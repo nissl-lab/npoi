@@ -319,7 +319,12 @@ namespace NPOI.XSSF.Model
         {
             return borders[idx];
         }
-
+        /// <summary>
+        /// Adds a border to the border style table if it isn't already in the style table
+        /// Does nothing if border is already in borders style table
+        /// </summary>
+        /// <param name="border">border to add</param>
+        /// <returns>return the index of the added border</returns>
         public int PutBorder(XSSFCellBorder border)
         {
             int idx = borders.IndexOf(border);
@@ -356,7 +361,12 @@ namespace NPOI.XSSF.Model
         {
             return numberFormats;
         }
-
+        /// <summary>
+        /// Adds a fill to the fill style table if it isn't already in the style table
+        /// Does nothing if fill is already in fill style table
+        /// </summary>
+        /// <param name="fill">fill to add</param>
+        /// <returns>return the index of the added fill</returns>
         public int PutFill(XSSFCellFill fill)
         {
             int idx = fills.IndexOf(fill);
@@ -372,6 +382,12 @@ namespace NPOI.XSSF.Model
         {
             return xfs[idx];
         }
+
+        /// <summary>
+        /// Adds a cell to the styles table. Does not check for duplicates
+        /// </summary>
+        /// <param name="cellXf">the cell to add to the styles table</param>
+        /// <returns>return the added cell ID in the style table</returns>
         internal int PutCellXf(CT_Xf cellXf)
         {
             xfs.Add(cellXf);
@@ -388,9 +404,16 @@ namespace NPOI.XSSF.Model
                 return null;
             return styleXfs[idx];
         }
+
+        /// <summary>
+        /// Adds a cell style to the styles table.Does not check for duplicates.
+        /// </summary>
+        /// <param name="cellStyleXf">the cell style to add to the styles table</param>
+        /// <returns>return the cell style ID in the style table</returns>
         internal int PutCellStyleXf(CT_Xf cellStyleXf)
         {
             styleXfs.Add(cellStyleXf);
+            // TODO: check for duplicate
             return styleXfs.Count;
         }
         internal void ReplaceCellStyleXfAt(int idx, CT_Xf cellStyleXf)
@@ -656,6 +679,11 @@ namespace NPOI.XSSF.Model
             return dxfs[idx];
         }
 
+        /// <summary>
+        /// Adds a Dxf to the style table Does not check for duplicates.
+        /// </summary>
+        /// <param name="dxf">the Dxf to add</param>
+        /// <returns>added dxf ID in the style table</returns>
         public int PutDxf(CT_Dxf dxf)
         {
             this.dxfs.Add(dxf);
