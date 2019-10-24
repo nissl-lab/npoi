@@ -2724,53 +2724,36 @@ namespace NPOI.XSSF.UserModel
             Console.WriteLine("long time test, run over 1 minute.");
             int numStyles = 33000;
             XSSFWorkbook wb = new XSSFWorkbook();
-            //XSSFSheet s = wb.CreateSheet("TestSheet") as XSSFSheet;
-            XSSFDataFormat fmt = wb.GetCreationHelper().CreateDataFormat() as XSSFDataFormat;
             for (int i = 1; i < numStyles; i++)
             {
-                short df = fmt.GetFormat("test" + i);
-                // Format indexes will be wrapped beyond 32,676
-                Assert.AreEqual(164 + i, df & 0xffff);
                 // Create a style and use it
                 XSSFCellStyle style = wb.CreateCellStyle() as XSSFCellStyle;
                 Assert.AreEqual(i, style.UIndex);
-                style.DataFormat = (/*setter*/df);
-                //XSSFCell c = s.CreateRow(i).CreateCell(0, CellType.Numeric) as XSSFCell;
-                //c.CellStyle = (/*setter*/style);
-                //c.SetCellValue(i);
             }
 
-            //wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-            // using temp file instead of ByteArrayOutputStream because of OOM in gump run
-            FileInfo tmp = TempFile.CreateTempFile("poi-test", ".bug57880");
-            FileStream fos = new FileStream(tmp.FullName, FileMode.Create, FileAccess.ReadWrite);
-            try
-            {
-                wb.Write(fos);
-            }
-            finally
-            {
-                fos.Close();
-            }
-            
-            wb.Close();
-            fmt = null; /*s = null;*/ wb = null;
-            // System.gc();
+            // avoid OOM in gump run
+            FileInfo file = XSSFTestDataSamples.WriteOutAndClose(wb, "bug57880");
+            wb = null;
+            // Garbage collection may happen here
 
-            wb = new XSSFWorkbook(tmp.FullName);
-            fmt = wb.GetCreationHelper().CreateDataFormat() as XSSFDataFormat;
-            //s = wb.GetSheetAt(0) as XSSFSheet;
+            //// avoid zip bomb detection
+            //double ratio = ZipSecureFile.getMinInflateRatio();
+            //ZipSecureFile.setMinInflateRatio(0.00005);
+            //wb = XSSFTestDataSamples.ReadBackAndDelete(file);
+            //ZipSecureFile.setMinInflateRatio(ratio);
+
+            //Assume identical cell styles aren't consolidated
+            //If XSSFWorkbooks ever implicitly optimize/consolidate cell styles (such as when the workbook is written to disk)
+            //then this unit test should be updated
+
             for (int i = 1; i < numStyles; i++)
             {
                 XSSFCellStyle style = wb.GetCellStyleAt((short)i) as XSSFCellStyle;
                 Assert.IsNotNull(style);
                 Assert.AreEqual(i, style.UIndex);
-                Assert.AreEqual(164 + i, style.DataFormat & 0xffff);
-                Assert.AreEqual("test" + i, style.GetDataFormatString());
             }
 
             wb.Close();
-            tmp.Delete();
 
             Assert.AreEqual(0, Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp").Length, "At Last: There are no temporary files.");
         }
