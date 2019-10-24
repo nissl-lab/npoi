@@ -230,7 +230,7 @@ namespace NPOI.XSSF.Model
                 throw new InvalidOperationException("Found the format, but couldn't figure out where - should never happen!");
             }
 
-            if (numberFormats.Count > MAXIMUM_NUMBER_OF_DATA_FORMATS)
+            if (numberFormats.Count >= MAXIMUM_NUMBER_OF_DATA_FORMATS)
             {
                 throw new InvalidOperationException("The maximum number of Data Formats was exceeded. " +
                         "You can define up to " + MAXIMUM_NUMBER_OF_DATA_FORMATS + " formats in a .xlsx Workbook.");
@@ -251,8 +251,29 @@ namespace NPOI.XSSF.Model
                         FIRST_USER_DEFINED_NUMBER_FORMAT_ID);
             }
 
-            numberFormats.Add(formatIndex, fmt);
+            if (numberFormats.ContainsKey(formatIndex))
+                numberFormats[formatIndex] = fmt;
+            else
+                numberFormats.Add(formatIndex, fmt);
+
             return formatIndex;
+        }
+
+        /**
+         * Add a number format with a specific ID into the numberFormats map.
+         * If a format with the same ID already exists, overwrite the format code
+         * with <code>fmt</code>
+         * This may be used to override built-in number formats.
+         *
+         * @param index the number format ID
+         * @param fmt the number format code
+         */
+        public void PutNumberFormat(short index, String fmt)
+        {
+            if (numberFormats.ContainsKey(index))
+                numberFormats[index] = fmt;
+            else
+                numberFormats.Add(index, fmt);
         }
 
         public XSSFFont GetFontAt(int idx)

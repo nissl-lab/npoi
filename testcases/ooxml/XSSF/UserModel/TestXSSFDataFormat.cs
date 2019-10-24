@@ -68,6 +68,36 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("FormatKM.xlsx");
             DoTest58532Core(wb);
         }
+
+        [Test]
+        public void Test58778()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            ICell cell = wb.CreateSheet("bug58778").CreateRow(0).CreateCell(0);
+            cell.SetCellValue(5.25);
+            ICellStyle style = wb.CreateCellStyle();
+
+            XSSFDataFormat dataFormat = wb.CreateDataFormat() as XSSFDataFormat;
+
+            short poundFmtIdx = 6;
+            dataFormat.PutFormat(poundFmtIdx, poundFmt);
+            style.DataFormat = (poundFmtIdx);
+            cell.CellStyle = style;
+            // Cell should appear as "<poundsymbol>5"
+
+            wb = XSSFTestDataSamples.WriteOutCloseAndReadBack(wb);
+            cell = wb.GetSheet("bug58778").GetRow(0).GetCell(0);
+            Assert.AreEqual(5.25, cell.NumericCellValue);
+
+            style = cell.CellStyle;
+            Assert.AreEqual(poundFmt, style.GetDataFormatString());
+            Assert.AreEqual(poundFmtIdx, style.DataFormat);
+
+            // manually check the file to make sure the cell is rendered as "<poundsymbol>5"
+            // Verified with LibreOffice 4.2.8.2 on 2015-12-28
+            wb.Close();
+        }
+
     }
 
 }

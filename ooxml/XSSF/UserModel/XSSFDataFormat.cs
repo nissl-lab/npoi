@@ -80,6 +80,20 @@ namespace NPOI.XSSF.UserModel
             if (fmt == null) fmt = BuiltinFormats.GetBuiltinFormat(index);
             return fmt;
         }
+
+        /**
+         * Add a number format with a specific ID into the number format style table.
+         * If a format with the same ID already exists, overwrite the format code
+         * with <code>fmt</code>
+         * This may be used to override built-in number formats.
+         *
+         * @param index the number format ID
+         * @param format the number format code
+         */
+        public void PutFormat(short index, String format)
+        {
+            stylesSource.PutNumberFormat(index, format);
+        }
     }
 }
 
