@@ -1055,13 +1055,10 @@ namespace NPOI.XSSF.UserModel
         public static void copyStyles(IWorkbook reference, IWorkbook target)
         {
             short numberOfStyles = reference.NumCellStyles;
-            for (short i = 0; i < numberOfStyles; i++)
+            // don't copy default style (style index 0)
+            for (short i = 1; i < numberOfStyles; i++)
             {
                 ICellStyle referenceStyle = reference.GetCellStyleAt(i);
-                if (i == 0)
-                {
-                    continue;
-                }
                 ICellStyle targetStyle = target.CreateCellStyle();
                 targetStyle.CloneStyleFrom(referenceStyle);
             }
