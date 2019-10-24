@@ -546,14 +546,16 @@ namespace NPOI.SS.Util
             Font font = new Font(font1.FontName, (float)font1.FontHeightInPoints, style, GraphicsUnit.Point);
             return font;
         }
+        /// <summary>
+        /// Check if the cell is in the specified cell range
+        /// </summary>
+        /// <param name="cr">the cell range to check in</param>
+        /// <param name="rowIx">the row to check</param>
+        /// <param name="colIx">the column to check</param>
+        /// <returns>return true if the range contains the cell [rowIx, colIx]</returns>
         public static bool ContainsCell(CellRangeAddress cr, int rowIx, int colIx)
         {
-            if (cr.FirstRow <= rowIx && cr.LastRow >= rowIx
-                    && cr.FirstColumn <= colIx && cr.LastColumn >= colIx)
-            {
-                return true;
-            }
-            return false;
+            return cr.IsInRange(rowIx, colIx);
         }
 
         /**

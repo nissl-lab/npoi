@@ -948,12 +948,6 @@ namespace NPOI.XSSF.Streaming
          * If <code>column</code> is not tracked, it will be ignored by this call.
          *
          * @param column the index of the column to track for auto-sizing
-         * @return true if column was tracked prior to being untracked, false if no action was taken
-         */
-        /**
-         * 
-         *
-         * @param column the index of the column to track for auto-sizing
          * @return true if column was tracked prior to this call, false if no action was taken
          * @since 3.14beta1
          * @see #untrackColumnsForAutoSizing(Collection)
