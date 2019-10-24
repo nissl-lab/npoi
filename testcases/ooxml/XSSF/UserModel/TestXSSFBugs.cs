@@ -3115,6 +3115,47 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(wbBack);
             wbBack.Close();
         }
+
+        [Test]
+        public void Test58731()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("58731.xlsx");
+            ISheet sheet = wb.CreateSheet("Java Books");
+
+            Object[][] bookData = {
+                new object[] {"Head First Java", "Kathy Serria", 79},
+                new object[] {"Effective Java", "Joshua Bloch", 36},
+                new object[] {"Clean Code", "Robert martin", 42},
+                new object[] {"Thinking in Java", "Bruce Eckel", 35},
+        };
+
+            int rowCount = 0;
+            foreach (Object[] aBook in bookData)
+            {
+                IRow row = sheet.CreateRow(rowCount++);
+
+                int columnCount = 0;
+                foreach (Object field in aBook)
+                {
+                    ICell cell = row.CreateCell(columnCount++);
+                    if (field is String)
+                    {
+                        cell.SetCellValue((String)field);
+                    }
+                    else if (field is int)
+                    {
+                        cell.SetCellValue((int)field);
+                    }
+                }
+            }
+
+            IWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            sheet = wb2.GetSheet("Java Books");
+            Assert.IsNotNull(sheet.GetRow(0));
+            Assert.IsNotNull(sheet.GetRow(0).GetCell(0));
+            Assert.AreEqual(bookData[0][0], sheet.GetRow(0).GetCell(0).StringCellValue);
+        }
+
     }
 
 }

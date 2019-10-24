@@ -214,6 +214,10 @@ namespace NPOI
         /**
          * Write out this document to an Outputstream.
          *
+         * Note - if the Document was opened from a {@link File} rather
+         *  than an {@link InputStream}, you <b>must</b> write out to
+         *  a different file, overwriting via an OutputStream isn't possible.
+         * 
          * @param stream - the java Stream you wish to write the file to
          *
          * @exception IOException if anything can't be written.
