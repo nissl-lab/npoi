@@ -42,18 +42,20 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("49928.xlsx");
             DoTest49928Core(wb);
+            IDataFormat dataFormat = wb.CreateDataFormat();
 
-            // an attempt to register an existing format returns its index
-            int poundFmtIdx = wb.GetSheetAt(0).GetRow(0).GetCell(0).CellStyle.DataFormat;
-            Assert.AreEqual(poundFmtIdx, wb.GetStylesSource().PutNumberFormat(poundFmt));
+            // As of 2015-12-27, there is no way to override a built-in number format with POI XSSFWorkbook
+            // 49928.xlsx has been saved with a poundFmt that overrides the default value (dollar)
+            short poundFmtIdx = wb.GetSheetAt(0).GetRow(0).GetCell(0).CellStyle.DataFormat;
+            Assert.AreEqual(poundFmtIdx, dataFormat.GetFormat(poundFmt));
 
             // now create a custom format with Pound (\u00a3)
-            IDataFormat dataFormat = wb.CreateDataFormat();
+
             string customFmt = "\u00a3##.00[Yellow]";
             AssertNotBuiltInFormat(customFmt);
             short customFmtIdx = dataFormat.GetFormat(customFmt);
 
-            Assert.IsTrue(customFmtIdx > BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX);
+            Assert.IsTrue(customFmtIdx >= BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX);
             Assert.AreEqual(customFmt, dataFormat.GetFormat(customFmtIdx));
         }
 
