@@ -234,14 +234,14 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// Get the number of styles the workbook Contains
         /// </summary>
-        short NumCellStyles { get; }
+        int NumCellStyles { get; }
 
         /// <summary>
         /// Get the cell style object at the given index
         /// </summary>
         /// <param name="idx">index within the set of styles (0-based)</param>
         /// <returns>CellStyle object at the index</returns>
-        ICellStyle GetCellStyleAt(short idx);
+        ICellStyle GetCellStyleAt(int idx);
 
         /// <summary>
         /// Write out this workbook to an OutPutstream.

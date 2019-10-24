@@ -265,9 +265,9 @@ namespace NPOI.SS.Util
 
             // index seems like what index the cellstyle is in the list of styles for a workbook.
             // not good to compare on!
-            short numberCellStyles = workbook.NumCellStyles;
+            int numberCellStyles = workbook.NumCellStyles;
 
-            for (short i = 0; i < numberCellStyles; i++)
+            for (int i = 0; i < numberCellStyles; i++)
             {
                 ICellStyle wbStyle = workbook.GetCellStyleAt(i);
 

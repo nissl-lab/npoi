@@ -2523,7 +2523,7 @@ namespace TestCases.HSSF.UserModel
         public void Test49751()
         {
             HSSFWorkbook wb = OpenSample("49751.xls");
-            short numCellStyles = wb.NumCellStyles;
+            int numCellStyles = wb.NumCellStyles;
             string[] namedStyles = new string[]{
             "20% - Accent1", "20% - Accent2", "20% - Accent3", "20% - Accent4", "20% - Accent5",
             "20% - Accent6", "40% - Accent1", "40% - Accent2", "40% - Accent3", "40% - Accent4",
@@ -2536,7 +2536,7 @@ namespace TestCases.HSSF.UserModel
             ArrayList namedStylesList = Arrays.AsList(namedStyles);
 
             List<String> collecteddStyles = new List<String>();
-            for (short i = 0; i < numCellStyles; i++)
+            for (int i = 0; i < numCellStyles; i++)
             {
                 HSSFCellStyle cellStyle = (HSSFCellStyle)wb.GetCellStyleAt(i);
                 String styleName = cellStyle.UserStyleName;

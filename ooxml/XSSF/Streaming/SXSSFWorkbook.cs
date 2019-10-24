@@ -94,7 +94,7 @@ namespace NPOI.XSSF.Streaming
             get { return XssfWorkbook.NumberOfFonts; }
         }
 
-        public short NumCellStyles
+        public int NumCellStyles
         {
             get { return XssfWorkbook.NumCellStyles; }
         }
@@ -566,7 +566,7 @@ namespace NPOI.XSSF.Streaming
             return XssfWorkbook.CreateCellStyle();
         }
 
-        public ICellStyle GetCellStyleAt(short idx)
+        public ICellStyle GetCellStyleAt(int idx)
         {
             return XssfWorkbook.GetCellStyleAt(idx);
         }

@@ -2730,6 +2730,7 @@ namespace NPOI.XSSF.UserModel
                 XSSFCellStyle style = wb.CreateCellStyle() as XSSFCellStyle;
                 Assert.AreEqual(i, style.UIndex);
             }
+            Assert.AreEqual(numStyles, wb.NumCellStyles);
 
             // avoid OOM in gump run
             FileInfo file = XSSFTestDataSamples.WriteOutAndClose(wb, "bug57880");
@@ -2745,7 +2746,7 @@ namespace NPOI.XSSF.UserModel
             //Assume identical cell styles aren't consolidated
             //If XSSFWorkbooks ever implicitly optimize/consolidate cell styles (such as when the workbook is written to disk)
             //then this unit test should be updated
-
+            Assert.AreEqual(numStyles, wb.NumCellStyles);
             for (int i = 1; i < numStyles; i++)
             {
                 XSSFCellStyle style = wb.GetCellStyleAt((short)i) as XSSFCellStyle;

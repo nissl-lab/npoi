@@ -1273,11 +1273,11 @@ namespace NPOI.HSSF.UserModel
         /// Get the number of styles the workbook Contains
         /// </summary>
         /// <value>count of cell styles</value>
-        public short NumCellStyles
+        public int NumCellStyles
         {
             get
             {
-                return (short)workbook.NumExFormats;
+                return workbook.NumExFormats;
             }
 
         }
@@ -1287,10 +1287,10 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="idx">index within the Set of styles</param>
         /// <returns>HSSFCellStyle object at the index</returns>
-        public NPOI.SS.UserModel.ICellStyle GetCellStyleAt(short idx)
+        public NPOI.SS.UserModel.ICellStyle GetCellStyleAt(int idx)
         {
             ExtendedFormatRecord xfr = workbook.GetExFormatAt(idx);
-            HSSFCellStyle style = new HSSFCellStyle(idx, xfr, this);
+            HSSFCellStyle style = new HSSFCellStyle((short)idx, xfr, this);
 
             return style;
         }

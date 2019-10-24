@@ -195,14 +195,13 @@ namespace NPOI.XSSF.UserModel
             
         }
         [Test]
-        public void NumCellStyles()
+        public void GetNumCellStyles()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
             try
             {
-                short i = workbook.NumCellStyles;
                 //get default cellStyles
-                Assert.AreEqual(1, i);
+                Assert.AreEqual(1, workbook.NumCellStyles);
             }
             finally
             {
