@@ -41,7 +41,7 @@ namespace NPOI.XSSF.UserModel
         public override void Test49928()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("49928.xlsx");
-            doTest49928Core(wb);
+            DoTest49928Core(wb);
 
             // an attempt to register an existing format returns its index
             int poundFmtIdx = wb.GetSheetAt(0).GetRow(0).GetCell(0).CellStyle.DataFormat;
@@ -49,9 +49,12 @@ namespace NPOI.XSSF.UserModel
 
             // now create a custom format with Pound (\u00a3)
             IDataFormat dataFormat = wb.CreateDataFormat();
-            short customFmtIdx = dataFormat.GetFormat("\u00a3##.00[Yellow]");
+            string customFmt = "\u00a3##.00[Yellow]";
+            AssertNotBuiltInFormat(customFmt);
+            short customFmtIdx = dataFormat.GetFormat(customFmt);
+
             Assert.IsTrue(customFmtIdx > BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX);
-            Assert.AreEqual("\u00a3##.00[Yellow]", dataFormat.GetFormat(customFmtIdx));
+            Assert.AreEqual(customFmt, dataFormat.GetFormat(customFmtIdx));
         }
 
         /**
@@ -61,7 +64,7 @@ namespace NPOI.XSSF.UserModel
         public void Test58532()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("FormatKM.xlsx");
-            doTest58532Core(wb);
+            DoTest58532Core(wb);
         }
     }
 

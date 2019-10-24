@@ -78,7 +78,7 @@ namespace NPOI.SS.UserModel
     public class BuiltinFormats
     {
         /**
-         * The first user-defined format starts at 164.
+         * The first user-defined number format starts at 164.
          */
         public const int FIRST_USER_DEFINED_FORMAT_INDEX = 164;
 

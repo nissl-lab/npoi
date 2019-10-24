@@ -44,7 +44,7 @@ namespace TestCases.HSSF.UserModel
         public new void Test49928()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("49928.xls");
-            doTest49928Core(wb);
+            DoTest49928Core(wb);
 
             // an attempt to register an existing format returns its index
             int poundFmtIdx = wb.GetSheetAt(0).GetRow(0).GetCell(0).CellStyle.DataFormat;
@@ -63,7 +63,7 @@ namespace TestCases.HSSF.UserModel
         public void test58532()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("FormatKM.xls");
-            doTest58532Core(wb);
+            DoTest58532Core(wb);
         }
         /**
          * Bug 51378: GetDataFormatString method call crashes when Reading the test file

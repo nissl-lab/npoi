@@ -41,6 +41,13 @@ namespace TestCases.SS.UserModel
         {
             _testDataProvider = testDataProvider;
         }
+
+        public void AssertNotBuiltInFormat(String customFmt)
+        {
+            //check it is not in built-in formats
+            Assert.AreEqual(-1, BuiltinFormats.GetBuiltinFormat(customFmt));
+        }
+
         [Test]
         public void TestBuiltinFormats()
         {
@@ -64,7 +71,7 @@ namespace TestCases.SS.UserModel
             //create a custom data format
             String customFmt = "#0.00 AM/PM";
             //check it is not in built-in formats
-            Assert.AreEqual(-1, HSSFDataFormat.GetBuiltinFormat(customFmt));
+            AssertNotBuiltInFormat(customFmt);
             int customIdx = df.GetFormat(customFmt);
             //The first user-defined format starts at 164.
             Assert.IsTrue(customIdx >= HSSFDataFormat.FIRST_USER_DEFINED_FORMAT_INDEX);
@@ -78,10 +85,10 @@ namespace TestCases.SS.UserModel
         public virtual void Test49928()
         {
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook("49928.xls");
-            doTest49928Core(wb);
+            DoTest49928Core(wb);
         }
         protected String poundFmt = "\"\u00a3\"#,##0;[Red]\\-\"\u00a3\"#,##0";
-        public void doTest49928Core(IWorkbook wb)
+        public void DoTest49928Core(IWorkbook wb)
         {
             DataFormatter df = new DataFormatter();
 
@@ -104,7 +111,34 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(poundFmt, dataFormat.GetFormat(poundFmtIdx));
         }
 
-        public void doTest58532Core(IWorkbook wb)
+        [Test]
+        public void TestReadbackFormat()
+        {
+            ReadbackFormat("built-in format", "0.00");
+            ReadbackFormat("overridden built-in format", poundFmt);
+
+            String customFormat = "#0.00 AM/PM";
+            AssertNotBuiltInFormat(customFormat);
+            ReadbackFormat("custom format", customFormat);
+        }
+
+        private void ReadbackFormat(String msg, String fmt)
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            try
+            {
+                IDataFormat dataFormat = wb.CreateDataFormat();
+                short fmtIdx = dataFormat.GetFormat(fmt);
+                String readbackFmt = dataFormat.GetFormat(fmtIdx);
+                Assert.AreEqual(msg, fmt, readbackFmt);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        public void DoTest58532Core(IWorkbook wb)
         {
             ISheet s = wb.GetSheetAt(0);
             DataFormatter fmt = new DataFormatter();
