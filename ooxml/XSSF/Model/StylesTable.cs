@@ -314,9 +314,9 @@ namespace NPOI.XSSF.Model
             return fills[idx];
         }
 
-        public List<XSSFCellBorder> GetBorders()
+        public ReadOnlyCollection<XSSFCellBorder> GetBorders()
         {
-            return borders;
+            return borders.AsReadOnly();
         }
 
         public ReadOnlyCollection<XSSFCellFill> GetFills()
@@ -324,9 +324,9 @@ namespace NPOI.XSSF.Model
             return fills.AsReadOnly();
         }
 
-        public List<XSSFFont> GetFonts()
+        public ReadOnlyCollection<XSSFFont> GetFonts()
         {
-            return fonts;
+            return fonts.AsReadOnly();
         }
 
         public Dictionary<int, String> GetNumberFormats()

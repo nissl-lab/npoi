@@ -197,13 +197,18 @@ namespace NPOI.SS.UserModel
             FileInfo fInfo = new FileInfo(file);
             try
             {
-                //using (fStream = new FileStream(file, FileMode.Open, FileAccess.Read))
-                //{
-                //    IWorkbook wb = new HSSFWorkbook(fStream);
-                //    return wb;
-                //}
                 NPOIFSFileSystem fs = new NPOIFSFileSystem(fInfo, readOnly);
-                return Create(fs, password);
+                try
+                {
+                    return Create(fs, password);
+                }
+                catch (RuntimeException e)
+                {
+                    // ensure that the file-handle is closed again
+                    fs.Close();
+                    throw e;
+                }
+                
             }
             catch (OfficeXmlFileException e)
             {
@@ -222,7 +227,7 @@ namespace NPOI.SS.UserModel
                     // rethrow exception
                     throw ioe;
                 }
-                catch (ArgumentException ioe)
+                catch (RuntimeException ioe)
                 {
                     // ensure that file handles are closed (use revert() to not re-write the file) 
                     pkg.Revert();
