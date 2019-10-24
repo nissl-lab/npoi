@@ -445,13 +445,14 @@ namespace TestCases.SS.UserModel
             cell = row.CreateCell(1);
             cell.SetCellValue(factory.CreateRichTextString("second row, second cell"));
 
-            CellRangeAddress region = new CellRangeAddress(1, 1, 0, 1);
+            CellRangeAddress region = CellRangeAddress.ValueOf("A2:B2");
             sheet.AddMergedRegion(region);
 
             sheet.ShiftRows(1, 1, 1);
 
             region = sheet.GetMergedRegion(0);
-            Assert.AreEqual(2, region.FirstRow, "Merged region not Moved over to row 2");
+            CellRangeAddress expectedRegion = CellRangeAddress.ValueOf("A3:B3");
+            Assert.AreEqual(expectedRegion, region, "Merged region not Moved over to row 2");
 
             wb.Close();
         }
