@@ -63,7 +63,7 @@ namespace NPOI.XSSF.Streaming
                 eval.EvaluateAll();
                 Assert.Fail("Evaluate All shouldn't work, as some cells outside the window");
             }
-            catch (RowFlushedException e)
+            catch (RowFlushedException)
             {
                 // Expected
             }
@@ -74,6 +74,7 @@ namespace NPOI.XSSF.Streaming
             xwb.CreateSheet("Open");
             xwb.CreateSheet("Closed");
 
+            wb.Close();
             wb = new SXSSFWorkbook(xwb, 5);
             s = wb.GetSheet("Closed") as SXSSFSheet;
             s.FlushRows();
@@ -86,7 +87,9 @@ namespace NPOI.XSSF.Streaming
                 eval.EvaluateAll();
                 Assert.Fail("Evaluate All shouldn't work, as sheets flushed");
             }
-            catch (SheetsFlushedException e) { }
+            catch (SheetsFlushedException) { }
+
+            wb.Close();
         }
 
         [Test]
@@ -112,10 +115,12 @@ namespace NPOI.XSSF.Streaming
                 eval.EvaluateFormulaCell(c);
                 Assert.Fail("Evaluate shouldn't work, as reference outside the window");
             }
-            catch (RowFlushedException e)
+            catch (RowFlushedException)
             {
                 // Expected
             }
+
+            wb.Close();
         }
 
         /**
@@ -137,6 +142,8 @@ namespace NPOI.XSSF.Streaming
             Assert.AreEqual(3, (int)s.GetRow(0).GetCell(0).NumericCellValue);
             Assert.AreEqual(13, (int)s.GetRow(1).GetCell(1).NumericCellValue);
             Assert.AreEqual(113, (int)s.GetRow(2).GetCell(2).NumericCellValue);
+
+            wb.Close();
         }
 
         [Test]
@@ -156,6 +163,8 @@ namespace NPOI.XSSF.Streaming
             Assert.AreEqual(0, (int)c.NumericCellValue);
             eval.EvaluateFormulaCell(c);
             Assert.AreEqual(3, (int)c.NumericCellValue);
+
+            wb.Close();
         }
 
         [Test]
@@ -176,6 +185,8 @@ namespace NPOI.XSSF.Streaming
             c.CellFormula = (/*setter*/"CONCATENATE(\"hello\",\" \",\"world\")");
             eval.EvaluateFormulaCell(c);
             Assert.AreEqual("hello world", c.StringCellValue);
+
+
         }
     }
 

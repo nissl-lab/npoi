@@ -257,6 +257,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             MemoryStream baos = new MemoryStream();
             pkg.Save(baos);
             MemoryStream bais = new MemoryStream(baos.ToArray());
+            pkg.Revert();
 
             pkg = OPCPackage.Open(bais);
 
@@ -265,6 +266,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             Assert.IsNotNull(pkg.GetPackageProperties());
             Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
             //Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
+            pkg.Close();
 
             // Open a new copy of it
             pkg = OPCPackage.Open(POIDataSamples.GetOpenXml4NetInstance().GetFileInfo(sampleFileName).FullName);
@@ -272,6 +274,8 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             // Save and re-load, without having touched the properties yet
             baos = new MemoryStream();
             pkg.Save(baos);
+            pkg.Revert();
+
             bais = new MemoryStream(baos.ToArray());
             pkg = OPCPackage.Open(bais);
 
@@ -295,10 +299,12 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             // Copy this into a temp file, so we can play with it
             FileInfo tmp = TempFile.CreateTempFile("poi-test", ".opc");
             FileStream out1 = new FileStream(tmp.FullName, FileMode.Create, FileAccess.ReadWrite);
+            Stream in1 = POIDataSamples.GetOpenXml4NetInstance().OpenResourceAsStream(sampleFileName);
             IOUtils.Copy(
-                    POIDataSamples.GetOpenXml4NetInstance().OpenResourceAsStream(sampleFileName),
+                    in1,
                     out1);
             out1.Close();
+            in1.Close();
 
             // Open it from that temp file
             OPCPackage pkg = OPCPackage.Open(tmp);

@@ -27,6 +27,7 @@ namespace TestCases.SS.UserModel
     using NPOI.HSSF.UserModel;
     using System.Text;
     using NPOI.SS;
+    using System.Collections.Generic;
 
     /**
      * Common superclass for testing implementatiosn of
@@ -36,6 +37,17 @@ namespace TestCases.SS.UserModel
     {
 
         protected ITestDataProvider _testDataProvider;
+        private List<IWorkbook> workbooksToClose = new List<IWorkbook>();
+
+        [TearDown]
+        public void TearDown()
+        {
+            // free resources correctly
+            foreach (IWorkbook wb in workbooksToClose)
+            {
+                wb.Close();
+            }
+        }
 
         public BaseTestCell()
             : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
@@ -350,7 +362,9 @@ namespace TestCases.SS.UserModel
         }
         private ICell CreateACell()
         {
-            return _testDataProvider.CreateWorkbook().CreateSheet("Sheet1").CreateRow(0).CreateCell(0);
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            workbooksToClose.Add(wb);
+            return wb.CreateSheet("Sheet1").CreateRow(0).CreateCell(0);
         }
 
         [Test]
@@ -964,6 +978,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(A1.Address, sheet.ActiveCell);
             B1.SetAsActiveCell();
             Assert.AreEqual(B1.Address, sheet.ActiveCell);
+            wb.Close();
         }
     }
 }

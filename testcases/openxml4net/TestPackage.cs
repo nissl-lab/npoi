@@ -731,6 +731,7 @@ namespace TestCases.OPC
             IWorkbook wb = WorkbookFactory.Create(new ByteArrayInputStream(buf));
             wb.GetSheetAt(0);
             wb.Close();
+            zipFile.Close();
         }
 
         [Test, Ignore("need ZipSecureFile class")]

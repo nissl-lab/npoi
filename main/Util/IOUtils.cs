@@ -191,7 +191,7 @@ namespace NPOI.Util
     }
 
     [Serializable]
-    internal class EmptyFileException : IOException
+    public class EmptyFileException : IOException
     {
         public EmptyFileException()
         {

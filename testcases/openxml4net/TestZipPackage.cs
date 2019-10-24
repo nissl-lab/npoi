@@ -15,17 +15,15 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.Openxml4j.opc
+namespace NPOI.OpenXml4Net.OPC
 {
     using System;
     using System.IO;
     using System.Xml;
-    using NPOI.OpenXml4Net.OPC;
     using NPOI.SS.UserModel;
     using NPOI.XSSF;
     using NPOI.XWPF.UserModel;
     using NUnit.Framework;
-    using TestCases.HSSF;
     using TestCases.OpenXml4Net;
 
     [TestFixture]
