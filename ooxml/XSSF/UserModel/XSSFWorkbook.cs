@@ -575,7 +575,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Returns the instance of XSSFDataFormat for this workbook.
+        /// Returns the workbook's data format table (a factory for creating data format strings).
         /// </summary>
         /// <returns>the XSSFDataFormat object</returns>
         public IDataFormat CreateDataFormat()

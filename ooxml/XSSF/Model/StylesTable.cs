@@ -201,7 +201,14 @@ namespace NPOI.XSSF.Model
             else
                 return null;
         }
-
+        /**
+         * Puts <code>fmt</code> in the numberFormats map if the format is not
+         * already in the the number format style table.
+         * Does nothing if <code>fmt</code> is already in number format style table.
+         *
+         * @param fmt the number format to add to number format style table
+         * @return the index of <code>fmt</code> in the number format style table
+         */
         public int PutNumberFormat(String fmt)
         {
             if (numberFormats.ContainsValue(fmt))
@@ -644,7 +651,11 @@ namespace NPOI.XSSF.Model
             this.dxfs.Add(dxf);
             return this.dxfs.Count;
         }
-
+        /**
+         * Create a cell style in this style table.
+         * Note - End users probably want to call {@link XSSFWorkbook#createCellStyle()}
+         * rather than working with the styles table directly.
+         */
         public XSSFCellStyle CreateCellStyle()
         {
             if (NumCellStyles > MAXIMUM_STYLE_ID)
