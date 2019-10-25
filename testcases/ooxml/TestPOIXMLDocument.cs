@@ -77,11 +77,15 @@ namespace NPOI.OOXML
          */
         private void Traverse(POIXMLDocumentPart part, Dictionary<String, POIXMLDocumentPart> context)
         {
-            context[part.GetPackageRelationship().TargetUri.ToString()] = part;
+            Assert.AreEqual(part.GetPackageRelationship().TargetUri.ToString(), part.GetPackagePart().PartName.Name);
+
+            context[part.GetPackagePart().PartName.Name] = part;
             foreach (POIXMLDocumentPart p in part.GetRelations())
             {
                 Assert.IsNotNull(p.ToString());
-                String uri = p.GetPackageRelationship().TargetUri.ToString();
+                String uri = p.GetPackagePart().PartName.URI.ToString();
+                Assert.AreEqual(uri, p.GetPackageRelationship().TargetUri.ToString());
+
                 if (!context.ContainsKey(uri))
                 {
                     Traverse(p, context);
@@ -108,6 +112,7 @@ namespace NPOI.OOXML
             FileStream out1 = new FileStream(tmp, FileMode.CreateNew);
             doc.Write(out1);
             out1.Close();
+            doc.Close();
 
             OPCPackage pkg2 = OPCPackage.Open(tmp);
             try
@@ -140,35 +145,39 @@ namespace NPOI.OOXML
             }
             finally
             {
-                pkg2.Revert();
+                doc.Close();
             }
         }
 
         [Test]
         public void TestPPTX()
         {
+            POIDataSamples pds = POIDataSamples.GetSlideShowInstance();
             AssertReadWrite(
-                    PackageHelper.Open(POIDataSamples.GetSlideShowInstance().OpenResourceAsStream("PPTWithAttachments.pptm"))
+                    PackageHelper.Open(pds.OpenResourceAsStream("PPTWithAttachments.pptm"))
             );
         }
         [Test]
         public void TestXLSX()
         {
+            POIDataSamples pds = POIDataSamples.GetSpreadSheetInstance();
             AssertReadWrite(
-                    PackageHelper.Open(POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("ExcelWithAttachments.xlsm"))
+                    PackageHelper.Open(pds.OpenResourceAsStream("ExcelWithAttachments.xlsm"))
                     );
         }
         [Test]
         public void TestDOCX()
         {
+            POIDataSamples pds = POIDataSamples.GetDocumentInstance();
             AssertReadWrite(
-                    PackageHelper.Open(POIDataSamples.GetDocumentInstance().OpenResourceAsStream("WordWithAttachments.docx"))
+                    PackageHelper.Open(pds.OpenResourceAsStream("WordWithAttachments.docx"))
                     );
         }
         [Test]
         public void TestRelationOrder()
         {
-            OPCPackage pkg = PackageHelper.Open(POIDataSamples.GetDocumentInstance().OpenResourceAsStream("WordWithAttachments.docx"));
+            POIDataSamples pds = POIDataSamples.GetDocumentInstance();
+            OPCPackage pkg = PackageHelper.Open(pds.OpenResourceAsStream("WordWithAttachments.docx"));
             OPCParser doc = new OPCParser(pkg);
             try
             {

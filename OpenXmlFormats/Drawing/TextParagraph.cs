@@ -636,6 +636,11 @@ namespace NPOI.OpenXmlFormats.Dml
             this.itemsField.Add(br);
             return br;
         }
+
+        internal CT_RegularTextRun GetRArray(int v)
+        {
+            return rField[v];
+        }
     }
 
     [Serializable]

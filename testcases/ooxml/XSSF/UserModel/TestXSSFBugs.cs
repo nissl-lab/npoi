@@ -273,16 +273,7 @@ namespace NPOI.XSSF.UserModel
                         {
                             if (c.CellType == CellType.Formula)
                             {
-                                String formula = c.CellFormula;
-                                CellValue cv;
-                                try
-                                {
-                                    cv = eval.Evaluate(c);
-                                }
-                                catch (Exception e)
-                                {
-                                    throw new RuntimeException("Can't evaluate formula: " + formula, e);
-                                }
+                                CellValue cv = eval.Evaluate(c);
                                 if (cv.CellType == CellType.Numeric)
                                 {
                                     // assert that the calculated value agrees with
@@ -2568,13 +2559,6 @@ namespace NPOI.XSSF.UserModel
                         Assert.IsNotNull(pictureData);
                     }
                 }
-
-                //            OutputStream out1 = new FileOutputStream("/tmp/56467.xls");
-                //            try {
-                //            	wb.Write(out1);
-                //            } finally {
-                //            	out1.Close();
-                //            }
             }
             finally
             {
