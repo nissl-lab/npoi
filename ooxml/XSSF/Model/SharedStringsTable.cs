@@ -91,29 +91,34 @@ namespace NPOI.XSSF.Model
         internal SharedStringsTable(PackagePart part, PackageRelationship rel)
             : base(part, rel)
         {
-
-            XmlDocument xml = ConvertStreamToXml(part.GetInputStream());
-            ReadFrom(xml);
+            ReadFrom(part.GetInputStream());
         }
 
 
 
-        public void ReadFrom(XmlDocument xml)
+        public void ReadFrom(Stream is1)
         {
-                 int cnt = 0;
+            try
+            {
+                int cnt = 0;
+                XmlDocument xml = ConvertStreamToXml(is1);
                 _sstDoc = SstDocument.Parse(xml, NamespaceManager);
                 CT_Sst sst = _sstDoc.GetSst();
                 count = (int)sst.count;
                 uniqueCount = (int)sst.uniqueCount;
                 foreach (CT_Rst st in sst.si)
                 {
-                     string key=GetKey(st);
-                   if(key!=null && !stmap.ContainsKey(key))
-                       stmap.Add(key, cnt);
-                   strings.Add(st);
+                    string key = GetKey(st);
+                    if (key != null && !stmap.ContainsKey(key))
+                        stmap.Add(key, cnt);
+                    strings.Add(st);
                     cnt++;
                 }
-
+            }
+            catch (XmlException e)
+            {
+                throw new IOException("SharedStrings read error", e);
+            }
         }
 
         private String GetKey(CT_Rst st)
