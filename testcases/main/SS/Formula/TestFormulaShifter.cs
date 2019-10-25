@@ -23,6 +23,7 @@ namespace TestCases.SS.Formula
     using NPOI.SS.Formula;
     using NPOI.SS;
     using NPOI.SS.Util;
+    using System;
 
 
     /**
@@ -260,6 +261,45 @@ namespace TestCases.SS.Formula
                 "formula previously pointing to sheet 2 should now point to sheet 1");
             Assert.AreEqual(3, ((Ref3DPtg)ptgs[3]).ExternSheetIndex,
                 "formula previously pointing to sheet 3 should be unchanged");
+        }
+
+        [Test]
+        public void TestInvalidArgument()
+        {
+            try
+            {
+                FormulaShifter.CreateForRowShift(1, "name", 1, 2, 0, SpreadsheetVersion.EXCEL97);
+                Assert.Fail("Should catch exception here");
+            }
+            catch (ArgumentException e)
+            {
+                // expected here
+            }
+            try
+            {
+                FormulaShifter.CreateForRowShift(1, "name", 2, 1, 2, SpreadsheetVersion.EXCEL97);
+                Assert.Fail("Should catch exception here");
+            }
+            catch (ArgumentException e)
+            {
+                // expected here
+            }
+        }
+        [Test]
+        public void TestConstructor()
+        {
+            Assert.IsNotNull(FormulaShifter.CreateForRowShift(1, "name", 1, 2, 2));
+        }
+        [Test]
+        public void TestToString()
+        {
+            FormulaShifter shifter = FormulaShifter.CreateForRowShift(0, "sheet", 123, 456, 789,
+                    SpreadsheetVersion.EXCEL2007);
+            Assert.IsNotNull(shifter);
+            Assert.IsNotNull(shifter.ToString());
+            Assert.IsTrue(shifter.ToString().Contains("123"));
+            Assert.IsTrue(shifter.ToString().Contains("456"));
+            Assert.IsTrue(shifter.ToString().Contains("789"));
         }
     }
 
