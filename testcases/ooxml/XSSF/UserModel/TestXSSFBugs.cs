@@ -3140,6 +3140,23 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(bookData[0][0], sheet.GetRow(0).GetCell(0).StringCellValue);
         }
 
+
+        /**
+         * Regression between 3.10.1 and 3.13 - 
+         * org.apache.poi.openxml4j.exceptions.InvalidFormatException: 
+         * The part /xl/sharedStrings.xml does not have any content type 
+         * ! Rule: Package require content types when retrieving a part from a package. [M.1.14]
+         */
+        [Test]
+        public void Test58760()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("58760.xlsx");
+            Assert.AreEqual(1, wb.NumberOfSheets);
+            Assert.AreEqual("Sheet1", wb.GetSheetName(0));
+            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.AreEqual(1, wb.NumberOfSheets);
+            Assert.AreEqual("Sheet1", wb.GetSheetName(0));
+        }
     }
 
 }
