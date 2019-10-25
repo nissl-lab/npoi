@@ -69,6 +69,9 @@ namespace NPOI.XSSF.UserModel
             DoTest58532Core(wb);
         }
 
+        /**
+         * [Bug 58778] Built-in number formats can be overridden with XSSFDataFormat.putFormat(int id, String fmt)
+         */
         [Test]
         public void Test58778()
         {

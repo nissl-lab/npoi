@@ -39,7 +39,7 @@ namespace NPOI.XSSF.Model
      */
     public class StylesTable : POIXMLDocumentPart
     {
-        private SortedDictionary<int, String> numberFormats = new SortedDictionary<int, String>();
+        private SortedDictionary<short, String> numberFormats = new SortedDictionary<short, String>();
         private bool[] usedNumberFormats = new bool[SpreadsheetVersion.EXCEL2007.MaxCellStyles];
         private List<XSSFFont> fonts = new List<XSSFFont>();
         private List<XSSFCellFill> fills = new List<XSSFCellFill>();
@@ -52,15 +52,48 @@ namespace NPOI.XSSF.Model
         /**
          * The first style id available for use as a custom style
          */
-        // Is this right? Number formats (XSSFDataFormat) and cell styles (XSSFCellStyle) are different.
-        // What's up with the plus 1?
         public static int FIRST_CUSTOM_STYLE_ID = BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX + 1;
-
-        private static int FIRST_USER_DEFINED_NUMBER_FORMAT_ID = BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX;
-        private static int MAXIMUM_NUMBER_OF_DATA_FORMATS = SpreadsheetVersion.EXCEL2007.MaxCellStyles; //FIXME: should be 250
-
+        // Is this right? Number formats (XSSFDataFormat) and cell styles (XSSFCellStyle) are different. What's up with the plus 1?
         private static int MAXIMUM_STYLE_ID = SpreadsheetVersion.EXCEL2007.MaxCellStyles;
 
+        private static short FIRST_USER_DEFINED_NUMBER_FORMAT_ID = BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX;
+        /**
+         * Depending on the version of Excel, the maximum number of number formats in a workbook is between 200 and 250
+         * See https://support.office.com/en-us/article/excel-specifications-and-limits-1672b34d-7043-467e-8e27-269d656771c3
+         * POI defaults this limit to 250, but can be increased or decreased on a per-StylesTable basis with
+         * {@link #setMaxNumberOfDataFormats(int)} if needed.
+         */
+        private int MAXIMUM_NUMBER_OF_DATA_FORMATS = 250;
+
+        /**
+         * Get the upper limit on the number of data formats that has been set for the style table.
+         * To get the current number of data formats in use, use {@link #getNumDataFormats()}.
+         *
+         * @return the maximum number of data formats allowed in the workbook
+         */
+        public int MaxNumberOfDataFormats
+        {
+            get
+            {
+                return MAXIMUM_NUMBER_OF_DATA_FORMATS;
+            }
+            set
+            {
+                if (value < NumDataFormats)
+                {
+                    if (value < 0)
+                    {
+                        throw new ArgumentException("Maximum Number of Data Formats must be greater than or equal to 0");
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Cannot set the maximum number of data formats less than the current quantity." +
+                                "Data formats must be explicitly removed (via StylesTable.removeNumberFormat) before the limit can be decreased.");
+                    }
+                }
+                MAXIMUM_NUMBER_OF_DATA_FORMATS = value;
+            }   
+        }
         private StyleSheetDocument doc;
         private XSSFWorkbook workbook;
         private ThemesTable theme;
@@ -141,7 +174,7 @@ namespace NPOI.XSSF.Model
                 {
                     foreach (CT_NumFmt nfmt in ctfmts.numFmt)
                     {
-                        int formatId = (int)nfmt.numFmtId;
+                        short formatId = (short)nfmt.numFmtId;
                         numberFormats.Add(formatId, nfmt.formatCode);
                     }
                 }
@@ -198,13 +231,42 @@ namespace NPOI.XSSF.Model
         // ===========================================================
         //  Start of style related Getters and Setters
         // ===========================================================
-
+        /**
+         * Get number format string given its id
+         * 
+         * @param idx number format id
+         * @return number format code
+         */
+         [Obsolete("deprecated POI 3.14-beta2. Use {@link #getNumberFormatAt(short)} instead.")]
         public String GetNumberFormatAt(int idx)
         {
-            if (numberFormats.ContainsKey(idx))
-                return numberFormats[idx];
+            return GetNumberFormatAt((short)idx);
+        }
+        /**
+         * Get number format string given its id
+         * 
+         * @param fmtId number format id
+         * @return number format code
+         */
+        public String GetNumberFormatAt(short fmtId)
+        {
+            if (numberFormats.ContainsKey(fmtId))
+                return numberFormats[fmtId];
             else
                 return null;
+        }
+
+        private short GetNumberFormatId(String fmt)
+        {
+            // Find the key, and return that
+            foreach (KeyValuePair<short, string> numFmt in numberFormats)
+            {
+                if (numFmt.Value.Equals(fmt))
+                {
+                    return numFmt.Key;
+                }
+            }
+            throw new InvalidOperationException("Number format not in style table: " + fmt);
         }
         /**
          * Puts <code>fmt</code> in the numberFormats map if the format is not
@@ -219,15 +281,14 @@ namespace NPOI.XSSF.Model
             // Check if number format already exists
             if (numberFormats.ContainsValue(fmt))
             {
-                // Find the key, and return that
-                foreach (KeyValuePair<int, string> numFmt in numberFormats)
+                try
                 {
-                    if (numFmt.Value.Equals(fmt))
-                    {
-                        return numFmt.Key;
-                    }
+                    return GetNumberFormatId(fmt);
                 }
-                throw new InvalidOperationException("Found the format, but couldn't figure out where - should never happen!");
+                catch (InvalidOperationException e)
+                {
+                    throw new InvalidOperationException("Found the format, but couldn't figure out where - should never happen!");
+                }
             }
 
             if (numberFormats.Count >= MAXIMUM_NUMBER_OF_DATA_FORMATS)
@@ -237,7 +298,7 @@ namespace NPOI.XSSF.Model
             }
 
             // Find a spare key, and add that
-            int formatIndex;
+            short formatIndex;
             if (numberFormats.Count == 0)
             {
                 formatIndex = FIRST_USER_DEFINED_NUMBER_FORMAT_ID;
@@ -245,10 +306,17 @@ namespace NPOI.XSSF.Model
             else
             {
                 // get next-available numberFormat index.
-                // Assumption: there are never gaps in numberFormats indices
-                formatIndex = Math.Max(
-                        numberFormats.Keys.Last() + 1,
-                        FIRST_USER_DEFINED_NUMBER_FORMAT_ID);
+                // Assumption: gaps in number format ids are acceptable
+                // to catch arithmetic overflow, nextKey's data type
+                // must match numberFormat's key data type
+                short nextKey = (short)(numberFormats.Last().Key + 1);
+                if (nextKey < 0)
+                {
+                    throw new InvalidOperationException(
+                            "Cowardly avoiding creating a number format with a negative id." +
+                            "This is probably due to arithmetic overflow.");
+                }
+                formatIndex = (short)Math.Max(nextKey, FIRST_USER_DEFINED_NUMBER_FORMAT_ID);
             }
 
             if (numberFormats.ContainsKey(formatIndex))
@@ -274,6 +342,46 @@ namespace NPOI.XSSF.Model
                 numberFormats[index] = fmt;
             else
                 numberFormats.Add(index, fmt);
+        }
+
+        /**
+         * Remove a number format from the style table if it exists.
+         * All cell styles with this number format will be modified to use the default number format.
+         * 
+         * @param fmt the number format to remove
+         * @return true if the number format was removed
+         */
+        public bool RemoveNumberFormat(short index)
+        {
+            String fmt = numberFormats[index];
+            bool removed = numberFormats.Remove(index);
+            //bool removed = (fmt != null);
+            if (removed)
+            {
+                foreach (CT_Xf style in xfs)
+                {
+                    if (style.numFmtIdSpecified && style.numFmtId == index)
+                    {
+                        style.applyNumberFormat = false;
+                        style.numFmtId = 0;
+                        style.numFmtIdSpecified = false;;
+                    }
+                }
+            }
+            return removed;
+        }
+
+        /**
+         * Remove a number format from the style table if it exists
+         * All cell styles with this number format will be modified to use the default number format
+         * 
+         * @param fmt the number format to remove
+         * @return true if the number format was removed
+         */
+        public bool RemoveNumberFormat(String fmt)
+        {
+            short id = GetNumberFormatId(fmt);
+            return RemoveNumberFormat(id);
         }
 
         public XSSFFont GetFontAt(int idx)
@@ -378,7 +486,7 @@ namespace NPOI.XSSF.Model
             return fonts.AsReadOnly();
         }
 
-        public IDictionary<int, String> GetNumberFormats()
+        public IDictionary<short, String> GetNumberFormats()
         {
             return numberFormats;
         }
@@ -454,10 +562,20 @@ namespace NPOI.XSSF.Model
                 return xfs.Count;
             }
         }
-
+        /**
+         * @return number of data formats in the styles table
+         */
+        public int NumDataFormats
+        {
+            get
+            {
+                return numberFormats.Count;
+            }
+        }
         /**
          * For unit testing only
          */
+        [Obsolete("deprecated POI 3.14 beta 2. Use {@link #getNumDataFormats()} instead.")]
         internal int NumberFormatSize
         {
             get
@@ -520,7 +638,7 @@ namespace NPOI.XSSF.Model
             CT_NumFmts formats = new CT_NumFmts();
             formats.count = (uint)numberFormats.Count;
 
-            foreach (KeyValuePair<int, String > entry in numberFormats)
+            foreach (KeyValuePair<short, String > entry in numberFormats)
             {
                 CT_NumFmt ctFmt = formats.AddNewNumFmt();
                 ctFmt.numFmtId = (uint)entry.Key;
