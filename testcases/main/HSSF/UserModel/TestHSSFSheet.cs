@@ -1327,5 +1327,34 @@ namespace TestCases.HSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Test58746()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+
+            HSSFSheet first = wb.CreateSheet("first") as HSSFSheet;
+            first.CreateRow(0).CreateCell(0).SetCellValue(1);
+
+            HSSFSheet second = wb.CreateSheet("second") as HSSFSheet;
+            second.CreateRow(0).CreateCell(0).SetCellValue(2);
+
+            HSSFSheet third = wb.CreateSheet("third") as HSSFSheet;
+            HSSFRow row = third.CreateRow(0) as HSSFRow;
+            row.CreateCell(0).CellFormula = ("first!A1");
+            row.CreateCell(1).CellFormula = ("second!A1");
+            // re-order for sheet "third"
+            wb.SetSheetOrder("third", 0);
+
+            // verify results
+            Assert.AreEqual("third", wb.GetSheetAt(0).SheetName);
+            Assert.AreEqual("first", wb.GetSheetAt(1).SheetName);
+            Assert.AreEqual("second", wb.GetSheetAt(2).SheetName);
+
+            Assert.AreEqual("first!A1", wb.GetSheetAt(0).GetRow(0).GetCell(0).CellFormula);
+            Assert.AreEqual("second!A1", wb.GetSheetAt(0).GetRow(0).GetCell(1).CellFormula);
+
+            wb.Close();
+        }
+
     }
 }

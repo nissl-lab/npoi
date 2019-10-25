@@ -22,6 +22,7 @@ namespace TestCases.SS.Formula
     using NUnit.Framework;
     using NPOI.SS.Formula;
     using NPOI.SS;
+    using NPOI.SS.Util;
 
 
     /**
@@ -210,6 +211,55 @@ namespace TestCases.SS.Formula
         private static AreaPtg CreateAreaPtg(int initialAreaFirstRow, int initialAreaLastRow, bool firstRowRelative, bool lastRowRelative)
         {
             return new AreaPtg(initialAreaFirstRow, initialAreaLastRow, 2, 5, firstRowRelative, lastRowRelative, false, false);
+        }
+
+        [Test]
+        public void TestShiftSheet()
+        {
+            // 4 sheets, move a sheet from pos 2 to pos 0, i.e. current 0 becomes 1, current 1 becomes pos 2 
+            FormulaShifter shifter = FormulaShifter.CreateForSheetShift(2, 0);
+
+            Ptg[] ptgs = new Ptg[] {
+          new Ref3DPtg(new CellReference("first", 0, 0, true, true), 0),
+          new Ref3DPtg(new CellReference("second", 0, 0, true, true), 1),
+          new Ref3DPtg(new CellReference("third", 0, 0, true, true), 2),
+          new Ref3DPtg(new CellReference("fourth", 0, 0, true, true), 3),
+        };
+
+            shifter.AdjustFormula(ptgs, -1);
+
+            Assert.AreEqual(1, ((Ref3DPtg)ptgs[0]).ExternSheetIndex,
+                "formula previously pointing to sheet 0 should now point to sheet 1");
+            Assert.AreEqual(2, ((Ref3DPtg)ptgs[1]).ExternSheetIndex,
+                "formula previously pointing to sheet 1 should now point to sheet 2");
+            Assert.AreEqual(0, ((Ref3DPtg)ptgs[2]).ExternSheetIndex,
+                "formula previously pointing to sheet 2 should now point to sheet 0");
+            Assert.AreEqual(3, ((Ref3DPtg)ptgs[3]).ExternSheetIndex,
+                "formula previously pointing to sheet 3 should be unchanged");
+        }
+
+        [Test]
+        public void TestShiftSheet2()
+        {
+            // 4 sheets, move a sheet from pos 1 to pos 2, i.e. current 2 becomes 1, current 1 becomes pos 2 
+            FormulaShifter shifter = FormulaShifter.CreateForSheetShift(1, 2);
+
+            Ptg[] ptgs = new Ptg[] {
+          new Ref3DPtg(new CellReference("first", 0, 0, true, true), 0),
+          new Ref3DPtg(new CellReference("second", 0, 0, true, true), 1),
+          new Ref3DPtg(new CellReference("third", 0, 0, true, true), 2),
+          new Ref3DPtg(new CellReference("fourth", 0, 0, true, true), 3),
+        };
+            shifter.AdjustFormula(ptgs, -1);
+
+            Assert.AreEqual(0, ((Ref3DPtg)ptgs[0]).ExternSheetIndex,
+                "formula previously pointing to sheet 0 should be unchanged");
+            Assert.AreEqual(2, ((Ref3DPtg)ptgs[1]).ExternSheetIndex,
+                "formula previously pointing to sheet 1 should now point to sheet 2");
+            Assert.AreEqual(1, ((Ref3DPtg)ptgs[2]).ExternSheetIndex,
+                "formula previously pointing to sheet 2 should now point to sheet 1");
+            Assert.AreEqual(3, ((Ref3DPtg)ptgs[3]).ExternSheetIndex,
+                "formula previously pointing to sheet 3 should be unchanged");
         }
     }
 

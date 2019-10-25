@@ -297,22 +297,47 @@ namespace NPOI.SS.Formula
 
         private Ptg AdjustPtgDueToSheetMove(Ptg ptg)
         {
-            Ptg updatedPtg = null;
             if (ptg is Ref3DPtg)
             {
                 Ref3DPtg ref1 = (Ref3DPtg)ptg;
-                if (ref1.ExternSheetIndex == _srcSheetIndex)
+                int oldSheetIndex = ref1.ExternSheetIndex;
+
+                // we have to handle a few cases here
+
+                // 1. sheet is outside moved sheets, no change necessary
+                if (oldSheetIndex < _srcSheetIndex &&
+                        oldSheetIndex < _dstSheetIndex)
+                {
+                    return null;
+                }
+                if (oldSheetIndex > _srcSheetIndex &&
+                        oldSheetIndex > _dstSheetIndex)
+                {
+                    return null;
+                }
+
+                // 2. ptg refers to the moved sheet
+                if (oldSheetIndex == _srcSheetIndex)
                 {
                     ref1.ExternSheetIndex = (_dstSheetIndex);
-                    updatedPtg = ref1;
+                    return ref1;
                 }
-                else if (ref1.ExternSheetIndex == _dstSheetIndex)
+
+                // 3. new index is lower than old one => sheets get moved up
+                if (_dstSheetIndex < _srcSheetIndex)
                 {
-                    ref1.ExternSheetIndex = (_srcSheetIndex);
-                    updatedPtg = ref1;
+                    ref1.ExternSheetIndex = (oldSheetIndex + 1);
+                    return ref1;
+                }
+
+                // 4. new index is higher than old one => sheets get moved down
+                if (_dstSheetIndex > _srcSheetIndex)
+                {
+                    ref1.ExternSheetIndex = (oldSheetIndex - 1);
+                    return ref1;
                 }
             }
-            return updatedPtg;
+            return null;
         }
         private Ptg RowMoveRefPtg(RefPtgBase rptg)
         {
