@@ -1378,21 +1378,35 @@ namespace NPOI.XWPF.UserModel
             return oMath;
         }
 
-        /**
-         * insert a new Run in RunArray
-         * @param pos
-         * @return  the inserted run
-         */
+        /// <summary>
+        /// insert a new Run in RunArray
+        /// </summary>
+        /// <param name="pos">The position at which the new run should be added.</param>
+        /// <returns>the inserted run or null if the given pos is out of bounds.</returns>
         public XWPFRun InsertNewRun(int pos)
         {
-            if (pos >= 0 && pos <= paragraph.SizeOfRArray())
+            if (pos >= 0 && pos <= runs.Count)
             {
-                CT_R ctRun = paragraph.InsertNewR(pos);
-                XWPFRun newRun = new XWPFRun(ctRun, (IRunBody)this);
+                // calculate the correct pos as our run/irun list contains
+                // hyperlinks
+                // and fields so it is different to the paragraph R array.
+                int rPos = 0;
+                for (int i = 0; i < pos; i++)
+                {
+                    XWPFRun currRun = runs[i];
+                    if (!(currRun is XWPFHyperlinkRun
+                        || currRun is XWPFFieldRun))
+                    {
+                        rPos++;
+                    }
+                }
 
-                // To update the iRuns, find where we're going
-                // in the normal Runs, and go in there
-                int iPos = iRuns.Count;
+            CT_R ctRun = paragraph.InsertNewR(rPos);
+            XWPFRun newRun = new XWPFRun(ctRun, (IRunBody)this);
+
+            // To update the iRuns, find where we're going
+            // in the normal Runs, and go in there
+            int iPos = iRuns.Count;
                 if (pos < runs.Count)
                 {
                     XWPFRun oldAtPos = runs[(pos)];
@@ -1457,7 +1471,7 @@ namespace NPOI.XWPF.UserModel
          */
         public bool RemoveRun(int pos)
         {
-            if (pos >= 0 && pos < paragraph.SizeOfRArray())
+            if (pos >= 0 && pos < runs.Count)
             {
                 // Remove the run from our high level lists
                 XWPFRun run = runs[(pos)];
@@ -1470,6 +1484,14 @@ namespace NPOI.XWPF.UserModel
                 runs.RemoveAt(pos);
                 iRuns.Remove(run);
                 // Remove the run from the low-level XML
+                //calculate the correct pos as our run/irun list contains hyperlinks and fields so is different to the paragraph R array.
+                int rPos = 0;
+                for (int i = 0; i < pos; i++)
+                {
+                    XWPFRun currRun = runs[i];
+                    if (!(currRun is XWPFHyperlinkRun || currRun is XWPFFieldRun))
+                        rPos++;
+                }
                 GetCTP().RemoveR(pos);
                 return true;
             }

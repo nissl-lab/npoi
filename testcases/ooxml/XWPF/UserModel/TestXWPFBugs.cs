@@ -49,6 +49,8 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(run.GetFontFamily(FontCharRange.HAnsi), "Times New Roman");
             run.SetFontFamily("Arial", FontCharRange.HAnsi);
             Assert.AreEqual(run.GetFontFamily(FontCharRange.HAnsi), "Arial");
+
+            doc.Close();
         }
 
         [Test]
@@ -80,6 +82,45 @@ namespace NPOI.XWPF.UserModel
                     }
                 }
             }
+        }
+
+        [Test]
+        public void Test56392()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("56392.docx");
+            Assert.IsNotNull(doc);
+        }
+        /**
+         * Removing a run needs to remove it from both Runs and IRuns
+         */
+        [Test]
+        public void Test57829()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
+            Assert.IsNotNull(doc);
+            Assert.AreEqual(3, doc.Paragraphs.Count);
+            foreach (XWPFParagraph paragraph in doc.Paragraphs)
+            {
+                paragraph.RemoveRun(0);
+                Assert.IsNotNull(paragraph.Text);
+            }
+        }
+
+        /**
+         * Removing a run needs to take into account position of run if paragraph contains hyperlink runs
+         */
+        [Test]
+        public void Test58618()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("58618.docx");
+            XWPFParagraph para = (XWPFParagraph)doc.BodyElements[0];
+            Assert.IsNotNull(para);
+            Assert.AreEqual("Some text  some hyper links link link and some text.....", para.Text);
+            XWPFRun run = para.InsertNewRun(para.Runs.Count);
+            run.SetText("New Text");
+            Assert.AreEqual("Some text  some hyper links link link and some text.....New Text", para.Text);
+            para.RemoveRun(para.Runs.Count - 2);
+            Assert.AreEqual("Some text  some hyper links link linkNew Text", para.Text);
         }
 
     }
