@@ -33,22 +33,63 @@ namespace NPOI.SS
     [TestFixture]
     public class TestWorkbookFactory
     {
-        private String xls;
-        private String xlsx;
-        private String[] xls_prot;
-        private String[] xlsx_prot;
-        private String txt;
+        private readonly String xls = "SampleSS.xls";
+        private readonly String xlsx = "SampleSS.xlsx";
+        private readonly String[] xls_prot = new String[] { "password.xls", "password" };
+        private readonly String[] xlsx_prot = new String[] { "protected_passtika.xlsx", "tika" };
+        private readonly String txt = "SampleSS.txt";
 
-        string testdataPath;
-        [SetUp]
-        public void SetUp()
+        private readonly string testdataPath = ConfigurationManager.AppSettings["POI.testdata.path"] + "\\spreadsheet\\";
+        private static POILogger LOGGER = POILogFactory.GetLogger(typeof(TestWorkbookFactory));
+
+        /**
+         * Closes the sample workbook read in from filename.
+         * Throws an exception if closing the workbook results in the file on disk getting modified.
+         *
+         * @param filename the sample workbook to read in
+         * @param wb the workbook to close
+         * @throws IOException
+         */
+        private static void AssertCloseDoesNotModifyFile(String filename, IWorkbook wb) {
+            byte[] before = HSSFTestDataSamples.GetTestDataFileContent(filename);
+            CloseOrRevert(wb);
+            byte[] after = HSSFTestDataSamples.GetTestDataFileContent(filename);
+            CollectionAssert.AreEqual(before, after, filename + " sample file was modified as a result of closing the workbook");
+        }
+        /**
+         * // TODO: close() re-writes the sample-file?! Resort to revert() for now to close file handle...
+         * Revert the changes that were made to the workbook rather than closing the workbook.
+         * This allows the file handle to be closed to avoid the file handle leak detector.
+         * This is a temporary fix until we figure out why wb.close() writes changes to disk.
+         *
+         * @param wb
+         */
+        private static void CloseOrRevert(IWorkbook wb)
         {
-            xls = "SampleSS.xls";
-            xlsx = "SampleSS.xlsx";
-            xls_prot = new String[] { "password.xls", "password" };
-            xlsx_prot = new String[] { "protected_passtika.xlsx", "tika" };
-            txt = "SampleSS.txt";
-            testdataPath = ConfigurationManager.AppSettings["POI.testdata.path"] + "\\spreadsheet\\";
+            // TODO: close() re-writes the sample-file?! Resort to revert() for now to close file handle...
+            if (wb is HSSFWorkbook)
+            {
+                wb.Close();
+            }
+            else if (wb is XSSFWorkbook)
+            {
+                XSSFWorkbook xwb = (XSSFWorkbook)wb;
+                if (PackageAccess.READ == xwb.Package.GetPackageAccess())
+                {
+                    xwb.Close();
+                }
+                else
+                {
+                    LOGGER.Log(POILogger.WARN,
+                            "reverting XSSFWorkbook rather than closing it to avoid close() modifying the file on disk. " +
+                            "Refer to bug 58779.");
+                    xwb.Package.Revert();
+                }
+            }
+            else
+            {
+                throw new RuntimeException("Unsupported workbook type");
+            }
         }
 
         [Test]
@@ -62,7 +103,7 @@ namespace NPOI.SS
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is HSSFWorkbook);
-            wb.Close();
+            AssertCloseDoesNotModifyFile(xls, wb);
 
             // Package -> xssf
             wb = WorkbookFactory.Create(
@@ -71,6 +112,7 @@ namespace NPOI.SS
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is XSSFWorkbook);
+            AssertCloseDoesNotModifyFile(xlsx, wb);
         }
         [Test]
         public void TestCreateReadOnly()
@@ -81,13 +123,13 @@ namespace NPOI.SS
             wb = WorkbookFactory.Create(HSSFTestDataSamples.GetSampleFile(xls).FullName, null, true);
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is HSSFWorkbook);
-            wb.Close();
+            AssertCloseDoesNotModifyFile(xls, wb);
 
             // Package -> xssf
             wb = WorkbookFactory.Create(HSSFTestDataSamples.GetSampleFile(xlsx).FullName, null, true);
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is XSSFWorkbook);
-            wb.Close();
+            AssertCloseDoesNotModifyFile(xlsx, wb);
         }
         /**
          * Creates the appropriate kind of Workbook, but
@@ -105,30 +147,32 @@ namespace NPOI.SS
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is HSSFWorkbook);
-            wb.Close();
+            AssertCloseDoesNotModifyFile(xls, wb);
 
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.OpenSampleFileStream(xlsx)
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is XSSFWorkbook);
+            AssertCloseDoesNotModifyFile(xlsx, wb);
+
             // File -> either
             wb = WorkbookFactory.Create(
                   Path.GetFullPath(testdataPath + xls)
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is HSSFWorkbook);
-            wb.Close();
+            AssertCloseDoesNotModifyFile(xls, wb);
 
             wb = WorkbookFactory.Create(
                   testdataPath + xlsx
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is XSSFWorkbook);
-            // TODO: close() re-writes the sample-file?! Resort to revert() for now to close file handle...
-            ((XSSFWorkbook)wb).Package.Revert();
+            AssertCloseDoesNotModifyFile(xlsx, wb);
 
             // Invalid type -> exception
+            byte[] before = HSSFTestDataSamples.GetTestDataFileContent(txt);
             try
             {
                 Stream stream = HSSFTestDataSamples.OpenSampleFileStream(txt);
@@ -146,6 +190,8 @@ namespace NPOI.SS
             {
                 // Good
             }
+            byte[] after = HSSFTestDataSamples.GetTestDataFileContent(txt);
+            CollectionAssert.AreEqual(before, after, "Invalid type file was modified after trying to open the file as a spreadsheet");
         }
 
         /**
@@ -161,42 +207,53 @@ namespace NPOI.SS
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is HSSFWorkbook);
-            wb.Close();
+            AssertCloseDoesNotModifyFile(xls, wb);
+
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.OpenSampleFileStream(xlsx), null
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is XSSFWorkbook);
+            AssertCloseDoesNotModifyFile(xlsx, wb);
+
             // Unprotected, wrong password, opens normally
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.OpenSampleFileStream(xls), "wrong"
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is HSSFWorkbook);
-            wb.Close();
+            AssertCloseDoesNotModifyFile(xls, wb);
+
+
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.OpenSampleFileStream(xlsx), "wrong"
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is XSSFWorkbook);
+            AssertCloseDoesNotModifyFile(xlsx, wb);
+
             // Protected, correct password, opens fine
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.OpenSampleFileStream(xls_prot[0]), xls_prot[1]
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is HSSFWorkbook);
-            wb.Close();
+            AssertCloseDoesNotModifyFile(xls_prot[0], wb);
+
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.OpenSampleFileStream(xlsx_prot[0]), xlsx_prot[1]
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is XSSFWorkbook);
+            AssertCloseDoesNotModifyFile(xlsx_prot[0], wb);
+
             // Protected, wrong password, throws Exception
             try
             {
                 wb = WorkbookFactory.Create(
                         HSSFTestDataSamples.OpenSampleFileStream(xls_prot[0]), "wrong"
                 );
+                AssertCloseDoesNotModifyFile(xls_prot[0], wb);
                 Assert.Fail("Shouldn't be able to open with the wrong password");
             }
             catch (EncryptedDocumentException e) { }
@@ -205,6 +262,7 @@ namespace NPOI.SS
                 wb = WorkbookFactory.Create(
                         HSSFTestDataSamples.OpenSampleFileStream(xlsx_prot[0]), "wrong"
                 );
+                AssertCloseDoesNotModifyFile(xlsx_prot[0], wb);
                 Assert.Fail("Shouldn't be able to open with the wrong password");
             }
             catch (EncryptedDocumentException e) { }
@@ -222,45 +280,52 @@ namespace NPOI.SS
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is HSSFWorkbook);
-            wb.Close();
+            AssertCloseDoesNotModifyFile(xls, wb);
+
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.GetSampleFile(xlsx).FullName, null
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is XSSFWorkbook);
-            wb.Close();
+            AssertCloseDoesNotModifyFile(xlsx, wb);
+
             // Unprotected, wrong password, opens normally
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.GetSampleFile(xls).FullName, "wrong"
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is HSSFWorkbook);
-            wb.Close();
+            AssertCloseDoesNotModifyFile(xls, wb);
+
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.GetSampleFile(xlsx).FullName, "wrong"
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is XSSFWorkbook);
-            wb.Close();
+            AssertCloseDoesNotModifyFile(xlsx, wb);
+
             // Protected, correct password, opens fine
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.GetSampleFile(xls_prot[0]).FullName, xls_prot[1]
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is HSSFWorkbook);
-            wb.Close();
+            AssertCloseDoesNotModifyFile(xls, wb);
+
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.GetSampleFile(xlsx_prot[0]).FullName, xlsx_prot[1]
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is XSSFWorkbook);
-            wb.Close();
+            AssertCloseDoesNotModifyFile(xlsx, wb);
+
             // Protected, wrong password, throws Exception
             try
             {
                 wb = WorkbookFactory.Create(
                         HSSFTestDataSamples.GetSampleFile(xls_prot[0]).FullName, "wrong"
                 );
+                AssertCloseDoesNotModifyFile(xls_prot[0], wb);
                 Assert.Fail("Shouldn't be able to open with the wrong password");
             }
             catch (EncryptedDocumentException e) { }
@@ -269,20 +334,16 @@ namespace NPOI.SS
                 wb = WorkbookFactory.Create(
                         HSSFTestDataSamples.GetSampleFile(xlsx_prot[0]).FullName, "wrong"
                 );
+                AssertCloseDoesNotModifyFile(xlsx_prot[0], wb);
                 Assert.Fail("Shouldn't be able to open with the wrong password");
             }
             catch (EncryptedDocumentException e) { }
         }
 
-        /**
-         * Check that a helpful exception is given on an empty file / stream
-         */
         [Test]
-        public void TestEmptyFile()
+        public void TestEmptyInputStream()
         {
             InputStream emptyStream = new ByteArrayInputStream(new byte[0]);
-            FileInfo emptyFile = TempFile.CreateTempFile("empty", ".poi");
-
             try
             {
                 WorkbookFactory.Create(emptyStream);
@@ -291,7 +352,15 @@ namespace NPOI.SS
             catch (EmptyFileException e)
             {
             }
-
+        }
+        /**
+         * Check that a helpful exception is given on an empty file / stream
+         */
+        [Test]
+        public void TestEmptyFile()
+        {
+            
+            FileInfo emptyFile = TempFile.CreateTempFile("empty", ".poi");
             try
             {
                 WorkbookFactory.Create(emptyFile.FullName);
