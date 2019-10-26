@@ -54,7 +54,7 @@ namespace TestCases.HPSF.Extractor
             Assert.IsTrue(dinfText.IndexOf("COMPANY = sample company") > -1);
 
             // Now overall
-             text = ext.Text;
+            text = ext.Text;
             Assert.IsTrue(text.IndexOf("TEMPLATE = Normal") > -1);
             Assert.IsTrue(text.IndexOf("SUBJECT = sample subject") > -1);
             Assert.IsTrue(text.IndexOf("MANAGER = sample manager") > -1);
@@ -153,6 +153,24 @@ namespace TestCases.HPSF.Extractor
             //wb.Close();
         }
 
+        [Test]
+        public void Test52258()
+        {
+            POIFSFileSystem fs = new POIFSFileSystem(_samples.OpenResourceAsStream("TestVisioWithCodepage.vsd"));
+            HPSFPropertiesExtractor ext = new HPSFPropertiesExtractor(fs);
+            try
+            {
+                Assert.IsNotNull(ext.DocSummaryInformation);
+                Assert.IsNotNull(ext.DocumentSummaryInformationText);
+                Assert.IsNotNull(ext.SummaryInformation);
+                Assert.IsNotNull(ext.SummaryInformationText);
+                Assert.IsNotNull(ext.Text);
+            }
+            finally
+            {
+                ext.Close();
+            }
+        }
     }
 
 
