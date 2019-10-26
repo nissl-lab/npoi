@@ -255,7 +255,16 @@ namespace NPOI.XWPF.UserModel
                 StringBuilder out1 = new StringBuilder();
                 foreach (IRunElement run in iRuns)
                 {
-                    if (run is XWPFSDT)
+                    if (run is XWPFRun)
+                    {
+                        XWPFRun xRun = (XWPFRun)run;
+                        // don't include the text if reviewing is enabled and this is a deleted run
+                        if (!xRun.GetCTR().IsSetRsidDel())
+                        {
+                            out1.Append(xRun.ToString());
+                        }
+                    }
+                    else if (run is XWPFSDT)
                     {
                         out1.Append(((XWPFSDT)run).Content.Text);
                     }

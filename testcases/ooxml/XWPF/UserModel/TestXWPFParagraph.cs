@@ -24,6 +24,7 @@ namespace NPOI.XWPF.UserModel
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using NPOI.Util;
+    using System.Text;
 
     /**
      * Tests for XWPF Paragraphs
@@ -537,7 +538,7 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual("FldSimple.docx", p.Text);
         }
 
-    [Test]
+        [Test]
         public void TestRuns()
         {
             XWPFDocument doc = new XWPFDocument();
@@ -550,6 +551,18 @@ namespace NPOI.XWPF.UserModel
 
             Assert.IsNotNull(p.GetRun(run));
             Assert.IsNull(p.GetRun(null));
+        }
+        [Test]
+        public void Test58067()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("58067.docx");
+
+            StringBuilder str = new StringBuilder();
+            foreach (XWPFParagraph par in doc.Paragraphs)
+            {
+                str.Append(par.Text).Append("\n");
+            }
+            Assert.AreEqual("This is a test.\n\n\n\n3\n4\n5\n\n\n\nThis is a whole paragraph where one word is deleted.\n", str.ToString());
         }
 
     }
