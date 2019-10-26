@@ -259,7 +259,7 @@ namespace NPOI.HPSF.Wellknown
         /**
          * This entry contains the version of the Application which wrote the
          *  Property set, stored with the two high order bytes having the major
-         *  version number, and hte two low order bytes the minor version number.
+         *  version number, and the two low order bytes the minor version number.
          */
         public static int PID_VERSION = 0x17;
 
