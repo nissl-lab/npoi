@@ -3141,6 +3141,40 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(1, wb.NumberOfSheets);
             Assert.AreEqual("Sheet1", wb.GetSheetName(0));
         }
+
+        [Test]
+        public void Test57236()
+        {
+            // Having very small numbers leads to different formatting, Excel uses the scientific notation, but POI leads to "0"
+
+            /*
+            DecimalFormat format = new DecimalFormat("#.##########", new DecimalFormatSymbols(Locale.Default));
+            double d = 3.0E-104;
+            Assert.AreEqual("3.0E-104", format.Format(d));
+             */
+
+            DataFormatter formatter = new DataFormatter(true);
+
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57236.xlsx");
+            for (int sheetNum = 0; sheetNum < wb.NumberOfSheets; sheetNum++)
+            {
+                ISheet sheet = wb.GetSheetAt(sheetNum);
+                for (int rowNum = sheet.FirstRowNum; rowNum < sheet.LastRowNum; rowNum++)
+                {
+                    IRow row = sheet.GetRow(rowNum);
+                    for (int cellNum = row.FirstCellNum; cellNum < row.LastCellNum; cellNum++)
+                    {
+                        ICell cell = row.GetCell(cellNum);
+                        String fmtCellValue = formatter.FormatCellValue(cell);
+
+                        //System.out.Println("Cell: " + fmtCellValue);
+                        Assert.IsNotNull(fmtCellValue);
+                        Assert.IsFalse(fmtCellValue.Equals("0"));
+                    }
+                }
+            }
+            wb.Close();
+        }
     }
 
 }
