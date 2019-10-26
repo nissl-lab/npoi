@@ -44,49 +44,23 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        public override POIXMLDocumentPart CreateDocumentPart(POIXMLDocumentPart parent, PackageRelationship rel, PackagePart part)
+        /**
+         * @since POI 3.14-Beta1
+         */
+        protected override POIXMLRelation GetDescriptor(String relationshipType)
         {
-            POIXMLRelation descriptor = XWPFRelation.GetInstance(rel.RelationshipType);
-            if (descriptor == null || descriptor.RelationClass == null)
-            {
-                logger.Log(POILogger.DEBUG, "using default POIXMLDocumentPart for " + rel.RelationshipType);
-                return new POIXMLDocumentPart(part, rel);
-            }
-
-            try
-            {
-                Type cls = descriptor.RelationClass;
-                try
-                {
-                    ConstructorInfo constructor = cls.GetConstructor(new Type[] { typeof(POIXMLDocumentPart), typeof(PackagePart), typeof(PackageRelationship) });
-                    return constructor.Invoke(new object[] { parent, part, rel }) as POIXMLDocumentPart;
-                }
-                catch (Exception)
-                {
-                    ConstructorInfo constructor = cls.GetConstructor(new Type[] { typeof(PackagePart), typeof(PackageRelationship) });
-                    return constructor.Invoke(new object[] { part, rel }) as POIXMLDocumentPart;
-                }
-            }
-            catch (Exception e)
-            {
-                throw new POIXMLException(e);
-            }
+            return XWPFRelation.GetInstance(relationshipType);
         }
 
+        /**
+         * @since POI 3.14-Beta1
+         */
 
-        public override POIXMLDocumentPart CreateDocumentPart(POIXMLRelation descriptor)
+        protected override POIXMLDocumentPart CreateDocumentPart(Type cls, Type[] classes, Object[] values)
         {
-            try
-            {
-                Type cls = descriptor.RelationClass;
-                ConstructorInfo constructor = cls.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public, 
-                    null, Type.EmptyTypes, null);
-                return constructor.Invoke(new object[] { }) as POIXMLDocumentPart;
-            }
-            catch (Exception e)
-            {
-                throw new POIXMLException(e);
-            }
+            ConstructorInfo constructor = cls.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public,
+                    null, classes, null);
+            return constructor.Invoke(values) as POIXMLDocumentPart;
         }
 
     }

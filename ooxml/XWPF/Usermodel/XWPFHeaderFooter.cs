@@ -57,8 +57,8 @@ namespace NPOI.XWPF.UserModel
             //ReadHdrFtr();
         }
 
-        public XWPFHeaderFooter(POIXMLDocumentPart parent, PackagePart part, PackageRelationship rel) :
-            base(parent, part, rel)
+        public XWPFHeaderFooter(POIXMLDocumentPart parent, PackagePart part) 
+            : base(parent, part)
         {
             ;
             this.document = (XWPFDocument)GetParent();
@@ -69,7 +69,12 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public XWPFHeaderFooter(POIXMLDocumentPart parent, PackagePart part, PackageRelationship rel)
+            : this(parent, part)
+        {
 
+        }
         internal override void OnDocumentRead()
         {
             foreach (POIXMLDocumentPart poixmlDocumentPart in GetRelations())
@@ -316,14 +321,9 @@ namespace NPOI.XWPF.UserModel
                  */
                 PackagePart picDataPart = xwpfPicData.GetPackagePart();
                 // TODO add support for TargetMode.EXTERNAL relations.
-                TargetMode targetMode = TargetMode.Internal;
-                PackagePartName partName = picDataPart.PartName;
-                String relation = relDesc.Relation;
-                PackageRelationship relShip = GetPackagePart().AddRelationship(partName, targetMode, relation);
-                String id = relShip.Id;
-                AddRelation(id, xwpfPicData);
+                RelationPart rp = AddRelation(null, XWPFRelation.IMAGES, xwpfPicData);
                 pictures.Add(xwpfPicData);
-                return id;
+                return rp.Relationship.Id;
             }
             else
             {

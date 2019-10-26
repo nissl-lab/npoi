@@ -43,12 +43,18 @@ namespace NPOI.XSSF.UserModel
          * @param rel - the relationship of the given package part in the underlying OPC package
          */
 
-        protected XSSFPivotCacheRecords(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        protected XSSFPivotCacheRecords(PackagePart part)
+            : base(part)
         {
             ReadFrom(part.GetInputStream());
         }
 
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        protected XSSFPivotCacheRecords(PackagePart part, PackageRelationship rel)
+            : this(part)
+        {
+
+        }
 
         protected void ReadFrom(Stream is1)
         {

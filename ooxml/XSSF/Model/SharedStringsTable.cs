@@ -88,13 +88,18 @@ namespace NPOI.XSSF.Model
             _sstDoc.AddNewSst();
         }
 
-        internal SharedStringsTable(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        public SharedStringsTable(PackagePart part)
+            : base(part)
         {
             ReadFrom(part.GetInputStream());
         }
 
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public SharedStringsTable(PackagePart part, PackageRelationship rel)
+             : this(part)
+        {
 
+        }
 
         public void ReadFrom(Stream is1)
         {

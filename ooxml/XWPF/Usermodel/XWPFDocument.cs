@@ -125,8 +125,9 @@ namespace NPOI.XWPF.UserModel
                     headerFooterPolicy = new XWPFHeaderFooterPolicy(this);
 
                 // Create for each XML-part in the Package a PartClass
-                foreach (POIXMLDocumentPart p in GetRelations()) {
-                    String relation = p.GetPackageRelationship().RelationshipType;
+                foreach (RelationPart rp in RelationParts) {
+                    POIXMLDocumentPart p = rp.DocumentPart;
+                    String relation = rp.Relationship.RelationshipType;
                     if (relation.Equals(XWPFRelation.STYLES.Relation))
                     {
                         this.styles = (XWPFStyles)p;
@@ -223,9 +224,10 @@ namespace NPOI.XWPF.UserModel
 
         private void InitFootnotes()
         {
-            foreach(POIXMLDocumentPart p in GetRelations()){
-               String relation = p.GetPackageRelationship().RelationshipType;
-               if (relation.Equals(XWPFRelation.FOOTNOTE.Relation)) {
+            foreach(RelationPart rp in RelationParts){
+                POIXMLDocumentPart p = rp.DocumentPart;
+                String relation = rp.Relationship.RelationshipType;
+                if (relation.Equals(XWPFRelation.FOOTNOTE.Relation)) {
                   this.footnotes = (XWPFFootnotes)p;
                   this.footnotes.OnDocumentRead();
                }
@@ -821,12 +823,10 @@ namespace NPOI.XWPF.UserModel
          */
         private int GetRelationIndex(XWPFRelation relation)
         {
-            List<POIXMLDocumentPart> relations = GetRelations();
             int i = 1;
-            for (IEnumerator<POIXMLDocumentPart> it = relations.GetEnumerator(); it.MoveNext(); )
+            foreach (RelationPart rp in RelationParts)
             {
-                POIXMLDocumentPart item = it.Current;
-                if (item.GetPackageRelationship().RelationshipType.Equals(relation.Relation))
+                if (rp.Relationship.RelationshipType.Equals(relation.Relation))
                 {
                     i++;
                 }
@@ -1360,14 +1360,8 @@ namespace NPOI.XWPF.UserModel
                  */
                 PackagePart picDataPart = xwpfPicData.GetPackagePart();
                 // TODO add support for TargetMode.EXTERNAL relations.
-                TargetMode targetMode = TargetMode.Internal;
-                PackagePartName partName = picDataPart.PartName;
-                String relation = relDesc.Relation;
-                PackageRelationship relShip = GetPackagePart().AddRelationship(partName, targetMode, relation);
-                String id = relShip.Id;
-                AddRelation(id, xwpfPicData);
-                pictures.Add(xwpfPicData);
-                return id;
+                RelationPart rp = AddRelation(null, XWPFRelation.IMAGES, xwpfPicData);
+                return rp.Relationship.Id;
             }
             else
             {

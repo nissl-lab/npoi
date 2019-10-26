@@ -111,12 +111,20 @@ namespace NPOI.XSSF.Model
             Initialize();
         }
 
-        internal StylesTable(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        internal StylesTable(PackagePart part)
+            : base(part)
         {
             XmlDocument xmldoc = ConvertStreamToXml(part.GetInputStream());
             ReadFrom(xmldoc);
         }
+
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public StylesTable(PackagePart part, PackageRelationship rel)
+             : this(part)
+        {
+
+        }
+
         public void SetWorkbook(XSSFWorkbook wb)
         {
             this.workbook = wb;

@@ -209,16 +209,21 @@ namespace NPOI.XWPF.UserModel
               null,
               "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
               null,
-              null
+              typeof(XWPFPictureData)
         );
 
 
         private XWPFRelation(String type, String rel, String defaultName, Type cls)
             : base(type, rel, defaultName, cls)
         {
-            ;
-
-            if (cls != null && !_table.ContainsKey(rel)) _table.Add(rel, this);
+            if (_table.ContainsKey(rel))
+            {
+                _table[rel] = this;
+            }
+            else
+            {
+                _table.Add(rel, this);
+            }
         }
 
         /**

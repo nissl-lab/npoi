@@ -17,6 +17,8 @@
 
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.OpenXml4Net.OPC;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -25,8 +27,8 @@ namespace NPOI.XSSF.UserModel
     {
         protected CT_Dialogsheet dialogsheet;
 
-        public XSSFDialogsheet(XSSFSheet sheet)
-            : base(sheet.GetPackagePart(), sheet.GetPackageRelationship())
+        public XSSFDialogsheet(XSSFSheet sheet, PackageRelationship rel)
+            : base(sheet.GetPackagePart(), rel)
         {
 
             this.dialogsheet = new CT_Dialogsheet();

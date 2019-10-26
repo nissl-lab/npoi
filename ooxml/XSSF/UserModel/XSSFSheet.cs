@@ -87,11 +87,16 @@ namespace NPOI.XSSF.UserModel
          * @param part - The namespace part that holds xml data represenring this sheet.
          * @param rel - the relationship of the given namespace part in the underlying OPC namespace
          */
-        internal XSSFSheet(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        protected internal XSSFSheet(PackagePart part)
+            : base(part)
         {
-
             dataValidationHelper = new XSSFDataValidationHelper(this);
+        }
+
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        internal XSSFSheet(PackagePart part, PackageRelationship rel)
+            : this(part)
+        {
         }
 
         /**
@@ -140,8 +145,9 @@ namespace NPOI.XSSF.UserModel
             columnHelper = new ColumnHelper(worksheet);
 
             // Look for bits we're interested in
-            foreach (POIXMLDocumentPart p in GetRelations())
+            foreach (RelationPart rp in RelationParts)
             {
+                POIXMLDocumentPart p = rp.DocumentPart;
                 if (p is CommentsTable)
                 {
                     sheetComments = (CommentsTable)p;
@@ -149,7 +155,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 if (p is XSSFTable)
                 {
-                    tables[p.GetPackageRelationship().Id] = (XSSFTable)p;
+                    tables[rp.Relationship.Id] = (XSSFTable)p;
                 }
                 if (p is XSSFPivotTable)
                 {
@@ -419,12 +425,13 @@ namespace NPOI.XSSF.UserModel
             if (ctDrawing != null)
             {
                 // Search the referenced Drawing in the list of the sheet's relations
-                foreach (POIXMLDocumentPart p in GetRelations())
+                foreach (RelationPart rp in RelationParts)
                 {
+                    POIXMLDocumentPart p = rp.DocumentPart;
                     if (p is XSSFDrawing)
                     {
                         XSSFDrawing dr = (XSSFDrawing)p;
-                        String drId = dr.GetPackageRelationship().Id;
+                        String drId = rp.Relationship.Id;
                         if (drId.Equals(ctDrawing.id))
                         {
                             return dr;
@@ -453,8 +460,9 @@ namespace NPOI.XSSF.UserModel
 
             //drawingNumber = #drawings.Count + 1
             int DrawingNumber = GetPackagePart().Package.GetPartsByContentType(XSSFRelation.DRAWINGS.ContentType).Count + 1;
-            XSSFDrawing Drawing = (XSSFDrawing)CreateRelationship(XSSFRelation.DRAWINGS, XSSFFactory.GetInstance(), DrawingNumber);
-            String relId = Drawing.GetPackageRelationship().Id;
+            RelationPart rp = CreateRelationship(XSSFRelation.DRAWINGS, XSSFFactory.GetInstance(), DrawingNumber, false);
+            XSSFDrawing drawing = rp.DocumentPart as XSSFDrawing;
+            String relId = rp.Relationship.Id;
 
             //add CT_Drawing element which indicates that this sheet Contains Drawing components built on the DrawingML platform.
             //The relationship Id references the part Containing the DrawingML defInitions.
@@ -462,7 +470,7 @@ namespace NPOI.XSSF.UserModel
             ctDrawing.id = (/*setter*/relId);
 
             // Return the newly Created Drawing
-            return Drawing;
+            return drawing;
         }
 
 
@@ -483,8 +491,9 @@ namespace NPOI.XSSF.UserModel
                 {
                     //drawingNumber = #drawings.Count + 1
                     int drawingNumber = GetPackagePart().Package.GetPartsByContentType(XSSFRelation.VML_DRAWINGS.ContentType).Count + 1;
-                    drawing = (XSSFVMLDrawing)CreateRelationship(XSSFRelation.VML_DRAWINGS, XSSFFactory.GetInstance(), drawingNumber);
-                    String relId = drawing.GetPackageRelationship().Id;
+                    RelationPart rp = CreateRelationship(XSSFRelation.VML_DRAWINGS, XSSFFactory.GetInstance(), drawingNumber, false);
+                    drawing = rp.DocumentPart as XSSFVMLDrawing;
+                    String relId = rp.Relationship.Id;
 
                     //add CT_LegacyDrawing element which indicates that this sheet Contains drawing components built on the drawingML platform.
                     //The relationship Id references the part Containing the drawing defInitions.
@@ -495,12 +504,13 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 //search the referenced drawing in the list of the sheet's relations
-                foreach (POIXMLDocumentPart p in GetRelations())
+                foreach (RelationPart rp in RelationParts)
                 {
+                    POIXMLDocumentPart p = rp.DocumentPart;
                     if (p is XSSFVMLDrawing)
                     {
                         XSSFVMLDrawing dr = (XSSFVMLDrawing)p;
-                        String drId = dr.GetPackageRelationship().Id;
+                        String drId = rp.Relationship.Id;
                         if (drId.Equals(ctDrawing.id))
                         {
                             drawing = dr;
@@ -4158,8 +4168,9 @@ namespace NPOI.XSSF.UserModel
             // Table numbers need to be unique in the file, not just
             //  unique within the sheet. Find the next one
             int tableNumber = GetPackagePart().Package.GetPartsByContentType(XSSFRelation.TABLE.ContentType).Count + 1;
-            XSSFTable table = (XSSFTable)CreateRelationship(XSSFRelation.TABLE, XSSFFactory.GetInstance(), tableNumber);
-            tbl.id = table.GetPackageRelationship().Id;
+            RelationPart rp = CreateRelationship(XSSFRelation.TABLE, XSSFFactory.GetInstance(), tableNumber, false);
+            XSSFTable table = rp.DocumentPart as XSSFTable;
+            tbl.id = rp.Relationship.Id;
 
             tables[tbl.id] = table;
 
@@ -4213,12 +4224,13 @@ namespace NPOI.XSSF.UserModel
                         return null;
                     }
 
-                    foreach (POIXMLDocumentPart p in GetRelations())
+                    foreach (RelationPart rp in RelationParts)
                     {
+                        POIXMLDocumentPart p = rp.DocumentPart;
                         if (p is XSSFDrawing)
                         {
                             XSSFDrawing dr = (XSSFDrawing)p;
-                            String drId = dr.GetPackageRelationship().Id;
+                            String drId = rp.Relationship.Id;
                             if (drId.Equals(ctDrawing.id))
                             {
                                 drawing = dr;
@@ -4542,6 +4554,7 @@ namespace NPOI.XSSF.UserModel
         {
             String clonedName = SheetUtil.GetUniqueSheetName(this.Workbook, name);
             XSSFSheet clonedSheet = (XSSFSheet)this.Workbook.CreateSheet(clonedName);
+
             try
             {
                 using (MemoryStream out1 = new MemoryStream())

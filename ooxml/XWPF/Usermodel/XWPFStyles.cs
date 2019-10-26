@@ -47,11 +47,17 @@ namespace NPOI.XWPF.UserModel
          * @param rel  the package relationship of type "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/styles"
          */
 
-        public XWPFStyles(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        public XWPFStyles(PackagePart part)
+            : base(part)
         {
         }
 
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public XWPFStyles(PackagePart part, PackageRelationship rel)
+             : this(part)
+        {
+
+        }
         /**
          * Construct XWPFStyles from scratch for a new document.
          */
@@ -66,9 +72,10 @@ namespace NPOI.XWPF.UserModel
         internal override void OnDocumentRead()
         {
             StylesDocument stylesDoc;
+            Stream is1 = GetPackagePart().GetInputStream();
             try
             {
-                XmlDocument doc = ConvertStreamToXml(GetPackagePart().GetInputStream());
+                XmlDocument doc = ConvertStreamToXml(is1);
                 stylesDoc = StylesDocument.Parse(doc,NamespaceManager);
                 SetStyles(stylesDoc.Styles);
                 latentStyles = new XWPFLatentStyles(ctStyles.latentStyles, this);
@@ -77,6 +84,10 @@ namespace NPOI.XWPF.UserModel
             catch (XmlException e)
             {
                 throw new POIXMLException("Unable to read styles", e);
+            }
+            finally
+            {
+                is1.Close();
             }
         }
 

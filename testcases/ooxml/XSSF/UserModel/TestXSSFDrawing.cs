@@ -24,6 +24,8 @@ using NPOI.Util;
 using System.Drawing;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using System.Text;
+using static NPOI.POIXMLDocumentPart;
+
 namespace NPOI.XSSF.UserModel
 {
     /**
@@ -38,14 +40,15 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("WithDrawing.xlsx");
             XSSFSheet sheet = (XSSFSheet)wb.GetSheetAt(0);
             //the sheet has one relationship and it is XSSFDrawing
-            List<POIXMLDocumentPart> rels = sheet.GetRelations();
+            List<RelationPart> rels = sheet.RelationParts;
             Assert.AreEqual(1, rels.Count);
-            Assert.IsTrue(rels[0] is XSSFDrawing);
+            RelationPart rp = rels[0];
+            Assert.IsTrue(rp.DocumentPart is XSSFDrawing);
 
-            XSSFDrawing drawing = (XSSFDrawing)rels[0];
+            XSSFDrawing drawing = (XSSFDrawing)rp.DocumentPart;
             //sheet.CreateDrawingPatriarch() should return the same instance of XSSFDrawing
             Assert.AreSame(drawing, sheet.CreateDrawingPatriarch());
-            String drawingId = drawing.GetPackageRelationship().Id;
+            String drawingId = rp.Relationship.Id;
 
             //there should be a relation to this Drawing in the worksheet
             Assert.IsTrue(sheet.GetCTWorksheet().IsSetDrawing());
@@ -78,12 +81,13 @@ namespace NPOI.XSSF.UserModel
             XSSFDrawing dr2 = (XSSFDrawing)sheet.CreateDrawingPatriarch();
             Assert.AreSame(dr1, dr2);
 
-            List<POIXMLDocumentPart> rels = sheet.GetRelations();
+            List<RelationPart> rels = sheet.RelationParts;
             Assert.AreEqual(1, rels.Count);
-            Assert.IsTrue(rels[0] is XSSFDrawing);
+            RelationPart rp = rels[0];
+            Assert.IsTrue(rp.DocumentPart is XSSFDrawing);
 
-            XSSFDrawing drawing = (XSSFDrawing)rels[0];
-            String drawingId = drawing.GetPackageRelationship().Id;
+            XSSFDrawing drawing = (XSSFDrawing)rp.DocumentPart;
+            String drawingId = rp.Relationship.Id;
 
             //there should be a relation to this Drawing in the worksheet
             Assert.IsTrue(sheet.GetCTWorksheet().IsSetDrawing());
@@ -526,14 +530,15 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("WithDrawing.xlsx");
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
             //the sheet has one relationship and it is XSSFDrawing
-            List<POIXMLDocumentPart> rels = sheet.GetRelations();
+            List<RelationPart> rels = sheet.RelationParts;
             Assert.AreEqual(1, rels.Count);
-            Assert.IsTrue(rels[0] is XSSFDrawing);
+            RelationPart rp = rels[0];
+            Assert.IsTrue(rp.DocumentPart is XSSFDrawing);
 
-            XSSFDrawing drawing = (XSSFDrawing)rels[0];
+            XSSFDrawing drawing = (XSSFDrawing)rp.DocumentPart;
             //sheet.CreateDrawingPatriarch() should return the same instance of XSSFDrawing
             Assert.AreSame(drawing, sheet.CreateDrawingPatriarch());
-            String drawingId = drawing.GetPackageRelationship().Id;
+            String drawingId = rp.Relationship.Id;
 
             //there should be a relation to this Drawing in the worksheet
             Assert.IsTrue(sheet.GetCTWorksheet().IsSetDrawing());
@@ -561,16 +566,16 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("WithTextBox.xlsx");
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
             //the sheet has one relationship and it is XSSFDrawing
-            List<POIXMLDocumentPart> rels = sheet.GetRelations();
+            List<RelationPart> rels = sheet.RelationParts;
             Assert.AreEqual(1, rels.Count);
+            RelationPart rp = rels[0];
+            Assert.IsTrue(rp.DocumentPart is XSSFDrawing);
 
-            Assert.IsTrue(rels[0] is XSSFDrawing);
-
-            XSSFDrawing drawing = (XSSFDrawing)rels[0];
+            XSSFDrawing drawing = (XSSFDrawing)rp.DocumentPart;
 
             //sheet.CreateDrawingPatriarch() should return the same instance of XSSFDrawing
             Assert.AreSame(drawing, sheet.CreateDrawingPatriarch());
-            String drawingId = drawing.GetPackageRelationship().Id;
+            String drawingId = rp.Relationship.Id;
 
             //there should be a relation to this Drawing in the worksheet
             Assert.IsTrue(sheet.GetCTWorksheet().IsSetDrawing());

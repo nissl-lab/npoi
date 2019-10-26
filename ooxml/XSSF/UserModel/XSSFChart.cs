@@ -73,8 +73,8 @@ namespace NPOI.XSSF.UserModel
          * @param rel  the namespace relationship holding this chart,
          * the relationship type must be http://schemas.Openxmlformats.org/officeDocument/2006/relationships/chart
          */
-        protected XSSFChart(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        protected XSSFChart(PackagePart part)
+            : base(part)
         {
 
             XmlDocument doc = ConvertStreamToXml(part.GetInputStream());
@@ -82,6 +82,12 @@ namespace NPOI.XSSF.UserModel
             chart = chartSpaceDocument.GetChartSpace().chart;
         }
 
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        protected XSSFChart(PackagePart part, PackageRelationship rel)
+            : this(part)
+        {
+
+        }
         /**
          * Construct a new CTChartSpace bean.
          * By default, it's just an empty placeholder for chart objects.

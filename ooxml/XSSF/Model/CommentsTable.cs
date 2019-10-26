@@ -47,18 +47,24 @@ namespace NPOI.XSSF.Model
             comments.AddNewAuthors().AddAuthor(DEFAULT_AUTHOR);
         }
 
-        internal CommentsTable(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        internal CommentsTable(PackagePart part)
+            : base(part)
         {
-
-            XmlDocument xml = ConvertStreamToXml(part.GetInputStream());
-            ReadFrom(xml);
+            ReadFrom(part.GetInputStream());
         }
 
-        public void ReadFrom(XmlDocument xmlDoc)
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public CommentsTable(PackagePart part, PackageRelationship rel)
+             : this(part)
+        {
+
+        }
+
+        public void ReadFrom(Stream is1)
         {
             try
             {
+                XmlDocument xmlDoc = ConvertStreamToXml(is1);
                 CommentsDocument doc = CommentsDocument.Parse(xmlDoc, NamespaceManager);
                 comments = doc.GetComments();
 

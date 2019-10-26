@@ -60,8 +60,8 @@ namespace NPOI.XSSF.Model
          * @param part A PackagePart.
          * @param rel A PackageRelationship.
          */
-        internal ThemesTable(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        public ThemesTable(PackagePart part)
+            : base(part)
         {
 
             XmlDocument xmldoc = ConvertStreamToXml(part.GetInputStream());
@@ -74,6 +74,13 @@ namespace NPOI.XSSF.Model
             {
                 throw new IOException(e.Message, e);
             }
+        }
+
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public ThemesTable(PackagePart part, PackageRelationship rel)
+             : this(part)
+        {
+
         }
         /**
          * Construct a ThemesTable from an existing ThemeDocument.

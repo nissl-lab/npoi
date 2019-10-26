@@ -60,14 +60,13 @@ namespace NPOI.OOXML
             {
                 //
             }
-            public override POIXMLDocumentPart CreateDocumentPart(POIXMLDocumentPart parent, PackageRelationship rel, PackagePart part)
+            protected override POIXMLRelation GetDescriptor(String relationshipType)
             {
-                return new POIXMLDocumentPart(part, rel);
+                return null;
             }
-
-            public override POIXMLDocumentPart CreateDocumentPart(POIXMLRelation descriptor)
+            protected override POIXMLDocumentPart CreateDocumentPart(Type cls, Type[] classes, Object[] values)
             {
-                throw new NotSupportedException();
+                return null;
             }
 
         }

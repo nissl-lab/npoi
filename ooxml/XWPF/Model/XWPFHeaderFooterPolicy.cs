@@ -26,6 +26,7 @@ namespace NPOI.XWPF.Model
     using NPOI.OpenXmlFormats.Vml;
     using NPOI.OpenXmlFormats.Vml.Office;
     using System.Diagnostics;
+    using static NPOI.POIXMLDocumentPart;
 
     /**
      * A .docx file can have no headers/footers, the same header/footer
@@ -189,12 +190,10 @@ namespace NPOI.XWPF.Model
 
         private int GetRelationIndex(XWPFRelation relation)
         {
-            List<POIXMLDocumentPart> relations = doc.GetRelations();
             int i = 1;
-            for (IEnumerator<POIXMLDocumentPart> it = relations.GetEnumerator(); it.MoveNext(); )
+            foreach (RelationPart rp in doc.RelationParts)
             {
-                POIXMLDocumentPart item = it.Current;
-                if (item.GetPackageRelationship().RelationshipType.Equals(relation.Relation))
+                if (rp.Relationship.RelationshipType.Equals(relation.Relation))
                 {
                     i++;
                 }
@@ -256,7 +255,7 @@ namespace NPOI.XWPF.Model
         {
             CT_HdrFtrRef ref1 = doc.Document.body.sectPr.AddNewFooterReference();
             ref1.type = (type);
-            ref1.id = (wrapper.GetPackageRelationship().Id);
+            ref1.id = (doc.GetRelationId(wrapper));
         }
 
 
@@ -264,7 +263,7 @@ namespace NPOI.XWPF.Model
         {
             CT_HdrFtrRef ref1 = doc.Document.body.sectPr.AddNewHeaderReference();
             ref1.type = (type);
-            ref1.id = (wrapper.GetPackageRelationship().Id);
+            ref1.id = (doc.GetRelationId(wrapper));
         }
 
 

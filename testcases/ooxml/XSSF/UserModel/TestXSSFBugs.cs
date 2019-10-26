@@ -41,6 +41,8 @@ namespace NPOI.XSSF.UserModel
     using NUnit.Framework.Constraints;
     using TestCases;
     using TestCases.HSSF;
+    using static NPOI.POIXMLDocumentPart;
+
     [TestFixture]
     public class TestXSSFBugs : BaseTestBugzillaIssues
     {
@@ -165,9 +167,9 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(1, wb1.NumberOfSheets);
             XSSFSheet sh = wb1.GetSheetAt(0) as XSSFSheet;
             XSSFDrawing drawing = sh.CreateDrawingPatriarch() as XSSFDrawing;
-            List<POIXMLDocumentPart> rels = drawing.GetRelations();
+            List<RelationPart> rels = drawing.RelationParts;
             Assert.AreEqual(1, rels.Count);
-            Assert.AreEqual("/xl/drawings/#Sheet1!A1", rels[0].GetPackageRelationship().TargetUri.ToString());
+            Assert.AreEqual("/xl/drawings/#Sheet1!A1", rels[0].Relationship.TargetUri.ToString());
 
             // And again, just to be sure
             XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1) as XSSFWorkbook;
@@ -176,9 +178,9 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(1, wb2.NumberOfSheets);
             sh = wb2.GetSheetAt(0) as XSSFSheet;
             drawing = sh.CreateDrawingPatriarch() as XSSFDrawing;
-            rels = drawing.GetRelations();
+            rels = drawing.RelationParts;
             Assert.AreEqual(1, rels.Count);
-            Assert.AreEqual("/xl/drawings/#Sheet1!A1", rels[0].GetPackageRelationship().TargetUri.ToString());
+            Assert.AreEqual("/xl/drawings/#Sheet1!A1", rels[0].Relationship.TargetUri.ToString());
 
             wb2.Close();
         }
@@ -1373,12 +1375,20 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("51470.xlsx");
             XSSFSheet sh0 = wb.GetSheetAt(0) as XSSFSheet;
             XSSFSheet sh1 = wb.CloneSheet(0) as XSSFSheet;
-            List<POIXMLDocumentPart> rels0 = sh0.GetRelations();
-            List<POIXMLDocumentPart> rels1 = sh1.GetRelations();
+            List<RelationPart> rels0 = sh0.RelationParts;
+            List<RelationPart> rels1 = sh1.RelationParts;
             Assert.AreEqual(1, rels0.Count);
             Assert.AreEqual(1, rels1.Count);
 
-            Assert.AreEqual(rels0[(0)].GetPackageRelationship(), rels1[0].GetPackageRelationship());
+            PackageRelationship pr0 = rels0[0].Relationship;
+            PackageRelationship pr1 = rels1[0].Relationship;
+
+            Assert.AreEqual(pr0.TargetMode, pr1.TargetMode);
+            Assert.AreEqual(pr0.TargetUri, pr1.TargetUri);
+            POIXMLDocumentPart doc0 = rels0[0].DocumentPart;
+            POIXMLDocumentPart doc1 = rels1[0].DocumentPart;
+
+            Assert.AreEqual(doc0, doc1);
             wb.Close();
         }
 

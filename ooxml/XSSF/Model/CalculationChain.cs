@@ -42,11 +42,18 @@ namespace NPOI.XSSF.Model
             chain = new CT_CalcChain();
         }
 
-        internal CalculationChain(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        internal CalculationChain(PackagePart part)
+            : base(part)
         {
             XmlDocument xml = ConvertStreamToXml(part.GetInputStream());
             ReadFrom(xml);
+        }
+
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public CalculationChain(PackagePart part, PackageRelationship rel)
+             : this(part)
+        {
+
         }
 
         public void ReadFrom(XmlDocument xml)

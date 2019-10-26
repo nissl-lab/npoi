@@ -55,17 +55,22 @@ namespace NPOI.XSSF.Model
 
         }
         XmlDocument xml = null;
-        internal MapInfo(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        internal MapInfo(PackagePart part)
+            : base(part)
         {
-            xml = ConvertStreamToXml(part.GetInputStream());
-            ReadFrom(xml);
+            ReadFrom(part.GetInputStream());
         }
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public MapInfo(PackagePart part, PackageRelationship rel)
+             : this(part)
+        {
 
-        public void ReadFrom(XmlDocument xmldoc)
+        }
+        public void ReadFrom(Stream is1)
         {
             try
             {
+                XmlDocument xmldoc = ConvertStreamToXml(is1);
                 MapInfoDocument doc = MapInfoDocument.Parse(xmldoc, NamespaceManager);
                 mapInfo = doc.GetMapInfo();
 

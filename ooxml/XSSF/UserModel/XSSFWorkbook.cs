@@ -326,8 +326,9 @@ namespace NPOI.XSSF.UserModel
                 ThemesTable theme = null;
                 Dictionary<String, XSSFSheet> shIdMap = new Dictionary<String, XSSFSheet>();
                 Dictionary<String, ExternalLinksTable> elIdMap = new Dictionary<String, ExternalLinksTable>();
-                foreach (POIXMLDocumentPart p in GetRelations())
+                foreach (RelationPart rp in RelationParts)
                 {
+                    POIXMLDocumentPart p = rp.DocumentPart;
                     if (p is SharedStringsTable) sharedStringSource = (SharedStringsTable)p;
                     else if (p is StylesTable) stylesSource = (StylesTable)p;
                     else if (p is ThemesTable) theme = (ThemesTable)p;
@@ -335,11 +336,11 @@ namespace NPOI.XSSF.UserModel
                     else if (p is MapInfo) mapInfo = (MapInfo)p;
                     else if (p is XSSFSheet)
                     {
-                        shIdMap.Add(p.GetPackageRelationship().Id,(XSSFSheet)p);
+                        shIdMap.Add(rp.Relationship.Id,(XSSFSheet)p);
                     }
                     else if (p is ExternalLinksTable)
                     {
-                        elIdMap.Add(p.GetPackageRelationship().Id, (ExternalLinksTable)p);
+                        elIdMap.Add(rp.Relationship.Id, (ExternalLinksTable)p);
                     }
                 }
 
@@ -541,7 +542,7 @@ namespace NPOI.XSSF.UserModel
         public int AddPicture(Stream picStream, int format)
         {
             int imageNumber = GetAllPictures().Count + 1;
-            XSSFPictureData img = (XSSFPictureData)CreateRelationship(XSSFPictureData.RELATIONS[format], XSSFFactory.GetInstance(), imageNumber, true);
+            XSSFPictureData img = (XSSFPictureData)CreateRelationship(XSSFPictureData.RELATIONS[format], XSSFFactory.GetInstance(), imageNumber, true).DocumentPart;
             Stream out1 = img.GetPackagePart().GetOutputStream();
             IOUtils.Copy(picStream, out1);
             out1.Close();
@@ -562,9 +563,155 @@ namespace NPOI.XSSF.UserModel
             ValidateSheetIndex(sheetNum);
 
             XSSFSheet srcSheet = sheets[sheetNum];
-            return srcSheet.CopySheet(srcSheet.SheetName);
+            //return srcSheet.CopySheet(srcSheet.SheetName);
+            String srcName = srcSheet.SheetName;
+            String clonedName = GetUniqueSheetName(srcName);
+
+            XSSFSheet clonedSheet = CreateSheet(clonedName) as XSSFSheet;
+
+            // copy sheet's relations
+            List<RelationPart> rels = srcSheet.RelationParts;
+            // if the sheet being cloned has a drawing then rememebr it and re-create it too
+            XSSFDrawing dg = null;
+            foreach (RelationPart rp in rels)
+            {
+                POIXMLDocumentPart r = rp.DocumentPart;
+                // do not copy the drawing relationship, it will be re-created
+                if (r is XSSFDrawing) {
+                    dg = (XSSFDrawing)r;
+                    continue;
+                }
+
+                AddRelation(rp, clonedSheet);
+            }
+
+            try {
+                foreach (PackageRelationship pr in srcSheet.GetPackagePart().Relationships) {
+                    if (pr.TargetMode == TargetMode.Internal) {
+                        clonedSheet.GetPackagePart().AddExternalRelationship
+                            (pr.TargetUri.ToString(), pr.RelationshipType, pr.Id);
+                    }
+                }
+            } catch (InvalidFormatException e) {
+                throw new POIXMLException("Failed to clone sheet", e);
+            }
+
+            try
+            {
+                using (MemoryStream out1 = new MemoryStream())
+                {
+                    this.Write(out1);
+                    clonedSheet.Read(new MemoryStream(out1.ToArray()));
+                }
+            }
+            catch (IOException e)
+            {
+                throw new POIXMLException("Failed to clone sheet", e);
+            }
+
+            CT_Worksheet ct = clonedSheet.GetCTWorksheet();
+            if (ct.IsSetLegacyDrawing()) {
+                //logger.log(POILogger.WARN, "Cloning sheets with comments is not yet supported.");
+                ct.UnsetLegacyDrawing();
+            }
+            if (ct.IsSetPageSetup()) {
+                //logger.log(POILogger.WARN, "Cloning sheets with page setup is not yet supported.");
+                ct.UnsetPageSetup();
+            }
+
+            clonedSheet.IsSelected = (false);
+
+            // clone the sheet drawing alongs with its relationships
+            if (dg != null) {
+                if (ct.IsSetDrawing()) {
+                    // unset the existing reference to the drawing,
+                    // so that subsequent call of clonedSheet.createDrawingPatriarch() will create a new one
+                    ct.UnsetDrawing();
+                }
+                XSSFDrawing clonedDg = clonedSheet.CreateDrawingPatriarch() as XSSFDrawing;
+                // copy drawing contents
+                clonedDg.GetCTDrawing().Set(dg.GetCTDrawing());
+
+                clonedDg = clonedSheet.CreateDrawingPatriarch() as XSSFDrawing;
+
+                // Clone drawing relations
+                List<RelationPart> srcRels = (srcSheet.CreateDrawingPatriarch() as XSSFDrawing).RelationParts;
+                foreach (RelationPart rp in srcRels) {
+                    AddRelation(rp, clonedDg);
+                }
+            }
+            return clonedSheet;
         }
 
+        /**
+         * @since 3.14-Beta1
+         */
+        private static void AddRelation(RelationPart rp, POIXMLDocumentPart target)
+        {
+            PackageRelationship rel = rp.Relationship;
+            if (rel.TargetMode == TargetMode.Internal)
+            {
+                target.GetPackagePart().AddRelationship(
+                    rel.TargetUri, rel.TargetMode.Value, rel.RelationshipType, rel.Id);
+            }
+            else
+            {
+                XSSFRelation xssfRel = XSSFRelation.GetInstance(rel.RelationshipType);
+                if (xssfRel == null)
+                {
+                    // Don't copy all relations blindly, but only the ones we know about
+                    throw new POIXMLException("Can't clone sheet - unknown relation type found: " + rel.RelationshipType);
+                }
+                target.AddRelation(rel.Id, xssfRel, rp.DocumentPart);
+            }
+        }
+
+        /**
+         * Generate a valid sheet name based on the existing one. Used when cloning sheets.
+         *
+         * @param srcName the original sheet name to
+         * @return clone sheet name
+         */
+        private String GetUniqueSheetName(String srcName)
+        {
+            int uniqueIndex = 2;
+            String baseName = srcName;
+            int bracketPos = srcName.LastIndexOf('(');
+            if (bracketPos > 0 && srcName.EndsWith(")"))
+            {
+                String suffix = srcName.Substring(bracketPos + 1, srcName.Length - ")".Length - bracketPos - 1);
+                try
+                {
+                    uniqueIndex = int.Parse(suffix.Trim());
+                    uniqueIndex++;
+                    baseName = srcName.Substring(0, bracketPos).Trim();
+                }
+                catch (FormatException e)
+                {
+                    // contents of brackets not numeric
+                }
+            }
+            while (true)
+            {
+                // Try and find the next sheet name that is unique
+                String index = (uniqueIndex++).ToString();
+                String name;
+                if (baseName.Length + index.Length + 2 < 31)
+                {
+                    name = baseName + " (" + index + ")";
+                }
+                else
+                {
+                    name = baseName.Substring(0, 31 - index.Length - 2) + "(" + index + ")";
+                }
+
+                //If the sheet name is unique, then set it otherwise move on to the next number.
+                if (GetSheetIndex(name) == -1)
+                {
+                    return name;
+                }
+            }
+        }
         /// <summary>
         /// Create a new XSSFCellStyle and add it to the workbook's style table
         /// </summary>
@@ -715,9 +862,10 @@ namespace NPOI.XSSF.UserModel
                 break;
             }
 
-            XSSFSheet wrapper = (XSSFSheet)CreateRelationship(XSSFRelation.WORKSHEET, XSSFFactory.GetInstance(), sheetNumber);
+            RelationPart rp = CreateRelationship(XSSFRelation.WORKSHEET, XSSFFactory.GetInstance(), sheetNumber, false);
+            XSSFSheet wrapper = rp.DocumentPart as XSSFSheet;
             wrapper.sheet = sheet;
-            sheet.id = (wrapper.GetPackageRelationship().Id);
+            sheet.id = (rp.Relationship.Id);
             sheet.sheetId = (uint)sheetNumber;
             if (sheets.Count == 0) wrapper.IsSelected = (true);
             sheets.Add(wrapper);
@@ -726,8 +874,10 @@ namespace NPOI.XSSF.UserModel
 
         protected XSSFDialogsheet CreateDialogsheet(String sheetname, CT_Dialogsheet dialogsheet)
         {
-            ISheet sheet = CreateSheet(sheetname);
-            return new XSSFDialogsheet((XSSFSheet)sheet);
+            XSSFSheet sheet = CreateSheet(sheetname) as XSSFSheet;
+            String sheetRelId = GetRelationId(sheet);
+            PackageRelationship pr = GetPackagePart().GetRelationship(sheetRelId);
+            return new XSSFDialogsheet(sheet, pr);
         }
 
         private CT_Sheet AddSheet(String sheetname)
@@ -2104,7 +2254,7 @@ namespace NPOI.XSSF.UserModel
         public int AddPicture(byte[] pictureData, PictureType format)
         {
             int imageNumber = GetAllPictures().Count + 1;
-            XSSFPictureData img = (XSSFPictureData)CreateRelationship(XSSFPictureData.RELATIONS[(int)format], XSSFFactory.GetInstance(), imageNumber, true);
+            XSSFPictureData img = (XSSFPictureData)CreateRelationship(XSSFPictureData.RELATIONS[(int)format], XSSFFactory.GetInstance(), imageNumber, true).DocumentPart;
             try
             {
                 Stream out1 = img.GetPackagePart().GetOutputStream();

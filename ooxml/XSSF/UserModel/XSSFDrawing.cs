@@ -66,13 +66,17 @@ namespace NPOI.XSSF.UserModel
          * @param rel  the namespace relationship holding this Drawing,
          * the relationship type must be http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing
          */
-        internal XSSFDrawing(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        internal XSSFDrawing(PackagePart part)
+            : base(part)
         {
             XmlDocument xmldoc = ConvertStreamToXml(part.GetInputStream());
             drawing = NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing.Parse(xmldoc, NamespaceManager);
         }
-
+        public XSSFDrawing(PackagePart part, PackageRelationship rel)
+            : this(part)
+        {
+            
+        }
         /**
          * Construct a new CT_Drawing bean. By default, it's just an empty placeholder for Drawing objects
          *
@@ -169,9 +173,10 @@ namespace NPOI.XSSF.UserModel
             int chartNumber = GetPackagePart().Package.
                 GetPartsByContentType(XSSFRelation.CHART.ContentType).Count + 1;
 
-            XSSFChart chart = (XSSFChart)CreateRelationship(
-                    XSSFRelation.CHART, XSSFFactory.GetInstance(), chartNumber);
-            String chartRelId = chart.GetPackageRelationship().Id;
+            RelationPart rp = CreateRelationship(
+            XSSFRelation.CHART, XSSFFactory.GetInstance(), chartNumber, false);
+            XSSFChart chart = rp.DocumentPart as XSSFChart;
+            String chartRelId = rp.Relationship.Id;
 
             XSSFGraphicFrame frame = CreateGraphicFrame((XSSFClientAnchor)anchor);
             frame.SetChart(chart, chartRelId);
@@ -194,10 +199,9 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFWorkbook wb = (XSSFWorkbook)GetParent().GetParent();
             XSSFPictureData data = (XSSFPictureData)wb.GetAllPictures()[pictureIndex];
-            PackagePartName ppName = data.GetPackagePart().PartName;
-            PackageRelationship rel = GetPackagePart().AddRelationship(ppName, TargetMode.Internal, XSSFRelation.IMAGES.Relation);
-            AddRelation(rel.Id, new XSSFPictureData(data.GetPackagePart(), rel));
-            return rel;
+            XSSFPictureData pic = new XSSFPictureData(data.GetPackagePart(), null);
+            RelationPart rp = AddRelation(null, XSSFRelation.IMAGES, pic);
+            return rp.Relationship;
         }
 
         /**

@@ -58,13 +58,19 @@ namespace NPOI.XSSF.UserModel
 
         }
 
-        internal XSSFTable(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        internal XSSFTable(PackagePart part)
+            : base(part)
         {
             XmlDocument xml = ConvertStreamToXml(part.GetInputStream());
             ReadFrom(xml);
         }
 
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        protected XSSFTable(PackagePart part, PackageRelationship rel)
+            : this(part)
+        {
+
+        }
         public void ReadFrom(XmlDocument xmlDoc)
         {
             try

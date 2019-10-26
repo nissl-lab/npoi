@@ -28,12 +28,17 @@ namespace NPOI.XWPF.UserModel
 
         private CT_Settings ctSettings;
 
-        public XWPFSettings(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        public XWPFSettings(PackagePart part)
+            : base(part)
         {
 
         }
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public XWPFSettings(PackagePart part, PackageRelationship rel)
+             : this(part)
+        {
 
+        }
         public XWPFSettings()
             : base()
         {

@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using NPOI.XSSF.Model;
 using NPOI.SS.UserModel;
 using System.Xml;
+using static NPOI.POIXMLDocumentPart;
+
 namespace NPOI.XSSF.UserModel
 {
     /**
@@ -108,14 +110,13 @@ namespace NPOI.XSSF.UserModel
             List<XSSFTable> tables = new List<XSSFTable>();
             int sheetNumber = mapInfo.Workbook.NumberOfSheets;
 
-            for (int i = 0; i < sheetNumber; i++)
+            foreach (ISheet sheet in mapInfo.Workbook)
             {
-                XSSFSheet sheet = (XSSFSheet)mapInfo.Workbook.GetSheetAt(i);
-                foreach (POIXMLDocumentPart p in sheet.GetRelations())
+                foreach (RelationPart rp in ((XSSFSheet)sheet).RelationParts)
                 {
-                    if (p.GetPackageRelationship().RelationshipType.Equals(XSSFRelation.TABLE.Relation))
+                    if (rp.Relationship.RelationshipType.Equals(XSSFRelation.TABLE.Relation))
                     {
-                        XSSFTable table = (XSSFTable)p;
+                        XSSFTable table = rp.DocumentPart as XSSFTable;
                         if (table.MapsTo(ctMap.ID))
                         {
                             tables.Add(table);
@@ -123,7 +124,6 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
             }
-
             return tables;
         }
     }

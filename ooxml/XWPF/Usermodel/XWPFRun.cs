@@ -566,7 +566,7 @@ namespace NPOI.XWPF.UserModel
         /**
          * Specifies that the contents of this run.shall be displayed with a single
          * horizontal line through the center of the line.
-         * <p/>
+         * <p>
          * This formatting property is a toggle property, which specifies that its
          * behavior differs between its use within a style defInition and its use as
          * direct formatting. When used as part of a style defInition, Setting this
@@ -577,7 +577,7 @@ namespace NPOI.XWPF.UserModel
          * formatting, Setting this property to true or false shall Set the absolute
          * state of the resulting property.
          * </p>
-         * <p/>
+         * <p>
          * If this element is not present, the default value is to leave the
          * formatting applied at previous level in the style hierarchy. If this
          * element is never applied in the style hierarchy, then strikethrough shall
@@ -1146,7 +1146,7 @@ namespace NPOI.XWPF.UserModel
 
             CT_BlipFillProperties blipFill = pic.AddNewBlipFill();
             CT_Blip blip = blipFill.AddNewBlip();
-            blip.embed = (picData.GetPackageRelationship().Id);
+            blip.embed = parent.Document.GetRelationId(picData);
             blipFill.AddNewStretch().AddNewFillRect();
 
             CT_ShapeProperties spPr = pic.AddNewSpPr();

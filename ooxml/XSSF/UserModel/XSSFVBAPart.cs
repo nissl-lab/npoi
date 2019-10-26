@@ -22,12 +22,17 @@ namespace NPOI.XSSF.UserModel
          * @param part the package part holding the VBA data,
          * @param rel  the package relationship holding this part
          */
-        public XSSFVBAPart(PackagePart part, PackageRelationship rel)
-                : base(part, rel)
+        public XSSFVBAPart(PackagePart part)
+                : base(part)
         {
             
         }
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        protected XSSFVBAPart(PackagePart part, PackageRelationship rel)
+            : this(part)
+        {
 
+        }
         /**
          * Like *PictureData, VBA objects store the actual content in the part
          * directly without keeping a copy like all others therefore we need to
