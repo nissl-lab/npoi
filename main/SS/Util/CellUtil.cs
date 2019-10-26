@@ -253,15 +253,20 @@ namespace NPOI.SS.Util
          *@param propertyValue The value of the property that is to be changed.
          *@param cell The cell that needs it's style changes
          */
-        public static void SetCellStyleProperty(ICell cell, IWorkbook workbook, String propertyName, Object propertyValue)
+        public static void SetCellStyleProperties(ICell cell, Dictionary<String, Object> properties)
         {
+            IWorkbook workbook = cell.Sheet.Workbook;
             ICellStyle originalStyle = cell.CellStyle;
             ICellStyle newStyle = null;
             Dictionary<String, Object> values = GetFormatProperties(originalStyle);
-            if (values.ContainsKey(propertyName))
-                values[propertyName] = propertyValue;
-            else
-                values.Add(propertyName, propertyValue);
+            foreach(KeyValuePair<string, object> kv in properties)
+            {
+                if (values.ContainsKey(kv.Key))
+                    values[kv.Key] = kv.Value;
+                else
+                    values.Add(kv.Key, kv.Value);
+            }
+            
 
             // index seems like what index the cellstyle is in the list of styles for a workbook.
             // not good to compare on!
@@ -273,10 +278,12 @@ namespace NPOI.SS.Util
 
                 Dictionary<String, Object> wbStyleMap = GetFormatProperties(wbStyle);
 
-                if (values.Keys.Count != wbStyleMap.Keys.Count) continue;
+                if (values.Keys.Count != wbStyleMap.Keys.Count)
+                    continue;
 
+                // the desired style already exists in the workbook. Use the existing style.
+                //if(wbStyleMap.equals(values))
                 bool found = true;
-                
                 foreach (string key in values.Keys)
                 {
                     if (!wbStyleMap.ContainsKey(key))
@@ -284,7 +291,6 @@ namespace NPOI.SS.Util
                         found = false;
                         break;
                     }
-
                     if (values[key].Equals(wbStyleMap[key])) continue;
 
                     found = false;
@@ -297,7 +303,7 @@ namespace NPOI.SS.Util
                     break;
                 }
             }
-
+            // the desired style does not exist in the workbook. Create a new style with desired properties.
             if (newStyle == null)
             {
                 newStyle = workbook.CreateCellStyle();
@@ -308,8 +314,39 @@ namespace NPOI.SS.Util
         }
 
         /**
+	     * <p>This method attempts to find an existing CellStyle that matches the <code>cell</code>'s
+	     * current style plus a single style property <code>propertyName</code> with value
+	     * <code>propertyValue</code>.
+	     * A new style is created if the workbook does not contain a matching style.</p>
+	     * 
+	     * <p>Modifies the cell style of <code>cell</code> without affecting other cells that use the
+	     * same style.</p>
+	     * 
+	     * <p>If setting more than one cell style property on a cell, use
+	     * {@link #setCellStyleProperties(Cell, Map)},
+	     * which is faster and does not add unnecessary intermediate CellStyles to the workbook.</p>
+	     * 
+	     * @param workbook The workbook that is being worked with.
+	     * @param propertyName The name of the property that is to be changed.
+	     * @param propertyValue The value of the property that is to be changed.
+	     * @param cell The cell that needs it's style changes
+	     */
+        public static void SetCellStyleProperty(ICell cell, IWorkbook workbook, String propertyName,
+                Object propertyValue)
+        {
+            if (cell.Sheet.Workbook != workbook)
+            {
+                throw new ArgumentException("Cannot set cell style property. Cell does not belong to workbook");
+            }
+
+            Dictionary<String, Object> values = new Dictionary<string, object>() { {propertyName, propertyValue} };
+            SetCellStyleProperties(cell, values);
+        }
+        /**
          * Returns a map containing the format properties of the given cell style.
-         *
+         * The returned map is not tied to <code>style</code>, so subsequent changes
+         * to <code>style</code> will not modify the map, and changes to the returned
+         * map will not modify the cell style. The returned map is mutable.
          * @param style cell style
          * @return map of format properties (String -> Object)
          * @see #setFormatProperties(org.apache.poi.ss.usermodel.CellStyle, org.apache.poi.ss.usermodel.Workbook, java.util.Map)

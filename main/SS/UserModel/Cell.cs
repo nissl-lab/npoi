@@ -205,7 +205,10 @@ namespace NPOI.SS.UserModel
         bool BooleanCellValue { get; }
 
         /// <summary>
-        /// Return the cell's style.
+        /// get or set the cell's style.
+        /// If set the style for the cell.  The style should be an CellStyle created/retreived from the Workbook.
+        /// To change the style of a cell without affecting other cells that use the same style,
+        /// use CellUtil#setCellStyleProperties
         /// </summary>
         ICellStyle CellStyle { get; set; }
 
