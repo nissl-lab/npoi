@@ -239,7 +239,17 @@ namespace NPOI.SS.Util
          */
         public static void SetFont(ICell cell, IWorkbook workbook, IFont font)
         {
-            SetCellStyleProperty(cell, workbook, FONT, font.Index);
+            // Check if font belongs to workbook
+            short fontIndex = font.Index;
+            if (!workbook.GetFontAt(fontIndex).Equals(font))
+            {
+                throw new ArgumentException("Font does not belong to this workbook");
+            }
+
+            // Check if cell belongs to workbook
+            // (checked in setCellStyleProperty)
+
+            SetCellStyleProperty(cell, workbook, FONT, fontIndex);
         }
 
         /**
@@ -336,7 +346,7 @@ namespace NPOI.SS.Util
         {
             if (cell.Sheet.Workbook != workbook)
             {
-                throw new ArgumentException("Cannot set cell style property. Cell does not belong to workbook");
+                throw new ArgumentException("Cannot set cell style property. Cell does not belong to workbook.");
             }
 
             Dictionary<String, Object> values = new Dictionary<string, object>() { {propertyName, propertyValue} };
