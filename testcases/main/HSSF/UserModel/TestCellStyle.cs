@@ -489,5 +489,38 @@ namespace TestCases.HSSF.UserModel
             //        }
         }
 
+        [Test]
+        public void Test58043()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFCellStyle cellStyle = wb.CreateCellStyle() as HSSFCellStyle;
+            Assert.AreEqual(0, cellStyle.Rotation);
+            cellStyle.Rotation = ((short)89);
+            Assert.AreEqual(89, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)90);
+            Assert.AreEqual(90, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)-1);
+            Assert.AreEqual(-1, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)-89);
+            Assert.AreEqual(-89, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)-90);
+            Assert.AreEqual(-90, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)-89);
+            Assert.AreEqual(-89, cellStyle.Rotation);
+            // values above 90 are mapped to the correct values for compatibility between HSSF and XSSF
+            cellStyle.Rotation = ((short)179);
+            Assert.AreEqual(-89, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)180);
+            Assert.AreEqual(-90, cellStyle.Rotation);
+
+            wb.Close();
+        }
+
     }
 }

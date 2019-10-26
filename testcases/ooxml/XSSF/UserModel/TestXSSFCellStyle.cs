@@ -1094,5 +1094,33 @@ namespace NPOI.XSSF.UserModel
             target.Close();
             reference.Close();
         }
+
+
+        [Test]
+        public void Test58043()
+        {
+            Assert.AreEqual(0, cellStyle.Rotation);
+            cellStyle.Rotation = ((short)89);
+            Assert.AreEqual(89, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)90);
+            Assert.AreEqual(90, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)179);
+            Assert.AreEqual(179, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)180);
+            Assert.AreEqual(180, cellStyle.Rotation);
+
+            // negative values are mapped to the correct values for compatibility between HSSF and XSSF
+            cellStyle.Rotation = ((short)-1);
+            Assert.AreEqual(91, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)-89);
+            Assert.AreEqual(179, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)-90);
+            Assert.AreEqual(180, cellStyle.Rotation);
+        }
     }
 }

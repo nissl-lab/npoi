@@ -3175,6 +3175,45 @@ namespace NPOI.XSSF.UserModel
             }
             wb.Close();
         }
+
+        private void CreateXls()
+        {
+            IWorkbook workbook = new HSSFWorkbook();
+            FileStream fileOut = new FileStream("/tmp/rotated.xls", FileMode.Create, FileAccess.ReadWrite);
+            ISheet sheet1 = workbook.CreateSheet();
+            IRow row1 = sheet1.CreateRow((short)0);
+            ICell cell1 = row1.CreateCell(0);
+            cell1.SetCellValue("Successful rotated text.");
+            ICellStyle style = workbook.CreateCellStyle();
+            style.Rotation = ((short)-90);
+            cell1.CellStyle = (style);
+            workbook.Write(fileOut);
+            fileOut.Close();
+            workbook.Close();
+        }
+        private void CreateXlsx()
+        {
+            IWorkbook workbook = new XSSFWorkbook();
+            FileStream fileOut = new FileStream("/tmp/rotated.xlsx", FileMode.Create, FileAccess.ReadWrite);
+            ISheet sheet1 = workbook.CreateSheet();
+            IRow row1 = sheet1.CreateRow((short)0);
+            ICell cell1 = row1.CreateCell(0);
+            cell1.SetCellValue("Unsuccessful rotated text.");
+            ICellStyle style = workbook.CreateCellStyle();
+            style.Rotation = ((short)-90);
+            cell1.CellStyle = (style);
+            workbook.Write(fileOut);
+            fileOut.Close();
+            workbook.Close();
+        }
+        [Ignore("Creates files for checking results manually, actual values are tested in Test*CellStyle")]
+        [Test]
+        public void Test58043()
+        {
+            CreateXls();
+            CreateXlsx();
+        }
+
     }
 
 }
