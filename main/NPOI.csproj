@@ -770,6 +770,7 @@
     <Compile Include="SS\UserModel\FractionFormat.cs" />
     <Compile Include="SS\Format\SimpleFraction.cs" />
     <Compile Include="SS\UserModel\IconMultiStateFormatting.cs" />
+    <Compile Include="SS\UserModel\IgnoredErrorType.cs" />
     <Compile Include="SS\UserModel\IndexedColors.cs" />
     <Compile Include="SS\Util\CellAddress.cs" />
     <Compile Include="SS\Util\DataMarker.cs" />

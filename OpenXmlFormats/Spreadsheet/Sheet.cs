@@ -8023,6 +8023,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
+        public CT_IgnoredError AddNewIgnoredError()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal CT_IgnoredError GetIgnoredErrorArray(int v)
+        {
+            throw new NotImplementedException();
+        }
 
         public List<CT_IgnoredError> ignoredError
         {
@@ -8123,6 +8132,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));
         }
+
 
         [XmlAttribute]
         public string sqref

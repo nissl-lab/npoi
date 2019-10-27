@@ -4948,6 +4948,85 @@ namespace NPOI.XSSF.UserModel
         {
            throw new NotImplementedException();
         }
+
+
+        /**
+         * Add ignored errors (usually to suppress them in the UI of a consuming
+         * application).
+         *
+         * @param cell Cell.
+         * @param ignoredErrorTypes Types of error to ignore there.
+         */
+        public void AddIgnoredErrors(CellReference cell, params IgnoredErrorType[] ignoredErrorTypes)
+        {
+            AddIgnoredErrors(cell.FormatAsString(), ignoredErrorTypes);
+        }
+
+        /**
+         * Ignore errors across a range of cells.
+         * 
+         * @param region Range of cells.
+         * @param ignoredErrorTypes Types of error to ignore there.
+         */
+        public void AddIgnoredErrors(CellRangeAddress region, params IgnoredErrorType[] ignoredErrorTypes)
+        {
+            region.Validate(SpreadsheetVersion.EXCEL2007);
+            AddIgnoredErrors(region.FormatAsString(), ignoredErrorTypes);
+        }
+
+        /**
+         * Returns the errors currently being ignored and the ranges
+         * where they are ignored.
+         *
+         * @return Map of error type to the range(s) where they are ignored.
+         */
+        public Dictionary<IgnoredErrorType, ISet<CellRangeAddress>> GetIgnoredErrors()
+        {
+            Dictionary<IgnoredErrorType, ISet<CellRangeAddress>> result = new Dictionary<IgnoredErrorType, ISet<CellRangeAddress>>();
+            if (worksheet.IsSetIgnoredErrors())
+            {
+                foreach (CT_IgnoredError err in worksheet.ignoredErrors.ignoredError)
+                {
+                    foreach (IgnoredErrorType errType in GetErrorTypes(err))
+                    {
+                        if (!result.ContainsKey(errType))
+                        {
+                            result.Add(errType, new HashSet<CellRangeAddress>());
+                        }
+                        foreach (Object ref1 in err.sqref) {
+                            result[errType].Add(CellRangeAddress.ValueOf(ref1.ToString()));
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        private void AddIgnoredErrors(String ref1, params IgnoredErrorType[] ignoredErrorTypes)
+        {
+            CT_IgnoredErrors ctIgnoredErrors = worksheet.IsSetIgnoredErrors() ? worksheet.ignoredErrors : worksheet.AddNewIgnoredErrors();
+            CT_IgnoredError ctIgnoredError = ctIgnoredErrors.AddNewIgnoredError();
+            ctIgnoredError.sqref = ref1;
+            foreach (IgnoredErrorType errType in ignoredErrorTypes)
+            {
+                XSSFIgnoredErrorHelper.Set(errType, ctIgnoredError);
+            }
+        }
+
+        private ISet<IgnoredErrorType> GetErrorTypes(CT_IgnoredError err)
+        {
+            ISet<IgnoredErrorType> result = new HashSet<IgnoredErrorType>();
+            
+            foreach (IgnoredErrorType errType in IgnoredErrorTypeValues.Values)
+            {
+                if (XSSFIgnoredErrorHelper.IsSet(errType, err))
+                {
+                    result.Add(errType);
+                }
+            }
+            return result;
+        }
+    
     }
 
 }
