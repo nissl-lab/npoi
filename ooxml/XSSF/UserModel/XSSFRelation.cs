@@ -316,6 +316,8 @@ namespace NPOI.XSSF.UserModel
         );
 
         public static String NS_SPREADSHEETML = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
+        public static String NS_DRAWINGML = "http://schemas.openxmlformats.org/drawingml/2006/main";
+        public static String NS_CHART = "http://schemas.openxmlformats.org/drawingml/2006/chart";
 
         private XSSFRelation(String type, String rel, String defaultName, Type cls) :
             base(type, rel, defaultName, cls)

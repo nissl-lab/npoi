@@ -38,8 +38,8 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFDrawing : POIXMLDocumentPart, IDrawing
     {
-        public const String NAMESPACE_A = "http://schemas.openxmlformats.org/drawingml/2006/main";
-        public const String NAMESPACE_C = "http://schemas.openxmlformats.org/drawingml/2006/chart";
+        public static String NAMESPACE_A = XSSFRelation.NS_DRAWINGML;
+        public static String NAMESPACE_C = XSSFRelation.NS_CHART;
 
         /**
          * Root element of the SpreadsheetML Drawing part
