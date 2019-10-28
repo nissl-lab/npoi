@@ -481,7 +481,7 @@ namespace NPOI.POIFS.FileSystem
             }
             catch (IndexOutOfRangeException e)
             {
-                throw new IndexOutOfRangeException("Block " + offset + " not found - " + e);
+                throw new IndexOutOfRangeException("Block " + offset + " not found - ", e);
             }
             
         }
