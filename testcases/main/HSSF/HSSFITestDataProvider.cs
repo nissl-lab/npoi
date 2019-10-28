@@ -34,9 +34,14 @@ namespace TestCases.HSSF
         {
             return new HSSFWorkbook();
         }
-
+        //************ SXSSF-specific methods ***************//
+        public IWorkbook CreateWorkbook(int rowAccessWindowSize)
+        {
+            return CreateWorkbook();
+        }
         public void TrackColumnsForAutosizing(ISheet sheet, params int[] columns) { }
-
+        public void TrackAllColumnsForAutosizing(ISheet sheet) { }
+        //************ End SXSSF-specific methods ***************//
         public IFormulaEvaluator CreateFormulaEvaluator(IWorkbook wb)
         {
             return new HSSFFormulaEvaluator((HSSFWorkbook)wb);

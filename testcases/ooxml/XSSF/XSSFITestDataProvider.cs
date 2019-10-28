@@ -48,11 +48,25 @@ namespace NPOI.XSSF
             }
             return XSSFTestDataSamples.WriteOutAndReadBack((XSSFWorkbook)original);
         }
+
         public IWorkbook CreateWorkbook()
         {
             return new XSSFWorkbook();
         }
 
+        //************ SXSSF-specific methods ***************//
+        /**
+         * Provides way of creating a SXSSFWorkbook with a specific row access window size.
+         * Equivalent to createWorkbook on others.
+         * @return an instance of Workbook
+         */
+        public IWorkbook CreateWorkbook(int rowAccessWindowSize)
+        {
+            return CreateWorkbook();
+        }
+        
+        public void TrackAllColumnsForAutosizing(ISheet sheet) { }
+        //************ End SXSSF-specific methods ***************//
         public void TrackColumnsForAutosizing(ISheet sheet, params int[] columns) { }
 
         public IFormulaEvaluator CreateFormulaEvaluator(IWorkbook wb)

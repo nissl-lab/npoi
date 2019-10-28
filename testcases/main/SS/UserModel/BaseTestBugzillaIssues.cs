@@ -29,6 +29,7 @@ namespace TestCases.SS.UserModel
     using System.Collections.Generic;
     using NPOI.HSSF.UserModel;
     using System.Drawing;
+    using System.IO;
 
     /**
      * A base class for bugzilla issues that can be described in terms of common ss interfaces.
@@ -386,11 +387,11 @@ namespace TestCases.SS.UserModel
 
             // autoSize will fail if required fonts are not installed, skip this test then
             IFont font = wb.GetFontAt(cell0.CellStyle.FontIndex);
-            Assume.That(SheetUtil.CanComputeColumnWidth(font), 
+            Assume.That(SheetUtil.CanComputeColumnWidth(font),
                 "Cannot verify auoSizeColumn() because the necessary Fonts are not installed on this machine: " + font);
 
             Assert.AreEqual(0, cell0.CellStyle.Indention, "Expecting no indentation in this test");
-            Assert.AreEqual(0, cell0.CellStyle.Rotation ,"Expecting no rotation in this test");
+            Assert.AreEqual(0, cell0.CellStyle.Rotation, "Expecting no rotation in this test");
 
             // check computing size up to a large size
             StringBuilder b = new StringBuilder();
@@ -1045,26 +1046,26 @@ namespace TestCases.SS.UserModel
             cell0.CellComment = (comment0);
 
             anchor = factory.CreateClientAnchor();
-            anchor.Col1=(1);
-            anchor.Col2=(1);
-            anchor.Row1=(1);
-            anchor.Row2=(1);
+            anchor.Col1 = (1);
+            anchor.Col2 = (1);
+            anchor.Row1 = (1);
+            anchor.Row2 = (1);
             ICell cell1 = sheet.CreateRow(3).CreateCell(5);
             cell1.SetCellValue("F4");
             IComment comment1 = drawing.CreateCellComment(anchor);
             IRichTextString str1 = factory.CreateRichTextString("Hello, World2!");
             comment1.String = (str1);
             comment1.Author = ("Apache POI");
-            cell1.CellComment=(comment1);
+            cell1.CellComment = (comment1);
 
             ICell cell2 = sheet.CreateRow(2).CreateCell(2);
             cell2.SetCellValue("C3");
 
             anchor = factory.CreateClientAnchor();
-            anchor.Col1=(2);
-            anchor.Col2=(2);
-            anchor.Row1=(2);
-            anchor.Row2=(2);
+            anchor.Col1 = (2);
+            anchor.Col2 = (2);
+            anchor.Row1 = (2);
+            anchor.Row2 = (2);
 
             IComment comment2 = drawing.CreateCellComment(anchor);
             IRichTextString str2 = factory.CreateRichTextString("XSSF can set cell comments");
@@ -1072,14 +1073,14 @@ namespace TestCases.SS.UserModel
             IFont font = wb.CreateFont();
             font.FontName = ("Arial");
             font.FontHeightInPoints = ((short)14);
-            font.Boldweight = (short) FontBoldWeight.Bold;// (Font.BOLDWEIGHT_BOLD);
+            font.Boldweight = (short)FontBoldWeight.Bold;// (Font.BOLDWEIGHT_BOLD);
             font.Color = (IndexedColors.Red.Index);
             str2.ApplyFont(font);
 
-            comment2.String=(str2);
-            comment2.Author=("Apache POI");
-            comment2.Column=(2);
-            comment2.Row=(2);
+            comment2.String = (str2);
+            comment2.Author = ("Apache POI");
+            comment2.Column = (2);
+            comment2.Row = (2);
 
             wb.Close();
         }
@@ -1386,6 +1387,77 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(164, cell.CellStyle.DataFormat);
             DataFormatter formatter = new DataFormatter();
             Assert.AreEqual("12-312-345-123", formatter.FormatCellValue(cell));
+        }
+
+
+        [Test]
+        public void Test58896()
+        {
+            int nrows = 160;
+            int ncols = 139;
+            TextWriter out1 = Console.Out;
+
+            // Create a workbook
+            IWorkbook wb = _testDataProvider.CreateWorkbook(nrows + 1);
+            ISheet sh = wb.CreateSheet();
+            out1.WriteLine(wb.GetType().Name + " column autosizing timing...");
+
+            long t0 = time();
+            _testDataProvider.TrackAllColumnsForAutosizing(sh);
+            for (int r = 0; r < nrows; r++)
+            {
+                IRow row = sh.CreateRow(r);
+                for (int c = 0; c < ncols; c++)
+                {
+                    ICell cell = row.CreateCell(c);
+                    cell.SetCellValue("Cell[r=" + r + ",c=" + c + "]");
+                }
+            }
+            double populateSheetTime = delta(t0);
+            double populateSheetTimePerCell_ns = (1000000 * populateSheetTime / (nrows * ncols));
+            out1.WriteLine("Populate sheet time: " + populateSheetTime + " ms (" + populateSheetTimePerCell_ns + " ns/cell)");
+
+            out1.WriteLine("\nAutosizing...");
+            long t1 = time();
+            for (int c = 0; c < ncols; c++)
+            {
+                long t2 = time();
+                sh.AutoSizeColumn(c);
+                out1.WriteLine("Column " + c + " took " + delta(t2) + " ms");
+            }
+            double autoSizeColumnsTime = delta(t1);
+            double autoSizeColumnsTimePerColumn = autoSizeColumnsTime / ncols;
+            double bestFitWidthTimePerCell_ns = 1000000 * autoSizeColumnsTime / (ncols * nrows);
+
+            out1.WriteLine("Auto sizing columns took a total of " + autoSizeColumnsTime + " ms (" + autoSizeColumnsTimePerColumn + " ms per column)");
+            out1.WriteLine("Best fit width time per cell: " + bestFitWidthTimePerCell_ns + " ns");
+
+            double totalTime_s = (populateSheetTime + autoSizeColumnsTime) / 1000;
+            out1.WriteLine("Total time: " + totalTime_s + " s");
+
+            wb.Close();
+
+            //if (bestFitWidthTimePerCell_ns > 50000) {
+            //    Assert.Fail("Best fit width time per cell exceeded 50000 ns: " + bestFitWidthTimePerCell_ns + " ns");
+            //}
+
+            if (totalTime_s > 10)
+            {
+                Assert.Fail("Total time exceeded 10 seconds: " + totalTime_s + " s");
+            }
+        }
+
+        public long time()
+        {
+            //从1970年1月1日至当前时间所经过的毫秒数
+            long currentTicks = DateTime.Now.Ticks;
+            DateTime dtFrom = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            long currentMillis = (currentTicks - dtFrom.Ticks) / 10000;
+            return currentMillis;
+        }
+        public double delta(long startTimeMillis)
+        {
+            return time() - startTimeMillis;
         }
 
     }

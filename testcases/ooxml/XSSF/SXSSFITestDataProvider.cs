@@ -84,6 +84,13 @@ namespace NPOI.XSSF
             return wb;
         }
 
+        //************ SXSSF-specific methods ***************//
+        public IWorkbook CreateWorkbook(int rowAccessWindowSize)
+        {
+            SXSSFWorkbook wb = new SXSSFWorkbook(rowAccessWindowSize);
+            instances.Add(wb);
+            return wb;
+        }
         public void TrackColumnsForAutosizing(ISheet sheet, params int[] columns)
         {
             foreach (int cn in columns)
@@ -91,6 +98,11 @@ namespace NPOI.XSSF
                 ((SXSSFSheet)sheet).TrackColumnForAutoSizing(cn);
             }
         }
+        public void TrackAllColumnsForAutosizing(ISheet sheet)
+        {
+            ((SXSSFSheet)sheet).TrackAllColumnsForAutoSizing();
+        }
+        //************ End SXSSF-specific methods ***************//
         public IFormulaEvaluator CreateFormulaEvaluator(IWorkbook wb)
         {
             return new XSSFFormulaEvaluator(((SXSSFWorkbook)wb).XssfWorkbook);

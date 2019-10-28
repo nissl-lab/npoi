@@ -23,12 +23,20 @@ namespace TestCases.SS
         /// <returns>an instance of Workbook loaded from the supplied file name</returns>
         IWorkbook OpenSampleWorkbook(String sampleFileName);
 
+        //************ SXSSF-specific methods ***************//
+        /**
+         * Provides way of creating a SXSSFWorkbook with a specific row access window size.
+         * Equivalent to createWorkbook on others.
+         * @return an instance of Workbook
+         */
+        IWorkbook CreateWorkbook(int rowAccessWindowSize);
         /// <summary>
         /// Override to provide way of creating HSSF / XSSF workbooks
         /// </summary>
         /// <returns>an instance of Workbook</returns>
         IWorkbook CreateWorkbook();
-
+        void TrackAllColumnsForAutosizing(ISheet sheet);
+        //************ End SXSSF-specific methods ***************//
         /// <summary>
         /// Only matters for SXSSF - enables tracking of the column
         /// widths so that autosizing can work. No-op on others.
