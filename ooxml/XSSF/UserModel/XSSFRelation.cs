@@ -307,6 +307,13 @@ namespace NPOI.XSSF.UserModel
                 typeof(XSSFPivotCacheRecords)
         );
 
+        public static XSSFRelation CTRL_PROP_RECORDS = new XSSFRelation(
+            null,
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/ctrlProp",
+            "/xl/ctrlProps/ctrlProp#.xml",
+            null
+        );
+
         private XSSFRelation(String type, String rel, String defaultName, Type cls) :
             base(type, rel, defaultName, cls)
         {
