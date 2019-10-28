@@ -1368,5 +1368,25 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(2048, s.GetColumnWidth(0));
             wb.Close();
         }
+
+        [Test]
+        public void Test52684()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("test");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            cell.SetCellValue(12312345123L);
+            IDataFormat format = wb.CreateDataFormat();
+            ICellStyle style = wb.CreateCellStyle();
+            style.DataFormat = (format.GetFormat("000-00000-000"));
+            cell.CellStyle = (style);
+            Assert.AreEqual("000-00000-000",
+                    cell.CellStyle.GetDataFormatString());
+            Assert.AreEqual(164, cell.CellStyle.DataFormat);
+            DataFormatter formatter = new DataFormatter();
+            Assert.AreEqual("12-312-345-123", formatter.FormatCellValue(cell));
+        }
+
     }
 }
