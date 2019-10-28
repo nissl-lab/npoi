@@ -42,7 +42,6 @@ namespace NPOI.HSSF.UserModel
         public HSSFComment(EscherContainerRecord spContainer, ObjRecord objRecord, TextObjectRecord textObjectRecord, NoteRecord _note)
             : base(spContainer, objRecord, textObjectRecord)
         {
-
             this._note = _note;
         }
         /// <summary>
@@ -50,10 +49,15 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="anchor">defines position of this anchor in the sheet</param>
-        public HSSFComment(HSSFShape parent, HSSFAnchor anchor)
+        public HSSFComment(HSSFShape parent, HSSFAnchor anchor):
+            this(parent, anchor, CreateNoteRecord())
+        {
+
+        }
+        private HSSFComment(HSSFShape parent, HSSFAnchor anchor, NoteRecord note)
             : base(parent, anchor)
         {
-            _note = CreateNoteRecord();
+            _note = note;
 
             //default color for comments
             this.FillColor = 0x08000050;
@@ -71,9 +75,8 @@ namespace NPOI.HSSF.UserModel
         /// <param name="note">The note.</param>
         /// <param name="txo">The txo.</param>
         public HSSFComment(NoteRecord note, TextObjectRecord txo)
-            : this((HSSFShape)null, new HSSFClientAnchor())
+            : this((HSSFShape)null, new HSSFClientAnchor(), note)
         {
-            this._note = note;
         }
 
 
@@ -114,7 +117,7 @@ namespace NPOI.HSSF.UserModel
             return obj;
         }
 
-        private NoteRecord CreateNoteRecord()
+        private static NoteRecord CreateNoteRecord()
         {
             NoteRecord note = new NoteRecord();
             note.Flags = (NoteRecord.NOTE_HIDDEN);
