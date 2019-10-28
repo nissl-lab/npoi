@@ -228,21 +228,11 @@ namespace NPOI.HSSF.UserModel
 
         }
 
-        /**
-         * Normally, the Workbook will be in a POIFS Stream
-         * called "Workbook". However, some weird XLS generators use "WORKBOOK"
-         */
-        private static readonly string[] WORKBOOK_DIR_ENTRY_NAMES = {
-            "Workbook", // as per BIFF8 spec
-            "WORKBOOK", // Typically from third party programs
-            "BOOK",     // Typically odd Crystal Reports exports
-        };
-
 
         private static String GetWorkbookDirEntryName(DirectoryNode directory)
         {
 
-            String[] potentialNames = WORKBOOK_DIR_ENTRY_NAMES;
+            String[] potentialNames = InternalWorkbook.WORKBOOK_DIR_ENTRY_NAMES;
             for (int i = 0; i < potentialNames.Length; i++)
             {
                 String wbName = potentialNames[i];
@@ -1358,7 +1348,7 @@ namespace NPOI.HSSF.UserModel
                         // Don't Write out the old Workbook, we'll be doing our new one
                         // If the file had an "incorrect" name for the workbook stream,
                         // don't write the old one as we'll use the correct name shortly
-                        excepts.AddRange(WORKBOOK_DIR_ENTRY_NAMES);
+                        excepts.AddRange(InternalWorkbook.WORKBOOK_DIR_ENTRY_NAMES);
 
                         // Copy over all the other nodes to our new poifs
                         EntryUtils.CopyNodes(
@@ -1966,7 +1956,7 @@ namespace NPOI.HSSF.UserModel
         {
             Dictionary<String, ClassID> olemap = new Dictionary<String, ClassID>();
             olemap.Add("PowerPoint Document", ClassID.PPT_SHOW);
-            foreach (String str in WORKBOOK_DIR_ENTRY_NAMES)
+            foreach (String str in InternalWorkbook.WORKBOOK_DIR_ENTRY_NAMES)
             {
                 olemap.Add(str, ClassID.XLS_WORKBOOK);
             }

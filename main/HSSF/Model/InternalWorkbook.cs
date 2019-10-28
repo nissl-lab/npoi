@@ -65,6 +65,15 @@ namespace NPOI.HSSF.Model
          */
         private const int MAX_SENSITIVE_SHEET_NAME_LEN = 31;
 
+        /**
+         * Normally, the Workbook will be in a POIFS Stream
+         * called "Workbook". However, some weird XLS generators use "WORKBOOK"
+         */
+        public static readonly string[] WORKBOOK_DIR_ENTRY_NAMES = {
+            "Workbook", // as per BIFF8 spec
+            "WORKBOOK", // Typically from third party programs
+            "BOOK",     // Typically odd Crystal Reports exports
+        };
         //private static int DEBUG = POILogger.DEBUG;
 
         //    public static Workbook currentBook = null;
