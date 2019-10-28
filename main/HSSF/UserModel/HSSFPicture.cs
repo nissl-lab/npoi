@@ -237,9 +237,12 @@ namespace NPOI.HSSF.UserModel
         {
             EscherAggregate agg = patriarch.GetBoundAggregate();
             agg.AssociateShapeToObjRecord(GetEscherContainer().GetChildById(EscherClientDataRecord.RECORD_ID), GetObjRecord());
-            EscherBSERecord bse =
+            if (PictureIndex != -1)
+            {
+                EscherBSERecord bse =
                     (patriarch.Sheet.Workbook as HSSFWorkbook).Workbook.GetBSERecord(PictureIndex);
-            bse.Ref = (bse.Ref + 1);
+                bse.Ref = (bse.Ref + 1);
+            }
         }
 
         /**
