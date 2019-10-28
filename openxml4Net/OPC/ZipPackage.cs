@@ -42,7 +42,10 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 this.contentTypeManager = new ZipContentTypeManager(null, this);
             }
-            catch (InvalidFormatException e) { }
+            catch (InvalidFormatException e)
+            {
+                logger.Log(POILogger.WARN, "Could not parse ZipPackage", e);
+            }
         }
 
         /**
@@ -51,9 +54,6 @@ namespace NPOI.OpenXml4Net.OPC
          * @param in
          *            Zip input stream to load.
          * @param access
-         * @throws ArgumentException
-         *             If the specified input stream not an instance of
-         *             ZipInputStream.
          */
         public ZipPackage(Stream filestream, PackageAccess access)
             : base(access)
@@ -69,8 +69,6 @@ namespace NPOI.OpenXml4Net.OPC
          *            The path of the file to open or create.
          * @param access
          *            The package access mode.
-         * @throws InvalidFormatException
-         *             If the content type part parsing encounters an error.
          */
         public ZipPackage(String path, PackageAccess access)
             : base(access)
@@ -97,8 +95,6 @@ namespace NPOI.OpenXml4Net.OPC
          *            The file to open or create.
          * @param access
          *            The package access mode.
-         * @throws InvalidFormatException
-         *             If the content type part parsing encounters an error.
          */
         public ZipPackage(FileInfo file, PackageAccess access)
             : base(access)
@@ -468,13 +464,13 @@ namespace NPOI.OpenXml4Net.OPC
                 }
 
                 // Save package relationships part.
-                logger.Log(POILogger.DEBUG,"Save package relationships");
+                logger.Log(POILogger.DEBUG, "Save package relationships");
                 ZipPartMarshaller.MarshallRelationshipPart(this.Relationships,
                         PackagingUriHelper.PACKAGE_RELATIONSHIPS_ROOT_PART_NAME,
                         zos);
 
                 // Save content type part.
-                logger.Log(POILogger.DEBUG,"Save content types part");
+                logger.Log(POILogger.DEBUG, "Save content types part");
                 this.contentTypeManager.Save(zos);
 
                 // Save parts.
@@ -485,7 +481,7 @@ namespace NPOI.OpenXml4Net.OPC
                     if (part.IsRelationshipPart)
                         continue;
 
-                    logger.Log(POILogger.DEBUG,"Save part '"
+                    logger.Log(POILogger.DEBUG, "Save part '"
                             + ZipHelper.GetZipItemNameFromOPCName(part
                                     .PartName.Name) + "'");
                     if (partMarshallers.ContainsKey(part._contentType))
@@ -516,6 +512,11 @@ namespace NPOI.OpenXml4Net.OPC
                     zos.Finish();   //instead of use zos.Close, it will close the stream
                 else
                     zos.Close();
+            }
+            catch (OpenXML4NetRuntimeException e)
+            {
+                // no need to wrap this type of Exception
+                throw e;
             }
             catch (Exception e)
             {
