@@ -20,6 +20,9 @@
 using NUnit.Framework;
 using NPOI.OpenXmlFormats.Wordprocessing;
 using System;
+using System.Collections.Generic;
+using static NPOI.XWPF.UserModel.XWPFTableCell;
+
 namespace NPOI.XWPF.UserModel
 {
     [TestFixture]
@@ -51,7 +54,7 @@ namespace NPOI.XWPF.UserModel
             XWPFTableCell cell = tr.GetCell(0);
 
             cell.SetVerticalAlignment(XWPFTableCell.XWPFVertAlign.BOTH);
-            XWPFTableCell.XWPFVertAlign al = cell.GetVerticalAlignment();
+            XWPFTableCell.XWPFVertAlign al = cell.GetVerticalAlignment().Value;
             Assert.AreEqual(XWPFTableCell.XWPFVertAlign.BOTH, al);
         }
         [Test]
@@ -91,6 +94,20 @@ namespace NPOI.XWPF.UserModel
 
             CT_TcBorders tblBorders = tcPr.AddNewTcBorders();
             CT_VMerge vMerge = tcPr.AddNewVMerge();
+        }
+
+        public void TestCellVerticalAlign()
+        {
+            XWPFDocument docx = XWPFTestDataSamples.OpenSampleDocument("59030.docx");
+            IList<XWPFTable> tables = docx.Tables;
+            Assert.AreEqual(1, tables.Count);
+            XWPFTable table = tables[0];
+            List<XWPFTableRow> tableRows = table.Rows;
+            Assert.AreEqual(2, tableRows.Count);
+            Assert.IsNull(tableRows[0].GetCell(0).GetVerticalAlignment());
+            Assert.AreEqual(XWPFVertAlign.BOTTOM, tableRows[0].GetCell(1).GetVerticalAlignment());
+            Assert.AreEqual(XWPFVertAlign.CENTER, tableRows[1].GetCell(0).GetVerticalAlignment());
+            Assert.IsNull(tableRows[1].GetCell(1).GetVerticalAlignment());
         }
     }
 

@@ -452,12 +452,11 @@ using System.Xml;
 
         }
 
-        /**
-         * Check if the new part was already added before via PackagePart.addRelationship()
-         *
-         * @param part
-         * @return
-         */
+        /// <summary>
+        /// Check if the new part was already added before via PackagePart.addRelationship()
+        /// </summary>
+        /// <param name="part"> to find the relationship for</param>
+        /// <returns>The existing relationship, or null if there isn't yet one</returns>
         private PackageRelationship FindExistingRelation(POIXMLDocumentPart part)
         {
             String ppn = part.GetPackagePart().PartName.Name;

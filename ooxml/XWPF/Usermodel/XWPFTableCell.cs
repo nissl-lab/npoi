@@ -316,16 +316,19 @@ namespace NPOI.XWPF.UserModel
 
         /**
          * Get the vertical alignment of the cell.
-         * @return the cell alignment enum value
+         * @return the cell alignment enum value or null if no vertical alignment is set
          */
-        public XWPFVertAlign GetVerticalAlignment()
+        public XWPFVertAlign? GetVerticalAlignment()
         {
-            XWPFVertAlign vAlign = XWPFVertAlign.TOP;
+            XWPFVertAlign? vAlign = null;
             CT_TcPr tcpr = ctTc.tcPr;
             if (tcpr != null)
             {
                 CT_VerticalJc va = tcpr.vAlign;
-                vAlign = stVertAlignTypeMap[(va.val)];
+                if (va != null && va.val != null)
+                {
+                    vAlign = stVertAlignTypeMap[va.val.Value];
+                }
             }
             return vAlign;
         }

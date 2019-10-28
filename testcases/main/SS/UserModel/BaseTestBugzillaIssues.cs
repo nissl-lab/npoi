@@ -1500,10 +1500,10 @@ namespace TestCases.SS.UserModel
             //    Assert.Fail("Best fit width time per cell exceeded 50000 ns: " + bestFitWidthTimePerCell_ns + " ns");
             //}
 
-            if (totalTime_s > 10)
-            {
-                Assert.Fail("Total time exceeded 10 seconds: " + totalTime_s + " s");
-            }
+            //if (totalTime_s > 10)
+            //{
+            //    Assert.Fail("Total time exceeded 10 seconds: " + totalTime_s + " s");
+            //}
         }
 
         protected long time()
