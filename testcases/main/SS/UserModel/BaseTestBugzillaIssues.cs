@@ -50,11 +50,6 @@ namespace TestCases.SS.UserModel
             _testDataProvider = TestDataProvider;
         }
 
-        protected virtual void TrackColumnsForAutoSizingIfSXSSF(ISheet sheet)
-        {
-            // do nothing for Sheet base class. This will be overridden for SXSSFSheets.
-        }
-
         public static void assertAlmostEquals(double expected, double actual, float factor)
         {
             double diff = Math.Abs(expected - actual);
@@ -372,6 +367,7 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             BaseTestSheetAutosizeColumn.FixFonts(wb);
             ISheet sheet = wb.CreateSheet("Sheet1");
+            _testDataProvider.TrackAllColumnsForAutosizing(sheet);
             IRow row = sheet.CreateRow(0);
             ICell cell0 = row.CreateCell(0);
 
@@ -421,8 +417,70 @@ namespace TestCases.SS.UserModel
 
 
             Assert.AreEqual(255 * 256, sheet.GetColumnWidth(0)); // maximum column width is 255 characters
-            sheet.SetColumnWidth(0, sheet.GetColumnWidth(0)); // Bug 506819 reports exception at this point
+            sheet.SetColumnWidth(0, sheet.GetColumnWidth(0)); // Bug 50681 reports exception at this point
         }
+
+        [Test]
+        public void Bug51622_testAutoSizeShouldRecognizeLeadingSpaces()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            BaseTestSheetAutosizeColumn.FixFonts(wb);
+            ISheet sheet = wb.CreateSheet();
+            _testDataProvider.TrackAllColumnsForAutosizing(sheet);
+            IRow row = sheet.CreateRow(0);
+            ICell cell0 = row.CreateCell(0);
+            ICell cell1 = row.CreateCell(1);
+            ICell cell2 = row.CreateCell(2);
+
+            cell0.SetCellValue("Test Column AutoSize");
+            cell1.SetCellValue("         Test Column AutoSize");
+            cell2.SetCellValue("Test Column AutoSize         ");
+
+            sheet.AutoSizeColumn(0);
+            sheet.AutoSizeColumn(1);
+            sheet.AutoSizeColumn(2);
+
+            int noWhitespaceColWidth = sheet.GetColumnWidth(0);
+            int leadingWhitespaceColWidth = sheet.GetColumnWidth(1);
+            int trailingWhitespaceColWidth = sheet.GetColumnWidth(2);
+
+            // Based on the amount of text and whitespace used, and the default font
+            // assume that the cell with whitespace should be at least 20% wider than
+            // the cell without whitespace. This number is arbitrary, but should be large
+            // enough to guarantee that the whitespace cell isn't wider due to chance.
+            // Experimentally, I calculated the ratio as 1.2478181, though this ratio may change
+            // if the default font or margins change.
+            double expectedRatioThreshold = 1.2f;
+            double leadingWhitespaceRatio = ((double)leadingWhitespaceColWidth) / noWhitespaceColWidth;
+            double trailingWhitespaceRatio = ((double)leadingWhitespaceColWidth) / noWhitespaceColWidth;
+
+            assertGreaterThan("leading whitespace is longer than no whitespace", leadingWhitespaceRatio, expectedRatioThreshold);
+            assertGreaterThan("trailing whitespace is longer than no whitespace", trailingWhitespaceRatio, expectedRatioThreshold);
+            Assert.AreEqual(leadingWhitespaceColWidth, trailingWhitespaceColWidth,
+                "cells with equal leading and trailing whitespace have equal width");
+
+            wb.Close();
+        }
+
+        /**
+         * Test if a > b. Fails if false.
+         *
+         * @param message
+         * @param a
+         * @param b
+         */
+        private void assertGreaterThan(String message, double a, double b)
+        {
+            if (a > b)
+            { // expected
+            }
+            else
+            {
+                String msg = "Expected: " + a + " > " + b;
+                Assert.Fail(message + ": " + msg);
+            }
+        }
+
 
         private double ComputeCellWidthManually(ICell cell0, IFont font)
         {
@@ -620,6 +678,7 @@ namespace TestCases.SS.UserModel
             d2Percent.DataFormat = (/*setter*/format.GetFormat("0.00%"));
 
             ISheet s = wb.CreateSheet();
+            _testDataProvider.TrackAllColumnsForAutosizing(s);
             IRow r1 = s.CreateRow(0);
 
             for (int i = 0; i < 3; i++)
@@ -1361,7 +1420,7 @@ namespace TestCases.SS.UserModel
             cell.SetCellValue((String)null);
             Assert.AreEqual(CellType.Blank, cell.CellType);
 
-            _testDataProvider.TrackColumnsForAutosizing(s, 0);
+            _testDataProvider.TrackAllColumnsForAutosizing(s);
 
             s.AutoSizeColumn(0);
             Assert.AreEqual(2048, s.GetColumnWidth(0));
@@ -1447,7 +1506,7 @@ namespace TestCases.SS.UserModel
             }
         }
 
-        public long time()
+        protected long time()
         {
             //从1970年1月1日至当前时间所经过的毫秒数
             long currentTicks = DateTime.Now.Ticks;
@@ -1455,7 +1514,7 @@ namespace TestCases.SS.UserModel
             long currentMillis = (currentTicks - dtFrom.Ticks) / 10000;
             return currentMillis;
         }
-        public double delta(long startTimeMillis)
+        protected double delta(long startTimeMillis)
         {
             return time() - startTimeMillis;
         }

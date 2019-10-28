@@ -35,16 +35,13 @@ namespace TestCases.SS
         /// </summary>
         /// <returns>an instance of Workbook</returns>
         IWorkbook CreateWorkbook();
-        void TrackAllColumnsForAutosizing(ISheet sheet);
-        //************ End SXSSF-specific methods ***************//
+
         /// <summary>
         /// Only matters for SXSSF - enables tracking of the column
         /// widths so that autosizing can work. No-op on others.
         /// </summary>
-        /// <param name="sheet"></param>
-        /// <param name="columns"></param>
-        void TrackColumnsForAutosizing(ISheet sheet, params int[] columns);
-
+        void TrackAllColumnsForAutosizing(ISheet sheet);
+        //************ End SXSSF-specific methods ***************//
         /// <summary>
         /// Creates the corresponding {@link FormulaEvaluator} for the
         /// type of Workbook handled by this Provider. 

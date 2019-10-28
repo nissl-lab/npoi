@@ -67,7 +67,6 @@ namespace NPOI.XSSF
         
         public void TrackAllColumnsForAutosizing(ISheet sheet) { }
         //************ End SXSSF-specific methods ***************//
-        public void TrackColumnsForAutosizing(ISheet sheet, params int[] columns) { }
 
         public IFormulaEvaluator CreateFormulaEvaluator(IWorkbook wb)
         {

@@ -19,11 +19,6 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
 
         }
 
-        protected override void TrackColumnsForAutoSizingIfSXSSF(ISheet sheet)
-        {
-            SXSSFSheet sxSheet = (SXSSFSheet)sheet;
-            sxSheet.TrackAllColumnsForAutoSizing();
-        }
         [Test]
         public void Tug49253()
         {

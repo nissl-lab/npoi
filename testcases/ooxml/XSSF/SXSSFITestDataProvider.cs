@@ -91,13 +91,6 @@ namespace NPOI.XSSF
             instances.Add(wb);
             return wb;
         }
-        public void TrackColumnsForAutosizing(ISheet sheet, params int[] columns)
-        {
-            foreach (int cn in columns)
-            {
-                ((SXSSFSheet)sheet).TrackColumnForAutoSizing(cn);
-            }
-        }
         public void TrackAllColumnsForAutosizing(ISheet sheet)
         {
             ((SXSSFSheet)sheet).TrackAllColumnsForAutoSizing();
