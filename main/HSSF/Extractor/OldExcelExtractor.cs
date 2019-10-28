@@ -92,7 +92,16 @@ namespace NPOI.HSSF.Extractor
         }
         private void Open(DirectoryNode directory)
         {
-            DocumentNode book = (DocumentNode)directory.GetEntry("Book");
+            DocumentNode book;
+            try
+            {
+                book = (DocumentNode)directory.GetEntry("Book");
+            }
+            catch (FileNotFoundException e)
+            {
+                // some files have "Workbook" instead
+                book = (DocumentNode)directory.GetEntry("Workbook");
+            }
             if (book == null)
             {
                 throw new IOException("No Excel 5/95 Book stream found");
@@ -255,9 +264,8 @@ namespace NPOI.HSSF.Extractor
                     }
                 }
 
-
+                Close();
                 ris = null;
-                this.Close();
                 return text.ToString();
             }
         }
