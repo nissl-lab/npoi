@@ -288,30 +288,27 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Adds a merged region of cells on a sheet.
-         *
-         * @param region to merge
-         * @return index of this region
-         * @throws IllegalStateException if region intersects with a multi-cell array formula
-         * @throws IllegalStateException if region intersects with an existing region on this sheet
-         */
+        /// <summary>
+        /// Adds a merged region of cells on a sheet.
+        /// </summary>
+        /// <param name="region">region to merge</param>
+        /// <returns>index of this region</returns>
+        /// <exception cref="System.ArgumentException">if region contains fewer than 2 cells</exception>
+        /// <exception cref="System.InvalidOperationException">if region intersects with an existing merged region
+        /// or multi-cell array formula on this sheet</exception>
         public int AddMergedRegion(CellRangeAddress region) {
             return AddMergedRegion(region, true);
         }
 
-        /**
-         * Adds a merged region of cells (hence those cells form one).
-         * Skips validation. It is possible to create overlapping merged regions
-         * or create a merged region that intersects a multi-cell array formula
-         * with this formula, which may result in a corrupt workbook.
-         *
-         * To check for merged regions overlapping array formulas or other merged regions
-         * after addMergedRegionUnsafe has been called, call {@link #validateMergedRegions()}, which runs in O(n^2) time.
-         *
-         * @param region to merge
-         * @return index of this region
-         */
+        /// <summary>
+        /// Adds a merged region of cells (hence those cells form one).
+        /// Skips validation.It is possible to create overlapping merged regions
+        /// or create a merged region that intersects a multi-cell array formula
+        /// with this formula, which may result in a corrupt workbook.
+        /// </summary>
+        /// <param name="region">region to merge</param>
+        /// <returns>index of this region</returns>
+        /// <exception cref="System.ArgumentException">if region contains fewer than 2 cells</exception>
         public int AddMergedRegionUnsafe(CellRangeAddress region)
         {
             return AddMergedRegion(region, false);
@@ -325,6 +322,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns>index of this region</returns>
         /// <exception cref="InvalidOperationException">if region intersects with a multi-cell array formula or
         /// if region intersects with an existing region on this sheet</exception>
+        /// <exception cref="System.ArgumentException">if region contains fewer than 2 cells</exception>
         public int AddMergedRegion(CellRangeAddress region, bool validate)
         {
             if (region.NumberOfCells < 2)

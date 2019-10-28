@@ -634,10 +634,15 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="region">region (rowfrom/colfrom-rowto/colto) to merge</param>
         /// <returns>index of this region</returns>
+        /// <exception cref="System.ArgumentException">if region contains fewer than 2 cells</exception>
         /// <exception cref="System.InvalidOperationException">if region intersects with an existing merged region
         /// or multi-cell array formula on this sheet</exception>
         public int AddMergedRegion(CellRangeAddress region)
         {
+            if (region.NumberOfCells < 2)
+            {
+                throw new ArgumentException("Merged region " + region.FormatAsString() + " must contain 2 or more cells");
+            }
             region.Validate(SpreadsheetVersion.EXCEL97);
             // throw IllegalStateException if the argument CellRangeAddress intersects with
             // a multi-cell array formula defined in this sheet

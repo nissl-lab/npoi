@@ -291,14 +291,15 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet();
 
-            CellRangeAddress baseRegion = new CellRangeAddress(0, 1, 0, 1);
+            CellRangeAddress baseRegion = new CellRangeAddress(0, 1, 0, 1); //A1:B2
             sheet.AddMergedRegion(baseRegion);
 
             try
             {
-                CellRangeAddress duplicateRegion = new CellRangeAddress(0, 1, 0, 1);
+                CellRangeAddress duplicateRegion = new CellRangeAddress(0, 1, 0, 1); //A1:B2
                 sheet.AddMergedRegion(duplicateRegion);
-                Assert.Fail("Should not be able to add a merged region if sheet already contains the same merged region");
+                Assert.Fail("Should not be able to add a merged region (" + duplicateRegion.FormatAsString() + ") " +
+                 "if sheet already contains the same merged region (" + baseRegion.FormatAsString() + ")");
             }
             catch (InvalidOperationException)
             {
@@ -306,9 +307,10 @@ namespace TestCases.SS.UserModel
 
             try
             {
-                CellRangeAddress partiallyOverlappingRegion = new CellRangeAddress(1, 2, 1, 2);
+                CellRangeAddress partiallyOverlappingRegion = new CellRangeAddress(1, 2, 1, 2); //B2:C3
                 sheet.AddMergedRegion(partiallyOverlappingRegion);
-                Assert.Fail("Should not be able to add a merged region if it partially overlaps with an existing merged region");
+                Assert.Fail("Should not be able to add a merged region (" + partiallyOverlappingRegion.FormatAsString() + ") " +
+                 "if it partially overlaps with an existing merged region (" + baseRegion.FormatAsString() + ")");
             }
             catch (InvalidOperationException)
             {
@@ -316,9 +318,10 @@ namespace TestCases.SS.UserModel
 
             try
             {
-                CellRangeAddress subsetRegion = new CellRangeAddress(0, 1, 0, 0);
+                CellRangeAddress subsetRegion = new CellRangeAddress(0, 1, 0, 0); //A1:A2
                 sheet.AddMergedRegion(subsetRegion);
-                Assert.Fail("Should not be able to add a merged region if it is a formal subset of an existing merged region");
+                Assert.Fail("Should not be able to add a merged region (" + subsetRegion.FormatAsString() + ") " +
+                 "if it is a formal subset of an existing merged region (" + baseRegion.FormatAsString() + ")");
             }
             catch (InvalidOperationException)
             {
@@ -326,9 +329,10 @@ namespace TestCases.SS.UserModel
 
             try
             {
-                CellRangeAddress supersetRegion = new CellRangeAddress(0, 2, 0, 2);
+                CellRangeAddress supersetRegion = new CellRangeAddress(0, 2, 0, 2); //A1:C3
                 sheet.AddMergedRegion(supersetRegion);
-                Assert.Fail("Should not be able to add a merged region if it is a formal superset of an existing merged region");
+                Assert.Fail("Should not be able to add a merged region (" + supersetRegion.FormatAsString() + ") " +
+                 "if it is a formal superset of an existing merged region (" + baseRegion.FormatAsString() + ")");
             }
             catch (InvalidOperationException)
             {
@@ -337,6 +341,28 @@ namespace TestCases.SS.UserModel
             CellRangeAddress disjointRegion = new CellRangeAddress(10, 11, 10, 11);
             sheet.AddMergedRegion(disjointRegion); //allowed
         }
+
+        /*
+        * Bug 56345: Reject single-cell merged regions
+        */
+        [Test]
+        public void AddMergedRegionWithSingleCellShouldFail()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            CellRangeAddress region = CellRangeAddress.ValueOf("A1:A1");
+            try
+            {
+                sheet.AddMergedRegion(region);
+                Assert.Fail("Should not be able to add a single-cell merged region (" + region.FormatAsString() + ")");
+            }
+            catch (ArgumentException e)
+            {
+                // expected
+            }
+            wb.Close();
+        }
+
 
         /**
          * Test Adding merged regions. If the region's bounds are outside of the allowed range
