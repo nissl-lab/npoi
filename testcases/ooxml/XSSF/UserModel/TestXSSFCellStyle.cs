@@ -1122,5 +1122,27 @@ namespace NPOI.XSSF.UserModel
             cellStyle.Rotation = ((short)-90);
             Assert.AreEqual(180, cellStyle.Rotation);
         }
+
+        [Test]
+        public void Bug58996_UsedToWorkIn3_11_ButNotIn3_13()
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFCellStyle cellStyle = workbook.CreateCellStyle() as XSSFCellStyle;
+            cellStyle.FillForegroundColorColor = (null);
+            Assert.IsNull(cellStyle.FillForegroundColorColor);
+            cellStyle.FillBackgroundColorColor = (null);
+            Assert.IsNull(cellStyle.FillBackgroundColorColor);
+            cellStyle.FillPattern = FillPattern.NoFill;;
+            Assert.AreEqual(FillPattern.NoFill, cellStyle.FillPattern);
+            cellStyle.SetBottomBorderColor(null);
+            Assert.IsNull(cellStyle.BottomBorderXSSFColor);
+            cellStyle.SetTopBorderColor(null);
+            Assert.IsNull(cellStyle.TopBorderXSSFColor);
+            cellStyle.SetLeftBorderColor(null);
+            Assert.IsNull(cellStyle.LeftBorderXSSFColor);
+            cellStyle.SetRightBorderColor(null);
+            Assert.IsNull(cellStyle.RightBorderXSSFColor);
+        }
+
     }
 }

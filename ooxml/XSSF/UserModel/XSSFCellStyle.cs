@@ -533,7 +533,7 @@ namespace NPOI.XSSF.UserModel
                 CT_PatternFill ptrn = ct.patternFill;
                 if (value == null)
                 {
-                    if (ptrn != null) ptrn.UnsetBgColor();
+                    if (ptrn != null && ptrn.IsSetBgColor()) ptrn.UnsetBgColor();
                 }
                 else
                 {
@@ -610,7 +610,7 @@ namespace NPOI.XSSF.UserModel
                 CT_PatternFill ptrn = ct.patternFill;
                 if (value == null)
                 {
-                    if (ptrn != null) ptrn.UnsetFgColor();
+                    if (ptrn != null && ptrn.IsSetFgColor()) ptrn.UnsetFgColor();
                 }
                 else
                 {
