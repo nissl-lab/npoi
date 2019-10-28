@@ -286,6 +286,74 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        /**
+	     * Sets the title text.
+	     */
+        public void SetTitle(String newTitle)
+        {
+            CT_Title ctTitle;
+            if (chart.IsSetTitle())
+            {
+                ctTitle = chart.title;
+            }
+            else
+            {
+                ctTitle = chart.AddNewTitle();
+            }
+
+            CT_Tx tx;
+            if (ctTitle.IsSetTx())
+            {
+                tx = ctTitle.tx;
+            }
+            else
+            {
+                tx = ctTitle.AddNewTx();
+            }
+
+            if (tx.IsSetStrRef())
+            {
+                tx.UnsetStrRef();
+            }
+
+            OpenXmlFormats.Dml.Chart.CT_TextBody rich;
+            if (tx.IsSetRich())
+            {
+                rich = tx.rich;
+            }
+            else
+            {
+                rich = tx.AddNewRich();
+                rich.AddNewBodyPr();  // body properties must exist (but can be empty)
+            }
+
+            CT_TextParagraph para;
+            if (rich.SizeOfPArray() > 0)
+            {
+                para = rich.GetPArray(0);
+            }
+            else
+            {
+                para = rich.AddNewP();
+            }
+
+            if (para.SizeOfRArray() > 0)
+            {
+                CT_RegularTextRun run = para.GetRArray(0);
+                run.t = (newTitle);
+            }
+            else if (para.SizeOfFldArray() > 0)
+            {
+                OpenXmlFormats.Dml.CT_TextField fld = para.GetFldArray(0);
+                fld.t = (newTitle);
+            }
+            else
+            {
+                CT_RegularTextRun run = para.AddNewR();
+                run.t = (newTitle);
+            }
+        }
+
         public IChartLegend GetOrCreateLegend()
         {
             return new XSSFChartLegend(this);
