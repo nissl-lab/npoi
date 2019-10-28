@@ -417,13 +417,16 @@ namespace NPOI.XSSF.Streaming
                 }
 
                 if (_value.GetType() == CellType.Formula)
-                    if (_value is NumericFormulaValue) {
-                    ((NumericFormulaValue)_value).PreEvaluatedValue = Double.Parse(value);
-                } else {
-                    ((StringFormulaValue)_value).Value = value;
-                }
-            else
-                ((PlainStringValue)_value).Value = value;
+                    if (_value is NumericFormulaValue)
+                    {
+                        ((NumericFormulaValue)_value).PreEvaluatedValue = Double.Parse(value);
+                    }
+                    else
+                    {
+                        ((StringFormulaValue)_value).Value = value;
+                    }
+                else
+                    ((PlainStringValue)_value).Value = value;
             }
             else
             {

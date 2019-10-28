@@ -1333,5 +1333,40 @@ namespace TestCases.SS.UserModel
 
             wb.Close();
         }
+
+        [Ignore("by poi")]
+        [Test]
+        public void test58648()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ICell cell = wb.CreateSheet().CreateRow(0).CreateCell(0);
+            cell.CellFormula = ("((1 + 1) )");
+            // Assert.Fails with
+            // org.apache.poi.ss.formula.FormulaParseException: Parse error near char ... ')'
+            // in specified formula '((1 + 1) )'. Expected cell ref or constant literal
+            wb.Close();
+        }
+
+        /**
+        * If someone sets a null string as a cell value, treat
+        *  it as an empty cell, and avoid a NPE on auto-sizing
+        */
+        [Test]
+        public void Test57034()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
+            ICell cell = s.CreateRow(0).CreateCell(0);
+            cell.SetCellValue((String)null);
+            Assert.AreEqual(CellType.Blank, cell.CellType);
+
+            _testDataProvider.TrackColumnsForAutosizing(s, 0);
+
+            s.AutoSizeColumn(0);
+            Assert.AreEqual(2048, s.GetColumnWidth(0));
+            s.AutoSizeColumn(0, true);
+            Assert.AreEqual(2048, s.GetColumnWidth(0));
+            wb.Close();
+        }
     }
 }
