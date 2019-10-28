@@ -74,9 +74,12 @@ namespace NPOI.HSSF.Model
             "WORKBOOK", // Typically from third party programs
             "BOOK",     // Typically odd Crystal Reports exports
         };
-        //private static int DEBUG = POILogger.DEBUG;
-
-        //    public static Workbook currentBook = null;
+        /**
+         * Name of older (pre-Excel 97) Workbook streams, which
+         *  aren't supported by HSSFWorkbook, only by
+         *  {@link OldExcelExtractor}
+         */
+        public static String OLD_WORKBOOK_DIR_ENTRY_NAME = "Book";
 
         /**
          * constant used to Set the "codepage" wherever "codepage" is Set in records

@@ -21,6 +21,7 @@ namespace NPOI.HSSF.Extractor
     using System.IO;
     using System.Text;
     using NPOI.HSSF;
+    using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using NPOI.POIFS.FileSystem;
     using NPOI.SS.UserModel;
@@ -95,12 +96,12 @@ namespace NPOI.HSSF.Extractor
             DocumentNode book;
             try
             {
-                book = (DocumentNode)directory.GetEntry("Book");
+                book = (DocumentNode)directory.GetEntry(InternalWorkbook.OLD_WORKBOOK_DIR_ENTRY_NAME);
             }
             catch (FileNotFoundException e)
             {
                 // some files have "Workbook" instead
-                book = (DocumentNode)directory.GetEntry("Workbook");
+                book = (DocumentNode)directory.GetEntry(InternalWorkbook.WORKBOOK_DIR_ENTRY_NAMES[0]);
             }
             if (book == null)
             {
