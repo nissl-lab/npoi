@@ -129,9 +129,9 @@ namespace NPOI.XSSF.UserModel
             comment.SetString(TEST_RICHTEXTSTRING);
 
             CT_Comment ctComment = comment.GetCTComment();
-          //  Assert.Fail("TODO test case incomplete!?");
+            //  Assert.Fail("TODO test case incomplete!?");
             //XmlObject[] obj = ctComment.selectPath(
-            //        "declare namespace w='http://schemas.Openxmlformats.org/spreadsheetml/2006/main' .//w:text");
+            //        "declare namespace w='"+XSSFRelation.NS_SPREADSHEETML+"' .//w:text");
             //Assert.AreEqual(1, obj.Length);
             Assert.AreEqual(TEST_RICHTEXTSTRING, comment.String.String);
 
@@ -149,7 +149,7 @@ namespace NPOI.XSSF.UserModel
             //check the low-level stuff
             comment.String = richText;
             //obj = ctComment.selectPath(
-            //        "declare namespace w='http://schemas.Openxmlformats.org/spreadsheetml/2006/main' .//w:text");
+            //        "declare namespace w='"+XSSFRelation.NS_SPREADSHEETML+"' .//w:text");
             //Assert.AreEqual(1, obj.Length);
             Assert.AreSame(comment.String, richText);
             //check that the rich text is Set in the comment

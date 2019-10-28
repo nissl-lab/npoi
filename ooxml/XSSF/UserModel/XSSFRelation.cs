@@ -23,9 +23,10 @@ using System.IO;
 namespace NPOI.XSSF.UserModel
 {
 
-    /**
-     *
-     */
+    /// <summary>
+    /// Defines namespaces, content types and normal file names / naming
+    /// patterns, for the well-known XSSF format parts. 
+    /// </summary>
     public class XSSFRelation : POIXMLRelation
     {
 
@@ -313,6 +314,8 @@ namespace NPOI.XSSF.UserModel
             "/xl/ctrlProps/ctrlProp#.xml",
             null
         );
+
+        public static String NS_SPREADSHEETML = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
 
         private XSSFRelation(String type, String rel, String defaultName, Type cls) :
             base(type, rel, defaultName, cls)
