@@ -828,5 +828,41 @@ namespace TestCases.SS.Format
             //Assert.AreEqual(" "+pound+"   -  ", cfUK.Apply((0)).Text);
             //Assert.AreEqual(" -    "+euro+"  ", cfFR.Apply((0)).Text);
         }
+
+        [Test]
+        public void TestThreePartComplexFormat1()
+        {
+            // verify a rather complex format found e.g. in http://wahl.land-oberoesterreich.gv.at/Downloads/bp10.xls
+            CellFormatPart posPart = new CellFormatPart("[$-F400]h:mm:ss\\ AM/PM");
+            Assert.IsNotNull(posPart);
+            Assert.AreEqual("1:00:12 AM", posPart.Apply(new DateTime(12345)).Text);
+
+            CellFormatPart negPart = new CellFormatPart("[$-F40]h:mm:ss\\ AM/PM");
+            Assert.IsNotNull(negPart);
+            Assert.AreEqual("1:00:12 AM", posPart.Apply(new DateTime(12345)).Text);
+            //Assert.IsNotNull(new CellFormatPart("_-* \"\"??_-;_-@_-"));
+
+            CellFormat instance = CellFormat.GetInstance("[$-F400]h:mm:ss\\ AM/PM;[$-F40]h:mm:ss\\ AM/PM;_-* \"\"??_-;_-@_-");
+            Assert.IsNotNull(instance);
+            Assert.AreEqual("1:00:12 AM", instance.Apply(new DateTime(12345)).Text);
+        }
+
+        [Test]
+        public void TestThreePartComplexFormat2()
+        {
+            // verify a rather complex format found e.g. in http://wahl.land-oberoesterreich.gv.at/Downloads/bp10.xls
+            CellFormatPart posPart = new CellFormatPart("dd/mm/yyyy");
+            Assert.IsNotNull(posPart);
+            Assert.AreEqual("01/01/1970", posPart.Apply(new DateTime(12345)).Text);
+
+            CellFormatPart negPart = new CellFormatPart("dd/mm/yyyy");
+            Assert.IsNotNull(negPart);
+            Assert.AreEqual("01/01/1970", posPart.Apply(new DateTime(12345)).Text);
+            //Assert.IsNotNull(new CellFormatPart("_-* \"\"??_-;_-@_-"));
+
+            CellFormat instance = CellFormat.GetInstance("dd/mm/yyyy;dd/mm/yyyy;_-* \"\"??_-;_-@_-");
+            Assert.IsNotNull(instance);
+            Assert.AreEqual("01/01/1970", instance.Apply(new DateTime(12345)).Text);
+        }
     }
 }

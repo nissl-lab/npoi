@@ -367,8 +367,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             try {
                 this.created = SetDateValue(created);
             } catch (InvalidFormatException e) {
-                new ArgumentException("created  : "
-                        + e.Message, e);
+                throw new ArgumentException("Date for created could not be parsed: " + created, e);
             }
         }
 
@@ -553,7 +552,8 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             }
             if (d == null)
             {
-                throw new InvalidFormatException("Date not well formated");
+                throw new InvalidFormatException("Date " + dateTzStr + " not well formated, "
+                    + "expected format " + DEFAULT_DATEFORMAT + " or " + ALTERNATIVE_DATEFORMAT);
             }
                 
             return new Nullable<DateTime>(d);

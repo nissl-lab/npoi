@@ -25,6 +25,7 @@ namespace NPOI.SS.UserModel
     using NPOI.SS.Util;
     using System.Globalization;
     using NPOI.SS.Format;
+    using NPOI.Util;
 
 
 
@@ -175,9 +176,12 @@ namespace NPOI.SS.UserModel
          */
         private Hashtable formats;
         private bool emulateCsv = false;
+
+        /** For logging any problems we find */
+        private static POILogger logger = POILogFactory.GetLogger(typeof(DataFormatter));
         /**
-     * Creates a formatter using the {@link Locale#getDefault() default locale}.
-     */
+         * Creates a formatter using the {@link Locale#getDefault() default locale}.
+         */
         public DataFormatter()
             : this(false)
         {
@@ -277,7 +281,9 @@ namespace NPOI.SS.UserModel
                     CellFormat cfmt = CellFormat.GetInstance(formatStr);
                     // CellFormat requires callers to identify date vs not, so do so
                     object cellValueO = (cellValue);
-                    if (DateUtil.IsADateFormat(formatIndex, formatStr))
+                    if (DateUtil.IsADateFormat(formatIndex, formatStr) &&
+                        // don't try to handle Date value 0, let a 3 or 4-part format take care of it 
+                        (double)cellValueO != 0.0)
                     {
                         cellValueO = DateUtil.GetJavaDate(cellValue);
                     }
@@ -286,7 +292,7 @@ namespace NPOI.SS.UserModel
                 }
                 catch (Exception e)
                 {
-                    //logger.log(POILogger.WARN, "Formatting failed as " + formatStr + ", falling back", e);
+                    logger.Log(POILogger.WARN, "Formatting failed for format " + formatStr + ", falling back", e);
                 }
             }
 

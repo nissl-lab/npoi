@@ -249,7 +249,7 @@ namespace NPOI.SS.Format
                 }
                 else
                 {
-                    throw new ArgumentException("value not a valid Excel date");
+                    throw new ArgumentException("value " + numericValue + " of date " + value + " is not a valid Excel date");
                 }
             }
             else

@@ -2822,8 +2822,7 @@ namespace NPOI.XSSF.UserModel
             wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
 
             CalculationChain chain = ((XSSFWorkbook)wb).GetCalculationChain();
-            CT_CalcCell[] cArray = chain.GetCTCalcChain().c.ToArray();
-            foreach (CT_CalcCell calc in cArray)
+            foreach (CT_CalcCell calc in chain.GetCTCalcChain().c)
             {
                 // A2 to A6 should be gone
                 Assert.IsFalse(calc.r.Equals("A2"));
@@ -2845,8 +2844,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(sheetBack);
 
             chain = ((XSSFWorkbook)wbBack).GetCalculationChain();
-            cArray = chain.GetCTCalcChain().c.ToArray();
-            foreach (CT_CalcCell calc in cArray)
+            foreach (CT_CalcCell calc in chain.GetCTCalcChain().c)
             {
                 // A2 to A6 should be gone
                 Assert.IsFalse(calc.r.Equals("A2"));
