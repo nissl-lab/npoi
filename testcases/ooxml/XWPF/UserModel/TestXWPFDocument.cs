@@ -393,6 +393,14 @@ namespace NPOI.XWPF.UserModel
             settings.SetZoomPercent(50);
             Assert.AreEqual(50, settings.GetZoomPercent());
         }
+
+        [Test]
+        public void TestEnforcedWith()
+        {
+            XWPFDocument docx = XWPFTestDataSamples.OpenSampleDocument("EnforcedWith.docx");
+            Assert.IsTrue(docx.IsEnforcedProtection());
+            docx.Close();
+        }
     }
 
 }

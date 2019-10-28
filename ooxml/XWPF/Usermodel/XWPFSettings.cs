@@ -92,6 +92,31 @@ namespace NPOI.XWPF.UserModel
         }
 
         /**
+         * Verifies the documentProtection tag inside settings.xml file <br/>
+         * if the protection is enforced (w:enforcement="1") <br/>
+         *  <p/>
+         * <br/>
+         * sample snippet from settings.xml
+         * <pre>
+         *     &lt;w:settings  ... &gt;
+         *         &lt;w:documentProtection w:edit=&quot;readOnly&quot; w:enforcement=&quot;1&quot;/&gt;
+         * </pre>
+         *
+         * @return true if documentProtection is enforced with option any
+         */
+        public bool isEnforcedWith()
+        {
+            CT_DocProtect ctDocProtect = ctSettings.documentProtection;
+
+            if (ctDocProtect == null)
+            {
+                return false;
+            }
+
+            return ctDocProtect.enforcement.Equals(ST_OnOff.on);
+        }
+
+        /**
          * Verifies the documentProtection tag inside Settings.xml file <br/>
          * if the protection is enforced (w:enforcement="1") <br/>
          * and if the kind of protection Equals to passed (STDocProtect.Enum editValue) <br/>
@@ -243,6 +268,21 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
+        internal bool IsEnforcedWith()
+        {
+            CT_DocProtect ctDocProtect = ctSettings.documentProtection;
+
+            if (ctDocProtect == null)
+            {
+                return false;
+            }
+
+            return ctDocProtect.enforcement.Equals(ST_OnOff.on) && 
+                (ctDocProtect.edit == ST_DocProtect.comments ||
+                ctDocProtect.edit == ST_DocProtect.forms ||
+                ctDocProtect.edit == ST_DocProtect.readOnly ||
+                ctDocProtect.edit == ST_DocProtect.trackedChanges);
+        }
     }
 
 }
