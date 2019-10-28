@@ -1288,6 +1288,7 @@
     <Compile Include="Util\FixedField.cs" />
     <Compile Include="Util\HexDump.cs" />
     <Compile Include="Util\HexRead.cs" />
+    <Compile Include="Util\ICloseable.cs" />
     <Compile Include="Util\InputStream.cs" />
     <Compile Include="Util\IntegerField.cs" />
     <Compile Include="Util\IntList.cs" />

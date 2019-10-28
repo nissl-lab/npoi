@@ -54,7 +54,7 @@ namespace NPOI.DDF
                 bool isBlipId = (propId & (short)0x4000) != 0;
 
                 byte propertyType = EscherProperties.GetPropertyType((short)propNumber);
-                if (propertyType == EscherPropertyMetaData.TYPE_bool)
+                if (propertyType == EscherPropertyMetaData.TYPE_BOOL)
                     results.Add(new EscherBoolProperty(propId, propData));
                 else if (propertyType == EscherPropertyMetaData.TYPE_RGB)
                     results.Add(new EscherRGBProperty(propId, propData));

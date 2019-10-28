@@ -26,7 +26,7 @@ namespace NPOI
     using NPOI.OpenXml4Net;
     using System.Reflection;
 
-    public abstract class POIXMLDocument : POIXMLDocumentPart, IDisposable
+    public abstract class POIXMLDocument : POIXMLDocumentPart, ICloseable
     {
         public static String DOCUMENT_CREATOR = "NPOI";
 
@@ -237,11 +237,6 @@ namespace NPOI
             GetProperties().Commit();
 
             Package.Save(stream);
-        }
-
-        public void Dispose()
-        {
-            Close();
         }
     }
 }

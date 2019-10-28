@@ -22,6 +22,7 @@ namespace NPOI.SS.UserModel
     using System.IO;
     using NPOI.SS.Formula.Udf;
     using System.Collections.Generic;
+    using NPOI.Util;
 
     public enum SheetState : int
     {
@@ -53,7 +54,7 @@ namespace NPOI.SS.UserModel
     /// This interface is shared between the implementation specific to xls and xlsx.
     /// This way it is possible to access Excel workbooks stored in both formats.
     /// </summary>
-    public interface IWorkbook
+    public interface IWorkbook : ICloseable
     {
 
         /// <summary>
@@ -424,14 +425,9 @@ namespace NPOI.SS.UserModel
 
         void Close();
 
-        bool Dispose();
-
-        /**
-         * Returns the spreadsheet version of this workbook
-         * 
-         * @return SpreadsheetVersion enum
-         * @since 3.14 beta 2
-         */
+        /// <summary>
+        /// Returns the spreadsheet version (EXCLE97) of this workbook
+        /// </summary>
         SpreadsheetVersion SpreadsheetVersion { get; }
     }
 }

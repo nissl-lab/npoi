@@ -2189,6 +2189,9 @@ namespace NPOI.XSSF.UserModel
             return calcPr != null && calcPr.calcId != 0;
         }
 
+        /// <summary>
+        /// Returns the spreadsheet version (EXCLE2007) of this workbook
+        /// </summary>
         public SpreadsheetVersion SpreadsheetVersion
         {
             get
@@ -2268,11 +2271,6 @@ namespace NPOI.XSSF.UserModel
             pictures.Add(img);
             return imageNumber - 1;
 
-        }
-
-        public new bool Dispose()
-        {
-            throw new NotImplementedException();
         }
 
         public XSSFWorkbookType WorkbookType

@@ -39,14 +39,17 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF;
     using System.Threading;
     using System.Globalization;
+    using NPOI.SS;
+
     /**
-     *
-     */
+*
+*/
     [TestFixture]
     public class TestHSSFWorkbook : BaseTestWorkbook
     {
+        private static HSSFITestDataProvider _testDataProvider = HSSFITestDataProvider.Instance;
         public TestHSSFWorkbook()
-            : base(HSSFITestDataProvider.Instance)
+            : base(_testDataProvider)
         { }
         /**
      * gives test code access to the {@link InternalWorkbook} within {@link HSSFWorkbook}
@@ -1367,6 +1370,13 @@ namespace TestCases.HSSF.UserModel
             fileOut.Write(byteArray, 0, byteArray.Length);
             fileOut.Close();
 
+        }
+
+        [Test]
+
+        public override void GetSpreadsheetVersion()
+        {
+            verifySpreadsheetVersion(SpreadsheetVersion.EXCEL97);
         }
     }
 }

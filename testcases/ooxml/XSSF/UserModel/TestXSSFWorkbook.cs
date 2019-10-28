@@ -40,9 +40,9 @@ namespace NPOI.XSSF.UserModel
     [TestFixture]
     public class TestXSSFWorkbook : BaseTestWorkbook
     {
-
+        private static XSSFITestDataProvider _testDataProvider = XSSFITestDataProvider.instance;
         public TestXSSFWorkbook()
-            : base(XSSFITestDataProvider.instance)
+            : base(_testDataProvider)
         {
 
         }
@@ -1088,5 +1088,12 @@ namespace NPOI.XSSF.UserModel
                 Assert.IsTrue(!file.Exists);
             }
         }
+        [Test]
+
+        public override void GetSpreadsheetVersion()
+        {
+            verifySpreadsheetVersion(SpreadsheetVersion.EXCEL2007);
+        }
+
     }
 }

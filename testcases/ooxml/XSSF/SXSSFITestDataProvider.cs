@@ -38,6 +38,8 @@ namespace NPOI.XSSF
     {
         public static SXSSFITestDataProvider instance = new SXSSFITestDataProvider();
 
+        // an instance of all SXSSFWorkbooks opened by this TestDataProvider,
+        // so that the temporary files created can be disposed up by cleanup() 
         private List<SXSSFWorkbook> instances = new List<SXSSFWorkbook>();
 
         private SXSSFITestDataProvider()

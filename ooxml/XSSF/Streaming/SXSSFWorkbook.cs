@@ -571,6 +571,30 @@ namespace NPOI.XSSF.Streaming
             return XssfWorkbook.GetCellStyleAt(idx);
         }
 
+
+        public void Close()
+        {
+            // ensure that any lingering writer is closed
+            foreach (SXSSFSheet sheet in _xFromSxHash.Values)
+            {
+                try
+                {
+                    sheet._writer.Close();
+                }
+                catch (IOException e)
+                {
+                    logger.Log(POILogger.WARN,
+                            "An exception occurred while closing sheet data writer for sheet "
+                            + sheet.SheetName + ".", e);
+                }
+            }
+
+
+            // Tell the base workbook to close, does nothing if 
+            //  it's a newly created one
+            XssfWorkbook.Close();
+        }
+
         public void Write(Stream stream)
         {
             FlushSheets();
@@ -741,29 +765,10 @@ namespace NPOI.XSSF.Streaming
             XssfWorkbook.AddToolPack(toopack);
         }
 
-        public void Close()
-        {
-            // ensure that any lingering writer is closed
-            foreach (SXSSFSheet sheet in _xFromSxHash.Values)
-            {
-                try
-                {
-                    sheet._writer.Close();
-                }
-                catch (IOException e)
-                {
-                    logger.Log(POILogger.WARN,
-                            "An exception occurred while closing sheet data writer for sheet "
-                            + sheet.SheetName + ".", e);
-                }
-            }
 
-
-            // Tell the base workbook to close, does nothing if 
-            //  it's a newly created one
-            XssfWorkbook.Close();
-        }
-
+        /// <summary>
+        /// Returns the spreadsheet version (EXCLE2007) of this workbook
+        /// </summary>
         public SpreadsheetVersion SpreadsheetVersion
         {
             get
@@ -772,7 +777,6 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        //TODO: missing methods from POI 3.16 setForceFormulaRecalculation, GetForceFormulaRecalulation, GetSpreadsheetVersion
         //TODO: missing method isDate1904, isHidden, setHidden
     }
 }

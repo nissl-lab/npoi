@@ -2174,6 +2174,9 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// Returns the spreadsheet version (EXCLE97) of this workbook
+        /// </summary>
         public SpreadsheetVersion SpreadsheetVersion
         {
             get
@@ -2271,10 +2274,6 @@ namespace NPOI.HSSF.UserModel
         public bool Remove(ISheet item)
         {
             return this._sheets.Remove((HSSFSheet)item);
-        }
-        public bool Dispose()
-        {
-            throw new NotImplementedException();
         }
     }
 }
