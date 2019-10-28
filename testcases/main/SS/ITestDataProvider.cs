@@ -30,6 +30,22 @@ namespace TestCases.SS
         IWorkbook CreateWorkbook();
 
         /// <summary>
+        /// Only matters for SXSSF - enables tracking of the column
+        /// widths so that autosizing can work. No-op on others.
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <param name="columns"></param>
+        void TrackColumnsForAutosizing(ISheet sheet, params int[] columns);
+
+        /// <summary>
+        /// Creates the corresponding {@link FormulaEvaluator} for the
+        /// type of Workbook handled by this Provider. 
+        /// </summary>
+        /// <param name="wb">The workbook to base the formula evaluator on.</param>
+        /// <returns>A new instance of a matching type of formula evaluator. </returns>
+        IFormulaEvaluator CreateFormulaEvaluator(IWorkbook wb);
+
+        /// <summary>
         ///Opens a sample file from the standard HSSF test data directory
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
@@ -39,14 +55,6 @@ namespace TestCases.SS
         SpreadsheetVersion GetSpreadsheetVersion();
 
         string StandardFileNameExtension { get; }
-
-        /**
-         * Creates the corresponding {@link FormulaEvaluator} for the
-         * type of Workbook handled by this Provider. 
-         *
-         * @param wb The workbook to base the formula evaluator on.
-         * @return A new instance of a matching type of formula evaluator. 
-         */
-        IFormulaEvaluator CreateFormulaEvaluator(IWorkbook wb);
+        
     }
 }

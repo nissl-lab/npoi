@@ -34,6 +34,9 @@ namespace TestCases.HSSF
         {
             return new HSSFWorkbook();
         }
+
+        public void TrackColumnsForAutosizing(ISheet sheet, params int[] columns) { }
+
         public IFormulaEvaluator CreateFormulaEvaluator(IWorkbook wb)
         {
             return new HSSFFormulaEvaluator((HSSFWorkbook)wb);

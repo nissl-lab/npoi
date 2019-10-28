@@ -52,6 +52,14 @@ namespace NPOI.XSSF
         {
             return new XSSFWorkbook();
         }
+
+        public void TrackColumnsForAutosizing(ISheet sheet, params int[] columns) { }
+
+        public IFormulaEvaluator CreateFormulaEvaluator(IWorkbook wb)
+        {
+            return new XSSFFormulaEvaluator((XSSFWorkbook)wb);
+        }
+
         public byte[] GetTestDataFileContent(String fileName)
         {
             return POIDataSamples.GetSpreadSheetInstance().ReadFile(fileName);
@@ -68,10 +76,7 @@ namespace NPOI.XSSF
             }
         }
 
-        public IFormulaEvaluator CreateFormulaEvaluator(IWorkbook wb)
-        {
-            return new XSSFFormulaEvaluator((XSSFWorkbook)wb);
-        }
+        
     }
 }
 

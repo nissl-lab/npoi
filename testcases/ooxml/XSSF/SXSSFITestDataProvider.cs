@@ -84,6 +84,13 @@ namespace NPOI.XSSF
             return wb;
         }
 
+        public void TrackColumnsForAutosizing(ISheet sheet, params int[] columns)
+        {
+            foreach (int cn in columns)
+            {
+                ((SXSSFSheet)sheet).TrackColumnForAutoSizing(cn);
+            }
+        }
         public IFormulaEvaluator CreateFormulaEvaluator(IWorkbook wb)
         {
             return new XSSFFormulaEvaluator(((SXSSFWorkbook)wb).XssfWorkbook);
