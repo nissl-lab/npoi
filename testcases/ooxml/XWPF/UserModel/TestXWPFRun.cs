@@ -23,6 +23,7 @@ namespace NPOI.XWPF.UserModel
     using NPOI.XWPF;
     using NPOI.XWPF.Model;
     using System;
+    using NPOI.Util;
 
     /**
      * Tests for XWPF Run
@@ -465,5 +466,26 @@ namespace NPOI.XWPF.UserModel
                 }
             }
         }
+
+        [Test]
+        public void TestBug55476()
+        {
+            byte[] image = XWPFTestDataSamples.GetImage("abstract1.jpg");
+            XWPFDocument document = new XWPFDocument();
+            document.CreateParagraph().CreateRun().AddPicture(
+                    new MemoryStream(image), (int)PictureType.JPEG, "test.jpg", Units.ToEMU(300), Units.ToEMU(100));
+            XWPFDocument docBack = XWPFTestDataSamples.WriteOutAndReadBack(document);
+            List<XWPFPicture> pictures = docBack.GetParagraphArray(0).Runs[0].GetEmbeddedPictures();
+            Assert.AreEqual(1, pictures.Count);
+            docBack.Close();
+            /*OutputStream stream = new FileOutputStream("c:\\temp\\55476.docx");
+            try {
+                document.write(stream);
+            } finally {
+                stream.close();
+            }*/
+            document.Close();
+        }
+
     }
 }
