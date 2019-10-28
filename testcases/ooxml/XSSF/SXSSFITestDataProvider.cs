@@ -114,8 +114,9 @@ namespace NPOI.XSSF
             {
                 SXSSFWorkbook wb = instances[(i)];
                 ok = ok && wb.Dispose();
-                instances.RemoveAt(i);
             }
+
+            instances.Clear();
             return ok;
         }
     }
