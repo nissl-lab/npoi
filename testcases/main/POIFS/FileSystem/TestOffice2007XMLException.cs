@@ -42,7 +42,7 @@ namespace TestCases.POIFS.FileSystem
      * @author Marc Johnson
      */
     [TestFixture]
-    public class TestOffice2007XMLException
+    public class TestOfficeXMLException
     {
 
         private static Stream OpenSampleStream(String sampleFileName)
@@ -50,7 +50,7 @@ namespace TestCases.POIFS.FileSystem
             return HSSFTestDataSamples.OpenSampleFileStream(sampleFileName);
         }
         [Test]
-        public void TestXMLException()
+        public void TestOOXMLException()
         {
             Stream in1 = OpenSampleStream("sample.xlsx");
 
@@ -66,12 +66,33 @@ namespace TestCases.POIFS.FileSystem
                 Assert.IsTrue(e.Message.IndexOf("You are calling the part of POI that deals with OLE2 Office Documents") > -1);
             }
         }
+
+        [Test]
+        public void Test2003XMLException()
+        {
+            Stream in1 = OpenSampleStream("SampleSS.xml");
+            try
+            {
+                new POIFSFileSystem(in1).Close();
+                Assert.Fail("expected exception was not thrown");
+            }
+            catch (NotOLE2FileException e)
+            {
+                // expected during successful test
+                Assert.IsTrue(e.Message.IndexOf("The supplied data appears to be a raw XML file") > -1);
+                Assert.IsTrue(e.Message.IndexOf("Formats such as Office 2003 XML") > -1);
+            }
+        }
+
         [Test]
         public void TestDetectAsPOIFS()
         {
 
             // ooxml file isn't
             ConfirmIsPOIFS("SampleSS.xlsx", false);
+
+            // 2003 xml file isn't
+            ConfirmIsPOIFS("SampleSS.xml", false);
 
             // xls file is
             ConfirmIsPOIFS("SampleSS.xls", true);

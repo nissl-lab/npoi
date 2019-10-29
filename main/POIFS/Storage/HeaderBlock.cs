@@ -128,6 +128,17 @@ namespace NPOI.POIFS.Storage
                 {
                     throw new OfficeXmlFileException("The supplied data appears to be in the Office 2007+ XML. You are calling the part of POI that deals with OLE2 Office Documents. You need to call a different part of POI to process this data (eg XSSF instead of HSSF)");
                 }
+
+                byte[] RAW_XML_FILE_HEADER = POIFSConstants.RAW_XML_FILE_HEADER;
+                if (_data[0] == RAW_XML_FILE_HEADER[0] &&
+                    _data[1] == RAW_XML_FILE_HEADER[1] &&
+                    _data[2] == RAW_XML_FILE_HEADER[2] &&
+                    _data[3] == RAW_XML_FILE_HEADER[3] &&
+                    _data[4] == RAW_XML_FILE_HEADER[4])
+                {
+                    throw new NotOLE2FileException("The supplied data appears to be a raw XML file. Formats such as Office 2003 XML are not supported");
+                }
+
                 if (_data[0] == 0x09 && _data[1] == 0x00 && // sid=0x0009
                 _data[2] == 0x04 && _data[3] == 0x00 && // size=0x0004
                 _data[4] == 0x00 && _data[5] == 0x00 && // unused
