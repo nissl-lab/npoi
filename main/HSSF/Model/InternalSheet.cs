@@ -49,7 +49,7 @@ namespace NPOI.HSSF.Model
     public class InternalSheet
     {
 
-        //private static POILogger log = POILogFactory.GetLogger(typeof(Sheet));
+        private static POILogger log = POILogFactory.GetLogger(typeof(InternalSheet));
 
         int preoffset = 0;            // offset of the sheet in a new file
         protected int dimsloc = -1;  // TODO - Is it legal for dims record to be missing?
@@ -829,8 +829,7 @@ namespace NPOI.HSSF.Model
         /// <param name="col">a record supporting the CellValueRecordInterface.</param>
         public void RemoveValueRecord(int row, CellValueRecordInterface col)
         {
-            //log.LogFormatted(POILogger.DEBUG, "Remove value record row,dimsloc %,%",
-            //                 new int[] { row, dimsloc });
+            log.Log(POILogger.DEBUG, "Remove value record row " + row);
             _rowsAggregate.RemoveCell(col);
         }
 

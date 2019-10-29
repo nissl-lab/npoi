@@ -58,11 +58,6 @@ namespace TestCases.Util
             POILogger log = POILogFactory.GetLogger( "foo" );
 
             log.Log( POILogger.WARN, "Test = ", 1 );
-            log.LogFormatted( POILogger.ERROR, "Test param 1 = %, param 2 = %", "2", 3 );
-            log.LogFormatted( POILogger.ERROR, "Test param 1 = %, param 2 = %", new int[]{4, 5} );
-            log.LogFormatted( POILogger.ERROR,
-                    "Test param 1 = %1.1, param 2 = %0.1", new double[]{4, 5.23} );
-
         }
 
     }
