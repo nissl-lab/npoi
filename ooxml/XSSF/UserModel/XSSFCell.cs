@@ -665,7 +665,7 @@ namespace NPOI.XSSF.UserModel
                 }
 
                 double value = NumericCellValue;
-                bool date1904 = ((XSSFWorkbook)Sheet.Workbook).IsDate1904();
+                bool date1904 = Sheet.Workbook.IsDate1904();
                 return DateUtil.GetJavaDate(value, date1904);
             }
         }
@@ -677,7 +677,7 @@ namespace NPOI.XSSF.UserModel
         /// for numerics we'll Set its value. For other types we will change the cell to a numeric cell and Set its value. </param>
         public void SetCellValue(DateTime value)
         {
-            bool date1904 = ((XSSFWorkbook)Sheet.Workbook).IsDate1904();
+            bool date1904 = Sheet.Workbook.IsDate1904();
             SetCellValue(DateUtil.GetExcelDate(value, date1904));
         }
         /// <summary>
