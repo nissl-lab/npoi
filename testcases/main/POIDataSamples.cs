@@ -24,6 +24,7 @@ namespace TestCases
         private static POIDataSamples _instHPSF;
         private static POIDataSamples _instHPBF;
         private static POIDataSamples _instHSMF;
+        private static POIDataSamples _instXmlDSign;
 
         private string _resolvedDataDir;
         /** <c>true</c> if standard system propery is not set,
@@ -100,7 +101,11 @@ namespace TestCases
             if (_instHSMF == null) _instHSMF = new POIDataSamples("hsmf");
             return _instHSMF;
         }
-
+        public static POIDataSamples GetXmlDSignInstance()
+        {
+            if (_instXmlDSign == null) _instXmlDSign = new POIDataSamples("xmldsign");
+            return _instXmlDSign;
+        }
         /**
  * Opens a test sample file from the 'data' sub-package of this class's package. 
  * @return <c>null</c> if the sample file is1 not deployed on the classpath.

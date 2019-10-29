@@ -57,7 +57,7 @@ namespace NPOI.Util
             try
             {
                 XmlReader xr = XmlReader.Create(stream, settings);
-
+                
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.XmlResolver = null;
                 xmlDoc.PreserveWhitespace = true;
@@ -78,6 +78,11 @@ namespace NPOI.Util
                     return xmlDoc;
                 }
             }
+        }
+
+        public static XPathDocument CreateDocument()
+        {
+            throw new NotImplementedException();
         }
     }
 }

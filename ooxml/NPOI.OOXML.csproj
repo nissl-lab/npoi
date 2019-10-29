@@ -89,6 +89,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\solution\packages\BouncyCastle.1.8.5\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\solution\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -96,9 +99,39 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="POIFS\Crypt\Agile\AgileDecryptor.cs" />
+    <Compile Include="POIFS\Crypt\Agile\AgileEncryptionHeader.cs" />
+    <Compile Include="POIFS\Crypt\Agile\AgileEncryptionInfoBuilder.cs" />
+    <Compile Include="POIFS\Crypt\Agile\AgileEncryptionVerifier.cs" />
+    <Compile Include="POIFS\Crypt\Agile\AgileEncryptor.cs" />
+    <Compile Include="POIFS\Crypt\Agile\KeyPair.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\CertificateSecurityException.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\DigestInfo.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\ExpiredCertificateSecurityException.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\Facets\EnvelopedSignatureFacet.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\Facets\KeyInfoSignatureFacet.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\Facets\Office2010SignatureFacet.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\Facets\OOXMLSignatureFacet.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\Facets\SignatureFacet.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\Facets\XAdESSignatureFacet.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\Facets\XAdESXLSignatureFacet.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\ISignatureConfigurable.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\OOXMLURIDereferencer.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\RevokedCertificateSecurityException.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\Services\RevocationData.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\Services\RevocationDataService.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\Services\SignaturePolicyService.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\Services\TimeStampService.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\Services\TimeStampServiceValidator.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\Services\TSPTimeStampService.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\SignatureConfig.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\SignatureInfo.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\SignatureMarshalListener.cs" />
+    <Compile Include="POIFS\Crypt\Dsig\TrustCertificateSecurityException.cs" />
     <Compile Include="POIXMLDocument.cs" />
     <Compile Include="POIXMLDocumentPart.cs" />
     <Compile Include="POIXmlException.cs" />
@@ -366,6 +399,7 @@
     <None Include="..\main\npoi.snk">
       <Link>npoi.snk</Link>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="XWPF\Util\" />

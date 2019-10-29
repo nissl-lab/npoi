@@ -152,5 +152,20 @@ using NPOI.POIFS.FileSystem;
             }
         }
 
+        internal static DocumentSummaryInformation NewDocumentSummaryInformation()
+        {
+            MutablePropertySet ps = new MutablePropertySet();
+            MutableSection s = (MutableSection)ps.FirstSection;
+            s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
+            try
+            {
+                return new DocumentSummaryInformation(ps);
+            }
+            catch (UnexpectedPropertySetTypeException ex)
+            {
+                /* This should never happen. */
+                throw new HPSFRuntimeException(ex);
+            }
+        }
     }
 }

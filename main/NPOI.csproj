@@ -88,6 +88,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\solution\packages\BouncyCastle.1.8.5\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\solution\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -213,6 +216,39 @@
     <Compile Include="HSSF\UserModel\HSSFCombobox.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeFactory.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeTypes.cs" />
+    <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4Decryptor.cs" />
+    <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4EncryptionHeader.cs" />
+    <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4EncryptionInfoBuilder.cs" />
+    <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4EncryptionVerifier.cs" />
+    <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4Encryptor.cs" />
+    <Compile Include="POIFS\Crypt\ChainingMode.cs" />
+    <Compile Include="POIFS\Crypt\ChunkedCipherInputStream.cs" />
+    <Compile Include="POIFS\Crypt\ChunkedCipherOutputStream.cs" />
+    <Compile Include="POIFS\Crypt\Cipher.cs" />
+    <Compile Include="POIFS\Crypt\CipherAlgorithm.cs" />
+    <Compile Include="POIFS\Crypt\CipherProvider.cs" />
+    <Compile Include="POIFS\Crypt\CryptoAPI\CryptoAPIDecryptor.cs" />
+    <Compile Include="POIFS\Crypt\CryptoAPI\CryptoAPIEncryptionHeader.cs" />
+    <Compile Include="POIFS\Crypt\CryptoAPI\CryptoAPIEncryptionInfoBuilder.cs" />
+    <Compile Include="POIFS\Crypt\CryptoAPI\CryptoAPIEncryptionVerifier.cs" />
+    <Compile Include="POIFS\Crypt\CryptoAPI\CryptoAPIEncryptor.cs" />
+    <Compile Include="POIFS\Crypt\CryptoFunctions.cs" />
+    <Compile Include="POIFS\Crypt\DataSpaceMapUtils.cs" />
+    <Compile Include="POIFS\Crypt\Decryptor.cs" />
+    <Compile Include="POIFS\Crypt\EncryptionHeader.cs" />
+    <Compile Include="POIFS\Crypt\EncryptionInfo.cs" />
+    <Compile Include="POIFS\Crypt\EncryptionInfoBuilder.cs" />
+    <Compile Include="POIFS\Crypt\EncryptionMode.cs" />
+    <Compile Include="POIFS\Crypt\EncryptionVerifier.cs" />
+    <Compile Include="POIFS\Crypt\Encryptor.cs" />
+    <Compile Include="POIFS\Crypt\HashAlgorithm.cs" />
+    <Compile Include="POIFS\Crypt\MessageDigest.cs" />
+    <Compile Include="POIFS\Crypt\Standard\EncryptionRecord.cs" />
+    <Compile Include="POIFS\Crypt\Standard\StandardDecryptor.cs" />
+    <Compile Include="POIFS\Crypt\Standard\StandardEncryptionHeader.cs" />
+    <Compile Include="POIFS\Crypt\Standard\StandardEncryptionInfoBuilder.cs" />
+    <Compile Include="POIFS\Crypt\Standard\StandardEncryptionVerifier.cs" />
+    <Compile Include="POIFS\Crypt\Standard\StandardEncryptor.cs" />
     <Compile Include="POIFS\FileSystem\EntryUtils.cs" />
     <Compile Include="POIFS\FileSystem\FilteringDirectoryNode.cs" />
     <Compile Include="POIFS\FileSystem\NDocumentOutputStream.cs" />
@@ -712,7 +748,9 @@
     <Compile Include="UnsupportedFileFormatException.cs" />
     <Compile Include="Util\AssertFailedException.cs" />
     <Compile Include="Util\BlockingInputStream.cs" />
+    <Compile Include="Util\BoundedInputStream.cs" />
     <Compile Include="Util\ByteArrayInputStream.cs" />
+    <Compile Include="Util\ByteArrayOutputStream.cs" />
     <Compile Include="Util\ByteBuffer.cs" />
     <Compile Include="Util\ClassID.cs" />
     <Compile Include="Util\CloseIgnoringInputStream.cs" />
@@ -1212,9 +1250,12 @@
     <Compile Include="Util\Collections\Properties.cs" />
     <Compile Include="Util\Collections\StringTokenizer.cs" />
     <Compile Include="Util\CRC32.cs" />
+    <Compile Include="Util\FilterInputStream.cs" />
+    <Compile Include="Util\FilterOutputStream.cs" />
     <Compile Include="Util\FixedField.cs" />
     <Compile Include="Util\HexDump.cs" />
     <Compile Include="Util\HexRead.cs" />
+    <Compile Include="Util\InputStream.cs" />
     <Compile Include="Util\IntegerField.cs" />
     <Compile Include="Util\IntList.cs" />
     <Compile Include="Util\IntMapper.cs" />
@@ -1233,6 +1274,7 @@
     <Compile Include="Util\NullLogger.cs" />
     <Compile Include="Util\Number.cs" />
     <Compile Include="Util\Operator.cs" />
+    <Compile Include="Util\OutputStream.cs" />
     <Compile Include="Util\PngUtils.cs" />
     <Compile Include="Util\POILogFactory.cs" />
     <Compile Include="Util\POILogger.cs" />

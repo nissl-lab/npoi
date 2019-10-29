@@ -43,8 +43,11 @@ namespace NPOI.Util
                 }
             }
         }
-
-        Stream out1 = null;
+        public void Close()
+        {
+            Dispose();
+        }
+        protected internal Stream out1 = null;
 
         public LittleEndianOutputStream(Stream out1)
         {
