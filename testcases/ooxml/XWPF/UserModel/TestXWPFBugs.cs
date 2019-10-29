@@ -19,6 +19,10 @@ namespace NPOI.XWPF.UserModel
     using System;
     using NUnit.Framework;
     using NPOI.XWPF;
+    using TestCases;
+    using ICSharpCode.SharpZipLib.Zip;
+    using NPOI.OpenXmlFormats.Wordprocessing;
+    using System.Xml;
 
     [TestFixture]
     public class TestXWPFBugs
@@ -121,6 +125,20 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual("Some text  some hyper links link link and some text.....New Text", para.Text);
             para.RemoveRun(para.Runs.Count - 2);
             Assert.AreEqual("Some text  some hyper links link linkNew Text", para.Text);
+        }
+        [Test]
+        public void Bug59058()
+        {
+            String[] files = { "bug57031.docx", "bug59058.docx" };
+            foreach (String f in files)
+            {
+                ZipFile zf = new ZipFile(POIDataSamples.GetDocumentInstance().GetFile(f));
+                ZipEntry entry = zf.GetEntry("word/document.xml");
+                XmlDocument xml = POIXMLDocumentPart.ConvertStreamToXml(zf.GetInputStream(entry));
+                DocumentDocument document = DocumentDocument.Parse(xml, POIXMLDocumentPart.NamespaceManager);
+                Assert.IsNotNull(document);
+                zf.Close();
+            }
         }
 
     }
