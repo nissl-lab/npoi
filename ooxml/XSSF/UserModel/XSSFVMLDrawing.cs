@@ -136,13 +136,6 @@ namespace NPOI.XSSF.UserModel
                 else if (nd.LocalName == QNAME_SHAPE_TYPE.Name)
                 {
                     CT_Shapetype st = CT_Shapetype.Parse(nd, nsmgr);
-                    //String typeid = st.id;
-                    //if (typeid != null)
-                    //{
-                    //    MatchCollection m = ptrn_shapeTypeId.Matches(typeid);
-                    //    if (m.Count>0)
-                    //        _shapeTypeId = Math.Max(_shapeTypeId, int.Parse(m[0].Groups[1].Value));
-                    //}
                     _items.Add(st);
                     _shapeTypeId = st.id;
                 }
@@ -160,6 +153,18 @@ namespace NPOI.XSSF.UserModel
                 }
                 else
                 {
+                    /// How to port following java code??
+                    //Document doc2;
+                    //try
+                    //{
+                    //    InputSource is2 = new InputSource(new StringReader(obj.xmlText()));
+                    //    doc2 = DocumentHelper.readDocument(is2);
+                    //}
+                    //catch (SAXException e)
+                    //{
+                    //    throw new XmlException(e.getMessage(), e);
+                    //}
+
                     _items.Add(nd);
                 }
 

@@ -59,6 +59,8 @@ namespace NPOI.OpenXml4Net.OPC
             Assert.IsTrue(foundCoreProps, "Core not found in " + p.GetParts());
             Assert.IsFalse(foundDocument, "Document should not be found in " + p.GetParts());
             Assert.IsFalse(foundTheme1, "Theme1 should not found in " + p.GetParts());
+            p.Close();
+            is1.Close();
         }
 
         [Test]
@@ -89,7 +91,7 @@ namespace NPOI.OpenXml4Net.OPC
             }
             //String string1 = new String(str.toByteArray(), "UTF-8");
             String string1 = e.Message;
-            Assert.IsTrue(string1.Contains("Exceeded Entity dereference bytes limit"), "Had: " + string1);
+            Assert.IsTrue(string1.Contains("The parser has encountered more than"), "Had: " + string1);
         }
         [Test]
         [Ignore("not implement class ExtractorFactory")]

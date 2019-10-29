@@ -1087,98 +1087,105 @@ namespace NPOI.XWPF.UserModel
                 picData = (XWPFPictureData)doc.GetRelationById(relationId);
             }
 
-
-            // Create the Drawing entry for it
-            CT_Drawing Drawing = run.AddNewDrawing();
-            CT_Inline inline = Drawing.AddNewInline();
-
-            // Do the fiddly namespace bits on the inline
-            // (We need full control of what goes where and as what)
-            //CT_GraphicalObject tmp = new CT_GraphicalObject();
-            //String xml =
-            //    "<a:graphic xmlns:a=\"" + "http://schemas.openxmlformats.org/drawingml/2006/main" + "\">" +
-            //    "<a:graphicData uri=\"" + "http://schemas.openxmlformats.org/drawingml/2006/picture" + "\">" +
-            //    "<pic:pic xmlns:pic=\"" + "http://schemas.openxmlformats.org/drawingml/2006/picture" + "\" />" +
-            //    "</a:graphicData>" +
-            //    "</a:graphic>";
-            //inline.Set((xml));
-
-            XmlDocument xmlDoc = new XmlDocument();
-            //XmlElement el = xmlDoc.CreateElement("pic", "pic", "http://schemas.openxmlformats.org/drawingml/2006/picture");
-
-            inline.graphic = new CT_GraphicalObject();
-            inline.graphic.graphicData = new CT_GraphicalObjectData();
-            inline.graphic.graphicData.uri = "http://schemas.openxmlformats.org/drawingml/2006/picture";
-
-
-            // Setup the inline
-            inline.distT = (0);
-            inline.distR = (0);
-            inline.distB = (0);
-            inline.distL = (0);
-
-            NPOI.OpenXmlFormats.Dml.WordProcessing.CT_NonVisualDrawingProps docPr = inline.AddNewDocPr();
-            long id = parent.Document.DrawingIdManager.ReserveNew();
-            docPr.id = (uint)(id);
-            /* This name is not visible in Word 2010 anywhere. */
-            docPr.name = ("Drawing " + id);
-            docPr.descr = (filename);
-
-            NPOI.OpenXmlFormats.Dml.WordProcessing.CT_PositiveSize2D extent = inline.AddNewExtent();
-            extent.cx = (width);
-            extent.cy = (height);
-
-            // Grab the picture object
-            NPOI.OpenXmlFormats.Dml.Picture.CT_Picture pic = new OpenXmlFormats.Dml.Picture.CT_Picture();
-
-            // Set it up
-            NPOI.OpenXmlFormats.Dml.Picture.CT_PictureNonVisual nvPicPr = pic.AddNewNvPicPr();
-
-            NPOI.OpenXmlFormats.Dml.CT_NonVisualDrawingProps cNvPr = nvPicPr.AddNewCNvPr();
-            /* use "0" for the id. See ECM-576, 20.2.2.3 */
-            cNvPr.id = (0);
-            /* This name is not visible in Word 2010 anywhere */
-            cNvPr.name = ("Picture " + id);
-            cNvPr.descr = (filename);
-
-            CT_NonVisualPictureProperties cNvPicPr = nvPicPr.AddNewCNvPicPr();
-            cNvPicPr.AddNewPicLocks().noChangeAspect = true;
-
-            CT_BlipFillProperties blipFill = pic.AddNewBlipFill();
-            CT_Blip blip = blipFill.AddNewBlip();
-            blip.embed = parent.Document.GetRelationId(picData);
-            blipFill.AddNewStretch().AddNewFillRect();
-
-            CT_ShapeProperties spPr = pic.AddNewSpPr();
-            CT_Transform2D xfrm = spPr.AddNewXfrm();
-
-            CT_Point2D off = xfrm.AddNewOff();
-            off.x = (0);
-            off.y = (0);
-
-            NPOI.OpenXmlFormats.Dml.CT_PositiveSize2D ext = xfrm.AddNewExt();
-            ext.cx = (width);
-            ext.cy = (height);
-
-            CT_PresetGeometry2D prstGeom = spPr.AddNewPrstGeom();
-            prstGeom.prst = (ST_ShapeType.rect);
-            prstGeom.AddNewAvLst();
-
-            using (var ms = new MemoryStream())
+            try
             {
-                StreamWriter sw = new StreamWriter(ms);
-                pic.Write(sw, "pic:pic");
-                sw.Flush();
-                ms.Position = 0;
-                var sr = new StreamReader(ms);
-                var picXml = sr.ReadToEnd();
-                inline.graphic.graphicData.AddPicElement(picXml);
-            }
-            // Finish up
-            XWPFPicture xwpfPicture = new XWPFPicture(pic, this);
-            pictures.Add(xwpfPicture);
-            return xwpfPicture;
+                // Create the Drawing entry for it
+                CT_Drawing Drawing = run.AddNewDrawing();
+                CT_Inline inline = Drawing.AddNewInline();
 
+                // Do the fiddly namespace bits on the inline
+                // (We need full control of what goes where and as what)
+                //CT_GraphicalObject tmp = new CT_GraphicalObject();
+                //String xml =
+                //    "<a:graphic xmlns:a=\"" + "http://schemas.openxmlformats.org/drawingml/2006/main" + "\">" +
+                //    "<a:graphicData uri=\"" + "http://schemas.openxmlformats.org/drawingml/2006/picture" + "\">" +
+                //    "<pic:pic xmlns:pic=\"" + "http://schemas.openxmlformats.org/drawingml/2006/picture" + "\" />" +
+                //    "</a:graphicData>" +
+                //    "</a:graphic>";
+                //InputSource is = new InputSource(new StringReader(xml));
+                //org.w3c.dom.Document doc = DocumentHelper.readDocument(is);
+                //inline.set(XmlToken.Factory.parse(doc.getDocumentElement(), DEFAULT_XML_OPTIONS));
+
+                XmlDocument xmlDoc = new XmlDocument();
+                //XmlElement el = xmlDoc.CreateElement("pic", "pic", "http://schemas.openxmlformats.org/drawingml/2006/picture");
+
+                inline.graphic = new CT_GraphicalObject();
+                inline.graphic.graphicData = new CT_GraphicalObjectData();
+                inline.graphic.graphicData.uri = "http://schemas.openxmlformats.org/drawingml/2006/picture";
+
+
+                // Setup the inline
+                inline.distT = (0);
+                inline.distR = (0);
+                inline.distB = (0);
+                inline.distL = (0);
+
+                NPOI.OpenXmlFormats.Dml.WordProcessing.CT_NonVisualDrawingProps docPr = inline.AddNewDocPr();
+                long id = parent.Document.DrawingIdManager.ReserveNew();
+                docPr.id = (uint)(id);
+                /* This name is not visible in Word 2010 anywhere. */
+                docPr.name = ("Drawing " + id);
+                docPr.descr = (filename);
+
+                NPOI.OpenXmlFormats.Dml.WordProcessing.CT_PositiveSize2D extent = inline.AddNewExtent();
+                extent.cx = (width);
+                extent.cy = (height);
+
+                // Grab the picture object
+                NPOI.OpenXmlFormats.Dml.Picture.CT_Picture pic = new OpenXmlFormats.Dml.Picture.CT_Picture();
+
+                // Set it up
+                NPOI.OpenXmlFormats.Dml.Picture.CT_PictureNonVisual nvPicPr = pic.AddNewNvPicPr();
+
+                NPOI.OpenXmlFormats.Dml.CT_NonVisualDrawingProps cNvPr = nvPicPr.AddNewCNvPr();
+                /* use "0" for the id. See ECM-576, 20.2.2.3 */
+                cNvPr.id = (0);
+                /* This name is not visible in Word 2010 anywhere */
+                cNvPr.name = ("Picture " + id);
+                cNvPr.descr = (filename);
+
+                CT_NonVisualPictureProperties cNvPicPr = nvPicPr.AddNewCNvPicPr();
+                cNvPicPr.AddNewPicLocks().noChangeAspect = true;
+
+                CT_BlipFillProperties blipFill = pic.AddNewBlipFill();
+                CT_Blip blip = blipFill.AddNewBlip();
+                blip.embed = parent.Document.GetRelationId(picData);
+                blipFill.AddNewStretch().AddNewFillRect();
+
+                CT_ShapeProperties spPr = pic.AddNewSpPr();
+                CT_Transform2D xfrm = spPr.AddNewXfrm();
+
+                CT_Point2D off = xfrm.AddNewOff();
+                off.x = (0);
+                off.y = (0);
+
+                NPOI.OpenXmlFormats.Dml.CT_PositiveSize2D ext = xfrm.AddNewExt();
+                ext.cx = (width);
+                ext.cy = (height);
+
+                CT_PresetGeometry2D prstGeom = spPr.AddNewPrstGeom();
+                prstGeom.prst = (ST_ShapeType.rect);
+                prstGeom.AddNewAvLst();
+
+                using (var ms = new MemoryStream())
+                {
+                    StreamWriter sw = new StreamWriter(ms);
+                    pic.Write(sw, "pic:pic");
+                    sw.Flush();
+                    ms.Position = 0;
+                    var sr = new StreamReader(ms);
+                    var picXml = sr.ReadToEnd();
+                    inline.graphic.graphicData.AddPicElement(picXml);
+                }
+                // Finish up
+                XWPFPicture xwpfPicture = new XWPFPicture(pic, this);
+                pictures.Add(xwpfPicture);
+                return xwpfPicture;
+            }
+            catch(XmlException e)
+            {
+                throw new InvalidOperationException("XWPFRun.Addpicture error", e);
+            }
         }
 
         /**

@@ -122,7 +122,7 @@ namespace NPOI.XSSF.Model
             }
             catch (XmlException e)
             {
-                throw new IOException("SharedStrings read error", e);
+                throw new IOException("unable to parse shared strings table", e);
             }
         }
 
