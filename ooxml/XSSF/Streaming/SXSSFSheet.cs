@@ -1156,7 +1156,7 @@ namespace NPOI.XSSF.Streaming
 
         public bool IsDate1904()
         {
-            throw new NotImplementedException();
+            return _workbook.IsDate1904();
         }
         public int GetRowNum(SXSSFRow row)
         {
