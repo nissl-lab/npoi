@@ -291,8 +291,48 @@ namespace NPOI.XWPF.UserModel
             {
                 return ctDocument;
             }
+            set
+            {
+                ctDocument = value;
+            }
         }
+        /**
+         * Sets columns on document base object
+         */
+        public int ColumnCount
+        {
+            get
+            {
+                return int.Parse(ctDocument.body.sectPr.cols.num);
+            }
+            set
+            {
+                if (ctDocument != null)
+                {
+                    ctDocument.body.sectPr.cols.num = value.ToString();
+                }
 
+            }
+            
+        }
+        /**
+         * Sets Text Direction of Document
+         */
+         public ST_TextDirection TextDirection
+        {
+            get
+            {
+                return ctDocument.body.sectPr.textDirection.val;
+            }
+            set
+            {
+                if (ctDocument != null)
+                {
+                    ctDocument.body.sectPr.textDirection.val = value;
+                }
+            }
+            
+        }
         internal IdentifierManager DrawingIdManager
         {
             get
