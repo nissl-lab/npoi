@@ -23,6 +23,7 @@ namespace NPOI.XWPF.UserModel
     using ICSharpCode.SharpZipLib.Zip;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Xml;
+    using NPOI.Util;
 
     [TestFixture]
     public class TestXWPFBugs
@@ -87,6 +88,46 @@ namespace NPOI.XWPF.UserModel
                 }
             }
         }
+
+        [Test]
+        public void Bug57495_getTableArrayInDoc()
+        {
+            XWPFDocument doc = new XWPFDocument();
+            //let's create a few tables for the test
+            for (int i = 0; i < 3; i++)
+            {
+                doc.CreateTable(2, 2);
+            }
+            XWPFTable table = doc.GetTableArray(0);
+            Assert.IsNotNull(table);
+            //let's check also that returns the correct table
+            XWPFTable same = doc.Tables[0];
+            Assert.AreEqual(table, same);
+        }
+
+        [Test]
+        public void Bug57495_getParagraphArrayInTableCell()
+        {
+            XWPFDocument doc = new XWPFDocument();
+            //let's create a table for the test
+            XWPFTable table = doc.CreateTable(2, 2);
+            Assert.IsNotNull(table);
+            XWPFParagraph p = table.GetRow(0).GetCell(0).GetParagraphArray(0);
+            Assert.IsNotNull(p);
+            //let's check also that returns the correct paragraph
+            XWPFParagraph same = table.GetRow(0).GetCell(0).Paragraphs[0];
+            Assert.AreEqual(p, same);
+        }
+
+        [Test]
+        public void Bug57495_convertPixelsToEMUs()
+        {
+            int pixels = 100;
+            int expectedEMU = 952500;
+            int result = Units.PixelToEMU(pixels);
+            Assert.AreEqual(expectedEMU, result);
+        }
+
 
         [Test]
         public void Test56392()

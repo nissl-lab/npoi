@@ -432,7 +432,7 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFParagraph GetParagraphArray(int pos)
         {
-            if (pos > 0 && pos < paragraphs.Count)
+            if (pos >= 0 && pos < paragraphs.Count)
             {
                 return paragraphs[(pos)];
             }

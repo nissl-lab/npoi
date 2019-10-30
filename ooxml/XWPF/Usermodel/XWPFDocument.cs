@@ -385,7 +385,7 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTable GetTableArray(int pos)
         {
-            if (pos > 0 && pos < tables.Count)
+            if (pos >= 0 && pos < tables.Count)
             {
                 return tables[(pos)];
             }
@@ -406,7 +406,11 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFFooter GetFooterArray(int pos)
         {
-            return footers[(pos)];
+            if (pos >= 0 && pos < footers.Count)
+            {
+                return footers[(pos)];
+            }
+            return null;
         }
 
         /**
@@ -423,7 +427,12 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFHeader GetHeaderArray(int pos)
         {
-            return headers[(pos)];
+            if (pos >= 0 && pos < headers.Count)
+            {
+                return headers[(pos)];
+            }
+            return null;
+            
         }
 
         public String GetTblStyle(XWPFTable table)

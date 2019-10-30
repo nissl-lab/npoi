@@ -231,8 +231,11 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFParagraph GetParagraphArray(int pos)
         {
-
-            return paragraphs[(pos)];
+            if (pos >= 0 && pos < paragraphs.Count)
+            {
+                return paragraphs[(pos)];
+            }
+            return null;
         }
 
         /**
@@ -486,8 +489,7 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTable GetTableArray(int pos)
         {
-
-            if (pos > 0 && pos < tables.Count)
+            if (pos >= 0 && pos < tables.Count)
             {
                 return tables[(pos)];
             }
