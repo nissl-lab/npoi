@@ -78,38 +78,7 @@ namespace NPOI.SS.UserModel
             // Encrypted OOXML files go inside OLE2 containers, is this one?
             if (root.HasEntry(Decryptor.DEFAULT_POIFS_ENTRY))
             {
-                EncryptionInfo info = new EncryptionInfo(fs);
-                Decryptor d = Decryptor.GetInstance(info);
-
-                bool passwordCorrect = false;
-                InputStream stream = null;
-                try
-                {
-                    if (password != null && d.VerifyPassword(password))
-                    {
-                        passwordCorrect = true;
-                    }
-                    if (!passwordCorrect && d.VerifyPassword(Decryptor.DEFAULT_PASSWORD))
-                    {
-                        passwordCorrect = true;
-                    }
-                    if (passwordCorrect)
-                    {
-                        stream = new FilterInputStream1(d.GetDataStream(root), fs);
-                    }
-                }
-                catch (Exception e)
-                {
-                    throw new IOException("error with encryption file", e);
-                }
-
-                if (!passwordCorrect)
-                {
-                    if (password != null)
-                        throw new EncryptedDocumentException("Password incorrect");
-                    else
-                        throw new EncryptedDocumentException("The supplied spreadsheet is protected, but no password was supplied");
-                }
+                InputStream stream = DocumentFactoryHelper.GetDecryptedStream(fs, password);
 
                 OPCPackage pkg = OPCPackage.Open(stream);
                 return Create(pkg);
@@ -131,20 +100,6 @@ namespace NPOI.SS.UserModel
             }
         }
 
-        private class FilterInputStream1 : FilterInputStream
-        {
-            NPOIFSFileSystem fs;
-            public FilterInputStream1(InputStream input, NPOIFSFileSystem fs)
-                : base(input)
-            {
-                this.fs = fs;
-            }
-            public override void Close()
-            {
-                fs.Close();
-                base.Close();
-            }
-        }
 
         /// <summary>
         /// Creates an XSSFWorkbook from the given OOXML Package
@@ -184,7 +139,7 @@ namespace NPOI.SS.UserModel
                 return new HSSFWorkbook(inputStream);
             }
             inputStream.Position = 0;
-            if (POIXMLDocument.HasOOXMLHeader(inputStream))
+            if (DocumentFactoryHelper.HasOOXMLHeader(inputStream))
             {
                 return new XSSFWorkbook(OPCPackage.Open(inputStream));
             }

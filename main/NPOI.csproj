@@ -270,6 +270,7 @@
     <Compile Include="POIFS\Crypt\Standard\StandardEncryptionInfoBuilder.cs" />
     <Compile Include="POIFS\Crypt\Standard\StandardEncryptionVerifier.cs" />
     <Compile Include="POIFS\Crypt\Standard\StandardEncryptor.cs" />
+    <Compile Include="POIFS\FileSystem\DocumentFactoryHelper.cs" />
     <Compile Include="POIFS\FileSystem\EntryUtils.cs" />
     <Compile Include="POIFS\FileSystem\FilteringDirectoryNode.cs" />
     <Compile Include="POIFS\FileSystem\NDocumentOutputStream.cs" />

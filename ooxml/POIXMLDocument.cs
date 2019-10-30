@@ -25,6 +25,7 @@ namespace NPOI
     using System.Collections.Generic;
     using NPOI.OpenXml4Net;
     using System.Reflection;
+    using NPOI.POIFS.FileSystem;
 
     public abstract class POIXMLDocument : POIXMLDocumentPart, ICloseable
     {
@@ -124,33 +125,10 @@ namespace NPOI
          *  sure to always use that, and not the original!
          * @param inp An Stream which supports either mark/reSet, or is a PushbackStream
          */
+        [Obsolete("deprecated use the method from DocumentFactoryHelper, deprecated as of 3.15-beta1, therefore eligible for removal in 3.17")]
         public static bool HasOOXMLHeader(Stream inp)
         {
-            // We want to peek at the first 4 bytes
-
-            byte[] header = new byte[4];
-            int bytesRead = IOUtils.ReadFully(inp, header);
-
-            // Wind back those 4 bytes
-            if (inp is PushbackStream)
-            {
-                PushbackStream pin = (PushbackStream)inp;
-                pin.Position = pin.Position - 4;
-                //pin.unread(header, 0, bytesRead);
-            }
-            else
-            {
-                inp.Position = 0;
-            }
-
-            // Did it match the ooxml zip signature?
-            return (
-                bytesRead == 4 &&
-                header[0] == POIFSConstants.OOXML_FILE_HEADER[0] &&
-                header[1] == POIFSConstants.OOXML_FILE_HEADER[1] &&
-                header[2] == POIFSConstants.OOXML_FILE_HEADER[2] &&
-                header[3] == POIFSConstants.OOXML_FILE_HEADER[3]
-            );
+            return DocumentFactoryHelper.HasOOXMLHeader(inp);
         }
 
         /**
