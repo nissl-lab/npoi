@@ -1183,13 +1183,14 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFWorkbook wb1 = new XSSFWorkbook();
             XSSFWorkbook wb2 = new XSSFWorkbook();
+            CellRangeAddress cra = CellRangeAddress.ValueOf("C2:D3");
 
             // No print Settings before repeating
             XSSFSheet s1 = wb1.CreateSheet() as XSSFSheet;
             Assert.AreEqual(false, s1.GetCTWorksheet().IsSetPageSetup());
             Assert.AreEqual(true, s1.GetCTWorksheet().IsSetPageMargins());
-
-            wb1.SetRepeatingRowsAndColumns(0, 2, 3, 1, 2);
+            s1.RepeatingColumns = (cra);
+            s1.RepeatingRows = (cra);
 
             Assert.AreEqual(true, s1.GetCTWorksheet().IsSetPageSetup());
             Assert.AreEqual(true, s1.GetCTWorksheet().IsSetPageMargins());
@@ -1209,7 +1210,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(true, ps2.ValidSettings);
             Assert.AreEqual(false, ps2.Landscape);
 
-            wb2.SetRepeatingRowsAndColumns(0, 2, 3, 1, 2);
+            s2.RepeatingColumns = (cra);
+            s2.RepeatingRows = (cra);
 
             ps2 = s2.PrintSetup;
             Assert.AreEqual(true, s2.GetCTWorksheet().IsSetPageSetup());
@@ -3130,6 +3132,9 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(sheet.GetRow(0));
             Assert.IsNotNull(sheet.GetRow(0).GetCell(0));
             Assert.AreEqual(bookData[0][0], sheet.GetRow(0).GetCell(0).StringCellValue);
+
+            wb2.Close();
+            wb.Close();
         }
 
 
@@ -3142,12 +3147,14 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void Test58760()
         {
-            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("58760.xlsx");
-            Assert.AreEqual(1, wb.NumberOfSheets);
-            Assert.AreEqual("Sheet1", wb.GetSheetName(0));
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb);
-            Assert.AreEqual(1, wb.NumberOfSheets);
-            Assert.AreEqual("Sheet1", wb.GetSheetName(0));
+            IWorkbook wb1 = XSSFTestDataSamples.OpenSampleWorkbook("58760.xlsx");
+            Assert.AreEqual(1, wb1.NumberOfSheets);
+            Assert.AreEqual("Sheet1", wb1.GetSheetName(0));
+            IWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            Assert.AreEqual(1, wb2.NumberOfSheets);
+            Assert.AreEqual("Sheet1", wb2.GetSheetName(0));
+            wb2.Close();
+            wb1.Close();
         }
 
         [Test]

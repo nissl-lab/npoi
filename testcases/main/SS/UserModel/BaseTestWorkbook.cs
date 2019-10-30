@@ -550,27 +550,30 @@ namespace TestCases.SS.UserModel
         }
 
         /**
-     * Test is kept to ensure stub for deprecated business method passes test.
-     * 
-     * @Deprecated remove this test when 
-     * {@link Workbook#setRepeatingRowsAndColumns(int, int, int, int, int)} 
-     * 
-     */
-        [Obsolete("remove this test when Workbook#setRepeatingRowsAndColumns(int, int, int, int, int) is removed ")]
+         * Test to validate that replacement for removed setRepeatingRowsAnsColumns() methods
+         * is still working correctly 
+         */
         [Test]
-        public void TestSetRepeatingRowsAnsColumns()
+        public void SetRepeatingRowsAnsColumns()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
+
+            CellRangeAddress cra = new CellRangeAddress(0, 3, 0, 0);
+            String expRows = "1:4", expCols = "A:A";
+
+
             ISheet sheet1 = wb.CreateSheet();
-            wb.SetRepeatingRowsAndColumns(wb.GetSheetIndex(sheet1), 0, 0, 0, 3);
-            Assert.AreEqual("1:4", sheet1.RepeatingRows.FormatAsString());
-            Assert.AreEqual("A:A", sheet1.RepeatingColumns.FormatAsString());
+            sheet1.RepeatingRows = (cra);
+            sheet1.RepeatingColumns = (cra);
+            Assert.AreEqual(expRows, sheet1.RepeatingRows.FormatAsString());
+            Assert.AreEqual(expCols, sheet1.RepeatingColumns.FormatAsString());
 
             //must handle sheets with quotas, see Bugzilla #47294
             ISheet sheet2 = wb.CreateSheet("My' Sheet");
-            wb.SetRepeatingRowsAndColumns(wb.GetSheetIndex(sheet2), 0, 0, 0, 3);
-            Assert.AreEqual("1:4", sheet2.RepeatingRows.FormatAsString());
-            Assert.AreEqual("A:A", sheet1.RepeatingColumns.FormatAsString());
+            sheet2.RepeatingRows = (cra);
+            sheet2.RepeatingColumns = (cra);
+            Assert.AreEqual(expRows, sheet2.RepeatingRows.FormatAsString());
+            Assert.AreEqual(expCols, sheet2.RepeatingColumns.FormatAsString());
             wb.Close();
         }
 

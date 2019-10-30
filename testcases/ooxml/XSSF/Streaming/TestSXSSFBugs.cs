@@ -1,4 +1,5 @@
 ﻿using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.Streaming;
 using NUnit.Framework;
@@ -24,11 +25,12 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
         {
             IWorkbook wb1 = new SXSSFWorkbook();
             IWorkbook wb2 = new SXSSFWorkbook();
+            CellRangeAddress cra = CellRangeAddress.ValueOf("C2:D3");
 
             // No print settings before repeating
             ISheet s1 = wb1.CreateSheet();
-
-            wb1.SetRepeatingRowsAndColumns(0, 2, 3, 1, 2);
+            s1.RepeatingColumns = (cra);
+            s1.RepeatingRows = (cra);
 
             IPrintSetup ps1 = s1.PrintSetup;
             Assert.AreEqual(false, ps1.ValidSettings);
@@ -42,8 +44,8 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
             ps2.Landscape = (false);
             Assert.AreEqual(true, ps2.ValidSettings);
             Assert.AreEqual(false, ps2.Landscape);
-
-            wb2.SetRepeatingRowsAndColumns(0, 2, 3, 1, 2);
+            s2.RepeatingColumns = (cra);
+            s2.RepeatingRows = (cra);
 
             ps2 = s2.PrintSetup;
             Assert.AreEqual(true, ps2.ValidSettings);

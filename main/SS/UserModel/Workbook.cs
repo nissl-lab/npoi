@@ -171,28 +171,6 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <returns></returns>
         IEnumerator GetEnumerator();
-        /**
-         * To set just repeating columns:
-         *  workbook.SetRepeatingRowsAndColumns(0,0,1,-1-1);
-         * To set just repeating rows:
-         *  workbook.SetRepeatingRowsAndColumns(0,-1,-1,0,4);
-         * To remove all repeating rows and columns for a sheet.
-         *  workbook.SetRepeatingRowsAndColumns(0,-1,-1,-1,-1);
-         */
-        /// <summary>
-        /// Sets the repeating rows and columns for a sheet (as found in
-        /// File->PageSetup->Sheet).  This is function is included in the workbook
-        /// because it Creates/modifies name records which are stored at the
-        /// workbook level.
-        /// </summary>
-        /// <param name="sheetIndex">0 based index to sheet.</param>
-        /// <param name="startColumn">0 based start of repeating columns.</param>
-        /// <param name="endColumn">0 based end of repeating columns.</param>
-        /// <param name="startRow">0 based start of repeating rows.</param>
-        /// <param name="endRow">0 based end of repeating rows.</param>
-        [Obsolete("use Sheet#setRepeatingRows(CellRangeAddress) or Sheet#setRepeatingColumns(CellRangeAddress)")]
-        void SetRepeatingRowsAndColumns(int sheetIndex, int startColumn, int endColumn, int startRow, int endRow);
-
 
         /// <summary>
         /// Create a new Font and add it to the workbook's font table

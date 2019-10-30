@@ -1415,52 +1415,6 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        /**
-         * Sets the repeating rows and columns for a sheet.
-         * <p/>
-         * To Set just repeating columns:
-         * <pre>
-         *  workbook.SetRepeatingRowsAndColumns(0,0,1,-1,-1);
-         * </pre>
-         * To Set just repeating rows:
-         * <pre>
-         *  workbook.SetRepeatingRowsAndColumns(0,-1,-1,0,4);
-         * </pre>
-         * To remove all repeating rows and columns for a sheet.
-         * <pre>
-         *  workbook.SetRepeatingRowsAndColumns(0,-1,-1,-1,-1);
-         * </pre>
-         *
-         * @param sheetIndex  0 based index to sheet.
-         * @param startColumn 0 based start of repeating columns.
-         * @param endColumn   0 based end of repeating columns.
-         * @param startRow    0 based start of repeating rows.
-         * @param endRow      0 based end of repeating rows.
-         */
-        [Obsolete("use XSSFSheet#setRepeatingRows(CellRangeAddress) or XSSFSheet#setRepeatingColumns(CellRangeAddress)")]
-        public void SetRepeatingRowsAndColumns(int sheetIndex,
-                                               int startColumn, int endColumn,
-                                               int startRow, int endRow)
-        {
-            XSSFSheet sheet = (XSSFSheet)GetSheetAt(sheetIndex);
-
-            CellRangeAddress rows = null;
-            CellRangeAddress cols = null;
-
-            if (startRow != -1)
-            {
-                rows = new CellRangeAddress(startRow, endRow, -1, -1);
-            }
-            if (startColumn != -1)
-            {
-                cols = new CellRangeAddress(-1, -1, startColumn, endColumn);
-            }
-
-            sheet.RepeatingRows=(rows);
-            sheet.RepeatingColumns=(cols);
-
-        }
-
         private static String GetReferenceBuiltInRecord(String sheetName, int startC, int endC, int startR, int endR)
         {
             //windows excel example for built-in title: 'second sheet'!$E:$F,'second sheet'!$2:$3

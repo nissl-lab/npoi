@@ -540,11 +540,6 @@ namespace NPOI.XSSF.Streaming
             throw new NotImplementedException();
         }
 
-        public void SetRepeatingRowsAndColumns(int sheetIndex, int startColumn, int endColumn, int startRow, int endRow)
-        {
-            throw new NotImplementedException();
-        }
-
         public IFont CreateFont()
         {
             return XssfWorkbook.CreateFont();

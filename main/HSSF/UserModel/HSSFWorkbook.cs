@@ -1021,47 +1021,6 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /// <summary>
-        /// Sets the repeating rows and columns for a sheet (as found in
-        /// File-&gt;PageSetup-&gt;Sheet).  This Is function Is included in the workbook
-        /// because it Creates/modifies name records which are stored at the
-        /// workbook level.
-        /// </summary>
-        /// <param name="sheetIndex">0 based index to sheet.</param>
-        /// <param name="startColumn">0 based start of repeating columns.</param>
-        /// <param name="endColumn">0 based end of repeating columns.</param>
-        /// <param name="startRow">0 based start of repeating rows.</param>
-        /// <param name="endRow">0 based end of repeating rows.</param>
-        /// <example>
-        /// To set just repeating columns:
-        /// workbook.SetRepeatingRowsAndColumns(0,0,1,-1-1);
-        /// To set just repeating rows:
-        /// workbook.SetRepeatingRowsAndColumns(0,-1,-1,0,4);
-        /// To remove all repeating rows and columns for a sheet.
-        /// workbook.SetRepeatingRowsAndColumns(0,-1,-1,-1,-1);
-        /// </example>
-        [Obsolete("use HSSFSheet#setRepeatingRows(CellRangeAddress) or HSSFSheet#setRepeatingColumns(CellRangeAddress)")]
-        public void SetRepeatingRowsAndColumns(int sheetIndex,
-                                               int startColumn, int endColumn,
-                                               int startRow, int endRow)
-        {
-            HSSFSheet sheet = (HSSFSheet)GetSheetAt(sheetIndex);
-
-            CellRangeAddress rows = null;
-            CellRangeAddress cols = null;
-
-            if (startRow != -1)
-            {
-                rows = new CellRangeAddress(startRow, endRow, -1, -1);
-            }
-            if (startColumn != -1)
-            {
-                cols = new CellRangeAddress(-1, -1, startColumn, endColumn);
-            }
-
-            sheet.RepeatingRows = (rows);
-            sheet.RepeatingColumns = (cols);
-        }
         internal int FindExistingBuiltinNameRecordIdx(int sheetIndex, byte builtinCode)
         {
             for (int defNameIndex = 0; defNameIndex < names.Count; defNameIndex++)
