@@ -1356,5 +1356,24 @@ namespace TestCases.HSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Bug59135()
+        {
+            HSSFWorkbook wb1 = new HSSFWorkbook();
+            wb1.CreateSheet().ProtectSheet("1111.2222.3333.1234");
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            wb1.Close();
+
+            Assert.AreEqual(unchecked((short)0xb86b), (wb2.GetSheetAt(0) as HSSFSheet).Password);
+            wb2.Close();
+
+            HSSFWorkbook wb3 = new HSSFWorkbook();
+            wb3.CreateSheet().ProtectSheet("1111.2222.3333.12345");
+            HSSFWorkbook wb4 = HSSFTestDataSamples.WriteOutAndReadBack(wb3);
+            wb3.Close();
+
+            Assert.AreEqual(unchecked((short)0xbecc), (wb4.GetSheetAt(0) as HSSFSheet).Password);
+            wb4.Close();
+        }
     }
 }
