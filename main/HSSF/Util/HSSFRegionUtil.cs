@@ -55,18 +55,7 @@ namespace NPOI.HSSF.Util
                 HSSFCellUtil.SetCellStyleProperty(cell, _workbook, _propertyName, _propertyValue);
             }
         }
-        [Obsolete]
-        private static CellRangeAddress toCRA(Region region)
-        {
-            return Region.ConvertToCellRangeAddress(region);
-        }
 
-        //[Obsolete]
-        //public static void SetBorderLeft(NPOI.SS.UserModel.CellBorderType border, Region region, HSSFSheet sheet,
-        //        HSSFWorkbook workbook)
-        //{
-        //    SetBorderLeft(border, toCRA(region), sheet, workbook);
-        //}
         /// <summary>
         /// Sets the left border for a region of cells by manipulating the cell style
         /// of the individual cells on the left
@@ -89,12 +78,6 @@ namespace NPOI.HSSF.Util
             }
         }
 
-        //[Obsolete]
-        //public static void SetLeftBorderColor(short color, Region region, HSSFSheet sheet,
-        //        HSSFWorkbook workbook)
-        //{
-        //    SetLeftBorderColor(color, toCRA(region), sheet, workbook);
-        //}
         /// <summary>
         /// Sets the leftBorderColor attribute of the HSSFRegionUtil object
         /// </summary>
@@ -116,12 +99,6 @@ namespace NPOI.HSSF.Util
             }
         }
 
-        //[Obsolete]
-        //public static void SetBorderRight(NPOI.SS.UserModel.CellBorderType border, Region region, HSSFSheet sheet,
-        //        HSSFWorkbook workbook)
-        //{
-        //    SetBorderRight(border, toCRA(region), sheet, workbook);
-        //}
         /// <summary>
         /// Sets the borderRight attribute of the HSSFRegionUtil object
         /// </summary>
@@ -143,12 +120,7 @@ namespace NPOI.HSSF.Util
             }
         }
 
-        //[Obsolete]
-        //public static void SetRightBorderColor(short color, Region region, HSSFSheet sheet,
-        //        HSSFWorkbook workbook)
-        //{
-        //    SetRightBorderColor(color, toCRA(region), sheet, workbook);
-        //}
+
         /// <summary>
         /// Sets the rightBorderColor attribute of the HSSFRegionUtil object
         /// </summary>
@@ -170,12 +142,6 @@ namespace NPOI.HSSF.Util
             }
         }
 
-        //[Obsolete]
-        //public static void SetBorderBottom(NPOI.SS.UserModel.CellBorderType border, Region region, HSSFSheet sheet,
-        //        HSSFWorkbook workbook)
-        //{
-        //    SetBorderBottom(border, toCRA(region), sheet, workbook);
-        //}
         /// <summary>
         /// Sets the borderBottom attribute of the HSSFRegionUtil object
         /// </summary>
@@ -197,12 +163,7 @@ namespace NPOI.HSSF.Util
             }
         }
 
-        //[Obsolete]
-        //public static void SetBottomBorderColor(short color, Region region, HSSFSheet sheet,
-        //        HSSFWorkbook workbook)
-        //{
-        //    SetBottomBorderColor(color, toCRA(region), sheet, workbook);
-        //}
+
         /// <summary>
         /// Sets the bottomBorderColor attribute of the HSSFRegionUtil object
         /// </summary>
@@ -224,12 +185,7 @@ namespace NPOI.HSSF.Util
             }
         }
 
-        //[Obsolete]
-        //public static void SetBorderTop(NPOI.SS.UserModel.CellBorderType border, Region region, HSSFSheet sheet,
-        //        HSSFWorkbook workbook)
-        //{
-        //    SetBorderTop(border, toCRA(region), sheet, workbook);
-        //}
+
         /// <summary>
         /// Sets the borderBottom attribute of the HSSFRegionUtil object
         /// </summary>

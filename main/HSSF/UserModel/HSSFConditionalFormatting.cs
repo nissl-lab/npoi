@@ -90,16 +90,6 @@ namespace NPOI.HSSF.UserModel
         }
 
         /// <summary>
-        /// Gets the array of Regions
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete]
-        public Region[] GetFormattingRegions()
-        {
-            CellRangeAddress[] cellRanges = GetFormattingRanges();
-            return Region.ConvertCellRangesToRegions(cellRanges);
-        }
-        /// <summary>
         /// Gets array of CellRangeAddresses
         /// </summary>
         /// <returns></returns>

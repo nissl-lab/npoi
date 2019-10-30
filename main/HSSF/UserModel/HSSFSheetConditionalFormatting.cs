@@ -151,11 +151,15 @@ namespace NPOI.HSSF.UserModel
         /// HSSFConditionalFormatting cf = sheet.GetConditionalFormattingAt(index);
         /// newSheet.AddConditionalFormatting(cf);
         /// </example>
-        public int AddConditionalFormatting(IConditionalFormatting cf)
+        public int AddConditionalFormatting(HSSFConditionalFormatting cf)
         {
-            CFRecordsAggregate cfraClone = ((HSSFConditionalFormatting)cf).CFRecordsAggregate.CloneCFAggregate();
+            CFRecordsAggregate cfraClone = cf.CFRecordsAggregate.CloneCFAggregate();
 
             return _conditionalFormattingTable.Add(cfraClone);
+        }
+        public int AddConditionalFormatting(IConditionalFormatting cf)
+        {
+            return AddConditionalFormatting((HSSFConditionalFormatting)cf);
         }
 
         /// <summary>
