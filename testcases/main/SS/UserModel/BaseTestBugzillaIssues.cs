@@ -30,6 +30,7 @@ namespace TestCases.SS.UserModel
     using NPOI.HSSF.UserModel;
     using System.Drawing;
     using System.IO;
+    using NPOI.Util;
 
     /**
      * A base class for bugzilla issues that can be described in terms of common ss interfaces.
@@ -92,15 +93,11 @@ namespace TestCases.SS.UserModel
             ISheet sheet = wb.CreateSheet();
             ICreationHelper factory = wb.GetCreationHelper();
 
-            String tmp1 = null;
-            String tmp2 = null;
-            String tmp3 = null;
-
             for (int i = 0; i < num; i++)
             {
-                tmp1 = "Test1" + i;
-                tmp2 = "Test2" + i;
-                tmp3 = "Test3" + i;
+                string tmp1 = "Test1" + i;
+                string tmp2 = "Test2" + i;
+                string tmp3 = "Test3" + i;
 
                 IRow row = sheet.CreateRow(i);
 
@@ -114,9 +111,9 @@ namespace TestCases.SS.UserModel
             wb = _testDataProvider.WriteOutAndReadBack(wb);
             for (int i = 0; i < num; i++)
             {
-                tmp1 = "Test1" + i;
-                tmp2 = "Test2" + i;
-                tmp3 = "Test3" + i;
+                string tmp1 = "Test1" + i;
+                string tmp2 = "Test2" + i;
+                string tmp3 = "Test3" + i;
 
                 IRow row = sheet.GetRow(i);
 
@@ -202,15 +199,11 @@ namespace TestCases.SS.UserModel
         [Test]
         public void Test22568()
         {
-            int r = 2000; int c = 3;
-
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet("ExcelTest");
 
-            int col_cnt = 0, rw_cnt = 0;
-
-            col_cnt = c;
-            rw_cnt = r;
+            int col_cnt = 3;
+            int rw_cnt = 2000;
 
             IRow rw;
             rw = sheet.CreateRow(0);
@@ -464,17 +457,10 @@ namespace TestCases.SS.UserModel
 
         /**
          * Test if a > b. Fails if false.
-         *
-         * @param message
-         * @param a
-         * @param b
          */
         private void assertGreaterThan(String message, double a, double b)
         {
-            if (a > b)
-            { // expected
-            }
-            else
+            if (a <= b)
             {
                 String msg = "Expected: " + a + " > " + b;
                 Assert.Fail(message + ": " + msg);
@@ -493,11 +479,10 @@ namespace TestCases.SS.UserModel
 
             //AttributedString str = new AttributedString(txt);
             //copyAttributes(font, str, 0, txt.length());
-
-            if (rt.NumFormattingRuns > 0)
-            {
-                // TODO: support rich text fragments
-            }
+            // TODO: support rich text fragments
+            //if (rt.NumFormattingRuns > 0)
+            //{
+            //}
 
             //TextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
             //width = ((layout.getBounds().getWidth() / 1) / 8);
@@ -699,7 +684,7 @@ namespace TestCases.SS.UserModel
             }
             for (int i = 0; i < 12; i += 3)
             {
-                r1.GetCell(i + 0).CellStyle = (/*setter*/iPercent);
+                r1.GetCell(i).CellStyle = (/*setter*/iPercent);
                 r1.GetCell(i + 1).CellStyle = (/*setter*/d1Percent);
                 r1.GetCell(i + 2).CellStyle = (/*setter*/d2Percent);
             }
@@ -879,16 +864,17 @@ namespace TestCases.SS.UserModel
         }
 
         /**
-     * Should be able to write then read formulas with references
-     *  to cells in other files, eg '[refs/airport.xls]Sheet1'!$A$2
-     *  or 'http://192.168.1.2/[blank.xls]Sheet1'!$A$1 .
-     * Additionally, if a reference to that file is provided, it should
-     *  be possible to Evaluate them too
-     * TODO Fix this to Evaluate for XSSF
-     * TODO Fix this to work at all for HSSF
-     */
-        //    [Test]
-        public void bug46670()
+         * Should be able to write then read formulas with references
+         *  to cells in other files, eg '[refs/airport.xls]Sheet1'!$A$2
+         *  or 'http://192.168.1.2/[blank.xls]Sheet1'!$A$1 .
+         * Additionally, if a reference to that file is provided, it should
+         *  be possible to Evaluate them too
+         * TODO Fix this to Evaluate for XSSF
+         * TODO Fix this to work at all for HSSF
+         */
+        [Test]
+        [Ignore("Fix this to evaluate for XSSF, Fix this to work at all for HSSF")]
+        public void Bug46670()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet s = wb.CreateSheet();
@@ -1189,7 +1175,7 @@ namespace TestCases.SS.UserModel
                 var tmp = cn.RichStringCellValue;
                 Assert.Fail();
             }
-            catch (Exception e) { }
+            catch (IllegalStateException) { }
 
             Assert.AreEqual("Testing", cs.StringCellValue);
             try
@@ -1197,7 +1183,7 @@ namespace TestCases.SS.UserModel
                 var tmp = cs.NumericCellValue;
                 Assert.Fail();
             }
-            catch (Exception e) { }
+            catch (IllegalStateException) { }
 
             Assert.AreEqual(1.2, cfn.NumericCellValue, 0);
             try
@@ -1205,7 +1191,7 @@ namespace TestCases.SS.UserModel
                 var tmp = cfn.RichStringCellValue;
                 Assert.Fail();
             }
-            catch (Exception e) { }
+            catch (IllegalStateException) { }
 
             Assert.AreEqual("Testing", cfs.StringCellValue);
             try
@@ -1213,7 +1199,7 @@ namespace TestCases.SS.UserModel
                 var tmp = cfs.NumericCellValue;
                 Assert.Fail();
             }
-            catch (Exception e) { }
+            catch (IllegalStateException) { }
 
             wb.Close();
         }
@@ -1305,7 +1291,7 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
-        public void bug58260()
+        public void Bug58260()
         {
             //Create workbook and worksheet
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -1324,9 +1310,9 @@ namespace TestCases.SS.UserModel
                 {
                     style = wb.CreateCellStyle();
                 }
-                catch (InvalidOperationException e)
+                catch (IllegalStateException e)
                 {
-                    throw new InvalidOperationException("Failed for row " + i, e);
+                    throw new IllegalStateException("Failed for row " + i, e);
                 }
                 style.Alignment = HorizontalAlignment.Right;
                 if ((wb is HSSFWorkbook))
@@ -1354,7 +1340,7 @@ namespace TestCases.SS.UserModel
                 wb.CreateCellStyle();
                 Assert.Fail("Should Assert.Fail after " + maxStyles + " styles, but did not Assert.Fail");
             }
-            catch (InvalidOperationException e)
+            catch (IllegalStateException)
             {
                 // expected here
             }
@@ -1446,6 +1432,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(164, cell.CellStyle.DataFormat);
             DataFormatter formatter = new DataFormatter();
             Assert.AreEqual("12-312-345-123", formatter.FormatCellValue(cell));
+            wb.Close();
         }
 
 

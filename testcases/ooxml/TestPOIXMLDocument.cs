@@ -145,6 +145,7 @@ namespace NPOI.OOXML
             finally
             {
                 doc.Close();
+                pkg2.Close();
             }
         }
 

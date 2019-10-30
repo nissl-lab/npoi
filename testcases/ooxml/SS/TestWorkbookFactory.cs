@@ -186,7 +186,7 @@ namespace NPOI.SS
                 }
                 Assert.Fail();
             }
-            catch (InvalidFormatException e)
+            catch (InvalidFormatException)
             {
                 // Good
             }
@@ -317,6 +317,9 @@ namespace NPOI.SS
             );
             Assert.IsNotNull(wb);
             Assert.IsTrue(wb is XSSFWorkbook);
+            Assert.IsTrue(wb.NumberOfSheets > 0);
+            Assert.IsNotNull(wb.GetSheetAt(0));
+            Assert.IsNotNull(wb.GetSheetAt(0).GetRow(0));
             AssertCloseDoesNotModifyFile(xlsx, wb);
 
             // Protected, wrong password, throws Exception
@@ -328,7 +331,10 @@ namespace NPOI.SS
                 AssertCloseDoesNotModifyFile(xls_prot[0], wb);
                 Assert.Fail("Shouldn't be able to open with the wrong password");
             }
-            catch (EncryptedDocumentException e) { }
+            catch (EncryptedDocumentException)
+            {
+                // expected here
+            }
             try
             {
                 wb = WorkbookFactory.Create(
@@ -337,7 +343,10 @@ namespace NPOI.SS
                 AssertCloseDoesNotModifyFile(xlsx_prot[0], wb);
                 Assert.Fail("Shouldn't be able to open with the wrong password");
             }
-            catch (EncryptedDocumentException e) { }
+            catch (EncryptedDocumentException)
+            {
+                // expected here
+            }
         }
 
         [Test]

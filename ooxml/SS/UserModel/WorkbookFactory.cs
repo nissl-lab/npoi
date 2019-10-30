@@ -68,9 +68,9 @@ namespace NPOI.SS.UserModel
             return new HSSFWorkbook(fs.Root, true);
         }
         /**
-     * Creates a Workbook from the given NPOIFSFileSystem, which may
-     *  be password protected
-     */
+         * Creates a Workbook from the given NPOIFSFileSystem, which may
+         *  be password protected
+         */
         private static IWorkbook Create(NPOIFSFileSystem fs, string password)
         {
             DirectoryNode root = fs.Root;
@@ -95,7 +95,7 @@ namespace NPOI.SS.UserModel
                     }
                     if (passwordCorrect)
                     {
-                        stream = d.GetDataStream(root);
+                        stream = new FilterInputStream1(d.GetDataStream(root), fs);
                     }
                 }
                 catch (Exception e)
@@ -130,6 +130,22 @@ namespace NPOI.SS.UserModel
                 Biff8EncryptionKey.CurrentUserPassword = (null);
             }
         }
+
+        private class FilterInputStream1 : FilterInputStream
+        {
+            NPOIFSFileSystem fs;
+            public FilterInputStream1(InputStream input, NPOIFSFileSystem fs)
+                : base(input)
+            {
+                this.fs = fs;
+            }
+            public override void Close()
+            {
+                fs.Close();
+                base.Close();
+            }
+        }
+
         /// <summary>
         /// Creates an XSSFWorkbook from the given OOXML Package
         /// </summary>
@@ -182,12 +198,19 @@ namespace NPOI.SS.UserModel
         {
             return Create(file, password, false);
         }
-        /**
-        * Creates the appropriate HSSFWorkbook / XSSFWorkbook from
-        *  the given File, which must exist and be readable.
-        * <p>Note that for Workbooks opened this way, it is not possible
-        *  to explicitly close the underlying File resource.
-        */
+        
+        /// <summary>
+        /// Creates the appropriate HSSFWorkbook / XSSFWorkbook from 
+        /// the given File, which must exist and be readable.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="password"></param>
+        /// <param name="readOnly"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Note that for Workbooks opened this way, it is not possible
+        /// to explicitly close the underlying File resource.
+        /// </remarks>
         public static IWorkbook Create(string file, string password, bool readOnly)
         {
             if (!File.Exists(file))
@@ -210,7 +233,7 @@ namespace NPOI.SS.UserModel
                 }
                 
             }
-            catch (OfficeXmlFileException e)
+            catch (OfficeXmlFileException)
             {
                 // opening as .xls failed => try opening as .xlsx
                 OPCPackage pkg = OPCPackage.Open(file, readOnly ? PackageAccess.READ : PackageAccess.READ_WRITE);
