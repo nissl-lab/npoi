@@ -215,7 +215,7 @@ namespace NPOI.XSSF.UserModel
             SetRunAttributes(xssfFont.GetCTFont(), fmt);
             ApplyFont(formats, startIndex, endIndex, fmt);
 
-            CT_Rst newSt = buildCTRst(text, formats);
+            CT_Rst newSt = BuildCTRst(text, formats);
             st.Set(newSt);
 
 
@@ -675,7 +675,7 @@ namespace NPOI.XSSF.UserModel
             throw new ArgumentOutOfRangeException("GetLastKey failed");
         }
 
-        CT_Rst buildCTRst(String text, SortedDictionary<int, CT_RPrElt> formats)
+        CT_Rst BuildCTRst(String text, SortedDictionary<int, CT_RPrElt> formats)
         {
             if (text.Length != GetLastKey(formats.Keys))
             {
@@ -684,16 +684,18 @@ namespace NPOI.XSSF.UserModel
             }
             CT_Rst st = new CT_Rst();
             int runStartIdx = 0;
-            for (SortedDictionary<int, CT_RPrElt>.KeyCollection.Enumerator it = formats.Keys.GetEnumerator(); it.MoveNext(); )
+            foreach (KeyValuePair<int, CT_RPrElt> kv in formats)
             {
-                int runEndIdx = it.Current;
+                int runEndIdx = kv.Key;
                 CT_RElt run = st.AddNewR();
                 String fragment = text.Substring(runStartIdx, runEndIdx - runStartIdx);
                 run.t = (fragment);
                 PreserveSpaces(run.t);
-                CT_RPrElt fmt = formats[runEndIdx];
+                CT_RPrElt fmt = kv.Value;
                 if (fmt != null)
-                    run.rPr = (fmt);
+                {
+                    run.rPr = fmt;
+                }
                 runStartIdx = runEndIdx;
             }
             return st;

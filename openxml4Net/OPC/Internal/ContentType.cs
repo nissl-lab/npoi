@@ -169,12 +169,12 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             retVal.Append(this.SubType);
             if (withParameters)
             {
-                foreach (String key in parameters.Keys)
+                foreach (KeyValuePair<string, string> kv in parameters)
                 {
                     retVal.Append(";");
-                    retVal.Append(key);
+                    retVal.Append(kv.Key);
                     retVal.Append("=");
-                    retVal.Append(parameters[key]);
+                    retVal.Append(kv.Value);
                 }
             }
             return retVal.ToString();
