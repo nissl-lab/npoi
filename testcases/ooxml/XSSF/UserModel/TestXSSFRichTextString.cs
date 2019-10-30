@@ -557,6 +557,22 @@ namespace NPOI.XSSF.UserModel
             rt = new XSSFRichTextString();
             Assert.IsNull(rt.ToString());
         }
+        [Test]
+        public void Test59008Font()
+        {
+            XSSFFont font = new XSSFFont(new CT_Font());
 
+            XSSFRichTextString rts = new XSSFRichTextString();
+            rts.Append("This is correct ");
+            int s1 = rts.Length;
+            rts.Append("This is Bold Red", font);
+            int s2 = rts.Length;
+            rts.Append(" This uses the default font rather than the cell style font");
+            int s3 = rts.Length;
+
+            Assert.AreEqual("<xml-fragment/>", rts.GetFontAtIndex(s1 - 1).ToString());
+            Assert.AreEqual(font, rts.GetFontAtIndex(s2 - 1));
+            Assert.AreEqual("<xml-fragment/>", rts.GetFontAtIndex(s3 - 1).ToString());
+        }
     }
 }
