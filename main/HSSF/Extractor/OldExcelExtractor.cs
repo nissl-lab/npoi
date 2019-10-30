@@ -25,6 +25,7 @@ namespace NPOI.HSSF.Extractor
     using NPOI.HSSF.Record;
     using NPOI.POIFS.FileSystem;
     using NPOI.SS.UserModel;
+    using NPOI.Util;
 
     /**
      * A text extractor for old Excel files, which are too old for
@@ -64,11 +65,35 @@ namespace NPOI.HSSF.Extractor
             }
             catch (OldExcelFormatException)
             {
-                Open(new FileStream(f.FullName, FileMode.Open, FileAccess.Read));
+                FileStream biffStream = new FileStream(f.FullName, FileMode.Open, FileAccess.Read);
+                try
+                {
+                    Open(biffStream);
+                }
+                catch (RuntimeException e2)
+                {
+                    // ensure that the stream is properly closed here if an Exception
+                    // is thrown while opening
+                    biffStream.Close();
+
+                    throw e2;
+                }
             }
             catch (NotOLE2FileException)
             {
-                Open(new FileStream(f.FullName, FileMode.Open, FileAccess.Read));
+                FileStream biffStream = new FileStream(f.FullName, FileMode.Open, FileAccess.Read);
+                try
+                {
+                    Open(biffStream);
+                }
+                catch (RuntimeException e2)
+                {
+                    // ensure that the stream is properly closed here if an Exception
+                    // is thrown while opening
+                    biffStream.Close();
+
+                    throw e2;
+                }
             }
         }
         public OldExcelExtractor(NPOIFSFileSystem fs)
@@ -282,12 +307,7 @@ namespace NPOI.HSSF.Extractor
         {
             if (streamInput != null)
             {
-                try
-                {
-                    streamInput.Close();
-                }
-                catch (IOException) { }
-                streamInput = null;
+                IOUtils.CloseQuietly(streamInput);
             }
             if (fsInput != null)
             {

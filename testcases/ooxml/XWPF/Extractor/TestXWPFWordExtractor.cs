@@ -355,7 +355,7 @@ namespace NPOI.XWPF.Extractor
             foreach (String targ in targs)
             {
                 bool hitted = false;
-                if (s.IndexOf(targ) > -1)
+                if (s.Contains(targ))
                 {
                     hitted = true;
                     hits++;

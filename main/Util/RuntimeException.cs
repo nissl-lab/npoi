@@ -24,4 +24,26 @@ namespace NPOI.Util
 
         }
     }
+
+    public class IllegalStateException : RuntimeException
+    {
+        public IllegalStateException()
+            : base()
+        {
+
+        }
+        public IllegalStateException(string message)
+            : base(message)
+        {
+        }
+        public IllegalStateException(Exception e)
+            : base("", e)
+        {
+        }
+        public IllegalStateException(string exception, Exception ex)
+            : base(exception, ex)
+        {
+
+        }
+    }
 }

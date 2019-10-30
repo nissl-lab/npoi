@@ -22,6 +22,7 @@ namespace NPOI.SS.Formula.Functions
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Util;
+    using NPOI.Util;
 
     /**
      * This class performs a D* calculation. It takes an {@link IDStarAlgorithm} object and
@@ -88,6 +89,8 @@ namespace NPOI.SS.Formula.Functions
             {
                 case DStarAlgorithmEnum.DGET: algorithm = new DGet(); break;
                 case DStarAlgorithmEnum.DMIN: algorithm = new DMin(); break;
+                default:
+                    throw new IllegalStateException("Unexpected algorithm type " + algoType + " encountered.");
             }
 
             // Iterate over all db entries.

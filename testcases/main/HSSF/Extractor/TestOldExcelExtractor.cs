@@ -225,11 +225,20 @@ namespace TestCases.HSSF.Extractor
                 CreateExtractor("WithVariousData.xlsx");
                 Assert.Fail("Should catch Exception here");
             }
-            catch (OfficeXmlFileException e)
+            catch (OfficeXmlFileException)
             {
                 // expected here
             }
-
+            // a completely different type of file
+            try
+            {
+                CreateExtractor("48936-strings.txt");
+                Assert.Fail("Should catch Exception here");
+            }
+            catch (RecordFormatException)
+            {
+                // expected here
+            }
         }
         [Test]
         public void TestOpenNonExistingFile()
@@ -241,7 +250,7 @@ namespace TestCases.HSSF.Extractor
                 extractor.Close();
                 Assert.Fail("Should catch Exception here");
             }
-            catch (EmptyFileException e)
+            catch (EmptyFileException)
             {
                 // expected here
             }
@@ -320,7 +329,7 @@ namespace TestCases.HSSF.Extractor
                 extractor.Close();
                 Assert.Fail("Should catch exception here");
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException)
             {
                 // expected here
             }
