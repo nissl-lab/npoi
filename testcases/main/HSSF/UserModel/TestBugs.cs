@@ -3389,6 +3389,30 @@ namespace TestCases.HSSF.UserModel
             //        fileOut.close();
             wb.Close();
         }
+        [Test]
+        public void Test55668()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("55668.xls");
+            ISheet sheet = wb.GetSheetAt(0);
+            IRow row = sheet.GetRow(0);
+            ICell cell = row.GetCell(0);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual("IF(TRUE,\"\",\"\")", cell.CellFormula);
+            Assert.AreEqual("", cell.StringCellValue);
+            cell.SetCellType(CellType.String);
+            Assert.AreEqual(CellType.Blank, cell.CellType);
+            try
+            {
+                Assert.IsNull(cell.CellFormula);
+                Assert.Fail("Should throw an exception here");
+            }
+            catch (IllegalStateException e)
+            {
+                // expected here
+            }
+            Assert.AreEqual("", cell.StringCellValue);
+            wb.Close();
+        }
 
     }
 }

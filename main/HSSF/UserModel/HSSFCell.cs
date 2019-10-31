@@ -316,11 +316,21 @@ namespace NPOI.HSSF.UserModel
                     if (setValue)
                     {
                         String str = ConvertCellValueToString();
-                        int sstIndex = book.Workbook.AddSSTString(new UnicodeString(str));
-                        lrec.SSTIndex = (sstIndex);
-                        UnicodeString us = book.Workbook.GetSSTString(sstIndex);
-                        stringValue = new HSSFRichTextString();
-                        stringValue.UnicodeString = us;
+                        if (str == null)
+                        {
+                            // bug 55668: don't try to store null-string when formula
+                            // results in empty/null value
+                            SetCellType(CellType.Blank, false, row, col, styleIndex);
+                            return;
+                        }
+                        else
+                        {
+                            int sstIndex = book.Workbook.AddSSTString(new UnicodeString(str));
+                            lrec.SSTIndex = (sstIndex);
+                            UnicodeString us = book.Workbook.GetSSTString(sstIndex);
+                            stringValue = new HSSFRichTextString();
+                            stringValue.UnicodeString = us;
+                        }
                     }
                     _record = lrec;
                     break;
