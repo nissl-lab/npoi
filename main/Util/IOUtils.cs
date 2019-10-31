@@ -74,7 +74,8 @@ namespace NPOI.Util
             stream.Read(outputBytes,0, (int)stream.Length);
             return outputBytes;
         }
-           public static byte[] ToByteArray(ByteBuffer buffer, int length)
+
+        public static byte[] ToByteArray(ByteBuffer buffer, int length)
         {
             if (buffer.HasBuffer && buffer.Offset == 0)
             {
@@ -100,14 +101,14 @@ namespace NPOI.Util
         }
 
         /// <summary>
-        /// Same as the normal 
-        /// <c>in.Read(b, off, len)</c>
-        /// , but tries to ensure that the entire len number of bytes is Read.
+        /// Same as the normal <tt>channel.read(b)</tt>, but tries to ensure
+        /// that the buffer is filled completely if possible, i.e. b.remaining()
+        /// returns 0.
         /// If the end of file is reached before any bytes are Read, returns -1.
-        /// If the end of the file is reached after some bytes are
-        /// Read, returns the number of bytes Read.
-        /// If the end of the file isn't reached before len
-        /// bytes have been Read, will return len bytes.
+        /// If the end of the file is reached after some bytes are read, returns the
+        /// number of bytes read. If the end of the file isn't reached before the
+        /// buffer has no more remaining capacity, will return the number of bytes
+        /// that were read.
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <param name="b">The b.</param>
