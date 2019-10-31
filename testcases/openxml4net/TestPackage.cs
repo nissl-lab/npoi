@@ -31,6 +31,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using System.Collections;
 using NPOI.SS.UserModel;
 using NPOI;
+using NPOI.Openxml4Net.Exceptions;
 
 namespace TestCases.OPC
 {
@@ -674,6 +675,57 @@ namespace TestCases.OPC
             Assert.False(mgr.IsContentTypeRegister("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"));
             Assert.True(mgr.IsContentTypeRegister("application/vnd.ms-excel.sheet.macroEnabled.main+xml"));
         }
+
+        /**
+         * Verify we give helpful exceptions (or as best we can) when
+         *  supplied with non-OOXML file types (eg OLE2, ODF)
+         */
+        [Test]
+        public void NonOOXMLFileTypes()
+        {
+            // Spreadsheet has a good mix of alternate file types
+            POIDataSamples files = POIDataSamples.GetSpreadSheetInstance();
+
+            // OLE2 - Stream
+            //        try {
+            //            OPCPackage.open(files.openResourceAsStream("SampleSS.xls"));
+            //            Assert.Fail("Shouldn't be able to open OLE2");
+            //        } catch (OLE2NotOfficeXmlFileException e) {
+            //            // TODO Check details
+            //        }
+
+            // OLE2 - File
+
+            // ODF / ODS - Stream
+            try
+            {
+                OPCPackage.Open(files.OpenResourceAsStream("SampleSS.ods"));
+                Assert.Fail("Shouldn't be able to open ODS");
+            }
+            catch (ODFNotOfficeXmlFileException e)
+            {
+                Assert.IsTrue(e.ToString().Contains("The supplied data appears to be in ODF"));
+                Assert.IsTrue(e.ToString().Contains("Formats like these (eg ODS"));
+            }
+            // ODF / ODS - File
+            try
+            {
+                OPCPackage.Open(files.GetFile("SampleSS.ods"));
+                Assert.Fail("Shouldn't be able to open ODS");
+            }
+            catch (ODFNotOfficeXmlFileException e)
+            {
+                Assert.IsTrue(e.ToString().Contains("The supplied data appears to be in ODF"));
+                Assert.IsTrue(e.ToString().Contains("Formats like these (eg ODS"));
+            }
+
+            // Plain Text - Stream
+            // Plain Text - File
+
+            // Raw XML - Stream
+            // Raw XML - File
+        }
+
 
         [Test, Ignore("need ZipSecureFile and ByteArrayOutputStream class")]
         public void ZipBombCreateAndHandle()

@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
@@ -14,33 +14,20 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-
-/* ================================================================
- * About NPOI
- * Author: Tony Qu 
- * Author's email: tonyqus (at) gmail.com 
- * Author's Blog: tonyqus.wordpress.com.cn (wp.tonyqus.cn)
- * HomePage: http://www.codeplex.com/npoi
- * Contributors:
- * 
- * ==============================================================*/
-
 using System;
 
-
-namespace NPOI.POIFS.FileSystem
+namespace NPOI.Openxml4Net.Exceptions
 {
-    /// <summary>
-    /// This exception is thrown when we try to open a file that's actually
-    /// an Office 2007+ XML file, rather than an OLE2 file (which is what
-    /// POIFS works with)
-    /// </summary>
-    [Serializable]
-    public class OfficeXmlFileException: UnsupportedFileFormatException
+    /**
+     * This exception is thrown when we are given an OLE2-based file
+     *  (eg Excel .xls) instead of an actually OOXML (Office Open XML) file
+     */
+    public class OLE2NotOfficeXmlFileException : NotOfficeXmlFileException
     {
-        public OfficeXmlFileException(String s):base(s)
-        { 
-        
+        public OLE2NotOfficeXmlFileException(String message)
+            : base(message)
+        {
+
         }
     }
 }

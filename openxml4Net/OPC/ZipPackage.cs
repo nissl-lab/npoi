@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
+﻿using ICSharpCode.SharpZipLib.Zip;
+using NPOI.Openxml4Net.Exceptions;
+using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.OpenXml4Net.OPC.Internal.Marshallers;
-using NPOI.OpenXml4Net.Exceptions;
-using Util=NPOI.OpenXml4Net.Util;
 using NPOI.OpenXml4Net.Util;
-using ICSharpCode.SharpZipLib.Zip;
 using NPOI.Util;
+using System;
+using System.Collections;
+using System.IO;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -127,95 +125,138 @@ namespace NPOI.OpenXml4Net.OPC
          *             Throws if the package is not valid.
          */
 
-        protected override PackagePart[] GetPartsImpl(){
-        if (this.partList == null) {
-            // The package has just been created, we create an empty part
-            // list.
-            this.partList = new PackagePartCollection();
-        }
-
-        if (this.zipArchive == null)
+        protected override PackagePart[] GetPartsImpl()
         {
-            PackagePart[] pp = new PackagePart[this.partList.Values.Count];
-            this.partList.Values.CopyTo(pp, 0);
-            return pp;
-        }
-        // First we need to parse the content type part
-        IEnumerator entries = this.zipArchive.Entries;
-        while (entries.MoveNext()) {
-            ZipEntry entry = (ZipEntry)entries.Current;
-            if (entry.Name.ToLower().Equals(
-                    ContentTypeManager.CONTENT_TYPES_PART_NAME.ToLower()))
+            if (this.partList == null)
             {
-                try {
-                    this.contentTypeManager = new ZipContentTypeManager(
-                            ZipArchive.GetInputStream(entry), this);
-                } catch (IOException e) {
-                    throw new InvalidFormatException(e.Message);
-                }
-                break;
+                // The package has just been created, we create an empty part
+                // list.
+                this.partList = new PackagePartCollection();
             }
-        }
 
-        // At this point, we should have loaded the content type part
-        if (this.contentTypeManager == null) {
-            throw new InvalidFormatException(
-                    "Package should contain a content type part [M1.13]");
-        }
-
-        // Now create all the relationships
-        // (Need to create relationships before other
-        //  parts, otherwise we might create a part before
-        //  its relationship exists, and then it won't tie up)
-        entries = this.zipArchive.Entries;
-        while (entries.MoveNext()) {
-            ZipEntry entry = (ZipEntry)entries.Current;
-            PackagePartName partName = BuildPartName(entry);
-            if(partName == null) continue;
-
-            // Only proceed for Relationships at this stage
-            String contentType = contentTypeManager.GetContentType(partName);
-            if (contentType != null && contentType.Equals(ContentTypes.RELATIONSHIPS_PART)) {
-                try {
-                    partList[partName]= new ZipPackagePart(this, entry,
-                        partName, contentType);
-                } catch (InvalidOperationException e) {
-                    throw new InvalidFormatException(e.Message);
-                }
-            }
-        }
-
-        // Then we can go through all the other parts
-        entries = this.zipArchive.Entries;
-        while (entries.MoveNext()) {
-            ZipEntry entry = entries.Current as ZipEntry;
-            PackagePartName partName = BuildPartName(entry);
-            if(partName == null) continue;
-
-            String contentType = contentTypeManager
-                    .GetContentType(partName);
-            if (contentType != null && contentType.Equals(ContentTypes.RELATIONSHIPS_PART)) {
-                // Already handled
-            }
-            else if (contentType != null) 
+            if (this.zipArchive == null)
             {
-                try {
-                    partList[partName]= new ZipPackagePart(this, entry,
-                            partName, contentType);
-                } catch (InvalidOperationException e) {
-                    throw new InvalidFormatException(e.Message);
+                PackagePart[] pp = new PackagePart[this.partList.Values.Count];
+                this.partList.Values.CopyTo(pp, 0);
+                return pp;
+            }
+            // First we need to parse the content type part
+            IEnumerator entries = this.zipArchive.Entries;
+            while (entries.MoveNext())
+            {
+                ZipEntry entry = (ZipEntry)entries.Current;
+                if (entry.Name.ToLower().Equals(
+                        ContentTypeManager.CONTENT_TYPES_PART_NAME.ToLower()))
+                {
+                    try
+                    {
+                        this.contentTypeManager = new ZipContentTypeManager(
+                                ZipArchive.GetInputStream(entry), this);
+                    }
+                    catch (IOException e)
+                    {
+                        throw new InvalidFormatException(e.Message);
+                    }
+                    break;
                 }
-            } else {
+            }
+
+            // At this point, we should have loaded the content type part
+            if (this.contentTypeManager == null)
+            {
+                // Is it a different Zip-based format?
+                bool hasMimetype = false;
+                bool hasSettingsXML = false;
+                entries = this.zipArchive.Entries;
+                while (entries.MoveNext())
+                {
+                    ZipEntry entry = entries.Current as ZipEntry;
+                    if (entry.Name.Equals("mimetype"))
+                    {
+                        hasMimetype = true;
+                    }
+                    if (entry.Name.Equals("settings.xml"))
+                    {
+                        hasSettingsXML = true;
+                    }
+                }
+                if (hasMimetype && hasSettingsXML)
+                {
+                    throw new ODFNotOfficeXmlFileException(
+                       "The supplied data appears to be in ODF (Open Document) Format. " +
+                       "Formats like these (eg ODS, ODP) are not supported, try Apache ODFToolkit");
+                }
+
+                // Fallback exception
                 throw new InvalidFormatException(
-                        "The part "
-                                + partName.URI.OriginalString
-                                + " does not have any content type ! Rule: Package require content types when retrieving a part from a package. [M.1.14]");
+                        "Package should contain a content type part [M1.13]");
             }
+
+            // Now create all the relationships
+            // (Need to create relationships before other
+            //  parts, otherwise we might create a part before
+            //  its relationship exists, and then it won't tie up)
+            entries = this.zipArchive.Entries;
+            while (entries.MoveNext())
+            {
+                ZipEntry entry = (ZipEntry)entries.Current;
+                PackagePartName partName = BuildPartName(entry);
+                if (partName == null) continue;
+
+                // Only proceed for Relationships at this stage
+                String contentType = contentTypeManager.GetContentType(partName);
+                if (contentType != null && contentType.Equals(ContentTypes.RELATIONSHIPS_PART))
+                {
+                    try
+                    {
+                        partList[partName] = new ZipPackagePart(this, entry,
+                            partName, contentType);
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        throw new InvalidFormatException(e.Message);
+                    }
+                }
+            }
+
+            // Then we can go through all the other parts
+            entries = this.zipArchive.Entries;
+            while (entries.MoveNext())
+            {
+                ZipEntry entry = entries.Current as ZipEntry;
+                PackagePartName partName = BuildPartName(entry);
+                if (partName == null) continue;
+
+                String contentType = contentTypeManager
+                        .GetContentType(partName);
+                if (contentType != null && contentType.Equals(ContentTypes.RELATIONSHIPS_PART))
+                {
+                    // Already handled
+                }
+                else if (contentType != null)
+                {
+                    try
+                    {
+                        partList[partName] = new ZipPackagePart(this, entry,
+                                partName, contentType);
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        throw new InvalidFormatException(e.Message);
+                    }
+                }
+                else
+                {
+                    throw new InvalidFormatException(
+                            "The part "
+                                    + partName.URI.OriginalString
+                                    + " does not have any content type ! Rule: Package require content types when retrieving a part from a package. [M.1.14]");
+                }
+            }
+            ZipPackagePart[] returnArray = new ZipPackagePart[partList.Count];
+            partList.Values.CopyTo(returnArray, 0);
+            return returnArray;
         }
-            ZipPackagePart[] returnArray =new ZipPackagePart[partList.Count];
-            partList.Values.CopyTo(returnArray,0);
-        return returnArray;
-    }
 
         /**
          * Builds a PackagePartName for the given ZipEntry,

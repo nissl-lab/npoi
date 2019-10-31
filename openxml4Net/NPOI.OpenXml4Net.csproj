@@ -101,6 +101,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\InvalidFormatException.cs" />
+    <Compile Include="Exceptions\NotOfficeXmlFileException.cs" />
+    <Compile Include="Exceptions\ODFNotOfficeXmlFileException.cs" />
+    <Compile Include="Exceptions\OLE2NotOfficeXmlFileException.cs" />
     <Compile Include="Exceptions\OpenXML4NetException.cs" />
     <Compile Include="Exceptions\OpenXML4NetRuntimeException.cs" />
     <Compile Include="Exceptions\PartAlreadyExistsException.cs" />
