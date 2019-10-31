@@ -53,11 +53,13 @@ namespace NPOI.OpenXml4Net.OPC
          *            Zip input stream to load.
          * @param access
          */
-        public ZipPackage(Stream filestream, PackageAccess access)
+        public ZipPackage(Stream in1, PackageAccess access)
             : base(access)
         {
             isStream = true;
-            this.zipArchive = new ZipInputStreamZipEntrySource(new ZipInputStream(filestream));
+            ZipInputStream zis = ZipHelper.OpenZipStream(in1);
+            //ThresholdInputStream zis = ZipHelper.OpenZipStream(in1);
+            this.zipArchive = new ZipInputStreamZipEntrySource(zis);
         }
 
         /**

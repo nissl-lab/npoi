@@ -129,6 +129,27 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 return null;
             }
         }
+
+        /**
+         * Opens the specified stream as a secure zip
+         *
+         * @param stream
+         *            The stream to open.
+         * @return The zip stream freshly open.
+         */
+        //public static ThresholdInputStream OpenZipStream(Stream stream)
+        //{
+        //    Stream zis = new ZipInputStream(stream);
+        //    ThresholdInputStream tis = ZipSecureFile.AddThreshold(zis);
+        //    return tis;
+        //}
+        public static ZipInputStream OpenZipStream(Stream stream)
+        {
+            //InputStream zis = new ZipInputStream(stream);
+            //ThresholdInputStream tis = ZipSecureFile.AddThreshold(zis);
+            //return tis;
+            return new ZipInputStream(stream);
+        }
         /**
         * Opens the specified file as a zip, or returns null if no such file exists
         *
@@ -143,6 +164,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 return null;
             }
 
+            //return new ZipSecureFile(file);
             return new ZipFile(File.OpenRead(file.FullName));
         }
         /**
@@ -154,12 +176,8 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          */
         public static ZipFile OpenZipFile(String path)
         {
-            if (!File.Exists(path))
-            {
-                return null;
-            }
-
-            return new ZipFile(File.OpenRead(path));
+            FileInfo f = new FileInfo(path);
+            return OpenZipFile(f);
         }
 
     }
