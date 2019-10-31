@@ -756,7 +756,26 @@ namespace TestCases.OPC
             }
 
             // Plain Text - Stream
+            try
+            {
+                OPCPackage.Open(files.OpenResourceAsStream("SampleSS.txt"));
+                Assert.Fail("Shouldn't be able to open Plain Text");
+            }
+            catch (NotOfficeXmlFileException e)
+            {
+                Assert.IsTrue(e.Message.IndexOf("No valid entries or contents found") > -1);
+                Assert.IsTrue(e.Message.IndexOf("not a valid OOXML") > -1);
+            }
             // Plain Text - File
+            try
+            {
+                OPCPackage.Open(files.GetFile("SampleSS.txt"));
+                Assert.Fail("Shouldn't be able to open Plain Text");
+            }
+            catch (InvalidOperationException e)
+            {
+                // Unhelpful low-level error, sorry
+            }
         }
 
 
