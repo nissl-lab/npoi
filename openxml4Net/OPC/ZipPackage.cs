@@ -166,6 +166,7 @@ namespace NPOI.OpenXml4Net.OPC
             // At this point, we should have loaded the content type part
             if (this.contentTypeManager == null)
             {
+                int numEntries = 0;
                 // Is it a different Zip-based format?
                 bool hasMimetype = false;
                 bool hasSettingsXML = false;
@@ -181,6 +182,7 @@ namespace NPOI.OpenXml4Net.OPC
                     {
                         hasSettingsXML = true;
                     }
+                    numEntries++;
                 }
                 if (hasMimetype && hasSettingsXML)
                 {
@@ -188,7 +190,12 @@ namespace NPOI.OpenXml4Net.OPC
                        "The supplied data appears to be in ODF (Open Document) Format. " +
                        "Formats like these (eg ODS, ODP) are not supported, try Apache ODFToolkit");
                 }
-
+                if (numEntries == 0)
+                {
+                    throw new NotOfficeXmlFileException(
+                       "No valid entries or contents found, this is not a valid OOXML " +
+                       "(Office Open XML) file");
+                }
                 // Fallback exception
                 throw new InvalidFormatException(
                         "Package should contain a content type part [M1.13]");

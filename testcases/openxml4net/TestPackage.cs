@@ -687,14 +687,50 @@ namespace TestCases.OPC
             POIDataSamples files = POIDataSamples.GetSpreadSheetInstance();
 
             // OLE2 - Stream
-            //        try {
-            //            OPCPackage.open(files.openResourceAsStream("SampleSS.xls"));
-            //            Assert.Fail("Shouldn't be able to open OLE2");
-            //        } catch (OLE2NotOfficeXmlFileException e) {
-            //            // TODO Check details
-            //        }
-
+            try
+            {
+                OPCPackage.Open(files.OpenResourceAsStream("SampleSS.xls"));
+                Assert.Fail("Shouldn't be able to open OLE2");
+            }
+            catch (OLE2NotOfficeXmlFileException e)
+            {
+                Assert.IsTrue(e.Message.IndexOf("The supplied data appears to be in the OLE2 Format") > -1);
+                Assert.IsTrue(e.Message.IndexOf("You are calling the part of POI that deals with OOXML") > -1);
+            }
             // OLE2 - File
+            try
+            {
+                OPCPackage.Open(files.GetFile("SampleSS.xls"));
+                Assert.Fail("Shouldn't be able to open OLE2");
+            }
+            catch (OLE2NotOfficeXmlFileException e)
+            {
+                Assert.IsTrue(e.Message.IndexOf("The supplied data appears to be in the OLE2 Format") > -1);
+                Assert.IsTrue(e.Message.IndexOf("You are calling the part of POI that deals with OOXML") > -1);
+            }
+
+            // Raw XML - Stream
+            try
+            {
+                OPCPackage.Open(files.OpenResourceAsStream("SampleSS.xml"));
+                Assert.Fail("Shouldn't be able to open XML");
+            }
+            catch (NotOfficeXmlFileException e)
+            {
+                Assert.IsTrue(e.Message.IndexOf("The supplied data appears to be a raw XML file") > -1);
+                Assert.IsTrue(e.Message.IndexOf("Formats such as Office 2003 XML") > -1);
+            }
+            // Raw XML - File
+            try
+            {
+                OPCPackage.Open(files.GetFile("SampleSS.xml"));
+                Assert.Fail("Shouldn't be able to open XML");
+            }
+            catch (NotOfficeXmlFileException e)
+            {
+                Assert.IsTrue(e.Message.IndexOf("The supplied data appears to be a raw XML file") > -1);
+                Assert.IsTrue(e.Message.IndexOf("Formats such as Office 2003 XML") > -1);
+            }
 
             // ODF / ODS - Stream
             try
@@ -721,10 +757,8 @@ namespace TestCases.OPC
 
             // Plain Text - Stream
             // Plain Text - File
-
-            // Raw XML - Stream
-            // Raw XML - File
         }
+
 
 
         [Test, Ignore("need ZipSecureFile and ByteArrayOutputStream class")]
