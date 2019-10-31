@@ -1460,7 +1460,19 @@ namespace NPOI.HSSF.UserModel
             }
             return (HSSFName)names[nameIndex];
         }
+        public IList<IName> GetNames(String name)
+        {
+            List<IName> nameList = new List<IName>();
+            foreach (HSSFName nr in names)
+            {
+                if (nr.NameName.Equals(name))
+                {
+                    nameList.Add(nr);
+                }
+            }
 
+            return nameList;
+        }
         /// <summary>
         /// Gets the Named range
         /// </summary>

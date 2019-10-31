@@ -23,6 +23,7 @@ namespace TestCases.SS.UserModel
     using NUnit.Framework;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
+    using System.Collections.Generic;
 
     /**
      * Tests of implementations of {@link NPOI.ss.usermodel.Name}.
@@ -649,6 +650,32 @@ namespace TestCases.SS.UserModel
             }
 
         }
+
+        [Test]
+        public void TestBug56930()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            // x1 on sheet1 defines "x=1"
+            wb.CreateSheet("sheet1");
+            IName x1 = wb.CreateName();
+            x1.NameName = "x";
+            x1.RefersToFormula = "1";
+            x1.SheetIndex = wb.GetSheetIndex("sheet1");
+            // x2 on sheet2 defines "x=2"
+            wb.CreateSheet("sheet2");
+            IName x2 = wb.CreateName();
+            x2.NameName = "x";
+            x2.RefersToFormula = "2";
+            x2.SheetIndex = wb.GetSheetIndex("sheet2");
+            IList<IName> names = wb.GetNames("x");
+            Assert.AreEqual(2, names.Count, "Had: " + names);
+            Assert.AreEqual("1", names[0].RefersToFormula);
+            Assert.AreEqual("2", names[1].RefersToFormula);
+            Assert.AreEqual("1", wb.GetName("x").RefersToFormula);
+            wb.RemoveName("x");
+            Assert.AreEqual("2", wb.GetName("x").RefersToFormula);
+        }
+
     }
 
 }

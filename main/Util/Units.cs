@@ -95,8 +95,11 @@ namespace NPOI.Util
          */
         public static int DoubleToFixedPoint(double floatPoint)
         {
-            int i = (int)Math.Floor(floatPoint);
-            int f = (int)((floatPoint % 1d) * 65536d);
+            double fractionalPart = floatPoint % 1d;
+            double integralPart = floatPoint - fractionalPart;
+            int i = (int)Math.Floor(integralPart);
+            //int f = (int)Math.rint(fractionalPart * 65536d);
+            int f = (int)Math.Round(fractionalPart * 65536d, MidpointRounding.ToEven);
             int fixedPoint = (i << 16) | (f & 0xFFFF);
             return fixedPoint;
         }

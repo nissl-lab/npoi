@@ -657,6 +657,18 @@ namespace NPOI.XSSF.Streaming
         {
             return XssfWorkbook.GetName(name);
         }
+
+        /**
+         * Returns all defined names with the given name.
+         *
+         * @param name the name of the defined name
+         * @return a list of the defined names with the specified name. An empty list is returned if none is found.
+         */
+        public IList<IName> GetNames(String name)
+        {
+            return XssfWorkbook.GetNames(name);
+        }
+
         [Obsolete("Deprecated in 3.16 throws an error.")]
         public IName GetNameAt(int nameIndex)
         {

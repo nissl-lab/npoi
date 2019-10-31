@@ -127,6 +127,7 @@ namespace TestCases.HSSF.UserModel
             IName namedRange1 = wb.GetNameAt(0);
             //Getting it sheet name
             sheetName = namedRange1.SheetName;
+            Assert.IsNotNull(sheetName);
 
             // sanity check
             SanityChecker c = new SanityChecker();
@@ -241,11 +242,10 @@ namespace TestCases.HSSF.UserModel
             wb.CreateSheet("CSCO");
 
             Ptg[] ptgs = HSSFFormulaParser.Parse("CSCO!$E$71", wb, FormulaType.NamedRange, 0);
-            for (int i = 0; i < ptgs.Length; i++)
+            foreach (Ptg ptg in ptgs)
             {
-                Assert.AreEqual('R', ptgs[i].RVAType);
+                Assert.AreEqual('R', ptg.RVAType);
             }
-
         }
     }
 }

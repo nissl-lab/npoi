@@ -924,7 +924,7 @@ namespace NPOI.XSSF.UserModel
                 pictures = new List<XSSFPictureData>(mediaParts.Count);
                 foreach (PackagePart part in mediaParts)
                 {
-                    pictures.Add(new XSSFPictureData(part, null));
+                    pictures.Add(new XSSFPictureData(part));
                 }
             }
             return pictures;
@@ -961,7 +961,19 @@ namespace NPOI.XSSF.UserModel
             }
             return namedRanges[nameIndex];
         }
+        public IList<IName> GetNames(String name)
+        {
+            List<IName> names = new List<IName>();
+            foreach (XSSFName nr in namedRanges)
+            {
+                if (nr.NameName.Equals(name))
+                {
+                    names.Add(nr);
+                }
+            }
 
+            return names;
+        }
         public IName GetNameAt(int nameIndex)
         {
             int nNames = namedRanges.Count;

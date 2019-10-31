@@ -71,7 +71,7 @@ namespace NPOI.XSSF.UserModel
          * @param rel  the namespace relationship holding this Drawing,
          * the relationship type must be http://schemas.Openxmlformats.org/officeDocument/2006/relationships/image
          */
-        protected XSSFPictureData(PackagePart part)
+        public XSSFPictureData(PackagePart part)
             : base(part)
         {
 

@@ -241,6 +241,13 @@ namespace NPOI.SS.UserModel
         IName GetName(String name);
 
         /// <summary>
+        /// Returns all defined names with the given name.
+        /// </summary>
+        /// <param name="name">the name of the defined name</param>
+        /// <returns>a list of the defined names with the specified name. An empty list is returned if none is found.</returns>
+        IList<IName> GetNames(String name);
+
+        /// <summary>
         /// the defined name at the specified index
         /// </summary>
         /// <param name="nameIndex">position of the named range (0-based)</param>
