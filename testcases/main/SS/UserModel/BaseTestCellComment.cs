@@ -20,6 +20,7 @@ namespace TestCases.SS.UserModel
     using System;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
     using NPOI.Util;
     using NUnit.Framework;
 
@@ -43,11 +44,11 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook book = _testDataProvider.CreateWorkbook();
             ISheet sheet = book.CreateSheet();
-            Assert.IsNull(sheet.GetCellComment(0, 0));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
 
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell(0);
-            Assert.IsNull(sheet.GetCellComment(0, 0));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
             Assert.IsNull(cell.CellComment);
 
             book.Close();
@@ -65,12 +66,12 @@ namespace TestCases.SS.UserModel
             ICreationHelper factory = wb1.GetCreationHelper();
 
             ISheet sheet = wb1.CreateSheet();
-            Assert.IsNull(sheet.GetCellComment(cellRow, cellColumn));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(cellRow, cellColumn)));
 
             ICell cell = sheet.CreateRow(cellRow).CreateCell(cellColumn);
             cell.SetCellValue(factory.CreateRichTextString(cellText));
             Assert.IsNull(cell.CellComment);
-            Assert.IsNull(sheet.GetCellComment(cellRow, cellColumn));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(cellRow, cellColumn)));
 
             IDrawing patr = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = factory.CreateClientAnchor();
@@ -87,7 +88,7 @@ namespace TestCases.SS.UserModel
             comment.Author=(commentAuthor);
             cell.CellComment=(comment);
             Assert.IsNotNull(cell.CellComment);
-            Assert.IsNotNull(sheet.GetCellComment(cellRow, cellColumn));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(cellRow, cellColumn)));
 
             //verify our Settings
             Assert.AreEqual(commentAuthor, comment.Author);
@@ -150,7 +151,7 @@ namespace TestCases.SS.UserModel
                 cell = row.GetCell(0);
                 comment = cell.CellComment;
                 Assert.IsNull(comment, "Cells in the first column are not commented");
-                Assert.IsNull(sheet.GetCellComment(rownum, 0));
+                Assert.IsNull(sheet.GetCellComment(new CellAddress(rownum, 0)));
             }
 
             for (int rownum = 0; rownum < 3; rownum++)
@@ -159,7 +160,7 @@ namespace TestCases.SS.UserModel
                 cell = row.GetCell(1);
                 comment = cell.CellComment;
                 Assert.IsNotNull(comment, "Cells in the second column have comments");
-                Assert.IsNotNull(sheet.GetCellComment(rownum, 1), "Cells in the second column have comments");
+                Assert.IsNotNull(sheet.GetCellComment(new CellAddress(rownum, 1)), "Cells in the second column have comments");
 
                 Assert.AreEqual("Yegor Kozlov", comment.Author);
                 Assert.IsFalse(comment.String.String == string.Empty, "cells in the second column have not empyy notes");

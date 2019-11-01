@@ -210,16 +210,16 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(3, sheet.LastRowNum);
 
             // Verify comments are in the position expected
-            Assert.IsNotNull(sheet.GetCellComment(0, 0));
-            Assert.IsNull(sheet.GetCellComment(1, 0));
-            Assert.IsNotNull(sheet.GetCellComment(2, 0));
-            Assert.IsNotNull(sheet.GetCellComment(3, 0));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(2, 0)));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
 
-            String comment1 = sheet.GetCellComment(0, 0).String.String;
+            String comment1 = sheet.GetCellComment(new CellAddress(0, 0)).String.String;
             Assert.AreEqual(comment1, "comment top row1 (index0)\n");
-            String comment3 = sheet.GetCellComment(2, 0).String.String;
+            String comment3 = sheet.GetCellComment(new CellAddress(2, 0)).String.String;
             Assert.AreEqual(comment3, "comment top row3 (index2)\n");
-            String comment4 = sheet.GetCellComment(3, 0).String.String;
+            String comment4 = sheet.GetCellComment(new CellAddress(3, 0)).String.String;
             Assert.AreEqual(comment4, "comment top row4 (index3)\n");
 
             //Workbook wbBack = _testDataProvider.writeOutAndReadBack(wb);
@@ -229,17 +229,17 @@ namespace TestCases.SS.UserModel
 
             // Test that comments were Shifted as expected
             Assert.AreEqual(4, sheet.LastRowNum);
-            Assert.IsNotNull(sheet.GetCellComment(0, 0));
-            Assert.IsNull(sheet.GetCellComment(1, 0));
-            Assert.IsNull(sheet.GetCellComment(2, 0));
-            Assert.IsNotNull(sheet.GetCellComment(3, 0));
-            Assert.IsNotNull(sheet.GetCellComment(4, 0));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(2, 0)));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(4, 0)));
 
-            String comment1_Shifted = sheet.GetCellComment(0, 0).String.String;
+            String comment1_Shifted = sheet.GetCellComment(new CellAddress(0, 0)).String.String;
             Assert.AreEqual(comment1, comment1_Shifted);
-            String comment3_Shifted = sheet.GetCellComment(3, 0).String.String;
+            String comment3_Shifted = sheet.GetCellComment(new CellAddress(3, 0)).String.String;
             Assert.AreEqual(comment3, comment3_Shifted);
-            String comment4_Shifted = sheet.GetCellComment(4, 0).String.String;
+            String comment4_Shifted = sheet.GetCellComment(new CellAddress(4, 0)).String.String;
             Assert.AreEqual(comment4, comment4_Shifted);
 
             // Write out and read back in again
@@ -250,17 +250,17 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(4, sheet.LastRowNum);
 
             // Verify comments are in the position expected After the shift
-            Assert.IsNotNull(sheet.GetCellComment(0, 0));
-            Assert.IsNull(sheet.GetCellComment(1, 0));
-            Assert.IsNull(sheet.GetCellComment(2, 0));
-            Assert.IsNotNull(sheet.GetCellComment(3, 0));
-            Assert.IsNotNull(sheet.GetCellComment(4, 0));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(2, 0)));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(4, 0)));
 
-            comment1_Shifted = sheet.GetCellComment(0, 0).String.String;
+            comment1_Shifted = sheet.GetCellComment(new CellAddress(0, 0)).String.String;
             Assert.AreEqual(comment1, comment1_Shifted);
-            comment3_Shifted = sheet.GetCellComment(3, 0).String.String;
+            comment3_Shifted = sheet.GetCellComment(new CellAddress(3, 0)).String.String;
             Assert.AreEqual(comment3, comment3_Shifted);
-            comment4_Shifted = sheet.GetCellComment(4, 0).String.String;
+            comment4_Shifted = sheet.GetCellComment(new CellAddress(4, 0)).String.String;
             Assert.AreEqual(comment4, comment4_Shifted);
 
             // Shifting back up again, now two rows
@@ -273,15 +273,15 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual(2, sheet.LastRowNum);
 
                 // Verify comments are in the position expected
-                Assert.IsNull(sheet.GetCellComment(0, 0),
-                    "Had: " + (sheet.GetCellComment(0, 0) == null ? "null" : sheet.GetCellComment(0, 0).String.String));
-                Assert.IsNotNull(sheet.GetCellComment(1, 0));
-                Assert.IsNotNull(sheet.GetCellComment(2, 0));
+                Assert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)),
+                    "Had: " + (sheet.GetCellComment(new CellAddress(0, 0)) == null ? "null" : sheet.GetCellComment(new CellAddress(0, 0)).String.String));
+                Assert.IsNotNull(sheet.GetCellComment(new CellAddress(1, 0)));
+                Assert.IsNotNull(sheet.GetCellComment(new CellAddress(2, 0)));
             }
 
-            comment1 = sheet.GetCellComment(1, 0).String.String;
+            comment1 = sheet.GetCellComment(new CellAddress(1, 0)).String.String;
             Assert.AreEqual(comment1, "comment top row3 (index2)\n");
-            String comment2 = sheet.GetCellComment(2, 0).String.String;
+            String comment2 = sheet.GetCellComment(new CellAddress(2, 0)).String.String;
             Assert.AreEqual(comment2, "comment top row4 (index3)\n");
             wb2.Close();
         }
@@ -347,7 +347,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("A3:C3", region.FormatAsString());
             wb.Close();
         }
-        [Ignore("")]
+        [Ignore("ignore by poi")]
         [Test]
         public void ShiftWithMergedRegions_bug56454()
         {
@@ -384,6 +384,8 @@ namespace TestCases.SS.UserModel
             expectedMergedRegions.Add(C4_D8);
 
             Assert.AreEqual(expectedMergedRegions, sheet.MergedRegions);
+
+            wb.Close();
         }
 
         /**

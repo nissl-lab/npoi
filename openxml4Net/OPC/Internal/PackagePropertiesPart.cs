@@ -568,7 +568,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 {
                     SimpleDateFormat df = new SimpleDateFormat(fStr);
                     //df.TimeZone = (LocaleUtil.TIMEZONE_UTC);
-                    DateTime d = new SimpleDateFormat(fStr).Parse(dateTzStr);
+                    DateTime d = df.Parse(dateTzStr);
                     if (d != null)
                     {
                         return new DateTime?(d);

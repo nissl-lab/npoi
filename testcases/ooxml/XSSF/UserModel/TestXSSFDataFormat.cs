@@ -57,6 +57,8 @@ namespace NPOI.XSSF.UserModel
 
             Assert.IsTrue(customFmtIdx >= BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX);
             Assert.AreEqual(customFmt, dataFormat.GetFormat(customFmtIdx));
+
+            wb.Close();
         }
 
         /**
@@ -67,6 +69,7 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("FormatKM.xlsx");
             DoTest58532Core(wb);
+            wb.Close();
         }
 
         /**
@@ -75,12 +78,12 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void Test58778()
         {
-            XSSFWorkbook wb = new XSSFWorkbook();
-            ICell cell = wb.CreateSheet("bug58778").CreateRow(0).CreateCell(0);
+            XSSFWorkbook wb1 = new XSSFWorkbook();
+            ICell cell = wb1.CreateSheet("bug58778").CreateRow(0).CreateCell(0);
             cell.SetCellValue(5.25);
-            ICellStyle style = wb.CreateCellStyle();
+            ICellStyle style = wb1.CreateCellStyle();
 
-            XSSFDataFormat dataFormat = wb.CreateDataFormat() as XSSFDataFormat;
+            XSSFDataFormat dataFormat = wb1.CreateDataFormat() as XSSFDataFormat;
 
             short poundFmtIdx = 6;
             dataFormat.PutFormat(poundFmtIdx, poundFmt);
@@ -88,9 +91,9 @@ namespace NPOI.XSSF.UserModel
             cell.CellStyle = style;
             // Cell should appear as "<poundsymbol>5"
 
-            wb = XSSFTestDataSamples.WriteOutCloseAndReadBack(wb);
-            cell = wb.GetSheet("bug58778").GetRow(0).GetCell(0);
-            Assert.AreEqual(5.25, cell.NumericCellValue);
+            XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutCloseAndReadBack(wb1);
+            cell = wb2.GetSheet("bug58778").GetRow(0).GetCell(0);
+            Assert.AreEqual(5.25, cell.NumericCellValue, 0);
 
             style = cell.CellStyle;
             Assert.AreEqual(poundFmt, style.GetDataFormatString());
@@ -98,7 +101,8 @@ namespace NPOI.XSSF.UserModel
 
             // manually check the file to make sure the cell is rendered as "<poundsymbol>5"
             // Verified with LibreOffice 4.2.8.2 on 2015-12-28
-            wb.Close();
+            wb2.Close();
+            wb1.Close();
         }
 
     }

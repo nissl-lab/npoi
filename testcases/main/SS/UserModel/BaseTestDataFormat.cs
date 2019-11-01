@@ -77,6 +77,8 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(customIdx >= HSSFDataFormat.FIRST_USER_DEFINED_FORMAT_INDEX);
             //read and verify the string representation
             Assert.AreEqual(customFmt, df.GetFormat((short)customIdx));
+
+            wb.Close();
         }
 
         /**
@@ -96,7 +98,6 @@ namespace TestCases.SS.UserModel
             ICell cell = sheet.GetRow(0).GetCell(0);
             ICellStyle style = cell.CellStyle;
 
-            String poundFmt = "\"\u00a3\"#,##0;[Red]\\-\"\u00a3\"#,##0";
             // not expected normally, id of a custom format should be greater 
             // than BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX
             short poundFmtIdx = 6;
@@ -215,6 +216,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("-" + pound + "   12,345", formatter.FormatCellValue(nve));
             // TODO Fix this to not have an extra 0 at the end
             //assertEquals(pound+"   -  ", formatter.formatCellValue(zero)); 
+
+            wb.Close();
         }
 
 
@@ -254,6 +257,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("12", formatter.FormatCellValue(sml));
             Assert.AreEqual("1'234", formatter.FormatCellValue(med));
             Assert.AreEqual("12'345'678", formatter.FormatCellValue(lge));
+
+            wb.Close();
         }
     }
 }

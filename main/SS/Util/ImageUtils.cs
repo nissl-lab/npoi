@@ -178,7 +178,7 @@ namespace NPOI.SS.Util
             }
             else
             {
-                h -= anchor.Dy1 / Units.EMU_PER_PIXEL;
+                h -= anchor.Dy1 / (double)Units.EMU_PER_PIXEL;
             }
 
             while (h < scaledHeight)

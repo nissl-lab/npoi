@@ -55,6 +55,8 @@ namespace TestCases.HSSF.UserModel
             short customFmtIdx = dataFormat.GetFormat("\u00a3##.00[Yellow]");
             Assert.IsTrue(customFmtIdx >= BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX);
             Assert.AreEqual("\u00a3##.00[Yellow]", dataFormat.GetFormat(customFmtIdx));
+
+            wb.Close();
         }
         /**
          * [Bug 58532] Handle formats that go numnum, numK, numM etc 
@@ -64,6 +66,7 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("FormatKM.xls");
             DoTest58532Core(wb);
+            wb.Close();
         }
         /**
          * Bug 51378: GetDataFormatString method call crashes when Reading the test file
@@ -89,6 +92,7 @@ namespace TestCases.HSSF.UserModel
                     }
                 }
             }
+            wb.Close();
         }
     }
 }

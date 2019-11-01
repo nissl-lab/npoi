@@ -307,12 +307,13 @@ namespace NPOI.POIFS.Storage
         public static long CalculateMaximumSize(POIFSBigBlockSize bigBlockSize,
               int numBATs)
         {
-            long size = 1; // Header isn't FAT addressed
+            // Header isn't FAT addressed
+            long size = 1;
 
             // The header has up to 109 BATs, and extra ones are referenced
             //  from XBATs
             // However, all BATs can contain 128/1024 blocks
-            size += (numBATs * bigBlockSize.GetBATEntriesPerBlock());
+            size += (((long)numBATs) * bigBlockSize.GetBATEntriesPerBlock());
 
             // So far we've been in sector counts, turn into bytes
             return size * bigBlockSize.GetBigBlockSize();
