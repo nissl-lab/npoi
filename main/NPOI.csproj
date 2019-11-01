@@ -279,6 +279,8 @@
     <Compile Include="POIUtils.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SS\Format\CellNumberPartHandler.cs" />
+    <Compile Include="SS\Format\CellNumberStringMod.cs" />
     <Compile Include="SS\Formula\Atp\ArgumentsEvaluator.cs" />
     <Compile Include="SS\Formula\Atp\DateParser.cs" />
     <Compile Include="SS\Formula\Atp\IfError.cs" />
