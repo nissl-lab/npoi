@@ -37,17 +37,6 @@ namespace TestCases.SS.UserModel
     {
 
         protected ITestDataProvider _testDataProvider;
-        private List<IWorkbook> workbooksToClose = new List<IWorkbook>();
-
-        [TearDown]
-        public void TearDown()
-        {
-            // free resources correctly
-            foreach (IWorkbook wb in workbooksToClose)
-            {
-                wb.Close();
-            }
-        }
 
         public BaseTestCell()
             : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
@@ -306,7 +295,7 @@ namespace TestCases.SS.UserModel
             r.CreateCell(0).SetCellValue(true);
             r.CreateCell(1).SetCellValue(1.5);
             r.CreateCell(2).SetCellValue(factory.CreateRichTextString("Astring"));
-            r.CreateCell(3).SetCellErrorValue((byte)ErrorConstants.ERROR_DIV_0);
+            r.CreateCell(3).SetCellErrorValue(FormulaError.DIV0.Code);
             r.CreateCell(4).CellFormula = ("A1+B1");
 
             Assert.AreEqual("TRUE", r.GetCell(0).ToString(), "Boolean");
@@ -360,44 +349,10 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(CellType.Blank, c3.CellType);
 
         }
-        private ICell CreateACell()
+        private ICell CreateACell(IWorkbook wb)
         {
-            IWorkbook wb = _testDataProvider.CreateWorkbook();
-            workbooksToClose.Add(wb);
             return wb.CreateSheet("Sheet1").CreateRow(0).CreateCell(0);
         }
-
-        [Test]
-        public void TestChangeTypeStringToBool()
-        {
-            ICell cell = CreateACell();
-
-            cell.SetCellValue("TRUE");
-            Assert.AreEqual(CellType.String, cell.CellType);
-            try
-            {
-                cell.SetCellType(CellType.Boolean);
-            }
-            catch (InvalidCastException)
-            {
-                throw new AssertionException(
-                        "Identified bug in conversion of cell from text to bool");
-            }
-
-            Assert.AreEqual(CellType.Boolean, cell.CellType);
-            Assert.AreEqual(true, cell.BooleanCellValue);
-            cell.SetCellType(CellType.String);
-            Assert.AreEqual("TRUE", cell.RichStringCellValue.String);
-
-            // 'false' text to bool and back
-            cell.SetCellValue("FALSE");
-            cell.SetCellType(CellType.Boolean);
-            Assert.AreEqual(CellType.Boolean, cell.CellType);
-            Assert.AreEqual(false, cell.BooleanCellValue);
-            cell.SetCellType(CellType.String);
-            Assert.AreEqual("FALSE", cell.RichStringCellValue.String);
-        }
-
         /**
 	     * bug 58452: Copy cell formulas containing unregistered function names
 	     * Make sure that formulas with unknown/unregistered UDFs can be written to and read back from a file.
@@ -414,14 +369,14 @@ namespace TestCases.SS.UserModel
                 ICell cell1 = wb1.CreateSheet().CreateRow(0).CreateCell(0);
                 String formula = "myFunc(\"arg\")";
                 cell1.SetCellFormula(formula);
-                confirmFormulaWithUnknownUDF(formula, cell1, evaluator1);
+                ConfirmFormulaWithUnknownUDF(formula, cell1, evaluator1);
 
                 IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
                 IFormulaEvaluator evaluator2 = wb2.GetCreationHelper().CreateFormulaEvaluator();
                 try
                 {
                     ICell cell2 = wb2.GetSheetAt(0).GetRow(0).GetCell(0);
-                    confirmFormulaWithUnknownUDF(formula, cell2, evaluator2);
+                    ConfirmFormulaWithUnknownUDF(formula, cell2, evaluator2);
                 }
                 finally
                 {
@@ -434,7 +389,7 @@ namespace TestCases.SS.UserModel
             }
         }
 
-        private static void confirmFormulaWithUnknownUDF(String expectedFormula, ICell cell, IFormulaEvaluator evaluator)
+        private static void ConfirmFormulaWithUnknownUDF(String expectedFormula, ICell cell, IFormulaEvaluator evaluator)
         {
             Assert.AreEqual(expectedFormula, cell.CellFormula);
             try
@@ -442,67 +397,79 @@ namespace TestCases.SS.UserModel
                 evaluator.Evaluate(cell);
                 Assert.Fail("Expected NotImplementedFunctionException/NotImplementedException");
             }
-            catch (NotImplementedException) {
+            catch (NotImplementedException)
+            {
                 // expected
             }
         }
+        [Test]
+        public void TestChangeTypeStringToBool()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ICell cell = CreateACell(wb);
+
+            cell.SetCellValue("TRUE");
+            Assert.AreEqual(CellType.String, cell.CellType);
+            // test conversion of cell from text to boolean
+            cell.SetCellType(CellType.Boolean);            
+
+            Assert.AreEqual(CellType.Boolean, cell.CellType);
+            Assert.AreEqual(true, cell.BooleanCellValue);
+            cell.SetCellType(CellType.String);
+            Assert.AreEqual("TRUE", cell.RichStringCellValue.String);
+
+            // 'false' text to bool and back
+            cell.SetCellValue("FALSE");
+            cell.SetCellType(CellType.Boolean);
+            Assert.AreEqual(CellType.Boolean, cell.CellType);
+            Assert.AreEqual(false, cell.BooleanCellValue);
+            cell.SetCellType(CellType.String);
+            Assert.AreEqual("FALSE", cell.RichStringCellValue.String);
+
+            wb.Close();
+        }
+
 
         [Test]
         public void TestChangeTypeBoolToString()
         {
-            ICell cell = CreateACell();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ICell cell = CreateACell(wb);
 
             cell.SetCellValue(true);
-            try
-            {
-                cell.SetCellType(CellType.String);
-            }
-            catch (InvalidOperationException e)
-            {
-                if (e.Message.Equals("Cannot get a text value from a bool cell"))
-                {
-                    throw new AssertionException(
-                            "Identified bug in conversion of cell from bool to text");
-                }
-                throw e;
-            }
+            // test conversion of cell from boolean to text
+            cell.SetCellType(CellType.String);
+   
             Assert.AreEqual("TRUE", cell.RichStringCellValue.String);
+            wb.Close();
         }
         [Test]
         public void TestChangeTypeErrorToNumber()
         {
-            ICell cell = CreateACell();
-            cell.SetCellErrorValue((byte)ErrorConstants.ERROR_NAME);
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ICell cell = CreateACell(wb);
+            cell.SetCellErrorValue(FormulaError.NAME.Code);
             try
             {
                 cell.SetCellValue(2.5);
             }
             catch (InvalidCastException)
             {
-                throw new AssertionException("Identified bug 46479b");
+                Assert.Fail("Identified bug 46479b");
             }
             Assert.AreEqual(2.5, cell.NumericCellValue, 0.0);
+            wb.Close();
         }
         [Test]
         public void TestChangeTypeErrorToBoolean()
         {
-            ICell cell = CreateACell();
-            cell.SetCellErrorValue((byte)ErrorConstants.ERROR_NAME);
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ICell cell = CreateACell(wb);
+            cell.SetCellErrorValue(FormulaError.NAME.Code);
             cell.SetCellValue(true);
-            try
-            {
-                object a = cell.BooleanCellValue;
-            }
-            catch (InvalidOperationException e)
-            {
-                if (e.Message.Equals("Cannot get a bool value from a error cell"))
-                {
-
-                    throw new AssertionException("Identified bug 46479c");
-                }
-                throw e;
-            }
+            // Identify bug 46479c
             Assert.AreEqual(true, cell.BooleanCellValue);
+            wb.Close();
         }
 
         /**
@@ -513,7 +480,8 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestConvertStringFormulaCell()
         {
-            ICell cellA1 = CreateACell();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ICell cellA1 = CreateACell(wb);
             cellA1.CellFormula = ("\"abc\"");
 
             // default cached formula result is numeric zero
@@ -525,11 +493,10 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("abc", cellA1.StringCellValue);
 
             fe.EvaluateInCell(cellA1);
-            if (cellA1.StringCellValue.Equals(""))
-            {
-                throw new AssertionException("Identified bug with writing back formula result of type string");
-            }
+            Assert.IsFalse(cellA1.StringCellValue.Equals(""), "Identified bug with writing back formula result of type string");
+
             Assert.AreEqual("abc", cellA1.StringCellValue);
+            wb.Close();
         }
         /**
          * similar to {@link #testConvertStringFormulaCell()} but  Checks at a
@@ -538,7 +505,8 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestSetTypeStringOnFormulaCell()
         {
-            ICell cellA1 = CreateACell();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ICell cellA1 = CreateACell(wb);
             IFormulaEvaluator fe = cellA1.Sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
 
             cellA1.CellFormula = ("\"DEF\"");
@@ -568,9 +536,11 @@ namespace TestCases.SS.UserModel
             fe.ClearAllCachedResultValues();
             fe.EvaluateFormulaCell(cellA1);
             ConfirmCannotReadString(cellA1);
-            Assert.AreEqual(ErrorConstants.ERROR_NAME, cellA1.ErrorCellValue);
+            Assert.AreEqual(FormulaError.NAME, FormulaError.ForInt(cellA1.ErrorCellValue));
             cellA1.SetCellType(CellType.String);
             Assert.AreEqual("#NAME?", cellA1.StringCellValue);
+
+            wb.Close();
         }
 
         private static void ConfirmCannotReadString(ICell cell)
@@ -584,15 +554,15 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestChangeTypeFormulaToBoolean()
         {
-            ICell cell = CreateACell();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ICell cell = CreateACell(wb);
             cell.CellFormula = ("1=1");
             cell.SetCellValue(true);
             cell.SetCellType(CellType.Boolean);
-            if (cell.BooleanCellValue == false)
-            {
-                throw new AssertionException("Identified bug 46479d");
-            }
+            Assert.IsTrue(cell.BooleanCellValue, "Identified bug 46479d");
             Assert.AreEqual(true, cell.BooleanCellValue);
+
+            wb.Close();
         }
 
         /**
@@ -698,32 +668,32 @@ namespace TestCases.SS.UserModel
             ICell cell0 = row.CreateCell(0);
             cell0.SetCellValue(Double.NaN);
             Assert.AreEqual(CellType.Error, cell0.CellType, "Double.NaN should change cell type to CELL_TYPE_ERROR");
-            Assert.AreEqual(ErrorConstants.ERROR_NUM, cell0.ErrorCellValue, "Double.NaN should change cell value to #NUM!");
+            Assert.AreEqual(FormulaError.NUM, FormulaError.ForInt(cell0.ErrorCellValue), "Double.NaN should change cell value to #NUM!");
 
             ICell cell1 = row.CreateCell(1);
             cell1.SetCellValue(Double.PositiveInfinity);
             Assert.AreEqual(CellType.Error, cell1.CellType, "Double.PositiveInfinity should change cell type to CELL_TYPE_ERROR");
-            Assert.AreEqual(ErrorConstants.ERROR_DIV_0, cell1.ErrorCellValue, "Double.POSITIVE_INFINITY should change cell value to #DIV/0!");
+            Assert.AreEqual(FormulaError.DIV0, FormulaError.ForInt(cell1.ErrorCellValue), "Double.POSITIVE_INFINITY should change cell value to #DIV/0!");
 
             ICell cell2 = row.CreateCell(2);
             cell2.SetCellValue(Double.NegativeInfinity);
             Assert.AreEqual(CellType.Error, cell2.CellType, "Double.NegativeInfinity should change cell type to CELL_TYPE_ERROR");
-            Assert.AreEqual(ErrorConstants.ERROR_DIV_0, cell2.ErrorCellValue, "Double.NEGATIVE_INFINITY should change cell value to #DIV/0!");
+            Assert.AreEqual(FormulaError.DIV0, FormulaError.ForInt(cell2.ErrorCellValue), "Double.NEGATIVE_INFINITY should change cell value to #DIV/0!");
 
             wb = _testDataProvider.WriteOutAndReadBack(wb);
             row = wb.GetSheetAt(0).GetRow(0);
 
             cell0 = row.GetCell(0);
             Assert.AreEqual(CellType.Error, cell0.CellType);
-            Assert.AreEqual(ErrorConstants.ERROR_NUM, cell0.ErrorCellValue);
+            Assert.AreEqual(FormulaError.NUM, FormulaError.ForInt(cell0.ErrorCellValue));
 
             cell1 = row.GetCell(1);
             Assert.AreEqual(CellType.Error, cell1.CellType);
-            Assert.AreEqual(ErrorConstants.ERROR_DIV_0, cell1.ErrorCellValue);
+            Assert.AreEqual(FormulaError.DIV0, FormulaError.ForInt(cell1.ErrorCellValue));
 
             cell2 = row.GetCell(2);
             Assert.AreEqual(CellType.Error, cell2.CellType);
-            Assert.AreEqual(ErrorConstants.ERROR_DIV_0, cell2.ErrorCellValue);
+            Assert.AreEqual(FormulaError.DIV0, FormulaError.ForInt(cell2.ErrorCellValue));
         }
         [Test]
         public void TestDefaultStyleProperties()

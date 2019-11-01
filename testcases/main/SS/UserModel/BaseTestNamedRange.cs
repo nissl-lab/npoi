@@ -674,6 +674,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("1", wb.GetName("x").RefersToFormula);
             wb.RemoveName("x");
             Assert.AreEqual("2", wb.GetName("x").RefersToFormula);
+
+            wb.Close();
         }
 
     }

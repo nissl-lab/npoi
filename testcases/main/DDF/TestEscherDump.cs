@@ -25,23 +25,28 @@ namespace TestCases.DDF
     [TestFixture]
     public class TestEscherDump
     {
-
+        static NullPrinterStream nullPS;
+        [SetUp]
+        public static void Init()
+        {
+            nullPS = new NullPrinterStream();
+        }
         [Test, Ignore("Not Implemented")]
         public void TestSimple()
         {
             // simple test to at least cover some parts of the class
             //EscherDump.Main(new String[] {});
 
-            //new EscherDump().Dump(0, new byte[] { }, System.Console.Out);
-            //new EscherDump().Dump(new byte[] { }, 0, 0, System.Console.Out);
-            //new EscherDump().DumpOld(0, new MemoryStream(new byte[] { }), System.Console.Out);
+            //new EscherDump().Dump(0, new byte[] { }, nullPS);
+            //new EscherDump().Dump(new byte[] { }, 0, 0, nullPS);
+            //new EscherDump().DumpOld(0, new MemoryStream(new byte[] { }), nullPS);
         }
 
 
         [Test, Ignore("Not Implemented")]
         public void TestWithData()
         {
-            //new EscherDump().DumpOld(8, new MemoryStream(new byte[] { 00, 00, 00, 00, 00, 00, 00, 00 }), System.Console.Out);
+            //new EscherDump().DumpOld(8, new MemoryStream(new byte[] { 00, 00, 00, 00, 00, 00, 00, 00 }), nullPS);
         }
 
         [Test, Ignore("Not Implemented")]
@@ -49,7 +54,7 @@ namespace TestCases.DDF
         {
             //InputStream stream = HSSFTestDataSamples.openSampleFileStream(")
             //byte[] data = POIDataSamples.DDFInstance.readFile("Container.dat");
-            //new EscherDump().dump(data.length, data, new NullPrinterStream());
+            //new EscherDump().dump(data.length, data, nullPS);
             ////new EscherDump().dumpOld(data.length, new ByteArrayInputStream(data), System.out);
 
             //data = new byte[2586114];
@@ -73,7 +78,7 @@ namespace TestCases.DDF
          */
         private class NullPrinterStream : TextWriter
         {
-            private NullPrinterStream()
+            public NullPrinterStream()
             {
                 //super(new NullOutputStream(),true,LocaleUtil.CHARSET_1252.name());
             }

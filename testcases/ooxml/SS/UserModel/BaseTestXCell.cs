@@ -40,17 +40,19 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestXmlEncoding()
         {
-            IWorkbook wb = _testDataProvider.CreateWorkbook();
-            ISheet sh = wb.CreateSheet();
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ISheet sh = wb1.CreateSheet();
             IRow row = sh.CreateRow(0);
             ICell cell = row.CreateCell(0);
             String sval = "\u0000\u0002\u0012<>\t\n\u00a0 &\"POI\'\u2122";
             cell.SetCellValue(sval);
 
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
 
             // invalid characters are Replaced with question marks
-            Assert.AreEqual("???<>\t\n\u00a0 &\"POI\'\u2122", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+            Assert.AreEqual("???<>\t\n\u00a0 &\"POI\'\u2122", wb2.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+            wb2.Close();
         }
     }
 

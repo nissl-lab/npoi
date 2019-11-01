@@ -35,17 +35,20 @@ namespace TestCases.SS.Formula
     public class BaseTestExternalFunctions
     {
         protected ITestDataProvider _testDataProvider;
+        private String atpFile;
         public BaseTestExternalFunctions()
         {
             _testDataProvider = TestCases.HSSF.HSSFITestDataProvider.Instance;
+            
         }
-        // not used:
-        // /**
-        // * @param TestDataProvider an object that provides Test data in HSSF / XSSF specific way
-        // */
-        protected BaseTestExternalFunctions(ITestDataProvider TestDataProvider)
+
+        /**
+        * @param TestDataProvider an object that provides Test data in HSSF / XSSF specific way
+        */
+        protected BaseTestExternalFunctions(ITestDataProvider TestDataProvider, String atpFile)
         {
             _testDataProvider = TestDataProvider;
+            this.atpFile = atpFile;
         }
         [Test]
         public void TestExternalFunctions()
@@ -56,11 +59,13 @@ namespace TestCases.SS.Formula
             ISheet sh = wb.CreateSheet();
 
             ICell cell1 = sh.CreateRow(0).CreateCell(0);
-            cell1.CellFormula=("ISODD(1)+ISEVEN(2)"); // functions from the Excel Analysis Toolpack
+            // functions from the Excel Analysis Toolpack
+            cell1.CellFormula=("ISODD(1)+ISEVEN(2)"); 
             Assert.AreEqual("ISODD(1)+ISEVEN(2)", cell1.CellFormula);
 
             ICell cell2 = sh.CreateRow(1).CreateCell(0);
-            cell2.SetCellFormula("MYFUNC(\"B1\")"); //unregistered functions are parseable and renderable, but may not be evaluateable
+            //unregistered functions are parseable and renderable, but may not be evaluateable
+            cell2.SetCellFormula("MYFUNC(\"B1\")"); 
 
             try
             {
@@ -102,6 +107,7 @@ namespace TestCases.SS.Formula
             Assert.AreEqual("B1abc", Evaluator.Evaluate(cell2).StringValue);
             Assert.AreEqual("C1abc2-B1abc", Evaluator.Evaluate(cell3).StringValue);
 
+            wb.Close();
         }
 
         /**
@@ -129,6 +135,7 @@ namespace TestCases.SS.Formula
             Assert.AreEqual(true, Evaluator.Evaluate(cell3).BooleanValue);
             Assert.AreEqual(CellType.Boolean, Evaluator.EvaluateFormulaCell(cell3));
 
+            wb.Close();
         }
 
         // define two custom user-defined functions

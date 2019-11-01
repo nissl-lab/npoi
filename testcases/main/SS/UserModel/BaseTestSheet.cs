@@ -26,6 +26,7 @@ namespace TestCases.SS.UserModel
     using System.Collections;
     using NPOI.HSSF.UserModel;
     using System.Collections.Generic;
+    using NPOI.Util;
 
     /**
      * Common superclass for Testing {@link NPOI.xssf.UserModel.XSSFCell}  and
@@ -282,7 +283,7 @@ namespace TestCases.SS.UserModel
 
 
         /**
-         * Dissallow creating wholly or partially overlapping merged regions
+         * Disallow creating wholly or partially overlapping merged regions
          * as this results in a corrupted workbook
          */
         [Test]
@@ -301,9 +302,9 @@ namespace TestCases.SS.UserModel
                 Assert.Fail("Should not be able to add a merged region (" + duplicateRegion.FormatAsString() + ") " +
                  "if sheet already contains the same merged region (" + baseRegion.FormatAsString() + ")");
             }
-            catch (InvalidOperationException)
+            catch (IllegalStateException)
             {
-            } //expected
+            } 
 
             try
             {
@@ -312,9 +313,9 @@ namespace TestCases.SS.UserModel
                 Assert.Fail("Should not be able to add a merged region (" + partiallyOverlappingRegion.FormatAsString() + ") " +
                  "if it partially overlaps with an existing merged region (" + baseRegion.FormatAsString() + ")");
             }
-            catch (InvalidOperationException)
+            catch (IllegalStateException)
             {
-            } //expected
+            } 
 
             try
             {
@@ -323,9 +324,9 @@ namespace TestCases.SS.UserModel
                 Assert.Fail("Should not be able to add a merged region (" + subsetRegion.FormatAsString() + ") " +
                  "if it is a formal subset of an existing merged region (" + baseRegion.FormatAsString() + ")");
             }
-            catch (InvalidOperationException)
+            catch (IllegalStateException)
             {
-            } //expected
+            } 
 
             try
             {
@@ -334,12 +335,14 @@ namespace TestCases.SS.UserModel
                 Assert.Fail("Should not be able to add a merged region (" + supersetRegion.FormatAsString() + ") " +
                  "if it is a formal superset of an existing merged region (" + baseRegion.FormatAsString() + ")");
             }
-            catch (InvalidOperationException)
+            catch (IllegalStateException)
             {
-            } //expected
+            }
 
             CellRangeAddress disjointRegion = new CellRangeAddress(10, 11, 10, 11);
-            sheet.AddMergedRegion(disjointRegion); //allowed
+            sheet.AddMergedRegion(disjointRegion);
+
+            wb.Close();
         }
 
         /*
