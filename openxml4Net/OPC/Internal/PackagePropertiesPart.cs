@@ -6,6 +6,8 @@ using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.SS.Util;
 using System.Globalization;
+using System.Text.RegularExpressions;
+using NPOI.Util;
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {
@@ -17,7 +19,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
      */
     public class PackagePropertiesPart : PackagePart, PackageProperties
     {
-        static String NAMESPACE_DC = "http://purl.org/dc/elements/1.1/";
+        public static String NAMESPACE_DC = "http://purl.org/dc/elements/1.1/";
 
         public static String NAMESPACE_DC_URI = "http://purl.org/dc/elements/1.1/";
 
@@ -27,7 +29,23 @@ namespace NPOI.OpenXml4Net.OPC.Internal
 
         public static String NAMESPACE_XSI_URI = "http://www.w3.org/2001/XMLSchema-instance";
         private static String DEFAULT_DATEFORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-        private static String ALTERNATIVE_DATEFORMAT = "yyyy-MM-dd'T'HH:mm:ss.SS'Z'";
+        //private static String ALTERNATIVE_DATEFORMAT = "yyyy-MM-dd'T'HH:mm:ss.SS'Z'";
+        private static String[] DATE_FORMATS = new String[]{
+            DEFAULT_DATEFORMAT,
+            "yyyy-MM-dd'T'HH:mm:ss.SS'Z'",
+        };
+
+        //Had to add this and TIME_ZONE_PAT to handle tz with colons.
+        //When we move to Java 7, we should be able to add another
+        //date format to DATE_FORMATS that uses XXX and get rid of this
+        //and TIME_ZONE_PAT
+        private String[] TZ_DATE_FORMATS = new String[]{
+			"yyyy-MM-dd'T'HH:mm:ssz",
+			"yyyy-MM-dd'T'HH:mm:ss.SSSz"
+	    };
+
+        private Regex TIME_ZONE_PAT = new Regex("([-+]\\d\\d):?(\\d\\d)");
+
         /**
          * Constructor.
          * 
@@ -530,45 +548,73 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         }
 
         /**
-         * Convert a string value represented a date into a Nullable<DateTime>.
+         * Convert a string value represented a date into a DateTime?.
          * 
          * @throws InvalidFormatException
          *             Throws if the date format isnot valid.
          */
-        private Nullable<DateTime> SetDateValue(String dateStr) {
+        private DateTime? SetDateValue(String dateStr) {
             if (dateStr == null || dateStr.Equals(""))
             {
                 return new Nullable<DateTime>();
             }
-            String dateTzStr = dateStr.EndsWith("Z") ? dateStr : (dateStr + "Z");
+            Match m = TIME_ZONE_PAT.Match(dateStr);
+            String dateTzStr;
+            if (m.Success)
+            {
+                dateTzStr = dateStr.Substring(0, m.Index) +
+                        m.Groups[1].Value + m.Groups[2].Value;
+                foreach (String fStr in TZ_DATE_FORMATS)
+                {
+                    SimpleDateFormat df = new SimpleDateFormat(fStr);
+                    //df.TimeZone = (LocaleUtil.TIMEZONE_UTC);
+                    DateTime d = new SimpleDateFormat(fStr).Parse(dateTzStr);
+                    if (d != null)
+                    {
+                        return new DateTime?(d);
+                    }
+                }
+            }
+            dateTzStr = dateStr.EndsWith("Z") ? dateStr : (dateStr + "Z");
+            foreach (String fStr in DATE_FORMATS)
+            {
+                SimpleDateFormat df = new SimpleDateFormat(fStr);
+                //df.TimeZone = (LocaleUtil.TIMEZONE_UTC);
+                DateTime d = df.Parse(dateTzStr);
+                if (d != null)
+                {
+                    return new DateTime?(d);
+                }
+            }
+            //if you're here, no pattern matched, throw exception
+            StringBuilder sb = new StringBuilder();
+            int i = 0;
+            foreach (String fStr in TZ_DATE_FORMATS)
+            {
+                if (i++ > 0)
+                {
+                    sb.Append(", ");
+                }
+                sb.Append(fStr);
+            }
+            foreach (String fStr in DATE_FORMATS)
+            {
+                sb.Append(", ").Append(fStr);
+            }
+            throw new InvalidFormatException("Date " + dateStr + " not well formatted, "
+                    + "expected format in: " + sb.ToString());
 
-            SimpleDateFormat df = new SimpleDateFormat(DEFAULT_DATEFORMAT);
-            DateTime d = (DateTime)df.ParseObject(dateTzStr, 0);
-            if (d == null)
-            {
-                df = new SimpleDateFormat(ALTERNATIVE_DATEFORMAT);
-                //df.setTimeZone(LocaleUtil.TIMEZONE_UTC);
-                d = (DateTime)df.ParseObject(dateTzStr, 0);
-            }
-            if (d == null)
-            {
-                throw new InvalidFormatException("Date " + dateTzStr + " not well formated, "
-                    + "expected format " + DEFAULT_DATEFORMAT + " or " + ALTERNATIVE_DATEFORMAT);
-            }
-                
-            return new Nullable<DateTime>(d);
-            
         }
 
         /**
-         * Convert a Nullable<DateTime> into a String.
+         * Convert a DateTime? into a String.
          * 
          * @param d
          *            The Date to convert.
          * @return The formated date or null.
          * @see java.util.SimpleDateFormat
          */
-        private String GetDateValue(Nullable<DateTime> d) {
+        private String GetDateValue(DateTime? d) {
             if (d == null || d.Equals(""))
                 return "";
             else {

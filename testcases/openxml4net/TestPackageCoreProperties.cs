@@ -59,36 +59,64 @@ namespace TestCases.OPC
             // Open namespace
             OPCPackage p = OPCPackage.Open(inputPath, PackageAccess.READ_WRITE);
 
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-                DateTime dateToInsert = DateTime.Parse("2007-05-12T08:00:00Z").ToUniversalTime();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            DateTime dateToInsert = DateTime.Parse("2007-05-12T08:00:00Z").ToUniversalTime();
 
-                PackageProperties props = p.GetPackageProperties();
-                props.SetCategoryProperty("MyCategory");
-                props.SetContentStatusProperty("MyContentStatus");
-                props.SetContentTypeProperty("MyContentType");
-                props.SetCreatedProperty(new DateTime?(dateToInsert));
-                props.SetCreatorProperty("MyCreator");
-                props.SetDescriptionProperty("MyDescription");
-                props.SetIdentifierProperty("MyIdentifier");
-                props.SetKeywordsProperty("MyKeywords");
-                props.SetLanguageProperty("MyLanguage");
-                props.SetLastModifiedByProperty("Julien Chable");
-                props.SetLastPrintedProperty(new Nullable<DateTime>(dateToInsert));
-                props.SetModifiedProperty(new Nullable<DateTime>(dateToInsert));
-                props.SetRevisionProperty("2");
-                props.SetTitleProperty("MyTitle");
-                props.SetSubjectProperty("MySubject");
-                props.SetVersionProperty("2");
-                p.Revert();
+            SimpleDateFormat msdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            //msdf.TimeZone = (LocaleUtil.TIMEZONE_UTC);
+
+            PackageProperties props = p.GetPackageProperties();
+
+            //test various date formats
+            props.SetCreatedProperty("2007-05-12T08:00:00Z");
+            Assert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
+
+            props.SetCreatedProperty("2007-05-12T08:00:00"); //no Z, assume Z
+            Assert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
+
+            props.SetCreatedProperty("2007-05-12T08:00:00.123Z");//millis
+            Assert.AreEqual(msdf.Parse("2007-05-12T08:00:00.123Z"), props.GetCreatedProperty().Value);
+
+            props.SetCreatedProperty("2007-05-12T10:00:00+0200");
+            Assert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
+
+            props.SetCreatedProperty("2007-05-12T10:00:00+02:00");//colon in tz
+            Assert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
+
+            props.SetCreatedProperty("2007-05-12T06:00:00-0200");
+            Assert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
+
+            props.SetCreatedProperty("2007-05-12T10:00:00.123+0200");
+            Assert.AreEqual(msdf.Parse("2007-05-12T08:00:00.123Z"), props.GetCreatedProperty().Value);
+
+            props.SetCategoryProperty("MyCategory");
+
+            props.SetCategoryProperty("MyCategory");
+            props.SetContentStatusProperty("MyContentStatus");
+            props.SetContentTypeProperty("MyContentType");
+            //props.SetCreatedProperty(new DateTime?(dateToInsert));
+            props.SetCreatorProperty("MyCreator");
+            props.SetDescriptionProperty("MyDescription");
+            props.SetIdentifierProperty("MyIdentifier");
+            props.SetKeywordsProperty("MyKeywords");
+            props.SetLanguageProperty("MyLanguage");
+            props.SetLastModifiedByProperty("Julien Chable");
+            props.SetLastPrintedProperty(new Nullable<DateTime>(dateToInsert));
+            props.SetModifiedProperty(new Nullable<DateTime>(dateToInsert));
+            props.SetRevisionProperty("2");
+            props.SetTitleProperty("MyTitle");
+            props.SetSubjectProperty("MySubject");
+            props.SetVersionProperty("2");
+            p.Revert();
 
 
-                // Open the newly Created file to check core properties saved values.
-                OPCPackage p2 = OPCPackage.Open(outputFile.Name, PackageAccess.READ);
-        
-                    CompareProperties(p2);
-                    p2.Revert();
-        
-                outputFile.Delete();
+            // Open the newly Created file to check core properties saved values.
+            OPCPackage p2 = OPCPackage.Open(outputFile.Name, PackageAccess.READ);
+
+            CompareProperties(p2);
+            p2.Revert();
+
+            outputFile.Delete();
 
         }
 
