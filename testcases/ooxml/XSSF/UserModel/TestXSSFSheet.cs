@@ -256,56 +256,6 @@ namespace NPOI.XSSF.UserModel
             workbook.Close();
         }
 
-        /**
-         * bug 58885: checking for overlapping merged regions when
-         * adding a merged region is safe, but runs in O(n).
-         * the check for merged regions when adding a merged region
-         * can be skipped (unsafe) and run in O(1).
-         */
-        [Test]
-        public void AddMergedRegionUnsafe()
-        {
-            XSSFWorkbook wb = new XSSFWorkbook();
-            XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
-            CellRangeAddress region1 = CellRangeAddress.ValueOf("A1:B2");
-            CellRangeAddress region2 = CellRangeAddress.ValueOf("B2:C3");
-            CellRangeAddress region3 = CellRangeAddress.ValueOf("C3:D4");
-            CellRangeAddress region4 = CellRangeAddress.ValueOf("J10:K11");
-            Assume.That(region1.Intersects(region2));
-            Assume.That(region2.Intersects(region3));
-            sh.AddMergedRegionUnsafe(region1);
-            Assert.IsTrue(sh.MergedRegions.Contains(region1));
-            // adding a duplicate or overlapping merged region should not
-            // raise an exception with the unsafe version of addMergedRegion.
-
-            sh.AddMergedRegionUnsafe(region2);
-            // the safe version of addMergedRegion should throw when trying to add a merged region that overlaps an existing region
-            Assert.IsTrue(sh.MergedRegions.Contains(region2));
-            try
-            {
-                sh.AddMergedRegion(region3);
-                Assert.Fail("Expected IllegalStateException. region3 overlaps already added merged region2.");
-            }
-            catch (InvalidOperationException)
-            {
-                // expected
-                Assert.IsFalse(sh.MergedRegions.Contains(region3));
-            }
-            // addMergedRegion should not re-validate previously-added merged regions
-            sh.AddMergedRegion(region4);
-            // validation methods should detect a problem with previously added merged regions (runs in O(n^2) time)
-            try
-            {
-                sh.ValidateMergedRegions();
-                Assert.Fail("Expected validation to Assert.Fail. Sheet contains merged regions A1:B2 and B2:C3, which overlap at B2.");
-            }
-            catch (InvalidOperationException)
-            {
-                // expected
-            }
-            wb.Close();
-        }
-
 
         [Test]
         public void TestSetDefaultColumnStyle()

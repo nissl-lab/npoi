@@ -32,6 +32,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using System.Globalization;
+    using NPOI.Util;
 
 
 
@@ -629,33 +630,80 @@ namespace NPOI.HSSF.UserModel
             set { _sheet.IsGridsPrinted = (value); }
         }
 
+
+        /// <summary>
+        /// Adds a merged region of cells on a sheet.
+        /// </summary>
+        /// <param name="region">region to merge</param>
+        /// <returns>index of this region</returns>
+        /// <exception cref="ArgumentException">if region contains fewer than 2 cells</exception>
+        /// <exception cref="IllegalStateException">if region intersects with an existing merged region
+        /// or multi-cell array formula on this sheet</exception>
+        public int AddMergedRegion(CellRangeAddress region)
+        {
+            return AddMergedRegion(region, true);
+        }
+
+        /// <summary>
+        /// Adds a merged region of cells (hence those cells form one).
+        /// Skips validation. It is possible to create overlapping merged regions
+        /// or create a merged region that intersects a multi-cell array formula
+        /// with this formula, which may result in a corrupt workbook.
+        /// 
+        /// To check for merged regions overlapping array formulas or other merged regions
+        /// after addMergedRegionUnsafe has been called, call {@link #validateMergedRegions()}, which runs in O(n^2) time.
+        /// </summary>
+        /// <param name="region">region to merge</param>
+        /// <returns>index of this region</returns>
+        /// <exception cref="ArgumentException">if region contains fewer than 2 cells</exception>
+        public int AddMergedRegionUnsafe(CellRangeAddress region)
+        {
+            return AddMergedRegion(region, false);
+        }
+
+        /// <summary>
+        /// Verify that merged regions do not intersect multi-cell array formulas and
+        /// no merged regions intersect another merged region in this sheet.
+        /// </summary>
+        /// <exception cref="IllegalStateException">if region intersects with an existing merged region
+        /// or multi-cell array formula on this sheet</exception>
+        public void ValidateMergedRegions()
+        {
+            CheckForMergedRegionsIntersectingArrayFormulas();
+            CheckForIntersectingMergedRegions();
+        }
+
         /// <summary>
         /// adds a merged region of cells (hence those cells form one)
         /// </summary>
         /// <param name="region">region (rowfrom/colfrom-rowto/colto) to merge</param>
+        /// <param name="validate">whether to validate merged region</param>
         /// <returns>index of this region</returns>
         /// <exception cref="System.ArgumentException">if region contains fewer than 2 cells</exception>
         /// <exception cref="System.InvalidOperationException">if region intersects with an existing merged region
         /// or multi-cell array formula on this sheet</exception>
-        public int AddMergedRegion(CellRangeAddress region)
+        private int AddMergedRegion(CellRangeAddress region, bool validate)
         {
             if (region.NumberOfCells < 2)
             {
                 throw new ArgumentException("Merged region " + region.FormatAsString() + " must contain 2 or more cells");
             }
-            region.Validate(SpreadsheetVersion.EXCEL97);
-            // throw IllegalStateException if the argument CellRangeAddress intersects with
-            // a multi-cell array formula defined in this sheet
-            ValidateArrayFormulas(region);
-            // Throw IllegalStateException if the argument CellRangeAddress intersects with
-            // a merged region already in this sheet
-            ValidateMergedRegions(region);
-
+            if (validate)
+            {
+                region.Validate(SpreadsheetVersion.EXCEL97);
+                // throw IllegalStateException if the argument CellRangeAddress intersects with
+                // a multi-cell array formula defined in this sheet
+                ValidateArrayFormulas(region);
+                // Throw IllegalStateException if the argument CellRangeAddress intersects with
+                // a merged region already in this sheet
+                ValidateMergedRegions(region);
+            }
             return _sheet.AddMergedRegion(region.FirstRow,
                     region.FirstColumn,
                     region.LastRow,
                     region.LastColumn);
         }
+       
         private void ValidateArrayFormulas(CellRangeAddress region)
         {
             int firstRow = region.FirstRow;
@@ -689,6 +737,18 @@ namespace NPOI.HSSF.UserModel
 
         }
 
+        /// <summary>
+        /// Verify that none of the merged regions intersect a multi-cell array formula in this sheet
+        /// </summary>
+        /// <exception cref="NPOI.Util.IllegalStateException">if candidate region intersects an existing array formula in this sheet</exception>
+        private void CheckForMergedRegionsIntersectingArrayFormulas()
+        {
+            foreach (CellRangeAddress region in MergedRegions)
+            {
+                ValidateArrayFormulas(region);
+            }
+        }
+
         private void ValidateMergedRegions(CellRangeAddress candidateRegion)
         {
             foreach (CellRangeAddress existingRegion in MergedRegions)
@@ -697,6 +757,30 @@ namespace NPOI.HSSF.UserModel
                 {
                     throw new InvalidOperationException("Cannot add merged region " + candidateRegion.FormatAsString() +
                             " to sheet because it overlaps with an existing merged region (" + existingRegion.FormatAsString() + ").");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Verify that no merged regions intersect another merged region in this sheet.
+        /// </summary>
+        /// <exception cref="IllegalStateException">if at least one region intersects with another merged region in this sheet</exception>
+        private void CheckForIntersectingMergedRegions()
+        {
+            List<CellRangeAddress> regions = MergedRegions;
+            int size = regions.Count;
+            for (int i = 0; i < size; i++)
+            {
+                CellRangeAddress region = regions[i];
+                foreach (CellRangeAddress other in regions.GetRange(i + 1, regions.Count - i - 1))
+                {
+                    if (region.Intersects(other))
+                    {
+                        String msg = "The range " + region.FormatAsString() +
+                                    " intersects with another merged region " +
+                                    other.FormatAsString() + " in this sheet";
+                        throw new IllegalStateException(msg);
+                    }
                 }
             }
         }

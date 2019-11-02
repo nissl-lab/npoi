@@ -447,6 +447,32 @@ namespace NPOI.XSSF.Streaming
             return _sh.AddMergedRegion(region);
         }
 
+        /// <summary>
+        /// Adds a merged region of cells (hence those cells form one).
+        /// Skips validation.It is possible to create overlapping merged regions
+        /// or create a merged region that intersects a multi-cell array formula
+        /// with this formula, which may result in a corrupt workbook.
+        /// </summary>
+        /// <param name="region">region to merge</param>
+        /// <returns>index of this region</returns>
+        /// <exception cref="System.ArgumentException">if region contains fewer than 2 cells</exception>
+        public int AddMergedRegionUnsafe(CellRangeAddress region)
+        {
+            return _sh.AddMergedRegionUnsafe(region);
+        }
+
+        /**
+         * Verify that merged regions do not intersect multi-cell array formulas and
+         * no merged regions intersect another merged region in this sheet.
+         *
+         * @throws IllegalStateException if region intersects with a multi-cell array formula
+         * @throws IllegalStateException if at least one region intersects with another merged region in this sheet
+         */
+        public void ValidateMergedRegions() {
+            _sh.ValidateMergedRegions();
+        }
+
+
         public void AddValidationData(IDataValidation dataValidation)
         {
             _sh.AddValidationData(dataValidation);

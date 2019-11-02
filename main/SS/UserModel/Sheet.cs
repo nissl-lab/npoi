@@ -23,6 +23,7 @@ namespace NPOI.SS.UserModel
 
     using NPOI.SS.Util;
     using System.Collections;
+    using NPOI.Util;
 
     /// <summary>
     /// Indicate the position of the margin. One of left, right, top and bottom.
@@ -217,6 +218,27 @@ namespace NPOI.SS.UserModel
         /// <returns>index of this region</returns>
         int AddMergedRegion(NPOI.SS.Util.CellRangeAddress region);
 
+        /// <summary>
+        /// Adds a merged region of cells (hence those cells form one).
+        /// Skips validation. It is possible to create overlapping merged regions
+        /// or create a merged region that intersects a multi-cell array formula
+        /// with this formula, which may result in a corrupt workbook.
+        /// 
+        /// To check for merged regions overlapping array formulas or other merged regions
+        /// after addMergedRegionUnsafe has been called, call {@link #validateMergedRegions()}, which runs in O(n^2) time.
+        /// </summary>
+        /// <param name="region">region to merge</param>
+        /// <returns>index of this region</returns>
+        /// <exception cref="ArgumentException">if region contains fewer than 2 cells</exception>
+        int AddMergedRegionUnsafe(CellRangeAddress region);
+
+        /// <summary>
+        /// Verify that merged regions do not intersect multi-cell array formulas and
+        /// no merged regions intersect another merged region in this sheet.
+        /// </summary>
+        /// <exception cref="NPOI.Util.IllegalStateException">if region intersects with a multi-cell array formula</exception>
+        /// <exception cref="NPOI.Util.IllegalStateException">if at least one region intersects with another merged region in this sheet</exception>
+        void ValidateMergedRegions();
         /// <summary>
         /// Determine whether printed output for this sheet will be horizontally centered.
         /// </summary>
