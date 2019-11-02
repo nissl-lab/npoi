@@ -113,13 +113,13 @@ namespace NPOI.XSSF.Model
             SharedStringsTable sst1 = wb.GetSharedStringSource();
 
             //Serialize, read back and compare with the original
-            SharedStringsTable sst2 = ((XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb)).GetSharedStringSource();
+            SharedStringsTable sst2 = XSSFTestDataSamples.WriteOutAndReadBack(wb).GetSharedStringSource();
 
             Assert.AreEqual(sst1.Count, sst2.Count);
             Assert.AreEqual(sst1.UniqueCount, sst2.UniqueCount);
 
-            List<CT_Rst> items1 = sst1.Items;
-            List<CT_Rst> items2 = sst2.Items;
+            IList<CT_Rst> items1 = sst1.Items;
+            IList<CT_Rst> items2 = sst2.Items;
             Assert.AreEqual(items1.Count, items2.Count);
             for (int i = 0; i < items1.Count; i++)
             {

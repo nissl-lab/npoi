@@ -63,6 +63,39 @@ namespace NPOI.XWPF.UserModel
             //Assert.Fail("Position wrong");
         }
 
+        /*
+         * bug 59208
+         * Purpose: test all valid boolean-like values
+         * exercise isCTOnOff(CTOnOff) through all valid permutations
+         */
+        [Ignore("stub testCTOnOff")]
+        public void TestCTOnOff()
+        {
+            //CTRPr rpr = ctRun.addNewRPr();
+            //CTOnOff bold = rpr.addNewB();
+            //XWPFRun run = new XWPFRun(ctRun, p);
+
+            //// True values: "true", "1", "on"
+            //bold.setVal(STOnOff.TRUE);
+            //assertEquals(true, run.isBold());
+
+            //bold.setVal(STOnOff.X_1);
+            //assertEquals(true, run.isBold());
+
+            //bold.setVal(STOnOff.ON);
+            //assertEquals(true, run.isBold());
+
+            //// False values: "false", "0", "off"
+            //bold.setVal(STOnOff.FALSE);
+            //assertEquals(false, run.isBold());
+
+            //bold.setVal(STOnOff.X_0);
+            //assertEquals(false, run.isBold());
+
+            //bold.setVal(STOnOff.OFF);
+            //assertEquals(false, run.isBold());
+        }
+
         [Test]
         public void TestSetGetBold()
         {
@@ -73,6 +106,8 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(true, run.IsBold);
 
             run.IsBold = (false);
+            // Implementation detail: POI natively prefers <w:b w:val="false"/>,
+            // but should correctly read val="0" and val="off"
             Assert.AreEqual(false, run.IsBold);
             Assert.AreEqual(false, rpr.b.val);
         }

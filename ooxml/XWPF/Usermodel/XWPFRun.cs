@@ -244,6 +244,8 @@ namespace NPOI.XWPF.UserModel
         {
             if (!onoff.IsSetVal())
                 return true;
+            //CT_OnOff.val is a boolean field, and parse "1","-1","true","on" valus as true.
+            //see CT_OnOff.Parse(XmlNode, XmlNamespaceManager)
             return onoff.val;
         }
 

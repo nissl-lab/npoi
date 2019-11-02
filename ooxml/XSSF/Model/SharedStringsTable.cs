@@ -206,11 +206,11 @@ namespace NPOI.XSSF.Model
          *
          * @return array of CT_Rst beans
          */
-        public List<CT_Rst> Items
+        public IList<CT_Rst> Items
         {
             get
             {
-                return strings;
+                return strings.AsReadOnly();
             }
         }
 
