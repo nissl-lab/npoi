@@ -33,6 +33,7 @@ namespace NPOI.Util
 
     public class IOUtils
     {
+        private static POILogger logger = POILogFactory.GetLogger(typeof(IOUtils));
         /**
          * Peeks at the first 8 bytes of the stream. Returns those bytes, but
          *  with the stream unaffected. Requires a stream that supports mark/reset,
@@ -84,7 +85,7 @@ namespace NPOI.Util
             ByteArrayOutputStream baos = new ByteArrayOutputStream(length == Int32.MaxValue ? 4096 : length);
 
             byte[] buffer = new byte[4096];
-            int totalBytes = 0, readBytes = 0;
+            int totalBytes = 0, readBytes;
             do
             {
                 readBytes = stream.Read(buffer, 0, Math.Min(buffer.Length, length - totalBytes));
@@ -195,26 +196,34 @@ namespace NPOI.Util
          */
         public static void CloseQuietly(Stream closeable )
         {
+            // no need to log a NullPointerException here
+            if (closeable == null)
+            {
+                return;
+            }
             try
             {
                 closeable.Close();
             }
             catch (Exception exc)
             {
-                //logger.log(POILogger.ERROR, "Unable to close resource: " + exc,
-                //        exc);
+                logger.Log(POILogger.ERROR, "Unable to close resource: " + exc, exc);
             }
         }
         public static void CloseQuietly(IDisposable closeable)
         {
+            // no need to log a NullPointerException here
+            if (closeable == null)
+            {
+                return;
+            }
             try
             {
                 closeable.Dispose();
             }
             catch (Exception exc)
             {
-                //logger.log(POILogger.ERROR, "Unable to close resource: " + exc,
-                //        exc);
+                logger.Log(POILogger.ERROR, "Unable to close resource: " + exc, exc);
             }
         }
     }
