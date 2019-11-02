@@ -102,9 +102,9 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * A boolean value indicating if the ctColor has a tint or not
+         * A boolean value indicating if the ctColor has a alpha or not
          */
-        public bool HasTint
+        public bool HasAlpha
         {
             get
             {
@@ -113,7 +113,20 @@ namespace NPOI.XSSF.UserModel
             }
             
         }
-
+        /**
+         * A boolean value indicating if the ctColor has a tint or not
+         */
+        public bool HasTint
+        {
+            get
+            {
+                if (!ctColor.IsSetTint())
+                {
+                    return false;
+                }
+                return ctColor.tint != 0;
+            }
+        }
         public override short Index
         {
             get
