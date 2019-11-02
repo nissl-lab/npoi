@@ -1208,6 +1208,11 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             ISheet sheet = workbook.CreateSheet("TEST");
+
+            // a sheet with no cell comments should return an empty map (not null or raise NPE).
+            //assertEquals(Collections.emptyMap(), sheet.getCellComments());
+            Assert.AreEqual(0, sheet.GetCellComments().Count);
+
             IDrawing dg = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = workbook.GetCreationHelper().CreateClientAnchor();
 

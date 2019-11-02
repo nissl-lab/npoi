@@ -826,6 +826,10 @@ namespace NPOI.XSSF.UserModel
         /// <returns>return A Dictionary of each Comment in the sheet, keyed on the cell address where the comment is located.</returns>
         public Dictionary<CellAddress, IComment> GetCellComments()
         {
+            if (sheetComments == null)
+            {
+                return new Dictionary<CellAddress, IComment>();
+            }
             return sheetComments.GetCellComments();
         }
 
