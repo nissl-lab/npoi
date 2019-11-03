@@ -201,9 +201,9 @@ namespace NPOI.XWPF.UserModel
             rpr.AddNewPosition().val = "4000";
 
             XWPFRun run = new XWPFRun(ctRun, p);
-            Assert.AreEqual(4000, run.GetTextPosition());
+            Assert.AreEqual(4000, run.TextPosition);
 
-            run.SetTextPosition(2400);
+            run.TextPosition = (2400);
             Assert.AreEqual(2400, int.Parse(rpr.position.val));
         }
         [Test]
@@ -521,6 +521,43 @@ namespace NPOI.XWPF.UserModel
             }*/
             document.Close();
         }
-
+        [Test]
+        public void TestBug58922()
+        {
+            XWPFDocument document = new XWPFDocument();
+            XWPFRun run = document.CreateParagraph().CreateRun();
+            Assert.AreEqual(-1, run.FontSize);
+            run.FontSize = 10;
+            Assert.AreEqual(10, run.FontSize);
+            run.FontSize = short.MaxValue - 1;
+            Assert.AreEqual(short.MaxValue - 1, run.FontSize);
+            run.FontSize = short.MaxValue;
+            Assert.AreEqual(short.MaxValue, run.FontSize);
+            run.FontSize = short.MaxValue + 1;
+            Assert.AreEqual(short.MaxValue + 1, run.FontSize);
+            run.FontSize = int.MaxValue - 1;
+            Assert.AreEqual(int.MaxValue - 1, run.FontSize);
+            run.FontSize = int.MaxValue;
+            Assert.AreEqual(int.MaxValue, run.FontSize);
+            run.FontSize = -1;
+            Assert.AreEqual(-1, run.FontSize);
+            Assert.AreEqual(-1, run.TextPosition);
+            run.TextPosition = 10;
+            Assert.AreEqual(10, run.TextPosition);
+            run.TextPosition = short.MaxValue - 1;
+            Assert.AreEqual(short.MaxValue - 1, run.TextPosition);
+            run.TextPosition = short.MaxValue;
+            Assert.AreEqual(short.MaxValue, run.TextPosition);
+            run.TextPosition = short.MaxValue + 1;
+            Assert.AreEqual(short.MaxValue + 1, run.TextPosition);
+            run.TextPosition = short.MaxValue + 1;
+            Assert.AreEqual(short.MaxValue + 1, run.TextPosition);
+            run.TextPosition = int.MaxValue - 1;
+            Assert.AreEqual(int.MaxValue - 1, run.TextPosition);
+            run.TextPosition = int.MaxValue;
+            Assert.AreEqual(int.MaxValue, run.TextPosition);
+            run.TextPosition = -1;
+            Assert.AreEqual(-1, run.TextPosition);
+        }
     }
 }

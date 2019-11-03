@@ -920,21 +920,6 @@ namespace NPOI.XWPF.UserModel
          * lowered for this run.in relation to the default baseline of the
          * surrounding non-positioned text. This allows the text to be repositioned
          * without altering the font size of the contents.
-         *
-         * @return a big integer representing the amount of text shall be "moved"
-         */
-        public int GetTextPosition()
-        {
-            CT_RPr pr = run.rPr;
-            return (pr != null && pr.IsSetPosition()) ? int.Parse(pr.position.val)
-                    : -1;
-        }
-
-        /**
-         * This element specifies the amount by which text shall be raised or
-         * lowered for this run.in relation to the default baseline of the
-         * surrounding non-positioned text. This allows the text to be repositioned
-         * without altering the font size of the contents.
          * 
          * If the val attribute is positive, then the parent run.shall be raised
          * above the baseline of the surrounding text by the specified number of
@@ -947,13 +932,25 @@ namespace NPOI.XWPF.UserModel
          * element is never applied in the style hierarchy, then the text shall not
          * be raised or lowered relative to the default baseline location for the
          * contents of this run.
+         * 
+         * @return a big integer representing the amount of text shall be "moved"
          */
-        public void SetTextPosition(int val)
+        public int TextPosition
         {
-            CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
-            CT_SignedHpsMeasure position = pr.IsSetPosition() ? pr.position : pr.AddNewPosition();
-            position.val = (val.ToString());
+            get
+            {
+                CT_RPr pr = run.rPr;
+                return (pr != null && pr.IsSetPosition()) ? int.Parse(pr.position.val)
+                        : -1;
+            }
+            set
+            {
+                CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
+                CT_SignedHpsMeasure position = pr.IsSetPosition() ? pr.position : pr.AddNewPosition();
+                position.val = (value.ToString());
+            }
         }
+
 
         /**
          * 
