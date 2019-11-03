@@ -703,7 +703,15 @@ namespace TestCases.OPC
             // OLE2 - Stream
             try
             {
-                OPCPackage.Open(files.OpenResourceAsStream("SampleSS.xls"));
+                Stream stream = files.OpenResourceAsStream("SampleSS.xls");
+                try
+                {
+                    OPCPackage.Open(stream);
+                }
+                finally
+                {
+                    stream.Dispose();//.Close();
+                }
                 Assert.Fail("Shouldn't be able to open OLE2");
             }
             catch (OLE2NotOfficeXmlFileException e)
@@ -726,7 +734,15 @@ namespace TestCases.OPC
             // Raw XML - Stream
             try
             {
-                OPCPackage.Open(files.OpenResourceAsStream("SampleSS.xml"));
+                Stream stream = files.OpenResourceAsStream("SampleSS.xml");
+                try
+                {
+                    OPCPackage.Open(stream);
+                }
+                finally
+                {
+                    stream.Dispose();//.Close();
+                }
                 Assert.Fail("Shouldn't be able to open XML");
             }
             catch (NotOfficeXmlFileException e)
@@ -749,7 +765,15 @@ namespace TestCases.OPC
             // ODF / ODS - Stream
             try
             {
-                OPCPackage.Open(files.OpenResourceAsStream("SampleSS.ods"));
+                Stream stream = files.OpenResourceAsStream("SampleSS.ods");
+                try
+                {
+                    OPCPackage.Open(stream);
+                }
+                finally
+                {
+                    stream.Dispose();//.Close();
+                }
                 Assert.Fail("Shouldn't be able to open ODS");
             }
             catch (ODFNotOfficeXmlFileException e)
@@ -772,7 +796,15 @@ namespace TestCases.OPC
             // Plain Text - Stream
             try
             {
-                OPCPackage.Open(files.OpenResourceAsStream("SampleSS.txt"));
+                Stream stream = files.OpenResourceAsStream("SampleSS.txt");
+                try
+                {
+                    OPCPackage.Open(stream);
+                }
+                finally
+                {
+                    stream.Dispose();//.Close();
+                }
                 Assert.Fail("Shouldn't be able to open Plain Text");
             }
             catch (NotOfficeXmlFileException e)

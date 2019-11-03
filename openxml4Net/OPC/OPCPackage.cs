@@ -209,12 +209,40 @@ namespace NPOI.OpenXml4Net.OPC
                 throw new ArgumentException("file must not be a directory");
 
             OPCPackage pack = new ZipPackage(file, access);
-            if (pack.partList == null && access != PackageAccess.WRITE)
+            
+            try
             {
-                pack.GetParts();
+                if (pack.partList == null && access != PackageAccess.WRITE)
+                {
+                    pack.GetParts();
+                }
+                pack.originalPackagePath = file.FullName;
+                return pack;
             }
-            pack.originalPackagePath = file.FullName;
-            return pack;
+            catch (InvalidFormatException e)
+            {
+                try
+                {
+                    pack.Close();
+                }
+                catch (IOException)
+                {
+                    throw new IllegalStateException(e);
+                }
+                throw e;
+            }
+            catch (RuntimeException e)
+            {
+                try
+                {
+                    pack.Close();
+                }
+                catch (IOException)
+                {
+                    throw new IllegalStateException(e);
+                }
+                throw e;
+            }
         }
         /**
          * Open a package.

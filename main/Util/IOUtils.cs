@@ -210,7 +210,7 @@ namespace NPOI.Util
                 logger.Log(POILogger.ERROR, "Unable to close resource: " + exc, exc);
             }
         }
-        public static void CloseQuietly(IDisposable closeable)
+        public static void CloseQuietly(ICloseable closeable)
         {
             // no need to log a NullPointerException here
             if (closeable == null)
@@ -219,7 +219,7 @@ namespace NPOI.Util
             }
             try
             {
-                closeable.Dispose();
+                closeable.Close();
             }
             catch (Exception exc)
             {

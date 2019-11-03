@@ -39,7 +39,7 @@ namespace NPOI.POIFS.FileSystem
      * This is the new NIO version
      */
 
-    public class NPOIFSFileSystem : BlockStore, POIFSViewable //, Closeable Leon
+    public class NPOIFSFileSystem : BlockStore, POIFSViewable , ICloseable
     {
         private static POILogger _logger =
                 POILogFactory.GetLogger(typeof(NPOIFSFileSystem));

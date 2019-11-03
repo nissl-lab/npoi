@@ -40,6 +40,11 @@ namespace NPOI.HSSF.Extractor
     public class OldExcelExtractor
     {
         private RecordInputStream ris;
+
+        // sometimes we hold the stream here and thus need to ensure it is closed at some point
+        private ICloseable toClose;
+        private Stream toCloseStream;
+
         private int biffVersion;
         private int fileType;
 
@@ -53,6 +58,7 @@ namespace NPOI.HSSF.Extractor
             try
             {
                 poifs = new NPOIFSFileSystem(f);
+                toClose = poifs;
                 Open(poifs);
                 return;
             }
@@ -79,6 +85,13 @@ namespace NPOI.HSSF.Extractor
                 Open(biffStream);
             }
             catch (IOException e)
+            {
+                // ensure that the stream is properly closed here if an Exception
+                // is thrown while opening
+                biffStream.Close();
+                throw e;
+            }
+            catch (RuntimeException e)
             {
                 // ensure that the stream is properly closed here if an Exception
                 // is thrown while opening
@@ -116,6 +129,7 @@ namespace NPOI.HSSF.Extractor
             else
             {
                 ris = new RecordInputStream(bis);
+                toCloseStream = bis;
                 Prepare();
             }
         }
@@ -312,6 +326,17 @@ namespace NPOI.HSSF.Extractor
 
         public void Close()
         {
+            // some cases require this close here
+            if (toClose != null)
+            {
+                IOUtils.CloseQuietly(toClose);
+                toClose = null;
+            }
+            if (toCloseStream != null)
+            {
+                IOUtils.CloseQuietly(toCloseStream);
+                toClose = null;
+            }
         }
     }
 
