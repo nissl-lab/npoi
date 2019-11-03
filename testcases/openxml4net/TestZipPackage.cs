@@ -194,7 +194,12 @@ namespace NPOI.OpenXml4Net.OPC
                 //ExtractorFactory.setThreadPrefersEventExtractors(before);
             }
         }
-
+        [Test, Ignore("SlideShow not implemented")]
+        public void UnparseableCentralDirectory() {
+            FileInfo f = OpenXml4NetTestDataSamples.GetSampleFile("at.pzp.www_uploads_media_PP_Scheinecker-jdk6error.pptx");
+            //SlideShow<?,?> ppt = SlideShowFactory.create(f);
+            //ppt.close();
+        }
     }
 
 }

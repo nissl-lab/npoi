@@ -772,7 +772,7 @@ namespace TestCases.OPC
                 OPCPackage.Open(files.GetFile("SampleSS.txt"));
                 Assert.Fail("Shouldn't be able to open Plain Text");
             }
-            catch (InvalidOperationException e)
+            catch (UnsupportedFileFormatException)
             {
                 // Unhelpful low-level error, sorry
             }

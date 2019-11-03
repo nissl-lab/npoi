@@ -71,21 +71,8 @@ namespace NPOI.OpenXml4Net.OPC
          *            The package access mode.
          */
         public ZipPackage(String path, PackageAccess access)
-            : base(access)
+            : this(new FileInfo(path), access)
         {
-            ZipFile zipFile = null;
-
-            try
-            {
-                zipFile = ZipHelper.OpenZipFile(path);
-            }
-            catch (IOException e)
-            {
-                throw new InvalidOperationException(
-                      "Can't open the specified file: '" + path + "'", e);
-            }
-
-            this.zipArchive = new ZipFileZipEntrySource(zipFile);
         }
 
         /**
@@ -99,21 +86,37 @@ namespace NPOI.OpenXml4Net.OPC
         public ZipPackage(FileInfo file, PackageAccess access)
             : base(access)
         {
-
-
-            ZipFile zipFile = null;
-
+            ZipEntrySource ze;
             try
             {
-                zipFile = ZipHelper.OpenZipFile(file);
+                ZipFile zipFile = ZipHelper.OpenZipFile(file);
+                ze = new ZipFileZipEntrySource(zipFile);
             }
             catch (IOException e)
             {
-                throw new InvalidOperationException(
-                      "Can't open the specified file: '" + file + "'", e);
+                // probably not happening with write access - not sure how to handle the default read-write access ...
+                if (access == PackageAccess.WRITE)
+                {
+                    throw new InvalidOperationException("Can't open the specified file: '" + file + "'", e);
+                }
+                logger.Log(POILogger.ERROR, "Error in zip file " + file + " - falling back to stream processing (i.e. ignoring zip central directory)");
+                // some zips can't be opened via ZipFile in JDK6, as the central directory
+                // contains either non-latin entries or the compression type can't be handled
+                // the workaround is to iterate over the stream and not the directory
+                FileStream fis;
+                try
+                {
+                    fis = file.Create();
+                    //ThresholdInputStream zis = ZipHelper.OpenZipStream(fis);
+                    ZipInputStream zis = ZipHelper.OpenZipStream(fis);
+                    ze = new ZipInputStreamZipEntrySource(zis);
+                }
+                catch (IOException e2)
+                {
+                    throw new InvalidOperationException("Can't open the specified file: '" + file + "'", e2);
+                }
             }
-
-            this.zipArchive = new ZipFileZipEntrySource(zipFile);
+            this.zipArchive = ze;
         }
 
         /**

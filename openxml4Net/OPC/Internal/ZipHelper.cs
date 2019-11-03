@@ -221,8 +221,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
 
         //    // Open as a proper zip stream
         //    InputStream zis = new ZipInputStream(checkedStream);
-        //    ThresholdInputStream tis = ZipSecureFile.addThreshold(zis);
-        //    return tis;
+        //    return ZipSecureFile.addThreshold(zis);
         //}
 
         public static ZipInputStream OpenZipStream(Stream stream)
@@ -263,8 +262,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          */
         public static ZipFile OpenZipFile(String path)
         {
-            FileInfo f = new FileInfo(path);
-            return OpenZipFile(f);
+            return OpenZipFile(new FileInfo(path));
         }
 
     }
