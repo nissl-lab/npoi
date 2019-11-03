@@ -553,21 +553,46 @@ namespace NPOI.XSSF.UserModel
         /**
          * Create an XSSFSheet from an existing sheet in the XSSFWorkbook.
          *  The Cloned sheet is a deep copy of the original.
-         *
+         *  
+         * @param sheetNum The index of the sheet to clone
          * @return XSSFSheet representing the Cloned sheet.
          * @throws ArgumentException if the sheet index in invalid
          * @throws POIXMLException if there were errors when cloning
          */
         public ISheet CloneSheet(int sheetNum)
         {
+            return CloneSheet(sheetNum, null);
+        }
+
+        /**
+         * Create an XSSFSheet from an existing sheet in the XSSFWorkbook.
+         *  The cloned sheet is a deep copy of the original but with a new given
+         *  name.
+         *
+         * @param sheetNum The index of the sheet to clone
+         * @param newName The name to set for the newly created sheet
+         * @return XSSFSheet representing the cloned sheet.
+         * @throws IllegalArgumentException if the sheet index or the sheet
+         *         name is invalid
+         * @throws POIXMLException if there were errors when cloning
+         */
+        public XSSFSheet CloneSheet(int sheetNum, String newName)
+        {
             ValidateSheetIndex(sheetNum);
 
             XSSFSheet srcSheet = sheets[sheetNum];
             //return srcSheet.CopySheet(srcSheet.SheetName);
-            String srcName = srcSheet.SheetName;
-            String clonedName = GetUniqueSheetName(srcName);
+            if (newName == null)
+            {
+                String srcName = srcSheet.SheetName;
+                newName = GetUniqueSheetName(srcName);
+            }
+            else
+            {
+                ValidateSheetName(newName);
+            }
 
-            XSSFSheet clonedSheet = CreateSheet(clonedName) as XSSFSheet;
+            XSSFSheet clonedSheet = CreateSheet(newName) as XSSFSheet;
 
             // copy sheet's relations
             List<RelationPart> rels = srcSheet.RelationParts;
@@ -822,9 +847,8 @@ namespace NPOI.XSSF.UserModel
             {
                 throw new ArgumentException("sheetName must not be null");
             }
-
-            if (ContainsSheet(sheetname, sheets.Count))
-                throw new ArgumentException("The workbook already contains a sheet of this name");
+            ValidateSheetName(sheetname);
+            
 
             // YK: Mimic Excel and silently tRuncate sheet names longer than 31 characters
             if (sheetname.Length > 31) sheetname = sheetname.Substring(0, 31);
@@ -871,7 +895,11 @@ namespace NPOI.XSSF.UserModel
             sheets.Add(wrapper);
             return wrapper;
         }
-
+        private void ValidateSheetName(String sheetName)
+        {
+            if (ContainsSheet(sheetName, sheets.Count))
+                throw new ArgumentException("The workbook already contains a sheet of this name");
+        }
         protected XSSFDialogsheet CreateDialogsheet(String sheetname, CT_Dialogsheet dialogsheet)
         {
             XSSFSheet sheet = CreateSheet(sheetname) as XSSFSheet;

@@ -170,7 +170,7 @@ namespace TestCases.SS.UserModel
             catch (ArgumentException e)
             {
                 // expected during successful Test
-                Assert.AreEqual("The workbook already contains a sheet of this name", e.Message);
+                Assert.AreEqual("The workbook already contains a sheet named 'sHeeT3'", e.Message);
             }
 
             //names cannot be blank or contain any of /\*?[]
@@ -281,7 +281,7 @@ namespace TestCases.SS.UserModel
             catch (ArgumentException e)
             {
                 // expected during successful Test
-                Assert.AreEqual("The workbook already contains a sheet of this name", e.Message);
+                Assert.AreEqual("The workbook already contains a sheet named 'My very long sheet name which is longer than 31 chars and sheetName2.substring(0, 31) == sheetName1.substring(0, 31)'", e.Message);
             }
 
             String sheetName3 = "POI allows creating sheets with names longer than 31 characters";
@@ -934,6 +934,66 @@ namespace TestCases.SS.UserModel
             CollectionAssert.AreEqual(before, after,
                 filename + " sample file was modified as a result of closing the workbook");
         }
+
+        [Test]
+        public void SheetClone()
+        {
+            // First up, try a simple file
+            IWorkbook b = _testDataProvider.CreateWorkbook();
+            Assert.AreEqual(0, b.NumberOfSheets);
+            b.CreateSheet("Sheet One");
+            b.CreateSheet("Sheet Two");
+            Assert.AreEqual(2, b.NumberOfSheets);
+            b.CloneSheet(0);
+            Assert.AreEqual(3, b.NumberOfSheets);
+            // Now try a problem one with drawing records in it
+            IWorkbook bBack = HSSFTestDataSamples.OpenSampleWorkbook("SheetWithDrawing.xls");
+            Assert.AreEqual(1, bBack.NumberOfSheets);
+            bBack.CloneSheet(0);
+            Assert.AreEqual(2, bBack.NumberOfSheets);
+            bBack.Close();
+            b.Close();
+        }
+        [Test]
+        public void GetSheetIndex()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet1 = wb.CreateSheet("Sheet1");
+            ISheet sheet2 = wb.CreateSheet("Sheet2");
+            ISheet sheet3 = wb.CreateSheet("Sheet3");
+            ISheet sheet4 = wb.CreateSheet("Sheet4");
+            Assert.AreEqual(0, wb.GetSheetIndex(sheet1));
+            Assert.AreEqual(1, wb.GetSheetIndex(sheet2));
+            Assert.AreEqual(2, wb.GetSheetIndex(sheet3));
+            Assert.AreEqual(3, wb.GetSheetIndex(sheet4));
+            // remove sheets
+            wb.RemoveSheetAt(0);
+            wb.RemoveSheetAt(2);
+            // ensure that sheets are moved up and removed sheets are not found any more
+            Assert.AreEqual(-1, wb.GetSheetIndex(sheet1));
+            Assert.AreEqual(0, wb.GetSheetIndex(sheet2));
+            Assert.AreEqual(1, wb.GetSheetIndex(sheet3));
+            Assert.AreEqual(-1, wb.GetSheetIndex(sheet4));
+            wb.Close();
+        }
+        [Test]
+        public void AddSheetTwice()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet1 = wb.CreateSheet("Sheet1");
+            Assert.IsNotNull(sheet1);
+            try
+            {
+                wb.CreateSheet("Sheet1");
+                Assert.Fail("Should Assert.Fail if we add the same sheet twice");
+            }
+            catch (ArgumentException e)
+            {
+                Assert.IsTrue(e.Message.Contains("already contains a sheet named 'Sheet1'"), e.Message);
+            }
+            wb.Close();
+        }
+
     }
 
 }

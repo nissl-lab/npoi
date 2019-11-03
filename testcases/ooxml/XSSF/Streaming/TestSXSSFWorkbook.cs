@@ -27,6 +27,7 @@ namespace NPOI.XSSF.Streaming
     using NPOI.SS;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
+    using NPOI.Util;
     using NPOI.XSSF;
     using NPOI.XSSF.Model;
     using NPOI.XSSF.UserModel;
@@ -63,12 +64,24 @@ namespace NPOI.XSSF.Streaming
                 base.CloneSheet();
                 Assert.Fail("expected exception");
             }
-            catch (Exception e)
+            catch (RuntimeException e)
             {
                 Assert.AreEqual("NotImplemented", e.Message);
             }
         }
-
+        [Test]
+        public new void SheetClone()
+        {
+            try
+            {
+                base.SheetClone();
+                Assert.Fail("expected exception");
+            }
+            catch (RuntimeException e)
+            {
+                Assert.AreEqual("NotImplemented", e.Message);
+            }
+        }
         /**
          * Skip this test, as SXSSF doesn't update formulas on sheet name
          *  Changes.

@@ -1079,7 +1079,7 @@ namespace TestCases.HSSF.UserModel
             }
             catch (ArgumentException e)
             {
-                Assert.AreEqual("The workbook already contains a sheet of this name", e.Message);
+                Assert.AreEqual("The workbook already contains a sheet named 'A123456789B123456789C123456789Dyyyy'", e.Message);
             }
             wb.CreateSheet(SAME_PREFIX + "Exxxx"); // OK - differs in the 31st char
 

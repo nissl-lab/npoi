@@ -148,9 +148,8 @@ namespace NPOI.HSSF.UserModel
             {
                 int result = 0;
                 int nRecs = _list.Count;
-                for (int i = 0; i < nRecs; i++)
+                foreach (Record rec in _list)
                 {
-                    Record rec = (Record)_list[i];
                     result += rec.Serialize(offset + result, data);
                 }
                 return result;
@@ -202,7 +201,7 @@ namespace NPOI.HSSF.UserModel
         /**
          * Given a POI POIFSFileSystem object, read in its Workbook along
          *  with all related nodes, and populate the high and low level models.
-         * <p>This calls {@link #HSSFWorkbook(POIFSFileSystem, boolean)} with
+         * This calls {@link #HSSFWorkbook(POIFSFileSystem, boolean)} with
          *  preserve nodes set to true. 
          * 
          * @see #HSSFWorkbook(POIFSFileSystem, boolean)
@@ -232,11 +231,8 @@ namespace NPOI.HSSF.UserModel
 
         private static String GetWorkbookDirEntryName(DirectoryNode directory)
         {
-
-            String[] potentialNames = InternalWorkbook.WORKBOOK_DIR_ENTRY_NAMES;
-            for (int i = 0; i < potentialNames.Length; i++)
+            foreach (String wbName in InternalWorkbook.WORKBOOK_DIR_ENTRY_NAMES)
             {
-                String wbName = potentialNames[i];
                 try
                 {
                     directory.GetEntry(wbName);
@@ -557,17 +553,17 @@ namespace NPOI.HSSF.UserModel
         public void SetSelectedTabs(int[] indexes)
         {
 
-            for (int i = 0; i < indexes.Length; i++)
+            foreach (int index in indexes)
             {
-                ValidateSheetIndex(indexes[i]);
+                ValidateSheetIndex(index);
             }
             int nSheets = _sheets.Count;
             for (int i = 0; i < nSheets; i++)
             {
                 bool bSelect = false;
-                for (int j = 0; j < indexes.Length; j++)
+                foreach (int index in indexes)
                 {
-                    if (indexes[j] == i)
+                    if (index == i)
                     {
                         bSelect = true;
                         break;
@@ -614,7 +610,10 @@ namespace NPOI.HSSF.UserModel
 
         /// <summary>
         /// Gets or sets the first tab that is displayed in the list of tabs
-        /// in excel.
+        /// in excel. This method does <b>not</b> hide, select or focus sheets.
+        /// It just sets the scroll position in the tab-bar.
+        /// 
+        /// @param index the sheet index of the tab that will become the first in the tab-bar
         /// </summary>
         public int FirstVisibleTab
         {
@@ -653,7 +652,7 @@ namespace NPOI.HSSF.UserModel
 
             if (workbook.ContainsSheetName(name, sheetIx))
             {
-                throw new ArgumentException("The workbook already contains a sheet with this name");
+                throw new ArgumentException("The workbook already contains a sheet named '" + name + "'");
             }
             ValidateSheetIndex(sheetIx);
             workbook.SetSheetName(sheetIx, name);
@@ -871,7 +870,7 @@ namespace NPOI.HSSF.UserModel
             }
 
             if (workbook.ContainsSheetName(sheetname, _sheets.Count))
-                throw new ArgumentException("The workbook already contains a sheet of this name");
+                throw new ArgumentException("The workbook already contains a sheet named '" + sheetname + "'");
 
             HSSFSheet sheet = new HSSFSheet(this);
 
@@ -1009,15 +1008,13 @@ namespace NPOI.HSSF.UserModel
             {
                 BackupRecord backupRecord = workbook.BackupRecord;
 
-                return (backupRecord.Backup == 0) ? false
-                        : true;
+                return backupRecord.Backup != 0;
             }
             set
             {
                 BackupRecord backupRecord = workbook.BackupRecord;
 
-                backupRecord.Backup = (value ? (short)1
-                        : (short)0);
+                backupRecord.Backup = (value ? (short)1 : (short)0);
             }
         }
 
@@ -1205,7 +1202,7 @@ namespace NPOI.HSSF.UserModel
         /// Create a new Cell style and Add it to the workbook's style table
         /// </summary>
         /// <returns>the new Cell Style object</returns>
-        public NPOI.SS.UserModel.ICellStyle CreateCellStyle()
+        public ICellStyle CreateCellStyle()
         {
             if (workbook.NumExFormats == MAX_STYLES)
             {
@@ -1214,9 +1211,7 @@ namespace NPOI.HSSF.UserModel
             }
             ExtendedFormatRecord xfr = workbook.CreateCellXF();
             short index = (short)(NumCellStyles - 1);
-            HSSFCellStyle style = new HSSFCellStyle(index, xfr, this);
-
-            return style;
+            return new HSSFCellStyle(index, xfr, this);
         }
 
         /// <summary>
@@ -1237,12 +1232,10 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="idx">index within the Set of styles</param>
         /// <returns>HSSFCellStyle object at the index</returns>
-        public NPOI.SS.UserModel.ICellStyle GetCellStyleAt(int idx)
+        public ICellStyle GetCellStyleAt(int idx)
         {
             ExtendedFormatRecord xfr = workbook.GetExFormatAt(idx);
-            HSSFCellStyle style = new HSSFCellStyle((short)idx, xfr, this);
-
-            return style;
+            return new HSSFCellStyle((short)idx, xfr, this);
         }
 
         /**
@@ -1349,10 +1342,10 @@ namespace NPOI.HSSF.UserModel
             // before Getting the workbook size we must tell the sheets that
             // serialization Is about to occur.
             workbook.PreSerialize();
-            for (int i = 0; i < nSheets; i++)
+            foreach (HSSFSheet sheet in sheets)
             {
-                sheets[i].Sheet.Preserialize();
-                sheets[i].PreSerialize();
+                sheet.Sheet.Preserialize();
+                sheet.PreSerialize();
             }
 
             int totalsize = workbook.Size;
@@ -1447,11 +1440,10 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                int result = names.Count;
-                return result;
+                return names.Count;
             }
         }
-        public NPOI.SS.UserModel.IName GetName(String name)
+        public IName GetName(String name)
         {
             int nameIndex = GetNameIndex(name);
             if (nameIndex < 0)
@@ -1478,7 +1470,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="nameIndex">position of the named range</param>
         /// <returns>named range high level</returns>
-        public NPOI.SS.UserModel.IName GetNameAt(int nameIndex)
+        public IName GetNameAt(int nameIndex)
         {
             int nNames = names.Count;
             if (nNames < 1)
@@ -1502,9 +1494,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>named range name</returns>
         public String GetNameName(int index)
         {
-            String result = GetNameAt(index).NameName;
-
-            return result;
+            return GetNameAt(index).NameName;
         }
         public NameRecord GetNameRecord(int nameIndex)
         {
@@ -1742,9 +1732,8 @@ namespace NPOI.HSSF.UserModel
             r.Decode();
             IList escherRecords = r.EscherRecords;
 
-            for (IEnumerator iterator = escherRecords.GetEnumerator(); iterator.MoveNext(); )
+            foreach (EscherRecord escherRecord in escherRecords)
             {
-                EscherRecord escherRecord = (EscherRecord)iterator.Current;
                 if (fat)
                     Console.WriteLine(escherRecord.ToString());
                 else
@@ -1871,14 +1860,11 @@ namespace NPOI.HSSF.UserModel
         {
             // The drawing Group record always exists at the top level, so we won't need to do this recursively.
             List<HSSFPictureData> pictures = new List<HSSFPictureData>();
-            IEnumerator recordIter = workbook.Records.GetEnumerator();
-            while (recordIter.MoveNext())
+            foreach (Record r in workbook.Records)
             {
-                Object obj = recordIter.Current;
-                if (obj is AbstractEscherHolderRecord)
-                {
-                    ((AbstractEscherHolderRecord)obj).Decode();
-                    IList escherRecords = ((AbstractEscherHolderRecord)obj).EscherRecords;
+                if (r is AbstractEscherHolderRecord) {
+                    ((AbstractEscherHolderRecord)r).Decode();
+                    IList escherRecords = ((AbstractEscherHolderRecord)r).EscherRecords;
                     SearchForPictures(escherRecords, pictures);
                 }
             }

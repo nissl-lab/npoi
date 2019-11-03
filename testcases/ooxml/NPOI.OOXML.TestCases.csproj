@@ -161,6 +161,7 @@
     <Compile Include="XSSF\Streaming\TestSXSSFWorkbook.cs" />
     <Compile Include="XSSF\SXSSFITestDataProvider.cs" />
     <Compile Include="XSSF\TestSheetProtection.cs" />
+    <Compile Include="XSSF\TestXSSFCloneSheet.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFCategoryAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFChartAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFChartLegend.cs" />
