@@ -288,31 +288,50 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestToString()
         {
-            IWorkbook wb = _testDataProvider.CreateWorkbook();
-            IRow r = wb.CreateSheet("Sheet1").CreateRow(0);
-            ICreationHelper factory = wb.GetCreationHelper();
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            IRow r = wb1.CreateSheet("Sheet1").CreateRow(0);
+            ICreationHelper factory = wb1.GetCreationHelper();
 
             r.CreateCell(0).SetCellValue(true);
             r.CreateCell(1).SetCellValue(1.5);
             r.CreateCell(2).SetCellValue(factory.CreateRichTextString("Astring"));
             r.CreateCell(3).SetCellErrorValue(FormulaError.DIV0.Code);
             r.CreateCell(4).CellFormula = ("A1+B1");
+            r.CreateCell(5); // blank
+
+            // create date-formatted cell
+            DateTime c = new DateTime(2010, 01, 02, 00, 00, 00);
+            r.CreateCell(6).SetCellValue(c);
+            ICellStyle dateStyle = wb1.CreateCellStyle();
+            short formatId = wb1.GetCreationHelper().CreateDataFormat().GetFormat("m/d/yy h:mm"); // any date format will do
+            dateStyle.DataFormat = formatId;
+            r.GetCell(6).CellStyle = dateStyle;
 
             Assert.AreEqual("TRUE", r.GetCell(0).ToString(), "Boolean");
             Assert.AreEqual("1.5", r.GetCell(1).ToString(), "Numeric");
             Assert.AreEqual("Astring", r.GetCell(2).ToString(), "String");
             Assert.AreEqual("#DIV/0!", r.GetCell(3).ToString(), "Error");
             Assert.AreEqual("A1+B1", r.GetCell(4).ToString(), "Formula");
+            Assert.AreEqual("", r.GetCell(5).ToString(), "Blank");
+            // toString on a date-formatted cell displays dates as dd-MMM-yyyy, which has locale problems with the month
+            String dateCell1 = r.GetCell(6).ToString();
+            Assert.IsTrue(dateCell1.StartsWith("02-"), "Date (Day)");
+            Assert.IsTrue(dateCell1.EndsWith("-2010"), "Date (Year)");
 
             //Write out the file, read it in, and then check cell values
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
 
-            r = wb.GetSheetAt(0).GetRow(0);
+            r = wb2.GetSheetAt(0).GetRow(0);
             Assert.AreEqual("TRUE", r.GetCell(0).ToString(), "Boolean");
             Assert.AreEqual("1.5", r.GetCell(1).ToString(), "Numeric");
             Assert.AreEqual("Astring", r.GetCell(2).ToString(), "String");
             Assert.AreEqual("#DIV/0!", r.GetCell(3).ToString(), "Error");
             Assert.AreEqual("A1+B1", r.GetCell(4).ToString(), "Formula");
+            Assert.AreEqual("", r.GetCell(5).ToString(), "Blank");
+            String dateCell2 = r.GetCell(6).ToString();
+            Assert.AreEqual(dateCell1, dateCell2, "Date");
+            wb2.Close();
         }
 
         /**
