@@ -319,9 +319,11 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(true, cs.GetCoreXf().applyFill);
 
             XSSFCellFill fg = wb.GetStylesSource().GetFillAt(2);
+            Assert.IsNotNull(fg.GetFillForegroundColor());
             Assert.AreEqual(0, fg.GetFillForegroundColor().Indexed);
             Assert.AreEqual(0.0, fg.GetFillForegroundColor().Tint);
             Assert.AreEqual("FFFF0000", fg.GetFillForegroundColor().ARGBHex);
+            Assert.IsNotNull(fg.GetFillBackgroundColor());
             Assert.AreEqual(64, fg.GetFillBackgroundColor().Indexed);
 
             // Now look higher up
@@ -1491,7 +1493,9 @@ namespace NPOI.XSSF.UserModel
          *  eg =SUM($Sheet1.C1:$Sheet4.C1)
          * DISABLED As we can't currently Evaluate these
          */
-        public void DISABLEDtest48703()
+         [Ignore("by poi")]
+         [Test]
+        public void Test48703()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("48703.xlsx");
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
@@ -1810,16 +1814,14 @@ namespace NPOI.XSSF.UserModel
 
             saveAndReloadReport(wb, xlsOutput);
 
-            IRow newRow = null;
-            ICell newCell = null;
             // 2) attempt to create a new row IN PLACE of a Removed row by a negative shift causes corrupted
             // xlsx file with  unreadable data in the negative Shifted row.
             // NOTE it's ok to create any other row.
-            newRow = testSheet.CreateRow(3);
+            IRow newRow = testSheet.CreateRow(3);
 
             saveAndReloadReport(wb, xlsOutput);
 
-            newCell = newRow.CreateCell(0);
+            ICell newCell = newRow.CreateCell(0);
 
             saveAndReloadReport(wb, xlsOutput);
 
@@ -2414,14 +2416,7 @@ namespace NPOI.XSSF.UserModel
                 //saveWorkbook(wb, fileName);
 
                 XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-                try
-                {
-
-                }
-                finally
-                {
-                    wbBack.Close();
-                }
+                wbBack.Close();
             }
             finally
             {
@@ -2441,14 +2436,7 @@ namespace NPOI.XSSF.UserModel
                 //saveWorkbook(wb, fileName);
 
                 XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-                try
-                {
-
-                }
-                finally
-                {
-                    wbBack.Close();
-                }
+                wbBack.Close();
             }
             finally
             {
@@ -3227,6 +3215,45 @@ namespace NPOI.XSSF.UserModel
         {
             CreateXls();
             CreateXlsx();
+        }
+        [Test]
+        public void Test59132()
+        {
+            IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("59132.xlsx");
+            ISheet worksheet = workbook.GetSheet("sheet1");
+            // B3
+            IRow row = worksheet.GetRow(2);
+            ICell cell = row.GetCell(1);
+            cell.SetCellValue((String)null);
+            IFormulaEvaluator evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
+            // B3
+            row = worksheet.GetRow(2);
+            cell = row.GetCell(1);
+            Assert.AreEqual(CellType.Blank, cell.CellType);
+            Assert.AreEqual(-1, evaluator.EvaluateFormulaCell(cell));
+            // A3
+            row = worksheet.GetRow(2);
+            cell = row.GetCell(0);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual("IF(ISBLANK(B3),\"\",B3)", cell.CellFormula);
+            Assert.AreEqual(CellType.String, evaluator.EvaluateFormulaCell(cell));
+            CellValue value = evaluator.Evaluate(cell);
+            Assert.AreEqual("", value.StringValue);
+            // A5
+            row = worksheet.GetRow(4);
+            cell = row.GetCell(0);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual("COUNTBLANK(A1:A4)", cell.CellFormula);
+            Assert.AreEqual(CellType.Numeric, evaluator.EvaluateFormulaCell(cell));
+            value = evaluator.Evaluate(cell);
+            Assert.AreEqual(1.0, value.NumberValue, 0.1);
+            /*FileOutputStream output = new FileOutputStream("C:\\temp\\59132.xlsx");
+            try {
+                workbook.write(output);
+            } finally {
+                output.close();
+            }*/
+            workbook.Close();
         }
 
     }
