@@ -77,7 +77,7 @@ namespace NPOI.XSSF.UserModel
 
 
 
-        public CT_PivotCacheDefinition GetCTPivotCacheDefInition()
+        public CT_PivotCacheDefinition GetCTPivotCacheDefinition()
         {
             return ctPivotCacheDefinition;
         }
@@ -103,6 +103,20 @@ namespace NPOI.XSSF.UserModel
             //Sets the pivotCacheDefInition tag
             //xmlOptions.SetSaveSyntheticDocumentElement(new QName(CTPivotCacheDefInition.type.Name.
             //         GetNamespaceURI(), "pivotCacheDefInition"));
+
+            //// ensure the fields have names
+            //if (ctPivotCacheDefinition.cacheFields != null)
+            //{
+            //    CT_CacheFields cFields = ctPivotCacheDefinition.cacheFields;
+            //    foreach (CT_CacheField cf in cFields.cacheField)
+            //    {
+            //        if (cf.name == null || cf.name.Equals(""))
+            //        {
+            //            cf.name = "A";
+            //        }
+            //    }
+            //}
+
             ctPivotCacheDefinition.Save(out1);
             out1.Close();
         }
@@ -142,7 +156,8 @@ namespace NPOI.XSSF.UserModel
                 cf.numFmtId = (/*setter*/0);
                 ICell cell = row.GetCell(i);
                 cell.SetCellType(CellType.String);
-                cf.name = (/*setter*/row.GetCell(i).StringCellValue);
+                String stringCellValue = cell.StringCellValue;
+                cf.name = stringCellValue;
                 cf.AddNewSharedItems();
             }
         }

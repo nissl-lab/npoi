@@ -32,6 +32,32 @@ using NPOI.XSSF.UserModel;
 
 namespace NPOI.XSSF.Streaming
 {
+    /**
+     * Streaming version of XSSFWorkbook implementing the "BigGridDemo" strategy.
+     *
+     * This allows to write very large files without running out of memory as only
+     * a configurable portion of the rows are kept in memory at any one time.
+     *
+     * You can provide a template workbook which is used as basis for the written
+     * data.
+     *
+     * See https://poi.apache.org/spreadsheet/how-to.html#sxssf for details.
+     *
+     * Please note that there are still things that still may consume a large
+     * amount of memory based on which features you are using, e.g. merged regions,
+     * comments, ... are still only stored in memory and thus may require a lot of
+     * memory if used extensively.
+     *
+     * SXSSFWorkbook defaults to using inline strings instead of a shared strings
+     * table. This is very efficient, since no document content needs to be kept in
+     * memory, but is also known to produce documents that are incompatible with
+     * some clients. With shared strings enabled all unique strings in the document
+     * has to be kept in memory. Depending on your document content this could use
+     * a lot more resources than with shared strings disabled.
+     *
+     * Carefully review your memory budget and compatibility needs before deciding
+     * whether to enable shared strings or not.
+     */
     /// <summary>
     /// Streaming version of the XSSFWorkbook, originally implemented in the "BigGridDemo".
     /// </summary>
@@ -48,6 +74,11 @@ namespace NPOI.XSSF.Streaming
 
         private int _randomAccessWindowSize = DEFAULT_WINDOW_SIZE;
 
+        /**
+        * See the constructors for a more detailed description of the sliding window of rows.
+        *
+        * @return The number of rows that are kept in memory at once before flushing them out.
+        */
         public int RandomAccessWindowSize
         {
             get { return _randomAccessWindowSize; }
@@ -120,33 +151,152 @@ namespace NPOI.XSSF.Streaming
 
 
         #region Constructors
+        /**
+         * Construct an empty workbook and specify the window for row access.
+         * <p>
+         * When a new node is created via createRow() and the total number
+         * of unflushed records would exceed the specified value, then the
+         * row with the lowest index value is flushed and cannot be accessed
+         * via getRow() anymore.
+         * </p>
+         * <p>
+         * A value of -1 indicates unlimited access. In this case all
+         * records that have not been flushed by a call to flush() are available
+         * for random access.
+         * <p>
+         * <p></p>
+         * A value of 0 is not allowed because it would flush any newly created row
+         * without having a chance to specify any cells.
+         * </p>
+         *
+         * @param rowAccessWindowSize the number of rows that are kept in memory until flushed out, see above.
+         */
         public SXSSFWorkbook(int rowAccessWindowSize)
             : this(null /*workbook*/, rowAccessWindowSize)
         {
             
         }
+        /// <summary>
+        /// Construct a new workbook with default row window size
+        /// </summary>
         public SXSSFWorkbook() : this(null)
         {
 
         }
-
-        public SXSSFWorkbook(XSSFWorkbook workbook) : this(workbook, DEFAULT_WINDOW_SIZE)
+        /**
+         * Construct a workbook from a template.
+         * <p>
+         * There are three use-cases to use SXSSFWorkbook(XSSFWorkbook) :
+         * <ol>
+         *   <li>
+         *       Append new sheets to existing workbooks. You can open existing
+         *       workbook from a file or create on the fly with XSSF.
+         *   </li>
+         *   <li>
+         *       Append rows to existing sheets. The row number MUST be greater
+         *       than max(rownum) in the template sheet.
+         *   </li>
+         *   <li>
+         *       Use existing workbook as a template and re-use global objects such
+         *       as cell styles, formats, images, etc.
+         *   </li>
+         * </ol>
+         * All three use cases can work in a combination.
+         * </p>
+         * What is not supported:
+         * <ul>
+         *   <li>
+         *   Access initial cells and rows in the template. After constructing
+         *   SXSSFWorkbook(XSSFWorkbook) all internal windows are empty and
+         *   SXSSFSheet@getRow and SXSSFRow#getCell return null.
+         *   </li>
+         *   <li>
+         *    Override existing cells and rows. The API silently allows that but
+         *    the output file is invalid and Excel cannot read it.
+         *   </li>
+         * </ul>
+         *
+         * @param workbook  the template workbook
+         */
+        public SXSSFWorkbook(XSSFWorkbook workbook) 
+            : this(workbook, DEFAULT_WINDOW_SIZE)
         {
 
         }
-
+        /**
+         * Constructs an workbook from an existing workbook.
+         * <p>
+         * When a new node is created via createRow() and the total number
+         * of unflushed records would exceed the specified value, then the
+         * row with the lowest index value is flushed and cannot be accessed
+         * via getRow() anymore.
+         * </p>
+         * <p>
+         * A value of -1 indicates unlimited access. In this case all
+         * records that have not been flushed by a call to flush() are available
+         * for random access.
+         * <p>
+         * <p></p>
+         * A value of 0 is not allowed because it would flush any newly created row
+         * without having a chance to specify any cells.
+         * </p>
+         *
+         * @param rowAccessWindowSize the number of rows that are kept in memory until flushed out, see above.
+         */
         public SXSSFWorkbook(XSSFWorkbook workbook, int rowAccessWindowSize)
             : this(workbook, rowAccessWindowSize, false)
         {
 
         }
-
+        /**
+         * Constructs an workbook from an existing workbook.
+         * <p>
+         * When a new node is created via createRow() and the total number
+         * of unflushed records would exceed the specified value, then the
+         * row with the lowest index value is flushed and cannot be accessed
+         * via getRow() anymore.
+         * </p>
+         * <p>
+         * A value of -1 indicates unlimited access. In this case all
+         * records that have not been flushed by a call to flush() are available
+         * for random access.
+         * <p>
+         * <p></p>
+         * A value of 0 is not allowed because it would flush any newly created row
+         * without having a chance to specify any cells.
+         * </p>
+         *
+         * @param rowAccessWindowSize the number of rows that are kept in memory until flushed out, see above.
+         * @param compressTmpFiles whether to use gzip compression for temporary files
+         */
         public SXSSFWorkbook(XSSFWorkbook workbook, int rowAccessWindowSize, bool compressTmpFiles)
             : this(workbook, rowAccessWindowSize, compressTmpFiles, false)
         {
 
         }
-
+        /**
+         * Constructs an workbook from an existing workbook.
+         * <p>
+         * When a new node is created via createRow() and the total number
+         * of unflushed records would exceed the specified value, then the
+         * row with the lowest index value is flushed and cannot be accessed
+         * via getRow() anymore.
+         * </p>
+         * <p>
+         * A value of -1 indicates unlimited access. In this case all
+         * records that have not been flushed by a call to flush() are available
+         * for random access.
+         * <p>
+         * <p></p>
+         * A value of 0 is not allowed because it would flush any newly created row
+         * without having a chance to specify any cells.
+         * </p>
+         *
+         * @param workbook  the template workbook
+         * @param rowAccessWindowSize the number of rows that are kept in memory until flushed out, see above.
+         * @param compressTmpFiles whether to use gzip compression for temporary files
+         * @param useSharedStringsTable whether to use a shared strings table
+         */
         /// <summary>
         /// Currently only supports writing not reading. E.g. the number of rows returned from a worksheet will be wrong etc.
         /// </summary>

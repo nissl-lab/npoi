@@ -4958,7 +4958,7 @@ namespace NPOI.XSSF.UserModel
                     CreateRelationship(XSSFRelation.PIVOT_CACHE_RECORDS, XSSFFactory.GetInstance(), tableId);
 
             //Set relationships id for pivotCacheDefInition to pivotCacheRecords
-            pivotTable.GetPivotCacheDefinition().GetCTPivotCacheDefInition().id = (/*setter*/pivotCacheDefinition.GetRelationId(pivotCacheRecords));
+            pivotTable.GetPivotCacheDefinition().GetCTPivotCacheDefinition().id = (/*setter*/pivotCacheDefinition.GetRelationId(pivotCacheRecords));
 
             wb.PivotTables = (/*setter*/pivotTables);
 

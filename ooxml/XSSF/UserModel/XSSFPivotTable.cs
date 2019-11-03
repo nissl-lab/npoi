@@ -218,7 +218,7 @@ namespace NPOI.XSSF.UserModel
         protected AreaReference GetPivotArea()
         {
             AreaReference pivotArea = new AreaReference(GetPivotCacheDefinition().
-                    GetCTPivotCacheDefInition().cacheSource.worksheetSource.@ref);
+                    GetCTPivotCacheDefinition().cacheSource.worksheetSource.@ref);
             return pivotArea;
         }
 
@@ -468,7 +468,7 @@ namespace NPOI.XSSF.UserModel
             pivotTableDefinition.location = (/*setter*/location);
 
             //Set source for the pivot table
-            CT_PivotCacheDefinition cacheDef = GetPivotCacheDefinition().GetCTPivotCacheDefInition();
+            CT_PivotCacheDefinition cacheDef = GetPivotCacheDefinition().GetCTPivotCacheDefinition();
             CT_CacheSource cacheSource = cacheDef.AddNewCacheSource();
             cacheSource.type = (/*setter*/ST_SourceType.worksheet);
             CT_WorksheetSource worksheetSource = cacheSource.AddNewWorksheetSource();
