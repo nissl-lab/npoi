@@ -2119,7 +2119,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(0xff, rotated.CellStyle.Rotation);
             Assert.AreEqual(0xff, nc.CellStyle.Rotation);
         }
-        
+
         /**
          * Regression with the PageSettingsBlock
          */
@@ -3329,15 +3329,19 @@ namespace TestCases.HSSF.UserModel
             wb.Close();
         }
         [Test]
-        public void Test57925() {
+        public void Test57925()
+        {
             IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("57925.xls");
 
             wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
 
-            for (int i = 0; i < wb.NumberOfSheets; i++) {
+            for (int i = 0; i < wb.NumberOfSheets; i++)
+            {
                 ISheet sheet = wb.GetSheetAt(i);
-                foreach (IRow row in sheet) {
-                    foreach (ICell cell in row) {
+                foreach (IRow row in sheet)
+                {
+                    foreach (ICell cell in row)
+                    {
                         new DataFormatter().FormatCellValue(cell);
                     }
                 }
@@ -3414,5 +3418,13 @@ namespace TestCases.HSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Test55982()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("55982.xls");
+            ISheet newSheet = wb.CloneSheet(1);
+            Assert.IsNotNull(newSheet);
+            wb.Close();
+        }
     }
 }

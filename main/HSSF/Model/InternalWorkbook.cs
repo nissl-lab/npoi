@@ -919,9 +919,17 @@ namespace NPOI.HSSF.Model
         /// make the tabid record look like the current situation.
         /// </summary>
         /// <returns>number of bytes written in the TabIdRecord</returns>
-        private int FixTabIdRecord()
+        private void FixTabIdRecord()
         {
-            TabIdRecord tir = (TabIdRecord)records[records.Tabpos];
+            // see bug 55982, quite a number of documents do not have a TabIdRecord and
+            // thus there is no way to do the fixup here,
+            // we use the same check on Tabpos as done in other places
+            if (records.Tabpos <= 0)
+            {
+                return;
+            }
+            Record rec = records[records.Tabpos];
+            TabIdRecord tir = (TabIdRecord)rec;
             int sz = tir.RecordSize;
             short[] tia = new short[boundsheets.Count];
 
@@ -930,7 +938,6 @@ namespace NPOI.HSSF.Model
                 tia[k] = k;
             }
             tir.SetTabIdArray(tia);
-            return tir.RecordSize - sz;
         }
 
         /**
