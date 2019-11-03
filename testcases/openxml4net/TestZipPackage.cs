@@ -197,7 +197,7 @@ namespace NPOI.OpenXml4Net.OPC
         [Test, Ignore("SlideShow not implemented")]
         public void UnparseableCentralDirectory() {
             FileInfo f = OpenXml4NetTestDataSamples.GetSampleFile("at.pzp.www_uploads_media_PP_Scheinecker-jdk6error.pptx");
-            //SlideShow<?,?> ppt = SlideShowFactory.create(f);
+            //SlideShow<?,?> ppt = SlideShowFactory.create(f, null, true);
             //ppt.close();
         }
     }

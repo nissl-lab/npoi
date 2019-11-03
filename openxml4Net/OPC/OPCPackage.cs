@@ -386,8 +386,8 @@ namespace NPOI.OpenXml4Net.OPC
         {
             if (this.packageAccess == PackageAccess.READ)
             {
-                logger
-                        .Log(POILogger.WARN, "The close() method is intended to SAVE a package. This package is open in READ ONLY mode, use the revert() method instead !");
+                logger.Log(POILogger.WARN, 
+                    "The close() method is intended to SAVE a package. This package is open in READ ONLY mode, use the revert() method instead !");
                 Revert();
                 return;
             }
@@ -395,6 +395,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 logger.Log(POILogger.WARN,
                         "Unable to call close() on a package that hasn't been fully opened yet");
+                Revert();
                 return;
             }
             // Save the content

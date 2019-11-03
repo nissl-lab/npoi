@@ -246,10 +246,17 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             {
                 return null;
             }
+            // TODO: ZipSecureFile
             //// Peek at the first few bytes to sanity check
             //FileInputStream input = new FileInputStream(file);
-            //VerifyZipHeader(input);
-            //input.close();
+            //try
+            //{
+            //    verifyZipHeader(input);
+            //}
+            //finally
+            //{
+            //    input.close();
+            //}
 
             //// Open as a proper zip file
             //return new ZipSecureFile(file);
