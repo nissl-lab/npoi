@@ -483,6 +483,34 @@ namespace NPOI.XSSF.Streaming
         {
             verifySpreadsheetVersion(SpreadsheetVersion.EXCEL2007);
         }
+
+        [Test]
+        public void closeDoesNotModifyWorkbook()
+        {
+            String filename = "SampleSS.xlsx";
+            FileInfo file = POIDataSamples.GetSpreadSheetInstance().GetFileInfo(filename);
+            SXSSFWorkbook wb;
+
+            // Some tests commented out because close() modifies the file
+            // See bug 58779
+
+            // String
+            //wb = new SXSSFWorkbook(new XSSFWorkbook(file.Path));
+            //assertCloseDoesNotModifyFile(filename, wb);
+
+            // File
+            //wb = new SXSSFWorkbook(new XSSFWorkbook(file));
+            //assertCloseDoesNotModifyFile(filename, wb);
+
+            // InputStream
+            wb = new SXSSFWorkbook(new XSSFWorkbook(file.Create()));
+            assertCloseDoesNotModifyFile(filename, wb);
+
+            // OPCPackage
+            //wb = new SXSSFWorkbook(new XSSFWorkbook(OPCPackage.open(file)));
+            //assertCloseDoesNotModifyFile(filename, wb);
+        }
+
     }
 
 }

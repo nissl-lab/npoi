@@ -1257,15 +1257,15 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("ASheet!A1", wb.GetName(nameName).RefersToFormula);
 
             HSSFWorkbook wb2 = new HSSFWorkbook(new ByteArrayInputStream(stream.ToArray()));
-            expectName(wb2, nameName, "ASheet!A1");
+            ExpectName(wb2, nameName, "ASheet!A1");
             HSSFWorkbook wb3 = new HSSFWorkbook(new ByteArrayInputStream(stream2.ToArray()));
-            expectName(wb3, nameName, "ASheet!A1");
+            ExpectName(wb3, nameName, "ASheet!A1");
             wb3.Close();
             wb2.Close();
             wb.Close();
         }
 
-        private void expectName(HSSFWorkbook wb, String name, String expect)
+        private void ExpectName(HSSFWorkbook wb, String name, String expect)
         {
             Assert.AreEqual(expect, wb.GetName(name).RefersToFormula);
         }
@@ -1328,7 +1328,7 @@ namespace TestCases.HSSF.UserModel
                     IRow row = sheet.CreateRow(1);
                     row.CreateCell(1).SetCellValue("bar");
 
-                    writeAndCloseWorkbook(workbook, file);
+                    WriteAndCloseWorkbook(workbook, file);
                 }
 
                 // edit the workbook
@@ -1341,7 +1341,7 @@ namespace TestCases.HSSF.UserModel
                         ISheet sheet = workbook.GetSheet("foo");
                         sheet.GetRow(1).CreateCell(2).SetCellValue("baz");
 
-                        writeAndCloseWorkbook(workbook, file);
+                        WriteAndCloseWorkbook(workbook, file);
                     }
                     finally
                     {
@@ -1357,7 +1357,7 @@ namespace TestCases.HSSF.UserModel
             }
         }
 
-        private void writeAndCloseWorkbook(IWorkbook workbook, FileInfo file)
+        private void WriteAndCloseWorkbook(IWorkbook workbook, FileInfo file)
         {
             ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
             workbook.Write(bytesOut);
@@ -1377,6 +1377,26 @@ namespace TestCases.HSSF.UserModel
         public override void GetSpreadsheetVersion()
         {
             verifySpreadsheetVersion(SpreadsheetVersion.EXCEL97);
+        }
+
+        [Test]
+        public void CloseDoesNotModifyWorkbook()
+        {
+            String filename = "SampleSS.xls";
+            FileInfo file = POIDataSamples.GetSpreadSheetInstance().GetFileInfo(filename);
+            IWorkbook wb;
+
+            // File via POIFileStream (java.io)
+            wb = new HSSFWorkbook(new POIFSFileSystem(file));
+            assertCloseDoesNotModifyFile(filename, wb);
+
+            // File via NPOIFileStream (java.nio)
+            wb = new HSSFWorkbook(new NPOIFSFileSystem(file));
+            assertCloseDoesNotModifyFile(filename, wb);
+
+            // InputStream
+            wb = new HSSFWorkbook(file.Create());
+            assertCloseDoesNotModifyFile(filename, wb);
         }
     }
 }

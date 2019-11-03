@@ -27,6 +27,7 @@ namespace TestCases.SS.UserModel
     using System.IO;
     using NPOI.Util;
     using NPOI.SS;
+    using TestCases.HSSF;
 
     /**
      * @author Yegor Kozlov
@@ -924,6 +925,14 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             Assert.AreEqual(expected, wb.SpreadsheetVersion);
             wb.Close();
+        }
+
+        protected static void assertCloseDoesNotModifyFile(String filename, IWorkbook wb) {
+            byte[] before = HSSFTestDataSamples.GetTestDataFileContent(filename);
+            wb.Close();
+            byte[] after = HSSFTestDataSamples.GetTestDataFileContent(filename);
+            CollectionAssert.AreEqual(before, after,
+                filename + " sample file was modified as a result of closing the workbook");
         }
     }
 

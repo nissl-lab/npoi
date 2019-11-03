@@ -165,9 +165,9 @@ namespace NPOI.XSSF.UserModel
             }
             finally
             {
-               
+
             }
-            
+
         }
         [Test]
         public void GetFontAt()
@@ -192,7 +192,7 @@ namespace NPOI.XSSF.UserModel
             {
                 workbook.Close();
             }
-            
+
         }
         [Test]
         public void GetNumCellStyles()
@@ -292,7 +292,7 @@ namespace NPOI.XSSF.UserModel
                 XSSFWorkbook wbBack = XSSFTestDataSamples.OpenSampleWorkbook("47089.xlsm");
                 try
                 {
-                    int lastSheetId = (int)(wbBack.GetSheetAt(wbBack.NumberOfSheets - 1)  as XSSFSheet).sheet.sheetId;
+                    int lastSheetId = (int)(wbBack.GetSheetAt(wbBack.NumberOfSheets - 1) as XSSFSheet).sheet.sheetId;
                     sheetId = (int)(wbBack.CreateSheet() as XSSFSheet).sheet.sheetId;
                     Assert.AreEqual(lastSheetId + 1, sheetId);
                 }
@@ -753,7 +753,7 @@ namespace NPOI.XSSF.UserModel
             {
                 workbook.Close();
             }
-            
+
         }
 
         private static int INDEX_NOT_FOUND = -1;
@@ -834,7 +834,7 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void LoadWorkbookWithPivotTable()
         {
-            String fileName = Path.Combine(TestContext.CurrentContext.TestDirectory,"ooxml-pivottable.xlsx");
+            String fileName = Path.Combine(TestContext.CurrentContext.TestDirectory, "ooxml-pivottable.xlsx");
 
             XSSFWorkbook wb = new XSSFWorkbook();
             SetPivotData(wb);
@@ -919,7 +919,7 @@ namespace NPOI.XSSF.UserModel
             {
                 allBytes[i] = (byte)(i - 128);
             }
-            
+
             XSSFWorkbook wb1 = new XSSFWorkbook();
             wb1.CreateSheet();
             wb1.SetVBAProject(new ByteArrayInputStream(allBytes));
@@ -929,7 +929,7 @@ namespace NPOI.XSSF.UserModel
             out1.Close();
             wb1.Close();
 
-            
+
             // Check the package contains what we'd expect it to
             OPCPackage pkg = OPCPackage.Open(file);
             PackagePart wbPart = pkg.GetPart(PackagingUriHelper.CreatePartName("/xl/workbook.xml"));
@@ -984,7 +984,7 @@ namespace NPOI.XSSF.UserModel
         public void Bug58245_XSSFSheetIterator()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
-            
+
             wb.CreateSheet();
 
             // =====================================================================
@@ -1093,6 +1093,32 @@ namespace NPOI.XSSF.UserModel
         public override void GetSpreadsheetVersion()
         {
             verifySpreadsheetVersion(SpreadsheetVersion.EXCEL2007);
+        }
+        [Test]
+        public void CloseDoesNotModifyWorkbook()
+        {
+            String filename = "SampleSS.xlsx";
+            FileInfo file = POIDataSamples.GetSpreadSheetInstance().GetFileInfo(filename);
+            IWorkbook wb;
+
+            // Some tests commented out because close() modifies the file
+            // See bug 58779
+
+            // String
+            //wb = new XSSFWorkbook(file.Path);
+            //assertCloseDoesNotModifyFile(filename, wb);
+
+            // File
+            //wb = new XSSFWorkbook(file);
+            //assertCloseDoesNotModifyFile(filename, wb);
+
+            // InputStream
+            wb = new XSSFWorkbook(file.Create());
+            assertCloseDoesNotModifyFile(filename, wb);
+
+            // OPCPackage
+            //wb = new XSSFWorkbook(OPCPackage.open(file));
+            //assertCloseDoesNotModifyFile(filename, wb);
         }
 
     }
