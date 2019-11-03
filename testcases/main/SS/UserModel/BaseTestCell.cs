@@ -273,7 +273,7 @@ namespace TestCases.SS.UserModel
             r = s.GetRow(0);
             c = r.GetCell(0);
 
-            Assert.IsTrue((c.CellType == CellType.Formula), "Formula Cell at 0,0");
+            Assert.AreEqual(c.CellType, CellType.Formula, "Formula Cell at 0,0");
             cs = c.CellStyle;
 
             Assert.IsNotNull(cs, "Formula Cell Style");

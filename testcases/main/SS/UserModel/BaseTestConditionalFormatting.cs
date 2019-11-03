@@ -1072,6 +1072,33 @@ namespace TestCases.SS.UserModel
 
             workbook.Close();
         }
+
+        [Test]
+        public void TestAllCreateBorderFormatting()
+        {
+            // Make sure it is possible to create a conditional formatting rule
+            // with every type of Border Style
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            ISheetConditionalFormatting sheetCF = sheet.SheetConditionalFormatting;
+            IConditionalFormattingRule rule1 = sheetCF.CreateConditionalFormattingRule(ComparisonOperator.Equal, "7");
+            IBorderFormatting borderFmt = rule1.CreateBorderFormatting();
+            foreach (BorderStyle border in BorderStyleEnum.Values())
+            {
+                borderFmt.BorderTop = border;
+                Assert.AreEqual(border, borderFmt.BorderTop);
+                borderFmt.BorderBottom = border;
+                Assert.AreEqual(border, borderFmt.BorderBottom);
+                borderFmt.BorderLeft = border;
+                Assert.AreEqual(border, borderFmt.BorderLeft);
+                borderFmt.BorderRight = border;
+                Assert.AreEqual(border, borderFmt.BorderRight);
+                borderFmt.BorderDiagonal = border;
+                Assert.AreEqual(border, borderFmt.BorderDiagonal);
+            }
+            workbook.Close();
+        }
+
         [Test]
         public void TestCreateBorderFormatting()
         {

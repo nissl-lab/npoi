@@ -262,6 +262,9 @@ namespace NPOI.XSSF.UserModel
             return HorizontalAlignment.General;
         }
 
+        /// <summary>
+        /// Get or set the type of border to use for the bottom border of the cell
+        /// </summary>
         public BorderStyle BorderBottom
         {
             get
@@ -295,7 +298,9 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-
+        /// <summary>
+        /// Get or set the type of border to use for the left border of the cell
+        /// </summary>
         public BorderStyle BorderLeft
         {
             get
@@ -329,7 +334,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Get the type of border to use for the right border of the cell
+        /// Get or set the type of border to use for the right border of the cell
         /// </summary>
         public BorderStyle BorderRight
         {
@@ -362,6 +367,9 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// Get or set the type of border to use for the top border of the cell
+        /// </summary>
         public BorderStyle BorderTop
         {
             get

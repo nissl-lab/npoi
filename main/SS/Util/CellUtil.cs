@@ -365,11 +365,10 @@ namespace NPOI.SS.Util
         {
             Dictionary<String, Object> properties = new Dictionary<String, Object>();
             PutShort(properties, ALIGNMENT, (short)style.Alignment);
-            PutShort(properties, BORDER_BOTTOM, (short)style.BorderBottom);
-            PutShort(properties, BORDER_DIAGONAL, (short)style.BorderDiagonal);
-            PutShort(properties, BORDER_LEFT, (short)style.BorderLeft);
-            PutShort(properties, BORDER_RIGHT, (short)style.BorderRight);
-            PutShort(properties, BORDER_TOP, (short)style.BorderTop);
+            PutBorderStyle(properties, BORDER_BOTTOM, style.BorderBottom);
+            PutBorderStyle(properties, BORDER_LEFT, style.BorderLeft);
+            PutBorderStyle(properties, BORDER_RIGHT, style.BorderRight);
+            PutBorderStyle(properties, BORDER_TOP, style.BorderTop);
             PutShort(properties, BOTTOM_BORDER_COLOR, style.BottomBorderColor);
             PutShort(properties, DATA_FORMAT, style.DataFormat);
             PutShort(properties, DIAGONAL_BORDER_COLOR, style.BorderDiagonalColor);
@@ -402,13 +401,10 @@ namespace NPOI.SS.Util
         private static void SetFormatProperties(ICellStyle style, IWorkbook workbook, Dictionary<String, Object> properties)
         {
             style.Alignment = (HorizontalAlignment)GetShort(properties, ALIGNMENT);
-            style.BorderBottom = (BorderStyle)GetShort(properties, BORDER_BOTTOM);
-            style.BorderDiagonalColor = GetShort(properties, DIAGONAL_BORDER_COLOR);
-            style.BorderDiagonal = (BorderDiagonal)GetShort(properties, BORDER_DIAGONAL);
-            style.BorderDiagonalLineStyle = (BorderStyle)GetShort(properties, DIAGONAL_BORDER_LINE_STYLE);
-            style.BorderLeft = (BorderStyle)GetShort(properties, BORDER_LEFT);
-            style.BorderRight = (BorderStyle)GetShort(properties, BORDER_RIGHT);
-            style.BorderTop = (BorderStyle)GetShort(properties, BORDER_TOP);
+            style.BorderBottom = GetBorderStyle(properties, BORDER_BOTTOM);
+            style.BorderLeft = GetBorderStyle(properties, BORDER_LEFT);
+            style.BorderRight = GetBorderStyle(properties, BORDER_RIGHT);
+            style.BorderTop = GetBorderStyle(properties, BORDER_TOP);
             style.BottomBorderColor = GetShort(properties, BOTTOM_BORDER_COLOR);
             style.DataFormat =GetShort(properties, DATA_FORMAT);
             style.FillBackgroundColor = GetShort(properties, FILL_BACKGROUND_COLOR);
@@ -442,7 +438,19 @@ namespace NPOI.SS.Util
                 return result;
             return 0;
         }
-
+        /**
+	     * Utility method that returns the named BorderStyle value form the given map.
+	     *
+	     * @param properties map of named properties (String -> Object)
+	     * @param name property name
+	     * @return Border style if set, otherwise {@link BorderStyle#NONE}
+	     */
+        private static BorderStyle GetBorderStyle(Dictionary<String, Object> properties, String name)
+        {
+            BorderStyle value = (BorderStyle)properties[name];
+            return value;
+            //return (value != null) ? value : BorderStyle.NONE;
+        }
         /**
          * Utility method that returns the named boolean value form the given map.
          *
@@ -474,7 +482,20 @@ namespace NPOI.SS.Util
             else
                 properties.Add(name, value);
         }
-
+        /**
+       * Utility method that puts the named short value to the given map.
+       *
+       * @param properties map of properties (String -> Object)
+       * @param name property name
+       * @param value property value
+       */
+        private static void PutBorderStyle(Dictionary<String, Object> properties, String name, BorderStyle border)
+        {
+            if (properties.ContainsKey(name))
+                properties[name] = border;
+            else
+                properties.Add(name, border);
+        }
         /**
          * Utility method that puts the named boolean value to the given map.
          *

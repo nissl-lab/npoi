@@ -126,6 +126,7 @@
     <Compile Include="SS\TestWorkbookFactory.cs" />
     <Compile Include="SS\UserModel\BaseTestXCell.cs" />
     <Compile Include="SS\UserModel\TestFormulaParser.cs" />
+    <Compile Include="SS\UserModel\TestXSSFBorderStyle.cs" />
     <Compile Include="TestDetectAsOOXML.cs" />
     <Compile Include="TestEmbeded.cs" />
     <Compile Include="TestPOIXMLDocument.cs" />

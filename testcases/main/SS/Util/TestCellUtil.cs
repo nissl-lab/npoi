@@ -43,13 +43,13 @@ namespace NPOI.SS.Util
             int styCnt1 = wb.NumCellStyles;
             CellUtil.SetCellStyleProperty(c, wb, CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
             int styCnt2 = wb.NumCellStyles;
-            Assert.AreEqual(styCnt2, styCnt1 + 1);
+            Assert.AreEqual(styCnt1 + 1, styCnt2);
 
             // Add same border to another cell, should not create another style
             c = r.CreateCell(1);
             CellUtil.SetCellStyleProperty(c, wb, CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
             int styCnt3 = wb.NumCellStyles;
-            Assert.AreEqual(styCnt3, styCnt2);
+            Assert.AreEqual(styCnt2, styCnt3);
 
             wb.Close();
         }
