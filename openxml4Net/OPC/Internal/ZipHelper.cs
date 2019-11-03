@@ -206,6 +206,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             }
             return new PushbackInputStream(stream, 8);
         }
+        // TODO: ZipSecureFile
         /**
          * Opens the specified stream as a secure zip
          *
@@ -226,6 +227,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
 
         public static ZipInputStream OpenZipStream(Stream stream)
         {
+            // TODO: ZipSecureFile
             //InputStream zis = new ZipInputStream(stream);
             //ThresholdInputStream tis = ZipSecureFile.AddThreshold(zis);
             //return tis;

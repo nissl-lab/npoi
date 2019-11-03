@@ -58,6 +58,7 @@ namespace NPOI.OpenXml4Net.OPC
         {
             isStream = true;
             ZipInputStream zis = ZipHelper.OpenZipStream(in1);
+            // TODO: ZipSecureFile
             //ThresholdInputStream zis = ZipHelper.OpenZipStream(in1);
             this.zipArchive = new ZipInputStreamZipEntrySource(zis);
         }
@@ -107,6 +108,7 @@ namespace NPOI.OpenXml4Net.OPC
                 try
                 {
                     fis = file.Create();
+                    // TODO: ZipSecureFile
                     //ThresholdInputStream zis = ZipHelper.OpenZipStream(fis);
                     ZipInputStream zis = ZipHelper.OpenZipStream(fis);
                     ze = new ZipInputStreamZipEntrySource(zis);

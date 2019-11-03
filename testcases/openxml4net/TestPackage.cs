@@ -77,7 +77,11 @@ namespace TestCases.OPC
 
             // Zap the target file, in case of an earlier run
             if (File.Exists(targetFile.FullName))
+            {
                 File.Delete(targetFile.FullName);
+                Assert.IsFalse(File.Exists(targetFile.FullName));
+            }
+                
 
             OPCPackage pkg = OPCPackage.Create(targetFile.FullName);
 
@@ -113,7 +117,11 @@ namespace TestCases.OPC
             FileInfo expectedFile = OpenXml4NetTestDataSamples.GetSampleFile("TestCreatePackageOUTPUT.docx");
 
             // Zap the target file, in case of an earlier run
-            if (targetFile.Exists) targetFile.Delete();
+            if (targetFile.Exists)
+            {
+                targetFile.Delete();
+                Assert.IsFalse(targetFile.Exists);
+            }
 
             // Create a namespace
             OPCPackage pkg = OPCPackage.Create(targetFile.FullName);
@@ -180,6 +188,8 @@ namespace TestCases.OPC
             PackagePartName sheetPartName = PackagingUriHelper.CreatePartName("/xl/worksheets/sheet1.xml");
             PackageRelationship rel =
                  corePart.AddRelationship(sheetPartName, TargetMode.Internal, "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/worksheet", "rSheet1");
+            Assert.IsNotNull(rel);
+
             PackagePart part = pkg.CreatePart(sheetPartName, "application/vnd.Openxmlformats-officedocument.spreadsheetml.worksheet+xml");
             Assert.IsNotNull(part);
 
@@ -197,6 +207,7 @@ namespace TestCases.OPC
                 pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_DOCUMENT);
             Assert.AreEqual(1, coreRels.Size);
             PackageRelationship coreRel = coreRels.GetRelationship(0);
+            Assert.IsNotNull(coreRel);
             Assert.AreEqual("/", coreRel.SourceUri.ToString());
             Assert.AreEqual("/xl/workbook.xml", coreRel.TargetUri.ToString());
             Assert.IsNotNull(pkg.GetPart(coreRel));
@@ -224,6 +235,7 @@ namespace TestCases.OPC
                 coreRels = pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_DOCUMENT);
                 Assert.AreEqual(1, coreRels.Size);
                 coreRel = coreRels.GetRelationship(0);
+                Assert.IsNotNull(coreRel);
 
                 Assert.AreEqual("/", coreRel.SourceUri.ToString());
                 Assert.AreEqual("/xl/workbook.xml", coreRel.TargetUri.ToString());
@@ -233,6 +245,8 @@ namespace TestCases.OPC
                 PackageRelationshipCollection rels = corePart.GetRelationshipsByType("http://schemas.Openxmlformats.org/officeDocument/2006/relationships/hyperlink");
                 Assert.AreEqual(1, rels.Size);
                 rel = rels.GetRelationship(0);
+                Assert.IsNotNull(rel);
+                Assert.Warn(" 'Sheet1!A1' and rel.TargetUri.Fragment should be equal.");
                 //Assert.AreEqual("Sheet1!A1", rel.TargetUri.Fragment);
 
                 assertMSCompatibility(pkg);
@@ -694,8 +708,8 @@ namespace TestCases.OPC
             }
             catch (OLE2NotOfficeXmlFileException e)
             {
-                Assert.IsTrue(e.Message.IndexOf("The supplied data appears to be in the OLE2 Format") > -1);
-                Assert.IsTrue(e.Message.IndexOf("You are calling the part of POI that deals with OOXML") > -1);
+                Assert.IsTrue(e.Message.Contains("The supplied data appears to be in the OLE2 Format"));
+                Assert.IsTrue(e.Message.Contains("You are calling the part of POI that deals with OOXML"));
             }
             // OLE2 - File
             try
@@ -705,8 +719,8 @@ namespace TestCases.OPC
             }
             catch (OLE2NotOfficeXmlFileException e)
             {
-                Assert.IsTrue(e.Message.IndexOf("The supplied data appears to be in the OLE2 Format") > -1);
-                Assert.IsTrue(e.Message.IndexOf("You are calling the part of POI that deals with OOXML") > -1);
+                Assert.IsTrue(e.Message.Contains("The supplied data appears to be in the OLE2 Format"));
+                Assert.IsTrue(e.Message.Contains("You are calling the part of POI that deals with OOXML"));
             }
 
             // Raw XML - Stream
@@ -717,8 +731,8 @@ namespace TestCases.OPC
             }
             catch (NotOfficeXmlFileException e)
             {
-                Assert.IsTrue(e.Message.IndexOf("The supplied data appears to be a raw XML file") > -1);
-                Assert.IsTrue(e.Message.IndexOf("Formats such as Office 2003 XML") > -1);
+                Assert.IsTrue(e.Message.Contains("The supplied data appears to be a raw XML file"));
+                Assert.IsTrue(e.Message.Contains("Formats such as Office 2003 XML"));
             }
             // Raw XML - File
             try
@@ -728,8 +742,8 @@ namespace TestCases.OPC
             }
             catch (NotOfficeXmlFileException e)
             {
-                Assert.IsTrue(e.Message.IndexOf("The supplied data appears to be a raw XML file") > -1);
-                Assert.IsTrue(e.Message.IndexOf("Formats such as Office 2003 XML") > -1);
+                Assert.IsTrue(e.Message.Contains("The supplied data appears to be a raw XML file"));
+                Assert.IsTrue(e.Message.Contains("Formats such as Office 2003 XML"));
             }
 
             // ODF / ODS - Stream
@@ -763,8 +777,8 @@ namespace TestCases.OPC
             }
             catch (NotOfficeXmlFileException e)
             {
-                Assert.IsTrue(e.Message.IndexOf("No valid entries or contents found") > -1);
-                Assert.IsTrue(e.Message.IndexOf("not a valid OOXML") > -1);
+                Assert.IsTrue(e.Message.Contains("No valid entries or contents found"));
+                Assert.IsTrue(e.Message.Contains("not a valid OOXML"));
             }
             // Plain Text - File
             try
@@ -785,6 +799,8 @@ namespace TestCases.OPC
         {
             // #50090 / #56865
             ZipFile zipFile = ZipHelper.OpenZipFile(OpenXml4NetTestDataSamples.GetSampleFile("sample.xlsx"));
+            Assert.IsNotNull(zipFile);
+
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ZipOutputStream append = new ZipOutputStream(bos);
             // first, copy contents from existing war
@@ -849,6 +865,7 @@ namespace TestCases.OPC
             //    double min_ratio = Double.MaxValue;
             //    long max_size = 0;
             //    ZipFile zf = ZipHelper.OpenZipFile(file);
+            //    assertNotNull(zf);
             //    IEnumerator entries = zf.GetEnumerator();
             //    while (entries.MoveNext())
             //    {
@@ -861,7 +878,9 @@ namespace TestCases.OPC
 
             //    // use values close to, but within the limits 
             //    ZipSecureFile.SetMinInflateRatio(min_ratio - 0.002);
+            //    assertEquals(min_ratio - 0.002, ZipSecureFile.getMinInflateRatio(), 0.00001);
             //    ZipSecureFile.SetMaxEntrySize(max_size + 1);
+            //    assertEquals(max_size + 1, ZipSecureFile.getMaxEntrySize());
             //    IWorkbook wb = WorkbookFactory.Create(file.FullName, null, true);
             //    wb.Close();
 
@@ -905,7 +924,7 @@ namespace TestCases.OPC
             //{
             //    // reset otherwise a lot of ooxml tests will fail
             //    ZipSecureFile.SetMinInflateRatio(0.01d);
-            //    ZipSecureFile.SetMaxEntrySize(0xFFFFFFFFl);
+            //    ZipSecureFile.SetMaxEntrySize(0xFFFFFFFFL);
             //}
         }
 
@@ -933,6 +952,37 @@ namespace TestCases.OPC
             }
 
             throw new InvalidOperationException("Expected to catch an Exception because of a detected Zip Bomb, but did not find the related error message in the exception", e);
+        }
+        [Ignore("need ZipSecureFile class")]
+        [Test]
+        public void TestConstructors()
+        {
+            //// verify the various ways to construct a ZipSecureFile
+            //File file = OpenXML4JTestDataSamples.GetSampleFile("sample.xlsx");
+            //ZipSecureFile zipFile = new ZipSecureFile(file);
+            //Assert.IsNotNull(zipFile.Name);
+            //zipFile.close();
+            //zipFile = new ZipSecureFile(file, ZipFile.OPEN_READ);
+            //Assert.IsNotNull(zipFile.Name);
+            //zipFile.close();
+            //zipFile = new ZipSecureFile(file.AbsolutePath);
+            //Assert.IsNotNull(zipFile.Name);
+            //zipFile.close();
+        }
+        [Ignore("need ZipSecureFile class")]
+        [Test]
+        public void TestMaxTextSize()
+        {
+            //long before = ZipSecureFile.MaxTextSize;
+            //try
+            //{
+            //    ZipSecureFile.MaxTextSize = 12345;
+            //    Assert.AreEqual(12345, ZipSecureFile.MaxTextSize);
+            //}
+            //finally
+            //{
+            //    ZipSecureFile.MaxTextSize = before;
+            //}
         }
     }
 }
