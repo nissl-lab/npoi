@@ -102,16 +102,15 @@ namespace NPOI.XSSF.UserModel
             _stylesSource = ((XSSFWorkbook)row.Sheet.Workbook).GetStylesSource();
         }
 
-        /**
-         * Copy cell value, formula, and style, from srcCell per cell copy policy
-         * If srcCell is null, clears the cell value and cell style per cell copy policy
-         * 
-         * This does not shift references in formulas. Use {@link XSSFRowShifter} to shift references in formulas.
-         * 
-         * @param srcCell
-         * @param policy
-         * @throws IllegalArgumentException if copy cell style and srcCell is from a different workbook
-         */
+        /// <summary>
+        /// Copy cell value, formula and style, from srcCell per cell copy policy
+        ///  If srcCell is null, clears the cell value and cell style per cell copy policy
+        ///  
+        /// This does not shift references in formulas. Use {@link XSSFRowShifter} to shift references in formulas.
+        /// </summary>
+        /// <param name="srcCell">The cell to take value, formula and style from</param>
+        /// <param name="policy">The policy for copying the information, see {@link CellCopyPolicy}</param>
+        /// <exception cref="ArgumentException">if copy cell style and srcCell is from a different workbook</exception>
         public void CopyCellFrom(ICell srcCell, CellCopyPolicy policy)
         {
             // Copy cell value (cell type is updated implicitly)
@@ -779,8 +778,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CellType cellType = CellType;
-                if (cellType == CellType.Blank)
+                if (CellType == CellType.Blank)
                 {
                     return DateTime.MinValue;
                 }
@@ -790,7 +788,15 @@ namespace NPOI.XSSF.UserModel
                 return DateUtil.GetJavaDate(value, date1904);
             }
         }
-
+        public void SetCellValue(DateTime? value)
+        {
+            if (value == null)
+            {
+                SetCellType(CellType.Blank);
+                return;
+            }
+            SetCellValue(value.Value);
+        }
         /// <summary>
         ///  Set a date value for the cell. Excel treats dates as numeric so you will need to format the cell as a date.
         /// </summary>
