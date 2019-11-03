@@ -429,11 +429,10 @@ namespace NPOI.SS.Util
 
         /**
          * Utility method that returns the named short value form the given map.
-         * @return zero if the property does not exist, or is not a {@link Short}.
-         *
+         * 
          * @param properties map of named properties (String -> Object)
          * @param name property name
-         * @return property value, or zero
+         * @return zero if the property does not exist, or is not a {@link Short}.
          */
         private static short GetShort(Dictionary<String, Object> properties, String name)
         {
@@ -446,11 +445,10 @@ namespace NPOI.SS.Util
 
         /**
          * Utility method that returns the named boolean value form the given map.
-         * @return false if the property does not exist, or is not a {@link Boolean}.
          *
          * @param properties map of properties (String -> Object)
          * @param name property name
-         * @return property value, or false
+         * @return false if the property does not exist, or is not a {@link Boolean}.
          */
         private static bool GetBoolean(Dictionary<String, Object> properties, String name)
         {
@@ -505,11 +503,10 @@ namespace NPOI.SS.Util
             bool foundUnicode = false;
             String lowerCaseStr = s.ToLower();
 
-            for (int i = 0; i < unicodeMappings.Length; i++)
+            foreach (UnicodeMapping entry in unicodeMappings)
             {
-                UnicodeMapping entry = unicodeMappings[i];
                 String key = entry.entityName;
-                if (lowerCaseStr.IndexOf(key, StringComparison.Ordinal) != -1)
+                if (lowerCaseStr.Contains(key))
                 {
                     s = s.Replace(key, entry.resolvedValue);
                     foundUnicode = true;

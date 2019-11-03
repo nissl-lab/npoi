@@ -40,60 +40,50 @@ namespace NPOI.HSSF.Extractor
     public class OldExcelExtractor
     {
         private RecordInputStream ris;
-        private Stream streamInput;
-        private NPOIFSFileSystem fsInput;
         private int biffVersion;
         private int fileType;
 
         public OldExcelExtractor(Stream input)
         {
-            BufferedStream bstream = new BufferedStream(input, 8);
-            if (NPOIFSFileSystem.HasPOIFSHeader(bstream))
-            {
-                Open(new NPOIFSFileSystem(bstream));
-            }
-            else
-            {
-                Open(bstream);
-            }
+            Open(input);
         }
         public OldExcelExtractor(FileInfo f)
         {
+            NPOIFSFileSystem poifs = null;
             try
             {
-                Open(new NPOIFSFileSystem(f, true));
+                poifs = new NPOIFSFileSystem(f);
+                Open(poifs);
+                return;
             }
             catch (OldExcelFormatException)
             {
-                FileStream biffStream = new FileStream(f.FullName, FileMode.Open, FileAccess.Read);
-                try
+                // will be handled by workaround below
+                if (poifs != null)
                 {
-                    Open(biffStream);
-                }
-                catch (RuntimeException e2)
-                {
-                    // ensure that the stream is properly closed here if an Exception
-                    // is thrown while opening
-                    biffStream.Close();
-
-                    throw e2;
+                    poifs.Close();
                 }
             }
             catch (NotOLE2FileException)
             {
-                FileStream biffStream = new FileStream(f.FullName, FileMode.Open, FileAccess.Read);
-                try
+                // will be handled by workaround below
+                if (poifs != null)
                 {
-                    Open(biffStream);
+                    poifs.Close();
                 }
-                catch (RuntimeException e2)
-                {
-                    // ensure that the stream is properly closed here if an Exception
-                    // is thrown while opening
-                    biffStream.Close();
+            }
 
-                    throw e2;
-                }
+            FileStream biffStream = f.Create();
+            try
+            {
+                Open(biffStream);
+            }
+            catch (IOException e)
+            {
+                // ensure that the stream is properly closed here if an Exception
+                // is thrown while opening
+                biffStream.Close();
+                throw e;
             }
         }
         public OldExcelExtractor(NPOIFSFileSystem fs)
@@ -107,13 +97,30 @@ namespace NPOI.HSSF.Extractor
 
         private void Open(Stream biffStream)
         {
-            streamInput = biffStream;
-            ris = new RecordInputStream(biffStream);
-            Prepare();
+            BufferedStream bis = (biffStream is BufferedStream) 
+            ? (BufferedStream)biffStream
+            : new BufferedStream(biffStream, 8);
+
+            if (NPOIFSFileSystem.HasPOIFSHeader(bis))
+            {
+                NPOIFSFileSystem poifs = new NPOIFSFileSystem(bis);
+                try
+                {
+                    Open(poifs);
+                }
+                finally
+                {
+                    poifs.Close();
+                }
+            }
+            else
+            {
+                ris = new RecordInputStream(bis);
+                Prepare();
+            }
         }
         private void Open(NPOIFSFileSystem fs)
         {
-            fsInput = fs;
             Open(fs.Root);
         }
         private void Open(DirectoryNode directory)
@@ -123,7 +130,7 @@ namespace NPOI.HSSF.Extractor
             {
                 book = (DocumentNode)directory.GetEntry(InternalWorkbook.OLD_WORKBOOK_DIR_ENTRY_NAME);
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException)
             {
                 // some files have "Workbook" instead
                 book = (DocumentNode)directory.GetEntry(InternalWorkbook.WORKBOOK_DIR_ENTRY_NAMES[0]);
@@ -305,19 +312,6 @@ namespace NPOI.HSSF.Extractor
 
         public void Close()
         {
-            if (streamInput != null)
-            {
-                IOUtils.CloseQuietly(streamInput);
-            }
-            if (fsInput != null)
-            {
-                try
-                {
-                    fsInput.Close();
-                }
-                catch (Exception) { }
-                fsInput = null;
-            }
         }
     }
 

@@ -398,7 +398,7 @@ namespace NPOI.XSSF.UserModel
 
             foreach (ICell cell in row)
             {
-                cell.ToString();
+                Assert.IsNotNull(cell.ToString());
             }
         }
 
@@ -453,7 +453,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
         [Test]
-        public void TestEncodingbeloAscii()
+        public void TestEncodingBelowAscii()
         {
             StringBuilder sb = new StringBuilder();
             // test all possible characters
@@ -476,27 +476,34 @@ namespace NPOI.XSSF.UserModel
                 IWorkbook xwb = XSSFITestDataProvider.instance.CreateWorkbook();
                 ICell xCell = xwb.CreateSheet().CreateRow(0).CreateCell(0);
 
-                //IWorkbook swb = SXSSFITestDataProvider.instance.CreateWorkbook();
-                //ICell sCell = swb.CreateSheet().CreateRow(0).CreateCell(0);
+                IWorkbook swb = SXSSFITestDataProvider.instance.CreateWorkbook();
+                ICell sCell = swb.CreateSheet().CreateRow(0).CreateCell(0);
 
                 cell.SetCellValue(str);
                 Assert.AreEqual(str, cell.StringCellValue);
                 xCell.SetCellValue(str);
                 Assert.AreEqual(str, xCell.StringCellValue);
-                //sCell.SetCellValue(str);
-                //Assert.AreEqual(str, sCell.StringCellValue);
+                sCell.SetCellValue(str);
+                Assert.AreEqual(str, sCell.StringCellValue);
 
                 IWorkbook wbBack = HSSFITestDataProvider.Instance.WriteOutAndReadBack(wb);
                 IWorkbook xwbBack = XSSFITestDataProvider.instance.WriteOutAndReadBack(xwb);
-                //IWorkbook swbBack = SXSSFITestDataProvider.instance.WriteOutAndReadBack(swb);
+                IWorkbook swbBack = SXSSFITestDataProvider.instance.WriteOutAndReadBack(swb);
                 cell = wbBack.GetSheetAt(0).CreateRow(0).CreateCell(0);
                 xCell = xwbBack.GetSheetAt(0).CreateRow(0).CreateCell(0);
-                //sCell = swbBack.GetSheetAt(0).CreateRow(0).CreateCell(0);
+                sCell = swbBack.GetSheetAt(0).CreateRow(0).CreateCell(0);
 
                 Assert.AreEqual(cell.StringCellValue, xCell.StringCellValue);
-                //Assert.AreEqual(cell.StringCellValue, sCell.StringCellValue);
+                Assert.AreEqual(cell.StringCellValue, sCell.StringCellValue);
 
                 pos += SpreadsheetVersion.EXCEL97.MaxTextLength;
+
+                swbBack.Close();
+                xwbBack.Close();
+                wbBack.Close();
+                swb.Close();
+                xwb.Close();
+                wb.Close();
             }
         }
 

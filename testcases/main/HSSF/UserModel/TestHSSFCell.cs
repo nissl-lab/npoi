@@ -157,7 +157,7 @@ namespace TestCases.HSSF.UserModel
         {
             Record[] recs = RecordInspector.GetRecords(sheet, 0);
             Assert.AreEqual(isPresent ? 29 : 28, recs.Length); //for SheetExtRecord
-            //Assert.AreEqual(isPresent ? 28 : 27, recs.Length);
+            //Assert.AreEqual(isPresent ? 28 : 27, recs.Length);  // statement in poi, why use above line?
             int index = 22;
             Record fr = recs[index++];
             Assert.AreEqual(typeof(FormulaRecord), fr.GetType());
@@ -169,7 +169,7 @@ namespace TestCases.HSSF.UserModel
             {
                 Assert.IsFalse(typeof(StringRecord) == recs[index].GetType());
             }
-            Record dbcr = recs[index++];
+            Record dbcr = recs[index];
             Assert.AreEqual(typeof(DBCellRecord), dbcr.GetType());
         }
 
