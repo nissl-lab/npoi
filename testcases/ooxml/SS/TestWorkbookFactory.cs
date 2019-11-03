@@ -380,6 +380,24 @@ namespace NPOI.SS
             }
             emptyFile.Delete();
         }
+        /**
+          * Check that a helpful exception is raised on a non-existing file
+          */
+        [Test]
+        public void TestNonExistantFile()
+        {
+            FileInfo nonExistantFile = new FileInfo("notExistantFile");
+            Assert.IsFalse(nonExistantFile.Exists);
+            try
+            {
+                WorkbookFactory.Create(nonExistantFile.FullName, "password", true);
+                Assert.Fail("Should not be able to create for a non-existant file");
+            }
+            catch (FileNotFoundException)
+            {
+                // expected
+            }
+        }
 
     }
 
