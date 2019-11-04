@@ -104,17 +104,43 @@ namespace NPOI.OpenXml4Net.OPC
                 // some zips can't be opened via ZipFile in JDK6, as the central directory
                 // contains either non-latin entries or the compression type can't be handled
                 // the workaround is to iterate over the stream and not the directory
-                FileStream fis;
+                FileStream fis = null;
+                //ThresholdInputStream zis = null;
+                ZipInputStream zis = null;
                 try
                 {
                     fis = file.Create();
                     // TODO: ZipSecureFile
-                    //ThresholdInputStream zis = ZipHelper.OpenZipStream(fis);
-                    ZipInputStream zis = ZipHelper.OpenZipStream(fis);
+                    // zis = ZipHelper.OpenZipStream(fis);
+                    zis = ZipHelper.OpenZipStream(fis);
                     ze = new ZipInputStreamZipEntrySource(zis);
                 }
                 catch (IOException e2)
                 {
+                    if (zis != null)
+                    {
+                        try
+                        {
+                            zis.Close();
+                        }
+                        catch (IOException)
+                        {
+                            throw new InvalidOperationException("Can't open the specified file: '" + file + "'" +
+                                    " and couldn't close the file input stream", e);
+                        }
+                    }
+                    else if (fis != null)
+                    {
+                        try
+                        {
+                            fis.Close();
+                        }
+                        catch (IOException)
+                        {
+                            throw new InvalidOperationException("Can't open the specified file: '" + file + "'" +
+                                    " and couldn't close the file input stream", e);
+                        }
+                    }
                     throw new InvalidOperationException("Can't open the specified file: '" + file + "'", e2);
                 }
             }

@@ -21,6 +21,7 @@ namespace NPOI.OpenXml4Net.OPC
     using System.IO;
     using System.Xml;
     using NPOI.SS.UserModel;
+    using NPOI.Util;
     using NPOI.XSSF;
     using NPOI.XWPF.UserModel;
     using NUnit.Framework;
@@ -199,6 +200,30 @@ namespace NPOI.OpenXml4Net.OPC
             FileInfo f = OpenXml4NetTestDataSamples.GetSampleFile("at.pzp.www_uploads_media_PP_Scheinecker-jdk6error.pptx");
             //SlideShow<?,?> ppt = SlideShowFactory.create(f, null, true);
             //ppt.close();
+        }
+
+        [Test]
+        public void TestClosingStreamOnException()
+        {
+            Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("dcterms_bug_56479.zip");
+            FileInfo tmp = TempFile.CreateTempFile("poi-test-truncated-zip", "");
+            Stream os = new FileStream(tmp.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            for (int i = 0; i < 100; i++)
+            {
+                os.WriteByte((byte)is1.ReadByte());
+            }
+            os.Flush();
+            os.Close();
+            is1.Close();
+            try
+            {
+                OPCPackage.Open(tmp, PackageAccess.READ);
+            }
+            catch (Exception)
+            {
+            }
+            tmp.Delete();
+            Assert.IsFalse(tmp.Exists, "Can't delete tmp file");
         }
     }
 
