@@ -45,18 +45,7 @@ namespace TestCases.SS.Formula.Eval
         {
             // 27349-vLookupAcrossSheets.xls is bugzilla/attachment.cgi?id=10622
             Stream is1 = HSSFTestDataSamples.OpenSampleFileStream("27349-vLookupAcrossSheets.xls");
-            HSSFWorkbook wb;
-            try
-            {
-                // original bug may have thrown exception here, or output warning to
-                // stderr
-                wb = new HSSFWorkbook(is1);
-            }
-            catch (IOException e)
-            {
-                throw new SystemException(e.Message);
-            }
-
+            IWorkbook wb = new HSSFWorkbook(is1);
             ISheet sheet = wb.GetSheetAt(0);
             IRow row = sheet.GetRow(1);
             ICell cell = row.GetCell(0);
@@ -66,7 +55,7 @@ namespace TestCases.SS.Formula.Eval
                     .CellFormula);
 
             // We might as well Evaluate the formula
-            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv = fe.Evaluate(cell);
 
             Assert.AreEqual(CellType.Numeric, cv.CellType);
@@ -82,7 +71,7 @@ namespace TestCases.SS.Formula.Eval
         public void Test27405()
         {
 
-            HSSFWorkbook wb = new HSSFWorkbook();
+            IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet("input");
             // input row 0
             IRow row = sheet.CreateRow(0);
@@ -117,7 +106,7 @@ namespace TestCases.SS.Formula.Eval
             }
 #endif
             // use POI's Evaluator as an extra sanity check
-            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv;
             cv = fe.Evaluate(cell);
             Assert.AreEqual(CellType.Numeric, cv.CellType);
@@ -134,7 +123,7 @@ namespace TestCases.SS.Formula.Eval
         [Test]
         public void Test42448()
         {
-            HSSFWorkbook wb = new HSSFWorkbook();
+            IWorkbook wb = new HSSFWorkbook();
             ISheet sheet1 = wb.CreateSheet("Sheet1");
 
             IRow row = sheet1.CreateRow(0);
@@ -173,7 +162,7 @@ namespace TestCases.SS.Formula.Eval
 
             double expectedResult = (4.0 * 8.0 + 5.0 * 9.0) / 10.0;
 
-            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv = fe.Evaluate(cell);
 
             Assert.AreEqual(CellType.Numeric, cv.CellType);

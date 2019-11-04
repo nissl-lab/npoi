@@ -26,6 +26,7 @@ namespace NPOI.HSSF.Record.Aggregates
     using NPOI.HSSF.Model;
     using System.Collections.Generic;
     using NPOI.HSSF.Record.Chart;
+    using NPOI.SS;
 
     /**
      *
@@ -54,7 +55,7 @@ namespace NPOI.HSSF.Record.Aggregates
             : this(SharedValueManager.CreateEmpty())
         {
         }
-
+        [Obsolete("deprecated use {@link #getCellValueIterator()} instead")]
         public CellValueRecordInterface[] GetValueRecords()
         {
             return _valuesAgg.GetValueRecords();
@@ -128,10 +129,10 @@ namespace NPOI.HSSF.Record.Aggregates
                 cellRecord.RowOffset = (pos);
                 rv.VisitRecord(cellRecord);
             }
-            for (int i = 0; i < _unknownRecords.Count; i++)
+            foreach (Record _unknownRecord in _unknownRecords)
             {
                 // Potentially breaking the file here since we don't know exactly where to write these records
-                rv.VisitRecord((Record)_unknownRecords[i]);
+                rv.VisitRecord(_unknownRecord);
             }
         }
         /**
@@ -252,10 +253,11 @@ namespace NPOI.HSSF.Record.Aggregates
         }
         public RowRecord GetRow(int rowIndex)
         {
+            int maxrow = SpreadsheetVersion.EXCEL97.LastRowIndex;
             // Row must be between 0 and 65535
-            if (rowIndex < 0 || rowIndex > 65535)
+            if (rowIndex < 0 || rowIndex > maxrow)
             {
-                throw new ArgumentException("The row number must be between 0 and 65535");
+                throw new ArgumentException("The row number must be between 0 and " + maxrow + ", but had: " + rowIndex);
             }
             return (RowRecord)_rowRecords[rowIndex];
         }
@@ -504,29 +506,24 @@ namespace NPOI.HSSF.Record.Aggregates
         public bool IsRowGroupCollapsed(int row)
         {
             int collapseRow = FindEndOfRowOutlineGroup(row) + 1;
-
-            if (GetRow(collapseRow) == null)
-                return false;
-            else
-                return GetRow(collapseRow).Colapsed;
+            return GetRow(collapseRow) != null && GetRow(collapseRow).Colapsed;
         }
 
         public void ExpandRow(int rowNumber)
         {
-            int idx = rowNumber;
-            if (idx == -1)
+            if (rowNumber == -1)
                 return;
 
             // If it is already expanded do nothing.
-            if (!IsRowGroupCollapsed(idx))
+            if (!IsRowGroupCollapsed(rowNumber))
                 return;
 
             // Find the start of the Group.
-            int startIdx = FindStartOfRowOutlineGroup(idx);
+            int startIdx = FindStartOfRowOutlineGroup(rowNumber);
             RowRecord row = GetRow(startIdx);
 
             // Find the end of the Group.
-            int endIdx = FindEndOfRowOutlineGroup(idx);
+            int endIdx = FindEndOfRowOutlineGroup(rowNumber);
 
             // expand:
             // collapsed bit must be UnSet
@@ -535,7 +532,7 @@ namespace NPOI.HSSF.Record.Aggregates
             //   to look at the start and the end of the current Group to determine which
             //   is the enclosing Group
             // hidden bit only is altered for this outline level.  ie.  don't Un-collapse contained Groups
-            if (!IsRowGroupHiddenByParent(idx))
+            if (!IsRowGroupHiddenByParent(rowNumber))
             {
                 for (int i = startIdx; i <= endIdx; i++)
                 {
