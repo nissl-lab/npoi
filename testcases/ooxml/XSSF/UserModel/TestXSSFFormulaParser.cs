@@ -22,6 +22,9 @@ using NPOI.SS.Formula;
 using NPOI.SS.UserModel;
 using TestCases.HSSF;
 using NPOI.HSSF.UserModel;
+using NPOI.Util;
+using NPOI.SS.Util;
+
 namespace NPOI.XSSF.UserModel
 {
     [TestFixture]
@@ -42,20 +45,20 @@ namespace NPOI.XSSF.UserModel
 
             ptgs = Parse(fpb, "ABC10");
             Assert.AreEqual(1, ptgs.Length);
-            Assert.IsTrue(ptgs[0] is RefPtg);
+            Assert.IsTrue(ptgs[0] is RefPtg, "Had " + Arrays.ToString(ptgs));
 
             ptgs = Parse(fpb, "A500000");
             Assert.AreEqual(1, ptgs.Length);
-            Assert.IsTrue(ptgs[0] is RefPtg);
+            Assert.IsTrue(ptgs[0] is RefPtg, "Had " + Arrays.ToString(ptgs));
 
             ptgs = Parse(fpb, "ABC500000");
             Assert.AreEqual(1, ptgs.Length);
-            Assert.IsTrue(ptgs[0] is RefPtg);
+            Assert.IsTrue(ptgs[0] is RefPtg, "Had " + Arrays.ToString(ptgs));
 
             //highest allowed rows and column (XFD and 0x100000)
             ptgs = Parse(fpb, "XFD1048576");
             Assert.AreEqual(1, ptgs.Length);
-            Assert.IsTrue(ptgs[0] is RefPtg);
+            Assert.IsTrue(ptgs[0] is RefPtg, "Had " + Arrays.ToString(ptgs));
 
 
             //column greater than XFD
@@ -124,12 +127,12 @@ namespace NPOI.XSSF.UserModel
 
             ptgs = Parse(fpb, "LOG10");
             Assert.AreEqual(1, ptgs.Length);
-            Assert.IsTrue((ptgs[0] is RefPtg));
+            Assert.IsTrue(ptgs[0] is RefPtg, "Had " + Arrays.ToString(ptgs));
 
             ptgs = Parse(fpb, "LOG10(100)");
             Assert.AreEqual(2, ptgs.Length);
-            Assert.IsTrue(ptgs[0] is IntPtg);
-            Assert.IsTrue(ptgs[1] is FuncPtg);
+            Assert.IsTrue(ptgs[0] is IntPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[1] is FuncPtg, "Had " + Arrays.ToString(ptgs));
         }
         [Test]
         public void FormaulReferncesSameWorkbook()
@@ -294,7 +297,6 @@ namespace NPOI.XSSF.UserModel
                 else
                     fpb = XSSFEvaluationWorkbook.Create((XSSFWorkbook)wb);
 
-
                 // Check things parse as expected:
 
                 // SUM to one cell over 3 workbooks, relative reference
@@ -312,7 +314,6 @@ namespace NPOI.XSSF.UserModel
                 Assert.AreEqual(typeof(AttrPtg), ptgs[1].GetType());
                 Assert.AreEqual("SUM", ToFormulaString(ptgs[1], fpb));
 
-
                 // MAX to one cell over 3 workbooks, absolute row reference
                 ptgs = Parse(fpb, "MAX(Sheet1:Sheet3!A$1)");
                 Assert.AreEqual(2, ptgs.Length);
@@ -327,7 +328,6 @@ namespace NPOI.XSSF.UserModel
                 Assert.AreEqual("Sheet1:Sheet3!A$1", ToFormulaString(ptgs[0], fpb));
                 Assert.AreEqual(typeof(FuncVarPtg), ptgs[1].GetType());
                 Assert.AreEqual( "MAX", ToFormulaString(ptgs[1], fpb));
-
 
                 // MIN to one cell over 3 workbooks, absolute reference
                 ptgs = Parse(fpb, "MIN(Sheet1:Sheet3!$A$1)");
@@ -359,7 +359,6 @@ namespace NPOI.XSSF.UserModel
                 Assert.AreEqual(typeof(AttrPtg), ptgs[1].GetType());
                 Assert.AreEqual("SUM", ToFormulaString(ptgs[1], fpb));
 
-
                 // MIN to a range of cells over 3 workbooks, absolute reference
                 ptgs = Parse(fpb, "MIN(Sheet1:Sheet3!$A$1:$B$2)");
                 Assert.AreEqual(2, ptgs.Length);
@@ -374,7 +373,6 @@ namespace NPOI.XSSF.UserModel
                 Assert.AreEqual(ToFormulaString(ptgs[0], fpb), "Sheet1:Sheet3!$A$1:$B$2");
                 Assert.AreEqual(typeof(FuncVarPtg), ptgs[1].GetType());
                 Assert.AreEqual("MIN", ToFormulaString(ptgs[1], fpb));
-
 
                 // Check we can round-trip - try to Set a new one to a new single cell
                 ICell newF = s1.GetRow(0).CreateCell(10, CellType.Formula);
@@ -397,6 +395,138 @@ namespace NPOI.XSSF.UserModel
             return ptg.ToFormulaString();
         }
 
+        [Test]
+        public void Test58648Single()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
+            Ptg[] ptgs;
+            ptgs = Parse(fpb, "(ABC10 )");
+            Assert.AreEqual(2, ptgs.Length, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[0] is RefPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[1] is ParenthesisPtg, "Had " + Arrays.ToString(ptgs));
+        }
+        [Test]
+        public void Test58648Basic()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
+            Ptg[] ptgs;
+            // verify whitespaces in different places
+            ptgs = Parse(fpb, "(ABC10)");
+            Assert.AreEqual(2, ptgs.Length, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[0] is RefPtg);
+            Assert.IsTrue(ptgs[1] is ParenthesisPtg);
+            ptgs = Parse(fpb, "( ABC10)");
+            Assert.AreEqual(2, ptgs.Length, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[0] is RefPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[1] is ParenthesisPtg, "Had " + Arrays.ToString(ptgs));
+            ptgs = Parse(fpb, "(ABC10 )");
+            Assert.AreEqual(2, ptgs.Length, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[0] is RefPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[1] is ParenthesisPtg, "Had " + Arrays.ToString(ptgs));
+            ptgs = Parse(fpb, "((ABC10))");
+            Assert.AreEqual(3, ptgs.Length, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[0] is RefPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[1] is ParenthesisPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[2] is ParenthesisPtg, "Had " + Arrays.ToString(ptgs));
+            ptgs = Parse(fpb, "((ABC10) )");
+            Assert.AreEqual(3, ptgs.Length, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[0] is RefPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[1] is ParenthesisPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[2] is ParenthesisPtg, "Had " + Arrays.ToString(ptgs));
+            ptgs = Parse(fpb, "( (ABC10))");
+            Assert.AreEqual(3, ptgs.Length, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[0] is RefPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[1] is ParenthesisPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[2] is ParenthesisPtg, "Had " + Arrays.ToString(ptgs));
+        }
+        [Test]
+        public void Test58648FormulaParsing()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("58648.xlsx");
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            for (int i = 0; i < wb.NumberOfSheets; i++)
+            {
+                ISheet xsheet = wb.GetSheetAt(i);
+                foreach (IRow row in xsheet)
+                {
+                    foreach (ICell cell in row)
+                    {
+                        if (cell.CellType == CellType.Formula)
+                        {
+                            try
+                            {
+                                evaluator.EvaluateFormulaCell(cell);
+                            }
+                            catch (Exception e)
+                            {
+                                CellReference cellRef = new CellReference(cell.RowIndex, cell.ColumnIndex);
+                                throw new RuntimeException("error at: " + cellRef.ToString(), e);
+                            }
+                        }
+                    }
+                }
+            }
+            ISheet sheet = wb.GetSheet("my-sheet");
+            ICell cell1 = sheet.GetRow(1).GetCell(4);
+            Assert.AreEqual(5d, cell1.NumericCellValue, 0d);
+        }
+        [Test]
+        public void TestWhitespaceInFormula()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
+            Ptg[] ptgs;
+            // verify whitespaces in different places
+            ptgs = Parse(fpb, "INTERCEPT(A2:A5, B2:B5)");
+            Assert.AreEqual(3, ptgs.Length, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[0] is AreaPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[1] is AreaPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[2] is FuncPtg, "Had " + Arrays.ToString(ptgs));
+            ptgs = Parse(fpb, " INTERCEPT ( \t \r A2 : \nA5 , B2 : B5 ) \t");
+            Assert.AreEqual(3, ptgs.Length, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[0] is AreaPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[1] is AreaPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[2] is FuncPtg, "Had " + Arrays.ToString(ptgs));
+            ptgs = Parse(fpb, "(VLOOKUP(\"item1\", A2:B3, 2, FALSE) - VLOOKUP(\"item2\", A2:B3, 2, FALSE) )");
+            Assert.AreEqual(12, ptgs.Length, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[0] is StringPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[1] is AreaPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[2] is IntPtg, "Had " + Arrays.ToString(ptgs));
+            ptgs = Parse(fpb, "A1:B1 B1:B2");
+            Assert.AreEqual(4, ptgs.Length, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[0] is MemAreaPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[1] is AreaPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[2] is AreaPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[3] is IntersectionPtg, "Had " + Arrays.ToString(ptgs));
+            ptgs = Parse(fpb, "A1:B1    B1:B2");
+            Assert.AreEqual(4, ptgs.Length, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[0] is MemAreaPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[1] is AreaPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[2] is AreaPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[3] is IntersectionPtg, "Had " + Arrays.ToString(ptgs));
+        }
+        [Test]
+        public void TestWhitespaceInComplexFormula()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
+            Ptg[] ptgs;
+            // verify whitespaces in different places
+            ptgs = Parse(fpb, "SUM(A1:INDEX(1:1048576,MAX(IFERROR(MATCH(99^99,B:B,1),0),IFERROR(MATCH(\"zzzz\",B:B,1),0)),MAX(IFERROR(MATCH(99^99,1:1,1),0),IFERROR(MATCH(\"zzzz\",1:1,1),0))))");
+            Assert.AreEqual(40, ptgs.Length, "Had: " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[0] is MemFuncPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[1] is RefPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[2] is AreaPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[3] is NameXPxg, "Had " + Arrays.ToString(ptgs));
+            ptgs = Parse(fpb, "SUM ( A1 : INDEX( 1 : 1048576 , MAX( IFERROR ( MATCH ( 99 ^ 99 , B : B , 1 ) , 0 ) , IFERROR ( MATCH ( \"zzzz\" , B:B , 1 ) , 0 ) ) , MAX ( IFERROR ( MATCH ( 99 ^ 99 , 1 : 1 , 1 ) , 0 ) , IFERROR ( MATCH ( \"zzzz\" , 1 : 1 , 1 )   , 0 )   )   )   )");
+            Assert.AreEqual(40, ptgs.Length, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[0] is MemFuncPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[1] is RefPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[2] is AreaPtg, "Had " + Arrays.ToString(ptgs));
+            Assert.IsTrue(ptgs[3] is NameXPxg, "Had " + Arrays.ToString(ptgs));
+        }
 
     }
 }

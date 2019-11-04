@@ -2014,11 +2014,21 @@ namespace NPOI.SS.Formula
                 SkipWhite();
                 if (_inIntersection)
                 {
+                    int savePointer = _pointer;
                     // Don't getChar() as the space has already been eaten and recorded by SkipWhite().
-                    hasIntersections = true;
-                    ParseNode other = ComparisonExpression();
-                    result = new ParseNode(IntersectionPtg.instance, result, other);
-                    continue;
+                    try
+                    {
+                        ParseNode other = ComparisonExpression();
+                        result = new ParseNode(IntersectionPtg.instance, result, other);
+                        hasIntersections = true;
+                        continue;
+                    }
+                    catch (FormulaParseException e)
+                    {
+                        // if parsing for intersection fails we assume that we actually had an arbitrary
+                        // whitespace and thus should simply skip this whitespace
+                        ResetPointer(savePointer);
+                    }
                 }
                 if (hasIntersections)
                 {
