@@ -130,7 +130,7 @@ namespace NPOI.Util
         }
 
         /// <summary>
-        /// Same as the normal <tt>channel.read(b)</tt>, but tries to ensure
+        /// Same as the normal InputStream#read(byte[], int, int), but tries to ensure
         /// that the buffer is filled completely if possible, i.e. b.remaining()
         /// returns 0.
         /// If the end of file is reached before any bytes are Read, returns -1.
@@ -139,10 +139,10 @@ namespace NPOI.Util
         /// buffer has no more remaining capacity, will return the number of bytes
         /// that were read.
         /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <param name="b">The b.</param>
-        /// <param name="off">The off.</param>
-        /// <param name="len">The len.</param>
+        /// <param name="stream">the stream from which the data is read.</param>
+        /// <param name="b">the buffer into which the data is read.</param>
+        /// <param name="off">the start offset in array b at which the data is written.</param>
+        /// <param name="len">the maximum number of bytes to read.</param>
         /// <returns></returns>
 
         public static int ReadFully(Stream stream, byte[] b, int off, int len)

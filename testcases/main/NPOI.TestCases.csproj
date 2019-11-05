@@ -256,6 +256,7 @@
     <Compile Include="Util\TestLongField.cs" />
     <Compile Include="Util\TestPOILogger.cs" />
     <Compile Include="Util\TestPOILogFactory.cs" />
+    <Compile Include="Util\TestRLEDecompressingInputStream.cs" />
     <Compile Include="Util\TestShortField.cs" />
     <Compile Include="Util\TestULongField.cs" />
   </ItemGroup>
