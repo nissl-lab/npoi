@@ -276,6 +276,8 @@
     <Compile Include="POIFS\FileSystem\NDocumentOutputStream.cs" />
     <Compile Include="POIFS\FileSystem\NotOLE2FileException.cs" />
     <Compile Include="POIFS\FileSystem\OPOIFSFileSystem.cs" />
+    <Compile Include="POIFS\Macros\VBAMacroExtractor.cs" />
+    <Compile Include="POIFS\Macros\VBAMacroReader.cs" />
     <Compile Include="POIUtils.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1318,6 +1320,7 @@
     <Compile Include="Util\PushbackInputStream.cs" />
     <Compile Include="Util\PushbackStream.cs" />
     <Compile Include="Util\RecordFormatException.cs" />
+    <Compile Include="Util\RLEDecompressingInputStream.cs" />
     <Compile Include="Util\RuntimeException.cs" />
     <Compile Include="Util\ShortField.cs" />
     <Compile Include="Util\ShortList.cs" />
