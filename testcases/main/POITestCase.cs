@@ -106,5 +106,15 @@ namespace TestCases
                 throw new RuntimeException("Cannot access field '" + fieldName + "' of class " + clazz, pae.InnerException);
             }
         }
+
+        public static void SkipTest(Exception e)
+        {
+            Assume.That(false, "This test currently fails with " + e);
+        }
+
+        public static void TestPassesNow(int bug)
+        {
+            Assert.Fail("This test passes now. Please update the unit test and bug " + bug + ".");
+        }
     }
 }

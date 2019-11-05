@@ -333,4 +333,48 @@ namespace NPOI.Util
             return false;
         }
     }
+
+    public class FileInputStream : InputStream
+    {
+        Stream inner;
+        public FileInputStream(Stream fs)
+        {
+            this.inner = fs;
+        }
+
+        public override bool CanRead => inner.CanRead;
+
+        public override bool CanSeek => false;
+
+        public override bool CanWrite => false;
+
+        public override long Length => inner.Length;
+
+        public override long Position { get => inner.Position; set => throw new NotImplementedException(); }
+
+        public override void Flush()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int Read()
+        {
+            return inner.ReadByte();
+        }
+
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetLength(long value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

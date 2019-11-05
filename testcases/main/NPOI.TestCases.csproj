@@ -171,6 +171,7 @@
     <Compile Include="POIFS\FileSystem\TestNPOIFSMiniStore.cs" />
     <Compile Include="POIFS\FileSystem\TestNPOIFSStream.cs" />
     <Compile Include="POIFS\FileSystem\TestOle10Native.cs" />
+    <Compile Include="POIFS\Macros\TestVBAMacroReader.cs" />
     <Compile Include="POIFS\NIO\TestDataSource.cs" />
     <Compile Include="POIFS\Storage\LocalProperty.cs" />
     <Compile Include="POIFS\Storage\RawDataUtil.cs" />

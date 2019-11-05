@@ -15,9 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.POIFS.macros
+namespace NPOI.POIFS.Macros
 {
-    using NPOI.Util;
     using System;
     using System.Collections.Generic;
     using System.IO;
