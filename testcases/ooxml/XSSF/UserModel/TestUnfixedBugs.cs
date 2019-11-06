@@ -222,9 +222,9 @@ namespace NPOI.XSSF.UserModel
                 row2.GetCell(0).CellStyle.BorderBottom = BorderStyle.Thin;
                 row2.GetCell(1).CellStyle.BorderBottom = BorderStyle.Thin;
                 ICell cell0 = CellUtil.GetCell(row3, 0);
-                CellUtil.SetCellStyleProperty(cell0, wb, CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
+                CellUtil.SetCellStyleProperty(cell0, CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
                 ICell cell1 = CellUtil.GetCell(row3, 1);
-                CellUtil.SetCellStyleProperty(cell1, wb, CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
+                CellUtil.SetCellStyleProperty(cell1, CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
                 RegionUtil.SetBorderBottom((int)BorderStyle.Thin, range4, sheet, wb);
 
                 // write to file

@@ -71,7 +71,7 @@ namespace NPOI.HSSF.Util
             int rowEnd = region.LastRow;
             int column = region.FirstColumn;
 
-            CellPropertySetter cps = new CellPropertySetter(workbook, HSSFCellUtil.BORDER_LEFT, (int)border);
+            CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.BORDER_LEFT, (int)border);
             for (int i = rowStart; i <= rowEnd; i++)
             {
                 cps.SetProperty(HSSFCellUtil.GetRow(i, sheet), column);
@@ -92,7 +92,7 @@ namespace NPOI.HSSF.Util
             int rowEnd = region.LastRow;
             int column = region.FirstColumn;
 
-            CellPropertySetter cps = new CellPropertySetter(workbook, HSSFCellUtil.LEFT_BORDER_COLOR, color);
+            CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.LEFT_BORDER_COLOR, color);
             for (int i = rowStart; i <= rowEnd; i++)
             {
                 cps.SetProperty(HSSFCellUtil.GetRow(i, sheet), column);
@@ -113,7 +113,7 @@ namespace NPOI.HSSF.Util
             int rowEnd = region.LastRow;
             int column = region.LastColumn;
 
-            CellPropertySetter cps = new CellPropertySetter(workbook, HSSFCellUtil.BORDER_RIGHT, (int)border);
+            CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.BORDER_RIGHT, (int)border);
             for (int i = rowStart; i <= rowEnd; i++)
             {
                 cps.SetProperty(HSSFCellUtil.GetRow(i, sheet), column);
@@ -135,7 +135,7 @@ namespace NPOI.HSSF.Util
             int rowEnd = region.LastRow;
             int column = region.LastColumn;
 
-            CellPropertySetter cps = new CellPropertySetter(workbook, HSSFCellUtil.RIGHT_BORDER_COLOR, color);
+            CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.RIGHT_BORDER_COLOR, color);
             for (int i = rowStart; i <= rowEnd; i++)
             {
                 cps.SetProperty(HSSFCellUtil.GetRow(i, sheet), column);
@@ -155,7 +155,7 @@ namespace NPOI.HSSF.Util
             int colStart = region.FirstColumn;
             int colEnd = region.LastColumn;
             int rowIndex = region.LastRow;
-            CellPropertySetter cps = new CellPropertySetter(workbook, HSSFCellUtil.BORDER_BOTTOM, (int)border);
+            CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.BORDER_BOTTOM, (int)border);
             NPOI.SS.UserModel.IRow row = HSSFCellUtil.GetRow(rowIndex, sheet);
             for (int i = colStart; i <= colEnd; i++)
             {
@@ -177,7 +177,7 @@ namespace NPOI.HSSF.Util
             int colStart = region.FirstColumn;
             int colEnd = region.LastColumn;
             int rowIndex = region.LastRow;
-            CellPropertySetter cps = new CellPropertySetter(workbook, HSSFCellUtil.BOTTOM_BORDER_COLOR, color);
+            CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.BOTTOM_BORDER_COLOR, color);
             NPOI.SS.UserModel.IRow row = HSSFCellUtil.GetRow(rowIndex, sheet);
             for (int i = colStart; i <= colEnd; i++)
             {
@@ -199,7 +199,7 @@ namespace NPOI.HSSF.Util
             int colStart = region.FirstColumn;
             int colEnd = region.LastColumn;
             int rowIndex = region.FirstRow;
-            CellPropertySetter cps = new CellPropertySetter(workbook, HSSFCellUtil.BORDER_TOP, (int)border);
+            CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.BORDER_TOP, (int)border);
             NPOI.SS.UserModel.IRow row = HSSFCellUtil.GetRow(rowIndex, sheet);
             for (int i = colStart; i <= colEnd; i++)
             {
@@ -220,7 +220,7 @@ namespace NPOI.HSSF.Util
             int colStart = region.FirstColumn;
             int colEnd = region.LastColumn;
             int rowIndex = region.FirstRow;
-            CellPropertySetter cps = new CellPropertySetter(workbook, HSSFCellUtil.TOP_BORDER_COLOR, color);
+            CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.TOP_BORDER_COLOR, color);
             NPOI.SS.UserModel.IRow row = HSSFCellUtil.GetRow(rowIndex, sheet);
             for (int i = colStart; i <= colEnd; i++)
             {

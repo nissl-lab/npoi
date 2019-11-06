@@ -2896,7 +2896,7 @@ namespace NPOI.HSSF.UserModel
             return CopySheet(Name, true);
         }
 
-
+        [Obsolete("since poi 3.15")]
         public ISheet CopySheet(String Name, Boolean copyStyle)
         {
             int maxColumnNum = 0;
@@ -2941,7 +2941,7 @@ namespace NPOI.HSSF.UserModel
             newSheet.PrintSetup.FitWidth = PrintSetup.FitWidth;
             return newSheet;
         }
-
+        [Obsolete("since poi 3.15")]
         public void CopyTo(HSSFWorkbook dest, String name, Boolean copyStyle, Boolean keepFormulas)
         {
             int maxColumnNum = 0;
@@ -3125,7 +3125,7 @@ namespace NPOI.HSSF.UserModel
             }
             return retval;
         }
-
+        [Obsolete("since poi 3.15")]
         private static void CopyRow(HSSFSheet srcSheet, HSSFSheet destSheet, HSSFRow srcRow, HSSFRow destRow, IDictionary<Int32, HSSFCellStyle> styleMap, Dictionary<short, short> paletteMap, bool keepFormulas)
         {
             List<SS.Util.CellRangeAddress> mergedRegions = destSheet.Sheet.MergedRecords.MergedRegions;
@@ -3146,18 +3146,19 @@ namespace NPOI.HSSF.UserModel
                     {
                         newCell = (HSSFCell)destRow.CreateCell(j);
                     }
-                    HSSFCellUtil.CopyCell(oldCell, newCell, styleMap, paletteMap, keepFormulas);
-                    CellRangeAddress mergedRegion = GetMergedRegion(srcSheet, srcRow.RowNum, (short)oldCell.ColumnIndex);
-                    if (mergedRegion != null)
-                    {
-                        CellRangeAddress newMergedRegion = new CellRangeAddress(mergedRegion.FirstRow,
-                                mergedRegion.LastRow, mergedRegion.FirstColumn, mergedRegion.LastColumn);
+                    throw new NotImplementedException();
+                    //HSSFCellUtil.CopyCell(oldCell, newCell, styleMap, paletteMap, keepFormulas);
+                    //CellRangeAddress mergedRegion = GetMergedRegion(srcSheet, srcRow.RowNum, (short)oldCell.ColumnIndex);
+                    //if (mergedRegion != null)
+                    //{
+                    //    CellRangeAddress newMergedRegion = new CellRangeAddress(mergedRegion.FirstRow,
+                    //            mergedRegion.LastRow, mergedRegion.FirstColumn, mergedRegion.LastColumn);
 
-                        if (IsNewMergedRegion(newMergedRegion, mergedRegions))
-                        {
-                            mergedRegions.Add(newMergedRegion);
-                        }
-                    }
+                    //    if (IsNewMergedRegion(newMergedRegion, mergedRegions))
+                    //    {
+                    //        mergedRegions.Add(newMergedRegion);
+                    //    }
+                    //}
                 }
             }
         }

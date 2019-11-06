@@ -41,13 +41,13 @@ namespace NPOI.SS.Util
 
             // Add a border should create a new style
             int styCnt1 = wb.NumCellStyles;
-            CellUtil.SetCellStyleProperty(c, wb, CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
+            CellUtil.SetCellStyleProperty(c, CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
             int styCnt2 = wb.NumCellStyles;
             Assert.AreEqual(styCnt1 + 1, styCnt2);
 
             // Add same border to another cell, should not create another style
             c = r.CreateCell(1);
-            CellUtil.SetCellStyleProperty(c, wb, CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
+            CellUtil.SetCellStyleProperty(c, CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
             int styCnt3 = wb.NumCellStyles;
             Assert.AreEqual(styCnt2, styCnt3);
 
@@ -71,7 +71,7 @@ namespace NPOI.SS.Util
             props.Add(CellUtil.BORDER_RIGHT, BorderStyle.Thin);
             CellUtil.SetCellStyleProperties(c, props);
             int styCnt2 = wb.NumCellStyles;
-            Assert.AreEqual(styCnt2, styCnt1 + 1);
+            Assert.AreEqual(styCnt1 + 1, styCnt2, "Only one additional style should have been created");
 
             // Add same border another to same cell, should not create another style
             c = r.CreateCell(1);
@@ -174,7 +174,7 @@ namespace NPOI.SS.Util
             Assert.AreEqual(HorizontalAlignment.General, B1.CellStyle.Alignment);
 
             // Get/set alignment modifies the cell's style
-            CellUtil.SetAlignment(A1, wb, (int)HorizontalAlignment.Right);
+            CellUtil.SetAlignment(A1, HorizontalAlignment.Right);
             Assert.AreEqual(HorizontalAlignment.Right, A1.CellStyle.Alignment);
 
             // Get/set alignment doesn't affect the style of cells with
@@ -208,7 +208,7 @@ namespace NPOI.SS.Util
             Assert.AreEqual(defaultFontIndex, B1.CellStyle.FontIndex);
 
             // Get/set alignment modifies the cell's style
-            CellUtil.SetFont(A1, wb, font);
+            CellUtil.SetFont(A1, font);
             Assert.AreEqual(customFontIndex, A1.CellStyle.FontIndex);
 
             // Get/set alignment doesn't affect the style of cells with
@@ -232,12 +232,12 @@ namespace NPOI.SS.Util
             ICell A1 = wb1.CreateSheet().CreateRow(0).CreateCell(0);
 
             // okay
-            CellUtil.SetFont(A1, wb1, font1);
+            CellUtil.SetFont(A1, font1);
 
             // font belongs to different workbook
             try
             {
-                CellUtil.SetFont(A1, wb1, font2);
+                CellUtil.SetFont(A1, font2);
                 Assert.Fail("setFont not allowed if font belongs to a different workbook");
             }
             catch (ArgumentException e)
@@ -251,23 +251,10 @@ namespace NPOI.SS.Util
                     throw e;
                 }
             }
-
-            // cell belongs to different workbook
-            try
+            finally
             {
-                CellUtil.SetFont(A1, wb2, font2);
-                Assert.Fail("setFont not allowed if cell belongs to a different workbook");
-            }
-            catch (ArgumentException e)
-            {
-                if (e.Message.StartsWith("Cannot Set cell style property. Cell does not belong to workbook."))
-                {
-                    // expected
-                }
-                else
-                {
-                    throw e;
-                }
+                wb1.Close();
+                wb2.Close();
             }
         }
     }
