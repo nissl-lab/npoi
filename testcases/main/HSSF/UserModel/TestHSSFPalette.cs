@@ -244,7 +244,7 @@ namespace TestCases.HSSF.UserModel
 
         private void CompareToDefaults(ColorComparator c)
         {
-            Hashtable colors = HSSFColor.GetIndexHash();
+            var colors = HSSFColor.GetIndexHash();
             IEnumerator it = colors.Keys.GetEnumerator();
             while (it.MoveNext())
             {

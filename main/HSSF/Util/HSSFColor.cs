@@ -20,6 +20,7 @@ namespace NPOI.HSSF.Util
     using NPOI.SS.UserModel;
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
     /**
@@ -35,9 +36,9 @@ namespace NPOI.HSSF.Util
      * @author  Andrew C. Oliver (acoliver at apache dot org)
      * @author  Brian Sanders (bsanders at risklabs dot com) - full default color palette
      */
-    public class HSSFColor : NPOI.SS.UserModel.IColor
+    public class HSSFColor : IColor
     {
-        private static Hashtable indexHash;
+        private static Dictionary<int, HSSFColor> indexHash;
         public const short COLOR_NORMAL = 0x7fff;
 
         // TODO make subclass instances immutable
@@ -55,7 +56,7 @@ namespace NPOI.HSSF.Util
          *
          * @return a hashtable containing all colors keyed by <c>int</c> excel-style palette indexes
          */
-        public static Hashtable GetIndexHash()
+        public static Dictionary<int, HSSFColor> GetIndexHash()
         {
             if (indexHash == null)
             {
@@ -70,15 +71,15 @@ namespace NPOI.HSSF.Util
          *  the table, then call {@link #getIndexHash()} which returns a
          *  statically cached imuatable map of colours.
          */
-        public static Hashtable GetMutableIndexHash()
+        public static Dictionary<int, HSSFColor> GetMutableIndexHash()
         {
             return CreateColorsByIndexMap();
         }
 
-        private static Hashtable CreateColorsByIndexMap()
+        private static Dictionary<int, HSSFColor> CreateColorsByIndexMap()
         {
             HSSFColor[] colors = GetAllColors();
-            Hashtable result = new Hashtable(colors.Length * 3 / 2);
+            Dictionary<int, HSSFColor> result = new Dictionary<int, HSSFColor>(colors.Length * 3 / 2);
 
             for (int i = 0; i < colors.Length; i++)
             {
@@ -92,7 +93,7 @@ namespace NPOI.HSSF.Util
                             + ") for colors (" + prevColor.GetType().Name
                             + "),(" + color.GetType().Name + ")");
                 }
-                result[index1] = color;
+                result.Add(index1, color);
             }
 
             for (int i = 0; i < colors.Length; i++)
@@ -114,7 +115,10 @@ namespace NPOI.HSSF.Util
                 //            + "),(" + color.GetType().Name + ")");
                 //}
                 //}
-                result[index2] = color;
+                if (result.ContainsKey(index2))
+                    result[index2] = color;
+                else
+                    result.Add(index2, color);
             }
             return result;
         }

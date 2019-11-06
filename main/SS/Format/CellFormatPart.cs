@@ -75,7 +75,7 @@ namespace NPOI.SS.Format
         {
             NAMED_COLORS = new Dictionary<String, Color>(CASE_INSENSITIVE_ORDER);
 
-            Hashtable colors = HSSFColor.GetIndexHash();
+            var colors = HSSFColor.GetIndexHash();
             foreach (object v in colors.Values)
             {
                 HSSFColor hc = (HSSFColor)v;
