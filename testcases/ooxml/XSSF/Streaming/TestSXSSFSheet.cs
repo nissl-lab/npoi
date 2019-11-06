@@ -159,5 +159,23 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
         public void CreateRowAfterLastRow() {
             createRowAfterLastRow(SpreadsheetVersion.EXCEL2007);
         }
+
+        [Test]
+        public void ChangeRowNum()
+        {
+            SXSSFWorkbook wb = new SXSSFWorkbook(3);
+            SXSSFSheet sheet = wb.CreateSheet() as SXSSFSheet;
+            SXSSFRow row0 = sheet.CreateRow(0) as SXSSFRow;
+            SXSSFRow row1 = sheet.CreateRow(1) as SXSSFRow;
+            sheet.ChangeRowNum(row0, 2);
+
+            Assert.AreEqual(1, row1.RowNum, "Row 1 knows its row number");
+            Assert.AreEqual(2, row0.RowNum, "Row 2 knows its row number");
+            Assert.AreEqual(1, sheet.GetRowNum(row1), "Sheet knows Row 1's row number");
+            Assert.AreEqual(2, sheet.GetRowNum(row0), "Sheet knows Row 2's row number");
+            Assert.AreEqual(row1, sheet.GetEnumerator().Current, "Sheet row iteratation order should be ascending");
+
+            wb.Close();
+        }
     }
 }
