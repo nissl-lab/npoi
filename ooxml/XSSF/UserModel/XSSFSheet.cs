@@ -3571,7 +3571,7 @@ namespace NPOI.XSSF.UserModel
                     sheetComments = (CommentsTable)CreateRelationship(
                           XSSFRelation.SHEET_COMMENTS, XSSFFactory.GetInstance(), (int)sheet.sheetId);
                 }
-                catch (PartAlreadyExistsException e)
+                catch (PartAlreadyExistsException)
                 {
                     // Technically a sheet doesn't need the same number as
                     //  it's comments, and clearly someone has already pinched
@@ -4300,6 +4300,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @param colorIndex  the indexed color to set, must be a constant from {@link IndexedColors}
          */
+         [Obsolete("deprecated 3.15-beta2. Removed in 3.17. Use {@link #setTabColor(XSSFColor)}.")]
         public void SetTabColor(int colorIndex)
         {
             CT_SheetPr pr = worksheet.sheetPr;
@@ -4308,7 +4309,37 @@ namespace NPOI.XSSF.UserModel
             color.indexed = (uint)(colorIndex);
             pr.tabColor = (color);
         }
-    
+
+        /*
+         * Get background color of the sheet tab.
+         * Returns <tt>null</tt> if no sheet tab color is set.
+         *
+         * @return the background color of the sheet tab
+         */
+        /// <summary>
+        /// Get or set background color of the sheet tab.
+        /// The value is null if no sheet tab color is set.
+        /// </summary>
+        public XSSFColor TabColor
+        {
+            get
+            {
+                CT_SheetPr pr = worksheet.sheetPr;
+                if (pr == null) pr = worksheet.AddNewSheetPr();
+                if (!pr.IsSetTabColor())
+                {
+                    return null;
+                }
+                return new XSSFColor(pr.tabColor);
+            }
+            set
+            {
+                CT_SheetPr pr = worksheet.sheetPr;
+                if (pr == null) pr = worksheet.AddNewSheetPr();
+                pr.tabColor = value.GetCTColor();
+            }
+        }
+
         #region ISheet Members
 
 

@@ -62,6 +62,11 @@ namespace NPOI.XSSF.UserModel
             ctColor.SetRgb(rgb);
         }
 
+        public XSSFColor(IndexedColors indexedColor)
+            : this()
+        {
+            ctColor.indexed = (uint)indexedColor.Index;
+        }
         /// <summary>
         ///A bool value indicating the ctColor is automatic and system ctColor dependent.
         /// </summary>
@@ -102,7 +107,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * A boolean value indicating if the ctColor has a alpha or not
+         * A bool value indicating if the ctColor has a alpha or not
          */
         public bool HasAlpha
         {
@@ -114,7 +119,7 @@ namespace NPOI.XSSF.UserModel
             
         }
         /**
-         * A boolean value indicating if the ctColor has a tint or not
+         * A bool value indicating if the ctColor has a tint or not
          */
         public bool HasTint
         {
@@ -280,8 +285,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Index into the <clrScheme> collection, referencing a particular <sysClr> or
-         *  <srgbClr> value expressed in the Theme part.
+         * Index into the clrScheme collection, referencing a particular sysClr or
+         *  srgbClr value expressed in the Theme part.
          */
         public override int Theme
         {
@@ -360,15 +365,75 @@ namespace NPOI.XSSF.UserModel
         {
             return ctColor;
         }
-
+        /// <summary>
+        /// Checked type cast <tt>color</tt> to an XSSFColor.
+        /// </summary>
+        /// <param name="color">the color to type cast</param>
+        /// <returns>the type casted color</returns>
+        /// <exception cref="ArgumentException">if color is null or is not an instance of XSSFColor</exception>
         public static XSSFColor ToXSSFColor(IColor color)
         {
+            // FIXME: this method would be more useful if it could convert any Color to an XSSFColor
+            // Currently the only benefit of this method is to throw an IllegalArgumentException
+            // instead of a ClassCastException.
             if (color != null && !(color is XSSFColor)) {
                 throw new ArgumentException("Only XSSFColor objects are supported");
             }
             return (XSSFColor)color;
         }
-
+        // Helper methods for {@link #equals(Object)}
+        private bool SameIndexed(XSSFColor other)
+        {
+            if (IsIndexed == other.IsIndexed)
+            {
+                if (IsIndexed)
+                {
+                    return Indexed == other.Indexed;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool SameARGB(XSSFColor other)
+        {
+            if (IsRGB == other.IsRGB)
+            {
+                if (IsRGB)
+                {
+                    return Arrays.Equals(ARGB, other.ARGB);
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool SameTheme(XSSFColor other)
+        {
+            if (IsThemed == other.IsThemed)
+            {
+                if (IsThemed)
+                {
+                    return Theme == other.Theme;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool SameTint(XSSFColor other)
+        {
+            if (HasTint == other.HasTint)
+            {
+                if (HasTint)
+                {
+                    return Tint == other.Tint;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool SameAuto(XSSFColor other)
+        {
+            return IsAuto == other.IsAuto;
+        }
         public override int GetHashCode()
         {
             return ctColor.ToString().GetHashCode();
@@ -376,10 +441,19 @@ namespace NPOI.XSSF.UserModel
 
         public override bool Equals(Object o)
         {
-            if (o == null || !(o is XSSFColor)) return false;
+            if (o == null || !(o is XSSFColor))
+                return false;
 
-            XSSFColor cf = (XSSFColor)o;
-            return ctColor.ToString().Equals(cf.GetCTColor().ToString());
+            XSSFColor other = (XSSFColor)o;
+
+            // Compare each field in ctColor.
+            // Cannot compare ctColor's XML string representation because equivalent
+            // colors may have different relation namespace URI's
+            return SameARGB(other)
+                    && SameTheme(other)
+                    && SameIndexed(other)
+                    && SameTint(other)
+                    && SameAuto(other);
         }
     }
 

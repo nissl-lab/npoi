@@ -1447,7 +1447,8 @@ namespace NPOI.XSSF.UserModel
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
             XSSFSheet sheet2 = wb.CreateSheet("TEST") as XSSFSheet;
 
-            Assert.Throws<ArgumentException>(() => {
+            Assert.Throws<ArgumentException>(() =>
+            {
                 sheet2.CreatePivotTable(
                     new AreaReference(sheet.SheetName + "!A$1:B$2", SpreadsheetVersion.EXCEL2007),
                     new CellReference("H5"),
@@ -1820,11 +1821,12 @@ namespace NPOI.XSSF.UserModel
             cell = CellUtil.GetCell(destRow1, col);
             Assert.AreEqual("Merged cells across multiple rows", cell.StringCellValue,
                 "[Merged across multiple rows] R10:S11 cell value");
-            Assert.IsTrue(sheet.MergedRegions.Contains(CellRangeAddress.ValueOf("R10:S11")), 
+            Assert.IsTrue(sheet.MergedRegions.Contains(CellRangeAddress.ValueOf("R10:S11")),
                 "[Merged across multiple rows] R10:S11 merged region");
 
             // Row 3 (zero-based) was empty, so Row 11 (zero-based) should be empty too.
-            if (srcRow3 == null) {
+            if (srcRow3 == null)
+            {
                 Assert.IsNull(destRow3, "Row 3 was empty, so Row 11 should be empty");
             }
 
@@ -1927,10 +1929,54 @@ namespace NPOI.XSSF.UserModel
             {
                 XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
                 Assert.IsTrue(sh.GetCTWorksheet().sheetPr == null || !sh.GetCTWorksheet().sheetPr.IsSetTabColor());
-                sh.SetTabColor(IndexedColors.Red.Index);
+                sh.TabColor = new XSSFColor(IndexedColors.Red);
                 Assert.IsTrue(sh.GetCTWorksheet().sheetPr.IsSetTabColor());
                 Assert.AreEqual(IndexedColors.Red.Index,
                         sh.GetCTWorksheet().sheetPr.tabColor.indexed);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void GetTabColor()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
+                Assert.IsTrue(sh.GetCTWorksheet().sheetPr == null || !sh.GetCTWorksheet().sheetPr.IsSetTabColor());
+                Assert.IsNull(sh.TabColor);
+                sh.TabColor = new XSSFColor(IndexedColors.Red);
+                XSSFColor expected = new XSSFColor(IndexedColors.Red);
+                Assert.AreEqual(expected, sh.TabColor);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        // Test using an existing workbook saved by Excel
+        [Test]
+        public void TabColor()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("SheetTabColors.xlsx");
+            try
+            {
+                // non-colored sheets do not have a color
+                Assert.IsNull((wb.GetSheet("default") as XSSFSheet).TabColor);
+
+                // test indexed-colored sheet
+                XSSFColor expected = new XSSFColor(IndexedColors.Red);
+                Assert.AreEqual(expected, (wb.GetSheet("indexedRed") as XSSFSheet).TabColor);
+
+                // test regular-colored (non-indexed, ARGB) sheet
+                expected = new XSSFColor();
+                expected.ARGBHex = "FF7F2700";
+                Assert.AreEqual(expected, (wb.GetSheet("customOrange") as XSSFSheet).TabColor);
             }
             finally
             {

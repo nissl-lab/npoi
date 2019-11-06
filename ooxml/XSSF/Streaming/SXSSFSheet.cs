@@ -1286,5 +1286,17 @@ namespace NPOI.XSSF.Streaming
                 _sh.ActiveCell = value;
             }
         }
+
+        public XSSFColor TabColor
+        {
+            get
+            {
+                return _sh.TabColor;
+            }
+            set
+            {
+                _sh.TabColor = value;
+            }
+        }
     }
 }
