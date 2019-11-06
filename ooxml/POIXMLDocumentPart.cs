@@ -465,6 +465,10 @@ using System.Xml;
                 foreach (PackageRelationship pr in packagePart.Relationships)
                 {
                     PackagePart pp = packagePart.GetRelatedPart(pr);
+                    if (pr.TargetMode == TargetMode.External)
+                    {
+                        continue;
+                    }
                     if (ppn.Equals(pp.PartName.Name))
                     {
                         return pr;
