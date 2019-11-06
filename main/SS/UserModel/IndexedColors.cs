@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using NPOI.HSSF.Util;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -260,7 +261,20 @@ namespace NPOI.SS.UserModel
         {
             if(mappingIndex.ContainsKey(index))
                 return mappingIndex[index];
-            return null;
+            throw new ArgumentException("Illegal IndexedColor index: " + index);
+        }
+
+        /**
+         * 
+         *
+         * @param index the index of the color
+         * @return the corresponding IndexedColors enum
+         * @throws IllegalArgumentException if index is not a valid IndexedColors
+         * @since 3.15-beta2
+         */
+        public static IndexedColors FromInt(int index)
+        {
+            return ValueOf(index);
         }
 
         public byte[] RGB
