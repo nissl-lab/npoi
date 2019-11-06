@@ -346,7 +346,7 @@ namespace NPOI.SS.UserModel
 
             // Build a formatter, and cache it
             format = CreateFormat(cellValue, formatIndex, formatStr);
-            //formats[formatStr] = format;
+            formats[formatStr] = format;
             return format;
         }
 
