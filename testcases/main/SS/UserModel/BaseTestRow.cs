@@ -35,7 +35,7 @@ namespace TestCases.SS.UserModel
     public class BaseTestRow
     {
 
-        private ITestDataProvider _testDataProvider;
+        protected ITestDataProvider _testDataProvider;
         public BaseTestRow()
             : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
         { }
@@ -140,7 +140,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(0, row.PhysicalNumberOfCells);
             wb2.Close();
         }
-        public void BaseTestRowBounds(int maxRowNum)
+        protected void BaseTestRowBounds(int maxRowNum)
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             ISheet sheet = workbook.CreateSheet();
@@ -174,7 +174,7 @@ namespace TestCases.SS.UserModel
             }
             workbook.Close();
         }
-        public void BaseTestCellBounds(int maxCellNum)
+        protected void BaseTestCellBounds(int maxCellNum)
         {
             IWorkbook wb1 = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb1.CreateSheet();

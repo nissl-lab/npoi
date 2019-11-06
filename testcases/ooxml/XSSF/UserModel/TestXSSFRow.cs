@@ -27,23 +27,14 @@ namespace NPOI.XSSF.UserModel
      * Tests for XSSFRow
      */
     [TestFixture]
-    public class TestXSSFRow : BaseTestRow
+    public class TestXSSFRow : BaseTestXRow
     {
 
         public TestXSSFRow():base(XSSFITestDataProvider.instance)
         {
             
         }
-        [Test]
-        public void TestRowBounds()
-        {
-            BaseTestRowBounds(SpreadsheetVersion.EXCEL2007.LastRowIndex);
-        }
-        [Test]
-        public void TestCellBounds()
-        {
-            BaseTestCellBounds(SpreadsheetVersion.EXCEL2007.LastColumnIndex);
-        }
+
         [Test]
         public void TestCopyRowFrom()
         {
@@ -60,7 +51,7 @@ namespace NPOI.XSSF.UserModel
             workbook.Close();
         }
         [Test]
-        public void testCopyRowFromExternalSheet()
+        public void TestCopyRowFromExternalSheet()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
             ISheet srcSheet = workbook.CreateSheet("src");

@@ -125,6 +125,9 @@
     <Compile Include="SS\Formula\Functions\TestProper.cs" />
     <Compile Include="SS\TestWorkbookFactory.cs" />
     <Compile Include="SS\UserModel\BaseTestXCell.cs" />
+    <Compile Include="SS\UserModel\BaseTestXRow.cs" />
+    <Compile Include="SS\UserModel\BaseTestXSheet.cs" />
+    <Compile Include="SS\UserModel\BaseTestXWorkbook.cs" />
     <Compile Include="SS\UserModel\TestFormulaParser.cs" />
     <Compile Include="SS\UserModel\TestXSSFBorderStyle.cs" />
     <Compile Include="TestDetectAsOOXML.cs" />
@@ -157,6 +160,7 @@
     <Compile Include="XSSF\Streaming\TestSXSSFBugs.cs" />
     <Compile Include="XSSF\Streaming\TestSXSSFCell.cs" />
     <Compile Include="XSSF\Streaming\TestSXSSFFormulaEvaluation.cs" />
+    <Compile Include="XSSF\Streaming\TestSXSSFRow.cs" />
     <Compile Include="XSSF\Streaming\TestSXSSFSheet.cs" />
     <Compile Include="XSSF\Streaming\TestSXSSFSheetAutoSizeColumn.cs" />
     <Compile Include="XSSF\Streaming\TestSXSSFWorkbook.cs" />

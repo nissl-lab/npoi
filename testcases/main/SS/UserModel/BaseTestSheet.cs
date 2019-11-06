@@ -114,8 +114,10 @@ namespace TestCases.SS.UserModel
             }
         }
 
-        protected void createRowAfterLastRow(SpreadsheetVersion version)
+        [Test]
+        public void CreateRowAfterLastRow()
         {
+            SpreadsheetVersion version = _testDataProvider.GetSpreadsheetVersion();
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             ISheet sh = workbook.CreateSheet();
             sh.CreateRow(version.LastRowIndex);

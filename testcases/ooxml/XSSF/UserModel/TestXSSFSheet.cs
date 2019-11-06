@@ -37,7 +37,7 @@ using NPOI.XSSF.Streaming;
 namespace NPOI.XSSF.UserModel
 {
     [TestFixture]
-    public class TestXSSFSheet : BaseTestSheet
+    public class TestXSSFSheet : BaseTestXSheet
     {
 
         public TestXSSFSheet()
@@ -1032,12 +1032,6 @@ namespace NPOI.XSSF.UserModel
         }
 
         [Test]
-        public void CreateRowAfterLastRow()
-        {
-            createRowAfterLastRow(SpreadsheetVersion.EXCEL2007);
-        }
-
-        [Test]
         public void TestSetAutoFilter()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -1617,7 +1611,7 @@ namespace NPOI.XSSF.UserModel
             wb.Close();
         }
 
-        public void testCopyMultipleRows(String copyRowsTestWorkbook)
+        protected void testCopyMultipleRows(String copyRowsTestWorkbook)
         {
             double FLOAT_PRECISION = 1e-9;
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook(copyRowsTestWorkbook);

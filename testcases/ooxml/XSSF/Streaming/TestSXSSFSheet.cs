@@ -31,7 +31,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
     using TestCases.SS.UserModel;
 
     [TestFixture]
-    public class TestSXSSFSheet : BaseTestSheet
+    public class TestSXSSFSheet : BaseTestXSheet
     {
 
         public TestSXSSFSheet()
@@ -153,11 +153,6 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
                 wb.Close();
                 template.Close();
             }
-        }
-
-        [Test]
-        public void CreateRowAfterLastRow() {
-            createRowAfterLastRow(SpreadsheetVersion.EXCEL2007);
         }
 
         [Test]

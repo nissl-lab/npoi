@@ -47,9 +47,8 @@ namespace TestCases.HSSF.UserModel
     [TestFixture]
     public class TestHSSFWorkbook : BaseTestWorkbook
     {
-        private static HSSFITestDataProvider _testDataProvider = HSSFITestDataProvider.Instance;
         public TestHSSFWorkbook()
-            : base(_testDataProvider)
+            : base(HSSFITestDataProvider.Instance)
         { }
         /**
      * gives test code access to the {@link InternalWorkbook} within {@link HSSFWorkbook}
@@ -1317,12 +1316,6 @@ namespace TestCases.HSSF.UserModel
 
         }
 
-        [Test]
-
-        public override void GetSpreadsheetVersion()
-        {
-            verifySpreadsheetVersion(SpreadsheetVersion.EXCEL97);
-        }
 
         [Test]
         public void CloseDoesNotModifyWorkbook()

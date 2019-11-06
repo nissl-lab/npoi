@@ -56,11 +56,6 @@ namespace TestCases.HSSF.UserModel
 
         }
 
-        [Test]
-        public void CreateRowAfterLastRow()
-        {
-            createRowAfterLastRow(SpreadsheetVersion.EXCEL97);
-        }
         /**
      * Test for Bugzilla #29747.
      * Moved from TestHSSFWorkbook#testSetRepeatingRowsAndColumns().

@@ -36,12 +36,11 @@ namespace NPOI.XSSF.Streaming
     using TestCases.SS.UserModel;
 
     [TestFixture]
-    public class TestSXSSFWorkbook : BaseTestWorkbook
+    public class TestSXSSFWorkbook : BaseTestXWorkbook
     {
-        private static SXSSFITestDataProvider _testDataProvider = SXSSFITestDataProvider.instance;
 
         public TestSXSSFWorkbook()
-                : base(_testDataProvider)
+                : base(SXSSFITestDataProvider.instance)
         {
 
         }
@@ -49,7 +48,7 @@ namespace NPOI.XSSF.Streaming
         [TearDown]
         public void TearDown()
         {
-            _testDataProvider.Cleanup();
+            ((SXSSFITestDataProvider)_testDataProvider).Cleanup();
         }
 
         /**
@@ -310,7 +309,7 @@ namespace NPOI.XSSF.Streaming
             xwb.Close();
         }
 
-        static void assertWorkbookDispose(SXSSFWorkbook wb)
+        protected static void assertWorkbookDispose(SXSSFWorkbook wb)
         {
             int rowNum = 1000;
             int sheetNum = 5;
@@ -347,7 +346,7 @@ namespace NPOI.XSSF.Streaming
         }
 
         [Test]
-        public void workbookDispose()
+        public void WorkbookDispose()
         {
             SXSSFWorkbook wb1 = new SXSSFWorkbook();
             // the underlying Writer is SheetDataWriter
@@ -488,13 +487,6 @@ namespace NPOI.XSSF.Streaming
 
             streamingWorkBook.Close();
             workBook.Close();
-        }
-
-        [Test]
-
-        public override void GetSpreadsheetVersion()
-        {
-            verifySpreadsheetVersion(SpreadsheetVersion.EXCEL2007);
         }
 
         [Test]

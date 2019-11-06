@@ -36,7 +36,7 @@ namespace TestCases.SS.UserModel
     public abstract class BaseTestWorkbook
     {
 
-        private ITestDataProvider _testDataProvider;
+        protected ITestDataProvider _testDataProvider;
         public BaseTestWorkbook()
         {
             _testDataProvider = TestCases.HSSF.HSSFITestDataProvider.Instance;
@@ -785,7 +785,7 @@ namespace TestCases.SS.UserModel
             wb2.Close();
         }
 
-        public void ChangeSheetNameWithSharedFormulas(String sampleFile)
+        protected void ChangeSheetNameWithSharedFormulas(String sampleFile)
         {
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook(sampleFile);
 
@@ -915,9 +915,11 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
-        public virtual void GetSpreadsheetVersion()
+        public void GetSpreadsheetVersion()
         {
-
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            Assert.AreEqual(_testDataProvider.GetSpreadsheetVersion(), wb.SpreadsheetVersion);
+            wb.Close();
         }
 
         protected void verifySpreadsheetVersion(SpreadsheetVersion expected)

@@ -38,11 +38,10 @@ namespace NPOI.XSSF.UserModel
 {
 
     [TestFixture]
-    public class TestXSSFWorkbook : BaseTestWorkbook
+    public class TestXSSFWorkbook : BaseTestXWorkbook
     {
-        private static XSSFITestDataProvider _testDataProvider = XSSFITestDataProvider.instance;
         public TestXSSFWorkbook()
-            : base(_testDataProvider)
+            : base(XSSFITestDataProvider.instance)
         {
 
         }
@@ -788,7 +787,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public void SetPivotData(XSSFWorkbook wb)
+        protected void SetPivotData(XSSFWorkbook wb)
         {
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
 
@@ -955,7 +954,7 @@ namespace NPOI.XSSF.UserModel
             workbook.Close();
         }
 
-        [Test]
+
         /**
          *  Iterator<XSSFSheet> XSSFWorkbook.iterator was committed in r700472 on 2008-09-30
          *  and has been replaced with Iterator<Sheet> XSSFWorkbook.iterator
@@ -971,6 +970,7 @@ namespace NPOI.XSSF.UserModel
          *  upgrade their code with either of the following options presented in this test case.
          *  
          */
+        [Test]
         public void Bug58245_XSSFSheetIterator()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -1078,12 +1078,7 @@ namespace NPOI.XSSF.UserModel
                 Assert.IsTrue(!file.Exists);
             }
         }
-        [Test]
-
-        public override void GetSpreadsheetVersion()
-        {
-            verifySpreadsheetVersion(SpreadsheetVersion.EXCEL2007);
-        }
+        
         [Test]
         public void CloseDoesNotModifyWorkbook()
         {
