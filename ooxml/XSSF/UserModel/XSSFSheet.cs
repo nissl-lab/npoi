@@ -50,6 +50,15 @@ namespace NPOI.XSSF.UserModel
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(XSSFSheet));
 
+        private static double DEFAULT_ROW_HEIGHT = 15.0;
+        private static double DEFAULT_MARGIN_HEADER = 0.3;
+        private static double DEFAULT_MARGIN_FOOTER = 0.3;
+        private static double DEFAULT_MARGIN_TOP = 0.75;
+        private static double DEFAULT_MARGIN_BOTTOM = 0.75;
+        private static double DEFAULT_MARGIN_LEFT = 0.7;
+        private static double DEFAULT_MARGIN_RIGHT = 0.7;
+        public static int TWIPS_PER_POINT = 20;
+
         //TODO make the two variable below private!
         internal CT_Sheet sheet;
         internal CT_Worksheet worksheet;
@@ -239,7 +248,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Worksheet worksheet = new CT_Worksheet();
             CT_SheetFormatPr ctFormat = worksheet.AddNewSheetFormatPr();
-            ctFormat.defaultRowHeight = (15.0);
+            ctFormat.defaultRowHeight = DEFAULT_ROW_HEIGHT;
 
             CT_SheetView ctView = worksheet.AddNewSheetViews().AddNewSheetView();
             ctView.workbookViewId = (0);
@@ -249,12 +258,12 @@ namespace NPOI.XSSF.UserModel
             worksheet.AddNewSheetData();
 
             CT_PageMargins ctMargins = worksheet.AddNewPageMargins();
-            ctMargins.bottom = (0.75);
-            ctMargins.footer = (0.3);
-            ctMargins.header = (0.3);
-            ctMargins.left = (0.7);
-            ctMargins.right = (0.7);
-            ctMargins.top = (0.75);
+            ctMargins.bottom = DEFAULT_MARGIN_BOTTOM;
+            ctMargins.footer = DEFAULT_MARGIN_FOOTER;
+            ctMargins.header = DEFAULT_MARGIN_HEADER;
+            ctMargins.left = DEFAULT_MARGIN_LEFT;
+            ctMargins.right = DEFAULT_MARGIN_RIGHT;
+            ctMargins.top = DEFAULT_MARGIN_TOP;
 
             return worksheet;
         }
@@ -954,11 +963,11 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (short)((decimal)DefaultRowHeightInPoints * 20);
+                return (short)((decimal)DefaultRowHeightInPoints * TWIPS_PER_POINT);
             }
             set
             {
-                DefaultRowHeightInPoints = (float)value / 20;
+                DefaultRowHeightInPoints = (float)value / TWIPS_PER_POINT;
             }
         }
 
@@ -4559,24 +4568,21 @@ namespace NPOI.XSSF.UserModel
             String c = "";
             String r = "";
 
-            if (startC == -1 && endC == -1)
+            if (startC != -1 || endC != -1)
             {
-            }
-            else
-            {
-                c = escapedName + "!$" + colRef.CellRefParts[2]
-                    + ":$" + colRef2.CellRefParts[2];
+                String col1 = colRef.CellRefParts[2];
+                String col2 = colRef2.CellRefParts[2];
+                c = escapedName + "!$" + col1 + ":$" + col2;
             }
 
-            if (startR == -1 && endR == -1)
+            if (startR != -1 || endR != -1)
             {
-
-            }
-            else if (!rowRef.CellRefParts[1].Equals("0")
-              && !rowRef2.CellRefParts[1].Equals("0"))
-            {
-                r = escapedName + "!$" + rowRef.CellRefParts[1]
-                      + ":$" + rowRef2.CellRefParts[1];
+                String row1 = rowRef.CellRefParts[1];
+                String row2 = rowRef2.CellRefParts[1];
+                if (!row1.Equals("0") && !row2.Equals("0"))
+                {
+                    r = escapedName + "!$" + row1 + ":$" + row2;
+                }
             }
 
             StringBuilder rng = new StringBuilder();
