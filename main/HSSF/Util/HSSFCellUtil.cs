@@ -33,6 +33,7 @@ namespace NPOI.HSSF.Util
     /// can be supported.
     /// @author     Eric Pugh epugh@upstate.com
     /// </summary>
+    [Obsolete("deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil} instead.")]
     public class HSSFCellUtil
     {
         public const string ALIGNMENT = "alignment";
@@ -102,6 +103,7 @@ namespace NPOI.HSSF.Util
         /// <param name="rowCounter">The 0 based row number</param>
         /// <param name="sheet">The sheet that the row is part of.</param>
         /// <returns>The row indicated by the rowCounter</returns>
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#getRow} instead.")]
         public static IRow GetRow(int rowCounter, HSSFSheet sheet)
         {
             IRow row = sheet.GetRow(rowCounter);
@@ -120,6 +122,7 @@ namespace NPOI.HSSF.Util
         /// <param name="row">The row that the cell is part of</param>
         /// <param name="column">The column index that the cell is in.</param>
         /// <returns>The cell indicated by the column.</returns>
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#getCell} instead.")]
         public static ICell GetCell(IRow row, int column)
         {
             ICell cell = row.GetCell(column);
@@ -140,6 +143,7 @@ namespace NPOI.HSSF.Util
         /// <param name="value">The value of the cell</param>
         /// <param name="style">If the style is not null, then Set</param>
         /// <returns>A new HSSFCell</returns>
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#createCell} instead.")]
         public static ICell CreateCell(IRow row, int column, String value, HSSFCellStyle style)
         {
             ICell cell = GetCell(row, column);
@@ -161,6 +165,7 @@ namespace NPOI.HSSF.Util
         /// <param name="column">the column index to Create the cell in</param>
         /// <param name="value">The value of the cell</param>
         /// <returns>A new HSSFCell.</returns>
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#createCell} instead.")]
         public static ICell CreateCell(IRow row, int column, String value)
         {
             return CreateCell(row, column, value, null);
@@ -200,7 +205,7 @@ namespace NPOI.HSSF.Util
                 stylish.TopBorderColor = paletteMap[stylish.TopBorderColor];
             }
         }
-
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#createCell} instead.")]
         public static void CopyCell(HSSFCell oldCell, HSSFCell newCell, IDictionary<Int32, HSSFCellStyle> styleMap, Dictionary<short, short> paletteMap, Boolean keepFormulas)
         {
             if (styleMap != null)
@@ -309,6 +314,7 @@ namespace NPOI.HSSF.Util
         /// <param name="cell">the cell to Set the alignment for</param>
         /// <param name="workbook">The workbook that is being worked with.</param>
         /// <param name="align">the column alignment to use.</param>
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#setAlignment} instead.")]
         public static void SetAlignment(ICell cell, HSSFWorkbook workbook, short align)
         {
             SetCellStyleProperty(cell, workbook, ALIGNMENT, align);
@@ -320,6 +326,7 @@ namespace NPOI.HSSF.Util
         /// <param name="cell">the cell to Set the alignment for</param>
         /// <param name="workbook">The workbook that is being worked with.</param>
         /// <param name="font">The HSSFFont that you want to Set...</param>
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#setFont} instead.")]
         public static void SetFont(ICell cell, HSSFWorkbook workbook, HSSFFont font)
         {
             SetCellStyleProperty(cell, workbook, FONT, font);
@@ -360,6 +367,7 @@ namespace NPOI.HSSF.Util
          *@param  cell                   The cell that needs it's style changes
          *@exception  NestableException  Thrown if an error happens.
          */
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#setCellStyleProperty} instead.")]
         public static void SetCellStyleProperty(ICell cell, HSSFWorkbook workbook, String propertyName, Object propertyValue)
         {
             ICellStyle originalStyle = cell.CellStyle;
@@ -523,6 +531,7 @@ namespace NPOI.HSSF.Util
         /// </summary>
         /// <param name="cell">The cell to check for unicode values</param>
         /// <returns>transalted to unicode</returns>
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#translateUnicodeValues} instead.")]
         public static ICell TranslateUnicodeValues(ICell cell)
         {
 
