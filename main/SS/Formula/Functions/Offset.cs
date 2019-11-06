@@ -245,11 +245,18 @@ namespace NPOI.SS.Formula.Functions
                         if (!(args[4] is MissingArgEval)) {
                             width = EvaluateIntArg(args[4], srcCellRow, srcCellCol);
                         }
+                        // fall-through to pick up height 
+                        if (!(args[3] is MissingArgEval))
+                        {
+                            height = EvaluateIntArg(args[3], srcCellRow, srcCellCol);
+                        }
                         break;
                     case 4:
                         if (!(args[3] is MissingArgEval)) {
                             height = EvaluateIntArg(args[3], srcCellRow, srcCellCol);
                         }
+                        break;
+                    default:
                         break;
                 }
                 // Zero height or width raises #REF! error

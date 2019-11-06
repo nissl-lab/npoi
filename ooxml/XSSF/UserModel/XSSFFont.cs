@@ -22,6 +22,8 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.OpenXmlFormats.Dml;
 using Dml = NPOI.OpenXmlFormats.Dml;
 using NPOI.XSSF.Model;
+using NPOI.Util;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -389,6 +391,8 @@ namespace NPOI.XSSF.UserModel
                         case FontSuperScript.Super:
                             offSetProperty.val = ST_VerticalAlignRun.superscript;
                             break;
+                        default:
+                            throw new IllegalStateException("Invalid type offset: " + value);
                     }
                 }
             }

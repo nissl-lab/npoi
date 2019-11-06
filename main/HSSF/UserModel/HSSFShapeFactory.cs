@@ -75,6 +75,8 @@ namespace NPOI.HSSF.UserModel
                         case EscherTextboxRecord.RECORD_ID:
                             txtRecord = (TextObjectRecord)shapeToObj[(record)];
                             break;
+                        default:
+                            break;
                     }
                 }
                 if (IsEmbeddedObject(objRecord))

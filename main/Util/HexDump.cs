@@ -155,6 +155,8 @@ namespace NPOI.Util
                 case 0xDD: // printable, but not compilable with current compiler encoding
                     charB = '.';
                     break;
+                default:
+                    break;
             }
             return charB;
         }

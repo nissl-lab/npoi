@@ -114,6 +114,8 @@ namespace NPOI.HSSF.Model
                         opt.EscherProperties.Remove(prop);
                         i--;
                         break;
+                    default:
+                        break;
                 }
             }
 

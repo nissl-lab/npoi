@@ -31,6 +31,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula;
     using System.Globalization;
     using System.Collections.Generic;
+    using NPOI.Util;
 
     /// <summary>
     /// High level representation of a cell in a row of a spReadsheet.
@@ -134,6 +135,9 @@ namespace NPOI.HSSF.UserModel
 
                 case CellType.Formula:
                     stringValue = new HSSFRichTextString(((FormulaRecordAggregate)cval).StringValue);
+                    break;
+
+                default:
                     break;
             }
             //ExtendedFormatRecord xf = book.Workbook.GetExFormatAt(cval.XFIndex);
@@ -395,6 +399,8 @@ namespace NPOI.HSSF.UserModel
                     errRec.Row = row;
                     _record = errRec;
                     break;
+                default:
+                    throw new IllegalStateException("Invalid cell type: " + cellType);
             }
             if (cellType != this.cellType &&
                 this.cellType != CellType.Unknown)  // Special Value to indicate an Uninitialized Cell
@@ -1222,6 +1228,8 @@ namespace NPOI.HSSF.UserModel
                         break;
                     case HyperlinkType.Document:
                         value.Label = ("place");
+                        break;
+                    default:
                         break;
                 }
 

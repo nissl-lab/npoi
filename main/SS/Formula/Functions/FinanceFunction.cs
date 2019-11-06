@@ -90,6 +90,8 @@ namespace NPOI.SS.Formula.Functions
                         arg4 = DEFAULT_ARG4;
                     }
                     return Evaluate(srcRowIndex, srcColumnIndex, args[0], args[1], args[2], arg3, arg4);
+                default:
+                    return ErrorEval.VALUE_INVALID;
             }
             return ErrorEval.VALUE_INVALID;
         }

@@ -1817,24 +1817,26 @@ namespace NPOI.HSSF.UserModel
             
             switch (format)
             {
-                case NPOI.SS.UserModel.PictureType.EMF:
+                case PictureType.EMF:
                     blipRecord.Options = HSSFPictureData.MSOBI_EMF;
                     break;
-                case NPOI.SS.UserModel.PictureType.WMF:
+                case PictureType.WMF:
                     blipRecord.Options = HSSFPictureData.MSOBI_WMF;
                     break;
-                case NPOI.SS.UserModel.PictureType.PICT:
+                case PictureType.PICT:
                     blipRecord.Options = HSSFPictureData.MSOBI_PICT;
                     break;
-                case NPOI.SS.UserModel.PictureType.PNG:
+                case PictureType.PNG:
                     blipRecord.Options = HSSFPictureData.MSOBI_PNG;
                     break;
-                case NPOI.SS.UserModel.PictureType.JPEG:
+                case PictureType.JPEG:
                     blipRecord.Options = HSSFPictureData.MSOBI_JPEG;
                     break;
-                case NPOI.SS.UserModel.PictureType.DIB:
+                case PictureType.DIB:
                     blipRecord.Options = HSSFPictureData.MSOBI_DIB;
                     break;
+                default:
+                    throw new IllegalStateException("Unexpected picture format: " + format);
             }
 
             EscherBSERecord r = new EscherBSERecord();

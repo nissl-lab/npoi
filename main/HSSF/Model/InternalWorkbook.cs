@@ -30,6 +30,7 @@ namespace NPOI.HSSF.Model
     using NPOI.SS.UserModel;
     using System.Security;
     using NPOI.POIFS.Crypt;
+    using NPOI.Util;
 
 
     /**
@@ -282,6 +283,10 @@ namespace NPOI.HSSF.Model
                         NameCommentRecord ncr = (NameCommentRecord)rec;
                         retval.commentRecords[ncr.NameText] = ncr;
                         break;
+                    default:
+                        //if (log.check(POILogger.DEBUG))
+                            //log.log(DEBUG, "ignoring record (sid=" + rec.getSid() + ") at " + k);
+                        break;
                 }
                 records.Add(rec);
             }
@@ -300,6 +305,8 @@ namespace NPOI.HSSF.Model
                 {
                     case HyperlinkRecord.sid:
                         retval.hyperlinks.Add((HyperlinkRecord)rec);
+                        break;
+                    default:
                         break;
                 }
             }
@@ -2012,6 +2019,8 @@ namespace NPOI.HSSF.Model
                     retval.AdtlPaletteOptions=(short)0;
                     retval.FillPaletteOptions=(short)0x20c0;
                     break;
+                default:
+                    throw new IllegalStateException("Unrecognized format id: " + id);
             }
             return retval;
         }
@@ -2122,6 +2131,8 @@ namespace NPOI.HSSF.Model
                     retval.SetBuiltinStyle(5);
                     retval.OutlineStyleLevel= (unchecked((byte)0xffffffff));
                     break;
+                default:
+                    throw new IllegalStateException("Unrecognized style id: " + id);
             }
             return retval;
         }

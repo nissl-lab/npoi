@@ -40,6 +40,7 @@ namespace NPOI.HSSF.Record.Chart
         public static byte LINK_TYPE_TITLE_OR_TEXT = 0;
         public static byte LINK_TYPE_VALUES = 1;
         public static byte LINK_TYPE_CATEGORIES = 2;
+        public static byte LINK_TYPE_SECONDARY_CATEGORIES = 3;
         private byte field_2_referenceType;
         public static byte REFERENCE_TYPE_DEFAULT_CATEGORIES = 0;
         public static byte REFERENCE_TYPE_DIRECT = 1;
