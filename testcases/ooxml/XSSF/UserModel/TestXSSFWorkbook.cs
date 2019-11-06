@@ -535,17 +535,7 @@ namespace NPOI.XSSF.UserModel
         {
             ChangeSheetNameWithSharedFormulas("shared_formulas.xlsx");
         }
-        [Test]
-        public void SetTabColor()
-        {
-            XSSFWorkbook wb = new XSSFWorkbook();
-            XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
-            Assert.IsTrue(sh.GetCTWorksheet().sheetPr == null || !sh.GetCTWorksheet().sheetPr.IsSetTabColor());
-            sh.SetTabColor(IndexedColors.Red.Index);
-            Assert.IsTrue(sh.GetCTWorksheet().sheetPr.IsSetTabColor());
-            Assert.AreEqual(IndexedColors.Red.Index,
-                    sh.GetCTWorksheet().sheetPr.tabColor.indexed);
-        }
+
         [Test]
         public void ColumnWidthPOI52233()
         {

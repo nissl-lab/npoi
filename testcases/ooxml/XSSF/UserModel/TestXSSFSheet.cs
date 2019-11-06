@@ -1919,5 +1919,23 @@ namespace NPOI.XSSF.UserModel
             workbook.Close();
         }
 
+        [Test]
+        public void SetTabColor()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
+                Assert.IsTrue(sh.GetCTWorksheet().sheetPr == null || !sh.GetCTWorksheet().sheetPr.IsSetTabColor());
+                sh.SetTabColor(IndexedColors.Red.Index);
+                Assert.IsTrue(sh.GetCTWorksheet().sheetPr.IsSetTabColor());
+                Assert.AreEqual(IndexedColors.Red.Index,
+                        sh.GetCTWorksheet().sheetPr.tabColor.indexed);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
     }
 }
