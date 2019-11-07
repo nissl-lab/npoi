@@ -1506,5 +1506,47 @@ namespace TestCases.SS.UserModel
             return time() - startTimeMillis;
         }
 
+        [Ignore("bug 59393")]
+        [Test]
+        public void Bug59393_commentsCanHaveSameAnchor()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+
+            ISheet sheet = wb.CreateSheet();
+
+            ICreationHelper helper = wb.GetCreationHelper();
+            IClientAnchor anchor = helper.CreateClientAnchor();
+            IDrawing drawing = sheet.CreateDrawingPatriarch();
+
+            IRow row = sheet.CreateRow(0);
+
+            ICell cell1 = row.CreateCell(0);
+            ICell cell2 = row.CreateCell(1);
+            ICell cell3 = row.CreateCell(2);
+            IComment comment1 = drawing.CreateCellComment(anchor);
+            IRichTextString richTextString1 = helper.CreateRichTextString("comment1");
+            comment1.String = richTextString1;
+            cell1.CellComment = comment1;
+
+            // Assert.Fails with IllegalArgumentException("Multiple cell comments in one cell are not allowed, cell: A1")
+            // because createCellComment tries to create a cell at A1
+            // (from CellAddress(anchor.Row1, anchor.Cell1)),
+            // but cell A1 already has a comment (comment1).
+            // Need to atomically create a comment and attach it to a cell.
+            // Current workaround: change anchor between each usage
+            // anchor.Col1=1;
+            IComment comment2 = drawing.CreateCellComment(anchor);
+            IRichTextString richTextString2 = helper.CreateRichTextString("comment2");
+            comment2.String = richTextString2;
+            cell2.CellComment = comment2;
+            // anchor.Col1=2;
+            IComment comment3 = drawing.CreateCellComment(anchor);
+            IRichTextString richTextString3 = helper.CreateRichTextString("comment3");
+            comment3.String = richTextString3;
+            cell3.CellComment = comment3;
+
+            wb.Close();
+        }
+
     }
 }
