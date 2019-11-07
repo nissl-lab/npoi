@@ -93,7 +93,11 @@ namespace NPOI.XSSF.UserModel
             set
             {
                 CellAddress oldRef = new CellAddress(_comment.@ref);
-
+                if (value.Equals(oldRef))
+                {
+                    // nothing to do
+                    return;
+                }
                 _comment.@ref = value.FormatAsString();
                 _comments.ReferenceUpdated(oldRef, _comment);
 
