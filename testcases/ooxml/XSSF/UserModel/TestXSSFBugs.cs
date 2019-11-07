@@ -3256,6 +3256,38 @@ namespace NPOI.XSSF.UserModel
             workbook.Close();
         }
 
+        [Ignore("bug 59442")]
+        [Test]
+        public void TestSetRGBBackgroundColor()
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFCell cell = workbook.CreateSheet().CreateRow(0).CreateCell(0) as XSSFCell;
+            XSSFColor color = new XSSFColor(System.Drawing.Color.Red);
+            XSSFCellStyle style = workbook.CreateCellStyle() as XSSFCellStyle;
+            style.FillForegroundColorColor = color;
+            style.FillPattern = FillPattern.SolidForeground;
+            cell.CellStyle = style;
+            // Everything is fine at this point, cell is red
+            Dictionary<String, Object> properties = new Dictionary<String, Object>();
+            properties.Add(CellUtil.BORDER_BOTTOM, BorderStyle.Thin); //or BorderStyle.THIN
+            CellUtil.SetCellStyleProperties(cell, properties);
+
+            // Now the cell is all black
+            XSSFColor actual = cell.CellStyle.FillBackgroundColorColor as XSSFColor;
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(color.ARGBHex, actual.ARGBHex);
+
+            XSSFWorkbook nwb = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            workbook.Close();
+            XSSFCell ncell = nwb.GetSheetAt(0).GetRow(0).GetCell(0) as XSSFCell;
+            XSSFColor ncolor = new XSSFColor(System.Drawing.Color.Red);
+            // Now the cell is all black
+            XSSFColor nactual = ncell.CellStyle.FillBackgroundColorColor as XSSFColor;
+            Assert.IsNotNull(nactual);
+            Assert.AreEqual(ncolor.ARGBHex, nactual.ARGBHex);
+
+            nwb.Close();
+        }
     }
 
 }
