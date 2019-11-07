@@ -15,26 +15,35 @@
    limitations under the License.
    ==================================================================== */
 
-namespace NPOI.SS.Util
+namespace TestCases.SS.Util
 {
     using System;
     using System.Collections.Generic;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
     using NUnit.Framework;
+    using TestCases.SS;
 
     /**
-* Tests Spreadsheet CellUtil
-*
-* @see NPOI.SS.Util.CellUtil
-*/
+    * Tests Spreadsheet CellUtil
+    *
+    * @see NPOI.SS.Util.CellUtil
+    */
     [TestFixture]
-    public class TestCellUtil
+    public class BaseTestCellUtil
     {
+        protected ITestDataProvider _testDataProvider;
+
+        protected BaseTestCellUtil(ITestDataProvider testDataProvider)
+        {
+            _testDataProvider = testDataProvider;
+        }
+
         [Test]
         public void SetCellStyleProperty()
         {
-            IWorkbook wb = new HSSFWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet s = wb.CreateSheet();
             IRow r = s.CreateRow(0);
             ICell c = r.CreateCell(0);
@@ -57,7 +66,7 @@ namespace NPOI.SS.Util
         [Test]
         public void SetCellStyleProperties()
         {
-            IWorkbook wb = new HSSFWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet s = wb.CreateSheet();
             IRow r = s.CreateRow(0);
             ICell c = r.CreateCell(0);
@@ -85,7 +94,7 @@ namespace NPOI.SS.Util
         [Test]
         public void GetRow()
         {
-            IWorkbook wb = new HSSFWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sh = wb.CreateSheet();
             IRow row1 = sh.CreateRow(0);
 
@@ -103,7 +112,7 @@ namespace NPOI.SS.Util
         [Test]
         public void GetCell()
         {
-            IWorkbook wb = new HSSFWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sh = wb.CreateSheet();
             IRow row = sh.CreateRow(0);
             ICell A1 = row.CreateCell(0);
@@ -122,7 +131,7 @@ namespace NPOI.SS.Util
         [Test]
         public void CreateCell()
         {
-            IWorkbook wb = new HSSFWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sh = wb.CreateSheet();
             IRow row = sh.CreateRow(0);
 
@@ -159,7 +168,7 @@ namespace NPOI.SS.Util
         [Test]
         public void SetAlignment()
         {
-            IWorkbook wb = new HSSFWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sh = wb.CreateSheet();
             IRow row = sh.CreateRow(0);
             ICell A1 = row.CreateCell(0);
@@ -188,7 +197,7 @@ namespace NPOI.SS.Util
         [Test]
         public void SetFont()
         {
-            IWorkbook wb = new HSSFWorkbook();
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sh = wb.CreateSheet();
             IRow row = sh.CreateRow(0);
             ICell A1 = row.CreateCell(0);
@@ -222,8 +231,8 @@ namespace NPOI.SS.Util
         [Test]
         public void SetFontFromDifferentWorkbook()
         {
-            IWorkbook wb1 = new HSSFWorkbook();
-            IWorkbook wb2 = new HSSFWorkbook();
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            IWorkbook wb2 = _testDataProvider.CreateWorkbook();
             IFont font1 = wb1.CreateFont();
             IFont font2 = wb2.CreateFont();
             // do something to make font1 and font2 different
