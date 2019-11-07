@@ -1696,57 +1696,72 @@ namespace NPOI.SS.Formula
             switch (part1[0])
             {
                 case 'V':
-                    if (part1.Equals("VALUE"))
                     {
-                        Match('!');
-                        return HSSFErrorConstants.ERROR_VALUE;
-                    }
-                    throw expected("#VALUE!");
-                case 'R':
-                    if (part1.Equals("REF"))
-                    {
-                        Match('!');
-                        return HSSFErrorConstants.ERROR_REF;
-                    }
-                    throw expected("#REF!");
-                case 'D':
-                    if (part1.Equals("DIV"))
-                    {
-                        Match('/');
-                        Match('0');
-                        Match('!');
-                        return HSSFErrorConstants.ERROR_DIV_0;
-                    }
-                    throw expected("#DIV/0!");
-                case 'N':
-                    if (part1.Equals("NAME"))
-                    {
-                        Match('?');  // only one that ends in '?'
-                        return HSSFErrorConstants.ERROR_NAME;
-                    }
-                    if (part1.Equals("NUM"))
-                    {
-                        Match('!');
-                        return HSSFErrorConstants.ERROR_NUM;
-                    }
-                    if (part1.Equals("NULL"))
-                    {
-                        Match('!');
-                        return HSSFErrorConstants.ERROR_NULL;
-                    }
-                    if (part1.Equals("N"))
-                    {
-                        Match('/');
-                        if (look != 'A' && look != 'a')
+                        FormulaError fe = FormulaError.VALUE;
+                        if (part1.Equals(fe.Name))
                         {
-                            throw expected("#N/A");
+                            Match('!');
+                            return fe.Code;
                         }
-                        Match(look);
-                        // Note - no '!' or '?' suffix
-                        return HSSFErrorConstants.ERROR_NA;
+                        throw expected(fe.String);
                     }
-                    throw expected("#NAME?, #NUM!, #NULL! or #N/A");
-
+                case 'R':
+                    {
+                        FormulaError fe = FormulaError.REF;
+                        if (part1.Equals(fe.Name))
+                        {
+                            Match('!');
+                            return fe.Code;
+                        }
+                        throw expected(fe.String);
+                    }
+                case 'D':
+                    {
+                        FormulaError fe = FormulaError.DIV0;
+                        if (part1.Equals("DIV"))
+                        {
+                            Match('/');
+                            Match('0');
+                            Match('!');
+                            return fe.Code;
+                        }
+                        throw expected(fe.String);
+                    }
+                case 'N':
+                    {
+                        FormulaError fe = FormulaError.NAME;
+                        if (part1.Equals(fe.Name))
+                        {
+                            // only one that ends in '?'
+                            Match('?');
+                            return fe.Code;
+                        }
+                        fe = FormulaError.NUM;
+                        if (part1.Equals(fe.Name))
+                        {
+                            Match('!');
+                            return fe.Code;
+                        }
+                        fe = FormulaError.NULL;
+                        if (part1.Equals(fe.Name))
+                        {
+                            Match('!');
+                            return fe.Code;
+                        }
+                        fe = FormulaError.NA;
+                        if (part1.Equals("N"))
+                        {
+                            Match('/');
+                            if (look != 'A' && look != 'a')
+                            {
+                                throw expected(fe.String);
+                            }
+                            Match(look);
+                            // Note - no '!' or '?' suffix
+                            return fe.Code;
+                        }
+                        throw expected("#NAME?, #NUM!, #NULL! or #N/A");
+                    }
             }
             throw expected("#VALUE!, #REF!, #DIV/0!, #NAME?, #NUM!, #NULL! or #N/A");
         }

@@ -31,8 +31,6 @@ namespace NPOI.SS.Formula.Eval
     public class ErrorEval : ValueEval
     {
         private static Dictionary<FormulaError, ErrorEval> evals = new Dictionary<FormulaError, ErrorEval>();
-        // convenient access to namespace
-        private const HSSFErrorConstants EC = null;
 
         /** <b>#NULL!</b>  - Intersection of two cell ranges is empty */
         public static readonly ErrorEval NULL_INTERSECTION = new ErrorEval(FormulaError.NULL);

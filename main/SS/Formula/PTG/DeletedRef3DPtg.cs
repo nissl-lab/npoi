@@ -23,6 +23,7 @@ namespace NPOI.SS.Formula.PTG
     
 
     using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
 
     /**
      * Title:        Deleted Reference 3D Ptg 
@@ -51,7 +52,7 @@ namespace NPOI.SS.Formula.PTG
         public String ToFormulaString(IFormulaRenderingWorkbook book)
         {
             return ExternSheetNameResolver.PrependSheetName(book, field_1_index_extern_sheet,
-                HSSFErrorConstants.GetText(HSSFErrorConstants.ERROR_REF));
+                FormulaError.REF.String);
         }
         public override String ToFormulaString()
         {

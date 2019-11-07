@@ -733,7 +733,6 @@
     <Compile Include="HSSF\Record\WriteProtectRecord.cs" />
     <Compile Include="HSSF\Record\WSBoolRecord.cs" />
     <Compile Include="HSSF\UserModel\HSSFChart.cs" />
-    <Compile Include="HSSF\UserModel\HSSFErrorConstants.cs" />
     <Compile Include="EncryptedDocumentException.cs" />
     <Compile Include="POIDocument.cs" />
     <Compile Include="POIFS\Common\POIFSBigBlockSize.cs" />
@@ -1218,7 +1217,6 @@
     <Compile Include="SS\UserModel\DataValidationHelper.cs" />
     <Compile Include="SS\UserModel\DateUtil.cs" />
     <Compile Include="SS\UserModel\Drawing.cs" />
-    <Compile Include="SS\UserModel\ErrorConstants.cs" />
     <Compile Include="SS\UserModel\ExcelStyleDateFormatter.cs" />
     <Compile Include="SS\UserModel\Font.cs" />
     <Compile Include="SS\UserModel\FontCharset.cs" />

@@ -28,10 +28,12 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.Formula.Eval;
     using NPOI.HSSF.Record;
     using TestCases.SS.UserModel;
+    using NPOI.Util;
+
     /**
-     * 
-     * @author Josh Micich
-     */
+* 
+* @author Josh Micich
+*/
     [TestFixture]
     public class TestHSSFFormulaEvaluator : BaseTestFormulaEvaluator
     {
@@ -55,28 +57,51 @@ namespace TestCases.HSSF.UserModel
         public void TestEvaluateSimple()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("TestNames.xls");
-            NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
+            ISheet sheet = wb.GetSheetAt(0);
             ICell cell = sheet.GetRow(8).GetCell(0);
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-            NPOI.SS.UserModel.CellValue cv = fe.Evaluate(cell);
-            Assert.AreEqual(NPOI.SS.UserModel.CellType.Numeric, cv.CellType);
+            CellValue cv = fe.Evaluate(cell);
+            Assert.AreEqual(CellType.Numeric, cv.CellType);
             Assert.AreEqual(3.72, cv.NumberValue, 0.0);
 
             wb.Close();
         }
-        
 
-        private static void setValue(NPOI.SS.UserModel.ISheet sheet, int rowIndex, int colIndex, double value)
+        /**
+	 * Test for bug due to attempt to convert a cached formula error result to a boolean
+	 */
+        [Test]
+        public new void TestUpdateCachedFormulaResultFromErrorToNumber_bug46479()
         {
-            IRow row = sheet.GetRow(rowIndex);
-            if (row == null)
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet("Sheet1") as HSSFSheet;
+            HSSFRow row = sheet.CreateRow(0) as HSSFRow;
+            HSSFCell cellA1 = row.CreateCell(0) as HSSFCell;
+            HSSFCell cellB1 = row.CreateCell(1) as HSSFCell;
+            cellB1.CellFormula = "A1+1";
+            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            cellA1.SetCellErrorValue(FormulaError.NAME.Code);
+            fe.EvaluateFormulaCell(cellB1);
+            cellA1.SetCellValue(2.5);
+            fe.NotifyUpdateCell(cellA1);
+            try
             {
-                row = sheet.CreateRow(rowIndex);
+                fe.EvaluateInCell(cellB1);
             }
-            row.CreateCell(colIndex).SetCellValue(value);
+            catch (IllegalStateException e)
+            {
+                if (e.Message.Equals("Cannot get a numeric value from a error formula cell"))
+                {
+                    Assert.Fail("Identified bug 46479a");
+                }
+            }
+            Assert.AreEqual(3.5, cellB1.NumericCellValue, 0.0);
+
+            wb.Close();
         }
 
-        
+
+
 
         /**
          * When evaluating defined names, POI has to decide whether it is capable.  Currently

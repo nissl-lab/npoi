@@ -393,7 +393,7 @@ namespace NPOI.HSSF.UserModel
                     errRec.Column = col;
                     if (setValue)
                     {
-                        errRec.SetValue((byte)HSSFErrorConstants.ERROR_VALUE);
+                        errRec.SetValue(FormulaError.VALUE.Code);
                     }
                     errRec.XFIndex = styleIndex;
                     errRec.Row = row;
@@ -436,7 +436,7 @@ namespace NPOI.HSSF.UserModel
                 case CellType.Numeric:
                     return NumberToTextConverter.ToText(((NumberRecord)_record).Value);
                 case CellType.Error:
-                    return HSSFErrorConstants.GetText(((BoolErrRecord)_record).ErrorValue);
+                    return FormulaError.ForInt(((BoolErrRecord)_record).ErrorValue).String;
                 case CellType.Formula:
                     // should really evaluate, but Cell can't call HSSFFormulaEvaluator
                     // just use cached formula result instead
@@ -455,7 +455,7 @@ namespace NPOI.HSSF.UserModel
                 case CellType.Numeric:
                     return NumberToTextConverter.ToText(fr.Value); 
                 case CellType.Error:
-                    return HSSFErrorConstants.GetText(fr.CachedErrorValue);
+                    return FormulaError.ForInt(fr.CachedErrorValue).String;
             }
             throw new InvalidDataException("Unexpected formula result type (" + cellType + ")");
 

@@ -23,10 +23,12 @@ namespace TestCases.SS.Formula.Constant
 
     using TestCases.HSSF.Record;
     using NPOI.SS.Formula.Constant;
+    using NPOI.SS.UserModel;
+
     /**
-     * 
-     * @author Josh Micich
-     */
+* 
+* @author Josh Micich
+*/
     [TestFixture]
     public class TestConstantValueParser
     {
@@ -35,7 +37,7 @@ namespace TestCases.SS.Formula.Constant
 			null,
 			1.1,
 			"Sample text",
-			ErrorConstant.ValueOf(HSSFErrorConstants.ERROR_DIV_0),
+			ErrorConstant.ValueOf(FormulaError.DIV0.Code),
 		};
         private static byte[] SAMPLE_ENCODING = HexRead.ReadFromString(
             "04 01 00 00 00 00 00 00 00 " +

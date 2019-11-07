@@ -299,7 +299,7 @@ namespace TestCases.SS.UserModel
             cellB1.SetCellFormula("A1+1");
             IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
-            cellA1.SetCellErrorValue((byte)ErrorConstants.ERROR_NAME);
+            cellA1.SetCellErrorValue(FormulaError.NAME.Code);
             fe.EvaluateFormulaCell(cellB1);
 
             cellA1.SetCellValue(2.5);

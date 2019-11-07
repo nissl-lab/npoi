@@ -68,21 +68,21 @@ namespace NPOI.SS.Formula.Functions
 
         private int TranslateErrorCodeToErrorTypeValue(int errorCode)
         {
-            switch (errorCode)
+            switch ((FormulaErrorEnum)errorCode)
             {
-                case ErrorConstants.ERROR_NULL:
+                case FormulaErrorEnum.NULL:
                     return 1;
-                case ErrorConstants.ERROR_DIV_0:
+                case FormulaErrorEnum.DIV_0:
                     return 2;
-                case ErrorConstants.ERROR_VALUE:
+                case FormulaErrorEnum.VALUE:
                     return 3;
-                case ErrorConstants.ERROR_REF:
+                case FormulaErrorEnum.REF:
                     return 4;
-                case ErrorConstants.ERROR_NAME:
+                case FormulaErrorEnum.NAME:
                     return 5;
-                case ErrorConstants.ERROR_NUM:
+                case FormulaErrorEnum.NUM:
                     return 6;
-                case ErrorConstants.ERROR_NA:
+                case FormulaErrorEnum.NA:
                     return 7;
             }
             throw new ArgumentException("Invalid error code (" + errorCode + ")");

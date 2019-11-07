@@ -49,12 +49,12 @@ namespace TestCases.SS.Formula.Functions
             ConfirmResult(fe, cell, "Find(5, 87654)", 4);
 
             // Errors
-            ConfirmError(fe, cell, "Find(\"n\", \"haystack\")", HSSFErrorConstants.ERROR_VALUE);
-            ConfirmError(fe, cell, "Find(\"k\", \"haystack\",9)", HSSFErrorConstants.ERROR_VALUE);
-            ConfirmError(fe, cell, "Find(\"k\", \"haystack\",#REF!)", HSSFErrorConstants.ERROR_REF);
-            ConfirmError(fe, cell, "Find(\"k\", \"haystack\",0)", HSSFErrorConstants.ERROR_VALUE);
-            ConfirmError(fe, cell, "Find(#DIV/0!, #N/A, #REF!)", HSSFErrorConstants.ERROR_DIV_0);
-            ConfirmError(fe, cell, "Find(2, #N/A, #REF!)", HSSFErrorConstants.ERROR_NA);
+            ConfirmError(fe, cell, "Find(\"n\", \"haystack\")", FormulaError.VALUE);
+            ConfirmError(fe, cell, "Find(\"k\", \"haystack\",9)", FormulaError.VALUE);
+            ConfirmError(fe, cell, "Find(\"k\", \"haystack\",#REF!)", FormulaError.REF);
+            ConfirmError(fe, cell, "Find(\"k\", \"haystack\",0)", FormulaError.VALUE);
+            ConfirmError(fe, cell, "Find(#DIV/0!, #N/A, #REF!)", FormulaError.DIV0);
+            ConfirmError(fe, cell, "Find(2, #N/A, #REF!)", FormulaError.NA);
         }
 
         private static void ConfirmResult(HSSFFormulaEvaluator fe, ICell cell, String formulaText,
@@ -68,13 +68,13 @@ namespace TestCases.SS.Formula.Functions
         }
 
         private static void ConfirmError(HSSFFormulaEvaluator fe, ICell cell, String formulaText,
-                int expectedErrorCode)
+                FormulaError expectedErrorCode)
         {
             cell.CellFormula=(formulaText);
             fe.NotifyUpdateCell(cell);
             CellValue result = fe.Evaluate(cell);
             Assert.AreEqual(result.CellType, CellType.Error);
-            Assert.AreEqual(expectedErrorCode, result.ErrorValue);
+            Assert.AreEqual(expectedErrorCode.Code, result.ErrorValue);
         }
     }
 
