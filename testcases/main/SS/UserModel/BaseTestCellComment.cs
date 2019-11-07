@@ -374,16 +374,26 @@ namespace TestCases.SS.UserModel
             ICreationHelper factory = wb.GetCreationHelper();
             IDrawing patriarch = sh.CreateDrawingPatriarch();
             patriarch.CreateCellComment(factory.CreateClientAnchor());
-            patriarch.CreateCellComment(factory.CreateClientAnchor());
 
             try
             {
+                patriarch.CreateCellComment(factory.CreateClientAnchor());
                 _testDataProvider.WriteOutAndReadBack(wb);
                 Assert.Fail("Expected IllegalStateException(found multiple cell comments for cell $A$1");
             }
             catch (IllegalStateException e)
             {
+                // HSSFWorkbooks fail when writing out workbook
                 Assert.AreEqual(e.Message, "found multiple cell comments for cell A1");
+            }
+            catch (ArgumentException e)
+            {
+                // XSSFWorkbooks fail when creating and setting the cell address of the comment
+                Assert.AreEqual(e.Message, "Multiple cell comments in one cell are not allowed, cell: A1");
+            }
+            finally
+            {
+                wb.Close();
             }
         }
     }
