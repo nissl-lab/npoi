@@ -1060,9 +1060,7 @@ namespace NPOI.XSSF.UserModel
                     RemoveCellComment();
                     return;
                 }
-
-                value.Row = (RowIndex);
-                value.Column = (ColumnIndex);
+                value.SetAddress(RowIndex, ColumnIndex);
             }
         }
 

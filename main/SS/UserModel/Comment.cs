@@ -72,6 +72,10 @@ namespace NPOI.SS.UserModel
         /**
          * Return defines position of this anchor in the sheet.
          *
+         * The anchor is the yellow box/balloon that is rendered on top of the sheets
+         * when the comment is visible.
+         * 
+         * To associate a comment with a different cell, use {@link #setAddress}.
          * @return defines position of this anchor in the sheet
          */
         IClientAnchor ClientAnchor { get; }
