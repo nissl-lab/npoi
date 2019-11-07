@@ -366,7 +366,26 @@ namespace TestCases.SS.UserModel
 
             wb.Close();
         }
+        [Test]
+        public void AttemptToSave2CommentsWithSameCoordinates()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sh = wb.CreateSheet();
+            ICreationHelper factory = wb.GetCreationHelper();
+            IDrawing patriarch = sh.CreateDrawingPatriarch();
+            patriarch.CreateCellComment(factory.CreateClientAnchor());
+            patriarch.CreateCellComment(factory.CreateClientAnchor());
 
+            try
+            {
+                _testDataProvider.WriteOutAndReadBack(wb);
+                Assert.Fail("Expected IllegalStateException(found multiple cell comments for cell $A$1");
+            }
+            catch (IllegalStateException e)
+            {
+                Assert.AreEqual(e.Message, "found multiple cell comments for cell A1");
+            }
+        }
     }
 }
 

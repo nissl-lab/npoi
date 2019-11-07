@@ -455,27 +455,5 @@ namespace TestCases.HSSF.UserModel
 
             wb.Close();
         }
-        [Test]
-        public void AttemptToSave2CommentsWithSameCoordinates()
-        {
-            Object err = null;
-
-            HSSFWorkbook wb = new HSSFWorkbook();
-            HSSFSheet sh = wb.CreateSheet() as HSSFSheet;
-            HSSFPatriarch patriarch = sh.CreateDrawingPatriarch() as HSSFPatriarch;
-            patriarch.CreateCellComment(new HSSFClientAnchor());
-            patriarch.CreateCellComment(new HSSFClientAnchor());
-
-            try
-            {
-                HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            }
-            catch (InvalidOperationException e)
-            {
-                err = 1;
-                Assert.AreEqual(e.Message, "found multiple cell comments for cell A1");
-            }
-            Assert.IsNotNull(err);
-        }
     }
 }
