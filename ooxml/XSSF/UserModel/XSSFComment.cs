@@ -22,6 +22,7 @@ using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.Model;
 using NPOI.Util;
+using NPOI.OpenXmlFormats.Vml.Spreadsheet;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -53,9 +54,10 @@ namespace NPOI.XSSF.UserModel
             if (vmlShape != null && vmlShape.SizeOfClientDataArray() > 0)
             {
                 CellReference ref1 = new CellReference(comment.@ref);
-                vmlShape.GetClientDataArray(0).SetRowArray(0, ref1.Row);
+                CT_ClientData clientData = vmlShape.GetClientDataArray(0);
+                clientData.SetRowArray(0, ref1.Row);
 
-                vmlShape.GetClientDataArray(0).SetColumnArray(0, ref1.Col);
+                clientData.SetColumnArray(0, ref1.Col);
 
                 // There is a very odd xmlbeans bug when changing the row
                 //  arrays which can lead to corrupt pointer
@@ -81,6 +83,37 @@ namespace NPOI.XSSF.UserModel
                 );
             }
         }
+
+        public CellAddress Address
+        {
+            get
+            {
+                return new CellAddress(_comment.@ref);
+            }
+            set
+            {
+                CellAddress oldRef = new CellAddress(_comment.@ref);
+
+                _comment.@ref = value.FormatAsString();
+                _comments.ReferenceUpdated(oldRef, _comment);
+
+                if (_vmlShape != null)
+                {
+                    CT_ClientData clientData = _vmlShape.GetClientDataArray(0);
+                    clientData.SetRowArray(0, value.Row);
+                    clientData.SetColumnArray(0, value.Column);
+
+                    // There is a very odd xmlbeans bug when changing the column
+                    //  arrays which can lead to corrupt pointer
+                    // This call seems to fix them again... See bug #50795
+                    //_vmlShape.GetClientDataList().toString();
+                }
+            }
+        }
+        public void SetAddress(int row, int col)
+        {
+            Address = new CellAddress(row, col);
+        }
         /**
          * @return the 0-based column of the cell that the comment is associated with.
          */
@@ -88,27 +121,11 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return new CellReference(_comment.@ref).Col;
+                return Address.Column;
             }
-            set 
+            set
             {
-                CellAddress oldRef = new CellAddress(_comment.@ref);
-
-                CellAddress ref1 = new CellAddress(Row, value);
-                _comment.@ref = (ref1.FormatAsString());
-                _comments.ReferenceUpdated(oldRef, _comment);
-
-                if (_vmlShape != null)
-                {
-                    _vmlShape.GetClientDataArray(0).SetColumnArray(
-                          0, value
-                    );
-
-                    // There is a very odd xmlbeans bug when changing the column
-                    //  arrays which can lead to corrupt pointer
-                    // This call seems to fix them again... See bug #50795
-                    //_vmlShape.ClientData.ToString();
-                }
+                SetAddress(Row, value);
             }
         }
 
@@ -119,25 +136,11 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return new CellReference(_comment.@ref).Row;
+                return Address.Row;
             }
             set 
             {
-                CellAddress oldRef = new CellAddress(_comment.@ref);
-
-                CellAddress ref1 = new CellAddress(value, Column);
-                _comment.@ref = (ref1.FormatAsString());
-                _comments.ReferenceUpdated(oldRef, _comment);
-
-                if (_vmlShape != null)
-                {
-                    _vmlShape.GetClientDataArray(0).SetRowArray(0, value);
-
-                    // There is a very odd xmlbeans bug when changing the row
-                    //  arrays which can lead to corrupt pointer
-                    // This call seems to fix them again... See bug #50795
-                    //_vmlShape.getClientDataList().toString();
-                }
+                SetAddress(value, Column);
             }
         }
 

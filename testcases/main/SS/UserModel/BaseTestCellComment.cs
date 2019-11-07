@@ -396,6 +396,43 @@ namespace TestCases.SS.UserModel
                 wb.Close();
             }
         }
+
+        [Test]
+        public void GetAddress()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sh = wb.CreateSheet();
+            ICreationHelper factory = wb.GetCreationHelper();
+            IDrawing patriarch = sh.CreateDrawingPatriarch();
+            IComment comment = patriarch.CreateCellComment(factory.CreateClientAnchor());
+
+            Assert.AreEqual(CellAddress.A1, comment.Address);
+            ICell C2 = sh.CreateRow(1).CreateCell(2);
+            C2.CellComment = comment;
+            Assert.AreEqual(new CellAddress("C2"), comment.Address);
+        }
+
+        [Test]
+        public void SetAddress()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sh = wb.CreateSheet();
+            ICreationHelper factory = wb.GetCreationHelper();
+            IDrawing patriarch = sh.CreateDrawingPatriarch();
+            IComment comment = patriarch.CreateCellComment(factory.CreateClientAnchor());
+
+            Assert.AreEqual(CellAddress.A1, comment.Address);
+            CellAddress C2 = new CellAddress("C2");
+            Assert.AreEqual("C2", C2.FormatAsString());
+            comment.Address = C2;
+            Assert.AreEqual(C2, comment.Address);
+
+            CellAddress E10 = new CellAddress(9, 4);
+            Assert.AreEqual("E10", E10.FormatAsString());
+            comment.SetAddress(9, 4);
+            Assert.AreEqual(E10, comment.Address);
+        }
+
     }
 }
 

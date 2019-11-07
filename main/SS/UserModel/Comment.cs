@@ -17,6 +17,7 @@
 
 namespace NPOI.SS.UserModel
 {
+    using NPOI.SS.Util;
     using System;
     public interface IComment
     {
@@ -26,6 +27,19 @@ namespace NPOI.SS.UserModel
          * @return <c>true</c> if the comment is visible, <c>false</c> otherwise
          */
         bool Visible { get; set; }
+
+        /// <summary>
+        /// Get or set the address of the cell that this comment is attached to
+        /// </summary>
+        CellAddress Address { get; set; }
+
+        /**
+         * Set the address of the cell that this comment is attached to
+         *
+         * @param row
+         * @param col
+         */
+        void SetAddress(int row, int col);
 
         /**
          * Return the row of the cell that Contains the comment

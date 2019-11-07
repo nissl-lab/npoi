@@ -20,6 +20,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.DDF;
     using NPOI.HSSF.Record;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
 
 
     /// <summary>
@@ -162,6 +163,23 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
+        public CellAddress Address
+        {
+            get
+            {
+                return new CellAddress(Row, Column);
+            }
+            set
+            {
+                Row = value.Row;
+                Column = value.Column;
+            }
+        }
+        public void SetAddress(int row, int col)
+        {
+            Row = row;
+            Column = col;
+        }
         /// <summary>
         /// Gets or sets the row of the cell that Contains the comment
         /// </summary>
