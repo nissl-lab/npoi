@@ -182,6 +182,18 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
+        [Test]
+        public void Test59378()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("59378.docx");
+            ByteArrayOutputStream out1 = new ByteArrayOutputStream();
+            doc.Write(out1);
+            out1.Close();
+            XWPFDocument doc2 = new XWPFDocument(new ByteArrayInputStream(out1.ToByteArray()));
+            doc2.Close();
+            XWPFDocument docBack = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            docBack.Close();
+        }
     }
 
 }

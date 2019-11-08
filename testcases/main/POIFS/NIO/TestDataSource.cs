@@ -210,7 +210,7 @@ namespace TestCases.POIFS.NIO
                     Assert.Fail("Shouldn't be able to read off the end of the file");
                 }
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
             }
         }
@@ -263,7 +263,7 @@ namespace TestCases.POIFS.NIO
             // Past the end
             try
             {
-                bs = ds.Read(4, 256);
+                ds.Read(4, 256);
                 Assert.Fail("Shouldn't be able to read off the end");
             }
             catch (System.IndexOutOfRangeException) { }

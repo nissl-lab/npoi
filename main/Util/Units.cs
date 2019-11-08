@@ -81,8 +81,7 @@ namespace NPOI.Util
         {
             int i = (fixedPoint >> 16);
             int f = (fixedPoint >> 0) & 0xFFFF;
-            double decimal1 = (i + f / 65536.0);
-            return decimal1;
+            return i + f / 65536.0;
         }
 
         /**
@@ -100,8 +99,7 @@ namespace NPOI.Util
             int i = (int)Math.Floor(integralPart);
             //int f = (int)Math.rint(fractionalPart * 65536d);
             int f = (int)Math.Round(fractionalPart * 65536d, MidpointRounding.ToEven);
-            int fixedPoint = (i << 16) | (f & 0xFFFF);
-            return fixedPoint;
+            return (i << 16) | (f & 0xFFFF);
         }
 
         public static double MasterToPoints(int masterDPI)
