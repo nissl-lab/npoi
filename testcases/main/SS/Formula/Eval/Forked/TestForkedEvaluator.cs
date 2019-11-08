@@ -85,6 +85,8 @@ namespace TestCases.SS.Formula.Eval.Forked
             Assert.AreEqual(4.0, ((NumberEval)fe2.Evaluate("Calculations", 0, 0)).NumberValue, 0.0);
             fe1.UpdateCell("Inputs", 0, 0, new NumberEval(3.0));
             Assert.AreEqual(13.9, ((NumberEval)fe1.Evaluate("Calculations", 0, 0)).NumberValue, 0.0);
+
+            wb.Close();
         }
 
         /**

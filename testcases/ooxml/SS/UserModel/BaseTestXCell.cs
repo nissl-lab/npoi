@@ -66,6 +66,8 @@ namespace TestCases.SS.UserModel
             cell.SetCellValue((String)null);
             cell.SetCellValue((IRichTextString)null);
             cell.SetCellValue((String)null);
+
+            wb.Close();
         }
     }
 

@@ -29,8 +29,6 @@ namespace NPOI.SS.Formula.Eval.Forked
      * Represents a workbook being used for forked Evaluation. Most operations are delegated to the
      * shared master workbook, except those that potentially involve cell values that may have been
      * updated After a call to {@link #getOrCreateUpdatableCell(String, int, int)}.
-     *
-     * @author Josh Micich
      */
     class ForkedEvaluationWorkbook : IEvaluationWorkbook
     {
@@ -82,15 +80,8 @@ namespace NPOI.SS.Formula.Eval.Forked
         {
             String[] sheetNames = new String[_sharedSheetsByName.Count];
             _sharedSheetsByName.Keys.CopyTo(sheetNames, 0);
-            OrderedSheet[] oss = new OrderedSheet[sheetNames.Length];
-            for (int i = 0; i < sheetNames.Length; i++)
+            foreach(String sheetName in sheetNames)
             {
-                String sheetName = sheetNames[i];
-                oss[i] = new OrderedSheet(sheetName, _masterBook.GetSheetIndex(sheetName));
-            }
-            for (int i = 0; i < oss.Length; i++)
-            {
-                String sheetName = oss[i].GetSheetName();
                 ForkedEvaluationSheet sheet = _sharedSheetsByName[(sheetName)];
                 sheet.CopyUpdatedCells(workbook.GetSheet(sheetName));
             }
@@ -171,27 +162,6 @@ namespace NPOI.SS.Formula.Eval.Forked
         {
             return _masterBook.GetUDFFinder();
         }
-
-        private class OrderedSheet : IComparable<OrderedSheet>
-        {
-            private String _sheetName;
-            private int _index;
-
-            public OrderedSheet(String sheetName, int index)
-            {
-                _sheetName = sheetName;
-                _index = index;
-            }
-            public String GetSheetName()
-            {
-                return _sheetName;
-            }
-            public int CompareTo(OrderedSheet o)
-            {
-                return _index - o._index;
-            }
-        }
-
     }
 
 }
