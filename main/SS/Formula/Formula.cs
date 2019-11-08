@@ -39,7 +39,7 @@ namespace NPOI.SS.Formula
 
         private Formula(byte[] byteEncoding, int encodedTokenLen)
         {
-            _byteEncoding = byteEncoding;
+            _byteEncoding = (byte[])byteEncoding.Clone();
             _encodedTokenLen = encodedTokenLen;
             //if (false) { // set to true to eagerly check Ptg decoding 
             //    LittleEndianByteArrayInputStream in1 = new LittleEndianByteArrayInputStream(byteEncoding);

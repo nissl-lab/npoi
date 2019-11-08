@@ -133,7 +133,7 @@ namespace NPOI.SS.Formula
             UnhookOldEnvironments(evaluators);
             HookNewEnvironment(evaluators, this);
             _unhooked = false;
-            _evaluators = evaluators;
+            _evaluators = (WorkbookEvaluator[])evaluators.Clone();
             _evaluatorsByName = evaluatorsByName;
         }
 
