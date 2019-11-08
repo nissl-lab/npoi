@@ -295,7 +295,27 @@ namespace NPOI.XSSF.UserModel
                 wb.Close();
             }
         }
+        [Test]
+        public void Bug57838DeleteRowsWthCommentsBug()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57838.xlsx");
+            ISheet sheet = wb.GetSheetAt(0);
+            IComment comment1 = sheet.GetCellComment(new CellAddress(2, 1));
+            Assert.IsNotNull(comment1);
+            IComment comment2 = sheet.GetCellComment(new CellAddress(2, 2));
+            Assert.IsNotNull(comment2);
+            IRow row = sheet.GetRow(2);
+            Assert.IsNotNull(row);
+            sheet.RemoveRow(row); // Remove row from index 2
+            row = sheet.GetRow(2);
+            Assert.IsNull(row); // Row is null since we deleted it.
+            comment1 = sheet.GetCellComment(new CellAddress(2, 1));
+            Assert.IsNull(comment1); // comment should be null but will Assert.Fail due to bug
+            comment2 = sheet.GetCellComment(new CellAddress(2, 2));
+            Assert.IsNull(comment2); // comment should be null but will Assert.Fail due to bug
+            wb.Close();
+        }
 
     }
-    
+
 }

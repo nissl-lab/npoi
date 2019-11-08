@@ -2112,8 +2112,19 @@ namespace NPOI.XSSF.UserModel
 
             foreach (XSSFCell cell in cellsToDelete) row.RemoveCell(cell);
 
+            int idx = row.RowNum + 1;// _rows.headMap(row.getRowNum()).size();
             _rows.Remove(row.RowNum);
-            worksheet.sheetData.RemoveRow(row.RowNum + 1); // Note that rows in worksheet.sheetData is 1-based.
+            worksheet.sheetData.RemoveRow(idx); // Note that rows in worksheet.sheetData is 1-based.
+
+            // also remove any comment located in that row
+            if (sheetComments != null)
+            {
+                foreach (CellAddress ref1 in GetCellComments().Keys) {
+                    if (ref1.Row == idx) {
+                        sheetComments.RemoveComment(ref1);
+                    }
+                }
+            }
         }
 
         /**
