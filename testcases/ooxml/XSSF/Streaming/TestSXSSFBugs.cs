@@ -19,6 +19,14 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
         {
 
         }
+        // override some tests which do not work for SXSSF
+        [Ignore("cloneSheet() not implemented")] [Test] public new void Bug18800() { /* cloneSheet() not implemented */ }
+        [Ignore("cloneSheet() not implemented")] [Test] public new void Bug22720() { /* cloneSheet() not implemented */ }
+        [Ignore("Evaluation is not fully supported")] [Test] public new void Bug47815() { /* Evaluation is not supported */ }
+        [Ignore("Evaluation is not fully supported")] [Test] public new void Test58113() { /* Evaluation is not supported */ }
+        [Ignore("Evaluation is not fully supported")] [Test] public new void Bug46729_testMaxFunctionArguments() { /* Evaluation is not supported */ }
+        [Ignore("Reading data is not supported")] [Test] public new void Bug57798() { /* Reading data is not supported */ }
+
 
         [Test]
         public void Tug49253()

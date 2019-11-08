@@ -127,7 +127,7 @@ namespace TestCases.SS.UserModel
          * Merged regions were being Removed from the parent in Cloned sheets
          */
         [Test]
-        public void TestBug22720()
+        public void Bug22720()
         {
             IWorkbook workBook = _testDataProvider.CreateWorkbook();
             workBook.CreateSheet("TEST");
@@ -258,7 +258,7 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(true, "no errors parsing formula");
         }
         [Test]
-        public void Test18800()
+        public void Bug18800()
         {
             IWorkbook book = _testDataProvider.CreateWorkbook();
             book.CreateSheet("TEST");
@@ -310,7 +310,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(d, (311 + 312 + 321 + 322), 0.0000001);
         }
         [Test]
-        public void TestMaxFunctionArguments_bug46729()
+        public void Bug46729_testMaxFunctionArguments()
         {
             String[] func = { "COUNT", "AVERAGE", "MAX", "MIN", "OR", "SUBTOTAL", "SKEW" };
 
@@ -1349,7 +1349,7 @@ namespace TestCases.SS.UserModel
             worksheet.setColumnWidth(0, 5000);
 
             // Write the output to a file       
-            System.out.println("Writing...");
+            Console.WriteLine("Writing...");
             OutputStream fileOut = new FileOutputStream("C:\\temp\\58260." + _testDataProvider.StandardFileNameExtension);
 
             // the resulting file can be compressed nicely, so we need to disable the zip bomb detection here
@@ -1548,5 +1548,39 @@ namespace TestCases.SS.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Bug57798()
+        {
+            String fileName = "57798." + _testDataProvider.StandardFileNameExtension;
+            IWorkbook workbook = _testDataProvider.OpenSampleWorkbook(fileName);
+            ISheet sheet = workbook.GetSheet("Sheet1");
+            // *******************************
+            // First cell of array formula, OK
+            int rowId = 0;
+            int cellId = 1;
+            Console.WriteLine("Reading row " + rowId + ", col " + cellId);
+            IRow row = sheet.GetRow(rowId);
+            ICell cell = row.GetCell(cellId);
+            Console.WriteLine("Formula:" + cell.CellFormula);
+            if (CellType.Formula == cell.CellType)
+            {
+                int formulaResultType = (int)cell.CachedFormulaResultType;
+                Console.WriteLine("Formual Result Type:" + formulaResultType);
+            }
+            // *******************************
+            // Second cell of array formula, NOT OK for xlsx files
+            rowId = 1;
+            cellId = 1;
+            Console.WriteLine("Reading row " + rowId + ", col " + cellId);
+            row = sheet.GetRow(rowId);
+            cell = row.GetCell(cellId);
+            Console.WriteLine("Formula:" + cell.CellFormula);
+            if (CellType.Formula == cell.CellType)
+            {
+                int formulaResultType = (int)cell.CachedFormulaResultType;
+                Console.WriteLine("Formual Result Type:" + formulaResultType);
+            }
+            workbook.Close();
+        }
     }
 }
