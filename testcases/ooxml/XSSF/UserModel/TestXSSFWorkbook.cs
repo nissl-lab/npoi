@@ -1105,6 +1105,23 @@ namespace NPOI.XSSF.UserModel
             //wb = new XSSFWorkbook(OPCPackage.open(file));
             //assertCloseDoesNotModifyFile(filename, wb);
         }
-
+        [Test]
+        public void TestCloseBeforeWrite()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+            wb.CreateSheet("somesheet");
+            // test what happens if we close the Workbook before we write it out
+            wb.Close();
+            try
+            {
+                XSSFTestDataSamples.WriteOutAndReadBack(wb);
+                Assert.Fail("Expecting IOException here");
+            }
+            catch (RuntimeException e)
+            {
+                // expected here
+                Assert.IsTrue(e.InnerException is IOException, "Had: " + e.InnerException);
+            }
+        }
     }
 }

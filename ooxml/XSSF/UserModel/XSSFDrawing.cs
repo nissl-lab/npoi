@@ -199,7 +199,7 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFWorkbook wb = (XSSFWorkbook)GetParent().GetParent();
             XSSFPictureData data = (XSSFPictureData)wb.GetAllPictures()[pictureIndex];
-            XSSFPictureData pic = new XSSFPictureData(data.GetPackagePart(), null);
+            XSSFPictureData pic = new XSSFPictureData(data.GetPackagePart());
             RelationPart rp = AddRelation(null, XSSFRelation.IMAGES, pic);
             return rp.Relationship;
         }

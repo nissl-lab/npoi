@@ -214,7 +214,12 @@ namespace NPOI
             //save extended and custom properties
             GetProperties().Commit();
 
-            Package.Save(stream);
+            OPCPackage pkg = Package;
+            if (pkg == null)
+            {
+                throw new IOException("Cannot write data, document seems to have been closed already");
+            }
+            pkg.Save(stream);
         }
     }
 }
