@@ -175,10 +175,6 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
                 // no longer fail on compliance error
                 //fail("expected OPC compliance exception was not thrown");
             }
-            catch (InvalidFormatException e)
-            {
-                throw;
-            }
             catch (InvalidOperationException e)
             {
                 // expected during successful test

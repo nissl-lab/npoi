@@ -22,6 +22,8 @@ using System.IO;
 using TestCases;
 using System.Collections;
 using NPOI.OpenXmlFormats.Vml.Spreadsheet;
+using System;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -75,6 +77,11 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, cldata.GetRowArray(0));
             Assert.AreEqual(0, cldata.GetColumnArray(0));
 
+            //each of the properties of CT_ClientData should occurs 0 or 1 times, and CT_ClientData has multiple properties.
+            //Assert.AreEqual("[]", cldata.GetVisibleList().ToString());
+            Assert.AreEqual(ST_TrueFalseBlank.NONE, cldata.visible);
+            cldata.visible = (ST_TrueFalseBlank)Enum.Parse(typeof(ST_TrueFalseBlank), "True");
+            Assert.AreEqual(ST_TrueFalseBlank.@true, cldata.visible);
             //serialize and read again
             MemoryStream out1 = new MemoryStream();
             vml.Write(out1);
