@@ -104,10 +104,28 @@ namespace NPOI.XWPF.UserModel
             XWPFTable table = tables[0];
             List<XWPFTableRow> tableRows = table.Rows;
             Assert.AreEqual(2, tableRows.Count);
-            Assert.IsNull(tableRows[0].GetCell(0).GetVerticalAlignment());
+            Assert.AreEqual(XWPFVertAlign.TOP, tableRows[0].GetCell(0).GetVerticalAlignment());
             Assert.AreEqual(XWPFVertAlign.BOTTOM, tableRows[0].GetCell(1).GetVerticalAlignment());
             Assert.AreEqual(XWPFVertAlign.CENTER, tableRows[1].GetCell(0).GetVerticalAlignment());
-            Assert.IsNull(tableRows[1].GetCell(1).GetVerticalAlignment());
+            Assert.AreEqual(XWPFVertAlign.TOP, tableRows[1].GetCell(1).GetVerticalAlignment());
+        }
+        [Test]
+        public void TestCellVerticalAlign2()
+        {
+            XWPFDocument docx = XWPFTestDataSamples.OpenSampleDocument("TestTableCellAlign.docx");
+            IList<XWPFTable> tables = docx.Tables;
+            foreach (XWPFTable table in tables)
+            {
+                List<XWPFTableRow> tableRows = table.Rows;
+                foreach (XWPFTableRow tableRow in tableRows)
+                {
+                    List<XWPFTableCell> tableCells = tableRow.GetTableCells();
+                    foreach (XWPFTableCell tableCell in tableCells)
+                    {
+                        Assert.IsNotNull(tableCell.GetVerticalAlignment());
+                    }
+                }
+            }
         }
     }
 

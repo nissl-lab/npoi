@@ -325,6 +325,14 @@ namespace NPOI.XWPF.UserModel
             if (tcpr != null)
             {
                 CT_VerticalJc va = tcpr.vAlign;
+                if (va != null)
+                {
+                    vAlign = stVertAlignTypeMap[va.val.Value];
+                }
+                else
+                {
+                    vAlign = XWPFVertAlign.TOP;
+                }
                 if (va != null && va.val != null)
                 {
                     vAlign = stVertAlignTypeMap[va.val.Value];
