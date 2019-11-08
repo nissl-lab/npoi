@@ -29,7 +29,8 @@ namespace NPOI.XSSF.UserModel
     public class TestXSSFPivotTable
     {
         private XSSFPivotTable pivotTable;
-
+        private XSSFPivotTable offsetPivotTable;
+        private ICell offsetOuterCell;
         [SetUp]
         public void SetUp()
         {
@@ -69,6 +70,46 @@ namespace NPOI.XSSF.UserModel
 
             AreaReference source = new AreaReference("A1:C2");
             pivotTable = sheet.CreatePivotTable(source, new CellReference("H5"));
+
+
+            XSSFSheet offsetSheet = (XSSFSheet)wb.CreateSheet();
+
+            IRow tableRow_1 = offsetSheet.CreateRow(1);
+            offsetOuterCell = tableRow_1.CreateCell(1);
+            offsetOuterCell.SetCellValue(-1);
+            ICell tableCell_1_1 = tableRow_1.CreateCell(2);
+            tableCell_1_1.SetCellValue("Row #");
+            ICell tableCell_1_2 = tableRow_1.CreateCell(3);
+            tableCell_1_2.SetCellValue("Exponent");
+            ICell tableCell_1_3 = tableRow_1.CreateCell(4);
+            tableCell_1_3.SetCellValue("10^Exponent");
+
+            IRow tableRow_2 = offsetSheet.CreateRow(2);
+            ICell tableCell_2_1 = tableRow_2.CreateCell(2);
+            tableCell_2_1.SetCellValue(0);
+            ICell tableCell_2_2 = tableRow_2.CreateCell(3);
+            tableCell_2_2.SetCellValue(0);
+            ICell tableCell_2_3 = tableRow_2.CreateCell(4);
+            tableCell_2_3.SetCellValue(1);
+
+            IRow tableRow_3 = offsetSheet.CreateRow(3);
+            ICell tableCell_3_1 = tableRow_3.CreateCell(2);
+            tableCell_3_1.SetCellValue(1);
+            ICell tableCell_3_2 = tableRow_3.CreateCell(3);
+            tableCell_3_2.SetCellValue(1);
+            ICell tableCell_3_3 = tableRow_3.CreateCell(4);
+            tableCell_3_3.SetCellValue(10);
+
+            IRow tableRow_4 = offsetSheet.CreateRow(4);
+            ICell tableCell_4_1 = tableRow_4.CreateCell(2);
+            tableCell_4_1.SetCellValue(2);
+            ICell tableCell_4_2 = tableRow_4.CreateCell(3);
+            tableCell_4_2.SetCellValue(2);
+            ICell tableCell_4_3 = tableRow_4.CreateCell(4);
+            tableCell_4_3.SetCellValue(100);
+
+            AreaReference offsetSource = new AreaReference(new CellReference("C2"), new CellReference("E4"));
+            offsetPivotTable = offsetSheet.CreatePivotTable(offsetSource, new CellReference("C6"));
         }
 
         /**
@@ -108,7 +149,7 @@ namespace NPOI.XSSF.UserModel
             {
                 pivotTable.AddRowLabel(columnIndex);
             }
-            catch (IndexOutOfRangeException e)
+            catch (IndexOutOfRangeException)
             {
                 return;
             }
@@ -229,7 +270,7 @@ namespace NPOI.XSSF.UserModel
             {
                 pivotTable.AddColumnLabel(DataConsolidateFunction.SUM, columnIndex);
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException)
             {
                 return;
             }
@@ -264,7 +305,7 @@ namespace NPOI.XSSF.UserModel
             {
                 pivotTable.AddDataColumn(columnIndex, isDataField);
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException)
             {
                 return;
             }
@@ -298,12 +339,26 @@ namespace NPOI.XSSF.UserModel
             {
                 pivotTable.AddReportFilter(columnIndex);
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException)
             {
                 return;
             }
             Assert.Fail();
         }
+
+        /**
+         * Verify that the Pivot Table operates only within the referenced area, even when the
+         * first column of the referenced area is not index 0.
+         */
+        [Test]
+        public void TestAddDataColumnWithOffsetData()
+        {
+            offsetPivotTable.AddColumnLabel(DataConsolidateFunction.SUM, 1);
+            Assert.AreEqual(CellType.Numeric, offsetOuterCell.CellType);
+
+            offsetPivotTable.AddColumnLabel(DataConsolidateFunction.SUM, 0);
+        }
+        [Ignore("not found in poi")]
         [Test]
         public void Test58294()
         {

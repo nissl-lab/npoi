@@ -337,9 +337,9 @@ namespace NPOI.XSSF.UserModel
         /**
          * Add data field with data from the given column and specified function.
          * @param function the function to be used on the data
-         * @param index the index of the column to be used as column label.
-         * The following functions exists:
-         * Sum, Count, Average, Max, Min, Product, Count numbers, StdDev, StdDevp, Var, Varp
+         *      The following functions exists:
+         *      Sum, Count, Average, Max, Min, Product, Count numbers, StdDev, StdDevp, Var, Varp
+         * @param columnIndex the index of the column to be used as column label.
          * @param valueFieldName the name of pivot table value field
          */
 
@@ -363,7 +363,8 @@ namespace NPOI.XSSF.UserModel
             }
             CT_DataField dataField = dataFields.AddNewDataField();
             dataField.subtotal = (ST_DataConsolidateFunction)(function.Value);
-            ICell cell = GetDataSheet().GetRow(pivotArea.FirstCell.Row).GetCell(columnIndex);
+            ICell cell = GetDataSheet().GetRow(pivotArea.FirstCell.Row)
+                .GetCell(pivotArea.FirstCell.Col + columnIndex);
             cell.SetCellType(CellType.String);
             dataField.name = (/*setter*/valueFieldName);
             dataField.fld = (uint)columnIndex;
