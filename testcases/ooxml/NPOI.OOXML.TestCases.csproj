@@ -200,6 +200,7 @@
     <Compile Include="XSSF\UserModel\TestXSSFDrawing.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFExternalFunctions.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFFont.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFForkedEvaluator.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFFormulaEvaluation.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFFormulaParser.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFHeaderFooter.cs" />
