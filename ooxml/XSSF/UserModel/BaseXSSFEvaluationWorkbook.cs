@@ -405,7 +405,9 @@ namespace NPOI.XSSF.UserModel
          */
         public ITable GetTable(String name)
         {
-            return GetTableCache()[name.ToLower(CultureInfo.CurrentCulture)];
+            if (name == null) return null;
+            String lname = name.ToLower(CultureInfo.CurrentCulture);
+            return GetTableCache()[lname];
         }
 
         public UDFFinder GetUDFFinder()

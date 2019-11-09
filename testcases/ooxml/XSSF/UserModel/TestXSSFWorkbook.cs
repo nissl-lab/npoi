@@ -1123,5 +1123,35 @@ namespace NPOI.XSSF.UserModel
                 Assert.IsTrue(e.InnerException is IOException, "Had: " + e.InnerException);
             }
         }
+
+        /**
+         * See bug #57840 test data tables
+         */
+        [Test]
+        public void GetTable()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("WithTable.xlsx");
+            XSSFTable table1 = wb.GetTable("Tabella1");
+            Assert.IsNotNull(table1, "Tabella1 was not found in workbook");
+            Assert.AreEqual("Tabella1", table1.Name, "Table name");
+            Assert.AreEqual("Foglio1", table1.SheetName, "Sheet name");
+            // Table lookup should be case-insensitive
+            Assert.AreSame(table1, wb.GetTable("TABELLA1"), "Case insensitive table name lookup");
+            // If workbook does not contain any data tables matching the provided name, getTable should return null
+            Assert.IsNull(wb.GetTable(null), "Null table name should not throw NPE");
+            Assert.IsNull(wb.GetTable("Foglio1"), "Should not be able to find non-existent table");
+            // If a table is added after getTable is called it should still be reachable by XSSFWorkbook.getTable
+            // This test makes sure that if any caching is done that getTable never uses a stale cache
+            XSSFTable table2 = (wb.GetSheet("Foglio2") as XSSFSheet).CreateTable();
+            table2.Name = "Table2";
+            Assert.AreSame(table2, wb.GetTable("Table2"), "Did not find Table2");
+
+            // If table name is modified after getTable is called, the table can only be found by its new name
+            // This test makes sure that if any caching is done that getTable never uses a stale cache
+            table1.Name = "Table1";
+            Assert.AreSame(table1, wb.GetTable("TABLE1"), "Did not find Tabella1 renamed to Table1");
+            wb.Close();
+        }
+
     }
 }
