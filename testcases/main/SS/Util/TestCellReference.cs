@@ -285,6 +285,21 @@ namespace TestCases.SS.Util
             throw new AssertionException("expected (c='" + colStr + "', r='" + rowStr + "' to be "
                     + (expResult ? "within" : "out of") + " bounds for version " + sv.ToString());
         }
+
+        /**
+         * bug 59684: separateRefParts Assert.Fails on entire-column references
+         */
+        [Test]
+        public void EntireColumnReferences()
+        {
+            CellReference ref1 = new CellReference("HOME!$169");
+            Assert.AreEqual("HOME", ref1.SheetName);
+            Assert.AreEqual(168, ref1.Row);
+            Assert.AreEqual(-1, ref1.Col);
+            Assert.IsTrue(ref1.IsRowAbsolute, "row absolute");
+            //Assert.IsFalse("column absolute/relative is undefined", ref.IsColAbsolute);
+        }
+
     }
 
 }

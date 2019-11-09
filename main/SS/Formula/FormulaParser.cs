@@ -1231,7 +1231,7 @@ namespace NPOI.SS.Formula
             }
             else if (hasLetters)
             {
-                if (!CellReference.IsColumnWithnRange(rep.Replace("$", ""), _ssVersion))
+                if (!CellReference.IsColumnWithinRange(rep.Replace("$", ""), _ssVersion))
                 {
                     return null;
                 }

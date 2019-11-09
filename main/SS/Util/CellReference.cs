@@ -64,25 +64,38 @@ namespace NPOI.SS.Util
 
         /**
          * Matches a run of one or more letters followed by a run of one or more digits.
-         * The run of letters is group 1 and the run of digits is group 2.  
+         * Both the letter and number groups are optional.
+         * The run of letters is group 1 and the run of digits is group 2.
          * Each group may optionally be prefixed with a single '$'.
          */
-        private const string CELL_REF_PATTERN = @"^\$?([A-Za-z]+)\$?([0-9]+)";
+        //private const string CELL_REF_PATTERN = @"^\$?([A-Za-z]+)\$?([0-9]+)";
+        //private static final Pattern CELL_REF_PATTERN = Pattern.compile("(\\$?[A-Z]+)?" + "(\\$?[0-9]+)?", Pattern.CASE_INSENSITIVE);
+        private static Regex CELL_REF_PATTERN = new Regex("(\\$?[A-Z]+)?" + "(\\$?[0-9]+)?");
+
+        /**
+         * Matches references only where row and column are included.
+         * Matches a run of one or more letters followed by a run of one or more digits.
+         * If a reference does not match this pattern, it might match COLUMN_REF_PATTERN or ROW_REF_PATTERN
+         * References may optionally include a single '$' before each group, but these are excluded from the Matcher.group(int).
+         */
+        //private static final Pattern STRICTLY_CELL_REF_PATTERN = Pattern.compile("\\$?([A-Z]+)" + "\\$?([0-9]+)", Pattern.CASE_INSENSITIVE);
+        private static Regex STRICTLY_CELL_REF_PATTERN = new Regex("\\$?([A-Z]+)" + "\\$?([0-9]+)");
         /**
          * Matches a run of one or more letters.  The run of letters is group 1.  
-         * The text may optionally be prefixed with a single '$'.
+         * References may optionally include a single '$' before the group, but these are excluded from the Matcher.group(int).
          */
-        private const string COLUMN_REF_PATTERN = @"^\$?([A-Za-z]+)$";
+        private static Regex COLUMN_REF_PATTERN = new Regex(@"^\$?([A-Za-z]+)$");
         /**
-         * Matches a run of one or more digits.  The run of digits is group 1.
-         * The text may optionally be prefixed with a single '$'.
+         * Matches a run of one or more letters.  The run of numbers is group 1.
+         * References may optionally include a single '$' before the group, but these are excluded from the Matcher.group(int).
          */
-        private const string ROW_REF_PATTERN = @"^\$?([0-9]+)$";
+        private static Regex ROW_REF_PATTERN = new Regex(@"^\$?([0-9]+)$");
         /**
          * Named range names must start with a letter or underscore.  Subsequent characters may include
          * digits or dot.  (They can even end in dot).
          */
-        private const string NAMED_RANGE_NAME_PATTERN = "^[_A-Za-z][_.A-Za-z0-9]*$";
+        //private static final Pattern NAMED_RANGE_NAME_PATTERN = Pattern.compile("[_A-Z][_.A-Z0-9]*", Pattern.CASE_INSENSITIVE);
+        private static Regex NAMED_RANGE_NAME_PATTERN = new Regex("^[_A-Za-z][_.A-Za-z0-9]*$");
         //private static string BIFF8_LAST_COLUMN = "IV";
         //private static int BIFF8_LAST_COLUMN_TEXT_LEN = BIFF8_LAST_COLUMN.Length;
         //private static string BIFF8_LAST_ROW = (0x10000).ToString();
@@ -275,7 +288,7 @@ namespace NPOI.SS.Util
                 // no digits at end of str
                 return ValidateNamedRangeName(str, ssVersion);
             }
-            Regex cellRefPatternMatcher = new Regex(CELL_REF_PATTERN);
+            Regex cellRefPatternMatcher = STRICTLY_CELL_REF_PATTERN;
             if (!cellRefPatternMatcher.IsMatch(str))
             {
                 return ValidateNamedRangeName(str, ssVersion);
@@ -302,26 +315,26 @@ namespace NPOI.SS.Util
         }
         private static NameType ValidateNamedRangeName(String str, SpreadsheetVersion ssVersion)
         {
-            Regex colMatcher = new Regex(COLUMN_REF_PATTERN);
+            Regex colMatcher = COLUMN_REF_PATTERN;
 
             if (colMatcher.IsMatch(str))
             {
                 Group colStr = colMatcher.Matches(str)[0].Groups[1];
-                if (IsColumnWithnRange(colStr.Value, ssVersion))
+                if (IsColumnWithinRange(colStr.Value, ssVersion))
                 {
                     return NameType.Column;
                 }
             }
-            Regex rowMatcher = new Regex(ROW_REF_PATTERN);
+            Regex rowMatcher = ROW_REF_PATTERN;
             if (rowMatcher.IsMatch(str))
             {
                 Group rowStr = rowMatcher.Matches(str)[0].Groups[1];
-                if (IsRowWithnRange(rowStr.Value, ssVersion))
+                if (IsRowWithinRange(rowStr.Value, ssVersion))
                 {
                     return NameType.Row;
                 }
             }
-            if (!Regex.IsMatch(str, NAMED_RANGE_NAME_PATTERN))
+            if (!NAMED_RANGE_NAME_PATTERN.IsMatch(str))
             {
                 return NameType.BadCellOrNamedRange;
             }
@@ -363,8 +376,8 @@ namespace NPOI.SS.Util
             public CellRefPartsInner(String sheetName, String rowRef, String colRef)
             {
                 this.sheetName = sheetName;
-                this.rowRef = rowRef;
-                this.colRef = colRef;
+                this.rowRef = rowRef ?? "";
+                this.colRef = colRef ?? "";
             }
         }
         /**
@@ -378,35 +391,15 @@ namespace NPOI.SS.Util
             int plingPos = reference.LastIndexOf(SHEET_NAME_DELIMITER);
             String sheetName = ParseSheetName(reference, plingPos);
             int start = plingPos + 1;
-            String row;
-            String col;
-            int Length = reference.Length;
+            String cell = reference.Substring(plingPos + 1).ToUpper(CultureInfo.CurrentCulture);
+            Match matcher = CELL_REF_PATTERN.Match(cell);
+            if (!matcher.Success)
+                throw new ArgumentException("Invalid CellReference: " + reference);
+            String col = matcher.Groups[1].Value;
+            String row = matcher.Groups[2].Value;
 
-
-            int loc = start;
-            // skip initial dollars 
-            if (reference[loc] == ABSOLUTE_REFERENCE_MARKER)
-            {
-                loc++;
-            }
-            // step over column name chars Until first digit (or dollars) for row number.
-            for (; loc < Length; loc++)
-            {
-                char ch = reference[loc];
-                if (Char.IsDigit(ch) || ch == ABSOLUTE_REFERENCE_MARKER)
-                {
-                    break;
-                }
-            }
-            col = reference.Substring(start, loc - start).ToUpper();
-            row = reference.Substring(loc);
             CellRefPartsInner cellRefParts = new CellRefPartsInner(sheetName, row, col);
             return cellRefParts;
-            //return new String[] {
-            //   sheetName,
-            //   reference.Substring(start,loc-start),
-            //   reference.Substring(loc),
-            //};
         }
 
         private static String ParseSheetName(String reference, int indexOfSheetNameDelimiter)
@@ -576,14 +569,24 @@ namespace NPOI.SS.Util
          */
         public static bool CellReferenceIsWithinRange(String colStr, String rowStr, SpreadsheetVersion ssVersion)
         {
-            if (!IsColumnWithnRange(colStr, ssVersion))
+            if (!IsColumnWithinRange(colStr, ssVersion))
             {
                 return false;
             }
-            return IsRowWithnRange(rowStr, ssVersion);
+            return IsRowWithinRange(rowStr, ssVersion);
         }
-        public static bool IsRowWithnRange(String rowStr, SpreadsheetVersion ssVersion)
+
+        /**
+         * @deprecated 3.15 beta 2. Use {@link #isColumnWithinRange}.
+         */
+        [Obsolete("deprecated 3.15 beta 2. Use {@link #isColumnWithinRange}.")]
+        public static bool IsColumnWithnRange(String colStr, SpreadsheetVersion ssVersion)
         {
+            return IsColumnWithinRange(colStr, ssVersion);
+        }
+        public static bool IsRowWithinRange(String rowStr, SpreadsheetVersion ssVersion)
+        {
+            // Equivalent to 0 <= CellReference.convertColStringToIndex(colStr) <= ssVersion.getLastColumnIndex()
             int rowNum = Int32.Parse(rowStr, CultureInfo.InvariantCulture);
 
             if (rowNum < 0)
@@ -599,7 +602,12 @@ namespace NPOI.SS.Util
             return rowNum <= ssVersion.MaxRows;
         }
 
-        public static bool IsColumnWithnRange(String colStr, SpreadsheetVersion ssVersion)
+        [Obsolete("deprecated 3.15 beta 2. Use {@link #isRowWithinRange}")]
+        public static bool isRowWithnRange(String rowStr, SpreadsheetVersion ssVersion)
+        {
+            return IsRowWithinRange(rowStr, ssVersion);
+        }
+        public static bool IsColumnWithinRange(String colStr, SpreadsheetVersion ssVersion)
         {
             String lastCol = ssVersion.LastColumnName;
             int lastColLength = lastCol.Length;
