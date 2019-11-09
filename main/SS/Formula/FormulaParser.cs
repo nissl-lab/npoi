@@ -971,7 +971,6 @@ namespace NPOI.SS.Formula
                 return null;
             }
             GetChar();
-            String name = "";
             if (look == '#')
             {
                 return null;
@@ -980,13 +979,14 @@ namespace NPOI.SS.Formula
             {
                 GetChar();
             }
+            StringBuilder name = new StringBuilder();
             while (look != ']')
             {
-                name += look;
+                name.Append(look);
                 GetChar();
             }
             Match(']');
-            return name;
+            return name.ToString();
         }
         /**
          * Tries to parse the next as special quantifier
