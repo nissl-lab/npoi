@@ -122,6 +122,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("Sheet1!A1:B3", ptgs[0].ToFormulaString());
             Assert.AreEqual("SUM", ptgs[1].ToFormulaString());
 
+            wb.Close();
         }
         [Test]
         public void TestBuiltInFormulas()
@@ -138,6 +139,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(2, ptgs.Length);
             Assert.IsTrue(ptgs[0] is IntPtg, "Had " + Arrays.ToString(ptgs));
             Assert.IsTrue(ptgs[1] is FuncPtg, "Had " + Arrays.ToString(ptgs));
+
+            wb.Close();
         }
         [Test]
         public void FormulaReferencesSameWorkbook()
@@ -157,6 +160,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(null, ((NameXPxg)ptgs[0]).SheetName);
             Assert.AreEqual("NR_Global_B2", ((NameXPxg)ptgs[0]).NameName);
             Assert.AreEqual("[0]!NR_Global_B2", ((NameXPxg)ptgs[0]).ToFormulaString());
+
+            wb.Close();
         }
 
         [Test]
@@ -200,6 +205,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(typeof(NamePtg), ptgs[0].GetType());
             Assert.AreEqual("NR_Global_B2", ((NamePtg)ptgs[0]).ToFormulaString(fpb));
 
+            wb.Close();
         }
 
         [Test]
@@ -237,6 +243,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("NR_Global_B2", ((NameXPxg)ptgs[0]).NameName);
             Assert.AreEqual("[1]!NR_Global_B2", ((NameXPxg)ptgs[0]).ToFormulaString());
 
+            wb.Close();
         }
 
         /**
@@ -389,6 +396,7 @@ namespace NPOI.XSSF.UserModel
                 newF.CellFormula = (/*setter*/"MIN(Sheet1:Sheet2!A1:B2)");
                 Assert.AreEqual("MIN(Sheet1:Sheet2!A1:B2)", newF.CellFormula);
 
+                wb.Close();
             }
         }
         private static String ToFormulaString(Ptg ptg, IFormulaParsingWorkbook wb)
@@ -410,6 +418,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(2, ptgs.Length, "Had " + Arrays.ToString(ptgs));
             Assert.IsTrue(ptgs[0] is RefPtg, "Had " + Arrays.ToString(ptgs));
             Assert.IsTrue(ptgs[1] is ParenthesisPtg, "Had " + Arrays.ToString(ptgs));
+
+            wb.Close();
         }
         [Test]
         public void Test58648Basic()
@@ -445,6 +455,8 @@ namespace NPOI.XSSF.UserModel
             Assert.IsTrue(ptgs[0] is RefPtg, "Had " + Arrays.ToString(ptgs));
             Assert.IsTrue(ptgs[1] is ParenthesisPtg, "Had " + Arrays.ToString(ptgs));
             Assert.IsTrue(ptgs[2] is ParenthesisPtg, "Had " + Arrays.ToString(ptgs));
+
+            wb.Close();
         }
         [Test]
         public void Test58648FormulaParsing()
@@ -476,6 +488,8 @@ namespace NPOI.XSSF.UserModel
             ISheet sheet = wb.GetSheet("my-sheet");
             ICell cell1 = sheet.GetRow(1).GetCell(4);
             Assert.AreEqual(5d, cell1.NumericCellValue, 0d);
+
+            wb.Close();
         }
         [Test]
         public void TestWhitespaceInFormula()
@@ -511,6 +525,8 @@ namespace NPOI.XSSF.UserModel
             Assert.IsTrue(ptgs[1] is AreaPtg, "Had " + Arrays.ToString(ptgs));
             Assert.IsTrue(ptgs[2] is AreaPtg, "Had " + Arrays.ToString(ptgs));
             Assert.IsTrue(ptgs[3] is IntersectionPtg, "Had " + Arrays.ToString(ptgs));
+
+            wb.Close();
         }
         [Test]
         public void TestWhitespaceInComplexFormula()
@@ -531,10 +547,12 @@ namespace NPOI.XSSF.UserModel
             Assert.IsTrue(ptgs[1] is RefPtg, "Had " + Arrays.ToString(ptgs));
             Assert.IsTrue(ptgs[2] is AreaPtg, "Had " + Arrays.ToString(ptgs));
             Assert.IsTrue(ptgs[3] is NameXPxg, "Had " + Arrays.ToString(ptgs));
+
+            wb.Close();
         }
 
         [Test]
-        public void parseStructuredReferences()
+        public void ParseStructuredReferences()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
             XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
