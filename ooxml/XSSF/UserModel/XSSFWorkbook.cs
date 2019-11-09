@@ -2193,47 +2193,8 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-
-        /*
-         * TODO: data tables are stored at the workbook level in XSSF, but are bound to a single sheet.
-         *       The current code structure has them hanging off XSSFSheet, but formulas reference them
-         *       only by name (names are global, and case insensitive).
-         *       This map stores names as lower case for case-insensitive lookups.
-         *
-         * FIXME: Caching tables by name here for fast formula lookup means the map is out of date if
-         *       a table is renamed or added/removed to a sheet after the map is created.
-         *
-         *       Perhaps tables can be managed similar to PivotTable references above?
-         */
-        Dictionary<String, XSSFTable> _tableCache = null;
-        private Dictionary<String, XSSFTable> GetTableCache()
-        {
-            if (_tableCache != null)
-            {
-                return _tableCache;
-            }
-            // FIXME: use org.apache.commons.collections.map.CaseInsensitiveMap
-            _tableCache = new Dictionary<String, XSSFTable>();
-
-            if (sheets != null)
-            {
-                foreach (XSSFSheet sheet in sheets)
-                {
-                    foreach (XSSFTable tbl in sheet.GetTables())
-                    {
-                        String lname = tbl.Name.ToLower(CultureInfo.CurrentCulture);
-                        _tableCache.Add(lname, tbl);
-                    }
-                }
-            }
-            return _tableCache;
-        }
-
         /**
          * Returns the data table with the given name (case insensitive).
-         * Tables are cached for performance (formula evaluation looks them up by name repeatedly).
-         * After the first table lookup, adding or removing a table from the document structure will cause trouble.
-         * This is meant to be used on documents whose structure is essentially static at the point formulas are evaluated.
          * 
          * @param name the data table name (case-insensitive)
          * @return The Data table in the workbook named <tt>name</tt>, or <tt>null</tt> if no table is named <tt>name</tt>.
@@ -2241,8 +2202,20 @@ namespace NPOI.XSSF.UserModel
          */
         public XSSFTable GetTable(String name)
         {
-            String lname = name.ToLower(CultureInfo.CurrentCulture);
-            return GetTableCache()[name];
+            if (sheets != null)
+            {
+                foreach (XSSFSheet sheet in sheets)
+                {
+                    foreach (XSSFTable tbl in sheet.GetTables())
+                    {
+                        if (name.Equals(tbl.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return tbl;
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
         public void SetActiveSheet(int sheetIndex)
