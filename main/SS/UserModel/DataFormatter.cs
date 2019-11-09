@@ -78,7 +78,7 @@ namespace NPOI.SS.UserModel
      *  The trailing underscore and space ("_ ") in the format adds a space to the end and Excel formats this cell as <code>"12.34 "</code>,
      *  but <code>DataFormatter</code> trims the formatted value and returns <code>"12.34"</code>.
      * </p>
-     * You can enable spaces by passing the <code>emulateCsv=true</code> flag in the <code>DateFormatter</code> cosntructor.
+     * You can enable spaces by passing the <code>emulateCSV=true</code> flag in the <code>DateFormatter</code> cosntructor.
      * If set to true, then the output tries to conform to what you get when you take an xls or xlsx in Excel and Save As CSV file:
      * <ul>
      *  <li>returned values are not trimmed</li>
@@ -175,13 +175,10 @@ namespace NPOI.SS.UserModel
          *  Map<String,FormatBase> Formats
          */
         private Hashtable formats;
-        private bool emulateCsv = false;
+        private bool emulateCSV = false;
 
         /** For logging any problems we find */
         private static POILogger logger = POILogFactory.GetLogger(typeof(DataFormatter));
-        /**
-         * Creates a formatter using the {@link Locale#getDefault() default locale}.
-         */
         public DataFormatter()
             : this(false)
         {
@@ -211,21 +208,21 @@ namespace NPOI.SS.UserModel
             AddFormat("000\\-00\\-0000", ssnFormat);
             AddFormat("000-00-0000", ssnFormat);
         }
-        public DataFormatter(bool emulateCsv)
+        public DataFormatter(bool emulateCSV)
             : this(CultureInfo.CurrentCulture)
         {
-            this.emulateCsv = emulateCsv;
+            this.emulateCSV = emulateCSV;
         }
         /**
          * Creates a formatter using the given locale.
          *
-         * @param  emulateCsv whether to emulate CSV output.
+         * @param  emulateCSV whether to emulate CSV output.
          */
-        public DataFormatter(CultureInfo locale, bool emulateCsv)
+        public DataFormatter(CultureInfo locale, bool emulateCSV)
             : this(locale)
         {
 
-            this.emulateCsv = emulateCsv;
+            this.emulateCSV = emulateCSV;
         }
         /**
          * Return a FormatBase for the given cell if one exists, otherwise try to
@@ -288,7 +285,7 @@ namespace NPOI.SS.UserModel
                         cellValueO = DateUtil.GetJavaDate(cellValue);
                     }
                     // Wrap and return (non-cachable - CellFormat does that)
-                    return new CellFormatResultWrapper(cfmt.Apply(cellValueO), emulateCsv);
+                    return new CellFormatResultWrapper(cfmt.Apply(cellValueO), emulateCSV);
                 }
                 catch (Exception e)
                 {
@@ -329,7 +326,7 @@ namespace NPOI.SS.UserModel
             }
 
             // Excel's # with value 0 will output empty where Java will output 0. This hack removes the # from the format.
-            if (emulateCsv && cellValue == 0.0 && formatStr.Contains("#") && !formatStr.Contains("0"))
+            if (emulateCSV && cellValue == 0.0 && formatStr.Contains("#") && !formatStr.Contains("0"))
             {
                 formatStr = formatStr.Replace("#", "");
             }
@@ -446,7 +443,7 @@ namespace NPOI.SS.UserModel
             {
                 return CreateNumberFormat(formatStr, cellValue);
             }
-            if (emulateCsv)
+            if (emulateCSV)
             {
                 return new ConstantStringFormat(cleanFormatForNumber(formatStr));
             }
@@ -635,7 +632,7 @@ namespace NPOI.SS.UserModel
         {
             StringBuilder sb = new StringBuilder(formatStr);
 
-            if (emulateCsv)
+            if (emulateCSV)
             {
                 // Requested spacers with "_" are replaced by a single space.
                 // Full-column-width padding "*" are removed.
@@ -737,13 +734,18 @@ namespace NPOI.SS.UserModel
             Match agm = alternateGrouping.Match(format);
             if (agm.Success)
             {
-                symbols = currentCulture.NumberFormat;
-
                 char grouping = agm.Groups[2].Value[0];
-                symbols.NumberGroupSeparator = grouping.ToString();
-                String oldPart = agm.Groups[1].Value;
-                String newPart = oldPart.Replace(grouping, ',');
-                format = format.Replace(oldPart, newPart);
+                // Only replace the grouping character if it is not the default
+                // grouping character for the US locale (',') in order to enable
+                // correct grouping for non-US locales.
+                if (grouping != ',')
+                {
+                    symbols = currentCulture.NumberFormat;
+                    symbols.NumberGroupSeparator = grouping.ToString();
+                    String oldPart = agm.Groups[1].Value;
+                    String newPart = oldPart.Replace(grouping, ',');
+                    format = format.Replace(oldPart, newPart);
+                }
             }
 
             try
@@ -871,7 +873,7 @@ namespace NPOI.SS.UserModel
                 }
 
                 // RK: Invalid dates are 255 #s.
-                if (emulateCsv)
+                if (emulateCSV)
                 {
                     return invalidDateTimeString;
                 }
@@ -1077,15 +1079,15 @@ namespace NPOI.SS.UserModel
         private class CellFormatResultWrapper : FormatBase
         {
             private CellFormatResult result;
-            private bool emulateCsv;
-            internal CellFormatResultWrapper(CellFormatResult result, bool emulateCsv)
+            private bool emulateCSV;
+            internal CellFormatResultWrapper(CellFormatResult result, bool emulateCSV)
             {
-                this.emulateCsv = emulateCsv;
+                this.emulateCSV = emulateCSV;
                 this.result = result;
             }
             public override StringBuilder Format(Object obj, StringBuilder toAppendTo, int pos)
             {
-                if (emulateCsv)
+                if (emulateCSV)
                 {
                     return toAppendTo.Append(result.Text);
                 }

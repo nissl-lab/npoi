@@ -71,7 +71,23 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("63", dfUS.FormatRawCellContents(63.0, -1, "[$-1010409]00"));
 
         }
-    
+        /**
+         * Test that we use the specified locale when deciding
+         *   how to format normal numbers
+         */
+        [Test]
+        public void TestGrouping()
+        {
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
+            DataFormatter dfDE = new DataFormatter(CultureInfo.GetCultureInfo("de-DE"));
+            Assert.AreEqual("1,234.57", dfUS.FormatRawCellContents(1234.567, -1, "#,##0.00"));
+            Assert.AreEqual("1'234.57", dfUS.FormatRawCellContents(1234.567, -1, "#'##0.00"));
+            Assert.AreEqual("1 234.57", dfUS.FormatRawCellContents(1234.567, -1, "# ##0.00"));
+            Assert.AreEqual("1.234,57", dfDE.FormatRawCellContents(1234.567, -1, "#,##0.00"));
+            Assert.AreEqual("1'234,57", dfDE.FormatRawCellContents(1234.567, -1, "#'##0.00"));
+            Assert.AreEqual("1 234,57", dfDE.FormatRawCellContents(1234.567, -1, "# ##0.00"));
+        }
+
         /**
          * Ensure that colours Get correctly
          *  zapped from within the format strings
