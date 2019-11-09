@@ -48,7 +48,7 @@ namespace NPOI.HSSF.UserModel
     /// @author  Yegor Kozlov (yegor at apache.org) (Autosizing columns)
     /// </remarks>
     [Serializable]
-    public class HSSFSheet : NPOI.SS.UserModel.ISheet
+    public class HSSFSheet : ISheet
     {
         /**
          * width of 1px in columns with default width in units of 1/256 of a character width
@@ -72,7 +72,7 @@ namespace NPOI.HSSF.UserModel
          */
 
         private InternalSheet _sheet;
-        private Dictionary<int, NPOI.SS.UserModel.IRow> rows;
+        private Dictionary<int, IRow> rows;
         public InternalWorkbook book;
         protected HSSFWorkbook _workbook;
         private int firstrow;
@@ -88,7 +88,7 @@ namespace NPOI.HSSF.UserModel
         public HSSFSheet(HSSFWorkbook workbook)
         {
             _sheet = InternalSheet.CreateSheet();
-            rows = new Dictionary<int, NPOI.SS.UserModel.IRow>();
+            rows = new Dictionary<int, IRow>();
             this._workbook = workbook;
             this.book = workbook.Workbook;
         }
@@ -103,7 +103,7 @@ namespace NPOI.HSSF.UserModel
         public HSSFSheet(HSSFWorkbook workbook, InternalSheet sheet)
         {
             this._sheet = sheet;
-            rows = new Dictionary<int, NPOI.SS.UserModel.IRow>();
+            rows = new Dictionary<int, IRow>();
             this._workbook = workbook;
             this.book = _workbook.Workbook;
             SetPropertiesFromSheet(_sheet);
@@ -155,9 +155,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="sheet">The _sheet.</param>
         private void SetPropertiesFromSheet(InternalSheet sheet)
         {
-
             RowRecord row = sheet.NextRow;
-            bool rowRecordsAlreadyPresent = row != null;
 
             while (row != null)
             {
@@ -1424,7 +1422,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="IsRow">if set to <c>true</c> [is row].</param>
         protected void ShiftMerged(int startRow, int endRow, int n, bool IsRow)
         {
-            List<CellRangeAddress> ShiftedRegions = new List<CellRangeAddress>();
+            List<CellRangeAddress> shiftedRegions = new List<CellRangeAddress>();
             //move merged regions completely if they fall within the new region boundaries when they are Shifted
             for (int i = 0; i < this.NumMergedRegions; i++)
             {
@@ -1445,7 +1443,7 @@ namespace NPOI.HSSF.UserModel
                     merged.FirstRow = (merged.FirstRow + n);
                     merged.LastRow = (merged.LastRow + n);
                     //have to Remove/Add it back
-                    ShiftedRegions.Add(merged);
+                    shiftedRegions.Add(merged);
                     this.RemoveMergedRegion(i);
                     i = i - 1; // we have to back up now since we Removed one
 
@@ -1454,11 +1452,8 @@ namespace NPOI.HSSF.UserModel
             }
 
             //Readd so it doesn't Get Shifted again
-            IEnumerator iterator = ShiftedRegions.GetEnumerator();
-            while (iterator.MoveNext())
+            foreach (CellRangeAddress region in shiftedRegions)
             {
-                NPOI.SS.Util.CellRangeAddress region = (NPOI.SS.Util.CellRangeAddress)iterator.Current;
-
                 this.AddMergedRegion(region);
             }
 
@@ -1992,10 +1987,9 @@ namespace NPOI.HSSF.UserModel
             _sheet.AggregateDrawingRecords(book.DrawingManager, false);
 
             EscherAggregate r = (EscherAggregate)Sheet.FindFirstRecordBySid(EscherAggregate.sid);
-            IList escherRecords = r.EscherRecords;
-            for (IEnumerator iterator = escherRecords.GetEnumerator(); iterator.MoveNext();)
+            var escherRecords = r.EscherRecords;
+            foreach (EscherRecord escherRecord in escherRecords)
             {
-                EscherRecord escherRecord = (EscherRecord)iterator.Current;
                 if (fat)
                     Console.WriteLine(escherRecord.ToString());
                 else
@@ -2038,8 +2032,7 @@ namespace NPOI.HSSF.UserModel
                 }
 
                 // Grab our aggregate record, and wire it up
-                EscherAggregate agg = (EscherAggregate)_sheet.FindFirstRecordBySid(EscherAggregate.sid);
-                return agg;
+                return (EscherAggregate)_sheet.FindFirstRecordBySid(EscherAggregate.sid);
             }
         }
 
@@ -2073,7 +2066,7 @@ namespace NPOI.HSSF.UserModel
 
         private HSSFPatriarch GetPatriarch(bool createIfMissing)
         {
-            HSSFPatriarch patriarch = null;
+            
             if (_patriarch != null)
             {
                 return _patriarch;
@@ -2101,7 +2094,7 @@ namespace NPOI.HSSF.UserModel
                     {
                         pos = _sheet.AggregateDrawingRecords(dm, true);
                         agg = (EscherAggregate)_sheet.Records[pos];
-                        patriarch = new HSSFPatriarch(this, agg);
+                        HSSFPatriarch patriarch = new HSSFPatriarch(this, agg);
                         patriarch.AfterCreate();
                         return patriarch;
                     }
@@ -2409,18 +2402,18 @@ namespace NPOI.HSSF.UserModel
             return FindCellComment(ref1.Row, ref1.Column);
         }
 
-        /**
-         * Get a Hyperlink in this sheet anchored at row, column
-         *
-         * @param row
-         * @param column
-         * @return hyperlink if there is a hyperlink anchored at row, column; otherwise returns null
-         */
+        /// <summary>
+        /// Get a Hyperlink in this sheet anchored at row, column
+        /// </summary>
+        /// <param name="row">The index of the row of the hyperlink, zero-based</param>
+        /// <param name="column">the index of the column of the hyperlink, zero-based</param>
+        /// <returns>return hyperlink if there is a hyperlink anchored at row, column; otherwise returns null</returns>
         public IHyperlink GetHyperlink(int row, int column)
         {
             foreach (RecordBase rec in _sheet.Records)
             {
-                if (rec is HyperlinkRecord) {
+                if (rec is HyperlinkRecord)
+                {
                     HyperlinkRecord link = (HyperlinkRecord)rec;
                     if (link.FirstColumn == column && link.FirstRow == row)
                     {
@@ -2818,9 +2811,8 @@ namespace NPOI.HSSF.UserModel
                     {
                         if (rows)
                         {
-                            CellRangeAddress rowRange = new CellRangeAddress(
+                            return new CellRangeAddress(
                                 areaPtg.FirstRow, areaPtg.LastRow, -1, -1);
-                            return rowRange;
                         }
                     }
                     else if (areaPtg.FirstRow == 0
@@ -2828,9 +2820,8 @@ namespace NPOI.HSSF.UserModel
                     {
                         if (!rows)
                         {
-                            CellRangeAddress columnRange = new CellRangeAddress(-1, -1,
+                            return new CellRangeAddress(-1, -1,
                                 areaPtg.FirstColumn, areaPtg.LastColumn);
-                            return columnRange;
                         }
                     }
 

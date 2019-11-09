@@ -72,10 +72,6 @@ namespace NPOI
             ctProps.Application = (application);
             ctProps.AppVersion = (appVersion);
 
-            ctProps = null;
-            properties = null;
-            props = null;
-
             XSSFWorkbook newWorkbook =
                     (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
             workbook.Close();

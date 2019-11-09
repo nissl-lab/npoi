@@ -83,15 +83,13 @@ namespace NPOI.SS.UserModel
 
         protected byte[] GetRGBOrARGB()
         {
-            byte[] rgb = null;
-
             if (IsIndexed && Index > 0)
             {
                 int indexNum = Index;
                 HSSFColor indexed = HSSFColor.GetAllColors()[indexNum];
                 if (indexed != null)
                 {
-                    rgb = new byte[3];
+                    byte[] rgb = new byte[3];
                     rgb[0] = (byte)indexed.GetTriplet()[0];
                     rgb[1] = (byte)indexed.GetTriplet()[1];
                     rgb[2] = (byte)indexed.GetTriplet()[2];
@@ -100,8 +98,7 @@ namespace NPOI.SS.UserModel
             }
 
             // Grab the colour
-            rgb = StoredRBG;
-            return rgb;
+            return StoredRBG;
         }
 
         /**
@@ -143,12 +140,12 @@ namespace NPOI.SS.UserModel
         {
             get
             {
-                StringBuilder sb = new StringBuilder();
                 byte[] rgb = ARGB;
                 if (rgb == null)
                 {
                     return null;
                 }
+                StringBuilder sb = new StringBuilder();
                 foreach (byte c in rgb)
                 {
                     int i = c & 0xff;

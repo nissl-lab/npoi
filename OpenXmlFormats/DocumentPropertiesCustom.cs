@@ -143,7 +143,181 @@ namespace NPOI.OpenXmlFormats
             }
         }
 
-    
+        public bool IsSetFiletime()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetBool()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetBool()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetI1()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetI1()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetI2()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetI2()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetI4()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetFiletime()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetI4()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetUi1()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetUi1()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetUi2()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetUi4()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetUi8()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetUint()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetUint()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetR4()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetR8()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetR8()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetR4()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetUi8()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetDecimal()
+        {
+            throw new NotImplementedException();
+        }
+
+        public decimal? GetDecimal()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetUi4()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetUi2()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetI8()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetI8()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetInt()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetInt()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetDate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetDate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetLpstr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSetLpstr()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetLpwstr()
+        {
+            throw new NotImplementedException();
+        }
+
         [XmlIgnore]
         public ItemChoiceType ItemElementName
         {
