@@ -25,6 +25,8 @@ namespace NPOI.XWPF.UserModel
     using NPOI.Util;
     using System.Xml.Serialization;
     using NPOI.OpenXmlFormats.Wordprocessing;
+    using TestCases;
+    using NPOI.XWPF.Extractor;
 
     [TestFixture]
     public class TestXWPFDocument
@@ -401,6 +403,24 @@ namespace NPOI.XWPF.UserModel
             Assert.IsTrue(docx.IsEnforcedProtection());
             docx.Close();
         }
+
+        [Test]
+	    [Ignore("XWPF should be able to write to a new Stream when opened Read-Only")]
+	    public void TestWriteFromReadOnlyOPC() {
+	        OPCPackage opc = OPCPackage.Open(
+	                POIDataSamples.GetDocumentInstance().GetFileInfo("SampleDoc.docx"),
+	                PackageAccess.READ
+	        );
+	        XWPFDocument doc = new XWPFDocument(opc);
+	        XWPFWordExtractor ext = new XWPFWordExtractor(doc);
+	        String origText = ext.Text;
+	    
+	        doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+	        ext = new XWPFWordExtractor(doc);
+	    
+	        Assert.AreEqual(origText, ext.Text);
+	    }
+
     }
 
 }
