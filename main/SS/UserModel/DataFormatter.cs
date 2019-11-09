@@ -179,20 +179,61 @@ namespace NPOI.SS.UserModel
 
         /** For logging any problems we find */
         private static POILogger logger = POILogFactory.GetLogger(typeof(DataFormatter));
+        /** stores if the locale should change according to {@link LocaleUtil#getUserLocale()} */
+        private bool localeIsAdapting;
+
         public DataFormatter()
             : this(false)
         {
         }
         /**
+         * Creates a formatter using the {@link Locale#getDefault() default locale}.
+         *
+         * @param  emulateCSV whether to emulate CSV output.
+         */
+        public DataFormatter(bool emulateCSV)
+            : this(CultureInfo.CurrentCulture, true, emulateCSV)
+        {
+            
+        }
+
+        /**
+         * Creates a formatter using the given locale.
+         */
+        public DataFormatter(CultureInfo locale)
+            : this(locale, false)
+        {
+            
+        }
+
+        /**
+         * Creates a formatter using the given locale.
+         *
+         * @param  emulateCSV whether to emulate CSV output.
+         */
+        public DataFormatter(CultureInfo locale, bool emulateCSV)
+            : this(locale, false, emulateCSV)
+        {
+            
+        }
+        /**
          * Constructor
          */
-        public DataFormatter(CultureInfo culture)
+        public DataFormatter(CultureInfo culture, bool localeIsAdapting, bool emulateCSV)
         {
+            this.localeIsAdapting = true;
             this.currentCulture = culture;
+            //localeChangedObservable.addObserver(this);
+            // localeIsAdapting must be true prior to this first checkForLocaleChange call.
+            //localeChangedObservable.checkForLocaleChange(culture);
+            // set localeIsAdapting so subsequent checks perform correctly
+            // (whether a specific locale was provided to this DataFormatter or DataFormatter should
+            // adapt to the current user locale as the locale changes)
+            this.localeIsAdapting = localeIsAdapting;
+            this.emulateCSV = emulateCSV;
             formats = new Hashtable();
 
             // init built-in Formats
-
             FormatBase zipFormat = ZipPlusFourFormat.instance;
             AddFormat("00000\\-0000", zipFormat);
             AddFormat("00000-0000", zipFormat);
@@ -208,22 +249,7 @@ namespace NPOI.SS.UserModel
             AddFormat("000\\-00\\-0000", ssnFormat);
             AddFormat("000-00-0000", ssnFormat);
         }
-        public DataFormatter(bool emulateCSV)
-            : this(CultureInfo.CurrentCulture)
-        {
-            this.emulateCSV = emulateCSV;
-        }
-        /**
-         * Creates a formatter using the given locale.
-         *
-         * @param  emulateCSV whether to emulate CSV output.
-         */
-        public DataFormatter(CultureInfo locale, bool emulateCSV)
-            : this(locale)
-        {
-
-            this.emulateCSV = emulateCSV;
-        }
+        
         /**
          * Return a FormatBase for the given cell if one exists, otherwise try to
          * Create one. This method will return <c>null</c> if the any of the
