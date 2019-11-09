@@ -25,6 +25,9 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.Util;
 using System.Collections;
 using NPOI.XSSF.UserModel.Helpers;
+using NPOI.SS.UserModel;
+using System.Text.RegularExpressions;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -40,11 +43,12 @@ namespace NPOI.XSSF.UserModel
      *
      * @author Roberto Manicardi
      */
-    public class XSSFTable : POIXMLDocumentPart
+    public class XSSFTable : POIXMLDocumentPart, ITable
     {
-
         private CT_Table ctTable;
         private List<XSSFXmlColumnPr> xmlColumnPr;
+        private CT_TableColumn[] ctColumns;
+        private Dictionary<String, int> columnMap;
         private CellReference startCellReference;
         private CellReference endCellReference;
         private String commonXPath;
@@ -134,7 +138,18 @@ namespace NPOI.XSSF.UserModel
             return maps;
         }
 
-
+        private CT_TableColumn[] TableColumns
+        {
+            get
+            {
+                if (ctColumns == null)
+                {
+                    ctColumns = ctTable.tableColumns.tableColumn.ToArray();
+                }
+                return ctColumns;
+            }
+            
+        }
         /**
          * 
          * Calculates the xpath of the root element for the table. This will be the common part
@@ -150,7 +165,7 @@ namespace NPOI.XSSF.UserModel
 
                 Array commonTokens = null;
 
-                foreach (CT_TableColumn column in ctTable.tableColumns.tableColumn)
+                foreach (CT_TableColumn column in TableColumns)
                 {
                     if (column.xmlColumnPr != null)
                     {
@@ -192,7 +207,10 @@ namespace NPOI.XSSF.UserModel
             return commonXPath;
         }
 
-
+        /**
+         * Note this list is static - once read, it does not notice later changes to the underlying column structures
+         * @return List of XSSFXmlColumnPr
+         */
         public List<XSSFXmlColumnPr> GetXmlColumnPrs()
         {
 
@@ -259,19 +277,23 @@ namespace NPOI.XSSF.UserModel
          * (see Open Office XML Part 4: chapter 3.5.1.2, attribute ref) 
          *
          */
-        public CellReference GetStartCellReference()
+        public CellReference StartCellReference
         {
-
-            if (startCellReference == null)
+            get
             {
-                String ref1 = ctTable.@ref;
-                if(ref1 != null) {
-                    String[] boundaries = ref1.Split(":".ToCharArray());
-                    String from = boundaries[0];
-                    startCellReference = new CellReference(from);
+                if (startCellReference == null)
+                {
+                    String ref1 = ctTable.@ref;
+                    if (ref1 != null)
+                    {
+                        String[] boundaries = ref1.Split(":".ToCharArray());
+                        String from = boundaries[0];
+                        startCellReference = new CellReference(from);
+                    }
                 }
+                return startCellReference;
             }
-            return startCellReference;
+            
         }
 
         /**
@@ -279,18 +301,21 @@ namespace NPOI.XSSF.UserModel
          * (see Open Office XML Part 4: chapter 3.5.1.2, attribute ref)
          *
          */
-        public CellReference GetEndCellReference()
+        public CellReference EndCellReference
         {
-
-            if (endCellReference == null)
+            get
             {
+                if (endCellReference == null)
+                {
 
-                String ref1 = ctTable.@ref;
-                String[] boundaries = ref1.Split(new char[] { ':' });
-                String from = boundaries[1];
-                endCellReference = new CellReference(from);
+                    String ref1 = ctTable.@ref;
+                    String[] boundaries = ref1.Split(new char[] { ':' });
+                    String from = boundaries[1];
+                    endCellReference = new CellReference(from);
+                }
+                return endCellReference;
             }
-            return endCellReference;
+            
         }
 
 
@@ -302,8 +327,8 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CellReference from = GetStartCellReference();
-                CellReference to = GetEndCellReference();
+                CellReference from = StartCellReference;
+                CellReference to = EndCellReference;
 
                 int rowCount = -1;
                 if (from != null && to != null)
@@ -323,7 +348,7 @@ namespace NPOI.XSSF.UserModel
         public void UpdateHeaders()
         {
             XSSFSheet sheet = (XSSFSheet)GetParent();
-            CellReference ref1 = GetStartCellReference() as CellReference;
+            CellReference ref1 = StartCellReference;
             if (ref1 == null) return;
 
             int headerRow = ref1.Row;
@@ -342,6 +367,76 @@ namespace NPOI.XSSF.UserModel
                     }
                     cellnum++;
                 }
+                ctColumns = null;
+                columnMap = null;
+            }
+        }
+
+        public int FindColumnIndex(String column)
+        {
+            if (columnMap == null)
+            {
+                columnMap = new Dictionary<string, int>(TableColumns.Length);
+
+                for (int i = 0; i < TableColumns.Length; i++)
+                {
+                    columnMap.Add(TableColumns[i].name.ToUpper(), i);
+                }
+            }
+            // Table column names with special characters need a single quote escape
+            // but the escape is not present in the column definition
+            int idx = -1;
+            string testKey = column.Replace("'", "").ToUpper();
+            if (columnMap.ContainsKey(testKey))
+                idx = columnMap[testKey];
+            return idx;
+        }
+
+        public String SheetName
+        {
+            get
+            {
+                return GetXSSFSheet().SheetName;
+            }
+        }
+
+        public bool IsHasTotalsRow
+        {
+            get
+            {
+                return ctTable.totalsRowShown;
+            }
+        }
+
+        public int StartColIndex
+        {
+            get
+            {
+                return StartCellReference.Col;
+            }
+        }
+
+        public int StartRowIndex
+        {
+            get
+            {
+                return StartCellReference.Row;
+            }
+        }
+
+        public int EndColIndex
+        {
+            get
+            {
+                return EndCellReference.Col;
+            }
+        }
+
+        public int EndRowIndex
+        {
+            get
+            {
+                return EndCellReference.Row;
             }
         }
     }

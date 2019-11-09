@@ -565,7 +565,7 @@ namespace NPOI.XSSF.UserModel
             XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(sheet.Workbook);
             SharedFormula sf = new SharedFormula(SpreadsheetVersion.EXCEL2007);
 
-            Ptg[] ptgs = FormulaParser.Parse(sharedFormula, fpb, FormulaType.Cell, sheetIndex);
+            Ptg[] ptgs = FormulaParser.Parse(sharedFormula, fpb, FormulaType.Cell, sheetIndex, RowIndex);
             Ptg[] fmla = sf.ConvertSharedFormulas(ptgs,
                     RowIndex - ref1.FirstRow, ColumnIndex - ref1.FirstColumn);
             return FormulaRenderer.ToFormulaString(fpb, fmla);
@@ -613,7 +613,7 @@ namespace NPOI.XSSF.UserModel
 
             IFormulaParsingWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
             //validate through the FormulaParser
-            FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(this.Sheet));
+            FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(this.Sheet), -1);
 
             CT_CellFormula f = new CT_CellFormula();
             f.Value = formula;

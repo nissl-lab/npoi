@@ -48,6 +48,12 @@ namespace NPOI.SS.Formula
         IName CreateName();
 
         /// <summary>
+        /// XSSF Only - gets a table that exists in the worksheet
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        ITable GetTable(String name);
+        /// <summary>
         /// Return an external name (named range, function, user-defined function) Ptg
         /// </summary>
         /// <param name="name">The name.</param>

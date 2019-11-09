@@ -315,5 +315,9 @@ using NPOI.Util;
         {
             return SpreadsheetVersion.EXCEL97;
         }
+        public ITable GetTable(String name)
+        {
+            throw new IllegalStateException("XSSF-style tables are not supported for HSSF");
+        }
     }
 }

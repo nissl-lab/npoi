@@ -346,8 +346,8 @@ namespace NPOI.XSSF.UserModel
 
             // expand table
             XSSFTable table = sheet.GetTables()[0];
-            CellReference startRef = table.GetStartCellReference();
-            CellReference endRef = table.GetEndCellReference();
+            CellReference startRef = table.StartCellReference;
+            CellReference endRef = table.EndCellReference;
             table.GetCTTable().@ref = (new CellRangeAddress(startRef.Row, 1, startRef.Col, endRef.Col).FormatAsString());
 
             wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);

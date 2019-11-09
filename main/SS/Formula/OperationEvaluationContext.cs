@@ -456,6 +456,14 @@ namespace NPOI.SS.Formula
             }
         }
 
+        public int SheetIndex
+        {
+            get
+            {
+                return _sheetIndex;
+            }
+        }
+
         // Fetch the workbook this refers to, and the name as defined with that
         private ValueEval GetExternalNameXEval(ExternalName externName, String workbookName)
         {

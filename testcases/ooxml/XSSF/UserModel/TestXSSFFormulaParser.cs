@@ -33,7 +33,7 @@ namespace NPOI.XSSF.UserModel
 
         private static Ptg[] Parse(IFormulaParsingWorkbook fpb, String fmla)
         {
-            return FormulaParser.Parse(fmla, fpb, FormulaType.Cell, -1);
+            return FormulaParser.Parse(fmla, fpb, FormulaType.Cell, -1, -1);
         }
 
         [Test]

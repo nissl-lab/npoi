@@ -30,6 +30,7 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
+    using NPOI.Util;
 
     /// <summary>
     /// Specific exception thrown when a supplied formula does not Parse properly.
@@ -60,8 +61,8 @@ namespace NPOI.SS.Formula
      */
     public class FormulaParser
     {
-        private String formulaString;
-        private int formulaLength;
+        private String _formulaString;
+        private int _formulaLength;
         private int _pointer;
 
         private ParseNode _rootNode;
@@ -86,6 +87,7 @@ namespace NPOI.SS.Formula
         private static SpreadsheetVersion _ssVersion;
 
         private int _sheetIndex;
+        private int _rowIndex; // 0-based
 
         /**
          * Create the formula Parser, with the string that is To be
@@ -99,20 +101,16 @@ namespace NPOI.SS.Formula
          *  model.Workbook, then use the convenience method on
          *  usermodel.HSSFFormulaEvaluator
          */
-        public FormulaParser(String formula, IFormulaParsingWorkbook book, int sheetIndex)
+        public FormulaParser(String formula, IFormulaParsingWorkbook book, int sheetIndex, int rowIndex)
         {
-            formulaString = formula;
+            _formulaString = formula;
             _pointer = 0;
             this._book = book;
 
             _ssVersion = book == null ? SpreadsheetVersion.EXCEL97 : book.GetSpreadsheetVersion();
-            formulaLength = formulaString.Length;
+            _formulaLength = _formulaString.Length;
             _sheetIndex = sheetIndex;
-        }
-
-        public static Ptg[] Parse(String formula, IFormulaParsingWorkbook book)
-        {
-            return Parse(formula, book, FormulaType.Cell);
+            _rowIndex = rowIndex;
         }
 
 
@@ -124,22 +122,42 @@ namespace NPOI.SS.Formula
          * @param workbook	the parent workbook
          * @param formulaType the type of the formula, see {@link FormulaType}
          * @param sheetIndex  the 0-based index of the sheet this formula belongs to.
+         * @param rowIndex  - the related cell's row index in 0-based form (-1 if the formula is not cell related)
+	     *                     used to handle structured references that have the "#This Row" quantifier.
          * The sheet index is required to resolve sheet-level names. <code>-1</code> means that
          * the scope of the name will be ignored and  the parser will match names only by name
          *
          * @return array of parsed tokens
          * @throws FormulaParseException if the formula is unparsable
          */
-        public static Ptg[] Parse(String formula, IFormulaParsingWorkbook workbook, FormulaType formulaType, int sheetIndex)
+        public static Ptg[] Parse(String formula, IFormulaParsingWorkbook workbook, FormulaType formulaType, int sheetIndex, int rowIndex)
         {
-            FormulaParser fp = new FormulaParser(formula, workbook, sheetIndex);
+            FormulaParser fp = new FormulaParser(formula, workbook, sheetIndex, rowIndex);
             fp.Parse();
             return fp.GetRPNPtg(formulaType);
         }
 
-        public static Ptg[] Parse(String formula, IFormulaParsingWorkbook workbook, FormulaType formulaType)
+        public static Ptg[] Parse(String formula, IFormulaParsingWorkbook workbook, FormulaType formulaType, int sheetIndex)
         {
-            return Parse(formula, workbook, formulaType, -1);
+            return Parse(formula, workbook, formulaType, sheetIndex, -1);
+        }
+
+        /**
+         * Parse a structured reference. Converts the structured
+         *  reference to the area that represent it.
+         *
+         * @param tableText - The structured reference text
+         * @param workbook - the parent workbook
+         * @param rowIndex - the 0-based cell's row index ( used to handle "#This Row" quantifiers )
+         * @return the area that being represented by the structured reference.
+         */
+        public static Area3DPxg ParseStructuredReference(String tableText, IFormulaParsingWorkbook workbook, int rowIndex)
+        {
+            Ptg[] arr = FormulaParser.Parse(tableText, workbook, 0, 0, rowIndex);
+            if (arr.Length != 1 || !(arr[0] is Area3DPxg) ) {
+                throw new IllegalStateException("Illegal structured reference");
+            }
+            return (Area3DPxg)arr[0];
         }
 
         /** Read New Character From Input Stream */
@@ -159,13 +177,13 @@ namespace NPOI.SS.Formula
                 _inIntersection = false;
             }
             // Check To see if we've walked off the end of the string.
-            if (_pointer > formulaLength)
+            if (_pointer > _formulaLength)
             {
                 throw new Exception("too far");
             }
-            if (_pointer < formulaLength)
+            if (_pointer < _formulaLength)
             {
-                look = formulaString[_pointer];
+                look = _formulaString[_pointer];
             }
             else
             {
@@ -183,15 +201,15 @@ namespace NPOI.SS.Formula
         {
             String msg;
 
-            if (look == '=' && formulaString.Substring(0, _pointer - 1).Trim().Length < 1)
+            if (look == '=' && _formulaString.Substring(0, _pointer - 1).Trim().Length < 1)
             {
-                msg = "The specified formula '" + formulaString
+                msg = "The specified formula '" + _formulaString
                     + "' starts with an equals sign which is not allowed.";
             }
             else
             {
                 msg = "Parse error near char " + (_pointer - 1) + " '" + look + "'"
-                    + " in specified formula '" + formulaString + "'. Expected "
+                    + " in specified formula '" + _formulaString + "'. Expected "
                     + s;
             }
             return new FormulaParseException(msg);
@@ -359,26 +377,6 @@ namespace NPOI.SS.Formula
             }
 
             return false;
-        }
-
-
-        private String ParseAsName()
-        {
-            StringBuilder sb = new StringBuilder();
-
-            // defined names may begin with a letter or underscore
-            if (!char.IsLetter(look) && look != '_')
-            {
-                throw expected("number, string, or defined name");
-            }
-            while (IsValidDefinedNameChar(look))
-            {
-                sb.Append(look);
-                GetChar();
-            }
-            SkipWhite();
-
-            return sb.ToString();
         }
 
         /**
@@ -594,7 +592,7 @@ namespace NPOI.SS.Formula
 
                 SkipWhite();
                 SimpleRangePart part2 = ParseSimpleRangePart();
-                String part1And2 = formulaString.Substring(savePointer - 1, _pointer - savePointer);
+                String part1And2 = _formulaString.Substring(savePointer - 1, _pointer - savePointer);
                 if (part2 == null)
                 {
                     if (sheetIden != null)
@@ -647,6 +645,351 @@ namespace NPOI.SS.Formula
             return ParseNonRange(savePointer);
         }
 
+        private static String specHeaders = "Headers";
+        private static String specAll = "All";
+        private static String specData = "Data";
+        private static String specTotals = "Totals";
+        private static String specThisRow = "This Row";
+
+        /**
+         * Parses a structured reference, returns it as area reference.
+         * Examples:
+         * <pre>
+         * Table1[col]
+         * Table1[[#Totals],[col]]
+         * Table1[#Totals]
+         * Table1[#All]
+         * Table1[#Data]
+         * Table1[#Headers]
+         * Table1[#Totals]
+         * Table1[#This Row]
+         * Table1[[#All],[col]]
+         * Table1[[#Headers],[col]]
+         * Table1[[#Totals],[col]]
+         * Table1[[#All],[col1]:[col2]]
+         * Table1[[#Data],[col1]:[col2]]
+         * Table1[[#Headers],[col1]:[col2]]
+         * Table1[[#Totals],[col1]:[col2]]
+         * Table1[[#Headers],[#Data],[col2]]
+         * Table1[[#This Row], [col1]]
+         * Table1[ [col1]:[col2] ]
+         * </pre>
+         * @param tableName
+         * @return
+         */
+        private ParseNode ParseStructuredReference(String tableName)
+        {
+
+            if (!(_ssVersion.Equals(SpreadsheetVersion.EXCEL2007)))
+            {
+                throw new FormulaParseException("Strctured references work only on XSSF (Excel 2007)!");
+            }
+            ITable tbl = _book.GetTable(tableName);
+            if (tbl == null)
+            {
+                throw new FormulaParseException("Illegal table name!");
+            }
+            String sheetName = tbl.SheetName;
+
+            int startCol = tbl.StartColIndex;
+            int endCol = tbl.EndColIndex;
+            int startRow = tbl.StartRowIndex;
+            int endRow = tbl.EndRowIndex;
+
+            int savePtr0 = _pointer;
+            GetChar();
+
+            bool isTotalsSpec = false;
+            bool isThisRowSpec = false;
+            bool isDataSpec = false;
+            bool isHeadersSpec = false;
+            bool isAllSpec = false;
+            int nSpecQuantifiers = 0; // The number of special quantifiers
+            int savePtr1;
+            while (true)
+            {
+                savePtr1 = _pointer;
+                String specName = ParseAsSpecialQuantifier();
+                if (specName == null)
+                {
+                    ResetPointer(savePtr1);
+                    break;
+                }
+                if (specName.Equals(specAll))
+                {
+                    isAllSpec = true;
+                }
+                else if (specName.Equals(specData))
+                {
+                    isDataSpec = true;
+                }
+                else if (specName.Equals(specHeaders))
+                {
+                    isHeadersSpec = true;
+                }
+                else if (specName.Equals(specThisRow))
+                {
+                    isThisRowSpec = true;
+                }
+                else if (specName.Equals(specTotals))
+                {
+                    isTotalsSpec = true;
+                }
+                else
+                {
+                    throw new FormulaParseException("Unknown special qunatifier " + specName);
+                }
+                nSpecQuantifiers++;
+                if (look == ',')
+                {
+                    GetChar();
+                }
+                else
+                {
+                    break;
+                }
+            }
+            bool isThisRow = false;
+            SkipWhite();
+            if (look == '@')
+            {
+                isThisRow = true;
+                GetChar();
+            }
+            // parse column quantifier
+            String startColumnName = null;
+            String endColumnName = null;
+            int nColQuantifiers = 0;
+            savePtr1 = _pointer;
+            startColumnName = ParseAsColumnQuantifier();
+            if (startColumnName == null)
+            {
+                ResetPointer(savePtr1);
+            }
+            else
+            {
+                nColQuantifiers++;
+                if (look == ',')
+                {
+                    throw new FormulaParseException("The formula " + _formulaString + "is illegal: you should not use ',' with column quantifiers");
+                }
+                else if (look == ':')
+                {
+                    GetChar();
+                    endColumnName = ParseAsColumnQuantifier();
+                    nColQuantifiers++;
+                    if (endColumnName == null)
+                    {
+                        throw new FormulaParseException("The formula " + _formulaString + "is illegal: the string after ':' must be column quantifier");
+                    }
+                }
+            }
+
+            if (nColQuantifiers == 0 && nSpecQuantifiers == 0)
+            {
+                ResetPointer(savePtr0);
+                savePtr0 = _pointer;
+                startColumnName = ParseAsColumnQuantifier();
+                if (startColumnName != null)
+                {
+                    nColQuantifiers++;
+                }
+                else
+                {
+                    ResetPointer(savePtr0);
+                    String name = ParseAsSpecialQuantifier();
+                    if (name != null)
+                    {
+                        if (name.Equals(specAll))
+                        {
+                            isAllSpec = true;
+                        }
+                        else if (name.Equals(specData))
+                        {
+                            isDataSpec = true;
+                        }
+                        else if (name.Equals(specHeaders))
+                        {
+                            isHeadersSpec = true;
+                        }
+                        else if (name.Equals(specThisRow))
+                        {
+                            isThisRowSpec = true;
+                        }
+                        else if (name.Equals(specTotals))
+                        {
+                            isTotalsSpec = true;
+                        }
+                        else
+                        {
+                            throw new FormulaParseException("Unknown special qunatifier " + name);
+                        }
+                        nSpecQuantifiers++;
+                    }
+                    else
+                    {
+                        throw new FormulaParseException("The formula " + _formulaString + " is illegal");
+                    }
+                }
+            }
+            else
+            {
+                Match(']');
+            }
+
+            int actualStartRow = startRow;
+            int actualEndRow = endRow;
+            int actualStartCol = startCol;
+            int actualEndCol = endCol;
+            if (nSpecQuantifiers > 0)
+            {
+                //Selecting rows
+                if (nSpecQuantifiers == 1 && isAllSpec)
+                {
+                    //do nothing
+                }
+                else if (isDataSpec && isHeadersSpec)
+                {
+                    if (tbl.IsHasTotalsRow)
+                    {
+                        actualEndRow = endRow - 1;
+                    }
+                }
+                else if (isDataSpec && isTotalsSpec)
+                {
+                    actualStartRow = startRow + 1;
+                }
+                else if (nSpecQuantifiers == 1 && isDataSpec)
+                {
+                    actualStartRow = startRow + 1;
+                    if (tbl.IsHasTotalsRow)
+                    {
+                        actualEndRow = endRow - 1;
+                    }
+                }
+                else if (nSpecQuantifiers == 1 && isHeadersSpec)
+                {
+                    actualEndRow = actualStartRow;
+                }
+                else if (nSpecQuantifiers == 1 && isTotalsSpec)
+                {
+                    actualStartRow = actualEndRow;
+                }
+                else if ((nSpecQuantifiers == 1 && isThisRowSpec) || isThisRow)
+                {
+                    actualStartRow = _rowIndex; //The rowNum is 0 based
+                    actualEndRow = _rowIndex;
+                }
+                else
+                {
+                    throw new FormulaParseException("The formula " + _formulaString + " is illegal");
+                }
+            }
+            else
+            {
+                if (isThisRow)
+                { // there is a @
+                    actualStartRow = _rowIndex; //The rowNum is 0 based
+                    actualEndRow = _rowIndex;
+                }
+                else
+                { // Really no special quantifiers
+                    actualStartRow++;
+                }
+            }
+            //Selecting cols
+            if (nColQuantifiers == 2)
+            {
+                if (startColumnName == null || endColumnName == null)
+                {
+                    throw new IllegalStateException("Fatal error");
+                }
+                int startIdx = tbl.FindColumnIndex(startColumnName);
+                int endIdx = tbl.FindColumnIndex(endColumnName);
+                if (startIdx == -1 || endIdx == -1)
+                {
+                    throw new FormulaParseException("One of the columns " + startColumnName + ", " + endColumnName + " doesn't exist in table " + tbl.Name);
+                }
+                actualStartCol = startCol + startIdx;
+                actualEndCol = startCol + endIdx;
+
+            }
+            else if (nColQuantifiers == 1)
+            {
+                if (startColumnName == null)
+                {
+                    throw new IllegalStateException("Fatal error");
+                }
+                int idx = tbl.FindColumnIndex(startColumnName);
+                if (idx == -1)
+                {
+                    throw new FormulaParseException("The column " + startColumnName + " doesn't exist in table " + tbl.Name);
+                }
+                actualStartCol = startCol + idx;
+                actualEndCol = actualStartCol;
+            }
+            CellReference tl = new CellReference(actualStartRow, actualStartCol);
+            CellReference br = new CellReference(actualEndRow, actualEndCol);
+            SheetIdentifier sheetIden = new SheetIdentifier(null, new NameIdentifier(sheetName, true));
+            Ptg ptg = _book.Get3DReferencePtg(new AreaReference(tl, br), sheetIden);
+            return new ParseNode(ptg);
+        }
+
+        /**
+         * Tries to parse the next as column - can contain whitespace
+         * Caller should save pointer.
+         * @return
+        */
+        private String ParseAsColumnQuantifier()
+        {
+            if (look != '[')
+            {
+                return null;
+            }
+            GetChar();
+            String name = "";
+            if (look == '#')
+            {
+                return null;
+            }
+            if (look == '@')
+            {
+                GetChar();
+            }
+            while (look != ']')
+            {
+                name += look;
+                GetChar();
+            }
+            Match(']');
+            return name;
+        }
+        /**
+         * Tries to parse the next as special quantifier
+         * Caller should save pointer.
+         * @return
+         */
+        private String ParseAsSpecialQuantifier()
+        {
+            if (look != '[')
+            {
+                return null;
+            }
+            GetChar();
+            if (look != '#')
+            {
+                return null;
+            }
+            GetChar();
+            String name = ParseAsName();
+            if (name.Equals("This"))
+            {
+                name = name + ' ' + ParseAsName();
+            }
+            Match(']');
+            return name;
+        }
+
         /**
           * Parses simple factors that are not primitive ranges or range components
           * i.e. '!', ':'(and equiv '...') do not appear
@@ -678,6 +1021,14 @@ namespace NPOI.SS.Formula
             {
                 return Function(name);
             }
+
+            //TODO Livshen's code
+            if (look == '[')
+            {
+                return ParseStructuredReference(name);
+            }
+            //TODO End of Livshen's code
+
             if (name.Equals("TRUE", StringComparison.OrdinalIgnoreCase) || name.Equals("FALSE", StringComparison.OrdinalIgnoreCase))
             {
                 return new ParseNode(new BoolPtg(name.ToUpper()));
@@ -700,6 +1051,26 @@ namespace NPOI.SS.Formula
             // TODO - what about NameX ?
             throw new FormulaParseException("Specified name '"
                     + name + "' is not a range as expected.");
+        }
+
+
+        private String ParseAsName()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            // defined names may begin with a letter or underscore  or backslash
+            if (!char.IsLetter(look) && look != '_' && look != '\\')
+            {
+                throw expected("number, string, or defined name, or table");
+            }
+            while (IsValidDefinedNameChar(look))
+            {
+                sb.Append(look);
+                GetChar();
+            }
+            SkipWhite();
+
+            return sb.ToString();
         }
 
         private int GetSheetExtIx(SheetIdentifier sheetIden)
@@ -793,9 +1164,9 @@ namespace NPOI.SS.Formula
             int ptr = _pointer - 1; // TODO avoid StringIndexOutOfBounds
             bool hasDigits = false;
             bool hasLetters = false;
-            while (ptr < formulaLength)
+            while (ptr < _formulaLength)
             {
-                char ch = formulaString[ptr];
+                char ch = _formulaString[ptr];
                 if (Char.IsDigit(ch))
                 {
                     hasDigits = true;
@@ -818,7 +1189,7 @@ namespace NPOI.SS.Formula
             {
                 return null;
             }
-            String rep = formulaString.Substring(_pointer - 1, ptr - _pointer + 1);
+            String rep = _formulaString.Substring(_pointer - 1, ptr - _pointer + 1);
 
             Regex pattern = new Regex(CELL_REF_PATTERN);
 
@@ -1134,9 +1505,9 @@ namespace NPOI.SS.Formula
         private void ResetPointer(int ptr)
         {
             _pointer = ptr;
-            if (_pointer <= formulaLength)
+            if (_pointer <= _formulaLength)
             {
-                look = formulaString[_pointer - 1];
+                look = _formulaString[_pointer - 1];
             }
             else
             {
@@ -1477,7 +1848,9 @@ namespace NPOI.SS.Formula
                     Match('}');
                     return arrayNode;
             }
-            if (IsAlpha(look) || Char.IsDigit(look) || look == '\'' || look == '[')
+            // named ranges and tables can start with underscore or backslash
+            // see https://support.office.com/en-us/article/Define-and-use-names-in-formulas-4d0f13ac-53b7-422e-afd2-abd7ff379c64?ui=en-US&rs=en-US&ad=US#bmsyntax_rules_for_names
+            if (IsAlpha(look) || Char.IsDigit(look) || look == '\'' || look == '[' || look == '_' || look == '\\')
             {
                 return ParseRangeExpression();
             }
@@ -1990,10 +2363,10 @@ namespace NPOI.SS.Formula
             GetChar();
             _rootNode = UnionExpression();
 
-            if (_pointer <= formulaLength)
+            if (_pointer <= _formulaLength)
             {
-                String msg = "Unused input [" + formulaString.Substring(_pointer - 1)
-                    + "] after attempting To Parse the formula [" + formulaString + "]";
+                String msg = "Unused input [" + _formulaString.Substring(_pointer - 1)
+                    + "] after attempting To Parse the formula [" + _formulaString + "]";
                 throw new FormulaParseException(msg);
             }
         }

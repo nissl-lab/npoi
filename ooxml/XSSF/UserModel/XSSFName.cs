@@ -177,7 +177,7 @@ namespace NPOI.XSSF.UserModel
             {
                 XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(_workbook);
                 //validate through the FormulaParser
-                FormulaParser.Parse(value, fpb, FormulaType.NamedRange, SheetIndex);
+                FormulaParser.Parse(value, fpb, FormulaType.NamedRange, SheetIndex, -1);
 
                 _ctName.Value = value;   
             }
@@ -192,7 +192,7 @@ namespace NPOI.XSSF.UserModel
                     return false;
                 }
                 XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(_workbook);
-                Ptg[] ptgs = FormulaParser.Parse(formulaText, fpb, FormulaType.NamedRange, SheetIndex);
+                Ptg[] ptgs = FormulaParser.Parse(formulaText, fpb, FormulaType.NamedRange, SheetIndex, -1);
                 return Ptg.DoesFormulaReferToDeletedCell(ptgs);
             }
         }

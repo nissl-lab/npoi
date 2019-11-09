@@ -113,7 +113,7 @@ namespace TestCases.HSSF.Record
 
             SharedFormula sf = new SharedFormula(SpreadsheetVersion.EXCEL97);
 
-            sharedFormula = FormulaParser.Parse("A2", fpb, FormulaType.Cell, -1);
+            sharedFormula = FormulaParser.Parse("A2", fpb, FormulaType.Cell, -1, -1);
             ConvertedFormula = sf.ConvertSharedFormulas(sharedFormula, 0, 0);
             ConfirmOperandClasses(sharedFormula, ConvertedFormula);
             //conversion relative to [0,0] should return the original formula
@@ -129,7 +129,7 @@ namespace TestCases.HSSF.Record
             //one row down and one cell right
             Assert.AreEqual(FormulaRenderer.ToFormulaString(fpb, ConvertedFormula), "B3");
 
-            sharedFormula = FormulaParser.Parse("SUM(A1:C1)", fpb, FormulaType.Cell, -1);
+            sharedFormula = FormulaParser.Parse("SUM(A1:C1)", fpb, FormulaType.Cell, -1, -1);
             ConvertedFormula = sf.ConvertSharedFormulas(sharedFormula, 0, 0);
             ConfirmOperandClasses(sharedFormula, ConvertedFormula);
             Assert.AreEqual(FormulaRenderer.ToFormulaString(fpb, ConvertedFormula), "SUM(A1:C1)");

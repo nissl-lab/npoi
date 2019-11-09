@@ -1081,7 +1081,7 @@ namespace TestCases.HSSF.Model
             String formula = "Sheet1!A1:Sheet1!B3";
             HSSFWorkbook wb = new HSSFWorkbook();
             wb.CreateSheet("Sheet1");
-            Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.Cell, -1);
+            Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.Cell, -1, -1);
 
             if (ptgs.Length == 3)
             {
@@ -1375,7 +1375,7 @@ namespace TestCases.HSSF.Model
             String formula = "Sheet1!$B$2:$C$3,OFFSET(Sheet1!$E$2:$E$4,1,Sheet1!$A$1),Sheet1!$D$6";
             HSSFWorkbook wb = new HSSFWorkbook();
             wb.CreateSheet("Sheet1");
-            Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.Cell, -1);
+            Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.Cell, -1, -1);
 
             ConfirmTokenClasses(ptgs,
                 // TODO - AttrPtg), // Excel prepends this
@@ -1651,8 +1651,8 @@ namespace TestCases.HSSF.Model
 
             ConfirmParseError(wb, "A1:ROUND(B1,1)", "The RHS of the range operator ':' at position 3 is not a proper reference.");
 
-            ConfirmParseError(wb, "Sheet1!!!", "Parse error near char 7 '!' in specified formula 'Sheet1!!!'. Expected number, string, or defined name");
-            ConfirmParseError(wb, "Sheet1!.Name", "Parse error near char 7 '.' in specified formula 'Sheet1!.Name'. Expected number, string, or defined name");
+            ConfirmParseError(wb, "Sheet1!!!", "Parse error near char 7 '!' in specified formula 'Sheet1!!!'. Expected number, string, defined name, or table");
+            ConfirmParseError(wb, "Sheet1!.Name", "Parse error near char 7 '.' in specified formula 'Sheet1!.Name'. Expected number, string, defined name, or table");
             ConfirmParseError(wb, "Sheet1!Sheet1", "Specified name 'Sheet1' for sheet Sheet1 not found");
 
             ConfirmParseError(wb, "Sheet1!F:Sheet1!G", "'Sheet1!F' is not a proper reference.");

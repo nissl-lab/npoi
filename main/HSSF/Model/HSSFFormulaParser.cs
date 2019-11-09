@@ -47,7 +47,7 @@ namespace NPOI.HSSF.Model
          */
         public static Ptg[] Parse(String formula, HSSFWorkbook workbook)
         {
-            return FormulaParser.Parse(formula, CreateParsingWorkbook(workbook));
+            return Parse(formula, workbook, FormulaType.Cell);
         }
 
         /**
@@ -56,21 +56,21 @@ namespace NPOI.HSSF.Model
          */
         public static Ptg[] Parse(String formula, HSSFWorkbook workbook, FormulaType formulaType)
         {
-            return FormulaParser.Parse(formula, CreateParsingWorkbook(workbook), formulaType);
+            return FormulaParser.Parse(formula, CreateParsingWorkbook(workbook), formulaType, -1);
         }
         /**
- * @param formula     the formula to parse
- * @param workbook    the parent workbook
- * @param formulaType a constant from {@link FormulaType}
- * @param sheetIndex  the 0-based index of the sheet this formula belongs to.
- * The sheet index is required to resolve sheet-level names. <code>-1</code> means that
- * the scope of the name will be ignored and  the parser will match named ranges only by name
- *
- * @return the parsed formula tokens
- */
+         * @param formula     the formula to parse
+         * @param workbook    the parent workbook
+         * @param formulaType a constant from {@link FormulaType}
+         * @param sheetIndex  the 0-based index of the sheet this formula belongs to.
+         * The sheet index is required to resolve sheet-level names. <code>-1</code> means that
+         * the scope of the name will be ignored and  the parser will match named ranges only by name
+         *
+         * @return the parsed formula tokens
+         */
         public static Ptg[] Parse(String formula, HSSFWorkbook workbook, FormulaType formulaType, int sheetIndex)
         {
-            return FormulaParser.Parse(formula, CreateParsingWorkbook(workbook), formulaType, sheetIndex);
+            return FormulaParser.Parse(formula, CreateParsingWorkbook(workbook), formulaType, sheetIndex, -1);
         }
 
 

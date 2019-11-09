@@ -358,7 +358,10 @@ namespace NPOI.XSSF.UserModel
         {
             return _uBook.CreateName();
         }
-
+        public ITable GetTable(String name)
+        {
+            return _uBook.GetTable(name);
+        }
         public UDFFinder GetUDFFinder()
         {
             return _uBook.GetUDFFinder();

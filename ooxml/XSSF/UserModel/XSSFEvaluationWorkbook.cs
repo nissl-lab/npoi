@@ -70,7 +70,7 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFCell cell = ((XSSFEvaluationCell)evalCell).GetXSSFCell();
             XSSFEvaluationWorkbook frBook = XSSFEvaluationWorkbook.Create(_uBook);
-            return FormulaParser.Parse(cell.CellFormula, frBook, FormulaType.Cell, _uBook.GetSheetIndex(cell.Sheet));
+            return FormulaParser.Parse(cell.CellFormula, frBook, FormulaType.Cell, _uBook.GetSheetIndex(cell.Sheet), cell.RowIndex);
         }
     }
 }

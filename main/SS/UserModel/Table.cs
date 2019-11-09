@@ -21,7 +21,17 @@ namespace NPOI.SS.UserModel
     using System.Text.RegularExpressions;
 
 
-
+    public static class Table
+    {
+        /**
+         * Regular expression matching a Structured Reference (Table syntax) for XSSF table expressions.
+         * Public for unit tests
+         * @see <a href="https://support.office.com/en-us/article/Using-structured-references-with-Excel-tables-F5ED2452-2337-4F71-BED3-C8AE6D2B276E">
+         *         Excel Structured Reference Syntax
+         *      </a>
+         */
+        public static Regex IsStructuredReference = new Regex("[a-zA-Z_\\\\][a-zA-Z0-9._]*\\[.*\\]");
+    }
     /**
      * XSSF Only!
      * High level abstraction of table in a workbook.
