@@ -36,6 +36,7 @@ namespace NPOI
     [Serializable]
     public abstract class POIDocument
     {
+        private static POILogger logger = POILogFactory.GetLogger(typeof(POIDocument));
         /** Holds metadata on our document */
         protected SummaryInformation sInf;
         /** Holds further metadata on our document */
@@ -203,61 +204,63 @@ namespace NPOI
             DirectoryNode dirNode = directory;
 
             NPOIFSFileSystem encPoifs = null;
-            if (encryptionInfo != null)
+            String step = "getting";
+            try
             {
-                try
+                if (encryptionInfo != null)
                 {
+                    step = "getting encrypted";
                     InputStream is1 = encryptionInfo.Decryptor.GetDataStream(directory);
-                    encPoifs = new NPOIFSFileSystem(is1);
+                    try
+                    {
+                        encPoifs = new NPOIFSFileSystem(is1);
+                        dirNode = encPoifs.Root;
+                    }
+                    finally
+                    {
                     is1.Close();
-                    dirNode = encPoifs.Root;
+                    }
                 }
-                catch (Exception e)
+
+                //directory can be null when creating new documents
+                if (dirNode == null || !dirNode.HasEntry(setName))
                 {
-                    //logger.log(POILogger.ERROR, "Error getting encrypted property set with name " + setName, e);
                     return null;
                 }
-            }
-            //directory can be null when creating new documents
-            if (dirNode == null || !dirNode.HasEntry(setName))
-                return null;
 
-            DocumentInputStream dis;
-            try
-            {
-                // Find the entry, and Get an input stream for it
-                dis = directory.CreateDocumentInputStream(setName);
+                // Find the entry, and get an input stream for it
+                step = "getting";
+                DocumentInputStream dis = dirNode.CreateDocumentInputStream(dirNode.GetEntry(setName));
+                try
+                {
+                    // Create the Property Set
+                    step = "creating";
+                    return PropertySetFactory.Create(dis);
+                }
+                finally
+                {
+                    dis.Close();
+                }
             }
-            catch (IOException)
+            catch (Exception e)
             {
-                // Oh well, doesn't exist
-                //logger.Log(POILogger.WARN, "Error Getting property Set with name " + SetName + "\n" + ie);
+                logger.Log(POILogger.WARN, "Error " + step + " property set with name " + setName, e);
                 return null;
             }
-
-            try
+            finally
             {
-                // Create the Property Set
-                PropertySet Set = PropertySetFactory.Create(dis);
-                // Tidy up if needed
                 if (encPoifs != null)
                 {
-                    encPoifs.Close();
+                    try
+                    {
+                        encPoifs.Close();
+                    }
+                    catch (IOException e)
+                    {
+                        logger.Log(POILogger.WARN, "Error closing encrypted property poifs", e);
+                    }
                 }
-                // Return the properties
-                return Set;
             }
-            catch (IOException)
-            {
-                // Must be corrupt or something like that
-                //logger.Log(POILogger.WARN, "Error creating property Set with name " + SetName + "\n" + ie);
-            }
-            catch (HPSFException)
-            {
-                // Oh well, doesn't exist
-                //logger.Log(POILogger.WARN, "Error creating property Set with name " + SetName + "\n" + he);
-            }
-            return null;
         }
         /**
          * Writes out the updated standard Document Information Properties (HPSF)
