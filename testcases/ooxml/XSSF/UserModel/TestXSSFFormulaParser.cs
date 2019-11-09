@@ -36,6 +36,11 @@ namespace NPOI.XSSF.UserModel
             return FormulaParser.Parse(fmla, fpb, FormulaType.Cell, -1, -1);
         }
 
+        private static Ptg[] Parse(IFormulaParsingWorkbook fpb, String fmla, int rowIndex)
+        {
+            return FormulaParser.Parse(fmla, fpb, FormulaType.Cell, -1, rowIndex);
+        }
+
         [Test]
         public void BasicParse()
         {
@@ -135,7 +140,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsTrue(ptgs[1] is FuncPtg, "Had " + Arrays.ToString(ptgs));
         }
         [Test]
-        public void FormaulReferncesSameWorkbook()
+        public void FormulaReferencesSameWorkbook()
         {
             // Use a test file with "other workbook" style references
             //  to itself
@@ -526,6 +531,142 @@ namespace NPOI.XSSF.UserModel
             Assert.IsTrue(ptgs[1] is RefPtg, "Had " + Arrays.ToString(ptgs));
             Assert.IsTrue(ptgs[2] is AreaPtg, "Had " + Arrays.ToString(ptgs));
             Assert.IsTrue(ptgs[3] is NameXPxg, "Had " + Arrays.ToString(ptgs));
+        }
+
+        [Test]
+        public void parseStructuredReferences()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
+            Ptg[] ptgs;
+            /*
+            The following cases are tested (copied from FormulaParser.parseStructuredReference)
+               1 Table1[col]
+               2 Table1[[#Totals],[col]]
+               3 Table1[#Totals]
+               4 Table1[#All]
+               5 Table1[#Data]
+               6 Table1[#Headers]
+               7 Table1[#Totals]
+               8 Table1[#This Row]
+               9 Table1[[#All],[col]]
+              10 Table1[[#Headers],[col]]
+              11 Table1[[#Totals],[col]]
+              12 Table1[[#All],[col1]:[col2]]
+              13 Table1[[#Data],[col1]:[col2]]
+              14 Table1[[#Headers],[col1]:[col2]]
+              15 Table1[[#Totals],[col1]:[col2]]
+              16 Table1[[#Headers],[#Data],[col2]]
+              17 Table1[[#This Row], [col1]]
+              18 Table1[ [col1]:[col2] ]
+            */
+            String tbl = "\\_Prime.1";
+            String noTotalsRowReason = ": Tables without a Totals row should return #REF! on [#Totals]";
+            ////// Case 1: Evaluate Table1[col] with apostrophe-escaped #-signs ////////
+            ptgs = Parse(fpb, "SUM(" + tbl + "[calc='#*'#])");
+            Assert.AreEqual(2, ptgs.Length);
+            // Area3DPxg [sheet=Table ! A2:A7]
+            Assert.IsTrue(ptgs[0] is Area3DPxg);
+            Area3DPxg ptg0 = (Area3DPxg)ptgs[0];
+            Assert.AreEqual("Table", ptg0.SheetName);
+            Assert.AreEqual("A2:A7", ptg0.Format2DRefAsString());
+            // Note: structured references are evaluated and resolved to regular 3D area references.
+            Assert.AreEqual("Table!A2:A7", ptg0.ToFormulaString());
+            // AttrPtg [sum ]
+            Assert.IsTrue(ptgs[1] is AttrPtg);
+            AttrPtg ptg1 = (AttrPtg)ptgs[1];
+            Assert.IsTrue(ptg1.IsSum);
+            ////// Case 1: Evaluate "Table1[col]" ////////
+            ptgs = Parse(fpb, tbl + "[Name]");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual("Table1[col]", "Table!B2:B7", ptgs[0].ToFormulaString());
+            ////// Case 2: Evaluate "Table1[[#Totals],[col]]" ////////
+            ptgs = Parse(fpb, tbl + "[[#Totals],[col]]");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual(ErrPtg.REF_INVALID, ptgs[0], "Table1[[#Totals],[col]]" + noTotalsRowReason);
+            ////// Case 3: Evaluate "Table1[#Totals]" ////////
+            ptgs = Parse(fpb, tbl + "[#Totals]");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual(ErrPtg.REF_INVALID, ptgs[0], "Table1[#Totals]" + noTotalsRowReason);
+            ////// Case 4: Evaluate "Table1[#All]" ////////
+            ptgs = Parse(fpb, tbl + "[#All]");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual("Table1[#All]", "Table!A1:C7", ptgs[0].ToFormulaString());
+            ////// Case 5: Evaluate "Table1[#Data]" (excludes Header and Data rows) ////////
+            ptgs = Parse(fpb, tbl + "[#Data]");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual("Table1[#Data]", "Table!A2:C7", ptgs[0].ToFormulaString());
+            ////// Case 6: Evaluate "Table1[#Headers]" ////////
+            ptgs = Parse(fpb, tbl + "[#Headers]");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual("Table1[#Headers]", "Table!A1:C1", ptgs[0].ToFormulaString());
+            ////// Case 7: Evaluate "Table1[#Totals]" ////////
+            ptgs = Parse(fpb, tbl + "[#Totals]");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual(ErrPtg.REF_INVALID, ptgs[0], "Table1[#Totals]" + noTotalsRowReason);
+            ////// Case 8: Evaluate "Table1[#This Row]" ////////
+            ptgs = Parse(fpb, tbl + "[#This Row]", 2);
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual("Table1[#This Row]", "Table!A3:C3", ptgs[0].ToFormulaString());
+            ////// Evaluate "Table1[@]" (equivalent to "Table1[#This Row]") ////////
+            ptgs = Parse(fpb, tbl + "[@]", 2);
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual("Table!A3:C3", ptgs[0].ToFormulaString());
+            ////// Evaluate "Table1[#This Row]" when rowIndex is outside Table ////////
+            ptgs = Parse(fpb, tbl + "[#This Row]", 10);
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual(ErrPtg.VALUE_INVALID, ptgs[0], "Table1[#This Row]");
+            ////// Evaluate "Table1[@]" when rowIndex is outside Table ////////
+            ptgs = Parse(fpb, tbl + "[@]", 10);
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual(ErrPtg.VALUE_INVALID, ptgs[0], "Table1[@]");
+            ////// Evaluate "Table1[[#Data],[col]]" ////////
+            ptgs = Parse(fpb, tbl + "[[#Data], [Number]]");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual("Table1[[#Data],[col]]", "Table!C2:C7", ptgs[0].ToFormulaString());
+            ////// Case 9: Evaluate "Table1[[#All],[col]]" ////////
+            ptgs = Parse(fpb, tbl + "[[#All], [Number]]");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual("Table1[[#All],[col]]", "Table!C1:C7", ptgs[0].ToFormulaString());
+            ////// Case 10: Evaluate "Table1[[#Headers],[col]]" ////////
+            ptgs = Parse(fpb, tbl + "[[#Headers], [Number]]");
+            Assert.AreEqual(1, ptgs.Length);
+            // also acceptable: Table1!B1
+            Assert.AreEqual("Table1[[#Headers],[col]]", "Table!C1:C1", ptgs[0].ToFormulaString());
+            ////// Case 11: Evaluate "Table1[[#Totals],[col]]" ////////
+            ptgs = Parse(fpb, tbl + "[[#Totals],[Name]]");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual(ErrPtg.REF_INVALID, ptgs[0], "Table1[[#Totals],[col]]" + noTotalsRowReason);
+            ////// Case 12: Evaluate "Table1[[#All],[col1]:[col2]]" ////////
+            ptgs = Parse(fpb, tbl + "[[#All], [Name]:[Number]]");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual("Table1[[#All],[col1]:[col2]]", "Table!B1:C7", ptgs[0].ToFormulaString());
+            ////// Case 13: Evaluate "Table1[[#Data],[col]:[col2]]" ////////
+            ptgs = Parse(fpb, tbl + "[[#Data], [Name]:[Number]]");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual("Table1[[#Data],[col]:[col2]]", "Table!B2:C7", ptgs[0].ToFormulaString());
+            ////// Case 14: Evaluate "Table1[[#Headers],[col1]:[col2]]" ////////
+            ptgs = Parse(fpb, tbl + "[[#Headers], [Name]:[Number]]");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual("Table1[[#Headers],[col1]:[col2]]", "Table!B1:C1", ptgs[0].ToFormulaString());
+            ////// Case 15: Evaluate "Table1[[#Totals],[col]:[col2]]" ////////
+            ptgs = Parse(fpb, tbl + "[[#Totals], [Name]:[Number]]");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual(ErrPtg.REF_INVALID, ptgs[0], "Table1[[#Totals],[col]:[col2]]" + noTotalsRowReason);
+            ////// Case 16: Evaluate "Table1[[#Headers],[#Data],[col]]" ////////
+            ptgs = Parse(fpb, tbl + "[[#Headers],[#Data],[Number]]");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual("Table1[[#Headers],[#Data],[col]]", "Table!C1:C7", ptgs[0].ToFormulaString());
+            ////// Case 17: Evaluate "Table1[[#This Row], [col1]]" ////////
+            ptgs = Parse(fpb, tbl + "[[#This Row], [Number]]", 2);
+            Assert.AreEqual(1, ptgs.Length);
+            // also acceptable: Table!C3
+            Assert.AreEqual("Table1[[#This Row], [col1]]", "Table!C3:C3", ptgs[0].ToFormulaString());
+            ////// Case 18: Evaluate "Table1[[col]:[col2]]" ////////
+            ptgs = Parse(fpb, tbl + "[[Name]:[Number]]");
+            Assert.AreEqual(1, ptgs.Length);
+            Assert.AreEqual("Table1[[col]:[col2]]", "Table!B2:C7", ptgs[0].ToFormulaString());
+            wb.Close();
         }
 
     }

@@ -687,7 +687,7 @@ namespace NPOI.SS.Formula
             ITable tbl = _book.GetTable(tableName);
             if (tbl == null)
             {
-                throw new FormulaParseException("Illegal table name!");
+                throw new FormulaParseException("Illegal table name: '" + tableName + "'");
             }
             String sheetName = tbl.SheetName;
 
@@ -696,6 +696,8 @@ namespace NPOI.SS.Formula
             int startRow = tbl.StartRowIndex;
             int endRow = tbl.EndRowIndex;
 
+            // Do NOT return before done reading all the structured reference tokens from the input stream.
+            // Throwing exceptions is okay.
             int savePtr0 = _pointer;
             GetChar();
 
@@ -737,7 +739,7 @@ namespace NPOI.SS.Formula
                 }
                 else
                 {
-                    throw new FormulaParseException("Unknown special qunatifier " + specName);
+                    throw new FormulaParseException("Unknown special quantifier " + specName);
                 }
                 nSpecQuantifiers++;
                 if (look == ',')
@@ -822,7 +824,7 @@ namespace NPOI.SS.Formula
                         }
                         else
                         {
-                            throw new FormulaParseException("Unknown special qunatifier " + name);
+                            throw new FormulaParseException("Unknown special quantifier " + name);
                         }
                         nSpecQuantifiers++;
                     }
@@ -835,6 +837,28 @@ namespace NPOI.SS.Formula
             else
             {
                 Match(']');
+            }
+
+            // Done reading from input stream
+            // Ok to return now
+
+            if (isTotalsSpec && !tbl.IsHasTotalsRow)
+            {
+                return new ParseNode(ErrPtg.REF_INVALID);
+            }
+            if ((isThisRow || isThisRowSpec) && (_rowIndex < startRow || endRow < _rowIndex))
+            {
+                // structured reference is trying to reference a row above or below the table with [#This Row] or [@]
+                if (_rowIndex >= 0)
+                {
+                    return new ParseNode(ErrPtg.VALUE_INVALID);
+                }
+                else
+                {
+                    throw new FormulaParseException(
+                            "Formula contained [#This Row] or [@] structured reference but this row < 0. " +
+                            "Row index must be specified for row-referencing structured references.");
+                }
             }
 
             int actualStartRow = startRow;
@@ -914,7 +938,7 @@ namespace NPOI.SS.Formula
                 actualEndCol = startCol + endIdx;
 
             }
-            else if (nColQuantifiers == 1)
+            else if (nColQuantifiers == 1 && !isThisRow)
             {
                 if (startColumnName == null)
                 {
@@ -928,10 +952,10 @@ namespace NPOI.SS.Formula
                 actualStartCol = startCol + idx;
                 actualEndCol = actualStartCol;
             }
-            CellReference tl = new CellReference(actualStartRow, actualStartCol);
-            CellReference br = new CellReference(actualEndRow, actualEndCol);
+            CellReference topLeft = new CellReference(actualStartRow, actualStartCol);
+            CellReference bottomRight = new CellReference(actualEndRow, actualEndCol);
             SheetIdentifier sheetIden = new SheetIdentifier(null, new NameIdentifier(sheetName, true));
-            Ptg ptg = _book.Get3DReferencePtg(new AreaReference(tl, br), sheetIden);
+            Ptg ptg = _book.Get3DReferencePtg(new AreaReference(topLeft, bottomRight), sheetIden);
             return new ParseNode(ptg);
         }
 
