@@ -105,7 +105,8 @@ namespace NPOI.XSSF.UserModel
             // column in the table, not the column number in the sheet
             XSSFTable table = wb.GetTable("\\_Prime.1");
             Assert.IsNotNull(table);
-            Assert.AreEqual(0, table.FindColumnIndex("calc='#*'#"));
+            Assert.AreEqual(0, table.FindColumnIndex("calc='#*'#"),
+                "column header has special escaped characters");
             Assert.AreEqual(1, table.FindColumnIndex("Name"));
             Assert.AreEqual(2, table.FindColumnIndex("Number"));
             Assert.AreEqual(2, table.FindColumnIndex("NuMbEr"), "case insensitive");
@@ -115,6 +116,21 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(-1, table.FindColumnIndex("one"));
             wb.Close();
         }
+
+        [Test]
+        public void FindColumnIndexIsRelativeToTableNotSheet()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("DataTableCities.xlsx");
+            XSSFTable table = wb.GetTable("SmallCity");
+            // Make sure that XSSFTable.findColumnIndex returns the column index relative to the first
+            // column in the table, not the column number in the sheet
+            Assert.AreEqual(0, table.FindColumnIndex("City")); // column I in worksheet but 0th column in table
+            Assert.AreEqual(1, table.FindColumnIndex("Latitude"));
+            Assert.AreEqual(2, table.FindColumnIndex("Longitude"));
+            Assert.AreEqual(3, table.FindColumnIndex("Population"));
+            wb.Close();
+        }
+
         [Test]
         public void GetSheetName()
         {
