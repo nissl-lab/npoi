@@ -653,11 +653,34 @@ namespace NPOI.XSSF.UserModel
             wb.Close();
         }
 
-        /**
-        * @param row 0-based
-        * @param column 0-based
-        */
-        private void setCellFormula(ISheet sheet, int row, int column, String formula)
+        // bug 57721
+        [Test]
+        public void structuredReferences() 
+        {
+            verifyAllFormulasInWorkbookCanBeEvaluated("evaluate_formula_with_structured_table_references.xlsx");
+        }
+
+        // bug 57840
+        [Ignore("Takes over a minute to evaluate all formulas in this large workbook. Run this test when profiling for formula evaluation speed.")]
+        [Test]
+        public void TestLotsOfFormulasWithStructuredReferencesToCalculatedTableColumns() 
+        {
+            verifyAllFormulasInWorkbookCanBeEvaluated("StructuredRefs-lots-with-lookups.xlsx");
+        }
+        // FIXME: use junit4 parameterization
+        private static void verifyAllFormulasInWorkbookCanBeEvaluated(String sampleWorkbook) 
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook(sampleWorkbook);
+            XSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
+            wb.Close();
+        }
+
+
+    /**
+    * @param row 0-based
+    * @param column 0-based
+    */
+    private void setCellFormula(ISheet sheet, int row, int column, String formula)
         {
             IRow r = sheet.GetRow(row);
             if (r == null)
@@ -680,16 +703,6 @@ namespace NPOI.XSSF.UserModel
         private ICell getCell(ISheet sheet, int rowNo, int column)
         {
             return sheet.GetRow(rowNo).GetCell(column);
-        }
-
-        // bug 57721
-        [Test]
-        public void StructuredReferences()
-        {
-            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("evaluate_formula_with_structured_table_references.xlsx");
-
-            XSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
-            wb.Close();
         }
 
     }
