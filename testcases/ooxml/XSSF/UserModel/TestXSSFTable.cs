@@ -94,5 +94,26 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(outputStyleInfo.showRowStripes, inputStyleInfo.showRowStripes, "Show row stripes");
 
         }
+
+        [Test]
+        public void FindColumnIndex()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            // FIXME: use a worksheet where upper left cell of table is not A1 so that we test
+            // that XSSFTable.findColumnIndex returns the column index relative to the first
+            // column in the table, not the column number in the sheet
+            XSSFTable table = wb.GetTable("\\_Prime.1");
+            Assert.IsNotNull(table);
+            Assert.AreEqual(0, table.FindColumnIndex("calc='#*'#"));
+            Assert.AreEqual(1, table.FindColumnIndex("Name"));
+            Assert.AreEqual(2, table.FindColumnIndex("Number"));
+            Assert.AreEqual(2, table.FindColumnIndex("NuMbEr"), "case insensitive");
+            // findColumnIndex should return -1 if no column header name matches
+            Assert.AreEqual(-1, table.FindColumnIndex(null));
+            Assert.AreEqual(-1, table.FindColumnIndex(""));
+            Assert.AreEqual(-1, table.FindColumnIndex("one"));
+            wb.Close();
+        }
+
     }
 }

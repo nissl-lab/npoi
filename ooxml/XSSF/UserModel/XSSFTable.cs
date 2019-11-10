@@ -371,9 +371,21 @@ namespace NPOI.XSSF.UserModel
                 columnMap = null;
             }
         }
-
-        public int FindColumnIndex(String column)
+        /**
+         * Gets the relative column index of a column in this table having the header name <code>column</code>.
+         * The column index is relative to the left-most column in the table, 0-indexed.
+         * Returns <code>-1</code> if <code>column</code> is not a header name in table.
+         *
+         * Column Header names are case-insensitive
+         *
+         * Note: this function caches column names for performance. To flush the cache (because columns
+         * have been moved or column headers have been changed), {@link #updateHeaders()} must be called.
+         *
+         * @since 3.15 beta 2
+         */
+        public int FindColumnIndex(String columnHeader)
         {
+            if (columnHeader == null) return -1;
             if (columnMap == null)
             {
                 columnMap = new Dictionary<string, int>(TableColumns.Length);
@@ -386,7 +398,7 @@ namespace NPOI.XSSF.UserModel
             // Table column names with special characters need a single quote escape
             // but the escape is not present in the column definition
             int idx = -1;
-            string testKey = column.Replace("'", "").ToUpper();
+            string testKey = columnHeader.Replace("'", "").ToUpper();
             if (columnMap.ContainsKey(testKey))
                 idx = columnMap[testKey];
             return idx;
