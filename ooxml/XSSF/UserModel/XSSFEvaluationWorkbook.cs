@@ -37,8 +37,7 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFEvaluationWorkbook : BaseXSSFEvaluationWorkbook
     {
-
-        //private XSSFWorkbook _uBook;
+        private XSSFEvaluationSheet[] _sheetCache;
 
         public static XSSFEvaluationWorkbook Create(IWorkbook book)
         {
@@ -63,7 +62,24 @@ namespace NPOI.XSSF.UserModel
 
         public override IEvaluationSheet GetSheet(int sheetIndex)
         {
-            return new XSSFEvaluationSheet(_uBook.GetSheetAt(sheetIndex));
+            // Performance optimization: build sheet cache the first time this is called
+            // to avoid re-creating the XSSFEvaluationSheet each time a new cell is evaluated
+            // EvaluationWorkbooks make not guarentee to syncronize changes made to
+            // the underlying workbook after the EvaluationWorkbook is created.
+            if (_sheetCache == null)
+            {
+                _sheetCache = new XSSFEvaluationSheet[_uBook.NumberOfSheets];
+                for (int i = 0; i < _uBook.NumberOfSheets; i++)
+                {
+                    _sheetCache[i] = new XSSFEvaluationSheet(_uBook.GetSheetAt(i));
+                }
+            }
+            if (sheetIndex < 0 || sheetIndex >= _sheetCache.Length)
+            {
+                // do this to reuse the out-of-bounds logic and message from XSSFWorkbook
+                _uBook.GetSheetAt(sheetIndex);
+            }
+            return _sheetCache[sheetIndex];
         }
 
         public override Ptg[] GetFormulaTokens(IEvaluationCell evalCell)

@@ -17,6 +17,9 @@
 
 using NPOI.SS.Formula;
 using NPOI.SS.UserModel;
+using System;
+using System.Collections.Generic;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -29,6 +32,7 @@ namespace NPOI.XSSF.UserModel
     {
 
         private XSSFSheet _xs;
+        private Dictionary<CellKey, IEvaluationCell> _cellCache;
 
         public XSSFEvaluationSheet(ISheet sheet)
         {
@@ -37,7 +41,7 @@ namespace NPOI.XSSF.UserModel
 
         public XSSFEvaluationSheet()
         {
-            
+
         }
 
         public XSSFSheet GetXSSFSheet()
@@ -46,17 +50,51 @@ namespace NPOI.XSSF.UserModel
         }
         public IEvaluationCell GetCell(int rowIndex, int columnIndex)
         {
-            IRow row = _xs.GetRow(rowIndex);
-            if (row == null)
+            // cache for performance: ~30% speedup due to caching
+            if (_cellCache == null)
             {
-                return null;
+                _cellCache = new Dictionary<CellKey, IEvaluationCell>(_xs.LastRowNum * 3);
+                foreach (IRow row in _xs)
+                {
+                    int rowNum = row.RowNum;
+                    foreach (ICell cell in row)
+                    {
+                        // cast is safe, the iterator is just defined using the interface
+                        CellKey key = new CellKey(rowNum, cell.ColumnIndex);
+                        IEvaluationCell evalcell = new XSSFEvaluationCell((XSSFCell)cell, this);
+                        _cellCache.Add(key, evalcell);
+                    }
+                }
             }
-            ICell cell = row.GetCell(columnIndex);
-            if (cell == null)
+
+            return _cellCache[new CellKey(rowIndex, columnIndex)];
+        }
+
+        private class CellKey
+        {
+            private int _row;
+            private int _col;
+            private int _hash;
+
+            protected internal CellKey(int row, int col)
             {
-                return null;
+                _row = row;
+                _col = col;
+                _hash = (17 * 37 + row) * 37 + col;
             }
-            return new XSSFEvaluationCell(cell, this);
+
+            public override int GetHashCode()
+            {
+                return _hash;
+            }
+
+            public override bool Equals(Object obj)
+            {
+                if (obj == null) return false;
+                // assumes other object is one of us, otherwise ClassCastException is thrown
+                CellKey oKey = (CellKey)obj;
+                return _row == oKey._row && _col == oKey._col;
+            }
         }
     }
 }
