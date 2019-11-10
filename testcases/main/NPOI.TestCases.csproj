@@ -236,6 +236,9 @@
     <Compile Include="SS\Formula\Functions\TestWeekNumFunctionsFromSpreadsheet2013.cs" />
     <Compile Include="SS\Formula\TestFunctionRegistry.cs" />
     <Compile Include="SS\Formula\TestMissingWorkbook.cs" />
+    <Compile Include="SS\Formula\UDF\BaseTestUDFFinder.cs" />
+    <Compile Include="SS\Formula\UDF\TestAggregatingUDFFinder.cs" />
+    <Compile Include="SS\Formula\UDF\TestDefaultUDFFinder.cs" />
     <Compile Include="SS\UserModel\BaseTestBorderStyle.cs" />
     <Compile Include="SS\UserModel\BaseTestCloneSheet.cs" />
     <Compile Include="SS\UserModel\Charts\TestDataSources.cs" />
