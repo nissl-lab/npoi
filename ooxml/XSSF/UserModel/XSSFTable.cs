@@ -388,7 +388,7 @@ namespace NPOI.XSSF.UserModel
             if (columnHeader == null) return -1;
             if (columnMap == null)
             {
-                columnMap = new Dictionary<string, int>(TableColumns.Length);
+                columnMap = new Dictionary<string, int>(TableColumns.Length * 3 / 2);
 
                 for (int i = 0; i < TableColumns.Length; i++)
                 {
