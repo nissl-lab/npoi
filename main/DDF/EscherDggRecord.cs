@@ -80,7 +80,8 @@ using System.Collections.Generic;
             int pos = offset + 8;
             int size = 0;
             field_1_shapeIdMax = LittleEndian.GetInt(data, pos + size); size += 4;
-            int field_2_numIdClusters = LittleEndian.GetInt(data, pos + size); size += 4;
+            //int field_2_numIdClusters = LittleEndian.GetInt(data, pos + size);
+            size += 4;
             field_3_numShapesSaved = LittleEndian.GetInt(data, pos + size); size += 4;
             field_4_drawingsSaved = LittleEndian.GetInt(data, pos + size); size += 4;
             field_5_fileIdClusters = new FileIdCluster[(bytesRemaining - size) / 8];  // Can't rely on field_2_numIdClusters

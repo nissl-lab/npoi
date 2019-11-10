@@ -24,6 +24,7 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using System.Globalization;
+    using NPOI.SS.Format;
 
     /**
      * Tests of {@link DataFormatter}
@@ -35,6 +36,26 @@ namespace TestCases.SS.UserModel
     public class TestDataFormatter
     {
         private static double _15_MINUTES = 0.041666667;
+        [SetUp]
+        public void SetUpClass()
+        {
+            // some pre-checks to hunt for a problem in the Maven build
+            // these checks ensure that the correct locale is set, so a Assert.Failure here
+            // usually indicates an invalid locale during test-execution
+            Assert.IsFalse(DateUtil.IsADateFormat(-1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            //Locale ul = LocaleUtil.getUserLocale();
+            //assertTrue(Locale.ROOT.equals(ul) || Locale.getDefault().equals(ul));
+            String textValue = NumberToTextConverter.ToText(1234.56);
+            Assert.AreEqual(-1, textValue.IndexOf('E'));
+            Object cellValueO = 1234.56d;
+            /*CellFormat cellFormat = new CellFormat("_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-");
+            CellFormatResult result = cellFormat.apply(cellValueO);
+            Assert.AreEqual("    1,234.56 ", result.text);*/
+            CellFormat cfmt = CellFormat.GetInstance("_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-");
+            CellFormatResult result = cfmt.Apply(cellValueO);
+            Assert.AreEqual("    1,234.56 ", result.Text,
+                "This Assert.Failure can indicate that the wrong locale is used during test-execution, ensure you run with english/US via -Duser.language=en -Duser.country=US");
+        }
         /**
          * Test that we use the specified locale when deciding
          *   how to format normal numbers

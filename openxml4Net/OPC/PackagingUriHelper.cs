@@ -830,7 +830,7 @@ namespace NPOI.OpenXml4Net.OPC
 
     private static bool IsUnsafe(int ch)
     {
-        return ch > 0x80 || char.IsWhiteSpace((char)ch) || ch == '\u00A0';
+        return ch > 0x80 || char.IsWhiteSpace((char)ch);
     }
         /**
          * Build a part name where the relationship should be stored ((ex

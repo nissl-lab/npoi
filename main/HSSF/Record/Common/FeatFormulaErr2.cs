@@ -33,22 +33,14 @@ namespace NPOI.HSSF.Record.Common
      */
     public class FeatFormulaErr2 : SharedFeature
     {
-        static BitField checkCalculationErrors =
-            BitFieldFactory.GetInstance(0x01);
-        static BitField checkEmptyCellRef =
-            BitFieldFactory.GetInstance(0x02);
-        static BitField checkNumbersAsText =
-            BitFieldFactory.GetInstance(0x04);
-        static BitField checkInconsistentRanges =
-            BitFieldFactory.GetInstance(0x08);
-        static BitField checkInconsistentFormulas =
-            BitFieldFactory.GetInstance(0x10);
-        static BitField checkDateTimeFormats =
-            BitFieldFactory.GetInstance(0x20);
-        static BitField checkUnprotectedFormulas =
-            BitFieldFactory.GetInstance(0x40);
-        static BitField performDataValidation =
-            BitFieldFactory.GetInstance(0x80);
+        private static BitField CHECK_CALCULATION_ERRORS = BitFieldFactory.GetInstance(0x01);
+        private static BitField CHECK_EMPTY_CELL_REF = BitFieldFactory.GetInstance(0x02);
+        private static BitField CHECK_NUMBERS_AS_TEXT = BitFieldFactory.GetInstance(0x04);
+        private static BitField CHECK_INCONSISTENT_RANGES = BitFieldFactory.GetInstance(0x08);
+        private static BitField CHECK_INCONSISTENT_FORMULAS = BitFieldFactory.GetInstance(0x10);
+        private static BitField CHECK_DATETIME_FORMATS = BitFieldFactory.GetInstance(0x20);
+        private static BitField CHECK_UNPROTECTED_FORMULAS = BitFieldFactory.GetInstance(0x40);
+        private static BitField PERFORM_DATA_VALIDATION = BitFieldFactory.GetInstance(0x80);
 
         /**
          * What errors we should ignore
@@ -104,11 +96,11 @@ namespace NPOI.HSSF.Record.Common
         {
             get
             {
-                return checkCalculationErrors.IsSet(errorCheck);
+                return CHECK_CALCULATION_ERRORS.IsSet(errorCheck);
             }
             set
             {
-                FeatFormulaErr2.checkCalculationErrors.SetBoolean(
+                errorCheck = FeatFormulaErr2.CHECK_CALCULATION_ERRORS.SetBoolean(
                         errorCheck, value);
             }
         }
@@ -117,11 +109,11 @@ namespace NPOI.HSSF.Record.Common
         {
             get
             {
-                return checkEmptyCellRef.IsSet(errorCheck);
+                return CHECK_EMPTY_CELL_REF.IsSet(errorCheck);
             }
             set
             {
-                FeatFormulaErr2.checkEmptyCellRef.SetBoolean(
+                errorCheck = FeatFormulaErr2.CHECK_EMPTY_CELL_REF.SetBoolean(
                         errorCheck, value);
             }
         }
@@ -130,11 +122,11 @@ namespace NPOI.HSSF.Record.Common
         {
             get
             {
-                return checkNumbersAsText.IsSet(errorCheck);
+                return CHECK_NUMBERS_AS_TEXT.IsSet(errorCheck);
             }
             set
             {
-                FeatFormulaErr2.checkNumbersAsText.SetBoolean(
+                errorCheck = FeatFormulaErr2.CHECK_NUMBERS_AS_TEXT.SetBoolean(
                         errorCheck, value);
             }
         }
@@ -143,11 +135,11 @@ namespace NPOI.HSSF.Record.Common
         {
             get
             {
-                return checkInconsistentRanges.IsSet(errorCheck);
+                return CHECK_INCONSISTENT_RANGES.IsSet(errorCheck);
             }
             set
             {
-                FeatFormulaErr2.checkInconsistentRanges.SetBoolean(
+                errorCheck = FeatFormulaErr2.CHECK_INCONSISTENT_RANGES.SetBoolean(
                         errorCheck, value);
             }
         }
@@ -156,11 +148,11 @@ namespace NPOI.HSSF.Record.Common
         {
             get
             {
-                return checkInconsistentFormulas.IsSet(errorCheck);
+                return CHECK_INCONSISTENT_FORMULAS.IsSet(errorCheck);
             }
             set
             {
-                FeatFormulaErr2.checkInconsistentFormulas.SetBoolean(
+                errorCheck = FeatFormulaErr2.CHECK_INCONSISTENT_FORMULAS.SetBoolean(
                         errorCheck, value);
             }
         }
@@ -169,11 +161,11 @@ namespace NPOI.HSSF.Record.Common
         {
             get
             {
-                return checkDateTimeFormats.IsSet(errorCheck);
+                return CHECK_DATETIME_FORMATS.IsSet(errorCheck);
             }
             set
             {
-                FeatFormulaErr2.checkDateTimeFormats.SetBoolean(
+                errorCheck = FeatFormulaErr2.CHECK_DATETIME_FORMATS.SetBoolean(
                         errorCheck, value);
             }
         }
@@ -182,11 +174,11 @@ namespace NPOI.HSSF.Record.Common
         {
             get
             {
-                return checkUnprotectedFormulas.IsSet(errorCheck);
+                return CHECK_UNPROTECTED_FORMULAS.IsSet(errorCheck);
             }
             set
             {
-                FeatFormulaErr2.checkUnprotectedFormulas.SetBoolean(
+                errorCheck = FeatFormulaErr2.CHECK_UNPROTECTED_FORMULAS.SetBoolean(
                         errorCheck, value);
             }
         }
@@ -195,11 +187,11 @@ namespace NPOI.HSSF.Record.Common
         {
             get
             {
-                return performDataValidation.IsSet(errorCheck);
+                return PERFORM_DATA_VALIDATION.IsSet(errorCheck);
             }
             set
             {
-                FeatFormulaErr2.performDataValidation.SetBoolean(
+                errorCheck = FeatFormulaErr2.PERFORM_DATA_VALIDATION.SetBoolean(
                     errorCheck, value);
             }
         }
