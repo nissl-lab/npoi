@@ -21,6 +21,7 @@ namespace NPOI.XSSF.UserModel
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
     using NPOI.XSSF;
     using NUnit.Framework;
 
@@ -112,6 +113,92 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(-1, table.FindColumnIndex(null));
             Assert.AreEqual(-1, table.FindColumnIndex(""));
             Assert.AreEqual(-1, table.FindColumnIndex("one"));
+            wb.Close();
+        }
+        [Test]
+        public void GetSheetName()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            XSSFTable table = wb.GetTable("\\_Prime.1");
+            Assert.AreEqual("Table", table.SheetName);
+            wb.Close();
+        }
+        [Test]
+        public void IsHasTotalsRow()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            XSSFTable table = wb.GetTable("\\_Prime.1");
+            Assert.IsFalse(table.IsHasTotalsRow);
+            wb.Close();
+        }
+        [Test]
+        public void GetStartColIndex()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            XSSFTable table = wb.GetTable("\\_Prime.1");
+            Assert.AreEqual(0, table.StartColIndex);
+            wb.Close();
+        }
+        [Test]
+        public void GetEndColIndex()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            XSSFTable table = wb.GetTable("\\_Prime.1");
+            Assert.AreEqual(2, table.EndColIndex);
+            wb.Close();
+        }
+        [Test]
+        public void GetStartRowIndex()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            XSSFTable table = wb.GetTable("\\_Prime.1");
+            Assert.AreEqual(0, table.StartRowIndex);
+            wb.Close();
+        }
+        [Test]
+        public void GetEndRowIndex()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            XSSFTable table = wb.GetTable("\\_Prime.1");
+            Assert.AreEqual(6, table.EndRowIndex);
+            wb.Close();
+        }
+        [Test]
+        public void GetStartCellReference()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            XSSFTable table = wb.GetTable("\\_Prime.1");
+            Assert.AreEqual(new CellReference("A1"), table.StartCellReference);
+            wb.Close();
+        }
+        [Test]
+        public void GetEndCellReference()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            XSSFTable table = wb.GetTable("\\_Prime.1");
+            Assert.AreEqual(new CellReference("C7"), table.EndCellReference);
+            wb.Close();
+        }
+        [Test]
+        public void GetNumberOfMappedColumns()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            XSSFTable table = wb.GetTable("\\_Prime.1");
+            Assert.AreEqual(3, table.NumberOfMappedColumns);
+            wb.Close();
+        }
+        [Test]
+        public void GetAndSetDisplayName()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            XSSFTable table = wb.GetTable("\\_Prime.1");
+            Assert.AreEqual("\\_Prime.1", table.DisplayName);
+            table.DisplayName = null;
+            Assert.IsNull(table.DisplayName);
+            Assert.AreEqual("\\_Prime.1", table.Name); // name and display name are different
+            table.DisplayName = "Display name";
+            Assert.AreEqual("Display name", table.DisplayName);
+            Assert.AreEqual("\\_Prime.1", table.Name); // name and display name are different
             wb.Close();
         }
 
