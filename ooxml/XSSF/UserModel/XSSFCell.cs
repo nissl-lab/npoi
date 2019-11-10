@@ -520,34 +520,49 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CellType cellType = CellType;
-                if (cellType != CellType.Formula) 
-                    throw TypeMismatch(CellType.Formula, cellType, false);
-
-                CT_CellFormula f = _cell.f;
-                if (IsPartOfArrayFormulaGroup && f == null)
-                {
-                    ICell cell = ((XSSFSheet)Sheet).GetFirstCellInArrayFormula(this);
-                    return cell.CellFormula;
-                }
-                if (f.t == ST_CellFormulaType.shared)
-                {
-                    return ConvertSharedFormula((int)f.si);
-                }
-                return f.Value;
+                // existing behavior - create a new XSSFEvaluationWorkbook for every call
+                return GetCellFormula(null);
             }
-            set 
+            set
             {
                 SetCellFormula(value);
             }
+        }
+
+        /**
+         * package/hierarchy use only - reuse an existing evaluation workbook if available for caching
+         *
+         * @param fpb evaluation workbook for reuse, if available, or null to create a new one as needed
+         * @return a formula for the cell
+         * @throws IllegalStateException if the cell type returned by {@link #getCellType()} is not CELL_TYPE_FORMULA
+         */
+        protected internal String GetCellFormula(XSSFEvaluationWorkbook fpb)
+        {
+            CellType cellType = CellType;
+            if (cellType != CellType.Formula) 
+                throw TypeMismatch(CellType.Formula, cellType, false);
+
+            CT_CellFormula f = _cell.f;
+            if (IsPartOfArrayFormulaGroup && f == null)
+            {
+                XSSFCell cell = ((XSSFSheet)Sheet).GetFirstCellInArrayFormula(this);
+                return cell.GetCellFormula(fpb);
+            }
+            if (f.t == ST_CellFormulaType.shared)
+            {
+                //return ConvertSharedFormula((int)f.si);
+                return ConvertSharedFormula((int)f.si, fpb == null ? XSSFEvaluationWorkbook.Create(Sheet.Workbook) : fpb);
+            }
+            return f.Value;
         }
 
         /// <summary>
         /// Creates a non shared formula from the shared formula counterpart
         /// </summary>
         /// <param name="si">Shared Group Index</param>
+        /// <param name="fpb"></param>
         /// <returns>non shared formula created for the given shared formula and this cell</returns>
-        private String ConvertSharedFormula(int si)
+        private String ConvertSharedFormula(int si, XSSFEvaluationWorkbook fpb)
         {
             XSSFSheet sheet = (XSSFSheet)Sheet;
 
@@ -562,7 +577,6 @@ namespace NPOI.XSSF.UserModel
             CellRangeAddress ref1 = CellRangeAddress.ValueOf(sharedFormulaRange);
 
             int sheetIndex = sheet.Workbook.GetSheetIndex(sheet);
-            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(sheet.Workbook);
             SharedFormula sf = new SharedFormula(SpreadsheetVersion.EXCEL2007);
 
             Ptg[] ptgs = FormulaParser.Parse(sharedFormula, fpb, FormulaType.Cell, sheetIndex, RowIndex);

@@ -85,7 +85,9 @@ namespace NPOI.XSSF.UserModel
         public override Ptg[] GetFormulaTokens(IEvaluationCell evalCell)
         {
             XSSFCell cell = ((XSSFEvaluationCell)evalCell).GetXSSFCell();
-            return FormulaParser.Parse(cell.CellFormula, this, FormulaType.Cell, _uBook.GetSheetIndex(cell.Sheet), cell.RowIndex);
+            int sheetIndex = _uBook.GetSheetIndex(cell.Sheet);
+            int rowIndex = cell.RowIndex;
+            return FormulaParser.Parse(cell.GetCellFormula(this), this, FormulaType.Cell, sheetIndex, rowIndex);
         }
     }
 }
