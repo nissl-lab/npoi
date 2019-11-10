@@ -1745,9 +1745,9 @@ namespace NPOI.HSSF.UserModel
             DrawingManager2 mgr = workbook.FindDrawingGroup();
             if (mgr != null)
             {
-                for (int i = 0; i < NumberOfSheets; i++)
+                foreach (HSSFSheet sh in _sheets)
                 {
-                    IDrawing tmp = GetSheetAt(i).DrawingPatriarch;
+                    IDrawing tmp = sh.DrawingPatriarch;
                 }
             }
             else
@@ -2029,9 +2029,9 @@ namespace NPOI.HSSF.UserModel
         public IList<HSSFObjectData> GetAllEmbeddedObjects()
         {
             List<HSSFObjectData> objects = new List<HSSFObjectData>();
-            for (int i = 0; i < NumberOfSheets; i++)
+            foreach (HSSFSheet sheet in _sheets)
             {
-                GetAllEmbeddedObjects((HSSFSheet)GetSheetAt(i), objects);
+                GetAllEmbeddedObjects(sheet, objects);
             }
             return objects;
         }
