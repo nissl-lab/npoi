@@ -110,7 +110,7 @@ namespace NPOI.DDF
         public override bool Equals(Object o)
         {
             if (this == o) return true;
-            if (!(o is EscherComplexProperty)) return false;
+            if (o == null || !(o is EscherComplexProperty)) return false;
 
             EscherComplexProperty escherComplexProperty = (EscherComplexProperty)o;
 

@@ -32,7 +32,7 @@ namespace NPOI.XWPF.UserModel
         protected StringBuilder text = new StringBuilder();
         private CT_Tbl ctTbl;
         protected List<XWPFTableRow> tableRows;
-        protected List<String> styleIDs;
+        //protected List<String> styleIDs;
 
         // Create a map from this XWPF-level enum to the STBorder.Enum values
         public enum XWPFBorderType { NIL, NONE, SINGLE, THICK, DOUBLE, DOTTED, DASHED, DOT_DASH };

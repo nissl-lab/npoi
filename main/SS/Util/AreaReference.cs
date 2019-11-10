@@ -407,7 +407,6 @@ namespace NPOI.SS.Util
                         }
                         continue;
                     case SPECIAL_NAME_DELIMITER:
-                    // fall through
                         break;
                     default:
                         continue;

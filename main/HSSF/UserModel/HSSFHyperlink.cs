@@ -56,6 +56,8 @@ namespace NPOI.HSSF.UserModel
                 case HyperlinkType.Document:
                     record.CreateDocumentLink();
                     break;
+                default:
+                    throw new ArgumentException("Invalid type: " + type);
             }
         }
 

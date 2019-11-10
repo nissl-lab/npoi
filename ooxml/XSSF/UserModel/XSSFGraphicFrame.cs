@@ -38,7 +38,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_GraphicalObjectFrame graphicFrame;
         private XSSFDrawing drawing;
-        private XSSFClientAnchor anchor;
+        private new XSSFClientAnchor anchor;
 
         /**
          * Construct a new XSSFGraphicFrame object.
