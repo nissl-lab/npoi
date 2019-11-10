@@ -56,7 +56,6 @@ namespace NPOI.XSSF.Streaming
         public override Ptg[] GetFormulaTokens(IEvaluationCell evalCell)
         {
             SXSSFCell cell = ((SXSSFEvaluationCell)evalCell).GetSXSSFCell();
-            SXSSFEvaluationWorkbook frBook = SXSSFEvaluationWorkbook.Create(_xBook);
             return FormulaParser.Parse(cell.CellFormula, this, FormulaType.Cell, _xBook.GetSheetIndex(cell.Sheet));
         }
     }
