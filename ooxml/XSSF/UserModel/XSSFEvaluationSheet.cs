@@ -74,17 +74,20 @@ namespace NPOI.XSSF.UserModel
         {
             private int _row;
             private int _col;
-            private int _hash;
+            private int _hash = -1; //lazily computed
 
             protected internal CellKey(int row, int col)
             {
                 _row = row;
                 _col = col;
-                _hash = (17 * 37 + row) * 37 + col;
             }
 
             public override int GetHashCode()
             {
+                if (_hash == -1)
+                {
+                    _hash = (17 * 37 + _row) * 37 + _col;
+                }
                 return _hash;
             }
 
