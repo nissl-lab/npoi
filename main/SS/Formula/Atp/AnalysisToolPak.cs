@@ -25,7 +25,7 @@ namespace NPOI.SS.Formula.Atp {
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.UDF;
 
     public class NotImplemented : FreeRefFunction
     {

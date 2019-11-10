@@ -29,7 +29,7 @@ using System.Text;
 using NPOI.SS.Util;
 using NPOI.SS.Formula;
 using NPOI.XSSF.UserModel.Helpers;
-using NPOI.SS.Formula.Udf;
+using NPOI.SS.Formula.UDF;
 using NPOI.OpenXmlFormats;
 using System.Collections;
 using NPOI.OpenXml4Net.Exceptions;

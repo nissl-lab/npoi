@@ -26,7 +26,7 @@ namespace NPOI.HSSF.Model
     using NPOI.HSSF.Util;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
-    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.UDF;
     using NPOI.SS.UserModel;
     using System.Security;
     using NPOI.POIFS.Crypt;

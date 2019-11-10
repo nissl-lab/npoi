@@ -21,7 +21,7 @@ using System;
 using NPOI.SS.UserModel;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula.Eval;
-using NPOI.SS.Formula.Udf;
+using NPOI.SS.Formula.UDF;
 using System.Collections.Generic;
 namespace NPOI.XSSF.UserModel
 {

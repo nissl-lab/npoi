@@ -26,7 +26,7 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Util;
     using NPOI.SS.Formula.Functions;
-    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.UDF;
     using System.Collections.Generic;
     using NPOI.SS.UserModel;
     using NPOI.SS.Formula.PTG;

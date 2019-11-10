@@ -16,7 +16,7 @@
 ==================================================================== */
 using System;
 using NPOI.SS.Formula;
-using NPOI.SS.Formula.Udf;
+using NPOI.SS.Formula.UDF;
 using NPOI.SS.UserModel;
 using NPOI.Util;
 using NPOI.XSSF.UserModel;

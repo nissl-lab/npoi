@@ -24,7 +24,7 @@ using System.Text;
 using ICSharpCode.SharpZipLib.Zip;
 using NPOI.OpenXml4Net.Util;
 using NPOI.SS;
-using NPOI.SS.Formula.Udf;
+using NPOI.SS.Formula.UDF;
 using NPOI.SS.UserModel;
 using NPOI.Util;
 using NPOI.XSSF.Model;

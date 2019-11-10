@@ -33,7 +33,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.POIFS.FileSystem;
     using NPOI.SS;
     using NPOI.SS.Formula;
-    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.UDF;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.Util;

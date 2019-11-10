@@ -25,7 +25,7 @@ namespace NPOI.XSSF.UserModel
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Functions;
     using NPOI.SS.Formula.PTG;
-    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.UDF;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.XSSF.Model;

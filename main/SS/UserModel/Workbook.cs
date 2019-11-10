@@ -20,7 +20,7 @@ namespace NPOI.SS.UserModel
     using System;
     using System.Collections;
     using System.IO;
-    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.UDF;
     using System.Collections.Generic;
     using NPOI.Util;
 

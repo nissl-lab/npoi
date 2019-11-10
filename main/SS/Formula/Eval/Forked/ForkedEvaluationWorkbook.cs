@@ -22,7 +22,7 @@ namespace NPOI.SS.Formula.Eval.Forked
     using System.Collections.Generic;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
-    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.UDF;
     using NPOI.SS.UserModel;
 
     /**

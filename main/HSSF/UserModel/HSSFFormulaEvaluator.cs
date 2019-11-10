@@ -22,7 +22,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.PTG;
-    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.UDF;
     using NPOI.SS.UserModel;
     using System.Collections.Generic;
 
