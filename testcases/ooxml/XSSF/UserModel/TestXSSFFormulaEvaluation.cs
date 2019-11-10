@@ -682,6 +682,16 @@ namespace NPOI.XSSF.UserModel
             return sheet.GetRow(rowNo).GetCell(column);
         }
 
+        // bug 57721
+        [Test]
+        public void StructuredReferences()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("evaluate_formula_with_structured_table_references.xlsx");
+
+            XSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
+            wb.Close();
+        }
+
     }
 
 }
