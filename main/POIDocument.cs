@@ -163,9 +163,12 @@ namespace NPOI
             }
             else if (ps != null)
             {
-                //logger.Log(POILogger.WARN, "DocumentSummaryInformation property Set came back with wrong class - ", ps.GetType());
+                logger.Log(POILogger.WARN, "DocumentSummaryInformation property Set came back with wrong class - ", ps.GetType());
             }
-
+            else
+            {
+                logger.Log(POILogger.WARN, "DocumentSummaryInformation property set came back as null");
+            }
             // SummaryInformation
             ps = GetPropertySet(SummaryInformation.DEFAULT_STREAM_NAME);
             if (ps is SummaryInformation)
@@ -174,8 +177,13 @@ namespace NPOI
             }
             else if (ps != null)
             {
-                //logger.Log(POILogger.WARN, "SummaryInformation property Set came back with wrong class - ", ps.GetType());
+                logger.Log(POILogger.WARN, "SummaryInformation property Set came back with wrong class - ", ps.GetType());
             }
+            else
+            {
+                logger.Log(POILogger.WARN, "SummaryInformation property set came back as null");
+            }
+            
 
             // Mark the fact that we've now loaded up the properties
             initialized = true;
