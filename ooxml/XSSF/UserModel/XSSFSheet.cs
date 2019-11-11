@@ -63,7 +63,7 @@ namespace NPOI.XSSF.UserModel
         internal CT_Sheet sheet;
         internal CT_Worksheet worksheet;
 
-        private SortedList<int, XSSFRow> _rows;
+        private SortedList<int, XSSFRow> _rows = new SortedList<int, XSSFRow>();
         private List<XSSFHyperlink> hyperlinks;
         private ColumnHelper columnHelper;
         private CommentsTable sheetComments;
@@ -190,7 +190,7 @@ namespace NPOI.XSSF.UserModel
 
         private void InitRows(CT_Worksheet worksheetParam)
         {
-            _rows = new SortedList<int, XSSFRow>();
+            _rows.Clear();
             tables = new Dictionary<String, XSSFTable>();
             sharedFormulas = new Dictionary<int, CT_CellFormula>();
             arrayFormulas = new List<CellRangeAddress>();
@@ -3279,13 +3279,18 @@ namespace NPOI.XSSF.UserModel
             rowShifter.UpdateHyperlinks(shifter);
 
             //rebuild the _rows map
-            SortedList<int, XSSFRow> map = new SortedList<int, XSSFRow>();
+            Dictionary<int, XSSFRow> map = new Dictionary<int, XSSFRow>();
             foreach (XSSFRow r in _rows.Values)
             {
                 map.Add(r.RowNum, r);
             }
-            _rows = map;
-
+            _rows.Clear();
+            //_rows.putAll(map);
+            foreach(KeyValuePair<int, XSSFRow> kv in map)
+            {
+                _rows.Add(kv.Key, kv.Value);
+            }
+            
             // Sort CTRows by index asc.
             worksheet.sheetData.row.Sort((row1, row2) => row1.r.CompareTo(row2.r));
         }
