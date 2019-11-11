@@ -40,11 +40,6 @@ namespace NPOI.XSSF.Extractor
         private bool includeCellComments = false;
         private bool includeHeadersFooters = true;
 
-        public XSSFExcelExtractor(String path)
-            : this(new XSSFWorkbook(path))
-        {
-
-        }
         public XSSFExcelExtractor(OPCPackage Container)
             : this(new XSSFWorkbook(Container))
         {
