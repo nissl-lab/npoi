@@ -537,7 +537,21 @@ namespace NPOI.HSSF.UserModel
          *        its value. For other types we will change the cell to an error
          *        cell and set its value.
          */
+        [Obsolete("deprecated 3.15 beta 2. Use {@link #setCellErrorValue(FormulaError)} instead.")]
         public void SetCellErrorValue(byte errorCode)
+        {
+            FormulaError error = FormulaError.ForInt(errorCode);
+            SetCellErrorValue(error);
+        }
+        /**
+         * set a error value for the cell
+         *
+         * @param error the error value to set this cell to.  For formulas we'll set the
+         *        precalculated value , for errors we'll set
+         *        its value. For other types we will change the cell to an error
+         *        cell and set its value.
+         */
+        public void SetCellErrorValue(FormulaError error)
         {
             int row = _record.Row;
             int col = _record.Column;
@@ -546,14 +560,14 @@ namespace NPOI.HSSF.UserModel
             {
 
                 case CellType.Error:
-                    ((BoolErrRecord)_record).SetValue(errorCode);
+                    ((BoolErrRecord)_record).SetValue(error);
                     break;
                 case CellType.Formula:
-                    ((FormulaRecordAggregate)_record).SetCachedErrorResult(errorCode);
+                    ((FormulaRecordAggregate)_record).SetCachedErrorResult(error);
                     break;
                 default:
                     SetCellType(CellType.Error, false, row, col, styleIndex);
-                    ((BoolErrRecord)_record).SetValue(errorCode);
+                    ((BoolErrRecord)_record).SetValue(error);
                     break;
             }
         }

@@ -102,7 +102,17 @@ namespace NPOI.HSSF.Record
             _value = value ? 1 : 0;
             _isError = false;
         }
-
+        /**
+	     * set the error value for the cell. See {@link FormulaError} for valid codes.
+	     *
+	     * @param value     error representing the error value
+	     *                  this value can only be 0,7,15,23,29,36 or 42
+	     *                  see bugzilla bug 16560 for an explanation
+	     */
+        public void SetValue(byte value)
+        {
+            SetValue(FormulaError.ForInt(value));
+        }
         /**
          * Set the error value for the cell
          *
@@ -111,9 +121,9 @@ namespace NPOI.HSSF.Record
          *                  see bugzilla bug 16560 for an explanation
          */
 
-        public void SetValue(byte value)
+        public void SetValue(FormulaError value)
         {
-            switch ((FormulaErrorEnum)value)
+            switch ((FormulaErrorEnum)value.Code)
             {
                 case FormulaErrorEnum.NULL:
                 case FormulaErrorEnum.DIV_0:
@@ -122,7 +132,7 @@ namespace NPOI.HSSF.Record
                 case FormulaErrorEnum.NAME:
                 case FormulaErrorEnum.NUM:
                 case FormulaErrorEnum.NA:
-                    _value = value;
+                    _value = value.Code;
                     _isError = true;
                     return;
                 default:
