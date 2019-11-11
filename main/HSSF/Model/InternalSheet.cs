@@ -159,21 +159,6 @@ namespace NPOI.HSSF.Model
             }
             return CreateSheet(new RecordStream(clonedRecords, 0));
         }
-        /// <summary>
-        /// get the NEXT value record (from LOC).  The first record that is a value record
-        /// (starting at LOC) will be returned.
-        /// This method is "loc" sensitive.  Meaning you need to set LOC to where you
-        /// want it to start searching.  If you don't know do this: setLoc(getDimsLoc).
-        /// When adding several rows you can just start at the last one by leaving loc
-        /// at what this sets it to.  For this method, set loc to dimsloc to start with,
-        /// subsequent calls will return values in (physical) sequence or NULL when you get to the end.
-        /// </summary>
-        /// <returns>the next value record or NULL if there are no more</returns>
-        // <see cref="SetLoc(int)"/>
-        public CellValueRecordInterface[] GetValueRecords()
-        {
-            return _rowsAggregate.GetValueRecords();
-        }
 
         public WindowTwoRecord WindowTwo
         {
@@ -899,7 +884,23 @@ namespace NPOI.HSSF.Model
             _rowsAggregate.RemoveRow(row);
         }
 
-
+        /**
+         * Get all the value records (from LOC). Records will be returned from the first
+         *  record (starting at LOC) which is a value record.
+         *
+         * <P>
+         * This method is "loc" sensitive.  Meaning you need to set LOC to where you
+         * want it to start searching.  If you don't know do this: setLoc(getDimsLoc).
+         * When adding several rows you can just start at the last one by leaving loc
+         * at what this sets it to.  For this method, set loc to dimsloc to start with,
+         * subsequent calls will return values in (physical) sequence or NULL when you get to the end.
+         *
+         * @return Iterator of CellValueRecordInterface representing the value records
+         */
+        public IEnumerator<CellValueRecordInterface> GetCellValueIterator()
+        {
+            return _rowsAggregate.GetCellValueEnumerator();
+        }
         /// <summary>
         /// Get the NEXT RowRecord (from LOC).  The first record that is a Row record
         /// (starting at LOC) will be returned.

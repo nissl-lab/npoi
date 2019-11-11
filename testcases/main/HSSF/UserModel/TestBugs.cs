@@ -1380,10 +1380,10 @@ namespace TestCases.HSSF.UserModel
             ConfirmCachedValue("70164", nc2);
             ConfirmCachedValue("90210", nc3);
 
-            CellValueRecordInterface[] cvrs = ns.Sheet.GetValueRecords();
-            for (int i = 0; i < cvrs.Length; i++)
+            int i = 0;
+            for (IEnumerator<CellValueRecordInterface> it = ns.Sheet.GetCellValueIterator(); it.MoveNext(); i++)
             {
-                CellValueRecordInterface cvr = cvrs[i];
+                CellValueRecordInterface cvr = it.Current;
                 if (cvr is FormulaRecordAggregate)
                 {
                     FormulaRecordAggregate fr = (FormulaRecordAggregate)cvr;
@@ -1407,7 +1407,7 @@ namespace TestCases.HSSF.UserModel
                     }
                 }
             }
-            Assert.AreEqual(3, cvrs.Length);
+            Assert.AreEqual(3, i);
         }
 
         private static void ConfirmCachedValue(double expectedValue, ICell cell)

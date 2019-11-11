@@ -164,7 +164,7 @@ namespace NPOI.HSSF.UserModel
                 row = sheet.NextRow;
             }
 
-            CellValueRecordInterface[] cvals = sheet.GetValueRecords();
+            var iter = sheet.GetCellValueIterator();
             long timestart = DateTime.Now.Millisecond;
 
             //if (log.Check(POILogger.DEBUG))
@@ -173,9 +173,9 @@ namespace NPOI.HSSF.UserModel
             HSSFRow lastrow = null;
 
             // Add every cell to its row
-            for (int i = 0; i < cvals.Length; i++)
+            while (iter.MoveNext())
             {
-                CellValueRecordInterface cval = cvals[i];
+                CellValueRecordInterface cval = iter.Current;
                 long cellstart = DateTime.Now.Millisecond;
                 HSSFRow hrow = lastrow;
 
@@ -282,6 +282,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="row">the row to Remove.</param>
         public void RemoveRow(IRow row)
         {
+            HSSFRow hrow = (HSSFRow)row;
             if (row.Sheet != this)
             {
                 throw new ArgumentException("Specified row does not belong to this sheet");
@@ -310,24 +311,24 @@ namespace NPOI.HSSF.UserModel
                     throw new InvalidOperationException("Specified row does not belong to this _sheet");
                 }
 
-                if (row.RowNum == LastRowNum)
+                if (hrow.RowNum == LastRowNum)
                 {
                     lastrow = FindLastRow(lastrow);
                 }
-                if (row.RowNum == FirstRowNum)
+                if (hrow.RowNum == FirstRowNum)
                 {
                     firstrow = FindFirstRow(firstrow);
                 }
-                CellValueRecordInterface[] cellvaluerecods = _sheet.GetValueRecords();
-                for (int i = 0; i < cellvaluerecods.Length; i++)
-                {
-                    if (cellvaluerecods[i].Row == key)
-                    {
-                        _sheet.RemoveValueRecord(key, cellvaluerecods[i]);
-                    }
-                }
+                //CellValueRecordInterface[] cellvaluerecods = _sheet.GetValueRecords();
+                //for (int i = 0; i < cellvaluerecods.Length; i++)
+                //{
+                //    if (cellvaluerecods[i].Row == key)
+                //    {
+                //        _sheet.RemoveValueRecord(key, cellvaluerecods[i]);
+                //    }
+                //}
 
-                _sheet.RemoveRow(((HSSFRow)row).RowRecord);
+                _sheet.RemoveRow(hrow.RowRecord);
             }
         }
 

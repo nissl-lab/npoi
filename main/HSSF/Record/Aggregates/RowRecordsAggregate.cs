@@ -465,7 +465,13 @@ namespace NPOI.HSSF.Record.Aggregates
         {
             return new RowRecord(rowNumber);
         }
-
+        /**
+         * Returns an iterator for the cell values
+         */
+        public IEnumerator<CellValueRecordInterface> GetCellValueEnumerator()
+        {
+            return _valuesAgg.GetEnumerator();
+        }
         public IndexRecord CreateIndexRecord(int indexRecordOffset, int sizeOfInitialSheetRecords, int offsetDefaultColWidth)
         {
             IndexRecord result = new IndexRecord();
