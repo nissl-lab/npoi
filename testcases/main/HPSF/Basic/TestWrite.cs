@@ -394,8 +394,8 @@ namespace TestCases.HPSF.Basic
 
         private static int CODEPAGE_DEFAULT = -1;
         private static int CODEPAGE_1252 = 1252;
-        private static int CODEPAGE_UTF8 = (int)Constants.CP_UTF8;
-        private static int CODEPAGE_UTF16 = (int)Constants.CP_UTF16;
+        private static int CODEPAGE_UTF8 = CodePageUtil.CP_UTF8;
+        private static int CODEPAGE_UTF16 = CodePageUtil.CP_UTF16;
 
 
 

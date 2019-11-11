@@ -411,7 +411,6 @@
     <Compile Include="DDF\EscherTextboxRecord.cs" />
     <Compile Include="DDF\NullEscherSerializationListener.cs" />
     <Compile Include="DDF\UnknownEscherRecord.cs" />
-    <Compile Include="HPSF\Constants.cs" />
     <Compile Include="HPSF\CustomProperties.cs" />
     <Compile Include="HPSF\CustomProperty.cs" />
     <Compile Include="HPSF\DocumentSummaryInformation.cs" />
