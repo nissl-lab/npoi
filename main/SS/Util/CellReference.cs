@@ -101,10 +101,11 @@ namespace NPOI.SS.Util
         //private static string BIFF8_LAST_ROW = (0x10000).ToString();
         //private static int BIFF8_LAST_ROW_TEXT_LEN = BIFF8_LAST_ROW.Length;
 
-
+        // FIXME: _sheetName may be null, depending on the entry point.
+        // Perhaps it would be better to declare _sheetName is never null, using an empty string to represent a 2D reference.
+        private String _sheetName;
         private int _rowIndex;
         private int _colIndex;
-        private String _sheetName;
         private bool _isRowAbs;
         private bool _isColAbs;
 
@@ -412,12 +413,20 @@ namespace NPOI.SS.Util
             bool IsQuoted = reference[0] == SPECIAL_NAME_DELIMITER;
             if (!IsQuoted)
             {
-                return reference.Substring(0, indexOfSheetNameDelimiter);
+                // sheet names with spaces must be quoted
+                if (reference.IndexOf(' ') == -1)
+                {
+                    return reference.Substring(0, indexOfSheetNameDelimiter);
+                }
+                else
+                {
+                    throw new ArgumentException("Sheet names containing spaces must be quoted: (" + reference + ")");
+                }
             }
             int lastQuotePos = indexOfSheetNameDelimiter - 1;
             if (reference[lastQuotePos] != SPECIAL_NAME_DELIMITER)
             {
-                throw new Exception("Mismatched quotes: (" + reference + ")");
+                throw new ArgumentException("Mismatched quotes: (" + reference + ")");
             }
 
             // TODO - refactor cell reference parsing logic to one place.
@@ -586,20 +595,8 @@ namespace NPOI.SS.Util
         }
         public static bool IsRowWithinRange(String rowStr, SpreadsheetVersion ssVersion)
         {
-            // Equivalent to 0 <= CellReference.convertColStringToIndex(colStr) <= ssVersion.getLastColumnIndex()
-            int rowNum = Int32.Parse(rowStr, CultureInfo.InvariantCulture);
-
-            if (rowNum < 0)
-            {
-                throw new InvalidOperationException("Invalid rowStr '" + rowStr + "'.");
-            }
-            if (rowNum == 0)
-            {
-                // execution Gets here because caller does first pass of discriminating
-                // potential cell references using a simplistic regex pattern.
-                return false;
-            }
-            return rowNum <= ssVersion.MaxRows;
+            int rowNum = int.Parse(rowStr) - 1;
+            return 0 <= rowNum && rowNum <= ssVersion.LastRowIndex;
         }
 
         [Obsolete("deprecated 3.15 beta 2. Use {@link #isRowWithinRange}")]
@@ -645,7 +642,10 @@ namespace NPOI.SS.Util
             return _rowIndex == cr._rowIndex
                 && _colIndex == cr._colIndex
                 && _isRowAbs == cr._isRowAbs
-                && _isColAbs == cr._isColAbs;
+                && _isColAbs == cr._isColAbs
+                && ((_sheetName == null)
+                        ? (cr._sheetName == null)
+                        : _sheetName.Equals(cr._sheetName));
         }
 
         public override int GetHashCode ()
@@ -655,6 +655,7 @@ namespace NPOI.SS.Util
             result = 31 * result + _colIndex;
             result = 31 * result + (_isRowAbs ? 1 : 0);
             result = 31 * result + (_isColAbs ? 1 : 0);
+            result = 31 * result + (_sheetName == null ? 0 : _sheetName.GetHashCode());
             return result;
         }
     }
