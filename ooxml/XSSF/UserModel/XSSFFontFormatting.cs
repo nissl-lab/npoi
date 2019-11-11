@@ -113,12 +113,6 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        [Obsolete("use FontColor")]
-        public XSSFColor GetXSSFColor()
-        {
-            return (XSSFColor)FontColor;
-        }
-
         /**
          * Gets the height of the font in 1/20th point units
          *
