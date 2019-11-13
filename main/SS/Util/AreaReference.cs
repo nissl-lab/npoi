@@ -38,7 +38,7 @@ namespace NPOI.SS.Util
         private bool _isSingleCell;
         private SpreadsheetVersion _version; // never null
 
-        [Obsolete]
+        [Obsolete("deprecated POI 3.13 beta 1. Prefer supplying a version.")]
         public AreaReference(String reference)
             : this(reference, DEFAULT_SPREADSHEET_VERSION)
         {
