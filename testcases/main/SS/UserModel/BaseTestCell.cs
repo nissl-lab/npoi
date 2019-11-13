@@ -969,5 +969,35 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(B1.Address, sheet.ActiveCell);
             wb.Close();
         }
+
+        [Test]
+        public void GetCellComment()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            ICreationHelper factory = wb.GetCreationHelper();
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(1);
+
+            // cell does not have a comment
+            Assert.IsNull(cell.CellComment);
+
+            // add a cell comment
+            IClientAnchor anchor = factory.CreateClientAnchor();
+            anchor.Col1 = cell.ColumnIndex;
+            anchor.Col2 = cell.ColumnIndex + 1;
+            anchor.Row1 = row.RowNum;
+            anchor.Row2 = row.RowNum + 3;
+            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            IComment comment = drawing.CreateCellComment(anchor);
+            IRichTextString str = factory.CreateRichTextString("Hello, World!");
+            comment.String = str;
+            comment.Author = "Apache POI";
+            cell.CellComment = comment;
+            // ideally assertSame, but XSSFCell creates a new XSSFCellComment wrapping the same bean for every call to getCellComment.
+            Assert.AreEqual(comment, cell.CellComment);
+            wb.Close();
+        }
+
     }
 }
