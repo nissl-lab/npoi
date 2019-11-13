@@ -47,7 +47,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(xssfFont.GetCTFont());
         }
         [Test]
-        public void TestBoldweight()
+        public void TestBold()
         {
             CT_Font ctFont = new CT_Font();
             CT_BooleanProperty bool1 = ctFont.AddNewB();

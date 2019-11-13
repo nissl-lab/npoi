@@ -84,7 +84,7 @@ namespace NPOI.SS.UserModel
 
         Red = 0xa,
     }
-
+    [Obsolete("deprecated 3.15 beta 2. Scheduled for removal in 3.17. Boldweight constants no longer needed due to {@link #getBold} and {@link #setBold(boolean)}")]
     public enum FontBoldWeight:short
     {
         /// <summary>
@@ -177,7 +177,7 @@ namespace NPOI.SS.UserModel
          *  unless you're comparing which one is which)
          */
         short Index { get; }
-
+        [Obsolete("deprecated 3.15 beta 2. Scheduled for removal in 3.17. Use {@link #setBold(boolean)} instead.")]
         short Boldweight { get; set; }
 
         bool IsBold { get; set; }
