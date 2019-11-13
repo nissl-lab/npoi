@@ -930,11 +930,18 @@ namespace NPOI.XSSF.UserModel
         /**
          * Finds a font that matches the one with the supplied attributes
          */
+        [Obsolete("deprecated POI 3.15. Use {@link #findFont(boolean, short, short, String, boolean, boolean, short, byte)} instead.")]
         public IFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
         {
             return stylesSource.FindFont(boldWeight, color, fontHeight, name, italic, strikeout, typeOffset, underline);
         }
-
+        /**
+         * Finds a font that matches the one with the supplied attributes
+         */
+        public IFont FindFont(bool bold, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
+        {
+            return stylesSource.FindFont(bold, color, fontHeight, name, italic, strikeout, typeOffset, underline);
+        }
         /**
          * Convenience method to Get the active sheet.  The active sheet is is the sheet
          * which is currently displayed when the workbook is viewed in Excel.

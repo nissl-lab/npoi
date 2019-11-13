@@ -701,6 +701,16 @@ namespace NPOI.XSSF.Streaming
             return XssfWorkbook.FindFont(boldWeight, color, fontHeight, name, italic, strikeout, typeOffset, underline);
         }
 
+        /**
+         * Finds a font that matches the one with the supplied attributes
+         *
+         * @return the font with the matched attributes or <code>null</code>
+         */
+        public IFont FindFont(bool bold, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
+        { 
+            return XssfWorkbook.FindFont(bold, color, fontHeight, name, italic, strikeout, typeOffset, underline);
+        }
+
         public IFont GetFontAt(short idx)
         {
             return XssfWorkbook.GetFontAt(idx);

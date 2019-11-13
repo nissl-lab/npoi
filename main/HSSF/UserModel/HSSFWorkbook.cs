@@ -1107,12 +1107,13 @@ namespace NPOI.HSSF.UserModel
         /// <param name="typeOffset">The type offset.</param>
         /// <param name="underline">The underline.</param>
         /// <returns></returns>
+        [Obsolete("deprecated 3.15 beta 2. Use {@link #findFont(boolean, short, short, String, boolean, boolean, short, byte)} instead.")]
         public NPOI.SS.UserModel.IFont FindFont(short boldWeight, short color, short fontHeight,
                          String name, bool italic, bool strikeout,
                          FontSuperScript typeOffset, FontUnderlineType underline)
         {
-            //        Console.WriteLine( boldWeight + ", " + color + ", " + fontHeight + ", " + name + ", " + italic + ", " + strikeout + ", " + typeOffset + ", " + Underline );
-            for (short i = 0; i <= this.NumberOfFonts; i++)
+            short numberOfFonts = NumberOfFonts;
+            for (short i = 0; i <= numberOfFonts; i++)
             {
                 // Remember - there is no 4!
                 if (i == 4)
@@ -1135,6 +1136,45 @@ namespace NPOI.HSSF.UserModel
             }
 
             //        Console.WriteLine( "No font found" );
+            return null;
+        }
+
+        /// <summary>
+        /// Finds a font that matches the one with the supplied attributes
+        /// </summary>
+        /// <param name="bold">The bold weight.</param>
+        /// <param name="color">The color.</param>
+        /// <param name="fontHeight">Height of the font.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="italic">if set to <c>true</c> [italic].</param>
+        /// <param name="strikeout">if set to <c>true</c> [strikeout].</param>
+        /// <param name="typeOffset">The type offset.</param>
+        /// <param name="underline">The underline.</param>
+        /// <returns></returns>
+        public IFont FindFont(bool bold, short color, short fontHeight,
+                                 String name, bool italic, bool strikeout,
+                                 FontSuperScript typeOffset, FontUnderlineType underline)
+        {
+            short numberOfFonts = NumberOfFonts;
+            for (short i = 0; i <= numberOfFonts; i++)
+            {
+                // Remember - there is no 4!
+                if (i == 4) continue;
+
+                HSSFFont hssfFont = GetFontAt(i) as HSSFFont;
+                if (hssfFont.IsBold == bold
+                        && hssfFont.Color == color
+                        && hssfFont.FontHeight == fontHeight
+                        && hssfFont.FontName.Equals(name)
+                        && hssfFont.IsItalic == italic
+                        && hssfFont.IsStrikeout == strikeout
+                        && hssfFont.TypeOffset == typeOffset
+                        && hssfFont.Underline == underline)
+                {
+                    return hssfFont;
+                }
+            }
+
             return null;
         }
 
