@@ -307,7 +307,6 @@
     <Compile Include="XWPF\Model\XMLParagraph.cs" />
     <Compile Include="XWPF\Model\XWPFCommentsDecorator.cs" />
     <Compile Include="XWPF\Model\XWPFHeaderFooterPolicy.cs" />
-    <Compile Include="XWPF\Model\XWPFHyperlinkDecorator.cs" />
     <Compile Include="XWPF\Model\XWPFParagraphDecorator.cs" />
     <Compile Include="XWPF\Usermodel\AbstractXWPFSDT.cs" />
     <Compile Include="XWPF\Usermodel\BodyElementType.cs" />
