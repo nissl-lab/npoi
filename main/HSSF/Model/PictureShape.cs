@@ -18,6 +18,7 @@
 
 namespace NPOI.HSSF.Model
 {
+    using System;
     using NPOI.HSSF.Record;
     using NPOI.DDF;
     using NPOI.HSSF.UserModel;
@@ -27,6 +28,7 @@ namespace NPOI.HSSF.Model
     /// Represents a picture shape and Creates all specific low level records.
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
+    [Obsolete("deprecated 3.15 beta 2. Use {@link HSSFPicture} instead.")]
     public class PictureShape: AbstractShape
     {
         private EscherContainerRecord spContainer;
