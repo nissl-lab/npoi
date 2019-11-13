@@ -143,19 +143,16 @@ namespace NPOI.XSSF.UserModel
                 validateName(value);
 
                 int sheetIndex = SheetIndex;
-
-                //Check to ensure no other names have the same case-insensitive name
-                for (int i = 0; i < _workbook.NumberOfNames; i++)
+                int numberOfNames = _workbook.NumberOfNames;
+                //Check to ensure no other names have the same case-insensitive name at the same scope
+                for (int i = 0; i < numberOfNames; i++)
                 {
                     IName nm = _workbook.GetNameAt(i);
-                    if (nm != this)
-                    {
-                        if (value.Equals(nm.NameName, StringComparison.InvariantCultureIgnoreCase) 
+                    if (nm != this && value.Equals(nm.NameName, StringComparison.InvariantCultureIgnoreCase)
                             && sheetIndex == nm.SheetIndex)
-                        {
-                            String msg = "The " + (sheetIndex == -1 ? "workbook" : "sheet") + " already contains this name: " + value;
-                            throw new ArgumentException(msg);
-                        }
+                    {
+                        String msg = "The " + (sheetIndex == -1 ? "workbook" : "sheet") + " already contains this name: " + value;
+                        throw new ArgumentException(msg);
                     }
                 }
                 _ctName.name = value;
