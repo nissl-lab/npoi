@@ -380,10 +380,7 @@ namespace NPOI.XSSF.UserModel
                     if (cell.IsPartOfArrayFormulaGroup)
                     {
                         CellRangeAddress arrayRange = cell.ArrayFormulaRange;
-                        if (arrayRange.NumberOfCells > 1 &&
-                                // region.intersects(arrayRange) is more concise and probably correct. Is it equivalent?
-                                (arrayRange.IsInRange(region.FirstRow, region.FirstColumn) ||
-                                  arrayRange.IsInRange(region.FirstRow, region.FirstColumn)))
+                        if (arrayRange.NumberOfCells > 1 && region.Intersects(arrayRange))
                         {
                             String msg = "The range " + region.FormatAsString() + " intersects with a multi-cell array formula. " +
                                     "You cannot merge cells of an array.";
