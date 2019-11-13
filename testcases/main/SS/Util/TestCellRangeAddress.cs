@@ -107,35 +107,6 @@ namespace TestCases.SS.Util
             }
         }
 
-        [Test]
-        public void TestStoreDeprecated()
-        {
-            CellRangeAddress ref1 = new CellRangeAddress(0, 0, 0, 0);
-
-            //byte[] recordBytes = new byte[CellRangeAddress.ENCODED_SIZE];
-            //// With nothing Set
-            //ref1.Serialize(0, recordBytes);
-            //Assert.AreEqual(recordBytes.Length, data.Length);
-            //for (int i = 0; i < data.Length; i++)
-            //{
-            //    Assert.AreEqual("At offset " + i, 0, recordBytes[i]);
-            //}
-
-            //// Now Set the flags
-            //ref1.FirstRow = (/*setter*/(short)2);
-            //ref1.LastRow = (/*setter*/(short)4);
-            //ref1.FirstColumn = (/*setter*/(short)0);
-            //ref1.LastColumn = (/*setter*/(short)3);
-
-            //// Re-test
-            //ref1.Serialize(0, recordBytes);
-
-            //Assert.AreEqual(recordBytes.Length, data.Length);
-            //for (int i = 0; i < data.Length; i++)
-            //{
-            //    Assert.AreEqual("At offset " + i, data[i], recordBytes[i]);
-            //}
-        }
 
         [Test]
         public void TestCreateIllegal()

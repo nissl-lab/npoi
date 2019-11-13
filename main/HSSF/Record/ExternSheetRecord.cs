@@ -228,11 +228,6 @@ namespace NPOI.HSSF.Record
         {
             return (RefSubRecord)_list[i];
         }
-        [Obsolete]
-        public void AdjustIndex(int extRefIndex, int offset)
-        {
-            GetRef(extRefIndex).AdjustIndex(offset);
-        }
 
         public void RemoveSheet(int sheetIdx)
         {

@@ -59,17 +59,9 @@ namespace NPOI.HSSF.UserModel
 
         }
 
-
         protected IRow row;
         protected ISheet sheet;
         protected IWorkbook workbook;
-        [Obsolete]
-        public HSSFFormulaEvaluator(ISheet sheet, IWorkbook workbook)
-            : this(workbook)
-        {
-            this.sheet = sheet;
-            this.workbook = workbook;
-        }
 
         public HSSFFormulaEvaluator(IWorkbook workbook)
             : this(workbook, null)

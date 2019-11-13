@@ -144,28 +144,7 @@ namespace NPOI.HSSF.Record.Aggregates
 
             records[rowIndex] = null;
         }
-        public CellValueRecordInterface[] GetValueRecords()
-        {
-            ArrayList temp = new ArrayList();
 
-            for (int i = 0; i < records.Length; i++)
-            {
-                CellValueRecordInterface[] rowCells = records[i];
-                if (rowCells == null)
-                {
-                    continue;
-                }
-                for (int j = 0; j < rowCells.Length; j++)
-                {
-                    CellValueRecordInterface cell = rowCells[j];
-                    if (cell != null)
-                    {
-                        temp.Add(cell);
-                    }
-                }
-            }
-             return (CellValueRecordInterface[])temp.ToArray(typeof(CellValueRecordInterface));
-        }
         public int PhysicalNumberOfCells
         {
             get

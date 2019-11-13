@@ -438,24 +438,6 @@ namespace NPOI.HSSF.UserModel
         /// 0-based.  If you ask for a cell that is not defined then
         /// you get a null, unless you have set a different
         /// MissingCellPolicy on the base workbook.
-        /// 
-        /// Short method signature provided to retain binary
-        /// compatibility.
-        /// </summary>
-        /// <param name="cellnum">0 based column number</param>
-        /// <returns>Cell representing that column or null if undefined.</returns>
-        [Obsolete]
-        public ICell GetCell(short cellnum)
-        {
-            int ushortCellNum = cellnum & 0x0000FFFF; // avoid sign extension
-            return GetCell(ushortCellNum);
-        }
-
-        /// <summary>
-        /// Get the hssfcell representing a given column (logical cell)
-        /// 0-based.  If you ask for a cell that is not defined then
-        /// you get a null, unless you have set a different
-        /// MissingCellPolicy on the base workbook.
         /// </summary>
         /// <param name="cellnum">0 based column number</param>
         /// <returns>Cell representing that column or null if undefined.</returns>

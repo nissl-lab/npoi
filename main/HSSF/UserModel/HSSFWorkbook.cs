@@ -574,7 +574,25 @@ namespace NPOI.HSSF.UserModel
             }
             workbook.WindowOne.NumSelectedTabs = ((short)indexes.Length);
         }
-
+        /**
+         * Gets the selected sheets (if more than one, Excel calls these a [Group]). 
+         *
+         * @return indices of selected sheets
+         */
+        public IList<int> GetSelectedTabs()
+        {
+            List<int> indexes = new List<int>();
+            int nSheets = _sheets.Count;
+            for (int i = 0; i < nSheets; i++)
+            {
+                HSSFSheet sheet = GetSheetAt(i) as HSSFSheet;
+                if (sheet.IsSelected)
+                {
+                    indexes.Add(i);
+                }
+            }
+            return indexes.AsReadOnly();
+        }
         /// <summary>
         /// Gets the tab whose data is actually seen when the sheet is opened.
         /// This may be different from the "selected sheet" since excel seems to
@@ -619,11 +637,6 @@ namespace NPOI.HSSF.UserModel
         {
             get { return workbook.WindowOne.FirstVisibleTab; }
             set { workbook.WindowOne.FirstVisibleTab = value;}
-        }
-        [Obsolete("Misleading name - use GetFirstVisibleTab() ")]
-        public short DisplayedTab
-        {
-            get { return (short)FirstVisibleTab; }
         }
 
         /**
@@ -747,20 +760,6 @@ namespace NPOI.HSSF.UserModel
                 }
             }
             return -1;
-        }
-
-        /// <summary>
-        /// Returns the external sheet index of the sheet
-        /// with the given internal index, creating one
-        /// if needed.
-        /// Used by some of the more obscure formula and
-        /// named range things.
-        /// </summary>
-        /// <param name="internalSheetIndex">Index of the internal sheet.</param>
-        /// <returns></returns>
-        public int GetExternalSheetIndex(int internalSheetIndex)
-        {
-            return workbook.CheckExternSheet(internalSheetIndex);
         }
 
         /// <summary>
@@ -1389,17 +1388,6 @@ namespace NPOI.HSSF.UserModel
             return retval;
         }
 
-        [Obsolete("Do not call this method from your applications. Use the methods available in the HSSFRow to Add string HSSFCells")]
-        public int AddSSTString(String str)
-        {
-            return workbook.AddSSTString(new UnicodeString(str));
-        }
-
-        [Obsolete("Do not call this method from your applications. Use the methods available in the HSSFRow to Get string HSSFCells")]
-        public String GetSSTString(int index)
-        {
-            return workbook.GetSSTString(index).String;
-        }
         /**
  * The locator of user-defined functions.
  * By default includes functions from the Excel Analysis Toolpack
@@ -1500,17 +1488,6 @@ namespace NPOI.HSSF.UserModel
         {
             return Workbook.GetNameRecord(nameIndex);
         }
-        /// <summary>
-        /// TODO - make this less cryptic / move elsewhere
-        /// </summary>
-        /// <param name="reFindex">Index to REF entry in EXTERNSHEET record in the Link Table</param>
-        /// <param name="definedNameIndex">zero-based to DEFINEDNAME or EXTERNALNAME record</param>
-        /// <returns>the string representation of the defined or external name</returns>
-        public String ResolveNameXText(int reFindex, int definedNameIndex)
-        {
-            return workbook.ResolveNameXText(reFindex, definedNameIndex);
-        }
-
 
         /// <summary>
         /// Sets the printarea for the sheet provided

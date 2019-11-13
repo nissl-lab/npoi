@@ -128,7 +128,7 @@ namespace NPOI.POIFS.Crypt
         [Test]
         public void TestCertificateEncryption1() {
             POIFSFileSystem fs = new POIFSFileSystem();
-            EncryptionInfo info = new EncryptionInfo(fs, EncryptionMode.Agile, CipherAlgorithm.aes128, HashAlgorithm.sha1, -1, -1, ChainingMode.cbc);
+            EncryptionInfo info = new EncryptionInfo(EncryptionMode.Agile, CipherAlgorithm.aes128, HashAlgorithm.sha1, -1, -1, ChainingMode.cbc);
             AgileEncryptionVerifier aev = (AgileEncryptionVerifier)info.Verifier;
             CertData certData = loadKeystore();
             aev.AddCertificate(certData.x509);

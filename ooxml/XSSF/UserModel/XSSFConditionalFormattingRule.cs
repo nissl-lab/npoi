@@ -368,25 +368,8 @@ namespace NPOI.XSSF.UserModel
         }
         /**
          * Type of conditional formatting rule.
-         * <p>
-         * MUST be one of the IDs of a {@link ConditionType}
-         * </p>
-         *
-         * @return the type of condition
          */
-        public byte ConditionType
-        {
-            get
-            {
-                ConditionType type = ConditionTypeType;
-                if (type != null) return type.Id;
-                return 0;
-            }
-        }
-        /**
-         * Type of conditional formatting rule.
-         */
-        public ConditionType ConditionTypeType
+        public ConditionType ConditionType
         {
             get
             {

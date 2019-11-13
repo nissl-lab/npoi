@@ -260,9 +260,6 @@ namespace TestCases.HSSF.UserModel
             ConfirmActiveSelected(sheet4, false);
 
             wb.SetSelectedTab(1);
-            // see Javadoc, in this case selected means "active"
-            Assert.AreEqual(wb.ActiveSheetIndex, (short)wb.ActiveSheetIndex);
-
 
             // Demonstrate bug 44525:
             // Well... not quite, since isActive + isSelected were also Added in the same bug fix
@@ -954,9 +951,6 @@ namespace TestCases.HSSF.UserModel
 
             wb.SetSelectedTab((short)1);
 
-            // see Javadoc, in this case selected means "active"
-            Assert.AreEqual(wb.ActiveSheetIndex, (short)wb.ActiveSheetIndex);
-
             // Demonstrate bug 44525:
             // Well... not quite, since isActive + isSelected were also Added in the same bug fix
             if (sheet1.IsSelected)
@@ -977,41 +971,12 @@ namespace TestCases.HSSF.UserModel
             ConfirmActiveSelected(sheet4, false);
 
             Assert.AreEqual(0, wb.FirstVisibleTab);
-            //wb.DisplayedTab=((short)2);
-            //Assert.AreEqual(2, wb.FirstVisibleTab);
-            //Assert.AreEqual(2, wb.DisplayedTab);
+            wb.FirstVisibleTab = 2;
+            Assert.AreEqual(2, wb.FirstVisibleTab);
+
+            wb.Close();
         }
 
-        [Test]
-        public void ExternSheetIndex()
-        {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            wb.CreateSheet("Sheet1");
-            wb.CreateSheet("Sheet2");
-
-            Assert.AreEqual(0, wb.GetExternalSheetIndex(0));
-            Assert.AreEqual(1, wb.GetExternalSheetIndex(1));
-
-            //The following methods are obsoleted
-
-            //Assert.AreEqual("Sheet1", wb.FindSheetNameFromExternSheet(0));
-            //Assert.AreEqual("Sheet2", wb.FindSheetNameFromExternSheet(1));
-            ////Assert.AreEqual(null, wb.FindSheetNameFromExternSheet(2));
-
-            //Assert.AreEqual(0, wb.GetSheetIndexFromExternSheetIndex(0));
-            //Assert.AreEqual(1, wb.GetSheetIndexFromExternSheetIndex(1));
-            //Assert.AreEqual(-1, wb.GetSheetIndexFromExternSheetIndex(2));
-            //Assert.AreEqual(-1, wb.GetSheetIndexFromExternSheetIndex(100));
-        }
-        [Test]
-        public void SSTString()
-        {
-            HSSFWorkbook wb = new HSSFWorkbook();
-
-            int sst = wb.AddSSTString("somestring");
-            Assert.AreEqual("somestring", wb.GetSSTString(sst));
-            ////Assert.IsNull(wb.GetSSTString(sst+1));
-        }
         [Test]
         public void Names()
         {

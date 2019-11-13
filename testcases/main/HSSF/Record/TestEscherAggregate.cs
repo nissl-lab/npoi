@@ -67,12 +67,12 @@ namespace TestCases.HSSF.Record
                     "0B 00 0C 00 00 00 11 F0 00 00 00 00";
 
             DrawingRecord d1 = new DrawingRecord();
-            d1.Data = (HexRead.ReadFromString(msoDrawingRecord1));
+            d1.SetData(HexRead.ReadFromString(msoDrawingRecord1));
 
             ObjRecord r1 = new ObjRecord();
 
             DrawingRecord d2 = new DrawingRecord();
-            d2.Data = (HexRead.ReadFromString(msoDrawingRecord2));
+            d2.SetData(HexRead.ReadFromString(msoDrawingRecord2));
 
             ObjRecord r2 = new ObjRecord();
 

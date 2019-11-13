@@ -63,27 +63,20 @@ namespace NPOI.HSSF.Record
         {
             get { return sid; }
         }
-        public byte[] Data
+        public byte[] RecordData
         {
             get
             {
-                //if (contd != null)
-                //{
-                //    byte[] newBuffer = new byte[recordData.Length + contd.Length];
-                //    Array.Copy(recordData, 0, newBuffer, 0, recordData.Length);
-                //    Array.Copy(contd, 0, newBuffer, recordData.Length, contd.Length);
-                //    return newBuffer;
-                //}
                 return recordData;
             }
-            set 
+        }
+        public void SetData(byte[] thedata)
+        {
+            if (thedata == null)
             {
-                if (value == null)
-                {
-                    throw new ArgumentException("data must not be null");
-                }
-                this.recordData = value;
+                throw new ArgumentException("data must not be null");
             }
+            recordData = thedata;
         }
         /**
          * Cloning of drawing records must be executed through HSSFPatriarch, because all id's must be changed

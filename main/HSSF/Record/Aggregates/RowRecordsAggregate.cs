@@ -55,11 +55,7 @@ namespace NPOI.HSSF.Record.Aggregates
             : this(SharedValueManager.CreateEmpty())
         {
         }
-        [Obsolete("deprecated use {@link #getCellValueIterator()} instead")]
-        public CellValueRecordInterface[] GetValueRecords()
-        {
-            return _valuesAgg.GetValueRecords();
-        }
+
         private RowRecordsAggregate(SharedValueManager svm)
         {
             _rowRecords = new SortedList();
@@ -190,8 +186,8 @@ namespace NPOI.HSSF.Record.Aggregates
             }
         }
         /**
-  * Handles UnknownRecords which appear within the row/cell records
-  */
+          * Handles UnknownRecords which appear within the row/cell records
+          */
         private void AddUnknownRecord(Record rec)
         {
             // ony a few distinct record IDs are encountered by the existing POI test cases:

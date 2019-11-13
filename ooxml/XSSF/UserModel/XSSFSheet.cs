@@ -34,6 +34,7 @@ using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel.Helpers;
+using NPOI.POIFS.Crypt;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -1499,7 +1500,7 @@ namespace NPOI.XSSF.UserModel
             if (password != null)
             {
                 CT_SheetProtection sheetProtection = worksheet.AddNewSheetProtection();
-                sheetProtection.password = StringToExcelPassword(password);
+                SetSheetPassword(password, null); // defaults to xor password
                 sheetProtection.sheet = (true);
                 sheetProtection.scenarios = (true);
                 sheetProtection.objects = (true);
@@ -1511,18 +1512,35 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Converts a String to a {@link STUnsignedshortHex} value that Contains the {@link PasswordRecord#hashPassword(String)}
-         * value in hexadecimal format
-         *  
-         * @param password the password string you wish convert to an {@link STUnsignedshortHex}
-         * @return {@link STUnsignedshortHex} that Contains Excel hashed password in Hex format
+         * Sets the sheet password. 
+         * 
+         * @param password if null, the password will be removed
+         * @param hashAlgo if null, the password will be set as XOR password (Excel 2010 and earlier)
+         *  otherwise the given algorithm is used for calculating the hash password (Excel 2013)
          */
-        private string StringToExcelPassword(String password)
+        public void SetSheetPassword(String password, HashAlgorithm hashAlgo)
         {
-            //ST_UnsignedshortHex hexPassword = new ST_UnsignedshortHex();
-            return PasswordRecord.HashPassword(password).ToString("x");
-            
-            //return hexPassword;
+            if (password == null && !IsSheetProtectionEnabled())
+            {
+                return;
+            }
+            //SetPassword(SafeGetProtectionField(), password, hashAlgo, null);
+            throw new NotImplementedException();
+        }
+
+        /**
+         * Validate the password against the stored hash, the hashing method will be determined
+         *  by the existing password attributes
+         * @return true, if the hashes match (... though original password may differ ...)
+         */
+        public bool ValidateSheetPassword(String password)
+        {
+            if (!IsSheetProtectionEnabled())
+            {
+                return (password == null);
+            }
+            //return ValidatePassword(SafeGetProtectionField(), password, null);
+            throw new NotImplementedException();
         }
 
         /**

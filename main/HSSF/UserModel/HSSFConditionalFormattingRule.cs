@@ -294,19 +294,10 @@ namespace NPOI.HSSF.UserModel
         {
             return GetColorScaleFormatting(true);
         }
-
-        public byte ConditionType
-        {
-            get
-            {
-                return cfRuleRecord.ConditionType;
-            }
-        }
-
         /**
 	     * @return -  the conditiontype for the cfrule
 	     */
-        public ConditionType ConditionTypeType
+        public ConditionType ConditionType
         {
             get
             {
