@@ -278,52 +278,74 @@ namespace TestCases.HSSF.UserModel
             ConfirmActiveSelected(sheet3, false);
             ConfirmActiveSelected(sheet4, false);
         }
+        private static List<int> arrayToList(int[] array)
+        {
+            List<int> list = new List<int>(array.Length);
+            foreach (int element in array)
+            {
+                list.Add(element);
+            }
+            return list;
+        }
 
+        private static void assertCollectionsEquals(List<int> expected, List<int> actual)
+        {
+            Assert.AreEqual(expected.Count, actual.Count, "size");
+            foreach (int e in expected)
+            {
+                Assert.IsTrue(actual.Contains(e));
+            }
+            foreach (int a in actual)
+            {
+                Assert.IsTrue(expected.Contains(a));
+            }
+        }
         [Test]
         public void SelectMultiple()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet0 = wb.CreateSheet("Sheet0") as HSSFSheet;
             HSSFSheet sheet1 = wb.CreateSheet("Sheet1") as HSSFSheet;
             HSSFSheet sheet2 = wb.CreateSheet("Sheet2") as HSSFSheet;
             HSSFSheet sheet3 = wb.CreateSheet("Sheet3") as HSSFSheet;
             HSSFSheet sheet4 = wb.CreateSheet("Sheet4") as HSSFSheet;
             HSSFSheet sheet5 = wb.CreateSheet("Sheet5") as HSSFSheet;
-            HSSFSheet sheet6 = wb.CreateSheet("Sheet6") as HSSFSheet;
 
-            wb.SetSelectedTabs(new int[] { 0, 2, 3 });
+            List<int> selected = arrayToList(new int[] { 0, 2, 3 });
+            wb.SetSelectedTabs(selected);
 
+            CollectionAssert.AreEqual(selected, wb.GetSelectedTabs());
+            Assert.AreEqual(true, sheet0.IsSelected);
+            Assert.AreEqual(false, sheet1.IsSelected);
+            Assert.AreEqual(true, sheet2.IsSelected);
+            Assert.AreEqual(true, sheet3.IsSelected);
+            Assert.AreEqual(false, sheet4.IsSelected);
+            Assert.AreEqual(false, sheet5.IsSelected);
+
+            selected = arrayToList(new int[] { 1, 3, 5 });
+            wb.SetSelectedTabs(selected);
+
+            // previous selection should be cleared
+            CollectionAssert.AreEqual(selected, wb.GetSelectedTabs());
+            Assert.AreEqual(false, sheet0.IsSelected);
             Assert.AreEqual(true, sheet1.IsSelected);
             Assert.AreEqual(false, sheet2.IsSelected);
             Assert.AreEqual(true, sheet3.IsSelected);
-            Assert.AreEqual(true, sheet4.IsSelected);
-            Assert.AreEqual(false, sheet5.IsSelected);
-            Assert.AreEqual(false, sheet6.IsSelected);
-
-            wb.SetSelectedTabs(new int[] { 1, 3, 5 });
-
-            Assert.AreEqual(false, sheet1.IsSelected);
-            Assert.AreEqual(true, sheet2.IsSelected);
-            Assert.AreEqual(false, sheet3.IsSelected);
-            Assert.AreEqual(true, sheet4.IsSelected);
-            Assert.AreEqual(false, sheet5.IsSelected);
-            Assert.AreEqual(true, sheet6.IsSelected);
-
-            Assert.AreEqual(true, sheet1.IsActive);
+            Assert.AreEqual(false, sheet4.IsSelected);
+            Assert.AreEqual(true, sheet5.IsSelected);
+            Assert.AreEqual(true, sheet0.IsActive);
             Assert.AreEqual(false, sheet2.IsActive);
 
-
-            Assert.AreEqual(true, sheet1.IsActive);
-            Assert.AreEqual(false, sheet3.IsActive);
             wb.SetActiveSheet(2);
-            Assert.AreEqual(false, sheet1.IsActive);
-            Assert.AreEqual(true, sheet3.IsActive);
+            Assert.AreEqual(false, sheet0.IsActive);
+            Assert.AreEqual(true, sheet2.IsActive);
 
-            
+
             /*{ // helpful if viewing this workbook in excel:
+                sheet0.createRow(0).createCell(0).setCellValue(new HSSFRichTextString("Sheet0"));
                 sheet1.CreateRow(0).CreateCell(0).SetCellValue(new HSSFRichTextString("Sheet1"));
                 sheet2.CreateRow(0).CreateCell(0).SetCellValue(new HSSFRichTextString("Sheet2"));
                 sheet3.CreateRow(0).CreateCell(0).SetCellValue(new HSSFRichTextString("Sheet3"));
-                sheet4.CreateRow(0).CreateCell(0).SetCellValue(new HSSFRichTextString("Sheet4"));
 
                 try
                 {

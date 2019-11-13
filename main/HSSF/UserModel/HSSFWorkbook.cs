@@ -552,27 +552,33 @@ namespace NPOI.HSSF.UserModel
         /// <param name="indexes">The indexes.</param>
         public void SetSelectedTabs(int[] indexes)
         {
+            IList<int> list = new List<int>(indexes);
+            SetSelectedTabs(list);
+        }
 
+        /**
+         * Selects multiple sheets as a group. This is distinct from
+         * the 'active' sheet (which is the sheet with focus).
+         * Unselects sheets that are not in <code>indexes</code>.
+         *
+         * @param indexes
+         */
+        public void SetSelectedTabs(IList<int> indexes)
+        { 
             foreach (int index in indexes)
             {
                 ValidateSheetIndex(index);
             }
+            // ignore duplicates
+            ISet<int> set = new HashSet<int>(indexes);
             int nSheets = _sheets.Count;
             for (int i = 0; i < nSheets; i++)
             {
-                bool bSelect = false;
-                foreach (int index in indexes)
-                {
-                    if (index == i)
-                    {
-                        bSelect = true;
-                        break;
-                    }
-
-                }
+                bool bSelect =  set.Contains(i);
                 GetSheetAt(i).IsSelected = (bSelect);
             }
-            workbook.WindowOne.NumSelectedTabs = ((short)indexes.Length);
+            // this is true only if all values in set were valid sheet indexes (between 0 and nSheets-1, inclusive)
+            workbook.WindowOne.NumSelectedTabs = ((short)indexes.Count);
         }
         /**
          * Gets the selected sheets (if more than one, Excel calls these a [Group]). 
