@@ -128,6 +128,10 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(cellColumn, comment.Column);
             Assert.IsFalse(comment.Visible);
 
+            // Test Comment.equals and Comment.hashCode
+            Assert.AreEqual(comment, cell.CellComment);
+            Assert.AreEqual(comment.GetHashCode(), cell.CellComment.GetHashCode());
+
             wb3.Close();
         }
 
