@@ -34,8 +34,12 @@ namespace NPOI.SS.Formula.Eval
      *  
      */
 
-    public abstract class FunctionEval
+    public sealed class FunctionEval
     {
+        private FunctionEval()
+        {
+            // no instances of this class
+        }
         /**
          * Some function IDs that require special treatment
          */
@@ -54,10 +58,6 @@ namespace NPOI.SS.Formula.Eval
             /** 255 */
             public const int EXTERNAL_FUNC = FunctionMetadataRegistry.FUNCTION_INDEX_EXTERNAL;
         }
-
-        public abstract Eval Evaluate(Eval[] evals, int srcCellRow, short srcCellCol);
-
-
         protected static Function[] functions = ProduceFunctions();
 
         // fix warning CS0169 "never used": private static Hashtable freeRefFunctionsByIdMap;
