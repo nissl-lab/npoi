@@ -269,14 +269,6 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             return parameters[key];
         }
 
-        /**
-     * @deprecated Use {@link #getParameter(String)} instead
-     */
-        public String GetParameters(String key)
-        {
-            return GetParameter(key);
-        }
-
         #region IComparable Members
 
         public int CompareTo(object obj)
