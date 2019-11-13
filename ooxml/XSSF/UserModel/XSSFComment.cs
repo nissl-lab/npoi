@@ -257,6 +257,21 @@ namespace NPOI.XSSF.UserModel
         {
             return _vmlShape;
         }
+
+        public override bool Equals(Object obj)
+        {
+            if (!(obj is XSSFComment)) {
+                return false;
+            }
+            XSSFComment other = (XSSFComment)obj;
+            return ((GetCTComment() == other.GetCTComment()) &&
+                    (GetCTShape() == other.GetCTShape()));
+        }
+
+        public override int GetHashCode()
+        {
+            return ((Row * 17) + Column) * 31;
+        }
     }
 }
 

@@ -328,5 +328,18 @@ namespace NPOI.HSSF.UserModel
                 SetPropertyValue(new EscherSimpleProperty(EscherProperties.GROUPSHAPE__PRINT, false, false, property.PropertyValue & GROUP_SHAPE_NOT_HIDDEN_MASK));
             }
         }
+        public override bool Equals(Object obj)
+        {
+            if (!(obj is HSSFComment))
+            {
+                return false;
+            }
+            HSSFComment other = (HSSFComment)obj;
+            return NoteRecord.Equals(other.NoteRecord);
+        }
+        public override int GetHashCode()
+        {
+            return ((Row * 17) + Column) * 31;
+        }
     }
 }
