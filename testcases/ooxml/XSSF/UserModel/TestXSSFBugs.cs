@@ -3288,6 +3288,26 @@ namespace NPOI.XSSF.UserModel
 
             nwb.Close();
         }
+
+        [Ignore("currently Assert.Fails on POI 3.15 beta 2")]
+        [Test]
+        public void Test55273()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("ExcelTables.xlsx");
+            ISheet sheet = wb.GetSheet("ExcelTable");
+            IName name = wb.GetName("TableAsRangeName");
+            Assert.AreEqual("TableName[#All]", name.RefersToFormula);
+            // POI 3.15-beta 2 (2016-06-15): getSheetName throws IllegalArgumentException: Invalid CellReference: TableName[#All]
+            Assert.AreEqual("TableName", name.SheetName);
+            XSSFSheet xsheet = (XSSFSheet)sheet;
+            List<XSSFTable> tables = xsheet.GetTables();
+            Assert.AreEqual(2, tables.Count); //FIXME: how many tables are there in this spreadsheet?
+            Assert.AreEqual("Table1", tables[0].Name); //FIXME: what is the table name?
+            Assert.AreEqual("Table2", tables[1].Name); //FIXME: what is the table name?
+
+            wb.Close();
+        }
+
     }
 
 }
