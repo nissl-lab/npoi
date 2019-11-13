@@ -118,9 +118,10 @@ namespace NPOI.SS.UserModel
                         Array.Copy(rgb, 1, tmp, 0, 3);
                         rgb = tmp;
                     }
+                    double tint = Tint;
                     for (int i = 0; i < rgb.Length; i++)
                     {
-                        rgb[i] = ApplyTint(rgb[i] & 0xFF, Tint);
+                        rgb[i] = ApplyTint(rgb[i] & 0xFF, tint);
                     }
                 }
                 return rgb;
