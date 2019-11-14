@@ -34,7 +34,7 @@ namespace NPOI
     /// </summary>
     /// <remarks>@author Nick Burch</remarks>
     [Serializable]
-    public abstract class POIDocument
+    public abstract class POIDocument : ICloseable
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(POIDocument));
         /** Holds metadata on our document */
@@ -353,5 +353,28 @@ namespace NPOI
         /// </summary>
         /// <param name="out1">The stream to write to.</param>
         public abstract void Write(Stream out1);
+
+        /**
+         * Closes the underlying {@link NPOIFSFileSystem} from which
+         *  the document was read, if any. Has no effect on documents
+         *  opened from an InputStream, or newly created ones.
+         * 
+         * Once {@link #close()} has been called, no further operations
+         *  should be called on the document.
+         */
+        public virtual void Close()
+        {
+            if (directory != null) {
+                if (directory.NFileSystem != null) {
+                    directory.NFileSystem.Close();
+                    directory = null;
+                }
+            }
+        }
+
+        public DirectoryNode Directory
+        {
+            get { return directory; }
+        }
     }
 }

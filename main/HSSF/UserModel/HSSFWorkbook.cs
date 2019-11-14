@@ -1287,17 +1287,13 @@ namespace NPOI.HSSF.UserModel
          * Closes the underlying {@link NPOIFSFileSystem} from which
          *  the Workbook was read, if any. Has no effect on Workbooks
          *  opened from an InputStream, or newly created ones.
+         *  Once {@link #close()} has been called, no further 
+         *  operations, updates or reads should be performed on the 
+         *  Workbook.
          */
-        public void Close()
+        public override void Close()
         {
-            if (directory != null)
-            {
-                if (directory.NFileSystem != null)
-                {
-                    directory.NFileSystem.Close();
-                    directory = null;
-                }
-            }
+            base.Close();
         }
 
         /// <summary>
