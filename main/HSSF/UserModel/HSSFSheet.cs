@@ -722,9 +722,7 @@ namespace NPOI.HSSF.UserModel
                     if (cell.IsPartOfArrayFormulaGroup)
                     {
                         CellRangeAddress arrayRange = cell.ArrayFormulaRange;
-                        if (arrayRange.NumberOfCells > 1 &&
-                                (arrayRange.IsInRange(region.FirstRow, region.FirstColumn) ||
-                                  arrayRange.IsInRange(region.FirstRow, region.FirstColumn)))
+                        if (arrayRange.NumberOfCells > 1 && region.Intersects(arrayRange))
                         {
                             String msg = "The range " + region.FormatAsString() + " intersects with a multi-cell array formula. " +
                                     "You cannot merge cells of an array.";

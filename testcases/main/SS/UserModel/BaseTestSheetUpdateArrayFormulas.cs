@@ -505,7 +505,7 @@ namespace TestCases.SS.UserModel
             workbook.Close();
         }
         [Test]
-        public void TestModifyArrayCells_mergeCells()
+        public void TestModifyArrayCells_mergeCellsSingle()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             ISheet sheet = workbook.CreateSheet();
@@ -520,25 +520,63 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(CellType.Formula, scell.CellType);
             Assert.IsTrue(scell.IsPartOfArrayFormulaGroup);
             Assert.AreEqual(1, sheet.NumMergedRegions);
-
-            //we cannot merge cells included in an array formula
-            ICellRange<ICell> mrange =
-                    sheet.SetArrayFormula("A1:A3*B1:B3", CellRangeAddress.ValueOf("C1:C3"));
-            CellRangeAddress cra = CellRangeAddress.ValueOf("C1:C3");
-            try
-            {
-                sheet.AddMergedRegion(cra);
-                Assert.Fail("expected exception");
-            }
-            catch (InvalidOperationException e)
-            {
-                String msg = "The range " + cra.FormatAsString() + " intersects with a multi-cell array formula. You cannot merge cells of an array.";
-                Assert.AreEqual(msg, e.Message);
-            }
-            //the number of merged regions remains the same
-            Assert.AreEqual(1, sheet.NumMergedRegions);
             workbook.Close();
         }
+
+        [Test]
+        public void testModifyArrayCells_mergeCellsMulti()
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            int expectedNumMergedRegions = 0;
+            Assert.AreEqual(expectedNumMergedRegions, sheet.NumMergedRegions);
+            // we cannot merge cells included in an array formula
+            sheet.SetArrayFormula("A1:A4*B1:B4", CellRangeAddress.ValueOf("C2:F5"));
+            foreach (String ref1 in Arrays.AsList(
+                    "C2:F5", // identity
+                    "D3:E4", "B1:G6", // contains
+                    "B1:C2", "F1:G2", "F5:G6", "B5:C6", // 1x1 corner intersection
+                    "B1:C6", "B1:G2", "F1:G6", "B5:G6", // 1-row/1-column intersection
+                    "B1:D3", "E1:G3", "E4:G6", "B4:D6", // 2x2 corner intersection
+                    "B1:D6", "B1:G3", "E1:G6", "B4:G6"  // 2-row/2-column intersection
+            )) {
+                CellRangeAddress cra = CellRangeAddress.ValueOf(ref1);
+                try
+                {
+                    sheet.AddMergedRegion(cra);
+                    Assert.Fail("expected exception with ref " + ref1);
+                }
+                catch (IllegalStateException e)
+                {
+                    String msg = "The range " + cra.FormatAsString() + " intersects with a multi-cell array formula. You cannot merge cells of an array.";
+                    Assert.AreEqual(msg, e.Message);
+                }
+            }
+            //the number of merged regions remains the same
+            Assert.AreEqual(expectedNumMergedRegions, sheet.NumMergedRegions);
+
+            // we can merge non-intersecting cells
+            foreach (String ref1 in Arrays.AsList(
+                    "C1:F1", //above
+                    "G2:G5", //right
+                    "C6:F6",  //bottom
+                    "B2:B5", "H7:J9")) {
+                CellRangeAddress cra = CellRangeAddress.ValueOf(ref1);
+                try
+                {
+                    sheet.AddMergedRegion(cra);
+                    expectedNumMergedRegions++;
+                    Assert.AreEqual(expectedNumMergedRegions, sheet.NumMergedRegions);
+                }
+                catch (IllegalStateException e)
+                {
+                    Assert.Fail("did not expect exception with ref: " + ref1 +"\n" + e.Message);
+                }
+            }
+
+            workbook.Close();
+        }
+
         [Test]
         public void TestModifyArrayCells_ShiftRows()
         {

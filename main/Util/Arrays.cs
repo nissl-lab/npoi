@@ -123,6 +123,14 @@ namespace NPOI.Util
             }
             return al;
         }
+        public static ArrayList AsList<T>(params T[] arr)
+        {
+            if (arr.Length <= 0)
+                return new ArrayList();
+            ArrayList al = new ArrayList(arr.Length);
+            al.AddRange(arr);
+            return al;
+        }
         /// <summary>
         /// Fills the specified array.
         /// </summary>
