@@ -1113,10 +1113,20 @@ namespace NPOI.HSSF.UserModel
         }
 
         /// <summary>
+        /// get or set whether row and column headings are printed.
+        /// </summary>
+        /// <value>row and column headings are printed</value>
+        public bool IsPrintRowAndColumnHeadings
+        {
+            get { return Sheet.PrintHeaders.PrintHeaders; }
+            set { Sheet.PrintHeaders.PrintHeaders = value; }
+        }
+
+        /// <summary>
         /// Gets the print setup object.
         /// </summary>
         /// <value>The user model for the print setup object.</value>
-        public NPOI.SS.UserModel.IPrintSetup PrintSetup
+        public IPrintSetup PrintSetup
         {
             get { return new HSSFPrintSetup(this._sheet.PageSettings.PrintSetup); }
         }
@@ -1125,7 +1135,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets the user model for the document header.
         /// </summary>
         /// <value>The Document header.</value>
-        public NPOI.SS.UserModel.IHeader Header
+        public IHeader Header
         {
             get { return new HSSFHeader(this._sheet.PageSettings); }
         }
@@ -1134,7 +1144,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets the user model for the document footer.
         /// </summary>
         /// <value>The Document footer.</value>
-        public NPOI.SS.UserModel.IFooter Footer
+        public IFooter Footer
         {
             get { return new HSSFFooter(this._sheet.PageSettings); }
         }

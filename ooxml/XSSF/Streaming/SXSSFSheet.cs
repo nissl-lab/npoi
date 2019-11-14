@@ -258,7 +258,22 @@ namespace NPOI.XSSF.Streaming
                 _sh.IsPrintGridlines = value;
             }
         }
-
+        /**
+         * Returns whether row and column headings are printed.
+         *
+         * @return whether row and column headings are printed
+         */
+        public bool IsPrintRowAndColumnHeadings
+        {
+            get
+            {
+                return _sh.IsPrintRowAndColumnHeadings;
+            }
+            set
+            {
+                _sh.IsPrintRowAndColumnHeadings = value;
+            }
+        }
         public bool IsRightToLeft
         {
             get

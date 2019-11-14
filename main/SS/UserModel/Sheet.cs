@@ -354,6 +354,14 @@ namespace NPOI.SS.UserModel
         bool IsPrintGridlines { get; set; }
 
         /// <summary>
+        /// Get or set the flag indicating whether this sheet prints the
+        /// row and column headings when printing.
+        /// 
+        /// return true if this sheet prints row and column headings.
+        /// </summary>
+        bool IsPrintRowAndColumnHeadings { get; set; }
+
+        /// <summary>
         /// Gets the print Setup object.
         /// </summary>
         /// <returns>The user model for the print Setup object.</returns>

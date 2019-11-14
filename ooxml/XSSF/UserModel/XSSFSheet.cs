@@ -1967,6 +1967,27 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+
+        /**
+         * Returns whether row and column headings are printed.
+         *
+         * @return whether row and column headings are printed
+         */
+        public bool IsPrintRowAndColumnHeadings
+        {
+            get
+            {
+                CT_PrintOptions opts = worksheet.printOptions;
+                return opts != null && opts.headings;
+            }
+            set
+            {
+                CT_PrintOptions opts = worksheet.IsSetPrintOptions() ?
+                    worksheet.printOptions : worksheet.AddNewPrintOptions();
+                opts.headings = value;
+            }
+        }
+
         /**
          * Tests if there is a page break at the indicated row
          *

@@ -739,7 +739,7 @@ namespace TestCases.SS.UserModel
         }
 
         /**
-         * Test basic display properties
+         * Test basic display and print properties
          */
         [Test]
         public void TestSheetProperties()
@@ -762,6 +762,10 @@ namespace TestCases.SS.UserModel
             Assert.IsFalse(sheet.IsPrintGridlines);
             sheet.IsPrintGridlines = (/*setter*/true);
             Assert.IsTrue(sheet.IsPrintGridlines);
+
+            Assert.IsFalse(sheet.IsPrintRowAndColumnHeadings);
+            sheet.IsPrintRowAndColumnHeadings = (true);
+            Assert.IsTrue(sheet.IsPrintRowAndColumnHeadings);
 
             Assert.IsFalse(sheet.DisplayFormulas);
             sheet.DisplayFormulas = (/*setter*/true);

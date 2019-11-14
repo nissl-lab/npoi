@@ -70,6 +70,8 @@ namespace NPOI.HSSF.Model
         [NonSerialized]
         protected PrintGridlinesRecord printGridlines = null;
         [NonSerialized]
+        protected PrintHeadersRecord printHeaders = null;
+        [NonSerialized]
         protected WindowTwoRecord windowTwo = null;
         [NonSerialized]
         protected MergeCellsRecord merged = null;
@@ -383,6 +385,10 @@ namespace NPOI.HSSF.Model
                 {
                     printGridlines = (PrintGridlinesRecord)rec;
                 }
+                else if (recSid == PrintHeadersRecord.sid)
+                {
+                    printHeaders = (PrintHeadersRecord)rec;
+                }
                 else if (recSid == GridsetRecord.sid)
                 {
                     gridset = (GridsetRecord)rec;
@@ -484,7 +490,8 @@ namespace NPOI.HSSF.Model
             records.Add(CreateIteration());
             records.Add(CreateDelta());
             records.Add(CreateSaveRecalc());
-            records.Add(CreatePrintHeaders());
+            printHeaders = CreatePrintHeaders();
+            records.Add(printHeaders);
             printGridlines = CreatePrintGridlines();
             records.Add(printGridlines);
             gridset = CreateGridset();
@@ -888,7 +895,6 @@ namespace NPOI.HSSF.Model
          * Get all the value records (from LOC). Records will be returned from the first
          *  record (starting at LOC) which is a value record.
          *
-         * <P>
          * This method is "loc" sensitive.  Meaning you need to set LOC to where you
          * want it to start searching.  If you don't know do this: setLoc(getDimsLoc).
          * When adding several rows you can just start at the last one by leaving loc
@@ -963,7 +969,7 @@ namespace NPOI.HSSF.Model
         /// Creates the BOF record
         /// </summary>
         /// <returns>record containing a BOFRecord</returns>
-        public static Record CreateBOF()
+        public static BOFRecord CreateBOF()
         {
             BOFRecord retval = new BOFRecord();
 
@@ -981,7 +987,7 @@ namespace NPOI.HSSF.Model
         /// Creates the Index record  - not currently used
         /// </summary>
         /// <returns>record containing a IndexRecord</returns>
-        protected Record CreateIndex()
+        private static IndexRecord CreateIndex()
         {
             IndexRecord retval = new IndexRecord();
 
@@ -994,7 +1000,7 @@ namespace NPOI.HSSF.Model
         /// Creates the CalcMode record and Sets it to 1 (automatic formula caculation)
         /// </summary>
         /// <returns>record containing a CalcModeRecord</returns>
-        protected Record CreateCalcMode()
+        private static CalcModeRecord CreateCalcMode()
         {
             CalcModeRecord retval = new CalcModeRecord();
 
@@ -1006,7 +1012,7 @@ namespace NPOI.HSSF.Model
         /// Creates the CalcCount record and Sets it to 0x64 (default number of iterations)
         /// </summary>
         /// <returns>record containing a CalcCountRecord</returns>
-        protected Record CreateCalcCount()
+        private static CalcCountRecord CreateCalcCount()
         {
             CalcCountRecord retval = new CalcCountRecord();
 
@@ -1018,7 +1024,7 @@ namespace NPOI.HSSF.Model
         /// Creates the RefMode record and Sets it to A1 Mode (default reference mode)
         /// </summary>
         /// <returns>record containing a RefModeRecord</returns>
-        protected Record CreateRefMode()
+        private static RefModeRecord CreateRefMode()
         {
             RefModeRecord retval = new RefModeRecord();
 
@@ -1030,7 +1036,7 @@ namespace NPOI.HSSF.Model
         /// Creates the Iteration record and Sets it to false (don't iteratively calculate formulas)
         /// </summary>
         /// <returns>record containing a IterationRecord</returns>
-        protected Record CreateIteration()
+        private static IterationRecord CreateIteration()
         {
             return new IterationRecord(false);
         }
@@ -1039,7 +1045,7 @@ namespace NPOI.HSSF.Model
         /// Creates the Delta record and Sets it to 0.0010 (default accuracy)
         /// </summary>
         /// <returns>record containing a DeltaRecord</returns>
-        protected Record CreateDelta()
+        private static DeltaRecord CreateDelta()
         {
             return new DeltaRecord(DeltaRecord.DEFAULT_VALUE);            
         }
@@ -1048,7 +1054,7 @@ namespace NPOI.HSSF.Model
         /// Creates the SaveRecalc record and Sets it to true (recalculate before saving)
         /// </summary>
         /// <returns>record containing a SaveRecalcRecord</returns>
-        protected Record CreateSaveRecalc()
+        private static SaveRecalcRecord CreateSaveRecalc()
         {
             SaveRecalcRecord retval = new SaveRecalcRecord();
 
@@ -1060,7 +1066,7 @@ namespace NPOI.HSSF.Model
         /// Creates the PrintHeaders record and Sets it to false (we don't Create headers yet so why print them)
         /// </summary>
         /// <returns>record containing a PrintHeadersRecord</returns>
-        protected Record CreatePrintHeaders()
+        private static PrintHeadersRecord CreatePrintHeaders()
         {
             PrintHeadersRecord retval = new PrintHeadersRecord();
 
@@ -1073,7 +1079,7 @@ namespace NPOI.HSSF.Model
         /// tell this does the same thing as the GridsetRecord
         /// </summary>
         /// <returns>record containing a PrintGridlinesRecord</returns>
-        protected PrintGridlinesRecord CreatePrintGridlines()
+        private static PrintGridlinesRecord CreatePrintGridlines()
         {
             PrintGridlinesRecord retval = new PrintGridlinesRecord();
 
@@ -1085,7 +1091,7 @@ namespace NPOI.HSSF.Model
         /// Creates the GridSet record and Sets it to true (user has mucked with the gridlines)
         /// </summary>
         /// <returns>record containing a GridsetRecord</returns>
-        protected GridsetRecord CreateGridset()
+        private static GridsetRecord CreateGridset()
         {
             GridsetRecord retval = new GridsetRecord();
 
@@ -1097,7 +1103,7 @@ namespace NPOI.HSSF.Model
         /// Creates the Guts record and Sets leftrow/topcol guttter and rowlevelmax/collevelmax to 0
         /// </summary>
         /// <returns>record containing a GutsRecordRecord</returns>
-        protected GutsRecord CreateGuts()
+        private static GutsRecord CreateGuts()
         {
             GutsRecord retval = new GutsRecord();
 
@@ -1113,7 +1119,7 @@ namespace NPOI.HSSF.Model
         /// <see cref="NPOI.HSSF.Record.DefaultRowHeightRecord"/>
         /// <see cref="NPOI.HSSF.Record.Record"/>
         /// <returns>record containing a DefaultRowHeightRecord</returns>
-        protected DefaultRowHeightRecord CreateDefaultRowHeight()
+        private static DefaultRowHeightRecord CreateDefaultRowHeight()
         {
             DefaultRowHeightRecord retval = new DefaultRowHeightRecord();
 
@@ -1129,7 +1135,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a WSBoolRecord
          */
 
-        protected Record CreateWSBool()
+        private static WSBoolRecord CreateWSBool()
         {
             WSBoolRecord retval = new WSBoolRecord();
 
@@ -1145,7 +1151,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a HCenterRecord
          */
 
-        protected Record CreateHCenter()
+        private static HCenterRecord CreateHCenter()
         {
             HCenterRecord retval = new HCenterRecord();
 
@@ -1160,7 +1166,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a VCenterRecord
          */
 
-        protected Record CreateVCenter()
+        private static VCenterRecord CreateVCenter()
         {
             VCenterRecord retval = new VCenterRecord();
 
@@ -1175,7 +1181,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a PrintSetupRecord
          */
 
-        protected Record CreatePrintSetup()
+        private static PrintSetupRecord CreatePrintSetup()
         {
             PrintSetupRecord retval = new PrintSetupRecord();
 
@@ -1200,7 +1206,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a DefaultColWidthRecord
          */
 
-        protected DefaultColWidthRecord CreateDefaultColWidth()
+        private static DefaultColWidthRecord CreateDefaultColWidth()
         {
             DefaultColWidthRecord retval = new DefaultColWidthRecord();
 
@@ -1750,6 +1756,16 @@ namespace NPOI.HSSF.Model
         }
 
         /**
+         * Returns the PrintHeadersRecord.
+         * @return PrintHeadersRecord for the sheet.
+         */
+        public PrintHeadersRecord PrintHeaders
+        {
+            get { return printHeaders; }
+            set { printHeaders = value; }
+        }
+
+        /**
          * Sets whether the sheet is selected
          * @param sel True to select the sheet, false otherwise.
          */
@@ -1980,6 +1996,15 @@ namespace NPOI.HSSF.Model
             }
         }
 
+        /**
+         * Returns if RowColHeadings are displayed.
+         * @return whether RowColHeadings are displayed
+         */
+        public bool IsPrintRowColHeadings
+        {
+            get { return windowTwo.DisplayRowColHeadings; }
+            set { windowTwo.DisplayRowColHeadings = (value); }
+        }
 
         /**
          * @return whether an Uncalced record must be Inserted or not at generation
