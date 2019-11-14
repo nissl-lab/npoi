@@ -68,7 +68,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                 }
 
                 //only shift if the region outside the Shifted rows is not merged too
-                if (!ContainsCell(merged, startRow - 1, 0) && !ContainsCell(merged, endRow + 1, 0))
+                if (!merged.ContainsRow(startRow - 1) && !merged.ContainsRow(endRow + 1))
                 {
                     merged.FirstRow = (merged.FirstRow + n);
                     merged.LastRow = (merged.LastRow + n);
