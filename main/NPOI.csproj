@@ -514,7 +514,7 @@
     <Compile Include="HSSF\Record\CFHeaderRecord.cs" />
     <Compile Include="HSSF\Record\CFRuleRecord.cs" />
     <Compile Include="HSSF\Record\CF\BorderFormatting.cs" />
-    <Compile Include="HSSF\Record\CF\CellRangeUtil.cs" />
+    <Compile Include="SS\Util\CellRangeUtil.cs" />
     <Compile Include="HSSF\Record\CF\FontFormatting.cs" />
     <Compile Include="HSSF\Record\CF\PatternFormatting.cs" />
     <Compile Include="HSSF\Record\Chart\AreaFormatRecord.cs" />

@@ -15,17 +15,13 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.Record.CF
+namespace NPOI.SS.Util
 {
     using System;
     using System.Collections;
     using NPOI.SS.Util;
     using System.Collections.Generic;
 
-    /**
-     * 
-     * @author Dmitriy Kumshayev
-     */
     public class CellRangeUtil
     {
 
