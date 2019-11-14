@@ -363,6 +363,8 @@ namespace NPOI.XSSF.UserModel
          */
         private void ValidateArrayFormulas(CellRangeAddress region)
         {
+            // FIXME: this may be faster if it looped over array formulas directly rather than looping over each cell in
+            // the region and searching if that cell belongs to an array formula
             int firstRow = region.FirstRow;
             int firstColumn = region.FirstColumn;
             int lastRow = region.LastRow;
@@ -370,11 +372,10 @@ namespace NPOI.XSSF.UserModel
             // for each cell in sheet, if cell belongs to an array formula, check if merged region intersects array formula cells
             for (int rowIn = firstRow; rowIn <= lastRow; rowIn++)
             {
+                IRow row = GetRow(rowIn);
+                if (row == null) continue;
                 for (int colIn = firstColumn; colIn <= lastColumn; colIn++)
                 {
-                    IRow row = GetRow(rowIn);
-                    if (row == null) continue;
-
                     ICell cell = row.GetCell(colIn);
                     if (cell == null) continue;
 
@@ -2723,7 +2724,7 @@ namespace NPOI.XSSF.UserModel
          *  </code>
          *
          *  which gives <code>7.29</code>.
-         *
+         * </p>
          * @param columnIndex - the column to set (0-based)
          * @param width - the width in units of 1/256th of a character width
          * @throws ArgumentException if width > 255*256 (the maximum column width in Excel is 255 characters)
@@ -2985,7 +2986,7 @@ namespace NPOI.XSSF.UserModel
 
         /**
          * Window zoom magnification for current view representing percent values.
-         * Valid values range from 10 to 400. Horizontal & Vertical scale toGether.
+         * Valid values range from 10 to 400. Horizontal &amp; Vertical scale toGether.
          *
          * For example:
          * <pre>
@@ -3146,7 +3147,7 @@ namespace NPOI.XSSF.UserModel
          *
          * <p>
          * Additionally Shifts merged regions that are completely defined in these
-         * rows (ie. merged 2 cells on a row to be Shifted).
+         * rows (ie. merged 2 cells on a row to be Shifted).</p>
          * @param startRow the row to start Shifting
          * @param endRow the row to end Shifting
          * @param n the number of rows to shift
@@ -3163,8 +3164,8 @@ namespace NPOI.XSSF.UserModel
          *
          * <p>
          * Additionally Shifts merged regions that are completely defined in these
-         * rows (ie. merged 2 cells on a row to be Shifted).
-         * <p>
+         * rows (ie. merged 2 cells on a row to be Shifted).</p>
+         * 
          * @param startRow the row to start Shifting
          * @param endRow the row to end Shifting
          * @param n the number of rows to shift

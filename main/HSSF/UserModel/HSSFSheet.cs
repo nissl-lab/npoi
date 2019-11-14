@@ -705,17 +705,19 @@ namespace NPOI.HSSF.UserModel
        
         private void ValidateArrayFormulas(CellRangeAddress region)
         {
+            // FIXME: this may be faster if it looped over array formulas directly rather than looping over each cell in
+            // the region and searching if that cell belongs to an array formula
             int firstRow = region.FirstRow;
             int firstColumn = region.FirstColumn;
             int lastRow = region.LastRow;
             int lastColumn = region.LastColumn;
             for (int rowIn = firstRow; rowIn <= lastRow; rowIn++)
             {
+                HSSFRow row = (HSSFRow)GetRow(rowIn);
+                if (row == null)
+                    continue;
                 for (int colIn = firstColumn; colIn <= lastColumn; colIn++)
                 {
-                    HSSFRow row = (HSSFRow)GetRow(rowIn);
-                    if (row == null) continue;
-
                     HSSFCell cell = (HSSFCell)row.GetCell(colIn);
                     if (cell == null) continue;
 
