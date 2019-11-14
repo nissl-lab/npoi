@@ -533,7 +533,7 @@ namespace NPOI.SS.Util
         internal static Font IFont2Font(IFont font1)
         {
             FontStyle style = FontStyle.Regular;
-            if (font1.Boldweight == (short)FontBoldWeight.Bold)
+            if (font1.IsBold)
             {
                 style |= FontStyle.Bold;
             }
@@ -553,6 +553,7 @@ namespace NPOI.SS.Util
         /// <param name="rowIx">the row to check</param>
         /// <param name="colIx">the column to check</param>
         /// <returns>return true if the range contains the cell [rowIx, colIx]</returns>
+        [Obsolete("deprecated 3.15 beta 2. Use {@link CellRangeAddressBase#isInRange(int, int)}.")]
         public static bool ContainsCell(CellRangeAddress cr, int rowIx, int colIx)
         {
             return cr.IsInRange(rowIx, colIx);
