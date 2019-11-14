@@ -32,11 +32,11 @@ namespace TestCases.SS.Util
     public class TestCellRangeAddress
     {
         byte[] data = new byte[] {
-     (byte)0x02,(byte)0x00, 
-     (byte)0x04,(byte)0x00, 
-     (byte)0x00,(byte)0x00, 
-     (byte)0x03,(byte)0x00, 
- };
+             (byte)0x02,(byte)0x00, 
+             (byte)0x04,(byte)0x00, 
+             (byte)0x00,(byte)0x00, 
+             (byte)0x03,(byte)0x00, 
+        };
         [Test]
         public void TestLoad()
         {
@@ -266,6 +266,33 @@ namespace TestCases.SS.Util
             CellRangeAddress disjointRegion = new CellRangeAddress(10, 11, 10, 11);
             assertNotIntersects(baseRegion, disjointRegion);
         }
+
+
+        [Test]
+        public void ContainsRow()
+        {
+            CellRangeAddress region = new CellRangeAddress(10, 12, 3, 5);
+
+            Assert.IsFalse(region.ContainsRow(9));
+            Assert.IsTrue(region.ContainsRow(10));
+            Assert.IsTrue(region.ContainsRow(11));
+            Assert.IsTrue(region.ContainsRow(12));
+            Assert.IsFalse(region.ContainsRow(13));
+        }
+
+        [Test]
+        public void ContainsColumn()
+        {
+            CellRangeAddress region = new CellRangeAddress(10, 12, 3, 5);
+
+            Assert.IsFalse(region.ContainsColumn(2));
+            Assert.IsTrue(region.ContainsColumn(3));
+            Assert.IsTrue(region.ContainsColumn(4));
+            Assert.IsTrue(region.ContainsColumn(5));
+            Assert.IsFalse(region.ContainsColumn(6));
+        }
+
+
 
         private static void assertIntersects(CellRangeAddress regionA, CellRangeAddress regionB)
         {

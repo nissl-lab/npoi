@@ -93,7 +93,9 @@ namespace NPOI.XSSF.UserModel
 
             public override bool Equals(Object obj)
             {
-                if (obj == null) return false;
+                if (obj == null || !(obj is CellKey))
+                    return false;
+
                 // assumes other object is one of us, otherwise ClassCastException is thrown
                 CellKey oKey = (CellKey)obj;
                 return _row == oKey._row && _col == oKey._col;

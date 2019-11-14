@@ -93,8 +93,8 @@
         }
         public bool IsInRange(int rowInd, int colInd)
         {
-            return _firstRow <= rowInd && rowInd <= _lastRow &&
-                    _firstCol <= colInd && colInd <= _lastCol;
+            return _firstRow <= rowInd && rowInd <= _lastRow && //containsRow
+                _firstCol <= colInd && colInd <= _lastCol; //containsColumn
         }
         public bool IsFullColumnRange
         {
@@ -113,6 +113,27 @@
             }
         }
 
+        /**
+         * Check if the row is in the specified cell range
+         *
+         * @param rowInd the row to check
+         * @return true if the range contains the row [rowInd]
+         */
+        public bool ContainsRow(int rowInd)
+        {
+            return _firstRow <= rowInd && rowInd <= _lastRow;
+        }
+
+        /**
+         * Check if the column is in the specified cell range
+         *
+         * @param colInd the column to check
+         * @return true if the range contains the column [colInd]
+         */
+        public bool ContainsColumn(int colInd)
+        {
+            return _firstCol <= colInd && colInd <= _lastCol;
+        }
 
         /// <summary>
         /// Determines whether or not this CellRangeAddress and the specified CellRangeAddress intersect.
