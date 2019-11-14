@@ -623,6 +623,41 @@ namespace TestCases.SS.UserModel
 
             workbook.Close();
         }
+
+        [Ignore("")]
+        [Test]
+        public void ShouldNotBeAbleToCreateArrayFormulaOnPreexistingMergedRegion()
+        {
+            /*
+             *  m  = merged region
+             *  f  = array formula
+             *  fm = cell belongs to a merged region and an array formula (illegal, that's what this tests for)
+             *  
+             *   A  B  C
+             * 1    f  f
+             * 2    fm fm
+             * 3    f  f
+             */
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+
+            CellRangeAddress mergedRegion = CellRangeAddress.ValueOf("B2:C2");
+            sheet.AddMergedRegion(mergedRegion);
+            CellRangeAddress arrayFormula = CellRangeAddress.ValueOf("C1:C3");
+            Assume.That(mergedRegion.Intersects(arrayFormula));
+            Assume.That(arrayFormula.Intersects(mergedRegion));
+            try
+            {
+                sheet.SetArrayFormula("SUM(A1:A3)",  arrayFormula);
+                Assert.Fail("expected exception: should not be able to create an array formula that intersects with a merged region");
+            }
+            catch (IllegalStateException e)
+            {
+                // expected
+            }
+
+            workbook.Close();
+        }
     }
 
 }
