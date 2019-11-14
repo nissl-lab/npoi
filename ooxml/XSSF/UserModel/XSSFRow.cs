@@ -27,6 +27,7 @@ using NPOI.SS;
 using System.Collections;
 using NPOI.XSSF.UserModel.Helpers;
 using NPOI.SS.Formula;
+using System.Linq;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -673,7 +674,7 @@ namespace NPOI.XSSF.UserModel
                         }
                         index++;
                     }
-                    (Sheet as XSSFSheet).RemoveMergedRegions(indices);
+                    (Sheet as XSSFSheet).RemoveMergedRegions(indices.ToList());
                 }
                 if (policy.IsCopyRowHeight)
                 {

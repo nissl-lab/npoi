@@ -19,6 +19,7 @@
 namespace TestCases.SS.UserModel
 {
     using System;
+    using System.Linq;
     using NUnit.Framework;
     using NPOI.SS;
     using NPOI.SS.Util;
@@ -462,6 +463,44 @@ namespace TestCases.SS.UserModel
 
             wb.Close();
         }
+
+        /**
+         * Remove multiple merged regions
+         */
+        [Test]
+        public void RemoveMergedRegions()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            Dictionary<int, CellRangeAddress> mergedRegions = new Dictionary<int, CellRangeAddress>();
+            for (int r = 0; r < 10; r++)
+            {
+                CellRangeAddress region = new CellRangeAddress(r, r, 0, 1);
+                mergedRegions.Add(r, region);
+                sheet.AddMergedRegion(region);
+            }
+
+            assertCollectionEquals(mergedRegions.Values.ToList(), sheet.MergedRegions);
+
+            IList<int> removed = new List<int> { 0, 2, 3, 6, 8 };
+            foreach (int rx in removed)
+                mergedRegions.Remove(rx);
+            sheet.RemoveMergedRegions(removed);
+            assertCollectionEquals(mergedRegions.Values.ToList(), sheet.MergedRegions);
+
+            wb.Close();
+        }
+
+        private static void assertCollectionEquals<T>(IList<T> expected, IList<T> actual)
+        {
+            ISet<T> e = new HashSet<T>(expected);
+            ISet<T> a = new HashSet<T>(actual);
+            //Assert.AreEqual(e, a);
+            CollectionAssert.AreEquivalent(expected, actual);
+        }
+
+
         [Test]
         public void TestShiftMerged()
         {

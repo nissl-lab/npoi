@@ -256,6 +256,12 @@ namespace NPOI.SS.UserModel
         void RemoveMergedRegion(int index);
 
         /// <summary>
+        /// Removes a number of merged regions of cells (hence letting them free)
+        /// </summary>
+        /// <param name="indices">A set of the regions to unmerge</param>
+        void RemoveMergedRegions(IList<int> indices);
+
+        /// <summary>
         /// Returns the number of merged regions
         /// </summary>
         int NumMergedRegions { get; }

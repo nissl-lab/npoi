@@ -842,7 +842,33 @@ namespace NPOI.HSSF.UserModel
             _sheet.RemoveMergedRegion(index);
         }
 
+        /// <summary>
+        /// Removes a number of merged regions of cells (hence letting them free)
+        /// </summary>
+        /// <param name="indices">A set of the regions to unmerge</param>
+        public void RemoveMergedRegions(IList<int> indices)
+        {
 
+            SortedSet<int> ss = new SortedSet<int>(indices, new Int32Comparer());
+            //foreach (int i in (new TreeSet<Integer>(indices)).descendingSet())
+            foreach (int i in ss)
+            {
+                _sheet.RemoveMergedRegion(i);
+            }
+        }
+
+        private class Int32Comparer : IComparer<int>
+        {
+            public int Compare(int x, int y)
+            {
+                if (x < y)
+                    return 1;
+                else if (x > y)
+                    return -1;
+                else
+                    return 0;
+            }
+        }
 
         /// <summary>
         /// returns the number of merged regions

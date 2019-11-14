@@ -2099,10 +2099,12 @@ namespace NPOI.XSSF.UserModel
          *
          * @param indices A Set of the regions to unmerge
          */
-        public void RemoveMergedRegions(HashSet<int> indices)
+        public void RemoveMergedRegions(IList<int> indices)
         {
-            CT_MergeCells ctMergeCells = worksheet.mergeCells;
+            if (!worksheet.IsSetMergeCells()) return;
 
+            CT_MergeCells ctMergeCells = worksheet.mergeCells;
+            //TODO: The following codes are not same as poi, re-do it?.
             int size = ctMergeCells.sizeOfMergeCellArray();
             List<CT_MergeCell> mergeCellsArray = new List<CT_MergeCell>(new CT_MergeCell[ctMergeCells.sizeOfMergeCellArray()]);
             for (int i = 0, d = 0; i < size; i++)

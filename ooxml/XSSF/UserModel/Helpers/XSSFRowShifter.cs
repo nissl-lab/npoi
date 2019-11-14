@@ -79,7 +79,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             }
             if (removedIndices.Count>0)
             {
-                sheet.RemoveMergedRegions(removedIndices);
+                sheet.RemoveMergedRegions(removedIndices.ToList());
             }
             //read so it doesn't get Shifted again
             foreach (CellRangeAddress region in ShiftedRegions)

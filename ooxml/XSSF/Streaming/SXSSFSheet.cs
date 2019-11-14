@@ -863,13 +863,21 @@ namespace NPOI.XSSF.Streaming
         {
             _sh.RemoveMergedRegion(index);
         }
-
+        /**
+         * Removes a merged region of cells (hence letting them free)
+         *
+         * @param indices of the regions to unmerge
+         */
+        public void RemoveMergedRegions(IList<int> indices)
+        {
+            _sh.RemoveMergedRegions(indices);
+        }
         public void RemoveRow(IRow row)
         {
             throw new NotImplementedException();
             //if (row.Sheet != this)
             //{
-            //    throw new InvalidOperationException("Specified row does not belong to this sheet");
+            //    throw new IllegalArgumentException("Specified row does not belong to this sheet");
             //}
 
 
