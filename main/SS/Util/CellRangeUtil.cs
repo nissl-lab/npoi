@@ -22,6 +22,11 @@ namespace NPOI.SS.Util
     using NPOI.SS.Util;
     using System.Collections.Generic;
 
+    /**
+     * Utility class that builds on {@link CellRangeAddress}
+     * 
+     * Portions of this class may be moved to {@link CellRangeAddressBase}
+     */
     public class CellRangeUtil
     {
 
@@ -38,7 +43,7 @@ namespace NPOI.SS.Util
         public const int ENCLOSES = 4;
 
         /**
-         * Intersect this range with the specified range.
+         * Get the type of intersection between two cell ranges
          * 
          * @param crB - the specified range
          * @return code which reflects how the specified range is related to this range.<br/>
@@ -92,7 +97,7 @@ namespace NPOI.SS.Util
         {
             if (cellRanges.Length < 1)
             {
-                return cellRanges;
+                return new CellRangeAddress[] { };
             }
             //ArrayList temp = MergeCellRanges(NPOI.Util.Arrays.AsList(cellRanges));
             List<CellRangeAddress> lst = new List<CellRangeAddress>(cellRanges);
@@ -288,7 +293,7 @@ namespace NPOI.SS.Util
         //    return result;
         //}
 
-
+        [Obsolete]
         private static CellRangeAddress[] ToArray(ArrayList temp)
         {
             CellRangeAddress[] result = new CellRangeAddress[temp.Count];
@@ -306,12 +311,10 @@ namespace NPOI.SS.Util
          */
         public static bool Contains(CellRangeAddress crA, CellRangeAddress crB)
         {
-            int firstRow = crB.FirstRow;
-            int lastRow = crB.LastRow;
-            int firstCol = crB.FirstColumn;
-            int lastCol = crB.LastColumn;
-            return le(crA.FirstRow, firstRow) && ge(crA.LastRow, lastRow)
-                    && le(crA.FirstColumn, firstCol) && ge(crA.LastColumn, lastCol);
+            return le(crA.FirstRow, crB.FirstRow) &&
+                ge(crA.LastRow, crB.LastRow) &&
+                le(crA.FirstColumn, crB.FirstColumn) &&
+                ge(crA.LastColumn, crB.LastColumn);
         }
 
         /**
@@ -357,13 +360,12 @@ namespace NPOI.SS.Util
                 return crA.Copy();
             }
 
-            return
-                new CellRangeAddress(
-                    lt(crB.FirstRow, crA.FirstRow) ? crB.FirstRow : crA.FirstRow,
-                    gt(crB.LastRow, crA.LastRow) ? crB.LastRow : crA.LastRow,
-                    lt(crB.FirstColumn, crA.FirstColumn) ? crB.FirstColumn : crA.FirstColumn,
-                    gt(crB.LastColumn, crA.LastColumn) ? crB.LastColumn : crA.LastColumn
-                );
+            int minRow = lt(crB.FirstRow, crA.FirstRow) ? crB.FirstRow : crA.FirstRow;
+            int maxRow = gt(crB.LastRow, crA.LastRow) ? crB.LastRow : crA.LastRow;
+            int minCol = lt(crB.FirstColumn, crA.FirstColumn) ? crB.FirstColumn : crA.FirstColumn;
+            int maxCol = gt(crB.LastColumn, crA.LastColumn) ? crB.LastColumn : crA.LastColumn;
+
+            return new CellRangeAddress(minRow, maxRow, minCol, maxCol);
 
         }
 
