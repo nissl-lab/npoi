@@ -1582,5 +1582,38 @@ namespace TestCases.SS.UserModel
             }
             workbook.Close();
         }
+
+
+        [Ignore("")]
+        [Test]
+        public void Test57929()
+        {
+            // Create a workbook with print areas on 2 sheets
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            wb.CreateSheet("Sheet0");
+            wb.CreateSheet("Sheet1");
+            wb.SetPrintArea(0, "$A$1:$C$6");
+            wb.SetPrintArea(1, "$B$1:$C$5");
+
+            // Verify the print areas were set correctly
+            Assert.AreEqual("Sheet0!$A$1:$C$6", wb.GetPrintArea(0));
+            Assert.AreEqual("Sheet1!$B$1:$C$5", wb.GetPrintArea(1));
+
+            // Remove the print area on Sheet0 and change the print area on Sheet1
+            wb.RemovePrintArea(0);
+            wb.SetPrintArea(1, "$A$1:$A$1");
+
+            // Verify that the changes were made
+            Assert.IsNull(wb.GetPrintArea(0), "Sheet0 before write");
+            Assert.AreEqual("Sheet1!$A$1:$A$1", wb.GetPrintArea(1), "Sheet1 before write");
+
+            // Verify that the changes are non-volatile
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb);
+            wb.Close();
+
+            Assert.IsNull(wb2.GetPrintArea(0), "Sheet0 after write"); // CURRENTLY FAILS with "Sheet0!$A$1:$C$6"
+            Assert.AreEqual("Sheet1!$A$1:$A$1", wb2.GetPrintArea(1), "Sheet1 after write");
+        }
+
     }
 }
