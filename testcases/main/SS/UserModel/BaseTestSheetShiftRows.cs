@@ -660,6 +660,40 @@ namespace TestCases.SS.UserModel
             read.Close();
         }
 
+        // bug 56454
+        [Ignore("")]
+        [Test]
+        public void ShiftRowsWithMergedRegionsThatDoNotContainColumnZero()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("test");
+
+            // populate sheet cells
+            for (int i = 0; i < 10; i++)
+            {
+                IRow row = sheet.CreateRow(i);
+                for (int j = 0; j < 12; j++)
+                {
+                    ICell cell = row.CreateCell(j);
+                    cell.SetCellValue(i + "x" + j);
+                }
+            }
+            CellRangeAddress A4_B7 = new CellRangeAddress(3, 6, 0, 1);
+            CellRangeAddress C5_D7 = new CellRangeAddress(4, 6, 2, 3);
+            sheet.AddMergedRegion(A4_B7);
+            sheet.AddMergedRegion(C5_D7);
+            // A4:B7 will elongate vertically
+            // C5:D7 will be shifted down with same size
+            sheet.ShiftRows(4, sheet.LastRowNum, 1);
+            Assert.AreEqual(2, sheet.NumMergedRegions);
+            Assert.AreEqual(CellRangeAddress.ValueOf("A4:B8"), sheet.GetMergedRegion(0));
+            Assert.AreEqual(CellRangeAddress.ValueOf("C5:D8"), sheet.GetMergedRegion(1));
+
+            wb.Close();
+        }
+
+
+
         private void createHyperlink(ICreationHelper helper, ICell cell, HyperlinkType linkType, String ref1)
         {
             cell.SetCellValue(ref1);
