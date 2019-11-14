@@ -76,6 +76,14 @@ namespace NPOI.XSSF.UserModel
             Validate();
         }
 
+        /// <summary>
+        /// This is the constructor called using the OOXML raw data.  Excel overloads formula1 to also encode explicit value lists,
+        /// so this constructor has to check for and parse that syntax.
+        /// </summary>
+        /// <param name="validationType"></param>
+        /// <param name="operator1"></param>
+        /// <param name="formula1">Overloaded: formula1 or list of explicit values</param>
+        /// <param name="formula2">formula1 is a list of explicit values, this is ignored: use <code>null</code></param>
         public XSSFDataValidationConstraint(int validationType, int operator1, String formula1, String formula2)
             : base()
         {
@@ -109,9 +117,11 @@ namespace NPOI.XSSF.UserModel
             set 
             {
                 this.explicitListOfValues = value;
+                // for OOXML we need to set formula1 to the quoted csv list of values (doesn't appear documented, but that's where Excel puts its lists)
+                // further, Excel has no escaping for commas in explicit lists, so we don't need to worry about that.
                 if (explicitListOfValues != null && explicitListOfValues.Length > 0)
                 {
-                    StringBuilder builder = new StringBuilder("\"");
+                    StringBuilder builder = new StringBuilder(QUOTE);
                     for (int i = 0; i < value.Length; i++)
                     {
                         String string1 = value[i];
@@ -121,7 +131,7 @@ namespace NPOI.XSSF.UserModel
                         }
                         builder.Append(string1);
                     }
-                    builder.Append("\"");
+                    builder.Append(QUOTE);
                     Formula1 = builder.ToString();
                 }
             }
