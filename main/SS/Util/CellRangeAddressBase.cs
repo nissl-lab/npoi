@@ -121,42 +121,11 @@
         /// <returns>returns true if this range and other range have at least 1 cell in common</returns>
         public bool Intersects(CellRangeAddressBase other)
         {
-            // see java.awt.Rectangle.intersects
-            // http://stackoverflow.com/questions/13390333/two-rectangles-intersection
-
-            // TODO: Replace with an intersection code that doesn't rely on java.awt
-            return GetRectangle().IntersectsWith(other.GetRectangle());
+            return this._firstRow <= other._lastRow &&
+                this._firstCol <= other._lastCol &&
+                other._firstRow <= this._lastRow &&
+                other._firstCol <= this._lastCol;
         }
-
-        // TODO: Replace with an intersection code that doesn't rely on java.awt
-        // Don't let this temporary implementation detail leak outside of this class
-        private Rectangle GetRectangle()
-        {
-            int firstRow, firstCol, lastRow, lastCol;
-
-            if (!IsFullColumnRange)
-            {
-                firstRow = Math.Min(_firstRow, _lastRow);
-                lastRow = Math.Max(_firstRow, _lastRow);
-            }
-            else
-            {
-                firstRow = 0;
-                lastRow = int.MaxValue;
-            }
-            if (!IsFullRowRange)
-            {
-                firstCol = Math.Min(_firstCol, _lastCol);
-                lastCol = Math.Max(_firstCol, _lastCol);
-            }
-            else
-            {
-                firstCol = 0;
-                lastCol = int.MaxValue;
-            }
-            return new Rectangle(firstRow, firstCol, lastRow - firstRow + 1, lastCol - firstCol + 1);
-        }
-
 
         /**
          * @return column number for the upper left hand corner
