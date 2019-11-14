@@ -1279,7 +1279,7 @@ namespace NPOI.HSSF.UserModel
 
         /**
          * Window zoom magnification for current view representing percent values.
-         * Valid values range from 10 to 400. Horizontal & Vertical scale together.
+         * Valid values range from 10 to 400. Horizontal &amp; Vertical scale together.
          *
          * For example:
          * <pre>
@@ -1305,7 +1305,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="region">The region.</param>
         /// <param name="borderType">Type of the border.</param>
         /// <param name="color">The color.</param>
-        public void SetEnclosedBorderOfRegion(CellRangeAddress region, NPOI.SS.UserModel.BorderStyle borderType, short color)
+        public void SetEnclosedBorderOfRegion(CellRangeAddress region, BorderStyle borderType, short color)
         {
             HSSFRegionUtil.SetRightBorderColor(color, region, this, _workbook);
             HSSFRegionUtil.SetBorderRight(borderType, region, this, _workbook);
@@ -1322,7 +1322,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="region">The region.</param>
         /// <param name="borderType">Type of the border.</param>
         /// <param name="color">The color.</param>
-        public void SetBorderRightOfRegion(CellRangeAddress region, NPOI.SS.UserModel.BorderStyle borderType, short color)
+        public void SetBorderRightOfRegion(CellRangeAddress region, BorderStyle borderType, short color)
         {
             HSSFRegionUtil.SetRightBorderColor(color, region, this, _workbook);
             HSSFRegionUtil.SetBorderRight(borderType, region, this, _workbook);
@@ -1334,7 +1334,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="region">The region.</param>
         /// <param name="borderType">Type of the border.</param>
         /// <param name="color">The color.</param>
-        public void SetBorderLeftOfRegion(CellRangeAddress region, NPOI.SS.UserModel.BorderStyle borderType, short color)
+        public void SetBorderLeftOfRegion(CellRangeAddress region, BorderStyle borderType, short color)
         {
             HSSFRegionUtil.SetLeftBorderColor(color, region, this, _workbook);
             HSSFRegionUtil.SetBorderLeft(borderType, region, this, _workbook);
@@ -1346,7 +1346,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="region">The region.</param>
         /// <param name="borderType">Type of the border.</param>
         /// <param name="color">The color.</param>
-        public void SetBorderTopOfRegion(CellRangeAddress region, NPOI.SS.UserModel.BorderStyle borderType, short color)
+        public void SetBorderTopOfRegion(CellRangeAddress region, BorderStyle borderType, short color)
         {
             HSSFRegionUtil.SetTopBorderColor(color, region, this, _workbook);
             HSSFRegionUtil.SetBorderTop(borderType, region, this, _workbook);
@@ -1358,7 +1358,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="region">The region.</param>
         /// <param name="borderType">Type of the border.</param>
         /// <param name="color">The color.</param>
-        public void SetBorderBottomOfRegion(CellRangeAddress region, NPOI.SS.UserModel.BorderStyle borderType, short color)
+        public void SetBorderBottomOfRegion(CellRangeAddress region, BorderStyle borderType, short color)
         {
             HSSFRegionUtil.SetBottomBorderColor(color, region, this, _workbook);
             HSSFRegionUtil.SetBorderBottom(borderType, region, this, _workbook);
@@ -1431,7 +1431,20 @@ namespace NPOI.HSSF.UserModel
         /// <param name="endRow">The end row.</param>
         /// <param name="n">The n.</param>
         /// <param name="IsRow">if set to <c>true</c> [is row].</param>
+        [Obsolete("deprecated POI 3.15 beta 2. This will be made private in future releases.")]
         protected void ShiftMerged(int startRow, int endRow, int n, bool IsRow)
+        {
+            ShiftMerged(startRow, endRow, n);
+        }
+
+        /**
+         * Shifts, grows, or shrinks the merged regions due to a row shift
+         *  
+         * @param startRow the start-index of the rows to shift, zero-based
+         * @param endRow the end-index of the rows to shift, zero-based
+         * @param n how far to shift, negative to shift up
+         */
+        private void ShiftMerged(int startRow, int endRow, int n)
         {
             List<CellRangeAddress> shiftedRegions = new List<CellRangeAddress>();
             //move merged regions completely if they fall within the new region boundaries when they are Shifted
@@ -1448,8 +1461,8 @@ namespace NPOI.HSSF.UserModel
 
                 //only Shift if the region outside the Shifted rows is not merged too
                 //if (!ContainsCell(merged, startRow - 1, 0) && !ContainsCell(merged, endRow + 1, 0))
-                if (!SheetUtil.ContainsCell(merged, startRow - 1, 0) &&
-                 !SheetUtil.ContainsCell(merged, endRow + 1, 0))
+                if (!merged.ContainsRow(startRow - 1) &&
+                    !merged.ContainsRow(endRow + 1))
                 {
                     merged.FirstRow = (merged.FirstRow + n);
                     merged.LastRow = (merged.LastRow + n);
@@ -1561,7 +1574,7 @@ namespace NPOI.HSSF.UserModel
             }
 
             // Shift Merged Regions
-            ShiftMerged(startRow, endRow, n, true);
+            ShiftMerged(startRow, endRow, n);
 
             // Shift Row Breaks
             _sheet.PageSettings.ShiftRowBreaks(startRow, endRow, n);
@@ -2374,7 +2387,8 @@ namespace NPOI.HSSF.UserModel
             get
             {
                 List<CellRangeAddress> addresses = new List<CellRangeAddress>();
-                for (int i = 0; i < _sheet.NumMergedRegions; i++)
+                int count = _sheet.NumMergedRegions;
+                for (int i = 0; i < count; i++)
                 {
                     addresses.Add(_sheet.GetMergedRegionAt(i));
                 }
