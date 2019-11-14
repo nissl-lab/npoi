@@ -33,6 +33,8 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Util;
     using System.Globalization;
     using NPOI.Util;
+    using NPOI.SS.UserModel.Helpers;
+    using NPOI.HSSF.UserModel.helpers;
 
 
 
@@ -1460,64 +1462,10 @@ namespace NPOI.HSSF.UserModel
         [Obsolete("deprecated POI 3.15 beta 2. This will be made private in future releases.")]
         protected void ShiftMerged(int startRow, int endRow, int n, bool IsRow)
         {
-            ShiftMerged(startRow, endRow, n);
+            RowShifter rowShifter = new HSSFRowShifter(this);
+            rowShifter.ShiftMergedRegions(startRow, endRow, n);
         }
 
-        /**
-         * Shifts, grows, or shrinks the merged regions due to a row shift
-         *  
-         * @param startRow the start-index of the rows to shift, zero-based
-         * @param endRow the end-index of the rows to shift, zero-based
-         * @param n how far to shift, negative to shift up
-         */
-        private void ShiftMerged(int startRow, int endRow, int n)
-        {
-            List<CellRangeAddress> shiftedRegions = new List<CellRangeAddress>();
-            //move merged regions completely if they fall within the new region boundaries when they are Shifted
-            for (int i = 0; i < this.NumMergedRegions; i++)
-            {
-                NPOI.SS.Util.CellRangeAddress merged = this.GetMergedRegion(i);
-
-                bool inStart = (merged.FirstRow >= startRow || merged.LastRow >= startRow);
-                bool inEnd = (merged.FirstRow <= endRow || merged.LastRow <= endRow);
-
-
-                //dont Check if it's not within the Shifted area
-                if (!(inStart && inEnd)) continue;
-
-                //only Shift if the region outside the Shifted rows is not merged too
-                //if (!ContainsCell(merged, startRow - 1, 0) && !ContainsCell(merged, endRow + 1, 0))
-                if (!merged.ContainsRow(startRow - 1) &&
-                    !merged.ContainsRow(endRow + 1))
-                {
-                    merged.FirstRow = (merged.FirstRow + n);
-                    merged.LastRow = (merged.LastRow + n);
-                    //have to Remove/Add it back
-                    shiftedRegions.Add(merged);
-                    this.RemoveMergedRegion(i);
-                    i = i - 1; // we have to back up now since we Removed one
-
-                }
-
-            }
-
-            //Readd so it doesn't Get Shifted again
-            foreach (CellRangeAddress region in shiftedRegions)
-            {
-                this.AddMergedRegion(region);
-            }
-
-        }
-        [Obsolete]
-        private static bool ContainsCell(NPOI.SS.Util.CellRangeAddress cr, int rowIx, int colIx)
-        {
-            if (cr.FirstRow <= rowIx && cr.LastRow >= rowIx
-                    && cr.FirstColumn <= colIx && cr.LastColumn >= colIx)
-            {
-                return true;
-            }
-            return false;
-        }
         /// <summary>
         /// Shifts rows between startRow and endRow n number of rows.
         /// If you use a negative number, it will Shift rows up.
@@ -1598,9 +1546,9 @@ namespace NPOI.HSSF.UserModel
             {
                 noteRecs = NoteRecord.EMPTY_ARRAY;
             }
-
+            RowShifter rowShifter = new HSSFRowShifter(this);
             // Shift Merged Regions
-            ShiftMerged(startRow, endRow, n);
+            rowShifter.ShiftMergedRegions(startRow, endRow, n);
 
             // Shift Row Breaks
             _sheet.PageSettings.ShiftRowBreaks(startRow, endRow, n);

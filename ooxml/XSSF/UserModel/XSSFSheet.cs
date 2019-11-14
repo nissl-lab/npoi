@@ -3313,7 +3313,7 @@ namespace NPOI.XSSF.UserModel
 
             rowShifter.UpdateNamedRanges(shifter);
             rowShifter.UpdateFormulas(shifter);
-            rowShifter.ShiftMerged(startRow, endRow, n);
+            rowShifter.ShiftMergedRegions(startRow, endRow, n);
             rowShifter.UpdateConditionalFormatting(shifter);
             rowShifter.UpdateHyperlinks(shifter);
 

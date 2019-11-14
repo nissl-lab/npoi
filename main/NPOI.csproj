@@ -229,6 +229,7 @@
     <Compile Include="HSSF\Record\OldSheetRecord.cs" />
     <Compile Include="HSSF\Record\OldStringRecord.cs" />
     <Compile Include="HSSF\Record\RowDataRecord.cs" />
+    <Compile Include="HSSF\UserModel\Helpers\HSSFRowShifter.cs" />
     <Compile Include="HSSF\UserModel\HSSFColorScaleFormatting.cs" />
     <Compile Include="HSSF\UserModel\HSSFCombobox.cs" />
     <Compile Include="HSSF\UserModel\HSSFConditionalFormattingThreshold.cs" />
@@ -514,6 +515,7 @@
     <Compile Include="HSSF\Record\CFHeaderRecord.cs" />
     <Compile Include="HSSF\Record\CFRuleRecord.cs" />
     <Compile Include="HSSF\Record\CF\BorderFormatting.cs" />
+    <Compile Include="SS\UserModel\Helpers\RowShifter.cs" />
     <Compile Include="SS\Util\CellRangeUtil.cs" />
     <Compile Include="HSSF\Record\CF\FontFormatting.cs" />
     <Compile Include="HSSF\Record\CF\PatternFormatting.cs" />
