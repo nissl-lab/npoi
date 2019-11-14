@@ -18,6 +18,7 @@ namespace NPOI
 {
     using NPOI.HPSF;
     using NPOI.HPSF.Extractor;
+    using NPOI.POIFS.FileSystem;
 
     /// <summary>
     /// Common Parent for OLE2 based Text Extractors
@@ -43,6 +44,9 @@ namespace NPOI
         public POIOLE2TextExtractor(POIDocument document)
         {
             this.document = document;
+            // Ensure any underlying resources, such as open files,
+            //  will get cleaned up if the user calls #close()
+            SetFilesystem(document);
         }
        
         /// <summary>
@@ -88,6 +92,17 @@ namespace NPOI
             {
                 return new HPSFPropertiesExtractor(this);
             }
+        }
+
+        /**
+	     * Return the underlying DirectoryEntry of this document.
+	     *
+	     * @return the DirectoryEntry that is associated with the POIDocument of this extractor.
+	     */
+        public DirectoryEntry Root
+        {
+            get { return document.Directory; }
+            
         }
     }
 }
