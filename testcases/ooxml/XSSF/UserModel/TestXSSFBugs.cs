@@ -3308,6 +3308,21 @@ namespace NPOI.XSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Test57523()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57523.xlsx");
+            ISheet sheet = wb.GetSheet("Attribute Master");
+            IRow row = sheet.GetRow(15);
+            int N = CellReference.ConvertColStringToIndex("N");
+            ICell N16 = row.GetCell(N);
+            Assert.AreEqual(500.0, N16.NumericCellValue, 0.00001);
+
+            int P = CellReference.ConvertColStringToIndex("P");
+            ICell P16 = row.GetCell(P);
+            Assert.AreEqual(10.0, P16.NumericCellValue, 0.00001);
+        }
+
     }
 
 }
