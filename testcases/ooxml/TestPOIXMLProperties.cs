@@ -25,6 +25,7 @@ namespace NPOI
     using NPOI.XSSF;
     using NPOI.XWPF.UserModel;
     using NPOI.XWPF;
+    using NPOI.Util;
 
     /**
      * Test Setting extended and custom OOXML properties
@@ -33,6 +34,7 @@ namespace NPOI
     public class TestPOIXMLProperties
     {
         private XWPFDocument sampleDoc;
+        private XWPFDocument sampleNoThumb;
         private POIXMLProperties _props;
         private CoreProperties _coreProperties;
 
@@ -40,6 +42,9 @@ namespace NPOI
         public void SetUp()
         {
             sampleDoc = XWPFTestDataSamples.OpenSampleDocument("documentProperties.docx");
+            sampleNoThumb = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
+            Assert.IsNotNull(sampleDoc);
+            Assert.IsNotNull(sampleNoThumb);
             _props = sampleDoc.GetProperties();
             _coreProperties = _props.CoreProperties;
             Assert.IsNotNull(_props);
@@ -50,6 +55,7 @@ namespace NPOI
         public void closeResources()
         {
             sampleDoc.Close();
+            sampleNoThumb.Close();
         }
 
         [Test]
@@ -218,6 +224,40 @@ namespace NPOI
             string dateTimeUtcString = utcDt.ToString("yyyy-MM-ddThh:mm:ssZ");
             return utcString.Equals(dateTimeUtcString);
         }
+
+        [Test]
+        public void testThumbnails()
+        {
+            POIXMLProperties noThumbProps = sampleNoThumb.GetProperties();
+
+            Assert.IsNotNull(_props.ThumbnailPart);
+            Assert.IsNull(noThumbProps.ThumbnailPart);
+
+            Assert.IsNotNull(_props.ThumbnailFilename);
+            Assert.IsNull(noThumbProps.ThumbnailFilename);
+
+            Assert.IsNotNull(_props.ThumbnailImage);
+            Assert.IsNull(noThumbProps.ThumbnailImage);
+
+            Assert.AreEqual("thumbnail.jpeg", _props.ThumbnailFilename);
+
+
+            // Adding / changing
+            noThumbProps.SetThumbnail("Testing.png", new ByteArrayInputStream(new byte[1]));
+            Assert.IsNotNull(noThumbProps.ThumbnailPart);
+            Assert.AreEqual("Testing.png", noThumbProps.ThumbnailFilename);
+            Assert.IsNotNull(noThumbProps.ThumbnailImage);
+            //Assert.AreEqual(1, noThumbProps.ThumbnailImage.Available());
+            Assert.AreEqual(1, noThumbProps.ThumbnailImage.Length - noThumbProps.ThumbnailImage.Position);
+
+            noThumbProps.SetThumbnail("Testing2.png", new ByteArrayInputStream(new byte[2]));
+            Assert.IsNotNull(noThumbProps.ThumbnailPart);
+            Assert.AreEqual("Testing.png", noThumbProps.ThumbnailFilename);
+            Assert.IsNotNull(noThumbProps.ThumbnailImage);
+            //Assert.AreEqual(2, noThumbProps.ThumbnailImage.Available());
+            Assert.AreEqual(2, noThumbProps.ThumbnailImage.Length - noThumbProps.ThumbnailImage.Position);
+        }
+
 
         private static String ZeroPad(long i)
         {

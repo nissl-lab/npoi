@@ -445,23 +445,35 @@ namespace NPOI.OpenXml4Net.OPC
             RevertImpl();
         }
 
-        /**
-         * Add a thumbnail to the package. This method is provided to make easier
-         * the addition of a thumbnail in a package. You can do the same work by
-         * using the traditionnal relationship and part mechanism.
-         * 
-         * @param path
-         *            The full path to the image file.
-         */
+        /// <summary>
+        /// Add a thumbnail to the package. This method is provided to make easier 
+        /// the addition of a thumbnail in a package. You can do the same work by 
+        /// using the traditionnal relationship and part mechanism.
+        /// </summary>
+        /// <param name="path">path The full path to the image file.</param>
         public void AddThumbnail(String path)
         {
             // Check parameter
-            if ("".Equals(path))
+            if (string.IsNullOrEmpty(path))
                 throw new ArgumentException("path");
+            String name = path.Substring(path.LastIndexOf(Path.DirectorySeparatorChar) + 1);
 
-            // Get the filename from the path
-            String filename = path
-                    .Substring(path.LastIndexOf('\\') + 1);
+            FileStream is1 = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            AddThumbnail(name, is1);
+            is1.Close();
+        }
+        /// <summary>
+        /// Add a thumbnail to the package. This method is provided to make easier 
+        /// the addition of a thumbnail in a package. You can do the same work by 
+        /// using the traditionnal relationship and part mechanism.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        public void AddThumbnail(String filename, Stream data) 
+        {
+            // Check parameter
+            if (string.IsNullOrEmpty(filename))
+                throw new ArgumentException("filename");
 
             // Create the thumbnail part name
             String contentType = ContentTypes
@@ -474,11 +486,11 @@ namespace NPOI.OpenXml4Net.OPC
             }
             catch (InvalidFormatException)
             {
+                String partName = "/docProps/thumbnail" +
+                         filename.Substring(filename.LastIndexOf(".") + 1);
                 try
                 {
-                    thumbnailPartName = PackagingUriHelper
-                            .CreatePartName("/docProps/thumbnail"
-                                    + path.Substring(path.LastIndexOf(".") + 1));
+                    thumbnailPartName = PackagingUriHelper.CreatePartName(partName);
                 }
                 catch (InvalidFormatException)
                 {
@@ -501,8 +513,7 @@ namespace NPOI.OpenXml4Net.OPC
                     PackageRelationshipTypes.THUMBNAIL);
 
             // Copy file data to the newly Created part
-            StreamHelper.CopyStream(new FileStream(path, FileMode.Open), thumbnailPart
-                    .GetOutputStream());
+            StreamHelper.CopyStream(data, thumbnailPart.GetOutputStream());
         }
 
         /**
