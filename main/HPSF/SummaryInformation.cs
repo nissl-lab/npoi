@@ -463,10 +463,9 @@ namespace NPOI.HPSF
         /// Gets or sets the thumbnail (or <c>null</c>) <strong>when this
         /// method is implemented. Please note that the return type is likely To
         /// Change!</strong>
-        /// <strong>Hint To developers:</strong> Drew Varner &lt;Drew.Varner
-        /// -at- sc.edu&gt; said that this is an image in WMF or Clipboard (BMP?)
-        /// format. However, we won't do any conversion into any image type but
-        /// instead just return a byte array.
+        /// <p>To process this data, you may wish to make use of the
+        ///  {@link Thumbnail} class. The raw data is generally 
+        /// an image in WMF or Clipboard (BMP?) format</p>
         /// </summary>
         /// <value>The thumbnail.</value>
         public byte[] Thumbnail
@@ -480,6 +479,19 @@ namespace NPOI.HPSF
             }
         }
 
+        /// <summary>
+        /// Returns the thumbnail or null, processed as an object 
+        /// which is (largely) able to unpack the thumbnail image data.
+        /// </summary>
+        public Thumbnail ThumbnailThumbnail
+        {
+            get
+            {
+                byte[] data = Thumbnail;
+                if (data == null) return null;
+                return new Thumbnail(data);
+            }
+        }
         /// <summary>
         /// Removes the thumbnail.
         /// </summary>
