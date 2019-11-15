@@ -24,6 +24,7 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using System.Collections.Generic;
+    using NPOI.Util;
 
     /**
      * Tests of implementations of {@link NPOI.ss.usermodel.Name}.
@@ -676,6 +677,57 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("2", wb.GetName("x").RefersToFormula);
 
             wb.Close();
+        }
+
+        [Test]
+        public void Test56781()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+
+            IName name = wb.CreateName();
+            foreach (String valid in Arrays.AsList(
+                    "Hello",
+                    "number1",
+                    "_underscore"
+                    //"p.e.r.o.i.d.s",
+                    //"\\Backslash",
+                    //"Backslash\\"
+                    ))
+            {
+                name.NameName = valid;
+            }
+
+            try
+            {
+                name.NameName = "";
+                Assert.Fail("expected exception: (blank)");
+            }
+            catch (ArgumentException e)
+            {
+                Assert.AreEqual("Name cannot be blank", e.Message);
+            }
+
+            foreach (String invalid in Arrays.AsList(
+                    "1number",
+                    "Sheet1!A1",
+                    "Exclamation!",
+                    "Has Space",
+                    "Colon:",
+                    "A-Minus",
+                    "A+Plus",
+                    "Dollar$"))
+            {
+                try
+                {
+                    name.NameName = invalid;
+                    Assert.Fail("expected exception: " + invalid);
+                }
+                catch (ArgumentException e)
+                {
+                    Assert.IsTrue(e.Message.StartsWith("Invalid name: '" + invalid + "'"), invalid);
+                }
+            }
+
         }
 
     }
