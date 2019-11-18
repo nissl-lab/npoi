@@ -459,8 +459,14 @@ namespace NPOI.OpenXml4Net.OPC
             String name = path.Substring(path.LastIndexOf(Path.DirectorySeparatorChar) + 1);
 
             FileStream is1 = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            AddThumbnail(name, is1);
-            is1.Close();
+            try
+            {
+                AddThumbnail(name, is1);
+            }
+            finally
+            {
+                is1.Close();
+            }
         }
         /// <summary>
         /// Add a thumbnail to the package. This method is provided to make easier 

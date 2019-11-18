@@ -42,7 +42,6 @@ namespace NPOI.DDF
 
             int pos = offset;
 
-            //        while ( bytesRemaining >= 6 )
             for (int i = 0; i < numProperties; i++)
             {
                 short propId;
@@ -51,7 +50,6 @@ namespace NPOI.DDF
                 propData = LittleEndian.GetInt(data, pos + 2);
                 short propNumber = (short)(propId & (short)0x3FFF);
                 bool isComplex = (propId & unchecked((short)0x8000)) != 0;
-                bool isBlipId = (propId & (short)0x4000) != 0;
 
                 byte propertyType = EscherProperties.GetPropertyType((short)propNumber);
                 if (propertyType == EscherPropertyMetaData.TYPE_BOOL)
@@ -74,7 +72,6 @@ namespace NPOI.DDF
                     }
                 }
                 pos += 6;
-                //            bytesRemaining -= 6 + complexBytes;
             }
 
             // Get complex data

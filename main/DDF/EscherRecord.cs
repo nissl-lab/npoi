@@ -26,9 +26,8 @@ namespace NPOI.DDF
     /// <summary>
     /// The base abstract record from which all escher records are defined.  Subclasses will need
     /// to define methods for serialization/deserialization and for determining the record size.
-    /// @author Glen Stampoultzis
     /// </summary>
-    abstract public class EscherRecord
+    abstract public class EscherRecord : ICloneable
     {
         private static BitField fInstance = BitFieldFactory.GetInstance(0xfff0);
         private static BitField fVersion = BitFieldFactory.GetInstance(0x000f);
@@ -46,9 +45,9 @@ namespace NPOI.DDF
         /// <summary>
         /// Delegates to FillFields(byte[], int, EscherRecordFactory)
         /// </summary>
-        /// <param name="data">The data.</param>
-        /// <param name="f">The f.</param>
-        /// <returns></returns>
+        /// <param name="data">the bytes to serialize from</param>
+        /// <param name="f">the escher record factory</param>
+        /// <returns>The number of bytes written.</returns>
         public int FillFields(byte[] data, IEscherRecordFactory f)
         {
             return FillFields(data, 0, f);
