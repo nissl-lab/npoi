@@ -116,7 +116,7 @@ namespace NPOI.HSSF.Record.Common
         public byte[] RGBA
         {
             get { return rgba; }
-            set { this.rgba = value; }
+            set { this.rgba = (value == null) ? null : (byte[])value.Clone(); }
         }
 
         /**

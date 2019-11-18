@@ -72,7 +72,7 @@ namespace NPOI.HSSF.Record.CF
         public Threshold[] Thresholds
         {
             get { return thresholds; }
-            set { this.thresholds = value; }
+            set { this.thresholds = (value == null) ? null : (Threshold[])value.Clone(); }
         }
 
         public bool IsIconOnly

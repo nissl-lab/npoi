@@ -96,7 +96,7 @@ namespace NPOI.HSSF.Record.CF
         {
             get { return thresholds; }
             set {
-                this.thresholds = value;
+                this.thresholds = value == null ? null : (ColorGradientThreshold[])value.Clone(); ;
                 updateThresholdPositions();
             }
         }
@@ -104,7 +104,7 @@ namespace NPOI.HSSF.Record.CF
         public ExtendedColor[] Colors
         {
             get { return colors; }
-            set { this.colors = value; }
+            set { this.colors = (value == null) ? null : (ExtendedColor[])value.Clone(); }
             
         }
 

@@ -42,8 +42,8 @@ using NPOI.HSSF.Record;
 
             public FormulaPair(Ptg[] formula1, Ptg[] formula2)
             {
-                _formula1 = formula1;
-                _formula2 = formula2;
+                _formula1 = (formula1 == null) ? null : (Ptg[])formula1.Clone();
+                _formula2 = (formula2 == null) ? null : (Ptg[])formula2.Clone();
             }
             public Ptg[] Formula1
             {
@@ -85,7 +85,7 @@ using NPOI.HSSF.Record;
             _formula2 = formulaB;
             _value1 = value1;
             _value2 = value2;
-            _explicitListValues = excplicitListValues;
+            _explicitListValues = (excplicitListValues == null) ? null : (String[])excplicitListValues.Clone();
         }
 
 
