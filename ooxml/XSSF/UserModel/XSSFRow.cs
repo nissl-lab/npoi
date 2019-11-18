@@ -75,6 +75,18 @@ namespace NPOI.XSSF.UserModel
                     sheet.OnReadCell(cell);
                 }
             }
+
+            if (!row.IsSetR())
+            {
+                // Certain file format writers skip the row number
+                // Assume no gaps, and give this the next row number
+                int nextRowNum = sheet.LastRowNum + 2;
+                if (nextRowNum == 2 && sheet.PhysicalNumberOfRows == 0)
+                {
+                    nextRowNum = 1;
+                }
+                row.r = (nextRowNum);
+            }
         }
 
         /**

@@ -3328,8 +3328,7 @@ namespace NPOI.XSSF.UserModel
          *  to include the row number on the row tags
          */
         [Test]
-        [Ignore("Not yet supported")]
-        public void noRowNumbers59746()
+        public void NoRowNumbers59746()
         {
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("59746_NoRowNums.xlsx");
             ISheet sheet = wb.GetSheetAt(0);
@@ -3337,6 +3336,10 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("Checked", sheet.GetRow(0).GetCell(0).StringCellValue);
             Assert.AreEqual("Checked", sheet.GetRow(9).GetCell(2).StringCellValue);
             Assert.AreEqual(false, sheet.GetRow(70).GetCell(8).BooleanCellValue);
+
+            Assert.AreEqual(71, sheet.PhysicalNumberOfRows);
+            Assert.AreEqual(70, sheet.LastRowNum);
+            Assert.AreEqual(70, sheet.GetRow(sheet.LastRowNum).RowNum);
         }
 
     }
