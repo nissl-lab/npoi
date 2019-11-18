@@ -83,7 +83,12 @@ namespace NPOI.Util
             for (int i = fromIndex; i < toIndex; i++)
                 a[i] = val;
         }
-
+        public static void Fill(char[] a, int fromIndex, int toIndex, char val)
+        {
+            RangeCheck(a.Length, fromIndex, toIndex);
+            for (int i = fromIndex; i < toIndex; i++)
+                a[i] = val;
+        }
         /// <summary>
         /// Checks that {@code fromIndex} and {@code toIndex} are in
         /// the range and throws an appropriate exception, if they aren't.

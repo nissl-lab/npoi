@@ -111,6 +111,7 @@ namespace NPOI.XSSF.Streaming
             xssfWb1.Close();
 
             wb2.Close();
+            wb1.Close();
         }
 
         [Test]
@@ -149,6 +150,7 @@ namespace NPOI.XSSF.Streaming
             Assert.AreEqual("A", cell.StringCellValue);
 
             xssfWorkbook.Close();
+            wb.Close();
         }
 
         [Test]
@@ -223,6 +225,7 @@ namespace NPOI.XSSF.Streaming
 
             xssfWb2.Close();
             xssfWb3.Close();
+            wb1.Close();
         }
 
         [Test]
@@ -307,6 +310,7 @@ namespace NPOI.XSSF.Streaming
 
             Assert.IsTrue(wb.Dispose());
             xwb.Close();
+            wb.Close();
         }
 
         protected static void assertWorkbookDispose(SXSSFWorkbook wb)
@@ -351,12 +355,12 @@ namespace NPOI.XSSF.Streaming
             SXSSFWorkbook wb1 = new SXSSFWorkbook();
             // the underlying Writer is SheetDataWriter
             assertWorkbookDispose(wb1);
-
+            wb1.Close();
             SXSSFWorkbook wb2 = new SXSSFWorkbook();
             wb2.CompressTempFiles = (/*setter*/true);
             // the underlying Writer is GZIPSheetDataWriter
             assertWorkbookDispose(wb2);
-
+            wb2.Close();
         }
 
         [Ignore("currently writing the same sheet multiple times is not supported...")]
@@ -419,6 +423,7 @@ namespace NPOI.XSSF.Streaming
                 {
                     Assert.IsTrue(wb.Dispose());
                 }
+                wb.Close();
             }
             out1.Delete();
         }
@@ -483,7 +488,9 @@ namespace NPOI.XSSF.Streaming
                 }
             }
 
-            streamingWorkBook.Write(new FileStream("C:\\temp\\streaming.xlsx", FileMode.Create, FileAccess.ReadWrite));
+            FileStream fos = new FileStream("C:\\temp\\streaming.xlsx", FileMode.Create, FileAccess.ReadWrite);
+            streamingWorkBook.Write(fos);
+            fos.Close();
 
             streamingWorkBook.Close();
             workBook.Close();
@@ -494,7 +501,8 @@ namespace NPOI.XSSF.Streaming
         {
             String filename = "SampleSS.xlsx";
             FileInfo file = POIDataSamples.GetSpreadSheetInstance().GetFileInfo(filename);
-            SXSSFWorkbook wb;
+            SXSSFWorkbook wb = null;
+            XSSFWorkbook xwb = null;
 
             // Some tests commented out because close() modifies the file
             // See bug 58779
@@ -508,12 +516,63 @@ namespace NPOI.XSSF.Streaming
             //assertCloseDoesNotModifyFile(filename, wb);
 
             // InputStream
-            wb = new SXSSFWorkbook(new XSSFWorkbook(file.Create()));
-            assertCloseDoesNotModifyFile(filename, wb);
+            FileStream fis = file.Open(FileMode.Open, FileAccess.ReadWrite);
+            try
+            {
+                xwb = new XSSFWorkbook(fis);
+                wb = new SXSSFWorkbook(xwb);
+                assertCloseDoesNotModifyFile(filename, wb);
+            }
+            finally
+            {
+                if (xwb != null)
+                {
+                    xwb.Close();
+                }
+                if (wb != null)
+                {
+                    wb.Close();
+                }
+                fis.Close();
+            }
 
             // OPCPackage
             //wb = new SXSSFWorkbook(new XSSFWorkbook(OPCPackage.open(file)));
             //assertCloseDoesNotModifyFile(filename, wb);
+        }
+        /**
+         * Bug #59743
+         * 
+         * this is only triggered on other files apart of sheet[1,2,...].xml
+         * as those are either copied uncompressed or with the use of GZIPInputStream
+         * so we use shared strings
+         */
+        [Test]
+        public void TestZipBombNotTriggeredOnUselessContent()
+        {
+            SXSSFWorkbook swb = new SXSSFWorkbook(null, 1, true, true);
+            SXSSFSheet s = swb.CreateSheet() as SXSSFSheet;
+            char[] useless = new char[32767];
+            Arrays.Fill(useless, ' ');
+
+            for (int row = 0; row < 1; row++)
+            {
+                IRow r = s.CreateRow(row);
+                for (int col = 0; col < 10; col++)
+                {
+                    char[] prefix = HexDump.ToHex(row * 1000 + col).ToCharArray();
+                    Arrays.Fill(useless, 0, 10, ' ');
+                    Array.Copy(prefix, 0, useless, 0, prefix.Length);
+                    String ul = new String(useless);
+                    r.CreateCell(col, CellType.String).SetCellValue(ul);
+                    ul = null;
+                }
+            }
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            swb.Write(bos);
+            swb.Dispose();
+            swb.Close();
         }
 
     }

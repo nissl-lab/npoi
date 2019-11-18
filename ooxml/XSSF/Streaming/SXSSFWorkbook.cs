@@ -425,19 +425,23 @@ namespace NPOI.XSSF.Streaming
             return null;
         }
 
-        private void InjectData(ZipEntrySource zipEntrySource, Stream outStream)
+        private void InjectData(FileInfo zipfile, Stream outStream)
         {
+            // don't use ZipHelper.openZipFile here - see #59743
+            ZipFile zip = new ZipFile(zipfile.FullName);
             try
             {
                 ZipOutputStream zos = new ZipOutputStream(outStream);
                 try
                 {
-                    var en = zipEntrySource.Entries;
+                    //ZipEntrySource zipEntrySource = new ZipFileZipEntrySource(zip);
+                    //var en =  zipEntrySource.Entries;
+                    var en = zip.GetEnumerator();
                     while (en.MoveNext())
                     {
                         var ze = (ZipEntry)en.Current;
                         zos.PutNextEntry(new ZipEntry(ze.Name));
-                        var inputStream = zipEntrySource.GetInputStream(ze);
+                        var inputStream = zip.GetInputStream(ze);
                         XSSFSheet xSheet = GetSheetFromZipEntryName(ze.Name);
                         if (xSheet != null)
                         {
@@ -466,7 +470,7 @@ namespace NPOI.XSSF.Streaming
             }
             finally
             {
-                zipEntrySource.Close();
+                zip.Close();
             }
         }
 
@@ -769,8 +773,8 @@ namespace NPOI.XSSF.Streaming
                 }
 
                 //Substitute the template entries with the generated sheet data files
-                ZipEntrySource source = new ZipFileZipEntrySource(new ZipFile(tmplFile.FullName));
-                InjectData(source, stream);
+                
+                InjectData(tmplFile, stream);
             }
             finally
             {
