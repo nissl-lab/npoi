@@ -85,7 +85,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     nextRowNum = 1;
                 }
-                row.r = (nextRowNum);
+                row.r = (uint)nextRowNum;
             }
         }
 

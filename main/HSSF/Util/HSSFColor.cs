@@ -115,10 +115,7 @@ namespace NPOI.HSSF.Util
                 //            + "),(" + color.GetType().Name + ")");
                 //}
                 //}
-                if (result.ContainsKey(index2))
-                    result[index2] = color;
-                else
-                    result.Add(index2, color);
+                result[index2] = color;
             }
             return result;
         }
@@ -160,15 +157,15 @@ namespace NPOI.HSSF.Util
         /// if you have none of those requests.
         /// </summary>
         /// <returns>a hashtable containing all colors keyed by String gnumeric-like triplets</returns>
-        public static Hashtable GetTripletHash()
+        public static Dictionary<String, HSSFColor> GetTripletHash()
         {
             return CreateColorsByHexStringMap();
         }
 
-        private static Hashtable CreateColorsByHexStringMap()
+        private static Dictionary<String, HSSFColor> CreateColorsByHexStringMap()
         {
             HSSFColor[] colors = GetAllColors();
-            Hashtable result = new Hashtable(colors.Length * 3 / 2);
+            Dictionary<String, HSSFColor> result = new Dictionary<String, HSSFColor>(colors.Length * 3 / 2);
 
             for (int i = 0; i < colors.Length; i++)
             {

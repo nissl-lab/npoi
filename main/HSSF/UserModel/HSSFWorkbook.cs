@@ -107,7 +107,7 @@ namespace NPOI.HSSF.UserModel
          * this holds the HSSFFont objects attached to this workbook.
          * We only create these from the low level records as required.
          */
-        private Hashtable fonts;
+        private Dictionary<short, HSSFFont> fonts;
 
 
 
@@ -1213,9 +1213,9 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="idx">The index number</param>
         /// <returns>HSSFFont at the index</returns>
-        public NPOI.SS.UserModel.IFont GetFontAt(short idx)
+        public IFont GetFontAt(short idx)
         {
-            if (fonts == null) fonts = new Hashtable();
+            if (fonts == null) fonts = new Dictionary<short, HSSFFont>();
 
             // So we don't confuse users, give them back
             //  the same object every time, but create
@@ -1241,7 +1241,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         public void ResetFontCache()
         {
-            fonts = new Hashtable();
+            fonts = new Dictionary<short, HSSFFont>();
         }
         /// <summary>
         /// Create a new Cell style and Add it to the workbook's style table

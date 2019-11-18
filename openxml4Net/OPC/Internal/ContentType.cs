@@ -156,6 +156,13 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                     }
                 }
             }
+            else
+            {
+                // missing media type and subtype
+                this.type = "";
+                this.subType = "";
+                this.parameters = new Dictionary<string, string>();
+            }
         }
         public override String ToString()
         {
