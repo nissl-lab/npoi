@@ -457,28 +457,18 @@ namespace NPOI.HSSF.UserModel
         public ICell GetCell(int cellnum, MissingCellPolicy policy)
         {
             ICell cell = RetrieveCell(cellnum);
-            if (policy == MissingCellPolicy.RETURN_NULL_AND_BLANK)
+            switch (policy)
             {
-                return cell;
+                case MissingCellPolicy.RETURN_NULL_AND_BLANK:
+                    return cell;
+                case MissingCellPolicy.RETURN_BLANK_AS_NULL:
+                    bool isBlank = (cell != null && cell.CellType == CellType.Blank);
+                    return (isBlank) ? null : cell;
+                case MissingCellPolicy.CREATE_NULL_AS_BLANK:
+                    return (cell == null) ? CreateCell(cellnum, CellType.Blank) : cell;
+                default:
+                    throw new ArgumentException("Illegal policy " + policy + " (" + policy + ")");
             }
-            if (policy == MissingCellPolicy.RETURN_BLANK_AS_NULL)
-            {
-                if (cell == null) return cell;
-                if (cell.CellType == CellType.Blank)
-                {
-                    return null;
-                }
-                return cell;
-            }
-            if (policy == MissingCellPolicy.CREATE_NULL_AS_BLANK)
-            {
-                if (cell == null)
-                {
-                    return CreateCell(cellnum, CellType.Blank);
-                }
-                return cell;
-            }
-            throw new ArgumentException("Illegal policy " + policy + " (" + policy.id + ")");
         }
 
         /// <summary>

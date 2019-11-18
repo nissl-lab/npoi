@@ -1832,7 +1832,7 @@ namespace NPOI.HSSF.UserModel
     	            break;
             }
 
-            blipRecord.RecordId = (short)(EscherBitmapBlip.RECORD_ID_START + format);
+            blipRecord.RecordId = (short)(EscherBlipRecord.RECORD_ID_START + format);
             
             switch (format)
             {

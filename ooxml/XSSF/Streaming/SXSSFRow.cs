@@ -274,21 +274,20 @@ namespace NPOI.XSSF.Streaming
             CheckBounds(cellnum);
 
             var cell = _cells[cellnum];
-
-            switch (policy._policy)
+            switch (policy)
             {
-                case MissingCellPolicy.Policy.RETURN_NULL_AND_BLANK:
+                case MissingCellPolicy.RETURN_NULL_AND_BLANK:
                     return cell;
-                case MissingCellPolicy.Policy.RETURN_BLANK_AS_NULL:
+                case MissingCellPolicy.RETURN_BLANK_AS_NULL:
                     bool isBlank = (cell != null && cell.CellType == CellType.Blank);
                     return (isBlank) ? null : cell;
-                case MissingCellPolicy.Policy.CREATE_NULL_AS_BLANK:
+                case MissingCellPolicy.CREATE_NULL_AS_BLANK:
                     return (cell == null) ? CreateCell(cellnum, CellType.Blank) : cell;
                 default:
-                    throw new InvalidOperationException("Illegal policy " + policy + " (" + policy.id + ")");
+                    throw new ArgumentException("Illegal policy " + policy + " (" + policy + ")");
+
             }
         }
-
         public IEnumerator<ICell> GetEnumerator()
         {
             return new FilledCellIterator(_cells);
