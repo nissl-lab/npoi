@@ -3323,6 +3323,22 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(10.0, P16.NumericCellValue, 0.00001);
         }
 
+        /**
+         * Files produced by some scientific equipment neglect
+         *  to include the row number on the row tags
+         */
+        [Test]
+        [Ignore("Not yet supported")]
+        public void noRowNumbers59746()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("59746_NoRowNums.xlsx");
+            ISheet sheet = wb.GetSheetAt(0);
+            Assert.IsTrue(sheet.LastRowNum > 20, "Last row num: " + sheet.LastRowNum);
+            Assert.AreEqual("Checked", sheet.GetRow(0).GetCell(0).StringCellValue);
+            Assert.AreEqual("Checked", sheet.GetRow(9).GetCell(2).StringCellValue);
+            Assert.AreEqual(false, sheet.GetRow(70).GetCell(8).BooleanCellValue);
+        }
+
     }
 
 }
