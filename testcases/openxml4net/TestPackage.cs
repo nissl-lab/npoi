@@ -833,7 +833,7 @@ namespace TestCases.OPC
             ZipFile zipFile = ZipHelper.OpenZipFile(OpenXml4NetTestDataSamples.GetSampleFile("sample.xlsx"));
             Assert.IsNotNull(zipFile);
 
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(2500000);
             ZipOutputStream append = new ZipOutputStream(bos);
             // first, copy contents from existing war
             IEnumerator entries = zipFile.GetEnumerator();
@@ -858,6 +858,7 @@ namespace TestCases.OPC
                         append.Write(bos2.ToByteArray(), 0, (int)size);
                         byte[] spam = new byte[0x7FFF];
                         for (int i = 0; i < spam.Length; i++) spam[i] = (byte)' ';
+                        // 0x7FFF0000 is the maximum for 32-bit zips, but less still works
                         while (size < 0x7FFF0000)
                         {
                             append.Write(spam, 0, spam.Length);
