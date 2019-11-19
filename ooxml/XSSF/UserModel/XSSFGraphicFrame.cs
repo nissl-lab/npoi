@@ -37,7 +37,6 @@ namespace NPOI.XSSF.UserModel
         private static CT_GraphicalObjectFrame prototype = null;
 
         private CT_GraphicalObjectFrame graphicFrame;
-        private XSSFDrawing drawing;
         private new XSSFClientAnchor anchor;
 
         /**
