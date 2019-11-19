@@ -96,7 +96,7 @@ namespace NPOI.SS.UserModel.Charts
         private T[] elements;
 
         public ArrayDataSource(T[] elements) {
-            this.elements = elements;
+            this.elements = (T[])elements.Clone();
         }
 
         public int PointCount {

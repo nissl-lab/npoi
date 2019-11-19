@@ -338,8 +338,8 @@ namespace NPOI.POIFS.FileSystem
          */
         public byte[] DataBuffer
         {
-            get{return dataBuffer;}
-            set { dataBuffer = value; }
+            get { return dataBuffer; }
+            set { dataBuffer =(byte[])value.Clone(); }
         }
 
         /**
