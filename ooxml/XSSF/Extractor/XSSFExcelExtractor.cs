@@ -164,12 +164,12 @@ namespace NPOI.XSSF.Extractor
 
                 StringBuilder text = new StringBuilder();
 
-                for (int i = 0; i < workbook.NumberOfSheets; i++)
+                foreach (ISheet sh in workbook)
                 {
-                    XSSFSheet sheet = (XSSFSheet)workbook.GetSheetAt(i);
+                    XSSFSheet sheet = (XSSFSheet)sh;
                     if (includeSheetNames)
                     {
-                        text.Append(workbook.GetSheetName(i)+"\n");
+                        text.Append(sheet.SheetName + "\n");
                     }
 
                     // Header(s), if present

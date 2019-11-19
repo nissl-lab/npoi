@@ -163,8 +163,8 @@ namespace NPOI.XSSF.Streaming
          * A value of -1 indicates unlimited access. In this case all
          * records that have not been flushed by a call to flush() are available
          * for random access.
+         * </p>
          * <p>
-         * <p></p>
          * A value of 0 is not allowed because it would flush any newly created row
          * without having a chance to specify any cells.
          * </p>
@@ -235,8 +235,8 @@ namespace NPOI.XSSF.Streaming
          * A value of -1 indicates unlimited access. In this case all
          * records that have not been flushed by a call to flush() are available
          * for random access.
+         * </p>
          * <p>
-         * <p></p>
          * A value of 0 is not allowed because it would flush any newly created row
          * without having a chance to specify any cells.
          * </p>
@@ -260,8 +260,8 @@ namespace NPOI.XSSF.Streaming
          * A value of -1 indicates unlimited access. In this case all
          * records that have not been flushed by a call to flush() are available
          * for random access.
+         * </p>
          * <p>
-         * <p></p>
          * A value of 0 is not allowed because it would flush any newly created row
          * without having a chance to specify any cells.
          * </p>
@@ -286,8 +286,8 @@ namespace NPOI.XSSF.Streaming
          * A value of -1 indicates unlimited access. In this case all
          * records that have not been flushed by a call to flush() are available
          * for random access.
+         * </p>
          * <p>
-         * <p></p>
          * A value of 0 is not allowed because it would flush any newly created row
          * without having a chance to specify any cells.
          * </p>
@@ -359,7 +359,7 @@ namespace NPOI.XSSF.Streaming
             {
                 sxSheet._writer.Close();
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 // ignore exception here
             }

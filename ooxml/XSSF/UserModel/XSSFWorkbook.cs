@@ -1163,13 +1163,14 @@ namespace NPOI.XSSF.UserModel
         /// <returns>index of the sheet (0 based) or -1 if not found</returns>
         public int GetSheetIndex(String name)
         {
-            for (int i = 0; i < sheets.Count; ++i)
+            int idx = 0;
+            foreach (XSSFSheet sh in sheets)
             {
-                XSSFSheet sheet = sheets[i];
-                if (name.Equals(sheet.SheetName, StringComparison.InvariantCultureIgnoreCase))
+                if (name.Equals(sh.SheetName, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return i;
+                    return idx;
                 }
+                idx++;
             }
             return -1;
         }
@@ -1232,14 +1233,15 @@ namespace NPOI.XSSF.UserModel
 
         public void RemoveName(String name)
         {
-            for (int i = 0; i < namedRanges.Count; i++)
+            int idx = 0;
+            foreach (XSSFName nm in namedRanges)
             {
-                XSSFName nm = namedRanges[i];
                 if (nm.NameName.Equals(name, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    RemoveName(i);
+                    RemoveName(idx);
                     return;
                 }
+                idx++;
             }
             throw new ArgumentException("Named range was not found: " + name);
         }
@@ -1564,10 +1566,11 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetSelectedTab(int index)
         {
-            for (int i = 0; i < sheets.Count; ++i)
+            int idx = 0;
+            foreach (XSSFSheet sh in sheets)
             {
-                XSSFSheet sheet = sheets[i];
-                sheet.IsSelected = (i == index);
+                sh.IsSelected = idx == index;
+                idx++;
             }
         }
 

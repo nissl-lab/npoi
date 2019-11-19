@@ -694,14 +694,15 @@ namespace NPOI.OpenXml4Net.OPC
             StringBuilder retVal = new StringBuilder();
             String uriStr = uri.OriginalString;
             char c;
-            for (int i = 0; i < uriStr.Length; ++i)
+            int length = uriStr.Length;
+            for (int i = 0; i < length; ++i)
             {
                 c = uriStr[i];
                 if (c == '%')
                 {
                     // We certainly found an encoded character, check for length
                     // now ( '%' HEXDIGIT HEXDIGIT)
-                    if (((uriStr.Length - i) < 2))
+                    if ((length - i) < 2)
                     {
                         throw new ArgumentException("The uri " + uriStr
                                 + " contain invalid encoded character !");
@@ -709,7 +710,7 @@ namespace NPOI.OpenXml4Net.OPC
 
                     // Decode the encoded character
                     char decodedChar = (char)Convert.ToInt32(uriStr.Substring(
-                            i + 1, i + 3), 16);
+                            i + 1, 2), 16);
                     retVal.Append(decodedChar);
                     i += 2;
                     continue;

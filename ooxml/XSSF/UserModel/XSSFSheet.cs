@@ -2902,7 +2902,8 @@ namespace NPOI.XSSF.UserModel
         {
             int level = ((XSSFRow)GetRow(row)).GetCTRow().outlineLevel;
             int currentRow;
-            for (currentRow = row; currentRow < LastRowNum; currentRow++)
+            int lastRowNum = LastRowNum;
+            for (currentRow = row; currentRow < lastRowNum; currentRow++)
             {
                 if (GetRow(currentRow) == null
                         || ((XSSFRow)GetRow(currentRow)).GetCTRow().outlineLevel < level)

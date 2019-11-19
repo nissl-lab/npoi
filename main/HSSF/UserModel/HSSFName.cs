@@ -100,9 +100,9 @@ namespace NPOI.HSSF.UserModel
                 _definedNameRec.NameText = value;
                 InternalWorkbook wb = book.Workbook;
                 int sheetNumber = _definedNameRec.SheetNumber;
-
+                int lastNameIndex = wb.NumNames - 1;
                 //Check to Ensure no other names have the same case-insensitive name
-                for (int i = wb.NumNames- 1; i >= 0; i--)
+                for (int i = lastNameIndex; i >= 0; i--)
                 {
                     NameRecord rec = wb.GetNameRecord(i);
                     if (rec != _definedNameRec)

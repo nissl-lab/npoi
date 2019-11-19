@@ -505,23 +505,21 @@ namespace NPOI.XSSF.UserModel
          */
         public XSSFFont GetFontAtIndex(int index)
         {
-            if (st.sizeOfRArray() == 0) return null;
-
+            ThemesTable themes = GetThemesTable();
             int pos = 0;
-            for (int i = 0; i < st.sizeOfRArray(); i++)
+            foreach (CT_RElt r in st.r)
             {
-                CT_RElt r = st.GetRArray(i);
-                if (index >= pos && index < pos + r.t.Length)
+                int length = r.t.Length;
+                if (index >= pos && index < pos + length)
                 {
                     XSSFFont fnt = new XSSFFont(ToCTFont(r.rPr));
-                    fnt.SetThemesTable(GetThemesTable());
+                    fnt.SetThemesTable(themes);
                     return fnt;
                 }
 
-                pos += r.t.Length;
+                pos += length;
             }
             return null;
-
         }
 
         /**

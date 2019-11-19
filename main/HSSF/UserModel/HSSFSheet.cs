@@ -1632,7 +1632,8 @@ namespace NPOI.HSSF.UserModel
                 {
                     // This code would get simpler if NoteRecords could be organised by HSSFRow.
                     HSSFPatriarch patriarch = CreateDrawingPatriarch() as HSSFPatriarch;
-                    for (int i = patriarch.Children.Count - 1; i >= 0; i--)
+                    int lastChildIndex = patriarch.Children.Count - 1;
+                    for (int i = lastChildIndex; i >= 0; i--)
                     {
                         HSSFShape shape = patriarch.Children[(i)];
                         if (!(shape is HSSFComment))
@@ -2576,7 +2577,9 @@ namespace NPOI.HSSF.UserModel
 
             //create a combobox control for each column
             HSSFPatriarch p = (HSSFPatriarch)CreateDrawingPatriarch();
-            for (int col = range.FirstColumn; col <= range.LastColumn; col++)
+            int firstColumn = range.FirstColumn;
+            int lastColumn = range.LastColumn;
+            for (int col = firstColumn; col <= lastColumn; col++)
             {
                 p.CreateComboBox(new HSSFClientAnchor(0, 0, 0, 0,
                         (short)col, firstRow, (short)(col + 1), firstRow + 1));
