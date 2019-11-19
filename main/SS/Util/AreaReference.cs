@@ -106,7 +106,7 @@ namespace NPOI.SS.Util
             }
         }
 
-        private bool IsPlainColumn(String refPart)
+        private static bool IsPlainColumn(String refPart)
         {
             for (int i = refPart.Length - 1; i >= 0; i--)
             {

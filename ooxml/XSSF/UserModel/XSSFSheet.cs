@@ -3046,7 +3046,8 @@ namespace NPOI.XSSF.UserModel
 
             // check row numbers to make sure they are continuous and increasing (monotonic)
             // and srcRows does not contain null rows
-            for (int index = 1; index < srcRows.Count; index++)
+            int size = srcRows.Count;
+            for (int index = 1; index < size; index++)
             {
                 IRow curRow = srcRows[(index)];
                 if (curRow == null)

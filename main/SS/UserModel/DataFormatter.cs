@@ -26,6 +26,7 @@ namespace NPOI.SS.UserModel
     using System.Globalization;
     using NPOI.SS.Format;
     using NPOI.Util;
+    using System.Collections.Generic;
 
 
 
@@ -523,7 +524,7 @@ namespace NPOI.SS.UserModel
             char[] chars = formatStr.ToCharArray();
             bool mIsMonth = true;
             bool isElapsed = false;
-            ArrayList ms = new ArrayList();
+            List<int> ms = new List<int>();
             for (int j = 0; j < chars.Length; j++)
             {
                 char c = chars[j];
@@ -604,9 +605,8 @@ namespace NPOI.SS.UserModel
                 {
                     sb.Append('s');
                     // if 'M' precedes 's' it should be minutes ('m')
-                    for (int i = 0; i < ms.Count; i++)
+                    foreach (int index in ms)
                     {
-                        int index = (int)ms[i];
                         if (sb[index] == 'M')
                         {
                             sb[index] = 'm';

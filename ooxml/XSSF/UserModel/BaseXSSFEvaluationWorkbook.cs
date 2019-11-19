@@ -113,14 +113,17 @@ namespace NPOI.XSSF.UserModel
             // Not properly referenced
             throw new Exception("Book not linked for filename " + bookName);
         }
+        /* case-sensitive */
         private int FindExternalLinkIndex(String bookName, List<ExternalLinksTable> tables)
         {
-            for (int i = 0; i < tables.Count; i++)
+            int i = 0;
+            foreach (ExternalLinksTable table in tables)
             {
-                if (tables[i].LinkedFileName.Equals(bookName))
+                if (table.LinkedFileName.Equals(bookName))
                 {
                     return i + 1; // 1 based results, 0 = current workbook
                 }
+                i++;
             }
             return -1;
         }

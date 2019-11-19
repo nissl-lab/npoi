@@ -94,7 +94,8 @@ namespace NPOI.SS.Formula.Functions
             }
 
             // Iterate over all db entries.
-            for (int row = 1; row < db.Height; ++row)
+            int height = db.Height;
+            for (int row = 1; row < height; ++row)
             {
                 bool matches = true;
                 try
@@ -209,7 +210,8 @@ namespace NPOI.SS.Formula.Functions
         private static int GetColumnForString(TwoDEval db, String name)
         {
             int resultColumn = -1;
-            for (int column = 0; column < db.Width; ++column)
+            int width = db.Width;
+            for (int column = 0; column < width; ++column)
             {
                 ValueEval columnNameValueEval = db.GetValue(0, column);
                 String columnName = GetStringFromValueEval(columnNameValueEval);
@@ -237,11 +239,13 @@ namespace NPOI.SS.Formula.Functions
             // Only one row must match to accept the input, so rows are ORed.
             // Each row is made up of cells where each cell is a condition,
             // all have to match, so they are ANDed.
-            for (int conditionRow = 1; conditionRow < cdb.Height; ++conditionRow)
+            int height = cdb.Height;
+            for (int conditionRow = 1; conditionRow < height; ++conditionRow)
             {
                 bool matches = true;
-                for (int column = 0; column < cdb.Width; ++column)
-                { // columns are ANDed
+                int width = cdb.Width;
+                for (int column = 0; column < width; ++column)  // columns are ANDed
+                { 
                     // Whether the condition column matches a database column, if not it's a
                     // special column that accepts formulas.
                     bool columnCondition = true;

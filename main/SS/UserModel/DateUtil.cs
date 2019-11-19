@@ -507,11 +507,12 @@ namespace NPOI.SS.UserModel
                 // If it end in ;@, that's some crazy dd/mm vs mm/dd
                 //  switching stuff, which we can ignore
                 fs = Regex.Replace(fs, ";@", "");
-                StringBuilder sb = new StringBuilder(fs.Length);
-                for (int i = 0; i < fs.Length; i++)
+                int length = fs.Length;
+                StringBuilder sb = new StringBuilder(length);
+                for (int i = 0; i < length; i++)
                 {
                     char c = fs[i];
-                    if (i < fs.Length - 1)
+                    if (i < length - 1)
                     {
                         char nc = fs[i + 1];
                         if (c == '\\')
@@ -561,9 +562,10 @@ namespace NPOI.SS.UserModel
                 // You're allowed something like dd/mm/yy;[red]dd/mm/yy
                 //  which would place dates before 1900/1904 in red
                 // For now, only consider the first one
-                if (fs.IndexOf(';') > 0 && fs.IndexOf(';') < fs.Length - 1)
+                int separatorIndex = fs.IndexOf(';');
+                if (separatorIndex > 0 && separatorIndex < fs.Length - 1)
                 {
-                    fs = fs.Substring(0, fs.IndexOf(';'));
+                    fs = fs.Substring(0, separatorIndex);
                 }
                 // Ensure it has some date letters in it
                 // (Avoids false positives on the rest of pattern 3)

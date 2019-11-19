@@ -260,9 +260,8 @@ namespace NPOI.Util
         public static bool HasMultibyte(String value)
         {
             if (value == null) return false;
-            for (int i = 0; i < value.Length; i++)
+            foreach (char c in value)
             {
-                char c = value[i];
                 if (c > 0xFF) return true;
             }
             return false;

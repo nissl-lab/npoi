@@ -204,13 +204,13 @@ namespace NPOI.SS.Formula.PTG
         {
             StringBuilder b = new StringBuilder();
             b.Append("{");
-            for (int y = 0; y < RowCount; y++)
+            for (int y = 0; y < _nRows; y++)
             {
                 if (y > 0)
                 {
                     b.Append(";");
                 }
-                for (int x = 0; x < ColumnCount; x++)
+                for (int x = 0; x < _nColumns; x++)
                 {
                     if (x > 0)
                     {
