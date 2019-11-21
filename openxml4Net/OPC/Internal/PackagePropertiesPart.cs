@@ -41,8 +41,10 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         //and TIME_ZONE_PAT
         private String[] TZ_DATE_FORMATS = new String[]{
 			"yyyy-MM-dd'T'HH:mm:ssz",
-			"yyyy-MM-dd'T'HH:mm:ss.SSSz"
-	    };
+            "yyyy-MM-dd'T'HH:mm:ss.Sz",
+            "yyyy-MM-dd'T'HH:mm:ss.SSz",
+            "yyyy-MM-dd'T'HH:mm:ss.SSSz",
+        };
 
         private Regex TIME_ZONE_PAT = new Regex("([-+]\\d\\d):?(\\d\\d)");
 

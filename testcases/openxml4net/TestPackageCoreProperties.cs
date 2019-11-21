@@ -271,6 +271,58 @@ namespace TestCases.OPC
             pkg.Close();
         }
 
+
+        [Test]
+        public void TestAlternateCorePropertyTimezones()
+        {
+            Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("OPCCompliance_CoreProperties_AlternateTimezones.docx");
+            OPCPackage pkg = OPCPackage.Open(is1);
+            PackagePropertiesPart props = (PackagePropertiesPart)pkg.GetPackageProperties();
+            is1.Close();
+
+            // We need predictable dates for testing!
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            //df.TimeZone = LocaleUtil.TIMEZONE_UTC;
+            // Check text properties first
+            Assert.AreEqual("Lorem Ipsum", props.GetTitleProperty());
+            Assert.AreEqual("Apache POI", props.GetCreatorProperty());
+
+            // Created at has a +3 timezone and milliseconds
+            //   2006-10-13T18:06:00.123+03:00
+            // = 2006-10-13T15:06:00.123+00:00
+            Assert.AreEqual("2006-10-13T15:06:00Z", props.GetCreatedPropertyString());
+            Assert.AreEqual("2006-10-13T15:06:00.123Z", df.Format(props.GetCreatedProperty()));
+
+            // Modified at has a -13 timezone but no milliseconds
+            //   2007-06-20T07:59:00-13:00
+            // = 2007-06-20T20:59:00-13:00
+            Assert.AreEqual("2007-06-20T20:59:00Z", props.GetModifiedPropertyString());
+            Assert.AreEqual("2007-06-20T20:59:00.000Z", df.Format(props.GetModifiedProperty()));
+
+
+            // Ensure we can change them with other timezones and still read back OK
+            props.SetCreatedProperty("2007-06-20T20:57:00+13:00");
+            props.SetModifiedProperty("2007-06-20T20:59:00.123-13:00");
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            pkg.Save(baos);
+            pkg = OPCPackage.Open(new ByteArrayInputStream(baos.ToByteArray()));
+
+            // Check text properties first - should be unchanged
+            Assert.AreEqual("Lorem Ipsum", props.GetTitleProperty());
+            Assert.AreEqual("Apache POI", props.GetCreatorProperty());
+
+            // Check the updated times
+            //   2007-06-20T20:57:00+13:00
+            // = 2007-06-20T07:57:00Z
+            Assert.AreEqual("2007-06-20T07:57:00.000Z", df.Format(props.GetCreatedProperty().Value));
+
+            //   2007-06-20T20:59:00.123-13:00
+            // = 2007-06-21T09:59:00.123Z
+            Assert.AreEqual("2007-06-21T09:59:00.123Z", df.Format(props.GetModifiedProperty().Value));
+        }
+
+
     }
 }
 
