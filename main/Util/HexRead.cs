@@ -127,67 +127,45 @@ namespace NPOI.Util
             int characterCount = 0;
             byte b = (byte) 0;
             ArrayList bytes = new ArrayList();
-            bool done = false;
-            while ( !done )
+            char a = (char)('a' - 10);
+            char A = (char)('A' - 10);
+            while (true)
             {
                 int count = stream.ReadByte();
-                char baseChar = 'a';
-                if ( count == eofChar ) break;
-                switch ( count )
+                int digitValue = -1;
+                if ('0' <= count && count <= '9')
                 {
-                    case '#':
-                        ReadToEOL( stream );
-                        break;
-                    case '0': case '1': case '2': case '3': case '4': case '5':
-                    case '6': case '7': case '8': case '9':
-                        b <<= 4;
-                        b += (byte) ( count - '0' );
-                        characterCount++;
-                        if ( characterCount == 2 )
-                        {
-                            bytes.Add( (byte)b );
-                            characterCount = 0;
-                            b = (byte) 0;
-                        }
-                        break;
-                    case 'A':
-                    case 'B':
-                    case 'C':
-                    case 'D':
-                    case 'E':
-                    case 'F':
-                        baseChar = 'A';
-                        b <<= 4;
-                        b += (byte)(count + 10 - baseChar);
-                        characterCount++;
-                        if (characterCount == 2)
-                        {
-                            bytes.Add((byte)b);
-                            characterCount = 0;
-                            b = (byte)0;
-                        }
-                        break;
-                    case 'a':
-                    case 'b':
-                    case 'c':
-                    case 'd':
-                    case 'e':
-                    case 'f':
-                        b <<= 4;
-                        b += (byte) ( count + 10 - baseChar );
-                        characterCount++;
-                        if ( characterCount == 2 )
-                        {
-                            bytes.Add( (byte) b );
-                            characterCount = 0;
-                            b = (byte) 0;
-                        }
-                        break;
-                    case -1:
-                        done = true;
-                        break;
-                    default :
-                        break;
+                    digitValue = count - '0';
+                }
+                else if ('A' <= count && count <= 'F')
+                {
+                    digitValue = count - A;
+                }
+                else if ('a' <= count && count <= 'f')
+                {
+                    digitValue = count - a;
+                }
+                else if ('#' == count)
+                {
+                    ReadToEOL(stream);
+                }
+                else if (-1 == count || eofChar == count)
+                {
+                    break;
+                }
+                // else: ignore the character
+
+                if (digitValue != -1)
+                {
+                    b <<= 4;
+                    b += (byte)digitValue;
+                    characterCount++;
+                    if (characterCount == 2)
+                    {
+                        bytes.Add(b);
+                        characterCount = 0;
+                        b = 0;
+                    }
                 }
             }
             byte[] polished = (byte[]) bytes.ToArray(typeof(byte) );
