@@ -3426,5 +3426,30 @@ namespace TestCases.HSSF.UserModel
             Assert.IsNotNull(newSheet);
             wb.Close();
         }
+
+        /**
+         * Test generator of ids for the CommonObjectDataSubRecord record.
+         */
+        [Test]
+        public void Test51332()
+        {
+            HSSFClientAnchor anchor = new HSSFClientAnchor();
+            HSSFSimpleShape shape;
+            CommonObjectDataSubRecord cmo;
+
+            shape = new HSSFTextbox(null, anchor);
+            shape.ShapeId = 1025;
+            cmo = (CommonObjectDataSubRecord)shape.GetObjRecord().SubRecords[0];
+            Assert.AreEqual(1, cmo.ObjectId);
+            shape = new HSSFPicture(null, anchor);
+            shape.ShapeId = 1026;
+            cmo = (CommonObjectDataSubRecord)shape.GetObjRecord().SubRecords[0];
+            Assert.AreEqual(2, cmo.ObjectId);
+            shape = new HSSFComment(null, anchor);
+            shape.ShapeId = 1027;
+            cmo = (CommonObjectDataSubRecord)shape.GetObjRecord().SubRecords[0];
+            Assert.AreEqual(1027, cmo.ObjectId);
+        }
+
     }
 }

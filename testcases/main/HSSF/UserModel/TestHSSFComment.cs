@@ -82,6 +82,8 @@ namespace TestCases.HSSF.UserModel
             cell = sheet.GetRow(5).GetCell(2);
             comment = cell.CellComment;
             Assert.AreEqual("c6", comment.String.String);
+
+            wb.Close();
         }
 
         [Test]
@@ -202,7 +204,7 @@ namespace TestCases.HSSF.UserModel
             return comment;
         }
         [Test]
-        public void ResultEqualsToAbstractShape()
+        public void ResultEqualsToNonExistingAbstractShape()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sh = wb.CreateSheet() as HSSFSheet;
@@ -213,59 +215,53 @@ namespace TestCases.HSSF.UserModel
             HSSFCell cell = row.CreateCell(0) as HSSFCell;
             cell.CellComment = (comment);
 
-            CommentShape commentShape = HSSFTestModelHelper.CreateCommentShape(1025, comment);
-
             Assert.AreEqual(comment.GetEscherContainer().ChildRecords.Count, 5);
-            Assert.AreEqual(commentShape.SpContainer.ChildRecords.Count, 5);
 
             //sp record
-            byte[] expected = commentShape.SpContainer.GetChild(0).Serialize();
+            byte[] expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAFvEw/WBg4GBgZEFSHAxMAAA9gX7nhAAAAA=");
             byte[] actual = comment.GetEscherContainer().GetChild(0).Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
             Assert.IsTrue(Arrays.Equals(expected, actual));
 
-            expected = commentShape.SpContainer.GetChild(2).Serialize();
+            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNgEPggxIANAABK4+laGgAAAA==");
             actual = comment.GetEscherContainer().GetChild(2).Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
             Assert.IsTrue(Arrays.Equals(expected, actual));
 
-            expected = commentShape.SpContainer.GetChild(3).Serialize();
+            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNgEPzAAAQACl6c5QgAAAA=");
             actual = comment.GetEscherContainer().GetChild(3).Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
             Assert.IsTrue(Arrays.Equals(expected, actual));
 
-            expected = commentShape.SpContainer.GetChild(4).Serialize();
+            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNg4P3AAAQA6pyIkQgAAAA=");
             actual = comment.GetEscherContainer().GetChild(4).Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
             Assert.IsTrue(Arrays.Equals(expected, actual));
 
             ObjRecord obj = comment.GetObjRecord();
-            ObjRecord objShape = commentShape.ObjRecord;
 
-            expected = obj.Serialize();
-            actual = objShape.Serialize();
+            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAItlMGEQZRBikGRgZBF0YEACvAxiDLgBAJZsuoU4AAAA");
+            actual = obj.Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
             //assertArrayEquals(expected, actual);
 
             TextObjectRecord tor = comment.GetTextObjectRecord();
-            TextObjectRecord torShape = commentShape.TextObjectRecord;
 
-            expected = tor.Serialize();
-            actual = torShape.Serialize();
+            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAANvGKMQgxMSABgBGi8T+FgAAAA==");
+            actual = tor.Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
             Assert.IsTrue(Arrays.Equals(expected, actual));
 
             NoteRecord note = comment.NoteRecord;
-            NoteRecord noteShape = commentShape.NoteRecord;
 
-            expected = note.Serialize();
-            actual = noteShape.Serialize();
+            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAJNh4GGAAEYWEAkAS0KXuRAAAAA=");
+            actual = note.Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
             Assert.IsTrue(Arrays.Equals(expected, actual));
@@ -387,6 +383,8 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(comment.String.String, "evgeniy:\npoi test");
             Assert.AreEqual(comment.Column, 1);
             Assert.AreEqual(comment.Row, 2);
+
+            wb.Close();
         }
         [Test]
         public void FindComments()
@@ -399,8 +397,6 @@ namespace TestCases.HSSF.UserModel
             HSSFRow row = sh.CreateRow(5) as HSSFRow;
             HSSFCell cell = row.CreateCell(4) as HSSFCell;
             cell.CellComment = (comment);
-
-            HSSFTestModelHelper.CreateCommentShape(0, comment);
 
             Assert.IsNotNull(sh.FindCellComment(5, 4));
             Assert.IsNull(sh.FindCellComment(5, 5));

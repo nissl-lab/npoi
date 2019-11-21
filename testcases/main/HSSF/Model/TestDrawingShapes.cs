@@ -79,21 +79,12 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(HSSFShape.LINESTYLE_SOLID, shape.LineStyle);
             Assert.IsFalse(shape.IsNoFill);
 
-            AbstractShape sp = AbstractShape.CreateShape(shape, 1);
-            EscherContainerRecord spContainer = sp.SpContainer;
-            EscherOptRecord opt = spContainer.GetChildById(EscherOptRecord.RECORD_ID) as EscherOptRecord;
-
+            EscherOptRecord opt = shape.GetOptRecord();
             Assert.AreEqual(7, opt.EscherProperties.Count);
-            Assert.IsTrue(((EscherBoolProperty)opt.Lookup(EscherProperties.TEXT__SIZE_TEXT_TO_FIT_SHAPE)).IsTrue);
-            Assert.AreEqual(0x00000004,
-                    ((EscherSimpleProperty)opt.Lookup(EscherProperties.GEOMETRY__SHAPEPATH)).PropertyValue);
-            Assert.AreEqual(0x08000009,
-                    ((EscherSimpleProperty)opt.Lookup(EscherProperties.FILL__FILLCOLOR)).PropertyValue);
-            Assert.IsTrue(((EscherBoolProperty)opt.Lookup(EscherProperties.FILL__NOFILLHITTEST)).IsTrue);
-            Assert.AreEqual(0x08000040,
-                    ((EscherSimpleProperty)opt.Lookup(EscherProperties.LINESTYLE__COLOR)).PropertyValue);
-            Assert.IsTrue(((EscherBoolProperty)opt.Lookup(EscherProperties.LINESTYLE__NOLINEDRAWDASH)).IsTrue);
             Assert.IsTrue(((EscherBoolProperty)opt.Lookup(EscherProperties.GROUPSHAPE__PRINT)).IsTrue);
+            Assert.IsTrue(((EscherBoolProperty)opt.Lookup(EscherProperties.LINESTYLE__NOLINEDRAWDASH)).IsTrue);
+            Assert.AreEqual(0x00000004, ((EscherSimpleProperty)opt.Lookup(EscherProperties.GEOMETRY__SHAPEPATH)).PropertyValue);
+            Assert.IsNull(opt.Lookup(EscherProperties.TEXT__SIZE_TEXT_TO_FIT_SHAPE));
         }
 
         public void TestDefaultPictureSettings()

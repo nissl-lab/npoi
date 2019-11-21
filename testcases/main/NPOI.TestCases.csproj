@@ -131,7 +131,6 @@
     <Compile Include="HPSF\TestVariantSupport.cs" />
     <Compile Include="HSSF\EventModel\TestAbortableListener.cs" />
     <Compile Include="HSSF\Extractor\TestOldExcelExtractor.cs" />
-    <Compile Include="HSSF\Model\HSSFTestModelHelper.cs" />
     <Compile Include="HSSF\Model\TestDrawingAggregate.cs" />
     <Compile Include="HSSF\Model\TestDrawingShapes.cs" />
     <Compile Include="HSSF\Model\TestEscherRecordFactory.cs" />
@@ -512,7 +511,6 @@
     <Compile Include="HSSF\Model\TestLinkTable.cs" />
     <Compile Include="HSSF\Model\TestOperandClassTransformer.cs" />
     <Compile Include="HSSF\Model\TestRowBlocksReader.cs" />
-    <Compile Include="HSSF\Model\TestShapes.cs" />
     <Compile Include="HSSF\Model\TestWorkbook.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestPageSettingsBlock.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestSharedValueManager.cs" />

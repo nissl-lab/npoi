@@ -36,59 +36,46 @@ namespace TestCases.HSSF.UserModel
     public class TestText
     {
         [Test]
-        public void TestResultEqualsToAbstractShape()
+        public void TestResultEqualsToNonExistingAbstractShape()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sh = wb.CreateSheet() as HSSFSheet;
             HSSFPatriarch patriarch = sh.CreateDrawingPatriarch() as HSSFPatriarch;
             HSSFTextbox textbox = patriarch.CreateTextbox(new HSSFClientAnchor()) as HSSFTextbox;
-            TextboxShape textboxShape = HSSFTestModelHelper.CreateTextboxShape(1025, textbox);
-
             Assert.AreEqual(textbox.GetEscherContainer().ChildRecords.Count, 5);
-            Assert.AreEqual(textboxShape.SpContainer.ChildRecords.Count, 5);
-
             //sp record
-            byte[] expected = textboxShape.SpContainer.GetChild(0).Serialize();
+            byte[] expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAFvEw/WBg4GBgZEFSHAxMAAA9gX7nhAAAAA=");
             byte[] actual = textbox.GetEscherContainer().GetChild(0).Serialize();
-
             Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
-
-            expected = textboxShape.SpContainer.GetChild(2).Serialize();
+            //assertArrayEquals(expected, actual)
+            CollectionAssert.AreEqual(expected, actual);
+            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNgEPggxIANAABK4+laGgAAAA==");
             actual = textbox.GetEscherContainer().GetChild(2).Serialize();
-
             Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
-
-            expected = textboxShape.SpContainer.GetChild(3).Serialize();
+            CollectionAssert.AreEqual(expected, actual);
+            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNgEPzAAAQACl6c5QgAAAA=");
             actual = textbox.GetEscherContainer().GetChild(3).Serialize();
-
             Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
-
-            expected = textboxShape.SpContainer.GetChild(4).Serialize();
+            CollectionAssert.AreEqual(expected, actual);
+            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNg4P3AAAQA6pyIkQgAAAA=");
             actual = textbox.GetEscherContainer().GetChild(4).Serialize();
-
             Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
-
+            CollectionAssert.AreEqual(expected, actual);
             ObjRecord obj = textbox.GetObjRecord();
-            ObjRecord objShape = textboxShape.ObjRecord;
-
-            expected = obj.Serialize();
-            actual = objShape.Serialize();
+            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAItlkGIQZRBiYGNgZBBMYEADAOdCLuweAAAA");
+            actual = obj.Serialize();
+            Assert.AreEqual(expected.Length, actual.Length);
+            CollectionAssert.AreEqual(expected, actual);
 
             TextObjectRecord tor = textbox.GetTextObjectRecord();
-            TextObjectRecord torShape = textboxShape.TextObjectRecord;
-
-            expected = tor.Serialize();
-            actual = torShape.Serialize();
-
+            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAANvGKMQgxMSABgBGi8T+FgAAAA==");
+            actual = tor.Serialize();
             Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
+            CollectionAssert.AreEqual(expected, actual);
 
             wb.Close();
         }
+
         [Test]
         public void TestAddTextToExistingFile()
         {
