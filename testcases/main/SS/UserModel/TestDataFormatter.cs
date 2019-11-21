@@ -25,6 +25,7 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.Util;
     using System.Globalization;
     using NPOI.SS.Format;
+    using TestCases.HSSF;
 
     /**
      * Tests of {@link DataFormatter}
@@ -781,6 +782,20 @@ namespace TestCases.SS.UserModel
             }
         }
 
+        [Test]
+        public void TestFormulaEvaluation()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("FormulaEvalTestData.xls");
+            CellReference ref1 = new CellReference("D47");
+            ICell cell = wb.GetSheetAt(0).GetRow(ref1.Row).GetCell(ref1.Col);
+            //noinspection deprecation
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual("G9:K9 I7:I12", cell.CellFormula);
+            DataFormatter formatter = new DataFormatter();
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            Assert.AreEqual("5.6789", formatter.FormatCellValue(cell, evaluator));
+            wb.Close();
+        }
     }
 
 }
