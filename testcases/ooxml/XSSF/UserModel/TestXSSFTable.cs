@@ -218,5 +218,29 @@ namespace NPOI.XSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void GetCellReferences()
+        {
+            // make sure that cached start and end cell references
+            // can be synchronized with the underlying CTTable
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
+            XSSFTable table = sh.CreateTable() as XSSFTable;
+            CT_Table ctTable = table.GetCTTable();
+            ctTable.@ref = "B2:E8";
+            Assert.AreEqual(new CellReference("B2"), table.StartCellReference);
+            Assert.AreEqual(new CellReference("E8"), table.EndCellReference);
+            // At this point start and end cell reference are cached
+            // and may not follow changes to the underlying CTTable
+            ctTable.@ref = "C1:M3";
+            Assert.AreEqual(new CellReference("B2"), table.StartCellReference);
+            Assert.AreEqual(new CellReference("E8"), table.EndCellReference);
+            // Force a synchronization between CTTable and XSSFTable
+            // start and end cell references
+            table.UpdateReferences();
+            Assert.AreEqual(new CellReference("C1"), table.StartCellReference);
+            Assert.AreEqual(new CellReference("M3"), table.EndCellReference);
+        }
+
     }
 }

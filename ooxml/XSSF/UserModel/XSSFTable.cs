@@ -276,6 +276,8 @@ namespace NPOI.XSSF.UserModel
          * @return The reference for the cell in the top-left part of the table
          * (see Open Office XML Part 4: chapter 3.5.1.2, attribute ref) 
          *
+         * To synchronize with changes to the underlying CTTable,
+         * call {@link #updateReferences()}.
          */
         public CellReference StartCellReference
         {
@@ -283,13 +285,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (startCellReference == null)
                 {
-                    String ref1 = ctTable.@ref;
-                    if (ref1 != null)
-                    {
-                        String[] boundaries = ref1.Split(":".ToCharArray());
-                        String from = boundaries[0];
-                        startCellReference = new CellReference(from);
-                    }
+                    SetCellReferences();
                 }
                 return startCellReference;
             }
@@ -300,6 +296,9 @@ namespace NPOI.XSSF.UserModel
          * @return The reference for the cell in the bottom-right part of the table
          * (see Open Office XML Part 4: chapter 3.5.1.2, attribute ref)
          *
+         * Does not track updates to underlying changes to CTTable
+         * To synchronize with changes to the underlying CTTable,
+         * call {@link #updateReferences()}.
          */
         public CellReference EndCellReference
         {
@@ -307,11 +306,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (endCellReference == null)
                 {
-
-                    String ref1 = ctTable.@ref;
-                    String[] boundaries = ref1.Split(new char[] { ':' });
-                    String from = boundaries[1];
-                    endCellReference = new CellReference(from);
+                    SetCellReferences();
                 }
                 return endCellReference;
             }
@@ -320,8 +315,42 @@ namespace NPOI.XSSF.UserModel
 
 
         /**
-         *  @return the total number of rows in the selection. (Note: in this version autofiltering is ignored)
+      * @since POI 3.15 beta 3
+      */
+        private void SetCellReferences()
+        {
+            String ref1 = ctTable.@ref;
+            if (ref1 != null) {
+                String[] boundaries = ref1.Split(new char[] { ':' }, 2);
+                String from = boundaries[0];
+                String to = boundaries[1];
+                startCellReference = new CellReference(from);
+                endCellReference = new CellReference(to);
+            }
+        }
+
+
+        /**
+         * Clears the cached values set by {@link #getStartCellReference()}
+         * and {@link #getEndCellReference()}.
+         * The next call to {@link #getStartCellReference()} and
+         * {@link #getEndCellReference()} will synchronize the
+         * cell references with the underlying <code>CTTable</code>.
+         * Thus, {@link #updateReferences()} is inexpensive.
          *
+         * @since POI 3.15 beta 3
+         */
+        public void UpdateReferences()
+        {
+            startCellReference = null;
+            endCellReference = null;
+        }
+
+        /**
+         * @return the total number of rows in the selection. (Note: in this version autofiltering is ignored)
+         *  
+         * To synchronize with changes to the underlying CTTable,
+         * call {@link #updateReferences()}.
          */
         public int RowCount
         {
@@ -341,10 +370,14 @@ namespace NPOI.XSSF.UserModel
 
 
         /**
-     * Synchronize table headers with cell values in the parent sheet.
-     * Headers <em>must</em> be in sync, otherwise Excel will display a
-     * "Found unreadable content" message on startup.
-     */
+         * Synchronize table headers with cell values in the parent sheet.
+         * Headers <em>must</em> be in sync, otherwise Excel will display a
+         * "Found unreadable content" message on startup.
+         * 
+         * If calling both {@link #updateReferences()} and
+         * {@link #updateHeaders()}, {@link #updateReferences()}
+         * should be called first.
+         */
         public void UpdateHeaders()
         {
             XSSFSheet sheet = (XSSFSheet)GetParent();
