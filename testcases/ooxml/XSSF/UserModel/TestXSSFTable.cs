@@ -242,5 +242,23 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(new CellReference("M3"), table.EndCellReference);
         }
 
+        [Test]
+        public void GetRowCount()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
+            XSSFTable table = sh.CreateTable() as XSSFTable;
+            CT_Table ctTable = table.GetCTTable();
+            Assert.AreEqual(0, table.RowCount);
+            ctTable.@ref = "B2:B2";
+            // update cell references to clear the cache
+            table.UpdateReferences();
+            Assert.AreEqual(1, table.RowCount);
+            ctTable.@ref = "B2:B12";
+            // update cell references to clear the cache
+            table.UpdateReferences();
+            Assert.AreEqual(11, table.RowCount);
+        }
+
     }
 }

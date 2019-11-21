@@ -27,6 +27,7 @@ using System.Collections;
 using NPOI.XSSF.UserModel.Helpers;
 using NPOI.SS.UserModel;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -348,6 +349,7 @@ namespace NPOI.XSSF.UserModel
 
         /**
          * @return the total number of rows in the selection. (Note: in this version autofiltering is ignored)
+         * Returns 0 if the start or end cell references are not set.
          *  
          * To synchronize with changes to the underlying CTTable,
          * call {@link #updateReferences()}.
@@ -359,10 +361,10 @@ namespace NPOI.XSSF.UserModel
                 CellReference from = StartCellReference;
                 CellReference to = EndCellReference;
 
-                int rowCount = -1;
+                int rowCount = 0;
                 if (from != null && to != null)
                 {
-                    rowCount = to.Row - from.Row;
+                    rowCount = to.Row - from.Row + 1;
                 }
                 return rowCount;
             }
@@ -423,15 +425,16 @@ namespace NPOI.XSSF.UserModel
             {
                 columnMap = new Dictionary<string, int>(TableColumns.Length * 3 / 2);
 
-                for (int i = 0; i < TableColumns.Length; i++)
+                int i = 0;
+                foreach (CT_TableColumn column in TableColumns)
                 {
-                    columnMap.Add(TableColumns[i].name.ToUpper(), i);
+                    columnMap.Add(column.name.ToUpper(CultureInfo.CurrentCulture), i);
                 }
             }
             // Table column names with special characters need a single quote escape
             // but the escape is not present in the column definition
             int idx = -1;
-            string testKey = columnHeader.Replace("'", "").ToUpper();
+            string testKey = columnHeader.Replace("'", "").ToUpper(CultureInfo.CurrentCulture);
             if (columnMap.ContainsKey(testKey))
                 idx = columnMap[testKey];
             return idx;
