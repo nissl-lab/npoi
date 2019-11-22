@@ -201,13 +201,13 @@ namespace NPOI
 
             XWPFDocument doc2 = XWPFTestDataSamples.WriteOutAndReadBack(doc);
             doc.Close();
-            cp = doc.GetProperties().CoreProperties;
+            cp = doc2.GetProperties().CoreProperties;
             DateTime? dt3 = cp.Created;
             Assert.AreEqual(dateCreated.ToString(), dt3.ToString());
 
             doc2.Close();
         }
-        [Ignore("test")]
+        [Test]
         public void TestGetSetRevision()
         {
             String revision = _coreProperties.Revision;
@@ -217,6 +217,16 @@ namespace NPOI
             _coreProperties.Revision = "20xx";
             Assert.AreEqual("20", _coreProperties.Revision);
         }
+
+        [Test]
+        public void TestLastModifiedByProperty()
+        {
+            String lastModifiedBy = _coreProperties.LastModifiedByUser;
+            Assert.AreEqual("Paolo Mottadelli", lastModifiedBy);
+            _coreProperties.LastModifiedByUser = "Test User";
+            Assert.AreEqual("Test User", _coreProperties.LastModifiedByUser);
+        }
+
 
         public static bool DateTimeEqualToUTCString(DateTime? dateTime, String utcString)
         {

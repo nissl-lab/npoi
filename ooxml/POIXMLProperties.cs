@@ -142,6 +142,19 @@ namespace NPOI
         {
             part.SetLastPrintedProperty(date);
         }
+
+        public String LastModifiedByUser
+        {
+            get
+            {
+                return part.GetLastModifiedByProperty();
+            }
+            set
+            {
+                part.SetLastModifiedByProperty(value);
+            }
+        }
+
         public DateTime? Modified
         {
             get
