@@ -96,6 +96,7 @@
     <Compile Include="OPC\Compliance\TestOPCComplianceCoreProperties.cs" />
     <Compile Include="OPC\Compliance\TestOPCCompliancePackageModel.cs" />
     <Compile Include="OPC\Compliance\TestOPCCompliancePartName.cs" />
+    <Compile Include="OPC\Internal\TestZipPackagePropertiesMarshaller.cs" />
     <Compile Include="OpenXML4NetTestDataSamples.cs" />
     <Compile Include="POIDataSamples.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
