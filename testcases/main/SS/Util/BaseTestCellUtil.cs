@@ -63,6 +63,38 @@ namespace TestCases.SS.Util
             wb.Close();
         }
 
+        [Test]//(expected=RuntimeException.class)
+        public void SetCellStylePropertyWithInvalidValue()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
+            IRow r = s.CreateRow(0);
+            ICell c = r.CreateCell(0);
+            // An invalid BorderStyle constant
+            CellUtil.SetCellStyleProperty(c, CellUtil.BORDER_BOTTOM, 42);
+
+            wb.Close();
+        }
+
+        [Test]
+        public void SetCellStylePropertyBorderWithShortAndEnum()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
+            IRow r = s.CreateRow(0);
+            ICell c = r.CreateCell(0);
+            // A valid BorderStyle constant, as a Short
+            CellUtil.SetCellStyleProperty(c, CellUtil.BORDER_BOTTOM, (short)BorderStyle.DashDot);
+            Assert.AreEqual(BorderStyle.DashDot, c.CellStyle.BorderBottom);
+
+            // A valid BorderStyle constant, as an Enum
+            CellUtil.SetCellStyleProperty(c, CellUtil.BORDER_TOP, BorderStyle.MediumDashDot);
+            Assert.AreEqual(BorderStyle.MediumDashDot, c.CellStyle.BorderTop);
+
+            wb.Close();
+        }
+
+
         [Test]
         public void SetCellStyleProperties()
         {
