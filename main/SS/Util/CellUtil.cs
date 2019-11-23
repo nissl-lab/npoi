@@ -43,8 +43,6 @@ namespace NPOI.SS.Util
         public const string BORDER_TOP = "borderTop";
         public const string BOTTOM_BORDER_COLOR = "bottomBorderColor";
         public const string DATA_FORMAT = "dataFormat";
-        public const string DIAGONAL_BORDER_COLOR = "diagonalBorderColor";
-        public const string DIAGONAL_BORDER_LINE_STYLE = "diagonalBorderLineStyle";
         public const string FILL_BACKGROUND_COLOR = "fillBackgroundColor";
         public const string FILL_FOREGROUND_COLOR = "fillForegroundColor";
         public const string FILL_PATTERN = "fillPattern";
@@ -504,11 +502,9 @@ namespace NPOI.SS.Util
             PutBorderStyle(properties, BORDER_TOP, style.BorderTop);
             PutShort(properties, BOTTOM_BORDER_COLOR, style.BottomBorderColor);
             PutShort(properties, DATA_FORMAT, style.DataFormat);
-            PutShort(properties, DIAGONAL_BORDER_COLOR, style.BorderDiagonalColor);
-            PutShort(properties, DIAGONAL_BORDER_LINE_STYLE, (short)style.BorderDiagonalLineStyle);
-            PutShort(properties, FILL_BACKGROUND_COLOR, style.FillBackgroundColor);
-            PutShort(properties, FILL_FOREGROUND_COLOR, style.FillForegroundColor);
             PutShort(properties, FILL_PATTERN, (short)style.FillPattern);
+            PutShort(properties, FILL_FOREGROUND_COLOR, style.FillForegroundColor);
+            PutShort(properties, FILL_BACKGROUND_COLOR, style.FillBackgroundColor);
             PutShort(properties, FONT, style.FontIndex);
             PutBoolean(properties, HIDDEN, style.IsHidden);
             PutShort(properties, INDENTION, style.Indention);
@@ -540,9 +536,9 @@ namespace NPOI.SS.Util
             style.BorderTop = GetBorderStyle(properties, BORDER_TOP);
             style.BottomBorderColor = GetShort(properties, BOTTOM_BORDER_COLOR);
             style.DataFormat = GetShort(properties, DATA_FORMAT);
-            style.FillBackgroundColor = GetShort(properties, FILL_BACKGROUND_COLOR);
-            style.FillForegroundColor = GetShort(properties, FILL_FOREGROUND_COLOR);
             style.FillPattern = (FillPattern)GetShort(properties, FILL_PATTERN);
+            style.FillForegroundColor = GetShort(properties, FILL_FOREGROUND_COLOR);
+            style.FillBackgroundColor = GetShort(properties, FILL_BACKGROUND_COLOR);
             style.SetFont(workbook.GetFontAt(GetShort(properties, FONT)));
             style.IsHidden = GetBoolean(properties, HIDDEN);
             style.Indention = GetShort(properties, INDENTION);

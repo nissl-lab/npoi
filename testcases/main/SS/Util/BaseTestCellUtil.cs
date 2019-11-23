@@ -266,6 +266,28 @@ namespace TestCases.SS.Util
                 wb2.Close();
             }
         }
+
+
+        // bug 55555
+        [Test]
+        public void SetFillForegroundColorBeforeFillBackgroundColor()
+        {
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ICell A1 = wb1.CreateSheet().CreateRow(0).CreateCell(0);
+            Dictionary<String, Object> properties = new Dictionary<String, Object>();
+            // FIXME: Use FillPatternType.BRICKS enum
+            properties.Add(CellUtil.FILL_PATTERN, FillPattern.Bricks);
+            properties.Add(CellUtil.FILL_FOREGROUND_COLOR, IndexedColors.Blue.Index);
+            properties.Add(CellUtil.FILL_BACKGROUND_COLOR, IndexedColors.Red.Index);
+
+            CellUtil.SetCellStyleProperties(A1, properties);
+            ICellStyle style = A1.CellStyle;
+            // FIXME: Use FillPatternType.BRICKS enum
+            Assert.AreEqual(FillPattern.Bricks, style.FillPattern, "fill pattern");
+            Assert.AreEqual(IndexedColors.Blue, IndexedColors.FromInt(style.FillForegroundColor), "fill foreground color");
+            Assert.AreEqual(IndexedColors.Red, IndexedColors.FromInt(style.FillBackgroundColor), "fill background color");
+        }
+
     }
 
 }
