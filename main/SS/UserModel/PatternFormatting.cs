@@ -32,7 +32,7 @@ namespace NPOI.SS.UserModel
 
         IColor FillForegroundColorColor { get; set; }
 
-        FillPattern FillPattern { get; set; }
+        FillPatternType FillPattern { get; set; }
     }
 
 }

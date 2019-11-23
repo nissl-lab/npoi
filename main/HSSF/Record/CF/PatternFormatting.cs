@@ -73,9 +73,9 @@ namespace NPOI.HSSF.Record.CF
          * @return Fill pattern
          */
 
-        public FillPattern FillPattern {
+        public FillPatternType FillPattern {
             get {
-                return (FillPattern) FillPatternStyle.GetShortValue (field_15_pattern_style);
+                return (FillPatternType) FillPatternStyle.GetShortValue (field_15_pattern_style);
             }
             set {
                 field_15_pattern_style = FillPatternStyle.SetShortValue (field_15_pattern_style, (short) value); 

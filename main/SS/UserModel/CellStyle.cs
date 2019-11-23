@@ -248,7 +248,7 @@ namespace NPOI.SS.UserModel
          * @return fill pattern
          */
 
-        FillPattern FillPattern { get; set; }
+        FillPatternType FillPattern { get; set; }
 
         /**
          * get the background fill color

@@ -137,7 +137,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the fill pattern.
         /// </summary>
         /// <value>The fill pattern.</value>
-        public FillPattern FillPattern
+        public FillPatternType FillPattern
         {
             get {
                 return patternFormatting.FillPattern;

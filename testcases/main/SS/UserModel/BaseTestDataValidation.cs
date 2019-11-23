@@ -235,7 +235,7 @@ namespace TestCases.SS.UserModel
                 ICellStyle cellStyle = wb.CreateCellStyle();
                 cellStyle.SetFont(font);
                 cellStyle.FillForegroundColor = (/*setter*/color);
-                cellStyle.FillPattern = (/*setter*/FillPattern.SolidForeground);
+                cellStyle.FillPattern = (/*setter*/FillPatternType.SolidForeground);
                 cellStyle.VerticalAlignment = (/*setter*/VerticalAlignment.Center);
                 cellStyle.Alignment = (/*setter*/h_align);
                 cellStyle.BorderLeft = (/*setter*/BorderStyle.Thin);
@@ -262,7 +262,7 @@ namespace TestCases.SS.UserModel
 
                 ICellStyle cellStyle = wb.CreateCellStyle();
                 cellStyle.FillForegroundColor = (/*setter*/HSSFColor.BlueGrey.Index);
-                cellStyle.FillPattern = (/*setter*/FillPattern.SolidForeground);
+                cellStyle.FillPattern = (/*setter*/FillPatternType.SolidForeground);
                 cellStyle.Alignment = (/*setter*/HorizontalAlignment.Center);
                 cellStyle.VerticalAlignment = (/*setter*/VerticalAlignment.Center);
                 cellStyle.BorderLeft = (/*setter*/BorderStyle.Thin);

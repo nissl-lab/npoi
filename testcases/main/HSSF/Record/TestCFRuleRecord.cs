@@ -229,8 +229,8 @@ namespace TestCases.HSSF.Record
             patternFormatting.FillForegroundColor = (HSSFColor.Indigo.Index);
             Assert.AreEqual(HSSFColor.Indigo.Index, patternFormatting.FillForegroundColor);
 
-            patternFormatting.FillPattern = FillPattern.Diamonds;
-            Assert.AreEqual(FillPattern.Diamonds, patternFormatting.FillPattern);
+            patternFormatting.FillPattern = FillPatternType.Diamonds;
+            Assert.AreEqual(FillPatternType.Diamonds, patternFormatting.FillPattern);
         }
 
         private void TestBorderFormattingAccessors(BorderFormatting borderFormatting)
@@ -382,7 +382,7 @@ namespace TestCases.HSSF.Record
             CFRuleRecord rr = CFRuleRecord.Create(sheet, (byte)ComparisonOperator.Between, "5", "10");
 
             PatternFormatting patternFormatting = new PatternFormatting();
-            patternFormatting.FillPattern = FillPattern.Bricks;
+            patternFormatting.FillPattern = FillPatternType.Bricks;
             rr.PatternFormatting=(patternFormatting);
 
             byte[] data = rr.Serialize();

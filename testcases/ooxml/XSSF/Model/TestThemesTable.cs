@@ -123,7 +123,7 @@ namespace NPOI.XSSF.Model
                     {
                         XSSFCellStyle cs = row.Sheet.Workbook.CreateCellStyle() as XSSFCellStyle;
                         cs.SetFillForegroundColor(color);
-                        cs.FillPattern = FillPattern.SolidForeground;
+                        cs.FillPattern = FillPatternType.SolidForeground;
                         row.CreateCell(1).CellStyle = (cs);
                     }
                 }

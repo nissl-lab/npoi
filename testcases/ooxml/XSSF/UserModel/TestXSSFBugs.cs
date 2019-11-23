@@ -1239,12 +1239,12 @@ namespace NPOI.XSSF.UserModel
 
             ICellStyle blueStyle = wb.CreateCellStyle();
             blueStyle.FillForegroundColor = (IndexedColors.Aqua.Index);
-            blueStyle.FillPattern = (FillPattern.SolidForeground);
+            blueStyle.FillPattern = (FillPatternType.SolidForeground);
             Assert.AreEqual(1, blueStyle.Index);
 
             ICellStyle pinkStyle = wb.CreateCellStyle();
             pinkStyle.FillForegroundColor = (IndexedColors.Pink.Index);
-            pinkStyle.FillPattern = (FillPattern.SolidForeground);
+            pinkStyle.FillPattern = (FillPatternType.SolidForeground);
             Assert.AreEqual(2, pinkStyle.Index);
 
             // Starts empty
@@ -3265,7 +3265,7 @@ namespace NPOI.XSSF.UserModel
             XSSFColor color = new XSSFColor(System.Drawing.Color.Red);
             XSSFCellStyle style = workbook.CreateCellStyle() as XSSFCellStyle;
             style.FillForegroundColorColor = color;
-            style.FillPattern = FillPattern.SolidForeground;
+            style.FillPattern = FillPatternType.SolidForeground;
             cell.CellStyle = style;
             // Everything is fine at this point, cell is red
             Dictionary<String, Object> properties = new Dictionary<String, Object>();

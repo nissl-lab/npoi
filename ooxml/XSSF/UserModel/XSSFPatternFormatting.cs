@@ -126,14 +126,14 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public FillPattern FillPattern
+        public FillPatternType FillPattern
         {
             get
             {
                 if (!_fill.IsSetPatternFill() || !_fill.GetPatternFill().IsSetPatternType())
                     return 0;
 
-                return (FillPattern) _fill.GetPatternFill().patternType;
+                return (FillPatternType) _fill.GetPatternFill().patternType;
             }
             set 
             {

@@ -536,7 +536,7 @@ namespace NPOI.SS.Util
             style.BorderTop = GetBorderStyle(properties, BORDER_TOP);
             style.BottomBorderColor = GetShort(properties, BOTTOM_BORDER_COLOR);
             style.DataFormat = GetShort(properties, DATA_FORMAT);
-            style.FillPattern = (FillPattern)GetShort(properties, FILL_PATTERN);
+            style.FillPattern = (FillPatternType)GetShort(properties, FILL_PATTERN);
             style.FillForegroundColor = GetShort(properties, FILL_FOREGROUND_COLOR);
             style.FillBackgroundColor = GetShort(properties, FILL_BACKGROUND_COLOR);
             style.SetFont(workbook.GetFontAt(GetShort(properties, FONT)));
@@ -631,13 +631,13 @@ namespace NPOI.SS.Util
          * @return FillPatternType style if set, otherwise {@link FillPatternType#NO_FILL}
          * @since POI 3.15 beta 3
          */
-        private static FillPattern GetFillPattern(Dictionary<String, Object> properties, String name)
+        private static FillPatternType GetFillPattern(Dictionary<String, Object> properties, String name)
         {
             Object value = properties[name];
-            FillPattern pattern;
-            if (value is FillPattern)
+            FillPatternType pattern;
+            if (value is FillPatternType)
             {
-                pattern = (FillPattern)value;
+                pattern = (FillPatternType)value;
             }
             // @deprecated 3.15 beta 2. getFillPattern will only work on FillPatternType enums instead of codes in the future.
             else if (value is short)
@@ -648,11 +648,11 @@ namespace NPOI.SS.Util
                 //            + name + ". Should use FillPatternType enums instead.");
                 //}
                 short code = (short)value;
-                pattern = (FillPattern)code;
+                pattern = (FillPatternType)code;
             }
             else if (value == null)
             {
-                pattern = FillPattern.NoFill;
+                pattern = FillPatternType.NoFill;
             }
             else
             {
