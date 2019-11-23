@@ -54,6 +54,12 @@ namespace NPOI.XSSF.UserModel
 
         }
 
+        public override void ClearAllCachedResultValues()
+        {
+            base.ClearAllCachedResultValues();
+            _sheetCache = null;
+        }
+
         public override int GetSheetIndex(IEvaluationSheet evalSheet)
         {
             XSSFSheet sheet = ((XSSFEvaluationSheet)evalSheet).GetXSSFSheet();

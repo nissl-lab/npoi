@@ -55,6 +55,11 @@ using NPOI.Util;
             _iBook = book.Workbook;
         }
 
+        public void ClearAllCachedResultValues()
+        {
+            // nothing to do
+        }
+
         public IName CreateName()
         {
             return _uBook.CreateName();

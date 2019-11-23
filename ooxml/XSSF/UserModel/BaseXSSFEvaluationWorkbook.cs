@@ -38,6 +38,11 @@ namespace NPOI.XSSF.UserModel
     {
         protected XSSFWorkbook _uBook;
 
+        public virtual void ClearAllCachedResultValues()
+        {
+            _tableCache = null;
+        }
+
         protected BaseXSSFEvaluationWorkbook(XSSFWorkbook book)
         {
             _uBook = book;

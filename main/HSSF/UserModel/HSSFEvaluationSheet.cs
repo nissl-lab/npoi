@@ -56,5 +56,10 @@ namespace NPOI.HSSF.UserModel
             }
             return new HSSFEvaluationCell(cell, this);
         }
+
+        public void ClearAllCachedResultValues()
+        {
+            // nothing to do
+        }
     }
 }

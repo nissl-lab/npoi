@@ -55,7 +55,7 @@ namespace NPOI.XSSF.Streaming
          * @since POI 3.15 beta 3
          */
 
-        public void clearAllCachedResultValues()
+        public void ClearAllCachedResultValues()
         {
             // nothing to do
         }

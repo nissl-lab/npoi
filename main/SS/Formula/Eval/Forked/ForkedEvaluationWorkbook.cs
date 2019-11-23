@@ -162,6 +162,16 @@ namespace NPOI.SS.Formula.Eval.Forked
         {
             return _masterBook.GetUDFFinder();
         }
+
+
+        /* (non-Javadoc)
+         * leave the map alone, if it needs resetting, reusing this class is probably a bad idea.
+         * @see org.apache.poi.ss.formula.EvaluationSheet#clearAllCachedResultValues()
+         */
+        public void ClearAllCachedResultValues()
+        {
+            _masterBook.ClearAllCachedResultValues();
+        }
     }
 
 }

@@ -184,6 +184,7 @@ namespace NPOI.SS.Formula
         {
             _cache.Clear();
             _sheetIndexesBySheet.Clear();
+            _workbook.ClearAllCachedResultValues();
         }
 
         /**
@@ -369,10 +370,10 @@ namespace NPOI.SS.Formula
             return result;
         }
         /**
- * Adds the current cell reference to the exception for easier debugging.
- * Would be nice to get the formula text as well, but that seems to require
- * too much digging around and casting to get the FormulaRenderingWorkbook.
- */
+         * Adds the current cell reference to the exception for easier debugging.
+         * Would be nice to get the formula text as well, but that seems to require
+         * too much digging around and casting to get the FormulaRenderingWorkbook.
+         */
         private NotImplementedException AddExceptionInfo(NotImplementedException inner, int sheetIndex, int rowIndex, int columnIndex)
         {
             try
@@ -846,12 +847,12 @@ namespace NPOI.SS.Formula
          *
          * @return names of functions supported by POI
          */
-        public static List<String> GetSupportedFunctionNames()
+        public static IList<String> GetSupportedFunctionNames()
         {
             List<String> lst = new List<String>();
             lst.AddRange(FunctionEval.GetSupportedFunctionNames());
             lst.AddRange(AnalysisToolPak.GetSupportedFunctionNames());
-            return lst;
+            return lst.AsReadOnly();
         }
 
         /**
@@ -859,12 +860,12 @@ namespace NPOI.SS.Formula
          *
          * @return names of functions NOT supported by POI
          */
-        public static List<String> GetNotSupportedFunctionNames()
+        public static IList<String> GetNotSupportedFunctionNames()
         {
             List<String> lst = new List<String>();
             lst.AddRange(FunctionEval.GetNotSupportedFunctionNames());
             lst.AddRange(AnalysisToolPak.GetNotSupportedFunctionNames());
-            return lst;
+            return lst.AsReadOnly();
         }
 
         /**

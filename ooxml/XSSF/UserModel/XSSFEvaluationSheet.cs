@@ -44,6 +44,11 @@ namespace NPOI.XSSF.UserModel
 
         }
 
+        public void ClearAllCachedResultValues()
+        {
+            _cellCache = null;
+        }
+
         public XSSFSheet GetXSSFSheet()
         {
             return _xs;

@@ -121,6 +121,13 @@ namespace NPOI.SS.Formula
         String ResolveNameXText(NameXPtg ptg);
         Ptg[] GetFormulaTokens(IEvaluationCell cell);
         UDFFinder GetUDFFinder();
+
+        /**
+         * Propagated from {@link WorkbookEvaluator#clearAllCachedResultValues()} to clear locally cached data.
+         * Implementations must call the same method on all referenced {@link EvaluationSheet} instances, as well as clearing local caches.
+         * @see WorkbookEvaluator#clearAllCachedResultValues()
+         */
+        void ClearAllCachedResultValues();
     }
 
     public class ExternalName
