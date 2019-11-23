@@ -78,6 +78,8 @@ namespace TestCases.SS.Util
             props.Add(CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
             props.Add(CellUtil.BORDER_LEFT, BorderStyle.Thin);
             props.Add(CellUtil.BORDER_RIGHT, BorderStyle.Thin);
+            props.Add(CellUtil.ALIGNMENT, HorizontalAlignment.Center); // try it both with a Short (deprecated)
+            props.Add(CellUtil.VERTICAL_ALIGNMENT, VerticalAlignment.Center); // and with an enum
             CellUtil.SetCellStyleProperties(c, props);
             int styCnt2 = wb.NumCellStyles;
             Assert.AreEqual(styCnt1 + 1, styCnt2, "Only one additional style should have been created");
@@ -86,7 +88,7 @@ namespace TestCases.SS.Util
             c = r.CreateCell(1);
             CellUtil.SetCellStyleProperties(c, props);
             int styCnt3 = wb.NumCellStyles;
-            Assert.AreEqual(styCnt3, styCnt2);
+            Assert.AreEqual(styCnt3, styCnt2, "No additional styles should have been created");
 
             wb.Close();
         }
@@ -166,33 +168,55 @@ namespace TestCases.SS.Util
         }
 
         [Test]
-        public void SetAlignment()
+        public void SetAlignmentEnum()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sh = wb.CreateSheet();
             IRow row = sh.CreateRow(0);
             ICell A1 = row.CreateCell(0);
             ICell B1 = row.CreateCell(1);
-
             // Assumptions
             Assert.AreEqual(A1.CellStyle, B1.CellStyle);
-            // should be Assert.AreSame, but a new HSSFCellStyle is returned for each GetCellStyle() call. 
+            // should be assertSame, but a new HSSFCellStyle is returned for each getCellStyle() call. 
             // HSSFCellStyle wraps an underlying style record, and the underlying
-            // style record is the same between multiple GetCellStyle() calls.
+            // style record is the same between multiple getCellStyle() calls.
             Assert.AreEqual(HorizontalAlignment.General, A1.CellStyle.Alignment);
             Assert.AreEqual(HorizontalAlignment.General, B1.CellStyle.Alignment);
-
-            // Get/set alignment modifies the cell's style
+            // get/set alignment modifies the cell's style
             CellUtil.SetAlignment(A1, HorizontalAlignment.Right);
             Assert.AreEqual(HorizontalAlignment.Right, A1.CellStyle.Alignment);
-
-            // Get/set alignment doesn't affect the style of cells with
+            // get/set alignment doesn't affect the style of cells with
             // the same style prior to modifying the style
             Assert.AreNotEqual(A1.CellStyle, B1.CellStyle);
             Assert.AreEqual(HorizontalAlignment.General, B1.CellStyle.Alignment);
-
             wb.Close();
         }
+
+        [Test]
+        public void SetVerticalAlignmentEnum()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sh = wb.CreateSheet();
+            IRow row = sh.CreateRow(0);
+            ICell A1 = row.CreateCell(0);
+            ICell B1 = row.CreateCell(1);
+            // Assumptions
+            Assert.AreEqual(A1.CellStyle, B1.CellStyle);
+            // should be assertSame, but a new HSSFCellStyle is returned for each getCellStyle() call. 
+            // HSSFCellStyle wraps an underlying style record, and the underlying
+            // style record is the same between multiple getCellStyle() calls.
+            Assert.AreEqual(VerticalAlignment.Bottom, A1.CellStyle.VerticalAlignment);
+            Assert.AreEqual(VerticalAlignment.Bottom, B1.CellStyle.VerticalAlignment);
+            // get/set alignment modifies the cell's style
+            CellUtil.SetVerticalAlignment(A1, VerticalAlignment.Top);
+            Assert.AreEqual(VerticalAlignment.Top, A1.CellStyle.VerticalAlignment);
+            // get/set alignment doesn't affect the style of cells with
+            // the same style prior to modifying the style
+            Assert.AreNotEqual(A1.CellStyle, B1.CellStyle);
+            Assert.AreEqual(VerticalAlignment.Bottom, B1.CellStyle.VerticalAlignment);
+            wb.Close();
+        }
+
 
         [Test]
         public void SetFont()
@@ -267,10 +291,12 @@ namespace TestCases.SS.Util
             }
         }
 
-
-        // bug 55555
+        /**
+         * bug 55555
+         * @since POI 3.15 beta 3
+         */
         [Test]
-        public void SetFillForegroundColorBeforeFillBackgroundColor()
+        public void SetFillForegroundColorBeforeFillBackgroundColorEnum()
         {
             IWorkbook wb1 = _testDataProvider.CreateWorkbook();
             ICell A1 = wb1.CreateSheet().CreateRow(0).CreateCell(0);

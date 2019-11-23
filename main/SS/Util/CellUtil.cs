@@ -275,6 +275,27 @@ namespace NPOI.SS.Util
         {
             SetCellStyleProperty(cell, ALIGNMENT, align);
         }
+
+        /**
+         * Take a cell, and vertically align it.
+         * 
+         * This is superior to cell.getCellStyle().setVerticalAlignment(align) because
+         * this method will not modify the CellStyle object that may be referenced
+         * by multiple cells. Instead, this method will search for existing CellStyles
+         * that match the desired CellStyle, creating a new CellStyle with the desired
+         * style if no match exists.
+         *
+         * @param cell the cell to set the alignment for
+         * @param align the vertical alignment to use.
+         *
+         * @see VerticalAlignment for alignment options
+         * @since POI 3.15 beta 3
+         */
+        public static void SetVerticalAlignment(ICell cell, VerticalAlignment align)
+        {
+            SetCellStyleProperty(cell, VERTICAL_ALIGNMENT, align);
+        }
+
         /**
          * Take a cell, and apply a font to it
          *
@@ -495,27 +516,27 @@ namespace NPOI.SS.Util
         private static Dictionary<String, Object> GetFormatProperties(ICellStyle style)
         {
             Dictionary<String, Object> properties = new Dictionary<String, Object>();
-            PutShort(properties, ALIGNMENT, (short)style.Alignment);
-            PutBorderStyle(properties, BORDER_BOTTOM, style.BorderBottom);
-            PutBorderStyle(properties, BORDER_LEFT, style.BorderLeft);
-            PutBorderStyle(properties, BORDER_RIGHT, style.BorderRight);
-            PutBorderStyle(properties, BORDER_TOP, style.BorderTop);
-            PutShort(properties, BOTTOM_BORDER_COLOR, style.BottomBorderColor);
-            PutShort(properties, DATA_FORMAT, style.DataFormat);
-            PutShort(properties, FILL_PATTERN, (short)style.FillPattern);
-            PutShort(properties, FILL_FOREGROUND_COLOR, style.FillForegroundColor);
-            PutShort(properties, FILL_BACKGROUND_COLOR, style.FillBackgroundColor);
-            PutShort(properties, FONT, style.FontIndex);
-            PutBoolean(properties, HIDDEN, style.IsHidden);
-            PutShort(properties, INDENTION, style.Indention);
-            PutShort(properties, LEFT_BORDER_COLOR, style.LeftBorderColor);
-            PutBoolean(properties, LOCKED, style.IsLocked);
-            PutShort(properties, RIGHT_BORDER_COLOR, style.RightBorderColor);
-            PutShort(properties, ROTATION, style.Rotation);
-            PutBoolean(properties, SHRINK_TO_FIT, style.ShrinkToFit);
-            PutShort(properties, TOP_BORDER_COLOR, style.TopBorderColor);
-            PutShort(properties, VERTICAL_ALIGNMENT, (short)style.VerticalAlignment);
-            PutBoolean(properties, WRAP_TEXT, style.WrapText);
+            Put(properties, ALIGNMENT, style.Alignment);
+            Put(properties, VERTICAL_ALIGNMENT, style.VerticalAlignment);
+            Put(properties, BORDER_BOTTOM, style.BorderBottom);
+            Put(properties, BORDER_LEFT, style.BorderLeft);
+            Put(properties, BORDER_RIGHT, style.BorderRight);
+            Put(properties, BORDER_TOP, style.BorderTop);
+            Put(properties, BOTTOM_BORDER_COLOR, style.BottomBorderColor);
+            Put(properties, DATA_FORMAT, style.DataFormat);
+            Put(properties, FILL_PATTERN, style.FillPattern);
+            Put(properties, FILL_FOREGROUND_COLOR, style.FillForegroundColor);
+            Put(properties, FILL_BACKGROUND_COLOR, style.FillBackgroundColor);
+            Put(properties, FONT, style.FontIndex);
+            Put(properties, HIDDEN, style.IsHidden);
+            Put(properties, INDENTION, style.Indention);
+            Put(properties, LEFT_BORDER_COLOR, style.LeftBorderColor);
+            Put(properties, LOCKED, style.IsLocked);
+            Put(properties, RIGHT_BORDER_COLOR, style.RightBorderColor);
+            Put(properties, ROTATION, style.Rotation);
+            Put(properties, SHRINK_TO_FIT, style.ShrinkToFit);
+            Put(properties, TOP_BORDER_COLOR, style.TopBorderColor);
+            Put(properties, WRAP_TEXT, style.WrapText);
             return properties;
         }
 
@@ -529,14 +550,15 @@ namespace NPOI.SS.Util
          */
         private static void SetFormatProperties(ICellStyle style, IWorkbook workbook, Dictionary<String, Object> properties)
         {
-            style.Alignment = (HorizontalAlignment)GetShort(properties, ALIGNMENT);
+            style.Alignment = GetHorizontalAlignment(properties, ALIGNMENT);
+            style.VerticalAlignment = GetVerticalAlignment(properties, VERTICAL_ALIGNMENT);
             style.BorderBottom = GetBorderStyle(properties, BORDER_BOTTOM);
             style.BorderLeft = GetBorderStyle(properties, BORDER_LEFT);
             style.BorderRight = GetBorderStyle(properties, BORDER_RIGHT);
             style.BorderTop = GetBorderStyle(properties, BORDER_TOP);
             style.BottomBorderColor = GetShort(properties, BOTTOM_BORDER_COLOR);
             style.DataFormat = GetShort(properties, DATA_FORMAT);
-            style.FillPattern = (FillPatternType)GetShort(properties, FILL_PATTERN);
+            style.FillPattern = GetFillPattern(properties, FILL_PATTERN);
             style.FillForegroundColor = GetShort(properties, FILL_FOREGROUND_COLOR);
             style.FillBackgroundColor = GetShort(properties, FILL_BACKGROUND_COLOR);
             style.SetFont(workbook.GetFontAt(GetShort(properties, FONT)));
@@ -548,7 +570,6 @@ namespace NPOI.SS.Util
             style.Rotation = GetShort(properties, ROTATION);
             style.ShrinkToFit = GetBoolean(properties, SHRINK_TO_FIT);
             style.TopBorderColor = GetShort(properties, TOP_BORDER_COLOR);
-            style.VerticalAlignment = (VerticalAlignment)GetShort(properties, VERTICAL_ALIGNMENT);
             style.WrapText = GetBoolean(properties, WRAP_TEXT);
         }
 
@@ -753,7 +774,17 @@ namespace NPOI.SS.Util
 
             return false;
         }
-
+        /**
+         * Utility method that puts the given value to the given map.
+         *
+         * @param properties map of properties (String -> Object)
+         * @param name property name
+         * @param value property value
+         */
+        private static void Put(Dictionary<String, Object> properties, String name, Object value)
+        {
+            properties[name] = value;
+        }
         /**
          * Utility method that puts the named short value to the given map.
          *
@@ -763,10 +794,7 @@ namespace NPOI.SS.Util
          */
         private static void PutShort(Dictionary<String, Object> properties, String name, short value)
         {
-            if (properties.ContainsKey(name))
-                properties[name] = value;
-            else
-                properties.Add(name, value);
+            properties[name] = value;
         }
         /**
        * Utility method that puts the named short value to the given map.
@@ -775,12 +803,9 @@ namespace NPOI.SS.Util
        * @param name property name
        * @param value property value
        */
-        private static void PutBorderStyle(Dictionary<String, Object> properties, String name, BorderStyle border)
+        private static void PutEnum(Dictionary<String, Object> properties, String name, Enum value)
         {
-            if (properties.ContainsKey(name))
-                properties[name] = border;
-            else
-                properties.Add(name, border);
+            properties[name] = value;
         }
         /**
          * Utility method that puts the named boolean value to the given map.
@@ -791,10 +816,7 @@ namespace NPOI.SS.Util
          */
         private static void PutBoolean(Dictionary<String, Object> properties, String name, bool value)
         {
-            if (properties.ContainsKey(name))
-                properties[name] = value;
-            else
-                properties.Add(name, value);
+            properties[name] = value;
         }
 
         /**
