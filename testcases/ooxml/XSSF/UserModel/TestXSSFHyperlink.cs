@@ -256,13 +256,13 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(sh1.NumberOfComments, sh2.NumberOfComments);
             XSSFHyperlink l1 = sh1.GetHyperlink(0, 1) as XSSFHyperlink;
             Assert.AreEqual(HyperlinkType.Document, l1.Type);
-            Assert.AreEqual("B1", l1.GetCellRef());
+            Assert.AreEqual("B1", l1.CellRef);
             Assert.AreEqual("Sort on Titel", l1.Tooltip);
 
             XSSFHyperlink l2 = sh2.GetHyperlink(0, 1) as XSSFHyperlink;
             Assert.AreEqual(l1.Tooltip, l2.Tooltip);
             Assert.AreEqual(HyperlinkType.Document, l2.Type);
-            Assert.AreEqual("B1", l2.GetCellRef());
+            Assert.AreEqual("B1", l2.CellRef);
         }
         [Test]
         public void Test53734()
@@ -306,12 +306,48 @@ namespace NPOI.XSSF.UserModel
             XSSFHyperlink xlink = new XSSFHyperlink(hlink);
 
             Assert.AreEqual("http://poi.apache.org/", xlink.Address);
-            Assert.AreEqual(new CellReference(2, 3), new CellReference(xlink.GetCellRef()));
+            Assert.AreEqual(new CellReference(2, 3), new CellReference(xlink.CellRef));
             // Are HSSFHyperlink.label and XSSFHyperlink.tooltip the same? If so, perhaps one of these needs renamed for a consistent Hyperlink interface
             // Assert.AreEqual("label", xlink.Tooltip);
         }
+
+
+        /* bug 59775: XSSFHyperlink has wrong type if it contains a location (CTHyperlink#getLocation)
+         * URLs with a hash mark (#) are still URL hyperlinks, not document links
+         */
+        [Test]
+        public void TestURLsWithHashMark()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("59775.xlsx");
+            XSSFSheet sh = wb.GetSheetAt(0) as XSSFSheet;
+            CellAddress A2 = new CellAddress("A2");
+            CellAddress A3 = new CellAddress("A3");
+            CellAddress A4 = new CellAddress("A4");
+            CellAddress A7 = new CellAddress("A7");
+
+            XSSFHyperlink link = sh.GetHyperlink(A2) as XSSFHyperlink;
+            Assert.AreEqual("address", "A2", link.CellRef);
+            Assert.AreEqual(HyperlinkType.Url, link.Type, "link type");
+            Assert.AreEqual("http://twitter.com/#!/apacheorg", link.Address, "link target");
+
+            link = sh.GetHyperlink(A3) as XSSFHyperlink;
+            Assert.AreEqual("address", "A3", link.CellRef);
+            Assert.AreEqual(HyperlinkType.Url, link.Type, "link type");
+            Assert.AreEqual("http://www.bailii.org/databases.html#ie", link.Address, "link target");
+
+            link = sh.GetHyperlink(A4) as XSSFHyperlink;
+            Assert.AreEqual("address", "A4", link.CellRef);
+            Assert.AreEqual(HyperlinkType.Url, link.Type, "link type");
+            Assert.AreEqual("https://en.wikipedia.org/wiki/Apache_POI#See_also", link.Address, "link target");
+
+            link = sh.GetHyperlink(A7) as XSSFHyperlink;
+            Assert.AreEqual("address", "A7", link.CellRef);
+            Assert.AreEqual(HyperlinkType.Document, link.Type, "link type");
+            Assert.AreEqual("Sheet1", link.Address, "link target");
+
+            wb.Close();
+        }
+
     }
-
-
 }
 

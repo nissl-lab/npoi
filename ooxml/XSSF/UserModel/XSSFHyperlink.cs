@@ -19,6 +19,8 @@ using NPOI.OpenXml4Net.OPC;
 using System;
 using NPOI.SS.Util;
 using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.Util;
+
 namespace NPOI.XSSF.UserModel
 {
     /**
@@ -56,54 +58,51 @@ namespace NPOI.XSSF.UserModel
             _ctHyperlink = ctHyperlink;
             _externalRel = hyperlinkRel;
 
-            // Figure out the Hyperlink type and distination
+            // Figure out the Hyperlink type and destination
 
-            // If it has a location, it's internal
-            if (ctHyperlink.location != null)
+            if (_externalRel == null)
             {
-                _type = HyperlinkType.Document;
-                _location = ctHyperlink.location;
-            }
-            else
-            {
-                // Otherwise it's somehow external, check
-                //  the relation to see how
-                if (_externalRel == null)
+                // If it has a location, it's internal
+                if (ctHyperlink.location != null)
                 {
-                    if (ctHyperlink.id != null)
-                    {
-                        throw new InvalidOperationException("The hyperlink for cell " +
-                            ctHyperlink.@ref + " references relation " + ctHyperlink.id + ", but that didn't exist!");
-                    }
-                    // hyperlink is internal and is not related to other parts
                     _type = HyperlinkType.Document;
+                    _location = ctHyperlink.location;
+                }
+                else if (ctHyperlink.id != null)
+                {
+                    throw new IllegalStateException("The hyperlink for cell "
+                            + ctHyperlink.@ref + " references relation "
+                            + ctHyperlink.id + ", but that didn't exist!");
                 }
                 else
                 {
-                    Uri target = _externalRel.TargetUri;
-                    try
-                    {
-                        _location = target.ToString();
-                    }
-                    catch (UriFormatException)
-                    {
-                        _location = target.OriginalString;
-                    }
+                    // hyperlink is internal and is not related to other parts
+                    _type = HyperlinkType.Document;
+                }
+            }
+            else
+            {
+                Uri target = _externalRel.TargetUri;
+                _location = target.ToString();
+                if (ctHyperlink.location != null)
+                {
+                    // URI fragment
+                    _location += "#" + ctHyperlink.location;
+                }
 
-                    // Try to figure out the type
-                    if (_location.StartsWith("http://") || _location.StartsWith("https://")
-                            || _location.StartsWith("ftp://"))
-                    {
-                        _type = HyperlinkType.Url;
-                    }
-                    else if (_location.StartsWith("mailto:"))
-                    {
-                        _type = HyperlinkType.Email;
-                    }
-                    else
-                    {
-                        _type = HyperlinkType.File;
-                    }
+                // Try to figure out the type
+                if (_location.StartsWith("http://") || _location.StartsWith("https://")
+                     || _location.StartsWith("ftp://"))
+                {
+                    _type = HyperlinkType.Url;
+                }
+                else if (_location.StartsWith("mailto:"))
+                {
+                    _type = HyperlinkType.Email;
+                }
+                else
+                {
+                    _type = HyperlinkType.File;
                 }
             }
         }
@@ -180,14 +179,21 @@ namespace NPOI.XSSF.UserModel
                 return _type;
             }
         }
-
+        [Obsolete("use property CellRef")]
+        public string GetCellRef()
+        {
+            return _ctHyperlink.@ref;
+        }
         /**
          * Get the reference of the cell this applies to,
          * es A55
          */
-        public String GetCellRef()
+        public String CellRef
         {
-            return _ctHyperlink.@ref;
+            get
+            {
+                return _ctHyperlink.@ref;
+            }
         }
 
         /**

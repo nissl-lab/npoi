@@ -862,7 +862,7 @@ namespace NPOI.XSSF.UserModel
             String ref1 = addr.FormatAsString();
             foreach (XSSFHyperlink hyperlink in hyperlinks)
             {
-                if (hyperlink.GetCellRef().Equals(ref1))
+                if (hyperlink.CellRef.Equals(ref1))
                 {
                     return hyperlink;
                 }
@@ -3243,7 +3243,7 @@ namespace NPOI.XSSF.UserModel
                     {
                         foreach (XSSFHyperlink link in new List<XSSFHyperlink>(hyperlinks))
                         {
-                            CellReference ref1 = new CellReference(link.GetCellRef());
+                            CellReference ref1 = new CellReference(link.CellRef);
                             if (ref1.Row == rownum)
                             {
                                 hyperlinks.Remove(link);
@@ -3525,7 +3525,7 @@ namespace NPOI.XSSF.UserModel
             for (int index = 0; index < hyperlinks.Count; index++)
             {
                 XSSFHyperlink hyperlink = hyperlinks[index];
-                if (hyperlink.GetCellRef().Equals(ref1))
+                if (hyperlink.CellRef.Equals(ref1))
                 {
                     hyperlinks.RemoveAt(index);
                     return;

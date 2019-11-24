@@ -590,9 +590,9 @@ namespace NPOI.XSSF.UserModel
                 "unit test assumes srcCell and destCell are on the same sheet");
             List<IHyperlink> links = srcCell.Sheet.GetHyperlinkList();
             Assert.AreEqual(2, links.Count, "number of hyperlinks on sheet");
-            Assert.AreEqual(new CellReference(srcCell).FormatAsString(), (links[(0)] as XSSFHyperlink).GetCellRef(),
+            Assert.AreEqual(new CellReference(srcCell).FormatAsString(), (links[(0)] as XSSFHyperlink).CellRef,
                 "source hyperlink");
-            Assert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(1)] as XSSFHyperlink).GetCellRef(),
+            Assert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(1)] as XSSFHyperlink).CellRef,
                 "destination hyperlink");
 
             wb.Close();
@@ -629,7 +629,7 @@ namespace NPOI.XSSF.UserModel
             List<IHyperlink> links;
             links = srcCell.Sheet.GetHyperlinkList();
             Assert.AreEqual(1, links.Count, "number of hyperlinks on sheet");
-            Assert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(0)] as XSSFHyperlink).GetCellRef(),
+            Assert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(0)] as XSSFHyperlink).CellRef,
                 "source hyperlink");
 
             // Merge destCell's hyperlink to srcCell. Since destCell does have a hyperlink, this should copy destCell's hyperlink to srcCell.
@@ -639,9 +639,9 @@ namespace NPOI.XSSF.UserModel
 
             links = srcCell.Sheet.GetHyperlinkList();
             Assert.AreEqual(2, links.Count, "number of hyperlinks on sheet");
-            Assert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(0)] as XSSFHyperlink).GetCellRef(),
+            Assert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(0)] as XSSFHyperlink).CellRef,
                 "dest hyperlink");
-            Assert.AreEqual(new CellReference(srcCell).FormatAsString(), (links[(1)] as XSSFHyperlink).GetCellRef(),
+            Assert.AreEqual(new CellReference(srcCell).FormatAsString(), (links[(1)] as XSSFHyperlink).CellRef,
                 "source hyperlink");
 
             wb.Close();

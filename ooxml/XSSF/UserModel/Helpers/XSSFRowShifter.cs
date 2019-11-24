@@ -271,7 +271,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             foreach (IHyperlink hyperlink1 in hyperlinkList)
             {
                 XSSFHyperlink hyperlink = hyperlink1 as XSSFHyperlink;
-                String cellRef = hyperlink.GetCellRef();
+                String cellRef = hyperlink.CellRef;
                 CellRangeAddress cra = CellRangeAddress.ValueOf(cellRef);
                 CellRangeAddress shiftedRange = ShiftRange(shifter, cra, sheetIndex);
                 if (shiftedRange != null && shiftedRange != cra)
