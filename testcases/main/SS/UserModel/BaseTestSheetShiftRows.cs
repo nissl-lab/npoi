@@ -171,21 +171,6 @@ namespace TestCases.SS.UserModel
         }
 
         /**
-         * Tests when Shifting the first row.
-         */
-        [Test]
-        public void TestActiveCell()
-        {
-            IWorkbook wb = _testDataProvider.CreateWorkbook();
-            ISheet s = wb.CreateSheet();
-
-            s.CreateRow(0).CreateCell(0).SetCellValue("TEST1");
-            s.CreateRow(3).CreateCell(0).SetCellValue("TEST2");
-            s.ShiftRows(0, 4, 1);
-            wb.Close();
-        }
-
-        /**
          * When Shifting rows, the page breaks should go with it
          */
         [Test]
@@ -347,7 +332,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("A3:C3", region.FormatAsString());
             wb.Close();
         }
-        [Ignore("ignore by poi")]
+        [Ignore("bug 56454: Incorrectly handles merged regions that do not contain column 0")]
         [Test]
         public void ShiftWithMergedRegions_bug56454()
         {
@@ -565,7 +550,7 @@ namespace TestCases.SS.UserModel
          * @throws IOException
          */
         [Test]
-        public void testBug46742_52903_shiftHyperlinks()
+        public void TestBug46742_52903_shiftHyperlinks()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet("test");
@@ -584,32 +569,32 @@ namespace TestCases.SS.UserModel
             // CellAddress=A1, shifted to A4
             ICell cell = row.CreateCell(0);
             cell.CellStyle = (hlinkStyle);
-            createHyperlink(helper, cell, HyperlinkType.Document, "test!E1");
+            CreateHyperlink(helper, cell, HyperlinkType.Document, "test!E1");
 
             // URL
             cell = row.CreateCell(1);
             // CellAddress=B1, shifted to B4
             cell.CellStyle = (hlinkStyle);
-            createHyperlink(helper, cell, HyperlinkType.Url, "http://poi.apache.org/");
+            CreateHyperlink(helper, cell, HyperlinkType.Url, "http://poi.apache.org/");
 
             // row0 will be shifted on top of row1, so this URL should be removed from the workbook
             IRow overwrittenRow = sheet.CreateRow(3);
             cell = overwrittenRow.CreateCell(2);
             // CellAddress=C4, will be overwritten (deleted)
             cell.CellStyle = (hlinkStyle);
-            createHyperlink(helper, cell, HyperlinkType.Email, "mailto:poi@apache.org");
+            CreateHyperlink(helper, cell, HyperlinkType.Email, "mailto:poi@apache.org");
 
             // hyperlinks on this row are unaffected by the row shifting, so the hyperlinks should not move
             IRow unaffectedRow = sheet.CreateRow(20);
             cell = unaffectedRow.CreateCell(3);
             // CellAddress=D21, will be unaffected
             cell.CellStyle = (hlinkStyle);
-            createHyperlink(helper, cell, HyperlinkType.File, "54524.xlsx");
+            CreateHyperlink(helper, cell, HyperlinkType.File, "54524.xlsx");
 
             cell = wb.CreateSheet("other").CreateRow(0).CreateCell(0);
             // CellAddress=Other!A1, will be unaffected
             cell.CellStyle = (hlinkStyle);
-            createHyperlink(helper, cell, HyperlinkType.Url, "http://apache.org/");
+            CreateHyperlink(helper, cell, HyperlinkType.Url, "http://apache.org/");
 
             int startRow = 0;
             int endRow = 0;
@@ -625,10 +610,10 @@ namespace TestCases.SS.UserModel
 
             // document link anchored on a shifted cell should be moved
             // Note that hyperlinks do not track what they point to, so this hyperlink should still refer to test!E1
-            verifyHyperlink(shiftedRow.GetCell(0), HyperlinkType.Document, "test!E1");
+            VerifyHyperlink(shiftedRow.GetCell(0), HyperlinkType.Document, "test!E1");
 
             // URL, EMAIL, and FILE links anchored on a shifted cell should be moved
-            verifyHyperlink(shiftedRow.GetCell(1), HyperlinkType.Url, "http://poi.apache.org/");
+            VerifyHyperlink(shiftedRow.GetCell(1), HyperlinkType.Url, "http://poi.apache.org/");
 
             // Make sure hyperlinks were moved and not copied
             Assert.IsNull(sh.GetHyperlink(0, 0), "Document hyperlink should be moved, not copied");
@@ -649,19 +634,18 @@ namespace TestCases.SS.UserModel
 
             // Make sure unaffected rows are not shifted
             ICell unaffectedCell = sh.GetRow(20).GetCell(3);
-            Assert.IsTrue(cellHasHyperlink(unaffectedCell));
-            verifyHyperlink(unaffectedCell, HyperlinkType.File, "54524.xlsx");
+            Assert.IsTrue(CellHasHyperlink(unaffectedCell));
+            VerifyHyperlink(unaffectedCell, HyperlinkType.File, "54524.xlsx");
 
             // Make sure cells on other sheets are not affected
             unaffectedCell = read.GetSheet("other").GetRow(0).GetCell(0);
-            Assert.IsTrue(cellHasHyperlink(unaffectedCell));
-            verifyHyperlink(unaffectedCell, HyperlinkType.Url, "http://apache.org/");
+            Assert.IsTrue(CellHasHyperlink(unaffectedCell));
+            VerifyHyperlink(unaffectedCell, HyperlinkType.Url, "http://apache.org/");
 
             read.Close();
         }
 
-        // bug 56454
-        [Ignore("")]
+        [Ignore("bug 56454: Incorrectly handles merged regions that do not contain column 0")]
         [Test]
         public void ShiftRowsWithMergedRegionsThatDoNotContainColumnZero()
         {
@@ -692,9 +676,57 @@ namespace TestCases.SS.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void ShiftMergedRowsToMergedRowsUp()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("test");
+            PopulateSheetCells(sheet);
+            CellRangeAddress A1_E1 = new CellRangeAddress(0, 0, 0, 4);
+            CellRangeAddress A2_C2 = new CellRangeAddress(1, 1, 0, 2);
+            sheet.AddMergedRegion(A1_E1);
+            sheet.AddMergedRegion(A2_C2);
+            // A1:E1 should be removed
+            // A2:C2 will be A1:C1
+            sheet.ShiftRows(1, sheet.LastRowNum, -1);
+            Assert.AreEqual(1, sheet.NumMergedRegions);
+            Assert.AreEqual(CellRangeAddress.ValueOf("A1:C1"), sheet.GetMergedRegion(0));
+            wb.Close();
+        }
+        private void PopulateSheetCells(ISheet sheet)
+        {
+            // populate sheet cells
+            for (int i = 0; i < 2; i++)
+            {
+                IRow row = sheet.CreateRow(i);
+                for (int j = 0; j < 5; j++)
+                {
+                    ICell cell = row.CreateCell(j);
+                    cell.SetCellValue(i + "x" + j);
+                }
+            }
+        }
+        [Test]
+        public void ShiftMergedRowsToMergedRowsDown()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("test");
+            // populate sheet cells
+            PopulateSheetCells(sheet);
+            CellRangeAddress A1_E1 = new CellRangeAddress(0, 0, 0, 4);
+            CellRangeAddress A2_C2 = new CellRangeAddress(1, 1, 0, 2);
+            sheet.AddMergedRegion(A1_E1);
+            sheet.AddMergedRegion(A2_C2);
+            // A1:E1 should be moved to A2:E2
+            // A2:C2 will be removed
+            sheet.ShiftRows(0, 0, 1);
+            Assert.AreEqual(1, sheet.NumMergedRegions);
+            Assert.AreEqual(CellRangeAddress.ValueOf("A2:E2"), sheet.GetMergedRegion(0));
+            wb.Close();
+        }
 
 
-        private void createHyperlink(ICreationHelper helper, ICell cell, HyperlinkType linkType, String ref1)
+        private void CreateHyperlink(ICreationHelper helper, ICell cell, HyperlinkType linkType, String ref1)
         {
             cell.SetCellValue(ref1);
             IHyperlink link = helper.CreateHyperlink(linkType);
@@ -702,15 +734,15 @@ namespace TestCases.SS.UserModel
             cell.Hyperlink = (link);
         }
 
-        private void verifyHyperlink(ICell cell, HyperlinkType linkType, String ref1)
+        private void VerifyHyperlink(ICell cell, HyperlinkType linkType, String ref1)
         {
-            Assert.IsTrue(cellHasHyperlink(cell));
+            Assert.IsTrue(CellHasHyperlink(cell));
             IHyperlink link = cell.Hyperlink;
             Assert.AreEqual(linkType, link.Type);
             Assert.AreEqual(ref1, link.Address);
         }
 
-        private bool cellHasHyperlink(ICell cell)
+        private bool CellHasHyperlink(ICell cell)
         {
             return (cell != null) && (cell.Hyperlink != null);
         }
