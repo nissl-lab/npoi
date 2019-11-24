@@ -8,6 +8,7 @@ using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.OpenXml4Net.OPC.Internal.Unmarshallers;
 using NPOI.Util;
 using System.Text.RegularExpressions;
+using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -160,6 +161,57 @@ namespace NPOI.OpenXml4Net.OPC
         {
             return Open(file, defaultPackageAccess);
         }
+
+        /**
+         * Open an user provided {@link ZipEntrySource} with read-only permission.
+         * This method can be used to stream data into POI.
+         * Opposed to other open variants, the data is read as-is, e.g. there aren't
+         * any zip-bomb protection put in place.
+         *
+         * @param zipEntry the custom source
+         * @return A Package object
+         * @ if a parsing error occur.
+         */
+        public static OPCPackage Open(ZipEntrySource zipEntry)
+        {
+            OPCPackage pack = new ZipPackage(zipEntry, PackageAccess.READ);
+            try
+            {
+                if (pack.partList == null)
+                {
+                    pack.GetParts();
+                }
+                // pack.originalPackagePath = file.AbsolutePath;
+                return pack;
+            }
+            catch (InvalidFormatException e)
+            {
+                try
+                {
+                    pack.Close();
+                }
+                catch (IOException)
+                {
+                    throw new IllegalStateException(e);
+                }
+                throw e;
+            }
+            catch (RuntimeException e)
+            {
+                try
+                {
+                    pack.Close();
+                }
+                catch (IOException)
+                {
+                    throw new IllegalStateException(e);
+                }
+                throw e;
+            }
+        }
+
+
+
         /**
          * Open a package.
          * 

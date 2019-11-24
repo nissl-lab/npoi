@@ -148,6 +148,22 @@ namespace NPOI.OpenXml4Net.OPC
         }
 
         /**
+         * Constructor. Opens a Zip based Open XML document from
+         *  a custom ZipEntrySource, typically an open archive
+         *  from another system
+         *
+         * @param zipEntry
+         *            Zip data to load.
+         * @param access
+         *            The package access mode.
+         */
+        public ZipPackage(ZipEntrySource zipEntry, PackageAccess access)
+            : base(access)
+        {
+            this.zipArchive = zipEntry;
+        }
+
+        /**
          * Retrieves the parts from this package. We assume that the package has not
          * been yet inspect to retrieve all the parts, this method will open the
          * archive and look for all parts contain inside it. If the package part
