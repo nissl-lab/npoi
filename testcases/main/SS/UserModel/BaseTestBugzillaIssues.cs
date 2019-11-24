@@ -1448,7 +1448,7 @@ namespace TestCases.SS.UserModel
             ISheet sh = wb.CreateSheet();
             out1.WriteLine(wb.GetType().Name + " column autosizing timing...");
 
-            long t0 = time();
+            long t0 = TimeUtil.CurrentMillis();
             _testDataProvider.TrackAllColumnsForAutosizing(sh);
             for (int r = 0; r < nrows; r++)
             {
@@ -1464,10 +1464,10 @@ namespace TestCases.SS.UserModel
             out1.WriteLine("Populate sheet time: " + populateSheetTime + " ms (" + populateSheetTimePerCell_ns + " ns/cell)");
 
             out1.WriteLine("\nAutosizing...");
-            long t1 = time();
+            long t1 = TimeUtil.CurrentMillis();
             for (int c = 0; c < ncols; c++)
             {
-                long t2 = time();
+                long t2 = TimeUtil.CurrentMillis();
                 sh.AutoSizeColumn(c);
                 out1.WriteLine("Column " + c + " took " + delta(t2) + " ms");
             }
@@ -1493,17 +1493,9 @@ namespace TestCases.SS.UserModel
             //}
         }
 
-        protected long time()
-        {
-            //从1970年1月1日至当前时间所经过的毫秒数
-            long currentTicks = DateTime.Now.Ticks;
-            DateTime dtFrom = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            long currentMillis = (currentTicks - dtFrom.Ticks) / 10000;
-            return currentMillis;
-        }
         protected double delta(long startTimeMillis)
         {
-            return time() - startTimeMillis;
+            return TimeUtil.CurrentMillis() - startTimeMillis;
         }
 
         [Ignore("bug 59393")]

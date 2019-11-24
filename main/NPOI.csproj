@@ -1319,6 +1319,7 @@
     <Compile Include="Util\StringUtil.cs" />
     <Compile Include="Util\SystemOutLogger.cs" />
     <Compile Include="Util\TempFile.cs" />
+    <Compile Include="Util\TimeUtil.cs" />
     <Compile Include="Util\ULongField.cs" />
     <Compile Include="HSSF\Record\Chart\ObjectKind.cs" />
     <Compile Include="HSSF\Record\TextOrientation.cs" />
