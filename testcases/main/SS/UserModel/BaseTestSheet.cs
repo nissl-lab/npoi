@@ -1307,6 +1307,28 @@ namespace TestCases.SS.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void GetHyperlink()
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            IHyperlink hyperlink = workbook.GetCreationHelper().CreateHyperlink(HyperlinkType.Url);
+            hyperlink.Address = "https://poi.apache.org/";
+
+            ISheet sheet = workbook.CreateSheet();
+            ICell cell = sheet.CreateRow(5).CreateCell(1);
+
+            Assert.AreEqual(0, sheet.GetHyperlinkList().Count, "list size before add");
+            cell.Hyperlink = hyperlink;
+            Assert.AreEqual(1, sheet.GetHyperlinkList().Count, "list size after add");
+
+            Assert.AreEqual(hyperlink, sheet.GetHyperlinkList()[0], "list");
+            Assert.AreEqual(hyperlink, sheet.GetHyperlink(5, 1), "row, col");
+            CellAddress B6 = new CellAddress(5, 1);
+            Assert.AreEqual(hyperlink, sheet.GetHyperlink(B6), "addr");
+            Assert.AreEqual(null, sheet.GetHyperlink(CellAddress.A1), "no hyperlink at A1");
+
+            workbook.Close();
+        }
 
         [Test]
         public void NewMergedRegionAt()

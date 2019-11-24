@@ -885,28 +885,30 @@ namespace NPOI.SS.UserModel
 
         bool IsDate1904();
 
-        /**
-         * Get a Hyperlink in this sheet anchored at row, column
-         *
-         * @param row
-         * @param column
-         * @return hyperlink if there is a hyperlink anchored at row, column; otherwise returns null
-         */
+        /// <summary>
+        /// Get a Hyperlink in this sheet anchored at row, column
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        /// <returns>return hyperlink if there is a hyperlink anchored at row, column; otherwise returns null</returns>
         IHyperlink GetHyperlink(int row, int column);
 
-        /**
-         * Get a list of Hyperlinks in this sheet
-         *
-         * @return Hyperlinks for the sheet
-         */
+        /// <summary>
+        /// Get a Hyperlink in this sheet located in a cell specified by {code addr}
+        /// </summary>
+        /// <param name="addr">The address of the cell containing the hyperlink</param>
+        /// <returns>return hyperlink if there is a hyperlink anchored at {@code addr}; otherwise returns {@code null}</returns>
+        IHyperlink GetHyperlink(CellAddress addr);
+
+        /// <summary>
+        /// Get a list of Hyperlinks in this sheet
+        /// </summary>
+        /// <returns>return Hyperlinks for the sheet</returns>
         List<IHyperlink> GetHyperlinkList();
 
-        /**
-         * Return location of the active cell, e.g. <code>A1</code>.
-         *
-         * @return the location of the active cell.
-         * @since 3.14beta2
-         */
+        /// <summary>
+        /// get or set location of the active cell, e.g. <code>A1</code>.
+        /// </summary>
         CellAddress ActiveCell { get; set; }
     }
 

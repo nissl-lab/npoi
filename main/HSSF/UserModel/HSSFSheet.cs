@@ -2424,6 +2424,16 @@ namespace NPOI.HSSF.UserModel
             return null;
         }
 
+        /// <summary>
+        /// Get a Hyperlink in this sheet located in a cell specified by {code addr}
+        /// </summary>
+        /// <param name="addr">The address of the cell containing the hyperlink</param>
+        /// <returns>return hyperlink if there is a hyperlink anchored at {@code addr}; otherwise returns {@code null}</returns>
+        public IHyperlink GetHyperlink(CellAddress addr)
+        {
+            return GetHyperlink(addr.Row, addr.Column);
+        }
+
         /**
          * Get a list of Hyperlinks in this sheet
          *

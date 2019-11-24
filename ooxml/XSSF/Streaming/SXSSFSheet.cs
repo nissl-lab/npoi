@@ -596,19 +596,25 @@ namespace NPOI.XSSF.Streaming
             throw new NotImplementedException();
         }
 
-        /**
-         * Get a Hyperlink in this sheet anchored at row, column
-         *
-         * @param row
-         * @param column
-         * @return hyperlink if there is a hyperlink anchored at row, column; otherwise returns null
-         */
-
+        /// <summary>
+        /// Get a Hyperlink in this sheet anchored at row, column
+        /// </summary>
+        /// <param name="row">The index of the row of the hyperlink, zero-based</param>
+        /// <param name="column">the index of the column of the hyperlink, zero-based</param>
+        /// <returns>return hyperlink if there is a hyperlink anchored at row, column; otherwise returns null</returns>
         public IHyperlink GetHyperlink(int row, int column)
         {
             return _sh.GetHyperlink(row, column);
         }
-
+        /// <summary>
+        /// Get a Hyperlink in this sheet located in a cell specified by {code addr}
+        /// </summary>
+        /// <param name="addr">The address of the cell containing the hyperlink</param>
+        /// <returns>return hyperlink if there is a hyperlink anchored at {@code addr}; otherwise returns {@code null}</returns>
+        public IHyperlink GetHyperlink(CellAddress addr)
+        {
+            return _sh.GetHyperlink(addr);
+        }
         /**
          * Get a list of Hyperlinks in this sheet
          *

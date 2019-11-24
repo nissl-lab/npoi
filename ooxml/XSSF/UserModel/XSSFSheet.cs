@@ -849,7 +849,17 @@ namespace NPOI.XSSF.UserModel
         /// <returns>return hyperlink if there is a hyperlink anchored at row, column; otherwise returns null</returns>
         public IHyperlink GetHyperlink(int row, int column)
         {
-            String ref1 = new CellReference(row, column).FormatAsString();
+            return GetHyperlink(new CellAddress(row, column));
+        }
+
+        /// <summary>
+        /// Get a Hyperlink in this sheet located in a cell specified by {code addr}
+        /// </summary>
+        /// <param name="addr">The address of the cell containing the hyperlink</param>
+        /// <returns>return hyperlink if there is a hyperlink anchored at {@code addr}; otherwise returns {@code null}</returns>
+        public IHyperlink GetHyperlink(CellAddress addr)
+        {
+            String ref1 = addr.FormatAsString();
             foreach (XSSFHyperlink hyperlink in hyperlinks)
             {
                 if (hyperlink.GetCellRef().Equals(ref1))
