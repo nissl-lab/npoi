@@ -347,9 +347,16 @@ namespace NPOI
         /// <summary>
         /// Writes the document out to the specified output stream. The
         /// stream is not closed as part of this operation.
+        /// 
         ///  Note - if the Document was opened from a {@link File} rather
         ///  than an { @link InputStream }, you<b> must</b> write out to
         ///  a different file, overwriting via an OutputStream isn't possible.
+        ///  
+        /// If {@code stream} is a {@link java.io.FileOutputStream} on a networked drive
+        /// or has a high cost/latency associated with each written byte,
+        /// consider wrapping the OutputStream in a {@link java.io.BufferedOutputStream}
+        /// to improve write performance.
+        /// 
         /// </summary>
         /// <param name="out1">The stream to write to.</param>
         public abstract void Write(Stream out1);

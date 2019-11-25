@@ -195,6 +195,11 @@ namespace NPOI
          * Note - if the Document was opened from a {@link File} rather
          *  than an {@link InputStream}, you <b>must</b> write out to
          *  a different file, overwriting via an OutputStream isn't possible.
+         *  
+         * If {@code stream} is a {@link java.io.FileOutputStream} on a networked drive
+         * or has a high cost/latency associated with each written byte,
+         * consider wrapping the OutputStream in a {@link java.io.BufferedOutputStream}
+         * to improve write performance.
          * 
          * @param stream - the java Stream you wish to write the file to
          *
