@@ -734,10 +734,12 @@ namespace NPOI.HSSF.Model
             boundsheets.Insert(pos, sheet);
 
             // also adjust order of Records, calculate the position of the Boundsheets via getBspos()...
+            int initialBspos = records.Bspos;
             int pos0 = records.Bspos - (boundsheets.Count - 1);
             Record removed = records[(pos0 + sheetNumber)];
             records.Remove(pos0 + sheetNumber);
             records.Add(pos0 + pos, removed);
+            records.Bspos = initialBspos;
         }
 
         /**

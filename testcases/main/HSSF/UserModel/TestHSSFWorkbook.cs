@@ -1323,5 +1323,26 @@ namespace TestCases.HSSF.UserModel
             wb = new HSSFWorkbook(file.Create());
             assertCloseDoesNotModifyFile(filename, wb);
         }
+
+        [Test]
+        public void SetSheetOrderToEnd()
+        {
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            workbook.CreateSheet("A");
+            try
+            {
+                for (int i = 0; i < 2 * workbook.InternalWorkbook.Records.Count; i++)
+                {
+                    workbook.SetSheetOrder("A", 0);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Moving a sheet to the end should not throw an exception, but threw ", e);
+            }
+        }
+
+
+
     }
 }
