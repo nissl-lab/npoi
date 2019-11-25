@@ -362,14 +362,14 @@ namespace NPOI.SS.Formula.Functions
                         int.Parse(stringOrNumber);
                         itsANumber = true;
                     }
-                    catch (FormatException e)
+                    catch (FormatException)
                     { // It's not an int.
                         try
                         {
                             Double.Parse(stringOrNumber);
                             itsANumber = true;
                         }
-                        catch (FormatException e2)
+                        catch (FormatException)
                         { // It's a string.
                             itsANumber = false;
                         }
@@ -399,7 +399,7 @@ namespace NPOI.SS.Formula.Functions
             }
             else if (condition is NumericValueEval) {
                 double conditionNumber = ((NumericValueEval)condition).NumberValue;
-                Double? valueNumber = GetNumerFromValueEval(value);
+                Double? valueNumber = GetNumberFromValueEval(value);
                 if (valueNumber == null)
                 {
                     return false;
@@ -473,7 +473,7 @@ namespace NPOI.SS.Formula.Functions
             return false; // Can not be reached.
         }
 
-        private static Double? GetNumerFromValueEval(ValueEval value)
+        private static Double? GetNumberFromValueEval(ValueEval value)
         {
             if (value is NumericValueEval)
             {
@@ -486,7 +486,7 @@ namespace NPOI.SS.Formula.Functions
                 {
                     return Double.Parse(stringValue);
                 }
-                catch (FormatException e2)
+                catch (FormatException)
                 {
                     return null;
                 }
