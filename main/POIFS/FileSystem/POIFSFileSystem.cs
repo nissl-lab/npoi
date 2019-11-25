@@ -131,5 +131,27 @@ namespace NPOI.POIFS.FileSystem
             return NPOIFSFileSystem.HasPOIFSHeader(header8Bytes);
         }
 
+        /**
+         * Creates a new {@link POIFSFileSystem} in a new {@link File}.
+         * Use {@link #POIFSFileSystem(File)} to open an existing File,
+         *  this should only be used to create a new empty filesystem.
+         *
+         * @param file The file to create and open
+         * @return The created and opened {@link POIFSFileSystem}
+         */
+        public static POIFSFileSystem Create(FileInfo file)
+        {
+            // TODO Make this nicer!
+            // Create a new empty POIFS in the file
+            POIFSFileSystem tmp = new POIFSFileSystem();
+            FileStream fout = file.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            tmp.WriteFileSystem(fout);
+            fout.Close();
+            tmp.Close();
+
+            // Open it up again backed by the file
+            return new POIFSFileSystem(file);
+        }
+
     }
 }
