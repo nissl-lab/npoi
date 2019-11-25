@@ -1418,5 +1418,22 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("Changed!", wb.GetSheetAt(0).GetRow(0).GetCell(0).ToString());
         }
 
+        [Test]
+        [Ignore("Not currently working, bug in POIFS creating empty FS")]
+        public void testWriteToNewFile()
+        {
+            // Open from a Stream
+            HSSFWorkbook wb = new HSSFWorkbook(
+                    POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("SampleSS.xls"));
+            // Save to a new temp file
+            FileInfo file = TempFile.CreateTempFile("TestHSSFWorkbook", ".xls");
+            wb.Write(file);
+            wb.Close();
+
+            // Read and check
+            wb = new HSSFWorkbook(new NPOIFSFileSystem(file));
+            Assert.AreEqual(3, wb.NumberOfSheets);
+            wb.Close();
+        }
     }
 }
