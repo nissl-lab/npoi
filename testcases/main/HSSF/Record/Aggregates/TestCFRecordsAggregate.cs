@@ -30,6 +30,7 @@ namespace TestCases.HSSF.Record.Aggregates
     using NPOI.SS.Util;
     using NPOI.SS.UserModel;
     using System.Collections.Generic;
+    using NPOI.HSSF.Model;
 
     /**
      * Tests the serialization and deserialization of the CFRecordsAggregate
@@ -61,11 +62,10 @@ namespace TestCases.HSSF.Record.Aggregates
             recs.Add(rule1);
             recs.Add(rule2);
             recs.Add(rule3);
-            CFRecordsAggregate record;
-            record = CFRecordsAggregate.CreateCFAggregate(recs, 0);
+            CFRecordsAggregate record = CFRecordsAggregate.CreateCFAggregate(new RecordStream(recs, 0));
 
             // Serialize
-		    byte [] serializedRecord = new byte[record.RecordSize];
+            byte [] serializedRecord = new byte[record.RecordSize];
 		    record.Serialize(0, serializedRecord);
 		    Stream in1 = new MemoryStream(serializedRecord);
 
@@ -78,14 +78,18 @@ namespace TestCases.HSSF.Record.Aggregates
 
             header = (CFHeaderRecord)recs[0];
             rule1 = (CFRuleRecord)recs[1];
+            Assert.IsNotNull(rule1);
             rule2 = (CFRuleRecord)recs[2];
+            Assert.IsNotNull(rule2);
             rule3 = (CFRuleRecord)recs[3];
+            Assert.IsNotNull(rule3);
             cellRanges = header.CellRanges;
 
             Assert.AreEqual(2, cellRanges.Length);
             Assert.AreEqual(3, header.NumberOfConditionalFormats);
+            Assert.IsFalse(header.NeedRecalculation);
 
-            record = CFRecordsAggregate.CreateCFAggregate(recs, 0);
+            record = CFRecordsAggregate.CreateCFAggregate(new RecordStream(recs, 0));
 
             record = record.CloneCFAggregate();
 
@@ -94,12 +98,16 @@ namespace TestCases.HSSF.Record.Aggregates
 
             header = record.Header;
             rule1 = record.GetRule(0);
+            Assert.IsNotNull(rule1);
             rule2 = record.GetRule(1);
+            Assert.IsNotNull(rule2);
             rule3 = record.GetRule(2);
+            Assert.IsNotNull(rule3);
             cellRanges = header.CellRanges;
 
             Assert.AreEqual(2, cellRanges.Length);
             Assert.AreEqual(3, header.NumberOfConditionalFormats);
+            Assert.IsFalse(header.NeedRecalculation);
         }
         /**
          * Make sure that the CF Header record is properly updated with the number of rules
@@ -147,17 +155,18 @@ namespace TestCases.HSSF.Record.Aggregates
                 new CFRecordsAggregate(cellRanges, rules);
                 Assert.Fail("Shouldn't be able to mix between types");
             }
-            catch (ArgumentException e) { }
+            catch (ArgumentException) { }
 
             rules = new CFRuleBase[] { CFRuleRecord.Create(sheet, "7") };
             CFRecordsAggregate agg = new CFRecordsAggregate(cellRanges, rules);
+            Assert.IsTrue(agg.Header.NeedRecalculation);
 
             try
             {
                 agg.AddRule(CFRule12Record.Create(sheet, "7"));
                 Assert.Fail("Shouldn't be able to mix between types");
             }
-            catch (ArgumentException e) { }
+            catch (ArgumentException) { }
         }
 
     }

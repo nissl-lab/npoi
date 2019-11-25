@@ -60,9 +60,8 @@ namespace NPOI.HSSF.Record.Aggregates
 
         public override void VisitContainedRecords(RecordVisitor rv)
         {
-            for (int i = 0; i < _cfHeaders.Count; i++)
+            foreach (CFRecordsAggregate subAgg in _cfHeaders)
             {
-                CFRecordsAggregate subAgg = (CFRecordsAggregate)_cfHeaders[i];
                 subAgg.VisitContainedRecords(rv);
             }
         }

@@ -87,10 +87,19 @@ namespace NPOI.HSSF.Record.Aggregates
         }
         private static CFHeaderBase CreateHeader(CellRangeAddress[] regions, CFRuleBase[] rules)
         {
+            CFHeaderBase header;
             if (rules.Length == 0 || rules[0] is CFRuleRecord) {
-                return new CFHeaderRecord(regions, rules.Length);
+                header = new CFHeaderRecord(regions, rules.Length);
             }
-            return new CFHeader12Record(regions, rules.Length);
+            else
+            {
+                header = new CFHeader12Record(regions, rules.Length);
+            }
+            // set the "needs recalculate" by default to avoid Excel handling conditional formatting incorrectly
+            // see bug 52122 for details
+            header.NeedRecalculation = true;
+
+            return header;
         }
         /// <summary>
         /// Create CFRecordsAggregate from a list of CF Records
