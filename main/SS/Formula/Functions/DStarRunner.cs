@@ -111,7 +111,7 @@ namespace NPOI.SS.Formula.Functions
                 {
                     try
                     {
-                        ValueEval currentValueEval = solveReference(db.GetValue(row, fc));
+                        ValueEval currentValueEval = SolveReference(db.GetValue(row, fc));
                         // Pass the match to the algorithm and conditionally abort the search.
                         bool shouldContinue = algorithm.ProcessMatch(currentValueEval);
                         if (!shouldContinue)
@@ -146,7 +146,7 @@ namespace NPOI.SS.Formula.Functions
          * @return a ValueEval which is guaranteed not to be a RefEval
          * @If a multi-sheet reference was found along the way.
          */
-        private static ValueEval solveReference(ValueEval field)
+        private static ValueEval SolveReference(ValueEval field)
         {
             if (field is RefEval)
             {
@@ -155,7 +155,7 @@ namespace NPOI.SS.Formula.Functions
                 {
                     throw new EvaluationException(ErrorEval.VALUE_INVALID);
                 }
-                return solveReference(refEval.GetInnerValueEval(refEval.FirstSheetIndex));
+                return SolveReference(refEval.GetInnerValueEval(refEval.FirstSheetIndex));
             }
             else
             {
@@ -214,6 +214,10 @@ namespace NPOI.SS.Formula.Functions
             for (int column = 0; column < width; ++column)
             {
                 ValueEval columnNameValueEval = db.GetValue(0, column);
+                if (SolveReference(columnNameValueEval) is BlankEval)
+                {
+                    continue;
+                }
                 String columnName = GetStringFromValueEval(columnNameValueEval);
                 if (name.Equals(columnName))
                 {
@@ -253,7 +257,7 @@ namespace NPOI.SS.Formula.Functions
                     try
                     {
                         // The condition to Apply.
-                        condition = solveReference(cdb.GetValue(conditionRow, column));
+                        condition = SolveReference(cdb.GetValue(conditionRow, column));
                     }
                     catch (Exception)
                     {
@@ -264,8 +268,8 @@ namespace NPOI.SS.Formula.Functions
                     if (condition is BlankEval)
                         continue;
                     // The column in the DB to apply the condition to.
-                    ValueEval targetHeader = solveReference(cdb.GetValue(0, column));
-                    targetHeader = solveReference(targetHeader);
+                    ValueEval targetHeader = SolveReference(cdb.GetValue(0, column));
+                    targetHeader = SolveReference(targetHeader);
 
 
                     if (!(targetHeader is StringValueEval))
@@ -506,7 +510,7 @@ namespace NPOI.SS.Formula.Functions
          */
         private static String GetStringFromValueEval(ValueEval value)
         {
-            value = solveReference(value);
+            value = SolveReference(value);
             if (value is BlankEval)
                 return "";
             if (!(value is StringValueEval))
