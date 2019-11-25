@@ -3342,6 +3342,18 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(70, sheet.GetRow(sheet.LastRowNum).RowNum);
         }
 
+        [Test]
+        public void TestWorkdayFunction()
+        {
+            XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("59106.xlsx");
+            XSSFSheet sheet = workbook.GetSheet("Test") as XSSFSheet;
+            IRow row = sheet.GetRow(1);
+            ICell cell = row.GetCell(0);
+            DataFormatter form = new DataFormatter();
+            IFormulaEvaluator evaluator = cell.Sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
+            String result = form.FormatCellValue(cell, evaluator);
+            Assert.AreEqual("09 Mar 2016", result);
+        }
     }
 
 }
