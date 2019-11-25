@@ -1419,8 +1419,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        [Ignore("Not currently working, bug in POIFS creating empty FS")]
-        public void testWriteToNewFile()
+        public void TestWriteToNewFile()
         {
             // Open from a Stream
             HSSFWorkbook wb = new HSSFWorkbook(

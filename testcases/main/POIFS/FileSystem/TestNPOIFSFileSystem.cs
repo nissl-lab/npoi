@@ -48,9 +48,9 @@ namespace TestCases.POIFS.FileSystem
         }
 
         /**
-    * Returns test files with 512 byte and 4k block sizes, loaded
-    *  both from InputStreams and Files
-    */
+        * Returns test files with 512 byte and 4k block sizes, loaded
+        *  both from InputStreams and Files
+        */
         protected NPOIFSFileSystem[] get512and4kFileAndInput()
         {
             NPOIFSFileSystem fsA = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
@@ -104,6 +104,16 @@ namespace TestCases.POIFS.FileSystem
             original.Close();
             return new NPOIFSFileSystem(new ByteArrayInputStream(baos.ToArray()));
         }
+
+        protected static NPOIFSFileSystem WriteOutFileAndReadBack(NPOIFSFileSystem original)
+        {
+            FileInfo file = TempFile.CreateTempFile("TestPOIFS", ".ole2");
+            FileStream fout = file.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            original.WriteFileSystem(fout);
+            original.Close();
+            return new NPOIFSFileSystem(file, false);
+        }
+
         [Test]
         public void TestBasicOpen()
         {
@@ -977,6 +987,19 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(3));
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
             Assert.AreEqual(0, fs.PropertyTable.StartBlock);
+
+            // Check the same but with saving to a file
+            fs = new NPOIFSFileSystem();
+            fs = WriteOutFileAndReadBack(fs);
+
+            // Same, no change, SBAT remains empty 
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(3));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
+            Assert.AreEqual(0, fs.PropertyTable.StartBlock);
+
 
             // Put everything within a new directory
             DirectoryEntry testDir = fs.CreateDirectory("Test Directory");

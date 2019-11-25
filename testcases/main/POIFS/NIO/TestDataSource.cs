@@ -49,7 +49,7 @@ namespace TestCases.POIFS.NIO
 
             try
             {
-                checkDataSource(ds, false);
+                CheckDataSource(ds, false);
             }
             finally
             {
@@ -60,24 +60,25 @@ namespace TestCases.POIFS.NIO
             ds = new FileBackedDataSource(f, false);
             try
             {
-                checkDataSource(ds, false);
+                CheckDataSource(ds, false);
             }
             finally
             {
                 ds.Close();
             }
         }
-
-        public void testFileWritable()
+        [Test]
+        public void TestFileWritable()
         {
             FileInfo temp = TempFile.CreateTempFile("TestDataSource", ".test");
-            try {
-                writeDataToFile(temp);
+            try
+            {
+                WriteDataToFile(temp);
 
                 FileBackedDataSource ds = new FileBackedDataSource(temp, false);
                 try
                 {
-                    checkDataSource(ds, true);
+                    CheckDataSource(ds, true);
                 }
                 finally
                 {
@@ -86,26 +87,32 @@ namespace TestCases.POIFS.NIO
 
                 // try a second time
                 ds = new FileBackedDataSource(temp, false);
-                try {
-                    checkDataSource(ds, true);
-                } finally {
+                try
+                {
+                    CheckDataSource(ds, true);
+                }
+                finally
+                {
                     ds.Close();
                 }
 
-                writeDataToFile(temp);
-            } finally {
+                WriteDataToFile(temp);
+            }
+            finally
+            {
                 Assert.IsTrue(temp.Exists);
                 temp.Delete();
                 Assert.IsTrue(!File.Exists(temp.FullName), "Could not delete file " + temp);
             }
         }
 
-
-        public void testRewritableFile()
+        [Test]
+        public void TestRewritableFile()
         {
             FileInfo temp = TempFile.CreateTempFile("TestDataSource", ".test");
-            try {
-                writeDataToFile(temp);
+            try
+            {
+                WriteDataToFile(temp);
 
                 FileBackedDataSource ds = new FileBackedDataSource(temp, true);
                 try
@@ -134,15 +141,17 @@ namespace TestCases.POIFS.NIO
                     ds.Close();
                 }
 
-                writeDataToFile(temp);
-            } finally {
+                WriteDataToFile(temp);
+            }
+            finally
+            {
                 Assert.IsTrue(temp.Exists);
                 temp.Delete();
                 Assert.IsTrue(!File.Exists(temp.FullName));
             }
         }
 
-        private void writeDataToFile(FileInfo temp)
+        private void WriteDataToFile(FileInfo temp)
         {
             FileStream str = temp.Create();
             try
@@ -163,15 +172,18 @@ namespace TestCases.POIFS.NIO
             }
         }
 
-        private void checkDataSource(FileBackedDataSource ds, bool writeable)
+        private void CheckDataSource(FileBackedDataSource ds, bool writeable)
         {
             Assert.AreEqual(writeable, ds.IsWriteable);
             //Assert.IsNotNull(ds.Channel);
 
             // rewriting changes the size
-            if (writeable) {
+            if (writeable)
+            {
                 Assert.IsTrue(ds.Size == 8192 || ds.Size == 8198, "Had: " + ds.Size);
-            } else {
+            }
+            else
+            {
                 Assert.AreEqual(8192, ds.Size);
             }
 
@@ -210,7 +222,7 @@ namespace TestCases.POIFS.NIO
                     Assert.Fail("Shouldn't be able to read off the end of the file");
                 }
             }
-            catch (ArgumentException)
+            catch (IndexOutOfRangeException)
             {
             }
         }
@@ -258,7 +270,7 @@ namespace TestCases.POIFS.NIO
                 //bs.get();
                 //fail("Shouldn't be able to read off the end");
             }
-            catch (System.Exception) { }
+            catch (Exception) { }
 
             // Past the end
             try
@@ -266,7 +278,7 @@ namespace TestCases.POIFS.NIO
                 ds.Read(4, 256);
                 Assert.Fail("Shouldn't be able to read off the end");
             }
-            catch (System.IndexOutOfRangeException) { }
+            catch (IndexOutOfRangeException) { }
 
 
             // Overwrite

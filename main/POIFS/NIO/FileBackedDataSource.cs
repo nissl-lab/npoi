@@ -124,7 +124,7 @@ namespace NPOI.POIFS.NIO
         public override ByteBuffer Read(int length, long position)
         {
             if (position >= Size)
-                throw new ArgumentException("Position " + position + " past the end of the file");
+                throw new IndexOutOfRangeException("Position " + position + " past the end of the file");
 
             // Do we read or map (for read/write?
             ByteBuffer dst;
@@ -145,7 +145,7 @@ namespace NPOI.POIFS.NIO
             }
             // Check
             if(worked == -1)
-                throw new ArgumentException("Position " + position + " past the end of the file");
+                throw new IndexOutOfRangeException("Position " + position + " past the end of the file");
 
             dst.Position = 0;
             // remember the buffer for cleanup if necessary
