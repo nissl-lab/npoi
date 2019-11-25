@@ -229,6 +229,13 @@ namespace NPOI.XSSF.UserModel
                         if(!Uri.IsWellFormedUriString(address,UriKind.RelativeOrAbsolute))
                             throw new ArgumentException("Address of hyperlink must be a valid URI:" + address);
                     break;
+                case HyperlinkType.Document:
+                    // currently not evaluating anything.
+                    break;
+                default:
+                    // this check wouldn't need to be done if _type was checked when object was set
+                    // since _type is final, this check would only need to be done once
+                    throw new IllegalStateException("Invalid Hyperlink type: " + _type);
             }
         }
         /**
