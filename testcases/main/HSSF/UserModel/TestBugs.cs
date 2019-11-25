@@ -3451,5 +3451,47 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(1027, cmo.ObjectId);
         }
 
+
+        // As of POI 3.15 beta 2, LibreOffice does not display the diagonal border while it does display the bottom border
+        // I have not checked Excel to know if this is a LibreOffice or a POI problem.
+        [Test]
+        public void Test53564()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet("Page 1") as HSSFSheet;
+            short BLUE = 30;
+
+            HSSFSheetConditionalFormatting scf = sheet.SheetConditionalFormatting as HSSFSheetConditionalFormatting;
+            HSSFConditionalFormattingRule rule = scf.CreateConditionalFormattingRule(ComparisonOperator.GreaterThan, "10") as HSSFConditionalFormattingRule;
+
+            HSSFBorderFormatting bord = rule.CreateBorderFormatting() as HSSFBorderFormatting;
+            bord.BorderDiagonal = BorderStyle.Thick;
+            Assert.AreEqual(BorderStyle.Thick, bord.BorderDiagonal);
+            bord.IsBackwardDiagonalOn = true;
+            Assert.IsTrue(bord.IsBackwardDiagonalOn);
+            bord.IsForwardDiagonalOn = true;
+            Assert.IsTrue(bord.IsForwardDiagonalOn);
+
+            bord.DiagonalBorderColor = BLUE;
+            Assert.AreEqual(BLUE, bord.DiagonalBorderColor);
+            // Create the bottom border style so we know what a border is supposed to look like
+            bord.BorderBottom = BorderStyle.Thick;
+            Assert.AreEqual(BorderStyle.Thick, bord.BorderBottom);
+            bord.BottomBorderColor = BLUE;
+            Assert.AreEqual(BLUE, bord.BottomBorderColor);
+
+            CellRangeAddress[] A2_D4 = { new CellRangeAddress(1, 3, 0, 3) };
+            scf.AddConditionalFormatting(A2_D4, rule);
+
+            // Set a cell value within the conditional formatting range whose rule would resolve to True.
+            ICell C3 = sheet.CreateRow(2).CreateCell(2);
+            C3.SetCellValue(30.0);
+
+            // Manually check the output file with Excel to see if the diagonal border is present
+            //OutputStream fos = new FileOutputStream("/tmp/53564.xls");
+            //wb.write(fos);
+            //fos.Close();
+            wb.Close();
+        }
     }
 }
