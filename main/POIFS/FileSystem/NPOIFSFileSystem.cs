@@ -737,6 +737,22 @@ namespace NPOI.POIFS.FileSystem
         {
             return Root.CreateDirectory(name);
         }
+        /**
+         * Does the filesystem support an in-place write via
+         *  {@link #writeFilesystem()} ? If false, only writing out to
+         *  a brand new file via {@link #writeFilesystem(OutputStream)}
+         *  is supported.
+         */
+        public bool IsInPlaceWriteable()
+        {
+            if (_data is FileBackedDataSource) {
+                if (((FileBackedDataSource)_data).IsWriteable)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         /**
          * Write the filesystem out to the open file. Will thrown an

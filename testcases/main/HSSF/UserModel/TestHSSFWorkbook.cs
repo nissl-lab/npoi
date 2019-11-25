@@ -1343,6 +1343,80 @@ namespace TestCases.HSSF.UserModel
         }
 
 
+        [Test]
+        public void InvalidInPlaceWrite()
+        {
+            HSSFWorkbook wb;
+
+            // Can't work for new files
+            wb = new HSSFWorkbook();
+            try
+            {
+                wb.Write();
+                Assert.Fail("Shouldn't work for new files");
+            }
+            catch (IllegalStateException e) { }
+
+            // Can't work for InputStream opened files
+            wb = new HSSFWorkbook(
+                POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("SampleSS.xls"));
+            try
+            {
+                wb.Write();
+                Assert.Fail("Shouldn't work for InputStream");
+            }
+            catch (IllegalStateException e) { }
+
+            // Can't work for OPOIFS
+            OPOIFSFileSystem ofs = new OPOIFSFileSystem(
+                    POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("SampleSS.xls"));
+            wb = new HSSFWorkbook(ofs.Root, true);
+            try
+            {
+                wb.Write();
+                Assert.Fail("Shouldn't work for OPOIFSFileSystem");
+            }
+            catch (IllegalStateException e) { }
+
+            // Can't work for Read-Only files
+            NPOIFSFileSystem fs = new NPOIFSFileSystem(
+                    POIDataSamples.GetSpreadSheetInstance().GetFile("SampleSS.xls"), true);
+            wb = new HSSFWorkbook(fs);
+            try
+            {
+                wb.Write();
+                Assert.Fail("Shouldn't work for Read Only");
+            }
+            catch (IllegalStateException e) { }
+        }
+
+        [Test]
+        public void inPlaceWrite()
+        {
+            // Setup as a copy of a known-good file
+            FileInfo file = TempFile.CreateTempFile("TestHSSFWorkbook", ".xls");
+            IOUtils.Copy(
+                    POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("SampleSS.xls"),
+                    file.Create()
+            );
+
+            // Open from the temp file in read-write mode
+            HSSFWorkbook wb = new HSSFWorkbook(new NPOIFSFileSystem(file, false));
+            Assert.AreEqual(3, wb.NumberOfSheets);
+
+            // Change
+            wb.RemoveSheetAt(2);
+            wb.RemoveSheetAt(1);
+            wb.GetSheetAt(0).GetRow(0).GetCell(0).SetCellValue("Changed!");
+
+            // Save in-place, close, re-open and check
+            wb.Write();
+            wb.Close();
+
+            wb = new HSSFWorkbook(new NPOIFSFileSystem(file));
+            Assert.AreEqual(1, wb.NumberOfSheets);
+            Assert.AreEqual("Changed!", wb.GetSheetAt(0).GetRow(0).GetCell(0).ToString());
+        }
 
     }
 }
