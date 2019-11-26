@@ -343,22 +343,72 @@ namespace NPOI
                 //logger.log(POILogger.ERROR, "Couldn't Write property Set with name " + name + " as not supported by HPSF yet");
             }
         }
+        /**
+         * Called during a {@link #write()} to ensure that the Document (and
+         *  associated {@link POIFSFileSystem}) was opened in a way compatible
+         *  with an in-place write.
+         * 
+         * @ if the document was opened suitably
+         */
+        protected void ValidateInPlaceWritePossible()
+        {
+            if (directory == null)
+            {
+                throw new IllegalStateException("Newly created Document, cannot save in-place");
+            }
+            if (directory.Parent != null)
+            {
+                throw new IllegalStateException("This is not the root Document, cannot save embedded resource in-place");
+            }
+            if (directory.FileSystem == null ||
+                !directory.FileSystem.IsInPlaceWriteable())
+            {
+                throw new IllegalStateException("Opened read-only or via an InputStream, a Writeable File is required");
+            }
+        }
 
-        /// <summary>
-        /// Writes the document out to the specified output stream. The
-        /// stream is not closed as part of this operation.
-        /// 
-        ///  Note - if the Document was opened from a {@link File} rather
-        ///  than an { @link InputStream }, you<b> must</b> write out to
-        ///  a different file, overwriting via an OutputStream isn't possible.
-        ///  
-        /// If {@code stream} is a {@link java.io.FileOutputStream} on a networked drive
-        /// or has a high cost/latency associated with each written byte,
-        /// consider wrapping the OutputStream in a {@link java.io.BufferedOutputStream}
-        /// to improve write performance.
-        /// 
-        /// </summary>
-        /// <param name="out1">The stream to write to.</param>
+        /**
+         * Writes the document out to the currently open {@link File}, via the
+         *  writeable {@link POIFSFileSystem} it was opened from.
+         *  
+         * <p>This will Assert.Fail (with an {@link IllegalStateException} if the
+         *  document was opened read-only, opened from an {@link InputStream}
+         *   instead of a File, or if this is not the root document. For those cases, 
+         *   you must use {@link #write(OutputStream)} or {@link #write(File)} to 
+         *   write to a brand new document.
+         * 
+         * @ thrown on errors writing to the file
+         */
+        //public abstract void write() ; // TODO Implement elsewhere
+        /**
+         * Writes the document out to the specified new {@link File}. If the file 
+         * exists, it will be replaced, otherwise a new one will be created
+         *
+         * @param newFile The new File to write to.
+         * 
+         * @ thrown on errors writing to the file
+         */
+        //public abstract void write(File newFile) ; // TODO Implement elsewhere
+        /**
+         * Writes the document out to the specified output stream. The
+         * stream is not closed as part of this operation.
+         * 
+         * Note - if the Document was opened from a {@link File} rather
+         *  than an {@link InputStream}, you <b>must</b> write out using
+         *  {@link #write()} or to a different File. Overwriting the currently
+         *  open file via an OutputStream isn't possible.
+         *  
+         * If {@code stream} is a {@link java.io.FileOutputStream} on a networked drive
+         * or has a high cost/latency associated with each written byte,
+         * consider wrapping the OutputStream in a {@link java.io.BufferedOutputStream}
+         * to improve write performance, or use {@link #write()} / {@link #write(File)}
+         * if possible.
+         * 
+         * @param out The stream to write to.
+         * 
+         * @ thrown on errors writing to the stream
+         */
+
         public abstract void Write(Stream out1);
 
         /**

@@ -1296,31 +1296,20 @@ namespace NPOI.HSSF.UserModel
             base.Close();
         }
 
-        //@Override // TODO Not yet on POIDocument
         /**
          * Write out this workbook to the currently open {@link File} via the
          *  writeable {@link POIFSFileSystem} it was opened as. 
-         * <p>This will Assert.Fail (with an {@link IllegalStateException} if the
+         *  
+         * This will fail (with an {@link IllegalStateException} if the
          *  Workbook was opened read-only, opened from an {@link InputStream}
          *   instead of a File, or if this is not the root document. For those cases, 
-         *   you must use {@link #write(OutputStream)} to write to a brand new stream.
+         *   you must use {@link #write(OutputStream)} or {@link #write(File)} to 
+         *   write to a brand new document.
          */
+        //@Override // TODO Not yet on POIDocument
         public void Write()
         {
-            // TODO Push much of this logic down to POIDocument, as will be common for most formats
-            if (directory == null)
-            {
-                throw new IllegalStateException("Newly created Workbook, cannot save in-place");
-            }
-            if (directory.Parent != null)
-            {
-                throw new IllegalStateException("This is not the root document, cannot save in-place");
-            }
-            if (directory.FileSystem == null ||
-                !directory.FileSystem.IsInPlaceWriteable())
-            {
-                throw new IllegalStateException("Opened read-only or via an InputStream, a Writeable File");
-            }
+            ValidateInPlaceWritePossible();
 
             // Update the Workbook stream in the file
             DocumentNode workbookNode = (DocumentNode)directory.GetEntry(
@@ -1341,8 +1330,6 @@ namespace NPOI.HSSF.UserModel
          * Note that you cannot write to the currently open File using this method.
          * If you opened your Workbook from a File, you <i>must</i> use the {@link #write()}
          * method instead!
-         * 
-         * TODO Finish Implementing
          * 
          * @param newFile - the new File you wish to write the XLS to
          *
