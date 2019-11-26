@@ -333,7 +333,18 @@ namespace NPOI
                     byte[] data = bOut.ToArray();
                     using (MemoryStream bIn = new MemoryStream(data))
                     {
-                        outFS.CreateDocument(bIn, name);
+                        // New or Existing?
+                        // TODO Use a createOrUpdate method for this to be cleaner!
+                        try
+                        {
+                            DocumentNode propSetNode = (DocumentNode)outFS.Root.GetEntry(name);
+                            NPOIFSDocument propSetDoc = new NPOIFSDocument(propSetNode);
+                            propSetDoc.ReplaceContents(bIn);
+                        }
+                        catch (FileNotFoundException)
+                        {
+                            outFS.CreateDocument(bIn, name);
+                        }
                     }
                     //logger.Log(POILogger.INFO, "Wrote property Set " + name + " of size " + data.Length);
                 }

@@ -1316,6 +1316,9 @@ namespace NPOI.HSSF.UserModel
             NPOIFSDocument workbookDoc = new NPOIFSDocument(workbookNode);
             workbookDoc.ReplaceContents(new ByteArrayInputStream(GetBytes()));
 
+            // Update the properties streams in the file
+            WriteProperties(directory.FileSystem, null);
+
             // Sync with the File on disk
             directory.FileSystem.WriteFileSystem();
         }
