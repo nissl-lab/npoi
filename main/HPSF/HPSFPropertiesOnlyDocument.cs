@@ -38,7 +38,7 @@ namespace NPOI.HPSF
         public HPSFPropertiesOnlyDocument(OPOIFSFileSystem fs)
             : base(fs)
         {
-            
+
         }
         public HPSFPropertiesOnlyDocument(POIFSFileSystem fs)
             : base(fs)
@@ -46,23 +46,61 @@ namespace NPOI.HPSF
 
         }
         /**
+         * Write out to the currently open file the properties changes, but nothing else
+         */
+        public override void Write()
+        {
+            NPOIFSFileSystem fs = directory.FileSystem;
+
+            ValidateInPlaceWritePossible();
+            WriteProperties(fs, null);
+            fs.WriteFileSystem();
+        }
+        /**
+         * Write out, with any properties changes, but nothing else
+         */
+        public override void Write(FileInfo newFile)
+        {
+            POIFSFileSystem fs = POIFSFileSystem.Create(newFile);
+            try
+            {
+                Write(fs);
+                fs.WriteFileSystem();
+            }
+            finally
+            {
+                fs.Close();
+            }
+        }
+        /**
          * Write out, with any properties changes, but nothing else
          */
         public override void Write(Stream out1)
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem();
+            try
+            {
+                Write(fs);
+                fs.WriteFileSystem(out1);
+            }
+            finally
+            {
+                fs.Close();
+            }
+        }
 
+        private void Write(NPOIFSFileSystem fs)
+        {
             // For tracking what we've written out, so far
             List<String> excepts = new List<String>(1);
 
             // Write out our HPFS properties, with any changes
             WriteProperties(fs, excepts);
-        
+
             // Copy over everything else unchanged
             EntryUtils.CopyNodes(directory, fs.Root, excepts);
-        
-            // Save the resultant POIFSFileSystem to the output stream
-            fs.WriteFileSystem(out1);
+
+            // Caller will save the resultant POIFSFileSystem to the stream/file
         }
     }
 }

@@ -379,7 +379,7 @@ namespace NPOI
          * 
          * @ thrown on errors writing to the file
          */
-        //public abstract void write() ; // TODO Implement elsewhere
+        public abstract void Write() ;
         /**
          * Writes the document out to the specified new {@link File}. If the file 
          * exists, it will be replaced, otherwise a new one will be created
@@ -388,7 +388,7 @@ namespace NPOI
          * 
          * @ thrown on errors writing to the file
          */
-        //public abstract void write(File newFile) ; // TODO Implement elsewhere
+        public abstract void Write(FileInfo newFile) ;
         /**
          * Writes the document out to the specified output stream. The
          * stream is not closed as part of this operation.

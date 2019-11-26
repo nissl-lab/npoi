@@ -1306,8 +1306,7 @@ namespace NPOI.HSSF.UserModel
          *   you must use {@link #write(OutputStream)} or {@link #write(File)} to 
          *   write to a brand new document.
          */
-        //@Override // TODO Not yet on POIDocument
-        public void Write()
+        public override void Write()
         {
             ValidateInPlaceWritePossible();
 
@@ -1336,8 +1335,7 @@ namespace NPOI.HSSF.UserModel
          * @exception IOException if anything can't be written.
          * @see org.apache.poi.poifs.filesystem.POIFSFileSystem
          */
-        //@Override // TODO Not yet on POIDocument
-        public void Write(FileInfo newFile)
+        public override void Write(FileInfo newFile)
         {
             POIFSFileSystem fs = POIFSFileSystem.Create(newFile);
             try {
