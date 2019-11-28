@@ -1606,6 +1606,79 @@ namespace TestCases.SS.UserModel
             Assert.IsNull(wb2.GetPrintArea(0), "Sheet0 after write"); // CURRENTLY FAILS with "Sheet0!$A$1:$C$6"
             Assert.AreEqual("Sheet1!$A$1:$A$1", wb2.GetPrintArea(1), "Sheet1 after write");
         }
+        [Test]
+        public void test55384()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            try
+            {
+                ISheet sh = wb.CreateSheet();
+                for (int rownum = 0; rownum < 10; rownum++)
+                {
+                    IRow row1 = sh.CreateRow(rownum);
+                    for (int cellnum = 0; cellnum < 3; cellnum++)
+                    {
+                        ICell cell = row1.CreateCell(cellnum);
+                        cell.SetCellValue(rownum + cellnum);
+                    }
+                }
+                IRow row = sh.CreateRow(10);
+                // setting no precalculated value works just fine.
+                ICell cell1 = row.CreateCell(0);
+                cell1.SetCellFormula("SUM(A1:A10)");
+                // but setting a precalculated STRING value Assert.Fails totally in1 SXSSF
+                ICell cell2 = row.CreateCell(1);
+                cell2.SetCellFormula("SUM(B1:B10)");
+                cell2.SetCellValue("55");
+                // setting a precalculated int value works as expected
+                ICell cell3 = row.CreateCell(2);
+                cell3.SetCellFormula("SUM(C1:C10)");
+                cell3.SetCellValue(65);
+                Assert.AreEqual(CellType.Formula, cell1.CellType);
+                Assert.AreEqual(CellType.Formula, cell2.CellType);
+                Assert.AreEqual(CellType.Formula, cell3.CellType);
+                Assert.AreEqual("SUM(A1:A10)", cell1.CellFormula);
+                Assert.AreEqual("SUM(B1:B10)", cell2.CellFormula);
+                Assert.AreEqual("SUM(C1:C10)", cell3.CellFormula);
+                /*String name = wb.GetClass().getCanonicalName();
+                String ext = (wb is HSSFWorkbook) ? ".xls" : ".xlsx";
+                OutputStream output = new FileOutputStream("/tmp" + name + ext);
+                try {
+                    wb.Write(output);
+                } finally {
+                    output.Close();
+                }*/
+                IWorkbook wbBack = _testDataProvider.WriteOutAndReadBack(wb);
+                checkFormulaPreevaluatedString(wbBack);
+                wbBack.Close();
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+        private void checkFormulaPreevaluatedString(IWorkbook readFile)
+        {
+            ISheet sheet = readFile.GetSheetAt(0);
+            IRow row = sheet.GetRow(sheet.LastRowNum);
+            Assert.AreEqual(10, row.RowNum);
+            foreach (ICell cell in row)
+            {
+                String cellValue = null;
+                switch (cell.CellType)
+                {
+                    case CellType.String:
+                        cellValue = cell.RichStringCellValue.String;
+                        break;
+                    case CellType.Formula:
+                        cellValue = cell.CellFormula;
+                        break;
+                }
+                Assert.IsNotNull(cellValue);
+                cellValue = string.IsNullOrEmpty(cellValue) ? null : cellValue;
+                Assert.IsNotNull(cellValue);
+            }
+        }
 
     }
 }
