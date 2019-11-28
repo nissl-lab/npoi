@@ -263,6 +263,12 @@ namespace NPOI.SS.UserModel
         IList<IName> GetNames(String name);
 
         /// <summary>
+        /// Returns all defined names.
+        /// </summary>
+        /// <returns>a list of the defined names. An empty list is returned if none is found.</returns>
+        IList<IName> GetAllNames();
+
+        /// <summary>
         /// the defined name at the specified index
         /// </summary>
         /// <param name="nameIndex">position of the named range (0-based)</param>
@@ -293,6 +299,12 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <param name="name">the name of the defined name</param>
         void RemoveName(String name);
+
+        /// <summary>
+        /// Remove a defined name
+        /// </summary>
+        /// <param name="name">the name of the defined name</param>
+        void RemoveName(IName name);
 
         /// <summary>
         /// Adds the linking required to allow formulas referencing the specified 

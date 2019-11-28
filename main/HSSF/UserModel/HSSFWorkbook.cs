@@ -1317,7 +1317,7 @@ namespace NPOI.HSSF.UserModel
             workbookDoc.ReplaceContents(new ByteArrayInputStream(GetBytes()));
 
             // Update the properties streams in the file
-            WriteProperties(directory.FileSystem, null);
+            WriteProperties();
 
             // Sync with the File on disk
             directory.FileSystem.WriteFileSystem();
@@ -1580,6 +1580,12 @@ namespace NPOI.HSSF.UserModel
             return result;
         }
 
+        public IList<IName> GetAllNames()
+        {
+            var ret = new List<IName>();
+            ret.AddRange(names);
+            return ret.AsReadOnly();
+        }
         /// <summary>
         /// Gets the named range name
         /// </summary>
@@ -1766,9 +1772,9 @@ namespace NPOI.HSSF.UserModel
         ///  this method is more accurate.
         /// </summary>
         /// <param name="name">the name to remove.</param>
-        public void RemoveName(HSSFName name)
+        public void RemoveName(IName name)
         {
-            int index = GetNameIndex(name);
+            int index = GetNameIndex((HSSFName)name);
             RemoveName(index);
         }
         public HSSFPalette GetCustomPalette()

@@ -1153,5 +1153,38 @@ namespace NPOI.XSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void TestRemoveSheet()
+        {
+            // Test removing a sheet maintains the named ranges correctly
+            XSSFWorkbook wb = new XSSFWorkbook();
+            wb.CreateSheet("Sheet1");
+            wb.CreateSheet("Sheet2");
+            XSSFName sheet1Name = wb.CreateName() as XSSFName;
+            sheet1Name.NameName = "name1";
+            sheet1Name.SheetIndex = 0;
+            sheet1Name.RefersToFormula = "Sheet1!$A$1";
+            XSSFName sheet2Name = wb.CreateName() as XSSFName;
+            sheet2Name.NameName = "name1";
+            sheet2Name.SheetIndex = 1;
+            sheet2Name.RefersToFormula = "Sheet2!$A$1";
+            Assert.IsTrue(wb.GetAllNames().Contains(sheet1Name));
+            Assert.IsTrue(wb.GetAllNames().Contains(sheet2Name));
+            Assert.AreEqual(2, wb.GetNames("name1").Count);
+            Assert.AreEqual(sheet1Name, wb.GetNames("name1")[0]);
+            Assert.AreEqual(sheet2Name, wb.GetNames("name1")[1]);
+            // Remove sheet1, we should only have sheet2Name now
+            wb.RemoveSheetAt(0);
+            Assert.IsFalse(wb.GetAllNames().Contains(sheet1Name));
+            Assert.IsTrue(wb.GetAllNames().Contains(sheet2Name));
+            Assert.AreEqual(1, wb.GetNames("name1").Count);
+            Assert.AreEqual(sheet2Name, wb.GetNames("name1")[0]);
+            // Check by index as well for sanity
+            Assert.AreEqual(1, wb.NumberOfNames);
+            Assert.AreEqual(0, wb.GetNameIndex("name1"));
+            Assert.AreEqual(sheet2Name, wb.GetNameAt(0));
+            wb.Close();
+        }
+
     }
 }

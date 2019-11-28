@@ -233,7 +233,7 @@ namespace NPOI.XSSF.UserModel
             // Otherwise, try it as a named range
             if (sheet == null)
             {
-                if (_uBook.GetNameIndex(name) > -1)
+                if (_uBook.GetNames(name).Count > 0)
                 {
                     return new NameXPxg(null, name);
                 }

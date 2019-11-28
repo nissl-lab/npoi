@@ -106,9 +106,8 @@ namespace NPOI.XSSF.UserModel.Helpers
         {
             // update named ranges
             int numberOfNames = _wb.NumberOfNames;
-            for (int i = 0; i < numberOfNames; i++)
-            {
-                IName nm = _wb.GetNameAt(i);
+            foreach (IName nm in _wb.GetAllNames())
+            { 
                 if (nm.SheetIndex == -1 || nm.SheetIndex == sheetIndex)
                 {
                     UpdateName(nm, oldName, newName);

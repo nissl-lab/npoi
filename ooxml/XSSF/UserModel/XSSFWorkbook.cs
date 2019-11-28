@@ -94,6 +94,10 @@ namespace NPOI.XSSF.UserModel
         private List<XSSFSheet> sheets;
 
         /**
+         * this holds the XSSFName objects attached to this workbook, keyed by lower-case name
+         */
+        private Dictionary<String, List<XSSFName>> namedRangesByName;
+        /**
          * this holds the XSSFName objects attached to this workbook
          */
         private List<XSSFName> namedRanges;
@@ -464,6 +468,7 @@ namespace NPOI.XSSF.UserModel
             stylesSource.SetWorkbook(this);
 
             namedRanges = new List<XSSFName>();
+            namedRangesByName = new Dictionary<string, List<XSSFName>>();
             sheets = new List<XSSFSheet>();
 
             pivotTables = new List<XSSFPivotTable>();
@@ -783,8 +788,22 @@ namespace NPOI.XSSF.UserModel
         {
             CT_DefinedName ctName = new CT_DefinedName();
             ctName.name = ("");
+            return CreateAndStoreName(ctName);
+        }
+
+        private void PutValuesMapping(string key, XSSFName name)
+        {
+            if (namedRangesByName.ContainsKey(key))
+                namedRangesByName[key].Add(name);
+            else
+                namedRangesByName.Add(key, new List<XSSFName>() { name });
+        }
+
+        private XSSFName CreateAndStoreName(CT_DefinedName ctName)
+        {
             XSSFName name = new XSSFName(ctName, this);
             namedRanges.Add(name);
+            PutValuesMapping(ctName.name.ToLower(), name);
             return name;
         }
 
@@ -999,28 +1018,37 @@ namespace NPOI.XSSF.UserModel
             return stylesSource.GetFontAt(idx);
         }
 
+        /// <summary>
+        /// Get the first named range with the given name.
+        /// Note: names of named ranges are not unique as they are scoped by sheet.
+        /// {@link #getNames(String name)} returns all named ranges with the given name.
+        /// </summary>
+        /// <param name="name">named range name</param>
+        /// <returns>return XSSFName with the given name. <code>null</code> is returned no named range could be found.</returns>
         public IName GetName(String name)
         {
-            int nameIndex = GetNameIndex(name);
-            if (nameIndex < 0)
+            IList<IName> list = GetNames(name);
+            if (list.Count == 0)
             {
                 return null;
             }
-            return namedRanges[nameIndex];
+            return list[0];
         }
+        /// <summary>
+        /// Get the named ranges with the given name.
+        /// <i>Note:</i>Excel named ranges are case-insensitive and
+        /// this method performs a case-insensitive search.
+        /// </summary>
+        /// <param name="name">named range name</param>
+        /// <returns>return list of XSSFNames with the given name. An empty list if no named ranges could be found</returns>
         public IList<IName> GetNames(String name)
         {
-            List<IName> names = new List<IName>();
-            foreach (XSSFName nr in namedRanges)
-            {
-                if (nr.NameName.Equals(name))
-                {
-                    names.Add(nr);
-                }
-            }
-
-            return names;
+            var ret = new List<IName>();
+            ret.AddRange(namedRangesByName[name.ToLower()]);
+            return ret.AsReadOnly();
+            //return Collections.unmodifiableList(namedRangesByName.get(name.toLowerCase(Locale.ENGLISH)));
         }
+        [Obsolete("deprecated 3.16. New projects should avoid accessing named ranges by index.")]
         public IName GetNameAt(int nameIndex)
         {
             int nNames = namedRanges.Count;
@@ -1036,6 +1064,16 @@ namespace NPOI.XSSF.UserModel
             return namedRanges[nameIndex];
         }
 
+        /// <summary>
+        /// Get a list of all the named ranges in the workbook.
+        /// </summary>
+        /// <returns>return list of XSSFNames in the workbook</returns>
+        public IList<IName> GetAllNames()
+        {
+            var ret = new List<IName>();
+            ret.AddRange(namedRanges);
+            return ret.AsReadOnly();
+        }
         /**
          * Gets the named range index by his name
          * <i>Note:</i>Excel named ranges are case-insensitive and
@@ -1044,16 +1082,13 @@ namespace NPOI.XSSF.UserModel
          * @param name named range name
          * @return named range index
          */
+        [Obsolete("deprecated 3.16. New projects should avoid accessing named ranges by index. Use {@link #getName(String)} instead.")]
         public int GetNameIndex(String name)
         {
-            int i = 0;
-            foreach (XSSFName nr in namedRanges)
+            XSSFName nm = GetName(name) as XSSFName;
+            if (nm != null)
             {
-                if (nr.NameName.Equals(name))
-                {
-                    return i;
-                }
-                i++;
+                return namedRanges.IndexOf(nm);
             }
             return -1;
         }
@@ -1225,25 +1260,31 @@ namespace NPOI.XSSF.UserModel
         {
             return GetPackagePart().ContentType.Equals(XSSFRelation.MACROS_WORKBOOK.ContentType);
         }
-
+        [Obsolete("deprecated 3.16. New projects should use {@link #removeName(Name)}.")]
         public void RemoveName(int nameIndex)
         {
-            namedRanges.RemoveAt(nameIndex);
+            RemoveName(GetNameAt(nameIndex));
+            //namedRanges.RemoveAt(nameIndex);
         }
-
+        [Obsolete("deprecated 3.16. New projects should use {@link #removeName(Name)}.")]
         public void RemoveName(String name)
         {
-            int idx = 0;
-            foreach (XSSFName nm in namedRanges)
+            List<XSSFName> names = namedRangesByName[name.ToLower()];
+            if (names.Count==0)
             {
-                if (nm.NameName.Equals(name, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    RemoveName(idx);
-                    return;
-                }
-                idx++;
+                throw new ArgumentException("Named range was not found: " + name);
             }
-            throw new ArgumentException("Named range was not found: " + name);
+            RemoveName(names[0]);
+        }
+
+        private bool RemoveMapping(string key, XSSFName item)
+        {
+            if(namedRangesByName.ContainsKey(key))
+            {
+                var values = namedRangesByName[key];
+                return values.Remove(item);
+            }
+            return false;
         }
         /**
          * As {@link #removeName(String)} is not necessarily unique 
@@ -1251,12 +1292,22 @@ namespace NPOI.XSSF.UserModel
          * 
          * @param name the name to remove.
          */
-        public void RemoveName(XSSFName name)
+        public void RemoveName(IName name)
         {
-            if (!namedRanges.Remove(name))
+            if (!RemoveMapping(name.NameName.ToLower(), name as XSSFName)
+                    || !namedRanges.Remove(name as XSSFName))
             {
                 throw new ArgumentException("Name was not found: " + name);
             }
+        }
+        void updateName(XSSFName name, String oldName)
+        {
+            if (!RemoveMapping(oldName.ToLower(), name))
+            {
+                throw new ArgumentException("Name was not found: " + name);
+            }
+
+            PutValuesMapping(name.NameName.ToLower(), name);
         }
         /**
          * Delete the printarea for the sheet specified
@@ -1265,16 +1316,10 @@ namespace NPOI.XSSF.UserModel
          */
         public void RemovePrintArea(int sheetIndex)
         {
-            int cont = 0;
-            foreach (XSSFName name in namedRanges)
+            XSSFName name = GetBuiltInName(XSSFName.BUILTIN_PRINT_AREA, sheetIndex);
+            if (name != null)
             {
-                if (name.NameName.Equals(XSSFName.BUILTIN_PRINT_AREA)
-                    && name.SheetIndex == sheetIndex)
-                {
-                    namedRanges.RemoveAt(cont);
-                    break;
-                }
-                cont++;
+                RemoveName(name);
             }
         }
 
@@ -1346,8 +1391,7 @@ namespace NPOI.XSSF.UserModel
                 calcChain = null;
             }
 
-            List<XSSFName> toRemoveNamedRanges = new List<XSSFName>();
-            //adjust indices of names ranges
+            List<XSSFName> toRemove = new List<XSSFName>();
             foreach (XSSFName nm in namedRanges)
             {
 
@@ -1355,7 +1399,7 @@ namespace NPOI.XSSF.UserModel
                 if (!ct.IsSetLocalSheetId()) continue;
                 if (ct.localSheetId == index)
                 {
-                    toRemoveNamedRanges.Add(nm);
+                    toRemove.Add(nm);
                 }
                 else if (ct.localSheetId > index)
                 {
@@ -1364,9 +1408,9 @@ namespace NPOI.XSSF.UserModel
                     ct.localSheetIdSpecified = true;
                 }
             }
-            foreach (XSSFName nm in toRemoveNamedRanges)
+            foreach (XSSFName nm in toRemove)
             {
-                namedRanges.Remove(nm);
+                RemoveName(nm);
             }
         }
 
@@ -1521,10 +1565,9 @@ namespace NPOI.XSSF.UserModel
 
         public XSSFName GetBuiltInName(String builtInCode, int sheetNumber)
         {
-            foreach (XSSFName name in namedRanges)
+            foreach (XSSFName name in namedRangesByName[builtInCode.ToLower()])
             {
-                if (name.NameName.Equals(builtInCode, StringComparison.InvariantCultureIgnoreCase)
-                    && name.SheetIndex == sheetNumber)
+                if (name.SheetIndex == sheetNumber)
                 {
                     return name;
                 }
@@ -1549,16 +1592,13 @@ namespace NPOI.XSSF.UserModel
             nameRecord.localSheetId = (uint)sheetNumber;
             nameRecord.localSheetIdSpecified = true;
 
-            XSSFName name = new XSSFName(nameRecord, this);
-            foreach (XSSFName nr in namedRanges)
+            if (GetBuiltInName(builtInName, sheetNumber) != null)
             {
-                if (nr.Equals(name))
-                    throw new POIXMLException("Builtin (" + builtInName
+                throw new POIXMLException("Builtin (" + builtInName
                             + ") already exists for sheet (" + sheetNumber + ")");
             }
 
-            namedRanges.Add(name);
-            return name;
+            return CreateAndStoreName(nameRecord);
         }
 
         /**
@@ -1692,12 +1732,13 @@ namespace NPOI.XSSF.UserModel
         }
         private void ReprocessNamedRanges()
         {
+            namedRangesByName = new Dictionary<string, List<XSSFName>>();
             namedRanges = new List<XSSFName>();
             if (workbook.IsSetDefinedNames())
             {
                 foreach (CT_DefinedName ctName in workbook.definedNames.definedName)
                 {
-                    namedRanges.Add(new XSSFName(ctName, this));
+                    CreateAndStoreName(ctName);
                 }
             }
         }

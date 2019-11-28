@@ -214,12 +214,7 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual("The sheet already contains this name: aaa", e.Message);
             }
 
-            int cnt = 0;
-            for (int i = 0; i < wb.NumberOfNames; i++)
-            {
-                if ("aaa".Equals(wb.GetNameAt(i).NameName)) cnt++;
-            }
-            Assert.AreEqual(3, cnt);
+            Assert.AreEqual(3, wb.GetNames("aaa").Count);
         }
 
         /**
@@ -263,11 +258,11 @@ namespace TestCases.SS.UserModel
             // Write the workbook to a file
             // Read the Excel file and verify its content
             wb = _testDataProvider.WriteOutAndReadBack(wb);
-            IName nm1 = wb.GetNameAt(wb.GetNameIndex("RangeTest1"));
+            IName nm1 = wb.GetName("RangeTest1");
             Assert.IsTrue("RangeTest1".Equals(nm1.NameName), "Name is " + nm1.NameName);
             Assert.IsTrue((wb.GetSheetName(0) + "!$A$1:$L$41").Equals(nm1.RefersToFormula), "Reference is " + nm1.RefersToFormula);
 
-            IName nm2 = wb.GetNameAt(wb.GetNameIndex("RangeTest2"));
+            IName nm2 = wb.GetName("RangeTest2");
             Assert.IsTrue("RangeTest2".Equals(nm2.NameName), "Name is " + nm2.NameName);
             Assert.IsTrue((wb.GetSheetName(1) + "!$A$1:$O$21").Equals(nm2.RefersToFormula), "Reference is " + nm2.RefersToFormula);
         }
@@ -468,11 +463,11 @@ namespace TestCases.SS.UserModel
             wb.GetNameAt(0);
 
             wb = _testDataProvider.WriteOutAndReadBack(wb);
-            IName nm = wb.GetNameAt(wb.GetNameIndex("RangeTest"));
+            IName nm = wb.GetName("RangeTest");
             Assert.IsTrue("RangeTest".Equals(nm.NameName), "Name is " + nm.NameName);
             Assert.IsTrue((wb.GetSheetName(0) + "!$D$4:$E$8").Equals(nm.RefersToFormula), "Reference is " + nm.RefersToFormula);
 
-            nm = wb.GetNameAt(wb.GetNameIndex("AnotherTest"));
+            nm = wb.GetName("AnotherTest");
             Assert.IsTrue("AnotherTest".Equals(nm.NameName), "Name is " + nm.NameName);
             Assert.IsTrue(newNamedRange2.RefersToFormula.Equals(nm.RefersToFormula), "Reference is " + nm.RefersToFormula);
         }
@@ -499,8 +494,7 @@ namespace TestCases.SS.UserModel
             namedCell.RefersToFormula = (reference);
 
             // retrieve the newly Created named range
-            int namedCellIdx = wb.GetNameIndex(cellName);
-            IName aNamedCell = wb.GetNameAt(namedCellIdx);
+            IName aNamedCell = wb.GetName(cellName);
             Assert.IsNotNull(aNamedCell);
 
             // retrieve the cell at the named range and Test its contents
@@ -538,8 +532,7 @@ namespace TestCases.SS.UserModel
             namedCell.RefersToFormula = (reference);
 
             // retrieve the newly Created named range
-            int namedCellIdx = wb.GetNameIndex(cname);
-            IName aNamedCell = wb.GetNameAt(namedCellIdx);
+            IName aNamedCell = wb.GetName(cname);
             Assert.IsNotNull(aNamedCell);
 
             // retrieve the cell at the named range and Test its contents

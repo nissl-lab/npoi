@@ -66,8 +66,11 @@ namespace NPOI.XSSF.Streaming
         private static readonly POILogger logger = POILogFactory.GetLogger(typeof(SXSSFWorkbook));
 
         public const int DEFAULT_WINDOW_SIZE = 100;
-        
-        public XSSFWorkbook XssfWorkbook;
+        private XSSFWorkbook _wb;
+        public XSSFWorkbook XssfWorkbook
+        {
+            get { return _wb; }
+        }
 
         private Dictionary<SXSSFSheet, XSSFSheet> _sxFromXHash = new Dictionary<SXSSFSheet, XSSFSheet>();
         private Dictionary<XSSFSheet, SXSSFSheet> _xFromSxHash = new Dictionary<XSSFSheet, SXSSFSheet>();
@@ -312,12 +315,12 @@ namespace NPOI.XSSF.Streaming
 
             if (workbook == null)
             {
-                XssfWorkbook = new XSSFWorkbook();
+                _wb = new XSSFWorkbook();
                 _sharedStringSource = useSharedStringsTable ? XssfWorkbook.GetSharedStringSource() : null;
             }
             else
             {
-                XssfWorkbook = workbook;
+                _wb = workbook;
                 _sharedStringSource = useSharedStringsTable ? XssfWorkbook.GetSharedStringSource() : null;
                 var numberOfSheets = XssfWorkbook.NumberOfSheets;
                 for (int i = 0; i < numberOfSheets; i++)
@@ -833,7 +836,15 @@ namespace NPOI.XSSF.Streaming
             return XssfWorkbook.GetNames(name);
         }
 
-        [Obsolete("Deprecated in 3.16 throws an error.")]
+        /// <summary>
+        /// Returns all defined names
+        /// </summary>
+        /// <returns>Returns all defined names</returns>
+        public IList<IName> GetAllNames()
+        {
+            return _wb.GetAllNames();
+        }
+        [Obsolete("Deprecated 3.16, New projects should avoid accessing named ranges by index.")]
         public IName GetNameAt(int nameIndex)
         {
             return XssfWorkbook.GetNameAt(nameIndex);
@@ -861,7 +872,14 @@ namespace NPOI.XSSF.Streaming
         {
             XssfWorkbook.RemoveName(name);
         }
-
+        /// <summary>
+        /// Remove the given defined name
+        /// </summary>
+        /// <param name="name">the name to remove</param>
+        public void RemoveName(IName name)
+        {
+            _wb.RemoveName(name);
+        }
         public int LinkExternalWorkbook(string name, IWorkbook workbook)
         {
             throw new NotImplementedException();

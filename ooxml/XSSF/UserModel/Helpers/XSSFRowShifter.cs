@@ -61,10 +61,8 @@ namespace NPOI.XSSF.UserModel.Helpers
         {
             IWorkbook wb = sheet.Workbook;
             XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
-            int numberOfNames = wb.NumberOfNames;
-            for (int i = 0; i < numberOfNames; i++)
-            {
-                IName name = wb.GetNameAt(i);
+            foreach (IName name in wb.GetAllNames())
+            { 
                 String formula = name.RefersToFormula;
                 int sheetIndex = name.SheetIndex;
 

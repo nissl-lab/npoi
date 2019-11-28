@@ -74,28 +74,28 @@ namespace NPOI.XSSF.UserModel
             Assert.IsFalse(wb.IsMacroEnabled());
             Assert.AreEqual(3, wb.NumberOfNames);
 
-            XSSFName name = (wb.GetNameAt(0) as XSSFName);
+            XSSFName name = wb.GetName("SheetAA1") as XSSFName;
             Assert.AreEqual(0, name.GetCTName().localSheetId);
             Assert.IsFalse(name.GetCTName().IsSetLocalSheetId());
             Assert.AreEqual("SheetA!$A$1", name.RefersToFormula);
             Assert.AreEqual("SheetA", name.SheetName);
 
-            name = (wb.GetNameAt(1) as XSSFName);
+            name = wb.GetName("SheetBA1") as XSSFName;
             Assert.AreEqual(0, name.GetCTName().localSheetId);
             Assert.IsFalse(name.GetCTName().IsSetLocalSheetId());
-            Assert.AreEqual("SheetB!$A$1", wb.GetNameAt(1).RefersToFormula);
-            Assert.AreEqual("SheetB", wb.GetNameAt(1).SheetName);
+            Assert.AreEqual("SheetB!$A$1", name.RefersToFormula);
+            Assert.AreEqual("SheetB", name.SheetName);
 
-            name = (wb.GetNameAt(2) as XSSFName);
+            name = wb.GetName("SheetCA1") as XSSFName;
             Assert.AreEqual(0, name.GetCTName().localSheetId);
             Assert.IsFalse(name.GetCTName().IsSetLocalSheetId());
-            Assert.AreEqual("SheetC!$A$1", wb.GetNameAt(2).RefersToFormula);
-            Assert.AreEqual("SheetC", wb.GetNameAt(2).SheetName);
+            Assert.AreEqual("SheetC!$A$1", name.RefersToFormula);
+            Assert.AreEqual("SheetC", name.SheetName);
 
             // Save and re-load, still there
             XSSFWorkbook nwb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
             Assert.AreEqual(3, nwb.NumberOfNames);
-            Assert.AreEqual("SheetA!$A$1", nwb.GetNameAt(0).RefersToFormula);
+            Assert.AreEqual("SheetA!$A$1", nwb.GetName("SheetAA1").RefersToFormula);
 
             nwb.Close();
             wb.Close();

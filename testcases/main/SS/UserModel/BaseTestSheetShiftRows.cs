@@ -300,17 +300,17 @@ namespace TestCases.SS.UserModel
             name4.SheetIndex = (/*setter*/1);
 
             sheet1.ShiftRows(0, 1, 2);  //shift down the top row on Sheet1.
-            name1 = wb.GetNameAt(0);
+            name1 = wb.GetName("name1");
             Assert.AreEqual(name1.RefersToFormula, "Sheet1!$A$3+Sheet1!$B$3");
 
-            name2 = wb.GetNameAt(1);
+            name2 = wb.GetName("name2");
             Assert.AreEqual(name2.RefersToFormula, "Sheet1!$A$3");
 
             //name3 and name4 refer to Sheet2 and should not be affected
-            name3 = wb.GetNameAt(2);
+            name3 = wb.GetName("name3");
             Assert.AreEqual(name3.RefersToFormula, "Sheet2!$A$1");
 
-            name4 = wb.GetNameAt(3);
+            name4 = wb.GetName("name4");
             Assert.AreEqual(name4.RefersToFormula, "A1");
             wb.Close();
         }
