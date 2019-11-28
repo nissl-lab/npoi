@@ -459,6 +459,42 @@ namespace NPOI.POIFS.FileSystem
             return rval;
         }
 
+        /**
+     * Set the contents of a document, creating if needed, 
+     *  otherwise updating. Returns the created / updated DocumentEntry
+     *
+     * @param name the name of the new or existing DocumentEntry
+     * @param stream the InputStream from which to populate the DocumentEntry
+     *
+     * @return the new or updated DocumentEntry
+     *
+     * @exception IOException
+     */
+        public DocumentEntry CreateOrUpdateDocument(String name,
+                                                    Stream stream)
+
+        {
+            if (!HasEntry(name))
+            {
+                return CreateDocument(name, stream);
+            }
+            else
+            {
+                DocumentNode existing = (DocumentNode)GetEntry(name);
+                if (_nFilesSystem != null)
+                {
+                    NPOIFSDocument nDoc = new NPOIFSDocument(existing);
+                    nDoc.ReplaceContents(stream);
+                    return existing;
+                }
+                else
+                {
+                    // Do it the hard way for Old POIFS...
+                    DeleteEntry(existing);
+                    return CreateDocument(name, stream);
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or Sets the storage clsid for the directory entry

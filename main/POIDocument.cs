@@ -281,7 +281,8 @@ namespace NPOI
          */
         protected internal void WriteProperties()
         {
-            throw new InvalidOperationException("In-place write is not yet supported");
+            ValidateInPlaceWritePossible();
+            WriteProperties(directory.FileSystem, null);
         }
         /// <summary>
         /// Writes out the standard Documment Information Properties (HPSF)
@@ -333,18 +334,8 @@ namespace NPOI
                     byte[] data = bOut.ToArray();
                     using (MemoryStream bIn = new MemoryStream(data))
                     {
-                        // New or Existing?
-                        // TODO Use a createOrUpdate method for this to be cleaner!
-                        try
-                        {
-                            DocumentNode propSetNode = (DocumentNode)outFS.Root.GetEntry(name);
-                            NPOIFSDocument propSetDoc = new NPOIFSDocument(propSetNode);
-                            propSetDoc.ReplaceContents(bIn);
-                        }
-                        catch (FileNotFoundException)
-                        {
-                            outFS.CreateDocument(bIn, name);
-                        }
+                        // Create or Update the Property Set stream in the POIFS
+                        outFS.CreateOrUpdateDocument(bIn, name);
                     }
                     //logger.Log(POILogger.INFO, "Wrote property Set " + name + " of size " + data.Length);
                 }

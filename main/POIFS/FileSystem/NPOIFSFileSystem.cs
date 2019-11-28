@@ -737,6 +737,26 @@ namespace NPOI.POIFS.FileSystem
         {
             return Root.CreateDirectory(name);
         }
+
+        /**
+         * Set the contents of a document in1 the root directory,
+         *  creating if needed, otherwise updating
+         *
+         * @param stream the InputStream from which the document's data
+         *               will be obtained
+         * @param name the name of the new or existing POIFSDocument
+         *
+         * @return the new or updated DocumentEntry
+         *
+         * @exception IOException on error populating the POIFSDocument
+         */
+        public DocumentEntry CreateOrUpdateDocument(Stream stream,
+                                                    String name)
+
+        {
+            return Root.CreateOrUpdateDocument(name, stream);
+        }
+
         /**
          * Does the filesystem support an in-place write via
          *  {@link #writeFilesystem()} ? If false, only writing out to
