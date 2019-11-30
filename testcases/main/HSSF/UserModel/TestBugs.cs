@@ -2533,7 +2533,7 @@ namespace TestCases.HSSF.UserModel
             "Good", "Heading 1", "Heading 2", "Heading 3", "Heading 4", "Input", "Linked Cell",
             "Neutral", "Note", "Output", "Title", "Total", "Warning Text"};
 
-            ArrayList namedStylesList = Arrays.AsList(namedStyles);
+            IList<string> namedStylesList = Arrays.AsList(namedStyles);
 
             List<String> collecteddStyles = new List<String>();
             for (int i = 0; i < numCellStyles; i++)

@@ -735,7 +735,7 @@ namespace TestCases.HSSF.Model
                 EOFRecord.instance,
         };
 
-            InternalSheet sheet = CreateSheet(NPOI.Util.Arrays.AsList(recs));
+            InternalSheet sheet = CreateSheet(Arrays.AsArrayList(recs));
 
             InternalSheet sheet2;
             try

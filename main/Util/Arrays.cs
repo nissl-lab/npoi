@@ -128,11 +128,20 @@ namespace NPOI.Util
             }
             return al;
         }
-        public static ArrayList AsList<T>(params T[] arr)
+        public static ArrayList AsArrayList<T>(params T[] arr)
         {
             if (arr.Length <= 0)
                 return new ArrayList();
             ArrayList al = new ArrayList(arr.Length);
+            al.AddRange(arr);
+            return al;
+        }
+
+        public static List<T> AsList<T>(params T[] arr)
+        {
+            if (arr.Length <= 0)
+                return new List<T>();
+            List<T> al = new List<T>(arr.Length);
             al.AddRange(arr);
             return al;
         }
