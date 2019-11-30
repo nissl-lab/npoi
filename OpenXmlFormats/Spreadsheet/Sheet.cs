@@ -3423,7 +3423,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        internal bool IsSetObjects()
+        {
+            return objects;
+        }
 
+        internal bool IsSetScenarios()
+        {
+            return scenarios;
+        }
+
+        internal bool IsSetSheet()
+        {
+            return sheet;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {

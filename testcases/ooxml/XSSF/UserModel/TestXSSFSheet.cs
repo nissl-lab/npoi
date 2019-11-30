@@ -1078,19 +1078,43 @@ namespace NPOI.XSSF.UserModel
         }
 
         [Test]
+        public void protectSheet_emptyPassword()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+            CT_SheetProtection pr = sheet.GetCTWorksheet().sheetProtection;
+            Assert.IsNull(pr, "CTSheetProtection should be null by default");
+            String password = "";
+            sheet.ProtectSheet(password);
+            pr = sheet.GetCTWorksheet().sheetProtection;
+            Assert.IsNotNull(pr, "CTSheetProtection should be not null");
+            Assert.IsTrue(pr.IsSetSheet(), "sheet protection should be on");
+            Assert.IsTrue(pr.IsSetObjects(), "object protection should be on");
+            Assert.IsTrue(pr.IsSetScenarios(), "scenario protection should be on");
+            int hashVal = CryptoFunctions.CreateXorVerifier1(password);
+            ST_UnsignedshortHex xpassword = new ST_UnsignedshortHex() { StringValue = pr.password };
+            int actualVal = int.Parse(xpassword.StringValue, NumberStyles.HexNumber);
+            Assert.AreEqual(hashVal, actualVal, "well known value for top secret hash should match");
+            sheet.ProtectSheet(null);
+            Assert.IsNull(sheet.GetCTWorksheet().sheetProtection, "protectSheet(null) should unset CTSheetProtection");
+            wb.Close();
+        }
+
+
+        [Test]
         public void ProtectSheet_lowlevel_2013()
         {
             String password = "test";
             XSSFWorkbook wb1 = new XSSFWorkbook();
             XSSFSheet xs = wb1.CreateSheet() as XSSFSheet;
-            //xs.SetSheetPassword(password, HashAlgorithm.sha384);
+            xs.SetSheetPassword(password, HashAlgorithm.sha384);
             XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1);
-            //wb1.Close();
-            //Assert.IsTrue(wb2.GetSheetAt(0).validateSheetPassword(password));
+            wb1.Close();
+            Assert.IsTrue((wb2.GetSheetAt(0) as XSSFSheet).ValidateSheetPassword(password));
             wb2.Close();
 
             XSSFWorkbook wb3 = XSSFTestDataSamples.OpenSampleWorkbook("workbookProtection-sheet_password-2013.xlsx");
-            //Assert.IsTrue(wb3.GetSheetAt(0).ValidateSheetPassword("pwd"));
+            Assert.IsTrue((wb3.GetSheetAt(0) as XSSFSheet).ValidateSheetPassword("pwd"));
 
             wb3.Close();
             throw new NotImplementedException();

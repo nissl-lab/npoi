@@ -352,23 +352,24 @@ namespace NPOI.POIFS.Crypt
 
             // SET Verifier TO 0x0000
             short verifier = 0;
-
-            // FOR EACH PasswordByte IN PasswordArray IN REVERSE ORDER
-            for (int i = arrByteChars.Length - 1; i >= 0; i--)
+            if (!"".Equals(password))
             {
-                // SET Verifier TO Intermediate3 BITWISE XOR PasswordByte
+                // FOR EACH PasswordByte IN PasswordArray IN REVERSE ORDER
+                for (int i = arrByteChars.Length - 1; i >= 0; i--)
+                {
+                    // SET Verifier TO Intermediate3 BITWISE XOR PasswordByte
+                    verifier = rotateLeftBase15Bit(verifier);
+                    verifier ^= arrByteChars[i];
+                }
+
+                // as we haven't prepended the password length into the input array
+                // we need to do it now separately ...
                 verifier = rotateLeftBase15Bit(verifier);
-                verifier ^= arrByteChars[i];
+                verifier ^= (short)arrByteChars.Length;
+
+                // RETURN Verifier BITWISE XOR 0xCE4B
+                verifier ^= unchecked((short)0xCE4B); // (0x8000 | ('N' << 8) | 'K')
             }
-
-            // as we haven't prepended the password length into the input array
-            // we need to do it now separately ...
-            verifier = rotateLeftBase15Bit(verifier);
-            verifier ^= (short)arrByteChars.Length;
-
-            // RETURN Verifier BITWISE XOR 0xCE4B
-            verifier ^= unchecked((short)0xCE4B); // (0x8000 | ('N' << 8) | 'K')
-
             return verifier & 0xFFFF;
         }
         /**
