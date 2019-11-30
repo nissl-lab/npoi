@@ -149,7 +149,9 @@ namespace NPOI.XSSF.UserModel
                 Assert.Fail("Without a fix for #56752, shouldn't be able to Evaluate a " +
                      "reference to a non-provided linked workbook");
             }
-            catch (Exception e) { }
+            catch (Exception)
+            {
+            }
 
             // Setup the environment
             Dictionary<String, IFormulaEvaluator> evaluators = new Dictionary<String, IFormulaEvaluator>();
@@ -182,20 +184,22 @@ namespace NPOI.XSSF.UserModel
 
             // Add another formula referencing these workbooks
             ICell cXSL_cell2 = rXSL.CreateCell(40);
-            cXSL_cell2.CellFormula=(/*setter*/"[56737.xls]Uses!$C$1");
+            cXSL_cell2.CellFormula = (/*setter*/"[56737.xls]Uses!$C$1");
             // TODO Shouldn't it become [2] like the others?
             Assert.AreEqual("[56737.xls]Uses!$C$1", cXSL_cell2.CellFormula);
-            Assert.AreEqual("\"Hello!\"",  evaluator.Evaluate(cXSL_cell2).FormatAsString());
-        
-        
+            Assert.AreEqual("\"Hello!\"", evaluator.Evaluate(cXSL_cell2).FormatAsString());
+
+
             // Now add a formula that refers to yet another (different) workbook
             // Won't work without the workbook being linked
             ICell cXSLX_nw_cell = rXSLX.CreateCell(42);
-            try {
-                cXSLX_nw_cell.CellFormula=(/*setter*/"[alt.xlsx]Sheet1!$A$1");
+            try
+            {
+                cXSLX_nw_cell.CellFormula = (/*setter*/"[alt.xlsx]Sheet1!$A$1");
                 Assert.Fail("New workbook not linked, shouldn't be able to Add");
-            } catch (Exception e) {}
-        
+            }
+            catch (Exception) { }
+
             // Link and re-try
             IWorkbook alt = new XSSFWorkbook();
             try
@@ -655,7 +659,7 @@ namespace NPOI.XSSF.UserModel
 
         // bug 57721
         [Test]
-        public void structuredReferences() 
+        public void structuredReferences()
         {
             verifyAllFormulasInWorkbookCanBeEvaluated("evaluate_formula_with_structured_table_references.xlsx");
         }
@@ -663,12 +667,12 @@ namespace NPOI.XSSF.UserModel
         // bug 57840
         [Ignore("Takes over a minute to evaluate all formulas in this large workbook. Run this test when profiling for formula evaluation speed.")]
         [Test]
-        public void TestLotsOfFormulasWithStructuredReferencesToCalculatedTableColumns() 
+        public void TestLotsOfFormulasWithStructuredReferencesToCalculatedTableColumns()
         {
             verifyAllFormulasInWorkbookCanBeEvaluated("StructuredRefs-lots-with-lookups.xlsx");
         }
         // FIXME: use junit4 parameterization
-        private static void verifyAllFormulasInWorkbookCanBeEvaluated(String sampleWorkbook) 
+        private static void verifyAllFormulasInWorkbookCanBeEvaluated(String sampleWorkbook)
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook(sampleWorkbook);
             XSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
@@ -676,11 +680,11 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-    /**
-    * @param row 0-based
-    * @param column 0-based
-    */
-    private void setCellFormula(ISheet sheet, int row, int column, String formula)
+        /**
+        * @param row 0-based
+        * @param column 0-based
+        */
+        private void setCellFormula(ISheet sheet, int row, int column, String formula)
         {
             IRow r = sheet.GetRow(row);
             if (r == null)
@@ -703,6 +707,21 @@ namespace NPOI.XSSF.UserModel
         private ICell getCell(ISheet sheet, int rowNo, int column)
         {
             return sheet.GetRow(rowNo).GetCell(column);
+        }
+
+        [Test]
+        public void Test59736()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("59736.xlsx");
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            ICell cell = wb.GetSheetAt(0).GetRow(0).GetCell(0);
+            Assert.AreEqual(1, cell.NumericCellValue, 0.001);
+            cell = wb.GetSheetAt(0).GetRow(1).GetCell(0);
+            CellValue value = evaluator.Evaluate(cell);
+            Assert.AreEqual(1, value.NumberValue, 0.001);
+            cell = wb.GetSheetAt(0).GetRow(2).GetCell(0);
+            value = evaluator.Evaluate(cell);
+            Assert.AreEqual(1, value.NumberValue, 0.001);
         }
 
     }
