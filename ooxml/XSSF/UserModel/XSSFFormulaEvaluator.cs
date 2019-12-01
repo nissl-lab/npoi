@@ -105,9 +105,9 @@ namespace NPOI.XSSF.UserModel
          * This is a helpful wrapper around looping over all
          *  cells, and calling EvaluateFormulaCell on each one.
          */
-        public static void EvaluateAllFormulaCells(IWorkbook wb)
+        public static void EvaluateAllFormulaCells(XSSFWorkbook wb)
         {
-            HSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
+            BaseFormulaEvaluator.EvaluateAllFormulaCells(wb);
         }
         /**
          * Loops over all cells in all sheets of the supplied
@@ -122,7 +122,7 @@ namespace NPOI.XSSF.UserModel
          */
         public override void EvaluateAll()
         {
-            HSSFFormulaEvaluator.EvaluateAllFormulaCells(_book);
+            EvaluateAllFormulaCells(_book, this);
         }
 
         /**
@@ -136,6 +136,11 @@ namespace NPOI.XSSF.UserModel
             }
 
             return new XSSFEvaluationCell((XSSFCell)cell);
+        }
+
+        protected override IRichTextString CreateRichTextString(string str)
+        {
+            throw new NotImplementedException();
         }
     }
 }

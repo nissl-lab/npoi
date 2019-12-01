@@ -26,71 +26,26 @@ namespace NPOI.XSSF.UserModel
     /**
      * Internal POI use only - parent of XSSF and SXSSF formula Evaluators
      */
-    public abstract class BaseXSSFFormulaEvaluator : IFormulaEvaluator, IWorkbookEvaluatorProvider
+    public abstract class BaseXSSFFormulaEvaluator : BaseFormulaEvaluator
     {
-        private WorkbookEvaluator _bookEvaluator;
 
         protected BaseXSSFFormulaEvaluator(WorkbookEvaluator bookEvaluator)
+            : base(bookEvaluator)
         {
-            _bookEvaluator = bookEvaluator;
         }
 
-        /**
-         * Should be called whenever there are major Changes (e.g. moving sheets) to input cells
-         * in the Evaluated workbook.
-         * Failure to call this method After changing cell values will cause incorrect behaviour
-         * of the Evaluate~ methods of this class
-         */
-        public void ClearAllCachedResultValues()
-        {
-            _bookEvaluator.ClearAllCachedResultValues();
-        }
-        public void NotifySetFormula(ICell cell)
+        public override void NotifySetFormula(ICell cell)
         {
             _bookEvaluator.NotifyUpdateCell(new XSSFEvaluationCell((XSSFCell)cell));
         }
-        public void NotifyDeleteCell(ICell cell)
+        public override void NotifyDeleteCell(ICell cell)
         {
             _bookEvaluator.NotifyDeleteCell(new XSSFEvaluationCell((XSSFCell)cell));
         }
-        public void NotifyUpdateCell(ICell cell)
+        public override void NotifyUpdateCell(ICell cell)
         {
             _bookEvaluator.NotifyUpdateCell(new XSSFEvaluationCell((XSSFCell)cell));
         }
-
-        /**
-         * If cell Contains a formula, the formula is Evaluated and returned,
-         * else the CellValue simply copies the appropriate cell value from
-         * the cell and also its cell type. This method should be preferred over
-         * EvaluateInCell() when the call should not modify the contents of the
-         * original cell.
-         * @param cell
-         */
-        public CellValue Evaluate(ICell cell)
-        {
-            if (cell == null)
-            {
-                return null;
-            }
-
-            switch (cell.CellType)
-            {
-                case CellType.Boolean:
-                    return CellValue.ValueOf(cell.BooleanCellValue);
-                case CellType.Error:
-                    return CellValue.GetError(cell.ErrorCellValue);
-                case CellType.Formula:
-                    return EvaluateFormulaCellValue(cell);
-                case CellType.Numeric:
-                    return new CellValue(cell.NumericCellValue);
-                case CellType.String:
-                    return new CellValue(cell.RichStringCellValue.String);
-                case CellType.Blank:
-                    return null;
-            }
-            throw new InvalidOperationException("Bad cell type (" + cell.CellType + ")");
-        }
-
 
         /**
          * If cell Contains formula, it Evaluates the formula,
@@ -110,7 +65,8 @@ namespace NPOI.XSSF.UserModel
          * @param cell The cell to Evaluate
          * @return The type of the formula result (the cell's type remains as HSSFCellType.FORMULA however)
          */
-        public CellType EvaluateFormulaCell(ICell cell)
+        [Obsolete("deprecated POI 3.15 beta 3. Will be deleted when we make the CellType enum transition. See bug 59791.")]
+        public override CellType EvaluateFormulaCellEnum(ICell cell)
         {
             if (cell == null || cell.CellType != CellType.Formula)
             {
@@ -139,27 +95,8 @@ namespace NPOI.XSSF.UserModel
                 SetCellValue(cell, cv);
             }
         }
-        private static void SetCellType(ICell cell, CellValue cv)
-        {
-            CellType cellType = cv.CellType;
-            switch (cellType)
-            {
-                case CellType.Boolean:
-                case CellType.Error:
-                case CellType.Numeric:
-                case CellType.String:
-                    cell.SetCellType(cellType);
-                    return;
-                case CellType.Blank:
-                // never happens - blanks eventually Get translated to zero
-                case CellType.Formula:
-                    // this will never happen, we have already Evaluated the formula
-                    break;
-            }
-            throw new InvalidOperationException("Unexpected cell value type (" + cellType + ")");
-        }
 
-        private static void SetCellValue(ICell cell, CellValue cv)
+        private new static void SetCellValue(ICell cell, CellValue cv)
         {
             CellType cellType = cv.CellType;
             switch (cellType)
@@ -193,7 +130,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Returns a CellValue wrapper around the supplied ValueEval instance.
          */
-        private CellValue EvaluateFormulaCellValue(ICell cell)
+        protected override CellValue EvaluateFormulaCellValue(ICell cell)
         {
             IEvaluationCell evalCell = ToEvaluationCell(cell);
             ValueEval eval = _bookEvaluator.Evaluate(evalCell);
@@ -217,41 +154,6 @@ namespace NPOI.XSSF.UserModel
                 return CellValue.GetError(((ErrorEval)eval).ErrorCode);
             }
             throw new Exception("Unexpected eval class (" + eval.GetType().Name + ")");
-        }
-
-        public void SetupReferencedWorkbooks(Dictionary<String, IFormulaEvaluator> evaluators)
-        {
-            CollaboratingWorkbooksEnvironment.SetupFormulaEvaluator(evaluators);
-        }
-
-        public WorkbookEvaluator GetWorkbookEvaluator()
-        {
-            return _bookEvaluator;
-        }
-
-        public abstract void EvaluateAll();
-
-        public abstract ICell EvaluateInCell(ICell cell);
-
-        /** {@inheritDoc} */
-        public bool IgnoreMissingWorkbooks
-        {
-            get
-            {
-                return _bookEvaluator.IgnoreMissingWorkbooks;
-            }
-            set
-            {
-                _bookEvaluator.IgnoreMissingWorkbooks = (value);
-            }
-            
-        }
-
-        /** {@inheritDoc} */
-        public bool DebugEvaluationOutputForNextEval
-        {
-            get{ return _bookEvaluator.DebugEvaluationOutputForNextEval; }
-            set { _bookEvaluator.DebugEvaluationOutputForNextEval = (value); }
         }
     }
 

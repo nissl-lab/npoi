@@ -23,8 +23,8 @@ namespace NPOI.SS.Formula
     using NPOI.Util;
 
     /**
-* Common functionality across file formats for Evaluating formula cells.<p/>
-*/
+    * Common functionality across file formats for Evaluating formula cells.<p/>
+    */
     public abstract class BaseFormulaEvaluator : IFormulaEvaluator, IWorkbookEvaluatorProvider
     {
         protected WorkbookEvaluator _bookEvaluator;
@@ -166,7 +166,7 @@ namespace NPOI.SS.Formula
          * @return -1 for non-formula cells, or the type of the <em>formula result</em>
          * @deprecated 3.15. Will return a {@link CellType} enum in the future.
          */
-
+        [Obsolete("deprecated 3.15. Will return a {@link CellType} enum in the future.")]
         public CellType EvaluateFormulaCell(ICell cell)
         {
             return EvaluateFormulaCellEnum(cell);
@@ -193,8 +193,8 @@ namespace NPOI.SS.Formula
          * @since POI 3.15 beta 3
          * @deprecated POI 3.15 beta 3. Will be deleted when we make the CellType enum transition. See bug 59791.
          */
-
-        public CellType EvaluateFormulaCellEnum(ICell cell)
+        [Obsolete("deprecated POI 3.15 beta 3. Will be deleted when we make the CellType enum transition. See bug 59791.")]
+        public virtual CellType EvaluateFormulaCellEnum(ICell cell)
         {
             if (cell == null || cell.CellType != CellType.Formula)
             {

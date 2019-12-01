@@ -33,16 +33,16 @@ namespace NPOI.HSSF.UserModel
     public class HSSFFormulaEvaluator : BaseFormulaEvaluator
     {
         // params to lookup the right constructor using reflection
-        private static Type[] VALUE_CONTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg) };
+        private static readonly Type[] VALUE_CONTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg) };
 
-        private static Type[] AREA3D_CONSTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg), typeof(ValueEval[]) };
+        private static readonly Type[] AREA3D_CONSTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg), typeof(ValueEval[]) };
 
-        private static Type[] REFERENCE_CONSTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg), typeof(ValueEval) };
+        private static readonly Type[] REFERENCE_CONSTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg), typeof(ValueEval) };
 
-        private static Type[] REF3D_CONSTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg), typeof(ValueEval) };
+        private static readonly Type[] REF3D_CONSTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg), typeof(ValueEval) };
 
         // Maps for mapping *Eval to *Ptg
-        private static Hashtable VALUE_EVALS_MAP = new Hashtable();
+        private static readonly Hashtable VALUE_EVALS_MAP = new Hashtable();
 
         /*
          * Following is the mapping between the Ptg tokens returned 
@@ -234,32 +234,17 @@ namespace NPOI.HSSF.UserModel
          */
         public new static void EvaluateAllFormulaCells(IWorkbook wb)
         {
-            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
-            EvaluateAllFormulaCells(wb, evaluator);
-        }
-        private new static void EvaluateAllFormulaCells(IWorkbook wb, IFormulaEvaluator evaluator)
-        {
-            for (int i = 0; i < wb.NumberOfSheets; i++)
-            {
-                ISheet sheet = wb.GetSheetAt(i);
-
-                for (IEnumerator it = sheet.GetRowEnumerator(); it.MoveNext(); )
-                {
-                    IRow r = (IRow)it.Current;
-                    foreach (ICell c in r.Cells)
-                    {
-                        if (c.CellType == CellType.Formula)
-                        {
-                            evaluator.EvaluateFormulaCell(c);
-                        }
-                    }
-                }
-            }
+            BaseFormulaEvaluator.EvaluateAllFormulaCells(wb);
         }
 
         public override void EvaluateAll()
         {
             HSSFFormulaEvaluator.EvaluateAllFormulaCells(_book, this);
+        }
+
+        protected override IRichTextString CreateRichTextString(string str)
+        {
+            throw new NotImplementedException();
         }
     }
 }

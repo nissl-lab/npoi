@@ -172,6 +172,22 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
+            // And evaluate the other way too
+            evaluator.EvaluateAll();
+
+            // Static evaluator won't work, as no references passed in
+            try
+            {
+                XSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
+                Assert.Fail("Static method lacks references, shouldn't work");
+            }
+            catch (Exception e)
+            {
+                // expected here
+            }
+
+
+            // Evaluate specific cells and check results
             Assert.AreEqual("\"Hello!\"", evaluator.Evaluate(cXSLX_cell).FormatAsString());
             Assert.AreEqual("\"Test A1\"", evaluator.Evaluate(cXSLX_sNR).FormatAsString());
             //Assert.AreEqual("142.0", evaluator.Evaluate(cXSLX_gNR).FormatAsString());
