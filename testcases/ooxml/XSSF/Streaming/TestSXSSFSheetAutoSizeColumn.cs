@@ -42,7 +42,7 @@ namespace NPOI.XSSF.streaming
         //  longCellValue ends up with approx. column width 10_000 (on my machine)
         //  so shortCellValue can be expected to be < 5000 for all fonts
         //  and longCellValue can be expected to be > 5000 for all fonts
-        private static int COLUMN_WIDTH_THRESHOLD_BETWEEN_SHORT_AND_LONG = 5000;
+        private static int COLUMN_WIDTH_THRESHOLD_BETWEEN_SHORT_AND_LONG = 4000;
         private static int MAX_COLUMN_WIDTH = 255 * 256;
 
         private static SortedSet<int> columns;
