@@ -1011,5 +1011,36 @@ namespace TestCases.SS.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void PrimitiveToEnumReplacementDoesNotBreakBackwardsCompatibility()
+        {
+            // bug 59836
+            // until we have changes POI from working on primitives (int) to enums,
+            // we should make sure we minimize backwards compatibility breakages.
+            // This method tests the old way of working with cell types, alignment, etc.
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            // CellType.* -> CellType.*
+            cell.SetCellValue(5.0);
+            Assert.AreEqual(CellType.Numeric, cell.CellType);
+            Assert.AreEqual(0, (int)cell.CellType);
+            //Assert.AreEqual(CellType.NUMERIC, cell.GetCellTypeEnum()); // make sure old way and new way are compatible
+            // make sure switch(int|Enum) still works. Cases must be statically resolvable in1 Java 6 ("constant expression required")
+            switch (cell.CellType)
+            {
+                case CellType.Numeric:
+                    // expected
+                    break;
+                case CellType.String:
+                case CellType.Error:
+                case CellType.Formula:
+                case CellType.Blank:
+                default:
+                    Assert.Fail("unexpected cell type: " + cell.CellType);
+                    break;
+            }
+        }
     }
 }
