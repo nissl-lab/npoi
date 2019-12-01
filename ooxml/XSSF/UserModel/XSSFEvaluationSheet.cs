@@ -65,14 +65,38 @@ namespace NPOI.XSSF.UserModel
                     foreach (ICell cell in row)
                     {
                         // cast is safe, the iterator is just defined using the interface
-                        CellKey key = new CellKey(rowNum, cell.ColumnIndex);
-                        IEvaluationCell evalcell = new XSSFEvaluationCell((XSSFCell)cell, this);
-                        _cellCache.Add(key, evalcell);
+                        CellKey key1 = new CellKey(rowNum, cell.ColumnIndex);
+                        IEvaluationCell evalcell1 = new XSSFEvaluationCell((XSSFCell)cell, this);
+                        _cellCache.Add(key1, evalcell1);
                     }
                 }
             }
 
-            return _cellCache[new CellKey(rowIndex, columnIndex)];
+            CellKey key = new CellKey(rowIndex, columnIndex);
+            IEvaluationCell evalcell = _cellCache[key];
+
+            // If cache is stale, update cache with this one cell
+            // This is a compromise between rebuilding the entire cache
+            // (which would quickly defeat the benefit of the cache)
+            // and not caching at all.
+            // See bug 59958: Add cells on the fly to the evaluation sheet cache on cache miss
+            if (evalcell == null)
+            {
+                XSSFRow row = _xs.GetRow(rowIndex) as XSSFRow;
+                if (row == null)
+                {
+                    return null;
+                }
+                XSSFCell cell = row.GetCell(columnIndex) as XSSFCell;
+                if (cell == null)
+                {
+                    return null;
+                }
+                evalcell = new XSSFEvaluationCell(cell, this);
+                _cellCache[key] = evalcell;
+            }
+
+            return evalcell;
         }
 
         private class CellKey
