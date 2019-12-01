@@ -21,6 +21,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using NPOI.Util;
 using System.Reflection;
+using System.Globalization;
 
 namespace TestCases
 {
@@ -38,11 +39,37 @@ namespace TestCases
                   "Unable to find expected text '" + needle + "' in text:\n" + haystack
             );
         }
+        public static void AssertContainsIgnoreCase(String haystack, String needle, CultureInfo locale)
+        {
+            Assert.IsNotNull(haystack);
+            Assert.IsNotNull(needle);
+            String hay = haystack.ToLower(locale);
+            String n = needle.ToLower(locale);
+            Assert.IsTrue(hay.Contains(n), "Unable to find expected text '" + needle + "' in1 text:\n" + haystack);
+        }
+        public static void AssertContainsIgnoreCase(String haystack, String needle)
+        {
+            AssertContainsIgnoreCase(haystack, needle, CultureInfo.CurrentCulture);
+        }
+
         public static void AssertNotContained(String haystack, String needle)
         {
             Assert.IsFalse(haystack.Contains(needle),
                   "Unexpectedly found text '" + needle + "' in text:\n" + haystack
             );
+        }
+
+        /**
+         * @param map haystack
+         * @param key needle
+         */
+        public static void AssertContains<TKey, TValue>(Dictionary<TKey, TValue> map, TKey key)
+        {
+            if (map.ContainsKey(key))
+            {
+                return;
+            }
+            Assert.Fail("Unable to find " + key + " in " + map);
         }
         public static void AssertEquals<T>(T[] expected, T[] actual)
         {
