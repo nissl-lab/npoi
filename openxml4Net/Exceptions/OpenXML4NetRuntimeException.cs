@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NPOI.OpenXml4Net.Exceptions
 {
-    class OpenXML4NetRuntimeException : RuntimeException
+    public class OpenXML4NetRuntimeException : RuntimeException
     {
 
         public OpenXML4NetRuntimeException(String msg)

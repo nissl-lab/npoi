@@ -207,6 +207,11 @@ namespace NPOI
          */
         public void Write(Stream stream)
         {
+            OPCPackage pkg = Package;
+            if (pkg == null)
+            {
+                throw new IOException("Cannot write data, document seems to have been closed already");
+            }
             if (!this.GetProperties().CustomProperties.Contains("Generator"))
                 this.GetProperties().CustomProperties.AddProperty("Generator", "NPOI");
             if (!this.GetProperties().CustomProperties.Contains("Generator Version"))
@@ -219,11 +224,6 @@ namespace NPOI
             //save extended and custom properties
             GetProperties().Commit();
 
-            OPCPackage pkg = Package;
-            if (pkg == null)
-            {
-                throw new IOException("Cannot write data, document seems to have been closed already");
-            }
             pkg.Save(stream);
         }
     }

@@ -25,6 +25,9 @@ namespace NPOI.OOXML
     using NPOI.OpenXml4Net.OPC;
     using NPOI;
     using TestCases;
+    using TestCases.Util;
+    using System.Text.RegularExpressions;
+    using NPOI.OpenXml4Net.Exceptions;
 
     /**
      * Test recursive read and write of OPC namespaces
@@ -111,9 +114,51 @@ namespace NPOI.OOXML
             FileStream out1 = new FileStream(tmp, FileMode.CreateNew);
             doc.Write(out1);
             out1.Close();
+
+            // Should not be able to write to an output stream that has been closed
+            try
+            {
+                doc.Write(out1);
+                Assert.Fail("Should not be able to write to an output stream that has been closed.");
+            }
+            catch (OpenXML4NetRuntimeException e) {
+                //OpenXml4NetRuntimeException
+                // FIXME: A better exception class (IOException?) and message should be raised
+                // indicating that the document could not be written because the output stream is closed.
+                // see {@link org.apache.poi.openxml4j.opc.ZipPackage#saveImpl(java.io.OutputStream)}
+                if (Regex.IsMatch(e.Message, "Fail to save: an error occurs while saving the package : The part .+ fail to be saved in the stream with marshaller .+"))
+                {
+                    // expected
+                }
+                else
+                {
+                    throw e;
+                }
+            }
+
+            // Should not be able to write a document that has been closed
+            doc.Close();
+            try
+            {
+                doc.Write(new NullOutputStream());
+                Assert.Fail("Should not be able to write a document that has been closed.");
+            }
+            catch (IOException e) {
+                if (e.Message.Equals("Cannot write data, document seems to have been closed already"))
+                {
+                    // expected
+                }
+                else
+                {
+                    throw e;
+                }
+            }
+
+            // Should be able to close a document multiple times, though subsequent closes will have no effect.
             doc.Close();
 
             OPCPackage pkg2 = OPCPackage.Open(tmp);
+            doc = new OPCParser(pkg1);
             try
             {
                 doc = new OPCParser(pkg1);
@@ -145,6 +190,7 @@ namespace NPOI.OOXML
             finally
             {
                 doc.Close();
+                pkg1.Close();
                 pkg2.Close();
             }
         }
