@@ -599,6 +599,7 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 //search the referenced drawing in the list of the sheet's relations
+                String id = ctDrawing.id;
                 foreach (RelationPart rp in RelationParts)
                 {
                     POIXMLDocumentPart p = rp.DocumentPart;
@@ -606,27 +607,27 @@ namespace NPOI.XSSF.UserModel
                     {
                         XSSFVMLDrawing dr = (XSSFVMLDrawing)p;
                         String drId = rp.Relationship.Id;
-                        if (drId.Equals(ctDrawing.id))
+                        if (drId.Equals(id))
                         {
                             drawing = dr;
                             break;
                         }
-                        break;
+                        // do not break here since drawing has not been found yet (see bug 52425)
                     }
                 }
                 if (drawing == null)
                 {
-                    logger.Log(POILogger.ERROR, "Can't find VML drawing with id=" + ctDrawing.id + " in the list of the sheet's relationships");
+                    logger.Log(POILogger.ERROR, "Can't find VML drawing with id=" + id + " in the list of the sheet's relationships");
                 }
             }
             return drawing;
         }
 
-        protected virtual NPOI.OpenXmlFormats.Spreadsheet.CT_Drawing GetCTDrawing()
+        protected virtual CT_Drawing GetCTDrawing()
         {
             return worksheet.drawing;
         }
-        protected virtual NPOI.OpenXmlFormats.Spreadsheet.CT_LegacyDrawing GetCTLegacyDrawing()
+        protected virtual CT_LegacyDrawing GetCTLegacyDrawing()
         {
             return worksheet.legacyDrawing;
         }

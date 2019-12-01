@@ -2001,5 +2001,45 @@ namespace NPOI.XSSF.UserModel
                 wb.Close();
             }
         }
+
+        /**
+         * See bug #52425
+         */
+        [Test]
+        public void TestInsertCommentsToClonedSheet()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("52425.xlsx");
+            ICreationHelper helper = wb.GetCreationHelper();
+            ISheet sheet2 = wb.CreateSheet("Sheet 2");
+            ISheet sheet3 = wb.CloneSheet(0);
+            wb.SetSheetName(2, "Sheet 3");
+            // Adding Comment to new created Sheet 2
+            AddComments(helper, sheet2);
+            // Adding Comment to cloned Sheet 3
+            AddComments(helper, sheet3);
+        }
+
+        private void AddComments(ICreationHelper helper, ISheet sheet)
+        {
+            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            for (int i = 0; i < 2; i++)
+            {
+                IClientAnchor anchor = helper.CreateClientAnchor();
+                anchor.Col1 = 0;
+                anchor.Row1 = 0 + i;
+                anchor.Col2 = 2;
+                anchor.Row2 = 3 + i;
+                IComment comment = drawing.CreateCellComment(anchor);
+                comment.String = (helper.CreateRichTextString("BugTesting"));
+                IRow row = sheet.GetRow(0 + i);
+                if (row == null)
+                    row = sheet.CreateRow(0 + i);
+                ICell cell = row.GetCell(0);
+                if (cell == null)
+                    cell = row.CreateCell(0);
+                cell.CellComment = comment;
+            }
+        }
+
     }
 }
