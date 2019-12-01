@@ -34,6 +34,7 @@ namespace NPOI.XSSF.Streaming
     using NUnit.Framework;
     using TestCases;
     using TestCases.SS.UserModel;
+    using TestCases.Util;
 
     [TestFixture]
     public class TestSXSSFWorkbook : BaseTestXWorkbook
