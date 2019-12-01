@@ -1002,7 +1002,7 @@ namespace NPOI.SS.UserModel
                     return cell.RichStringCellValue.String;
 
                 case CellType.Boolean:
-                    return cell.BooleanCellValue.ToString().ToUpper();
+                    return cell.BooleanCellValue ? "TRUE" : "FALSE";
                 case CellType.Blank:
                     return "";
                 case CellType.Error:

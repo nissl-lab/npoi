@@ -597,6 +597,28 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(FormulaError.REF.String, dfUS.FormatCellValue(c));
         }
 
+        [Test]
+        public void TestBoolean()
+        {
+            DataFormatter formatter = new DataFormatter();
+            // Create a spreadsheet with some TRUE/FALSE boolean values in1 it
+            IWorkbook wb = new HSSFWorkbook();
+            try
+            {
+                ISheet s = wb.CreateSheet();
+                IRow r = s.CreateRow(0);
+                ICell c = r.CreateCell(0);
+                c.SetCellValue(true);
+                Assert.AreEqual("TRUE", formatter.FormatCellValue(c));
+                c.SetCellValue(false);
+                Assert.AreEqual("FALSE", formatter.FormatCellValue(c));
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
         /**
          * While we don't currently support using a locale code at
          *  the start of a format string to format it differently, we
