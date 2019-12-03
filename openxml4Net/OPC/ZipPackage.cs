@@ -18,7 +18,8 @@ namespace NPOI.OpenXml4Net.OPC
      */
     public class ZipPackage : OPCPackage
     {
-
+        private static String MIMETYPE = "mimetype";
+        private static String SETTINGS_XML = "settings.xml";
         private static POILogger logger = POILogFactory.GetLogger(typeof(ZipPackage));
 
         /**
@@ -204,7 +205,7 @@ namespace NPOI.OpenXml4Net.OPC
                     }
                     catch (IOException e)
                     {
-                        throw new InvalidFormatException(e.Message);
+                        throw new InvalidFormatException(e.Message, e);
                     }
                     break;
                 }
@@ -221,11 +222,11 @@ namespace NPOI.OpenXml4Net.OPC
                 while (entries.MoveNext())
                 {
                     ZipEntry entry = entries.Current as ZipEntry;
-                    if (entry.Name.Equals("mimetype"))
+                    if (entry.Name.Equals(MIMETYPE))
                     {
                         hasMimetype = true;
                     }
-                    if (entry.Name.Equals("settings.xml"))
+                    if (entry.Name.Equals(SETTINGS_XML))
                     {
                         hasSettingsXML = true;
                     }
@@ -265,12 +266,12 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     try
                     {
-                        partList[partName] = new ZipPackagePart(this, entry,
-                            partName, contentType);
+                        PackagePart part = new ZipPackagePart(this, entry, partName, contentType);
+                        partList[partName] = part;
                     }
                     catch (InvalidOperationException e)
                     {
-                        throw new InvalidFormatException(e.Message);
+                        throw new InvalidFormatException(e.Message, e);
                     }
                 }
             }
@@ -283,8 +284,7 @@ namespace NPOI.OpenXml4Net.OPC
                 PackagePartName partName = BuildPartName(entry);
                 if (partName == null) continue;
 
-                String contentType = contentTypeManager
-                        .GetContentType(partName);
+                String contentType = contentTypeManager.GetContentType(partName);
                 if (contentType != null && contentType.Equals(ContentTypes.RELATIONSHIPS_PART))
                 {
                     // Already handled
@@ -293,12 +293,12 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     try
                     {
-                        partList[partName] = new ZipPackagePart(this, entry,
-                                partName, contentType);
+                        PackagePart part = new ZipPackagePart(this, entry, partName, contentType);
+                        partList[partName] = part;
                     }
                     catch (InvalidOperationException e)
                     {
-                        throw new InvalidFormatException(e.Message);
+                        throw new InvalidFormatException(e.Message, e);
                     }
                 }
                 else
@@ -425,25 +425,29 @@ namespace NPOI.OpenXml4Net.OPC
                     // Save the final package to a temporary file
                     try
                     {
-                        FileStream fs = File.OpenWrite(fi.FullName);
-                        Save(fs);
-                        if(zipArchive!=null)
-                            this.zipArchive.Close(); // Close the zip archive to be
-                        fs.Close();
-                        // able to delete it
-                        FileHelper.CopyFile(fi.FullName, this.originalPackagePath);
+                        Save(tempfilePath);
                     }
                     finally
                     {
-                        // Either the save operation succeed or not, we delete the
-                        // temporary file
-                        File.Delete(fi.FullName);
-                        
+                        try
+                        {
+                            if (zipArchive != null)
+                                this.zipArchive.Close(); // Close the zip archive to be
+                                                         // able to delete it
+                            FileHelper.CopyFile(fi.FullName, this.originalPackagePath);
+                        }
+                        finally
+                        {
+                            // Either the save operation succeed or not, we delete the
+                            // temporary file
+                            File.Delete(fi.FullName);
+
                             logger
                                     .Log(POILogger.WARN, "The temporary file: '"
                                             + tempfilePath
                                             + "' cannot be deleted ! Make sure that no other application use it.");
-                        
+
+                        }
                     }
                 }
                 else
