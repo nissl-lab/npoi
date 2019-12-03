@@ -24,6 +24,7 @@ namespace NPOI.XSSF.Streaming
 {
     using System;
     using System.IO;
+    using NPOI.OpenXml4Net.OPC;
     using NPOI.SS;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
@@ -574,6 +575,45 @@ namespace NPOI.XSSF.Streaming
             swb.Write(bos);
             swb.Dispose();
             swb.Close();
+        }
+
+        /**
+         * To avoid accident changes to the template, you should be able
+         *  to create a SXSSFWorkbook from a read-only XSSF one, then
+         *  change + save that (only). See bug #60010
+         * TODO Fix this to work!
+         */
+
+        [Ignore("")]
+        [Test]
+        public void CreateFromReadOnlyWorkbook()
+        {
+            FileInfo input = XSSFTestDataSamples.GetSampleFile("sample.xlsx");
+            OPCPackage pkg = OPCPackage.Open(input, PackageAccess.READ);
+            XSSFWorkbook xssf = new XSSFWorkbook(pkg);
+            SXSSFWorkbook wb = new SXSSFWorkbook(xssf, 2);
+
+            String sheetName = "Test SXSSF";
+            ISheet s = wb.CreateSheet(sheetName);
+            for (int i = 0; i < 10; i++)
+            {
+                IRow r = s.CreateRow(i);
+                r.CreateCell(0).SetCellValue(true);
+                r.CreateCell(1).SetCellValue(2.4);
+                r.CreateCell(2).SetCellValue("Test Row " + i);
+            }
+            Assert.AreEqual(10, s.LastRowNum);
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            wb.Write(bos);
+            wb.Dispose();
+            wb.Close();
+
+            xssf = new XSSFWorkbook(new ByteArrayInputStream(bos.ToByteArray()));
+            s = xssf.GetSheet(sheetName);
+            Assert.AreEqual(10, s.LastRowNum);
+            Assert.AreEqual(true, s.GetRow(0).GetCell(0).BooleanCellValue);
+            Assert.AreEqual("Test Row 9", s.GetRow(9).GetCell(2).StringCellValue);
         }
 
     }
