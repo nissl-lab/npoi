@@ -234,9 +234,28 @@ namespace NPOI.OpenXml4Net.OPC
 
 
             OPCPackage pack = new ZipPackage(path, access);
+            bool success = false;
             if (pack.partList == null && access != PackageAccess.WRITE)
             {
-                pack.GetParts();
+                try
+                {
+                    pack.GetParts();
+                    success = true;
+                }
+                finally
+                {
+                    if (!success)
+                    {
+                        try
+                        {
+                            pack.Close();
+                        }
+                        catch (IOException e)
+                        {
+                            throw new InvalidOperationException("Could not close OPCPackage while cleaning up", e);
+                        }
+                    }
+                }
             }
             pack.originalPackagePath = new DirectoryInfo(path).FullName;
             return pack;

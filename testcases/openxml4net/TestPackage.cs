@@ -1017,6 +1017,32 @@ namespace TestCases.OPC
             //    ZipSecureFile.MaxTextSize = before;
             //}
         }
+
+
+        // bug 60128
+        [Test]
+        public void TestCorruptFile()
+        {
+            OPCPackage pkg = null;
+            FileInfo file = OpenXml4NetTestDataSamples.GetSampleFile("invalid.xlsx");
+            try
+            {
+                pkg = OPCPackage.Open(file, PackageAccess.READ);
+            }
+            catch (Exception e)
+            {
+                //System.out.println(e.GetClass().getName());
+                //System.out.println(e.GetMessage());
+                //e.printStackTrace();
+            }
+            finally
+            {
+                if (pkg != null)
+                {
+                    pkg.Close();
+                }
+            }
+        }
     }
 }
 

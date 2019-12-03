@@ -210,6 +210,7 @@ namespace NPOI.OpenXml4Net.OPC
         {
             Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("dcterms_bug_56479.zip");
             FileInfo tmp = TempFile.CreateTempFile("poi-test-truncated-zip", "");
+            // create a corrupted zip file by truncating a valid zip file to the first 100 bytes
             Stream os = new FileStream(tmp.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             for (int i = 0; i < 100; i++)
             {
@@ -218,14 +219,19 @@ namespace NPOI.OpenXml4Net.OPC
             os.Flush();
             os.Close();
             is1.Close();
+            // feed the corrupted zip file to OPCPackage
             try
             {
                 OPCPackage.Open(tmp, PackageAccess.READ);
             }
             catch (Exception)
             {
+                // expected: the zip file is invalid
+                // this test does not care if open() throws an exception or not.
             }
             tmp.Delete();
+            // If the stream is not closed on exception, it will keep a file descriptor to tmp,
+            // and requests to the OS to delete the file will fail.
             Assert.IsFalse(tmp.Exists, "Can't delete tmp file");
         }
 
