@@ -133,11 +133,6 @@ namespace NPOI.XSSF.Streaming
             // Have the evaluation done, with exceptions
             EvaluateAllFormulaCells((SXSSFWorkbook)wb, false);
         }
-
-        protected override IRichTextString CreateRichTextString(string str)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 

@@ -33,7 +33,10 @@ namespace NPOI.XSSF.UserModel
             : base(bookEvaluator)
         {
         }
-
+        protected override IRichTextString CreateRichTextString(String str)
+        {
+            return new XSSFRichTextString(str);
+        }
         public override void NotifySetFormula(ICell cell)
         {
             _bookEvaluator.NotifyUpdateCell(new XSSFEvaluationCell((XSSFCell)cell));
@@ -45,81 +48,6 @@ namespace NPOI.XSSF.UserModel
         public override void NotifyUpdateCell(ICell cell)
         {
             _bookEvaluator.NotifyUpdateCell(new XSSFEvaluationCell((XSSFCell)cell));
-        }
-
-        /**
-         * If cell Contains formula, it Evaluates the formula,
-         *  and saves the result of the formula. The cell
-         *  remains as a formula cell.
-         * Else if cell does not contain formula, this method leaves
-         *  the cell unChanged.
-         * Note that the type of the formula result is returned,
-         *  so you know what kind of value is also stored with
-         *  the formula.
-         * <pre>
-         * int EvaluatedCellType = Evaluator.EvaluateFormulaCell(cell);
-         * </pre>
-         * Be aware that your cell will hold both the formula,
-         *  and the result. If you want the cell Replaced with
-         *  the result of the formula, use {@link #Evaluate(NPOI.SS.UserModel.Cell)} }
-         * @param cell The cell to Evaluate
-         * @return The type of the formula result (the cell's type remains as HSSFCellType.FORMULA however)
-         */
-        [Obsolete("deprecated POI 3.15 beta 3. Will be deleted when we make the CellType enum transition. See bug 59791.")]
-        public override CellType EvaluateFormulaCellEnum(ICell cell)
-        {
-            if (cell == null || cell.CellType != CellType.Formula)
-            {
-                return CellType.Unknown;
-            }
-            CellValue cv = EvaluateFormulaCellValue(cell);
-            // cell remains a formula cell, but the cached value is Changed
-            SetCellValue(cell, cv);
-            return cv.CellType;
-        }
-
-        /**
-         * If cell Contains formula, it Evaluates the formula, and
-         *  Puts the formula result back into the cell, in place
-         *  of the old formula.
-         * Else if cell does not contain formula, this method leaves
-         *  the cell unChanged.
-         */
-        protected void DoEvaluateInCell(ICell cell)
-        {
-            if (cell == null) return;
-            if (cell.CellType == CellType.Formula)
-            {
-                CellValue cv = EvaluateFormulaCellValue(cell);
-                SetCellType(cell, cv); // cell will no longer be a formula cell
-                SetCellValue(cell, cv);
-            }
-        }
-
-        private new static void SetCellValue(ICell cell, CellValue cv)
-        {
-            CellType cellType = cv.CellType;
-            switch (cellType)
-            {
-                case CellType.Boolean:
-                    cell.SetCellValue(cv.BooleanValue);
-                    break;
-                case CellType.Error:
-                    cell.SetCellErrorValue((byte)cv.ErrorValue);
-                    break;
-                case CellType.Numeric:
-                    cell.SetCellValue(cv.NumberValue);
-                    break;
-                case CellType.String:
-                    cell.SetCellValue(new XSSFRichTextString(cv.StringValue));
-                    break;
-                case CellType.Blank:
-                // never happens - blanks eventually Get translated to zero
-                case CellType.Formula:
-                // this will never happen, we have already Evaluated the formula
-                default:
-                    throw new InvalidOperationException("Unexpected cell value type (" + cellType + ")");
-            }
         }
 
         /**

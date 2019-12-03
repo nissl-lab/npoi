@@ -88,16 +88,20 @@ namespace NPOI.HSSF.UserModel
         }
 
         /**
-     * @param stabilityClassifier used to optimise caching performance. Pass <code>null</code>
-     * for the (conservative) assumption that any cell may have its definition changed after
-     * evaluation begins.
-     * @param udfFinder pass <code>null</code> for default (AnalysisToolPak only)
-     */
+         * @param stabilityClassifier used to optimise caching performance. Pass <code>null</code>
+         * for the (conservative) assumption that any cell may have its definition changed after
+         * evaluation begins.
+         * @param udfFinder pass <code>null</code> for default (AnalysisToolPak only)
+         */
         public static HSSFFormulaEvaluator Create(IWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
         {
             return new HSSFFormulaEvaluator(workbook, stabilityClassifier, udfFinder);
         }
 
+        protected override IRichTextString CreateRichTextString(string str)
+        {
+            return new HSSFRichTextString(str);
+        }
         /**
          * Coordinates several formula evaluators together so that formulas that involve external
          * references can be evaluated.
@@ -242,9 +246,5 @@ namespace NPOI.HSSF.UserModel
             HSSFFormulaEvaluator.EvaluateAllFormulaCells(_book, this);
         }
 
-        protected override IRichTextString CreateRichTextString(string str)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

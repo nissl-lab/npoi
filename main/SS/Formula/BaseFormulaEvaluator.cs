@@ -164,9 +164,7 @@ namespace NPOI.SS.Formula
          * Replaced with the result of the formula, use {@link #EvaluateInCell(NPOI.SS.UserModel.Cell)}
          * @param cell The cell to Evaluate
          * @return -1 for non-formula cells, or the type of the <em>formula result</em>
-         * @deprecated 3.15. Will return a {@link CellType} enum in the future.
          */
-        [Obsolete("deprecated 3.15. Will return a {@link CellType} enum in the future.")]
         public CellType EvaluateFormulaCell(ICell cell)
         {
             return EvaluateFormulaCellEnum(cell);
@@ -191,9 +189,7 @@ namespace NPOI.SS.Formula
          * @return The type of the formula result (the cell's type remains as CellType.FORMULA however)
          *         If cell is not a formula cell, returns {@link CellType#_NONE} rather than throwing an exception.
          * @since POI 3.15 beta 3
-         * @deprecated POI 3.15 beta 3. Will be deleted when we make the CellType enum transition. See bug 59791.
          */
-        [Obsolete("deprecated POI 3.15 beta 3. Will be deleted when we make the CellType enum transition. See bug 59791.")]
         public virtual CellType EvaluateFormulaCellEnum(ICell cell)
         {
             if (cell == null || cell.CellType != CellType.Formula)

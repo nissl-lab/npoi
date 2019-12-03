@@ -342,5 +342,18 @@ namespace TestCases.SS.UserModel
 
             wb.Close();
         }
+
+        [Test]
+        public void EvaluateInCellReturnsSameCell()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            wb.CreateSheet().CreateRow(0).CreateCell(0);
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            ICell cell = wb.GetSheetAt(0).GetRow(0).GetCell(0);
+            ICell same = evaluator.EvaluateInCell(cell);
+            //assertSame(cell, same);
+            Assert.AreSame(cell, same);
+            wb.Close();
+        }
     }
 }

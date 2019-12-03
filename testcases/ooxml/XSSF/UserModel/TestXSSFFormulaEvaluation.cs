@@ -181,7 +181,7 @@ namespace NPOI.XSSF.UserModel
                 XSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
                 Assert.Fail("Static method lacks references, shouldn't work");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // expected here
             }
@@ -740,6 +740,18 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(1, value.NumberValue, 0.001);
         }
 
+        [Test]
+        public void EvaluateInCellReturnsSameDataType()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            wb.CreateSheet().CreateRow(0).CreateCell(0);
+            XSSFFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator() as XSSFFormulaEvaluator;
+            XSSFCell cell = wb.GetSheetAt(0).GetRow(0).GetCell(0) as XSSFCell;
+            XSSFCell same = evaluator.EvaluateInCell(cell) as XSSFCell;
+            //assertSame(cell, same);
+            Assert.AreSame(cell, same);
+            wb.Close();
+        }
     }
 
 }

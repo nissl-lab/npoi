@@ -70,29 +70,6 @@ namespace NPOI.XSSF.UserModel
         {
             return new XSSFFormulaEvaluator(workbook, stabilityClassifier, udfFinder);
         }
-
-
-        /**
-         * If cell Contains formula, it Evaluates the formula, and
-         *  Puts the formula result back into the cell, in place
-         *  of the old formula.
-         * Else if cell does not contain formula, this method leaves
-         *  the cell unChanged.
-         * Note that the same instance of HSSFCell is returned to
-         * allow chained calls like:
-         * <pre>
-         * int EvaluatedCellType = Evaluator.EvaluateInCell(cell).CellType;
-         * </pre>
-         * Be aware that your cell value will be Changed to hold the
-         *  result of the formula. If you simply want the formula
-         *  value computed for you, use {@link #EvaluateFormulaCell(NPOI.ss.usermodel.Cell)} }
-         * @param cell
-         */
-        public override ICell EvaluateInCell(ICell cell)
-        {
-            DoEvaluateInCell(cell);
-            return cell;
-        }
         
         /**
          * Loops over all cells in all sheets of the supplied
@@ -136,11 +113,6 @@ namespace NPOI.XSSF.UserModel
             }
 
             return new XSSFEvaluationCell((XSSFCell)cell);
-        }
-
-        protected override IRichTextString CreateRichTextString(string str)
-        {
-            throw new NotImplementedException();
         }
     }
 }
