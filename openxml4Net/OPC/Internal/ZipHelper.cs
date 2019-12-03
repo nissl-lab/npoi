@@ -244,8 +244,12 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         {
             if (!file.Exists)
             {
-                return null;
+                throw new FileNotFoundException("File does not exist");
             }
+            //if (file.isDirectory())
+            //{
+            //    throw new IOException("File is a directory");
+            //}
             // TODO: ZipSecureFile
             //// Peek at the first few bytes to sanity check
             //FileInputStream input = new FileInputStream(file);
