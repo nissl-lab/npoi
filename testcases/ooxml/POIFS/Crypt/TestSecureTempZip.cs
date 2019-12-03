@@ -178,9 +178,9 @@ namespace NPOI.POIFS.Crypt
             }
 
 
-            public bool IsClosed()
+            public bool IsClosed
             {
-                return closed;
+                get { return closed; }
             }
         }
     }

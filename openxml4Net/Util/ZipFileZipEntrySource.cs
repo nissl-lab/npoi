@@ -28,6 +28,11 @@ namespace NPOI.OpenXml4Net.Util
             }
         }
 
+        public bool IsClosed
+        {
+            get { return zipArchive == null; }
+        }
+
         public IEnumerator Entries
         {
             get

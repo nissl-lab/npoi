@@ -20,11 +20,13 @@ namespace NPOI.OpenXml4Net.OPC
     using System;
     using System.IO;
     using System.Xml;
+    using NPOI.Openxml4Net.Exceptions;
     using NPOI.SS.UserModel;
     using NPOI.Util;
     using NPOI.XSSF;
     using NPOI.XWPF.UserModel;
     using NUnit.Framework;
+    using TestCases;
     using TestCases.OpenXml4Net;
 
     [TestFixture]
@@ -196,7 +198,8 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
         [Test, Ignore("SlideShow not implemented")]
-        public void UnparseableCentralDirectory() {
+        public void UnparseableCentralDirectory()
+        {
             FileInfo f = OpenXml4NetTestDataSamples.GetSampleFile("at.pzp.www_uploads_media_PP_Scheinecker-jdk6error.pptx");
             //SlideShow<?,?> ppt = SlideShowFactory.create(f, null, true);
             //ppt.close();
@@ -225,6 +228,65 @@ namespace NPOI.OpenXml4Net.OPC
             tmp.Delete();
             Assert.IsFalse(tmp.Exists, "Can't delete tmp file");
         }
+
+        /**
+         * If ZipPackage is passed an invalid file, a call to close
+         *  (eg from the OPCPackage open method) should tidy up the
+         *  stream / file the broken file is being read from.
+         * See bug #60128 for more
+         */
+        [Test]
+        public void testTidyStreamOnInvalidFile()
+        {
+            // Spreadsheet has a good mix of alternate file types
+            POIDataSamples files = POIDataSamples.GetSpreadSheetInstance();
+
+            FileInfo[] notValidF = new FileInfo[] {
+                files.GetFileInfo("SampleSS.ods"), files.GetFileInfo("SampleSS.txt")
+        };
+            Stream[] notValidS = new Stream[] {
+                files.OpenResourceAsStream("SampleSS.ods"), files.OpenResourceAsStream("SampleSS.txt")
+        };
+            foreach (FileInfo notValid in notValidF)
+            {
+                ZipPackage pkg = new ZipPackage(notValid, PackageAccess.READ);
+                Assert.IsNotNull(pkg.ZipArchive);
+                Assert.IsFalse(pkg.ZipArchive.IsClosed);
+                try
+                {
+                    pkg.GetParts();
+                    Assert.Fail("Shouldn't work");
+                }
+                catch (ODFNotOfficeXmlFileException e)
+                {
+                }
+                catch (NotOfficeXmlFileException ne) { }
+                pkg.Close();
+
+                Assert.IsNotNull(pkg.ZipArchive);
+                Assert.IsTrue(pkg.ZipArchive.IsClosed);
+            }
+            foreach (InputStream notValid in notValidS)
+            {
+                ZipPackage pkg = new ZipPackage(notValid, PackageAccess.READ);
+                Assert.IsNotNull(pkg.ZipArchive);
+                Assert.IsFalse(pkg.ZipArchive.IsClosed);
+                try
+                {
+                    pkg.GetParts();
+                    Assert.Fail("Shouldn't work");
+                }
+                catch (ODFNotOfficeXmlFileException e)
+                {
+                }
+                catch (NotOfficeXmlFileException ne) { }
+                pkg.Close();
+
+                Assert.IsNotNull(pkg.ZipArchive);
+                Assert.IsTrue(pkg.ZipArchive.IsClosed);
+            }
+        }
+
     }
 
 }
