@@ -28,6 +28,8 @@ namespace NPOI.XSSF.UserModel
     [TestFixture]
     public class TestXSSFPivotTable
     {
+        private static XSSFITestDataProvider _testDataProvider = XSSFITestDataProvider.instance;
+        private XSSFWorkbook wb;
         private XSSFPivotTable pivotTable;
         private XSSFPivotTable offsetPivotTable;
         private ICell offsetOuterCell;
@@ -68,7 +70,7 @@ namespace NPOI.XSSF.UserModel
             ICell cell12 = row1.CreateCell(3);
             cell12.SetCellValue(12.12);
 
-            AreaReference source = new AreaReference("A1:C2");
+            AreaReference source = new AreaReference("A1:C2",_testDataProvider.GetSpreadsheetVersion());
             pivotTable = sheet.CreatePivotTable(source, new CellReference("H5"));
 
 
@@ -110,6 +112,14 @@ namespace NPOI.XSSF.UserModel
 
             AreaReference offsetSource = new AreaReference(new CellReference("C2"), new CellReference("E4"));
             offsetPivotTable = offsetSheet.CreatePivotTable(offsetSource, new CellReference("C6"));
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            XSSFWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            wb.Close();
+            wb2.Close();
         }
 
         /**
