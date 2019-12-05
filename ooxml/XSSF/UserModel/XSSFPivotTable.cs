@@ -24,7 +24,7 @@ namespace NPOI.XSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.OpenXmlFormats.Spreadsheet;
-
+    using NPOI.SS;
 
     public class XSSFPivotTable : POIXMLDocumentPart
     {
@@ -217,9 +217,31 @@ namespace NPOI.XSSF.UserModel
 
         protected AreaReference GetPivotArea()
         {
-            AreaReference pivotArea = new AreaReference(GetPivotCacheDefinition().
-                    GetCTPivotCacheDefinition().cacheSource.worksheetSource.@ref);
+            AreaReference pivotArea = new AreaReference(
+                GetPivotCacheDefinition()
+                .GetCTPivotCacheDefinition()
+                .cacheSource
+                .worksheetSource
+                .@ref,
+                SpreadsheetVersion.EXCEL2007);
             return pivotArea;
+        }
+
+        /**
+         * Verify column index (relative to first column in1 pivot area) is within the
+         * pivot area
+         *
+         * @param columnIndex
+         * @
+         */
+        private void CheckColumnIndex(int columnIndex)
+        {
+            AreaReference pivotArea = GetPivotArea();
+            int size = pivotArea.LastCell.Col - pivotArea.FirstCell.Col + 1;
+            if (columnIndex < 0 || columnIndex >= size)
+            {
+                throw new IndexOutOfRangeException("Column Index: " + columnIndex + ", Size: " + size);
+            }
         }
 
         /**
@@ -229,14 +251,10 @@ namespace NPOI.XSSF.UserModel
 
         public void AddRowLabel(int columnIndex)
         {
+            CheckColumnIndex(columnIndex);
             AreaReference pivotArea = GetPivotArea();
             int lastRowIndex = pivotArea.LastCell.Row - pivotArea.FirstCell.Row;
-            int lastColIndex = pivotArea.LastCell.Col - pivotArea.FirstCell.Col;
 
-            if (columnIndex > lastColIndex)
-            {
-                throw new IndexOutOfRangeException();
-            }
             CT_PivotFields pivotFields = pivotTableDefinition.pivotFields;
 
             CT_PivotField pivotField = new CT_PivotField();
@@ -293,13 +311,7 @@ namespace NPOI.XSSF.UserModel
 
         public void AddColumnLabel(DataConsolidateFunction function, int columnIndex, String valueFieldName)
         {
-            AreaReference pivotArea = GetPivotArea();
-            int lastColIndex = pivotArea.LastCell.Col - pivotArea.FirstCell.Col;
-
-            if (columnIndex > lastColIndex && columnIndex < 0)
-            {
-                throw new IndexOutOfRangeException();
-            }
+            CheckColumnIndex(columnIndex);
 
             AddDataColumn(columnIndex, true);
             AddDataField(function, columnIndex, valueFieldName);
@@ -345,13 +357,8 @@ namespace NPOI.XSSF.UserModel
 
         private void AddDataField(DataConsolidateFunction function, int columnIndex, String valueFieldName)
         {
+            CheckColumnIndex(columnIndex);
             AreaReference pivotArea = GetPivotArea();
-            int lastColIndex = pivotArea.LastCell.Col - pivotArea.FirstCell.Col;
-
-            if (columnIndex > lastColIndex && columnIndex < 0)
-            {
-                throw new IndexOutOfRangeException();
-            }
             CT_DataFields dataFields;
             if (pivotTableDefinition.dataFields != null)
             {
@@ -379,12 +386,8 @@ namespace NPOI.XSSF.UserModel
 
         public void AddDataColumn(int columnIndex, bool isDataField)
         {
-            AreaReference pivotArea = GetPivotArea();
-            int lastColIndex = pivotArea.LastCell.Col - pivotArea.FirstCell.Col;
-            if (columnIndex > lastColIndex && columnIndex < 0)
-            {
-                throw new IndexOutOfRangeException();
-            }
+            CheckColumnIndex(columnIndex);
+
             CT_PivotFields pivotFields = pivotTableDefinition.pivotFields;
             CT_PivotField pivotField = new CT_PivotField();
 
@@ -400,14 +403,11 @@ namespace NPOI.XSSF.UserModel
 
         public void AddReportFilter(int columnIndex)
         {
+            CheckColumnIndex(columnIndex);
             AreaReference pivotArea = GetPivotArea();
-            int lastColIndex = pivotArea.LastCell.Col - pivotArea.FirstCell.Col;
+            
             int lastRowIndex = pivotArea.LastCell.Row - pivotArea.FirstCell.Row;
 
-            if (columnIndex > lastColIndex && columnIndex < 0)
-            {
-                throw new IndexOutOfRangeException();
-            }
             CT_PivotFields pivotFields = pivotTableDefinition.pivotFields;
 
             CT_PivotField pivotField = new CT_PivotField();
