@@ -134,6 +134,8 @@ namespace NPOI.POIFS.NIO
                 //dst = channel.map(FileChannel.MapMode.READ_WRITE, position, length);
                 dst = ByteBuffer.CreateBuffer(length);
                 worked = 0;
+                // remember the buffer for cleanup if necessary
+                buffersToClean.Add(dst);
             }
             else
             {
@@ -148,8 +150,6 @@ namespace NPOI.POIFS.NIO
                 throw new IndexOutOfRangeException("Position " + position + " past the end of the file");
 
             dst.Position = 0;
-            // remember the buffer for cleanup if necessary
-            buffersToClean.Add(dst);
 
             // All done
             return dst;
