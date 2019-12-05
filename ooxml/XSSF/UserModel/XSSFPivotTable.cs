@@ -217,13 +217,8 @@ namespace NPOI.XSSF.UserModel
 
         protected AreaReference GetPivotArea()
         {
-            AreaReference pivotArea = new AreaReference(
-                GetPivotCacheDefinition()
-                .GetCTPivotCacheDefinition()
-                .cacheSource
-                .worksheetSource
-                .@ref,
-                SpreadsheetVersion.EXCEL2007);
+            IWorkbook wb = GetDataSheet().Workbook;
+            AreaReference pivotArea = GetPivotCacheDefinition().GetPivotArea(wb);
             return pivotArea;
         }
 
@@ -442,13 +437,13 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Creates cacheSource and workSheetSource for pivot table and Sets the source reference as well assets the location of the pivot table
-         * @param source Source for data for pivot table
+         * Creates cacheSource and workSheetSource for pivot table and sets the source reference as well assets the location of the pivot table
+         * @param sourceRef Source for data for pivot table - mutually exclusive with sourceName
+         * @param sourceName Source for data for pivot table - mutually exclusive with sourceRef
          * @param position Position for pivot table in sheet
          * @param sourceSheet Sheet where the source will be collected from
          */
-
-        protected internal void CreateSourceReferences(AreaReference source, CellReference position, ISheet sourceSheet)
+        protected internal void CreateSourceReferences(CellReference position, ISheet sourceSheet, IPivotTableReferenceConfigurator refConfig)
         {
             //Get cell one to the right and one down from position, add both to AreaReference and Set pivot table location.
             AreaReference destination = new AreaReference(position, new CellReference(position.Row + 1, position.Col + 1));
@@ -476,9 +471,9 @@ namespace NPOI.XSSF.UserModel
             worksheetSource.sheet = (/*setter*/sourceSheet.SheetName);
             SetDataSheet(sourceSheet);
 
-            String[] firstCell = source.FirstCell.CellRefParts;
-            String[] lastCell = source.LastCell.CellRefParts;
-            worksheetSource.@ref = (/*setter*/firstCell[2] + firstCell[1] + ':' + lastCell[2] + lastCell[1]);
+            refConfig.ConfigureReference(worksheetSource);
+            if (worksheetSource.name == null && worksheetSource.@ref == null)
+                throw new ArgumentException("Pivot table source area reference or name must be specified.");
         }
 
 
@@ -497,13 +492,23 @@ namespace NPOI.XSSF.UserModel
             int firstColumn = sourceArea.FirstCell.Col;
             int lastColumn = sourceArea.LastCell.Col;
             CT_PivotField pivotField;
-            for (int i = 0; i <= lastColumn - firstColumn; i++)
+            for (int i = firstColumn; i <= lastColumn; i++)
             {
                 pivotField = pivotFields.AddNewPivotField();
                 pivotField.dataField = (/*setter*/false);
                 pivotField.showAll = (/*setter*/false);
             }
             pivotFields.count = (/*setter*/pivotFields.SizeOfPivotFieldArray());
+        }
+
+        public interface IPivotTableReferenceConfigurator
+        {
+
+            /**
+             * Configure the name or area reference for the pivot table 
+             * @param wsSource CTWorksheetSource that needs the pivot source reference assignment
+             */
+            void ConfigureReference(CT_WorksheetSource wsSource);
         }
     }
 

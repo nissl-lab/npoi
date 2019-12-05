@@ -23,7 +23,7 @@ namespace NPOI.XSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using System;
-
+    using NPOI.SS;
 
     public class XSSFPivotCacheDefinition : POIXMLDocumentPart
     {
@@ -122,6 +122,46 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Find the 2D base data area for the pivot table, either from its direct reference or named table/range.
+         * @return AreaReference representing the current area defined by the pivot table
+         * @ if the ref1 attribute is not contiguous or the name attribute is not found.
+         */
+
+        public AreaReference GetPivotArea(IWorkbook wb)
+        {
+            CT_WorksheetSource wsSource = ctPivotCacheDefinition.cacheSource.worksheetSource;
+
+            String ref1 = wsSource.@ref;
+            String name = wsSource.name;
+
+            if (ref1 == null && name == null)
+                throw new ArgumentException("Pivot cache must reference an area, named range, or table.");
+
+            // this is the XML format, so tell the reference that.
+            if (ref1 != null) return new AreaReference(ref1, SpreadsheetVersion.EXCEL2007);
+
+            if (name != null)
+            {
+                // named range or table?
+                IName range = wb.GetName(name);
+                if (range != null) return new AreaReference(range.RefersToFormula, SpreadsheetVersion.EXCEL2007);
+                // not a named range, check for a table.
+                // do this second, as tables are sheet-specific, but named ranges are not, and may not have a sheet name given.
+                XSSFSheet sheet = (XSSFSheet)wb.GetSheet(wsSource.sheet);
+                foreach (XSSFTable table in sheet.GetTables())
+                {
+                    if (table.Name.Equals(name))
+                    { //case-sensitive?
+                        return new AreaReference(table.StartCellReference, table.EndCellReference);
+                    }
+                }
+            }
+
+            throw new ArgumentException("Name '" + name + "' was not found.");
+        }
+
+
+        /**
          * Generates a cache field for each column in the reference area for the pivot table.
          * @param sheet The sheet where the data i collected from
          */
@@ -129,7 +169,7 @@ namespace NPOI.XSSF.UserModel
         protected internal void CreateCacheFields(ISheet sheet)
         {
             //Get values for start row, start and end column
-            AreaReference ar = new AreaReference(ctPivotCacheDefinition.cacheSource.worksheetSource.@ref);
+            AreaReference ar = GetPivotArea(sheet.Workbook);
             CellReference firstCell = ar.FirstCell;
             CellReference lastCell = ar.LastCell;
             int columnStart = firstCell.Col;

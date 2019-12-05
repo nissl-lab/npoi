@@ -211,7 +211,9 @@
     <Compile Include="XSSF\UserModel\TestXSSFName.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFPicture.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFPictureData.cs" />
-    <Compile Include="XSSF\UserModel\TestXSSFPivotTable.cs" />
+    <Compile Include="XSSF\UserModel\BaseTestXSSFPivotTable.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFPivotTableName.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFPivotTableRef.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFPrintSetup.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFRichTextString.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFRow.cs" />

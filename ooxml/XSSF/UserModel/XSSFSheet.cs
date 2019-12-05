@@ -35,6 +35,7 @@ using NPOI.Util;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel.Helpers;
 using NPOI.POIFS.Crypt;
+using static NPOI.XSSF.UserModel.XSSFPivotTable;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -306,7 +307,8 @@ namespace NPOI.XSSF.UserModel
         /// <exception cref="System.ArgumentException">if region contains fewer than 2 cells</exception>
         /// <exception cref="IllegalStateException">if region intersects with an existing merged region
         /// or multi-cell array formula on this sheet</exception>
-        public int AddMergedRegion(CellRangeAddress region) {
+        public int AddMergedRegion(CellRangeAddress region)
+        {
             return AddMergedRegion(region, true);
         }
 
@@ -716,7 +718,7 @@ namespace NPOI.XSSF.UserModel
         int GetLastKey(IList<int> keys)
         {
             int i = keys.Count;
-            return keys[keys.Count-1];
+            return keys[keys.Count - 1];
         }
         SortedList<int, XSSFRow> HeadMap(SortedList<int, XSSFRow> rows, int rownum)
         {
@@ -1743,7 +1745,7 @@ namespace NPOI.XSSF.UserModel
                 CellReference cellReference = new CellReference(cellRef);
                 return (short)cellReference.Row;
             }
-            set 
+            set
             {
                 throw new NotImplementedException();
             }
@@ -1815,10 +1817,12 @@ namespace NPOI.XSSF.UserModel
         /**
          * Do not leave the width attribute undefined (see #52186).
          */
-        private void SetColWidthAttribute(CT_Cols ctCols) {
+        private void SetColWidthAttribute(CT_Cols ctCols)
+        {
             foreach (CT_Col col in ctCols.GetColList())
             {
-                if (!col.IsSetWidth()) {
+                if (!col.IsSetWidth())
+                {
                     col.width = (DefaultColumnWidth);
                     col.customWidth = (false);
                 }
@@ -2169,8 +2173,10 @@ namespace NPOI.XSSF.UserModel
             // also remove any comment located in that row
             if (sheetComments != null)
             {
-                foreach (CellAddress ref1 in GetCellComments().Keys) {
-                    if (ref1.Row == idx) {
+                foreach (CellAddress ref1 in GetCellComments().Keys)
+                {
+                    if (ref1.Row == idx)
+                    {
                         sheetComments.RemoveComment(ref1);
                     }
                 }
@@ -2222,14 +2228,14 @@ namespace NPOI.XSSF.UserModel
                     CT_SheetCalcPr calc = worksheet.sheetCalcPr;
                     calc.fullCalcOnLoad = value;
                 }
-                else if(value)
+                else if (value)
                 {
                     // Add the Calc block and set it
                     CT_SheetCalcPr calc = worksheet.AddNewSheetCalcPr();
                     calc.fullCalcOnLoad = value;
                 }
 
-                if (value && calcPr!=null&& calcPr.calcMode == ST_CalcMode.manual)
+                if (value && calcPr != null && calcPr.calcMode == ST_CalcMode.manual)
                 {
                     calcPr.calcMode = ST_CalcMode.auto;
                 }
@@ -2835,7 +2841,7 @@ namespace NPOI.XSSF.UserModel
         private int WriteHidden(XSSFRow xRow, int rowIndex, bool hidden)
         {
             int level = xRow.GetCTRow().outlineLevel;
-            for (IEnumerator it = this.GetRowEnumerator(); it.MoveNext(); )
+            for (IEnumerator it = this.GetRowEnumerator(); it.MoveNext();)
             {
                 xRow = (XSSFRow)it.Current;
                 if (xRow.GetCTRow().outlineLevel >= level)
@@ -3338,11 +3344,11 @@ namespace NPOI.XSSF.UserModel
             }
             _rows.Clear();
             //_rows.putAll(map);
-            foreach(KeyValuePair<int, XSSFRow> kv in map)
+            foreach (KeyValuePair<int, XSSFRow> kv in map)
             {
                 _rows.Add(kv.Key, kv.Value);
             }
-            
+
             // Sort CTRows by index asc.
             worksheet.sheetData.row.Sort((row1, row2) => row1.r.CompareTo(row2.r));
         }
@@ -3353,7 +3359,8 @@ namespace NPOI.XSSF.UserModel
             {
                 this.shiftDir = shiftDir;
             }
-            public int Compare(XSSFComment o1, XSSFComment o2) {
+            public int Compare(XSSFComment o1, XSSFComment o2)
+            {
                 int row1 = o1.Row;
                 int row2 = o2.Row;
 
@@ -3368,7 +3375,9 @@ namespace NPOI.XSSF.UserModel
                 if (shiftDir > 0)
                 {
                     return row1 < row2 ? 1 : -1;
-                } else {
+                }
+                else
+                {
                     // sort lower-row values first when Shifting up
                     return row1 > row2 ? 1 : -1;
                 }
@@ -3377,23 +3386,27 @@ namespace NPOI.XSSF.UserModel
         private int ShiftedRowNum(int startRow, int endRow, int n, int rownum)
         {
             // no change if before any affected row
-            if (rownum < startRow && (n > 0 || (startRow - rownum) > n)) {
+            if (rownum < startRow && (n > 0 || (startRow - rownum) > n))
+            {
                 return rownum;
             }
 
             // no change if After any affected row
-            if (rownum > endRow && (n < 0 || (rownum - endRow) > n)) {
+            if (rownum > endRow && (n < 0 || (rownum - endRow) > n))
+            {
                 return rownum;
             }
 
             // row before and things are Moved up
-            if (rownum < startRow) {
+            if (rownum < startRow)
+            {
                 // row is Moved down by the Shifting
                 return rownum + (endRow - startRow);
             }
 
             // row is After and things are Moved down
-            if (rownum > endRow) {
+            if (rownum > endRow)
+            {
                 // row is Moved up by the Shifting
                 return rownum - (endRow - startRow);
             }
@@ -3561,8 +3574,8 @@ namespace NPOI.XSSF.UserModel
         public void SetActiveCell(string cellref)
         {
             CT_Selection ctsel = GetSheetTypeSelection();
-                ctsel.activeCell = cellref;
-                ctsel.SetSqref(new string[] { cellref }); 
+            ctsel.activeCell = cellref;
+            ctsel.SetSqref(new string[] { cellref });
         }
 
         //public void SetActiveCell(int row, int column)
@@ -3750,7 +3763,7 @@ namespace NPOI.XSSF.UserModel
                     SetColWidthAttribute(col);
                 }
             }
-            
+
 
             // Now re-generate our CT_Hyperlinks, if needed
             if (hyperlinks.Count > 0)
@@ -4368,7 +4381,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @param colorIndex  the indexed color to set, must be a constant from {@link IndexedColors}
          */
-         [Obsolete("deprecated 3.15-beta2. Removed in 3.17. Use {@link #setTabColor(XSSFColor)}.")]
+        [Obsolete("deprecated 3.15-beta2. Removed in 3.17. Use {@link #setTabColor(XSSFColor)}.")]
         public void SetTabColor(int colorIndex)
         {
             CT_SheetPr pr = worksheet.sheetPr;
@@ -4445,7 +4458,7 @@ namespace NPOI.XSSF.UserModel
 
         public IEnumerator GetEnumerator()
         {
-            return _rows.Values.GetEnumerator(); 
+            return _rows.Values.GetEnumerator();
         }
 
         public IEnumerator GetRowEnumerator()
@@ -4459,7 +4472,7 @@ namespace NPOI.XSSF.UserModel
             {
                 return IsSelected;
             }
-            set 
+            set
             {
                 IsSelected = value;
             }
@@ -4512,7 +4525,7 @@ namespace NPOI.XSSF.UserModel
                 throw new NotImplementedException();
             }
         }
-        
+
         public bool IsRightToLeft
         {
             get
@@ -4789,10 +4802,10 @@ namespace NPOI.XSSF.UserModel
                     rel.TargetUri, (TargetMode)rel.TargetMode, rel.RelationshipType);
                 clonedSheet.AddRelation(rel.Id, r);
             }
-            
+
             // copy hyperlinks
             clonedSheet.hyperlinks = new List<XSSFHyperlink>(hyperlinks);
-            
+
             // clone the sheet drawing along with its relationships
             if (dg != null)
             {
@@ -4822,7 +4835,7 @@ namespace NPOI.XSSF.UserModel
             }
             return clonedSheet;
         }
-        
+
         private void CopySheetImages(XSSFWorkbook destWorkbook, XSSFSheet destSheet)
         {
             XSSFDrawing sheetDrawing = GetDrawingPatriarch();
@@ -4878,7 +4891,7 @@ namespace NPOI.XSSF.UserModel
         {
             foreach (POIXMLDocumentPart item in sheetPictures)
             {
-                if(item.GetPackageRelationship().Id == id)
+                if (item.GetPackageRelationship().Id == id)
                 {
                     return item as XSSFPictureData;
                 }
@@ -4896,8 +4909,8 @@ namespace NPOI.XSSF.UserModel
             destRow.Hidden = srcRow.Hidden;
             destRow.Collapsed = srcRow.Collapsed;
             destRow.OutlineLevel = srcRow.OutlineLevel;
-            
-            if(srcRow.FirstCellNum < 0)
+
+            if (srcRow.FirstCellNum < 0)
             {
                 return; //Row has no cells, this sometimes happens with hidden or blank rows
             }
@@ -5071,10 +5084,12 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Create a pivot table and Set area of source, source sheet and a position for pivot table
-         * @param source Area from where data will be collected
-         * @param position A reference to the cell where the table will start
-         * @param sourceSheet The sheet where source will be collected from
+         * Create a pivot table using the AreaReference range on sourceSheet, at the given position.
+         * If the source reference contains a sheet name, it must match the sourceSheet
+         * @param source location of pivot data
+         * @param position A reference to the top left cell where the pivot table will start
+         * @param sourceSheet The sheet containing the source data, if the source reference doesn't contain a sheet name
+         * @throws IllegalArgumentException if source references a sheet different than sourceSheet
          * @return The pivot table
          */
         public XSSFPivotTable CreatePivotTable(AreaReference source, CellReference position, ISheet sourceSheet)
@@ -5085,14 +5100,49 @@ namespace NPOI.XSSF.UserModel
                 throw new ArgumentException("The area is referenced in another sheet than the "
                         + "defined source sheet " + sourceSheet.SheetName + ".");
             }
+            IPivotTableReferenceConfigurator refConfig = new PivotTableReferenceConfigurator1(source);
+            return CreatePivotTable(position, sourceSheet, refConfig);
+        }
+        public class PivotTableReferenceConfigurator1 : IPivotTableReferenceConfigurator
+        {
+            AreaReference source;
+            public PivotTableReferenceConfigurator1(AreaReference source)
+            {
+                this.source = source;
+            }
+            public void ConfigureReference(CT_WorksheetSource wsSource)
+            {
+                String[] firstCell = source.FirstCell.CellRefParts;
+                String firstRow = firstCell[1];
+                String firstCol = firstCell[2];
+                String[] lastCell = source.LastCell.CellRefParts;
+                String lastRow = lastCell[1];
+                String lastCol = lastCell[2];
+                String ref1 = firstCol + firstRow + ':' + lastCol + lastRow; //or just source.formatAsString()
+                wsSource.@ref = ref1;
+            }
+        }
+        /**
+         * Create a pivot table using the AreaReference or named/table range on sourceSheet, at the given position.
+         * If the source reference contains a sheet name, it must match the sourceSheet.
+         * @param sourceRef location of pivot data - mutually exclusive with SourceName
+         * @param sourceName range or table name for pivot data - mutually exclusive with SourceRef
+         * @param position A reference to the top left cell where the pivot table will start
+         * @param sourceSheet The sheet containing the source data, if the source reference doesn't contain a sheet name
+         * @throws IllegalArgumentException if source references a sheet different than sourceSheet
+         * @return The pivot table
+         */
+        private XSSFPivotTable CreatePivotTable(CellReference position, ISheet sourceSheet, IPivotTableReferenceConfigurator refConfig)
+        {
+
             XSSFPivotTable pivotTable = CreatePivotTable();
             //Creates default Settings for the pivot table
             pivotTable.SetDefaultPivotTableDefinition();
 
             //Set sources and references
-            pivotTable.CreateSourceReferences(source, position, sourceSheet);
+            pivotTable.CreateSourceReferences(position, sourceSheet, refConfig);
 
-            //Create cachefield/s and empty SharedItems
+            //Create cachefield/s and empty SharedItems - must be after creating references
             pivotTable.GetPivotCacheDefinition().CreateCacheFields(sourceSheet);
             pivotTable.CreateDefaultDataColumns();
 
@@ -5100,9 +5150,10 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Create a pivot table and Set area of source and a position for pivot table
-         * @param source Area from where data will be collected
-         * @param position A reference to the cell where the table will start
+         * Create a pivot table using the AreaReference range, at the given position.
+         * If the source reference contains a sheet name, that sheet is used, otherwise this sheet is assumed as the source sheet.
+         * @param source location of pivot data
+         * @param position A reference to the top left cell where the pivot table will start
          * @return The pivot table
          */
         public XSSFPivotTable CreatePivotTable(AreaReference source, CellReference position)
@@ -5116,6 +5167,76 @@ namespace NPOI.XSSF.UserModel
             return CreatePivotTable(source, position, this);
         }
 
+        /**
+         * Create a pivot table using the Name range reference on sourceSheet, at the given position.
+         * If the source reference contains a sheet name, it must match the sourceSheet
+         * @param source location of pivot data
+         * @param position A reference to the top left cell where the pivot table will start
+         * @param sourceSheet The sheet containing the source data, if the source reference doesn't contain a sheet name
+         * @ if source references a sheet different than sourceSheet
+         * @return The pivot table
+         */
+
+        public XSSFPivotTable CreatePivotTable(IName source, CellReference position, ISheet sourceSheet)
+        {
+            if (source.SheetName != null && !source.SheetName.Equals(sourceSheet.SheetName))
+            {
+                throw new ArgumentException("The named range references another sheet than the "
+                        + "defined source sheet " + sourceSheet.SheetName + ".");
+            }
+
+            return CreatePivotTable(position, sourceSheet, new PivotTableReferenceConfigurator2(source));
+        }
+        public class PivotTableReferenceConfigurator2 : IPivotTableReferenceConfigurator
+        {
+            IName source;
+            public PivotTableReferenceConfigurator2(IName source)
+            {
+                this.source = source;
+            }
+            public void ConfigureReference(CT_WorksheetSource wsSource)
+            {
+                wsSource.name = (source.NameName);
+            }
+        }
+        /**
+         * Create a pivot table using the Name range, at the given position.
+         * If the source reference contains a sheet name, that sheet is used, otherwise this sheet is assumed as the source sheet.
+         * @param source location of pivot data
+         * @param position A reference to the top left cell where the pivot table will start
+         * @return The pivot table
+         */
+
+        public XSSFPivotTable CreatePivotTable(IName source, CellReference position)
+        {
+            return CreatePivotTable(source, position, GetWorkbook().GetSheet(source.SheetName));
+        }
+
+        /**
+         * Create a pivot table using the Table, at the given position.
+         * Tables are required to have a sheet reference, so no additional logic around reference sheet is needed.
+         * @param source location of pivot data
+         * @param position A reference to the top left cell where the pivot table will start
+         * @return The pivot table
+         */
+
+        public XSSFPivotTable CreatePivotTable(ITable source, CellReference position)
+        {
+            return CreatePivotTable(position, GetWorkbook().GetSheet(source.SheetName), new PivotTableReferenceConfigurator3(source));
+        }
+
+        public class PivotTableReferenceConfigurator3 : IPivotTableReferenceConfigurator
+        {
+            ITable source;
+            public PivotTableReferenceConfigurator3(ITable source)
+            {
+                this.source = source;
+            }
+            public void ConfigureReference(CT_WorksheetSource wsSource)
+            {
+                wsSource.name = (source.Name);
+            }
+        }
         /**
          * Returns all the pivot tables for this Sheet
          */
@@ -5144,7 +5265,7 @@ namespace NPOI.XSSF.UserModel
 
         public bool IsDate1904()
         {
-           throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
 
@@ -5191,7 +5312,8 @@ namespace NPOI.XSSF.UserModel
                         {
                             result.Add(errType, new HashSet<CellRangeAddress>());
                         }
-                        foreach (Object ref1 in err.sqref) {
+                        foreach (Object ref1 in err.sqref)
+                        {
                             result[errType].Add(CellRangeAddress.ValueOf(ref1.ToString()));
                         }
                     }
@@ -5214,7 +5336,7 @@ namespace NPOI.XSSF.UserModel
         private ISet<IgnoredErrorType> GetErrorTypes(CT_IgnoredError err)
         {
             ISet<IgnoredErrorType> result = new HashSet<IgnoredErrorType>();
-            
+
             foreach (IgnoredErrorType errType in IgnoredErrorTypeValues.Values)
             {
                 if (XSSFIgnoredErrorHelper.IsSet(errType, err))
@@ -5224,7 +5346,7 @@ namespace NPOI.XSSF.UserModel
             }
             return result;
         }
-    
+
     }
 
 }
