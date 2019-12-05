@@ -5079,8 +5079,8 @@ namespace NPOI.XSSF.UserModel
          */
         public XSSFPivotTable CreatePivotTable(AreaReference source, CellReference position, ISheet sourceSheet)
         {
-
-            if (source.FirstCell.SheetName != null && !source.FirstCell.SheetName.Equals(sourceSheet.SheetName))
+            String sourceSheetName = source.FirstCell.SheetName;
+            if (sourceSheetName != null && !sourceSheetName.Equals(sourceSheet.SheetName, StringComparison.InvariantCultureIgnoreCase))
             {
                 throw new ArgumentException("The area is referenced in another sheet than the "
                         + "defined source sheet " + sourceSheet.SheetName + ".");
@@ -5107,9 +5107,11 @@ namespace NPOI.XSSF.UserModel
          */
         public XSSFPivotTable CreatePivotTable(AreaReference source, CellReference position)
         {
-            if (source.FirstCell.SheetName != null && !source.FirstCell.SheetName.Equals(this.SheetName))
+            String sourceSheetName = source.FirstCell.SheetName;
+            if (sourceSheetName != null && !sourceSheetName.Equals(this.SheetName, StringComparison.InvariantCultureIgnoreCase))
             {
-                return CreatePivotTable(source, position, GetWorkbook().GetSheet(source.FirstCell.SheetName));
+                XSSFSheet sourceSheet = Workbook.GetSheet(sourceSheetName) as XSSFSheet;
+                return CreatePivotTable(source, position, sourceSheet);
             }
             return CreatePivotTable(source, position, this);
         }
