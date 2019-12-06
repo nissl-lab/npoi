@@ -332,7 +332,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("A3:C3", region.FormatAsString());
             wb.Close();
         }
-        [Ignore("bug 56454: Incorrectly handles merged regions that do not contain column 0")]
+        //[Ignore("bug 56454: Incorrectly handles merged regions that do not contain column 0")]
         [Test]
         public void ShiftWithMergedRegions_bug56454()
         {
@@ -368,8 +368,18 @@ namespace TestCases.SS.UserModel
             expectedMergedRegions.Add(A4_B8);
             expectedMergedRegions.Add(C4_D8);
 
-            Assert.AreEqual(expectedMergedRegions, sheet.MergedRegions);
-
+            // This test is written as expected-to-fail and should be rewritten
+            // as expected-to-pass when the bug is fixed.
+            // FIXME: remove try, catch, and testPassesNow, skipTest when test passes
+            try
+            {
+                Assert.AreEqual(expectedMergedRegions, sheet.MergedRegions);
+                POITestCase.TestPassesNow(56454);
+            }
+            catch (AssertionException e)
+            {
+                POITestCase.SkipTest(e);
+            }
             wb.Close();
         }
 
@@ -645,7 +655,7 @@ namespace TestCases.SS.UserModel
             read.Close();
         }
 
-        [Ignore("bug 56454: Incorrectly handles merged regions that do not contain column 0")]
+        //[Ignore("bug 56454: Incorrectly handles merged regions that do not contain column 0")]
         [Test]
         public void ShiftRowsWithMergedRegionsThatDoNotContainColumnZero()
         {
@@ -669,9 +679,21 @@ namespace TestCases.SS.UserModel
             // A4:B7 will elongate vertically
             // C5:D7 will be shifted down with same size
             sheet.ShiftRows(4, sheet.LastRowNum, 1);
-            Assert.AreEqual(2, sheet.NumMergedRegions);
-            Assert.AreEqual(CellRangeAddress.ValueOf("A4:B8"), sheet.GetMergedRegion(0));
-            Assert.AreEqual(CellRangeAddress.ValueOf("C5:D8"), sheet.GetMergedRegion(1));
+            
+            // This test is written as expected-to-fail and should be rewritten
+            // as expected-to-pass when the bug is fixed.
+            // FIXME: remove try, catch, and testPassesNow, skipTest when test passes
+            try
+            {
+                Assert.AreEqual(2, sheet.NumMergedRegions);
+                Assert.AreEqual(CellRangeAddress.ValueOf("A4:B8"), sheet.GetMergedRegion(0));
+                Assert.AreEqual(CellRangeAddress.ValueOf("C5:D8"), sheet.GetMergedRegion(1));
+                POITestCase.TestPassesNow(56454);
+            }
+            catch (AssertionException e)
+            {
+                POITestCase.SkipTest(e);
+            }
 
             wb.Close();
         }
