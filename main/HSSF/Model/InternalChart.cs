@@ -615,9 +615,9 @@ namespace NPOI.HSSF.Model
 
             return r;
         }
-        private static FontXRecord CreateFontXRecord(int index)
+        private static FontIndexRecord CreateFontXRecord(int index)
         {
-            FontXRecord r = new FontXRecord();
+            FontIndexRecord r = new FontIndexRecord();
             r.FontIndex = ((short)index);
             return r;
         }
@@ -706,7 +706,7 @@ namespace NPOI.HSSF.Model
                                             "05 00 00 00");
 
             DrawingRecord retval = new DrawingRecord();
-            retval.Data = drawingData;
+            retval.SetData(drawingData);
             return retval;
         }
 
