@@ -126,29 +126,28 @@ namespace NPOI.POIFS.NIO
             if (position >= Size)
                 throw new IndexOutOfRangeException("Position " + position + " past the end of the file");
 
-            // Do we read or map (for read/write?
+            // Do we read or map (for read/write)?
             ByteBuffer dst;
-            int worked = -1;
             if (writable)
             {
                 //dst = channel.map(FileChannel.MapMode.READ_WRITE, position, length);
                 dst = ByteBuffer.CreateBuffer(length);
-                worked = 0;
-                // remember the buffer for cleanup if necessary
+                // remember this buffer for cleanup
                 buffersToClean.Add(dst);
             }
             else
             {
-                // Read
+                // allocate the buffer on the heap if we cannot map the data in directly
                 fileStream.Position = position;
                 dst = ByteBuffer.CreateBuffer(length);
 
-                worked = IOUtils.ReadFully(fileStream, dst.Buffer);
+                // Read the contents and check that we could read some data
+                int worked = IOUtils.ReadFully(fileStream, dst.Buffer);
+                // Check
+                if (worked == -1)
+                    throw new IndexOutOfRangeException("Position " + position + " past the end of the file");
             }
-            // Check
-            if(worked == -1)
-                throw new IndexOutOfRangeException("Position " + position + " past the end of the file");
-
+            // make it ready for reading
             dst.Position = 0;
 
             // All done
