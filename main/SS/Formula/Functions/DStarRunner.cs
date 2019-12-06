@@ -62,12 +62,21 @@ namespace NPOI.SS.Formula.Functions
                 ValueEval database, ValueEval filterColumn, ValueEval conditionDatabase)
         {
             // Input Processing and error Checks.
-            if (!(database is TwoDEval) || !(conditionDatabase is TwoDEval))
+            if (!(database is AreaEval) || !(conditionDatabase is AreaEval))
             {
                 return ErrorEval.VALUE_INVALID;
             }
-            TwoDEval db = (TwoDEval)database;
-            TwoDEval cdb = (TwoDEval)conditionDatabase;
+            AreaEval db = (AreaEval)database;
+            AreaEval cdb = (AreaEval)conditionDatabase;
+
+            try
+            {
+                filterColumn = OperandResolver.GetSingleValue(filterColumn, srcRowIndex, srcColumnIndex);
+            }
+            catch (EvaluationException e)
+            {
+                return e.GetErrorEval();
+            }
 
             int fc;
             try
@@ -109,19 +118,12 @@ namespace NPOI.SS.Formula.Functions
                 // Filter each entry.
                 if (matches)
                 {
-                    try
+                    ValueEval currentValueEval = ResolveReference(db, row, fc);
+                    // Pass the match to the algorithm and conditionally abort the search.
+                    bool shouldContinue = algorithm.ProcessMatch(currentValueEval);
+                    if (!shouldContinue)
                     {
-                        ValueEval currentValueEval = SolveReference(db.GetValue(row, fc));
-                        // Pass the match to the algorithm and conditionally abort the search.
-                        bool shouldContinue = algorithm.ProcessMatch(currentValueEval);
-                        if (!shouldContinue)
-                        {
-                            break;
-                        }
-                    }
-                    catch (EvaluationException e)
-                    {
-                        return e.GetErrorEval();
+                        break;
                     }
                 }
             }
@@ -140,62 +142,16 @@ namespace NPOI.SS.Formula.Functions
         }
 
         /**
-         * Resolve reference(-chains) until we have a normal value.
+         * 
          *
-         * @param field a ValueEval which can be a RefEval.
-         * @return a ValueEval which is guaranteed not to be a RefEval
-         * @If a multi-sheet reference was found along the way.
-         */
-        private static ValueEval SolveReference(ValueEval field)
-        {
-            if (field is RefEval)
-            {
-                RefEval refEval = (RefEval)field;
-                if (refEval.NumberOfSheets > 1)
-                {
-                    throw new EvaluationException(ErrorEval.VALUE_INVALID);
-                }
-                return SolveReference(refEval.GetInnerValueEval(refEval.FirstSheetIndex));
-            }
-            else
-            {
-                return field;
-            }
-        }
-
-        /**
-         * Returns the first column index that matches the given name. The name can either be
-         * a string or an integer, when it's an integer, then the respective column
-         * (1 based index) is returned.
-         * @param nameValueEval
+         * @param nameValueEval Must not be a RefEval or AreaEval. Thus make sure resolveReference() is called on the value first!
          * @param db
-         * @return the first column index that matches the given name (or int)
-         * @
+         * @return
+         * @throws EvaluationException
          */
-        private static int GetColumnForTag(ValueEval nameValueEval, TwoDEval db)
+        private static int GetColumnForName(ValueEval nameValueEval, AreaEval db)
         {
-            int resultColumn = -1;
-
-            // Numbers as column indicator are allowed, check that.
-            if (nameValueEval is NumericValueEval)
-            {
-                double doubleResultColumn = ((NumericValueEval)nameValueEval).NumberValue;
-                resultColumn = (int)doubleResultColumn;
-                // Floating comparisions are usually not possible, but should work for 0.0.
-                if (doubleResultColumn - resultColumn != 0.0)
-                    throw new EvaluationException(ErrorEval.VALUE_INVALID);
-                resultColumn -= 1; // Numbers are 1-based not 0-based.
-            }
-            else
-            {
-                resultColumn = GetColumnForName(nameValueEval, db);
-            }
-            return resultColumn;
-        }
-
-        private static int GetColumnForName(ValueEval nameValueEval, TwoDEval db)
-        {
-            String name = GetStringFromValueEval(nameValueEval);
+            String name = OperandResolver.CoerceValueToString(nameValueEval);
             return GetColumnForString(db, name);
         }
 
@@ -207,18 +163,22 @@ namespace NPOI.SS.Formula.Functions
          * @return Corresponding column number.
          * @If it's not possible to turn all headings into strings.
          */
-        private static int GetColumnForString(TwoDEval db, String name)
+        private static int GetColumnForString(AreaEval db, String name)
         {
             int resultColumn = -1;
             int width = db.Width;
             for (int column = 0; column < width; ++column)
             {
-                ValueEval columnNameValueEval = db.GetValue(0, column);
-                if (SolveReference(columnNameValueEval) is BlankEval)
+                ValueEval columnNameValueEval = ResolveReference(db, 0, column);
+                if (columnNameValueEval is BlankEval)
                 {
                     continue;
                 }
-                String columnName = GetStringFromValueEval(columnNameValueEval);
+                if (columnNameValueEval is ErrorEval)
+                {
+                    continue;
+                }
+                String columnName = OperandResolver.CoerceValueToString(columnNameValueEval);
                 if (name.Equals(columnName))
                 {
                     resultColumn = column;
@@ -238,7 +198,7 @@ namespace NPOI.SS.Formula.Functions
          * @If references could not be Resolved or comparison
          * operators and operands didn't match.
          */
-        private static bool FullFillsConditions(TwoDEval db, int row, TwoDEval cdb)
+        private static bool FullFillsConditions(AreaEval db, int row, AreaEval cdb)
         {
             // Only one row must match to accept the input, so rows are ORed.
             // Each row is made up of cells where each cell is a condition,
@@ -254,23 +214,15 @@ namespace NPOI.SS.Formula.Functions
                     // special column that accepts formulas.
                     bool columnCondition = true;
                     ValueEval condition = null;
-                    try
-                    {
-                        // The condition to Apply.
-                        condition = SolveReference(cdb.GetValue(conditionRow, column));
-                    }
-                    catch (Exception)
-                    {
-                        // It might be a special formula, then it is ok if it fails.
-                        columnCondition = false;
-                    }
+
+                    // The condition to apply.
+                    condition = ResolveReference(cdb, conditionRow, column);
+
                     // If the condition is empty it matches.
                     if (condition is BlankEval)
                         continue;
                     // The column in the DB to apply the condition to.
-                    ValueEval targetHeader = SolveReference(cdb.GetValue(0, column));
-                    targetHeader = SolveReference(targetHeader);
-
+                    ValueEval targetHeader = ResolveReference(cdb, 0, column);
 
                     if (!(targetHeader is StringValueEval))
                     {
@@ -284,10 +236,7 @@ namespace NPOI.SS.Formula.Functions
                     if (columnCondition == true)
                     { // normal column condition
                         // Should not throw, Checked above.
-                        ValueEval value = db.GetValue(
-                                row, GetColumnForName(targetHeader, db));
-                        // Must be a string.
-                        String conditionString = GetStringFromValueEval(condition);
+                        ValueEval value = ResolveReference(db, row, GetColumnForName(targetHeader, db));
                         if (!testNormalCondition(value, condition))
                         { 
                             matches = false;
@@ -296,7 +245,8 @@ namespace NPOI.SS.Formula.Functions
                     }
                     else
                     { // It's a special formula condition.
-                        if (string.IsNullOrEmpty(GetStringFromValueEval(condition)))
+                      // TODO: Check whether the condition cell contains a formula and return #VALUE! if it doesn't.
+                        if (string.IsNullOrEmpty(OperandResolver.CoerceValueToString(condition)))
                         {
                             throw new EvaluationException(ErrorEval.VALUE_INVALID);
                         }
@@ -384,7 +334,7 @@ namespace NPOI.SS.Formula.Functions
                     }
                     else
                     { // It's a string.
-                        String valueString = value is BlankEval ? "" : GetStringFromValueEval(value);
+                        String valueString = value is BlankEval ? "" : OperandResolver.CoerceValueToString(value);
                         return stringOrNumber.Equals(valueString);
                     }
                 }
@@ -396,7 +346,7 @@ namespace NPOI.SS.Formula.Functions
                     }
                     else
                     {
-                        String valueString = value is BlankEval ? "" : GetStringFromValueEval(value);
+                        String valueString = value is BlankEval ? "" : OperandResolver.CoerceValueToString(value);
                         return valueString.StartsWith(conditionString);
                     }
                 }
@@ -501,21 +451,23 @@ namespace NPOI.SS.Formula.Functions
             }
         }
         /**
-         * Takes a ValueEval and tries to retrieve a String value from it.
-         * It tries to resolve references if there are any.
+         * Resolve a ValueEval that's in an AreaEval.
          *
-         * @param value ValueEval to retrieve the string from.
-         * @return String corresponding to the given ValueEval.
-         * @If it's not possible to retrieve a String value.
+         * @param db AreaEval from which the cell to resolve is retrieved. 
+         * @param dbRow Relative row in the AreaEval.
+         * @param dbCol Relative column in the AreaEval.
+         * @return A ValueEval that is a NumberEval, StringEval, BoolEval, BlankEval or ErrorEval.
          */
-        private static String GetStringFromValueEval(ValueEval value)
+        private static ValueEval ResolveReference(AreaEval db, int dbRow, int dbCol)
         {
-            value = SolveReference(value);
-            if (value is BlankEval)
-                return "";
-            if (!(value is StringValueEval))
-                throw new EvaluationException(ErrorEval.VALUE_INVALID);
-            return ((StringValueEval)value).StringValue;
+            try
+            {
+                return OperandResolver.GetSingleValue(db.GetValue(dbRow, dbCol), db.FirstRow + dbRow, db.FirstColumn + dbCol);
+            }
+            catch (EvaluationException e)
+            {
+                return e.GetErrorEval();
+            }
         }
     }
 
