@@ -21,6 +21,7 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NUnit.Framework;
+using TestCases;
 using TestCases.SS.UserModel;
 namespace NPOI.XSSF.UserModel
 {
@@ -424,7 +425,9 @@ namespace NPOI.XSSF.UserModel
             wb.Close();
         }
 
-        [Ignore("")]
+        // This test is written as expected-to-fail and should be rewritten
+        // as expected-to-pass when the bug is fixed.
+        //@Ignore("Bug 59733 - shiftRows() causes org.apache.xmlbeans.impl.values.XmlValueDisconnectedException")
         [Test]
         public void Bug59733()
         {
@@ -449,9 +452,55 @@ namespace NPOI.XSSF.UserModel
                 at org.apache.poi.xssf.usermodel.XSSFSheet.shiftRows(XSSFSheet.java:2901)
                 at org.apache.poi.xssf.usermodel.TestXSSFSheetShiftRows.bug59733(TestXSSFSheetShiftRows.java:393)
              */
-            sheet.ShiftRows(3, 3, -3);
+            try
+            {
+                sheet.RemoveRow(sheet.GetRow(0));
+                Assert.AreEqual(1, sheet.GetRow(1).RowNum);
+                POITestCase.TestPassesNow(59733);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+                POITestCase.SkipTest(e);
+            }
 
             workbook.Close();
+        }
+        private static String getCellFormula(ISheet sheet, String address)
+        {
+            CellAddress cellAddress = new CellAddress(address);
+            IRow row = sheet.GetRow(cellAddress.Row);
+            Assert.IsNotNull(row);
+            ICell cell = row.GetCell(cellAddress.Column);
+            Assert.IsNotNull(cell);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            return cell.CellFormula;
+        }
+        // This test is written as expected-to-Assert.Fail and should be rewritten
+        // as expected-to-pass when the bug is fixed.
+        [Test]
+        public void TestSharedFormulas()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("TestShiftRowSharedFormula.xlsx");
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+            Assert.AreEqual("SUM(C2:C4)", getCellFormula(sheet, "C5"));
+            Assert.AreEqual("SUM(D2:D4)", getCellFormula(sheet, "D5"));
+            Assert.AreEqual("SUM(E2:E4)", getCellFormula(sheet, "E5"));
+            sheet.ShiftRows(3, sheet.LastRowNum, 1);
+            try
+            {
+                Assert.AreEqual("SUM(C2:C5)", getCellFormula(sheet, "C6"));
+                Assert.AreEqual("SUM(D2:D5)", getCellFormula(sheet, "D6"));
+                Assert.AreEqual("SUM(E2:E5)", getCellFormula(sheet, "E6"));
+                POITestCase.TestPassesNow(59983);
+            }
+            catch (AssertionException e)
+            {
+                POITestCase.SkipTest(e);
+            }
+
+            wb.Close();
         }
 
     }
