@@ -152,11 +152,11 @@ namespace NPOI.Util
             while (true)
             {
                 int got = stream.Read(b, off + total, len - total - off);
-                total += got;
-                if (stream.Position == stream.Length)
+                if (got <= 0)
                 {
-                    return total;
+                    return (total == 0) ? -1 : total;
                 }
+                total += got;
                 if (total == len)
                 {
                     return total;
