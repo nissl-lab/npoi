@@ -350,7 +350,7 @@ namespace NPOI.Util
 
         public override long Length => inner.Length;
 
-        public override long Position { get => inner.Position; set => throw new NotImplementedException(); }
+        public override long Position { get => inner.Position; set => inner.Position = value; }
 
         public override void Flush()
         {

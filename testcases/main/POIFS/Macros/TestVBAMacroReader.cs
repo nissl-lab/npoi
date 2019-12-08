@@ -97,6 +97,7 @@ namespace NPOI.POIFS.Macros
         {
             FromStream(POIDataSamples.GetSlideShowInstance(), "SimpleMacro.ppt");
         }
+        [Ignore("not support XSLF")]
         [Test]
         public void XSLFfromStream()
         {
@@ -118,6 +119,7 @@ namespace NPOI.POIFS.Macros
         {
             FromStream(POIDataSamples.GetDiagramInstance(), "SimpleMacro.vsd");
         }
+        [Ignore("not support XDGF")]
         [Test]
         public void XDGFfromStream()
         {
@@ -141,6 +143,7 @@ namespace NPOI.POIFS.Macros
         {
             FromFile(POIDataSamples.GetSlideShowInstance(), "SimpleMacro.ppt");
         }
+        [Ignore("not support XSLF")]
         [Test]
         public void XSLFfromFile()
         {
@@ -162,6 +165,7 @@ namespace NPOI.POIFS.Macros
         {
             FromFile(POIDataSamples.GetDiagramInstance(), "SimpleMacro.vsd");
         }
+        [Ignore("not support XDGF")]
         [Test]
         public void XDGFfromFile()
         {
@@ -274,15 +278,15 @@ namespace NPOI.POIFS.Macros
             */
 
             // Check the script one
-            CollectionAssert.Contains(contents, "Module1");
+            POITestCase.AssertContains(contents, "Module1");
             String content = contents["Module1"];
             Assert.IsNotNull(content);
-            CollectionAssert.Contains(content, "Attribute VB_Name = \"Module1\"");
+            POITestCase.AssertContains(content, "Attribute VB_Name = \"Module1\"");
             //assertContains(content, "Attribute TestMacro.VB_Description = \"This is a test macro\"");
 
             // And the macro itself
             String testMacroNoSub = expectedMacroContents[samples];
-            CollectionAssert.Contains(content, testMacroNoSub);
+            POITestCase.AssertContains(content, testMacroNoSub);
         }
 
         [Ignore("by poi")]

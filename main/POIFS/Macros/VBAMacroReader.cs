@@ -61,7 +61,7 @@ namespace NPOI.POIFS.Macros
             }
             catch (OfficeXmlFileException)
             {
-                OpenOOXML(file.Create());
+                OpenOOXML(file.OpenRead());
             }
         }
         public VBAMacroReader(NPOIFSFileSystem fs)

@@ -210,6 +210,13 @@ namespace NPOI.Util
             if (input == null)
                 throw new IOException("Stream closed");
         }
+        /// <summary>
+        /// Pushes back a portion of an array of bytes by copying it to the front
+        /// of the pushback buffer.
+        /// </summary>
+        /// <param name="b">the byte array to push back.</param>
+        /// <param name="off">the start offset of the data.</param>
+        /// <param name="len">the number of bytes to push back.</param>
         public void Unread(byte[] b, int off, int len)
         {
             ensureOpen();
@@ -218,6 +225,7 @@ namespace NPOI.Util
                 throw new IOException("Push back buffer is full");
             }
             pos -= len;
+            Position -= len;
             Array.Copy(b, off, buf, pos, len);
         }
         public override long Skip(long n)

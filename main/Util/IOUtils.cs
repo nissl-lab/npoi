@@ -54,8 +54,9 @@ namespace NPOI.Util
 
             // Wind back those 8 bytes
             if (stream is PushbackInputStream) {
-                PushbackInputStream pin = (PushbackInputStream)stream;
-                pin.Unread(header, 0, read);
+                //PushbackInputStream pin = (PushbackInputStream)stream;
+                //pin.Unread(header, 0, read);
+                stream.Position -= read;
             } else {
                 stream.Reset();
             }
@@ -94,7 +95,7 @@ namespace NPOI.Util
                 {
                     baos.Write(buffer, 0, readBytes);
                 }
-            } while (totalBytes < length && readBytes > -1);
+            } while (totalBytes < length && readBytes > 0);
 
             if (length != Int32.MaxValue && totalBytes < length)
             {

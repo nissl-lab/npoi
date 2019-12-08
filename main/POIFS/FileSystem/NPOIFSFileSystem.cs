@@ -201,18 +201,28 @@ namespace NPOI.POIFS.FileSystem
                 {
                     _data = new FileBackedDataSource(channel, readOnly);
                 }
-                // Get the header
-                byte[] headerBuffer = new byte[POIFSConstants.SMALLER_BIG_BLOCK_SIZE];
-                IOUtils.ReadFully(channel, headerBuffer);
+                try
+                {
+                    // Get the header
+                    byte[] headerBuffer = new byte[POIFSConstants.SMALLER_BIG_BLOCK_SIZE];
+                    IOUtils.ReadFully(channel, headerBuffer);
 
-                // Have the header Processed
-                _header = new HeaderBlock(headerBuffer);
+                    // Have the header Processed
+                    _header = new HeaderBlock(headerBuffer);
 
-                // Now process the various entries
-                //_data = new FileBackedDataSource(channel, readOnly);
-                ReadCoreContents();
-                channel.Close();
-
+                    // Now process the various entries
+                    //_data = new FileBackedDataSource(channel, readOnly);
+                    ReadCoreContents();
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                finally
+                {
+                    if (channel != null)
+                        channel.Close();
+                }
             }
             catch (IOException e)
             {
