@@ -181,7 +181,7 @@ namespace NPOI.SS.Formula.Atp {
         private static void r(Dictionary<String, FreeRefFunction> m, String functionName, FreeRefFunction pFunc)
         {
             FreeRefFunction func = pFunc == null ? new NotImplemented(functionName) : pFunc;
-            m.Add(functionName, func);
+            m[functionName]= func;
         }
 
         public static bool IsATPFunction(String name)
