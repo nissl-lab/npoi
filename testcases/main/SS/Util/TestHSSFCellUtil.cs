@@ -15,10 +15,12 @@
    limitations under the License.
    ==================================================================== */
 
+using NUnit.Framework;
 using TestCases.HSSF;
 
 namespace TestCases.SS.Util
 {
+    [TestFixture]
     public class TestHSSFCellUtil : BaseTestCellUtil
     {
         public TestHSSFCellUtil()

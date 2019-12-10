@@ -16,10 +16,12 @@
    ==================================================================== */
 
 using NPOI.XSSF;
+using NUnit.Framework;
 using TestCases.SS.Util;
 
 namespace Testcases.OOXML.SS.Util
 {
+    [TestFixture]
     public class TestSXSSFCellUtil : BaseTestCellUtil
     {
         public TestSXSSFCellUtil()

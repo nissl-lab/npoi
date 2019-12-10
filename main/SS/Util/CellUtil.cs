@@ -384,7 +384,7 @@ namespace NPOI.SS.Util
                 Dictionary<String, Object> wbStyleMap = GetFormatProperties(wbStyle);
 
                 // the desired style already exists in the workbook. Use the existing style.
-                if (wbStyleMap.Equals(values))
+                if (DictionaryEqual(wbStyleMap, values, null))
                 {
                     newStyle = wbStyle;
                     break;
@@ -400,7 +400,23 @@ namespace NPOI.SS.Util
 
             cell.CellStyle = newStyle;
         }
+        public static bool DictionaryEqual<TKey, TValue>(IDictionary<TKey, TValue> first, 
+            IDictionary<TKey, TValue> second, IEqualityComparer<TValue> valueComparer)
+        {
+            if (first == second) return true;
+            if ((first == null) || (second == null)) return false;
+            if (first.Count != second.Count) return false;
 
+            valueComparer = valueComparer ?? EqualityComparer<TValue>.Default;
+
+            foreach (var kvp in first)
+            {
+                TValue secondValue;
+                if (!second.TryGetValue(kvp.Key, out secondValue)) return false;
+                if (!valueComparer.Equals(kvp.Value, secondValue)) return false;
+            }
+            return true;
+        }
         /**
          * <p>This method attempts to find an existing CellStyle that matches the <code>cell</code>'s
          * current style plus a single style property <code>propertyName</code> with value
@@ -441,9 +457,9 @@ namespace NPOI.SS.Util
 	     * @param propertyValue The value of the property that is to be changed.
 	     * @param cell The cell that needs it's style changes
 	     */
-         [Obsolete("deprecated 3.15-beta2. Use {@link #setCellStyleProperty(Cell, String, Object)} instead.")]
+        [Obsolete("deprecated 3.15-beta2. Use {@link #setCellStyleProperty(Cell, String, Object)} instead.")]
         public static void SetCellStyleProperty(ICell cell, IWorkbook workbook, String propertyName,
-                Object propertyValue)
+               Object propertyValue)
         {
             if (cell.Sheet.Workbook != workbook)
             {
@@ -468,31 +484,31 @@ namespace NPOI.SS.Util
             {
                 if (shortValues.Contains(key))
                 {
-                    dest.Add(key, GetShort(src, key));
+                    dest[key] = GetShort(src, key);
                 }
                 else if (intValues.Contains(key))
                 {
-                    dest.Add(key, GetInt(src, key));
+                    dest[key] = GetInt(src, key);
                 }
                 else if (booleanValues.Contains(key))
                 {
-                    dest.Add(key, GetBoolean(src, key));
+                    dest[key] = GetBoolean(src, key);
                 }
                 else if (borderTypeValues.Contains(key))
                 {
-                    dest.Add(key, GetBorderStyle(src, key));
+                    dest[key] = GetBorderStyle(src, key);
                 }
                 else if (ALIGNMENT.Equals(key))
                 {
-                    dest.Add(key, GetHorizontalAlignment(src, key));
+                    dest[key] = GetHorizontalAlignment(src, key);
                 }
                 else if (VERTICAL_ALIGNMENT.Equals(key))
                 {
-                    dest.Add(key, GetVerticalAlignment(src, key));
+                    dest[key] = GetVerticalAlignment(src, key);
                 }
                 else if (FILL_PATTERN.Equals(key))
                 {
-                    dest.Add(key, GetFillPattern(src, key));
+                    dest[key] = GetFillPattern(src, key);
                 }
                 else
                 {
@@ -534,7 +550,7 @@ namespace NPOI.SS.Util
             Put(properties, LOCKED, style.IsLocked);
             Put(properties, RIGHT_BORDER_COLOR, style.RightBorderColor);
             Put(properties, ROTATION, style.Rotation);
-            Put(properties, SHRINK_TO_FIT, style.ShrinkToFit);
+            //Put(properties, SHRINK_TO_FIT, style.ShrinkToFit);
             Put(properties, TOP_BORDER_COLOR, style.TopBorderColor);
             Put(properties, WRAP_TEXT, style.WrapText);
             return properties;
@@ -568,7 +584,7 @@ namespace NPOI.SS.Util
             style.IsLocked = GetBoolean(properties, LOCKED);
             style.RightBorderColor = GetShort(properties, RIGHT_BORDER_COLOR);
             style.Rotation = GetShort(properties, ROTATION);
-            style.ShrinkToFit = GetBoolean(properties, SHRINK_TO_FIT);
+            //style.ShrinkToFit = GetBoolean(properties, SHRINK_TO_FIT);
             style.TopBorderColor = GetShort(properties, TOP_BORDER_COLOR);
             style.WrapText = GetBoolean(properties, WRAP_TEXT);
         }
@@ -602,7 +618,7 @@ namespace NPOI.SS.Util
             Object value = properties[name];
             if (Number.IsNumber(value))
             {
-                return (int)value;
+                return int.Parse(value.ToString());
             }
             return 0;
         }
@@ -623,14 +639,14 @@ namespace NPOI.SS.Util
                 border = (BorderStyle)value;
             }
             // @deprecated 3.15 beta 2. getBorderStyle will only work on BorderStyle enums instead of codes in the future.
-            else if (value is short)
+            else if (value is short || value is int)
             {
                 //if (log.check(POILogger.WARN))
                 //{
                 //    log.log(POILogger.WARN, "Deprecation warning: CellUtil properties map uses Short values for "
                 //            + name + ". Should use BorderStyle enums instead.");
                 //}
-                short code = ((short)value);
+                short code = short.Parse(value.ToString());
                 border = (BorderStyle)code;
             }
             else if (value == null)

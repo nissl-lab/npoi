@@ -23,18 +23,18 @@ namespace TestCases.SS.Util
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NUnit.Framework;
+    using TestCases.HSSF;
     using TestCases.SS;
 
-    /**
-    * Tests Spreadsheet CellUtil
-    *
-    * @see NPOI.SS.Util.CellUtil
-    */
-    [TestFixture]
+    
     public class BaseTestCellUtil
     {
         protected ITestDataProvider _testDataProvider;
+        public BaseTestCellUtil()
+            : this(HSSFITestDataProvider.Instance)
+        {
 
+        }
         protected BaseTestCellUtil(ITestDataProvider testDataProvider)
         {
             _testDataProvider = testDataProvider;

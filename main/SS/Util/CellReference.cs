@@ -456,7 +456,7 @@ namespace NPOI.SS.Util
                         continue;
                     }
                 }
-                throw new Exception("Bad sheet name quote escaping: (" + reference + ")");
+                throw new ArgumentException("Bad sheet name quote escaping: (" + reference + ")");
             }
             return sb.ToString();
         }
