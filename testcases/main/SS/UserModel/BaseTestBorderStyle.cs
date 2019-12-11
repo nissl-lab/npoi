@@ -29,7 +29,7 @@ namespace TestCases.SS.UserModel
     /**
      * Tests of {@link BorderStyle}
      */
-    [TestFixture]
+    [TestFixture, Explicit]
     public class BaseTestBorderStyle
     {
 

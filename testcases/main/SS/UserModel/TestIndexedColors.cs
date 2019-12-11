@@ -15,8 +15,9 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.UserModel
+namespace TestCases.SS.UserModel
 {
+    using NPOI.SS.UserModel;
     using NUnit.Framework;
     using System;
 

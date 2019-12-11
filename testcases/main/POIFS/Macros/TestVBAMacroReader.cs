@@ -15,9 +15,10 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.POIFS.Macros
+namespace TestCases.POIFS.Macros
 {
     using NPOI.POIFS.FileSystem;
+    using NPOI.POIFS.Macros;
     using NPOI.Util;
     using NUnit.Framework;
     using System;

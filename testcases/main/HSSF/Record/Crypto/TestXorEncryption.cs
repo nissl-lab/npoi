@@ -15,10 +15,10 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.Record.Crypto
+namespace TestCases.HSSF.Record.Crypto
 {
     using System;
-
+    using NPOI.HSSF.Record.Crypto;
     using NPOI.HSSF.UserModel;
     using NPOI.POIFS.Crypt;
     using NPOI.POIFS.FileSystem;

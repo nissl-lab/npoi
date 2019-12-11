@@ -15,8 +15,9 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.Util
+namespace TestCases.Util
 {
+    using NPOI.Util;
     using NUnit.Framework;
     using System;
     using System.IO;

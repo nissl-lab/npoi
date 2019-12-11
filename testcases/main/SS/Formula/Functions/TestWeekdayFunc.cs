@@ -15,11 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Functions
+namespace TestCases.SS.Formula.Functions
 {
     using System;
 
     using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
     using NUnit.Framework;
 
     [TestFixture]
