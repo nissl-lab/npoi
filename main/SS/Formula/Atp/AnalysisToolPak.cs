@@ -59,7 +59,11 @@ namespace NPOI.SS.Formula.Atp {
             // if you save such a .xlsx workbook as .xls
             if (name.StartsWith("_xlfn.")) name = name.Substring(6);
 
-            return (FreeRefFunction)_functionsByName[name.ToUpper()];
+            string key = name.ToUpper();
+            if (_functionsByName.ContainsKey(key))
+                return (FreeRefFunction)_functionsByName[key];
+
+            return null;
         }
 
         private static Dictionary<String, FreeRefFunction> CreateFunctionsMap()
