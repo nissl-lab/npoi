@@ -37,7 +37,7 @@ namespace NPOI.HSSF.Record.Aggregates
      * @author Jason Height (jheight at chariot dot net dot au)
      */
 
-    public class ValueRecordsAggregate
+    public class ValueRecordsAggregate : IEnumerable<CellValueRecordInterface>
     {
         const int MAX_ROW_INDEX = 0XFFFF;
         const int INDEX_NOT_SET = -1;
@@ -372,6 +372,11 @@ namespace NPOI.HSSF.Record.Aggregates
             return new ValueEnumerator(ref records);
         }
 
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
         private class ValueEnumerator : IEnumerator<CellValueRecordInterface>
         {
             short nextColumn = -1;
@@ -444,7 +449,7 @@ namespace NPOI.HSSF.Record.Aggregates
 
             public void Dispose()
             {
-                throw new NotImplementedException();
+                this.records = null;
             }
         }
     }
