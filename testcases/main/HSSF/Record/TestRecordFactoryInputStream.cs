@@ -63,6 +63,7 @@ namespace TestCases.HSSF.Record
          * Makes sure that a default password mismatch condition is represented with {@link EncryptedDocumentException}
          */
         [Test]
+        [Ignore("not implemented")]
         public void TestDefaultPassword()
         {
             // This encodng depends on docId, password and stream position
@@ -105,6 +106,7 @@ namespace TestCases.HSSF.Record
          * Makes sure that an incorrect user supplied password condition is represented with {@link EncryptedDocumentException}
          */
         [Test]
+        [Ignore("not implemented")]
         public void TestSuppliedPassword()
         {
             // This encodng depends on docId, password and stream position
