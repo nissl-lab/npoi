@@ -79,7 +79,7 @@ namespace NPOI.HSSF.Extractor
                 }
             }
 
-            FileStream biffStream = f.Create();
+            FileStream biffStream = f.OpenRead();
             try
             {
                 Open(biffStream);

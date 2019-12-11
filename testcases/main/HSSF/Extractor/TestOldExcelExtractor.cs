@@ -37,9 +37,9 @@ namespace TestCases.HSSF.Extractor
     {
         private static OldExcelExtractor CreateExtractor(String sampleFileName)
         {
-            Stream is1 = HSSFTestDataSamples.OpenSampleFileStream(sampleFileName);
+            FileInfo file = HSSFTestDataSamples.GetSampleFile(sampleFileName);
 
-            return new OldExcelExtractor(is1);
+            return new OldExcelExtractor(file);
         }
 
         [Test]
@@ -250,7 +250,7 @@ namespace TestCases.HSSF.Extractor
                 extractor.Close();
                 Assert.Fail("Should catch Exception here");
             }
-            catch (EmptyFileException)
+            catch (FileNotFoundException)
             {
                 // expected here
             }
@@ -260,7 +260,7 @@ namespace TestCases.HSSF.Extractor
         public void TestInputStream()
         {
             FileInfo file = HSSFTestDataSamples.GetSampleFile("testEXCEL_3.xls");
-            Stream stream = file.Create();
+            Stream stream = file.OpenRead();
             try
             {
                 OldExcelExtractor extractor = new OldExcelExtractor(stream);
@@ -277,7 +277,7 @@ namespace TestCases.HSSF.Extractor
         public void TestInputStreamNPOIHeader()
         {
             FileInfo file = HSSFTestDataSamples.GetSampleFile("FormulaRefs.xls");
-            Stream stream = file.Create();
+            Stream stream = file.OpenRead();
             try
             {
                 OldExcelExtractor extractor = new OldExcelExtractor(stream);
