@@ -33,6 +33,7 @@ namespace TestCases.SS.UserModel
      * Common superclass for testing implementatiosn of
      *  {@link NPOI.SS.usermodel.Cell}
      */
+    [TestFixture, Explicit]
     public class BaseTestCell
     {
 
@@ -205,7 +206,7 @@ namespace TestCases.SS.UserModel
             IRow r;
             ICell c;
             // B1
-            r = s.CreateRow(1);
+            r = s.CreateRow(0);
             c = r.CreateCell(1);
             Assert.AreEqual(0, c.RowIndex);
             Assert.AreEqual(1, c.ColumnIndex);
@@ -305,16 +306,9 @@ namespace TestCases.SS.UserModel
             DateTime c = new DateTime(2010, 01, 02, 00, 00, 00);
             r.CreateCell(7).SetCellValue(c);
             ICellStyle dateStyle = wb1.CreateCellStyle();
-            short formatId = wb1.GetCreationHelper().CreateDataFormat().GetFormat("m/d/yy h:mm"); // any date format will do
+            short formatId = wb1.GetCreationHelper().CreateDataFormat().GetFormat("dd-MMM-yyyy"); // m/d/yy h:mm any date format will do
             dateStyle.DataFormat = formatId;
             r.GetCell(7).CellStyle = dateStyle;
-
-            Assert.AreEqual("TRUE", r.GetCell(0).ToString(), "Boolean");
-            Assert.AreEqual("1.5", r.GetCell(1).ToString(), "Numeric");
-            Assert.AreEqual("Astring", r.GetCell(2).ToString(), "String");
-            Assert.AreEqual("#DIV/0!", r.GetCell(3).ToString(), "Error");
-            Assert.AreEqual("A1+B1", r.GetCell(4).ToString(), "Formula");
-            Assert.AreEqual("", r.GetCell(5).ToString(), "Blank");
 
             Assert.AreEqual("FALSE", r.GetCell(0).ToString(), "Boolean");
             Assert.AreEqual("TRUE", r.GetCell(1).ToString(), "Boolean");
