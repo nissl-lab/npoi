@@ -244,7 +244,7 @@ namespace NPOI.HSSF.UserModel
                     ftCf.Flags = (/*setter*/FtCfSubRecord.BITMAP_BIT);
                     break;
                 default:
-                    throw new IllegalStateException("Invalid picture type: " + pictData.Format);
+                    throw new InvalidOperationException("Invalid picture type: " + pictData.Format);
             }
             obj.AddSubRecord(ftCf);
             // FtPioGrbit (pictFlags)

@@ -236,8 +236,8 @@ namespace NPOI.SS.UserModel
         /// Verify that merged regions do not intersect multi-cell array formulas and
         /// no merged regions intersect another merged region in this sheet.
         /// </summary>
-        /// <exception cref="NPOI.Util.IllegalStateException">if region intersects with a multi-cell array formula</exception>
-        /// <exception cref="NPOI.Util.IllegalStateException">if at least one region intersects with another merged region in this sheet</exception>
+        /// <exception cref="NPOI.Util.InvalidOperationException">if region intersects with a multi-cell array formula</exception>
+        /// <exception cref="NPOI.Util.InvalidOperationException">if at least one region intersects with another merged region in this sheet</exception>
         void ValidateMergedRegions();
         /// <summary>
         /// Determine whether printed output for this sheet will be horizontally centered.

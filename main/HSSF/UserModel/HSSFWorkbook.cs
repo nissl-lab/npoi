@@ -1300,7 +1300,7 @@ namespace NPOI.HSSF.UserModel
          * Write out this workbook to the currently open {@link File} via the
          *  writeable {@link POIFSFileSystem} it was opened as. 
          *  
-         * This will fail (with an {@link IllegalStateException} if the
+         * This will fail (with an {@link InvalidOperationException} if the
          *  Workbook was opened read-only, opened from an {@link InputStream}
          *   instead of a File, or if this is not the root document. For those cases, 
          *   you must use {@link #write(OutputStream)} or {@link #write(File)} to 
@@ -1924,7 +1924,7 @@ namespace NPOI.HSSF.UserModel
                     blipRecord.Options = HSSFPictureData.MSOBI_DIB;
                     break;
                 default:
-                    throw new IllegalStateException("Unexpected picture format: " + format);
+                    throw new InvalidOperationException("Unexpected picture format: " + format);
             }
 
             EscherBSERecord r = new EscherBSERecord();

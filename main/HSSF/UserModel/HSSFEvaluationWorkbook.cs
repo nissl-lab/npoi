@@ -322,7 +322,7 @@ using NPOI.Util;
         }
         public ITable GetTable(String name)
         {
-            throw new IllegalStateException("XSSF-style tables are not supported for HSSF");
+            throw new InvalidOperationException("XSSF-style tables are not supported for HSSF");
         }
     }
 }

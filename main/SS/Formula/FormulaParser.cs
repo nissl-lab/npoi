@@ -155,7 +155,7 @@ namespace NPOI.SS.Formula
         {
             Ptg[] arr = FormulaParser.Parse(tableText, workbook, 0, 0, rowIndex);
             if (arr.Length != 1 || !(arr[0] is Area3DPxg) ) {
-                throw new IllegalStateException("Illegal structured reference");
+                throw new InvalidOperationException("Illegal structured reference");
             }
             return (Area3DPxg)arr[0];
         }
@@ -926,7 +926,7 @@ namespace NPOI.SS.Formula
             {
                 if (startColumnName == null || endColumnName == null)
                 {
-                    throw new IllegalStateException("Fatal error");
+                    throw new InvalidOperationException("Fatal error");
                 }
                 int startIdx = tbl.FindColumnIndex(startColumnName);
                 int endIdx = tbl.FindColumnIndex(endColumnName);
@@ -942,7 +942,7 @@ namespace NPOI.SS.Formula
             {
                 if (startColumnName == null)
                 {
-                    throw new IllegalStateException("Fatal error");
+                    throw new InvalidOperationException("Fatal error");
                 }
                 int idx = tbl.FindColumnIndex(startColumnName);
                 if (idx == -1)

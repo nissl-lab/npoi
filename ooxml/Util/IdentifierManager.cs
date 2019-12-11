@@ -153,7 +153,7 @@ namespace NPOI.Util
 
         /**
          * @return a new identifier. 
-         * @throws IllegalStateException if no more identifiers are available, then an Exception is raised.
+         * @throws InvalidOperationException if no more identifiers are available, then an Exception is raised.
          */
         public long ReserveNew()
         {

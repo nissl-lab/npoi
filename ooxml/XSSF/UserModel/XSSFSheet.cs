@@ -305,7 +305,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="region">region to merge</param>
         /// <returns>index of this region</returns>
         /// <exception cref="System.ArgumentException">if region contains fewer than 2 cells</exception>
-        /// <exception cref="IllegalStateException">if region intersects with an existing merged region
+        /// <exception cref="InvalidOperationException">if region intersects with an existing merged region
         /// or multi-cell array formula on this sheet</exception>
         public int AddMergedRegion(CellRangeAddress region)
         {
@@ -332,7 +332,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="region">region (rowfrom/colfrom-rowto/colto) to merge</param>
         /// <param name="validate">whether to validate merged region</param>
         /// <returns>index of this region</returns>
-        /// <exception cref="IllegalStateException">if region intersects with a multi-cell array formula or
+        /// <exception cref="InvalidOperationException">if region intersects with a multi-cell array formula or
         /// if region intersects with an existing region on this sheet</exception>
         /// <exception cref="System.ArgumentException">if region contains fewer than 2 cells</exception>
         private int AddMergedRegion(CellRangeAddress region, bool validate)
@@ -361,7 +361,7 @@ namespace NPOI.XSSF.UserModel
          * Verify that the candidate region does not intersect with an existing multi-cell array formula in this sheet
          *
          * @param region
-         * @throws IllegalStateException if candidate region intersects an existing array formula in this sheet
+         * @throws InvalidOperationException if candidate region intersects an existing array formula in this sheet
          */
         private void ValidateArrayFormulas(CellRangeAddress region)
         {
@@ -388,7 +388,7 @@ namespace NPOI.XSSF.UserModel
                         {
                             String msg = "The range " + region.FormatAsString() + " intersects with a multi-cell array formula. " +
                                     "You cannot merge cells of an array.";
-                            throw new IllegalStateException(msg);
+                            throw new InvalidOperationException(msg);
                         }
                     }
                 }
@@ -400,7 +400,7 @@ namespace NPOI.XSSF.UserModel
          * Verify that none of the merged regions intersect a multi-cell array formula in this sheet
          *
          * @param region
-         * @throws IllegalStateException if candidate region intersects an existing array formula in this sheet
+         * @throws InvalidOperationException if candidate region intersects an existing array formula in this sheet
          */
         private void CheckForMergedRegionsIntersectingArrayFormulas()
         {
@@ -414,7 +414,7 @@ namespace NPOI.XSSF.UserModel
          * Verify that candidate region does not intersect with an existing merged region in this sheet
          *
          * @param candidateRegion
-         * @throws IllegalStateException if candidate region intersects an existing merged region in this sheet
+         * @throws InvalidOperationException if candidate region intersects an existing merged region in this sheet
          */
         private void ValidateMergedRegions(CellRangeAddress candidateRegion)
         {
@@ -422,7 +422,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (existingRegion.Intersects(candidateRegion))
                 {
-                    throw new IllegalStateException("Cannot add merged region " + candidateRegion.FormatAsString() +
+                    throw new InvalidOperationException("Cannot add merged region " + candidateRegion.FormatAsString() +
                             " to sheet because it overlaps with an existing merged region (" + existingRegion.FormatAsString() + ").");
                 }
             }
@@ -431,7 +431,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Verify that no merged regions intersect another merged region in this sheet.
          *
-         * @throws IllegalStateException if at least one region intersects with another merged region in this sheet
+         * @throws InvalidOperationException if at least one region intersects with another merged region in this sheet
          */
         private void CheckForIntersectingMergedRegions()
         {
@@ -447,7 +447,7 @@ namespace NPOI.XSSF.UserModel
                         String msg = "The range " + region.FormatAsString() +
                                     " intersects with another merged region " +
                                     other.FormatAsString() + " in this sheet";
-                        throw new IllegalStateException(msg);
+                        throw new InvalidOperationException(msg);
                     }
                 }
             }
@@ -457,8 +457,8 @@ namespace NPOI.XSSF.UserModel
          * Verify that merged regions do not intersect multi-cell array formulas and
          * no merged regions intersect another merged region in this sheet.
          *
-         * @throws IllegalStateException if region intersects with a multi-cell array formula
-         * @throws IllegalStateException if at least one region intersects with another merged region in this sheet
+         * @throws InvalidOperationException if region intersects with a multi-cell array formula
+         * @throws InvalidOperationException if at least one region intersects with another merged region in this sheet
          */
         public void ValidateMergedRegions()
         {
@@ -1397,7 +1397,7 @@ namespace NPOI.XSSF.UserModel
          * faster than calling {@link #getMergedRegion(int)} each time.
          *
          * @return the list of merged regions
-         * @throws IllegalStateException if this worksheet does not contain merged regions
+         * @throws InvalidOperationException if this worksheet does not contain merged regions
          */
 
         public List<CellRangeAddress> MergedRegions

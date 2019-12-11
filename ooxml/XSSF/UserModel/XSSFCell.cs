@@ -534,7 +534,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @param fpb evaluation workbook for reuse, if available, or null to create a new one as needed
          * @return a formula for the cell
-         * @throws IllegalStateException if the cell type returned by {@link #getCellType()} is not CELL_TYPE_FORMULA
+         * @throws InvalidOperationException if the cell type returned by {@link #getCellType()} is not CELL_TYPE_FORMULA
          */
         protected internal String GetCellFormula(XSSFEvaluationWorkbook fpb)
         {

@@ -110,7 +110,7 @@ namespace NPOI.POIFS.EventFileSystem
          * @param listener the listener to be registered
          *
          * @exception NullPointerException if listener is null
-         * @exception IllegalStateException if read() has already been
+         * @exception InvalidOperationException if read() has already been
          *                                  called
          */
 
@@ -136,7 +136,7 @@ namespace NPOI.POIFS.EventFileSystem
          *
          * @exception NullPointerException if listener is null or name is
          *                                 null or empty
-         * @exception IllegalStateException if read() has already been
+         * @exception InvalidOperationException if read() has already been
          *                                  called
          */
 
@@ -157,7 +157,7 @@ namespace NPOI.POIFS.EventFileSystem
          *
          * @exception NullPointerException if listener is null or name is
          *                                 null or empty
-         * @exception IllegalStateException if read() has already been
+         * @exception InvalidOperationException if read() has already been
          *                                  called
          */
 

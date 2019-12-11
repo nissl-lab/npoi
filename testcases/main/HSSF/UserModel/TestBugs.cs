@@ -2152,7 +2152,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         /**
-         * IllegalStateException received when creating Data validation in sheet with macro
+         * InvalidOperationException received when creating Data validation in sheet with macro
          */
         [Test]
         public void Test50020()
@@ -2804,7 +2804,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook workbook = OpenSample("49529.xls");
             workbook.GetSheetAt(0).CreateDrawingPatriarch();
             // prior to the fix the line below failed with
-            // java.lang.IllegalStateException: EOF - next record not available
+            // java.lang.InvalidOperationException: EOF - next record not available
             workbook.CloneSheet(0);
 
             // make sure we are still readable
@@ -3410,7 +3410,7 @@ namespace TestCases.HSSF.UserModel
                 Assert.IsNull(cell.CellFormula);
                 Assert.Fail("Should throw an exception here");
             }
-            catch (IllegalStateException e)
+            catch (InvalidOperationException e)
             {
                 // expected here
             }

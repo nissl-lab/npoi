@@ -691,7 +691,7 @@ namespace NPOI.SS.Format
                             break;
 
                         default:
-                            throw new IllegalStateException("Unknown op: " + nextChange.Op);
+                            throw new InvalidOperationException("Unknown op: " + nextChange.Op);
                     }
                     adjust += output.Length - lenBefore;
 

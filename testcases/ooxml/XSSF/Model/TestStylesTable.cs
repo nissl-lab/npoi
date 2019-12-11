@@ -335,7 +335,7 @@ namespace NPOI.XSSF.Model
                 try
                 {
                     styles.PutNumberFormat("\"test \"0");
-                    Assert.Fail("Expected to raise IllegalStateException");
+                    Assert.Fail("Expected to raise InvalidOperationException");
                 }
                 catch (InvalidOperationException e)
                 {
@@ -369,7 +369,7 @@ namespace NPOI.XSSF.Model
                 try
                 {
                     styles.MaxNumberOfDataFormats = (0);
-                    Assert.Fail("Expected to raise IllegalStateException");
+                    Assert.Fail("Expected to raise InvalidOperationException");
                 }
                 catch (InvalidOperationException e)
                 {

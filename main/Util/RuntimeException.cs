@@ -25,25 +25,25 @@ namespace NPOI.Util
         }
     }
 
-    public class IllegalStateException : RuntimeException
-    {
-        public IllegalStateException()
-            : base()
-        {
+    //public class InvalidOperationException : RuntimeException
+    //{
+    //    public InvalidOperationException()
+    //        : base()
+    //    {
 
-        }
-        public IllegalStateException(string message)
-            : base(message)
-        {
-        }
-        public IllegalStateException(Exception e)
-            : base("", e)
-        {
-        }
-        public IllegalStateException(string exception, Exception ex)
-            : base(exception, ex)
-        {
+    //    }
+    //    public InvalidOperationException(string message)
+    //        : base(message)
+    //    {
+    //    }
+    //    public InvalidOperationException(Exception e)
+    //        : base("", e)
+    //    {
+    //    }
+    //    public InvalidOperationException(string exception, Exception ex)
+    //        : base(exception, ex)
+    //    {
 
-        }
-    }
+    //    }
+    //}
 }

@@ -88,7 +88,7 @@ namespace TestCases.HSSF.UserModel
             {
                 fe.EvaluateInCell(cellB1);
             }
-            catch (IllegalStateException e)
+            catch (InvalidOperationException e)
             {
                 if (e.Message.Equals("Cannot get a numeric value from a error formula cell"))
                 {

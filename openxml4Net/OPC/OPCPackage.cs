@@ -190,9 +190,9 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     pack.Close();
                 }
-                catch (IOException)
+                catch (IOException ex)
                 {
-                    throw new IllegalStateException(e);
+                    throw new InvalidOperationException(ex.Message, e);
                 }
                 throw e;
             }
@@ -202,9 +202,9 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     pack.Close();
                 }
-                catch (IOException)
+                catch (IOException ex)
                 {
-                    throw new IllegalStateException(e);
+                    throw new InvalidOperationException(ex.Message, e);
                 }
                 throw e;
             }
@@ -296,9 +296,9 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     pack.Close();
                 }
-                catch (IOException)
+                catch (IOException ex)
                 {
-                    throw new IllegalStateException(e);
+                    throw new InvalidOperationException(ex.Message, e);
                 }
                 throw e;
             }
@@ -308,9 +308,9 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     pack.Close();
                 }
-                catch (IOException)
+                catch (IOException ex)
                 {
-                    throw new IllegalStateException(e);
+                    throw new InvalidOperationException(ex.Message, e);
                 }
                 throw e;
             }

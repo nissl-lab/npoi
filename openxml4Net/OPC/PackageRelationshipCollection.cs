@@ -381,7 +381,7 @@ namespace NPOI.OpenXml4Net.OPC
                     try
                     {
                         // when parsing of the given uri fails, we can either
-                        // ignore this relationship, which leads to IllegalStateException
+                        // ignore this relationship, which leads to InvalidOperationException
                         // later on, or use a dummy value and thus enable processing of the
                         // package
                         target = PackagingUriHelper.ToUri(value);

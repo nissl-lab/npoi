@@ -1175,7 +1175,7 @@ namespace TestCases.SS.UserModel
                 var tmp = cn.RichStringCellValue;
                 Assert.Fail();
             }
-            catch (IllegalStateException) { }
+            catch (InvalidOperationException) { }
 
             Assert.AreEqual("Testing", cs.StringCellValue);
             try
@@ -1183,7 +1183,7 @@ namespace TestCases.SS.UserModel
                 var tmp = cs.NumericCellValue;
                 Assert.Fail();
             }
-            catch (IllegalStateException) { }
+            catch (InvalidOperationException) { }
 
             Assert.AreEqual(1.2, cfn.NumericCellValue, 0);
             try
@@ -1191,7 +1191,7 @@ namespace TestCases.SS.UserModel
                 var tmp = cfn.RichStringCellValue;
                 Assert.Fail();
             }
-            catch (IllegalStateException) { }
+            catch (InvalidOperationException) { }
 
             Assert.AreEqual("Testing", cfs.StringCellValue);
             try
@@ -1199,7 +1199,7 @@ namespace TestCases.SS.UserModel
                 var tmp = cfs.NumericCellValue;
                 Assert.Fail();
             }
-            catch (IllegalStateException) { }
+            catch (InvalidOperationException) { }
 
             wb.Close();
         }
@@ -1310,9 +1310,9 @@ namespace TestCases.SS.UserModel
                 {
                     style = wb.CreateCellStyle();
                 }
-                catch (IllegalStateException e)
+                catch (InvalidOperationException e)
                 {
-                    throw new IllegalStateException("Failed for row " + i, e);
+                    throw new InvalidOperationException("Failed for row " + i, e);
                 }
                 style.Alignment = HorizontalAlignment.Right;
                 if ((wb is HSSFWorkbook))
@@ -1340,7 +1340,7 @@ namespace TestCases.SS.UserModel
                 wb.CreateCellStyle();
                 Assert.Fail("Should Assert.Fail after " + maxStyles + " styles, but did not Assert.Fail");
             }
-            catch (IllegalStateException)
+            catch (InvalidOperationException)
             {
                 // expected here
             }

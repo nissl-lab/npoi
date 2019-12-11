@@ -400,7 +400,7 @@ namespace NPOI.HSSF.UserModel
                     _record = errRec;
                     break;
                 default:
-                    throw new IllegalStateException("Invalid cell type: " + cellType);
+                    throw new InvalidOperationException("Invalid cell type: " + cellType);
             }
             if (cellType != this.cellType &&
                 this.cellType != CellType.Unknown)  // Special Value to indicate an Uninitialized Cell

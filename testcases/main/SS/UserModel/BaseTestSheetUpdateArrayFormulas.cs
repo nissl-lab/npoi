@@ -546,7 +546,7 @@ namespace TestCases.SS.UserModel
                     sheet.AddMergedRegion(cra);
                     Assert.Fail("expected exception with ref " + ref1);
                 }
-                catch (IllegalStateException e)
+                catch (InvalidOperationException e)
                 {
                     String msg = "The range " + cra.FormatAsString() + " intersects with a multi-cell array formula. You cannot merge cells of an array.";
                     Assert.AreEqual(msg, e.Message);
@@ -568,7 +568,7 @@ namespace TestCases.SS.UserModel
                     expectedNumMergedRegions++;
                     Assert.AreEqual(expectedNumMergedRegions, sheet.NumMergedRegions);
                 }
-                catch (IllegalStateException e)
+                catch (InvalidOperationException e)
                 {
                     Assert.Fail("did not expect exception with ref: " + ref1 +"\n" + e.Message);
                 }
@@ -651,7 +651,7 @@ namespace TestCases.SS.UserModel
                 sheet.SetArrayFormula("SUM(A1:A3)",  arrayFormula);
                 Assert.Fail("expected exception: should not be able to create an array formula that intersects with a merged region");
             }
-            catch (IllegalStateException e)
+            catch (InvalidOperationException e)
             {
                 // expected
             }

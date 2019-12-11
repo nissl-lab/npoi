@@ -383,9 +383,9 @@ namespace TestCases.SS.UserModel
             {
                 patriarch.CreateCellComment(factory.CreateClientAnchor());
                 _testDataProvider.WriteOutAndReadBack(wb);
-                Assert.Fail("Expected IllegalStateException(found multiple cell comments for cell $A$1");
+                Assert.Fail("Expected InvalidOperationException(found multiple cell comments for cell $A$1");
             }
-            catch (IllegalStateException e)
+            catch (InvalidOperationException e)
             {
                 // HSSFWorkbooks fail when writing out workbook
                 Assert.AreEqual(e.Message, "found multiple cell comments for cell A1");

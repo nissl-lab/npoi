@@ -2022,7 +2022,7 @@ namespace NPOI.HSSF.Model
                     retval.FillPaletteOptions=(short)0x20c0;
                     break;
                 default:
-                    throw new IllegalStateException("Unrecognized format id: " + id);
+                    throw new InvalidOperationException("Unrecognized format id: " + id);
             }
             return retval;
         }
@@ -2134,7 +2134,7 @@ namespace NPOI.HSSF.Model
                     retval.OutlineStyleLevel= (unchecked((byte)0xffffffff));
                     break;
                 default:
-                    throw new IllegalStateException("Unrecognized style id: " + id);
+                    throw new InvalidOperationException("Unrecognized style id: " + id);
             }
             return retval;
         }

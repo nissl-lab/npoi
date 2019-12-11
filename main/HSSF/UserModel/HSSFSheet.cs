@@ -638,7 +638,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="region">region to merge</param>
         /// <returns>index of this region</returns>
         /// <exception cref="ArgumentException">if region contains fewer than 2 cells</exception>
-        /// <exception cref="IllegalStateException">if region intersects with an existing merged region
+        /// <exception cref="InvalidOperationException">if region intersects with an existing merged region
         /// or multi-cell array formula on this sheet</exception>
         public int AddMergedRegion(CellRangeAddress region)
         {
@@ -666,7 +666,7 @@ namespace NPOI.HSSF.UserModel
         /// Verify that merged regions do not intersect multi-cell array formulas and
         /// no merged regions intersect another merged region in this sheet.
         /// </summary>
-        /// <exception cref="IllegalStateException">if region intersects with an existing merged region
+        /// <exception cref="InvalidOperationException">if region intersects with an existing merged region
         /// or multi-cell array formula on this sheet</exception>
         public void ValidateMergedRegions()
         {
@@ -692,10 +692,10 @@ namespace NPOI.HSSF.UserModel
             if (validate)
             {
                 region.Validate(SpreadsheetVersion.EXCEL97);
-                // throw IllegalStateException if the argument CellRangeAddress intersects with
+                // throw InvalidOperationException if the argument CellRangeAddress intersects with
                 // a multi-cell array formula defined in this sheet
                 ValidateArrayFormulas(region);
-                // Throw IllegalStateException if the argument CellRangeAddress intersects with
+                // Throw InvalidOperationException if the argument CellRangeAddress intersects with
                 // a merged region already in this sheet
                 ValidateMergedRegions(region);
             }
@@ -741,7 +741,7 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Verify that none of the merged regions intersect a multi-cell array formula in this sheet
         /// </summary>
-        /// <exception cref="NPOI.Util.IllegalStateException">if candidate region intersects an existing array formula in this sheet</exception>
+        /// <exception cref="NPOI.Util.InvalidOperationException">if candidate region intersects an existing array formula in this sheet</exception>
         private void CheckForMergedRegionsIntersectingArrayFormulas()
         {
             foreach (CellRangeAddress region in MergedRegions)
@@ -765,7 +765,7 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Verify that no merged regions intersect another merged region in this sheet.
         /// </summary>
-        /// <exception cref="IllegalStateException">if at least one region intersects with another merged region in this sheet</exception>
+        /// <exception cref="InvalidOperationException">if at least one region intersects with another merged region in this sheet</exception>
         private void CheckForIntersectingMergedRegions()
         {
             List<CellRangeAddress> regions = MergedRegions;
@@ -780,7 +780,7 @@ namespace NPOI.HSSF.UserModel
                         String msg = "The range " + region.FormatAsString() +
                                     " intersects with another merged region " +
                                     other.FormatAsString() + " in this sheet";
-                        throw new IllegalStateException(msg);
+                        throw new InvalidOperationException(msg);
                     }
                 }
             }
@@ -1573,7 +1573,7 @@ namespace NPOI.HSSF.UserModel
                 HSSFRow row = (HSSFRow)GetRow(rowNum);
 
                 // notify all cells in this row that we are going to shift them,
-                // it can throw IllegalStateException if the operation is not allowed, for example,
+                // it can throw InvalidOperationException if the operation is not allowed, for example,
                 // if the row contains cells included in a multi-cell array formula
                 if (row != null) NotifyRowShifting(row);
 

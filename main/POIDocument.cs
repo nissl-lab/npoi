@@ -356,16 +356,16 @@ namespace NPOI
         {
             if (directory == null)
             {
-                throw new IllegalStateException("Newly created Document, cannot save in-place");
+                throw new InvalidOperationException("Newly created Document, cannot save in-place");
             }
             if (directory.Parent != null)
             {
-                throw new IllegalStateException("This is not the root Document, cannot save embedded resource in-place");
+                throw new InvalidOperationException("This is not the root Document, cannot save embedded resource in-place");
             }
             if (directory.FileSystem == null ||
                 !directory.FileSystem.IsInPlaceWriteable())
             {
-                throw new IllegalStateException("Opened read-only or via an InputStream, a Writeable File is required");
+                throw new InvalidOperationException("Opened read-only or via an InputStream, a Writeable File is required");
             }
         }
 
@@ -373,7 +373,7 @@ namespace NPOI
          * Writes the document out to the currently open {@link File}, via the
          *  writeable {@link POIFSFileSystem} it was opened from.
          *  
-         * <p>This will Assert.Fail (with an {@link IllegalStateException} if the
+         * <p>This will Assert.Fail (with an {@link InvalidOperationException} if the
          *  document was opened read-only, opened from an {@link InputStream}
          *   instead of a File, or if this is not the root document. For those cases, 
          *   you must use {@link #write(OutputStream)} or {@link #write(File)} to 

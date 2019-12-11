@@ -305,7 +305,7 @@ namespace TestCases.SS.UserModel
                 Assert.Fail("Should not be able to add a merged region (" + duplicateRegion.FormatAsString() + ") " +
                  "if sheet already contains the same merged region (" + baseRegion.FormatAsString() + ")");
             }
-            catch (IllegalStateException)
+            catch (InvalidOperationException)
             {
             } 
 
@@ -316,7 +316,7 @@ namespace TestCases.SS.UserModel
                 Assert.Fail("Should not be able to add a merged region (" + partiallyOverlappingRegion.FormatAsString() + ") " +
                  "if it partially overlaps with an existing merged region (" + baseRegion.FormatAsString() + ")");
             }
-            catch (IllegalStateException)
+            catch (InvalidOperationException)
             {
             } 
 
@@ -327,7 +327,7 @@ namespace TestCases.SS.UserModel
                 Assert.Fail("Should not be able to add a merged region (" + subsetRegion.FormatAsString() + ") " +
                  "if it is a formal subset of an existing merged region (" + baseRegion.FormatAsString() + ")");
             }
-            catch (IllegalStateException)
+            catch (InvalidOperationException)
             {
             } 
 
@@ -338,7 +338,7 @@ namespace TestCases.SS.UserModel
                 Assert.Fail("Should not be able to add a merged region (" + supersetRegion.FormatAsString() + ") " +
                  "if it is a formal superset of an existing merged region (" + baseRegion.FormatAsString() + ")");
             }
-            catch (IllegalStateException)
+            catch (InvalidOperationException)
             {
             }
 
@@ -556,7 +556,7 @@ namespace TestCases.SS.UserModel
             try
             {
                 sh.AddMergedRegion(region3);
-                Assert.Fail("Expected IllegalStateException. region3 overlaps already added merged region2.");
+                Assert.Fail("Expected InvalidOperationException. region3 overlaps already added merged region2.");
             }
             catch (InvalidOperationException)
             {

@@ -220,7 +220,7 @@ namespace NPOI.SS.Formula
                     // this will never happen, we have already Evaluated the formula
                     throw new ArgumentException("This should never happen. Formulas should have already been Evaluated.");
                 default:
-                    throw new IllegalStateException("Unexpected cell value type (" + cellType + ")");
+                    throw new InvalidOperationException("Unexpected cell value type (" + cellType + ")");
             }
         }
 
@@ -248,7 +248,7 @@ namespace NPOI.SS.Formula
                 case CellType.Formula:
                 // this will never happen, we have already Evaluated the formula
                 default:
-                    throw new IllegalStateException("Unexpected cell value type (" + cellType + ")");
+                    throw new InvalidOperationException("Unexpected cell value type (" + cellType + ")");
             }
         }
 

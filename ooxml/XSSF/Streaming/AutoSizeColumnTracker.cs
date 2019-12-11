@@ -265,7 +265,7 @@ namespace NPOI.XSSF.Streaming
          * @param column the index of the column to get the current best-fit width of
          * @param useMergedCells true if merged cells should be considered when computing the best-fit width
          * @return best-fit column width, measured in number of characters
-         * @throws IllegalStateException if column is not tracked and trackAllColumns is false
+         * @throws InvalidOperationException if column is not tracked and trackAllColumns is false
          * @since 3.14beta1
          */
         public int GetBestFitColumnWidth(int column, bool useMergedCells)

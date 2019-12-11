@@ -99,7 +99,7 @@ namespace NPOI.SS.Formula.Functions
                 case DStarAlgorithmEnum.DGET: algorithm = new DGet(); break;
                 case DStarAlgorithmEnum.DMIN: algorithm = new DMin(); break;
                 default:
-                    throw new IllegalStateException("Unexpected algorithm type " + algoType + " encountered.");
+                    throw new InvalidOperationException("Unexpected algorithm type " + algoType + " encountered.");
             }
 
             // Iterate over all db entries.

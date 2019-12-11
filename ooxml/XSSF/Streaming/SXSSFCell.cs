@@ -720,11 +720,11 @@ namespace NPOI.XSSF.Streaming
         /**
          * Used to help format error messages
          */
-        private static IllegalStateException typeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool isFormulaCell)
+        private static InvalidOperationException typeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool isFormulaCell)
         {
             String msg = "Cannot get a " + expectedTypeCode + " value from a " + actualTypeCode
                     + " " + (isFormulaCell ? "formula " : "") + "cell";
-            return new IllegalStateException(msg);
+            return new InvalidOperationException(msg);
         }
         private bool convertCellValueToBoolean()
         {

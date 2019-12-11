@@ -480,8 +480,8 @@ namespace NPOI.XSSF.Streaming
          * Verify that merged regions do not intersect multi-cell array formulas and
          * no merged regions intersect another merged region in this sheet.
          *
-         * @throws IllegalStateException if region intersects with a multi-cell array formula
-         * @throws IllegalStateException if at least one region intersects with another merged region in this sheet
+         * @throws InvalidOperationException if region intersects with a multi-cell array formula
+         * @throws InvalidOperationException if at least one region intersects with another merged region in this sheet
          */
         public void ValidateMergedRegions() {
             _sh.ValidateMergedRegions();

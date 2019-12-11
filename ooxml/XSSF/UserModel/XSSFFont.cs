@@ -392,7 +392,7 @@ namespace NPOI.XSSF.UserModel
                             offSetProperty.val = ST_VerticalAlignRun.superscript;
                             break;
                         default:
-                            throw new IllegalStateException("Invalid type offset: " + value);
+                            throw new InvalidOperationException("Invalid type offset: " + value);
                     }
                 }
             }

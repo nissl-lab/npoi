@@ -70,7 +70,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 else if (ctHyperlink.id != null)
                 {
-                    throw new IllegalStateException("The hyperlink for cell "
+                    throw new InvalidOperationException("The hyperlink for cell "
                             + ctHyperlink.@ref + " references relation "
                             + ctHyperlink.id + ", but that didn't exist!");
                 }
@@ -235,7 +235,7 @@ namespace NPOI.XSSF.UserModel
                 default:
                     // this check wouldn't need to be done if _type was checked when object was set
                     // since _type is final, this check would only need to be done once
-                    throw new IllegalStateException("Invalid Hyperlink type: " + _type);
+                    throw new InvalidOperationException("Invalid Hyperlink type: " + _type);
             }
         }
         /**
