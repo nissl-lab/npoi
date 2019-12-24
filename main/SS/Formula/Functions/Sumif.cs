@@ -71,6 +71,12 @@ namespace NPOI.SS.Formula.Functions
 
             // TODO - junit to prove last arg must be srcColumnIndex and not srcRowIndex
             IMatchPredicate mp = Countif.CreateCriteriaPredicate(arg1, srcRowIndex, srcColumnIndex);
+
+            // handle empty cells
+            if (mp == null)
+            {
+                return NumberEval.ZERO;
+            }
             double result = SumMatchingCells(aeRange, mp, aeSum);
             return new NumberEval(result);
 

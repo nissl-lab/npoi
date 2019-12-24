@@ -471,6 +471,7 @@ namespace TestCases.HSSF.Record
             {
                 throw new AssertionException("Identified bug in reading workbook link");
             }
+            Assert.AreNotEqual("YEARFR~1.XLS", hr.Address, "Identified bug in reading workbook link");
             Assert.AreEqual("yearfracExamples.xls", hr.Address);
         }
         [Test]
@@ -487,7 +488,7 @@ namespace TestCases.HSSF.Record
             }
             catch (NullReferenceException)
             {
-                throw new AssertionException("Identified bug with option URL and UNC set at same time");
+                Assert.Fail("Identified bug with option URL and UNC set at same time");
             }
         }
         [Test]

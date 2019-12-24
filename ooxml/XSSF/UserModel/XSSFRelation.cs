@@ -23,9 +23,10 @@ using System.IO;
 namespace NPOI.XSSF.UserModel
 {
 
-    /**
-     *
-     */
+    /// <summary>
+    /// Defines namespaces, content types and normal file names / naming
+    /// patterns, for the well-known XSSF format parts. 
+    /// </summary>
     public class XSSFRelation : POIXMLRelation
     {
 
@@ -247,7 +248,7 @@ namespace NPOI.XSSF.UserModel
                 "application/vnd.ms-office.vbaProject",
                 "http://schemas.microsoft.com/office/2006/relationships/vbaProject",
                 "/xl/vbaProject.bin",
-                null
+                typeof(XSSFVBAPart)
         );
         public static XSSFRelation ACTIVEX_CONTROLS = new XSSFRelation(
                 "application/vnd.ms-office.activeX+xml",
@@ -307,11 +308,26 @@ namespace NPOI.XSSF.UserModel
                 typeof(XSSFPivotCacheRecords)
         );
 
+        public static XSSFRelation CTRL_PROP_RECORDS = new XSSFRelation(
+            null,
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/ctrlProp",
+            "/xl/ctrlProps/ctrlProp#.xml",
+            null
+        );
+
+        public static String NS_SPREADSHEETML = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
+        public static String NS_DRAWINGML = "http://schemas.openxmlformats.org/drawingml/2006/main";
+        public static String NS_CHART = "http://schemas.openxmlformats.org/drawingml/2006/chart";
+
         private XSSFRelation(String type, String rel, String defaultName, Type cls) :
             base(type, rel, defaultName, cls)
         {
-            if (cls != null && !_table.ContainsKey(rel))
+            if (_table.ContainsKey(rel))
+                _table[rel] = this; 
+            else
+            {
                 _table.Add(rel, this);
+            }
         }
 
         /**

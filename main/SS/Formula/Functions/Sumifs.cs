@@ -16,7 +16,10 @@
  *    limitations under the License.
  * ====================================================================
  */
+using System;
 using NPOI.SS.Formula.Eval;
+using static NPOI.SS.Formula.Functions.Countif;
+
 namespace NPOI.SS.Formula.Functions
 {
     /**
@@ -65,7 +68,7 @@ namespace NPOI.SS.Formula.Functions
                 }
 
                 ValidateCriteriaRanges(ae, sumRange);
-
+                ValidateCriteria(mp);
                 double result = SumMatchingCells(ae, mp, sumRange);
                 return new NumberEval(result);
             }
@@ -74,6 +77,22 @@ namespace NPOI.SS.Formula.Functions
                 return e.GetErrorEval();
             }
         }
+        /**
+         * Verify that each <code>criteria</code> predicate is valid, i.e. not an error
+         *
+         * @throws EvaluationException if there are criteria which resulted in Errors.
+         */
+        private void ValidateCriteria(IMatchPredicate[] criteria)
+        {
+            foreach (IMatchPredicate predicate in criteria)
+            {
+
+                // check for errors in predicate and return immediately using this error code
+                if (predicate is ErrorMatcher) {
+                throw new EvaluationException(ErrorEval.ValueOf(((ErrorMatcher)predicate).Value));
+            }
+        }
+    }
 
         /**
          * Verify that each <code>criteriaRanges</code> argument contains the same number of rows and columns

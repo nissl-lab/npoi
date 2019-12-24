@@ -28,7 +28,75 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
 
         private ST_ObjectType objectTypeField;
 
-    
+        private static XmlQualifiedName MOVEWITHCELLS = new XmlQualifiedName("MoveWithCells", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName SIZEWITHCELLS = new XmlQualifiedName("SizeWithCells", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName ANCHOR = new XmlQualifiedName("Anchor", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName LOCKED = new XmlQualifiedName("Locked", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName DEFAULTSIZE = new XmlQualifiedName("DefaultSize", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName PRINTOBJECT = new XmlQualifiedName("PrintObject", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName DISABLED = new XmlQualifiedName("Disabled", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName AUTOFILL = new XmlQualifiedName("AutoFill", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName AUTOLINE = new XmlQualifiedName("AutoLine", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName AUTOPICT = new XmlQualifiedName("AutoPict", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName FMLAMACRO = new XmlQualifiedName("FmlaMacro", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName TEXTHALIGN = new XmlQualifiedName("TextHAlign", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName TEXTVALIGN = new XmlQualifiedName("TextVAlign", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName LOCKTEXT = new XmlQualifiedName("LockText", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName JUSTLASTX = new XmlQualifiedName("JustLastX", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName SECRETEDIT = new XmlQualifiedName("SecretEdit", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName DEFAULT = new XmlQualifiedName("Default", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName HELP = new XmlQualifiedName("Help", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName CANCEL = new XmlQualifiedName("Cancel", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName DISMISS = new XmlQualifiedName("Dismiss", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName ACCEL = new XmlQualifiedName("Accel", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName ACCEL2 = new XmlQualifiedName("Accel2", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName ROW = new XmlQualifiedName("Row", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName COLUMN = new XmlQualifiedName("Column", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName VISIBLE = new XmlQualifiedName("Visible", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName ROWHIDDEN = new XmlQualifiedName("RowHidden", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName COLHIDDEN = new XmlQualifiedName("ColHidden", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName VTEDIT = new XmlQualifiedName("VTEdit", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName MULTILINE = new XmlQualifiedName("MultiLine", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName VSCROLL = new XmlQualifiedName("VScroll", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName VALIDIDS = new XmlQualifiedName("ValidIds", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName FMLARANGE = new XmlQualifiedName("FmlaRange", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName WIDTHMIN = new XmlQualifiedName("WidthMin", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName SEL = new XmlQualifiedName("Sel", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName NOTHREED2 = new XmlQualifiedName("NoThreeD2", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName SELTYPE = new XmlQualifiedName("SelType", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName MULTISEL = new XmlQualifiedName("MultiSel", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName LCT = new XmlQualifiedName("LCT", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName LISTITEM = new XmlQualifiedName("ListItem", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName DROPSTYLE = new XmlQualifiedName("DropStyle", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName COLORED = new XmlQualifiedName("Colored", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName DROPLINES = new XmlQualifiedName("DropLines", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName CHECKED = new XmlQualifiedName("Checked", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName FMLALINK = new XmlQualifiedName("FmlaLink", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName FMLAPICT = new XmlQualifiedName("FmlaPict", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName NOTHREED = new XmlQualifiedName("NoThreeD", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName FIRSTBUTTON = new XmlQualifiedName("FirstButton", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName FMLAGROUP = new XmlQualifiedName("FmlaGroup", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName VAL = new XmlQualifiedName("Val", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName MIN = new XmlQualifiedName("Min", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName MAX = new XmlQualifiedName("Max", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName INC = new XmlQualifiedName("Inc", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName PAGE = new XmlQualifiedName("Page", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName HORIZ = new XmlQualifiedName("Horiz", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName DX = new XmlQualifiedName("Dx", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName MAPOCX = new XmlQualifiedName("MapOCX", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName CF = new XmlQualifiedName("CF", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName CAMERA = new XmlQualifiedName("Camera", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName RECALCALWAYS = new XmlQualifiedName("RecalcAlways", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName AUTOSCALE = new XmlQualifiedName("AutoScale", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName DDE = new XmlQualifiedName("DDE", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName UIOBJ = new XmlQualifiedName("UIObj", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName SCRIPTTEXT = new XmlQualifiedName("ScriptText", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName SCRIPTEXTENDED = new XmlQualifiedName("ScriptExtended", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName SCRIPTLANGUAGE = new XmlQualifiedName("ScriptLanguage", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName SCRIPTLOCATION = new XmlQualifiedName("ScriptLocation", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName FMLATXBX = new XmlQualifiedName("FmlaTxbx", "urn:schemas-microsoft-com:office:excel");
+        private static XmlQualifiedName OBJECTTYPE = new XmlQualifiedName("ObjectType", "");
+
         //[XmlElement("Accel", typeof(string), DataType = "integer")]
         //[XmlElement("Accel2", typeof(string), DataType = "integer")]
         //[XmlElement("Anchor", typeof(string))]
@@ -124,11 +192,11 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
                 else if (childNode.LocalName == "AutoFill")
                     ctObj.autoFill = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalseBlank(childNode.InnerText);
                 else if (childNode.LocalName == "Visible")
-                    ctObj.visible =NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalseBlank(childNode.InnerText);
+                    ctObj.visible = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalseBlank(childNode.InnerText);
                 else if (childNode.LocalName == "MoveWithCells")
-                    ctObj.moveWithCells =NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalseBlank(childNode.InnerText);
+                    ctObj.moveWithCells = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalseBlank(childNode.InnerText);
                 else if (childNode.LocalName == "SizeWithCells")
-                    ctObj.sizeWithCells =NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalseBlank(childNode.InnerText);
+                    ctObj.sizeWithCells = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalseBlank(childNode.InnerText);
                 else if (childNode.LocalName == "Column")
                     ctObj.column.Add(Int32.Parse(childNode.InnerText));
                 else if (childNode.LocalName == "Row")
@@ -184,7 +252,7 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
             if (columnField != null)
             {
                 columnField.Add(columnNum);
-            }        
+            }
         }
 
         public void AddNewMoveWithCells()
@@ -250,10 +318,10 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
             set { this.visibleFieldSpecified = value; }
         }
 
-        ST_TrueFalseBlank moveWithCellsField= ST_TrueFalseBlank.NONE;
+        ST_TrueFalseBlank moveWithCellsField = ST_TrueFalseBlank.NONE;
         bool moveWithCellsFieldSpecified = false;
 
-        [XmlElement(ElementName="MoveWithCells")]
+        [XmlElement(ElementName = "MoveWithCells")]
         [DefaultValue(ST_TrueFalseBlank.NONE)]
         public ST_TrueFalseBlank moveWithCells
         {
@@ -268,11 +336,11 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
         }
         public int SizeOfMoveWithCellsArray()
         {
-            return moveWithCellsSpecified?1:0;
+            return moveWithCellsSpecified ? 1 : 0;
         }
         public int SizeOfSizeWithCellsArray()
         {
-            return sizeWithCellsFieldSpecified?1:0;
+            return sizeWithCellsFieldSpecified ? 1 : 0;
         }
         ST_TrueFalseBlank sizeWithCellsField = ST_TrueFalseBlank.NONE;
         bool sizeWithCellsFieldSpecified = false;
@@ -290,7 +358,7 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
             get { return this.sizeWithCellsFieldSpecified; }
             set { this.sizeWithCellsFieldSpecified = value; }
         }
-        
+
 
         private List<int> columnField;
         [XmlElement(ElementName = "Column")]
@@ -305,7 +373,7 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
         }
         public void SetColumnArray(int index, int value)
         {
-            this.columnField[index]= value;
+            this.columnField[index] = value;
         }
         public void SetRowArray(int index, int value)
         {
@@ -317,7 +385,7 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
         }
         private List<int> rowField;
 
-        [XmlElement(ElementName="Row")]
+        [XmlElement(ElementName = "Row")]
         public List<int> row
         {
             get { return this.rowField; }
@@ -328,7 +396,7 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
         {
             return this.rowField[index];
         }
-    
+
         [XmlAttribute]
         public ST_ObjectType ObjectType
         {
@@ -354,22 +422,16 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
     [XmlRoot(Namespace = "urn:schemas-microsoft-com:office:excel", IsNullable = false)]
     public enum ST_TrueFalseBlank
     {
-        NONE,
-        [XmlEnum("True")]
-        @true,
+        //[XmlEnum("")]
+        NONE, //Blank - Default Value
 
-    
-        t,
+        [XmlEnum("True")]
+        @true, //Logical True
+        t,//Logical True
 
         [XmlEnum("False")]
-        @false,
-
-    
-        f,
-
-    
-        //[XmlEnum("")]
-        //Item,
+        @false, //Logical False
+        f,//Logical False
     }
 
 
@@ -379,19 +441,19 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
     public enum ST_CF
     {
 
-    
+
         PictOld,
 
-    
+
         Pict,
 
-    
+
         Bitmap,
 
-    
+
         PictPrint,
 
-    
+
         PictScreen,
     }
 
@@ -401,205 +463,205 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
     public enum ItemsChoiceType
     {
 
-    
+
         Accel,
 
-    
+
         Accel2,
 
-    
+
         Anchor,
 
-    
+
         AutoFill,
 
-    
+
         AutoLine,
 
-    
+
         AutoPict,
 
-    
+
         AutoScale,
 
-    
+
         CF,
 
-    
+
         Camera,
 
-    
+
         Cancel,
 
-    
+
         Checked,
 
-    
+
         ColHidden,
 
-    
+
         Colored,
 
-    
+
         Column,
 
-    
+
         DDE,
 
-    
+
         Default,
 
-    
+
         DefaultSize,
 
-    
+
         Disabled,
 
-    
+
         Dismiss,
 
-    
+
         DropLines,
 
-    
+
         DropStyle,
 
-    
+
         Dx,
 
-    
+
         FirstButton,
 
-    
+
         FmlaGroup,
 
-    
+
         FmlaLink,
 
-    
+
         FmlaMacro,
 
-    
+
         FmlaPict,
 
-    
+
         FmlaRange,
 
-    
+
         FmlaTxbx,
 
-    
+
         Help,
 
-    
+
         Horiz,
 
-    
+
         Inc,
 
-    
+
         JustLastX,
 
-    
+
         LCT,
 
-    
+
         ListItem,
 
-    
+
         LockText,
 
-    
+
         Locked,
 
-    
+
         MapOCX,
 
-    
+
         Max,
 
-    
+
         Min,
 
-    
+
         MoveWithCells,
 
-    
+
         MultiLine,
 
-    
+
         MultiSel,
 
-    
+
         NoThreeD,
 
-    
+
         NoThreeD2,
 
-    
+
         Page,
 
-    
+
         PrintObject,
 
-    
+
         RecalcAlways,
 
-    
+
         Row,
 
-    
+
         RowHidden,
 
-    
+
         ScriptExtended,
 
-    
+
         ScriptLanguage,
 
-    
+
         ScriptLocation,
 
-    
+
         ScriptText,
 
-    
+
         SecretEdit,
 
-    
+
         Sel,
 
-    
+
         SelType,
 
-    
+
         SizeWithCells,
 
-    
+
         TextHAlign,
 
-    
+
         TextVAlign,
 
-    
+
         UIObj,
 
-    
+
         VScroll,
 
-    
+
         VTEdit,
 
-    
+
         Val,
 
-    
+
         ValidIds,
 
-    
+
         Visible,
 
-    
+
         WidthMin,
     }
 
@@ -610,61 +672,61 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
     public enum ST_ObjectType
     {
 
-    
+
         Button,
 
-    
+
         Checkbox,
 
-    
+
         Dialog,
 
-    
+
         Drop,
 
-    
+
         Edit,
 
-    
+
         GBox,
 
-    
+
         Label,
 
-    
+
         LineA,
 
-    
+
         List,
 
-    
+
         Movie,
 
-    
+
         Note,
 
-    
+
         Pict,
 
-    
+
         Radio,
 
-    
+
         RectA,
 
-    
+
         Scroll,
 
-    
+
         Spin,
 
-    
+
         Shape,
 
-    
+
         Group,
 
-    
+
         Rect,
     }
 }

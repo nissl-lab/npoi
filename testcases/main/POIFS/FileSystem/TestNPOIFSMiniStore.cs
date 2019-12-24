@@ -34,7 +34,7 @@ namespace TestCases.POIFS.FileSystem
     /// Summary description for TestNPOIFSMiniStore
     /// </summary>
     [TestFixture]
-    public class TestNPOIFSMiniStore
+    public class TestNPOIFSMiniStore : POITestCase
     {
         private static POIDataSamples _inst = POIDataSamples.GetPOIFSInstance();
 
@@ -124,6 +124,11 @@ namespace TestCases.POIFS.FileSystem
                 }
                 fs.Close();
             }
+
+            fsD.Close();
+            fsC.Close();
+            fsB.Close();
+            fsA.Close();
         }
 
 
@@ -193,6 +198,11 @@ namespace TestCases.POIFS.FileSystem
 
                 fs.Close();
             }
+
+            fsD.Close();
+            fsC.Close();
+            fsB.Close();
+            fsA.Close();
         }
 
         [Test]
@@ -362,6 +372,142 @@ namespace TestCases.POIFS.FileSystem
 
             fs.Close();
         }
+        [Test]
+        public void TestCreateMiniStoreFirst()
+        {
+            NPOIFSFileSystem fs = new NPOIFSFileSystem();
+            NPOIFSMiniStore ministore = fs.GetMiniStore();
+            DocumentInputStream dis;
+            DocumentEntry entry;
 
+            // Initially has Properties + BAT but nothing else
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
+            // Ministore has no blocks, so can't iterate until used
+            try
+            {
+                ministore.GetNextBlock(0);
+            }
+            catch (ArgumentOutOfRangeException e) { }
+
+            // Write a very small new document, will populate the ministore for us
+            byte[] data = new byte[8];
+            for (int i = 0; i < data.Length; i++)
+            {
+                data[i] = (byte)(i + 42);
+            }
+            fs.Root.CreateDocument("mini", new ByteArrayInputStream(data));
+
+            // Should now have a mini-fat and a mini-stream
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(4));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(1));
+
+            // Re-fetch the mini store, and add it a second time
+            ministore = fs.GetMiniStore();
+            fs.Root.CreateDocument("mini2", new ByteArrayInputStream(data));
+
+            // Main unchanged, ministore has a second
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(4));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(1));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(2));
+
+            // Check the data is unchanged and the right length
+            entry = (DocumentEntry)fs.Root.GetEntry("mini");
+            Assert.AreEqual(data.Length, entry.Size);
+            byte[] rdata = new byte[data.Length];
+            dis = new DocumentInputStream(entry);
+            IOUtils.ReadFully(dis, rdata);
+            CollectionAssert.AreEqual(data, rdata);
+            
+            dis.Close();
+
+            entry = (DocumentEntry)fs.Root.GetEntry("mini2");
+            Assert.AreEqual(data.Length, entry.Size);
+            rdata = new byte[data.Length];
+            dis = new DocumentInputStream(entry);
+            IOUtils.ReadFully(dis, rdata);
+            CollectionAssert.AreEqual(data, rdata);
+            dis.Close();
+
+            // Done
+            fs.Close();
+        }
+
+        [Test]
+        public void TestMultiBlockStream()
+        {
+            byte[] data1B = new byte[63];
+            byte[] data2B = new byte[64 + 14];
+            for (int i = 0; i < data1B.Length; i++)
+            {
+                data1B[i] = (byte)(i + 2);
+            }
+            for (int i = 0; i < data2B.Length; i++)
+            {
+                data2B[i] = (byte)(i + 4);
+            }
+
+            // New filesystem and store to use
+            NPOIFSFileSystem fs = new NPOIFSFileSystem();
+            NPOIFSMiniStore ministore = fs.GetMiniStore();
+
+            // Initially has Properties + BAT but nothing else
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
+
+            // Store the 2 block one, should use 2 mini blocks, and request
+            // the use of 2 big blocks
+            ministore = fs.GetMiniStore();
+            fs.Root.CreateDocument("mini2", new ByteArrayInputStream(data2B));
+
+            // Check
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2)); // SBAT
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3)); // Mini
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(4));
+
+            // First 2 Mini blocks will be used
+            Assert.AreEqual(2, ministore.GetFreeBlock());
+
+            // Add one more mini-stream, and check
+            fs.Root.CreateDocument("mini1", new ByteArrayInputStream(data1B));
+
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2)); // SBAT
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3)); // Mini
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(4));
+
+            // One more mini-block will be used
+            Assert.AreEqual(3, ministore.GetFreeBlock());
+
+            // Check the contents too
+            byte[] r1 = new byte[data1B.Length];
+            DocumentInputStream dis = fs.CreateDocumentInputStream("mini1");
+            IOUtils.ReadFully(dis, r1);
+            dis.Close();
+            CollectionAssert.AreEqual(data1B, r1);
+
+            byte[] r2 = new byte[data2B.Length];
+            dis = fs.CreateDocumentInputStream("mini2");
+            IOUtils.ReadFully(dis, r2);
+            dis.Close();
+            CollectionAssert.AreEqual(data2B, r2);
+
+            fs.Close();
+        }
     }
 }

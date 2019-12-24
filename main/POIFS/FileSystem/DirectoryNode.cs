@@ -52,17 +52,24 @@ namespace NPOI.POIFS.FileSystem
 
         private List<Entry> _entries;
 
+        // Only one of these two will exist
         // the POIFSFileSystem we belong to
-        private POIFSFileSystem _oFilesSystem;
-
+        private OPOIFSFileSystem _oFilesSystem;
+        // the NPOIFSFileSytem we belong to
         private NPOIFSFileSystem _nFilesSystem;
 
         // the path described by this document
         private POIFSDocumentPath _path;
 
-
-        public DirectoryNode(DirectoryProperty property,
-                        POIFSFileSystem fileSystem,
+        /// <summary>
+        /// Create a DirectoryNode. This method Is not public by design; it
+        /// Is intended strictly for the internal use of this package
+        /// </summary>
+        /// <param name="property">the DirectoryProperty for this DirectoryEntry</param>
+        /// <param name="fileSystem">the OPOIFSFileSystem we belong to</param>
+        /// <param name="parent">the parent of this entry</param>
+        internal DirectoryNode(DirectoryProperty property,
+                        OPOIFSFileSystem fileSystem,
                         DirectoryNode parent)
             : this(property, parent, fileSystem, (NPOIFSFileSystem)null)
         {
@@ -75,16 +82,16 @@ namespace NPOI.POIFS.FileSystem
         /// <param name="property">the DirectoryProperty for this DirectoryEntry</param>
         /// <param name="nFileSystem">the POIFSFileSystem we belong to</param>
         /// <param name="parent">the parent of this entry</param>
-        public DirectoryNode(DirectoryProperty property,
+        internal DirectoryNode(DirectoryProperty property,
                 NPOIFSFileSystem nFileSystem,
                 DirectoryNode parent)
-            : this(property, parent, (POIFSFileSystem)null, nFileSystem)
+            : this(property, parent, (OPOIFSFileSystem)null, nFileSystem)
         {
         }
 
         private DirectoryNode(DirectoryProperty property,
                         DirectoryNode parent,
-                        POIFSFileSystem oFileSystem,
+                        OPOIFSFileSystem oFileSystem,
                         NPOIFSFileSystem nFileSystem)
             : base(property, parent)
         {
@@ -151,7 +158,7 @@ namespace NPOI.POIFS.FileSystem
         /// </summary>
         /// <param name="document">the name of the new documentEntry</param>
         /// <returns>the new DocumentEntry</returns>
-        public DocumentEntry CreateDocument(POIFSDocument document)
+        public DocumentEntry CreateDocument(OPOIFSDocument document)
         {
             DocumentProperty property = document.DocumentProperty;
             DocumentNode     rval     = new DocumentNode(property, this);
@@ -232,12 +239,28 @@ namespace NPOI.POIFS.FileSystem
         {
             get { return _path; }
         }
-
-        public POIFSFileSystem FileSystem
+        /// <summary>
+        /// return the filesystem that this belongs to
+        /// TODO: Temporary workaround during #56791
+        /// </summary>
+        public NPOIFSFileSystem FileSystem
+        {
+            get { return _nFilesSystem; }
+        }
+        /// <summary>
+        ///  If this is OPOIFS based, return the NPOIFSFileSystem
+        ///  that this belong to, otherwise Null if NPOIFS based
+        /// return the filesystem that this belongs to
+        /// </summary>
+        public OPOIFSFileSystem OFileSystem
         {
             get { return _oFilesSystem; }
         }
-
+        /// <summary>
+        /// If this is NPOIFS based, return the NPOIFSFileSystem
+        /// that this belong to, otherwise Null if OPOIFS based.
+        /// return the filesystem that this belongs to
+        /// </summary>
         public NPOIFSFileSystem NFileSystem
         {
             get { return _nFilesSystem; }
@@ -436,6 +459,42 @@ namespace NPOI.POIFS.FileSystem
             return rval;
         }
 
+        /**
+     * Set the contents of a document, creating if needed, 
+     *  otherwise updating. Returns the created / updated DocumentEntry
+     *
+     * @param name the name of the new or existing DocumentEntry
+     * @param stream the InputStream from which to populate the DocumentEntry
+     *
+     * @return the new or updated DocumentEntry
+     *
+     * @exception IOException
+     */
+        public DocumentEntry CreateOrUpdateDocument(String name,
+                                                    Stream stream)
+
+        {
+            if (!HasEntry(name))
+            {
+                return CreateDocument(name, stream);
+            }
+            else
+            {
+                DocumentNode existing = (DocumentNode)GetEntry(name);
+                if (_nFilesSystem != null)
+                {
+                    NPOIFSDocument nDoc = new NPOIFSDocument(existing);
+                    nDoc.ReplaceContents(stream);
+                    return existing;
+                }
+                else
+                {
+                    // Do it the hard way for Old POIFS...
+                    DeleteEntry(existing);
+                    return CreateDocument(name, stream);
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or Sets the storage clsid for the directory entry
@@ -486,7 +545,7 @@ namespace NPOI.POIFS.FileSystem
                 }
                 else
                 {
-                    return CreateDocument(new POIFSDocument(name, stream));
+                    return CreateDocument(new OPOIFSDocument(name, stream));
                 }
             }
             catch (IOException ex)
@@ -504,7 +563,7 @@ namespace NPOI.POIFS.FileSystem
             }
             else
             {
-                return CreateDocument(new POIFSDocument(name, size, _path, writer));
+                return CreateDocument(new OPOIFSDocument(name, size, _path, writer));
             }
         }
 

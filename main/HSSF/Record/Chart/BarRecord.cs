@@ -32,8 +32,7 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class BarRecord
-       : StandardRecord
+    public class BarRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x1017;
         private short field_1_barSpace;

@@ -22,6 +22,7 @@ namespace NPOI.SS.Formula.Functions
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Util;
+    using NPOI.Util;
 
     /**
      * This class performs a D* calculation. It takes an {@link IDStarAlgorithm} object and
@@ -30,11 +31,19 @@ namespace NPOI.SS.Formula.Functions
      */
     public class DStarRunner : Function3Arg
     {
-        private IDStarAlgorithm algorithm;
 
-        public DStarRunner(IDStarAlgorithm algorithm)
+        public enum DStarAlgorithmEnum
         {
-            this.algorithm = algorithm;
+            DGET,
+            DMIN,
+            // DMAX, // DMAX is not yet implemented
+        }
+
+        private DStarAlgorithmEnum algoType;
+
+        public DStarRunner(DStarAlgorithmEnum algorithm)
+        {
+            this.algoType = algorithm;
         }
 
         public ValueEval Evaluate(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
@@ -53,12 +62,21 @@ namespace NPOI.SS.Formula.Functions
                 ValueEval database, ValueEval filterColumn, ValueEval conditionDatabase)
         {
             // Input Processing and error Checks.
-            if (!(database is TwoDEval) || !(conditionDatabase is TwoDEval))
+            if (!(database is AreaEval) || !(conditionDatabase is AreaEval))
             {
                 return ErrorEval.VALUE_INVALID;
             }
-            TwoDEval db = (TwoDEval)database;
-            TwoDEval cdb = (TwoDEval)conditionDatabase;
+            AreaEval db = (AreaEval)database;
+            AreaEval cdb = (AreaEval)conditionDatabase;
+
+            try
+            {
+                filterColumn = OperandResolver.GetSingleValue(filterColumn, srcRowIndex, srcColumnIndex);
+            }
+            catch (EvaluationException e)
+            {
+                return e.GetErrorEval();
+            }
 
             int fc;
             try
@@ -74,11 +92,19 @@ namespace NPOI.SS.Formula.Functions
                 return ErrorEval.VALUE_INVALID;
             }
 
-            // Reset algorithm.
-            algorithm.Reset();
+            // Create an algorithm runner.
+            IDStarAlgorithm algorithm = null;
+            switch (algoType)
+            {
+                case DStarAlgorithmEnum.DGET: algorithm = new DGet(); break;
+                case DStarAlgorithmEnum.DMIN: algorithm = new DMin(); break;
+                default:
+                    throw new InvalidOperationException("Unexpected algorithm type " + algoType + " encountered.");
+            }
 
             // Iterate over all db entries.
-            for (int row = 1; row < db.Height; ++row)
+            int height = db.Height;
+            for (int row = 1; row < height; ++row)
             {
                 bool matches = true;
                 try
@@ -92,19 +118,12 @@ namespace NPOI.SS.Formula.Functions
                 // Filter each entry.
                 if (matches)
                 {
-                    try
+                    ValueEval currentValueEval = ResolveReference(db, row, fc);
+                    // Pass the match to the algorithm and conditionally abort the search.
+                    bool shouldContinue = algorithm.ProcessMatch(currentValueEval);
+                    if (!shouldContinue)
                     {
-                        ValueEval currentValueEval = solveReference(db.GetValue(row, fc));
-                        // Pass the match to the algorithm and conditionally abort the search.
-                        bool shouldContinue = algorithm.ProcessMatch(currentValueEval);
-                        if (!shouldContinue)
-                        {
-                            break;
-                        }
-                    }
-                    catch (EvaluationException e)
-                    {
-                        return e.GetErrorEval();
+                        break;
                     }
                 }
             }
@@ -123,62 +142,16 @@ namespace NPOI.SS.Formula.Functions
         }
 
         /**
-         * Resolve reference(-chains) until we have a normal value.
+         * 
          *
-         * @param field a ValueEval which can be a RefEval.
-         * @return a ValueEval which is guaranteed not to be a RefEval
-         * @If a multi-sheet reference was found along the way.
-         */
-        private static ValueEval solveReference(ValueEval field)
-        {
-            if (field is RefEval)
-            {
-                RefEval refEval = (RefEval)field;
-                if (refEval.NumberOfSheets > 1)
-                {
-                    throw new EvaluationException(ErrorEval.VALUE_INVALID);
-                }
-                return solveReference(refEval.GetInnerValueEval(refEval.FirstSheetIndex));
-            }
-            else
-            {
-                return field;
-            }
-        }
-
-        /**
-         * Returns the first column index that matches the given name. The name can either be
-         * a string or an integer, when it's an integer, then the respective column
-         * (1 based index) is returned.
-         * @param nameValueEval
+         * @param nameValueEval Must not be a RefEval or AreaEval. Thus make sure resolveReference() is called on the value first!
          * @param db
-         * @return the first column index that matches the given name (or int)
-         * @
+         * @return
+         * @throws EvaluationException
          */
-        private static int GetColumnForTag(ValueEval nameValueEval, TwoDEval db)
+        private static int GetColumnForName(ValueEval nameValueEval, AreaEval db)
         {
-            int resultColumn = -1;
-
-            // Numbers as column indicator are allowed, check that.
-            if (nameValueEval is NumericValueEval)
-            {
-                double doubleResultColumn = ((NumericValueEval)nameValueEval).NumberValue;
-                resultColumn = (int)doubleResultColumn;
-                // Floating comparisions are usually not possible, but should work for 0.0.
-                if (doubleResultColumn - resultColumn != 0.0)
-                    throw new EvaluationException(ErrorEval.VALUE_INVALID);
-                resultColumn -= 1; // Numbers are 1-based not 0-based.
-            }
-            else
-            {
-                resultColumn = GetColumnForName(nameValueEval, db);
-            }
-            return resultColumn;
-        }
-
-        private static int GetColumnForName(ValueEval nameValueEval, TwoDEval db)
-        {
-            String name = GetStringFromValueEval(nameValueEval);
+            String name = OperandResolver.CoerceValueToString(nameValueEval);
             return GetColumnForString(db, name);
         }
 
@@ -190,13 +163,22 @@ namespace NPOI.SS.Formula.Functions
          * @return Corresponding column number.
          * @If it's not possible to turn all headings into strings.
          */
-        private static int GetColumnForString(TwoDEval db, String name)
+        private static int GetColumnForString(AreaEval db, String name)
         {
             int resultColumn = -1;
-            for (int column = 0; column < db.Width; ++column)
+            int width = db.Width;
+            for (int column = 0; column < width; ++column)
             {
-                ValueEval columnNameValueEval = db.GetValue(0, column);
-                String columnName = GetStringFromValueEval(columnNameValueEval);
+                ValueEval columnNameValueEval = ResolveReference(db, 0, column);
+                if (columnNameValueEval is BlankEval)
+                {
+                    continue;
+                }
+                if (columnNameValueEval is ErrorEval)
+                {
+                    continue;
+                }
+                String columnName = OperandResolver.CoerceValueToString(columnNameValueEval);
                 if (name.Equals(columnName))
                 {
                     resultColumn = column;
@@ -216,59 +198,58 @@ namespace NPOI.SS.Formula.Functions
          * @If references could not be Resolved or comparison
          * operators and operands didn't match.
          */
-        private static bool FullFillsConditions(TwoDEval db, int row, TwoDEval cdb)
+        private static bool FullFillsConditions(AreaEval db, int row, AreaEval cdb)
         {
             // Only one row must match to accept the input, so rows are ORed.
             // Each row is made up of cells where each cell is a condition,
             // all have to match, so they are ANDed.
-            for (int conditionRow = 1; conditionRow < cdb.Height; ++conditionRow)
+            int height = cdb.Height;
+            for (int conditionRow = 1; conditionRow < height; ++conditionRow)
             {
                 bool matches = true;
-                for (int column = 0; column < cdb.Width; ++column)
-                { // columns are ANDed
+                int width = cdb.Width;
+                for (int column = 0; column < width; ++column)  // columns are ANDed
+                { 
                     // Whether the condition column matches a database column, if not it's a
                     // special column that accepts formulas.
                     bool columnCondition = true;
                     ValueEval condition = null;
-                    try
-                    {
-                        // The condition to Apply.
-                        condition = solveReference(cdb.GetValue(conditionRow, column));
-                    }
-                    catch (Exception)
-                    {
-                        // It might be a special formula, then it is ok if it fails.
-                        columnCondition = false;
-                    }
+
+                    // The condition to apply.
+                    condition = ResolveReference(cdb, conditionRow, column);
+
                     // If the condition is empty it matches.
                     if (condition is BlankEval)
                         continue;
                     // The column in the DB to apply the condition to.
-                    ValueEval targetHeader = solveReference(cdb.GetValue(0, column));
-                    targetHeader = solveReference(targetHeader);
-
+                    ValueEval targetHeader = ResolveReference(cdb, 0, column);
 
                     if (!(targetHeader is StringValueEval))
-                        columnCondition = false;
-                    else if (GetColumnForName(targetHeader, db) == -1)
+                    {
+                        throw new EvaluationException(ErrorEval.VALUE_INVALID);
+                    }
+                        
+                    if (GetColumnForName(targetHeader, db) == -1)
                         // No column found, it's again a special column that accepts formulas.
                         columnCondition = false;
 
                     if (columnCondition == true)
                     { // normal column condition
                         // Should not throw, Checked above.
-                        ValueEval target = db.GetValue(
-                                row, GetColumnForName(targetHeader, db));
-                        // Must be a string.
-                        String conditionString = GetStringFromValueEval(condition);
-                        if (!testNormalCondition(target, conditionString))
-                        {
+                        ValueEval value = ResolveReference(db, row, GetColumnForName(targetHeader, db));
+                        if (!testNormalCondition(value, condition))
+                        { 
                             matches = false;
                             break;
                         }
                     }
                     else
                     { // It's a special formula condition.
+                      // TODO: Check whether the condition cell contains a formula and return #VALUE! if it doesn't.
+                        if (string.IsNullOrEmpty(OperandResolver.CoerceValueToString(condition)))
+                        {
+                            throw new EvaluationException(ErrorEval.VALUE_INVALID);
+                        }
                         throw new NotImplementedException(
                                 "D* function with formula conditions");
                     }
@@ -289,52 +270,110 @@ namespace NPOI.SS.Formula.Functions
          * @return Whether the condition holds.
          * @If comparison operator and operands don't match.
          */
-        private static bool testNormalCondition(ValueEval value, String condition)
-            {
-        if(condition.StartsWith("<")) { // It's a </<= condition.
-            String number = condition.Substring(1);
-            if(number.StartsWith("=")) {
-                number = number.Substring(1);
-                return testNumericCondition(value, Operator.smallerEqualThan, number);
-            } else {
-                return testNumericCondition(value, Operator.smallerThan, number);
-            }
-        }
-        else if(condition.StartsWith(">")) { // It's a >/>= condition.
-            String number = condition.Substring(1);
-            if(number.StartsWith("=")) {
-                number = number.Substring(1);
-                return testNumericCondition(value, Operator.largerEqualThan, number);
-            } else {
-                return testNumericCondition(value, Operator.largerThan, number);
-            }
-        }
-        else if(condition.StartsWith("=")) { // It's a = condition.
-            String stringOrNumber = condition.Substring(1);
-            // Distinguish between string and number.
-            bool itsANumber = false;
-            try {
-                Int32.Parse(stringOrNumber);
-                itsANumber = true;
-            } catch (FormatException) { // It's not an int.
-                try {
-                    Double.Parse(stringOrNumber);
-                    itsANumber = true;
-                } catch (FormatException) { // It's a string.
-                    itsANumber = false;
+        private static bool testNormalCondition(ValueEval value, ValueEval condition)
+        {
+            if (condition is StringEval) {
+                String conditionString = ((StringEval)condition).StringValue;
+
+                if (conditionString.StartsWith("<"))
+                { // It's a </<= condition.
+                    String number = conditionString.Substring(1);
+                    if (number.StartsWith("="))
+                    {
+                        number = number.Substring(1);
+                        return testNumericCondition(value, Operator.smallerEqualThan, number);
+                    }
+                    else
+                    {
+                        return testNumericCondition(value, Operator.smallerThan, number);
+                    }
+                }
+                else if (conditionString.StartsWith(">"))
+                { // It's a >/>= condition.
+                    String number = conditionString.Substring(1);
+                    if (number.StartsWith("="))
+                    {
+                        number = number.Substring(1);
+                        return testNumericCondition(value, Operator.largerEqualThan, number);
+                    }
+                    else
+                    {
+                        return testNumericCondition(value, Operator.largerThan, number);
+                    }
+                }
+                else if (conditionString.StartsWith("="))
+                { // It's a = condition.
+                    String stringOrNumber = conditionString.Substring(1);
+
+                    if (string.IsNullOrEmpty(stringOrNumber))
+                    {
+                        return value is BlankEval;
+                    }
+                    // Distinguish between string and number.
+                    bool itsANumber = false;
+                    try
+                    {
+                        int.Parse(stringOrNumber);
+                        itsANumber = true;
+                    }
+                    catch (FormatException)
+                    { // It's not an int.
+                        try
+                        {
+                            Double.Parse(stringOrNumber);
+                            itsANumber = true;
+                        }
+                        catch (FormatException)
+                        { // It's a string.
+                            itsANumber = false;
+                        }
+                    }
+                    if (itsANumber)
+                    {
+                        return testNumericCondition(value, Operator.equal, stringOrNumber);
+                    }
+                    else
+                    { // It's a string.
+                        String valueString = value is BlankEval ? "" : OperandResolver.CoerceValueToString(value);
+                        return stringOrNumber.Equals(valueString);
+                    }
+                }
+                else
+                { // It's a text starts-with condition.
+                    if (string.IsNullOrEmpty(conditionString))
+                    {
+                        return value is StringEval;
+                    }
+                    else
+                    {
+                        String valueString = value is BlankEval ? "" : OperandResolver.CoerceValueToString(value);
+                        return valueString.StartsWith(conditionString);
+                    }
                 }
             }
-            if(itsANumber) {
-                return testNumericCondition(value, Operator.equal, stringOrNumber);
-            } else { // It's a string.
-                String valueString = GetStringFromValueEval(value);
-                return stringOrNumber.Equals(valueString);
+            else if (condition is NumericValueEval) {
+                double conditionNumber = ((NumericValueEval)condition).NumberValue;
+                Double? valueNumber = GetNumberFromValueEval(value);
+                if (valueNumber == null)
+                {
+                    return false;
+                }
+
+                return conditionNumber == valueNumber;
             }
-        } else { // It's a text starts-with condition.
-            String valueString = GetStringFromValueEval(value);
-            return valueString.StartsWith(condition);
+            else if (condition is ErrorEval) {
+                if (value is ErrorEval) {
+                    return ((ErrorEval)condition).ErrorCode == ((ErrorEval)value).ErrorCode;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+            
         }
-    }
 
         /**
          * Test whether a value matches a numeric condition.
@@ -388,22 +427,47 @@ namespace NPOI.SS.Formula.Functions
             return false; // Can not be reached.
         }
 
-        /**
-         * Takes a ValueEval and tries to retrieve a String value from it.
-         * It tries to resolve references if there are any.
-         *
-         * @param value ValueEval to retrieve the string from.
-         * @return String corresponding to the given ValueEval.
-         * @If it's not possible to retrieve a String value.
-         */
-        private static String GetStringFromValueEval(ValueEval value)
+        private static Double? GetNumberFromValueEval(ValueEval value)
         {
-            value = solveReference(value);
-            if (value is BlankEval)
-                return "";
-            if (!(value is StringValueEval))
-                throw new EvaluationException(ErrorEval.VALUE_INVALID);
-            return ((StringValueEval)value).StringValue;
+            if (value is NumericValueEval)
+            {
+                return ((NumericValueEval)value).NumberValue;
+            }
+            else if (value is StringValueEval)
+            {
+                String stringValue = ((StringValueEval)value).StringValue;
+                try
+                {
+                    return Double.Parse(stringValue);
+                }
+                catch (FormatException)
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+        /**
+         * Resolve a ValueEval that's in an AreaEval.
+         *
+         * @param db AreaEval from which the cell to resolve is retrieved. 
+         * @param dbRow Relative row in the AreaEval.
+         * @param dbCol Relative column in the AreaEval.
+         * @return A ValueEval that is a NumberEval, StringEval, BoolEval, BlankEval or ErrorEval.
+         */
+        private static ValueEval ResolveReference(AreaEval db, int dbRow, int dbCol)
+        {
+            try
+            {
+                return OperandResolver.GetSingleValue(db.GetValue(dbRow, dbCol), db.FirstRow + dbRow, db.FirstColumn + dbCol);
+            }
+            catch (EvaluationException e)
+            {
+                return e.GetErrorEval();
+            }
         }
     }
 

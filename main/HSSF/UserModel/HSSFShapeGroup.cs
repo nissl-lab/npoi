@@ -52,6 +52,8 @@ namespace NPOI.HSSF.UserModel
                     case EscherChildAnchorRecord.RECORD_ID:
                         anchor = new HSSFChildAnchor((EscherChildAnchorRecord)ch);
                         break;
+                    default:
+                        break;
                 }
             }
         }

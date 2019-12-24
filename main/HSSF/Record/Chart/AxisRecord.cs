@@ -32,8 +32,7 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class AxisRecord
-       : StandardRecord
+    public class AxisRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x101d;
         private short field_1_axisType;

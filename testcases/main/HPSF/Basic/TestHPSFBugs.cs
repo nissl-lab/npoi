@@ -107,8 +107,8 @@ namespace TestCases.HPSF.Basic
         public void Test54233()
         {
             DocumentInputStream dis;
-            POIFSFileSystem fs =
-                    new POIFSFileSystem(_samples.OpenResourceAsStream("TestNon4ByteBoundary.doc"));
+            NPOIFSFileSystem fs =
+                    new NPOIFSFileSystem(_samples.OpenResourceAsStream("TestNon4ByteBoundary.doc"));
 
             dis = fs.CreateDocumentInputStream(SummaryInformation.DEFAULT_STREAM_NAME);
             SummaryInformation si = (SummaryInformation)PropertySetFactory.Create(dis);

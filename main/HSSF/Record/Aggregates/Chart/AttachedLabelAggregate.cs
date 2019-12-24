@@ -29,9 +29,9 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
     {
         private TextRecord text = null;
         private PosRecord pos = null;
-        private FontXRecord fontX = null;
+        private FontIndexRecord fontX = null;
         private AlRunsRecord alRuns = null;
-        private BRAIRecord brai = null;
+        private LinkedDataRecord brai = null;
         private SeriesTextRecord seriesText = null;
         private FrameAggregate frame = null;
         private ObjectLinkRecord objectLink = null;
@@ -61,15 +61,15 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
             text = (TextRecord)rs.GetNext();
             rs.GetNext();//BeginRecord
             pos = (PosRecord)rs.GetNext();
-            if (rs.PeekNextChartSid() == FontXRecord.sid)
+            if (rs.PeekNextChartSid() == FontIndexRecord.sid)
             {
-                fontX = (FontXRecord)rs.GetNext();
+                fontX = (FontIndexRecord)rs.GetNext();
             }
             if (rs.PeekNextChartSid() == AlRunsRecord.sid)
             {
                 alRuns = (AlRunsRecord)rs.GetNext();
             }
-            brai = (BRAIRecord)rs.GetNext();
+            brai = (LinkedDataRecord)rs.GetNext();
             if (rs.PeekNextChartSid() == SeriesTextRecord.sid)
             {
                 seriesText = (SeriesTextRecord)rs.GetNext();

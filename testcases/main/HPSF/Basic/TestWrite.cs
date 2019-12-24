@@ -143,6 +143,7 @@ namespace TestCases.HPSF.Basic
                 }
                 finally
                 {
+                    poiFs.Close();
                     out1.Close();
                 }
             }
@@ -193,6 +194,8 @@ namespace TestCases.HPSF.Basic
                 POIFSReader reader3 = new POIFSReader();
                 reader3.StreamReaded += new POIFSReaderEventHandler(reader3_StreamReaded);
                 reader3.Read(file);
+
+                poiFs.Close();
                 file.Close();
                 //File.Delete(dataDir + POI_FS);
             }
@@ -255,6 +258,7 @@ namespace TestCases.HPSF.Basic
             poiFs.CreateDocument(ps.ToInputStream(),
                                  SummaryInformation.DEFAULT_STREAM_NAME);
             poiFs.WriteFileSystem(out1);
+            poiFs.Close();
             //out1.Close();
             file.Position = 0;
 
@@ -334,6 +338,7 @@ namespace TestCases.HPSF.Basic
 
             poiFs.CreateDocument(ps.ToInputStream(), STREAM_NAME);
             poiFs.WriteFileSystem(out1);
+            poiFs.Close();
             //out1.Close();
 
             /* Read the POIFS: */
@@ -389,8 +394,8 @@ namespace TestCases.HPSF.Basic
 
         private static int CODEPAGE_DEFAULT = -1;
         private static int CODEPAGE_1252 = 1252;
-        private static int CODEPAGE_UTF8 = (int)Constants.CP_UTF8;
-        private static int CODEPAGE_UTF16 = (int)Constants.CP_UTF16;
+        private static int CODEPAGE_UTF8 = CodePageUtil.CP_UTF8;
+        private static int CODEPAGE_UTF16 = CodePageUtil.CP_UTF16;
 
 
 
@@ -738,6 +743,7 @@ namespace TestCases.HPSF.Basic
                                      psf1[i].GetName());
                 poiFs.WriteFileSystem(out1);
             }
+            poiFs.Close();
 
             /* Read the property Set streams from the POI filesystem just
              * Created. */
@@ -781,6 +787,7 @@ namespace TestCases.HPSF.Basic
                 s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, codepage);
                 poiFs.CreateDocument(ps1.ToInputStream(), "Test");
                 poiFs.WriteFileSystem(copy);
+                poiFs.Close();
 
                 /* Read back: */
                 POIFile[] psf = Util.ReadPropertySets(copy);
@@ -808,7 +815,6 @@ namespace TestCases.HPSF.Basic
          * Tests that when using NPOIFS, we can do an in-place write
          *  without needing to stream in + out the whole kitchen sink
          */
-        [Ignore("poi ignore")]
         [Test]
         public void TestInPlaceNPOIFSWrite()
         {
@@ -839,10 +845,14 @@ namespace TestCases.HPSF.Basic
             sinfDoc = (DocumentNode)root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME);
             dinfDoc = (DocumentNode)root.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
 
-            sinf = (SummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(sinfDoc));
+            InputStream sinfStream = new NDocumentInputStream(sinfDoc);
+            sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream);
+            sinfStream.Close();
             Assert.AreEqual(131077, sinf.OSVersion);
 
-            dinf = (DocumentSummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(dinfDoc));
+            InputStream dinfStream = new NDocumentInputStream(dinfDoc);
+            dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream);
+            dinfStream.Close();
             Assert.AreEqual(131077, dinf.OSVersion);
 
             // Check they start as we expect
@@ -862,10 +872,14 @@ namespace TestCases.HPSF.Basic
             sinfDoc = (DocumentNode)root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME);
             dinfDoc = (DocumentNode)root.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
 
-            sinf = (SummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(sinfDoc));
+            InputStream sinfStream2 = new NDocumentInputStream(sinfDoc);
+            sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream2);
+            sinfStream2.Close();
             Assert.AreEqual(131077, sinf.OSVersion);
 
-            dinf = (DocumentSummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(dinfDoc));
+            InputStream dinfStream2 = new NDocumentInputStream(dinfDoc);
+            dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream2);
+            dinfStream2.Close();
             Assert.AreEqual(131077, dinf.OSVersion);
 
 
@@ -885,16 +899,24 @@ namespace TestCases.HPSF.Basic
             sinfDoc = (DocumentNode)root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME);
             dinfDoc = (DocumentNode)root.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
 
-            sinf = (SummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(sinfDoc));
+            InputStream sinfStream3 = new NDocumentInputStream(sinfDoc);
+            sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream3);
+            sinfStream3.Close();
             Assert.AreEqual(131077, sinf.OSVersion);
 
-            dinf = (DocumentSummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(dinfDoc));
+            InputStream dinfStream3 = new NDocumentInputStream(dinfDoc);
+            dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream3);
+            dinfStream3.Close();
             Assert.AreEqual(131077, dinf.OSVersion);
 
 
             // Have them write themselves in-place with no Changes
-            sinf.Write(new NDocumentOutputStream(sinfDoc));
-            dinf.Write(new NDocumentOutputStream(dinfDoc));
+            Stream soufStream = new NDocumentOutputStream(sinfDoc);
+            sinf.Write(soufStream);
+            soufStream.Close();
+            Stream doufStream = new NDocumentOutputStream(dinfDoc);
+            dinf.Write(doufStream);
+            doufStream.Close();
 
             // And also write to some bytes for Checking
             MemoryStream sinfBytes = new MemoryStream();
@@ -907,17 +929,25 @@ namespace TestCases.HPSF.Basic
             sinfDoc = (DocumentNode)root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME);
             dinfDoc = (DocumentNode)root.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
 
-            byte[] sinfData = IOUtils.ToByteArray(new NDocumentInputStream(sinfDoc));
-            byte[] dinfData = IOUtils.ToByteArray(new NDocumentInputStream(dinfDoc));
+            InputStream sinfStream4 = new NDocumentInputStream(sinfDoc);
+            byte[] sinfData = IOUtils.ToByteArray(sinfStream4);
+            sinfStream4.Close();
+            InputStream dinfStream4 = new NDocumentInputStream(dinfDoc);
+            byte[] dinfData = IOUtils.ToByteArray(dinfStream4);
+            dinfStream4.Close();
             Assert.That(sinfBytes.ToArray(), new EqualConstraint(sinfData));
             Assert.That(dinfBytes.ToArray(), new EqualConstraint(dinfData));
 
 
             // Read back in as-is
-            sinf = (SummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(sinfDoc));
+            InputStream sinfStream5 = new NDocumentInputStream(sinfDoc);
+            sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream5);
+            sinfStream5.Close();
             Assert.AreEqual(131077, sinf.OSVersion);
 
-            dinf = (DocumentSummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(dinfDoc));
+            InputStream dinfStream5 = new NDocumentInputStream(dinfDoc);
+            dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream5);
+            dinfStream5.Close();
             Assert.AreEqual(131077, dinf.OSVersion);
 
             Assert.AreEqual("Reiichiro Hori", sinf.Author);
@@ -935,17 +965,25 @@ namespace TestCases.HPSF.Basic
 
 
             // Save this into the filesystem
-            sinf.Write(new NDocumentOutputStream(sinfDoc));
-            dinf.Write(new NDocumentOutputStream(dinfDoc));
+            Stream soufStream2 = new NDocumentOutputStream(sinfDoc);
+            sinf.Write(soufStream2);
+            soufStream2.Close();
+            Stream doufStream2 = new NDocumentOutputStream(dinfDoc);
+            dinf.Write(doufStream2);
+            doufStream2.Close();
 
 
             // Read them back in again
             sinfDoc = (DocumentNode)root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME);
-            sinf = (SummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(sinfDoc));
+            InputStream sinfStream6 = new NDocumentInputStream(sinfDoc);
+            sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream6);
+            sinfStream6.Close();
             Assert.AreEqual(131077, sinf.OSVersion);
 
             dinfDoc = (DocumentNode)root.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
-            dinf = (DocumentSummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(dinfDoc));
+            InputStream dinfStream6 = new NDocumentInputStream(dinfDoc);
+            dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream6);
+            dinfStream6.Close();
             Assert.AreEqual(131077, dinf.OSVersion);
 
             Assert.AreEqual("Changed Author", sinf.Author);
@@ -965,11 +1003,15 @@ namespace TestCases.HPSF.Basic
 
             // Re-check on load
             sinfDoc = (DocumentNode)root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME);
-            sinf = (SummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(sinfDoc));
+            InputStream sinfStream7 = new NDocumentInputStream(sinfDoc);
+            sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream7);
+            sinfStream7.Close();
             Assert.AreEqual(131077, sinf.OSVersion);
 
             dinfDoc = (DocumentNode)root.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
-            dinf = (DocumentSummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(dinfDoc));
+            InputStream dinfStream7 = new NDocumentInputStream(dinfDoc);
+            dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream7);
+            dinfStream7.Close();
             Assert.AreEqual(131077, dinf.OSVersion);
 
             Assert.AreEqual("Changed Author", sinf.Author);
@@ -1014,10 +1056,9 @@ namespace TestCases.HPSF.Basic
                     poiFs.WriteFileSystem(copy);
                     Assert.Fail("This Testcase did not detect the invalid codepage value.");
                 }
-                catch (IllegalPropertySetDataException)
+                finally
                 {
-                        
-                    Assert.IsTrue(true);
+                    poiFs.Close();
                 }
             }
             

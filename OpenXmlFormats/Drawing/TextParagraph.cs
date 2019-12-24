@@ -636,6 +636,21 @@ namespace NPOI.OpenXmlFormats.Dml
             this.itemsField.Add(br);
             return br;
         }
+
+        public CT_RegularTextRun GetRArray(int v)
+        {
+            return rField[v];
+        }
+
+        public int SizeOfFldArray()
+        {
+            return this.fldField.Count;
+        }
+
+        public CT_TextField GetFldArray(int v)
+        {
+            return fldField[v];
+        }
     }
 
     [Serializable]

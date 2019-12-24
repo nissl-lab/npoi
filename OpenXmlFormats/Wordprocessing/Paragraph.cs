@@ -231,6 +231,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return ctObj;
         }
 
+        public bool IsSetRsidR()
+        {
+            return this.rsidRField != null && rsidRField.Length > 0;
+        }
+
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
@@ -4777,6 +4782,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (this.spacingField == null)
                 this.spacingField = new CT_SignedTwipsMeasure();
             return this.spacingField;
+        }
+
+        public bool IsSetHighlight()
+        {
+            return this.highlightField != null;
+        }
+
+        internal CT_Highlight AddNewHighlight()
+        {
+            this.highlightField = new CT_Highlight();
+            return this.highlightField;
         }
     }
 

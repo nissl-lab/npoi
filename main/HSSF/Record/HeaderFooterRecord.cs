@@ -27,7 +27,7 @@ namespace NPOI.HSSF.Record
      *
      * @author Yegor Kozlov
      */
-    public class HeaderFooterRecord : StandardRecord
+    public class HeaderFooterRecord : StandardRecord, ICloneable
     {
 
         private static byte[] BLANK_GUID = new byte[16];

@@ -43,7 +43,7 @@ namespace NPOI.POIFS.FileSystem
         private bool _closed;
 
         /** the actual Document */
-        private POIFSDocument _document;
+        private OPOIFSDocument _document;
 
         /** the data block Containing the current stream pointer */
         private DataInputBlock _currentBlock;
@@ -89,7 +89,7 @@ namespace NPOI.POIFS.FileSystem
          * 
          * @param document the Document to be read
          */
-        public ODocumentInputStream(POIFSDocument document)
+        public ODocumentInputStream(OPOIFSDocument document)
         {
             _current_offset = 0;
             _marked_offset = 0;

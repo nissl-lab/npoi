@@ -123,6 +123,39 @@ namespace NPOI.SS.UserModel
         /// <returns>conditional formatting rule</returns>
         IConditionalFormattingRule CreateConditionalFormattingRule(String formula);
 
+        /**
+         * Create a Databar conditional formatting rule.
+         * <p>The thresholds and colour for it will be created, but will be 
+         *  empty and require configuring with 
+         *  {@link ConditionalFormattingRule#getDataBarFormatting()}
+         *  then
+         *  {@link DataBarFormatting#getMinThreshold()}
+         *  and 
+         *  {@link DataBarFormatting#getMaxThreshold()}
+         */
+        IConditionalFormattingRule CreateConditionalFormattingRule(ExtendedColor color);
+        /**
+         * Create an Icon Set / Multi-State conditional formatting rule.
+         * <p>The thresholds for it will be created, but will be empty
+         *  and require configuring with 
+         *  {@link ConditionalFormattingRule#getMultiStateFormatting()}
+         *  then
+         *  {@link IconMultiStateFormatting#getThresholds()}
+         */
+        IConditionalFormattingRule CreateConditionalFormattingRule(IconSet iconSet);
+
+        /**
+         * Create a Color Scale / Color Gradient conditional formatting rule.
+         * <p>The thresholds and colours for it will be created, but will be 
+         *  empty and require configuring with 
+         *  {@link ConditionalFormattingRule#getColorScaleFormatting()}
+         *  then
+         *  {@link ColorScaleFormatting#getThresholds()}
+         *  and
+         *  {@link ColorScaleFormatting#getColors()}
+         */
+        IConditionalFormattingRule CreateConditionalFormattingColorScaleRule();
+
         /// <summary>
         /// Gets Conditional Formatting object at a particular index
         /// </summary>

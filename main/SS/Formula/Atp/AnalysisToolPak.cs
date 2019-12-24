@@ -25,7 +25,7 @@ namespace NPOI.SS.Formula.Atp {
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.UDF;
 
     public class NotImplemented : FreeRefFunction
     {
@@ -46,7 +46,7 @@ namespace NPOI.SS.Formula.Atp {
     {
         public static UDFFinder instance = new AnalysisToolPak();
 
-        private static Hashtable _functionsByName = CreateFunctionsMap();
+        private static Dictionary<String, FreeRefFunction> _functionsByName = CreateFunctionsMap();
 
         private AnalysisToolPak()
         {
@@ -59,12 +59,16 @@ namespace NPOI.SS.Formula.Atp {
             // if you save such a .xlsx workbook as .xls
             if (name.StartsWith("_xlfn.")) name = name.Substring(6);
 
-            return (FreeRefFunction)_functionsByName[name.ToUpper()];
+            string key = name.ToUpper();
+            if (_functionsByName.ContainsKey(key))
+                return (FreeRefFunction)_functionsByName[key];
+
+            return null;
         }
 
-        private static Hashtable CreateFunctionsMap()
+        private static Dictionary<String, FreeRefFunction> CreateFunctionsMap()
         {
-            Hashtable m = new Hashtable(120);
+            Dictionary<String, FreeRefFunction> m = new Dictionary<String, FreeRefFunction>(120);
 
             r(m, "ACCRINT", null);
             r(m, "ACCRINTM", null);
@@ -178,10 +182,10 @@ namespace NPOI.SS.Formula.Atp {
             return m;
         }
 
-        private static void r(Hashtable m, String functionName, FreeRefFunction pFunc)
+        private static void r(Dictionary<String, FreeRefFunction> m, String functionName, FreeRefFunction pFunc)
         {
             FreeRefFunction func = pFunc == null ? new NotImplemented(functionName) : pFunc;
-            m[functionName] = func;
+            m[functionName]= func;
         }
 
         public static bool IsATPFunction(String name)
@@ -200,12 +204,12 @@ namespace NPOI.SS.Formula.Atp {
         {
             AnalysisToolPak inst = (AnalysisToolPak)instance;
             List<String> lst = new List<String>();
-            foreach (String name in AnalysisToolPak._functionsByName.Keys)
+            foreach (KeyValuePair<String, FreeRefFunction> me in AnalysisToolPak._functionsByName)
             {
-                FreeRefFunction func = (FreeRefFunction)AnalysisToolPak._functionsByName[(name)];
+                FreeRefFunction func = me.Value;
                 if (func != null && !(func is NotImplemented))
                 {
-                    lst.Add(name);
+                    lst.Add(me.Key);
                 }
             }
             return lst.AsReadOnly(); //Collections.unmodifiableCollection(lst);
@@ -221,12 +225,12 @@ namespace NPOI.SS.Formula.Atp {
         {
             AnalysisToolPak inst = (AnalysisToolPak)instance;
             List<String> lst = new List<String>();
-            foreach (String name in AnalysisToolPak._functionsByName.Keys)
+            foreach (KeyValuePair<String, FreeRefFunction> me in AnalysisToolPak._functionsByName)
             {
-                FreeRefFunction func = (FreeRefFunction)AnalysisToolPak._functionsByName[(name)];
+                FreeRefFunction func = me.Value;
                 if (func != null && (func is NotImplemented))
                 {
-                    lst.Add(name);
+                    lst.Add(me.Key);
                 }
             }
             return lst.AsReadOnly(); //Collections.unmodifiableCollection(lst);

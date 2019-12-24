@@ -210,7 +210,7 @@ namespace NPOI.DDF
             else
             {
                 short numElements = LittleEndian.GetShort(data, offset);
-                short numReserved = LittleEndian.GetShort(data, offset + 2);
+                //short numReserved = LittleEndian.GetShort(data, offset + 2); // numReserved
                 short sizeOfElements = LittleEndian.GetShort(data, offset + 4);
 
                 int arraySize = GetActualSizeOfElements(sizeOfElements) * numElements;

@@ -262,6 +262,11 @@ namespace NPOI.HSSF.UserModel
 
         /// <summary>
         /// Gets or sets the degree of rotation for the text in the cell
+        /// 
+        /// Note: HSSF uses values from -90 to 90 degrees, whereas XSSF 
+        /// uses values from 0 to 180 degrees.The implementations of this method will map between these two value-ranges
+        /// accordingly, however the corresponding getter is returning values in the range mandated by the current type
+        /// of Excel file-format that this CellStyle is applied to.
         /// </summary>
         /// <value>The rotation degrees (between -90 and 90 degrees).</value>
         public short Rotation
@@ -489,11 +494,11 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the fill pattern. - Set to 1 to Fill with foreground color
         /// </summary>
         /// <value>The fill pattern.</value>
-        public FillPattern FillPattern
+        public FillPatternType FillPattern
         {
             get
             {
-                return (FillPattern)_format.AdtlFillPattern;
+                return (FillPatternType)_format.AdtlFillPattern;
             }
             set { _format.AdtlFillPattern=(short)value; }
         }

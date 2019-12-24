@@ -33,7 +33,11 @@ namespace TestCases.HSSF.Record
     [TestFixture]
     public class TestRecordFactoryInputStream
     {
-
+        [TearDown]
+        public void ResetPassword()
+        {
+            Biff8EncryptionKey.CurrentUserPassword = (null);
+        }
         /**
          * Hex dump of a BOF record and most of a FILEPASS record.
          * A 16 byte saltHash should be Added to complete the second record
@@ -59,6 +63,7 @@ namespace TestCases.HSSF.Record
          * Makes sure that a default password mismatch condition is represented with {@link EncryptedDocumentException}
          */
         [Test]
+        [Ignore("not implemented")]
         public void TestDefaultPassword()
         {
             // This encodng depends on docId, password and stream position
@@ -101,6 +106,7 @@ namespace TestCases.HSSF.Record
          * Makes sure that an incorrect user supplied password condition is represented with {@link EncryptedDocumentException}
          */
         [Test]
+        [Ignore("not implemented")]
         public void TestSuppliedPassword()
         {
             // This encodng depends on docId, password and stream position

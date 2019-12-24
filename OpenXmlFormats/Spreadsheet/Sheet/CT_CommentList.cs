@@ -92,5 +92,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.commentField = value;
             }
         }
+
+        public CT_Comment[] GetCommentArray()
+        {
+            return this.commentField.ToArray();
+        }
     }
 }

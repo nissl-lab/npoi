@@ -53,8 +53,14 @@ namespace NPOI.HSSF.Record.Aggregates
                 {
                     if (_psBlock != null)
                     {
+                        if (rs.PeekNextSid() == HeaderFooterRecord.sid)
+                        {
+                            // test samples: 45538_classic_Footer.xls, 45538_classic_Header.xls
+                            _psBlock.AddLateHeaderFooter((HeaderFooterRecord)rs.GetNext());
+                            continue;
+                        }
                         throw new InvalidOperationException(
-                                "Found more than one PageSettingsBlock in custom view Settings sub-stream");
+                                "Found more than one PageSettingsBlock in chart sub-stream, had sid: " + rs.PeekNextSid());
                     }
                     _psBlock = new PageSettingsBlock(rs);
                     temp.Add(_psBlock);

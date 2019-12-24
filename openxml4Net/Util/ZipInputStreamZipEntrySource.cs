@@ -7,138 +7,155 @@ using ICSharpCode.SharpZipLib.Zip;
 
 namespace NPOI.OpenXml4Net.Util
 {
-/**
- * Provides a way to get at all the ZipEntries
- *  from a ZipInputStream, as many times as required.
- * Allows a ZipInputStream to be treated much like
- *  a ZipFile, for a price in terms of memory.
- * Be sure to call {@link #close()} as soon as you're
- *  done, to free up that memory!
- */
-public class ZipInputStreamZipEntrySource:ZipEntrySource {
-    private List<FakeZipEntry> zipEntries;
-	
-	/**
-	 * Reads all the entries from the ZipInputStream 
-	 *  into memory, and closes the source stream.
-	 * We'll then eat lots of memory, but be able to
-	 *  work with the entries at-will.
-	 */
-	public ZipInputStreamZipEntrySource(ZipInputStream inp){
-        zipEntries = new List<FakeZipEntry>();
-		
-		bool going = true;
-		while(going) {
-			ZipEntry zipEntry = inp.GetNextEntry();
-			if(zipEntry == null) {
-				going = false;
-			} else {
-				FakeZipEntry entry = new FakeZipEntry(zipEntry, inp);
-				//inp.Close();
-
-                zipEntries.Add(entry);
-			}
-		}
-		inp.Close();
-	}
-
-    public IEnumerator Entries
+    /**
+     * Provides a way to get at all the ZipEntries
+     *  from a ZipInputStream, as many times as required.
+     * Allows a ZipInputStream to be treated much like
+     *  a ZipFile, for a price in terms of memory.
+     * Be sure to call {@link #close()} as soon as you're
+     *  done, to free up that memory!
+     */
+    public class ZipInputStreamZipEntrySource : ZipEntrySource
     {
-        get{
-		return new EntryEnumerator(zipEntries);
-        }
-	}
-	
-	public Stream GetInputStream(ZipEntry zipEntry) {
-        FakeZipEntry entry = (FakeZipEntry)zipEntry;
-		return entry.GetInputStream();
-	}
-	
-	public void Close() {
-		// Free the memory
-		zipEntries = null;
-	}
-	
-	/**
-	 * Why oh why oh why are Iterator and Enumeration
-	 *  still not compatible?
-	 */
-	internal class EntryEnumerator:IEnumerator {
-        private List<FakeZipEntry>.Enumerator iterator;
+        private List<FakeZipEntry> zipEntries;
 
-        internal EntryEnumerator(List<FakeZipEntry> zipEntries)
+        /**
+         * Reads all the entries from the ZipInputStream 
+         *  into memory, and closes the source stream.
+         * We'll then eat lots of memory, but be able to
+         *  work with the entries at-will.
+         */
+        public ZipInputStreamZipEntrySource(ZipInputStream inp)
         {
-			iterator = zipEntries.GetEnumerator();
-		}
-		
-		public bool MoveNext() {
-			return iterator.MoveNext();
-		}
+            zipEntries = new List<FakeZipEntry>();
 
-		public object Current 
+            bool going = true;
+            while (going)
+            {
+                ZipEntry zipEntry = inp.GetNextEntry();
+                if (zipEntry == null)
+                {
+                    going = false;
+                }
+                else
+                {
+                    FakeZipEntry entry = new FakeZipEntry(zipEntry, inp);
+                    //inp.Close();
+
+                    zipEntries.Add(entry);
+                }
+            }
+            inp.Close();
+        }
+
+        public IEnumerator Entries
         {
             get
             {
-                return iterator.Current;
+                return new EntryEnumerator(zipEntries);
             }
-		}
-
-        #region IEnumerator Members
-
-
-        public void Reset()
-        {
-            throw new NotImplementedException();
         }
 
-        #endregion
-    }
-
-	/**
-	 * So we can close the real zip entry and still
-	 *  effectively work with it.
-	 * Holds the (decompressed!) data in memory, so
-	 *  close this as soon as you can! 
-	 */
-	public class FakeZipEntry : ZipEntry {
-		private byte[] data;
-		
-		public FakeZipEntry(ZipEntry entry, ZipInputStream inp):base(entry.Name)
+        public Stream GetInputStream(ZipEntry zipEntry)
         {
+            FakeZipEntry entry = (FakeZipEntry)zipEntry;
+            return entry.GetInputStream();
+        }
 
-            // Grab the de-compressed contents for later
-            MemoryStream baos = new MemoryStream();
+        public void Close()
+        {
+            // Free the memory
+            zipEntries = null;
+        }
 
-            long entrySize = entry.Size;
+        public bool IsClosed
+        {
+            get { return zipEntries == null; }
+        }
+        /**
+         * Why oh why oh why are Iterator and Enumeration
+         *  still not compatible?
+         */
+        internal class EntryEnumerator : IEnumerator
+        {
+            private List<FakeZipEntry>.Enumerator iterator;
 
-            if (entrySize != -1)
+            internal EntryEnumerator(List<FakeZipEntry> zipEntries)
             {
-                if (entrySize >= Int32.MaxValue)
+                iterator = zipEntries.GetEnumerator();
+            }
+
+            public bool MoveNext()
+            {
+                return iterator.MoveNext();
+            }
+
+            public object Current
+            {
+                get
                 {
-                    throw new IOException("ZIP entry size is too large");
+                    return iterator.Current;
+                }
+            }
+
+            #region IEnumerator Members
+
+
+            public void Reset()
+            {
+                throw new NotImplementedException();
+            }
+
+            #endregion
+        }
+
+        /**
+         * So we can close the real zip entry and still
+         *  effectively work with it.
+         * Holds the (decompressed!) data in memory, so
+         *  close this as soon as you can! 
+         */
+        public class FakeZipEntry : ZipEntry
+        {
+            private byte[] data;
+
+            public FakeZipEntry(ZipEntry entry, ZipInputStream inp) : base(entry.Name)
+            {
+
+                // Grab the de-compressed contents for later
+                MemoryStream baos = new MemoryStream();
+
+                long entrySize = entry.Size;
+
+                if (entrySize != -1)
+                {
+                    if (entrySize >= Int32.MaxValue)
+                    {
+                        throw new IOException("ZIP entry size is too large");
+                    }
+
+                    baos = new MemoryStream((int)entrySize);
+                }
+                else
+                {
+                    baos = new MemoryStream();
                 }
 
-                baos = new MemoryStream((int)entrySize);
+                byte[] buffer = new byte[4096];
+                int read = 0;
+                while ((read = inp.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    baos.Write(buffer, 0, read);
+                }
+
+                data = baos.ToArray();
             }
-            else
+
+            public Stream GetInputStream()
             {
-                baos = new MemoryStream();
+                return new MemoryStream(data);
             }
-
-			byte[] buffer = new byte[4096];
-			int read = 0;
-			while( (read = inp.Read(buffer,0,buffer.Length)) > 0 ) {
-				baos.Write(buffer, 0, read);
-			}
-			
-			data = baos.ToArray();
-		}
-
-        public Stream GetInputStream() 
-        {
-            return new MemoryStream(data);
-		}
-	}
-}
+        }
+    }
 
 }

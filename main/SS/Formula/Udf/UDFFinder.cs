@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Udf
+namespace NPOI.SS.Formula.UDF
 {
     using System;
     using NPOI.SS.Formula.Atp;
@@ -28,7 +28,10 @@ namespace NPOI.SS.Formula.Udf
      */
     public abstract class UDFFinder
     {
-        public static readonly UDFFinder DEFAULT = new AggregatingUDFFinder(AnalysisToolPak.instance);
+        public static UDFFinder GetDefault()
+        {
+            return new AggregatingUDFFinder(AnalysisToolPak.instance);
+        }
 
         /**
          * Returns executor by specified name. Returns <code>null</code> if the function name is unknown.

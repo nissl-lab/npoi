@@ -23,16 +23,18 @@ namespace NPOI.HSSF.Record
     using NPOI.HSSF.Record.Crypto;
     using NPOI.Util;
     using NPOI.HSSF.Record.Chart;
+    using NPOI.POIFS.Crypt;
+
     /**
-     * A stream based way to get at complete records, with
-     * as low a memory footprint as possible.
-     * This handles Reading from a RecordInputStream, turning
-     * the data into full records, processing continue records
-     * etc.
-     * Most users should use {@link HSSFEventFactory} /
-     * {@link HSSFListener} and have new records pushed to
-     * them, but this does allow for a "pull" style of coding.
-     */
+* A stream based way to get at complete records, with
+* as low a memory footprint as possible.
+* This handles Reading from a RecordInputStream, turning
+* the data into full records, processing continue records
+* etc.
+* Most users should use {@link HSSFEventFactory} /
+* {@link HSSFListener} and have new records pushed to
+* them, but this does allow for a "pull" style of coding.
+*/
     public class RecordFactoryInputStream
     {
 
@@ -113,23 +115,13 @@ namespace NPOI.HSSF.Record
             {
                 FilePassRecord fpr = _filePassRec;
                 String userPassword = Biff8EncryptionKey.CurrentUserPassword;
-
-                Biff8EncryptionKey key;
                 if (userPassword == null)
                 {
-                    key = Biff8EncryptionKey.Create(fpr.DocId);
+                    userPassword = Decryptor.DEFAULT_PASSWORD;
                 }
-                else
-                {
-                    key = Biff8EncryptionKey.Create(userPassword, fpr.DocId);
-                }
-                if (!key.Validate(fpr.SaltData, fpr.SaltHash))
-                {
-                    throw new EncryptedDocumentException(
-                            (userPassword == null ? "Default" : "Supplied")
-                            + " password is invalid for docId/saltData/saltHash");
-                }
-                return new RecordInputStream(original, key, _InitialRecordsSize);
+
+                //return new RecordInputStream(original, key, _InitialRecordsSize);
+                throw new NotImplementedException("Implement it based on poi 4.2 in the future");
             }
 
             public bool HasEncryption

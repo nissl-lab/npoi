@@ -43,7 +43,7 @@ namespace NPOI.SS.Util
             _firstColumn = firstColumn;
             _height = height;
             _width = width;
-            _flattenedArray = flattenedArray;
+            _flattenedArray = (K[])flattenedArray.Clone();
         }
 
         public static SSCellRange<K> Create(int firstRow, int firstColumn, int height, int width, List<K> flattenedList, Type cellClass)
@@ -84,7 +84,7 @@ namespace NPOI.SS.Util
 
             public ArrayIterator(D[] array)
             {
-                _array = array;
+                _array = (D[])array.Clone();
                 _index = 0;
             }
 

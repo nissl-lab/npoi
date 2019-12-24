@@ -20,6 +20,7 @@ namespace TestCases.SS.UserModel
     using System;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
     using NPOI.Util;
     using NUnit.Framework;
 
@@ -43,12 +44,14 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook book = _testDataProvider.CreateWorkbook();
             ISheet sheet = book.CreateSheet();
-            Assert.IsNull(sheet.GetCellComment(0, 0));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
 
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell(0);
-            Assert.IsNull(sheet.GetCellComment(0, 0));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
             Assert.IsNull(cell.CellComment);
+
+            book.Close();
         }
         [Test]
         public void Create()
@@ -59,16 +62,16 @@ namespace TestCases.SS.UserModel
             int cellRow = 3;
             int cellColumn = 1;
 
-            IWorkbook wb = _testDataProvider.CreateWorkbook();
-            ICreationHelper factory = wb.GetCreationHelper();
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ICreationHelper factory = wb1.GetCreationHelper();
 
-            ISheet sheet = wb.CreateSheet();
-            Assert.IsNull(sheet.GetCellComment(cellRow, cellColumn));
+            ISheet sheet = wb1.CreateSheet();
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(cellRow, cellColumn)));
 
             ICell cell = sheet.CreateRow(cellRow).CreateCell(cellColumn);
             cell.SetCellValue(factory.CreateRichTextString(cellText));
             Assert.IsNull(cell.CellComment);
-            Assert.IsNull(sheet.GetCellComment(cellRow, cellColumn));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(cellRow, cellColumn)));
 
             IDrawing patr = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = factory.CreateClientAnchor();
@@ -85,7 +88,7 @@ namespace TestCases.SS.UserModel
             comment.Author=(commentAuthor);
             cell.CellComment=(comment);
             Assert.IsNotNull(cell.CellComment);
-            Assert.IsNotNull(sheet.GetCellComment(cellRow, cellColumn));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(cellRow, cellColumn)));
 
             //verify our Settings
             Assert.AreEqual(commentAuthor, comment.Author);
@@ -93,8 +96,10 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(cellRow, comment.Row);
             Assert.AreEqual(cellColumn, comment.Column);
 
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
-            sheet = wb.GetSheetAt(0);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
+
+            sheet = wb2.GetSheetAt(0);
             cell = sheet.GetRow(cellRow).GetCell(cellColumn);
             comment = cell.CellComment;
 
@@ -109,9 +114,10 @@ namespace TestCases.SS.UserModel
             comment.String = (factory.CreateRichTextString("New Comment Text"));
             comment.Visible = (false);
 
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            IWorkbook wb3 = _testDataProvider.WriteOutAndReadBack(wb2);
+            wb2.Close();
 
-            sheet = wb.GetSheetAt(0);
+            sheet = wb3.GetSheetAt(0);
             cell = sheet.GetRow(cellRow).GetCell(cellColumn);
             comment = cell.CellComment;
 
@@ -121,6 +127,12 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(cellRow, comment.Row);
             Assert.AreEqual(cellColumn, comment.Column);
             Assert.IsFalse(comment.Visible);
+
+            // Test Comment.equals and Comment.hashCode
+            Assert.AreEqual(comment, cell.CellComment);
+            Assert.AreEqual(comment.GetHashCode(), cell.CellComment.GetHashCode());
+
+            wb3.Close();
         }
 
         /**
@@ -143,7 +155,7 @@ namespace TestCases.SS.UserModel
                 cell = row.GetCell(0);
                 comment = cell.CellComment;
                 Assert.IsNull(comment, "Cells in the first column are not commented");
-                Assert.IsNull(sheet.GetCellComment(rownum, 0));
+                Assert.IsNull(sheet.GetCellComment(new CellAddress(rownum, 0)));
             }
 
             for (int rownum = 0; rownum < 3; rownum++)
@@ -152,13 +164,15 @@ namespace TestCases.SS.UserModel
                 cell = row.GetCell(1);
                 comment = cell.CellComment;
                 Assert.IsNotNull(comment, "Cells in the second column have comments");
-                Assert.IsNotNull(sheet.GetCellComment(rownum, 1), "Cells in the second column have comments");
+                Assert.IsNotNull(sheet.GetCellComment(new CellAddress(rownum, 1)), "Cells in the second column have comments");
 
                 Assert.AreEqual("Yegor Kozlov", comment.Author);
                 Assert.IsFalse(comment.String.String == string.Empty, "cells in the second column have not empyy notes");
                 Assert.AreEqual(rownum, comment.Row);
                 Assert.AreEqual(cell.ColumnIndex, comment.Column);
             }
+
+            wb.Close();
         }
 
         /**
@@ -168,10 +182,10 @@ namespace TestCases.SS.UserModel
         public void ModifyComments()
         {
 
-            IWorkbook wb = _testDataProvider.OpenSampleWorkbook("SimpleWithComments." + _testDataProvider.StandardFileNameExtension);
-            ICreationHelper factory = wb.GetCreationHelper();
+            IWorkbook wb1 = _testDataProvider.OpenSampleWorkbook("SimpleWithComments." + _testDataProvider.StandardFileNameExtension);
+            ICreationHelper factory = wb1.GetCreationHelper();
 
-            ISheet sheet = wb.GetSheetAt(0);
+            ISheet sheet = wb1.GetSheetAt(0);
 
             ICell cell;
             IRow row;
@@ -186,8 +200,10 @@ namespace TestCases.SS.UserModel
                 comment.String = (factory.CreateRichTextString("Modified comment at row " + rownum));
             }
 
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
-            sheet = wb.GetSheetAt(0);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
+
+            sheet = wb2.GetSheetAt(0);
 
             for (int rownum = 0; rownum < 3; rownum++)
             {
@@ -199,12 +215,13 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual("Modified comment at row " + rownum, comment.String.String);
             }
 
+            wb2.Close();
         }
         [Test]
         public void DeleteComments()
         {
-            IWorkbook wb = _testDataProvider.OpenSampleWorkbook("SimpleWithComments." + _testDataProvider.StandardFileNameExtension);
-            ISheet sheet = wb.GetSheetAt(0);
+            IWorkbook wb1 = _testDataProvider.OpenSampleWorkbook("SimpleWithComments." + _testDataProvider.StandardFileNameExtension);
+            ISheet sheet = wb1.GetSheetAt(0);
 
             // Zap from rows 1 and 3
             Assert.IsNotNull(sheet.GetRow(0).GetCell(1).CellComment);
@@ -220,13 +237,16 @@ namespace TestCases.SS.UserModel
             Assert.IsNull(sheet.GetRow(2).GetCell(1).CellComment);
 
             // Save and re-load
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
-            sheet = wb.GetSheetAt(0);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
+
+            sheet = wb2.GetSheetAt(0);
             // Check
             Assert.IsNull(sheet.GetRow(0).GetCell(1).CellComment);
             Assert.IsNotNull(sheet.GetRow(1).GetCell(1).CellComment);
             Assert.IsNull(sheet.GetRow(2).GetCell(1).CellComment);
 
+            wb2.Close();
         }
 
         /**
@@ -235,11 +255,11 @@ namespace TestCases.SS.UserModel
         [Test]
         public void QuickGuide()
         {
-            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
 
-            ICreationHelper factory = wb.GetCreationHelper();
+            ICreationHelper factory = wb1.GetCreationHelper();
 
-            ISheet sheet = wb.CreateSheet();
+            ISheet sheet = wb1.CreateSheet();
 
             ICell cell = sheet.CreateRow(3).CreateCell(5);
             cell.SetCellValue("F4");
@@ -254,8 +274,10 @@ namespace TestCases.SS.UserModel
             //assign the comment to the cell
             cell.CellComment = (comment);
 
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
-            sheet = wb.GetSheetAt(0);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
+
+            sheet = wb2.GetSheetAt(0);
             cell = sheet.GetRow(3).GetCell(5);
             comment = cell.CellComment;
             Assert.IsNotNull(comment);
@@ -263,6 +285,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("Apache POI", comment.Author);
             Assert.AreEqual(3, comment.Row);
             Assert.AreEqual(5, comment.Column);
+
+            wb2.Close();
         }
 
         [Test]
@@ -343,6 +367,74 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual(3, anchor.Row2);
                 Assert.AreEqual(16 * Units.EMU_PER_PIXEL, anchor.Dy2);
             }
+
+            wb.Close();
+        }
+        [Test]
+        public void AttemptToSave2CommentsWithSameCoordinates()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sh = wb.CreateSheet();
+            ICreationHelper factory = wb.GetCreationHelper();
+            IDrawing patriarch = sh.CreateDrawingPatriarch();
+            patriarch.CreateCellComment(factory.CreateClientAnchor());
+
+            try
+            {
+                patriarch.CreateCellComment(factory.CreateClientAnchor());
+                _testDataProvider.WriteOutAndReadBack(wb);
+                Assert.Fail("Expected InvalidOperationException(found multiple cell comments for cell $A$1");
+            }
+            catch (InvalidOperationException e)
+            {
+                // HSSFWorkbooks fail when writing out workbook
+                Assert.AreEqual(e.Message, "found multiple cell comments for cell A1");
+            }
+            catch (ArgumentException e)
+            {
+                // XSSFWorkbooks fail when creating and setting the cell address of the comment
+                Assert.AreEqual(e.Message, "Multiple cell comments in one cell are not allowed, cell: A1");
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void GetAddress()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sh = wb.CreateSheet();
+            ICreationHelper factory = wb.GetCreationHelper();
+            IDrawing patriarch = sh.CreateDrawingPatriarch();
+            IComment comment = patriarch.CreateCellComment(factory.CreateClientAnchor());
+
+            Assert.AreEqual(CellAddress.A1, comment.Address);
+            ICell C2 = sh.CreateRow(1).CreateCell(2);
+            C2.CellComment = comment;
+            Assert.AreEqual(new CellAddress("C2"), comment.Address);
+        }
+
+        [Test]
+        public void SetAddress()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sh = wb.CreateSheet();
+            ICreationHelper factory = wb.GetCreationHelper();
+            IDrawing patriarch = sh.CreateDrawingPatriarch();
+            IComment comment = patriarch.CreateCellComment(factory.CreateClientAnchor());
+
+            Assert.AreEqual(CellAddress.A1, comment.Address);
+            CellAddress C2 = new CellAddress("C2");
+            Assert.AreEqual("C2", C2.FormatAsString());
+            comment.Address = C2;
+            Assert.AreEqual(C2, comment.Address);
+
+            CellAddress E10 = new CellAddress(9, 4);
+            Assert.AreEqual("E10", E10.FormatAsString());
+            comment.SetAddress(9, 4);
+            Assert.AreEqual(E10, comment.Address);
         }
 
     }

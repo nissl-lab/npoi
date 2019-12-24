@@ -29,7 +29,7 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
     {
         private IFmtRecordRecord ifmt = null;
         private TickRecord tick = null;
-        private FontXRecord fontx = null;
+        private FontIndexRecord fontx = null;
         private List<AxisLineFormatRecord> axisLines = new List<AxisLineFormatRecord>();
         private List<LineFormatRecord> lineFormats = new List<LineFormatRecord>();
         private AreaFormatRecord areaFormat = null;
@@ -45,8 +45,8 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
                 ifmt = (IFmtRecordRecord)rs.GetNext();
             if (rs.PeekNextChartSid() == TickRecord.sid)
                 tick = (TickRecord)rs.GetNext();
-            if (rs.PeekNextChartSid() == FontXRecord.sid)
-                fontx = (FontXRecord)rs.GetNext();
+            if (rs.PeekNextChartSid() == FontIndexRecord.sid)
+                fontx = (FontIndexRecord)rs.GetNext();
             if (rs.PeekNextChartSid() == AxisLineFormatRecord.sid)
             {
                 while (rs.PeekNextChartSid() == AxisLineFormatRecord.sid)

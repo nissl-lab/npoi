@@ -60,16 +60,23 @@ namespace NPOI.SS.Formula
             return new LazyAreaEval(area, _evaluator);
         }
 
+        public bool IsSubTotal
+        {
+            get
+            {
+                SheetRefEvaluator sheetEvaluator = _evaluator.GetSheetEvaluator(FirstSheetIndex);
+                return sheetEvaluator.IsSubTotal(Row, Column);
+            }
+        }
+
         public override String ToString()
         {
             CellReference cr = new CellReference(Row, Column);
-            StringBuilder sb = new StringBuilder();
-            sb.Append(GetType().Name).Append("[");
-            sb.Append(_evaluator.SheetNameRange);
-            sb.Append('!');
-            sb.Append(cr.FormatAsString());
-            sb.Append("]");
-            return sb.ToString();
+            return GetType().Name + "[" +
+                _evaluator.SheetNameRange +
+                '!' +
+                cr.FormatAsString() +
+                "]";
         }
     }
 }

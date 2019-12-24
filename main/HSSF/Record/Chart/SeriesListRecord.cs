@@ -40,7 +40,7 @@ namespace NPOI.HSSF.Record.Chart
 
         public SeriesListRecord(short[] seriesNumbers)
         {
-            field_1_seriesNumbers = seriesNumbers;
+            field_1_seriesNumbers = (seriesNumbers == null) ? null : (short[])seriesNumbers.Clone();
         }
 
         /**
@@ -99,11 +99,8 @@ namespace NPOI.HSSF.Record.Chart
 
         public override Object Clone()
         {
-            return new SeriesListRecord((short[])field_1_seriesNumbers.Clone());
+            return new SeriesListRecord(field_1_seriesNumbers);
         }
-
-
-
 
         /**
          * Get the series numbers field for the SeriesList record.

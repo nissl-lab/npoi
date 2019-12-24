@@ -24,6 +24,7 @@ namespace NPOI.XWPF.UserModel
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using NPOI.Util;
+    using System.Text;
 
     /**
      * Tests for XWPF Paragraphs
@@ -516,6 +517,27 @@ namespace NPOI.XWPF.UserModel
 
             Assert.IsTrue(p.RemoveRun(0));
         }
+
+        [Test]
+        public void TestFieldRuns()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("FldSimple.docx");
+            IList<XWPFParagraph> ps = doc.Paragraphs;
+            Assert.AreEqual(1, ps.Count);
+
+            XWPFParagraph p = ps[0];
+            Assert.AreEqual(1, p.Runs.Count);
+            Assert.AreEqual(1, p.IRuns.Count);
+
+            XWPFRun r = p.Runs[0];
+            Assert.AreEqual(typeof(XWPFFieldRun), r.GetType());
+
+            XWPFFieldRun fr = (XWPFFieldRun)r;
+            Assert.AreEqual(" FILENAME   \\* MERGEFORMAT ", fr.FieldInstruction);
+            Assert.AreEqual("FldSimple.docx", fr.Text);
+            Assert.AreEqual("FldSimple.docx", p.Text);
+        }
+
         [Test]
         public void TestRuns()
         {
@@ -529,6 +551,18 @@ namespace NPOI.XWPF.UserModel
 
             Assert.IsNotNull(p.GetRun(run));
             Assert.IsNull(p.GetRun(null));
+        }
+        [Test]
+        public void Test58067()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("58067.docx");
+
+            StringBuilder str = new StringBuilder();
+            foreach (XWPFParagraph par in doc.Paragraphs)
+            {
+                str.Append(par.Text).Append("\n");
+            }
+            Assert.AreEqual("This is a test.\n\n\n\n3\n4\n5\n\n\n\nThis is a whole paragraph where one word is deleted.\n", str.ToString());
         }
 
     }

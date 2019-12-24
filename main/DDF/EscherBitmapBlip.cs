@@ -35,7 +35,7 @@ namespace NPOI.DDF
 
         private const int HEADER_SIZE = 8;
 
-        private byte[] field_1_UID;
+        private byte[] field_1_UID  = new byte[16];
         private byte field_2_marker = (byte)0xFF;
 
 
@@ -101,7 +101,14 @@ namespace NPOI.DDF
         public byte[] UID
         {
             get { return field_1_UID; }
-            set { this.field_1_UID = value; }
+            set
+            {
+                if (value == null || value.Length != 16)
+                {
+                    throw new ArgumentException("uid must be byte[16]");
+                }
+                Array.Copy(field_1_UID, 0, this.field_1_UID, 0, 16);
+            }
         }
 
         /// <summary>
@@ -122,41 +129,20 @@ namespace NPOI.DDF
         {
             String nl = Environment.NewLine;
 
-            String extraData;
-            using (MemoryStream b = new MemoryStream())
-            {
-                try
-                {
-                    HexDump.Dump(this.field_pictureData, 0, b, 0);
-                    extraData = HexDump.ToHex(b.ToArray());
-                }
-                catch (Exception e)
-                {
-                    extraData = e.ToString();
-                }
-                return this.GetType().Name + ":" + nl +
+            String extraData = HexDump.Dump(this.field_pictureData, 0, 0);
+            return this.GetType().Name + ":" + nl +
                         "  RecordId: 0x" + HexDump.ToHex(RecordId) + nl +
                         "  Version: 0x" + HexDump.ToHex(Version) + nl +
                         "  Instance: 0x" + HexDump.ToHex(Instance) + nl +
                         "  UID: 0x" + HexDump.ToHex(field_1_UID) + nl +
                         "  Marker: 0x" + HexDump.ToHex(field_2_marker) + nl +
                         "  Extra Data:" + nl + extraData;
-            }
         }
 
         public override String ToXml(String tab)
         {
-            String extraData;
-            //MemoryStream b = new MemoryStream();
-            try
-            {
-                //HexDump.Dump(this.field_pictureData, 0, b, 0);
-                extraData = HexDump.ToHex(this.field_pictureData);
-            }
-            catch (Exception e)
-            {
-                extraData = e.ToString();
-            }
+            String extraData = HexDump.ToHex(this.field_pictureData);
+            
             StringBuilder builder = new StringBuilder();
             builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))
                     .Append(tab).Append("\t").Append("<UID>0x").Append(HexDump.ToHex(field_1_UID)).Append("</UID>\n")

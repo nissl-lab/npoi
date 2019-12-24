@@ -260,9 +260,8 @@ namespace NPOI.Util
         public static bool HasMultibyte(String value)
         {
             if (value == null) return false;
-            for (int i = 0; i < value.Length; i++)
+            foreach (char c in value)
             {
-                char c = value[i];
                 if (c > 0xFF) return true;
             }
             return false;
@@ -507,9 +506,9 @@ namespace NPOI.Util
             StringBuilder sb = new StringBuilder();
             int length = string1.Length;
             //char[] stringChars = string1.ToCharArray();
-            for (int offset = 0; offset < length; )
+            for (int offset = 0; offset < length;)
             {
-                
+
                 int msCodepoint = char.ConvertToUtf32(string1, offset);//codePointAt(stringChars, offset, string1.Length);
                 int uniCodepoint = msCodepointToUnicode[(msCodepoint)];
                 sb.Append(Char.ConvertFromUtf32(uniCodepoint == null ? msCodepoint : uniCodepoint));
@@ -539,16 +538,16 @@ namespace NPOI.Util
          * @since 1.5
          */
         public static char MAX_HIGH_SURROGATE = '\uDBFF';
-            /**
-         * The minimum value of a
-         * <a href="http://www.unicode.org/glossary/#low_surrogate_code_unit">
-         * Unicode low-surrogate code unit</a>
-         * in the UTF-16 encoding, constant {@code '\u005CuDC00'}.
-         * A low-surrogate is also known as a <i>trailing-surrogate</i>.
-         *
-         * @since 1.5
-         */
-        public static char MIN_LOW_SURROGATE  = '\uDC00';
+        /**
+     * The minimum value of a
+     * <a href="http://www.unicode.org/glossary/#low_surrogate_code_unit">
+     * Unicode low-surrogate code unit</a>
+     * in the UTF-16 encoding, constant {@code '\u005CuDC00'}.
+     * A low-surrogate is also known as a <i>trailing-surrogate</i>.
+     *
+     * @since 1.5
+     */
+        public static char MIN_LOW_SURROGATE = '\uDC00';
 
         /**
          * The maximum value of a
@@ -559,20 +558,21 @@ namespace NPOI.Util
          *
          * @since 1.5
          */
-        public static char MAX_LOW_SURROGATE  = '\uDFFF';
-            /**
-         * Converts the specified surrogate pair to its supplementary code
-         * point value. This method does not validate the specified
-         * surrogate pair. The caller must validate it using {@link
-         * #isSurrogatePair(char, char) isSurrogatePair} if necessary.
-         *
-         * @param  high the high-surrogate code unit
-         * @param  low the low-surrogate code unit
-         * @return the supplementary code point composed from the
-         *         specified surrogate pair.
-         * @since  1.5
-         */
-        public static int toCodePoint(char high, char low) {
+        public static char MAX_LOW_SURROGATE = '\uDFFF';
+        /**
+     * Converts the specified surrogate pair to its supplementary code
+     * point value. This method does not validate the specified
+     * surrogate pair. The caller must validate it using {@link
+     * #isSurrogatePair(char, char) isSurrogatePair} if necessary.
+     *
+     * @param  high the high-surrogate code unit
+     * @param  low the low-surrogate code unit
+     * @return the supplementary code point composed from the
+     *         specified surrogate pair.
+     * @since  1.5
+     */
+        public static int toCodePoint(char high, char low)
+        {
             // Optimized form of:
             // return ((high - MIN_HIGH_SURROGATE) << 10)
             //         + (low - MIN_LOW_SURROGATE)
@@ -836,5 +836,23 @@ namespace NPOI.Util
        ' ', // 0xf0ff not defined
    };
 
+        // Could be replaced with org.apache.commons.lang3.StringUtils#join
+        // for dotnet, should use string.Join
+        public static String Join(Object[] array, String separator)
+        {
+            if (array.Length == 0) return "";
+            StringBuilder sb = new StringBuilder();
+            sb.Append(array[0]);
+            for (int i = 1; i < array.Length; i++)
+            {
+                sb.Append(separator).Append(array[i]);
+            }
+            return sb.ToString();
+        }
+
+        public static String Join(String separator, params object[] array)
+        {
+            return Join(array, separator);
+        }
     }
 }

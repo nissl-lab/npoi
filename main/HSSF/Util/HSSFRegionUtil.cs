@@ -55,18 +55,7 @@ namespace NPOI.HSSF.Util
                 HSSFCellUtil.SetCellStyleProperty(cell, _workbook, _propertyName, _propertyValue);
             }
         }
-        [Obsolete]
-        private static CellRangeAddress toCRA(Region region)
-        {
-            return Region.ConvertToCellRangeAddress(region);
-        }
 
-        //[Obsolete]
-        //public static void SetBorderLeft(NPOI.SS.UserModel.CellBorderType border, Region region, HSSFSheet sheet,
-        //        HSSFWorkbook workbook)
-        //{
-        //    SetBorderLeft(border, toCRA(region), sheet, workbook);
-        //}
         /// <summary>
         /// Sets the left border for a region of cells by manipulating the cell style
         /// of the individual cells on the left
@@ -82,19 +71,13 @@ namespace NPOI.HSSF.Util
             int rowEnd = region.LastRow;
             int column = region.FirstColumn;
 
-            CellPropertySetter cps = new CellPropertySetter(workbook, HSSFCellUtil.BORDER_LEFT, (int)border);
+            CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.BORDER_LEFT, (int)border);
             for (int i = rowStart; i <= rowEnd; i++)
             {
                 cps.SetProperty(HSSFCellUtil.GetRow(i, sheet), column);
             }
         }
 
-        //[Obsolete]
-        //public static void SetLeftBorderColor(short color, Region region, HSSFSheet sheet,
-        //        HSSFWorkbook workbook)
-        //{
-        //    SetLeftBorderColor(color, toCRA(region), sheet, workbook);
-        //}
         /// <summary>
         /// Sets the leftBorderColor attribute of the HSSFRegionUtil object
         /// </summary>
@@ -109,19 +92,13 @@ namespace NPOI.HSSF.Util
             int rowEnd = region.LastRow;
             int column = region.FirstColumn;
 
-            CellPropertySetter cps = new CellPropertySetter(workbook, HSSFCellUtil.LEFT_BORDER_COLOR, color);
+            CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.LEFT_BORDER_COLOR, color);
             for (int i = rowStart; i <= rowEnd; i++)
             {
                 cps.SetProperty(HSSFCellUtil.GetRow(i, sheet), column);
             }
         }
 
-        //[Obsolete]
-        //public static void SetBorderRight(NPOI.SS.UserModel.CellBorderType border, Region region, HSSFSheet sheet,
-        //        HSSFWorkbook workbook)
-        //{
-        //    SetBorderRight(border, toCRA(region), sheet, workbook);
-        //}
         /// <summary>
         /// Sets the borderRight attribute of the HSSFRegionUtil object
         /// </summary>
@@ -136,19 +113,14 @@ namespace NPOI.HSSF.Util
             int rowEnd = region.LastRow;
             int column = region.LastColumn;
 
-            CellPropertySetter cps = new CellPropertySetter(workbook, HSSFCellUtil.BORDER_RIGHT, (int)border);
+            CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.BORDER_RIGHT, (int)border);
             for (int i = rowStart; i <= rowEnd; i++)
             {
                 cps.SetProperty(HSSFCellUtil.GetRow(i, sheet), column);
             }
         }
 
-        //[Obsolete]
-        //public static void SetRightBorderColor(short color, Region region, HSSFSheet sheet,
-        //        HSSFWorkbook workbook)
-        //{
-        //    SetRightBorderColor(color, toCRA(region), sheet, workbook);
-        //}
+
         /// <summary>
         /// Sets the rightBorderColor attribute of the HSSFRegionUtil object
         /// </summary>
@@ -163,19 +135,13 @@ namespace NPOI.HSSF.Util
             int rowEnd = region.LastRow;
             int column = region.LastColumn;
 
-            CellPropertySetter cps = new CellPropertySetter(workbook, HSSFCellUtil.RIGHT_BORDER_COLOR, color);
+            CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.RIGHT_BORDER_COLOR, color);
             for (int i = rowStart; i <= rowEnd; i++)
             {
                 cps.SetProperty(HSSFCellUtil.GetRow(i, sheet), column);
             }
         }
 
-        //[Obsolete]
-        //public static void SetBorderBottom(NPOI.SS.UserModel.CellBorderType border, Region region, HSSFSheet sheet,
-        //        HSSFWorkbook workbook)
-        //{
-        //    SetBorderBottom(border, toCRA(region), sheet, workbook);
-        //}
         /// <summary>
         /// Sets the borderBottom attribute of the HSSFRegionUtil object
         /// </summary>
@@ -189,7 +155,7 @@ namespace NPOI.HSSF.Util
             int colStart = region.FirstColumn;
             int colEnd = region.LastColumn;
             int rowIndex = region.LastRow;
-            CellPropertySetter cps = new CellPropertySetter(workbook, HSSFCellUtil.BORDER_BOTTOM, (int)border);
+            CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.BORDER_BOTTOM, (int)border);
             NPOI.SS.UserModel.IRow row = HSSFCellUtil.GetRow(rowIndex, sheet);
             for (int i = colStart; i <= colEnd; i++)
             {
@@ -197,12 +163,7 @@ namespace NPOI.HSSF.Util
             }
         }
 
-        //[Obsolete]
-        //public static void SetBottomBorderColor(short color, Region region, HSSFSheet sheet,
-        //        HSSFWorkbook workbook)
-        //{
-        //    SetBottomBorderColor(color, toCRA(region), sheet, workbook);
-        //}
+
         /// <summary>
         /// Sets the bottomBorderColor attribute of the HSSFRegionUtil object
         /// </summary>
@@ -216,7 +177,7 @@ namespace NPOI.HSSF.Util
             int colStart = region.FirstColumn;
             int colEnd = region.LastColumn;
             int rowIndex = region.LastRow;
-            CellPropertySetter cps = new CellPropertySetter(workbook, HSSFCellUtil.BOTTOM_BORDER_COLOR, color);
+            CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.BOTTOM_BORDER_COLOR, color);
             NPOI.SS.UserModel.IRow row = HSSFCellUtil.GetRow(rowIndex, sheet);
             for (int i = colStart; i <= colEnd; i++)
             {
@@ -224,12 +185,7 @@ namespace NPOI.HSSF.Util
             }
         }
 
-        //[Obsolete]
-        //public static void SetBorderTop(NPOI.SS.UserModel.CellBorderType border, Region region, HSSFSheet sheet,
-        //        HSSFWorkbook workbook)
-        //{
-        //    SetBorderTop(border, toCRA(region), sheet, workbook);
-        //}
+
         /// <summary>
         /// Sets the borderBottom attribute of the HSSFRegionUtil object
         /// </summary>
@@ -243,7 +199,7 @@ namespace NPOI.HSSF.Util
             int colStart = region.FirstColumn;
             int colEnd = region.LastColumn;
             int rowIndex = region.FirstRow;
-            CellPropertySetter cps = new CellPropertySetter(workbook, HSSFCellUtil.BORDER_TOP, (int)border);
+            CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.BORDER_TOP, (int)border);
             NPOI.SS.UserModel.IRow row = HSSFCellUtil.GetRow(rowIndex, sheet);
             for (int i = colStart; i <= colEnd; i++)
             {
@@ -264,7 +220,7 @@ namespace NPOI.HSSF.Util
             int colStart = region.FirstColumn;
             int colEnd = region.LastColumn;
             int rowIndex = region.FirstRow;
-            CellPropertySetter cps = new CellPropertySetter(workbook, HSSFCellUtil.TOP_BORDER_COLOR, color);
+            CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.TOP_BORDER_COLOR, color);
             NPOI.SS.UserModel.IRow row = HSSFCellUtil.GetRow(rowIndex, sheet);
             for (int i = colStart; i <= colEnd; i++)
             {

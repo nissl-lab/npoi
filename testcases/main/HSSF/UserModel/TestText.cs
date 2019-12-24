@@ -36,62 +36,51 @@ namespace TestCases.HSSF.UserModel
     public class TestText
     {
         [Test]
-        public void TestResultEqualsToAbstractShape()
+        public void TestResultEqualsToNonExistingAbstractShape()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sh = wb.CreateSheet() as HSSFSheet;
             HSSFPatriarch patriarch = sh.CreateDrawingPatriarch() as HSSFPatriarch;
             HSSFTextbox textbox = patriarch.CreateTextbox(new HSSFClientAnchor()) as HSSFTextbox;
-            TextboxShape textboxShape = HSSFTestModelHelper.CreateTextboxShape(1025, textbox);
-
             Assert.AreEqual(textbox.GetEscherContainer().ChildRecords.Count, 5);
-            Assert.AreEqual(textboxShape.SpContainer.ChildRecords.Count, 5);
-
             //sp record
-            byte[] expected = textboxShape.SpContainer.GetChild(0).Serialize();
+            byte[] expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAFvEw/WBg4GBgZEFSHAxMAAA9gX7nhAAAAA=");
             byte[] actual = textbox.GetEscherContainer().GetChild(0).Serialize();
-
             Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
-
-            expected = textboxShape.SpContainer.GetChild(2).Serialize();
+            //assertArrayEquals(expected, actual)
+            CollectionAssert.AreEqual(expected, actual);
+            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNgEPggxIANAABK4+laGgAAAA==");
             actual = textbox.GetEscherContainer().GetChild(2).Serialize();
-
             Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
-
-            expected = textboxShape.SpContainer.GetChild(3).Serialize();
+            CollectionAssert.AreEqual(expected, actual);
+            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNgEPzAAAQACl6c5QgAAAA=");
             actual = textbox.GetEscherContainer().GetChild(3).Serialize();
-
             Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
-
-            expected = textboxShape.SpContainer.GetChild(4).Serialize();
+            CollectionAssert.AreEqual(expected, actual);
+            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNg4P3AAAQA6pyIkQgAAAA=");
             actual = textbox.GetEscherContainer().GetChild(4).Serialize();
-
             Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
-
+            CollectionAssert.AreEqual(expected, actual);
             ObjRecord obj = textbox.GetObjRecord();
-            ObjRecord objShape = textboxShape.ObjRecord;
-
-            expected = obj.Serialize();
-            actual = objShape.Serialize();
+            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAItlkGIQZRBiYGNgZBBMYEADAOdCLuweAAAA");
+            actual = obj.Serialize();
+            Assert.AreEqual(expected.Length, actual.Length);
+            CollectionAssert.AreEqual(expected, actual);
 
             TextObjectRecord tor = textbox.GetTextObjectRecord();
-            TextObjectRecord torShape = textboxShape.TextObjectRecord;
-
-            expected = tor.Serialize();
-            actual = torShape.Serialize();
-
+            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAANvGKMQgxMSABgBGi8T+FgAAAA==");
+            actual = tor.Serialize();
             Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
+            CollectionAssert.AreEqual(expected, actual);
+
+            wb.Close();
         }
+
         [Test]
         public void TestAddTextToExistingFile()
         {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            HSSFSheet sh = wb.CreateSheet() as HSSFSheet;
+            HSSFWorkbook wb1 = new HSSFWorkbook();
+            HSSFSheet sh = wb1.CreateSheet() as HSSFSheet;
             HSSFPatriarch patriarch = sh.CreateDrawingPatriarch() as HSSFPatriarch;
             HSSFTextbox textbox = patriarch.CreateTextbox(new HSSFClientAnchor()) as HSSFTextbox;
             textbox.String=(new HSSFRichTextString("just for Test"));
@@ -100,8 +89,10 @@ namespace TestCases.HSSF.UserModel
 
             Assert.AreEqual(patriarch.Children.Count, 2);
 
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            sh = wb.GetSheetAt(0) as HSSFSheet;
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            wb1.Close();
+
+            sh = wb2.GetSheetAt(0) as HSSFSheet;
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
 
             Assert.AreEqual(patriarch.Children.Count, 2);
@@ -109,20 +100,24 @@ namespace TestCases.HSSF.UserModel
             text3.String=(new HSSFRichTextString("text3"));
             Assert.AreEqual(patriarch.Children.Count, 3);
 
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            sh = wb.GetSheetAt(0) as HSSFSheet;
+            HSSFWorkbook wb3 = HSSFTestDataSamples.WriteOutAndReadBack(wb2);
+            wb2.Close();
+
+            sh = wb3.GetSheetAt(0) as HSSFSheet;
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
 
             Assert.AreEqual(patriarch.Children.Count, 3);
             Assert.AreEqual(((HSSFTextbox)patriarch.Children[0]).String.String, "just for Test");
             Assert.AreEqual(((HSSFTextbox)patriarch.Children[1]).String.String, "just for Test2");
             Assert.AreEqual(((HSSFTextbox)patriarch.Children[2]).String.String, "text3");
+
+            wb3.Close();
         }
         [Test]
         public void TestSetGetProperties()
         {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            HSSFSheet sh = wb.CreateSheet() as HSSFSheet;
+            HSSFWorkbook wb1 = new HSSFWorkbook();
+            HSSFSheet sh = wb1.CreateSheet() as HSSFSheet;
             HSSFPatriarch patriarch = sh.CreateDrawingPatriarch() as HSSFPatriarch;
             HSSFTextbox textbox = patriarch.CreateTextbox(new HSSFClientAnchor()) as HSSFTextbox;
             textbox.String = (new HSSFRichTextString("test"));
@@ -146,8 +141,10 @@ namespace TestCases.HSSF.UserModel
             textbox.MarginTop=(10);
             Assert.AreEqual(textbox.MarginTop, 10);
 
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            sh = wb.GetSheetAt(0) as HSSFSheet;
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            wb1.Close();
+
+            sh = wb2.GetSheetAt(0) as HSSFSheet;
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
             textbox = (HSSFTextbox)patriarch.Children[0];
             Assert.AreEqual(textbox.String.String, "test");
@@ -174,8 +171,10 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(textbox.MarginRight, 91);
             Assert.AreEqual(textbox.MarginTop, 101);
 
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            sh = wb.GetSheetAt(0) as HSSFSheet;
+            HSSFWorkbook wb3 = HSSFTestDataSamples.WriteOutAndReadBack(wb2);
+            wb2.Close();
+
+            sh = wb3.GetSheetAt(0) as HSSFSheet;
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
             textbox = (HSSFTextbox)patriarch.Children[0];
 
@@ -186,6 +185,8 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(textbox.MarginLeft, 81);
             Assert.AreEqual(textbox.MarginRight, 91);
             Assert.AreEqual(textbox.MarginTop, 101);
+
+            wb3.Close();
         }
         [Test]
         public void TestExistingFileWithText()
@@ -202,6 +203,8 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(textbox.MarginLeft, 3600000);
             Assert.AreEqual(textbox.MarginRight, 0);
             Assert.AreEqual(textbox.String.String, "teeeeesssstttt");
+
+            wb.Close();
         }
     }
 

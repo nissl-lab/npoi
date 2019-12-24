@@ -125,7 +125,7 @@ namespace NPOI.XWPF.UserModel
         /// <returns>The table at position pos</returns>
         public XWPFTable GetTableArray(int pos)
         {
-            if (pos > 0 && pos < tables.Count)
+            if (pos >= 0 && pos < tables.Count)
             {
                 return tables[(pos)];
             }
@@ -192,8 +192,11 @@ namespace NPOI.XWPF.UserModel
         /// <returns></returns>
         public XWPFParagraph GetParagraphArray(int pos)
         {
-
-            return paragraphs[pos];
+            if (pos >= 0 && pos < paragraphs.Count)
+            {
+                return paragraphs[pos];
+            }
+            return null;
         }
 
         /// <summary>
@@ -217,7 +220,8 @@ namespace NPOI.XWPF.UserModel
                 return null;
             }
             XWPFTableRow tableRow = table.GetRow(row);
-            if(row == null){
+            if (tableRow == null)
+            {
                 return null;
             }
             return tableRow.GetTableCell(cell);

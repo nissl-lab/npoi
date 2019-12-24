@@ -72,6 +72,10 @@ namespace NPOI.XSSF.Util
             int read;
             if (readB == -1 || readB == 0)
             {
+                if (readA == 0)
+                {
+                    return readB;
+                }
                 read = readA;
             }
             else

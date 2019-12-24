@@ -339,11 +339,21 @@ namespace TestCases.Util
         [Test]
         public void TestDumpToStringOutOfIndex()
         {
-            byte[] testArray = new byte[0];
+            byte[] testArray = new byte[1];
 
             try
             {
                 HexDump.Dump(testArray, 0, -1);
+                Assert.Fail("Should throw an exception with invalid input");
+            }
+            catch (IndexOutOfRangeException)
+            {
+                // expected
+            }
+
+            try
+            {
+                HexDump.Dump(testArray, 0, 2);
                 Assert.Fail("Should throw an exception with invalid input");
             }
             catch (IndexOutOfRangeException)

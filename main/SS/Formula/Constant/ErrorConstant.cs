@@ -20,7 +20,8 @@ namespace NPOI.SS.Formula.Constant
     using System;
     using System.Text;
     using NPOI.HSSF.UserModel;
-    
+    using NPOI.SS.UserModel;
+
     /// <summary>
     /// Represents a constant error code value as encoded in a constant values array.
     /// This class is a type-safe wrapper for a 16-bit int value performing a similar job to
@@ -29,13 +30,13 @@ namespace NPOI.SS.Formula.Constant
     ///<remarks> @author Josh Micich</remarks>
     public class ErrorConstant
     {
-        private static readonly ErrorConstant NULL = new ErrorConstant(HSSFErrorConstants.ERROR_NULL);
-        private static readonly ErrorConstant DIV_0 = new ErrorConstant(HSSFErrorConstants.ERROR_DIV_0);
-        private static readonly ErrorConstant VALUE = new ErrorConstant(HSSFErrorConstants.ERROR_VALUE);
-        private static readonly ErrorConstant REF = new ErrorConstant(HSSFErrorConstants.ERROR_REF);
-        private static readonly ErrorConstant NAME = new ErrorConstant(HSSFErrorConstants.ERROR_NAME);
-        private static readonly ErrorConstant NUM = new ErrorConstant(HSSFErrorConstants.ERROR_NUM);
-        private static readonly ErrorConstant NA = new ErrorConstant(HSSFErrorConstants.ERROR_NA);
+        private static readonly ErrorConstant NULL = new ErrorConstant(FormulaError.NULL.Code);
+        private static readonly ErrorConstant DIV_0 = new ErrorConstant(FormulaError.DIV0.Code);
+        private static readonly ErrorConstant VALUE = new ErrorConstant(FormulaError.VALUE.Code);
+        private static readonly ErrorConstant REF = new ErrorConstant(FormulaError.REF.Code);
+        private static readonly ErrorConstant NAME = new ErrorConstant(FormulaError.NAME.Code);
+        private static readonly ErrorConstant NUM = new ErrorConstant(FormulaError.NUM.Code);
+        private static readonly ErrorConstant NA = new ErrorConstant(FormulaError.NA.Code);
 
         private int _errorCode;
 
@@ -43,7 +44,8 @@ namespace NPOI.SS.Formula.Constant
         /// Initializes a new instance of the <see cref="ErrorConstant"/> class.
         /// </summary>
         /// <param name="errorCode">The error code.</param>
-        private ErrorConstant(int errorCode) {
+        private ErrorConstant(int errorCode)
+        {
             _errorCode = errorCode;
         }
 
@@ -51,19 +53,21 @@ namespace NPOI.SS.Formula.Constant
         /// Gets the error code.
         /// </summary>
         /// <value>The error code.</value>
-        public int ErrorCode {
+        public int ErrorCode
+        {
             get { return _errorCode; }
         }
         /// <summary>
         /// Gets the text.
         /// </summary>
         /// <value>The text.</value>
-        public String Text {
+        public String Text
+        {
             get
             {
-                if (HSSFErrorConstants.IsValidCode(_errorCode))
+                if (FormulaError.IsValidCode(_errorCode))
                 {
-                    return HSSFErrorConstants.GetText(_errorCode);
+                    return FormulaError.ForInt(_errorCode).String;
                 }
                 return "unknown error code (" + _errorCode + ")";
             }
@@ -74,34 +78,21 @@ namespace NPOI.SS.Formula.Constant
         /// </summary>
         /// <param name="errorCode">The error code.</param>
         /// <returns></returns>
-        public static ErrorConstant ValueOf(int errorCode) {
-            if(errorCode==HSSFErrorConstants.ERROR_NULL)
+        public static ErrorConstant ValueOf(int errorCode)
+        {
+            if (FormulaError.IsValidCode(errorCode))
             {
-                return NULL;
-            }
-            else if (errorCode == HSSFErrorConstants.ERROR_DIV_0)
-            {
-                return DIV_0;
-            }
-            else if (errorCode == HSSFErrorConstants.ERROR_VALUE)
-            {
-                return VALUE;
-            }
-            else if (errorCode == HSSFErrorConstants.ERROR_REF)
-            {
-                return REF;
-            }
-            else if (errorCode == HSSFErrorConstants.ERROR_NAME)
-            {
-                return NAME;
-            }
-            else if (errorCode == HSSFErrorConstants.ERROR_NUM)
-            {
-                return NUM;
-            }
-            else if (errorCode == HSSFErrorConstants.ERROR_NA)
-            {
-                return NA;
+                switch ((FormulaErrorEnum)errorCode)
+                {
+                    case FormulaErrorEnum.NULL: return NULL;
+                    case FormulaErrorEnum.DIV_0: return DIV_0;
+                    case FormulaErrorEnum.VALUE: return VALUE;
+                    case FormulaErrorEnum.REF: return REF;
+                    case FormulaErrorEnum.NAME: return NAME;
+                    case FormulaErrorEnum.NUM: return NUM;
+                    case FormulaErrorEnum.NA: return NA;
+                    default: break;
+                }
             }
             Console.Error.WriteLine("Warning - Unexpected error code (" + errorCode + ")");
             return new ErrorConstant(errorCode);
@@ -112,7 +103,8 @@ namespace NPOI.SS.Formula.Constant
         /// <returns>
         /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </returns>
-        public override String ToString() {
+        public override String ToString()
+        {
             StringBuilder sb = new StringBuilder(64);
             sb.Append(GetType().Name).Append(" [");
             sb.Append(Text);

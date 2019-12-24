@@ -115,7 +115,7 @@ namespace NPOI.SS.Converter
         }
         public static XmlDocument Process(string excelFile)
         {
-            IWorkbook workbook = WorkbookFactory.Create(excelFile);
+            IWorkbook workbook = WorkbookFactory.Create(excelFile, null);
             ExcelToHtmlConverter excelToHtmlConverter = new ExcelToHtmlConverter();
             excelToHtmlConverter.ProcessWorkbook(workbook);
             return excelToHtmlConverter.Document;
@@ -651,11 +651,11 @@ namespace NPOI.SS.Converter
                 style.Append("white-space: pre-wrap; ");
                 ExcelToHtmlUtils.AppendAlign(style, cellStyle.Alignment);
 
-                if (cellStyle.FillPattern == FillPattern.NoFill)
+                if (cellStyle.FillPattern == FillPatternType.NoFill)
                 {
                     // no fill
                 }
-                else if (cellStyle.FillPattern == FillPattern.SolidForeground)
+                else if (cellStyle.FillPattern == FillPatternType.SolidForeground)
                 {
                     //cellStyle.
                     //HSSFColor.
@@ -676,11 +676,11 @@ namespace NPOI.SS.Converter
                 ExcelToHtmlUtils.AppendAlign(style, cellStyle.Alignment);
                 StylesTable st = ((XSSFWorkbook)workbook).GetStylesSource();
                 ThemesTable tt = st.GetTheme();
-                if (cellStyle.FillPattern == FillPattern.NoFill)
+                if (cellStyle.FillPattern == FillPatternType.NoFill)
                 {
                     // no fill
                 }
-                else if (cellStyle.FillPattern == FillPattern.SolidForeground)
+                else if (cellStyle.FillPattern == FillPatternType.SolidForeground)
                 {
                     //cellStyle
                     IndexedColors clr=IndexedColors.ValueOf(cellStyle.FillForegroundColor);

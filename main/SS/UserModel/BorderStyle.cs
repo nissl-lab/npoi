@@ -15,6 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+
 namespace NPOI.SS.UserModel
 {
 
@@ -92,5 +94,26 @@ namespace NPOI.SS.UserModel
         /// slanted dash-dot border
         /// </summary>
         SlantedDashDot = 0xD
+    }
+
+    public class BorderStyleEnum
+    {
+        private static BorderStyle[] _table = new BorderStyle[0xD + 1];
+        public static BorderStyle[] Values()
+        {
+            return _table;
+        }
+            
+        static BorderStyleEnum()
+        {
+            foreach (BorderStyle c in Enum.GetValues(typeof(BorderStyle)))
+            {
+                _table[(int)c] = c;
+            }
+        }
+        public static BorderStyle ValueOf(short code)
+        {
+            return _table[code];
+        }
     }
 }

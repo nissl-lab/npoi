@@ -21,6 +21,7 @@ namespace NPOI.SS.Formula.PTG
     
     using NPOI.Util;
     using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
 
     /**
      * @author Daniel Noll (daniel at nuix dot com dot au)
@@ -32,33 +33,34 @@ namespace NPOI.SS.Formula.PTG
         //private static HSSFErrorConstants EC = null;
 
         /** <b>#NULL!</b>  - Intersection of two cell ranges is empty */
-        public static readonly ErrPtg NULL_INTERSECTION = new ErrPtg(HSSFErrorConstants.ERROR_NULL);
+        public static readonly ErrPtg NULL_INTERSECTION = new ErrPtg(FormulaError.NULL.Code);
         /** <b>#DIV/0!</b> - Division by zero */
-        public static readonly ErrPtg DIV_ZERO = new ErrPtg(HSSFErrorConstants.ERROR_DIV_0);
+        public static readonly ErrPtg DIV_ZERO = new ErrPtg(FormulaError.DIV0.Code);
         /** <b>#VALUE!</b> - Wrong type of operand */
-        public static readonly ErrPtg VALUE_INVALID = new ErrPtg(HSSFErrorConstants.ERROR_VALUE);
+        public static readonly ErrPtg VALUE_INVALID = new ErrPtg(FormulaError.VALUE.Code);
         /** <b>#REF!</b> - Illegal or deleted cell reference */
-        public static readonly ErrPtg REF_INVALID = new ErrPtg(HSSFErrorConstants.ERROR_REF);
+        public static readonly ErrPtg REF_INVALID = new ErrPtg(FormulaError.REF.Code);
         /** <b>#NAME?</b> - Wrong function or range name */
-        public static readonly ErrPtg NAME_INVALID = new ErrPtg(HSSFErrorConstants.ERROR_NAME);
+        public static readonly ErrPtg NAME_INVALID = new ErrPtg(FormulaError.NAME.Code);
         /** <b>#NUM!</b> - Value range overflow */
-        public static readonly ErrPtg NUM_ERROR = new ErrPtg(HSSFErrorConstants.ERROR_NUM);
+        public static readonly ErrPtg NUM_ERROR = new ErrPtg(FormulaError.NUM.Code);
         /** <b>#N/A</b> - Argument or function not available */
-        public static readonly ErrPtg N_A = new ErrPtg(HSSFErrorConstants.ERROR_NA);
+        public static readonly ErrPtg N_A = new ErrPtg(FormulaError.NA.Code);
 
         public static ErrPtg ValueOf(int code)
         {
-            switch (code)
+            switch ((FormulaErrorEnum)code)
             {
-                case HSSFErrorConstants.ERROR_DIV_0: return DIV_ZERO;
-                case HSSFErrorConstants.ERROR_NA: return N_A;
-                case HSSFErrorConstants.ERROR_NAME: return NAME_INVALID;
-                case HSSFErrorConstants.ERROR_NULL: return NULL_INTERSECTION;
-                case HSSFErrorConstants.ERROR_NUM: return NUM_ERROR;
-                case HSSFErrorConstants.ERROR_REF: return REF_INVALID;
-                case HSSFErrorConstants.ERROR_VALUE: return VALUE_INVALID;
+                case FormulaErrorEnum.DIV_0: return DIV_ZERO;
+                case FormulaErrorEnum.NA: return N_A;
+                case FormulaErrorEnum.NAME: return NAME_INVALID;
+                case FormulaErrorEnum.NULL: return NULL_INTERSECTION;
+                case FormulaErrorEnum.NUM: return NUM_ERROR;
+                case FormulaErrorEnum.REF: return REF_INVALID;
+                case FormulaErrorEnum.VALUE: return VALUE_INVALID;
+                default:
+                    throw new InvalidOperationException("Unexpected error code (" + code + ")");
             }
-            throw new InvalidOperationException("Unexpected error code (" + code + ")");
         }
 
         public const byte sid = 0x1c;
@@ -69,7 +71,7 @@ namespace NPOI.SS.Formula.PTG
 
         public ErrPtg(int errorCode)
         {
-            if (!HSSFErrorConstants.IsValidCode(errorCode))
+            if (!FormulaError.IsValidCode(errorCode))
             {
                 throw new ArgumentException("Invalid error code (" + errorCode + ")");
             }
@@ -90,7 +92,7 @@ namespace NPOI.SS.Formula.PTG
 
         public override String ToFormulaString()
         {
-            return HSSFErrorConstants.GetText(field_1_error_code);
+            return FormulaError.ForInt(field_1_error_code).String;
         }
 
         public override int Size

@@ -38,11 +38,13 @@ namespace TestCases.POIFS.Storage
     using NPOI.Util;
     using NPOI.POIFS.Properties;
     using NPOI.POIFS.FileSystem;
+    using System.Collections.Generic;
+
     /**
-     * Class to Test SmallBlockTableWriter functionality
-     *
-     * @author Marc Johnson
-     */
+* Class to Test SmallBlockTableWriter functionality
+*
+* @author Marc Johnson
+*/
     [TestFixture]
     public class TestSmallBlockTableWriter
     {
@@ -65,43 +67,43 @@ namespace TestCases.POIFS.Storage
         [Test]
         public void TestWritingConstructor()
         {
-            ArrayList documents = new ArrayList();
+            List<OPOIFSDocument> documents = new List<OPOIFSDocument>();
 
             documents.Add(
-                new POIFSDocument(
+                new OPOIFSDocument(
                     "doc340", new MemoryStream(new byte[340])));
             documents.Add(
-                new POIFSDocument(
+                new OPOIFSDocument(
                     "doc5000", new MemoryStream(new byte[5000])));
             documents
-                .Add(new POIFSDocument("doc0",
+                .Add(new OPOIFSDocument("doc0",
                                        new MemoryStream(new byte[0])));
             documents
-                .Add(new POIFSDocument("doc1",
+                .Add(new OPOIFSDocument("doc1",
                                        new MemoryStream(new byte[1])));
             documents
-                .Add(new POIFSDocument("doc2",
+                .Add(new OPOIFSDocument("doc2",
                                        new MemoryStream(new byte[2])));
             documents
-                .Add(new POIFSDocument("doc3",
+                .Add(new OPOIFSDocument("doc3",
                                        new MemoryStream(new byte[3])));
             documents
-                .Add(new POIFSDocument("doc4",
+                .Add(new OPOIFSDocument("doc4",
                                        new MemoryStream(new byte[4])));
             documents
-                .Add(new POIFSDocument("doc5",
+                .Add(new OPOIFSDocument("doc5",
                                        new MemoryStream(new byte[5])));
             documents
-                .Add(new POIFSDocument("doc6",
+                .Add(new OPOIFSDocument("doc6",
                                        new MemoryStream(new byte[6])));
             documents
-                .Add(new POIFSDocument("doc7",
+                .Add(new OPOIFSDocument("doc7",
                                        new MemoryStream(new byte[7])));
             documents
-                .Add(new POIFSDocument("doc8",
+                .Add(new OPOIFSDocument("doc8",
                                        new MemoryStream(new byte[8])));
             documents
-                .Add(new POIFSDocument("doc9",
+                .Add(new OPOIFSDocument("doc9",
                                        new MemoryStream(new byte[9])));
             HeaderBlock header = new HeaderBlock(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
             RootProperty root = new PropertyTable(header).Root;

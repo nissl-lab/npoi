@@ -76,7 +76,7 @@ namespace TestCases.POIFS.FileSystem
             {
                 rawBlocks[j] = new RawDataBlock(stream);
             }
-            POIFSDocument document = new POIFSDocument("Workbook", rawBlocks,
+            OPOIFSDocument document = new OPOIFSDocument("Workbook", rawBlocks,
                                                        _workbook_size);
 
             _workbook_o = new DocumentNode(
@@ -111,13 +111,16 @@ namespace TestCases.POIFS.FileSystem
         [Test]
         public void TestConstructor()
         {
-            DocumentInputStream ostream = new DocumentInputStream(_workbook_o);
+            DocumentInputStream ostream = new ODocumentInputStream(_workbook_o);
             DocumentInputStream nstream = new NDocumentInputStream(_workbook_n);
 
             Assert.AreEqual(_workbook_size, _workbook_o.Size);
             Assert.AreEqual(_workbook_size, _workbook_n.Size);
             Assert.AreEqual(_workbook_size, ostream.Available());
             Assert.AreEqual(_workbook_size, nstream.Available());
+
+            ostream.Close();
+            nstream.Close();
         }
 
         /**
@@ -584,12 +587,14 @@ namespace TestCases.POIFS.FileSystem
             try
             {
                 sample = _samples.GetFile("Sample.pub");
-                POIFSFileSystem opoifs = new POIFSFileSystem(sample);
+                OPOIFSFileSystem opoifs = new OPOIFSFileSystem(sample);
 
                 // Ensure we have what we expect on the root
                 Assert.AreEqual(npoifs, npoifs.Root.NFileSystem);
-                Assert.AreEqual(null, npoifs.Root.FileSystem);
-                Assert.AreEqual(opoifs, opoifs.Root.FileSystem);
+                Assert.AreEqual(npoifs, npoifs.Root.FileSystem);
+                Assert.AreEqual(null, npoifs.Root.OFileSystem);
+                Assert.AreEqual(null, opoifs.Root.FileSystem);
+                Assert.AreEqual(opoifs, opoifs.Root.OFileSystem);
                 Assert.AreEqual(null, opoifs.Root.NFileSystem);
 
                 // Check inside

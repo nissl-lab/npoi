@@ -153,22 +153,6 @@ namespace NPOI.HPSF.Wellknown
             return (PropertyIDMap)this[Encoding.UTF8.GetString(sectionFormatID)];
         }
 
-
-
-        /// <summary>
-        /// Returns the {@link PropertyIDMap} for a given section format
-        /// ID.
-        /// </summary>
-        /// <param name="sectionFormatID">A section format ID as a 
-        /// <c>byte[]</c></param>
-        /// <returns>the property ID map</returns>
-        public Object Get(Object sectionFormatID)
-        {
-            return Get((byte[])sectionFormatID);
-        }
-
-
-
         /// <summary>
         /// Associates a section format ID with a {@link
         /// PropertyIDMap}.
@@ -181,22 +165,5 @@ namespace NPOI.HPSF.Wellknown
         {
             return this[sectionFormatID] = propertyIDMap;
         }
-
-
-
-        /// <summary>
-        /// Puts the specified key.
-        /// </summary>
-        /// <param name="key">This parameter remains undocumented since the method Is
-        /// deprecated.</param>
-        /// <param name="value">This parameter remains undocumented since the method Is
-        /// deprecated.</param>
-        /// <returns>The return value remains undocumented since the method Is
-        /// deprecated.</returns>
-        public Object Put(Object key, Object value)
-        {
-            return Put((byte[])key, (PropertyIDMap)value);
-        }
-
     }
 }

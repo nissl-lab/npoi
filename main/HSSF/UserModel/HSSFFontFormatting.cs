@@ -19,7 +19,9 @@ namespace NPOI.HSSF.UserModel
 {
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.CF;
+    using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
+    using System;
 
     /**
      * High level representation for Font Formatting component
@@ -32,10 +34,11 @@ namespace NPOI.HSSF.UserModel
     {
 
         private FontFormatting fontFormatting;
-
-        public HSSFFontFormatting(CFRuleRecord cfRuleRecord)
+        private HSSFWorkbook workbook;
+        public HSSFFontFormatting(CFRuleBase cfRuleRecord, HSSFWorkbook workbook)
         {
             this.fontFormatting = cfRuleRecord.FontFormatting;
+            this.workbook = workbook;
         }
 
         protected FontFormatting GetFontFormattingBlock()
@@ -83,6 +86,26 @@ namespace NPOI.HSSF.UserModel
             set { fontFormatting.FontColorIndex=(value); }
         }
 
+        public IColor FontColor
+        {
+            get
+            {
+                return workbook.GetCustomPalette().GetColor(FontColorIndex);
+            }
+            set
+            {
+                HSSFColor hcolor = HSSFColor.ToHSSFColor(value);
+                if (hcolor == null)
+                {
+                    fontFormatting.FontColorIndex = ((short)0);
+                }
+                else
+                {
+                    fontFormatting.FontColorIndex = (hcolor.Indexed);
+                }
+            }
+        }
+
         /**
          * Gets the height of the font in 1/20th point Units
          *
@@ -112,7 +135,7 @@ namespace NPOI.HSSF.UserModel
          */
         protected byte[] GetRawRecord()
         {
-            return fontFormatting.GetRawRecord();
+            return fontFormatting.RawRecord;
         }
 
         /**

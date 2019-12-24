@@ -17,6 +17,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using NPOI.SS;
@@ -29,7 +30,7 @@ namespace NPOI.XSSF.Streaming
 {
     public class SXSSFSheet : ISheet
     {
-        /*package*/
+        // TODO: fields should be private and use public property
         public XSSFSheet _sh;
         public SXSSFWorkbook _workbook;
         //private TreeMap<Integer, SXSSFRow> _rows = new TreeMap<Integer, SXSSFRow>();
@@ -257,7 +258,22 @@ namespace NPOI.XSSF.Streaming
                 _sh.IsPrintGridlines = value;
             }
         }
-
+        /**
+         * Returns whether row and column headings are printed.
+         *
+         * @return whether row and column headings are printed
+         */
+        public bool IsPrintRowAndColumnHeadings
+        {
+            get
+            {
+                return _sh.IsPrintRowAndColumnHeadings;
+            }
+            set
+            {
+                _sh.IsPrintRowAndColumnHeadings = value;
+            }
+        }
         public bool IsRightToLeft
         {
             get
@@ -307,6 +323,16 @@ namespace NPOI.XSSF.Streaming
             get { return _sh.NumMergedRegions; }
         }
 
+        /**
+         * Returns the list of merged regions. If you want multiple regions, this is
+         * faster than calling {@link #getMergedRegion(int)} each time.
+         *
+         * @return the list of merged regions
+         */
+        public List<CellRangeAddress> MergedRegions
+        {
+            get { return _sh.MergedRegions; }
+        }
         public PaneInformation PaneInformation
         {
             get { return _sh.PaneInformation; }
@@ -436,16 +462,85 @@ namespace NPOI.XSSF.Streaming
             return _sh.AddMergedRegion(region);
         }
 
+        /// <summary>
+        /// Adds a merged region of cells (hence those cells form one).
+        /// Skips validation.It is possible to create overlapping merged regions
+        /// or create a merged region that intersects a multi-cell array formula
+        /// with this formula, which may result in a corrupt workbook.
+        /// </summary>
+        /// <param name="region">region to merge</param>
+        /// <returns>index of this region</returns>
+        /// <exception cref="System.ArgumentException">if region contains fewer than 2 cells</exception>
+        public int AddMergedRegionUnsafe(CellRangeAddress region)
+        {
+            return _sh.AddMergedRegionUnsafe(region);
+        }
+
+        /**
+         * Verify that merged regions do not intersect multi-cell array formulas and
+         * no merged regions intersect another merged region in this sheet.
+         *
+         * @throws InvalidOperationException if region intersects with a multi-cell array formula
+         * @throws InvalidOperationException if at least one region intersects with another merged region in this sheet
+         */
+        public void ValidateMergedRegions() {
+            _sh.ValidateMergedRegions();
+        }
+
+
         public void AddValidationData(IDataValidation dataValidation)
         {
             _sh.AddValidationData(dataValidation);
         }
-
+        /**
+         * Adjusts the column width to fit the contents.
+         *
+         * <p>
+         * This process can be relatively slow on large sheets, so this should
+         *  normally only be called once per column, at the end of your
+         *  processing.
+         * </p>
+         * You can specify whether the content of merged cells should be considered or ignored.
+         *  Default is to ignore merged cells.
+         *  
+         *  <p>
+         *  Special note about SXSSF implementation: You must register the columns you wish to track with
+         *  the SXSSFSheet using {@link #trackColumnForAutoSizing(int)} or {@link #trackAllColumnsForAutoSizing()}.
+         *  This is needed because the rows needed to compute the column width may have fallen outside the
+         *  random access window and been flushed to disk.
+         *  Tracking columns is required even if all rows are in the random access window.
+         *  </p>
+         *  <p><i>New in POI 3.14 beta 1: auto-sizes columns using cells from current and flushed rows.</i></p>
+         *
+         * @param column the column index to auto-size
+         */
         public void AutoSizeColumn(int column)
         {
             AutoSizeColumn(column, false);
         }
 
+        /**
+         * Adjusts the column width to fit the contents.
+         * <p>
+         * This process can be relatively slow on large sheets, so this should
+         *  normally only be called once per column, at the end of your
+         *  processing.
+         * </p>
+         * You can specify whether the content of merged cells should be considered or ignored.
+         *  Default is to ignore merged cells.
+         *  
+         *  <p>
+         *  Special note about SXSSF implementation: You must register the columns you wish to track with
+         *  the SXSSFSheet using {@link #trackColumnForAutoSizing(int)} or {@link #trackAllColumnsForAutoSizing()}.
+         *  This is needed because the rows needed to compute the column width may have fallen outside the
+         *  random access window and been flushed to disk.
+         *  Tracking columns is required even if all rows are in the random access window.
+         *  </p>
+         *  <p><i>New in POI 3.14 beta 1: auto-sizes columns using cells from current and flushed rows.</i></p>
+         *
+         * @param column the column index to auto-size
+         * @param useMergedCells whether to use the contents of merged cells when calculating the width of the column
+         */
         public void AutoSizeColumn(int column, bool useMergedCells)
         {
             // Multiple calls to autoSizeColumn need to look up the best-fit width
@@ -464,7 +559,7 @@ namespace NPOI.XSSF.Streaming
             try
             {
                 // get the best fit width of rows already flushed to disk
-                flushedWidth = _autoSizeColumnTracker.getBestFitColumnWidth(column, useMergedCells);
+                flushedWidth = _autoSizeColumnTracker.GetBestFitColumnWidth(column, useMergedCells);
             }
             catch (Exception e)
             {
@@ -501,9 +596,39 @@ namespace NPOI.XSSF.Streaming
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Get a Hyperlink in this sheet anchored at row, column
+        /// </summary>
+        /// <param name="row">The index of the row of the hyperlink, zero-based</param>
+        /// <param name="column">the index of the column of the hyperlink, zero-based</param>
+        /// <returns>return hyperlink if there is a hyperlink anchored at row, column; otherwise returns null</returns>
+        public IHyperlink GetHyperlink(int row, int column)
+        {
+            return _sh.GetHyperlink(row, column);
+        }
+        /// <summary>
+        /// Get a Hyperlink in this sheet located in a cell specified by {code addr}
+        /// </summary>
+        /// <param name="addr">The address of the cell containing the hyperlink</param>
+        /// <returns>return hyperlink if there is a hyperlink anchored at {@code addr}; otherwise returns {@code null}</returns>
+        public IHyperlink GetHyperlink(CellAddress addr)
+        {
+            return _sh.GetHyperlink(addr);
+        }
+        /**
+         * Get a list of Hyperlinks in this sheet
+         *
+         * @return Hyperlinks for the sheet
+         */
+
+        public List<IHyperlink> GetHyperlinkList()
+        {
+            return _sh.GetHyperlinkList();
+        }
+
         public IDrawing CreateDrawingPatriarch()
         {
-            throw new NotImplementedException();
+            return _sh.CreateDrawingPatriarch();
         }
 
         public void CreateFreezePane(int colSplit, int rowSplit)
@@ -548,7 +673,7 @@ namespace NPOI.XSSF.Streaming
             {
                 try
                 {
-                    flushRows(_randomAccessWindowSize);
+                    FlushRows(_randomAccessWindowSize);
                 }
                 catch (IOException ioe)
                 {
@@ -563,9 +688,34 @@ namespace NPOI.XSSF.Streaming
             _sh.CreateSplitPane(xSplitPos, ySplitPos, leftmostColumn, topRow, activePane);
         }
 
+        /// <summary>
+        /// Returns cell comment for the specified row and column
+        /// </summary>
+        /// <param name="row">The row.</param>
+        /// <param name="column">The column.</param>
+        /// <returns>cell comment or <code>null</code> if not found</returns>
+        [Obsolete("deprecated as of 2015-11-23 (circa POI 3.14beta1). Use {@link #getCellComment(CellAddress)} instead.")]
         public IComment GetCellComment(int row, int column)
         {
-            return _sh.GetCellComment(row, column);
+            return GetCellComment(new CellAddress(row, column));
+        }
+        /// <summary>
+        /// Returns cell comment for the specified location
+        /// </summary>
+        /// <param name="ref1">cell location</param>
+        /// <returns>return cell comment or null if not found</returns>
+        public IComment GetCellComment(CellAddress ref1)
+        {
+            return _sh.GetCellComment(ref1);
+        }
+
+        /// <summary>
+        /// Returns all cell comments on this sheet.
+        /// </summary>
+        /// <returns>return A Dictionary of each Comment in the sheet, keyed on the cell address where the comment is located.</returns>
+        public Dictionary<CellAddress, IComment> GetCellComments()
+        {
+            return _sh.GetCellComments();
         }
 
         public int GetColumnOutlineLevel(int columnIndex)
@@ -719,13 +869,21 @@ namespace NPOI.XSSF.Streaming
         {
             _sh.RemoveMergedRegion(index);
         }
-
+        /**
+         * Removes a merged region of cells (hence letting them free)
+         *
+         * @param indices of the regions to unmerge
+         */
+        public void RemoveMergedRegions(IList<int> indices)
+        {
+            _sh.RemoveMergedRegions(indices);
+        }
         public void RemoveRow(IRow row)
         {
             throw new NotImplementedException();
             //if (row.Sheet != this)
             //{
-            //    throw new InvalidOperationException("Specified row does not belong to this sheet");
+            //    throw new IllegalArgumentException("Specified row does not belong to this sheet");
             //}
 
 
@@ -800,6 +958,115 @@ namespace NPOI.XSSF.Streaming
             _sh.SetDefaultColumnStyle(column, style);
         }
 
+
+        /**
+         * Track a column in the sheet for auto-sizing.
+         * Note this has undefined behavior if a column is tracked after one or more rows are written to the sheet.
+         * If <code>column</code> is already tracked, this call does nothing.
+         *
+         * @param column the column to track for autosizing
+         * @since 3.14beta1
+         * @see #trackColumnsForAutoSizing(Collection)
+         * @see #trackAllColumnsForAutoSizing()
+         */
+        public void TrackColumnForAutoSizing(int column)
+        {
+            _autoSizeColumnTracker.TrackColumn(column);
+        }
+
+        /**
+         * Track several columns in the sheet for auto-sizing.
+         * Note this has undefined behavior if columns are tracked after one or more rows are written to the sheet.
+         * Any column in <code>columns</code> that are already tracked are ignored by this call.
+         *
+         * @param columns the columns to track for autosizing
+         * @since 3.14beta1
+         */
+        public void TrackColumnsForAutoSizing(ICollection<int> columns)
+        {
+            _autoSizeColumnTracker.TrackColumns(columns);
+        }
+
+        /**
+         * Tracks all columns in the sheet for auto-sizing. If this is called, individual columns do not need to be tracked.
+         * Because determining the best-fit width for a cell is expensive, this may affect the performance.
+         * @since 3.14beta1
+         */
+        public void TrackAllColumnsForAutoSizing()
+        {
+            _autoSizeColumnTracker.TrackAllColumns();
+        }
+
+        /**
+         * Removes a column that was previously marked for inclusion in auto-size column tracking.
+         * When a column is untracked, the best-fit width is forgotten.
+         * If <code>column</code> is not tracked, it will be ignored by this call.
+         *
+         * @param column the index of the column to track for auto-sizing
+         * @return true if column was tracked prior to this call, false if no action was taken
+         * @since 3.14beta1
+         * @see #untrackColumnsForAutoSizing(Collection)
+         * @see #untrackAllColumnsForAutoSizing(int)
+         */
+        public bool UntrackColumnForAutoSizing(int column)
+        {
+            return _autoSizeColumnTracker.UntrackColumn(column);
+        }
+
+        /**
+         * Untracks several columns in the sheet for auto-sizing.
+         * When a column is untracked, the best-fit width is forgotten.
+         * Any column in <code>columns</code> that is not tracked will be ignored by this call.
+         *
+         * @param columns the indices of the columns to track for auto-sizing
+         * @return true if one or more columns were untracked as a result of this call
+         *
+         * @param columns the columns to track for autosizing
+         * @since 3.14beta1
+         */
+        public bool UntrackColumnsForAutoSizing(ICollection<int> columns)
+        {
+            return _autoSizeColumnTracker.UntrackColumns(columns);
+        }
+
+        /**
+         * Untracks all columns in the sheet for auto-sizing. Best-fit column widths are forgotten.
+         * If this is called, individual columns do not need to be untracked.
+         * @since 3.14beta1
+         */
+        public void UntrackAllColumnsForAutoSizing()
+        {
+            _autoSizeColumnTracker.UntrackAllColumns();
+        }
+
+        /**
+         * Returns true if column is currently tracked for auto-sizing.
+         *
+         * @param column the index of the column to check
+         * @return true if column is tracked
+         * @since 3.14beta1
+         */
+        public bool IsColumnTrackedForAutoSizing(int column)
+        {
+            return _autoSizeColumnTracker.IsColumnTracked(column);
+        }
+
+        /**
+         * Get the currently tracked columns for auto-sizing.
+         * Note if all columns are tracked, this will only return the columns that have been explicitly or implicitly tracked,
+         * which is probably only columns containing 1 or more non-blank values
+         *
+         * @return a set of the indices of all tracked columns
+         * @since 3.14beta1
+         */
+        public ISet<int> TrackedColumnsForAutoSizing
+        {
+            get
+            {
+                return _autoSizeColumnTracker.TrackedColumns;
+            }
+        }
+
         public void SetMargin(MarginType margin, double size)
         {
             _sh.SetMargin(margin, size);
@@ -850,8 +1117,8 @@ namespace NPOI.XSSF.Streaming
         }
 
         /**
- * @param rowIndex the zero based row index to find from
- */
+         * @param rowIndex the zero based row index to find from
+         */
         private int FindStartOfRowOutlineGroup(int rowIndex)
         {
             // Find the start of the group.
@@ -885,10 +1152,35 @@ namespace NPOI.XSSF.Streaming
             return rowIndex;
         }
 
-        [Obsolete("in poi 3.16")]
+        [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #setZoom(int)} instead.")]
         public void SetZoom(int numerator, int denominator)
         {
             _sh.SetZoom(numerator, denominator);
+        }
+
+        /**
+         * Window zoom magnification for current view representing percent values.
+         * Valid values range from 10 to 400. Horizontal & Vertical scale together.
+         *
+         * For example:
+         * <pre>
+         * 10 - 10%
+         * 20 - 20%
+         * ...
+         * 100 - 100%
+         * ...
+         * 400 - 400%
+         * </pre>
+         *
+         * Current view can be Normal, Page Layout, or Page Break Preview.
+         *
+         * @param scale window zoom magnification
+         * @throws IllegalArgumentException if scale is invalid
+         */
+
+        public void SetZoom(int scale)
+        {
+            _sh.SetZoom(scale);
         }
 
         public void ShiftRows(int startRow, int endRow, int n)
@@ -899,11 +1191,6 @@ namespace NPOI.XSSF.Streaming
         public void ShiftRows(int startRow, int endRow, int n, bool copyRowHeight, bool resetOriginalRowHeight)
         {
             throw new NotImplementedException();
-        }
-
-        public void ShowInPane(short toprow, short leftcol)
-        {
-            _sh.ShowInPane(toprow, leftcol);
         }
 
         public void ShowInPane(int toprow, int leftcol)
@@ -926,46 +1213,74 @@ namespace NPOI.XSSF.Streaming
         {
             return _workbook.IsDate1904();
         }
-
-        public void changeRowNum(SXSSFRow row, int newRowNum)
+        public int GetRowNum(SXSSFRow row)
+        {
+            foreach (KeyValuePair<int, SXSSFRow> entry in _rows)
+            {
+                if (entry.Value == row)
+                    return entry.Key;
+            }
+            return -1;
+        }
+        public void ChangeRowNum(SXSSFRow row, int newRowNum)
         {
 
             RemoveRow(row);
             _rows.Add(newRowNum, row);
         }
 
-        public bool dispose()
+        public bool Dispose()
         {
-            if (!allFlushed) flushRows();
+            if (!allFlushed) FlushRows();
             return _writer.Dispose();
         }
-
         /**
- * Specifies how many rows can be accessed at most via getRow().
- * The exeeding rows (if any) are flushed to the disk while rows
- * with lower index values are flushed first.
- */
-        private void flushRows(int remaining)
+         * Are all rows flushed to disk?
+         */
+        public bool AllRowsFlushed
         {
-            while (_rows.Count > remaining) flushOneRow();
+            get
+            {
+                return allFlushed;
+            }
+        }
+        /**
+         * @return Last row number to be flushed to disk, or -1 if none flushed yet
+         */
+        public int LastFlushedRowNum
+        {
+            get
+            {
+                return lastFlushedRowNumber;
+            }
+        }
+        /**
+         * Specifies how many rows can be accessed at most via getRow().
+         * The exeeding rows (if any) are flushed to the disk while rows
+         * with lower index values are flushed first.
+         */
+        private void FlushRows(int remaining)
+        {
+            while (_rows.Count > remaining) FlushOneRow();
             if (remaining == 0) allFlushed = true;
         }
 
-        public void flushRows()
+        public void FlushRows()
         {
-            flushRows(0);
+            FlushRows(0);
         }
 
-        private void flushOneRow()
+        private void FlushOneRow()
         {
-
-            int firstRowNum = _rows.FirstOrDefault().Key;
-            if (firstRowNum != null)
+            KeyValuePair<int, SXSSFRow> firstRow = _rows.FirstOrDefault();
+            //KeyValuePair is struct, so check value instead of key
+            if (firstRow.Value != null)
             {
+                int firstRowNum = firstRow.Key;
                 int rowIndex = firstRowNum;
                 SXSSFRow row = _rows[firstRowNum];
                 // Update the best fit column widths for auto-sizing just before the rows are flushed
-                // _autoSizeColumnTracker.UpdateColumnWidths(row);
+                _autoSizeColumnTracker.UpdateColumnWidths(row);
                 _writer.WriteRow(rowIndex, row);
                 _rows.Remove(firstRowNum);
                 lastFlushedRowNumber = rowIndex;
@@ -973,17 +1288,44 @@ namespace NPOI.XSSF.Streaming
         }
 
         /* Gets "<sheetData>" document fragment*/
-        public Stream getWorksheetXMLInputStream()
+        public Stream GetWorksheetXMLInputStream()
         {
             // flush all remaining data and close the temp file writer
-            flushRows(0);
+            FlushRows(0);
             _writer.Close();
             return _writer.GetWorksheetXmlInputStream();
         }
 
-        public SheetDataWriter getSheetDataWriter()
+        public SheetDataWriter SheetDataWriter
         {
-            return _writer;
+            get
+            {
+                return _writer;
+            }
+        }
+
+        public CellAddress ActiveCell
+        {
+            get
+            {
+                return _sh.ActiveCell;
+            }
+            set
+            {
+                _sh.ActiveCell = value;
+            }
+        }
+
+        public XSSFColor TabColor
+        {
+            get
+            {
+                return _sh.TabColor;
+            }
+            set
+            {
+                _sh.TabColor = value;
+            }
         }
     }
 }

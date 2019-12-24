@@ -244,6 +244,15 @@ namespace TestCases.Util
                 // as expected
             }
         }
+
+        [Test]
+        public void Join()
+        {
+            Assert.AreEqual("", StringUtil.Join(",")); // degenerate case: nothing to join
+            Assert.AreEqual("abc", StringUtil.Join(",", "abc")); // degenerate case: one thing to join, no trailing comma
+            Assert.AreEqual("abc|def|ghi", StringUtil.Join("|", "abc", "def", "ghi"));
+            Assert.AreEqual("5|8.5|True|string", StringUtil.Join("|", 5, 8.5, true, "string")); //assumes Locale prints number decimal point as a period rather than a comma
+        }
     }
 }
 

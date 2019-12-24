@@ -45,18 +45,18 @@ namespace NPOI.POIFS.Crypt.Agile
             int keySize = builder.GetHeader().KeySize / 8;
             int hashSize = builder.GetHeader().HashAlgorithm.hashSize;
 
-            byte[] verifierSalt = new byte[blockSize]
-                 , verifier = new byte[blockSize]
-                 , keySalt = new byte[blockSize]
-                 , keySpec = new byte[keySize]
-                 , integritySalt = new byte[hashSize];
-            r.NextBytes(verifierSalt); // blocksize
-            r.NextBytes(verifier); // blocksize
-            r.NextBytes(keySalt); // blocksize
-            r.NextBytes(keySpec); // keysize
-            r.NextBytes(integritySalt); // hashsize
+            byte[] newVerifierSalt = new byte[blockSize]
+                 , newVerifier = new byte[blockSize]
+                 , newKeySalt = new byte[blockSize]
+                 , newKeySpec = new byte[keySize]
+                 , newIntegritySalt = new byte[hashSize];
+            r.NextBytes(newVerifierSalt); // blocksize
+            r.NextBytes(newVerifier); // blocksize
+            r.NextBytes(newKeySalt); // blocksize
+            r.NextBytes(newKeySpec); // keysize
+            r.NextBytes(newIntegritySalt); // hashsize
 
-            ConfirmPassword(password, keySpec, keySalt, verifierSalt, verifier, integritySalt);
+            ConfirmPassword(password, newKeySpec, newKeySalt, newVerifierSalt, newVerifier, newIntegritySalt);
         }
 
         public override void ConfirmPassword(String password, byte[] keySpec, byte[] keySalt, byte[] verifier, byte[] verifierSalt, byte[] integritySalt) {

@@ -228,35 +228,24 @@ namespace NPOI.HSSF.Record
         {
             return (RefSubRecord)_list[i];
         }
-        [Obsolete]
-        public void AdjustIndex(int extRefIndex, int offset)
-        {
-            GetRef(extRefIndex).AdjustIndex(offset);
-        }
 
         public void RemoveSheet(int sheetIdx)
         {
             int nItems = _list.Count;
-            int toRemove = -1;
             for (int i = 0; i < nItems; i++)
             {
                 RefSubRecord refSubRecord = _list[(i)];
                 if (refSubRecord.FirstSheetIndex == sheetIdx &&
                         refSubRecord.LastSheetIndex == sheetIdx)
                 {
-                    toRemove = i;
+                    // removing the entry would mess up the sheet index in Formula of NameRecord
+                    _list[i] = new RefSubRecord(refSubRecord.ExtBookIndex, -1, -1);
                 }
                 else if (refSubRecord.FirstSheetIndex > sheetIdx &&
                       refSubRecord.LastSheetIndex > sheetIdx)
                 {
                     _list[i] =(new RefSubRecord(refSubRecord.ExtBookIndex, refSubRecord.FirstSheetIndex - 1, refSubRecord.LastSheetIndex - 1));
                 }
-            }
-
-            // finally remove entries for sheet indexes that we remove
-            if (toRemove != -1)
-            {
-                _list.RemoveAt(toRemove);
             }
         }
 

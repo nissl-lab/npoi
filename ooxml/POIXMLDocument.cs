@@ -25,8 +25,9 @@ namespace NPOI
     using System.Collections.Generic;
     using NPOI.OpenXml4Net;
     using System.Reflection;
+    using NPOI.POIFS.FileSystem;
 
-    public abstract class POIXMLDocument : POIXMLDocumentPart
+    public abstract class POIXMLDocument : POIXMLDocumentPart, ICloseable
     {
         public static String DOCUMENT_CREATOR = "NPOI";
 
@@ -47,7 +48,19 @@ namespace NPOI
         protected POIXMLDocument(OPCPackage pkg)
             : base(pkg)
         {
+            init(pkg);
+        }
+
+        protected POIXMLDocument(OPCPackage pkg, String coreDocumentRel)
+            : base(pkg, coreDocumentRel)
+        {
+            init(pkg);
+        }
+
+        private void init(OPCPackage pkg)
+        {
             this.pkg = pkg;
+
         }
 
         /**
@@ -112,31 +125,10 @@ namespace NPOI
          *  sure to always use that, and not the original!
          * @param inp An Stream which supports either mark/reSet, or is a PushbackStream
          */
+        [Obsolete("deprecated use the method from DocumentFactoryHelper, deprecated as of 3.15-beta1, therefore eligible for removal in 3.17")]
         public static bool HasOOXMLHeader(Stream inp)
         {
-            // We want to peek at the first 4 bytes
-
-            byte[] header = new byte[4];
-            IOUtils.ReadFully(inp, header);
-
-            // Wind back those 4 bytes
-            if (inp is PushbackStream)
-            {
-                PushbackStream pin = (PushbackStream)inp;
-                pin.Position = pin.Position - 4;
-            }
-            else
-            {
-                inp.Position = 0;
-            }
-
-            // Did it match the ooxml zip signature?
-            return (
-                    header[0] == POIFSConstants.OOXML_FILE_HEADER[0] &&
-                    header[1] == POIFSConstants.OOXML_FILE_HEADER[1] &&
-                    header[2] == POIFSConstants.OOXML_FILE_HEADER[2] &&
-                    header[3] == POIFSConstants.OOXML_FILE_HEADER[3]
-            );
+            return DocumentFactoryHelper.HasOOXMLHeader(inp);
         }
 
         /**
@@ -200,12 +192,26 @@ namespace NPOI
         /**
          * Write out this document to an Outputstream.
          *
+         * Note - if the Document was opened from a {@link File} rather
+         *  than an {@link InputStream}, you <b>must</b> write out to
+         *  a different file, overwriting via an OutputStream isn't possible.
+         *  
+         * If {@code stream} is a {@link java.io.FileOutputStream} on a networked drive
+         * or has a high cost/latency associated with each written byte,
+         * consider wrapping the OutputStream in a {@link java.io.BufferedOutputStream}
+         * to improve write performance.
+         * 
          * @param stream - the java Stream you wish to write the file to
          *
          * @exception IOException if anything can't be written.
          */
         public void Write(Stream stream)
         {
+            OPCPackage pkg = Package;
+            if (pkg == null)
+            {
+                throw new IOException("Cannot write data, document seems to have been closed already");
+            }
             if (!this.GetProperties().CustomProperties.Contains("Generator"))
                 this.GetProperties().CustomProperties.AddProperty("Generator", "NPOI");
             if (!this.GetProperties().CustomProperties.Contains("Generator Version"))
@@ -218,7 +224,7 @@ namespace NPOI
             //save extended and custom properties
             GetProperties().Commit();
 
-            Package.Save(stream);
+            pkg.Save(stream);
         }
     }
 }

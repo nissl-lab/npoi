@@ -24,7 +24,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
-    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.UDF;
     using NPOI.SS.UserModel;
 using NPOI.Util;
     using NPOI.SS.Util;
@@ -53,6 +53,16 @@ using NPOI.Util;
         {
             _uBook = book;
             _iBook = book.Workbook;
+        }
+
+        public void ClearAllCachedResultValues()
+        {
+            // nothing to do
+        }
+
+        public IName CreateName()
+        {
+            return _uBook.CreateName();
         }
 
         public int GetExternalSheetIndex(String sheetName)
@@ -84,6 +94,13 @@ using NPOI.Util;
             int extIx = GetSheetExtIx(sheet);
             return new Area3DPtg(areaRef, extIx);
         }
+
+        /// <summary>
+        /// Return an external name (named range, function, user-defined function) Ptg
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="sheet"></param>
+        /// <returns></returns>
         public Ptg GetNameXPtg(String name, SheetIdentifier sheet)
         {
             int sheetRefIndex = GetSheetExtIx(sheet);
@@ -302,6 +319,10 @@ using NPOI.Util;
         public SpreadsheetVersion GetSpreadsheetVersion()
         {
             return SpreadsheetVersion.EXCEL97;
+        }
+        public ITable GetTable(String name)
+        {
+            throw new InvalidOperationException("XSSF-style tables are not supported for HSSF");
         }
     }
 }

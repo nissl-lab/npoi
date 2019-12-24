@@ -83,6 +83,8 @@ namespace TestCases.HSSF.Record.Aggregates
             //    }
             //    System.Console.WriteLine("Output file to " + f.getAbsolutePath());
             //}
+
+            wb.Close();
         }
 
         private static int verifySharedValues(Record[] recs, Type shfClass)
@@ -98,7 +100,7 @@ namespace TestCases.HSSF.Record.Aggregates
                     Record prevRec = recs[i - 1];
                     if (!(prevRec is FormulaRecord))
                     {
-                        throw new AssertionException("Bad record order at index "
+                        Assert.Fail("Bad record order at index "
                                 + i + ": Formula record expected but got ("
                                 + prevRec.GetType().Name + ")");
                     }
@@ -128,8 +130,8 @@ namespace TestCases.HSSF.Record.Aggregates
         [Test]
         public void TestUnknownContinue_bug46280()
         {
-            byte[] dummtydata = Encoding.Unicode.GetBytes("dummydata");
-            byte[] moredummydata = Encoding.Unicode.GetBytes("moredummydata");
+            byte[] dummtydata = Encoding.GetEncoding(1252).GetBytes("dummydata");
+            byte[] moredummydata = Encoding.GetEncoding(1252).GetBytes("moredummydata");
             Record[] inRecs = {
 			new RowRecord(0),
 			new NumberRecord(),
@@ -148,7 +150,7 @@ namespace TestCases.HSSF.Record.Aggregates
             {
                 if (e.Message.StartsWith("Unexpected record type"))
                 {
-                    throw new AssertionException("Identified bug 46280a");
+                    Assert.Fail("Identified bug 46280a");
                 }
                 throw e;
             }

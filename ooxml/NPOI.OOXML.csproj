@@ -143,7 +143,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SS\Converter\ExcelToHtmlConverter.cs" />
     <Compile Include="SS\Converter\ExcelToHtmlUtils.cs" />
-    <Compile Include="SS\UserModel\IndexedColors.cs" />
     <Compile Include="SS\UserModel\WorkbookFactory.cs" />
     <Compile Include="Util\IdentifierManager.cs" />
     <Compile Include="Util\PackageHelper.cs" />
@@ -188,6 +187,8 @@
     <Compile Include="XSSF\Streaming\Values\StringFormulaValue.cs" />
     <Compile Include="XSSF\Streaming\Values\StringValue.cs" />
     <Compile Include="XSSF\Streaming\Values\Value.cs" />
+    <Compile Include="XSSF\UserModel\BaseXSSFEvaluationWorkbook.cs" />
+    <Compile Include="XSSF\UserModel\BaseXSSFFormulaEvaluator.cs" />
     <Compile Include="XSSF\UserModel\Charts\AbstractXSSFChartSeries.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFBarChartData.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFCategoryAxis.cs" />
@@ -219,6 +220,8 @@
     <Compile Include="XSSF\UserModel\Helpers\ColumnHelper.cs" />
     <Compile Include="XSSF\UserModel\Helpers\HeaderFooterHelper.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFFormulaUtils.cs" />
+    <Compile Include="XSSF\UserModel\Helpers\XSSFIgnoredErrorHelper.cs" />
+    <Compile Include="XSSF\UserModel\Helpers\XSSFPasswordHelper.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFRowShifter.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFSingleXmlCell.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFXmlColumnPr.cs" />
@@ -240,11 +243,14 @@
     <Compile Include="XSSF\UserModel\XSSFChildAnchor.cs" />
     <Compile Include="XSSF\UserModel\XSSFClientAnchor.cs" />
     <Compile Include="XSSF\UserModel\XSSFColor.cs" />
+    <Compile Include="XSSF\UserModel\XSSFColorScaleFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFComment.cs" />
     <Compile Include="XSSF\UserModel\XSSFConditionalFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFConditionalFormattingRule.cs" />
+    <Compile Include="XSSF\UserModel\XSSFConditionalFormattingThreshold.cs" />
     <Compile Include="XSSF\UserModel\XSSFConnector.cs" />
     <Compile Include="XSSF\UserModel\XSSFCreationHelper.cs" />
+    <Compile Include="XSSF\UserModel\XSSFDataBarFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFDataFormat.cs" />
     <Compile Include="XSSF\UserModel\XSSFDataValidation.cs" />
     <Compile Include="XSSF\UserModel\XSSFDataValidationConstraint.cs" />
@@ -263,6 +269,7 @@
     <Compile Include="XSSF\UserModel\XSSFFontFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFFormulaEvaluator.cs" />
     <Compile Include="XSSF\UserModel\XSSFGraphicFrame.cs" />
+    <Compile Include="XSSF\UserModel\XSSFIconMultiStateFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFLineBreak.cs" />
     <Compile Include="XSSF\UserModel\XSSFMap.cs" />
     <Compile Include="XSSF\UserModel\XSSFName.cs" />
@@ -289,8 +296,10 @@
     <Compile Include="XSSF\UserModel\XSSFTextBox.cs" />
     <Compile Include="XSSF\UserModel\XSSFTextParagraph.cs" />
     <Compile Include="XSSF\UserModel\XSSFTextRun.cs" />
+    <Compile Include="XSSF\UserModel\XSSFVBAPart.cs" />
     <Compile Include="XSSF\UserModel\XSSFVMLDrawing.cs" />
     <Compile Include="XSSF\UserModel\XSSFWorkbook.cs" />
+    <Compile Include="XSSF\UserModel\XSSFWorkbookType.cs" />
     <Compile Include="XSSF\Util\CTColComparator.cs" />
     <Compile Include="XSSF\Util\EvilUnclosedBRFixingInputStream.cs" />
     <Compile Include="XSSF\Util\NumericRange.cs" />
@@ -299,7 +308,6 @@
     <Compile Include="XWPF\Model\XMLParagraph.cs" />
     <Compile Include="XWPF\Model\XWPFCommentsDecorator.cs" />
     <Compile Include="XWPF\Model\XWPFHeaderFooterPolicy.cs" />
-    <Compile Include="XWPF\Model\XWPFHyperlinkDecorator.cs" />
     <Compile Include="XWPF\Model\XWPFParagraphDecorator.cs" />
     <Compile Include="XWPF\Usermodel\AbstractXWPFSDT.cs" />
     <Compile Include="XWPF\Usermodel\BodyElementType.cs" />
@@ -332,6 +340,7 @@
     <Compile Include="XWPF\Usermodel\XWPFDocument.cs" />
     <Compile Include="XWPF\Usermodel\XWPFF.cs" />
     <Compile Include="XWPF\Usermodel\XWPFFactory.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFFieldRun.cs" />
     <Compile Include="XWPF\Usermodel\XWPFFooter.cs" />
     <Compile Include="XWPF\Usermodel\XWPFFootnote.cs" />
     <Compile Include="XWPF\Usermodel\XWPFFootnotes.cs" />

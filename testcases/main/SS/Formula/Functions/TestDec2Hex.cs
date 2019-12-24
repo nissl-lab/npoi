@@ -81,6 +81,30 @@ namespace TestCases.SS.Formula.Functions
 
             ConfirmValue("Converts decimal -54 to hexadecimal, 2 is ignored", "-54", "2", "FFFFFFFFCA");
             ConfirmValue("places is optionnal", "-54", "FFFFFFFFCA");
+
+
+            ConfirmValue("Converts normal decimal number to hexadecimal", "100", "64");
+
+            String maxInt = Int32.MaxValue.ToString();
+            Assert.AreEqual("2147483647", maxInt);
+            ConfirmValue("Converts INT_MAX to hexadecimal", maxInt, "7FFFFFFF");
+
+            String minInt = Int32.MinValue.ToString();
+            Assert.AreEqual("-2147483648", minInt);
+            ConfirmValue("Converts INT_MIN to hexadecimal", minInt, "FF80000000");
+
+            String maxIntPlusOne = (((long)Int32.MaxValue) + 1).ToString();
+            Assert.AreEqual("2147483648", maxIntPlusOne);
+            ConfirmValue("Converts INT_MAX + 1 to hexadecimal", maxIntPlusOne, "80000000");
+
+            String maxLong = (549755813887).ToString();
+            Assert.AreEqual("549755813887", maxLong);
+            ConfirmValue("Converts the max supported value to hexadecimal", maxLong, "7FFFFFFFFF");
+
+            String minLong = (-549755813888l).ToString();
+            Assert.AreEqual("-549755813888", minLong);
+            ConfirmValue("Converts the min supported value to hexadecimal", minLong, "FF80000000");
+
         }
         [Test]
         public void TestErrors()

@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\ooxml\NPOI.OOXML.Core.csproj" />
     <ProjectReference Include="..\..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
     <ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" />
+    <ProjectReference Include="..\ooxml\NPOI.OOXML.TestCases.Core.csproj" />
   </ItemGroup>
 
 	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">

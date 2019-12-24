@@ -52,7 +52,7 @@ namespace NPOI.DDF
         private short field_7_dx2;
         private short field_8_row2;
         private short field_9_dy2;
-        private byte[] remainingData;
+        private byte[] remainingData = new byte[0];
         private bool shortRecord = false;
 
         /// <summary>
@@ -170,71 +170,43 @@ namespace NPOI.DDF
         public override String ToString()
         {
             String nl = Environment.NewLine;
-
-            String extraData;
-            using (MemoryStream b = new MemoryStream())
-            {
-                try
-                {
-                    HexDump.Dump(this.remainingData, 0, b, 0);
-                    //extraData = b.ToString();
-                    extraData = Encoding.UTF8.GetString(b.ToArray());
-                }
-                catch (Exception)
-                {
-                    extraData = "error\n";
-                }
-                return GetType().Name + ":" + nl +
-                       "  RecordId: 0x" + HexDump.ToHex(RECORD_ID) + nl +
-                       "  Version: 0x" + HexDump.ToHex(Version) + nl +
-                       "  Instance: 0x" + HexDump.ToHex(Instance) + nl +
-                       "  Flag: " + field_1_flag + nl +
-                       "  Col1: " + field_2_col1 + nl +
-                       "  DX1: " + field_3_dx1 + nl +
-                       "  Row1: " + field_4_row1 + nl +
-                       "  DY1: " + field_5_dy1 + nl +
-                       "  Col2: " + field_6_col2 + nl +
-                       "  DX2: " + field_7_dx2 + nl +
-                       "  Row2: " + field_8_row2 + nl +
-                       "  DY2: " + field_9_dy2 + nl +
-                       "  Extra Data:" + nl + extraData;
-            }
+            String extraData = HexDump.Dump(this.remainingData, 0, 0);
+            
+            return GetType().Name + ":" + nl +
+                    "  RecordId: 0x" + HexDump.ToHex(RECORD_ID) + nl +
+                    "  Version: 0x" + HexDump.ToHex(Version) + nl +
+                    "  Instance: 0x" + HexDump.ToHex(Instance) + nl +
+                    "  Flag: " + field_1_flag + nl +
+                    "  Col1: " + field_2_col1 + nl +
+                    "  DX1: " + field_3_dx1 + nl +
+                    "  Row1: " + field_4_row1 + nl +
+                    "  DY1: " + field_5_dy1 + nl +
+                    "  Col2: " + field_6_col2 + nl +
+                    "  DX2: " + field_7_dx2 + nl +
+                    "  Row2: " + field_8_row2 + nl +
+                    "  DY2: " + field_9_dy2 + nl +
+                    "  Extra Data:" + nl + extraData;
+            
         }
         public override String ToXml(String tab)
         {
-            String extraData;
-            using (MemoryStream b = new MemoryStream())
-            {
-                try
-                {
-                    HexDump.Dump(this.remainingData, 0, b, 0);
-                    extraData = HexDump.ToHex(b.ToArray());
-                }
-                catch (Exception)
-                {
-                    extraData = "error\n";
-                }
-                if (extraData.Contains("No Data"))
-                {
-                    extraData = "No Data";
-                }
-                StringBuilder builder = new StringBuilder();
-                builder.Append(tab)
-                       .Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId),
-                                                     HexDump.ToHex(Version), HexDump.ToHex(Instance)))
-                       .Append(tab).Append("\t").Append("<Flag>").Append(field_1_flag).Append("</Flag>\n")
-                       .Append(tab).Append("\t").Append("<Col1>").Append(field_2_col1).Append("</Col1>\n")
-                       .Append(tab).Append("\t").Append("<DX1>").Append(field_3_dx1).Append("</DX1>\n")
-                       .Append(tab).Append("\t").Append("<Row1>").Append(field_4_row1).Append("</Row1>\n")
-                       .Append(tab).Append("\t").Append("<DY1>").Append(field_5_dy1).Append("</DY1>\n")
-                       .Append(tab).Append("\t").Append("<Col2>").Append(field_6_col2).Append("</Col2>\n")
-                       .Append(tab).Append("\t").Append("<DX2>").Append(field_7_dx2).Append("</DX2>\n")
-                       .Append(tab).Append("\t").Append("<Row2>").Append(field_8_row2).Append("</Row2>\n")
-                       .Append(tab).Append("\t").Append("<DY2>").Append(field_9_dy2).Append("</DY2>\n")
-                       .Append(tab).Append("\t").Append("<ExtraData>").Append(extraData).Append("</ExtraData>\n");
-                builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
-                return builder.ToString();
-            }
+            String extraData = HexDump.Dump(this.remainingData, 0, 0).Trim();
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tab)
+                   .Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId),
+                                                 HexDump.ToHex(Version), HexDump.ToHex(Instance)))
+                   .Append(tab).Append("\t").Append("<Flag>").Append(field_1_flag).Append("</Flag>\n")
+                   .Append(tab).Append("\t").Append("<Col1>").Append(field_2_col1).Append("</Col1>\n")
+                   .Append(tab).Append("\t").Append("<DX1>").Append(field_3_dx1).Append("</DX1>\n")
+                   .Append(tab).Append("\t").Append("<Row1>").Append(field_4_row1).Append("</Row1>\n")
+                   .Append(tab).Append("\t").Append("<DY1>").Append(field_5_dy1).Append("</DY1>\n")
+                   .Append(tab).Append("\t").Append("<Col2>").Append(field_6_col2).Append("</Col2>\n")
+                   .Append(tab).Append("\t").Append("<DX2>").Append(field_7_dx2).Append("</DX2>\n")
+                   .Append(tab).Append("\t").Append("<Row2>").Append(field_8_row2).Append("</Row2>\n")
+                   .Append(tab).Append("\t").Append("<DY2>").Append(field_9_dy2).Append("</DY2>\n")
+                   .Append(tab).Append("\t").Append("<ExtraData>").Append(extraData).Append("</ExtraData>\n");
+            builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
+            return builder.ToString();
         }
         /// <summary>
         /// Gets or sets the flag.
@@ -353,7 +325,19 @@ namespace NPOI.DDF
         public byte[] RemainingData
         {
             get { return remainingData; }
-            set { remainingData = value; }
+            set
+            {
+                if (value == null)
+                {
+                    this.remainingData = new byte[0];
+                }
+                else
+                {
+                    remainingData = new byte[value.Length];
+                    if (value.Length > 0)
+                        Array.Copy(value, remainingData, value.Length);
+                }
+            }
         }
 
     }

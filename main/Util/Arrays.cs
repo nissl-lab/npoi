@@ -83,7 +83,12 @@ namespace NPOI.Util
             for (int i = fromIndex; i < toIndex; i++)
                 a[i] = val;
         }
-
+        public static void Fill(char[] a, int fromIndex, int toIndex, char val)
+        {
+            RangeCheck(a.Length, fromIndex, toIndex);
+            for (int i = fromIndex; i < toIndex; i++)
+                a[i] = val;
+        }
         /// <summary>
         /// Checks that {@code fromIndex} and {@code toIndex} are in
         /// the range and throws an appropriate exception, if they aren't.
@@ -121,6 +126,23 @@ namespace NPOI.Util
             {
                 al.Add(arr.GetValue(i));
             }
+            return al;
+        }
+        public static ArrayList AsArrayList<T>(params T[] arr)
+        {
+            if (arr.Length <= 0)
+                return new ArrayList();
+            ArrayList al = new ArrayList(arr.Length);
+            al.AddRange(arr);
+            return al;
+        }
+
+        public static List<T> AsList<T>(params T[] arr)
+        {
+            if (arr.Length <= 0)
+                return new List<T>();
+            List<T> al = new List<T>(arr.Length);
+            al.AddRange(arr);
             return al;
         }
         /// <summary>

@@ -28,9 +28,6 @@ namespace NPOI.SS.Formula.Atp
      */
     public class DateParser
     {
-
-        public DateParser instance = new DateParser();
-
         private DateParser()
         {
             // enforcing singleton

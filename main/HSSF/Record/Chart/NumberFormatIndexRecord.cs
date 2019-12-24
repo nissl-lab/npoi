@@ -31,8 +31,7 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class NumberFormatIndexRecord
-       : StandardRecord
+    public class NumberFormatIndexRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x104e;
         private short field_1_formatIndex;

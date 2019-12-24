@@ -44,12 +44,17 @@ namespace NPOI.XWPF.UserModel
          * @param part the package part holding the data of the footnotes,
          * @param rel  the package relationship of type "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/footnotes"
          */
-        public XWPFFootnotes(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        public XWPFFootnotes(PackagePart part)
+            : base(part)
         {
             ;
         }
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public XWPFFootnotes(PackagePart part, PackageRelationship rel)
+            : this(part)
+        {
 
+        }
         /**
          * Construct XWPFFootnotes from scratch for a new document.
          */
@@ -64,14 +69,25 @@ namespace NPOI.XWPF.UserModel
         internal override void OnDocumentRead()
         {
             FootnotesDocument notesDoc;
-            try {
-               XmlDocument xmldoc = ConvertStreamToXml(GetPackagePart().GetInputStream());
-               notesDoc = FootnotesDocument.Parse(xmldoc, NamespaceManager);
-               ctFootnotes = notesDoc.Footnotes;
-            } catch (XmlException) {
-               throw new POIXMLException();
+            Stream is1 = null;
+            try
+            {
+                is1 = GetPackagePart().GetInputStream();
+                XmlDocument xmldoc = ConvertStreamToXml(is1);
+                notesDoc = FootnotesDocument.Parse(xmldoc, NamespaceManager);
+                ctFootnotes = notesDoc.Footnotes;
             }
-	   
+            catch (XmlException)
+            {
+                throw new POIXMLException();
+            }
+            finally
+            {
+                if (is1 != null)
+                {
+                    is1.Close();
+                }
+            }
             //get any Footnote
             if (ctFootnotes.footnote != null)
             {

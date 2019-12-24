@@ -316,6 +316,36 @@ namespace NPOI.HPSF
                     return 1;
             }
 
+            public override int GetHashCode()
+            {
+                int prime = 31;
+                int result = 1;
+                result = prime * result + id;
+                result = prime * result + Length;
+                result = prime * result + offset;
+                return result;
+            }
+
+
+
+            public override bool Equals(Object obj)
+            {
+                if (this == obj)
+                    return true;
+                if (obj == null)
+                    return false;
+                if (GetType() != obj.GetType())
+                    return false;
+                PropertyListEntry other = (PropertyListEntry)obj;
+                if (id != other.id)
+                    return false;
+                if (Length != other.Length)
+                    return false;
+                if (offset != other.offset)
+                    return false;
+                return true;
+            }
+
             public override String ToString()
             {
                 StringBuilder b = new StringBuilder();
@@ -448,8 +478,6 @@ namespace NPOI.HPSF
                 s = (String)dictionary[pid];
             if (s == null)
                 s = SectionIDMap.GetPIDString(FormatID.Bytes, pid);
-            if (s == null)
-                s = SectionIDMap.UNDEFINED;
             return s;
         }
 
@@ -590,9 +618,6 @@ namespace NPOI.HPSF
             int returnHashCode = (int)(GetHashCode & 0x0ffffffffL);
             return returnHashCode;
         }
-
-
-
 
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.

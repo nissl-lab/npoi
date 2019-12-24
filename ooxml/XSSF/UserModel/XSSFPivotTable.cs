@@ -24,7 +24,7 @@ namespace NPOI.XSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.OpenXmlFormats.Spreadsheet;
-
+    using NPOI.SS;
 
     public class XSSFPivotTable : POIXMLDocumentPart
     {
@@ -58,14 +58,19 @@ namespace NPOI.XSSF.UserModel
         * @param rel - the relationship of the given package part in the underlying OPC package
         */
 
-        protected XSSFPivotTable(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        protected XSSFPivotTable(PackagePart part)
+            : base(part)
         {
 
             ReadFrom(part.GetInputStream());
         }
 
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        protected XSSFPivotTable(PackagePart part, PackageRelationship rel)
+            : this(part)
+        {
 
+        }
         public void ReadFrom(Stream is1)
         {
             try
@@ -212,9 +217,26 @@ namespace NPOI.XSSF.UserModel
 
         protected AreaReference GetPivotArea()
         {
-            AreaReference pivotArea = new AreaReference(GetPivotCacheDefinition().
-                    GetCTPivotCacheDefInition().cacheSource.worksheetSource.@ref);
+            IWorkbook wb = GetDataSheet().Workbook;
+            AreaReference pivotArea = GetPivotCacheDefinition().GetPivotArea(wb);
             return pivotArea;
+        }
+
+        /**
+         * Verify column index (relative to first column in1 pivot area) is within the
+         * pivot area
+         *
+         * @param columnIndex
+         * @
+         */
+        private void CheckColumnIndex(int columnIndex)
+        {
+            AreaReference pivotArea = GetPivotArea();
+            int size = pivotArea.LastCell.Col - pivotArea.FirstCell.Col + 1;
+            if (columnIndex < 0 || columnIndex >= size)
+            {
+                throw new IndexOutOfRangeException("Column Index: " + columnIndex + ", Size: " + size);
+            }
         }
 
         /**
@@ -224,14 +246,10 @@ namespace NPOI.XSSF.UserModel
 
         public void AddRowLabel(int columnIndex)
         {
+            CheckColumnIndex(columnIndex);
             AreaReference pivotArea = GetPivotArea();
             int lastRowIndex = pivotArea.LastCell.Row - pivotArea.FirstCell.Row;
-            int lastColIndex = pivotArea.LastCell.Col - pivotArea.FirstCell.Col;
 
-            if (columnIndex > lastColIndex)
-            {
-                throw new IndexOutOfRangeException();
-            }
             CT_PivotFields pivotFields = pivotTableDefinition.pivotFields;
 
             CT_PivotField pivotField = new CT_PivotField();
@@ -288,13 +306,7 @@ namespace NPOI.XSSF.UserModel
 
         public void AddColumnLabel(DataConsolidateFunction function, int columnIndex, String valueFieldName)
         {
-            AreaReference pivotArea = GetPivotArea();
-            int lastColIndex = pivotArea.LastCell.Col - pivotArea.FirstCell.Col;
-
-            if (columnIndex > lastColIndex && columnIndex < 0)
-            {
-                throw new IndexOutOfRangeException();
-            }
+            CheckColumnIndex(columnIndex);
 
             AddDataColumn(columnIndex, true);
             AddDataField(function, columnIndex, valueFieldName);
@@ -332,21 +344,16 @@ namespace NPOI.XSSF.UserModel
         /**
          * Add data field with data from the given column and specified function.
          * @param function the function to be used on the data
-         * @param index the index of the column to be used as column label.
-         * The following functions exists:
-         * Sum, Count, Average, Max, Min, Product, Count numbers, StdDev, StdDevp, Var, Varp
+         *      The following functions exists:
+         *      Sum, Count, Average, Max, Min, Product, Count numbers, StdDev, StdDevp, Var, Varp
+         * @param columnIndex the index of the column to be used as column label.
          * @param valueFieldName the name of pivot table value field
          */
 
         private void AddDataField(DataConsolidateFunction function, int columnIndex, String valueFieldName)
         {
+            CheckColumnIndex(columnIndex);
             AreaReference pivotArea = GetPivotArea();
-            int lastColIndex = pivotArea.LastCell.Col - pivotArea.FirstCell.Col;
-
-            if (columnIndex > lastColIndex && columnIndex < 0)
-            {
-                throw new IndexOutOfRangeException();
-            }
             CT_DataFields dataFields;
             if (pivotTableDefinition.dataFields != null)
             {
@@ -358,7 +365,8 @@ namespace NPOI.XSSF.UserModel
             }
             CT_DataField dataField = dataFields.AddNewDataField();
             dataField.subtotal = (ST_DataConsolidateFunction)(function.Value);
-            ICell cell = GetDataSheet().GetRow(pivotArea.FirstCell.Row).GetCell(columnIndex);
+            ICell cell = GetDataSheet().GetRow(pivotArea.FirstCell.Row)
+                .GetCell(pivotArea.FirstCell.Col + columnIndex);
             cell.SetCellType(CellType.String);
             dataField.name = (/*setter*/valueFieldName);
             dataField.fld = (uint)columnIndex;
@@ -373,12 +381,8 @@ namespace NPOI.XSSF.UserModel
 
         public void AddDataColumn(int columnIndex, bool isDataField)
         {
-            AreaReference pivotArea = GetPivotArea();
-            int lastColIndex = pivotArea.LastCell.Col - pivotArea.FirstCell.Col;
-            if (columnIndex > lastColIndex && columnIndex < 0)
-            {
-                throw new IndexOutOfRangeException();
-            }
+            CheckColumnIndex(columnIndex);
+
             CT_PivotFields pivotFields = pivotTableDefinition.pivotFields;
             CT_PivotField pivotField = new CT_PivotField();
 
@@ -394,14 +398,11 @@ namespace NPOI.XSSF.UserModel
 
         public void AddReportFilter(int columnIndex)
         {
+            CheckColumnIndex(columnIndex);
             AreaReference pivotArea = GetPivotArea();
-            int lastColIndex = pivotArea.LastCell.Col - pivotArea.FirstCell.Col;
+            
             int lastRowIndex = pivotArea.LastCell.Row - pivotArea.FirstCell.Row;
 
-            if (columnIndex > lastColIndex && columnIndex < 0)
-            {
-                throw new IndexOutOfRangeException();
-            }
             CT_PivotFields pivotFields = pivotTableDefinition.pivotFields;
 
             CT_PivotField pivotField = new CT_PivotField();
@@ -436,13 +437,13 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Creates cacheSource and workSheetSource for pivot table and Sets the source reference as well assets the location of the pivot table
-         * @param source Source for data for pivot table
+         * Creates cacheSource and workSheetSource for pivot table and sets the source reference as well assets the location of the pivot table
+         * @param sourceRef Source for data for pivot table - mutually exclusive with sourceName
+         * @param sourceName Source for data for pivot table - mutually exclusive with sourceRef
          * @param position Position for pivot table in sheet
          * @param sourceSheet Sheet where the source will be collected from
          */
-
-        protected internal void CreateSourceReferences(AreaReference source, CellReference position, ISheet sourceSheet)
+        protected internal void CreateSourceReferences(CellReference position, ISheet sourceSheet, IPivotTableReferenceConfigurator refConfig)
         {
             //Get cell one to the right and one down from position, add both to AreaReference and Set pivot table location.
             AreaReference destination = new AreaReference(position, new CellReference(position.Row + 1, position.Col + 1));
@@ -463,16 +464,16 @@ namespace NPOI.XSSF.UserModel
             pivotTableDefinition.location = (/*setter*/location);
 
             //Set source for the pivot table
-            CT_PivotCacheDefinition cacheDef = GetPivotCacheDefinition().GetCTPivotCacheDefInition();
+            CT_PivotCacheDefinition cacheDef = GetPivotCacheDefinition().GetCTPivotCacheDefinition();
             CT_CacheSource cacheSource = cacheDef.AddNewCacheSource();
             cacheSource.type = (/*setter*/ST_SourceType.worksheet);
             CT_WorksheetSource worksheetSource = cacheSource.AddNewWorksheetSource();
             worksheetSource.sheet = (/*setter*/sourceSheet.SheetName);
             SetDataSheet(sourceSheet);
 
-            String[] firstCell = source.FirstCell.CellRefParts;
-            String[] lastCell = source.LastCell.CellRefParts;
-            worksheetSource.@ref = (/*setter*/firstCell[2] + firstCell[1] + ':' + lastCell[2] + lastCell[1]);
+            refConfig.ConfigureReference(worksheetSource);
+            if (worksheetSource.name == null && worksheetSource.@ref == null)
+                throw new ArgumentException("Pivot table source area reference or name must be specified.");
         }
 
 
@@ -491,13 +492,23 @@ namespace NPOI.XSSF.UserModel
             int firstColumn = sourceArea.FirstCell.Col;
             int lastColumn = sourceArea.LastCell.Col;
             CT_PivotField pivotField;
-            for (int i = 0; i <= lastColumn - firstColumn; i++)
+            for (int i = firstColumn; i <= lastColumn; i++)
             {
                 pivotField = pivotFields.AddNewPivotField();
                 pivotField.dataField = (/*setter*/false);
                 pivotField.showAll = (/*setter*/false);
             }
             pivotFields.count = (/*setter*/pivotFields.SizeOfPivotFieldArray());
+        }
+
+        public interface IPivotTableReferenceConfigurator
+        {
+
+            /**
+             * Configure the name or area reference for the pivot table 
+             * @param wsSource CTWorksheetSource that needs the pivot source reference assignment
+             */
+            void ConfigureReference(CT_WorksheetSource wsSource);
         }
     }
 

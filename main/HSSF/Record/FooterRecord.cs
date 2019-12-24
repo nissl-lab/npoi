@@ -33,7 +33,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class FooterRecord
-       : HeaderFooterBase
+       : HeaderFooterBase, ICloneable
     {
         public const short sid = 0x15;
         public FooterRecord(string text):base(text)

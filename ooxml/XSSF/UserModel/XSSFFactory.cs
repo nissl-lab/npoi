@@ -44,45 +44,23 @@ namespace NPOI.XSSF.UserModel
             return inst;
         }
 
-
-        public override POIXMLDocumentPart CreateDocumentPart(POIXMLDocumentPart parent, PackageRelationship rel, PackagePart part)
+        /**
+     * @since POI 3.14-Beta1
+     */
+        protected override POIXMLRelation GetDescriptor(String relationshipType)
         {
-            POIXMLRelation descriptor = XSSFRelation.GetInstance(rel.RelationshipType);
-            if (descriptor == null || descriptor.RelationClass == null)
-            {
-                logger.Log(POILogger.DEBUG, "using default POIXMLDocumentPart for " + rel.RelationshipType);
-                return new POIXMLDocumentPart(part, rel);
-            }
-
-            try
-            {
-                Type cls = descriptor.RelationClass;
-                ConstructorInfo constructor = cls.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance,null, new Type[] { typeof(PackagePart), typeof(PackageRelationship) },null);
-                return (POIXMLDocumentPart)constructor.Invoke(new object[] { part, rel });
-            }
-            catch (Exception e)
-            {
-                throw new POIXMLException(e);
-            }
+            return XSSFRelation.GetInstance(relationshipType);
         }
 
+        /**
+         * @since POI 3.14-Beta1
+         */
 
-        public override POIXMLDocumentPart CreateDocumentPart(POIXMLRelation descriptor)
+        protected override POIXMLDocumentPart CreateDocumentPart(Type cls, Type[] classes, Object[] values)
         {
-            try
-            {
-                Type cls = descriptor.RelationClass;
-                //Console.WriteLine(cls.ToString());
-                ConstructorInfo constructor = cls.GetConstructor(new Type[] { });
-                return (POIXMLDocumentPart)constructor.Invoke(new object[] { });
-            }
-            catch (Exception e)
-            {
-                throw new POIXMLException(e);
-            }
+            ConstructorInfo constructor = cls.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public,
+                        null, classes, null);
+            return constructor.Invoke(values) as POIXMLDocumentPart;
         }
-
     }
-
-
 }

@@ -32,6 +32,7 @@ namespace TestCases.HSSF.Model
     using NPOI.SS.Formula;
     using NPOI.Util;
     using NPOI.DDF;
+    using NPOI.SS;
 
     /**
      * Unit Test for the Sheet class.
@@ -688,7 +689,7 @@ namespace TestCases.HSSF.Model
             //Assert.AreEqual(23, sheetRecs.Count);
             Assert.AreEqual(24, sheetRecs.Count); //for SheetExtRecord
 
-            FormulaShifter shifter = FormulaShifter.CreateForRowShift(0,"", 0, 0, 1);
+            FormulaShifter shifter = FormulaShifter.CreateForRowShift(0,"", 0, 0, 1, SpreadsheetVersion.EXCEL97);
             sheet.UpdateFormulasAfterCellShift(shifter, 0);
             if (sheetRecs.Count == 25 && sheetRecs[22] is ConditionalFormattingTable)
             {
@@ -734,7 +735,7 @@ namespace TestCases.HSSF.Model
                 EOFRecord.instance,
         };
 
-            InternalSheet sheet = CreateSheet(NPOI.Util.Arrays.AsList(recs));
+            InternalSheet sheet = CreateSheet(Arrays.AsArrayList(recs));
 
             InternalSheet sheet2;
             try
@@ -782,12 +783,12 @@ namespace TestCases.HSSF.Model
                     "0B 00 0C 00 00 00 11 F0 00 00 00 00";
 
             DrawingRecord d1 = new DrawingRecord();
-            d1.Data = HexRead.ReadFromString(msoDrawingRecord1);
+            d1.SetData(HexRead.ReadFromString(msoDrawingRecord1));
 
             ObjRecord r1 = new ObjRecord();
 
             DrawingRecord d2 = new DrawingRecord();
-            d2.Data = (HexRead.ReadFromString(msoDrawingRecord2));
+            d2.SetData(HexRead.ReadFromString(msoDrawingRecord2));
 
             TextObjectRecord r2 = new TextObjectRecord();
             r2.Str = (new HSSFRichTextString("Aggregated"));

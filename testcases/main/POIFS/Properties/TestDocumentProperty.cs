@@ -180,7 +180,7 @@ namespace TestCases.POIFS.Properties
             {
                 Testblock[index] = (byte)0x0;
             }
-            byte[] name_bytes = Encoding.UTF8.GetBytes(name);
+            byte[] name_bytes = Encoding.GetEncoding(1252).GetBytes(name);
 
             for (index = 0; index < limit; index++)
             {

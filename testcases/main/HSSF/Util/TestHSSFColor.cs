@@ -24,9 +24,11 @@ namespace TestCases.HSSF.Util
     using NPOI.HSSF.Util;
 
     using NUnit.Framework;
+    using System.Collections.Generic;
+
     /**
-     * @author Nick Burch
-     */
+* @author Nick Burch
+*/
     [TestFixture]
     public class TestHSSFColor
     {
@@ -50,7 +52,7 @@ namespace TestCases.HSSF.Util
         [Test]
         public void TestTrippletHash()
         {
-            Hashtable tripplets = HSSFColor.GetTripletHash();
+            Dictionary<String, HSSFColor> tripplets = HSSFColor.GetTripletHash();
 
             Assert.AreEqual(
                     typeof(HSSFColor.Maroon),

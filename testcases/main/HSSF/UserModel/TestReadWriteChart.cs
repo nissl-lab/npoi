@@ -25,6 +25,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.UserModel;
     using NUnit.Framework;
     using NPOI.HSSF.Model;
+    using System.Collections.Generic;
 
     /**
      * @author Glen Stampoultzis (glens at apache.org)
@@ -52,12 +53,14 @@ namespace TestCases.HSSF.UserModel
 
             cell.SetCellValue(22);
             InternalSheet newSheet = ((HSSFSheet)workbook.GetSheetAt(0)).Sheet;
-            IList records = newSheet.Records;
+            IList<RecordBase> records = newSheet.Records;
 
             //System.out.println("BOF Assertion");
             Assert.IsTrue(records[0] is BOFRecord);
             //System.out.println("EOF Assertion");
             Assert.IsTrue(records[records.Count - 1] is EOFRecord);
+
+            workbook.Close();
         }
     }
 }

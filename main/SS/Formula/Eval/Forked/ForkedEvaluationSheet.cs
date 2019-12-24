@@ -116,6 +116,15 @@ namespace NPOI.SS.Formula.Eval.Forked
             return mewb.GetSheetIndex(_masterSheet);
         }
 
+        /* (non-Javadoc)
+         * leave the map alone, if it needs resetting, reusing this class is probably a bad idea.
+         * @see org.apache.poi.ss.formula.EvaluationSheet#clearAllCachedResultValues()
+         */
+        public void ClearAllCachedResultValues()
+        {
+            _masterSheet.ClearAllCachedResultValues();
+        }
+
         private class RowColKey : IComparable<RowColKey>
         {
             private int _rowIndex;

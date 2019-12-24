@@ -45,6 +45,14 @@ namespace NPOI.SS.UserModel
             set;
         }
         /// <summary>
+        /// get or set the colour of the font, or null if no colour applied
+        /// </summary>
+        IColor FontColor
+        {
+            get;
+            set;
+        }
+        /// <summary>
         /// get or set the height of the font in 1/20th point units
         /// </summary>
         int FontHeight

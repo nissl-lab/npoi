@@ -32,8 +32,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class GutsRecord
-       : StandardRecord
+    public class GutsRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x80;
         private short field_1_left_row_gutter;   // size of the row gutter to the left of the rows

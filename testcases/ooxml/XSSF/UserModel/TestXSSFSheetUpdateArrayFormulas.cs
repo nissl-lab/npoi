@@ -60,6 +60,8 @@ namespace NPOI.XSSF.UserModel
             //retrieve the range and check it is the same
             Assert.AreEqual(range.FormatAsString(), firstCell.ArrayFormulaRange.FormatAsString());
             ConfirmArrayFormulaCell(firstCell, "C3", formula1, "C3");
+
+            workbook.Close();
         }
         [Test]
         public void TestXSSFSetArrayFormula_multiCell()
@@ -87,6 +89,7 @@ namespace NPOI.XSSF.UserModel
             ConfirmArrayFormulaCell(cells.GetCell(2, 0), "C6");
 
             Assert.AreSame(firstCell, sheet.GetFirstCellInArrayFormula(firstCell));
+            workbook.Close();
         }
 
         private static void ConfirmArrayFormulaCell(ICell c, String cellRef)

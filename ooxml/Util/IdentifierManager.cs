@@ -51,8 +51,7 @@ namespace NPOI.Util
         {
             if (lowerbound > upperbound)
             {
-                String message = "lowerbound must not be greater than upperbound";
-                throw new ArgumentException(message);
+                throw new ArgumentException("lowerbound must not be greater than upperbound, had " + lowerbound + " and " + upperbound);
             }
             else if (lowerbound < MIN_ID)
             {
@@ -62,11 +61,10 @@ namespace NPOI.Util
             else if (upperbound > MAX_ID)
             {
                 /*
-                 * while MAX_ID is Long.MaxValue, this check is pointless. But if
-                 * someone subclasses / tweaks the limits, this check if fine.
+                 * while MAX_ID is Long.MAX_VALUE, this check is pointless. But if
+                 * someone subclasses / tweaks the limits, this check is fine.
                  */
-                String message = "upperbound must be less thean or equal " + MAX_ID;
-                throw new ArgumentException(message);
+                throw new ArgumentException("upperbound must be less than or equal to " + MAX_ID + " but had " + upperbound);
             }
             this.lowerbound = lowerbound;
             this.upperbound = upperbound;
@@ -155,7 +153,7 @@ namespace NPOI.Util
 
         /**
          * @return a new identifier. 
-         * @throws IllegalStateException if no more identifiers are available, then an Exception is raised.
+         * @throws InvalidOperationException if no more identifiers are available, then an Exception is raised.
          */
         public long ReserveNew()
         {
@@ -181,7 +179,7 @@ namespace NPOI.Util
         {
             if (id < lowerbound || id > upperbound)
             {
-                throw new ArgumentException("Value for parameter 'id' was out of bounds");
+                throw new ArgumentException("Value for parameter 'id' was out of bounds, had " + id + ", but should be within [" + lowerbound + ":" + upperbound + "]");
             }
 
             if (id == upperbound)

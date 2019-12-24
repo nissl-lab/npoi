@@ -81,11 +81,11 @@ namespace TestCases.SS.Formula.Functions
         {
             ValueEval result = eOMonth.Evaluate(new ValueEval[] { new NumberEval(DATE_1902_09_26) }, ec);
             Assert.IsTrue(result is ErrorEval);
-            Assert.AreEqual(ErrorConstants.ERROR_VALUE, ((ErrorEval)result).ErrorCode);
+            Assert.AreEqual(FormulaError.VALUE.Code, ((ErrorEval)result).ErrorCode);
 
             result = eOMonth.Evaluate(new ValueEval[] { new StringEval("a"), new StringEval("b") }, ec);
             Assert.IsTrue(result is ErrorEval);
-            Assert.AreEqual(ErrorConstants.ERROR_VALUE, ((ErrorEval)result).ErrorCode);
+            Assert.AreEqual(FormulaError.VALUE.Code, ((ErrorEval)result).ErrorCode);
         }
 
         [Test]

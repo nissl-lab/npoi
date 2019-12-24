@@ -28,7 +28,7 @@ namespace NPOI.HSSF.Record.Chart
      * 
      * @author Patrick Cheng
      */
-    public class ChartStartBlockRecord : StandardRecord
+    public class ChartStartBlockRecord : StandardRecord, ICloneable
     {
         public static short sid = 0x0852;
 

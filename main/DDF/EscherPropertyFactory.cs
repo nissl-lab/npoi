@@ -42,7 +42,6 @@ namespace NPOI.DDF
 
             int pos = offset;
 
-            //        while ( bytesRemaining >= 6 )
             for (int i = 0; i < numProperties; i++)
             {
                 short propId;
@@ -51,10 +50,9 @@ namespace NPOI.DDF
                 propData = LittleEndian.GetInt(data, pos + 2);
                 short propNumber = (short)(propId & (short)0x3FFF);
                 bool isComplex = (propId & unchecked((short)0x8000)) != 0;
-                bool isBlipId = (propId & (short)0x4000) != 0;
 
                 byte propertyType = EscherProperties.GetPropertyType((short)propNumber);
-                if (propertyType == EscherPropertyMetaData.TYPE_bool)
+                if (propertyType == EscherPropertyMetaData.TYPE_BOOL)
                     results.Add(new EscherBoolProperty(propId, propData));
                 else if (propertyType == EscherPropertyMetaData.TYPE_RGB)
                     results.Add(new EscherRGBProperty(propId, propData));
@@ -74,7 +72,6 @@ namespace NPOI.DDF
                     }
                 }
                 pos += 6;
-                //            bytesRemaining -= 6 + complexBytes;
             }
 
             // Get complex data
@@ -90,6 +87,12 @@ namespace NPOI.DDF
                     else
                     {
                         byte[] complexData = ((EscherComplexProperty)p).ComplexData;
+                        int leftover = data.Length - pos;
+                        if (leftover < complexData.Length)
+                        {
+                            throw new InvalidOperationException("Could not read complex escher property, lenght was " + complexData.Length + ", but had only " +
+                                    leftover + " bytes left");
+                        }
                         Array.Copy(data, pos, complexData, 0, complexData.Length);
                         pos += complexData.Length;
                     }

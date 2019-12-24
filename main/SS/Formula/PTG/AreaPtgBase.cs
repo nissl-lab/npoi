@@ -50,9 +50,9 @@ namespace NPOI.SS.Formula.PTG
         /** zero based, Unsigned 16 bit */
         private int field_2_last_row;
         /** zero based, Unsigned 8 bit */
-        private int field_3_first_column;
+        private int field_3_first_column; //BitFields: (first row relative, first col relative, first column number)
         /** zero based, Unsigned 8 bit */
-        private int field_4_last_column;
+        private int field_4_last_column;  //BitFields: (last row relative, last col relative, last column number)
 
         private static BitField rowRelative = BitFieldFactory.GetInstance(0x8000);
         private static BitField colRelative = BitFieldFactory.GetInstance(0x4000);
@@ -119,6 +119,40 @@ namespace NPOI.SS.Formula.PTG
                 IsLastColRelative = (firstColRelative);
             }
         }
+
+
+        /**
+         * Sort the first and last row and columns in-place to the preferred (top left:bottom right) order
+         * Note: Sort only occurs when an instance is constructed or when this method is called.
+         * 
+         * <p>For example, <code>$E5:B$10</code> becomes <code>B5:$E$10</code></p>
+         */
+        public void SortTopLeftToBottomRight()
+        {
+            if (FirstRow > LastRow)
+            {
+                //swap first row and last row numbers and relativity
+                //Note: cannot just swap the fields because row relativity is stored in fields 3 and 4
+                int firstRow = FirstRow;
+                bool firstRowRel = IsFirstRowRelative;
+                FirstRow = (LastRow);
+                IsFirstRowRelative = (IsLastRowRelative);
+                LastRow = (firstRow);
+                IsLastRowRelative = (firstRowRel);
+            }
+            if (FirstColumn > LastColumn)
+            {
+                //swap first column and last column numbers and relativity
+                //Note: cannot just swap the fields because row relativity is stored in fields 3 and 4
+                int firstCol = FirstColumn;
+                bool firstColRel = IsFirstColRelative;
+                FirstColumn = (LastColumn);
+                IsFirstColRelative = (IsLastColRelative);
+                LastColumn = (firstCol);
+                IsLastColRelative = (firstColRel);
+            }
+        }
+
         protected void ReadCoordinates(ILittleEndianInput in1)
         {
             field_1_first_row = in1.ReadUShort();
@@ -270,7 +304,7 @@ namespace NPOI.SS.Formula.PTG
             CellReference topLeft = new CellReference(FirstRow, FirstColumn, !IsFirstRowRelative, !IsFirstColRelative);
             CellReference botRight = new CellReference(LastRow, LastColumn, !IsLastRowRelative, !IsLastColRelative);
 
-            if (AreaReference.IsWholeColumnReference(topLeft, botRight))
+            if (AreaReference.IsWholeColumnReference(SpreadsheetVersion.EXCEL97, topLeft, botRight))
             {
                 return (new AreaReference(topLeft, botRight)).FormatAsString();
             }

@@ -22,6 +22,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.HSSF.UserModel;
     using NUnit.Framework;
     using NPOI.SS.Formula.Functions;
+    using NPOI.SS.UserModel;
 
     /**
      * @author Josh Micich
@@ -47,7 +48,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval ev = invoke(args);
             if (ev is ErrorEval)
             {
-                throw new AssertionException("Normal Evaluation failed with error code: "
+                Assert.Fail("Normal Evaluation failed with error code: "
                         + ev.ToString());
             }
             return (NumberEval)ev;
@@ -84,9 +85,9 @@ namespace TestCases.SS.Formula.Functions
             if (ev is ErrorEval)
             {
                 ErrorEval err = (ErrorEval)ev;
-                if (err.ErrorCode == HSSFErrorConstants.ERROR_VALUE)
+                if (err.ErrorCode == FormulaError.VALUE.Code)
                 {
-                    throw new AssertionException("Identified bug 44691");
+                    Assert.Fail("Identified bug 44691");
                 }
             }
 

@@ -302,6 +302,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                         pos, this.itemsField[pos].GetType().Name, typeof(T).Name));
             }
         }
+
+        public bool IsSetRsidDel()
+        {
+            return this.rsidDelField != null;
+        }
+
         private int GetObjectIndex(RunItemsChoiceType type, int p)
         {
             int index = -1;

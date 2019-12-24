@@ -3423,7 +3423,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        internal bool IsSetObjects()
+        {
+            return objects;
+        }
 
+        internal bool IsSetScenarios()
+        {
+            return scenarios;
+        }
+
+        internal bool IsSetSheet()
+        {
+            return sheet;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -6255,7 +6268,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.iconSet = src.iconSet;
             this.extLst = src.extLst;
         }
-        public int sizeOfFormulaArray()
+        public int SizeOfFormulaArray()
         {
             return formula.Count;
         }
@@ -6263,6 +6276,41 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return formula[index];
         }
+
+        public CT_IconSet AddNewIconSet()
+        {
+            var ret = new CT_IconSet();
+            this.iconSet = ret;
+            return ret;
+        }
+
+        public bool IsSetIconSet()
+        {
+            return this.iconSetField != null;
+        }
+
+        public bool IsSetColorScale()
+        {
+            return this.colorScale != null;
+        }
+
+        public CT_ColorScale AddNewColorScale()
+        {
+            this.colorScale = new CT_ColorScale();
+            return this.colorScale;
+        }
+
+        public bool IsSetDataBar()
+        {
+            return dataBar != null;
+        }
+
+        public CT_DataBar AddNewDataBar()
+        {
+            this.dataBar = new CT_DataBar();
+            return dataBar;
+        }
+
         [XmlElement]
         public List<string> formula
         {
@@ -6621,7 +6669,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public CT_Cfvo AddNewCfvo()
+        {
+            CT_Cfvo cfvox = new CT_Cfvo();
+            cfvo.Add(cfvox);
+            return cfvox;
+        }
 
+        public CT_Color AddNewColor()
+        {
+            CT_Color colorx = new CT_Color();
+            color.Add(colorx);
+            return colorx;
+        }
+
+        public void RemoveCfvo(int p)
+        {
+            this.cfvo.RemoveAt(p);
+        }
+
+        public void RemoveColor(int p)
+        {
+            this.color.RemoveAt(p);
+        }
+
+        public int SizeOfCfvoArray()
+        {
+            return cfvo == null ? 0 : cfvo.Count;
+        }
+
+        public int SizeOfColorArray()
+        {
+            return color == null ? 0 : color.Count;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -6731,7 +6811,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public bool IsSetVal()
+        {
+            return !string.IsNullOrEmpty(this.val);
+        }
 
+        public void UnsetVal()
+        {
+            this.val = string.Empty;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -6887,7 +6975,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public CT_Cfvo AddNewCfvo()
+        {
+            CT_Cfvo val = new CT_Cfvo();
+            if(cfvo==null)
+                cfvo = new List<CT_Cfvo>();
+            cfvo.Add(val);
+            return val;
+        }
 
+        public bool IsSetShowValue()
+        {
+            return this.showValueField;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -7019,7 +7119,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public CT_Cfvo AddNewCfvo()
+        {
+            if (cfvoField == null)
+                cfvoField = new List<CT_Cfvo>();
 
+            var ret = new CT_Cfvo();
+            cfvoField.Add(ret);
+            return ret;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -7928,6 +8036,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
+        public CT_IgnoredError AddNewIgnoredError()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal CT_IgnoredError GetIgnoredErrorArray(int v)
+        {
+            throw new NotImplementedException();
+        }
 
         public List<CT_IgnoredError> ignoredError
         {
@@ -8028,6 +8145,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));
         }
+
 
         [XmlAttribute]
         public string sqref

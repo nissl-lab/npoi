@@ -59,7 +59,10 @@ namespace NPOI.SS.Formula.Functions
 
             public bool Matches(ValueEval valueEval)
             {
-                return valueEval == BlankEval.instance;
+                return valueEval == BlankEval.instance ||
+                    // see https://support.office.com/en-us/article/COUNTBLANK-function-6a92d772-675c-4bee-b346-24af6bd3ac22
+                    // "Cells with formulas that return "" (empty text) are also counted."
+                    (valueEval is StringEval && "".Equals(((StringEval)valueEval).StringValue));
             }
 
             #endregion

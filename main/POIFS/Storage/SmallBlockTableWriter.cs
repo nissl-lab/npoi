@@ -31,7 +31,7 @@ using System.Collections;
 using NPOI.POIFS.Common;
 using NPOI.POIFS.Properties;
 using NPOI.POIFS.FileSystem;
-
+using System.Collections.Generic;
 
 namespace NPOI.POIFS.Storage
 {
@@ -43,7 +43,7 @@ namespace NPOI.POIFS.Storage
     public class SmallBlockTableWriter : BlockWritable, BATManaged
     {
         private BlockAllocationTableWriter _sbat;
-        private IList                       _small_blocks;
+        private IList<SmallDocumentBlock>  _small_blocks;
         private int                        _big_block_count;
         private RootProperty               _root;
 
@@ -53,18 +53,19 @@ namespace NPOI.POIFS.Storage
         /// <param name="bigBlockSize">the poifs bigBlockSize</param>
         /// <param name="documents">a IList of POIFSDocument instances</param>
         /// <param name="root">the Filesystem's root property</param>
-        public SmallBlockTableWriter(POIFSBigBlockSize bigBlockSize, IList documents,
-                                     RootProperty root)
+        public SmallBlockTableWriter(POIFSBigBlockSize bigBlockSize, 
+                                    IList<OPOIFSDocument> documents,
+                                    RootProperty root)
         {
             _sbat = new BlockAllocationTableWriter(bigBlockSize);
-            _small_blocks = new ArrayList();
+            _small_blocks = new List<SmallDocumentBlock>();
             _root         = root;
             IEnumerator iter = documents.GetEnumerator();
 
             while (iter.MoveNext())
             {
-                POIFSDocument   doc    = ( POIFSDocument ) iter.Current;
-                BlockWritable[] blocks = doc.SmallBlocks;
+                OPOIFSDocument   doc    = ( OPOIFSDocument ) iter.Current;
+                SmallDocumentBlock[] blocks = doc.SmallBlocks;
 
                 if (blocks.Length != 0)
                 {
@@ -124,11 +125,9 @@ namespace NPOI.POIFS.Storage
         /// <param name="stream">the OutputStream to which the stored data should be written</param>
         public void WriteBlocks(Stream stream)
         {
-            IEnumerator iter = _small_blocks.GetEnumerator();
-
-            while (iter.MoveNext())
+            foreach(BlockWritable block in _small_blocks)
             {
-                (( BlockWritable ) iter.Current).WriteBlocks(stream);
+                block.WriteBlocks(stream);
             }
         }
     }

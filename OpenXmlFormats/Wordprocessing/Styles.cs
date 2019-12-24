@@ -1261,15 +1261,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+            if(val.HasValue)
+                XmlHelper.WriteAttribute(sw, "w:val", this.val.Value.ToString());
             sw.Write("/>");
         }
 
 
-        private ST_VerticalJc valField;
+        private ST_VerticalJc? valField;
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_VerticalJc val
+        public ST_VerticalJc? val
         {
             get
             {

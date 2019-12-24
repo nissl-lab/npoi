@@ -46,6 +46,21 @@ namespace NPOI.WP.UserModel
 
         int Kerning { get; set; }
 
+        bool IsHighlighted { get; }
+
+        // HWPF has colour indexes, XWPF has a highlight enum with the colours in
+        //    byte getHighlightedColor();
+        //    void setHighlighted(byte color);
+
+        // HWPF has colour indexes, XWPF colour names
+        //  int getColor();
+        //  void setColor(int color);
+
+        /// <summary>
+        /// Gets the fonts which shall be used to display the text contents of
+        /// this run. Specifies a font which shall be used to format all "normal"
+        /// characters in the run
+        /// </summary>
         String FontName { get; }
 
         /**
@@ -60,14 +75,6 @@ namespace NPOI.WP.UserModel
         // HWPF uses indexes, XWPF special vertical alignments
         //    public short GetSubSuperScriptIndex();
         //    public void SetSubSuperScriptIndex(short iss);
-
-        // HWPF uses indexes, XWPF special vertical alignments
-        //    int GetVerticalOffset();
-        //    public void SetVerticalOffset(int hpsPos);
-
-        // HWPF has colour indexes, XWPF colour names
-        //    int GetColor();
-        //    public void SetColor(int color);
 
         // TODO Review these, and add to XWPFRun if possible
         /*

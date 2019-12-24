@@ -28,7 +28,11 @@ namespace NPOI.SS.UserModel
 
         short FillForegroundColor { get; set; }
 
-        FillPattern FillPattern { get; set; }
+        IColor FillBackgroundColorColor { get; set; }
+
+        IColor FillForegroundColorColor { get; set; }
+
+        FillPatternType FillPattern { get; set; }
     }
 
 }

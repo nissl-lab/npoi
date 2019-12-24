@@ -34,8 +34,7 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class AreaRecord
-       : StandardRecord
+    public class AreaRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x101A;
         private short field_1_formatFlags;

@@ -42,7 +42,7 @@ namespace TestCases.HSSF.Record
             DrawingRecord dg = new DrawingRecord();
             byte[] data1 = new byte[8224];
             Arrays.Fill(data1, (byte)1);
-            dg.Data = (/*setter*/data1);
+            dg.SetData(data1);
             byte[] dataX = dg.Serialize();
             out1.Write(dataX, 0, dataX.Length);
 
@@ -58,7 +58,7 @@ namespace TestCases.HSSF.Record
             Assert.IsTrue(rec[0] is DrawingRecord);
             Assert.IsTrue(rec[1] is ContinueRecord);
 
-            Assert.IsTrue(Arrays.Equals(data1, ((DrawingRecord)rec[0]).Data));
+            Assert.IsTrue(Arrays.Equals(data1, ((DrawingRecord)rec[0]).RecordData));
             Assert.IsTrue(Arrays.Equals(data2, ((ContinueRecord)rec[1]).Data));
 
         }

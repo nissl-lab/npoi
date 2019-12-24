@@ -102,9 +102,24 @@ namespace TestCases.HSSF.Record.Crypto
                 cmp(HexDump.ByteToHex(expVal), HexDump.ByteToHex(_bds.ReadUByte()));
             }
 
-            public void Confirmshort(int expVal)
+            public void ConfirmShort(int expVal)
             {
                 cmp(HexDump.ShortToHex(expVal), HexDump.ShortToHex(_bds.ReadUShort()));
+            }
+
+            public void ConfirmUShort(int expVal)
+            {
+                cmp(HexDump.ShortToHex(expVal), HexDump.ShortToHex(_bds.ReadUShort()));
+            }
+
+            public short ReadShort()
+            {
+                return _bds.ReadShort();
+            }
+
+            public int ReadUShort()
+            {
+                return _bds.ReadUShort();
             }
 
             public void ConfirmInt(int expVal)
@@ -177,14 +192,25 @@ namespace TestCases.HSSF.Record.Crypto
             st.ConfirmByte(0x3E);
             st.ConfirmByte(0x28);
             st.RollForward(0x0401, 0x07FE);
-            st.Confirmshort(0x76CC);
-            st.Confirmshort(0xD83E);
+            st.ConfirmShort(0x76CC);
+            st.ConfirmShort(0xD83E);
             st.RollForward(0x0802, 0x0BFC);
             st.ConfirmInt(0x25F280EB);
             st.ConfirmInt(unchecked((int)0xB549E99B));
             st.RollForward(0x0C04, 0x0FF8);
             st.ConfirmLong(0x6AA2D5F6B975D10CL);
             st.ConfirmLong(0x34248ADF7ED4F029L);
+
+            // check for signed/unsigned shorts #58069
+            st.RollForward(0x1008, 0x7213);
+            st.ConfirmUShort(0xFFFF);
+            st.RollForward(0x7215, 0x1B9AD);
+            st.ConfirmShort(-1);
+            st.RollForward(0x1B9AF, 0x37D99);
+            Assert.AreEqual(0xFFFF, st.ReadUShort());
+            st.RollForward(0x37D9B, 0x4A6F2);
+            Assert.AreEqual(-1, st.ReadShort());
+
             st.AssertNoErrors();
         }
 
@@ -201,7 +227,7 @@ namespace TestCases.HSSF.Record.Crypto
             st.RollForward(0x0404, 0x07FE);
             st.ConfirmInt( unchecked((int)0xD83E76CC));
             st.RollForward(0x0802, 0x0BFF);
-            st.Confirmshort(0x9B25);
+            st.ConfirmShort(0x9B25);
             st.AssertNoErrors();
         }
 

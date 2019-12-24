@@ -193,7 +193,6 @@ namespace NPOI.POIFS.Crypt
             byte[] keySalt = infoExpected.Header.KeySalt;
 
 
-            POIFSFileSystem fs = new POIFSFileSystem();
             EncryptionInfo infoActual = new EncryptionInfo(
                   EncryptionMode.Standard
                 , infoExpected.Verifier.CipherAlgorithm
@@ -212,7 +211,6 @@ namespace NPOI.POIFS.Crypt
             // now we use a newly generated salt/verifier and check
             // if the file content is still the same 
 
-            fs = new POIFSFileSystem();
             infoActual = new EncryptionInfo(
                   EncryptionMode.Standard
                 , infoExpected.Verifier.CipherAlgorithm
@@ -225,6 +223,7 @@ namespace NPOI.POIFS.Crypt
             e = Encryptor.GetInstance(infoActual);
             e.ConfirmPassword(pass);
 
+            POIFSFileSystem fs = new POIFSFileSystem();
             Stream os = e.GetDataStream(fs);
             IOUtils.Copy(new MemoryStream(payloadExpected), os);
             os.Close();

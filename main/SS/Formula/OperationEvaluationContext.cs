@@ -84,7 +84,15 @@ namespace NPOI.SS.Formula
             {
                 // sheet is in same workbook
                 targetEvaluator = _bookEvaluator;
-                otherFirstSheetIndex = _workbook.GetSheetIndex(externalSheet.SheetName);
+
+                if (externalSheet == null)
+                {
+                    otherFirstSheetIndex = 0;
+                }
+                else
+                {
+                    otherFirstSheetIndex = _workbook.GetSheetIndex(externalSheet.SheetName);
+                }
 
                 if (externalSheet is ExternalSheetRange)
                 {
@@ -445,6 +453,14 @@ namespace NPOI.SS.Formula
             {
                 // Must be an external function
                 return new FunctionNameEval(name);
+            }
+        }
+
+        public int SheetIndex
+        {
+            get
+            {
+                return _sheetIndex;
             }
         }
 

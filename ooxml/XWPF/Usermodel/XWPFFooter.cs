@@ -70,11 +70,16 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        public XWPFFooter(POIXMLDocumentPart parent, PackagePart part, PackageRelationship rel)
-            : base(parent, part, rel)
+        public XWPFFooter(POIXMLDocumentPart parent, PackagePart part)
+            : base(parent, part)
         {
         }
-
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public XWPFFooter(POIXMLDocumentPart parent, PackagePart part, PackageRelationship rel)
+            : this(parent, part)
+        {
+            
+        }
         /**
          * save and Commit footer
          */

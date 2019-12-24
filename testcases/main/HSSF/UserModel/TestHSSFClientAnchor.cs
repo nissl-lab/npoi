@@ -90,6 +90,7 @@ namespace TestCases.HSSF.UserModel
                 Assert.AreEqual(anchor[i].Row2, record.Row2);
             }
         }
+
         [Test]
         public void TestAnchorHeightInPoints()
         {
@@ -111,5 +112,85 @@ namespace TestCases.HSSF.UserModel
 
         }
 
+
+        /**
+         * Check {@link HSSFClientAnchor} constructor does not treat 32768 as -32768.
+         */
+        [Test]
+        public void TestCanHaveRowGreaterThan32767()
+        {
+            // Maximum permitted row number should be 65535.
+            HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 0, 0, (short)0, 32768, (short)0, 32768);
+
+            Assert.AreEqual(32768, anchor.Row1);
+            Assert.AreEqual(32768, anchor.Row2);
+        }
+
+        /**
+         * Check the maximum is not set at 255*256 instead of 256*256 - 1.
+         */
+        [Test]
+        public void TestCanHaveRowUpTo65535()
+        {
+            HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 0, 0, (short)0, 65535, (short)0, 65535);
+
+            Assert.AreEqual(65535, anchor.Row1);
+            Assert.AreEqual(65535, anchor.Row2);
+        }
+        [Test]
+        public void TestCannotHaveRowGreaterThan65535()
+        {
+            try
+            {
+                new HSSFClientAnchor(0, 0, 0, 0, (short)0, 65536, (short)0, 65536);
+                Assert.Fail("Expected IllegalArgumentException to be thrown");
+            }
+            catch (ArgumentException)
+            {
+                // pass
+            }
+        }
+
+        /**
+         * Check the same maximum value enforced when using {@link HSSFClientAnchor#setRow1}.
+         */
+        [Test]
+        public void TestCanSetRowUpTo65535()
+        {
+            HSSFClientAnchor anchor = new HSSFClientAnchor();
+            anchor.Row1 = (65535);
+            anchor.Row2 = (65535);
+
+            Assert.AreEqual(65535, anchor.Row1);
+            Assert.AreEqual(65535, anchor.Row2);
+        }
+
+        [Test]
+        public void TestCannotSetRow1GreaterThan65535()
+        {
+            try
+            {
+                new HSSFClientAnchor().Row1 = (65536);
+                Assert.Fail("Expected IllegalArgumentException to be thrown");
+            }
+            catch (ArgumentException)
+            {
+                // pass
+            }
+        }
+
+        [Test]
+        public void TestCannotSetRow2GreaterThan65535()
+        {
+            try
+            {
+                new HSSFClientAnchor().Row2 = (65536);
+                Assert.Fail("Expected IllegalArgumentException to be thrown");
+            }
+            catch (ArgumentException)
+            {
+                // pass
+            }
+        }
     }
 }

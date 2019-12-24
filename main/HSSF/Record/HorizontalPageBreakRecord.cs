@@ -28,7 +28,7 @@ namespace NPOI.HSSF.Record
      * @see PageBreakRecord
      * @author Danny Mui (dmui at apache dot org) 
      */
-    public class HorizontalPageBreakRecord : PageBreakRecord
+    public class HorizontalPageBreakRecord : PageBreakRecord, ICloneable
     {
 
         public new const short sid = 0x001B;

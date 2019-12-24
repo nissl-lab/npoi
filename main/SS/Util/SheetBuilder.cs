@@ -38,7 +38,7 @@ namespace NPOI.SS.Util
         public SheetBuilder(IWorkbook workbook, Object[][] cells)
         {
             this.workbook = workbook;
-            this.cells = cells;
+            this.cells = (Object[][])cells.Clone();
         }
 
         /**

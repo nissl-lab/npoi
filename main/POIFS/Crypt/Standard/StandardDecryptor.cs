@@ -112,7 +112,10 @@ namespace NPOI.POIFS.Crypt.Standard
             DocumentInputStream dis = dir.CreateDocumentInputStream(Encryptor.DEFAULT_POIFS_ENTRY);
 
             _length = dis.ReadLong();
-
+            if (GetSecretKey() == null)
+            {
+                VerifyPassword(null);
+            }
             // limit wrong calculated ole entries - (bug #57080)
             // standard encryption always uses aes encoding, so blockSize is always 16 
             // http://stackoverflow.com/questions/3283787/size-of-data-after-aes-encryption

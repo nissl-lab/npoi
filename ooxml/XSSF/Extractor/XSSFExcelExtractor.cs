@@ -40,11 +40,6 @@ namespace NPOI.XSSF.Extractor
         private bool includeCellComments = false;
         private bool includeHeadersFooters = true;
 
-        public XSSFExcelExtractor(String path)
-            : this(new XSSFWorkbook(path))
-        {
-
-        }
         public XSSFExcelExtractor(OPCPackage Container)
             : this(new XSSFWorkbook(Container))
         {
@@ -169,12 +164,12 @@ namespace NPOI.XSSF.Extractor
 
                 StringBuilder text = new StringBuilder();
 
-                for (int i = 0; i < workbook.NumberOfSheets; i++)
+                foreach (ISheet sh in workbook)
                 {
-                    XSSFSheet sheet = (XSSFSheet)workbook.GetSheetAt(i);
+                    XSSFSheet sheet = (XSSFSheet)sh;
                     if (includeSheetNames)
                     {
-                        text.Append(workbook.GetSheetName(i)+"\n");
+                        text.Append(sheet.SheetName + "\n");
                     }
 
                     // Header(s), if present

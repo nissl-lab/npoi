@@ -40,10 +40,19 @@ namespace NPOI.SS.Util
     }
 
     /**
-     *
-     * @author  Avik Sengupta
-     * @author  Dennis doubleday (patch to seperateRowColumns())
+     * <p>Common conversion functions between Excel style A1, C27 style
+     *  cell references, and POI usermodel style row=0, column=0
+     *  style references. Handles sheet-based and sheet-free references
+     *  as well, eg "Sheet1!A1" and "$B$72"</p>
+     *  
+     *  <p>Use <tt>CellReference</tt> when the concept of
+     * relative/absolute does apply (such as a cell reference in a formula).
+     * Use {@link CellAddress} when you want to refer to the location of a cell in a sheet
+     * when the concept of relative/absolute does not apply (such as the anchor location 
+     * of a cell comment).
+     * <tt>CellReference</tt>s have a concept of "sheet", while <tt>CellAddress</tt>es do not.</p>
      */
+
     public class CellReference
     {
         /** The character ($) that signifies a row or column value is absolute instead of relative */
@@ -55,34 +64,48 @@ namespace NPOI.SS.Util
 
         /**
          * Matches a run of one or more letters followed by a run of one or more digits.
-         * The run of letters is group 1 and the run of digits is group 2.  
+         * Both the letter and number groups are optional.
+         * The run of letters is group 1 and the run of digits is group 2.
          * Each group may optionally be prefixed with a single '$'.
          */
-        private const string CELL_REF_PATTERN = @"^\$?([A-Za-z]+)\$?([0-9]+)";
+        //private const string CELL_REF_PATTERN = @"^\$?([A-Za-z]+)\$?([0-9]+)";
+        //private static final Pattern CELL_REF_PATTERN = Pattern.compile("(\\$?[A-Z]+)?" + "(\\$?[0-9]+)?", Pattern.CASE_INSENSITIVE);
+        private static Regex CELL_REF_PATTERN = new Regex("(\\$?[A-Z]+)?" + "(\\$?[0-9]+)?", RegexOptions.IgnoreCase);
+
+        /**
+         * Matches references only where row and column are included.
+         * Matches a run of one or more letters followed by a run of one or more digits.
+         * If a reference does not match this pattern, it might match COLUMN_REF_PATTERN or ROW_REF_PATTERN
+         * References may optionally include a single '$' before each group, but these are excluded from the Matcher.group(int).
+         */
+        //private static final Pattern STRICTLY_CELL_REF_PATTERN = Pattern.compile("\\$?([A-Z]+)" + "\\$?([0-9]+)", Pattern.CASE_INSENSITIVE);
+        private static Regex STRICTLY_CELL_REF_PATTERN = new Regex("^\\$?([A-Z]+)" + "\\$?([0-9]+)$", RegexOptions.IgnoreCase);
         /**
          * Matches a run of one or more letters.  The run of letters is group 1.  
-         * The text may optionally be prefixed with a single '$'.
+         * References may optionally include a single '$' before the group, but these are excluded from the Matcher.group(int).
          */
-        private const string COLUMN_REF_PATTERN = @"^\$?([A-Za-z]+)$";
+        private static Regex COLUMN_REF_PATTERN = new Regex(@"^\$?([A-Za-z]+)$", RegexOptions.IgnoreCase);
         /**
- * Matches a run of one or more digits.  The run of digits is group 1.
- * The text may optionally be prefixed with a single '$'.
- */
-        private const string ROW_REF_PATTERN = @"^\$?([0-9]+)$";
+         * Matches a run of one or more letters.  The run of numbers is group 1.
+         * References may optionally include a single '$' before the group, but these are excluded from the Matcher.group(int).
+         */
+        private static Regex ROW_REF_PATTERN = new Regex(@"^\$?([0-9]+)$");
         /**
          * Named range names must start with a letter or underscore.  Subsequent characters may include
          * digits or dot.  (They can even end in dot).
          */
-        private const string NAMED_RANGE_NAME_PATTERN = "^[_A-Za-z][_.A-Za-z0-9]*$";
+        //private static final Pattern NAMED_RANGE_NAME_PATTERN = Pattern.compile("[_A-Z][_.A-Z0-9]*", Pattern.CASE_INSENSITIVE);
+        private static Regex NAMED_RANGE_NAME_PATTERN = new Regex("^[_A-Za-z][_.A-Za-z0-9]*$", RegexOptions.IgnoreCase);
         //private static string BIFF8_LAST_COLUMN = "IV";
         //private static int BIFF8_LAST_COLUMN_TEXT_LEN = BIFF8_LAST_COLUMN.Length;
         //private static string BIFF8_LAST_ROW = (0x10000).ToString();
         //private static int BIFF8_LAST_ROW_TEXT_LEN = BIFF8_LAST_ROW.Length;
 
-
+        // FIXME: _sheetName may be null, depending on the entry point.
+        // Perhaps it would be better to declare _sheetName is never null, using an empty string to represent a 2D reference.
+        private String _sheetName;
         private int _rowIndex;
         private int _colIndex;
-        private String _sheetName;
         private bool _isRowAbs;
         private bool _isColAbs;
 
@@ -96,9 +119,9 @@ namespace NPOI.SS.Util
             {
                 throw new ArgumentException("Cell reference invalid: " + cellRef);
             }
-            String[] parts = SeparateRefParts(cellRef);
-            _sheetName = parts[0];
-            String colRef = parts[1];
+            CellRefPartsInner parts = SeparateRefParts(cellRef);
+            _sheetName = parts.sheetName;//parts[0];
+            String colRef = parts.colRef;// parts[1];
             //if (colRef.Length < 1)
             //{
             //    throw new ArgumentException("Invalid Formula cell reference: '" + cellRef + "'");
@@ -117,9 +140,9 @@ namespace NPOI.SS.Util
             {
                 _colIndex = ConvertColStringToIndex(colRef);
             }
-            
 
-            String rowRef = parts[2];
+
+            String rowRef = parts.rowRef;// parts[2];
             //if (rowRef.Length < 1)
             //{
             //    throw new ArgumentException("Invalid Formula cell reference: '" + cellRef + "'");
@@ -266,7 +289,7 @@ namespace NPOI.SS.Util
                 // no digits at end of str
                 return ValidateNamedRangeName(str, ssVersion);
             }
-            Regex cellRefPatternMatcher = new Regex(CELL_REF_PATTERN);
+            Regex cellRefPatternMatcher = STRICTLY_CELL_REF_PATTERN;
             if (!cellRefPatternMatcher.IsMatch(str))
             {
                 return ValidateNamedRangeName(str, ssVersion);
@@ -293,26 +316,26 @@ namespace NPOI.SS.Util
         }
         private static NameType ValidateNamedRangeName(String str, SpreadsheetVersion ssVersion)
         {
-            Regex colMatcher = new Regex(COLUMN_REF_PATTERN);
+            Regex colMatcher = COLUMN_REF_PATTERN;
 
             if (colMatcher.IsMatch(str))
             {
                 Group colStr = colMatcher.Matches(str)[0].Groups[1];
-                if (IsColumnWithnRange(colStr.Value, ssVersion))
+                if (IsColumnWithinRange(colStr.Value, ssVersion))
                 {
                     return NameType.Column;
                 }
             }
-            Regex rowMatcher = new Regex(ROW_REF_PATTERN);
+            Regex rowMatcher = ROW_REF_PATTERN;
             if (rowMatcher.IsMatch(str))
             {
                 Group rowStr = rowMatcher.Matches(str)[0].Groups[1];
-                if (IsRowWithnRange(rowStr.Value, ssVersion))
+                if (IsRowWithinRange(rowStr.Value, ssVersion))
                 {
                     return NameType.Row;
                 }
             }
-            if (!Regex.IsMatch(str, NAMED_RANGE_NAME_PATTERN))
+            if (!NAMED_RANGE_NAME_PATTERN.IsMatch(str))
             {
                 return NameType.BadCellOrNamedRange;
             }
@@ -345,42 +368,39 @@ namespace NPOI.SS.Util
 
             return colRef.ToString();
         }
+        internal class CellRefPartsInner
+        {
+            public String sheetName;
+            public String rowRef;
+            public String colRef;
 
+            public CellRefPartsInner(String sheetName, String rowRef, String colRef)
+            {
+                this.sheetName = sheetName;
+                this.rowRef = rowRef ?? "";
+                this.colRef = colRef ?? "";
+            }
+        }
         /**
          * Separates the row from the columns and returns an array of three Strings.  The first element
          * is the sheet name. Only the first element may be null.  The second element in is the column 
          * name still in ALPHA-26 number format.  The third element is the row.
          */
-        private static String[] SeparateRefParts(String reference)
+        private static CellRefPartsInner SeparateRefParts(String reference)
         {
 
             int plingPos = reference.LastIndexOf(SHEET_NAME_DELIMITER);
             String sheetName = ParseSheetName(reference, plingPos);
             int start = plingPos + 1;
+            String cell = reference.Substring(plingPos + 1).ToUpper(CultureInfo.CurrentCulture);
+            Match matcher = CELL_REF_PATTERN.Match(cell);
+            if (!matcher.Success)
+                throw new ArgumentException("Invalid CellReference: " + reference);
+            String col = matcher.Groups[1].Value;
+            String row = matcher.Groups[2].Value;
 
-            int Length = reference.Length;
-
-
-            int loc = start;
-            // skip initial dollars 
-            if (reference[loc] == ABSOLUTE_REFERENCE_MARKER)
-            {
-                loc++;
-            }
-            // step over column name chars Until first digit (or dollars) for row number.
-            for (; loc < Length; loc++)
-            {
-                char ch = reference[loc];
-                if (Char.IsDigit(ch) || ch == ABSOLUTE_REFERENCE_MARKER)
-                {
-                    break;
-                }
-            }
-            return new String[] {
-               sheetName,
-               reference.Substring(start,loc-start),
-               reference.Substring(loc),
-            };
+            CellRefPartsInner cellRefParts = new CellRefPartsInner(sheetName, row, col);
+            return cellRefParts;
         }
 
         private static String ParseSheetName(String reference, int indexOfSheetNameDelimiter)
@@ -393,12 +413,20 @@ namespace NPOI.SS.Util
             bool IsQuoted = reference[0] == SPECIAL_NAME_DELIMITER;
             if (!IsQuoted)
             {
-                return reference.Substring(0, indexOfSheetNameDelimiter);
+                // sheet names with spaces must be quoted
+                if (reference.IndexOf(' ') == -1)
+                {
+                    return reference.Substring(0, indexOfSheetNameDelimiter);
+                }
+                else
+                {
+                    throw new ArgumentException("Sheet names containing spaces must be quoted: (" + reference + ")");
+                }
             }
             int lastQuotePos = indexOfSheetNameDelimiter - 1;
             if (reference[lastQuotePos] != SPECIAL_NAME_DELIMITER)
             {
-                throw new Exception("Mismatched quotes: (" + reference + ")");
+                throw new ArgumentException("Mismatched quotes: (" + reference + ")");
             }
 
             // TODO - refactor cell reference parsing logic to one place.
@@ -428,7 +456,7 @@ namespace NPOI.SS.Util
                         continue;
                     }
                 }
-                throw new Exception("Bad sheet name quote escaping: (" + reference + ")");
+                throw new ArgumentException("Bad sheet name quote escaping: (" + reference + ")");
             }
             return sb.ToString();
         }
@@ -550,30 +578,33 @@ namespace NPOI.SS.Util
          */
         public static bool CellReferenceIsWithinRange(String colStr, String rowStr, SpreadsheetVersion ssVersion)
         {
-            if (!IsColumnWithnRange(colStr, ssVersion))
+            if (!IsColumnWithinRange(colStr, ssVersion))
             {
                 return false;
             }
-            return IsRowWithnRange(rowStr, ssVersion);
-        }
-        public static bool IsRowWithnRange(String rowStr, SpreadsheetVersion ssVersion)
-        {
-            int rowNum = Int32.Parse(rowStr, CultureInfo.InvariantCulture);
-
-            if (rowNum < 0)
-            {
-                throw new InvalidOperationException("Invalid rowStr '" + rowStr + "'.");
-            }
-            if (rowNum == 0)
-            {
-                // execution Gets here because caller does first pass of discriminating
-                // potential cell references using a simplistic regex pattern.
-                return false;
-            }
-            return rowNum <= ssVersion.MaxRows;
+            return IsRowWithinRange(rowStr, ssVersion);
         }
 
+        /**
+         * @deprecated 3.15 beta 2. Use {@link #isColumnWithinRange}.
+         */
+        [Obsolete("deprecated 3.15 beta 2. Use {@link #isColumnWithinRange}.")]
         public static bool IsColumnWithnRange(String colStr, SpreadsheetVersion ssVersion)
+        {
+            return IsColumnWithinRange(colStr, ssVersion);
+        }
+        public static bool IsRowWithinRange(String rowStr, SpreadsheetVersion ssVersion)
+        {
+            int rowNum = int.Parse(rowStr) - 1;
+            return 0 <= rowNum && rowNum <= ssVersion.LastRowIndex;
+        }
+
+        [Obsolete("deprecated 3.15 beta 2. Use {@link #isRowWithinRange}")]
+        public static bool isRowWithnRange(String rowStr, SpreadsheetVersion ssVersion)
+        {
+            return IsRowWithinRange(rowStr, ssVersion);
+        }
+        public static bool IsColumnWithinRange(String colStr, SpreadsheetVersion ssVersion)
         {
             String lastCol = ssVersion.LastColumnName;
             int lastColLength = lastCol.Length;
@@ -611,7 +642,10 @@ namespace NPOI.SS.Util
             return _rowIndex == cr._rowIndex
                 && _colIndex == cr._colIndex
                 && _isRowAbs == cr._isRowAbs
-                && _isColAbs == cr._isColAbs;
+                && _isColAbs == cr._isColAbs
+                && ((_sheetName == null)
+                        ? (cr._sheetName == null)
+                        : _sheetName.Equals(cr._sheetName));
         }
 
         public override int GetHashCode ()
@@ -621,6 +655,7 @@ namespace NPOI.SS.Util
             result = 31 * result + _colIndex;
             result = 31 * result + (_isRowAbs ? 1 : 0);
             result = 31 * result + (_isColAbs ? 1 : 0);
+            result = 31 * result + (_sheetName == null ? 0 : _sheetName.GetHashCode());
             return result;
         }
     }

@@ -58,25 +58,25 @@ namespace TestCases.SS.Formula.Functions
 
             values = new ValueEval[] {
 				new NumberEval(0),
-				new StringEval(""),	// note - does not match blank
+				new StringEval(""),	// note - does match blank
 				BoolEval.TRUE,
 				BoolEval.FALSE,
 				ErrorEval.DIV_ZERO,
 				BlankEval.instance,
 		};
             range = EvalFactory.CreateAreaEval("A1:B3", values);
-            ConfirmCountBlank(1, range);
+            ConfirmCountBlank(2, range);
 
             values = new ValueEval[] {
 				new NumberEval(0),
-				new StringEval(""),	// note - does not match blank
+				new StringEval(""),	// note - does match blank
 				BlankEval.instance,
 				BoolEval.FALSE,
 				BoolEval.TRUE,
 				BlankEval.instance,
 		};
             range = EvalFactory.CreateAreaEval("A1:B3", values);
-            ConfirmCountBlank(2, range);
+            ConfirmCountBlank(3, range);
         }
         [Test]
         public void TestCountA()
@@ -151,6 +151,7 @@ namespace TestCases.SS.Formula.Functions
         public void TestCriteriaPredicateNe_Bug46647()
         {
             IMatchPredicate mp = Countif.CreateCriteriaPredicate(new StringEval("<>aa"), 0, 0);
+            Assert.IsNotNull(mp);
             StringEval seA = new StringEval("aa"); // this should not match the criteria '<>aa'
             StringEval seB = new StringEval("bb"); // this should match
             if (mp.Matches(seA) && !mp.Matches(seB))

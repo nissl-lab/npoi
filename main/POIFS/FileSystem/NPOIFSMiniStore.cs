@@ -256,16 +256,30 @@ namespace NPOI.POIFS.FileSystem
             return POIFSConstants.SMALL_BLOCK_SIZE;
         }
 
-        /**
-         * Writes the SBATs to their backing blocks
-         */
+        /// <summary>
+        /// Writes the SBATs to their backing blocks, and updates 
+        /// the mini-stream size in the properties. Stream size is
+        /// based on full blocks used, not the data within the streams
+        /// </summary>
         public void SyncWithDataSource()
         {
+            int blocksUsed = 0;
             foreach (BATBlock sbat in _sbat_blocks)
             {
                 ByteBuffer block = _filesystem.GetBlockAt(sbat.OurBlockIndex);
                 BlockAllocationTableWriter.WriteBlock(sbat, block);
+                if (!sbat.HasFreeSectors)
+                {
+                    blocksUsed += _filesystem.GetBigBlockSizeDetails().GetBATEntriesPerBlock();
+                }
+                else
+                {
+                    blocksUsed += sbat.GetUsedSectors(false);
+                }
             }
+            // Set the size on the root in terms of the number of SBAT blocks
+            // RootProperty.setSize does the sbat -> bytes conversion for us
+            _filesystem.PropertyTable.Root.Size = (blocksUsed);
         }
     }
 }

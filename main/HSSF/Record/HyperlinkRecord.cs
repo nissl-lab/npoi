@@ -32,7 +32,7 @@ namespace NPOI.HSSF.Record
      * @author      Mark Hissink Muller <a href="mailto:mark@hissinkmuller.nl">mark@hissinkmuller.nl</a>
      * @author      Yegor Kozlov (yegor at apache dot org)
      */
-    public class HyperlinkRecord : StandardRecord
+    public class HyperlinkRecord : StandardRecord, ICloneable
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(HyperlinkRecord));
         /**
@@ -610,6 +610,39 @@ namespace NPOI.HSSF.Record
             buffer.Append("    .address            = ").Append(Address).Append("\n");
             buffer.Append("[/HYPERLINK RECORD]\n");
             return buffer.ToString();
+        }
+
+        /**
+         * Based on the link options, is this a url?
+         */
+        public bool IsUrlLink
+        {
+            get
+            {
+                return (_linkOpts & HLINK_URL) > 0
+                && (_linkOpts & HLINK_ABS) > 0;
+            }
+        }
+        /**
+         * Based on the link options, is this a file?
+         */
+        public bool IsFileLink
+        {
+            get
+            {
+                return (_linkOpts & HLINK_URL) > 0
+                && (_linkOpts & HLINK_ABS) == 0;
+            }
+        }
+        /**
+         * Based on the link options, is this a document?
+         */
+        public bool IsDocumentLink
+        {
+            get
+            {
+                return (_linkOpts & HLINK_PLACE) > 0;
+            }
         }
 
         /// <summary>

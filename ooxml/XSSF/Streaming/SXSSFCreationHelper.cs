@@ -43,6 +43,11 @@ namespace NPOI.XSSF.Streaming
             return helper.CreateDataFormat();
         }
 
+        public ExtendedColor CreateExtendedColor()
+        {
+            return helper.CreateExtendedColor();
+        }
+
         public IFormulaEvaluator CreateFormulaEvaluator()
         {
             return new SXSSFFormulaEvaluator(wb);

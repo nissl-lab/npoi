@@ -59,7 +59,7 @@ namespace NPOI.SS.Formula.PTG
                 SheetNameFormatter.AppendFormat(sb, sheetName);
             }
             sb.Append(" ! ");
-            sb.Append(ErrorConstants.GetText(ErrorConstants.ERROR_REF));
+            sb.Append(FormulaError.REF.String);
             sb.Append("]");
             return sb.ToString();
         }
@@ -97,7 +97,7 @@ namespace NPOI.SS.Formula.PTG
                 sb.Append(sheetName);
             }
             sb.Append('!');
-            sb.Append(ErrorConstants.GetText(ErrorConstants.ERROR_REF));
+            sb.Append(FormulaError.REF.String);
             return sb.ToString();
         }
 

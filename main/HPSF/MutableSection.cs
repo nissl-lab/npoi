@@ -480,7 +480,7 @@ namespace NPOI.HPSF
                 {
                     /* Write the dictionary item in Unicode. */
                     int sLength = value.Length + 1;
-                    if (sLength % 2 == 1)
+                    if ((sLength & 1) == 1)
                         sLength++;
                     length += TypeWriter.WriteUIntToStream(out1, (uint)key);
                     length += TypeWriter.WriteUIntToStream(out1, (uint)sLength);

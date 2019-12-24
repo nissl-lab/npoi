@@ -36,11 +36,11 @@ namespace NPOI.SS.Formula.Functions
             bool shouldMakeUppercase = true;
             String lowercaseText = text.ToLower();
             String uppercaseText = text.ToUpper();
+            int length = text.Length;
 
             bool prevCharIsLetter = char.IsLetter(text[0]);
             sb.Append(uppercaseText[0]);
-
-            for (int i = 1; i < text.Length; i++)
+            for (int i = 1; i < length; i++)
             {
                 shouldMakeUppercase = !prevCharIsLetter;
                 if (shouldMakeUppercase)

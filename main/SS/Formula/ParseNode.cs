@@ -25,8 +25,6 @@ namespace NPOI.SS.Formula
      * Represents a syntactic element from a formula by encapsulating the corresponding <c>Ptg</c>
      * Token.  Each <c>ParseNode</c> may have child <c>ParseNode</c>s in the case when the wrapped
      * <c>Ptg</c> is non-atomic.
-     * 
-     * @author Josh Micich
      */
     class ParseNode
     {
@@ -40,7 +38,7 @@ namespace NPOI.SS.Formula
         public ParseNode(Ptg token, ParseNode[] children)
         {
             _token = token;
-            _children = children;
+            _children = (ParseNode[])children.Clone();
             _isIf = IsIf(token);
             int tokenCount = 1;
             for (int i = 0; i < children.Length; i++)

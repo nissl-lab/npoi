@@ -76,7 +76,7 @@ namespace TestCases.POIFS.FileSystem
             {
                 rawBlocks[j] = new RawDataBlock(stream);
             }
-            POIFSDocument document = new POIFSDocument("document", rawBlocks,
+            OPOIFSDocument document = new OPOIFSDocument("document", rawBlocks,
                                              2000);
             DocumentProperty property2 = document.DocumentProperty;
             DirectoryNode parent = new DirectoryNode(property1, (POIFSFileSystem)null, null);

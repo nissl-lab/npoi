@@ -62,7 +62,7 @@ namespace NPOI.XSSF.Streaming
                         {
                             FormulaValue fv = (FormulaValue)_value;
                             if (fv.GetFormulaType() != CellType.Boolean)
-                                throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.Boolean, CellType.Formula, false));
+                                throw typeMismatch(CellType.Boolean, CellType.Formula, false);
                             return ((BooleanFormulaValue)_value).PreEvaluatedValue;
                         }
                     case CellType.Boolean:
@@ -70,16 +70,16 @@ namespace NPOI.XSSF.Streaming
                             return ((BooleanValue)_value).Value;
                         }
                     default:
-                        throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.Boolean, cellType, false));
+                        throw typeMismatch(CellType.Boolean, cellType, false);
                 }
             }
         }
 
-        private string BuildTypeMismatchMessage(CellType expectedTypeCode, CellType actualTypeCode,
-            bool isFormulaCell)
-        {
-            return string.Format("Cannot get a {0} value from a {1} {2} cell", expectedTypeCode, actualTypeCode,(isFormulaCell ? "formula " : ""));
-        }
+        //private string BuildTypeMismatchMessage(CellType expectedTypeCode, CellType actualTypeCode,
+        //    bool isFormulaCell)
+        //{
+        //    return string.Format("Cannot get a {0} value from a {1} {2} cell", expectedTypeCode, actualTypeCode,(isFormulaCell ? "formula " : ""));
+        //}
 
         public CellType CachedFormulaResultType
         {
@@ -114,7 +114,7 @@ namespace NPOI.XSSF.Streaming
             get
             {
                 if (_value.GetType() != CellType.Formula)
-                    throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.Formula, _value.GetType(), false));
+                    throw typeMismatch(CellType.Formula, _value.GetType(), false);
                 return ((FormulaValue) _value).Value;
             }
 
@@ -161,7 +161,7 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                return _row.getCellIndex(this);
+                return _row.GetCellIndex(this);
             }
         }
 
@@ -194,7 +194,7 @@ namespace NPOI.XSSF.Streaming
                         {
                             FormulaValue fv = (FormulaValue)_value;
                             if (fv.GetFormulaType() != CellType.Error)
-                                new InvalidOperationException(BuildTypeMismatchMessage(CellType.Error, CellType.Formula, false));
+                                throw typeMismatch(CellType.Error, CellType.Formula, false);
                             return ((ErrorFormulaValue)_value).PreEvaluatedValue;
                         }
                     case CellType.Error:
@@ -202,7 +202,7 @@ namespace NPOI.XSSF.Streaming
                             return ((ErrorValue)_value).Value;
                         }
                     default:
-                        throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.Error, cellType, false));
+                        throw typeMismatch(CellType.Error, cellType, false);
                 }
             }
         }
@@ -216,22 +216,20 @@ namespace NPOI.XSSF.Streaming
 
             set
             {
-                throw new NotImplementedException();
-                //if (Hyperlink == null)
-                //{
-                //    RemoveHyperlink();
-                //    return;
-                //}
+                if (value == null)
+                {
+                    RemoveHyperlink();
+                    return;
+                }
+                SetProperty(Property.HYPERLINK, value);
 
-                //SetProperty(Property.HYPERLINK, Hyperlink);
+                XSSFHyperlink xssfobj = (XSSFHyperlink)value;
+                // Assign to us
+                CellReference reference = new CellReference(RowIndex, ColumnIndex);
+                xssfobj.GetCTHyperlink().@ref = reference.FormatAsString();
 
-                //XSSFHyperlink xssfobj = (XSSFHyperlink)Hyperlink;
-                //// Assign to us
-                //CellReference reference = new CellReference(RowIndex, ColumnIndex);
-                //xssfobj.GetCTHyperlink().@ref = reference.FormatAsString();
-
-                //// Add to the lists
-                //Sheet._sh.addHyperlink(xssfobj);
+                // Add to the lists
+                ((SXSSFSheet)Sheet)._sh.AddHyperlink(xssfobj);
             }
         }
 
@@ -265,13 +263,13 @@ namespace NPOI.XSSF.Streaming
                         {
                             FormulaValue fv = (FormulaValue)_value;
                             if (fv.GetFormulaType() != CellType.Numeric)
-                                throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.Numeric, CellType.Formula, false));
+                                throw typeMismatch(CellType.Numeric, CellType.Formula, false);
                             return ((NumericFormulaValue)_value).PreEvaluatedValue;
                         }
                     case CellType.Numeric:
                         return ((NumericValue) _value).Value;
                     default:
-                        throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.Numeric, cellType, false));
+                        throw typeMismatch(CellType.Numeric, cellType, false);
                 }
             }
         }
@@ -282,7 +280,7 @@ namespace NPOI.XSSF.Streaming
             {
                 CellType cellType = _value.GetType();
                 if (cellType != CellType.String)
-                    throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.String, cellType, false));
+                    throw typeMismatch(CellType.String, cellType, false);
 
                 StringValue sval = (StringValue)_value;
                 if (sval.IsRichText())
@@ -307,7 +305,13 @@ namespace NPOI.XSSF.Streaming
                 return _row.RowNum;
             }
         }
-
+        public CellAddress Address
+        {
+            get
+            {
+                return new CellAddress(this);
+            }
+        }
         public ISheet Sheet
         {
             get
@@ -329,7 +333,7 @@ namespace NPOI.XSSF.Streaming
                         {
                             FormulaValue fv = (FormulaValue)_value;
                             if (fv.GetFormulaType() != CellType.String)
-                                throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.String, CellType.Formula, false));
+                                throw typeMismatch(CellType.String, CellType.Formula, false);
                             return ((StringFormulaValue)_value).PreEvaluatedValue;
                         }
                     case CellType.String:
@@ -340,7 +344,7 @@ namespace NPOI.XSSF.Streaming
                             return ((PlainStringValue) _value).Value;
                     }
                     default:
-                        throw new InvalidOperationException(BuildTypeMismatchMessage(CellType.String, cellType, false));
+                        throw typeMismatch(CellType.String, cellType, false);
                 }
 
             }
@@ -359,17 +363,13 @@ namespace NPOI.XSSF.Streaming
         //TODO: implement correctly
         public void RemoveHyperlink()
         {
-            throw new NotImplementedException();
-            //RemoveProperty(Property.HYPERLINK);
-
-            //Sheet.RemoveHyperlink(getRowIndex(), getColumnIndex());
+            RemoveProperty(Property.HYPERLINK);
+            ((SXSSFSheet)Sheet)._sh.RemoveHyperlink(RowIndex, ColumnIndex);
         }
 
         public void SetAsActiveCell()
         {
-            //TODO: 
-            throw new NotImplementedException();
-           // Sheet.SetActiveCell(CellAddress);
+            Sheet.ActiveCell = Address;
         }
 
         public void SetCellErrorValue(byte value)
@@ -393,12 +393,6 @@ namespace NPOI.XSSF.Streaming
             EnsureFormulaType(ComputeTypeFromFormula(formula));
             ((FormulaValue)_value).Value = formula;
         }
-        
-        //TODO: not implemented correctly in poi 3.16 beta
-        private CellType ComputeTypeFromFormula(String formula)
-        {
-            return CellType.Numeric;
-        }
 
         public void SetCellType(CellType cellType)
         {
@@ -417,13 +411,16 @@ namespace NPOI.XSSF.Streaming
                 }
 
                 if (_value.GetType() == CellType.Formula)
-                    if (_value is NumericFormulaValue) {
-                    ((NumericFormulaValue)_value).PreEvaluatedValue = Double.Parse(value);
-                } else {
-                    ((StringFormulaValue)_value).Value = value;
-                }
-            else
-                ((PlainStringValue)_value).Value = value;
+                    if (_value is NumericFormulaValue)
+                    {
+                        ((NumericFormulaValue)_value).PreEvaluatedValue = Double.Parse(value);
+                    }
+                    else
+                    {
+                        ((StringFormulaValue)_value).Value = value;
+                    }
+                else
+                    ((PlainStringValue)_value).Value = value;
             }
             else
             {
@@ -548,7 +545,7 @@ namespace NPOI.XSSF.Streaming
                         }
                     default:
                         {
-                            throw new InvalidOperationException("Invalid type: " + type);
+                            throw new ArgumentException("Invalid type: " + type);
                         }
                 }
                 if (previous != null)
@@ -564,10 +561,10 @@ namespace NPOI.XSSF.Streaming
 
         private object GetPropertyValue(int type)
         {
-            return getPropertyValue(type, null);
+            return GetPropertyValue(type, null);
         }
 
-        private object getPropertyValue(int type, string defaultValue)
+        private object GetPropertyValue(int type, string defaultValue)
         {
             Property current = _firstProperty;
             while (current != null && current.GetType() != type) current = current._next;
@@ -638,7 +635,7 @@ namespace NPOI.XSSF.Streaming
                         if (_value != null)
                         {
                             // if a cell is not blank then convert the old value to string
-                            String str = convertCellValueToString();
+                            String str = ConvertCellValueToString();
                             sval.Value = str;
                         }
                         _value = sval;
@@ -673,7 +670,7 @@ namespace NPOI.XSSF.Streaming
                     }
                 default:
                     {
-                        throw new InvalidOperationException("Illegal type " + type);
+                        throw new ArgumentException("Illegal type " + type);
                     }
             }
         }
@@ -705,7 +702,7 @@ namespace NPOI.XSSF.Streaming
                     }
                 default:
                     {
-                        throw new InvalidOperationException("Illegal type " + type);
+                        throw new ArgumentException("Illegal type " + type);
                     }
             }
 
@@ -715,8 +712,20 @@ namespace NPOI.XSSF.Streaming
                 ((FormulaValue)_value).Value = ((FormulaValue)prevValue).Value;
             }
         }
-
+        private CellType ComputeTypeFromFormula(String formula)
+        {
+            return CellType.Numeric;
+        }
         //COPIED FROM https://svn.apache.org/repos/asf/poi/trunk/src/ooxml/java/org/apache/poi/xssf/usermodel/XSSFCell.java since the functions are declared private there
+        /**
+         * Used to help format error messages
+         */
+        private static InvalidOperationException typeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool isFormulaCell)
+        {
+            String msg = "Cannot get a " + expectedTypeCode + " value from a " + actualTypeCode
+                    + " " + (isFormulaCell ? "formula " : "") + "cell";
+            return new InvalidOperationException(msg);
+        }
         private bool convertCellValueToBoolean()
         {
             CellType cellType = _value.GetType();
@@ -743,12 +752,12 @@ namespace NPOI.XSSF.Streaming
             }
 
         }
-        private String convertCellValueToString()
+        private String ConvertCellValueToString()
         {
             CellType cellType = _value.GetType();
-            return convertCellValueToString(cellType);
+            return ConvertCellValueToString(cellType);
         }
-        private String convertCellValueToString(CellType cellType)
+        private String ConvertCellValueToString(CellType cellType)
         {
             switch (cellType)
             {
@@ -770,7 +779,7 @@ namespace NPOI.XSSF.Streaming
                         FormulaValue fv = (FormulaValue)_value;
                         if (fv.GetFormulaType() != CellType.Formula)
                         {
-                            return convertCellValueToString(fv.GetFormulaType());
+                            return ConvertCellValueToString(fv.GetFormulaType());
                         }
                     }
                     return "";

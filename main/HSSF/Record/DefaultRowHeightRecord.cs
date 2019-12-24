@@ -35,7 +35,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class DefaultRowHeightRecord
-       : StandardRecord
+       : StandardRecord, ICloneable
     {
         public const short sid = 0x225;
         private short field_1_option_flags;

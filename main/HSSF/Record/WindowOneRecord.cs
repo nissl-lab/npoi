@@ -32,8 +32,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class WindowOneRecord
-       : StandardRecord
+    public class WindowOneRecord : StandardRecord
     {
         public const short sid = 0x3d;
 
@@ -43,17 +42,12 @@ namespace NPOI.HSSF.Record
         private short field_3_width;
         private short field_4_height;
         private short field_5_options;
-        static private BitField hidden =
-            BitFieldFactory.GetInstance(0x01);                                        // Is this window Is hidden
-        static private BitField iconic =
-            BitFieldFactory.GetInstance(0x02);                                        // Is this window Is an icon
+        static private BitField hidden = BitFieldFactory.GetInstance(0x01);                                        // Is this window Is hidden
+        static private BitField iconic = BitFieldFactory.GetInstance(0x02);                                        // Is this window Is an icon
         static private BitField reserved = BitFieldFactory.GetInstance(0x04);   // reserved
-        static private BitField hscroll =
-            BitFieldFactory.GetInstance(0x08);                                        // Display horizontal scrollbar
-        static private BitField vscroll =
-            BitFieldFactory.GetInstance(0x10);                                        // Display vertical scrollbar
-        static private BitField tabs =
-            BitFieldFactory.GetInstance(0x20);                                        // Display tabs at the bottom
+        static private BitField hscroll = BitFieldFactory.GetInstance(0x08);                                        // Display horizontal scrollbar
+        static private BitField vscroll = BitFieldFactory.GetInstance(0x10);                                        // Display vertical scrollbar
+        static private BitField tabs = BitFieldFactory.GetInstance(0x20);                                        // Display tabs at the bottom
 
         // all the rest are "reserved"
         private int field_6_active_sheet;
@@ -207,16 +201,6 @@ namespace NPOI.HSSF.Record
             get { return field_6_active_sheet; }
             set { field_6_active_sheet = value; }
         }
-        /**
-         * deprecated May 2008
-         * @deprecated - Misleading name - use GetActiveSheetIndex() 
-         */
-        [Obsolete]
-        public short SelectedTab
-        {
-            get { return (short)ActiveSheetIndex; }
-            set { ActiveSheetIndex = value; }
-        }
 
         /**
          * @return the first visible sheet in the worksheet tab-bar. 
@@ -226,16 +210,6 @@ namespace NPOI.HSSF.Record
         {
             get { return field_7_first_visible_tab; }
             set { field_7_first_visible_tab = value; }
-        }
-        /**
-         * deprecated May 2008
-         * @deprecated - Misleading name - use GetFirstVisibleTab() 
-         */
-        [Obsolete]
-        public short DisplayedTab
-        {
-            get { return (short)FirstVisibleTab; }
-            set { FirstVisibleTab=value; }
         }
 
         /**

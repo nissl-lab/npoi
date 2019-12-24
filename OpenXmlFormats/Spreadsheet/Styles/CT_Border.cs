@@ -187,6 +187,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.rightField != null;
         }
+
+        public static CT_Border Parse(string p)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(p);
+            return Parse(doc.DocumentElement, CT_Fill.CreateDefaultNSM());
+        }
+
         public bool IsSetTop()
         {
             return this.topField != null;

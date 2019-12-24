@@ -24,6 +24,9 @@ namespace TestCases.HSSF.Extractor
     using System.IO;
     using TestCases.HSSF;
     using NPOI.HSSF.Extractor;
+    using NPOI.POIFS.FileSystem;
+    using NPOI.Util;
+    using System.Text;
 
     /**
      * Unit tests for the Excel 5/95 and Excel 4 (and older) text 
@@ -34,25 +37,9 @@ namespace TestCases.HSSF.Extractor
     {
         private static OldExcelExtractor CreateExtractor(String sampleFileName)
         {
-            Stream is1 = HSSFTestDataSamples.OpenSampleFileStream(sampleFileName);
+            FileInfo file = HSSFTestDataSamples.GetSampleFile(sampleFileName);
 
-            try
-            {
-                MemoryStream ms = new MemoryStream();
-                is1.CopyTo(ms);
-                ms.Position = 0;
-                return new OldExcelExtractor(ms);
-
-
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            finally
-            {
-                //is1.Close();
-            }
+            return new OldExcelExtractor(file);
         }
 
         [Test]
@@ -77,7 +64,18 @@ namespace TestCases.HSSF.Extractor
             // Check the type
             Assert.AreEqual(3, extractor.BiffVersion);
             Assert.AreEqual(0x10, extractor.FileType);
+
+            extractor.Close();
         }
+        [Test]
+        public void TestSimpleExcel3NoReading()
+        {
+            OldExcelExtractor extractor = CreateExtractor("testEXCEL_3.xls");
+            Assert.IsNotNull(extractor);
+
+            extractor.Close();
+        }
+
         [Test]
         public void TestSimpleExcel4()
         {
@@ -97,6 +95,8 @@ namespace TestCases.HSSF.Extractor
             // Check the type
             Assert.AreEqual(4, extractor.BiffVersion);
             Assert.AreEqual(0x10, extractor.FileType);
+
+            extractor.Close();
         }
         [Test]
         public void TestSimpleExcel5()
@@ -122,6 +122,8 @@ namespace TestCases.HSSF.Extractor
                 // Check the type
                 Assert.AreEqual(5, extractor.BiffVersion);
                 Assert.AreEqual(0x05, extractor.FileType);
+
+                extractor.Close();
             }
         }
 
@@ -143,6 +145,8 @@ namespace TestCases.HSSF.Extractor
 
             // Formula based strings
             // TODO Find some then test
+
+            extractor.Close();
         }
 
         [Test]
@@ -163,6 +167,8 @@ namespace TestCases.HSSF.Extractor
             // TODO
             //      AssertContains(text, "55,624");
             //      AssertContains(text, "11,743,477");
+
+            extractor.Close();
         }
         [Test]
         public void TestFormattedNumbersExcel5()
@@ -188,6 +194,8 @@ namespace TestCases.HSSF.Extractor
                 //          AssertContains(text, "1,234,500");
                 //          AssertContains(text, "$169.00");
                 //          AssertContains(text, "$1,253.82");
+
+                extractor.Close();
             }
         }
 
@@ -203,8 +211,185 @@ namespace TestCases.HSSF.Extractor
                 String text = extractor.Text;
                 Assert.IsNotNull(text);
                 Assert.IsTrue(text.Length > 100);
+
+                extractor.Close();
             }
         }
+
+        [Test]
+        public void TestOpenInvalidFile()
+        {
+            // a file that exists, but is a different format
+            try
+            {
+                CreateExtractor("WithVariousData.xlsx");
+                Assert.Fail("Should catch Exception here");
+            }
+            catch (OfficeXmlFileException)
+            {
+                // expected here
+            }
+            // a completely different type of file
+            try
+            {
+                CreateExtractor("48936-strings.txt");
+                Assert.Fail("Should catch Exception here");
+            }
+            catch (RecordFormatException)
+            {
+                // expected here
+            }
+        }
+        [Test]
+        public void TestOpenNonExistingFile()
+        {
+            // a file that exists, but is a different format
+            try
+            {
+                OldExcelExtractor extractor = new OldExcelExtractor(new FileInfo("notexistingfile.xls"));
+                extractor.Close();
+                Assert.Fail("Should catch Exception here");
+            }
+            catch (FileNotFoundException)
+            {
+                // expected here
+            }
+        }
+
+        [Test]
+        public void TestInputStream()
+        {
+            FileInfo file = HSSFTestDataSamples.GetSampleFile("testEXCEL_3.xls");
+            Stream stream = file.OpenRead();
+            try
+            {
+                OldExcelExtractor extractor = new OldExcelExtractor(stream);
+                String text = extractor.Text;
+                Assert.IsNotNull(text);
+                extractor.Close();
+            }
+            finally
+            {
+                stream.Close();
+            }
+        }
+        [Test]
+        public void TestInputStreamNPOIHeader()
+        {
+            FileInfo file = HSSFTestDataSamples.GetSampleFile("FormulaRefs.xls");
+            Stream stream = file.OpenRead();
+            try
+            {
+                OldExcelExtractor extractor = new OldExcelExtractor(stream);
+                extractor.Close();
+            }
+            finally
+            {
+                stream.Close();
+            }
+        }
+        [Test]
+        public void TestNPOIFSFileSystem()
+        {
+            FileInfo file = HSSFTestDataSamples.GetSampleFile("FormulaRefs.xls");
+            NPOIFSFileSystem fs = new NPOIFSFileSystem(file);
+            try
+            {
+                OldExcelExtractor extractor = new OldExcelExtractor(fs);
+                extractor.Close();
+            }
+            finally
+            {
+                fs.Close();
+            }
+        }
+        [Test]
+        public void TestDirectoryNode()
+        {
+            FileInfo file = HSSFTestDataSamples.GetSampleFile("FormulaRefs.xls");
+            NPOIFSFileSystem fs = new NPOIFSFileSystem(file);
+            try
+            {
+                OldExcelExtractor extractor = new OldExcelExtractor(fs.Root);
+                extractor.Close();
+            }
+            finally
+            {
+                fs.Close();
+            }
+        }
+        [Test]
+        public void TestDirectoryNodeInvalidFile()
+        {
+            FileStream file = POIDataSamples.GetDocumentInstance().GetFile("test.doc");
+            NPOIFSFileSystem fs = new NPOIFSFileSystem(file);
+            try
+            {
+                OldExcelExtractor extractor = new OldExcelExtractor(fs.Root);
+                extractor.Close();
+                Assert.Fail("Should catch exception here");
+            }
+            catch (FileNotFoundException)
+            {
+                // expected here
+            }
+            finally
+            {
+                fs.Close();
+            }
+        }
+        [Ignore("Calls System.exit()")]
+        [Test]
+        public void TestMainUsage()
+        {
+            TextWriter save = System.Console.Error;
+            try
+            {
+                ByteArrayOutputStream out1 = new ByteArrayOutputStream();
+                try
+                {
+
+                    TextWriter str = new StreamWriter(out1, Encoding.UTF8) { AutoFlush = false };
+                    Console.SetError(str);
+                    OldExcelExtractor.main(new String[] { });
+                }
+                finally
+                {
+                out1.Close();
+                }
+            }
+            finally
+            {
+                Console.SetError(save);
+            }
+        }
+        [Test]
+        public void TestMain()
+        {
+            FileInfo file = HSSFTestDataSamples.GetSampleFile("testEXCEL_3.xls");
+            TextWriter save = Console.Out;
+            try
+            {
+                ByteArrayOutputStream out1 = new ByteArrayOutputStream();
+                try
+                {
+                    TextWriter str = new StreamWriter(out1, Encoding.UTF8) { AutoFlush = false };
+                    Console.SetOut(str);
+                    OldExcelExtractor.main(new String[] { file.FullName });
+                }
+                finally
+                {
+                out1.Close();
+                }
+                String string1 = Encoding.UTF8.GetString(out1.ToByteArray());
+                Assert.IsTrue(string1.Contains("Table C-13--Lemons"), "Had: " + string1);
+            }
+            finally
+            {
+                Console.SetOut(save);
+            }
+        }
+
     }
 
 }

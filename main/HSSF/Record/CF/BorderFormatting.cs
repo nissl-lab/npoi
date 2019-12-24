@@ -39,7 +39,7 @@ namespace NPOI.HSSF.Record.CF
      * @author Dmitriy Kumshayev
      */
 
-    public class BorderFormatting
+    public class BorderFormatting : ICloneable
     {
         public BorderFormatting()
         {
@@ -53,7 +53,13 @@ namespace NPOI.HSSF.Record.CF
             field_13_border_styles1 = in1.ReadInt();
             field_14_border_styles2 = in1.ReadInt();
         }
-
+        public int DataLength
+        {
+            get
+            {
+                return 8;
+            }
+        }
         // BORDER FORMATTING BLOCK
         // For Border Line Style codes see HSSFCellStyle.BORDER_XXXXXX
         private int field_13_border_styles1;

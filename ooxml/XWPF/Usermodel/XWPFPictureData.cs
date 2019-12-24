@@ -69,11 +69,16 @@ namespace NPOI.XWPF.UserModel
          * @param rel  the package relationship holding this Drawing,
          * the relationship type must be http://schemas.Openxmlformats.org/officeDocument/2006/relationships/image
          */
-        public XWPFPictureData(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        public XWPFPictureData(PackagePart part)
+            : base(part)
         {
         }
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public XWPFPictureData(PackagePart part, PackageRelationship rel)
+             : this(part)
+        {
 
+        }
 
         internal override void OnDocumentRead()
         {
@@ -117,8 +122,6 @@ namespace NPOI.XWPF.UserModel
             get
             {
                 String name = GetPackagePart().PartName.Name;
-                if (name == null)
-                    return null;
                 return name.Substring(name.LastIndexOf('/') + 1);
             }
         }

@@ -22,6 +22,8 @@ using NUnit.Framework;
 using System;
 using NPOI.Util;
 using System.Text;
+using NPOI.SS.Util;
+
 namespace NPOI.XSSF.UserModel
 {
     [TestFixture]
@@ -45,7 +47,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(xssfFont.GetCTFont());
         }
         [Test]
-        public void TestBoldweight()
+        public void TestBold()
         {
             CT_Font ctFont = new CT_Font();
             CT_BooleanProperty bool1 = ctFont.AddNewB();
@@ -79,6 +81,8 @@ namespace NPOI.XSSF.UserModel
             // And Set with the Charset index
             xssfFont.SetCharSet(FontCharset.ARABIC.Value);
             Assert.AreEqual(FontCharset.ARABIC.Value, xssfFont.Charset);
+            xssfFont.SetCharSet((byte)(FontCharset.ARABIC.Value));
+            Assert.AreEqual(FontCharset.ARABIC.Value, xssfFont.Charset);
 
             // This one isn't allowed
             Assert.AreEqual(null, FontCharset.ValueOf(9999));
@@ -110,7 +114,7 @@ namespace NPOI.XSSF.UserModel
             CT_Font ctFont = new CT_Font();
             CT_FontName fname = ctFont.AddNewName();
             fname.val = "Arial";
-            ctFont.name =  fname;
+            ctFont.name = fname;
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
             Assert.AreEqual("Arial", xssfFont.FontName);
@@ -130,7 +134,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(false, xssfFont.IsItalic);
 
             xssfFont.IsItalic = (true);
-            Assert.AreEqual(1,ctFont.i.Count);
+            Assert.AreEqual(1, ctFont.i.Count);
             Assert.AreEqual(true, ctFont.GetIArray(0).val);
             Assert.AreEqual(true, ctFont.GetIArray(0).val);
         }
@@ -190,11 +194,11 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(FontUnderlineType.Single, xssfFont.Underline);
 
             xssfFont.SetUnderline(FontUnderlineType.Double);
-            Assert.AreEqual(1,ctFont.u.Count);
+            Assert.AreEqual(1, ctFont.u.Count);
             Assert.AreEqual(ST_UnderlineValues.@double, ctFont.GetUArray(0).val);
 
             xssfFont.SetUnderline(FontUnderlineType.DoubleAccounting);
-            Assert.AreEqual(1,ctFont.u.Count);
+            Assert.AreEqual(1, ctFont.u.Count);
             Assert.AreEqual(ST_UnderlineValues.doubleAccounting, ctFont.GetUArray(0).val);
         }
         [Test]
@@ -222,16 +226,22 @@ namespace NPOI.XSSF.UserModel
             ctFont.SetColorArray(0, color);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[0], xssfFont.GetXSSFColor().GetRgb()[0]);
-            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[1], xssfFont.GetXSSFColor().GetRgb()[1]);
-            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[2], xssfFont.GetXSSFColor().GetRgb()[2]);
-            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[3], xssfFont.GetXSSFColor().GetRgb()[3]);
+            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[0], xssfFont.GetXSSFColor().RGB[0]);
+            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[1], xssfFont.GetXSSFColor().RGB[1]);
+            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[2], xssfFont.GetXSSFColor().RGB[2]);
+            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[3], xssfFont.GetXSSFColor().RGB[3]);
 
-            //Integer.toHexString(0xF1F1F1).getBytes() = [102, 49, 102, 49, 102, 49]
-            color.SetRgb(Encoding.ASCII.GetBytes("f1f1f1"));
+            xssfFont.Color = ((short)23);
+
+            byte[] bytes = Encoding.ASCII.GetBytes(HexDump.ToHex(0xF1F1F1));
+            color.rgb = (bytes);
+
             XSSFColor newColor = new XSSFColor(color);
             xssfFont.SetColor(newColor);
-            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[2], newColor.GetRgb()[2]);
+            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[2], newColor.RGB[2]);
+
+            CollectionAssert.AreEqual(bytes, xssfFont.GetXSSFColor().RGB);
+            Assert.AreEqual(0, xssfFont.Color);
         }
         [Test]
         public void TestThemeColor()
@@ -286,6 +296,29 @@ namespace NPOI.XSSF.UserModel
 
             font.TypeOffset = FontSuperScript.Super;
             Assert.AreEqual(ST_VerticalAlignRun.superscript, ctFont.GetVertAlignArray(0).val);
+        }
+
+        // store test from TestSheetUtil here as it uses XSSF
+        [Test]
+        public void TestCanComputeWidthXSSF()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+
+            // cannot check on result because on some machines we get back false here!
+            SheetUtil.CanComputeColumnWidth(wb.GetFontAt((short)0));
+
+            wb.Close();
+        }
+
+        // store test from TestSheetUtil here as it uses XSSF
+        [Test]
+        public void TestCanComputeWidthInvalidFont()
+        {
+            IFont font = new XSSFFont(new CT_Font());
+            font.FontName = ("some non existing font name");
+
+            // Even with invalid fonts we still get back useful data most of the time... 
+            SheetUtil.CanComputeColumnWidth(font);
         }
     }
 }

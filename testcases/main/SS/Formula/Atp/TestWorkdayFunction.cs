@@ -81,49 +81,62 @@ namespace TestCases.SS.Formula.Atp
         [Test]
         public void TestReturnWorkdaysSpanningAWeekendSubtractingDays()
         {
-            String startDate = "2013/09/30";
-            int days = -1;
-            String expectedWorkDay = "2013/09/27";
-            StringEval stringEval = new StringEval(startDate);
-            double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(new ValueEval[]{
-                stringEval, new NumberEval(days) }, EC)).NumberValue;
-            Assert.AreEqual(expectedWorkDay, formatter.Format(DateUtil.GetJavaDate(numberValue)));
+            //Calendar expCal = LocaleUtil.getLocaleCalendar(2013, 8, 27);
+            //Date expDate = expCal.getTime();
+            DateTime expDate = new DateTime(2013, 9, 27); //the month value of java date should plus one 
+
+            ValueEval[] ve = { new StringEval("2013/09/30"), new NumberEval(-1) };
+            double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(ve, EC)).NumberValue;
+            Assert.AreEqual(41544.0, numberValue, 0);
+
+            DateTime actDate = DateUtil.GetJavaDate(numberValue);
+            Assert.AreEqual(expDate, actDate);
         }
 
         [Test]
         public void TestReturnWorkdaysSpanningAWeekendAddingDays()
         {
-            String startDate = "2013/09/27";
-            int days = 1;
-            String expectedWorkDay = "2013/09/30";
-            StringEval stringEval = new StringEval(startDate);
-            double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(new ValueEval[]{
-                stringEval, new NumberEval(days) }, EC)).NumberValue;
-            Assert.AreEqual(expectedWorkDay, formatter.Format(DateUtil.GetJavaDate(numberValue)));
+            //Calendar expCal = LocaleUtil.getLocaleCalendar(2013, 8, 30);
+            //Date expDate = expCal.getTime();
+            DateTime expDate = new DateTime(2013, 9, 30); //the month value of java date should plus one 
+
+            ValueEval[] ve = { new StringEval("2013/09/27"), new NumberEval(1) };
+            double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(ve, EC)).NumberValue;
+            Assert.AreEqual(41547.0, numberValue, 0);
+
+            DateTime actDate = DateUtil.GetJavaDate(numberValue);
+            Assert.AreEqual(expDate, actDate);
         }
 
         [Test]
         public void TestReturnWorkdaysWhenStartIsWeekendAddingDays()
         {
-            String startDate = "2013/10/06";
-            int days = 1;
-            String expectedWorkDay = "2013/10/07";
-            StringEval stringEval = new StringEval(startDate);
-            double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(new ValueEval[]{
-                stringEval, new NumberEval(days) }, EC)).NumberValue;
-            Assert.AreEqual(expectedWorkDay, formatter.Format(DateUtil.GetJavaDate(numberValue)));
+            //Calendar expCal = LocaleUtil.getLocaleCalendar(2013, 9, 7);
+            //Date expDate = expCal.getTime();
+            DateTime expDate = new DateTime(2013, 10, 7); //the month value of java date should plus one 
+
+            ValueEval[] ve = { new StringEval("2013/10/06"), new NumberEval(1) };
+            double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(ve, EC)).NumberValue;
+            Assert.AreEqual(41554.0, numberValue, 0);
+
+            DateTime actDate = DateUtil.GetJavaDate(numberValue);
+            Assert.AreEqual(expDate, actDate);
+
         }
 
         [Test]
         public void TestReturnWorkdaysWhenStartIsWeekendSubtractingDays()
         {
-            String startDate = "2013/10/06";
-            int days = -1;
-            String expectedWorkDay = "2013/10/04";
-            StringEval stringEval = new StringEval(startDate);
-            double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(new ValueEval[]{
-                stringEval, new NumberEval(days) }, EC)).NumberValue;
-            Assert.AreEqual(expectedWorkDay, formatter.Format(DateUtil.GetJavaDate(numberValue)));
+            //Calendar expCal = LocaleUtil.getLocaleCalendar(2013, 9, 4);
+            //Date expDate = expCal.getTime();
+            DateTime expDate = new DateTime(2013, 10, 4); //the month value of java date should plus one 
+
+            ValueEval[] ve = { new StringEval("2013/10/06"), new NumberEval(-1) };
+            double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(ve, EC)).NumberValue;
+            Assert.AreEqual(41551.0, numberValue, 0);
+
+            DateTime actDate = DateUtil.GetJavaDate(numberValue);
+            Assert.AreEqual(expDate, actDate);
         }
         [Test]
         public void TestReturnWorkdaysWithDaysTruncated()

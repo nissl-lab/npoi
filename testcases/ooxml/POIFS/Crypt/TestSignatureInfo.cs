@@ -514,7 +514,22 @@ namespace NPOI.POIFS.Crypt
             throw new NotImplementedException();
         }
 
+        [Test, Ignore("not implemented")]
+        public void TestMultiSign()
+        {
+            //initKeyPair("KeyA", "CN=KeyA");
+            //KeyPair keyPairA = keyPair;
+            //X509Certificate x509A = x509;
+            //initKeyPair("KeyB", "CN=KeyB");
+            //KeyPair keyPairB = keyPair;
+            //X509Certificate x509B = x509;
 
+            //File tpl = copy(testdata.GetFile("bug58630.xlsx"));
+            //OPCPackage pkg = OPCPackage.open(tpl);
+            //SignatureConfig signatureConfig = new SignatureConfig();
+
+
+        }
         private void sign(OPCPackage pkgCopy, String alias, String signerDn, int signerCount) {
             throw new NotImplementedException();
             //InitKeyPair(alias, signerDn);

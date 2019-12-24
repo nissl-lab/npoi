@@ -33,15 +33,15 @@ namespace NPOI.Util
         }
         private static int MAX_ARRAY_SIZE = Int32.MaxValue - 8;
 
-        public override bool CanRead => throw new NotImplementedException();
+        public override bool CanRead => false;
 
-        public override bool CanSeek => throw new NotImplementedException();
+        public override bool CanSeek => true;
 
-        public override bool CanWrite => throw new NotImplementedException();
+        public override bool CanWrite => true;
 
-        public override long Length => throw new NotImplementedException();
+        public override long Length => buf.Length;
 
-        public override long Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override long Position { get => count; set => count = (int)value; }
 
         private void Grow(int minCapacity)
         {

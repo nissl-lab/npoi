@@ -106,7 +106,7 @@ namespace NPOI.POIFS.Crypt
             this.jceId = jceId;
             this.ecmaId = ecmaId;
             this.defaultKeySize = defaultKeySize;
-            this.allowedKeySize = allowedKeySize;
+            this.allowedKeySize = (int[])allowedKeySize.Clone();
             this.blockSize = blockSize;
             this.encryptedVerifierHashLength = encryptedVerifierHashLength;
             this.xmlId = xmlId;

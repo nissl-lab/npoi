@@ -19,7 +19,9 @@ namespace NPOI.HSSF.UserModel
 {
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.CF;
+    using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
+    using System;
 
     /// <summary>
     /// High level representation for Conditional Formatting Settings
@@ -27,14 +29,15 @@ namespace NPOI.HSSF.UserModel
     /// </summary>
     public class HSSFPatternFormatting : IPatternFormatting
     {
-        private CFRuleRecord cfRuleRecord;
+        private CFRuleBase cfRuleRecord;
+        private HSSFWorkbook workbook;
         private PatternFormatting patternFormatting;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HSSFPatternFormatting"/> class.
         /// </summary>
         /// <param name="cfRuleRecord">The cf rule record.</param>
-        public HSSFPatternFormatting(CFRuleRecord cfRuleRecord)
+        public HSSFPatternFormatting(CFRuleBase cfRuleRecord, HSSFWorkbook workbook)
         {
             this.cfRuleRecord = cfRuleRecord;
             this.patternFormatting = cfRuleRecord.PatternFormatting;
@@ -52,6 +55,44 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
+        public IColor FillBackgroundColorColor
+        {
+            get
+            {
+                return workbook.GetCustomPalette().GetColor(FillBackgroundColor);
+            }
+            set
+            {
+                HSSFColor hcolor = HSSFColor.ToHSSFColor(value);
+                if (hcolor == null)
+                {
+                    FillBackgroundColor = ((short)0);
+                }
+                else
+                {
+                    FillBackgroundColor = (hcolor.Indexed);
+                }
+            }
+        }
+        public IColor FillForegroundColorColor
+        {
+            get
+            {
+                return workbook.GetCustomPalette().GetColor(FillForegroundColor);
+            }
+            set
+            {
+                HSSFColor hcolor = HSSFColor.ToHSSFColor(value);
+                if (hcolor == null)
+                {
+                    FillForegroundColor = ((short)0);
+                }
+                else
+                {
+                    FillForegroundColor = (hcolor.Indexed);
+                }
+            }
+        }
         /// <summary>
         /// Gets or sets the color of the fill background.
         /// </summary>
@@ -96,7 +137,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the fill pattern.
         /// </summary>
         /// <value>The fill pattern.</value>
-        public FillPattern FillPattern
+        public FillPatternType FillPattern
         {
             get {
                 return patternFormatting.FillPattern;

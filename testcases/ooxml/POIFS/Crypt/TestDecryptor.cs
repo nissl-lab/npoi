@@ -21,6 +21,7 @@ namespace NPOI.POIFS.Crypt
     using ICSharpCode.SharpZipLib.Zip;
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
+    using NPOI.XSSF;
     using NUnit.Framework;
     using TestCases;
 
@@ -154,6 +155,16 @@ namespace NPOI.POIFS.Crypt
 
             zis.Close();
             fs.Close();
+        }
+
+        [Test]
+        public void Test58616()
+        {
+            POIFSFileSystem pfs = new POIFSFileSystem(XSSFTestDataSamples.GetSampleFile("58616.xlsx").Create());
+            EncryptionInfo info = new EncryptionInfo(pfs);
+            Decryptor dec = Decryptor.GetInstance(info);
+            //dec.VerifyPassword(null);
+            dec.GetDataStream(pfs);
         }
     }
 }

@@ -287,14 +287,13 @@ namespace NPOI.OpenXml4Net.OPC
             if (index < 0 || index > relationshipsByID.Values.Count)
                 throw new ArgumentException("index");
 
-            PackageRelationship retRel = null;
             int i = 0;
             foreach (PackageRelationship rel in relationshipsByID.Values)
             {
                 if (index == i++)
                     return rel;
             }
-            return retRel;
+            return null;
         }
 
         /**
@@ -382,7 +381,7 @@ namespace NPOI.OpenXml4Net.OPC
                     try
                     {
                         // when parsing of the given uri fails, we can either
-                        // ignore this relationship, which leads to IllegalStateException
+                        // ignore this relationship, which leads to InvalidOperationException
                         // later on, or use a dummy value and thus enable processing of the
                         // package
                         target = PackagingUriHelper.ToUri(value);

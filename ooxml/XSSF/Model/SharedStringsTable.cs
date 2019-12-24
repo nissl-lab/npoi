@@ -88,32 +88,42 @@ namespace NPOI.XSSF.Model
             _sstDoc.AddNewSst();
         }
 
-        internal SharedStringsTable(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        public SharedStringsTable(PackagePart part)
+            : base(part)
         {
-
-            XmlDocument xml = ConvertStreamToXml(part.GetInputStream());
-            ReadFrom(xml);
+            ReadFrom(part.GetInputStream());
         }
 
-
-
-        public void ReadFrom(XmlDocument xml)
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public SharedStringsTable(PackagePart part, PackageRelationship rel)
+             : this(part)
         {
-                 int cnt = 0;
+
+        }
+
+        public void ReadFrom(Stream is1)
+        {
+            try
+            {
+                int cnt = 0;
+                XmlDocument xml = ConvertStreamToXml(is1);
                 _sstDoc = SstDocument.Parse(xml, NamespaceManager);
                 CT_Sst sst = _sstDoc.GetSst();
                 count = (int)sst.count;
                 uniqueCount = (int)sst.uniqueCount;
                 foreach (CT_Rst st in sst.si)
                 {
-                     string key=GetKey(st);
-                   if(key!=null && !stmap.ContainsKey(key))
-                       stmap.Add(key, cnt);
-                   strings.Add(st);
+                    string key = GetKey(st);
+                    if (key != null && !stmap.ContainsKey(key))
+                        stmap.Add(key, cnt);
+                    strings.Add(st);
                     cnt++;
                 }
-
+            }
+            catch (XmlException e)
+            {
+                throw new IOException("unable to parse shared strings table", e);
+            }
         }
 
         private String GetKey(CT_Rst st)
@@ -196,11 +206,11 @@ namespace NPOI.XSSF.Model
          *
          * @return array of CT_Rst beans
          */
-        public List<CT_Rst> Items
+        public IList<CT_Rst> Items
         {
             get
             {
-                return strings;
+                return strings.AsReadOnly();
             }
         }
 

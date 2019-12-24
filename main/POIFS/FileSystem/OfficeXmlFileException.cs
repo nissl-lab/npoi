@@ -36,7 +36,7 @@ namespace NPOI.POIFS.FileSystem
     /// POIFS works with)
     /// </summary>
     [Serializable]
-    public class OfficeXmlFileException:ArgumentException
+    public class OfficeXmlFileException: UnsupportedFileFormatException
     {
         public OfficeXmlFileException(String s):base(s)
         { 

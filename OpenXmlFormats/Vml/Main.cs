@@ -1085,6 +1085,11 @@ namespace NPOI.OpenXmlFormats.Vml
             this.textpathField = new CT_TextPath();
             return this.textpathField;
         }
+
+        public int SizeOfClientDataArray()
+        {
+            return clientDataField == null ? 0 : clientDataField.Count;
+        }
     }
     
     

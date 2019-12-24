@@ -78,106 +78,66 @@ namespace NPOI.SS.UserModel
     public class BuiltinFormats
     {
         /**
-         * The first user-defined format starts at 164.
+         * The first user-defined number format starts at 164.
          */
         public const int FIRST_USER_DEFINED_FORMAT_INDEX = 164;
 
-        private static String[] _formats;
-
-        /*
-        0 General General 18 Time h:mm AM/PM
-        1 Decimal 0 19 Time h:mm:ss AM/PM
-        2 Decimal 0.00 20 Time h:mm
-        3 Decimal #,##0 21 Time h:mm:ss
-        4 Decimal #,##0.00 2232 Date/Time M/D/YY h:mm
-        531 Currency "$"#,##0_);("$"#,##0) 37 Account. _(#,##0_);(#,##0)
-        631 Currency "$"#,##0_);[Red]("$"#,##0) 38 Account. _(#,##0_);[Red](#,##0)
-        731 Currency "$"#,##0.00_);("$"#,##0.00) 39 Account. _(#,##0.00_);(#,##0.00)
-        831 Currency "$"#,##0.00_);[Red]("$"#,##0.00) 40 Account. _(#,##0.00_);[Red](#,##0.00)
-        9 Percent 0% 4131 Currency _("$"* #,##0_);_("$"* (#,##0);_("$"* "-"_);_(@_)
-        10 Percent 0.00% 4231 33 Currency _(* #,##0_);_(* (#,##0);_(* "-"_);_(@_)
-        11 Scientific 0.00E+00 4331 Currency _("$"* #,##0.00_);_("$"* (#,##0.00);_("$"* "-"??_);_(@_)
-        12 Fraction # ?/? 4431 33 Currency _(* #,##0.00_);_(* (#,##0.00);_(* "-"??_);_(@_)
-        13 Fraction # ??/?? 45 Time mm:ss
-        1432 Date M/D/YY 46 Time [h]:mm:ss
-        15 Date D-MMM-YY 47 Time mm:ss.0
-        16 Date D-MMM 48 Scientific ##0.0E+0
-        17 Date MMM-YY 49 Text @
-        * */
-        static BuiltinFormats()
-        {
-            List<String> m = new List<String>();
-            PutFormat(m, 0, "General");
-            PutFormat(m, 1, "0");
-            PutFormat(m, 2, "0.00");
-            PutFormat(m, 3, "#,##0");
-            PutFormat(m, 4, "#,##0.00");
-            PutFormat(m, 5, "\"$\"#,##0_);(\"$\"#,##0)");
-            PutFormat(m, 6, "\"$\"#,##0_);[Red](\"$\"#,##0)");
-            PutFormat(m, 7, "\"$\"#,##0.00_);(\"$\"#,##0.00)");
-            PutFormat(m, 8, "\"$\"#,##0.00_);[Red](\"$\"#,##0.00)");
-            PutFormat(m, 9, "0%");
-            PutFormat(m, 0xa, "0.00%");
-            PutFormat(m, 0xb, "0.00E+00");
-            PutFormat(m, 0xc, "# ?/?");
-            PutFormat(m, 0xd, "# ??/??");
-            PutFormat(m, 0xe, "m/d/yy");
-            PutFormat(m, 0xf, "d-mmm-yy");
-            PutFormat(m, 0x10, "d-mmm");
-            PutFormat(m, 0x11, "mmm-yy");
-            PutFormat(m, 0x12, "h:mm AM/PM");
-            PutFormat(m, 0x13, "h:mm:ss AM/PM");
-            PutFormat(m, 0x14, "h:mm");
-            PutFormat(m, 0x15, "h:mm:ss");
-            PutFormat(m, 0x16, "m/d/yy h:mm");
+        private static String[] _formats = new string[]{
+            "General",
+            "0",
+            "0.00",
+            "#,##0",
+            "#,##0.00",
+            "\"$\"#,##0_);(\"$\"#,##0)",
+            "\"$\"#,##0_);[Red](\"$\"#,##0)",
+            "\"$\"#,##0.00_);(\"$\"#,##0.00)",
+            "\"$\"#,##0.00_);[Red](\"$\"#,##0.00)",
+            "0%",
+            "0.00%",
+            "0.00E+00",
+            "# ?/?",
+            "# ??/??",
+            "m/d/yy",
+            "d-mmm-yy",
+            "d-mmm",
+            "mmm-yy",
+            "h:mm AM/PM",
+            "h:mm:ss AM/PM",
+            "h:mm",
+            "h:mm:ss",
+            "m/d/yy h:mm",
 
             // 0x17 - 0x24 reserved for international and undocumented
-            for (int i = 0x17; i <= 0x24; i++)
-            {
-                // TODO - one junit relies on these values which seems incorrect
-                PutFormat(m, i, "reserved-0x" + (i).ToString("X", CultureInfo.CurrentCulture));
-            }
+            // TODO - one junit relies on these values which seems incorrect
+            "reserved-0x17",
+            "reserved-0x18",
+            "reserved-0x19",
+            "reserved-0x1A",
+            "reserved-0x1B",
+            "reserved-0x1C",
+            "reserved-0x1D",
+            "reserved-0x1E",
+            "reserved-0x1F",
+            "reserved-0x20",
+            "reserved-0x21",
+            "reserved-0x22",
+            "reserved-0x23",
+            "reserved-0x24",
 
-            PutFormat(m, 0x25, "#,##0_);(#,##0)");
-            PutFormat(m, 0x26, "#,##0_);[Red](#,##0)");
-            PutFormat(m, 0x27, "#,##0.00_);(#,##0.00)");
-            PutFormat(m, 0x28, "#,##0.00_);[Red](#,##0.00)");
-            PutFormat(m, 0x29, "_(\"$\"* #,##0_);_(\"$\"* (#,##0);_(\"$\"* \"-\"_);_(@_)");
-            PutFormat(m, 0x2a, "_(* #,##0_);_(* (#,##0);_(* \"-\"_);_(@_)");
-            PutFormat(m, 0x2b, "_(* #,##0.00_);_(* (#,##0.00);_(* \"-\"??_);_(@_)");
-            PutFormat(m, 0x2c, "_(\"$\"* #,##0.00_);_(\"$\"* (#,##0.00);_(\"$\"* \"-\"??_);_(@_)");
-            PutFormat(m, 0x2d, "mm:ss");
-            PutFormat(m, 0x2e, "[h]:mm:ss");
-            PutFormat(m, 0x2f, "mm:ss.0");
-            PutFormat(m, 0x30, "##0.0E+0");
-            PutFormat(m, 0x31, "@");
-            //String[] ss = new String[m.Count];
-            String[] ss = m.ToArray();
-            _formats = ss;
-        }
-        private static void PutFormat(List<String> m, int index, String value)
-        {
-            if (m.Count != index)
-            {
-                throw new InvalidOperationException("index " + index + " is wrong");
-            }
-            m.Add(value);
-        }
-
-
-        /**
-         * @deprecated (May 2009) use {@link #getAll()}
-         */
-        [Obsolete]
-        public static Dictionary<int, String> GetBuiltinFormats()
-        {
-            Dictionary<int, String> result = new Dictionary<int, String>();
-            for (int i = 0; i < _formats.Length; i++)
-            {
-                result.Add(i, _formats[i]);
-            }
-            return result;
-        }
+            "#,##0_);(#,##0)",
+            "#,##0_);[Red](#,##0)",
+            "#,##0.00_);(#,##0.00)",
+            "#,##0.00_);[Red](#,##0.00)",
+            "_(\"$\"* #,##0_);_(\"$\"* (#,##0);_(\"$\"* \"-\"_);_(@_)",
+            "_(* #,##0_);_(* (#,##0);_(* \"-\"_);_(@_)",
+            "_(* #,##0.00_);_(* (#,##0.00);_(* \"-\"??_);_(@_)",
+            "_(\"$\"* #,##0.00_);_(\"$\"* (#,##0.00);_(\"$\"* \"-\"??_);_(@_)",
+            "mm:ss",
+            "[h]:mm:ss",
+            "mm:ss.0",
+            "##0.0E+0",
+            "@"
+        };
 
         /**
          * @return array of built-in data formats
@@ -213,23 +173,18 @@ namespace NPOI.SS.UserModel
          */
         public static int GetBuiltinFormat(String pFmt)
         {
-            String fmt;
-            if (string.Compare(pFmt, ("TEXT"), StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                fmt = "@";
-            }
-            else
-            {
-                fmt = pFmt;
-            }
+            String fmt = "TEXT".Equals(pFmt, StringComparison.OrdinalIgnoreCase) ? "@" : pFmt;
 
-            for (int i = 0; i < _formats.Length; i++)
+            int i = -1;
+            foreach (String f in _formats)
             {
-                if (fmt.Equals(_formats[i]))
+                i++;
+                if (f.Equals(fmt))
                 {
                     return i;
                 }
             }
+
             return -1;
         }
     }

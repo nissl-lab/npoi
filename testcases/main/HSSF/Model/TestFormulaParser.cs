@@ -30,6 +30,8 @@ namespace TestCases.HSSF.Model
     using TestCases.HSSF.UserModel;
     using TestCases.SS.Formula;
     using NPOI.SS.Formula.Constant;
+    using System.IO;
+    using System.Globalization;
 
     /**
      * Test the low level formula Parser functionality. High level Tests are to
@@ -126,19 +128,81 @@ namespace TestCases.HSSF.Model
         [Test]
         public void TestMacroFunction()
         {
-            // TestNames.xls contains a VB function called 'myFunc'
-            HSSFWorkbook w = HSSFTestDataSamples.OpenSampleWorkbook("testNames.xls");
-            HSSFEvaluationWorkbook book = HSSFEvaluationWorkbook.Create(w);
+            // testNames.xls contains a VB function called 'myFunc'
+            String testFile = "testNames.xls";
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook(testFile);
+            try
+            {
+                HSSFEvaluationWorkbook book = HSSFEvaluationWorkbook.Create(wb);
 
-            Ptg[] ptg = HSSFFormulaParser.Parse("myFunc()", w);
+                //Expected ptg stack: [NamePtg(myFunc), StringPtg(arg), (additional operands go here...), FunctionPtg(myFunc)]
+                Ptg[] ptg = FormulaParser.Parse("myFunc(\"arg\")", book, FormulaType.Cell, -1);
+                Assert.AreEqual(3, ptg.Length);
 
-            // the name Gets encoded as the first arg
-            NamePtg tname = (NamePtg)ptg[0];
-            Assert.AreEqual("myFunc", tname.ToFormulaString(book));
+                // the name gets encoded as the first operand on the stack
+                NamePtg tname = (NamePtg)ptg[0];
+                Assert.AreEqual("myFunc", tname.ToFormulaString(book));
 
-            AbstractFunctionPtg tfunc = (AbstractFunctionPtg)ptg[1];
-            Assert.IsTrue(tfunc.IsExternalFunction);
+                // the function's arguments are pushed onto the stack from left-to-right as OperandPtgs
+                StringPtg arg = (StringPtg)ptg[1];
+                Assert.AreEqual("arg", arg.Value);
+
+                // The external FunctionPtg is the last Ptg added to the stack
+                // During formula evaluation, this Ptg pops off the the appropriate number of
+                // arguments (getNumberOfOperands()) and pushes the result on the stack
+                AbstractFunctionPtg tfunc = (AbstractFunctionPtg)ptg[2]; //FuncVarPtg
+                Assert.IsTrue(tfunc.IsExternalFunction);
+
+                // confirm formula parsing is case-insensitive
+                FormulaParser.Parse("mYfUnC(\"arg\")", book, FormulaType.Cell, -1);
+
+                // confirm formula parsing doesn't care about argument count or type
+                // this should only throw an error when evaluating the formula.
+                FormulaParser.Parse("myFunc()", book, FormulaType.Cell, -1);
+                FormulaParser.Parse("myFunc(\"arg\", 0, TRUE)", book, FormulaType.Cell, -1);
+
+                // A completely unknown formula name (not saved in workbook) should still be parseable and renderable
+                // but will throw an NotImplementedFunctionException or return a #NAME? error value if evaluated.
+                FormulaParser.Parse("yourFunc(\"arg\")", book, FormulaType.Cell, -1);
+
+                // Verify that myFunc and yourFunc were successfully added to Workbook names
+                HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+                try
+                {
+                    // HSSFWorkbook/EXCEL97-specific side-effects user-defined function names must be added to Workbook's defined names in order to be saved.
+                    Assert.IsNotNull(wb2.GetName("myFunc"));
+                    assertEqualsIgnoreCase("myFunc", wb2.GetName("myFunc").NameName);
+                    Assert.IsNotNull(wb2.GetName("yourFunc"));
+                    assertEqualsIgnoreCase("yourFunc", wb2.GetName("yourFunc").NameName);
+
+                    // Manually check to make sure file isn't corrupted
+                    // TODO: develop a process for occasionally manually reviewing workbooks
+                    // to verify workbooks are not corrupted
+                    /*
+                    FileInfo fileIn = HSSFTestDataSamples.GetSampleFile(testFile);
+                    FileInfo reSavedFile = new FileInfo(fileIn.FullName.Replace(".xls", "-saved.xls"));
+                    FileStream fos = new FileStream(reSavedFile.FullName, FileMode.Create, FileAccess.ReadWrite);
+                    wb2.Write(fos);
+                    fos.Close();
+                    */
+                }
+                finally
+                {
+                    wb2.Close();
+                }
+            }
+            finally
+            {
+                wb.Close();
+            }
         }
+
+        private static void assertEqualsIgnoreCase(String expected, String actual)
+        {
+            CultureInfo cultureUS = CultureInfo.GetCultureInfo("en-US");
+            Assert.AreEqual(expected.ToLower(cultureUS), actual.ToLower(cultureUS));
+        }
+
         [Test]
         public void TestEmbeddedSlash()
         {
@@ -405,13 +469,13 @@ namespace TestCases.HSSF.Model
         [Test]
         public void TestNumbers()
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
 
             HSSFWorkbook wb = new HSSFWorkbook();
 
             wb.CreateSheet("Cash_Flow");
 
-            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Test");
+            ISheet sheet = wb.CreateSheet("Test");
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell((short)0);
             String formula = null;
@@ -639,7 +703,7 @@ namespace TestCases.HSSF.Model
         }
 
         /* package */
-        public static Ptg[] ConfirmTokenClasses(String formula, Type[] expectedClasses)
+        public static Ptg[] ConfirmTokenClasses(String formula, params Type[] expectedClasses)
         {
             Ptg[] ptgs = ParseFormula(formula);
             Assert.AreEqual(expectedClasses.Length, ptgs.Length);
@@ -802,7 +866,7 @@ namespace TestCases.HSSF.Model
             {
                 if (e.Message.StartsWith("Cannot Parse"))
                 {
-                    throw new AssertionException("Identified bug 28754a");
+                    Assert.Fail("Identified bug 28754a");
                 }
                 throw e;
             }
@@ -820,7 +884,7 @@ namespace TestCases.HSSF.Model
                 String actualCellFormula = cell.CellFormula;
                 if ("RIGHT(\"test\"ing\",3)".Equals(actualCellFormula))
                 {
-                    throw new AssertionException("Identified bug 28754b");
+                    Assert.Fail("Identified bug 28754b");
                 }
                 Assert.AreEqual("RIGHT(\"test\"\"ing\",3)", actualCellFormula);
             }
@@ -858,7 +922,6 @@ namespace TestCases.HSSF.Model
         [Test]
         public void TestParserErrors()
         {
-            ParseExpectedException("1 2");
             ParseExpectedException(" 12 . 345  ");
             ParseExpectedException("1 .23  ");
 
@@ -870,6 +933,13 @@ namespace TestCases.HSSF.Model
 
             ParseExpectedException("IF(TRUE)");
             ParseExpectedException("countif(A1:B5, C1, D1)");
+
+            ParseExpectedException("(");
+            ParseExpectedException(")");
+            ParseExpectedException("+");
+            ParseExpectedException("42+");
+
+            ParseExpectedException("IF(");
         }
 
         private static void ParseExpectedException(String formula)
@@ -877,16 +947,12 @@ namespace TestCases.HSSF.Model
             try
             {
                 ParseFormula(formula);
-                throw new AssertionException("expected Parse exception");
+                Assert.Fail("Expected FormulaParseException: " + formula);
             }
-            catch (Exception e)
+            catch (FormulaParseException e)
             {
-                if (!(e is FormulaParseException))
-                {
-                    String failMsg = "Expected FormulaParseException, but got (" + e.GetType().Name + "):";
-                    Console.WriteLine(failMsg);
-                    throw new AssertionException(failMsg);
-                }
+                // expected during successful test
+                Assert.IsNotNull(e.Message);
             }
         }
         [Test]
@@ -894,7 +960,7 @@ namespace TestCases.HSSF.Model
         {
 
             HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet();
+            ISheet sheet = wb.CreateSheet();
             wb.SetSheetName(0, "Sheet1");
 
             IRow row = sheet.CreateRow(0);
@@ -925,7 +991,7 @@ namespace TestCases.HSSF.Model
             {
                 if (e.Message.Equals("too much stuff left on the stack", StringComparison.OrdinalIgnoreCase))
                 {
-                    throw new AssertionException("Identified bug 44609");
+                    Assert.Fail("Identified bug 44609");
                 }
                 // else some unexpected error
                 throw e;
@@ -979,7 +1045,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(3, ptgs.Length);
             if (typeof(FuncVarPtg) == ptgs[2].GetType())
             {
-                throw new AssertionException("Identified bug 44675");
+                Assert.Fail("Identified bug 44675");
             }
             Assert.AreEqual(typeof(FuncPtg), ptgs[2].GetType());
             ptgs = ParseFormula("sin(1)");
@@ -1001,7 +1067,7 @@ namespace TestCases.HSSF.Model
             try
             {
                 HSSFFormulaParser.Parse(formula, book);
-                throw new AssertionException("Didn't Get Parse exception as expected");
+                Assert.Fail("Didn't Get Parse exception as expected");
             }
             catch (Exception e)
             {
@@ -1015,12 +1081,12 @@ namespace TestCases.HSSF.Model
             String formula = "Sheet1!A1:Sheet1!B3";
             HSSFWorkbook wb = new HSSFWorkbook();
             wb.CreateSheet("Sheet1");
-            Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.Cell, -1);
+            Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.Cell, -1, -1);
 
             if (ptgs.Length == 3)
             {
                 ConfirmTokenClasses(ptgs, typeof(Ref3DPtg), typeof(Ref3DPtg), typeof(RangePtg));
-                throw new AssertionException("Identified bug 46643");
+                Assert.Fail("Identified bug 46643");
             }
 
             ConfirmTokenClasses(ptgs,
@@ -1053,7 +1119,7 @@ namespace TestCases.HSSF.Model
             try
             {
                 ParseFormula("round(3.14;2)");
-                throw new AssertionException("Didn't get parse exception as expected");
+                Assert.Fail("Didn't get parse exception as expected");
             }
             catch (FormulaParseException e)
             {
@@ -1064,7 +1130,7 @@ namespace TestCases.HSSF.Model
             try
             {
                 ParseFormula(" =2+2");
-                throw new AssertionException("Didn't get parse exception as expected");
+                Assert.Fail("Didn't get parse exception as expected");
             }
             catch (FormulaParseException e)
             {
@@ -1089,7 +1155,7 @@ namespace TestCases.HSSF.Model
             {
                 if (e.Message.Equals("Invalid Formula cell reference: 'error'"))
                 {
-                    throw new AssertionException("Identified bug 45334");
+                    Assert.Fail("Identified bug 45334");
                 }
                 throw e;
             }
@@ -1114,8 +1180,9 @@ namespace TestCases.HSSF.Model
             {
                 if (e.Message.Equals("Specified colIx (1012) is out of range"))
                 {
-                    throw new AssertionException("Identified bug 45354");
+                    Assert.Fail("Identified bug 45354");
                 }
+                wb.Close();
                 throw e;
             }
             ConfirmTokenClasses(ptgs, typeof(NamePtg), typeof(FuncVarPtg));
@@ -1126,7 +1193,7 @@ namespace TestCases.HSSF.Model
             try
             {
                 cell.CellFormula = ("count(pf1)");
-                throw new AssertionException("Expected formula parse execption");
+                Assert.Fail("Expected formula parse execption");
             }
             catch (FormulaParseException e)
             {
@@ -1134,6 +1201,7 @@ namespace TestCases.HSSF.Model
                         "Specified named range 'pf1' does not exist in the current workbook.");
             }
             cell.CellFormula = ("count(fp1)"); // plain cell ref, col is in range
+            wb.Close();
         }
         [Test]
         public void TestParseAreaRefHighRow_bug45358()
@@ -1148,7 +1216,7 @@ namespace TestCases.HSSF.Model
             aptg = (AreaI)ptgs[0];
             if (aptg.LastRow == -25537)
             {
-                throw new AssertionException("Identified bug 45358");
+                Assert.Fail("Identified bug 45358");
             }
             Assert.AreEqual(39999, aptg.LastRow);
 
@@ -1160,7 +1228,7 @@ namespace TestCases.HSSF.Model
             ptgs = ParseFormula("A10:A65536");
             aptg = (AreaI)ptgs[0];
             Assert.AreEqual(65535, aptg.LastRow);
-
+            book.Close();
         }
         [Test]
         public void TestParseArray()
@@ -1172,7 +1240,7 @@ namespace TestCases.HSSF.Model
 
             ArrayPtg aptg = (ArrayPtg)ptgs[0];
             Object[][] values = aptg.GetTokenArrayValues();
-            Assert.AreEqual(ErrorConstant.ValueOf(HSSFErrorConstants.ERROR_REF), values[0][3]);
+            Assert.AreEqual(ErrorConstant.ValueOf(FormulaError.REF.Code), values[0][3]);
             Assert.AreEqual(false, values[1][0]);
         }
         [Test]
@@ -1185,7 +1253,7 @@ namespace TestCases.HSSF.Model
             if (element is UnicodeString)
             {
                 // this would cause ClassCastException below
-                throw new AssertionException("Wrong encoding of array element value");
+                Assert.Fail("Wrong encoding of array element value");
             }
             Assert.AreEqual(typeof(String), element.GetType());
 
@@ -1217,7 +1285,7 @@ namespace TestCases.HSSF.Model
             {
                 if (e.Message.StartsWith("Parse error near char 1 '-' in specified formula '{-42}'. Expected ")) // "Integer" in Java or "int" in C#
                 {
-                    throw new AssertionException("Identified bug - failed to parse negative array element.");
+                    Assert.Fail("Identified bug - failed to parse negative array element.");
                 }
                 throw e;
             }
@@ -1291,6 +1359,8 @@ namespace TestCases.HSSF.Model
             // try setting the same formula in a cell
             cell.CellFormula = ("[multibookFormulaB.xls]AnotherSheet!B1");
             Assert.AreEqual("[multibookFormulaB.xls]AnotherSheet!B1", cell.CellFormula);
+
+            wbA.Close();
         }
         private static void ConfirmSingle3DRef(Ptg[] ptgs, int expectedExternSheetIndex)
         {
@@ -1305,7 +1375,7 @@ namespace TestCases.HSSF.Model
             String formula = "Sheet1!$B$2:$C$3,OFFSET(Sheet1!$E$2:$E$4,1,Sheet1!$A$1),Sheet1!$D$6";
             HSSFWorkbook wb = new HSSFWorkbook();
             wb.CreateSheet("Sheet1");
-            Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.Cell, -1);
+            Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.Cell, -1, -1);
 
             ConfirmTokenClasses(ptgs,
                 // TODO - AttrPtg), // Excel prepends this
@@ -1321,7 +1391,73 @@ namespace TestCases.HSSF.Model
             );
             MemFuncPtg mf = (MemFuncPtg)ptgs[0];
             Assert.AreEqual(45, mf.LenRefSubexpression);
+
+            // We don't check the type of the operands.
+            ConfirmTokenClasses("1,2", typeof(MemAreaPtg), typeof(IntPtg), typeof(IntPtg), typeof(UnionPtg));
+
+            wb.Close();
         }
+
+        [Test]
+        public void TestIntersection()
+        {
+            String formula = "Sheet1!$B$2:$C$3 OFFSET(Sheet1!$E$2:$E$4, 1,Sheet1!$A$1) Sheet1!$D$6";
+            HSSFWorkbook wb = new HSSFWorkbook();
+            wb.CreateSheet("Sheet1");
+            Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.Cell, -1);
+            ConfirmTokenClasses(ptgs,
+                    // TODO - AttrPtg.class, // Excel prepends this
+                typeof(MemFuncPtg),
+                typeof(Area3DPtg),
+                typeof(Area3DPtg),
+                typeof(IntPtg),
+                typeof(Ref3DPtg),
+                typeof(FuncVarPtg),
+                typeof(IntersectionPtg),
+                typeof(Ref3DPtg),
+                typeof(IntersectionPtg)
+        );
+            MemFuncPtg mf = (MemFuncPtg)ptgs[0];
+            Assert.AreEqual(45, mf.LenRefSubexpression);
+            // This used to be an error but now parses.  Union has the same behaviour.
+            ConfirmTokenClasses("1 2", typeof(MemAreaPtg), typeof(IntPtg), typeof(IntPtg), typeof(IntersectionPtg));
+
+            wb.Close();
+        }
+        [Test]
+        public void TestComparisonInParen()
+        {
+            ConfirmTokenClasses("(A1 > B2)",
+                typeof(RefPtg),
+                typeof(RefPtg),
+                typeof(GreaterThanPtg),
+                typeof(ParenthesisPtg)
+            );
+        }
+        [Test]
+        public void TestUnionInParen()
+        {
+            ConfirmTokenClasses("(A1:B2,B2:C3)",
+              typeof(MemAreaPtg),
+                  typeof(AreaPtg),
+                  typeof(AreaPtg),
+                  typeof(UnionPtg),
+                  typeof(ParenthesisPtg)
+                );
+        }
+        [Test]
+        public void TestIntersectionInParen()
+        {
+            ConfirmTokenClasses("(A1:B2 B2:C3)",
+                typeof(MemAreaPtg),
+                    typeof(AreaPtg),
+                    typeof(AreaPtg),
+                    typeof(IntersectionPtg),
+                    typeof(ParenthesisPtg)
+                );
+        }
+    
+
         /** Named ranges with backslashes, e.g. 'POI\\2009' */
         [Test]
         public void TestBackSlashInNames()
@@ -1361,10 +1497,12 @@ namespace TestCases.HSSF.Model
             }
             catch (IndexOutOfRangeException)
             {
-                throw new AssertionException("Identified bug 42448");
+                Assert.Fail("Identified bug 42448");
             }
             // the exact example from the bugzilla description:
             HSSFFormulaParser.Parse("SUMPRODUCT(A!C7:A!C67, B8:B68) / B69", wb);
+
+            wb.Close();
         }
         [Test]
         public void TestRangeFuncOperand_bug46951()
@@ -1379,8 +1517,9 @@ namespace TestCases.HSSF.Model
             {
                 if (e.Message.Equals("Specified named range 'OFFSET' does not exist in the current workbook."))
                 {
-                    throw new AssertionException("Identified bug 46951");
+                    Assert.Fail("Identified bug 46951");
                 }
+                wb.Close();
                 throw e;
             }
             ConfirmTokenClasses(ptgs,
@@ -1393,7 +1532,7 @@ namespace TestCases.HSSF.Model
                 typeof(RangePtg), //
                 typeof(AttrPtg) // [sum ]
             );
-
+            wb.Close();
         }
         [Test]
         public void TestUnionOfFullCollFullRowRef()
@@ -1430,6 +1569,7 @@ namespace TestCases.HSSF.Model
                     typeof(Area3DPtg),
                     typeof(UnionPtg)
             );
+            wb.Close();
         }
 
         [Test]
@@ -1447,6 +1587,7 @@ namespace TestCases.HSSF.Model
             MemFuncPtg mf;
             mf = (MemFuncPtg)ptgs[0];
             Assert.AreEqual(15, mf.LenRefSubexpression);
+            wb.Close();
         }
 
         /**
@@ -1510,8 +1651,8 @@ namespace TestCases.HSSF.Model
 
             ConfirmParseError(wb, "A1:ROUND(B1,1)", "The RHS of the range operator ':' at position 3 is not a proper reference.");
 
-            ConfirmParseError(wb, "Sheet1!!!", "Parse error near char 7 '!' in specified formula 'Sheet1!!!'. Expected number, string, or defined name");
-            ConfirmParseError(wb, "Sheet1!.Name", "Parse error near char 7 '.' in specified formula 'Sheet1!.Name'. Expected number, string, or defined name");
+            ConfirmParseError(wb, "Sheet1!!!", "Parse error near char 7 '!' in specified formula 'Sheet1!!!'. Expected number, string, defined name, or data table");
+            ConfirmParseError(wb, "Sheet1!.Name", "Parse error near char 7 '.' in specified formula 'Sheet1!.Name'. Expected number, string, defined name, or data table");
             ConfirmParseError(wb, "Sheet1!Sheet1", "Specified name 'Sheet1' for sheet Sheet1 not found");
 
             ConfirmParseError(wb, "Sheet1!F:Sheet1!G", "'Sheet1!F' is not a proper reference.");
@@ -1529,7 +1670,7 @@ namespace TestCases.HSSF.Model
             try
             {
                 HSSFFormulaParser.Parse(formula, wb);
-                throw new AssertionException("Expected formula parse execption");
+                Assert.Fail("Expected formula parse execption");
             }
             catch (FormulaParseException e)
             {
@@ -1565,11 +1706,13 @@ namespace TestCases.HSSF.Model
             {
                 if (e.Message.Equals("Specified name 'foo' is not a range as expected."))
                 {
-                    throw new AssertionException("Identified bug 47078c");
+                    Assert.Fail("Identified bug 47078c");
                 }
+                wb.Close();
                 throw e;
             }
             ConfirmTokenClasses(result, typeof(IntPtg), typeof(NamePtg), typeof(AddPtg));
+            wb.Close();
         }
 
         /**
@@ -1589,7 +1732,7 @@ namespace TestCases.HSSF.Model
             try
             {
                 HSSFFormulaParser.Parse(badCellRef, wb);
-                throw new AssertionException("Identified bug 47312b - Shouldn't be able to parse cell ref '"
+                Assert.Fail("Identified bug 47312b - Shouldn't be able to parse cell ref '"
                         + badCellRef + "'.");
             }
             catch (FormulaParseException e)
@@ -1610,7 +1753,7 @@ namespace TestCases.HSSF.Model
                 ConfirmParseException(e, "Specified named range '"
                         + leadingZeroCellRef + "' does not exist in the current workbook.");
                 // close but no cigar
-                throw new AssertionException("Identified bug 47312c - '"
+                Assert.Fail("Identified bug 47312c - '"
                         + leadingZeroCellRef + "' should parse as 'B1'.");
             }
 
@@ -1620,6 +1763,7 @@ namespace TestCases.HSSF.Model
             n.RefersToFormula = ("1+1");
             ptgs = HSSFFormulaParser.Parse("B0", wb);
             ConfirmTokenClasses(ptgs, typeof(NamePtg));
+            wb.Close();
         }
 
         private static void ConfirmParseException(FormulaParseException e, String expMsg)
@@ -1658,6 +1802,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual("O2", o2.ToFormulaString());
             Assert.AreEqual("D2", d2.ToFormulaString());
             Assert.AreEqual(255, dec2Hex.FunctionIndex);
+            wb.Close();
         }
 
     }

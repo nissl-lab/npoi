@@ -75,6 +75,7 @@ namespace TestCases.SS.UserModel
                 }
                 truthLine = reader.ReadLine();
             }
+            wb.Close();
             reader.Close();
         }
 

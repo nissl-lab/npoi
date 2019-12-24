@@ -23,11 +23,32 @@ namespace TestCases.SS
         /// <returns>an instance of Workbook loaded from the supplied file name</returns>
         IWorkbook OpenSampleWorkbook(String sampleFileName);
 
+        //************ SXSSF-specific methods ***************//
+        /**
+         * Provides way of creating a SXSSFWorkbook with a specific row access window size.
+         * Equivalent to createWorkbook on others.
+         * @return an instance of Workbook
+         */
+        IWorkbook CreateWorkbook(int rowAccessWindowSize);
         /// <summary>
         /// Override to provide way of creating HSSF / XSSF workbooks
         /// </summary>
         /// <returns>an instance of Workbook</returns>
         IWorkbook CreateWorkbook();
+
+        /// <summary>
+        /// Only matters for SXSSF - enables tracking of the column
+        /// widths so that autosizing can work. No-op on others.
+        /// </summary>
+        void TrackAllColumnsForAutosizing(ISheet sheet);
+        //************ End SXSSF-specific methods ***************//
+        /// <summary>
+        /// Creates the corresponding {@link FormulaEvaluator} for the
+        /// type of Workbook handled by this Provider. 
+        /// </summary>
+        /// <param name="wb">The workbook to base the formula evaluator on.</param>
+        /// <returns>A new instance of a matching type of formula evaluator. </returns>
+        IFormulaEvaluator CreateFormulaEvaluator(IWorkbook wb);
 
         /// <summary>
         ///Opens a sample file from the standard HSSF test data directory
@@ -39,14 +60,6 @@ namespace TestCases.SS
         SpreadsheetVersion GetSpreadsheetVersion();
 
         string StandardFileNameExtension { get; }
-
-        /**
-         * Creates the corresponding {@link FormulaEvaluator} for the
-         * type of Workbook handled by this Provider. 
-         *
-         * @param wb The workbook to base the formula evaluator on.
-         * @return A new instance of a matching type of formula evaluator. 
-         */
-        IFormulaEvaluator CreateFormulaEvaluator(IWorkbook wb);
+        
     }
 }

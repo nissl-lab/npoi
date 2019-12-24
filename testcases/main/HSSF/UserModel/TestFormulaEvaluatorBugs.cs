@@ -30,9 +30,12 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.UserModel;
     using TestCases.HSSF;
     using TestCases.SS.Formula;
+    using NPOI.HSSF.Record;
+    using NPOI.SS.Util;
+
     /**
-     * 
-     */
+* 
+*/
     [TestFixture]
     public class TestFormulaEvaluatorBugs
     {
@@ -82,6 +85,8 @@ namespace TestCases.HSSF.UserModel
                 existing.Close();
                 Console.Error.WriteLine("Existing file for bug #44636 written to " + existing.ToString());
             }
+
+            wb.Close();
             // Now, do a new file from scratch
             wb = new HSSFWorkbook();
             sheet = wb.CreateSheet();
@@ -99,12 +104,14 @@ namespace TestCases.HSSF.UserModel
             if (OUTPUT_TEST_FILES)
             {
                 // Save
-                FileStream scratch = File.Open(tmpDirName+"44636-scratch.xls",FileMode.Open);
+                FileStream scratch = File.Open(tmpDirName + "44636-scratch.xls", FileMode.Open);
                 scratch.Seek(0, SeekOrigin.End);
                 wb.Write(scratch);
                 scratch.Close();
                 Console.Error.WriteLine("New file for bug #44636 written to " + scratch.ToString());
             }
+
+            wb.Close();
         }
 
         /**
@@ -171,6 +178,8 @@ namespace TestCases.HSSF.UserModel
             cell = row.GetCell(0);
             Assert.AreEqual("-1000000-3000000", cell.CellFormula);
             Assert.AreEqual(-4000000, eva.Evaluate(cell).NumberValue, 0);
+
+            wb.Close();
         }
 
         /**
@@ -234,6 +243,8 @@ namespace TestCases.HSSF.UserModel
             ICell cellSUM2D = rowSUM2D.GetCell(0);
             Assert.AreEqual("SUM(C:D)", cellSUM2D.CellFormula);
             Assert.AreEqual(66, eva.Evaluate(cellSUM2D).NumberValue, 0);
+
+            wb.Close();
         }
 
         /**
@@ -260,6 +271,8 @@ namespace TestCases.HSSF.UserModel
                 Assert.Fail("Identified bug 44508");
             }
             Assert.AreEqual(true, cell.BooleanCellValue);
+
+            wb.Close();
         }
         [Test]
         public void TestClassCast_bug44861()
@@ -276,17 +289,19 @@ namespace TestCases.HSSF.UserModel
                 NPOI.SS.UserModel.ISheet s = wb.GetSheetAt(i);
                 HSSFFormulaEvaluator eval = new HSSFFormulaEvaluator(wb);
 
-                for (IEnumerator rows = s.GetRowEnumerator(); rows.MoveNext(); )
+                for (IEnumerator rows = s.GetRowEnumerator(); rows.MoveNext();)
                 {
                     IRow r = (IRow)rows.Current;
 
-                    for (IEnumerator cells = r.GetEnumerator(); cells.MoveNext(); )
+                    for (IEnumerator cells = r.GetEnumerator(); cells.MoveNext();)
                     {
                         ICell c = (ICell)cells.Current;
                         eval.EvaluateFormulaCell(c);
                     }
                 }
             }
+
+            wb.Close();
         }
         [Test]
         public void TestEvaluateInCellWithErrorCode_bug44950()
@@ -305,9 +320,13 @@ namespace TestCases.HSSF.UserModel
             {
                 if (e.Message.StartsWith("Cannot get a error value from"))
                 {
-                    throw new AssertionException("Identified bug 44950 b");
+                    Assert.Fail("Identified bug 44950 b");
                 }
                 throw;
+            }
+            finally
+            {
+                wb.Close();
             }
         }
 
@@ -367,7 +386,7 @@ namespace TestCases.HSSF.UserModel
                 cell.CellFormula = (formula);
 
             }
-            row.CreateCell(0).SetCellValue(new DateTime(2000,1,1,0,0,0));
+            row.CreateCell(0).SetCellValue(new DateTime(2000, 1, 1, 0, 0, 0));
 
             // Choose cell A9, so that the Assert.Failing Test case doesn't take too long to execute.
             ICell cell1 = row.GetCell(8);
@@ -396,6 +415,8 @@ namespace TestCases.HSSF.UserModel
 
             // confirm the evaluation result too
             Assert.AreEqual(ErrorEval.NA, ve);
+
+            wb.Close();
         }
         [Test]
         public void TestDateWithNegativeParts_bug48528()
@@ -412,33 +433,177 @@ namespace TestCases.HSSF.UserModel
             // 5th Dec 2011 = 40882
             // 5th Feb 2011 = 40579
 
-            cell.CellFormula=("DATE(2012,2,1)");
+            cell.CellFormula = ("DATE(2012,2,1)");
             fe.NotifyUpdateCell(cell);
             Assert.AreEqual(40940.0, fe.Evaluate(cell).NumberValue);
 
-            cell.CellFormula=("DATE(2012,2,1+4)");
+            cell.CellFormula = ("DATE(2012,2,1+4)");
             fe.NotifyUpdateCell(cell);
             Assert.AreEqual(40944.0, fe.Evaluate(cell).NumberValue);
 
-            cell.CellFormula=("DATE(2012,2-1,1+4)");
+            cell.CellFormula = ("DATE(2012,2-1,1+4)");
             fe.NotifyUpdateCell(cell);
             Assert.AreEqual(40913.0, fe.Evaluate(cell).NumberValue);
 
-            cell.CellFormula=("DATE(2012,2,1-27)");
+            cell.CellFormula = ("DATE(2012,2,1-27)");
             fe.NotifyUpdateCell(cell);
             Assert.AreEqual(40913.0, fe.Evaluate(cell).NumberValue);
 
-            cell.CellFormula=("DATE(2012,2-2,1+4)");
+            cell.CellFormula = ("DATE(2012,2-2,1+4)");
             fe.NotifyUpdateCell(cell);
             Assert.AreEqual(40882.0, fe.Evaluate(cell).NumberValue);
 
-            cell.CellFormula=("DATE(2012,2,1-58)");
+            cell.CellFormula = ("DATE(2012,2,1-58)");
             fe.NotifyUpdateCell(cell);
             Assert.AreEqual(40882.0, fe.Evaluate(cell).NumberValue);
 
-            cell.CellFormula=("DATE(2012,2-12,1+4)");
+            cell.CellFormula = ("DATE(2012,2-12,1+4)");
             fe.NotifyUpdateCell(cell);
             Assert.AreEqual(40579.0, fe.Evaluate(cell).NumberValue);
+
+            wb.Close();
         }
+
+        [Test]
+        public void Test55747_55324()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFFormulaEvaluator ev = wb.GetCreationHelper().CreateFormulaEvaluator() as HSSFFormulaEvaluator;
+            HSSFSheet ws = wb.CreateSheet() as HSSFSheet;
+            HSSFRow row = ws.CreateRow(0) as HSSFRow;
+            HSSFCell cell;
+
+            // Our test value
+            cell = row.CreateCell(0) as HSSFCell;
+            cell.SetCellValue("abc");
+            // Lots of IF cases
+
+            cell = row.CreateCell(1) as HSSFCell;
+            cell.SetCellFormula("IF(A1<>\"\",MID(A1,1,2),\"X\")");//if(expr,func,val)
+
+            cell = row.CreateCell(2) as HSSFCell;
+            cell.SetCellFormula("IF(A1<>\"\",\"A\",\"B\")");// if(expr,val,val)
+
+            cell = row.CreateCell(3) as HSSFCell;
+            cell.SetCellFormula("IF(A1=\"\",\"X\",MID(A1,1,2))");//if(expr,val,func),
+
+            cell = row.CreateCell(4) as HSSFCell;
+            cell.SetCellFormula("IF(A1<>\"\",\"X\",MID(A1,1,2))");//if(expr,val,func),
+
+            cell = row.CreateCell(5) as HSSFCell;
+            cell.SetCellFormula("IF(A1=\"\",MID(A1,1,2),MID(A1,2,2))");//if(exp,func,func)
+            cell = row.CreateCell(6) as HSSFCell;
+            cell.SetCellFormula("IF(A1<>\"\",MID(A1,1,2),MID(A1,2,2))");//if(exp,func,func)
+
+            cell = row.CreateCell(7) as HSSFCell;
+            cell.SetCellFormula("IF(MID(A1,1,2)<>\"\",\"A\",\"B\")");//if(func_expr,val,val)
+
+            // And some MID ones just to check
+            row = ws.CreateRow(1) as HSSFRow;
+            cell = row.CreateCell(1) as HSSFCell;
+            cell.SetCellFormula("MID(A1,1,2)");
+            cell = row.CreateCell(2) as HSSFCell;
+            cell.SetCellFormula("MID(A1,2,2)");
+            cell = row.CreateCell(3) as HSSFCell;
+            cell.SetCellFormula("MID(A1,2,1)");
+            cell = row.CreateCell(4) as HSSFCell;
+            cell.SetCellFormula("MID(A1,3,1)");
+
+            // Evaluate
+            ev.EvaluateAll();
+
+            // Save and re-load
+            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb) as HSSFWorkbook;
+            ws = wb.GetSheetAt(0) as HSSFSheet;
+
+            // Check the MID Ptgs in Row 2 have V RefPtgs for A1
+            row = ws.GetRow(1) as HSSFRow;
+            for (int i = 1; i <= 4; i++)
+            {
+                cell = row.GetCell(i) as HSSFCell;
+                Ptg[] ptgs = getPtgs(cell);
+                Assert.AreEqual(4, ptgs.Length);
+                Assert.AreEqual(typeof(FuncPtg), ptgs[3].GetType());
+                Assert.AreEqual("MID", ((FuncPtg)ptgs[3]).Name);
+                assertRefPtgA1('V', ptgs, 0);
+            }
+
+            // Now check the IF formulas
+            row = ws.GetRow(0) as HSSFRow;
+
+            // H1, MID is used in the expression IF checks, so A1 should be V
+            cell = row.GetCell(CellReference.ConvertColStringToIndex("H")) as HSSFCell;
+            assertRefPtgA1('V', getPtgs(cell), 0);
+
+            // E1, MID is used in the FALSE route, so A1 should be V
+            //  A1 should be V in the IF check
+            //  A1 should be R in the FALSE route
+            cell = row.GetCell(CellReference.ConvertColStringToIndex("E")) as HSSFCell;
+            assertRefPtgA1('V', getPtgs(cell), 0);
+            assertRefPtgA1('R', getPtgs(cell), 6);
+
+            // Check that, for B1, D1, F1 and G1, the references to A1
+            //  from all of IF check, True and False are V
+            cell = row.GetCell(CellReference.ConvertColStringToIndex("B")) as HSSFCell;
+            assertRefPtgA1('V', getPtgs(cell), 0);
+            //      assertRefPtgA1('V', getPtgs(cell), 4); // FIXME!
+
+            cell = row.GetCell(CellReference.ConvertColStringToIndex("D")) as HSSFCell;
+            assertRefPtgA1('V', getPtgs(cell), 0);
+            //      assertRefPtgA1('V', getPtgs(cell), 6); // FIXME!
+
+            cell = row.GetCell(CellReference.ConvertColStringToIndex("F")) as HSSFCell;
+            assertRefPtgA1('V', getPtgs(cell), 0);
+            //      assertRefPtgA1('V', getPtgs(cell), 4); // FIXME!
+            //      assertRefPtgA1('V', getPtgs(cell), 9); // FIXME!
+
+            cell = row.GetCell(CellReference.ConvertColStringToIndex("G")) as HSSFCell;
+            assertRefPtgA1('V', getPtgs(cell), 0);
+            //      assertRefPtgA1('V', getPtgs(cell), 4); // FIXME!
+            //      assertRefPtgA1('V', getPtgs(cell), 9); // FIXME!
+
+            // Check our cached values were correctly evaluated
+            cell = row.GetCell(CellReference.ConvertColStringToIndex("A")) as HSSFCell;
+            Assert.AreEqual("abc", cell.StringCellValue);
+            cell = row.GetCell(CellReference.ConvertColStringToIndex("B")) as HSSFCell;
+            Assert.AreEqual("ab", cell.StringCellValue);
+            cell = row.GetCell(CellReference.ConvertColStringToIndex("C")) as HSSFCell;
+            Assert.AreEqual("A", cell.StringCellValue);
+            cell = row.GetCell(CellReference.ConvertColStringToIndex("D")) as HSSFCell;
+            Assert.AreEqual("ab", cell.StringCellValue);
+            cell = row.GetCell(CellReference.ConvertColStringToIndex("E")) as HSSFCell;
+            Assert.AreEqual("X", cell.StringCellValue);
+            cell = row.GetCell(CellReference.ConvertColStringToIndex("F")) as HSSFCell;
+            Assert.AreEqual("bc", cell.StringCellValue);
+            cell = row.GetCell(CellReference.ConvertColStringToIndex("G")) as HSSFCell;
+            Assert.AreEqual("ab", cell.StringCellValue);
+            cell = row.GetCell(CellReference.ConvertColStringToIndex("H")) as HSSFCell;
+            Assert.AreEqual("A", cell.StringCellValue);
+
+            // Enable this to write out + check in Excel
+            if (OUTPUT_TEST_FILES)
+            {
+                FileStream out1 = new FileStream("/tmp/test.xls", FileMode.Create, FileAccess.ReadWrite);
+                wb.Write(out1);
+                out1.Close();
+            }
+        }
+        private Ptg[] getPtgs(HSSFCell cell)
+        {
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual(typeof(FormulaRecordAggregate), cell.CellValueRecord.GetType());
+            FormulaRecordAggregate agg = (FormulaRecordAggregate)cell.CellValueRecord;
+            FormulaRecord rec = agg.FormulaRecord;
+            return rec.ParsedExpression;
+        }
+        private void assertRefPtgA1(char rv, Ptg[] ptgs, int at)
+        {
+            Ptg ptg = ptgs[at];
+            Assert.AreEqual(typeof(RefPtg), ptg.GetType());
+            Assert.AreEqual(0, ((RefPtg)ptg).Row);
+            Assert.AreEqual(0, ((RefPtg)ptg).Column);
+            Assert.AreEqual(rv, ((RefPtg)ptg).RVAType);
+        }
+
     }
 }

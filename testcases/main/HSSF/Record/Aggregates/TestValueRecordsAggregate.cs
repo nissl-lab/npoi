@@ -28,12 +28,22 @@ namespace TestCases.HSSF.Record.Aggregates
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Model;
     using NPOI.Util;
+    using System.Collections.Generic;
 
     [TestFixture]
     public class TestValueRecordsAggregate
     {
         private static String ABNORMAL_SHARED_FORMULA_FLAG_TEST_FILE = "AbnormalSharedFormulaFlag.xls";
         ValueRecordsAggregate valueRecord = new ValueRecordsAggregate();
+        private IList<CellValueRecordInterface> GetValueRecords()
+        {
+            List<CellValueRecordInterface> list = new List<CellValueRecordInterface>();
+            foreach (CellValueRecordInterface rec in valueRecord)
+            {
+                list.Add(rec);
+            }
+            return list.AsReadOnly();
+        }
         [TearDown]
         public void TearDown()
         {
@@ -52,14 +62,13 @@ namespace TestCases.HSSF.Record.Aggregates
             records.Add(new WindowTwoRecord());
 
             ConstructValueRecord(records);
-            IEnumerator iterator = valueRecord.GetEnumerator();
-            iterator.MoveNext();
-            object record = iterator.Current;
+            IList<CellValueRecordInterface> cvrs = GetValueRecords();
+            //Ensure that the SharedFormulaRecord has been converted
+            Assert.AreEqual(1, cvrs.Count);
+
+            CellValueRecordInterface record = cvrs[0];
             Assert.IsNotNull(record, "Row contains a value");
             Assert.IsTrue((record is FormulaRecordAggregate), "First record is1 a FormulaRecordsAggregate");
-            //Ensure that the SharedFormulaRecord has been converted
-            Assert.IsFalse(iterator.MoveNext(), "SharedFormulaRecord is1 null");
-
         }
 
         private IList TestData()
@@ -81,13 +90,11 @@ namespace TestCases.HSSF.Record.Aggregates
         [Test]
         public void TestInsertCell()
         {
-            IEnumerator iterator = valueRecord.GetEnumerator();
-            Assert.IsFalse(iterator.MoveNext());
+            Assert.AreEqual(0, GetValueRecords().Count);
 
             BlankRecord blankRecord = NewBlankRecord();
             valueRecord.InsertCell(blankRecord);
-            iterator = valueRecord.GetEnumerator();
-            Assert.IsTrue(iterator.MoveNext());
+            Assert.AreEqual(1, GetValueRecords().Count);
         }
         [Test]
         public void TestRemoveCell()
@@ -96,8 +103,7 @@ namespace TestCases.HSSF.Record.Aggregates
             valueRecord.InsertCell(blankRecord1);
             BlankRecord blankRecord2 = NewBlankRecord();
             valueRecord.RemoveCell(blankRecord2);
-            IEnumerator iterator = valueRecord.GetEnumerator();
-            Assert.IsFalse(iterator.MoveNext());
+            Assert.AreEqual(0, GetValueRecords().Count);
 
             // removing an already empty cell just falls through
             valueRecord.RemoveCell(blankRecord2);

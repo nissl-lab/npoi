@@ -241,7 +241,7 @@ namespace NPOI.Util
         /// <p> The <c>Close</c> method of <c>InputStream</c> does nothing.</p>
         /// </summary>
         /// <exception cref="IOException">if an I/O error occurs.</exception>
-        public virtual void Close()
+        public override void Close()
         {
 
         }
@@ -331,6 +331,50 @@ namespace NPOI.Util
         public virtual bool MarkSupported()
         {
             return false;
+        }
+    }
+
+    public class FileInputStream : InputStream
+    {
+        Stream inner;
+        public FileInputStream(Stream fs)
+        {
+            this.inner = fs;
+        }
+
+        public override bool CanRead => inner.CanRead;
+
+        public override bool CanSeek => false;
+
+        public override bool CanWrite => false;
+
+        public override long Length => inner.Length;
+
+        public override long Position { get => inner.Position; set => inner.Position = value; }
+
+        public override void Flush()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int Read()
+        {
+            return inner.ReadByte();
+        }
+
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetLength(long value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            throw new NotImplementedException();
         }
     }
 }

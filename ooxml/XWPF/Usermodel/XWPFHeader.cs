@@ -36,10 +36,17 @@ namespace NPOI.XWPF.UserModel
             ReadHdrFtr();
         }
 
-        public XWPFHeader(POIXMLDocumentPart parent, PackagePart part, PackageRelationship rel)
-            : base(parent, part, rel)
+        public XWPFHeader(POIXMLDocumentPart parent, PackagePart part)
+            : base(parent, part)
         {
             
+        }
+
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public XWPFHeader(POIXMLDocumentPart parent, PackagePart part, PackageRelationship rel)
+            : this(parent, part)
+        {
+
         }
 
         public XWPFHeader(XWPFDocument doc, CT_HdrFtr hdrFtr)
@@ -109,9 +116,11 @@ namespace NPOI.XWPF.UserModel
         {
             base.OnDocumentRead();
             HdrDocument hdrDocument = null;
+            Stream is1 = null;
             try
             {
-                XmlDocument xmldoc = DocumentHelper.LoadDocument(GetPackagePart().GetInputStream());
+                is1 = GetPackagePart().GetInputStream();
+                XmlDocument xmldoc = DocumentHelper.LoadDocument(is1);
                 hdrDocument = HdrDocument.Parse(xmldoc, NamespaceManager);
                 headerFooter = hdrDocument.Hdr;
                 foreach (object o in headerFooter.Items)
@@ -138,6 +147,11 @@ namespace NPOI.XWPF.UserModel
             catch (Exception e)
             {
                 throw new POIXMLException(e);
+            }
+            finally
+            {
+                if (is1 != null)
+                    is1.Close();
             }
         }
         /// <summary>

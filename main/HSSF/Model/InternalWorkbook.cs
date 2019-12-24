@@ -26,9 +26,11 @@ namespace NPOI.HSSF.Model
     using NPOI.HSSF.Util;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
-    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.UDF;
     using NPOI.SS.UserModel;
     using System.Security;
+    using NPOI.POIFS.Crypt;
+    using NPOI.Util;
 
 
     /**
@@ -64,9 +66,21 @@ namespace NPOI.HSSF.Model
          */
         private const int MAX_SENSITIVE_SHEET_NAME_LEN = 31;
 
-        //private static int DEBUG = POILogger.DEBUG;
-
-        //    public static Workbook currentBook = null;
+        /**
+         * Normally, the Workbook will be in a POIFS Stream
+         * called "Workbook". However, some weird XLS generators use "WORKBOOK"
+         */
+        public static readonly string[] WORKBOOK_DIR_ENTRY_NAMES = {
+            "Workbook", // as per BIFF8 spec
+            "WORKBOOK", // Typically from third party programs
+            "BOOK",     // Typically odd Crystal Reports exports
+        };
+        /**
+         * Name of older (pre-Excel 97) Workbook streams, which
+         *  aren't supported by HSSFWorkbook, only by
+         *  {@link OldExcelExtractor}
+         */
+        public static String OLD_WORKBOOK_DIR_ENTRY_NAME = "Book";
 
         /**
          * constant used to Set the "codepage" wherever "codepage" is Set in records
@@ -269,6 +283,10 @@ namespace NPOI.HSSF.Model
                         NameCommentRecord ncr = (NameCommentRecord)rec;
                         retval.commentRecords[ncr.NameText] = ncr;
                         break;
+                    default:
+                        //if (log.check(POILogger.DEBUG))
+                            //log.log(DEBUG, "ignoring record (sid=" + rec.getSid() + ") at " + k);
+                        break;
                 }
                 records.Add(rec);
             }
@@ -287,6 +305,8 @@ namespace NPOI.HSSF.Model
                 {
                     case HyperlinkRecord.sid:
                         retval.hyperlinks.Add((HyperlinkRecord)rec);
+                        break;
+                    default:
                         break;
                 }
             }
@@ -714,10 +734,12 @@ namespace NPOI.HSSF.Model
             boundsheets.Insert(pos, sheet);
 
             // also adjust order of Records, calculate the position of the Boundsheets via getBspos()...
+            int initialBspos = records.Bspos;
             int pos0 = records.Bspos - (boundsheets.Count - 1);
             Record removed = records[(pos0 + sheetNumber)];
             records.Remove(pos0 + sheetNumber);
             records.Add(pos0 + pos, removed);
+            records.Bspos = initialBspos;
         }
 
         /**
@@ -897,11 +919,8 @@ namespace NPOI.HSSF.Model
             if (linkTable != null)
             {
                 // also tell the LinkTable about the removed sheet
-                // +1 because we already removed it from the count of sheets!
-                for (int i = sheetIndex + 1; i < NumSheets + 1; i++)
-                {
-                    linkTable.RemoveSheet(i);
-                }
+                //index hasn't change in the linktable
+                linkTable.RemoveSheet(sheetIndex);
             }
         }
 
@@ -909,9 +928,17 @@ namespace NPOI.HSSF.Model
         /// make the tabid record look like the current situation.
         /// </summary>
         /// <returns>number of bytes written in the TabIdRecord</returns>
-        private int FixTabIdRecord()
+        private void FixTabIdRecord()
         {
-            TabIdRecord tir = (TabIdRecord)records[records.Tabpos];
+            // see bug 55982, quite a number of documents do not have a TabIdRecord and
+            // thus there is no way to do the fixup here,
+            // we use the same check on Tabpos as done in other places
+            if (records.Tabpos <= 0)
+            {
+                return;
+            }
+            Record rec = records[records.Tabpos];
+            TabIdRecord tir = (TabIdRecord)rec;
             int sz = tir.RecordSize;
             short[] tia = new short[boundsheets.Count];
 
@@ -920,7 +947,6 @@ namespace NPOI.HSSF.Model
                 tia[k] = k;
             }
             tir.SetTabIdArray(tia);
-            return tir.RecordSize - sz;
         }
 
         /**
@@ -1995,6 +2021,8 @@ namespace NPOI.HSSF.Model
                     retval.AdtlPaletteOptions=(short)0;
                     retval.FillPaletteOptions=(short)0x20c0;
                     break;
+                default:
+                    throw new InvalidOperationException("Unrecognized format id: " + id);
             }
             return retval;
         }
@@ -2105,6 +2133,8 @@ namespace NPOI.HSSF.Model
                     retval.SetBuiltinStyle(5);
                     retval.OutlineStyleLevel= (unchecked((byte)0xffffffff));
                     break;
+                default:
+                    throw new InvalidOperationException("Unrecognized style id: " + id);
             }
             return retval;
         }
@@ -2982,7 +3012,8 @@ namespace NPOI.HSSF.Model
             FileSharingRecord frec = FileSharing;
             WriteAccessRecord waccess = WriteAccess;
             frec.ReadOnly=((short)1);
-            frec.Password=(FileSharingRecord.HashPassword(password));
+            //frec.Password=(FileSharingRecord.HashPassword(password));
+            frec.Password = (short)CryptoFunctions.CreateXorVerifier1(password);
             frec.Username=(username);
             waccess.Username=(username);
         }
