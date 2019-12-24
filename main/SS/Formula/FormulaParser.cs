@@ -1085,7 +1085,7 @@ namespace NPOI.SS.Formula
             // defined names may begin with a letter or underscore  or backslash
             if (!char.IsLetter(look) && look != '_' && look != '\\')
             {
-                throw expected("number, string, or defined name, or table");
+                throw expected("number, string, defined name, or data table");
             }
             while (IsValidDefinedNameChar(look))
             {

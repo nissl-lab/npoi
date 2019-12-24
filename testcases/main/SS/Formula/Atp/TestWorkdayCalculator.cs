@@ -71,7 +71,7 @@ namespace TestCases.SS.Formula.Atp
         {
             double start = 41553.0;
             int days = 1;
-            Assert.AreEqual(new DateTime(113, 9, 7), WorkdayCalculator.instance.CalculateWorkdays(start, days, new double[0]));
+            Assert.AreEqual(new DateTime(2013, 10, 7), WorkdayCalculator.instance.CalculateWorkdays(start, days, new double[0]));
         }
 
 

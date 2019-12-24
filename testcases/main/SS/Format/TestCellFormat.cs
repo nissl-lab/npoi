@@ -832,9 +832,11 @@ namespace TestCases.SS.Format
         [Test]
         public void TestThreePartComplexFormat1()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             // verify a rather complex format found e.g. in http://wahl.land-oberoesterreich.gv.at/Downloads/bp10.xls
             CellFormatPart posPart = new CellFormatPart("[$-F400]h:mm:ss\\ AM/PM");
             Assert.IsNotNull(posPart);
+            DateTime dateTime = DateUtil.GetJavaDate(12345);
             Assert.AreEqual("1:00:12 AM", posPart.Apply(new DateTime(12345)).Text);
 
             CellFormatPart negPart = new CellFormatPart("[$-F40]h:mm:ss\\ AM/PM");
@@ -850,6 +852,7 @@ namespace TestCases.SS.Format
         [Test]
         public void TestThreePartComplexFormat2()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             // verify a rather complex format found e.g. in http://wahl.land-oberoesterreich.gv.at/Downloads/bp10.xls
             CellFormatPart posPart = new CellFormatPart("dd/mm/yyyy");
             Assert.IsNotNull(posPart);

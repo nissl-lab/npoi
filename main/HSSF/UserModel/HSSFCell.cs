@@ -526,7 +526,7 @@ namespace NPOI.HSSF.UserModel
         /// If value is null then we will Change the cell to a Blank cell.</param>
         public void SetCellValue(String value)
         {
-            HSSFRichTextString str = new HSSFRichTextString(value);
+            HSSFRichTextString str = value == null ? null : new HSSFRichTextString(value);
             SetCellValue(str);
         }
         /**

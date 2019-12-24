@@ -121,6 +121,10 @@ namespace NPOI.SS.Formula.Functions
                     }
                 }
             }
+
+            foreach (var x in toRemove)
+                list.Remove(x);
+
             return innerFunc.Evaluate(list.ToArray(), srcRowIndex, srcColumnIndex);
 
         }

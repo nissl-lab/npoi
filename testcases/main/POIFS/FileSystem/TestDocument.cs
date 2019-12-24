@@ -67,7 +67,7 @@ namespace TestCases.POIFS.FileSystem
          * @exception IOException
          */
         [Test]
-        public void TestPOIFSDocument()
+        public void TestOPOIFSDocument()
         {
 
             // Verify correct number of blocks Get Created for document

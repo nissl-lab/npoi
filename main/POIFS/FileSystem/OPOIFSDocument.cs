@@ -211,13 +211,58 @@ namespace NPOI.POIFS.FileSystem
         /// <param name="offset">the offset into our storage to read from</param>
         public virtual void Read(byte[] buffer, int offset)
         {
-            if (this._property.ShouldUseSmallBlocks)
+            //if (this._property.ShouldUseSmallBlocks)
+            //{
+            //    SmallDocumentBlock.Read(this._small_store.Blocks, buffer, offset);
+            //}
+            //else
+            //{
+            //    DocumentBlock.Read(this._big_store.Blocks, buffer, offset);
+            //}
+            int len = buffer.Length;
+
+            DataInputBlock currentBlock = GetDataInputBlock(offset);
+
+            int blockAvailable = currentBlock.Available();
+            if (blockAvailable > len)
             {
-                SmallDocumentBlock.Read(this._small_store.Blocks, buffer, offset);
+                currentBlock.ReadFully(buffer, 0, len);
+                return;
             }
-            else
+            // else read big amount in chunks
+            int remaining = len;
+            int writePos = 0;
+            int currentOffset = offset;
+            while (remaining > 0)
             {
-                DocumentBlock.Read(this._big_store.Blocks, buffer, offset);
+                bool blockIsExpiring = remaining >= blockAvailable;
+                int reqSize;
+                if (blockIsExpiring)
+                {
+                    reqSize = blockAvailable;
+                }
+                else
+                {
+                    reqSize = remaining;
+                }
+                currentBlock.ReadFully(buffer, writePos, reqSize);
+                remaining -= reqSize;
+                writePos += reqSize;
+                currentOffset += reqSize;
+                if (blockIsExpiring)
+                {
+                    if (currentOffset == _size)
+                    {
+                        if (remaining > 0)
+                        {
+                            throw new InvalidOperationException("reached end of document stream unexpectedly");
+                        }
+                        currentBlock = null;
+                        break;
+                    }
+                    currentBlock = GetDataInputBlock(currentOffset);
+                    blockAvailable = currentBlock.Available();
+                }
             }
         }
 
@@ -237,7 +282,7 @@ namespace NPOI.POIFS.FileSystem
             {
                 if (offset > _size)
                 {
-                    throw new Exception("Request for Offset " + offset + " doc size is " + _size);
+                    throw new RuntimeException("Request for Offset " + offset + " doc size is " + _size);
                 }
 
                 return null;

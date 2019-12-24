@@ -469,13 +469,13 @@ namespace TestCases.HSSF.Model
         [Test]
         public void TestNumbers()
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
 
             HSSFWorkbook wb = new HSSFWorkbook();
 
             wb.CreateSheet("Cash_Flow");
 
-            NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet("Test");
+            ISheet sheet = wb.CreateSheet("Test");
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell((short)0);
             String formula = null;
@@ -1651,8 +1651,8 @@ namespace TestCases.HSSF.Model
 
             ConfirmParseError(wb, "A1:ROUND(B1,1)", "The RHS of the range operator ':' at position 3 is not a proper reference.");
 
-            ConfirmParseError(wb, "Sheet1!!!", "Parse error near char 7 '!' in specified formula 'Sheet1!!!'. Expected number, string, defined name, or table");
-            ConfirmParseError(wb, "Sheet1!.Name", "Parse error near char 7 '.' in specified formula 'Sheet1!.Name'. Expected number, string, defined name, or table");
+            ConfirmParseError(wb, "Sheet1!!!", "Parse error near char 7 '!' in specified formula 'Sheet1!!!'. Expected number, string, defined name, or data table");
+            ConfirmParseError(wb, "Sheet1!.Name", "Parse error near char 7 '.' in specified formula 'Sheet1!.Name'. Expected number, string, defined name, or data table");
             ConfirmParseError(wb, "Sheet1!Sheet1", "Specified name 'Sheet1' for sheet Sheet1 not found");
 
             ConfirmParseError(wb, "Sheet1!F:Sheet1!G", "'Sheet1!F' is not a proper reference.");

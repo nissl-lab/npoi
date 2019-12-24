@@ -62,11 +62,14 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        protected int GetDataSize()
+        protected override int DataSize
         {
-            return FtrHeader.GetDataSize() + base.DataSize;
-        }
+            get
+            {
+                return FtrHeader.GetDataSize() + base.DataSize;
+            }
 
+        }
         public override void Serialize(ILittleEndianOutput out1)
         {
             // Sync the associated range

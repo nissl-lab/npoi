@@ -291,7 +291,8 @@ namespace NPOI.HSSF.Record
             sb.Append("[ftLbsData]\n");
             sb.Append("    .unknownshort1 =").Append(HexDump.ShortToHex(_cbFContinued)).Append("\n");
             sb.Append("    .formula        = ").Append('\n');
-            sb.Append(_linkPtg.ToString()).Append(_linkPtg.RVAType).Append('\n');
+            if (_linkPtg != null)
+                sb.Append(_linkPtg.ToString()).Append(_linkPtg.RVAType).Append('\n');
             sb.Append("    .nEntryCount   =").Append(HexDump.ShortToHex(_cLines)).Append("\n");
             sb.Append("    .selEntryIx    =").Append(HexDump.ShortToHex(_iSel)).Append("\n");
             sb.Append("    .style         =").Append(HexDump.ShortToHex(_flags)).Append("\n");

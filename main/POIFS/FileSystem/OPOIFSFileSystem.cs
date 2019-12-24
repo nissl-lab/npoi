@@ -188,13 +188,12 @@ namespace NPOI.POIFS.FileSystem
         /// <returns>
         /// 	<c>true</c> if [has POIFS header] [the specified inp]; otherwise, <c>false</c>.
         /// </returns>
-        public static bool HasPOIFSHeader(Stream inp){
+        public static bool HasPOIFSHeader(InputStream inp)
+        {
 
-            byte[] header = new byte[8];
-            IOUtils.ReadFully(inp, header);
-            LongField signature = new LongField(HeaderBlockConstants._signature_offset, header);            
-            
-            return (signature.Value == HeaderBlockConstants._signature);
+            // We want to peek at the first 8 bytes
+            byte[] header = IOUtils.PeekFirst8Bytes(inp);
+            return HasPOIFSHeader(header);
         }
         /**
          * Checks if the supplied first 8 bytes of a stream / file

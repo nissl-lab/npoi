@@ -99,19 +99,19 @@ namespace TestCases.SS.Formula.Functions
         {
             // jan
             ConfirmMonthBoundary(false, 2001, 1, 0, 0, 2, 3, 4);
-            ConfirmMonthBoundary(true, 2001, 1, 0, 0, 1, 3, 4);
+            ConfirmMonthBoundary(true, 2001, 1, 0, 0, 1, 2, 3);
             // feb
             ConfirmMonthBoundary(false, 2001, 2, -2, 1, 2, 3, 4);
             ConfirmMonthBoundary(true, 2001, 2, 0, 1, 2, 3, 4);
             // mar
             ConfirmMonthBoundary(false, 2001, 3, 0, 0, 2, 3, 4);
-            ConfirmMonthBoundary(true, 2001, 3, 0, 0, 1, 3, 4);
+            ConfirmMonthBoundary(true, 2001, 3, 0, 0, 1, 2, 3);
             // apr
             ConfirmMonthBoundary(false, 2001, 4, 0, 1, 2, 3, 4);
             ConfirmMonthBoundary(true, 2001, 4, 0, 1, 2, 3, 4);
             // may
             ConfirmMonthBoundary(false, 2001, 5, 0, 0, 2, 3, 4);
-            ConfirmMonthBoundary(true, 2001, 5, 0, 0, 1, 3, 4);
+            ConfirmMonthBoundary(true, 2001, 5, 0, 0, 1, 2, 3);
             // jun
             ConfirmMonthBoundary(false, 2001, 6, 0, 1, 2, 3, 4);
             ConfirmMonthBoundary(true, 2001, 6, 0, 1, 2, 3, 4);

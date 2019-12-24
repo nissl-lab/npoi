@@ -1461,6 +1461,7 @@ namespace TestCases.POIFS.FileSystem
 
             // Save and re-check
             fs = WriteOutAndReadBack(fs);
+            testDir = fs.Root;
 
             miniDoc = (DocumentEntry)testDir.GetEntry("Mini2");
             assertContentsMatches(mini2, miniDoc);

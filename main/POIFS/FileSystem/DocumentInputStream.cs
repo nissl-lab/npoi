@@ -147,7 +147,7 @@ namespace NPOI.POIFS.FileSystem
             return delegate1.Read();
         }
 
-        public virtual int Read(byte[] b)
+        public override int Read(byte[] b)
         {
             return Read(b, 0, b.Length);
         }

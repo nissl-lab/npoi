@@ -462,7 +462,6 @@ namespace NPOI.SS.Format
                 IEnumerator<Special> it = specials.GetRange(idx + 1, specials.Count - idx - 1).GetEnumerator();//.ListIterator(specials.IndexOf(decimalPoint));
                 //if (it.HasNext())
                 //     it.Next();  // skip over the decimal point itself
-                it.MoveNext();
                 while (it.MoveNext())
                 {
                     Special s = it.Current;

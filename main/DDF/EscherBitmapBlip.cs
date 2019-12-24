@@ -35,7 +35,7 @@ namespace NPOI.DDF
 
         private const int HEADER_SIZE = 8;
 
-        private byte[] field_1_UID  = new byte[0];
+        private byte[] field_1_UID  = new byte[16];
         private byte field_2_marker = (byte)0xFF;
 
 

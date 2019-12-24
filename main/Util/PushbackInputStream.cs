@@ -89,7 +89,7 @@ namespace NPOI.Util
             }
             return base.Read();
         }
-        public int read(byte[] b, int off, int len)
+        public override int Read(byte[] b, int off, int len)
         {
             ensureOpen();
             if (b == null)
@@ -155,18 +155,18 @@ namespace NPOI.Util
         /// <exception cref="T:System.ObjectDisposedException">
         /// Methods were called after the stream was closed.
         /// </exception>
-        public override int Read(byte[] buffer, int offset, int count)
-		{
-			if (bufint != -1 && count > 0)
-			{
-				// TODO Can this case be made more efficient?
-				buffer[offset] = (byte) bufint;
-				bufint = -1;
-				return 1;
-			}
+  //      public override int Read(byte[] buffer, int offset, int count)
+		//{
+		//	if (bufint != -1 && count > 0)
+		//	{
+		//		// TODO Can this case be made more efficient?
+		//		buffer[offset] = (byte) bufint;
+		//		bufint = -1;
+		//		return 1;
+		//	}
 
-			return input.Read(buffer, offset, count);
-		}
+		//	return input.Read(buffer, offset, count);
+		//}
 
         /// <summary>
         /// Unreads the specified b.
@@ -225,7 +225,7 @@ namespace NPOI.Util
                 throw new IOException("Push back buffer is full");
             }
             pos -= len;
-            Position -= len;
+            //Position -= len;
             Array.Copy(b, off, buf, pos, len);
         }
         public override long Skip(long n)

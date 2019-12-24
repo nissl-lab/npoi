@@ -40,6 +40,7 @@ namespace TestCases.SS.UserModel
         [SetUp]
         public void SetUpClass()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             // some pre-checks to hunt for a problem in the Maven build
             // these checks ensure that the correct locale is set, so a Assert.Failure here
             // usually indicates an invalid locale during test-execution

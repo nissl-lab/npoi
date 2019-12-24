@@ -97,11 +97,11 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual("2147483648", maxIntPlusOne);
             ConfirmValue("Converts INT_MAX + 1 to hexadecimal", maxIntPlusOne, "80000000");
 
-            String maxLong = "549755813887";
+            String maxLong = (549755813887).ToString();
             Assert.AreEqual("549755813887", maxLong);
             ConfirmValue("Converts the max supported value to hexadecimal", maxLong, "7FFFFFFFFF");
 
-            String minLong = "-549755813888l";
+            String minLong = (-549755813888l).ToString();
             Assert.AreEqual("-549755813888", minLong);
             ConfirmValue("Converts the min supported value to hexadecimal", minLong, "FF80000000");
 

@@ -20,6 +20,7 @@ namespace NPOI.HSSF.Model
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Text;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.SS.Formula;
@@ -2173,7 +2174,6 @@ namespace NPOI.HSSF.Model
 
         public void VisitContainedRecords(RecordVisitor rv, int offset)
         {
-
             PositionTrackingVisitor ptv = new PositionTrackingVisitor(rv, offset);
 
             bool haveSerializedIndex = false;
@@ -2182,7 +2182,6 @@ namespace NPOI.HSSF.Model
             for (int k = 0; k < records.Count; k++)
             {
                 RecordBase record = records[k];
-
                 if (record is RecordAggregate)
                 {
                     RecordAggregate agg = (RecordAggregate)record;
