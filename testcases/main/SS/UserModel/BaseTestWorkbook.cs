@@ -516,7 +516,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(2, ClonedSheet.NumMergedRegions);
 
             ClonedSheet.CreateRow(2).CreateCell(0).SetCellValue(1);
-            ClonedSheet.AddMergedRegion(new CellRangeAddress(0, 2, 0, 2));
+            ClonedSheet.AddMergedRegion(new CellRangeAddress(6, 7, 0, 2));
             Assert.AreEqual(3, ClonedSheet.PhysicalNumberOfRows);
             Assert.AreEqual(3, ClonedSheet.NumMergedRegions);
             book.Close();

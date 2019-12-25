@@ -28,13 +28,10 @@ namespace TestCases.SS.UserModel
      *
      * @author Yegor Kozlov
      */
-    public class BaseTestHyperlink
+    public abstract class BaseTestHyperlink
     {
 
         protected ITestDataProvider _testDataProvider;
-        public BaseTestHyperlink()
-            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
-        {}
 
         /**
          * @param testDataProvider an object that provides test data in HSSF / XSSF specific way
@@ -144,10 +141,7 @@ namespace TestCases.SS.UserModel
             wb.Close();
         }
 
-        public virtual IHyperlink CopyHyperlink(IHyperlink link)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract IHyperlink CopyHyperlink(IHyperlink link);
     }
 
 }

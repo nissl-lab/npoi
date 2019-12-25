@@ -124,8 +124,9 @@ namespace TestCases.SS.UserModel
             sh.CreateRow(version.LastRowIndex);
             try
             {
-                sh.CreateRow(version.LastRowIndex + 1);
-                Assert.Fail("Row number must be between 0 and " + version.LastColumnIndex);
+                Assert.Throws<ArgumentException>(()=> {
+                    sh.CreateRow(version.LastRowIndex + 1);
+                });
             }
             finally
             {

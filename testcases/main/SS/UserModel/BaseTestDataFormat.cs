@@ -131,7 +131,7 @@ namespace TestCases.SS.UserModel
                 IDataFormat dataFormat = wb.CreateDataFormat();
                 short fmtIdx = dataFormat.GetFormat(fmt);
                 String readbackFmt = dataFormat.GetFormat(fmtIdx);
-                Assert.AreEqual(msg, fmt, readbackFmt);
+                Assert.AreEqual(fmt, readbackFmt, msg);
             }
             finally
             {

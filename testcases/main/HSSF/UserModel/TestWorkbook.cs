@@ -693,8 +693,8 @@ namespace TestCases.HSSF.UserModel
                     c.SetCellValue(new HSSFRichTextString("TEST"));
                 }
             }
-            s.AddMergedRegion(new CellRangeAddress(0, (short)0, 10, (short)10));
-            s.AddMergedRegion(new CellRangeAddress(30, 40, (short)5, (short)15));
+            s.AddMergedRegion(new CellRangeAddress(0, 10, 0, 10));
+            s.AddMergedRegion(new CellRangeAddress(30, 40, 5, 15));
             sanityChecker.CheckHSSFWorkbook(wb1);
             HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
 
@@ -702,7 +702,7 @@ namespace TestCases.HSSF.UserModel
             CellRangeAddress r1 = s.GetMergedRegion(0);
             CellRangeAddress r2 = s.GetMergedRegion(1);
 
-            ConfirmRegion(new CellRangeAddress(0, 0, 10, 10), r1);
+            ConfirmRegion(new CellRangeAddress(0, 10, 0, 10), r1);
             ConfirmRegion(new CellRangeAddress(30, 40, 5, 15), r2);
 
             wb2.Close();
