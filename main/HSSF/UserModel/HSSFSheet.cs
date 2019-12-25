@@ -1245,11 +1245,11 @@ namespace NPOI.HSSF.UserModel
         /// Gets the hashed password
         /// </summary>
         /// <value>The password.</value>
-        public int Password
+        public short Password
         {
             get
             {
-                return ProtectionBlock.PasswordHash;
+                return (short)ProtectionBlock.PasswordHash;
             }
         }
 
