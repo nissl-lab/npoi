@@ -521,25 +521,6 @@ namespace TestCases.HSSF.UserModel
 
             wb.Close();
         }
-        [Test]
-        public void Test58607()
-        {
-            //HSSFWorkbook wb = new HSSFWorkbook();
-            //HSSFCellStyle style = wb.CreateCellStyle() as HSSFCellStyle;
-            //style.DataFormat = wb.CreateDataFormat().GetFormat("dd/MM/yyyy HH:mm:ss");
-            //ICell cell = wb.CreateSheet("test").CreateRow(0).CreateCell(0);
-            //cell.SetCellType(CellType.Numeric);
-            //cell.CellStyle = style;
-            //cell.SetCellValue(DateTime.Now);
-            //FileStream out1 = new FileStream("C:\\temp\\58607.xls", FileMode.Create, FileAccess.ReadWrite);
-            //try
-            //{
-            //    wb.Write(out1);
-            //}
-            //finally
-            //{
-            //    out1.Close();
-            //}
-        }
+        
     }
 }
