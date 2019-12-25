@@ -193,6 +193,8 @@ namespace NPOI.POIFS.FileSystem
                 // Initialize the datasource
                 if (srcFile != null)
                 {
+                    if (srcFile.Length == 0)
+                        throw new EmptyFileException();
                     //FileBackedDataSource d = new FileBackedDataSource(srcFile, readOnly);
                     channel = new FileStream(srcFile.FullName, FileMode.Open, FileAccess.Read);
                     _data = new FileBackedDataSource(channel, readOnly);

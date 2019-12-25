@@ -91,10 +91,12 @@ namespace NPOI.HPSF
 
         public void SetJavaValue(String aString, int codepage)
         {
+            String stringNT = aString + "\0";
             if (codepage == -1)
-                _value = Encoding.UTF8.GetBytes(aString + "\0");
+                _value = Encoding.UTF8.GetBytes(stringNT);
             else
-                _value = Encoding.GetEncoding(codepage).GetBytes(aString + "\0");
+                _value = CodePageUtil.GetBytesInCodePage(stringNT, codepage);
+                //_value = Encoding.GetEncoding(codepage).GetBytes(aString + "\0");
         }
 
         public int Write(Stream out1)

@@ -837,8 +837,7 @@ namespace TestCases.HPSF.Basic
             out1.Close();
 
             // Open the copy in Read/write mode
-            fs = new NPOIFSFileSystem(new FileStream(copy.FullName, FileMode.Open, FileAccess.ReadWrite),
-                null, false, true);
+            fs = new NPOIFSFileSystem(copy, false);
             root = fs.Root;
 
             // Read the properties in there
@@ -1046,15 +1045,16 @@ namespace TestCases.HPSF.Basic
                 m[1] = "String 1";
                 m[2] = "String 2";
                 m[3] = "String 3";
-
+                
                 try
                 {
-                    s.Dictionary = m;
-                    s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
-                    s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, 12345);
-                    poiFs.CreateDocument(ps1.ToInputStream(), "Test");
-                    poiFs.WriteFileSystem(copy);
-                    Assert.Fail("This Testcase did not detect the invalid codepage value.");
+                    Assert.Throws<IllegalPropertySetDataException>(() => {
+                        s.Dictionary = m;
+                        s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
+                        s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, 12345);
+                        poiFs.CreateDocument(ps1.ToInputStream(), "Test");
+                        poiFs.WriteFileSystem(copy);
+                    });
                 }
                 finally
                 {
