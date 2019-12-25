@@ -3057,32 +3057,25 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void Bug56325a()
         {
-            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("56325a.xls");
+            HSSFWorkbook wb1 = HSSFTestDataSamples.OpenSampleWorkbook("56325a.xls");
 
-            HSSFSheet sheet = wb.CloneSheet(2) as HSSFSheet;
-            wb.SetSheetName(3, "Clone 1");
+            HSSFSheet sheet = wb1.CloneSheet(2) as HSSFSheet;
+            wb1.SetSheetName(3, "Clone 1");
             sheet.RepeatingRows = (/*setter*/CellRangeAddress.ValueOf("2:3"));
-            wb.SetPrintArea(3, "$A$4:$C$10");
+            wb1.SetPrintArea(3, "$A$4:$C$10");
 
-            sheet = wb.CloneSheet(2) as HSSFSheet;
-            wb.SetSheetName(4, "Clone 2");
+            sheet = wb1.CloneSheet(2) as HSSFSheet;
+            wb1.SetSheetName(4, "Clone 2");
             sheet.RepeatingRows = (/*setter*/CellRangeAddress.ValueOf("2:3"));
-            wb.SetPrintArea(4, "$A$4:$C$10");
+            wb1.SetPrintArea(4, "$A$4:$C$10");
 
-            wb.RemoveSheetAt(2);
+            wb1.RemoveSheetAt(2);
 
-            IWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            Assert.AreEqual(4, wbBack.NumberOfSheets);
+            IWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            Assert.AreEqual(4, wb2.NumberOfSheets);
 
-            FileStream fOut = new FileStream("c:\\temp\\56325a.xls", FileMode.Create, FileAccess.ReadWrite);
-            try
-            {
-                wb.Write(fOut);
-            }
-            finally
-            {
-                fOut.Close();
-            }
+            wb2.Close();
+            wb1.Close();
         }
 
 
@@ -3366,10 +3359,9 @@ namespace TestCases.HSSF.UserModel
                 bimage = Bitmap.FromStream(ms);
                 ms.Close();
             }
-            catch (IOException e)
+            catch (WebException)
             {
                 //Assume.assumeNoException("Downloading a jpg from poi.apache.org should work", e);
-                Assert.Fail("Downloading a jpg from poi.apache.org should work");
                 return;
             }
             // Convert BufferedImage to byte[]
