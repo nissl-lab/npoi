@@ -338,6 +338,7 @@
     <Compile Include="XWPF\Usermodel\XWPFDefaultParagraphStyle.cs" />
     <Compile Include="XWPF\Usermodel\XWPFDefaultRunStyle.cs" />
     <Compile Include="XWPF\Usermodel\XWPFDocument.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFRad.cs" />
     <Compile Include="XWPF\Usermodel\XWPFF.cs" />
     <Compile Include="XWPF\Usermodel\XWPFFactory.cs" />
     <Compile Include="XWPF\Usermodel\XWPFFieldRun.cs" />
@@ -365,6 +366,7 @@
     <Compile Include="XWPF\Usermodel\XWPFSDTContentCell.cs" />
     <Compile Include="XWPF\Usermodel\XWPFSettings.cs" />
     <Compile Include="XWPF\Usermodel\XWPFSharedRun.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFSSup.cs" />
     <Compile Include="XWPF\Usermodel\XWPFSSub.cs" />
     <Compile Include="XWPF\Usermodel\XWPFStyle.cs" />
     <Compile Include="XWPF\Usermodel\XWPFStyles.cs" />
