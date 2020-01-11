@@ -24,6 +24,7 @@ To follow us, please visit http://www.linkedin.com/company/neuzilla
 Advantage of NPOI
 =================
 a. It's totally free to use
+
 b. Cover most features of Excel (cell style, data format, formula and so on)
 
 c. Professional support service (even 24*7) from NPOI team (not free)
@@ -43,8 +44,6 @@ i. huge amout of basic examples
 Neuzilla on SNS
 ============
 Linkedin Group: https://www.linkedin.com/groups/6655065/
-
-Twitter: http://twitter.com/tonyqus
 
 QQ Group: 189925337, 20144214
 
