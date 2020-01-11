@@ -1037,7 +1037,8 @@ namespace NPOI.XSSF.UserModel
         {
             FileInfo file = TempFile.CreateTempFile("TestBug56957_", ".xlsx");
             //String dateExp = "Sun Nov 09 00:00:00 CET 2014";
-            DateTime dateExp = LocaleUtil.GetLocaleCalendar(2014, 10, 9);
+            DateTime dateExp = LocaleUtil.GetLocaleCalendar(2014, 11, 9);
+            IWorkbook workbook = null;
             try
             {
                 // as the file is written to, we make a copy before actually working on it
@@ -1046,7 +1047,7 @@ namespace NPOI.XSSF.UserModel
                 Assert.IsTrue(file.Exists);
 
                 // read-only mode works!
-                IWorkbook workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ));
+                workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ));
                 DateTime dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
                 Assert.AreEqual(dateExp, dateAct);
                 workbook.Close();
@@ -1073,6 +1074,10 @@ namespace NPOI.XSSF.UserModel
             }
             finally
             {
+                if (workbook != null)
+                {
+                    workbook.Close();
+                }
                 Assert.IsTrue(file.Exists);
                 file.Delete();
                 Assert.IsTrue(!file.Exists);

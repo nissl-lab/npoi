@@ -929,7 +929,7 @@ namespace NPOI.XSSF.UserModel
         private void ValidateSheetName(String sheetName)
         {
             if (ContainsSheet(sheetName, sheets.Count))
-                throw new ArgumentException("The workbook already contains a sheet of this name");
+                throw new ArgumentException($"The workbook already contains a sheet named '{sheetName}'");
         }
         protected XSSFDialogsheet CreateDialogsheet(String sheetname, CT_Dialogsheet dialogsheet)
         {
@@ -1296,8 +1296,11 @@ namespace NPOI.XSSF.UserModel
          */
         public void RemoveName(IName name)
         {
-            if (!RemoveMapping(name.NameName.ToLower(), name as XSSFName)
-                    || !namedRanges.Remove(name as XSSFName))
+            if (!RemoveMapping(name.NameName.ToLower(), name as XSSFName))
+            {
+                throw new ArgumentException("Name was not found: " + name);
+            }
+            if (!namedRanges.Remove((XSSFName)name))
             {
                 throw new ArgumentException("Name was not found: " + name);
             }
@@ -1644,7 +1647,7 @@ namespace NPOI.XSSF.UserModel
 
             // Check it isn't already taken
             if (ContainsSheet(sheetname, sheetIndex))
-                throw new ArgumentException("The workbook already contains a sheet of this name");
+                throw new ArgumentException($"The workbook already contains a sheet named '{sheetname}'");
 
             // Update references to the name
             XSSFFormulaUtils utils = new XSSFFormulaUtils(this);

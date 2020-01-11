@@ -188,7 +188,7 @@ namespace NPOI.XSSF.Streaming
          * @param rownum 0-based row number
          * @param row    a row
          */
-        public void WriteRow(int rownum, IRow row)
+        public void WriteRow(int rownum, SXSSFRow row)
         {
             if (NumberOfFlushedRows == 0)
             {
@@ -208,7 +208,7 @@ namespace NPOI.XSSF.Streaming
             EndRow();
         }
 
-        private void BeginRow(int rownum, IRow row1)
+        private void BeginRow(int rownum, SXSSFRow row1)
         {
             SXSSFRow row = row1 as SXSSFRow;
             WriteAsBytes(OutputStream, "<row r=\"" + (rownum + 1) + "\"");

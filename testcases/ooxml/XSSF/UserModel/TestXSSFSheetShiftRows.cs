@@ -425,48 +425,6 @@ namespace NPOI.XSSF.UserModel
             wb.Close();
         }
 
-        // This test is written as expected-to-fail and should be rewritten
-        // as expected-to-pass when the bug is fixed.
-        //@Ignore("Bug 59733 - shiftRows() causes org.apache.xmlbeans.impl.values.XmlValueDisconnectedException")
-        [Test]
-        public void Bug59733()
-        {
-            IWorkbook workbook = new XSSFWorkbook();
-            ISheet sheet = workbook.CreateSheet();
-            for (int r = 0; r <= 3; r++)
-            {
-                sheet.CreateRow(r);
-            }
-            // Shift the 2nd row on top of the 0th row
-            sheet.ShiftRows(2, 2, -2);
-
-            /*
-             * The following error is thrown when shifting the 3rd row on top of the 0th row
-             * If the rows are not created, the error does not occur
-             *
-            org.apache.xmlbeans.impl.values.XmlValueDisconnectedException
-                at org.apache.xmlbeans.impl.values.XmlObjectBase.check_orphaned(XmlObjectBase.java:1258)
-                at org.Openxmlformats.schemas.spreadsheetml.x2006.main.impl.CTRowImpl.GetR(Unknown Source)
-                at org.apache.poi.xssf.usermodel.XSSFRow.GetRowNum(XSSFRow.java:363)
-                at org.apache.poi.xssf.usermodel.XSSFSheet.shiftRows(XSSFSheet.java:2926)
-                at org.apache.poi.xssf.usermodel.XSSFSheet.shiftRows(XSSFSheet.java:2901)
-                at org.apache.poi.xssf.usermodel.TestXSSFSheetShiftRows.bug59733(TestXSSFSheetShiftRows.java:393)
-             */
-            try
-            {
-                sheet.RemoveRow(sheet.GetRow(0));
-                Assert.AreEqual(1, sheet.GetRow(1).RowNum);
-                POITestCase.TestPassesNow(59733);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-                POITestCase.SkipTest(e);
-            }
-
-            workbook.Close();
-        }
         private static String getCellFormula(ISheet sheet, String address)
         {
             CellAddress cellAddress = new CellAddress(address);

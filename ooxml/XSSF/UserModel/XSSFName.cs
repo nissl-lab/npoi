@@ -349,7 +349,7 @@ namespace NPOI.XSSF.UserModel
             if (!(o is XSSFName)) return false;
 
             XSSFName cf = (XSSFName)o;
-            return _ctName.name == cf.GetCTName().name && _ctName.localSheetId == cf.GetCTName().localSheetId;
+            return _ctName.name == cf.GetCTName().name && _ctName.localSheetId == cf.GetCTName().localSheetId && _ctName.Value==cf.RefersToFormula ;
         }
 
         private static void ValidateName(String name)

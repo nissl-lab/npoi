@@ -28,13 +28,13 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
     class SheetDataWriterTests
     {
         private SheetDataWriter _objectToTest;
-        private IRow _row;
+        private SXSSFRow _row;
         private ICell _cell;
 
         [SetUp]
         public void Init()
         {
-            _row = Substitute.For<IRow>();
+            _row = Substitute.For<SXSSFRow>();
             _cell = Substitute.For<ICell>();
         }
 

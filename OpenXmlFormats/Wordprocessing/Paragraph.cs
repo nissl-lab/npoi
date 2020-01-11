@@ -2873,20 +2873,28 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         public int SizeOfHeaderReferenceArray()
         {
+            if (headerReferenceField == null)
+                return 0;
             return headerReferenceField.Count;
         }
         public CT_HdrFtrRef GetHeaderReferenceArray(int i)
         {
+            if (headerReferenceField == null)
+                return null;
             return headerReferenceField[i];
         }
 
         public int SizeOfFooterReferenceArray()
         {
+            if (footerReferenceField == null)
+                return 0;
             return footerReferenceField.Count;
         }
 
         public CT_HdrFtrRef GetFooterReferenceArray(int i)
         {
+            if (footerReferenceField == null)
+                return null;
             return footerReferenceField[i];
         }
 

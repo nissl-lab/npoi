@@ -120,7 +120,7 @@ namespace NPOI.POIFS.Macros
                 Module module = entry.Value;
                 if (module.buf != null && module.buf.Length > 0)
                 { // Skip empty modules
-                    moduleSources.Add(entry.Key, modules.charset.GetString(module.buf));
+                    moduleSources.Add(entry.Key, ModuleMap.charset.GetString(module.buf));
                 }
             }
             return moduleSources;
@@ -140,7 +140,14 @@ namespace NPOI.POIFS.Macros
         }
         protected class ModuleMap : Dictionary<String, Module>
         {
-            public Encoding charset = Encoding.GetEncoding(1252);
+            static ModuleMap()
+            {
+#if NETSTANDARD2_0
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+#endif
+                charset =Encoding.GetEncoding(1252);
+            }
+            public static Encoding charset = null;
             //Charset charset = Charset.ForName("Cp1252"); // default charset
             public Module Get(string key)
             {
@@ -353,10 +360,10 @@ namespace NPOI.POIFS.Macros
                                         break;
                                     case PROJECTCODEPAGE:
                                         int codepage = in1.ReadShort();
-                                        modules.charset = Encoding.GetEncoding(codepage); //Charset.ForName("Cp" + codepage);
+                                        ModuleMap.charset = Encoding.GetEncoding(codepage); //Charset.ForName("Cp" + codepage);
                                         break;
                                     case STREAMNAME:
-                                        streamName = ReadString(in1, recordLength, modules.charset);
+                                        streamName = ReadString(in1, recordLength, ModuleMap.charset);
                                         break;
                                     case MODULEOFFSET:
                                         ReadModule(in1, streamName, modules);
