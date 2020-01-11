@@ -1,4 +1,4 @@
-/* ====================================================================
+﻿/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
@@ -73,7 +73,8 @@ namespace NPOI.SS.Formula.Functions
             // CURRENTLY FAILS: result: "SSUnd"+scharfes
             // LibreOffice 5.0.3.2 behavior: "Sund"+scharfes
             // Excel 2013 behavior: ???
-            Confirm("PROPER(\"" + scharfes + "und" + scharfes + "\")", "SSund" + scharfes);
+            //Confirm("PROPER(\"" + scharfes + "und" + scharfes + "\")", "SSund" + scharfes);
+            Confirm("PROPER(\"" + scharfes + "und" + scharfes + "\")", "ßund" + scharfes); //should be ß in .net framework
 
             // also test longer string
             StringBuilder builder = new StringBuilder("A");
@@ -114,8 +115,10 @@ namespace NPOI.SS.Formula.Functions
             checkProper("aBc/\u00C4\u00F6\u00DF\u00FC/ABC", "Abc/\u00C4\u00F6\u00DF\u00FC/Abc");  // Some German umlauts with uppercase first letter is not changed
             checkProper("\u00FC", "\u00DC");
             checkProper("\u00DC", "\u00DC");
-            checkProper("\u00DF", "SS");    // German "scharfes s" is uppercased to "SS"
-            checkProper("\u00DFomesing", "SSomesing");    // German "scharfes s" is uppercased to "SS"
+            //checkProper("\u00DF", "SS");    // German "scharfes s" is uppercased to "SS"
+            checkProper("\u00DF", "ß");  //should be ß in .net framework
+            //checkProper("\u00DFomesing", "SSomesing");    // German "scharfes s" is uppercased to "SS"
+            checkProper("\u00DFomesing", "ßomesing");   //should be ß in .net framework
             checkProper("aBc/\u00FC\u00C4\u00F6\u00DF\u00FC/ABC", "Abc/\u00DC\u00E4\u00F6\u00DF\u00FC/Abc");  // Some German umlauts with lowercase first letter is changed to uppercase
         }
         [Test]
