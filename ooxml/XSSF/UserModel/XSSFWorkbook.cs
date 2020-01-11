@@ -582,7 +582,7 @@ namespace NPOI.XSSF.UserModel
          *         name is invalid
          * @throws POIXMLException if there were errors when cloning
          */
-        public XSSFSheet CloneSheet(int sheetNum, String newName)
+        public ISheet CloneSheet(int sheetNum, String newName)
         {
             ValidateSheetIndex(sheetNum);
 
@@ -624,7 +624,7 @@ namespace NPOI.XSSF.UserModel
                     if (pr.TargetMode == TargetMode.Internal)
                     {
                         clonedSheet.GetPackagePart().AddExternalRelationship
-                            (pr.TargetUri.ToString(), pr.RelationshipType, pr.Id);
+                            (pr.TargetUri.ToString(), pr.RelationshipType, null);
                     }
                 }
             }
@@ -637,7 +637,7 @@ namespace NPOI.XSSF.UserModel
             {
                 using (MemoryStream out1 = new MemoryStream())
                 {
-                    this.Write(out1);
+                    srcSheet.Write(out1);
                     clonedSheet.Read(new MemoryStream(out1.ToArray()));
                 }
             }
@@ -1044,7 +1044,10 @@ namespace NPOI.XSSF.UserModel
         public IList<IName> GetNames(String name)
         {
             var ret = new List<IName>();
-            ret.AddRange(namedRangesByName[name.ToLower()]);
+            if (namedRangesByName.ContainsKey(name.ToLower()))
+            {
+                ret.AddRange(namedRangesByName[name.ToLower()]);
+            }
             return ret.AsReadOnly();
             //return Collections.unmodifiableList(namedRangesByName.get(name.toLowerCase(Locale.ENGLISH)));
         }
@@ -1266,7 +1269,6 @@ namespace NPOI.XSSF.UserModel
             RemoveName(GetNameAt(nameIndex));
             //namedRanges.RemoveAt(nameIndex);
         }
-        [Obsolete("deprecated 3.16. New projects should use {@link #removeName(Name)}.")]
         public void RemoveName(String name)
         {
             List<XSSFName> names = namedRangesByName[name.ToLower()];
@@ -1300,7 +1302,7 @@ namespace NPOI.XSSF.UserModel
                 throw new ArgumentException("Name was not found: " + name);
             }
         }
-        void updateName(XSSFName name, String oldName)
+        internal void UpdateName(XSSFName name, String oldName)
         {
             if (!RemoveMapping(oldName.ToLower(), name))
             {
@@ -1565,6 +1567,9 @@ namespace NPOI.XSSF.UserModel
 
         public XSSFName GetBuiltInName(String builtInCode, int sheetNumber)
         {
+            if (!namedRangesByName.ContainsKey(builtInCode.ToLower()))
+                return null;
+            
             foreach (XSSFName name in namedRangesByName[builtInCode.ToLower()])
             {
                 if (name.SheetIndex == sheetNumber)

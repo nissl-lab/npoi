@@ -235,7 +235,7 @@ namespace NPOI.XSSF.UserModel
             int size = pivotArea.LastCell.Col - pivotArea.FirstCell.Col + 1;
             if (columnIndex < 0 || columnIndex >= size)
             {
-                throw new IndexOutOfRangeException("Column Index: " + columnIndex + ", Size: " + size);
+                throw new ArgumentOutOfRangeException("Column Index: " + columnIndex + ", Size: " + size);
             }
         }
 

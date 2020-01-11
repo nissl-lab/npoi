@@ -72,7 +72,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             String filename = "OPCCompliance_DerivedPartNameFail.docx";
             try
             {
-                OPCPackage.Open(POIDataSamples.GetOpenXml4NetInstance().OpenResourceAsStream(filename));
+                OPCPackage.Open(POIDataSamples.GetOpenXML4JInstance().OpenResourceAsStream(filename));
             }
             catch (InvalidFormatException e)
             {

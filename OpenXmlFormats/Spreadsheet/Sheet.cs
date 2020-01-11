@@ -8038,14 +8038,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_IgnoredError AddNewIgnoredError()
         {
-            throw new NotImplementedException();
+            if (this.ignoredError == null)
+            {
+                this.ignoredError = new List<CT_IgnoredError>();
+            }
+            CT_IgnoredError ie = new CT_IgnoredError();
+            ignoredError.Add(ie);
+            return ie;
         }
-
         internal CT_IgnoredError GetIgnoredErrorArray(int v)
         {
-            throw new NotImplementedException();
+            if (this.ignoredError == null)
+            {
+                return null;
+            }
+            return ignoredErrorField[v];
         }
-
         public List<CT_IgnoredError> ignoredError
         {
             get

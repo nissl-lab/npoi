@@ -507,6 +507,10 @@ namespace NPOI.XSSF.UserModel
         {
             ThemesTable themes = GetThemesTable();
             int pos = 0;
+            if (st.r == null)
+            {
+                return null;
+            }
             foreach (CT_RElt r in st.r)
             {
                 int length = r.t.Length;

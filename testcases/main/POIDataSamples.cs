@@ -106,6 +106,8 @@ namespace TestCases
             if (_instXmlDSign == null) _instXmlDSign = new POIDataSamples("xmldsign");
             return _instXmlDSign;
         }
+
+
         /**
  * Opens a test sample file from the 'data' sub-package of this class's package. 
  * @return <c>null</c> if the sample file is1 not deployed on the classpath.
@@ -140,12 +142,17 @@ namespace TestCases
             _resolvedDataDir = dataDir + Path.DirectorySeparatorChar;
         }
 
-        /**
- * Opens a sample file from the standard HSSF test data directory
- * 
- * @return an Open <c>Stream</c> for the specified sample file
- */
-        public Stream OpenResourceAsStream(String sampleFileName)
+        public string ResolvedDataDir
+        {
+            get { return _resolvedDataDir; }
+        }
+
+    /**
+* Opens a sample file from the standard HSSF test data directory
+* 
+* @return an Open <c>Stream</c> for the specified sample file
+*/
+    public Stream OpenResourceAsStream(String sampleFileName)
         {
             Initialise();
 

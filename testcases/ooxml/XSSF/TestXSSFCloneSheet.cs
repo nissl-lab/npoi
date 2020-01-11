@@ -43,8 +43,8 @@ namespace NPOI.XSSF
 
         [Test]
         public void TestCloneSheetIntStringValidName() {
-            XSSFSheet Cloned = wb.CloneSheet(0, OTHER_SHEET_NAME);
-            Assert.AreEqual(OTHER_SHEET_NAME, Cloned.SheetName);
+            ISheet cloned = wb.CloneSheet(0, OTHER_SHEET_NAME);
+            Assert.AreEqual(OTHER_SHEET_NAME, cloned.SheetName);
             Assert.AreEqual(2, wb.NumberOfSheets);
         }
 

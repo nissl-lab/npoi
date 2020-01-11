@@ -146,21 +146,21 @@ namespace NPOI.XSSF.UserModel
             set
             {
                 ValidateName(value);
-
+                String oldName = NameName;
                 int sheetIndex = SheetIndex;
-                int numberOfNames = _workbook.NumberOfNames;
+                
                 //Check to ensure no other names have the same case-insensitive name at the same scope
-                for (int i = 0; i < numberOfNames; i++)
+                foreach (XSSFName foundName in _workbook.GetNames(value))
                 {
-                    IName nm = _workbook.GetNameAt(i);
-                    if (nm != this && value.Equals(nm.NameName, StringComparison.InvariantCultureIgnoreCase)
-                            && sheetIndex == nm.SheetIndex)
+                    if (foundName != this && sheetIndex == foundName.SheetIndex)
                     {
                         String msg = "The " + (sheetIndex == -1 ? "workbook" : "sheet") + " already contains this name: " + value;
                         throw new ArgumentException(msg);
                     }
                 }
                 _ctName.name = value;
+                //Need to update the name -> named ranges map
+                _workbook.UpdateName(this, oldName);
             }
         }
 
