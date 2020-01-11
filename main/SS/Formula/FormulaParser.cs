@@ -2390,7 +2390,7 @@ namespace NPOI.SS.Formula
             if (_pointer <= _formulaLength)
             {
                 String msg = "Unused input [" + _formulaString.Substring(_pointer - 1)
-                    + "] after attempting To Parse the formula [" + _formulaString + "]";
+                    + "] after attempting to parse the formula [" + _formulaString + "]";
                 throw new FormulaParseException(msg);
             }
         }
