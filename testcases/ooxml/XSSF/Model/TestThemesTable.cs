@@ -111,7 +111,7 @@ namespace NPOI.XSSF.Model
                     // Theme colours aren't tinted
                     Assert.AreEqual(color.HasTint, false);
                     // Check the RGB part (no tint)
-                    Assert.AreEqual(rgbExpected[expectedThemeIdx], HexDump.ToHex(color.RGB),
+                    Assert.AreEqual(rgbExpected[expectedThemeIdx], HexDump.EncodeHexString(color.RGB),
                             "Wrong theme colour " + themeElem.name + " on " + whatWorkbook);
                     
                     long themeIdx = font.GetCTFont().GetColorArray(0).theme;
@@ -188,7 +188,7 @@ namespace NPOI.XSSF.Model
                 color = style.GetFont().GetXSSFColor();
                 Assert.AreEqual(true, color.IsThemed);
                 Assert.AreEqual(idx, color.Theme);
-                Assert.AreEqual(rgbExpected[idx], HexDump.ToHex(color.RGB));
+                Assert.AreEqual(rgbExpected[idx], HexDump.EncodeHexString(color.RGB));
                 //  B: Theme Based, Foreground
                 cell = row.GetCell(1) as XSSFCell;
                 style = cell.CellStyle as XSSFCellStyle;
@@ -199,7 +199,7 @@ namespace NPOI.XSSF.Model
                 {
                     Assert.AreEqual(true, color.IsThemed);
                     Assert.AreEqual(idx, color.Theme);
-                    Assert.AreEqual(rgbExpected[idx], HexDump.ToHex(color.RGB));
+                    Assert.AreEqual(rgbExpected[idx], HexDump.EncodeHexString(color.RGB));
                 }
                 else
                 {

@@ -360,7 +360,8 @@ namespace NPOI.XSSF.Streaming
 
             public void Dispose()
             {
-                throw new NotImplementedException();
+                if (_cells != null)
+                    _cells.Clear();
             }
 
             public IEnumerator<ICell> GetEnumerator()

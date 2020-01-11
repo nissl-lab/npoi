@@ -1320,7 +1320,7 @@ namespace TestCases.HSSF.UserModel
             assertCloseDoesNotModifyFile(filename, wb);
 
             // InputStream
-            wb = new HSSFWorkbook(file.Create());
+            wb = new HSSFWorkbook(file.OpenRead());
             assertCloseDoesNotModifyFile(filename, wb);
         }
 

@@ -190,6 +190,8 @@ namespace NPOI.XSSF.Model
 
     public class ThemeElement
     {
+
+        private static SortedDictionary<int, ThemeElement> values = new SortedDictionary<int, ThemeElement>();
         public static ThemeElement LT1 = new ThemeElement(0, "Lt1");
         public static ThemeElement DK1 = new ThemeElement(1, "Dk1");
         public static ThemeElement LT2 = new ThemeElement(2, "Lt2");
@@ -203,7 +205,6 @@ namespace NPOI.XSSF.Model
         public static ThemeElement HLINK = new ThemeElement(10, "Hlink");
         public static ThemeElement FOLHLINK = new ThemeElement(11, "FolHlink");
         public static ThemeElement UNKNOWN = new ThemeElement(-1,null);
-        private static SortedDictionary<int, ThemeElement> values = new SortedDictionary<int, ThemeElement>();
 
         public static ThemeElement ById(int idx)
         {

@@ -282,7 +282,7 @@ namespace TestCases.SS.UserModel
             catch (ArgumentException e)
             {
                 // expected during successful Test
-                Assert.AreEqual("The workbook already contains a sheet named 'My very long sheet name which is longer than 31 chars and sheetName2.substring(0, 31) == sheetName1.substring(0, 31)'", e.Message);
+                Assert.AreEqual("The workbook already contains a sheet named 'My very long sheet name which is longer than 31 chars and sheetName2.Substring(0, 31) == sheetName1.Substring(0, 31)'", e.Message);
             }
 
             String sheetName3 = "POI allows creating sheets with names longer than 31 characters";

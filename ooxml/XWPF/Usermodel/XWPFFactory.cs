@@ -58,8 +58,18 @@ namespace NPOI.XWPF.UserModel
 
         protected override POIXMLDocumentPart CreateDocumentPart(Type cls, Type[] classes, Object[] values)
         {
+            if (classes == null)
+            {
+                classes = new Type[0];
+            }
             ConstructorInfo constructor = cls.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public,
                     null, classes, null);
+            if (constructor == null)
+                throw new MissingMethodException();
+            if (values == null)
+            {
+                values = new object[0];
+            }
             return constructor.Invoke(values) as POIXMLDocumentPart;
         }
 
