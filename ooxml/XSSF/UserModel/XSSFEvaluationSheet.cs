@@ -73,7 +73,12 @@ namespace NPOI.XSSF.UserModel
             }
 
             CellKey key = new CellKey(rowIndex, columnIndex);
-            IEvaluationCell evalcell = _cellCache[key];
+
+            IEvaluationCell evalcell = null;
+            if (_cellCache.ContainsKey(key))
+            {
+                evalcell = _cellCache[key];           
+            }           
 
             // If cache is stale, update cache with this one cell
             // This is a compromise between rebuilding the entire cache

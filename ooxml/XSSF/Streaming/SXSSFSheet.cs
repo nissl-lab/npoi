@@ -591,6 +591,11 @@ namespace NPOI.XSSF.Streaming
             throw new NotImplementedException();
         }
 
+        public ISheet CopySheet(string Name,string newName, bool copyStyle)
+        {
+            throw new NotImplementedException();
+        }
+
         public ISheet CopySheet(string Name, bool copyStyle)
         {
             throw new NotImplementedException();

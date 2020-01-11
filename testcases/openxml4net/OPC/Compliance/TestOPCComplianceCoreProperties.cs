@@ -164,7 +164,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         {
             String sampleFileName = "OPCCompliance_CoreProperties_OnlyOneCorePropertiesPart.docx";
             OPCPackage pkg = null;
-            pkg = OPCPackage.Open(POIDataSamples.GetOpenXml4NetInstance().GetFile(sampleFileName));
+            pkg = OPCPackage.Open(POIDataSamples.GetOpenXML4JInstance().GetFile(sampleFileName));
 
 
             Uri partUri = CreateURI("/docProps/core2.xml");
@@ -241,7 +241,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         public void TestNoCoreProperties_saveNew()
         {
             String sampleFileName = "OPCCompliance_NoCoreProperties.xlsx";
-            OPCPackage pkg = OPCPackage.Open(POIDataSamples.GetOpenXml4NetInstance().GetFileInfo(sampleFileName).FullName);
+            OPCPackage pkg = OPCPackage.Open(POIDataSamples.GetOpenXML4JInstance().GetFileInfo(sampleFileName).FullName);
 
             // Verify it has empty properties
             Assert.AreEqual(0, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
@@ -265,7 +265,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             pkg.Close();
 
             // Open a new copy of it
-            pkg = OPCPackage.Open(POIDataSamples.GetOpenXml4NetInstance().GetFileInfo(sampleFileName).FullName);
+            pkg = OPCPackage.Open(POIDataSamples.GetOpenXML4JInstance().GetFileInfo(sampleFileName).FullName);
 
             // Save and re-load, without having touched the properties yet
             baos = new MemoryStream();
@@ -295,7 +295,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             // Copy this into a temp file, so we can play with it
             FileInfo tmp = TempFile.CreateTempFile("poi-test", ".opc");
             FileStream out1 = new FileStream(tmp.FullName, FileMode.Create, FileAccess.ReadWrite);
-            Stream in1 = POIDataSamples.GetOpenXml4NetInstance().OpenResourceAsStream(sampleFileName);
+            Stream in1 = POIDataSamples.GetOpenXML4JInstance().OpenResourceAsStream(sampleFileName);
             IOUtils.Copy(
                     in1,
                     out1);

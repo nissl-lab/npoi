@@ -43,7 +43,7 @@ namespace NPOI.XSSF.Streaming
 
         [TearDown]
         public static void TearDown() {
-            SXSSFITestDataProvider.instance.Cleanup();
+            //SXSSFITestDataProvider.instance.Cleanup();
         }
 
         [Test]

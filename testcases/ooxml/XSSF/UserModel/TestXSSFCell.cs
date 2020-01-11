@@ -649,7 +649,7 @@ namespace NPOI.XSSF.UserModel
 
 
 
-        [SetUp]
+        //[SetUp]
         private void setUp_testCopyCellFrom_CellCopyPolicy()
         {
             XSSFWorkbook wb = new XSSFWorkbook();

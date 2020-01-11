@@ -79,7 +79,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "name", this.name,true);
             XmlHelper.WriteAttribute(sw, "comment", this.comment);
             XmlHelper.WriteAttribute(sw, "customMenu", this.customMenu);
             XmlHelper.WriteAttribute(sw, "description", this.description);

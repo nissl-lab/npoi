@@ -228,7 +228,7 @@ namespace NPOI.XSSF.UserModel
                 RegionUtil.SetBorderBottom((int)BorderStyle.Thin, range4, sheet, wb);
 
                 // write to file
-                Stream stream = new FileStream("C:/temp/55752.xlsx", FileMode.Create, FileAccess.ReadWrite);
+                Stream stream = new FileStream("55752.xlsx", FileMode.Create, FileAccess.ReadWrite);
                 try
                 {
                     wb.Write(stream);

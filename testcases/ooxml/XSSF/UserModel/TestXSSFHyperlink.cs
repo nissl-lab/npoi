@@ -326,22 +326,22 @@ namespace NPOI.XSSF.UserModel
             CellAddress A7 = new CellAddress("A7");
 
             XSSFHyperlink link = sh.GetHyperlink(A2) as XSSFHyperlink;
-            Assert.AreEqual("address", "A2", link.CellRef);
+            Assert.AreEqual("A2", link.CellRef, "address");
             Assert.AreEqual(HyperlinkType.Url, link.Type, "link type");
             Assert.AreEqual("http://twitter.com/#!/apacheorg", link.Address, "link target");
 
             link = sh.GetHyperlink(A3) as XSSFHyperlink;
-            Assert.AreEqual("address", "A3", link.CellRef);
+            Assert.AreEqual("A3", link.CellRef, "address");
             Assert.AreEqual(HyperlinkType.Url, link.Type, "link type");
             Assert.AreEqual("http://www.bailii.org/databases.html#ie", link.Address, "link target");
 
             link = sh.GetHyperlink(A4) as XSSFHyperlink;
-            Assert.AreEqual("address", "A4", link.CellRef);
+            Assert.AreEqual("A4", link.CellRef, "address");
             Assert.AreEqual(HyperlinkType.Url, link.Type, "link type");
             Assert.AreEqual("https://en.wikipedia.org/wiki/Apache_POI#See_also", link.Address, "link target");
 
             link = sh.GetHyperlink(A7) as XSSFHyperlink;
-            Assert.AreEqual("address", "A7", link.CellRef);
+            Assert.AreEqual("A7", link.CellRef, "address");
             Assert.AreEqual(HyperlinkType.Document, link.Type, "link type");
             Assert.AreEqual("Sheet1", link.Address, "link target");
 

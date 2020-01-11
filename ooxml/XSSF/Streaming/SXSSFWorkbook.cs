@@ -694,7 +694,7 @@ namespace NPOI.XSSF.Streaming
 
         public IEnumerator GetEnumerator()
         {
-            throw new NotImplementedException();
+            return XssfWorkbook.GetEnumerator();
         }
 
         public IFont CreateFont()
