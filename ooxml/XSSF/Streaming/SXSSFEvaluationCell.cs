@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 using System;
+using NPOI.SS.Formula;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
@@ -22,110 +23,141 @@ namespace NPOI.XSSF.Streaming
 {
     public class SXSSFEvaluationCell : XSSFEvaluationCell
     {
-    private  SXSSFEvaluationSheet _evalSheet;
-    private  SXSSFCell _cell;
+        private SXSSFEvaluationSheet _evalSheet;
+        private SXSSFCell _cell;
 
-    public SXSSFEvaluationCell(SXSSFCell cell, SXSSFEvaluationSheet evaluationSheet)
-    {
-        _cell = cell;
-        _evalSheet = evaluationSheet;
-    }
+        public SXSSFEvaluationCell(SXSSFCell cell, SXSSFEvaluationSheet evaluationSheet)
+        {
+            _cell = cell;
+            _evalSheet = evaluationSheet;
+        }
 
-    public SXSSFEvaluationCell(SXSSFCell cell): this(cell, null/*new SXSSFEvaluationSheet(cell.Sheet)*/)
-    {
-        throw new NotImplementedException();
-    }
+        public SXSSFEvaluationCell(SXSSFCell cell)
+            : this(cell, new SXSSFEvaluationSheet(cell.Sheet as SXSSFSheet))
+        {
+        }
 
 
-    public Object GetIdentityKey()
-    {
-        // save memory by just using the cell itself as the identity key
-        // Note - this assumes SXSSFCell has not overridden hashCode and equals
-        return _cell;
-    }
+        public Object GetIdentityKey()
+        {
+            // save memory by just using the cell itself as the identity key
+            // Note - this assumes SXSSFCell has not overridden hashCode and equals
+            return _cell;
+        }
 
-    public SXSSFCell GetSXSSFCell()
-    {
-        return _cell;
-    }
-  
-    public bool getBooleanCellValue()
-    {
-        return _cell.BooleanCellValue;
-    }
-    /**
-     * Will return {@link CellType} in a future version of POI.
-     * For forwards compatibility, do not hard-code cell type literals in your code.
-     *
-     * @return cell type
-     */
+        public SXSSFCell GetSXSSFCell()
+        {
+            return _cell;
+        }
 
-    public int getCellType()
-    {
-        return (int)_cell.CellType;
-    }
-    /**
-     * @since POI 3.15 beta 3
-     * @deprecated POI 3.15 beta 3.
-     * Will be deleted when we make the CellType enum transition. See bug 59791.
-     */
-    //(since= "POI 3.15 beta 3")
-   
-    public CellType getCellTypeEnum()
-    {
-        return _cell.CellType;
-    }
+        public override bool BooleanCellValue
+        {
+            get
+            {
+                return _cell.BooleanCellValue;
+            }
+        }
+        /**
+         * Will return {@link CellType} in a future version of POI.
+         * For forwards compatibility, do not hard-code cell type literals in your code.
+         *
+         * @return cell type
+         */
 
-    public int getColumnIndex()
-    {
-        return _cell.ColumnIndex;
+        public override CellType CellType
+        {
+            get
+            {
+                return _cell.CellType;
+            }
+        }
+        /**
+         * @since POI 3.15 beta 3
+         * @deprecated POI 3.15 beta 3.
+         * Will be deleted when we make the CellType enum transition. See bug 59791.
+         */
+
+        public CellType CellTypeEnum
+        {
+            get
+            {
+                return _cell.CellType;
+            }
+        }
+
+        public override int ColumnIndex
+        {
+            get
+            {
+                return _cell.ColumnIndex;
+            }
+            
+        }
+
+        public override int ErrorCellValue
+        {
+            get
+            {
+                return _cell.ErrorCellValue;
+            }
+            
+        }
+
+        public override double NumericCellValue
+        {
+            get
+            {
+                return _cell.NumericCellValue;
+            }
+        }
+
+        public override int RowIndex
+        {
+            get
+            {
+                return _cell.RowIndex;
+            }
+        }
+
+        public override IEvaluationSheet Sheet
+        {
+            get
+            {
+                return _evalSheet;
+            }
+        }
+
+        public override String StringCellValue
+        {
+            get
+            {
+                return _cell.RichStringCellValue.String;
+            }
+        }
+        /**
+         * Will return {@link CellType} in a future version of POI.
+         * For forwards compatibility, do not hard-code cell type literals in your code.
+         *
+         * @return cell type of cached formula result
+         */
+
+        public override CellType CachedFormulaResultType
+        {
+            get
+            {
+                return _cell.CachedFormulaResultType;
+            }
+        }
+        /**
+         * @since POI 3.15 beta 3
+         * @deprecated POI 3.15 beta 3.
+         * Will be deleted when we make the CellType enum transition. See bug 59791.
+         */
+        //@Internal(since= "POI 3.15 beta 3")
+
+        public CellType getCachedFormulaResultTypeEnum()
+        {
+            return _cell.GetCachedFormulaResultTypeEnum();
+        }
     }
-    
-    public int getErrorCellValue()
-    {
-        return _cell.ErrorCellValue;
-    }
-    
-    public double getNumericCellValue()
-    {
-        return _cell.NumericCellValue;
-    }
-    
-    public int getRowIndex()
-    {
-        return _cell.RowIndex;
-    }
-    
-    public SXSSFEvaluationSheet getSheet()
-    {
-        return _evalSheet;
-    }
-    
-    public String getStringCellValue()
-    {
-        return _cell.RichStringCellValue.String;
-    }
-    /**
-     * Will return {@link CellType} in a future version of POI.
-     * For forwards compatibility, do not hard-code cell type literals in your code.
-     *
-     * @return cell type of cached formula result
-     */
-    
-    public int getCachedFormulaResultType()
-    {
-        return (int)_cell.CachedFormulaResultType;
-    }
-    /**
-     * @since POI 3.15 beta 3
-     * @deprecated POI 3.15 beta 3.
-     * Will be deleted when we make the CellType enum transition. See bug 59791.
-     */
-    //@Internal(since= "POI 3.15 beta 3")
-    
-    public CellType getCachedFormulaResultTypeEnum()
-    {
-        return _cell.GetCachedFormulaResultTypeEnum();
-    }
-}
 }
