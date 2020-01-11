@@ -854,7 +854,7 @@ namespace TestCases.OPC
                     {
                         ByteArrayOutputStream bos2 = new ByteArrayOutputStream();
                         IOUtils.Copy(is1, bos2);
-                        long size = bos2.Size() - "</Types>".Length;
+                        long size = bos2.Length - "</Types>".Length;
                         append.Write(bos2.ToByteArray(), 0, (int)size);
                         byte[] spam = new byte[0x7FFF];
                         for (int i = 0; i < spam.Length; i++) spam[i] = (byte)' ';

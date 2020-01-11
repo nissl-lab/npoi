@@ -236,12 +236,12 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
 
             public byte[] GetBuf()
             {
-                return buf;
+                return base.ToArray();
             }
 
-            public void SetSize(int count)
+            public void SetSize(long count)
             {
-                this.count = count;
+                base.SetLength(count);
             }
 
             public void SetBlock(int block)
