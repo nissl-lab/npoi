@@ -16,6 +16,7 @@
 ==================================================================== */
 using System;
 using NPOI.SS;
+using NPOI.SS.Formula.Eval;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
@@ -491,6 +492,33 @@ namespace NPOI.XSSF.Streaming
                     ((NumericFormulaValue)_value).PreEvaluatedValue = value;
                 else
                     ((NumericValue)_value).Value = value;
+            }
+        }
+
+        public override string ToString()
+        {
+            switch (CellType)
+            {
+                case CellType.Blank:
+                    return "";
+                case CellType.Boolean:
+                    return BooleanCellValue ? "TRUE" : "FALSE";
+                case CellType.Error:
+                    return ErrorEval.GetText(ErrorCellValue);
+                case CellType.Formula:
+                    return CellFormula;
+                case CellType.Numeric:
+                    if (DateUtil.IsCellDateFormatted(this))
+                    {
+                        FormatBase sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                        //sdf.setTimeZone(LocaleUtil.getUserTimeZone());
+                        return sdf.Format(DateCellValue);
+                    }
+                    return NumericCellValue + "";
+                case CellType.String:
+                    return RichStringCellValue.ToString();
+                default:
+                    return "Unknown Cell Type: " + CellType;
             }
         }
 
