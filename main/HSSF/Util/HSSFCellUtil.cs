@@ -153,5 +153,141 @@ namespace NPOI.HSSF.Util
             CellUtil.TranslateUnicodeValues(cell);
             return cell;
         }
+        /// <summary>
+        /// Translate color palette entries from the source to the destination sheet
+        /// </summary>
+        private static void RemapCellStyle(HSSFCellStyle stylish, Dictionary<short, short> paletteMap)
+        {
+            if (paletteMap.ContainsKey(stylish.BorderDiagonalColor))
+            {
+                stylish.BorderDiagonalColor = paletteMap[stylish.BorderDiagonalColor];
+            }
+            if (paletteMap.ContainsKey(stylish.BottomBorderColor))
+            {
+                stylish.BottomBorderColor = paletteMap[stylish.BottomBorderColor];
+            }
+            if (paletteMap.ContainsKey(stylish.FillBackgroundColor))
+            {
+                stylish.FillBackgroundColor = paletteMap[stylish.FillBackgroundColor];
+            }
+            if (paletteMap.ContainsKey(stylish.FillForegroundColor))
+            {
+                stylish.FillForegroundColor = paletteMap[stylish.FillForegroundColor];
+            }
+            if (paletteMap.ContainsKey(stylish.LeftBorderColor))
+            {
+                stylish.LeftBorderColor = paletteMap[stylish.LeftBorderColor];
+            }
+            if (paletteMap.ContainsKey(stylish.RightBorderColor))
+            {
+                stylish.RightBorderColor = paletteMap[stylish.RightBorderColor];
+            }
+            if (paletteMap.ContainsKey(stylish.TopBorderColor))
+            {
+                stylish.TopBorderColor = paletteMap[stylish.TopBorderColor];
+            }
+        }
+        public static void CopyCell(HSSFCell oldCell, HSSFCell newCell, IDictionary<Int32, HSSFCellStyle> styleMap, Dictionary<short, short> paletteMap, Boolean keepFormulas)
+        {
+            if (styleMap != null)
+            {
+                if (oldCell.CellStyle != null)
+                {
+                    if (oldCell.Sheet.Workbook == newCell.Sheet.Workbook)
+                    {
+                        newCell.CellStyle = oldCell.CellStyle;
+                    }
+                    else
+                    {
+                        int styleHashCode = oldCell.CellStyle.GetHashCode();
+                        if (styleMap.ContainsKey(styleHashCode))
+                        {
+                            newCell.CellStyle = styleMap[styleHashCode];
+                        }
+                        else
+                        {
+                            HSSFCellStyle newCellStyle = (HSSFCellStyle)newCell.Sheet.Workbook.CreateCellStyle();
+                            newCellStyle.CloneStyleFrom(oldCell.CellStyle);
+                            RemapCellStyle(newCellStyle, paletteMap); //Clone copies as-is, we need to remap colors manually
+                            newCell.CellStyle = newCellStyle;
+                            //Clone of cell style always clones the font. This makes my life easier
+                            IFont theFont = newCellStyle.GetFont(newCell.Sheet.Workbook);
+                            if (theFont.Color > 0 && paletteMap.ContainsKey(theFont.Color))
+                            {
+                                theFont.Color = paletteMap[theFont.Color]; //Remap font color
+                            }
+                            styleMap.Add(styleHashCode, newCellStyle);
+                        }
+                    }
+                }
+                else
+                {
+                    newCell.CellStyle = null;
+                }
+            }
+            switch (oldCell.CellType)
+            {
+                case CellType.String:
+                    HSSFRichTextString rts = oldCell.RichStringCellValue as HSSFRichTextString;
+                    newCell.SetCellValue(rts);
+                    if (rts != null)
+                    {
+                        for (int j = 0; j < rts.NumFormattingRuns; j++)
+                        {
+                            short fontIndex = rts.GetFontOfFormattingRun(j);
+                            int startIndex = rts.GetIndexOfFormattingRun(j);
+                            int endIndex = 0;
+                            if (j + 1 == rts.NumFormattingRuns)
+                            {
+                                endIndex = rts.Length;
+                            }
+                            else
+                            {
+                                endIndex = rts.GetIndexOfFormattingRun(j + 1);
+                            }
+                            FontRecord fr = newCell.BoundWorkbook.CreateNewFont();
+                            fr.CloneStyleFrom(oldCell.BoundWorkbook.GetFontRecordAt(fontIndex));
+                            HSSFFont font = new HSSFFont((short)(newCell.BoundWorkbook.GetFontIndex(fr)), fr);
+                            newCell.RichStringCellValue.ApplyFont(startIndex, endIndex, font);
+                        }
+                    }
+                    break;
+                case CellType.Numeric:
+                    newCell.SetCellValue(oldCell.NumericCellValue);
+                    break;
+                case CellType.Blank:
+                    newCell.SetCellType(CellType.Blank);
+                    break;
+                case CellType.Boolean:
+                    newCell.SetCellValue(oldCell.BooleanCellValue);
+                    break;
+                case CellType.Error:
+                    newCell.SetCellValue(oldCell.ErrorCellValue);
+                    break;
+                case CellType.Formula:
+                    if (keepFormulas)
+                    {
+                        newCell.SetCellType(CellType.Formula);
+                        newCell.CellFormula = oldCell.CellFormula;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            newCell.SetCellType(CellType.Numeric);
+                            newCell.SetCellValue(oldCell.NumericCellValue);
+                        }
+                        catch (Exception)
+                        {
+                            newCell.SetCellType(CellType.String);
+                            newCell.SetCellValue(oldCell.ToString());
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 }

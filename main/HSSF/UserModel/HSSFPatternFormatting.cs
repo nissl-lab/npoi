@@ -39,6 +39,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="cfRuleRecord">The cf rule record.</param>
         public HSSFPatternFormatting(CFRuleBase cfRuleRecord, HSSFWorkbook workbook)
         {
+            this.workbook = workbook;
             this.cfRuleRecord = cfRuleRecord;
             this.patternFormatting = cfRuleRecord.PatternFormatting;
         }

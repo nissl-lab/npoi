@@ -766,7 +766,7 @@ namespace NPOI.SS.UserModel
                 // correct grouping for non-US locales.
                 if (grouping != ',')
                 {
-                    symbols = currentCulture.NumberFormat;
+                    symbols = currentCulture.NumberFormat.Clone() as NumberFormatInfo;
                     symbols.NumberGroupSeparator = grouping.ToString();
                     String oldPart = agm.Groups[1].Value;
                     String newPart = oldPart.Replace(grouping, ',');

@@ -110,7 +110,7 @@ namespace NPOI.HSSF.Record.CF
         {
             get
             {
-                return value.Value;
+                return this.value;
             }
             set
             {

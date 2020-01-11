@@ -169,7 +169,7 @@ namespace NPOI.SS.UserModel
                     byte[] rgb = new byte[value.Length / 2];
                     for (int i = 0; i < rgb.Length; i++)
                     {
-                        String part = value.Substring(i * 2, (i + 1) * 2);
+                        String part = value.Substring(i * 2, (i + 1) * 2-i*2);
                         rgb[i] = (byte)Int32.Parse(part, System.Globalization.NumberStyles.HexNumber);
                     }
                     RGB = (rgb);
