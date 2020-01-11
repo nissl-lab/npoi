@@ -407,7 +407,7 @@ namespace NPOI.XSSF.Streaming
 
                 if (value.Length > SpreadsheetVersion.EXCEL2007.MaxTextLength)
                 {
-                    throw new InvalidOperationException("The maximum length of cell contents (text) is 32,767 characters");
+                    throw new ArgumentException("The maximum length of cell contents (text) is 32,767 characters");
                 }
 
                 if (_value.GetType() == CellType.Formula)
