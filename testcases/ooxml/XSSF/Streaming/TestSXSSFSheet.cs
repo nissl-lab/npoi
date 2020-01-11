@@ -43,7 +43,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
 
         [TearDown]
         public void TearDown() {
-            SXSSFITestDataProvider.instance.Cleanup();
+            //SXSSFITestDataProvider.instance.Cleanup();
         }
 
         protected override void TrackColumnsForAutoSizingIfSXSSF(ISheet sheet)
