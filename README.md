@@ -11,6 +11,7 @@ Donation
 ===============
 Paypal account: tonyqus@gmail.com
 
+
 Support and Service
 ===================
 Neuzilla is the studio behind NPOI.
@@ -49,6 +50,8 @@ QQ Group: 189925337, 20144214
 
 System Requirement
 ===================
+.NET Standard 2.0 (.NET Core)
+
 .NET Framework 4.0 and above
 
 .NET Standard 2.0
