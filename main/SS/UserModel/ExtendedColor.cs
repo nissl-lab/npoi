@@ -86,7 +86,10 @@ namespace NPOI.SS.UserModel
             if (IsIndexed && Index > 0)
             {
                 int indexNum = Index;
-                HSSFColor indexed = HSSFColor.GetAllColors()[indexNum];
+                var hashIndex = HSSFColor.GetIndexHash();
+                HSSFColor indexed = null;
+                if (hashIndex.ContainsKey(indexNum))
+                    indexed = hashIndex[indexNum];
                 if (indexed != null)
                 {
                     byte[] rgb = new byte[3];
@@ -150,7 +153,7 @@ namespace NPOI.SS.UserModel
                 foreach (byte c in rgb)
                 {
                     int i = c & 0xff;
-                    String cs = HexDump.ToHex(i);
+                    String cs = string.Format("{0:x}", i);
                     if (cs.Length == 1)
                     {
                         sb.Append('0');

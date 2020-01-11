@@ -95,6 +95,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_Comment[] GetCommentArray()
         {
+            if (this.commentField == null)
+                this.commentField = new List<CT_Comment>();
             return this.commentField.ToArray();
         }
     }

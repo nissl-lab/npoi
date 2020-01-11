@@ -206,8 +206,17 @@ namespace NPOI.Util
          */
         public static byte[] GetBytesInCodePage(String string1, int codepage)
         {
-            String encoding = CodepageToEncoding(codepage);
-            return Encoding.GetEncoding(encoding).GetBytes(string1);
+            String cp = CodepageToEncoding(codepage);
+            Encoding encoding;
+            try
+            {
+                encoding = Encoding.GetEncoding(cp);
+            }
+            catch (Exception)
+            {
+                encoding = Encoding.ASCII;
+            }
+            return encoding.GetBytes(string1);
             //return string1.GetBytes(encoding);
         }
 

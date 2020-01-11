@@ -49,6 +49,18 @@ namespace NPOI.Util
         private static readonly int[] _shifts = new int[] { 60, 56, 52, 48, 44, 40, 36, 32, 28, 24, 20, 16, 12, 8, 4, 0 };
         public static readonly string EOL = Environment.NewLine;
 
+        /**
+     * Used to build output as Hex
+     */
+        private static char[] DIGITS_LOWER =
+            {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+
+        /**
+         * Used to build output as Hex
+         */
+        private static char[] DIGITS_UPPER =
+            {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
         private HexDump()
         {
         }
@@ -466,6 +478,31 @@ namespace NPOI.Util
                 retVal.Append(ToHex(value[x]));
             }
             return retVal.ToString();
+        }
+
+        public static string EncodeHexString(byte[] data)
+        {
+            return new String(EncodeHex(data));
+        }
+        public static char[] EncodeHex(byte[] data)
+        {
+            return EncodeHex(data, true);
+        }
+        public static char[] EncodeHex(byte[] data, bool toLowerCase)
+        {
+            return EncodeHex(data, toLowerCase ? DIGITS_LOWER : DIGITS_UPPER);
+        }
+        protected static char[] EncodeHex(byte[] data, char[] toDigits)
+        {
+            int l = data.Length;
+            char[] out1 = new char[l << 1];
+            // two characters form the hex value.
+            for (int i = 0, j = 0; i < l; i++)
+            {
+                out1[j++] = toDigits[(int)(0xF0 & data[i]) >> 4];
+                out1[j++] = toDigits[0x0F & data[i]];
+            }
+            return out1;
         }
     }
 

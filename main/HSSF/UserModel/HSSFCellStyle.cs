@@ -296,7 +296,11 @@ namespace NPOI.HSSF.UserModel
                     //The 4th quadrant (-1 to -90) is stored as (91 to 180)
                     rotation = (short)(90 - value);
                 }
-
+                else if (rotation > 90 && rotation <= 180)
+                {
+                    // stay compatible with the range used by XSSF, map from ]90..180] to ]0..-90]
+                    // we actually don't need to do anything here as the internal value is stored in [0-180] anyway!
+                }
                 else if ((value < -90) || (value > 90))
                 {
                     //Do not allow an incorrect rotation to be Set
