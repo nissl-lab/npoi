@@ -208,11 +208,11 @@ namespace NPOI.XSSF.Model
             }
         }
 
-        private static void assertNotContainsKey<K, V>(Dictionary<K, V> map, K key)
+        private static void assertNotContainsKey<K, V>(SortedDictionary<K, V> map, K key)
         {
             Assert.IsFalse(map.ContainsKey(key));
         }
-        private static void assertNotContainsValue<K, V>(Dictionary<K, V> map, V value)
+        private static void assertNotContainsValue<K, V>(SortedDictionary<K, V> map, V value)
         {
             Assert.IsFalse(map.ContainsValue(value));
         }
@@ -245,7 +245,7 @@ namespace NPOI.XSSF.Model
                 Assert.AreEqual(defaultFmt, style.GetDataFormatString());
 
                 // The custom number format should be entirely removed from the workbook
-                Dictionary<short, String> numberFormats = wb.GetStylesSource().GetNumberFormats() as Dictionary<short, String>;
+                SortedDictionary<short, String> numberFormats = wb.GetStylesSource().GetNumberFormats() as SortedDictionary<short, String>;
                 assertNotContainsKey(numberFormats, fmtIdx);
                 assertNotContainsValue(numberFormats, fmt);
 
@@ -263,7 +263,7 @@ namespace NPOI.XSSF.Model
                 Assert.AreEqual(defaultFmt, style.GetDataFormatString());
 
                 // The custom number format should be entirely removed from the workbook
-                numberFormats = wb.GetStylesSource().GetNumberFormats() as Dictionary<short, String>;
+                numberFormats = wb.GetStylesSource().GetNumberFormats() as SortedDictionary<short, String>;
                 assertNotContainsKey(numberFormats, fmtIdx);
                 assertNotContainsValue(numberFormats, fmt);
 

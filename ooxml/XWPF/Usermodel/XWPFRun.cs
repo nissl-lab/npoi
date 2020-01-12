@@ -905,7 +905,7 @@ namespace NPOI.XWPF.UserModel
             get
             {
                 CT_RPr pr = run.rPr;
-                return (pr != null && pr.IsSetSz()) ? (int)pr.sz.val / 2 : -1;
+                return (pr != null && pr.IsSetSz()) ? (int)(pr.sz.val / 2) : -1;
             }
             set
             {
