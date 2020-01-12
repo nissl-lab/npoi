@@ -12136,6 +12136,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public int SizeOfPArray()
         {
+            if (this.pField == null)
+                pField = new List<CT_TextParagraph>();
             return this.pField.Count;
         }
 
