@@ -14,20 +14,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.XWPF
+namespace TestCases.XWPF
 {
-    using System;
-
-
-
-
-    using NUnit.Framework;
-
     using NPOI.HSSF.Record.Crypto;
     using NPOI.POIFS.FileSystem;
+    using NPOI.XWPF;
     using NPOI.XWPF.UserModel;
-    using TestCases;
+    using NUnit.Framework;
     using System.IO;
+    using TestCases;
 
     [TestFixture]
     public class TestXWPFBugs

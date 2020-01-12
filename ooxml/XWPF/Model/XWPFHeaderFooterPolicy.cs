@@ -240,10 +240,18 @@ namespace NPOI.XWPF.Model
             }
             else {
                 CT_P p = ftr.AddNewP();
-                byte[] rsidr = doc.Document.body.GetPArray(0).rsidR;
-                byte[] rsidrdefault = doc.Document.body.GetPArray(0).rsidRDefault;
-                p.rsidP=(rsidr);
-                p.rsidRDefault=(rsidrdefault);
+                CT_Body body = doc.Document.body;
+                if (body.SizeOfPArray() > 0)
+                {
+                    CT_P p0 = body.GetPArray(0);
+                    if (p0.IsSetRsidR())
+                    {
+                        byte[] rsidr = p0.rsidR;
+                        byte[] rsidrdefault = p0.rsidRDefault;
+                        p.rsidP = rsidr;
+                        p.rsidRDefault = rsidrdefault;
+                    }
+                }
                 CT_PPr pPr = p.AddNewPPr();
                 pPr.AddNewPStyle().val = (pStyle);
             }

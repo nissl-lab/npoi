@@ -14,16 +14,18 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.XWPF.UserModel
+namespace TestCases.XWPF.UserModel
 {
-    using System;
-    using NUnit.Framework;
-    using NPOI.XWPF;
-    using TestCases;
     using ICSharpCode.SharpZipLib.Zip;
+    using NPOI;
     using NPOI.OpenXmlFormats.Wordprocessing;
-    using System.Xml;
     using NPOI.Util;
+    using NPOI.XWPF;
+    using NPOI.XWPF.UserModel;
+    using NUnit.Framework;
+    using System;
+    using System.Xml;
+    using TestCases;
 
     [TestFixture]
     public class TestXWPFBugs

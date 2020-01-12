@@ -15,16 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XWPF.Model
+namespace TestCases.XWPF.Model
 {
-    using System;
-
-
-
-    using NUnit.Framework;
-
-    using NPOI.XWPF;
+    using NPOI.XWPF.Model;
     using NPOI.XWPF.UserModel;
+    using NUnit.Framework;
 
     /**
      * Tests for XWPF Header Footer Stuff
