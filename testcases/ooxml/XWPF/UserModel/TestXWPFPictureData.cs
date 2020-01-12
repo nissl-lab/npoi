@@ -25,8 +25,6 @@ namespace NPOI.XWPF.UserModel
     using NPOI.XSSF.UserModel;
     using NPOI.XWPF;
     using NPOI.XWPF.Model;
-    using System.Xml;
-    using NPOI.OpenXmlFormats.Wordprocessing;
 
     [TestFixture]
     public class TestXWPFPictureData
