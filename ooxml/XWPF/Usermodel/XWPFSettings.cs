@@ -104,7 +104,7 @@ namespace NPOI.XWPF.UserModel
          *
          * @return true if documentProtection is enforced with option any
          */
-        public bool isEnforcedWith()
+        public bool IsEnforcedWith()
         {
             CT_DocProtect ctDocProtect = ctSettings.documentProtection;
 
@@ -266,22 +266,6 @@ namespace NPOI.XWPF.UserModel
             {
                 throw new Exception("SettingsDocument parse failed", e);
             }
-        }
-
-        internal bool IsEnforcedWith()
-        {
-            CT_DocProtect ctDocProtect = ctSettings.documentProtection;
-
-            if (ctDocProtect == null)
-            {
-                return false;
-            }
-
-            return ctDocProtect.enforcement.Equals(ST_OnOff.on) && 
-                (ctDocProtect.edit == ST_DocProtect.comments ||
-                ctDocProtect.edit == ST_DocProtect.forms ||
-                ctDocProtect.edit == ST_DocProtect.readOnly ||
-                ctDocProtect.edit == ST_DocProtect.trackedChanges);
         }
     }
 
