@@ -15,17 +15,18 @@
   limitations under the License.
 ==================================================================== */
 
-namespace NPOI
+namespace TestCases
 {
 
-    using System;
-    using NUnit.Framework;
-    using NPOI.XSSF.UserModel;
+    using NPOI;
     using NPOI.OpenXmlFormats;
-    using NPOI.XSSF;
-    using NPOI.XWPF.UserModel;
-    using NPOI.XWPF;
     using NPOI.Util;
+    using NPOI.XSSF;
+    using NPOI.XSSF.UserModel;
+    using NPOI.XWPF.UserModel;
+    using NUnit.Framework;
+    using System;
+    using TestCases.XWPF;
 
     /**
      * Test Setting extended and custom OOXML properties
@@ -236,7 +237,7 @@ namespace NPOI
         }
 
         [Test]
-        public void testThumbnails()
+        public void TestThumbnails()
         {
             POIXMLProperties noThumbProps = sampleNoThumb.GetProperties();
 

@@ -15,9 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XWPF
+namespace TestCases.XWPF
 {
-    using System;
     using NPOI.XWPF.UserModel;
     using NPOI.OpenXmlFormats;
     using NUnit.Framework;

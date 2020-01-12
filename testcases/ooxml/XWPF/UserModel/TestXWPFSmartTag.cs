@@ -14,9 +14,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.XWPF.UserModel
+namespace TestCases.XWPF.UserModel
 {
-    using NPOI.XWPF;
+    using NPOI.XWPF.UserModel;
     using NUnit.Framework;
 
     /**

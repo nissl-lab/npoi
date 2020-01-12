@@ -22,8 +22,9 @@ using NPOI.OpenXmlFormats.Wordprocessing;
 using System;
 using System.Collections.Generic;
 using static NPOI.XWPF.UserModel.XWPFTableCell;
+using NPOI.XWPF.UserModel;
 
-namespace NPOI.XWPF.UserModel
+namespace TestCases.XWPF.UserModel
 {
     [TestFixture]
     public class TestXWPFTableCell

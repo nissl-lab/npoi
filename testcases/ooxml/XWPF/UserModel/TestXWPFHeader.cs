@@ -15,17 +15,13 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XWPF.UserModel
+namespace TestCases.XWPF.UserModel
 {
-    using System;
-
-
-
-    using NUnit.Framework;
-
-    using NPOI.XWPF;
-    using NPOI.XWPF.Model;
     using NPOI.OpenXmlFormats.Wordprocessing;
+    using NPOI.XWPF.Model;
+    using NPOI.XWPF.UserModel;
+    using NUnit.Framework;
+    using System;
     using System.Collections.Generic;
 
     [TestFixture]

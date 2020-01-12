@@ -15,16 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XWPF.Extractor
+namespace TestCases.XWPF.Extractor
 {
-    using System;
-
-
-
-    using NPOI.XWPF;
-    using NPOI.XWPF.UserModel;
     using NPOI.XWPF.Extractor;
+    using NPOI.XWPF.UserModel;
     using NUnit.Framework;
+    using System;
     using System.Diagnostics;
     using System.Text.RegularExpressions;
 

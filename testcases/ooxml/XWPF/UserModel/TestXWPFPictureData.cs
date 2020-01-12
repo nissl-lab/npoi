@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XWPF.UserModel
+namespace TestCases.XWPF.UserModel
 {
     using System;
     using System.Collections.Generic;
@@ -25,6 +25,7 @@ namespace NPOI.XWPF.UserModel
     using NPOI.XSSF.UserModel;
     using NPOI.XWPF;
     using NPOI.XWPF.Model;
+    using NPOI.XWPF.UserModel;
 
     [TestFixture]
     public class TestXWPFPictureData
