@@ -15,20 +15,21 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS
+namespace TestCases.SS
 {
-    using System;
-    using NUnit.Framework;
+    using NPOI;
     using NPOI.HSSF.UserModel;
+    using NPOI.OpenXml4Net.Exceptions;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.POIFS.FileSystem;
     using NPOI.SS.UserModel;
-    using NPOI.XSSF.UserModel;
-    using TestCases.HSSF;
-    using System.Configuration;
-    using System.IO;
-    using NPOI.OpenXml4Net.Exceptions;
     using NPOI.Util;
+    using NPOI.XSSF.UserModel;
+    using NUnit.Framework;
+    using System;
+    using System.IO;
+    using TestCases;
+    using TestCases.HSSF;
 
     [TestFixture]
     public class TestWorkbookFactory
@@ -39,7 +40,8 @@ namespace NPOI.SS
         private readonly String[] xlsx_prot = new String[] { "protected_passtika.xlsx", "tika" };
         private readonly String txt = "SampleSS.txt";
 
-        private readonly string testdataPath = ConfigurationManager.AppSettings["POI.testdata.path"] + "\\spreadsheet\\";
+        private readonly string testdataPath = Path.Combine(TestContext.CurrentContext.TestDirectory,
+            TestContext.Parameters[POIDataSamples.TEST_PROPERTY] + "\\spreadsheet\\");
         private static POILogger LOGGER = POILogFactory.GetLogger(typeof(TestWorkbookFactory));
 
         /**

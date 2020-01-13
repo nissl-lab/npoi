@@ -130,7 +130,7 @@ namespace NPOI.SS.UserModel
             //}
             inputStream = new PushbackStream(inputStream);
             // Ensure that there is at least some data there
-            //byte[] header8 = IOUtils.PeekFirst8Bytes(inputStream);
+            byte[] header8 = IOUtils.PeekFirst8Bytes(inputStream);
 
             if (POIFSFileSystem.HasPOIFSHeader(inputStream))
             {
