@@ -14,9 +14,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+using NPOI.Util;
 using NUnit.Framework;
 using System;
-namespace NPOI.Util
+namespace TestCases.Util
 {
     [TestFixture]
     public class TestIdentifierManager
