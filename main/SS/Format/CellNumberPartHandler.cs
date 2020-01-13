@@ -170,15 +170,15 @@ namespace NPOI.SS.Format
                 Special s = specials[i];
                 if (IsDigitFmt(s))
                 {
-                    Special numStart = s;
+                    //Special numStart = s;
                     Special last = s;
-                    while (i > 0)
+                    while (i >= 0)
                     {
-                        i--;
                         s = specials[i];
-                        if (last.pos - s.pos > 1 || IsDigitFmt(s)) // it has to be continuous digits
+                        if (last.pos - s.pos > 1 || !IsDigitFmt(s)) // it has to be continuous digits
                             break;
                         last = s;
+                        i--;
                     }
                     return last;
                 }
