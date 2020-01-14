@@ -14,16 +14,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.SS.Format
+namespace TestCases.SS.Format
 {
-    using System;
-    using System.Text;
-    using System.Text.RegularExpressions;
-    using NUnit.Framework;
+    using NPOI.SS.Format;
     using NPOI.SS.UserModel;
     using NPOI.XSSF;
-    using TestCases.SS.Format;
+    using NUnit.Framework;
+    using System;
     using System.Globalization;
+    using System.Text;
+    using System.Text.RegularExpressions;
 
 
 

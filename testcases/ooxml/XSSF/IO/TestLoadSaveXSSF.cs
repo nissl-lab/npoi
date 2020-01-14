@@ -15,13 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
-using TestCases;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
-using NPOI.SS.UserModel;
-using System.Collections.Generic;
 using System.Collections;
-namespace NPOI.XSSF.IO
+namespace TestCases.XSSF.IO
 {
 
     [TestFixture]

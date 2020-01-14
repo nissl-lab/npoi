@@ -17,24 +17,22 @@
 
 namespace TestCases.SS.Util
 {
-    using System;
-    using System.Collections.Generic;
-    using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NUnit.Framework;
-    using TestCases.HSSF;
+    using System;
+    using System.Collections.Generic;
     using TestCases.SS;
 
-    
-    public class BaseTestCellUtil
+
+    public abstract class BaseTestCellUtil
     {
         protected ITestDataProvider _testDataProvider;
-        public BaseTestCellUtil()
-            : this(HSSFITestDataProvider.Instance)
-        {
+        //public BaseTestCellUtil()
+        //    : this(HSSFITestDataProvider.Instance)
+        //{
 
-        }
+        //}
         protected BaseTestCellUtil(ITestDataProvider testDataProvider)
         {
             _testDataProvider = testDataProvider;

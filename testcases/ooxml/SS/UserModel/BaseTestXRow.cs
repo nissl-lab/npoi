@@ -27,7 +27,6 @@ namespace TestCases.SS.UserModel
      *  Any test that is applicable for {@link NPOI.HSSF.UserModel.HSSFRow} as well should go into
      *  the common base class {@link BaseTestRow}.
      */
-    [TestFixture]
     public abstract class BaseTestXRow : BaseTestRow
     {
         protected BaseTestXRow(ITestDataProvider testDataProvider)

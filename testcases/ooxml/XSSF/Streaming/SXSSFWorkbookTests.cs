@@ -24,7 +24,7 @@ using NPOI.XSSF.Streaming;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 
-namespace NPOI.OOXML.Testcases.XSSF.Streaming
+namespace TestCases.XSSF.Streaming
 {
     [TestFixture]
     class SXSSFWorkbookTests

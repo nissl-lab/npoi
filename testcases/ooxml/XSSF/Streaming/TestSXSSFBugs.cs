@@ -3,14 +3,9 @@ using NPOI.SS.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.Streaming;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TestCases.SS.UserModel;
 
-namespace NPOI.OOXML.Testcases.XSSF.Streaming
+namespace TestCases.XSSF.Streaming
 {
     public class TestSXSSFBugs : BaseTestBugzillaIssues
     {
