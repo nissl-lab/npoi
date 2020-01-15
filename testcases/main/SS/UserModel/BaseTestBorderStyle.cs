@@ -29,8 +29,7 @@ namespace TestCases.SS.UserModel
     /**
      * Tests of {@link BorderStyle}
      */
-    [TestFixture, Explicit]
-    public class BaseTestBorderStyle
+    public abstract class BaseTestBorderStyle
     {
 
         private ITestDataProvider _testDataProvider;

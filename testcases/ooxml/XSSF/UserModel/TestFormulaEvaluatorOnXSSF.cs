@@ -24,7 +24,10 @@ using System.IO;
 using TestCases.HSSF;
 using NPOI.Util;
 using NPOI.SS.Util;
-namespace NPOI.XSSF.UserModel{
+using NPOI.XSSF.UserModel;
+
+namespace TestCases.XSSF.UserModel
+{
 
 
     /**
@@ -250,7 +253,7 @@ namespace NPOI.XSSF.UserModel{
                             break;
                         default:
                             throw new RuntimeException("unexpected result");
-                        
+
                     }
                 }
                 rowIndex += SS.NUMBER_OF_ROWS_PER_FUNCTION;

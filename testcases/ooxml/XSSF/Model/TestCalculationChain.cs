@@ -19,7 +19,10 @@ using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
-namespace NPOI.XSSF.Model
+using NPOI.XSSF;
+using NPOI.XSSF.Model;
+
+namespace TestCases.XSSF.Model
 {
 
     [TestFixture]

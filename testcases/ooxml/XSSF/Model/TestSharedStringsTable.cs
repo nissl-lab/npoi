@@ -23,7 +23,11 @@ using System;
 using NPOI.SS.UserModel;
 using TestCases;
 using System.IO;
-namespace NPOI.XSSF.Model
+using NPOI.XSSF.Model;
+using NPOI.XSSF;
+using NPOI;
+
+namespace TestCases.XSSF.Model
 {
 
     /**

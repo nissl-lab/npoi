@@ -19,20 +19,19 @@
 
 namespace TestCases.HSSF.UserModel
 {
-    using System;
-    using NPOI.HSSF.UserModel;
-    using NPOI.SS.Util;
-    using NUnit.Framework;
-    using NPOI.SS.UserModel;
     using NPOI.DDF;
     using NPOI.HSSF.Record;
+    using NPOI.HSSF.UserModel;
     using NPOI.Util;
+    using NUnit.Framework;
+    using TestCases.SS.UserModel;
+
     /**
-     * Test the ability to clone a sheet. 
-     *  If Adding new records that belong to a sheet (as opposed to a book)
-     *  Add that record to the sheet in the TestCloneSheetBasic method. 
-     * @author  avik
-     */
+* Test the ability to clone a sheet. 
+*  If Adding new records that belong to a sheet (as opposed to a book)
+*  Add that record to the sheet in the TestCloneSheetBasic method. 
+* @author  avik
+*/
     [TestFixture]
     public class TestCloneSheet : BaseTestCloneSheet
     {

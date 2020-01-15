@@ -22,7 +22,10 @@ using NPOI.Util;
 using NPOI.SS.UserModel;
 using System.Collections;
 using System.Text;
-namespace NPOI.XSSF.UserModel
+using NPOI.XSSF.UserModel;
+using NPOI.XSSF;
+
+namespace TestCases.XSSF.UserModel
 {
     /**
      * @author Yegor Kozlov

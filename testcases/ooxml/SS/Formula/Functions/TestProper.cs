@@ -15,12 +15,13 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Functions
+namespace TestCases.SS.Formula.Functions
 {
     using System;
     using System.Text;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.Eval;
+    using NPOI.SS.Formula.Functions;
     using NPOI.SS.UserModel;
     using NPOI.Util;
     using NPOI.XSSF.UserModel;

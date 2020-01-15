@@ -20,7 +20,7 @@ using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using TestCases.SS.Formula.Eval.Forked;
 
-namespace Testcases.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
     [TestFixture]
     public class TestXSSFForkedEvaluator : TestForkedEvaluator

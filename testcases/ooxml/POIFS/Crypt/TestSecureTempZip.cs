@@ -15,23 +15,20 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.POIFS.Crypt
+namespace TestCases.POIFS.Crypt
 {
-    using System;
-    using System.IO;
-    using System.Collections.Generic;
     using ICSharpCode.SharpZipLib.Zip;
-    using NPOI.OpenXml4Net.Exceptions;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.OpenXml4Net.Util;
+    using NPOI.POIFS.Crypt;
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
     using NPOI.XSSF;
-    using NPOI.XSSF.UserModel;
     using NUnit.Framework;
     using Org.BouncyCastle.Security;
-    using NPOI.POIFS.Crypt.Standard;
+    using System;
     using System.Collections;
+    using System.IO;
 
     [TestFixture]
     public class TestSecureTempZip

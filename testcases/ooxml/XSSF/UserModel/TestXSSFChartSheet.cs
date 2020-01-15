@@ -16,11 +16,12 @@
 ==================================================================== */
 
 using NPOI.OpenXmlFormats.Spreadsheet;
-using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.XSSF;
+using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
     [TestFixture]
     public class TestXSSFChartSheet

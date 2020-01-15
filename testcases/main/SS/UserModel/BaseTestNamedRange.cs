@@ -17,8 +17,6 @@
 
 namespace TestCases.SS.UserModel
 {
-
-
     using System;
     using NUnit.Framework;
     using NPOI.SS.UserModel;
@@ -31,14 +29,13 @@ namespace TestCases.SS.UserModel
      *
      * @author Yegor Kozlov
      */
-    [TestFixture]
-    public class BaseTestNamedRange
+    public abstract class BaseTestNamedRange
     {
 
         private ITestDataProvider _testDataProvider;
-        public BaseTestNamedRange()
-            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
-        { }
+        //public BaseTestNamedRange()
+        //    : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
+        //{ }
         protected BaseTestNamedRange(ITestDataProvider TestDataProvider)
         {
             _testDataProvider = TestDataProvider;

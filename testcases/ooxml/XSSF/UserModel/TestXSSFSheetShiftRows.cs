@@ -15,15 +15,16 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
-using System.Collections.Generic;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.XSSF;
+using NPOI.XSSF.UserModel;
 using NUnit.Framework;
-using TestCases;
+using System;
+using System.Collections.Generic;
 using TestCases.SS.UserModel;
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
 
     /**

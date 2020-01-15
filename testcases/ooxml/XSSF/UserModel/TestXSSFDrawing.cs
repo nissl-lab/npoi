@@ -25,8 +25,11 @@ using System.Drawing;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using System.Text;
 using static NPOI.POIXMLDocumentPart;
+using NPOI.XSSF;
+using NPOI.XSSF.UserModel;
+using NPOI;
 
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
     /**
      * @author Yegor Kozlov
@@ -97,7 +100,7 @@ namespace NPOI.XSSF.UserModel
 
             XSSFConnector c1 = drawing.CreateConnector(new XSSFClientAnchor(0, 0, 0, 0, 0, 0, 2, 2));
             c1.LineWidth = 2.5;
-            c1.LineStyle = SS.UserModel.LineStyle.DashDotSys;
+            c1.LineStyle = LineStyle.DashDotSys;
 
             XSSFShapeGroup c2 = drawing.CreateGroup(new XSSFClientAnchor(0, 0, 0, 0, 0, 0, 5, 5));
             Assert.IsNotNull(c2);

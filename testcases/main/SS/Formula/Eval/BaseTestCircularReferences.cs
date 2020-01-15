@@ -27,7 +27,6 @@ namespace TestCases.SS.Formula.Eval
      * Common superclass for testing cases of circular references
      * both for HSSF and XSSF
      */
-    [TestFixture]
     public abstract class BaseTestCircularReferences
     {
 

@@ -26,8 +26,10 @@ using NPOI.SS;
 using TestCases.HSSF;
 using System.Text;
 using System.Collections.Generic;
+using NPOI.XSSF;
+using NPOI.XSSF.UserModel;
 
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
 
     /**
@@ -204,7 +206,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsFalse(cell6.IsMergedCell);
             Assert.IsFalse(cell8.IsMergedCell);
 
-            sheet.AddMergedRegion(new SS.Util.CellRangeAddress(5, 6, 5, 6));   //region with 4 cells
+            sheet.AddMergedRegion(new CellRangeAddress(5, 6, 5, 6));   //region with 4 cells
 
             Assert.IsTrue(cell5.IsMergedCell);
             Assert.IsTrue(cell6.IsMergedCell);

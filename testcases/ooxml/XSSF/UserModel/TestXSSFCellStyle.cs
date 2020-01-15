@@ -23,7 +23,10 @@ using NPOI.SS.UserModel;
 using NPOI.HSSF.UserModel;
 using System.Drawing;
 using NPOI.HSSF.Util;
-namespace NPOI.XSSF.UserModel
+using NPOI.XSSF.UserModel;
+using NPOI.XSSF;
+
+namespace TestCases.XSSF.UserModel
 {
 
     [TestFixture]

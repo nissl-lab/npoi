@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XSSF.Model
+namespace TestCases.XSSF.Model
 {
     using System;
     using System.IO;
@@ -27,6 +27,7 @@ namespace NPOI.XSSF.Model
     using NPOI.SS.Util;
     using NPOI.Util;
     using NPOI.OpenXmlFormats.Spreadsheet;
+    using NPOI.XSSF.Model;
 
     [TestFixture]
     public class TestThemesTable

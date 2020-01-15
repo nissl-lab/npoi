@@ -3397,7 +3397,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.selectUnlockedCellsField = value;
             }
         }
-
+        // default value of CT_SheetProtection BOOLEAN attribute, see OfficeOpenXML-XMLSchema\sml-sheet.xsd
+        // | attribute           | default value |
+        // |---------------------|---------------|
+        // | sheet               |    false      |
+        // | objects             |    false      |
+        // | scenarios           |    false      |
+        // | formatCells         |    true       |
+        // | formatColumns       |    true       |
+        // | formatRows          |    true       |
+        // | insertColumns       |    true       |
+        // | insertHyperlinks    |    true       |
+        // | deleteColumns       |    true       |
+        // | deleteRows          |    true       |
+        // | selectLockedCells   |    false      |
+        // | sort                |    true       |
+        // | autoFilter          |    true       |
+        // | pivotTables         |    true       |
+        // | selectUnlockedCells |    false      |
         public static CT_SheetProtection Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -3407,18 +3424,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.sheet = XmlHelper.ReadBool(node.Attributes["sheet"]);
             ctObj.objects = XmlHelper.ReadBool(node.Attributes["objects"]);
             ctObj.scenarios = XmlHelper.ReadBool(node.Attributes["scenarios"]);
-            ctObj.formatCells = XmlHelper.ReadBool(node.Attributes["formatCells"]);
-            ctObj.formatColumns = XmlHelper.ReadBool(node.Attributes["formatColumns"]);
-            ctObj.formatRows = XmlHelper.ReadBool(node.Attributes["formatRows"]);
-            ctObj.insertColumns = XmlHelper.ReadBool(node.Attributes["insertColumns"]);
-            ctObj.insertRows = XmlHelper.ReadBool(node.Attributes["insertRows"]);
-            ctObj.insertHyperlinks = XmlHelper.ReadBool(node.Attributes["insertHyperlinks"]);
-            ctObj.deleteColumns = XmlHelper.ReadBool(node.Attributes["deleteColumns"]);
-            ctObj.deleteRows = XmlHelper.ReadBool(node.Attributes["deleteRows"]);
+            ctObj.formatCells = XmlHelper.ReadBool(node.Attributes["formatCells"], true);
+            ctObj.formatColumns = XmlHelper.ReadBool(node.Attributes["formatColumns"], true);
+            ctObj.formatRows = XmlHelper.ReadBool(node.Attributes["formatRows"], true);
+            ctObj.insertColumns = XmlHelper.ReadBool(node.Attributes["insertColumns"], true);
+            ctObj.insertRows = XmlHelper.ReadBool(node.Attributes["insertRows"], true);
+            ctObj.insertHyperlinks = XmlHelper.ReadBool(node.Attributes["insertHyperlinks"], true);
+            ctObj.deleteColumns = XmlHelper.ReadBool(node.Attributes["deleteColumns"], true);
+            ctObj.deleteRows = XmlHelper.ReadBool(node.Attributes["deleteRows"], true);
             ctObj.selectLockedCells = XmlHelper.ReadBool(node.Attributes["selectLockedCells"]);
-            ctObj.sort = XmlHelper.ReadBool(node.Attributes["sort"]);
-            ctObj.autoFilter = XmlHelper.ReadBool(node.Attributes["autoFilter"]);
-            ctObj.pivotTables = XmlHelper.ReadBool(node.Attributes["pivotTables"]);
+            ctObj.sort = XmlHelper.ReadBool(node.Attributes["sort"], true);
+            ctObj.autoFilter = XmlHelper.ReadBool(node.Attributes["autoFilter"], true);
+            ctObj.pivotTables = XmlHelper.ReadBool(node.Attributes["pivotTables"], true);
             ctObj.selectUnlockedCells = XmlHelper.ReadBool(node.Attributes["selectUnlockedCells"]);
             return ctObj;
         }

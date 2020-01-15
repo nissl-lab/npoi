@@ -14,18 +14,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-using System.IO;
-using System.Linq;
-using System.Text;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Streaming;
 using NSubstitute;
 using NUnit.Framework;
+using System.IO;
 
-namespace NPOI.OOXML.Testcases.XSSF.Streaming
+namespace TestCases.XSSF.Streaming
 {
     [TestFixture]
-    class SheetDataWriterTests
+    public class SheetDataWriterTests
     {
         private SheetDataWriter _objectToTest;
         private SXSSFRow _row;

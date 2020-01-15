@@ -17,31 +17,23 @@
 
 namespace TestCases.SS.UserModel
 {
-    using System;
-
-    using NUnit.Framework;
-    using TestCases.SS;
-    using NPOI.SS.UserModel;
-    using NPOI.SS.Util;
-    using NPOI.HSSF.Util;
     using NPOI.HSSF.UserModel;
-    using System.Text;
+    using NPOI.HSSF.Util;
     using NPOI.SS;
-    using System.Collections.Generic;
+    using NPOI.SS.UserModel;
+    using NUnit.Framework;
+    using System;
+    using System.Text;
+    using TestCases.SS;
 
     /**
      * Common superclass for testing implementatiosn of
      *  {@link NPOI.SS.usermodel.Cell}
      */
-    [TestFixture, Explicit]
-    public class BaseTestCell
+    public abstract class BaseTestCell
     {
 
         protected ITestDataProvider _testDataProvider;
-
-        public BaseTestCell()
-            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
-        { }
 
         /**
          * @param testDataProvider an object that provides test data in HSSF / XSSF specific way

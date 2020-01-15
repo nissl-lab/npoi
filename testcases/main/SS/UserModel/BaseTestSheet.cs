@@ -18,29 +18,23 @@
 
 namespace TestCases.SS.UserModel
 {
-    using System;
-    using System.Linq;
-    using NUnit.Framework;
     using NPOI.SS;
-    using NPOI.SS.Util;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+    using NUnit.Framework;
+    using System;
     using System.Collections;
-    using NPOI.HSSF.UserModel;
     using System.Collections.Generic;
-    using NPOI.Util;
+    using System.Linq;
 
     /**
      * Common superclass for Testing {@link NPOI.xssf.UserModel.XSSFCell}  and
      * {@link NPOI.HSSF.UserModel.HSSFCell}
      */
-    [TestFixture]
-    public class BaseTestSheet
+    public abstract class BaseTestSheet
     {
         private static int ROW_COUNT = 40000;
         private ITestDataProvider _testDataProvider;
-        public BaseTestSheet()
-            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
-        { }
         protected BaseTestSheet(ITestDataProvider TestDataProvider)
         {
             _testDataProvider = TestDataProvider;

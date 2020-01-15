@@ -16,8 +16,10 @@
 ==================================================================== */
 
 using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.XSSF;
+using NPOI.XSSF.UserModel;
 using NUnit.Framework;
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
 
     /**

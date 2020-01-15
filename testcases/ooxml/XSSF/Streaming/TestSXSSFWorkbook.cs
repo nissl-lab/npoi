@@ -17,22 +17,20 @@
  * ====================================================================
  */
 
-using NUnit.Framework;
-using System;
 
-namespace NPOI.XSSF.Streaming
+namespace TestCases.XSSF.Streaming
 {
-    using System;
-    using System.IO;
     using NPOI.OpenXml4Net.OPC;
-    using NPOI.SS;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.Util;
     using NPOI.XSSF;
     using NPOI.XSSF.Model;
+    using NPOI.XSSF.Streaming;
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;
+    using System;
+    using System.IO;
     using TestCases;
     using TestCases.SS.UserModel;
     using TestCases.Util;

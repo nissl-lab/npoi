@@ -17,35 +17,28 @@
 
 namespace TestCases.SS.UserModel
 {
-    using System;
-
-    using NUnit.Framework;
-
-    using NPOI.HSSF.Util;
-    using NPOI.SS;
-    using NPOI.SS.Util;
-    using System.Text;
-    using NPOI.SS.UserModel;
-    using System.Collections.Generic;
     using NPOI.HSSF.UserModel;
+    using NPOI.SS;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+    using NPOI.Util;
+    using NUnit.Framework;
+    using System;
+    using System.Collections.Generic;
     using System.Drawing;
     using System.IO;
-    using NPOI.Util;
+    using System.Text;
 
     /**
      * A base class for bugzilla issues that can be described in terms of common ss interfaces.
      *
      * @author Yegor Kozlov
      */
-    [TestFixture]
-    public class BaseTestBugzillaIssues
+    public abstract class BaseTestBugzillaIssues
     {
 
         private ITestDataProvider _testDataProvider;
-        public BaseTestBugzillaIssues()
-        {
-            _testDataProvider = TestCases.HSSF.HSSFITestDataProvider.Instance;
-        }
+
         protected BaseTestBugzillaIssues(ITestDataProvider TestDataProvider)
         {
             _testDataProvider = TestDataProvider;

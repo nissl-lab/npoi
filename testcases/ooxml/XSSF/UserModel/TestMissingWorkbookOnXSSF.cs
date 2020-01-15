@@ -15,16 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
-    using System;
-
-    using NPOI.HSSF;
-    using NPOI.SS.Formula;
     using NPOI.XSSF;
-    using TestCases.SS.Formula;
     using NUnit.Framework;
     using TestCases.HSSF;
+    using TestCases.SS.Formula;
 
     /**
      * XSSF Specific version of the Missing Workbooks test

@@ -22,11 +22,13 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.OpenXmlFormats.Vml;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.XSSF;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.Streaming;
+using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using TestCases.SS.UserModel;
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
     /**
      * @author Yegor Kozlov

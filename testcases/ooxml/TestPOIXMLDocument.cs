@@ -15,19 +15,19 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.OOXML
+namespace TestCases.OOXML
 {
-    using System;
-    using NPOI.Util;
-    using System.Collections.Generic;
-    using NUnit.Framework;
-    using System.IO;
-    using NPOI.OpenXml4Net.OPC;
     using NPOI;
+    using NPOI.OpenXml4Net.Exceptions;
+    using NPOI.OpenXml4Net.OPC;
+    using NPOI.Util;
+    using NUnit.Framework;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text.RegularExpressions;
     using TestCases;
     using TestCases.Util;
-    using System.Text.RegularExpressions;
-    using NPOI.OpenXml4Net.Exceptions;
 
     /**
      * Test recursive read and write of OPC namespaces

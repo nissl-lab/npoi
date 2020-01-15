@@ -17,7 +17,7 @@
  * ====================================================================
  */
 
-namespace Testcases.XSSF.Streaming
+namespace TestCases.XSSF.Streaming
 {
     using NPOI.XSSF;
     using NUnit.Framework;

@@ -17,25 +17,22 @@
 
 namespace TestCases.SS.UserModel
 {
-    using System;
-
-    using NUnit.Framework;
-
-    using NPOI.SS;
     using NPOI.SS.UserModel;
+    using NUnit.Framework;
+    using System;
 
     /**
      * Common superclass for Testing implementatiosn of{@link FormulaEvaluator}
      *
      * @author Yegor Kozlov
      */
-    public class BaseTestFormulaEvaluator
+    public abstract class BaseTestFormulaEvaluator
     {
 
         protected ITestDataProvider _testDataProvider;
-        public BaseTestFormulaEvaluator()
-            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
-        { }
+        //public BaseTestFormulaEvaluator()
+        //    : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
+        //{ }
         /**
          * @param TestDataProvider an object that provides Test data in  /  specific way
          */

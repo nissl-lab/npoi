@@ -18,7 +18,10 @@
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NUnit.Framework;
 using NPOI.XSSF.Model;
-namespace NPOI.XSSF.UserModel.Helpers
+using NPOI.XSSF.UserModel.Helpers;
+using NPOI.XSSF.UserModel;
+
+namespace TestCases.XSSF.UserModel.Helpers
 {
     /**
      * Tests for {@link ColumnHelper}

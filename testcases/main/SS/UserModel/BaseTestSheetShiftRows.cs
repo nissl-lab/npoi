@@ -17,16 +17,13 @@
 
 namespace TestCases.SS.UserModel
 {
-    using System;
-
-    using NUnit.Framework;
-
-    using NPOI.SS;
-    using NPOI.SS.Util;
-    using TestCases.SS;
-    using NPOI.SS.UserModel;
     using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+    using NUnit.Framework;
+    using System;
     using System.Collections.Generic;
+    using TestCases.SS;
 
     /**
      * Tests row Shifting capabilities.
@@ -34,14 +31,14 @@ namespace TestCases.SS.UserModel
      * @author Shawn Laubach (slaubach at apache dot com)
      * @author Toshiaki Kamoshida (kamoshida.Toshiaki at future dot co dot jp)
      */
-    public class BaseTestSheetShiftRows
+    public abstract class BaseTestSheetShiftRows
     {
 
         private ITestDataProvider _testDataProvider;
-        public BaseTestSheetShiftRows()
-        {
-            _testDataProvider = TestCases.HSSF.HSSFITestDataProvider.Instance;
-        }
+        //public BaseTestSheetShiftRows()
+        //{
+        //    _testDataProvider = TestCases.HSSF.HSSFITestDataProvider.Instance;
+        //}
         protected BaseTestSheetShiftRows(ITestDataProvider TestDataProvider)
         {
             _testDataProvider = TestDataProvider;

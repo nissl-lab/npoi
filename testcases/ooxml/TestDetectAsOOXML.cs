@@ -16,14 +16,15 @@
    limitations under the License.
 ==================================================================== */
 
-using System.IO;
-using NUnit.Framework;
+using NPOI;
 using NPOI.OpenXml4Net.OPC;
-using NPOI.Util;
-using TestCases.HSSF;
 using NPOI.POIFS.FileSystem;
+using NPOI.Util;
+using NUnit.Framework;
+using System.IO;
+using TestCases.HSSF;
 
-namespace NPOI.OOXML
+namespace TestCases.OOXML
 {
 
     /**

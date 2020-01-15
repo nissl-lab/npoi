@@ -32,14 +32,13 @@ namespace TestCases.SS.UserModel
      * @author Yegor Kozlov
      * @author Josh Micich
      */
-    [TestFixture]
-    public class BaseTestSheetUpdateArrayFormulas
+    public abstract class BaseTestSheetUpdateArrayFormulas
     {
         protected ITestDataProvider _testDataProvider;
-        public BaseTestSheetUpdateArrayFormulas()
-        {
-            _testDataProvider = TestCases.HSSF.HSSFITestDataProvider.Instance;
-        }
+        //public BaseTestSheetUpdateArrayFormulas()
+        //{
+        //    _testDataProvider = TestCases.HSSF.HSSFITestDataProvider.Instance;
+        //}
         protected BaseTestSheetUpdateArrayFormulas(ITestDataProvider TestDataProvider)
         {
             _testDataProvider = TestDataProvider;

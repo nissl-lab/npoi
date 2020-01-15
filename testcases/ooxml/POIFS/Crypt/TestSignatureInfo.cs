@@ -21,22 +21,16 @@
    http://code.google.com/p/eid-applet/source/browse/tRunk/README.txt  
    Copyright (C) 2008-2014 FedICT.
    ================================================================= */
-using NPOI.Util;
-using System;
 using System.IO;
 
-namespace NPOI.POIFS.Crypt
+namespace TestCases.POIFS.Crypt
 {
+    using NPOI.OpenXml4Net.OPC;
+    using NPOI.POIFS.Crypt.Dsig;
+    using NUnit.Framework;
     using System;
     using System.Collections.Generic;
     using System.Security.Cryptography.X509Certificates;
-    using NPOI.OpenXml4Net.OPC;
-    using NPOI.POIFS.Crypt.Dsig;
-    using NPOI.POIFS.Crypt.Dsig.Facets;
-    using NPOI.POIFS.Crypt.Dsig.Services;
-
-    using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
     using TestCases;
 
     [TestFixture]

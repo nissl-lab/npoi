@@ -19,8 +19,10 @@ using NUnit.Framework;
 using NPOI.SS.UserModel;
 using System.Collections.Generic;
 using NPOI.SS.UserModel.Charts;
+using NPOI.XSSF.UserModel;
+using NPOI.XSSF;
 
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
     [TestFixture]
     public class TestXSSFChart

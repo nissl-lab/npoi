@@ -14,15 +14,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.POIFS.Crypt
+namespace TestCases.POIFS.Crypt
 {
-    using System;
-    using System.IO;
     using ICSharpCode.SharpZipLib.Zip;
+    using NPOI.POIFS.Crypt;
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
     using NPOI.XSSF;
     using NUnit.Framework;
+    using System.IO;
     using TestCases;
 
     /**

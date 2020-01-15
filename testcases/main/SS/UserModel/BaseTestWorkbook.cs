@@ -17,31 +17,26 @@
 
 namespace TestCases.SS.UserModel
 {
+    using NPOI.SS;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+    using NPOI.Util;
+    using NUnit.Framework;
     using System;
     using System.Collections;
-    using NUnit.Framework;
-    using NPOI.SS.Util;
-    using TestCases.SS;
-    using NPOI.SS.UserModel;
     using System.Text;
-    using System.IO;
-    using NPOI.Util;
-    using NPOI.SS;
     using TestCases.HSSF;
+    using TestCases.SS;
     using TestCases.Util;
 
     /**
      * @author Yegor Kozlov
      */
-    [TestFixture]
     public abstract class BaseTestWorkbook
     {
 
         protected ITestDataProvider _testDataProvider;
-        public BaseTestWorkbook()
-        {
-            _testDataProvider = TestCases.HSSF.HSSFITestDataProvider.Instance;
-        }
+
         protected BaseTestWorkbook(ITestDataProvider TestDataProvider)
         {
             _testDataProvider = TestDataProvider;

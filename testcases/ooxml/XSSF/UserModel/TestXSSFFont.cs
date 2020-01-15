@@ -15,16 +15,18 @@
    limitations under the License.
 ==================================================================== */
 
-using TestCases.SS.UserModel;
-using NPOI.SS.UserModel;
+using NPOI;
 using NPOI.OpenXmlFormats.Spreadsheet;
-using NUnit.Framework;
-using System;
-using NPOI.Util;
-using System.Text;
+using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.Util;
+using NPOI.XSSF;
+using NPOI.XSSF.UserModel;
+using NUnit.Framework;
+using System.Text;
+using TestCases.SS.UserModel;
 
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
     [TestFixture]
     public class TestXSSFFont : BaseTestFont

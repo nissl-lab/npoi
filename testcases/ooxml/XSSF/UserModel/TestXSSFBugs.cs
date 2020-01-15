@@ -16,13 +16,9 @@
 ==================================================================== */
 
 using TestCases.SS.UserModel;
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.IO;
-    using System.Text;
+    using NPOI;
     using NPOI.HSSF.UserModel;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.OpenXmlFormats.Spreadsheet;
@@ -36,9 +32,15 @@ namespace NPOI.XSSF.UserModel
     using NPOI.XSSF;
     using NPOI.XSSF.Model;
     using NPOI.XSSF.Streaming;
+    using NPOI.XSSF.UserModel;
     using NPOI.XSSF.UserModel.Extensions;
     using NUnit.Framework;
     using NUnit.Framework.Constraints;
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Text;
     using TestCases;
     using TestCases.HSSF;
     using static NPOI.POIXMLDocumentPart;

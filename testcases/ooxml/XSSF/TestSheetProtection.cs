@@ -16,12 +16,9 @@
 ==================================================================== */
 namespace TestCases
 {
-    using System;
-
-    using NUnit.Framework;
-
-    using NPOI.XSSF.UserModel;
     using NPOI.XSSF;
+    using NPOI.XSSF.UserModel;
+    using NUnit.Framework;
 
     [TestFixture]
     public class TestSheetProtection

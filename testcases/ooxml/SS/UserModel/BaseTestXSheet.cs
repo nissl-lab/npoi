@@ -17,7 +17,6 @@
 
 namespace TestCases.SS.UserModel
 {
-    using NUnit.Framework;
     using TestCases.SS;
 
     /**
@@ -27,7 +26,6 @@ namespace TestCases.SS.UserModel
      *  Any test that is applicable for {@link NPOI.HSSF.UserModel.HSSFSheet} as well should go into
      *  the common base class {@link BaseTestSheet}.
      */
-    [TestFixture]
     public abstract class BaseTestXSheet : BaseTestSheet
     {
         protected BaseTestXSheet(ITestDataProvider testDataProvider)

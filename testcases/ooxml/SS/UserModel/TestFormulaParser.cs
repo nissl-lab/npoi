@@ -23,13 +23,8 @@ using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace NPOI.SS.UserModel
+namespace TestCases.SS.UserModel
 {
     [TestFixture]
     public class TestFormulaParser

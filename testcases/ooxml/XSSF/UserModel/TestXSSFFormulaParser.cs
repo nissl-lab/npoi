@@ -24,8 +24,10 @@ using TestCases.HSSF;
 using NPOI.HSSF.UserModel;
 using NPOI.Util;
 using NPOI.SS.Util;
+using NPOI.XSSF.UserModel;
+using NPOI.XSSF;
 
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
     [TestFixture]
     public class TestXSSFFormulaParser

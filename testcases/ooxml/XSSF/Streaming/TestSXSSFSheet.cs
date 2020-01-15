@@ -17,17 +17,14 @@
  * ====================================================================
  */
 
-namespace NPOI.OOXML.Testcases.XSSF.Streaming
+namespace TestCases.XSSF.Streaming
 {
-    using System;
-
-
-    using NPOI.SS;
     using NPOI.SS.UserModel;
     using NPOI.XSSF;
     using NPOI.XSSF.Streaming;
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;
+    using System;
     using TestCases.SS.UserModel;
 
     [TestFixture]
@@ -37,7 +34,7 @@ namespace NPOI.OOXML.Testcases.XSSF.Streaming
         public TestSXSSFSheet()
             : base(SXSSFITestDataProvider.instance)
         {
-            ;
+            
         }
 
 

@@ -15,8 +15,9 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI.XSSF.Util;
 using NUnit.Framework;
-namespace NPOI.XSSF.Util
+namespace TestCases.XSSF.Util
 {
 
     [TestFixture]

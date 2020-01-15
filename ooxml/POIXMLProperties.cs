@@ -663,7 +663,7 @@ namespace NPOI
                 PackagePart tPart = ThumbnailPart;
                 if (tPart == null) return null;
                 String name = tPart.PartName.Name;
-                return name.Substring(name.LastIndexOf('/'));
+                return name.Substring(name.LastIndexOf('/') + 1);
             }
         }
         /**

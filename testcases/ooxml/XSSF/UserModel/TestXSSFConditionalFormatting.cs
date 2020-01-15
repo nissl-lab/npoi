@@ -1,4 +1,6 @@
 using NPOI.SS.UserModel;
+using NPOI.XSSF;
+using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using System;
 /*
@@ -20,7 +22,7 @@ using System;
 * ====================================================================
 */
 using TestCases.SS.UserModel;
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
     /**
      * @author Yegor Kozlov
