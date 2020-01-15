@@ -14,17 +14,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-using NUnit.Framework;
-using System.Collections.Generic;
 using NPOI.OpenXmlFormats.Vml;
 using NPOI.OpenXmlFormats.Vml.Office;
-using System.IO;
-using TestCases;
-using System.Collections;
 using NPOI.OpenXmlFormats.Vml.Spreadsheet;
+using NPOI.XSSF.UserModel;
+using NUnit.Framework;
 using System;
+using System.Collections;
+using System.IO;
 
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
 
     /**

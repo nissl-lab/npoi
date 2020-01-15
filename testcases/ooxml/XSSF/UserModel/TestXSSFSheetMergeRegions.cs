@@ -14,14 +14,14 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
     using NPOI.SS.Util;
     using NPOI.XSSF;
+    using NPOI.XSSF.UserModel;
     using NUnit.Framework;
+    using System.Collections.Generic;
+    using System.Diagnostics;
 
     [TestFixture]
     public class TestXSSFSheetMergeRegions

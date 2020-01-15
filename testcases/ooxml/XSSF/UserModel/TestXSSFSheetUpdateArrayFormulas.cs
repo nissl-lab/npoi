@@ -21,7 +21,10 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using TestCases.SS.UserModel;
-namespace NPOI.XSSF.UserModel
+using NPOI.XSSF;
+using NPOI.XSSF.UserModel;
+
+namespace TestCases.XSSF.UserModel
 {
     /**
      * Test array formulas in XSSF

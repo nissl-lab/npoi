@@ -22,8 +22,10 @@ using NPOI.SS.UserModel;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Util;
+using NPOI.XSSF.UserModel;
+using NPOI.XSSF;
 
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
     [TestFixture]
     public class TestXSSFHyperlink : BaseTestHyperlink

@@ -15,11 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
 using NUnit.Framework;
 using NPOI.SS.UserModel;
 using NPOI.SS.UserModel.Charts;
-namespace NPOI.XSSF.UserModel.Charts
+using NPOI.XSSF.UserModel;
+
+namespace TestCases.XSSF.UserModel.Charts
 {
 
     [TestFixture]

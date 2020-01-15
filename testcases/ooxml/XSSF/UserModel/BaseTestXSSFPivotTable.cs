@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
     using System;
     using System.Collections.Generic;
@@ -22,10 +22,11 @@ namespace NPOI.XSSF.UserModel
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
+    using NPOI.XSSF;
+    using NPOI.XSSF.UserModel;
     using NUnit.Framework;
 
 
-    [TestFixture]
     public abstract class BaseTestXSSFPivotTable
     {
         private static XSSFITestDataProvider _testDataProvider = XSSFITestDataProvider.instance;

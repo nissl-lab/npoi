@@ -16,8 +16,9 @@
 ==================================================================== */
 
 using System;
+using NPOI.XSSF.UserModel.Helpers;
 using NUnit.Framework;
-namespace NPOI.XSSF.UserModel.Helpers
+namespace TestCases.XSSF.UserModel.Helpers
 {
 
     /**

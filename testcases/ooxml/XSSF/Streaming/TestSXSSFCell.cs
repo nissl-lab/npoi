@@ -17,14 +17,14 @@
  * ====================================================================
  */
 
-namespace NPOI.XSSF.Streaming
+namespace TestCases.XSSF.Streaming
 {
-    using System;
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.SS.UserModel;
     using NPOI.XSSF;
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;
+    using System;
     using TestCases.SS.UserModel;
 
     /**

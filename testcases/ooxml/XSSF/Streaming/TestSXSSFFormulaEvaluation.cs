@@ -17,11 +17,11 @@
  * ====================================================================
  */
 
-namespace NPOI.XSSF.Streaming
+namespace TestCases.XSSF.Streaming
 {
-    using System;
-
     using NPOI.SS.UserModel;
+    using NPOI.XSSF;
+    using NPOI.XSSF.Streaming;
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;
 

@@ -20,7 +20,11 @@ using NUnit.Framework;
 using NPOI.HSSF.Extractor;
 using TestCases.HSSF;
 using System.Text.RegularExpressions;
-namespace NPOI.XSSF.Extractor
+using NPOI.XSSF.Extractor;
+using NPOI.XSSF;
+using NPOI;
+
+namespace TestCases.XSSF.Extractor
 {
 
     /**

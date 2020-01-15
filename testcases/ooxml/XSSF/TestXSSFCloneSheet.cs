@@ -15,13 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XSSF
+namespace TestCases.XSSF
 {
     using System;
     using NPOI.SS.UserModel;
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;
     using TestCases.HSSF;
+    using TestCases.SS.UserModel;
 
     [TestFixture]
     public class TestXSSFCloneSheet : BaseTestCloneSheet

@@ -15,15 +15,19 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.XSSF.UserModel;
+using NPOI;
+using NPOI.XSSF;
+using NPOI.XSSF.Extractor;
 using NPOI.XSSF.Model;
-using System.IO;
+using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using System;
-using System.Xml;
-using System.Text.RegularExpressions;
+using System.IO;
 using System.Text;
-namespace NPOI.XSSF.Extractor
+using System.Text.RegularExpressions;
+using System.Xml;
+
+namespace TestCases.XSSF.Extractor
 {
 
     /**

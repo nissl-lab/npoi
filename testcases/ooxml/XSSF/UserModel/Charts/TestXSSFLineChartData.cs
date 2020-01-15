@@ -1,4 +1,4 @@
-﻿namespace NPOI.XSSF.UserModel.Charts
+﻿namespace TestCases.XSSF.UserModel.Charts
 {
     using System;
 

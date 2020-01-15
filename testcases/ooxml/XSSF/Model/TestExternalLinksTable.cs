@@ -15,11 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XSSF.Model
+namespace TestCases.XSSF.Model
 {
-    using System;
 
     using NPOI.SS.UserModel;
+    using NPOI.XSSF;
+    using NPOI.XSSF.Model;
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;
 

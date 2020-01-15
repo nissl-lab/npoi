@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XSSF.UserModel.Charts
+namespace TestCases.XSSF.UserModel.Charts
 {
     using System;
     using System.Collections.Generic;

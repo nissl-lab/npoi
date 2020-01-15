@@ -14,10 +14,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
     using System;
     using NPOI.SS.UserModel;
+    using NPOI.XSSF.UserModel;
     using NUnit.Framework;
 
     [TestFixture]

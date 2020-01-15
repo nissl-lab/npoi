@@ -17,15 +17,10 @@
 
 namespace TestCases.SS.UserModel
 {
-    using System;
-
-    using NUnit.Framework;
-    using NPOI.SS;
-    using NPOI.SS.Util;
     using NPOI.SS.UserModel;
-    using System.Collections;
-    using System.IO;
-    using NPOI.HSSF.UserModel;
+    using NPOI.SS.Util;
+    using NUnit.Framework;
+    using System;
 
 
 
@@ -34,15 +29,14 @@ namespace TestCases.SS.UserModel
      *
      * @author Yegor Kozlov
      */
-    [TestFixture]
-    public class BaseTestSheetAutosizeColumn
+    public abstract class BaseTestSheetAutosizeColumn
     {
 
         private ITestDataProvider _testDataProvider;
-        public BaseTestSheetAutosizeColumn()
-        {
-            _testDataProvider = TestCases.HSSF.HSSFITestDataProvider.Instance;
-        }
+        //public BaseTestSheetAutosizeColumn()
+        //{
+        //    _testDataProvider = TestCases.HSSF.HSSFITestDataProvider.Instance;
+        //}
         protected BaseTestSheetAutosizeColumn(ITestDataProvider TestDataProvider)
         {
             _testDataProvider = TestDataProvider;

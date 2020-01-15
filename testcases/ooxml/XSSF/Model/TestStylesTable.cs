@@ -20,8 +20,10 @@ using NUnit.Framework;
 using NPOI.XSSF.UserModel;
 using System.Collections.Generic;
 using NPOI.SS.UserModel;
+using NPOI.XSSF.Model;
+using NPOI.XSSF;
 
-namespace NPOI.XSSF.Model
+namespace TestCases.XSSF.Model
 {
     [TestFixture]
     public class TestStylesTable

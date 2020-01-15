@@ -15,13 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
-using NUnit.Framework;
 using NPOI.OpenXmlFormats.Spreadsheet;
-using System.Collections.Generic;
-using System;
 using NPOI.SS.UserModel;
+using NPOI.XSSF;
 using NPOI.XSSF.Model;
-namespace NPOI.XSSF.UserModel
+using NPOI.XSSF.UserModel;
+using NUnit.Framework;
+using System;
+namespace TestCases.XSSF.UserModel
 {
     /**
      * Tests functionality of the XSSFRichTextRun object

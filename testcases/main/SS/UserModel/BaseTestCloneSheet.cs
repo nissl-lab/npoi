@@ -15,8 +15,9 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.UserModel
+namespace TestCases.SS.UserModel
 {
+    using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NUnit.Framework;
     using System;
@@ -26,7 +27,6 @@ namespace NPOI.SS.UserModel
      * Common superclass for testing implementations of
      * Workbook.CloneSheet()
      */
-    [TestFixture]
     public abstract class BaseTestCloneSheet
     {
 
