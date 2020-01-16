@@ -273,7 +273,9 @@ namespace NPOI.XSSF.Streaming
         {
             CheckBounds(cellnum);
 
-            var cell = _cells[cellnum];
+            SXSSFCell cell = null;
+            if (_cells.ContainsKey(cellnum))
+                cell = _cells[cellnum];
             switch (policy)
             {
                 case MissingCellPolicy.RETURN_NULL_AND_BLANK:
