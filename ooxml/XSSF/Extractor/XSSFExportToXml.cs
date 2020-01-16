@@ -132,7 +132,7 @@ namespace NPOI.XSSF.Extractor
             }
 
 
-            xpaths.Sort();
+            xpaths.Sort(this);
 
             foreach (String xpath in xpaths)
             {

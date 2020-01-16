@@ -375,12 +375,18 @@ namespace NPOI.XSSF.Streaming
 
         private XSSFSheet GetXSSFSheet(SXSSFSheet sheet)
         {
-            return _sxFromXHash[sheet];
+            if (sheet != null && _sxFromXHash.ContainsKey(sheet))
+                return _sxFromXHash[sheet];
+            else
+                return null;
         }
 
         private SXSSFSheet GetSXSSFSheet(XSSFSheet sheet)
         {
-            return _xFromSxHash[sheet];
+            if (sheet != null && _xFromSxHash.ContainsKey(sheet))
+                return _xFromSxHash[sheet];
+            else
+                return null;
         }
 
         /**

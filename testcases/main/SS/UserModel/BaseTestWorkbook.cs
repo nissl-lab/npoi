@@ -492,7 +492,7 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
-        public void CloneSheet()
+        public virtual void CloneSheet()
         {
             IWorkbook book = _testDataProvider.CreateWorkbook();
             ISheet sheet = book.CreateSheet("TEST");

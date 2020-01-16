@@ -79,7 +79,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             String[] xPathTokens = ctXmlColumnPr.xpath.Split(new char[] { '/' });
             for (int i = numberOfCommonXPathAxis; i < xPathTokens.Length; i++)
             {
-                localXPath.Append(xPathTokens[i]);
+                localXPath.Append("/" + xPathTokens[i]);
             }
             return localXPath.ToString();
         }

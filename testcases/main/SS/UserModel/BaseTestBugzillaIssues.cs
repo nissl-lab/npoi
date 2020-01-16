@@ -120,7 +120,7 @@ namespace TestCases.SS.UserModel
          * Merged regions were being Removed from the parent in Cloned sheets
          */
         [Test]
-        public void Bug22720()
+        public virtual void Bug22720()
         {
             IWorkbook workBook = _testDataProvider.CreateWorkbook();
             workBook.CreateSheet("TEST");
@@ -251,7 +251,7 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(true, "no errors parsing formula");
         }
         [Test]
-        public void Bug18800()
+        public virtual void Bug18800()
         {
             IWorkbook book = _testDataProvider.CreateWorkbook();
             book.CreateSheet("TEST");
@@ -303,7 +303,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(d, (311 + 312 + 321 + 322), 0.0000001);
         }
         [Test]
-        public void Bug46729_testMaxFunctionArguments()
+        public virtual void Bug46729_testMaxFunctionArguments()
         {
             String[] func = { "COUNT", "AVERAGE", "MAX", "MIN", "OR", "SUBTOTAL", "SKEW" };
 
@@ -1129,7 +1129,7 @@ namespace TestCases.SS.UserModel
          *  kind of value from a Formula cell
          */
         [Test]
-        public void Bug47815()
+        public virtual void Bug47815()
         {
 
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -1197,7 +1197,7 @@ namespace TestCases.SS.UserModel
             wb.Close();
         }
         [Test]
-        public void Test58113()
+        public virtual void Test58113()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet("Test");
@@ -1534,7 +1534,7 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
-        public void Bug57798()
+        public virtual void Bug57798()
         {
             String fileName = "57798." + _testDataProvider.StandardFileNameExtension;
             IWorkbook workbook = _testDataProvider.OpenSampleWorkbook(fileName);
