@@ -173,7 +173,7 @@ namespace TestCases.SS.UserModel
             workbook.Close();
         }
         [Test]
-        public void TestCloneSheet()
+        public virtual void CloneSheet()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             ICreationHelper factory = workbook.GetCreationHelper();
@@ -211,7 +211,7 @@ namespace TestCases.SS.UserModel
          * BUG 37416
          */
         [Test]
-        public void TestCloneSheetMultipleTimes()
+        public virtual void CloneSheetMultipleTimes()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             ICreationHelper factory = workbook.GetCreationHelper();
@@ -497,7 +497,7 @@ namespace TestCases.SS.UserModel
 
 
         [Test]
-        public void TestShiftMerged()
+        public virtual void ShiftMerged()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ICreationHelper factory = wb.GetCreationHelper();
@@ -706,7 +706,7 @@ namespace TestCases.SS.UserModel
 
         /** cell with formula becomes null on cloning a sheet*/
         [Test]
-        public void Test35084()
+        public virtual void Bug35084()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet s = wb.CreateSheet("Sheet1");
@@ -724,7 +724,7 @@ namespace TestCases.SS.UserModel
 
         /** Test that new default column styles Get applied */
         [Test]
-        public virtual void TestDefaultColumnStyle()
+        public virtual void DefaultColumnStyle()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ICellStyle style = wb.CreateCellStyle();
@@ -1224,7 +1224,7 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
-        public void GetCellComment()
+        public virtual void GetCellComment()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             ISheet sheet = workbook.CreateSheet();

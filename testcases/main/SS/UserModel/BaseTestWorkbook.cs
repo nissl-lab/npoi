@@ -73,6 +73,9 @@ namespace TestCases.SS.UserModel
             // Iterator order should be fixed when iterator is created
             try
             {
+                it = wb.GetEnumerator();
+                it.MoveNext();
+                it.MoveNext();
                 it.MoveNext();
                 Assert.AreEqual("Sheet1", (it.Current as ISheet).SheetName);
             }
@@ -96,6 +99,7 @@ namespace TestCases.SS.UserModel
             // Iterator order should be fixed when iterator is created
             try
             {
+                it = wb.GetEnumerator();
                 it.MoveNext();
             }
             finally

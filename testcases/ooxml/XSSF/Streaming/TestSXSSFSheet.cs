@@ -54,18 +54,23 @@ namespace TestCases.XSSF.Streaming
          */
 
         [Test]
-        public void CloneSheet() {
+        public override void CloneSheet() {
             //thrown.Expect(typeof(Exception));
             //thrown.ExpectMessage("NotImplemented");
-            base.TestCloneSheet();
+            Assert.Throws<NotImplementedException>(() => {
+                base.CloneSheet();
+            });
+            
         }
 
 
         [Test]
-        public void CloneSheetMultipleTimes() {
+        public override void CloneSheetMultipleTimes() {
             //thrown.Expect(typeof(Exception));
             //thrown.ExpectMessage("NotImplemented");
-            base.TestCloneSheetMultipleTimes();
+            Assert.Throws<NotImplementedException>(() => {
+                base.CloneSheetMultipleTimes();
+            });
         }
 
         /**
@@ -73,10 +78,13 @@ namespace TestCases.XSSF.Streaming
          */
 
         [Test]
-        public void ShiftMerged() {
+        public override void ShiftMerged() {
             //thrown.Expect(typeof(Exception));
             //thrown.ExpectMessage("NotImplemented");
-            base.TestShiftMerged();
+            
+            Assert.Throws<NotImplementedException>(() => {
+                base.ShiftMerged();
+            });
         }
 
         /**
@@ -86,14 +94,17 @@ namespace TestCases.XSSF.Streaming
          */
 
         [Test]
-        public void bug35084() {
+        public override void Bug35084() {
             //thrown.Expect(typeof(Exception));
             //thrown.ExpectMessage("NotImplemented");
-            base.Test35084();
+            
+            Assert.Throws<NotImplementedException>(() => {
+                base.Bug35084();
+            });
         }
 
         [Test]
-        public void getCellComment() {
+        public override void GetCellComment() {
             // TODO: Reading cell comments via Sheet does not work currently as it tries 
             // to access the underlying sheet for this, but comments are stored as
             // properties on Cells...
@@ -101,7 +112,7 @@ namespace TestCases.XSSF.Streaming
 
 
         [Test]
-        public void defaultColumnStyle() {
+        public override void DefaultColumnStyle() {
             //TODO column styles are not yet supported by XSSF
         }
 
