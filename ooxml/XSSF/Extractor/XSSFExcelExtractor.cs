@@ -140,11 +140,12 @@ namespace NPOI.XSSF.Extractor
         {
             this.includeHeadersFooters = includeHeadersFooters;
         }
-        public void SetLocale(CultureInfo locale) {
+        public void SetLocale(CultureInfo locale)
+        {
             this.locale = locale;
         }
 
-        private CultureInfo locale=null;
+        private CultureInfo locale = null;
         /**
          * Retreives the text contents of the file
          */
@@ -190,10 +191,13 @@ namespace NPOI.XSSF.Extractor
                     foreach (Object rawR in sheet)
                     {
                         IRow row = (IRow)rawR;
-                        IEnumerator ri =row.GetEnumerator();
-                        bool firsttime=true;
+                        IEnumerator ri = row.GetEnumerator();
+                        bool firsttime = true;
                         for (int j = 0; j < row.LastCellNum; j++)
                         {
+                            ICell cell = (ICell)row.GetCell(j);
+                            if (cell == null)
+                                continue;
                             if (!firsttime)
                             {
                                 text.Append("\t");
@@ -202,9 +206,7 @@ namespace NPOI.XSSF.Extractor
                             {
                                 firsttime = false;
                             }
-                            ICell cell = (ICell)row.GetCell(j);
-                            if (cell == null)
-                                continue;
+                            
 
                             // Is it a formula one?
                             if (cell.CellType == CellType.Formula)
@@ -244,7 +246,7 @@ namespace NPOI.XSSF.Extractor
                                 String commentText = comment.String.String.Replace('\n', ' ');
                                 text.Append(" Comment by ").Append(comment.Author).Append(": ").Append(commentText);
                             }
-                            
+
                         }
                         text.Append("\n");
                     }
@@ -283,7 +285,7 @@ namespace NPOI.XSSF.Extractor
             {
                 ICellStyle cs = cell.CellStyle;
 
-                if (cs.GetDataFormatString()!= null)
+                if (cs.GetDataFormatString() != null)
                 {
                     text.Append(formatter.FormatRawCellContents(
                           cell.NumericCellValue, cs.DataFormat, cs.GetDataFormatString()

@@ -56,14 +56,14 @@ namespace TestCases.XSSF.Streaming
          */
 
         [Test]
-        public new void CloneSheet()
+        public override void CloneSheet()
         {
             try
             {
                 base.CloneSheet();
                 Assert.Fail("expected exception");
             }
-            catch (RuntimeException e)
+            catch (NotImplementedException e)
             {
                 Assert.AreEqual("NotImplemented", e.Message);
             }

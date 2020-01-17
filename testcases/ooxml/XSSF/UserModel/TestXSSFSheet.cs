@@ -47,9 +47,9 @@ namespace TestCases.XSSF.UserModel
 
         //[Test]
         //TODO column styles are not yet supported by XSSF
-        public override void TestDefaultColumnStyle()
+        public override void DefaultColumnStyle()
         {
-            base.TestDefaultColumnStyle();
+            base.DefaultColumnStyle();
         }
         [Test]
         public void TestTestGetSetMargin()

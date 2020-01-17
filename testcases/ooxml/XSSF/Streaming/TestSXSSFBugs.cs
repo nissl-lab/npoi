@@ -7,6 +7,7 @@ using TestCases.SS.UserModel;
 
 namespace TestCases.XSSF.Streaming
 {
+    [TestFixture]
     public class TestSXSSFBugs : BaseTestBugzillaIssues
     {
         public TestSXSSFBugs()
@@ -15,12 +16,12 @@ namespace TestCases.XSSF.Streaming
 
         }
         // override some tests which do not work for SXSSF
-        [Ignore("cloneSheet() not implemented")]  public new void Bug18800() { /* cloneSheet() not implemented */ }
-        [Ignore("cloneSheet() not implemented")]  public new void Bug22720() { /* cloneSheet() not implemented */ }
-        [Ignore("Evaluation is not fully supported")]  public new void Bug47815() { /* Evaluation is not supported */ }
-        [Ignore("Evaluation is not fully supported")]  public new void Test58113() { /* Evaluation is not supported */ }
-        [Ignore("Evaluation is not fully supported")] public new void Bug46729_testMaxFunctionArguments() { /* Evaluation is not supported */ }
-        [Ignore("Reading data is not supported")] [Test] public new void Bug57798() { /* Reading data is not supported */ }
+        [Ignore("cloneSheet() not implemented")]  public override void Bug18800() { /* cloneSheet() not implemented */ }
+        [Ignore("cloneSheet() not implemented")]  public override void Bug22720() { /* cloneSheet() not implemented */ }
+        [Ignore("Evaluation is not fully supported")]  public override void Bug47815() { /* Evaluation is not supported */ }
+        [Ignore("Evaluation is not fully supported")]  public override void Test58113() { /* Evaluation is not supported */ }
+        [Ignore("Evaluation is not fully supported")] public override void Bug46729_testMaxFunctionArguments() { /* Evaluation is not supported */ }
+        [Ignore("Reading data is not supported")] public override void Bug57798() { /* Reading data is not supported */ }
 
         [Test]
         public void Tug49253()

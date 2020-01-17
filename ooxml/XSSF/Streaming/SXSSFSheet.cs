@@ -771,7 +771,10 @@ namespace NPOI.XSSF.Streaming
 
         public IRow GetRow(int rownum)
         {
-            return _rows[rownum];
+            if (_rows.ContainsKey(rownum))
+                return _rows[rownum];
+            else
+                return null;
         }
 
         public IEnumerator GetRowEnumerator()

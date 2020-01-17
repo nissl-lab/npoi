@@ -21,7 +21,7 @@ using NUnit.Framework;
 namespace TestCases.XSSF.Streaming
 {
     [TestFixture]
-    class SXSSFCellTests
+    public class SXSSFCellTests
     {
         private SXSSFCell _objectToTest;
 

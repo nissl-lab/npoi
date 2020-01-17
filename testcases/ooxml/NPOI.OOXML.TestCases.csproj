@@ -151,8 +151,6 @@
     <Compile Include="XSSF\Model\TestThemesTable.cs" />
     <Compile Include="XSSF\Streaming\AutoSizeColumnTrackerTests.cs" />
     <Compile Include="XSSF\Streaming\GZIPSheetDataWriterTests.cs" />
-    <Compile Include="XSSF\Streaming\SheetDataWriterTests.cs" />
-    <Compile Include="XSSF\Streaming\SXSSFCellTests.cs" />
     <Compile Include="XSSF\Streaming\SXSSFCreationHelperTests.cs" />
     <Compile Include="XSSF\Streaming\SXSSFEvaluationCellTests.cs" />
     <Compile Include="XSSF\Streaming\SXSSFEvaluationWorkbookTests.cs" />
