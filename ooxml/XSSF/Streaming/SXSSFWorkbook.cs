@@ -664,7 +664,7 @@ namespace NPOI.XSSF.Streaming
 
         public ISheet CloneSheet(int sheetNum)
         {
-            throw new NotImplementedException();
+            throw new RuntimeException("NotImplemented");
         }
 
         public ISheet GetSheetAt(int index)
