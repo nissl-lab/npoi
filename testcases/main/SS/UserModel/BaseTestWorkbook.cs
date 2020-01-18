@@ -899,7 +899,7 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
-        public void SheetClone()
+        public virtual void SheetClone()
         {
             // First up, try a simple file
             IWorkbook b = _testDataProvider.CreateWorkbook();

@@ -418,7 +418,7 @@ namespace NPOI.XSSF.Streaming
                     }
                     else
                     {
-                        ((StringFormulaValue)_value).Value = value;
+                        ((StringFormulaValue)_value).PreEvaluatedValue = value;
                     }
                 else
                     ((PlainStringValue)_value).Value = value;

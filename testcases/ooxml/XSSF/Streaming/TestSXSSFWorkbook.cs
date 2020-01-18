@@ -63,13 +63,13 @@ namespace TestCases.XSSF.Streaming
                 base.CloneSheet();
                 Assert.Fail("expected exception");
             }
-            catch (NotImplementedException e)
+            catch (RuntimeException e)
             {
                 Assert.AreEqual("NotImplemented", e.Message);
             }
         }
         [Test]
-        public new void SheetClone()
+        public override void SheetClone()
         {
             try
             {

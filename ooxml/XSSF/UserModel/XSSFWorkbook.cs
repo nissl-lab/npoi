@@ -1251,7 +1251,7 @@ namespace NPOI.XSSF.UserModel
          * }
          * </code></pre>
          */
-        public IEnumerator GetEnumerator()
+        public IEnumerator<ISheet> GetEnumerator()
         {
             return sheets.GetEnumerator();
         }

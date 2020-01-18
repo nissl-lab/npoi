@@ -170,7 +170,7 @@ namespace NPOI.SS.UserModel
         /// Enumerate sheets
         /// </summary>
         /// <returns></returns>
-        IEnumerator GetEnumerator();
+        IEnumerator<ISheet> GetEnumerator();
 
         /// <summary>
         /// Create a new Font and add it to the workbook's font table
