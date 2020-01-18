@@ -116,7 +116,7 @@ namespace NPOI.XSSF.Streaming
             {
                 OutputStream.Flush();
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }
@@ -124,7 +124,7 @@ namespace NPOI.XSSF.Streaming
             {
                 OutputStream.Close();
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }
@@ -170,8 +170,6 @@ namespace NPOI.XSSF.Streaming
         {
             return fis;
         }
-
-
 
         protected void Finalize()
         {
@@ -520,7 +518,8 @@ namespace NPOI.XSSF.Streaming
             finally
             {
                 TemporaryFileInfo.Delete();
-                ret = File.Exists(TemporaryFileInfo.FullName);
+                ret = !File.Exists(TemporaryFileInfo.FullName);
+                TemporaryFileInfo.Refresh();
             }
             return ret;
         }

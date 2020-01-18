@@ -698,9 +698,9 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        public IEnumerator GetEnumerator()
+        public IEnumerator<ISheet> GetEnumerator()
         {
-            return XssfWorkbook.GetEnumerator();
+            return new SheetEnumerator<SXSSFSheet>(XssfWorkbook, this);
         }
 
         public IFont CreateFont()
@@ -979,5 +979,53 @@ namespace NPOI.XSSF.Streaming
             return XssfWorkbook.IsDate1904();
         }
         //TODO: missing method isDate1904, isHidden, setHidden
+
+        private class SheetEnumerator<T> : IEnumerator<T> where T : class, ISheet
+        {
+            private XSSFWorkbook _wb;
+            private SXSSFWorkbook _xwb;
+            private IEnumerator<ISheet> it;
+            public SheetEnumerator(XSSFWorkbook wb, SXSSFWorkbook xwb)
+            {
+                this._wb = wb;
+                this._xwb = xwb;
+                //wb.GetEnumerator();
+                it = wb.GetEnumerator();
+            }
+
+            T IEnumerator<T>.Current
+            {
+                get
+                {
+                    XSSFSheet xssfSheet = (XSSFSheet)it.Current;
+                    return _xwb.GetSXSSFSheet(xssfSheet) as T;
+                }
+            }
+
+
+            object IEnumerator.Current
+            {
+                get
+                {
+                    XSSFSheet xssfSheet = (XSSFSheet)it.Current;
+                    return _xwb.GetSXSSFSheet(xssfSheet);
+                }
+            }
+
+            public void Dispose()
+            {
+                it.Dispose();
+            }
+
+            public bool MoveNext()
+            {
+                return it.MoveNext();
+            }
+
+            public void Reset()
+            {
+                it.Reset();
+            }
+        }
     }
 }
