@@ -1538,8 +1538,7 @@ namespace NPOI.XSSF.UserModel
             {
                 return;
             }
-            //SetPassword(SafeGetProtectionField(), password, hashAlgo, null);
-            throw new NotImplementedException();
+            XSSFPasswordHelper.SetPassword(SafeGetProtectionField().RelatedNode, password, hashAlgo, null);
         }
 
         /**
