@@ -97,7 +97,7 @@ namespace TestCases.SS.UserModel
             try
             {
                 //Negative rows not allowed
-                Assert.Throws<ArgumentException>(() =>
+                Assert.Throws<ArgumentOutOfRangeException>(() =>
                 {
                     sh.CreateRow(-1);
                 });
@@ -118,7 +118,7 @@ namespace TestCases.SS.UserModel
             sh.CreateRow(version.LastRowIndex);
             try
             {
-                Assert.Throws<ArgumentException>(()=> {
+                Assert.Throws<ArgumentOutOfRangeException>(()=> {
                     sh.CreateRow(version.LastRowIndex + 1);
                 });
             }

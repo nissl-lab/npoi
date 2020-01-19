@@ -651,14 +651,14 @@ namespace NPOI.XSSF.Streaming
             int maxrow = SpreadsheetVersion.EXCEL2007.LastRowIndex;
             if (rownum < 0 || rownum > maxrow)
             {
-                throw new InvalidOperationException("Invalid row number (" + rownum
+                throw new ArgumentOutOfRangeException("Invalid row number (" + rownum
                         + ") outside allowable range (0.." + maxrow + ")");
             }
 
             // attempt to overwrite a row that is already flushed to disk
             if (rownum <= _writer.NumberLastFlushedRow)
             {
-                throw new InvalidOperationException(
+                throw new ArgumentOutOfRangeException(
                         "Attempting to write a row[" + rownum + "] " +
                         "in the range [0," + _writer.NumberLastFlushedRow + "] that is already written to disk.");
             }
@@ -666,7 +666,7 @@ namespace NPOI.XSSF.Streaming
             // attempt to overwrite a existing row in the input template
             if (_sh.PhysicalNumberOfRows > 0 && rownum <= _sh.LastRowNum)
             {
-                throw new InvalidOperationException(
+                throw new ArgumentOutOfRangeException(
                         "Attempting to write a row[" + rownum + "] " +
                                 "in the range [0," + _sh.LastRowNum + "] that is already written to disk.");
             }
@@ -756,6 +756,7 @@ namespace NPOI.XSSF.Streaming
 
         public IEnumerator GetEnumerator()
         {
+            //return (IEnumerator<IRow>)_rows.Values.GetEnumerator();
             return _sh.GetEnumerator();
         }
 

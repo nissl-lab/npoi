@@ -20,6 +20,7 @@
 namespace TestCases.XSSF.Streaming
 {
     using NPOI.SS.UserModel;
+    using NPOI.Util;
     using NPOI.XSSF;
     using NPOI.XSSF.Streaming;
     using NPOI.XSSF.UserModel;
@@ -57,7 +58,7 @@ namespace TestCases.XSSF.Streaming
         public override void CloneSheet() {
             //thrown.Expect(typeof(Exception));
             //thrown.ExpectMessage("NotImplemented");
-            Assert.Throws<NotImplementedException>(() => {
+            Assert.Throws<RuntimeException>(() => {
                 base.CloneSheet();
             });
             
@@ -68,7 +69,7 @@ namespace TestCases.XSSF.Streaming
         public override void CloneSheetMultipleTimes() {
             //thrown.Expect(typeof(Exception));
             //thrown.ExpectMessage("NotImplemented");
-            Assert.Throws<NotImplementedException>(() => {
+            Assert.Throws<RuntimeException>(() => {
                 base.CloneSheetMultipleTimes();
             });
         }
@@ -98,7 +99,7 @@ namespace TestCases.XSSF.Streaming
             //thrown.Expect(typeof(Exception));
             //thrown.ExpectMessage("NotImplemented");
             
-            Assert.Throws<NotImplementedException>(() => {
+            Assert.Throws<RuntimeException>(() => {
                 base.Bug35084();
             });
         }
