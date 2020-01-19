@@ -658,7 +658,7 @@ namespace NPOI.XSSF.Streaming
             // attempt to overwrite a row that is already flushed to disk
             if (rownum <= _writer.NumberLastFlushedRow)
             {
-                throw new ArgumentOutOfRangeException(
+                throw new ArgumentException(
                         "Attempting to write a row[" + rownum + "] " +
                         "in the range [0," + _writer.NumberLastFlushedRow + "] that is already written to disk.");
             }
@@ -666,7 +666,7 @@ namespace NPOI.XSSF.Streaming
             // attempt to overwrite a existing row in the input template
             if (_sh.PhysicalNumberOfRows > 0 && rownum <= _sh.LastRowNum)
             {
-                throw new ArgumentOutOfRangeException(
+                throw new ArgumentException(
                         "Attempting to write a row[" + rownum + "] " +
                                 "in the range [0," + _sh.LastRowNum + "] that is already written to disk.");
             }
