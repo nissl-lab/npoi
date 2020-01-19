@@ -128,9 +128,9 @@ namespace TestCases.XSSF.Streaming
                 sheet.CreateRow(3);
                 sheet.CreateRow(4);
 
-                //thrown.Expect(typeof(Throwable));
-                //thrown.ExpectMessage("Attempting to write a row[1] in the range [0,1] that is already written to disk.");
-                sheet.CreateRow(1);
+                Assert.Throws<ArgumentOutOfRangeException>(() => {
+                    sheet.CreateRow(1);
+                }, "Attempting to write a row[1] in the range [0,1] that is already written to disk.");
             } finally {
                 wb.Close();
             }
