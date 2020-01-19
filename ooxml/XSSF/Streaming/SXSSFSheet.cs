@@ -889,22 +889,22 @@ namespace NPOI.XSSF.Streaming
         }
         public void RemoveRow(IRow row)
         {
-            throw new NotImplementedException();
-            //if (row.Sheet != this)
-            //{
-            //    throw new IllegalArgumentException("Specified row does not belong to this sheet");
-            //}
-
-
-            //for (Iterator<Map.Entry<Integer, SXSSFRow>> iter = _rows.entrySet().iterator(); iter.hasNext();)
-            //{
-            //    Map.Entry<int, SXSSFRow> entry = iter.next();
-            //    if (entry.getValue() == row)
-            //    {
-            //        iter.remove();
-            //        return;
-            //    }
-            //}
+            if (row.Sheet != this)
+            {
+                throw new ArgumentException("Specified row does not belong to this sheet");
+            }
+            List<int> toRemove = new List<int>();
+            foreach(var kv in _rows)
+            {
+                if(kv.Value == row)
+                {
+                    toRemove.Add(kv.Key);
+                }
+            }
+            foreach(var key in toRemove)
+            {
+                _rows.Remove(key);
+            }
         }
 
         public void RemoveRowBreak(int row)
