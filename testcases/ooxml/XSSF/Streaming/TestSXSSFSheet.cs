@@ -177,7 +177,9 @@ namespace TestCases.XSSF.Streaming
             Assert.AreEqual(2, row0.RowNum, "Row 2 knows its row number");
             Assert.AreEqual(1, sheet.GetRowNum(row1), "Sheet knows Row 1's row number");
             Assert.AreEqual(2, sheet.GetRowNum(row0), "Sheet knows Row 2's row number");
-            Assert.AreEqual(row1, sheet.GetEnumerator().Current, "Sheet row iteratation order should be ascending");
+            var it = sheet.GetEnumerator();
+            it.MoveNext();
+            Assert.AreEqual(row1, it.Current, "Sheet row iteratation order should be ascending");
 
             wb.Close();
         }

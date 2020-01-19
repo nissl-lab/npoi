@@ -756,8 +756,7 @@ namespace NPOI.XSSF.Streaming
 
         public IEnumerator GetEnumerator()
         {
-            //return (IEnumerator<IRow>)_rows.Values.GetEnumerator();
-            return _sh.GetEnumerator();
+            return (IEnumerator<IRow>)_rows.Values.GetEnumerator();
         }
 
         public double GetMargin(MarginType margin)
