@@ -3162,8 +3162,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.autoFilterField = true;
             this.pivotTablesField = true;
             this.selectUnlockedCellsField = false;
+            XmlDocument doc = new XmlDocument();
+            RelatedNode = doc.CreateElement("sheetProtection");
         }
-
+        public XmlNode RelatedNode { get; set; }
         //public bool IsSetSheet()
         //{
         //    return this.sheetField != null;
@@ -3437,6 +3439,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.autoFilter = XmlHelper.ReadBool(node.Attributes["autoFilter"], true);
             ctObj.pivotTables = XmlHelper.ReadBool(node.Attributes["pivotTables"], true);
             ctObj.selectUnlockedCells = XmlHelper.ReadBool(node.Attributes["selectUnlockedCells"]);
+            ctObj.RelatedNode = node.CloneNode(true);
             return ctObj;
         }
 
@@ -3457,26 +3460,33 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "password", this.password);
-            XmlHelper.WriteAttribute(sw, "sheet", this.sheet);
-            XmlHelper.WriteAttribute(sw, "objects", this.objects);
-            XmlHelper.WriteAttribute(sw, "scenarios", this.scenarios);
-            XmlHelper.WriteAttribute(sw, "formatCells", this.formatCells);
-            XmlHelper.WriteAttribute(sw, "formatColumns", this.formatColumns);
-            XmlHelper.WriteAttribute(sw, "formatRows", this.formatRows);
-            XmlHelper.WriteAttribute(sw, "insertColumns", this.insertColumns);
-            XmlHelper.WriteAttribute(sw, "insertRows", this.insertRows);
-            XmlHelper.WriteAttribute(sw, "insertHyperlinks", this.insertHyperlinks);
-            XmlHelper.WriteAttribute(sw, "deleteColumns", this.deleteColumns);
-            XmlHelper.WriteAttribute(sw, "deleteRows", this.deleteRows);
-            XmlHelper.WriteAttribute(sw, "selectLockedCells", this.selectLockedCells);
-            XmlHelper.WriteAttribute(sw, "sort", this.sort);
-            XmlHelper.WriteAttribute(sw, "autoFilter", this.autoFilter);
-            XmlHelper.WriteAttribute(sw, "pivotTables", this.pivotTables);
-            XmlHelper.WriteAttribute(sw, "selectUnlockedCells", this.selectUnlockedCells);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            if (RelatedNode.Attributes["algorithmName"] == null)
+            {
+                sw.Write(string.Format("<{0}", nodeName));
+                XmlHelper.WriteAttribute(sw, "password", this.password);
+                XmlHelper.WriteAttribute(sw, "sheet", this.sheet);
+                XmlHelper.WriteAttribute(sw, "objects", this.objects);
+                XmlHelper.WriteAttribute(sw, "scenarios", this.scenarios);
+                XmlHelper.WriteAttribute(sw, "formatCells", this.formatCells);
+                XmlHelper.WriteAttribute(sw, "formatColumns", this.formatColumns);
+                XmlHelper.WriteAttribute(sw, "formatRows", this.formatRows);
+                XmlHelper.WriteAttribute(sw, "insertColumns", this.insertColumns);
+                XmlHelper.WriteAttribute(sw, "insertRows", this.insertRows);
+                XmlHelper.WriteAttribute(sw, "insertHyperlinks", this.insertHyperlinks);
+                XmlHelper.WriteAttribute(sw, "deleteColumns", this.deleteColumns);
+                XmlHelper.WriteAttribute(sw, "deleteRows", this.deleteRows);
+                XmlHelper.WriteAttribute(sw, "selectLockedCells", this.selectLockedCells);
+                XmlHelper.WriteAttribute(sw, "sort", this.sort);
+                XmlHelper.WriteAttribute(sw, "autoFilter", this.autoFilter);
+                XmlHelper.WriteAttribute(sw, "pivotTables", this.pivotTables);
+                XmlHelper.WriteAttribute(sw, "selectUnlockedCells", this.selectUnlockedCells);
+                sw.Write(">");
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
+            else
+            {
+                sw.Write(RelatedNode.OuterXml);
+            }
         }
 
     }

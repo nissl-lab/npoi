@@ -20,6 +20,7 @@
 namespace TestCases.XSSF.Streaming
 {
     using NPOI.SS.UserModel;
+    using NPOI.Util;
     using NPOI.XSSF;
     using NPOI.XSSF.Streaming;
     using NPOI.XSSF.UserModel;
@@ -57,7 +58,7 @@ namespace TestCases.XSSF.Streaming
         public override void CloneSheet() {
             //thrown.Expect(typeof(Exception));
             //thrown.ExpectMessage("NotImplemented");
-            Assert.Throws<NotImplementedException>(() => {
+            Assert.Throws<RuntimeException>(() => {
                 base.CloneSheet();
             });
             
@@ -68,7 +69,7 @@ namespace TestCases.XSSF.Streaming
         public override void CloneSheetMultipleTimes() {
             //thrown.Expect(typeof(Exception));
             //thrown.ExpectMessage("NotImplemented");
-            Assert.Throws<NotImplementedException>(() => {
+            Assert.Throws<RuntimeException>(() => {
                 base.CloneSheetMultipleTimes();
             });
         }
@@ -98,7 +99,7 @@ namespace TestCases.XSSF.Streaming
             //thrown.Expect(typeof(Exception));
             //thrown.ExpectMessage("NotImplemented");
             
-            Assert.Throws<NotImplementedException>(() => {
+            Assert.Throws<RuntimeException>(() => {
                 base.Bug35084();
             });
         }
@@ -127,9 +128,9 @@ namespace TestCases.XSSF.Streaming
                 sheet.CreateRow(3);
                 sheet.CreateRow(4);
 
-                //thrown.Expect(typeof(Throwable));
-                //thrown.ExpectMessage("Attempting to write a row[1] in the range [0,1] that is already written to disk.");
-                sheet.CreateRow(1);
+                Assert.Throws<ArgumentException>(() => {
+                    sheet.CreateRow(1);
+                }, "Attempting to write a row[1] in the range [0,1] that is already written to disk.");
             } finally {
                 wb.Close();
             }
@@ -176,7 +177,9 @@ namespace TestCases.XSSF.Streaming
             Assert.AreEqual(2, row0.RowNum, "Row 2 knows its row number");
             Assert.AreEqual(1, sheet.GetRowNum(row1), "Sheet knows Row 1's row number");
             Assert.AreEqual(2, sheet.GetRowNum(row0), "Sheet knows Row 2's row number");
-            Assert.AreEqual(row1, sheet.GetEnumerator().Current, "Sheet row iteratation order should be ascending");
+            var it = sheet.GetEnumerator();
+            it.MoveNext();
+            Assert.AreEqual(row1, it.Current, "Sheet row iteratation order should be ascending");
 
             wb.Close();
         }

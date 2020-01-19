@@ -651,14 +651,14 @@ namespace NPOI.XSSF.Streaming
             int maxrow = SpreadsheetVersion.EXCEL2007.LastRowIndex;
             if (rownum < 0 || rownum > maxrow)
             {
-                throw new InvalidOperationException("Invalid row number (" + rownum
+                throw new ArgumentOutOfRangeException("Invalid row number (" + rownum
                         + ") outside allowable range (0.." + maxrow + ")");
             }
 
             // attempt to overwrite a row that is already flushed to disk
             if (rownum <= _writer.NumberLastFlushedRow)
             {
-                throw new InvalidOperationException(
+                throw new ArgumentException(
                         "Attempting to write a row[" + rownum + "] " +
                         "in the range [0," + _writer.NumberLastFlushedRow + "] that is already written to disk.");
             }
@@ -666,13 +666,13 @@ namespace NPOI.XSSF.Streaming
             // attempt to overwrite a existing row in the input template
             if (_sh.PhysicalNumberOfRows > 0 && rownum <= _sh.LastRowNum)
             {
-                throw new InvalidOperationException(
+                throw new ArgumentException(
                         "Attempting to write a row[" + rownum + "] " +
                                 "in the range [0," + _sh.LastRowNum + "] that is already written to disk.");
             }
 
             SXSSFRow newRow = new SXSSFRow(this);
-            _rows.Add(rownum, newRow);
+            _rows[rownum] = newRow;
             allFlushed = false;
             if (_randomAccessWindowSize >= 0 && _rows.Count > _randomAccessWindowSize)
             {
@@ -756,7 +756,7 @@ namespace NPOI.XSSF.Streaming
 
         public IEnumerator GetEnumerator()
         {
-            return _sh.GetEnumerator();
+            return (IEnumerator<IRow>)_rows.Values.GetEnumerator();
         }
 
         public double GetMargin(MarginType margin)
@@ -779,7 +779,7 @@ namespace NPOI.XSSF.Streaming
 
         public IEnumerator GetRowEnumerator()
         {
-            return _sh.GetRowEnumerator();
+            return GetEnumerator();
         }
 
         public void GroupColumn(int fromColumn, int toColumn)
@@ -888,22 +888,22 @@ namespace NPOI.XSSF.Streaming
         }
         public void RemoveRow(IRow row)
         {
-            throw new NotImplementedException();
-            //if (row.Sheet != this)
-            //{
-            //    throw new IllegalArgumentException("Specified row does not belong to this sheet");
-            //}
-
-
-            //for (Iterator<Map.Entry<Integer, SXSSFRow>> iter = _rows.entrySet().iterator(); iter.hasNext();)
-            //{
-            //    Map.Entry<int, SXSSFRow> entry = iter.next();
-            //    if (entry.getValue() == row)
-            //    {
-            //        iter.remove();
-            //        return;
-            //    }
-            //}
+            if (row.Sheet != this)
+            {
+                throw new ArgumentException("Specified row does not belong to this sheet");
+            }
+            List<int> toRemove = new List<int>();
+            foreach(var kv in _rows)
+            {
+                if(kv.Value == row)
+                {
+                    toRemove.Add(kv.Key);
+                }
+            }
+            foreach(var key in toRemove)
+            {
+                _rows.Remove(key);
+            }
         }
 
         public void RemoveRowBreak(int row)

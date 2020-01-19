@@ -703,7 +703,7 @@ namespace TestCases.SS.UserModel
          * @see <a href="https://issues.apache.org/bugzilla/Show_bug.cgi?id=47100">Bugzilla 47100</a>
          */
         [Test]
-        public void TestSetSheetName()
+        public virtual void TestSetSheetName()
         {
 
             IWorkbook wb1 = newSetSheetNameTestingWorkbook();

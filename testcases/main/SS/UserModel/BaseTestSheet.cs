@@ -97,7 +97,7 @@ namespace TestCases.SS.UserModel
             try
             {
                 //Negative rows not allowed
-                Assert.Throws<ArgumentException>(() =>
+                Assert.Throws<ArgumentOutOfRangeException>(() =>
                 {
                     sh.CreateRow(-1);
                 });
@@ -118,7 +118,7 @@ namespace TestCases.SS.UserModel
             sh.CreateRow(version.LastRowIndex);
             try
             {
-                Assert.Throws<ArgumentException>(()=> {
+                Assert.Throws<ArgumentOutOfRangeException>(()=> {
                     sh.CreateRow(version.LastRowIndex + 1);
                 });
             }
@@ -1206,6 +1206,7 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet("Test");
+            TrackColumnsForAutoSizingIfSXSSF(sheet);
             ICreationHelper factory = wb.GetCreationHelper();
 
             IRow row = sheet.CreateRow(0);
