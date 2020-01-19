@@ -1206,6 +1206,7 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet("Test");
+            TrackColumnsForAutoSizingIfSXSSF(sheet);
             ICreationHelper factory = wb.GetCreationHelper();
 
             IRow row = sheet.CreateRow(0);
