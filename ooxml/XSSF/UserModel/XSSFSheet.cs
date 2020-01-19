@@ -2120,22 +2120,24 @@ namespace NPOI.XSSF.UserModel
             CT_MergeCells ctMergeCells = worksheet.mergeCells;
             //TODO: The following codes are not same as poi, re-do it?.
             int size = ctMergeCells.sizeOfMergeCellArray();
-            List<CT_MergeCell> mergeCellsArray = new List<CT_MergeCell>(new CT_MergeCell[ctMergeCells.sizeOfMergeCellArray()]);
+            List<CT_MergeCell> newMergeCells = new List<CT_MergeCell>(ctMergeCells.sizeOfMergeCellArray());
+
             for (int i = 0, d = 0; i < size; i++)
             {
                 if (!indices.Contains(i))
                 {
-                    mergeCellsArray[d] = ctMergeCells.GetMergeCellArray(i);
+                    //newMergeCells[d] = ctMergeCells.GetMergeCellArray(i);
+                    newMergeCells.Add(ctMergeCells.GetMergeCellArray(i));
                     d++;
                 }
             }
-            if (ListIsEmpty(mergeCellsArray))
+            if (ListIsEmpty(newMergeCells))
             {
                 worksheet.UnsetMergeCells();
             }
             else
             {
-                ctMergeCells.SetMergeCellArray(mergeCellsArray.ToArray());
+                ctMergeCells.SetMergeCellArray(newMergeCells.ToArray());
             }
         }
         private bool ListIsEmpty(List<CT_MergeCell> list)
