@@ -27,34 +27,34 @@ namespace TestCases.Util
         {
         }
 
-        public override bool CanRead => throw new NotImplementedException();
+        public override bool CanRead => false;
 
-        public override bool CanSeek => throw new NotImplementedException();
+        public override bool CanSeek => true;
 
-        public override bool CanWrite => throw new NotImplementedException();
+        public override bool CanWrite => true;
+        private long _length;
+        public override long Length { get { return _length; } }
 
-        public override long Length => throw new NotImplementedException();
-
-        public override long Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override long Position { get; set; }
 
         public override void Flush()
         {
-            throw new NotImplementedException();
+            
         }
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         public override long Seek(long offset, SeekOrigin origin)
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         public override void SetLength(long value)
         {
-            throw new NotImplementedException();
+            _length = value;
         }
 
         public override void Write(int b)

@@ -87,7 +87,7 @@ namespace TestCases.XSSF.Streaming
          */
 
         [Test]
-        public void SetSheetName()
+        public override void TestSetSheetName()
         {
             Assume.That(false, "SXSSF doesn't update formulas on sheet name Changes, as most cells probably aren't in memory at the time");
         }
