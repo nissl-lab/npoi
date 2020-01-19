@@ -672,7 +672,7 @@ namespace NPOI.XSSF.Streaming
             }
 
             SXSSFRow newRow = new SXSSFRow(this);
-            _rows.Add(rownum, newRow);
+            _rows[rownum] = newRow;
             allFlushed = false;
             if (_randomAccessWindowSize >= 0 && _rows.Count > _randomAccessWindowSize)
             {
@@ -779,7 +779,7 @@ namespace NPOI.XSSF.Streaming
 
         public IEnumerator GetRowEnumerator()
         {
-            return _sh.GetRowEnumerator();
+            return GetEnumerator();
         }
 
         public void GroupColumn(int fromColumn, int toColumn)
