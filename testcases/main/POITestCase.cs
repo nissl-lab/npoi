@@ -121,10 +121,10 @@ namespace TestCases
 
         public static R GetFieldValue<R, T>(Type clazz, T instance, Type fieldType, String fieldName)
         {
-            Assert.IsTrue(clazz.Name.StartsWith("NPOI"), "Reflection of private fields is only allowed for POI classes.");
+            Assert.IsTrue(clazz.FullName.StartsWith("NPOI"), "Reflection of private fields is only allowed for POI classes.");
             try
             {
-                FieldInfo fieldInfo = clazz.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.GetField);
+                FieldInfo fieldInfo = clazz.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance);
                 return (R)fieldInfo.GetValue(instance);
 
             }
