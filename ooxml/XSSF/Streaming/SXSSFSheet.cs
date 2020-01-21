@@ -651,7 +651,7 @@ namespace NPOI.XSSF.Streaming
             int maxrow = SpreadsheetVersion.EXCEL2007.LastRowIndex;
             if (rownum < 0 || rownum > maxrow)
             {
-                throw new ArgumentOutOfRangeException("Invalid row number (" + rownum
+                throw new ArgumentException("Invalid row number (" + rownum
                         + ") outside allowable range (0.." + maxrow + ")");
             }
 
