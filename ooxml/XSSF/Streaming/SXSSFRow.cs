@@ -242,7 +242,7 @@ namespace NPOI.XSSF.Streaming
         {
             CheckBounds(column);
             SXSSFCell cell = new SXSSFCell(this, type);
-            _cells.Add(column, cell);
+            _cells[column] = cell;
             return cell;
         }
 
@@ -257,7 +257,7 @@ namespace NPOI.XSSF.Streaming
             int maxcol = SpreadsheetVersion.EXCEL2007.LastColumnIndex;
             if (cellIndex < 0 || cellIndex > maxcol)
             {
-                throw new InvalidOperationException("Invalid column index (" + cellIndex
+                throw new ArgumentException("Invalid column index (" + cellIndex
                         + ").  Allowable column range for " + v.DefaultExtension + " is (0.."
                         + maxcol + ") or ('A'..'" + v.LastColumnName + "')");
             }
@@ -340,46 +340,44 @@ namespace NPOI.XSSF.Streaming
         */
         public class FilledCellIterator : IEnumerator<ICell>
         {
-            private SortedDictionary<int, SXSSFCell> _cells;
-            private int pos = -1;
+            //private SortedDictionary<int, SXSSFCell> _cells;
+            private IEnumerator<SXSSFCell> enumerator;
             public FilledCellIterator(SortedDictionary<int, SXSSFCell> cells)
             {
-                _cells = cells;
+                //_cells = cells;
+                enumerator = cells.Values.GetEnumerator();
             }
 
             public ICell Current
             {
-                get { return _cells[pos]; }
+                get { return enumerator.Current; }
             }
 
             object IEnumerator.Current
             {
                 get
                 {
-                    throw new NotImplementedException();
+                    return enumerator.Current;
                 }
             }
 
             public void Dispose()
             {
-                if (_cells != null)
-                    _cells.Clear();
             }
 
             public IEnumerator<ICell> GetEnumerator()
             {
-                return _cells.Values.GetEnumerator();
+                return enumerator;
             }
 
             public bool MoveNext()
             {
-                pos += 1;
-                return _cells.ContainsKey(pos);
+                return enumerator.MoveNext();
             }
 
             public void Reset()
             {
-                throw new NotImplementedException();
+                enumerator.Reset();
             }
         }
 
