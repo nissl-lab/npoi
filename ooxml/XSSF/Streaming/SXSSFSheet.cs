@@ -576,7 +576,7 @@ namespace NPOI.XSSF.Streaming
             if (bestFitWidth > 0)
             {
                 int maxColumnWidth = 255 * 256; // The maximum column width for an individual cell is 255 characters
-                int width = Math.Max(bestFitWidth, maxColumnWidth);
+                int width = Math.Min(bestFitWidth, maxColumnWidth);
                 SetColumnWidth(column, width);
             }
         }

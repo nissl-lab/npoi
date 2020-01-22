@@ -24,6 +24,16 @@ namespace TestCases.XSSF.Streaming
     using NPOI.XSSF.Streaming;
     using NUnit.Framework;
 
+    //Add a new test fixture, set useMergedCells with true value.
+    [TestFixture]
+    public class TestSXSSFSheetAutoSizeColumn_useMergedCells_true : TestSXSSFSheetAutoSizeColumn
+    {
+        public TestSXSSFSheetAutoSizeColumn_useMergedCells_true()
+        {
+            this.useMergedCells = true;
+        }
+    }
+
     /**
      * Tests the auto-sizing behaviour of {@link SXSSFSheet} when not all
      * rows fit into the memory window size etc.
@@ -58,7 +68,7 @@ namespace TestCases.XSSF.Streaming
 
         private SXSSFSheet sheet;
         private SXSSFWorkbook workbook;
-
+        
         public bool useMergedCells;
 
         //public static ICollection<Object[]> data()
