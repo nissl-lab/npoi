@@ -45,8 +45,8 @@ namespace NPOI.XSSF.Streaming
 
         private class ColumnWidthPair
         {
-            private static double withSkipMergedCells;
-            private static double withUseMergedCells;
+            private double withSkipMergedCells;
+            private double withUseMergedCells;
 
             public ColumnWidthPair() : this(-1.0, -1.0)
             {
