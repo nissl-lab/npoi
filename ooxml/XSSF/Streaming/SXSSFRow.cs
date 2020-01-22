@@ -41,9 +41,9 @@ namespace NPOI.XSSF.Streaming
             _sheet = sheet;
         }
         
-        public IEnumerator<ICell> AllCellsIterator()
+        public CellIterator AllCellsIterator()
         {
-            return new CellIterator(LastCellNum, null);
+            return new CellIterator(LastCellNum, _cells);
         }
         public bool HasCustomHeight()
         {
@@ -383,10 +383,10 @@ namespace NPOI.XSSF.Streaming
 
         public class CellIterator : IEnumerator<ICell>
         {
-            private Dictionary<int, SXSSFCell> _cells;
+            private SortedDictionary<int, SXSSFCell> _cells;
             private int maxColumn;
             private int pos;
-            public CellIterator(int lastCellNum, Dictionary<int, SXSSFCell> cells)
+            public CellIterator(int lastCellNum, SortedDictionary<int, SXSSFCell> cells)
             {
                 maxColumn = lastCellNum; //last column PLUS ONE, SHOULD BE DERIVED from cells enum.
                 pos = 0;
@@ -433,7 +433,15 @@ namespace NPOI.XSSF.Streaming
             public ICell Next()
             {
                 if (HasNext())
-                    return _cells[pos++];
+                {
+                    if (_cells.ContainsKey(pos))
+                        return _cells[pos++];
+                    else
+                    {
+                        pos++;
+                        return null;
+                    }
+                }
                 else
                     throw new NullReferenceException();
             }
