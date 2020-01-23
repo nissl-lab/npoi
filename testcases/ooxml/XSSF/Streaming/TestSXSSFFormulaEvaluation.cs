@@ -100,14 +100,14 @@ namespace TestCases.XSSF.Streaming
 
             s.CreateRow(0).CreateCell(0).CellFormula = (/*setter*/"1+2");
             Assert.AreEqual(false, s.AllRowsFlushed);
-            Assert.AreEqual(-1, s.LastFlushedRowNum);
+            Assert.AreEqual(-1, s.LastFlushedRowNumber);
 
             for (int i = 1; i <= 19; i++) { s.CreateRow(i); }
             ICell c = s.CreateRow(20).CreateCell(0);
             c.CellFormula = (/*setter*/"A1+100");
 
             Assert.AreEqual(false, s.AllRowsFlushed);
-            Assert.AreEqual(15, s.LastFlushedRowNum);
+            Assert.AreEqual(15, s.LastFlushedRowNumber);
 
             IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
             try

@@ -31,16 +31,16 @@ namespace NPOI.XSSF.Streaming
     public class SXSSFSheet : ISheet
     {
         // TODO: fields should be private and use public property
-        public XSSFSheet _sh;
-        public SXSSFWorkbook _workbook;
+        internal XSSFSheet _sh;
+        private SXSSFWorkbook _workbook;
         //private TreeMap<Integer, SXSSFRow> _rows = new TreeMap<Integer, SXSSFRow>();
-        public SortedDictionary<int, SXSSFRow> _rows = new SortedDictionary<int, SXSSFRow>();
-        public SheetDataWriter _writer;
-        public int _randomAccessWindowSize = SXSSFWorkbook.DEFAULT_WINDOW_SIZE;
-        public AutoSizeColumnTracker _autoSizeColumnTracker;
-        public int outlineLevelRow = 0;
-        public int lastFlushedRowNumber = -1;
-        public bool allFlushed = false;
+        private SortedDictionary<int, SXSSFRow> _rows = new SortedDictionary<int, SXSSFRow>();
+        private SheetDataWriter _writer;
+        private int _randomAccessWindowSize = SXSSFWorkbook.DEFAULT_WINDOW_SIZE;
+        private AutoSizeColumnTracker _autoSizeColumnTracker;
+        private int outlineLevelRow = 0;
+        private int lastFlushedRowNumber = -1;
+        private bool allFlushed = false;
 
 
         public SXSSFSheet(SXSSFWorkbook workbook, XSSFSheet xSheet)
@@ -576,7 +576,7 @@ namespace NPOI.XSSF.Streaming
             if (bestFitWidth > 0)
             {
                 int maxColumnWidth = 255 * 256; // The maximum column width for an individual cell is 255 characters
-                int width = Math.Max(bestFitWidth, maxColumnWidth);
+                int width = Math.Min(bestFitWidth, maxColumnWidth);
                 SetColumnWidth(column, width);
             }
         }
@@ -651,7 +651,7 @@ namespace NPOI.XSSF.Streaming
             int maxrow = SpreadsheetVersion.EXCEL2007.LastRowIndex;
             if (rownum < 0 || rownum > maxrow)
             {
-                throw new ArgumentOutOfRangeException("Invalid row number (" + rownum
+                throw new ArgumentException("Invalid row number (" + rownum
                         + ") outside allowable range (0.." + maxrow + ")");
             }
 
@@ -1255,7 +1255,7 @@ namespace NPOI.XSSF.Streaming
         /**
          * @return Last row number to be flushed to disk, or -1 if none flushed yet
          */
-        public int LastFlushedRowNum
+        public int LastFlushedRowNumber
         {
             get
             {

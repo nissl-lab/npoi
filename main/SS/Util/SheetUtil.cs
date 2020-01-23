@@ -379,12 +379,12 @@ namespace NPOI.SS.Util
             else
             {
                 //bounds = layout.getBounds();
-                actualWidth = Math.Round(g.MeasureString(str, windowsFont).Width, 0, MidpointRounding.ToEven);                
+                actualWidth = Math.Round(g.MeasureString(str, windowsFont, int.MaxValue, StringFormat.GenericTypographic).Width, 0, MidpointRounding.ToEven);                
             }
             // entireWidth accounts for leading spaces which is excluded from bounds.getWidth()
             //double frameWidth = bounds.getX() + bounds.getWidth();
             //width = Math.max(width, ((frameWidth / colspan) / defaultCharWidth) + style.getIndention());
-            width = Math.Max(width, (actualWidth / colspan / defaultCharWidth) * 2 + cell.CellStyle.Indention);
+            width = Math.Max(width, (actualWidth / colspan / defaultCharWidth) + cell.CellStyle.Indention);
             return width;
         }
         // /**
@@ -453,7 +453,7 @@ namespace NPOI.SS.Util
                 using (var g = Graphics.FromImage(image))
                 {
                     g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                    defaultCharWidth = (int)g.MeasureString(new String(defaultChar, 1), font, int.MaxValue).Width;
+                    defaultCharWidth = (int)g.MeasureString(new String(defaultChar, 1), font, int.MaxValue, StringFormat.GenericTypographic).Width;
                 }
             }
             return defaultCharWidth;

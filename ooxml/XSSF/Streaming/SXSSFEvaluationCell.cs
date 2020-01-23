@@ -21,7 +21,7 @@ using NPOI.XSSF.UserModel;
 
 namespace NPOI.XSSF.Streaming
 {
-    public class SXSSFEvaluationCell : XSSFEvaluationCell
+    public class SXSSFEvaluationCell : IEvaluationCell //XSSFEvaluationCell
     {
         private SXSSFEvaluationSheet _evalSheet;
         private SXSSFCell _cell;
@@ -38,11 +38,14 @@ namespace NPOI.XSSF.Streaming
         }
 
 
-        public Object GetIdentityKey()
+        public Object IdentityKey
         {
-            // save memory by just using the cell itself as the identity key
-            // Note - this assumes SXSSFCell has not overridden hashCode and equals
-            return _cell;
+            get
+            {
+                // save memory by just using the cell itself as the identity key
+                // Note - this assumes SXSSFCell has not overridden hashCode and equals
+                return _cell;
+            }
         }
 
         public SXSSFCell GetSXSSFCell()
@@ -50,7 +53,7 @@ namespace NPOI.XSSF.Streaming
             return _cell;
         }
 
-        public override bool BooleanCellValue
+        public bool BooleanCellValue
         {
             get
             {
@@ -64,7 +67,7 @@ namespace NPOI.XSSF.Streaming
          * @return cell type
          */
 
-        public override CellType CellType
+        public CellType CellType
         {
             get
             {
@@ -85,7 +88,7 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        public override int ColumnIndex
+        public int ColumnIndex
         {
             get
             {
@@ -94,7 +97,7 @@ namespace NPOI.XSSF.Streaming
             
         }
 
-        public override int ErrorCellValue
+        public int ErrorCellValue
         {
             get
             {
@@ -103,7 +106,7 @@ namespace NPOI.XSSF.Streaming
             
         }
 
-        public override double NumericCellValue
+        public double NumericCellValue
         {
             get
             {
@@ -111,7 +114,7 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        public override int RowIndex
+        public int RowIndex
         {
             get
             {
@@ -119,7 +122,7 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        public override IEvaluationSheet Sheet
+        public IEvaluationSheet Sheet
         {
             get
             {
@@ -127,7 +130,7 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        public override String StringCellValue
+        public String StringCellValue
         {
             get
             {
@@ -141,7 +144,7 @@ namespace NPOI.XSSF.Streaming
          * @return cell type of cached formula result
          */
 
-        public override CellType CachedFormulaResultType
+        public CellType CachedFormulaResultType
         {
             get
             {

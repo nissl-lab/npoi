@@ -41,9 +41,9 @@ namespace NPOI.XSSF.Streaming
             _sheet = sheet;
         }
         
-        public IEnumerator<ICell> AllCellsIterator()
+        public CellIterator AllCellsIterator()
         {
-            return new CellIterator(LastCellNum, null);
+            return new CellIterator(LastCellNum, _cells);
         }
         public bool HasCustomHeight()
         {
@@ -242,7 +242,7 @@ namespace NPOI.XSSF.Streaming
         {
             CheckBounds(column);
             SXSSFCell cell = new SXSSFCell(this, type);
-            _cells.Add(column, cell);
+            _cells[column] = cell;
             return cell;
         }
 
@@ -257,7 +257,7 @@ namespace NPOI.XSSF.Streaming
             int maxcol = SpreadsheetVersion.EXCEL2007.LastColumnIndex;
             if (cellIndex < 0 || cellIndex > maxcol)
             {
-                throw new InvalidOperationException("Invalid column index (" + cellIndex
+                throw new ArgumentException("Invalid column index (" + cellIndex
                         + ").  Allowable column range for " + v.DefaultExtension + " is (0.."
                         + maxcol + ") or ('A'..'" + v.LastColumnName + "')");
             }
@@ -340,55 +340,53 @@ namespace NPOI.XSSF.Streaming
         */
         public class FilledCellIterator : IEnumerator<ICell>
         {
-            private SortedDictionary<int, SXSSFCell> _cells;
-            private int pos = -1;
+            //private SortedDictionary<int, SXSSFCell> _cells;
+            private IEnumerator<SXSSFCell> enumerator;
             public FilledCellIterator(SortedDictionary<int, SXSSFCell> cells)
             {
-                _cells = cells;
+                //_cells = cells;
+                enumerator = cells.Values.GetEnumerator();
             }
 
             public ICell Current
             {
-                get { return _cells[pos]; }
+                get { return enumerator.Current; }
             }
 
             object IEnumerator.Current
             {
                 get
                 {
-                    throw new NotImplementedException();
+                    return enumerator.Current;
                 }
             }
 
             public void Dispose()
             {
-                if (_cells != null)
-                    _cells.Clear();
             }
 
             public IEnumerator<ICell> GetEnumerator()
             {
-                return _cells.Values.GetEnumerator();
+                return enumerator;
             }
 
             public bool MoveNext()
             {
-                pos += 1;
-                return _cells.ContainsKey(pos);
+                return enumerator.MoveNext();
             }
 
             public void Reset()
             {
-                throw new NotImplementedException();
+                enumerator.Reset();
             }
         }
 
         public class CellIterator : IEnumerator<ICell>
         {
-            private Dictionary<int, SXSSFCell> _cells;
+            private SortedDictionary<int, SXSSFCell> _cells;
             private int maxColumn;
             private int pos;
-            public CellIterator(int lastCellNum, Dictionary<int, SXSSFCell> cells)
+            public CellIterator(int lastCellNum, SortedDictionary<int, SXSSFCell> cells)
             {
                 maxColumn = lastCellNum; //last column PLUS ONE, SHOULD BE DERIVED from cells enum.
                 pos = 0;
@@ -435,7 +433,15 @@ namespace NPOI.XSSF.Streaming
             public ICell Next()
             {
                 if (HasNext())
-                    return _cells[pos++];
+                {
+                    if (_cells.ContainsKey(pos))
+                        return _cells[pos++];
+                    else
+                    {
+                        pos++;
+                        return null;
+                    }
+                }
                 else
                     throw new NullReferenceException();
             }

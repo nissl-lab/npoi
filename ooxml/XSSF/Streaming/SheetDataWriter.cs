@@ -197,11 +197,11 @@ namespace NPOI.XSSF.Streaming
             NumberOfCellsOfLastFlushedRow = row.LastCellNum;
             NumberOfFlushedRows++;
             BeginRow(rownum, row);
-            var cells = row.GetEnumerator();
+            var cells = row.AllCellsIterator();
             int columnIndex = 0;
-            while (cells.MoveNext())
+            while (cells.HasNext())
             {
-                WriteCell(columnIndex++, cells.Current);
+                WriteCell(columnIndex++, cells.Next());
             }
             EndRow();
         }

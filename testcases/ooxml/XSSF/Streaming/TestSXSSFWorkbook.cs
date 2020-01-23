@@ -48,7 +48,7 @@ namespace TestCases.XSSF.Streaming
         [TearDown]
         public void TearDown()
         {
-            ((SXSSFITestDataProvider)_testDataProvider).Cleanup();
+            //((SXSSFITestDataProvider)_testDataProvider).Cleanup();
         }
 
         /**

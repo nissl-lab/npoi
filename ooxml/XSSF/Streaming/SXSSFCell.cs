@@ -799,7 +799,7 @@ namespace NPOI.XSSF.Streaming
                     return NumericCellValue.ToString();
                 case CellType.Error:
                     byte errVal = ErrorCellValue;
-                    return FormulaError.ForInt(errVal).ToString();
+                    return FormulaError.ForInt(errVal).String;
 
                 case CellType.Formula:
                     if (_value != null)

@@ -360,7 +360,7 @@ namespace NPOI.XSSF.Streaming
 
             try
             {
-                sxSheet._writer.Close();
+                sxSheet.SheetDataWriter.Close();
             }
             catch (IOException)
             {
@@ -747,7 +747,7 @@ namespace NPOI.XSSF.Streaming
             {
                 try
                 {
-                    sheet._writer.Close();
+                    sheet.SheetDataWriter.Close();
                 }
                 catch (IOException e)
                 {

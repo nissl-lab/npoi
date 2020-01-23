@@ -68,7 +68,7 @@ namespace NPOI.XSSF.Streaming
             // Check they're all available
             foreach (ISheet sheet in wb)
             {
-                if (((SXSSFSheet)sheet).allFlushed)
+                if (((SXSSFSheet)sheet).AllRowsFlushed)
                 {
                     throw new SheetsFlushedException();
                 }
@@ -79,7 +79,7 @@ namespace NPOI.XSSF.Streaming
             {
 
                 // Check if any rows have already been flushed out
-                int lastFlushedRowNum = ((SXSSFSheet)sheet).lastFlushedRowNumber;
+                int lastFlushedRowNum = ((SXSSFSheet)sheet).LastFlushedRowNumber;
                 if (lastFlushedRowNum > -1)
                 {
                     if (!skipOutOfWindow) throw new RowFlushedException(0);
