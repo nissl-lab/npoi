@@ -2402,7 +2402,7 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(-60, value.ErrorValue);
 
             Assert.AreEqual("~CIRCULAR~REF~", FormulaError.ForInt(value.ErrorValue).String);
-            Assert.AreEqual("CIRCULAR_REF", FormulaError.ForInt(value.ErrorValue).String);
+            Assert.AreEqual("CIRCULAR_REF", FormulaError.ForInt(value.ErrorValue).ToString());
             wb.Close();
         }
 
