@@ -3232,7 +3232,7 @@ namespace TestCases.XSSF.UserModel
             row = worksheet.GetRow(2);
             cell = row.GetCell(1);
             Assert.AreEqual(CellType.Blank, cell.CellType);
-            Assert.AreEqual(-1, evaluator.EvaluateFormulaCell(cell));
+            Assert.AreEqual(CellType.Unknown, evaluator.EvaluateFormulaCell(cell));
             // A3
             row = worksheet.GetRow(2);
             cell = row.GetCell(0);
