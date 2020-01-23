@@ -2913,7 +2913,7 @@ namespace TestCases.XSSF.UserModel
 
             // not an RGB color
             Assert.IsFalse(color.IsRGB);
-            Assert.IsNotNull(color.RGB);
+            Assert.IsNull(color.RGB);
 
             wb.Close();
         }
