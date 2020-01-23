@@ -1557,7 +1557,7 @@ namespace TestCases.XSSF.UserModel
             cell = CellUtil.GetCell(destRow, col++);
             Assert.AreEqual("J7", new CellReference(cell).FormatAsString());
             Assert.AreEqual(CellType.Formula, cell.CellType, "[Cell Formula] J7 cell type");
-            Assert.AreEqual("[Cell Formula] J7 cell formula", "5+2", cell.CellFormula);
+            Assert.AreEqual("5+2", cell.CellFormula, "[Cell Formula] J7 cell formula");
             Console.WriteLine("Cell formula evaluation currently unsupported");
 
             // Cell Formula with Reference
@@ -1620,8 +1620,8 @@ namespace TestCases.XSSF.UserModel
             //Assert.IsFalse("[Merged across multiple rows] R7:S8 merged region", 
             //        sheet.MergedRegions.contains(CellRangeAddress.valueOf("R7:S8")));
             // As currently implemented, cell value is copied but merged region is not copied
-            Assert.AreEqual("[Merged across multiple rows] R7:S8 cell value",
-                    "Merged cells across multiple rows", cell.StringCellValue);
+            Assert.AreEqual("Merged cells across multiple rows", cell.StringCellValue,
+                "[Merged across multiple rows] R7:S8 cell value");
             Assert.IsFalse(sheet.MergedRegions.Contains(CellRangeAddress.ValueOf("R7:S7")),
                 "[Merged across multiple rows] R7:S7 merged region (one row)"); //shouldn't do 1-row merge
             Assert.IsFalse(sheet.MergedRegions.Contains(CellRangeAddress.ValueOf("R7:S8")),
