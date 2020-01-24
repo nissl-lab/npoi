@@ -72,7 +72,7 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_BorderPr pr = _border.IsSetDiagonal() ? _border.diagonal : _border.AddNewDiagonal();
                 if (value == (short)BorderStyle.None) _border.unsetDiagonal();
-                else pr.style = (ST_BorderStyle)(value + 1);
+                else pr.style = (ST_BorderStyle)value;
             }
         }
 
