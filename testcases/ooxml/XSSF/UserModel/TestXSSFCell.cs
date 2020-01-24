@@ -570,7 +570,7 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestCopyCellFrom_CellCopyPolicy_copyHyperlink()
         {
-            //setUp_testCopyCellFrom_CellCopyPolicy();
+            setUp_testCopyCellFrom_CellCopyPolicy();
             IWorkbook wb = srcCell.Sheet.Workbook;
             ICreationHelper createHelper = wb.GetCreationHelper();
             srcCell.SetCellValue("URL LINK");
@@ -649,9 +649,6 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
 
-
-
-        //[SetUp]
         private void setUp_testCopyCellFrom_CellCopyPolicy()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
