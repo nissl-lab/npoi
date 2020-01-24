@@ -167,7 +167,8 @@ namespace TestCases.XSSF.UserModel
             XSSFFont xssfFont = new XSSFFont(ctFont);
             Assert.AreEqual(11, xssfFont.FontHeightInPoints);
 
-            xssfFont.FontHeight = 20;
+            //should use FontHeightInPoints here, not FontHeight.
+            xssfFont.FontHeightInPoints = 20;
             Assert.AreEqual(20.0, ctFont.GetSzArray(0).val, 0.0);
         }
         [Test]
