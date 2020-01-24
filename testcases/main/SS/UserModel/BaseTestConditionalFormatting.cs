@@ -1159,7 +1159,7 @@ namespace TestCases.SS.UserModel
             ISheet sheet = wb1.CreateSheet();
             ISheetConditionalFormatting sheetCF = sheet.SheetConditionalFormatting;
             IConditionalFormattingRule rule1 =
-                    sheetCF.CreateConditionalFormattingRule(IconSet.GYRB_4_TRAFFIC_LIGHTS.name);
+                    sheetCF.CreateConditionalFormattingRule(IconSet.GYRB_4_TRAFFIC_LIGHTS);
             IIconMultiStateFormatting iconFmt = rule1.MultiStateFormatting;
 
             Assert.AreEqual(IconSet.GYRB_4_TRAFFIC_LIGHTS, iconFmt.IconSet);
@@ -1201,8 +1201,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(RangeType.PERCENT, iconFmt.Thresholds[2].RangeType);
             Assert.AreEqual(RangeType.MAX, iconFmt.Thresholds[3].RangeType);
             Assert.AreEqual(null, iconFmt.Thresholds[0].Value);
-            Assert.AreEqual(10d, iconFmt.Thresholds[1].Value);
-            Assert.AreEqual(75d, iconFmt.Thresholds[2].Value);
+            Assert.AreEqual(10d, iconFmt.Thresholds[1].Value, 0);
+            Assert.AreEqual(75d, iconFmt.Thresholds[2].Value, 0);
             Assert.AreEqual(null, iconFmt.Thresholds[3].Value);
 
             wb2.Close();

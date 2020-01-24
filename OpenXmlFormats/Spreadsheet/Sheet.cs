@@ -7048,6 +7048,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private ST_IconSetType iconSetField;
 
         private bool showValueField;
+        private bool showValueFieldSpecified;
 
         private bool percentField;
 
@@ -7134,8 +7135,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             CT_IconSet ctObj = new CT_IconSet();
             if (node.Attributes["iconSet"] != null)
                 ctObj.iconSet = (ST_IconSetType)Enum.Parse(typeof(ST_IconSetType), "Item"+node.Attributes["iconSet"].Value);
-            ctObj.showValue = XmlHelper.ReadBool(node.Attributes["showValue"]);
-            ctObj.percent = XmlHelper.ReadBool(node.Attributes["percent"]);
+            ctObj.showValue = XmlHelper.ReadBool(node.Attributes["showValue"], true);
+            if (!ctObj.showValue)
+                ctObj.showValueFieldSpecified = true;
+            ctObj.percent = XmlHelper.ReadBool(node.Attributes["percent"], true);
             ctObj.reverse = XmlHelper.ReadBool(node.Attributes["reverse"]);
             ctObj.cfvo = new List<CT_Cfvo>();
             foreach (XmlNode childNode in node.ChildNodes)
@@ -7156,14 +7159,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ret;
         }
 
+        public bool IsSetShowValue()
+        {
+            return this.showValueFieldSpecified;
+        }
+
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
             if(this.iconSet!= ST_IconSetType.Item3TrafficLights1)
                 XmlHelper.WriteAttribute(sw, "iconSet", this.iconSet.ToString().Replace("Item",""));
-            if(showValue)
+            if(!showValue)
                 XmlHelper.WriteAttribute(sw, "showValue", this.showValue);
-            if (percent)
+            if (!percent)
                 XmlHelper.WriteAttribute(sw, "percent", this.percent);
             if (reverse)
                 XmlHelper.WriteAttribute(sw, "reverse", this.reverse);
