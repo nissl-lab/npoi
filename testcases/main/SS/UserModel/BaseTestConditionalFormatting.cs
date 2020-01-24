@@ -26,7 +26,6 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using TestCases.SS;
-    using NPOI.HSSF.Record.CF;
     using NPOI.HSSF.Util;
     using NPOI.HSSF.UserModel;
 
