@@ -550,9 +550,9 @@ namespace TestCases.XSSF.UserModel
             List<XSSFShape> shapes = drawing.GetShapes();
             Assert.AreEqual(6, shapes.Count);
 
-            Assert.IsTrue(shapes[0] is XSSFSimpleShape);
+            Assert.IsTrue(shapes[4] is XSSFSimpleShape);
 
-            XSSFSimpleShape textbox = (XSSFSimpleShape)shapes[0];
+            XSSFSimpleShape textbox = (XSSFSimpleShape)shapes[4];
             Assert.AreEqual("Sheet with various pictures\n(jpeg, png, wmf, emf and pict)", textbox.Text);
 
             checkRewrite(wb);
