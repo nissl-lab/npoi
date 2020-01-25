@@ -3162,10 +3162,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.autoFilterField = true;
             this.pivotTablesField = true;
             this.selectUnlockedCellsField = false;
-            XmlDocument doc = new XmlDocument();
-            RelatedNode = doc.CreateElement("sheetProtection");
         }
-        public XmlNode RelatedNode { get; set; }
         //public bool IsSetSheet()
         //{
         //    return this.sheetField != null;
@@ -3179,6 +3176,27 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         //{
         //    return this.scenariosField != null;
         //}
+        public string algorithmName
+        {
+            get;
+            set;
+        }
+        public string hashValue
+        {
+            get;
+            set;
+        }
+        public string saltValue
+        {
+            get;
+            set;
+        }
+        public string spinCount
+        {
+            get;
+            set;
+        }
+
         [XmlAttribute]
         public string password
         {
@@ -3439,7 +3457,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.autoFilter = XmlHelper.ReadBool(node.Attributes["autoFilter"], true);
             ctObj.pivotTables = XmlHelper.ReadBool(node.Attributes["pivotTables"], true);
             ctObj.selectUnlockedCells = XmlHelper.ReadBool(node.Attributes["selectUnlockedCells"]);
-            ctObj.RelatedNode = node.CloneNode(true);
+            ctObj.algorithmName = XmlHelper.ReadString(node.Attributes["algorithmName"]);
+            if (ctObj.algorithmName != null)
+            {
+                ctObj.hashValue = XmlHelper.ReadString(node.Attributes["hashValue"]);
+                ctObj.saltValue = XmlHelper.ReadString(node.Attributes["saltValue"]);
+                ctObj.spinCount = XmlHelper.ReadString(node.Attributes["spinCount"]);
+            }
             return ctObj;
         }
 
@@ -3460,33 +3484,34 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            if (RelatedNode.Attributes["algorithmName"] == null)
+            sw.Write(string.Format("<{0}", nodeName));
+            if (this.algorithmName != null)
             {
-                sw.Write(string.Format("<{0}", nodeName));
-                XmlHelper.WriteAttribute(sw, "password", this.password);
-                XmlHelper.WriteAttribute(sw, "sheet", this.sheet);
-                XmlHelper.WriteAttribute(sw, "objects", this.objects);
-                XmlHelper.WriteAttribute(sw, "scenarios", this.scenarios);
-                XmlHelper.WriteAttribute(sw, "formatCells", this.formatCells);
-                XmlHelper.WriteAttribute(sw, "formatColumns", this.formatColumns);
-                XmlHelper.WriteAttribute(sw, "formatRows", this.formatRows);
-                XmlHelper.WriteAttribute(sw, "insertColumns", this.insertColumns);
-                XmlHelper.WriteAttribute(sw, "insertRows", this.insertRows);
-                XmlHelper.WriteAttribute(sw, "insertHyperlinks", this.insertHyperlinks);
-                XmlHelper.WriteAttribute(sw, "deleteColumns", this.deleteColumns);
-                XmlHelper.WriteAttribute(sw, "deleteRows", this.deleteRows);
-                XmlHelper.WriteAttribute(sw, "selectLockedCells", this.selectLockedCells);
-                XmlHelper.WriteAttribute(sw, "sort", this.sort);
-                XmlHelper.WriteAttribute(sw, "autoFilter", this.autoFilter);
-                XmlHelper.WriteAttribute(sw, "pivotTables", this.pivotTables);
-                XmlHelper.WriteAttribute(sw, "selectUnlockedCells", this.selectUnlockedCells);
-                sw.Write(">");
-                sw.Write(string.Format("</{0}>", nodeName));
+                XmlHelper.WriteAttribute(sw, "algorithmName", this.algorithmName);
+                XmlHelper.WriteAttribute(sw, "hashValue", this.hashValue);
+                XmlHelper.WriteAttribute(sw, "saltValue", this.saltValue);
+                XmlHelper.WriteAttribute(sw, "spinCount", this.spinCount);
             }
-            else
-            {
-                sw.Write(RelatedNode.OuterXml);
-            }
+
+            XmlHelper.WriteAttribute(sw, "password", this.password);
+            XmlHelper.WriteAttribute(sw, "sheet", this.sheet);
+            XmlHelper.WriteAttribute(sw, "objects", this.objects);
+            XmlHelper.WriteAttribute(sw, "scenarios", this.scenarios);
+            XmlHelper.WriteAttribute(sw, "formatCells", this.formatCells);
+            XmlHelper.WriteAttribute(sw, "formatColumns", this.formatColumns);
+            XmlHelper.WriteAttribute(sw, "formatRows", this.formatRows);
+            XmlHelper.WriteAttribute(sw, "insertColumns", this.insertColumns);
+            XmlHelper.WriteAttribute(sw, "insertRows", this.insertRows);
+            XmlHelper.WriteAttribute(sw, "insertHyperlinks", this.insertHyperlinks);
+            XmlHelper.WriteAttribute(sw, "deleteColumns", this.deleteColumns);
+            XmlHelper.WriteAttribute(sw, "deleteRows", this.deleteRows);
+            XmlHelper.WriteAttribute(sw, "selectLockedCells", this.selectLockedCells);
+            XmlHelper.WriteAttribute(sw, "sort", this.sort);
+            XmlHelper.WriteAttribute(sw, "autoFilter", this.autoFilter);
+            XmlHelper.WriteAttribute(sw, "pivotTables", this.pivotTables);
+            XmlHelper.WriteAttribute(sw, "selectUnlockedCells", this.selectUnlockedCells);
+            sw.Write(">");
+            sw.Write(string.Format("</{0}>", nodeName));
         }
 
     }
@@ -7048,6 +7073,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private ST_IconSetType iconSetField;
 
         private bool showValueField;
+        private bool showValueFieldSpecified;
 
         private bool percentField;
 
@@ -7134,8 +7160,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             CT_IconSet ctObj = new CT_IconSet();
             if (node.Attributes["iconSet"] != null)
                 ctObj.iconSet = (ST_IconSetType)Enum.Parse(typeof(ST_IconSetType), "Item"+node.Attributes["iconSet"].Value);
-            ctObj.showValue = XmlHelper.ReadBool(node.Attributes["showValue"]);
-            ctObj.percent = XmlHelper.ReadBool(node.Attributes["percent"]);
+            ctObj.showValue = XmlHelper.ReadBool(node.Attributes["showValue"], true);
+            if (!ctObj.showValue)
+                ctObj.showValueFieldSpecified = true;
+            ctObj.percent = XmlHelper.ReadBool(node.Attributes["percent"], true);
             ctObj.reverse = XmlHelper.ReadBool(node.Attributes["reverse"]);
             ctObj.cfvo = new List<CT_Cfvo>();
             foreach (XmlNode childNode in node.ChildNodes)
@@ -7156,14 +7184,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ret;
         }
 
+        public bool IsSetShowValue()
+        {
+            return this.showValueFieldSpecified;
+        }
+
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
             if(this.iconSet!= ST_IconSetType.Item3TrafficLights1)
                 XmlHelper.WriteAttribute(sw, "iconSet", this.iconSet.ToString().Replace("Item",""));
-            if(showValue)
+            if(!showValue)
                 XmlHelper.WriteAttribute(sw, "showValue", this.showValue);
-            if (percent)
+            if (!percent)
                 XmlHelper.WriteAttribute(sw, "percent", this.percent);
             if (reverse)
                 XmlHelper.WriteAttribute(sw, "reverse", this.reverse);
@@ -8111,7 +8144,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_IgnoredError
     {
 
-        private string sqrefField;
+        private List<string> sqrefField;
 
         private bool evalErrorField;
 
@@ -8133,7 +8166,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_IgnoredError()
         {
-            //this.sqrefField = new List<string>();
+            this.sqrefField = new List<string>();
             this.evalErrorField = false;
             this.twoDigitTextYearField = false;
             this.numberStoredAsTextField = false;
@@ -8158,7 +8191,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.emptyCellReference = XmlHelper.ReadBool(node.Attributes["emptyCellReference"]);
             ctObj.listDataValidation = XmlHelper.ReadBool(node.Attributes["listDataValidation"]);
             ctObj.calculatedColumn = XmlHelper.ReadBool(node.Attributes["calculatedColumn"]);
-            ctObj.sqref = XmlHelper.ReadString(node.Attributes["sqref"]);
+            string sqref = XmlHelper.ReadString(node.Attributes["sqref"]);
+            //sqref is Reference Sequenc, a list of ST_Ref(Cell References, xsd:string)
+            //we don't know how to store this list yet. Try parse it as comma/space split string.
+            ctObj.sqref.AddRange(sqref.Split(", ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
             return ctObj;
         }
 
@@ -8176,14 +8212,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "emptyCellReference", this.emptyCellReference);
             XmlHelper.WriteAttribute(sw, "listDataValidation", this.listDataValidation);
             XmlHelper.WriteAttribute(sw, "calculatedColumn", this.calculatedColumn);
-            XmlHelper.WriteAttribute(sw, "sqref", this.sqref);
+            XmlHelper.WriteAttribute(sw, "sqref", string.Join(",", this.sqref));
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
 
         [XmlAttribute]
-        public string sqref
+        public List<string> sqref
         {
             get
             {

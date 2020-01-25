@@ -20,8 +20,10 @@
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Model;
+using NPOI.XSSF.Util;
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using ConditionTypeClass = NPOI.SS.UserModel.ConditionType;
 
 namespace NPOI.XSSF.UserModel
@@ -276,8 +278,8 @@ namespace NPOI.XSSF.UserModel
             // Set the type of the icon set
             if (iconSet.name != null)
             {
-                ST_IconSetType xIconSet = (ST_IconSetType)Enum.Parse(typeof(ST_IconSetType), iconSet.name);
-                icons.iconSet = (xIconSet);
+                ST_IconSetType xIconSet = XmlEnumParser<ST_IconSetType>.ForName(iconSet.name, ST_IconSetType.Item3TrafficLights1);
+                icons.iconSet = xIconSet;
             }
 
             // Add a default set of thresholds

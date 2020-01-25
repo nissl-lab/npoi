@@ -26,7 +26,6 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using TestCases.SS;
-    using NPOI.HSSF.Record.CF;
     using NPOI.HSSF.Util;
     using NPOI.HSSF.UserModel;
 
@@ -875,7 +874,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(null, cr.Formula1);
             Assert.AreEqual(null, cr.Formula2);
 
-            IconMultiStateFormatting icon = cr.MultiStateFormatting as IconMultiStateFormatting;
+            IIconMultiStateFormatting icon = cr.MultiStateFormatting;
             Assert.IsNotNull(icon);
             Assert.AreEqual(iconset, icon.IconSet);
             Assert.AreEqual(false, icon.IsIconOnly);
@@ -1159,8 +1158,8 @@ namespace TestCases.SS.UserModel
             ISheet sheet = wb1.CreateSheet();
             ISheetConditionalFormatting sheetCF = sheet.SheetConditionalFormatting;
             IConditionalFormattingRule rule1 =
-                    sheetCF.CreateConditionalFormattingRule(IconSet.GYRB_4_TRAFFIC_LIGHTS.name);
-            IconMultiStateFormatting iconFmt = rule1.MultiStateFormatting as IconMultiStateFormatting;
+                    sheetCF.CreateConditionalFormattingRule(IconSet.GYRB_4_TRAFFIC_LIGHTS);
+            IIconMultiStateFormatting iconFmt = rule1.MultiStateFormatting;
 
             Assert.AreEqual(IconSet.GYRB_4_TRAFFIC_LIGHTS, iconFmt.IconSet);
             Assert.AreEqual(4, iconFmt.Thresholds.Length);
@@ -1168,12 +1167,12 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(false, iconFmt.IsReversed);
 
             iconFmt.IsIconOnly = (true);
-            iconFmt.Thresholds[0].Type = (byte)(RangeType.MIN.id);
-            iconFmt.Thresholds[1].Type = (byte)(RangeType.NUMBER.id);
+            iconFmt.Thresholds[0].RangeType = RangeType.MIN;
+            iconFmt.Thresholds[1].RangeType = RangeType.NUMBER;
             iconFmt.Thresholds[1].Value = (10d);
-            iconFmt.Thresholds[2].Type = (byte)(RangeType.PERCENT.id);
+            iconFmt.Thresholds[2].RangeType = RangeType.PERCENT;
             iconFmt.Thresholds[2].Value = (75d);
-            iconFmt.Thresholds[3].Type = (byte)(RangeType.MAX.id);
+            iconFmt.Thresholds[3].RangeType = RangeType.MAX;
 
             CellRangeAddress[] regions = { CellRangeAddress.ValueOf("A1:A5") };
             sheetCF.AddConditionalFormatting(regions, rule1);
@@ -1190,19 +1189,19 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(1, cf.NumberOfRules);
             rule1 = cf.GetRule(0);
             Assert.AreEqual(ConditionType.IconSet, rule1.ConditionType);
-            iconFmt = rule1.MultiStateFormatting as IconMultiStateFormatting;
+            iconFmt = rule1.MultiStateFormatting;
 
             Assert.AreEqual(IconSet.GYRB_4_TRAFFIC_LIGHTS, iconFmt.IconSet);
             Assert.AreEqual(4, iconFmt.Thresholds.Length);
             Assert.AreEqual(true, iconFmt.IsIconOnly);
             Assert.AreEqual(false, iconFmt.IsReversed);
-            Assert.AreEqual(RangeType.MIN, RangeType.ById(iconFmt.Thresholds[0].Type));
-            Assert.AreEqual(RangeType.NUMBER, RangeType.ById(iconFmt.Thresholds[1].Type));
-            Assert.AreEqual(RangeType.PERCENT, RangeType.ById(iconFmt.Thresholds[2].Type));
-            Assert.AreEqual(RangeType.MAX, RangeType.ById(iconFmt.Thresholds[3].Type));
+            Assert.AreEqual(RangeType.MIN, iconFmt.Thresholds[0].RangeType);
+            Assert.AreEqual(RangeType.NUMBER, iconFmt.Thresholds[1].RangeType);
+            Assert.AreEqual(RangeType.PERCENT, iconFmt.Thresholds[2].RangeType);
+            Assert.AreEqual(RangeType.MAX, iconFmt.Thresholds[3].RangeType);
             Assert.AreEqual(null, iconFmt.Thresholds[0].Value);
-            Assert.AreEqual(10d, iconFmt.Thresholds[1].Value);
-            Assert.AreEqual(75d, iconFmt.Thresholds[2].Value);
+            Assert.AreEqual(10d, iconFmt.Thresholds[1].Value, 0);
+            Assert.AreEqual(75d, iconFmt.Thresholds[2].Value, 0);
             Assert.AreEqual(null, iconFmt.Thresholds[3].Value);
 
             wb2.Close();

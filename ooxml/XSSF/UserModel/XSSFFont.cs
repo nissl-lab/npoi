@@ -150,7 +150,7 @@ namespace NPOI.XSSF.UserModel
                 Spreadsheet.CT_Color color = _ctFont.sizeOfColorArray() == 0 ? null : _ctFont.GetColorArray(0);
                 if (color == null) return IndexedColors.Black.Index;
 
-                if (!color.indexedSpecified) return IndexedColors.Black.Index;
+                //if (!color.indexedSpecified) return IndexedColors.Black.Index;
                 long index = color.indexed;
                 if (index == XSSFFont.DEFAULT_FONT_COLOR)
                 {

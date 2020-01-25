@@ -166,6 +166,10 @@ namespace NPOI.SS.UserModel
             //    smap = new Dictionary<string, FormulaError>();
             //smap.Add(this.String, this);
         }
+        public override string ToString()
+        {
+            return Name;
+        }
         public string Name
         {
             get;

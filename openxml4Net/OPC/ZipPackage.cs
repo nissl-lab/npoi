@@ -415,17 +415,14 @@ namespace NPOI.OpenXml4Net.OPC
                 if (File.Exists(this.originalPackagePath))
                 {
                     // Case of a package previously open
-
                     string tempfilePath=GenerateTempFileName(FileHelper
                                     .GetDirectory(this.originalPackagePath));
 
-                    FileInfo fi=NPOI.Util.TempFile.CreateTempFile(
-                            tempfilePath, ".tmp");
-
+                    FileInfo fi=TempFile.CreateTempFile(tempfilePath, ".tmp");
                     // Save the final package to a temporary file
                     try
                     {
-                        Save(tempfilePath);
+                        Save(fi.FullName);
                     }
                     finally
                     {

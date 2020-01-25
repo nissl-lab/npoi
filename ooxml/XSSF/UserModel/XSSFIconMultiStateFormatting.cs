@@ -21,6 +21,7 @@ namespace NPOI.XSSF.UserModel
     using System;
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.SS.UserModel;
+    using NPOI.XSSF.Util;
 
     /**
      * High level representation for Icon / Multi-State Formatting 
@@ -41,11 +42,11 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 String set = _iconset.iconSet.ToString();
-                return IconSet.ByName(set);
+                return IconSet.ByOOXMLName(set);
             }
             set
             {
-                ST_IconSetType xIconSet = (ST_IconSetType)Enum.Parse(typeof(ST_IconSetType), value.name);
+                ST_IconSetType xIconSet = XmlEnumParser<ST_IconSetType>.ForName(value.name, ST_IconSetType.Item3TrafficLights1);
                 _iconset.iconSet = (xIconSet);
             }
         }
@@ -54,7 +55,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (_iconset.showValue)
+                if (_iconset.IsSetShowValue())
                     return !_iconset.showValue;
                 return false;
             }

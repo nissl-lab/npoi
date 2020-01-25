@@ -143,7 +143,7 @@ namespace TestCases.XSSF.UserModel
             XSSFRichTextString richText = new XSSFRichTextString(TEST_RICHTEXTSTRING);
             XSSFFont font1 = (XSSFFont)wb.CreateFont();
             font1.FontName = ("Tahoma");
-            font1.FontHeight = 8.5;
+            font1.FontHeightInPoints = 8.5;
             font1.IsItalic = true;
             font1.Color = IndexedColors.BlueGrey.Index;
             richText.ApplyFont(0, 5, font1);
@@ -254,7 +254,7 @@ namespace TestCases.XSSF.UserModel
         }
         [Ignore("Used for manual testing with opening the resulting Workbook in Excel")]
         [Test]
-        public void testBug58175a()
+        public void TestBug58175a()
         {
             IWorkbook wb = new SXSSFWorkbook();
             try

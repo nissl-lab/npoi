@@ -477,11 +477,10 @@ namespace NPOI.OpenXml4Net.OPC
                 if (this.originalPackagePath != null
                         && !"".Equals(this.originalPackagePath.Trim()))
                 {
-                    //File targetFile = new File(this.originalPackagePath);
-                    if (!File.Exists(this.originalPackagePath))
-                    {
-                        //|| !(this.originalPackagePath
-                        //		.Equals(targetFile.GetAbsolutePath(),StringComparison.InvariantCultureIgnoreCase))) {
+                    FileInfo targetFile = new FileInfo(this.originalPackagePath);
+                    if (!File.Exists(this.originalPackagePath)|| !(this.originalPackagePath
+                        		.Equals(targetFile.FullName, StringComparison.InvariantCultureIgnoreCase))) {
+
                         // Case of a package Created from scratch
                         Save(originalPackagePath);
                     }

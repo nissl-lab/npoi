@@ -429,6 +429,7 @@ namespace NPOI.XSSF.UserModel
                 foreach (CT_TableColumn column in TableColumns)
                 {
                     columnMap.Add(column.name.ToUpper(CultureInfo.CurrentCulture), i);
+                    i++;
                 }
             }
             // Table column names with special characters need a single quote escape

@@ -259,7 +259,7 @@ namespace NPOI.XSSF.UserModel
                     if (nextp.Text.Length > 0)
                     {
                         // increment the count for this level
-                        levelCount[level] = levelCount[(level) + 1];
+                        levelCount[level] = levelCount[level] + 1;
                         out1.Append(GetBulletPrefix(nextScheme, levelCount[(level)]));
                         out1.Append(nextp.Text);
                     }

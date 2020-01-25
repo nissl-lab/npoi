@@ -23,6 +23,7 @@ namespace NPOI.XSSF.UserModel.Helpers
     using System.Globalization;
     using System.Xml;
     using System.Xml.XPath;
+    using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.POIFS.Crypt;
     using NPOI.Util;
     using Org.BouncyCastle.Security;
@@ -33,7 +34,34 @@ namespace NPOI.XSSF.UserModel.Helpers
         {
             // no instances of this static class
         }
-
+        public static void SetPassword(CT_SheetProtection xobj, String password, HashAlgorithm hashAlgo, String prefix)
+        {
+            if (password == null)
+            {
+                xobj.password = null;
+                xobj.algorithmName = null;
+                xobj.hashValue = null;
+                xobj.saltValue = null;
+                xobj.spinCount = null;
+                return;
+            }
+            if (hashAlgo == null)
+            {
+                int hash = CryptoFunctions.CreateXorVerifier1(password);
+                xobj.password = String.Format("{0:X4}", hash).ToUpper();
+            }
+            else
+            {
+                SecureRandom random = new SecureRandom();
+                byte[] salt = random.GenerateSeed(16);
+                int spinCount = 100000;
+                byte[] hash = CryptoFunctions.HashPassword(password, hashAlgo, salt, spinCount, false);
+                xobj.algorithmName = hashAlgo.jceId;
+                xobj.hashValue = Convert.ToBase64String(hash);
+                xobj.saltValue = Convert.ToBase64String(salt);
+                xobj.spinCount = "" + spinCount;
+            }
+        }
         /**
          * Sets the XORed or hashed password 
          *
@@ -61,7 +89,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             if (hashAlgo == null)
             {
                 int hash = CryptoFunctions.CreateXorVerifier1(password);
-                cur.CreateAttribute(prefix, "password", null, String.Format("{0:X}", hash).ToUpper());
+                cur.CreateAttribute(prefix, "password", null, String.Format("{0:X4}", hash).ToUpper());
                 //cur.InsertAttributeWithValue(GetAttrName(prefix, "password"),
                 //                             String.Format("{0:X}", hash).ToUpper());
             }
@@ -90,6 +118,36 @@ namespace NPOI.XSSF.UserModel.Helpers
             //cur.Dispose();
         }
 
+        public static bool ValidatePassword(CT_SheetProtection xobj, String password, String prefix)
+        {
+            if (password == null) return false;
+
+            string xorHashVal = xobj.password;
+            string algoName = xobj.algorithmName;
+            string hashVal = xobj.hashValue;
+            string saltVal = xobj.saltValue;
+            string spinCount = xobj.spinCount;
+            if (xorHashVal != null)
+            {
+                int hash1 = Int32.Parse(xorHashVal, NumberStyles.HexNumber);
+                int hash2 = CryptoFunctions.CreateXorVerifier1(password);
+                return hash1 == hash2;
+            }
+            else
+            {
+                if (hashVal == null || algoName == null || saltVal == null || spinCount == null)
+                {
+                    return false;
+                }
+
+                byte[] hash1 = Convert.FromBase64String(hashVal);
+                HashAlgorithm hashAlgo = HashAlgorithm.FromString(algoName);
+                byte[] salt = Convert.FromBase64String(saltVal);
+                int spinCnt = Int32.Parse(spinCount);
+                byte[] hash2 = CryptoFunctions.HashPassword(password, hashAlgo, salt, spinCnt, false);
+                return Arrays.Equals(hash1, hash2);
+            }
+        }
         /**
          * Validates the password, i.e.
          * calculates the hash of the given password and Compares it against the stored hash

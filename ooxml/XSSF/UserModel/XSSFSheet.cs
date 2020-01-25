@@ -224,7 +224,7 @@ namespace NPOI.XSSF.UserModel
                     GetPackagePart().GetRelationshipsByType(XSSFRelation.SHEET_HYPERLINKS.Relation);
 
                 // Turn each one into a XSSFHyperlink
-                foreach (NPOI.OpenXmlFormats.Spreadsheet.CT_Hyperlink hyperlink in worksheet.hyperlinks.hyperlink)
+                foreach (CT_Hyperlink hyperlink in worksheet.hyperlinks.hyperlink)
                 {
                     PackageRelationship hyperRel = null;
                     if (hyperlink.id != null)
@@ -1538,7 +1538,7 @@ namespace NPOI.XSSF.UserModel
             {
                 return;
             }
-            XSSFPasswordHelper.SetPassword(SafeGetProtectionField().RelatedNode, password, hashAlgo, null);
+            XSSFPasswordHelper.SetPassword(SafeGetProtectionField(), password, hashAlgo, null);
         }
 
         /**
@@ -1552,8 +1552,7 @@ namespace NPOI.XSSF.UserModel
             {
                 return (password == null);
             }
-            //return ValidatePassword(SafeGetProtectionField(), password, null);
-            throw new NotImplementedException();
+            return XSSFPasswordHelper.ValidatePassword(SafeGetProtectionField(), password, null);
         }
 
         /**
@@ -2167,7 +2166,8 @@ namespace NPOI.XSSF.UserModel
 
             foreach (XSSFCell cell in cellsToDelete) row.RemoveCell(cell);
 
-            int idx = row.RowNum + 1;// _rows.headMap(row.getRowNum()).size();
+
+            int idx = _rows.Count(p => p.Key < row.RowNum);// _rows.headMap(row.getRowNum()).size();
             _rows.Remove(row.RowNum);
             worksheet.sheetData.RemoveRow(idx); // Note that rows in worksheet.sheetData is 1-based.
 
@@ -3351,7 +3351,9 @@ namespace NPOI.XSSF.UserModel
             }
 
             // Sort CTRows by index asc.
-            worksheet.sheetData.row.Sort((row1, row2) => row1.r.CompareTo(row2.r));
+            // not found at poi 3.15
+            if (worksheet.sheetData.row != null)
+                worksheet.sheetData.row.Sort((row1, row2) => row1.r.CompareTo(row2.r));
         }
         private class ShiftCommentComparator : IComparer<XSSFComment>
         {
@@ -5327,11 +5329,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_IgnoredErrors ctIgnoredErrors = worksheet.IsSetIgnoredErrors() ? worksheet.ignoredErrors : worksheet.AddNewIgnoredErrors();
             CT_IgnoredError ctIgnoredError = ctIgnoredErrors.AddNewIgnoredError();
-            ctIgnoredError.sqref = ref1;
-            foreach (IgnoredErrorType errType in ignoredErrorTypes)
-            {
-                XSSFIgnoredErrorHelper.Set(errType, ctIgnoredError);
-            }
+            XSSFIgnoredErrorHelper.AddIgnoredErrors(ctIgnoredError, ref1, ignoredErrorTypes);
         }
 
         private ISet<IgnoredErrorType> GetErrorTypes(CT_IgnoredError err)

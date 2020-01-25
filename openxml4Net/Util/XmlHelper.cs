@@ -366,9 +366,6 @@ namespace NPOI.OpenXml4Net.Util
         }
         public static void LoadXmlSafe(XmlDocument xmlDoc, Stream stream)
         {
-            
-
-            
             XmlReaderSettings settings = new XmlReaderSettings();
             //Disable entity parsing (to aviod xmlbombs, External Entity Attacks etc).
             settings.XmlResolver = null;
