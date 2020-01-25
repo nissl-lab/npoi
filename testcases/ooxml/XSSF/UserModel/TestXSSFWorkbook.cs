@@ -1012,8 +1012,9 @@ namespace TestCases.XSSF.UserModel
 
             // Option A:
             {
-                IEnumerator<XSSFSheet> it = wb.GetEnumerator() as IEnumerator<XSSFSheet>;
-                XSSFSheet sh = it.Current;
+                IEnumerator<ISheet> it = wb.GetEnumerator();
+                it.MoveNext();
+                XSSFSheet sh = it.Current as XSSFSheet;
                 sh.CreateRow(0);
             }
 
@@ -1026,7 +1027,8 @@ namespace TestCases.XSSF.UserModel
 
             // Option C (preferred for new code):
             {
-                IEnumerator<ISheet> it = wb.GetEnumerator() as IEnumerator<ISheet>;
+                IEnumerator<ISheet> it = wb.GetEnumerator();
+                it.MoveNext();
                 ISheet sh = it.Current;
                 sh.CreateRow(0);
             }
