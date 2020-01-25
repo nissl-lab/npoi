@@ -3353,7 +3353,8 @@ namespace NPOI.XSSF.UserModel
 
             // Sort CTRows by index asc.
             // not found at poi 3.15
-            //worksheet.sheetData.row.Sort((row1, row2) => row1.r.CompareTo(row2.r));
+            if (worksheet.sheetData.row != null)
+                worksheet.sheetData.row.Sort((row1, row2) => row1.r.CompareTo(row2.r));
         }
         private class ShiftCommentComparator : IComparer<XSSFComment>
         {
