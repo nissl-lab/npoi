@@ -616,10 +616,17 @@ namespace NPOI.OpenXml4Net.OPC
                 // no need to wrap this type of Exception
                 throw e;
             }
+            catch (IOException e)
+            {
+                throw new OpenXML4NetRuntimeException(
+                    "Fail to save: an error occurs while saving the package : "
+                            + e.Message, e);
+            }
             catch (Exception e)
             {
-                logger.Log(POILogger.ERROR, "fail to save: an error occurs while saving the package : "
-                                + e.Message);
+                throw new OpenXML4NetRuntimeException(
+                    "Fail to save: an error occurs while saving the package : "
+                            + e.Message, e);
             }
         }
 

@@ -126,7 +126,7 @@ namespace TestCases.OOXML
                 // FIXME: A better exception class (IOException?) and message should be raised
                 // indicating that the document could not be written because the output stream is closed.
                 // see {@link org.apache.poi.openxml4j.opc.ZipPackage#saveImpl(java.io.OutputStream)}
-                if (Regex.IsMatch(e.Message, "Fail to save: an error occurs while saving the package : The part .+ fail to be saved in the stream with marshaller .+"))
+                if (Regex.IsMatch(e.Message, "Fail to save: an error occurs while saving the package : Must support writing.+"))
                 {
                     // expected
                 }
