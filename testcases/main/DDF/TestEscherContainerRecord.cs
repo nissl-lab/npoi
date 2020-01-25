@@ -33,6 +33,7 @@ using System.Configuration;
     [TestFixture]
     public class TestEscherContainerRecord
     {
+        private static POIDataSamples _samples = POIDataSamples.GetDDFInstance();
         private String ESCHER_DATA_PATH;
 
         public TestEscherContainerRecord()
@@ -176,18 +177,11 @@ using System.Configuration;
         [Test]
         public void TestBug44857()
         {
-            //File f = new File(ESCHER_DATA_PATH, "Container.dat");
-            Assert.IsTrue(File.Exists(ESCHER_DATA_PATH+"Container.dat"));
+            byte[] data = _samples.ReadFile("Container.dat");
 
-            using (FileStream finp = new FileStream(ESCHER_DATA_PATH + "Container.dat", FileMode.Open, FileAccess.Read))
-            {
-                byte[] data = IOUtils.ToByteArray(finp);
-                finp.Close();
-
-                // This used to fail with an OutOfMemory
-                EscherContainerRecord record = new EscherContainerRecord();
-                record.FillFields(data, 0, new DefaultEscherRecordFactory());
-            }
+            // This used to fail with an OutOfMemory
+            EscherContainerRecord record = new EscherContainerRecord();
+            record.FillFields(data, 0, new DefaultEscherRecordFactory());
         }
         /**
 	 * Ensure {@link EscherContainerRecord} doesn't spill its guts everywhere
