@@ -627,7 +627,7 @@ namespace NPOI.XSSF.UserModel
 
             IFormulaParsingWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
             //validate through the FormulaParser
-            FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(this.Sheet), -1);
+            FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(this.Sheet), RowIndex);
 
             CT_CellFormula f = new CT_CellFormula();
             f.Value = formula;

@@ -33,8 +33,6 @@ namespace TestCases.XSSF.Extractor
     [TestFixture]
     public class TestXSSFExcelExtractor
     {
-
-
         protected XSSFExcelExtractor GetExtractor(String sampleName)
         {
             return new XSSFExcelExtractor(XSSFTestDataSamples.OpenSampleWorkbook(sampleName));
@@ -218,6 +216,7 @@ namespace TestCases.XSSF.Extractor
         }
 
         [Test]
+        [Ignore("not found in poi")]
         public void TestEmptyCells()
         {
             XSSFExcelExtractor extractor = GetExtractor("SimpleNormal.xlsx");
@@ -246,6 +245,28 @@ namespace TestCases.XSSF.Extractor
                 text);
 
             extractor.Close();
+        }
+
+        /**
+	     * Simple test for text box text
+	     * @throws IOException
+	     */
+        [Test]
+        public void TestTextBoxes()
+        {
+            XSSFExcelExtractor extractor = GetExtractor("WithTextBox.xlsx");
+            try
+            {
+                extractor.SetFormulasNotResults(true);
+                String text = extractor.Text;
+                Assert.IsTrue(text.IndexOf("Line 1") > -1);
+                Assert.IsTrue(text.IndexOf("Line 2") > -1);
+                Assert.IsTrue(text.IndexOf("Line 3") > -1);
+            }
+            finally
+            {
+                extractor.Close();
+            }
         }
     }
 }
