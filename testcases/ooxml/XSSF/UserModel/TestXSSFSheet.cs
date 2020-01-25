@@ -1116,7 +1116,6 @@ namespace TestCases.XSSF.UserModel
             Assert.IsTrue((wb3.GetSheetAt(0) as XSSFSheet).ValidateSheetPassword("pwd"));
 
             wb3.Close();
-            throw new NotImplementedException();
         }
 
         [Test]

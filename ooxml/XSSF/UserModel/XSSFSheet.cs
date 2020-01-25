@@ -1552,8 +1552,7 @@ namespace NPOI.XSSF.UserModel
             {
                 return (password == null);
             }
-            //return ValidatePassword(SafeGetProtectionField(), password, null);
-            throw new NotImplementedException();
+            return XSSFPasswordHelper.ValidatePassword(SafeGetProtectionField(), password, null);
         }
 
         /**

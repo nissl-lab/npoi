@@ -42,7 +42,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                 xobj.algorithmName = null;
                 xobj.hashValue = null;
                 xobj.saltValue = null;
-                xobj.spinCount = 0;
+                xobj.spinCount = null;
                 return;
             }
             if (hashAlgo == null)
@@ -59,7 +59,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                 xobj.algorithmName = hashAlgo.jceId;
                 xobj.hashValue = Convert.ToBase64String(hash);
                 xobj.saltValue = Convert.ToBase64String(salt);
-                xobj.spinCount = spinCount;
+                xobj.spinCount = "" + spinCount;
             }
         }
         /**
@@ -118,6 +118,36 @@ namespace NPOI.XSSF.UserModel.Helpers
             //cur.Dispose();
         }
 
+        public static bool ValidatePassword(CT_SheetProtection xobj, String password, String prefix)
+        {
+            if (password == null) return false;
+
+            string xorHashVal = xobj.password;
+            string algoName = xobj.algorithmName;
+            string hashVal = xobj.hashValue;
+            string saltVal = xobj.saltValue;
+            string spinCount = xobj.spinCount;
+            if (xorHashVal != null)
+            {
+                int hash1 = Int32.Parse(xorHashVal, NumberStyles.HexNumber);
+                int hash2 = CryptoFunctions.CreateXorVerifier1(password);
+                return hash1 == hash2;
+            }
+            else
+            {
+                if (hashVal == null || algoName == null || saltVal == null || spinCount == null)
+                {
+                    return false;
+                }
+
+                byte[] hash1 = Convert.FromBase64String(hashVal);
+                HashAlgorithm hashAlgo = HashAlgorithm.FromString(algoName);
+                byte[] salt = Convert.FromBase64String(saltVal);
+                int spinCnt = Int32.Parse(spinCount);
+                byte[] hash2 = CryptoFunctions.HashPassword(password, hashAlgo, salt, spinCnt, false);
+                return Arrays.Equals(hash1, hash2);
+            }
+        }
         /**
          * Validates the password, i.e.
          * calculates the hash of the given password and Compares it against the stored hash

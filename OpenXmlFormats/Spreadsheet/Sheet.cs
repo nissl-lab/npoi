@@ -3191,7 +3191,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             get;
             set;
         }
-        public int spinCount
+        public string spinCount
         {
             get;
             set;
@@ -3462,7 +3462,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 ctObj.hashValue = XmlHelper.ReadString(node.Attributes["hashValue"]);
                 ctObj.saltValue = XmlHelper.ReadString(node.Attributes["saltValue"]);
-                ctObj.spinCount = XmlHelper.ReadInt(node.Attributes["spinCount"]);
+                ctObj.spinCount = XmlHelper.ReadString(node.Attributes["spinCount"]);
             }
             return ctObj;
         }
