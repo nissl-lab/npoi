@@ -1104,7 +1104,7 @@ namespace TestCases.XSSF.UserModel
             //assertCloseDoesNotModifyFile(filename, wb);
 
             // InputStream
-            wb = new XSSFWorkbook(file.Create());
+            wb = new XSSFWorkbook(file.OpenRead());
             assertCloseDoesNotModifyFile(filename, wb);
 
             // OPCPackage
