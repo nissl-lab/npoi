@@ -341,11 +341,11 @@ namespace NPOI.XSSF.UserModel
                     else if (p is MapInfo) mapInfo = (MapInfo)p;
                     else if (p is XSSFSheet)
                     {
-                        shIdMap.Add(rp.Relationship.Id, (XSSFSheet)p);
+                        shIdMap[rp.Relationship.Id] = (XSSFSheet)p;
                     }
                     else if (p is ExternalLinksTable)
                     {
-                        elIdMap.Add(rp.Relationship.Id, (ExternalLinksTable)p);
+                        elIdMap[rp.Relationship.Id] = (ExternalLinksTable)p;
                     }
                 }
 

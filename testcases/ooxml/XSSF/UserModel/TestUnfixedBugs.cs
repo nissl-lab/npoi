@@ -350,8 +350,9 @@ namespace TestCases.XSSF.UserModel
 
             ICell cell = row.GetCell(0);
             Assert.IsNotNull(cell, "Expecting cell at rownum " + rowNum);
-            Assert.AreEqual(contents + ".0", cell.ToString(),
-                "Did not have expected contents at rownum " + rowNum);
+            //why concate ".0"? There is no ".0" in excel.
+            Assert.AreEqual(contents, cell.ToString(), "Did not have expected contents at rownum " + rowNum);
+            //Assert.AreEqual(contents + ".0", cell.ToString(), "Did not have expected contents at rownum " + rowNum);
         }
 
         [Test]
