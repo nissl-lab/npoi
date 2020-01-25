@@ -1603,10 +1603,9 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 //rows.addAll(_rows.subMap(startRowNum, endRowNum + 1).values());
-                for (int i = startRowNum; i <= endRowNum; i++)
-                {
-                    rows.Add(_rows[i]);
-                }
+                rows.AddRange(_rows.SkipWhile(x => x.Key < startRowNum)
+                    .TakeWhile(x => x.Key < endRowNum + 1)
+                    .Select(x => x.Value));
             }
             return rows;
         }
