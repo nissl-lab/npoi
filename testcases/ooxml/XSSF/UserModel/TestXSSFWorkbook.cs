@@ -1083,6 +1083,7 @@ namespace TestCases.XSSF.UserModel
                 }
                 Assert.IsTrue(file.Exists);
                 file.Delete();
+                file.Refresh();
                 Assert.IsTrue(!file.Exists);
             }
         }
