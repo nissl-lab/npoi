@@ -5329,11 +5329,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_IgnoredErrors ctIgnoredErrors = worksheet.IsSetIgnoredErrors() ? worksheet.ignoredErrors : worksheet.AddNewIgnoredErrors();
             CT_IgnoredError ctIgnoredError = ctIgnoredErrors.AddNewIgnoredError();
-            ctIgnoredError.sqref = ref1;
-            foreach (IgnoredErrorType errType in ignoredErrorTypes)
-            {
-                XSSFIgnoredErrorHelper.Set(errType, ctIgnoredError);
-            }
+            XSSFIgnoredErrorHelper.AddIgnoredErrors(ctIgnoredError, ref1, ignoredErrorTypes);
         }
 
         private ISet<IgnoredErrorType> GetErrorTypes(CT_IgnoredError err)

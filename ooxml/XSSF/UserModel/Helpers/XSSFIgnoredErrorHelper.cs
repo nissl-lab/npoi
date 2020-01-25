@@ -93,7 +93,8 @@ namespace NPOI.XSSF.UserModel.Helpers
 
         public static void AddIgnoredErrors(CT_IgnoredError err, String ref1, params IgnoredErrorType[] ignoredErrorTypes)
         {
-            err.sqref = ref1;
+            err.sqref.Clear();
+            err.sqref.Add(ref1);
             foreach (IgnoredErrorType errType in ignoredErrorTypes)
             {
                 XSSFIgnoredErrorHelper.Set(errType, err);

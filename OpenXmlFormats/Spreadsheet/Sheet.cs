@@ -8144,7 +8144,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_IgnoredError
     {
 
-        private string sqrefField;
+        private List<string> sqrefField;
 
         private bool evalErrorField;
 
@@ -8166,7 +8166,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_IgnoredError()
         {
-            //this.sqrefField = new List<string>();
+            this.sqrefField = new List<string>();
             this.evalErrorField = false;
             this.twoDigitTextYearField = false;
             this.numberStoredAsTextField = false;
@@ -8191,7 +8191,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.emptyCellReference = XmlHelper.ReadBool(node.Attributes["emptyCellReference"]);
             ctObj.listDataValidation = XmlHelper.ReadBool(node.Attributes["listDataValidation"]);
             ctObj.calculatedColumn = XmlHelper.ReadBool(node.Attributes["calculatedColumn"]);
-            ctObj.sqref = XmlHelper.ReadString(node.Attributes["sqref"]);
+            string sqref = XmlHelper.ReadString(node.Attributes["sqref"]);
+            //sqref is Reference Sequenc, a list of ST_Ref(Cell References, xsd:string)
+            //we don't know how to store this list yet. Try parse it as comma/space split string.
+            ctObj.sqref.AddRange(sqref.Split(", ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
             return ctObj;
         }
 
@@ -8209,14 +8212,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "emptyCellReference", this.emptyCellReference);
             XmlHelper.WriteAttribute(sw, "listDataValidation", this.listDataValidation);
             XmlHelper.WriteAttribute(sw, "calculatedColumn", this.calculatedColumn);
-            XmlHelper.WriteAttribute(sw, "sqref", this.sqref);
+            XmlHelper.WriteAttribute(sw, "sqref", string.Join(",", this.sqref));
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
 
         [XmlAttribute]
-        public string sqref
+        public List<string> sqref
         {
             get
             {
