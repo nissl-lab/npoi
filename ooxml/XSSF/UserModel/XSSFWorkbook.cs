@@ -621,7 +621,7 @@ namespace NPOI.XSSF.UserModel
             {
                 foreach (PackageRelationship pr in srcSheet.GetPackagePart().Relationships)
                 {
-                    if (pr.TargetMode == TargetMode.Internal)
+                    if (pr.TargetMode == TargetMode.External)
                     {
                         clonedSheet.GetPackagePart().AddExternalRelationship
                             (pr.TargetUri.ToString(), pr.RelationshipType, null);
@@ -691,7 +691,7 @@ namespace NPOI.XSSF.UserModel
         private static void AddRelation(RelationPart rp, POIXMLDocumentPart target)
         {
             PackageRelationship rel = rp.Relationship;
-            if (rel.TargetMode == TargetMode.Internal)
+            if (rel.TargetMode == TargetMode.External)
             {
                 target.GetPackagePart().AddRelationship(
                     rel.TargetUri, rel.TargetMode.Value, rel.RelationshipType, rel.Id);

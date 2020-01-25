@@ -70,7 +70,7 @@ namespace NPOI.XSSF.UserModel
             : base(part)
         {
             XmlDocument xmldoc = ConvertStreamToXml(part.GetInputStream());
-            drawing = NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing.Parse(xmldoc, NamespaceManager);
+            drawing = CT_Drawing.Parse(xmldoc, NamespaceManager);
         }
         public XSSFDrawing(PackagePart part, PackageRelationship rel)
             : this(part)
@@ -82,7 +82,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return a new CT_Drawing bean
          */
-        private static NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing NewDrawing()
+        private static CT_Drawing NewDrawing()
         {
             return new CT_Drawing();
         }
