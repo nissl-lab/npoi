@@ -571,9 +571,11 @@ namespace TestCases.XSSF.UserModel
             rts.Append(" This uses the default font rather than the cell style font");
             int s3 = rts.Length;
 
-            Assert.AreEqual("<xml-fragment/>", rts.GetFontAtIndex(s1 - 1).ToString());
+            //Assert.AreEqual("<xml-fragment/>", rts.GetFontAtIndex(s1 - 1).ToString());
+            Assert.AreEqual("<font></font>", rts.GetFontAtIndex(s1 - 1).ToString());
             Assert.AreEqual(font, rts.GetFontAtIndex(s2 - 1));
-            Assert.AreEqual("<xml-fragment/>", rts.GetFontAtIndex(s3 - 1).ToString());
+            //Assert.AreEqual("<xml-fragment/>", rts.GetFontAtIndex(s3 - 1).ToString());
+            Assert.AreEqual("<font></font>", rts.GetFontAtIndex(s3 - 1).ToString());
         }
     }
 }
