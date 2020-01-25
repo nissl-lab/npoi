@@ -224,7 +224,7 @@ namespace NPOI.XSSF.UserModel
                     GetPackagePart().GetRelationshipsByType(XSSFRelation.SHEET_HYPERLINKS.Relation);
 
                 // Turn each one into a XSSFHyperlink
-                foreach (NPOI.OpenXmlFormats.Spreadsheet.CT_Hyperlink hyperlink in worksheet.hyperlinks.hyperlink)
+                foreach (CT_Hyperlink hyperlink in worksheet.hyperlinks.hyperlink)
                 {
                     PackageRelationship hyperRel = null;
                     if (hyperlink.id != null)
