@@ -195,8 +195,8 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public void AddRelationship(PackageRelationship relPart)
         {
-            relationshipsByID.Add(relPart.Id, relPart);
-            relationshipsByType.Add(relPart.RelationshipType, relPart);
+            relationshipsByID[relPart.Id] = relPart;
+            relationshipsByType[relPart.RelationshipType] = relPart;
         }
 
         /**
@@ -233,8 +233,8 @@ namespace NPOI.OpenXml4Net.OPC
 
             PackageRelationship rel = new PackageRelationship(container,
                     sourcePart, targetUri, targetMode, relationshipType, id);
-            relationshipsByID.Add(rel.Id, rel);
-            relationshipsByType.Add(rel.RelationshipType, rel);
+            relationshipsByID[rel.Id] = rel;
+            relationshipsByType[rel.RelationshipType] = rel;
             return rel;
         }
 
