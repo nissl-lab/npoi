@@ -205,7 +205,7 @@ namespace TestCases.XSSF.UserModel
             {
                 pivotTable.AddColumnLabel(DataConsolidateFunction.SUM, columnIndex);
             }
-            catch (ArgumentOutOfRangeException)
+            catch (IndexOutOfRangeException)
             {
                 return;
             }
@@ -240,7 +240,7 @@ namespace TestCases.XSSF.UserModel
             {
                 pivotTable.AddDataColumn(columnIndex, isDataField);
             }
-            catch (ArgumentOutOfRangeException)
+            catch (IndexOutOfRangeException)
             {
                 return;
             }
@@ -274,7 +274,7 @@ namespace TestCases.XSSF.UserModel
             {
                 pivotTable.AddReportFilter(columnIndex);
             }
-            catch (ArgumentOutOfRangeException)
+            catch (IndexOutOfRangeException)
             {
                 return;
             }
