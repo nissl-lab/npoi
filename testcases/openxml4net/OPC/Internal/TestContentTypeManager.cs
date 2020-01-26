@@ -17,7 +17,7 @@ namespace TestCases.OpenXml4Net.OPC.Internal
          * Test the properties part content parsing.
          */
         [Test]
-        public void testContentType()
+        public void TestContentType()
         {
             String filepath = OpenXml4NetTestDataSamples.GetSampleFileName("sample.docx");
             // Retrieves core properties part
@@ -26,7 +26,7 @@ namespace TestCases.OpenXml4Net.OPC.Internal
             PackageRelationship corePropertiesRelationship = rels.GetRelationship(0);
             PackagePart coreDocument = p.GetPart(corePropertiesRelationship);
 
-            Assert.AreEqual("application/vnd.Openxmlformats-package.core-properties+xml", coreDocument.ContentType);
+            Assert.AreEqual("application/vnd.openxmlformats-package.core-properties+xml", coreDocument.ContentType);
             // TODO - finish writing this test
             Assume.That(false,"finish writing this test");
 
