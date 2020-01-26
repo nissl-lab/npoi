@@ -3347,6 +3347,7 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestWorkdayFunction()
         {
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("en-US");
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("59106.xlsx");
             XSSFSheet sheet = workbook.GetSheet("Test") as XSSFSheet;
             IRow row = sheet.GetRow(1);

@@ -333,8 +333,8 @@ namespace NPOI.HSSF.UserModel
                     byte comparisonOperation = cfRuleRecord.ComparisonOperation;
                     switch (comparisonOperation)
                     {
-                        case (byte)NPOI.SS.UserModel.ComparisonOperator.Between:
-                        case (byte)NPOI.SS.UserModel.ComparisonOperator.NotBetween:
+                        case (byte)ComparisonOperator.Between:
+                        case (byte)ComparisonOperator.NotBetween:
                             return ToFormulaString(cfRuleRecord.ParsedExpression2);
                     }
                 }
@@ -348,7 +348,7 @@ namespace NPOI.HSSF.UserModel
             {
                 return null;
             }
-            return HSSFFormulaParser.ToFormulaString(this.workbook, ParsedExpression);
+            return HSSFConditionalFormattingRule.ToFormulaString(ParsedExpression, workbook);
         }
         protected internal static String ToFormulaString(Ptg[] parsedExpression, HSSFWorkbook workbook)
         {

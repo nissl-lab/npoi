@@ -135,13 +135,16 @@ namespace NPOI.XSSF.UserModel
         private class FakeExternalLinksTable : ExternalLinksTable
         {
             private String fileName;
-            internal FakeExternalLinksTable(String fileName)
+            internal FakeExternalLinksTable(string fileName)
             {
                 this.fileName = fileName;
             }
-            public String GetLinkedFileName()
+            public override string LinkedFileName
             {
-                return fileName;
+                get
+                {
+                    return fileName;
+                }
             }
         }
         /// <summary>

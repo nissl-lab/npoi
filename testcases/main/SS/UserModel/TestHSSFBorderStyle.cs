@@ -15,11 +15,10 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.UserModel
+namespace TestCases.SS.UserModel
 {
     using NUnit.Framework;
     using TestCases.HSSF;
-    using TestCases.SS.UserModel;
 
     /**
      * @author Yegor Kozlov

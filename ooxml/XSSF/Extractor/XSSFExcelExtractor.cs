@@ -21,6 +21,8 @@ using System.Text;
 using NPOI.SS.UserModel;
 using System.Collections;
 using System.Globalization;
+using System.Collections.Generic;
+
 namespace NPOI.XSSF.Extractor
 {
     /**
@@ -39,6 +41,7 @@ namespace NPOI.XSSF.Extractor
         private bool formulasNotResults = false;
         private bool includeCellComments = false;
         private bool includeHeadersFooters = true;
+        private bool includeTextBoxes = true;
 
         public XSSFExcelExtractor(OPCPackage Container)
             : this(new XSSFWorkbook(Container))
@@ -111,6 +114,18 @@ namespace NPOI.XSSF.Extractor
                 this.includeCellComments = value;
             }
         }
+
+        public bool IncludeTextBoxes
+        {
+            get
+            {
+                return includeTextBoxes;
+            }
+            set
+            {
+                includeTextBoxes = value;
+            }
+        }
         /**
          * Should sheet names be included? Default is true
          */
@@ -139,6 +154,15 @@ namespace NPOI.XSSF.Extractor
         public void SetIncludeHeadersFooters(bool includeHeadersFooters)
         {
             this.includeHeadersFooters = includeHeadersFooters;
+        }
+
+        /**
+         * Should text within textboxes be included? Default is true
+         * @param includeTextBoxes
+         */
+        public void SetIncludeTextBoxes(bool includeTextBoxes)
+        {
+            this.includeTextBoxes = includeTextBoxes;
         }
         public void SetLocale(CultureInfo locale)
         {
@@ -191,11 +215,11 @@ namespace NPOI.XSSF.Extractor
                     foreach (Object rawR in sheet)
                     {
                         IRow row = (IRow)rawR;
-                        IEnumerator ri = row.GetEnumerator();
+                        IEnumerator<ICell> ri = row.GetEnumerator();
                         bool firsttime = true;
                         for (int j = 0; j < row.LastCellNum; j++)
                         {
-                            ICell cell = (ICell)row.GetCell(j);
+                            ICell cell = row.GetCell(j);
                             if (cell == null)
                                 continue;
                             if (!firsttime)
@@ -249,6 +273,26 @@ namespace NPOI.XSSF.Extractor
 
                         }
                         text.Append("\n");
+                    }
+                    // add textboxes
+                    if (includeTextBoxes)
+                    {
+                        XSSFDrawing drawing = sheet.GetDrawingPatriarch();
+                        if (drawing != null)
+                        {
+                            foreach (XSSFShape shape in drawing.GetShapes())
+                            {
+                                if (shape is XSSFSimpleShape)
+                                {
+                                    String boxText = ((XSSFSimpleShape)shape).Text;
+                                    if (boxText.Length > 0)
+                                    {
+                                        text.Append(boxText);
+                                        text.Append('\n');
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     // Finally footer(s), if present

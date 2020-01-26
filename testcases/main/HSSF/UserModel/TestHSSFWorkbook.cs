@@ -1391,14 +1391,18 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        public void inPlaceWrite()
+        public void InPlaceWrite()
         {
             // Setup as a copy of a known-good file
             FileInfo file = TempFile.CreateTempFile("TestHSSFWorkbook", ".xls");
+            Stream outStream = file.Open(FileMode.Open, FileAccess.ReadWrite);
+            Stream inStream = POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("SampleSS.xls");
             IOUtils.Copy(
-                    POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("SampleSS.xls"),
-                    file.Create()
+                    inStream,
+                    outStream
             );
+            outStream.Close();
+            inStream.Close();
 
             // Open from the temp file in read-write mode
             HSSFWorkbook wb = new HSSFWorkbook(new NPOIFSFileSystem(file, false));
