@@ -250,18 +250,18 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             //{
             //    throw new IOException("File is a directory");
             //}
-            // TODO: ZipSecureFile
-            //// Peek at the first few bytes to sanity check
-            //FileInputStream input = new FileInputStream(file);
-            //try
-            //{
-            //    verifyZipHeader(input);
-            //}
-            //finally
-            //{
-            //    input.close();
-            //}
 
+            // Peek at the first few bytes to sanity check
+            FileInputStream input = new FileInputStream(file.OpenRead());
+            try
+            {
+                VerifyZipHeader(input);
+            }
+            finally
+            {
+                input.Close();
+            }
+            // TODO: ZipSecureFile
             //// Open as a proper zip file
             //return new ZipSecureFile(file);
             return new ZipFile(File.OpenRead(file.FullName));

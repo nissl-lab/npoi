@@ -26,6 +26,7 @@ namespace NPOI.OpenXml4Net.Util
             {
                 zipArchive.Close();
             }
+            zipArchive = null;
         }
 
         public bool IsClosed

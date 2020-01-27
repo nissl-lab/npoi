@@ -243,7 +243,7 @@ namespace NPOI.OpenXml4Net.OPC
          * See bug #60128 for more
          */
         [Test]
-        public void testTidyStreamOnInvalidFile()
+        public void TestTidyStreamOnInvalidFile()
         {
             // Spreadsheet has a good mix of alternate file types
             POIDataSamples files = POIDataSamples.GetSpreadSheetInstance();
