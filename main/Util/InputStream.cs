@@ -376,5 +376,11 @@ namespace NPOI.Util
         {
             throw new NotImplementedException();
         }
+
+        public override void Close()
+        {
+            if (inner != null)
+                inner.Close();
+        }
     }
 }

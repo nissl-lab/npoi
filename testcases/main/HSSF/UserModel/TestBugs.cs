@@ -3155,8 +3155,8 @@ namespace TestCases.HSSF.UserModel
         {
             IWorkbook wb = OpenSample("Intersection-52111.xls");
             ISheet s = wb.GetSheetAt(0);
-            assertFormula(wb, s.GetRow(2).GetCell(0), "(C2:D3 D3:E4)", "4.0");
-            assertFormula(wb, s.GetRow(6).GetCell(0), "Tabelle2!E:E Tabelle2!$A11:$IV11", "5.0");
+            assertFormula(wb, s.GetRow(2).GetCell(0), "(C2:D3 D3:E4)", "4");
+            assertFormula(wb, s.GetRow(6).GetCell(0), "Tabelle2!E:E Tabelle2!$A11:$IV11", "5");
             assertFormula(wb, s.GetRow(8).GetCell(0), "Tabelle2!E:F Tabelle2!$A11:$IV12", null);
         }
 

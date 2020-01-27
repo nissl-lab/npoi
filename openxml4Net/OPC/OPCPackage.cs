@@ -856,8 +856,6 @@ namespace NPOI.OpenXml4Net.OPC
                                     "POI will use only the first, but other software may reject this file.");
                     }
 
-
-
                     if (partUnmarshallers.ContainsKey(part._contentType))
                     {
                         PartUnmarshaller partUnmarshaller = partUnmarshallers[part._contentType];

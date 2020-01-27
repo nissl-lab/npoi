@@ -2866,8 +2866,8 @@ namespace TestCases.XSSF.UserModel
         {
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("Intersection-52111-xssf.xlsx");
             ISheet s = wb.GetSheetAt(0);
-            assertFormula(wb, s.GetRow(2).GetCell(0), "(C2:D3 D3:E4)", "4.0");
-            assertFormula(wb, s.GetRow(6).GetCell(0), "Tabelle2!E:E Tabelle2!11:11", "5.0");
+            assertFormula(wb, s.GetRow(2).GetCell(0), "(C2:D3 D3:E4)", "4");
+            assertFormula(wb, s.GetRow(6).GetCell(0), "Tabelle2!E:E Tabelle2!11:11", "5");
             assertFormula(wb, s.GetRow(8).GetCell(0), "Tabelle2!E:F Tabelle2!11:12", null);
             wb.Close();
         }

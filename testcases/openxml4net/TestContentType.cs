@@ -23,7 +23,7 @@ using System.IO;
 using NPOI.OpenXml4Net.OPC;
 using TestCases.OpenXml4Net;
 using NPOI.XWPF.UserModel;
-namespace TestCase.OPC
+namespace TestCases.OpenXml4Net.OPC
 {
 
     /**

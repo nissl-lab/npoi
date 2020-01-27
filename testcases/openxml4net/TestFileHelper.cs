@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.IO;
 using NPOI.OpenXml4Net.OPC.Internal;
 using NUnit.Framework;
-namespace TestCases.OPC
+namespace TestCases.OpenXml4Net.OPC
 {
 
     /**

@@ -20,7 +20,7 @@ using TestCases.OpenXml4Net;
 using System;
 using System.IO;
 using NUnit.Framework;
-namespace TestCases.OPC
+namespace TestCases.OpenXml4Net.OPC
 {
 
     /**
@@ -59,7 +59,7 @@ namespace TestCases.OPC
                     }
 
                     // Open the newly created file to check core properties saved values.
-                    OPCPackage p2 = OPCPackage.Open(outputFile.Name, PackageAccess.READ);
+                    OPCPackage p2 = OPCPackage.Open(outputFile.FullName, PackageAccess.READ);
                     try
                     {
                         if (p2.GetRelationshipsByType(PackageRelationshipTypes.THUMBNAIL)

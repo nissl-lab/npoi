@@ -15,8 +15,9 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.OpenXml4Net.OPC.Internal
+namespace TestCases.OpenXml4Net.OPC.Internal
 {
+    using NPOI.OpenXml4Net.OPC.Internal;
     using NPOI.OpenXml4Net.OPC.Internal.Marshallers;
     using NUnit.Framework;
     using System;

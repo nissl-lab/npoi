@@ -15,12 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.OpenXml4Net.OPC
+namespace TestCases.OpenXml4Net.OPC
 {
     using System;
     using System.IO;
     using System.Xml;
+    using NPOI;
     using NPOI.Openxml4Net.Exceptions;
+    using NPOI.OpenXml4Net.OPC;
     using NPOI.SS.UserModel;
     using NPOI.Util;
     using NPOI.XSSF;
@@ -230,6 +232,7 @@ namespace NPOI.OpenXml4Net.OPC
                 // this test does not care if open() throws an exception or not.
             }
             tmp.Delete();
+            tmp.Refresh();
             // If the stream is not closed on exception, it will keep a file descriptor to tmp,
             // and requests to the OS to delete the file will fail.
             Assert.IsFalse(tmp.Exists, "Can't delete tmp file");
@@ -242,7 +245,7 @@ namespace NPOI.OpenXml4Net.OPC
          * See bug #60128 for more
          */
         [Test]
-        public void testTidyStreamOnInvalidFile()
+        public void TestTidyStreamOnInvalidFile()
         {
             // Spreadsheet has a good mix of alternate file types
             POIDataSamples files = POIDataSamples.GetSpreadSheetInstance();

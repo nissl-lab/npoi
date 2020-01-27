@@ -60,10 +60,10 @@ namespace TestCases
 
             // Should now hold them
             Assert.IsNotNull(
-                    outFS.CreateDocumentInputStream("\005SummaryInformation")
+                    outFS.CreateDocumentInputStream("\x0005SummaryInformation")
             );
             Assert.IsNotNull(
-                    outFS.CreateDocumentInputStream("\005DocumentSummaryInformation")
+                    outFS.CreateDocumentInputStream("\x0005DocumentSummaryInformation")
             );
         }
         [Test]
