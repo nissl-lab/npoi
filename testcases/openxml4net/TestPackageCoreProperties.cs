@@ -25,7 +25,7 @@ using System;
 using NPOI.OpenXmlFormats;
 using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.XSSF.UserModel;
-namespace TestCases.OPC
+namespace TestCases.OpenXml4Net.OPC
 {
 
     [TestFixture]

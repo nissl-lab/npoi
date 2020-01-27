@@ -20,7 +20,7 @@ using TestCases.OpenXml4Net;
 using System;
 using System.IO;
 using NUnit.Framework;
-namespace TestCases.OPC
+namespace TestCases.OpenXml4Net.OPC
 {
 
     /**

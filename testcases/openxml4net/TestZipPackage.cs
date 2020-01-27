@@ -15,12 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.OpenXml4Net.OPC
+namespace TestCases.OpenXml4Net.OPC
 {
     using System;
     using System.IO;
     using System.Xml;
+    using NPOI;
     using NPOI.Openxml4Net.Exceptions;
+    using NPOI.OpenXml4Net.OPC;
     using NPOI.SS.UserModel;
     using NPOI.Util;
     using NPOI.XSSF;

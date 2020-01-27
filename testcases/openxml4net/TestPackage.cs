@@ -33,7 +33,7 @@ using NPOI.SS.UserModel;
 using NPOI;
 using NPOI.Openxml4Net.Exceptions;
 
-namespace TestCases.OPC
+namespace TestCases.OpenXml4Net.OPC
 {
     [TestFixture]
     public class TestPackage

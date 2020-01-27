@@ -24,7 +24,7 @@ using System.IO;
 using System.Web;
 using System.Text.RegularExpressions;
 using NPOI.XWPF.UserModel;
-namespace TestCases.OPC
+namespace TestCases.OpenXml4Net.OPC
 {
 
 
