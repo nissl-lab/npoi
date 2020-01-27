@@ -32,7 +32,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         //private static String ALTERNATIVE_DATEFORMAT = "yyyy-MM-dd'T'HH:mm:ss.SS'Z'";
         private static String[] DATE_FORMATS = new String[]{
             DEFAULT_DATEFORMAT,
-            "yyyy-MM-dd'T'HH:mm:ss.SS'Z'",
+            "yyyy-MM-dd'T'HH:mm:ss.ff'Z'",
         };
 
         //Had to add this and TIME_ZONE_PAT to handle tz with colons.
@@ -41,9 +41,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         //and TIME_ZONE_PAT
         private String[] TZ_DATE_FORMATS = new String[]{
 			"yyyy-MM-dd'T'HH:mm:ssz",
-            "yyyy-MM-dd'T'HH:mm:ss.Sz",
-            "yyyy-MM-dd'T'HH:mm:ss.SSz",
-            "yyyy-MM-dd'T'HH:mm:ss.SSSz",
+            "yyyy-MM-dd'T'HH:mm:ss.fz",
+            "yyyy-MM-dd'T'HH:mm:ss.ffz",
+            "yyyy-MM-dd'T'HH:mm:ss.fffz",
         };
 
         private Regex TIME_ZONE_PAT = new Regex("([-+]\\d\\d):?(\\d\\d)");
@@ -569,7 +569,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 foreach (String fStr in TZ_DATE_FORMATS)
                 {
                     SimpleDateFormat df = new SimpleDateFormat(fStr);
-                    //df.TimeZone = (LocaleUtil.TIMEZONE_UTC);
+                    df.TimeZone = TimeZoneInfo.Utc;
                     DateTime d = df.Parse(dateTzStr);
                     if (d != null)
                     {
@@ -581,8 +581,8 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             foreach (String fStr in DATE_FORMATS)
             {
                 SimpleDateFormat df = new SimpleDateFormat(fStr);
-                //df.TimeZone = (LocaleUtil.TIMEZONE_UTC);
-                DateTime d = df.Parse(dateTzStr);
+                df.TimeZone = TimeZoneInfo.Utc;
+                DateTime d = df.Parse(dateTzStr).ToUniversalTime();
                 if (d != null)
                 {
                     return new DateTime?(d);
@@ -617,12 +617,14 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          * @see java.util.SimpleDateFormat
          */
         private String GetDateValue(DateTime? d) {
-            if (d == null || d.Equals(""))
+            if (!d.HasValue || d == null || d.Equals(""))
+            {
                 return "";
-            else {
-                SimpleDateFormat df = new SimpleDateFormat(DEFAULT_DATEFORMAT);
-                return df.Format(d.Value, CultureInfo.InvariantCulture);
             }
+
+            SimpleDateFormat df = new SimpleDateFormat(DEFAULT_DATEFORMAT);
+            df.TimeZone = TimeZoneInfo.Utc;
+            return df.Format(d.Value, CultureInfo.InvariantCulture);
         }
 
 

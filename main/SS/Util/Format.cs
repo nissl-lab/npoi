@@ -246,7 +246,10 @@ namespace NPOI.SS.Util
         }
         public override string Format(object obj, CultureInfo culture)
         {
-            String result = ((DateTime)obj).ToString(pattern, culture); //DateTimeFormatInfo.InvariantInfo
+            DateTime dt = (DateTime)obj;
+            if (TimeZone != null)
+                dt = TimeZoneInfo.ConvertTime(dt, TimeZone);
+            String result = dt.ToString(pattern, culture); //DateTimeFormatInfo.InvariantInfo
             return result;
         }
 
@@ -257,11 +260,22 @@ namespace NPOI.SS.Util
 
         public override object ParseObject(string source, int pos)
         {
-            return DateTime.Parse(source.Substring(pos), CultureInfo.InvariantCulture).ToUniversalTime();
+            DateTime dt = DateTime.Parse(source.Substring(pos), CultureInfo.InvariantCulture);
+            if (TimeZone != null)
+                return TimeZoneInfo.ConvertTime(dt, TimeZone);
+            return dt;
         }
         public DateTime Parse(string source)
         {
-            return DateTime.Parse(source, CultureInfo.InvariantCulture);
+            DateTime dt = DateTime.Parse(source, CultureInfo.InvariantCulture);
+            if (TimeZone != null)
+                return TimeZoneInfo.ConvertTime(dt, TimeZone);
+            return dt;
+        }
+        public TimeZoneInfo TimeZone
+        {
+            get;
+            set;
         }
     }
     

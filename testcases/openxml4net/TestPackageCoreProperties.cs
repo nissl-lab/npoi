@@ -60,10 +60,11 @@ namespace TestCases.OPC
             OPCPackage p = OPCPackage.Open(inputPath, PackageAccess.READ_WRITE);
 
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-            DateTime dateToInsert = DateTime.Parse("2007-05-12T08:00:00Z").ToUniversalTime();
+            df.TimeZone = TimeZoneInfo.Utc;
+            DateTime dateToInsert = df.Parse("2007-05-12T08:00:00Z");
 
-            SimpleDateFormat msdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            //msdf.TimeZone = (LocaleUtil.TIMEZONE_UTC);
+            SimpleDateFormat msdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.fff'Z'");
+            msdf.TimeZone = TimeZoneInfo.Utc;
 
             PackageProperties props = p.GetPackageProperties();
 
@@ -107,11 +108,13 @@ namespace TestCases.OPC
             props.SetTitleProperty("MyTitle");
             props.SetSubjectProperty("MySubject");
             props.SetVersionProperty("2");
+            // Save the package in the output directory
+            p.Save(outputFile.FullName);
             p.Revert();
 
 
             // Open the newly Created file to check core properties saved values.
-            OPCPackage p2 = OPCPackage.Open(outputFile.Name, PackageAccess.READ);
+            OPCPackage p2 = OPCPackage.Open(outputFile.FullName, PackageAccess.READ);
 
             CompareProperties(p2);
             p2.Revert();
@@ -123,7 +126,8 @@ namespace TestCases.OPC
         private void CompareProperties(OPCPackage p)
         {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-            DateTime expectedDate = DateTime.Parse("2007/05/12T08:00:00Z").ToUniversalTime();
+            df.TimeZone = TimeZoneInfo.Utc;
+            DateTime expectedDate = df.Parse("2007-05-12T08:00:00Z");
 
             // Gets the core properties
             PackageProperties props = p.GetPackageProperties();
@@ -281,12 +285,13 @@ namespace TestCases.OPC
             is1.Close();
 
             // We need predictable dates for testing!
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            //df.TimeZone = LocaleUtil.TIMEZONE_UTC;
+            //SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.fff'Z'"); //use fff for millisecond.
+            df.TimeZone = TimeZoneInfo.Utc;
             // Check text properties first
             Assert.AreEqual("Lorem Ipsum", props.GetTitleProperty());
             Assert.AreEqual("Apache POI", props.GetCreatorProperty());
-
+            
             // Created at has a +3 timezone and milliseconds
             //   2006-10-13T18:06:00.123+03:00
             // = 2006-10-13T15:06:00.123+00:00
