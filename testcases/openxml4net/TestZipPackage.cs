@@ -230,6 +230,7 @@ namespace NPOI.OpenXml4Net.OPC
                 // this test does not care if open() throws an exception or not.
             }
             tmp.Delete();
+            tmp.Refresh();
             // If the stream is not closed on exception, it will keep a file descriptor to tmp,
             // and requests to the OS to delete the file will fail.
             Assert.IsFalse(tmp.Exists, "Can't delete tmp file");

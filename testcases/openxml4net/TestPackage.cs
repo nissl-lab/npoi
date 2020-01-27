@@ -120,6 +120,7 @@ namespace TestCases.OPC
             if (targetFile.Exists)
             {
                 targetFile.Delete();
+                targetFile.Refresh();
                 Assert.IsFalse(targetFile.Exists);
             }
 
