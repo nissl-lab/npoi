@@ -160,7 +160,7 @@ namespace TestCases.POIFS.Crypt
         [Test]
         public void Test58616()
         {
-            POIFSFileSystem pfs = new POIFSFileSystem(XSSFTestDataSamples.GetSampleFile("58616.xlsx").Create());
+            POIFSFileSystem pfs = new POIFSFileSystem(XSSFTestDataSamples.GetSampleFile("58616.xlsx"));
             EncryptionInfo info = new EncryptionInfo(pfs);
             Decryptor dec = Decryptor.GetInstance(info);
             //dec.VerifyPassword(null);
