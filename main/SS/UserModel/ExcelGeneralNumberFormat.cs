@@ -42,7 +42,7 @@ namespace NPOI.SS.UserModel
         private DecimalFormat integerFormat;
         private DecimalFormat decimalFormat;
         private DecimalFormat scientificFormat;
-
+        private CultureInfo culture;
         public ExcelGeneralNumberFormat(CultureInfo culture)
         {
             decimalSymbols = culture.NumberFormat;// DecimalFormatSymbols.GetInstance(locale);
@@ -52,6 +52,7 @@ namespace NPOI.SS.UserModel
             //DataFormatter.SetExcelStyleRoundingMode(/*setter*/integerFormat);
             decimalFormat = new DecimalFormat("#.##########");//, decimalSymbols);
             //DataFormatter.ExcelStyleRoundingMode = (/*setter*/decimalFormat);
+            this.culture = culture;
         }
 
         public override StringBuilder Format(Object number, StringBuilder toAppendTo, CultureInfo culture)
@@ -88,6 +89,11 @@ namespace NPOI.SS.UserModel
             //double rounded = new BigDecimal(value).round(TO_10_SF);
             double rounded = Math.Round(value, MidpointRounding.ToEven);
             return decimalFormat.Format(rounded, toAppendTo, culture);
+        }
+
+        public override string Format(object obj)
+        {
+            return double.Parse(obj.ToString()).ToString(culture.NumberFormat);
         }
 
         public override Object ParseObject(String source, int pos)

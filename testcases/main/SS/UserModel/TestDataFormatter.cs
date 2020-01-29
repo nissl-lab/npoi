@@ -72,7 +72,6 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("1234", dfFR.FormatRawCellContents(1234, -1, "@"));
             
             Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.34, -1, "@"));
-            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("fr-FR");
             Assert.AreEqual("12,34", dfFR.FormatRawCellContents(12.34, -1, "@"));
         }
         /**
