@@ -46,18 +46,6 @@ namespace TestCases.HPSF.Basic
     };
 
         /**
-         * Test case constructor.
-         * 
-         * @param name The Test case's name.
-         */
-        public TestReadAllFiles()
-        {
-
-        }
-
-
-
-        /**
          * This Test methods Reads all property Set streams from all POI
          * filesystems in the "data" directory.
          */
@@ -71,31 +59,28 @@ namespace TestCases.HPSF.Basic
             {
                 for (int i = 0; i < files.Length; i++)
                 {
-                    if (files[i].EndsWith("1") || !checkExclude(files[i]))
+                    if (!checkExclude(files[i]))
                         continue;
 
                     Console.WriteLine("Reading file \"" + files[i] + "\"");
+                    FileInfo f = new FileInfo(files[i]);
+                    /* Read the POI filesystem's property Set streams: */
+                    POIFile[] psf1 = Util.ReadPropertySets(f);
 
-                    using (FileStream f = new FileStream(files[i], FileMode.Open, FileAccess.Read))
+                    for (int j = 0; j < psf1.Length; j++)
                     {
-                        /* Read the POI filesystem's property Set streams: */
-                        POIFile[] psf1 = Util.ReadPropertySets(f);
-
-                        for (int j = 0; j < psf1.Length; j++)
+                        Stream in1 =
+                            new ByteArrayInputStream(psf1[j].GetBytes());
+                        try
                         {
-                            Stream in1 =
-                                new ByteArrayInputStream(psf1[j].GetBytes());
-                            try
-                            {
                             PropertySet a = PropertySetFactory.Create(in1);
-                            }
-                            catch(Exception e)
-                            {
-                                throw new IOException("While handling file: " + files[i] + " at " + j, e);
-                            }
                         }
-                        f.Close();
+                        catch (Exception e)
+                        {
+                            throw new IOException("While handling file: " + files[i] + " at " + j, e);
+                        }
                     }
+
                 }
             }
             catch (Exception t)

@@ -42,13 +42,9 @@ namespace TestCases.HPSF.Basic
     [TestFixture]
     public class TestWrite
     {
-        //static string dataDir = @"..\..\..\TestCases\HPSF\data\";
         static String POI_FS = "TestHPSFWritingFunctionality.doc";
         private static POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
 
-        //static int BYTE_ORDER = 0xfffe;
-        //static int FORMAT = 0x0000;
-        //static int OS_VERSION = 0x00020A04;
         static int[] SECTION_COUNT = { 1, 2 };
         static bool[] IS_SUMMARY_INFORMATION = { true, false };
         static bool[] IS_DOCUMENT_SUMMARY_INFORMATION = { false, true };
@@ -60,38 +56,6 @@ namespace TestCases.HPSF.Basic
             "8-bit-characters. You can achieve this by Setting the " +
             "LANG environment variable to a proper value, e.g. " +
             "\"de_DE\".";
-
-        //POIFile[] poiFiles;
-
-        private TestContext testContextInstance;
-
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-
-
-        /**
-         * Constructor
-         * 
-         * @param name the Test case's name
-         */
-        public TestWrite()
-        {
-        }
-
-
 
         [SetUp]
         public void SetUp()
@@ -690,11 +654,6 @@ namespace TestCases.HPSF.Basic
                 string filename = Path.GetFileName(files[i]);
                 if (filename.StartsWith("Test") && TestReadAllFiles.checkExclude(filename))
                 {
-                    //if (files[i].EndsWith("1")
-                    //    || files[i].EndsWith("TestHPSFWritingFunctionality.doc")
-                    //    || files[i].EndsWith("excel_with_embeded.xls"))
-                    //    continue;
-
                     try
                     {
                         TestRecreate(new FileInfo(files[i]));
@@ -720,13 +679,14 @@ namespace TestCases.HPSF.Basic
             Console.WriteLine("Recreating file \"" + f.Name + "\"");
             
             /* Read the POI filesystem's property Set streams: */
-            POIFile[] psf1 = Util.ReadPropertySets(_samples.GetFile(f.Name));
+            POIFile[] psf1 = Util.ReadPropertySets(f);
 
             /* Create a new POI filesystem containing the origin file's
              * property Set streams: */
-            FileStream copy = File.Create(Path.Combine(TestContext.CurrentContext.TestDirectory,f.Name));
+            FileInfo copy = TempFile.CreateTempFile(f.Name, "");
+            //File.Create(Path.Combine(TestContext.CurrentContext.TestDirectory,f.Name));
             //copy.deleteOnExit();
-            FileStream out1 = copy;
+            FileStream out1 = copy.OpenWrite();
             POIFSFileSystem poiFs = new POIFSFileSystem();
             for (int i = 0; i < psf1.Length; i++)
             {
@@ -744,6 +704,7 @@ namespace TestCases.HPSF.Basic
                 poiFs.WriteFileSystem(out1);
             }
             poiFs.Close();
+            out1.Close();
 
             /* Read the property Set streams from the POI filesystem just
              * Created. */
@@ -771,11 +732,12 @@ namespace TestCases.HPSF.Basic
         [Test]
         public void TestDictionary()
         {
-            using (FileStream copy = File.Create(@".\Test-HPSF.ole2"))
+            FileInfo copy = TempFile.CreateTempFile("Test-HPSF", "ole2");
+            MutablePropertySet ps1 = new MutablePropertySet();
+            using (FileStream out1 = copy.OpenWrite())
             {
                 /* Write: */
                 POIFSFileSystem poiFs = new POIFSFileSystem();
-                MutablePropertySet ps1 = new MutablePropertySet();
                 MutableSection s = (MutableSection)ps1.Sections[0];
                 Hashtable m = new Hashtable(3, 1.0f);
                 m[1] = "String 1";
@@ -786,29 +748,25 @@ namespace TestCases.HPSF.Basic
                 int codepage = CodePageUtil.CP_UNICODE;
                 s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, codepage);
                 poiFs.CreateDocument(ps1.ToInputStream(), "Test");
-                poiFs.WriteFileSystem(copy);
+                poiFs.WriteFileSystem(out1);
                 poiFs.Close();
-
-                /* Read back: */
-                POIFile[] psf = Util.ReadPropertySets(copy);
-                Assert.AreEqual(1, psf.Length);
-                byte[] bytes = psf[0].GetBytes();
-                Stream in1 = new ByteArrayInputStream(bytes);
-                PropertySet ps2 = PropertySetFactory.Create(in1);
-
-                /* Check if the result is a DocumentSummaryInformation stream, as
-                 * specified. */
-                Assert.IsTrue(ps2.IsDocumentSummaryInformation);
-
-                /* Compare the property Set stream with the corresponding one
-                 * from the origin file and check whether they are equal. */
-                Assert.IsTrue(ps1.Equals(ps2));
             }
+            /* Read back: */
+            POIFile[] psf = Util.ReadPropertySets(copy);
+            Assert.AreEqual(1, psf.Length);
+            byte[] bytes = psf[0].GetBytes();
+            Stream in1 = new ByteArrayInputStream(bytes);
+            PropertySet ps2 = PropertySetFactory.Create(in1);
 
-            if (File.Exists(@".\Test-HPSF.ole2"))
-            {
-                File.Delete(@".\Test-HPSF.ole2");
-            }
+            /* Check if the result is a DocumentSummaryInformation stream, as
+                * specified. */
+            Assert.IsTrue(ps2.IsDocumentSummaryInformation);
+
+            /* Compare the property Set stream with the corresponding one
+                * from the origin file and check whether they are equal. */
+            Assert.IsTrue(ps1.Equals(ps2));
+            
+            copy.Delete();
         }
 
         /**

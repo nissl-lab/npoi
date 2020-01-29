@@ -172,12 +172,18 @@ namespace NPOI.SS.Util
         }
 
         private string pattern;
+        private NumberFormatInfo formatInfo;
 
         public DecimalFormat(string pattern)
         {
             if (pattern.IndexOf("'", StringComparison.Ordinal) != -1)
                 throw new ArgumentException("invalid pattern");
             this.pattern = pattern;
+        }
+        public DecimalFormat(string pattern, NumberFormatInfo formatInfo)
+            : this(pattern)
+        {
+            this.formatInfo = formatInfo;
         }
         public string Pattern
         {
@@ -190,13 +196,18 @@ namespace NPOI.SS.Util
         private static readonly Regex RegexFraction = new Regex("#+/#+");
         public override string Format(Object obj)
         {
-            return Format(obj, System.Globalization.CultureInfo.CurrentCulture);
+            return Format(obj, CultureInfo.CurrentCulture);
         }
         public override string Format(object obj, CultureInfo culture)
         {
             //invalide fraction
             pattern = RegexFraction.Replace(pattern, "/");
-            
+            if (formatInfo != null)
+            {
+                culture = (CultureInfo)culture.Clone();
+                culture.NumberFormat = formatInfo;
+            }
+                
             if (pattern.IndexOf("'", StringComparison.Ordinal) != -1)
             {
                 //return ((double)obj).ToString();

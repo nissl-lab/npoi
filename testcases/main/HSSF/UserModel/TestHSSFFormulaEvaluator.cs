@@ -17,18 +17,16 @@
 
 namespace TestCases.HSSF.UserModel
 {
-    using System;
-    using NPOI.HSSF.UserModel;
-    using NPOI.SS.UserModel;
-
-    using NUnit.Framework;
-    using TestCases.HSSF;
-    using NPOI.SS.Formula;
-    using TestCases.SS.Formula;
-    using NPOI.SS.Formula.Eval;
     using NPOI.HSSF.Record;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.SS.UserModel;
+    using NUnit.Framework;
+    using System;
+    using TestCases.HSSF;
+    using TestCases.SS.Formula;
     using TestCases.SS.UserModel;
-    using NPOI.Util;
 
     /**
 * 
@@ -68,10 +66,10 @@ namespace TestCases.HSSF.UserModel
         }
 
         /**
-	 * Test for bug due to attempt to convert a cached formula error result to a boolean
-	 */
+	     * Test for bug due to attempt to convert a cached formula error result to a boolean
+	     */
         [Test]
-        public new void TestUpdateCachedFormulaResultFromErrorToNumber_bug46479()
+        public override void TestUpdateCachedFormulaResultFromErrorToNumber_bug46479()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet = wb.CreateSheet("Sheet1") as HSSFSheet;
@@ -80,7 +78,7 @@ namespace TestCases.HSSF.UserModel
             HSSFCell cellB1 = row.CreateCell(1) as HSSFCell;
             cellB1.CellFormula = "A1+1";
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-            cellA1.SetCellErrorValue(FormulaError.NAME.Code);
+            cellA1.SetCellErrorValue(FormulaError.NAME);
             fe.EvaluateFormulaCell(cellB1);
             cellA1.SetCellValue(2.5);
             fe.NotifyUpdateCell(cellA1);

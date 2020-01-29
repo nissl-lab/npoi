@@ -285,7 +285,7 @@ namespace TestCases.SS.UserModel
          * Test for bug due to attempt to convert a cached formula error result to a bool
          */
         [Test]
-        public void TestUpdateCachedFormulaResultFromErrorToNumber_bug46479()
+        public virtual void TestUpdateCachedFormulaResultFromErrorToNumber_bug46479()
         {
 
             IWorkbook wb = _testDataProvider.CreateWorkbook();
