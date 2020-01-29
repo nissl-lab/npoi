@@ -778,7 +778,7 @@ namespace NPOI.SS.UserModel
             {
                 //DecimalFormat df = new DecimalFormat(format, symbols);
                 //setExcelStyleRoundingMode(df);
-                return new DecimalFormat(format);
+                return new DecimalFormat(format, symbols);
             }
             catch (ArgumentException)
             {

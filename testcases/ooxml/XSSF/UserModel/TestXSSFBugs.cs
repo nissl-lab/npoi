@@ -3347,12 +3347,11 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestWorkdayFunction()
         {
-            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("en-US");
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("59106.xlsx");
             XSSFSheet sheet = workbook.GetSheet("Test") as XSSFSheet;
             IRow row = sheet.GetRow(1);
             ICell cell = row.GetCell(0);
-            DataFormatter form = new DataFormatter();
+            DataFormatter form = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
             IFormulaEvaluator evaluator = cell.Sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
             String result = form.FormatCellValue(cell, evaluator);
             Assert.AreEqual("09 Mar 2016", result);
