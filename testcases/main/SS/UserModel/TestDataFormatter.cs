@@ -103,9 +103,11 @@ namespace TestCases.SS.UserModel
         {
             DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
             DataFormatter dfDE = new DataFormatter(CultureInfo.GetCultureInfo("de-DE"));
+
             Assert.AreEqual("1,234.57", dfUS.FormatRawCellContents(1234.567, -1, "#,##0.00"));
             Assert.AreEqual("1'234.57", dfUS.FormatRawCellContents(1234.567, -1, "#'##0.00"));
             Assert.AreEqual("1 234.57", dfUS.FormatRawCellContents(1234.567, -1, "# ##0.00"));
+
             Assert.AreEqual("1.234,57", dfDE.FormatRawCellContents(1234.567, -1, "#,##0.00"));
             Assert.AreEqual("1'234,57", dfDE.FormatRawCellContents(1234.567, -1, "#'##0.00"));
             Assert.AreEqual("1 234,57", dfDE.FormatRawCellContents(1234.567, -1, "# ##0.00"));

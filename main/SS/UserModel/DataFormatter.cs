@@ -161,6 +161,11 @@ namespace NPOI.SS.UserModel
          */
         private DateTimeFormatInfo dateSymbols;
 
+        /**
+         * A default date format, if no date format was given
+         */
+        private DateFormat defaultDateformat;
+
         /** <em>General</em> FormatBase for whole numbers. */
         //private static DecimalFormat generalWholeNumFormat = new DecimalFormat("0");
         private FormatBase generalNumberFormat;
@@ -232,6 +237,15 @@ namespace NPOI.SS.UserModel
             // adapt to the current user locale as the locale changes)
             this.localeIsAdapting = localeIsAdapting;
             this.emulateCSV = emulateCSV;
+
+            dateSymbols = culture.DateTimeFormat;
+            decimalSymbols = culture.NumberFormat;
+            generalNumberFormat = new ExcelGeneralNumberFormat(culture);
+
+            // default format in dot net is not same as in java
+            defaultDateformat = new SimpleDateFormat(dateSymbols.FullDateTimePattern, dateSymbols);
+            defaultDateformat.TimeZone = TimeZoneInfo.Local;
+
             formats = new Hashtable();
 
             // init built-in Formats
