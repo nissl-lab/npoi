@@ -89,7 +89,7 @@ namespace TestCases.SS.Formula
                 table.GetCTTable().@ref = (/*setter*/newAreaStr);
                 table.GetCTTable().autoFilter.@ref = (/*setter*/newAreaStr);
                 table.UpdateHeaders();
-                //table.UpdateReferences();
+                table.UpdateReferences();
 
                 // these fail before the fix for 59814
                 Confirm(eval, tableSheet.GetRow(7).GetCell(0), 13 * 13);
