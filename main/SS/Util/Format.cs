@@ -63,7 +63,10 @@ namespace NPOI.SS.Util
             sb.Append(result.Substring(5, 4));
             return sb.ToString();
         }
-
+        public override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
+        {
+            return toAppendTo.Append(Format(obj, CultureInfo.CurrentCulture));
+        }
         public override StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
             return toAppendTo.Append(Format((long)obj, culture));
@@ -98,6 +101,11 @@ namespace NPOI.SS.Util
             sb.Append(result.Substring(0, 5)).Append('-');
             sb.Append(result.Substring(5, 4));
             return sb.ToString();
+        }
+
+        public override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
+        {
+            return toAppendTo.Append(Format(obj, CultureInfo.CurrentCulture));
         }
 
         public override StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture)
@@ -155,7 +163,10 @@ namespace NPOI.SS.Util
             sb.Append(seg3);
             return sb.ToString();
         }
-
+        public override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
+        {
+            return toAppendTo.Append(Format(obj, CultureInfo.CurrentCulture));
+        }
         public override StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
             return toAppendTo.Append(Format(obj, culture));
