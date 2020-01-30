@@ -91,7 +91,7 @@ namespace NPOI.XSSF.UserModel
         public XSSFTextBox CreateTextbox(XSSFChildAnchor anchor)
         {
             CT_Shape ctShape = ctGroup.AddNewSp();
-            ctShape.Set(XSSFSimpleShape.GetPrototype());
+            ctShape.Set(XSSFSimpleShape.Prototype());
 
             XSSFTextBox shape = new XSSFTextBox(GetDrawing(), ctShape);
             shape.parent = this;
@@ -111,7 +111,7 @@ namespace NPOI.XSSF.UserModel
         public XSSFSimpleShape CreateSimpleShape(XSSFChildAnchor anchor)
         {
             CT_Shape ctShape = ctGroup.AddNewSp();
-            ctShape.Set(XSSFSimpleShape.GetPrototype());
+            ctShape.Set(XSSFSimpleShape.Prototype());
 
             XSSFSimpleShape shape = new XSSFSimpleShape(GetDrawing(), ctShape);
             shape.parent = (this);

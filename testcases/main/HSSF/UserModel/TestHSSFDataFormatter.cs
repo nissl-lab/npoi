@@ -244,7 +244,6 @@ namespace TestCases.HSSF.UserModel
             {
                 ICell cell = (ICell)it.Current;
                 String fmtval = formatter.FormatCellValue(cell);
-                log(fmtval);
 
                 // should not be equal to "555.555"
                 Assert.IsTrue(DateUtil.IsCellDateFormatted(cell));
@@ -261,6 +260,7 @@ namespace TestCases.HSSF.UserModel
                 {
                     jul = jul.Substring(0, 1);
                 }
+                log(fmt+"\t\t\t"+fmtval + "\t\t\t" + jul);
                 // check we found july properly
                 Assert.IsTrue(fmtval.IndexOf(jul) > -1, "Format came out incorrect - " + fmt);
             }

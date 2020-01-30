@@ -52,7 +52,7 @@ namespace NPOI.SS.Formula
         private int _workbookIx;
 
         private IEvaluationListener _evaluationListener;
-        private Hashtable _sheetIndexesBySheet;
+        private Dictionary<IEvaluationSheet, int> _sheetIndexesBySheet;
         private Dictionary<String, int> _sheetIndexesByName;
         private CollaboratingWorkbooksEnvironment _collaboratingWorkbookEnvironment;
         private IStabilityClassifier _stabilityClassifier;
@@ -71,7 +71,7 @@ namespace NPOI.SS.Formula
             _workbook = workbook;
             _evaluationListener = evaluationListener;
             _cache = new EvaluationCache(evaluationListener);
-            _sheetIndexesBySheet = new Hashtable();
+            _sheetIndexesBySheet = new Dictionary<IEvaluationSheet, int>();
             _sheetIndexesByName = new Dictionary<string, int>();
             _collaboratingWorkbookEnvironment = CollaboratingWorkbooksEnvironment.EMPTY;
             _workbookIx = 0;
@@ -208,8 +208,10 @@ namespace NPOI.SS.Formula
 
         public int GetSheetIndex(IEvaluationSheet sheet)
         {
-            object result = _sheetIndexesBySheet[sheet];
-            if (result == null)
+            int result = int.MinValue;
+            if(_sheetIndexesBySheet.ContainsKey(sheet))
+                result = _sheetIndexesBySheet[sheet];
+            if (result == int.MinValue)
             {
                 int sheetIndex = _workbook.GetSheetIndex(sheet);
                 if (sheetIndex < 0)
@@ -219,7 +221,7 @@ namespace NPOI.SS.Formula
                 result = sheetIndex;
                 _sheetIndexesBySheet[sheet] = result;
             }
-            return (int)result;
+            return result;
         }
         /* package */
         internal int GetSheetIndexByExternIndex(int externSheetIndex)

@@ -161,6 +161,11 @@ namespace NPOI.SS.UserModel
          */
         private DateTimeFormatInfo dateSymbols;
 
+        /**
+         * A default date format, if no date format was given
+         */
+        private DateFormat defaultDateformat;
+
         /** <em>General</em> FormatBase for whole numbers. */
         //private static DecimalFormat generalWholeNumFormat = new DecimalFormat("0");
         private FormatBase generalNumberFormat;
@@ -232,6 +237,15 @@ namespace NPOI.SS.UserModel
             // adapt to the current user locale as the locale changes)
             this.localeIsAdapting = localeIsAdapting;
             this.emulateCSV = emulateCSV;
+
+            dateSymbols = culture.DateTimeFormat;
+            decimalSymbols = culture.NumberFormat;
+            generalNumberFormat = new ExcelGeneralNumberFormat(culture);
+
+            // default format in dot net is not same as in java
+            defaultDateformat = new SimpleDateFormat(dateSymbols.FullDateTimePattern, dateSymbols);
+            defaultDateformat.TimeZone = TimeZoneInfo.Local;
+
             formats = new Hashtable();
 
             // init built-in Formats
@@ -821,12 +835,14 @@ namespace NPOI.SS.UserModel
         private String GetFormattedDateString(ICell cell)
         {
             FormatBase dateFormat = GetFormat(cell);
-            DateTime d = cell.DateCellValue;
-            if (dateFormat != null)
-            {
-                return dateFormat.Format(d, currentCulture);
+            if (dateFormat is ExcelStyleDateFormatter) {
+                // Hint about the raw excel value
+                ((ExcelStyleDateFormatter)dateFormat).SetDateToBeFormatted(
+                      cell.NumericCellValue
+                );
             }
-            return d.ToString();
+            DateTime d = cell.DateCellValue;
+            return PerformDateFormatting(d, dateFormat);
         }
 
         /**
@@ -849,6 +865,10 @@ namespace NPOI.SS.UserModel
             }
             //return numberFormat.Format(d, currentCulture);
             String formatted = numberFormat.Format(d);
+            if (formatted.StartsWith("."))
+                formatted = "0" + formatted;
+            if (formatted.StartsWith("-."))
+                formatted = "-0" + formatted.Substring(1);
             //return formatted.ReplaceFirst("E(\\d)", "E+$1"); // to match Excel's E-notation
             return Regex.Replace(formatted, "E(\\d)", "E+$1");
         }
@@ -863,16 +883,16 @@ namespace NPOI.SS.UserModel
             return FormatRawCellContents(value, formatIndex, formatString, false);
         }
         /**
-     * Performs Excel-style date formatting, using the
-     *  supplied Date and format
-     */
+         * Performs Excel-style date formatting, using the
+         *  supplied Date and format
+         */
         private String PerformDateFormatting(DateTime d, FormatBase dateFormat)
         {
             if (dateFormat != null)
             {
-                return dateFormat.Format(d, currentCulture);
+                return dateFormat.Format(d);
             }
-            return d.ToString();
+            return defaultDateformat.Format(d);
         }
         /**
      * Formats the given raw cell value, based on the supplied

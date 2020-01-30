@@ -31,7 +31,11 @@ namespace NPOI.SS.Util
 
         //public abstract Object Parse(string source);
         public abstract Object ParseObject(string source, int pos);
-
+        public TimeZoneInfo TimeZone
+        {
+            get;
+            set;
+        }
     }
 
     /**
@@ -59,7 +63,10 @@ namespace NPOI.SS.Util
             sb.Append(result.Substring(5, 4));
             return sb.ToString();
         }
-
+        public override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
+        {
+            return toAppendTo.Append(Format(obj, CultureInfo.CurrentCulture));
+        }
         public override StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
             return toAppendTo.Append(Format((long)obj, culture));
@@ -94,6 +101,11 @@ namespace NPOI.SS.Util
             sb.Append(result.Substring(0, 5)).Append('-');
             sb.Append(result.Substring(5, 4));
             return sb.ToString();
+        }
+
+        public override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
+        {
+            return toAppendTo.Append(Format(obj, CultureInfo.CurrentCulture));
         }
 
         public override StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture)
@@ -151,7 +163,10 @@ namespace NPOI.SS.Util
             sb.Append(seg3);
             return sb.ToString();
         }
-
+        public override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
+        {
+            return toAppendTo.Append(Format(obj, CultureInfo.CurrentCulture));
+        }
         public override StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
             return toAppendTo.Append(Format(obj, culture));
@@ -222,7 +237,7 @@ namespace NPOI.SS.Util
 
         public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
-            return toAppendTo.Append(Format((double)obj, culture));
+            return toAppendTo.Append(Format(obj, culture));
         }
 
         public override object ParseObject(string source, int pos)
@@ -238,14 +253,37 @@ namespace NPOI.SS.Util
 
     }
 
-    public class SimpleDateFormat : FormatBase
+    public class SimpleDateFormat : DateFormat
     {
+        protected string pattern;
+        private DateTimeFormatInfo formatData;
+        private CultureInfo culture;
         public SimpleDateFormat()
+            : this("", CultureInfo.CurrentCulture)
         {
 
         }
-
-        protected string pattern;
+        public SimpleDateFormat(String pattern, CultureInfo culture)
+        {
+            if (pattern == null || culture == null)
+            {
+                throw new ArgumentNullException();
+            }
+            this.pattern = pattern;
+            this.formatData = (DateTimeFormatInfo)culture.DateTimeFormat.Clone();
+            this.culture = culture;
+        }
+        
+        public SimpleDateFormat(String pattern, DateTimeFormatInfo formatSymbols)
+        {
+            if (pattern == null || formatSymbols == null)
+            {
+                throw new ArgumentNullException();
+            }
+            this.pattern = pattern;
+            this.formatData = (DateTimeFormatInfo)formatSymbols.Clone();
+            this.culture = CultureInfo.CurrentCulture;
+        }
 
         public SimpleDateFormat(string pattern)
         {
@@ -283,11 +321,7 @@ namespace NPOI.SS.Util
                 return TimeZoneInfo.ConvertTime(dt, TimeZone);
             return dt;
         }
-        public TimeZoneInfo TimeZone
-        {
-            get;
-            set;
-        }
+        
     }
     
     

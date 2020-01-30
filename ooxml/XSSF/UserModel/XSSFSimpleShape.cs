@@ -70,9 +70,14 @@ namespace NPOI.XSSF.UserModel
         /**
          * Prototype with the default structure of a new auto-shape.
          */
-        protected internal static CT_Shape GetPrototype()
+        protected internal static CT_Shape Prototype()
         {
-            if (prototype == null)
+            // in poi, method XmlObject set(XmlObject srcObj) will create a copy of XmlObject
+            // so this prototype object would be newly set to shape object
+            // but in .net, the prototype object will be modified and keep its contents, would
+            // affect next usage. so comment the following code, and create a new prototype object 
+            // for every calling of Prototype().
+            //if (prototype == null)
             {
                 CT_Shape shape = new CT_Shape();
 

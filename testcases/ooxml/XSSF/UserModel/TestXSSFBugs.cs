@@ -171,7 +171,9 @@ namespace TestCases.XSSF.UserModel
             XSSFDrawing drawing = sh.CreateDrawingPatriarch() as XSSFDrawing;
             List<RelationPart> rels = drawing.RelationParts;
             Assert.AreEqual(1, rels.Count);
-            Assert.AreEqual("/xl/drawings/#Sheet1!A1", rels[0].Relationship.TargetUri.ToString());
+            Uri baseUri = new Uri("ooxml://npoi.org"); //For test only.
+            Uri target = new Uri(baseUri, rels[0].Relationship.TargetUri.ToString());
+            Assert.AreEqual("#Sheet1!A1", target.Fragment);
 
             // And again, just to be sure
             XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1) as XSSFWorkbook;
@@ -182,7 +184,8 @@ namespace TestCases.XSSF.UserModel
             drawing = sh.CreateDrawingPatriarch() as XSSFDrawing;
             rels = drawing.RelationParts;
             Assert.AreEqual(1, rels.Count);
-            Assert.AreEqual("/xl/drawings/#Sheet1!A1", rels[0].Relationship.TargetUri.ToString());
+            Uri target2 = new Uri(baseUri, rels[0].Relationship.TargetUri.ToString());
+            Assert.AreEqual("#Sheet1!A1", target2.Fragment);
 
             wb2.Close();
         }

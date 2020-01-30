@@ -42,6 +42,8 @@ namespace NPOI.Util
                         objType != IntPtrType &&
                         objType != UIntPtrType);
             }
+            if (decimal.TryParse(value.ToString(), out decimal result))
+                return true;
             //if (value is int) return true;
             //if (value is uint) return true;
             //if (value is long) return true;

@@ -726,7 +726,16 @@ using System.Xml;
                     //if (uri.getRawFragment() != null)
                     if (uri.OriginalString.IndexOf('#') >= 0)
                     {
-                        relName = PackagingUriHelper.CreatePartName(uri.AbsolutePath);
+                        string path = string.Empty;
+                        try
+                        {
+                            path = uri.AbsolutePath;
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            path = uri.OriginalString.Substring(0, uri.OriginalString.IndexOf('#'));
+                        }
+                        relName = PackagingUriHelper.CreatePartName(path);
                     }
                     else
                     {

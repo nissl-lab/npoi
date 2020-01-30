@@ -426,7 +426,7 @@ namespace NPOI.SS.Util
 
     }
 
-    public class DateFormat
+    public abstract class DateFormat : FormatBase
     {
         public const int FULL = 0;
         public const int LONG = 1;

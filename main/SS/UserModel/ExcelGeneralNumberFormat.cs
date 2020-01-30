@@ -42,7 +42,7 @@ namespace NPOI.SS.UserModel
         private DecimalFormat integerFormat;
         private DecimalFormat decimalFormat;
         private DecimalFormat scientificFormat;
-
+        private CultureInfo culture;
         public ExcelGeneralNumberFormat(CultureInfo culture)
         {
             decimalSymbols = culture.NumberFormat;// DecimalFormatSymbols.GetInstance(locale);
@@ -52,6 +52,12 @@ namespace NPOI.SS.UserModel
             //DataFormatter.SetExcelStyleRoundingMode(/*setter*/integerFormat);
             decimalFormat = new DecimalFormat("#.##########");//, decimalSymbols);
             //DataFormatter.ExcelStyleRoundingMode = (/*setter*/decimalFormat);
+            this.culture = culture;
+        }
+
+        public override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
+        {
+            return Format(obj, toAppendTo, culture);
         }
 
         public override StringBuilder Format(Object number, StringBuilder toAppendTo, CultureInfo culture)
@@ -59,7 +65,7 @@ namespace NPOI.SS.UserModel
             double value;
             if (Number.IsNumber(number))
             {
-                value = ((double)number);
+                value = double.Parse(number.ToString());
                 if (Double.IsInfinity(value) || Double.IsNaN(value))
                 {
                     return integerFormat.Format(number, toAppendTo, culture);
@@ -86,7 +92,14 @@ namespace NPOI.SS.UserModel
             // character". We know there is a decimal point, so limit to 10 digits.
             // https://support.microsoft.com/en-us/kb/65903
             //double rounded = new BigDecimal(value).round(TO_10_SF);
-            double rounded = Math.Round(value, MidpointRounding.ToEven);
+            // calculate round precision
+            int digits = 10;
+            if (Math.Abs(value) > 1)
+            {
+                int len = (int)Math.Log10((int)Math.Abs(value)) + 1;
+                digits -= len;
+            }
+            double rounded = Math.Round(value, digits, MidpointRounding.AwayFromZero);
             return decimalFormat.Format(rounded, toAppendTo, culture);
         }
 
