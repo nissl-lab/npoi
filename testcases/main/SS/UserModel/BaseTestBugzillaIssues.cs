@@ -466,7 +466,7 @@ namespace TestCases.SS.UserModel
             double width;
             //FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
             IRichTextString rt = cell0.RichStringCellValue;
-            String[] lines = rt.String.Split("\\n".ToCharArray());
+            String[] lines = rt.String.Split("\n".ToCharArray());
             Assert.AreEqual(1, lines.Length);
             String txt = lines[0] + "0";
 
