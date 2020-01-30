@@ -226,7 +226,7 @@ namespace NPOI.SS.Util
 
         public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
-            return toAppendTo.Append(Format((double)obj, culture));
+            return toAppendTo.Append(Format(obj, culture));
         }
 
         public override object ParseObject(string source, int pos)

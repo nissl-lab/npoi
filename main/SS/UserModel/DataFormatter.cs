@@ -863,6 +863,10 @@ namespace NPOI.SS.UserModel
             }
             //return numberFormat.Format(d, currentCulture);
             String formatted = numberFormat.Format(d);
+            if (formatted.StartsWith("."))
+                formatted = "0" + formatted;
+            if (formatted.StartsWith("-."))
+                formatted = "-0" + formatted.Substring(1);
             //return formatted.ReplaceFirst("E(\\d)", "E+$1"); // to match Excel's E-notation
             return Regex.Replace(formatted, "E(\\d)", "E+$1");
         }
