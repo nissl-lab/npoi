@@ -835,12 +835,14 @@ namespace NPOI.SS.UserModel
         private String GetFormattedDateString(ICell cell)
         {
             FormatBase dateFormat = GetFormat(cell);
-            DateTime d = cell.DateCellValue;
-            if (dateFormat != null)
-            {
-                return dateFormat.Format(d, currentCulture);
+            if (dateFormat is ExcelStyleDateFormatter) {
+                // Hint about the raw excel value
+                ((ExcelStyleDateFormatter)dateFormat).SetDateToBeFormatted(
+                      cell.NumericCellValue
+                );
             }
-            return d.ToString();
+            DateTime d = cell.DateCellValue;
+            return PerformDateFormatting(d, dateFormat);
         }
 
         /**
@@ -881,16 +883,16 @@ namespace NPOI.SS.UserModel
             return FormatRawCellContents(value, formatIndex, formatString, false);
         }
         /**
-     * Performs Excel-style date formatting, using the
-     *  supplied Date and format
-     */
+         * Performs Excel-style date formatting, using the
+         *  supplied Date and format
+         */
         private String PerformDateFormatting(DateTime d, FormatBase dateFormat)
         {
             if (dateFormat != null)
             {
-                return dateFormat.Format(d, currentCulture);
+                return dateFormat.Format(d);
             }
-            return d.ToString();
+            return defaultDateformat.Format(d);
         }
         /**
      * Formats the given raw cell value, based on the supplied
