@@ -474,7 +474,11 @@ namespace NPOI.OpenXml4Net.OPC
                 path = Path.GetDirectoryName(sourcePartUri.OriginalString).Replace("\\", "/");
 
             string targetPath = targetUri.OriginalString;
-            if (targetPath.StartsWith("../"))
+            if (targetPath.StartsWith("#"))
+            {
+                path += "/" + Path.GetFileName(sourcePartUri.OriginalString) + targetPath;
+            }
+            else if (targetPath.StartsWith("../"))
             {
                 string[] segments = path.Split(new char[] { '/' });
 
