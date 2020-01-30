@@ -48,7 +48,7 @@ namespace TestCases.XSSF.UserModel
 
                 Assert.IsNotNull(shape.GetCTShape());
                 Assert.IsNotNull(shape.GetEnumerator());
-                Assert.IsNotNull(XSSFSimpleShape.GetPrototype());
+                Assert.IsNotNull(XSSFSimpleShape.Prototype());
 
                 foreach (ListAutoNumber nr in Enum.GetValues(typeof(ListAutoNumber)))
                 {

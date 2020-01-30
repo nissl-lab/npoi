@@ -338,9 +338,9 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
-            XSSFDrawing Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+            XSSFDrawing drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
 
-            XSSFTextBox shape = Drawing.CreateTextbox(new XSSFClientAnchor(0, 0, 0, 0, 2, 2, 3, 4));
+            XSSFTextBox shape = drawing.CreateTextbox(new XSSFClientAnchor(0, 0, 0, 0, 2, 2, 3, 4));
             XSSFRichTextString rt = new XSSFRichTextString("Test String");
 
             XSSFFont font = wb.CreateFont() as XSSFFont;
@@ -375,9 +375,9 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
-            XSSFDrawing Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+            XSSFDrawing drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
 
-            XSSFTextBox shape = Drawing.CreateTextbox(new XSSFClientAnchor(0, 0, 0, 0, 2, 2, 3, 4));
+            XSSFTextBox shape = drawing.CreateTextbox(new XSSFClientAnchor(0, 0, 0, 0, 2, 2, 3, 4));
 
             XSSFTextParagraph para = shape.AddNewTextParagraph();
             para.AddNewTextRun().Text = ("Line 1");
@@ -401,9 +401,9 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb1 = new XSSFWorkbook();
             XSSFSheet sheet = wb1.CreateSheet() as XSSFSheet;
-            XSSFDrawing Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+            XSSFDrawing drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
 
-            XSSFTextBox shape = Drawing.CreateTextbox(new XSSFClientAnchor(0, 0, 0, 0, 2, 2, 3, 4));
+            XSSFTextBox shape = drawing.CreateTextbox(new XSSFClientAnchor(0, 0, 0, 0, 2, 2, 3, 4));
             XSSFRichTextString rt = new XSSFRichTextString("Test Rich Text String");
 
             XSSFFont font = wb1.CreateFont() as XSSFFont;
@@ -423,9 +423,9 @@ namespace TestCases.XSSF.UserModel
             sheet = wb2.GetSheetAt(0) as XSSFSheet;
 
             // Check
-            Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+            drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
 
-            List<XSSFShape> shapes = Drawing.GetShapes();
+            List<XSSFShape> shapes = drawing.GetShapes();
             Assert.AreEqual(1, shapes.Count);
             Assert.IsTrue(shapes[0] is XSSFSimpleShape);
 
