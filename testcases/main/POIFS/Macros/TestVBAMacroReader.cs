@@ -338,6 +338,7 @@ namespace TestCases.POIFS.Macros
         // This test is written as expected-to-fail and should be rewritten
         // as expected-to-pass when the bug is fixed.
         [Test]
+        [Ignore("fix it when it is be fixed in poi")]
         public void Bug60158()
         {
             try
