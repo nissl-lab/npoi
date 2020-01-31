@@ -11,6 +11,7 @@ Donation
 ===============
 Paypal account: tonyqus@gmail.com
 
+Alipay account（支付宝）:tonyqus@163.com
 
 Support and Service
 ===================
@@ -39,7 +40,7 @@ g. .Net 2.0 based even for xlsx and docx (though we also support .NET 4.0)
 
 h. Real successful cases all over the world
 
-i. huge amout of basic examples
+i. [huge amout of basic examples](https://github.com/tonyqus/npoi/tree/master/examples)
 
 Neuzilla on SNS
 ============
