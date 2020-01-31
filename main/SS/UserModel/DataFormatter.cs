@@ -943,7 +943,7 @@ namespace NPOI.SS.UserModel
             }
             else
             {
-                result = numberFormat.Format(textValue);
+                result = numberFormat.Format(decimal.Parse(textValue));
             }
             // Complete scientific notation by adding the missing +.
             if (result.Contains("E") && !result.Contains("E-"))

@@ -42,19 +42,6 @@ namespace NPOI.Util
                         objType != IntPtrType &&
                         objType != UIntPtrType);
             }
-            if (decimal.TryParse(value.ToString(), out decimal result))
-                return true;
-            //if (value is int) return true;
-            //if (value is uint) return true;
-            //if (value is long) return true;
-            //if (value is ulong) return true;
-            //if (value is sbyte) return true;
-            //if (value is byte) return true;
-            //if (value is short) return true;
-            //if (value is ushort) return true;
-            //if (value is float) return true;
-            //if (value is double) return true;
-            //if (value is decimal) return true;
             return false;
         }
         public static bool IsInteger(object value)
