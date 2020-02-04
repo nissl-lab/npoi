@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.Util;
@@ -53,7 +54,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                 CT_Col[] colArray = cols.GetColList().ToArray();
                 foreach (CT_Col col in colArray)
                 {
-                    addCleanColIntoCols(newCols, col, trackedCols);
+                    AddCleanColIntoCols(newCols, col, trackedCols);
                 }
             }
             for (int y = i - 1; y >= 0; y--)
@@ -95,7 +96,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             //worksheet.SetColsArray(0, newCols);
         }
 
-        public CT_Cols addCleanColIntoCols(CT_Cols cols, CT_Col newCol)
+        public CT_Cols AddCleanColIntoCols(CT_Cols cols, CT_Col newCol)
         {
             // Performance issue. If we encapsulated management of min/max in this
             // class then we could keep trackedCols as state,
@@ -103,14 +104,14 @@ namespace NPOI.XSSF.UserModel.Helpers
             // read above.
             TreeSet<CT_Col> trackedCols = new TreeSet<CT_Col>(CTColComparator.BY_MIN_MAX);
             trackedCols.AddAll(cols.GetColList());
-            addCleanColIntoCols(cols, newCol, trackedCols);
+            AddCleanColIntoCols(cols, newCol, trackedCols);
             cols.SetColArray(trackedCols.ToArray(new CT_Col[0]));
             return cols;
         }
 
-        private void addCleanColIntoCols(CT_Cols cols, CT_Col newCol, TreeSet<CT_Col> trackedCols)
+        private void AddCleanColIntoCols(CT_Cols cols, CT_Col newCol, TreeSet<CT_Col> trackedCols)
         {
-            List<CT_Col> overlapping = getOverlappingCols(newCol, trackedCols);
+            List<CT_Col> overlapping = GetOverlappingCols(newCol, trackedCols);
             if (overlapping.Count == 0)
             {
                 trackedCols.Add(CloneCol(cols, newCol));
@@ -122,9 +123,9 @@ namespace NPOI.XSSF.UserModel.Helpers
             {
                 // We add up to three columns for each existing one: non-overlap
                 // before, overlap, non-overlap after.
-                long[] overlap = getOverlap(newCol, existing);
+                long[] overlap = GetOverlap(newCol, existing);
 
-                CT_Col overlapCol = cloneCol(cols, existing, overlap);
+                CT_Col overlapCol = CloneCol(cols, existing, overlap);
                 SetColumnAttributes(newCol, overlapCol);
                 trackedCols.Add(overlapCol);
 
@@ -135,7 +136,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                     overlap[0] - 1 };
                 if (before[0] <= before[1])
                 {
-                    trackedCols.Add(cloneCol(cols, beforeCol, before));
+                    trackedCols.Add(CloneCol(cols, beforeCol, before));
                 }
 
                 CT_Col afterCol = existing.max > newCol.max ? existing
@@ -144,12 +145,12 @@ namespace NPOI.XSSF.UserModel.Helpers
                     Math.Max(existing.max, newCol.max) };
                 if (after[0] <= after[1])
                 {
-                    trackedCols.Add(cloneCol(cols, afterCol, after));
+                    trackedCols.Add(CloneCol(cols, afterCol, after));
                 }
             }
         }
 
-        private CT_Col cloneCol(CT_Cols cols, CT_Col col, long[] newRange)
+        private CT_Col CloneCol(CT_Cols cols, CT_Col col, long[] newRange)
         {
             CT_Col cloneCol = CloneCol(cols, col);
             cloneCol.min = (uint)(newRange[0]);
@@ -157,19 +158,19 @@ namespace NPOI.XSSF.UserModel.Helpers
             return cloneCol;
         }
 
-        private long[] getOverlap(CT_Col col1, CT_Col col2)
+        private long[] GetOverlap(CT_Col col1, CT_Col col2)
         {
-            return getOverlappingRange(col1, col2);
+            return GetOverlappingRange(col1, col2);
         }
 
-        private List<CT_Col> getOverlappingCols(CT_Col newCol, TreeSet<CT_Col> trackedCols)
+        private List<CT_Col> GetOverlappingCols(CT_Col newCol, TreeSet<CT_Col> trackedCols)
         {
             CT_Col lower = trackedCols.Lower(newCol);
-            TreeSet<CT_Col> potentiallyOverlapping = lower == null ? trackedCols : trackedCols.TailSet(lower, overlaps(lower, newCol));
+            TreeSet<CT_Col> potentiallyOverlapping = lower == null ? trackedCols : trackedCols.TailSet(lower, Overlaps(lower, newCol));
             List<CT_Col> overlapping = new List<CT_Col>();
             foreach (CT_Col existing in potentiallyOverlapping)
             {
-                if (overlaps(newCol, existing))
+                if (Overlaps(newCol, existing))
                 {
                     overlapping.Add(existing);
                 }
@@ -181,17 +182,17 @@ namespace NPOI.XSSF.UserModel.Helpers
             return overlapping;
         }
 
-        private bool overlaps(CT_Col col1, CT_Col col2)
+        private bool Overlaps(CT_Col col1, CT_Col col2)
         {
-            return NumericRanges.GetOverlappingType(toRange(col1), toRange(col2)) != NumericRanges.NO_OVERLAPS;
+            return NumericRanges.GetOverlappingType(ToRange(col1), ToRange(col2)) != NumericRanges.NO_OVERLAPS;
         }
 
-        private long[] getOverlappingRange(CT_Col col1, CT_Col col2)
+        private long[] GetOverlappingRange(CT_Col col1, CT_Col col2)
         {
-            return NumericRanges.GetOverlappingRange(toRange(col1), toRange(col2));
+            return NumericRanges.GetOverlappingRange(ToRange(col1), ToRange(col2));
         }
 
-        private long[] toRange(CT_Col col)
+        private long[] ToRange(CT_Col col)
         {
             return new long[] { col.min, col.max };
         }
@@ -244,11 +245,11 @@ namespace NPOI.XSSF.UserModel.Helpers
                     {
                         if (colMin < index1)
                         {
-                            insertCol(colsArray, colMin, (index1 - 1), new CT_Col[] { colArray });
+                            InsertCol(colsArray, colMin, (index1 - 1), new CT_Col[] { colArray });
                         }
                         if (colMax > index1)
                         {
-                            insertCol(colsArray, (index1 + 1), colMax, new CT_Col[] { colArray });
+                            InsertCol(colsArray, (index1 + 1), colMax, new CT_Col[] { colArray });
                         }
                         colArray.min = (uint)(index1);
                         colArray.max = (uint)(index1);
@@ -257,22 +258,6 @@ namespace NPOI.XSSF.UserModel.Helpers
                 }
             }
             return null;
-        }
-        public CT_Cols AddCleanColIntoCols(CT_Cols cols, CT_Col col)
-        {
-            CT_Cols newCols = new CT_Cols();
-            foreach (CT_Col c in cols.GetColList())
-            {
-                CloneCol(newCols, c);
-            }
-            CloneCol(newCols, col);
-            SortColumns(newCols);
-            CT_Col[] colArray = newCols.GetColList().ToArray();
-            CT_Cols returnCols = new CT_Cols();
-            SweepCleanColumns(returnCols, colArray, col);
-            colArray = returnCols.GetColList().ToArray();
-            cols.SetColArray(colArray);
-            return returnCols;
         }
 
         public class TreeSet<T>
@@ -370,7 +355,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                     }
                     prevElement = enumerator.Current;
                 }
-                return default(T);
+                return prevElement;
             }
 
             /// <summary>
@@ -457,7 +442,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                     // we need to process previous elements first
                     CT_Col[] copyCols = new CT_Col[currentElements.Count];
                     currentElements.CopyTo(copyCols);
-                    insertCol(cols, lastMaxIndex, currentIndex - 1, copyCols, true, haveOverrideColumn);
+                    InsertCol(cols, lastMaxIndex, currentIndex - 1, copyCols, true, haveOverrideColumn);
                 }
                 currentElements.Add(col);
                 if (colMax > currentMax) currentMax = colMax;
@@ -490,7 +475,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                     {
                         CT_Col[] copyCols = new CT_Col[currentElements.Count];
                         currentElements.CopyTo(copyCols);
-                        insertCol(cols, currentIndex, currentElemIndex, copyCols, true, haveOverrideColumn);
+                        InsertCol(cols, currentIndex, currentElemIndex, copyCols, true, haveOverrideColumn);
                         //if (flIter.hasNext()) {
                         if ((pos + 1) < flattenedCols.Count)
                         {
@@ -633,15 +618,15 @@ namespace NPOI.XSSF.UserModel.Helpers
          * Insert a new CT_Col at position 0 into cols, Setting min=min, max=max and
          * copying all the colsWithAttributes array cols attributes into newCol
          */
-        private CT_Col insertCol(CT_Cols cols, long min, long max,
+        private CT_Col InsertCol(CT_Cols cols, long min, long max,
             CT_Col[] colsWithAttributes)
         {
-            return insertCol(cols, min, max, colsWithAttributes, false, null);
+            return InsertCol(cols, min, max, colsWithAttributes, false, null);
         }
-        private CT_Col insertCol(CT_Cols cols, long min, long max,
+        private CT_Col InsertCol(CT_Cols cols, long min, long max,
         CT_Col[] colsWithAttributes, bool ignoreExistsCheck, CT_Col overrideColumn)
         {
-            if (ignoreExistsCheck || !columnExists(cols, min, max))
+            if (ignoreExistsCheck || !ColumnExists(cols, min, max))
             {
                 CT_Col newCol = cols.InsertNewCol(0);
                 newCol.min = (uint)(min);
@@ -659,11 +644,11 @@ namespace NPOI.XSSF.UserModel.Helpers
          * Does the column at the given 0 based index exist
          *  in the supplied list of column defInitions?
          */
-        public bool columnExists(CT_Cols cols, long index)
+        public bool ColumnExists(CT_Cols cols, long index)
         {
-            return columnExists1Based(cols, index + 1);
+            return ColumnExists1Based(cols, index + 1);
         }
-        private bool columnExists1Based(CT_Cols cols, long index1)
+        private bool ColumnExists1Based(CT_Cols cols, long index1)
         {
             for (int i = 0; i < cols.sizeOfColArray(); i++)
             {
@@ -778,7 +763,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             return -1;
         }
 
-        private bool columnExists(CT_Cols cols, long min, long max)
+        private bool ColumnExists(CT_Cols cols, long min, long max)
         {
             for (int i = 0; i < cols.sizeOfColArray(); i++)
             {

@@ -326,12 +326,13 @@ namespace TestCases.OpenXml4Net.OPC
             Assert.AreEqual("../media/image1.png", rel2.OriginalString);
 
             PackageRelationship rId3 = drawingPart.GetRelationship("rId3");
-            Uri rel3 = new Uri(Path.Combine(parent.ToString(), rId3.TargetUri.ToString()), UriKind.Relative);
-            Assert.AreEqual("#ThirdSheet!A1", rel3.OriginalString.Split(new char[] { '/' })[3]);
+            Uri baseUri = new Uri("ooxml://npoi.org"); //For test only.
+            Uri target = new Uri(baseUri, rId3.TargetUri);
+            Assert.AreEqual("#ThirdSheet!A1", target.Fragment);
 
             PackageRelationship rId4 = drawingPart.GetRelationship("rId4");
-            Uri rel4 = new Uri(Path.Combine(parent.ToString(), rId4.TargetUri.ToString()), UriKind.Relative);
-            Assert.AreEqual("#'\u0410\u043F\u0430\u0447\u0435 \u041F\u041E\u0418'!A1",HttpUtility.UrlDecode(rel4.OriginalString.Split(new char[] { '/' })[3]));
+            target = new Uri(baseUri, rId4.TargetUri);
+            Assert.AreEqual("#'\u0410\u043F\u0430\u0447\u0435 \u041F\u041E\u0418'!A1",HttpUtility.UrlDecode(target.Fragment));
 
             PackageRelationship rId5 = drawingPart.GetRelationship("rId5");
             //Uri rel5 = new Uri(Path.Combine(parent.ToString(), rId5.TargetUri.ToString()), UriKind.Relative); 

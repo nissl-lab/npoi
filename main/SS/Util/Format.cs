@@ -230,7 +230,11 @@ namespace NPOI.SS.Util
             }
             else
             {
-                return Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(pattern, culture);
+                double value = Convert.ToDouble(obj, CultureInfo.InvariantCulture);
+                string ret = value.ToString(pattern, culture);
+                if (string.IsNullOrEmpty(ret))
+                    ret = "0";
+                return ret;
                 //return ((double)obj).ToString(pattern) ;
             }
         }

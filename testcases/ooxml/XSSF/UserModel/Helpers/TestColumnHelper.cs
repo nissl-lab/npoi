@@ -153,7 +153,7 @@ namespace TestCases.XSSF.UserModel.Helpers
             Assert.AreEqual(4, cols1.sizeOfColArray());
 
             // No overlap
-            helper.addCleanColIntoCols(cols1, createCol(4, 5));
+            helper.AddCleanColIntoCols(cols1, createCol(4, 5));
             Assert.AreEqual(5, cols1.sizeOfColArray());
 
             // Overlaps with 8 - 9 (overlap and after replacements required)
@@ -169,11 +169,11 @@ namespace TestCases.XSSF.UserModel.Helpers
             Assert.AreEqual(8, cols1.sizeOfColArray());
 
             // Overlaps with 13 - 16750 (before, overlap and after replacements required)
-            helper.addCleanColIntoCols(cols1, createCol(20, 30));
+            helper.AddCleanColIntoCols(cols1, createCol(20, 30));
             Assert.AreEqual(10, cols1.sizeOfColArray());
 
             // Overlaps with 20 - 30 (before, overlap and after replacements required)
-            helper.addCleanColIntoCols(cols1, createCol(25, 27));
+            helper.AddCleanColIntoCols(cols1, createCol(25, 27));
 
             // TODO - assert something interesting
             Assert.AreEqual(12, cols1.col.Count);
@@ -256,10 +256,10 @@ namespace TestCases.XSSF.UserModel.Helpers
             CT_Cols cols = worksheet.GetColsArray(0);
             CT_Col hidden = createCol(hiddenMin, hiddenMax);
             hidden.hidden = (true);
-            helper.addCleanColIntoCols(cols, hidden);
+            helper.AddCleanColIntoCols(cols, hidden);
             CT_Col bestFit = createCol(bestFitMin, bestFitMax);
             bestFit.bestFit = (true);
-            helper.addCleanColIntoCols(cols, bestFit);
+            helper.AddCleanColIntoCols(cols, bestFit);
             return cols;
         }
         private void assertMinMaxHiddenBestFit(CT_Cols cols, int index, int min, int max, bool hidden, bool bestFit)
