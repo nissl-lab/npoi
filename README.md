@@ -55,5 +55,3 @@ System Requirement
 .NET Standard 2.0 (.NET Core)
 
 .NET Framework 4.0 and above
-
-.NET Standard 2.0
