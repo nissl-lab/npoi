@@ -47,7 +47,7 @@ namespace NPOI.XSSF.UserModel.Helpers
          * @param n        the number of rows to shift
          * @return an array of affected cell regions
          */
-         [Obsolete("deprecated POI 3.15 beta 2. Use {@link #shiftMergedRegions(int, int, int)} instead.")]
+         [Obsolete("deprecated POI 3.15 beta 2. Use ShiftMergedRegions(int, int, int) instead.")]
         public List<CellRangeAddress> ShiftMerged(int startRow, int endRow, int n)
         {
             return ShiftMergedRegions(startRow, endRow, n);

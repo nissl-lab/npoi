@@ -668,13 +668,13 @@ namespace NPOI.SS.Util
          * @return FillPatternType style if set, otherwise {@link FillPatternType#NO_FILL}
          * @since POI 3.15 beta 3
          */
-        private static FillPatternType GetFillPattern(Dictionary<String, Object> properties, String name)
+        private static FillPattern GetFillPattern(Dictionary<String, Object> properties, String name)
         {
             Object value = properties[name];
-            FillPatternType pattern;
-            if (value is FillPatternType)
+            FillPattern pattern;
+            if (value is FillPattern)
             {
-                pattern = (FillPatternType)value;
+                pattern = (FillPattern)value;
             }
             // @deprecated 3.15 beta 2. getFillPattern will only work on FillPatternType enums instead of codes in the future.
             else if (value is short)
@@ -685,11 +685,11 @@ namespace NPOI.SS.Util
                 //            + name + ". Should use FillPatternType enums instead.");
                 //}
                 short code = (short)value;
-                pattern = (FillPatternType)code;
+                pattern = (FillPattern)code;
             }
             else if (value == null)
             {
-                pattern = FillPatternType.NoFill;
+                pattern = FillPattern.NoFill;
             }
             else
             {

@@ -498,11 +498,11 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the fill pattern. - Set to 1 to Fill with foreground color
         /// </summary>
         /// <value>The fill pattern.</value>
-        public FillPatternType FillPattern
+        public FillPattern FillPattern
         {
             get
             {
-                return (FillPatternType)_format.AdtlFillPattern;
+                return (FillPattern)_format.AdtlFillPattern;
             }
             set { _format.AdtlFillPattern=(short)value; }
         }

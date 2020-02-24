@@ -629,27 +629,27 @@ namespace NPOI.XSSF.UserModel
                 AddFill(ct);
             }
         }
-        public FillPatternType FillPattern
+        public FillPattern FillPattern
         {
             get
             {
                 // bug 56295: handle missing applyFill attribute as "true" because Excel does as well
-                if (_cellXf.IsSetApplyFill() && !_cellXf.applyFill) return FillPatternType.NoFill;
+                if (_cellXf.IsSetApplyFill() && !_cellXf.applyFill) return FillPattern.NoFill;
 
                 int FillIndex = (int)_cellXf.fillId;
                 XSSFCellFill fill = _stylesSource.GetFillAt(FillIndex);
 
                 ST_PatternType ptrn = fill.GetPatternType();
-                if(ptrn == ST_PatternType.none) return FillPatternType.NoFill;
+                if(ptrn == ST_PatternType.none) return FillPattern.NoFill;
 
-                return (FillPatternType)((int)ptrn);
+                return (FillPattern)((int)ptrn);
                 //return FillPatternType.forInt(ptrn.intValue() - 1);  minus one in poi, why???
             }
             set
             {
                 CT_Fill ct = GetCTFill();
                 CT_PatternFill ptrn = ct.IsSetPatternFill() ? ct.GetPatternFill() : ct.AddNewPatternFill();
-                if (value == FillPatternType.NoFill && ptrn.IsSetPatternType())
+                if (value == FillPattern.NoFill && ptrn.IsSetPatternType())
                     ptrn.UnsetPatternType();
                 else
                     ptrn.patternType = (ST_PatternType)(value);

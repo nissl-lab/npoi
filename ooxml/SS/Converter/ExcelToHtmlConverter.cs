@@ -651,11 +651,11 @@ namespace NPOI.SS.Converter
                 style.Append("white-space: pre-wrap; ");
                 ExcelToHtmlUtils.AppendAlign(style, cellStyle.Alignment);
 
-                if (cellStyle.FillPattern == FillPatternType.NoFill)
+                if (cellStyle.FillPattern == FillPattern.NoFill)
                 {
                     // no fill
                 }
-                else if (cellStyle.FillPattern == FillPatternType.SolidForeground)
+                else if (cellStyle.FillPattern == FillPattern.SolidForeground)
                 {
                     //cellStyle.
                     //HSSFColor.
@@ -676,11 +676,11 @@ namespace NPOI.SS.Converter
                 ExcelToHtmlUtils.AppendAlign(style, cellStyle.Alignment);
                 StylesTable st = ((XSSFWorkbook)workbook).GetStylesSource();
                 ThemesTable tt = st.GetTheme();
-                if (cellStyle.FillPattern == FillPatternType.NoFill)
+                if (cellStyle.FillPattern == FillPattern.NoFill)
                 {
                     // no fill
                 }
-                else if (cellStyle.FillPattern == FillPatternType.SolidForeground)
+                else if (cellStyle.FillPattern == FillPattern.SolidForeground)
                 {
                     //cellStyle
                     IndexedColors clr=IndexedColors.ValueOf(cellStyle.FillForegroundColor);

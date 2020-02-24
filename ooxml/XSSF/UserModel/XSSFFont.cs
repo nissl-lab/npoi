@@ -428,7 +428,7 @@ namespace NPOI.XSSF.UserModel
          * @see #BOLDWEIGHT_NORMAL
          * @see #BOLDWEIGHT_BOLD
          */
-        [Obsolete("deprecated 3.15 beta 2. Scheduled for removal in 3.17. Use {@link #setBold(boolean)} instead.")]
+        [Obsolete("deprecated POI 3.15 beta 2. Use IsBold instead.")]
         public short Boldweight
         {
             get
