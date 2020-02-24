@@ -4900,6 +4900,76 @@ namespace NPOI.XSSF.UserModel
             }
             return null;
         }
+        public void CopyTo(IWorkbook dest, string name, bool copyStyle, bool keepFormulas)
+        {
+            StylesTable styles = ((XSSFWorkbook)dest).GetStylesSource();
+            if (copyStyle && Workbook.NumberOfFonts > 0)
+            {
+                foreach (var font in((XSSFWorkbook)Workbook).GetStylesSource().GetFonts())
+                {
+                    styles.PutFont(font);  //TODO::create real font mapping, the correct logic may be wrong
+                }
+            }
+            XSSFSheet newSheet = (XSSFSheet)dest.CreateSheet(name);
+            newSheet.sheet.state = sheet.state;
+            IDictionary<Int32, ICellStyle> styleMap = (copyStyle) ? new Dictionary<Int32, ICellStyle>() : null;
+            for (int i = FirstRowNum; i <= LastRowNum; i++)
+            {
+                XSSFRow srcRow = (XSSFRow)GetRow(i);
+                XSSFRow destRow = (XSSFRow)newSheet.CreateRow(i);
+                if (srcRow != null)
+                {
+                    CopyRow(this, newSheet, srcRow, destRow, styleMap, keepFormulas);
+                }
+            }
+            List<CT_Cols> srcCols = worksheet.GetColsList();
+            List<CT_Cols> dstCols = newSheet.worksheet.GetColsList();
+            dstCols.Clear(); //Should already be empty since this is a new sheet.
+            foreach (CT_Cols srcCol in srcCols)
+            {
+                CT_Cols dstCol = new CT_Cols();
+                foreach (var column in srcCol.col)
+                {
+                    dstCol.col.Add(column.Copy());
+                }
+                dstCols.Add(dstCol);
+            }
+            newSheet.ForceFormulaRecalculation = true;
+            newSheet.PrintSetup.Landscape = PrintSetup.Landscape;
+            newSheet.PrintSetup.HResolution = PrintSetup.HResolution;
+            newSheet.PrintSetup.VResolution = PrintSetup.VResolution;
+            newSheet.SetMargin(MarginType.LeftMargin, GetMargin(MarginType.LeftMargin));
+            newSheet.SetMargin(MarginType.RightMargin, GetMargin(MarginType.RightMargin));
+            newSheet.SetMargin(MarginType.TopMargin, GetMargin(MarginType.TopMargin));
+            newSheet.SetMargin(MarginType.BottomMargin, GetMargin(MarginType.BottomMargin));
+            newSheet.PrintSetup.HeaderMargin = PrintSetup.HeaderMargin;
+            newSheet.PrintSetup.FooterMargin = PrintSetup.FooterMargin;
+            newSheet.Header.Left = Header.Left;
+            newSheet.Header.Center = Header.Center;
+            newSheet.Header.Right = Header.Right;
+            newSheet.Footer.Left = Footer.Left;
+            newSheet.Footer.Center = Footer.Center;
+            newSheet.Footer.Right = Footer.Right;
+            newSheet.PrintSetup.Scale = PrintSetup.Scale;
+            newSheet.PrintSetup.FitHeight = PrintSetup.FitHeight;
+            newSheet.PrintSetup.FitWidth = PrintSetup.FitWidth;
+            newSheet.DisplayGridlines = DisplayGridlines;
+            if (worksheet.IsSetSheetPr())
+            {
+                newSheet.worksheet.sheetPr = worksheet.sheetPr.Clone();
+            }
+            if (GetDefaultSheetView().pane != null)
+            {
+                var oldPane = GetDefaultSheetView().pane;
+                var newPane = newSheet.GetPane();
+                newPane.activePane = oldPane.activePane;
+                newPane.state = oldPane.state;
+                newPane.topLeftCell = oldPane.topLeftCell;
+                newPane.xSplit = oldPane.xSplit;
+                newPane.ySplit = oldPane.ySplit;
+            }
+            CopySheetImages(dest as XSSFWorkbook, newSheet);
+        }
         private static void CopyRow(XSSFSheet srcSheet, XSSFSheet destSheet, XSSFRow srcRow, XSSFRow destRow, IDictionary<Int32, ICellStyle> styleMap, bool keepFormulas)
         {
             destRow.Height = srcRow.Height;

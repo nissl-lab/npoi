@@ -1335,5 +1335,9 @@ namespace NPOI.XSSF.Streaming
                 _sh.TabColor = value;
             }
         }
+        public void CopyTo(IWorkbook dest, string name, bool copyStyle, bool keepFormulas)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

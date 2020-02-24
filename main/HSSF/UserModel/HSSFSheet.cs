@@ -2943,21 +2943,22 @@ namespace NPOI.HSSF.UserModel
             newSheet.PrintSetup.FitWidth = PrintSetup.FitWidth;
             return newSheet;
         }
-        public void CopyTo(HSSFWorkbook dest, String name, Boolean copyStyle, Boolean keepFormulas)
+        public void CopyTo(IWorkbook dest, String name, Boolean copyStyle, Boolean keepFormulas)
         {
             int maxColumnNum = 0;
             HSSFSheet newSheet = (HSSFSheet)dest.CreateSheet(name);
             newSheet._sheet = Sheet.CloneSheet();
+            var internalWorkbook=((HSSFWorkbook)dest).Workbook;
             Dictionary<short, short> paletteMap = new Dictionary<short, short>();
             if (dest.NumberOfSheets == 1)
             {
                 //Replace the color palette with the palette from the source, since this is the first sheet
-                dest.Workbook.CustomPalette.ClearColors();
-                paletteMap = MergePalettes(Workbook as HSSFWorkbook, dest);
+                internalWorkbook.CustomPalette.ClearColors();
+                paletteMap = MergePalettes(Workbook as HSSFWorkbook, dest as HSSFWorkbook);
             }
             else if (dest != Workbook)
             {
-                paletteMap = MergePalettes(Workbook as HSSFWorkbook, dest);
+                paletteMap = MergePalettes(Workbook as HSSFWorkbook, dest as HSSFWorkbook);
             }
             IDictionary<Int32, HSSFCellStyle> styleMap = (copyStyle) ? new Dictionary<Int32, HSSFCellStyle>() : null;
             for (int i = FirstRowNum; i <= LastRowNum; i++)
@@ -2999,9 +3000,10 @@ namespace NPOI.HSSF.UserModel
             EscherAggregate escher = DrawingEscherAggregate;
             if (escher != null)
             {
-                if (dest.Workbook.DrawingManager == null)
+                
+                if (internalWorkbook.DrawingManager == null)
                 {
-                    dest.Workbook.CreateDrawingGroup();
+                    internalWorkbook.CreateDrawingGroup();
                 }
                 EscherAggregate destEscher = newSheet.DrawingEscherAggregate;
                 //Note: This logic assumes that image id's go from 1 to N in the source document. It usually does

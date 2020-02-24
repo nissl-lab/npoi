@@ -301,7 +301,7 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <value>whether all zero values on the worksheet are displayed.</value>
         bool DisplayZeros { get; set; }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether the sheet displays Automatic Page Breaks.
         /// </summary>
@@ -824,7 +824,7 @@ namespace NPOI.SS.UserModel
         /// </summary>
         bool IsRightToLeft { get; set; }
 
-        
+
         /// <summary>
         ///  Get or set the repeating rows used when printing the sheet, as found in File->PageSetup->Sheet.
         /// <p/>
@@ -910,6 +910,8 @@ namespace NPOI.SS.UserModel
         /// get or set location of the active cell, e.g. <code>A1</code>.
         /// </summary>
         CellAddress ActiveCell { get; set; }
-    }
 
+
+        void CopyTo(IWorkbook dest, string name, bool copyStyle, bool keepFormulas);
+    }
 }
