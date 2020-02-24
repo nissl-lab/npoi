@@ -1126,7 +1126,6 @@ namespace NPOI.HSSF.UserModel
                     continue;
 
                 NPOI.SS.UserModel.IFont hssfFont = GetFontAt(i);
-                //            Console.WriteLine( hssfFont.GetBoldweight() + ", " + hssfFont.GetColor() + ", " + hssfFont.FontHeight + ", " + hssfFont.FontName + ", " + hssfFont.GetItalic() + ", " + hssfFont.GetStrikeout() + ", " + hssfFont.GetTypeOffset() + ", " + hssfFont.Underline );
                 if (hssfFont.Boldweight == boldWeight
                         && hssfFont.Color == color
                         && hssfFont.FontHeight == fontHeight
@@ -1136,7 +1135,6 @@ namespace NPOI.HSSF.UserModel
                         && hssfFont.TypeOffset == typeOffset
                         && hssfFont.Underline == underline)
                 {
-                    //                Console.WriteLine( "Found font" );
                     return hssfFont;
                 }
             }

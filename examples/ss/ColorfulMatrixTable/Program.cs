@@ -24,6 +24,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
 using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 /* ================================================================
  * Author: Tony Qu 
@@ -38,11 +39,12 @@ namespace ColorfulMatrixTable
 {
     class Program
     {
+        static IWorkbook wb;
         static void Main(string[] args)
         {
-            InitializeWorkbook();
+            InitializeWorkbook(args);
 
-            ISheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
+            ISheet sheet1 = wb.CreateSheet("Sheet1");
 
             int x = 1;
             for (int i = 0; i <15; i++)
@@ -54,7 +56,7 @@ namespace ColorfulMatrixTable
                     if (x % 2 == 0)
                     {
                         //fill background with blue
-                       ICellStyle style1 = hssfworkbook.CreateCellStyle();
+                       ICellStyle style1 = wb.CreateCellStyle();
                         style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Blue.Index2;
                         style1.FillPattern = FillPattern.SolidForeground;
                         cell.CellStyle = style1;
@@ -62,7 +64,7 @@ namespace ColorfulMatrixTable
                     else
                     {
                         //fill background with yellow
-                       ICellStyle style1 = hssfworkbook.CreateCellStyle();
+                       ICellStyle style1 = wb.CreateCellStyle();
                         style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Yellow.Index2;
                         style1.FillPattern = FillPattern.SolidForeground;
                         cell.CellStyle = style1;
@@ -76,29 +78,23 @@ namespace ColorfulMatrixTable
         }
 
 
-        static HSSFWorkbook hssfworkbook;
-
         static void WriteToFile()
         {
+            string filename = "test.xls";
+            if (wb is XSSFWorkbook) filename += "x";
             //Write the stream data of workbook to the root directory
-            FileStream file = new FileStream(@"test.xls", FileMode.Create);
-            hssfworkbook.Write(file);
+
+            FileStream file = new FileStream(filename, FileMode.Create);
+            wb.Write(file);
             file.Close();
         }
 
-        static void InitializeWorkbook()
+        static void InitializeWorkbook(string[] args)
         {
-            hssfworkbook = new HSSFWorkbook();
-
-            ////create a entry of DocumentSummaryInformation
-            DocumentSummaryInformation dsi = PropertySetFactory.CreateDocumentSummaryInformation();
-            dsi.Company = "NPOI Team";
-            hssfworkbook.DocumentSummaryInformation = dsi;
-
-            ////create a entry of SummaryInformation
-            SummaryInformation si = PropertySetFactory.CreateSummaryInformation();
-            si.Subject = "NPOI SDK Example";
-            hssfworkbook.SummaryInformation = si;
+            if (args.Length > 0 && args[0].Equals("-xls"))
+                wb = new HSSFWorkbook();
+            else
+                wb = new XSSFWorkbook();
         }
     }
 }

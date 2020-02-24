@@ -91,8 +91,10 @@ namespace BusinessPlan
 
             IWorkbook wb;
 
-            if (args.Length > 0 && args[0].Equals("-xls")) wb = new HSSFWorkbook();
-            else wb = new XSSFWorkbook();
+            if (args.Length > 0 && args[0].Equals("-xls")) 
+                wb = new HSSFWorkbook();
+            else 
+                wb = new XSSFWorkbook();
 
             Dictionary<String, ICellStyle> styles = createStyles(wb);
 
@@ -240,7 +242,7 @@ namespace BusinessPlan
 
             ICellStyle style;
             IFont headerFont = wb.CreateFont();
-            headerFont.Boldweight = (short)(FontBoldWeight.Bold);
+            headerFont.IsBold = true;
             style = CreateBorderedStyle(wb);
             style.Alignment = HorizontalAlignment.Center;
             style.FillForegroundColor = (IndexedColors.LightCornflowerBlue.Index);
@@ -257,7 +259,7 @@ namespace BusinessPlan
             styles.Add("header_date", style);
 
             IFont font1 = wb.CreateFont();
-            font1.Boldweight = (short)(FontBoldWeight.Bold);
+            font1.IsBold = true;
             style = CreateBorderedStyle(wb);
             style.Alignment = HorizontalAlignment.Center;
             style.SetFont(font1);
@@ -284,7 +286,7 @@ namespace BusinessPlan
 
             IFont font2 = wb.CreateFont();
             font2.Color = (IndexedColors.Blue.Index);
-            font2.Boldweight = (short)(FontBoldWeight.Bold);
+            font2.IsBold = true;
             style = CreateBorderedStyle(wb);
             style.Alignment = HorizontalAlignment.Center;
             style.SetFont(font2);
@@ -301,7 +303,7 @@ namespace BusinessPlan
             IFont font3 = wb.CreateFont();
             font3.FontHeightInPoints = ((short)14);
             font3.Color = (IndexedColors.DarkBlue.Index);
-            font3.Boldweight = (short)(FontBoldWeight.Bold);
+            font3.IsBold = true;
             style = CreateBorderedStyle(wb);
             style.Alignment = HorizontalAlignment.Center;
             style.SetFont(font3);

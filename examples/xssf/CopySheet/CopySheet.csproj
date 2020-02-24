@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,29 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SharpZipLib" Version="1.0.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+    <PackageReference Include="SharpZipLib" Version="1.2.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="NPOI">
-      <HintPath>..\..\..\solution\Lib\NPOI.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OOXML">
-      <HintPath>..\..\..\solution\Lib\NPOI.OOXML.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OpenXml4Net">
-      <HintPath>..\..\..\solution\Lib\NPOI.OpenXml4Net.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OpenXmlFormats">
-      <HintPath>..\..\..\solution\Lib\NPOI.OpenXmlFormats.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.ScratchPad.HSSF">
-      <HintPath>..\..\..\solution\Lib\NPOI.ScratchPad.HSSF.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.ScratchPad.HWPF">
-      <HintPath>..\..\..\solution\Lib\NPOI.ScratchPad.HWPF.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\..\main\NPOI.Core.csproj" />
+    <ProjectReference Include="..\..\..\ooxml\NPOI.OOXML.Core.csproj" />
+    <ProjectReference Include="..\..\..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
+    <ProjectReference Include="..\..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" />
   </ItemGroup>
 
 </Project>

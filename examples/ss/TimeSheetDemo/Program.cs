@@ -33,6 +33,7 @@ using NPOI.HPSF;
 using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.XSSF.UserModel;
 
 namespace TimeSheetDemo
 {
@@ -53,11 +54,11 @@ namespace TimeSheetDemo
 
         static void Main(string[] args)
         {
-            InitializeWorkbook();
+            InitializeWorkbook(args);
 
-            Dictionary<String, ICellStyle> styles = CreateStyles(hssfworkbook);
+            Dictionary<String, ICellStyle> styles = CreateStyles(workbook);
 
-            ISheet sheet = hssfworkbook.CreateSheet("Timesheet");
+            ISheet sheet = workbook.CreateSheet("Timesheet");
             IPrintSetup printSetup = sheet.PrintSetup;
             printSetup.Landscape = true;
             sheet.FitToPage=(true);
@@ -186,8 +187,8 @@ namespace TimeSheetDemo
             Dictionary<String, ICellStyle> styles = new Dictionary<String, ICellStyle>();
             ICellStyle style;
             IFont titleFont = wb.CreateFont();
-            titleFont.FontHeightInPoints = ((short)18);
-            titleFont.Boldweight = (short)FontBoldWeight.Bold;
+            titleFont.FontHeightInPoints =18;
+            titleFont.IsBold = true;
             style = wb.CreateCellStyle();
             style.Alignment = HorizontalAlignment.Center;
             style.VerticalAlignment = VerticalAlignment.Center;
@@ -195,7 +196,7 @@ namespace TimeSheetDemo
             styles.Add("title", style);
 
             IFont monthFont = wb.CreateFont();
-            monthFont.FontHeightInPoints = ((short)11);
+            monthFont.FontHeightInPoints = 11;
             monthFont.Color = (IndexedColors.White.Index);
             style = wb.CreateCellStyle();
             style.Alignment = HorizontalAlignment.Center;
@@ -224,7 +225,7 @@ namespace TimeSheetDemo
             style.VerticalAlignment = VerticalAlignment.Center;
             style.FillForegroundColor = (IndexedColors.Grey25Percent.Index);
             style.FillPattern = FillPattern.SolidForeground;
-            style.DataFormat = (wb.CreateDataFormat().GetFormat("0.00"));
+            style.DataFormat = wb.CreateDataFormat().GetFormat("0.00");
             styles.Add("formula", style);
 
             style = wb.CreateCellStyle();
@@ -239,31 +240,24 @@ namespace TimeSheetDemo
         }
 
 
-        static HSSFWorkbook hssfworkbook;
+        static IWorkbook workbook;
 
         static void WriteToFile()
         {
-            // Write the output to a file
-            String filename = "timesheet.xls";
+            string filename = "timesheet.xls";
+            if (workbook is XSSFWorkbook) filename += "x";
             //Write the stream data of workbook to the root directory
             FileStream file = new FileStream(filename, FileMode.Create);
-            hssfworkbook.Write(file);
+            workbook.Write(file);
             file.Close();
         }
 
-        static void InitializeWorkbook()
+        static void InitializeWorkbook(string[] args)
         {
-            hssfworkbook = new HSSFWorkbook();
-
-            ////create a entry of DocumentSummaryInformation
-            DocumentSummaryInformation dsi = PropertySetFactory.CreateDocumentSummaryInformation();
-            dsi.Company = "NPOI Team";
-            hssfworkbook.DocumentSummaryInformation = dsi;
-
-            ////create a entry of SummaryInformation
-            SummaryInformation si = PropertySetFactory.CreateSummaryInformation();
-            si.Subject = "NPOI SDK Example";
-            hssfworkbook.SummaryInformation = si;
+            if (args.Length > 0 && args[0].Equals("-xls"))
+                workbook = new HSSFWorkbook();
+            else
+                workbook = new XSSFWorkbook();
         }
     }
 }

@@ -21,9 +21,8 @@ namespace CalendarDemo
             "September","October", "November", "December"};
         static void Main(string[] args)
         {
-            //Calendar calendar = Calendar.getInstance();
             DateTime dt = DateTime.Now;
-            bool xlsx = true;
+            bool xlsx = false;
             for (int i = 0; i < args.Length; i++)
             {
                 if (args[i][0] == '-')
@@ -32,7 +31,6 @@ namespace CalendarDemo
                 }
                 else
                 {
-                    //calendar.set(Calendar.YEAR, Integer.parseInt(args[i]));
                     dt = new DateTime(dt.Year, int.Parse(args[i]), dt.Day);
                 }
             }

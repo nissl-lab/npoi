@@ -33,6 +33,7 @@ using NPOI.HPSF;
 using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.XSSF.UserModel;
 
 namespace LoanCalculator
 {
@@ -40,9 +41,9 @@ namespace LoanCalculator
     {
         static void Main(string[] args)
         {
-            InitializeWorkbook();
-            Dictionary<String, ICellStyle> styles = CreateStyles(hssfworkbook);
-            ISheet sheet = hssfworkbook.CreateSheet("Loan Calculator");
+            InitializeWorkbook(args);
+            Dictionary<String, ICellStyle> styles = CreateStyles(workbook);
+            ISheet sheet = workbook.CreateSheet("Loan Calculator");
             sheet.IsPrintGridlines = (false);
             sheet.DisplayGridlines = (false);
 
@@ -59,7 +60,7 @@ namespace LoanCalculator
             sheet.SetColumnWidth(5, 14 * 256);
             sheet.SetColumnWidth(6, 14 * 256);
 
-            CreateNames(hssfworkbook);
+            CreateNames(workbook);
 
             IRow titleRow = sheet.CreateRow(0);
             titleRow.HeightInPoints = (35);
@@ -302,29 +303,24 @@ namespace LoanCalculator
         }
 
 
-        static HSSFWorkbook hssfworkbook;
+        static IWorkbook workbook;
 
         static void WriteToFile()
         {
+            string filename = "loan-calculator.xls";
+            if (workbook is XSSFWorkbook) filename += "x";
             //Write the stream data of workbook to the root directory
-            FileStream file = new FileStream(@"loan-calculator.xls", FileMode.Create);
-            hssfworkbook.Write(file);
+            FileStream file = new FileStream(filename, FileMode.Create);
+            workbook.Write(file);
             file.Close();
         }
 
-        static void InitializeWorkbook()
+        static void InitializeWorkbook(string[] args)
         {
-            hssfworkbook = new HSSFWorkbook();
-
-            ////create a entry of DocumentSummaryInformation
-            DocumentSummaryInformation dsi = PropertySetFactory.CreateDocumentSummaryInformation();
-            dsi.Company = "NPOI Team";
-            hssfworkbook.DocumentSummaryInformation = dsi;
-
-            ////create a entry of SummaryInformation
-            SummaryInformation si = PropertySetFactory.CreateSummaryInformation();
-            si.Subject = "NPOI SDK Example";
-            hssfworkbook.SummaryInformation = si;
+            if (args.Length > 0 && args[0].Equals("-xls"))
+                workbook = new HSSFWorkbook();
+            else
+                workbook = new XSSFWorkbook();
         }
     }
 }
