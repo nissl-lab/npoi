@@ -158,7 +158,8 @@ namespace NPOI.SS.Util
             for (int i = 0; i < sourceSheet.NumMergedRegions; i++)
             {
                 CellRangeAddress cellRangeAddress = sourceSheet.GetMergedRegion(i);
-                if (cellRangeAddress.FirstRow == sourceRow.RowNum)
+                
+                if (cellRangeAddress!=null && cellRangeAddress.FirstRow == sourceRow.RowNum)
                 {
                     CellRangeAddress newCellRangeAddress = new CellRangeAddress(newRow.RowNum,
                             (newRow.RowNum +
@@ -251,7 +252,7 @@ namespace NPOI.SS.Util
             for (int i = 0; i < sheet.NumMergedRegions; i++)
             {
                 CellRangeAddress cellRangeAddress = sheet.GetMergedRegion(i);
-                if (cellRangeAddress.FirstRow == sourceRow.RowNum)
+                if (cellRangeAddress != null && cellRangeAddress.FirstRow == sourceRow.RowNum)
                 {
                     CellRangeAddress newCellRangeAddress = new CellRangeAddress(newRow.RowNum,
                             (newRow.RowNum +
