@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -294,7 +295,7 @@ namespace NPOI.XSSF.Streaming
                                 double nval = cell.NumericCellValue;
                                 if (!Double.IsNaN(nval))
                                 {
-                                    WriteAsBytes(OutputStream, "<v>" + nval + "</v>");
+                                    WriteAsBytes(OutputStream, "<v>" + nval.ToString(CultureInfo.InvariantCulture) + "</v>");
                                 }
                                 break;
                             default:
@@ -335,7 +336,7 @@ namespace NPOI.XSSF.Streaming
                 case CellType.Numeric:
                     {
                         WriteAsBytes(OutputStream, " t=\"n\">");
-                        WriteAsBytes(OutputStream, "<v>" + cell.NumericCellValue + "</v>");
+                        WriteAsBytes(OutputStream, "<v>" + cell.NumericCellValue.ToString(CultureInfo.InvariantCulture) + "</v>");
                         break;
                     }
                 case CellType.Boolean:
