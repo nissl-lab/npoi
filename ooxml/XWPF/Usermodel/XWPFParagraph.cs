@@ -189,7 +189,7 @@ namespace NPOI.XWPF.UserModel
         }
 
 
-        internal CT_P GetCTP()
+        public CT_P GetCTP()
         {
             return paragraph;
         }
