@@ -4520,11 +4520,11 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException("Use XSSFSheet.TabColor instead");
             }
             set
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException("Use XSSFSheet.TabColor instead");
             }
         }
 
