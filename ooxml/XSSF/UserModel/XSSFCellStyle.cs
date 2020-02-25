@@ -643,7 +643,7 @@ namespace NPOI.XSSF.UserModel
                 if(ptrn == ST_PatternType.none) return FillPattern.NoFill;
 
                 return (FillPattern)((int)ptrn);
-                //return FillPatternType.forInt(ptrn.intValue() - 1);  minus one in poi, why???
+                //return FillPattern.forInt(ptrn.intValue() - 1);  minus one in poi, why???
             }
             set
             {
