@@ -226,7 +226,7 @@ namespace NPOI.XSSF.UserModel
                 case HyperlinkType.Email:
                 case HyperlinkType.File:
                 case HyperlinkType.Url:
-                        if(!Uri.IsWellFormedUriString(address,UriKind.RelativeOrAbsolute))
+                        if(!Uri.TryCreate(address,UriKind.RelativeOrAbsolute,out Uri uri))
                             throw new ArgumentException("Address of hyperlink must be a valid URI:" + address);
                     break;
                 case HyperlinkType.Document:

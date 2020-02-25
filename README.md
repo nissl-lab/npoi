@@ -9,6 +9,8 @@ This project is the .NET version of POI Java project. With NPOI, you can read/wr
 
 Donation
 ===============
+<a href="https://www.buymeacoffee.com/V0BNGi3" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+
 Paypal account: tonyqus@gmail.com
 
 Alipay account（支付宝）:tonyqus@163.com
@@ -53,5 +55,3 @@ System Requirement
 .NET Standard 2.0 (.NET Core)
 
 .NET Framework 4.0 and above
-
-.NET Standard 2.0
