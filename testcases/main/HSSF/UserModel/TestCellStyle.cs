@@ -205,11 +205,11 @@ namespace TestCases.HSSF.UserModel
         cs.BorderRight= (BorderStyle.Thin);
         cs.BorderTop= (BorderStyle.Thin);
         cs.FillForegroundColor= ( short ) 0xA;
-        cs.FillPattern = FillPatternType.SolidForeground;
+        cs.FillPattern = FillPattern.SolidForeground;
         fnt.Color= ( short ) 0xf;
         fnt.IsItalic= (true);
         cs2.FillForegroundColor= ( short ) 0x0;
-        cs2.FillPattern= FillPatternType.SolidForeground;
+        cs2.FillPattern= FillPattern.SolidForeground;
         cs2.SetFont(fnt);
         for (short rownum = ( short ) 0; rownum < 100; rownum++)
         {

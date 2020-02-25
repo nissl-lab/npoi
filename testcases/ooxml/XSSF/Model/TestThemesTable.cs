@@ -124,7 +124,7 @@ namespace TestCases.XSSF.Model
                     {
                         XSSFCellStyle cs = row.Sheet.Workbook.CreateCellStyle() as XSSFCellStyle;
                         cs.SetFillForegroundColor(color);
-                        cs.FillPattern = FillPatternType.SolidForeground;
+                        cs.FillPattern = FillPattern.SolidForeground;
                         row.CreateCell(1).CellStyle = (cs);
                     }
                 }

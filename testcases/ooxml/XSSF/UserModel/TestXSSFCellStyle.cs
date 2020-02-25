@@ -634,12 +634,12 @@ namespace TestCases.XSSF.UserModel
             XSSFCellStyle defaultStyle = (XSSFCellStyle)wb.GetCellStyleAt((short)0);
             Assert.AreEqual(IndexedColors.Automatic.Index, defaultStyle.FillForegroundColor);
             Assert.AreEqual(null, defaultStyle.FillForegroundColorColor);
-            Assert.AreEqual(FillPatternType.NoFill, defaultStyle.FillPattern);
+            Assert.AreEqual(FillPattern.NoFill, defaultStyle.FillPattern);
 
             XSSFCellStyle customStyle = (XSSFCellStyle)wb.CreateCellStyle();
 
-            customStyle.FillPattern = (FillPatternType.SolidForeground);
-            Assert.AreEqual(FillPatternType.SolidForeground, customStyle.FillPattern);
+            customStyle.FillPattern = (FillPattern.SolidForeground);
+            Assert.AreEqual(FillPattern.SolidForeground, customStyle.FillPattern);
             Assert.AreEqual(3, styles.GetFills().Count);
 
             customStyle.FillForegroundColor = (IndexedColors.BrightGreen.Index);
@@ -650,8 +650,8 @@ namespace TestCases.XSSF.UserModel
             {
                 XSSFCellStyle style = (XSSFCellStyle)wb.CreateCellStyle();
 
-                style.FillPattern = (FillPatternType.SolidForeground);
-                Assert.AreEqual(FillPatternType.SolidForeground, style.FillPattern);
+                style.FillPattern = (FillPattern.SolidForeground);
+                Assert.AreEqual(FillPattern.SolidForeground, style.FillPattern);
                 Assert.AreEqual(4, styles.GetFills().Count);
 
                 style.FillForegroundColor = (IndexedColors.BrightGreen.Index);
@@ -670,8 +670,8 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual((int)ST_PatternType.darkGray, (int)cellStyle.FillPattern);
 
             int num = stylesTable.GetFills().Count;
-            cellStyle.FillPattern = (FillPatternType.SolidForeground);
-            Assert.AreEqual(FillPatternType.SolidForeground, cellStyle.FillPattern);
+            cellStyle.FillPattern = (FillPattern.SolidForeground);
+            Assert.AreEqual(FillPattern.SolidForeground, cellStyle.FillPattern);
             Assert.AreEqual(num + 1, stylesTable.GetFills().Count);
             int FillId = (int)cellStyle.GetCoreXf().fillId;
             Assert.IsTrue(FillId > 0);
@@ -682,12 +682,12 @@ namespace TestCases.XSSF.UserModel
             //setting the same fill multiple time does not update the styles table
             for (int i = 0; i < 3; i++)
             {
-                cellStyle.FillPattern = (FillPatternType.SolidForeground);
+                cellStyle.FillPattern = (FillPattern.SolidForeground);
             }
             Assert.AreEqual(num + 1, stylesTable.GetFills().Count);
 
-            cellStyle.FillPattern = (FillPatternType.NoFill);
-            Assert.AreEqual(FillPatternType.NoFill, cellStyle.FillPattern);
+            cellStyle.FillPattern = (FillPattern.NoFill);
+            Assert.AreEqual(FillPattern.NoFill, cellStyle.FillPattern);
             FillId = (int)cellStyle.GetCoreXf().fillId;
             ctFill = stylesTable.GetFillAt(FillId).GetCTFill();
             Assert.IsFalse(ctFill.GetPatternFill().IsSetPatternType());
@@ -977,7 +977,7 @@ namespace TestCases.XSSF.UserModel
 
             cellStyle.FillBackgroundColor = (/*setter*/IndexedColors.DarkBlue.Index);
             cellStyle.FillForegroundColor = (/*setter*/IndexedColors.DarkBlue.Index);
-            cellStyle.FillPattern = FillPatternType.SolidForeground;
+            cellStyle.FillPattern = FillPattern.SolidForeground;
 
             cellStyle.Alignment = HorizontalAlignment.Right;
             cellStyle.VerticalAlignment = VerticalAlignment.Top;
@@ -999,7 +999,7 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(IndexedColors.DarkBlue.Index, styleBack.FillForegroundColor);
             Assert.AreEqual(HorizontalAlignment.Right, styleBack.Alignment);
             Assert.AreEqual(VerticalAlignment.Top, styleBack.VerticalAlignment);
-            Assert.AreEqual(FillPatternType.SolidForeground, styleBack.FillPattern);
+            Assert.AreEqual(FillPattern.SolidForeground, styleBack.FillPattern);
 
             wbBack.Close();
 
@@ -1086,8 +1086,8 @@ namespace TestCases.XSSF.UserModel
             Assert.IsNull(cellStyle.FillForegroundColorColor);
             cellStyle.FillBackgroundColorColor = (null);
             Assert.IsNull(cellStyle.FillBackgroundColorColor);
-            cellStyle.FillPattern = FillPatternType.NoFill;;
-            Assert.AreEqual(FillPatternType.NoFill, cellStyle.FillPattern);
+            cellStyle.FillPattern = FillPattern.NoFill;;
+            Assert.AreEqual(FillPattern.NoFill, cellStyle.FillPattern);
             cellStyle.SetBottomBorderColor(null);
             Assert.IsNull(cellStyle.BottomBorderXSSFColor);
             cellStyle.SetTopBorderColor(null);

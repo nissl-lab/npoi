@@ -575,7 +575,7 @@ namespace TestCases.SS.UserModel
             IPatternFormatting fmt4 = rule3.PatternFormatting;
             //        Assert.AreEqual(HSSFColor.LIGHT_CORNFLOWER_BLUE.index, fmt4.FillBackgroundColor);
             //        Assert.AreEqual(HSSFColor.Automatic.index, fmt4.FillForegroundColor);
-            Assert.AreEqual(FillPatternType.NoFill, fmt4.FillPattern);
+            Assert.AreEqual(FillPattern.NoFill, fmt4.FillPattern);
             // borders are not Set
             Assert.IsNull(rule3.BorderFormatting);
 
@@ -1024,15 +1024,15 @@ namespace TestCases.SS.UserModel
             patternFmt.FillForegroundColor = (/*setter*/HSSFColor.Blue.Index);
             Assert.AreEqual(HSSFColor.Blue.Index, patternFmt.FillForegroundColor);
 
-            Assert.AreEqual(FillPatternType.NoFill, patternFmt.FillPattern);
-            patternFmt.FillPattern = FillPatternType.SolidForeground;
-            Assert.AreEqual(FillPatternType.SolidForeground, patternFmt.FillPattern);
-            patternFmt.FillPattern = FillPatternType.NoFill;
-            Assert.AreEqual(FillPatternType.NoFill, patternFmt.FillPattern);
+            Assert.AreEqual(FillPattern.NoFill, patternFmt.FillPattern);
+            patternFmt.FillPattern = FillPattern.SolidForeground;
+            Assert.AreEqual(FillPattern.SolidForeground, patternFmt.FillPattern);
+            patternFmt.FillPattern = FillPattern.NoFill;
+            Assert.AreEqual(FillPattern.NoFill, patternFmt.FillPattern);
             if (this._testDataProvider.GetSpreadsheetVersion() == SpreadsheetVersion.EXCEL97)
             {
-                patternFmt.FillPattern = FillPatternType.Bricks;
-                Assert.AreEqual(FillPatternType.Bricks, patternFmt.FillPattern);
+                patternFmt.FillPattern = FillPattern.Bricks;
+                Assert.AreEqual(FillPattern.Bricks, patternFmt.FillPattern);
             }
 
             IConditionalFormattingRule[] cfRules = { rule1 };
@@ -1054,7 +1054,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(HSSFColor.Blue.Index, r1fp.FillForegroundColor);
             if (this._testDataProvider.GetSpreadsheetVersion() == SpreadsheetVersion.EXCEL97)
             {
-                Assert.AreEqual(FillPatternType.Bricks, r1fp.FillPattern);
+                Assert.AreEqual(FillPattern.Bricks, r1fp.FillPattern);
             }
 
             workbook.Close();

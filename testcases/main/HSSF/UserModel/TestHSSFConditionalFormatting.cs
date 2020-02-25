@@ -172,7 +172,7 @@ namespace TestCases.HSSF.UserModel
             IConditionalFormattingRule rule = formatting.CreateConditionalFormattingRule("$A$1>75");
             IPatternFormatting pattern = rule.CreatePatternFormatting();
             pattern.FillBackgroundColor = IndexedColors.Blue.Index;
-            pattern.FillPattern = FillPatternType.SolidForeground;
+            pattern.FillPattern = FillPattern.SolidForeground;
             CellRangeAddress[] range = { CellRangeAddress.ValueOf("B2:C2") };
             CellRangeAddress[] range2 = { CellRangeAddress.ValueOf("B1:C1") };
             formatting.AddConditionalFormatting(range, rule);
@@ -195,7 +195,7 @@ namespace TestCases.HSSF.UserModel
             IPatternFormatting patternFormattingBack1 = ruleBack.PatternFormatting;
             Assert.IsNotNull(patternFormattingBack1);
             Assert.AreEqual(IndexedColors.Blue.Index, patternFormattingBack1.FillBackgroundColor);
-            Assert.AreEqual(FillPatternType.SolidForeground, patternFormattingBack1.FillPattern);
+            Assert.AreEqual(FillPattern.SolidForeground, patternFormattingBack1.FillPattern);
         }
 
     }
