@@ -1377,7 +1377,7 @@ namespace NPOI.XSSF.UserModel
                 return null;
             foreach (CT_MergeCell mc in worksheet.mergeCells.mergeCell)
             {
-                if (!string.IsNullOrEmpty(mc.@ref))
+                if (mc!=null && !string.IsNullOrEmpty(mc.@ref))
                 {
                     CellRangeAddress range = CellRangeAddress.ValueOf(mc.@ref);
                     if (range.FirstColumn <= mergedRegion.FirstColumn
