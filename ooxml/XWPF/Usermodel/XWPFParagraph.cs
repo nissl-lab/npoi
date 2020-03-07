@@ -124,7 +124,7 @@ namespace NPOI.XWPF.UserModel
             {
                 if (o is CT_R)
                 {
-                    XWPFRun r = new XWPFRun((CT_R)o, this);
+                    XWPFRun r = new XWPFRun((CT_R)o, (IRunBody)this);
                     runs.Add(r);
                     iRuns.Add(r);
                 }
@@ -173,6 +173,18 @@ namespace NPOI.XWPF.UserModel
                     // Smart Tags can be nested many times. 
                     // This implementation does not preserve the tagging information
                     BuildRunsInOrderFromXml((o as CT_SmartTagRun).Items);
+                }
+                if (o is CT_RunTrackChange) {
+                    // add all the insertions as text
+                    foreach (CT_RunTrackChange ins in ((CT_RunTrackChange)o).GetInsList())
+                    {
+                        foreach (CT_R r in ins.GetRList())
+                        {
+                            XWPFRun cr = new XWPFRun(r, (IRunBody)this);
+                            runs.Add(cr);
+                            iRuns.Add(cr);
+                        }
+                    }
                 }
             }
         }
@@ -229,9 +241,6 @@ namespace NPOI.XWPF.UserModel
                 //!paragraph.getDomNode().hasChildNodes();
                 //inner xml include objects holded by Items and pPr object
                 //should use children of pPr node, but we didn't keep reference to it.
-                //return paragraph.Items.Count == 0 && (paragraph.pPr == null ||
-                //    paragraph.pPr != null && paragraph.pPr.rPr == null && paragraph.pPr.sectPr == null && paragraph.pPr.pPrChange == null
-                //    );
                 return paragraph.Items.Count == 0 && (paragraph.pPr == null || paragraph.pPr.IsEmpty);
             }
         }
@@ -259,7 +268,7 @@ namespace NPOI.XWPF.UserModel
                     {
                         XWPFRun xRun = (XWPFRun)run;
                         // don't include the text if reviewing is enabled and this is a deleted run
-                        if (!xRun.GetCTR().IsSetRsidDel())
+                        if (xRun.GetCTR().GetDelTextList().Count==0)
                         {
                             out1.Append(xRun.ToString());
                         }

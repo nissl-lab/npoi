@@ -21,6 +21,7 @@ namespace TestCases.XWPF.UserModel
     using NPOI.Util;
     using NPOI.XWPF.UserModel;
     using NUnit.Framework;
+    using System;
     using System.Collections.Generic;
     using System.Text;
 
@@ -562,7 +563,32 @@ namespace TestCases.XWPF.UserModel
             }
             Assert.AreEqual("This is a test.\n\n\n\n3\n4\n5\n\n\n\nThis is a whole paragraph where one word is deleted.\n", str.ToString());
         }
+        [Test]
+        public void Test61787()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("61787.docx");
 
+            StringBuilder str = new StringBuilder();
+            foreach (XWPFParagraph par in doc.Paragraphs)
+            {
+                str.Append(par.Text).Append("\n");
+            }
+            String s = str.ToString();
+            Assert.IsTrue(s.Trim().Length > 0, "Having text: \n" + s + "\nTrimmed lenght: " + s.Trim().Length);
+        }
+        [Test]
+        public void Test61787_1()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("61787-1.docx");
+
+            StringBuilder str = new StringBuilder();
+            foreach (XWPFParagraph par in doc.Paragraphs)
+            {
+                str.Append(par.Text).Append("\n");
+            }
+            String s = str.ToString();
+            Assert.IsFalse(s.Contains("This is another Test"));
+        }
     }
 
 }
