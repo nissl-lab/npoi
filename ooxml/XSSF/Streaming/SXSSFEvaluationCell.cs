@@ -21,7 +21,7 @@ using NPOI.XSSF.UserModel;
 
 namespace NPOI.XSSF.Streaming
 {
-    public class SXSSFEvaluationCell : IEvaluationCell //XSSFEvaluationCell
+    public class SXSSFEvaluationCell : IEvaluationCell 
     {
         private SXSSFEvaluationSheet _evalSheet;
         private SXSSFCell _cell;
