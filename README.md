@@ -8,6 +8,13 @@ NPOI
 <br />
 This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
+Contributors
+============
+Big thanks to all NPOI contributors!!! 
+
+https://github.com/tonyqus/npoi/wiki/NPOI-Contributors
+
+
 Donation
 ===============
 <a href="https://www.buymeacoffee.com/V0BNGi3" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
