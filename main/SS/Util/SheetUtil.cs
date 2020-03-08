@@ -185,10 +185,8 @@ namespace NPOI.SS.Util
             {
                 sheet.ShiftRows(targetRowIndex, sheet.LastRowNum, 1);
             }
-            else
-            {
-                newRow = sheet.CreateRow(targetRowIndex);
-            }
+            newRow = sheet.CreateRow(targetRowIndex);
+            newRow.Height = sourceRow.Height;   //copy row height
 
             // Loop through source columns to add to new row
             for (int i = sourceRow.FirstCellNum; i < sourceRow.LastCellNum; i++)
