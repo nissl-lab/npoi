@@ -7,10 +7,17 @@
 	<RootNamespace>NPOI</RootNamespace>
 	<SignAssembly>true</SignAssembly>
 	<AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+	<PackageId>NPOI</PackageId>
+	<RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>	
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>D:\github\npoi\main\NPOI.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\solution\Lib</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,10 +33,10 @@
 
   <ItemGroup>
     <PackageReference Include="BouncyCastle.NetCore" Version="1.8.5" />
-    <PackageReference Include="SharpZipLib" Version="1.0.0" />
+    <PackageReference Include="SharpZipLib" Version="1.2.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
   </ItemGroup>
 
 </Project>
