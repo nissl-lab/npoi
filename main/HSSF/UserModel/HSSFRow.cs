@@ -721,78 +721,9 @@ namespace NPOI.HSSF.UserModel
         /// </remarks>
         public IEnumerator<ICell> GetEnumerator()
         {
-            //return //new CellEnumerator(this.cells);
             return this.cells.Values.GetEnumerator();
         }
-        ///// <summary>
-        ///// Alias for {@link CellEnumerator} to allow
-        ///// foreach loops
-        ///// </summary>
-        ///// <returns></returns>
-        //public IEnumerator GetEnumerator()
-        //{
-        //    return GetCellEnumerator();
-        //}
-
-        /*
-         * An iterator over the (physical) cells in the row.
-         */
-        //private class CellEnumerator : IEnumerator
-        //{
-        //    int thisId = -1;
-        //    int nextId = -1;
-        //    private HSSFCell[] cells;
-
-        //    public CellEnumerator()
-        //    {
-        //    }
-
-        //    public CellEnumerator(HSSFCell[] cells)
-        //    {
-        //        this.cells = cells;
-        //    }
-
-        //    public bool MoveNext()
-        //    {
-
-        //        FindNext();
-        //        return nextId < cells.Length;
-        //    }
-
-        //    public Object Current
-        //    {
-        //        get
-        //        {
-        //            thisId = nextId;
-        //            Cell cell = cells[thisId];
-        //            return cell;
-        //        }
-        //    }
-
-        //    public void Remove()
-        //    {
-        //        if (thisId == -1)
-        //            throw new InvalidOperationException("Remove() called before next()");
-        //        cells[thisId] = null;
-        //    }
-
-        //    private void FindNext()
-        //    {
-        //        int i = nextId + 1;
-        //        for (; i < cells.Length; i++)
-        //        {
-        //            if (cells[i] != null) break;
-        //        }
-        //        nextId = i;
-        //    }
-        //    public void Reset()
-        //    {
-        //        thisId = -1;
-        //        nextId = -1;
-        //    }
-
-        //}
-
+ 
         /// <summary>
         /// Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
         /// </summary>

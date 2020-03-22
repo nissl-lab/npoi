@@ -497,7 +497,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             return GetObjectList<CT_MarkupRange>(ParagraphItemsChoiceType.commentRangeStart);
         }
-
+        public CT_Hyperlink1 AddNewHyperlink()
+        {
+            return AddNewObject<CT_Hyperlink1>(ParagraphItemsChoiceType.hyperlink);
+        }
         public IEnumerable<CT_Hyperlink1> GetHyperlinkList()
         {
             return GetObjectList<CT_Hyperlink1>(ParagraphItemsChoiceType.hyperlink);

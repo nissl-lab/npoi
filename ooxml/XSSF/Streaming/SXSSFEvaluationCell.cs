@@ -158,7 +158,7 @@ namespace NPOI.XSSF.Streaming
          */
         //@Internal(since= "POI 3.15 beta 3")
 
-        public CellType getCachedFormulaResultTypeEnum()
+        public CellType GetCachedFormulaResultTypeEnum()
         {
             return _cell.GetCachedFormulaResultTypeEnum();
         }

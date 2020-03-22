@@ -264,8 +264,11 @@ namespace NPOI.XWPF.UserModel
         {
             int pos = abstractNums.Count;
             if (abstractNum.GetAbstractNum() != null)
-            { // Use the current CTAbstractNum if it exists
-                ctNumbering.AddNewAbstractNum().Set(abstractNum.GetAbstractNum());
+            {
+                var ctAbstractNum = abstractNum.GetAbstractNum();
+                ctAbstractNum.abstractNumId = pos.ToString();
+                // Use the current CTAbstractNum if it exists
+                ctNumbering.AddNewAbstractNum().Set(ctAbstractNum);
             }
             else
             {

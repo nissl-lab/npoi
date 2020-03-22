@@ -1626,6 +1626,25 @@ namespace NPOI.XWPF.UserModel
             }
             return null;
         }
+        /// <summary>
+        /// Appends a new hyperlink run to this paragraph
+        /// </summary>
+        /// <param name="rId">a new hyperlink run</param>
+        /// <returns></returns>
+        public XWPFHyperlinkRun CreateHyperlinkRun(string rId)
+        {
+            CT_R r = new CT_R();
+            r.AddNewRPr().rStyle = new CT_String() { val = "Hyperlink" };
 
-    }//end class
+            CT_Hyperlink1 hl = paragraph.AddNewHyperlink();
+            hl.history = ST_OnOff.on;
+            hl.id = rId;
+            hl.Items.Add(r);
+            XWPFHyperlinkRun xwpfRun = new XWPFHyperlinkRun(hl, r, this);
+            runs.Add(xwpfRun);
+            iRuns.Add(xwpfRun);
+            return xwpfRun;
+        }
+    }
+
 }
