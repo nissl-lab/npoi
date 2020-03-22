@@ -108,10 +108,6 @@ namespace NPOI.SS.UserModel
         {
             return new XSSFWorkbook(pkg);
         }
-        public static IWorkbook Create(Stream inp)
-        {
-            return Create(inp, null);
-        }
         /// <summary>
         /// Creates the appropriate HSSFWorkbook / XSSFWorkbook from
         /// the given InputStream. The Stream is wraped inside a PushbackInputStream.
@@ -121,33 +117,62 @@ namespace NPOI.SS.UserModel
         /// <returns>IWorkbook depending on the input HSSFWorkbook or XSSFWorkbook is returned.</returns>
         // Your input stream MUST either support mark/reset, or
         //  be wrapped as a {@link PushbackInputStream}!
-        public static IWorkbook Create(Stream inputStream, string password)
+        public static IWorkbook Create(Stream inputStream, bool bReadonly)
         {
-            // If Clearly doesn't do mark/reset, wrap up
-            //if (!inp.MarkSupported())
-            //{
-            //    inp = new PushbackInputStream(inp, 8);
-            //}
             inputStream = new PushbackStream(inputStream);
-            // Ensure that there is at least some data there
-            byte[] header8 = IOUtils.PeekFirst8Bytes(inputStream);
-
             if (POIFSFileSystem.HasPOIFSHeader(inputStream))
             {
-                //NPOIFSFileSystem fs = new NPOIFSFileSystem(inputStream);
-                //return Create(fs, password);
                 return new HSSFWorkbook(inputStream);
             }
             inputStream.Position = 0;
             if (DocumentFactoryHelper.HasOOXMLHeader(inputStream))
             {
-                return new XSSFWorkbook(OPCPackage.Open(inputStream));
+                return new XSSFWorkbook(OPCPackage.Open(inputStream, bReadonly));
             }
-            throw new InvalidFormatException("Your stream was neither an OLE2 stream, nor an OOXML stream.");
+            throw new ArgumentException("Your stream was neither an OLE2 stream, nor an OOXML stream.");
         }
         public static IWorkbook Create(string file)
         {
-            return Create(file, null, false);
+            if (!File.Exists(file))
+            {
+                throw new FileNotFoundException(file);
+            }
+            FileStream fStream = null;
+            try
+            {
+                using (fStream = new FileStream(file, FileMode.Open, FileAccess.Read))
+                {
+                    IWorkbook wb = new HSSFWorkbook(fStream);
+                    return wb;
+                }
+            }
+            catch (OfficeXmlFileException e)
+            {
+                // opening as .xls failed => try opening as .xlsx
+                OPCPackage pkg = OPCPackage.Open(file);
+                try
+                {
+                    return new XSSFWorkbook(pkg);
+                }
+                catch (IOException ioe)
+                {
+                    // ensure that file handles are closed (use revert() to not re-write the file)
+                    pkg.Revert();
+                    //pkg.close();
+
+                    // rethrow exception
+                    throw ioe;
+                }
+                catch (ArgumentException ioe)
+                {
+                    // ensure that file handles are closed (use revert() to not re-write the file) 
+                    pkg.Revert();
+                    //pkg.close();
+
+                    // rethrow exception
+                    throw ioe;
+                }
+            }
         }
         public static IWorkbook Create(string file, string password)
         {
@@ -177,14 +202,13 @@ namespace NPOI.SS.UserModel
             {
                 NPOIFSFileSystem fs = new NPOIFSFileSystem(fInfo, readOnly);
                 try
-                {
+                {   
                     return Create(fs, password);
                 }
-                catch (RuntimeException e)
-                {
+                finally {
                     // ensure that the file-handle is closed again
-                    fs.Close();
-                    throw e;
+                    if (fs!=null)
+                        fs.Close();
                 }
                 
             }
@@ -205,7 +229,7 @@ namespace NPOI.SS.UserModel
                     // rethrow exception
                     throw ioe;
                 }
-                catch (RuntimeException ioe)
+                catch (Exception ioe)
                 {
                     // ensure that file handles are closed (use revert() to not re-write the file) 
                     pkg.Revert();
@@ -226,7 +250,7 @@ namespace NPOI.SS.UserModel
         public static IWorkbook Create(Stream inputStream, ImportOption importOption)
         {
             SetImportOption(importOption);
-            IWorkbook workbook = Create(inputStream, null);
+            IWorkbook workbook = Create(inputStream, true);
             return workbook;
         }
 

@@ -125,7 +125,7 @@ namespace NPOI
          *  sure to always use that, and not the original!
          * @param inp An Stream which supports either mark/reSet, or is a PushbackStream
          */
-        [Obsolete("deprecated use the method from DocumentFactoryHelper, deprecated as of 3.15-beta1, therefore eligible for removal in 3.17")]
+        [Obsolete("Use the method from DocumentFactoryHelper")]
         public static bool HasOOXMLHeader(Stream inp)
         {
             return DocumentFactoryHelper.HasOOXMLHeader(inp);

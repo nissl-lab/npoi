@@ -336,6 +336,17 @@ namespace NPOI.OpenXml4Net.OPC
             return pack;
         }
 
+        public static OPCPackage Open(Stream in1,bool bReadonly)
+        {
+            OPCPackage pack = new ZipPackage(in1, bReadonly ? PackageAccess.READ : PackageAccess.READ_WRITE);
+            if (pack.partList == null)
+            {
+                pack.GetParts();
+            }
+            return pack;
+        }
+
+
         /**
          * Opens a package if it exists, else it Creates one.
          * 
