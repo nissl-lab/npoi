@@ -12,8 +12,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.OpenXml4Net", "..\open
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.OpenXmlFormats", "..\OpenXmlFormats\NPOI.OpenXmlFormats.csproj", "{A6874784-2875-4F40-9E8F-8385A640F5D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenEncryptExcel", "..\examples\ss\CreateEncryptedExcel\OpenEncryptExcel.csproj", "{5C96989D-558A-4AFA-BE21-5DB8627B4950}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		.net 2 Release|Any CPU = .net 2 Release|Any CPU
@@ -54,14 +52,6 @@ Global
 		{A6874784-2875-4F40-9E8F-8385A640F5D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6874784-2875-4F40-9E8F-8385A640F5D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6874784-2875-4F40-9E8F-8385A640F5D6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5C96989D-558A-4AFA-BE21-5DB8627B4950}..net 2 Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5C96989D-558A-4AFA-BE21-5DB8627B4950}..net 2 Release|Any CPU.Build.0 = Release|Any CPU
-		{5C96989D-558A-4AFA-BE21-5DB8627B4950}..net 4 Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5C96989D-558A-4AFA-BE21-5DB8627B4950}..net 4 Release|Any CPU.Build.0 = Release|Any CPU
-		{5C96989D-558A-4AFA-BE21-5DB8627B4950}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5C96989D-558A-4AFA-BE21-5DB8627B4950}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5C96989D-558A-4AFA-BE21-5DB8627B4950}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5C96989D-558A-4AFA-BE21-5DB8627B4950}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
