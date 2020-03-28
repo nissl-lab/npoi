@@ -183,7 +183,7 @@ namespace NPOI.XSSF.UserModel
                 if(sqref.Length==0)
                     sqref = cellRangeAddress.FormatAsString();
                 else
-                    sqref = " " + cellRangeAddress.FormatAsString();
+                    sqref += " " + cellRangeAddress.FormatAsString();
             }
             newDataValidation.sqref = sqref;
             newDataValidation.allowBlank = (true);
