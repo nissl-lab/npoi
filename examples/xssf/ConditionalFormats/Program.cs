@@ -48,13 +48,13 @@ namespace ConditionalFormats
             IConditionalFormattingRule rule1 = sheetCF.CreateConditionalFormattingRule(ComparisonOperator.GreaterThan, "70");
             IPatternFormatting fill1 = rule1.CreatePatternFormatting();
             fill1.FillBackgroundColor = (IndexedColors.Blue.Index);
-            fill1.FillPattern = (short)FillPattern.SolidForeground;
+            fill1.FillPattern = FillPattern.SolidForeground;
 
             // Condition 2: Cell Value Is  less than      50   (Green Fill)
             IConditionalFormattingRule rule2 = sheetCF.CreateConditionalFormattingRule(ComparisonOperator.LessThan, "50");
             IPatternFormatting fill2 = rule2.CreatePatternFormatting();
             fill2.FillBackgroundColor = (IndexedColors.Green.Index);
-            fill2.FillPattern= (short)FillPattern.SolidForeground;
+            fill2.FillPattern= FillPattern.SolidForeground;
 
             CellRangeAddress[] regions = {
                 CellRangeAddress.ValueOf("A1:A6")
@@ -97,8 +97,8 @@ namespace ConditionalFormats
             // Condition 1: Formula Is   =$B2>75   (Blue Fill)
             IConditionalFormattingRule rule1 = sheetCF.CreateConditionalFormattingRule("$A2>75");
             IPatternFormatting fill1 = rule1.CreatePatternFormatting();
-            fill1.FillBackgroundColor = (IndexedColors.Blue.Index);
-            fill1.FillPattern = ((short)FillPattern.SolidForeground);
+            fill1.FillBackgroundColor = IndexedColors.Blue.Index;
+            fill1.FillPattern = FillPattern.SolidForeground;
 
             CellRangeAddress[] regions = {
                 CellRangeAddress.ValueOf("A2:C4")
@@ -232,7 +232,7 @@ namespace ConditionalFormats
             IConditionalFormattingRule rule1 = sheetCF.CreateConditionalFormattingRule("COUNTIF($C$2:$C$4,A2)");
             IPatternFormatting fill1 = rule1.CreatePatternFormatting();
             fill1.FillBackgroundColor = (IndexedColors.LightBlue.Index);
-            fill1.FillPattern = ((short)FillPattern.SolidForeground);
+            fill1.FillPattern = FillPattern.SolidForeground;
 
             CellRangeAddress[] regions = {
                 CellRangeAddress.ValueOf("A2:A8")
@@ -287,7 +287,7 @@ namespace ConditionalFormats
             IConditionalFormattingRule rule1 = sheetCF.CreateConditionalFormattingRule("MOD(ROW(),2)");
             IPatternFormatting fill1 = rule1.CreatePatternFormatting();
             fill1.FillBackgroundColor = (IndexedColors.LightGreen.Index);
-            fill1.FillPattern = ((short)FillPattern.SolidForeground);
+            fill1.FillPattern = FillPattern.SolidForeground;
 
             CellRangeAddress[] regions = {
                 CellRangeAddress.ValueOf("A1:Z100")
@@ -311,7 +311,7 @@ namespace ConditionalFormats
             IConditionalFormattingRule rule1 = sheetCF.CreateConditionalFormattingRule("MOD(ROW(),6)<3");
             IPatternFormatting fill1 = rule1.CreatePatternFormatting();
             fill1.FillBackgroundColor = (IndexedColors.Grey25Percent.Index);
-            fill1.FillPattern = ((short)FillPattern.SolidForeground);
+            fill1.FillPattern = FillPattern.SolidForeground;
 
             CellRangeAddress[] regions = {
                 CellRangeAddress.ValueOf("A1:Z100")
