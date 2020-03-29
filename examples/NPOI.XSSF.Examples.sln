@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateEmptyWorkbook", "xssf\CreateEmptyWorkbook\CreateEmptyWorkbook.csproj", "{AFBE86E3-EDBE-45B4-8950-8B883102A47F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetCellValuesInXlsx", "xssf\SetCellValuesInXlsx\SetCellValuesInXlsx.csproj", "{D49F896A-A2E1-4C28-ACB7-73FB2910626D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetWidthAndHeightInXlsx", "xssf\SetWidthAndHeightInXlsx\SetWidthAndHeightInXlsx.csproj", "{D94F543E-F925-44F5-9347-A6DC96D58F17}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorfulMatrix", "xssf\ColorfulMatrix\ColorfulMatrix.csproj", "{A3103D4C-7334-4B70-9524-E57105EB5E55}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FillBackgroundInXlsx", "xssf\FillBackgroundInXlsx\FillBackgroundInXlsx.csproj", "{B6485025-FA2D-4BFB-A98A-A7AE95582EE3}"
 EndProject
@@ -49,8 +47,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WritePerformanceTest", "xss
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateCustomProperties", "xssf\CreateCustomProperties\CreateCustomProperties.csproj", "{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonthlySalaryReport", "xssf\MonthlySalaryReport\MonthlySalaryReport.csproj", "{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadXlsx", "xssf\DownloadXlsx\DownloadXlsx.csproj", "{4C8B6A62-F77D-477F-9A60-C8C8098AC2E1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Performance", "Performance", "{FB96FC42-FB38-4F3B-9BA2-ACE24653CE0D}"
@@ -69,7 +65,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractPicturesFromXlsx", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseBasicFormulaInXlsx", "xssf\UseBasicFormulaInXlsx\UseBasicFormulaInXlsx.csproj", "{874E25C5-3ECE-4772-90C1-C857AF4C7568}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopySheet", "xssf\CopySheet\CopySheet.csproj", "{DFBB8F76-A870-479B-A696-E228A2365078}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CopySheet", "xssf\CopySheet\CopySheet.csproj", "{DFBB8F76-A870-479B-A696-E228A2365078}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,16 +107,6 @@ Global
 		{D94F543E-F925-44F5-9347-A6DC96D58F17}.Release|Mixed Platforms.Build.0 = Release|x86
 		{D94F543E-F925-44F5-9347-A6DC96D58F17}.Release|x86.ActiveCfg = Release|x86
 		{D94F543E-F925-44F5-9347-A6DC96D58F17}.Release|x86.Build.0 = Release|x86
-		{A3103D4C-7334-4B70-9524-E57105EB5E55}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{A3103D4C-7334-4B70-9524-E57105EB5E55}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{A3103D4C-7334-4B70-9524-E57105EB5E55}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{A3103D4C-7334-4B70-9524-E57105EB5E55}.Debug|x86.ActiveCfg = Debug|x86
-		{A3103D4C-7334-4B70-9524-E57105EB5E55}.Debug|x86.Build.0 = Debug|x86
-		{A3103D4C-7334-4B70-9524-E57105EB5E55}.Release|Any CPU.ActiveCfg = Release|x86
-		{A3103D4C-7334-4B70-9524-E57105EB5E55}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{A3103D4C-7334-4B70-9524-E57105EB5E55}.Release|Mixed Platforms.Build.0 = Release|x86
-		{A3103D4C-7334-4B70-9524-E57105EB5E55}.Release|x86.ActiveCfg = Release|x86
-		{A3103D4C-7334-4B70-9524-E57105EB5E55}.Release|x86.Build.0 = Release|x86
 		{B6485025-FA2D-4BFB-A98A-A7AE95582EE3}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{B6485025-FA2D-4BFB-A98A-A7AE95582EE3}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{B6485025-FA2D-4BFB-A98A-A7AE95582EE3}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -311,16 +297,6 @@ Global
 		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667}.Release|x86.ActiveCfg = Release|Any CPU
-		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7}.Release|x86.ActiveCfg = Release|Any CPU
 		{4C8B6A62-F77D-477F-9A60-C8C8098AC2E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C8B6A62-F77D-477F-9A60-C8C8098AC2E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C8B6A62-F77D-477F-9A60-C8C8098AC2E1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -389,13 +365,11 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{AFBE86E3-EDBE-45B4-8950-8B883102A47F} = {CD941EF6-8FB7-467D-8AE7-0C85E07BD53F}
-		{A3103D4C-7334-4B70-9524-E57105EB5E55} = {219097C8-95A0-479C-A713-8D4EB842C2FF}
 		{A1C0DE12-A626-431F-B2E1-DB4B3A706383} = {219097C8-95A0-479C-A713-8D4EB842C2FF}
 		{421AEE65-B2DB-4633-A5E1-97E9DC809ADE} = {8CFB89FD-C679-473B-B421-D7EC19D7FC4F}
 		{ED6DC363-2017-4004-AF44-2AA171709EFC} = {FB96FC42-FB38-4F3B-9BA2-ACE24653CE0D}
 		{87009589-28B8-4F63-A50D-A0C599E01A1E} = {FB96FC42-FB38-4F3B-9BA2-ACE24653CE0D}
 		{BABCE350-9EC0-4EE7-A8E5-7CC73CA5E667} = {CD941EF6-8FB7-467D-8AE7-0C85E07BD53F}
-		{AAAED0B0-1797-464C-8DF6-96DEBFB57DE7} = {219097C8-95A0-479C-A713-8D4EB842C2FF}
 		{A429FB81-425D-4046-92B5-CBE0FBC9AA3F} = {8CFB89FD-C679-473B-B421-D7EC19D7FC4F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
