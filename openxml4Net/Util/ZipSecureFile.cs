@@ -51,7 +51,7 @@ namespace NPOI.OpenXml4Net.Util
          */
         public static void SetMaxEntrySize(long maxEntrySize)
         {
-            if (maxEntrySize < 0 || maxEntrySize > 0xFFFFFFFFl)
+            if (maxEntrySize < 0 || maxEntrySize > 0xFFFFFFFFL)
             {
                 throw new ArgumentException("Max entry size is bounded [0-4GB].");
             }

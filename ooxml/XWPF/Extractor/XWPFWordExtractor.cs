@@ -37,7 +37,7 @@ namespace NPOI.XWPF.Extractor
       XWPFRelation.MACRO_TEMPLATE_DOCUMENT
    };
 
-        private new XWPFDocument document;
+        private XWPFDocument document;
         private bool fetchHyperlinks = false;
 
         public XWPFWordExtractor(OPCPackage Container)

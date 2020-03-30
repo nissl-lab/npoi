@@ -498,7 +498,7 @@ namespace NPOI.Util
         * @see <a href="http://www.alanwood.net/unicode/private_use_area.html#symbol">Private Use Area (symbol)</a>
         * @see <a href="http://www.alanwood.net/demos/symbol.html">Symbol font - Unicode alternatives for Greek and special characters in HTML</a>
         */
-        public static String mapMsCodepointString(String string1)
+        public static String MapMsCodepointString(String string1)
         {
             if (string1 == null || "".Equals(string1)) return string1;
             InitMsCodepointMap();

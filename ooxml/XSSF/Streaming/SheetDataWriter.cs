@@ -63,7 +63,7 @@ namespace NPOI.XSSF.Streaming
          * 
          * @return temp file to write sheet data
          */
-       
+
         public virtual FileInfo CreateTempFile()
         {
             return TempFile.CreateTempFile("poi-sxssf-sheet", ".xml");
@@ -172,14 +172,14 @@ namespace NPOI.XSSF.Streaming
             return fis;
         }
 
-        protected void Finalize()
-        {
-            TemporaryFileInfo.Delete();
-            if (File.Exists(TemporaryFileInfo.FullName))
-            {
-                logger.Log(POILogger.ERROR, "Can't delete temporary encryption file: " + TemporaryFileInfo);
-            }
-        }
+        //protected void Finalize()
+        //{
+        //    TemporaryFileInfo.Delete();
+        //    if (File.Exists(TemporaryFileInfo.FullName))
+        //    {
+        //        logger.Log(POILogger.ERROR, "Can't delete temporary encryption file: " + TemporaryFileInfo);
+        //    }
+        //}
 
         /**
          * Write a row to the file
@@ -193,7 +193,7 @@ namespace NPOI.XSSF.Streaming
             {
                 LowestIndexOfFlushedRows = rownum;
             }
-                
+
             NumberLastFlushedRow = Math.Max(rownum, NumberLastFlushedRow);
             NumberOfCellsOfLastFlushedRow = row.LastCellNum;
             NumberOfFlushedRows++;
