@@ -35,8 +35,8 @@
     </TargetFrameworkProfile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
-	<PackageId>NPOI</PackageId>
-	<RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>	
+    <PackageId>NPOI</PackageId>
+    <RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -297,6 +297,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="npoi.snk" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.csproj">

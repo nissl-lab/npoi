@@ -8,31 +8,18 @@
 	<SignAssembly>true</SignAssembly>
 	<AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
 	<PackageId>NPOI</PackageId>
-	<RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>	
+	<RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
+  <OutputPath>..\solution\Lib</OutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>D:\github\npoi\main\NPOI.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\solution\Lib</OutputPath>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Resources\font_metrics.properties" />
-    <None Remove="Resources\functionMetadata.txt" />
-  </ItemGroup>
-
-  
+ 
   <ItemGroup>
     <EmbeddedResource Include="Resources\font_metrics.properties" />
     <EmbeddedResource Include="Resources\functionMetadata.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BouncyCastle.NetCore" Version="1.8.5" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.6" />
     <PackageReference Include="SharpZipLib" Version="1.2.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
