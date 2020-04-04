@@ -1052,19 +1052,20 @@ namespace NPOI.XWPF.UserModel
             // Add the picture + relationship
             String relationId;
             XWPFPictureData picData;
+            XWPFDocument doc=null;
 
             // Work out what to add the picture to, then add both the
             //  picture and the relationship for it
             // TODO Should we have an interface for this sort of thing?
             if (parent.Part is XWPFHeaderFooter)
-            {   
-                headerFooter = (XWPFHeaderFooter)parent.Part;
+            {
+                XWPFHeaderFooter headerFooter = (XWPFHeaderFooter)parent.Part;
                 relationId = headerFooter.AddPictureData(pictureData, pictureType);
                 picData = (XWPFPictureData)headerFooter.GetRelationById(relationId);
             }
             else
             {
-                XWPFDocument doc = parent.Document;
+                doc = parent.Document;
                 relationId = doc.AddPictureData(pictureData, pictureType);
                 picData = (XWPFPictureData)doc.GetRelationById(relationId);
             }
@@ -1087,9 +1088,6 @@ namespace NPOI.XWPF.UserModel
                 //InputSource is = new InputSource(new StringReader(xml));
                 //org.w3c.dom.Document doc = DocumentHelper.readDocument(is);
                 //inline.set(XmlToken.Factory.parse(doc.getDocumentElement(), DEFAULT_XML_OPTIONS));
-
-                XmlDocument xmlDoc = new XmlDocument();
-                //XmlElement el = xmlDoc.CreateElement("pic", "pic", "http://schemas.openxmlformats.org/drawingml/2006/picture");
 
                 inline.graphic = new CT_GraphicalObject();
                 inline.graphic.graphicData = new CT_GraphicalObjectData();
@@ -1132,7 +1130,10 @@ namespace NPOI.XWPF.UserModel
                 CT_BlipFillProperties blipFill = pic.AddNewBlipFill();
                 CT_Blip blip = blipFill.AddNewBlip();
                 blip.embed = (picData.GetPackageRelationship().Id);
-                extAct(doc, blip);
+                if (doc != null)
+                {
+                    extAct(doc, blip);
+                }
                 blipFill.AddNewStretch().AddNewFillRect();
 
                 CT_ShapeProperties spPr = pic.AddNewSpPr();
