@@ -1047,26 +1047,9 @@ namespace NPOI.XWPF.UserModel
             throw new NotImplementedException();
         }
 
-        /**
-         * Adds a picture to the run. This method handles
-         *  attaching the picture data to the overall file.
-         *  
-         * @see NPOI.XWPF.UserModel.Document#PICTURE_TYPE_EMF
-         * @see NPOI.XWPF.UserModel.Document#PICTURE_TYPE_WMF
-         * @see NPOI.XWPF.UserModel.Document#PICTURE_TYPE_PICT
-         * @see NPOI.XWPF.UserModel.Document#PICTURE_TYPE_JPEG
-         * @see NPOI.XWPF.UserModel.Document#PICTURE_TYPE_PNG
-         * @see NPOI.XWPF.UserModel.Document#PICTURE_TYPE_DIB
-         *  
-         * @param pictureData The raw picture data
-         * @param pictureType The type of the picture, eg {@link Document#PICTURE_TYPE_JPEG}
-         * @param width width in EMUs. To convert to / from points use {@link org.apache.poi.util.Units}
-         * @param height height in EMUs. To convert to / from points use {@link org.apache.poi.util.Units}
-         * @throws NPOI.Openxml4j.exceptions.InvalidFormatException 
-         * @throws IOException 
-         */
-        public XWPFPicture AddPicture(Stream pictureData, int pictureType, String filename, int width, int height)
+        XWPFPicture AddPicture(Stream pictureData, int pictureType, String filename, int width, int height, Action<XWPFDocument, CT_Blip> extAct)
         {
+            // Add the picture + relationship
             String relationId;
             XWPFPictureData picData;
 
@@ -1074,8 +1057,8 @@ namespace NPOI.XWPF.UserModel
             //  picture and the relationship for it
             // TODO Should we have an interface for this sort of thing?
             if (parent.Part is XWPFHeaderFooter)
-            {
-                XWPFHeaderFooter headerFooter = (XWPFHeaderFooter)parent.Part;
+            {   
+                headerFooter = (XWPFHeaderFooter)parent.Part;
                 relationId = headerFooter.AddPictureData(pictureData, pictureType);
                 picData = (XWPFPictureData)headerFooter.GetRelationById(relationId);
             }
@@ -1148,7 +1131,8 @@ namespace NPOI.XWPF.UserModel
 
                 CT_BlipFillProperties blipFill = pic.AddNewBlipFill();
                 CT_Blip blip = blipFill.AddNewBlip();
-                blip.embed = parent.Document.GetRelationId(picData);
+                blip.embed = (picData.GetPackageRelationship().Id);
+                extAct(doc, blip);
                 blipFill.AddNewStretch().AddNewFillRect();
 
                 CT_ShapeProperties spPr = pic.AddNewSpPr();
@@ -1185,6 +1169,44 @@ namespace NPOI.XWPF.UserModel
             {
                 throw new InvalidOperationException("XWPFRun.Addpicture error", e);
             }
+        }
+
+        public XWPFPicture AddSvg(Stream svgData, Stream altPictureData, int altPictureType, String filename, int width, int height)
+        {
+            return AddPicture(altPictureData, altPictureType, filename, width, height, (doc, blip) =>
+            {
+                String relationId = doc.AddPictureData(svgData, (int)PictureType.SVG);
+                XWPFPictureData picData = (XWPFPictureData)doc.GetRelationById(relationId);
+                var extLst = new CT_OfficeArtExtensionList();
+                var extItem = new CT_OfficeArtExtension();
+                extItem.uri = "{96DAC541-7B7A-43D3-8B79-37D633B846F1}";
+                extItem.Any = "<asvg:svgBlip xmlns:asvg=\"http://schemas.microsoft.com/office/drawing/2016/SVG/main\" r:embed=\"" + picData.GetPackageRelationship().Id + "\"/>";
+                extLst.ext.Add(extItem);
+                blip.extLst = extLst;
+            });
+        }
+
+        /**
+         * Adds a picture to the run. This method handles
+         *  attaching the picture data to the overall file.
+         *  
+         * @see NPOI.XWPF.UserModel.Document#PICTURE_TYPE_EMF
+         * @see NPOI.XWPF.UserModel.Document#PICTURE_TYPE_WMF
+         * @see NPOI.XWPF.UserModel.Document#PICTURE_TYPE_PICT
+         * @see NPOI.XWPF.UserModel.Document#PICTURE_TYPE_JPEG
+         * @see NPOI.XWPF.UserModel.Document#PICTURE_TYPE_PNG
+         * @see NPOI.XWPF.UserModel.Document#PICTURE_TYPE_DIB
+         *  
+         * @param pictureData The raw picture data
+         * @param pictureType The type of the picture, eg {@link Document#PICTURE_TYPE_JPEG}
+         * @param width width in EMUs. To convert to / from points use {@link org.apache.poi.util.Units}
+         * @param height height in EMUs. To convert to / from points use {@link org.apache.poi.util.Units}
+         * @throws NPOI.Openxml4j.exceptions.InvalidFormatException 
+         * @throws IOException 
+         */
+        public XWPFPicture AddPicture(Stream pictureData, int pictureType, String filename, int width, int height)
+        {
+            return AddPicture(pictureData, pictureType, filename, width, height, (doc, blip) => { });
         }
 
         /**
