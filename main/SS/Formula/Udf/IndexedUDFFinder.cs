@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.Formula.Udf
+namespace NPOI.SS.Formula.UDF
 {
     using System;
     using System.Collections.Generic;

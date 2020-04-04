@@ -83,6 +83,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\..\solution\packages\BouncyCastle.1.8.5\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\solution\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -100,9 +103,17 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="POIFS\Crypt\TestAgileEncryptionParameters.cs" />
+    <Compile Include="POIFS\Crypt\TestCertificateEncryption.cs" />
+    <Compile Include="POIFS\Crypt\TestDecryptor.cs" />
+    <Compile Include="POIFS\Crypt\TestEncryptionInfo.cs" />
+    <Compile Include="POIFS\Crypt\TestEncryptor.cs" />
+    <Compile Include="POIFS\Crypt\TestSecureTempZip.cs" />
+    <Compile Include="POIFS\Crypt\TestSignatureInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -113,8 +124,16 @@
     <Compile Include="SS\Format\TestCellFormatPart.cs" />
     <Compile Include="SS\Formula\Eval\TestXSSFCircularReferences.cs" />
     <Compile Include="SS\Formula\Functions\TestProper.cs" />
+    <Compile Include="SS\Formula\TestStructuredReferences.cs" />
     <Compile Include="SS\TestWorkbookFactory.cs" />
     <Compile Include="SS\UserModel\BaseTestXCell.cs" />
+    <Compile Include="SS\UserModel\BaseTestXRow.cs" />
+    <Compile Include="SS\UserModel\BaseTestXSheet.cs" />
+    <Compile Include="SS\UserModel\BaseTestXWorkbook.cs" />
+    <Compile Include="SS\UserModel\TestFormulaParser.cs" />
+    <Compile Include="SS\UserModel\TestXSSFBorderStyle.cs" />
+    <Compile Include="SS\Util\TestSXSSFCellUtil.cs" />
+    <Compile Include="SS\Util\TestXSSFCellUtil.cs" />
     <Compile Include="TestDetectAsOOXML.cs" />
     <Compile Include="TestEmbeded.cs" />
     <Compile Include="TestPOIXMLDocument.cs" />
@@ -132,8 +151,6 @@
     <Compile Include="XSSF\Model\TestThemesTable.cs" />
     <Compile Include="XSSF\Streaming\AutoSizeColumnTrackerTests.cs" />
     <Compile Include="XSSF\Streaming\GZIPSheetDataWriterTests.cs" />
-    <Compile Include="XSSF\Streaming\SheetDataWriterTests.cs" />
-    <Compile Include="XSSF\Streaming\SXSSFCellTests.cs" />
     <Compile Include="XSSF\Streaming\SXSSFCreationHelperTests.cs" />
     <Compile Include="XSSF\Streaming\SXSSFEvaluationCellTests.cs" />
     <Compile Include="XSSF\Streaming\SXSSFEvaluationWorkbookTests.cs" />
@@ -141,10 +158,21 @@
     <Compile Include="XSSF\Streaming\SXSSFRowTests.cs" />
     <Compile Include="XSSF\Streaming\SXSSFSheetTests.cs" />
     <Compile Include="XSSF\Streaming\SXSSFWorkbookTests.cs" />
+    <Compile Include="XSSF\Streaming\TestAutoSizeColumnTracker.cs" />
+    <Compile Include="XSSF\Streaming\TestSXSSFBugs.cs" />
+    <Compile Include="XSSF\Streaming\TestSXSSFCell.cs" />
+    <Compile Include="XSSF\Streaming\TestSXSSFFormulaEvaluation.cs" />
+    <Compile Include="XSSF\Streaming\TestSXSSFRow.cs" />
+    <Compile Include="XSSF\Streaming\TestSXSSFSheet.cs" />
+    <Compile Include="XSSF\Streaming\TestSXSSFSheetAutoSizeColumn.cs" />
+    <Compile Include="XSSF\Streaming\TestSXSSFWorkbook.cs" />
+    <Compile Include="XSSF\SXSSFITestDataProvider.cs" />
     <Compile Include="XSSF\TestSheetProtection.cs" />
+    <Compile Include="XSSF\TestXSSFCloneSheet.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFCategoryAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFChartAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFChartLegend.cs" />
+    <Compile Include="XSSF\UserModel\Charts\TestXSSFChartTitle.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFLineChartData.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFManualLayout.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFScatterChartData.cs" />
@@ -169,9 +197,11 @@
     <Compile Include="XSSF\UserModel\TestXSSFConditionalFormatting.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFDataFormat.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFDataValidation.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFDataValidationConstraint.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFDrawing.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFExternalFunctions.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFFont.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFForkedEvaluator.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFFormulaEvaluation.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFFormulaParser.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFHeaderFooter.cs" />
@@ -179,12 +209,15 @@
     <Compile Include="XSSF\UserModel\TestXSSFName.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFPicture.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFPictureData.cs" />
-    <Compile Include="XSSF\UserModel\TestXSSFPivotTable.cs" />
+    <Compile Include="XSSF\UserModel\BaseTestXSSFPivotTable.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFPivotTableName.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFPivotTableRef.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFPrintSetup.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFRichTextString.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFRow.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFSheet.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFSheetAutosizeColumn.cs" />
+    <Compile Include="XSSF\UserModel\TestXSSFSheetMergeRegions.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFSheetRowGrouping.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFSheetShiftRows.cs" />
     <Compile Include="XSSF\UserModel\TestXSSFSheetUpdateArrayFormulas.cs" />

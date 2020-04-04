@@ -70,26 +70,20 @@ namespace TestCases.HSSF.UserModel
             HSSFSheet sheet = (HSSFSheet)wb.CreateSheet("FirstSheet");
 
             // set repeating rows and columns twice for the first sheet
+            CellRangeAddress cra = CellRangeAddress.ValueOf("A1:A3");
             for (int i = 0; i < 2; i++)
             {
-                wb.SetRepeatingRowsAndColumns(0, 0, 0, 0, 3 - 1);
+                sheet.RepeatingColumns = (cra);
+                sheet.RepeatingRows = (cra);
                 sheet.CreateFreezePane(0, 3);
             }
             Assert.AreEqual(1, wb.NumberOfNames);
             IName nr1 = wb.GetNameAt(0);
 
             Assert.AreEqual("Print_Titles", nr1.NameName);
-            if (false)
-            {
-#if !HIDE_UNREACHABLE_CODE
-                //     TODO - full column references not rendering properly, absolute markers not present either
-                Assert.AreEqual("FirstSheet!$A:$A,FirstSheet!$1:$3", nr1.RefersToFormula);
-#endif
-            }
-            else
-            {
-                Assert.AreEqual("FirstSheet!A:A,FirstSheet!$A$1:$IV$3", nr1.RefersToFormula);
-            }
+            // TODO - full column references not rendering properly, absolute markers not present either
+            // assertEquals("FirstSheet!$A:$A,FirstSheet!$1:$3", nr1.getRefersToFormula());
+            Assert.AreEqual("FirstSheet!A:A,FirstSheet!$A$1:$IV$3", nr1.RefersToFormula);
 
             // Save and re-open
             HSSFWorkbook nwb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
@@ -103,23 +97,15 @@ namespace TestCases.HSSF.UserModel
             // check that Setting RR&C on a second sheet causes a new Print_Titles built-in
             // name to be Created
             sheet = (HSSFSheet)nwb.CreateSheet("SecondSheet");
-            nwb.SetRepeatingRowsAndColumns(1, 1, 2, 0, 0);
+            cra = CellRangeAddress.ValueOf("B1:C1");
+            sheet.RepeatingColumns = (cra);
+            sheet.RepeatingRows = (cra);
 
             Assert.AreEqual(2, nwb.NumberOfNames);
             IName nr2 = nwb.GetNameAt(1);
 
             Assert.AreEqual("Print_Titles", nr2.NameName);
             Assert.AreEqual("SecondSheet!B:C,SecondSheet!$A$1:$IV$1", nr2.RefersToFormula);
-
-            //if (false) {
-            //    // In case you fancy Checking in excel, to ensure it
-            //    //  won't complain about the file now
-            //        File tempFile = File.CreateTempFile("POI-45126-", ".xls");
-            //        FileOutputStream fout = new FileOutputStream(tempFile);
-            //        nwb.Write(fout);
-            //        fout.close();
-            //        Console.WriteLine("check out " + tempFile.GetAbsolutePath());
-            //}
         }
         [Test]
         public void TestNamedRange()
@@ -141,6 +127,7 @@ namespace TestCases.HSSF.UserModel
             IName namedRange1 = wb.GetNameAt(0);
             //Getting it sheet name
             sheetName = namedRange1.SheetName;
+            Assert.IsNotNull(sheetName);
 
             // sanity check
             SanityChecker c = new SanityChecker();
@@ -255,11 +242,10 @@ namespace TestCases.HSSF.UserModel
             wb.CreateSheet("CSCO");
 
             Ptg[] ptgs = HSSFFormulaParser.Parse("CSCO!$E$71", wb, FormulaType.NamedRange, 0);
-            for (int i = 0; i < ptgs.Length; i++)
+            foreach (Ptg ptg in ptgs)
             {
-                Assert.AreEqual('R', ptgs[i].RVAType);
+                Assert.AreEqual('R', ptg.RVAType);
             }
-
         }
     }
 }

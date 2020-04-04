@@ -18,6 +18,8 @@
  */
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
+using System;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -88,17 +90,27 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
-
-
-        /**
-         *
-         * @return xssf color wrapper or null if color info is missing
-         */
-        public XSSFColor GetXSSFColor()
+        
+        public IColor FontColor
         {
-            if (_font.sizeOfColorArray() == 0) return null;
+            get
+            {
+                if (_font.sizeOfColorArray() == 0) return null;
 
-            return new XSSFColor(_font.GetColorArray(0));
+                return new XSSFColor(_font.GetColorArray(0));
+            }
+            set
+            {
+                XSSFColor xcolor = XSSFColor.ToXSSFColor(value);
+                if (xcolor == null)
+                {
+                    _font.color.Clear();
+                }
+                else
+                {
+                    _font.SetColorArray(0, xcolor.GetCTColor());
+                }
+            }
         }
 
         /**

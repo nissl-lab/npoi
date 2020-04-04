@@ -28,13 +28,13 @@ namespace NPOI.HSSF.UserModel
      */
     public class HSSFDataValidationHelper : IDataValidationHelper
     {
-        private HSSFSheet sheet;
+        //private HSSFSheet sheet;
 
         public HSSFDataValidationHelper(HSSFSheet sheet)
             : base()
         {
 
-            this.sheet = sheet;
+            //this.sheet = sheet;
         }
 
         /*

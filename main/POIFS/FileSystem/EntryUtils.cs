@@ -117,10 +117,41 @@ namespace NPOI.POIFS.FileSystem
          * @param target
          *            is the target POIFS to copy to
          */
-        public static void CopyNodes(POIFSFileSystem source,
-                POIFSFileSystem target)
+        public static void CopyNodes(OPOIFSFileSystem source,
+                OPOIFSFileSystem target)
         {
             CopyNodes(source.Root, target.Root);
+        }
+        /**
+         * Copies all nodes from one POIFS to the other
+         * 
+         * @param source
+         *            is the source POIFS to copy from
+         * @param target
+         *            is the target POIFS to copy to
+         */
+        public static void CopyNodes(NPOIFSFileSystem source,
+                NPOIFSFileSystem target)
+        {
+            CopyNodes(source.Root, target.Root);
+        }
+        /**
+         * Copies nodes from one POIFS to the other, minus the excepts.
+         * This delegates the filtering work to {@link FilteringDirectoryNode},
+         *  so excepts can be of the form "NodeToExclude" or
+         *  "FilteringDirectory/ExcludedChildNode"
+         * 
+         * @param source is the source POIFS to copy from
+         * @param target is the target POIFS to copy to
+         * @param excepts is a list of Entry Names to be excluded from the copy
+         */
+        public static void CopyNodes(OPOIFSFileSystem source,
+                    OPOIFSFileSystem target, List<String> excepts)
+        {
+            CopyNodes(
+                  new FilteringDirectoryNode(source.Root, excepts),
+                  new FilteringDirectoryNode(target.Root, excepts)
+            );
         }
 
         /**
@@ -133,8 +164,8 @@ namespace NPOI.POIFS.FileSystem
          * @param target is the target POIFS to copy to
          * @param excepts is a list of Entry Names to be excluded from the copy
          */
-        public static void CopyNodes(POIFSFileSystem source,
-                POIFSFileSystem target, List<String> excepts)
+        public static void CopyNodes(NPOIFSFileSystem source,
+                NPOIFSFileSystem target, List<String> excepts)
         {
             CopyNodes(
                   new FilteringDirectoryNode(source.Root, excepts),

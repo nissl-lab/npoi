@@ -214,9 +214,10 @@ namespace NPOI.SS.Formula.Functions
 
             LookupValueComparer lookupComparer = CreateLookupComparer(lookupValue, matchExact);
 
+            int size = lookupRange.Size;
             if (matchExact)
             {
-                for (int i = 0; i < lookupRange.Size; i++)
+                for (int i = 0; i < size; i++)
                 {
                     if (lookupComparer.CompareTo(lookupRange.GetItem(i)).IsEqual)
                     {
@@ -229,7 +230,7 @@ namespace NPOI.SS.Formula.Functions
             if (FindLargestLessThanOrEqual)
             {
                 // Note - backward iteration
-                for (int i = lookupRange.Size - 1; i >= 0; i--)
+                for (int i = size - 1; i >= 0; i--)
                 {
                     CompareResult cmp = lookupComparer.CompareTo(lookupRange.GetItem(i));
                     if (cmp.IsTypeMismatch)
@@ -246,7 +247,7 @@ namespace NPOI.SS.Formula.Functions
 
             // else - Find smallest greater than or equal to
             // TODO - Is binary search used for (match_type==+1) ?
-            for (int i = 0; i < lookupRange.Size; i++)
+            for (int i = 0; i < size; i++)
             {
                 CompareResult cmp = lookupComparer.CompareTo(lookupRange.GetItem(i));
                 if (cmp.IsEqual)
@@ -263,21 +264,12 @@ namespace NPOI.SS.Formula.Functions
                 }
             }
 
-            throw new EvaluationException(ErrorEval.NA);
+            return size - 1;
         }
 
         private static LookupValueComparer CreateLookupComparer(ValueEval lookupValue, bool matchExact)
         {
             return LookupUtils.CreateLookupComparer(lookupValue, matchExact, true);
-        }
-
-        private static bool IsLookupValueWild(String stringValue)
-        {
-            if (stringValue.IndexOf('?') >= 0 || stringValue.IndexOf('*') >= 0)
-            {
-                return true;
-            }
-            return false;
         }
     }
 }

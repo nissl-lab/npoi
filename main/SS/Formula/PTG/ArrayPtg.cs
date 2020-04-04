@@ -58,16 +58,16 @@ namespace NPOI.SS.Formula.PTG
         // data from these fields comes after the Ptg data of all tokens in current formula
         private int _nColumns;
         private int _nRows;
-        private Object[] _arrayValues;
+        private object[] _arrayValues;
 
-        ArrayPtg(int reserved0, int reserved1, int reserved2, int nColumns, int nRows, Object[] arrayValues)
+        ArrayPtg(int reserved0, int reserved1, int reserved2, int nColumns, int nRows, object[] arrayValues)
         {
             _reserved0Int = reserved0;
             _reserved1Short = reserved1;
             _reserved2Byte = reserved2;
             _nColumns = nColumns;
             _nRows = nRows;
-            _arrayValues = arrayValues;
+            _arrayValues = (object[])arrayValues.Clone();
         }
         /**
          * @param values2d array values arranged in rows
@@ -204,13 +204,13 @@ namespace NPOI.SS.Formula.PTG
         {
             StringBuilder b = new StringBuilder();
             b.Append("{");
-            for (int y = 0; y < RowCount; y++)
+            for (int y = 0; y < _nRows; y++)
             {
                 if (y > 0)
                 {
                     b.Append(";");
                 }
-                for (int x = 0; x < ColumnCount; x++)
+                for (int x = 0; x < _nColumns; x++)
                 {
                     if (x > 0)
                     {

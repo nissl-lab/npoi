@@ -48,10 +48,9 @@ namespace NPOI.SS.Formula.Functions
             /*
              * Note: no short-circuit bool loop exit because any ErrorEvals will override the result
              */
-            for (int i = 0, iSize = args.Length; i < iSize; i++)
+            foreach (ValueEval arg in args)
             {
                 bool? tempVe;
-                ValueEval arg = args[i];
                 if (arg is TwoDEval)
                 {
                     TwoDEval ae = (TwoDEval)arg;
@@ -76,7 +75,9 @@ namespace NPOI.SS.Formula.Functions
                 if (arg is RefEval)
                 {
                     RefEval re = (RefEval)arg;
-                    for (int sIx = re.FirstSheetIndex; sIx <= re.LastSheetIndex; sIx++)
+                    int firstSheetIndex = re.FirstSheetIndex;
+                    int lastSheetIndex = re.LastSheetIndex;
+                    for (int sIx = firstSheetIndex; sIx <= lastSheetIndex; sIx++)
                     {
                         ValueEval ve = re.GetInnerValueEval(sIx);
                         tempVe = OperandResolver.CoerceValueToBoolean(ve, true);

@@ -20,7 +20,11 @@ using NUnit.Framework;
 using NPOI.HSSF.Extractor;
 using TestCases.HSSF;
 using System.Text.RegularExpressions;
-namespace NPOI.XSSF.Extractor
+using NPOI.XSSF.Extractor;
+using NPOI.XSSF;
+using NPOI;
+
+namespace TestCases.XSSF.Extractor
 {
 
     /**
@@ -29,8 +33,6 @@ namespace NPOI.XSSF.Extractor
     [TestFixture]
     public class TestXSSFExcelExtractor
     {
-
-
         protected XSSFExcelExtractor GetExtractor(String sampleName)
         {
             return new XSSFExcelExtractor(XSSFTestDataSamples.OpenSampleWorkbook(sampleName));
@@ -211,6 +213,60 @@ namespace NPOI.XSSF.Extractor
             Assert.IsTrue(text.Contains("A2"), "Unable to find expected word in text\n" + text);
             Assert.IsTrue(text.Contains("A5-A$2"), "Unable to find expected word in text\n" + text);
             extractor.Close();
+        }
+
+        [Test]
+        [Ignore("not found in poi")]
+        public void TestEmptyCells()
+        {
+            XSSFExcelExtractor extractor = GetExtractor("SimpleNormal.xlsx");
+
+            String text = extractor.Text;
+            Assert.IsTrue(text.Length > 0);
+            
+            // This sheet demonstrates the preservation of empty cells, as
+            // signified by sequential \t characters.
+            Assert.AreEqual(
+                // Sheet 1
+                "Sheet1\n" + 
+                "test\t\t1\n" + 
+                "test 2\t\t2\n" + 
+                "\t\t3\n" + 
+                "\t\t4\n" + 
+                "\t\t5\n" + 
+                "\t\t6\n" + 
+                // Sheet 2
+                "Sheet Number 2\n" + 
+                "This is sheet 2\n" + 
+                "Stuff\n" + 
+                "1\t2\t3\t4\t5\t6\n" + 
+                "1/1/90\n" + 
+                "10\t\t3\n", 
+                text);
+
+            extractor.Close();
+        }
+
+        /**
+	     * Simple test for text box text
+	     * @throws IOException
+	     */
+        [Test]
+        public void TestTextBoxes()
+        {
+            XSSFExcelExtractor extractor = GetExtractor("WithTextBox.xlsx");
+            try
+            {
+                extractor.SetFormulasNotResults(true);
+                String text = extractor.Text;
+                Assert.IsTrue(text.IndexOf("Line 1") > -1);
+                Assert.IsTrue(text.IndexOf("Line 2") > -1);
+                Assert.IsTrue(text.IndexOf("Line 3") > -1);
+            }
+            finally
+            {
+                extractor.Close();
+            }
         }
     }
 }

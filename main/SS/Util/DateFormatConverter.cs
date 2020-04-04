@@ -345,16 +345,18 @@ namespace NPOI.SS.Util
             string result = null;
             if (!localePrefixes.ContainsKey(localeString))
             {
-                if (!localePrefixes.ContainsKey(localeString.Substring(0, 2)))
+                string name = localeString.IndexOf("-") > 0 ? localeString.Substring(0, localeString.IndexOf("-")) :
+                    localeString;
+                if (!localePrefixes.ContainsKey(name))
                 {
-                    CultureInfo parentLocale = CultureInfo.GetCultureInfo(localeString.Substring(0, 2));
+                    CultureInfo parentLocale = CultureInfo.GetCultureInfo(name);
                     logger.Log(POILogger.ERROR, "Unable to find prefix for " + locale + "(" + locale.DisplayName + ") or "
-                            + localeString.Substring(0, 2) + "(" + parentLocale.DisplayName + ")");
+                            + name + "(" + parentLocale.DisplayName + ")");
                     return "";
                 }
                 else
                 {
-                    result = localePrefixes[localeString.Substring(0, 2)];
+                    result = localePrefixes[name];
                 }
             }
             else
@@ -424,7 +426,7 @@ namespace NPOI.SS.Util
 
     }
 
-    public class DateFormat
+    public abstract class DateFormat : FormatBase
     {
         public const int FULL = 0;
         public const int LONG = 1;

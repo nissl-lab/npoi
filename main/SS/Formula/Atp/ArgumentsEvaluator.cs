@@ -91,7 +91,9 @@ namespace NPOI.SS.Formula.Atp
                 {
                     for (int j = area.FirstColumn; j <= area.LastColumn; j++)
                     {
-                        valuesList.Add(EvaluateDateArg(area.GetValue(i, j), i, j));
+                        // getValue() is replaced with getAbsoluteValue() because loop variables i, j are
+                        // absolute indexes values, but getValue() works with relative indexes values
+                        valuesList.Add(EvaluateDateArg(area.GetAbsoluteValue(i, j), i, j));
                     }
                 }
                 double[] values = new double[valuesList.Count];

@@ -56,6 +56,7 @@ namespace NPOI.XWPF.Usermodel
         public bool IsImprinted { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int CharacterSpacing { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int Kerning { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool IsHighlighted => throw new NotImplementedException();
 
         public string FontName
         {

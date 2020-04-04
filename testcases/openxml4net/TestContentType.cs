@@ -23,7 +23,7 @@ using System.IO;
 using NPOI.OpenXml4Net.OPC;
 using TestCases.OpenXml4Net;
 using NPOI.XWPF.UserModel;
-namespace TestCase.OPC
+namespace TestCases.OpenXml4Net.OPC
 {
 
     /**
@@ -85,7 +85,7 @@ namespace TestCase.OPC
                 {
                     new ContentType(contentTypesToTest[i]);
                 }
-                catch (InvalidFormatException e)
+                catch (InvalidFormatException)
                 {
                     continue;
                 }
@@ -130,7 +130,7 @@ namespace TestCase.OPC
                 {
                     new ContentType(contentTypesToTest[i]);
                 }
-                catch (InvalidFormatException e)
+                catch (InvalidFormatException)
                 {
                     continue;
                 }
@@ -154,7 +154,7 @@ namespace TestCase.OPC
                 {
                     new ContentType(contentTypesToTest[i]);
                 }
-                catch (InvalidFormatException e)
+                catch (InvalidFormatException)
                 {
                     continue;
                 }
@@ -215,53 +215,62 @@ namespace TestCase.OPC
             // Check the types on everything
             foreach (PackagePart part in p.GetParts())
             {
+                String contentType = part.ContentType;
+                ContentType details = part.ContentTypeDetails;
+                int length = details.GetParameterKeys().Length;
+                bool hasParameters = details.HasParameters();
                 // _rels type doesn't have any params
                 if (part.IsRelationshipPart)
                 {
-                    Assert.AreEqual(ContentTypes.RELATIONSHIPS_PART, part.ContentType);
-                    Assert.AreEqual(ContentTypes.RELATIONSHIPS_PART, part.ContentTypeDetails.ToString());
-                    Assert.AreEqual(false, part.ContentTypeDetails.HasParameters());
-                    Assert.AreEqual(0, part.ContentTypeDetails.GetParameterKeys().Length);
+                    Assert.AreEqual(ContentTypes.RELATIONSHIPS_PART, contentType);
+                    Assert.AreEqual(ContentTypes.RELATIONSHIPS_PART, details.ToString());
+                    Assert.AreEqual(false, hasParameters);
+                    Assert.AreEqual(0, length);
                 }
                 // Core type doesn't have any params
                 else if (part.PartName.ToString().Equals("/docProps/core.xml"))
                 {
-                    Assert.AreEqual(ContentTypes.CORE_PROPERTIES_PART, part.ContentType);
-                    Assert.AreEqual(ContentTypes.CORE_PROPERTIES_PART, part.ContentTypeDetails.ToString());
-                    Assert.AreEqual(false, part.ContentTypeDetails.HasParameters());
-                    Assert.AreEqual(0, part.ContentTypeDetails.GetParameterKeys().Length);
+                    Assert.AreEqual(ContentTypes.CORE_PROPERTIES_PART, contentType);
+                    Assert.AreEqual(ContentTypes.CORE_PROPERTIES_PART, details.ToString());
+                    Assert.AreEqual(false, hasParameters);
+                    Assert.AreEqual(0, length);
                 }
                 // Global Crs types do have params
                 else if (part.PartName.ToString().Equals("/global1dCrs.xml"))
                 {
-                    Assert.AreEqual(typeResqml, part.ContentType.Substring(0, typeResqml.Length));
-                    Assert.AreEqual(typeResqml, part.ContentTypeDetails.ToString(false));
-                    Assert.AreEqual(true, part.ContentTypeDetails.HasParameters());
-                    Assert.AreEqual(typeResqml + ";version=2.0;type=obj_global1dCrs", part.ContentTypeDetails.ToString());
-                    Assert.AreEqual(2, part.ContentTypeDetails.GetParameterKeys().Length);
-                    Assert.AreEqual("2.0", part.ContentTypeDetails.GetParameter("version"));
-                    Assert.AreEqual("obj_global1dCrs", part.ContentTypeDetails.GetParameter("type"));
+                    Assert.IsTrue(part.ContentType.StartsWith(typeResqml));
+                    Assert.AreEqual(typeResqml, details.ToString(false));
+                    Assert.AreEqual(true, hasParameters);
+                    assertContains("version=2.0", details.ToString());
+                    assertContains("type=obj_global1dCrs", details.ToString());
+                    Assert.AreEqual(2, length);
+                    Assert.AreEqual("2.0", details.GetParameter("version"));
+                    Assert.AreEqual("obj_global1dCrs", details.GetParameter("type"));
+
                 }
                 else if (part.PartName.ToString().Equals("/global2dCrs.xml"))
                 {
-                    Assert.AreEqual(typeResqml, part.ContentType.Substring(0, typeResqml.Length));
-                    Assert.AreEqual(typeResqml, part.ContentTypeDetails.ToString(false));
-                    Assert.AreEqual(true, part.ContentTypeDetails.HasParameters());
-                    Assert.AreEqual(typeResqml + ";version=2.0;type=obj_global2dCrs", part.ContentTypeDetails.ToString());
-                    Assert.AreEqual(2, part.ContentTypeDetails.GetParameterKeys().Length);
-                    Assert.AreEqual("2.0", part.ContentTypeDetails.GetParameter("version"));
-                    Assert.AreEqual("obj_global2dCrs", part.ContentTypeDetails.GetParameter("type"));
+                    Assert.IsTrue(part.ContentType.StartsWith(typeResqml));
+                    Assert.AreEqual(typeResqml, details.ToString(false));
+                    Assert.AreEqual(true, hasParameters);
+                    assertContains("version=2.0", details.ToString());
+                    assertContains("type=obj_global2dCrs", details.ToString());
+                    Assert.AreEqual(2, length);
+                    Assert.AreEqual("2.0", details.GetParameter("version"));
+                    Assert.AreEqual("obj_global2dCrs", details.GetParameter("type"));
+
                 }
                 // Other thingy
                 else if (part.PartName.ToString().Equals("/myTestingGuid.xml"))
                 {
-                    Assert.AreEqual(typeResqml, part.ContentType.Substring(0, typeResqml.Length));
-                    Assert.AreEqual(typeResqml, part.ContentTypeDetails.ToString(false));
-                    Assert.AreEqual(true, part.ContentTypeDetails.HasParameters());
-                    Assert.AreEqual(typeResqml + ";version=2.0;type=obj_tectonicBoundaryFeature", part.ContentTypeDetails.ToString());
-                    Assert.AreEqual(2, part.ContentTypeDetails.GetParameterKeys().Length);
-                    Assert.AreEqual("2.0", part.ContentTypeDetails.GetParameter("version"));
-                    Assert.AreEqual("obj_tectonicBoundaryFeature", part.ContentTypeDetails.GetParameter("type"));
+                    Assert.IsTrue(part.ContentType.StartsWith(typeResqml));
+                    Assert.AreEqual(typeResqml, details.ToString(false));
+                    Assert.AreEqual(true, hasParameters);
+                    assertContains("version=2.0", details.ToString());
+                    assertContains("type=obj_tectonicBoundaryFeature", details.ToString());
+                    Assert.AreEqual(2, length);
+                    Assert.AreEqual("2.0", details.GetParameter("version"));
+                    Assert.AreEqual("obj_tectonicBoundaryFeature", details.GetParameter("type"));
                 }
                 // That should be it!
                 else
@@ -269,6 +278,11 @@ namespace TestCase.OPC
                     Assert.Fail("Unexpected part " + part);
                 }
             }
+        }
+
+        private static void assertContains(String needle, String haystack)
+        {
+            Assert.IsTrue(haystack.Contains(needle));
         }
     }
 }

@@ -31,11 +31,6 @@ namespace NPOI.SS.Formula.Functions
     {
         private ValueEval result;
 
-        public void Reset()
-        {
-            result = null;
-        }
-
         public bool ProcessMatch(ValueEval eval)
         {
             if (result == null) // First match, just Set the value.
@@ -59,10 +54,25 @@ namespace NPOI.SS.Formula.Functions
                 {
                     return ErrorEval.VALUE_INVALID;
                 }
-                else
-                {
-                    return result;
+                if (result is BlankEval) {
+                    return ErrorEval.VALUE_INVALID;
                 }
+                else
+                    try
+                    {
+                        if (OperandResolver.CoerceValueToString(OperandResolver.GetSingleValue(result, 0, 0)).Equals(""))
+                        {
+                            return ErrorEval.VALUE_INVALID;
+                        }
+                        else
+                        {
+                            return result;
+                        }
+                    }
+                    catch (EvaluationException e)
+                    {
+                        return e.GetErrorEval();
+                    }
             }
         }
     }

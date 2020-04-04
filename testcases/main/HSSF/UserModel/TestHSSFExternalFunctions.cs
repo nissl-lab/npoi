@@ -30,8 +30,13 @@ namespace TestCases.HSSF.UserModel
      * Tests Setting and Evaluating user-defined functions in HSSF
      */
     [TestFixture]
-    public class TestHSSFExternalFunctions
+    public class TestHSSFExternalFunctions //: BaseTestExternalFunctions
     {
+        //public TestHSSFExternalFunctions()
+        //    : base(HSSFITestDataProvider.Instance, "atp.xls")
+        //{
+            
+        //}
         /* This test is a copy of BaseTestExternalFunctions.BaseTestInvokeATP(String testFile)
          * If we made this test class derived from BaseTestExternalFunctions, 
          * the test BaseTestExternalFunctions.TestExternalFunctions would run twice,

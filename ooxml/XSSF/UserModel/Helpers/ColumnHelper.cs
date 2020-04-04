@@ -15,9 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
+using NPOI.Util;
 using NPOI.XSSF.Util;
 namespace NPOI.XSSF.UserModel.Helpers
 {
@@ -31,7 +34,7 @@ namespace NPOI.XSSF.UserModel.Helpers
     {
 
         private CT_Worksheet worksheet;
-        private CT_Cols newCols;
+        //private CT_Cols newCols;
 
         public ColumnHelper(CT_Worksheet worksheet)
         {
@@ -41,37 +44,158 @@ namespace NPOI.XSSF.UserModel.Helpers
         }
         public void CleanColumns()
         {
-            this.newCols = new CT_Cols();
-
-            CT_Cols aggregateCols = new CT_Cols();
-            List<CT_Cols> colsList = worksheet.GetColsList();
-            if (colsList == null)
+            TreeSet<CT_Col> trackedCols = new TreeSet<CT_Col>(CTColComparator.BY_MIN_MAX);
+            CT_Cols newCols = new CT_Cols();
+            CT_Cols[] colsArray = worksheet.GetColsList().ToArray();
+            int i = 0;
+            for (i = 0; i < colsArray.Length; i++)
             {
-                return;
-            }
-
-            foreach (CT_Cols cols in colsList)
-            {
-                foreach (CT_Col col in cols.GetColList())
+                CT_Cols cols = colsArray[i];
+                CT_Col[] colArray = cols.GetColList().ToArray();
+                foreach (CT_Col col in colArray)
                 {
-                    CloneCol(aggregateCols, col);
+                    AddCleanColIntoCols(newCols, col, trackedCols);
                 }
             }
-
-            SortColumns(aggregateCols);
-
-            CT_Col[] colArray = aggregateCols.GetColList().ToArray();
-            SweepCleanColumns(newCols, colArray, null);
-
-            int i = colsList.Count;
             for (int y = i - 1; y >= 0; y--)
             {
                 worksheet.RemoveCols(y);
             }
+
+            newCols.SetColArray(trackedCols.ToArray(new CT_Col[trackedCols.Count]));
             worksheet.AddNewCols();
             worksheet.SetColsArray(0, newCols);
+            //this.newCols = new CT_Cols();
+
+            //CT_Cols aggregateCols = new CT_Cols();
+            //List<CT_Cols> colsList = worksheet.GetColsList();
+            //if (colsList == null)
+            //{
+            //    return;
+            //}
+
+            //foreach (CT_Cols cols in colsList)
+            //{
+            //    foreach (CT_Col col in cols.GetColList())
+            //    {
+            //        CloneCol(aggregateCols, col);
+            //    }
+            //}
+
+            //SortColumns(aggregateCols);
+
+            //CT_Col[] colArray = aggregateCols.GetColList().ToArray();
+            //SweepCleanColumns(newCols, colArray, null);
+
+            //int i = colsList.Count;
+            //for (int y = i - 1; y >= 0; y--)
+            //{
+            //    worksheet.RemoveCols(y);
+            //}
+            //worksheet.AddNewCols();
+            //worksheet.SetColsArray(0, newCols);
         }
-        
+
+        public CT_Cols AddCleanColIntoCols(CT_Cols cols, CT_Col newCol)
+        {
+            // Performance issue. If we encapsulated management of min/max in this
+            // class then we could keep trackedCols as state,
+            // making this log(N) rather than Nlog(N). We do this for the initial
+            // read above.
+            TreeSet<CT_Col> trackedCols = new TreeSet<CT_Col>(CTColComparator.BY_MIN_MAX);
+            trackedCols.AddAll(cols.GetColList());
+            AddCleanColIntoCols(cols, newCol, trackedCols);
+            cols.SetColArray(trackedCols.ToArray(new CT_Col[0]));
+            return cols;
+        }
+
+        private void AddCleanColIntoCols(CT_Cols cols, CT_Col newCol, TreeSet<CT_Col> trackedCols)
+        {
+            List<CT_Col> overlapping = GetOverlappingCols(newCol, trackedCols);
+            if (overlapping.Count == 0)
+            {
+                trackedCols.Add(CloneCol(cols, newCol));
+                return;
+            }
+
+            trackedCols.RemoveAll(overlapping);
+            foreach (CT_Col existing in overlapping)
+            {
+                // We add up to three columns for each existing one: non-overlap
+                // before, overlap, non-overlap after.
+                long[] overlap = GetOverlap(newCol, existing);
+
+                CT_Col overlapCol = CloneCol(cols, existing, overlap);
+                SetColumnAttributes(newCol, overlapCol);
+                trackedCols.Add(overlapCol);
+
+                CT_Col beforeCol = existing.min < newCol.min ? existing
+                        : newCol;
+                long[] before = new long[] {
+                    Math.Min(existing.min, newCol.min),
+                    overlap[0] - 1 };
+                if (before[0] <= before[1])
+                {
+                    trackedCols.Add(CloneCol(cols, beforeCol, before));
+                }
+
+                CT_Col afterCol = existing.max > newCol.max ? existing
+                        : newCol;
+                long[] after = new long[] { overlap[1] + 1,
+                    Math.Max(existing.max, newCol.max) };
+                if (after[0] <= after[1])
+                {
+                    trackedCols.Add(CloneCol(cols, afterCol, after));
+                }
+            }
+        }
+
+        private CT_Col CloneCol(CT_Cols cols, CT_Col col, long[] newRange)
+        {
+            CT_Col cloneCol = CloneCol(cols, col);
+            cloneCol.min = (uint)(newRange[0]);
+            cloneCol.max = (uint)(newRange[1]);
+            return cloneCol;
+        }
+
+        private long[] GetOverlap(CT_Col col1, CT_Col col2)
+        {
+            return GetOverlappingRange(col1, col2);
+        }
+
+        private List<CT_Col> GetOverlappingCols(CT_Col newCol, TreeSet<CT_Col> trackedCols)
+        {
+            CT_Col lower = trackedCols.Lower(newCol);
+            TreeSet<CT_Col> potentiallyOverlapping = lower == null ? trackedCols : trackedCols.TailSet(lower, Overlaps(lower, newCol));
+            List<CT_Col> overlapping = new List<CT_Col>();
+            foreach (CT_Col existing in potentiallyOverlapping)
+            {
+                if (Overlaps(newCol, existing))
+                {
+                    overlapping.Add(existing);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return overlapping;
+        }
+
+        private bool Overlaps(CT_Col col1, CT_Col col2)
+        {
+            return NumericRanges.GetOverlappingType(ToRange(col1), ToRange(col2)) != NumericRanges.NO_OVERLAPS;
+        }
+
+        private long[] GetOverlappingRange(CT_Col col1, CT_Col col2)
+        {
+            return NumericRanges.GetOverlappingRange(ToRange(col1), ToRange(col2));
+        }
+
+        private long[] ToRange(CT_Col col)
+        {
+            return new long[] { col.min, col.max };
+        }
 
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public static void SortColumns(CT_Cols newCols)
@@ -121,11 +245,11 @@ namespace NPOI.XSSF.UserModel.Helpers
                     {
                         if (colMin < index1)
                         {
-                            insertCol(colsArray, colMin, (index1 - 1), new CT_Col[] { colArray });
+                            InsertCol(colsArray, colMin, (index1 - 1), new CT_Col[] { colArray });
                         }
                         if (colMax > index1)
                         {
-                            insertCol(colsArray, (index1 + 1), colMax, new CT_Col[] { colArray });
+                            InsertCol(colsArray, (index1 + 1), colMax, new CT_Col[] { colArray });
                         }
                         colArray.min = (uint)(index1);
                         colArray.max = (uint)(index1);
@@ -135,27 +259,14 @@ namespace NPOI.XSSF.UserModel.Helpers
             }
             return null;
         }
-        public CT_Cols AddCleanColIntoCols(CT_Cols cols, CT_Col col)
-        {
-            CT_Cols newCols = new CT_Cols();
-            foreach (CT_Col c in cols.GetColList())
-            {
-                CloneCol(newCols, c);
-            }
-            CloneCol(newCols, col);
-            SortColumns(newCols);
-            CT_Col[] colArray = newCols.GetColList().ToArray();
-            CT_Cols returnCols = new CT_Cols();
-            SweepCleanColumns(returnCols, colArray, col);
-            colArray = returnCols.GetColList().ToArray();
-            cols.SetColArray(colArray);
-            return returnCols;
-        }
+
         public class TreeSet<T>
         {
             private SortedList<T, object> innerObj;
+            private IComparer<T> comparer;
             public TreeSet(IComparer<T> comparer)
             {
+                this.comparer = comparer;
                 innerObj = new SortedList<T, object>(comparer);
             }
             public T First()
@@ -199,6 +310,85 @@ namespace NPOI.XSSF.UserModel.Helpers
             public IEnumerator<T> GetEnumerator()
             {
                 return this.innerObj.Keys.GetEnumerator();
+            }
+
+            public T[] ToArray(T[] a)
+            {
+                List<T> ts = new List<T>();
+                ts.AddRange(this.innerObj.Keys);
+                if (a.Length < Count)
+                {
+                    // Make a new array of a's runtime type, but my contents:
+                    return ts.ToArray();
+                }
+
+                Array.Copy(ts.ToArray(), 0, a, 0, Count);
+                if (a.Length > Count)
+                    a[Count] = default(T);
+                return a;
+            }
+
+            internal void AddAll(List<T> list)
+            {
+                foreach(var item in list)
+                {
+                    if (!this.innerObj.ContainsKey(item))
+                        this.innerObj.Add(item, null);
+                }
+            }
+
+            internal void RemoveAll(List<T> list)
+            {
+                foreach (var item in list)
+                    this.innerObj.Remove(item);
+            }
+
+            internal T Lower(T element)
+            {
+                IEnumerator<T> enumerator = this.innerObj.Keys.GetEnumerator();
+                T prevElement = default(T);
+                while (enumerator.MoveNext())
+                {
+                    if (this.innerObj.Comparer.Compare(enumerator.Current, element) >= 0)
+                    {
+                        return prevElement;
+                    }
+                    prevElement = enumerator.Current;
+                }
+                return prevElement;
+            }
+
+            /// <summary>
+            /// Returns a view of the portion of this map whose keys are greater than (or
+            /// equal to, if inclusive is true) fromKey. 
+            /// </summary>
+            /// <param name="fromElement"></param>
+            /// <param name="inclusive"></param>
+            /// <returns></returns>
+            internal TreeSet<T> TailSet(T fromElement, bool inclusive)
+            {
+                TreeSet<T> set = new TreeSet<T>(comparer);
+
+                IEnumerator<T> enumerator = this.innerObj.Keys.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    if (inclusive)
+                    {
+                        if (this.innerObj.Comparer.Compare(enumerator.Current, fromElement) >= 0)
+                        {
+                            set.Add(enumerator.Current);
+                        }
+                    }
+                    else
+                    {
+                        if (this.innerObj.Comparer.Compare(enumerator.Current, fromElement) > 0)
+                        {
+                            set.Add(enumerator.Current);
+                        }
+                    }
+                }
+
+                return set;
             }
         }
         /**
@@ -252,7 +442,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                     // we need to process previous elements first
                     CT_Col[] copyCols = new CT_Col[currentElements.Count];
                     currentElements.CopyTo(copyCols);
-                    insertCol(cols, lastMaxIndex, currentIndex - 1, copyCols, true, haveOverrideColumn);
+                    InsertCol(cols, lastMaxIndex, currentIndex - 1, copyCols, true, haveOverrideColumn);
                 }
                 currentElements.Add(col);
                 if (colMax > currentMax) currentMax = colMax;
@@ -285,7 +475,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                     {
                         CT_Col[] copyCols = new CT_Col[currentElements.Count];
                         currentElements.CopyTo(copyCols);
-                        insertCol(cols, currentIndex, currentElemIndex, copyCols, true, haveOverrideColumn);
+                        InsertCol(cols, currentIndex, currentElemIndex, copyCols, true, haveOverrideColumn);
                         //if (flIter.hasNext()) {
                         if ((pos + 1) < flattenedCols.Count)
                         {
@@ -428,15 +618,15 @@ namespace NPOI.XSSF.UserModel.Helpers
          * Insert a new CT_Col at position 0 into cols, Setting min=min, max=max and
          * copying all the colsWithAttributes array cols attributes into newCol
          */
-        private CT_Col insertCol(CT_Cols cols, long min, long max,
+        private CT_Col InsertCol(CT_Cols cols, long min, long max,
             CT_Col[] colsWithAttributes)
         {
-            return insertCol(cols, min, max, colsWithAttributes, false, null);
+            return InsertCol(cols, min, max, colsWithAttributes, false, null);
         }
-        private CT_Col insertCol(CT_Cols cols, long min, long max,
+        private CT_Col InsertCol(CT_Cols cols, long min, long max,
         CT_Col[] colsWithAttributes, bool ignoreExistsCheck, CT_Col overrideColumn)
         {
-            if (ignoreExistsCheck || !columnExists(cols, min, max))
+            if (ignoreExistsCheck || !ColumnExists(cols, min, max))
             {
                 CT_Col newCol = cols.InsertNewCol(0);
                 newCol.min = (uint)(min);
@@ -454,11 +644,11 @@ namespace NPOI.XSSF.UserModel.Helpers
          * Does the column at the given 0 based index exist
          *  in the supplied list of column defInitions?
          */
-        public bool columnExists(CT_Cols cols, long index)
+        public bool ColumnExists(CT_Cols cols, long index)
         {
-            return columnExists1Based(cols, index + 1);
+            return ColumnExists1Based(cols, index + 1);
         }
-        private bool columnExists1Based(CT_Cols cols, long index1)
+        private bool ColumnExists1Based(CT_Cols cols, long index1)
         {
             for (int i = 0; i < cols.sizeOfColArray(); i++)
             {
@@ -573,7 +763,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             return -1;
         }
 
-        private bool columnExists(CT_Cols cols, long min, long max)
+        private bool ColumnExists(CT_Cols cols, long min, long max)
         {
             for (int i = 0; i < cols.sizeOfColArray(); i++)
             {

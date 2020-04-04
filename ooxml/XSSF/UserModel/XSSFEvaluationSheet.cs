@@ -17,6 +17,9 @@
 
 using NPOI.SS.Formula;
 using NPOI.SS.UserModel;
+using System;
+using System.Collections.Generic;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -29,6 +32,7 @@ namespace NPOI.XSSF.UserModel
     {
 
         private XSSFSheet _xs;
+        private Dictionary<CellKey, IEvaluationCell> _cellCache;
 
         public XSSFEvaluationSheet(ISheet sheet)
         {
@@ -37,7 +41,12 @@ namespace NPOI.XSSF.UserModel
 
         public XSSFEvaluationSheet()
         {
-            
+
+        }
+
+        public void ClearAllCachedResultValues()
+        {
+            _cellCache = null;
         }
 
         public XSSFSheet GetXSSFSheet()
@@ -46,17 +55,85 @@ namespace NPOI.XSSF.UserModel
         }
         public IEvaluationCell GetCell(int rowIndex, int columnIndex)
         {
-            IRow row = _xs.GetRow(rowIndex);
-            if (row == null)
+            // cache for performance: ~30% speedup due to caching
+            if (_cellCache == null)
             {
-                return null;
+                _cellCache = new Dictionary<CellKey, IEvaluationCell>(_xs.LastRowNum * 3);
+                foreach (IRow row in _xs)
+                {
+                    int rowNum = row.RowNum;
+                    foreach (ICell cell in row)
+                    {
+                        // cast is safe, the iterator is just defined using the interface
+                        CellKey key1 = new CellKey(rowNum, cell.ColumnIndex);
+                        IEvaluationCell evalcell1 = new XSSFEvaluationCell((XSSFCell)cell, this);
+                        _cellCache.Add(key1, evalcell1);
+                    }
+                }
             }
-            ICell cell = row.GetCell(columnIndex);
-            if (cell == null)
+
+            CellKey key = new CellKey(rowIndex, columnIndex);
+
+            IEvaluationCell evalcell = null;
+            if (_cellCache.ContainsKey(key))
             {
-                return null;
+                evalcell = _cellCache[key];           
+            }           
+
+            // If cache is stale, update cache with this one cell
+            // This is a compromise between rebuilding the entire cache
+            // (which would quickly defeat the benefit of the cache)
+            // and not caching at all.
+            // See bug 59958: Add cells on the fly to the evaluation sheet cache on cache miss
+            if (evalcell == null)
+            {
+                XSSFRow row = _xs.GetRow(rowIndex) as XSSFRow;
+                if (row == null)
+                {
+                    return null;
+                }
+                XSSFCell cell = row.GetCell(columnIndex) as XSSFCell;
+                if (cell == null)
+                {
+                    return null;
+                }
+                evalcell = new XSSFEvaluationCell(cell, this);
+                _cellCache[key] = evalcell;
             }
-            return new XSSFEvaluationCell(cell, this);
+
+            return evalcell;
+        }
+
+        private class CellKey
+        {
+            private int _row;
+            private int _col;
+            private int _hash = -1; //lazily computed
+
+            protected internal CellKey(int row, int col)
+            {
+                _row = row;
+                _col = col;
+            }
+
+            public override int GetHashCode()
+            {
+                if (_hash == -1)
+                {
+                    _hash = (17 * 37 + _row) * 37 + _col;
+                }
+                return _hash;
+            }
+
+            public override bool Equals(Object obj)
+            {
+                if (obj == null || !(obj is CellKey))
+                    return false;
+
+                // assumes other object is one of us, otherwise ClassCastException is thrown
+                CellKey oKey = (CellKey)obj;
+                return _row == oKey._row && _col == oKey._col;
+            }
         }
     }
 }

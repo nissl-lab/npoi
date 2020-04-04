@@ -115,11 +115,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
-
-
-
-
-
-
+        public CT_Hyperlink Copy()
+        {
+            CT_Hyperlink ctObj = new CT_Hyperlink();
+            ctObj.@ref = @ref;
+            ctObj.id = id;
+            ctObj.location = location;
+            ctObj.tooltip = tooltip;
+            ctObj.display = display;
+            return ctObj;
+        }
     }
 }

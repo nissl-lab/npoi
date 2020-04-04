@@ -142,6 +142,19 @@ namespace NPOI
         {
             part.SetLastPrintedProperty(date);
         }
+
+        public String LastModifiedByUser
+        {
+            get
+            {
+                return part.GetLastModifiedByProperty();
+            }
+            set
+            {
+                part.SetLastModifiedByProperty(value);
+            }
+        }
+
         public DateTime? Modified
         {
             get
@@ -514,9 +527,11 @@ namespace NPOI
             return null;
         }
     }
+
     /**
-     * Wrapper around the two different kinds of OOXML properties
-     *  a document can have
+     * Wrapper around the three different kinds of OOXML properties
+     *  and metadata a document can have (Core, Extended and Custom), 
+     *  as well Thumbnails.
      */
     public class POIXMLProperties
     {
@@ -612,6 +627,84 @@ namespace NPOI
             get
             {
                 return cust;
+            }
+        }
+
+        /**
+	     * Returns the {@link PackagePart} for the Document
+	     *  Thumbnail, or <code>null</code> if there isn't one
+	     *
+	     * @return The Document Thumbnail part or null
+	     */
+        protected internal PackagePart ThumbnailPart
+        {
+            get
+            {
+                PackageRelationshipCollection rels =
+                    pkg.GetRelationshipsByType(PackageRelationshipTypes.THUMBNAIL);
+                if (rels.Size == 1)
+                {
+                    return pkg.GetPart(rels.GetRelationship(0));
+                }
+                return null;
+            }
+        }
+        /**
+         * Returns the name of the Document thumbnail, eg 
+         *  <code>thumbnail.jpeg</code>, or <code>null</code> if there
+         *  isn't one.
+         *
+         * @return The thumbnail filename, or null
+         */
+        public String ThumbnailFilename
+        {
+            get
+            {
+                PackagePart tPart = ThumbnailPart;
+                if (tPart == null) return null;
+                String name = tPart.PartName.Name;
+                return name.Substring(name.LastIndexOf('/') + 1);
+            }
+        }
+        /**
+         * Returns the Document thumbnail image data, or
+         *  <code>null</code> if there isn't one.
+         *
+         * @return The thumbnail data, or null
+         */
+        public Stream ThumbnailImage
+        {
+            get
+            {
+                PackagePart tPart = ThumbnailPart;
+                if (tPart == null) return null;
+                return tPart.GetInputStream();
+            }
+        }
+
+        /**
+	     * Sets the Thumbnail for the document, replacing any existing
+	     *  one.
+	     *
+	     * @param name The filename for the thumbnail image, eg <code>thumbnail.jpg</code>
+	     * @param imageData The inputstream to read the thumbnail image from
+	     */
+        public void SetThumbnail(String filename, Stream imageData) 
+        {
+            PackagePart tPart = ThumbnailPart;
+            if (tPart == null) {
+                // New thumbnail
+                pkg.AddThumbnail(filename, imageData);
+            } else {
+                // Change existing
+                String newType = ContentTypes.GetContentTypeFromFileExtension(filename);
+                if (!newType.Equals(tPart.ContentType))
+                {
+                    throw new ArgumentException("Can't set a Thumbnail of type " +
+                                   newType + " when existing one is of a different type " +
+                                   tPart.ContentType);
+                }
+                StreamHelper.CopyStream(imageData, tPart.GetOutputStream());
             }
         }
 

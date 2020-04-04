@@ -21,24 +21,24 @@ namespace NPOI.SS.UserModel
 
     public interface IDataValidationConstraint
     {
-
-        /**
-         * @return data validation type of this constraint
-         * @see ValidationType
-         */
+        /// <summary>
+        /// return data validation type of this constraint
+        /// </summary>
+        /// <returns></returns>
         int GetValidationType();
 
 
-        /**
-        * @return the operator used for this constraint
-        * @see OperatorType
-        */
         /// <summary>
         /// get or set then comparison operator for this constraint
         /// </summary>
         int Operator { get; set; }
-
-
+        
+        /// <summary>
+        /// If validation type is {@link ValidationType#LIST} 
+        /// and <code>formula1</code> was comma-separated literal values rather than a range or named range,
+        /// returns list of literal values.
+        /// Otherwise returns <code>null</code>.
+        /// </summary>
         String[] ExplicitListValues { get; set; }
 
         /// <summary>

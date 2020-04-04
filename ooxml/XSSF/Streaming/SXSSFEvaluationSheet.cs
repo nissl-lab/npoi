@@ -14,36 +14,37 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+using NPOI.SS.Formula;
 using NPOI.XSSF.UserModel;
 
 namespace NPOI.XSSF.Streaming
 {
-    public class SXSSFEvaluationSheet : XSSFEvaluationSheet
+    public class SXSSFEvaluationSheet : IEvaluationSheet //XSSFEvaluationSheet
     {
         private SXSSFSheet _xs;
 
-    public SXSSFEvaluationSheet(SXSSFSheet sheet)
+        public SXSSFEvaluationSheet(SXSSFSheet sheet)
         {
             _xs = sheet;
         }
 
-        public SXSSFSheet getSXSSFSheet()
+        public SXSSFSheet GetSXSSFSheet()
         {
             return _xs;
         }
 
-    public SXSSFEvaluationCell getCell(int rowIndex, int columnIndex)
+        public IEvaluationCell GetCell(int rowIndex, int columnIndex)
         {
-            SXSSFRow row = _xs._rows[rowIndex];
+            SXSSFRow row = (SXSSFRow)_xs.GetRow(rowIndex);                
             if (row == null)
             {
-                if (rowIndex <= _xs.lastFlushedRowNumber)
+                if (rowIndex <= _xs.LastFlushedRowNumber)
                 {
                     throw new RowFlushedException(rowIndex);
                 }
                 return null;
             }
-            SXSSFCell cell = (SXSSFCell)row.Cells[columnIndex];
+            SXSSFCell cell = (SXSSFCell)row.GetCell(columnIndex);
             if (cell == null)
             {
                 return null;
@@ -55,7 +56,7 @@ namespace NPOI.XSSF.Streaming
          * @since POI 3.15 beta 3
          */
 
-    public void clearAllCachedResultValues()
+        public void ClearAllCachedResultValues()
         {
             // nothing to do
         }

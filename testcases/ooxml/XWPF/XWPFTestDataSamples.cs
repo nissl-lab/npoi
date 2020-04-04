@@ -14,14 +14,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.XWPF
+namespace TestCases.XWPF
 {
-    using System;
+    using NPOI.Util;
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using System;
     using System.IO;
     using TestCases;
-    using NPOI.Util;
 
     /**
      * @author Yegor Kozlov

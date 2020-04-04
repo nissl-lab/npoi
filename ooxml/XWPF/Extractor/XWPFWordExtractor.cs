@@ -37,7 +37,7 @@ namespace NPOI.XWPF.Extractor
       XWPFRelation.MACRO_TEMPLATE_DOCUMENT
    };
 
-        private new XWPFDocument document;
+        private XWPFDocument document;
         private bool fetchHyperlinks = false;
 
         public XWPFWordExtractor(OPCPackage Container)
@@ -71,7 +71,7 @@ namespace NPOI.XWPF.Extractor
                 XWPFHeaderFooterPolicy hfPolicy = document.GetHeaderFooterPolicy();
 
                 // Start out with all headers
-                extractHeaders(text, hfPolicy);
+                ExtractHeaders(text, hfPolicy);
 
                 // body elements
                 foreach (IBodyElement e in document.BodyElements)
@@ -81,7 +81,7 @@ namespace NPOI.XWPF.Extractor
                 }
 
                 // Finish up with all the footers
-                extractFooters(text, hfPolicy);
+                ExtractFooters(text, hfPolicy);
 
                 return text.ToString();
             }
@@ -95,7 +95,7 @@ namespace NPOI.XWPF.Extractor
             }
             else if (e is XWPFTable)
             {
-                appendTableText(text, (XWPFTable)e);
+                AppendTableText(text, (XWPFTable)e);
             }
             else if (e is XWPFSDT)
             {
@@ -118,7 +118,7 @@ namespace NPOI.XWPF.Extractor
                 if (ctSectPr != null)
                 {
                     headerFooterPolicy = new XWPFHeaderFooterPolicy(document, ctSectPr);
-                    extractHeaders(text, headerFooterPolicy);
+                    ExtractHeaders(text, headerFooterPolicy);
                 }
 
 
@@ -150,7 +150,7 @@ namespace NPOI.XWPF.Extractor
 
                 if (ctSectPr != null)
                 {
-                    extractFooters(text, headerFooterPolicy);
+                    ExtractFooters(text, headerFooterPolicy);
                 }
             }
             catch (IOException e)
@@ -164,7 +164,7 @@ namespace NPOI.XWPF.Extractor
 
         }
 
-        private void appendTableText(StringBuilder text, XWPFTable table)
+        private void AppendTableText(StringBuilder text, XWPFTable table)
         {
             //this works recursively to pull embedded tables from tables
             foreach (XWPFTableRow row in table.Rows)
@@ -190,7 +190,7 @@ namespace NPOI.XWPF.Extractor
             }
         }
 
-        private void extractFooters(StringBuilder text, XWPFHeaderFooterPolicy hfPolicy)
+        private void ExtractFooters(StringBuilder text, XWPFHeaderFooterPolicy hfPolicy)
         {
             if (hfPolicy == null) return;
             if (hfPolicy.GetFirstPageFooter() != null)
@@ -207,7 +207,7 @@ namespace NPOI.XWPF.Extractor
             }
         }
 
-        private void extractHeaders(StringBuilder text, XWPFHeaderFooterPolicy hfPolicy)
+        private void ExtractHeaders(StringBuilder text, XWPFHeaderFooterPolicy hfPolicy)
         {
             if (hfPolicy == null) return;
             if (hfPolicy.GetFirstPageHeader() != null)

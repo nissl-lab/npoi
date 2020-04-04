@@ -20,7 +20,7 @@ namespace NPOI.SS.Formula.Functions
     using System;
     using NPOI.SS.Formula.Eval;
     using System.Text;
-    using System.Text.RegularExpressions;
+    using System.Globalization;
 
     /// <summary>
     /// Implementation of the PROPER function:
@@ -29,29 +29,26 @@ namespace NPOI.SS.Formula.Functions
     /// </summary>
     public class Proper : SingleArgTextFunc
     {
-        //Regex nonAlphabeticPattern = new Regex("\\P{IsL}");
         public override ValueEval Evaluate(String text)
         {
             StringBuilder sb = new StringBuilder();
             bool shouldMakeUppercase = true;
-            String lowercaseText = text.ToLower();
-            String uppercaseText = text.ToUpper();
 
-            bool prevCharIsLetter = char.IsLetter(text[0]);
-            sb.Append(uppercaseText[0]);
-
-            for (int i = 1; i < text.Length; i++)
+            foreach (char ch in text.ToCharArray())
             {
-                shouldMakeUppercase = !prevCharIsLetter;
+
+                // Note: we are using String.toUpperCase() here on purpose as it handles certain things
+                // better than Character.toUpperCase(), e.g. German "scharfes s" is translated
+                // to "SS" (i.e. two characters), if uppercased properly!
                 if (shouldMakeUppercase)
                 {
-                    sb.Append(uppercaseText[(i)]);
+                    sb.Append(ch.ToString().ToUpper(CultureInfo.CurrentCulture));
                 }
                 else
                 {
-                    sb.Append(lowercaseText[(i)]);
+                    sb.Append(ch.ToString().ToLower(CultureInfo.CurrentCulture));
                 }
-                prevCharIsLetter = char.IsLetter(text[i]);
+                shouldMakeUppercase = !char.IsLetter(ch);
             }
             return new StringEval(sb.ToString());
         }

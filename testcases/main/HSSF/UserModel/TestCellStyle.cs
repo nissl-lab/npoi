@@ -33,6 +33,7 @@ namespace TestCases.HSSF.UserModel
     using NUnit.Framework;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
+    using NPOI.HSSF.Util;
 
     /**
      * Class to Test cell styling functionality
@@ -77,7 +78,7 @@ namespace TestCases.HSSF.UserModel
         IFont         fnt  = wb.CreateFont();
         NPOI.SS.UserModel.ICellStyle    cs   = wb.CreateCellStyle();
 
-        fnt.Color=(NPOI.HSSF.Util.HSSFColor.Red.Index);
+        fnt.Color=(HSSFColor.Red.Index);
         fnt.Boldweight= (short)FontBoldWeight.Bold;
         cs.SetFont(fnt);
         for (short rownum = ( short ) 0; rownum < 100; rownum++)
@@ -171,6 +172,8 @@ namespace TestCases.HSSF.UserModel
             int hash1 = cs1.GetHashCode();
             cs1.DataFormat = (HSSFDataFormat.GetBuiltinFormat("m/dd/yy"));
             Assert.IsFalse(hash1 == cs1.GetHashCode());
+
+            wb.Close();
         }
 
         /**
@@ -445,5 +448,79 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(false, r.GetCell(0).CellStyle.ShrinkToFit);
             Assert.AreEqual(true, r.GetCell(1).CellStyle.ShrinkToFit);
         }
+
+        [Test]
+        public void Test56959()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("somesheet");
+
+            IRow row = sheet.CreateRow(0);
+
+            // Create a new font and alter it.
+            IFont font = wb.CreateFont();
+            font.FontHeightInPoints = ((short)24);
+            font.FontName = ("Courier New");
+            font.IsItalic = (true);
+            font.IsStrikeout = (true);
+            font.Color = (HSSFColor.Red.Index);
+
+            ICellStyle style = wb.CreateCellStyle();
+            style.BorderBottom = BorderStyle.Dotted;
+            style.SetFont(font);
+
+            ICell cell = row.CreateCell(0);
+            cell.CellStyle = (style);
+            cell.SetCellValue("testtext");
+
+            ICell newCell = row.CreateCell(1);
+
+            newCell.CellStyle = (style);
+            newCell.SetCellValue("2testtext2");
+            ICellStyle newStyle = newCell.CellStyle;
+            Assert.AreEqual(BorderStyle.Dotted, newStyle.BorderBottom);
+            Assert.AreEqual(HSSFColor.Red.Index, ((HSSFCellStyle)newStyle).GetFont(wb).Color);
+
+            //        OutputStream out = new FileOutputStream("/tmp/56959.xls");
+            //        try {
+            //            wb.write(out);
+            //        } finally {
+            //            out.close();
+            //        }
+        }
+
+        [Test]
+        public void Test58043()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFCellStyle cellStyle = wb.CreateCellStyle() as HSSFCellStyle;
+            Assert.AreEqual(0, cellStyle.Rotation);
+            cellStyle.Rotation = ((short)89);
+            Assert.AreEqual(89, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)90);
+            Assert.AreEqual(90, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)-1);
+            Assert.AreEqual(-1, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)-89);
+            Assert.AreEqual(-89, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)-90);
+            Assert.AreEqual(-90, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)-89);
+            Assert.AreEqual(-89, cellStyle.Rotation);
+            // values above 90 are mapped to the correct values for compatibility between HSSF and XSSF
+            cellStyle.Rotation = ((short)179);
+            Assert.AreEqual(-89, cellStyle.Rotation);
+
+            cellStyle.Rotation = ((short)180);
+            Assert.AreEqual(-90, cellStyle.Rotation);
+
+            wb.Close();
+        }
+        
     }
 }

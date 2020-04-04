@@ -116,5 +116,14 @@ namespace TestCases.SS.Formula.Functions
 
             ConfirmDouble(60, ve);
         }
+
+        [Test]
+        public void TestEvaluateException()
+        {
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumif(-1, -1, BlankEval.instance, new NumberEval(30.0)));
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumif(-1, -1, BlankEval.instance, new NumberEval(30.0), new NumberEval(30.0)));
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumif(-1, -1, new NumberEval(30.0), BlankEval.instance, new NumberEval(30.0)));
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumif(-1, -1, new NumberEval(30.0), new NumberEval(30.0), BlankEval.instance));
+        }
     }
 }

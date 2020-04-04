@@ -15,10 +15,13 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.SS.UserModel;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.SS.Util;
+using NPOI.XSSF;
+using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
     [TestFixture]
     public class TestXSSFChartSheet
@@ -34,6 +37,8 @@ namespace NPOI.XSSF.UserModel
             Assert.IsTrue(wb.GetSheetAt(2) is XSSFChartSheet);
             Assert.AreEqual("Chart1", wb.GetSheetAt(2).SheetName);
 
+            CT_Chartsheet ctChartsheet = ((XSSFChartSheet)wb.GetSheetAt(2)).GetCTChartsheet();
+            Assert.IsNotNull(ctChartsheet);
         }
         [Test]
         public void TestGetAccessors()
@@ -41,23 +46,26 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("chart_sheet.xlsx");
             XSSFChartSheet sheet = (XSSFChartSheet) wb.GetSheetAt(2);
 
-            //foreach (IRow row in sheet)
-            //{
-            //    fail("Row iterator for charts sheets should return zero rows");
-            //}
+            Assert.IsFalse(sheet.GetEnumerator().MoveNext(), 
+                "Row iterator for charts sheets should return zero rows");
 
             //access to a arbitrary row
-            Assert.AreEqual(null, sheet.GetRow(1));
+            Assert.IsNull(sheet.GetRow(1));
 
             //some basic get* accessors
             Assert.AreEqual(0, sheet.NumberOfComments);
             Assert.AreEqual(0, sheet.NumHyperlinks);
             Assert.AreEqual(0, sheet.NumMergedRegions);
-            Assert.AreEqual(null, sheet.ActiveCell);
-            Assert.AreEqual(true, sheet.Autobreaks);
-            Assert.AreEqual(null, sheet.GetCellComment(0, 0));
+            Assert.IsNull(sheet.ActiveCell);
+            Assert.IsTrue(sheet.Autobreaks);
+            Assert.IsNull(sheet.GetCellComment(0, 0));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
             Assert.AreEqual(0, sheet.ColumnBreaks.Length);
-            Assert.AreEqual(true, sheet.RowSumsBelow);
+            Assert.IsTrue(sheet.RowSumsBelow);
+
+            Assert.IsNotNull(sheet.CreateDrawingPatriarch());
+            Assert.IsNotNull(sheet.GetDrawingPatriarch());
+            Assert.IsNotNull(sheet.GetCTChartsheet());
         }
 
         [Test]
@@ -72,7 +80,7 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(1, (cs.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
 
             XSSFChart chart = (cs.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[0];
-            Assert.AreEqual(null, chart.Title);
+            Assert.IsNull(chart.Title);
         }
     }
 }

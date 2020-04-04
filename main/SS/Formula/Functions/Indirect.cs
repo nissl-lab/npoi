@@ -22,6 +22,8 @@ namespace NPOI.SS.Formula.Functions
     
     using NPOI.SS.Formula;
     using System.Text;
+    using NPOI.SS.Formula.PTG;
+    using NPOI.SS.UserModel;
 
     /**
      * Implementation for Excel function INDIRECT<p/>
@@ -99,6 +101,8 @@ namespace NPOI.SS.Formula.Functions
         private static ValueEval EvaluateIndirect(OperationEvaluationContext ec, String text,
                 bool isA1style)
         {
+            int tmp = ec.RowIndex;
+            tmp = ec.ColumnIndex;
             // Search backwards for '!' because sheet names can contain '!'
             int plingPos = text.LastIndexOf('!');
 
@@ -125,19 +129,34 @@ namespace NPOI.SS.Formula.Functions
 
             String refStrPart1;
             String refStrPart2;
-
-            int colonPos = refText.IndexOf(':');
-            if (colonPos < 0)
-            {
-                refStrPart1 = refText.Trim();
-                refStrPart2 = null;
+            if (Table.IsStructuredReference.Match(refText).Success)
+            { // The argument is structured reference
+                Area3DPxg areaPtg = null;
+                try
+                {
+                    areaPtg = FormulaParser.ParseStructuredReference(refText, (IFormulaParsingWorkbook)ec.GetWorkbook(), ec.RowIndex);
+                }
+                catch (FormulaParseException e)
+                {
+                    return ErrorEval.REF_INVALID;
+                }
+                return ec.GetArea3DEval(areaPtg);
             }
             else
-            {
-                refStrPart1 = refText.Substring(0, colonPos).Trim();
-                refStrPart2 = refText.Substring(colonPos + 1).Trim();
+            { // The argumnet is regular reference
+                int colonPos = refText.IndexOf(':');
+                if (colonPos < 0)
+                {
+                    refStrPart1 = refText.Trim();
+                    refStrPart2 = null;
+                }
+                else
+                {
+                    refStrPart1 = refText.Substring(0, colonPos).Trim();
+                    refStrPart2 = refText.Substring(colonPos + 1).Trim();
+                }
+                return ec.GetDynamicReference(workbookName, sheetName, refStrPart1, refStrPart2, isA1style);
             }
-            return ec.GetDynamicReference(workbookName, sheetName, refStrPart1, refStrPart2, isA1style);
         }
 
         /**

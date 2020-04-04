@@ -46,6 +46,7 @@ namespace TestCases.HPSF.Basic
         /**
          * @see TestCase#SetUp()
          */
+        [SetUp]
         public void SetUp()
         {
             VariantSupport.IsLogUnsupportedTypes = false;
@@ -135,71 +136,6 @@ namespace TestCases.HPSF.Basic
                         throw new IOException("While handling file " + files[i], e);
                     }
                 }
-            }
-        }
-
-        /**
-         * This Test method Test the writing of properties in the well-known
-         * property Set streams "SummaryInformation" and
-         * "DocumentSummaryInformation" by performing the following steps:
-         * 
-         * <ol>
-         * 
-         * <li>Read a Test document <em>doc1</em> into a POI filesystem.</li>
-         * 
-         * <li>Read the summary information stream and the document summary
-         * information stream from the POI filesystem.</li>
-         * 
-         * <li>Write all properties supported by HPSF to the summary
-         * information (e.g. author, edit date, application name) and to the
-         * document summary information (e.g. company, manager).</li>
-         * 
-         * <li>Write the summary information stream and the document summary
-         * information stream to the POI filesystem.</li>
-         * 
-         * <li>Write the POI filesystem to a (temporary) file <em>doc2</em>
-         * and Close the latter.</li>
-         * 
-         * <li>Open <em>doc2</em> for Reading and check summary information
-         * and document summary information. All properties written before must be
-         * found in the property streams of <em>doc2</em> and have the correct
-         * values.</li>
-         * 
-         * <li>Remove all properties supported by HPSF from the summary
-         * information (e.g. author, edit date, application name) and from the
-         * document summary information (e.g. company, manager).</li>
-         * 
-         * <li>Write the summary information stream and the document summary
-         * information stream to the POI filesystem.</li>
-         * 
-         * <li>Write the POI filesystem to a (temporary) file <em>doc3</em>
-         * and Close the latter.</li>
-         * 
-         * <li>Open <em>doc3</em> for Reading and check summary information
-         * and document summary information. All properties Removed before must not
-         * be found in the property streams of <em>doc3</em>.</li> </ol>
-         * 
-         * @throws IOException if some I/O error occurred.
-         * @throws MarkUnsupportedException
-         * @throws NoPropertySetStreamException
-         * @throws UnexpectedPropertySetTypeException
-         * @throws WritingNotSupportedException
-         */
-        private TestContext testContextInstance;
-
-        /// <summary>
-        /// Gets or sets the test context which provides
-        /// information about and functionality for the current test run.
-        /// </summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
             }
         }
 

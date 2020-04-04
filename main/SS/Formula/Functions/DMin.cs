@@ -31,11 +31,6 @@ namespace NPOI.SS.Formula.Functions
     {
         private ValueEval minimumValue;
 
-        public void Reset()
-        {
-            minimumValue = null;
-        }
-
         public bool ProcessMatch(ValueEval eval)
         {
             if (eval is NumericValueEval)

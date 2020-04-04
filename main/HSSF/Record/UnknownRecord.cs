@@ -191,8 +191,10 @@ namespace NPOI.HSSF.Record
                 //case RANGEPROTECTION_0868: return "RANGEPROTECTION";
                 case 0x086B: return "DATALABEXTCONTENTS";
                 case 0x086C: return "CELLWATCH";
+                case FeatRecord.v11_sid: return "SHARED FEATURE v11";
                 case 0x0874: return "DROPDOWNOBJIDS";
                 case 0x0876: return "DCONN";
+                case FeatRecord.v12_sid: return "SHARED FEATURE v12";
                 case 0x087B: return "CFEX";
                 case 0x087C: return "XFCRC";
                 case 0x087D: return "XFEXT";
@@ -206,14 +208,21 @@ namespace NPOI.HSSF.Record
                 case 0x089A: return "MTRSETTINGS";
                 case 0x089B: return "COMPRESSPICTURES";
                 case HEADER_FOOTER_089C: return "HEADERFOOTER";
+                case 0x089D: return "CRTLAYOUT12";
+                case 0x089E: return "CRTMLFRT";
+                case 0x089F: return "CRTMLFRTCONTINUE";
                 case 0x08A1: return "SHAPEPROPSSTREAM";
                 case 0x08A3: return "FORCEFULLCALCULATION";
                 case 0x08A4: return "SHAPEPROPSSTREAM";
                 case 0x08A5: return "TEXTPROPSSTREAM";
                 case 0x08A6: return "RICHTEXTSTREAM";
+                case 0x08A7: return "CRTLAYOUT12A";
 
                 case 0x08C8: return "PLV{Mac Excel}";
 
+                case 0x1001: return "UNITS";
+                case 0x1006: return "CHARTDATAFORMAT";
+                case 0x1007: return "CHARTLINEFORMAT";
             }
             if (IsObservedButUnknown(sid))
             {
@@ -231,6 +240,7 @@ namespace NPOI.HSSF.Record
  */
         private static bool IsObservedButUnknown(int sid)
         {
+            // TODO Look up more of these in the latest [MS-XLS] doc and move to getBiffName
             switch (sid)
             {
                 case 0x0033:
@@ -244,13 +254,6 @@ namespace NPOI.HSSF.Record
                 // Written by Excel 2007
                 // rawData is multiple of 12 bytes long
                 // appears after last cell value record and before WINDOW2 or drawing records
-                //case 0x089D:
-                case 0x089E:
-                //case 0x08A7:
-
-                //case 0x1001:
-                //case 0x1006:
-                //case 0x1007:
                 //case 0x1009:
                 //case 0x100A:
                 //case 0x100B:

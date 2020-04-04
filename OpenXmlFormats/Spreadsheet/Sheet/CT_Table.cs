@@ -158,8 +158,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
-
-
         internal void Write(StreamWriter sw)
         {
 
@@ -621,6 +619,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.connectionIdFieldSpecified = value;
             }
+        }
+
+        internal CT_TableStyleInfo AddNewTableStyleInfo()
+        {
+            this.tableStyleInfoField = new CT_TableStyleInfo();
+            return this.tableStyleInfoField;
         }
     }
     [Serializable]

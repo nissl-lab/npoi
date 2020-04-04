@@ -1,12 +1,12 @@
-﻿using System;
+﻿using NPOI.HSSF.UserModel;
+using NPOI.SS.Converter;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using NPOI.HSSF.UserModel;
-using NUnit.Framework;
-using TestCases;
 
-namespace NPOI.SS.Converter
+namespace TestCases.SS.Converter
 {
     [TestFixture]
     public class TestExcelToHtmlConverterSuite

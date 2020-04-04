@@ -26,6 +26,7 @@ namespace TestCases.HSSF.Record
     using NUnit.Framework;
     using NPOI.SS.Formula.PTG;
     using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
 
     /**
      * Tests the serialization and deserialization of the FormulaRecord
@@ -58,20 +59,34 @@ namespace TestCases.HSSF.Record
         [Test]
         public void TestCheckNanPreserve()
         {
-            byte[] formulaByte = new byte[29];
+            byte[] formulaByte = {
+            0, 0, 0, 0,
+            0x0F, 0x00,
 
-            formulaByte[4] = (byte)0x0F;
-            formulaByte[6] = (byte)0x02;
-            formulaByte[8] = (byte)0x07;
-            formulaByte[12] = (byte)0xFF;
-            formulaByte[13] = (byte)0xFF;
-            formulaByte[18] = (byte)0xE0;
-            formulaByte[19] = (byte)0xFC;
-            formulaByte[20] = (byte)0x07;
-            formulaByte[22] = (byte)0x1E;
-            formulaByte[23] = (byte)0x01;
-            formulaByte[25] = (byte)0x1E;
-            formulaByte[28] = (byte)0x06;
+			// 8 bytes cached number is a 'special value' in this case
+			0x02, // special cached value type 'error'
+			0x00,
+            FormulaError.DIV0.Code,
+            0x00,
+            0x00,
+            0x00,
+            (byte)0xFF,
+            (byte)0xFF,
+
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+
+            (byte)0xE0, //18
+			(byte)0xFC,
+			// Ptgs
+			0x07, 0x00, // encoded length
+			0x1E, 0x01, 0x00, // IntPtg(1)
+			0x1E, 0x00, 0x00, // IntPtg(0)
+			0x06, // DividePtg
+
+		};
 
             FormulaRecord record = new FormulaRecord(TestcaseRecordInputStream.Create(FormulaRecord.sid,  formulaByte));
             Assert.AreEqual(0, record.Row, "Row");
@@ -181,8 +196,8 @@ namespace TestCases.HSSF.Record
             // Test some other cached value types 
             fr0.Value = (/*setter*/3.5);
             Assert.AreEqual(3.5, fr0.Value, 0.0);
-            fr0.SetCachedResultErrorCode (HSSFErrorConstants.ERROR_REF);
-            Assert.AreEqual(HSSFErrorConstants.ERROR_REF, fr0.CachedErrorValue);
+            fr0.SetCachedResultErrorCode (FormulaError.REF.Code);
+            Assert.AreEqual(FormulaError.REF.Code, fr0.CachedErrorValue);
 
             fr0.SetCachedResultBoolean(false);
             fr1.SetCachedResultBoolean(true);

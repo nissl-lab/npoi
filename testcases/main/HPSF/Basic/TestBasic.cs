@@ -159,19 +159,14 @@ namespace TestCases.HPSF.Basic
             for (int i = 0; i < 2; i++)
             {
                 byte[] b = poiFiles[i].GetBytes();
-                PropertySet ps =
-                    PropertySetFactory.Create(new ByteArrayInputStream(b));
+                PropertySet ps = PropertySetFactory.Create(new ByteArrayInputStream(b));
                 Assert.AreEqual(ps.ByteOrder, BYTE_ORDER);
                 Assert.AreEqual(ps.Format, FORMAT);
                 Assert.AreEqual(ps.OSVersion, OS_VERSION);
-                byte[] a1=ps.ClassID.Bytes;
-                byte[] a2=CLASS_ID;
-                CollectionAssert.AreEqual(a1, a2); 
-                Assert.AreEqual(ps.SectionCount, SECTION_COUNT[i]);
-                Assert.AreEqual(ps.IsSummaryInformation,
-                                    IS_SUMMARY_INFORMATION[i]);
-                Assert.AreEqual(ps.IsDocumentSummaryInformation,
-                                    IS_DOCUMENT_SUMMARY_INFORMATION[i]);
+                CollectionAssert.AreEqual(CLASS_ID, ps.ClassID.Bytes);
+                Assert.AreEqual(SECTION_COUNT[i], ps.SectionCount);
+                Assert.AreEqual(IS_SUMMARY_INFORMATION[i], ps.IsSummaryInformation);
+                Assert.AreEqual(IS_DOCUMENT_SUMMARY_INFORMATION[i], ps.IsDocumentSummaryInformation);
             }
         }
 

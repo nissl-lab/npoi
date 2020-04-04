@@ -37,8 +37,7 @@ namespace NPOI.Util
             settings.ValidationFlags = XmlSchemaValidationFlags.None;
             settings.ValidationType = ValidationType.None;
             settings.XmlResolver = null;
-            settings.ProhibitDtd = true;
-            //settings.ConformanceLevel = ConformanceLevel.Document;
+            settings.DtdProcessing = DtdProcessing.Ignore;
             XmlReader xr = XmlReader.Create(stream, settings);
             
             XPathDocument xpathdoc = new XPathDocument(xr);
@@ -51,13 +50,13 @@ namespace NPOI.Util
             settings.ValidationFlags = XmlSchemaValidationFlags.None;
             settings.ValidationType = ValidationType.Schema;
             settings.XmlResolver = null;
-            settings.ProhibitDtd = true; 
+            settings.DtdProcessing = DtdProcessing.Ignore;
             settings.ConformanceLevel = ConformanceLevel.Auto;
             settings.IgnoreProcessingInstructions = true;
             try
             {
                 XmlReader xr = XmlReader.Create(stream, settings);
-
+                
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.XmlResolver = null;
                 xmlDoc.PreserveWhitespace = true;
@@ -78,6 +77,11 @@ namespace NPOI.Util
                     return xmlDoc;
                 }
             }
+        }
+
+        public static XPathDocument CreateDocument()
+        {
+            throw new NotImplementedException();
         }
     }
 }

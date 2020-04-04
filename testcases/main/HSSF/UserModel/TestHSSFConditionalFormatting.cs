@@ -26,186 +26,45 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.Util;
     using NPOI.SS.UserModel;
     using NPOI.HSSF.Record.CF;
+    using TestCases.SS.UserModel;
+
     /**
-     * 
-     * @author Dmitriy Kumshayev
-     */
+* 
+* @author Dmitriy Kumshayev
+*/
     [TestFixture]
-    public class TestHSSFConditionalFormatting
+    public class TestHSSFConditionalFormatting : BaseTestConditionalFormatting
     {
-        [Test]
-        public void TestCreateCF()
+        protected override void AssertColour(String hexExpected, IColor actual)
         {
-            HSSFWorkbook workbook = new HSSFWorkbook();
-            HSSFSheet sheet = (HSSFSheet)workbook.CreateSheet();
-            String formula = "7";
+            Assert.IsNotNull(actual, "Colour must be given");
 
-            HSSFSheetConditionalFormatting sheetCF = (HSSFSheetConditionalFormatting)sheet.SheetConditionalFormatting;
-
-            HSSFConditionalFormattingRule rule1 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(formula);
-            HSSFFontFormatting fontFmt = (HSSFFontFormatting)rule1.CreateFontFormatting();
-            fontFmt.SetFontStyle(true, false);
-
-            HSSFBorderFormatting bordFmt = (HSSFBorderFormatting)rule1.CreateBorderFormatting();
-            bordFmt.BorderBottom = BorderStyle.Thin;
-            bordFmt.BorderTop = BorderStyle.Thick;
-            bordFmt.BorderLeft = BorderStyle.Dashed;
-            bordFmt.BorderRight = BorderStyle.Dotted;
-
-            HSSFPatternFormatting patternFmt = (HSSFPatternFormatting)rule1.CreatePatternFormatting();
-            patternFmt.FillBackgroundColor = (HSSFColor.Yellow.Index);
-
-
-            HSSFConditionalFormattingRule rule2 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(ComparisonOperator.Between, "1", "2");
-            HSSFConditionalFormattingRule[] cfRules =
-            {
-                rule1, rule2
-            };
-
-            short col = 1;
-            CellRangeAddress[] regions = {
-                new CellRangeAddress(0, 65535, col, col)
-            };
-
-            sheetCF.AddConditionalFormatting(regions, cfRules);
-            sheetCF.AddConditionalFormatting(regions, cfRules);
-
-            // Verification
-            Assert.AreEqual(2, sheetCF.NumConditionalFormattings);
-            sheetCF.RemoveConditionalFormatting(1);
-            Assert.AreEqual(1, sheetCF.NumConditionalFormattings);
-            HSSFConditionalFormatting cf = (HSSFConditionalFormatting)sheetCF.GetConditionalFormattingAt(0);
-            Assert.IsNotNull(cf);
-
-            regions = cf.GetFormattingRanges();
-            Assert.IsNotNull(regions);
-            Assert.AreEqual(1, regions.Length);
-            CellRangeAddress r = regions[0];
-            Assert.AreEqual(1, r.FirstColumn);
-            Assert.AreEqual(1, r.LastColumn);
-            Assert.AreEqual(0, r.FirstRow);
-            Assert.AreEqual(65535, r.LastRow);
-
-            Assert.AreEqual(2, cf.NumberOfRules);
-
-            rule1 = (HSSFConditionalFormattingRule)cf.GetRule(0);
-            Assert.AreEqual("7", rule1.Formula1);
-            Assert.IsNull(rule1.Formula2);
-
-            HSSFFontFormatting r1fp = (HSSFFontFormatting)rule1.GetFontFormatting();
-            Assert.IsNotNull(r1fp);
-
-            Assert.IsTrue(r1fp.IsItalic);
-            Assert.IsFalse(r1fp.IsBold);
-
-            HSSFBorderFormatting r1bf = (HSSFBorderFormatting)rule1.GetBorderFormatting();
-            Assert.IsNotNull(r1bf);
-            Assert.AreEqual(BorderStyle.Thin, r1bf.BorderBottom);
-            Assert.AreEqual(BorderStyle.Thick, r1bf.BorderTop);
-            Assert.AreEqual(BorderStyle.Dashed, r1bf.BorderLeft);
-            Assert.AreEqual(BorderStyle.Dotted, r1bf.BorderRight);
-
-            HSSFPatternFormatting r1pf = (HSSFPatternFormatting)rule1.GetPatternFormatting();
-            Assert.IsNotNull(r1pf);
-            Assert.AreEqual(HSSFColor.Yellow.Index, r1pf.FillBackgroundColor);
-
-            rule2 = (HSSFConditionalFormattingRule)cf.GetRule(1);
-            Assert.AreEqual("2", rule2.Formula2);
-            Assert.AreEqual("1", rule2.Formula1);
-        }
-        [Test]
-        public void TestClone()
-        {
-
-            HSSFWorkbook wb = new HSSFWorkbook();
-            HSSFSheet sheet = (HSSFSheet)wb.CreateSheet();
-            String formula = "7";
-
-            HSSFSheetConditionalFormatting sheetCF = (HSSFSheetConditionalFormatting)sheet.SheetConditionalFormatting;
-
-            HSSFConditionalFormattingRule rule1 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(formula);
-            HSSFFontFormatting fontFmt = (HSSFFontFormatting)rule1.CreateFontFormatting();
-            fontFmt.SetFontStyle(true, false);
-
-            HSSFPatternFormatting patternFmt = (HSSFPatternFormatting)rule1.CreatePatternFormatting();
-            patternFmt.FillBackgroundColor = (HSSFColor.Yellow.Index);
-
-
-            HSSFConditionalFormattingRule rule2 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(ComparisonOperator.Between, "1", "2");
-            HSSFConditionalFormattingRule[] cfRules =
-            {
-                rule1, rule2
-            };
-
-            short col = 1;
-            CellRangeAddress[] regions = {
-                new CellRangeAddress(0, 65535, col, col)
-            };
-
-            sheetCF.AddConditionalFormatting(regions, cfRules);
-
-            try
-            {
-                wb.CloneSheet(0);
-            }
-            catch (Exception e)
-            {
-                if (e.Message.IndexOf("needs to define a clone method") > 0)
+            if (actual is HSSFColor) {
+                HSSFColor colour = (HSSFColor)actual;
+                Assert.AreEqual(hexExpected, colour.GetHexString());
+            } else {
+                HSSFExtendedColor colour = (HSSFExtendedColor)actual;
+                if (hexExpected.Length == 8)
                 {
-                    throw new AssertionException("Indentified bug 45682");
+                    Assert.AreEqual(hexExpected, colour.ARGBHex);
                 }
-                throw e;
+                else
+                {
+                    Assert.AreEqual(hexExpected, colour.ARGBHex.Substring(2));
+                }
             }
-            Assert.AreEqual(2, wb.NumberOfSheets);
         }
         [Test]
-        public void TestShiftRows()
+        public void TestReadOffice2007()
         {
-
-            HSSFWorkbook wb = new HSSFWorkbook();
-            HSSFSheet sheet = (HSSFSheet)wb.CreateSheet();
-
-            HSSFSheetConditionalFormatting sheetCF = (HSSFSheetConditionalFormatting)sheet.SheetConditionalFormatting;
-
-            HSSFConditionalFormattingRule rule1 = (HSSFConditionalFormattingRule)sheetCF.CreateConditionalFormattingRule(
-                    ComparisonOperator.Between, "sum(A10:A15)", "1+sum(B16:B30)");
-            HSSFFontFormatting fontFmt = (HSSFFontFormatting)rule1.CreateFontFormatting();
-            fontFmt.SetFontStyle(true, false);
-
-            HSSFPatternFormatting patternFmt = (HSSFPatternFormatting)rule1.CreatePatternFormatting();
-            patternFmt.FillBackgroundColor = (HSSFColor.Yellow.Index);
-            HSSFConditionalFormattingRule[] cfRules = { rule1, };
-
-            CellRangeAddress[] regions = {
-                new CellRangeAddress(2, 4, 0, 0), // A3:A5
-            };
-            sheetCF.AddConditionalFormatting(regions, cfRules);
-
-            // This row-shift should destroy the CF region
-            sheet.ShiftRows(10, 20, -9);
-            Assert.AreEqual(0, sheetCF.NumConditionalFormattings);
-
-            // re-Add the CF
-            sheetCF.AddConditionalFormatting(regions, cfRules);
-
-            // This row shift should only affect the formulas
-            sheet.ShiftRows(14, 17, 8);
-            HSSFConditionalFormatting cf = (HSSFConditionalFormatting)sheetCF.GetConditionalFormattingAt(0);
-            Assert.AreEqual("SUM(A10:A23)", cf.GetRule(0).Formula1);
-            Assert.AreEqual("1+SUM(B24:B30)", cf.GetRule(0).Formula2);
-
-            sheet.ShiftRows(0, 8, 21);
-            cf = (HSSFConditionalFormatting)sheetCF.GetConditionalFormattingAt(0);
-            Assert.AreEqual("SUM(A10:A21)", cf.GetRule(0).Formula1);
-            Assert.AreEqual("1+SUM(#REF!)", cf.GetRule(0).Formula2);
+            testReadOffice2007("NewStyleConditionalFormattings.xls");
         }
 
         [Test]
         public void Test53691()
         {
             ISheetConditionalFormatting cf;
-            IWorkbook wb;
-            wb = HSSFITestDataProvider.Instance.OpenSampleWorkbook("53691.xls");
+            IWorkbook wb = HSSFITestDataProvider.Instance.OpenSampleWorkbook("53691.xls");
             /*
             FileInputStream s = new FileInputStream("C:\\temp\\53691bbadfixed.xls");
             try {
@@ -245,6 +104,8 @@ namespace TestCases.HSSF.UserModel
             RemoveConditionalFormatting(sheet);
             RemoveConditionalFormatting(wb.GetSheetAt(0));
             WriteTemp53691(wb, "fgood");
+
+            wb.Close();
         }
 
         private void RemoveConditionalFormatting(ISheet sheet)
@@ -261,14 +122,80 @@ namespace TestCases.HSSF.UserModel
             // assert that we can Write/read it in memory
             IWorkbook wbBack = HSSFITestDataProvider.Instance.WriteOutAndReadBack(wb);
             Assert.IsNotNull(wbBack);
+            wbBack.Close();
+        }
 
-            /* Just necessary for local testing... */
-            /*OutputStream out1 = new FileOutputStream("C:\\temp\\53691" + suffix + ".xls");
+        [Test]
+        public void test52122()
+        {
+            IWorkbook workbook = new HSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet("Conditional Formatting Test");
+            sheet.SetColumnWidth(0, 256 * 10);
+            sheet.SetColumnWidth(1, 256 * 10);
+            sheet.SetColumnWidth(2, 256 * 10);
+            // Create some content.
+            // row 0
+            IRow row = sheet.CreateRow(0);
+            ICell cell0 = row.CreateCell(0);
+            cell0.SetCellType(CellType.Numeric);
+            cell0.SetCellValue(100);
+            ICell cell1 = row.CreateCell(1);
+            cell1.SetCellType(CellType.Numeric);
+            cell1.SetCellValue(120);
+            ICell cell2 = row.CreateCell(2);
+            cell2.SetCellType(CellType.Numeric);
+            cell2.SetCellValue(130);
+            // row 1
+            row = sheet.CreateRow(1);
+            cell0 = row.CreateCell(0);
+            cell0.SetCellType(CellType.Numeric);
+            cell0.SetCellValue(200);
+            cell1 = row.CreateCell(1);
+            cell1.SetCellType(CellType.Numeric);
+            cell1.SetCellValue(220);
+            cell2 = row.CreateCell(2);
+            cell2.SetCellType(CellType.Numeric);
+            cell2.SetCellValue(230);
+            // row 2
+            row = sheet.CreateRow(2);
+            cell0 = row.CreateCell(0);
+            cell0.SetCellType(CellType.Numeric);
+            cell0.SetCellValue(300);
+            cell1 = row.CreateCell(1);
+            cell1.SetCellType(CellType.Numeric);
+            cell1.SetCellValue(320);
+            cell2 = row.CreateCell(2);
+            cell2.SetCellType(CellType.Numeric);
+            cell2.SetCellValue(330);
+            // Create conditional formatting, CELL1 should be yellow if CELL0 is not blank.
+            ISheetConditionalFormatting formatting = sheet.SheetConditionalFormatting;
+            IConditionalFormattingRule rule = formatting.CreateConditionalFormattingRule("$A$1>75");
+            IPatternFormatting pattern = rule.CreatePatternFormatting();
+            pattern.FillBackgroundColor = IndexedColors.Blue.Index;
+            pattern.FillPattern = FillPattern.SolidForeground;
+            CellRangeAddress[] range = { CellRangeAddress.ValueOf("B2:C2") };
+            CellRangeAddress[] range2 = { CellRangeAddress.ValueOf("B1:C1") };
+            formatting.AddConditionalFormatting(range, rule);
+            formatting.AddConditionalFormatting(range2, rule);
+            // Write file.
+            /*FileOutputStream fos = new FileOutputStream("c:\\temp\\52122_conditional-sheet.xls");
             try {
-                wb.Write(out1);
+                workbook.write(fos);
             } finally {
-                out1.Close();
+                fos.Close();
             }*/
+            IWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack((HSSFWorkbook)workbook);
+            ISheet sheetBack = wbBack.GetSheetAt(0);
+            ISheetConditionalFormatting sheetConditionalFormattingBack = sheetBack.SheetConditionalFormatting;
+            Assert.IsNotNull(sheetConditionalFormattingBack);
+            IConditionalFormatting formattingBack = sheetConditionalFormattingBack.GetConditionalFormattingAt(0);
+            Assert.IsNotNull(formattingBack);
+            IConditionalFormattingRule ruleBack = formattingBack.GetRule(0);
+            Assert.IsNotNull(ruleBack);
+            IPatternFormatting patternFormattingBack1 = ruleBack.PatternFormatting;
+            Assert.IsNotNull(patternFormattingBack1);
+            Assert.AreEqual(IndexedColors.Blue.Index, patternFormattingBack1.FillBackgroundColor);
+            Assert.AreEqual(FillPattern.SolidForeground, patternFormattingBack1.FillPattern);
         }
 
     }

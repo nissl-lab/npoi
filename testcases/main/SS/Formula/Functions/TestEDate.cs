@@ -35,7 +35,7 @@ namespace TestCases.SS.Formula.Functions
         {
             EDate eDate = (EDate)EDate.Instance;
             ErrorEval result = (ErrorEval)eDate.Evaluate(new ValueEval[] { new NumberEval(1000) }, null);
-            Assert.AreEqual(ErrorConstants.ERROR_VALUE, result.ErrorCode);
+            Assert.AreEqual(FormulaError.VALUE.Code, result.ErrorCode);
         }
         [Test]
         public void TestEDateIncrease()

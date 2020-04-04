@@ -18,29 +18,31 @@
 
 namespace TestCases.SS.UserModel
 {
-    using System;
-    using NUnit.Framework;
     using NPOI.SS;
-    using NPOI.SS.Util;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+    using NUnit.Framework;
+    using System;
     using System.Collections;
-    using NPOI.HSSF.UserModel;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /**
      * Common superclass for Testing {@link NPOI.xssf.UserModel.XSSFCell}  and
      * {@link NPOI.HSSF.UserModel.HSSFCell}
      */
-    [TestFixture]
-    public class BaseTestSheet
+    public abstract class BaseTestSheet
     {
         private static int ROW_COUNT = 40000;
         private ITestDataProvider _testDataProvider;
-        public BaseTestSheet()
-            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
-        { }
         protected BaseTestSheet(ITestDataProvider TestDataProvider)
         {
             _testDataProvider = TestDataProvider;
+        }
+
+        protected virtual void TrackColumnsForAutoSizingIfSXSSF(ISheet sheet)
+        {
+            // do nothing for Sheet base class. This will be overridden for SXSSFSheets.
         }
         [Test]
         public void TestCreateRow()
@@ -81,7 +83,51 @@ namespace TestCases.SS.UserModel
             IRow row2_ovrewritten_ref = (IRow)it2.Current;
             Assert.AreSame(row2_ovrewritten, row2_ovrewritten_ref);
             Assert.AreEqual(100.0, row2_ovrewritten_ref.GetCell(0).NumericCellValue, 0.0);
+
+            workbook.Close();
         }
+
+
+        [Test]
+        public void CreateRowBeforeFirstRow()
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sh = workbook.CreateSheet();
+            sh.CreateRow(0);
+            try
+            {
+                //Negative rows not allowed
+                Assert.Throws<ArgumentException>(() =>
+                {
+                    sh.CreateRow(-1);
+                });
+
+            }
+            finally
+            {
+                workbook.Close();
+            }
+        }
+
+        [Test]
+        public void CreateRowAfterLastRow()
+        {
+            SpreadsheetVersion version = _testDataProvider.GetSpreadsheetVersion();
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sh = workbook.CreateSheet();
+            sh.CreateRow(version.LastRowIndex);
+            try
+            {
+                Assert.Throws<ArgumentException>(()=> {
+                    sh.CreateRow(version.LastRowIndex + 1);
+                });
+            }
+            finally
+            {
+                workbook.Close();
+            }
+        }
+
 
         [Test]
         public void TestRemoveRow()
@@ -118,30 +164,16 @@ namespace TestCases.SS.UserModel
 
             IRow row3 = sheet1.CreateRow(3);
             ISheet sheet2 = workbook.CreateSheet();
-            try
+            ArgumentException e = Assert.Throws<ArgumentException>(() =>
             {
                 sheet2.RemoveRow(row3);
-                Assert.Fail("Expected exception");
-            }
-            catch (ArgumentException e)
-            {
-                Assert.AreEqual("Specified row does not belong to this sheet", e.Message);
-            }
+            });
+            Assert.AreEqual("Specified row does not belong to this sheet", e.Message);
 
-            IRow row20 = sheet2.CreateRow(0);
-            row20.CreateCell(0).SetCellValue("row20");
-            IRow row24 = sheet2.CreateRow(4);
-            row24.CreateCell(0).SetCellValue("row24");
-            sheet2.RemoveRow(row24);
-
-            workbook = _testDataProvider.WriteOutAndReadBack(workbook);
-            sheet2 = workbook.GetSheetAt(1);
-
-            Assert.IsNull(sheet2.GetRow(4));
-            Assert.AreEqual("row20", sheet2.GetRow(0).GetCell(0).StringCellValue);
+            workbook.Close();
         }
         [Test]
-        public void TestCloneSheet()
+        public virtual void CloneSheet()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             ICreationHelper factory = workbook.GetCreationHelper();
@@ -150,7 +182,7 @@ namespace TestCases.SS.UserModel
             ICell cell = row.CreateCell(0);
             ICell cell2 = row.CreateCell(1);
             cell.SetCellValue(factory.CreateRichTextString("Clone_test"));
-            cell2.CellFormula = (/*setter*/"SIN(1)");
+            cell2.CellFormula = "SIN(1)";
 
             ISheet clonedSheet = workbook.CloneSheet(0);
             IRow clonedRow = clonedSheet.GetRow(0);
@@ -171,13 +203,15 @@ namespace TestCases.SS.UserModel
             }
             Assert.AreEqual(clonedRow.GetCell(0).RichStringCellValue.String, "Clone_test");
             Assert.AreEqual(clonedRow.GetCell(1).CellFormula, "SIN(1)");
+
+            workbook.Close();
         }
 
         /** Tests that the sheet name for multiple Clones of the same sheet is unique
          * BUG 37416
          */
         [Test]
-        public void TestCloneSheetMultipleTimes()
+        public virtual void CloneSheetMultipleTimes()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             ICreationHelper factory = workbook.GetCreationHelper();
@@ -200,6 +234,8 @@ namespace TestCases.SS.UserModel
             workbook.CreateSheet("abc ( 123)");
             workbook.CloneSheet(0);
             Assert.AreEqual("abc (124)", workbook.GetSheetName(1));
+
+            workbook.Close();
         }
 
         /**
@@ -208,9 +244,9 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestPrintSetupLandscapeNew()
         {
-            IWorkbook workbook = _testDataProvider.CreateWorkbook();
-            ISheet sheetL = workbook.CreateSheet("LandscapeS");
-            ISheet sheetP = workbook.CreateSheet("LandscapeP");
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ISheet sheetL = wb1.CreateSheet("LandscapeS");
+            ISheet sheetP = wb1.CreateSheet("LandscapeP");
 
             // Check two aspects of the print Setup
             Assert.IsFalse(sheetL.PrintSetup.Landscape);
@@ -229,15 +265,105 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(3, sheetP.PrintSetup.Copies);
 
             // Save and re-load, and check still there
-            workbook = _testDataProvider.WriteOutAndReadBack(workbook);
-            sheetL = workbook.GetSheet("LandscapeS");
-            sheetP = workbook.GetSheet("LandscapeP");
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
+
+            sheetL = wb2.GetSheet("LandscapeS");
+            sheetP = wb2.GetSheet("LandscapeP");
 
             Assert.IsTrue(sheetL.PrintSetup.Landscape);
             Assert.IsFalse(sheetP.PrintSetup.Landscape);
             Assert.AreEqual(1, sheetL.PrintSetup.Copies);
             Assert.AreEqual(3, sheetP.PrintSetup.Copies);
+
+            wb2.Close();
         }
+
+
+        /**
+         * Disallow creating wholly or partially overlapping merged regions
+         * as this results in a corrupted workbook
+         */
+        [Test]
+        public void AddOverlappingMergedRegions()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            CellRangeAddress baseRegion = new CellRangeAddress(0, 1, 0, 1); //A1:B2
+            sheet.AddMergedRegion(baseRegion);
+
+            try
+            {
+                CellRangeAddress duplicateRegion = new CellRangeAddress(0, 1, 0, 1); //A1:B2
+                sheet.AddMergedRegion(duplicateRegion);
+                Assert.Fail("Should not be able to add a merged region (" + duplicateRegion.FormatAsString() + ") " +
+                 "if sheet already contains the same merged region (" + baseRegion.FormatAsString() + ")");
+            }
+            catch (InvalidOperationException)
+            {
+            } 
+
+            try
+            {
+                CellRangeAddress partiallyOverlappingRegion = new CellRangeAddress(1, 2, 1, 2); //B2:C3
+                sheet.AddMergedRegion(partiallyOverlappingRegion);
+                Assert.Fail("Should not be able to add a merged region (" + partiallyOverlappingRegion.FormatAsString() + ") " +
+                 "if it partially overlaps with an existing merged region (" + baseRegion.FormatAsString() + ")");
+            }
+            catch (InvalidOperationException)
+            {
+            } 
+
+            try
+            {
+                CellRangeAddress subsetRegion = new CellRangeAddress(0, 1, 0, 0); //A1:A2
+                sheet.AddMergedRegion(subsetRegion);
+                Assert.Fail("Should not be able to add a merged region (" + subsetRegion.FormatAsString() + ") " +
+                 "if it is a formal subset of an existing merged region (" + baseRegion.FormatAsString() + ")");
+            }
+            catch (InvalidOperationException)
+            {
+            } 
+
+            try
+            {
+                CellRangeAddress supersetRegion = new CellRangeAddress(0, 2, 0, 2); //A1:C3
+                sheet.AddMergedRegion(supersetRegion);
+                Assert.Fail("Should not be able to add a merged region (" + supersetRegion.FormatAsString() + ") " +
+                 "if it is a formal superset of an existing merged region (" + baseRegion.FormatAsString() + ")");
+            }
+            catch (InvalidOperationException)
+            {
+            }
+
+            CellRangeAddress disjointRegion = new CellRangeAddress(10, 11, 10, 11);
+            sheet.AddMergedRegion(disjointRegion);
+
+            wb.Close();
+        }
+
+        /*
+        * Bug 56345: Reject single-cell merged regions
+        */
+        [Test]
+        public void AddMergedRegionWithSingleCellShouldFail()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            CellRangeAddress region = CellRangeAddress.ValueOf("A1:A1");
+            try
+            {
+                sheet.AddMergedRegion(region);
+                Assert.Fail("Should not be able to add a single-cell merged region (" + region.FormatAsString() + ")");
+            }
+            catch (ArgumentException e)
+            {
+                // expected
+            }
+            wb.Close();
+        }
+
 
         /**
          * Test Adding merged regions. If the region's bounds are outside of the allowed range
@@ -287,6 +413,8 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual("Maximum row number is " + ssVersion.LastRowIndex, e.Message);
             }
             Assert.AreEqual(1, sheet.NumMergedRegions);
+
+            wb.Close();
         }
 
         /**
@@ -300,13 +428,13 @@ namespace TestCases.SS.UserModel
             ISheet sheet = wb.CreateSheet();
             CellRangeAddress region = new CellRangeAddress(0, 1, 0, 1);
             sheet.AddMergedRegion(region);
-            region = new CellRangeAddress(1, 2, 0, 1);
+            region = new CellRangeAddress(2, 3, 0, 1);
             sheet.AddMergedRegion(region);
 
             sheet.RemoveMergedRegion(0);
 
             region = sheet.GetMergedRegion(0);
-            Assert.AreEqual(1, region.FirstRow, "Left over region should be starting at row 1");
+            Assert.AreEqual(2, region.FirstRow, "Left over region should be starting at row 2");
 
             sheet.RemoveMergedRegion(0);
 
@@ -327,9 +455,49 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(1 <= sheet.NumMergedRegions, "there isn't more than one merged region in there");
             region = sheet.GetMergedRegion(0);
             Assert.AreEqual(4, region.LastRow, "the merged row to doesnt match the one we Put in ");
+
+            wb.Close();
         }
+
+        /**
+         * Remove multiple merged regions
+         */
         [Test]
-        public void TestShiftMerged()
+        public void RemoveMergedRegions()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            Dictionary<int, CellRangeAddress> mergedRegions = new Dictionary<int, CellRangeAddress>();
+            for (int r = 0; r < 10; r++)
+            {
+                CellRangeAddress region = new CellRangeAddress(r, r, 0, 1);
+                mergedRegions.Add(r, region);
+                sheet.AddMergedRegion(region);
+            }
+
+            assertCollectionEquals(mergedRegions.Values.ToList(), sheet.MergedRegions);
+
+            IList<int> removed = new List<int> { 0, 2, 3, 6, 8 };
+            foreach (int rx in removed)
+                mergedRegions.Remove(rx);
+            sheet.RemoveMergedRegions(removed);
+            assertCollectionEquals(mergedRegions.Values.ToList(), sheet.MergedRegions);
+
+            wb.Close();
+        }
+
+        private static void assertCollectionEquals<T>(IList<T> expected, IList<T> actual)
+        {
+            ISet<T> e = new HashSet<T>(expected);
+            ISet<T> a = new HashSet<T>(actual);
+            //Assert.AreEqual(e, a);
+            CollectionAssert.AreEquivalent(expected, actual);
+        }
+
+
+        [Test]
+        public virtual void ShiftMerged()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ICreationHelper factory = wb.GetCreationHelper();
@@ -342,13 +510,67 @@ namespace TestCases.SS.UserModel
             cell = row.CreateCell(1);
             cell.SetCellValue(factory.CreateRichTextString("second row, second cell"));
 
-            CellRangeAddress region = new CellRangeAddress(1, 1, 0, 1);
+            CellRangeAddress region = CellRangeAddress.ValueOf("A2:B2");
             sheet.AddMergedRegion(region);
 
             sheet.ShiftRows(1, 1, 1);
 
             region = sheet.GetMergedRegion(0);
-            Assert.AreEqual(2, region.FirstRow, "Merged region not Moved over to row 2");
+            CellRangeAddress expectedRegion = CellRangeAddress.ValueOf("A3:B3");
+            Assert.AreEqual(expectedRegion, region, "Merged region not Moved over to row 2");
+
+            wb.Close();
+        }
+
+        /**
+ * bug 58885: checking for overlapping merged regions when
+ * adding a merged region is safe, but runs in O(n).
+ * the check for merged regions when adding a merged region
+ * can be skipped (unsafe) and run in O(1).
+ */
+        [Test]
+        public void AddMergedRegionUnsafe()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sh = wb.CreateSheet();
+            CellRangeAddress region1 = CellRangeAddress.ValueOf("A1:B2");
+            CellRangeAddress region2 = CellRangeAddress.ValueOf("B2:C3");
+            CellRangeAddress region3 = CellRangeAddress.ValueOf("C3:D4");
+            CellRangeAddress region4 = CellRangeAddress.ValueOf("J10:K11");
+            Assume.That(region1.Intersects(region2));
+            Assume.That(region2.Intersects(region3));
+
+            sh.AddMergedRegionUnsafe(region1);
+            Assert.IsTrue(sh.MergedRegions.Contains(region1));
+            // adding a duplicate or overlapping merged region should not
+            // raise an exception with the unsafe version of addMergedRegion.
+
+            sh.AddMergedRegionUnsafe(region2);
+            // the safe version of addMergedRegion should throw when trying to add a merged region that overlaps an existing region
+            Assert.IsTrue(sh.MergedRegions.Contains(region2));
+            try
+            {
+                sh.AddMergedRegion(region3);
+                Assert.Fail("Expected InvalidOperationException. region3 overlaps already added merged region2.");
+            }
+            catch (InvalidOperationException)
+            {
+                // expected
+                Assert.IsFalse(sh.MergedRegions.Contains(region3));
+            }
+            // addMergedRegion should not re-validate previously-added merged regions
+            sh.AddMergedRegion(region4);
+            // validation methods should detect a problem with previously added merged regions (runs in O(n^2) time)
+            try
+            {
+                sh.ValidateMergedRegions();
+                Assert.Fail("Expected validation to Assert.Fail. Sheet contains merged regions A1:B2 and B2:C3, which overlap at B2.");
+            }
+            catch (InvalidOperationException)
+            {
+                // expected
+            }
+            wb.Close();
         }
 
         /**
@@ -358,8 +580,8 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestDisplayOptions()
         {
-            IWorkbook wb = _testDataProvider.CreateWorkbook();
-            ISheet sheet = wb.CreateSheet();
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb1.CreateSheet();
 
             Assert.AreEqual(sheet.DisplayGridlines, true);
             Assert.AreEqual(sheet.DisplayRowColHeadings, true);
@@ -371,19 +593,22 @@ namespace TestCases.SS.UserModel
             sheet.DisplayFormulas = (/*setter*/true);
             sheet.DisplayZeros = (/*setter*/false);
 
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
-            sheet = wb.GetSheetAt(0);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
+            sheet = wb2.GetSheetAt(0);
 
             Assert.AreEqual(sheet.DisplayGridlines, false);
             Assert.AreEqual(sheet.DisplayRowColHeadings, false);
             Assert.AreEqual(sheet.DisplayFormulas, true);
             Assert.AreEqual(sheet.DisplayZeros, false);
+
+            wb2.Close();
         }
         [Test]
         public void TestColumnWidth()
         {
-            IWorkbook wb = _testDataProvider.CreateWorkbook();
-            ISheet sheet = wb.CreateSheet();
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb1.CreateSheet();
 
             //default column width measured in characters
             sheet.DefaultColumnWidth = (/*setter*/10);
@@ -429,9 +654,10 @@ namespace TestCases.SS.UserModel
             }
 
             //serialize and read again
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
 
-            sheet = wb.GetSheetAt(0);
+            sheet = wb2.GetSheetAt(0);
             Assert.AreEqual(20, sheet.DefaultColumnWidth);
             //columns A-C have default width
             Assert.AreEqual(256 * 20, sheet.GetColumnWidth(0));
@@ -444,6 +670,8 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual(w, sheet.GetColumnWidth(i));
             }
             Assert.AreEqual(40000, sheet.GetColumnWidth(10));
+
+            wb2.Close();
         }
         [Test]
         public void TestDefaultRowHeight()
@@ -472,11 +700,13 @@ namespace TestCases.SS.UserModel
             sheet.DefaultRowHeightInPoints = (/*setter*/17.5f);
             Assert.AreEqual(17.5f, sheet.DefaultRowHeightInPoints, 0.01F);
             Assert.AreEqual((short)(17.5f * 20), sheet.DefaultRowHeight);
+
+            workbook.Close();
         }
 
         /** cell with formula becomes null on cloning a sheet*/
         [Test]
-        public void Test35084()
+        public virtual void Bug35084()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet s = wb.CreateSheet("Sheet1");
@@ -488,11 +718,13 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(r.GetCell(0).NumericCellValue, 1, 0, "double"); // sanity check
             Assert.IsNotNull(r.GetCell(1));
             Assert.AreEqual(r.GetCell(1).CellFormula, "A1*2", "formula");
+
+            wb.Close();
         }
 
         /** Test that new default column styles Get applied */
         [Test]
-        public virtual void TestDefaultColumnStyle()
+        public virtual void DefaultColumnStyle()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ICellStyle style = wb.CreateCellStyle();
@@ -506,13 +738,15 @@ namespace TestCases.SS.UserModel
             ICellStyle style2 = cell.CellStyle;
             Assert.IsNotNull(style2);
             Assert.AreEqual(style.Index, style2.Index, "style should match");
+
+            wb.Close();
         }
         [Test]
         public void TestOutlineProperties()
         {
-            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
 
-            ISheet sheet = wb.CreateSheet();
+            ISheet sheet = wb1.CreateSheet();
 
             //TODO defaults are different in HSSF and XSSF
             //Assert.IsTrue(sheet.RowSumsBelow);
@@ -530,14 +764,16 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(sheet.RowSumsBelow);
             Assert.IsTrue(sheet.RowSumsRight);
 
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
-            sheet = wb.GetSheetAt(0);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            sheet = wb2.GetSheetAt(0);
             Assert.IsTrue(sheet.RowSumsBelow);
             Assert.IsTrue(sheet.RowSumsRight);
+
+            wb2.Close();
         }
 
         /**
-         * Test basic display properties
+         * Test basic display and print properties
          */
         [Test]
         public void TestSheetProperties()
@@ -560,6 +796,10 @@ namespace TestCases.SS.UserModel
             Assert.IsFalse(sheet.IsPrintGridlines);
             sheet.IsPrintGridlines = (/*setter*/true);
             Assert.IsTrue(sheet.IsPrintGridlines);
+
+            Assert.IsFalse(sheet.IsPrintRowAndColumnHeadings);
+            sheet.IsPrintRowAndColumnHeadings = (true);
+            Assert.IsTrue(sheet.IsPrintRowAndColumnHeadings);
 
             Assert.IsFalse(sheet.DisplayFormulas);
             sheet.DisplayFormulas = (/*setter*/true);
@@ -591,6 +831,8 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(sheet.FitToPage);
             sheet.FitToPage = (/*setter*/false);
             Assert.IsFalse(sheet.FitToPage);
+
+            wb.Close();
         }
         public void BaseTestGetSetMargin(double[] defaultMargins)
         {
@@ -632,6 +874,8 @@ namespace TestCases.SS.UserModel
             {
                 Assert.AreEqual("Unknown margin constant:  65", e.Message);
             }
+
+            workbook.Close();
         }
         [Test]
         public void TestRowBreaks()
@@ -661,6 +905,8 @@ namespace TestCases.SS.UserModel
 
             Assert.IsFalse(sheet.IsRowBroken(1));
             Assert.IsFalse(sheet.IsRowBroken(15));
+
+            workbook.Close();
         }
         [Test]
         public void TestColumnBreaks()
@@ -689,6 +935,8 @@ namespace TestCases.SS.UserModel
 
             Assert.IsFalse(sheet.IsColumnBroken(11));
             Assert.IsFalse(sheet.IsColumnBroken(12));
+
+            workbook.Close();
         }
         [Test]
         public void TestGetFirstLastRowNum()
@@ -700,6 +948,8 @@ namespace TestCases.SS.UserModel
             sheet.CreateRow(1);
             Assert.AreEqual(0, sheet.FirstRowNum);
             Assert.AreEqual(9, sheet.LastRowNum);
+
+            workbook.Close();
         }
         [Test]
         public void TestGetFooter()
@@ -709,6 +959,8 @@ namespace TestCases.SS.UserModel
             Assert.IsNotNull(sheet.Footer);
             sheet.Footer.Center = (/*setter*/"test center footer");
             Assert.AreEqual("test center footer", sheet.Footer.Center);
+
+            workbook.Close();
         }
         [Test]
         public void TestGetSetColumnHidden()
@@ -717,6 +969,8 @@ namespace TestCases.SS.UserModel
             ISheet sheet = workbook.CreateSheet("Sheet 1");
             sheet.SetColumnHidden(2, true);
             Assert.IsTrue(sheet.IsColumnHidden(2));
+
+            workbook.Close();
         }
         [Test]
         public void TestProtectSheet()
@@ -729,6 +983,8 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(sheet.Protect);
             sheet.ProtectSheet(null);
             Assert.IsFalse(sheet.Protect);
+
+            wb.Close();
 
         }
         [Test]
@@ -780,6 +1036,8 @@ namespace TestCases.SS.UserModel
             sheet.CreateFreezePane(0, 0);
             // If both colSplit and rowSplit are zero then the existing freeze pane is Removed
             Assert.IsNull(sheet.PaneInformation);
+
+            wb.Close();
         }
         [Test]
         public void TestGetRepeatingRowsAndColumns()
@@ -792,6 +1050,8 @@ namespace TestCases.SS.UserModel
             CheckRepeatingRowsAndColumns(wb.GetSheetAt(1), "1:1", null);
             CheckRepeatingRowsAndColumns(wb.GetSheetAt(2), null, "A:A");
             CheckRepeatingRowsAndColumns(wb.GetSheetAt(3), "2:3", "A:B");
+
+            wb.Close();
         }
 
         [Test]
@@ -806,14 +1066,16 @@ namespace TestCases.SS.UserModel
             ISheet sheet2 = wb.CreateSheet("My' Sheet");
             sheet2.RepeatingRows = (CellRangeAddress.ValueOf("1:4"));
             Assert.AreEqual("1:4", sheet2.RepeatingRows.FormatAsString());
+
+            wb.Close();
         }
         [Test]
         public void TestSetRepeatingRowsAndColumns()
         {
-            IWorkbook wb = _testDataProvider.CreateWorkbook();
-            ISheet sheet1 = wb.CreateSheet("Sheet1");
-            ISheet sheet2 = wb.CreateSheet("Sheet2");
-            ISheet sheet3 = wb.CreateSheet("Sheet3");
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ISheet sheet1 = wb1.CreateSheet("Sheet1");
+            ISheet sheet2 = wb1.CreateSheet("Sheet2");
+            ISheet sheet3 = wb1.CreateSheet("Sheet3");
 
             CheckRepeatingRowsAndColumns(sheet1, null, null);
 
@@ -827,10 +1089,11 @@ namespace TestCases.SS.UserModel
             CheckRepeatingRowsAndColumns(sheet3, "1:4", "A:A");
 
             // write out, read back, and test refrain...
-            wb = _testDataProvider.WriteOutAndReadBack(wb);
-            sheet1 = wb.GetSheetAt(0);
-            sheet2 = wb.GetSheetAt(1);
-            sheet3 = wb.GetSheetAt(2);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
+            sheet1 = wb2.GetSheetAt(0);
+            sheet2 = wb2.GetSheetAt(1);
+            sheet3 = wb2.GetSheetAt(2);
 
             CheckRepeatingRowsAndColumns(sheet1, "4:5", null);
             CheckRepeatingRowsAndColumns(sheet2, null, "A:C");
@@ -842,6 +1105,8 @@ namespace TestCases.SS.UserModel
 
             sheet3.RepeatingColumns = (null);
             CheckRepeatingRowsAndColumns(sheet3, null, null);
+
+            wb2.Close();
         }
 
         private void CheckRepeatingRowsAndColumns(
@@ -871,7 +1136,9 @@ namespace TestCases.SS.UserModel
             ISheet sheet = wb.CreateSheet();
 
             // here we can only verify that setting some zoom values works, range-checking is different between the implementations
-            sheet.SetZoom(3, 4);
+            sheet.SetZoom(75);
+
+            wb.Close();
         }
 
         [Test]
@@ -880,6 +1147,8 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet();
             sheet.ShowInPane(2, 3);
+
+            wb.Close();
         }
 
         [Test]
@@ -897,6 +1166,8 @@ namespace TestCases.SS.UserModel
             filter = sheet.SetAutoFilter(range);
             Assert.IsNotNull(filter);
             // there seems to be currently no generic way to check the Setting...
+
+            wb.Close();
         }
 
         [Test]
@@ -935,6 +1206,7 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet("Test");
+            TrackColumnsForAutoSizingIfSXSSF(sheet);
             ICreationHelper factory = wb.GetCreationHelper();
 
             IRow row = sheet.CreateRow(0);
@@ -953,7 +1225,7 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
-        public void GetCellComment()
+        public virtual void GetCellComment()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             ISheet sheet = workbook.CreateSheet();
@@ -963,17 +1235,99 @@ namespace TestCases.SS.UserModel
             comment.Author = (/*setter*/"test C10 author");
             cell.CellComment = (/*setter*/comment);
 
-            Assert.IsNotNull(sheet.GetCellComment(9, 2));
-            Assert.AreEqual("test C10 author", sheet.GetCellComment(9, 2).Author);
+            CellAddress ref1 = new CellAddress(9, 2);
+            Assert.IsNotNull(sheet.GetCellComment(ref1));
+            Assert.AreEqual("test C10 author", sheet.GetCellComment(ref1).Author);
 
             Assert.IsNotNull(_testDataProvider.WriteOutAndReadBack(workbook));
 
             workbook.Close();
         }
 
+        [Test]
+        public void GetCellComments()
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet("TEST");
+
+            // a sheet with no cell comments should return an empty map (not null or raise NPE).
+            //assertEquals(Collections.emptyMap(), sheet.getCellComments());
+            Assert.AreEqual(0, sheet.GetCellComments().Count);
+
+            IDrawing dg = sheet.CreateDrawingPatriarch();
+            IClientAnchor anchor = workbook.GetCreationHelper().CreateClientAnchor();
+
+            int nRows = 5;
+            int nCols = 6;
+
+            for (int r = 0; r < nRows; r++)
+            {
+                sheet.CreateRow(r);
+                // Create columns in reverse order
+                for (int c = nCols - 1; c >= 0; c--)
+                {
+                    // When the comment box is visible, have it show in a 1x3 space
+                    anchor.Col1 = c;
+                    anchor.Col2 = c;
+                    anchor.Row1 = r;
+                    anchor.Row2 = r;
+
+                    // Create the comment and set the text-author
+                    IComment comment = dg.CreateCellComment(anchor);
+
+                    ICell cell = sheet.GetRow(r).CreateCell(c);
+                    comment.Author = ("Author " + r);
+                    IRichTextString text = workbook.GetCreationHelper().CreateRichTextString("Test comment at row=" + r + ", column=" + c);
+                    comment.String = (text);
+
+                    // Assign the comment to the cell
+                    cell.CellComment = (comment);
+                }
+            }
+
+            IWorkbook wb = _testDataProvider.WriteOutAndReadBack(workbook);
+            ISheet sh = wb.GetSheet("TEST");
+            Dictionary<CellAddress, IComment> cellComments = sh.GetCellComments();
+            Assert.AreEqual(nRows * nCols, cellComments.Count);
+
+            foreach (KeyValuePair<CellAddress, IComment> e in cellComments)
+            {
+                CellAddress ref1 = e.Key;
+                IComment aComment = e.Value;
+                Assert.AreEqual("Author " + ref1.Row, aComment.Author);
+                String text = "Test comment at row=" + ref1.Row + ", column=" + ref1.Column;
+                Assert.AreEqual(text, aComment.String.String);
+            }
+
+            workbook.Close();
+            wb.Close();
+        }
 
         [Test]
-        public void newMergedRegionAt()
+        public void GetHyperlink()
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            IHyperlink hyperlink = workbook.GetCreationHelper().CreateHyperlink(HyperlinkType.Url);
+            hyperlink.Address = "https://poi.apache.org/";
+
+            ISheet sheet = workbook.CreateSheet();
+            ICell cell = sheet.CreateRow(5).CreateCell(1);
+
+            Assert.AreEqual(0, sheet.GetHyperlinkList().Count, "list size before add");
+            cell.Hyperlink = hyperlink;
+            Assert.AreEqual(1, sheet.GetHyperlinkList().Count, "list size after add");
+
+            Assert.AreEqual(hyperlink, sheet.GetHyperlinkList()[0], "list");
+            Assert.AreEqual(hyperlink, sheet.GetHyperlink(5, 1), "row, col");
+            CellAddress B6 = new CellAddress(5, 1);
+            Assert.AreEqual(hyperlink, sheet.GetHyperlink(B6), "addr");
+            Assert.AreEqual(null, sheet.GetHyperlink(CellAddress.A1), "no hyperlink at A1");
+
+            workbook.Close();
+        }
+
+        [Test]
+        public void NewMergedRegionAt()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             ISheet sheet = workbook.CreateSheet();
@@ -990,8 +1344,8 @@ namespace TestCases.SS.UserModel
         [Test]
         public void ShowInPaneManyRowsBug55248()
         {
-            IWorkbook workbook = _testDataProvider.CreateWorkbook();
-            ISheet sheet = workbook.CreateSheet("Sheet 1");
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb1.CreateSheet("Sheet 1");
 
             sheet.ShowInPane(0, 0);
             int i;
@@ -1005,8 +1359,11 @@ namespace TestCases.SS.UserModel
             i = 0;
             sheet.ShowInPane(i, i);
 
-            IWorkbook wb = _testDataProvider.WriteOutAndReadBack(workbook);
-            CheckRowCount(wb);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            wb1.Close();
+            CheckRowCount(wb2);
+
+            wb2.Close();
         }
 
         private void CheckRowCount(IWorkbook wb)
@@ -1031,6 +1388,37 @@ namespace TestCases.SS.UserModel
             Assert.IsFalse(sheet.IsRightToLeft);
 
             wb.Close();
+        }
+
+        [Test]
+        public void TestNoMergedRegionsIsEmptyList()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            Assert.IsTrue(sheet.MergedRegions.Count ==0 );
+            wb.Close();
+        }
+        /**
+         * Tests that the setAsActiveCell and getActiveCell function pairs work together
+         */
+        [Test]
+        public void SetActiveCell()
+        {
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb1.CreateSheet();
+            CellAddress B42 = new CellAddress("B42");
+
+            // active cell behavior is undefined if not set.
+            // HSSFSheet defaults to A1 active cell, while XSSFSheet defaults to null.
+            if (sheet.ActiveCell != null && !sheet.ActiveCell.Equals(CellAddress.A1))
+            {
+                Assert.Fail("If not set, active cell should default to null or A1");
+            }
+            sheet.ActiveCell = (B42);
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            Assert.AreEqual(B42, sheet.ActiveCell);
+            wb1.Close();
+            wb2.Close();
         }
 
     }

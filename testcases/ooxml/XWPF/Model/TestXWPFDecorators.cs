@@ -15,16 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XWPF.Model
+namespace TestCases.XWPF.Model
 {
-    using System;
-
-
-
-    using NUnit.Framework;
-
-    using NPOI.XWPF;
+    using NPOI.XWPF.Model;
     using NPOI.XWPF.UserModel;
+    using NUnit.Framework;
 
     /**
      * Tests for the various XWPF decorators
@@ -69,27 +64,6 @@ namespace NPOI.XWPF.Model
 
             XWPFHyperlinkRun link = (XWPFHyperlinkRun)ph.Runs[(1)];
             Assert.AreEqual("http://poi.apache.org/", link.GetHyperlink(hyperlink).URL);
-
-
-            // Test the old style decorator
-            // You probably don't want to still be using it...
-            Assert.AreEqual(
-                  "I am a test document",
-                  (new XWPFHyperlinkDecorator(ps, null, false)).Text
-            );
-            Assert.AreEqual(
-                  "I am a test document",
-                  (new XWPFHyperlinkDecorator(ps, null, true)).Text
-            );
-
-            Assert.AreEqual(
-                  "We have a hyperlink here, and another.hyperlink",
-                  (new XWPFHyperlinkDecorator(ph, null, false)).Text
-            );
-            Assert.AreEqual(
-                  "We have a hyperlink here, and another.hyperlink <http://poi.apache.org/>",
-                  (new XWPFHyperlinkDecorator(ph, null, true)).Text
-            );
         }
 
         [Test]

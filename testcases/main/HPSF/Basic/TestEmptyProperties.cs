@@ -51,14 +51,8 @@ namespace TestCases.HPSF.Basic
 
         POIFile[] poiFiles;
 
-
-
-        /**
-         * Constructor
-         * 
-         * @param name The name of the Test case
-         */
-        public TestEmptyProperties()
+        [SetUp]
+        public void SetUp()
         {
             POIDataSamples samples = POIDataSamples.GetHPSFInstance();
             Stream data = samples.OpenResourceAsStream(POI_FS);;
@@ -75,8 +69,6 @@ namespace TestCases.HPSF.Basic
             for (int i = 0; i < expected.Length; i++)
                 Assert.AreEqual(poiFiles[i].GetName(), expected[i]);
         }
-
-
 
         /**
          * Tests whether property Sets can be Created from the POI

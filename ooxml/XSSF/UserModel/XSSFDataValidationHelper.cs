@@ -29,14 +29,13 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFDataValidationHelper : IDataValidationHelper
     {
-        private XSSFSheet xssfSheet;
+        //private XSSFSheet xssfSheet;
 
 
         public XSSFDataValidationHelper(XSSFSheet xssfSheet)
             : base()
         {
-
-            this.xssfSheet = xssfSheet;
+            //this.xssfSheet = xssfSheet;
         }
 
         /* (non-Javadoc)
@@ -184,7 +183,7 @@ namespace NPOI.XSSF.UserModel
                 if(sqref.Length==0)
                     sqref = cellRangeAddress.FormatAsString();
                 else
-                    sqref = " " + cellRangeAddress.FormatAsString();
+                    sqref += " " + cellRangeAddress.FormatAsString();
             }
             newDataValidation.sqref = sqref;
             newDataValidation.allowBlank = (true);

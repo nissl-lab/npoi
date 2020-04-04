@@ -178,12 +178,12 @@ namespace TestCases.HSSF.UserModel
                 Assert.IsNotNull(r, "Row is not null");
 
                 cs = r.RowStyle;
-                Assert.AreEqual(cs.BorderBottom, BorderStyle.Thin, "FillForegroundColor for row: ");
-                Assert.AreEqual(cs.BorderLeft, BorderStyle.Thin, "FillPattern for row: ");
-                Assert.AreEqual(cs.BorderRight, BorderStyle.Thin, "FillForegroundColor for row: ");
-                Assert.AreEqual(cs.BorderTop, BorderStyle.Thin, "FillPattern for row: ");
-                Assert.AreEqual(cs.FillForegroundColor, 0xA, "FillForegroundColor for row: ");
-                Assert.AreEqual((short)cs.FillPattern, (short)0x1, "FillPattern for row: ");
+                Assert.AreEqual(cs.BorderBottom, BorderStyle.Thin, "Bottom Border Style for row: ");
+                Assert.AreEqual(cs.BorderLeft, BorderStyle.Thin, "Left Border Style for row: ");
+                Assert.AreEqual(cs.BorderRight, BorderStyle.Thin, "Right Border Style for row: ");
+                Assert.AreEqual(cs.BorderTop, BorderStyle.Thin, "Top Border Style for row: ");
+                Assert.AreEqual(0xA, cs.FillForegroundColor,  "FillForegroundColor for row: ");
+                Assert.AreEqual((short)0x1, (short)cs.FillPattern,  "FillPattern for row: ");
 
                 rownum++;
                 if (rownum >= 100) break; // I feel too lazy to Check if this isreqd :-/ 

@@ -988,6 +988,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.pageSetup = null;
         }
+
+        public bool IsSetIgnoredErrors()
+        {
+            return this.ignoredErrors != null;
+        }
+
+        public CT_IgnoredErrors AddNewIgnoredErrors()
+        {
+            this.ignoredErrorsField = new CT_IgnoredErrors();
+            return this.ignoredErrorsField;
+        }
     }
 
 }

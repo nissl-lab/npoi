@@ -8,6 +8,7 @@ using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.OpenXml4Net.OPC.Internal.Unmarshallers;
 using NPOI.Util;
 using System.Text.RegularExpressions;
+using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -160,6 +161,57 @@ namespace NPOI.OpenXml4Net.OPC
         {
             return Open(file, defaultPackageAccess);
         }
+
+        /**
+         * Open an user provided {@link ZipEntrySource} with read-only permission.
+         * This method can be used to stream data into POI.
+         * Opposed to other open variants, the data is read as-is, e.g. there aren't
+         * any zip-bomb protection put in place.
+         *
+         * @param zipEntry the custom source
+         * @return A Package object
+         * @ if a parsing error occur.
+         */
+        public static OPCPackage Open(ZipEntrySource zipEntry)
+        {
+            OPCPackage pack = new ZipPackage(zipEntry, PackageAccess.READ);
+            try
+            {
+                if (pack.partList == null)
+                {
+                    pack.GetParts();
+                }
+                // pack.originalPackagePath = file.AbsolutePath;
+                return pack;
+            }
+            catch (InvalidFormatException e)
+            {
+                try
+                {
+                    pack.Close();
+                }
+                catch (IOException ex)
+                {
+                    throw new InvalidOperationException(ex.Message, e);
+                }
+                throw e;
+            }
+            catch (RuntimeException e)
+            {
+                try
+                {
+                    pack.Close();
+                }
+                catch (IOException ex)
+                {
+                    throw new InvalidOperationException(ex.Message, e);
+                }
+                throw e;
+            }
+        }
+
+
+
         /**
          * Open a package.
          * 
@@ -182,9 +234,28 @@ namespace NPOI.OpenXml4Net.OPC
 
 
             OPCPackage pack = new ZipPackage(path, access);
+            bool success = false;
             if (pack.partList == null && access != PackageAccess.WRITE)
             {
-                pack.GetParts();
+                try
+                {
+                    pack.GetParts();
+                    success = true;
+                }
+                finally
+                {
+                    if (!success)
+                    {
+                        try
+                        {
+                            pack.Close();
+                        }
+                        catch (IOException e)
+                        {
+                            throw new InvalidOperationException("Could not close OPCPackage while cleaning up", e);
+                        }
+                    }
+                }
             }
             pack.originalPackagePath = new DirectoryInfo(path).FullName;
             return pack;
@@ -204,17 +275,45 @@ namespace NPOI.OpenXml4Net.OPC
         public static OPCPackage Open(FileInfo file, PackageAccess access)
         {
             if (file == null)
-                throw new ArgumentException("'file' must be given");
+                throw new ArgumentNullException("'file' must be given");
             if (new DirectoryInfo(file.FullName).Exists)
                 throw new ArgumentException("file must not be a directory");
 
             OPCPackage pack = new ZipPackage(file, access);
-            if (pack.partList == null && access != PackageAccess.WRITE)
+            
+            try
             {
-                pack.GetParts();
+                if (pack.partList == null && access != PackageAccess.WRITE)
+                {
+                    pack.GetParts();
+                }
+                pack.originalPackagePath = file.FullName;
+                return pack;
             }
-            pack.originalPackagePath = file.FullName;
-            return pack;
+            catch (InvalidFormatException e)
+            {
+                try
+                {
+                    pack.Close();
+                }
+                catch (IOException ex)
+                {
+                    throw new InvalidOperationException(ex.Message, e);
+                }
+                throw e;
+            }
+            catch (RuntimeException e)
+            {
+                try
+                {
+                    pack.Close();
+                }
+                catch (IOException ex)
+                {
+                    throw new InvalidOperationException(ex.Message, e);
+                }
+                throw e;
+            }
         }
         /**
          * Open a package.
@@ -236,6 +335,17 @@ namespace NPOI.OpenXml4Net.OPC
             }
             return pack;
         }
+
+        public static OPCPackage Open(Stream in1,bool bReadonly)
+        {
+            OPCPackage pack = new ZipPackage(in1, bReadonly ? PackageAccess.READ : PackageAccess.READ_WRITE);
+            if (pack.partList == null)
+            {
+                pack.GetParts();
+            }
+            return pack;
+        }
+
 
         /**
          * Opens a package if it exists, else it Creates one.
@@ -358,8 +468,8 @@ namespace NPOI.OpenXml4Net.OPC
         {
             if (this.packageAccess == PackageAccess.READ)
             {
-                logger
-                        .Log(POILogger.WARN, "The close() method is intended to SAVE a package. This package is open in READ ONLY mode, use the revert() method instead !");
+                logger.Log(POILogger.WARN, 
+                    "The close() method is intended to SAVE a package. This package is open in READ ONLY mode, use the revert() method instead !");
                 Revert();
                 return;
             }
@@ -367,6 +477,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 logger.Log(POILogger.WARN,
                         "Unable to call close() on a package that hasn't been fully opened yet");
+                Revert();
                 return;
             }
             // Save the content
@@ -377,11 +488,10 @@ namespace NPOI.OpenXml4Net.OPC
                 if (this.originalPackagePath != null
                         && !"".Equals(this.originalPackagePath.Trim()))
                 {
-                    //File targetFile = new File(this.originalPackagePath);
-                    if (!File.Exists(this.originalPackagePath))
-                    {
-                        //|| !(this.originalPackagePath
-                        //		.Equals(targetFile.GetAbsolutePath(),StringComparison.InvariantCultureIgnoreCase))) {
+                    FileInfo targetFile = new FileInfo(this.originalPackagePath);
+                    if (!File.Exists(this.originalPackagePath)|| !(this.originalPackagePath
+                        		.Equals(targetFile.FullName, StringComparison.InvariantCultureIgnoreCase))) {
+
                         // Case of a package Created from scratch
                         Save(originalPackagePath);
                     }
@@ -416,23 +526,41 @@ namespace NPOI.OpenXml4Net.OPC
             RevertImpl();
         }
 
-        /**
-         * Add a thumbnail to the package. This method is provided to make easier
-         * the addition of a thumbnail in a package. You can do the same work by
-         * using the traditionnal relationship and part mechanism.
-         * 
-         * @param path
-         *            The full path to the image file.
-         */
+        /// <summary>
+        /// Add a thumbnail to the package. This method is provided to make easier 
+        /// the addition of a thumbnail in a package. You can do the same work by 
+        /// using the traditionnal relationship and part mechanism.
+        /// </summary>
+        /// <param name="path">path The full path to the image file.</param>
         public void AddThumbnail(String path)
         {
             // Check parameter
-            if ("".Equals(path))
+            if (string.IsNullOrEmpty(path))
                 throw new ArgumentException("path");
+            String name = path.Substring(path.LastIndexOf(Path.DirectorySeparatorChar) + 1);
 
-            // Get the filename from the path
-            String filename = path
-                    .Substring(path.LastIndexOf('\\') + 1);
+            FileStream is1 = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            try
+            {
+                AddThumbnail(name, is1);
+            }
+            finally
+            {
+                is1.Close();
+            }
+        }
+        /// <summary>
+        /// Add a thumbnail to the package. This method is provided to make easier 
+        /// the addition of a thumbnail in a package. You can do the same work by 
+        /// using the traditionnal relationship and part mechanism.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        public void AddThumbnail(String filename, Stream data) 
+        {
+            // Check parameter
+            if (string.IsNullOrEmpty(filename))
+                throw new ArgumentException("filename");
 
             // Create the thumbnail part name
             String contentType = ContentTypes
@@ -445,11 +573,11 @@ namespace NPOI.OpenXml4Net.OPC
             }
             catch (InvalidFormatException)
             {
+                String partName = "/docProps/thumbnail" +
+                         filename.Substring(filename.LastIndexOf(".") + 1);
                 try
                 {
-                    thumbnailPartName = PackagingUriHelper
-                            .CreatePartName("/docProps/thumbnail"
-                                    + path.Substring(path.LastIndexOf(".") + 1));
+                    thumbnailPartName = PackagingUriHelper.CreatePartName(partName);
                 }
                 catch (InvalidFormatException)
                 {
@@ -472,8 +600,7 @@ namespace NPOI.OpenXml4Net.OPC
                     PackageRelationshipTypes.THUMBNAIL);
 
             // Copy file data to the newly Created part
-            StreamHelper.CopyStream(new FileStream(path, FileMode.Open), thumbnailPart
-                    .GetOutputStream());
+            StreamHelper.CopyStream(data, thumbnailPart.GetOutputStream());
         }
 
         /**
@@ -739,8 +866,6 @@ namespace NPOI.OpenXml4Net.OPC
                                     "OPC Compliance error [M4.1]: there is more than one core properties relationship in the package ! " +
                                     "POI will use only the first, but other software may reject this file.");
                     }
-
-
 
                     if (partUnmarshallers.ContainsKey(part._contentType))
                     {
@@ -1707,6 +1832,34 @@ namespace NPOI.OpenXml4Net.OPC
                 }
             }
             return success;
+        }
+
+        /**
+        * Add the specified part, and register its content type with the content
+        * type manager.
+        *
+        * @param part
+        *            The part to add.
+        */
+        public void RegisterPartAndContentType(PackagePart part)
+        {
+            AddPackagePart(part);
+            this.contentTypeManager.AddContentType(part.PartName, part.ContentType);
+            this.isDirty = true;
+        }
+
+        /**
+         * Remove the specified part, and clear its content type from the content
+         * type manager.
+         *
+         * @param partName
+         *            The part name of the part to remove.
+         */
+        public void UnregisterPartAndContentType(PackagePartName partName)
+        {
+            RemovePart(partName);
+            this.contentTypeManager.RemoveContentType(partName);
+            this.isDirty = true;
         }
     }
 

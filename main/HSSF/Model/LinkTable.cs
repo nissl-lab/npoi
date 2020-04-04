@@ -372,11 +372,6 @@ namespace NPOI.HSSF.Model
             }
             return _externSheetRecord.GetLastSheetIndexFromRefIndex(extRefIndex);
         }
-        [Obsolete]
-        public void UpdateIndexToInternalSheet(int extRefIndex, int offset)
-        {
-            _externSheetRecord.AdjustIndex(extRefIndex, offset);
-        }
 
         public void RemoveSheet(int sheetIdx)
         {

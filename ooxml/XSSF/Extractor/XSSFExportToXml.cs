@@ -132,7 +132,7 @@ namespace NPOI.XSSF.Extractor
             }
 
 
-            xpaths.Sort();
+            xpaths.Sort(this);
 
             foreach (String xpath in xpaths)
             {
@@ -171,11 +171,11 @@ namespace NPOI.XSSF.Extractor
 
                         XSSFSheet sheet = table.GetXSSFSheet();
 
-                        int startRow = table.GetStartCellReference().Row;
+                        int startRow = table.StartCellReference.Row;
                         // In mappings Created with Microsoft Excel the first row Contains the table header and must be Skipped
                         startRow += 1;
 
-                        int endRow = table.GetEndCellReference().Row;
+                        int endRow = table.EndCellReference.Row;
 
                         for (int i = startRow; i <= endRow; i++)
                         {
@@ -183,8 +183,8 @@ namespace NPOI.XSSF.Extractor
 
                             XmlNode tableRootNode = GetNodeByXPath(table.GetCommonXpath(), doc.FirstChild, doc, true);
 
-                            short startColumnIndex = table.GetStartCellReference().Col;
-                            for (int j = startColumnIndex; j <= table.GetEndCellReference().Col; j++)
+                            short startColumnIndex = table.StartCellReference.Col;
+                            for (int j = startColumnIndex; j <= table.EndCellReference.Col; j++)
                             {
                                 XSSFCell cell = (XSSFCell)row.GetCell(j);
                                 if (cell != null)

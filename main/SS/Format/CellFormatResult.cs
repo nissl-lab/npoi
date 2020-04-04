@@ -72,6 +72,9 @@ namespace NPOI.SS.Format
          */
         public CellFormatResult(bool applies, String text, Color textColor)
         {
+            if (text == null)
+                throw new ArgumentException("CellFormatResult text may not be null");
+
             this.Applies = applies;
             this.Text = text;
             this.TextColor = (applies ? textColor : Color.Empty);

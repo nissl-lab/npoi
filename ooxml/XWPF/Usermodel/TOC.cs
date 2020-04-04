@@ -52,7 +52,7 @@ namespace NPOI.XWPF.UserModel
             rPr.AddNewSzCs().val = 24;
             CT_SdtContentBlock content = block.AddNewSdtContent();
             CT_P p = content.AddNewP();
-            byte[] b = Encoding.Unicode.GetBytes("00EF7E24");
+            byte[] b = Encoding.GetEncoding(1252).GetBytes("00EF7E24");
             p.rsidR = b;
             p.rsidRDefault = b;
             p.AddNewPPr().AddNewPStyle().val=("TOCHeading");
@@ -70,7 +70,7 @@ namespace NPOI.XWPF.UserModel
         {
             CT_SdtContentBlock contentBlock = this.block.sdtContent;
             CT_P p = contentBlock.AddNewP();
-            byte[] b = Encoding.Unicode.GetBytes("00EF7E24");
+            byte[] b = Encoding.GetEncoding(1252).GetBytes("00EF7E24");
             p.rsidR = b;
             p.rsidRDefault = b;
             CT_PPr pPr = p.AddNewPPr();

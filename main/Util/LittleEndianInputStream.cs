@@ -33,6 +33,52 @@ namespace NPOI.Util
     {
         Stream in1 = null;
 
+        /// <summary>
+        /// Reads up to <code>byte.length</code> bytes of data from this
+        /// input stream into an array of bytes. This method blocks until some
+        /// input is available.
+        /// 
+        /// simulate java FilterInputStream
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public int Read(byte[] b)
+        {
+            return Read(b, 0, b.Length);
+        }
+        /// <summary>
+        /// Reads up to <code>len</code> bytes of data from this input stream
+        /// into an array of bytes.If<code> len</code> is not zero, the method
+        /// blocks until some input is available; otherwise, no
+        /// bytes are read and<code>0</code> is returned.
+        /// 
+        /// simulate java FilterInputStream
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="off"></param>
+        /// <param name="len"></param>
+        /// <returns></returns>
+        public int Read(byte[] b, int off, int len)
+        {
+            return in1.Read(b, off, len);
+        }
+        private int readLimit = -1;
+        private long markPos = -1;
+        public void Mark(int readlimit)
+        {
+            this.readLimit = readlimit;
+            this.markPos = in1.Position;
+        }
+
+        public void Reset()
+        {
+            in1.Seek(markPos - in1.Position, SeekOrigin.Current);
+        }
+
+        public long Skip(long n)
+        {
+            return in1.Seek(n, SeekOrigin.Current);
+        }
         public int Available()
         {
             return (int)(in1.Length - in1.Position);
@@ -84,6 +130,13 @@ namespace NPOI.Util
             CheckEOF(ch1 | ch2 | ch3 | ch4);
             return (ch4 << 24) + (ch3 << 16) + (ch2 << 8) + (ch1 << 0);
         }
+
+        public long ReadUInt()
+        {
+            long retNum = ReadInt();
+            return retNum & 0x00FFFFFFFFL;
+        }
+
         public long ReadLong()
         {
             int b0;
@@ -169,6 +222,11 @@ namespace NPOI.Util
                 CheckEOF(ch);
                 buf[i] = ch;
             }
+        }
+
+        internal void Close()
+        {
+            in1.Close();
         }
     }
 }

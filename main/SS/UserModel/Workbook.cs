@@ -20,8 +20,9 @@ namespace NPOI.SS.UserModel
     using System;
     using System.Collections;
     using System.IO;
-    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.UDF;
     using System.Collections.Generic;
+    using NPOI.Util;
 
     public enum SheetState : int
     {
@@ -53,7 +54,7 @@ namespace NPOI.SS.UserModel
     /// This interface is shared between the implementation specific to xls and xlsx.
     /// This way it is possible to access Excel workbooks stored in both formats.
     /// </summary>
-    public interface IWorkbook
+    public interface IWorkbook : ICloseable
     {
 
         /// <summary>
@@ -169,29 +170,7 @@ namespace NPOI.SS.UserModel
         /// Enumerate sheets
         /// </summary>
         /// <returns></returns>
-        IEnumerator GetEnumerator();
-        /**
-         * To set just repeating columns:
-         *  workbook.SetRepeatingRowsAndColumns(0,0,1,-1-1);
-         * To set just repeating rows:
-         *  workbook.SetRepeatingRowsAndColumns(0,-1,-1,0,4);
-         * To remove all repeating rows and columns for a sheet.
-         *  workbook.SetRepeatingRowsAndColumns(0,-1,-1,-1,-1);
-         */
-        /// <summary>
-        /// Sets the repeating rows and columns for a sheet (as found in
-        /// File->PageSetup->Sheet).  This is function is included in the workbook
-        /// because it Creates/modifies name records which are stored at the
-        /// workbook level.
-        /// </summary>
-        /// <param name="sheetIndex">0 based index to sheet.</param>
-        /// <param name="startColumn">0 based start of repeating columns.</param>
-        /// <param name="endColumn">0 based end of repeating columns.</param>
-        /// <param name="startRow">0 based start of repeating rows.</param>
-        /// <param name="endRow">0 based end of repeating rows.</param>
-        [Obsolete("use Sheet#setRepeatingRows(CellRangeAddress) or Sheet#setRepeatingColumns(CellRangeAddress)")]
-        void SetRepeatingRowsAndColumns(int sheetIndex, int startColumn, int endColumn, int startRow, int endRow);
-
+        IEnumerator<ISheet> GetEnumerator();
 
         /// <summary>
         /// Create a new Font and add it to the workbook's font table
@@ -211,7 +190,22 @@ namespace NPOI.SS.UserModel
         /// <param name="typeOffset"></param>
         /// <param name="underline"></param>
         /// <returns>the font with the matched attributes or null</returns>
+        [Obsolete("deprecated 3.15 beta 2. Use {@link #findFont(boolean, short, short, String, boolean, boolean, short, byte)} instead.")]
         IFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline);
+
+        /// <summary>
+        /// Finds a font that matches the one with the supplied attributes
+        /// </summary>
+        /// <param name="bold"></param>
+        /// <param name="color"></param>
+        /// <param name="fontHeight"></param>
+        /// <param name="name"></param>
+        /// <param name="italic"></param>
+        /// <param name="strikeout"></param>
+        /// <param name="typeOffset"></param>
+        /// <param name="underline"></param>
+        /// <returns>the font with the matched attributes or null</returns>
+        IFont FindFont(bool bold, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline);
 
         /// <summary>
         /// Get the number of fonts in the font table
@@ -234,14 +228,14 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// Get the number of styles the workbook Contains
         /// </summary>
-        short NumCellStyles { get; }
+        int NumCellStyles { get; }
 
         /// <summary>
         /// Get the cell style object at the given index
         /// </summary>
         /// <param name="idx">index within the set of styles (0-based)</param>
         /// <returns>CellStyle object at the index</returns>
-        ICellStyle GetCellStyleAt(short idx);
+        ICellStyle GetCellStyleAt(int idx);
 
         /// <summary>
         /// Write out this workbook to an OutPutstream.
@@ -260,6 +254,19 @@ namespace NPOI.SS.UserModel
         /// <param name="name">the name of the defined name</param>
         /// <returns>the defined name with the specified name. null if not found</returns>
         IName GetName(String name);
+
+        /// <summary>
+        /// Returns all defined names with the given name.
+        /// </summary>
+        /// <param name="name">the name of the defined name</param>
+        /// <returns>a list of the defined names with the specified name. An empty list is returned if none is found.</returns>
+        IList<IName> GetNames(String name);
+
+        /// <summary>
+        /// Returns all defined names.
+        /// </summary>
+        /// <returns>a list of the defined names. An empty list is returned if none is found.</returns>
+        IList<IName> GetAllNames();
 
         /// <summary>
         /// the defined name at the specified index
@@ -292,6 +299,12 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <param name="name">the name of the defined name</param>
         void RemoveName(String name);
+
+        /// <summary>
+        /// Remove a defined name
+        /// </summary>
+        /// <param name="name">the name of the defined name</param>
+        void RemoveName(IName name);
 
         /// <summary>
         /// Adds the linking required to allow formulas referencing the specified 
@@ -422,8 +435,19 @@ namespace NPOI.SS.UserModel
         /// <param name="toopack">the toolpack to register</param>
         void AddToolPack(UDFFinder toopack);
 
+        /// <summary>
+        /// Gets a bool value that indicates whether the date systems used in the workbook starts in 1904.
+        /// The default value is false, meaning that the workbook uses the 1900 date system,
+        /// where 1/1/1900 is the first day in the system.
+        /// </summary>
+        /// <returns>True if the date systems used in the workbook starts in 1904</returns>
+        bool IsDate1904();
+
         void Close();
 
-        bool Dispose();
+        /// <summary>
+        /// Returns the spreadsheet version (EXCLE97) of this workbook
+        /// </summary>
+        SpreadsheetVersion SpreadsheetVersion { get; }
     }
 }

@@ -38,7 +38,7 @@ namespace NPOI.HSSF.UserModel
 
         }
 
-        HSSFRichTextString str = new HSSFRichTextString("");
+        //HSSFRichTextString str = new HSSFRichTextString("");
 
         /// <summary>
         /// Construct a new textbox with the given parent and anchor.

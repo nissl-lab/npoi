@@ -32,7 +32,7 @@ namespace NPOI.POIFS.FileSystem
     public class DocumentNode : EntryNode, POIFSViewable, DocumentEntry
     {
         // underlying POIFSDocument instance
-        private POIFSDocument _document;
+        private OPOIFSDocument _document;
 
         /**
          * create a DocumentNode. This method Is not public by design; it
@@ -53,7 +53,7 @@ namespace NPOI.POIFS.FileSystem
          * @return the internal POIFSDocument
          */
 
-        public POIFSDocument Document
+        public OPOIFSDocument Document
         {
             get { return _document; }
         }

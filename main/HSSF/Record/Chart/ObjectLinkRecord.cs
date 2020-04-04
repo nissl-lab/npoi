@@ -31,8 +31,7 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Andrew C. Oliver (acoliver at apache.org)
      */
-    public class ObjectLinkRecord
-       : StandardRecord
+    public class ObjectLinkRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x1027;
         private short field_1_anchorId;

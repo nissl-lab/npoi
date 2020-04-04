@@ -4,6 +4,10 @@ using System.Collections;
 using System.Text;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
+using NPOI.POIFS.Common;
+using NPOI.Util;
+using NPOI.POIFS.Storage;
+using NPOI.Openxml4Net.Exceptions;
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {
@@ -129,6 +133,106 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 return null;
             }
         }
+
+        /**
+         * Verifies that the given stream starts with a Zip structure.
+         * 
+         * Warning - this will consume the first few bytes of the stream,
+         *  you should push-back or reset the stream after use!
+         */
+        public static void VerifyZipHeader(InputStream stream)
+        {
+            // Grab the first 8 bytes
+            byte[] data = new byte[8];
+            IOUtils.ReadFully(stream, data);
+
+            // OLE2?
+            long signature = LittleEndian.GetLong(data);
+            if (signature == HeaderBlockConstants._signature)
+            {
+                throw new OLE2NotOfficeXmlFileException(
+                    "The supplied data appears to be in the OLE2 Format. " +
+                    "You are calling the part of POI that deals with OOXML " +
+                    "(Office Open XML) Documents. You need to call a different " +
+                    "part of POI to process this data (eg HSSF instead of XSSF)");
+            }
+
+            // Raw XML?
+            byte[] RAW_XML_FILE_HEADER = POIFSConstants.RAW_XML_FILE_HEADER;
+            if (data[0] == RAW_XML_FILE_HEADER[0] &&
+                data[1] == RAW_XML_FILE_HEADER[1] &&
+                data[2] == RAW_XML_FILE_HEADER[2] &&
+                data[3] == RAW_XML_FILE_HEADER[3] &&
+                data[4] == RAW_XML_FILE_HEADER[4])
+            {
+                throw new NotOfficeXmlFileException(
+                    "The supplied data appears to be a raw XML file. " +
+                    "Formats such as Office 2003 XML are not supported");
+            }
+
+            // Don't check for a Zip header, as to maintain backwards
+            //  compatibility we need to let them seek over junk at the
+            //  start before beginning processing.
+
+            // Put things back
+            if (stream is PushbackInputStream)
+            {
+                ((PushbackInputStream)stream).Unread(data);
+            }
+            else if (stream.MarkSupported())
+            {
+                stream.Reset();
+            }
+            else if (stream is FileStream)
+            {
+                // File open check, about to be closed, nothing to do
+            }
+            else
+            {
+                // Oh dear... I hope you know what you're doing!
+            }
+        }
+
+        private static InputStream PrepareToCheckHeader(InputStream stream)
+        {
+            if (stream is PushbackInputStream)
+            {
+                return stream;
+            }
+            if (stream.MarkSupported())
+            {
+                stream.Mark(8);
+                return stream;
+            }
+            return new PushbackInputStream(stream, 8);
+        }
+        // TODO: ZipSecureFile
+        /**
+         * Opens the specified stream as a secure zip
+         *
+         * @param stream
+         *            The stream to open.
+         * @return The zip stream freshly open.
+         */
+        //public static ThresholdInputStream OpenZipStream(Stream stream)
+        //{
+        //    // Peek at the first few bytes to sanity check
+        //    InputStream checkedStream = prepareToCheckHeader(stream);
+        //    verifyZipHeader(checkedStream);
+
+        //    // Open as a proper zip stream
+        //    InputStream zis = new ZipInputStream(checkedStream);
+        //    return ZipSecureFile.addThreshold(zis);
+        //}
+
+        public static ZipInputStream OpenZipStream(Stream stream)
+        {
+            // TODO: ZipSecureFile
+            //InputStream zis = new ZipInputStream(stream);
+            //ThresholdInputStream tis = ZipSecureFile.AddThreshold(zis);
+            //return tis;
+            return new ZipInputStream(stream);
+        }
         /**
         * Opens the specified file as a zip, or returns null if no such file exists
         *
@@ -140,9 +244,26 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         {
             if (!file.Exists)
             {
-                return null;
+                throw new FileNotFoundException("File does not exist");
             }
+            //if (file.isDirectory())
+            //{
+            //    throw new IOException("File is a directory");
+            //}
 
+            // Peek at the first few bytes to sanity check
+            FileInputStream input = new FileInputStream(file.OpenRead());
+            try
+            {
+                VerifyZipHeader(input);
+            }
+            finally
+            {
+                input.Close();
+            }
+            // TODO: ZipSecureFile
+            //// Open as a proper zip file
+            //return new ZipSecureFile(file);
             return new ZipFile(File.OpenRead(file.FullName));
         }
         /**
@@ -154,12 +275,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          */
         public static ZipFile OpenZipFile(String path)
         {
-            if (!File.Exists(path))
-            {
-                return null;
-            }
-
-            return new ZipFile(File.OpenRead(path));
+            return OpenZipFile(new FileInfo(path));
         }
 
     }

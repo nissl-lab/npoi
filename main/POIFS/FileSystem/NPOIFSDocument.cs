@@ -141,6 +141,17 @@ namespace NPOI.POIFS.FileSystem
                 length += readBytes;
                 outStream.Write(buf, 0, readBytes);
             }
+            // Pad to the end of the block with -1s
+            int usedInBlock = length % _block_size;
+            if (usedInBlock != 0 && usedInBlock != _block_size)
+            {
+                int toBlockEnd = _block_size - usedInBlock;
+                byte[] padding = new byte[toBlockEnd];
+                Arrays.Fill(padding, (byte)0xFF);
+                outStream.Write(padding, 0, padding.Length);
+            }
+
+            // Tidy and return the length
             outStream.Close();
             return length;
         }
@@ -242,38 +253,22 @@ namespace NPOI.POIFS.FileSystem
          */
         protected Object[] GetViewableArray()
         {
-            Object[] results = new Object[1];
-            String result;
-
-            try
+            String result = "<NO DATA>";
+            if (Size > 0)
             {
-                if (Size > 0)
+                // Get all the data into a single array
+                byte[] data = new byte[Size];
+                int offset = 0;
+                foreach (ByteBuffer buffer in _stream)
                 {
-                    // Get all the data into a single array
-                    byte[] data = new byte[Size];
-                    int offset = 0;
-                    foreach (ByteBuffer buffer in _stream)
-                    {
-                        int length = Math.Min(_block_size, data.Length - offset);
-                        buffer.Read(data, offset, length);
-                        offset += length;
-                    }
+                    int length = Math.Min(_block_size, data.Length - offset);
+                    buffer.Read(data, offset, length);
+                    offset += length;
+                }
+                result = HexDump.Dump(data, 0, 0);
+            }
 
-                    MemoryStream output = new MemoryStream();
-                    HexDump.Dump(data, 0, output, 0);
-                    result = output.ToString();
-                }
-                else
-                {
-                    result = "<NO DATA>";
-                }
-            }
-            catch (IOException e)
-            {
-                result = e.Message;
-            }
-            results[0] = result;
-            return results;
+            return new String[] { result };
         }
 
         /**

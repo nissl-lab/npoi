@@ -102,6 +102,108 @@ namespace NPOI.XSSF.UserModel
             _stylesSource = ((XSSFWorkbook)row.Sheet.Workbook).GetStylesSource();
         }
 
+        /// <summary>
+        /// Copy cell value, formula and style, from srcCell per cell copy policy
+        ///  If srcCell is null, clears the cell value and cell style per cell copy policy
+        ///  
+        /// This does not shift references in formulas. Use {@link XSSFRowShifter} to shift references in formulas.
+        /// </summary>
+        /// <param name="srcCell">The cell to take value, formula and style from</param>
+        /// <param name="policy">The policy for copying the information, see {@link CellCopyPolicy}</param>
+        /// <exception cref="ArgumentException">if copy cell style and srcCell is from a different workbook</exception>
+        public void CopyCellFrom(ICell srcCell, CellCopyPolicy policy)
+        {
+            // Copy cell value (cell type is updated implicitly)
+            if (policy.IsCopyCellValue)
+            {
+                if (srcCell != null)
+                {
+                    CellType copyCellType = srcCell.CellType;
+                    if (copyCellType == CellType.Formula && !policy.IsCopyCellFormula)
+                    {
+                        // Copy formula result as value
+                        // FIXME: Cached value may be stale
+                        copyCellType = srcCell.CachedFormulaResultType;
+                    }
+                    switch (copyCellType)
+                    {
+                        case CellType.Boolean:
+                            SetCellValue(srcCell.BooleanCellValue);
+                            break;
+                        case CellType.Error:
+                            SetCellErrorValue(srcCell.ErrorCellValue);
+                            break;
+                        case CellType.Formula:
+                            SetCellFormula(srcCell.CellFormula);
+                            break;
+                        case CellType.Numeric:
+                            // DataFormat is not copied unless policy.isCopyCellStyle is true
+                            if (DateUtil.IsCellDateFormatted(srcCell))
+                            {
+                                SetCellValue(srcCell.DateCellValue);
+                            }
+                            else
+                            {
+                                SetCellValue(srcCell.NumericCellValue);
+                            }
+                            break;
+                        case CellType.String:
+                            SetCellValue(srcCell.StringCellValue);
+                            break;
+                        case CellType.Blank:
+                            SetBlank();
+                            break;
+                        default:
+                            throw new ArgumentException("Invalid cell type " + srcCell.CellType);
+                    }
+                }
+                else
+                { //srcCell is null
+                    SetBlank();
+                }
+            }
+
+            // Copy CellStyle
+            if (policy.IsCopyCellStyle)
+            {
+                if (srcCell != null)
+                {
+                    CellStyle = (srcCell.CellStyle);
+                }
+                else
+                {
+                    // clear cell style
+                    CellStyle = (null);
+                }
+            }
+
+
+            if (policy.IsMergeHyperlink)
+            {
+                // if srcCell doesn't have a hyperlink and destCell has a hyperlink, don't clear destCell's hyperlink
+                IHyperlink srcHyperlink = srcCell.Hyperlink;
+                if (srcHyperlink != null)
+                {
+                    Hyperlink = new XSSFHyperlink(srcHyperlink);
+                }
+            }
+            else if (policy.IsCopyHyperlink)
+            {
+                // overwrite the hyperlink at dest cell with srcCell's hyperlink
+                // if srcCell doesn't have a hyperlink, clear the hyperlink (if one exists) at destCell
+                IHyperlink srcHyperlink = srcCell.Hyperlink;
+                if (srcHyperlink == null)
+                {
+                    Hyperlink = (null);
+                }
+                else
+                {
+                    Hyperlink = new XSSFHyperlink(srcHyperlink);
+                }
+            }
+        }
+
+
         /**
          * @return table of strings shared across this workbook
          */
@@ -274,8 +376,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                IRichTextString str = this.RichStringCellValue;
-                return str == null ? null : str.String;
+                return this.RichStringCellValue.String;
             }
         }
 
@@ -377,7 +478,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetCellValue(IRichTextString str)
         {
-            if (str == null || string.IsNullOrEmpty(str.String))
+            if (str == null || str.String == null)
             {
                 SetCellType(CellType.Blank);
                 return;
@@ -419,34 +520,49 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CellType cellType = CellType;
-                if (cellType != CellType.Formula) 
-                    throw TypeMismatch(CellType.Formula, cellType, false);
-
-                CT_CellFormula f = _cell.f;
-                if (IsPartOfArrayFormulaGroup && f == null)
-                {
-                    ICell cell = ((XSSFSheet)Sheet).GetFirstCellInArrayFormula(this);
-                    return cell.CellFormula;
-                }
-                if (f.t == ST_CellFormulaType.shared)
-                {
-                    return ConvertSharedFormula((int)f.si);
-                }
-                return f.Value;
+                // existing behavior - create a new XSSFEvaluationWorkbook for every call
+                return GetCellFormula(null);
             }
-            set 
+            set
             {
                 SetCellFormula(value);
             }
+        }
+
+        /**
+         * package/hierarchy use only - reuse an existing evaluation workbook if available for caching
+         *
+         * @param fpb evaluation workbook for reuse, if available, or null to create a new one as needed
+         * @return a formula for the cell
+         * @throws InvalidOperationException if the cell type returned by {@link #getCellType()} is not CELL_TYPE_FORMULA
+         */
+        protected internal String GetCellFormula(XSSFEvaluationWorkbook fpb)
+        {
+            CellType cellType = CellType;
+            if (cellType != CellType.Formula) 
+                throw TypeMismatch(CellType.Formula, cellType, false);
+
+            CT_CellFormula f = _cell.f;
+            if (IsPartOfArrayFormulaGroup && f == null)
+            {
+                XSSFCell cell = ((XSSFSheet)Sheet).GetFirstCellInArrayFormula(this);
+                return cell.GetCellFormula(fpb);
+            }
+            if (f.t == ST_CellFormulaType.shared)
+            {
+                //return ConvertSharedFormula((int)f.si);
+                return ConvertSharedFormula((int)f.si, fpb == null ? XSSFEvaluationWorkbook.Create(Sheet.Workbook) : fpb);
+            }
+            return f.Value;
         }
 
         /// <summary>
         /// Creates a non shared formula from the shared formula counterpart
         /// </summary>
         /// <param name="si">Shared Group Index</param>
+        /// <param name="fpb"></param>
         /// <returns>non shared formula created for the given shared formula and this cell</returns>
-        private String ConvertSharedFormula(int si)
+        private String ConvertSharedFormula(int si, XSSFEvaluationWorkbook fpb)
         {
             XSSFSheet sheet = (XSSFSheet)Sheet;
 
@@ -461,10 +577,9 @@ namespace NPOI.XSSF.UserModel
             CellRangeAddress ref1 = CellRangeAddress.ValueOf(sharedFormulaRange);
 
             int sheetIndex = sheet.Workbook.GetSheetIndex(sheet);
-            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(sheet.Workbook);
             SharedFormula sf = new SharedFormula(SpreadsheetVersion.EXCEL2007);
 
-            Ptg[] ptgs = FormulaParser.Parse(sharedFormula, fpb, FormulaType.Cell, sheetIndex);
+            Ptg[] ptgs = FormulaParser.Parse(sharedFormula, fpb, FormulaType.Cell, sheetIndex, RowIndex);
             Ptg[] fmla = sf.ConvertSharedFormulas(ptgs,
                     RowIndex - ref1.FirstRow, ColumnIndex - ref1.FirstColumn);
             return FormulaRenderer.ToFormulaString(fpb, fmla);
@@ -512,7 +627,7 @@ namespace NPOI.XSSF.UserModel
 
             IFormulaParsingWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
             //validate through the FormulaParser
-            FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(this.Sheet));
+            FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(this.Sheet), RowIndex);
 
             CT_CellFormula f = new CT_CellFormula();
             f.Value = formula;
@@ -550,11 +665,17 @@ namespace NPOI.XSSF.UserModel
             String ref1 = _cell.r;
             if (ref1 == null)
             {
-                return new CellReference(this).FormatAsString();
+                return new CellAddress(this).FormatAsString();
             }
             return ref1;
         }
-
+        public CellAddress Address
+        {
+            get
+            {
+                return new CellAddress(this);
+            }
+        }
         /// <summary>
         /// Return the cell's style.
         /// </summary>
@@ -586,6 +707,19 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
+
+        private bool IsFormulaCell
+        {
+            get
+            {
+                if (_cell.f != null || ((XSSFSheet)Sheet).IsCellInArrayFormulaContext(this))
+                {
+                    return true;
+                }
+                return false;
+            }
+            
+        }
         /// <summary>
         /// Return the cell type.
         /// </summary>
@@ -594,7 +728,7 @@ namespace NPOI.XSSF.UserModel
             get
             {
 
-                if (_cell.f != null || ((XSSFSheet)Sheet).IsCellInArrayFormulaContext(this))
+                if (IsFormulaCell)
                 {
                     return CellType.Formula;
                 }
@@ -609,7 +743,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (_cell.f == null)
+                if (!IsFormulaCell)
                 {
                     throw new InvalidOperationException("Only formula cells have cached results");
                 }
@@ -658,18 +792,25 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CellType cellType = CellType;
-                if (cellType == CellType.Blank)
+                if (CellType == CellType.Blank)
                 {
                     return DateTime.MinValue;
                 }
 
                 double value = NumericCellValue;
-                bool date1904 = ((XSSFWorkbook)Sheet.Workbook).IsDate1904();
+                bool date1904 = Sheet.Workbook.IsDate1904();
                 return DateUtil.GetJavaDate(value, date1904);
             }
         }
-
+        public void SetCellValue(DateTime? value)
+        {
+            if (value == null)
+            {
+                SetCellType(CellType.Blank);
+                return;
+            }
+            SetCellValue(value.Value);
+        }
         /// <summary>
         ///  Set a date value for the cell. Excel treats dates as numeric so you will need to format the cell as a date.
         /// </summary>
@@ -677,7 +818,7 @@ namespace NPOI.XSSF.UserModel
         /// for numerics we'll Set its value. For other types we will change the cell to a numeric cell and Set its value. </param>
         public void SetCellValue(DateTime value)
         {
-            bool date1904 = ((XSSFWorkbook)Sheet.Workbook).IsDate1904();
+            bool date1904 = Sheet.Workbook.IsDate1904();
             SetCellValue(DateUtil.GetExcelDate(value, date1904));
         }
         /// <summary>
@@ -735,7 +876,7 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         public void SetAsActiveCell()
         {
-            ((XSSFSheet)Sheet).SetActiveCell(GetReference());
+            Sheet.ActiveCell = Address;
         }
 
         /// <summary>
@@ -894,11 +1035,11 @@ namespace NPOI.XSSF.UserModel
         /**
          * Used to help format error messages
          */
-        private static Exception TypeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool IsFormulaCell)
+        private static Exception TypeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool isFormulaCell)
         {
             String msg = "Cannot get a "
                 + GetCellTypeName(expectedTypeCode) + " value from a "
-                + GetCellTypeName(actualTypeCode) + " " + (IsFormulaCell ? "formula " : "") + "cell";
+                + GetCellTypeName(actualTypeCode) + " " + (isFormulaCell ? "formula " : "") + "cell";
             return new InvalidOperationException(msg);
         }
 
@@ -924,7 +1065,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return Sheet.GetCellComment(_row.RowNum, ColumnIndex);
+                return Sheet.GetCellComment(new CellAddress(this));
             }
             set 
             {
@@ -933,9 +1074,7 @@ namespace NPOI.XSSF.UserModel
                     RemoveCellComment();
                     return;
                 }
-
-                value.Row = (RowIndex);
-                value.Column = (ColumnIndex);
+                value.SetAddress(RowIndex, ColumnIndex);
             }
         }
 
@@ -946,7 +1085,7 @@ namespace NPOI.XSSF.UserModel
             IComment comment = this.CellComment;
             if (comment != null)
             {
-                String ref1 = GetReference();
+                CellAddress ref1 = new CellAddress(GetReference());
                 XSSFSheet sh = (XSSFSheet)Sheet;
                 sh.GetCommentsTable(false).RemoveComment(ref1);
                 sh.GetVMLDrawing(false).RemoveCommentShape(RowIndex, ColumnIndex);

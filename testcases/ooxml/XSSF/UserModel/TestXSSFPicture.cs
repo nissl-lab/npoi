@@ -23,7 +23,10 @@ using NPOI.Util;
 using System.Text;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using System.Collections;
-namespace NPOI.XSSF.UserModel
+using NPOI.XSSF.UserModel;
+using NPOI.XSSF;
+
+namespace TestCases.XSSF.UserModel
 {
 
     /**

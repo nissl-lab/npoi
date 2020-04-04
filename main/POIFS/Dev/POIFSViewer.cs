@@ -57,7 +57,7 @@ namespace NPOI.POIFS.Dev
             {
                 using (Stream fileStream = File.OpenRead(filename))
                 {
-                    POIFSViewable fs = (POIFSViewable)new POIFSFileSystem(fileStream);
+                    POIFSViewable fs = (POIFSViewable)new NPOIFSFileSystem(fileStream);
                 
                     IList strings = POIFSViewEngine.InspectViewable(fs, true,
                                                 0, "  ");

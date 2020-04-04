@@ -15,13 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
-using NUnit.Framework;
 using NPOI.OpenXmlFormats.Spreadsheet;
-using System.Collections.Generic;
-using System;
 using NPOI.SS.UserModel;
+using NPOI.XSSF;
 using NPOI.XSSF.Model;
-namespace NPOI.XSSF.UserModel
+using NPOI.XSSF.UserModel;
+using NUnit.Framework;
+using System;
+namespace TestCases.XSSF.UserModel
 {
     /**
      * Tests functionality of the XSSFRichTextRun object
@@ -38,16 +39,19 @@ namespace NPOI.XSSF.UserModel
 
             XSSFRichTextString rt = new XSSFRichTextString("Apache POI");
             Assert.AreEqual("Apache POI", rt.String);
+            Assert.AreEqual(false, rt.HasFormatting());
 
             CT_Rst st = rt.GetCTRst();
             Assert.IsTrue(st.IsSetT());
             Assert.AreEqual("Apache POI", st.t);
+            Assert.AreEqual(false, rt.HasFormatting());
 
             rt.Append(" is cool stuff");
             Assert.AreEqual(2, st.sizeOfRArray());
             Assert.IsFalse(st.IsSetT());
 
             Assert.AreEqual("Apache POI is cool stuff", rt.String);
+            Assert.AreEqual(false, rt.HasFormatting());
         }
         [Test]
         public void TestEmpty()
@@ -68,11 +72,13 @@ namespace NPOI.XSSF.UserModel
             rt.Append("89");
 
             Assert.AreEqual("123456789", rt.String);
+            Assert.AreEqual(false, rt.HasFormatting());
 
             XSSFFont font1 = new XSSFFont();
             font1.IsBold = (true);
 
             rt.ApplyFont(2, 5, font1);
+            Assert.AreEqual(true, rt.HasFormatting());
 
             Assert.AreEqual(4, rt.NumFormattingRuns);
             Assert.AreEqual(0, rt.GetIndexOfFormattingRun(0));
@@ -173,6 +179,7 @@ namespace NPOI.XSSF.UserModel
 
             XSSFRichTextString rt = new XSSFRichTextString("Apache POI");
             Assert.AreEqual("Apache POI", rt.String);
+            Assert.AreEqual(false, rt.HasFormatting());
 
             rt.ClearFormatting();
 
@@ -180,15 +187,20 @@ namespace NPOI.XSSF.UserModel
             Assert.IsTrue(st.IsSetT());
             Assert.AreEqual("Apache POI", rt.String);
             Assert.AreEqual(0, rt.NumFormattingRuns);
+            Assert.AreEqual(false, rt.HasFormatting());
 
             XSSFFont font = new XSSFFont();
             font.IsBold = true;
 
             rt.ApplyFont(7, 10, font);
             Assert.AreEqual(2, rt.NumFormattingRuns);
+            Assert.AreEqual(true, rt.HasFormatting());
+
             rt.ClearFormatting();
+
             Assert.AreEqual("Apache POI", rt.String);
             Assert.AreEqual(0, rt.NumFormattingRuns);
+            Assert.AreEqual(false, rt.HasFormatting());
         }
         [Test]
         public void TestGetFonts()
@@ -546,6 +558,24 @@ namespace NPOI.XSSF.UserModel
             rt = new XSSFRichTextString();
             Assert.IsNull(rt.ToString());
         }
+        [Test]
+        public void Test59008Font()
+        {
+            XSSFFont font = new XSSFFont(new CT_Font());
 
+            XSSFRichTextString rts = new XSSFRichTextString();
+            rts.Append("This is correct ");
+            int s1 = rts.Length;
+            rts.Append("This is Bold Red", font);
+            int s2 = rts.Length;
+            rts.Append(" This uses the default font rather than the cell style font");
+            int s3 = rts.Length;
+
+            //Assert.AreEqual("<xml-fragment/>", rts.GetFontAtIndex(s1 - 1).ToString());
+            Assert.AreEqual("<font></font>", rts.GetFontAtIndex(s1 - 1).ToString());
+            Assert.AreEqual(font, rts.GetFontAtIndex(s2 - 1));
+            //Assert.AreEqual("<xml-fragment/>", rts.GetFontAtIndex(s3 - 1).ToString());
+            Assert.AreEqual("<font></font>", rts.GetFontAtIndex(s3 - 1).ToString());
+        }
     }
 }

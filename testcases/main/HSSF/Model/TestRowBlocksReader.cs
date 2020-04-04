@@ -48,7 +48,7 @@ namespace TestCases.HSSF.Model
             if (rs.PeekNextClass() == typeof(WindowTwoRecord))
             {
                 // Should have stopped at the SXVIEW record
-                throw new AssertionException("Identified bug 46280b");
+                Assert.Fail("Identified bug 46280b");
             }
             RecordStream rbStream = rbr.PlainRecordStream;
             Assert.AreEqual(inRecs[0], rbStream.GetNext());

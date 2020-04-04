@@ -44,6 +44,8 @@ using System.IO;
 
             // Check we can get at the Escher layer still
             workbook.GetAllPictures();
+
+            workbook.Close();
         }
         [Test]
         public void TestEmbeddedObjects()
@@ -52,35 +54,34 @@ using System.IO;
 
             IList<HSSFObjectData> objects = workbook.GetAllEmbeddedObjects();
             Assert.AreEqual(2, objects.Count, "Wrong number of objects");
-            Assert.AreEqual("MBD06CAB431",
-                ((HSSFObjectData)objects[0]).GetDirectory().Name,
+            Assert.AreEqual("MBD06CAB431", objects[0].GetDirectory().Name,
                     "Wrong name for first object");
-            Assert.AreEqual("MBD06CAC85A",
-                    ((HSSFObjectData)
-                    objects[1]).GetDirectory().Name, "Wrong name for second object");
+            Assert.AreEqual("MBD06CAC85A", objects[1].GetDirectory().Name, "Wrong name for second object");
+
+            workbook.Close();
         }
 
         [Test]
         public void TestReallyEmbedSomething()
         {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            ISheet sheet = wb.CreateSheet();
+            HSSFWorkbook wb1 = new HSSFWorkbook();
+            ISheet sheet = wb1.CreateSheet();
             HSSFPatriarch patriarch = sheet.CreateDrawingPatriarch() as HSSFPatriarch;
 
             byte[] pictureData = HSSFTestDataSamples.GetTestDataFileContent("logoKarmokar4.png");
             byte[] picturePPT = POIDataSamples.GetSlideShowInstance().ReadFile("clock.jpg");
-            int imgIdx = wb.AddPicture(pictureData, PictureType.PNG);
+            int imgIdx = wb1.AddPicture(pictureData, PictureType.PNG);
             POIFSFileSystem pptPoifs = GetSamplePPT();
-            int pptIdx = wb.AddOlePackage(pptPoifs, "Sample-PPT", "sample.ppt", "sample.ppt");
+            int pptIdx = wb1.AddOlePackage(pptPoifs, "Sample-PPT", "sample.ppt", "sample.ppt");
             POIFSFileSystem xlsPoifs = GetSampleXLS();
-            int imgPPT = wb.AddPicture(picturePPT, PictureType.JPEG);
-            int xlsIdx = wb.AddOlePackage(xlsPoifs, "Sample-XLS", "sample.xls", "sample.xls");
-            int txtIdx = wb.AddOlePackage(GetSampleTXT(), "Sample-TXT", "sample.txt", "sample.txt");
+            int imgPPT = wb1.AddPicture(picturePPT, PictureType.JPEG);
+            int xlsIdx = wb1.AddOlePackage(xlsPoifs, "Sample-XLS", "sample.xls", "sample.xls");
+            int txtIdx = wb1.AddOlePackage(GetSampleTXT(), "Sample-TXT", "sample.txt", "sample.txt");
 
             int rowoffset = 5;
             int coloffset = 5;
 
-            ICreationHelper ch = wb.GetCreationHelper();
+            ICreationHelper ch = wb1.GetCreationHelper();
             HSSFClientAnchor anchor = (HSSFClientAnchor)ch.CreateClientAnchor();
             anchor.SetAnchor((short)(2 + coloffset), 1 + rowoffset, 0, 0, (short)(3 + coloffset), 5 + rowoffset, 0, 0);
             anchor.AnchorType = (/*setter*/AnchorType.DontMoveAndResize);
@@ -107,32 +108,36 @@ using System.IO;
             circle.ShapeType = (/*setter*/HSSFSimpleShape.OBJECT_TYPE_OVAL);
             circle.IsNoFill = (/*setter*/true);
 
-            if (false)
-            {
-                FileStream fos = new FileStream("embed.xls", FileMode.Create);
-                wb.Write(fos);
-                fos.Close();
-            }
+            //if (false)
+            //{
+            //    FileStream fos = new FileStream("embed.xls", FileMode.Create);
+            //    wb.Write(fos);
+            //    fos.Close();
+            //}
 
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb as HSSFWorkbook);
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1 as HSSFWorkbook);
+            wb1.Close();
 
             MemoryStream bos = new MemoryStream();
-            HSSFObjectData od = wb.GetAllEmbeddedObjects()[0];
+            HSSFObjectData od = wb2.GetAllEmbeddedObjects()[0];
             Ole10Native ole10 = Ole10Native.CreateFromEmbeddedOleObject((DirectoryNode)od.GetDirectory());
             bos = new MemoryStream();
             pptPoifs.WriteFileSystem(bos);
             Assert.IsTrue(Arrays.Equals(ole10.DataBuffer, bos.ToArray()));
 
-            od = wb.GetAllEmbeddedObjects()[1];
+            od = wb2.GetAllEmbeddedObjects()[1];
             ole10 = Ole10Native.CreateFromEmbeddedOleObject((DirectoryNode)od.GetDirectory());
             bos = new MemoryStream();
             xlsPoifs.WriteFileSystem(bos);
             Assert.IsTrue(Arrays.Equals(ole10.DataBuffer, bos.ToArray()));
 
-            od = wb.GetAllEmbeddedObjects()[2];
+            od = wb2.GetAllEmbeddedObjects()[2];
             ole10 = Ole10Native.CreateFromEmbeddedOleObject((DirectoryNode)od.GetDirectory());
             Assert.IsTrue(Arrays.Equals(ole10.DataBuffer, GetSampleTXT()));
 
+            xlsPoifs.Close();
+            pptPoifs.Close();
+            wb2.Close();
         }
 
         static POIFSFileSystem GetSamplePPT()
@@ -141,7 +146,7 @@ using System.IO;
             Stream is1 = POIDataSamples.GetSlideShowInstance().OpenResourceAsStream("with_textbox.ppt");
             POIFSFileSystem poifs = new POIFSFileSystem(is1);
             is1.Close();
-
+            
             return poifs;
         }
 
@@ -153,14 +158,15 @@ using System.IO;
 
             MemoryStream bos = new MemoryStream();
             wb.Write(bos);
+            wb.Close();
             POIFSFileSystem poifs = new POIFSFileSystem(new MemoryStream(bos.ToArray()));
-
+            
             return poifs;
         }
 
         static byte[] GetSampleTXT()
         {
-            return Encoding.Default.GetBytes("All your base are belong to us");
+            return Encoding.GetEncoding(1252).GetBytes("All your base are belong to us");
         }
     }
 }

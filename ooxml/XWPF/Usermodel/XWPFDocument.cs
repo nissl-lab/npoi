@@ -47,7 +47,7 @@ namespace NPOI.XWPF.UserModel
         /**
          * Keeps track on all id-values used in this document and included parts, like headers, footers, etc.
          */
-        private IdentifierManager drawingIdManager = new IdentifierManager(1L, 4294967295L);
+        private IdentifierManager drawingIdManager = new IdentifierManager(0L, 4294967295L);
         protected List<XWPFFooter> footers = new List<XWPFFooter>();
         protected List<XWPFHeader> headers = new List<XWPFHeader>();
         protected List<XWPFComment> comments = new List<XWPFComment>();
@@ -125,8 +125,9 @@ namespace NPOI.XWPF.UserModel
                     headerFooterPolicy = new XWPFHeaderFooterPolicy(this);
 
                 // Create for each XML-part in the Package a PartClass
-                foreach (POIXMLDocumentPart p in GetRelations()) {
-                    String relation = p.GetPackageRelationship().RelationshipType;
+                foreach (RelationPart rp in RelationParts) {
+                    POIXMLDocumentPart p = rp.DocumentPart;
+                    String relation = rp.Relationship.RelationshipType;
                     if (relation.Equals(XWPFRelation.STYLES.Relation))
                     {
                         this.styles = (XWPFStyles)p;
@@ -223,9 +224,10 @@ namespace NPOI.XWPF.UserModel
 
         private void InitFootnotes()
         {
-            foreach(POIXMLDocumentPart p in GetRelations()){
-               String relation = p.GetPackageRelationship().RelationshipType;
-               if (relation.Equals(XWPFRelation.FOOTNOTE.Relation)) {
+            foreach(RelationPart rp in RelationParts){
+                POIXMLDocumentPart p = rp.DocumentPart;
+                String relation = rp.Relationship.RelationshipType;
+                if (relation.Equals(XWPFRelation.FOOTNOTE.Relation)) {
                   this.footnotes = (XWPFFootnotes)p;
                   this.footnotes.OnDocumentRead();
                }
@@ -291,8 +293,48 @@ namespace NPOI.XWPF.UserModel
             {
                 return ctDocument;
             }
+            set
+            {
+                ctDocument = value;
+            }
         }
+        /**
+         * Sets columns on document base object
+         */
+        public int ColumnCount
+        {
+            get
+            {
+                return int.Parse(ctDocument.body.sectPr.cols.num);
+            }
+            set
+            {
+                if (ctDocument != null)
+                {
+                    ctDocument.body.sectPr.cols.num = value.ToString();
+                }
 
+            }
+            
+        }
+        /**
+         * Sets Text Direction of Document
+         */
+         public ST_TextDirection TextDirection
+        {
+            get
+            {
+                return ctDocument.body.sectPr.textDirection.val;
+            }
+            set
+            {
+                if (ctDocument != null)
+                {
+                    ctDocument.body.sectPr.textDirection.val = value;
+                }
+            }
+            
+        }
         internal IdentifierManager DrawingIdManager
         {
             get
@@ -343,7 +385,7 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTable GetTableArray(int pos)
         {
-            if (pos > 0 && pos < tables.Count)
+            if (pos >= 0 && pos < tables.Count)
             {
                 return tables[(pos)];
             }
@@ -364,7 +406,11 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFFooter GetFooterArray(int pos)
         {
-            return footers[(pos)];
+            if (pos >= 0 && pos < footers.Count)
+            {
+                return footers[(pos)];
+            }
+            return null;
         }
 
         /**
@@ -381,7 +427,12 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFHeader GetHeaderArray(int pos)
         {
-            return headers[(pos)];
+            if (pos >= 0 && pos < headers.Count)
+            {
+                return headers[(pos)];
+            }
+            return null;
+            
         }
 
         public String GetTblStyle(XWPFTable table)
@@ -478,7 +529,18 @@ namespace NPOI.XWPF.UserModel
         {
             return headerFooterPolicy;
         }
-
+        public XWPFHeaderFooterPolicy CreateHeaderFooterPolicy()
+        {
+            if (headerFooterPolicy == null)
+            {
+                if (!ctDocument.body.IsSetSectPr())
+                {
+                    ctDocument.body.AddNewSectPr();
+                }
+                headerFooterPolicy = new XWPFHeaderFooterPolicy(this);
+            }
+            return headerFooterPolicy;
+        }
         /**
          * Returns the styles object used
          */
@@ -810,12 +872,10 @@ namespace NPOI.XWPF.UserModel
          */
         private int GetRelationIndex(XWPFRelation relation)
         {
-            List<POIXMLDocumentPart> relations = GetRelations();
             int i = 1;
-            for (IEnumerator<POIXMLDocumentPart> it = relations.GetEnumerator(); it.MoveNext(); )
+            foreach (RelationPart rp in RelationParts)
             {
-                POIXMLDocumentPart item = it.Current;
-                if (item.GetPackageRelationship().RelationshipType.Equals(relation.Relation))
+                if (rp.Relationship.RelationshipType.Equals(relation.Relation))
                 {
                     i++;
                 }
@@ -1020,6 +1080,23 @@ namespace NPOI.XWPF.UserModel
         {
             tables[pos] = table;
             ctDocument.body.SetTblArray(pos, table.GetCTTbl());
+        }
+
+        /**
+         * Verifies that the documentProtection tag in settings.xml file <br/>
+         * specifies that the protection is enforced (w:enforcement="1") <br/>
+         * <br/>
+         * sample snippet from settings.xml
+         * <pre>
+         *     &lt;w:settings  ... &gt;
+         *         &lt;w:documentProtection w:edit=&quot;readOnly&quot; w:enforcement=&quot;1&quot;/&gt;
+         * </pre>
+         *
+         * @return true if documentProtection is enforced with option any
+         */
+        public bool IsEnforcedProtection()
+        {
+            return Settings.IsEnforcedWith();
         }
 
         /**
@@ -1349,14 +1426,8 @@ namespace NPOI.XWPF.UserModel
                  */
                 PackagePart picDataPart = xwpfPicData.GetPackagePart();
                 // TODO add support for TargetMode.EXTERNAL relations.
-                TargetMode targetMode = TargetMode.Internal;
-                PackagePartName partName = picDataPart.PartName;
-                String relation = relDesc.Relation;
-                PackageRelationship relShip = GetPackagePart().AddRelationship(partName, targetMode, relation);
-                String id = relShip.Id;
-                AddRelation(id, xwpfPicData);
-                pictures.Add(xwpfPicData);
-                return id;
+                RelationPart rp = AddRelation(null, XWPFRelation.IMAGES, xwpfPicData);
+                return rp.Relationship.Id;
             }
             else
             {

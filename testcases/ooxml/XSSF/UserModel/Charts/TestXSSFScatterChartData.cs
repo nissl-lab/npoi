@@ -20,7 +20,9 @@ using NPOI.SS.UserModel;
 using System;
 using NUnit.Framework;
 using NPOI.SS.UserModel.Charts;
-namespace NPOI.XSSF.UserModel.Charts
+using NPOI.XSSF.UserModel;
+
+namespace TestCases.XSSF.UserModel.Charts
 {
     /**
      * Tests for XSSFScatterChartData.

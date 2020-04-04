@@ -104,7 +104,19 @@ namespace NPOI.DDF
         public byte[] PictureData
         {
             get { return field_pictureData; }
-            set { field_pictureData = value; }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("picture data can't be null");
+                }
+                else
+                {
+                    field_pictureData = new byte[value.Length];
+                    if (value.Length > 0)
+                        Array.Copy(value, field_pictureData, value.Length);
+                }
+            }
         }
 
 

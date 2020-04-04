@@ -36,8 +36,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class IterationRecord
-       : StandardRecord
+    public class IterationRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x11;
         private static BitField iterationOn = BitFieldFactory.GetInstance(0x0001);

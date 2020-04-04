@@ -141,6 +141,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the boldness to use
         /// </summary>
         /// <value>The boldweight.</value>
+        [Obsolete("deprecated POI 3.15 beta 2. Use IsBold instead.")]
         public short Boldweight
         {
             get { return font.BoldWeight; }

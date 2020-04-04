@@ -14,15 +14,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.XWPF.UserModel
+namespace TestCases.XWPF.UserModel
 {
+    using NPOI.OpenXmlFormats.Wordprocessing;
+    using NPOI.Util;
+    using NPOI.XWPF.Model;
+    using NPOI.XWPF.UserModel;
+    using NUnit.Framework;
+    using System;
     using System.Collections.Generic;
     using System.IO;
-    using NUnit.Framework;
-    using NPOI.OpenXmlFormats.Wordprocessing;
-    using NPOI.XWPF;
-    using NPOI.XWPF.Model;
-    using System;
 
     /**
      * Tests for XWPF Run
@@ -62,6 +63,39 @@ namespace NPOI.XWPF.UserModel
             //Assert.Fail("Position wrong");
         }
 
+        /*
+         * bug 59208
+         * Purpose: test all valid boolean-like values
+         * exercise isCTOnOff(CTOnOff) through all valid permutations
+         */
+        [Ignore("stub testCTOnOff")]
+        public void TestCTOnOff()
+        {
+            //CTRPr rpr = ctRun.addNewRPr();
+            //CTOnOff bold = rpr.addNewB();
+            //XWPFRun run = new XWPFRun(ctRun, p);
+
+            //// True values: "true", "1", "on"
+            //bold.setVal(STOnOff.TRUE);
+            //assertEquals(true, run.isBold());
+
+            //bold.setVal(STOnOff.X_1);
+            //assertEquals(true, run.isBold());
+
+            //bold.setVal(STOnOff.ON);
+            //assertEquals(true, run.isBold());
+
+            //// False values: "false", "0", "off"
+            //bold.setVal(STOnOff.FALSE);
+            //assertEquals(false, run.isBold());
+
+            //bold.setVal(STOnOff.X_0);
+            //assertEquals(false, run.isBold());
+
+            //bold.setVal(STOnOff.OFF);
+            //assertEquals(false, run.isBold());
+        }
+
         [Test]
         public void TestSetGetBold()
         {
@@ -72,6 +106,8 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(true, run.IsBold);
 
             run.IsBold = (false);
+            // Implementation detail: POI natively prefers <w:b w:val="false"/>,
+            // but should correctly read val="0" and val="off"
             Assert.AreEqual(false, run.IsBold);
             Assert.AreEqual(false, rpr.b.val);
         }
@@ -165,9 +201,9 @@ namespace NPOI.XWPF.UserModel
             rpr.AddNewPosition().val = "4000";
 
             XWPFRun run = new XWPFRun(ctRun, p);
-            Assert.AreEqual(4000, run.GetTextPosition());
+            Assert.AreEqual(4000, run.TextPosition);
 
-            run.SetTextPosition(2400);
+            run.TextPosition = (2400);
             Assert.AreEqual(2400, int.Parse(rpr.position.val));
         }
         [Test]
@@ -411,6 +447,21 @@ namespace NPOI.XWPF.UserModel
         }
 
         [Test]
+        public void testSetGetHighlight()
+        {
+            XWPFRun run = p.CreateRun();
+            Assert.AreEqual(false, run.IsHighlighted);
+
+            // TODO Do this using XWPFRun methods
+            run.GetCTR().AddNewRPr().AddNewHighlight().val = (ST_HighlightColor.none);
+            Assert.AreEqual(false, run.IsHighlighted);
+            run.GetCTR().rPr.highlight.val = (ST_HighlightColor.cyan);
+            Assert.AreEqual(true, run.IsHighlighted);
+            run.GetCTR().rPr.highlight.val = (ST_HighlightColor.none);
+            Assert.AreEqual(false, run.IsHighlighted);
+        }
+
+        [Test]
         public void TestAddPicture()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("TestDocument.docx");
@@ -426,9 +477,9 @@ namespace NPOI.XWPF.UserModel
             Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
         }
         /**
-     * Bugzilla #52288 - setting the font family on the
-     *  run mustn't NPE
-     */
+         * Bugzilla #52288 - setting the font family on the
+         *  run mustn't NPE
+         */
         [Test]
         public void TestSetFontFamily_52288()
         {
@@ -449,6 +500,64 @@ namespace NPOI.XWPF.UserModel
                     }
                 }
             }
+        }
+
+        [Test]
+        public void TestBug55476()
+        {
+            byte[] image = XWPFTestDataSamples.GetImage("abstract1.jpg");
+            XWPFDocument document = new XWPFDocument();
+            document.CreateParagraph().CreateRun().AddPicture(
+                    new MemoryStream(image), (int)PictureType.JPEG, "test.jpg", Units.ToEMU(300), Units.ToEMU(100));
+            XWPFDocument docBack = XWPFTestDataSamples.WriteOutAndReadBack(document);
+            List<XWPFPicture> pictures = docBack.GetParagraphArray(0).Runs[0].GetEmbeddedPictures();
+            Assert.AreEqual(1, pictures.Count);
+            docBack.Close();
+            /*OutputStream stream = new FileOutputStream("c:\\temp\\55476.docx");
+            try {
+                document.write(stream);
+            } finally {
+                stream.close();
+            }*/
+            document.Close();
+        }
+        [Test]
+        public void TestBug58922()
+        {
+            XWPFDocument document = new XWPFDocument();
+            XWPFRun run = document.CreateParagraph().CreateRun();
+            Assert.AreEqual(-1, run.FontSize);
+            run.FontSize = 10;
+            Assert.AreEqual(10, run.FontSize);
+            run.FontSize = short.MaxValue - 1;
+            Assert.AreEqual(short.MaxValue - 1, run.FontSize);
+            run.FontSize = short.MaxValue;
+            Assert.AreEqual(short.MaxValue, run.FontSize);
+            run.FontSize = short.MaxValue + 1;
+            Assert.AreEqual(short.MaxValue + 1, run.FontSize);
+            run.FontSize = int.MaxValue - 1;
+            Assert.AreEqual(int.MaxValue - 1, run.FontSize);
+            run.FontSize = int.MaxValue;
+            Assert.AreEqual(int.MaxValue, run.FontSize);
+            run.FontSize = -1;
+            Assert.AreEqual(-1, run.FontSize);
+            Assert.AreEqual(-1, run.TextPosition);
+            run.TextPosition = 10;
+            Assert.AreEqual(10, run.TextPosition);
+            run.TextPosition = short.MaxValue - 1;
+            Assert.AreEqual(short.MaxValue - 1, run.TextPosition);
+            run.TextPosition = short.MaxValue;
+            Assert.AreEqual(short.MaxValue, run.TextPosition);
+            run.TextPosition = short.MaxValue + 1;
+            Assert.AreEqual(short.MaxValue + 1, run.TextPosition);
+            run.TextPosition = short.MaxValue + 1;
+            Assert.AreEqual(short.MaxValue + 1, run.TextPosition);
+            run.TextPosition = int.MaxValue - 1;
+            Assert.AreEqual(int.MaxValue - 1, run.TextPosition);
+            run.TextPosition = int.MaxValue;
+            Assert.AreEqual(int.MaxValue, run.TextPosition);
+            run.TextPosition = -1;
+            Assert.AreEqual(-1, run.TextPosition);
         }
     }
 }

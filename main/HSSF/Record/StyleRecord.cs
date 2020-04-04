@@ -54,7 +54,7 @@ namespace NPOI.HSSF.Record
 
         public StyleRecord()
         {
-            field_1_xf_index = isBuiltinFlag.Set(field_1_xf_index);
+            field_1_xf_index = isBuiltinFlag.Set(0);
         }
         public bool IsBuiltin
         {

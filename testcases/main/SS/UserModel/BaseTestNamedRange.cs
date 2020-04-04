@@ -17,26 +17,25 @@
 
 namespace TestCases.SS.UserModel
 {
-
-
     using System;
     using NUnit.Framework;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
+    using System.Collections.Generic;
+    using NPOI.Util;
 
     /**
      * Tests of implementations of {@link NPOI.ss.usermodel.Name}.
      *
      * @author Yegor Kozlov
      */
-    [TestFixture]
-    public class BaseTestNamedRange
+    public abstract class BaseTestNamedRange
     {
 
         private ITestDataProvider _testDataProvider;
-        public BaseTestNamedRange()
-            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
-        { }
+        //public BaseTestNamedRange()
+        //    : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
+        //{ }
         protected BaseTestNamedRange(ITestDataProvider TestDataProvider)
         {
             _testDataProvider = TestDataProvider;
@@ -212,12 +211,7 @@ namespace TestCases.SS.UserModel
                 Assert.AreEqual("The sheet already contains this name: aaa", e.Message);
             }
 
-            int cnt = 0;
-            for (int i = 0; i < wb.NumberOfNames; i++)
-            {
-                if ("aaa".Equals(wb.GetNameAt(i).NameName)) cnt++;
-            }
-            Assert.AreEqual(3, cnt);
+            Assert.AreEqual(3, wb.GetNames("aaa").Count);
         }
 
         /**
@@ -261,11 +255,11 @@ namespace TestCases.SS.UserModel
             // Write the workbook to a file
             // Read the Excel file and verify its content
             wb = _testDataProvider.WriteOutAndReadBack(wb);
-            IName nm1 = wb.GetNameAt(wb.GetNameIndex("RangeTest1"));
+            IName nm1 = wb.GetName("RangeTest1");
             Assert.IsTrue("RangeTest1".Equals(nm1.NameName), "Name is " + nm1.NameName);
             Assert.IsTrue((wb.GetSheetName(0) + "!$A$1:$L$41").Equals(nm1.RefersToFormula), "Reference is " + nm1.RefersToFormula);
 
-            IName nm2 = wb.GetNameAt(wb.GetNameIndex("RangeTest2"));
+            IName nm2 = wb.GetName("RangeTest2");
             Assert.IsTrue("RangeTest2".Equals(nm2.NameName), "Name is " + nm2.NameName);
             Assert.IsTrue((wb.GetSheetName(1) + "!$A$1:$O$21").Equals(nm2.RefersToFormula), "Reference is " + nm2.RefersToFormula);
         }
@@ -466,11 +460,11 @@ namespace TestCases.SS.UserModel
             wb.GetNameAt(0);
 
             wb = _testDataProvider.WriteOutAndReadBack(wb);
-            IName nm = wb.GetNameAt(wb.GetNameIndex("RangeTest"));
+            IName nm = wb.GetName("RangeTest");
             Assert.IsTrue("RangeTest".Equals(nm.NameName), "Name is " + nm.NameName);
             Assert.IsTrue((wb.GetSheetName(0) + "!$D$4:$E$8").Equals(nm.RefersToFormula), "Reference is " + nm.RefersToFormula);
 
-            nm = wb.GetNameAt(wb.GetNameIndex("AnotherTest"));
+            nm = wb.GetName("AnotherTest");
             Assert.IsTrue("AnotherTest".Equals(nm.NameName), "Name is " + nm.NameName);
             Assert.IsTrue(newNamedRange2.RefersToFormula.Equals(nm.RefersToFormula), "Reference is " + nm.RefersToFormula);
         }
@@ -497,8 +491,7 @@ namespace TestCases.SS.UserModel
             namedCell.RefersToFormula = (reference);
 
             // retrieve the newly Created named range
-            int namedCellIdx = wb.GetNameIndex(cellName);
-            IName aNamedCell = wb.GetNameAt(namedCellIdx);
+            IName aNamedCell = wb.GetName(cellName);
             Assert.IsNotNull(aNamedCell);
 
             // retrieve the cell at the named range and Test its contents
@@ -536,8 +529,7 @@ namespace TestCases.SS.UserModel
             namedCell.RefersToFormula = (reference);
 
             // retrieve the newly Created named range
-            int namedCellIdx = wb.GetNameIndex(cname);
-            IName aNamedCell = wb.GetNameAt(namedCellIdx);
+            IName aNamedCell = wb.GetName(cname);
             Assert.IsNotNull(aNamedCell);
 
             // retrieve the cell at the named range and Test its contents
@@ -649,6 +641,85 @@ namespace TestCases.SS.UserModel
             }
 
         }
+
+        [Test]
+        public void TestBug56930()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            // x1 on sheet1 defines "x=1"
+            wb.CreateSheet("sheet1");
+            IName x1 = wb.CreateName();
+            x1.NameName = "x";
+            x1.RefersToFormula = "1";
+            x1.SheetIndex = wb.GetSheetIndex("sheet1");
+            // x2 on sheet2 defines "x=2"
+            wb.CreateSheet("sheet2");
+            IName x2 = wb.CreateName();
+            x2.NameName = "x";
+            x2.RefersToFormula = "2";
+            x2.SheetIndex = wb.GetSheetIndex("sheet2");
+            IList<IName> names = wb.GetNames("x");
+            Assert.AreEqual(2, names.Count, "Had: " + names);
+            Assert.AreEqual("1", names[0].RefersToFormula);
+            Assert.AreEqual("2", names[1].RefersToFormula);
+            Assert.AreEqual("1", wb.GetName("x").RefersToFormula);
+            wb.RemoveName("x");
+            Assert.AreEqual("2", wb.GetName("x").RefersToFormula);
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Test56781()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+
+            IName name = wb.CreateName();
+            foreach (String valid in Arrays.AsList(
+                    "Hello",
+                    "number1",
+                    "_underscore"
+                    //"p.e.r.o.i.d.s",
+                    //"\\Backslash",
+                    //"Backslash\\"
+                    ))
+            {
+                name.NameName = valid;
+            }
+
+            try
+            {
+                name.NameName = "";
+                Assert.Fail("expected exception: (blank)");
+            }
+            catch (ArgumentException e)
+            {
+                Assert.AreEqual("Name cannot be blank", e.Message);
+            }
+
+            foreach (String invalid in Arrays.AsList(
+                    "1number",
+                    "Sheet1!A1",
+                    "Exclamation!",
+                    "Has Space",
+                    "Colon:",
+                    "A-Minus",
+                    "A+Plus",
+                    "Dollar$"))
+            {
+                try
+                {
+                    name.NameName = invalid;
+                    Assert.Fail("expected exception: " + invalid);
+                }
+                catch (ArgumentException e)
+                {
+                    Assert.IsTrue(e.Message.StartsWith("Invalid name: '" + invalid + "'"), invalid);
+                }
+            }
+
+        }
+
     }
 
 }

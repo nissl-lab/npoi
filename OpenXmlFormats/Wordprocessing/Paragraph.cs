@@ -231,6 +231,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return ctObj;
         }
 
+        public bool IsSetRsidR()
+        {
+            return this.rsidRField != null && rsidRField.Length > 0;
+        }
+
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
@@ -492,7 +497,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             return GetObjectList<CT_MarkupRange>(ParagraphItemsChoiceType.commentRangeStart);
         }
-
+        public CT_Hyperlink1 AddNewHyperlink()
+        {
+            return AddNewObject<CT_Hyperlink1>(ParagraphItemsChoiceType.hyperlink);
+        }
         public IEnumerable<CT_Hyperlink1> GetHyperlinkList()
         {
             return GetObjectList<CT_Hyperlink1>(ParagraphItemsChoiceType.hyperlink);
@@ -751,6 +759,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public CT_PPr()
         {
 
+        }
+        public CT_SectPr createSectPr()
+        {
+            this.sectPrField = new CT_SectPr();
+            return this.sectPrField;
         }
         public override bool IsEmpty
         {
@@ -1893,7 +1906,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_SectPrChange()
         {
-            //this.sectPrField = new CT_SectPrBase();
+            this.sectPrField = new CT_SectPrBase();
         }
         public static new CT_SectPrChange Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -1999,12 +2012,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             //this.docGridField = new CT_DocGrid();
             //this.rtlGutterField = new CT_OnOff();
             //this.bidiField = new CT_OnOff();
-            //this.textDirectionField = new CT_TextDirection();
+            this.textDirectionField = new CT_TextDirection();
             //this.titlePgField = new CT_OnOff();
             //this.noEndnoteField = new CT_OnOff();
             //this.vAlignField = new CT_VerticalJc();
             //this.formProtField = new CT_OnOff();
-            //this.colsField = new CT_Columns();
+            this.colsField = new CT_Columns();
             //this.pgNumTypeField = new CT_PageNumber();
             //this.lnNumTypeField = new CT_LineNumber();
             //this.pgBordersField = new CT_PageBorders();
@@ -2476,7 +2489,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_SectPr()
         {
-            //this.sectPrChangeField = new CT_SectPrChange();
+            this.sectPrChangeField = new CT_SectPrChange();
             //this.printerSettingsField = new CT_Rel();
             this.docGridField = new CT_DocGrid();
             this.docGrid.type = ST_DocGrid.lines;
@@ -2485,7 +2498,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             
             //this.rtlGutterField = new CT_OnOff();
             //this.bidiField = new CT_OnOff();
-            //this.textDirectionField = new CT_TextDirection();
+            this.textDirectionField = new CT_TextDirection();
             //this.titlePgField = new CT_OnOff();
             //this.noEndnoteField = new CT_OnOff();
             //this.vAlignField = new CT_VerticalJc();
@@ -2493,7 +2506,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.colsField = new CT_Columns();
             this.cols.space = 425;
             this.cols.spaceSpecified = true;
-            //this.pgNumTypeField = new CT_PageNumber();
+            this.pgNumTypeField = new CT_PageNumber();
             //this.lnNumTypeField = new CT_LineNumber();
             //this.pgBordersField = new CT_PageBorders();
             //this.paperSrcField = new CT_PaperSource();
@@ -2863,20 +2876,28 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         public int SizeOfHeaderReferenceArray()
         {
+            if (headerReferenceField == null)
+                return 0;
             return headerReferenceField.Count;
         }
         public CT_HdrFtrRef GetHeaderReferenceArray(int i)
         {
+            if (headerReferenceField == null)
+                return null;
             return headerReferenceField[i];
         }
 
         public int SizeOfFooterReferenceArray()
         {
+            if (footerReferenceField == null)
+                return 0;
             return footerReferenceField.Count;
         }
 
         public CT_HdrFtrRef GetFooterReferenceArray(int i)
         {
+            if (footerReferenceField == null)
+                return null;
             return footerReferenceField[i];
         }
 
@@ -3497,7 +3518,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             return !(this.lineRuleField == ST_LineSpacingRule.nil);
         }
-
+        public bool IsSetBetweenLines()
+        {
+            return !string.IsNullOrEmpty(this.lineField);
+        }
         public bool IsSetAfter()
         {
             return !(this.afterField == 0);
@@ -4769,6 +4793,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (this.spacingField == null)
                 this.spacingField = new CT_SignedTwipsMeasure();
             return this.spacingField;
+        }
+
+        public bool IsSetHighlight()
+        {
+            return this.highlightField != null;
+        }
+
+        internal CT_Highlight AddNewHighlight()
+        {
+            this.highlightField = new CT_Highlight();
+            return this.highlightField;
         }
     }
 

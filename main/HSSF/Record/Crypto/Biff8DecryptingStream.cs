@@ -100,7 +100,8 @@ namespace NPOI.HSSF.Record.Crypto
 
         public int ReadUByte()
         {
-            return _rc4.XorByte(_le.ReadUByte());
+            //return _rc4.XorByte(_le.ReadUByte());
+            return ReadByte() & 0xFF;
         }
         public int ReadByte()
         {
@@ -110,7 +111,8 @@ namespace NPOI.HSSF.Record.Crypto
 
         public int ReadUShort()
         {
-            return _rc4.Xorshort(_le.ReadUShort());
+            //return _rc4.Xorshort(_le.ReadUShort());
+            return ReadShort() & 0xFFFF;
         }
         public short ReadShort()
         {

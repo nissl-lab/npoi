@@ -28,11 +28,6 @@ namespace NPOI.SS.Formula.Functions
     public interface IDStarAlgorithm
     {
         /**
-         * Reset the state of this algorithm.
-         * This is called before each run through a database.
-         */
-        void Reset();
-        /**
          * Process a match that is found during a run through a database.
          * @param eval ValueEval of the cell in the matching row. References will already be Resolved.
          * @return Whether we should continue iterating through the database.

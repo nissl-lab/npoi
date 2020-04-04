@@ -65,6 +65,16 @@ namespace TestCases.SS.Formula.Atp
             double A_WEDNESDAY = DateUtil.GetExcelDate(new DateTime(2011, December, 21));
             Assert.AreEqual(4, WorkdayCalculator.instance.CalculateWorkdays(A_FRIDAY, A_WEDNESDAY, new double[] { A_SATURDAY, A_SUNDAY }));
         }
+
+        [Test]
+        public void TestCalculateWorkdaysNumberOfDays()
+        {
+            double start = 41553.0;
+            int days = 1;
+            Assert.AreEqual(new DateTime(2013, 10, 7), WorkdayCalculator.instance.CalculateWorkdays(start, days, new double[0]));
+        }
+
+
         [Test]
         public void TestPastDaysOfWeekShouldReturn0Past0Saturdays()
         {

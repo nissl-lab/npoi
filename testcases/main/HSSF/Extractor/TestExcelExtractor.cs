@@ -352,6 +352,7 @@ using NPOI.HSSF.Record.Crypto;
             }
         }
         [Test]
+        [Ignore("not implemented")]
         public void TestPassword()
         {
             Biff8EncryptionKey.CurrentUserPassword = ("password");
@@ -360,6 +361,13 @@ using NPOI.HSSF.Record.Crypto;
             Biff8EncryptionKey.CurrentUserPassword = (null);
 
             Assert.IsTrue(text.Contains("ZIP"));
+        }
+        [Test]
+        public void TestNullPointerException()
+        {
+            ExcelExtractor extractor = CreateExtractor("ar.org.apsme.www_Form%20Inscripcion%20Curso%20NO%20Socios.xls");
+            Assert.IsNotNull(extractor);
+            Assert.IsNotNull(extractor.Text);
         }
     }
 }

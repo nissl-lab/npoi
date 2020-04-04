@@ -15,14 +15,16 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
-using System.Collections.Generic;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.XSSF;
+using NPOI.XSSF.UserModel;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using TestCases.SS.UserModel;
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
 
     /**
@@ -38,8 +40,10 @@ namespace NPOI.XSSF.UserModel
 
         }
 
-         [Test]
-        public override void TestShiftRowBreaks() { // disabled test from superclass
+        [Test]
+        public override void TestShiftRowBreaks()
+        {
+            // disabled test from superclass
             // TODO - support shifting of page breaks
         }
 
@@ -51,11 +55,13 @@ namespace NPOI.XSSF.UserModel
             sheet.ShiftRows(3, 5, -1);
 
             ICell cell = CellUtil.GetCell(sheet.GetRow(1), 0);
-            Assert.AreEqual(1.0, cell.NumericCellValue);
+            Assert.AreEqual(1.0, cell.NumericCellValue, 0);
             cell = CellUtil.GetCell(sheet.GetRow(2), 0);
             Assert.AreEqual("SUM(A2:A2)", cell.CellFormula);
             cell = CellUtil.GetCell(sheet.GetRow(3), 0);
             Assert.AreEqual("X", cell.StringCellValue);
+
+            workbook.Close();
         }
         [Test]
         public void TestBug53798()
@@ -81,11 +87,12 @@ namespace NPOI.XSSF.UserModel
             // org.apache.xmlbeans.impl.values.XmlValueDisconnectedException.
             // NOTE: another negative shift on another group of rows is successful, provided no new rows in  
             // place of previously shifted rows were attempted to be created as explained above.
-            testSheet.ShiftRows(6, 7, 1);	// -- CHANGE the shift to positive once the behaviour of  
-            // the above has been tested
+            // -- CHANGE the shift to positive once the behaviour of the above has been tested
+            testSheet.ShiftRows(6, 7, 1);
+            
 
-            //saveReport(wb, new File("/tmp/53798.xlsx"));
             IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wb.Close();
             Assert.IsNotNull(read);
 
             ISheet readSheet = read.GetSheetAt(0);
@@ -98,6 +105,7 @@ namespace NPOI.XSSF.UserModel
             verifyCellContent(readSheet, 6, null);
             verifyCellContent(readSheet, 7, "6.0");
             verifyCellContent(readSheet, 8, "7.0");
+            read.Close();
         }
 
         // CT_Rows should stay sorted in ascending order after a call to ShiftRows.
@@ -172,8 +180,8 @@ namespace NPOI.XSSF.UserModel
             }
             testSheet.ShiftRows(6, 6, 1);
 
-            //saveReport(wb, new File("/tmp/53798.xlsx"));
             IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wb.Close();
             Assert.IsNotNull(read);
 
             ISheet readSheet = read.GetSheetAt(0);
@@ -186,6 +194,7 @@ namespace NPOI.XSSF.UserModel
             verifyCellContent(readSheet, 6, null);
             verifyCellContent(readSheet, 7, "6.0");
             verifyCellContent(readSheet, 8, "8.0");
+            read.Close();
         }
 
         [Test]
@@ -195,7 +204,7 @@ namespace NPOI.XSSF.UserModel
 
             ISheet sheet = wb.GetSheetAt(0);
 
-            IComment comment = sheet.GetCellComment(0, 0);
+            IComment comment = sheet.GetCellComment(new CellAddress(0, 0));
             Assert.IsNotNull(comment);
             Assert.AreEqual("Amdocs", comment.Author);
             Assert.AreEqual("Amdocs:\ntest\n", comment.String.String);
@@ -203,36 +212,31 @@ namespace NPOI.XSSF.UserModel
             sheet.ShiftRows(0, 1, 1);
 
             // comment in row 0 is gone
-            comment = sheet.GetCellComment(0, 0);
+            comment = sheet.GetCellComment(new CellAddress(0, 0));
             Assert.IsNull(comment);
 
             // comment is now in row 1
-            comment = sheet.GetCellComment(1, 0);
+            comment = sheet.GetCellComment(new CellAddress(1, 0));
             Assert.IsNotNull(comment);
             Assert.AreEqual("Amdocs", comment.Author);
             Assert.AreEqual("Amdocs:\ntest\n", comment.String.String);
 
-            //        FileOutputStream outputStream = new FileOutputStream("/tmp/56017.xlsx");
-            //        try {
-            //            wb.Write(outputStream);
-            //        } finally {
-            //            outputStream.Close();
-            //        }
-
             IWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wb.Close();
             Assert.IsNotNull(wbBack);
 
             ISheet sheetBack = wbBack.GetSheetAt(0);
 
             // comment in row 0 is gone
-            comment = sheetBack.GetCellComment(0, 0);
+            comment = sheetBack.GetCellComment(new CellAddress(0, 0));
             Assert.IsNull(comment);
 
             // comment is now in row 1
-            comment = sheetBack.GetCellComment(1, 0);
+            comment = sheetBack.GetCellComment(new CellAddress(1, 0));
             Assert.IsNotNull(comment);
             Assert.AreEqual("Amdocs", comment.Author);
             Assert.AreEqual("Amdocs:\ntest\n", comment.String.String);
+            wbBack.Close();
         }
 
         [Test]
@@ -244,12 +248,13 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, wb.ActiveSheetIndex);
 
             IWorkbook wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wb.Close();
             Assert.AreEqual(0, wbRead.ActiveSheetIndex);
 
             wbRead.RemoveSheetAt(0);
             Assert.AreEqual(0, wbRead.ActiveSheetIndex);
 
-            //wb.Write(new FileOutputStream("/tmp/57171.xls"));
+            wbRead.Close();
         }
 
         [Test]
@@ -260,7 +265,7 @@ namespace NPOI.XSSF.UserModel
             wb.RemoveSheetAt(0);
             Assert.AreEqual(4, wb.ActiveSheetIndex);
 
-            //wb.Write(new FileOutputStream("/tmp/57163.xls"));
+            wb.Close();
         }
 
         [Test]
@@ -310,6 +315,8 @@ namespace NPOI.XSSF.UserModel
 
             wb.SetSheetOrder(wb.GetSheetName(0), 5);
             Assert.AreEqual(5, wb.ActiveSheetIndex);
+
+            wb.Close();
         }
 
         [Test]
@@ -356,9 +363,10 @@ namespace NPOI.XSSF.UserModel
 
             wb.RemoveSheetAt(0);
             Assert.AreEqual(0, wb.ActiveSheetIndex);
+
+            wb.Close();
         }
 
-        // TODO: enable when bug 57165 is fixed
         [Test]
         public void Test57165()
         {
@@ -372,18 +380,8 @@ namespace NPOI.XSSF.UserModel
             wb.SetSheetName(1, "New Sheet");
             Assert.AreEqual(0, wb.ActiveSheetIndex);
 
-            //wb.Write(new FileOutputStream("/tmp/57165.xls"));
+            wb.Close();
         }
-
-        //    public void Test57165b(){
-        //        IWorkbook wb = new XSSFWorkbook();
-        //        try {
-        //            wb.CreateSheet("New Sheet 1");
-        //            wb.CreateSheet("New Sheet 2");
-        //        } finally {
-        //            wb.Close();
-        //        }
-        //    }
 
         private static void RemoveAllSheetsBut(int sheetIndex, IWorkbook wb)
         {
@@ -405,32 +403,61 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57828.xlsx");
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
 
-            IComment comment1 = sheet.GetCellComment(2, 1);
+            IComment comment1 = sheet.GetCellComment(new CellAddress(2, 1));
             Assert.IsNotNull(comment1);
 
-            IComment comment2 = sheet.GetCellComment(2, 2);
+            IComment comment2 = sheet.GetCellComment(new CellAddress(2, 2));
             Assert.IsNotNull(comment2);
 
-            IComment comment3 = sheet.GetCellComment(1, 1);
+            IComment comment3 = sheet.GetCellComment(new CellAddress(1, 1));
             Assert.IsNull(comment3, "NO comment in (1,1) and it should be null");
 
             sheet.ShiftRows(2, 2, -1);
 
-            comment3 = sheet.GetCellComment(1, 1);
+            comment3 = sheet.GetCellComment(new CellAddress(1, 1));
             Assert.IsNotNull(comment3, "Comment in (2,1) Moved to (1,1) so its not null now.");
 
-            comment1 = sheet.GetCellComment(2, 1);
+            comment1 = sheet.GetCellComment(new CellAddress(2, 1));
             Assert.IsNull(comment1, "No comment currently in (2,1) and hence it is null");
 
-            comment2 = sheet.GetCellComment(1, 2);
+            comment2 = sheet.GetCellComment(new CellAddress(1, 2));
             Assert.IsNotNull(comment2, "Comment in (2,2) should have Moved as well because of shift rows. But its not");
 
-            //        OutputStream stream = new FileOutputStream("/tmp/57828.xlsx");
-            //        try {
-            //        	wb.Write(stream);
-            //        } finally {
-            //        	stream.Close();
-            //        }
+            wb.Close();
+        }
+
+        private static String getCellFormula(ISheet sheet, String address)
+        {
+            CellAddress cellAddress = new CellAddress(address);
+            IRow row = sheet.GetRow(cellAddress.Row);
+            Assert.IsNotNull(row);
+            ICell cell = row.GetCell(cellAddress.Column);
+            Assert.IsNotNull(cell);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            return cell.CellFormula;
+        }
+        // This test is written as expected-to-Assert.Fail and should be rewritten
+        // as expected-to-pass when the bug is fixed.
+        [Test]
+        public void TestSharedFormulas()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("TestShiftRowSharedFormula.xlsx");
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+            Assert.AreEqual("SUM(C2:C4)", getCellFormula(sheet, "C5"));
+            Assert.AreEqual("SUM(D2:D4)", getCellFormula(sheet, "D5"));
+            Assert.AreEqual("SUM(E2:E4)", getCellFormula(sheet, "E5"));
+            sheet.ShiftRows(3, sheet.LastRowNum, 1);
+            try
+            {
+                Assert.AreEqual("SUM(C2:C5)", getCellFormula(sheet, "C6"));
+                Assert.AreEqual("SUM(D2:D5)", getCellFormula(sheet, "D6"));
+                Assert.AreEqual("SUM(E2:E5)", getCellFormula(sheet, "E6"));
+                POITestCase.TestPassesNow(59983);
+            }
+            catch (AssertionException e)
+            {
+                POITestCase.SkipTest(e);
+            }
 
             wb.Close();
         }

@@ -190,9 +190,9 @@ namespace NPOI.HSSF.UserModel
                         lastChart.chartTitleText = str;
                     }
                 }
-                else if (r is BRAIRecord)
+                else if (r is LinkedDataRecord)
                 {
-                    BRAIRecord linkedDataRecord = (BRAIRecord)r;
+                    LinkedDataRecord linkedDataRecord = (LinkedDataRecord)r;
                     if (lastSeries != null)
                     {
                         lastSeries.InsertData(linkedDataRecord);
@@ -516,11 +516,11 @@ namespace NPOI.HSSF.UserModel
             records.Add(CreateEndRecord());
         }
 
-        private BRAIRecord CreateLinkedDataRecord()
+        private LinkedDataRecord CreateLinkedDataRecord()
         {
-            BRAIRecord r = new BRAIRecord();
-            r.LinkType = (BRAIRecord.LINK_TYPE_TITLE_OR_TEXT);
-            r.ReferenceType = (BRAIRecord.REFERENCE_TYPE_DIRECT);
+            LinkedDataRecord r = new LinkedDataRecord();
+            r.LinkType = (LinkedDataRecord.LINK_TYPE_TITLE_OR_TEXT);
+            r.ReferenceType = (LinkedDataRecord.REFERENCE_TYPE_DIRECT);
             r.IsCustomNumberFormat = (false);
             r.IndexNumberFmtRecord = ((short)0);
             r.FormulaOfLink = (null);
@@ -716,20 +716,20 @@ namespace NPOI.HSSF.UserModel
             return r;
         }
 
-        private BRAIRecord CreateDirectLinkRecord()
+        private LinkedDataRecord CreateDirectLinkRecord()
         {
-            BRAIRecord r = new BRAIRecord();
-            r.LinkType = (BRAIRecord.LINK_TYPE_TITLE_OR_TEXT);
-            r.ReferenceType = (BRAIRecord.REFERENCE_TYPE_DIRECT);
+            LinkedDataRecord r = new LinkedDataRecord();
+            r.LinkType = (LinkedDataRecord.LINK_TYPE_TITLE_OR_TEXT);
+            r.ReferenceType = (LinkedDataRecord.REFERENCE_TYPE_DIRECT);
             r.IsCustomNumberFormat = (false);
             r.IndexNumberFmtRecord = ((short)0);
             r.FormulaOfLink = (null);
             return r;
         }
 
-        private FontXRecord CreateFontIndexRecord(int index)
+        private FontIndexRecord CreateFontIndexRecord(int index)
         {
-            FontXRecord r = new FontXRecord();
+            FontIndexRecord r = new FontIndexRecord();
             r.FontIndex = ((short)index);
             return r;
         }
@@ -827,11 +827,11 @@ namespace NPOI.HSSF.UserModel
             return r;
         }
 
-        private BRAIRecord CreateCategoriesLinkedDataRecord()
+        private LinkedDataRecord CreateCategoriesLinkedDataRecord()
         {
-            BRAIRecord r = new BRAIRecord();
-            r.LinkType = (BRAIRecord.LINK_TYPE_CATEGORIES);
-            r.ReferenceType = (BRAIRecord.REFERENCE_TYPE_WORKSHEET);
+            LinkedDataRecord r = new LinkedDataRecord();
+            r.LinkType = (LinkedDataRecord.LINK_TYPE_CATEGORIES);
+            r.ReferenceType = (LinkedDataRecord.REFERENCE_TYPE_WORKSHEET);
             r.IsCustomNumberFormat = (false);
             r.IndexNumberFmtRecord = ((short)0);
             Area3DPtg p = new Area3DPtg(0, 31, 1, 1,
@@ -840,11 +840,11 @@ namespace NPOI.HSSF.UserModel
             return r;
         }
 
-        private BRAIRecord CreateValuesLinkedDataRecord()
+        private LinkedDataRecord CreateValuesLinkedDataRecord()
         {
-            BRAIRecord r = new BRAIRecord();
-            r.LinkType = (BRAIRecord.LINK_TYPE_VALUES);
-            r.ReferenceType = (BRAIRecord.REFERENCE_TYPE_WORKSHEET);
+            LinkedDataRecord r = new LinkedDataRecord();
+            r.LinkType = (LinkedDataRecord.LINK_TYPE_VALUES);
+            r.ReferenceType = (LinkedDataRecord.REFERENCE_TYPE_WORKSHEET);
             r.IsCustomNumberFormat = (false);
             r.IndexNumberFmtRecord = ((short)0);
             Area3DPtg p = new Area3DPtg(0, 31, 0, 0,
@@ -853,11 +853,11 @@ namespace NPOI.HSSF.UserModel
             return r;
         }
 
-        private BRAIRecord CreateTitleLinkedDataRecord()
+        private LinkedDataRecord CreateTitleLinkedDataRecord()
         {
-            BRAIRecord r = new BRAIRecord();
-            r.LinkType = (BRAIRecord.LINK_TYPE_TITLE_OR_TEXT);
-            r.ReferenceType = (BRAIRecord.REFERENCE_TYPE_DIRECT);
+            LinkedDataRecord r = new LinkedDataRecord();
+            r.LinkType = (LinkedDataRecord.LINK_TYPE_TITLE_OR_TEXT);
+            r.ReferenceType = (LinkedDataRecord.REFERENCE_TYPE_DIRECT);
             r.IsCustomNumberFormat = (false);
             r.IndexNumberFmtRecord = ((short)0);
             r.FormulaOfLink = (null);
@@ -996,10 +996,10 @@ namespace NPOI.HSSF.UserModel
         {
             internal SeriesRecord series;
             internal SeriesTextRecord seriesTitleText;
-            private BRAIRecord dataName;
-            private BRAIRecord dataValues;
-            private BRAIRecord dataCategoryLabels;
-            private BRAIRecord dataSecondaryCategoryLabels;
+            private LinkedDataRecord dataName;
+            private LinkedDataRecord dataValues;
+            private LinkedDataRecord dataCategoryLabels;
+            private LinkedDataRecord dataSecondaryCategoryLabels;
 
             /* package */
             public HSSFSeries(SeriesRecord series)
@@ -1007,7 +1007,7 @@ namespace NPOI.HSSF.UserModel
                 this.series = series;
             }
 
-            internal void InsertData(BRAIRecord data)
+            internal void InsertData(LinkedDataRecord data)
             {
                 switch (data.LinkType)
                 {
@@ -1075,7 +1075,7 @@ namespace NPOI.HSSF.UserModel
             /**
              * @return record with data names
              */
-            public BRAIRecord GetDataName()
+            public LinkedDataRecord GetDataName()
             {
                 return dataName;
             }
@@ -1083,7 +1083,7 @@ namespace NPOI.HSSF.UserModel
             /**
              * @return record with data values
              */
-            public BRAIRecord GetDataValues()
+            public LinkedDataRecord GetDataValues()
             {
                 return dataValues;
             }
@@ -1091,7 +1091,7 @@ namespace NPOI.HSSF.UserModel
             /**
              * @return record with data category labels
              */
-            public BRAIRecord GetDataCategoryLabels()
+            public LinkedDataRecord GetDataCategoryLabels()
             {
                 return dataCategoryLabels;
             }
@@ -1099,7 +1099,7 @@ namespace NPOI.HSSF.UserModel
             /**
              * @return record with data secondary category labels
              */
-            public BRAIRecord GetDataSecondaryCategoryLabels()
+            public LinkedDataRecord GetDataSecondaryCategoryLabels()
             {
                 return dataSecondaryCategoryLabels;
             }
@@ -1112,7 +1112,7 @@ namespace NPOI.HSSF.UserModel
                 return series;
             }
 
-            private CellRangeAddressBase GetCellRange(BRAIRecord linkedDataRecord)
+            private CellRangeAddressBase GetCellRange(LinkedDataRecord linkedDataRecord)
             {
                 if (linkedDataRecord == null)
                 {
@@ -1151,7 +1151,7 @@ namespace NPOI.HSSF.UserModel
                 return GetCellRange(dataCategoryLabels);
             }
 
-            private int SetVerticalCellRange(BRAIRecord linkedDataRecord,
+            private int SetVerticalCellRange(LinkedDataRecord linkedDataRecord,
                                                  CellRangeAddressBase range)
             {
                 if (linkedDataRecord == null)
@@ -1299,9 +1299,9 @@ namespace NPOI.HSSF.UserModel
                     newSeries = new HSSFSeries(seriesRecord);
                     newRecord = seriesRecord;
                 }
-                else if (record is BRAIRecord)
+                else if (record is LinkedDataRecord)
                 {
-                    BRAIRecord linkedDataRecord = (BRAIRecord)((BRAIRecord)record).Clone();
+                    LinkedDataRecord linkedDataRecord = (LinkedDataRecord)((LinkedDataRecord)record).Clone();
                     if (newSeries != null)
                     {
                         newSeries.InsertData(linkedDataRecord);

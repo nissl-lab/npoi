@@ -25,7 +25,7 @@ namespace NPOI.HSSF.Record
     /**
      * This structure appears as part of an Obj record that represents image display properties.
      */
-    public class FtPioGrbitSubRecord : SubRecord
+    public class FtPioGrbitSubRecord : SubRecord, ICloneable
     {
         public const short sid = 0x08;
         public const short length = 0x02;

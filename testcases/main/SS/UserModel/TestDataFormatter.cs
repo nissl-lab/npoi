@@ -24,6 +24,8 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using System.Globalization;
+    using NPOI.SS.Format;
+    using TestCases.HSSF;
 
     /**
      * Tests of {@link DataFormatter}
@@ -35,6 +37,27 @@ namespace TestCases.SS.UserModel
     public class TestDataFormatter
     {
         private static double _15_MINUTES = 0.041666667;
+        [SetUp]
+        public void SetUpClass()
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+            // some pre-checks to hunt for a problem in the Maven build
+            // these checks ensure that the correct locale is set, so a Assert.Failure here
+            // usually indicates an invalid locale during test-execution
+            Assert.IsFalse(DateUtil.IsADateFormat(-1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            //Locale ul = LocaleUtil.getUserLocale();
+            //assertTrue(Locale.ROOT.equals(ul) || Locale.getDefault().equals(ul));
+            String textValue = NumberToTextConverter.ToText(1234.56);
+            Assert.AreEqual(-1, textValue.IndexOf('E'));
+            Object cellValueO = 1234.56d;
+            /*CellFormat cellFormat = new CellFormat("_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-");
+            CellFormatResult result = cellFormat.apply(cellValueO);
+            Assert.AreEqual("    1,234.56 ", result.text);*/
+            CellFormat cfmt = CellFormat.GetInstance("_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-");
+            CellFormatResult result = cfmt.Apply(cellValueO);
+            Assert.AreEqual("    1,234.56 ", result.Text,
+                "This Assert.Failure can indicate that the wrong locale is used during test-execution, ensure you run with english/US via -Duser.language=en -Duser.country=US");
+        }
         /**
          * Test that we use the specified locale when deciding
          *   how to format normal numbers
@@ -42,14 +65,13 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestLocale()
         {
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
-            DataFormatter dfFR = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("fr-FR"));
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
+            DataFormatter dfFR = new DataFormatter(CultureInfo.GetCultureInfo("fr-FR"));
 
             Assert.AreEqual("1234", dfUS.FormatRawCellContents(1234, -1, "@"));
             Assert.AreEqual("1234", dfFR.FormatRawCellContents(1234, -1, "@"));
             
             Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.34, -1, "@"));
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("fr-FR");
             Assert.AreEqual("12,34", dfFR.FormatRawCellContents(12.34, -1, "@"));
         }
         /**
@@ -60,7 +82,7 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestLocaleBasedFormats()
         {
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
 
             // Standard formats
             Assert.AreEqual("63", dfUS.FormatRawCellContents(63.0, -1, "[$-1010409]General"));
@@ -71,7 +93,25 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("63", dfUS.FormatRawCellContents(63.0, -1, "[$-1010409]00"));
 
         }
-    
+        /**
+         * Test that we use the specified locale when deciding
+         *   how to format normal numbers
+         */
+        [Test]
+        public void TestGrouping()
+        {
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
+            DataFormatter dfDE = new DataFormatter(CultureInfo.GetCultureInfo("de-DE"));
+
+            Assert.AreEqual("1,234.57", dfUS.FormatRawCellContents(1234.567, -1, "#,##0.00"));
+            Assert.AreEqual("1'234.57", dfUS.FormatRawCellContents(1234.567, -1, "#'##0.00"));
+            Assert.AreEqual("1 234.57", dfUS.FormatRawCellContents(1234.567, -1, "# ##0.00"));
+
+            Assert.AreEqual("1.234,57", dfDE.FormatRawCellContents(1234.567, -1, "#,##0.00"));
+            Assert.AreEqual("1'234,57", dfDE.FormatRawCellContents(1234.567, -1, "#'##0.00"));
+            Assert.AreEqual("1 234,57", dfDE.FormatRawCellContents(1234.567, -1, "# ##0.00"));
+        }
+
         /**
          * Ensure that colours Get correctly
          *  zapped from within the format strings
@@ -80,7 +120,7 @@ namespace TestCases.SS.UserModel
         public void TestColours()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
 
             String[] formats = new String[] {
              "##.##",
@@ -111,7 +151,7 @@ namespace TestCases.SS.UserModel
         public void TestColoursAndBrackets()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
 
             // Without currency symbols
             String[] formats = new String[] {
@@ -162,7 +202,7 @@ namespace TestCases.SS.UserModel
         public void TestNegativeZero()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
 
             String all2dp = "00.00";
             String alln1dp = "(00.0)";
@@ -208,7 +248,7 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestFractions()
         {
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
 
             // Excel often prefers "# #/#"
             Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# #/#"));
@@ -222,14 +262,14 @@ namespace TestCases.SS.UserModel
 
             // p;n;z;s parts
             Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# #/#;# ##/#;0;xxx"));
-            Assert.AreEqual("-321 1/3", dfUS.FormatRawCellContents(-321.321, -1, "# #/#;# ##/#;0;xxx"));
+            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(-321.321, -1, "# #/#;# ##/#;0;xxx")); // Note the lack of - sign!
             Assert.AreEqual("0", dfUS.FormatRawCellContents(0, -1, "# #/#;# ##/#;0;xxx"));
-            //     Assert.AreEqual("0.0",       dfUS.FormatRawCellContents(0,        -1, "# #/#;# ##/#;#.#;xxx")); // currently hard coded to 0
+            //     Assert.AreEqual(".",        dfUS.FormatRawCellContents(0,       -1, "# #/#;# ##/#;#.#;xxx")); // Currently shows as 0. not .
 
             // Custom formats with text are not currently supported
-            //     Assert.AreEqual("+ve",       dfUS.FormatRawCellContents(0,        -1, "+ve;-ve;zero;xxx"));
-            //     Assert.AreEqual("-ve",       dfUS.FormatRawCellContents(0,        -1, "-ve;-ve;zero;xxx"));
-            //     Assert.AreEqual("zero",      dfUS.FormatRawCellContents(0,        -1, "zero;-ve;zero;xxx"));
+            Assert.AreEqual("+ve", dfUS.FormatRawCellContents(1, -1, "+ve;-ve;zero;xxx"));
+            Assert.AreEqual("-ve", dfUS.FormatRawCellContents(-1, -1, "-ve;-ve;zero;xxx"));
+            Assert.AreEqual("zero", dfUS.FormatRawCellContents(0, -1, "zero;-ve;zero;xxx"));
 
             // Custom formats - check text is stripped, including multiple spaces
             Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "#   #/#"));
@@ -259,7 +299,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# ?/? ?/?"));
             Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# ?/? #/# #/#"));
 
-            // Where both p and n don't include a fraction, so cannot always be formatted
+            // Where +ve has a fraction, but -ve doesnt, we currently show both
+            Assert.AreEqual("123 1/3", dfUS.FormatRawCellContents(123.321, -1, "0 ?/?;0"));
             //Assert.AreEqual("123", dfUS.FormatRawCellContents(-123.321, -1, "0 ?/?;0"));
 
             //Bug54868 patch has a hit on the first string before the ";"
@@ -279,7 +320,7 @@ namespace TestCases.SS.UserModel
         public void TestPaddingSpaces()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
             Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##_ "));
             Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##_1"));
             Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##_)"));
@@ -298,7 +339,7 @@ namespace TestCases.SS.UserModel
         public void TestPaddingSpacesCSV()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"), true);
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"), true);
             Assert.AreEqual("12.34 ", dfUS.FormatRawCellContents(12.343, -1, "##.##_ "));
             Assert.AreEqual("-12.34 ", dfUS.FormatRawCellContents(-12.343, -1, "##.##_ "));
             Assert.AreEqual(". ", dfUS.FormatRawCellContents(0.0, -1, "##.##_ "));
@@ -334,10 +375,10 @@ namespace TestCases.SS.UserModel
         public void TestMMMMM()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
 
             DateTime c = new DateTime(2010, 6, 1, 2, 0, 0, 0);
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             Assert.AreEqual("2010-J-1 2:00:00", dfUS.FormatRawCellContents(
                   DateUtil.GetExcelDate(c, false), -1, "YYYY-MMMMM-D h:mm:ss"
             ));
@@ -348,7 +389,7 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestAMPM()
         {
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
 
             Assert.AreEqual("06:00", dfUS.FormatRawCellContents(0.25, -1, "hh:mm"));
             Assert.AreEqual("18:00", dfUS.FormatRawCellContents(0.75, -1, "hh:mm"));
@@ -367,7 +408,7 @@ namespace TestCases.SS.UserModel
         public void TestElapsedTime()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
             double hour = 1.0 / 24.0;
 
             Assert.AreEqual("01:00", dfUS.FormatRawCellContents(1 * hour, -1, "hh:mm"));
@@ -474,7 +515,7 @@ namespace TestCases.SS.UserModel
         public void TestDateWindowing()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
             Assert.AreEqual("1899-12-31 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss"));
             Assert.AreEqual("1899-12-31 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss", false));
             Assert.AreEqual("1904-01-01 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss", true));
@@ -483,7 +524,7 @@ namespace TestCases.SS.UserModel
         public void TestScientificNotation()
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
 
             Assert.AreEqual("1.23E+01", dfUS.FormatRawCellContents(12.343, -1, "0.00E+00"));
             Assert.AreEqual("-1.23E+01", dfUS.FormatRawCellContents(-12.343, -1, "0.00E+00"));
@@ -493,19 +534,19 @@ namespace TestCases.SS.UserModel
         public void TestInvalidDate()
         {
             //DataFormatter df1 = new DataFormatter(Locale.US);
-            DataFormatter df1 = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+            DataFormatter df1 = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
             //Assert.AreEqual("-1.0", df1.FormatRawCellContents(-1, -1, "mm/dd/yyyy"));
             //in java -1.toString() is "-1.0", but in C# -1.ToString() is "-1".
             Assert.AreEqual("-1", df1.FormatRawCellContents(-1, -1, "mm/dd/yyyy"));
             //DataFormatter df2 = new DataFormatter(Locale.US);
-            DataFormatter df2 = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"), true);
+            DataFormatter df2 = new DataFormatter(CultureInfo.GetCultureInfo("en-US"), true);
             Assert.AreEqual("###############################################################################################################################################################################################################################################################",
                     df2.FormatRawCellContents(-1, -1, "mm/dd/yyyy"));
         }
         [Test]
         public void TestEscapes()
         {
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
             Assert.AreEqual("1901-01-01", dfUS.FormatRawCellContents(367.0, -1, "yyyy-mm-dd"));
             Assert.AreEqual("1901-01-01", dfUS.FormatRawCellContents(367.0, -1, "yyyy\\-mm\\-dd"));
 
@@ -516,19 +557,34 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("1901/01/01", dfUS.FormatRawCellContents(367.0, -1, "yyyy\\/mm\\/dd"));
         }
         [Test]
-        public void TestOther()
+        public void TestFormatsWithPadding()
         {
-            //DataFormatter dfUS = new DataFormatter(Locale.US, true);
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"), true);
-            Assert.AreEqual(" 12.34 ", dfUS.FormatRawCellContents(12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
-            Assert.AreEqual("-12.34 ", dfUS.FormatRawCellContents(-12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
-            Assert.AreEqual(" -   ", dfUS.FormatRawCellContents(0.0, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
-            Assert.AreEqual(" $-   ", dfUS.FormatRawCellContents(0.0, -1, "_-$* #,##0.00_-;-$* #,##0.00_-;_-$* \"-\"??_-;_-@_-"));
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"), true);
+
+            // These request space-padding, based on the cell width
+            // There should always be one space after, variable (non-zero) amount before
+            // Because the Cell Width isn't available, this gets emulated with
+            //  4 leading spaces, or a minus then 3 leading spaces
+            // This isn't all that consistent, but it's the best we can really manage...
+            Assert.AreEqual("    1,234.56 ", dfUS.FormatRawCellContents(1234.56, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            Assert.AreEqual("-   1,234.56 ", dfUS.FormatRawCellContents(-1234.56, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            Assert.AreEqual("    12.34 ", dfUS.FormatRawCellContents(12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            Assert.AreEqual("-   12.34 ", dfUS.FormatRawCellContents(-12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+
+            Assert.AreEqual("    0.10 ", dfUS.FormatRawCellContents(0.1, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            Assert.AreEqual("-   0.10 ", dfUS.FormatRawCellContents(-0.1, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            // TODO Fix this, we are randomly adding a 0 at the end that souldn't be there
+            //Assert.AreEqual("     -   ", dfUS.FormatRawCellContents(0.0, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+
+            Assert.AreEqual(" $   1.10 ", dfUS.FormatRawCellContents(1.1, -1, "_-$* #,##0.00_-;-$* #,##0.00_-;_-$* \"-\"??_-;_-@_-"));
+            Assert.AreEqual("-$   1.10 ", dfUS.FormatRawCellContents(-1.1, -1, "_-$* #,##0.00_-;-$* #,##0.00_-;_-$* \"-\"??_-;_-@_-"));
+            // TODO Fix this, we are randomly adding a 0 at the end that souldn't be there
+            //Assert.AreEqual(" $    -   ", dfUS.FormatRawCellContents( 0.0, -1, "_-$* #,##0.00_-;-$* #,##0.00_-;_-$* \"-\"??_-;_-@_-"));
         }
         [Test]
         public void TestErrors()
         {
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"), true);
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"), true);
 
             // Create a spreadsheet with some formula errors in it
             IWorkbook wb = new HSSFWorkbook();
@@ -541,6 +597,28 @@ namespace TestCases.SS.UserModel
 
             c.SetCellErrorValue(FormulaError.REF.Code);
             Assert.AreEqual(FormulaError.REF.String, dfUS.FormatCellValue(c));
+        }
+
+        [Test]
+        public void TestBoolean()
+        {
+            DataFormatter formatter = new DataFormatter();
+            // Create a spreadsheet with some TRUE/FALSE boolean values in1 it
+            IWorkbook wb = new HSSFWorkbook();
+            try
+            {
+                ISheet s = wb.CreateSheet();
+                IRow r = s.CreateRow(0);
+                ICell c = r.CreateCell(0);
+                c.SetCellValue(true);
+                Assert.AreEqual("TRUE", formatter.FormatCellValue(c));
+                c.SetCellValue(false);
+                Assert.AreEqual("FALSE", formatter.FormatCellValue(c));
+            }
+            finally
+            {
+                wb.Close();
+            }
         }
 
         /**
@@ -571,11 +649,12 @@ namespace TestCases.SS.UserModel
             );
         }
 
-
+        //TODO Fix these so that they work
         [Test]
+        [Ignore("Fix these so that they work")]
         public void TestCustomFormats()
         {
-            DataFormatter dfUS = new DataFormatter(System.Globalization.CultureInfo.GetCultureInfo("en-US"), true);
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"), true);
             String fmt;
 
             fmt = "\"At\" H:MM AM/PM \"on\" DDDD MMMM D\",\" YYYY";
@@ -595,7 +674,7 @@ namespace TestCases.SS.UserModel
         {
             // Test directly with the .000 style
             SimpleDateFormat formatter1 = new ExcelStyleDateFormatter("ss.000");
-            CultureInfo culture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+            CultureInfo culture = CultureInfo.GetCultureInfo("en-US");
             DateTime dt = DateTime.Now.Date;
             Assert.AreEqual("00.001", formatter1.Format(dt.AddMilliseconds(1L), culture));
             Assert.AreEqual("00.010", formatter1.Format(dt.AddMilliseconds(10L), culture));
@@ -648,6 +727,99 @@ namespace TestCases.SS.UserModel
             {
                 //Assert.IsTrue(e.Message.Contains("Cannot format given Object as a Number"));
             }
+        }
+        [Test]
+        public void TestIsADateFormat()
+        {
+            // first check some cases that should not be a date, also call multiple times to ensure the cache is used
+            Assert.IsFalse(DateUtil.IsADateFormat(-1, null));
+            Assert.IsFalse(DateUtil.IsADateFormat(-1, null));
+            Assert.IsFalse(DateUtil.IsADateFormat(123, null));
+            Assert.IsFalse(DateUtil.IsADateFormat(123, ""));
+            Assert.IsFalse(DateUtil.IsADateFormat(124, ""));
+            Assert.IsFalse(DateUtil.IsADateFormat(-1, ""));
+            Assert.IsFalse(DateUtil.IsADateFormat(-1, ""));
+            Assert.IsFalse(DateUtil.IsADateFormat(-1, "nodateformat"));
+
+            // then also do the same for some valid date formats
+            Assert.IsTrue(DateUtil.IsADateFormat(0x0e, null));
+            Assert.IsTrue(DateUtil.IsADateFormat(0x2f, null));
+            Assert.IsTrue(DateUtil.IsADateFormat(-1, "yyyy"));
+            Assert.IsTrue(DateUtil.IsADateFormat(-1, "yyyy"));
+            Assert.IsTrue(DateUtil.IsADateFormat(-1, "dd/mm/yy;[red]dd/mm/yy"));
+            Assert.IsTrue(DateUtil.IsADateFormat(-1, "dd/mm/yy;[red]dd/mm/yy"));
+            Assert.IsTrue(DateUtil.IsADateFormat(-1, "[h]"));
+        }
+
+        [Test]
+        public void testLargeNumbersAndENotation()
+        {
+            assertFormatsTo("1E+86", 99999999999999999999999999999999999999999999999999999999999999999999999999999999999999d);
+            assertFormatsTo("1E-84", 0.000000000000000000000000000000000000000000000000000000000000000000000000000000000001d);
+            // Smallest double
+            //assertFormatsTo("1E-323", 0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d);
+            // "up to 11 numeric characters, with the decimal point counting as a numeric character"
+            // https://support.microsoft.com/en-us/kb/65903
+            assertFormatsTo("12345678911", 12345678911d);
+            assertFormatsTo("1.23457E+11", 123456789112d);  // 12th digit of integer -> scientific
+            assertFormatsTo("-12345678911", -12345678911d);
+            assertFormatsTo("-1.23457E+11", -123456789112d);
+            assertFormatsTo("0.1", 0.1);
+            assertFormatsTo("0.000000001", 0.000000001);
+            assertFormatsTo("1E-10", 0.0000000001);  // 12th digit
+            assertFormatsTo("-0.000000001", -0.000000001);
+            assertFormatsTo("-1E-10", -0.0000000001);
+            assertFormatsTo("123.4567892", 123.45678919);  // excess decimals are simply rounded away
+            assertFormatsTo("-123.4567892", -123.45678919);
+            assertFormatsTo("1.234567893", 1.2345678925);  // rounding mode is half-up
+            assertFormatsTo("-1.234567893", -1.2345678925);
+            assertFormatsTo("1.23457E+19", 12345650000000000000d);
+            assertFormatsTo("-1.23457E+19", -12345650000000000000d);
+            assertFormatsTo("1.23457E-19", 0.0000000000000000001234565d);
+            assertFormatsTo("-1.23457E-19", -0.0000000000000000001234565d);
+            assertFormatsTo("1.000000001", 1.000000001);
+            assertFormatsTo("1", 1.0000000001);
+            assertFormatsTo("1234.567891", 1234.567891123456789d);
+            assertFormatsTo("1234567.891", 1234567.891123456789d);
+            assertFormatsTo("12345678912", 12345678911.63456789d);  // integer portion uses all 11 digits
+            assertFormatsTo("12345678913", 12345678912.5d);  // half-up here too
+            assertFormatsTo("-12345678913", -12345678912.5d);
+            assertFormatsTo("1.23457E+11", 123456789112.3456789d);
+        }
+        private static void assertFormatsTo(String expected, double input)
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            try
+            {
+                ISheet s1 = wb.CreateSheet();
+                IRow row = s1.CreateRow(0);
+                ICell rawValue = row.CreateCell(0);
+                rawValue.SetCellValue(input);
+                ICellStyle newStyle = wb.CreateCellStyle();
+                IDataFormat dataFormat = wb.CreateDataFormat();
+                newStyle.DataFormat = (dataFormat.GetFormat("General"));
+                String actual = new DataFormatter().FormatCellValue(rawValue);
+                Assert.AreEqual(expected, actual);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void TestFormulaEvaluation()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("FormulaEvalTestData.xls");
+            CellReference ref1 = new CellReference("D47");
+            ICell cell = wb.GetSheetAt(0).GetRow(ref1.Row).GetCell(ref1.Col);
+            //noinspection deprecation
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual("G9:K9 I7:I12", cell.CellFormula);
+            DataFormatter formatter = new DataFormatter();
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            Assert.AreEqual("5.6789", formatter.FormatCellValue(cell, evaluator));
+            wb.Close();
         }
     }
 

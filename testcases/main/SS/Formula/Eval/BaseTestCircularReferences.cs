@@ -27,7 +27,6 @@ namespace TestCases.SS.Formula.Eval
      * Common superclass for testing cases of circular references
      * both for HSSF and XSSF
      */
-    [TestFixture]
     public abstract class BaseTestCircularReferences
     {
 
@@ -96,6 +95,8 @@ namespace TestCases.SS.Formula.Eval
 
             Assert.IsTrue(cellValue.CellType == CellType.Numeric);
             Assert.AreEqual(2, cellValue.NumberValue, 0);
+
+            wb.Close();
         }
 
         /**
@@ -115,6 +116,8 @@ namespace TestCases.SS.Formula.Eval
             CellValue cellValue = EvaluateWithCycles(wb, testCell);
 
             ConfirmCycleErrorCode(cellValue);
+
+            wb.Close();
         }
 
         /**
@@ -137,6 +140,8 @@ namespace TestCases.SS.Formula.Eval
             CellValue cellValue = EvaluateWithCycles(wb, testCell);
 
             ConfirmCycleErrorCode(cellValue);
+
+            wb.Close();
         }
 
         [Test]
@@ -173,10 +178,9 @@ namespace TestCases.SS.Formula.Eval
             // Show the bug - Evaluate another cell from the loop first
             fe.ClearAllCachedResultValues();
             cv = fe.Evaluate(cellB1);
-            if ((int)cv.CellType == ErrorEval.CIRCULAR_REF_ERROR.ErrorCode)
-            {
-                throw new AssertFailedException("Identified bug 46898");
-            }
+            // Identified bug 46898
+            Assert.AreNotEqual(cv.CellType, ErrorEval.CIRCULAR_REF_ERROR.ErrorCode);
+
             Assert.AreEqual(CellType.Numeric, cv.CellType);
             Assert.AreEqual(46.0, cv.NumberValue, 0.0);
 
@@ -185,6 +189,8 @@ namespace TestCases.SS.Formula.Eval
             cv = fe.Evaluate(cellE1);
             Assert.AreEqual(CellType.Numeric, cv.CellType);
             Assert.AreEqual(43.0, cv.NumberValue, 0.0);
+
+            wb.Close();
         }
     }
 

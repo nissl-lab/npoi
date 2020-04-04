@@ -15,12 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.SS.Util;
 using NPOI.SS.UserModel;
-using System;
-using NUnit.Framework;
 using NPOI.SS.UserModel.Charts;
-namespace NPOI.XSSF.UserModel.Charts
+using NPOI.XSSF.UserModel;
+using NUnit.Framework;
+
+namespace TestCases.XSSF.UserModel.Charts
 {
     [TestFixture]
     public class TestXSSFValueAxis

@@ -17,7 +17,9 @@
 
 using TestCases.SS.UserModel;
 using NUnit.Framework;
-namespace NPOI.XSSF.UserModel
+using NPOI.XSSF;
+
+namespace TestCases.XSSF.UserModel
 {
 
     /**

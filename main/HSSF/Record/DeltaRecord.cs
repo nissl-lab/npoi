@@ -33,7 +33,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class DeltaRecord : StandardRecord
+    public class DeltaRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x10;
         public const double DEFAULT_VALUE = 0.0010;   // should be .001

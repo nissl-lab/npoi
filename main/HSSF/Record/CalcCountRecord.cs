@@ -38,7 +38,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class CalcCountRecord
-       : StandardRecord
+       : StandardRecord, ICloneable
     {
         public const short sid = 0xC;
         private short field_1_iterations;

@@ -31,18 +31,27 @@ namespace NPOI.SS.Util
         private const char CELL_DELIMITER = ':';
         /** The Char (') used to quote sheet names when they contain special Chars */
         private const char SPECIAL_NAME_DELIMITER = '\'';
+        private static SpreadsheetVersion DEFAULT_SPREADSHEET_VERSION = SpreadsheetVersion.EXCEL97;
 
         private CellReference _firstCell;
         private CellReference _lastCell;
         private bool _isSingleCell;
+        private SpreadsheetVersion _version; // never null
 
+        [Obsolete("deprecated POI 3.13 beta 1. Prefer supplying a version.")]
+        public AreaReference(String reference)
+            : this(reference, DEFAULT_SPREADSHEET_VERSION)
+        {
+            
+        }
         /**
          * Create an area ref from a string representation.  Sheet names containing special Chars should be
          * delimited and escaped as per normal syntax rules for formulas.<br/> 
          * The area reference must be contiguous (i.e. represent a single rectangle, not a Union of rectangles)
          */
-        public AreaReference(String reference)
+        public AreaReference(String reference, SpreadsheetVersion version)
         {
+            _version = (null != version) ? version : DEFAULT_SPREADSHEET_VERSION;
             if (!IsContiguous(reference))
             {
                 throw new ArgumentException(
@@ -97,7 +106,7 @@ namespace NPOI.SS.Util
             }
         }
 
-        private bool IsPlainColumn(String refPart)
+        private static bool IsPlainColumn(String refPart)
         {
             for (int i = refPart.Length - 1; i >= 0; i--)
             {
@@ -113,14 +122,22 @@ namespace NPOI.SS.Util
             }
             return true;
         }
-        public static AreaReference GetWholeRow(String start, String end)
+        public static AreaReference GetWholeRow(SpreadsheetVersion version, String start, String end)
         {
-            return new AreaReference("$A" + start + ":$IV" + end);
+            if (null == version)
+            {
+                version = DEFAULT_SPREADSHEET_VERSION;
+            }
+            return new AreaReference("$A" + start + ":$" + version.LastColumnName + end, version);
         }
 
-        public static AreaReference GetWholeColumn(String start, String end)
+        public static AreaReference GetWholeColumn(SpreadsheetVersion version, String start, String end)
         {
-            return new AreaReference(start + "$1:" + end + "$65536");
+            if (null == version)
+            {
+                version = DEFAULT_SPREADSHEET_VERSION;
+            }
+            return new AreaReference(start + "$1:" + end + "$" + version.MaxRows, version);
         }
 
 
@@ -129,9 +146,7 @@ namespace NPOI.SS.Util
          */
         public AreaReference(CellReference topLeft, CellReference botRight)
         {
-            //_firstCell = topLeft;
-            //_lastCell = botRight;
-            //_isSingleCell = false;
+            _version = DEFAULT_SPREADSHEET_VERSION;
 
             bool swapRows = topLeft.Row > botRight.Row;
             bool swapCols = topLeft.Col > botRight.Col;
@@ -212,13 +227,17 @@ namespace NPOI.SS.Util
          * is the reference for a whole-column reference,
          *  such as C:C or D:G ?
          */
-        public static bool IsWholeColumnReference(CellReference topLeft, CellReference botRight)
+        public static bool IsWholeColumnReference(SpreadsheetVersion version, CellReference topLeft, CellReference botRight)
         {
+            if (null == version)
+            {
+                version = SpreadsheetVersion.EXCEL97; // how the code used to behave.
+            }
             // These are represented as something like
             //   C$1:C$65535 or D$1:F$0
             // i.e. absolute from 1st row to 0th one
             if (topLeft.Row == 0 && topLeft.IsRowAbsolute &&
-                (botRight.Row == -1 || botRight.Row == 65535) && botRight.IsRowAbsolute)
+                (botRight.Row == version.LastRowIndex) && botRight.IsRowAbsolute)
             {
                 return true;
             }
@@ -226,7 +245,7 @@ namespace NPOI.SS.Util
         }
         public bool IsWholeColumnReference()
         {
-            return IsWholeColumnReference(_firstCell, _lastCell);
+            return IsWholeColumnReference(_version, _firstCell, _lastCell);
         }
 
         /**
@@ -388,7 +407,6 @@ namespace NPOI.SS.Util
                         }
                         continue;
                     case SPECIAL_NAME_DELIMITER:
-                    // fall through
                         break;
                     default:
                         continue;

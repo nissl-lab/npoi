@@ -32,8 +32,7 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class AreaFormatRecord
-       : StandardRecord
+    public class AreaFormatRecord : StandardRecord, ICloneable
     {
         public const short FILL_PATTERN_NONE = 0x0;
         public const short FILL_PATTERN_SOLID = 0x1;

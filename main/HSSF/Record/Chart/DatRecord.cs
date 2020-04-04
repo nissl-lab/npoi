@@ -33,8 +33,7 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class DatRecord
-       : StandardRecord
+    public class DatRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x1063;
         private short field_1_options;

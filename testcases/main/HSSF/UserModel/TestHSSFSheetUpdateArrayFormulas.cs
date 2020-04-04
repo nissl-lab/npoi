@@ -61,6 +61,7 @@ namespace TestCases.HSSF.UserModel
             FormulaRecordAggregate agg = (FormulaRecordAggregate)(((HSSFCell)cell).CellValueRecord);
             Assert.AreEqual(range.FormatAsString(), agg.GetArrayFormulaRange().FormatAsString());
             Assert.IsTrue(agg.IsPartOfArrayFormula);
+            workbook.Close();
         }
 
         /**
@@ -95,15 +96,16 @@ namespace TestCases.HSSF.UserModel
             SharedValueManager svm = TestSharedValueManager.ExtractFromRRA(rra);
             if (svm.GetArrayRecord(4, 1) != null)
             {
-                throw new AssertionException("Array record was not cleaned up properly.");
+                Assert.Fail("Array record was not cleaned up properly.");
             }
+            wb.Close();
         }
 
         private static void ConfirmRecordClass(Record[] recs, int index, Type cls)
         {
             if (recs.Length <= index)
             {
-                throw new AssertionException("Expected (" + cls.Name + ") at index "
+                Assert.Fail("Expected (" + cls.Name + ") at index "
                         + index + " but array length is " + recs.Length + ".");
             }
             Assert.AreEqual(cls, recs[index].GetType());

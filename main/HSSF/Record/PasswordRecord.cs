@@ -52,27 +52,6 @@ namespace NPOI.HSSF.Record
             field_1_password = in1.ReadShort();
         }
 
-        //this Is the world's lamest "security".  thanks to Wouter van Vugt for making me
-        //not have to try real hard.  -ACO
-        public static short HashPassword(String password)
-        {
-            byte[] passwordChars = Encoding.UTF8.GetBytes(password);
-            int hash = 0;
-            if (passwordChars.Length > 0)
-            {
-                int charIndex = passwordChars.Length;
-                while (charIndex-- > 0)
-                {
-                    hash = ((hash >> 14) & 0x01) | ((hash << 1) & 0x7fff);
-                    hash ^= passwordChars[charIndex];
-                }
-                // also hash with charcount
-                hash = ((hash >> 14) & 0x01) | ((hash << 1) & 0x7fff);
-                hash ^= passwordChars.Length;
-                hash ^= (0x8000 | ('N' << 8) | 'K');
-            }
-            return (short)hash;
-        }
 
         /**
          * Get the password

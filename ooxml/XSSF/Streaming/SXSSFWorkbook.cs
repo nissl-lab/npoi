@@ -23,7 +23,8 @@ using System.IO;
 using System.Text;
 using ICSharpCode.SharpZipLib.Zip;
 using NPOI.OpenXml4Net.Util;
-using NPOI.SS.Formula.Udf;
+using NPOI.SS;
+using NPOI.SS.Formula.UDF;
 using NPOI.SS.UserModel;
 using NPOI.Util;
 using NPOI.XSSF.Model;
@@ -31,6 +32,32 @@ using NPOI.XSSF.UserModel;
 
 namespace NPOI.XSSF.Streaming
 {
+    /**
+     * Streaming version of XSSFWorkbook implementing the "BigGridDemo" strategy.
+     *
+     * This allows to write very large files without running out of memory as only
+     * a configurable portion of the rows are kept in memory at any one time.
+     *
+     * You can provide a template workbook which is used as basis for the written
+     * data.
+     *
+     * See https://poi.apache.org/spreadsheet/how-to.html#sxssf for details.
+     *
+     * Please note that there are still things that still may consume a large
+     * amount of memory based on which features you are using, e.g. merged regions,
+     * comments, ... are still only stored in memory and thus may require a lot of
+     * memory if used extensively.
+     *
+     * SXSSFWorkbook defaults to using inline strings instead of a shared strings
+     * table. This is very efficient, since no document content needs to be kept in
+     * memory, but is also known to produce documents that are incompatible with
+     * some clients. With shared strings enabled all unique strings in the document
+     * has to be kept in memory. Depending on your document content this could use
+     * a lot more resources than with shared strings disabled.
+     *
+     * Carefully review your memory budget and compatibility needs before deciding
+     * whether to enable shared strings or not.
+     */
     /// <summary>
     /// Streaming version of the XSSFWorkbook, originally implemented in the "BigGridDemo".
     /// </summary>
@@ -39,14 +66,22 @@ namespace NPOI.XSSF.Streaming
         private static readonly POILogger logger = POILogFactory.GetLogger(typeof(SXSSFWorkbook));
 
         public const int DEFAULT_WINDOW_SIZE = 100;
-        
-        public XSSFWorkbook XssfWorkbook;
+        private XSSFWorkbook _wb;
+        public XSSFWorkbook XssfWorkbook
+        {
+            get { return _wb; }
+        }
 
         private Dictionary<SXSSFSheet, XSSFSheet> _sxFromXHash = new Dictionary<SXSSFSheet, XSSFSheet>();
         private Dictionary<XSSFSheet, SXSSFSheet> _xFromSxHash = new Dictionary<XSSFSheet, SXSSFSheet>();
 
         private int _randomAccessWindowSize = DEFAULT_WINDOW_SIZE;
 
+        /**
+        * See the constructors for a more detailed description of the sliding window of rows.
+        *
+        * @return The number of rows that are kept in memory at once before flushing them out.
+        */
         public int RandomAccessWindowSize
         {
             get { return _randomAccessWindowSize; }
@@ -93,7 +128,7 @@ namespace NPOI.XSSF.Streaming
             get { return XssfWorkbook.NumberOfFonts; }
         }
 
-        public short NumCellStyles
+        public int NumCellStyles
         {
             get { return XssfWorkbook.NumCellStyles; }
         }
@@ -119,29 +154,152 @@ namespace NPOI.XSSF.Streaming
 
 
         #region Constructors
-
+        /**
+         * Construct an empty workbook and specify the window for row access.
+         * <p>
+         * When a new node is created via createRow() and the total number
+         * of unflushed records would exceed the specified value, then the
+         * row with the lowest index value is flushed and cannot be accessed
+         * via getRow() anymore.
+         * </p>
+         * <p>
+         * A value of -1 indicates unlimited access. In this case all
+         * records that have not been flushed by a call to flush() are available
+         * for random access.
+         * </p>
+         * <p>
+         * A value of 0 is not allowed because it would flush any newly created row
+         * without having a chance to specify any cells.
+         * </p>
+         *
+         * @param rowAccessWindowSize the number of rows that are kept in memory until flushed out, see above.
+         */
+        public SXSSFWorkbook(int rowAccessWindowSize)
+            : this(null /*workbook*/, rowAccessWindowSize)
+        {
+            
+        }
+        /// <summary>
+        /// Construct a new workbook with default row window size
+        /// </summary>
         public SXSSFWorkbook() : this(null)
         {
 
         }
-
-        public SXSSFWorkbook(XSSFWorkbook workbook) : this(workbook, DEFAULT_WINDOW_SIZE)
+        /**
+         * Construct a workbook from a template.
+         * <p>
+         * There are three use-cases to use SXSSFWorkbook(XSSFWorkbook) :
+         * <ol>
+         *   <li>
+         *       Append new sheets to existing workbooks. You can open existing
+         *       workbook from a file or create on the fly with XSSF.
+         *   </li>
+         *   <li>
+         *       Append rows to existing sheets. The row number MUST be greater
+         *       than max(rownum) in the template sheet.
+         *   </li>
+         *   <li>
+         *       Use existing workbook as a template and re-use global objects such
+         *       as cell styles, formats, images, etc.
+         *   </li>
+         * </ol>
+         * All three use cases can work in a combination.
+         * </p>
+         * What is not supported:
+         * <ul>
+         *   <li>
+         *   Access initial cells and rows in the template. After constructing
+         *   SXSSFWorkbook(XSSFWorkbook) all internal windows are empty and
+         *   SXSSFSheet@getRow and SXSSFRow#getCell return null.
+         *   </li>
+         *   <li>
+         *    Override existing cells and rows. The API silently allows that but
+         *    the output file is invalid and Excel cannot read it.
+         *   </li>
+         * </ul>
+         *
+         * @param workbook  the template workbook
+         */
+        public SXSSFWorkbook(XSSFWorkbook workbook) 
+            : this(workbook, DEFAULT_WINDOW_SIZE)
         {
 
         }
-
+        /**
+         * Constructs an workbook from an existing workbook.
+         * <p>
+         * When a new node is created via createRow() and the total number
+         * of unflushed records would exceed the specified value, then the
+         * row with the lowest index value is flushed and cannot be accessed
+         * via getRow() anymore.
+         * </p>
+         * <p>
+         * A value of -1 indicates unlimited access. In this case all
+         * records that have not been flushed by a call to flush() are available
+         * for random access.
+         * </p>
+         * <p>
+         * A value of 0 is not allowed because it would flush any newly created row
+         * without having a chance to specify any cells.
+         * </p>
+         *
+         * @param rowAccessWindowSize the number of rows that are kept in memory until flushed out, see above.
+         */
         public SXSSFWorkbook(XSSFWorkbook workbook, int rowAccessWindowSize)
             : this(workbook, rowAccessWindowSize, false)
         {
 
         }
-
+        /**
+         * Constructs an workbook from an existing workbook.
+         * <p>
+         * When a new node is created via createRow() and the total number
+         * of unflushed records would exceed the specified value, then the
+         * row with the lowest index value is flushed and cannot be accessed
+         * via getRow() anymore.
+         * </p>
+         * <p>
+         * A value of -1 indicates unlimited access. In this case all
+         * records that have not been flushed by a call to flush() are available
+         * for random access.
+         * </p>
+         * <p>
+         * A value of 0 is not allowed because it would flush any newly created row
+         * without having a chance to specify any cells.
+         * </p>
+         *
+         * @param rowAccessWindowSize the number of rows that are kept in memory until flushed out, see above.
+         * @param compressTmpFiles whether to use gzip compression for temporary files
+         */
         public SXSSFWorkbook(XSSFWorkbook workbook, int rowAccessWindowSize, bool compressTmpFiles)
             : this(workbook, rowAccessWindowSize, compressTmpFiles, false)
         {
 
         }
-
+        /**
+         * Constructs an workbook from an existing workbook.
+         * <p>
+         * When a new node is created via createRow() and the total number
+         * of unflushed records would exceed the specified value, then the
+         * row with the lowest index value is flushed and cannot be accessed
+         * via getRow() anymore.
+         * </p>
+         * <p>
+         * A value of -1 indicates unlimited access. In this case all
+         * records that have not been flushed by a call to flush() are available
+         * for random access.
+         * </p>
+         * <p>
+         * A value of 0 is not allowed because it would flush any newly created row
+         * without having a chance to specify any cells.
+         * </p>
+         *
+         * @param workbook  the template workbook
+         * @param rowAccessWindowSize the number of rows that are kept in memory until flushed out, see above.
+         * @param compressTmpFiles whether to use gzip compression for temporary files
+         * @param useSharedStringsTable whether to use a shared strings table
+         */
         /// <summary>
         /// Currently only supports writing not reading. E.g. the number of rows returned from a worksheet will be wrong etc.
         /// </summary>
@@ -157,12 +315,12 @@ namespace NPOI.XSSF.Streaming
 
             if (workbook == null)
             {
-                XssfWorkbook = new XSSFWorkbook();
+                _wb = new XSSFWorkbook();
                 _sharedStringSource = useSharedStringsTable ? XssfWorkbook.GetSharedStringSource() : null;
             }
             else
             {
-                XssfWorkbook = workbook;
+                _wb = workbook;
                 _sharedStringSource = useSharedStringsTable ? XssfWorkbook.GetSharedStringSource() : null;
                 var numberOfSheets = XssfWorkbook.NumberOfSheets;
                 for (int i = 0; i < numberOfSheets; i++)
@@ -202,9 +360,9 @@ namespace NPOI.XSSF.Streaming
 
             try
             {
-                sxSheet._writer.Close();
+                sxSheet.SheetDataWriter.Close();
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 // ignore exception here
             }
@@ -217,12 +375,44 @@ namespace NPOI.XSSF.Streaming
 
         private XSSFSheet GetXSSFSheet(SXSSFSheet sheet)
         {
-            return _sxFromXHash[sheet];
+            if (sheet != null && _sxFromXHash.ContainsKey(sheet))
+                return _sxFromXHash[sheet];
+            else
+                return null;
         }
 
         private SXSSFSheet GetSXSSFSheet(XSSFSheet sheet)
         {
-            return _xFromSxHash[sheet];
+            if (sheet != null && _xFromSxHash.ContainsKey(sheet))
+                return _xFromSxHash[sheet];
+            else
+                return null;
+        }
+
+        /**
+         * Set whether temp files should be compressed.
+         * <p>
+         *   SXSSF writes sheet data in temporary files (a temp file per-sheet)
+         *   and the size of these temp files can grow to to a very large size,
+         *   e.g. for a 20 MB csv data the size of the temp xml file become few GB large.
+         *   If the "compress" flag is set to <code>true</code> then the temporary XML is gzipped.
+         * </p>
+         * <p>
+         *     Please note the the "compress" option may cause performance penalty.
+         * </p>
+         * @param compress whether to compress temp files
+         */
+        public bool CompressTempFiles
+        {
+            get
+            {
+                return _compressTmpFiles;
+            }
+            set
+            {
+                _compressTmpFiles = value;
+            }
+            
         }
 
         public SheetDataWriter CreateSheetDataWriter()
@@ -244,24 +434,28 @@ namespace NPOI.XSSF.Streaming
             return null;
         }
 
-        private void InjectData(ZipEntrySource zipEntrySource, Stream outStream)
+        private void InjectData(FileInfo zipfile, Stream outStream)
         {
+            // don't use ZipHelper.openZipFile here - see #59743
+            ZipFile zip = new ZipFile(zipfile.FullName);
             try
             {
                 ZipOutputStream zos = new ZipOutputStream(outStream);
                 try
                 {
-                    var en = zipEntrySource.Entries;
+                    //ZipEntrySource zipEntrySource = new ZipFileZipEntrySource(zip);
+                    //var en =  zipEntrySource.Entries;
+                    var en = zip.GetEnumerator();
                     while (en.MoveNext())
                     {
                         var ze = (ZipEntry)en.Current;
                         zos.PutNextEntry(new ZipEntry(ze.Name));
-                        var inputStream = zipEntrySource.GetInputStream(ze);
+                        var inputStream = zip.GetInputStream(ze);
                         XSSFSheet xSheet = GetSheetFromZipEntryName(ze.Name);
                         if (xSheet != null)
                         {
                             SXSSFSheet sxSheet = GetSXSSFSheet(xSheet);
-                            var xis = sxSheet.getWorksheetXMLInputStream();
+                            var xis = sxSheet.GetWorksheetXMLInputStream();
                             try
                             {
                                 CopyStreamAndInjectWorksheet(inputStream, zos, xis);
@@ -273,7 +467,7 @@ namespace NPOI.XSSF.Streaming
                         }
                         else
                         {
-                            CopyStream(inputStream, zos);
+                            inputStream.CopyTo(zos);
                         }
                         inputStream.Close();
                     }
@@ -285,18 +479,7 @@ namespace NPOI.XSSF.Streaming
             }
             finally
             {
-                zipEntrySource.Close();
-            }
-        }
-
-        private static void CopyStream(Stream inputStream, Stream outputStream)
-        {
-            var chunk = new byte[1024];
-            int count;
-
-            while ((count = inputStream.Read(chunk, 0, chunk.Length)) > 0)
-            {
-                outputStream.Write(chunk, 0, count);
+                zip.Close();
             }
         }
 
@@ -410,7 +593,7 @@ namespace NPOI.XSSF.Streaming
                 outWriter.Flush();
             }
             //Copy the worksheet data to "out".
-            CopyStream(worksheetData, outputStream);
+            worksheetData.CopyTo(outputStream);
             outWriter.Write("</sheetData>");
             outWriter.Flush();
             //Copy the rest of "in" to "out".
@@ -470,7 +653,7 @@ namespace NPOI.XSSF.Streaming
 
         public ISheet CloneSheet(int sheetNum)
         {
-            throw new NotImplementedException();
+            throw new RuntimeException("NotImplemented");
         }
 
         public ISheet GetSheetAt(int index)
@@ -496,7 +679,7 @@ namespace NPOI.XSSF.Streaming
             // Clean up temporary resources
             try
             {
-                sxSheet.dispose();
+                sxSheet.Dispose();
             }
             catch (IOException e)
             {
@@ -504,14 +687,9 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        public IEnumerator GetEnumerator()
+        public IEnumerator<ISheet> GetEnumerator()
         {
-            throw new NotImplementedException();
-        }
-
-        public void SetRepeatingRowsAndColumns(int sheetIndex, int startColumn, int endColumn, int startRow, int endRow)
-        {
-            throw new NotImplementedException();
+            return new SheetEnumerator<SXSSFSheet>(XssfWorkbook, this);
         }
 
         public IFont CreateFont()
@@ -525,6 +703,16 @@ namespace NPOI.XSSF.Streaming
             return XssfWorkbook.FindFont(boldWeight, color, fontHeight, name, italic, strikeout, typeOffset, underline);
         }
 
+        /**
+         * Finds a font that matches the one with the supplied attributes
+         *
+         * @return the font with the matched attributes or <code>null</code>
+         */
+        public IFont FindFont(bool bold, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
+        { 
+            return XssfWorkbook.FindFont(bold, color, fontHeight, name, italic, strikeout, typeOffset, underline);
+        }
+
         public IFont GetFontAt(short idx)
         {
             return XssfWorkbook.GetFontAt(idx);
@@ -535,9 +723,33 @@ namespace NPOI.XSSF.Streaming
             return XssfWorkbook.CreateCellStyle();
         }
 
-        public ICellStyle GetCellStyleAt(short idx)
+        public ICellStyle GetCellStyleAt(int idx)
         {
             return XssfWorkbook.GetCellStyleAt(idx);
+        }
+
+
+        public void Close()
+        {
+            // ensure that any lingering writer is closed
+            foreach (SXSSFSheet sheet in _xFromSxHash.Values)
+            {
+                try
+                {
+                    sheet.SheetDataWriter.Close();
+                }
+                catch (IOException e)
+                {
+                    logger.Log(POILogger.WARN,
+                            "An exception occurred while closing sheet data writer for sheet "
+                            + sheet.SheetName + ".", e);
+                }
+            }
+
+
+            // Tell the base workbook to close, does nothing if 
+            //  it's a newly created one
+            XssfWorkbook.Close();
         }
 
         public void Write(Stream stream)
@@ -559,8 +771,8 @@ namespace NPOI.XSSF.Streaming
                 }
 
                 //Substitute the template entries with the generated sheet data files
-                ZipEntrySource source = new ZipFileZipEntrySource(new ZipFile(tmplFile.FullName));
-                InjectData(source, stream);
+                
+                InjectData(tmplFile, stream);
             }
             finally
             {
@@ -576,7 +788,7 @@ namespace NPOI.XSSF.Streaming
         {
             foreach (SXSSFSheet sheet in _xFromSxHash.Values)
             {
-                sheet.flushRows();
+                sheet.FlushRows();
             }
         }
 
@@ -592,7 +804,7 @@ namespace NPOI.XSSF.Streaming
             {
                 try
                 {
-                    success = sheet.dispose() && success;
+                    success = sheet.Dispose() && success;
                 }
                 catch (IOException e)
                 {
@@ -607,7 +819,27 @@ namespace NPOI.XSSF.Streaming
         {
             return XssfWorkbook.GetName(name);
         }
-        [Obsolete("Deprecated in 3.16 throws an error.")]
+
+        /**
+         * Returns all defined names with the given name.
+         *
+         * @param name the name of the defined name
+         * @return a list of the defined names with the specified name. An empty list is returned if none is found.
+         */
+        public IList<IName> GetNames(String name)
+        {
+            return XssfWorkbook.GetNames(name);
+        }
+
+        /// <summary>
+        /// Returns all defined names
+        /// </summary>
+        /// <returns>Returns all defined names</returns>
+        public IList<IName> GetAllNames()
+        {
+            return _wb.GetAllNames();
+        }
+        [Obsolete("Deprecated 3.16, New projects should avoid accessing named ranges by index.")]
         public IName GetNameAt(int nameIndex)
         {
             return XssfWorkbook.GetNameAt(nameIndex);
@@ -635,7 +867,14 @@ namespace NPOI.XSSF.Streaming
         {
             XssfWorkbook.RemoveName(name);
         }
-
+        /// <summary>
+        /// Remove the given defined name
+        /// </summary>
+        /// <param name="name">the name to remove</param>
+        public void RemoveName(IName name)
+        {
+            _wb.RemoveName(name);
+        }
         public int LinkExternalWorkbook(string name, IWorkbook workbook)
         {
             throw new NotImplementedException();
@@ -681,7 +920,6 @@ namespace NPOI.XSSF.Streaming
         {
             return new SXSSFCreationHelper(this);
         }
-
         public bool IsSheetHidden(int sheetIx)
         {
             return XssfWorkbook.IsSheetHidden(sheetIx);
@@ -707,30 +945,76 @@ namespace NPOI.XSSF.Streaming
             XssfWorkbook.AddToolPack(toopack);
         }
 
-        public void Close()
+
+        /// <summary>
+        /// Returns the spreadsheet version (EXCLE2007) of this workbook
+        /// </summary>
+        public SpreadsheetVersion SpreadsheetVersion
         {
-            // ensure that any lingering writer is closed
-            foreach (SXSSFSheet sheet in _xFromSxHash.Values)
+            get
             {
-                try
+                return SpreadsheetVersion.EXCEL2007;
+            }
+        }
+
+        /// <summary>
+        /// Gets a bool value that indicates whether the date systems used in the workbook starts in 1904.
+        /// The default value is false, meaning that the workbook uses the 1900 date system,
+        /// where 1/1/1900 is the first day in the system.
+        /// </summary>
+        /// <returns>True if the date systems used in the workbook starts in 1904</returns>
+        public bool IsDate1904()
+        {
+            return XssfWorkbook.IsDate1904();
+        }
+        //TODO: missing method isDate1904, isHidden, setHidden
+
+        private class SheetEnumerator<T> : IEnumerator<T> where T : class, ISheet
+        {
+            private XSSFWorkbook _wb;
+            private SXSSFWorkbook _xwb;
+            private IEnumerator<ISheet> it;
+            public SheetEnumerator(XSSFWorkbook wb, SXSSFWorkbook xwb)
+            {
+                this._wb = wb;
+                this._xwb = xwb;
+                //wb.GetEnumerator();
+                it = wb.GetEnumerator();
+            }
+
+            T IEnumerator<T>.Current
+            {
+                get
                 {
-                    sheet._writer.Close();
-                }
-                catch (IOException e)
-                {
-                    logger.Log(POILogger.WARN,
-                            "An exception occurred while closing sheet data writer for sheet "
-                            + sheet.SheetName + ".", e);
+                    XSSFSheet xssfSheet = (XSSFSheet)it.Current;
+                    return _xwb.GetSXSSFSheet(xssfSheet) as T;
                 }
             }
 
 
-            // Tell the base workbook to close, does nothing if 
-            //  it's a newly created one
-            XssfWorkbook.Close();
-        }
+            object IEnumerator.Current
+            {
+                get
+                {
+                    XSSFSheet xssfSheet = (XSSFSheet)it.Current;
+                    return _xwb.GetSXSSFSheet(xssfSheet);
+                }
+            }
 
-        //TODO: missing methods from POI 3.16 setForceFormulaRecalculation, GetForceFormulaRecalulation, GetSpreadsheetVersion
-        //TODO: missing method isDate1904, isHidden, setHidden
+            public void Dispose()
+            {
+                it.Dispose();
+            }
+
+            public bool MoveNext()
+            {
+                return it.MoveNext();
+            }
+
+            public void Reset()
+            {
+                it.Reset();
+            }
+        }
     }
 }

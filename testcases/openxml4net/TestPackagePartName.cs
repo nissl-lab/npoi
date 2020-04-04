@@ -17,7 +17,7 @@
 
 using NPOI.OpenXml4Net.OPC;
 using NUnit.Framework;
-namespace TestCases.OPC
+namespace TestCases.OpenXml4Net.OPC
 {
     [TestFixture]
     public class TestPackagePartName

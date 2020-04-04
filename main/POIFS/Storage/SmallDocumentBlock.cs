@@ -123,7 +123,7 @@ namespace NPOI.POIFS.Storage
         /// <param name="bigBlockSize"></param>
         /// <param name="blocks">the List to be filled out.</param>
         /// <returns>number of big blocks the list encompasses</returns>
-        public static int Fill(POIFSBigBlockSize bigBlockSize,IList blocks)
+        public static int Fill(POIFSBigBlockSize bigBlockSize,IList<SmallDocumentBlock> blocks)
         {
             int _blocks_per_big_block = GetBlocksPerBigBlock(bigBlockSize);
             int count           = blocks.Count;
@@ -245,6 +245,14 @@ namespace NPOI.POIFS.Storage
         public static int CalcSize(int size)
         {
             return size * _block_size;
+        }
+
+        protected int SmallBlocksPerBigBlock
+        {
+            get
+            {
+                return _blocks_per_big_block;
+            }
         }
 
         /// <summary>

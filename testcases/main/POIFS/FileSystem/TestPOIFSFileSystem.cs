@@ -190,7 +190,7 @@ namespace TestCases.POIFS.FileSystem
             testIS = new TestIS(OpenSampleStream("13224.xls"), -1);
             try
             {
-                new POIFSFileSystem(testIS);
+                new OPOIFSFileSystem(testIS);
             }
             catch (IOException)
             {
@@ -202,7 +202,7 @@ namespace TestCases.POIFS.FileSystem
             testIS = new TestIS(OpenSampleStream("13224.xls"), 10000);
             try
             {
-                new POIFSFileSystem(testIS);
+                new OPOIFSFileSystem(testIS);
                 Assert.Fail("ex Should have been thrown");
             }
             catch (IOException)
@@ -236,7 +236,7 @@ namespace TestCases.POIFS.FileSystem
             for (int i = 0; i < files.Length; i++)
             {
                 // Open the file up
-                POIFSFileSystem fs = new POIFSFileSystem(
+                OPOIFSFileSystem fs = new OPOIFSFileSystem(
                         _samples.OpenResourceAsStream(files[i])
                 );
 
@@ -257,7 +257,7 @@ namespace TestCases.POIFS.FileSystem
                 Stream stream = _samples.OpenResourceAsStream("ReferencesInvalidSectors.mpp");
                 try
                 {
-                    POIFSFileSystem fs = new POIFSFileSystem(stream);
+                    OPOIFSFileSystem fs = new OPOIFSFileSystem(stream);
                     Assert.Fail("File is corrupt and shouldn't have been opened");
                 }
                 finally
@@ -276,7 +276,7 @@ namespace TestCases.POIFS.FileSystem
         public void TestBATandXBAT()
         {
             byte[] hugeStream = new byte[8 * 1024 * 1024];
-            POIFSFileSystem fs = new POIFSFileSystem();
+            OPOIFSFileSystem fs = new OPOIFSFileSystem();
             fs.Root.CreateDocument("BIG", new MemoryStream(hugeStream));
 
             MemoryStream baos = new MemoryStream();
@@ -317,14 +317,14 @@ namespace TestCases.POIFS.FileSystem
                                             blockList);
             Assert.AreEqual(fsData.Length / 512, blockList.BlockCount() + 1);
 
-            //fs = null;
-            //fs = new POIFSFileSystem(new MemoryStream(fsData));
+            fs = null;
+            fs = new OPOIFSFileSystem(new MemoryStream(fsData));
 
 
-            //DirectoryNode root = fs.Root;
-            //Assert.AreEqual(1, root.EntryCount);
-            //DocumentNode big = (DocumentNode)root.GetEntry("BIG");
-            //Assert.AreEqual(hugeStream.Length, big.Size);
+            DirectoryNode root = fs.Root;
+            Assert.AreEqual(1, root.EntryCount);
+            DocumentNode big = (DocumentNode)root.GetEntry("BIG");
+            Assert.AreEqual(hugeStream.Length, big.Size);
 
         }
 
@@ -350,7 +350,7 @@ namespace TestCases.POIFS.FileSystem
                 Assert.AreEqual(15, data_blocks.BlockCount());
 
                 // Now try and open properly
-                POIFSFileSystem fs = new POIFSFileSystem(
+                OPOIFSFileSystem fs = new OPOIFSFileSystem(
                       _samples.OpenResourceAsStream("BlockSize4096.zvi")
                 );
                 Assert.IsTrue(fs.Root.EntryCount > 3);
@@ -360,7 +360,7 @@ namespace TestCases.POIFS.FileSystem
 
 
                 // Finally, check we can do a similar 512byte one too
-                fs = new POIFSFileSystem(
+                fs = new OPOIFSFileSystem(
                      _samples.OpenResourceAsStream("BlockSize512.zvi")
                );
                 Assert.IsTrue(fs.Root.EntryCount > 3);

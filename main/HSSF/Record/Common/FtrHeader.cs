@@ -22,6 +22,7 @@ namespace NPOI.HSSF.Record.Common
     using NPOI.HSSF.Record;
     using NPOI.Util;
     using System.Text;
+    using NPOI.SS.Util;
 
     /**
      * Title: FtrHeader (Future Record Header) common record part
@@ -30,18 +31,18 @@ namespace NPOI.HSSF.Record.Common
      *  style record, which includes extra attributes above and
      *  beyond those of a traditional record. 
      */
-    public class FtrHeader
+    public class FtrHeader : ICloneable
     {
         /** This MUST match the type on the Containing record */
         private short recordType;
         /** This is a FrtFlags */
         private short grbitFrt;
-        /** MUST be 8 bytes and all zero */
-        private byte[] reserved;
 
+        /** The range of cells the parent record applies to, or 0 if N/A */
+        private CellRangeAddress associatedRange;
         public FtrHeader()
         {
-            reserved = new byte[8];
+            associatedRange = new CellRangeAddress(0, 0, 0, 0);
         }
 
         public FtrHeader(RecordInputStream in1)
@@ -49,8 +50,7 @@ namespace NPOI.HSSF.Record.Common
             recordType = in1.ReadShort();
             grbitFrt = in1.ReadShort();
 
-            reserved = new byte[8];
-            in1.Read(reserved, 0, 8);
+            associatedRange = new CellRangeAddress(in1);
         }
 
         public override String ToString()
@@ -67,7 +67,7 @@ namespace NPOI.HSSF.Record.Common
         {
             out1.WriteShort(recordType);
             out1.WriteShort(grbitFrt);
-            out1.Write(reserved);
+            associatedRange.Serialize(out1);
         }
 
         public static int GetDataSize()
@@ -99,16 +99,28 @@ namespace NPOI.HSSF.Record.Common
             }
         }
 
-        public byte[] GetReserved
+ 
+        public CellRangeAddress AssociatedRange
         {
             get
             {
-                return reserved;
+                return associatedRange;
             }
             set
             {
-                reserved = value;
+                this.associatedRange = value;
             }
+        }
+
+        public object Clone()
+        {
+            FtrHeader result = new FtrHeader
+            {
+                recordType = recordType,
+                grbitFrt = grbitFrt,
+                associatedRange = associatedRange.Copy()
+            };
+            return result;
         }
     }
 }

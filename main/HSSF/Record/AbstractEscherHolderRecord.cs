@@ -34,7 +34,7 @@ namespace NPOI.HSSF.Record
      * @author Glen Stampoultzis (glens at apache.org)
      * @author Michael Zalewski (zalewski at optonline.net)
      */
-    public abstract class AbstractEscherHolderRecord : Record
+    public abstract class AbstractEscherHolderRecord : Record, ICloneable
     {
         private static bool DESERIALISE;
         static AbstractEscherHolderRecord()

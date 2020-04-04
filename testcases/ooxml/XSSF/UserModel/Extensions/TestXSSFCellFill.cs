@@ -17,7 +17,11 @@
 
 using NUnit.Framework;
 using NPOI.OpenXmlFormats.Spreadsheet;
-namespace NPOI.XSSF.UserModel.Extensions
+using NPOI.XSSF.UserModel.Extensions;
+using NPOI.XSSF.UserModel;
+using NPOI.XSSF;
+
+namespace TestCases.XSSF.UserModel.Extensions
 {
 
     [TestFixture]

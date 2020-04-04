@@ -16,6 +16,7 @@
 ==================================================================== */
 namespace NPOI
 {
+    using NPOI.Util;
     using System;
     /// <summary>
     /// Common Parent for Text Extractors
@@ -28,30 +29,9 @@ namespace NPOI
     /// @see org.apache.poi.hslf.extractor.PowerPointExtractor
     /// @see org.apache.poi.hdgf.extractor.VisioTextExtractor
     /// @see org.apache.poi.hwpf.extractor.WordExtractor
-    public abstract class POITextExtractor 
+    public abstract class POITextExtractor : ICloseable
     {
-        /** The POIDocument that's open */
-        protected POIDocument document;
-
-        /// <summary>
-        /// Creates a new text extractor for the given document
-        /// </summary>
-        /// <param name="document">The document.</param>
-        public POITextExtractor(POIDocument document)
-        {
-            this.document = document;
-        }
-        /// <summary>
-        /// Creates a new text extractor, using the same
-        /// document as another text extractor. Normally
-        /// only used by properties extractors.
-        /// </summary>
-        /// <param name="otherExtractor">The other extractor.</param>
-        protected POITextExtractor(POITextExtractor otherExtractor)
-        {
-            this.document = otherExtractor.document;
-        }
-
+        private ICloseable fsToClose = null;
         /// <summary>
         /// Retrieves all the text from the document.
         /// How cells, paragraphs etc are separated in the text
@@ -59,7 +39,7 @@ namespace NPOI
         /// a specific project for details.
         /// </summary>
         /// <value>All the text from the document.</value>
-        public abstract String Text{get;}
+        public abstract String Text { get; }
 
         /// <summary>
         /// Returns another text extractor, which is able to
@@ -67,8 +47,23 @@ namespace NPOI
         /// metadata / properties, such as author and title.
         /// </summary>
         /// <value>The metadata text extractor.</value>
-        public abstract POITextExtractor MetadataTextExtractor{get;}
+        public abstract POITextExtractor MetadataTextExtractor { get; }
 
-        public virtual void Close() { }
+        /**
+	     * Used to ensure file handle cleanup.
+	     * 
+	     * @param fs filesystem to close
+	     */
+        public void SetFilesystem(ICloseable fs)
+        {
+            fsToClose = fs;
+        }
+        public virtual void Close()
+        {
+            if (fsToClose != null)
+            {
+                fsToClose.Close();
+            }
+        }
     }
 }

@@ -84,7 +84,7 @@ namespace NPOI.SS.UserModel
 
         Red = 0xa,
     }
-
+    [Obsolete("deprecated POI 3.15 beta 2. Boldweight constants no longer needed due to IsBold property")]
     public enum FontBoldWeight:short
     {
         /// <summary>
@@ -161,23 +161,17 @@ namespace NPOI.SS.UserModel
         /// </summary>
         FontUnderlineType Underline { get; set; }
 
-        /**
-         * get character-set to use.
-         * @return character-set
-         * @see #ANSI_CHARSET
-         * @see #DEFAULT_CHARSET
-         * @see #SYMBOL_CHARSET
-         */
+        /// <summary>
+        /// get character-set to use.
+        /// </summary>
+        /// <value>ANSI_CHARSET,DEFAULT_CHARSET,SYMBOL_CHARSET </value>
         short Charset { get; set; }
 
-        /**
-         * get the index within the XSSFWorkbook (sequence within the collection of Font objects)
-         * 
-         * @return unique index number of the underlying record this Font represents (probably you don't care
-         *  unless you're comparing which one is which)
-         */
+        /// <summary>
+        /// get the index within the Workbook (sequence within the collection of Font objects)
+        /// </summary>
         short Index { get; }
-
+        [Obsolete("deprecated POI 3.15 beta 2. Use IsBold instead.")]
         short Boldweight { get; set; }
 
         bool IsBold { get; set; }

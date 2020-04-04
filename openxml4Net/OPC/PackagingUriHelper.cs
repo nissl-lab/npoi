@@ -474,7 +474,11 @@ namespace NPOI.OpenXml4Net.OPC
                 path = Path.GetDirectoryName(sourcePartUri.OriginalString).Replace("\\", "/");
 
             string targetPath = targetUri.OriginalString;
-            if (targetPath.StartsWith("../"))
+            if (targetPath.StartsWith("#"))
+            {
+                path += "/" + Path.GetFileName(sourcePartUri.OriginalString) + targetPath;
+            }
+            else if (targetPath.StartsWith("../"))
             {
                 string[] segments = path.Split(new char[] { '/' });
 
@@ -694,14 +698,15 @@ namespace NPOI.OpenXml4Net.OPC
             StringBuilder retVal = new StringBuilder();
             String uriStr = uri.OriginalString;
             char c;
-            for (int i = 0; i < uriStr.Length; ++i)
+            int length = uriStr.Length;
+            for (int i = 0; i < length; ++i)
             {
                 c = uriStr[i];
                 if (c == '%')
                 {
                     // We certainly found an encoded character, check for length
                     // now ( '%' HEXDIGIT HEXDIGIT)
-                    if (((uriStr.Length - i) < 2))
+                    if ((length - i) < 2)
                     {
                         throw new ArgumentException("The uri " + uriStr
                                 + " contain invalid encoded character !");
@@ -709,7 +714,7 @@ namespace NPOI.OpenXml4Net.OPC
 
                     // Decode the encoded character
                     char decodedChar = (char)Convert.ToInt32(uriStr.Substring(
-                            i + 1, i + 3), 16);
+                            i + 1, 2), 16);
                     retVal.Append(decodedChar);
                     i += 2;
                     continue;
@@ -830,7 +835,7 @@ namespace NPOI.OpenXml4Net.OPC
 
     private static bool IsUnsafe(int ch)
     {
-        return ch > 0x80 || char.IsWhiteSpace((char)ch) || ch == '\u00A0';
+        return ch > 0x80 || char.IsWhiteSpace((char)ch);
     }
         /**
          * Build a part name where the relationship should be stored ((ex

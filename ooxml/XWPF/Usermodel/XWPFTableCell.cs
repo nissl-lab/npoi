@@ -316,16 +316,27 @@ namespace NPOI.XWPF.UserModel
 
         /**
          * Get the vertical alignment of the cell.
-         * @return the cell alignment enum value
+         * @return the cell alignment enum value or null if no vertical alignment is set
          */
-        public XWPFVertAlign GetVerticalAlignment()
+        public XWPFVertAlign? GetVerticalAlignment()
         {
-            XWPFVertAlign vAlign = XWPFVertAlign.TOP;
+            XWPFVertAlign? vAlign = null;
             CT_TcPr tcpr = ctTc.tcPr;
-            if (ctTc != null)
+            if (tcpr != null)
             {
                 CT_VerticalJc va = tcpr.vAlign;
-                vAlign = stVertAlignTypeMap[(va.val)];
+                if (va != null)
+                {
+                    vAlign = stVertAlignTypeMap[va.val.Value];
+                }
+                else
+                {
+                    vAlign = XWPFVertAlign.TOP;
+                }
+                if (va != null && va.val != null)
+                {
+                    vAlign = stVertAlignTypeMap[va.val.Value];
+                }
             }
             return vAlign;
         }
@@ -429,7 +440,7 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFParagraph GetParagraphArray(int pos)
         {
-            if (pos > 0 && pos < paragraphs.Count)
+            if (pos >= 0 && pos < paragraphs.Count)
             {
                 return paragraphs[(pos)];
             }
@@ -602,12 +613,12 @@ namespace NPOI.XWPF.UserModel
             {
                 return null;
             }
-            XWPFTableRow tableRow = table.GetRow(row);
-            if (tableRow == null)
+            XWPFTableRow tr = table.GetRow(row);
+            if (tr == null)
             {
                 return null;
             }
-            return tableRow.GetTableCell(cell);
+            return tr.GetTableCell(cell);
         }
 
         public XWPFDocument GetXWPFDocument()

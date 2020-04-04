@@ -33,8 +33,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class HCenterRecord
-       : StandardRecord
+    public class HCenterRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x83;
         private short field_1_hcenter;

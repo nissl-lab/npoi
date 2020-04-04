@@ -33,8 +33,7 @@ namespace NPOI.HSSF.Record
      * @author Andrew C. Oliver (acoliver at apache dot org)
      */
 
-    public class ObjectProtectRecord
-       : StandardRecord
+    public class ObjectProtectRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x63;
         private short field_1_protect;

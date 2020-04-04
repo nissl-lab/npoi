@@ -20,6 +20,8 @@ using NPOI.SS.Formula.PTG;
 using NPOI.SS.Formula;
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
+using System.Text.RegularExpressions;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -53,7 +55,10 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFName : IName
     {
-
+        //private static Regex isValidName = new Regex(
+        //   "[\\p{IsAlphabetic}_\\\\]" +
+        //   "[\\p{IsAlphabetic}0-9_.\\\\]*",
+        //   RegexOptions.IgnoreCase);
         /**
          * A built-in defined name that specifies the workbook's print area
          */
@@ -81,9 +86,9 @@ namespace NPOI.XSSF.UserModel
 
         /**
          * ?an be one of the following
-         * <li> this defined name refers to a range to which an advanced filter has been
+         * 1 this defined name refers to a range to which an advanced filter has been
          * applied. This represents the source data range, unfiltered.
-         * <li> This defined name refers to a range to which an AutoFilter has been
+         * 2 This defined name refers to a range to which an AutoFilter has been
          * applied
          */
         public static String BUILTIN_FILTER_DB = "_xlnm._FilterDatabase";
@@ -140,25 +145,22 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                validateName(value);
-
+                ValidateName(value);
+                String oldName = NameName;
                 int sheetIndex = SheetIndex;
-
-                //Check to ensure no other names have the same case-insensitive name
-                for (int i = 0; i < _workbook.NumberOfNames; i++)
+                
+                //Check to ensure no other names have the same case-insensitive name at the same scope
+                foreach (XSSFName foundName in _workbook.GetNames(value))
                 {
-                    IName nm = _workbook.GetNameAt(i);
-                    if (nm != this)
+                    if (foundName != this && sheetIndex == foundName.SheetIndex)
                     {
-                        if (value.Equals(nm.NameName, StringComparison.InvariantCultureIgnoreCase) 
-                            && sheetIndex == nm.SheetIndex)
-                        {
-                            String msg = "The " + (sheetIndex == -1 ? "workbook" : "sheet") + " already contains this name: " + value;
-                            throw new ArgumentException(msg);
-                        }
+                        String msg = "The " + (sheetIndex == -1 ? "workbook" : "sheet") + " already contains this name: " + value;
+                        throw new ArgumentException(msg);
                     }
                 }
                 _ctName.name = value;
+                //Need to update the name -> named ranges map
+                _workbook.UpdateName(this, oldName);
             }
         }
 
@@ -177,7 +179,7 @@ namespace NPOI.XSSF.UserModel
             {
                 XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(_workbook);
                 //validate through the FormulaParser
-                FormulaParser.Parse(value, fpb, FormulaType.NamedRange, SheetIndex);
+                FormulaParser.Parse(value, fpb, FormulaType.NamedRange, SheetIndex, -1);
 
                 _ctName.Value = value;   
             }
@@ -192,7 +194,7 @@ namespace NPOI.XSSF.UserModel
                     return false;
                 }
                 XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(_workbook);
-                Ptg[] ptgs = FormulaParser.Parse(formulaText, fpb, FormulaType.NamedRange, SheetIndex);
+                Ptg[] ptgs = FormulaParser.Parse(formulaText, fpb, FormulaType.NamedRange, SheetIndex, -1);
                 return Ptg.DoesFormulaReferToDeletedCell(ptgs);
             }
         }
@@ -347,16 +349,43 @@ namespace NPOI.XSSF.UserModel
             if (!(o is XSSFName)) return false;
 
             XSSFName cf = (XSSFName)o;
-            return _ctName.name == cf.GetCTName().name && _ctName.localSheetId == cf.GetCTName().localSheetId;
+            return _ctName.name == cf.GetCTName().name && _ctName.localSheetId == cf.GetCTName().localSheetId && _ctName.Value==cf.RefersToFormula ;
         }
 
-        private static void validateName(String name)
+        private static void ValidateName(String name)
         {
-            if (name.Length == 0) throw new ArgumentException("Name cannot be blank");
-            char c = name[0];
-            if (!(c == '_' || Char.IsLetter(c)) || name.IndexOf(' ') != -1)
+            /* equivalent to:
+            Pattern.compile(
+                    "[\\p{IsAlphabetic}_]" +
+                    "[\\p{IsAlphabetic}0-9_\\\\]*",
+                    Pattern.CASE_INSENSITIVE).matcher(name).matches();
+            \p{IsAlphabetic} doesn't work on Java 6, and other regex-based character classes don't work on unicode
+            thus we are stuck with Character.isLetter (for now).
+            */
+
+            if (name.Length == 0)
             {
-                throw new ArgumentException("Invalid name: '" + name + "'; Names must begin with a letter or underscore and not contain spaces");
+                throw new ArgumentException("Name cannot be blank");
+            }
+
+            // is first character valid?
+            char c = name[0];
+            String allowedSymbols = "_";
+            bool characterIsValid = (char.IsLetter(c) || allowedSymbols.IndexOf(c) != -1);
+            if (!characterIsValid)
+            {
+                throw new ArgumentException("Invalid name: '" + name + "': first character must be underscore or a letter");
+            }
+
+            // are all other characters valid?
+            allowedSymbols = "_\\"; //backslashes needed for unicode escape
+            foreach (char ch in name.ToCharArray())
+            {
+                characterIsValid = (char.IsLetterOrDigit(ch) || allowedSymbols.IndexOf(ch) != -1);
+                if (!characterIsValid)
+                {
+                    throw new ArgumentException("Invalid name: '" + name + "'");
+                }
             }
         }
     }

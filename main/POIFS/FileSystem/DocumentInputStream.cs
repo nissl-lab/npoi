@@ -61,7 +61,7 @@ namespace NPOI.POIFS.FileSystem
             {
                 delegate1 = new ODocumentInputStream(document);
             }
-            else if (parentNode.FileSystem != null)
+            else if (parentNode.OFileSystem != null)
             {
                 delegate1 = new ODocumentInputStream(document);
             }
@@ -102,7 +102,7 @@ namespace NPOI.POIFS.FileSystem
          * 
          * @param document the Document to be read
          */
-        public DocumentInputStream(POIFSDocument document)
+        public DocumentInputStream(OPOIFSDocument document)
         {
             delegate1 = new ODocumentInputStream(document);
         }
@@ -147,7 +147,7 @@ namespace NPOI.POIFS.FileSystem
             return delegate1.Read();
         }
 
-        public virtual int Read(byte[] b)
+        public override int Read(byte[] b)
         {
             return Read(b, 0, b.Length);
         }

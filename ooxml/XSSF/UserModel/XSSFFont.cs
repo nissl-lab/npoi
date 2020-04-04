@@ -22,6 +22,8 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.OpenXmlFormats.Dml;
 using Dml = NPOI.OpenXmlFormats.Dml;
 using NPOI.XSSF.Model;
+using NPOI.Util;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -148,7 +150,7 @@ namespace NPOI.XSSF.UserModel
                 Spreadsheet.CT_Color color = _ctFont.sizeOfColorArray() == 0 ? null : _ctFont.GetColorArray(0);
                 if (color == null) return IndexedColors.Black.Index;
 
-                if (!color.indexedSpecified) return IndexedColors.Black.Index;
+                //if (!color.indexedSpecified) return IndexedColors.Black.Index;
                 long index = color.indexed;
                 if (index == XSSFFont.DEFAULT_FONT_COLOR)
                 {
@@ -389,6 +391,8 @@ namespace NPOI.XSSF.UserModel
                         case FontSuperScript.Super:
                             offSetProperty.val = ST_VerticalAlignRun.superscript;
                             break;
+                        default:
+                            throw new InvalidOperationException("Invalid type offset: " + value);
                     }
                 }
             }
@@ -424,7 +428,7 @@ namespace NPOI.XSSF.UserModel
          * @see #BOLDWEIGHT_NORMAL
          * @see #BOLDWEIGHT_BOLD
          */
-
+        [Obsolete("deprecated POI 3.15 beta 2. Use IsBold instead.")]
         public short Boldweight
         {
             get
@@ -443,13 +447,9 @@ namespace NPOI.XSSF.UserModel
          * @param charset - charset
          * @see FontCharset
          */
-        public void SetCharSet(byte charSet)
+        public void SetCharSet(byte charset)
         {
-            int cs = (int)charSet;
-            if (cs < 0)
-            {
-                cs += 256;
-            }
+            int cs = charset & 0xff;
             SetCharSet(cs);
         }
         /**
@@ -503,6 +503,10 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 Spreadsheet.CT_Color ctColor = _ctFont.sizeOfColorArray() == 0 ? _ctFont.AddNewColor() : _ctFont.GetColorArray(0);
+                if (ctColor.IsSetIndexed())
+                {
+                    ctColor.UnsetIndexed();
+                }
                 ctColor.SetRgb(color.RGB);
             }
         }

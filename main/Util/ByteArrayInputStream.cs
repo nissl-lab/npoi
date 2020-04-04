@@ -3,7 +3,7 @@ using System.IO;
 
 namespace NPOI.Util
 {
-    public class ByteArrayInputStream : Stream
+    public class ByteArrayInputStream : InputStream
     {
 
         public ByteArrayInputStream()
@@ -27,7 +27,7 @@ namespace NPOI.Util
             this.mark = offset;
         }
         
-        public virtual int Read()
+        public override int Read()
         {
             lock (this)
             {
@@ -67,19 +67,19 @@ namespace NPOI.Util
             }
             
         }
-        public virtual int Available()
+        public override int Available()
         {
             return count - pos;
         }
-        public virtual bool MarkSupported()
+        public override bool MarkSupported()
         {
             return true;
         }
-        public virtual void Mark(int readAheadLimit)
+        public override void Mark(int readAheadLimit)
         {
             mark = pos;
         }
-        public virtual void Reset()
+        public override void Reset()
         {
             pos = mark;
         }
@@ -166,6 +166,7 @@ namespace NPOI.Util
 
         public override void SetLength(long value)
         {
+            throw new NotImplementedException();
         }
 
         public override void Write(byte[] buffer, int offset, int count)

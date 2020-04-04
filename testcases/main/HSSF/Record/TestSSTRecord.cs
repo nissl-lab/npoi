@@ -374,8 +374,8 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual("01/05 (Wed)", sheet.GetRow(0).GetCell(8).StringCellValue);
             Assert.AreEqual("01/05 (Wed)", sheet.GetRow(1).GetCell(8).StringCellValue);
 
-            HSSFTestDataSamples.WriteOutAndReadBack((HSSFWorkbook)wb);
-
+            HSSFTestDataSamples.WriteOutAndReadBack((HSSFWorkbook)wb).Close();
+            wb.Close();
             // Test the second file.
             wb = HSSFTestDataSamples.OpenSampleWorkbook("duprich2.xls");
             sheet = wb.GetSheetAt(0);
@@ -387,7 +387,8 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual("Testing", sheet.GetRow(row++).GetCell(0).StringCellValue);
             Assert.AreEqual("Testing", sheet.GetRow(row++).GetCell(0).StringCellValue);
 
-            HSSFTestDataSamples.WriteOutAndReadBack((HSSFWorkbook)wb);
+            HSSFTestDataSamples.WriteOutAndReadBack((HSSFWorkbook)wb).Close();
+            wb.Close();
         }
 
         /**
@@ -1481,7 +1482,7 @@ namespace TestCases.HSSF.Record
         /**
          * deep comparison of two SST records
          */
-        public static void AssertAreEqual(SSTRecord expected, SSTRecord actual)
+        private static void assertRecordEquals(SSTRecord expected, SSTRecord actual)
         {
             Assert.AreEqual(expected.NumStrings, actual.NumStrings, "number of strings");
             Assert.AreEqual(expected.NumUniqueStrings, actual.NumUniqueStrings, "number of unique strings");
@@ -1512,7 +1513,7 @@ namespace TestCases.HSSF.Record
             SSTRecord dst = new SSTRecord(in1);
             Assert.AreEqual(81, dst.NumStrings);
 
-            AssertAreEqual(src, dst);
+            assertRecordEquals(src, dst);
         }
         [Test]
         public void Test50779_2()
@@ -1531,7 +1532,7 @@ namespace TestCases.HSSF.Record
             SSTRecord dst = new SSTRecord(in1);
             Assert.AreEqual(81, dst.NumStrings);
 
-            AssertAreEqual(src, dst);
+            assertRecordEquals(src, dst);
         }
 
     }

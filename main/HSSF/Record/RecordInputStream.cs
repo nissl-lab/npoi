@@ -35,8 +35,18 @@ namespace NPOI.HSSF.Record
     {
         public LeftoverDataException(int sid, int remainingByteCount)
             : base("Initialisation of record 0x" + StringUtil.ToHexString(sid).ToUpper()
-                + " left " + remainingByteCount + " bytes remaining still to be read.")
+                  + "(" + getRecordName(sid) + ") left " + remainingByteCount
+                    + " bytes remaining still to be read.")
         {
+        }
+        private static String getRecordName(int sid)
+        {
+            Type recordClass = RecordFactory.GetRecordClass(sid);
+            if (recordClass == null)
+            {
+                return null;
+            }
+            return recordClass.Name;
         }
     }
     internal class SimpleHeaderInput : BiffHeaderInput

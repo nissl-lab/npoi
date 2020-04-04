@@ -13,52 +13,26 @@ namespace TestCases.OpenXml4Net.OPC.Internal
     [TestFixture]
     public class TestContentTypeManager
     {
-        public TestContentTypeManager()
+        /**
+         * Test the properties part content parsing.
+         */
+        [Test]
+        public void TestContentType()
         {
-            //
-            // TODO: Add constructor logic here
-            //
+            String filepath = OpenXml4NetTestDataSamples.GetSampleFileName("sample.docx");
+            // Retrieves core properties part
+            OPCPackage p = OPCPackage.Open(filepath, PackageAccess.READ);
+            PackageRelationshipCollection rels = p.GetRelationshipsByType(PackageRelationshipTypes.CORE_PROPERTIES);
+            PackageRelationship corePropertiesRelationship = rels.GetRelationship(0);
+            PackagePart coreDocument = p.GetPart(corePropertiesRelationship);
+
+            Assert.AreEqual("application/vnd.openxmlformats-package.core-properties+xml", coreDocument.ContentType);
+            // TODO - finish writing this test
+            Assume.That(false,"finish writing this test");
+
+            ContentTypeManager ctm = new ZipContentTypeManager(coreDocument.GetInputStream(), p);
         }
 
-        private TestContext testContextInstance;
-
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-
-        #region Additional test attributes
-        //
-        // You can use the following additional attributes as you write your tests:
-        //
-        // Use ClassInitialize to run code before running the first test in the class
-        // [ClassInitialize()]
-        // public static void MyClassInitialize(TestContext testContext) { }
-        //
-        // Use ClassCleanup to run code after all tests in a class have run
-        // [ClassCleanup()]
-        // public static void MyClassCleanup() { }
-        //
-        // Use TestInitialize to run code before running each test 
-        // [TestInitialize()]
-        // public void MyTestInitialize() { }
-        //
-        // Use TestCleanup to run code after each test has run
-        // [TestCleanup()]
-        // public void MyTestCleanup() { }
-        //
-        #endregion
 
         /**
          * Test the addition of several default and override content types.
@@ -85,8 +59,8 @@ namespace TestCases.OpenXml4Net.OPC.Internal
             Assert.AreEqual(ctm.GetContentType(name3), "text/xml+rel");
         }
         /**
- * Test the addition then removal of content types.
- */
+         * Test the addition then removal of content types.
+         */
         [Test]
         public void TestContentTypeRemoval()
         {
@@ -113,5 +87,17 @@ namespace TestCases.OpenXml4Net.OPC.Internal
             Assert.AreEqual(ctm.GetContentType(name1), null);
             Assert.AreEqual(ctm.GetContentType(name2), null);
         }
+
+        /**
+         * Test the addition then removal of content types in a package.
+         */
+        [Ignore("")]
+        [Test]
+        public void TestContentTypeRemovalPackage()
+        {
+            // TODO
+            Assert.Fail("test not written");
+        }
+
     }
 }

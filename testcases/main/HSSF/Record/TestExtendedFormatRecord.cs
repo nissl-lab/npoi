@@ -139,6 +139,26 @@ namespace TestCases.HSSF.Record
             for (int i = 0; i < data.Length; i++)
                 Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
+
+        [Test]
+        public void TestRotation()
+        {
+            ExtendedFormatRecord record = CreateEFR();
+            Assert.AreEqual(0, record.Rotation);
+            record.Rotation = ((short)1);
+            Assert.AreEqual(1, record.Rotation);
+            record.Rotation = ((short)89);
+            Assert.AreEqual(89, record.Rotation);
+            record.Rotation = ((short)90);
+            Assert.AreEqual(90, record.Rotation);
+            // internally values below zero are stored differently
+            record.Rotation = ((short)-1);
+            Assert.AreEqual(255, record.Rotation);
+            record.Rotation = ((short)-89);
+            Assert.AreEqual(-77, 90 - record.Rotation);
+            record.Rotation = ((short)-90);
+            Assert.AreEqual(-76, 90 - record.Rotation);
+        }
     }
 
 }

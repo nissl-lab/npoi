@@ -19,10 +19,10 @@
 
 namespace NPOI.SS.UserModel
 {
-    /**
-     * @author Dmitriy Kumshayev
-     * @author Yegor Kozlov
-     */
+    /// <summary>
+    /// High level representation for Border Formatting component
+    /// of Conditional Formatting settings
+    /// </summary>
     public interface IBorderFormatting
     {
         BorderStyle BorderBottom { get; set; }
@@ -44,5 +44,14 @@ namespace NPOI.SS.UserModel
         short RightBorderColor { get; set; }
 
         short TopBorderColor { get; set; }
+
+        IColor BottomBorderColorColor { get; set; }
+
+        IColor DiagonalBorderColorColor { get; set; }
+
+        IColor LeftBorderColorColor { get; set; }
+
+        IColor RightBorderColorColor { get; set; }
+        IColor TopBorderColorColor { get; set; }
     }
 }

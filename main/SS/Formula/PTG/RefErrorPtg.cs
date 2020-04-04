@@ -19,7 +19,7 @@ namespace NPOI.SS.Formula.PTG
 {
     using System;
     using System.Text;
-    
+    using NPOI.SS.UserModel;
     using NPOI.Util;
 
 
@@ -71,8 +71,7 @@ namespace NPOI.SS.Formula.PTG
 
         public override String ToFormulaString()
         {
-            //TODO -- should we store a cellreference instance in this ptg?? but .. memory is an Issue, i believe!
-            return "#REF!";
+            return FormulaError.REF.String;
         }
 
         public override byte DefaultOperandClass

@@ -31,5 +31,10 @@ namespace NPOI.OpenXml4Net.Util
          *  resources may be freed
          */
         void Close();
+
+        /**
+	     * Has close been called already?
+	     */
+        bool IsClosed { get; }
     }
 }

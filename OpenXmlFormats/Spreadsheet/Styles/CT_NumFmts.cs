@@ -85,6 +85,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.countField = value;
+                this.countFieldSpecified = value > 0;
             }
         }
 

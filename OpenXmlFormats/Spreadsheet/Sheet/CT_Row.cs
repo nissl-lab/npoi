@@ -73,7 +73,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
-
+        public bool IsSetR()
+        {
+            return this.rField > 0;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {

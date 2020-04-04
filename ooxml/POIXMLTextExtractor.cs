@@ -29,9 +29,7 @@ namespace NPOI
          * Creates a new text extractor for the given document
          */
         public POIXMLTextExtractor(POIXMLDocument document)
-            : base((POIDocument)null)
         {
-
 
             _document = document;
         }

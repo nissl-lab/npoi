@@ -37,7 +37,7 @@ namespace NPOI.POIFS.EventFileSystem
     /// </summary>
     public class POIFSReaderEventArgs:EventArgs
     {
-        public POIFSReaderEventArgs(string name, POIFSDocumentPath path, POIFSDocument document)
+        public POIFSReaderEventArgs(string name, POIFSDocumentPath path, OPOIFSDocument document)
         {
             this.name = name;
             this.path = path;
@@ -45,14 +45,14 @@ namespace NPOI.POIFS.EventFileSystem
         }
 
         private POIFSDocumentPath path;
-        private POIFSDocument document;
+        private OPOIFSDocument document;
         private string name;
 
         public virtual POIFSDocumentPath Path
         {
             get { return path; }
         }
-        public virtual POIFSDocument Document
+        public virtual OPOIFSDocument Document
         {
             get { return document; }
         }

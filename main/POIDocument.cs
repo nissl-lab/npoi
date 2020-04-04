@@ -23,6 +23,8 @@ namespace NPOI
     using NPOI.POIFS.FileSystem;
     using NPOI.HPSF;
     using System.Collections.Generic;
+    using NPOI.POIFS.Crypt;
+    using NPOI.Util;
 
 
     /// <summary>
@@ -32,14 +34,23 @@ namespace NPOI
     /// </summary>
     /// <remarks>@author Nick Burch</remarks>
     [Serializable]
-    public abstract class POIDocument
+    public abstract class POIDocument : ICloseable
     {
+        private static POILogger logger = POILogFactory.GetLogger(typeof(POIDocument));
         /** Holds metadata on our document */
         protected SummaryInformation sInf;
         /** Holds further metadata on our document */
         protected DocumentSummaryInformation dsInf;
         /**	The directory that our document lives in */
         protected DirectoryNode directory;
+
+        /// <summary>
+        /// just for test case  TestPOIDocumentMain.TestWriteReadProperties
+        /// </summary>
+        protected internal void SetDirectoryNode(DirectoryNode directory)
+        {
+            this.directory = directory;
+        }
 
         /** For our own logging use */
         //protected POILogger logger;
@@ -51,35 +62,38 @@ namespace NPOI
         {
             this.directory = dir;
         }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="POIDocument"/> class.
-        /// </summary>
-        /// <param name="dir">The dir.</param>
-        /// <param name="fs">The fs.</param>
-        [Obsolete]
-        public POIDocument(DirectoryNode dir, POIFSFileSystem fs)
+        /**
+     * Constructs from an old-style OPOIFS
+     */
+        protected POIDocument(OPOIFSFileSystem fs)
+            : this(fs.Root)
         {
-            this.directory = dir;
-            //POILogFactory.GetLogger(this.GetType());
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="POIDocument"/> class.
         /// </summary>
         /// <param name="fs">The fs.</param>
-        public POIDocument(POIFSFileSystem fs)
+        public POIDocument(NPOIFSFileSystem fs)
             : this(fs.Root) 
         {
             
         }
         /**
-     * Will create whichever of SummaryInformation
-     *  and DocumentSummaryInformation (HPSF) properties
-     *  are not already part of your document.
-     * This is normally useful when creating a new
-     *  document from scratch.
-     * If the information properties are already there,
-     *  then nothing will happen.
+     * Constructs from the default POIFS
      */
+        protected POIDocument(POIFSFileSystem fs)
+            : this(fs.Root)
+        {
+        }
+        /**
+         * Will create whichever of SummaryInformation
+         *  and DocumentSummaryInformation (HPSF) properties
+         *  are not already part of your document.
+         * This is normally useful when creating a new
+         *  document from scratch.
+         * If the information properties are already there,
+         *  then nothing will happen.
+         */
         public void CreateInformationProperties()
         {
             if (!initialized) ReadProperties();
@@ -137,7 +151,7 @@ namespace NPOI
         /// If a given property Set is missing or corrupt,
         /// it will remain null;
         /// </summary>
-        protected void ReadProperties()
+        protected internal void ReadProperties()
         {
             PropertySet ps;
 
@@ -149,9 +163,12 @@ namespace NPOI
             }
             else if (ps != null)
             {
-                //logger.Log(POILogger.WARN, "DocumentSummaryInformation property Set came back with wrong class - ", ps.GetType());
+                logger.Log(POILogger.WARN, "DocumentSummaryInformation property Set came back with wrong class - ", ps.GetType());
             }
-
+            else
+            {
+                logger.Log(POILogger.WARN, "DocumentSummaryInformation property set came back as null");
+            }
             // SummaryInformation
             ps = GetPropertySet(SummaryInformation.DEFAULT_STREAM_NAME);
             if (ps is SummaryInformation)
@@ -160,60 +177,118 @@ namespace NPOI
             }
             else if (ps != null)
             {
-                //logger.Log(POILogger.WARN, "SummaryInformation property Set came back with wrong class - ", ps.GetType());
+                logger.Log(POILogger.WARN, "SummaryInformation property Set came back with wrong class - ", ps.GetType());
             }
+            else
+            {
+                logger.Log(POILogger.WARN, "SummaryInformation property set came back as null");
+            }
+            
 
             // Mark the fact that we've now loaded up the properties
             initialized = true;
         }
-
         /// <summary>
         /// For a given named property entry, either return it or null if
         /// if it wasn't found
         /// </summary>
-        /// <param name="setName">Name of the set.</param>
-        /// <returns></returns>
-        protected PropertySet GetPropertySet(String setName)
+        /// <param name="setName">The property to read</param>
+        /// <returns>The value of the given property or null if it wasn't found.</returns>
+        /// <exception cref="IOException">If retrieving properties fails</exception>
+        protected PropertySet GetPropertySet(string setName)
         {
-            //directory can be null when creating new documents
-            if (directory == null || !directory.HasEntry(setName)) return null;
-            DocumentInputStream dis;
+            return GetPropertySet(setName, null);
+        }
+        /// <summary>
+        /// For a given named property entry, either return it or null if
+        /// if it wasn't found
+        /// </summary>
+        /// <param name="setName">The property to read</param>
+        /// <param name="encryptionInfo">the encryption descriptor in case of cryptoAPI encryption</param>
+        /// <returns>The value of the given property or null if it wasn't found.</returns>
+        /// <exception cref="IOException">If retrieving properties fails</exception>
+        protected PropertySet GetPropertySet(string setName, EncryptionInfo encryptionInfo)
+        {
+            DirectoryNode dirNode = directory;
+
+            NPOIFSFileSystem encPoifs = null;
+            String step = "getting";
             try
             {
-                // Find the entry, and Get an input stream for it
-                dis = directory.CreateDocumentInputStream(setName);
+                if (encryptionInfo != null)
+                {
+                    step = "getting encrypted";
+                    InputStream is1 = encryptionInfo.Decryptor.GetDataStream(directory);
+                    try
+                    {
+                        encPoifs = new NPOIFSFileSystem(is1);
+                        dirNode = encPoifs.Root;
+                    }
+                    finally
+                    {
+                    is1.Close();
+                    }
+                }
+
+                //directory can be null when creating new documents
+                if (dirNode == null || !dirNode.HasEntry(setName))
+                {
+                    return null;
+                }
+
+                // Find the entry, and get an input stream for it
+                step = "getting";
+                DocumentInputStream dis = dirNode.CreateDocumentInputStream(dirNode.GetEntry(setName));
+                try
+                {
+                    // Create the Property Set
+                    step = "creating";
+                    return PropertySetFactory.Create(dis);
+                }
+                finally
+                {
+                    dis.Close();
+                }
             }
-            catch (IOException)
+            catch (Exception e)
             {
-                // Oh well, doesn't exist
-                //logger.Log(POILogger.WARN, "Error Getting property Set with name " + SetName + "\n" + ie);
+                logger.Log(POILogger.WARN, "Error " + step + " property set with name " + setName, e);
                 return null;
             }
-
-            try
+            finally
             {
-                // Create the Property Set
-                PropertySet Set = PropertySetFactory.Create(dis);
-                return Set;
+                if (encPoifs != null)
+                {
+                    try
+                    {
+                        encPoifs.Close();
+                    }
+                    catch (IOException e)
+                    {
+                        logger.Log(POILogger.WARN, "Error closing encrypted property poifs", e);
+                    }
+                }
             }
-            catch (IOException)
-            {
-                // Must be corrupt or something like that
-                //logger.Log(POILogger.WARN, "Error creating property Set with name " + SetName + "\n" + ie);
-            }
-            catch (HPSFException)
-            {
-                // Oh well, doesn't exist
-                //logger.Log(POILogger.WARN, "Error creating property Set with name " + SetName + "\n" + he);
-            }
-            return null;
         }
-
+        /**
+         * Writes out the updated standard Document Information Properties (HPSF)
+         *  into the currently open NPOIFSFileSystem
+         * TODO Implement in-place update
+         * 
+         * @throws IOException if an error when writing to the open
+         *      {@link NPOIFSFileSystem} occurs
+         * TODO throws exception if open from stream not file
+         */
+        protected internal void WriteProperties()
+        {
+            ValidateInPlaceWritePossible();
+            WriteProperties(directory.FileSystem, null);
+        }
         /// <summary>
         /// Writes out the standard Documment Information Properties (HPSF)
         /// </summary>
         /// <param name="outFS">the POIFSFileSystem to Write the properties into</param>
-        protected void WriteProperties(POIFSFileSystem outFS)
+        protected internal void WriteProperties(NPOIFSFileSystem outFS)
         {
             WriteProperties(outFS, null);
         }
@@ -222,7 +297,7 @@ namespace NPOI
         /// </summary>
         /// <param name="outFS">the POIFSFileSystem to Write the properties into.</param>
         /// <param name="writtenEntries">a list of POIFS entries to Add the property names too.</param>
-        protected void WriteProperties(POIFSFileSystem outFS, IList writtenEntries)
+        protected internal void WriteProperties(NPOIFSFileSystem outFS, IList writtenEntries)
         {
             if (sInf != null)
             {
@@ -248,7 +323,7 @@ namespace NPOI
         /// <param name="name">the (POIFS Level) name of the property to Write.</param>
         /// <param name="Set">the PropertySet to Write out.</param>
         /// <param name="outFS">the POIFSFileSystem to Write the property into.</param>
-        protected void WritePropertySet(String name, PropertySet Set, POIFSFileSystem outFS)
+        protected void WritePropertySet(String name, PropertySet Set, NPOIFSFileSystem outFS)
         {
             try
             {
@@ -259,7 +334,8 @@ namespace NPOI
                     byte[] data = bOut.ToArray();
                     using (MemoryStream bIn = new MemoryStream(data))
                     {
-                        outFS.CreateDocument(bIn, name);
+                        // Create or Update the Property Set stream in the POIFS
+                        outFS.CreateOrUpdateDocument(bIn, name);
                     }
                     //logger.Log(POILogger.INFO, "Wrote property Set " + name + " of size " + data.Length);
                 }
@@ -269,70 +345,95 @@ namespace NPOI
                 //logger.log(POILogger.ERROR, "Couldn't Write property Set with name " + name + " as not supported by HPSF yet");
             }
         }
+        /**
+         * Called during a {@link #write()} to ensure that the Document (and
+         *  associated {@link POIFSFileSystem}) was opened in a way compatible
+         *  with an in-place write.
+         * 
+         * @ if the document was opened suitably
+         */
+        protected void ValidateInPlaceWritePossible()
+        {
+            if (directory == null)
+            {
+                throw new InvalidOperationException("Newly created Document, cannot save in-place");
+            }
+            if (directory.Parent != null)
+            {
+                throw new InvalidOperationException("This is not the root Document, cannot save embedded resource in-place");
+            }
+            if (directory.FileSystem == null ||
+                !directory.FileSystem.IsInPlaceWriteable())
+            {
+                throw new InvalidOperationException("Opened read-only or via an InputStream, a Writeable File is required");
+            }
+        }
 
-        /// <summary>
-        /// Writes the document out to the specified output stream
-        /// </summary>
-        /// <param name="out1">The out1.</param>
+        /**
+         * Writes the document out to the currently open {@link File}, via the
+         *  writeable {@link POIFSFileSystem} it was opened from.
+         *  
+         * <p>This will Assert.Fail (with an {@link InvalidOperationException} if the
+         *  document was opened read-only, opened from an {@link InputStream}
+         *   instead of a File, or if this is not the root document. For those cases, 
+         *   you must use {@link #write(OutputStream)} or {@link #write(File)} to 
+         *   write to a brand new document.
+         * 
+         * @ thrown on errors writing to the file
+         */
+        public abstract void Write() ;
+        /**
+         * Writes the document out to the specified new {@link File}. If the file 
+         * exists, it will be replaced, otherwise a new one will be created
+         *
+         * @param newFile The new File to write to.
+         * 
+         * @ thrown on errors writing to the file
+         */
+        public abstract void Write(FileInfo newFile) ;
+        /**
+         * Writes the document out to the specified output stream. The
+         * stream is not closed as part of this operation.
+         * 
+         * Note - if the Document was opened from a {@link File} rather
+         *  than an {@link InputStream}, you <b>must</b> write out using
+         *  {@link #write()} or to a different File. Overwriting the currently
+         *  open file via an OutputStream isn't possible.
+         *  
+         * If {@code stream} is a {@link java.io.FileOutputStream} on a networked drive
+         * or has a high cost/latency associated with each written byte,
+         * consider wrapping the OutputStream in a {@link java.io.BufferedOutputStream}
+         * to improve write performance, or use {@link #write()} / {@link #write(File)}
+         * if possible.
+         * 
+         * @param out The stream to write to.
+         * 
+         * @ thrown on errors writing to the stream
+         */
+
         public abstract void Write(Stream out1);
 
-        /// <summary>
-        /// Copies nodes from one POIFS to the other minus the excepts
-        /// </summary>
-        /// <param name="source">the source POIFS to copy from.</param>
-        /// <param name="target">the target POIFS to copy to</param>
-        /// <param name="excepts">a list of Strings specifying what nodes NOT to copy</param>
-        [Obsolete]
-        protected void CopyNodes(POIFSFileSystem source, POIFSFileSystem target,
-                                  List<String> excepts)
+        /**
+         * Closes the underlying {@link NPOIFSFileSystem} from which
+         *  the document was read, if any. Has no effect on documents
+         *  opened from an InputStream, or newly created ones.
+         * 
+         * Once {@link #close()} has been called, no further operations
+         *  should be called on the document.
+         */
+        public virtual void Close()
         {
-            EntryUtils.CopyNodes(source, target, excepts);
-        }
-        /// <summary>
-        /// Copies nodes from one POIFS to the other minus the excepts
-        /// </summary>
-        /// <param name="sourceRoot">the source POIFS to copy from.</param>
-        /// <param name="targetRoot">the target POIFS to copy to</param>
-        /// <param name="excepts">a list of Strings specifying what nodes NOT to copy</param>
-        [Obsolete]
-        protected void CopyNodes(DirectoryNode sourceRoot,
-                DirectoryNode targetRoot, List<String> excepts)
-        {
-            EntryUtils.CopyNodes(sourceRoot, targetRoot, excepts);
-        }
-
-        /// <summary>
-        /// Checks to see if the String is in the list, used when copying
-        /// nodes between one POIFS and another
-        /// </summary>
-        /// <param name="entry">The entry.</param>
-        /// <param name="list">The list.</param>
-        /// <returns>
-        /// 	<c>true</c> if [is in list] [the specified entry]; otherwise, <c>false</c>.
-        /// </returns>
-        private bool isInList(String entry, IList list)
-        {
-            for (int k = 0; k < list.Count; k++)
-            {
-                if (list[k].Equals(entry))
-                {
-                    return true;
+            if (directory != null) {
+                if (directory.NFileSystem != null) {
+                    directory.NFileSystem.Close();
+                    directory = null;
                 }
             }
-            return false;
         }
 
-        /// <summary>
-        /// Copies an Entry into a target POIFS directory, recursively
-        /// </summary>
-        /// <param name="entry">The entry.</param>
-        /// <param name="target">The target.</param>
-        [Obsolete]
-        private void CopyNodeRecursively(Entry entry, DirectoryEntry target)
+        public DirectoryNode Directory
         {
-            //System.err.println("copyNodeRecursively called with "+entry.Name+
-            //                   ","+target.Name);
-            EntryUtils.CopyNodeRecursively(entry, target);
+            get { return directory; }
         }
     }
 }

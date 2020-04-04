@@ -16,13 +16,15 @@
    limitations under the License.
 ==================================================================== */
 
-using System.IO;
-using NUnit.Framework;
+using NPOI;
 using NPOI.OpenXml4Net.OPC;
+using NPOI.POIFS.FileSystem;
 using NPOI.Util;
+using NUnit.Framework;
+using System.IO;
 using TestCases.HSSF;
 
-namespace NPOI.OOXML
+namespace TestCases.OOXML
 {
 
     /**
@@ -46,22 +48,41 @@ namespace NPOI.OOXML
             in1 = new PushbackStream(
                     HSSFTestDataSamples.OpenSampleFileStream("SampleSS.xlsx")
             );
-            Assert.IsTrue(POIXMLDocument.HasOOXMLHeader(in1));
+            Assert.IsTrue(DocumentFactoryHelper.HasOOXMLHeader(in1));
             in1.Close();
 
             // xls file isn't
             in1 = new PushbackStream(
                     HSSFTestDataSamples.OpenSampleFileStream("SampleSS.xls")
             );
-            Assert.IsFalse(POIXMLDocument.HasOOXMLHeader(in1));
+            Assert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(in1));
             in1.Close();
 
             // text file isn't
             in1 = new PushbackStream(
                     HSSFTestDataSamples.OpenSampleFileStream("SampleSS.txt")
             );
-            Assert.IsFalse(POIXMLDocument.HasOOXMLHeader(in1));
+            Assert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(in1));
             in1.Close();
+        }
+        [Test]
+        public void TestFileCorruption()
+        {
+            // create test InputStream
+            byte[] testData = { (byte)1, (byte)2, (byte)3 };
+            ByteArrayInputStream testInput = new ByteArrayInputStream(testData);
+
+            // detect header
+            InputStream in1 = new PushbackInputStream(testInput, 10);
+            Assert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(in1));
+            //noinspection deprecation
+            Assert.IsFalse(POIXMLDocument.HasOOXMLHeader(in1));
+
+            // check if InputStream is still intact
+            byte[] test = new byte[3];
+            Assert.AreEqual(3, in1.Read(test));
+            Assert.IsTrue(Arrays.Equals(testData, test));
+            Assert.AreEqual(-1, in1.Read());
         }
     }
 }

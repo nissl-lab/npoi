@@ -75,7 +75,7 @@ namespace NPOI.SS.Format
         {
             NAMED_COLORS = new Dictionary<String, Color>(CASE_INSENSITIVE_ORDER);
 
-            Hashtable colors = HSSFColor.GetIndexHash();
+            var colors = HSSFColor.GetIndexHash();
             foreach (object v in colors.Values)
             {
                 HSSFColor hc = (HSSFColor)v;
@@ -109,6 +109,9 @@ namespace NPOI.SS.Format
             String condition = "([<>=]=?|!=|<>)    # The operator\n" +
                     "  \\s*([0-9]+(?:\\.[0-9]*)?)\\s*  # The constant to test against\n";
 
+            // A currency symbol / string, in a specific locale
+            String currency = "(\\[\\$.{0,3}-[0-9a-f]{3}\\])";
+
             String color =
                     "\\[(black|blue|cyan|green|magenta|red|white|yellow|color [0-9]+)\\]";
 
@@ -118,6 +121,7 @@ namespace NPOI.SS.Format
             // A part of a specification
             String part = "\\\\.                 # Quoted single character\n" +
                     "|\"([^\\\\\"]|\\\\.)*\"         # Quoted string of characters (handles escaped quotes like \\\") \n" +
+                    "|" + currency + "               # Currency symbol in a given locale\n" +
                     "|_.                             # Space as wide as a given character\n" +
                     "|\\*.                           # Repeating fill character\n" +
                     "|@                              # Text: cell text\n" +
@@ -136,12 +140,16 @@ namespace NPOI.SS.Format
 
             String format = "(?:" + color + ")?                  # Text color\n" +
                     "(?:\\[" + condition + "\\])?                # Condition\n" +
+                    // see https://msdn.microsoft.com/en-ca/goglobal/bb964664.aspx and https://bz.apache.org/ooo/show_bug.cgi?id=70003
+                    // we ignore these for now though
+                    "(?:\\[\\$-[0-9a-fA-F]+\\])?                # Optional locale id, ignored currently\n" +
                     "((?:" + part + ")+)                        # Format spec\n";
 
             RegexOptions flags = RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled;
             COLOR_PAT = new Regex(color, flags);
             CONDITION_PAT = new Regex(condition, flags);
             SPECIFICATION_PAT = new Regex(part, flags);
+            CURRENCY_PAT = new Regex(currency, flags);
             FORMAT_PAT = new Regex(format, flags);
 
             // Calculate the group numbers of important groups.  (They shift around
@@ -160,6 +168,8 @@ namespace NPOI.SS.Format
         public static Regex CONDITION_PAT;
         /** Pattern for the format specification part of a cell format part. */
         public static Regex SPECIFICATION_PAT;
+        /** Pattern for the currency symbol part of a cell format part */
+        public static Regex CURRENCY_PAT;
         /** Pattern for an entire cell single part. */
         public static Regex FORMAT_PAT;
 
@@ -233,7 +243,7 @@ namespace NPOI.SS.Format
 
         /**
          * Returns the number of the first group that is the same as the marker
-         * string.  The search starts with group 1.
+         * string.  Starts from group 1.
          *
          * @param pat    The pattern to use.
          * @param str    The string to match against the pattern.
@@ -321,7 +331,25 @@ namespace NPOI.SS.Format
         private CellFormatter GetFormatter(Match matcher)
         {
             String fdesc = matcher.Groups[(SPECIFICATION_GROUP)].Value;
-            //CellFormatType type = formatType(fdesc);
+            // For now, we don't support localised currencies, so simplify if there
+            Match currencyM = CURRENCY_PAT.Match(fdesc);
+            if (currencyM.Success)
+            {
+                String currencyPart = currencyM.Groups[(1)].Value;
+                String currencyRepl;
+                if (currencyPart.StartsWith("[$-"))
+                {
+                    // Default $ in a different locale
+                    currencyRepl = "$";
+                }
+                else
+                {
+                    currencyRepl = currencyPart.Substring(2, currencyPart.LastIndexOf('-') - 2);
+                }
+                fdesc = fdesc.Replace(currencyPart, currencyRepl);
+            }
+
+            // Build a formatter for this simplified string
             return type.Formatter(fdesc);
         }
 
@@ -347,7 +375,13 @@ namespace NPOI.SS.Format
                 String repl = m.Groups[(0)].Value;
                 if (repl.Length > 0)
                 {
-                    switch (repl[0])
+                    //switch (repl[0])
+                    char c1 = repl[0];
+                    char c2 = '\0';
+                    if (repl.Length > 1)
+                        c2 = Char.ToLower(repl[(1)]);
+
+                    switch (c1)
                     {
                         case '@':
                             return CellFormatType.TEXT;
@@ -370,7 +404,18 @@ namespace NPOI.SS.Format
                             seenZero = true;
                             break;
                         case '[':
-                            return CellFormatType.ELAPSED;
+                            if (c2 == 'h' || c2 == 'm' || c2 == 's')
+                            {
+                                return CellFormatType.ELAPSED;
+                            }
+                            if (c2 == '$')
+                            {
+                                // Localised currency
+                                return CellFormatType.NUMBER;
+                            }
+                            // Something else inside [] which isn't supported!
+                            throw new ArgumentException("Unsupported [] format block '" +
+                                                               repl + "' in '" + fdesc + "' with c2: " + c2);
                         case '#':
                         case '?':
                             return CellFormatType.NUMBER;

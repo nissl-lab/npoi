@@ -110,6 +110,13 @@ namespace NPOI.SS.UserModel
 
         /**
          * get the degree of rotation for the text in the cell
+         * 
+         * Note: HSSF uses values from -90 to 90 degrees, whereas XSSF 
+         * uses values from 0 to 180 degrees. The implementations of this method will map between these two value-ranges 
+         * accordingly, however the corresponding getter is returning values in the range mandated by the current type
+         * of Excel file-format that this CellStyle is applied to.
+         *
+         * 
          * @return rotation degrees (between -90 and 90 degrees)
          */
 

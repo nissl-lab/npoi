@@ -16,12 +16,9 @@
 ==================================================================== */
 
 using TestCases.SS.UserModel;
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.IO;
+    using NPOI;
     using NPOI.HSSF.UserModel;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.OpenXmlFormats.Spreadsheet;
@@ -34,11 +31,20 @@ namespace NPOI.XSSF.UserModel
     using NPOI.Util;
     using NPOI.XSSF;
     using NPOI.XSSF.Model;
+    using NPOI.XSSF.Streaming;
+    using NPOI.XSSF.UserModel;
     using NPOI.XSSF.UserModel.Extensions;
     using NUnit.Framework;
     using NUnit.Framework.Constraints;
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Text;
     using TestCases;
     using TestCases.HSSF;
+    using static NPOI.POIXMLDocumentPart;
+
     [TestFixture]
     public class TestXSSFBugs : BaseTestBugzillaIssues
     {
@@ -70,28 +76,31 @@ namespace NPOI.XSSF.UserModel
             Assert.IsFalse(wb.IsMacroEnabled());
             Assert.AreEqual(3, wb.NumberOfNames);
 
-            XSSFName name = (wb.GetNameAt(0) as XSSFName);
+            XSSFName name = wb.GetName("SheetAA1") as XSSFName;
             Assert.AreEqual(0, name.GetCTName().localSheetId);
             Assert.IsFalse(name.GetCTName().IsSetLocalSheetId());
             Assert.AreEqual("SheetA!$A$1", name.RefersToFormula);
             Assert.AreEqual("SheetA", name.SheetName);
 
-            name = (wb.GetNameAt(1) as XSSFName);
+            name = wb.GetName("SheetBA1") as XSSFName;
             Assert.AreEqual(0, name.GetCTName().localSheetId);
             Assert.IsFalse(name.GetCTName().IsSetLocalSheetId());
-            Assert.AreEqual("SheetB!$A$1", wb.GetNameAt(1).RefersToFormula);
-            Assert.AreEqual("SheetB", wb.GetNameAt(1).SheetName);
+            Assert.AreEqual("SheetB!$A$1", name.RefersToFormula);
+            Assert.AreEqual("SheetB", name.SheetName);
 
-            name = (wb.GetNameAt(2) as XSSFName);
+            name = wb.GetName("SheetCA1") as XSSFName;
             Assert.AreEqual(0, name.GetCTName().localSheetId);
             Assert.IsFalse(name.GetCTName().IsSetLocalSheetId());
-            Assert.AreEqual("SheetC!$A$1", wb.GetNameAt(2).RefersToFormula);
-            Assert.AreEqual("SheetC", wb.GetNameAt(2).SheetName);
+            Assert.AreEqual("SheetC!$A$1", name.RefersToFormula);
+            Assert.AreEqual("SheetC", name.SheetName);
 
             // Save and re-load, still there
             XSSFWorkbook nwb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
             Assert.AreEqual(3, nwb.NumberOfNames);
-            Assert.AreEqual("SheetA!$A$1", nwb.GetNameAt(0).RefersToFormula);
+            Assert.AreEqual("SheetA!$A$1", nwb.GetName("SheetAA1").RefersToFormula);
+
+            nwb.Close();
+            wb.Close();
         }
 
         /**
@@ -100,69 +109,85 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void Test45431()
         {
-            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("45431.xlsm");
-            OPCPackage pkg = wb.Package;
-            Assert.IsTrue(wb.IsMacroEnabled());
+            XSSFWorkbook wb1 = XSSFTestDataSamples.OpenSampleWorkbook("45431.xlsm");
+            OPCPackage pkg1 = wb1.Package;
+            Assert.IsTrue(wb1.IsMacroEnabled());
 
             // Check the various macro related bits can be found
-            PackagePart vba = pkg.GetPart(
+            PackagePart vba = pkg1.GetPart(
                     PackagingUriHelper.CreatePartName("/xl/vbaProject.bin")
             );
             Assert.IsNotNull(vba);
             // And the Drawing bit
-            PackagePart drw = pkg.GetPart(
+            PackagePart drw = pkg1.GetPart(
                     PackagingUriHelper.CreatePartName("/xl/drawings/vmlDrawing1.vml")
             );
             Assert.IsNotNull(drw);
 
 
             // Save and re-open, both still there
-            XSSFWorkbook nwb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-            OPCPackage nPkg = nwb.Package;
-            Assert.IsTrue(nwb.IsMacroEnabled());
+            XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1) as XSSFWorkbook;
+            pkg1.Close();
+            wb1.Close();
 
-            vba = nPkg.GetPart(
+            OPCPackage pkg2 = wb2.Package;
+            Assert.IsTrue(wb2.IsMacroEnabled());
+
+            vba = pkg2.GetPart(
                     PackagingUriHelper.CreatePartName("/xl/vbaProject.bin")
             );
             Assert.IsNotNull(vba);
-            drw = nPkg.GetPart(
+            drw = pkg2.GetPart(
                     PackagingUriHelper.CreatePartName("/xl/drawings/vmlDrawing1.vml")
             );
             Assert.IsNotNull(drw);
 
             // And again, just to be sure
-            nwb = XSSFTestDataSamples.WriteOutAndReadBack(nwb) as XSSFWorkbook;
-            nPkg = nwb.Package;
-            Assert.IsTrue(nwb.IsMacroEnabled());
+            XSSFWorkbook wb3 = XSSFTestDataSamples.WriteOutAndReadBack(wb2) as XSSFWorkbook;
+            pkg2.Close();
+            wb2.Close();
 
-            vba = nPkg.GetPart(
+            OPCPackage pkg3 = wb3.Package;
+            Assert.IsTrue(wb3.IsMacroEnabled());
+
+            vba = pkg3.GetPart(
                     PackagingUriHelper.CreatePartName("/xl/vbaProject.bin")
             );
             Assert.IsNotNull(vba);
-            drw = nPkg.GetPart(
+            drw = pkg3.GetPart(
                     PackagingUriHelper.CreatePartName("/xl/drawings/vmlDrawing1.vml")
             );
             Assert.IsNotNull(drw);
+
+            pkg3.Close();
+            wb3.Close();
         }
         [Test]
         public void Test47504()
         {
-            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("47504.xlsx");
-            Assert.AreEqual(1, wb.NumberOfSheets);
-            XSSFSheet sh = wb.GetSheetAt(0) as XSSFSheet;
+            XSSFWorkbook wb1 = XSSFTestDataSamples.OpenSampleWorkbook("47504.xlsx");
+            Assert.AreEqual(1, wb1.NumberOfSheets);
+            XSSFSheet sh = wb1.GetSheetAt(0) as XSSFSheet;
             XSSFDrawing drawing = sh.CreateDrawingPatriarch() as XSSFDrawing;
-            List<POIXMLDocumentPart> rels = drawing.GetRelations();
+            List<RelationPart> rels = drawing.RelationParts;
             Assert.AreEqual(1, rels.Count);
-            Assert.AreEqual("/xl/drawings/#Sheet1!A1", rels[0].GetPackageRelationship().TargetUri.ToString());
+            Uri baseUri = new Uri("ooxml://npoi.org"); //For test only.
+            Uri target = new Uri(baseUri, rels[0].Relationship.TargetUri.ToString());
+            Assert.AreEqual("#Sheet1!A1", target.Fragment);
 
             // And again, just to be sure
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-            Assert.AreEqual(1, wb.NumberOfSheets);
-            sh = wb.GetSheetAt(0) as XSSFSheet;
+            XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1) as XSSFWorkbook;
+            wb1.Close();
+
+            Assert.AreEqual(1, wb2.NumberOfSheets);
+            sh = wb2.GetSheetAt(0) as XSSFSheet;
             drawing = sh.CreateDrawingPatriarch() as XSSFDrawing;
-            rels = drawing.GetRelations();
+            rels = drawing.RelationParts;
             Assert.AreEqual(1, rels.Count);
-            Assert.AreEqual("/xl/drawings/#Sheet1!A1", rels[0].GetPackageRelationship().TargetUri.ToString());
+            Uri target2 = new Uri(baseUri, rels[0].Relationship.TargetUri.ToString());
+            Assert.AreEqual("#Sheet1!A1", target2.Fragment);
+
+            wb2.Close();
         }
 
         /**
@@ -174,8 +199,8 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void Test49020()
         {
-            /*XSSFWorkbook wb =*/
-            XSSFTestDataSamples.OpenSampleWorkbook("BrNotClosed.xlsx");
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("BrNotClosed.xlsx");
+            wb.Close();
         }
 
         /**
@@ -223,6 +248,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("Test", test.NameName);
             Assert.AreEqual("Sheet1", test.SheetName);
             Assert.AreEqual(-1, test.SheetIndex);
+
+            wb.Close();
         }
 
         /**
@@ -237,45 +264,44 @@ namespace NPOI.XSSF.UserModel
         public void Bug48539()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("48539.xlsx");
-            Assert.AreEqual(3, wb.NumberOfSheets);
-            Assert.AreEqual(0, wb.NumberOfNames);
-
-            // Try each cell individually
-            XSSFFormulaEvaluator eval = new XSSFFormulaEvaluator(wb);
-            for (int i = 0; i < wb.NumberOfSheets; i++)
+            try
             {
-                ISheet s = wb.GetSheetAt(i);
-                foreach (IRow r in s)
+                Assert.AreEqual(3, wb.NumberOfSheets);
+                Assert.AreEqual(0, wb.NumberOfNames);
+
+                // Try each cell individually
+                XSSFFormulaEvaluator eval = new XSSFFormulaEvaluator(wb);
+                for (int i = 0; i < wb.NumberOfSheets; i++)
                 {
-                    foreach (ICell c in r)
+                    ISheet s = wb.GetSheetAt(i);
+                    foreach (IRow r in s)
                     {
-                        if (c.CellType == CellType.Formula)
+                        foreach (ICell c in r)
                         {
-                            String formula = c.CellFormula;
-                            CellValue cv;
-                            try
+                            if (c.CellType == CellType.Formula)
                             {
-                                cv = eval.Evaluate(c);
-                            }
-                            catch (Exception e)
-                            {
-                                throw new RuntimeException("Can't evaluate formula: " + formula, e);
-                            }
-                            if (cv.CellType == CellType.Numeric)
-                            {
-                                // assert that the calculated value agrees with
-                                // the cached formula result calculated by Excel
-                                double cachedFormulaResult = c.NumericCellValue;
-                                double EvaluatedFormulaResult = cv.NumberValue;
-                                Assert.AreEqual(cachedFormulaResult, EvaluatedFormulaResult, 1E-7, c.CellFormula);
+                                CellValue cv = eval.Evaluate(c);
+                                if (cv.CellType == CellType.Numeric)
+                                {
+                                    // assert that the calculated value agrees with
+                                    // the cached formula result calculated by Excel
+                                    double cachedFormulaResult = c.NumericCellValue;
+                                    double EvaluatedFormulaResult = cv.NumberValue;
+                                    Assert.AreEqual(cachedFormulaResult, EvaluatedFormulaResult, 1E-7, c.CellFormula);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            // Now all of them
-            XSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
+                // Now all of them
+                XSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
+            }
+            finally
+            {
+                wb.Close();
+            }
+            
         }
 
         /**
@@ -298,21 +324,25 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(true, cs.GetCoreXf().applyFill);
 
             XSSFCellFill fg = wb.GetStylesSource().GetFillAt(2);
+            Assert.IsNotNull(fg.GetFillForegroundColor());
             Assert.AreEqual(0, fg.GetFillForegroundColor().Indexed);
             Assert.AreEqual(0.0, fg.GetFillForegroundColor().Tint);
-            Assert.AreEqual("FFFF0000", fg.GetFillForegroundColor().GetARGBHex());
+            Assert.AreEqual("FFFF0000", fg.GetFillForegroundColor().ARGBHex);
+            Assert.IsNotNull(fg.GetFillBackgroundColor());
             Assert.AreEqual(64, fg.GetFillBackgroundColor().Indexed);
 
             // Now look higher up
             Assert.IsNotNull(cs.FillForegroundXSSFColor);
             Assert.AreEqual(0, cs.FillForegroundColor);
-            Assert.AreEqual("FFFF0000", cs.FillForegroundXSSFColor.GetARGBHex());
-            Assert.AreEqual("FFFF0000", (cs.FillForegroundColorColor as XSSFColor).GetARGBHex());
+            Assert.AreEqual("FFFF0000", cs.FillForegroundXSSFColor.ARGBHex);
+            Assert.AreEqual("FFFF0000", (cs.FillForegroundColorColor as XSSFColor).ARGBHex);
 
             Assert.IsNotNull(cs.FillBackgroundColor);
             Assert.AreEqual(64, cs.FillBackgroundColor);
-            Assert.AreEqual(null, cs.FillBackgroundXSSFColor.GetARGBHex());
-            Assert.AreEqual(null, (cs.FillBackgroundColorColor as XSSFColor).GetARGBHex());
+            Assert.AreEqual(null, cs.FillBackgroundXSSFColor.ARGBHex);
+            Assert.AreEqual(null, (cs.FillBackgroundColorColor as XSSFColor).ARGBHex);
+
+            wb.Close();
         }
 
         /**
@@ -387,6 +417,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("123", df.FormatCellValue(r.GetCell(2)));
             Assert.AreEqual("123", df.FormatRawCellContents(123.0, -1, "@"));
             Assert.AreEqual("123", df.FormatRawCellContents(123.0, -1, "General"));
+
+            wb.Close();
         }
 
         /**
@@ -482,6 +514,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("FAM", wb.GetSheetName(0));
             Assert.AreEqual("Cycle", wb.GetSheetAt(0).GetRow(0).GetCell(1).StringCellValue);
 
+            wb.Close();
+
         }
         [Test]
         public void Test49783()
@@ -507,6 +541,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("sale_1*sale_2", cell.CellFormula);
             Assert.AreEqual(CellType.Error, Evaluator.EvaluateInCell(cell).CellType);
             Assert.AreEqual("#REF!", FormulaError.ForInt(cell.ErrorCellValue).String);
+
+            wb.Close();
         }
 
         /**
@@ -519,8 +555,8 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void Test49941()
         {
-            XSSFWorkbook wb = new XSSFWorkbook();
-            XSSFSheet s = wb.CreateSheet() as XSSFSheet;
+            XSSFWorkbook wb1 = new XSSFWorkbook();
+            XSSFSheet s = wb1.CreateSheet() as XSSFSheet;
             XSSFRow r = s.CreateRow(0) as XSSFRow;
             XSSFCell c = r.CreateCell(0) as XSSFCell;
 
@@ -542,8 +578,9 @@ namespace NPOI.XSSF.UserModel
             //);
 
             // Save and check
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-            s = wb.GetSheetAt(0) as XSSFSheet;
+            XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1) as XSSFWorkbook;
+            wb1.Close();
+            s = wb2.GetSheetAt(0) as XSSFSheet;
             r = s.GetRow(0) as XSSFRow;
             c = r.GetCell(0) as XSSFCell;
             Assert.AreEqual(" with spaces ", c.RichStringCellValue.ToString());
@@ -562,7 +599,7 @@ namespace NPOI.XSSF.UserModel
             //);
 
             // Apply a font
-            XSSFFont f = wb.CreateFont() as XSSFFont;
+            XSSFFont f = wb2.CreateFont() as XSSFFont;
             f.IsBold = (true);
             c.RichStringCellValue.ApplyFont(0, 5, f);
             Assert.AreEqual("hello world", c.RichStringCellValue.ToString());
@@ -583,13 +620,14 @@ namespace NPOI.XSSF.UserModel
             //);
 
             // Save and check
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-            s = wb.GetSheetAt(0) as XSSFSheet;
+            XSSFWorkbook wb3 = XSSFTestDataSamples.WriteOutAndReadBack(wb2) as XSSFWorkbook;
+            wb2.Close();
+            s = wb3.GetSheetAt(0) as XSSFSheet;
             r = s.GetRow(0) as XSSFRow;
             c = r.GetCell(0) as XSSFCell;
             Assert.AreEqual("hello world", c.RichStringCellValue.ToString());
 
-            wb.Close();
+            wb3.Close();
         }
 
         /**
@@ -614,10 +652,12 @@ namespace NPOI.XSSF.UserModel
                    })
             {
                 MemoryStream bais = new MemoryStream(data);
-                wb = new XSSFWorkbook(bais);
-                Assert.AreEqual(3, wb.NumberOfSheets);
-                Assert.AreEqual(10, wb.GetStylesSource().NumCellStyles);
+                XSSFWorkbook wb2 = new XSSFWorkbook(bais);
+                Assert.AreEqual(3, wb2.NumberOfSheets);
+                Assert.AreEqual(10, wb2.GetStylesSource().NumCellStyles);
+                wb2.Close();
             }
+            wb.Close();
         }
 
         /**
@@ -627,12 +667,13 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void Test49966()
         {
-            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("shared_formulas.xlsx");
-            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+            XSSFWorkbook wb1 = XSSFTestDataSamples.OpenSampleWorkbook("shared_formulas.xlsx");
+            XSSFSheet sheet = wb1.GetSheetAt(0) as XSSFSheet;
 
-            XSSFWorkbook wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
+
             // CalcChain has lots of entries
-            CalculationChain cc = wb.GetCalculationChain();
+            CalculationChain cc = wb1.GetCalculationChain();
             Assert.AreEqual("A2", cc.GetCTCalcChain().GetCArray(0).r);
             Assert.AreEqual("A3", cc.GetCTCalcChain().GetCArray(1).r);
             Assert.AreEqual("A4", cc.GetCTCalcChain().GetCArray(2).r);
@@ -641,9 +682,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("A7", cc.GetCTCalcChain().GetCArray(5).r);
             Assert.AreEqual("A8", cc.GetCTCalcChain().GetCArray(6).r);
             Assert.AreEqual(40, cc.GetCTCalcChain().SizeOfCArray());
-            wbRead.Close();
 
-            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
 
             // Try various ways of changing the formulas
             // If it stays a formula, chain entry should remain
@@ -651,36 +691,37 @@ namespace NPOI.XSSF.UserModel
             sheet.GetRow(1).GetCell(0).SetCellFormula("A1"); // stay
             sheet.GetRow(2).GetCell(0).SetCellFormula(null);  // go
             sheet.GetRow(3).GetCell(0).SetCellType(CellType.Formula); // stay
-            wbRead.Close();
-            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            
+            XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
             sheet.GetRow(4).GetCell(0).SetCellType(CellType.String);  // go
-            wbRead.Close();
-            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            
+            XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
 
             validateCells(sheet);
             sheet.GetRow(5).RemoveCell(
                   sheet.GetRow(5).GetCell(0)  // go
             );
             validateCells(sheet);
-            wbRead.Close();
-            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            
+            XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
 
             sheet.GetRow(6).GetCell(0).SetCellType(CellType.Blank);  // go
-            wbRead.Close();
-            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            
+            XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
             sheet.GetRow(7).GetCell(0).SetCellValue((String)null);  // go
-            wbRead.Close();
-            wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            
+            XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
 
             // Save and check
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1) as XSSFWorkbook;
+            wb1.Close();
             Assert.AreEqual(35, cc.GetCTCalcChain().SizeOfCArray());
 
-            cc = wb.GetCalculationChain();
+            cc = wb2.GetCalculationChain();
             Assert.AreEqual("A2", cc.GetCTCalcChain().GetCArray(0).r);
             Assert.AreEqual("A4", cc.GetCTCalcChain().GetCArray(1).r);
             Assert.AreEqual("A9", cc.GetCTCalcChain().GetCArray(2).r);
-            wbRead.Close();
+            wb2.Close();
         }
         [Test]
         public void Bug49966Row()
@@ -692,6 +733,8 @@ namespace NPOI.XSSF.UserModel
             validateCells(sheet);
             sheet.GetRow(5).RemoveCell(sheet.GetRow(5).GetCell(0)); // go
             validateCells(sheet);
+
+            wb.Close();
         }
 
         private void validateCells(XSSFSheet sheet)
@@ -719,6 +762,7 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
             }
+            wb.Close();
         }
 
         /**
@@ -745,6 +789,8 @@ namespace NPOI.XSSF.UserModel
             formulaEvaluator.EvaluateFormulaCell(b3);
             Assert.AreEqual("B1+B2", b3.CellFormula); // The newline is lost for shared formulas
             Assert.AreEqual(3.0, b3.NumericCellValue);
+
+            wb.Close();
         }
 
         /**
@@ -753,8 +799,8 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void Test50795()
         {
-            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("50795.xlsx");
-            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+            XSSFWorkbook wb1 = XSSFTestDataSamples.OpenSampleWorkbook("50795.xlsx");
+            XSSFSheet sheet = wb1.GetSheetAt(0) as XSSFSheet;
             XSSFRow row = sheet.GetRow(0) as XSSFRow;
 
             XSSFCell cellWith = row.GetCell(0) as XSSFCell;
@@ -769,8 +815,9 @@ namespace NPOI.XSSF.UserModel
 
 
             // Check we can write it out and read it back as-is
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-            sheet = wb.GetSheetAt(0) as XSSFSheet;
+            XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1) as XSSFWorkbook;
+            wb1.Close();
+            sheet = wb2.GetSheetAt(0) as XSSFSheet;
             row = sheet.GetRow(0) as XSSFRow;
             cellWith = row.GetCell(0) as XSSFCell;
             cellWithoutComment = row.GetCell(1) as XSSFCell;
@@ -787,8 +834,10 @@ namespace NPOI.XSSF.UserModel
 
 
             // Write out and re-check
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-            sheet = wb.GetSheetAt(0) as XSSFSheet;
+            XSSFWorkbook wb3 = XSSFTestDataSamples.WriteOutAndReadBack(wb2) as XSSFWorkbook;
+            wb2.Close();
+
+            sheet = wb3.GetSheetAt(0) as XSSFSheet;
             row = sheet.GetRow(0) as XSSFRow;
 
             // Ensure it swapped over
@@ -799,6 +848,8 @@ namespace NPOI.XSSF.UserModel
 
             comment = cellWithoutComment.CellComment as XSSFComment;
             Assert.AreEqual(exp, comment.String.String);
+
+            wb3.Close();
         }
 
         /**
@@ -838,6 +889,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(64, s.GetRow(0).GetCell(8).CellStyle.FillBackgroundColor);
             Assert.AreEqual(0, s.GetRow(1).GetCell(8).CellStyle.FillForegroundColor);
             Assert.AreEqual(64, s.GetRow(1).GetCell(8).CellStyle.FillBackgroundColor);
+
+            wb.Close();
         }
 
         /**
@@ -858,8 +911,10 @@ namespace NPOI.XSSF.UserModel
             XSSFCellStyle cs = c.CellStyle as XSSFCellStyle;
             Assert.AreEqual(42, cs.FillForegroundColor);
             Assert.AreEqual(42, (cs.FillForegroundColorColor as XSSFColor).Indexed);
-            Assert.IsNotNull((cs.FillForegroundColorColor as XSSFColor).GetRgb());
-            Assert.AreEqual("FFCCFFCC", (cs.FillForegroundColorColor as XSSFColor).GetARGBHex());
+            Assert.IsNotNull((cs.FillForegroundColorColor as XSSFColor).RGB);
+            Assert.AreEqual("FFCCFFCC", (cs.FillForegroundColorColor as XSSFColor).ARGBHex);
+
+            wb.Close();
         }
 
         /**
@@ -880,7 +935,7 @@ namespace NPOI.XSSF.UserModel
             XSSFColor colorT = styleT.BottomBorderXSSFColor;
 
             Assert.AreEqual(5, colorT.Theme);
-            Assert.AreEqual("FFC0504D", colorT.GetARGBHex());
+            Assert.AreEqual("FFC0504D", colorT.ARGBHex);
 
             // Border from a style direct, red
             XSSFCell cellS = row.GetCell(1) as XSSFCell;
@@ -888,7 +943,9 @@ namespace NPOI.XSSF.UserModel
             XSSFColor colorS = styleS.BottomBorderXSSFColor;
 
             Assert.AreEqual(0, colorS.Theme);
-            Assert.AreEqual("FFFF0000", colorS.GetARGBHex());
+            Assert.AreEqual("FFFF0000", colorS.ARGBHex);
+
+            wb.Close();
         }
 
         /**
@@ -919,7 +976,9 @@ namespace NPOI.XSSF.UserModel
             XSSFColor themeC = wb.GetTheme().GetThemeColor(colt.Theme);
             Assert.IsNotNull(themeC.GetRgb());
             Assert.IsNotNull(colt.GetRgb());
-            Assert.AreEqual(themeC.GetARGBHex(), colt.GetARGBHex()); // The same colour
+            Assert.AreEqual(themeC.ARGBHex, colt.ARGBHex); // The same colour
+
+            wb.Close();
         }
 
         /**
@@ -932,20 +991,20 @@ namespace NPOI.XSSF.UserModel
             String text = "Use \n with word wrap on to create a new line.\n" +
                "This line finishes with two trailing spaces.  ";
 
-            XSSFWorkbook wb = new XSSFWorkbook();
-            XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+            XSSFWorkbook wb1 = new XSSFWorkbook();
+            XSSFSheet sheet = wb1.CreateSheet() as XSSFSheet;
 
-            IFont font1 = wb.CreateFont();
+            IFont font1 = wb1.CreateFont();
             font1.Color = ((short)20);
-            IFont font2 = wb.CreateFont();
+            IFont font2 = wb1.CreateFont();
             font2.Color = (short)(FontColor.Red);
-            IFont font3 = wb.GetFontAt((short)0);
+            IFont font3 = wb1.GetFontAt((short)0);
 
             XSSFRow row = sheet.CreateRow(2) as XSSFRow;
             XSSFCell cell = row.CreateCell(2) as XSSFCell;
 
             XSSFRichTextString richTextString =
-               wb.GetCreationHelper().CreateRichTextString(text) as XSSFRichTextString;
+               wb1.GetCreationHelper().CreateRichTextString(text) as XSSFRichTextString;
 
             // Check the text has the newline
             Assert.AreEqual(text, richTextString.String);
@@ -956,7 +1015,7 @@ namespace NPOI.XSSF.UserModel
             cell.SetCellValue(richTextString);
 
             // To enable newlines you need Set a cell styles with wrap=true
-            ICellStyle cs = wb.CreateCellStyle();
+            ICellStyle cs = wb1.CreateCellStyle();
             cs.WrapText = (true);
             cell.CellStyle = (cs);
 
@@ -964,8 +1023,10 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(text, cell.StringCellValue);
 
             // Save the file and re-read it
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-            sheet = wb.GetSheetAt(0) as XSSFSheet;
+            XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1) as XSSFWorkbook;
+            wb1.Close();
+
+            sheet = wb2.GetSheetAt(0) as XSSFSheet;
             row = sheet.GetRow(2) as XSSFRow;
             cell = row.GetCell(2) as XSSFCell;
             Assert.AreEqual(text, cell.StringCellValue);
@@ -982,12 +1043,14 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("line.\n", r3.Substring(r3.Length - 6));
 
             // Save and re-check
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-            sheet = wb.GetSheetAt(0) as XSSFSheet;
+            XSSFWorkbook wb3 = XSSFTestDataSamples.WriteOutAndReadBack(wb2) as XSSFWorkbook;
+            wb2.Close();
+
+            sheet = wb3.GetSheetAt(0) as XSSFSheet;
             row = sheet.GetRow(2) as XSSFRow;
             cell = row.GetCell(2) as XSSFCell;
             Assert.AreEqual(text, cell.StringCellValue);
-            wb.Close();
+            wb3.Close();
 
             //       FileOutputStream out = new FileOutputStream("/tmp/test48877.xlsx");
             //       wb.Write(out);
@@ -1001,12 +1064,12 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void Test50867()
         {
-            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("50867_with_table.xlsx");
-            Assert.AreEqual(3, wb.NumberOfSheets);
+            XSSFWorkbook wb1 = XSSFTestDataSamples.OpenSampleWorkbook("50867_with_table.xlsx");
+            Assert.AreEqual(3, wb1.NumberOfSheets);
 
-            XSSFSheet s1 = wb.GetSheetAt(0) as XSSFSheet;
-            XSSFSheet s2 = wb.GetSheetAt(1) as XSSFSheet;
-            XSSFSheet s3 = wb.GetSheetAt(2) as XSSFSheet;
+            XSSFSheet s1 = wb1.GetSheetAt(0) as XSSFSheet;
+            XSSFSheet s2 = wb1.GetSheetAt(1) as XSSFSheet;
+            XSSFSheet s3 = wb1.GetSheetAt(2) as XSSFSheet;
             Assert.AreEqual(1, s1.GetTables().Count);
             Assert.AreEqual(0, s2.GetTables().Count);
             Assert.AreEqual(0, s3.GetTables().Count);
@@ -1017,8 +1080,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("A1:C3", t.GetCTTable().@ref);
 
             // Add a sheet and re-order
-            XSSFSheet s4 = wb.CreateSheet("NewSheet") as XSSFSheet;
-            wb.SetSheetOrder(s4.SheetName, 0);
+            XSSFSheet s4 = wb1.CreateSheet("NewSheet") as XSSFSheet;
+            wb1.SetSheetOrder(s4.SheetName, 0);
 
             // Check on tables
             Assert.AreEqual(1, s1.GetTables().Count);
@@ -1027,21 +1090,23 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, s4.GetTables().Count);
 
             // Refetch to Get the new order
-            s1 = wb.GetSheetAt(0) as XSSFSheet;
-            s2 = wb.GetSheetAt(1) as XSSFSheet;
-            s3 = wb.GetSheetAt(2) as XSSFSheet;
-            s4 = wb.GetSheetAt(3) as XSSFSheet;
+            s1 = wb1.GetSheetAt(0) as XSSFSheet;
+            s2 = wb1.GetSheetAt(1) as XSSFSheet;
+            s3 = wb1.GetSheetAt(2) as XSSFSheet;
+            s4 = wb1.GetSheetAt(3) as XSSFSheet;
             Assert.AreEqual(0, s1.GetTables().Count);
             Assert.AreEqual(1, s2.GetTables().Count);
             Assert.AreEqual(0, s3.GetTables().Count);
             Assert.AreEqual(0, s4.GetTables().Count);
 
             // Save and re-load
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-            s1 = wb.GetSheetAt(0) as XSSFSheet;
-            s2 = wb.GetSheetAt(1) as XSSFSheet;
-            s3 = wb.GetSheetAt(2) as XSSFSheet;
-            s4 = wb.GetSheetAt(3) as XSSFSheet;
+            XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1) as XSSFWorkbook;
+            wb1.Close();
+
+            s1 = wb2.GetSheetAt(0) as XSSFSheet;
+            s2 = wb2.GetSheetAt(1) as XSSFSheet;
+            s3 = wb2.GetSheetAt(2) as XSSFSheet;
+            s4 = wb2.GetSheetAt(3) as XSSFSheet;
             Assert.AreEqual(0, s1.GetTables().Count);
             Assert.AreEqual(1, s2.GetTables().Count);
             Assert.AreEqual(0, s3.GetTables().Count);
@@ -1061,11 +1126,13 @@ namespace NPOI.XSSF.UserModel
             t.Name = ("New 3");
             t.DisplayName = ("New 3");
 
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-            s1 = wb.GetSheetAt(0) as XSSFSheet;
-            s2 = wb.GetSheetAt(1) as XSSFSheet;
-            s3 = wb.GetSheetAt(2) as XSSFSheet;
-            s4 = wb.GetSheetAt(3) as XSSFSheet;
+            XSSFWorkbook wb3 = XSSFTestDataSamples.WriteOutAndReadBack(wb2) as XSSFWorkbook;
+            wb2.Close();
+
+            s1 = wb3.GetSheetAt(0) as XSSFSheet;
+            s2 = wb3.GetSheetAt(1) as XSSFSheet;
+            s3 = wb3.GetSheetAt(2) as XSSFSheet;
+            s4 = wb3.GetSheetAt(3) as XSSFSheet;
             Assert.AreEqual(0, s1.GetTables().Count);
             Assert.AreEqual(2, s2.GetTables().Count);
             Assert.AreEqual(1, s3.GetTables().Count);
@@ -1110,6 +1177,8 @@ namespace NPOI.XSSF.UserModel
                   "/xl/tables/table3.xml",
                   s3.GetRelations()[(0)].GetPackagePart().PartName.ToString()
             );
+
+            wb3.Close();
         }
 
         /**
@@ -1121,25 +1190,26 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFWorkbook wb1 = new XSSFWorkbook();
             XSSFWorkbook wb2 = new XSSFWorkbook();
+            CellRangeAddress cra = CellRangeAddress.ValueOf("C2:D3");
 
             // No print Settings before repeating
             XSSFSheet s1 = wb1.CreateSheet() as XSSFSheet;
             Assert.AreEqual(false, s1.GetCTWorksheet().IsSetPageSetup());
             Assert.AreEqual(true, s1.GetCTWorksheet().IsSetPageMargins());
-
-            wb1.SetRepeatingRowsAndColumns(0, 2, 3, 1, 2);
+            s1.RepeatingColumns = (cra);
+            s1.RepeatingRows = (cra);
 
             Assert.AreEqual(true, s1.GetCTWorksheet().IsSetPageSetup());
             Assert.AreEqual(true, s1.GetCTWorksheet().IsSetPageMargins());
 
-            XSSFPrintSetup ps1 = s1.PrintSetup as XSSFPrintSetup;
+            IPrintSetup ps1 = s1.PrintSetup;
             Assert.AreEqual(false, ps1.ValidSettings);
             Assert.AreEqual(false, ps1.Landscape);
 
 
             // Had valid print Settings before repeating
             XSSFSheet s2 = wb2.CreateSheet() as XSSFSheet;
-            XSSFPrintSetup ps2 = s2.PrintSetup as XSSFPrintSetup;
+            IPrintSetup ps2 = s2.PrintSetup;
             Assert.AreEqual(true, s2.GetCTWorksheet().IsSetPageSetup());
             Assert.AreEqual(true, s2.GetCTWorksheet().IsSetPageMargins());
 
@@ -1147,9 +1217,10 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(true, ps2.ValidSettings);
             Assert.AreEqual(false, ps2.Landscape);
 
-            wb2.SetRepeatingRowsAndColumns(0, 2, 3, 1, 2);
+            s2.RepeatingColumns = (cra);
+            s2.RepeatingRows = (cra);
 
-            ps2 = s2.PrintSetup as XSSFPrintSetup;
+            ps2 = s2.PrintSetup;
             Assert.AreEqual(true, s2.GetCTWorksheet().IsSetPageSetup());
             Assert.AreEqual(true, s2.GetCTWorksheet().IsSetPageMargins());
             Assert.AreEqual(true, ps2.ValidSettings);
@@ -1246,16 +1317,18 @@ namespace NPOI.XSSF.UserModel
         public void Test46662()
         {
             // New file
-            XSSFWorkbook wb = new XSSFWorkbook();
-            XSSFTestDataSamples.WriteOutAndReadBack(wb);
-            XSSFTestDataSamples.WriteOutAndReadBack(wb);
-            XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            XSSFWorkbook wb1 = new XSSFWorkbook();
+            XSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            XSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            XSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            wb1.Close();
 
             // Simple file
-            wb = XSSFTestDataSamples.OpenSampleWorkbook("sample.xlsx");
-            XSSFTestDataSamples.WriteOutAndReadBack(wb);
-            XSSFTestDataSamples.WriteOutAndReadBack(wb);
-            XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            XSSFWorkbook wb2 = XSSFTestDataSamples.OpenSampleWorkbook("sample.xlsx");
+            XSSFTestDataSamples.WriteOutAndReadBack(wb2);
+            XSSFTestDataSamples.WriteOutAndReadBack(wb2);
+            XSSFTestDataSamples.WriteOutAndReadBack(wb2);
+            wb2.Close();
 
             // Complex file
             // TODO
@@ -1295,13 +1368,15 @@ namespace NPOI.XSSF.UserModel
 
             // Ensure we Get the right colours for these themes
             // TODO fix
-            //       Assert.AreEqual("FFEEECE1", wb.Theme.GetThemeColor(2).GetARGBHex());
-            //       Assert.AreEqual("FF1F497D", wb.Theme.GetThemeColor(3).GetARGBHex());
+            //       Assert.AreEqual("FFEEECE1", wb.Theme.GetThemeColor(2).ARGBHex);
+            //       Assert.AreEqual("FF1F497D", wb.Theme.GetThemeColor(3).ARGBHex);
 
             // Finally check the colours on the styles
             // TODO fix
-            //       Assert.AreEqual("FFEEECE1", cA4_EEECE1.CellStyle.GetFillForegroundXSSFColor().GetARGBHex());
-            //       Assert.AreEqual("FF1F497D", cA5_1F497D.CellStyle.GetFillForegroundXSSFColor().GetARGBHex());
+            //       Assert.AreEqual("FFEEECE1", cA4_EEECE1.CellStyle.GetFillForegroundXSSFColor().ARGBHex);
+            //       Assert.AreEqual("FF1F497D", cA5_1F497D.CellStyle.GetFillForegroundXSSFColor().ARGBHex);
+
+            wb.Close();
         }
         [Test]
         public void Test51470()
@@ -1309,12 +1384,21 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("51470.xlsx");
             XSSFSheet sh0 = wb.GetSheetAt(0) as XSSFSheet;
             XSSFSheet sh1 = wb.CloneSheet(0) as XSSFSheet;
-            List<POIXMLDocumentPart> rels0 = sh0.GetRelations();
-            List<POIXMLDocumentPart> rels1 = sh1.GetRelations();
+            List<RelationPart> rels0 = sh0.RelationParts;
+            List<RelationPart> rels1 = sh1.RelationParts;
             Assert.AreEqual(1, rels0.Count);
             Assert.AreEqual(1, rels1.Count);
 
-            Assert.AreEqual(rels0[(0)].GetPackageRelationship(), rels1[0].GetPackageRelationship());
+            PackageRelationship pr0 = rels0[0].Relationship;
+            PackageRelationship pr1 = rels1[0].Relationship;
+
+            Assert.AreEqual(pr0.TargetMode, pr1.TargetMode);
+            Assert.AreEqual(pr0.TargetUri, pr1.TargetUri);
+            POIXMLDocumentPart doc0 = rels0[0].DocumentPart;
+            POIXMLDocumentPart doc1 = rels1[0].DocumentPart;
+
+            Assert.AreEqual(doc0, doc1);
+            wb.Close();
         }
 
         /**
@@ -1324,9 +1408,9 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void Test51850()
         {
-            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("51850.xlsx");
-            XSSFSheet sh1 = wb.GetSheetAt(0) as XSSFSheet;
-            XSSFSheet sh2 = wb.GetSheetAt(1) as XSSFSheet;
+            XSSFWorkbook wb1 = XSSFTestDataSamples.OpenSampleWorkbook("51850.xlsx");
+            XSSFSheet sh1 = wb1.GetSheetAt(0) as XSSFSheet;
+            XSSFSheet sh2 = wb1.GetSheetAt(1) as XSSFSheet;
 
             // Sheet 2 has comments
             Assert.IsNotNull(sh2.GetCommentsTable(false));
@@ -1336,7 +1420,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNull(sh1.GetCommentsTable(false));
 
             // Try to add comments to Sheet 1
-            ICreationHelper factory = wb.GetCreationHelper();
+            ICreationHelper factory = wb1.GetCreationHelper();
             IDrawing Drawing = sh1.CreateDrawingPatriarch();
 
             IClientAnchor anchor = factory.CreateClientAnchor();
@@ -1371,9 +1455,11 @@ namespace NPOI.XSSF.UserModel
 
 
             // Save and re-load
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-            sh1 = wb.GetSheetAt(0) as XSSFSheet;
-            sh2 = wb.GetSheetAt(1) as XSSFSheet;
+            XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1) as XSSFWorkbook;
+            wb1.Close();
+
+            sh1 = wb2.GetSheetAt(0) as XSSFSheet;
+            sh2 = wb2.GetSheetAt(1) as XSSFSheet;
 
             // Check the comments
             Assert.IsNotNull(sh2.GetCommentsTable(false));
@@ -1381,6 +1467,8 @@ namespace NPOI.XSSF.UserModel
 
             Assert.IsNotNull(sh1.GetCommentsTable(false));
             Assert.AreEqual(2, sh1.GetCommentsTable(false).GetNumberOfComments());
+
+            wb2.Close();
         }
 
         /**
@@ -1390,7 +1478,7 @@ namespace NPOI.XSSF.UserModel
         public void Test51963()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("51963.xlsx");
-            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+            ISheet sheet = wb.GetSheetAt(0);
             Assert.AreEqual("Abc,1", sheet.SheetName);
 
             XSSFName name = wb.GetName("Intekon.ProdCodes") as XSSFName;
@@ -1401,6 +1489,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, ref1.FirstCell.Col);
             Assert.AreEqual(1, ref1.LastCell.Row);
             Assert.AreEqual(0, ref1.LastCell.Col);
+
+            wb.Close();
         }
 
         /**
@@ -1408,7 +1498,9 @@ namespace NPOI.XSSF.UserModel
          *  eg =SUM($Sheet1.C1:$Sheet4.C1)
          * DISABLED As we can't currently Evaluate these
          */
-        public void DISABLEDtest48703()
+         [Ignore("by poi")]
+         [Test]
+        public void Test48703()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("48703.xlsx");
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
@@ -1432,6 +1524,8 @@ namespace NPOI.XSSF.UserModel
 
             Assert.AreEqual(20.0, c1.NumericCellValue);
             Assert.AreEqual(20.0, c2.NumericCellValue);
+
+            wb.Close();
         }
 
         /**
@@ -1466,6 +1560,8 @@ namespace NPOI.XSSF.UserModel
                 }
 
             }
+
+            wb.Close();
         }
 
         /**
@@ -1474,22 +1570,24 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void Test5301()
         {
-            IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("53101.xlsx");
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53101.xlsx");
             IFormulaEvaluator Evaluator =
-                    workbook.GetCreationHelper().CreateFormulaEvaluator();
+                    wb.GetCreationHelper().CreateFormulaEvaluator();
             // A1: SUM(B1: IZ1)
             double a1Value =
-                    Evaluator.Evaluate(workbook.GetSheetAt(0).GetRow(0).GetCell(0)).NumberValue;
+                    Evaluator.Evaluate(wb.GetSheetAt(0).GetRow(0).GetCell(0)).NumberValue;
 
             // Assert
             Assert.AreEqual(259.0, a1Value, 0.0);
 
             // KY: SUM(B1: IZ1)
             double ky1Value =
-                    Evaluator.Evaluate(workbook.GetSheetAt(0).GetRow(0).GetCell(310)).NumberValue;
+                    Evaluator.Evaluate(wb.GetSheetAt(0).GetRow(0).GetCell(310)).NumberValue;
 
             // Assert
             Assert.AreEqual(259.0, a1Value, 0.0);
+
+            wb.Close();
         }
         private class Function54436 : Function
         {
@@ -1501,14 +1599,16 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void Test54436()
         {
-            IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("54436.xlsx");
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("54436.xlsx");
             if (!WorkbookEvaluator.GetSupportedFunctionNames().Contains("GETPIVOTDATA"))
             {
                 Function func = new Function54436();
 
                 WorkbookEvaluator.RegisterFunction("GETPIVOTDATA", func);
             }
-            workbook.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+            wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+
+            wb.Close();
         }
 
         /**
@@ -1560,6 +1660,8 @@ namespace NPOI.XSSF.UserModel
             //excel does nothing, it still show string "#@_#" 
             //should we add more validation to valid mail address in method PackagingUriHelper.ParseUri(string, UriKind)
             Assert.AreEqual("mailto:#@_#", c.Hyperlink.Address);
+
+            wb.Close();
         }
 
         /**
@@ -1576,6 +1678,9 @@ namespace NPOI.XSSF.UserModel
             // Save and re-check
             IWorkbook nwb = XSSFTestDataSamples.WriteOutAndReadBack(wb);
             Assert.AreEqual(0, nwb.GetSheetIndex("Market Rates"));
+
+            wb.Close();
+            nwb.Close();
         }
 
         [Test]
@@ -1586,6 +1691,8 @@ namespace NPOI.XSSF.UserModel
             CellValue cv = wb.GetCreationHelper().CreateFormulaEvaluator().Evaluate(c);
             double rounded = cv.NumberValue;
             Assert.AreEqual(0.1, rounded, 0.0);
+
+            wb.Close();
         }
         [Test]
         public void Bug56468()
@@ -1596,7 +1703,7 @@ namespace NPOI.XSSF.UserModel
             XSSFCell cell = row.CreateCell(0) as XSSFCell;
             cell.SetCellValue("Hi");
             sheet.RepeatingRows = (new CellRangeAddress(0, 0, 0, 0));
-            
+
             MemoryStream bos = new MemoryStream(8096);
             wb.Write(bos);
             byte[] firstSave = bos.ToArray();
@@ -1605,7 +1712,7 @@ namespace NPOI.XSSF.UserModel
             //    fs.Write(firstSave, 0, firstSave.Length);
             //    fs.Flush();
             //}
-            
+
             MemoryStream bos2 = new MemoryStream(8096);
             wb.Write(bos2);
             byte[] secondSave = bos2.ToArray();
@@ -1614,9 +1721,9 @@ namespace NPOI.XSSF.UserModel
             //    fs2.Write(secondSave, 0, secondSave.Length);
             //    fs2.Flush();
             //}
-            
 
-            Assert.That(firstSave, new EqualConstraint(secondSave), 
+
+            Assert.That(firstSave, new EqualConstraint(secondSave),
                 "Had: \n" + Arrays.ToString(firstSave) + " and \n" + Arrays.ToString(secondSave));
 
             wb.Close();
@@ -1637,6 +1744,8 @@ namespace NPOI.XSSF.UserModel
             DataFormatter fmt = new DataFormatter();
             Assert.AreEqual("yyyy\\-mm\\-dd\\Thh:mm", cell.CellStyle.GetDataFormatString());
             Assert.AreEqual("2012-08-08T22:59", fmt.FormatCellValue(cell));
+
+            wb.Close();
         }
 
         [Test]
@@ -1645,6 +1754,21 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53798_ShiftNegative_TMPL.xlsx");
             FileInfo xlsOutput = TempFile.CreateTempFile("testBug53798", ".xlsx");
             bug53798Work(wb, xlsOutput);
+
+            wb.Close();
+        }
+
+
+        [Ignore("Shifting rows is not yet implemented in SXSSFSheet")]
+        [Test]
+        public void TestBug53798XLSXStream()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53798_shiftNegative_TMPL.xlsx");
+            FileInfo xlsOutput = TempFile.CreateTempFile("testBug53798", ".xlsx");
+            SXSSFWorkbook wb2 = new SXSSFWorkbook(wb);
+            bug53798Work(wb2, xlsOutput);
+            wb2.Close();
+            wb.Close();
         }
 
         [Test]
@@ -1653,12 +1777,13 @@ namespace NPOI.XSSF.UserModel
             IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("53798_ShiftNegative_TMPL.xls");
             FileInfo xlsOutput = TempFile.CreateTempFile("testBug53798", ".xls");
             bug53798Work(wb, xlsOutput);
+
+            wb.Close();
         }
         /**
          * SUMIF was throwing a NPE on some formulas
          */
         [Test]
-        [Ignore("This bug is still to be fixed")]
         public void TestBug56420SumIfNPE()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56420.xlsx");
@@ -1670,6 +1795,11 @@ namespace NPOI.XSSF.UserModel
             ICell c = r.GetCell(2);
             Assert.AreEqual("SUMIF($A$1:$A$4,A3,$B$1:$B$4)", c.CellFormula);
             evaluator.EvaluateInCell(c);
+
+            ICell eval = evaluator.EvaluateInCell(c);
+            Assert.AreEqual(0.0, eval.NumericCellValue, 0.0001);
+
+            wb.Close();
         }
         private void bug53798Work(IWorkbook wb, FileInfo xlsOutput)
         {
@@ -1689,16 +1819,14 @@ namespace NPOI.XSSF.UserModel
 
             saveAndReloadReport(wb, xlsOutput);
 
-            IRow newRow = null;
-            ICell newCell = null;
             // 2) attempt to create a new row IN PLACE of a Removed row by a negative shift causes corrupted
             // xlsx file with  unreadable data in the negative Shifted row.
             // NOTE it's ok to create any other row.
-            newRow = testSheet.CreateRow(3);
+            IRow newRow = testSheet.CreateRow(3);
 
             saveAndReloadReport(wb, xlsOutput);
 
-            newCell = newRow.CreateCell(0);
+            ICell newCell = newRow.CreateCell(0);
 
             saveAndReloadReport(wb, xlsOutput);
 
@@ -1741,6 +1869,8 @@ namespace NPOI.XSSF.UserModel
 
             // Check the formatting
             Assert.AreEqual("0", formatter.FormatCellValue(cell));
+
+            wb.Close();
         }
 
         /**
@@ -1780,6 +1910,8 @@ namespace NPOI.XSSF.UserModel
 
             // Try to Evaluate everything
             eval.EvaluateAll();
+
+            wb.Close();
         }
 
         private void saveAndReloadReport(IWorkbook wb, FileInfo outFile)
@@ -1843,6 +1975,8 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook excel = XSSFTestDataSamples.OpenSampleWorkbook("56688_1.xlsx");
             //CheckValue(excel, "-1.0");  /* Not 0.0 because POI sees date "0" minus one month as invalid date, which is -1! */
             CheckValue(excel, "-1");
+
+            excel.Close();
         }
 
         [Test]
@@ -1850,6 +1984,7 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFWorkbook excel = XSSFTestDataSamples.OpenSampleWorkbook("56688_2.xlsx");
             CheckValue(excel, "#VALUE!");
+            excel.Close();
         }
 
         [Test]
@@ -1857,6 +1992,7 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFWorkbook excel = XSSFTestDataSamples.OpenSampleWorkbook("56688_3.xlsx");
             CheckValue(excel, "#VALUE!");
+            excel.Close();
         }
 
         [Test]
@@ -1870,6 +2006,7 @@ namespace NPOI.XSSF.UserModel
             NumberEval eval = new NumberEval(Math.Floor(excelDate));
             //CheckValue(excel, eval.StringValue + ".0");
             CheckValue(excel, eval.StringValue);
+            excel.Close();
         }
 
         /**
@@ -1905,6 +2042,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(3, hyperlink.FirstColumn);
             Assert.AreEqual(5, hyperlink.LastRow);
             Assert.AreEqual(3, hyperlink.LastColumn);
+
+            wb.Close();
         }
 
         /**
@@ -1930,6 +2069,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("[1]!LUCANET(\"Ist\")", cFunc.CellFormula);
             cRef = sheet.GetRow(4).GetCell(1);
             Assert.AreEqual("A4", cRef.CellFormula);
+
+            wb.Close();
         }
 
         [Test]
@@ -1948,18 +2089,19 @@ namespace NPOI.XSSF.UserModel
 
             try
             {
-                new XSSFWorkbook(pkg);
+                new XSSFWorkbook(pkg).Close();
                 Assert.Fail("Should fail as too much expansion occurs");
             }
             catch (POIXMLException)
             {
                 //Expected
             }
+            pkg.Close();
 
             // Try with one with the entities in the Content Types
             try
             {
-                XSSFTestDataSamples.OpenSamplePackage("54764-2.xlsx");
+                XSSFTestDataSamples.OpenSamplePackage("54764-2.xlsx").Close();
                 Assert.Fail("Should fail as too much expansion occurs");
             }
             catch (Exception)
@@ -1970,12 +2112,14 @@ namespace NPOI.XSSF.UserModel
             // Check we can still parse valid files after all that
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("sample.xlsx");
             Assert.AreEqual(3, wb.NumberOfSheets);
+
+            wb.Close();
         }
 
         /**
-     * CTDefinedNamesImpl should be included in the smaller
-     *  poi-ooxml-schemas jar
-     */
+         * CTDefinedNamesImpl should be included in the smaller
+         *  poi-ooxml-schemas jar
+         */
         [Test]
         public void Bug57176()
         {
@@ -1988,6 +2132,8 @@ namespace NPOI.XSSF.UserModel
                 Assert.IsNotNull(defName.Value);
             }
             Assert.AreEqual("TestDefinedName", definedNameList[(0)].name);
+
+            wb.Close();
         }
 
         /**
@@ -2003,7 +2149,7 @@ namespace NPOI.XSSF.UserModel
             // XSSF Workbook gives helpful error
             try
             {
-                new XSSFWorkbook(pkg);
+                new XSSFWorkbook(pkg).Close();
                 Assert.Fail(".xlsb files not supported");
             }
             catch (XLSBUnsupportedException e)
@@ -2014,7 +2160,7 @@ namespace NPOI.XSSF.UserModel
             // Workbook Factory gives helpful error on package
             try
             {
-                WorkbookFactory.Create(pkg);
+                WorkbookFactory.Create(pkg).Close();
                 Assert.Fail(".xlsb files not supported");
             }
             catch (XLSBUnsupportedException e)
@@ -2026,13 +2172,15 @@ namespace NPOI.XSSF.UserModel
             FileInfo xlsbFile = HSSFTestDataSamples.GetSampleFile("Simple.xlsb");
             try
             {
-                WorkbookFactory.Create(xlsbFile.FullName);
+                WorkbookFactory.Create(xlsbFile.FullName).Close();
                 Assert.Fail(".xlsb files not supported");
             }
             catch (XLSBUnsupportedException e)
             {
                 // Good, detected and warned
             }
+
+            pkg.Close();
         }
 
         private void CheckValue(XSSFWorkbook excel, String expect)
@@ -2072,6 +2220,7 @@ namespace NPOI.XSSF.UserModel
             CellValue cv = fe.Evaluate(cell);
 
             Assert.IsNotNull(cv);
+            wb.Close();
         }
 
         [Test]
@@ -2086,6 +2235,7 @@ namespace NPOI.XSSF.UserModel
             CellValue cv = fe.Evaluate(cell);
 
             Assert.IsNotNull(cv);
+            wb.Close();
         }
 
         [Test]
@@ -2160,7 +2310,7 @@ namespace NPOI.XSSF.UserModel
                 workbookEvaluator = new WorkbookEvaluator(XSSFEvaluationWorkbook.Create(wb), null, null);
                 workbookEvaluator.DebugEvaluationOutputForNextEval = (/*setter*/true);
                 workbookEvaluator.Evaluate(new XSSFEvaluationCell(cell));
-
+                wb.Close();
             }
             finally
             {
@@ -2168,23 +2318,7 @@ namespace NPOI.XSSF.UserModel
                 //System.ClearProperty("poi.log.level");
             }
         }
-        [Test]
-        public void Bug57430()
-        {
-            XSSFWorkbook wb = new XSSFWorkbook();
-            try
-            {
-                wb.CreateSheet("Sheet1");
 
-                XSSFName name1 = wb.CreateName() as XSSFName;
-                name1.NameName = (/*setter*/"FMLA");
-                name1.RefersToFormula = (/*setter*/"Sheet1!$B$3");
-            }
-            finally
-            {
-                wb.Close();
-            }
-        }
 
         /**
          * A .xlsx file with no Shared Strings table should open fine
@@ -2271,8 +2405,8 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(-60, value.ErrorValue);
 
             Assert.AreEqual("~CIRCULAR~REF~", FormulaError.ForInt(value.ErrorValue).String);
-            //Assert.AreEqual("CIRCULAR_REF", FormulaError.ForInt(value.ErrorValue).ToString());
-
+            Assert.AreEqual("CIRCULAR_REF", FormulaError.ForInt(value.ErrorValue).ToString());
+            wb.Close();
         }
 
         [Test]
@@ -2287,14 +2421,7 @@ namespace NPOI.XSSF.UserModel
                 //saveWorkbook(wb, fileName);
 
                 XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-                try
-                {
-
-                }
-                finally
-                {
-                    wbBack.Close();
-                }
+                wbBack.Close();
             }
             finally
             {
@@ -2314,14 +2441,7 @@ namespace NPOI.XSSF.UserModel
                 //saveWorkbook(wb, fileName);
 
                 XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-                try
-                {
-
-                }
-                finally
-                {
-                    wbBack.Close();
-                }
+                wbBack.Close();
             }
             finally
             {
@@ -2444,13 +2564,6 @@ namespace NPOI.XSSF.UserModel
                         Assert.IsNotNull(pictureData);
                     }
                 }
-
-                //            OutputStream out1 = new FileOutputStream("/tmp/56467.xls");
-                //            try {
-                //            	wb.Write(out1);
-                //            } finally {
-                //            	out1.Close();
-                //            }
             }
             finally
             {
@@ -2474,6 +2587,9 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(3, wbBack.NumberOfSheets);
             // TODO Re-check sheet contents
             // TODO Re-check formula Evaluation
+
+            wb.Close();
+            wbBack.Close();
         }
 
         [Test]
@@ -2493,6 +2609,8 @@ namespace NPOI.XSSF.UserModel
             //        for(XSSFCellFill fill : Fills) {
             //        	System.out.Println("Fill: " + Fill.FillBackgroundColor + "/" + Fill.FillForegroundColor);
             //        }        
+
+            xlsToAppendWorkbook.Close();
 
             XSSFWorkbook targetWorkbook = new XSSFWorkbook();
             XSSFSheet newSheet = targetWorkbook.CreateSheet(sheet.SheetName) as XSSFSheet;
@@ -2516,6 +2634,39 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(targetWorkbook) as XSSFWorkbook;
             XSSFCellStyle styleBack = wbBack.GetSheetAt(0).GetRow(0).GetCell(0).CellStyle as XSSFCellStyle;
             CheckStyle(styleBack);
+
+            targetWorkbook.Close();
+            wbBack.Close();
+        }
+
+        /**
+         * Paragraph with property BuFont but none of the properties
+         *  BuNone, BuChar, and BuAutoNum, used to trigger a NPE
+         * Excel treats this as not-bulleted, so now do we
+         */
+        [Test]
+        public void TestBug57826()  {
+            XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("57826.xlsx");
+
+            Assert.IsTrue(workbook.NumberOfSheets >= 1, "no sheets in workbook");
+            XSSFSheet sheet = workbook.GetSheetAt(0) as XSSFSheet;
+
+            XSSFDrawing drawing = sheet.GetDrawingPatriarch();
+            Assert.IsNotNull(drawing);
+
+            List<XSSFShape> shapes = drawing.GetShapes();
+            Assert.AreEqual(1, shapes.Count);
+            Assert.IsTrue(shapes[0] is XSSFSimpleShape);
+
+            XSSFSimpleShape shape = (XSSFSimpleShape)shapes[0];
+
+            // Used to throw a NPE
+            String text = shape.Text;
+
+            // No bulleting info included
+            Assert.AreEqual("test ok", text);
+        
+            workbook.Close();
         }
 
         private void CheckStyle(XSSFCellStyle cellStyle)
@@ -2525,13 +2676,13 @@ namespace NPOI.XSSF.UserModel
             Assert.IsNotNull(cellStyle.FillForegroundXSSFColor);
             XSSFColor fgColor = cellStyle.FillForegroundColorColor as XSSFColor;
             Assert.IsNotNull(fgColor);
-            Assert.AreEqual("FF00FFFF", fgColor.GetARGBHex());
+            Assert.AreEqual("FF00FFFF", fgColor.ARGBHex);
 
             Assert.AreEqual(0, cellStyle.FillBackgroundColor);
             Assert.IsNotNull(cellStyle.FillBackgroundXSSFColor);
             XSSFColor bgColor = cellStyle.FillBackgroundColorColor as XSSFColor;
             Assert.IsNotNull(bgColor);
-            Assert.AreEqual("FF00FFFF", fgColor.GetARGBHex());
+            Assert.AreEqual("FF00FFFF", fgColor.ARGBHex);
         }
 
         [Test]
@@ -2562,51 +2713,652 @@ namespace NPOI.XSSF.UserModel
             Console.WriteLine("long time test, run over 1 minute.");
             int numStyles = 33000;
             XSSFWorkbook wb = new XSSFWorkbook();
-            XSSFSheet s = wb.CreateSheet("TestSheet") as XSSFSheet;
-            XSSFDataFormat fmt = wb.GetCreationHelper().CreateDataFormat() as XSSFDataFormat;
             for (int i = 1; i < numStyles; i++)
             {
-                short df = fmt.GetFormat("test" + i);
-                // Format indexes will be wrapped beyond 32,676
-                Assert.AreEqual(164 + i, df & 0xffff);
                 // Create a style and use it
                 XSSFCellStyle style = wb.CreateCellStyle() as XSSFCellStyle;
                 Assert.AreEqual(i, style.UIndex);
-                style.DataFormat = (/*setter*/df);
-                XSSFCell c = s.CreateRow(i).CreateCell(0, CellType.Numeric) as XSSFCell;
-                c.CellStyle = (/*setter*/style);
-                c.SetCellValue(i);
             }
+            Assert.AreEqual(numStyles, wb.NumCellStyles);
 
-            //wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-            // using temp file instead of ByteArrayOutputStream because of OOM in gump run
-            FileInfo tmp = TempFile.CreateTempFile("poi-test", ".bug57880");
-            FileStream fos = new FileStream(tmp.FullName, FileMode.Create, FileAccess.ReadWrite);
-            wb.Write(fos);
-            fos.Close();
+            // avoid OOM in gump run
+            FileInfo file = XSSFTestDataSamples.WriteOutAndClose(wb, "bug57880");
+            wb = null;
+            // Garbage collection may happen here
 
-            wb.Close();
-            fmt = null; s = null; wb = null;
-            // System.gc();
+            //// avoid zip bomb detection
+            //double ratio = ZipSecureFile.getMinInflateRatio();
+            //ZipSecureFile.setMinInflateRatio(0.00005);
+            //wb = XSSFTestDataSamples.ReadBackAndDelete(file);
+            //ZipSecureFile.setMinInflateRatio(ratio);
 
-            wb = new XSSFWorkbook(tmp.FullName);
-            fmt = wb.GetCreationHelper().CreateDataFormat() as XSSFDataFormat;
-            s = wb.GetSheetAt(0) as XSSFSheet;
+            //Assume identical cell styles aren't consolidated
+            //If XSSFWorkbooks ever implicitly optimize/consolidate cell styles (such as when the workbook is written to disk)
+            //then this unit test should be updated
+            Assert.AreEqual(numStyles, wb.NumCellStyles);
             for (int i = 1; i < numStyles; i++)
             {
                 XSSFCellStyle style = wb.GetCellStyleAt((short)i) as XSSFCellStyle;
                 Assert.IsNotNull(style);
                 Assert.AreEqual(i, style.UIndex);
-                Assert.AreEqual(164 + i, style.DataFormat & 0xffff);
-                Assert.AreEqual("test" + i, style.GetDataFormatString());
             }
 
             wb.Close();
-            tmp.Delete();
 
             Assert.AreEqual(0, Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp").Length, "At Last: There are no temporary files.");
         }
+        [Test]
+        public void Test56574()
+        {
+            RunTest56574(false);
+            RunTest56574(true);
+        }
 
+        private void RunTest56574(bool CreateRow)
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56574.xlsx");
+
+            ISheet sheet = wb.GetSheet("Func");
+            Assert.IsNotNull(sheet);
+
+            Dictionary<String, Object[]> data;
+            data = new Dictionary<String, Object[]>();
+            data.Add("1", new Object[] { "ID", "NAME", "LASTNAME" });
+            data.Add("2", new Object[] { 2, "Amit", "Shukla" });
+            data.Add("3", new Object[] { 1, "Lokesh", "Gupta" });
+            data.Add("4", new Object[] { 4, "John", "Adwards" });
+            data.Add("5", new Object[] { 2, "Brian", "Schultz" });
+
+            var keyset = data.Keys;
+            int rownum = 1;
+            foreach (String key in keyset)
+            {
+                IRow row;
+                if (CreateRow)
+                {
+                    row = sheet.CreateRow(rownum++);
+                }
+                else
+                {
+                    row = sheet.GetRow(rownum++);
+                }
+                Assert.IsNotNull(row);
+
+                Object[] objArr = data[(key)];
+                int cellnum = 0;
+                foreach (Object obj in objArr)
+                {
+                    ICell cell = row.GetCell(cellnum);
+                    if (cell == null)
+                    {
+                        cell = row.CreateCell(cellnum);
+                    }
+                    else
+                    {
+                        if (cell.CellType == CellType.Formula)
+                        {
+                            cell.CellFormula = (/*setter*/null);
+                            cell.CellStyle.DataFormat = (/*setter*/(short)0);
+                        }
+                    }
+                    if (obj is String)
+                    {
+                        cell.SetCellValue((String)obj);
+                    }
+                    else if (obj is int)
+                    {
+                        cell.SetCellValue((int)obj);
+                    }
+                    cellnum++;
+                }
+            }
+
+            XSSFFormulaEvaluator.EvaluateAllFormulaCells((XSSFWorkbook)wb);
+            wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+
+            CalculationChain chain = ((XSSFWorkbook)wb).GetCalculationChain();
+            foreach (CT_CalcCell calc in chain.GetCTCalcChain().c)
+            {
+                // A2 to A6 should be gone
+                Assert.IsFalse(calc.r.Equals("A2"));
+                Assert.IsFalse(calc.r.Equals("A3"));
+                Assert.IsFalse(calc.r.Equals("A4"));
+                Assert.IsFalse(calc.r.Equals("A5"));
+                Assert.IsFalse(calc.r.Equals("A6"));
+            }
+
+            /*FileOutputStream out1 = new FileOutputStream(new File("C:\\temp\\56574.xlsx"));
+            try {
+                wb.Write(out1);
+            } finally {
+                out1.Close();
+            }*/
+
+            IWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            ISheet sheetBack = wbBack.GetSheet("Func");
+            Assert.IsNotNull(sheetBack);
+
+            chain = ((XSSFWorkbook)wbBack).GetCalculationChain();
+            foreach (CT_CalcCell calc in chain.GetCTCalcChain().c)
+            {
+                // A2 to A6 should be gone
+                Assert.IsFalse(calc.r.Equals("A2"));
+                Assert.IsFalse(calc.r.Equals("A3"));
+                Assert.IsFalse(calc.r.Equals("A4"));
+                Assert.IsFalse(calc.r.Equals("A5"));
+                Assert.IsFalse(calc.r.Equals("A6"));
+            }
+
+            wbBack.Close();
+            wb.Close();
+        }
+
+        /**
+         * Excel 2007 generated Macro-Enabled .xlsm file
+         */
+        [Test]
+        public void Bug57181()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57181.xlsm");
+            Assert.AreEqual(9, wb.NumberOfSheets);
+            wb.Close();
+        }
+
+        [Test]
+        public void Bug52111()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("Intersection-52111-xssf.xlsx");
+            ISheet s = wb.GetSheetAt(0);
+            assertFormula(wb, s.GetRow(2).GetCell(0), "(C2:D3 D3:E4)", "4");
+            assertFormula(wb, s.GetRow(6).GetCell(0), "Tabelle2!E:E Tabelle2!11:11", "5");
+            assertFormula(wb, s.GetRow(8).GetCell(0), "Tabelle2!E:F Tabelle2!11:12", null);
+            wb.Close();
+        }
+
+        private void assertFormula(IWorkbook wb, ICell intF, String expectedFormula, String expectedResultOrNull)
+        {
+            Assert.AreEqual(CellType.Formula, intF.CellType);
+            if (null == expectedResultOrNull)
+            {
+                Assert.AreEqual(CellType.Error, intF.CachedFormulaResultType);
+                expectedResultOrNull = "#VALUE!";
+            }
+            else
+            {
+                Assert.AreEqual(CellType.Numeric, intF.CachedFormulaResultType);
+            }
+
+            Assert.AreEqual(expectedFormula, intF.CellFormula);
+            // Check we can evaluate it correctly
+            IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
+            Assert.AreEqual(expectedResultOrNull, eval.Evaluate(intF).FormatAsString());
+        }
+
+        [Test]
+        public void Test48962()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("48962.xlsx");
+            ISheet sh = wb.GetSheetAt(0);
+            IRow row = sh.GetRow(1);
+            ICell cell = row.GetCell(0);
+
+            ICellStyle style = cell.CellStyle;
+            Assert.IsNotNull(style);
+
+            // color index
+            Assert.AreEqual(64, style.FillBackgroundColor);
+            XSSFColor color = ((XSSFCellStyle)style).FillBackgroundXSSFColor;
+            Assert.IsNotNull(color);
+
+            // indexed color
+            Assert.AreEqual(64, color.Indexed);
+            Assert.AreEqual(64, color.Index);
+
+            // not an RGB color
+            Assert.IsFalse(color.IsRGB);
+            Assert.IsNull(color.RGB);
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Test50755_workday_formula_example()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("50755_workday_formula_example.xlsx");
+            ISheet sheet = wb.GetSheet("Sheet1");
+            foreach (IRow aRow in sheet)
+            {
+                ICell cell = aRow.GetCell(1);
+                if (cell.CellType == CellType.Formula)
+                {
+                    String formula = cell.CellFormula;
+                    //System.out.println("formula: " + formula);
+                    Assert.IsNotNull(formula);
+                    Assert.IsTrue(formula.Contains("WORKDAY"));
+                }
+                else
+                {
+                    Assert.IsNotNull(cell.ToString());
+                }
+            }
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Test51626()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("51626.xlsx");
+            Assert.IsNotNull(wb);
+            wb.Close();
+
+            Stream stream = HSSFTestDataSamples.OpenSampleFileStream("51626.xlsx");
+            wb = WorkbookFactory.Create(stream);
+            stream.Close();
+            wb.Close();
+
+            wb = XSSFTestDataSamples.OpenSampleWorkbook("51626_contact.xlsx");
+            Assert.IsNotNull(wb);
+            wb.Close();
+
+            stream = HSSFTestDataSamples.OpenSampleFileStream("51626_contact.xlsx");
+            wb = WorkbookFactory.Create(stream);
+            stream.Close();
+            wb.Close();
+
+        }
+
+        [Test]
+        public void Test51451()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+            ISheet sh = wb.CreateSheet();
+
+            IRow row = sh.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            cell.SetCellValue(239827342);
+
+            ICellStyle style = wb.CreateCellStyle();
+            //style.setHidden(false);
+            IDataFormat excelFormat = wb.CreateDataFormat();
+            style.DataFormat = (excelFormat.GetFormat("#,##0"));
+            sh.SetDefaultColumnStyle(0, style);
+            //        FileOutputStream out = new FileOutputStream("/tmp/51451.xlsx");
+            //        wb.write(out);
+            //        out.close();
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Test53105()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53105.xlsx");
+            Assert.IsNotNull(wb);
+
+            // Act
+            // evaluate SUM('Skye Lookup Input'!A4:XFD4), cells in range each contain "1"
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            double numericValue = evaluator.Evaluate(wb.GetSheetAt(0).GetRow(1).GetCell(0)).NumberValue;
+            // Assert
+            Assert.AreEqual(16384.0, numericValue, 0.0);
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Test58315()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("58315.xlsx");
+            ICell cell = wb.GetSheetAt(0).GetRow(0).GetCell(0);
+            Assert.IsNotNull(cell);
+            StringBuilder tmpCellContent = new StringBuilder(cell.StringCellValue);
+            XSSFRichTextString richText = (XSSFRichTextString)cell.RichStringCellValue;
+            for (int i = richText.Length - 1; i >= 0; i--)
+            {
+                IFont f = richText.GetFontAtIndex(i);
+                if (f != null && f.IsStrikeout)
+                {
+                    tmpCellContent.Remove(i, 1);
+                }
+            }
+            String result = tmpCellContent.ToString();
+            Assert.AreEqual("320 350", result);
+            wb.Close();
+        }
+
+        [Test]
+        public void Test55406()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("55406_Conditional_formatting_sample.xlsx");
+            ISheet sheet = wb.GetSheetAt(0);
+            ICell cellA1 = sheet.GetRow(0).GetCell(0);
+            ICell cellA2 = sheet.GetRow(1).GetCell(0);
+
+            Assert.AreEqual(0, cellA1.CellStyle.FillForegroundColor);
+            Assert.AreEqual("FFFDFDFD", ((XSSFColor)cellA1.CellStyle.FillForegroundColorColor).ARGBHex);
+            Assert.AreEqual(0, cellA2.CellStyle.FillForegroundColor);
+            Assert.AreEqual("FFFDFDFD", ((XSSFColor)cellA2.CellStyle.FillForegroundColorColor).ARGBHex);
+
+            ISheetConditionalFormatting cond = sheet.SheetConditionalFormatting;
+            Assert.AreEqual(2, cond.NumConditionalFormattings);
+            Assert.AreEqual(1, cond.GetConditionalFormattingAt(0).NumberOfRules);
+            Assert.AreEqual(64, cond.GetConditionalFormattingAt(0).GetRule(0).PatternFormatting.FillForegroundColor);
+            Assert.AreEqual("ISEVEN(ROW())", cond.GetConditionalFormattingAt(0).GetRule(0).Formula1);
+            Assert.IsNull(((XSSFColor)cond.GetConditionalFormattingAt(0).GetRule(0).PatternFormatting.FillForegroundColorColor).ARGBHex);
+            Assert.AreEqual(1, cond.GetConditionalFormattingAt(1).NumberOfRules);
+            Assert.AreEqual(64, cond.GetConditionalFormattingAt(1).GetRule(0).PatternFormatting.FillForegroundColor);
+            Assert.AreEqual("ISEVEN(ROW())", cond.GetConditionalFormattingAt(1).GetRule(0).Formula1);
+            Assert.IsNull(((XSSFColor)cond.GetConditionalFormattingAt(1).GetRule(0).PatternFormatting.FillForegroundColorColor).ARGBHex);
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Test51998()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("51998.xlsx");
+
+            HashSet<String> sheetNames = new HashSet<String>();
+
+            for (int sheetNum = 0; sheetNum < wb.NumberOfSheets; sheetNum++)
+            {
+                sheetNames.Add(wb.GetSheetName(sheetNum));
+            }
+
+            foreach (String sheetName in sheetNames)
+            {
+                int sheetIndex = wb.GetSheetIndex(sheetName);
+
+                wb.RemoveSheetAt(sheetIndex);
+
+                ISheet newSheet = wb.CreateSheet();
+                //Sheet newSheet = wb.createSheet(sheetName);
+                int newSheetIndex = wb.GetSheetIndex(newSheet);
+                //System.out.println(newSheetIndex);
+                wb.SetSheetName(newSheetIndex, sheetName);
+                wb.SetSheetOrder(sheetName, sheetIndex);
+            }
+
+            IWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            wb.Close();
+
+            Assert.IsNotNull(wbBack);
+            wbBack.Close();
+        }
+
+        [Test]
+        public void Test58731()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("58731.xlsx");
+            ISheet sheet = wb.CreateSheet("Java Books");
+
+            Object[][] bookData = {
+                new object[] {"Head First Java", "Kathy Serria", 79},
+                new object[] {"Effective Java", "Joshua Bloch", 36},
+                new object[] {"Clean Code", "Robert martin", 42},
+                new object[] {"Thinking in Java", "Bruce Eckel", 35},
+        };
+
+            int rowCount = 0;
+            foreach (Object[] aBook in bookData)
+            {
+                IRow row = sheet.CreateRow(rowCount++);
+
+                int columnCount = 0;
+                foreach (Object field in aBook)
+                {
+                    ICell cell = row.CreateCell(columnCount++);
+                    if (field is String)
+                    {
+                        cell.SetCellValue((String)field);
+                    }
+                    else if (field is int)
+                    {
+                        cell.SetCellValue((int)field);
+                    }
+                }
+            }
+
+            IWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            sheet = wb2.GetSheet("Java Books");
+            Assert.IsNotNull(sheet.GetRow(0));
+            Assert.IsNotNull(sheet.GetRow(0).GetCell(0));
+            Assert.AreEqual(bookData[0][0], sheet.GetRow(0).GetCell(0).StringCellValue);
+
+            wb2.Close();
+            wb.Close();
+        }
+
+
+        /**
+         * Regression between 3.10.1 and 3.13 - 
+         * org.apache.poi.openxml4j.exceptions.InvalidFormatException: 
+         * The part /xl/sharedStrings.xml does not have any content type 
+         * ! Rule: Package require content types when retrieving a part from a package. [M.1.14]
+         */
+        [Test]
+        public void Test58760()
+        {
+            IWorkbook wb1 = XSSFTestDataSamples.OpenSampleWorkbook("58760.xlsx");
+            Assert.AreEqual(1, wb1.NumberOfSheets);
+            Assert.AreEqual("Sheet1", wb1.GetSheetName(0));
+            IWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            Assert.AreEqual(1, wb2.NumberOfSheets);
+            Assert.AreEqual("Sheet1", wb2.GetSheetName(0));
+            wb2.Close();
+            wb1.Close();
+        }
+
+        [Test]
+        public void Test57236()
+        {
+            // Having very small numbers leads to different formatting, Excel uses the scientific notation, but POI leads to "0"
+
+            /*
+            DecimalFormat format = new DecimalFormat("#.##########", new DecimalFormatSymbols(Locale.Default));
+            double d = 3.0E-104;
+            Assert.AreEqual("3.0E-104", format.Format(d));
+             */
+
+            DataFormatter formatter = new DataFormatter(true);
+
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57236.xlsx");
+            for (int sheetNum = 0; sheetNum < wb.NumberOfSheets; sheetNum++)
+            {
+                ISheet sheet = wb.GetSheetAt(sheetNum);
+                for (int rowNum = sheet.FirstRowNum; rowNum < sheet.LastRowNum; rowNum++)
+                {
+                    IRow row = sheet.GetRow(rowNum);
+                    for (int cellNum = row.FirstCellNum; cellNum < row.LastCellNum; cellNum++)
+                    {
+                        ICell cell = row.GetCell(cellNum);
+                        String fmtCellValue = formatter.FormatCellValue(cell);
+
+                        //System.out.Println("Cell: " + fmtCellValue);
+                        Assert.IsNotNull(fmtCellValue);
+                        Assert.IsFalse(fmtCellValue.Equals("0"));
+                    }
+                }
+            }
+            wb.Close();
+        }
+
+        private void CreateXls()
+        {
+            IWorkbook workbook = new HSSFWorkbook();
+            FileStream fileOut = new FileStream("/tmp/rotated.xls", FileMode.Create, FileAccess.ReadWrite);
+            ISheet sheet1 = workbook.CreateSheet();
+            IRow row1 = sheet1.CreateRow((short)0);
+            ICell cell1 = row1.CreateCell(0);
+            cell1.SetCellValue("Successful rotated text.");
+            ICellStyle style = workbook.CreateCellStyle();
+            style.Rotation = ((short)-90);
+            cell1.CellStyle = (style);
+            workbook.Write(fileOut);
+            fileOut.Close();
+            workbook.Close();
+        }
+        private void CreateXlsx()
+        {
+            IWorkbook workbook = new XSSFWorkbook();
+            FileStream fileOut = new FileStream("/tmp/rotated.xlsx", FileMode.Create, FileAccess.ReadWrite);
+            ISheet sheet1 = workbook.CreateSheet();
+            IRow row1 = sheet1.CreateRow((short)0);
+            ICell cell1 = row1.CreateCell(0);
+            cell1.SetCellValue("Unsuccessful rotated text.");
+            ICellStyle style = workbook.CreateCellStyle();
+            style.Rotation = ((short)-90);
+            cell1.CellStyle = (style);
+            workbook.Write(fileOut);
+            fileOut.Close();
+            workbook.Close();
+        }
+        [Ignore("Creates files for checking results manually, actual values are tested in Test*CellStyle")]
+        [Test]
+        public void Test58043()
+        {
+            CreateXls();
+            CreateXlsx();
+        }
+        [Test]
+        public void Test59132()
+        {
+            IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("59132.xlsx");
+            ISheet worksheet = workbook.GetSheet("sheet1");
+            // B3
+            IRow row = worksheet.GetRow(2);
+            ICell cell = row.GetCell(1);
+            cell.SetCellValue((String)null);
+            IFormulaEvaluator evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
+            // B3
+            row = worksheet.GetRow(2);
+            cell = row.GetCell(1);
+            Assert.AreEqual(CellType.Blank, cell.CellType);
+            Assert.AreEqual(CellType.Unknown, evaluator.EvaluateFormulaCell(cell));
+            // A3
+            row = worksheet.GetRow(2);
+            cell = row.GetCell(0);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual("IF(ISBLANK(B3),\"\",B3)", cell.CellFormula);
+            Assert.AreEqual(CellType.String, evaluator.EvaluateFormulaCell(cell));
+            CellValue value = evaluator.Evaluate(cell);
+            Assert.AreEqual("", value.StringValue);
+            // A5
+            row = worksheet.GetRow(4);
+            cell = row.GetCell(0);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual("COUNTBLANK(A1:A4)", cell.CellFormula);
+            Assert.AreEqual(CellType.Numeric, evaluator.EvaluateFormulaCell(cell));
+            value = evaluator.Evaluate(cell);
+            Assert.AreEqual(1.0, value.NumberValue, 0.1);
+            /*FileOutputStream output = new FileOutputStream("C:\\temp\\59132.xlsx");
+            try {
+                workbook.write(output);
+            } finally {
+                output.close();
+            }*/
+            workbook.Close();
+        }
+
+        [Ignore("bug 59442")]
+        [Test]
+        public void TestSetRGBBackgroundColor()
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFCell cell = workbook.CreateSheet().CreateRow(0).CreateCell(0) as XSSFCell;
+            XSSFColor color = new XSSFColor(System.Drawing.Color.Red);
+            XSSFCellStyle style = workbook.CreateCellStyle() as XSSFCellStyle;
+            style.FillForegroundColorColor = color;
+            style.FillPattern = FillPattern.SolidForeground;
+            cell.CellStyle = style;
+            // Everything is fine at this point, cell is red
+            Dictionary<String, Object> properties = new Dictionary<String, Object>();
+            properties.Add(CellUtil.BORDER_BOTTOM, BorderStyle.Thin); //or BorderStyle.THIN
+            CellUtil.SetCellStyleProperties(cell, properties);
+
+            // Now the cell is all black
+            XSSFColor actual = cell.CellStyle.FillBackgroundColorColor as XSSFColor;
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(color.ARGBHex, actual.ARGBHex);
+
+            XSSFWorkbook nwb = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            workbook.Close();
+            XSSFCell ncell = nwb.GetSheetAt(0).GetRow(0).GetCell(0) as XSSFCell;
+            XSSFColor ncolor = new XSSFColor(System.Drawing.Color.Red);
+            // Now the cell is all black
+            XSSFColor nactual = ncell.CellStyle.FillBackgroundColorColor as XSSFColor;
+            Assert.IsNotNull(nactual);
+            Assert.AreEqual(ncolor.ARGBHex, nactual.ARGBHex);
+
+            nwb.Close();
+        }
+
+        [Ignore("currently Assert.Fails on POI 3.15 beta 2")]
+        [Test]
+        public void Test55273()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("ExcelTables.xlsx");
+            ISheet sheet = wb.GetSheet("ExcelTable");
+            IName name = wb.GetName("TableAsRangeName");
+            Assert.AreEqual("TableName[#All]", name.RefersToFormula);
+            // POI 3.15-beta 2 (2016-06-15): getSheetName throws IllegalArgumentException: Invalid CellReference: TableName[#All]
+            Assert.AreEqual("TableName", name.SheetName);
+            XSSFSheet xsheet = (XSSFSheet)sheet;
+            List<XSSFTable> tables = xsheet.GetTables();
+            Assert.AreEqual(2, tables.Count); //FIXME: how many tables are there in this spreadsheet?
+            Assert.AreEqual("Table1", tables[0].Name); //FIXME: what is the table name?
+            Assert.AreEqual("Table2", tables[1].Name); //FIXME: what is the table name?
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Test57523()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57523.xlsx");
+            ISheet sheet = wb.GetSheet("Attribute Master");
+            IRow row = sheet.GetRow(15);
+            int N = CellReference.ConvertColStringToIndex("N");
+            ICell N16 = row.GetCell(N);
+            Assert.AreEqual(500.0, N16.NumericCellValue, 0.00001);
+
+            int P = CellReference.ConvertColStringToIndex("P");
+            ICell P16 = row.GetCell(P);
+            Assert.AreEqual(10.0, P16.NumericCellValue, 0.00001);
+        }
+
+        /**
+         * Files produced by some scientific equipment neglect
+         *  to include the row number on the row tags
+         */
+        [Test]
+        public void NoRowNumbers59746()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("59746_NoRowNums.xlsx");
+            ISheet sheet = wb.GetSheetAt(0);
+            Assert.IsTrue(sheet.LastRowNum > 20, "Last row num: " + sheet.LastRowNum);
+            Assert.AreEqual("Checked", sheet.GetRow(0).GetCell(0).StringCellValue);
+            Assert.AreEqual("Checked", sheet.GetRow(9).GetCell(2).StringCellValue);
+            Assert.AreEqual(false, sheet.GetRow(70).GetCell(8).BooleanCellValue);
+
+            Assert.AreEqual(71, sheet.PhysicalNumberOfRows);
+            Assert.AreEqual(70, sheet.LastRowNum);
+            Assert.AreEqual(70, sheet.GetRow(sheet.LastRowNum).RowNum);
+        }
+
+        [Test]
+        public void TestWorkdayFunction()
+        {
+            XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("59106.xlsx");
+            XSSFSheet sheet = workbook.GetSheet("Test") as XSSFSheet;
+            IRow row = sheet.GetRow(1);
+            ICell cell = row.GetCell(0);
+            DataFormatter form = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
+            IFormulaEvaluator evaluator = cell.Sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
+            String result = form.FormatCellValue(cell, evaluator);
+            Assert.AreEqual("09 Mar 2016", result);
+        }
     }
 
 }

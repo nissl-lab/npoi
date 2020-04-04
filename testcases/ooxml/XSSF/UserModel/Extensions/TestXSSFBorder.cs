@@ -18,7 +18,9 @@
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NUnit.Framework;
-namespace NPOI.XSSF.UserModel.Extensions
+using NPOI.XSSF.UserModel.Extensions;
+
+namespace TestCases.XSSF.UserModel.Extensions
 {
 
     [TestFixture]

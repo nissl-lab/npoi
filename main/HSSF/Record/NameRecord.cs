@@ -523,12 +523,13 @@ namespace NPOI.HSSF.Record
         {
             get
             {
-                if (field_13_name_definition.EncodedSize < 1)
+                Ptg[] tokens = field_13_name_definition.Tokens;
+                if (tokens.Length == 0)
                 {
                     return 0;
                 }
-                Ptg ptg = field_13_name_definition.Tokens[0];
 
+                Ptg ptg = tokens[0];
                 if (ptg.GetType() == typeof(Area3DPtg))
                 {
                     return ((Area3DPtg)ptg).ExternSheetIndex;

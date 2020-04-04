@@ -31,6 +31,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula;
     using System.Globalization;
     using System.Collections.Generic;
+    using NPOI.Util;
 
     /// <summary>
     /// High level representation of a cell in a row of a spReadsheet.
@@ -134,6 +135,9 @@ namespace NPOI.HSSF.UserModel
 
                 case CellType.Formula:
                     stringValue = new HSSFRichTextString(((FormulaRecordAggregate)cval).StringValue);
+                    break;
+
+                default:
                     break;
             }
             //ExtendedFormatRecord xf = book.Workbook.GetExFormatAt(cval.XFIndex);
@@ -316,11 +320,21 @@ namespace NPOI.HSSF.UserModel
                     if (setValue)
                     {
                         String str = ConvertCellValueToString();
-                        int sstIndex = book.Workbook.AddSSTString(new UnicodeString(str));
-                        lrec.SSTIndex = (sstIndex);
-                        UnicodeString us = book.Workbook.GetSSTString(sstIndex);
-                        stringValue = new HSSFRichTextString();
-                        stringValue.UnicodeString = us;
+                        if (str == null)
+                        {
+                            // bug 55668: don't try to store null-string when formula
+                            // results in empty/null value
+                            SetCellType(CellType.Blank, false, row, col, styleIndex);
+                            return;
+                        }
+                        else
+                        {
+                            int sstIndex = book.Workbook.AddSSTString(new UnicodeString(str));
+                            lrec.SSTIndex = (sstIndex);
+                            UnicodeString us = book.Workbook.GetSSTString(sstIndex);
+                            stringValue = new HSSFRichTextString();
+                            stringValue.UnicodeString = us;
+                        }
                     }
                     _record = lrec;
                     break;
@@ -379,12 +393,14 @@ namespace NPOI.HSSF.UserModel
                     errRec.Column = col;
                     if (setValue)
                     {
-                        errRec.SetValue((byte)HSSFErrorConstants.ERROR_VALUE);
+                        errRec.SetValue(FormulaError.VALUE.Code);
                     }
                     errRec.XFIndex = styleIndex;
                     errRec.Row = row;
                     _record = errRec;
                     break;
+                default:
+                    throw new InvalidOperationException("Invalid cell type: " + cellType);
             }
             if (cellType != this.cellType &&
                 this.cellType != CellType.Unknown)  // Special Value to indicate an Uninitialized Cell
@@ -420,7 +436,7 @@ namespace NPOI.HSSF.UserModel
                 case CellType.Numeric:
                     return NumberToTextConverter.ToText(((NumberRecord)_record).Value);
                 case CellType.Error:
-                    return HSSFErrorConstants.GetText(((BoolErrRecord)_record).ErrorValue);
+                    return FormulaError.ForInt(((BoolErrRecord)_record).ErrorValue).String;
                 case CellType.Formula:
                     // should really evaluate, but Cell can't call HSSFFormulaEvaluator
                     // just use cached formula result instead
@@ -439,7 +455,7 @@ namespace NPOI.HSSF.UserModel
                 case CellType.Numeric:
                     return NumberToTextConverter.ToText(fr.Value); 
                 case CellType.Error:
-                    return HSSFErrorConstants.GetText(fr.CachedErrorValue);
+                    return FormulaError.ForInt(fr.CachedErrorValue).String;
             }
             throw new InvalidDataException("Unexpected formula result type (" + cellType + ")");
 
@@ -496,7 +512,7 @@ namespace NPOI.HSSF.UserModel
         /// will Change the cell to a numeric cell and Set its value.</param>
         public void SetCellValue(DateTime value)
         {
-            SetCellValue(DateUtil.GetExcelDate(value, this.book.Workbook.IsUsing1904DateWindowing));
+            SetCellValue(DateUtil.GetExcelDate(value, this.book.IsDate1904()));
         }
 
 
@@ -510,18 +526,32 @@ namespace NPOI.HSSF.UserModel
         /// If value is null then we will Change the cell to a Blank cell.</param>
         public void SetCellValue(String value)
         {
-            HSSFRichTextString str = new HSSFRichTextString(value);
+            HSSFRichTextString str = value == null ? null : new HSSFRichTextString(value);
             SetCellValue(str);
         }
         /**
- * set a error value for the cell
- *
- * @param errorCode the error value to set this cell to.  For formulas we'll set the
- *        precalculated value , for errors we'll set
- *        its value. For other types we will change the cell to an error
- *        cell and set its value.
- */
+         * set a error value for the cell
+         *
+         * @param errorCode the error value to set this cell to.  For formulas we'll set the
+         *        precalculated value , for errors we'll set
+         *        its value. For other types we will change the cell to an error
+         *        cell and set its value.
+         */
+        [Obsolete("deprecated 3.15 beta 2. Use {@link #setCellErrorValue(FormulaError)} instead.")]
         public void SetCellErrorValue(byte errorCode)
+        {
+            FormulaError error = FormulaError.ForInt(errorCode);
+            SetCellErrorValue(error);
+        }
+        /**
+         * set a error value for the cell
+         *
+         * @param error the error value to set this cell to.  For formulas we'll set the
+         *        precalculated value , for errors we'll set
+         *        its value. For other types we will change the cell to an error
+         *        cell and set its value.
+         */
+        public void SetCellErrorValue(FormulaError error)
         {
             int row = _record.Row;
             int col = _record.Column;
@@ -530,14 +560,14 @@ namespace NPOI.HSSF.UserModel
             {
 
                 case CellType.Error:
-                    ((BoolErrRecord)_record).SetValue(errorCode);
+                    ((BoolErrRecord)_record).SetValue(error);
                     break;
                 case CellType.Formula:
-                    ((FormulaRecordAggregate)_record).SetCachedErrorResult(errorCode);
+                    ((FormulaRecordAggregate)_record).SetCachedErrorResult(error);
                     break;
                 default:
                     SetCellType(CellType.Error, false, row, col, styleIndex);
-                    ((BoolErrRecord)_record).SetValue(errorCode);
+                    ((BoolErrRecord)_record).SetValue(error);
                     break;
             }
         }
@@ -761,7 +791,7 @@ namespace NPOI.HSSF.UserModel
                         "You cannot get a date value from an error cell");
                 }
                 double value = this.NumericCellValue;
-                if (book.Workbook.IsUsing1904DateWindowing)
+                if (book.IsDate1904())
                 {
                     return DateUtil.GetJavaDate(value, true);
                 }
@@ -1148,6 +1178,15 @@ namespace NPOI.HSSF.UserModel
                 return _record.Column & 0xFFFF;
             }
         }
+
+        public CellAddress Address
+        {
+            get
+            {
+                return new CellAddress(this);
+            }
+        }
+
         /**
          * Updates the cell record's idea of what
          *  column it belongs in (0 based)
@@ -1177,19 +1216,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                for (IEnumerator it = _sheet.Sheet.Records.GetEnumerator(); it.MoveNext(); )
-                {
-                    RecordBase rec = (RecordBase)it.Current;
-                    if (rec is HyperlinkRecord)
-                    {
-                        HyperlinkRecord link = (HyperlinkRecord)rec;
-                        if (link.FirstColumn == _record.Column && link.FirstRow == _record.Row)
-                        {
-                            return new HSSFHyperlink(link);
-                        }
-                    }
-                }
-                return null;
+                return _sheet.GetHyperlink(_record.Row, _record.Column);
             }
             set
             {
@@ -1215,6 +1242,8 @@ namespace NPOI.HSSF.UserModel
                         break;
                     case HyperlinkType.Document:
                         value.Label = ("place");
+                        break;
+                    default:
                         break;
                 }
 

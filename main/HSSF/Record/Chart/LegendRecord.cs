@@ -32,8 +32,7 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Andrew C. Oliver (acoliver at apache.org)
      */
-    public class LegendRecord
-       : StandardRecord
+    public class LegendRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x1015;
         private int field_1_xAxisUpperLeft;

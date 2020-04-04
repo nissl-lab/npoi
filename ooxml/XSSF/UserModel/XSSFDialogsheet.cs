@@ -17,6 +17,8 @@
 
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.OpenXml4Net.OPC;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -25,8 +27,8 @@ namespace NPOI.XSSF.UserModel
     {
         protected CT_Dialogsheet dialogsheet;
 
-        public XSSFDialogsheet(XSSFSheet sheet)
-            : base(sheet.GetPackagePart(), sheet.GetPackageRelationship())
+        public XSSFDialogsheet(XSSFSheet sheet, PackageRelationship rel)
+            : base(sheet.GetPackagePart(), rel)
         {
 
             this.dialogsheet = new CT_Dialogsheet();
@@ -439,11 +441,6 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        void ISheet.ShowInPane(short toprow, short leftcol)
-        {
-            throw new System.NotImplementedException();
-        }
-
         void ISheet.ShiftRows(int startRow, int endRow, int n)
         {
             throw new System.NotImplementedException();
@@ -540,11 +537,6 @@ namespace NPOI.XSSF.UserModel
         int[] ISheet.ColumnBreaks
         {
             get { throw new System.NotImplementedException(); }
-        }
-
-        void ISheet.SetActiveCell(int row, int column)
-        {
-            throw new System.NotImplementedException();
         }
 
         void ISheet.SetActiveCellRange(int firstRow, int lastRow, int firstColumn, int lastColumn)

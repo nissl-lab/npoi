@@ -38,7 +38,7 @@ public class ZipPackagePropertiesMarshaller:PackagePropertiesMarshaller
         }
         catch (IOException e)
         {
-            throw new OpenXml4NetException(e.Message);
+            throw new OpenXml4NetException(e.Message, e);
         }
         catch
         {

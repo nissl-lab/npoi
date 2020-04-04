@@ -62,7 +62,8 @@ namespace TestCases.SS.Formula.Functions
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             fe.EvaluateFormulaCell(cell);
             Assert.AreEqual(CellType.Error, cell.CachedFormulaResultType);
-            Assert.AreEqual(HSSFErrorConstants.ERROR_NUM, cell.ErrorCellValue);
+            Assert.AreEqual(FormulaError.NUM.Code, cell.ErrorCellValue);
+            wb.Close();
         }
     }
 

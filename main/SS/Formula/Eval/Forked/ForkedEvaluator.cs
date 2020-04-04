@@ -16,10 +16,11 @@
 ==================================================================== */
 
 using System;
+using System.Reflection;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula;
 using NPOI.SS.Formula.Eval;
-using NPOI.SS.Formula.Udf;
+using NPOI.SS.Formula.UDF;
 using NPOI.SS.UserModel;
 namespace NPOI.SS.Formula.Eval.Forked
 {
@@ -52,19 +53,24 @@ namespace NPOI.SS.Formula.Eval.Forked
             {
                 return HSSFEvaluationWorkbook.Create((HSSFWorkbook)wb);
             }
-            // TODO rearrange POI build to allow this
-            //		if (wb is XSSFWorkbook) {
-            //			return XSSFEvaluationWorkbook.Create((XSSFWorkbook) wb);
-            //		}
-            throw new ArgumentException("Unexpected workbook type (" + wb.GetType().Name + ")");
+            else
+            {
+                try
+                {
+                    // TODO: check if this is Java 9 compatible ...
+                    Type evalWB = Type.GetType("NPOI.XSSF.UserModel.XSSFEvaluationWorkbook");
+                    Type xssfWB = Type.GetType("NPOI.XSSF.UserMode.XSSFWorkbook");
+                    MethodInfo createM = evalWB.GetMethod("create", new Type[] { xssfWB });
+                    return (IEvaluationWorkbook)createM.Invoke(null, new object[] { wb });
+                }
+                catch (Exception e)
+                {
+                    throw new ArgumentException("Unexpected workbook type (" + wb.GetType().Name
+                        + ") - check for poi-ooxml and poi-ooxml schemas jar in the classpath", e);
+                }
+            }
         }
-        /**
-         * @deprecated (Sep 2009) (reduce overloading) use {@link #Create(Workbook, IStabilityClassifier, UDFFinder)}
-         */
-        public static ForkedEvaluator Create(IWorkbook wb, IStabilityClassifier stabilityClassifier)
-        {
-            return Create(wb, stabilityClassifier, null);
-        }
+
         /**
          * @param udfFinder pass <code>null</code> for default (AnalysisToolPak only)
          */

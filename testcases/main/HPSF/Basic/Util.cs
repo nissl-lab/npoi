@@ -193,7 +193,7 @@ namespace TestCases.HPSF.Basic
          * 
          * @exception IOException if an I/O exception occurs
          */
-        public static POIFile[] ReadPropertySets(FileStream poifs)
+        public static POIFile[] ReadPropertySets(FileInfo poifs)
         {
             List<POIFile> files = new List<POIFile>(7);
             POIFSReader reader2 = new POIFSReader();
@@ -201,12 +201,14 @@ namespace TestCases.HPSF.Basic
             POIFSReaderListener pfl = new POIFSReaderListener1(files);
             reader2.RegisterListener(pfl);
             /* Read the POI filesystem. */
+            FileStream stream = poifs.OpenRead();
             try
             {
-                reader2.Read(poifs);
+                reader2.Read(stream);
             }
             finally
             {
+                stream.Close();
             }
             POIFile[] result = new POIFile[files.Count];
             for (int i = 0; i < result.Length; i++)

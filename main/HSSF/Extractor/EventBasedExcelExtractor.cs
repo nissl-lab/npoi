@@ -50,7 +50,7 @@ namespace NPOI.HSSF.Extractor
         private bool formulasNotResults = false;
 
         public EventBasedExcelExtractor(POIFSFileSystem fs)
-            : base(null)
+            : base((POIDocument)null)
         {
 
             this.fs = fs;

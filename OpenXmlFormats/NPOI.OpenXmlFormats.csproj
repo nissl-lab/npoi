@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NPOI.OpenXmlFormats</RootNamespace>
     <AssemblyName>NPOI.OpenXmlFormats</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -35,6 +35,8 @@
     </TargetFrameworkProfile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+    <PackageId>NPOI</PackageId>
+    <RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -93,6 +95,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Encryption\Encryption.cs" />
+    <Compile Include="Encryption\EncryptionDocument.cs" />
+    <Compile Include="Encryption\KeyEncryptorCertificate.cs" />
+    <Compile Include="Encryption\KeyEncryptorPassword.cs" />
     <Compile Include="Shared\IOMathContainer.cs" />
     <Compile Include="Spreadsheet\PivotTable\CT_PivotCacheRecords.cs" />
     <Compile Include="Drawing\ChartDrawing.cs" />
@@ -291,6 +297,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="npoi.snk" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.csproj">

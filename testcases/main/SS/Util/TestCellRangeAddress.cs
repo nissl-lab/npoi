@@ -32,11 +32,11 @@ namespace TestCases.SS.Util
     public class TestCellRangeAddress
     {
         byte[] data = new byte[] {
-     (byte)0x02,(byte)0x00, 
-     (byte)0x04,(byte)0x00, 
-     (byte)0x00,(byte)0x00, 
-     (byte)0x03,(byte)0x00, 
- };
+             (byte)0x02,(byte)0x00, 
+             (byte)0x04,(byte)0x00, 
+             (byte)0x00,(byte)0x00, 
+             (byte)0x03,(byte)0x00, 
+        };
         [Test]
         public void TestLoad()
         {
@@ -107,35 +107,6 @@ namespace TestCases.SS.Util
             }
         }
 
-        [Test]
-        public void TestStoreDeprecated()
-        {
-            CellRangeAddress ref1 = new CellRangeAddress(0, 0, 0, 0);
-
-            //byte[] recordBytes = new byte[CellRangeAddress.ENCODED_SIZE];
-            //// With nothing Set
-            //ref1.Serialize(0, recordBytes);
-            //Assert.AreEqual(recordBytes.Length, data.Length);
-            //for (int i = 0; i < data.Length; i++)
-            //{
-            //    Assert.AreEqual("At offset " + i, 0, recordBytes[i]);
-            //}
-
-            //// Now Set the flags
-            //ref1.FirstRow = (/*setter*/(short)2);
-            //ref1.LastRow = (/*setter*/(short)4);
-            //ref1.FirstColumn = (/*setter*/(short)0);
-            //ref1.LastColumn = (/*setter*/(short)3);
-
-            //// Re-test
-            //ref1.Serialize(0, recordBytes);
-
-            //Assert.AreEqual(recordBytes.Length, data.Length);
-            //for (int i = 0; i < data.Length; i++)
-            //{
-            //    Assert.AreEqual("At offset " + i, data[i], recordBytes[i]);
-            //}
-        }
 
         [Test]
         public void TestCreateIllegal()
@@ -230,6 +201,116 @@ namespace TestCases.SS.Util
             ref1 = new CellRangeAddress(-1, -1, -1, -1);
             Assert.AreEqual(":", ref1.FormatAsString());
         }
+        [Test]
+        public void TestEquals()
+        {
+            CellRangeAddress ref1 = new CellRangeAddress(1, 2, 3, 4);
+            CellRangeAddress ref2 = new CellRangeAddress(1, 2, 3, 4);
+            Assert.AreEqual(ref1, ref2);
 
+            // Invert first/last row, but refer to same area
+            ref2.FirstRow = (2);
+            ref2.LastRow = (1);
+            Assert.AreEqual(ref1, ref2);
+
+            // Invert first/last column, but refer to same area
+            ref2.FirstColumn = (4);
+            ref2.LastColumn = (3);
+            Assert.AreEqual(ref1, ref2);
+
+            // Refer to a different area
+            Assert.AreNotEqual(ref1, new CellRangeAddress(3, 4, 1, 2));
+        }
+        [Test]
+        public void TestGetMinMaxRow()
+        {
+            CellRangeAddress ref1 = new CellRangeAddress(1, 2, 3, 4);
+            Assert.AreEqual(1, ref1.MinRow);
+            Assert.AreEqual(2, ref1.MaxRow);
+
+            ref1.FirstRow = (10);
+            //now ref is CellRangeAddress(10, 2, 3, 4)
+            Assert.AreEqual(2, ref1.MinRow);
+            Assert.AreEqual(10, ref1.MaxRow);
+        }
+        [Test]
+        public void TestGetMinMaxColumn()
+        {
+            CellRangeAddress ref1 = new CellRangeAddress(1, 2, 3, 4);
+            Assert.AreEqual(3, ref1.MinColumn);
+            Assert.AreEqual(4, ref1.MaxColumn);
+
+            ref1.FirstColumn = (10);
+            //now ref is CellRangeAddress(1, 2, 10, 4)
+            Assert.AreEqual(4, ref1.MinColumn);
+            Assert.AreEqual(10, ref1.MaxColumn);
+        }
+
+        [Test]
+        public void TestIntersects()
+        {
+            CellRangeAddress baseRegion = new CellRangeAddress(0, 1, 0, 1);
+
+            CellRangeAddress duplicateRegion = new CellRangeAddress(0, 1, 0, 1);
+            assertIntersects(baseRegion, duplicateRegion);
+
+            CellRangeAddress partiallyOverlappingRegion = new CellRangeAddress(1, 2, 1, 2);
+            assertIntersects(baseRegion, partiallyOverlappingRegion);
+
+            CellRangeAddress subsetRegion = new CellRangeAddress(0, 1, 0, 0);
+            assertIntersects(baseRegion, subsetRegion);
+
+            CellRangeAddress supersetRegion = new CellRangeAddress(0, 2, 0, 2);
+            assertIntersects(baseRegion, supersetRegion);
+
+            CellRangeAddress disjointRegion = new CellRangeAddress(10, 11, 10, 11);
+            assertNotIntersects(baseRegion, disjointRegion);
+        }
+
+
+        [Test]
+        public void ContainsRow()
+        {
+            CellRangeAddress region = new CellRangeAddress(10, 12, 3, 5);
+
+            Assert.IsFalse(region.ContainsRow(9));
+            Assert.IsTrue(region.ContainsRow(10));
+            Assert.IsTrue(region.ContainsRow(11));
+            Assert.IsTrue(region.ContainsRow(12));
+            Assert.IsFalse(region.ContainsRow(13));
+        }
+
+        [Test]
+        public void ContainsColumn()
+        {
+            CellRangeAddress region = new CellRangeAddress(10, 12, 3, 5);
+
+            Assert.IsFalse(region.ContainsColumn(2));
+            Assert.IsTrue(region.ContainsColumn(3));
+            Assert.IsTrue(region.ContainsColumn(4));
+            Assert.IsTrue(region.ContainsColumn(5));
+            Assert.IsFalse(region.ContainsColumn(6));
+        }
+
+
+
+        private static void assertIntersects(CellRangeAddress regionA, CellRangeAddress regionB)
+        {
+            if (!(regionA.Intersects(regionB) && regionB.Intersects(regionA)))
+            {
+                String A = regionA.FormatAsString();
+                String B = regionB.FormatAsString();
+                Assert.Fail("expected: regions " + A + " and " + B + " intersect");
+            }
+        }
+        private static void assertNotIntersects(CellRangeAddress regionA, CellRangeAddress regionB)
+        {
+            if ((regionA.Intersects(regionB) || regionB.Intersects(regionA)))
+            {
+                String A = regionA.FormatAsString();
+                String B = regionB.FormatAsString();
+                Assert.Fail("expected: regions " + A + " and " + B + " do not intersect");
+            }
+        }
     }
 }

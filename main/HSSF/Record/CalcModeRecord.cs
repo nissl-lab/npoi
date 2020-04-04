@@ -39,7 +39,7 @@ namespace NPOI.HSSF.Record
      */
 
     public class CalcModeRecord
-       : StandardRecord
+       : StandardRecord, ICloneable
     {
         public const short sid = 0xD;
 

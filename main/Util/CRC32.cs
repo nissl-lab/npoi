@@ -133,6 +133,13 @@ namespace NPOI.Util
                 throw;
             }
         }
+
+        public ulong Value { get; set; }
+
+        public void Update(byte[] data)
+        {
+            Value = ByteCRC(ref data);
+        }
     }
 
 }

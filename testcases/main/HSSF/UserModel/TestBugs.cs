@@ -24,6 +24,7 @@ namespace TestCases.HSSF.UserModel
     using System.IO;
     using System.Text;
     using System.Collections;
+    using System.Linq;
     using NUnit.Framework;
 
     using TestCases.HSSF;
@@ -42,6 +43,10 @@ namespace TestCases.HSSF.UserModel
     using NPOI.POIFS.FileSystem;
     using NPOI.HSSF.Extractor;
     using NPOI.HSSF.Record.Crypto;
+    using NPOI.HSSF;
+    using System.Drawing;
+    using System.Net;
+    using System.Drawing.Imaging;
 
     /**
      * Testcases for bugs entered in bugzilla
@@ -60,7 +65,11 @@ namespace TestCases.HSSF.UserModel
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
         }
-
+        [TearDown]
+        public void ResetPassword()
+        {
+            Biff8EncryptionKey.CurrentUserPassword = (null);
+        }
 
         private static HSSFWorkbook OpenSample(String sampleFileName)
         {
@@ -349,7 +358,7 @@ namespace TestCases.HSSF.UserModel
          * Merged regions were being Removed from the parent in cloned sheets
          */
         [Test]
-        [Ignore("this test was not found in poi 3.8beta4")] 
+        [Ignore("this test was not found in poi 3.8beta4")]
         public void Test22720()
         {
             HSSFWorkbook workBook = new HSSFWorkbook();
@@ -1042,7 +1051,7 @@ namespace TestCases.HSSF.UserModel
 
             // Now Check the iterator
             int rowsSeen = 0;
-            for (IEnumerator i = s.GetRowEnumerator(); i.MoveNext(); )
+            for (IEnumerator i = s.GetRowEnumerator(); i.MoveNext();)
             {
                 IRow r = (IRow)i.Current;
                 Assert.IsNotNull(r);
@@ -1299,6 +1308,8 @@ namespace TestCases.HSSF.UserModel
                        "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                    )
             );
+
+            wb.Close();
         }
 
         /**
@@ -1369,10 +1380,10 @@ namespace TestCases.HSSF.UserModel
             ConfirmCachedValue("70164", nc2);
             ConfirmCachedValue("90210", nc3);
 
-            CellValueRecordInterface[] cvrs = ns.Sheet.GetValueRecords();
-            for (int i = 0; i < cvrs.Length; i++)
+            int i = 0;
+            for (IEnumerator<CellValueRecordInterface> it = ns.Sheet.GetCellValueIterator(); it.MoveNext(); i++)
             {
-                CellValueRecordInterface cvr = cvrs[i];
+                CellValueRecordInterface cvr = it.Current;
                 if (cvr is FormulaRecordAggregate)
                 {
                     FormulaRecordAggregate fr = (FormulaRecordAggregate)cvr;
@@ -1396,7 +1407,7 @@ namespace TestCases.HSSF.UserModel
                     }
                 }
             }
-            Assert.AreEqual(3, cvrs.Length);
+            Assert.AreEqual(3, i);
         }
 
         private static void ConfirmCachedValue(double expectedValue, ICell cell)
@@ -1503,6 +1514,8 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(0, r.FirstCellNum);
             Assert.AreEqual(5, r.LastCellNum); // last cell # + 1
             Assert.AreEqual(3, r.PhysicalNumberOfCells);
+
+            wb.Close();
         }
 
         /**
@@ -1740,8 +1753,8 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void Test46664()
         {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            ISheet sheet = wb.CreateSheet("new_sheet");
+            HSSFWorkbook wb1 = new HSSFWorkbook();
+            ISheet sheet = wb1.CreateSheet("new_sheet");
             IRow row = sheet.CreateRow((short)0);
             row.CreateCell(0).SetCellValue(new HSSFRichTextString("Column A"));
             row.CreateCell(1).SetCellValue(new HSSFRichTextString("Column B"));
@@ -1751,7 +1764,7 @@ namespace TestCases.HSSF.UserModel
             row.CreateCell(5).SetCellValue(new HSSFRichTextString("Column F"));
 
             //set print area from column a to column c (on first row)
-            wb.SetPrintArea(
+            wb1.SetPrintArea(
                     0, //sheet index
                     0, //start column
                     2, //end column
@@ -1759,11 +1772,12 @@ namespace TestCases.HSSF.UserModel
                     0  //end row
             );
 
-            wb = WriteOutAndReadBack(wb);
+            HSSFWorkbook wb2 = WriteOutAndReadBack(wb1);
+            wb1.Close();
 
             // Ensure the tab index
             TabIdRecord tr = null;
-            foreach (Record r in wb.Workbook.Records)
+            foreach (Record r in wb2.Workbook.Records)
             {
                 if (r is TabIdRecord)
                 {
@@ -1775,21 +1789,23 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(0, tr._tabids[0]);
 
             // Ensure the print setup
-            Assert.AreEqual("new_sheet!$A$1:$C$1", wb.GetPrintArea(0));
-            Assert.AreEqual("new_sheet!$A$1:$C$1", wb.GetName("Print_Area").RefersToFormula);
+            Assert.AreEqual("new_sheet!$A$1:$C$1", wb2.GetPrintArea(0));
+            Assert.AreEqual("new_sheet!$A$1:$C$1", wb2.GetName("Print_Area").RefersToFormula);
 
             // Needs reference not value
-            NameRecord nr = wb.Workbook.GetNameRecord(
-                  wb.GetNameIndex("Print_Area")
+            NameRecord nr = wb2.Workbook.GetNameRecord(
+                  wb2.GetNameIndex("Print_Area")
             );
             Assert.AreEqual("Print_Area", nr.NameText);
             Assert.AreEqual(1, nr.NameDefinition.Length);
             Assert.AreEqual(
                   "new_sheet!$A$1:$C$1",
-                  ((Area3DPtg)nr.NameDefinition[0]).ToFormulaString(HSSFEvaluationWorkbook.Create(wb))
+                  ((Area3DPtg)nr.NameDefinition[0]).ToFormulaString(HSSFEvaluationWorkbook.Create(wb2))
             );
-            // TODO - fix me to be Reference not Value!
-            //Assert.AreEqual('R', nr.NameDefinition[0].RVAType);
+
+            Assert.AreEqual('R', nr.NameDefinition[0].RVAType);
+
+            wb2.Close();
         }
         /**
          * Odd POIFS blocks issue:
@@ -1914,15 +1930,40 @@ namespace TestCases.HSSF.UserModel
         {
             try
             {
-                OpenSample("46904.xls");
+                //OpenSample("46904.xls");
+                OPOIFSFileSystem fs = new OPOIFSFileSystem(
+                    HSSFITestDataProvider.Instance.OpenWorkbookStream("46904.xls"));
+                new HSSFWorkbook(fs.Root, false).Close();
                 Assert.Fail();
             }
-            catch (NPOI.HSSF.OldExcelFormatException e)
+            catch (OldExcelFormatException e)
             {
                 Assert.IsTrue(e.Message.StartsWith(
                         "The supplied spreadsheet seems to be Excel"
                 ));
             }
+
+            try
+            {
+                NPOIFSFileSystem fs = new NPOIFSFileSystem(
+                        HSSFITestDataProvider.Instance.OpenWorkbookStream("46904.xls"));
+                try
+                {
+                    new HSSFWorkbook(fs.Root, false).Close();
+                    Assert.Fail();
+                }
+                finally
+                {
+                    fs.Close();
+                }
+            }
+            catch (OldExcelFormatException e)
+            {
+                Assert.IsTrue(e.Message.StartsWith(
+                        "The supplied spreadsheet seems to be Excel"
+                ));
+            }
+
         }
 
         /**
@@ -2080,67 +2121,6 @@ namespace TestCases.HSSF.UserModel
         }
 
         /**
-         * Setting the user style name on custom styles
-         */
-        /*        public void Test49689()
-                {
-                    HSSFWorkbook wb = new HSSFWorkbook();
-                    Sheet s = wb.CreateSheet("Test");
-                    Row r = s.CreateRow(0);
-                    Cell c = r.CreateCell(0);
-
-                    CellStyle cs1 = wb.CreateCellStyle();
-                    CellStyle cs2 = wb.CreateCellStyle();
-                    CellStyle cs3 = wb.CreateCellStyle();
-
-                    Assert.AreEqual(21, cs1.Index);
-                    cs1.setUserStyleName("Testing");
-
-                    Assert.AreEqual(22, cs2.Index);
-                    cs2.setUserStyleName("Testing 2");
-
-                    Assert.AreEqual(23, cs3.Index);
-                    cs3.setUserStyleName("Testing 3");
-
-                    // Set one
-                    c.setCellStyle(cs1);
-
-                    // Write out and read back
-                    wb = WriteOutAndReadBack(wb);
-
-                    // Re-check
-                    Assert.AreEqual("Testing", wb.GetCellStyleAt((short)21).GetUserStyleName());
-                    Assert.AreEqual("Testing 2", wb.GetCellStyleAt((short)22).GetUserStyleName());
-                    Assert.AreEqual("Testing 3", wb.GetCellStyleAt((short)23).GetUserStyleName());
-                }
-
-                public void Test49751()
-                {
-                    HSSFWorkbook wb = OpenSample("49751.xls");
-                    short numCellStyles = wb.NumCellStyles;
-                    List<String> namedStyles = new List<string>(new string[]{
-                        "20% - Accent1", "20% - Accent2", "20% - Accent3", "20% - Accent4", "20% - Accent5",
-                        "20% - Accent6", "40% - Accent1", "40% - Accent2", "40% - Accent3", "40% - Accent4", 
-                        "40% - Accent5", "40% - Accent6", "60% - Accent1", "60% - Accent2", "60% - Accent3",
-                        "60% - Accent4", "60% - Accent5", "60% - Accent6", "Accent1", "Accent2", "Accent3",
-                        "Accent4", "Accent5", "Accent6", "Bad", "Calculation", "Check Cell", "Explanatory Text",
-                        "Good", "Heading 1", "Heading 2", "Heading 3", "Heading 4", "Input", "Linked Cell",
-                        "Neutral", "Note", "Output", "Title", "Total", "Warning Text"});
-
-                    List<String> collecteddStyles = new List<String>();
-                    for (short i = 0; i < numCellStyles; i++)
-                    {
-                        ICellStyle cellStyle = wb.GetCellStyleAt(i);
-                        String styleName = cellStyle.GetUserStyleName();
-                        if (styleName != null)
-                        {
-                            collecteddStyles.Add(styleName);
-                        }
-                    }
-                    Assert.IsTrue(namedStyles.ContainsAll(collecteddStyles));
-                }
-        */
-        /**
          * Regression with the PageSettingsBlock
          */
         [Test]
@@ -2172,7 +2152,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         /**
-         * IllegalStateException received when creating Data validation in sheet with macro
+         * InvalidOperationException received when creating Data validation in sheet with macro
          */
         [Test]
         public void Test50020()
@@ -2508,14 +2488,14 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void Test49689()
         {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            ISheet s = wb.CreateSheet("Test");
+            HSSFWorkbook wb1 = new HSSFWorkbook();
+            ISheet s = wb1.CreateSheet("Test");
             IRow r = s.CreateRow(0);
             ICell c = r.CreateCell(0);
 
-            HSSFCellStyle cs1 = (HSSFCellStyle)wb.CreateCellStyle();
-            HSSFCellStyle cs2 = (HSSFCellStyle)wb.CreateCellStyle();
-            HSSFCellStyle cs3 = (HSSFCellStyle)wb.CreateCellStyle();
+            HSSFCellStyle cs1 = (HSSFCellStyle)wb1.CreateCellStyle();
+            HSSFCellStyle cs2 = (HSSFCellStyle)wb1.CreateCellStyle();
+            HSSFCellStyle cs3 = (HSSFCellStyle)wb1.CreateCellStyle();
 
             Assert.AreEqual(21, cs1.Index);
             cs1.UserStyleName = ("Testing");
@@ -2530,18 +2510,20 @@ namespace TestCases.HSSF.UserModel
             c.CellStyle = (cs1);
 
             // Write out and read back
-            wb = WriteOutAndReadBack(wb);
+            HSSFWorkbook wb2 = WriteOutAndReadBack(wb1);
 
             // Re-check
-            Assert.AreEqual("Testing", ((HSSFCellStyle)wb.GetCellStyleAt((short)21)).UserStyleName);
-            Assert.AreEqual("Testing 2", ((HSSFCellStyle)wb.GetCellStyleAt((short)22)).UserStyleName);
-            Assert.AreEqual("Testing 3", ((HSSFCellStyle)wb.GetCellStyleAt((short)23)).UserStyleName);
+            Assert.AreEqual("Testing", ((HSSFCellStyle)wb2.GetCellStyleAt((short)21)).UserStyleName);
+            Assert.AreEqual("Testing 2", ((HSSFCellStyle)wb2.GetCellStyleAt((short)22)).UserStyleName);
+            Assert.AreEqual("Testing 3", ((HSSFCellStyle)wb2.GetCellStyleAt((short)23)).UserStyleName);
+
+            wb2.Close();
         }
         [Test]
         public void Test49751()
         {
             HSSFWorkbook wb = OpenSample("49751.xls");
-            short numCellStyles = wb.NumCellStyles;
+            int numCellStyles = wb.NumCellStyles;
             string[] namedStyles = new string[]{
             "20% - Accent1", "20% - Accent2", "20% - Accent3", "20% - Accent4", "20% - Accent5",
             "20% - Accent6", "40% - Accent1", "40% - Accent2", "40% - Accent3", "40% - Accent4",
@@ -2551,10 +2533,10 @@ namespace TestCases.HSSF.UserModel
             "Good", "Heading 1", "Heading 2", "Heading 3", "Heading 4", "Input", "Linked Cell",
             "Neutral", "Note", "Output", "Title", "Total", "Warning Text"};
 
-            ArrayList namedStylesList = Arrays.AsList(namedStyles);
+            IList<string> namedStylesList = Arrays.AsList(namedStyles);
 
             List<String> collecteddStyles = new List<String>();
-            for (short i = 0; i < numCellStyles; i++)
+            for (int i = 0; i < numCellStyles; i++)
             {
                 HSSFCellStyle cellStyle = (HSSFCellStyle)wb.GetCellStyleAt(i);
                 String styleName = cellStyle.UserStyleName;
@@ -2619,6 +2601,8 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("Cell A,2", sheet.GetRow(0).GetCell(0).StringCellValue);
             Assert.AreEqual("Cell A,1", sheet.GetRow(1).GetCell(0).StringCellValue);
             Assert.AreEqual("Cell A,3", sheet.GetRow(2).GetCell(0).StringCellValue);
+
+            workbook.Close();
         }
         [Test]
         public void Test50426()
@@ -2712,7 +2696,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = OpenSample("50939.xls");
             Assert.AreEqual(2, wb.NumberOfSheets);
         }
-        
+
         /**
          * File with exactly 256 data blocks (+header block)
          *  shouldn't break on POIFS loading 
@@ -2820,7 +2804,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook workbook = OpenSample("49529.xls");
             workbook.GetSheetAt(0).CreateDrawingPatriarch();
             // prior to the fix the line below failed with
-            // java.lang.IllegalStateException: EOF - next record not available
+            // java.lang.InvalidOperationException: EOF - next record not available
             workbook.CloneSheet(0);
 
             // make sure we are still readable
@@ -2897,23 +2881,31 @@ namespace TestCases.HSSF.UserModel
 
             HSSFSheet sh2 = wb.CloneSheet(0) as HSSFSheet;
             Assert.IsNotNull(sh2.DrawingPatriarch);
+
+            wb.Close();
         }
 
         [Test]
         public void Test53432()
         {
-            IWorkbook wb = new HSSFWorkbook(); //or new HSSFWorkbook();
-            wb.AddPicture(new byte[] { 123, 22 }, PictureType.JPEG);
-            Assert.AreEqual(wb.GetAllPictures().Count, 1);
+            IWorkbook wb1 = new HSSFWorkbook(); //or new HSSFWorkbook();
+            wb1.AddPicture(new byte[] { 123, 22 }, PictureType.JPEG);
+            Assert.AreEqual(wb1.GetAllPictures().Count, 1);
+            wb1.Close();
 
-            wb = new HSSFWorkbook();
-            wb = WriteOutAndReadBack((HSSFWorkbook)wb);
-            Assert.AreEqual(wb.GetAllPictures().Count, 0);
-            wb.AddPicture(new byte[] { 123, 22 }, PictureType.JPEG);
-            Assert.AreEqual(wb.GetAllPictures().Count, 1);
+            wb1.Close();
+            wb1 = new HSSFWorkbook();
+            IWorkbook wb2 = WriteOutAndReadBack((HSSFWorkbook)wb1);
+            wb1.Close();
+            Assert.AreEqual(wb2.GetAllPictures().Count, 0);
+            wb2.AddPicture(new byte[] { 123, 22 }, PictureType.JPEG);
+            Assert.AreEqual(wb2.GetAllPictures().Count, 1);
 
-            wb = WriteOutAndReadBack((HSSFWorkbook)wb);
-            Assert.AreEqual(wb.GetAllPictures().Count, 1);
+            IWorkbook wb3 = WriteOutAndReadBack((HSSFWorkbook)wb2);
+            wb2.Close();
+            Assert.AreEqual(wb3.GetAllPictures().Count, 1);
+
+            wb3.Close();
         }
         [Test]
         public void Test46250()
@@ -2925,8 +2917,8 @@ namespace TestCases.HSSF.UserModel
             HSSFPatriarch patriarch = (HSSFPatriarch)cSh.CreateDrawingPatriarch();
             HSSFTextbox tb = (HSSFTextbox)patriarch.Children[2];
 
-            tb.String=(new HSSFRichTextString("POI test"));
-            tb.Anchor=(new HSSFClientAnchor(0, 0, 0, 0, (short)0, 0, (short)10, 10));
+            tb.String = (new HSSFRichTextString("POI test"));
+            tb.Anchor = (new HSSFClientAnchor(0, 0, 0, 0, (short)0, 0, (short)10, 10));
 
             wb = WriteOutAndReadBack((HSSFWorkbook)wb);
         }
@@ -3028,61 +3020,62 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void Bug56325()
         {
-            HSSFWorkbook wb;
+            HSSFWorkbook wb1;
 
             FileInfo file = HSSFTestDataSamples.GetSampleFile("56325.xls");
             Stream stream = new FileStream(file.FullName, FileMode.Open, FileAccess.ReadWrite);
             try
             {
                 POIFSFileSystem fs = new POIFSFileSystem(stream);
-                wb = new HSSFWorkbook(fs);
+                wb1 = new HSSFWorkbook(fs);
             }
             finally
             {
                 stream.Close();
             }
 
-            Assert.AreEqual(3, wb.NumberOfSheets);
-            wb.RemoveSheetAt(0);
-            Assert.AreEqual(2, wb.NumberOfSheets);
+            Assert.AreEqual(3, wb1.NumberOfSheets);
+            wb1.RemoveSheetAt(0);
+            Assert.AreEqual(2, wb1.NumberOfSheets);
 
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            Assert.AreEqual(2, wb.NumberOfSheets);
-            wb.RemoveSheetAt(0);
-            Assert.AreEqual(1, wb.NumberOfSheets);
-            wb.RemoveSheetAt(0);
-            Assert.AreEqual(0, wb.NumberOfSheets);
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            wb1.Close();
 
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            Assert.AreEqual(0, wb.NumberOfSheets);
+            Assert.AreEqual(2, wb2.NumberOfSheets);
+            wb2.RemoveSheetAt(0);
+            Assert.AreEqual(1, wb2.NumberOfSheets);
+            wb2.RemoveSheetAt(0);
+            Assert.AreEqual(0, wb2.NumberOfSheets);
+
+            HSSFWorkbook wb3 = HSSFTestDataSamples.WriteOutAndReadBack(wb2);
+            wb2.Close();
+
+            Assert.AreEqual(0, wb3.NumberOfSheets);
+            wb3.Close();
         }
 
         [Test]
         public void Bug56325a()
         {
-            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("56325a.xls");
+            HSSFWorkbook wb1 = HSSFTestDataSamples.OpenSampleWorkbook("56325a.xls");
 
-            HSSFSheet sheet = wb.CloneSheet(2) as HSSFSheet;
-            wb.SetSheetName(3, "Clone 1");
+            HSSFSheet sheet = wb1.CloneSheet(2) as HSSFSheet;
+            wb1.SetSheetName(3, "Clone 1");
             sheet.RepeatingRows = (/*setter*/CellRangeAddress.ValueOf("2:3"));
-            wb.SetPrintArea(3, "$A$4:$C$10");
+            wb1.SetPrintArea(3, "$A$4:$C$10");
 
-            sheet = wb.CloneSheet(2) as HSSFSheet;
-            wb.SetSheetName(4, "Clone 2");
+            sheet = wb1.CloneSheet(2) as HSSFSheet;
+            wb1.SetSheetName(4, "Clone 2");
             sheet.RepeatingRows = (/*setter*/CellRangeAddress.ValueOf("2:3"));
-            wb.SetPrintArea(4, "$A$4:$C$10");
+            wb1.SetPrintArea(4, "$A$4:$C$10");
 
-            wb.RemoveSheetAt(2);
+            wb1.RemoveSheetAt(2);
 
-            IWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            Assert.AreEqual(4, wbBack.NumberOfSheets);
+            IWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            Assert.AreEqual(4, wb2.NumberOfSheets);
 
-            //        OutputStream fOut = new FileOutputStream("/tmp/56325a.xls");
-            //        try {
-            //        	wb.Write(fOut);
-            //        } finally {
-            //        	fOut.Close();
-            //        }
+            wb2.Close();
+            wb1.Close();
         }
 
 
@@ -3118,7 +3111,7 @@ namespace TestCases.HSSF.UserModel
             //assertEquals("'56737.xls'!NR_Global_B2", cRefWName.getCellFormula());
             // TODO This isn't right, but it's what we currently generate....
             Assert.AreEqual("NR_Global_B2", cRefWName.CellFormula);
-        
+
 
             // Try to Evaluate them
             IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
@@ -3162,17 +3155,29 @@ namespace TestCases.HSSF.UserModel
         {
             IWorkbook wb = OpenSample("Intersection-52111.xls");
             ISheet s = wb.GetSheetAt(0);
+            assertFormula(wb, s.GetRow(2).GetCell(0), "(C2:D3 D3:E4)", "4");
+            assertFormula(wb, s.GetRow(6).GetCell(0), "Tabelle2!E:E Tabelle2!$A11:$IV11", "5");
+            assertFormula(wb, s.GetRow(8).GetCell(0), "Tabelle2!E:F Tabelle2!$A11:$IV12", null);
+        }
 
-            // Check we can read it correctly
-            ICell intF = s.GetRow(2).GetCell(0);
+        private void assertFormula(IWorkbook wb, ICell intF, String expectedFormula, String expectedResultOrNull)
+        {
             Assert.AreEqual(CellType.Formula, intF.CellType);
-            Assert.AreEqual(CellType.Numeric, intF.CachedFormulaResultType);
+            if (null == expectedResultOrNull)
+            {
+                Assert.AreEqual(CellType.Error, intF.CachedFormulaResultType);
+                expectedResultOrNull = "#VALUE!";
+            }
+            else
+            {
+                Assert.AreEqual(CellType.Numeric, intF.CachedFormulaResultType);
+            }
 
-            Assert.AreEqual("(C2:D3 D3:E4)", intF.CellFormula);
+            Assert.AreEqual(expectedFormula, intF.CellFormula);
 
-            // Check we can Evaluate it correctly
+            // Check we can evaluate it correctly
             IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
-            Assert.AreEqual("4", eval.Evaluate(intF).FormatAsString());
+            Assert.AreEqual(expectedResultOrNull, eval.Evaluate(intF).FormatAsString());
         }
         [Test]
         public void Bug42016()
@@ -3260,5 +3265,225 @@ namespace TestCases.HSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Test53109()
+        {
+            HSSFWorkbook wb = OpenSample("53109.xls");
+
+            IWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.IsNotNull(wbBack);
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Test53109a()
+        {
+            HSSFWorkbook wb = OpenSample("com.aida-tour.www_SPO_files_maldives%20august%20october.xls");
+
+            IWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.IsNotNull(wbBack);
+
+            wb.Close();
+        }
+        [Test]
+        public void Test48043()
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("56325a.xls");
+
+            wb.RemoveSheetAt(2);
+            wb.RemoveSheetAt(1);
+
+            //Sheet s = wb.createSheet("sheetname");
+            ISheet s = wb.GetSheetAt(0);
+            IRow row = s.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+
+            cell.SetCellFormula(
+                    "IF(AND(ISBLANK(A10)," +
+                    "ISBLANK(B10)),\"\"," +
+                    "CONCATENATE(A10,\"-\",B10))");
+
+            IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
+
+            eval.EvaluateAll();
+
+            /*OutputStream out = new FileOutputStream("C:\\temp\\48043.xls");
+            try {
+              wb.write(out);
+            } finally {
+              out.close();
+            }*/
+
+            IWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.IsNotNull(wbBack);
+            wbBack.Close();
+
+            wb.Close();
+        }
+        [Test]
+        public void Test57925()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("57925.xls");
+
+            wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+
+            for (int i = 0; i < wb.NumberOfSheets; i++)
+            {
+                ISheet sheet = wb.GetSheetAt(i);
+                foreach (IRow row in sheet)
+                {
+                    foreach (ICell cell in row)
+                    {
+                        new DataFormatter().FormatCellValue(cell);
+                    }
+                }
+            }
+
+            wb.Close();
+        }
+
+
+        [Test]
+        public void Test46515()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("46515.xls");
+            // Get structure from webservice
+            String urlString = "http://poi.apache.org/resources/images/project-logo.jpg";
+            Uri structURL = new Uri(urlString);
+            Image bimage;
+            try
+            {
+                WebClient client = new WebClient();
+                MemoryStream ms = new MemoryStream(client.DownloadData(structURL));
+                bimage = Bitmap.FromStream(ms);
+                ms.Close();
+            }
+            catch (WebException)
+            {
+                //Assume.assumeNoException("Downloading a jpg from poi.apache.org should work", e);
+                return;
+            }
+            // Convert BufferedImage to byte[]
+            ByteArrayOutputStream imageBAOS = new ByteArrayOutputStream();
+            //ImageIO.write(bimage, "jpeg", imageBAOS);
+            bimage.Save(imageBAOS, ImageFormat.Jpeg);
+            imageBAOS.Flush();
+            byte[] imageBytes = imageBAOS.ToByteArray();
+            imageBAOS.Close();
+            // Pop structure into Structure HSSFSheet
+            int pict = wb.AddPicture(imageBytes, PictureType.JPEG);
+            ISheet sheet = wb.GetSheet("Structure");
+            Assert.IsNotNull(sheet, "Did not find sheet");
+            HSSFPatriarch patriarch = (HSSFPatriarch)sheet.CreateDrawingPatriarch();
+            HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 0, 0, (short)1, 1, (short)10, 22);
+            anchor.AnchorType = AnchorType.MoveDontResize; //(2);
+            patriarch.CreatePicture(anchor, pict);
+            // Write out destination file
+            //        FileOutputStream fileOut = new FileOutputStream("/tmp/46515.xls");
+            //        wb.write(fileOut);
+            //        fileOut.close();
+            wb.Close();
+        }
+        [Test]
+        public void Test55668()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("55668.xls");
+            ISheet sheet = wb.GetSheetAt(0);
+            IRow row = sheet.GetRow(0);
+            ICell cell = row.GetCell(0);
+            Assert.AreEqual(CellType.Formula, cell.CellType);
+            Assert.AreEqual("IF(TRUE,\"\",\"\")", cell.CellFormula);
+            Assert.AreEqual("", cell.StringCellValue);
+            cell.SetCellType(CellType.String);
+            Assert.AreEqual(CellType.Blank, cell.CellType);
+            try
+            {
+                Assert.IsNull(cell.CellFormula);
+                Assert.Fail("Should throw an exception here");
+            }
+            catch (InvalidOperationException e)
+            {
+                // expected here
+            }
+            Assert.AreEqual("", cell.StringCellValue);
+            wb.Close();
+        }
+
+        [Test]
+        public void Test55982()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("55982.xls");
+            ISheet newSheet = wb.CloneSheet(1);
+            Assert.IsNotNull(newSheet);
+            wb.Close();
+        }
+
+        /**
+         * Test generator of ids for the CommonObjectDataSubRecord record.
+         */
+        [Test]
+        public void Test51332()
+        {
+            HSSFClientAnchor anchor = new HSSFClientAnchor();
+            HSSFSimpleShape shape;
+            CommonObjectDataSubRecord cmo;
+
+            shape = new HSSFTextbox(null, anchor);
+            shape.ShapeId = 1025;
+            cmo = (CommonObjectDataSubRecord)shape.GetObjRecord().SubRecords[0];
+            Assert.AreEqual(1, cmo.ObjectId);
+            shape = new HSSFPicture(null, anchor);
+            shape.ShapeId = 1026;
+            cmo = (CommonObjectDataSubRecord)shape.GetObjRecord().SubRecords[0];
+            Assert.AreEqual(2, cmo.ObjectId);
+            shape = new HSSFComment(null, anchor);
+            shape.ShapeId = 1027;
+            cmo = (CommonObjectDataSubRecord)shape.GetObjRecord().SubRecords[0];
+            Assert.AreEqual(1027, cmo.ObjectId);
+        }
+
+
+        // As of POI 3.15 beta 2, LibreOffice does not display the diagonal border while it does display the bottom border
+        // I have not checked Excel to know if this is a LibreOffice or a POI problem.
+        [Test]
+        public void Test53564()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet("Page 1") as HSSFSheet;
+            short BLUE = 30;
+
+            HSSFSheetConditionalFormatting scf = sheet.SheetConditionalFormatting as HSSFSheetConditionalFormatting;
+            HSSFConditionalFormattingRule rule = scf.CreateConditionalFormattingRule(ComparisonOperator.GreaterThan, "10") as HSSFConditionalFormattingRule;
+
+            HSSFBorderFormatting bord = rule.CreateBorderFormatting() as HSSFBorderFormatting;
+            bord.BorderDiagonal = BorderStyle.Thick;
+            Assert.AreEqual(BorderStyle.Thick, bord.BorderDiagonal);
+            bord.IsBackwardDiagonalOn = true;
+            Assert.IsTrue(bord.IsBackwardDiagonalOn);
+            bord.IsForwardDiagonalOn = true;
+            Assert.IsTrue(bord.IsForwardDiagonalOn);
+
+            bord.DiagonalBorderColor = BLUE;
+            Assert.AreEqual(BLUE, bord.DiagonalBorderColor);
+            // Create the bottom border style so we know what a border is supposed to look like
+            bord.BorderBottom = BorderStyle.Thick;
+            Assert.AreEqual(BorderStyle.Thick, bord.BorderBottom);
+            bord.BottomBorderColor = BLUE;
+            Assert.AreEqual(BLUE, bord.BottomBorderColor);
+
+            CellRangeAddress[] A2_D4 = { new CellRangeAddress(1, 3, 0, 3) };
+            scf.AddConditionalFormatting(A2_D4, rule);
+
+            // Set a cell value within the conditional formatting range whose rule would resolve to True.
+            ICell C3 = sheet.CreateRow(2).CreateCell(2);
+            C3.SetCellValue(30.0);
+
+            // Manually check the output file with Excel to see if the diagonal border is present
+            //OutputStream fos = new FileOutputStream("/tmp/53564.xls");
+            //wb.write(fos);
+            //fos.Close();
+            wb.Close();
+        }
     }
 }

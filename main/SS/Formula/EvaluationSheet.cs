@@ -32,5 +32,12 @@ namespace NPOI.SS.Formula
          * @return <c>null</c> if there is no cell at the specified coordinates
          */
         IEvaluationCell GetCell(int rowIndex, int columnIndex);
+        /**
+         * Propagated from {@link EvaluationWorkbook#clearAllCachedResultValues()} to clear locally cached data.
+         * 
+         * @see WorkbookEvaluator#clearAllCachedResultValues()
+         * @see EvaluationWorkbook#clearAllCachedResultValues()
+         */
+        void ClearAllCachedResultValues();
     }
 }

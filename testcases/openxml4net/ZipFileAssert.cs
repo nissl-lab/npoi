@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using ICSharpCode.SharpZipLib.Zip;
 using NUnit.Framework;
-namespace TestCases.OPC
+namespace TestCases.OpenXml4Net.OPC
 {
 
     /**

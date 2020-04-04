@@ -62,10 +62,16 @@ namespace NPOI.HSSF.UserModel
                 String formula1,
                 String formula2)
         {
-
-            HSSFWorkbook wb = (HSSFWorkbook)_sheet.Workbook;
             CFRuleRecord rr = CFRuleRecord.Create(_sheet, (byte)comparisonOperation, formula1, formula2);
-            return new HSSFConditionalFormattingRule(wb, rr);
+            return new HSSFConditionalFormattingRule(_sheet, rr);
+        }
+
+        public IConditionalFormattingRule CreateConditionalFormattingRule(
+            ComparisonOperator comparisonOperation,
+            String formula1)
+        {
+            CFRuleRecord rr = CFRuleRecord.Create(_sheet, (byte)comparisonOperation, formula1, null);
+            return new HSSFConditionalFormattingRule(_sheet, rr);
         }
 
         /// <summary>
@@ -77,18 +83,63 @@ namespace NPOI.HSSF.UserModel
         /// <returns></returns>
         public IConditionalFormattingRule CreateConditionalFormattingRule(String formula)
         {
-            HSSFWorkbook wb = (HSSFWorkbook)_sheet.Workbook;
             CFRuleRecord rr = CFRuleRecord.Create(_sheet, formula);
-            return new HSSFConditionalFormattingRule(wb, rr);
+            return new HSSFConditionalFormattingRule(_sheet, rr);
         }
+
+        /**
+         * A factory method allowing the creation of conditional formatting
+         *  rules using an Icon Set / Multi-State formatting.
+         * The thresholds for it will be created, but will be empty
+         *  and require configuring with 
+         *  {@link HSSFConditionalFormattingRule#getMultiStateFormatting()}
+         *  then
+         *  {@link HSSFIconMultiStateFormatting#getThresholds()}
+         */
         public IConditionalFormattingRule CreateConditionalFormattingRule(
-            ComparisonOperator comparisonOperation,
-            String formula1)
+                IconSet iconSet)
         {
-            HSSFWorkbook wb = (HSSFWorkbook)_sheet.Workbook;
-            CFRuleRecord rr = CFRuleRecord.Create(_sheet, (byte)comparisonOperation, formula1, null);
-            return new HSSFConditionalFormattingRule(wb, rr);
+            CFRule12Record rr = CFRule12Record.Create(_sheet, iconSet);
+            return new HSSFConditionalFormattingRule(_sheet, rr);
         }
+
+        /**
+         * Create a Databar conditional formatting rule.
+         * <p>The thresholds and colour for it will be created, but will be 
+         *  empty and require configuring with 
+         *  {@link HSSFConditionalFormattingRule#getDataBarFormatting()}
+         *  then
+         *  {@link HSSFDataBarFormatting#getMinThreshold()}
+         *  and 
+         *  {@link HSSFDataBarFormatting#getMaxThreshold()}
+         */
+        public HSSFConditionalFormattingRule CreateConditionalFormattingRule(HSSFExtendedColor color)
+        {
+            CFRule12Record rr = CFRule12Record.Create(_sheet, color.ExtendedColor);
+            return new HSSFConditionalFormattingRule(_sheet, rr);
+        }
+        public IConditionalFormattingRule CreateConditionalFormattingRule(ExtendedColor color)
+        {
+            return CreateConditionalFormattingRule((HSSFExtendedColor)color);
+        }
+
+        /**
+         * Create a Color Scale / Color Gradient conditional formatting rule.
+         * <p>The thresholds and colours for it will be created, but will be 
+         *  empty and require configuring with 
+         *  {@link HSSFConditionalFormattingRule#getColorScaleFormatting()}
+         *  then
+         *  {@link HSSFColorScaleFormatting#getThresholds()}
+         *  and
+         *  {@link HSSFColorScaleFormatting#getColors()}
+         */
+        public IConditionalFormattingRule CreateConditionalFormattingColorScaleRule()
+        {
+            CFRule12Record rr = CFRule12Record.CreateColorScale(_sheet);
+            return new HSSFConditionalFormattingRule(_sheet, rr);
+        }
+
+
         /// <summary>
         /// Adds a copy of HSSFConditionalFormatting object to the sheet
         /// This method could be used to copy HSSFConditionalFormatting object
@@ -100,11 +151,15 @@ namespace NPOI.HSSF.UserModel
         /// HSSFConditionalFormatting cf = sheet.GetConditionalFormattingAt(index);
         /// newSheet.AddConditionalFormatting(cf);
         /// </example>
-        public int AddConditionalFormatting(IConditionalFormatting cf)
+        public int AddConditionalFormatting(HSSFConditionalFormatting cf)
         {
-            CFRecordsAggregate cfraClone = ((HSSFConditionalFormatting)cf).CFRecordsAggregate.CloneCFAggregate();
+            CFRecordsAggregate cfraClone = cf.CFRecordsAggregate.CloneCFAggregate();
 
             return _conditionalFormattingTable.Add(cfraClone);
+        }
+        public int AddConditionalFormatting(IConditionalFormatting cf)
+        {
+            return AddConditionalFormatting((HSSFConditionalFormatting)cf);
         }
 
         /// <summary>
@@ -132,7 +187,7 @@ namespace NPOI.HSSF.UserModel
                 throw new ArgumentException("Number of rules must not exceed 3");
             }
 
-            CFRuleRecord[] rules = new CFRuleRecord[cfRules.Length];
+            CFRuleBase[] rules = new CFRuleBase[cfRules.Length];
             for (int i = 0; i != cfRules.Length; i++)
             {
                 rules[i] = ((HSSFConditionalFormattingRule)cfRules[i]).CfRuleRecord;
@@ -194,7 +249,7 @@ namespace NPOI.HSSF.UserModel
             {
                 return null;
             }
-            return new HSSFConditionalFormatting((HSSFWorkbook)_sheet.Workbook, cf);
+            return new HSSFConditionalFormatting(_sheet, cf);
         }
 
         /// <summary>

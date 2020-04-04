@@ -1056,7 +1056,38 @@ namespace NPOI.XSSF.UserModel
                 return false;
             }
         }
+        /**
+         * Set or unset this paragraph as a bullet point
+         * 
+         * @param flag whether text in this paragraph has bullets
+         */
+        public void SetBullet(bool flag)
+        {
+            if (IsBullet == flag) return;
 
+            CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
+            if (!flag)
+            {
+                pr.AddNewBuNone();
+
+                if (pr.IsSetBuAutoNum()) pr.UnsetBuAutoNum();
+                if (pr.IsSetBuBlip()) pr.UnsetBuBlip();
+                if (pr.IsSetBuChar()) pr.UnsetBuChar();
+                if (pr.IsSetBuClr()) pr.UnsetBuClr();
+                if (pr.IsSetBuClrTx()) pr.UnsetBuClrTx();
+                if (pr.IsSetBuFont()) pr.UnsetBuFont();
+                if (pr.IsSetBuFontTx()) pr.UnsetBuFontTx();
+                if (pr.IsSetBuSzPct()) pr.UnsetBuSzPct();
+                if (pr.IsSetBuSzPts()) pr.UnsetBuSzPts();
+                if (pr.IsSetBuSzTx()) pr.UnsetBuSzTx();
+            }
+            else
+            {
+                if (pr.IsSetBuNone()) pr.UnsetBuNone();
+                if (!pr.IsSetBuFont()) pr.AddNewBuFont().typeface = "Arial";
+                if (!pr.IsSetBuAutoNum()) pr.AddNewBuChar().@char = "\u2022";
+            }
+        }
         /**
          * Set this paragraph as an automatic numbered bullet point
          *

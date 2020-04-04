@@ -70,6 +70,10 @@ namespace NPOI.HSSF.Record
 
         public RowRecord(int rowNumber)
         {
+            if (rowNumber < 0)
+            {
+                throw new ArgumentException("Invalid row number (" + rowNumber + ")");
+            }
             field_1_row_number = rowNumber;
             //field_2_first_col = -1;
             //field_3_last_col = -1;
@@ -90,6 +94,10 @@ namespace NPOI.HSSF.Record
         public RowRecord(RecordInputStream in1)
         {
             field_1_row_number = in1.ReadUShort();
+            if (field_1_row_number < 0)
+            {
+                throw new ArgumentException("Invalid row number " + field_1_row_number + " found in InputStream");
+            }
             field_2_first_col = in1.ReadShort();
             field_3_last_col = in1.ReadShort();
             field_4_height = in1.ReadShort();

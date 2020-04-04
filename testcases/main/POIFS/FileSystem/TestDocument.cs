@@ -67,19 +67,19 @@ namespace TestCases.POIFS.FileSystem
          * @exception IOException
          */
         [Test]
-        public void TestPOIFSDocument()
+        public void TestOPOIFSDocument()
         {
 
             // Verify correct number of blocks Get Created for document
             // that is exact multituple of block size
-            POIFSDocument document;
+            OPOIFSDocument document;
             byte[] array = new byte[4096];
 
             for (int j = 0; j < array.Length; j++)
             {
                 array[j] = (byte)j;
             }
-            document = new POIFSDocument("foo", new SlowInputStream(new MemoryStream(array)));
+            document = new OPOIFSDocument("foo", new SlowInputStream(new MemoryStream(array)));
             checkDocument(document, array);
 
             // Verify correct number of blocks Get Created for document
@@ -89,7 +89,7 @@ namespace TestCases.POIFS.FileSystem
             {
                 array[j] = (byte)j;
             }
-            document = new POIFSDocument("bar", new MemoryStream(array));
+            document = new OPOIFSDocument("bar", new MemoryStream(array));
             checkDocument(document, array);
 
             // Verify correct number of blocks Get Created for document
@@ -99,7 +99,7 @@ namespace TestCases.POIFS.FileSystem
             {
                 array[j] = (byte)j;
             }
-            document = new POIFSDocument("_bar", new MemoryStream(array));
+            document = new OPOIFSDocument("_bar", new MemoryStream(array));
             checkDocument(document, array);
 
             // Verify correct number of blocks Get Created for document
@@ -109,7 +109,7 @@ namespace TestCases.POIFS.FileSystem
             {
                 array[j] = (byte)j;
             }
-            document = new POIFSDocument("_bar2",
+            document = new OPOIFSDocument("_bar2",
                                          new MemoryStream(array));
             checkDocument(document, array);
 
@@ -119,7 +119,7 @@ namespace TestCases.POIFS.FileSystem
             {
                 array[j] = (byte)j;
             }
-            document = new POIFSDocument("foobar",
+            document = new OPOIFSDocument("foobar",
                                          new MemoryStream(array));
             checkDocument(document, array);
             document.StartBlock=0x12345678;   // what a big file!!
@@ -166,10 +166,10 @@ namespace TestCases.POIFS.FileSystem
             }
         }
 
-        private POIFSDocument makeCopy(POIFSDocument document, byte[] input,
+        private OPOIFSDocument makeCopy(OPOIFSDocument document, byte[] input,
                                        byte[] data)
         {
-            POIFSDocument copy = null;
+            OPOIFSDocument copy = null;
 
             if (input.Length >= 4096)
             {
@@ -188,12 +188,12 @@ namespace TestCases.POIFS.FileSystem
                     }
                     blocks[index++] = block;
                 }
-                copy = new POIFSDocument("test" + input.Length, blocks,
+                copy = new OPOIFSDocument("test" + input.Length, blocks,
                                          input.Length);
             }
             else
             {
-                copy = new POIFSDocument(
+                copy = new OPOIFSDocument(
                     "test" + input.Length,
                     (SmallDocumentBlock[])document.SmallBlocks,
                     input.Length);
@@ -201,7 +201,7 @@ namespace TestCases.POIFS.FileSystem
             return copy;
         }
 
-        private void checkDocument(POIFSDocument document,
+        private void checkDocument(OPOIFSDocument document,
                                    byte[] input)
         {
             int big_blocks = 0;
@@ -228,7 +228,7 @@ namespace TestCases.POIFS.FileSystem
         }
 
         private byte[] checkValues(int big_blocks, int small_blocks,
-                                    int total_output, POIFSDocument document,
+                                    int total_output, OPOIFSDocument document,
                                     byte[] input)
         {
             Assert.AreEqual(document, document.DocumentProperty.Document);

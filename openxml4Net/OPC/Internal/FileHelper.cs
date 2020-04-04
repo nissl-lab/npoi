@@ -39,7 +39,10 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         public static void CopyFile(string inpath, string outpath){
             File.Copy(inpath, outpath,true);
         }
-
+        public static void CopyFile(FileInfo inpath, FileInfo outpath)
+        {
+            File.Copy(inpath.FullName, outpath.FullName, true);
+        }
         /**
          * Get file name from the specified File object.
          */

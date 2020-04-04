@@ -29,7 +29,7 @@ namespace NPOI.DDF
     /// we do not explicitly support.
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
-    public class UnknownEscherRecord : EscherRecord
+    public class UnknownEscherRecord : EscherRecord, ICloneable
     {
         private static byte[] NO_BYTES = new byte[0];
 
@@ -148,6 +148,16 @@ namespace NPOI.DDF
         {
             get { return _childRecords; }
             set { this._childRecords = value; }
+        }
+
+
+        public override object Clone()
+        {
+            UnknownEscherRecord uer = new UnknownEscherRecord();
+            uer._thedata = (byte[])this._thedata.Clone();
+            uer.Options = (this.Options);
+            uer.RecordId = (this.RecordId);
+            return uer;
         }
 
         /// <summary>

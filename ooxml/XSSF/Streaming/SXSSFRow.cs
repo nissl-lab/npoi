@@ -40,10 +40,10 @@ namespace NPOI.XSSF.Streaming
         {
             _sheet = sheet;
         }
-
-        public IEnumerator<ICell> allCellsIterator()
+        
+        public CellIterator AllCellsIterator()
         {
-            return new CellIterator(LastCellNum, null);
+            return new CellIterator(LastCellNum, _cells);
         }
         public bool HasCustomHeight()
         {
@@ -61,7 +61,7 @@ namespace NPOI.XSSF.Streaming
             {
                 try
                 {
-                    return (short) _cells.Keys.First();
+                    return (short) _cells.First().Key;
                 }
                 catch
                 {
@@ -119,12 +119,22 @@ namespace NPOI.XSSF.Streaming
 
         public int RowNum
         {
-            get { throw new NotImplementedException();/*return Sheet.GetRow(this);*/ }
+            get
+            {
+                return _sheet.GetRowNum(this);
+            }
 
             set
             {
-                throw new NotImplementedException();
+                _sheet.ChangeRowNum(this, value);
+            }
+        }
 
+        internal int RowStyleIndex
+        {
+            get
+            {
+                return _style;
             }
         }
 
@@ -162,6 +172,27 @@ namespace NPOI.XSSF.Streaming
             set { _zHeight = value; }
         }
 
+        /**
+         * Compares two <code>SXSSFRow</code> objects.  Two rows are equal if they belong to the same worksheet and
+         * their row indexes are equal.
+         *
+         * @param   other   the <code>SXSSFRow</code> to be compared.
+         * @return  <ul>
+         *      <li>
+         *      the value <code>0</code> if the row number of this <code>SXSSFRow</code> is
+         *      equal to the row number of the argument <code>SXSSFRow</code>
+         *      </li>
+         *      <li>
+         *      a value less than <code>0</code> if the row number of this this <code>SXSSFRow</code> is
+         *      numerically less than the row number of the argument <code>SXSSFRow</code>
+         *      </li>
+         *      <li>
+         *      a value greater than <code>0</code> if the row number of this this <code>SXSSFRow</code> is
+         *      numerically greater than the row number of the argument <code>SXSSFRow</code>
+         *      </li>
+         *      </ul>
+         * @throws IllegalArgumentException if the argument row belongs to a different worksheet
+         */
         public int CompareTo(SXSSFRow other)
         {
             if (this.Sheet != other.Sheet)
@@ -173,6 +204,24 @@ namespace NPOI.XSSF.Streaming
             var otherRow = other.RowNum;
             return thisRow.CompareTo(otherRow);
         }
+
+        public override bool Equals(Object obj)
+        {
+            if (!(obj is SXSSFRow))
+        {
+                return false;
+            }
+            SXSSFRow other = (SXSSFRow)obj;
+
+            return (this.RowNum == other.RowNum) &&
+                   (this.Sheet == other.Sheet);
+        }
+
+        public override int GetHashCode()
+        {
+            return _cells.GetHashCode();// (Sheet.GetHashCode() << 16) + RowNum;
+        }
+
 
         public ICell CopyCell(int sourceIndex, int targetIndex)
         {
@@ -193,7 +242,7 @@ namespace NPOI.XSSF.Streaming
         {
             CheckBounds(column);
             SXSSFCell cell = new SXSSFCell(this, type);
-            _cells.Add(column, cell);
+            _cells[column] = cell;
             return cell;
         }
 
@@ -208,7 +257,7 @@ namespace NPOI.XSSF.Streaming
             int maxcol = SpreadsheetVersion.EXCEL2007.LastColumnIndex;
             if (cellIndex < 0 || cellIndex > maxcol)
             {
-                throw new InvalidOperationException("Invalid column index (" + cellIndex
+                throw new ArgumentException("Invalid column index (" + cellIndex
                         + ").  Allowable column range for " + v.DefaultExtension + " is (0.."
                         + maxcol + ") or ('A'..'" + v.LastColumnName + "')");
             }
@@ -224,22 +273,23 @@ namespace NPOI.XSSF.Streaming
         {
             CheckBounds(cellnum);
 
-            var cell = _cells[cellnum];
-
-            switch (policy._policy)
+            SXSSFCell cell = null;
+            if (_cells.ContainsKey(cellnum))
+                cell = _cells[cellnum];
+            switch (policy)
             {
-                case MissingCellPolicy.Policy.RETURN_NULL_AND_BLANK:
+                case MissingCellPolicy.RETURN_NULL_AND_BLANK:
                     return cell;
-                case MissingCellPolicy.Policy.RETURN_BLANK_AS_NULL:
+                case MissingCellPolicy.RETURN_BLANK_AS_NULL:
                     bool isBlank = (cell != null && cell.CellType == CellType.Blank);
                     return (isBlank) ? null : cell;
-                case MissingCellPolicy.Policy.CREATE_NULL_AS_BLANK:
+                case MissingCellPolicy.CREATE_NULL_AS_BLANK:
                     return (cell == null) ? CreateCell(cellnum, CellType.Blank) : cell;
                 default:
-                    throw new InvalidOperationException("Illegal policy " + policy + " (" + policy.id + ")");
+                    throw new ArgumentException("Illegal policy " + policy + " (" + policy + ")");
+
             }
         }
-
         public IEnumerator<ICell> GetEnumerator()
         {
             return new FilledCellIterator(_cells);
@@ -252,18 +302,18 @@ namespace NPOI.XSSF.Streaming
 
         public void RemoveCell(ICell cell)
         {
-            int index = getCellIndex((SXSSFCell)cell);
+            int index = GetCellIndex((SXSSFCell)cell);
             _cells.Remove(index);
         }
         /**
- * Return the column number of a cell if it is in this row
- * Otherwise return -1
- *
- * @param cell the cell to get the index of
- * @return cell column index if it is in this row, -1 otherwise
- */
+         * Return the column number of a cell if it is in this row
+         * Otherwise return -1
+         *
+         * @param cell the cell to get the index of
+         * @return cell column index if it is in this row, -1 otherwise
+         */
         /*package*/
-        public int getCellIndex(SXSSFCell cell)
+        public int GetCellIndex(SXSSFCell cell)
         {
             foreach (var entry in _cells)
             {
@@ -281,63 +331,62 @@ namespace NPOI.XSSF.Streaming
         }
 
         /**
-* Create an iterator over the cells from [0, getLastCellNum()).
-* Includes blank cells, excludes empty cells
-* 
-* Returns an iterator over all filled cells (created via Row.createCell())
-* Throws ConcurrentModificationException if cells are added, moved, or
-* removed after the iterator is created.
-*/
+        * Create an iterator over the cells from [0, getLastCellNum()).
+        * Includes blank cells, excludes empty cells
+        * 
+        * Returns an iterator over all filled cells (created via Row.createCell())
+        * Throws ConcurrentModificationException if cells are added, moved, or
+        * removed after the iterator is created.
+        */
         public class FilledCellIterator : IEnumerator<ICell>
         {
-            private SortedDictionary<int, SXSSFCell> _cells;
-            private int pos = -1;
+            //private SortedDictionary<int, SXSSFCell> _cells;
+            private IEnumerator<SXSSFCell> enumerator;
             public FilledCellIterator(SortedDictionary<int, SXSSFCell> cells)
             {
-                _cells = cells;
+                //_cells = cells;
+                enumerator = cells.Values.GetEnumerator();
             }
 
             public ICell Current
             {
-                get { return _cells[pos]; }
+                get { return enumerator.Current; }
             }
 
             object IEnumerator.Current
             {
                 get
                 {
-                    throw new NotImplementedException();
+                    return enumerator.Current;
                 }
             }
 
             public void Dispose()
-            {
-                throw new NotImplementedException();
+            { 
             }
 
             public IEnumerator<ICell> GetEnumerator()
             {
-                return _cells.Values.GetEnumerator();
+                return enumerator;
             }
 
             public bool MoveNext()
             {
-                pos += 1;
-                return _cells.ContainsKey(pos);
+                return enumerator.MoveNext();
             }
 
             public void Reset()
             {
-                throw new NotImplementedException();
+                enumerator.Reset();
             }
         }
 
         public class CellIterator : IEnumerator<ICell>
         {
-            private Dictionary<int, SXSSFCell> _cells;
+            private SortedDictionary<int, SXSSFCell> _cells;
             private int maxColumn;
             private int pos;
-            public CellIterator(int lastCellNum, Dictionary<int, SXSSFCell> cells)
+            public CellIterator(int lastCellNum, SortedDictionary<int, SXSSFCell> cells)
             {
                 maxColumn = lastCellNum; //last column PLUS ONE, SHOULD BE DERIVED from cells enum.
                 pos = 0;
@@ -362,16 +411,14 @@ namespace NPOI.XSSF.Streaming
             }
 
             public void Dispose()
-            {
-                throw new NotImplementedException();
-            }
+            { }
 
             public IEnumerator<ICell> GetEnumerator()
             {
                 throw new NotImplementedException();
             }
 
-            public bool hasNext()
+            public bool HasNext()
             {
                 return pos < maxColumn;
             }
@@ -381,15 +428,23 @@ namespace NPOI.XSSF.Streaming
                 throw new NotImplementedException();
             }
 
-            public ICell next()
+            public ICell Next()
             {
-                if (hasNext())
-                    return _cells[pos++];
+                if (HasNext())
+                {
+                    if (_cells.ContainsKey(pos))
+                        return _cells[pos++];
+                    else
+                    {
+                        pos++;
+                        return null;
+                    }
+                }
                 else
                     throw new NullReferenceException();
             }
 
-            public void remove()
+            public void Remove()
             {
                 throw new InvalidOperationException();
             }

@@ -218,7 +218,10 @@ namespace NPOI.Util
             //PutNumber(data, offset, value, LittleEndianConsts.BYTE_SIZE);
         }
 
-
+        public static void PutUByte(byte[] data, int offset, short value)
+        {
+            data[offset] = (byte)(value & 0xFF);
+        }
         /// <summary>
         /// Puts the U short.
         /// </summary>
@@ -231,18 +234,6 @@ namespace NPOI.Util
             int i = offset;
             data[i++] = (byte)((value >> 0) & 0xFF);
             data[i++] = (byte)((value >> 8) & 0xFF);
-        }
-
-
-        /// <summary>
-        /// put a short value into beginning of a byte array
-        /// </summary>
-        /// <param name="data">the byte array</param>
-        /// <param name="value">the short (16-bit) value</param>
-        [Obsolete]
-        public static void PutShort(byte[] data, short value)
-        {
-            PutShort(data, 0, value);
         }
 
         /**
@@ -274,17 +265,6 @@ namespace NPOI.Util
             data[i++] = (byte)((value >> 8) & 0xFF);
             data[i++] = (byte)((value >> 16) & 0xFF);
             data[i++] = (byte)((value >> 24) & 0xFF);
-        }
-
-        /// <summary>
-        /// put an int value into beginning of a byte array
-        /// </summary>
-        /// <param name="data">the byte array</param>
-        /// <param name="value">the int (32-bit) value</param>
-        [Obsolete]
-        public static void PutInt(byte[] data, int value)
-        {
-            PutInt(data, 0, value);
         }
 
         /// <summary>
@@ -429,19 +409,6 @@ namespace NPOI.Util
         }
 
         /// <summary>
-        /// get the unsigned value of a byte.
-        /// </summary>
-        /// <param name="data">the byte array.</param>
-        /// <param name="offset">a starting offset into the byte array.</param>
-        /// <returns>the unsigned value of the byte as a 32 bit integer</returns>
-        [Obsolete]
-        public static int GetUnsignedByte(byte[] data, int offset)
-        {
-            return data[offset] & 0xFF;
-        }
-
-
-        /// <summary>
         /// Copy a portion of a byte array
         /// </summary>
         /// <param name="data"> the original byte array</param>
@@ -552,19 +519,6 @@ namespace NPOI.Util
             PutLong(BitConverter.DoubleToInt64Bits(value), outputStream);
         }
 
-
-
-        /// <summary>
-        /// Puts the uint.
-        /// </summary>
-        /// <param name="data">the byte array</param>
-        /// <param name="value">The value.</param>
-        [Obsolete]
-        public static void PutUInt(byte[] data, uint value)
-        {
-            PutUInt(data, 0, value);
-        }
-
         /**
          * Put unsigned int into output stream
          * 
@@ -594,7 +548,14 @@ namespace NPOI.Util
         {
             PutNumber(data, offset, Convert.ToInt64(value), LittleEndianConsts.UINT_SIZE);
         }
-
+        public static void PutUInt(byte[] data, int offset, long value)
+        {
+            int i = offset;
+            data[i++] = (byte)((value >> 0) & 0xFF);
+            data[i++] = (byte)((value >> 8) & 0xFF);
+            data[i++] = (byte)((value >> 16) & 0xFF);
+            data[i++] = (byte)((value >> 24) & 0xFF);
+        }
         /// <summary>
         /// Puts the long.
         /// </summary>

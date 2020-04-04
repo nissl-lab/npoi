@@ -25,7 +25,7 @@ using System;
 using NPOI.OpenXmlFormats;
 using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.XSSF.UserModel;
-namespace TestCases.OPC
+namespace TestCases.OpenXml4Net.OPC
 {
 
     [TestFixture]
@@ -58,59 +58,76 @@ namespace TestCases.OPC
 
             // Open namespace
             OPCPackage p = OPCPackage.Open(inputPath, PackageAccess.READ_WRITE);
-            try
-            {
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-                DateTime dateToInsert = DateTime.Parse("2007-05-12T08:00:00Z").ToUniversalTime();
 
-                PackageProperties props = p.GetPackageProperties();
-                props.SetCategoryProperty("MyCategory");
-                props.SetContentStatusProperty("MyContentStatus");
-                props.SetContentTypeProperty("MyContentType");
-                props.SetCreatedProperty(new DateTime?(dateToInsert));
-                props.SetCreatorProperty("MyCreator");
-                props.SetDescriptionProperty("MyDescription");
-                props.SetIdentifierProperty("MyIdentifier");
-                props.SetKeywordsProperty("MyKeywords");
-                props.SetLanguageProperty("MyLanguage");
-                props.SetLastModifiedByProperty("Julien Chable");
-                props.SetLastPrintedProperty(new Nullable<DateTime>(dateToInsert));
-                props.SetModifiedProperty(new Nullable<DateTime>(dateToInsert));
-                props.SetRevisionProperty("2");
-                props.SetTitleProperty("MyTitle");
-                props.SetSubjectProperty("MySubject");
-                props.SetVersionProperty("2");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            df.TimeZone = TimeZoneInfo.Utc;
+            DateTime dateToInsert = df.Parse("2007-05-12T08:00:00Z");
 
-                using (FileStream fs = outputFile.OpenWrite())
-                {
-                    // Save the namespace in the output directory
-                    p.Save(fs);
-                }
+            SimpleDateFormat msdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.fff'Z'");
+            msdf.TimeZone = TimeZoneInfo.Utc;
 
-                // Open the newly Created file to check core properties saved values.
-                OPCPackage p2 = OPCPackage.Open(outputFile.Name, PackageAccess.READ);
-                try
-                {
-                    CompareProperties(p2);
-                    p2.Revert();
-                }
-                finally
-                {
-                    p2.Close();
-                }
-                outputFile.Delete();
-            }
-            finally
-            {
-                // use revert to not re-write the input file
-                p.Revert();
-            }
+            PackageProperties props = p.GetPackageProperties();
+
+            //test various date formats
+            props.SetCreatedProperty("2007-05-12T08:00:00Z");
+            Assert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
+
+            props.SetCreatedProperty("2007-05-12T08:00:00"); //no Z, assume Z
+            Assert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
+
+            props.SetCreatedProperty("2007-05-12T08:00:00.123Z");//millis
+            Assert.AreEqual(msdf.Parse("2007-05-12T08:00:00.123Z"), props.GetCreatedProperty().Value);
+
+            props.SetCreatedProperty("2007-05-12T10:00:00+0200");
+            Assert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
+
+            props.SetCreatedProperty("2007-05-12T10:00:00+02:00");//colon in tz
+            Assert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
+
+            props.SetCreatedProperty("2007-05-12T06:00:00-0200");
+            Assert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
+
+            props.SetCreatedProperty("2007-05-12T10:00:00.123+0200");
+            Assert.AreEqual(msdf.Parse("2007-05-12T08:00:00.123Z"), props.GetCreatedProperty().Value);
+
+            props.SetCategoryProperty("MyCategory");
+
+            props.SetCategoryProperty("MyCategory");
+            props.SetContentStatusProperty("MyContentStatus");
+            props.SetContentTypeProperty("MyContentType");
+            //props.SetCreatedProperty(new DateTime?(dateToInsert));
+            props.SetCreatorProperty("MyCreator");
+            props.SetDescriptionProperty("MyDescription");
+            props.SetIdentifierProperty("MyIdentifier");
+            props.SetKeywordsProperty("MyKeywords");
+            props.SetLanguageProperty("MyLanguage");
+            props.SetLastModifiedByProperty("Julien Chable");
+            props.SetLastPrintedProperty(new Nullable<DateTime>(dateToInsert));
+            props.SetModifiedProperty(new Nullable<DateTime>(dateToInsert));
+            props.SetRevisionProperty("2");
+            props.SetTitleProperty("MyTitle");
+            props.SetSubjectProperty("MySubject");
+            props.SetVersionProperty("2");
+            // Save the package in the output directory
+            p.Save(outputFile.FullName);
+            p.Revert();
+
+
+            // Open the newly Created file to check core properties saved values.
+            OPCPackage p2 = OPCPackage.Open(outputFile.FullName, PackageAccess.READ);
+
+            CompareProperties(p2);
+            p2.Revert();
+
+            outputFile.Delete();
+
         }
 
         private void CompareProperties(OPCPackage p)
         {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-            DateTime expectedDate = DateTime.Parse("2007/05/12T08:00:00Z").ToUniversalTime();
+            df.TimeZone = TimeZoneInfo.Utc;
+            DateTime expectedDate = df.Parse("2007-05-12T08:00:00Z");
 
             // Gets the core properties
             PackageProperties props = p.GetPackageProperties();
@@ -201,10 +218,12 @@ namespace TestCases.OPC
             MemoryStream out1 = new MemoryStream();
             pkg1.Save(out1);
             out1.Close();
+            pkg1.Close();
 
             OPCPackage pkg2 = OPCPackage.Open(new MemoryStream(out1.ToArray()));
             PackageProperties props2 = pkg2.GetPackageProperties();
             props2.SetTitleProperty("Bug 51444 fixed");
+            pkg2.Close();
         }
         [Test]
         public void TestEntitiesInCoreProps_56164()
@@ -233,6 +252,8 @@ namespace TestCases.OPC
 
             // Check
             Assert.AreEqual("Stefan Kopf", props.GetCreatorProperty());
+
+            p.Close();
         }
 
         [Test]
@@ -253,6 +274,59 @@ namespace TestCases.OPC
             wb.Close();
             pkg.Close();
         }
+
+
+        [Test]
+        public void TestAlternateCorePropertyTimezones()
+        {
+            Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("OPCCompliance_CoreProperties_AlternateTimezones.docx");
+            OPCPackage pkg = OPCPackage.Open(is1);
+            PackagePropertiesPart props = (PackagePropertiesPart)pkg.GetPackageProperties();
+            is1.Close();
+
+            // We need predictable dates for testing!
+            //SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.fff'Z'"); //use fff for millisecond.
+            df.TimeZone = TimeZoneInfo.Utc;
+            // Check text properties first
+            Assert.AreEqual("Lorem Ipsum", props.GetTitleProperty());
+            Assert.AreEqual("Apache POI", props.GetCreatorProperty());
+            
+            // Created at has a +3 timezone and milliseconds
+            //   2006-10-13T18:06:00.123+03:00
+            // = 2006-10-13T15:06:00.123+00:00
+            Assert.AreEqual("2006-10-13T15:06:00Z", props.GetCreatedPropertyString());
+            Assert.AreEqual("2006-10-13T15:06:00.123Z", df.Format(props.GetCreatedProperty()));
+
+            // Modified at has a -13 timezone but no milliseconds
+            //   2007-06-20T07:59:00-13:00
+            // = 2007-06-20T20:59:00-13:00
+            Assert.AreEqual("2007-06-20T20:59:00Z", props.GetModifiedPropertyString());
+            Assert.AreEqual("2007-06-20T20:59:00.000Z", df.Format(props.GetModifiedProperty()));
+
+
+            // Ensure we can change them with other timezones and still read back OK
+            props.SetCreatedProperty("2007-06-20T20:57:00+13:00");
+            props.SetModifiedProperty("2007-06-20T20:59:00.123-13:00");
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            pkg.Save(baos);
+            pkg = OPCPackage.Open(new ByteArrayInputStream(baos.ToByteArray()));
+
+            // Check text properties first - should be unchanged
+            Assert.AreEqual("Lorem Ipsum", props.GetTitleProperty());
+            Assert.AreEqual("Apache POI", props.GetCreatorProperty());
+
+            // Check the updated times
+            //   2007-06-20T20:57:00+13:00
+            // = 2007-06-20T07:57:00Z
+            Assert.AreEqual("2007-06-20T07:57:00.000Z", df.Format(props.GetCreatedProperty().Value));
+
+            //   2007-06-20T20:59:00.123-13:00
+            // = 2007-06-21T09:59:00.123Z
+            Assert.AreEqual("2007-06-21T09:59:00.123Z", df.Format(props.GetModifiedProperty().Value));
+        }
+
 
     }
 }

@@ -15,9 +15,10 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
-
+    using NPOI.XSSF;
+    using NPOI.XSSF.UserModel;
     using NUnit.Framework;
 
     [TestFixture]
@@ -38,9 +39,11 @@ namespace NPOI.XSSF.UserModel
             // Now check the XSSFColor
             // Note - 64 is a special "auto" one with no rgb equiv
             Assert.AreEqual(64, indexed.Indexed);
-            Assert.AreEqual(null, indexed.GetRgb());
+            Assert.AreEqual(null, indexed.RGB);
             Assert.AreEqual(null, indexed.GetRgbWithTint());
-            Assert.AreEqual(null, indexed.GetARGBHex());
+            Assert.AreEqual(null, indexed.ARGBHex);
+            Assert.IsFalse(indexed.HasAlpha);
+            Assert.IsFalse(indexed.HasTint);
 
             // Now Move to one with indexed rgb values
             indexed.Indexed = (59);
@@ -50,18 +53,18 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(null, indexed.GetCTColor().GetRgb());
 
             Assert.AreEqual(59, indexed.Indexed);
-            Assert.AreEqual("FF333300", indexed.GetARGBHex());
+            Assert.AreEqual("FF333300", indexed.ARGBHex);
 
-            Assert.AreEqual(3, indexed.GetRgb().Length);
-            Assert.AreEqual(0x33, indexed.GetRgb()[0]);
-            Assert.AreEqual(0x33, indexed.GetRgb()[1]);
-            Assert.AreEqual(0x00, indexed.GetRgb()[2]);
+            Assert.AreEqual(3, indexed.RGB.Length);
+            Assert.AreEqual(0x33, indexed.RGB[0]);
+            Assert.AreEqual(0x33, indexed.RGB[1]);
+            Assert.AreEqual(0x00, indexed.RGB[2]);
 
-            Assert.AreEqual(4, indexed.GetARgb().Length);
-            Assert.AreEqual(255, indexed.GetARgb()[0]);
-            Assert.AreEqual(0x33, indexed.GetARgb()[1]);
-            Assert.AreEqual(0x33, indexed.GetARgb()[2]);
-            Assert.AreEqual(0x00, indexed.GetARgb()[3]);
+            Assert.AreEqual(4, indexed.ARGB.Length);
+            Assert.AreEqual(255, indexed.ARGB[0]);
+            Assert.AreEqual(0x33, indexed.ARGB[1]);
+            Assert.AreEqual(0x33, indexed.ARGB[2]);
+            Assert.AreEqual(0x00, indexed.ARGB[3]);
 
             // You don't Get tinted indexed colours, sorry...
             Assert.AreEqual(null, indexed.GetRgbWithTint());
@@ -83,18 +86,20 @@ namespace NPOI.XSSF.UserModel
             // Now check the XSSFColor
             Assert.AreEqual(0, rgb3.Indexed);
             Assert.AreEqual(-0.34999, rgb3.Tint, 0.00001);
+            Assert.IsFalse(rgb3.HasAlpha);
+            Assert.IsTrue(rgb3.HasTint);
 
-            Assert.AreEqual("FFFFFFFF", rgb3.GetARGBHex());
-            Assert.AreEqual(3, rgb3.GetRgb().Length);
-            Assert.AreEqual(255, rgb3.GetRgb()[0]);
-            Assert.AreEqual(255, rgb3.GetRgb()[1]);
-            Assert.AreEqual(255, rgb3.GetRgb()[2]);
+            Assert.AreEqual("FFFFFFFF", rgb3.ARGBHex);
+            Assert.AreEqual(3, rgb3.RGB.Length);
+            Assert.AreEqual(255, rgb3.RGB[0]);
+            Assert.AreEqual(255, rgb3.RGB[1]);
+            Assert.AreEqual(255, rgb3.RGB[2]);
 
-            Assert.AreEqual(4, rgb3.GetARgb().Length);
-            Assert.AreEqual(255, rgb3.GetARgb()[0]);
-            Assert.AreEqual(255, rgb3.GetARgb()[1]);
-            Assert.AreEqual(255, rgb3.GetARgb()[2]);
-            Assert.AreEqual(255, rgb3.GetARgb()[3]);
+            Assert.AreEqual(4, rgb3.ARGB.Length);
+            Assert.AreEqual(255, rgb3.ARGB[0]);
+            Assert.AreEqual(255, rgb3.ARGB[1]);
+            Assert.AreEqual(255, rgb3.ARGB[2]);
+            Assert.AreEqual(255, rgb3.ARGB[3]);
 
             // Tint doesn't have the alpha
             // tint = -0.34999
@@ -109,14 +114,15 @@ namespace NPOI.XSSF.UserModel
             // (Excel stores 3 colour white and black wrong!)
             // Set the color to black (no theme).
             rgb3.SetRgb(new byte[] { 0, 0, 0 });
-            Assert.AreEqual("FF000000", rgb3.GetARGBHex());
+            Assert.AreEqual("FF000000", rgb3.ARGBHex);
             Assert.AreEqual(0, rgb3.GetCTColor().GetRgb()[0]);
             Assert.AreEqual(0, rgb3.GetCTColor().GetRgb()[1]);
             Assert.AreEqual(0, rgb3.GetCTColor().GetRgb()[2]);
 
             // Set another, is fine
             rgb3.SetRgb(new byte[] { 16, 17, 18 });
-            Assert.AreEqual("FF101112", rgb3.GetARGBHex());
+            Assert.IsFalse(rgb3.HasAlpha);
+            Assert.AreEqual("FF101112", rgb3.ARGBHex);
             Assert.AreEqual(0x10, rgb3.GetCTColor().GetRgb()[0]);
             Assert.AreEqual(0x11, rgb3.GetCTColor().GetRgb()[1]);
             Assert.AreEqual(0x12, rgb3.GetCTColor().GetRgb()[2]);
@@ -136,18 +142,20 @@ namespace NPOI.XSSF.UserModel
             // Now check the XSSFColor
             Assert.AreEqual(0, rgb4.Indexed);
             Assert.AreEqual(0.0, rgb4.Tint);
+            Assert.IsFalse(rgb4.HasTint);
+            Assert.IsTrue(rgb4.HasAlpha);
 
-            Assert.AreEqual("FFFF0000", rgb4.GetARGBHex());
-            Assert.AreEqual(3, rgb4.GetRgb().Length);
-            Assert.AreEqual(255, rgb4.GetRgb()[0]);
-            Assert.AreEqual(0, rgb4.GetRgb()[1]);
-            Assert.AreEqual(0, rgb4.GetRgb()[2]);
+            Assert.AreEqual("FFFF0000", rgb4.ARGBHex);
+            Assert.AreEqual(3, rgb4.RGB.Length);
+            Assert.AreEqual(255, rgb4.RGB[0]);
+            Assert.AreEqual(0, rgb4.RGB[1]);
+            Assert.AreEqual(0, rgb4.RGB[2]);
 
-            Assert.AreEqual(4, rgb4.GetARgb().Length);
-            Assert.AreEqual(255, rgb4.GetARgb()[0]);
-            Assert.AreEqual(255, rgb4.GetARgb()[1]);
-            Assert.AreEqual(0, rgb4.GetARgb()[2]);
-            Assert.AreEqual(0, rgb4.GetARgb()[3]);
+            Assert.AreEqual(4, rgb4.ARGB.Length);
+            Assert.AreEqual(255, rgb4.ARGB[0]);
+            Assert.AreEqual(255, rgb4.ARGB[1]);
+            Assert.AreEqual(0, rgb4.ARGB[2]);
+            Assert.AreEqual(0, rgb4.ARGB[3]);
 
             // Tint doesn't have the alpha
             Assert.AreEqual(3, rgb4.GetRgbWithTint().Length);
@@ -159,6 +167,7 @@ namespace NPOI.XSSF.UserModel
             // Turn on tinting, and check it behaves
             // TODO These values are suspected to be wrong...
             rgb4.Tint = (0.4);
+            Assert.IsTrue(rgb4.HasTint);
             Assert.AreEqual(0.4, rgb4.Tint);
 
             Assert.AreEqual(3, rgb4.GetRgbWithTint().Length);

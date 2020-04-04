@@ -44,7 +44,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class BOFRecord : StandardRecord
+    public class BOFRecord : StandardRecord, ICloneable
     {
 
         /**

@@ -24,7 +24,7 @@ namespace TestCases.HSSF.Model
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.UDF;
     using TestCases.HSSF.UserModel;
     using NPOI.HSSF.Model;
 
@@ -39,7 +39,8 @@ namespace TestCases.HSSF.Model
         [Test]
         public void TestFontStuff()
         {
-            InternalWorkbook wb = TestHSSFWorkbook.GetInternalWorkbook(new HSSFWorkbook());
+            HSSFWorkbook hwb = new HSSFWorkbook();
+            InternalWorkbook wb = TestHSSFWorkbook.GetInternalWorkbook(hwb);
 
             Assert.AreEqual(4, wb.NumberOfFontRecords);
             Assert.AreEqual(68, wb.Records.Count);
@@ -91,6 +92,8 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(6, wb.NumberOfFontRecords);
             Assert.AreEqual(6, wb.GetFontIndex(n7));
             Assert.AreEqual(n7, wb.GetFontRecordAt(6));
+
+            hwb.Close();
         }
         private class FreeRefFunction1 : FreeRefFunction
         {
@@ -106,8 +109,9 @@ namespace TestCases.HSSF.Model
         [Test]
         public void TestAddNameX()
         {
-            InternalWorkbook wb = TestHSSFWorkbook.GetInternalWorkbook(new HSSFWorkbook());
-            Assert.IsNotNull(wb.GetNameXPtg("ISODD", UDFFinder.DEFAULT));
+            HSSFWorkbook hwb = new HSSFWorkbook();
+            InternalWorkbook wb = TestHSSFWorkbook.GetInternalWorkbook(hwb);
+            Assert.IsNotNull(wb.GetNameXPtg("ISODD", UDFFinder.GetDefault()));
 
             FreeRefFunction1 NotImplemented = new FreeRefFunction1();
 
@@ -123,6 +127,8 @@ namespace TestCases.HSSF.Model
             Assert.IsNotNull(wb.GetNameXPtg("myFunc2", udff));
 
             Assert.IsNull(wb.GetNameXPtg("myFunc3", udff));  // myFunc3 is unknown
+
+            hwb.Close();
         }
         [Test]
         public void TestRecalcId()
@@ -149,6 +155,8 @@ namespace TestCases.HSSF.Model
             wb.ForceFormulaRecalculation = (/*setter*/true); // resets the EngineId flag to zero
             Assert.AreEqual(0, record.EngineId);
             Assert.IsFalse(wb.ForceFormulaRecalculation);
+
+            wb.Close();
         }
     }
 

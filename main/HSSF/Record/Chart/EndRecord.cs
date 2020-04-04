@@ -34,8 +34,7 @@ namespace NPOI.HSSF.Record.Chart
      * @author Glen Stampoultzis (glens at apache.org)
      */
 
-    public class EndRecord
-       : StandardRecord
+    public class EndRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x1034;
         public static EndRecord instance = new EndRecord();

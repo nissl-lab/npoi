@@ -41,11 +41,17 @@ namespace NPOI.XSSF.Model
             link.AddNewExternalBook();
         }
 
-        internal ExternalLinksTable(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        internal ExternalLinksTable(PackagePart part)
+            : base(part)
         {
-            ;
             ReadFrom(part.GetInputStream());
+        }
+
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public ExternalLinksTable(PackagePart part, PackageRelationship rel)
+             : this(part)
+        {
+
         }
 
         public void ReadFrom(Stream is1)

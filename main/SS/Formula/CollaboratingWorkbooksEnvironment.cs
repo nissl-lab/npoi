@@ -81,9 +81,10 @@ namespace NPOI.SS.Formula
         public static void SetupFormulaEvaluator(Dictionary<String, IFormulaEvaluator> evaluators)
         {
             Dictionary<String, WorkbookEvaluator> evaluatorsByName = new Dictionary<String, WorkbookEvaluator>(evaluators.Count);
-            foreach (String wbName in evaluators.Keys)
+            foreach (KeyValuePair<string, IFormulaEvaluator> swb in evaluators)
             {
-                IFormulaEvaluator eval = evaluators[(wbName)];
+                string wbName = swb.Key;
+                IFormulaEvaluator eval = swb.Value;
                 if (eval is IWorkbookEvaluatorProvider)
                 {
                     evaluatorsByName.Add(wbName, ((IWorkbookEvaluatorProvider)eval).GetWorkbookEvaluator());
@@ -97,11 +98,11 @@ namespace NPOI.SS.Formula
             Setup(evaluatorsByName);
         }
         private CollaboratingWorkbooksEnvironment(String[] workbookNames, WorkbookEvaluator[] evaluators, int nItems)
-            : this(toUniqueMap(workbookNames, evaluators, nItems), evaluators)
+            : this(ToUniqueMap(workbookNames, evaluators, nItems), evaluators)
         {
 
         }
-        private static Dictionary<String, WorkbookEvaluator> toUniqueMap(String[] workbookNames, WorkbookEvaluator[] evaluators, int nItems)
+        private static Dictionary<String, WorkbookEvaluator> ToUniqueMap(String[] workbookNames, WorkbookEvaluator[] evaluators, int nItems)
         {
             Dictionary<String, WorkbookEvaluator> evaluatorsByName = new Dictionary<String, WorkbookEvaluator>(nItems * 3 / 2);
             for (int i = 0; i < nItems; i++)
@@ -119,21 +120,20 @@ namespace NPOI.SS.Formula
         private CollaboratingWorkbooksEnvironment(Dictionary<String, WorkbookEvaluator> evaluatorsByName, WorkbookEvaluator[] evaluators)
         {
             Dictionary<WorkbookEvaluator, String> uniqueEvals = new Dictionary<WorkbookEvaluator, String>(evaluators.Length);
-            foreach (String wbName in evaluatorsByName.Keys)
+            foreach (KeyValuePair<string, WorkbookEvaluator> me in evaluatorsByName)
             {
-                WorkbookEvaluator wbEval = evaluatorsByName[(wbName)];
-                if (uniqueEvals.ContainsKey(wbEval))
+                if (uniqueEvals.ContainsKey(me.Value))
                 {
-                    String msg = "Attempted to register same workbook under names '"
-                        + uniqueEvals[(wbEval)] + "' and '" + wbName + "'";
+                    String msg = "Attempted to register same workbook under names '" +
+                        uniqueEvals[me.Value] + "' and '" + me.Key + "'";
                     throw new ArgumentException(msg);
                 }
-                uniqueEvals.Add(wbEval, wbName);
+                uniqueEvals.Add(me.Value, me.Key);
             }
             UnhookOldEnvironments(evaluators);
             HookNewEnvironment(evaluators, this);
             _unhooked = false;
-            _evaluators = evaluators;
+            _evaluators = (WorkbookEvaluator[])evaluators.Clone();
             _evaluatorsByName = evaluatorsByName;
         }
 

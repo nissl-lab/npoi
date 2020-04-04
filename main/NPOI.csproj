@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NPOI</RootNamespace>
     <AssemblyName>NPOI</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
@@ -34,6 +34,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <PackageId>NPOI</PackageId>
+    <RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -88,9 +90,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\solution\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.6.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>..\solution\packages\Portable.BouncyCastle.1.8.6\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.2.0.246, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\solution\packages\SharpZipLib.1.2.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll</HintPath>
@@ -159,31 +163,45 @@
     <Compile Include="HSSF\Record\Aggregates\Chart\ShapePropsAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\SSAggregate.cs" />
     <Compile Include="HSSF\Record\Aggregates\Chart\TextPropsAggregate.cs" />
+    <Compile Include="HSSF\Record\CFHeader12Record.cs" />
+    <Compile Include="HSSF\Record\CFHeaderBase.cs" />
+    <Compile Include="HSSF\Record\CFRule12Record.cs" />
+    <Compile Include="HSSF\Record\CFRuleBase.cs" />
+    <Compile Include="HSSF\Record\CF\ColorGradientFormatting.cs" />
+    <Compile Include="HSSF\Record\CF\ColorGradientThreshold.cs" />
+    <Compile Include="HSSF\Record\CF\DataBarFormatting.cs" />
+    <Compile Include="HSSF\Record\CF\DataBarThreshold.cs" />
+    <Compile Include="HSSF\Record\CF\IconMultiStateFormatting.cs" />
+    <Compile Include="HSSF\Record\CF\IconMultiStateThreshold.cs" />
+    <Compile Include="HSSF\Record\CF\Threshold.cs" />
     <Compile Include="HSSF\Record\Chart\AlRunsRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AttachedLabelRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxcExtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxesUsedRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxisLineFormatRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\AxisOptionsRecord.cs" />
     <Compile Include="HSSF\Record\Chart\AxisUsedRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BopPopCustomRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BopPopRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\BRAIRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\CategorySeriesAxisRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CatSerRangeRecord.cs" />
     <Compile Include="HSSF\Record\Chart\Chart3DBarShapeRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CrtLineRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CrtMlFrtContinueRecord.cs" />
     <Compile Include="HSSF\Record\Chart\DataLabExtContentsRecord.cs" />
     <Compile Include="HSSF\Record\Chart\DataLabExtRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\DefaultDataLabelTextPropertiesRecord.cs" />
     <Compile Include="HSSF\Record\Chart\DefaultTextRecord.cs" />
     <Compile Include="HSSF\Record\Chart\DropBarRecord.cs" />
     <Compile Include="HSSF\Record\Chart\EndBlockRecord.cs" />
     <Compile Include="HSSF\Record\Chart\Fbi2Record.cs" />
     <Compile Include="HSSF\Record\Chart\FbiRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\FontXRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\FontIndexRecord.cs" />
     <Compile Include="HSSF\Record\Chart\FrtFontListRecord.cs" />
     <Compile Include="HSSF\Record\Chart\GelFrameRecord.cs" />
     <Compile Include="HSSF\Record\Chart\IFmtRecordRecord.cs" />
     <Compile Include="HSSF\Record\Chart\LegendExceptionRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\LinkedDataRecord.cs" />
     <Compile Include="HSSF\Record\Chart\PicFRecord.cs" />
     <Compile Include="HSSF\Record\Chart\RadarAreaRecord.cs" />
     <Compile Include="HSSF\Record\Chart\RadarRecord.cs" />
@@ -200,6 +218,8 @@
     <Compile Include="HSSF\Record\Chart\SurfRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TextPropsStreamRecord.cs" />
     <Compile Include="HSSF\Record\Chart\YMultRecord.cs" />
+    <Compile Include="HSSF\Record\Common\ExtendedColor.cs" />
+    <Compile Include="HSSF\Record\Common\FutureRecord.cs" />
     <Compile Include="HSSF\Record\ContinueFrt12Record.cs" />
     <Compile Include="HSSF\Record\DConRefRecord.cs" />
     <Compile Include="HSSF\Record\FtCfSubRecord.cs" />
@@ -210,20 +230,66 @@
     <Compile Include="HSSF\Record\OldSheetRecord.cs" />
     <Compile Include="HSSF\Record\OldStringRecord.cs" />
     <Compile Include="HSSF\Record\RowDataRecord.cs" />
+    <Compile Include="HSSF\UserModel\Helpers\HSSFRowShifter.cs" />
+    <Compile Include="HSSF\UserModel\HSSFColorScaleFormatting.cs" />
     <Compile Include="HSSF\UserModel\HSSFCombobox.cs" />
+    <Compile Include="HSSF\UserModel\HSSFConditionalFormattingThreshold.cs" />
+    <Compile Include="HSSF\UserModel\HSSFDataBarFormatting.cs" />
+    <Compile Include="HSSF\UserModel\HSSFExtendedColor.cs" />
+    <Compile Include="HSSF\UserModel\HSSFIconMultiStateFormatting.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeFactory.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeTypes.cs" />
+    <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4Decryptor.cs" />
+    <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4EncryptionHeader.cs" />
+    <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4EncryptionInfoBuilder.cs" />
+    <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4EncryptionVerifier.cs" />
+    <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4Encryptor.cs" />
+    <Compile Include="POIFS\Crypt\ChainingMode.cs" />
+    <Compile Include="POIFS\Crypt\ChunkedCipherInputStream.cs" />
+    <Compile Include="POIFS\Crypt\ChunkedCipherOutputStream.cs" />
+    <Compile Include="POIFS\Crypt\Cipher.cs" />
+    <Compile Include="POIFS\Crypt\CipherAlgorithm.cs" />
+    <Compile Include="POIFS\Crypt\CipherProvider.cs" />
+    <Compile Include="POIFS\Crypt\CryptoAPI\CryptoAPIDecryptor.cs" />
+    <Compile Include="POIFS\Crypt\CryptoAPI\CryptoAPIEncryptionHeader.cs" />
+    <Compile Include="POIFS\Crypt\CryptoAPI\CryptoAPIEncryptionInfoBuilder.cs" />
+    <Compile Include="POIFS\Crypt\CryptoAPI\CryptoAPIEncryptionVerifier.cs" />
+    <Compile Include="POIFS\Crypt\CryptoAPI\CryptoAPIEncryptor.cs" />
+    <Compile Include="POIFS\Crypt\CryptoFunctions.cs" />
+    <Compile Include="POIFS\Crypt\DataSpaceMapUtils.cs" />
+    <Compile Include="POIFS\Crypt\Decryptor.cs" />
+    <Compile Include="POIFS\Crypt\EncryptionHeader.cs" />
+    <Compile Include="POIFS\Crypt\EncryptionInfo.cs" />
+    <Compile Include="POIFS\Crypt\EncryptionInfoBuilder.cs" />
+    <Compile Include="POIFS\Crypt\EncryptionMode.cs" />
+    <Compile Include="POIFS\Crypt\EncryptionVerifier.cs" />
+    <Compile Include="POIFS\Crypt\Encryptor.cs" />
+    <Compile Include="POIFS\Crypt\HashAlgorithm.cs" />
+    <Compile Include="POIFS\Crypt\MessageDigest.cs" />
+    <Compile Include="POIFS\Crypt\Standard\EncryptionRecord.cs" />
+    <Compile Include="POIFS\Crypt\Standard\StandardDecryptor.cs" />
+    <Compile Include="POIFS\Crypt\Standard\StandardEncryptionHeader.cs" />
+    <Compile Include="POIFS\Crypt\Standard\StandardEncryptionInfoBuilder.cs" />
+    <Compile Include="POIFS\Crypt\Standard\StandardEncryptionVerifier.cs" />
+    <Compile Include="POIFS\Crypt\Standard\StandardEncryptor.cs" />
+    <Compile Include="POIFS\FileSystem\DocumentFactoryHelper.cs" />
     <Compile Include="POIFS\FileSystem\EntryUtils.cs" />
     <Compile Include="POIFS\FileSystem\FilteringDirectoryNode.cs" />
     <Compile Include="POIFS\FileSystem\NDocumentOutputStream.cs" />
     <Compile Include="POIFS\FileSystem\NotOLE2FileException.cs" />
+    <Compile Include="POIFS\FileSystem\OPOIFSFileSystem.cs" />
+    <Compile Include="POIFS\Macros\VBAMacroExtractor.cs" />
+    <Compile Include="POIFS\Macros\VBAMacroReader.cs" />
     <Compile Include="POIUtils.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SS\Format\CellNumberPartHandler.cs" />
+    <Compile Include="SS\Format\CellNumberStringMod.cs" />
     <Compile Include="SS\Formula\Atp\ArgumentsEvaluator.cs" />
     <Compile Include="SS\Formula\Atp\DateParser.cs" />
     <Compile Include="SS\Formula\Atp\IfError.cs" />
     <Compile Include="SS\Formula\Atp\NetworkdaysFunction.cs" />
+    <Compile Include="SS\Formula\BaseFormulaEvaluator.cs" />
     <Compile Include="SS\Formula\Eval\NotImplementedFunctionException.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayFunction.cs" />
@@ -348,7 +414,6 @@
     <Compile Include="DDF\EscherTextboxRecord.cs" />
     <Compile Include="DDF\NullEscherSerializationListener.cs" />
     <Compile Include="DDF\UnknownEscherRecord.cs" />
-    <Compile Include="HPSF\Constants.cs" />
     <Compile Include="HPSF\CustomProperties.cs" />
     <Compile Include="HPSF\CustomProperty.cs" />
     <Compile Include="HPSF\DocumentSummaryInformation.cs" />
@@ -399,24 +464,16 @@
     <Compile Include="HSSF\EventUserModel\MissingRecordAwareHSSFListener.cs" />
     <Compile Include="HSSF\Extractor\EventBasedExcelExtractor.cs" />
     <Compile Include="HSSF\Extractor\ExcelExtractor.cs" />
-    <Compile Include="HSSF\Model\AbstractShape.cs" />
-    <Compile Include="HSSF\Model\ComboboxShape.cs" />
-    <Compile Include="HSSF\Model\CommentShape.cs" />
     <Compile Include="HSSF\Model\ConvertAnchor.cs" />
     <Compile Include="HSSF\Model\DrawingManager.cs" />
     <Compile Include="HSSF\Model\DrawingManager2.cs" />
     <Compile Include="HSSF\Model\HSSFFormulaParser.cs" />
-    <Compile Include="HSSF\Model\LineShape.cs" />
     <Compile Include="HSSF\Model\LinkTable.cs" />
     <Compile Include="HSSF\Model\ParseNode.cs" />
-    <Compile Include="HSSF\Model\PictureShape.cs" />
-    <Compile Include="HSSF\Model\PolygonShape.cs" />
     <Compile Include="HSSF\Model\RecordOrderer.cs" />
     <Compile Include="HSSF\Model\RecordStream.cs" />
     <Compile Include="HSSF\Model\RowBlocksReader.cs" />
     <Compile Include="HSSF\Model\InternalSheet.cs" />
-    <Compile Include="HSSF\Model\SimpleFilledShape.cs" />
-    <Compile Include="HSSF\Model\TextboxShape.cs" />
     <Compile Include="HSSF\Model\InternalWorkbook.cs" />
     <Compile Include="HSSF\Model\WorkbookRecordList.cs" />
     <Compile Include="HSSF\OldExcelFormatException.cs" />
@@ -452,7 +509,8 @@
     <Compile Include="HSSF\Record\CFHeaderRecord.cs" />
     <Compile Include="HSSF\Record\CFRuleRecord.cs" />
     <Compile Include="HSSF\Record\CF\BorderFormatting.cs" />
-    <Compile Include="HSSF\Record\CF\CellRangeUtil.cs" />
+    <Compile Include="SS\UserModel\Helpers\RowShifter.cs" />
+    <Compile Include="SS\Util\CellRangeUtil.cs" />
     <Compile Include="HSSF\Record\CF\FontFormatting.cs" />
     <Compile Include="HSSF\Record\CF\PatternFormatting.cs" />
     <Compile Include="HSSF\Record\Chart\AreaFormatRecord.cs" />
@@ -509,7 +567,7 @@
     <Compile Include="POIFS\FileSystem\NPOIFSMiniStore.cs" />
     <Compile Include="POIFS\FileSystem\NPOIFSStream.cs" />
     <Compile Include="POIFS\FileSystem\ODocumentInputStream.cs" />
-    <Compile Include="POIFS\FileSystem\POIFSDocument.cs" />
+    <Compile Include="POIFS\FileSystem\OPOIFSDocument.cs" />
     <Compile Include="POIFS\NIO\ByteArrayBackedDataSource.cs" />
     <Compile Include="POIFS\NIO\FileBackedDataSource.cs" />
     <Compile Include="POIFS\NIO\DataSource.cs" />
@@ -642,12 +700,12 @@
     <Compile Include="HSSF\Record\StandardRecord.cs" />
     <Compile Include="HSSF\Record\StringRecord.cs" />
     <Compile Include="HSSF\Record\StyleRecord.cs" />
-    <Compile Include="HSSF\Record\SubRecord\CommonObjectDataSubRecord.cs" />
-    <Compile Include="HSSF\Record\SubRecord\EmbeddedObjectRefSubRecord.cs" />
-    <Compile Include="HSSF\Record\SubRecord\EndSubRecord.cs" />
-    <Compile Include="HSSF\Record\SubRecord\GroupMarkerSubRecord.cs" />
-    <Compile Include="HSSF\Record\SubRecord\LbsDataSubRecord.cs" />
-    <Compile Include="HSSF\Record\SubRecord\NoteStructureSubRecord.cs" />
+    <Compile Include="HSSF\Record\CommonObjectDataSubRecord.cs" />
+    <Compile Include="HSSF\Record\EmbeddedObjectRefSubRecord.cs" />
+    <Compile Include="HSSF\Record\EndSubRecord.cs" />
+    <Compile Include="HSSF\Record\GroupMarkerSubRecord.cs" />
+    <Compile Include="HSSF\Record\LbsDataSubRecord.cs" />
+    <Compile Include="HSSF\Record\NoteStructureSubRecord.cs" />
     <Compile Include="HSSF\Record\SubRecord\ScrollableObjectSubRecord.cs" />
     <Compile Include="HSSF\Record\SubRecord\SubRecord.cs" />
     <Compile Include="HSSF\Record\SupBookRecord.cs" />
@@ -670,7 +728,6 @@
     <Compile Include="HSSF\Record\WriteProtectRecord.cs" />
     <Compile Include="HSSF\Record\WSBoolRecord.cs" />
     <Compile Include="HSSF\UserModel\HSSFChart.cs" />
-    <Compile Include="HSSF\UserModel\HSSFErrorConstants.cs" />
     <Compile Include="EncryptedDocumentException.cs" />
     <Compile Include="POIDocument.cs" />
     <Compile Include="POIFS\Common\POIFSBigBlockSize.cs" />
@@ -692,6 +749,7 @@
     <Compile Include="SS\Formula\Functions\Logical\Iserr.cs" />
     <Compile Include="SS\Formula\SharedFormula.cs" />
     <Compile Include="SS\UserModel\BorderDiagonal.cs" />
+    <Compile Include="SS\UserModel\CellCopyPolicy.cs" />
     <Compile Include="SS\UserModel\Charts\AxisTickMark.cs" />
     <Compile Include="SS\UserModel\Charts\BarChartData.cs" />
     <Compile Include="SS\UserModel\Charts\BarChartSeries.cs" />
@@ -700,10 +758,21 @@
     <Compile Include="SS\UserModel\Charts\DataSources.cs" />
     <Compile Include="SS\UserModel\Charts\LineChartData.cs" />
     <Compile Include="SS\UserModel\Charts\LineChartSeries.cs" />
+    <Compile Include="SS\UserModel\ColorScaleFormatting.cs" />
+    <Compile Include="SS\UserModel\ConditionalFormattingThreshold.cs" />
+    <Compile Include="SS\UserModel\ConditionType.cs" />
+    <Compile Include="SS\UserModel\DataBarFormatting.cs" />
     <Compile Include="SS\UserModel\DataConsolidateFunction.cs" />
+    <Compile Include="SS\UserModel\ExcelGeneralNumberFormat.cs" />
+    <Compile Include="SS\UserModel\ExtendedColor.cs" />
     <Compile Include="SS\UserModel\FontUnderline.cs" />
     <Compile Include="SS\UserModel\FractionFormat.cs" />
     <Compile Include="SS\Format\SimpleFraction.cs" />
+    <Compile Include="SS\UserModel\IconMultiStateFormatting.cs" />
+    <Compile Include="SS\UserModel\IgnoredErrorType.cs" />
+    <Compile Include="SS\UserModel\IndexedColors.cs" />
+    <Compile Include="SS\UserModel\Table.cs" />
+    <Compile Include="SS\Util\CellAddress.cs" />
     <Compile Include="SS\Util\DataMarker.cs" />
     <Compile Include="SS\Util\DateFormatConverter.cs" />
     <Compile Include="SS\Util\ImageUtils.cs">
@@ -712,7 +781,9 @@
     <Compile Include="UnsupportedFileFormatException.cs" />
     <Compile Include="Util\AssertFailedException.cs" />
     <Compile Include="Util\BlockingInputStream.cs" />
+    <Compile Include="Util\BoundedInputStream.cs" />
     <Compile Include="Util\ByteArrayInputStream.cs" />
+    <Compile Include="Util\ByteArrayOutputStream.cs" />
     <Compile Include="Util\ByteBuffer.cs" />
     <Compile Include="Util\ClassID.cs" />
     <Compile Include="Util\CloseIgnoringInputStream.cs" />
@@ -925,7 +996,7 @@
     <Compile Include="SS\Formula\Functions\Function4Arg.cs" />
     <Compile Include="SS\Formula\Functions\Fv.cs" />
     <Compile Include="SS\Formula\Functions\Hlookup.cs" />
-    <Compile Include="SS\Formula\Functions\If.cs" />
+    <Compile Include="SS\Formula\Functions\IfFunc.cs" />
     <Compile Include="SS\Formula\Functions\Index.cs" />
     <Compile Include="SS\Formula\Functions\Indirect.cs" />
     <Compile Include="SS\Formula\Functions\Int.cs" />
@@ -1142,7 +1213,6 @@
     <Compile Include="SS\UserModel\DataValidationHelper.cs" />
     <Compile Include="SS\UserModel\DateUtil.cs" />
     <Compile Include="SS\UserModel\Drawing.cs" />
-    <Compile Include="SS\UserModel\ErrorConstants.cs" />
     <Compile Include="SS\UserModel\ExcelStyleDateFormatter.cs" />
     <Compile Include="SS\UserModel\Font.cs" />
     <Compile Include="SS\UserModel\FontCharset.cs" />
@@ -1193,7 +1263,6 @@
     <Compile Include="SS\Util\NumberComparer.cs" />
     <Compile Include="SS\Util\NumberToTextConverter.cs" />
     <Compile Include="SS\Util\PaneInformation.cs" />
-    <Compile Include="SS\Util\Region.cs" />
     <Compile Include="SS\Util\RegionUtil.cs" />
     <Compile Include="SS\Util\SheetBuilder.cs" />
     <Compile Include="SS\Util\SheetReferences.cs" />
@@ -1212,9 +1281,13 @@
     <Compile Include="Util\Collections\Properties.cs" />
     <Compile Include="Util\Collections\StringTokenizer.cs" />
     <Compile Include="Util\CRC32.cs" />
+    <Compile Include="Util\FilterInputStream.cs" />
+    <Compile Include="Util\FilterOutputStream.cs" />
     <Compile Include="Util\FixedField.cs" />
     <Compile Include="Util\HexDump.cs" />
     <Compile Include="Util\HexRead.cs" />
+    <Compile Include="Util\ICloseable.cs" />
+    <Compile Include="Util\InputStream.cs" />
     <Compile Include="Util\IntegerField.cs" />
     <Compile Include="Util\IntList.cs" />
     <Compile Include="Util\IntMapper.cs" />
@@ -1228,22 +1301,27 @@
     <Compile Include="Util\LittleEndianOutputStream.cs" />
     <Compile Include="Util\LittleEndian.cs" />
     <Compile Include="Util\LittleEndianConsts.cs" />
+    <Compile Include="Util\LocaleUtil.cs" />
     <Compile Include="Util\LongField.cs" />
     <Compile Include="Util\LZWDecompresser.cs" />
     <Compile Include="Util\NullLogger.cs" />
     <Compile Include="Util\Number.cs" />
     <Compile Include="Util\Operator.cs" />
+    <Compile Include="Util\OutputStream.cs" />
     <Compile Include="Util\PngUtils.cs" />
     <Compile Include="Util\POILogFactory.cs" />
     <Compile Include="Util\POILogger.cs" />
+    <Compile Include="Util\PushbackInputStream.cs" />
     <Compile Include="Util\PushbackStream.cs" />
     <Compile Include="Util\RecordFormatException.cs" />
+    <Compile Include="Util\RLEDecompressingInputStream.cs" />
     <Compile Include="Util\RuntimeException.cs" />
     <Compile Include="Util\ShortField.cs" />
     <Compile Include="Util\ShortList.cs" />
     <Compile Include="Util\StringUtil.cs" />
     <Compile Include="Util\SystemOutLogger.cs" />
     <Compile Include="Util\TempFile.cs" />
+    <Compile Include="Util\TimeUtil.cs" />
     <Compile Include="Util\ULongField.cs" />
     <Compile Include="HSSF\Record\Chart\ObjectKind.cs" />
     <Compile Include="HSSF\Record\TextOrientation.cs" />

@@ -29,7 +29,7 @@ namespace NPOI.HSSF.Record
      * 
      * @see org.apache.poi.hssf.record.LabelSSTRecord
      */
-    public class LabelRecord : Record, CellValueRecordInterface
+    public class LabelRecord : Record, CellValueRecordInterface, ICloneable
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(LabelRecord));
         public const short sid = 0x204;

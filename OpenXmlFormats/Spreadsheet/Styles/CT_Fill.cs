@@ -105,7 +105,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return Parse(doc.DocumentElement, CreateDefaultNSM());
         }
         //TODO: NPOI  duplication code, fix it.
-        internal static XmlNamespaceManager CreateDefaultNSM()
+        public static XmlNamespaceManager CreateDefaultNSM()
         {
             //  Create a NamespaceManager to handle the default namespace, 
             //  and create a prefix for the default namespace:

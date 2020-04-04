@@ -24,6 +24,19 @@ namespace NPOI.SS.UserModel
      *
      * See also OOO's excelfileformat.pdf (2.5.6)
      */
+    public enum FormulaErrorEnum : long
+    {
+        NO_ERROR = -1,
+        NULL = 0x0,
+        DIV_0 = 0x07,
+        VALUE = 0x0F,
+        REF = 0x17,
+        NAME = 0x1D,
+        NUM = 0x24,
+        NA = 0x2A,
+        CIRCULAR_REF = 0xFFFFFFC4,
+        FUNCTION_NOT_IMPLEMENTED = 0xFFFFFFE2
+    }
     public class FormulaError
     {
         static FormulaError()
@@ -48,6 +61,8 @@ namespace NPOI.SS.UserModel
             }
         }
         private static FormulaError[] _values;
+
+        internal static readonly FormulaError _NO_ERROR = new FormulaError(-1, "(no error)", "_NO_ERROR");
         /**
          * Intended to indicate when two areas are required to intersect, but do not.
          * <p>Example:
@@ -55,13 +70,13 @@ namespace NPOI.SS.UserModel
          * intersection operator, when a comma was intended. end example]
          * </p>
          */
-        public static readonly FormulaError NULL = new FormulaError(0x00, "#NULL!");
+        public static readonly FormulaError NULL = new FormulaError(0x00, "#NULL!", "NULL");
 
         /**
          * Intended to indicate when any number, including zero, is divided by zero.
          * Note: However, any error code divided by zero results in that error code.
          */
-        public static readonly FormulaError DIV0 = new FormulaError(0x07, "#DIV/0!");
+        public static readonly FormulaError DIV0 = new FormulaError(0x07, "#DIV/0!", "DIV0");
 
         /**
          * Intended to indicate when an incompatible type argument is passed to a function, or
@@ -70,7 +85,7 @@ namespace NPOI.SS.UserModel
          * In the case of a function argument, text was expected, but a number was provided
          * </p>
          */
-        public static readonly FormulaError VALUE = new FormulaError(0x0F, "#VALUE!");
+        public static readonly FormulaError VALUE = new FormulaError(0x0F, "#VALUE!", "VALUE");
 
         /**
          * Intended to indicate when a cell reference is invalid.
@@ -80,7 +95,7 @@ namespace NPOI.SS.UserModel
          * OFFSET(A1,0,20000) will result in a #REF! error.
          * </p>
          */
-        public static readonly FormulaError REF = new FormulaError(0x17, "#REF!");
+        public static readonly FormulaError REF = new FormulaError(0x17, "#REF!", "REF");
 
         /*
          * Intended to indicate when what looks like a name is used, but no such name has been defined.
@@ -90,7 +105,7 @@ namespace NPOI.SS.UserModel
          * was intended. SUM(A1C10), where the range A1:C10 was intended.
          * </p>
          */
-        public static readonly FormulaError NAME = new FormulaError(0x1D, "#NAME?");
+        public static readonly FormulaError NAME = new FormulaError(0x1D, "#NAME?", "NAME");
 
         /**
          * Intended to indicate when an argument to a function has a compatible type, but has a
@@ -104,7 +119,7 @@ namespace NPOI.SS.UserModel
          * error.)
          * <p>Example: FACT(1000) might result in a range error. </p>
          */
-        public static readonly FormulaError NUM = new FormulaError(0x24, "#NUM!");
+        public static readonly FormulaError NUM = new FormulaError(0x24, "#NUM!", "NUM");
 
         /**
          * Intended to indicate when a designated value is not available.
@@ -116,7 +131,7 @@ namespace NPOI.SS.UserModel
          * </p>
          * This error value can be produced by calling the function NA
          */
-        public static readonly FormulaError NA = new FormulaError(0x2A, "#N/A");
+        public static readonly FormulaError NA = new FormulaError(0x2A, "#N/A", "NA");
 
         // These are POI-specific error codes
         // It is desirable to make these (arbitrary) strings look clearly different from any other
@@ -127,22 +142,23 @@ namespace NPOI.SS.UserModel
          * POI specific code to indicate that there is a circular reference
          *  in the formula
          */
-        public static readonly FormulaError CIRCULAR_REF = new FormulaError(unchecked((int)0xFFFFFFC4), "~CIRCULAR~REF~");
+        public static readonly FormulaError CIRCULAR_REF = new FormulaError(unchecked((int)0xFFFFFFC4), "~CIRCULAR~REF~", "CIRCULAR_REF");
         /**
          * POI specific code to indicate that the funcition required is
          *  not implemented in POI
          */
-        public static readonly FormulaError FUNCTION_NOT_IMPLEMENTED = new FormulaError(unchecked((int)0xFFFFFFE2), "~FUNCTION~NOT~IMPLEMENTED~");
+        public static readonly FormulaError FUNCTION_NOT_IMPLEMENTED = new FormulaError(unchecked((int)0xFFFFFFE2), "~FUNCTION~NOT~IMPLEMENTED~", "FUNCTION_NOT_IMPLEMENTED");
 
         private byte type;
         private int longType;
         private String repr;
 
-        private FormulaError(int type, String repr)
+        private FormulaError(int type, String repr, string name)
         {
             this.type = (byte)type;
             this.longType = type;
             this.repr = repr;
+            this.Name = name;
             //if(imap==null)
             //    imap = new Dictionary<Byte, FormulaError>();
             //imap.Add(this.Code, this);
@@ -150,7 +166,15 @@ namespace NPOI.SS.UserModel
             //    smap = new Dictionary<string, FormulaError>();
             //smap.Add(this.String, this);
         }
-
+        public override string ToString()
+        {
+            return Name;
+        }
+        public string Name
+        {
+            get;
+            private set;
+        }
         /**
          * @return numeric code of the error
          */

@@ -31,8 +31,7 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class FrameRecord
-       : StandardRecord
+    public class FrameRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x1032;
         private short field_1_borderType;

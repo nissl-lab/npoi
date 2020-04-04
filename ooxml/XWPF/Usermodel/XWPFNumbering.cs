@@ -41,12 +41,17 @@ namespace NPOI.XWPF.UserModel
         /**
          *create a new styles object with an existing document 
          */
-        public XWPFNumbering(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        public XWPFNumbering(PackagePart part)
+            : base(part)
         {
             isNew = true;
         }
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public XWPFNumbering(PackagePart part, PackageRelationship rel)
+             : this(part)
+        {
 
+        }
         /**
          * create a new XWPFNumbering object for use in a new document
          */
@@ -64,21 +69,32 @@ namespace NPOI.XWPF.UserModel
         internal override void OnDocumentRead()
         {
             NumberingDocument numberingDoc = null;
-            
-            XmlDocument doc = ConvertStreamToXml(GetPackagePart().GetInputStream());
-            try {
+            Stream is1 = GetPackagePart().GetInputStream();
+
+            try
+            {
+                XmlDocument doc = ConvertStreamToXml(is1);
                 numberingDoc = NumberingDocument.Parse(doc, NamespaceManager);
                 ctNumbering = numberingDoc.Numbering;
                 //get any Nums
-                foreach(CT_Num ctNum in ctNumbering.GetNumList()) {
+                foreach (CT_Num ctNum in ctNumbering.GetNumList())
+                {
                     nums.Add(new XWPFNum(ctNum, this));
                 }
-                foreach(CT_AbstractNum ctAbstractNum in ctNumbering.GetAbstractNumList()){
+                foreach (CT_AbstractNum ctAbstractNum in ctNumbering.GetAbstractNumList())
+                {
                     abstractNums.Add(new XWPFAbstractNum(ctAbstractNum, this));
                 }
                 isNew = false;
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 throw new POIXMLException(e);
+            }
+            finally
+            {
+                if (is1 != null)
+                    is1.Close();
             }
         }
 
@@ -248,8 +264,11 @@ namespace NPOI.XWPF.UserModel
         {
             int pos = abstractNums.Count;
             if (abstractNum.GetAbstractNum() != null)
-            { // Use the current CTAbstractNum if it exists
-                ctNumbering.AddNewAbstractNum().Set(abstractNum.GetAbstractNum());
+            {
+                var ctAbstractNum = abstractNum.GetAbstractNum();
+                ctAbstractNum.abstractNumId = pos.ToString();
+                // Use the current CTAbstractNum if it exists
+                ctNumbering.AddNewAbstractNum().Set(ctAbstractNum);
             }
             else
             {

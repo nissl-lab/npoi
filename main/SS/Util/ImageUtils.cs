@@ -137,11 +137,11 @@ namespace NPOI.SS.Util
             w = sheet.GetColumnWidthInPixels(col2++);
             if (isHSSF)
             {
-                w *= 1 - anchor.Dx1 / 1024d;
+                w *= 1d - anchor.Dx1 / 1024d;
             }
             else
             {
-                w -= anchor.Dx1 / Units.EMU_PER_PIXEL;
+                w -= anchor.Dx1 / (double)Units.EMU_PER_PIXEL;
             }
 
             while (w < scaledWidth)
@@ -178,7 +178,7 @@ namespace NPOI.SS.Util
             }
             else
             {
-                h -= anchor.Dy1 / Units.EMU_PER_PIXEL;
+                h -= anchor.Dy1 / (double)Units.EMU_PER_PIXEL;
             }
 
             while (h < scaledHeight)
@@ -235,7 +235,7 @@ namespace NPOI.SS.Util
             }
             else
             {
-                w -= anchor.Dx1 / Units.EMU_PER_PIXEL;
+                w -= anchor.Dx1 / (double)Units.EMU_PER_PIXEL;
             }
 
             while (col2 < anchor.Col2)
@@ -249,7 +249,7 @@ namespace NPOI.SS.Util
             }
             else
             {
-                w += anchor.Dx2 / Units.EMU_PER_PIXEL;
+                w += anchor.Dx2 / (double)Units.EMU_PER_PIXEL;
             }
 
             double h = 0;
@@ -262,7 +262,7 @@ namespace NPOI.SS.Util
             }
             else
             {
-                h -= anchor.Dy1 / Units.EMU_PER_PIXEL;
+                h -= anchor.Dy1 / (double)Units.EMU_PER_PIXEL;
             }
 
             while (row2 < anchor.Row2)
@@ -276,10 +276,15 @@ namespace NPOI.SS.Util
             }
             else
             {
-                h += anchor.Dy2 / Units.EMU_PER_PIXEL;
+                h += anchor.Dy2 / (double)Units.EMU_PER_PIXEL;
             }
 
-            return new Size((int)w * Units.EMU_PER_PIXEL, (int)h * Units.EMU_PER_PIXEL);
+            w *= Units.EMU_PER_PIXEL;
+            h *= Units.EMU_PER_PIXEL;
+
+            return new Size((int)Math.Round(w), (int)Math.Round(h));
+            //return new Size((int)w * Units.EMU_PER_PIXEL, (int)h * Units.EMU_PER_PIXEL);
+
         }
 
 

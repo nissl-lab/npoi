@@ -32,8 +32,7 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class DataFormatRecord
-       : StandardRecord
+    public class DataFormatRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x1006;
         private short field_1_pointNumber;

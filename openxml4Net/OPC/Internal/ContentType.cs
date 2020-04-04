@@ -156,6 +156,13 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                     }
                 }
             }
+            else
+            {
+                // missing media type and subtype
+                this.type = "";
+                this.subType = "";
+                this.parameters = new Dictionary<string, string>();
+            }
         }
         public override String ToString()
         {
@@ -169,12 +176,12 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             retVal.Append(this.SubType);
             if (withParameters)
             {
-                foreach (String key in parameters.Keys)
+                foreach (KeyValuePair<string, string> kv in parameters)
                 {
                     retVal.Append(";");
-                    retVal.Append(key);
+                    retVal.Append(kv.Key);
                     retVal.Append("=");
-                    retVal.Append(parameters[key]);
+                    retVal.Append(kv.Value);
                 }
             }
             return retVal.ToString();
@@ -267,14 +274,6 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         public String GetParameter(String key)
         {
             return parameters[key];
-        }
-
-        /**
-     * @deprecated Use {@link #getParameter(String)} instead
-     */
-        public String GetParameters(String key)
-        {
-            return GetParameter(key);
         }
 
         #region IComparable Members

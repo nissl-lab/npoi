@@ -96,11 +96,10 @@
     <Compile Include="OPC\Compliance\TestOPCComplianceCoreProperties.cs" />
     <Compile Include="OPC\Compliance\TestOPCCompliancePackageModel.cs" />
     <Compile Include="OPC\Compliance\TestOPCCompliancePartName.cs" />
+    <Compile Include="OPC\Internal\TestZipPackagePropertiesMarshaller.cs" />
     <Compile Include="OpenXML4NetTestDataSamples.cs" />
-    <Compile Include="POIDataSamples.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OPC\Internal\TestContentTypeManager.cs" />
-    <Compile Include="RunSerialyAndSweepTmpFilesAttribute.cs" />
     <Compile Include="TestContentType.cs" />
     <Compile Include="TestFileHelper.cs" />
     <Compile Include="TestListParts.cs" />
@@ -110,6 +109,7 @@
     <Compile Include="TestPackageThumbnail.cs" />
     <Compile Include="TestPackagingURIHelper.cs" />
     <Compile Include="TestRelationships.cs" />
+    <Compile Include="TestZipPackage.cs" />
     <Compile Include="ZipFileAssert.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +154,14 @@
     <ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.csproj">
       <Project>{A6874784-2875-4F40-9E8F-8385A640F5D6}</Project>
       <Name>NPOI.OpenXmlFormats</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\main\NPOI.TestCases.csproj">
+      <Project>{a920c2ba-8bfd-4f54-8401-7d1c0730f1f0}</Project>
+      <Name>NPOI.TestCases</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ooxml\NPOI.OOXML.TestCases.csproj">
+      <Project>{0BF8C464-8779-43CF-AD7A-B1109A86EAAE}</Project>
+      <Name>NPOI.OOXML.TestCases</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

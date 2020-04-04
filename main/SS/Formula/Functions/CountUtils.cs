@@ -49,8 +49,9 @@ namespace NPOI.SS.Formula.Functions
         public static int CountMatchingCellsInRef(RefEval refEval, IMatchPredicate criteriaPredicate)
         {
             int result = 0;
-
-            for (int sIx = refEval.FirstSheetIndex; sIx <= refEval.LastSheetIndex; sIx++)
+            int firstSheetIndex = refEval.FirstSheetIndex;
+            int lastSheetIndex = refEval.LastSheetIndex;
+            for (int sIx = firstSheetIndex; sIx <= lastSheetIndex; sIx++)
             {
                 ValueEval ve = refEval.GetInnerValueEval(sIx);
                 if (criteriaPredicate.Matches(ve))
@@ -86,7 +87,9 @@ namespace NPOI.SS.Formula.Functions
         public static int CountMatchingCellsInArea(ThreeDEval areaEval, IMatchPredicate criteriaPredicate)
         {
             int result = 0;
-            for (int sIx = areaEval.FirstSheetIndex; sIx <= areaEval.LastSheetIndex; sIx++)
+            int firstSheetIndex = areaEval.FirstSheetIndex;
+            int lastSheetIndex = areaEval.LastSheetIndex;
+            for (int sIx = firstSheetIndex; sIx <= lastSheetIndex; sIx++)
             {
                 int height = areaEval.Height;
                 int width = areaEval.Width;

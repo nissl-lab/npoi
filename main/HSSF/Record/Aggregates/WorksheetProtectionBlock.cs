@@ -20,6 +20,7 @@ namespace NPOI.HSSF.Record.Aggregates
 
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
+    using NPOI.POIFS.Crypt;
     using NPOI.Util;
     using System;
 
@@ -208,7 +209,7 @@ namespace NPOI.HSSF.Record.Aggregates
             ProtectRecord prec = this.Protect;
             PasswordRecord pass = this.Password;
             prec.Protect = true;
-            pass.Password = (PasswordRecord.HashPassword(password));
+            pass.Password = (short)CryptoFunctions.CreateXorVerifier1(password);
             if (_objectProtectRecord == null && shouldProtectObjects)
             {
                 ObjectProtectRecord rec = CreateObjectProtect();

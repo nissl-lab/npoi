@@ -15,6 +15,8 @@
    limitations under the License.
 ==================================================================== */
 using System;
+using System.Text.RegularExpressions;
+
 namespace NPOI
 {
 
@@ -131,6 +133,16 @@ namespace NPOI
             return _defaultName.Replace("#", index.ToString());
         }
 
+        /**
+         * Returns the index of the filename within the package for the given part.
+         *  e.g. 4 for /xl/comments4.xml
+         */
+        public int GetFileNameIndex(POIXMLDocumentPart part)
+        {
+            Regex regex = new Regex(_defaultName.Replace("#", "(\\d+)"));
+            return int.Parse(regex.Match(part.GetPackagePart().PartName.Name).Value);
+            //return Integer.valueOf(part.getPackagePart().getPartName().getName().replaceAll(regex, "$1"));
+        }
         /**
          * Return type of the obejct used to construct instances of this relationship
          *

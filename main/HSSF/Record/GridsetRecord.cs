@@ -36,8 +36,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class GridsetRecord
-       : StandardRecord
+    public class GridsetRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x82;
         public short field_1_gridset_flag;

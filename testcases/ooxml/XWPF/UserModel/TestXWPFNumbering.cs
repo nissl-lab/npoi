@@ -15,14 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XWPF.UserModel
+namespace TestCases.XWPF.UserModel
 {
-    using System;
 
-    using NUnit.Framework;
-
-    using NPOI.XWPF;
     using NPOI.OpenXmlFormats.Wordprocessing;
+    using NPOI.XWPF.UserModel;
+    using NUnit.Framework;
 
     [TestFixture]
     public class TestXWPFNumbering
@@ -104,24 +102,13 @@ namespace NPOI.XWPF.UserModel
         [Test]
         public void TestOverrideList()
         {
-            //TODO: for now the try/catch block ensures loading/inclusion of CTNumLevel
-            //for down stream Processing.
-            //Ideally, we should find files that actually use overrides and test against those.
-            //Use XWPFParagraph's GetNumStartOverride() in the actual tests
-
-            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Numbering.docx");
-            XWPFParagraph p = doc.Paragraphs[(18)]; XWPFNumbering numbering = doc.CreateNumbering();
-            bool ex = false;
-            Assert.IsNull(p.GetNumStartOverride());
-            try
-            {
-                numbering.GetNum(p.GetNumID()).GetCTNum().GetLvlOverrideArray(1);
-            }
-            catch (ArgumentOutOfRangeException e)
-            {
-                ex = true;
-            }
-            Assert.IsTrue(ex);
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("NumberingWOverrides.docx");
+            XWPFParagraph p = doc.Paragraphs[(4)];
+            XWPFNumbering numbering = doc.GetNumbering();
+            CT_Num ctNum = numbering.GetNum(p.GetNumID()).GetCTNum();
+            Assert.AreEqual(9, ctNum.SizeOfLvlOverrideArray());
+            CT_NumLvl ctNumLvl = ctNum.GetLvlOverrideArray(0);
+            Assert.AreEqual("upperLetter", ctNumLvl.lvl.numFmt.val.ToString());
         }
 
     }

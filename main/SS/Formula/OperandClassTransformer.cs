@@ -117,7 +117,8 @@ namespace NPOI.SS.Formula
             if (token is ValueOperatorPtg || token is ControlPtg
                 || token is MemFuncPtg
 				|| token is MemAreaPtg
-				|| token is UnionPtg)
+				|| token is UnionPtg
+                || token is IntersectionPtg)
             {
                 // Value Operator Ptgs and Control are base Tokens, so Token will be unchanged
                 // but any child nodes are processed according To desiredOperandClass and callerForceArrayFlag

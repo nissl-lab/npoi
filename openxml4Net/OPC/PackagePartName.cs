@@ -291,7 +291,8 @@ namespace NPOI.OpenXml4Net.OPC
         private static void CheckPCharCompliance(String segment)
         {
             bool errorFlag;
-            for (int i = 0; i < segment.Length; ++i)
+            int length = segment.Length;
+            for (int i = 0; i < length; ++i)
             {
                 char c = segment[i];
                 errorFlag = true;
@@ -341,7 +342,7 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     // We certainly found an encoded character, check for length
                     // now ( '%' HEXDIGIT HEXDIGIT)
-                    if (((segment.Length - i) < 2))
+                    if ((length - i) < 2)
                     {
                         throw new InvalidFormatException("The segment " + segment
                                 + " contain invalid encoded character !");

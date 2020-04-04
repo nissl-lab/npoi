@@ -36,11 +36,12 @@ using NUnit.Framework;
 using NPOI.POIFS.FileSystem;
 using NPOI.POIFS.Properties;
 using NPOI.POIFS.Storage;
+using System.Collections.Generic;
 /**
- * Class to Test DirectoryNode functionality
- *
- * @author Marc Johnson
- */
+* Class to Test DirectoryNode functionality
+*
+* @author Marc Johnson
+*/
 
 namespace TestCases.POIFS.FileSystem
 {
@@ -82,7 +83,7 @@ namespace TestCases.POIFS.FileSystem
 
             // Verify that GetEntries behaves correctly
             int count = 0;
-            IEnumerator iter = node.Entries;
+            IEnumerator<Entry> iter = node.Entries;
 
             while (iter.MoveNext())
             {
@@ -139,7 +140,7 @@ namespace TestCases.POIFS.FileSystem
 
             // Verify that GetEntries behaves correctly
             int count = 0;
-            IEnumerator iter = node.Entries;
+            IEnumerator<Entry> iter = node.Entries;
 
             while (iter.MoveNext())
             {
@@ -220,6 +221,8 @@ namespace TestCases.POIFS.FileSystem
             // Verify now we can Delete it
             Assert.IsTrue(dir.Delete());
             Assert.IsTrue(root.IsEmpty);
+
+            fs.Close();
         }
 
         /**
@@ -246,6 +249,8 @@ namespace TestCases.POIFS.FileSystem
             Assert.IsTrue(dir.RenameTo("FirstDir"));
             Assert.IsTrue(dir2.RenameTo("foo"));
             Assert.AreEqual("foo", dir2.Name);
+
+            fs.Close();
         }
 
     }
