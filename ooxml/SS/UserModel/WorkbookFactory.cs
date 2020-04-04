@@ -119,6 +119,8 @@ namespace NPOI.SS.UserModel
         //  be wrapped as a {@link PushbackInputStream}!
         public static IWorkbook Create(Stream inputStream, bool bReadonly)
         {
+            if (inputStream.Length == 0)
+                throw new EmptyFileException();
             inputStream = new PushbackStream(inputStream);
             if (POIFSFileSystem.HasPOIFSHeader(inputStream))
             {
@@ -129,7 +131,7 @@ namespace NPOI.SS.UserModel
             {
                 return new XSSFWorkbook(OPCPackage.Open(inputStream, bReadonly));
             }
-            throw new ArgumentException("Your stream was neither an OLE2 stream, nor an OOXML stream.");
+            throw new InvalidFormatException("Your stream was neither an OLE2 stream, nor an OOXML stream.");
         }
         public static IWorkbook Create(Stream inputStream)
         {
@@ -141,7 +143,7 @@ namespace NPOI.SS.UserModel
             {
                 throw new FileNotFoundException(file);
             }
-            using (var stream = File.OpenWrite(file))
+            using (var stream = File.OpenRead(file))
             {
                 return Create(stream);
             }
