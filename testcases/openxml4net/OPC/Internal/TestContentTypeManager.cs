@@ -88,16 +88,5 @@ namespace TestCases.OpenXml4Net.OPC.Internal
             Assert.AreEqual(ctm.GetContentType(name2), null);
         }
 
-        /**
-         * Test the addition then removal of content types in a package.
-         */
-        [Ignore("")]
-        [Test]
-        public void TestContentTypeRemovalPackage()
-        {
-            // TODO
-            Assert.Fail("test not written");
-        }
-
     }
 }

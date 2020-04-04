@@ -695,6 +695,7 @@ namespace TestCases.OpenXml4Net.OPC
          * Verify we give helpful exceptions (or as best we can) when
          *  supplied with non-OOXML file types (eg OLE2, ODF)
          */
+         [Ignore("not found in poi test cases")]
         [Test]
         public void NonOOXMLFileTypes()
         {
