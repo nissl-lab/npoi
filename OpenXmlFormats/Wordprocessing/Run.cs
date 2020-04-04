@@ -220,6 +220,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return GetObjectList<CT_Drawing>(RunItemsChoiceType.drawing);
         }
 
+        public IList<CT_Text> GetDelTextList()
+        {
+            return GetObjectList<CT_Text>(RunItemsChoiceType.delText);
+        }
+
         public IList<CT_Picture> GetPictList()
         {
             return GetObjectList<CT_Picture>(RunItemsChoiceType.pict);
@@ -302,6 +307,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                         pos, this.itemsField[pos].GetType().Name, typeof(T).Name));
             }
         }
+
+        public bool IsSetRsidDel()
+        {
+            return this.rsidDelField != null;
+        }
+
         private int GetObjectIndex(RunItemsChoiceType type, int p)
         {
             int index = -1;
@@ -2321,8 +2332,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.itemsElementNameField = value;
             }
         }
-
-        public IEnumerable<CT_R> GetRList()
+        public List<CT_RunTrackChange> GetInsList()
+        {
+            return GetObjectList<CT_RunTrackChange>(ItemsChoiceType6.ins);
+        }
+        public List<CT_R> GetRList()
         {
             return GetObjectList<CT_R>(ItemsChoiceType6.r);
         }

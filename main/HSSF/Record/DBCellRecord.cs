@@ -30,7 +30,7 @@ namespace NPOI.HSSF.Record
      * @author Jason Height
      * @version 2.0-pre
      */
-    public class DBCellRecord : StandardRecord
+    public class DBCellRecord : StandardRecord, ICloneable
     {
         public const int BLOCK_SIZE = 32;
         public const short sid = 0xd7;

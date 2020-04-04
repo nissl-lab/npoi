@@ -40,7 +40,7 @@ namespace NPOI.POIFS.FileSystem
     {
         private bool _closed;
         private int _current_offset;
-        private POIFSDocument _document;
+        private OPOIFSDocument _document;
         private int _document_size;
         private byte[] _tiny_buffer;
         private const int _EOD = 0;
@@ -65,7 +65,7 @@ namespace NPOI.POIFS.FileSystem
         /// Create an InputStream from the specified Document
         /// </summary>
         /// <param name="document">the Document to be read</param>
-        public POIFSDocumentReader(POIFSDocument document)
+        public POIFSDocumentReader(OPOIFSDocument document)
         {
             this._current_offset = 0;
             this._document_size = document.Size;

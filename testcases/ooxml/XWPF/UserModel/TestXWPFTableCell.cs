@@ -20,7 +20,11 @@
 using NUnit.Framework;
 using NPOI.OpenXmlFormats.Wordprocessing;
 using System;
-namespace NPOI.XWPF.UserModel
+using System.Collections.Generic;
+using static NPOI.XWPF.UserModel.XWPFTableCell;
+using NPOI.XWPF.UserModel;
+
+namespace TestCases.XWPF.UserModel
 {
     [TestFixture]
     public class TestXWPFTableCell
@@ -51,7 +55,7 @@ namespace NPOI.XWPF.UserModel
             XWPFTableCell cell = tr.GetCell(0);
 
             cell.SetVerticalAlignment(XWPFTableCell.XWPFVertAlign.BOTH);
-            XWPFTableCell.XWPFVertAlign al = cell.GetVerticalAlignment();
+            XWPFTableCell.XWPFVertAlign al = cell.GetVerticalAlignment().Value;
             Assert.AreEqual(XWPFTableCell.XWPFVertAlign.BOTH, al);
         }
         [Test]
@@ -91,6 +95,38 @@ namespace NPOI.XWPF.UserModel
 
             CT_TcBorders tblBorders = tcPr.AddNewTcBorders();
             CT_VMerge vMerge = tcPr.AddNewVMerge();
+        }
+
+        public void TestCellVerticalAlign()
+        {
+            XWPFDocument docx = XWPFTestDataSamples.OpenSampleDocument("59030.docx");
+            IList<XWPFTable> tables = docx.Tables;
+            Assert.AreEqual(1, tables.Count);
+            XWPFTable table = tables[0];
+            List<XWPFTableRow> tableRows = table.Rows;
+            Assert.AreEqual(2, tableRows.Count);
+            Assert.AreEqual(XWPFVertAlign.TOP, tableRows[0].GetCell(0).GetVerticalAlignment());
+            Assert.AreEqual(XWPFVertAlign.BOTTOM, tableRows[0].GetCell(1).GetVerticalAlignment());
+            Assert.AreEqual(XWPFVertAlign.CENTER, tableRows[1].GetCell(0).GetVerticalAlignment());
+            Assert.AreEqual(XWPFVertAlign.TOP, tableRows[1].GetCell(1).GetVerticalAlignment());
+        }
+        [Test]
+        public void TestCellVerticalAlign2()
+        {
+            XWPFDocument docx = XWPFTestDataSamples.OpenSampleDocument("TestTableCellAlign.docx");
+            IList<XWPFTable> tables = docx.Tables;
+            foreach (XWPFTable table in tables)
+            {
+                List<XWPFTableRow> tableRows = table.Rows;
+                foreach (XWPFTableRow tableRow in tableRows)
+                {
+                    List<XWPFTableCell> tableCells = tableRow.GetTableCells();
+                    foreach (XWPFTableCell tableCell in tableCells)
+                    {
+                        Assert.IsNotNull(tableCell.GetVerticalAlignment());
+                    }
+                }
+            }
         }
     }
 

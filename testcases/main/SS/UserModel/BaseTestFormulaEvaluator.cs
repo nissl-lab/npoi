@@ -17,25 +17,22 @@
 
 namespace TestCases.SS.UserModel
 {
-    using System;
-
-    using NUnit.Framework;
-
-    using NPOI.SS;
     using NPOI.SS.UserModel;
+    using NUnit.Framework;
+    using System;
 
     /**
      * Common superclass for Testing implementatiosn of{@link FormulaEvaluator}
      *
      * @author Yegor Kozlov
      */
-    public class BaseTestFormulaEvaluator
+    public abstract class BaseTestFormulaEvaluator
     {
 
         protected ITestDataProvider _testDataProvider;
-        public BaseTestFormulaEvaluator()
-            : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
-        { }
+        //public BaseTestFormulaEvaluator()
+        //    : this(TestCases.HSSF.HSSFITestDataProvider.Instance)
+        //{ }
         /**
          * @param TestDataProvider an object that provides Test data in  /  specific way
          */
@@ -65,6 +62,8 @@ namespace TestCases.SS.UserModel
 
             Assert.AreEqual(6.0, c1.NumericCellValue, 0.0001);
             Assert.AreEqual(5.0, c2.NumericCellValue, 0.0001);
+
+            wb.Close();
         }
         [Test]
         public void TestSumCount()
@@ -108,6 +107,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(17.5, c2.NumericCellValue, 0.0001);
             Assert.AreEqual(1, c3.NumericCellValue, 0.0001);
             Assert.AreEqual(4, c4.NumericCellValue, 0.0001);
+
+            wb.Close();
         }
 
         public void BaseTestSharedFormulas(String sampleFile)
@@ -134,6 +135,8 @@ namespace TestCases.SS.UserModel
             cell = sheet.GetRow(4).GetCell(0);
             Assert.AreEqual("B5", cell.CellFormula);
             Assert.AreEqual("UniqueDocumentNumberID", Evaluator.Evaluate(cell).StringValue);
+
+            wb.Close();
         }
 
         /**
@@ -172,6 +175,8 @@ namespace TestCases.SS.UserModel
 
             Assert.AreEqual(5.0, Evaluator.Evaluate(sh2.GetRow(0).GetCell(1)).NumberValue, 0.0);
             Assert.AreEqual(15.0, Evaluator.Evaluate(sh2.GetRow(0).GetCell(2)).NumberValue, 0.0);
+
+            wb.Close();
         }
         [Test]
         public void TestFullColumnRefs()
@@ -204,6 +209,8 @@ namespace TestCases.SS.UserModel
             IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
             Assert.AreEqual(26.0, fe.Evaluate(cell0).NumberValue, 0.0);
             Assert.AreEqual(56.0, fe.Evaluate(cell1).NumberValue, 0.0);
+
+            wb.Close();
         }
         [Test]
         public void TestRepeatedEvaluation()
@@ -243,6 +250,8 @@ namespace TestCases.SS.UserModel
             fe.ClearAllCachedResultValues();
             cellValue = fe.Evaluate(c);
             Assert.AreEqual(40455.0, cellValue.NumberValue, 0.0);
+
+            wb.Close();
         }
 
         private static void SetValue(ISheet sheet, int rowIndex, int colIndex, double value)
@@ -268,13 +277,15 @@ namespace TestCases.SS.UserModel
             ISheet sheet = wb.CreateSheet("Sheet1");
             ICell cell = sheet.CreateRow(0).CreateCell(0);
             Assert.IsNull(fe.Evaluate(cell));
+
+            wb.Close();
         }
 
         /**
          * Test for bug due to attempt to convert a cached formula error result to a bool
          */
         [Test]
-        public void TestUpdateCachedFormulaResultFromErrorToNumber_bug46479()
+        public virtual void TestUpdateCachedFormulaResultFromErrorToNumber_bug46479()
         {
 
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -285,7 +296,7 @@ namespace TestCases.SS.UserModel
             cellB1.SetCellFormula("A1+1");
             IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
 
-            cellA1.SetCellErrorValue((byte)ErrorConstants.ERROR_NAME);
+            cellA1.SetCellErrorValue(FormulaError.NAME.Code);
             fe.EvaluateFormulaCell(cellB1);
 
             cellA1.SetCellValue(2.5);
@@ -298,10 +309,12 @@ namespace TestCases.SS.UserModel
             {
                 if (e.Message.Equals("Cannot get a numeric value from a error formula cell"))
                 {
-                    throw new AssertionException("Identified bug 46479a");
+                    Assert.Fail("Identified bug 46479a");
                 }
             }
             Assert.AreEqual(3.5, cellB1.NumericCellValue, 0.0);
+
+            wb.Close();
         }
 
         [Test]
@@ -323,6 +336,21 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(2162.62, fe.EvaluateInCell(cellB1).NumericCellValue, 0.0);
             Assert.AreEqual(2162.62, fe.EvaluateInCell(cellC1).NumericCellValue, 0.0);
             Assert.AreEqual(2162.61, fe.EvaluateInCell(cellD1).NumericCellValue, 0.0);
+
+            wb.Close();
+        }
+
+        [Test]
+        public void EvaluateInCellReturnsSameCell()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            wb.CreateSheet().CreateRow(0).CreateCell(0);
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            ICell cell = wb.GetSheetAt(0).GetRow(0).GetCell(0);
+            ICell same = evaluator.EvaluateInCell(cell);
+            //assertSame(cell, same);
+            Assert.AreSame(cell, same);
+            wb.Close();
         }
     }
 }

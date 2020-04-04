@@ -32,8 +32,8 @@ namespace NPOI.OpenXml4Net.OPC
         /* End XML markup */
 
         /**
-         * L'ID de la relation.
-         */
+	     * Relation id.
+	     */
         private String id;
 
         /**
@@ -42,22 +42,22 @@ namespace NPOI.OpenXml4Net.OPC
         private OPCPackage container;
 
         /**
-         * Type de relation.
+         * Relationship type
          */
         private String relationshipType;
 
         /**
-         * Partie source de cette relation.
+         * Part of this relationship source
          */
         private PackagePart source;
 
         /**
-         * Le mode de ciblage [Internal|External]
+         * Targeting mode [Internal|External]
          */
         private TargetMode? targetMode;
 
         /**
-         * URI de la partie cible.
+         * Target URI
          */
         private Uri targetUri;
 
@@ -207,7 +207,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 // If it's an external target, we don't
                 //  need to apply our normal validation rules
-                if (targetMode == NPOI.OpenXml4Net.OPC.TargetMode.External)
+                if (targetMode == OPC.TargetMode.External)
                 {
                     return targetUri;
                 }

@@ -102,7 +102,7 @@ namespace NPOI.HSSF.Record
 
         public virtual Object Clone()
         {
-            throw new Exception("The class " + this.GetType().Name + " needs to define a Clone method");
+            throw new NotSupportedException("The class " + this.GetType().Name + " needs to define a Clone method");
         }
 
         public Record CloneViaReserialise() 

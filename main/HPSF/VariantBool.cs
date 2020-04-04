@@ -25,9 +25,21 @@ namespace NPOI.HPSF
 
         public VariantBool(byte[] data, int offset)
         {
-            _value = LittleEndian.GetShort(data, offset) != 0;
+            short value = LittleEndian.GetShort(data, offset);
+            switch (value)
+            {
+                case 0:
+                    _value = false;
+                    break;
+                case -1:
+                    _value = true;
+                    break;
+                default:
+                    //logger.log(POILogger.WARN, "VARIANT_BOOL value '" + value + "' is incorrect");
+                    _value = true;
+                    break;
+            }
         }
-
         public bool Value
         {
             get 

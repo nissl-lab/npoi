@@ -38,7 +38,7 @@ namespace NPOI.HSSF.Record
         private short field_1_charCount;
         private byte field_2_optionflags;
         private String field_3_string;
-        private List<FormatRun> field_4_format_Runs;
+        private List<FormatRun> field_4_format_runs;
         private ExtRst field_5_ext_rst;
         private static BitField highByte = BitFieldFactory.GetInstance(0x1);
         // 0x2 is reserved
@@ -442,59 +442,50 @@ namespace NPOI.HSSF.Record
             UnicodeString other = (UnicodeString)o;
 
             //OK lets do this in stages to return a quickly, first check the actual string
-            bool eq = ((field_1_charCount == other.field_1_charCount)
-                    && (field_2_optionflags == other.field_2_optionflags)
-                    && field_3_string.Equals(other.field_3_string));
-            if (!eq) return false;
+            if (field_1_charCount != other.field_1_charCount
+            || field_2_optionflags != other.field_2_optionflags
+            || !field_3_string.Equals(other.field_3_string))
+            {
+                return false;
+            }
 
             //OK string appears to be equal but now lets compare formatting Runs
-            if ((field_4_format_Runs == null) && (other.field_4_format_Runs == null))
-                //Strings are Equal, and there are not formatting Runs.
-                return true;
-            if (((field_4_format_Runs == null) && (other.field_4_format_Runs != null)) ||
-                 (field_4_format_Runs != null) && (other.field_4_format_Runs == null))
-                //Strings are Equal, but one or the other has formatting Runs
+            if (field_4_format_runs == null)
+            {
+                // Strings are equal, and there are not formatting runs.
+                return (other.field_4_format_runs == null);
+            }
+            else if (other.field_4_format_runs == null)
+            {
+                // Strings are equal, but one or the other has formatting runs
                 return false;
+            }
 
             //Strings are Equal, so now compare formatting Runs.
-            int size = field_4_format_Runs.Count;
-            if (size != other.field_4_format_Runs.Count)
+            int size = field_4_format_runs.Count;
+            if (size != other.field_4_format_runs.Count)
                 return false;
 
             for (int i = 0; i < size; i++)
             {
-                FormatRun Run1 = field_4_format_Runs[(i)];
-                FormatRun run2 = other.field_4_format_Runs[(i)];
+                FormatRun Run1 = field_4_format_runs[(i)];
+                FormatRun run2 = other.field_4_format_runs[(i)];
 
                 if (!Run1.Equals(run2))
                     return false;
             }
 
             // Well the format Runs are equal as well!, better check the ExtRst data
-            if (field_5_ext_rst == null && other.field_5_ext_rst == null)
+            if (field_5_ext_rst == null)
             {
-                // Good
+                return (other.field_5_ext_rst == null);
             }
-            else if (field_5_ext_rst != null && other.field_5_ext_rst != null)
-            {
-                int extCmp = field_5_ext_rst.CompareTo(other.field_5_ext_rst);
-                if (extCmp == 0)
-                {
-                    // Good
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
+            else if (other.field_5_ext_rst == null)
             {
                 return false;
             }
 
-            //Phew!! After all of that we have finally worked out that the strings
-            //are identical.
-            return true;
+            return field_5_ext_rst.Equals(other.field_5_ext_rst);
         }
 
         /**
@@ -519,23 +510,17 @@ namespace NPOI.HSSF.Record
                 extensionLength = in1.ReadInt();
             }
 
-            bool IsCompressed = ((field_2_optionflags & 1) == 0);
-            if (IsCompressed)
-            {
-                field_3_string = in1.ReadCompressedUnicode(CharCount);
-            }
-            else
-            {
-                field_3_string = in1.ReadUnicodeLEString(CharCount);
-            }
+            bool isCompressed = ((field_2_optionflags & 1) == 0);
+            int cc = CharCount;
+            field_3_string = (isCompressed) ? in1.ReadCompressedUnicode(cc) : in1.ReadUnicodeLEString(cc);
 
 
             if (IsRichText && (RunCount > 0))
             {
-                field_4_format_Runs = new List<FormatRun>(RunCount);
+                field_4_format_runs = new List<FormatRun>(RunCount);
                 for (int i = 0; i < RunCount; i++)
                 {
-                    field_4_format_Runs.Add(new FormatRun(in1));
+                    field_4_format_runs.Add(new FormatRun(in1));
                 }
             }
 
@@ -628,7 +613,8 @@ namespace NPOI.HSSF.Record
                 if (useUTF16)
                     //Set the uncompressed bit
                     field_2_optionflags = highByte.SetByte(field_2_optionflags);
-                else field_2_optionflags = highByte.ClearByte(field_2_optionflags);
+                else
+                    field_2_optionflags = highByte.ClearByte(field_2_optionflags);
 
             }
         }
@@ -637,31 +623,29 @@ namespace NPOI.HSSF.Record
         {
             get
             {
-                if (field_4_format_Runs == null)
-                    return 0;
-                return field_4_format_Runs.Count;
+                return (field_4_format_runs == null) ? 0: field_4_format_runs.Count;
             }
         }
 
         public FormatRun GetFormatRun(int index)
         {
-            if (field_4_format_Runs == null)
+            if (field_4_format_runs == null)
             {
                 return null;
             }
-            if (index < 0 || index >= field_4_format_Runs.Count)
+            if (index < 0 || index >= field_4_format_runs.Count)
             {
                 return null;
             }
-            return field_4_format_Runs[(index)];
+            return field_4_format_runs[(index)];
         }
 
         private int FindFormatRunAt(int characterPos)
         {
-            int size = field_4_format_Runs.Count;
+            int size = field_4_format_runs.Count;
             for (int i = 0; i < size; i++)
             {
-                FormatRun r = field_4_format_Runs[(i)];
+                FormatRun r = field_4_format_runs[(i)];
                 if (r._character == characterPos)
                     return i;
                 else if (r._character > characterPos)
@@ -677,20 +661,20 @@ namespace NPOI.HSSF.Record
          */
         public void AddFormatRun(FormatRun r)
         {
-            if (field_4_format_Runs == null)
+            if (field_4_format_runs == null)
             {
-                field_4_format_Runs = new List<FormatRun>();
+                field_4_format_runs = new List<FormatRun>();
             }
 
             int index = FindFormatRunAt(r._character);
             if (index != -1)
-                field_4_format_Runs.RemoveAt(index);
+                field_4_format_runs.RemoveAt(index);
 
-            field_4_format_Runs.Add(r);
+            field_4_format_runs.Add(r);
             //Need to sort the font Runs to ensure that the font Runs appear in
             //character order
             //collections.Sort(field_4_format_Runs);
-            field_4_format_Runs.Sort();
+            field_4_format_runs.Sort();
 
             //Make sure that we now say that we are a rich string
             field_2_optionflags = richText.SetByte(field_2_optionflags);
@@ -698,26 +682,26 @@ namespace NPOI.HSSF.Record
 
         public List<FormatRun> FormatIterator()
         {
-            if (field_4_format_Runs != null)
+            if (field_4_format_runs != null)
             {
-                return field_4_format_Runs;
+                return field_4_format_runs;
             }
             return null;
         }
 
         public void RemoveFormatRun(FormatRun r)
         {
-            field_4_format_Runs.Remove(r);
-            if (field_4_format_Runs.Count == 0)
+            field_4_format_runs.Remove(r);
+            if (field_4_format_runs.Count == 0)
             {
-                field_4_format_Runs = null;
+                field_4_format_runs = null;
                 field_2_optionflags = richText.ClearByte(field_2_optionflags);
             }
         }
 
         public void ClearFormatting()
         {
-            field_4_format_Runs = null;
+            field_4_format_runs = null;
             field_2_optionflags = richText.ClearByte(field_2_optionflags);
         }
 
@@ -752,7 +736,7 @@ namespace NPOI.HSSF.Record
          */
         public void SwapFontUse(short oldFontIndex, short newFontIndex)
         {
-            foreach (FormatRun run in field_4_format_Runs)
+            foreach (FormatRun run in field_4_format_runs)
             {
                 if (run._fontIndex == oldFontIndex)
                 {
@@ -789,11 +773,11 @@ namespace NPOI.HSSF.Record
             buffer.Append("    .optionflags     = ")
                 .Append(StringUtil.ToHexString(OptionFlags)).Append("\n");
             buffer.Append("    .string          = ").Append(String).Append("\n");
-            if (field_4_format_Runs != null)
+            if (field_4_format_runs != null)
             {
-                for (int i = 0; i < field_4_format_Runs.Count; i++)
+                for (int i = 0; i < field_4_format_runs.Count; i++)
                 {
-                    FormatRun r = field_4_format_Runs[(i)];
+                    FormatRun r = field_4_format_runs[(i)];
                     buffer.Append("      .format_Run" + i + "          = ").Append(r.ToString()).Append("\n");
                 }
             }
@@ -815,9 +799,9 @@ namespace NPOI.HSSF.Record
         {
             int numberOfRichTextRuns = 0;
             int extendedDataSize = 0;
-            if (IsRichText && field_4_format_Runs != null)
+            if (IsRichText && field_4_format_runs != null)
             {
-                numberOfRichTextRuns = field_4_format_Runs.Count;
+                numberOfRichTextRuns = field_4_format_runs.Count;
             }
             if (IsExtendedText && field_5_ext_rst != null)
             {
@@ -838,7 +822,7 @@ namespace NPOI.HSSF.Record
                     {
                         out1.WriteContinue();
                     }
-                    FormatRun r = field_4_format_Runs[(i)];
+                    FormatRun r = field_4_format_runs[(i)];
                     r.Serialize(out1);
                 }
             }
@@ -860,26 +844,27 @@ namespace NPOI.HSSF.Record
                 return result;
 
             //OK string appears to be equal but now lets compare formatting Runs
-            if ((field_4_format_Runs == null) && (str.field_4_format_Runs == null))
-                //Strings are Equal, and there are no formatting Runs.
-                return 0;
-
-            if ((field_4_format_Runs == null) && (str.field_4_format_Runs != null))
-                //Strings are Equal, but one or the other has formatting Runs
-                return 1;
-            if ((field_4_format_Runs != null) && (str.field_4_format_Runs == null))
-                //Strings are Equal, but one or the other has formatting Runs
+            if (field_4_format_runs == null)
+            {
+                //Strings are equal, and there are no formatting runs. -> 0
+                //Strings are equal, but one or the other has formatting runs -> 1
+                return (str.field_4_format_runs == null) ? 0 : 1;
+            }
+            else if (str.field_4_format_runs == null)
+            {
+                //Strings are equal, but one or the other has formatting runs
                 return -1;
+            }
 
             //Strings are Equal, so now compare formatting Runs.
-            int size = field_4_format_Runs.Count;
-            if (size != str.field_4_format_Runs.Count)
-                return size - str.field_4_format_Runs.Count;
+            int size = field_4_format_runs.Count;
+            if (size != str.field_4_format_runs.Count)
+                return size - str.field_4_format_runs.Count;
 
             for (int i = 0; i < size; i++)
             {
-                FormatRun Run1 = field_4_format_Runs[(i)];
-                FormatRun run2 = str.field_4_format_Runs[(i)];
+                FormatRun Run1 = field_4_format_runs[(i)];
+                FormatRun run2 = str.field_4_format_runs[(i)];
 
                 result = Run1.CompareTo(run2);
                 if (result != 0)
@@ -887,20 +872,18 @@ namespace NPOI.HSSF.Record
             }
 
             //Well the format Runs are equal as well!, better check the ExtRst data
-            if ((field_5_ext_rst == null) && (str.field_5_ext_rst == null))
-                return 0;
-            if ((field_5_ext_rst == null) && (str.field_5_ext_rst != null))
-                return 1;
-            if ((field_5_ext_rst != null) && (str.field_5_ext_rst == null))
+            if (field_5_ext_rst == null)
+            {
+                return (str.field_5_ext_rst == null) ? 0 : 1;
+            }
+            else if (str.field_5_ext_rst == null)
+            {
                 return -1;
-
-            result = field_5_ext_rst.CompareTo(str.field_5_ext_rst);
-            if (result != 0)
-                return result;
-
-            //Phew!! After all of that we have finally worked out that the strings
-            //are identical.
-            return 0;
+            }
+            else
+            {
+                return field_5_ext_rst.CompareTo(str.field_5_ext_rst);
+            }
         }
 
         private bool IsRichText
@@ -925,12 +908,12 @@ namespace NPOI.HSSF.Record
             str.field_1_charCount = field_1_charCount;
             str.field_2_optionflags = field_2_optionflags;
             str.field_3_string = field_3_string;
-            if (field_4_format_Runs != null)
+            if (field_4_format_runs != null)
             {
-                str.field_4_format_Runs = new List<FormatRun>();
-                foreach (FormatRun r in field_4_format_Runs)
+                str.field_4_format_runs = new List<FormatRun>();
+                foreach (FormatRun r in field_4_format_runs)
                 {
-                    str.field_4_format_Runs.Add(new FormatRun(r._character, r._fontIndex));
+                    str.field_4_format_runs.Add(new FormatRun(r._character, r._fontIndex));
                 }
             }
             if (field_5_ext_rst != null)

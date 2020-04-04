@@ -213,7 +213,7 @@ namespace NPOI.DDF
 
         public void SetSysIndexFlag(bool flag)
         {
-            FLAG_SYS_INDEX.SetBoolean(colorRef, flag);
+            colorRef = FLAG_SYS_INDEX.SetBoolean(colorRef, flag);
         }
 
         public bool HasSchemeIndexFlag()
@@ -223,7 +223,7 @@ namespace NPOI.DDF
 
         public void SetSchemeIndexFlag(bool flag)
         {
-            FLAG_SCHEME_INDEX.SetBoolean(colorRef, flag);
+            colorRef = FLAG_SCHEME_INDEX.SetBoolean(colorRef, flag);
         }
 
         public bool HasSystemRGBFlag()
@@ -233,7 +233,7 @@ namespace NPOI.DDF
 
         public void SetSystemRGBFlag(bool flag)
         {
-            FLAG_SYSTEM_RGB.SetBoolean(colorRef, flag);
+            colorRef = FLAG_SYSTEM_RGB.SetBoolean(colorRef, flag);
         }
 
         public bool HasPaletteRGBFlag()
@@ -243,7 +243,7 @@ namespace NPOI.DDF
 
         public void SetPaletteRGBFlag(bool flag)
         {
-            FLAG_PALETTE_RGB.SetBoolean(colorRef, flag);
+            colorRef = FLAG_PALETTE_RGB.SetBoolean(colorRef, flag);
         }
 
         public bool HasPaletteIndexFlag()
@@ -253,7 +253,7 @@ namespace NPOI.DDF
 
         public void SetPaletteIndexFlag(bool flag)
         {
-            FLAG_PALETTE_INDEX.SetBoolean(colorRef, flag);
+            colorRef = FLAG_PALETTE_INDEX.SetBoolean(colorRef, flag);
         }
 
         public int[] GetRGB()

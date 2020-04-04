@@ -38,7 +38,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class BoolErrRecord : CellRecord
+    public class BoolErrRecord : CellRecord, ICloneable
     {
         public const short sid = 0x205;
         private int _value;
@@ -102,7 +102,17 @@ namespace NPOI.HSSF.Record
             _value = value ? 1 : 0;
             _isError = false;
         }
-
+        /**
+	     * set the error value for the cell. See {@link FormulaError} for valid codes.
+	     *
+	     * @param value     error representing the error value
+	     *                  this value can only be 0,7,15,23,29,36 or 42
+	     *                  see bugzilla bug 16560 for an explanation
+	     */
+        public void SetValue(byte value)
+        {
+            SetValue(FormulaError.ForInt(value));
+        }
         /**
          * Set the error value for the cell
          *
@@ -111,22 +121,24 @@ namespace NPOI.HSSF.Record
          *                  see bugzilla bug 16560 for an explanation
          */
 
-        public void SetValue(byte value)
+        public void SetValue(FormulaError value)
         {
-            switch (value)
+            switch ((FormulaErrorEnum)value.Code)
             {
-                case ErrorConstants.ERROR_NULL:
-                case ErrorConstants.ERROR_DIV_0:
-                case ErrorConstants.ERROR_VALUE:
-                case ErrorConstants.ERROR_REF:
-                case ErrorConstants.ERROR_NAME:
-                case ErrorConstants.ERROR_NUM:
-                case ErrorConstants.ERROR_NA:
-                    _value = value;
+                case FormulaErrorEnum.NULL:
+                case FormulaErrorEnum.DIV_0:
+                case FormulaErrorEnum.VALUE:
+                case FormulaErrorEnum.REF:
+                case FormulaErrorEnum.NAME:
+                case FormulaErrorEnum.NUM:
+                case FormulaErrorEnum.NA:
+                    _value = value.Code;
                     _isError = true;
                     return;
+                default:
+                    throw new ArgumentException("Error Value can only be 0,7,15,23,29,36 or 42. It cannot be " + value);
             }
-            throw new ArgumentException("Error Value can only be 0,7,15,23,29,36 or 42. It cannot be " + value);
+            
         }
 
         /**
@@ -185,7 +197,7 @@ namespace NPOI.HSSF.Record
             }
             else
             {
-                buffer.Append("    .errCode     = ").Append(ErrorValue)
+                buffer.Append("    .errCode     = ").Append(FormulaError.ForInt(ErrorValue).String)
                     .Append("\n");
             }
         }

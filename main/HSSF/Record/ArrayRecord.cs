@@ -31,7 +31,7 @@ namespace NPOI.HSSF.Record
      * 
      * @author Josh Micich
      */
-    public class ArrayRecord : SharedValueRecordBase
+    public class ArrayRecord : SharedValueRecordBase, ICloneable
     {
 
         public const short sid = 0x0221;

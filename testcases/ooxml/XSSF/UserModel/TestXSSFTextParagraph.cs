@@ -14,12 +14,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
-    using System;
+    using NPOI.XSSF.UserModel;
     using NUnit.Framework;
-    using System.Drawing;
     using System.Collections.Generic;
+    using System.Drawing;
 
     [TestFixture]
     public class TestXSSFTextParagraph

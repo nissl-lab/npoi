@@ -54,6 +54,11 @@ namespace NPOI.SS.UserModel
          */
         IFormulaEvaluator CreateFormulaEvaluator();
 
+        /**
+         * Creates a XSSF-style Color object, used for extended sheet
+         *  formattings and conditional formattings
+         */
+        ExtendedColor CreateExtendedColor();
         IClientAnchor CreateClientAnchor();
     }
 }

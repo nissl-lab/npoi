@@ -34,8 +34,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
 
-    public class DimensionsRecord
-       : StandardRecord
+    public class DimensionsRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x200;
         private int field_1_first_row;

@@ -19,6 +19,8 @@ using System;
 using System.Text;
 using NPOI.Util;
 using NPOI.OpenXmlFormats.Spreadsheet;
+using System.Text.RegularExpressions;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -28,6 +30,13 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFDataValidationConstraint : IDataValidationConstraint
     {
+        /**
+         * Excel validation constraints with static lists are delimited with optional whitespace and the Windows List Separator,
+         * which is typically comma, but can be changed by users.  POI will just assume comma.
+         */
+        private static String LIST_SEPARATOR = ",";
+        private static Regex LIST_SPLIT_REGEX = new Regex("\\s*" + LIST_SEPARATOR + "\\s*");
+        private static String QUOTE = "\"";
         private String formula1;
         private String formula2;
         private int validationType = -1;
@@ -67,6 +76,14 @@ namespace NPOI.XSSF.UserModel
             Validate();
         }
 
+        /// <summary>
+        /// This is the constructor called using the OOXML raw data.  Excel overloads formula1 to also encode explicit value lists,
+        /// so this constructor has to check for and parse that syntax.
+        /// </summary>
+        /// <param name="validationType"></param>
+        /// <param name="operator1"></param>
+        /// <param name="formula1">Overloaded: formula1 or list of explicit values</param>
+        /// <param name="formula2">formula1 is a list of explicit values, this is ignored: use <code>null</code></param>
         public XSSFDataValidationConstraint(int validationType, int operator1, String formula1, String formula2)
             : base()
         {
@@ -79,9 +96,15 @@ namespace NPOI.XSSF.UserModel
             Validate();
 
             //FIXME: Need to confirm if this is not a formula.
-            if (ValidationType.LIST == validationType)
+            // empirical testing shows Excel saves explicit lists surrounded by double quotes, 
+            // range formula expressions can't start with quotes (I think - anyone have a creative counter example?)
+            if (ValidationType.LIST == validationType
+                    && formula1 != null
+                    && formula1.StartsWith(QUOTE)
+                    && formula1.EndsWith(QUOTE))
             {
-                explicitListOfValues = formula1.Split(new char[]{','});
+                String formulaWithoutQuotes = formula1.Substring(1, formula1.Length - 2);
+                explicitListOfValues = LIST_SPLIT_REGEX.Split(formulaWithoutQuotes);
             }
         }
 
@@ -94,19 +117,21 @@ namespace NPOI.XSSF.UserModel
             set 
             {
                 this.explicitListOfValues = value;
+                // for OOXML we need to set formula1 to the quoted csv list of values (doesn't appear documented, but that's where Excel puts its lists)
+                // further, Excel has no escaping for commas in explicit lists, so we don't need to worry about that.
                 if (explicitListOfValues != null && explicitListOfValues.Length > 0)
                 {
-                    StringBuilder builder = new StringBuilder("\"");
+                    StringBuilder builder = new StringBuilder(QUOTE);
                     for (int i = 0; i < value.Length; i++)
                     {
                         String string1 = value[i];
                         if (builder.Length > 1)
                         {
-                            builder.Append(",");
+                            builder.Append(LIST_SEPARATOR);
                         }
                         builder.Append(string1);
                     }
-                    builder.Append("\"");
+                    builder.Append(QUOTE);
                     Formula1 = builder.ToString();
                 }
             }
@@ -165,7 +190,7 @@ namespace NPOI.XSSF.UserModel
             return validationType;
         }
 
-        protected String RemoveLeadingEquals(String formula1)
+        protected static String RemoveLeadingEquals(String formula1)
         {
             return IsFormulaEmpty(formula1) ? formula1 : formula1[0] == '=' ? formula1.Substring(1) : formula1;
         }
@@ -205,7 +230,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        protected bool IsFormulaEmpty(String formula1)
+        protected static bool IsFormulaEmpty(String formula1)
         {
             return formula1 == null || formula1.Trim().Length == 0;
         }
@@ -219,11 +244,12 @@ namespace NPOI.XSSF.UserModel
             builder.Append(' ');
             if (validationType != ValidationType.ANY)
             {
-                if (validationType != ValidationType.LIST && validationType != ValidationType.ANY && validationType != ValidationType.FORMULA)
+                if (validationType != ValidationType.LIST
+                    && validationType != ValidationType.ANY
+                    && validationType != ValidationType.FORMULA)
                 {
-                    builder.Append(",").Append(ot).Append(", ");
+                    builder.Append(LIST_SEPARATOR).Append(ot).Append(", ");
                 }
-                String QUOTE = "";
                 if (validationType == ValidationType.LIST && explicitListOfValues != null)
                 {
                     builder.Append(QUOTE).Append(Arrays.AsList(explicitListOfValues)).Append(QUOTE).Append(' ');

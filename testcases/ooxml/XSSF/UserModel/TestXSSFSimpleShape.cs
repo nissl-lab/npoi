@@ -14,13 +14,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
     using System;
     using NPOI.SS.UserModel;
     using NUnit.Framework;
     using System.Drawing;
-
+    using NPOI.XSSF.UserModel;
 
     [TestFixture]
     public class TestXSSFSimpleShape
@@ -48,7 +48,7 @@ namespace NPOI.XSSF.UserModel
 
                 Assert.IsNotNull(shape.GetCTShape());
                 Assert.IsNotNull(shape.GetEnumerator());
-                Assert.IsNotNull(XSSFSimpleShape.GetPrototype());
+                Assert.IsNotNull(XSSFSimpleShape.Prototype());
 
                 foreach (ListAutoNumber nr in Enum.GetValues(typeof(ListAutoNumber)))
                 {

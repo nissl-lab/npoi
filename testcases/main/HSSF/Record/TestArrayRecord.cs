@@ -50,7 +50,7 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(FormulaRenderer.ToFormulaString(null, ptg), "MAX(C1:C2-D1:D2)");
 
             //construct a new ArrayRecord with the same contents as r1
-            Ptg[] fmlaPtg = FormulaParser.Parse("MAX(C1:C2-D1:D2)", null, FormulaType.Array, 0);
+            Ptg[] fmlaPtg = FormulaParser.Parse("MAX(C1:C2-D1:D2)", null, FormulaType.Array, 0, -1);
             ArrayRecord r2 = new ArrayRecord(Formula.Create(fmlaPtg), new CellRangeAddress8Bit(1, 1, 1, 1));
             byte[] ser = r2.Serialize();
             //serialize and check that the data is the same as in r1

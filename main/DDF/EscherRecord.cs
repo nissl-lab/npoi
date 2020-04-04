@@ -26,7 +26,6 @@ namespace NPOI.DDF
     /// <summary>
     /// The base abstract record from which all escher records are defined.  Subclasses will need
     /// to define methods for serialization/deserialization and for determining the record size.
-    /// @author Glen Stampoultzis
     /// </summary>
     abstract public class EscherRecord : ICloneable
     {
@@ -46,9 +45,9 @@ namespace NPOI.DDF
         /// <summary>
         /// Delegates to FillFields(byte[], int, EscherRecordFactory)
         /// </summary>
-        /// <param name="data">The data.</param>
-        /// <param name="f">The f.</param>
-        /// <returns></returns>
+        /// <param name="data">the bytes to serialize from</param>
+        /// <param name="f">the escher record factory</param>
+        /// <returns>The number of bytes written.</returns>
         public int FillFields(byte[] data, IEscherRecordFactory f)
         {
             return FillFields(data, 0, f);
@@ -198,9 +197,9 @@ namespace NPOI.DDF
         /// <returns>
         /// A new object that is a copy of this instance.
         /// </returns>
-        public object Clone()
+        public virtual object Clone()
         {
-            throw new Exception("The class " + this.GetType().Name + " needs to define a clone method");
+            throw new NotSupportedException("The class " + this.GetType().Name + " needs to define a clone method");
         }
         
         /// <summary>

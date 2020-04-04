@@ -23,6 +23,7 @@ namespace NPOI.HSSF.Util
     using NPOI.SS.UserModel;
     using System.Collections.Generic;
     using NPOI.HSSF.Record;
+    using NPOI.SS.Util;
 
     /// <summary>
     /// Various utility functions that make working with a cells and rows easier.  The various
@@ -33,64 +34,9 @@ namespace NPOI.HSSF.Util
     /// can be supported.
     /// @author     Eric Pugh epugh@upstate.com
     /// </summary>
+    [Obsolete("deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil} instead.")]
     public class HSSFCellUtil
     {
-        public const string ALIGNMENT = "alignment";
-        public const string BORDER_BOTTOM = "borderBottom";
-        public const string BORDER_LEFT = "borderLeft";
-        public const string BORDER_RIGHT = "borderRight";
-        public const string BORDER_TOP = "borderTop";
-        public const string BOTTOM_BORDER_COLOR = "bottomBorderColor";
-        public const string DATA_FORMAT = "dataFormat";
-        public const string FILL_BACKGROUND_COLOR = "fillBackgroundColor";
-        public const string FILL_FOREGROUND_COLOR = "fillForegroundColor";
-        public const string FILL_PATTERN = "fillPattern";
-        public const string FONT = "font";
-        public const string HIDDEN = "hidden";
-        public const string INDENTION = "indention";
-        public const string LEFT_BORDER_COLOR = "leftBorderColor";
-        public const string LOCKED = "locked";
-        public const string RIGHT_BORDER_COLOR = "rightBorderColor";
-        public const string ROTATION = "rotation";
-        public const string TOP_BORDER_COLOR = "topBorderColor";
-        public const string VERTICAL_ALIGNMENT = "verticalAlignment";
-        public const string WRAP_TEXT = "wrapText";
-
-        private static UnicodeMapping[] unicodeMappings;
-
-        static HSSFCellUtil()
-        {
-            unicodeMappings = new UnicodeMapping[15];
-            unicodeMappings[0] = um("alpha", "\u03B1");
-            unicodeMappings[1] = um("beta", "\u03B2");
-            unicodeMappings[2] = um("gamma", "\u03B3");
-            unicodeMappings[3] = um("delta", "\u03B4");
-            unicodeMappings[4] = um("epsilon", "\u03B5");
-            unicodeMappings[5] = um("zeta", "\u03B6");
-            unicodeMappings[6] = um("eta", "\u03B7");
-            unicodeMappings[7] = um("theta", "\u03B8");
-            unicodeMappings[8] = um("iota", "\u03B9");
-            unicodeMappings[9] = um("kappa", "\u03BA");
-            unicodeMappings[10] = um("lambda", "\u03BB");
-            unicodeMappings[11] = um("mu", "\u03BC");
-            unicodeMappings[12] = um("nu", "\u03BD");
-            unicodeMappings[13] = um("xi", "\u03BE");
-            unicodeMappings[14] = um("omicron", "\u03BF");
-        }
-
-        private class UnicodeMapping
-        {
-
-            public String entityName;
-            public String resolvedValue;
-
-            public UnicodeMapping(String pEntityName, String pResolvedValue)
-            {
-                entityName = "&" + pEntityName + ";";
-                resolvedValue = pResolvedValue;
-            }
-        }
-
         private HSSFCellUtil()
         {
             // no instances of this class
@@ -102,15 +48,10 @@ namespace NPOI.HSSF.Util
         /// <param name="rowCounter">The 0 based row number</param>
         /// <param name="sheet">The sheet that the row is part of.</param>
         /// <returns>The row indicated by the rowCounter</returns>
-        public static IRow GetRow(int rowCounter, HSSFSheet sheet)
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#getRow} instead.")]
+        public static IRow GetRow(int rowIndex, HSSFSheet sheet)
         {
-            IRow row = sheet.GetRow(rowCounter);
-            if (row == null)
-            {
-                row = sheet.CreateRow(rowCounter);
-            }
-
-            return row;
+            return (HSSFRow)CellUtil.GetRow(rowIndex, sheet);
         }
 
 
@@ -120,15 +61,10 @@ namespace NPOI.HSSF.Util
         /// <param name="row">The row that the cell is part of</param>
         /// <param name="column">The column index that the cell is in.</param>
         /// <returns>The cell indicated by the column.</returns>
-        public static ICell GetCell(IRow row, int column)
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#getCell} instead.")]
+        public static ICell GetCell(IRow row, int columnIndex)
         {
-            ICell cell = row.GetCell(column);
-
-            if (cell == null)
-            {
-                cell = row.CreateCell(column);
-            }
-            return cell;
+            return (HSSFCell)CellUtil.GetCell(row, columnIndex);
         }
 
 
@@ -140,17 +76,10 @@ namespace NPOI.HSSF.Util
         /// <param name="value">The value of the cell</param>
         /// <param name="style">If the style is not null, then Set</param>
         /// <returns>A new HSSFCell</returns>
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#createCell} instead.")]
         public static ICell CreateCell(IRow row, int column, String value, HSSFCellStyle style)
         {
-            ICell cell = GetCell(row, column);
-
-            cell.SetCellValue(new HSSFRichTextString(value));
-            if (style != null)
-            {
-                cell.CellStyle = (style);
-            }
-
-            return cell;
+            return (HSSFCell)CellUtil.CreateCell(row, column, value, style);
         }
 
 
@@ -161,11 +90,69 @@ namespace NPOI.HSSF.Util
         /// <param name="column">the column index to Create the cell in</param>
         /// <param name="value">The value of the cell</param>
         /// <returns>A new HSSFCell.</returns>
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#createCell} instead.")]
         public static ICell CreateCell(IRow row, int column, String value)
         {
             return CreateCell(row, column, value, null);
         }
 
+        /// <summary>
+        /// Take a cell, and align it.
+        /// </summary>
+        /// <param name="cell">the cell to Set the alignment for</param>
+        /// <param name="workbook">The workbook that is being worked with.</param>
+        /// <param name="align">the column alignment to use.</param>
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#setAlignment} instead.")]
+        public static void SetAlignment(ICell cell, HSSFWorkbook workbook, short align)
+        {
+            CellUtil.SetAlignment(cell, (HorizontalAlignment)align);
+        }
+
+        /// <summary>
+        /// Take a cell, and apply a font to it
+        /// </summary>
+        /// <param name="cell">the cell to Set the alignment for</param>
+        /// <param name="workbook">The workbook that is being worked with.</param>
+        /// <param name="font">The HSSFFont that you want to Set...</param>
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#setFont} instead.")]
+        public static void SetFont(ICell cell, HSSFWorkbook workbook, HSSFFont font)
+        {
+            CellUtil.SetFont(cell, font);
+        }
+
+        /**
+         *  This method attempt to find an already existing HSSFCellStyle that matches
+         *  what you want the style to be. If it does not find the style, then it
+         *  Creates a new one. If it does Create a new one, then it applies the
+         *  propertyName and propertyValue to the style. This is necessary because
+         *  Excel has an upper limit on the number of Styles that it supports.
+         *
+         *@param  workbook               The workbook that is being worked with.
+         *@param  propertyName           The name of the property that is to be
+         *      changed.
+         *@param  propertyValue          The value of the property that is to be
+         *      changed.
+         *@param  cell                   The cell that needs it's style changes
+         *@exception  NestableException  Thrown if an error happens.
+         */
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#setCellStyleProperty} instead.")]
+        public static void SetCellStyleProperty(ICell cell, HSSFWorkbook workbook, String propertyName, Object propertyValue)
+        {
+            CellUtil.SetCellStyleProperty(cell, propertyName, propertyValue);
+        }
+
+        /// <summary>
+        /// Looks for text in the cell that should be unicode, like alpha; and provides the
+        /// unicode version of it.
+        /// </summary>
+        /// <param name="cell">The cell to check for unicode values</param>
+        /// <returns>transalted to unicode</returns>
+        [Obsolete("@deprecated 3.15 beta2. Removed in 3.17. Use {@link org.apache.poi.ss.util.CellUtil#translateUnicodeValues} instead.")]
+        public static ICell TranslateUnicodeValues(ICell cell)
+        {
+            CellUtil.TranslateUnicodeValues(cell);
+            return cell;
+        }
         /// <summary>
         /// Translate color palette entries from the source to the destination sheet
         /// </summary>
@@ -200,7 +187,6 @@ namespace NPOI.HSSF.Util
                 stylish.TopBorderColor = paletteMap[stylish.TopBorderColor];
             }
         }
-
         public static void CopyCell(HSSFCell oldCell, HSSFCell newCell, IDictionary<Int32, HSSFCellStyle> styleMap, Dictionary<short, short> paletteMap, Boolean keepFormulas)
         {
             if (styleMap != null)
@@ -242,9 +228,9 @@ namespace NPOI.HSSF.Util
             switch (oldCell.CellType)
             {
                 case CellType.String:
-                   HSSFRichTextString rts= oldCell.RichStringCellValue as HSSFRichTextString;
+                    HSSFRichTextString rts = oldCell.RichStringCellValue as HSSFRichTextString;
                     newCell.SetCellValue(rts);
-                    if(rts!=null)
+                    if (rts != null)
                     {
                         for (int j = 0; j < rts.NumFormattingRuns; j++)
                         {
@@ -257,12 +243,12 @@ namespace NPOI.HSSF.Util
                             }
                             else
                             {
-                                endIndex = rts.GetIndexOfFormattingRun(j+1);
+                                endIndex = rts.GetIndexOfFormattingRun(j + 1);
                             }
                             FontRecord fr = newCell.BoundWorkbook.CreateNewFont();
                             fr.CloneStyleFrom(oldCell.BoundWorkbook.GetFontRecordAt(fontIndex));
                             HSSFFont font = new HSSFFont((short)(newCell.BoundWorkbook.GetFontIndex(fr)), fr);
-                            newCell.RichStringCellValue.ApplyFont(startIndex,endIndex, font);
+                            newCell.RichStringCellValue.ApplyFont(startIndex, endIndex, font);
                         }
                     }
                     break;
@@ -303,253 +289,5 @@ namespace NPOI.HSSF.Util
             }
         }
 
-        /// <summary>
-        /// Take a cell, and align it.
-        /// </summary>
-        /// <param name="cell">the cell to Set the alignment for</param>
-        /// <param name="workbook">The workbook that is being worked with.</param>
-        /// <param name="align">the column alignment to use.</param>
-        public static void SetAlignment(ICell cell, HSSFWorkbook workbook, short align)
-        {
-            SetCellStyleProperty(cell, workbook, ALIGNMENT, align);
-        }
-
-        /// <summary>
-        /// Take a cell, and apply a font to it
-        /// </summary>
-        /// <param name="cell">the cell to Set the alignment for</param>
-        /// <param name="workbook">The workbook that is being worked with.</param>
-        /// <param name="font">The HSSFFont that you want to Set...</param>
-        public static void SetFont(ICell cell, HSSFWorkbook workbook, HSSFFont font)
-        {
-            SetCellStyleProperty(cell, workbook, FONT, font);
-        }
-        private static bool CompareHashTableKeyValueIsEqual(Hashtable a, Hashtable b)
-        {
-            foreach (DictionaryEntry a_entry in a)
-            {
-                foreach (DictionaryEntry b_entry in b)
-                {
-                    if (a_entry.Key.ToString() == b_entry.Key.ToString())
-                    {
-                        if ((a_entry.Value is short && b_entry.Value is short
-                            && (short)a_entry.Value != (short)b_entry.Value) ||
-                            (a_entry.Value is bool && b_entry.Value is bool
-                            && (bool)a_entry.Value != (bool)b_entry.Value))
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            return true;
-        }
-        /**
-         *  This method attempt to find an already existing HSSFCellStyle that matches
-         *  what you want the style to be. If it does not find the style, then it
-         *  Creates a new one. If it does Create a new one, then it applies the
-         *  propertyName and propertyValue to the style. This is necessary because
-         *  Excel has an upper limit on the number of Styles that it supports.
-         *
-         *@param  workbook               The workbook that is being worked with.
-         *@param  propertyName           The name of the property that is to be
-         *      changed.
-         *@param  propertyValue          The value of the property that is to be
-         *      changed.
-         *@param  cell                   The cell that needs it's style changes
-         *@exception  NestableException  Thrown if an error happens.
-         */
-        public static void SetCellStyleProperty(ICell cell, HSSFWorkbook workbook, String propertyName, Object propertyValue)
-        {
-            ICellStyle originalStyle = cell.CellStyle;
-            ICellStyle newStyle = null;
-            Hashtable values = GetFormatProperties(originalStyle);
-            values[propertyName] = propertyValue;
-
-            // index seems like what  index the cellstyle is in the list of styles for a workbook.
-            // not good to compare on!
-            short numberCellStyles = workbook.NumCellStyles;
-
-            for (short i = 0; i < numberCellStyles; i++)
-            {
-                ICellStyle wbStyle = workbook.GetCellStyleAt(i);
-                Hashtable wbStyleMap = GetFormatProperties(wbStyle);
-
-                // if (wbStyleMap.Equals(values))
-                if (CompareHashTableKeyValueIsEqual(wbStyleMap, values))
-                {
-                    newStyle = wbStyle;
-                    break;
-                }
-            }
-
-            if (newStyle == null)
-            {
-                newStyle = workbook.CreateCellStyle();
-                SetFormatProperties(newStyle, workbook, values);
-            }
-
-            cell.CellStyle = (newStyle);
-        }
-
-        /// <summary>
-        /// Returns a map containing the format properties of the given cell style.
-        /// </summary>
-        /// <param name="style">cell style</param>
-        /// <returns>map of format properties (String -&gt; Object)</returns>
-        private static Hashtable GetFormatProperties(ICellStyle style)
-        {
-            Hashtable properties = new Hashtable();
-            PutShort(properties, ALIGNMENT, (short)style.Alignment);
-            PutShort(properties, BORDER_BOTTOM, (short)style.BorderBottom);
-            PutShort(properties, BORDER_LEFT, (short)style.BorderLeft);
-            PutShort(properties, BORDER_RIGHT, (short)style.BorderRight);
-            PutShort(properties, BORDER_TOP, (short)style.BorderTop);
-            PutShort(properties, BOTTOM_BORDER_COLOR, style.BottomBorderColor);
-            PutShort(properties, DATA_FORMAT, style.DataFormat);
-            PutShort(properties, FILL_BACKGROUND_COLOR, style.FillBackgroundColor);
-            PutShort(properties, FILL_FOREGROUND_COLOR, style.FillForegroundColor);
-            PutShort(properties, FILL_PATTERN, (short)style.FillPattern);
-            PutShort(properties, FONT, style.FontIndex);
-            PutBoolean(properties, HIDDEN, style.IsHidden);
-            PutShort(properties, INDENTION, style.Indention);
-            PutShort(properties, LEFT_BORDER_COLOR, style.LeftBorderColor);
-            PutBoolean(properties, LOCKED, style.IsLocked);
-            PutShort(properties, RIGHT_BORDER_COLOR, style.RightBorderColor);
-            PutShort(properties, ROTATION, style.Rotation);
-            PutShort(properties, TOP_BORDER_COLOR, style.TopBorderColor);
-            PutShort(properties, VERTICAL_ALIGNMENT, (short)style.VerticalAlignment);
-            PutBoolean(properties, WRAP_TEXT, style.WrapText);
-            return properties;
-        }
-
-        /// <summary>
-        /// Sets the format properties of the given style based on the given map.
-        /// </summary>
-        /// <param name="style">The cell style</param>
-        /// <param name="workbook">The parent workbook.</param>
-        /// <param name="properties">The map of format properties (String -&gt; Object).</param>
-        private static void SetFormatProperties(
-                ICellStyle style, HSSFWorkbook workbook, Hashtable properties)
-        {
-            style.Alignment = (HorizontalAlignment)GetShort(properties, ALIGNMENT);
-            style.BorderBottom = (BorderStyle)GetShort(properties, BORDER_BOTTOM);
-            style.BorderLeft = (BorderStyle)GetShort(properties, BORDER_LEFT);
-            style.BorderRight = (BorderStyle)GetShort(properties, BORDER_RIGHT);
-            style.BorderTop = (BorderStyle)GetShort(properties, BORDER_TOP);
-            style.BottomBorderColor = (GetShort(properties, BOTTOM_BORDER_COLOR));
-            style.DataFormat = (GetShort(properties, DATA_FORMAT));
-            style.FillBackgroundColor = (GetShort(properties, FILL_BACKGROUND_COLOR));
-            style.FillForegroundColor = (GetShort(properties, FILL_FOREGROUND_COLOR));
-            style.FillPattern = (FillPattern)GetShort(properties, FILL_PATTERN);
-            style.SetFont(workbook.GetFontAt(GetShort(properties, FONT)));
-            style.IsHidden = (GetBoolean(properties, HIDDEN));
-            style.Indention = (GetShort(properties, INDENTION));
-            style.LeftBorderColor = (GetShort(properties, LEFT_BORDER_COLOR));
-            style.IsLocked = (GetBoolean(properties, LOCKED));
-            style.RightBorderColor = (GetShort(properties, RIGHT_BORDER_COLOR));
-            style.Rotation = (GetShort(properties, ROTATION));
-            style.TopBorderColor = (GetShort(properties, TOP_BORDER_COLOR));
-            style.VerticalAlignment = (VerticalAlignment)GetShort(properties, VERTICAL_ALIGNMENT);
-            style.WrapText = (GetBoolean(properties, WRAP_TEXT));
-        }
-
-        /// <summary>
-        /// Utility method that returns the named short value form the given map.
-        /// Returns zero if the property does not exist, or is not a {@link Short}.
-        /// </summary>
-        /// <param name="properties">The map of named properties (String -&gt; Object)</param>
-        /// <param name="name">The property name.</param>
-        /// <returns>property value, or zero</returns>
-        private static short GetShort(Hashtable properties, String name)
-        {
-            Object value = properties[name];
-            if (value is short)
-            {
-                return (short)value;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        /// <summary>
-        /// Utility method that returns the named boolean value form the given map.
-        /// Returns false if the property does not exist, or is not a {@link Boolean}.
-        /// </summary>
-        /// <param name="properties">map of properties (String -&gt; Object)</param>
-        /// <param name="name">The property name.</param>
-        /// <returns>property value, or false</returns>
-        private static bool GetBoolean(Hashtable properties, String name)
-        {
-            Object value = properties[name];
-            if (value is Boolean)
-            {
-                return ((Boolean)value);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Utility method that Puts the named short value to the given map.
-        /// </summary>
-        /// <param name="properties">The map of properties (String -&gt; Object).</param>
-        /// <param name="name">The property name.</param>
-        /// <param name="value">The property value.</param>
-        private static void PutShort(Hashtable properties, String name, short value)
-        {
-            properties[name] = value;
-        }
-
-        /// <summary>
-        /// Utility method that Puts the named boolean value to the given map.
-        /// </summary>
-        /// <param name="properties">map of properties (String -&gt; Object)</param>
-        /// <param name="name">property name</param>
-        /// <param name="value">property value</param>
-        private static void PutBoolean(Hashtable properties, String name, bool value)
-        {
-            properties[name] = value;
-        }
-
-        /// <summary>
-        /// Looks for text in the cell that should be unicode, like alpha; and provides the
-        /// unicode version of it.
-        /// </summary>
-        /// <param name="cell">The cell to check for unicode values</param>
-        /// <returns>transalted to unicode</returns>
-        public static ICell TranslateUnicodeValues(ICell cell)
-        {
-
-            String s = cell.RichStringCellValue.String;
-            bool foundUnicode = false;
-            String lowerCaseStr = s.ToLower();
-
-            for (int i = 0; i < unicodeMappings.Length; i++)
-            {
-                UnicodeMapping entry = unicodeMappings[i];
-                String key = entry.entityName;
-                if (lowerCaseStr.IndexOf(key, StringComparison.Ordinal) != -1)
-                {
-                    s = s.Replace(key, entry.resolvedValue);
-                    foundUnicode = true;
-                }
-            }
-            if (foundUnicode)
-            {
-                cell.SetCellValue(new HSSFRichTextString(s));
-            }
-            return cell;
-        }
-
-        private static UnicodeMapping um(String entityName, String resolvedValue)
-        {
-            return new UnicodeMapping(entityName, resolvedValue);
-        }
     }
 }

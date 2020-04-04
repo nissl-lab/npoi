@@ -285,7 +285,7 @@ namespace NPOI.HSSF.Record
          */
         public ExtSSTRecord CreateExtSSTRecord(int sstOffset)
         {
-            if (bucketAbsoluteOffsets == null || bucketAbsoluteOffsets == null)
+            if (bucketAbsoluteOffsets == null || bucketRelativeOffsets == null)
                 throw new InvalidOperationException("SST record has not yet been Serialized.");
 
             ExtSSTRecord extSST = new ExtSSTRecord();

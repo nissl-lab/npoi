@@ -28,42 +28,47 @@ namespace NPOI.SS.Format
      * Format a value according to the standard Excel behavior.  This "standard" is
      * not explicitly documented by Microsoft, so the behavior is determined by
      * experimentation; see the tests.
-     * 
-     * An Excel format has up to four parts, Separated by semicolons.  Each part
+     * <p/>
+     * An Excel format has up to four parts, separated by semicolons.  Each part
      * specifies what to do with particular kinds of values, depending on the number
-     * of parts given: 
-     * 
-     * - One part (example: <c>[Green]#.##</c>) 
-     * If the value is a number, display according to this one part (example: green text,
+     * of parts given: <dl> <dt>One part (example: <tt>[Green]#.##</tt>) <dd>If the
+     * value is a number, display according to this one part (example: green text,
      * with up to two decimal points). If the value is text, display it as is.
-     * 
-     * - Two parts (example: <c>[Green]#.##;[Red]#.##</c>) 
-     * If the value is a positive number or zero, display according to the first part (example: green
+     * <dt>Two parts (example: <tt>[Green]#.##;[Red]#.##</tt>) <dd>If the value is a
+     * positive number or zero, display according to the first part (example: green
      * text, with up to two decimal points); if it is a negative number, display
      * according to the second part (example: red text, with up to two decimal
-     * points). If the value is text, display it as is. 
-     * 
-     * - Three parts (example: <c>[Green]#.##;[Black]#.##;[Red]#.##</c>) 
-     * If the value is a positive number, display according to the first part (example: green text, with up to
+     * points). If the value is text, display it as is. <dt>Three parts (example:
+     * <tt>[Green]#.##;[Black]#.##;[Red]#.##</tt>) <dd>If the value is a positive
+     * number, display according to the first part (example: green text, with up to
      * two decimal points); if it is zero, display according to the second part
      * (example: black text, with up to two decimal points); if it is a negative
      * number, display according to the third part (example: red text, with up to
-     * two decimal points). If the value is text, display it as is.
-     * 
-     * - Four parts (example: <c>[Green]#.##;[Black]#.##;[Red]#.##;[@]</c>)
-     * If the value is a positive number, display according to the first part (example: green text,
+     * two decimal points). If the value is text, display it as is. <dt>Four parts
+     * (example: <tt>[Green]#.##;[Black]#.##;[Red]#.##;[@]</tt>) <dd>If the value is
+     * a positive number, display according to the first part (example: green text,
      * with up to two decimal points); if it is zero, display according to the
      * second part (example: black text, with up to two decimal points); if it is a
      * negative number, display according to the third part (example: red text, with
      * up to two decimal points). If the value is text, display according to the
      * fourth part (example: text in the cell's usual color, with the text value
-     * surround by brackets).
-     * 
-     * In Addition to these, there is a general format that is used when no format
+     * surround by brackets). </dd></dt></dd></dt></dd></dt></dd></dt></dl>
+     * <p/>
+     * A given format part may specify a given Locale, by including something
+     *  like <tt>[$$-409]</tt> or <tt>[$&pound;-809]</tt> or <tt>[$-40C]</tt>. These
+     *  are (currently) largely ignored. You can use {@link DateFormatConverter}
+     *  to look these up into Java Locales if desired.
+     * <p/>
+     * In addition to these, there is a general format that is used when no format
      * is specified.  This formatting is presented by the {@link #GENERAL_FORMAT}
      * object.
-     *
-     * @author Ken Arnold, Industrious Media LLC
+     * 
+     * TODO Merge this with {@link DataFormatter} so we only have one set of
+     *  code for formatting numbers.
+     * TODO Re-use parts of this logic with {@link ConditionalFormatting} /
+     *  {@link ConditionalFormattingRule} for reporting stylings which do/don't apply
+     * TODO Support the full set of modifiers, including alternate calendars and
+     *  native character numbers, as documented at https://help.libreoffice.org/Common/Number_Format_Codes
      */
     public class CellFormat
     {
@@ -244,7 +249,7 @@ namespace NPOI.SS.Format
                 }
                 else
                 {
-                    throw new ArgumentException("value not a valid Excel date");
+                    throw new ArgumentException("value " + numericValue + " of date " + value + " is not a valid Excel date");
                 }
             }
             else

@@ -234,6 +234,8 @@ namespace NPOI.XSSF.UserModel
             {
                 if (value)
                     PageOrder = (PageOrder.OVER_THEN_DOWN);
+                else
+                    PageOrder = (PageOrder.DOWN_THEN_OVER);
             }
         }
 
@@ -252,6 +254,8 @@ namespace NPOI.XSSF.UserModel
             {
                 if (value)
                     Orientation =(PrintOrientation.LANDSCAPE);
+                else
+                    Orientation = (PrintOrientation.PORTRAIT);
             }
         }
 

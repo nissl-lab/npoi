@@ -291,23 +291,7 @@ namespace NPOI.HSSF.Record
                 field_1_options = active.SetShortBoolean(field_1_options, value); 
             }
         }
-        /**
-         * deprecated May 2008
-         * @deprecated use IsActive()
-         */
-        [Obsolete]
-        public bool Paged
-        {
-            get
-            {
-                return IsActive;
-            }
-            set 
-            {
-                IsActive = value;
-            }
-        }
-
+        
         /**
          * was the sheet saved in page break view
          * @return pagebreaksaved or not

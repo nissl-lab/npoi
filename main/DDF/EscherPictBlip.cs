@@ -37,7 +37,7 @@ namespace NPOI.DDF
 
         private const int HEADER_SIZE = 8;
 
-        private byte[] field_1_UID;
+        private byte[] field_1_UID = new byte[16];
         private int field_2_cb;
         private int field_3_rcBounds_x1;
         private int field_3_rcBounds_y1;
@@ -65,7 +65,6 @@ namespace NPOI.DDF
             int bytesAfterHeader = ReadHeader(data, offset);
             int pos = offset + HEADER_SIZE;
 
-            field_1_UID = new byte[16];
             Array.Copy(data, pos, field_1_UID, 0, 16); pos += 16;
             field_2_cb = LittleEndian.GetInt(data, pos); pos += 4;
             field_3_rcBounds_x1 = LittleEndian.GetInt(data, pos); pos += 4;
@@ -179,7 +178,13 @@ namespace NPOI.DDF
         public byte[] UID
         {
             get { return field_1_UID; }
-            set { this.field_1_UID = value; }
+            set {
+                if (value == null || value.Length != 16)
+                {
+                    throw new ArgumentException("uid must be byte[16]");
+                }
+                Array.Copy(value, 0, field_1_UID, 0, field_1_UID.Length);
+            }
         }
 
         /// <summary>

@@ -27,7 +27,13 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using System.Xml;
 using System.Text;
-namespace TestCases.OPC
+using ICSharpCode.SharpZipLib.Zip;
+using System.Collections;
+using NPOI.SS.UserModel;
+using NPOI;
+using NPOI.Openxml4Net.Exceptions;
+
+namespace TestCases.OpenXml4Net.OPC
 {
     [TestFixture]
     public class TestPackage
@@ -71,7 +77,11 @@ namespace TestCases.OPC
 
             // Zap the target file, in case of an earlier run
             if (File.Exists(targetFile.FullName))
+            {
                 File.Delete(targetFile.FullName);
+                Assert.IsFalse(File.Exists(targetFile.FullName));
+            }
+                
 
             OPCPackage pkg = OPCPackage.Create(targetFile.FullName);
 
@@ -107,7 +117,12 @@ namespace TestCases.OPC
             FileInfo expectedFile = OpenXml4NetTestDataSamples.GetSampleFile("TestCreatePackageOUTPUT.docx");
 
             // Zap the target file, in case of an earlier run
-            if (targetFile.Exists) targetFile.Delete();
+            if (targetFile.Exists)
+            {
+                targetFile.Delete();
+                targetFile.Refresh();
+                Assert.IsFalse(targetFile.Exists);
+            }
 
             // Create a namespace
             OPCPackage pkg = OPCPackage.Create(targetFile.FullName);
@@ -174,6 +189,8 @@ namespace TestCases.OPC
             PackagePartName sheetPartName = PackagingUriHelper.CreatePartName("/xl/worksheets/sheet1.xml");
             PackageRelationship rel =
                  corePart.AddRelationship(sheetPartName, TargetMode.Internal, "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/worksheet", "rSheet1");
+            Assert.IsNotNull(rel);
+
             PackagePart part = pkg.CreatePart(sheetPartName, "application/vnd.Openxmlformats-officedocument.spreadsheetml.worksheet+xml");
             Assert.IsNotNull(part);
 
@@ -191,6 +208,7 @@ namespace TestCases.OPC
                 pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_DOCUMENT);
             Assert.AreEqual(1, coreRels.Size);
             PackageRelationship coreRel = coreRels.GetRelationship(0);
+            Assert.IsNotNull(coreRel);
             Assert.AreEqual("/", coreRel.SourceUri.ToString());
             Assert.AreEqual("/xl/workbook.xml", coreRel.TargetUri.ToString());
             Assert.IsNotNull(pkg.GetPart(coreRel));
@@ -218,6 +236,7 @@ namespace TestCases.OPC
                 coreRels = pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_DOCUMENT);
                 Assert.AreEqual(1, coreRels.Size);
                 coreRel = coreRels.GetRelationship(0);
+                Assert.IsNotNull(coreRel);
 
                 Assert.AreEqual("/", coreRel.SourceUri.ToString());
                 Assert.AreEqual("/xl/workbook.xml", coreRel.TargetUri.ToString());
@@ -227,6 +246,8 @@ namespace TestCases.OPC
                 PackageRelationshipCollection rels = corePart.GetRelationshipsByType("http://schemas.Openxmlformats.org/officeDocument/2006/relationships/hyperlink");
                 Assert.AreEqual(1, rels.Size);
                 rel = rels.GetRelationship(0);
+                Assert.IsNotNull(rel);
+                Assert.Warn(" 'Sheet1!A1' and rel.TargetUri.Fragment should be equal.");
                 //Assert.AreEqual("Sheet1!A1", rel.TargetUri.Fragment);
 
                 assertMSCompatibility(pkg);
@@ -387,8 +408,8 @@ namespace TestCases.OPC
         /**
          * TODO: fix and enable
          */
-        //[Test]
-        public void disabled_testRemovePartRecursive()
+        [Test, Ignore("by poi")]
+        public void TestRemovePartRecursive()
         {
             String originalFile = OpenXml4NetTestDataSamples.GetSampleFileName("TestPackageCommon.docx");
             FileInfo targetFile = OpenXml4NetTestDataSamples.GetOutputFile("TestPackageRemovePartRecursiveOUTPUT.docx");
@@ -668,6 +689,360 @@ namespace TestCases.OPC
 
             Assert.False(mgr.IsContentTypeRegister("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"));
             Assert.True(mgr.IsContentTypeRegister("application/vnd.ms-excel.sheet.macroEnabled.main+xml"));
+        }
+
+        /**
+         * Verify we give helpful exceptions (or as best we can) when
+         *  supplied with non-OOXML file types (eg OLE2, ODF)
+         */
+        [Test]
+        public void NonOOXMLFileTypes()
+        {
+            // Spreadsheet has a good mix of alternate file types
+            POIDataSamples files = POIDataSamples.GetSpreadSheetInstance();
+
+            // OLE2 - Stream
+            try
+            {
+                Stream stream = files.OpenResourceAsStream("SampleSS.xls");
+                try
+                {
+                    OPCPackage.Open(stream);
+                }
+                finally
+                {
+                    stream.Dispose();//.Close();
+                }
+                Assert.Fail("Shouldn't be able to open OLE2");
+            }
+            catch (OLE2NotOfficeXmlFileException e)
+            {
+                Assert.IsTrue(e.Message.Contains("The supplied data appears to be in the OLE2 Format"));
+                Assert.IsTrue(e.Message.Contains("You are calling the part of POI that deals with OOXML"));
+            }
+            // OLE2 - File
+            try
+            {
+                OPCPackage.Open(files.GetFile("SampleSS.xls"));
+                Assert.Fail("Shouldn't be able to open OLE2");
+            }
+            catch (OLE2NotOfficeXmlFileException e)
+            {
+                Assert.IsTrue(e.Message.Contains("The supplied data appears to be in the OLE2 Format"));
+                Assert.IsTrue(e.Message.Contains("You are calling the part of POI that deals with OOXML"));
+            }
+
+            // Raw XML - Stream
+            try
+            {
+                Stream stream = files.OpenResourceAsStream("SampleSS.xml");
+                try
+                {
+                    OPCPackage.Open(stream);
+                }
+                finally
+                {
+                    stream.Dispose();//.Close();
+                }
+                Assert.Fail("Shouldn't be able to open XML");
+            }
+            catch (NotOfficeXmlFileException e)
+            {
+                Assert.IsTrue(e.Message.Contains("The supplied data appears to be a raw XML file"));
+                Assert.IsTrue(e.Message.Contains("Formats such as Office 2003 XML"));
+            }
+            // Raw XML - File
+            try
+            {
+                OPCPackage.Open(files.GetFile("SampleSS.xml"));
+                Assert.Fail("Shouldn't be able to open XML");
+            }
+            catch (NotOfficeXmlFileException e)
+            {
+                Assert.IsTrue(e.Message.Contains("The supplied data appears to be a raw XML file"));
+                Assert.IsTrue(e.Message.Contains("Formats such as Office 2003 XML"));
+            }
+
+            // ODF / ODS - Stream
+            try
+            {
+                Stream stream = files.OpenResourceAsStream("SampleSS.ods");
+                try
+                {
+                    OPCPackage.Open(stream);
+                }
+                finally
+                {
+                    stream.Dispose();//.Close();
+                }
+                Assert.Fail("Shouldn't be able to open ODS");
+            }
+            catch (ODFNotOfficeXmlFileException e)
+            {
+                Assert.IsTrue(e.ToString().Contains("The supplied data appears to be in ODF"));
+                Assert.IsTrue(e.ToString().Contains("Formats like these (eg ODS"));
+            }
+            // ODF / ODS - File
+            try
+            {
+                OPCPackage.Open(files.GetFile("SampleSS.ods"));
+                Assert.Fail("Shouldn't be able to open ODS");
+            }
+            catch (ODFNotOfficeXmlFileException e)
+            {
+                Assert.IsTrue(e.ToString().Contains("The supplied data appears to be in ODF"));
+                Assert.IsTrue(e.ToString().Contains("Formats like these (eg ODS"));
+            }
+
+            // Plain Text - Stream
+            try
+            {
+                Stream stream = files.OpenResourceAsStream("SampleSS.txt");
+                try
+                {
+                    OPCPackage.Open(stream);
+                }
+                finally
+                {
+                    stream.Dispose();//.Close();
+                }
+                Assert.Fail("Shouldn't be able to open Plain Text");
+            }
+            catch (NotOfficeXmlFileException e)
+            {
+                Assert.IsTrue(e.Message.Contains("No valid entries or contents found"));
+                Assert.IsTrue(e.Message.Contains("not a valid OOXML"));
+            }
+            // Plain Text - File
+            try
+            {
+                OPCPackage.Open(files.GetFile("SampleSS.txt"));
+                Assert.Fail("Shouldn't be able to open Plain Text");
+            }
+            catch (UnsupportedFileFormatException)
+            {
+                // Unhelpful low-level error, sorry
+            }
+        }
+
+
+
+        [Test, Ignore("need ZipSecureFile and ByteArrayOutputStream class")]
+        public void ZipBombCreateAndHandle()
+        {
+            // #50090 / #56865
+            ZipFile zipFile = ZipHelper.OpenZipFile(OpenXml4NetTestDataSamples.GetSampleFile("sample.xlsx"));
+            Assert.IsNotNull(zipFile);
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(2500000);
+            ZipOutputStream append = new ZipOutputStream(bos);
+            // first, copy contents from existing war
+            IEnumerator entries = zipFile.GetEnumerator();
+            while (entries.MoveNext())
+            {
+                ZipEntry e2 = (ZipEntry)entries.Current;
+                ZipEntry e = new ZipEntry(e2.Name);
+                
+                e.DateTime = (e2.DateTime);
+                e.Comment = (e2.Comment);
+                e.Size = (e2.Size);
+
+                append.PutNextEntry(e);
+                if (!e.IsDirectory)
+                {
+                    Stream is1 = zipFile.GetInputStream(e);
+                    if (e.Name.Equals("[Content_Types].xml"))
+                    {
+                        ByteArrayOutputStream bos2 = new ByteArrayOutputStream();
+                        IOUtils.Copy(is1, bos2);
+                        long size = bos2.Length - "</Types>".Length;
+                        append.Write(bos2.ToByteArray(), 0, (int)size);
+                        byte[] spam = new byte[0x7FFF];
+                        for (int i = 0; i < spam.Length; i++) spam[i] = (byte)' ';
+                        // 0x7FFF0000 is the maximum for 32-bit zips, but less still works
+                        while (size < 0x7FFF0000)
+                        {
+                            append.Write(spam, 0, spam.Length);
+                            size += spam.Length;
+                        }
+                        append.Write(Encoding.ASCII.GetBytes("</Types>"), 0, 8);
+                        size += 8;
+                        e.Size = (size);
+                    }
+                    else
+                    {
+                        IOUtils.Copy(is1, append);
+                    }
+                }
+                append.CloseEntry();
+            }
+
+            append.Close();
+            zipFile.Close();
+
+            byte[] buf = bos.ToByteArray();
+            bos = null;
+
+            IWorkbook wb = WorkbookFactory.Create(new ByteArrayInputStream(buf));
+            wb.GetSheetAt(0);
+            wb.Close();
+            zipFile.Close();
+        }
+
+        [Test, Ignore("need ZipSecureFile class")]
+        public void ZipBombCheckSizes()
+        {
+            //FileInfo file = OpenXml4NetTestDataSamples.GetSampleFile("sample.xlsx");
+
+            //try
+            //{
+            //    double min_ratio = Double.MaxValue;
+            //    long max_size = 0;
+            //    ZipFile zf = ZipHelper.OpenZipFile(file);
+            //    assertNotNull(zf);
+            //    IEnumerator entries = zf.GetEnumerator();
+            //    while (entries.MoveNext())
+            //    {
+            //        ZipEntry ze = (ZipEntry)entries.Current;
+            //        double ratio = (double)ze.CompressedSize / (double)ze.Size;
+            //        min_ratio = Math.Min(min_ratio, ratio);
+            //        max_size = Math.Max(max_size, ze.Size);
+            //    }
+            //    zf.Close();
+
+            //    // use values close to, but within the limits 
+            //    ZipSecureFile.SetMinInflateRatio(min_ratio - 0.002);
+            //    assertEquals(min_ratio - 0.002, ZipSecureFile.getMinInflateRatio(), 0.00001);
+            //    ZipSecureFile.SetMaxEntrySize(max_size + 1);
+            //    assertEquals(max_size + 1, ZipSecureFile.getMaxEntrySize());
+            //    IWorkbook wb = WorkbookFactory.Create(file.FullName, null, true);
+            //    wb.Close();
+
+            //    // check ratio ouf of bounds
+            //    ZipSecureFile.setMinInflateRatio(min_ratio + 0.002);
+            //    try
+            //    {
+            //        wb = WorkbookFactory.Create(file.FullName, null, true);
+            //        wb.Close();
+            //        // this is a bit strange, as there will be different exceptions thrown
+            //        // depending if this executed via "ant test" or within eclipse
+            //        // maybe a difference in JDK ...
+            //    }
+            //    catch (InvalidDataException e)
+            //    {
+            //        checkForZipBombException(e);
+            //    }
+            //    catch (POIXMLException e)
+            //    {
+            //        checkForZipBombException(e);
+            //    }
+
+            //    // check max entry size ouf of bounds
+            //    ZipSecureFile.SetMinInflateRatio(min_ratio - 0.002);
+            //    ZipSecureFile.SetMaxEntrySize(max_size - 1);
+            //    try
+            //    {
+            //        wb = WorkbookFactory.Create(file.FullName, null, true);
+            //        wb.Close();
+            //    }
+            //    catch (InvalidDataException e)
+            //    {
+            //        checkForZipBombException(e);
+            //    }
+            //    catch (POIXMLException e)
+            //    {
+            //        checkForZipBombException(e);
+            //    }
+            //}
+            //finally
+            //{
+            //    // reset otherwise a lot of ooxml tests will fail
+            //    ZipSecureFile.SetMinInflateRatio(0.01d);
+            //    ZipSecureFile.SetMaxEntrySize(0xFFFFFFFFL);
+            //}
+        }
+
+        private void checkForZipBombException(Exception e)
+        {
+            //if (e is InvocationTargetException) {
+            //    InvocationTargetException t = (InvocationTargetException)e;
+            //    IOException t2 = (IOException)t.getTargetException();
+            //    if (t2.Message.StartsWith("Zip bomb detected!"))
+            //    {
+            //        return;
+            //    }
+            //}
+
+            if (e.Message.StartsWith("Zip bomb detected! Exiting."))
+            {
+                return;
+            }
+
+            // recursively check the causes for the message as it can be nested further down in the exception-tree
+            if (e.InnerException != null && e.InnerException != e)
+            {
+                checkForZipBombException(e.InnerException);
+                return;
+            }
+
+            throw new InvalidOperationException("Expected to catch an Exception because of a detected Zip Bomb, but did not find the related error message in the exception", e);
+        }
+        [Ignore("need ZipSecureFile class")]
+        [Test]
+        public void TestConstructors()
+        {
+            //// verify the various ways to construct a ZipSecureFile
+            //File file = OpenXML4JTestDataSamples.GetSampleFile("sample.xlsx");
+            //ZipSecureFile zipFile = new ZipSecureFile(file);
+            //Assert.IsNotNull(zipFile.Name);
+            //zipFile.close();
+            //zipFile = new ZipSecureFile(file, ZipFile.OPEN_READ);
+            //Assert.IsNotNull(zipFile.Name);
+            //zipFile.close();
+            //zipFile = new ZipSecureFile(file.AbsolutePath);
+            //Assert.IsNotNull(zipFile.Name);
+            //zipFile.close();
+        }
+        [Ignore("need ZipSecureFile class")]
+        [Test]
+        public void TestMaxTextSize()
+        {
+            //long before = ZipSecureFile.MaxTextSize;
+            //try
+            //{
+            //    ZipSecureFile.MaxTextSize = 12345;
+            //    Assert.AreEqual(12345, ZipSecureFile.MaxTextSize);
+            //}
+            //finally
+            //{
+            //    ZipSecureFile.MaxTextSize = before;
+            //}
+        }
+
+
+        // bug 60128
+        [Test]
+        public void TestCorruptFile()
+        {
+            OPCPackage pkg = null;
+            FileInfo file = OpenXml4NetTestDataSamples.GetSampleFile("invalid.xlsx");
+            try
+            {
+                pkg = OPCPackage.Open(file, PackageAccess.READ);
+            }
+            catch (Exception e)
+            {
+                //System.out.println(e.GetClass().getName());
+                //System.out.println(e.GetMessage());
+                //e.printStackTrace();
+            }
+            finally
+            {
+                if (pkg != null)
+                {
+                    pkg.Close();
+                }
+            }
         }
     }
 }

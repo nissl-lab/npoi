@@ -16,14 +16,14 @@
 ==================================================================== */
 using System;
 using NPOI.SS.Formula;
-using NPOI.SS.Formula.Udf;
+using NPOI.SS.Formula.UDF;
 using NPOI.SS.UserModel;
 using NPOI.Util;
 using NPOI.XSSF.UserModel;
 
 namespace NPOI.XSSF.Streaming
 {
-    public class SXSSFFormulaEvaluator : XSSFFormulaEvaluator
+    public class SXSSFFormulaEvaluator : BaseXSSFFormulaEvaluator
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(SXSSFFormulaEvaluator));
 
@@ -33,22 +33,24 @@ namespace NPOI.XSSF.Streaming
         {
         }
 
-        private SXSSFFormulaEvaluator(SXSSFWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder) : this(workbook, new WorkbookEvaluator(SXSSFEvaluationWorkbook.Create(workbook), stabilityClassifier, udfFinder))
+        private SXSSFFormulaEvaluator(SXSSFWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder) 
+            : this(workbook, new WorkbookEvaluator(SXSSFEvaluationWorkbook.Create(workbook), stabilityClassifier, udfFinder))
         {
 
         }
 
-        private SXSSFFormulaEvaluator(SXSSFWorkbook workbook, WorkbookEvaluator bookEvaluator) : base(bookEvaluator)
+        private SXSSFFormulaEvaluator(SXSSFWorkbook workbook, WorkbookEvaluator bookEvaluator) 
+            : base(bookEvaluator)
         {
             this.wb = workbook;
         }
 
-        public static SXSSFFormulaEvaluator create(SXSSFWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
+        public static SXSSFFormulaEvaluator Create(SXSSFWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
         {
             return new SXSSFFormulaEvaluator(workbook, stabilityClassifier, udfFinder);
         }
 
-        protected IEvaluationCell toEvaluationCell(ICell cell)
+        protected override IEvaluationCell ToEvaluationCell(ICell cell)
         {
             if (!(cell is SXSSFCell))
             {
@@ -59,11 +61,6 @@ namespace NPOI.XSSF.Streaming
             return new SXSSFEvaluationCell((SXSSFCell)cell);
         }
 
-        public SXSSFCell EvaluateInCell(ICell cell)
-        {
-            return (SXSSFCell)base.EvaluateInCell(cell);
-        }
-
         public static void EvaluateAllFormulaCells(SXSSFWorkbook wb, bool skipOutOfWindow)
         {
             SXSSFFormulaEvaluator eval = new SXSSFFormulaEvaluator(wb);
@@ -71,7 +68,7 @@ namespace NPOI.XSSF.Streaming
             // Check they're all available
             foreach (ISheet sheet in wb)
             {
-                if (((SXSSFSheet)sheet).allFlushed)
+                if (((SXSSFSheet)sheet).AllRowsFlushed)
                 {
                     throw new SheetsFlushedException();
                 }
@@ -82,7 +79,7 @@ namespace NPOI.XSSF.Streaming
             {
 
                 // Check if any rows have already been flushed out
-                int lastFlushedRowNum = ((SXSSFSheet)sheet).lastFlushedRowNumber;
+                int lastFlushedRowNum = ((SXSSFSheet)sheet).LastFlushedRowNumber;
                 if (lastFlushedRowNum > -1)
                 {
                     if (!skipOutOfWindow) throw new RowFlushedException(0);
@@ -103,12 +100,18 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        public void EvaluateAll()
+        /**
+         * Loops over rows and cells, evaluating formula cells there.
+         * If any sheets are inactive, or any cells outside of the window,
+         *  will give an Exception.
+         * For SXSSF, you generally don't want to use this method, instead
+         *  evaluate your formulas as you go before they leave the window.
+         */
+        public override void EvaluateAll()
         {
             // Have the evaluation done, with exceptions
             EvaluateAllFormulaCells((SXSSFWorkbook)wb, false);
         }
-
     }
 
 

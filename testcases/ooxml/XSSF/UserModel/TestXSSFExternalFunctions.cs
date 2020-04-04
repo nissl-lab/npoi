@@ -17,7 +17,9 @@
 
 using TestCases.SS.Formula;
 using NUnit.Framework;
-namespace NPOI.XSSF.UserModel
+using NPOI.XSSF;
+
+namespace TestCases.XSSF.UserModel
 {
 
     /**
@@ -27,14 +29,10 @@ namespace NPOI.XSSF.UserModel
     public class TestXSSFExternalFunctions : BaseTestExternalFunctions
     {
 
-        public TestXSSFExternalFunctions():base(XSSFITestDataProvider.instance)
+        public TestXSSFExternalFunctions()
+            : base(XSSFITestDataProvider.instance, "atp.xlsx")
         {
-            
-        }
-        [Test]
-        public void TestATP()
-        {
-            BaseTestInvokeATP("atp.xlsx");
+
         }
     }
 

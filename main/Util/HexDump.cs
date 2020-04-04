@@ -49,6 +49,18 @@ namespace NPOI.Util
         private static readonly int[] _shifts = new int[] { 60, 56, 52, 48, 44, 40, 36, 32, 28, 24, 20, 16, 12, 8, 4, 0 };
         public static readonly string EOL = Environment.NewLine;
 
+        /**
+     * Used to build output as Hex
+     */
+        private static char[] DIGITS_LOWER =
+            {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+
+        /**
+         * Used to build output as Hex
+         */
+        private static char[] DIGITS_UPPER =
+            {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
         private HexDump()
         {
         }
@@ -77,50 +89,88 @@ namespace NPOI.Util
 
         public static string Dump(byte[] data, long offset, int index)
         {
+            return Dump(data, offset, index, Int32.MaxValue);
+        }
+
+        /**
+         * dump an array of bytes to a String
+         *
+         * @param data the byte array to be dumped
+         * @param offset its offset, whatever that might mean
+         * @param index initial index into the byte array
+         * @param length number of characters to output
+         *
+         * @exception ArrayIndexOutOfBoundsException if the index is
+         *            outside the data array's bounds
+         * @return output string
+         */
+
+        public static String Dump(byte[] data, long offset, int index, int length)
+        {
+            if (data == null || data.Length == 0)
+            {
+                return "No Data" + EOL;
+            }
+
+            int data_length = (length == Int32.MaxValue|| length < 0 || index + length < 0)
+                ? data.Length
+                : Math.Min(data.Length, index + length);
+
 
             if ((index < 0) || (index >= data.Length))
             {
-                string message = string.Format(CultureInfo.InvariantCulture, "illegal index: {0} into array of length {1}", index, data.Length);
-                throw new IndexOutOfRangeException(message);
+                String err = "illegal index: " + index + " into array of length " + data.Length;
+                throw new IndexOutOfRangeException(err);
             }
+
             long display_offset = offset + index;
-            StringBuilder buffer = new StringBuilder(0x4a);
-            for (int i = index; i < data.Length; i += 16)
+            StringBuilder buffer = new StringBuilder(74);
+
+            for (int j = index; j < data_length; j += 16)
             {
-                int chars_read = data.Length - i;
+                int chars_read = data_length - j;
 
                 if (chars_read > 16)
                 {
                     chars_read = 16;
                 }
+
                 buffer.Append(Dump(display_offset)).Append(' ');
-                for (int j = 0; j < 16; j++)
+                for (int k = 0; k < 16; k++)
                 {
-                    if (j < chars_read)
+                    if (k < chars_read)
                     {
-                        buffer.Append(Dump(data[j + i]));
+                        buffer.Append(Dump(data[k + j])).Append(' ');
                     }
                     else
                     {
-                        buffer.Append("  ");
+                        buffer.Append("   ");
                     }
-                    buffer.Append(' ');
                 }
                 for (int k = 0; k < chars_read; k++)
                 {
-                    if ((data[k + i] >= ' ') && (data[k + i] < 127))
-                    {
-                        buffer.Append((char)data[k + i]);
-                    }
-                    else
-                    {
-                        buffer.Append('.');
-                    }
+                    buffer.Append(ToAscii(data[k + j]));
                 }
                 buffer.Append(EOL);
                 display_offset += chars_read;
             }
             return buffer.ToString();
+        }
+        public static char ToAscii(int dataB)
+        {
+            char charB = (char)(dataB & 0xFF);
+            if (char.IsControl(charB)) return '.';
+
+            switch ((byte)charB)
+            {
+                case 0xFF:
+                case 0xDD: // printable, but not compilable with current compiler encoding
+                    charB = '.';
+                    break;
+                default:
+                    break;
+            }
+            return charB;
         }
 
         public static void Dump(byte[] data, long offset, Stream stream, int index)
@@ -359,13 +409,16 @@ namespace NPOI.Util
         {
             StringBuilder buffer = new StringBuilder();
             buffer.Append('[');
-            for (int i = 0; i < value.Length; i++)
+            if (value != null && value.Length > 0)
             {
-                if (i > 0)
+                for (int i = 0; i < value.Length; i++)
                 {
-                    buffer.Append(", ");
+                    if (i > 0)
+                    {
+                        buffer.Append(", ");
+                    }
+                    buffer.Append(ToHex(value[i]));
                 }
-                buffer.Append(ToHex(value[i]));
             }
             buffer.Append(']');
             return buffer.ToString();
@@ -425,6 +478,31 @@ namespace NPOI.Util
                 retVal.Append(ToHex(value[x]));
             }
             return retVal.ToString();
+        }
+
+        public static string EncodeHexString(byte[] data)
+        {
+            return new String(EncodeHex(data));
+        }
+        public static char[] EncodeHex(byte[] data)
+        {
+            return EncodeHex(data, true);
+        }
+        public static char[] EncodeHex(byte[] data, bool toLowerCase)
+        {
+            return EncodeHex(data, toLowerCase ? DIGITS_LOWER : DIGITS_UPPER);
+        }
+        protected static char[] EncodeHex(byte[] data, char[] toDigits)
+        {
+            int l = data.Length;
+            char[] out1 = new char[l << 1];
+            // two characters form the hex value.
+            for (int i = 0, j = 0; i < l; i++)
+            {
+                out1[j++] = toDigits[(int)(0xF0 & data[i]) >> 4];
+                out1[j++] = toDigits[0x0F & data[i]];
+            }
+            return out1;
         }
     }
 

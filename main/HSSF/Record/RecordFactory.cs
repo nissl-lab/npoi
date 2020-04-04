@@ -133,7 +133,9 @@ namespace NPOI.HSSF.Record
 		        typeof(CalcCountRecord),
 		        typeof(CalcModeRecord),
 		        typeof(CFHeaderRecord),
-		        typeof(CFRuleRecord),
+                typeof(CFHeader12Record),
+                typeof(CFRuleRecord),
+                typeof(CFRule12Record),
                 typeof(ChartRecord),
                 typeof(AlRunsRecord),
                 //typeof(CodeNameRecord),
@@ -255,7 +257,6 @@ namespace NPOI.HSSF.Record
                 typeof(BeginRecord),
                 typeof(BopPopCustomRecord),
                 typeof(BopPopRecord),
-                typeof(BRAIRecord),
                 typeof(CatLabRecord),
                 typeof(CatSerRangeRecord),
                 typeof(Chart3DBarShapeRecord),
@@ -279,9 +280,10 @@ namespace NPOI.HSSF.Record
                 typeof(DropBarRecord),
                 typeof(EndBlockRecord),
                 typeof(EndRecord),
+                typeof(LinkedDataRecord),
                 typeof(Fbi2Record),
                 typeof(FbiRecord),
-                typeof(FontXRecord),
+                typeof(FontIndexRecord),
                 typeof(FrameRecord),
                 typeof(FrtFontListRecord),
                 typeof(GelFrameRecord),
@@ -420,7 +422,10 @@ namespace NPOI.HSSF.Record
          */
         public static Type GetRecordClass(int sid)
         {
-            I_RecordCreator rc = _recordCreatorsById[(short)sid];
+            I_RecordCreator rc = null;
+            if (_recordCreatorsById.ContainsKey((short)sid))
+                rc = _recordCreatorsById[(short)sid];
+
             if (rc == null)
             {
                 return null;

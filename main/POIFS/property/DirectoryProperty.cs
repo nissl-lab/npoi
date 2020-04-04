@@ -28,6 +28,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace NPOI.POIFS.Properties
 {
@@ -35,7 +36,7 @@ namespace NPOI.POIFS.Properties
     /// Trivial extension of Property for POIFSDocuments
     /// @author Marc Johnson (mjohnson at apache dot org)
     /// </summary>
-    public class DirectoryProperty:Property,Parent
+    public class DirectoryProperty: Property, Parent, IEnumerable<Property>
     {
         // List of Property instances
         private List<Property> _children;
@@ -286,6 +287,16 @@ namespace NPOI.POIFS.Properties
             }
             _children_names.Add(name);
             _children.Add(property);
+        }
+
+        public IEnumerator<Property> GetEnumerator()
+        {
+            return _children.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _children.GetEnumerator();
         }
     }
 }

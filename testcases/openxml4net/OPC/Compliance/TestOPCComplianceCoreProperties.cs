@@ -164,7 +164,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         {
             String sampleFileName = "OPCCompliance_CoreProperties_OnlyOneCorePropertiesPart.docx";
             OPCPackage pkg = null;
-            pkg = OPCPackage.Open(POIDataSamples.GetOpenXml4NetInstance().GetFile(sampleFileName));
+            pkg = OPCPackage.Open(POIDataSamples.GetOpenXML4JInstance().GetFile(sampleFileName));
 
 
             Uri partUri = CreateURI("/docProps/core2.xml");
@@ -174,10 +174,6 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
                         ContentTypes.CORE_PROPERTIES_PART);
                 // no longer fail on compliance error
                 //fail("expected OPC compliance exception was not thrown");
-            }
-            catch (InvalidFormatException e)
-            {
-                throw;
             }
             catch (InvalidOperationException e)
             {
@@ -234,7 +230,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         public void TestLimitedXSITypeAttribute_PresentWithUnauthorizedValue()
         {
             String msg = ExtractInvalidFormatMessage("LimitedXSITypeAttribute_PresentWithUnauthorizedValueFAIL.docx");
-            Assert.AreEqual("The element 'modified' must have the 'xsi:type' attribute with the value 'dcterms:W3CDTF' !", msg);
+            Assert.AreEqual("The element 'modified' must have the 'xsi:type' attribute with the value 'dcterms:W3CDTF', but had 'W3CDTF' !", msg);
         }
 
         /**
@@ -245,7 +241,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         public void TestNoCoreProperties_saveNew()
         {
             String sampleFileName = "OPCCompliance_NoCoreProperties.xlsx";
-            OPCPackage pkg = OPCPackage.Open(POIDataSamples.GetOpenXml4NetInstance().GetFileInfo(sampleFileName).FullName);
+            OPCPackage pkg = OPCPackage.Open(POIDataSamples.GetOpenXML4JInstance().GetFileInfo(sampleFileName).FullName);
 
             // Verify it has empty properties
             Assert.AreEqual(0, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
@@ -257,6 +253,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             MemoryStream baos = new MemoryStream();
             pkg.Save(baos);
             MemoryStream bais = new MemoryStream(baos.ToArray());
+            pkg.Revert();
 
             pkg = OPCPackage.Open(bais);
 
@@ -265,13 +262,16 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             Assert.IsNotNull(pkg.GetPackageProperties());
             Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
             //Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
+            pkg.Close();
 
             // Open a new copy of it
-            pkg = OPCPackage.Open(POIDataSamples.GetOpenXml4NetInstance().GetFileInfo(sampleFileName).FullName);
+            pkg = OPCPackage.Open(POIDataSamples.GetOpenXML4JInstance().GetFileInfo(sampleFileName).FullName);
 
             // Save and re-load, without having touched the properties yet
             baos = new MemoryStream();
             pkg.Save(baos);
+            pkg.Revert();
+
             bais = new MemoryStream(baos.ToArray());
             pkg = OPCPackage.Open(bais);
 
@@ -295,10 +295,12 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             // Copy this into a temp file, so we can play with it
             FileInfo tmp = TempFile.CreateTempFile("poi-test", ".opc");
             FileStream out1 = new FileStream(tmp.FullName, FileMode.Create, FileAccess.ReadWrite);
+            Stream in1 = POIDataSamples.GetOpenXML4JInstance().OpenResourceAsStream(sampleFileName);
             IOUtils.Copy(
-                    POIDataSamples.GetOpenXml4NetInstance().OpenResourceAsStream(sampleFileName),
+                    in1,
                     out1);
             out1.Close();
+            in1.Close();
 
             // Open it from that temp file
             OPCPackage pkg = OPCPackage.Open(tmp);

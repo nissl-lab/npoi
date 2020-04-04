@@ -124,7 +124,7 @@ namespace TestCases.SS.Formula.Functions
             Evaluator.ClearAllCachedResultValues();
             CellValue cv = Evaluator.Evaluate(cell11);
             Assert.IsTrue(cv.CellType == CellType.Error
-                    && cv.ErrorValue == ErrorConstants.ERROR_VALUE, "Wrong result type: " + cv.FormatAsString());
+                    && cv.ErrorValue == FormulaError.VALUE.Code, "Wrong result type: " + cv.FormatAsString());
         }
     }
 }

@@ -32,9 +32,9 @@ namespace NPOI.HPSF.Extractor
     /// build in and custom, returning them in
     /// textual form.
     /// </summary>
-    public class HPSFPropertiesExtractor : POITextExtractor
+    public class HPSFPropertiesExtractor : POIOLE2TextExtractor
     {
-        public HPSFPropertiesExtractor(POITextExtractor mainExtractor)
+        public HPSFPropertiesExtractor(POIOLE2TextExtractor mainExtractor)
             : base(mainExtractor)
         {
 

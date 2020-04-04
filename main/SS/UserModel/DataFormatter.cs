@@ -24,6 +24,9 @@ namespace NPOI.SS.UserModel
 
     using NPOI.SS.Util;
     using System.Globalization;
+    using NPOI.SS.Format;
+    using NPOI.Util;
+    using System.Collections.Generic;
 
 
 
@@ -66,8 +69,33 @@ namespace NPOI.SS.UserModel
      * default FormatBase will only be used when a FormatBase cannot be Created from the
      * cell's data FormatBase string.
      *
-     * @author James May (james dot may at fmr dot com)
-     *
+     * <p>
+     * Note that by default formatted numeric values are trimmed.
+     * Excel formats can contain spacers and padding and the default behavior is to strip them off.
+     * </p>
+     * <p>Example:</p>
+     * <p>
+     * Consider a numeric cell with a value <code>12.343</code> and format <code>"##.##_ "</code>.
+     *  The trailing underscore and space ("_ ") in the format adds a space to the end and Excel formats this cell as <code>"12.34 "</code>,
+     *  but <code>DataFormatter</code> trims the formatted value and returns <code>"12.34"</code>.
+     * </p>
+     * You can enable spaces by passing the <code>emulateCSV=true</code> flag in the <code>DateFormatter</code> cosntructor.
+     * If set to true, then the output tries to conform to what you get when you take an xls or xlsx in Excel and Save As CSV file:
+     * <ul>
+     *  <li>returned values are not trimmed</li>
+     *  <li>Invalid dates are formatted as  255 pound signs ("#")</li>
+     *  <li>simulate Excel's handling of a format string of all # when the value is 0.
+     *   Excel will output "", <code>DataFormatter</code> will output "0".</li>
+     * </ul>
+     * <p>
+     *  Some formats are automatically "localised" by Excel, eg show as mm/dd/yyyy when
+     *   loaded in Excel in some Locales but as dd/mm/yyyy in others. These are always
+     *   returned in the "default" (US) format, as stored in the file. 
+     *  Some format strings request an alternate locale, eg 
+     *   <code>[$-809]d/m/yy h:mm AM/PM</code> which explicitly requests UK locale.
+     *   These locale directives are (currently) ignored.
+     *  You can use {@link DateFormatConverter} to do some of this localisation if
+     *   you need it. 
      */
     public class DataFormatter
     {
@@ -85,10 +113,10 @@ namespace NPOI.SS.UserModel
         private static string localePatternGroup = "(\\[\\$[^-\\]]*-[0-9A-Z]+\\])";
 
         /*
-     * A regex to match the colour formattings rules.
-     * Allowed colours are: Black, Blue, Cyan, Green,
-     *  Magenta, Red, White, Yellow, "Color n" (1<=n<=56)
-     */
+         * A regex to match the colour formattings rules.
+         * Allowed colours are: Black, Blue, Cyan, Green,
+         *  Magenta, Red, White, Yellow, "Color n" (1<=n<=56)
+         */
         private static Regex colorPattern = new Regex("(\\[BLACK\\])|(\\[BLUE\\])|(\\[CYAN\\])|(\\[GREEN\\])|" +
             "(\\[MAGENTA\\])|(\\[RED\\])|(\\[WHITE\\])|(\\[YELLOW\\])|" +
             "(\\[COLOR\\s*\\d\\])|(\\[COLOR\\s*[0-5]\\d\\])", RegexOptions.IgnoreCase);
@@ -103,10 +131,17 @@ namespace NPOI.SS.UserModel
          * A regex to strip junk out of fraction formats
          */
         private static Regex fractionStripper = new Regex("(\"[^\"]*\")|([^ \\?#\\d\\/]+)");
+
         /**
-      * Cells formatted with a date or time format and which contain invalid date or time values
-     *  show 255 pound signs ("#").
-      */
+         * A regex to detect if an alternate grouping character is used
+         *  in a numeric format 
+         */
+        private static Regex alternateGrouping = new Regex("([#0]([^.#0])[#0]{3})");
+    
+        /**
+         * Cells formatted with a date or time format and which contain invalid date or time values
+         *  show 255 pound signs ("#").
+         */
         private static String invalidDateTimeString;
         static DataFormatter()
         {
@@ -114,11 +149,29 @@ namespace NPOI.SS.UserModel
             for (int i = 0; i < 255; i++) buf.Append('#');
             invalidDateTimeString = buf.ToString();
         }
+
+
+        /**
+         * The decimal symbols of the locale used for formatting values.
+         */
+        private NumberFormatInfo decimalSymbols;
+
+        /**
+         * The date symbols of the locale used for formatting values.
+         */
+        private DateTimeFormatInfo dateSymbols;
+
+        /**
+         * A default date format, if no date format was given
+         */
+        private DateFormat defaultDateformat;
+
         /** <em>General</em> FormatBase for whole numbers. */
-        private static DecimalFormat generalWholeNumFormat = new DecimalFormat("0");
+        //private static DecimalFormat generalWholeNumFormat = new DecimalFormat("0");
+        private FormatBase generalNumberFormat;
 
         /** <em>General</em> FormatBase for decimal numbers. */
-        private static DecimalFormat generalDecimalNumFormat = new DecimalFormat("0.##########");
+        //private static DecimalFormat generalDecimalNumFormat = new DecimalFormat("0.##########");
 
         /** A default FormatBase to use when a number pattern cannot be Parsed. */
         private FormatBase defaultNumFormat;
@@ -128,24 +181,74 @@ namespace NPOI.SS.UserModel
          *  Map<String,FormatBase> Formats
          */
         private Hashtable formats;
-        private bool emulateCsv = false;
-        /**
-     * Creates a formatter using the {@link Locale#getDefault() default locale}.
-     */
+        private bool emulateCSV = false;
+
+        /** For logging any problems we find */
+        private static POILogger logger = POILogFactory.GetLogger(typeof(DataFormatter));
+        /** stores if the locale should change according to {@link LocaleUtil#getUserLocale()} */
+        private bool localeIsAdapting;
+
         public DataFormatter()
             : this(false)
         {
         }
         /**
+         * Creates a formatter using the {@link Locale#getDefault() default locale}.
+         *
+         * @param  emulateCSV whether to emulate CSV output.
+         */
+        public DataFormatter(bool emulateCSV)
+            : this(CultureInfo.CurrentCulture, true, emulateCSV)
+        {
+            
+        }
+
+        /**
+         * Creates a formatter using the given locale.
+         */
+        public DataFormatter(CultureInfo locale)
+            : this(locale, false)
+        {
+            
+        }
+
+        /**
+         * Creates a formatter using the given locale.
+         *
+         * @param  emulateCSV whether to emulate CSV output.
+         */
+        public DataFormatter(CultureInfo locale, bool emulateCSV)
+            : this(locale, false, emulateCSV)
+        {
+            
+        }
+        /**
          * Constructor
          */
-        public DataFormatter(CultureInfo culture)
+        public DataFormatter(CultureInfo culture, bool localeIsAdapting, bool emulateCSV)
         {
+            this.localeIsAdapting = true;
             this.currentCulture = culture;
+            //localeChangedObservable.addObserver(this);
+            // localeIsAdapting must be true prior to this first checkForLocaleChange call.
+            //localeChangedObservable.checkForLocaleChange(culture);
+            // set localeIsAdapting so subsequent checks perform correctly
+            // (whether a specific locale was provided to this DataFormatter or DataFormatter should
+            // adapt to the current user locale as the locale changes)
+            this.localeIsAdapting = localeIsAdapting;
+            this.emulateCSV = emulateCSV;
+
+            dateSymbols = culture.DateTimeFormat;
+            decimalSymbols = culture.NumberFormat;
+            generalNumberFormat = new ExcelGeneralNumberFormat(culture);
+
+            // default format in dot net is not same as in java
+            defaultDateformat = new SimpleDateFormat(dateSymbols.FullDateTimePattern, dateSymbols);
+            defaultDateformat.TimeZone = TimeZoneInfo.Local;
+
             formats = new Hashtable();
 
             // init built-in Formats
-
             FormatBase zipFormat = ZipPlusFourFormat.instance;
             AddFormat("00000\\-0000", zipFormat);
             AddFormat("00000-0000", zipFormat);
@@ -161,22 +264,7 @@ namespace NPOI.SS.UserModel
             AddFormat("000\\-00\\-0000", ssnFormat);
             AddFormat("000-00-0000", ssnFormat);
         }
-        public DataFormatter(bool emulateCsv)
-            : this(CultureInfo.CurrentCulture)
-        {
-            this.emulateCsv = emulateCsv;
-        }
-        /**
-         * Creates a formatter using the given locale.
-         *
-         * @param  emulateCsv whether to emulate CSV output.
-         */
-        public DataFormatter(CultureInfo locale, bool emulateCsv)
-            : this(locale)
-        {
-
-            this.emulateCsv = emulateCsv;
-        }
+        
         /**
          * Return a FormatBase for the given cell if one exists, otherwise try to
          * Create one. This method will return <c>null</c> if the any of the
@@ -215,6 +303,37 @@ namespace NPOI.SS.UserModel
             //      String formatStr = (i < formatBits.length) ? formatBits[i] : formatBits[0];
 
             String formatStr = formatStrIn;
+
+            // Excel supports 3+ part conditional data formats, eg positive/negative/zero,
+            //  or (>1000),(>0),(0),(negative). As Java doesn't handle these kinds
+            //  of different formats for different ranges, just +ve/-ve, we need to 
+            //  handle these ourselves in a special way.
+            // For now, if we detect 3+ parts, we call out to CellFormat to handle it
+            // TODO Going forward, we should really merge the logic between the two classes
+            if (formatStr.IndexOf(";") != -1 &&
+                    formatStr.IndexOf(';') != formatStr.LastIndexOf(';'))
+            {
+                try
+                {
+                    // Ask CellFormat to get a formatter for it
+                    CellFormat cfmt = CellFormat.GetInstance(formatStr);
+                    // CellFormat requires callers to identify date vs not, so do so
+                    object cellValueO = (cellValue);
+                    if (DateUtil.IsADateFormat(formatIndex, formatStr) &&
+                        // don't try to handle Date value 0, let a 3 or 4-part format take care of it 
+                        (double)cellValueO != 0.0)
+                    {
+                        cellValueO = DateUtil.GetJavaDate(cellValue);
+                    }
+                    // Wrap and return (non-cachable - CellFormat does that)
+                    return new CellFormatResultWrapper(cfmt.Apply(cellValueO), emulateCSV);
+                }
+                catch (Exception e)
+                {
+                    logger.Log(POILogger.WARN, "Formatting failed for format " + formatStr + ", falling back", e);
+                }
+            }
+
             // Excel supports positive/negative/zero, but java
             // doesn't, so we need to do it specially
             int firstAt = formatStr.IndexOf(';');
@@ -248,7 +367,7 @@ namespace NPOI.SS.UserModel
             }
 
             // Excel's # with value 0 will output empty where Java will output 0. This hack removes the # from the format.
-            if (emulateCsv && cellValue == 0.0 && formatStr.Contains("#") && !formatStr.Contains("0"))
+            if (emulateCSV && cellValue == 0.0 && formatStr.Contains("#") && !formatStr.Contains("0"))
             {
                 formatStr = formatStr.Replace("#", "");
             }
@@ -260,11 +379,7 @@ namespace NPOI.SS.UserModel
             // Is it one of the special built in types, General or @?
             if (formatStr.Equals("General", StringComparison.CurrentCultureIgnoreCase) || "@".Equals(formatStr))
             {
-                if (DataFormatter.IsWholeNumber(cellValue))
-                {
-                    return generalWholeNumFormat;
-                }
-                return generalDecimalNumFormat;
+                return generalNumberFormat;
             }
 
             // Build a formatter, and cache it
@@ -328,11 +443,7 @@ namespace NPOI.SS.UserModel
 
             if ("General".Equals(formatStr, StringComparison.CurrentCultureIgnoreCase) || "@".Equals(formatStr))
             {
-                if (IsWholeNumber(cellValue))
-                {
-                    return generalWholeNumFormat;
-                }
-                return generalDecimalNumFormat;
+                return generalNumberFormat;
             }
 
 
@@ -357,7 +468,7 @@ namespace NPOI.SS.UserModel
                     //take the first match
                     if (fractionMatcher.Success)
                     {
-                        String wholePart = (fractionMatcher.Groups[1] == null||!fractionMatcher.Groups[1].Success) ? "" : defaultFractionWholePartFormat;
+                        String wholePart = (fractionMatcher.Groups[1] == null || !fractionMatcher.Groups[1].Success) ? "" : defaultFractionWholePartFormat;
                         return new FractionFormat(wholePart, fractionMatcher.Groups[3].Value);
                     }
                 }
@@ -373,7 +484,7 @@ namespace NPOI.SS.UserModel
             {
                 return CreateNumberFormat(formatStr, cellValue);
             }
-            if (emulateCsv)
+            if (emulateCSV)
             {
                 return new ConstantStringFormat(cleanFormatForNumber(formatStr));
             }
@@ -427,7 +538,7 @@ namespace NPOI.SS.UserModel
             char[] chars = formatStr.ToCharArray();
             bool mIsMonth = true;
             bool isElapsed = false;
-            ArrayList ms = new ArrayList();
+            List<int> ms = new List<int>();
             for (int j = 0; j < chars.Length; j++)
             {
                 char c = chars[j];
@@ -508,9 +619,8 @@ namespace NPOI.SS.UserModel
                 {
                     sb.Append('s');
                     // if 'M' precedes 's' it should be minutes ('m')
-                    for (int i = 0; i < ms.Count; i++)
+                    foreach (int index in ms)
                     {
-                        int index = (int)ms[i];
                         if (sb[index] == 'M')
                         {
                             sb[index] = 'm';
@@ -562,7 +672,7 @@ namespace NPOI.SS.UserModel
         {
             StringBuilder sb = new StringBuilder(formatStr);
 
-            if (emulateCsv)
+            if (emulateCSV)
             {
                 // Requested spacers with "_" are replaced by a single space.
                 // Full-column-width padding "*" are removed.
@@ -657,9 +767,32 @@ namespace NPOI.SS.UserModel
         private FormatBase CreateNumberFormat(String formatStr, double cellValue)
         {
             String format = cleanFormatForNumber(formatStr);
+            NumberFormatInfo symbols = decimalSymbols;
+
+            // Do we need to change the grouping character?
+            // eg for a format like #'##0 which wants 12'345 not 12,345
+            Match agm = alternateGrouping.Match(format);
+            if (agm.Success)
+            {
+                char grouping = agm.Groups[2].Value[0];
+                // Only replace the grouping character if it is not the default
+                // grouping character for the US locale (',') in order to enable
+                // correct grouping for non-US locales.
+                if (grouping != ',')
+                {
+                    symbols = currentCulture.NumberFormat.Clone() as NumberFormatInfo;
+                    symbols.NumberGroupSeparator = grouping.ToString();
+                    String oldPart = agm.Groups[1].Value;
+                    String newPart = oldPart.Replace(grouping, ',');
+                    format = format.Replace(oldPart, newPart);
+                }
+            }
+
             try
             {
-                return new DecimalFormat(format);
+                //DecimalFormat df = new DecimalFormat(format, symbols);
+                //setExcelStyleRoundingMode(df);
+                return new DecimalFormat(format, symbols);
             }
             catch (ArgumentException)
             {
@@ -668,16 +801,6 @@ namespace NPOI.SS.UserModel
                 // so fall back to the default number FormatBase
                 return GetDefaultFormat(cellValue);
             }
-        }
-
-        /**
-         * Return true if the double value represents a whole number
-         * @param d the double value to check
-         * @return <c>true</c> if d is a whole number
-         */
-        private static bool IsWholeNumber(double d)
-        {
-            return d == Math.Floor(d);
         }
 
         /**
@@ -698,11 +821,7 @@ namespace NPOI.SS.UserModel
 
                 // otherwise use general FormatBase
             }
-            if (IsWholeNumber(cellValue))
-            {
-                return generalWholeNumFormat;
-            }
-            return generalDecimalNumFormat;
+            return generalNumberFormat;
         }
 
         /**
@@ -716,12 +835,14 @@ namespace NPOI.SS.UserModel
         private String GetFormattedDateString(ICell cell)
         {
             FormatBase dateFormat = GetFormat(cell);
-            DateTime d = cell.DateCellValue;
-            if (dateFormat != null)
-            {
-                return dateFormat.Format(d, currentCulture);
+            if (dateFormat is ExcelStyleDateFormatter) {
+                // Hint about the raw excel value
+                ((ExcelStyleDateFormatter)dateFormat).SetDateToBeFormatted(
+                      cell.NumericCellValue
+                );
             }
-            return d.ToString();
+            DateTime d = cell.DateCellValue;
+            return PerformDateFormatting(d, dateFormat);
         }
 
         /**
@@ -742,7 +863,14 @@ namespace NPOI.SS.UserModel
             {
                 return d.ToString(currentCulture);
             }
-            return numberFormat.Format(d, currentCulture);
+            //return numberFormat.Format(d, currentCulture);
+            String formatted = numberFormat.Format(d);
+            if (formatted.StartsWith("."))
+                formatted = "0" + formatted;
+            if (formatted.StartsWith("-."))
+                formatted = "-0" + formatted.Substring(1);
+            //return formatted.ReplaceFirst("E(\\d)", "E+$1"); // to match Excel's E-notation
+            return Regex.Replace(formatted, "E(\\d)", "E+$1");
         }
 
         /**
@@ -755,16 +883,16 @@ namespace NPOI.SS.UserModel
             return FormatRawCellContents(value, formatIndex, formatString, false);
         }
         /**
-     * Performs Excel-style date formatting, using the
-     *  supplied Date and format
-     */
+         * Performs Excel-style date formatting, using the
+         *  supplied Date and format
+         */
         private String PerformDateFormatting(DateTime d, FormatBase dateFormat)
         {
             if (dateFormat != null)
             {
-                return dateFormat.Format(d, currentCulture);
+                return dateFormat.Format(d);
             }
-            return d.ToString();
+            return defaultDateformat.Format(d);
         }
         /**
      * Formats the given raw cell value, based on the supplied
@@ -791,7 +919,7 @@ namespace NPOI.SS.UserModel
                 }
 
                 // RK: Invalid dates are 255 #s.
-                if (emulateCsv)
+                if (emulateCSV)
                 {
                     return invalidDateTimeString;
                 }
@@ -809,11 +937,13 @@ namespace NPOI.SS.UserModel
             // original method.
             String result;
             String textValue = NumberToTextConverter.ToText(value);
-            if (textValue.IndexOf('E') > -1) {
+            if (textValue.IndexOf('E') > -1)
+            {
                 result = numberFormat.Format(value);
             }
-            else {
-                result = numberFormat.Format(textValue);
+            else
+            {
+                result = numberFormat.Format(decimal.Parse(textValue));
             }
             // Complete scientific notation by adding the missing +.
             if (result.Contains("E") && !result.Contains("E-"))
@@ -892,7 +1022,7 @@ namespace NPOI.SS.UserModel
                     return cell.RichStringCellValue.String;
 
                 case CellType.Boolean:
-                    return cell.BooleanCellValue.ToString().ToUpper();
+                    return cell.BooleanCellValue ? "TRUE" : "FALSE";
                 case CellType.Blank:
                     return "";
                 case CellType.Error:
@@ -925,8 +1055,7 @@ namespace NPOI.SS.UserModel
             while (itr.MoveNext())
             {
                 string key = (string)itr.Current;
-                if (formats[key] == generalDecimalNumFormat
-                        || formats[key] == generalWholeNumFormat)
+                if (formats[key] == generalNumberFormat)
                 {
                     formats[key] = format;
                 }
@@ -951,5 +1080,78 @@ namespace NPOI.SS.UserModel
         }
 
         // Some custom Formats
+
+        /**
+     * Update formats when locale has been changed
+     *
+     * @param observable usually this is our own Observable instance
+     * @param localeObj only reacts on Locale objects
+     */
+        public void Update(IObservable<object> observable, object localeObj)
+        {
+            if (!(localeObj is CultureInfo)) return;
+            CultureInfo newLocale = (CultureInfo)localeObj;
+            if (newLocale.Equals(currentCulture)) return;
+
+            currentCulture = newLocale;
+
+            //dateSymbols = DateFormatSymbols.getInstance(currentCulture);
+            //decimalSymbols = DecimalFormatSymbols.getInstance(currentCulture);
+            generalNumberFormat = new ExcelGeneralNumberFormat(currentCulture);
+
+            // init built-in formats
+
+            formats.Clear();
+            FormatBase zipFormat = ZipPlusFourFormat.instance;
+            AddFormat("00000\\-0000", zipFormat);
+            AddFormat("00000-0000", zipFormat);
+
+            FormatBase phoneFormat = PhoneFormat.instance;
+            // allow for format string variations
+            AddFormat("[<=9999999]###\\-####;\\(###\\)\\ ###\\-####", phoneFormat);
+            AddFormat("[<=9999999]###-####;(###) ###-####", phoneFormat);
+            AddFormat("###\\-####;\\(###\\)\\ ###\\-####", phoneFormat);
+            AddFormat("###-####;(###) ###-####", phoneFormat);
+
+            FormatBase ssnFormat = SSNFormat.instance;
+            AddFormat("000\\-00\\-0000", ssnFormat);
+            AddFormat("000-00-0000", ssnFormat);
+        }
+
+        /**
+         * Workaround until we merge {@link DataFormatter} with {@link CellFormat}.
+         * Constant, non-cachable wrapper around a {@link CellFormatResult} 
+         */
+        private class CellFormatResultWrapper : FormatBase
+        {
+            private CellFormatResult result;
+            private bool emulateCSV;
+            internal CellFormatResultWrapper(CellFormatResult result, bool emulateCSV)
+            {
+                this.emulateCSV = emulateCSV;
+                this.result = result;
+            }
+            public override StringBuilder Format(Object obj, StringBuilder toAppendTo, int pos)
+            {
+                if (emulateCSV)
+                {
+                    return toAppendTo.Append(result.Text);
+                }
+                else
+                {
+                    return toAppendTo.Append(result.Text.Trim());
+                }
+            }
+
+            public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override Object ParseObject(String source, int pos)
+            {
+                return null; // Not supported
+            }
+        }
     }
 }

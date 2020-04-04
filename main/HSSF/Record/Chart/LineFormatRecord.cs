@@ -32,8 +32,7 @@ namespace NPOI.HSSF.Record.Chart
 
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class LineFormatRecord
-       : StandardRecord
+    public class LineFormatRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x1007;
         private int field_1_lineColor;

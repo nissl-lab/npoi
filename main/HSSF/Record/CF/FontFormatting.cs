@@ -29,9 +29,9 @@ namespace NPOI.HSSF.Record.CF
      * 
      * @author Dmitriy Kumshayev
      */
-    public class FontFormatting
+    public class FontFormatting : ICloneable
     {
-        private byte[] _rawData;
+        private byte[] _rawData = new byte[RAW_DATA_SIZE];
 
         private const int OFFSET_FONT_NAME = 0;
         private const int OFFSET_FONT_HEIGHT = 64;
@@ -74,12 +74,7 @@ namespace NPOI.HSSF.Record.CF
          */
         private const short FONT_WEIGHT_BOLD = 0x2bc;
 
-        private FontFormatting(byte[] rawData)
-        {
-            _rawData = rawData;
-        }
-
-        public FontFormatting():this(new byte[RAW_DATA_SIZE])
+        public FontFormatting()
         {
             
 
@@ -109,9 +104,8 @@ namespace NPOI.HSSF.Record.CF
         }
 
         /** Creates new FontFormatting */
-        public FontFormatting(RecordInputStream in1):this(new byte[RAW_DATA_SIZE])
+        public FontFormatting(RecordInputStream in1)
         {
-            
             for (int i = 0; i < _rawData.Length; i++)
             {
                 _rawData[i] =(byte) in1.ReadByte();
@@ -135,11 +129,22 @@ namespace NPOI.HSSF.Record.CF
             LittleEndian.PutInt(_rawData, offset, value);
         }
 
-        public byte[] GetRawRecord()
+        public byte[] RawRecord
         {
-            return _rawData;
+            get
+            {
+                return _rawData;
+            }
+            
         }
-
+        public int DataLength
+        {
+            get
+            {
+                return RAW_DATA_SIZE;
+            }
+            
+        }
         /**
          * Gets the height of the font in 1/20th point Units
          *
@@ -378,7 +383,7 @@ namespace NPOI.HSSF.Record.CF
         public override String ToString()
         {
             StringBuilder buffer = new StringBuilder();
-            buffer.Append("	[Font Formatting]\n");
+            buffer.Append("    [Font Formatting]\n");
 
             buffer.Append("	.font height = ").Append(FontHeight).Append(" twips\n");
 
@@ -451,14 +456,15 @@ namespace NPOI.HSSF.Record.CF
             }
             buffer.Append("	.color index = ").Append("0x" + StringUtil.ToHexString(FontColorIndex).ToUpper()).Append("\n");
 
-            buffer.Append("	[/Font Formatting]\n");
+            buffer.Append("    [/Font Formatting]\n");
             return buffer.ToString();
         }
 
         public Object Clone()
         {
-            byte[] rawData = (byte[])_rawData.Clone();
-            return new FontFormatting(rawData);
+            FontFormatting other = new FontFormatting();
+            Array.Copy(_rawData, 0, other._rawData, 0, _rawData.Length);
+            return other;
         }
     }
 }

@@ -29,6 +29,7 @@ using NPOI.POIFS.NIO;
 using NPOI.Util;
 using NPOI.POIFS.EventFileSystem;
 using NUnit.Framework.Constraints;
+using Property = NPOI.POIFS.Properties.Property;
 
 namespace TestCases.POIFS.FileSystem
 {
@@ -47,9 +48,9 @@ namespace TestCases.POIFS.FileSystem
         }
 
         /**
-    * Returns test files with 512 byte and 4k block sizes, loaded
-    *  both from InputStreams and Files
-    */
+        * Returns test files with 512 byte and 4k block sizes, loaded
+        *  both from InputStreams and Files
+        */
         protected NPOIFSFileSystem[] get512and4kFileAndInput()
         {
             NPOIFSFileSystem fsA = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
@@ -103,6 +104,18 @@ namespace TestCases.POIFS.FileSystem
             original.Close();
             return new NPOIFSFileSystem(new ByteArrayInputStream(baos.ToArray()));
         }
+
+        protected static NPOIFSFileSystem WriteOutFileAndReadBack(NPOIFSFileSystem original)
+        {
+            FileInfo file = TempFile.CreateTempFile("TestPOIFS", ".ole2");
+            using (FileStream fout = file.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                original.WriteFileSystem(fout);
+                original.Close();
+            }
+            return new NPOIFSFileSystem(file, false);
+        }
+
         [Test]
         public void TestBasicOpen()
         {
@@ -955,27 +968,40 @@ namespace TestCases.POIFS.FileSystem
             DocumentEntry miniDoc;
             DocumentEntry normDoc;
 
-            // Initially has a BAT but not SBAT
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
+            // Initially has Properties + BAT but not SBAT
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
 
             // Check that the SBAT is empty
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
 
-            // Check that no properties table has been written yet
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.PropertyTable.StartBlock);
+            // Check that properties table was given block 0
+            Assert.AreEqual(0, fs.PropertyTable.StartBlock);
 
             // Write and read it
             fs = WriteOutAndReadBack(fs);
 
-            // Property table entries have been added to the blocks 
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
+            // No change, SBAT remains empty 
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(3));
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
-            Assert.AreEqual(2, fs.PropertyTable.StartBlock);
+            Assert.AreEqual(0, fs.PropertyTable.StartBlock);
+
+            // Check the same but with saving to a file
+            fs = new NPOIFSFileSystem();
+            fs = WriteOutFileAndReadBack(fs);
+
+            // Same, no change, SBAT remains empty 
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(3));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
+            Assert.AreEqual(0, fs.PropertyTable.StartBlock);
+
 
             // Put everything within a new directory
             DirectoryEntry testDir = fs.CreateDirectory("Test Directory");
@@ -986,19 +1012,19 @@ namespace TestCases.POIFS.FileSystem
             main4096[4095] = unchecked((byte)-11);
             testDir.CreateDocument("Normal4096", new MemoryStream(main4096));
 
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
-
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            Assert.AreEqual(3, fs.GetNextBlock(2));
             Assert.AreEqual(4, fs.GetNextBlock(3));
             Assert.AreEqual(5, fs.GetNextBlock(4));
             Assert.AreEqual(6, fs.GetNextBlock(5));
             Assert.AreEqual(7, fs.GetNextBlock(6));
             Assert.AreEqual(8, fs.GetNextBlock(7));
             Assert.AreEqual(9, fs.GetNextBlock(8));
-            Assert.AreEqual(10, fs.GetNextBlock(9));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(10));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(9));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(10));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(11));
+            // SBAT still unused
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
 
 
@@ -1008,100 +1034,18 @@ namespace TestCases.POIFS.FileSystem
             main5124[5123] = unchecked((byte)-33);
             testDir.CreateDocument("Normal5124", new MemoryStream(main5124));
 
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
-                Assert.AreEqual(4, fs.GetNextBlock(3));
-                Assert.AreEqual(5, fs.GetNextBlock(4));
-                Assert.AreEqual(6, fs.GetNextBlock(5));
-                Assert.AreEqual(7, fs.GetNextBlock(6));
-                Assert.AreEqual(8, fs.GetNextBlock(7));
-                Assert.AreEqual(9, fs.GetNextBlock(8));
-                Assert.AreEqual(10, fs.GetNextBlock(9));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(10));
-
-                Assert.AreEqual(12, fs.GetNextBlock(11));
-                Assert.AreEqual(13, fs.GetNextBlock(12));
-                Assert.AreEqual(14, fs.GetNextBlock(13));
-                Assert.AreEqual(15, fs.GetNextBlock(14));
-                Assert.AreEqual(16, fs.GetNextBlock(15));
-                Assert.AreEqual(17, fs.GetNextBlock(16));
-                Assert.AreEqual(18, fs.GetNextBlock(17));
-                Assert.AreEqual(19, fs.GetNextBlock(18));
-                Assert.AreEqual(20, fs.GetNextBlock(19));
-                Assert.AreEqual(21, fs.GetNextBlock(20));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(21));
-                Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(22));
-
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
-
-
-            // Now Add a mini stream
-            byte[] mini = new byte[] { 42, 0, 1, 2, 3, 4, 42 };
-            testDir.CreateDocument("Mini", new MemoryStream(mini));
-
-            // Mini stream will Get one block for fat + one block for data
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
-
-                Assert.AreEqual(4, fs.GetNextBlock(3));
-                Assert.AreEqual(5, fs.GetNextBlock(4));
-                Assert.AreEqual(6, fs.GetNextBlock(5));
-                Assert.AreEqual(7, fs.GetNextBlock(6));
-                Assert.AreEqual(8, fs.GetNextBlock(7));
-                Assert.AreEqual(9, fs.GetNextBlock(8));
-                Assert.AreEqual(10, fs.GetNextBlock(9));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(10));
-
-                Assert.AreEqual(12, fs.GetNextBlock(11));
-                Assert.AreEqual(13, fs.GetNextBlock(12));
-                Assert.AreEqual(14, fs.GetNextBlock(13));
-                Assert.AreEqual(15, fs.GetNextBlock(14));
-                Assert.AreEqual(16, fs.GetNextBlock(15));
-                Assert.AreEqual(17, fs.GetNextBlock(16));
-                Assert.AreEqual(18, fs.GetNextBlock(17));
-                Assert.AreEqual(19, fs.GetNextBlock(18));
-                Assert.AreEqual(20, fs.GetNextBlock(19));
-                Assert.AreEqual(21, fs.GetNextBlock(20));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(21));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(22));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(23));
-                Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(24));
-
-            // Check the mini stream location was set
-            // (22 is mini fat, 23 is first mini stream block)
-            Assert.AreEqual(23, fs.Root.Property.StartBlock);
-
-            // Write and read back
-            fs = WriteOutAndReadBack(fs);
-            HeaderBlock header = WriteOutAndReadHeader(fs);
-
-            // Check the header has the right points in it
-            Assert.AreEqual(1, header.BATCount);
-            Assert.AreEqual(0, header.BATArray[0]);
-            Assert.AreEqual(2, header.PropertyStart);
-            Assert.AreEqual(1, header.SBATCount);
-            Assert.AreEqual(22, header.SBATStart);
-            Assert.AreEqual(23, fs.PropertyTable.Root.StartBlock);
-
-            // Block use should be almost the same, except the properties
-            //  stream will have grown out to cover 2 blocks
-            // Check the block use is all unChanged
-            // Check it's all unChanged
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
-            Assert.AreEqual(24, fs.GetNextBlock(2)); // Properties now extends over 2 blocks
-
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            Assert.AreEqual(3, fs.GetNextBlock(2));
             Assert.AreEqual(4, fs.GetNextBlock(3));
             Assert.AreEqual(5, fs.GetNextBlock(4));
             Assert.AreEqual(6, fs.GetNextBlock(5));
             Assert.AreEqual(7, fs.GetNextBlock(6));
             Assert.AreEqual(8, fs.GetNextBlock(7));
             Assert.AreEqual(9, fs.GetNextBlock(8));
-            Assert.AreEqual(10, fs.GetNextBlock(9));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(10));// End of normal4096
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(9));
 
+            Assert.AreEqual(11, fs.GetNextBlock(10));
             Assert.AreEqual(12, fs.GetNextBlock(11));
             Assert.AreEqual(13, fs.GetNextBlock(12));
             Assert.AreEqual(14, fs.GetNextBlock(13));
@@ -1111,14 +1055,92 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(18, fs.GetNextBlock(17));
             Assert.AreEqual(19, fs.GetNextBlock(18));
             Assert.AreEqual(20, fs.GetNextBlock(19));
-            Assert.AreEqual(21, fs.GetNextBlock(20));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(20));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(21));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(22));
 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(21)); // End of normal5124 
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(22)); // Mini Stream FAT
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(23)); // Mini Stream data
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(24)); // Properties #2
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(25));
+
+            // Now Add a mini stream
+            byte[] mini = new byte[] { 42, 0, 1, 2, 3, 4, 42 };
+            testDir.CreateDocument("Mini", new MemoryStream(mini));
+
+            // Mini stream will Get one block for fat + one block for data
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            Assert.AreEqual(3, fs.GetNextBlock(2));
+            Assert.AreEqual(4, fs.GetNextBlock(3));
+            Assert.AreEqual(5, fs.GetNextBlock(4));
+            Assert.AreEqual(6, fs.GetNextBlock(5));
+            Assert.AreEqual(7, fs.GetNextBlock(6));
+            Assert.AreEqual(8, fs.GetNextBlock(7));
+            Assert.AreEqual(9, fs.GetNextBlock(8));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(9));
+
+            Assert.AreEqual(11, fs.GetNextBlock(10));
+            Assert.AreEqual(12, fs.GetNextBlock(11));
+            Assert.AreEqual(13, fs.GetNextBlock(12));
+            Assert.AreEqual(14, fs.GetNextBlock(13));
+            Assert.AreEqual(15, fs.GetNextBlock(14));
+            Assert.AreEqual(16, fs.GetNextBlock(15));
+            Assert.AreEqual(17, fs.GetNextBlock(16));
+            Assert.AreEqual(18, fs.GetNextBlock(17));
+            Assert.AreEqual(19, fs.GetNextBlock(18));
+            Assert.AreEqual(20, fs.GetNextBlock(19));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(20));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(21));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(22));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(23));
+
+            // Check the mini stream location was set
+            // (21 is mini fat, 22 is first mini stream block)
+            Assert.AreEqual(22, fs.Root.Property.StartBlock);
+
+            // Write and read back
+            fs = WriteOutAndReadBack(fs);
+            HeaderBlock header = WriteOutAndReadHeader(fs);
+
+            // Check the header has the right points in it
+            Assert.AreEqual(1, header.BATCount);
+            Assert.AreEqual(1, header.BATArray[0]);
+            Assert.AreEqual(0, header.PropertyStart);
+            Assert.AreEqual(1, header.SBATCount);
+            Assert.AreEqual(21, header.SBATStart);
+            Assert.AreEqual(22, fs.PropertyTable.Root.StartBlock);
+
+            // Block use should be almost the same, except the properties
+            //  stream will have grown out to cover 2 blocks
+            // Check the block use is all unChanged
+            // Check it's all unChanged
+            Assert.AreEqual(23, fs.GetNextBlock(0));// Properties now extends over 2 blocks
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+
+            Assert.AreEqual(3, fs.GetNextBlock(2));
+            Assert.AreEqual(4, fs.GetNextBlock(3));
+            Assert.AreEqual(5, fs.GetNextBlock(4));
+            Assert.AreEqual(6, fs.GetNextBlock(5));
+            Assert.AreEqual(7, fs.GetNextBlock(6));
+            Assert.AreEqual(8, fs.GetNextBlock(7));
+            Assert.AreEqual(9, fs.GetNextBlock(8));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(9));// End of normal4096
+
+            Assert.AreEqual(11, fs.GetNextBlock(10));
+            Assert.AreEqual(12, fs.GetNextBlock(11));
+            Assert.AreEqual(13, fs.GetNextBlock(12));
+            Assert.AreEqual(14, fs.GetNextBlock(13));
+            Assert.AreEqual(15, fs.GetNextBlock(14));
+            Assert.AreEqual(16, fs.GetNextBlock(15));
+            Assert.AreEqual(17, fs.GetNextBlock(16));
+            Assert.AreEqual(18, fs.GetNextBlock(17));
+            Assert.AreEqual(19, fs.GetNextBlock(18));
+            Assert.AreEqual(20, fs.GetNextBlock(19));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(20)); // End of normal5124 
+
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(21)); // Mini Stream FAT
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(22)); // Mini Stream data
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(23)); // Properties #2
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(24));
 
             // Check some data
             Assert.AreEqual(1, fs.Root.EntryCount);
@@ -1142,19 +1164,19 @@ namespace TestCases.POIFS.FileSystem
             // Check - will have un-used sectors now
             fs = WriteOutAndReadBack(fs);
 
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2)); // Props back in 1 block
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));// Props back in 1 block
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
 
+            Assert.AreEqual(3, fs.GetNextBlock(2)); 
             Assert.AreEqual(4, fs.GetNextBlock(3));
             Assert.AreEqual(5, fs.GetNextBlock(4));
             Assert.AreEqual(6, fs.GetNextBlock(5));
             Assert.AreEqual(7, fs.GetNextBlock(6));
             Assert.AreEqual(8, fs.GetNextBlock(7));
             Assert.AreEqual(9, fs.GetNextBlock(8));
-            Assert.AreEqual(10, fs.GetNextBlock(9));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(10)); // End of normal4096
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(9));  // End of normal4096
 
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(10));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(11));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(12));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(13));
@@ -1165,11 +1187,11 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(18));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(19));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(20));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(21));
 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(22)); // Mini Stream FAT
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(23)); // Mini Stream data
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(24)); // Properties gone
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(21)); // Mini Stream FAT
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(22)); // Mini Stream data
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(23)); // Properties gone
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(24));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(25));
       
 
@@ -1185,20 +1207,20 @@ namespace TestCases.POIFS.FileSystem
             DocumentEntry normDoc;
             HeaderBlock hdr;
 
-            // Initially has BAT + Properties but nothing else
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
+            // Initially has Properties + BAT but nothing else
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
             Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
 
             hdr = WriteOutAndReadHeader(fs);
             // No mini stream, and no xbats
             // Will have fat then properties stream
             Assert.AreEqual(1, hdr.BATCount);
-            Assert.AreEqual(0, hdr.BATArray[0]);
-            Assert.AreEqual(2, hdr.PropertyStart);
+            Assert.AreEqual(1, hdr.BATArray[0]);
+            Assert.AreEqual(0, hdr.PropertyStart);
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, hdr.SBATStart);
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, hdr.XBATIndex);
-            Assert.AreEqual(POIFSConstants.SMALLER_BIG_BLOCK_SIZE * 4, fs.Size);
+            Assert.AreEqual(POIFSConstants.SMALLER_BIG_BLOCK_SIZE * 3, fs.Size);
 
 
             // Get a clean filesystem to start with
@@ -1221,11 +1243,11 @@ namespace TestCases.POIFS.FileSystem
 
 
             // Check the mini stream was Added, then the main stream
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3));
-            Assert.AreEqual(5, fs.GetNextBlock(4));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2)); // Mini Fat
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3)); // Mini Stream
+            Assert.AreEqual(5, fs.GetNextBlock(4)); // Main Stream
             Assert.AreEqual(6, fs.GetNextBlock(5));
             Assert.AreEqual(7, fs.GetNextBlock(6));
             Assert.AreEqual(8, fs.GetNextBlock(7));
@@ -1250,15 +1272,15 @@ namespace TestCases.POIFS.FileSystem
             // Check the header details - will have the sbat near the start,
             //  then the properties at the end
             Assert.AreEqual(1, hdr.BATCount);
-            Assert.AreEqual(0, hdr.BATArray[0]);
+            Assert.AreEqual(1, hdr.BATArray[0]);
             Assert.AreEqual(2, hdr.SBATStart);
-            Assert.AreEqual(12, hdr.PropertyStart);
+            Assert.AreEqual(0, hdr.PropertyStart);
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, hdr.XBATIndex);
 
             // Check the block allocation is unChanged, other than
             //  the properties stream going in at the end
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(1));
+            Assert.AreEqual(12, fs.GetNextBlock(0));
+            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1)); // Properties
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3));
             Assert.AreEqual(5, fs.GetNextBlock(4));
@@ -1269,10 +1291,9 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(10, fs.GetNextBlock(9));
             Assert.AreEqual(11, fs.GetNextBlock(10));
             Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(11));
-            Assert.AreEqual(13, fs.GetNextBlock(12));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(13));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(14));
-            Assert.AreEqual(POIFSConstants.SMALLER_BIG_BLOCK_SIZE * 15, fs.Size);
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(12));
+            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(13));
+            Assert.AreEqual(POIFSConstants.SMALLER_BIG_BLOCK_SIZE * 14, fs.Size);
        
             // Check the data
             DirectoryEntry fsRoot = fs.Root;
@@ -1322,6 +1343,148 @@ namespace TestCases.POIFS.FileSystem
 
             normDoc = (DocumentEntry)testDir.GetEntry("Normal4106");
             assertContentsMatches(main4106, normDoc);
+
+            // All done
+            fs.Close();
+        }
+        [Test]
+        public void ReadZeroLengthEntries()
+        {
+            NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.GetFile("only-zero-byte-streams.ole2"));
+            DirectoryNode testDir = fs.Root;
+            Assert.AreEqual(3, testDir.EntryCount);
+            DocumentEntry entry;
+
+            entry = (DocumentEntry)testDir.GetEntry("test-zero-1");
+            Assert.IsNotNull(entry);
+            Assert.AreEqual(0, entry.Size);
+
+            entry = (DocumentEntry)testDir.GetEntry("test-zero-2");
+            Assert.IsNotNull(entry);
+            Assert.AreEqual(0, entry.Size);
+
+            entry = (DocumentEntry)testDir.GetEntry("test-zero-3");
+            Assert.IsNotNull(entry);
+            Assert.AreEqual(0, entry.Size);
+
+            // Check properties, all have zero length, no blocks
+            NPropertyTable props = fs.PropertyTable;
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, props.Root.StartBlock);
+            foreach (NPOI.POIFS.Properties.Property prop in props.Root)
+            {
+                Assert.AreEqual("test-zero-", prop.Name.Substring(0, 10));
+                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
+            }
+
+            // All done
+            fs.Close();
+        }
+
+        [Test]
+        public void WriteZeroLengthEntries()
+        {
+            NPOIFSFileSystem fs = new NPOIFSFileSystem();
+            DirectoryNode testDir = fs.Root;
+            DocumentEntry miniDoc;
+            DocumentEntry normDoc;
+            DocumentEntry emptyDoc;
+
+            byte[] mini2;
+            // Add mini and normal sized entries to start
+            unchecked
+            {
+                mini2 = new byte[] { (byte)-42, 0, (byte)-1, (byte)-2, (byte)-3, (byte)-4, (byte)-42 };
+            }
+            
+            testDir.CreateDocument("Mini2", new ByteArrayInputStream(mini2));
+
+            // Add to the main stream
+            byte[] main4106 = new byte[4106];
+            main4106[0] = 41;
+            main4106[4105] = 42;
+            testDir.CreateDocument("Normal4106", new ByteArrayInputStream(main4106));
+
+            // Now add some empty ones
+            byte[] empty = new byte[0];
+            testDir.CreateDocument("empty-1", new ByteArrayInputStream(empty));
+            testDir.CreateDocument("empty-2", new ByteArrayInputStream(empty));
+            testDir.CreateDocument("empty-3", new ByteArrayInputStream(empty));
+
+            // Check
+            miniDoc = (DocumentEntry)testDir.GetEntry("Mini2");
+            assertContentsMatches(mini2, miniDoc);
+
+            normDoc = (DocumentEntry)testDir.GetEntry("Normal4106");
+            assertContentsMatches(main4106, normDoc);
+
+            emptyDoc = (DocumentEntry)testDir.GetEntry("empty-1");
+            assertContentsMatches(empty, emptyDoc);
+
+            emptyDoc = (DocumentEntry)testDir.GetEntry("empty-2");
+            assertContentsMatches(empty, emptyDoc);
+
+            emptyDoc = (DocumentEntry)testDir.GetEntry("empty-3");
+            assertContentsMatches(empty, emptyDoc);
+
+            // Look at the properties entry, and check the empty ones
+            //  have zero size and no start block
+            NPropertyTable props = fs.PropertyTable;
+            IEnumerator<Property> propsIt = props.Root.Children;
+
+            propsIt.MoveNext();
+            Property prop = propsIt.Current;
+            Assert.AreEqual("Mini2", prop.Name);
+            Assert.AreEqual(0, prop.StartBlock);
+            Assert.AreEqual(7, prop.Size);
+
+            propsIt.MoveNext();
+            prop = propsIt.Current;
+            Assert.AreEqual("Normal4106", prop.Name);
+            Assert.AreEqual(4, prop.StartBlock); // BAT, Props, SBAT, MIni
+            Assert.AreEqual(4106, prop.Size);
+
+            propsIt.MoveNext();
+            prop = propsIt.Current;
+            Assert.AreEqual("empty-1", prop.Name);
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
+            Assert.AreEqual(0, prop.Size);
+
+            propsIt.MoveNext();
+            prop = propsIt.Current;
+            Assert.AreEqual("empty-2", prop.Name);
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
+            Assert.AreEqual(0, prop.Size);
+
+            propsIt.MoveNext();
+            prop = propsIt.Current;
+            Assert.AreEqual("empty-3", prop.Name);
+            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
+            Assert.AreEqual(0, prop.Size);
+
+            // Save and re-check
+            fs = WriteOutAndReadBack(fs);
+            testDir = fs.Root;
+
+            miniDoc = (DocumentEntry)testDir.GetEntry("Mini2");
+            assertContentsMatches(mini2, miniDoc);
+
+            normDoc = (DocumentEntry)testDir.GetEntry("Normal4106");
+            assertContentsMatches(main4106, normDoc);
+
+            emptyDoc = (DocumentEntry)testDir.GetEntry("empty-1");
+            assertContentsMatches(empty, emptyDoc);
+
+            emptyDoc = (DocumentEntry)testDir.GetEntry("empty-2");
+            assertContentsMatches(empty, emptyDoc);
+
+            emptyDoc = (DocumentEntry)testDir.GetEntry("empty-3");
+            assertContentsMatches(empty, emptyDoc);
+
+            // Check that a mini-stream was assigned, with one block used
+            Assert.AreEqual(3, testDir.Property.StartBlock);
+            Assert.AreEqual(64, testDir.Property.Size);
+            // All done
+            fs.Close();
         }
 
         /**

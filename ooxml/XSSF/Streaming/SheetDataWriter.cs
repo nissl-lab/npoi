@@ -40,9 +40,9 @@ namespace NPOI.XSSF.Streaming
         public int NumberLastFlushedRow = -1; // meaningful only of _numberOfFlushedRows>0
 
         /**
- * Table of strings shared across this workbook.
- * If two cells contain the same string, then the cell value is the same index into SharedStringsTable
- */
+         * Table of strings shared across this workbook.
+         * If two cells contain the same string, then the cell value is the same index into SharedStringsTable
+         */
         private SharedStringsTable _sharedStringSource;
         private StreamWriter _outputWriter;
 
@@ -57,14 +57,14 @@ namespace NPOI.XSSF.Streaming
             _sharedStringSource = sharedStringsTable;
         }
         /**
- * Create a temp file to write sheet data. 
- * By default, temp files are created in the default temporary-file directory
- * with a prefix "poi-sxssf-sheet" and suffix ".xml".  Subclasses can override 
- * it and specify a different temp directory or filename or suffix, e.g. <code>.gz</code>
- * 
- * @return temp file to write sheet data
- */
-       
+         * Create a temp file to write sheet data. 
+         * By default, temp files are created in the default temporary-file directory
+         * with a prefix "poi-sxssf-sheet" and suffix ".xml".  Subclasses can override 
+         * it and specify a different temp directory or filename or suffix, e.g. <code>.gz</code>
+         * 
+         * @return temp file to write sheet data
+         */
+
         public virtual FileInfo CreateTempFile()
         {
             return TempFile.CreateTempFile("poi-sxssf-sheet", ".xml");
@@ -135,6 +135,13 @@ namespace NPOI.XSSF.Streaming
 
         }
 
+        public FileInfo TempFileInfo
+        {
+            get
+            {
+                return TemporaryFileInfo;
+            }
+        }
         /**
          * @return a stream to read temp file with the sheet data
          */
@@ -167,8 +174,6 @@ namespace NPOI.XSSF.Streaming
             return fis;
         }
 
-
-
         protected void FinalizeWriter()
         {
             TemporaryFileInfo.Delete();
@@ -184,7 +189,7 @@ namespace NPOI.XSSF.Streaming
          * @param rownum 0-based row number
          * @param row    a row
          */
-        public void WriteRow(int rownum, IRow row)
+        public void WriteRow(int rownum, SXSSFRow row)
         {
             BeginRow(rownum, row);
             using (var cells = row.GetEnumerator())
@@ -213,7 +218,7 @@ namespace NPOI.XSSF.Streaming
             OutputStream.Flush();
         }
 
-        private void BeginRow(int rownum, IRow row)
+        private void BeginRow(int rownum, SXSSFRow row1)
         {
             WriteAsBytes("<row r=\"");
             WriteAsBytes(rownum + 1);
@@ -234,9 +239,7 @@ namespace NPOI.XSSF.Streaming
                 WriteAsBytes(" s=\"");
                 WriteAsBytes(row.RowStyle.Index);
                 WriteAsBytes("\"");
-
                 WriteAsBytes(" customFormat=\"1\"");
-
             }
 
             if (row.OutlineLevel != 0)
@@ -554,7 +557,8 @@ namespace NPOI.XSSF.Streaming
             finally
             {
                 TemporaryFileInfo.Delete();
-                ret = File.Exists(TemporaryFileInfo.FullName);
+                ret = !File.Exists(TemporaryFileInfo.FullName);
+                TemporaryFileInfo.Refresh();
             }
             return ret;
         }

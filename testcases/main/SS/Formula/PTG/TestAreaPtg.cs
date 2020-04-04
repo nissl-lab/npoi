@@ -46,6 +46,20 @@ namespace TestCases.SS.Formula.PTG
             relative = new AreaPtg(firstRow, lastRow, firstCol, lastCol, true, true, true, true);
             absolute = new AreaPtg(firstRow, lastRow, firstCol, lastCol, false, false, false, false);
         }
+
+        [Test]
+        public void TestSortTopLeftToBottomRight()
+        {
+            AreaPtg ptg = new AreaPtg("A$1:$B5");
+            Assert.AreEqual("A$1:$B5", ptg.ToFormulaString());
+            ptg.FirstColumn = (3);
+            Assert.AreEqual("D$1:$B5", ptg.ToFormulaString(),
+                "Area Ptg should not implicitly re-sort itself (except during construction)");
+            ptg.SortTopLeftToBottomRight();
+            Assert.AreEqual("$B$1:D5", ptg.ToFormulaString(),
+                "Area Ptg should restore itself to top-left to lower-right order when explicitly asked");
+        }
+
         [Test]
         public void TestSetColumnsAbsolute()
         {

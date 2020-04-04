@@ -13,6 +13,15 @@ namespace NPOI.OpenXml4Net.OPC
     public class PackageNamespaces
     {
         /**
+         * Dublin Core Terms URI.
+         */
+        public const String NAMESPACE_DCTERMS = "http://purl.org/dc/terms/";
+
+        /**
+         * Dublin Core namespace URI.
+         */
+        public const String NAMESPACE_DC = "http://purl.org/dc/elements/1.1/";
+        /**
          * Content Types.
          */
         public const String CONTENT_TYPES = "http://schemas.openxmlformats.org/package/2006/content-types";

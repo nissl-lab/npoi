@@ -32,6 +32,55 @@ namespace TestCases.SS.Util
     public class TestCellReference
     {
         [Test]
+        public void TestConstructors()
+        {
+            CellReference cellReference;
+            String sheet = "Sheet1";
+            String cellRef = "A1";
+            int row = 0;
+            int col = 0;
+            bool absRow = true;
+            bool absCol = false;
+
+            cellReference = new CellReference(row, col);
+            Assert.AreEqual("A1", cellReference.FormatAsString());
+
+            cellReference = new CellReference(row, col, absRow, absCol);
+            Assert.AreEqual("A$1", cellReference.FormatAsString());
+
+            cellReference = new CellReference(row, (short)col);
+            Assert.AreEqual("A1", cellReference.FormatAsString());
+
+            cellReference = new CellReference(cellRef);
+            Assert.AreEqual("A1", cellReference.FormatAsString());
+
+            cellReference = new CellReference(sheet, row, col, absRow, absCol);
+            Assert.AreEqual("Sheet1!A$1", cellReference.FormatAsString());
+        }
+
+        [Test]
+        public void TestFormatAsString()
+        {
+            CellReference cellReference;
+
+            cellReference = new CellReference(null, 0, 0, false, false);
+            Assert.AreEqual("A1", cellReference.FormatAsString());
+
+            //absolute references
+            cellReference = new CellReference(null, 0, 0, true, false);
+            Assert.AreEqual("A$1", cellReference.FormatAsString());
+
+            //sheet name with no spaces
+            cellReference = new CellReference("Sheet1", 0, 0, true, false);
+            Assert.AreEqual("Sheet1!A$1", cellReference.FormatAsString());
+
+            //sheet name with spaces
+            cellReference = new CellReference("Sheet 1", 0, 0, true, false);
+            Assert.AreEqual("'Sheet 1'!A$1", cellReference.FormatAsString());
+        }
+
+
+        [Test]
         public void TestGetCellRefParts()
         {
             CellReference cellReference;
@@ -236,6 +285,134 @@ namespace TestCases.SS.Util
             throw new AssertionException("expected (c='" + colStr + "', r='" + rowStr + "' to be "
                     + (expResult ? "within" : "out of") + " bounds for version " + sv.ToString());
         }
+
+        /**
+         * bug 59684: separateRefParts Assert.Fails on entire-column references
+         */
+        [Test]
+        public void EntireColumnReferences()
+        {
+            CellReference ref1 = new CellReference("HOME!$169");
+            Assert.AreEqual("HOME", ref1.SheetName);
+            Assert.AreEqual(168, ref1.Row);
+            Assert.AreEqual(-1, ref1.Col);
+            Assert.IsTrue(ref1.IsRowAbsolute, "row absolute");
+            //Assert.IsFalse("column absolute/relative is undefined", ref.IsColAbsolute);
+        }
+
+        [Test]
+        public void GetSheetName()
+        {
+            Assert.AreEqual(null, new CellReference("A5").SheetName);
+            Assert.AreEqual(null, new CellReference(null, 0, 0, false, false).SheetName);
+            // FIXME: CellReference is inconsistent
+            Assert.AreEqual("", new CellReference("", 0, 0, false, false).SheetName);
+            Assert.AreEqual("Sheet1", new CellReference("Sheet1!A5").SheetName);
+            Assert.AreEqual("Sheet 1", new CellReference("'Sheet 1'!A5").SheetName);
+        }
+
+        [Test]
+        public void TestToString()
+        {
+            CellReference ref1 = new CellReference("'Sheet 1'!A5");
+            Assert.AreEqual(ref1.ToString(), "CellReference ['Sheet 1'!A5]");
+        }
+
+        [Test]
+        public void TestEqualsAndHashCode()
+        {
+            CellReference ref1 = new CellReference("'Sheet 1'!A5");
+            CellReference ref2 = new CellReference("Sheet 1", 4, 0, false, false);
+            Assert.AreEqual(ref1, ref2, "equals");
+            Assert.AreEqual(ref1.GetHashCode(), ref2.GetHashCode(), "hash code");
+
+            Assert.IsFalse(ref1.Equals(null), "null");
+            Assert.IsFalse(ref1.Equals(new CellReference("A5")), "3D vs 2D");
+            Assert.IsFalse(ref1.Equals(0), "type");
+        }
+
+        [Test]
+        public void IsRowWithinRange()
+        {
+            SpreadsheetVersion ss = SpreadsheetVersion.EXCEL2007;
+            Assert.IsFalse(CellReference.IsRowWithinRange("0", ss), "1 before first row");
+            Assert.IsTrue(CellReference.IsRowWithinRange("1", ss), "first row");
+            Assert.IsTrue(CellReference.IsRowWithinRange("1048576", ss), "last row");
+            Assert.IsFalse(CellReference.IsRowWithinRange("1048577", ss), "1 beyond last row");
+        }
+
+        [Test]
+        public void IsColWithinRange()
+        {
+            SpreadsheetVersion ss = SpreadsheetVersion.EXCEL2007;
+            Assert.IsTrue(CellReference.IsColumnWithinRange("", ss), "(empty)");
+            Assert.IsTrue(CellReference.IsColumnWithinRange("A", ss), "first column (A)");
+            Assert.IsTrue(CellReference.IsColumnWithinRange("XFD", ss), "last column (XFD)");
+            Assert.IsFalse(CellReference.IsColumnWithinRange("XFE", ss), "1 beyond last column (XFE)");
+        }
+
+        [Test]
+        public void UnquotedSheetName()
+        {
+            Assert.Throws(typeof(ArgumentException), () => {
+                new CellReference("'Sheet 1!A5");
+            });
+        }
+        [Test]
+        public void MismatchedQuotesSheetName()
+        {
+            Assert.Throws(typeof(ArgumentException), () => {
+                new CellReference("Sheet 1!A5");
+            });
+        }
+
+        [Test]
+        public void EscapedSheetName()
+        {
+            String escapedName = "'Don''t Touch'!A5";
+            String unescapedName = "'Don't Touch'!A5";
+            new CellReference(escapedName);
+            try
+            {
+                new CellReference(unescapedName);
+                Assert.Fail("Sheet names containing apostrophe's must be escaped via a repeated apostrophe");
+            }
+            catch (ArgumentException e)
+            {
+                Assert.IsTrue(e.Message.StartsWith("Bad sheet name quote escaping: "));
+            }
+        }
+
+        [Test]
+        public void NegativeRow()
+        {
+            Assert.Throws(typeof(ArgumentException), () => {
+                new CellReference("sheet", -2, 0, false, false);
+            });
+        }
+        [Test]
+        public void NegativeColumn()
+        {
+            Assert.Throws(typeof(ArgumentException), () => {
+                new CellReference("sheet", 0, -2, false, false);
+            });
+        }
+
+        [Test]
+        public void ClassifyEmptyStringCellReference()
+        {
+            Assert.Throws(typeof(ArgumentException), () => {
+                CellReference.ClassifyCellReference("", SpreadsheetVersion.EXCEL2007);
+            });
+        }
+        [Test]
+        public void ClassifyInvalidFirstCharCellReference()
+        {
+            Assert.Throws(typeof(ArgumentException), () => {
+                CellReference.ClassifyCellReference("!A5", SpreadsheetVersion.EXCEL2007);
+            }); 
+        }
+
     }
 
 }

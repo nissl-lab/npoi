@@ -17,32 +17,28 @@
 
 namespace TestCases.SS.UserModel
 {
-    using System;
-
-    using NUnit.Framework;
-
-    using NPOI.HSSF.Util;
-    using NPOI.SS;
-    using NPOI.SS.Util;
-    using System.Text;
-    using NPOI.SS.UserModel;
-    using System.Collections.Generic;
     using NPOI.HSSF.UserModel;
+    using NPOI.SS;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+    using NPOI.Util;
+    using NUnit.Framework;
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.IO;
+    using System.Text;
 
     /**
      * A base class for bugzilla issues that can be described in terms of common ss interfaces.
      *
      * @author Yegor Kozlov
      */
-    [TestFixture]
-    public class BaseTestBugzillaIssues
+    public abstract class BaseTestBugzillaIssues
     {
 
         private ITestDataProvider _testDataProvider;
-        public BaseTestBugzillaIssues()
-        {
-            _testDataProvider = TestCases.HSSF.HSSFITestDataProvider.Instance;
-        }
+
         protected BaseTestBugzillaIssues(ITestDataProvider TestDataProvider)
         {
             _testDataProvider = TestDataProvider;
@@ -90,15 +86,11 @@ namespace TestCases.SS.UserModel
             ISheet sheet = wb.CreateSheet();
             ICreationHelper factory = wb.GetCreationHelper();
 
-            String tmp1 = null;
-            String tmp2 = null;
-            String tmp3 = null;
-
             for (int i = 0; i < num; i++)
             {
-                tmp1 = "Test1" + i;
-                tmp2 = "Test2" + i;
-                tmp3 = "Test3" + i;
+                string tmp1 = "Test1" + i;
+                string tmp2 = "Test2" + i;
+                string tmp3 = "Test3" + i;
 
                 IRow row = sheet.CreateRow(i);
 
@@ -112,9 +104,9 @@ namespace TestCases.SS.UserModel
             wb = _testDataProvider.WriteOutAndReadBack(wb);
             for (int i = 0; i < num; i++)
             {
-                tmp1 = "Test1" + i;
-                tmp2 = "Test2" + i;
-                tmp3 = "Test3" + i;
+                string tmp1 = "Test1" + i;
+                string tmp2 = "Test2" + i;
+                string tmp3 = "Test3" + i;
 
                 IRow row = sheet.GetRow(i);
 
@@ -128,14 +120,14 @@ namespace TestCases.SS.UserModel
          * Merged regions were being Removed from the parent in Cloned sheets
          */
         [Test]
-        public void Test22720()
+        public virtual void Bug22720()
         {
             IWorkbook workBook = _testDataProvider.CreateWorkbook();
             workBook.CreateSheet("TEST");
             ISheet template = workBook.GetSheetAt(0);
 
             template.AddMergedRegion(new CellRangeAddress(0, 1, 0, 2));
-            template.AddMergedRegion(new CellRangeAddress(1, 2, 0, 2));
+            template.AddMergedRegion(new CellRangeAddress(2, 3, 0, 2));
 
             ISheet clone = workBook.CloneSheet(0);
             int originalMerged = template.NumMergedRegions;
@@ -158,7 +150,7 @@ namespace TestCases.SS.UserModel
 
         }
         [Test]
-        public void Test28031()
+        public void TestBug28031()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -200,15 +192,11 @@ namespace TestCases.SS.UserModel
         [Test]
         public void Test22568()
         {
-            int r = 2000; int c = 3;
-
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet("ExcelTest");
 
-            int col_cnt = 0, rw_cnt = 0;
-
-            col_cnt = c;
-            rw_cnt = r;
+            int col_cnt = 3;
+            int rw_cnt = 2000;
 
             IRow rw;
             rw = sheet.CreateRow(0);
@@ -263,7 +251,7 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(true, "no errors parsing formula");
         }
         [Test]
-        public void Test18800()
+        public virtual void Bug18800()
         {
             IWorkbook book = _testDataProvider.CreateWorkbook();
             book.CreateSheet("TEST");
@@ -315,7 +303,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(d, (311 + 312 + 321 + 322), 0.0000001);
         }
         [Test]
-        public void TestMaxFunctionArguments_bug46729()
+        public virtual void Bug46729_testMaxFunctionArguments()
         {
             String[] func = { "COUNT", "AVERAGE", "MAX", "MIN", "OR", "SUBTOTAL", "SKEW" };
 
@@ -360,11 +348,12 @@ namespace TestCases.SS.UserModel
             return fmla.ToString();
         }
         [Test]
-        public void TestAutoSize_bug506819()
+        public void Bug50681_TestAutoSize()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             BaseTestSheetAutosizeColumn.FixFonts(wb);
             ISheet sheet = wb.CreateSheet("Sheet1");
+            _testDataProvider.TrackAllColumnsForAutosizing(sheet);
             IRow row = sheet.CreateRow(0);
             ICell cell0 = row.CreateCell(0);
 
@@ -377,10 +366,154 @@ namespace TestCases.SS.UserModel
 
             cell0.SetCellValue(longValue);
 
+
+            // autoSize will fail if required fonts are not installed, skip this test then
+            IFont font = wb.GetFontAt(cell0.CellStyle.FontIndex);
+            Assume.That(SheetUtil.CanComputeColumnWidth(font),
+                "Cannot verify auoSizeColumn() because the necessary Fonts are not installed on this machine: " + font);
+
+            Assert.AreEqual(0, cell0.CellStyle.Indention, "Expecting no indentation in this test");
+            Assert.AreEqual(0, cell0.CellStyle.Rotation, "Expecting no rotation in this test");
+
+            // check computing size up to a large size
+            StringBuilder b = new StringBuilder();
+            for (int i = 0; i < longValue.Length * 5; i++)
+            {
+                b.Append("w");
+                Assert.IsTrue(ComputeCellWidthFixed(font, b.ToString()) > 0, "Had zero length starting at length " + i);
+            }
+
+            double widthManual = ComputeCellWidthManually(cell0, font);
+            double widthBeforeCell = SheetUtil.GetCellWidth(cell0, 8, null, false);
+            double widthBeforeCol = SheetUtil.GetColumnWidth(sheet, 0, false);
+            String info = widthManual + "/" + widthBeforeCell + "/" + widthBeforeCol + "/" +
+                SheetUtil.CanComputeColumnWidth(font) + "/" + ComputeCellWidthFixed(font, "1") + "/" + ComputeCellWidthFixed(font, "w") + "/" +
+                ComputeCellWidthFixed(font, "1w") + "/" + ComputeCellWidthFixed(font, "0000") + "/" + ComputeCellWidthFixed(font, longValue);
+
+            Assert.IsTrue(widthManual > 0, "Expected to have cell width > 0 when computing manually, but had " + info);
+            Assert.IsTrue(widthBeforeCell > 0, "Expected to have cell width > 0 BEFORE auto-size, but had " + info);
+            Assert.IsTrue(widthBeforeCol > 0, "Expected to have column width > 0 BEFORE auto-size, but had " + info);
+
             sheet.AutoSizeColumn(0);
+
+            double width = SheetUtil.GetColumnWidth(sheet, 0, false);
+            Assert.IsTrue(width > 0, "Expected to have column width > 0 AFTER auto-size, but had " + width);
+            width = SheetUtil.GetCellWidth(cell0, 8, null, false);
+            Assert.IsTrue(width > 0, "Expected to have cell width > 0 AFTER auto-size, but had " + width);
+
+
             Assert.AreEqual(255 * 256, sheet.GetColumnWidth(0)); // maximum column width is 255 characters
-            sheet.SetColumnWidth(0, sheet.GetColumnWidth(0)); // Bug 506819 reports exception at this point
+            sheet.SetColumnWidth(0, sheet.GetColumnWidth(0)); // Bug 50681 reports exception at this point
         }
+
+        [Test]
+        public void Bug51622_testAutoSizeShouldRecognizeLeadingSpaces()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            BaseTestSheetAutosizeColumn.FixFonts(wb);
+            ISheet sheet = wb.CreateSheet();
+            _testDataProvider.TrackAllColumnsForAutosizing(sheet);
+            IRow row = sheet.CreateRow(0);
+            ICell cell0 = row.CreateCell(0);
+            ICell cell1 = row.CreateCell(1);
+            ICell cell2 = row.CreateCell(2);
+
+            cell0.SetCellValue("Test Column AutoSize");
+            cell1.SetCellValue("         Test Column AutoSize");
+            cell2.SetCellValue("Test Column AutoSize         ");
+
+            sheet.AutoSizeColumn(0);
+            sheet.AutoSizeColumn(1);
+            sheet.AutoSizeColumn(2);
+
+            int noWhitespaceColWidth = sheet.GetColumnWidth(0);
+            int leadingWhitespaceColWidth = sheet.GetColumnWidth(1);
+            int trailingWhitespaceColWidth = sheet.GetColumnWidth(2);
+
+            // Based on the amount of text and whitespace used, and the default font
+            // assume that the cell with whitespace should be at least 20% wider than
+            // the cell without whitespace. This number is arbitrary, but should be large
+            // enough to guarantee that the whitespace cell isn't wider due to chance.
+            // Experimentally, I calculated the ratio as 1.2478181, though this ratio may change
+            // if the default font or margins change.
+            double expectedRatioThreshold = 1.2f;
+            double leadingWhitespaceRatio = ((double)leadingWhitespaceColWidth) / noWhitespaceColWidth;
+            double trailingWhitespaceRatio = ((double)leadingWhitespaceColWidth) / noWhitespaceColWidth;
+
+            assertGreaterThan("leading whitespace is longer than no whitespace", leadingWhitespaceRatio, expectedRatioThreshold);
+            assertGreaterThan("trailing whitespace is longer than no whitespace", trailingWhitespaceRatio, expectedRatioThreshold);
+            Assert.AreEqual(leadingWhitespaceColWidth, trailingWhitespaceColWidth,
+                "cells with equal leading and trailing whitespace have equal width");
+
+            wb.Close();
+        }
+
+        /**
+         * Test if a > b. Fails if false.
+         */
+        private void assertGreaterThan(String message, double a, double b)
+        {
+            if (a <= b)
+            {
+                String msg = "Expected: " + a + " > " + b;
+                Assert.Fail(message + ": " + msg);
+            }
+        }
+
+
+        private double ComputeCellWidthManually(ICell cell0, IFont font)
+        {
+            double width;
+            //FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
+            IRichTextString rt = cell0.RichStringCellValue;
+            String[] lines = rt.String.Split("\n".ToCharArray());
+            Assert.AreEqual(1, lines.Length);
+            String txt = lines[0] + "0";
+
+            //AttributedString str = new AttributedString(txt);
+            //copyAttributes(font, str, 0, txt.length());
+            // TODO: support rich text fragments
+            //if (rt.NumFormattingRuns > 0)
+            //{
+            //}
+
+            //TextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
+            //width = ((layout.getBounds().getWidth() / 1) / 8);
+            Font wfont = SheetUtil.IFont2Font(font);
+            using (var image = new Bitmap(1, 1))
+            {
+                using (var g = Graphics.FromImage(image))
+                {
+                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                    width = (int)g.MeasureString(txt, wfont, int.MaxValue).Width;
+                }
+            }
+            return width;
+        }
+
+        private double ComputeCellWidthFixed(IFont font, String txt)
+        {
+            double width;
+            Font wfont = SheetUtil.IFont2Font(font);
+            using (var image = new Bitmap(1, 1))
+            {
+                using (var g = Graphics.FromImage(image))
+                {
+                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                    width = (int)g.MeasureString(txt, wfont, int.MaxValue).Width;
+                }
+            }
+            return width;
+        }
+
+        //private static void copyAttributes(Font font, AttributedString str, int startIdx, int endIdx)
+        //{
+        //    str.addAttribute(TextAttribute.FAMILY, font.getFontName(), startIdx, endIdx);
+        //    str.addAttribute(TextAttribute.SIZE, (float)font.getFontHeightInPoints());
+        //    if (font.getBoldweight() == Font.BOLDWEIGHT_BOLD) str.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, startIdx, endIdx);
+        //    if (font.getItalic()) str.addAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, startIdx, endIdx);
+        //    if (font.getUnderline() == Font.U_SINGLE) str.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);
+        //}
 
         /**
          * CreateFreezePane column/row order check
@@ -523,6 +656,7 @@ namespace TestCases.SS.UserModel
             d2Percent.DataFormat = (/*setter*/format.GetFormat("0.00%"));
 
             ISheet s = wb.CreateSheet();
+            _testDataProvider.TrackAllColumnsForAutosizing(s);
             IRow r1 = s.CreateRow(0);
 
             for (int i = 0; i < 3; i++)
@@ -543,7 +677,7 @@ namespace TestCases.SS.UserModel
             }
             for (int i = 0; i < 12; i += 3)
             {
-                r1.GetCell(i + 0).CellStyle = (/*setter*/iPercent);
+                r1.GetCell(i).CellStyle = (/*setter*/iPercent);
                 r1.GetCell(i + 1).CellStyle = (/*setter*/d1Percent);
                 r1.GetCell(i + 2).CellStyle = (/*setter*/d2Percent);
             }
@@ -679,7 +813,7 @@ namespace TestCases.SS.UserModel
             // Next up, SEARCH on its own
             cf.SetCellFormula("SEARCH(\"am\", A1)");
             cf = EvaluateCell(wb, cf);
-            Assert.AreEqual(ErrorConstants.ERROR_VALUE, cf.ErrorCellValue);
+            Assert.AreEqual(FormulaError.VALUE.Code, cf.ErrorCellValue);
 
             cf.SetCellFormula("SEARCH(\"am\", B1)");
             cf = EvaluateCell(wb, cf);
@@ -687,11 +821,11 @@ namespace TestCases.SS.UserModel
 
             cf.SetCellFormula("SEARCH(\"am\", C1)");
             cf = EvaluateCell(wb, cf);
-            Assert.AreEqual(ErrorConstants.ERROR_VALUE, cf.ErrorCellValue);
+            Assert.AreEqual(FormulaError.VALUE.Code, cf.ErrorCellValue);
 
             cf.SetCellFormula("SEARCH(\"am\", D1)");
             cf = EvaluateCell(wb, cf);
-            Assert.AreEqual(ErrorConstants.ERROR_VALUE, cf.ErrorCellValue);
+            Assert.AreEqual(FormulaError.VALUE.Code, cf.ErrorCellValue);
 
 
             // Finally, bring it all together
@@ -723,16 +857,17 @@ namespace TestCases.SS.UserModel
         }
 
         /**
-     * Should be able to write then read formulas with references
-     *  to cells in other files, eg '[refs/airport.xls]Sheet1'!$A$2
-     *  or 'http://192.168.1.2/[blank.xls]Sheet1'!$A$1 .
-     * Additionally, if a reference to that file is provided, it should
-     *  be possible to Evaluate them too
-     * TODO Fix this to Evaluate for XSSF
-     * TODO Fix this to work at all for HSSF
-     */
-        //    [Test]
-        public void bug46670()
+         * Should be able to write then read formulas with references
+         *  to cells in other files, eg '[refs/airport.xls]Sheet1'!$A$2
+         *  or 'http://192.168.1.2/[blank.xls]Sheet1'!$A$1 .
+         * Additionally, if a reference to that file is provided, it should
+         *  be possible to Evaluate them too
+         * TODO Fix this to Evaluate for XSSF
+         * TODO Fix this to work at all for HSSF
+         */
+        [Test]
+        [Ignore("Fix this to evaluate for XSSF, Fix this to work at all for HSSF")]
+        public void Bug46670()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet s = wb.CreateSheet();
@@ -740,8 +875,7 @@ namespace TestCases.SS.UserModel
 
 
             // References to try
-            String ext = "xls";
-            if (!(wb is HSSFWorkbook)) ext += "x";
+            String ext = _testDataProvider.StandardFileNameExtension;
             String refLocal = "'[test." + ext + "]Sheet1'!$A$2";
             String refHttp = "'[http://example.com/test." + ext + "]Sheet1'!$A$2";
             String otherCellText = "In Another Workbook";
@@ -805,7 +939,739 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(otherCellText, c1.StringCellValue);
             Assert.AreEqual(otherCellText, c2.StringCellValue);
         }
+        [Test]
+        public void Test56574OverwriteExistingRow()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            { // create the Formula-Cell
+                IRow row = sheet.CreateRow(0);
+                ICell cell = row.CreateCell(0);
+                cell.SetCellFormula("A2");
+            }
+
+            { // check that it is there now
+                IRow row = sheet.GetRow(0);
+
+                /* CTCell[] cArray = ((XSSFRow)row).getCTRow().getCArray();
+                 assertEquals(1, cArray.length);*/
+
+                ICell cell = row.GetCell(0);
+                Assert.AreEqual(CellType.Formula, cell.CellType);
+            }
+
+            { // overwrite the row
+                IRow row = sheet.CreateRow(0);
+                Assert.IsNotNull(row);
+            }
+
+            { // creating a row in place of another should remove the existing data,
+              // check that the cell is gone now
+                IRow row = sheet.GetRow(0);
+
+                /*CTCell[] cArray = ((XSSFRow)row).getCTRow().getCArray();
+                assertEquals(0, cArray.length);*/
+
+                ICell cell = row.GetCell(0);
+                Assert.IsNull(cell);
+            }
+
+            // the calculation chain in XSSF is empty in a newly created workbook, so we cannot check if it is correctly updated
+            /*assertNull(((XSSFWorkbook)wb).getCalculationChain());
+            assertNotNull(((XSSFWorkbook)wb).getCalculationChain().getCTCalcChain());
+            assertNotNull(((XSSFWorkbook)wb).getCalculationChain().getCTCalcChain().getCArray());
+            assertEquals(0, ((XSSFWorkbook)wb).getCalculationChain().getCTCalcChain().getCArray().length);*/
+
+            wb.Close();
+        }
+
+        /**
+         * With HSSF, if you create a font, don't change it, and
+         *  create a 2nd, you really do get two fonts that you
+         *  can alter as and when you want.
+         * With XSSF, that wasn't the case, but this verfies
+         *  that it now is again
+         */
+        [Test]
+        public void Bug48718()
+        {
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            int startingFonts = wb is HSSFWorkbook ? 4 : 1;
+
+            Assert.AreEqual(startingFonts, wb.NumberOfFonts);
+
+            // Get a font, and slightly change it
+            IFont a = wb.CreateFont();
+            Assert.AreEqual(startingFonts + 1, wb.NumberOfFonts);
+            a.FontHeightInPoints = ((short)23);
+            Assert.AreEqual(startingFonts + 1, wb.NumberOfFonts);
+
+            // Get two more, unchanged
+            /*Font b =*/
+            wb.CreateFont();
+            Assert.AreEqual(startingFonts + 2, wb.NumberOfFonts);
+            /*Font c =*/
+            wb.CreateFont();
+            Assert.AreEqual(startingFonts + 3, wb.NumberOfFonts);
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Bug57430()
+        {
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            wb.CreateSheet("Sheet1");
+
+            IName name1 = wb.CreateName();
+            name1.NameName = ("FMLA");
+            name1.RefersToFormula = ("Sheet1!$B$3");
+            wb.Close();
+        }
+
+        [Test]
+        public void Bug56981()
+        {
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ICellStyle vertTop = wb.CreateCellStyle();
+            vertTop.VerticalAlignment = VerticalAlignment.Top;
+            ICellStyle vertBottom = wb.CreateCellStyle();
+            vertBottom.VerticalAlignment = VerticalAlignment.Bottom;
+            ISheet sheet = wb.CreateSheet("Sheet 1");
+            IRow row = sheet.CreateRow(0);
+            ICell top = row.CreateCell(0);
+            ICell bottom = row.CreateCell(1);
+            top.SetCellValue("Top");
+            top.CellStyle = (vertTop); // comment this out to get all bottom-aligned
+                                       // cells
+            bottom.SetCellValue("Bottom");
+            bottom.CellStyle = (vertBottom);
+            row.HeightInPoints = (85.75f); // make it obvious
+
+            /*FileOutputStream out = new FileOutputStream("c:\\temp\\56981.xlsx");
+            try {
+                wb.write(out);
+            } finally {
+                out.close();
+            }*/
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Test57973()
+        {
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+
+            ICreationHelper factory = wb.GetCreationHelper();
+
+            ISheet sheet = wb.CreateSheet();
+            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            IClientAnchor anchor = factory.CreateClientAnchor();
+
+            ICell cell0 = sheet.CreateRow(0).CreateCell(0);
+            cell0.SetCellValue("Cell0");
+
+            IComment comment0 = drawing.CreateCellComment(anchor);
+            IRichTextString str0 = factory.CreateRichTextString("Hello, World1!");
+            comment0.String = (str0);
+            comment0.Author = ("Apache POI");
+            cell0.CellComment = (comment0);
+
+            anchor = factory.CreateClientAnchor();
+            anchor.Col1 = (1);
+            anchor.Col2 = (1);
+            anchor.Row1 = (1);
+            anchor.Row2 = (1);
+            ICell cell1 = sheet.CreateRow(3).CreateCell(5);
+            cell1.SetCellValue("F4");
+            IComment comment1 = drawing.CreateCellComment(anchor);
+            IRichTextString str1 = factory.CreateRichTextString("Hello, World2!");
+            comment1.String = (str1);
+            comment1.Author = ("Apache POI");
+            cell1.CellComment = (comment1);
+
+            ICell cell2 = sheet.CreateRow(2).CreateCell(2);
+            cell2.SetCellValue("C3");
+
+            anchor = factory.CreateClientAnchor();
+            anchor.Col1 = (2);
+            anchor.Col2 = (2);
+            anchor.Row1 = (2);
+            anchor.Row2 = (2);
+
+            IComment comment2 = drawing.CreateCellComment(anchor);
+            IRichTextString str2 = factory.CreateRichTextString("XSSF can set cell comments");
+            //apply custom font to the text in the comment
+            IFont font = wb.CreateFont();
+            font.FontName = ("Arial");
+            font.FontHeightInPoints = ((short)14);
+            font.Boldweight = (short)FontBoldWeight.Bold;// (Font.BOLDWEIGHT_BOLD);
+            font.Color = (IndexedColors.Red.Index);
+            str2.ApplyFont(font);
+
+            comment2.String = (str2);
+            comment2.Author = ("Apache POI");
+            comment2.Column = (2);
+            comment2.Row = (2);
+
+            wb.Close();
+        }
+
+        /**
+         * Ensures that XSSF and HSSF agree with each other,
+         *  and with the docs on when fetching the wrong
+         *  kind of value from a Formula cell
+         */
+        [Test]
+        public virtual void Bug47815()
+        {
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
+            IRow r = s.CreateRow(0);
+
+            // Setup
+            ICell cn = r.CreateCell(0, CellType.Numeric);
+            cn.SetCellValue(1.2);
+            ICell cs = r.CreateCell(1, CellType.String);
+            cs.SetCellValue("Testing");
+
+            ICell cfn = r.CreateCell(2, CellType.Formula);
+            cfn.SetCellFormula("A1");
+            ICell cfs = r.CreateCell(3, CellType.Formula);
+            cfs.SetCellFormula("B1");
+
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            Assert.AreEqual(CellType.Numeric, fe.Evaluate(cfn).CellType);
+            Assert.AreEqual(CellType.String, fe.Evaluate(cfs).CellType);
+            fe.EvaluateFormulaCell(cfn);
+            fe.EvaluateFormulaCell(cfs);
+
+            // Now test
+            Assert.AreEqual(CellType.Numeric, cn.CellType);
+            Assert.AreEqual(CellType.String, cs.CellType);
+            Assert.AreEqual(CellType.Formula, cfn.CellType);
+            Assert.AreEqual(CellType.Numeric, cfn.CachedFormulaResultType);
+            Assert.AreEqual(CellType.Formula, cfs.CellType);
+            Assert.AreEqual(CellType.String, cfs.CachedFormulaResultType);
+
+            // Different ways of retrieving
+            Assert.AreEqual(1.2, cn.NumericCellValue, 0);
+            try
+            {
+                var tmp = cn.RichStringCellValue;
+                Assert.Fail();
+            }
+            catch (InvalidOperationException) { }
+
+            Assert.AreEqual("Testing", cs.StringCellValue);
+            try
+            {
+                var tmp = cs.NumericCellValue;
+                Assert.Fail();
+            }
+            catch (InvalidOperationException) { }
+
+            Assert.AreEqual(1.2, cfn.NumericCellValue, 0);
+            try
+            {
+                var tmp = cfn.RichStringCellValue;
+                Assert.Fail();
+            }
+            catch (InvalidOperationException) { }
+
+            Assert.AreEqual("Testing", cfs.StringCellValue);
+            try
+            {
+                var tmp = cfs.NumericCellValue;
+                Assert.Fail();
+            }
+            catch (InvalidOperationException) { }
+
+            wb.Close();
+        }
+        [Test]
+        public virtual void Test58113()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("Test");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            // verify that null-values can be set, this was possible up to 3.11, but broken in 3.12 
+            cell.SetCellValue((String)null);
+            String value = cell.StringCellValue;
+            Assert.IsTrue(value == null || value.Length == 0, "HSSF will currently return empty string, XSSF/SXSSF will return null, but had: " + value);
+
+            cell = row.CreateCell(1);
+            // also verify that setting formulas to null works  
+            cell.SetCellType(CellType.Formula);
+            cell.SetCellValue((String)null);
+
+            wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+            value = cell.StringCellValue;
+            Assert.IsTrue(value == null || value.Length == 0, "HSSF will currently return empty string, XSSF/SXSSF will return null, but had: " + value);
+
+            // set some value
+            cell.SetCellType(CellType.String);
+            cell.SetCellValue("somevalue");
+            value = cell.StringCellValue;
+            Assert.IsTrue(value.Equals("somevalue"), "can set value afterwards: " + value);
+            // verify that the null-value is actually set even if there was some value in the cell before  
+            cell.SetCellValue((String)null);
+            value = cell.StringCellValue;
+            Assert.IsTrue(value == null || value.Length == 0, "HSSF will currently return empty string, XSSF/SXSSF will return null, but had: " + value);
+        }
+
+        /**
+         * Formulas with Nested Ifs, or If with text functions like
+         *  Mid in it, can give #VALUE in Excel
+         */
+        [Test]
+        public void Bug55747()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            IFormulaEvaluator ev = wb.GetCreationHelper().CreateFormulaEvaluator();
+            ISheet s = wb.CreateSheet();
+
+            IRow row = s.CreateRow(0);
+            row.CreateCell(0).SetCellValue("abc");
+            row.CreateCell(1).SetCellValue("");
+            row.CreateCell(2).SetCellValue(3);
+            ICell cell = row.CreateCell(5);
+            cell.SetCellFormula("IF(A1<>\"\",MID(A1,1,2),\" \")");
+            ev.EvaluateAll();
+            Assert.AreEqual("ab", cell.StringCellValue);
+
+            cell = row.CreateCell(6);
+            cell.SetCellFormula("IF(B1<>\"\",MID(A1,1,2),\"empty\")");
+            ev.EvaluateAll();
+            Assert.AreEqual("empty", cell.StringCellValue);
+
+            cell = row.CreateCell(7);
+            cell.SetCellFormula("IF(A1<>\"\",IF(C1<>\"\",MID(A1,1,2),\"c1\"),\"c2\")");
+            ev.EvaluateAll();
+            Assert.AreEqual("ab", cell.StringCellValue);
+
+
+            // Write it back out, and re-read
+            wb = _testDataProvider.WriteOutAndReadBack(wb);
+            ev = wb.GetCreationHelper().CreateFormulaEvaluator();
+            s = wb.GetSheetAt(0);
+            row = s.GetRow(0);
+
+            // Check read ok, and re-evaluate fine
+            cell = row.GetCell(5);
+            Assert.AreEqual("ab", cell.StringCellValue);
+            ev.EvaluateFormulaCell(cell);
+            Assert.AreEqual("ab", cell.StringCellValue);
+
+            cell = row.GetCell(6);
+            Assert.AreEqual("empty", cell.StringCellValue);
+            ev.EvaluateFormulaCell(cell);
+            Assert.AreEqual("empty", cell.StringCellValue);
+
+            cell = row.GetCell(7);
+            Assert.AreEqual("ab", cell.StringCellValue);
+            ev.EvaluateFormulaCell(cell);
+            Assert.AreEqual("ab", cell.StringCellValue);
+
+        }
+
+        [Test]
+        public void Bug58260()
+        {
+            //Create workbook and worksheet
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            //ISheet worksheet = wb.CreateSheet("sample");
+            //Loop through and add all values from array list
+            // use a fixed seed to always produce the same file which makes comparing stuff easier
+            //Random rnd = new Random(4352345);
+            int maxStyles = (wb is HSSFWorkbook) ? 4009 : 64000;
+            for (int i = 0; i < maxStyles; i++)
+            {
+                //Create new row
+                //IRow row = worksheet.CreateRow(i);
+                //Create cell style
+                ICellStyle style;
+                try
+                {
+                    style = wb.CreateCellStyle();
+                }
+                catch (InvalidOperationException e)
+                {
+                    throw new InvalidOperationException("Failed for row " + i, e);
+                }
+                style.Alignment = HorizontalAlignment.Right;
+                if ((wb is HSSFWorkbook))
+                {
+                    // there are some predefined styles
+                    Assert.AreEqual(i + 21, style.Index);
+                }
+                else
+                {
+                    // getIndex() returns short, which is not sufficient for > 32767
+                    // we should really change the API to be "int" for getIndex() but
+                    // that needs API changes
+                    Assert.AreEqual(i + 1, style.Index & 0xffff);
+                }
+                //Create cell
+                //ICell cell = row.CreateCell(0);
+                //Set cell style
+                //cell.CellStyle = (style);
+                //Set cell value
+                //cell.SetCellValue("r" + rnd.Next());
+            }
+            // should Assert.Fail if we try to add more now
+            try
+            {
+                wb.CreateCellStyle();
+                Assert.Fail("Should Assert.Fail after " + maxStyles + " styles, but did not Assert.Fail");
+            }
+            catch (InvalidOperationException)
+            {
+                // expected here
+            }
+
+            /*//add column width for appearance sake
+            worksheet.setColumnWidth(0, 5000);
+
+            // Write the output to a file       
+            Console.WriteLine("Writing...");
+            OutputStream fileOut = new FileOutputStream("C:\\temp\\58260." + _testDataProvider.StandardFileNameExtension);
+
+            // the resulting file can be compressed nicely, so we need to disable the zip bomb detection here
+            double before = ZipSecureFile.MinInflateRatio;
+            try {
+                ZipSecureFile.setMinInflateRatio(0.00001);
+                wb.write(fileOut);
+            } finally { 
+                fileOut.close();
+                ZipSecureFile.setMinInflateRatio(before);
+            }*/
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Test50319()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("Test");
+            sheet.CreateRow(0);
+            sheet.GroupRow(0, 0);
+            sheet.SetRowGroupCollapsed(0, true);
+
+            sheet.GroupColumn(0, 0);
+            sheet.SetColumnGroupCollapsed(0, true);
+
+            wb.Close();
+        }
+
+        [Ignore("by poi")]
+        [Test]
+        public void test58648()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ICell cell = wb.CreateSheet().CreateRow(0).CreateCell(0);
+            cell.CellFormula = ("((1 + 1) )");
+            // Assert.Fails with
+            // org.apache.poi.ss.formula.FormulaParseException: Parse error near char ... ')'
+            // in specified formula '((1 + 1) )'. Expected cell ref or constant literal
+            wb.Close();
+        }
+
+        /**
+        * If someone sets a null string as a cell value, treat
+        *  it as an empty cell, and avoid a NPE on auto-sizing
+        */
+        [Test]
+        public void Test57034()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
+            ICell cell = s.CreateRow(0).CreateCell(0);
+            cell.SetCellValue((String)null);
+            Assert.AreEqual(CellType.Blank, cell.CellType);
+
+            _testDataProvider.TrackAllColumnsForAutosizing(s);
+
+            s.AutoSizeColumn(0);
+            Assert.AreEqual(2048, s.GetColumnWidth(0));
+            s.AutoSizeColumn(0, true);
+            Assert.AreEqual(2048, s.GetColumnWidth(0));
+            wb.Close();
+        }
+
+        [Test]
+        public void Test52684()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("test");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            cell.SetCellValue(12312345123L);
+            IDataFormat format = wb.CreateDataFormat();
+            ICellStyle style = wb.CreateCellStyle();
+            style.DataFormat = (format.GetFormat("000-00000-000"));
+            cell.CellStyle = (style);
+            Assert.AreEqual("000-00000-000",
+                    cell.CellStyle.GetDataFormatString());
+            Assert.AreEqual(164, cell.CellStyle.DataFormat);
+            DataFormatter formatter = new DataFormatter();
+            Assert.AreEqual("12-312-345-123", formatter.FormatCellValue(cell));
+            wb.Close();
+        }
+
+
+        [Test]
+        public void Test58896()
+        {
+            int nrows = 160;
+            int ncols = 139;
+            TextWriter out1 = Console.Out;
+
+            // Create a workbook
+            IWorkbook wb = _testDataProvider.CreateWorkbook(nrows + 1);
+            ISheet sh = wb.CreateSheet();
+            out1.WriteLine(wb.GetType().Name + " column autosizing timing...");
+
+            long t0 = TimeUtil.CurrentMillis();
+            _testDataProvider.TrackAllColumnsForAutosizing(sh);
+            for (int r = 0; r < nrows; r++)
+            {
+                IRow row = sh.CreateRow(r);
+                for (int c = 0; c < ncols; c++)
+                {
+                    ICell cell = row.CreateCell(c);
+                    cell.SetCellValue("Cell[r=" + r + ",c=" + c + "]");
+                }
+            }
+            double populateSheetTime = delta(t0);
+            double populateSheetTimePerCell_ns = (1000000 * populateSheetTime / (nrows * ncols));
+            out1.WriteLine("Populate sheet time: " + populateSheetTime + " ms (" + populateSheetTimePerCell_ns + " ns/cell)");
+
+            out1.WriteLine("\nAutosizing...");
+            long t1 = TimeUtil.CurrentMillis();
+            for (int c = 0; c < ncols; c++)
+            {
+                long t2 = TimeUtil.CurrentMillis();
+                sh.AutoSizeColumn(c);
+                out1.WriteLine("Column " + c + " took " + delta(t2) + " ms");
+            }
+            double autoSizeColumnsTime = delta(t1);
+            double autoSizeColumnsTimePerColumn = autoSizeColumnsTime / ncols;
+            double bestFitWidthTimePerCell_ns = 1000000 * autoSizeColumnsTime / (ncols * nrows);
+
+            out1.WriteLine("Auto sizing columns took a total of " + autoSizeColumnsTime + " ms (" + autoSizeColumnsTimePerColumn + " ms per column)");
+            out1.WriteLine("Best fit width time per cell: " + bestFitWidthTimePerCell_ns + " ns");
+
+            double totalTime_s = (populateSheetTime + autoSizeColumnsTime) / 1000;
+            out1.WriteLine("Total time: " + totalTime_s + " s");
+
+            wb.Close();
+
+            //if (bestFitWidthTimePerCell_ns > 50000) {
+            //    Assert.Fail("Best fit width time per cell exceeded 50000 ns: " + bestFitWidthTimePerCell_ns + " ns");
+            //}
+
+            //if (totalTime_s > 10)
+            //{
+            //    Assert.Fail("Total time exceeded 10 seconds: " + totalTime_s + " s");
+            //}
+        }
+
+        protected double delta(long startTimeMillis)
+        {
+            return TimeUtil.CurrentMillis() - startTimeMillis;
+        }
+
+        [Ignore("bug 59393")]
+        [Test]
+        public void Bug59393_commentsCanHaveSameAnchor()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+
+            ISheet sheet = wb.CreateSheet();
+
+            ICreationHelper helper = wb.GetCreationHelper();
+            IClientAnchor anchor = helper.CreateClientAnchor();
+            IDrawing drawing = sheet.CreateDrawingPatriarch();
+
+            IRow row = sheet.CreateRow(0);
+
+            ICell cell1 = row.CreateCell(0);
+            ICell cell2 = row.CreateCell(1);
+            ICell cell3 = row.CreateCell(2);
+            IComment comment1 = drawing.CreateCellComment(anchor);
+            IRichTextString richTextString1 = helper.CreateRichTextString("comment1");
+            comment1.String = richTextString1;
+            cell1.CellComment = comment1;
+
+            // Assert.Fails with IllegalArgumentException("Multiple cell comments in one cell are not allowed, cell: A1")
+            // because createCellComment tries to create a cell at A1
+            // (from CellAddress(anchor.Row1, anchor.Cell1)),
+            // but cell A1 already has a comment (comment1).
+            // Need to atomically create a comment and attach it to a cell.
+            // Current workaround: change anchor between each usage
+            // anchor.Col1=1;
+            IComment comment2 = drawing.CreateCellComment(anchor);
+            IRichTextString richTextString2 = helper.CreateRichTextString("comment2");
+            comment2.String = richTextString2;
+            cell2.CellComment = comment2;
+            // anchor.Col1=2;
+            IComment comment3 = drawing.CreateCellComment(anchor);
+            IRichTextString richTextString3 = helper.CreateRichTextString("comment3");
+            comment3.String = richTextString3;
+            cell3.CellComment = comment3;
+
+            wb.Close();
+        }
+
+        [Test]
+        public virtual void Bug57798()
+        {
+            String fileName = "57798." + _testDataProvider.StandardFileNameExtension;
+            IWorkbook workbook = _testDataProvider.OpenSampleWorkbook(fileName);
+            ISheet sheet = workbook.GetSheet("Sheet1");
+            // *******************************
+            // First cell of array formula, OK
+            int rowId = 0;
+            int cellId = 1;
+            Console.WriteLine("Reading row " + rowId + ", col " + cellId);
+            IRow row = sheet.GetRow(rowId);
+            ICell cell = row.GetCell(cellId);
+            Console.WriteLine("Formula:" + cell.CellFormula);
+            if (CellType.Formula == cell.CellType)
+            {
+                int formulaResultType = (int)cell.CachedFormulaResultType;
+                Console.WriteLine("Formual Result Type:" + formulaResultType);
+            }
+            // *******************************
+            // Second cell of array formula, NOT OK for xlsx files
+            rowId = 1;
+            cellId = 1;
+            Console.WriteLine("Reading row " + rowId + ", col " + cellId);
+            row = sheet.GetRow(rowId);
+            cell = row.GetCell(cellId);
+            Console.WriteLine("Formula:" + cell.CellFormula);
+            if (CellType.Formula == cell.CellType)
+            {
+                int formulaResultType = (int)cell.CachedFormulaResultType;
+                Console.WriteLine("Formual Result Type:" + formulaResultType);
+            }
+            workbook.Close();
+        }
+
+
+        [Ignore("")]
+        [Test]
+        public void Test57929()
+        {
+            // Create a workbook with print areas on 2 sheets
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            wb.CreateSheet("Sheet0");
+            wb.CreateSheet("Sheet1");
+            wb.SetPrintArea(0, "$A$1:$C$6");
+            wb.SetPrintArea(1, "$B$1:$C$5");
+
+            // Verify the print areas were set correctly
+            Assert.AreEqual("Sheet0!$A$1:$C$6", wb.GetPrintArea(0));
+            Assert.AreEqual("Sheet1!$B$1:$C$5", wb.GetPrintArea(1));
+
+            // Remove the print area on Sheet0 and change the print area on Sheet1
+            wb.RemovePrintArea(0);
+            wb.SetPrintArea(1, "$A$1:$A$1");
+
+            // Verify that the changes were made
+            Assert.IsNull(wb.GetPrintArea(0), "Sheet0 before write");
+            Assert.AreEqual("Sheet1!$A$1:$A$1", wb.GetPrintArea(1), "Sheet1 before write");
+
+            // Verify that the changes are non-volatile
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb);
+            wb.Close();
+
+            Assert.IsNull(wb2.GetPrintArea(0), "Sheet0 after write"); // CURRENTLY FAILS with "Sheet0!$A$1:$C$6"
+            Assert.AreEqual("Sheet1!$A$1:$A$1", wb2.GetPrintArea(1), "Sheet1 after write");
+        }
+        [Test]
+        public void test55384()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            try
+            {
+                ISheet sh = wb.CreateSheet();
+                for (int rownum = 0; rownum < 10; rownum++)
+                {
+                    IRow row1 = sh.CreateRow(rownum);
+                    for (int cellnum = 0; cellnum < 3; cellnum++)
+                    {
+                        ICell cell = row1.CreateCell(cellnum);
+                        cell.SetCellValue(rownum + cellnum);
+                    }
+                }
+                IRow row = sh.CreateRow(10);
+                // setting no precalculated value works just fine.
+                ICell cell1 = row.CreateCell(0);
+                cell1.SetCellFormula("SUM(A1:A10)");
+                // but setting a precalculated STRING value Assert.Fails totally in1 SXSSF
+                ICell cell2 = row.CreateCell(1);
+                cell2.SetCellFormula("SUM(B1:B10)");
+                cell2.SetCellValue("55");
+                // setting a precalculated int value works as expected
+                ICell cell3 = row.CreateCell(2);
+                cell3.SetCellFormula("SUM(C1:C10)");
+                cell3.SetCellValue(65);
+                Assert.AreEqual(CellType.Formula, cell1.CellType);
+                Assert.AreEqual(CellType.Formula, cell2.CellType);
+                Assert.AreEqual(CellType.Formula, cell3.CellType);
+                Assert.AreEqual("SUM(A1:A10)", cell1.CellFormula);
+                Assert.AreEqual("SUM(B1:B10)", cell2.CellFormula);
+                Assert.AreEqual("SUM(C1:C10)", cell3.CellFormula);
+                /*String name = wb.GetClass().getCanonicalName();
+                String ext = (wb is HSSFWorkbook) ? ".xls" : ".xlsx";
+                OutputStream output = new FileOutputStream("/tmp" + name + ext);
+                try {
+                    wb.Write(output);
+                } finally {
+                    output.Close();
+                }*/
+                IWorkbook wbBack = _testDataProvider.WriteOutAndReadBack(wb);
+                checkFormulaPreevaluatedString(wbBack);
+                wbBack.Close();
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+        private void checkFormulaPreevaluatedString(IWorkbook readFile)
+        {
+            ISheet sheet = readFile.GetSheetAt(0);
+            IRow row = sheet.GetRow(sheet.LastRowNum);
+            Assert.AreEqual(10, row.RowNum);
+            foreach (ICell cell in row)
+            {
+                String cellValue = null;
+                switch (cell.CellType)
+                {
+                    case CellType.String:
+                        cellValue = cell.RichStringCellValue.String;
+                        break;
+                    case CellType.Formula:
+                        cellValue = cell.CellFormula;
+                        break;
+                }
+                Assert.IsNotNull(cellValue);
+                cellValue = string.IsNullOrEmpty(cellValue) ? null : cellValue;
+                Assert.IsNotNull(cellValue);
+            }
+        }
 
     }
-
 }

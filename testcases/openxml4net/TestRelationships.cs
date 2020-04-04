@@ -24,7 +24,7 @@ using System.IO;
 using System.Web;
 using System.Text.RegularExpressions;
 using NPOI.XWPF.UserModel;
-namespace TestCases.OPC
+namespace TestCases.OpenXml4Net.OPC
 {
 
 
@@ -326,22 +326,25 @@ namespace TestCases.OPC
             Assert.AreEqual("../media/image1.png", rel2.OriginalString);
 
             PackageRelationship rId3 = drawingPart.GetRelationship("rId3");
-            Uri rel3 = new Uri(Path.Combine(parent.ToString(), rId3.TargetUri.ToString()), UriKind.Relative);
-            Assert.AreEqual("#ThirdSheet!A1", rel3.OriginalString.Split(new char[] { '/' })[3]);
+            Uri baseUri = new Uri("ooxml://npoi.org"); //For test only.
+            Uri target = new Uri(baseUri, rId3.TargetUri);
+            Assert.AreEqual("#ThirdSheet!A1", target.Fragment);
 
             PackageRelationship rId4 = drawingPart.GetRelationship("rId4");
-            Uri rel4 = new Uri(Path.Combine(parent.ToString(), rId4.TargetUri.ToString()), UriKind.Relative);
-            Assert.AreEqual("#'\u0410\u043F\u0430\u0447\u0435 \u041F\u041E\u0418'!A1",HttpUtility.UrlDecode(rel4.OriginalString.Split(new char[] { '/' })[3]));
+            target = new Uri(baseUri, rId4.TargetUri);
+            Assert.AreEqual("#'\u0410\u043F\u0430\u0447\u0435 \u041F\u041E\u0418'!A1",HttpUtility.UrlDecode(target.Fragment));
 
             PackageRelationship rId5 = drawingPart.GetRelationship("rId5");
-            Uri rel5 = new Uri(Path.Combine(parent.ToString(), rId5.TargetUri.ToString()), UriKind.Relative); 
+            //Uri rel5 = new Uri(Path.Combine(parent.ToString(), rId5.TargetUri.ToString()), UriKind.Relative); 
+            Uri rel5 = rId5.TargetUri;
             // back slashed have been Replaced with forward
-            //Assert.AreEqual("file:///D:/chan-chan.mp3", rel5.ToString());
+            Assert.AreEqual("file:///D:/chan-chan.mp3", rel5.ToString());
 
             PackageRelationship rId6 = drawingPart.GetRelationship("rId6");
-            Uri rel6 = new Uri(ResolveRelativePath(parent.ToString(), HttpUtility.UrlDecode(rId6.TargetUri.ToString())), UriKind.Relative); 
-            //Assert.AreEqual("../../../../../../../cygwin/home/yegor/dinom/&&&[access].2010-10-26.log", rel6.OriginalString);
-            //Assert.AreEqual("#'\u0410\u043F\u0430\u0447\u0435 \u041F\u041E\u0418'!A5", HttpUtility.UrlDecode(rel6.OriginalString.Split(new char[] { '/' })[3]));
+            //Uri rel6 = new Uri(ResolveRelativePath(parent.ToString(), HttpUtility.UrlDecode(rId6.TargetUri.ToString())), UriKind.Relative);
+            Uri rel6 = rId6.TargetUri;
+            Assert.AreEqual("../../../../../../../cygwin/home/yegor/dinom/&&&[access].2010-10-26.log", HttpUtility.UrlDecode(rel6.OriginalString.Split(new char[] { '#' })[0]));
+            Assert.AreEqual("'\u0410\u043F\u0430\u0447\u0435 \u041F\u041E\u0418'!A5", HttpUtility.UrlDecode(rel6.OriginalString.Split(new char[] { '#' })[1]));
         }
         public static string ResolveRelativePath(string referencePath, string relativePath)
         {
@@ -381,6 +384,7 @@ namespace TestCases.OPC
             Assert.AreEqual(rel1.TargetMode, rel2.TargetMode);
         }
         [Test]
+        [Ignore("since limitation in .NET Uri class, it's impossible to accept uri like mailto:nobody@nowhere.uk%C2%A0")]
         public void TestTrailingSpacesInURI_53282()
         {
             OPCPackage pkg = null;

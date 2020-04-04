@@ -29,7 +29,7 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
     public class SeriesFormatAggregate : ChartRecordAggregate
     {
         private SeriesRecord series = null;
-        private Dictionary<BRAIRecord, SeriesTextRecord> dic4AI = new Dictionary<BRAIRecord, SeriesTextRecord>();
+        private Dictionary<LinkedDataRecord, SeriesTextRecord> dic4AI = new Dictionary<LinkedDataRecord, SeriesTextRecord>();
         private List<SSAggregate> ssList = new List<SSAggregate>();
         private SerToCrtRecord serToCrt = null;
         private SerParentRecord serParent = null;
@@ -41,12 +41,12 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
         {
             series = (SeriesRecord)rs.GetNext();
             rs.GetNext();
-            BRAIRecord ai;
+            LinkedDataRecord ai;
             SeriesTextRecord sText;
-            while (rs.PeekNextChartSid() == BRAIRecord.sid)
+            while (rs.PeekNextChartSid() == LinkedDataRecord.sid)
             {
                 sText = null;
-                ai = (BRAIRecord)rs.GetNext();
+                ai = (LinkedDataRecord)rs.GetNext();
                 if (rs.PeekNextChartSid() == SeriesTextRecord.sid)
                     sText = (SeriesTextRecord)rs.GetNext();
                 dic4AI.Add(ai, sText);
@@ -93,7 +93,7 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
             rv.VisitRecord(series);
             rv.VisitRecord(BeginRecord.instance);
 
-            foreach(KeyValuePair<BRAIRecord,SeriesTextRecord> kv in dic4AI)
+            foreach(KeyValuePair<LinkedDataRecord, SeriesTextRecord> kv in dic4AI)
             {
                 rv.VisitRecord(kv.Key);
                 if (kv.Value != null)

@@ -18,6 +18,8 @@
 using NPOI.XSSF.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System;
+using System.Text;
+
 namespace NPOI.XSSF.UserModel.Helpers
 {
 
@@ -71,15 +73,15 @@ namespace NPOI.XSSF.UserModel.Helpers
          */
         public String GetLocalXPath()
         {
-            String localXPath = "";
+            StringBuilder localXPath = new StringBuilder();
             int numberOfCommonXPathAxis = table.GetCommonXpath().Split(new char[] { '/' }).Length - 1;
 
             String[] xPathTokens = ctXmlColumnPr.xpath.Split(new char[] { '/' });
             for (int i = numberOfCommonXPathAxis; i < xPathTokens.Length; i++)
             {
-                localXPath += "/" + xPathTokens[i];
+                localXPath.Append("/" + xPathTokens[i]);
             }
-            return localXPath;
+            return localXPath.ToString();
         }
 
         public ST_XmlDataType GetXmlDataType()

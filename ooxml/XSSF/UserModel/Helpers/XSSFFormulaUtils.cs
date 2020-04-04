@@ -105,9 +105,9 @@ namespace NPOI.XSSF.UserModel.Helpers
         public void UpdateSheetName(int sheetIndex, string oldName, string newName)
         {
             // update named ranges
-            for (int i = 0; i < _wb.NumberOfNames; i++)
-            {
-                IName nm = _wb.GetNameAt(i);
+            int numberOfNames = _wb.NumberOfNames;
+            foreach (IName nm in _wb.GetAllNames())
+            { 
                 if (nm.SheetIndex == -1 || nm.SheetIndex == sheetIndex)
                 {
                     UpdateName(nm, oldName, newName);
@@ -145,7 +145,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                 if (formula != null && formula.Length > 0)
                 {
                     int sheetIndex = _wb.GetSheetIndex(cell.Sheet);
-                    Ptg[] ptgs = FormulaParser.Parse(formula, _fpwb, FormulaType.Cell, sheetIndex);
+                    Ptg[] ptgs = FormulaParser.Parse(formula, _fpwb, FormulaType.Cell, sheetIndex, -1);
                     foreach (Ptg ptg in ptgs)
                     {
                         UpdatePtg(ptg, oldName, newName);
@@ -168,7 +168,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             if (formula != null)
             {
                 int sheetIndex = name.SheetIndex;
-                Ptg[] ptgs = FormulaParser.Parse(formula, _fpwb, FormulaType.NamedRange, sheetIndex);
+                Ptg[] ptgs = FormulaParser.Parse(formula, _fpwb, FormulaType.NamedRange, sheetIndex, -1);
                 foreach (Ptg ptg in ptgs)
                 {
                     UpdatePtg(ptg, oldName, newName);

@@ -4,6 +4,7 @@ using System.Text;
 using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
 using System.IO;
+using NPOI.SS.Util;
 
 namespace NPOI.Examples.XSSF.PageSetupInXlsx
 {
@@ -34,9 +35,10 @@ namespace NPOI.Examples.XSSF.PageSetupInXlsx
             row4.CreateCell(5).SetCellValue(2.5);
 
             // Set the columns to repeat from column 0 to 2 on the first sheet
-            wb.SetRepeatingRowsAndColumns(0, 0, 2, -1, -1);
+            sheet1.RepeatingColumns = new CellRangeAddress(-1, -1, 0, 2);
             // Set the the repeating rows and columns on the second sheet.
-            wb.SetRepeatingRowsAndColumns(1, 4, 5, 1, 2);
+            sheet2.RepeatingColumns = new CellRangeAddress(-1, -1, 4, 5);
+            sheet2.RepeatingRows = new CellRangeAddress(1, 2, -1, -1);
 
             //set the print area for the first sheet
             wb.SetPrintArea(0, 1, 2, 0, 3);

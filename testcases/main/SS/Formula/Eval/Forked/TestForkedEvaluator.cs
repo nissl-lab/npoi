@@ -17,14 +17,13 @@
 
 namespace TestCases.SS.Formula.Eval.Forked
 {
-    using System;
-    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
-    using NPOI.SS.UserModel;
-    using TestCases.SS.Formula.Eval.Forked;
     using NPOI.SS.Formula.Eval.Forked;
+    using NPOI.SS.UserModel;
+    using NUnit.Framework;
+    using System;
 
     /**
      * @author Josh Micich
@@ -32,13 +31,17 @@ namespace TestCases.SS.Formula.Eval.Forked
     [TestFixture]
     public class TestForkedEvaluator
     {
+        protected IWorkbook NewWorkbook()
+        {
+            return new HSSFWorkbook();
+        }
         /**
          * Set up a calculation workbook with input cells nicely segregated on a
          * sheet called "Inputs"
          */
-        private static HSSFWorkbook CreateWorkbook()
+        private IWorkbook CreateWorkbook()
         {
-            HSSFWorkbook wb = new HSSFWorkbook();
+            IWorkbook wb = NewWorkbook();
             ISheet sheet1 = wb.CreateSheet("Inputs");
             ISheet sheet2 = wb.CreateSheet("Calculations");
             IRow row;
@@ -65,7 +68,7 @@ namespace TestCases.SS.Formula.Eval.Forked
         [Test]
         public void TestBasic()
         {
-            HSSFWorkbook wb = CreateWorkbook();
+            IWorkbook wb = CreateWorkbook();
 
             // The stability classifier is useful to reduce memory consumption of caching logic
             IStabilityClassifier stabilityClassifier = new StabilityClassifier();
@@ -85,6 +88,8 @@ namespace TestCases.SS.Formula.Eval.Forked
             Assert.AreEqual(4.0, ((NumberEval)fe2.Evaluate("Calculations", 0, 0)).NumberValue, 0.0);
             fe1.UpdateCell("Inputs", 0, 0, new NumberEval(3.0));
             Assert.AreEqual(13.9, ((NumberEval)fe1.Evaluate("Calculations", 0, 0)).NumberValue, 0.0);
+
+            wb.Close();
         }
 
         /**
@@ -98,12 +103,10 @@ namespace TestCases.SS.Formula.Eval.Forked
          * <i>read-only</i> with respect to the ForkedEvaluator.
          */
         [Test]
-        public void TestMissingInputCell()
+        public void TestMissingInputCellH()
         {
-            HSSFWorkbook wb = CreateWorkbook();
-
+            IWorkbook wb = CreateWorkbook();
             ForkedEvaluator fe = ForkedEvaluator.Create(wb, null, null);
-
             // attempt update input at cell A2 (which is missing)
             try
             {

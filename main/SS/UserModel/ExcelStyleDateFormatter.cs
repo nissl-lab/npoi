@@ -45,11 +45,11 @@ namespace NPOI.SS.UserModel
         public const char LL_BRACKET_SYMBOL = '\ue017';
         public const char QUOTE_SYMBOL = '\ue009'; //add for C# DateTime format
 
-        private DecimalFormat format1digit = new DecimalFormat("0");
-        private DecimalFormat format2digits = new DecimalFormat("00");
+        private static DecimalFormat format1digit = new DecimalFormat("0");
+        private static DecimalFormat format2digits = new DecimalFormat("00");
 
-        private DecimalFormat format3digit = new DecimalFormat("0");
-        private DecimalFormat format4digits = new DecimalFormat("00");
+        private static DecimalFormat format3digit = new DecimalFormat("0");
+        private static DecimalFormat format4digits = new DecimalFormat("00");
 
         static ExcelStyleDateFormatter()
         {
@@ -210,6 +210,21 @@ namespace NPOI.SS.UserModel
             }
 
             return new StringBuilder(s);
+        }
+
+        public override bool Equals(Object o)
+        {
+            if (!(o is ExcelStyleDateFormatter)) {
+                return false;
+            }
+
+            ExcelStyleDateFormatter other = (ExcelStyleDateFormatter)o;
+            return dateToBeFormatted == other.dateToBeFormatted;
+        }
+
+        public override int GetHashCode()
+        {
+            return dateToBeFormatted.GetHashCode();
         }
     }
 

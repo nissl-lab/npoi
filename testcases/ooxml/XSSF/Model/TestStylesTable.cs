@@ -18,12 +18,25 @@
 using System;
 using NUnit.Framework;
 using NPOI.XSSF.UserModel;
-namespace NPOI.XSSF.Model
+using System.Collections.Generic;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.Model;
+using NPOI.XSSF;
+
+namespace TestCases.XSSF.Model
 {
     [TestFixture]
     public class TestStylesTable
     {
         private String testFile = "Formatting.xlsx";
+        private static String customDataFormat = "YYYY-mm-dd";
+    
+        [SetUp]
+        public static void assumeCustomDataFormatIsNotBuiltIn()
+        {
+            Assert.AreEqual(-1, BuiltinFormats.GetBuiltinFormat(customDataFormat));
+        }
+
         [Test]
         public void TestCreateNew()
         {
@@ -33,7 +46,7 @@ namespace NPOI.XSSF.Model
             Assert.IsNotNull(st.GetCTStylesheet());
             Assert.AreEqual(1, st.XfsSize);
             Assert.AreEqual(1, st.StyleXfsSize);
-            Assert.AreEqual(0, st.NumberFormatSize);
+            Assert.AreEqual(0, st.NumDataFormats);
         }
         [Test]
         public void TestCreateSaveLoad()
@@ -44,14 +57,14 @@ namespace NPOI.XSSF.Model
             Assert.IsNotNull(st.GetCTStylesheet());
             Assert.AreEqual(1, st.XfsSize);
             Assert.AreEqual(1, st.StyleXfsSize);
-            Assert.AreEqual(0, st.NumberFormatSize);
+            Assert.AreEqual(0, st.NumDataFormats);
 
             st = ((XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb)).GetStylesSource();
 
             Assert.IsNotNull(st.GetCTStylesheet());
             Assert.AreEqual(1, st.XfsSize);
             Assert.AreEqual(1, st.StyleXfsSize);
-            Assert.AreEqual(0, st.NumberFormatSize);
+            Assert.AreEqual(0, st.NumDataFormats);
 
             Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
@@ -85,7 +98,7 @@ namespace NPOI.XSSF.Model
             Assert.IsNotNull(st.GetCTStylesheet());
             Assert.AreEqual(11, st.XfsSize);
             Assert.AreEqual(1, st.StyleXfsSize);
-            Assert.AreEqual(8, st.NumberFormatSize);
+            Assert.AreEqual(8, st.NumDataFormats);
 
             Assert.AreEqual(2, st.GetFonts().Count);
             Assert.AreEqual(2, st.GetFills().Count);
@@ -114,7 +127,7 @@ namespace NPOI.XSSF.Model
             Assert.IsNotNull(st.GetCTStylesheet());
             Assert.AreEqual(1, st.XfsSize);
             Assert.AreEqual(1, st.StyleXfsSize);
-            Assert.AreEqual(0, st.NumberFormatSize);
+            Assert.AreEqual(0, st.NumDataFormats);
 
             int nf1 = st.PutNumberFormat("yyyy-mm-dd");
             int nf2 = st.PutNumberFormat("yyyy-mm-DD");
@@ -128,7 +141,7 @@ namespace NPOI.XSSF.Model
             Assert.IsNotNull(st.GetCTStylesheet());
             Assert.AreEqual(2, st.XfsSize);
             Assert.AreEqual(1, st.StyleXfsSize);
-            Assert.AreEqual(2, st.NumberFormatSize);
+            Assert.AreEqual(2, st.NumDataFormats);
 
             Assert.AreEqual("yyyy-mm-dd", st.GetNumberFormatAt(nf1));
             Assert.AreEqual(nf1, st.PutNumberFormat("yyyy-mm-dd"));
@@ -145,7 +158,7 @@ namespace NPOI.XSSF.Model
             StylesTable st = workbook.GetStylesSource();
             Assert.AreEqual(11, st.XfsSize);
             Assert.AreEqual(1, st.StyleXfsSize);
-            Assert.AreEqual(8, st.NumberFormatSize);
+            Assert.AreEqual(8, st.NumDataFormats);
 
             int nf1 = st.PutNumberFormat("YYYY-mm-dd");
             int nf2 = st.PutNumberFormat("YYYY-mm-DD");
@@ -155,7 +168,7 @@ namespace NPOI.XSSF.Model
 
             Assert.AreEqual(11, st.XfsSize);
             Assert.AreEqual(1, st.StyleXfsSize);
-            Assert.AreEqual(10, st.NumberFormatSize);
+            Assert.AreEqual(10, st.NumDataFormats);
 
             Assert.AreEqual("YYYY-mm-dd", st.GetNumberFormatAt(nf1));
             Assert.AreEqual(nf1, st.PutNumberFormat("YYYY-mm-dd"));
@@ -163,5 +176,220 @@ namespace NPOI.XSSF.Model
 
             Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(workbook));
         }
+
+        [Test]
+        public void ExceedNumberFormatLimit()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                StylesTable styles = wb.GetStylesSource();
+                for (int i = 0; i < styles.MaxNumberOfDataFormats; i++)
+                {
+                    wb.GetStylesSource().PutNumberFormat("\"test" + i + " \"0");
+                }
+                try
+                {
+                    wb.GetStylesSource().PutNumberFormat("\"anotherformat \"0");
+                }
+                catch (InvalidOperationException e)
+                {
+                    if (e.Message.StartsWith("The maximum number of Data Formats was exceeded."))
+                    {
+                        //expected
+                    }
+                    else
+                    {
+                        throw e;
+                    }
+                }
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        private static void assertNotContainsKey<K, V>(SortedDictionary<K, V> map, K key)
+        {
+            Assert.IsFalse(map.ContainsKey(key));
+        }
+        private static void assertNotContainsValue<K, V>(SortedDictionary<K, V> map, V value)
+        {
+            Assert.IsFalse(map.ContainsValue(value));
+        }
+
+        [Test]
+        public void removeNumberFormat()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                String fmt = customDataFormat;
+                short fmtIdx = (short)wb.GetStylesSource().PutNumberFormat(fmt);
+
+                ICell cell = wb.CreateSheet("test").CreateRow(0).CreateCell(0);
+                cell.SetCellValue(5.25);
+                ICellStyle style = wb.CreateCellStyle();
+                style.DataFormat = fmtIdx;
+                cell.CellStyle = style;
+
+                Assert.AreEqual(fmt, cell.CellStyle.GetDataFormatString());
+                Assert.AreEqual(fmt, wb.GetStylesSource().GetNumberFormatAt(fmtIdx));
+
+                // remove the number format from the workbook
+                wb.GetStylesSource().RemoveNumberFormat(fmt);
+
+                // number format in CellStyles should be restored to default number format
+                short defaultFmtIdx = 0;
+                String defaultFmt = BuiltinFormats.GetBuiltinFormat(0);
+                Assert.AreEqual(defaultFmtIdx, style.DataFormat);
+                Assert.AreEqual(defaultFmt, style.GetDataFormatString());
+
+                // The custom number format should be entirely removed from the workbook
+                SortedDictionary<short, String> numberFormats = wb.GetStylesSource().GetNumberFormats() as SortedDictionary<short, String>;
+                assertNotContainsKey(numberFormats, fmtIdx);
+                assertNotContainsValue(numberFormats, fmt);
+
+                // The default style shouldn't be added back to the styles source because it's built-in
+                Assert.AreEqual(0, wb.GetStylesSource().NumDataFormats);
+
+                cell = null; style = null; numberFormats = null;
+                wb = XSSFTestDataSamples.WriteOutCloseAndReadBack(wb);
+
+                cell = wb.GetSheet("test").GetRow(0).GetCell(0);
+                style = cell.CellStyle;
+
+                // number format in CellStyles should be restored to default number format
+                Assert.AreEqual(defaultFmtIdx, style.DataFormat);
+                Assert.AreEqual(defaultFmt, style.GetDataFormatString());
+
+                // The custom number format should be entirely removed from the workbook
+                numberFormats = wb.GetStylesSource().GetNumberFormats() as SortedDictionary<short, String>;
+                assertNotContainsKey(numberFormats, fmtIdx);
+                assertNotContainsValue(numberFormats, fmt);
+
+                // The default style shouldn't be added back to the styles source because it's built-in
+                Assert.AreEqual(0, wb.GetStylesSource().NumDataFormats);
+
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void maxNumberOfDataFormats()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+
+            try
+            {
+                StylesTable styles = wb.GetStylesSource();
+
+                // Check default limit
+                int n = styles.MaxNumberOfDataFormats;
+                // https://support.office.com/en-us/article/excel-specifications-and-limits-1672b34d-7043-467e-8e27-269d656771c3
+                Assert.IsTrue(200 <= n);
+                Assert.IsTrue(n <= 250);
+
+                // Check upper limit
+                n = int.MaxValue;
+                styles.MaxNumberOfDataFormats = (n);
+                Assert.AreEqual(n, styles.MaxNumberOfDataFormats);
+
+                // Check negative (illegal) limits
+                try
+                {
+                    styles.MaxNumberOfDataFormats = (-1);
+                    Assert.Fail("Expected to get an IllegalArgumentException(\"Maximum Number of Data Formats must be greater than or equal to 0\")");
+                }
+                catch (ArgumentException e)
+                {
+                    if (e.Message.StartsWith("Maximum Number of Data Formats must be greater than or equal to 0"))
+                    {
+                        // expected
+                    }
+                    else
+                    {
+                        throw e;
+                    }
+                }
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void addDataFormatsBeyondUpperLimit()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+
+            try
+            {
+                StylesTable styles = wb.GetStylesSource();
+                styles.MaxNumberOfDataFormats = (0);
+
+                // Try adding a format beyond the upper limit
+                try
+                {
+                    styles.PutNumberFormat("\"test \"0");
+                    Assert.Fail("Expected to raise InvalidOperationException");
+                }
+                catch (InvalidOperationException e)
+                {
+                    if (e.Message.StartsWith("The maximum number of Data Formats was exceeded."))
+                    {
+                        // expected
+                    }
+                    else
+                    {
+                        throw e;
+                    }
+                }
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void decreaseUpperLimitBelowCurrentNumDataFormats()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+
+            try
+            {
+                StylesTable styles = wb.GetStylesSource();
+                styles.PutNumberFormat(customDataFormat);
+
+                // Try decreasing the upper limit below the current number of formats
+                try
+                {
+                    styles.MaxNumberOfDataFormats = (0);
+                    Assert.Fail("Expected to raise InvalidOperationException");
+                }
+                catch (InvalidOperationException e)
+                {
+                    if (e.Message.StartsWith("Cannot set the maximum number of data formats less than the current quantity."))
+                    {
+                        // expected
+                    }
+                    else
+                    {
+                        throw e;
+                    }
+                }
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
     }
 }

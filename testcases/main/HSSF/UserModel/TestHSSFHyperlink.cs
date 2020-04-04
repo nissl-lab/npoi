@@ -293,5 +293,29 @@ namespace TestCases.HSSF.UserModel
             Assert.IsNotNull(link);
             Assert.AreEqual("http://poi.apache.org/hssf/", link.Address);
         }
+
+        public override IHyperlink CopyHyperlink(IHyperlink link)
+        {
+            return new HSSFHyperlink(link);
+        }
+
+        /*
+        [Test]
+        public void testCopyXSSFHyperlink() {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFCreationHelper helper = wb.CreationHelper;
+            XSSFHyperlink xlink = helper.createHyperlink(Hyperlink.LINK_URL);
+            xlink.setAddress("http://poi.apache.org/");
+            xlink.setCellReference("D3");
+            xlink.setTooltip("tooltip");
+            HSSFHyperlink hlink = new HSSFHyperlink(xlink);
+
+            Assert.AreEqual("http://poi.apache.org/", hlink.Address);
+            Assert.AreEqual("D3", new CellReference(hlink.FirstRow, hlink.FirstColumn).formatAsString());
+            // Are HSSFHyperlink.label and XSSFHyperlink.tooltip the same? If so, perhaps one of these needs renamed for a consistent Hyperlink interface
+            // Assert.AreEqual("tooltip", hlink.Label);
+
+            wb.close();
+        }*/
     }
 }

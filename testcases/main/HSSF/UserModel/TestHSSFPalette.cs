@@ -27,6 +27,7 @@ namespace TestCases.HSSF.UserModel
     using TestCases.HSSF;
     using NUnit.Framework;
     using NPOI.SS.UserModel;
+    using System.Drawing;
 
     /**
      * @author Brian Sanders (bsanders at risklabs dot com)
@@ -193,6 +194,8 @@ namespace TestCases.HSSF.UserModel
                     p.GetColor((short)12).GetHexString(),
                     p.FindSimilarColor(unchecked((byte)-1), (byte)2, (byte)10).GetHexString()
             );
+
+            book.Close();
         }
 
         /**
@@ -241,7 +244,7 @@ namespace TestCases.HSSF.UserModel
 
         private void CompareToDefaults(ColorComparator c)
         {
-            Hashtable colors = HSSFColor.GetIndexHash();
+            var colors = HSSFColor.GetIndexHash();
             IEnumerator it = colors.Keys.GetEnumerator();
             while (it.MoveNext())
             {
@@ -268,6 +271,28 @@ namespace TestCases.HSSF.UserModel
         private interface ColorComparator
         {
             void Compare(HSSFColor expected, HSSFColor palette);
+        }
+        [Test]
+        public void Test48403()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+
+            Color color = Color.FromArgb(0, 0x6B, 0x6B); //decode("#006B6B");
+            HSSFPalette palette = wb.GetCustomPalette();
+
+            HSSFColor hssfColor = palette.FindColor(color.R, color.G, color.B);
+            Assert.IsNull(hssfColor);
+
+            palette.SetColorAtIndex(
+                    (short)(PaletteRecord.STANDARD_PALETTE_SIZE - 1),
+                    (byte)color.R, (byte)color.G,
+                    (byte)color.B);
+            hssfColor = palette.GetColor((short)(PaletteRecord.STANDARD_PALETTE_SIZE - 1));
+            Assert.IsNotNull(hssfColor);
+            Assert.AreEqual(55, hssfColor.Indexed);
+            CollectionAssert.AreEqual(new short[] { 0, 107, 107 }, hssfColor.GetTriplet());
+
+            wb.Close();
         }
     }
 }

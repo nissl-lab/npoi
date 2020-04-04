@@ -21,7 +21,10 @@ using NUnit.Framework;
 using NPOI.SS.Util;
 using System;
 using System.Text;
-namespace NPOI.XSSF.UserModel
+using NPOI.XSSF;
+using NPOI.XSSF.UserModel;
+
+namespace TestCases.XSSF.UserModel
 {
     [TestFixture]
     public class TestXSSFDataValidation : BaseTestDataValidation
@@ -335,6 +338,33 @@ namespace NPOI.XSSF.UserModel
 
                 List<IDataValidation> dataValidations = sheet.GetDataValidations();
                 Assert.AreEqual(true, (dataValidations[0] as XSSFDataValidation).GetCTDataValidation().allowBlank);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void TestCreateMultipleRegionsValidation()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+                IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
+                IDataValidationConstraint constraint = dataValidationHelper.CreateExplicitListConstraint(new string[] { "A" });
+                CellRangeAddressList cellRangeAddressList = new CellRangeAddressList();
+                cellRangeAddressList.AddCellRangeAddress(0, 0, 0, 0);
+                cellRangeAddressList.AddCellRangeAddress(0, 1, 0, 1);
+                cellRangeAddressList.AddCellRangeAddress(0, 2, 0, 2);
+                XSSFDataValidation dataValidation = dataValidationHelper.CreateValidation(constraint, cellRangeAddressList) as XSSFDataValidation;
+                sheet.AddValidationData(dataValidation);
+
+                Assert.AreEqual(new CellRangeAddress(0, 0, 0, 0), sheet.GetDataValidations()[0].Regions.CellRangeAddresses[0]);
+                Assert.AreEqual(new CellRangeAddress(0, 0, 1, 1), sheet.GetDataValidations()[0].Regions.CellRangeAddresses[1]);
+                Assert.AreEqual(new CellRangeAddress(0, 0, 2, 2), sheet.GetDataValidations()[0].Regions.CellRangeAddresses[2]);
+                Assert.AreEqual("A1 B1 C1", dataValidation.GetCTDataValidation().sqref);
             }
             finally
             {

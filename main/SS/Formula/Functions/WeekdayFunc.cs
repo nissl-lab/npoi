@@ -88,7 +88,7 @@ namespace NPOI.SS.Formula.Functions
                     return ErrorEval.NUM_ERROR;						// EXCEL uses this and no VALUE_ERROR
                 }
                 DateTime date = DateUtil.GetJavaCalendar(serialDate, false);		// (XXX 1904-windowing not respected)
-                int weekday = (int)date.DayOfWeek;		// => sunday = 1, monday = 2, ..., saturday = 7
+                int weekday = (int)date.DayOfWeek + 1;	// => sunday = 1, monday = 2, ..., saturday = 7
 
                 // extract second parameter
                 int returnOption = 1;					// default value

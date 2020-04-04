@@ -195,8 +195,8 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public void AddRelationship(PackageRelationship relPart)
         {
-            relationshipsByID.Add(relPart.Id, relPart);
-            relationshipsByType.Add(relPart.RelationshipType, relPart);
+            relationshipsByID[relPart.Id] = relPart;
+            relationshipsByType[relPart.RelationshipType] = relPart;
         }
 
         /**
@@ -233,8 +233,8 @@ namespace NPOI.OpenXml4Net.OPC
 
             PackageRelationship rel = new PackageRelationship(container,
                     sourcePart, targetUri, targetMode, relationshipType, id);
-            relationshipsByID.Add(rel.Id, rel);
-            relationshipsByType.Add(rel.RelationshipType, rel);
+            relationshipsByID[rel.Id] = rel;
+            relationshipsByType[rel.RelationshipType] = rel;
             return rel;
         }
 
@@ -287,14 +287,13 @@ namespace NPOI.OpenXml4Net.OPC
             if (index < 0 || index > relationshipsByID.Values.Count)
                 throw new ArgumentException("index");
 
-            PackageRelationship retRel = null;
             int i = 0;
             foreach (PackageRelationship rel in relationshipsByID.Values)
             {
                 if (index == i++)
                     return rel;
             }
-            return retRel;
+            return null;
         }
 
         /**
@@ -382,7 +381,7 @@ namespace NPOI.OpenXml4Net.OPC
                     try
                     {
                         // when parsing of the given uri fails, we can either
-                        // ignore this relationship, which leads to IllegalStateException
+                        // ignore this relationship, which leads to InvalidOperationException
                         // later on, or use a dummy value and thus enable processing of the
                         // package
                         target = PackagingUriHelper.ToUri(value);

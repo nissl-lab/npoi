@@ -149,7 +149,7 @@ namespace TestCases.SS.Formula.Functions
          *  Example 2 from
          *  http://office.microsoft.com/en-us/excel-help/sumifs-function-HA010047504.aspx
          */
-           [Test]
+        [Test]
         public void TestExample2()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
@@ -290,6 +290,88 @@ namespace TestCases.SS.Formula.Functions
             HSSFCell ex5cell = (HSSFCell)example5.GetRow(8).GetCell(2);
             fe.Evaluate(ex5cell);
             Assert.AreEqual(625000.0, ex5cell.NumericCellValue);
+        }
+        [Test]
+        public void TestBug56655()
+        {
+            ValueEval[] a2a9 = new ValueEval[] {
+                new NumberEval(5),
+                new NumberEval(4),
+                new NumberEval(15),
+                new NumberEval(3),
+                new NumberEval(22),
+                new NumberEval(12),
+                new NumberEval(10),
+                new NumberEval(33)
+        };
+
+            ValueEval[] args = new ValueEval[]{
+                EvalFactory.CreateAreaEval("A2:A9", a2a9),
+                ErrorEval.VALUE_INVALID,
+                new StringEval("A*"),
+        };
+
+            ValueEval result = InvokeSumifs(args, EC);
+            Assert.IsTrue(result is ErrorEval, "Expect to have an error when an input is an invalid value, but had: " + result.GetType());
+
+            args = new ValueEval[]{
+                EvalFactory.CreateAreaEval("A2:A9", a2a9),
+                EvalFactory.CreateAreaEval("A2:A9", a2a9),
+                ErrorEval.VALUE_INVALID,
+        };
+
+            result = InvokeSumifs(args, EC);
+            Assert.IsTrue(result is ErrorEval, "Expect to have an error when an input is an invalid value, but had: " + result.GetType());
+        }
+        [Test]
+        public void TestBug56655b()
+        {
+            /*
+                    setCellFormula(sheet, 0, 0, "B1*C1");
+                    sheet.getRow(0).createCell(1).setCellValue("A");
+                    setCellFormula(sheet, 1, 0, "B1*C1");
+                    sheet.getRow(1).createCell(1).setCellValue("A");
+                    setCellFormula(sheet, 0, 3, "SUMIFS(A:A,A:A,A2)");
+             */
+            ValueEval[] a0a1 = new ValueEval[] {
+                NumberEval.ZERO,
+                NumberEval.ZERO
+        };
+
+            ValueEval[] args = new ValueEval[]{
+                EvalFactory.CreateAreaEval("A0:A1", a0a1),
+                EvalFactory.CreateAreaEval("A0:A1", a0a1),
+                ErrorEval.VALUE_INVALID
+        };
+
+            ValueEval result = InvokeSumifs(args, EC);
+            Assert.IsTrue(result is ErrorEval, "Expect to have an error when an input is an invalid value, but had: " + result.GetType().Name);
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+        }
+        [Test]
+        public void TestBug56655c()
+        {
+            /*
+                    setCellFormula(sheet, 0, 0, "B1*C1");
+                    sheet.getRow(0).createCell(1).setCellValue("A");
+                    setCellFormula(sheet, 1, 0, "B1*C1");
+                    sheet.getRow(1).createCell(1).setCellValue("A");
+                    setCellFormula(sheet, 0, 3, "SUMIFS(A:A,A:A,A2)");
+             */
+            ValueEval[] a0a1 = new ValueEval[] {
+                NumberEval.ZERO,
+                NumberEval.ZERO
+        };
+
+            ValueEval[] args = new ValueEval[]{
+                EvalFactory.CreateAreaEval("A0:A1", a0a1),
+                EvalFactory.CreateAreaEval("A0:A1", a0a1),
+                ErrorEval.NAME_INVALID
+        };
+
+            ValueEval result = InvokeSumifs(args, EC);
+            Assert.IsTrue(result is ErrorEval, "Expect to have an error when an input is an invalid value, but had: " + result.GetType());
+            Assert.AreEqual(ErrorEval.NAME_INVALID, result);
         }
     }
 }

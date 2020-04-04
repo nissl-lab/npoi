@@ -18,7 +18,10 @@
 using NUnit.Framework;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
-namespace NPOI.XSSF.UserModel
+using NPOI.XSSF.UserModel;
+using NPOI.XSSF;
+
+namespace TestCases.XSSF.UserModel
 {
 
     /**
@@ -239,10 +242,10 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(true, s2.GetCTWorksheet().IsSetPageMargins());
 
             // Round trip and check
-            wb = (XSSFWorkbook)XSSFITestDataProvider.instance.WriteOutAndReadBack(wb);
+            XSSFWorkbook wbBack = (XSSFWorkbook)XSSFITestDataProvider.instance.WriteOutAndReadBack(wb);
 
-            s1 = (XSSFSheet)wb.GetSheetAt(0);
-            s2 = (XSSFSheet)wb.GetSheetAt(1);
+            s1 = (XSSFSheet)wbBack.GetSheetAt(0);
+            s2 = (XSSFSheet)wbBack.GetSheetAt(1);
 
             Assert.AreEqual(true, s1.GetCTWorksheet().IsSetPageSetup());
             Assert.AreEqual(true, s1.GetCTWorksheet().IsSetPageMargins());
@@ -252,7 +255,35 @@ namespace NPOI.XSSF.UserModel
             print = (XSSFPrintSetup)s1.PrintSetup;
             Assert.AreEqual(3, print.Copies);
             Assert.AreEqual(true, print.Landscape);
+
+            wb.Close();
+        }
+        [Test]
+        public void TestSetLandscapeFalse()
+        {
+            XSSFPrintSetup ps = new XSSFPrintSetup(new CT_Worksheet());
+
+            Assert.IsFalse(ps.Landscape);
+
+            ps.Landscape = (true);
+            Assert.IsTrue(ps.Landscape);
+
+            ps.Landscape = (false);
+            Assert.IsFalse(ps.Landscape);
         }
 
+        [Test]
+        public void TestSetLeftToRight()
+        {
+            XSSFPrintSetup ps = new XSSFPrintSetup(new CT_Worksheet());
+
+            Assert.IsFalse(ps.LeftToRight);
+
+            ps.LeftToRight = (true);
+            Assert.IsTrue(ps.LeftToRight);
+
+            ps.LeftToRight = (false);
+            Assert.IsFalse(ps.LeftToRight);
+        }
     }
 }

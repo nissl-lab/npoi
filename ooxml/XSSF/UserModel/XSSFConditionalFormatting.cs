@@ -113,6 +113,11 @@ namespace NPOI.XSSF.UserModel
                 return _cf.sizeOfCfRuleArray();
             }
         }
+
+        public override string ToString()
+        {
+            return _cf.ToString();
+        }
     }
 }
 

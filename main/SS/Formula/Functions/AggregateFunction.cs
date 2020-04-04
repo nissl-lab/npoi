@@ -279,7 +279,7 @@ namespace NPOI.SS.Formula.Functions
                 {
                     result = StatsLib.kthSmallest(ds, 1);
                 }
-                else if (n == N)
+                else if (n == N) //TODO: Double.compare(n, N) == 0, DOSE THE "==" operator equals Double.compare
                 {
                     result = StatsLib.kthLargest(ds, 1);
                 }

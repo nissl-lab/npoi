@@ -32,10 +32,12 @@ namespace NPOI.XSSF.UserModel
 
 
     /**
-     * @author Yegor Kozlov
+     * XSSF Conditional Formattings
      */
     public class XSSFSheetConditionalFormatting : ISheetConditionalFormatting
     {
+        /** Office 2010 Conditional Formatting extensions namespace */
+        protected static string CF_EXT_2009_NS_X14 = "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main";
         private XSSFSheet _sheet;
 
         /* namespace */
@@ -126,6 +128,71 @@ namespace NPOI.XSSF.UserModel
             cfRule.type = ST_CfType.expression;
             return rule;
         }
+
+        /**
+         * A factory method allowing the creation of conditional formatting
+         *  rules using an Icon Set / Multi-State formatting.
+         * The thresholds for it will be created, but will be empty
+         *  and require configuring with 
+         *  {@link XSSFConditionalFormattingRule#getMultiStateFormatting()}
+         *  then
+         *  {@link XSSFIconMultiStateFormatting#getThresholds()}
+         */
+        public IConditionalFormattingRule CreateConditionalFormattingRule(IconSet iconSet)
+        {
+            XSSFConditionalFormattingRule rule = new XSSFConditionalFormattingRule(_sheet);
+
+            // Have it setup, with suitable defaults
+            rule.CreateMultiStateFormatting(iconSet);
+
+            // All done!
+            return rule;
+        }
+        /**
+         * Create a Databar conditional formatting rule.
+         * <p>The thresholds and colour for it will be created, but will be 
+         *  empty and require configuring with 
+         *  {@link XSSFConditionalFormattingRule#getDataBarFormatting()}
+         *  then
+         *  {@link XSSFDataBarFormatting#getMinThreshold()}
+         *  and 
+         *  {@link XSSFDataBarFormatting#getMaxThreshold()}
+         */
+        public XSSFConditionalFormattingRule CreateConditionalFormattingRule(XSSFColor color)
+        {
+            XSSFConditionalFormattingRule rule = new XSSFConditionalFormattingRule(_sheet);
+
+            // Have it setup, with suitable defaults
+            rule.CreateDataBarFormatting(color);
+
+            // All done!
+            return rule;
+        }
+        public IConditionalFormattingRule CreateConditionalFormattingRule(ExtendedColor color)
+        {
+            return CreateConditionalFormattingRule((XSSFColor)color);
+        }
+        /**
+         * Create a Color Scale / Color Gradient conditional formatting rule.
+         * <p>The thresholds and colours for it will be created, but will be 
+         *  empty and require configuring with 
+         *  {@link XSSFConditionalFormattingRule#getColorScaleFormatting()}
+         *  then
+         *  {@link XSSFColorScaleFormatting#getThresholds()}
+         *  and
+         *  {@link XSSFColorScaleFormatting#getColors()}
+         */
+        public IConditionalFormattingRule CreateConditionalFormattingColorScaleRule()
+        {
+            XSSFConditionalFormattingRule rule = new XSSFConditionalFormattingRule(_sheet);
+
+            // Have it setup, with suitable defaults
+            rule.CreateColorScaleFormatting();
+
+            // All done!
+            return rule;
+        }
+
 
         public int AddConditionalFormatting(CellRangeAddress[] regions, IConditionalFormattingRule[] cfRules)
         {

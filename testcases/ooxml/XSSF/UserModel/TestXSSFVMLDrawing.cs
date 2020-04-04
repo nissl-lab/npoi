@@ -14,15 +14,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-using NUnit.Framework;
-using System.Collections.Generic;
 using NPOI.OpenXmlFormats.Vml;
 using NPOI.OpenXmlFormats.Vml.Office;
-using System.IO;
-using TestCases;
-using System.Collections;
 using NPOI.OpenXmlFormats.Vml.Spreadsheet;
-namespace NPOI.XSSF.UserModel
+using NPOI.XSSF.UserModel;
+using NUnit.Framework;
+using System;
+using System.Collections;
+using System.IO;
+
+namespace TestCases.XSSF.UserModel
 {
 
     /**
@@ -48,14 +49,14 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual("21600,21600", type.coordsize);
             Assert.AreEqual(202.0f, type.spt);
             Assert.AreEqual("m,l,21600r21600,l21600,xe", type.path2);
-            Assert.IsTrue(type.id.StartsWith("_x0000_"));
+            Assert.AreEqual("_x0000_t202", type.id);
             Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, type.path.gradientshapeok);
             Assert.AreEqual(ST_ConnectType.rect, type.path.connecttype);
 
             CT_Shape shape = vml.newCommentShape();
             Assert.AreEqual(3, items.Count);
             Assert.AreSame(items[2], shape);
-            Assert.IsTrue(shape.type.StartsWith("#_x0000_"));
+            Assert.AreEqual("#_x0000_t202", shape.type);
             Assert.AreEqual("position:absolute; visibility:hidden", shape.style);
             Assert.AreEqual("#ffffe1", shape.fillcolor);
             Assert.AreEqual(ST_InsetMode.auto, shape.insetmode);
@@ -75,6 +76,11 @@ namespace NPOI.XSSF.UserModel
             Assert.AreEqual(0, cldata.GetRowArray(0));
             Assert.AreEqual(0, cldata.GetColumnArray(0));
 
+            //each of the properties of CT_ClientData should occurs 0 or 1 times, and CT_ClientData has multiple properties.
+            //Assert.AreEqual("[]", cldata.GetVisibleList().ToString());
+            Assert.AreEqual(ST_TrueFalseBlank.NONE, cldata.visible);
+            cldata.visible = (ST_TrueFalseBlank)Enum.Parse(typeof(ST_TrueFalseBlank), "true");
+            Assert.AreEqual(ST_TrueFalseBlank.@true, cldata.visible);
             //serialize and read again
             MemoryStream out1 = new MemoryStream();
             vml.Write(out1);

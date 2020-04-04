@@ -21,7 +21,10 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using TestCases.SS.UserModel;
-namespace NPOI.XSSF.UserModel
+using NPOI.XSSF;
+using NPOI.XSSF.UserModel;
+
+namespace TestCases.XSSF.UserModel
 {
     /**
      * Test array formulas in XSSF
@@ -60,6 +63,8 @@ namespace NPOI.XSSF.UserModel
             //retrieve the range and check it is the same
             Assert.AreEqual(range.FormatAsString(), firstCell.ArrayFormulaRange.FormatAsString());
             ConfirmArrayFormulaCell(firstCell, "C3", formula1, "C3");
+
+            workbook.Close();
         }
         [Test]
         public void TestXSSFSetArrayFormula_multiCell()
@@ -87,6 +92,7 @@ namespace NPOI.XSSF.UserModel
             ConfirmArrayFormulaCell(cells.GetCell(2, 0), "C6");
 
             Assert.AreSame(firstCell, sheet.GetFirstCellInArrayFormula(firstCell));
+            workbook.Close();
         }
 
         private static void ConfirmArrayFormulaCell(ICell c, String cellRef)

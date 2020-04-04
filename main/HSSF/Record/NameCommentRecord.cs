@@ -62,10 +62,30 @@ namespace NPOI.HSSF.Record
             out1.WriteShort(field_4_name_length);
             out1.WriteShort(field_5_comment_length);
 
-            out1.WriteByte(0);
-            StringUtil.PutCompressedUnicode(field_6_name_text,out1);
-            out1.WriteByte(0);
-            StringUtil.PutCompressedUnicode(field_7_comment_text, out1);
+            //out1.WriteByte(0);
+            //StringUtil.PutCompressedUnicode(field_6_name_text,out1);
+            //out1.WriteByte(0);
+            //StringUtil.PutCompressedUnicode(field_7_comment_text, out1);
+            bool isNameMultiByte = StringUtil.HasMultibyte(field_6_name_text);
+            out1.WriteByte(isNameMultiByte ? 1 : 0);
+            if (isNameMultiByte)
+            {
+                StringUtil.PutUnicodeLE(field_6_name_text, out1);
+            }
+            else
+            {
+                StringUtil.PutCompressedUnicode(field_6_name_text, out1);
+            }
+            bool isCommentMultiByte = StringUtil.HasMultibyte(field_7_comment_text);
+            out1.WriteByte(isCommentMultiByte ? 1 : 0);
+            if (isCommentMultiByte)
+            {
+                StringUtil.PutUnicodeLE(field_7_comment_text, out1);
+            }
+            else
+            {
+                StringUtil.PutCompressedUnicode(field_7_comment_text, out1);
+            }
         }
 
         protected override int DataSize
@@ -73,8 +93,8 @@ namespace NPOI.HSSF.Record
             get
             {
                 return 18 // 4 shorts + 1 long + 2 spurious 'nul's
-                     + field_6_name_text.Length
-                     + field_7_comment_text.Length;
+                    + (StringUtil.HasMultibyte(field_6_name_text) ? field_6_name_text.Length * 2 : field_6_name_text.Length)
+                    + (StringUtil.HasMultibyte(field_7_comment_text) ? field_7_comment_text.Length * 2 : field_7_comment_text.Length);
             }
         }
 
@@ -90,10 +110,22 @@ namespace NPOI.HSSF.Record
             int field_4_name_length = in1.ReadShort();
             int field_5_comment_length = in1.ReadShort();
 
-            in1.ReadByte(); //spurious NUL
-            field_6_name_text = StringUtil.ReadCompressedUnicode(in1, field_4_name_length);
-            in1.ReadByte(); //spurious NUL
-            field_7_comment_text = StringUtil.ReadCompressedUnicode(in1, field_5_comment_length);
+            if (in1.ReadByte() == 0)
+            {
+                field_6_name_text = StringUtil.ReadCompressedUnicode(in1, field_4_name_length);
+            }
+            else
+            {
+                field_6_name_text = StringUtil.ReadUnicodeLE(in1, field_4_name_length);
+            }
+            if (in1.ReadByte() == 0)
+            {
+                field_7_comment_text = StringUtil.ReadCompressedUnicode(in1, field_5_comment_length);
+            }
+            else
+            {
+                field_7_comment_text = StringUtil.ReadUnicodeLE(in1, field_5_comment_length);
+            }
         }
 
         /**

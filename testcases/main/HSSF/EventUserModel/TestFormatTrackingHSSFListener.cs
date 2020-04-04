@@ -62,7 +62,8 @@ namespace TestCases.HSSF.EventUserModel
 
             Assert.AreEqual("_(\"$\"* #,##0_);_(\"$\"* (#,##0);_(\"$\"* \"-\"_);_(@_)", listener.GetFormatString(41));
             Assert.AreEqual("_(* #,##0_);_(* (#,##0);_(* \"-\"_);_(@_)", listener.GetFormatString(42));
-            Assert.AreEqual("_(\"$\"* #,##0.00_);_(\"$\"* (#,##0.00);_(\"$\"* \"-\"??_);_(@_)", listener.GetFormatString(43));
+            Assert.AreEqual("_(* #,##0.00_);_(* (#,##0.00);_(* \"-\"??_);_(@_)", listener.GetFormatString(43));
+            Assert.AreEqual("_(\"$\"* #,##0.00_);_(\"$\"* (#,##0.00);_(\"$\"* \"-\"??_);_(@_)", listener.GetFormatString(44));
         }
 
         /**

@@ -26,7 +26,7 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Util;
     using NPOI.SS.Formula.Functions;
-    using NPOI.SS.Formula.Udf;
+    using NPOI.SS.Formula.UDF;
     using System.Collections.Generic;
     using NPOI.SS.UserModel;
     using NPOI.SS.Formula.PTG;
@@ -52,7 +52,7 @@ namespace NPOI.SS.Formula
         private int _workbookIx;
 
         private IEvaluationListener _evaluationListener;
-        private Hashtable _sheetIndexesBySheet;
+        private Dictionary<IEvaluationSheet, int> _sheetIndexesBySheet;
         private Dictionary<String, int> _sheetIndexesByName;
         private CollaboratingWorkbooksEnvironment _collaboratingWorkbookEnvironment;
         private IStabilityClassifier _stabilityClassifier;
@@ -71,7 +71,7 @@ namespace NPOI.SS.Formula
             _workbook = workbook;
             _evaluationListener = evaluationListener;
             _cache = new EvaluationCache(evaluationListener);
-            _sheetIndexesBySheet = new Hashtable();
+            _sheetIndexesBySheet = new Dictionary<IEvaluationSheet, int>();
             _sheetIndexesByName = new Dictionary<string, int>();
             _collaboratingWorkbookEnvironment = CollaboratingWorkbooksEnvironment.EMPTY;
             _workbookIx = 0;
@@ -184,6 +184,7 @@ namespace NPOI.SS.Formula
         {
             _cache.Clear();
             _sheetIndexesBySheet.Clear();
+            _workbook.ClearAllCachedResultValues();
         }
 
         /**
@@ -207,8 +208,10 @@ namespace NPOI.SS.Formula
 
         public int GetSheetIndex(IEvaluationSheet sheet)
         {
-            object result = _sheetIndexesBySheet[sheet];
-            if (result == null)
+            int result = int.MinValue;
+            if(_sheetIndexesBySheet.ContainsKey(sheet))
+                result = _sheetIndexesBySheet[sheet];
+            if (result == int.MinValue)
             {
                 int sheetIndex = _workbook.GetSheetIndex(sheet);
                 if (sheetIndex < 0)
@@ -218,7 +221,7 @@ namespace NPOI.SS.Formula
                 result = sheetIndex;
                 _sheetIndexesBySheet[sheet] = result;
             }
-            return (int)result;
+            return result;
         }
         /* package */
         internal int GetSheetIndexByExternIndex(int externSheetIndex)
@@ -369,10 +372,10 @@ namespace NPOI.SS.Formula
             return result;
         }
         /**
- * Adds the current cell reference to the exception for easier debugging.
- * Would be nice to get the formula text as well, but that seems to require
- * too much digging around and casting to get the FormulaRenderingWorkbook.
- */
+         * Adds the current cell reference to the exception for easier debugging.
+         * Would be nice to get the formula text as well, but that seems to require
+         * too much digging around and casting to get the FormulaRenderingWorkbook.
+         */
         private NotImplementedException AddExceptionInfo(NotImplementedException inner, int sheetIndex, int rowIndex, int columnIndex)
         {
             try
@@ -508,7 +511,7 @@ namespace NPOI.SS.Formula
                         bool evaluatedPredicate;
                         try
                         {
-                            evaluatedPredicate = If.EvaluateFirstArg(arg0, ec.RowIndex, ec.ColumnIndex);
+                            evaluatedPredicate = IfFunc.EvaluateFirstArg(arg0, ec.RowIndex, ec.ColumnIndex);
                         }
                         catch (EvaluationException e)
                         {
@@ -846,12 +849,12 @@ namespace NPOI.SS.Formula
          *
          * @return names of functions supported by POI
          */
-        public static List<String> GetSupportedFunctionNames()
+        public static IList<String> GetSupportedFunctionNames()
         {
             List<String> lst = new List<String>();
             lst.AddRange(FunctionEval.GetSupportedFunctionNames());
             lst.AddRange(AnalysisToolPak.GetSupportedFunctionNames());
-            return lst;
+            return lst.AsReadOnly();
         }
 
         /**
@@ -859,12 +862,12 @@ namespace NPOI.SS.Formula
          *
          * @return names of functions NOT supported by POI
          */
-        public static List<String> GetNotSupportedFunctionNames()
+        public static IList<String> GetNotSupportedFunctionNames()
         {
             List<String> lst = new List<String>();
             lst.AddRange(FunctionEval.GetNotSupportedFunctionNames());
             lst.AddRange(AnalysisToolPak.GetNotSupportedFunctionNames());
-            return lst;
+            return lst.AsReadOnly();
         }
 
         /**

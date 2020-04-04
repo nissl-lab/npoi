@@ -18,7 +18,9 @@ namespace NPOI.XWPF.Usermodel
         protected List<XWPFNary> naries;
         protected List<XWPFAcc> accs;
         protected List<XWPFSSub> sSubs;
+        protected List<XWPFSSup> sSups;
         protected List<XWPFF> fs;
+        protected List<XWPFRad> rads;
 
         public MathContainer(IOMathContainer c, IRunBody p)
         {
@@ -42,7 +44,9 @@ namespace NPOI.XWPF.Usermodel
             accs = new List<XWPFAcc>();
             naries = new List<XWPFNary>();
             sSubs = new List<XWPFSSub>();
+            sSups = new List<XWPFSSup>();
             fs = new List<XWPFF>();
+            rads = new List<XWPFRad>();
 
             BuildListsInOrderFromXml(items);
         }
@@ -73,6 +77,11 @@ namespace NPOI.XWPF.Usermodel
                 if (o is CT_F)
                 {
                     fs.Add(new XWPFF(o as CT_F, this));
+                }
+
+                if (o is CT_Rad)
+                {
+                    rads.Add(new XWPFRad(o as CT_Rad, this));
                 }
             }
         }
@@ -118,6 +127,17 @@ namespace NPOI.XWPF.Usermodel
         }
 
         /// <summary>
+        /// Superscript Object
+        /// </summary>
+        /// <returns></returns>
+        public XWPFSSup CreateSSup()
+        {
+            XWPFSSup ssup = new XWPFSSup(container.AddNewSSup(), this);
+            sSups.Add(ssup);
+            return ssup;
+        }
+
+        /// <summary>
         /// Fraction Object
         /// </summary>
         /// <returns></returns>
@@ -126,6 +146,17 @@ namespace NPOI.XWPF.Usermodel
             XWPFF f = new XWPFF(container.AddNewF(), this);
             fs.Add(f);
             return f;
+        }
+
+        /// <summary>
+        /// Radical Object
+        /// </summary>
+        /// <returns></returns>
+        public XWPFRad CreateRad()
+        {
+            XWPFRad rad = new XWPFRad(container.AddNewRad(), this);
+            rads.Add(rad);
+            return rad;
         }
 
         public IList<XWPFSharedRun> Runs
@@ -165,6 +196,14 @@ namespace NPOI.XWPF.Usermodel
             get
             {
                 return fs.AsReadOnly();
+            }
+        }
+
+        public IList<XWPFRad> Rads
+        {
+            get
+            {
+                return rads.AsReadOnly();
             }
         }
 

@@ -28,12 +28,17 @@ namespace NPOI.XWPF.UserModel
 
         private CT_Settings ctSettings;
 
-        public XWPFSettings(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        public XWPFSettings(PackagePart part)
+            : base(part)
         {
 
         }
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public XWPFSettings(PackagePart part, PackageRelationship rel)
+             : this(part)
+        {
 
+        }
         public XWPFSettings()
             : base()
         {
@@ -84,6 +89,31 @@ namespace NPOI.XWPF.UserModel
             }
             CT_Zoom zoom = ctSettings.zoom;
             zoom.percent = zoomPercent.ToString();
+        }
+
+        /**
+         * Verifies the documentProtection tag inside settings.xml file <br/>
+         * if the protection is enforced (w:enforcement="1") <br/>
+         *  <p/>
+         * <br/>
+         * sample snippet from settings.xml
+         * <pre>
+         *     &lt;w:settings  ... &gt;
+         *         &lt;w:documentProtection w:edit=&quot;readOnly&quot; w:enforcement=&quot;1&quot;/&gt;
+         * </pre>
+         *
+         * @return true if documentProtection is enforced with option any
+         */
+        public bool IsEnforcedWith()
+        {
+            CT_DocProtect ctDocProtect = ctSettings.documentProtection;
+
+            if (ctDocProtect == null)
+            {
+                return false;
+            }
+
+            return ctDocProtect.enforcement.Equals(ST_OnOff.on);
         }
 
         /**
@@ -237,7 +267,6 @@ namespace NPOI.XWPF.UserModel
                 throw new Exception("SettingsDocument parse failed", e);
             }
         }
-
     }
 
 }

@@ -237,13 +237,26 @@ namespace NPOI.SS.Formula.Functions
                 int columnOffset = EvaluateIntArg(args[2], srcCellRow, srcCellCol);
                 int height = baseRef.Height;
                 int width = baseRef.Width;
+                // optional arguments
+                // If height or width is omitted, it is assumed to be the same height or width as reference.
                 switch (args.Length)
                 {
                     case 5:
-                        width = EvaluateIntArg(args[4], srcCellRow, srcCellCol);
+                        if (!(args[4] is MissingArgEval)) {
+                            width = EvaluateIntArg(args[4], srcCellRow, srcCellCol);
+                        }
+                        // fall-through to pick up height 
+                        if (!(args[3] is MissingArgEval))
+                        {
+                            height = EvaluateIntArg(args[3], srcCellRow, srcCellCol);
+                        }
                         break;
                     case 4:
-                        height = EvaluateIntArg(args[3], srcCellRow, srcCellCol);
+                        if (!(args[3] is MissingArgEval)) {
+                            height = EvaluateIntArg(args[3], srcCellRow, srcCellCol);
+                        }
+                        break;
+                    default:
                         break;
                 }
                 // Zero height or width raises #REF! error

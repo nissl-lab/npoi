@@ -20,7 +20,12 @@
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Model;
+using NPOI.XSSF.Util;
 using System;
+using System.Collections.Generic;
+using System.Xml.Serialization;
+using ConditionTypeClass = NPOI.SS.UserModel.ConditionType;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -31,9 +36,33 @@ namespace NPOI.XSSF.UserModel
     {
         private CT_CfRule _cfRule;
         private XSSFSheet _sh;
+        
+        private static Dictionary<ST_CfType, ConditionType> typeLookup = new Dictionary<ST_CfType, ConditionType>();
+        static XSSFConditionalFormattingRule()
+        {
+            typeLookup.Add(ST_CfType.cellIs, ConditionTypeClass.CellValueIs);
+            typeLookup.Add(ST_CfType.expression, ConditionTypeClass.Formula);
+            typeLookup.Add(ST_CfType.colorScale, ConditionTypeClass.ColorScale);
+            typeLookup.Add(ST_CfType.dataBar, ConditionTypeClass.DataBar);
+            typeLookup.Add(ST_CfType.iconSet, ConditionTypeClass.IconSet);
 
-        /*package*/
-        public XSSFConditionalFormattingRule(XSSFSheet sh)
+            // These are all subtypes of Filter, we think...
+            typeLookup.Add(ST_CfType.top10, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.uniqueValues, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.duplicateValues, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.containsText, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.notContainsText, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.beginsWith, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.endsWith, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.containsBlanks, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.notContainsBlanks, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.containsErrors, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.notContainsErrors, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.timePeriod, ConditionTypeClass.Filter);
+            typeLookup.Add(ST_CfType.aboveAverage, ConditionTypeClass.Filter);
+        }
+    /*package*/
+    public XSSFConditionalFormattingRule(XSSFSheet sh)
         {
             _cfRule = new CT_CfRule();
             _sh = sh;
@@ -96,12 +125,15 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return - border formatting object  if defined,  <code>null</code> otherwise
          */
-        public IBorderFormatting GetBorderFormatting()
+        public IBorderFormatting BorderFormatting
         {
-            CT_Dxf dxf = GetDxf(false);
-            if (dxf == null || !dxf.IsSetBorder()) return null;
+            get
+            {
+                CT_Dxf dxf = GetDxf(false);
+                if (dxf == null || !dxf.IsSetBorder()) return null;
 
-            return new XSSFBorderFormatting(dxf.border);
+                return new XSSFBorderFormatting(dxf.border);
+            }
         }
 
         /**
@@ -129,12 +161,15 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return - font formatting object  if defined,  <code>null</code> otherwise
          */
-        public IFontFormatting GetFontFormatting()
+        public IFontFormatting FontFormatting
         {
-            CT_Dxf dxf = GetDxf(false);
-            if (dxf == null || !dxf.IsSetFont()) return null;
+            get
+            {
+                CT_Dxf dxf = GetDxf(false);
+                if (dxf == null || !dxf.IsSetFont()) return null;
 
-            return new XSSFFontFormatting(dxf.font);
+                return new XSSFFontFormatting(dxf.font);
+            }
         }
 
         /**
@@ -162,36 +197,188 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return - pattern formatting object  if defined,  <code>null</code> otherwise
          */
-        public IPatternFormatting GetPatternFormatting()
+        public IPatternFormatting PatternFormatting
         {
-            CT_Dxf dxf = GetDxf(false);
-            if (dxf == null || !dxf.IsSetFill()) return null;
+            get
+            {
+                CT_Dxf dxf = GetDxf(false);
+                if (dxf == null || !dxf.IsSetFill()) return null;
 
-            return new XSSFPatternFormatting(dxf.fill);
+                return new XSSFPatternFormatting(dxf.fill);
+            }
         }
 
+        public XSSFDataBarFormatting CreateDataBarFormatting(XSSFColor color)
+        {
+            // Is it already there?
+            if (_cfRule.IsSetDataBar() && _cfRule.type == ST_CfType.dataBar)
+                return DataBarFormatting as XSSFDataBarFormatting;
+
+            // Mark it as being a Data Bar
+            _cfRule.type = ST_CfType.dataBar;
+
+            // Ensure the right element
+            CT_DataBar bar = null;
+            if (_cfRule.IsSetDataBar())
+            {
+                bar = _cfRule.dataBar;
+            }
+            else
+            {
+                bar = _cfRule.AddNewDataBar();
+            }
+            // Set the color
+            bar.color = (color.GetCTColor());
+
+            // Add the default thresholds
+            CT_Cfvo min = bar.AddNewCfvo();
+            min.type = (ST_CfvoType)Enum.Parse(typeof(ST_CfvoType), RangeType.MIN.name);
+            CT_Cfvo max = bar.AddNewCfvo();
+            max.type = (ST_CfvoType)Enum.Parse(typeof(ST_CfvoType), RangeType.MAX.name);
+
+            // Wrap and return
+            return new XSSFDataBarFormatting(bar);
+        }
+        public IDataBarFormatting DataBarFormatting
+        {
+            get
+            {
+                if (_cfRule.IsSetDataBar())
+                {
+                    CT_DataBar bar = _cfRule.dataBar;
+                    return new XSSFDataBarFormatting(bar);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            
+        }
+
+        public XSSFIconMultiStateFormatting CreateMultiStateFormatting(IconSet iconSet)
+        {
+            // Is it already there?
+            if (_cfRule.IsSetIconSet() && _cfRule.type == ST_CfType.iconSet)
+                return MultiStateFormatting as XSSFIconMultiStateFormatting;
+
+            // Mark it as being an Icon Set
+            _cfRule.type = (ST_CfType.iconSet);
+
+            // Ensure the right element
+            CT_IconSet icons = null;
+            if (_cfRule.IsSetIconSet())
+            {
+                icons = _cfRule.iconSet;
+            }
+            else
+            {
+                icons = _cfRule.AddNewIconSet();
+            }
+            // Set the type of the icon set
+            if (iconSet.name != null)
+            {
+                ST_IconSetType xIconSet = XmlEnumParser<ST_IconSetType>.ForName(iconSet.name, ST_IconSetType.Item3TrafficLights1);
+                icons.iconSet = xIconSet;
+            }
+
+            // Add a default set of thresholds
+            int jump = 100 / iconSet.num;
+            ST_CfvoType type = (ST_CfvoType)Enum.Parse(typeof(ST_CfvoType), RangeType.PERCENT.name);
+            for (int i = 0; i < iconSet.num; i++)
+            {
+                CT_Cfvo cfvo = icons.AddNewCfvo();
+                cfvo.type = (type);
+                cfvo.val = (i * jump).ToString();
+            }
+
+            // Wrap and return
+            return new XSSFIconMultiStateFormatting(icons);
+        }
+        public IIconMultiStateFormatting MultiStateFormatting
+        {
+            get
+            {
+                if (_cfRule.IsSetIconSet())
+                {
+                    CT_IconSet icons = _cfRule.iconSet;
+                    return new XSSFIconMultiStateFormatting(icons);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public XSSFColorScaleFormatting CreateColorScaleFormatting()
+        {
+            // Is it already there?
+            if (_cfRule.IsSetColorScale() && _cfRule.type == ST_CfType.colorScale)
+                return ColorScaleFormatting as XSSFColorScaleFormatting;
+
+            // Mark it as being a Color Scale
+            _cfRule.type = (ST_CfType.colorScale);
+
+            // Ensure the right element
+            CT_ColorScale scale = null;
+            if (_cfRule.IsSetColorScale())
+            {
+                scale = _cfRule.colorScale;
+            }
+            else
+            {
+                scale = _cfRule.AddNewColorScale();
+            }
+
+            // Add a default set of thresholds and colors
+            if (scale.SizeOfCfvoArray() == 0)
+            {
+                CT_Cfvo cfvo;
+                cfvo = scale.AddNewCfvo();
+                cfvo.type = (ST_CfvoType)Enum.Parse(typeof(ST_CfvoType), RangeType.MIN.name);
+                cfvo = scale.AddNewCfvo();
+                cfvo.type = (ST_CfvoType)Enum.Parse(typeof(ST_CfvoType), RangeType.PERCENTILE.name);
+                cfvo.val = ("50");
+                cfvo = scale.AddNewCfvo();
+                cfvo.type = (ST_CfvoType)Enum.Parse(typeof(ST_CfvoType), RangeType.MAX.name);
+
+                for (int i = 0; i < 3; i++)
+                {
+                    scale.AddNewColor();
+                }
+            }
+
+            // Wrap and return
+            return new XSSFColorScaleFormatting(scale);
+        }
+        public IColorScaleFormatting ColorScaleFormatting
+        {
+            get
+            {
+                if (_cfRule.IsSetColorScale())
+                {
+                    CT_ColorScale scale = _cfRule.colorScale;
+                    return new XSSFColorScaleFormatting(scale);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            
+        }
         /**
          * Type of conditional formatting rule.
-         * <p>
-         * MUST be either {@link ConditionalFormattingRule#CONDITION_TYPE_CELL_VALUE_IS}
-         * or  {@link ConditionalFormattingRule#CONDITION_TYPE_FORMULA}
-         * </p>
-         *
-         * @return the type of condition
          */
         public ConditionType ConditionType
         {
             get
             {
-                switch (_cfRule.type)
-                {
-                    case ST_CfType.expression: return ConditionType.Formula;
-                    case ST_CfType.cellIs: return ConditionType.CellValueIs;
-                }
-                return 0;
+                return typeLookup[(_cfRule.type)];
             }
+            
         }
-
         /**
          * The comparison function used when the type of conditional formatting is Set to
          * {@link ConditionalFormattingRule#CONDITION_TYPE_CELL_VALUE_IS}
@@ -242,7 +429,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _cfRule.sizeOfFormulaArray() > 0 ? _cfRule.GetFormulaArray(0) : null;
+                return _cfRule.SizeOfFormulaArray() > 0 ? _cfRule.GetFormulaArray(0) : null;
             }
         }
 
@@ -257,9 +444,10 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _cfRule.sizeOfFormulaArray() == 2 ? _cfRule.GetFormulaArray(1) : null;
+                return _cfRule.SizeOfFormulaArray() == 2 ? _cfRule.GetFormulaArray(1) : null;
             }
         }
+
     }
 }
 

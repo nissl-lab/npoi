@@ -3163,7 +3163,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.pivotTablesField = true;
             this.selectUnlockedCellsField = false;
         }
-
         //public bool IsSetSheet()
         //{
         //    return this.sheetField != null;
@@ -3177,6 +3176,27 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         //{
         //    return this.scenariosField != null;
         //}
+        public string algorithmName
+        {
+            get;
+            set;
+        }
+        public string hashValue
+        {
+            get;
+            set;
+        }
+        public string saltValue
+        {
+            get;
+            set;
+        }
+        public string spinCount
+        {
+            get;
+            set;
+        }
+
         [XmlAttribute]
         public string password
         {
@@ -3397,7 +3417,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.selectUnlockedCellsField = value;
             }
         }
-
+        // default value of CT_SheetProtection BOOLEAN attribute, see OfficeOpenXML-XMLSchema\sml-sheet.xsd
+        // | attribute           | default value |
+        // |---------------------|---------------|
+        // | sheet               |    false      |
+        // | objects             |    false      |
+        // | scenarios           |    false      |
+        // | formatCells         |    true       |
+        // | formatColumns       |    true       |
+        // | formatRows          |    true       |
+        // | insertColumns       |    true       |
+        // | insertHyperlinks    |    true       |
+        // | deleteColumns       |    true       |
+        // | deleteRows          |    true       |
+        // | selectLockedCells   |    false      |
+        // | sort                |    true       |
+        // | autoFilter          |    true       |
+        // | pivotTables         |    true       |
+        // | selectUnlockedCells |    false      |
         public static CT_SheetProtection Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -3407,27 +3444,55 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.sheet = XmlHelper.ReadBool(node.Attributes["sheet"]);
             ctObj.objects = XmlHelper.ReadBool(node.Attributes["objects"]);
             ctObj.scenarios = XmlHelper.ReadBool(node.Attributes["scenarios"]);
-            ctObj.formatCells = XmlHelper.ReadBool(node.Attributes["formatCells"]);
-            ctObj.formatColumns = XmlHelper.ReadBool(node.Attributes["formatColumns"]);
-            ctObj.formatRows = XmlHelper.ReadBool(node.Attributes["formatRows"]);
-            ctObj.insertColumns = XmlHelper.ReadBool(node.Attributes["insertColumns"]);
-            ctObj.insertRows = XmlHelper.ReadBool(node.Attributes["insertRows"]);
-            ctObj.insertHyperlinks = XmlHelper.ReadBool(node.Attributes["insertHyperlinks"]);
-            ctObj.deleteColumns = XmlHelper.ReadBool(node.Attributes["deleteColumns"]);
-            ctObj.deleteRows = XmlHelper.ReadBool(node.Attributes["deleteRows"]);
+            ctObj.formatCells = XmlHelper.ReadBool(node.Attributes["formatCells"], true);
+            ctObj.formatColumns = XmlHelper.ReadBool(node.Attributes["formatColumns"], true);
+            ctObj.formatRows = XmlHelper.ReadBool(node.Attributes["formatRows"], true);
+            ctObj.insertColumns = XmlHelper.ReadBool(node.Attributes["insertColumns"], true);
+            ctObj.insertRows = XmlHelper.ReadBool(node.Attributes["insertRows"], true);
+            ctObj.insertHyperlinks = XmlHelper.ReadBool(node.Attributes["insertHyperlinks"], true);
+            ctObj.deleteColumns = XmlHelper.ReadBool(node.Attributes["deleteColumns"], true);
+            ctObj.deleteRows = XmlHelper.ReadBool(node.Attributes["deleteRows"], true);
             ctObj.selectLockedCells = XmlHelper.ReadBool(node.Attributes["selectLockedCells"]);
-            ctObj.sort = XmlHelper.ReadBool(node.Attributes["sort"]);
-            ctObj.autoFilter = XmlHelper.ReadBool(node.Attributes["autoFilter"]);
-            ctObj.pivotTables = XmlHelper.ReadBool(node.Attributes["pivotTables"]);
+            ctObj.sort = XmlHelper.ReadBool(node.Attributes["sort"], true);
+            ctObj.autoFilter = XmlHelper.ReadBool(node.Attributes["autoFilter"], true);
+            ctObj.pivotTables = XmlHelper.ReadBool(node.Attributes["pivotTables"], true);
             ctObj.selectUnlockedCells = XmlHelper.ReadBool(node.Attributes["selectUnlockedCells"]);
+            ctObj.algorithmName = XmlHelper.ReadString(node.Attributes["algorithmName"]);
+            if (ctObj.algorithmName != null)
+            {
+                ctObj.hashValue = XmlHelper.ReadString(node.Attributes["hashValue"]);
+                ctObj.saltValue = XmlHelper.ReadString(node.Attributes["saltValue"]);
+                ctObj.spinCount = XmlHelper.ReadString(node.Attributes["spinCount"]);
+            }
             return ctObj;
         }
 
+        internal bool IsSetObjects()
+        {
+            return objects;
+        }
 
+        internal bool IsSetScenarios()
+        {
+            return scenarios;
+        }
+
+        internal bool IsSetSheet()
+        {
+            return sheet;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
+            if (this.algorithmName != null)
+            {
+                XmlHelper.WriteAttribute(sw, "algorithmName", this.algorithmName);
+                XmlHelper.WriteAttribute(sw, "hashValue", this.hashValue);
+                XmlHelper.WriteAttribute(sw, "saltValue", this.saltValue);
+                XmlHelper.WriteAttribute(sw, "spinCount", this.spinCount);
+            }
+
             XmlHelper.WriteAttribute(sw, "password", this.password);
             XmlHelper.WriteAttribute(sw, "sheet", this.sheet);
             XmlHelper.WriteAttribute(sw, "objects", this.objects);
@@ -6255,7 +6320,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.iconSet = src.iconSet;
             this.extLst = src.extLst;
         }
-        public int sizeOfFormulaArray()
+        public int SizeOfFormulaArray()
         {
             return formula.Count;
         }
@@ -6263,6 +6328,41 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return formula[index];
         }
+
+        public CT_IconSet AddNewIconSet()
+        {
+            var ret = new CT_IconSet();
+            this.iconSet = ret;
+            return ret;
+        }
+
+        public bool IsSetIconSet()
+        {
+            return this.iconSetField != null;
+        }
+
+        public bool IsSetColorScale()
+        {
+            return this.colorScale != null;
+        }
+
+        public CT_ColorScale AddNewColorScale()
+        {
+            this.colorScale = new CT_ColorScale();
+            return this.colorScale;
+        }
+
+        public bool IsSetDataBar()
+        {
+            return dataBar != null;
+        }
+
+        public CT_DataBar AddNewDataBar()
+        {
+            this.dataBar = new CT_DataBar();
+            return dataBar;
+        }
+
         [XmlElement]
         public List<string> formula
         {
@@ -6621,7 +6721,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public CT_Cfvo AddNewCfvo()
+        {
+            CT_Cfvo cfvox = new CT_Cfvo();
+            cfvo.Add(cfvox);
+            return cfvox;
+        }
 
+        public CT_Color AddNewColor()
+        {
+            CT_Color colorx = new CT_Color();
+            color.Add(colorx);
+            return colorx;
+        }
+
+        public void RemoveCfvo(int p)
+        {
+            this.cfvo.RemoveAt(p);
+        }
+
+        public void RemoveColor(int p)
+        {
+            this.color.RemoveAt(p);
+        }
+
+        public int SizeOfCfvoArray()
+        {
+            return cfvo == null ? 0 : cfvo.Count;
+        }
+
+        public int SizeOfColorArray()
+        {
+            return color == null ? 0 : color.Count;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -6731,7 +6863,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public bool IsSetVal()
+        {
+            return !string.IsNullOrEmpty(this.val);
+        }
 
+        public void UnsetVal()
+        {
+            this.val = string.Empty;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -6887,7 +7027,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public CT_Cfvo AddNewCfvo()
+        {
+            CT_Cfvo val = new CT_Cfvo();
+            if(cfvo==null)
+                cfvo = new List<CT_Cfvo>();
+            cfvo.Add(val);
+            return val;
+        }
 
+        public bool IsSetShowValue()
+        {
+            return this.showValueField;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -6921,6 +7073,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private ST_IconSetType iconSetField;
 
         private bool showValueField;
+        private bool showValueFieldSpecified;
 
         private bool percentField;
 
@@ -7007,8 +7160,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             CT_IconSet ctObj = new CT_IconSet();
             if (node.Attributes["iconSet"] != null)
                 ctObj.iconSet = (ST_IconSetType)Enum.Parse(typeof(ST_IconSetType), "Item"+node.Attributes["iconSet"].Value);
-            ctObj.showValue = XmlHelper.ReadBool(node.Attributes["showValue"]);
-            ctObj.percent = XmlHelper.ReadBool(node.Attributes["percent"]);
+            ctObj.showValue = XmlHelper.ReadBool(node.Attributes["showValue"], true);
+            if (!ctObj.showValue)
+                ctObj.showValueFieldSpecified = true;
+            ctObj.percent = XmlHelper.ReadBool(node.Attributes["percent"], true);
             ctObj.reverse = XmlHelper.ReadBool(node.Attributes["reverse"]);
             ctObj.cfvo = new List<CT_Cfvo>();
             foreach (XmlNode childNode in node.ChildNodes)
@@ -7019,16 +7174,29 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public CT_Cfvo AddNewCfvo()
+        {
+            if (cfvoField == null)
+                cfvoField = new List<CT_Cfvo>();
 
+            var ret = new CT_Cfvo();
+            cfvoField.Add(ret);
+            return ret;
+        }
+
+        public bool IsSetShowValue()
+        {
+            return this.showValueFieldSpecified;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
             if(this.iconSet!= ST_IconSetType.Item3TrafficLights1)
                 XmlHelper.WriteAttribute(sw, "iconSet", this.iconSet.ToString().Replace("Item",""));
-            if(showValue)
+            if(!showValue)
                 XmlHelper.WriteAttribute(sw, "showValue", this.showValue);
-            if (percent)
+            if (!percent)
                 XmlHelper.WriteAttribute(sw, "percent", this.percent);
             if (reverse)
                 XmlHelper.WriteAttribute(sw, "reverse", this.reverse);
@@ -7928,7 +8096,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
-
+        public CT_IgnoredError AddNewIgnoredError()
+        {
+            if (this.ignoredError == null)
+            {
+                this.ignoredError = new List<CT_IgnoredError>();
+            }
+            CT_IgnoredError ie = new CT_IgnoredError();
+            ignoredError.Add(ie);
+            return ie;
+        }
+        internal CT_IgnoredError GetIgnoredErrorArray(int v)
+        {
+            if (this.ignoredError == null)
+            {
+                return null;
+            }
+            return ignoredErrorField[v];
+        }
         public List<CT_IgnoredError> ignoredError
         {
             get
@@ -7959,7 +8144,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     public class CT_IgnoredError
     {
 
-        private string sqrefField;
+        private List<string> sqrefField;
 
         private bool evalErrorField;
 
@@ -7981,7 +8166,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_IgnoredError()
         {
-            //this.sqrefField = new List<string>();
+            this.sqrefField = new List<string>();
             this.evalErrorField = false;
             this.twoDigitTextYearField = false;
             this.numberStoredAsTextField = false;
@@ -8006,7 +8191,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.emptyCellReference = XmlHelper.ReadBool(node.Attributes["emptyCellReference"]);
             ctObj.listDataValidation = XmlHelper.ReadBool(node.Attributes["listDataValidation"]);
             ctObj.calculatedColumn = XmlHelper.ReadBool(node.Attributes["calculatedColumn"]);
-            ctObj.sqref = XmlHelper.ReadString(node.Attributes["sqref"]);
+            string sqref = XmlHelper.ReadString(node.Attributes["sqref"]);
+            //sqref is Reference Sequenc, a list of ST_Ref(Cell References, xsd:string)
+            //we don't know how to store this list yet. Try parse it as comma/space split string.
+            ctObj.sqref.AddRange(sqref.Split(", ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
             return ctObj;
         }
 
@@ -8024,13 +8212,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "emptyCellReference", this.emptyCellReference);
             XmlHelper.WriteAttribute(sw, "listDataValidation", this.listDataValidation);
             XmlHelper.WriteAttribute(sw, "calculatedColumn", this.calculatedColumn);
-            XmlHelper.WriteAttribute(sw, "sqref", this.sqref);
+            XmlHelper.WriteAttribute(sw, "sqref", string.Join(",", this.sqref));
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
+
         [XmlAttribute]
-        public string sqref
+        public List<string> sqref
         {
             get
             {

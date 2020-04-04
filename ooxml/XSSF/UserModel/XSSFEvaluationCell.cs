@@ -64,56 +64,56 @@ namespace NPOI.XSSF.UserModel
         {
             return _cell;
         }
-        public bool BooleanCellValue
+        public virtual bool BooleanCellValue
         {
             get
             {
                 return _cell.BooleanCellValue;
             }
         }
-        public CellType CellType
+        public virtual CellType CellType
         {
             get
             {
                 return _cell.CellType;
             }
         }
-        public int ColumnIndex
+        public virtual int ColumnIndex
         {
             get
             {
                 return _cell.ColumnIndex;
             }
         }
-        public int ErrorCellValue
+        public virtual int ErrorCellValue
         {
             get
             {
                 return _cell.ErrorCellValue;
             }
         }
-        public double NumericCellValue
+        public virtual double NumericCellValue
         {
             get
             {
                 return _cell.NumericCellValue;
             }
         }
-        public int RowIndex
+        public virtual int RowIndex
         {
             get
             {
                 return _cell.RowIndex;
             }
         }
-        public IEvaluationSheet Sheet
+        public virtual IEvaluationSheet Sheet
         {
             get
             {
                 return _evalSheet;
             }
         }
-        public String StringCellValue
+        public virtual String StringCellValue
         {
             get
             {
@@ -124,7 +124,7 @@ namespace NPOI.XSSF.UserModel
         #region IEvaluationCell ≥…‘±
 
 
-        public CellType CachedFormulaResultType
+        public virtual CellType CachedFormulaResultType
         {
             get { return _cell.CachedFormulaResultType; }
         }

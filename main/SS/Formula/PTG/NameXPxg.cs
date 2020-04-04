@@ -45,7 +45,11 @@ namespace NPOI.SS.Formula.PTG
             : this(-1, sheetName, nameName)
         {
         }
-
+        public NameXPxg(String nameName)
+            : this(-1, null, nameName)
+        {
+            
+        }
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder();

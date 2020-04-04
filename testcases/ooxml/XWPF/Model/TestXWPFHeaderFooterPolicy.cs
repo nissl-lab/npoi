@@ -15,16 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XWPF.Model
+namespace TestCases.XWPF.Model
 {
-    using System;
-
-
-
-    using NUnit.Framework;
-
-    using NPOI.XWPF;
+    using NPOI.XWPF.Model;
     using NPOI.XWPF.UserModel;
+    using NUnit.Framework;
 
     /**
      * Tests for XWPF Header Footer Stuff
@@ -132,6 +127,37 @@ namespace NPOI.XWPF.Model
             Assert.AreEqual(policy.GetDefaultFooter(), policy.GetFooter(2));
             Assert.AreEqual(policy.GetDefaultFooter(), policy.GetFooter(3));
         }
+
+        [Test]
+        public void TestCreate()
+        {
+            XWPFDocument doc = new XWPFDocument();
+            Assert.AreEqual(null, doc.GetHeaderFooterPolicy());
+            Assert.AreEqual(0, doc.HeaderList.Count);
+            Assert.AreEqual(0, doc.FooterList.Count);
+
+            XWPFHeaderFooterPolicy policy = doc.CreateHeaderFooterPolicy();
+            Assert.IsNotNull(doc.GetHeaderFooterPolicy());
+            Assert.AreEqual(0, doc.HeaderList.Count);
+            Assert.AreEqual(0, doc.FooterList.Count);
+
+            // Create a header and a footer
+            XWPFHeader header = policy.CreateHeader(XWPFHeaderFooterPolicy.DEFAULT);
+            XWPFFooter footer = policy.CreateFooter(XWPFHeaderFooterPolicy.DEFAULT);
+            header.CreateParagraph().CreateRun().SetText("Header Hello");
+            footer.CreateParagraph().CreateRun().SetText("Footer Bye");
+
+
+            // Save, re-load, and check
+            doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            Assert.IsNotNull(doc.GetHeaderFooterPolicy());
+            Assert.AreEqual(1, doc.HeaderList.Count);
+            Assert.AreEqual(1, doc.FooterList.Count);
+
+            Assert.AreEqual("Header Hello\n", doc.HeaderList[(0)].Text);
+            Assert.AreEqual("Footer Bye\n", doc.FooterList[(0)].Text);
+        }
+
 
         [Test]
         public void TestContents()

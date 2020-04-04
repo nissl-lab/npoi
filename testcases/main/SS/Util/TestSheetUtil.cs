@@ -66,6 +66,92 @@ namespace TestCases.SS.Util
             Assert.AreEqual(21.0, SheetUtil.GetCellWithMerges(s, 2, 2).NumericCellValue);
             Assert.AreEqual(21.0, SheetUtil.GetCellWithMerges(s, 2, 3).NumericCellValue);
             Assert.AreEqual(21.0, SheetUtil.GetCellWithMerges(s, 2, 4).NumericCellValue);
+
+            wb.Close();
         }
+        [Test]
+        public void testCanComputeWidthHSSF()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+
+            // cannot check on result because on some machines we get back false here!
+            SheetUtil.CanComputeColumnWidth(wb.GetFontAt((short)0));
+            wb.Close();
+        }
+        [Test]
+        public void testGetCellWidthEmpty()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("sheet");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+
+            // no contents: cell.setCellValue("sometext");
+
+            Assert.AreEqual(-1.0, SheetUtil.GetCellWidth(cell, 1, null, true));
+
+            wb.Close();
+        }
+        [Test]
+        public void testGetCellWidthString()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("sheet");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+
+            cell.SetCellValue("sometext");
+
+            Assert.IsTrue(SheetUtil.GetCellWidth(cell, 1, null, true) > 0);
+
+            wb.Close();
+        }
+        [Test]
+        public void testGetCellWidthNumber()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("sheet");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+
+            cell.SetCellValue(88.234);
+
+            Assert.IsTrue(SheetUtil.GetCellWidth(cell, 1, null, true) > 0);
+
+            wb.Close();
+        }
+        [Test]
+        public void testGetCellWidthBoolean()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("sheet");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+
+            cell.SetCellValue(false);
+
+            Assert.IsTrue(SheetUtil.GetCellWidth(cell, 1, null, false) > 0);
+
+            wb.Close();
+        }
+        [Test]
+        public void testGetColumnWidthString()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("sheet");
+            IRow row = sheet.CreateRow(0);
+            sheet.CreateRow(1);
+            sheet.CreateRow(2);
+            ICell cell = row.CreateCell(0);
+
+            cell.SetCellValue("sometext");
+
+            Assert.IsTrue(SheetUtil.GetColumnWidth(sheet, 0, true) > 0, "Having some width for rows with actual cells");
+            Assert.AreEqual(-1.0, SheetUtil.GetColumnWidth(sheet, 0, true, 1, 2)
+                    , "Not having any widht for rows with all empty cells");
+
+            wb.Close();
+        }
+
     }
 }

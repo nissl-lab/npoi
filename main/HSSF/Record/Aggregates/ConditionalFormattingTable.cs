@@ -20,7 +20,7 @@ namespace NPOI.HSSF.Record.Aggregates
 
     using System;
     using System.Collections;
-
+    using System.Collections.Generic;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using NPOI.SS.Formula;
@@ -36,21 +36,22 @@ namespace NPOI.HSSF.Record.Aggregates
     public class ConditionalFormattingTable : RecordAggregate
     {
 
-        private IList _cfHeaders;
+        private IList<CFRecordsAggregate> _cfHeaders;
 
         /**
          * Creates an empty ConditionalFormattingTable
          */
         public ConditionalFormattingTable()
         {
-            _cfHeaders = new ArrayList();
+            _cfHeaders = new List<CFRecordsAggregate>();
         }
 
         public ConditionalFormattingTable(RecordStream rs)
         {
 
-            IList temp = new ArrayList();
-            while (rs.PeekNextClass() == typeof(CFHeaderRecord))
+            List<CFRecordsAggregate> temp = new List<CFRecordsAggregate>();
+            while (rs.PeekNextClass() == typeof(CFHeaderRecord)||
+                rs.PeekNextClass() == typeof(CFHeader12Record))
             {
                 temp.Add(CFRecordsAggregate.CreateCFAggregate(rs));
             }
@@ -59,9 +60,8 @@ namespace NPOI.HSSF.Record.Aggregates
 
         public override void VisitContainedRecords(RecordVisitor rv)
         {
-            for (int i = 0; i < _cfHeaders.Count; i++)
+            foreach (CFRecordsAggregate subAgg in _cfHeaders)
             {
-                CFRecordsAggregate subAgg = (CFRecordsAggregate)_cfHeaders[i];
                 subAgg.VisitContainedRecords(rv);
             }
         }
@@ -71,6 +71,7 @@ namespace NPOI.HSSF.Record.Aggregates
          */
         public int Add(CFRecordsAggregate cfAggregate)
         {
+            cfAggregate.Header.ID = (_cfHeaders.Count);
             _cfHeaders.Add(cfAggregate);
             return _cfHeaders.Count - 1;
         }
@@ -86,7 +87,7 @@ namespace NPOI.HSSF.Record.Aggregates
         public CFRecordsAggregate Get(int index)
         {
             CheckIndex(index);
-            return (CFRecordsAggregate)_cfHeaders[index];
+            return _cfHeaders[index];
         }
 
         public void Remove(int index)
@@ -108,7 +109,7 @@ namespace NPOI.HSSF.Record.Aggregates
         {
             for (int i = 0; i < _cfHeaders.Count; i++)
             {
-                CFRecordsAggregate subAgg = (CFRecordsAggregate)_cfHeaders[i];
+                CFRecordsAggregate subAgg = _cfHeaders[i];
                 bool shouldKeep = subAgg.UpdateFormulasAfterCellShift(shifter, externSheetIndex);
                 if (!shouldKeep)
                 {

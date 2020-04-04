@@ -18,7 +18,9 @@
 using System;
 using NUnit.Framework;
 using NPOI.OpenXmlFormats.Spreadsheet;
-namespace NPOI.XSSF.UserModel
+using NPOI.XSSF.UserModel;
+
+namespace TestCases.XSSF.UserModel
 {
     /**
      * Tests for {@link XSSFHeaderFooter}

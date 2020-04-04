@@ -26,14 +26,14 @@ namespace NPOI.Examples.XSSF.CreateCommentInXlsx
             IComment comment1 = patr.CreateCellComment(new XSSFClientAnchor(0, 0, 0, 0, 4, 2, 6, 5));
 
             // set text in the comment
-            comment1.String = (new XSSFRichTextString("We can set comments in POI"));
+            comment1.String = new XSSFRichTextString("We can set comments in POI");
 
             //set comment author.
             //you can see it in the status bar when moving mouse over the commented cell
-            comment1.Author = ("Apache Software Foundation");
+            comment1.Author = "Apache Software Foundation";
 
             // The first way to assign comment to a cell is via HSSFCell.SetCellComment method
-            cell1.CellComment = (comment1);
+            cell1.CellComment = comment1;
 
             //Create another cell in row 6
             ICell cell2 = sheet.CreateRow(6).CreateCell(1);
@@ -48,9 +48,9 @@ namespace NPOI.Examples.XSSF.CreateCommentInXlsx
 
             //apply custom font to the text in the comment
             IFont font = workbook.CreateFont();
-            font.FontName = ("Arial");
+            font.FontName = "Arial";
             font.FontHeightInPoints = 10;
-            font.Boldweight = (short)FontBoldWeight.Bold;
+            font.IsBold = true;
             font.Color = HSSFColor.Red.Index;
             str.ApplyFont(font);
 

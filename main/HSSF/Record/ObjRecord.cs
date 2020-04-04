@@ -30,7 +30,7 @@ namespace NPOI.HSSF.Record
      *
      * @author Glen Stampoultzis (glens at apache.org)
      */
-    public class ObjRecord : Record
+    public class ObjRecord : Record, ICloneable
     {
         private const int NORMAL_PAD_ALIGNMENT = 2;
 	    private const int MAX_PAD_ALIGNMENT = 4;

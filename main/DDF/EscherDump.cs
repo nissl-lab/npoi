@@ -776,7 +776,7 @@ namespace NPOI.DDF
             String result = "";
             result += (short)(n32 >> 16);
             result += '.';
-            result += (short)(n32 & unchecked((short)0xFFFF));
+            result += (short)(n32 & 0xFFFF);
             return result;
         }
 

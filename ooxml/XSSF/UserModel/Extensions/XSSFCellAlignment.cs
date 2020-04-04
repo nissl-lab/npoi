@@ -107,6 +107,10 @@ namespace NPOI.XSSF.UserModel.Extensions
          * <br/>
          * <code>[degrees below horizon] = 90 - textRotation.</code>
          * </p>
+         * Note: HSSF uses values from -90 to 90 degrees, whereas XSSF 
+         * uses values from 0 to 180 degrees. The implementations of this method will map between these two value-ranges 
+         * accordingly, however the corresponding getter is returning values in the range mandated by the current type
+         * of Excel file-format that this CellStyle is applied to.
          *
          * @return rotation degrees (between 0 and 180 degrees)
          */
@@ -118,7 +122,12 @@ namespace NPOI.XSSF.UserModel.Extensions
             }
             set
             {
-                cellAlignement.textRotation = value;
+                long rotation = value;
+                if (rotation < 0 && rotation >= -90)
+                {
+                    rotation = 90 + ((-1) * rotation);
+                }
+                cellAlignement.textRotation = rotation;
                 cellAlignement.textRotationSpecified = true;            
             }
         }

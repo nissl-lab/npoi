@@ -23,6 +23,7 @@ namespace NPOI.SS.Formula.PTG
     using NPOI.SS.Formula;
 
     using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
 
     /**
      * Title:        Deleted Area 3D Ptg - 3D referecnce (Sheet + Area)
@@ -54,7 +55,7 @@ namespace NPOI.SS.Formula.PTG
         public String ToFormulaString(IFormulaRenderingWorkbook book)
         {
             return ExternSheetNameResolver.PrependSheetName(book, field_1_index_extern_sheet,
-                    HSSFErrorConstants.GetText(HSSFErrorConstants.ERROR_REF));
+                    FormulaError.REF.String);
         }
         public override String ToFormulaString()
         {

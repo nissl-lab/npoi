@@ -13,9 +13,6 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
-    <PackageReference Include="SharpZipLib" Version="1.0.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
-    <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +20,7 @@
     <ProjectReference Include="..\..\ooxml\NPOI.OOXML.Core.csproj" />
     <ProjectReference Include="..\..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
     <ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" />
+    <ProjectReference Include="..\ooxml\NPOI.OOXML.TestCases.Core.csproj" />
   </ItemGroup>
 
 	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">

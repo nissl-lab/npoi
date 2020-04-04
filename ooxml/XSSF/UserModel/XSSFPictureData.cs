@@ -71,8 +71,14 @@ namespace NPOI.XSSF.UserModel
          * @param rel  the namespace relationship holding this Drawing,
          * the relationship type must be http://schemas.Openxmlformats.org/officeDocument/2006/relationships/image
          */
+        public XSSFPictureData(PackagePart part)
+            : base(part)
+        {
+
+        }
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
         internal XSSFPictureData(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+            : this(part)
         {
 
         }

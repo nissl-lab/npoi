@@ -8,7 +8,7 @@ namespace TestCases.OpenXml4Net
 {
     public class OpenXml4NetTestDataSamples
     {
-        private static POIDataSamples _samples = POIDataSamples.GetOpenXml4NetInstance();
+        private static POIDataSamples _samples = POIDataSamples.GetOpenXML4JInstance();
 
         private OpenXml4NetTestDataSamples()
         {

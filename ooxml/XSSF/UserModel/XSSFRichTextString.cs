@@ -215,7 +215,7 @@ namespace NPOI.XSSF.UserModel
             SetRunAttributes(xssfFont.GetCTFont(), fmt);
             ApplyFont(formats, startIndex, endIndex, fmt);
 
-            CT_Rst newSt = buildCTRst(text, formats);
+            CT_Rst newSt = BuildCTRst(text, formats);
             st.Set(newSt);
 
 
@@ -285,8 +285,12 @@ namespace NPOI.XSSF.UserModel
             CT_RElt lt2 = st.AddNewR();
             lt2.t= (text);
             PreserveSpaces(lt2.t);
-            CT_RPrElt pr = lt2.AddNewRPr();
-            if (font != null) SetRunAttributes(font.GetCTFont(), pr);
+            
+            if (font != null)
+            {
+                CT_RPrElt pr = lt2.AddNewRPr();
+                SetRunAttributes(font.GetCTFont(), pr);
+            }   
         }
 
         /**
@@ -349,6 +353,24 @@ namespace NPOI.XSSF.UserModel
             if (ctFont.sizeOfOutlineArray() > 0) pr.AddNewOutline().val =(ctFont.GetOutlineArray(0).val);
             if (ctFont.sizeOfShadowArray() > 0) pr.AddNewShadow().val =(ctFont.GetShadowArray(0).val);
             if (ctFont.sizeOfStrikeArray() > 0) pr.AddNewStrike().val = (ctFont.GetStrikeArray(0).val);
+        }
+
+        /**
+         * Does this string have any explicit formatting applied, or is 
+         *  it just text in the default style?
+         */
+        public bool HasFormatting()
+        {
+            List<CT_RElt> rs = st.r;
+            if (rs == null || rs.Count == 0)
+            {
+                return false;
+            }
+            foreach (CT_RElt r in rs)
+            {
+                if (r.isSetRPr()) return true;
+            }
+            return false;
         }
 
         /**
@@ -483,23 +505,25 @@ namespace NPOI.XSSF.UserModel
          */
         public XSSFFont GetFontAtIndex(int index)
         {
-            if (st.sizeOfRArray() == 0) return null;
-
+            ThemesTable themes = GetThemesTable();
             int pos = 0;
-            for (int i = 0; i < st.sizeOfRArray(); i++)
+            if (st.r == null)
             {
-                CT_RElt r = st.GetRArray(i);
-                if (index >= pos && index < pos + r.t.Length)
+                return null;
+            }
+            foreach (CT_RElt r in st.r)
+            {
+                int length = r.t.Length;
+                if (index >= pos && index < pos + length)
                 {
                     XSSFFont fnt = new XSSFFont(ToCTFont(r.rPr));
-                    fnt.SetThemesTable(GetThemesTable());
+                    fnt.SetThemesTable(themes);
                     return fnt;
                 }
 
-                pos += r.t.Length;
+                pos += length;
             }
             return null;
-
         }
 
         /**
@@ -519,7 +543,11 @@ namespace NPOI.XSSF.UserModel
         protected static CT_Font ToCTFont(CT_RPrElt pr)
         {
             CT_Font ctFont = new CT_Font();
-
+            // Bug 58315: there are files where there is no pr-entry for a RichTextString
+            if (pr == null)
+            {
+                return ctFont;
+            }
             if (pr.SizeOfBArray() > 0) ctFont.AddNewB().val = (pr.GetBArray(0).val);
             if (pr.SizeOfUArray() > 0) ctFont.AddNewU().val = (pr.GetUArray(0).val);
             if (pr.SizeOfIArray() > 0) ctFont.AddNewI().val = (pr.GetIArray(0).val);
@@ -611,20 +639,28 @@ namespace NPOI.XSSF.UserModel
             StringBuilder buf = new StringBuilder();
             MatchCollection mc = utfPtrn.Matches(value);
             int idx = 0;
-            for (int i = 0; i < mc.Count;i++ )
+            for (int i = 0; i < mc.Count; i++)
             {
-                    int pos = mc[i].Index;
-                    if (pos > idx)
-                    {
-                        buf.Append(value.Substring(idx, pos-idx));
-                    }
-
-                    String code = mc[i].Groups[1].Value;
-                    int icode = Int32.Parse(code, System.Globalization.NumberStyles.AllowHexSpecifier);
-                    buf.Append((char)icode);
-
-                    idx = mc[i].Index+mc[i].Length;
+                int pos = mc[i].Index;
+                if (pos > idx)
+                {
+                    buf.Append(value.Substring(idx, pos - idx));
                 }
+
+                String code = mc[i].Groups[1].Value;
+                int icode = Int32.Parse(code, System.Globalization.NumberStyles.AllowHexSpecifier);
+                buf.Append((char)icode);
+
+                idx = mc[i].Index + mc[i].Length;
+            }
+
+            // small optimization: don't go via StringBuilder if not necessary, 
+            // the encodings are very rare, so we should almost always go via this shortcut. 
+            if (idx == 0)
+            {
+                return value;
+            }
+
             buf.Append(value.Substring(idx));
             return buf.ToString();
         }
@@ -641,7 +677,7 @@ namespace NPOI.XSSF.UserModel
             throw new ArgumentOutOfRangeException("GetLastKey failed");
         }
 
-        CT_Rst buildCTRst(String text, SortedDictionary<int, CT_RPrElt> formats)
+        CT_Rst BuildCTRst(String text, SortedDictionary<int, CT_RPrElt> formats)
         {
             if (text.Length != GetLastKey(formats.Keys))
             {
@@ -650,16 +686,18 @@ namespace NPOI.XSSF.UserModel
             }
             CT_Rst st = new CT_Rst();
             int runStartIdx = 0;
-            for (SortedDictionary<int, CT_RPrElt>.KeyCollection.Enumerator it = formats.Keys.GetEnumerator(); it.MoveNext(); )
+            foreach (KeyValuePair<int, CT_RPrElt> kv in formats)
             {
-                int runEndIdx = it.Current;
+                int runEndIdx = kv.Key;
                 CT_RElt run = st.AddNewR();
                 String fragment = text.Substring(runStartIdx, runEndIdx - runStartIdx);
                 run.t = (fragment);
                 PreserveSpaces(run.t);
-                CT_RPrElt fmt = formats[runEndIdx];
+                CT_RPrElt fmt = kv.Value;
                 if (fmt != null)
-                    run.rPr = (fmt);
+                {
+                    run.rPr = fmt;
+                }
                 runStartIdx = runEndIdx;
             }
             return st;
@@ -669,22 +707,6 @@ namespace NPOI.XSSF.UserModel
         {
             if (styles == null) return null;
             return styles.GetTheme();
-        }
-
-        public bool HasFormatting()
-        {
-            //noinspection deprecation - for performance reasons!
-            CT_RElt[] rs = st.r.ToArray();
-            if (rs == null || rs.Length == 0)
-            {
-                return false;
-            }
-            foreach (CT_RElt r in rs)
-            {
-                //TODO: check that this functions the same.
-                if (r.rPr != null) return true;
-            }
-            return false;
         }
     }
 }

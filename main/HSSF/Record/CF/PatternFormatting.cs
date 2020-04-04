@@ -52,7 +52,13 @@ namespace NPOI.HSSF.Record.CF
             field_15_pattern_style = in1.ReadShort();
             field_16_pattern_color_indexes = in1.ReadShort();
         }
-
+        public int DataLength
+        {
+            get
+            {
+                return 4;
+            }
+        }
         // PATTERN FORMATING BLOCK
         // For Pattern Styles see constants at HSSFCellStyle (from NO_Fill to LEAST_DOTS)
         private short field_15_pattern_style;

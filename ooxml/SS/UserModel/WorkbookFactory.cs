@@ -17,11 +17,15 @@
 
 using System;
 using System.IO;
+using NPOI.HSSF.Record.Crypto;
 using NPOI.HSSF.UserModel;
+using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC;
+using NPOI.POIFS.Crypt;
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
 using NPOI.XSSF.UserModel;
+using Org.BouncyCastle.Security;
 
 namespace NPOI.SS.UserModel
 {
@@ -63,6 +67,39 @@ namespace NPOI.SS.UserModel
         {
             return new HSSFWorkbook(fs.Root, true);
         }
+        /**
+         * Creates a Workbook from the given NPOIFSFileSystem, which may
+         *  be password protected
+         */
+        private static IWorkbook Create(NPOIFSFileSystem fs, string password)
+        {
+            DirectoryNode root = fs.Root;
+
+            // Encrypted OOXML files go inside OLE2 containers, is this one?
+            if (root.HasEntry(Decryptor.DEFAULT_POIFS_ENTRY))
+            {
+                InputStream stream = DocumentFactoryHelper.GetDecryptedStream(fs, password);
+
+                OPCPackage pkg = OPCPackage.Open(stream);
+                return Create(pkg);
+            }
+
+            // If we get here, it isn't an encrypted XLSX file
+            // So, treat it as a regular HSSF XLS one
+            if (password != null)
+            {
+                Biff8EncryptionKey.CurrentUserPassword = (password);
+            }
+            try
+            {
+                return new HSSFWorkbook(root, true);
+            }
+            finally
+            {
+                Biff8EncryptionKey.CurrentUserPassword = (null);
+            }
+        }
+
 
         /// <summary>
         /// Creates an XSSFWorkbook from the given OOXML Package
@@ -71,40 +108,29 @@ namespace NPOI.SS.UserModel
         {
             return new XSSFWorkbook(pkg);
         }
-
         /// <summary>
         /// Creates the appropriate HSSFWorkbook / XSSFWorkbook from
         /// the given InputStream. The Stream is wraped inside a PushbackInputStream.
         /// </summary>
         /// <param name="inputStream">Input Stream of .xls or .xlsx file</param>
+        /// <param name="password"></param>
         /// <returns>IWorkbook depending on the input HSSFWorkbook or XSSFWorkbook is returned.</returns>
         // Your input stream MUST either support mark/reset, or
         //  be wrapped as a {@link PushbackInputStream}!
-        public static IWorkbook Create(Stream inputStream)
+        public static IWorkbook Create(Stream inputStream, bool bReadonly)
         {
-            // If Clearly doesn't do mark/reset, wrap up
-            //if (!inp.MarkSupported())
-            //{
-            //    inp = new PushbackInputStream(inp, 8);
-            //}
             inputStream = new PushbackStream(inputStream);
             if (POIFSFileSystem.HasPOIFSHeader(inputStream))
             {
                 return new HSSFWorkbook(inputStream);
             }
             inputStream.Position = 0;
-            if (POIXMLDocument.HasOOXMLHeader(inputStream))
+            if (DocumentFactoryHelper.HasOOXMLHeader(inputStream))
             {
-                return new XSSFWorkbook(OPCPackage.Open(inputStream));
+                return new XSSFWorkbook(OPCPackage.Open(inputStream, bReadonly));
             }
             throw new ArgumentException("Your stream was neither an OLE2 stream, nor an OOXML stream.");
         }
-        /**
-        * Creates the appropriate HSSFWorkbook / XSSFWorkbook from
-        *  the given File, which must exist and be readable.
-        * <p>Note that for Workbooks opened this way, it is not possible
-        *  to explicitly close the underlying File resource.
-        */
         public static IWorkbook Create(string file)
         {
             if (!File.Exists(file))
@@ -148,6 +174,72 @@ namespace NPOI.SS.UserModel
                 }
             }
         }
+        public static IWorkbook Create(string file, string password)
+        {
+            return Create(file, password, false);
+        }
+        
+        /// <summary>
+        /// Creates the appropriate HSSFWorkbook / XSSFWorkbook from 
+        /// the given File, which must exist and be readable.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="password"></param>
+        /// <param name="readOnly"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Note that for Workbooks opened this way, it is not possible
+        /// to explicitly close the underlying File resource.
+        /// </remarks>
+        public static IWorkbook Create(string file, string password, bool readOnly)
+        {
+            if (!File.Exists(file))
+            {
+                throw new FileNotFoundException(file);
+            }
+            FileInfo fInfo = new FileInfo(file);
+            try
+            {
+                NPOIFSFileSystem fs = new NPOIFSFileSystem(fInfo, readOnly);
+                try
+                {   
+                    return Create(fs, password);
+                }
+                finally {
+                    // ensure that the file-handle is closed again
+                    if (fs!=null)
+                        fs.Close();
+                }
+                
+            }
+            catch (OfficeXmlFileException)
+            {
+                // opening as .xls failed => try opening as .xlsx
+                OPCPackage pkg = OPCPackage.Open(file, readOnly ? PackageAccess.READ : PackageAccess.READ_WRITE);
+                try
+                {
+                    return new XSSFWorkbook(pkg);
+                }
+                catch (IOException ioe)
+                {
+                    // ensure that file handles are closed (use revert() to not re-write the file)
+                    pkg.Revert();
+                    //pkg.close();
+
+                    // rethrow exception
+                    throw ioe;
+                }
+                catch (Exception ioe)
+                {
+                    // ensure that file handles are closed (use revert() to not re-write the file) 
+                    pkg.Revert();
+                    //pkg.close();
+
+                    // rethrow exception
+                    throw ioe;
+                }
+            }
+        }
         /// <summary>
         /// Creates the appropriate HSSFWorkbook / XSSFWorkbook from
         /// the given InputStream. The Stream is wraped inside a PushbackInputStream.
@@ -158,7 +250,7 @@ namespace NPOI.SS.UserModel
         public static IWorkbook Create(Stream inputStream, ImportOption importOption)
         {
             SetImportOption(importOption);
-            IWorkbook workbook = Create(inputStream);
+            IWorkbook workbook = Create(inputStream, true);
             return workbook;
         }
 

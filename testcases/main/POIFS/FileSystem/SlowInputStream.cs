@@ -107,12 +107,6 @@ namespace TestCases.POIFS.FileSystem
                 }
             }
 
-            // 75% of the time, claim there's no data
-            if (ClaimNoData())
-            {
-                return 0;
-            }
-
             // Copy, and return what we Read
             Array.Copy(data, pos, b, off, len);
             pos += len;

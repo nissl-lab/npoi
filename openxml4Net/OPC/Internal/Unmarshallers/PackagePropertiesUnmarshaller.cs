@@ -375,12 +375,15 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
          */
         public void CheckElementForOPCCompliance(XmlElement el)
         {
-            foreach (XmlAttribute attr in el.Attributes)
+            // Check the current element
+            XmlAttributeCollection namedNodeMap = el.Attributes;
+            int namedNodeCount = namedNodeMap.Count;
+            for (int i = 0; i < namedNodeCount; i++)
             {
-                if (attr.Name.StartsWith("xmlns:"))
+                XmlAttribute attr = namedNodeMap[i];
+                if(attr.NamespaceURI.Equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI))
                 {
-                    string namespacePrefix = attr.Name.Substring(6);
-                    if (nsmgr.LookupNamespace(namespacePrefix).Equals(PackageNamespaces.MARKUP_COMPATIBILITY))
+                    if (attr.Value.Equals(PackageNamespaces.MARKUP_COMPATIBILITY))
                     {
                         // Rule M4.2
                         throw new InvalidFormatException(
@@ -388,14 +391,12 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
                     }
                 }
             }
-            // Check the current element
 
 
             // Rule M4.3
-            if (el.NamespaceURI.Equals(
-                    namespaceDcTerms)
-                    && !(el.LocalName.Equals(KEYWORD_CREATED) || el.LocalName
-                            .Equals(KEYWORD_MODIFIED)))
+            string elName = el.LocalName;
+            if (el.NamespaceURI.Equals(PackageNamespaces.NAMESPACE_DCTERMS)
+                    && !(elName.Equals(KEYWORD_CREATED) || elName.Equals(KEYWORD_MODIFIED)))
                 throw new InvalidFormatException(
                         "OPC Compliance error [M4.3]: Producers shall not create a document element that contains refinements to the Dublin Core elements, except for the two specified in the schema: <dcterms:created> and <dcterms:modified> Consumers shall consider a document element that violates this constraint to be an error.");
 
@@ -405,29 +406,26 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
                         "OPC Compliance error [M4.4]: Producers shall not create a document element that contains the xml:lang attribute. Consumers shall consider a document element that violates this constraint to be an error.");
 
             // Rule M4.5
-            if (el.NamespaceURI.Equals(
-                    namespaceDcTerms))
+            if (el.NamespaceURI.Equals(PackageNamespaces.NAMESPACE_DCTERMS))
             {
                 // DCTerms namespace only use with 'created' and 'modified' elements
-                String elName = el.LocalName;
-                if (!(elName.Equals(KEYWORD_CREATED) || elName
-                        .Equals(KEYWORD_MODIFIED)))
+                if (!(elName.Equals(KEYWORD_CREATED) || elName.Equals(KEYWORD_MODIFIED)))
                     throw new InvalidFormatException("Namespace error : " + elName
                             + " shouldn't have the following naemspace -> "
-                            + namespaceDcTerms);
+                            + PackageNamespaces.NAMESPACE_DCTERMS);
 
                 // Check for the 'xsi:type' attribute
-                XmlAttribute typeAtt = el.Attributes["xsi:type"];
+                XmlNode typeAtt = el.Attributes["type", XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI];// el.Attributes["xsi:type"];
                 if (typeAtt == null)
                     throw new InvalidFormatException("The element '" + elName
                             + "' must have the '" + nsmgr.LookupPrefix(namespaceXSI)
                             + ":type' attribute present !");
 
                 // Check for the attribute value => 'dcterms:W3CDTF'
-                if (!typeAtt.Value.Equals("dcterms:W3CDTF"))
+                if (!typeAtt.Value.Equals(el.Prefix + ":W3CDTF"))
                     throw new InvalidFormatException("The element '" + elName
                             + "' must have the '" + nsmgr.LookupPrefix(namespaceXSI)
-                            + ":type' attribute with the value 'dcterms:W3CDTF' !");
+                            + ":type' attribute with the value '" + el.Prefix + ":W3CDTF', but had '" + typeAtt.Value + "' !");
             }
 
             // Check its children

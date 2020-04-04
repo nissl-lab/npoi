@@ -17,15 +17,14 @@
 ==================================================================== */
 
 
-namespace NPOI
+namespace TestCases
 {
-
-    using TestCases;
+    using NPOI;
+    using NPOI.OpenXml4Net.OPC;
+    using NPOI.Util;
     using NPOI.XSSF.UserModel;
     using NPOI.XWPF.UserModel;
     using NUnit.Framework;
-    using NPOI.OpenXml4Net.OPC;
-    using NPOI.Util;
 
     /**
      * Class to Test that we handle embeded bits in

@@ -26,6 +26,7 @@ namespace NPOI.XWPF.Model
     using NPOI.OpenXmlFormats.Vml;
     using NPOI.OpenXmlFormats.Vml.Office;
     using System.Diagnostics;
+    using static NPOI.POIXMLDocumentPart;
 
     /**
      * A .docx file can have no headers/footers, the same header/footer
@@ -147,7 +148,7 @@ namespace NPOI.XWPF.Model
             int i = GetRelationIndex(relation);
             HdrDocument hdrDoc = new HdrDocument();
             XWPFHeader wrapper = (XWPFHeader)doc.CreateRelationship(relation, XWPFFactory.GetInstance(), i);
-
+            wrapper.SetXWPFDocument(doc);
             CT_HdrFtr hdr = buildHdr(type, pStyle, wrapper, pars);
             wrapper.SetHeaderFooter(hdr);
 
@@ -173,7 +174,7 @@ namespace NPOI.XWPF.Model
             int i = GetRelationIndex(relation);
             FtrDocument ftrDoc = new FtrDocument();
             XWPFFooter wrapper = (XWPFFooter)doc.CreateRelationship(relation, XWPFFactory.GetInstance(), i);
-
+            wrapper.SetXWPFDocument(doc);
             CT_HdrFtr ftr = buildFtr(type, pStyle, wrapper, pars);
             wrapper.SetHeaderFooter(ftr);
 
@@ -189,12 +190,10 @@ namespace NPOI.XWPF.Model
 
         private int GetRelationIndex(XWPFRelation relation)
         {
-            List<POIXMLDocumentPart> relations = doc.GetRelations();
             int i = 1;
-            for (IEnumerator<POIXMLDocumentPart> it = relations.GetEnumerator(); it.MoveNext(); )
+            foreach (RelationPart rp in doc.RelationParts)
             {
-                POIXMLDocumentPart item = it.Current;
-                if (item.GetPackageRelationship().RelationshipType.Equals(relation.Relation))
+                if (rp.Relationship.RelationshipType.Equals(relation.Relation))
                 {
                     i++;
                 }
@@ -216,28 +215,6 @@ namespace NPOI.XWPF.Model
             CT_HdrFtr hdr = buildHdrFtr(pStyle, pars, wrapper);		// MB 24 May 2010
             SetHeaderReference(type, wrapper);
             return hdr;
-        }
-
-        private CT_HdrFtr buildHdrFtr(String pStyle, XWPFParagraph[] paragraphs)
-        {
-            CT_HdrFtr ftr = new CT_HdrFtr();
-            if (paragraphs != null) {
-                for (int i = 0 ; i < paragraphs.Length ; i++) {
-                    CT_P p = ftr.AddNewP();
-                    //ftr.PArray=(0, paragraphs[i].CTP);		// MB 23 May 2010
-                    ftr.SetPArray(i, paragraphs[i].GetCTP());   	// MB 23 May 2010
-                }
-            }
-            else {
-                CT_P p = ftr.AddNewP();
-                byte[] rsidr = doc.Document.body.GetPArray(0).rsidR;
-                byte[] rsidrdefault = doc.Document.body.GetPArray(0).rsidRDefault;
-                p.rsidR = (rsidr);
-                p.rsidRDefault = (rsidrdefault);
-                CT_PPr pPr = p.AddNewPPr();
-                pPr.AddNewPStyle().val = (pStyle);
-            }
-            return ftr;
         }
 
         /**
@@ -263,10 +240,18 @@ namespace NPOI.XWPF.Model
             }
             else {
                 CT_P p = ftr.AddNewP();
-                byte[] rsidr = doc.Document.body.GetPArray(0).rsidR;
-                byte[] rsidrdefault = doc.Document.body.GetPArray(0).rsidRDefault;
-                p.rsidP=(rsidr);
-                p.rsidRDefault=(rsidrdefault);
+                CT_Body body = doc.Document.body;
+                if (body.SizeOfPArray() > 0)
+                {
+                    CT_P p0 = body.GetPArray(0);
+                    if (p0.IsSetRsidR())
+                    {
+                        byte[] rsidr = p0.rsidR;
+                        byte[] rsidrdefault = p0.rsidRDefault;
+                        p.rsidP = rsidr;
+                        p.rsidRDefault = rsidrdefault;
+                    }
+                }
                 CT_PPr pPr = p.AddNewPPr();
                 pPr.AddNewPStyle().val = (pStyle);
             }
@@ -278,7 +263,7 @@ namespace NPOI.XWPF.Model
         {
             CT_HdrFtrRef ref1 = doc.Document.body.sectPr.AddNewFooterReference();
             ref1.type = (type);
-            ref1.id = (wrapper.GetPackageRelationship().Id);
+            ref1.id = (doc.GetRelationId(wrapper));
         }
 
 
@@ -286,7 +271,7 @@ namespace NPOI.XWPF.Model
         {
             CT_HdrFtrRef ref1 = doc.Document.body.sectPr.AddNewHeaderReference();
             ref1.type = (type);
-            ref1.id = (wrapper.GetPackageRelationship().Id);
+            ref1.id = (doc.GetRelationId(wrapper));
         }
 
 

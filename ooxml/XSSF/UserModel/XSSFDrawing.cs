@@ -38,8 +38,8 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFDrawing : POIXMLDocumentPart, IDrawing
     {
-        public const String NAMESPACE_A = "http://schemas.openxmlformats.org/drawingml/2006/main";
-        public const String NAMESPACE_C = "http://schemas.openxmlformats.org/drawingml/2006/chart";
+        public static String NAMESPACE_A = XSSFRelation.NS_DRAWINGML;
+        public static String NAMESPACE_C = XSSFRelation.NS_CHART;
 
         /**
          * Root element of the SpreadsheetML Drawing part
@@ -66,19 +66,23 @@ namespace NPOI.XSSF.UserModel
          * @param rel  the namespace relationship holding this Drawing,
          * the relationship type must be http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing
          */
-        internal XSSFDrawing(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        internal XSSFDrawing(PackagePart part)
+            : base(part)
         {
             XmlDocument xmldoc = ConvertStreamToXml(part.GetInputStream());
-            drawing = NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing.Parse(xmldoc, NamespaceManager);
+            drawing = CT_Drawing.Parse(xmldoc, NamespaceManager);
         }
-
+        public XSSFDrawing(PackagePart part, PackageRelationship rel)
+            : this(part)
+        {
+            
+        }
         /**
          * Construct a new CT_Drawing bean. By default, it's just an empty placeholder for Drawing objects
          *
          * @return a new CT_Drawing bean
          */
-        private static NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing NewDrawing()
+        private static CT_Drawing NewDrawing()
         {
             return new CT_Drawing();
         }
@@ -120,7 +124,7 @@ namespace NPOI.XSSF.UserModel
             long shapeId = newShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_Shape ctShape = ctAnchor.AddNewSp();
-            ctShape.Set(XSSFSimpleShape.GetPrototype());
+            ctShape.Set(XSSFSimpleShape.Prototype());
             ctShape.nvSpPr.cNvPr.id=(uint)shapeId;
             XSSFTextBox shape = new XSSFTextBox(this, ctShape);
             shape.anchor = (XSSFClientAnchor)anchor;
@@ -169,9 +173,10 @@ namespace NPOI.XSSF.UserModel
             int chartNumber = GetPackagePart().Package.
                 GetPartsByContentType(XSSFRelation.CHART.ContentType).Count + 1;
 
-            XSSFChart chart = (XSSFChart)CreateRelationship(
-                    XSSFRelation.CHART, XSSFFactory.GetInstance(), chartNumber);
-            String chartRelId = chart.GetPackageRelationship().Id;
+            RelationPart rp = CreateRelationship(
+            XSSFRelation.CHART, XSSFFactory.GetInstance(), chartNumber, false);
+            XSSFChart chart = rp.DocumentPart as XSSFChart;
+            String chartRelId = rp.Relationship.Id;
 
             XSSFGraphicFrame frame = CreateGraphicFrame((XSSFClientAnchor)anchor);
             frame.SetChart(chart, chartRelId);
@@ -194,10 +199,9 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFWorkbook wb = (XSSFWorkbook)GetParent().GetParent();
             XSSFPictureData data = (XSSFPictureData)wb.GetAllPictures()[pictureIndex];
-            PackagePartName ppName = data.GetPackagePart().PartName;
-            PackageRelationship rel = GetPackagePart().AddRelationship(ppName, TargetMode.Internal, XSSFRelation.IMAGES.Relation);
-            AddRelation(rel.Id, new XSSFPictureData(data.GetPackagePart(), rel));
-            return rel;
+            XSSFPictureData pic = new XSSFPictureData(data.GetPackagePart());
+            RelationPart rp = AddRelation(null, XSSFRelation.IMAGES, pic);
+            return rp.Relationship;
         }
 
         /**
@@ -213,7 +217,7 @@ namespace NPOI.XSSF.UserModel
             long shapeId = newShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_Shape ctShape = ctAnchor.AddNewSp();
-            ctShape.Set(XSSFSimpleShape.GetPrototype());
+            ctShape.Set(XSSFSimpleShape.Prototype());
             ctShape.nvSpPr.cNvPr.id=(uint)(shapeId);
             XSSFSimpleShape shape = new XSSFSimpleShape(this, ctShape);
             shape.anchor = anchor;
@@ -288,7 +292,7 @@ namespace NPOI.XSSF.UserModel
                         ca.Row2 + ", " + dy2Pixels;
                 vmlShape.GetClientDataArray(0).SetAnchorArray(0, position);
             }
-            String ref1 = new CellReference(ca.Row1, ca.Col1).FormatAsString();
+            CellAddress ref1 = new CellAddress(ca.Row1, ca.Col1);
             if (comments.FindCellComment(ref1) != null)
             {
                 throw new ArgumentException("Multiple cell comments in one cell are not allowed, cell: " + ref1);

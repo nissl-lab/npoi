@@ -1,7 +1,7 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
+   this work for Additional information regarding copyright ownership.
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
@@ -15,139 +15,133 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
-using System.Text;
 using System.IO;
-using NPOI.POIFS.FileSystem;
-using NPOI.Util;
-using NPOI;
-using System.Security.Cryptography;
 
 namespace NPOI.POIFS.Crypt
 {
+    using System;
+
+    using NPOI.POIFS.FileSystem;
+    using NPOI.Util;
+
     public abstract class Decryptor
     {
-        public const string DEFAULT_PASSWORD = "VelvetSweatshop";
+        public static String DEFAULT_PASSWORD = "VelvetSweatshop";
+        public static String DEFAULT_POIFS_ENTRY = "EncryptedPackage";
 
-        /// <summary>
-        /// Return a stream with decrypted data.
-        /// Use {@link #getLength()} to get the size of that data that can be safely read from the stream.
-        /// Just reading to the end of the input stream is not sufficient because there are
-        /// normally padding bytes that must be discarded
-        /// </summary>
-        /// <param name="dir">the node to read from</param>
-        /// <returns>decrypted stream</returns>
-        public abstract Stream GetDataStream(DirectoryNode dir);
+        protected internal IEncryptionInfoBuilder builder;
+        private ISecretKey secretKey;
+        private byte[] verifier, integrityHmacKey, integrityHmacValue;
 
-        public abstract bool VerifyPassword(string password);
-     
-        /// <summary>
-        /// Returns the length of the encytpted data that can be safely read with
-        /// {@link #getDataStream(org.apache.poi.poifs.filesystem.DirectoryNode)}.
-        /// Just reading to the end of the input stream is not sufficient because there are
-        /// normally padding bytes that must be discarded
-        /// 
-        /// The length variable is initialized in {@link #getDataStream(org.apache.poi.poifs.filesystem.DirectoryNode)},
-        /// an attempt to call getLength() prior to getDataStream() will result in IllegalStateException.
-        /// 
-        /// return length of the encrypted data
-        /// </summary>
-        public abstract long Length { get; }
+        protected Decryptor(IEncryptionInfoBuilder builder)
+        {
+            this.builder = builder;
+        }
+
+        /**
+     * Return a stream with decrypted data.
+     * <p>
+     * Use {@link #getLength()} to Get the size of that data that can be safely read from the stream.
+     * Just Reading to the end of the input stream is not sufficient because there are
+     * normally pAdding bytes that must be discarded
+     * </p>
+     *
+     * @param dir the node to read from
+     * @return decrypted stream
+     */
+        public abstract InputStream GetDataStream(DirectoryNode dir);
+
+        public abstract bool VerifyPassword(String password);
+
+        /**
+     * Returns the length of the encrypted data that can be safely read with
+     * {@link #getDataStream(NPOI.POIFS.FileSystem.DirectoryNode)}.
+     * Just Reading to the end of the input stream is not sufficient because there are
+     * normally pAdding bytes that must be discarded
+     *
+     * <p>
+     *    The length variable is Initialized in {@link #getDataStream(NPOI.POIFS.FileSystem.DirectoryNode)},
+     *    an attempt to call GetLength() prior to GetDataStream() will result in InvalidOperationException.
+     * </p>
+     *
+     * @return length of the encrypted data
+     * @throws InvalidOperationException if {@link #getDataStream(NPOI.POIFS.FileSystem.DirectoryNode)}
+     * was not called
+     */
+        public abstract long GetLength();
 
         public static Decryptor GetInstance(EncryptionInfo info)
         {
-            int major = info.VersionMajor;
-            int minor = info.VersionMinor;
-
-            if (major == 4 && minor == 4)
-                return new AgileDecryptor(info);
-            else if (minor == 2 && (major == 3 || major == 4))
-                return new EcmaDecryptor(info);
-            else
+            Decryptor d = info.Decryptor;
+            if (d == null)
+            {
                 throw new EncryptedDocumentException("Unsupported version");
+            }
+            return d;
         }
 
-        public Stream GetDataStream(NPOIFSFileSystem fs)
+        public InputStream GetDataStream(NPOIFSFileSystem fs)
+        {
+            return GetDataStream(fs.Root);
+        }
+        public InputStream GetDataStream(OPOIFSFileSystem fs)
+        {
+            return GetDataStream(fs.Root);
+        }
+        public InputStream GetDataStream(POIFSFileSystem fs)
         {
             return GetDataStream(fs.Root);
         }
 
-        public Stream GetDataStream(POIFSFileSystem fs)
+        // for tests
+        public byte[] GetVerifier()
         {
-            return GetDataStream(fs.Root);
+            return verifier;
         }
 
-        protected static int GetBlockSize(int algorithm)
+        public ISecretKey GetSecretKey()
         {
-            switch (algorithm)
-            {
-                case EncryptionHeader.ALGORITHM_AES_128:
-                    return 16;
-                case EncryptionHeader.ALGORITHM_AES_192:
-                    return 24;
-                case EncryptionHeader.ALGORITHM_AES_256:
-                    return 32;
-            }
-            throw new EncryptedDocumentException("Unknown block size");
+            return secretKey;
         }
 
-        protected byte[] HashPassword(EncryptionInfo info,  string password)
+        public byte[] GetIntegrityHmacKey()
         {
-            HashAlgorithm sha1 = HashAlgorithm.Create("SHA1");
-
-            byte[] bytes;
-            try
-            {
-                bytes = Encoding.Unicode.GetBytes(password); //bytes = password.getBytes("UTF-16LE");
-            }
-            catch (CryptographicUnexpectedOperationException)
-            {
-                throw new EncryptedDocumentException("UTF16 not supported");
-            }
-
-            //sha1.ComputeHash(info.GetVerifier().Salt);
-            byte[] salt = info.Verifier.Salt;
-            byte[] temp = new byte[salt.Length + bytes.Length];
-            Array.Copy(salt, temp, salt.Length);
-            Array.Copy(bytes, 0, temp, salt.Length, bytes.Length);
-            byte[] hash = sha1.ComputeHash(temp);
-            byte[] iterator = new byte[4];
-            temp = new byte[24];
-            for (int i = 0; i < info.Verifier.SpinCount; i++)
-            {
-                //sha1.Clear();
-                LittleEndian.PutInt(iterator, 0, i);
-                //sha1.iterator; //sha1.update(iterator);
-                Array.Copy(iterator, temp, iterator.Length);
-                Array.Copy(hash, 0, temp, iterator.Length, hash.Length);
-                hash = sha1.ComputeHash(temp);
-            }
-
-            return hash;
+            return integrityHmacKey;
         }
 
-        protected byte[] Decrypt(SymmetricAlgorithm cipher,byte[] encryptBytes)
+        public byte[] GetIntegrityHmacValue()
         {
-            byte[] decryptBytes = new byte[0];
-            using (MemoryStream fStream = new MemoryStream(encryptBytes))
-            {
-                using (CryptoStream cStream = new CryptoStream(fStream, cipher.CreateDecryptor(cipher.Key, cipher.IV),
-                    CryptoStreamMode.Read))
-                {
-                    
-                    using (MemoryStream destMs = new MemoryStream())
-                    {
-                        byte[] buffer = new byte[100];
-                        int readLen;
+            return integrityHmacValue;
+        }
 
-                        while ((readLen = cStream.Read(buffer, 0, 100)) > 0)
-                            destMs.Write(buffer, 0, readLen);
+        protected void SetSecretKey(ISecretKey secretKey)
+        {
+            this.secretKey = secretKey;
+        }
 
-                        decryptBytes = destMs.ToArray();
-                    }
-                }
-            }
-            return decryptBytes;
+        protected void SetVerifier(byte[] verifier)
+        {
+            this.verifier = verifier;
+        }
+
+        protected void SetIntegrityHmacKey(byte[] integrityHmacKey)
+        {
+            this.integrityHmacKey = integrityHmacKey;
+        }
+
+        protected void SetIntegrityHmacValue(byte[] integrityHmacValue)
+        {
+            this.integrityHmacValue = integrityHmacValue;
+        }
+
+        protected int GetBlockSizeInBytes()
+        {
+            return builder.GetHeader().BlockSize;
+        }
+
+        protected int GetKeySizeInBytes()
+        {
+            return builder.GetHeader().KeySize/8;
         }
     }
 }

@@ -61,7 +61,7 @@ namespace TestCases.SS.UserModel
         public void TestSheetHidden()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
-            ISheet sh = wb.CreateSheet("MySheet");
+            wb.CreateSheet("MySheet");
 
             Assert.IsFalse(wb.IsSheetHidden(0));
             Assert.IsFalse(wb.IsSheetVeryHidden(0));
@@ -96,6 +96,8 @@ namespace TestCases.SS.UserModel
             {
                 // ok
             }
+
+            wb.Close();
         }
 
         /**
@@ -155,6 +157,8 @@ namespace TestCases.SS.UserModel
             IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wbU);
             Assert.IsTrue(wb2.IsSheetHidden(0));
             Assert.IsFalse(wb2.IsSheetHidden(1));
+
+            wb2.Close();
         }
 
         /**
@@ -170,6 +174,8 @@ namespace TestCases.SS.UserModel
             IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wbH);
             Assert.IsFalse(wb2.IsSheetHidden(0));
             Assert.IsFalse(wb2.IsSheetHidden(1));
+
+            wb2.Close();
         }
     }
 }

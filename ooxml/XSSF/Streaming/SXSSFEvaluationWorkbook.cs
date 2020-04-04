@@ -21,44 +21,43 @@ using NPOI.XSSF.UserModel;
 
 namespace NPOI.XSSF.Streaming
 {
-    public  class SXSSFEvaluationWorkbook : XSSFEvaluationWorkbook
+    public class SXSSFEvaluationWorkbook : BaseXSSFEvaluationWorkbook
     {
-    private  SXSSFWorkbook _uBook;
-    
-    public static SXSSFEvaluationWorkbook create(SXSSFWorkbook book)
-    {
-        if (book == null)
+        private SXSSFWorkbook _xBook;
+
+        public static SXSSFEvaluationWorkbook Create(SXSSFWorkbook book)
         {
-            return null;
+            if (book == null)
+            {
+                return null;
+            }
+            return new SXSSFEvaluationWorkbook(book);
         }
-        return new SXSSFEvaluationWorkbook(book);
-    }
 
-    private SXSSFEvaluationWorkbook(SXSSFWorkbook book) : base(book.XssfWorkbook)
-    {
-        _uBook = book;
-    }
+        private SXSSFEvaluationWorkbook(SXSSFWorkbook book) : base(book.XssfWorkbook)
+        {
+            _xBook = book;
+        }
 
-    
-    public int getSheetIndex(SXSSFEvaluationSheet evalSheet)
-    {
-        SXSSFSheet sheet = ((SXSSFEvaluationSheet)evalSheet).getSXSSFSheet();
-        return _uBook.GetSheetIndex(sheet);
-    }
 
-    
-    public SXSSFEvaluationSheet getSheet(int sheetIndex)
-    {
-            throw new NotImplementedException();
-        //return new SXSSFEvaluationSheet(_uBook.GetSheetAt(sheetIndex));
-    }
+        public override int GetSheetIndex(IEvaluationSheet evalSheet)
+        {
+            SXSSFSheet sheet = ((SXSSFEvaluationSheet)evalSheet).GetSXSSFSheet();
+            return _xBook.GetSheetIndex(sheet);
+        }
 
-    
-    public Ptg[] getFormulaTokens(SXSSFEvaluationCell evalCell)
-    {
-        SXSSFCell cell = ((SXSSFEvaluationCell)evalCell).getSXSSFCell();
-        return FormulaParser.Parse(cell.CellFormula, this, FormulaType.Cell, _uBook.GetSheetIndex(cell.Sheet));
+
+        public override IEvaluationSheet GetSheet(int sheetIndex)
+        {
+            return new SXSSFEvaluationSheet(_xBook.GetSheetAt(sheetIndex) as SXSSFSheet);
+        }
+
+
+        public override Ptg[] GetFormulaTokens(IEvaluationCell evalCell)
+        {
+            SXSSFCell cell = ((SXSSFEvaluationCell)evalCell).GetSXSSFCell();
+            return FormulaParser.Parse(cell.CellFormula, this, FormulaType.Cell, _xBook.GetSheetIndex(cell.Sheet));
+        }
     }
-}
 
 }

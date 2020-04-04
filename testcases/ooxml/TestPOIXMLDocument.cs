@@ -15,16 +15,19 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.OOXML
+namespace TestCases.OOXML
 {
-    using System;
-    using NPOI.Util;
-    using System.Collections.Generic;
-    using NUnit.Framework;
-    using System.IO;
-    using NPOI.OpenXml4Net.OPC;
     using NPOI;
+    using NPOI.OpenXml4Net.Exceptions;
+    using NPOI.OpenXml4Net.OPC;
+    using NPOI.Util;
+    using NUnit.Framework;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text.RegularExpressions;
     using TestCases;
+    using TestCases.Util;
 
     /**
      * Test recursive read and write of OPC namespaces
@@ -60,14 +63,13 @@ namespace NPOI.OOXML
             {
                 //
             }
-            public override POIXMLDocumentPart CreateDocumentPart(POIXMLDocumentPart parent, PackageRelationship rel, PackagePart part)
+            protected override POIXMLRelation GetDescriptor(String relationshipType)
             {
-                return new POIXMLDocumentPart(part, rel);
+                return null;
             }
-
-            public override POIXMLDocumentPart CreateDocumentPart(POIXMLRelation descriptor)
+            protected override POIXMLDocumentPart CreateDocumentPart(Type cls, Type[] classes, Object[] values)
             {
-                throw new NotSupportedException();
+                return null;
             }
 
         }
@@ -77,11 +79,15 @@ namespace NPOI.OOXML
          */
         private void Traverse(POIXMLDocumentPart part, Dictionary<String, POIXMLDocumentPart> context)
         {
-            context[part.GetPackageRelationship().TargetUri.ToString()] = part;
+            Assert.AreEqual(part.GetPackageRelationship().TargetUri.ToString(), part.GetPackagePart().PartName.Name);
+
+            context[part.GetPackagePart().PartName.Name] = part;
             foreach (POIXMLDocumentPart p in part.GetRelations())
             {
                 Assert.IsNotNull(p.ToString());
-                String uri = p.GetPackageRelationship().TargetUri.ToString();
+                String uri = p.GetPackagePart().PartName.URI.ToString();
+                Assert.AreEqual(uri, p.GetPackageRelationship().TargetUri.ToString());
+
                 if (!context.ContainsKey(uri))
                 {
                     Traverse(p, context);
@@ -109,7 +115,50 @@ namespace NPOI.OOXML
             doc.Write(out1);
             out1.Close();
 
+            // Should not be able to write to an output stream that has been closed
+            try
+            {
+                doc.Write(out1);
+                Assert.Fail("Should not be able to write to an output stream that has been closed.");
+            }
+            catch (OpenXML4NetRuntimeException e) {
+                //OpenXml4NetRuntimeException
+                // FIXME: A better exception class (IOException?) and message should be raised
+                // indicating that the document could not be written because the output stream is closed.
+                // see {@link org.apache.poi.openxml4j.opc.ZipPackage#saveImpl(java.io.OutputStream)}
+                if (Regex.IsMatch(e.Message, "Fail to save: an error occurs while saving the package : Must support writing.+"))
+                {
+                    // expected
+                }
+                else
+                {
+                    throw e;
+                }
+            }
+
+            // Should not be able to write a document that has been closed
+            doc.Close();
+            try
+            {
+                doc.Write(new NullOutputStream());
+                Assert.Fail("Should not be able to write a document that has been closed.");
+            }
+            catch (IOException e) {
+                if (e.Message.Equals("Cannot write data, document seems to have been closed already"))
+                {
+                    // expected
+                }
+                else
+                {
+                    throw e;
+                }
+            }
+
+            // Should be able to close a document multiple times, though subsequent closes will have no effect.
+            doc.Close();
+
             OPCPackage pkg2 = OPCPackage.Open(tmp);
+            doc = new OPCParser(pkg1);
             try
             {
                 doc = new OPCParser(pkg1);
@@ -140,42 +189,55 @@ namespace NPOI.OOXML
             }
             finally
             {
-                pkg2.Revert();
+                doc.Close();
+                pkg1.Close();
+                pkg2.Close();
             }
         }
 
         [Test]
         public void TestPPTX()
         {
+            POIDataSamples pds = POIDataSamples.GetSlideShowInstance();
             AssertReadWrite(
-                    PackageHelper.Open(POIDataSamples.GetSlideShowInstance().OpenResourceAsStream("PPTWithAttachments.pptm"))
+                    PackageHelper.Open(pds.OpenResourceAsStream("PPTWithAttachments.pptm"))
             );
         }
         [Test]
         public void TestXLSX()
         {
+            POIDataSamples pds = POIDataSamples.GetSpreadSheetInstance();
             AssertReadWrite(
-                    PackageHelper.Open(POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("ExcelWithAttachments.xlsm"))
+                    PackageHelper.Open(pds.OpenResourceAsStream("ExcelWithAttachments.xlsm"))
                     );
         }
         [Test]
         public void TestDOCX()
         {
+            POIDataSamples pds = POIDataSamples.GetDocumentInstance();
             AssertReadWrite(
-                    PackageHelper.Open(POIDataSamples.GetDocumentInstance().OpenResourceAsStream("WordWithAttachments.docx"))
+                    PackageHelper.Open(pds.OpenResourceAsStream("WordWithAttachments.docx"))
                     );
         }
         [Test]
         public void TestRelationOrder()
         {
-            OPCPackage pkg = PackageHelper.Open(POIDataSamples.GetDocumentInstance().OpenResourceAsStream("WordWithAttachments.docx"));
+            POIDataSamples pds = POIDataSamples.GetDocumentInstance();
+            OPCPackage pkg = PackageHelper.Open(pds.OpenResourceAsStream("WordWithAttachments.docx"));
             OPCParser doc = new OPCParser(pkg);
-            doc.Parse(new TestFactory());
-
-            foreach (POIXMLDocumentPart rel in doc.GetRelations())
+            try
             {
-                //TODO finish me
-                Assert.IsNotNull(rel);
+                doc.Parse(new TestFactory());
+
+                foreach (POIXMLDocumentPart rel in doc.GetRelations())
+                {
+                    //TODO finish me
+                    Assert.IsNotNull(rel);
+                }
+            }
+            finally
+            {
+                doc.Close();
             }
 
         }

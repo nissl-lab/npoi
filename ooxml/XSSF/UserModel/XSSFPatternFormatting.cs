@@ -18,6 +18,8 @@
  */
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
+using System;
+
 namespace NPOI.XSSF.UserModel
 {
     /**
@@ -32,6 +34,60 @@ namespace NPOI.XSSF.UserModel
             _fill = fill;
         }
 
+        public  IColor FillBackgroundColorColor
+        {
+            get
+            {
+                if (!_fill.IsSetPatternFill()) return null;
+                return new XSSFColor(_fill.GetPatternFill().bgColor);
+            }
+            set
+            {
+                XSSFColor xcolor = XSSFColor.ToXSSFColor(value);
+                if (value == null) SetFillBackgroundColor((CT_Color)null);
+                else SetFillBackgroundColor(xcolor.GetCTColor());
+            }
+        }
+        private void SetFillBackgroundColor(CT_Color color)
+        {
+            CT_PatternFill ptrn = _fill.IsSetPatternFill() ? _fill.patternFill : _fill.AddNewPatternFill();
+            if (color == null)
+            {
+                ptrn.UnsetBgColor();
+            }
+            else
+            {
+                ptrn.bgColor = (color);
+            }
+        }
+
+        public IColor FillForegroundColorColor
+        {
+            get
+            {
+                if (!_fill.IsSetPatternFill() || !_fill.GetPatternFill().IsSetFgColor())
+                    return null;
+                return new XSSFColor(_fill.GetPatternFill().bgColor);
+            }
+            set
+            {
+                XSSFColor xcolor = XSSFColor.ToXSSFColor(value);
+                if (value == null) SetFillForegroundColor((CT_Color)null);
+                else SetFillForegroundColor(xcolor.GetCTColor());
+            }
+        }
+        private void SetFillForegroundColor(CT_Color color)
+        {
+            CT_PatternFill ptrn = _fill.IsSetPatternFill() ? _fill.GetPatternFill() : _fill.AddNewPatternFill();
+            if (color == null)
+            {
+                ptrn.UnsetFgColor();
+            }
+            else
+            {
+                ptrn.fgColor = (color);
+            }
+        }
         public short FillBackgroundColor
         {
             get

@@ -43,7 +43,7 @@ namespace NPOI.SS.Formula
             }
             _firstSheetIndex = firstSheetIndex;
             _lastSheetIndex = lastSheetIndex;
-            _sheetEvaluators = sheetEvaluators;
+            _sheetEvaluators = (SheetRefEvaluator[])sheetEvaluators.Clone();
         }
         public SheetRangeEvaluator(int onlySheetIndex, SheetRefEvaluator sheetEvaluator)
             : this(onlySheetIndex, onlySheetIndex, new SheetRefEvaluator[] { sheetEvaluator })

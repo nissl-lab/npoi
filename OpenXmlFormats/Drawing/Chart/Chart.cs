@@ -3396,6 +3396,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             sw.Write(string.Format("</c:{0}>", nodeName));
         }
 
+        public bool IsSetTx()
+        {
+            return this.txField != null;
+        }
+
+        public CT_Tx AddNewTx()
+        {
+            this.txField = new CT_Tx();
+            return this.txField;
+        }
+
         [XmlElement(Order = 0)]
         public CT_Tx tx
         {
@@ -3525,7 +3536,26 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             sw.Write(string.Format("</c:{0}>", nodeName));
         }
 
+        public bool IsSetStrRef()
+        {
+            return this.strRefField != null;
+        }
 
+        public void UnsetStrRef()
+        {
+            this.strRefField = null;
+        }
+
+        public bool IsSetRich()
+        {
+            return rich != null;
+        }
+
+        public CT_TextBody AddNewRich()
+        {
+            this.richField = new CT_TextBody();
+            return this.richField;
+        }
     }
 
 
@@ -11351,6 +11381,12 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             return this.legendField;
         }
 
+        public CT_Title AddNewTitle()
+        {
+            this.titleField = new CT_Title();
+            return this.titleField;
+        }
+
         [XmlElement(Order = 0)]
         public CT_Title title
         {
@@ -12096,6 +12132,18 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 }
             }
             return sb.ToString();
+        }
+
+        public int SizeOfPArray()
+        {
+            if (this.pField == null)
+                pField = new List<CT_TextParagraph>();
+            return this.pField.Count;
+        }
+
+        public CT_TextParagraph GetPArray(int v)
+        {
+            return this.pField[v];
         }
 
         [XmlElement("p")]

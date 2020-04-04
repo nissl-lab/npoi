@@ -18,7 +18,10 @@
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NUnit.Framework;
 using NPOI.XSSF.Model;
-namespace NPOI.XSSF.UserModel.Helpers
+using NPOI.XSSF.UserModel.Helpers;
+using NPOI.XSSF.UserModel;
+
+namespace TestCases.XSSF.UserModel.Helpers
 {
     /**
      * Tests for {@link ColumnHelper}
@@ -64,9 +67,6 @@ namespace NPOI.XSSF.UserModel.Helpers
         [Test]
         public void TestSortColumns()
         {
-            //CT_Worksheet worksheet = new CT_Worksheet();
-            //ColumnHelper helper = new ColumnHelper(worksheet);
-
             CT_Cols cols1 = new CT_Cols();
             CT_Col col1 = cols1.AddNewCol();
             col1.min = (1);
@@ -152,44 +152,134 @@ namespace NPOI.XSSF.UserModel.Helpers
             col4.max = (9);
             Assert.AreEqual(4, cols1.sizeOfColArray());
 
-            CT_Col col5 = new CT_Col();
-            col5.min = (4);
-            col5.max = (5);
-            helper.AddCleanColIntoCols(cols1, col5);
+            // No overlap
+            helper.AddCleanColIntoCols(cols1, createCol(4, 5));
             Assert.AreEqual(5, cols1.sizeOfColArray());
 
-            CT_Col col6 = new CT_Col();
-            col6.min = (8);
-            col6.max = (11);
+            // Overlaps with 8 - 9 (overlap and after replacements required)
+            CT_Col col6 = createCol(8, 11);
             col6.hidden = (true);
             helper.AddCleanColIntoCols(cols1, col6);
             Assert.AreEqual(6, cols1.sizeOfColArray());
 
-            CT_Col col7 = new CT_Col();
-            col7.min = (6);
-            col7.max = (8);
+            // Overlaps with 8 - 9 (before and overlap replacements required)
+            CT_Col col7 = createCol(6, 8);
             col7.width = (17.0);
             helper.AddCleanColIntoCols(cols1, col7);
             Assert.AreEqual(8, cols1.sizeOfColArray());
 
-            CT_Col col8 = new CT_Col();
-            col8.min = (20);
-            col8.max = (30);
-            helper.AddCleanColIntoCols(cols1, col8);
+            // Overlaps with 13 - 16750 (before, overlap and after replacements required)
+            helper.AddCleanColIntoCols(cols1, createCol(20, 30));
             Assert.AreEqual(10, cols1.sizeOfColArray());
 
-            CT_Col col9 = new CT_Col();
-            col9.min = (25);
-            col9.max = (27);
-            helper.AddCleanColIntoCols(cols1, col9);
+            // Overlaps with 20 - 30 (before, overlap and after replacements required)
+            helper.AddCleanColIntoCols(cols1, createCol(25, 27));
 
             // TODO - assert something interesting
             Assert.AreEqual(12, cols1.col.Count);
             Assert.AreEqual(1u, cols1.GetColArray(0).min);
             Assert.AreEqual(16750u, cols1.GetColArray(11).max);
         }
+
         [Test]
-        public void TestColumn()
+        public void TestAddCleanColIntoColsExactOverlap()
+        {
+            CT_Cols cols = createHiddenAndBestFitColsWithHelper(1, 1, 1, 1);
+            Assert.AreEqual(1, cols.sizeOfColArray());
+            assertMinMaxHiddenBestFit(cols, 0, 1, 1, true, true);
+        }
+
+        [Test]
+        public void TestAddCleanColIntoColsOverlapsOverhangingBothSides()
+        {
+            CT_Cols cols = createHiddenAndBestFitColsWithHelper(2, 2, 1, 3);
+            Assert.AreEqual(3, cols.sizeOfColArray());
+            assertMinMaxHiddenBestFit(cols, 0, 1, 1, false, true);
+            assertMinMaxHiddenBestFit(cols, 1, 2, 2, true, true);
+            assertMinMaxHiddenBestFit(cols, 2, 3, 3, false, true);
+        }
+        [Test]
+        public void TestAddCleanColIntoColsOverlapsCompletelyNested()
+        {
+            CT_Cols cols = createHiddenAndBestFitColsWithHelper(1, 3, 2, 2);
+            Assert.AreEqual(3, cols.sizeOfColArray());
+            assertMinMaxHiddenBestFit(cols, 0, 1, 1, true, false);
+            assertMinMaxHiddenBestFit(cols, 1, 2, 2, true, true);
+            assertMinMaxHiddenBestFit(cols, 2, 3, 3, true, false);
+        }
+
+        [Test]
+        public void TestAddCleanColIntoColsNewOverlapsOverhangingLeftNotRightExactRight()
+        {
+            CT_Cols cols = createHiddenAndBestFitColsWithHelper(2, 3, 1, 3);
+            Assert.AreEqual(2, cols.sizeOfColArray());
+            assertMinMaxHiddenBestFit(cols, 0, 1, 1, false, true);
+            assertMinMaxHiddenBestFit(cols, 1, 2, 3, true, true);
+        }
+
+        [Test]
+        public void TestAddCleanColIntoColsNewOverlapsOverhangingRightNotLeftExactLeft()
+        {
+            CT_Cols cols = createHiddenAndBestFitColsWithHelper(1, 2, 1, 3);
+            Assert.AreEqual(2, cols.sizeOfColArray());
+            assertMinMaxHiddenBestFit(cols, 0, 1, 2, true, true);
+            assertMinMaxHiddenBestFit(cols, 1, 3, 3, false, true);
+        }
+
+        [Test]
+        public void TestAddCleanColIntoColsNewOverlapsOverhangingLeftNotRight()
+        {
+            CT_Cols cols = createHiddenAndBestFitColsWithHelper(2, 3, 1, 2);
+            Assert.AreEqual(3, cols.sizeOfColArray());
+            assertMinMaxHiddenBestFit(cols, 0, 1, 1, false, true);
+            assertMinMaxHiddenBestFit(cols, 1, 2, 2, true, true);
+            assertMinMaxHiddenBestFit(cols, 2, 3, 3, true, false);
+        }
+
+        [Test]
+        public void TestAddCleanColIntoColsNewOverlapsOverhangingRightNotLeft()
+        {
+            CT_Cols cols = createHiddenAndBestFitColsWithHelper(1, 2, 2, 3);
+            Assert.AreEqual(3, cols.sizeOfColArray());
+            assertMinMaxHiddenBestFit(cols, 0, 1, 1, true, false);
+            assertMinMaxHiddenBestFit(cols, 1, 2, 2, true, true);
+            assertMinMaxHiddenBestFit(cols, 2, 3, 3, false, true);
+        }
+        /**
+         * Creates and adds a hidden column and then a best fit column with the given min/max pairs.
+         * Suitable for testing handling of overlap. 
+         */
+        private CT_Cols createHiddenAndBestFitColsWithHelper(int hiddenMin, int hiddenMax, int bestFitMin, int bestFitMax)
+        {
+            CT_Worksheet worksheet = new CT_Worksheet();
+            ColumnHelper helper = new ColumnHelper(worksheet);
+            CT_Cols cols = worksheet.GetColsArray(0);
+            CT_Col hidden = createCol(hiddenMin, hiddenMax);
+            hidden.hidden = (true);
+            helper.AddCleanColIntoCols(cols, hidden);
+            CT_Col bestFit = createCol(bestFitMin, bestFitMax);
+            bestFit.bestFit = (true);
+            helper.AddCleanColIntoCols(cols, bestFit);
+            return cols;
+        }
+        private void assertMinMaxHiddenBestFit(CT_Cols cols, int index, int min, int max, bool hidden, bool bestFit)
+        {
+            CT_Col col = cols.GetColArray(index);
+            Assert.AreEqual(min, col.min);
+            Assert.AreEqual(max, col.max);
+            Assert.AreEqual(hidden, col.hidden);
+            Assert.AreEqual(bestFit, col.bestFit);
+        }
+        private CT_Col createCol(int min, int max)
+        {
+            CT_Col col = new CT_Col();
+            col.min = (uint)(min);
+            col.max = (uint)(max);
+            return col;
+        }
+
+        [Test]
+        public void TestGetColumn()
         {
             CT_Worksheet worksheet = new CT_Worksheet();
 

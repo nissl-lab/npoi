@@ -53,12 +53,12 @@ namespace NPOI.XWPF.UserModel
         protected XWPFHeaderFooter()
         {
 
-            //headerFooter = new CT_HdrFtr();
-            //ReadHdrFtr();
+            headerFooter = new CT_HdrFtr();
+            ReadHdrFtr();
         }
 
-        public XWPFHeaderFooter(POIXMLDocumentPart parent, PackagePart part, PackageRelationship rel) :
-            base(parent, part, rel)
+        public XWPFHeaderFooter(POIXMLDocumentPart parent, PackagePart part) 
+            : base(parent, part)
         {
             ;
             this.document = (XWPFDocument)GetParent();
@@ -69,7 +69,12 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        public XWPFHeaderFooter(POIXMLDocumentPart parent, PackagePart part, PackageRelationship rel)
+            : this(parent, part)
+        {
 
+        }
         internal override void OnDocumentRead()
         {
             foreach (POIXMLDocumentPart poixmlDocumentPart in GetRelations())
@@ -226,8 +231,11 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFParagraph GetParagraphArray(int pos)
         {
-
-            return paragraphs[(pos)];
+            if (pos >= 0 && pos < paragraphs.Count)
+            {
+                return paragraphs[(pos)];
+            }
+            return null;
         }
 
         /**
@@ -316,14 +324,9 @@ namespace NPOI.XWPF.UserModel
                  */
                 PackagePart picDataPart = xwpfPicData.GetPackagePart();
                 // TODO add support for TargetMode.EXTERNAL relations.
-                TargetMode targetMode = TargetMode.Internal;
-                PackagePartName partName = picDataPart.PartName;
-                String relation = relDesc.Relation;
-                PackageRelationship relShip = GetPackagePart().AddRelationship(partName, targetMode, relation);
-                String id = relShip.Id;
-                AddRelation(id, xwpfPicData);
+                RelationPart rp = AddRelation(null, XWPFRelation.IMAGES, xwpfPicData);
                 pictures.Add(xwpfPicData);
-                return id;
+                return rp.Relationship.Id;
             }
             else
             {
@@ -486,8 +489,7 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTable GetTableArray(int pos)
         {
-
-            if (pos > 0 && pos < tables.Count)
+            if (pos >= 0 && pos < tables.Count)
             {
                 return tables[(pos)];
             }
@@ -627,7 +629,15 @@ namespace NPOI.XWPF.UserModel
                 throw new NotImplementedException();
             }
         }
-
+        /**
+         * Adds a new paragraph at the end of the header or footer
+         */
+        public XWPFParagraph CreateParagraph()
+        {
+            XWPFParagraph paragraph = new XWPFParagraph(headerFooter.AddNewP(), this);
+            paragraphs.Add(paragraph);
+            return paragraph;
+        }
         public XWPFParagraph InsertNewParagraph(System.Xml.XmlDocument cursor)
         {
             throw new NotImplementedException();

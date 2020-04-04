@@ -23,6 +23,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.UserModel;
     using System;
     using NUnit.Framework;
+    using NPOI.SS.Formula.Functions;
 
     /**
      * Tests for the INDIRECT() function.</p>
@@ -104,6 +105,7 @@ namespace TestCases.SS.Formula.Functions
 
             // non-error cases
             Confirm(feA, c, "INDIRECT(\"C2\")", 23);
+            Confirm(feA, c, "INDIRECT(\"C2\", TRUE)", 23);
             Confirm(feA, c, "INDIRECT(\"$C2\")", 23);
             Confirm(feA, c, "INDIRECT(\"C$2\")", 23);
             Confirm(feA, c, "SUM(INDIRECT(\"Sheet2!B1:C3\"))", 351); // area ref
@@ -203,6 +205,12 @@ namespace TestCases.SS.Formula.Functions
                 throw new AssertionException("Expected error '" + ErrorEval.GetText(expCode)
                         + "' but got '" + cv.FormatAsString() + "'.");
             }
+        }
+
+        [Test]
+        public void TestInvalidInput()
+        {
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, Indirect.instance.Evaluate(new ValueEval[] { }, null));
         }
     }
 

@@ -25,7 +25,11 @@ using NPOI.SS.Util;
 using NPOI.SS;
 using TestCases.HSSF;
 using System.Text;
-namespace NPOI.XSSF.UserModel
+using System.Collections.Generic;
+using NPOI.XSSF;
+using NPOI.XSSF.UserModel;
+
+namespace TestCases.XSSF.UserModel
 {
 
     /**
@@ -202,7 +206,7 @@ namespace NPOI.XSSF.UserModel
             Assert.IsFalse(cell6.IsMergedCell);
             Assert.IsFalse(cell8.IsMergedCell);
 
-            sheet.AddMergedRegion(new SS.Util.CellRangeAddress(5, 6, 5, 6));   //region with 4 cells
+            sheet.AddMergedRegion(new CellRangeAddress(5, 6, 5, 6));   //region with 4 cells
 
             Assert.IsTrue(cell5.IsMergedCell);
             Assert.IsTrue(cell6.IsMergedCell);
@@ -344,8 +348,8 @@ namespace NPOI.XSSF.UserModel
 
             // expand table
             XSSFTable table = sheet.GetTables()[0];
-            CellReference startRef = table.GetStartCellReference();
-            CellReference endRef = table.GetEndCellReference();
+            CellReference startRef = table.StartCellReference;
+            CellReference endRef = table.EndCellReference;
             table.GetCTTable().@ref = (new CellRangeAddress(startRef.Row, 1, startRef.Col, endRef.Col).FormatAsString());
 
             wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
@@ -396,7 +400,7 @@ namespace NPOI.XSSF.UserModel
 
             foreach (ICell cell in row)
             {
-                cell.ToString();
+                Assert.IsNotNull(cell.ToString());
             }
         }
 
@@ -451,7 +455,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
         [Test]
-        public void TestEncodingbeloAscii()
+        public void TestEncodingBelowAscii()
         {
             StringBuilder sb = new StringBuilder();
             // test all possible characters
@@ -474,29 +478,194 @@ namespace NPOI.XSSF.UserModel
                 IWorkbook xwb = XSSFITestDataProvider.instance.CreateWorkbook();
                 ICell xCell = xwb.CreateSheet().CreateRow(0).CreateCell(0);
 
-                //IWorkbook swb = SXSSFITestDataProvider.instance.CreateWorkbook();
-                //ICell sCell = swb.CreateSheet().CreateRow(0).CreateCell(0);
+                IWorkbook swb = SXSSFITestDataProvider.instance.CreateWorkbook();
+                ICell sCell = swb.CreateSheet().CreateRow(0).CreateCell(0);
 
                 cell.SetCellValue(str);
                 Assert.AreEqual(str, cell.StringCellValue);
                 xCell.SetCellValue(str);
                 Assert.AreEqual(str, xCell.StringCellValue);
-                //sCell.SetCellValue(str);
-                //Assert.AreEqual(str, sCell.StringCellValue);
+                sCell.SetCellValue(str);
+                Assert.AreEqual(str, sCell.StringCellValue);
 
                 IWorkbook wbBack = HSSFITestDataProvider.Instance.WriteOutAndReadBack(wb);
                 IWorkbook xwbBack = XSSFITestDataProvider.instance.WriteOutAndReadBack(xwb);
-                //IWorkbook swbBack = SXSSFITestDataProvider.instance.WriteOutAndReadBack(swb);
+                IWorkbook swbBack = SXSSFITestDataProvider.instance.WriteOutAndReadBack(swb);
                 cell = wbBack.GetSheetAt(0).CreateRow(0).CreateCell(0);
                 xCell = xwbBack.GetSheetAt(0).CreateRow(0).CreateCell(0);
-                //sCell = swbBack.GetSheetAt(0).CreateRow(0).CreateCell(0);
+                sCell = swbBack.GetSheetAt(0).CreateRow(0).CreateCell(0);
 
                 Assert.AreEqual(cell.StringCellValue, xCell.StringCellValue);
-                //Assert.AreEqual(cell.StringCellValue, sCell.StringCellValue);
+                Assert.AreEqual(cell.StringCellValue, sCell.StringCellValue);
 
                 pos += SpreadsheetVersion.EXCEL97.MaxTextLength;
+
+                swbBack.Close();
+                xwbBack.Close();
+                wbBack.Close();
+                swb.Close();
+                xwb.Close();
+                wb.Close();
             }
         }
+
+        private XSSFCell srcCell, destCell; //used for testCopyCellFrom_CellCopyPolicy
+
+        [Test]
+        public void TestCopyCellFrom_CellCopyPolicy_default()
+        {
+            setUp_testCopyCellFrom_CellCopyPolicy();
+
+            // default copy policy
+            CellCopyPolicy policy = new CellCopyPolicy();
+            destCell.CopyCellFrom(srcCell, policy);
+
+            Assert.AreEqual(CellType.Formula, destCell.CellType);
+            Assert.AreEqual("2+3", destCell.CellFormula);
+            Assert.AreEqual(srcCell.CellStyle, destCell.CellStyle);
+        }
+
+        [Test]
+        public void TestCopyCellFrom_CellCopyPolicy_value()
+        {
+            setUp_testCopyCellFrom_CellCopyPolicy();
+
+            // Paste values only
+            CellCopyPolicy policy = new CellCopyPolicy.Builder().CellFormula(false).Build();
+            destCell.CopyCellFrom(srcCell, policy);
+            Assert.AreEqual(CellType.Numeric, destCell.CellType);
+        }
+        [Test]
+        public void TestCopyCellFrom_CellCopyPolicy_formulaWithUnregisteredUDF()
+        {
+            //setUp_testCopyCellFrom_CellCopyPolicy();
+
+            srcCell.CellFormula = ("MYFUNC2(123, $A5, Sheet1!$B7)");
+
+            // Copy formula verbatim (no shifting). This is okay because copyCellFrom is Internal.
+            // Users should use higher-level copying functions to row- or column-shift formulas.
+            CellCopyPolicy policy = new CellCopyPolicy.Builder().CellFormula(true).Build();
+            destCell.CopyCellFrom(srcCell, policy);
+            Assert.AreEqual("MYFUNC2(123, $A5, Sheet1!$B7)", destCell.CellFormula);
+        }
+
+        [Test]
+        public void TestCopyCellFrom_CellCopyPolicy_style()
+        {
+            setUp_testCopyCellFrom_CellCopyPolicy();
+            srcCell.SetCellValue((String)null);
+
+            // Paste styles only
+            CellCopyPolicy policy = new CellCopyPolicy.Builder().CellValue(false).Build();
+            destCell.CopyCellFrom(srcCell, policy);
+            Assert.AreEqual(srcCell.CellStyle, destCell.CellStyle);
+
+            // Old cell value should not have been overwritten
+            Assert.AreNotEqual(CellType.Blank, destCell.CellType);
+            Assert.AreEqual(CellType.Boolean, destCell.CellType);
+            Assert.AreEqual(true, destCell.BooleanCellValue);
+        }
+
+
+        [Test]
+        public void TestCopyCellFrom_CellCopyPolicy_copyHyperlink()
+        {
+            setUp_testCopyCellFrom_CellCopyPolicy();
+            IWorkbook wb = srcCell.Sheet.Workbook;
+            ICreationHelper createHelper = wb.GetCreationHelper();
+            srcCell.SetCellValue("URL LINK");
+            IHyperlink link = createHelper.CreateHyperlink(HyperlinkType.Url);
+            link.Address = ("http://poi.apache.org/");
+            srcCell.Hyperlink = (link);
+            // Set link cell style (optional)
+            ICellStyle hlinkStyle = wb.CreateCellStyle();
+            IFont hlinkFont = wb.CreateFont();
+            hlinkFont.Underline = FontUnderlineType.Single;
+            hlinkFont.Color = (IndexedColors.Blue.Index);
+            hlinkStyle.SetFont(hlinkFont);
+            srcCell.CellStyle = (hlinkStyle);
+            // Copy hyperlink
+            CellCopyPolicy policy = new CellCopyPolicy.Builder().CopyHyperlink(true).MergeHyperlink(false).Build();
+            destCell.CopyCellFrom(srcCell, policy);
+            Assert.IsNotNull(destCell.Hyperlink);
+            Assert.AreSame(srcCell.Sheet, destCell.Sheet,
+                "unit test assumes srcCell and destCell are on the same sheet");
+            List<IHyperlink> links = srcCell.Sheet.GetHyperlinkList();
+            Assert.AreEqual(2, links.Count, "number of hyperlinks on sheet");
+            Assert.AreEqual(new CellReference(srcCell).FormatAsString(), (links[(0)] as XSSFHyperlink).CellRef,
+                "source hyperlink");
+            Assert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(1)] as XSSFHyperlink).CellRef,
+                "destination hyperlink");
+
+            wb.Close();
+        }
+
+        [Test]
+        public void TestCopyCellFrom_CellCopyPolicy_mergeHyperlink()
+        {
+            //setUp_testCopyCellFrom_CellCopyPolicy();
+            IWorkbook wb = srcCell.Sheet.Workbook;
+            ICreationHelper createHelper = wb.GetCreationHelper();
+            srcCell.SetCellValue("URL LINK");
+            IHyperlink link = createHelper.CreateHyperlink(HyperlinkType.Url);
+            link.Address = ("http://poi.apache.org/");
+            destCell.Hyperlink = (link);
+            // Set link cell style (optional)
+            ICellStyle hlinkStyle = wb.CreateCellStyle();
+            IFont hlinkFont = wb.CreateFont();
+            hlinkFont.Underline = FontUnderlineType.Single;
+            hlinkFont.Color = (IndexedColors.Blue.Index);
+            hlinkStyle.SetFont(hlinkFont);
+            destCell.CellStyle = (hlinkStyle);
+
+            // Pre-condition assumptions. This test is broken if either of these Assert.Fail.
+            Assert.AreSame(srcCell.Sheet, destCell.Sheet,
+                "unit test assumes srcCell and destCell are on the same sheet");
+            Assert.IsNull(srcCell.Hyperlink);
+            // Merge hyperlink - since srcCell doesn't have a hyperlink, destCell's hyperlink is not overwritten (cleared).
+            CellCopyPolicy policy = new CellCopyPolicy.Builder().MergeHyperlink(true).CopyHyperlink(false).Build();
+            destCell.CopyCellFrom(srcCell, policy);
+            Assert.IsNull(srcCell.Hyperlink);
+            Assert.IsNotNull(destCell.Hyperlink);
+            Assert.AreSame(link, destCell.Hyperlink);
+            List<IHyperlink> links;
+            links = srcCell.Sheet.GetHyperlinkList();
+            Assert.AreEqual(1, links.Count, "number of hyperlinks on sheet");
+            Assert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(0)] as XSSFHyperlink).CellRef,
+                "source hyperlink");
+
+            // Merge destCell's hyperlink to srcCell. Since destCell does have a hyperlink, this should copy destCell's hyperlink to srcCell.
+            srcCell.CopyCellFrom(destCell, policy);
+            Assert.IsNotNull(srcCell.Hyperlink);
+            Assert.IsNotNull(destCell.Hyperlink);
+
+            links = srcCell.Sheet.GetHyperlinkList();
+            Assert.AreEqual(2, links.Count, "number of hyperlinks on sheet");
+            Assert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(0)] as XSSFHyperlink).CellRef,
+                "dest hyperlink");
+            Assert.AreEqual(new CellReference(srcCell).FormatAsString(), (links[(1)] as XSSFHyperlink).CellRef,
+                "source hyperlink");
+
+            wb.Close();
+        }
+
+        private void setUp_testCopyCellFrom_CellCopyPolicy()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFRow row = wb.CreateSheet().CreateRow(0) as XSSFRow;
+            srcCell = row.CreateCell(0) as XSSFCell;
+            destCell = row.CreateCell(1) as XSSFCell;
+
+            srcCell.CellFormula = ("2+3");
+
+            ICellStyle style = wb.CreateCellStyle();
+            style.BorderTop = BorderStyle.Thick;
+            style.FillBackgroundColor = ((short)5);
+            srcCell.CellStyle = (style);
+
+            destCell.SetCellValue(true);
+        }
+
     }
 
 }

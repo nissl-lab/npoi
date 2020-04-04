@@ -32,6 +32,9 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using System.Globalization;
+    using NPOI.Util;
+    using NPOI.SS.UserModel.Helpers;
+    using NPOI.HSSF.UserModel.helpers;
 
 
 
@@ -47,7 +50,7 @@ namespace NPOI.HSSF.UserModel
     /// @author  Yegor Kozlov (yegor at apache.org) (Autosizing columns)
     /// </remarks>
     [Serializable]
-    public class HSSFSheet : NPOI.SS.UserModel.ISheet
+    public class HSSFSheet : ISheet
     {
         /**
          * width of 1px in columns with default width in units of 1/256 of a character width
@@ -71,7 +74,7 @@ namespace NPOI.HSSF.UserModel
          */
 
         private InternalSheet _sheet;
-        private Dictionary<int, NPOI.SS.UserModel.IRow> rows;
+        private Dictionary<int, IRow> rows;
         public InternalWorkbook book;
         protected HSSFWorkbook _workbook;
         private int firstrow;
@@ -87,7 +90,7 @@ namespace NPOI.HSSF.UserModel
         public HSSFSheet(HSSFWorkbook workbook)
         {
             _sheet = InternalSheet.CreateSheet();
-            rows = new Dictionary<int, NPOI.SS.UserModel.IRow>();
+            rows = new Dictionary<int, IRow>();
             this._workbook = workbook;
             this.book = workbook.Workbook;
         }
@@ -102,7 +105,7 @@ namespace NPOI.HSSF.UserModel
         public HSSFSheet(HSSFWorkbook workbook, InternalSheet sheet)
         {
             this._sheet = sheet;
-            rows = new Dictionary<int, NPOI.SS.UserModel.IRow>();
+            rows = new Dictionary<int, IRow>();
             this._workbook = workbook;
             this.book = _workbook.Workbook;
             SetPropertiesFromSheet(_sheet);
@@ -154,9 +157,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="sheet">The _sheet.</param>
         private void SetPropertiesFromSheet(InternalSheet sheet)
         {
-
             RowRecord row = sheet.NextRow;
-            bool rowRecordsAlreadyPresent = row != null;
 
             while (row != null)
             {
@@ -165,7 +166,7 @@ namespace NPOI.HSSF.UserModel
                 row = sheet.NextRow;
             }
 
-            CellValueRecordInterface[] cvals = sheet.GetValueRecords();
+            var iter = sheet.GetCellValueIterator();
             long timestart = DateTime.Now.Millisecond;
 
             //if (log.Check(POILogger.DEBUG))
@@ -174,9 +175,9 @@ namespace NPOI.HSSF.UserModel
             HSSFRow lastrow = null;
 
             // Add every cell to its row
-            for (int i = 0; i < cvals.Length; i++)
+            while (iter.MoveNext())
             {
-                CellValueRecordInterface cval = cvals[i];
+                CellValueRecordInterface cval = iter.Current;
                 long cellstart = DateTime.Now.Millisecond;
                 HSSFRow hrow = lastrow;
 
@@ -283,6 +284,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="row">the row to Remove.</param>
         public void RemoveRow(IRow row)
         {
+            HSSFRow hrow = (HSSFRow)row;
             if (row.Sheet != this)
             {
                 throw new ArgumentException("Specified row does not belong to this sheet");
@@ -311,24 +313,24 @@ namespace NPOI.HSSF.UserModel
                     throw new InvalidOperationException("Specified row does not belong to this _sheet");
                 }
 
-                if (row.RowNum == LastRowNum)
+                if (hrow.RowNum == LastRowNum)
                 {
                     lastrow = FindLastRow(lastrow);
                 }
-                if (row.RowNum == FirstRowNum)
+                if (hrow.RowNum == FirstRowNum)
                 {
                     firstrow = FindFirstRow(firstrow);
                 }
-                CellValueRecordInterface[] cellvaluerecods = _sheet.GetValueRecords();
-                for (int i = 0; i < cellvaluerecods.Length; i++)
-                {
-                    if (cellvaluerecods[i].Row == key)
-                    {
-                        _sheet.RemoveValueRecord(key, cellvaluerecods[i]);
-                    }
-                }
+                //CellValueRecordInterface[] cellvaluerecods = _sheet.GetValueRecords();
+                //for (int i = 0; i < cellvaluerecods.Length; i++)
+                //{
+                //    if (cellvaluerecods[i].Row == key)
+                //    {
+                //        _sheet.RemoveValueRecord(key, cellvaluerecods[i]);
+                //    }
+                //}
 
-                _sheet.RemoveRow(((HSSFRow)row).RowRecord);
+                _sheet.RemoveRow(hrow.RowRecord);
             }
         }
 
@@ -631,57 +633,100 @@ namespace NPOI.HSSF.UserModel
 
 
         /// <summary>
-        /// Adds a merged region of cells (hence those cells form one)
+        /// Adds a merged region of cells on a sheet.
         /// </summary>
-        /// <param name="region">The region (rowfrom/colfrom-rowto/colto) to merge.</param>
+        /// <param name="region">region to merge</param>
         /// <returns>index of this region</returns>
-        [Obsolete]
-        public int AddMergedRegion(NPOI.SS.Util.Region region)
+        /// <exception cref="ArgumentException">if region contains fewer than 2 cells</exception>
+        /// <exception cref="InvalidOperationException">if region intersects with an existing merged region
+        /// or multi-cell array formula on this sheet</exception>
+        public int AddMergedRegion(CellRangeAddress region)
         {
-            return _sheet.AddMergedRegion(region.RowFrom,
-                    region.ColumnFrom,
-                    region.RowTo,
-                    region.ColumnTo);
+            return AddMergedRegion(region, true);
         }
+
+        /// <summary>
+        /// Adds a merged region of cells (hence those cells form one).
+        /// Skips validation. It is possible to create overlapping merged regions
+        /// or create a merged region that intersects a multi-cell array formula
+        /// with this formula, which may result in a corrupt workbook.
+        /// 
+        /// To check for merged regions overlapping array formulas or other merged regions
+        /// after addMergedRegionUnsafe has been called, call {@link #validateMergedRegions()}, which runs in O(n^2) time.
+        /// </summary>
+        /// <param name="region">region to merge</param>
+        /// <returns>index of this region</returns>
+        /// <exception cref="ArgumentException">if region contains fewer than 2 cells</exception>
+        public int AddMergedRegionUnsafe(CellRangeAddress region)
+        {
+            return AddMergedRegion(region, false);
+        }
+
+        /// <summary>
+        /// Verify that merged regions do not intersect multi-cell array formulas and
+        /// no merged regions intersect another merged region in this sheet.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">if region intersects with an existing merged region
+        /// or multi-cell array formula on this sheet</exception>
+        public void ValidateMergedRegions()
+        {
+            CheckForMergedRegionsIntersectingArrayFormulas();
+            CheckForIntersectingMergedRegions();
+        }
+
         /// <summary>
         /// adds a merged region of cells (hence those cells form one)
         /// </summary>
         /// <param name="region">region (rowfrom/colfrom-rowto/colto) to merge</param>
+        /// <param name="validate">whether to validate merged region</param>
         /// <returns>index of this region</returns>
-        public int AddMergedRegion(NPOI.SS.Util.CellRangeAddress region)
+        /// <exception cref="System.ArgumentException">if region contains fewer than 2 cells</exception>
+        /// <exception cref="System.InvalidOperationException">if region intersects with an existing merged region
+        /// or multi-cell array formula on this sheet</exception>
+        private int AddMergedRegion(CellRangeAddress region, bool validate)
         {
-            region.Validate(SpreadsheetVersion.EXCEL97);
-            // throw IllegalStateException if the argument CellRangeAddress intersects with
-            // a multi-cell array formula defined in this sheet
-            ValidateArrayFormulas(region);
-
+            if (region.NumberOfCells < 2)
+            {
+                throw new ArgumentException("Merged region " + region.FormatAsString() + " must contain 2 or more cells");
+            }
+            if (validate)
+            {
+                region.Validate(SpreadsheetVersion.EXCEL97);
+                // throw InvalidOperationException if the argument CellRangeAddress intersects with
+                // a multi-cell array formula defined in this sheet
+                ValidateArrayFormulas(region);
+                // Throw InvalidOperationException if the argument CellRangeAddress intersects with
+                // a merged region already in this sheet
+                ValidateMergedRegions(region);
+            }
             return _sheet.AddMergedRegion(region.FirstRow,
                     region.FirstColumn,
                     region.LastRow,
                     region.LastColumn);
         }
+       
         private void ValidateArrayFormulas(CellRangeAddress region)
         {
+            // FIXME: this may be faster if it looped over array formulas directly rather than looping over each cell in
+            // the region and searching if that cell belongs to an array formula
             int firstRow = region.FirstRow;
             int firstColumn = region.FirstColumn;
             int lastRow = region.LastRow;
             int lastColumn = region.LastColumn;
             for (int rowIn = firstRow; rowIn <= lastRow; rowIn++)
             {
+                HSSFRow row = (HSSFRow)GetRow(rowIn);
+                if (row == null)
+                    continue;
                 for (int colIn = firstColumn; colIn <= lastColumn; colIn++)
                 {
-                    HSSFRow row = (HSSFRow)GetRow(rowIn);
-                    if (row == null) continue;
-
                     HSSFCell cell = (HSSFCell)row.GetCell(colIn);
                     if (cell == null) continue;
 
                     if (cell.IsPartOfArrayFormulaGroup)
                     {
                         CellRangeAddress arrayRange = cell.ArrayFormulaRange;
-                        if (arrayRange.NumberOfCells > 1 &&
-                                (arrayRange.IsInRange(region.FirstRow, region.FirstColumn) ||
-                                  arrayRange.IsInRange(region.FirstRow, region.FirstColumn)))
+                        if (arrayRange.NumberOfCells > 1 && region.Intersects(arrayRange))
                         {
                             String msg = "The range " + region.FormatAsString() + " intersects with a multi-cell array formula. " +
                                     "You cannot merge cells of an array.";
@@ -692,6 +737,55 @@ namespace NPOI.HSSF.UserModel
             }
 
         }
+
+        /// <summary>
+        /// Verify that none of the merged regions intersect a multi-cell array formula in this sheet
+        /// </summary>
+        /// <exception cref="NPOI.Util.InvalidOperationException">if candidate region intersects an existing array formula in this sheet</exception>
+        private void CheckForMergedRegionsIntersectingArrayFormulas()
+        {
+            foreach (CellRangeAddress region in MergedRegions)
+            {
+                ValidateArrayFormulas(region);
+            }
+        }
+
+        private void ValidateMergedRegions(CellRangeAddress candidateRegion)
+        {
+            foreach (CellRangeAddress existingRegion in MergedRegions)
+            {
+                if (existingRegion.Intersects(candidateRegion))
+                {
+                    throw new InvalidOperationException("Cannot add merged region " + candidateRegion.FormatAsString() +
+                            " to sheet because it overlaps with an existing merged region (" + existingRegion.FormatAsString() + ").");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Verify that no merged regions intersect another merged region in this sheet.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">if at least one region intersects with another merged region in this sheet</exception>
+        private void CheckForIntersectingMergedRegions()
+        {
+            List<CellRangeAddress> regions = MergedRegions;
+            int size = regions.Count;
+            for (int i = 0; i < size; i++)
+            {
+                CellRangeAddress region = regions[i];
+                foreach (CellRangeAddress other in regions.GetRange(i + 1, regions.Count - i - 1))
+                {
+                    if (region.Intersects(other))
+                    {
+                        String msg = "The range " + region.FormatAsString() +
+                                    " intersects with another merged region " +
+                                    other.FormatAsString() + " in this sheet";
+                        throw new InvalidOperationException(msg);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Whether a record must be Inserted or not at generation to indicate that
         /// formula must be recalculated when _workbook is opened.
@@ -748,6 +842,34 @@ namespace NPOI.HSSF.UserModel
         public void RemoveMergedRegion(int index)
         {
             _sheet.RemoveMergedRegion(index);
+        }
+
+        /// <summary>
+        /// Removes a number of merged regions of cells (hence letting them free)
+        /// </summary>
+        /// <param name="indices">A set of the regions to unmerge</param>
+        public void RemoveMergedRegions(IList<int> indices)
+        {
+
+            SortedSet<int> ss = new SortedSet<int>(indices, new Int32Comparer());
+            //foreach (int i in (new TreeSet<Integer>(indices)).descendingSet())
+            foreach (int i in ss)
+            {
+                _sheet.RemoveMergedRegion(i);
+            }
+        }
+
+        private class Int32Comparer : IComparer<int>
+        {
+            public int Compare(int x, int y)
+            {
+                if (x < y)
+                    return 1;
+                else if (x > y)
+                    return -1;
+                else
+                    return 0;
+            }
         }
 
         /// <summary>
@@ -1019,10 +1141,20 @@ namespace NPOI.HSSF.UserModel
         }
 
         /// <summary>
+        /// get or set whether row and column headings are printed.
+        /// </summary>
+        /// <value>row and column headings are printed</value>
+        public bool IsPrintRowAndColumnHeadings
+        {
+            get { return Sheet.PrintHeaders.PrintHeaders; }
+            set { Sheet.PrintHeaders.PrintHeaders = value; }
+        }
+
+        /// <summary>
         /// Gets the print setup object.
         /// </summary>
         /// <value>The user model for the print setup object.</value>
-        public NPOI.SS.UserModel.IPrintSetup PrintSetup
+        public IPrintSetup PrintSetup
         {
             get { return new HSSFPrintSetup(this._sheet.PageSettings.PrintSetup); }
         }
@@ -1031,7 +1163,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets the user model for the document header.
         /// </summary>
         /// <value>The Document header.</value>
-        public NPOI.SS.UserModel.IHeader Header
+        public IHeader Header
         {
             get { return new HSSFHeader(this._sheet.PageSettings); }
         }
@@ -1040,7 +1172,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets the user model for the document footer.
         /// </summary>
         /// <value>The Document footer.</value>
-        public NPOI.SS.UserModel.IFooter Footer
+        public IFooter Footer
         {
             get { return new HSSFFooter(this._sheet.PageSettings); }
         }
@@ -1113,11 +1245,11 @@ namespace NPOI.HSSF.UserModel
         /// Gets the hashed password
         /// </summary>
         /// <value>The password.</value>
-        public int Password
+        public short Password
         {
             get
             {
-                return ProtectionBlock.PasswordHash;
+                return (short)ProtectionBlock.PasswordHash;
             }
         }
 
@@ -1159,6 +1291,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="numerator">The numerator for the zoom magnification.</param>
         /// <param name="denominator">The denominator for the zoom magnification.</param>
+        [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #setZoom(int)} instead.")]
         public void SetZoom(int numerator, int denominator)
         {
             if (numerator < 1 || numerator > 65535)
@@ -1171,13 +1304,36 @@ namespace NPOI.HSSF.UserModel
             sclRecord.Denominator = ((short)denominator);
             Sheet.SetSCLRecord(sclRecord);
         }
+
+        /**
+         * Window zoom magnification for current view representing percent values.
+         * Valid values range from 10 to 400. Horizontal &amp; Vertical scale together.
+         *
+         * For example:
+         * <pre>
+         * 10 - 10%
+         * 20 - 20%
+         * ...
+         * 100 - 100%
+         * ...
+         * 400 - 400%
+         * </pre>
+         *
+         * @param scale window zoom magnification
+         * @throws IllegalArgumentException if scale is invalid
+         */   
+        public void SetZoom(int scale)
+        {
+            SetZoom(scale, 100);
+        }
+
         /// <summary>
         /// Sets the enclosed border of region.
         /// </summary>
         /// <param name="region">The region.</param>
         /// <param name="borderType">Type of the border.</param>
         /// <param name="color">The color.</param>
-        public void SetEnclosedBorderOfRegion(CellRangeAddress region, NPOI.SS.UserModel.BorderStyle borderType, short color)
+        public void SetEnclosedBorderOfRegion(CellRangeAddress region, BorderStyle borderType, short color)
         {
             HSSFRegionUtil.SetRightBorderColor(color, region, this, _workbook);
             HSSFRegionUtil.SetBorderRight(borderType, region, this, _workbook);
@@ -1194,7 +1350,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="region">The region.</param>
         /// <param name="borderType">Type of the border.</param>
         /// <param name="color">The color.</param>
-        public void SetBorderRightOfRegion(CellRangeAddress region, NPOI.SS.UserModel.BorderStyle borderType, short color)
+        public void SetBorderRightOfRegion(CellRangeAddress region, BorderStyle borderType, short color)
         {
             HSSFRegionUtil.SetRightBorderColor(color, region, this, _workbook);
             HSSFRegionUtil.SetBorderRight(borderType, region, this, _workbook);
@@ -1206,7 +1362,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="region">The region.</param>
         /// <param name="borderType">Type of the border.</param>
         /// <param name="color">The color.</param>
-        public void SetBorderLeftOfRegion(CellRangeAddress region, NPOI.SS.UserModel.BorderStyle borderType, short color)
+        public void SetBorderLeftOfRegion(CellRangeAddress region, BorderStyle borderType, short color)
         {
             HSSFRegionUtil.SetLeftBorderColor(color, region, this, _workbook);
             HSSFRegionUtil.SetBorderLeft(borderType, region, this, _workbook);
@@ -1218,7 +1374,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="region">The region.</param>
         /// <param name="borderType">Type of the border.</param>
         /// <param name="color">The color.</param>
-        public void SetBorderTopOfRegion(CellRangeAddress region, NPOI.SS.UserModel.BorderStyle borderType, short color)
+        public void SetBorderTopOfRegion(CellRangeAddress region, BorderStyle borderType, short color)
         {
             HSSFRegionUtil.SetTopBorderColor(color, region, this, _workbook);
             HSSFRegionUtil.SetBorderTop(borderType, region, this, _workbook);
@@ -1230,7 +1386,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="region">The region.</param>
         /// <param name="borderType">Type of the border.</param>
         /// <param name="color">The color.</param>
-        public void SetBorderBottomOfRegion(CellRangeAddress region, NPOI.SS.UserModel.BorderStyle borderType, short color)
+        public void SetBorderBottomOfRegion(CellRangeAddress region, BorderStyle borderType, short color)
         {
             HSSFRegionUtil.SetBottomBorderColor(color, region, this, _workbook);
             HSSFRegionUtil.SetBorderBottom(borderType, region, this, _workbook);
@@ -1303,57 +1459,13 @@ namespace NPOI.HSSF.UserModel
         /// <param name="endRow">The end row.</param>
         /// <param name="n">The n.</param>
         /// <param name="IsRow">if set to <c>true</c> [is row].</param>
+        [Obsolete("deprecated POI 3.15 beta 2. This will be made private in future releases.")]
         protected void ShiftMerged(int startRow, int endRow, int n, bool IsRow)
         {
-            List<CellRangeAddress> ShiftedRegions = new List<CellRangeAddress>();
-            //move merged regions completely if they fall within the new region boundaries when they are Shifted
-            for (int i = 0; i < this.NumMergedRegions; i++)
-            {
-                NPOI.SS.Util.CellRangeAddress merged = this.GetMergedRegion(i);
-
-                bool inStart = (merged.FirstRow >= startRow || merged.LastRow >= startRow);
-                bool inEnd = (merged.FirstRow <= endRow || merged.LastRow <= endRow);
-
-
-                //dont Check if it's not within the Shifted area
-                if (!(inStart && inEnd)) continue;
-
-                //only Shift if the region outside the Shifted rows is not merged too
-                //if (!ContainsCell(merged, startRow - 1, 0) && !ContainsCell(merged, endRow + 1, 0))
-                if (!SheetUtil.ContainsCell(merged, startRow - 1, 0) &&
-                 !SheetUtil.ContainsCell(merged, endRow + 1, 0))
-                {
-                    merged.FirstRow = (merged.FirstRow + n);
-                    merged.LastRow = (merged.LastRow + n);
-                    //have to Remove/Add it back
-                    ShiftedRegions.Add(merged);
-                    this.RemoveMergedRegion(i);
-                    i = i - 1; // we have to back up now since we Removed one
-
-                }
-
-            }
-
-            //Readd so it doesn't Get Shifted again
-            IEnumerator iterator = ShiftedRegions.GetEnumerator();
-            while (iterator.MoveNext())
-            {
-                NPOI.SS.Util.CellRangeAddress region = (NPOI.SS.Util.CellRangeAddress)iterator.Current;
-
-                this.AddMergedRegion(region);
-            }
-
+            RowShifter rowShifter = new HSSFRowShifter(this);
+            rowShifter.ShiftMergedRegions(startRow, endRow, n);
         }
-        [Obsolete]
-        private static bool ContainsCell(NPOI.SS.Util.CellRangeAddress cr, int rowIx, int colIx)
-        {
-            if (cr.FirstRow <= rowIx && cr.LastRow >= rowIx
-                    && cr.FirstColumn <= colIx && cr.LastColumn >= colIx)
-            {
-                return true;
-            }
-            return false;
-        }
+
         /// <summary>
         /// Shifts rows between startRow and endRow n number of rows.
         /// If you use a negative number, it will Shift rows up.
@@ -1404,6 +1516,10 @@ namespace NPOI.HSSF.UserModel
             bool copyRowHeight, bool resetOriginalRowHeight, bool moveComments)
         {
             int s, inc;
+            if (endRow < startRow)
+            {
+                throw new ArgumentException("startRow must be less than or equal to endRow. To shift rows up, use n<0.");
+            }
             if (n < 0)
             {
                 s = startRow;
@@ -1421,6 +1537,7 @@ namespace NPOI.HSSF.UserModel
             }
 
             NoteRecord[] noteRecs;
+            // Shift comments
             if (moveComments)
             {
                 noteRecs = _sheet.GetNoteRecords();
@@ -1429,16 +1546,34 @@ namespace NPOI.HSSF.UserModel
             {
                 noteRecs = NoteRecord.EMPTY_ARRAY;
             }
+            RowShifter rowShifter = new HSSFRowShifter(this);
+            // Shift Merged Regions
+            rowShifter.ShiftMergedRegions(startRow, endRow, n);
 
-            ShiftMerged(startRow, endRow, n, true);
+            // Shift Row Breaks
             _sheet.PageSettings.ShiftRowBreaks(startRow, endRow, n);
+
+            // Delete overwritten hyperlinks
+            int firstOverwrittenRow = startRow + n;
+            int lastOverwrittenRow = endRow + n;
+            foreach (HSSFHyperlink link in GetHyperlinkList())
+            {
+                // If hyperlink is fully contained in the rows that will be overwritten, delete the hyperlink
+                if (firstOverwrittenRow <= link.FirstRow &&
+                        link.FirstRow <= lastOverwrittenRow &&
+                        lastOverwrittenRow <= link.LastRow &&
+                        link.LastRow <= lastOverwrittenRow)
+                {
+                    RemoveHyperlink(link);
+                }
+            }
 
             for (int rowNum = s; rowNum >= startRow && rowNum <= endRow && rowNum >= 0 && rowNum < 65536; rowNum += inc)
             {
                 HSSFRow row = (HSSFRow)GetRow(rowNum);
 
                 // notify all cells in this row that we are going to shift them,
-                // it can throw IllegalStateException if the operation is not allowed, for example,
+                // it can throw InvalidOperationException if the operation is not allowed, for example,
                 // if the row contains cells included in a multi-cell array formula
                 if (row != null) NotifyRowShifting(row);
 
@@ -1448,7 +1583,7 @@ namespace NPOI.HSSF.UserModel
 
 
                 // Remove all the old cells from the row we'll
-                //  be writing too, before we start overwriting 
+                //  be writing to, before we start overwriting 
                 //  any cells. This avoids issues with cells 
                 //  changing type, and records not being correctly
                 //  overwritten
@@ -1475,12 +1610,12 @@ namespace NPOI.HSSF.UserModel
                 foreach (ICell cell in cells)
                 {
                     row.RemoveCell(cell);
+                    IHyperlink link = cell.Hyperlink;
                     CellValueRecordInterface cellRecord = ((HSSFCell)cell).CellValueRecord;
                     cellRecord.Row = (rowNum + n);
                     row2Replace.CreateCellFromRecord(cellRecord);
                     _sheet.AddValueRecord(rowNum + n, cellRecord);
 
-                    NPOI.SS.UserModel.IHyperlink link = cell.Hyperlink;
                     if (link != null)
                     {
                         link.FirstRow = (link.FirstRow + n);
@@ -1497,7 +1632,8 @@ namespace NPOI.HSSF.UserModel
                 {
                     // This code would get simpler if NoteRecords could be organised by HSSFRow.
                     HSSFPatriarch patriarch = CreateDrawingPatriarch() as HSSFPatriarch;
-                    for (int i = patriarch.Children.Count - 1; i >= 0; i--)
+                    int lastChildIndex = patriarch.Children.Count - 1;
+                    for (int i = lastChildIndex; i >= 0; i--)
                     {
                         HSSFShape shape = patriarch.Children[(i)];
                         if (!(shape is HSSFComment))
@@ -1564,7 +1700,7 @@ namespace NPOI.HSSF.UserModel
             int sheetIndex = _workbook.GetSheetIndex(this);
             String sheetName = _workbook.GetSheetName(sheetIndex);
             int externSheetIndex = book.CheckExternSheet(sheetIndex);
-            FormulaShifter shifter = FormulaShifter.CreateForRowShift(externSheetIndex,sheetName, startRow, endRow, n);
+            FormulaShifter shifter = FormulaShifter.CreateForRowShift(externSheetIndex, sheetName, startRow, endRow, n, SpreadsheetVersion.EXCEL97);
             _sheet.UpdateFormulasAfterCellShift(shifter, externSheetIndex);
 
             int nSheets = _workbook.NumberOfSheets;
@@ -1850,10 +1986,9 @@ namespace NPOI.HSSF.UserModel
             _sheet.AggregateDrawingRecords(book.DrawingManager, false);
 
             EscherAggregate r = (EscherAggregate)Sheet.FindFirstRecordBySid(EscherAggregate.sid);
-            IList escherRecords = r.EscherRecords;
-            for (IEnumerator iterator = escherRecords.GetEnumerator(); iterator.MoveNext(); )
+            var escherRecords = r.EscherRecords;
+            foreach (EscherRecord escherRecord in escherRecords)
             {
-                EscherRecord escherRecord = (EscherRecord)iterator.Current;
                 if (fat)
                     Console.WriteLine(escherRecord.ToString());
                 else
@@ -1896,8 +2031,7 @@ namespace NPOI.HSSF.UserModel
                 }
 
                 // Grab our aggregate record, and wire it up
-                EscherAggregate agg = (EscherAggregate)_sheet.FindFirstRecordBySid(EscherAggregate.sid);
-                return agg;
+                return (EscherAggregate)_sheet.FindFirstRecordBySid(EscherAggregate.sid);
             }
         }
 
@@ -1931,7 +2065,7 @@ namespace NPOI.HSSF.UserModel
 
         private HSSFPatriarch GetPatriarch(bool createIfMissing)
         {
-            HSSFPatriarch patriarch = null;
+            
             if (_patriarch != null)
             {
                 return _patriarch;
@@ -1959,7 +2093,7 @@ namespace NPOI.HSSF.UserModel
                     {
                         pos = _sheet.AggregateDrawingRecords(dm, true);
                         agg = (EscherAggregate)_sheet.Records[pos];
-                        patriarch = new HSSFPatriarch(this, agg);
+                        HSSFPatriarch patriarch = new HSSFPatriarch(this, agg);
                         patriarch.AfterCreate();
                         return patriarch;
                     }
@@ -2218,6 +2352,24 @@ namespace NPOI.HSSF.UserModel
         {
             return _sheet.GetMergedRegionAt(index);
         }
+
+        /// <summary>
+        /// get the list of merged regions
+        /// </summary>
+        /// <returns>return the list of merged regions</returns>
+        public List<CellRangeAddress> MergedRegions
+        {
+            get
+            {
+                List<CellRangeAddress> addresses = new List<CellRangeAddress>();
+                int count = _sheet.NumMergedRegions;
+                for (int i = 0; i < count; i++)
+                {
+                    addresses.Add(_sheet.GetMergedRegionAt(i));
+                }
+                return addresses;
+            }
+        }
         /// <summary>
         /// Convert HSSFFont to Font.
         /// </summary>
@@ -2234,9 +2386,104 @@ namespace NPOI.HSSF.UserModel
         /// <param name="row">The row.</param>
         /// <param name="column">The column.</param>
         /// <returns>cell comment or null if not found</returns>
+        [Obsolete("deprecated as of 2015-11-23 (circa POI 3.14beta1). Use {@link #getCellComment(CellAddress)} instead.")]
         public IComment GetCellComment(int row, int column)
         {
             return FindCellComment(row, column);
+        }
+
+        /// <summary>
+        /// Returns cell comment for the specified row and column
+        /// </summary>
+        /// <param name="ref1">cell location</param>
+        /// <returns>return cell comment or null if not found</returns>
+        public IComment GetCellComment(CellAddress ref1)
+        {
+            return FindCellComment(ref1.Row, ref1.Column);
+        }
+
+        /// <summary>
+        /// Get a Hyperlink in this sheet anchored at row, column
+        /// </summary>
+        /// <param name="row">The index of the row of the hyperlink, zero-based</param>
+        /// <param name="column">the index of the column of the hyperlink, zero-based</param>
+        /// <returns>return hyperlink if there is a hyperlink anchored at row, column; otherwise returns null</returns>
+        public IHyperlink GetHyperlink(int row, int column)
+        {
+            foreach (RecordBase rec in _sheet.Records)
+            {
+                if (rec is HyperlinkRecord)
+                {
+                    HyperlinkRecord link = (HyperlinkRecord)rec;
+                    if (link.FirstColumn == column && link.FirstRow == row)
+                    {
+                        return new HSSFHyperlink(link);
+                    }
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Get a Hyperlink in this sheet located in a cell specified by {code addr}
+        /// </summary>
+        /// <param name="addr">The address of the cell containing the hyperlink</param>
+        /// <returns>return hyperlink if there is a hyperlink anchored at {@code addr}; otherwise returns {@code null}</returns>
+        public IHyperlink GetHyperlink(CellAddress addr)
+        {
+            return GetHyperlink(addr.Row, addr.Column);
+        }
+
+        /**
+         * Get a list of Hyperlinks in this sheet
+         *
+         * @return Hyperlinks for the sheet
+         */
+
+        public List<IHyperlink> GetHyperlinkList()
+        {
+            List<IHyperlink> hyperlinkList = new List<IHyperlink>();
+            foreach (RecordBase rec in _sheet.Records)
+            {
+                if (rec is HyperlinkRecord){
+                    HyperlinkRecord link = (HyperlinkRecord)rec;
+                    hyperlinkList.Add(new HSSFHyperlink(link));
+                }
+            }
+            return hyperlinkList;
+        }
+
+        /**
+         * Remove the underlying HyperlinkRecord from this sheet.
+         * If multiple HSSFHyperlinks refer to the same HyperlinkRecord, all HSSFHyperlinks will be removed.
+         *
+         * @param link the HSSFHyperlink wrapper around the HyperlinkRecord to remove
+         */
+        protected void RemoveHyperlink(HSSFHyperlink link) {
+            RemoveHyperlink(link.record);
+        }
+
+        /**
+         * Remove the underlying HyperlinkRecord from this sheet
+         *
+         * @param link the underlying HyperlinkRecord to remove from this sheet
+         */
+        protected void RemoveHyperlink(HyperlinkRecord link)
+        {
+            for (int i = 0; i < _sheet.Records.Count; i++)
+            {
+                RecordBase rec = _sheet.Records[i];
+                if (rec is HyperlinkRecord)
+                {
+                    HyperlinkRecord recLink = (HyperlinkRecord)rec;
+                    if (link == recLink)
+                    {
+                        _sheet.Records.RemoveAt(i);
+                        // if multiple HSSFHyperlinks refer to the same record
+                        return;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -2340,7 +2587,9 @@ namespace NPOI.HSSF.UserModel
 
             //create a combobox control for each column
             HSSFPatriarch p = (HSSFPatriarch)CreateDrawingPatriarch();
-            for (int col = range.FirstColumn; col <= range.LastColumn; col++)
+            int firstColumn = range.FirstColumn;
+            int lastColumn = range.LastColumn;
+            for (int col = firstColumn; col <= lastColumn; col++)
             {
                 p.CreateComboBox(new HSSFClientAnchor(0, 0, 0, 0,
                         (short)col, firstRow, (short)(col + 1), firstRow + 1));
@@ -2384,6 +2633,51 @@ namespace NPOI.HSSF.UserModel
             }
             return null;
         }
+
+        /// <summary>
+        /// Returns all cell comments on this sheet.
+        /// </summary>
+        /// <returns>return A Dictionary of each Comment in the sheet, keyed on the cell address where the comment is located.</returns>
+        public Dictionary<CellAddress, IComment> GetCellComments()
+        {
+            HSSFPatriarch patriarch = DrawingPatriarch as HSSFPatriarch;
+            if (null == patriarch)
+            {
+                patriarch = CreateDrawingPatriarch() as HSSFPatriarch;
+            }
+
+            Dictionary<CellAddress, IComment> locations = new Dictionary<CellAddress, IComment>();
+            FindCellCommentLocations(patriarch, locations);
+            return locations;
+        }
+
+        /**
+         * Finds all cell comments in this sheet and adds them to the specified locations map
+         *
+         * @param container a container that may contain HSSFComments
+         * @param locations the map to store the HSSFComments in
+         */
+        private void FindCellCommentLocations(HSSFShapeContainer container, Dictionary<CellAddress, IComment> locations)
+        {
+            foreach (object obj in container.Children)
+            {
+                HSSFShape shape = (HSSFShape)obj;
+                if (shape is HSSFShapeGroup)
+                {
+                    FindCellCommentLocations((HSSFShapeGroup)shape, locations);
+                    continue;
+                }
+                if (shape is HSSFComment)
+                {
+                    HSSFComment comment = (HSSFComment)shape;
+                    if (comment.HasPosition)
+                    {
+                        locations.Add(new CellAddress(comment.Row, comment.Column), comment);
+                    }
+                }
+            }
+        }
+
         public CellRangeAddress RepeatingRows
         {
             get
@@ -2529,9 +2823,8 @@ namespace NPOI.HSSF.UserModel
                     {
                         if (rows)
                         {
-                            CellRangeAddress rowRange = new CellRangeAddress(
+                            return new CellRangeAddress(
                                 areaPtg.FirstRow, areaPtg.LastRow, -1, -1);
-                            return rowRange;
                         }
                     }
                     else if (areaPtg.FirstRow == 0
@@ -2539,9 +2832,8 @@ namespace NPOI.HSSF.UserModel
                     {
                         if (!rows)
                         {
-                            CellRangeAddress columnRange = new CellRangeAddress(-1, -1,
+                            return new CellRangeAddress(-1, -1,
                                 areaPtg.FirstColumn, areaPtg.LastColumn);
-                            return columnRange;
                         }
                     }
 
@@ -2607,7 +2899,6 @@ namespace NPOI.HSSF.UserModel
             return CopySheet(Name, true);
         }
 
-
         public ISheet CopySheet(String Name, Boolean copyStyle)
         {
             int maxColumnNum = 0;
@@ -2652,22 +2943,22 @@ namespace NPOI.HSSF.UserModel
             newSheet.PrintSetup.FitWidth = PrintSetup.FitWidth;
             return newSheet;
         }
-
-        public void CopyTo(HSSFWorkbook dest, String name, Boolean copyStyle, Boolean keepFormulas)
+        public void CopyTo(IWorkbook dest, String name, Boolean copyStyle, Boolean keepFormulas)
         {
             int maxColumnNum = 0;
             HSSFSheet newSheet = (HSSFSheet)dest.CreateSheet(name);
             newSheet._sheet = Sheet.CloneSheet();
+            var internalWorkbook=((HSSFWorkbook)dest).Workbook;
             Dictionary<short, short> paletteMap = new Dictionary<short, short>();
             if (dest.NumberOfSheets == 1)
             {
                 //Replace the color palette with the palette from the source, since this is the first sheet
-                dest.Workbook.CustomPalette.ClearColors();
-                paletteMap = MergePalettes(Workbook as HSSFWorkbook, dest);
+                internalWorkbook.CustomPalette.ClearColors();
+                paletteMap = MergePalettes(Workbook as HSSFWorkbook, dest as HSSFWorkbook);
             }
             else if (dest != Workbook)
             {
-                paletteMap = MergePalettes(Workbook as HSSFWorkbook, dest);
+                paletteMap = MergePalettes(Workbook as HSSFWorkbook, dest as HSSFWorkbook);
             }
             IDictionary<Int32, HSSFCellStyle> styleMap = (copyStyle) ? new Dictionary<Int32, HSSFCellStyle>() : null;
             for (int i = FirstRowNum; i <= LastRowNum; i++)
@@ -2709,9 +3000,10 @@ namespace NPOI.HSSF.UserModel
             EscherAggregate escher = DrawingEscherAggregate;
             if (escher != null)
             {
-                if (dest.Workbook.DrawingManager == null)
+                
+                if (internalWorkbook.DrawingManager == null)
                 {
-                    dest.Workbook.CreateDrawingGroup();
+                    internalWorkbook.CreateDrawingGroup();
                 }
                 EscherAggregate destEscher = newSheet.DrawingEscherAggregate;
                 //Note: This logic assumes that image id's go from 1 to N in the source document. It usually does
@@ -2808,7 +3100,6 @@ namespace NPOI.HSSF.UserModel
                 }
             }
         }
-
         private static Dictionary<short,short> MergePalettes(HSSFWorkbook source, HSSFWorkbook dest)
         {
             Dictionary<short, short> retval = new Dictionary<short, short>();
@@ -2836,7 +3127,6 @@ namespace NPOI.HSSF.UserModel
             }
             return retval;
         }
-
         private static void CopyRow(HSSFSheet srcSheet, HSSFSheet destSheet, HSSFRow srcRow, HSSFRow destRow, IDictionary<Int32, HSSFCellStyle> styleMap, Dictionary<short, short> paletteMap, bool keepFormulas)
         {
             List<SS.Util.CellRangeAddress> mergedRegions = destSheet.Sheet.MergedRecords.MergedRegions;
@@ -2863,12 +3153,12 @@ namespace NPOI.HSSF.UserModel
                     {
                         CellRangeAddress newMergedRegion = new CellRangeAddress(mergedRegion.FirstRow,
                                 mergedRegion.LastRow, mergedRegion.FirstColumn, mergedRegion.LastColumn);
-
                         if (IsNewMergedRegion(newMergedRegion, mergedRegions))
                         {
                             mergedRegions.Add(newMergedRegion);
                         }
                     }
+
                 }
             }
         }
@@ -2925,6 +3215,23 @@ namespace NPOI.HSSF.UserModel
         public bool IsDate1904()
         {
             throw new NotImplementedException();
+        }
+
+        public CellAddress ActiveCell
+        {
+            get
+            {
+                int row = _sheet.ActiveCellRow;
+                int col = _sheet.ActiveCellCol;
+                return new CellAddress(row, col);
+            }
+            set
+            {
+                int row = value.Row;
+                short col = (short)value.Column;
+                _sheet.ActiveCellRow = row;
+                _sheet.ActiveCellCol = col;
+            }
         }
     }
 }

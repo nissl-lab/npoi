@@ -42,9 +42,17 @@ namespace NPOI.XSSF.UserModel
         private static byte[] BLANK_WORKSHEET = blankWorksheet();
 
         protected CT_Chartsheet chartsheet;
-
+        /**
+         * @since POI 3.14-Beta1
+         */
+        protected XSSFChartSheet(PackagePart part)
+            : base(part)
+        {
+            
+        }
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
         protected XSSFChartSheet(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+            : base(part)
         {
 
         }

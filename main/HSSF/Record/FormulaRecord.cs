@@ -202,7 +202,7 @@ namespace NPOI.HSSF.Record
      * @version 2.0-pre
      */
     [Serializable]
-    public class FormulaRecord : CellRecord
+    public class FormulaRecord : CellRecord, ICloneable
     {
 
         public const short sid = 0x06;   // docs say 406...because of a bug Microsoft support site article #Q184647)

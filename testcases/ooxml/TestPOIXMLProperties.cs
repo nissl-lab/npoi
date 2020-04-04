@@ -15,16 +15,18 @@
   limitations under the License.
 ==================================================================== */
 
-namespace NPOI
+namespace TestCases
 {
 
-    using System;
-    using NUnit.Framework;
-    using NPOI.XSSF.UserModel;
+    using NPOI;
     using NPOI.OpenXmlFormats;
+    using NPOI.Util;
     using NPOI.XSSF;
+    using NPOI.XSSF.UserModel;
     using NPOI.XWPF.UserModel;
-    using NPOI.XWPF;
+    using NUnit.Framework;
+    using System;
+    using TestCases.XWPF;
 
     /**
      * Test Setting extended and custom OOXML properties
@@ -32,17 +34,31 @@ namespace NPOI
     [TestFixture]
     public class TestPOIXMLProperties
     {
+        private XWPFDocument sampleDoc;
+        private XWPFDocument sampleNoThumb;
         private POIXMLProperties _props;
         private CoreProperties _coreProperties;
 
         [SetUp]
         public void SetUp()
         {
-            XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("documentProperties.docx");
+            sampleDoc = XWPFTestDataSamples.OpenSampleDocument("documentProperties.docx");
+            sampleNoThumb = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
+            Assert.IsNotNull(sampleDoc);
+            Assert.IsNotNull(sampleNoThumb);
             _props = sampleDoc.GetProperties();
             _coreProperties = _props.CoreProperties;
             Assert.IsNotNull(_props);
         }
+
+
+        [TearDown]
+        public void closeResources()
+        {
+            sampleDoc.Close();
+            sampleNoThumb.Close();
+        }
+
         [Test]
         public void TestWorkbookExtendedProperties()
         {
@@ -63,13 +79,9 @@ namespace NPOI
             ctProps.Application = (application);
             ctProps.AppVersion = (appVersion);
 
-            ctProps = null;
-            properties = null;
-            props = null;
-
             XSSFWorkbook newWorkbook =
                     (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
-
+            workbook.Close();
             Assert.IsTrue(workbook != newWorkbook);
 
 
@@ -88,7 +100,7 @@ namespace NPOI
             Assert.AreEqual(application, newCtProps.Application);
             Assert.AreEqual(appVersion, newCtProps.AppVersion);
 
-
+            newWorkbook.Close();
         }
 
 
@@ -98,9 +110,9 @@ namespace NPOI
         [Test]
         public void TestCustomProperties()
         {
-            POIXMLDocument wb = new XSSFWorkbook();
+            POIXMLDocument wb1 = new XSSFWorkbook();
 
-            CustomProperties customProps = wb.GetProperties().CustomProperties;
+            CustomProperties customProps = wb1.GetProperties().CustomProperties;
             customProps.AddProperty("test-1", "string val");
             customProps.AddProperty("test-2", 1974);
             customProps.AddProperty("test-3", 36.6);
@@ -116,9 +128,11 @@ namespace NPOI
             }
             customProps.AddProperty("test-4", true);
 
-            wb = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack((XSSFWorkbook)wb);
+            POIXMLDocument wb2 = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack((XSSFWorkbook)wb1);
+            wb1.Close();
+
             CT_CustomProperties ctProps =
-                    wb.GetProperties().CustomProperties.GetUnderlyingProperties();
+                    wb2.GetProperties().CustomProperties.GetUnderlyingProperties();
             Assert.AreEqual(6, ctProps.sizeOfPropertyArray());
             CT_Property p;
 
@@ -155,6 +169,8 @@ namespace NPOI
             //Assert.AreEqual("Generator Version", p.name);
             //Assert.AreEqual("2.0.9", p.Item);
             //Assert.AreEqual(7, p.pid);
+
+            wb2.Close();
         }
         [Ignore("test")]
         public void TestDocumentProperties()
@@ -184,13 +200,15 @@ namespace NPOI
             cp.Created = new DateTime(2010, 6, 15, 10, 0, 0);
             Assert.AreEqual(dateCreated.ToString(), cp.Created.ToString());
 
-            doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
-            cp = doc.GetProperties().CoreProperties;
+            XWPFDocument doc2 = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            doc.Close();
+            cp = doc2.GetProperties().CoreProperties;
             DateTime? dt3 = cp.Created;
             Assert.AreEqual(dateCreated.ToString(), dt3.ToString());
 
+            doc2.Close();
         }
-        [Ignore("test")]
+        [Test]
         public void TestGetSetRevision()
         {
             String revision = _coreProperties.Revision;
@@ -201,12 +219,56 @@ namespace NPOI
             Assert.AreEqual("20", _coreProperties.Revision);
         }
 
+        [Test]
+        public void TestLastModifiedByProperty()
+        {
+            String lastModifiedBy = _coreProperties.LastModifiedByUser;
+            Assert.AreEqual("Paolo Mottadelli", lastModifiedBy);
+            _coreProperties.LastModifiedByUser = "Test User";
+            Assert.AreEqual("Test User", _coreProperties.LastModifiedByUser);
+        }
+
+
         public static bool DateTimeEqualToUTCString(DateTime? dateTime, String utcString)
         {
             DateTime utcDt = DateTime.SpecifyKind((DateTime)dateTime, DateTimeKind.Utc);
             string dateTimeUtcString = utcDt.ToString("yyyy-MM-ddThh:mm:ssZ");
             return utcString.Equals(dateTimeUtcString);
         }
+
+        [Test]
+        public void TestThumbnails()
+        {
+            POIXMLProperties noThumbProps = sampleNoThumb.GetProperties();
+
+            Assert.IsNotNull(_props.ThumbnailPart);
+            Assert.IsNull(noThumbProps.ThumbnailPart);
+
+            Assert.IsNotNull(_props.ThumbnailFilename);
+            Assert.IsNull(noThumbProps.ThumbnailFilename);
+
+            Assert.IsNotNull(_props.ThumbnailImage);
+            Assert.IsNull(noThumbProps.ThumbnailImage);
+
+            Assert.AreEqual("thumbnail.jpeg", _props.ThumbnailFilename);
+
+
+            // Adding / changing
+            noThumbProps.SetThumbnail("Testing.png", new ByteArrayInputStream(new byte[1]));
+            Assert.IsNotNull(noThumbProps.ThumbnailPart);
+            Assert.AreEqual("Testing.png", noThumbProps.ThumbnailFilename);
+            Assert.IsNotNull(noThumbProps.ThumbnailImage);
+            //Assert.AreEqual(1, noThumbProps.ThumbnailImage.Available());
+            Assert.AreEqual(1, noThumbProps.ThumbnailImage.Length - noThumbProps.ThumbnailImage.Position);
+
+            noThumbProps.SetThumbnail("Testing2.png", new ByteArrayInputStream(new byte[2]));
+            Assert.IsNotNull(noThumbProps.ThumbnailPart);
+            Assert.AreEqual("Testing.png", noThumbProps.ThumbnailFilename);
+            Assert.IsNotNull(noThumbProps.ThumbnailImage);
+            //Assert.AreEqual(2, noThumbProps.ThumbnailImage.Available());
+            Assert.AreEqual(2, noThumbProps.ThumbnailImage.Length - noThumbProps.ThumbnailImage.Position);
+        }
+
 
         private static String ZeroPad(long i)
         {

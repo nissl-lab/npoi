@@ -28,7 +28,7 @@ namespace NPOI.HSSF.Record
      * NOTE: This source was automatically generated.
      * @author Shawn Laubach (slaubach at apache dot org)
      */
-    public class LeftMarginRecord : StandardRecord, IMargin
+    public class LeftMarginRecord : StandardRecord, IMargin, ICloneable
     {
         public const short sid = 0x26;
         private double field_1_margin;

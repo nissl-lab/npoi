@@ -22,7 +22,10 @@ using NPOI.SS.Util;
 using System;
 using System.Collections.Generic;
 using TestCases.HSSF;
-namespace NPOI.XSSF.UserModel
+using NPOI.XSSF;
+using NPOI.XSSF.UserModel;
+
+namespace TestCases.XSSF.UserModel
 {
 
     [TestFixture]
@@ -57,14 +60,16 @@ namespace NPOI.XSSF.UserModel
 
             // Get B3 and Evaluate it in the cell
             ICell b3 = sheet.GetRow(2).GetCell(1);
-            Assert.AreEqual(result, Evaluator.EvaluateInCell(b3).NumericCellValue);
+            Assert.AreEqual(result, Evaluator.EvaluateInCell(b3).NumericCellValue, 0);
 
             //at this point the master formula is gone, but we are still able to Evaluate dependent cells
             ICell c3 = sheet.GetRow(2).GetCell(2);
-            Assert.AreEqual(result, Evaluator.EvaluateInCell(c3).NumericCellValue);
+            Assert.AreEqual(result, Evaluator.EvaluateInCell(c3).NumericCellValue, 0);
 
             ICell d3 = sheet.GetRow(2).GetCell(3);
-            Assert.AreEqual(result, Evaluator.EvaluateInCell(d3).NumericCellValue);
+            Assert.AreEqual(result, Evaluator.EvaluateInCell(d3).NumericCellValue, 0);
+
+            wb.Close();
         }
 
         /**
@@ -95,9 +100,10 @@ namespace NPOI.XSSF.UserModel
 
                 CellValue cv_noformula = Evaluator.Evaluate(cell_noformula);
                 CellValue cv_formula = Evaluator.Evaluate(cell_formula);
-                Assert.AreEqual(cv_noformula.NumberValue, cv_formula.NumberValue, "Wrong Evaluation result in " + ref_formula.FormatAsString());
+                Assert.AreEqual(cv_noformula.NumberValue, cv_formula.NumberValue, 0, "Wrong Evaluation result in " + ref_formula.FormatAsString());
             }
 
+            wb.Close();
         }
 
         /**
@@ -123,7 +129,7 @@ namespace NPOI.XSSF.UserModel
 
             Assert.AreEqual("Hello!", cXSLX_cell.StringCellValue);
             Assert.AreEqual("Test A1", cXSLX_sNR.StringCellValue);
-            Assert.AreEqual(142.0, cXSLX_gNR.NumericCellValue);
+            Assert.AreEqual(142.0, cXSLX_gNR.NumericCellValue, 0);
 
             // References to a .xls file
             IRow rXSL = s.GetRow(4);
@@ -136,7 +142,7 @@ namespace NPOI.XSSF.UserModel
 
             Assert.AreEqual("Hello!", cXSL_cell.StringCellValue);
             Assert.AreEqual("Test A1", cXSL_sNR.StringCellValue);
-            Assert.AreEqual(142.0, cXSL_gNR.NumericCellValue);
+            Assert.AreEqual(142.0, cXSL_gNR.NumericCellValue, 0);
 
             // Try to Evaluate without references, won't work
             // (At least, not unit we fix bug #56752 that is1)
@@ -146,7 +152,9 @@ namespace NPOI.XSSF.UserModel
                 Assert.Fail("Without a fix for #56752, shouldn't be able to Evaluate a " +
                      "reference to a non-provided linked workbook");
             }
-            catch (Exception e) { }
+            catch (Exception)
+            {
+            }
 
             // Setup the environment
             Dictionary<String, IFormulaEvaluator> evaluators = new Dictionary<String, IFormulaEvaluator>();
@@ -167,6 +175,22 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
+            // And evaluate the other way too
+            evaluator.EvaluateAll();
+
+            // Static evaluator won't work, as no references passed in
+            try
+            {
+                XSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
+                Assert.Fail("Static method lacks references, shouldn't work");
+            }
+            catch (Exception)
+            {
+                // expected here
+            }
+
+
+            // Evaluate specific cells and check results
             Assert.AreEqual("\"Hello!\"", evaluator.Evaluate(cXSLX_cell).FormatAsString());
             Assert.AreEqual("\"Test A1\"", evaluator.Evaluate(cXSLX_sNR).FormatAsString());
             //Assert.AreEqual("142.0", evaluator.Evaluate(cXSLX_gNR).FormatAsString());
@@ -179,46 +203,54 @@ namespace NPOI.XSSF.UserModel
 
             // Add another formula referencing these workbooks
             ICell cXSL_cell2 = rXSL.CreateCell(40);
-            cXSL_cell2.CellFormula=(/*setter*/"[56737.xls]Uses!$C$1");
+            cXSL_cell2.CellFormula = (/*setter*/"[56737.xls]Uses!$C$1");
             // TODO Shouldn't it become [2] like the others?
             Assert.AreEqual("[56737.xls]Uses!$C$1", cXSL_cell2.CellFormula);
-            Assert.AreEqual("\"Hello!\"",  evaluator.Evaluate(cXSL_cell2).FormatAsString());
-        
-        
+            Assert.AreEqual("\"Hello!\"", evaluator.Evaluate(cXSL_cell2).FormatAsString());
+
+
             // Now add a formula that refers to yet another (different) workbook
             // Won't work without the workbook being linked
             ICell cXSLX_nw_cell = rXSLX.CreateCell(42);
-            try {
-                cXSLX_nw_cell.CellFormula=(/*setter*/"[alt.xlsx]Sheet1!$A$1");
+            try
+            {
+                cXSLX_nw_cell.CellFormula = (/*setter*/"[alt.xlsx]Sheet1!$A$1");
                 Assert.Fail("New workbook not linked, shouldn't be able to Add");
-            } catch (Exception e) {}
-        
+            }
+            catch (Exception) { }
+
             // Link and re-try
             IWorkbook alt = new XSSFWorkbook();
-            alt.CreateSheet().CreateRow(0).CreateCell(0).SetCellValue("In another workbook");
-        // TODO Implement the rest of this, see bug #57184
-/*
-        wb.LinkExternalWorkbook("alt.xlsx", alt);
-                
-        cXSLX_nw_cell.SetCellFormula"[alt.xlsx]Sheet1!$A$1");
-        // Check it - TODO Is this correct? Or should it become [3]Sheet1!$A$1 ?
-        Assert.AreEqual("[alt.xlsx]Sheet1!$A$1", cXSLX_nw_cell.CellFormula);
-        
-        // Evaluate it, without a link to that workbook
-        try {
-            Evaluator.Evaluate(cXSLX_nw_cell);
-            Assert.Fail("No cached value and no link to workbook, shouldn't Evaluate");
-        } catch(Exception e) {}
-        
-        // Add a link, check it does
-        Evaluators.Put("alt.xlsx", alt.GetCreationHelper().CreateFormulaEvaluator());
-        Evaluator.SetupReferencedWorkbooks(evaluators);
-        
-        Evaluator.Evaluate(cXSLX_nw_cell);
-        Assert.AreEqual("In another workbook", cXSLX_nw_cell.StringCellValue);
-*/
+            try
+            {
+                alt.CreateSheet().CreateRow(0).CreateCell(0).SetCellValue("In another workbook");
+                // TODO Implement the rest of this, see bug #57184
+                /*
+                            wb.linkExternalWorkbook("alt.xlsx", alt);
 
+                            cXSLX_nw_cell.setCellFormula("[alt.xlsx]Sheet1!$A$1");
+                            // Check it - TODO Is this correct? Or should it become [3]Sheet1!$A$1 ?
+                            Assert.AreEqual("[alt.xlsx]Sheet1!$A$1", cXSLX_nw_cell.getCellFormula());
 
+                            // Evaluate it, without a link to that workbook
+                            try {
+                                evaluator.evaluate(cXSLX_nw_cell);
+                                fail("No cached value and no link to workbook, shouldn't evaluate");
+                            } catch(Exception e) {}
+
+                            // Add a link, check it does
+                            evaluators.put("alt.xlsx", alt.getCreationHelper().createFormulaEvaluator());
+                            evaluator.setupReferencedWorkbooks(evaluators);
+
+                            evaluator.evaluate(cXSLX_nw_cell);
+                            Assert.AreEqual("In another workbook", cXSLX_nw_cell.getStringCellValue());
+                */
+            }
+            finally
+            {
+                alt.Close();
+            }
+            wb.Close();
         }
 
         /**
@@ -243,11 +275,10 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void TestMultiSheetReferencesHSSFandXSSF()
         {
-            IWorkbook[] wbs = new IWorkbook[] {
-                HSSFTestDataSamples.OpenSampleWorkbook("55906-MultiSheetRefs.xls"),
-                XSSFTestDataSamples.OpenSampleWorkbook("55906-MultiSheetRefs.xlsx")
-        };
-            foreach (IWorkbook wb in wbs)
+            IWorkbook wb1 = HSSFTestDataSamples.OpenSampleWorkbook("55906-MultiSheetRefs.xls");
+            IWorkbook wb2 = XSSFTestDataSamples.OpenSampleWorkbook("55906-MultiSheetRefs.xlsx");
+
+            foreach (IWorkbook wb in new IWorkbook[] { wb1, wb2 })
             {
                 IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
                 ISheet s1 = wb.GetSheetAt(0);
@@ -298,6 +329,9 @@ namespace NPOI.XSSF.UserModel
                 Assert.AreEqual("COUNTA(Sheet1:Sheet3!E1)", countA_3F.CellFormula);
                 Assert.AreEqual("3", Evaluator.Evaluate(countA_3F).FormatAsString());
             }
+
+            wb2.Close();
+            wb1.Close();
         }
         /**
          * A handful of functions (such as SUM, COUNTA, MIN) support
@@ -309,11 +343,10 @@ namespace NPOI.XSSF.UserModel
         [Test]
         public void TestMultiSheetAreasHSSFandXSSF()
         {
-            IWorkbook[] wbs = new IWorkbook[] {
-                HSSFTestDataSamples.OpenSampleWorkbook("55906-MultiSheetRefs.xls"),
-                XSSFTestDataSamples.OpenSampleWorkbook("55906-MultiSheetRefs.xlsx")
-        };
-            foreach (IWorkbook wb in wbs)
+            IWorkbook wb1 = HSSFTestDataSamples.OpenSampleWorkbook("55906-MultiSheetRefs.xls");
+            IWorkbook wb2 = XSSFTestDataSamples.OpenSampleWorkbook("55906-MultiSheetRefs.xlsx");
+
+            foreach (IWorkbook wb in new IWorkbook[] { wb1, wb2 })
             {
                 IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
                 ISheet s1 = wb.GetSheetAt(0);
@@ -348,6 +381,9 @@ namespace NPOI.XSSF.UserModel
                 Assert.AreEqual("4", Evaluator.Evaluate(countFA).FormatAsString());
 
             }
+
+            wb2.Close();
+            wb1.Close();
         }
 
         [Test]
@@ -393,10 +429,10 @@ namespace NPOI.XSSF.UserModel
                 wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
 
                 cell = sheet1.GetRow(1).GetCell(0) as XSSFCell;
-                Assert.AreEqual(3.0, cell.NumericCellValue);
+                Assert.AreEqual(3.0, cell.NumericCellValue, 0);
 
                 cell = sheet1.GetRow(2).GetCell(0) as XSSFCell;
-                Assert.AreEqual(4.0, cell.NumericCellValue);
+                Assert.AreEqual(4.0, cell.NumericCellValue, 0);
             }
             finally
             {
@@ -598,8 +634,127 @@ namespace NPOI.XSSF.UserModel
                 wb.Close();
             }
         }
+        [Test]
+        public void TestBug56655()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            setCellFormula(sheet, 0, 0, "#VALUE!");
+            setCellFormula(sheet, 0, 1, "SUMIFS(A:A,A:A,#VALUE!)");
+
+            wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+
+            Assert.AreEqual(CellType.Error, getCell(sheet, 0, 0).CachedFormulaResultType);
+            Assert.AreEqual(FormulaError.VALUE.Code, getCell(sheet, 0, 0).ErrorCellValue);
+            Assert.AreEqual(CellType.Error, getCell(sheet, 0, 1).CachedFormulaResultType);
+            Assert.AreEqual(FormulaError.VALUE.Code, getCell(sheet, 0, 1).ErrorCellValue);
+
+            wb.Close();
+        }
+        [Test]
+        public void TestBug56655a()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            setCellFormula(sheet, 0, 0, "B1*C1");
+            sheet.GetRow(0).CreateCell(1).SetCellValue("A");
+            setCellFormula(sheet, 1, 0, "B1*C1");
+            sheet.GetRow(1).CreateCell(1).SetCellValue("A");
+            setCellFormula(sheet, 0, 3, "SUMIFS(A:A,A:A,A2)");
+
+            wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+
+            Assert.AreEqual(CellType.Error, getCell(sheet, 0, 0).CachedFormulaResultType);
+            Assert.AreEqual(FormulaError.VALUE.Code, getCell(sheet, 0, 0).ErrorCellValue);
+            Assert.AreEqual(CellType.Error, getCell(sheet, 1, 0).CachedFormulaResultType);
+            Assert.AreEqual(FormulaError.VALUE.Code, getCell(sheet, 1, 0).ErrorCellValue);
+            Assert.AreEqual(CellType.Error, getCell(sheet, 0, 3).CachedFormulaResultType);
+            Assert.AreEqual(FormulaError.VALUE.Code, getCell(sheet, 0, 3).ErrorCellValue);
+
+            wb.Close();
+        }
+
+        // bug 57721
+        [Test]
+        public void structuredReferences()
+        {
+            verifyAllFormulasInWorkbookCanBeEvaluated("evaluate_formula_with_structured_table_references.xlsx");
+        }
+
+        // bug 57840
+        [Ignore("Takes over a minute to evaluate all formulas in this large workbook. Run this test when profiling for formula evaluation speed.")]
+        [Test]
+        public void TestLotsOfFormulasWithStructuredReferencesToCalculatedTableColumns()
+        {
+            verifyAllFormulasInWorkbookCanBeEvaluated("StructuredRefs-lots-with-lookups.xlsx");
+        }
+        // FIXME: use junit4 parameterization
+        private static void verifyAllFormulasInWorkbookCanBeEvaluated(String sampleWorkbook)
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook(sampleWorkbook);
+            XSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
+            wb.Close();
+        }
 
 
+        /**
+        * @param row 0-based
+        * @param column 0-based
+        */
+        private void setCellFormula(ISheet sheet, int row, int column, String formula)
+        {
+            IRow r = sheet.GetRow(row);
+            if (r == null)
+            {
+                r = sheet.CreateRow(row);
+            }
+            ICell cell = r.GetCell(column);
+            if (cell == null)
+            {
+                cell = r.CreateCell(column);
+            }
+            cell.SetCellType(CellType.Formula);
+            cell.CellFormula = (formula);
+        }
+
+        /**
+         * @param rowNo 0-based
+         * @param column 0-based
+         */
+        private ICell getCell(ISheet sheet, int rowNo, int column)
+        {
+            return sheet.GetRow(rowNo).GetCell(column);
+        }
+
+        [Test]
+        public void Test59736()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("59736.xlsx");
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            ICell cell = wb.GetSheetAt(0).GetRow(0).GetCell(0);
+            Assert.AreEqual(1, cell.NumericCellValue, 0.001);
+            cell = wb.GetSheetAt(0).GetRow(1).GetCell(0);
+            CellValue value = evaluator.Evaluate(cell);
+            Assert.AreEqual(1, value.NumberValue, 0.001);
+            cell = wb.GetSheetAt(0).GetRow(2).GetCell(0);
+            value = evaluator.Evaluate(cell);
+            Assert.AreEqual(1, value.NumberValue, 0.001);
+        }
+
+        [Test]
+        public void EvaluateInCellReturnsSameDataType()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            wb.CreateSheet().CreateRow(0).CreateCell(0);
+            XSSFFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator() as XSSFFormulaEvaluator;
+            XSSFCell cell = wb.GetSheetAt(0).GetRow(0).GetCell(0) as XSSFCell;
+            XSSFCell same = evaluator.EvaluateInCell(cell) as XSSFCell;
+            //assertSame(cell, same);
+            Assert.AreSame(cell, same);
+            wb.Close();
+        }
     }
 
 }

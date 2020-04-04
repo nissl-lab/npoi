@@ -69,6 +69,11 @@ namespace NPOI.XSSF.UserModel
         {
             return new XSSFClientAnchor();
         }
+
+        public ExtendedColor CreateExtendedColor()
+        {
+            return new XSSFColor();
+        }
     }
 
 }

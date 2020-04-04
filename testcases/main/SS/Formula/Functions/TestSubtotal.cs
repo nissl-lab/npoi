@@ -24,6 +24,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula.Functions;
     using NPOI.SS.UserModel;
     using TestCases.HSSF;
+    using NPOI.SS.Formula;
 
 
 
@@ -81,7 +82,6 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestAvg()
         {
-
             IWorkbook wb = new HSSFWorkbook();
 
             IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
@@ -101,12 +101,15 @@ namespace TestCases.SS.Formula.Functions
             a6.CellFormula = ("SUBTOTAL(1,B2:B6)*2 + 2");
             ICell a7 = sh.CreateRow(7).CreateCell(1);
             a7.CellFormula = ("SUBTOTAL(1,B2:B7)");
+            ICell a8 = sh.CreateRow(8).CreateCell(1);
+            a8.CellFormula = ("SUBTOTAL(1,B2,B3,B4,B5,B6,B7,B8)");
 
             fe.EvaluateAll();
 
             Assert.AreEqual(2.0, a3.NumericCellValue);
             Assert.AreEqual(8.0, a6.NumericCellValue);
             Assert.AreEqual(3.0, a7.NumericCellValue);
+            Assert.AreEqual(3.0, a8.NumericCellValue);
         }
         [Test]
         public void TestSum()
@@ -131,12 +134,15 @@ namespace TestCases.SS.Formula.Functions
             a6.CellFormula = ("SUBTOTAL(9,B2:B6)*2 + 2");
             ICell a7 = sh.CreateRow(7).CreateCell(0);
             a7.CellFormula = ("SUBTOTAL(9,B2:B7)");
+            ICell a8 = sh.CreateRow(8).CreateCell(1);
+            a8.CellFormula = ("SUBTOTAL(9,B2,B3,B4,B5,B6,B7,B8)");
 
             fe.EvaluateAll();
 
             Assert.AreEqual(4.0, a3.NumericCellValue);
             Assert.AreEqual(26.0, a6.NumericCellValue);
             Assert.AreEqual(12.0, a7.NumericCellValue);
+            Assert.AreEqual(12.0, a8.NumericCellValue);
         }
         [Test]
         public void TestCount()
@@ -161,12 +167,15 @@ namespace TestCases.SS.Formula.Functions
             a6.CellFormula = ("SUBTOTAL(2,B2:B6)*2 + 2");
             ICell a7 = sh.CreateRow(7).CreateCell(1);
             a7.CellFormula = ("SUBTOTAL(2,B2:B7)");
+            ICell a8 = sh.CreateRow(8).CreateCell(1);
+            a8.CellFormula = ("SUBTOTAL(2,B2,B3,B4,B5,B6,B7,B8)");
 
             fe.EvaluateAll();
 
             Assert.AreEqual(2.0, a3.NumericCellValue);
             Assert.AreEqual(6.0, a6.NumericCellValue);
             Assert.AreEqual(2.0, a7.NumericCellValue);
+            Assert.AreEqual(2.0, a8.NumericCellValue);
         }
         [Test]
         public void TestCounta()
@@ -191,12 +200,15 @@ namespace TestCases.SS.Formula.Functions
             a6.CellFormula = ("SUBTOTAL(3,B2:B6)*2 + 2");
             ICell a7 = sh.CreateRow(7).CreateCell(1);
             a7.CellFormula = ("SUBTOTAL(3,B2:B7)");
+            ICell a8 = sh.CreateRow(8).CreateCell(1);
+            a8.CellFormula = ("SUBTOTAL(3,B2,B3,B4,B5,B6,B7,B8)");
 
             fe.EvaluateAll();
 
             Assert.AreEqual(2.0, a3.NumericCellValue);
             Assert.AreEqual(8.0, a6.NumericCellValue);
             Assert.AreEqual(3.0, a7.NumericCellValue);
+            Assert.AreEqual(3.0, a8.NumericCellValue);
         }
         [Test]
         public void TestMax()
@@ -221,12 +233,15 @@ namespace TestCases.SS.Formula.Functions
             a6.CellFormula = ("SUBTOTAL(4,B2:B6)*2 + 2");
             ICell a7 = sh.CreateRow(7).CreateCell(1);
             a7.CellFormula = ("SUBTOTAL(4,B2:B7)");
+            ICell a8 = sh.CreateRow(8).CreateCell(1);
+            a8.CellFormula = ("SUBTOTAL(4,B2,B3,B4,B5,B6,B7,B8)");
 
             fe.EvaluateAll();
 
             Assert.AreEqual(3.0, a3.NumericCellValue);
             Assert.AreEqual(16.0, a6.NumericCellValue);
             Assert.AreEqual(7.0, a7.NumericCellValue);
+            Assert.AreEqual(7.0, a8.NumericCellValue);
         }
         [Test]
         public void TestMin()
@@ -251,12 +266,15 @@ namespace TestCases.SS.Formula.Functions
             a6.CellFormula = ("SUBTOTAL(5,B2:B6)*2 + 2");
             ICell a7 = sh.CreateRow(7).CreateCell(1);
             a7.CellFormula = ("SUBTOTAL(5,B2:B7)");
+            ICell a8 = sh.CreateRow(8).CreateCell(1);
+            a8.CellFormula = ("SUBTOTAL(5,B2,B3,B4,B5,B6,B7,B8)");
 
             fe.EvaluateAll();
 
             Assert.AreEqual(1.0, a3.NumericCellValue);
             Assert.AreEqual(4.0, a6.NumericCellValue);
             Assert.AreEqual(1.0, a7.NumericCellValue);
+            Assert.AreEqual(1.0, a8.NumericCellValue);
         }
         [Test]
         public void TestStdev()
@@ -281,12 +299,15 @@ namespace TestCases.SS.Formula.Functions
             a6.CellFormula = ("SUBTOTAL(7,B2:B6)*2 + 2");
             ICell a7 = sh.CreateRow(7).CreateCell(1);
             a7.CellFormula = ("SUBTOTAL(7,B2:B7)");
+            ICell a8 = sh.CreateRow(8).CreateCell(1);
+            a8.CellFormula = ("SUBTOTAL(7,B2,B3,B4,B5,B6,B7,B8)");
 
             fe.EvaluateAll();
 
             Assert.AreEqual(1.41421, a3.NumericCellValue, 0.0001);
             Assert.AreEqual(7.65685, a6.NumericCellValue, 0.0001);
             Assert.AreEqual(2.82842, a7.NumericCellValue, 0.0001);
+            Assert.AreEqual(2.82842, a8.NumericCellValue, 0.0001);
         }
         [Test]
         public void Test50209()
@@ -343,6 +364,79 @@ namespace TestCases.SS.Formula.Functions
             ConfirmExpectedResult(evaluator, "SUBTOTAL(COUNT;B2:B8;C2:C8)", cellC2, 3.0);
             ConfirmExpectedResult(evaluator, "SUBTOTAL(COUNTA;B2:B8;C2:C8)", cellC3, 5.0);
         }
+
+        [Test]
+        public void testUnimplemented()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+            ISheet sh = wb.CreateSheet();
+            ICell a3 = sh.CreateRow(3).CreateCell(1);
+            a3.CellFormula = ("SUBTOTAL(8,B2:B3)");
+            try
+            {
+                fe.EvaluateAll();
+                Assert.Fail("Should catch an NotImplementedFunctionException here, adjust these tests if it was actually implemented");
+            }
+            catch (NotImplementedException)
+            {
+                // expected here
+            }
+            a3.CellFormula = ("SUBTOTAL(10,B2:B3)");
+            try
+            {
+                fe.EvaluateAll();
+                Assert.Fail("Should catch an NotImplementedFunctionException here, adjust these tests if it was actually implemented");
+            }
+            catch (NotImplementedException)
+            {
+                // expected here
+            }
+            a3.CellFormula = ("SUBTOTAL(11,B2:B3)");
+            try
+            {
+                fe.EvaluateAll();
+                Assert.Fail("Should catch an NotImplementedFunctionException here, adjust these tests if it was actually implemented");
+            }
+            catch (NotImplementedException)
+            {
+                // expected here
+            }
+            a3.CellFormula = ("SUBTOTAL(107,B2:B3)");
+            try
+            {
+                fe.EvaluateAll();
+                Assert.Fail("Should catch an NotImplementedFunctionException here, adjust these tests if it was actually implemented");
+            }
+            catch (NotImplementedException)
+            {
+                // expected here
+            }
+            a3.CellFormula = ("SUBTOTAL(0,B2:B3)");
+            fe.EvaluateAll();
+            Assert.AreEqual(FormulaError.VALUE.Code, a3.ErrorCellValue);
+            try
+            {
+                a3.CellFormula = ("SUBTOTAL(9)");
+                Assert.Fail("Should catch an exception here");
+            }
+            catch (FormulaParseException)
+            {
+                // expected here
+            }
+            try
+            {
+                a3.CellFormula = ("SUBTOTAL()");
+                Assert.Fail("Should catch an exception here");
+            }
+            catch (FormulaParseException)
+            {
+                // expected here
+            }
+            Subtotal subtotal = new Subtotal();
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, subtotal.Evaluate(new ValueEval[] { }, 0, 0));
+        }
+
     }
 
 }

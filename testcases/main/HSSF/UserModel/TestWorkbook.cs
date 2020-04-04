@@ -17,21 +17,18 @@
 
 namespace TestCases.HSSF.UserModel
 {
-    using System;
-    using System.IO;
     using NPOI.HSSF.Model;
-    using NPOI.HSSF.UserModel;
-    using System.Collections;
     using NPOI.HSSF.Record;
-    using NPOI.HSSF.Util;
-    using NPOI.POIFS.FileSystem;
-    using NPOI.Util;
     using NPOI.HSSF.Record.Aggregates;
-    using TestCases.HSSF;
-
-    using NUnit.Framework;
+    using NPOI.HSSF.UserModel;
+    using NPOI.POIFS.FileSystem;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
+    using NPOI.Util;
+    using NUnit.Framework;
+    using System;
+    using System.IO;
+    using TestCases.HSSF;
     /**
      * Class to Test Workbook functionality
      *
@@ -72,33 +69,34 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestWriteSheetSimple()
         {
-            string filepath = TempFile.GetTempFilePath("TestWriteSheetSimple",
-                                                        ".xls");
-            FileStream out1 = new FileStream(filepath, FileMode.OpenOrCreate);
-            HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
-            IRow r = null;
-            ICell c = null;
-
+            HSSFWorkbook wb1 = new HSSFWorkbook();
+            HSSFSheet s = wb1.CreateSheet() as HSSFSheet;
+            
             for (int rownum = 0; rownum < 100; rownum++)
             {
-                r = s.CreateRow(rownum);
+                HSSFRow r = s.CreateRow(rownum) as HSSFRow;
 
                 for (int cellnum = 0; cellnum < 50; cellnum += 2)
                 {
-                    c = r.CreateCell(cellnum);
+                    HSSFCell c = r.CreateCell(cellnum) as HSSFCell;
                     c.SetCellValue(rownum * 10000 + cellnum
                                    + (((double)rownum / 1000)
                                       + ((double)cellnum / 10000)));
-                    c = r.CreateCell(cellnum + 1);
+                    c = r.CreateCell(cellnum + 1) as HSSFCell;
                     c.SetCellValue(new HSSFRichTextString("TEST"));
                 }
             }
-            wb.Write(out1);
-            out1.Close();
-            sanityChecker.CheckHSSFWorkbook(wb);
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+
+            sanityChecker.CheckHSSFWorkbook(wb1);
             Assert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
             Assert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
+            sanityChecker.CheckHSSFWorkbook(wb2);
+            s = wb2.GetSheetAt(0) as HSSFSheet;
+            Assert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
+            Assert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
+            wb2.Close();
+            wb1.Close();
         }
 
         /**
@@ -114,44 +112,46 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestWriteModifySheetSimple()
         {
-            string filepath = TempFile.GetTempFilePath("TestWriteSheetSimple",
-                                                        ".xls");
-            FileStream out1 = new FileStream(filepath, FileMode.OpenOrCreate);
-            HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
-            IRow r = null;
-            ICell c = null;
+            HSSFWorkbook wb1 = new HSSFWorkbook();
+            HSSFSheet s = wb1.CreateSheet() as HSSFSheet;
 
             for (int rownum = 0; rownum < 100; rownum++)
             {
-                r = s.CreateRow(rownum);
+                HSSFRow r = s.CreateRow(rownum) as HSSFRow;
 
                 for (int cellnum = 0; cellnum < 50; cellnum += 2)
                 {
-                    c = r.CreateCell(cellnum);
+                    HSSFCell c = r.CreateCell(cellnum)as HSSFCell;
                     c.SetCellValue(rownum * 10000 + cellnum
                                    + (((double)rownum / 1000)
                                       + ((double)cellnum / 10000)));
-                    c = r.CreateCell(cellnum + 1);
+                    c = r.CreateCell(cellnum + 1) as HSSFCell;
                     c.SetCellValue(new HSSFRichTextString("TEST"));
                 }
             }
             for (int rownum = 0; rownum < 25; rownum++)
             {
-                r = s.GetRow(rownum);
+                HSSFRow r = s.GetRow(rownum) as HSSFRow;
                 s.RemoveRow(r);
             }
             for (int rownum = 75; rownum < 100; rownum++)
             {
-                r = s.GetRow(rownum);
+                HSSFRow r = s.GetRow(rownum) as HSSFRow;
                 s.RemoveRow(r);
             }
-            wb.Write(out1);
-            out1.Close();
 
-            sanityChecker.CheckHSSFWorkbook(wb);
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+
+            sanityChecker.CheckHSSFWorkbook(wb1);
             Assert.AreEqual(74, s.LastRowNum, "LAST ROW == 74");
             Assert.AreEqual(25, s.FirstRowNum, "FIRST ROW == 25");
+
+            s = wb2.GetSheetAt(0) as HSSFSheet;
+            Assert.AreEqual(74, s.LastRowNum, "LAST ROW == 74");
+            Assert.AreEqual(25, s.FirstRowNum, "FIRST ROW == 25");
+
+            wb2.Close();
+            wb1.Close();
         }
 
         /**
@@ -165,11 +165,12 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestReadSimple()
         {
-            HSSFWorkbook workbook = OpenSample("Simple.xls");
-            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
+            HSSFWorkbook wb = OpenSample("Simple.xls");
+            HSSFSheet sheet = wb.GetSheetAt(0) as HSSFSheet;
 
             ICell cell = sheet.GetRow(0).GetCell(0);
             Assert.AreEqual(REPLACE_ME, cell.RichStringCellValue.String);
+            wb.Close();
         }
 
         /**
@@ -183,14 +184,15 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestReadSimpleWithDataFormat()
         {
-            HSSFWorkbook workbook = OpenSample("SimpleWithDataFormat.xls");
-            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
-            IDataFormat format = workbook.CreateDataFormat();
+            HSSFWorkbook wb = OpenSample("SimpleWithDataFormat.xls");
+            NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
+            IDataFormat format = wb.CreateDataFormat();
             ICell cell = sheet.GetRow(0).GetCell(0);
 
             Assert.AreEqual(1.25, cell.NumericCellValue, 1e-10);
 
             Assert.AreEqual(format.GetFormat(cell.CellStyle.DataFormat), "0.0");
+            wb.Close();
         }
 
         /**
@@ -204,41 +206,33 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestWriteDataFormat()
         {
-            string filepath = TempFile.GetTempFilePath("TestWriteSheetSimple", ".xls");
-            FileStream out1 = new FileStream(filepath, FileMode.OpenOrCreate);
-            HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
-            IRow r = null;
-            ICell c = null;
-            IDataFormat format = wb.CreateDataFormat();
-            NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
+            HSSFWorkbook wb1 = new HSSFWorkbook();
+            HSSFSheet s1 = wb1.CreateSheet() as HSSFSheet;
+            HSSFDataFormat format = wb1.CreateDataFormat() as HSSFDataFormat;
+            HSSFCellStyle cs = wb1.CreateCellStyle() as HSSFCellStyle;
 
             short df = format.GetFormat("0.0");
             cs.DataFormat = (df);
 
-            r = s.CreateRow(0);
-            c = r.CreateCell(0);
-            c.CellStyle = (cs);
-            c.SetCellValue(1.25);
+            HSSFCell c1 = s1.CreateRow(0).CreateCell(0) as HSSFCell;
+            c1.CellStyle = (cs);
+            c1.SetCellValue(1.25);
 
-            wb.Write(out1);
-            out1.Close();
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            wb1.Close();
 
-            FileStream stream = new FileStream(filepath, FileMode.OpenOrCreate);
-            POIFSFileSystem fs = new POIFSFileSystem(stream);
-            HSSFWorkbook workbook = new HSSFWorkbook(fs);
-            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
-            ICell cell =
-                             sheet.GetRow(0).GetCell(0);
-            format = workbook.CreateDataFormat();
+            HSSFSheet s2 = wb2.GetSheetAt(0) as HSSFSheet;
+            HSSFCell c2 = s2.GetRow(0).GetCell(0) as HSSFCell;
+            format = wb2.CreateDataFormat() as HSSFDataFormat;
 
-            Assert.AreEqual(1.25, cell.NumericCellValue, 1e-10);
+            Assert.AreEqual(1.25, c2.NumericCellValue, 1e-10);
 
             Assert.AreEqual(format.GetFormat(df), "0.0");
 
-            Assert.AreEqual(format, workbook.CreateDataFormat());
+            Assert.AreEqual(format, wb2.CreateDataFormat());
 
-            stream.Close();
+            wb2.Close();
+            wb1.Close();
         }
 
         /**
@@ -252,13 +246,15 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestReadEmployeeSimple()
         {
-            HSSFWorkbook workbook = OpenSample("Employee.xls");
-            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
+            HSSFWorkbook wb = OpenSample("Employee.xls");
+            ISheet sheet = wb.GetSheetAt(0);
 
             Assert.AreEqual(EMPLOYEE_INFORMATION, sheet.GetRow(1).GetCell(1).RichStringCellValue.String);
             Assert.AreEqual(LAST_NAME_KEY, sheet.GetRow(3).GetCell(2).RichStringCellValue.String);
             Assert.AreEqual(FIRST_NAME_KEY, sheet.GetRow(4).GetCell(2).RichStringCellValue.String);
             Assert.AreEqual(SSN_KEY, sheet.GetRow(5).GetCell(2).RichStringCellValue.String);
+
+            wb.Close();
         }
 
         /**
@@ -276,16 +272,19 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestModifySimple()
         {
-            HSSFWorkbook workbook = OpenSample("Simple.xls");
-            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
+            HSSFWorkbook wb1 = OpenSample("Simple.xls");
+            NPOI.SS.UserModel.ISheet sheet = wb1.GetSheetAt(0);
             ICell cell = sheet.GetRow(0).GetCell(0);
 
             cell.SetCellValue(new HSSFRichTextString(REPLACED));
 
-            workbook = HSSFTestDataSamples.WriteOutAndReadBack(workbook);
-            sheet = workbook.GetSheetAt(0);
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            sheet = wb2.GetSheetAt(0);
             cell = sheet.GetRow(0).GetCell(0);
             Assert.AreEqual(REPLACED, cell.RichStringCellValue.String);
+
+            wb2.Close();
+            wb1.Close();
         }
 
         /**
@@ -304,17 +303,17 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestModifySimpleWithSkip()
         {
-            HSSFWorkbook workbook = OpenSample("SimpleWithSkip.xls");
-            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
+            HSSFWorkbook wb1 = OpenSample("SimpleWithSkip.xls");
+            ISheet sheet = wb1.GetSheetAt(0);
             ICell cell = sheet.GetRow(0).GetCell(1);
 
             cell.SetCellValue(new HSSFRichTextString(REPLACED));
             cell = sheet.GetRow(1).GetCell(0);
             cell.SetCellValue(new HSSFRichTextString(REPLACED));
 
-            workbook = HSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
 
-            sheet = workbook.GetSheetAt(0);
+            sheet = wb2.GetSheetAt(0);
             cell = sheet.GetRow(0).GetCell(1);
             Assert.AreEqual(REPLACED, cell.RichStringCellValue.String);
             cell = sheet.GetRow(0).GetCell(0);
@@ -323,6 +322,9 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(REPLACED, cell.RichStringCellValue.String);
             cell = sheet.GetRow(1).GetCell(1);
             Assert.AreEqual(DO_NOT_REPLACE, cell.RichStringCellValue.String);
+
+            wb2.Close();
+            wb1.Close();
         }
 
         /**
@@ -341,8 +343,8 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestModifySimpleWithStyling()
         {
-            HSSFWorkbook workbook = OpenSample("SimpleWithStyling.xls");
-            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
+            HSSFWorkbook wb1 = OpenSample("SimpleWithStyling.xls");
+            ISheet sheet = wb1.GetSheetAt(0);
 
             for (int k = 0; k < 4; k++)
             {
@@ -351,15 +353,17 @@ namespace TestCases.HSSF.UserModel
                 cell.SetCellValue(new HSSFRichTextString(REPLACED));
             }
 
-
-            workbook = HSSFTestDataSamples.WriteOutAndReadBack(workbook);
-            sheet = workbook.GetSheetAt(0);
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            sheet = wb2.GetSheetAt(0);
             for (int k = 0; k < 4; k++)
             {
                 ICell cell = sheet.GetRow(k).GetCell(0);
 
                 Assert.AreEqual(REPLACED, cell.RichStringCellValue.String);
             }
+
+            wb2.Close();
+            wb1.Close();
         }
 
         /**
@@ -378,8 +382,8 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestModifyEmployee()
         {
-            HSSFWorkbook workbook = OpenSample("Employee.xls");
-            NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
+            HSSFWorkbook wb1 = OpenSample("Employee.xls");
+            ISheet sheet = wb1.GetSheetAt(0);
             ICell cell = sheet.GetRow(3).GetCell(2);
 
             cell.SetCellValue(new HSSFRichTextString(LAST_NAME_VALUE));
@@ -388,12 +392,15 @@ namespace TestCases.HSSF.UserModel
             cell = sheet.GetRow(5).GetCell(2);
             cell.SetCellValue(new HSSFRichTextString(SSN_VALUE));
 
-            workbook = HSSFTestDataSamples.WriteOutAndReadBack(workbook);
-            sheet = workbook.GetSheetAt(0);
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            sheet = wb2.GetSheetAt(0);
             Assert.AreEqual(EMPLOYEE_INFORMATION, sheet.GetRow(1).GetCell(1).RichStringCellValue.String);
             Assert.AreEqual(LAST_NAME_VALUE, sheet.GetRow(3).GetCell(2).RichStringCellValue.String);
             Assert.AreEqual(FIRST_NAME_VALUE, sheet.GetRow(4).GetCell(2).RichStringCellValue.String);
             Assert.AreEqual(SSN_VALUE, sheet.GetRow(5).GetCell(2).RichStringCellValue.String);
+
+            wb2.Close();
+            wb1.Close();
         }
 
         /**
@@ -407,12 +414,13 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestReadSheetWithRK()
         {
-            HSSFWorkbook h = OpenSample("rk.xls");
-            NPOI.SS.UserModel.ISheet s = h.GetSheetAt(0);
+            HSSFWorkbook wb = OpenSample("rk.xls");
+            ISheet s = wb.GetSheetAt(0);
             ICell c = s.GetRow(0).GetCell(0);
-            NPOI.SS.UserModel.CellType a = c.CellType;
+            CellType a = c.CellType;
 
-            Assert.AreEqual(a, NPOI.SS.UserModel.CellType.Numeric);
+            Assert.AreEqual(a, CellType.Numeric);
+            wb.Close();
         }
 
         /**
@@ -428,8 +436,8 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestWriteModifySheetMerged()
         {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
+            HSSFWorkbook wb1 = new HSSFWorkbook();
+            ISheet s = wb1.CreateSheet();
 
             for (int rownum = 0; rownum < 100; rownum++)
             {
@@ -447,15 +455,18 @@ namespace TestCases.HSSF.UserModel
             }
             s.AddMergedRegion(new CellRangeAddress(0, 10, 0, 10));
             s.AddMergedRegion(new CellRangeAddress(30, 40, 5, 15));
-            sanityChecker.CheckHSSFWorkbook(wb);
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            sanityChecker.CheckHSSFWorkbook(wb1);
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
 
-            s = wb.GetSheetAt(0);
+            s = wb2.GetSheetAt(0);
             CellRangeAddress r1 = s.GetMergedRegion(0);
             CellRangeAddress r2 = s.GetMergedRegion(1);
 
             ConfirmRegion(new CellRangeAddress(0, 10, 0, 10), r1);
             ConfirmRegion(new CellRangeAddress(30, 40, 5, 15), r2);
+            wb2.Close();
+            wb1.Close();
+
         }
 
         private static void ConfirmRegion(CellRangeAddress ra, CellRangeAddress rb)
@@ -485,6 +496,7 @@ namespace TestCases.HSSF.UserModel
             wb.BackupFlag = (false);
             Assert.AreEqual(0, record.Backup);
             Assert.IsFalse(wb.BackupFlag);
+            wb.Close();
         }
 
         private class RecordCounter : RecordVisitor
@@ -527,6 +539,36 @@ namespace TestCases.HSSF.UserModel
             RecordCounter rc = new RecordCounter();
             sheet.Sheet.VisitContainedRecords(rc, 0);
             Assert.AreEqual(1, rc.GetCount());
+            workbook.Close();
+        }
+
+        [Test]
+        public void TestRowIndexesBeyond32768()
+        {
+            HSSFWorkbook wb1 = new HSSFWorkbook();
+            HSSFSheet sheet = wb1.CreateSheet() as HSSFSheet;
+            HSSFRow row;
+            HSSFCell cell;
+            for (int i = 32700; i < 32771; i++)
+            {
+                row = sheet.CreateRow(i) as HSSFRow;
+                cell = row.CreateCell(0) as HSSFCell;
+                cell.SetCellValue(i);
+            }
+            sanityChecker.CheckHSSFWorkbook(wb1);
+            Assert.AreEqual(32770, sheet.LastRowNum, "LAST ROW == 32770");
+            cell = sheet.GetRow(32770).GetCell(0) as HSSFCell;
+            double lastVal = cell.NumericCellValue;
+
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            HSSFSheet s = wb2.GetSheetAt(0) as HSSFSheet;
+            row = s.GetRow(32770) as HSSFRow;
+            cell = row.GetCell(0) as HSSFCell;
+            Assert.AreEqual(lastVal, cell.NumericCellValue, 0, "Value from last row == 32770");
+            Assert.AreEqual(32770, s.LastRowNum, "LAST ROW == 32770");
+
+            wb2.Close();
+            wb1.Close();
         }
 
         [Test]
@@ -562,24 +604,25 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestRepeatingColsRows()
         {
-            HSSFWorkbook workbook = new HSSFWorkbook();
-            NPOI.SS.UserModel.ISheet sheet = workbook.CreateSheet("Test Print Titles");
+            HSSFWorkbook wb1 = new HSSFWorkbook();
+            HSSFSheet sheet = wb1.CreateSheet("Test Print Titles") as HSSFSheet;
 
-            IRow row = sheet.CreateRow(0);
+            HSSFRow row = sheet.CreateRow(0) as HSSFRow;
 
-            ICell cell = row.CreateCell(1);
+            HSSFCell cell = row.CreateCell(1) as HSSFCell;
             cell.SetCellValue(new HSSFRichTextString("hi"));
 
+            CellRangeAddress cra = CellRangeAddress.ValueOf("A1:B1");
+            sheet.RepeatingColumns = (cra);
+            sheet.RepeatingRows = (cra);
 
-            workbook.SetRepeatingRowsAndColumns(0, 0, 1, 0, 0);
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            sheet = wb2.GetSheetAt(0) as HSSFSheet;
+            Assert.AreEqual("A:B", sheet.RepeatingColumns.FormatAsString());
+            Assert.AreEqual("1:1", sheet.RepeatingRows.FormatAsString());
 
-            string filepath = TempFile.GetTempFilePath("TestPrintTitles", ".xls");
-
-            FileStream fileOut = new FileStream(filepath, FileMode.OpenOrCreate);
-            workbook.Write(fileOut);
-            fileOut.Close();
-
-            Assert.IsTrue(File.Exists(filepath), "file exists");
+            wb2.Close();
+            wb1.Close();
         }
 
         [Test]
@@ -594,7 +637,7 @@ namespace TestCases.HSSF.UserModel
                 int i = workbook.ActiveSheetIndex;
             }
             HSSFWorkbook workbook2 = OpenSample("blankworkbook.xls");
-            NPOI.SS.UserModel.ISheet sheet = workbook2.GetSheetAt(1);
+            ISheet sheet = workbook2.GetSheetAt(1);
         }
         [Test]
         public void TestRepeatingColsRowsMinusOne()
@@ -608,21 +651,33 @@ namespace TestCases.HSSF.UserModel
             cell.SetCellValue(new HSSFRichTextString("hi"));
 
 
-            workbook.SetRepeatingRowsAndColumns(0, -1, 1, -1, 0);
+            CellRangeAddress cra = new CellRangeAddress(-1, 1, -1, 1);
+            try
+            {
+                sheet.RepeatingColumns = (cra);
+                Assert.Fail("invalid start index is ignored");
+            }
+            catch (ArgumentException) { }
 
-            FileInfo file = TempFile.CreateTempFile("testPrintTitlesA", ".xls");
+            try
+            {
+                sheet.RepeatingRows = (cra);
+                Assert.Fail("invalid start index is ignored");
+            }
+            catch (ArgumentException) { }
 
-            FileStream fileOut = new FileStream(file.FullName, FileMode.Create, FileAccess.ReadWrite);
-            workbook.Write(fileOut);
-            fileOut.Close();
-            Assert.IsTrue(file.Exists, "file exists");
+            sheet.RepeatingColumns = (null);
+            sheet.RepeatingRows = (null);
+
+            HSSFTestDataSamples.WriteOutAndReadBack(workbook).Close();
+            workbook.Close();
         }
 
         [Test]
-        public void testAddMergedRegionWithRegion()
+        public void TestAddMergedRegionWithRegion()
         {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            ISheet s = wb.CreateSheet();
+            HSSFWorkbook wb1 = new HSSFWorkbook();
+            ISheet s = wb1.CreateSheet();
 
             for (int rownum = 0; rownum < 100; rownum++)
             {
@@ -638,17 +693,70 @@ namespace TestCases.HSSF.UserModel
                     c.SetCellValue(new HSSFRichTextString("TEST"));
                 }
             }
-            s.AddMergedRegion(new CellRangeAddress(0, (short)0, 10, (short)10));
-            s.AddMergedRegion(new CellRangeAddress(30, 40, (short)5, (short)15));
-            sanityChecker.CheckHSSFWorkbook(wb);
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            s.AddMergedRegion(new CellRangeAddress(0, 10, 0, 10));
+            s.AddMergedRegion(new CellRangeAddress(30, 40, 5, 15));
+            sanityChecker.CheckHSSFWorkbook(wb1);
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
 
-            s = wb.GetSheetAt(0);
+            s = wb2.GetSheetAt(0);
             CellRangeAddress r1 = s.GetMergedRegion(0);
             CellRangeAddress r2 = s.GetMergedRegion(1);
 
-            ConfirmRegion(new CellRangeAddress(0, 0, 10, 10), r1);
+            ConfirmRegion(new CellRangeAddress(0, 10, 0, 10), r1);
             ConfirmRegion(new CellRangeAddress(30, 40, 5, 15), r2);
+
+            wb2.Close();
+            wb1.Close();
+        }
+
+
+        [Test]
+        public void TestBug58085RemoveSheetWithNames()
+        {
+            HSSFWorkbook wb1 = new HSSFWorkbook();
+            ISheet sheet1 = wb1.CreateSheet("sheet1");
+            ISheet sheet2 = wb1.CreateSheet("sheet2");
+            ISheet sheet3 = wb1.CreateSheet("sheet3");
+
+            sheet1.CreateRow(0).CreateCell((short)0).SetCellValue("val1");
+            sheet2.CreateRow(0).CreateCell((short)0).SetCellValue("val2");
+            sheet3.CreateRow(0).CreateCell((short)0).SetCellValue("val3");
+
+            IName namedCell1 = wb1.CreateName();
+            namedCell1.NameName = (/*setter*/"name1");
+            String reference1 = "sheet1!$A$1";
+            namedCell1.RefersToFormula = (/*setter*/reference1);
+
+            IName namedCell2 = wb1.CreateName();
+            namedCell2.NameName = (/*setter*/"name2");
+            String reference2 = "sheet2!$A$1";
+            namedCell2.RefersToFormula = (/*setter*/reference2);
+
+            IName namedCell3 = wb1.CreateName();
+            namedCell3.NameName = (/*setter*/"name3");
+            String reference3 = "sheet3!$A$1";
+            namedCell3.RefersToFormula = (/*setter*/reference3);
+
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            wb1.Close();
+
+            IName nameCell = wb2.GetName("name1");
+            Assert.AreEqual("sheet1!$A$1", nameCell.RefersToFormula);
+            nameCell = wb2.GetName("name2");
+            Assert.AreEqual("sheet2!$A$1", nameCell.RefersToFormula);
+            nameCell = wb2.GetName("name3");
+            Assert.AreEqual("sheet3!$A$1", nameCell.RefersToFormula);
+
+            wb2.RemoveSheetAt(wb2.GetSheetIndex("sheet1"));
+
+            nameCell = wb2.GetName("name1");
+            Assert.AreEqual("#REF!$A$1", nameCell.RefersToFormula);
+            nameCell = wb2.GetName("name2");
+            Assert.AreEqual("sheet2!$A$1", nameCell.RefersToFormula);
+            nameCell = wb2.GetName("name3");
+            Assert.AreEqual("sheet3!$A$1", nameCell.RefersToFormula);
+
+            wb2.Close();
         }
     }
 }

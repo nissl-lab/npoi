@@ -18,6 +18,9 @@
 using System.IO;
 using System;
 using NPOI.Util;
+using System.Collections.Generic;
+using System.Security;
+using System.Reflection;
 //using System.IO.MemoryMappedFiles;
 namespace NPOI.POIFS.NIO
 {
@@ -34,6 +37,15 @@ namespace NPOI.POIFS.NIO
         //private MemoryMappedViewStream mmViewStream;
         private FileInfo fileinfo;
         private bool writable;
+
+        // Buffers which map to a file-portion are not closed automatically when the Channel is closed
+        // therefore we need to keep the list of mapped buffers and do some ugly reflection to try to 
+        // clean the buffer during close().
+        // See https://bz.apache.org/bugzilla/show_bug.cgi?id=58480, 
+        // http://stackoverflow.com/questions/3602783/file-access-synchronized-on-java-object and
+        // http://bugs.java.com/view_bug.do?bug_id=4724038 for related discussions
+        private List<ByteBuffer> buffersToClean = new List<ByteBuffer>();
+
         public FileBackedDataSource(FileInfo file)
             : this(file, false)
         {
@@ -112,29 +124,30 @@ namespace NPOI.POIFS.NIO
         public override ByteBuffer Read(int length, long position)
         {
             if (position >= Size)
-                throw new ArgumentException("Position " + position + " past the end of the file");
+                throw new IndexOutOfRangeException("Position " + position + " past the end of the file");
 
-            // Do we read or map (for read/write?
+            // Do we read or map (for read/write)?
             ByteBuffer dst;
-            int worked = -1;
             if (writable)
             {
                 //dst = channel.map(FileChannel.MapMode.READ_WRITE, position, length);
                 dst = ByteBuffer.CreateBuffer(length);
-                worked = 0;
+                // remember this buffer for cleanup
+                buffersToClean.Add(dst);
             }
             else
             {
-                // Read
+                // allocate the buffer on the heap if we cannot map the data in directly
                 fileStream.Position = position;
                 dst = ByteBuffer.CreateBuffer(length);
 
-                worked = IOUtils.ReadFully(fileStream, dst.Buffer);
+                // Read the contents and check that we could read some data
+                int worked = IOUtils.ReadFully(fileStream, dst.Buffer);
+                // Check
+                if (worked == -1)
+                    throw new IndexOutOfRangeException("Position " + position + " past the end of the file");
             }
-            // Check
-            if(worked == -1)
-                throw new ArgumentException("Position " + position + " past the end of the file");
-
+            // make it ready for reading
             dst.Position = 0;
 
             // All done
@@ -176,11 +189,58 @@ namespace NPOI.POIFS.NIO
 
         public override void Close()
         {
+            // also ensure that all buffers are unmapped so we do not keep files locked on Windows
+            // We consider it a bug if a Buffer is still in use now! 
+            foreach (ByteBuffer buffer in buffersToClean)
+            {
+                unmap(buffer);
+            }
+            buffersToClean.Clear();
+
             if (fileStream != null)
             {
                 fileStream.Close();
             }
             
+        }
+
+        // need to use reflection to avoid depending on the sun.nio internal API
+        // unfortunately this might break silently with newer/other Java implementations, 
+        // but we at least have unit-tests which will indicate this when run on Windows
+        private static void unmap(ByteBuffer bb)
+        {
+            //TODO: try add clean method for ByteBuffer class.
+            //Type fcClass = bb.GetType();
+            //try
+            //{
+            //    // invoke bb.cleaner().clean(), but do not depend on sun.nio
+            //    // interfaces
+            //    MethodInfo cleanerMethod = fcClass.GetMethod("cleaner");
+            //    //cleanerMethod.setAccessible(true);
+            //    Object cleaner = cleanerMethod.Invoke(bb, null);
+            //    MethodInfo cleanMethod = cleaner.GetType().GetMethod("clean");
+            //    cleanMethod.Invoke(cleaner, null);
+            //}
+            //catch (NotSupportedException e)
+            //{
+            //    // e.printStackTrace();
+            //}
+            //catch (SecurityException e)
+            //{
+            //    // e.printStackTrace();
+            //}
+            //catch (MethodAccessException e)
+            //{
+            //    // e.printStackTrace();
+            //}
+            //catch (ArgumentException e)
+            //{
+            //    // e.printStackTrace();
+            //}
+            //catch (TargetException e)
+            //{
+            //    // e.printStackTrace();
+            //}
         }
     }
 

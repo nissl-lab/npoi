@@ -19,7 +19,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.Streaming;
 using NUnit.Framework;
 
-namespace NPOI.OOXML.Testcases.XSSF.Streaming
+namespace TestCases.XSSF.Streaming
 {
     [TestFixture]
     class SXSSFRowTests

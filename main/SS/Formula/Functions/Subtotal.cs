@@ -16,7 +16,11 @@
 ==================================================================== */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using NPOI.SS.Formula.Eval;
+using NPOI.Util;
+
 namespace NPOI.SS.Formula.Functions
 {
     /**
@@ -98,10 +102,31 @@ namespace NPOI.SS.Formula.Functions
                 return e.GetErrorEval();
             }
 
-            ValueEval[] innerArgs = new ValueEval[nInnerArgs];
-            Array.Copy(args, 1, innerArgs, 0, nInnerArgs);
+            // ignore the first arg, this is the function-type, we check for the length above
+            IList<ValueEval> list = new List<ValueEval>(Arrays.AsList(args).GetRange(1, args.Length - 1));
+            IEnumerator<ValueEval> it = list.GetEnumerator();
+            // See https://support.office.com/en-us/article/SUBTOTAL-function-7b027003-f060-4ade-9040-e478765b9939
+            // "If there are other subtotals within ref1, ref2,... (or nested subtotals), these nested subtotals are ignored to avoid double counting."
+            // For array references it is handled in1 other evaluation steps, but we need to handle this here for references to subtotal-functions
+            IList<ValueEval> toRemove = new List<ValueEval>();
+            while (it.MoveNext())
+            {
+                ValueEval eval = it.Current;
+                if (eval is LazyRefEval)
+                {
+                    LazyRefEval lazyRefEval = (LazyRefEval)eval;
+                    if (lazyRefEval.IsSubTotal)
+                    {
+                        toRemove.Add(eval);
+                    }
+                }
+            }
 
-            return innerFunc.Evaluate(innerArgs, srcRowIndex, srcColumnIndex);
+            foreach (var x in toRemove)
+                list.Remove(x);
+
+            return innerFunc.Evaluate(list.ToArray(), srcRowIndex, srcColumnIndex);
+
         }
     }
 }

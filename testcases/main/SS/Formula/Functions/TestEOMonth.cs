@@ -62,7 +62,8 @@ namespace TestCases.SS.Formula.Functions
 
         private void CheckValue(double startDate, int monthInc, double expectedResult)
         {
-            NumberEval result = (NumberEval)eOMonth.Evaluate(new ValueEval[] { new NumberEval(startDate), new NumberEval(monthInc) }, ec);
+            ValueEval[] ve = new ValueEval[] { new NumberEval(startDate), new NumberEval(monthInc) };
+            NumberEval result = (NumberEval)eOMonth.Evaluate(ve, ec);
             Assert.AreEqual(expectedResult, result.NumberValue);
         }
 
@@ -81,11 +82,36 @@ namespace TestCases.SS.Formula.Functions
         {
             ValueEval result = eOMonth.Evaluate(new ValueEval[] { new NumberEval(DATE_1902_09_26) }, ec);
             Assert.IsTrue(result is ErrorEval);
-            Assert.AreEqual(ErrorConstants.ERROR_VALUE, ((ErrorEval)result).ErrorCode);
+            Assert.AreEqual(FormulaError.VALUE.Code, ((ErrorEval)result).ErrorCode);
 
             result = eOMonth.Evaluate(new ValueEval[] { new StringEval("a"), new StringEval("b") }, ec);
             Assert.IsTrue(result is ErrorEval);
-            Assert.AreEqual(ErrorConstants.ERROR_VALUE, ((ErrorEval)result).ErrorCode);
+            Assert.AreEqual(FormulaError.VALUE.Code, ((ErrorEval)result).ErrorCode);
+        }
+        [Test]
+        public void CheckOffset()
+        {
+            for (int offset = -12; offset <= 12; offset++)
+            {
+                DateTime startDate = DateTime.Now;
+                //the month
+                DateTime expDate = startDate.AddMonths(offset);
+                //next month
+                expDate = expDate.AddMonths(1);
+                //first day of next month
+                expDate = new DateTime(expDate.Year, expDate.Month, 1);
+                //last day of the month
+                expDate = expDate.AddDays(-1);
+
+                ValueEval[] ve = {
+                new NumberEval(DateUtil.GetExcelDate(startDate)),
+                new NumberEval(offset)
+                };
+                NumberEval result = (NumberEval)eOMonth.Evaluate(ve, ec);
+                DateTime actDate = DateUtil.GetJavaDate(result.NumberValue);
+
+                Assert.AreEqual(expDate, actDate);
+            }
         }
 
         [Test]
@@ -119,31 +145,36 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestBug56688()
         {
-            NumberEval result = (NumberEval)eOMonth.Evaluate(new ValueEval[] { new NumberEval(DATE_1902_09_26), new RefEvalImplementation(new NumberEval(0)) }, ec);
+            ValueEval[] ve = new ValueEval[] { new NumberEval(DATE_1902_09_26), new RefEvalImplementation(new NumberEval(0)) };
+            NumberEval result = (NumberEval)eOMonth.Evaluate(ve, ec);
             Assert.AreEqual(DATE_1902_09_30, result.NumberValue);
         }
 
         [Test]
         public void TestRefEvalStartDate()
         {
-            NumberEval result = (NumberEval)eOMonth.Evaluate(new ValueEval[] { new RefEvalImplementation(new NumberEval(DATE_1902_09_26)), new NumberEval(0) }, ec);
+            ValueEval[] ve = new ValueEval[] { new RefEvalImplementation(new NumberEval(DATE_1902_09_26)), new NumberEval(0) };
+            NumberEval result = (NumberEval)eOMonth.Evaluate(ve, ec);
             Assert.AreEqual(DATE_1902_09_30, result.NumberValue);
         }
 
         [Test]
         public void TestEOMonthBlankValueEval()
         {
-            NumberEval Evaluate = (NumberEval)eOMonth.Evaluate(new ValueEval[] { BlankEval.instance, new NumberEval(0) }, ec);
+            ValueEval[] ve = new ValueEval[] { BlankEval.instance, new NumberEval(0) };
+            NumberEval Evaluate = (NumberEval)eOMonth.Evaluate(ve, ec);
             Assert.AreEqual(DATE_1900_01_31, Evaluate.NumberValue, "Blank is handled as 0");
         }
 
         [Test]
         public void TestEOMonthBlankRefValueEval()
         {
-            NumberEval result = (NumberEval)eOMonth.Evaluate(new ValueEval[] { new RefEvalImplementation(BlankEval.instance), new NumberEval(1) }, ec);
+            ValueEval[] ve1 = new ValueEval[] { new RefEvalImplementation(BlankEval.instance), new NumberEval(1) };
+            NumberEval result = (NumberEval)eOMonth.Evaluate(ve1, ec);
             Assert.AreEqual(DATE_1900_02_28, result.NumberValue, "Blank is handled as 0");
 
-            result = (NumberEval)eOMonth.Evaluate(new ValueEval[] { new NumberEval(1), new RefEvalImplementation(BlankEval.instance) }, ec);
+            ValueEval[] ve2 = { new NumberEval(1), new RefEvalImplementation(BlankEval.instance) };
+            result = (NumberEval)eOMonth.Evaluate(ve2, ec);
             Assert.AreEqual(DATE_1900_01_31, result.NumberValue, "Blank is handled as 0");
         }
     }

@@ -37,7 +37,7 @@ namespace NPOI.HSSF.Record
      * @author Dragos Buleandra (dragos.buleandra@trade2b.ro)
      * @version 2.0-pre
      */
-    public class DVRecord : StandardRecord
+    public class DVRecord : StandardRecord, ICloneable
     {
         private static readonly UnicodeString NULL_TEXT_STRING = new UnicodeString("\0");
 

@@ -28,7 +28,7 @@ namespace NPOI.HSSF.Record
      *               This record Is the list header of all data validation records (0x01BE) in the current sheet.
      * @author Dragos Buleandra (dragos.buleandra@trade2b.ro)
      */
-    public class DVALRecord : StandardRecord
+    public class DVALRecord : StandardRecord, ICloneable
     {
         public const short sid = 0x01B2;
 

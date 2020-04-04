@@ -83,32 +83,41 @@ namespace TestCases.SS.Formula.Functions
             Confirm(expResult, MakeDate(y1, m1, d1), MakeDate(y2, m2, d2), false);
             Confirm(-expResult, MakeDate(y2, m2, d2), MakeDate(y1, m1, d1), false);
 
+            // other tests
+            Confirm(1, MakeDate(1993, 2, 28), MakeDate(1993, 3, 1), false);
+            Confirm(1, MakeDate(1996, 2, 29), MakeDate(1996, 3, 1), false);
+            Confirm(-2, MakeDate(1993, 2, 28), MakeDate(1993, 2, 28), false);
+            Confirm(3, MakeDate(1993, 2, 28), MakeDate(1993, 3, 1), true);
+            Confirm(2, MakeDate(1996, 2, 29), MakeDate(1996, 3, 1), true);
         }
         /**
          * The <c>method</c> parameter only Makes a difference when the second parameter
          * is the last day of the month that does <em>not</em> have 30 days.
          */
-        public void DISABLED_testMonthBoundaries()
+        [Test]
+        public void TestMonthBoundaries()
         {
             // jan
-            ConfirmMonthBoundary(false, 1, 0, 0, 2, 3, 4);
-            ConfirmMonthBoundary(true, 1, 0, 0, 1, 3, 4);
+            ConfirmMonthBoundary(false, 2001, 1, 0, 0, 2, 3, 4);
+            ConfirmMonthBoundary(true, 2001, 1, 0, 0, 1, 2, 3);
             // feb
-            ConfirmMonthBoundary(false, 2, -2, 1, 2, 3, 4);
-            ConfirmMonthBoundary(true, 2, 0, 1, 2, 3, 4);
+            ConfirmMonthBoundary(false, 2001, 2, -2, 1, 2, 3, 4);
+            ConfirmMonthBoundary(true, 2001, 2, 0, 1, 2, 3, 4);
             // mar
-            ConfirmMonthBoundary(false, 3, 0, 0, 2, 3, 4);
-            ConfirmMonthBoundary(true, 3, 0, 0, 1, 3, 4);
+            ConfirmMonthBoundary(false, 2001, 3, 0, 0, 2, 3, 4);
+            ConfirmMonthBoundary(true, 2001, 3, 0, 0, 1, 2, 3);
             // apr
-            ConfirmMonthBoundary(false, 4, 0, 1, 2, 3, 4);
-            ConfirmMonthBoundary(true, 4, 0, 1, 2, 3, 4);
+            ConfirmMonthBoundary(false, 2001, 4, 0, 1, 2, 3, 4);
+            ConfirmMonthBoundary(true, 2001, 4, 0, 1, 2, 3, 4);
             // may
-            ConfirmMonthBoundary(false, 5, 0, 0, 2, 3, 4);
-            ConfirmMonthBoundary(true, 5, 0, 0, 1, 3, 4);
+            ConfirmMonthBoundary(false, 2001, 5, 0, 0, 2, 3, 4);
+            ConfirmMonthBoundary(true, 2001, 5, 0, 0, 1, 2, 3);
             // jun
-            ConfirmMonthBoundary(false, 6, 0, 1, 2, 3, 4);
-            ConfirmMonthBoundary(true, 6, 0, 1, 2, 3, 4);
-            // etc...
+            ConfirmMonthBoundary(false, 2001, 6, 0, 1, 2, 3, 4);
+            ConfirmMonthBoundary(true, 2001, 6, 0, 1, 2, 3, 4);
+            // leap year
+            ConfirmMonthBoundary(false, 2012, 2, -1, 1, 2, 3, 4);
+            ConfirmMonthBoundary(true, 2012, 2, 0, 1, 2, 3, 4);
         }
 
 
@@ -116,15 +125,14 @@ namespace TestCases.SS.Formula.Functions
          * @param monthNo 1-based
          * @param diffs
          */
-        private static void ConfirmMonthBoundary(bool method, int monthNo, params int[] diffs)
+        private static void ConfirmMonthBoundary(bool method, int year, int monthNo, params int[] diffs)
         {
-            DateTime firstDayOfNextMonth = MakeDate(2001, monthNo + 1, 1);
+            DateTime firstDayOfNextMonth = MakeDate(year, monthNo + 1, 1);
             DateTime secondArg = decrementDay(firstDayOfNextMonth);
             DateTime firstArg = secondArg;
 
-            for (int i = 0; i < diffs.Length; i++)
+            foreach (int expResult in diffs)
             {
-                int expResult = diffs[i];
                 Confirm(expResult, firstArg, secondArg, method);
                 firstArg = decrementDay(firstArg);
             }
@@ -145,18 +153,11 @@ namespace TestCases.SS.Formula.Functions
             }
             if (ve is NumberEval)
             {
-
+                Assert.IsTrue(ve is NumberEval, "wrong return type (" + ve.GetType().Name + ")");
                 NumberEval numberEval = (NumberEval)ve;
-                if (numberEval.NumberValue != expResult)
-                {
-                    throw new AssertionException(fmt(firstArg) + " " + fmt(secondArg) + " " + method +
-                            " wrong result got (" + numberEval.NumberValue
-                            + ") but expected (" + expResult + ")");
-                }
-                //	System.err.println(fmt(firstArg) + " " + fmt(secondArg) + " " + method + " success got (" + expResult + ")");
-                return;
+                String err = String.Format("days360({0},{1},{2}) wrong result", firstArg, secondArg, method);
+                Assert.AreEqual(expResult, numberEval.NumberValue, err);
             }
-            throw new AssertionException("wrong return type (" + ve.GetType().Name + ")");
         }
         private static ValueEval invokeDays360(params ValueEval[] args)
         {

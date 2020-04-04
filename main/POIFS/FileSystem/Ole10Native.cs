@@ -108,20 +108,6 @@ namespace NPOI.POIFS.FileSystem
          *
          * @param data   The buffer Containing the Ole10Native record
          * @param offset The start offset of the record in the buffer
-         * @param plain as of POI 3.11 this parameter is ignored
-         * @throws Ole10NativeException on invalid or unexcepted data format
-         */
-        [Obsolete("parameter plain is ignored, use {@link #Ole10Native(byte[],int)}")]
-        public Ole10Native(byte[] data, int offset, bool plain)
-            : this(data, offset)
-        {
-
-        }
-        /**
-         * Creates an instance and Fills the fields based on the data in the given buffer.
-         *
-         * @param data   The buffer Containing the Ole10Native record
-         * @param offset The start offset of the record in the buffer
          * @throws Ole10NativeException on invalid or unexcepted data format
          */
         public Ole10Native(byte[] data, int offset)
@@ -352,8 +338,8 @@ namespace NPOI.POIFS.FileSystem
          */
         public byte[] DataBuffer
         {
-            get{return dataBuffer;}
-            set { dataBuffer = value; }
+            get { return dataBuffer; }
+            set { dataBuffer =(byte[])value.Clone(); }
         }
 
         /**

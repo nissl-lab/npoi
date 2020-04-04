@@ -39,7 +39,7 @@ namespace NPOI.POIFS.FileSystem
     public class POIFSDocumentPath
     {
         private string[] components;
-        private int hashcode=0;
+        private int hashcode = 0; //lazy-compute hashCode
 
         /// <summary>
         /// simple constructor for the path of a document that is in the
@@ -178,14 +178,19 @@ namespace NPOI.POIFS.FileSystem
         {
             if (this.hashcode == 0)
             {
-                for (int i = 0; i < this.components.Length; i++)
-                {
-                    this.hashcode += this.components[i].GetHashCode();
-                }
+                this.hashcode = ComputeHashCode();
             }
             return this.hashcode;
         }
-
+        private int ComputeHashCode()
+        {
+            int code = 0;
+            for (int j = 0; j < components.Length; j++)
+            {
+                code += components[j].GetHashCode();
+            }
+            return code;
+        }
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </summary>
@@ -233,11 +238,33 @@ namespace NPOI.POIFS.FileSystem
                 {
                     return null;
                 }
-                POIFSDocumentPath path = new POIFSDocumentPath(null);
-                path.components = new string[length];
-                Array.Copy(this.components, 0, path.components, 0, length);
-                return path;
+
+                String[] parentComponents = new String[length];
+                Array.Copy(components, 0, parentComponents, 0, length);
+                POIFSDocumentPath parent = new POIFSDocumentPath(parentComponents);
+                return parent;
             }
+        }
+
+        /**
+         * <p>Returns the last name in the document path's name sequence.
+         * If the document path's name sequence is empty, then the empty string is returned.</p>
+         *
+         * @since 2016-04-09
+         * @return The last name in the document path's name sequence, or empty string if this is the root path
+         */
+
+        public String Name
+        {
+            get
+            {
+                if (components.Length == 0)
+                {
+                    return "";
+                }
+                return components[components.Length - 1];
+            }
+            
         }
     }
 }

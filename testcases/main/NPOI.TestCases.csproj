@@ -131,7 +131,6 @@
     <Compile Include="HPSF\TestVariantSupport.cs" />
     <Compile Include="HSSF\EventModel\TestAbortableListener.cs" />
     <Compile Include="HSSF\Extractor\TestOldExcelExtractor.cs" />
-    <Compile Include="HSSF\Model\HSSFTestModelHelper.cs" />
     <Compile Include="HSSF\Model\TestDrawingAggregate.cs" />
     <Compile Include="HSSF\Model\TestDrawingShapes.cs" />
     <Compile Include="HSSF\Model\TestEscherRecordFactory.cs" />
@@ -140,16 +139,16 @@
     <Compile Include="HSSF\Record\Chart\TestAxcExtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxesUsedRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestAxisLineFormatRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestBRAIRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestLinkedDataRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestCatSerRangeRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestDefaultTextRecord.cs" />
-    <Compile Include="HSSF\Record\Chart\TestFontXRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\TestFontIndexRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestSerToCrtRecord.cs" />
     <Compile Include="HSSF\Record\Chart\TestShtPropsRecord.cs" />
+    <Compile Include="HSSF\Record\Crypto\TestXorEncryption.cs" />
     <Compile Include="HSSF\Record\TestDConRefRecord.cs" />
     <Compile Include="HSSF\Record\TestPLVRecord.cs" />
     <Compile Include="HSSF\Record\TestUnicodeString.cs" />
-    <Compile Include="HSSF\UserModel\TestComment.cs" />
     <Compile Include="HSSF\UserModel\TestEmbeddedObjects.cs" />
     <Compile Include="HSSF\UserModel\TestExternalReferenceChange.cs" />
     <Compile Include="HSSF\UserModel\TestHSSFComment.cs" />
@@ -159,6 +158,7 @@
     <Compile Include="HSSF\UserModel\TestText.cs" />
     <Compile Include="HSSF\UserModel\TestCopySheet.cs" />
     <Compile Include="HSSF\Util\TestRangeAddress.cs" />
+    <Compile Include="POIFS\Crypt\TestCipherAlgorithm.cs" />
     <Compile Include="POIFS\EventFileSystem\Listener.cs" />
     <Compile Include="POIFS\EventFileSystem\TestPOIFSReaderRegistry.cs" />
     <Compile Include="POIFS\FileSystem\ReaderWriter.cs" />
@@ -169,6 +169,7 @@
     <Compile Include="POIFS\FileSystem\TestNPOIFSMiniStore.cs" />
     <Compile Include="POIFS\FileSystem\TestNPOIFSStream.cs" />
     <Compile Include="POIFS\FileSystem\TestOle10Native.cs" />
+    <Compile Include="POIFS\Macros\TestVBAMacroReader.cs" />
     <Compile Include="POIFS\NIO\TestDataSource.cs" />
     <Compile Include="POIFS\Storage\LocalProperty.cs" />
     <Compile Include="POIFS\Storage\RawDataUtil.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="RunSerialyAndSweepTmpFilesAttribute.cs" />
     <Compile Include="SS\Format\CellFormatTestBase.cs" />
     <Compile Include="SS\Format\TestCellFormat.cs" />
+    <Compile Include="SS\Format\TestCellFormatResult.cs" />
     <Compile Include="SS\Formula\Atp\TestDateParser.cs" />
     <Compile Include="SS\Formula\Atp\TestIfError.cs" />
     <Compile Include="SS\Formula\Atp\TestNetworkdaysFunction.cs" />
@@ -190,7 +192,7 @@
     <Compile Include="SS\Formula\Eval\TestHSSFCircularReferences.cs" />
     <Compile Include="SS\Formula\Eval\TestMultiSheetEval.cs" />
     <Compile Include="SS\Formula\Functions\CountifsTests.cs" />
-    <Compile Include="SS\Formula\Functions\RefValueImplementation.cs" />
+    <Compile Include="SS\Formula\Functions\RefEvalImplementation.cs" />
     <Compile Include="SS\Formula\Functions\TestBin2Dec.cs" />
     <Compile Include="SS\Formula\Functions\TestCode.cs" />
     <Compile Include="SS\Formula\Functions\TestCodeFunctionsFromSpreadsheet.cs" />
@@ -229,13 +231,30 @@
     <Compile Include="SS\Formula\Functions\TestAverageif.cs" />
     <Compile Include="SS\Formula\Functions\TestAverageifs.cs" />
     <Compile Include="SS\Formula\Functions\TestSumifs.cs" />
+    <Compile Include="SS\Formula\Functions\TestWeekdayFunc.cs" />
     <Compile Include="SS\Formula\Functions\TestWeekNumFunctionsFromSpreadsheet.cs" />
     <Compile Include="SS\Formula\Functions\TestWeekNumFunctionsFromSpreadsheet2013.cs" />
     <Compile Include="SS\Formula\TestFunctionRegistry.cs" />
     <Compile Include="SS\Formula\TestMissingWorkbook.cs" />
+    <Compile Include="SS\Formula\UDF\BaseTestUDFFinder.cs" />
+    <Compile Include="SS\Formula\UDF\TestAggregatingUDFFinder.cs" />
+    <Compile Include="SS\Formula\UDF\TestDefaultUDFFinder.cs" />
+    <Compile Include="SS\UserModel\BaseTestBorderStyle.cs" />
+    <Compile Include="SS\UserModel\BaseTestCloneSheet.cs" />
     <Compile Include="SS\UserModel\Charts\TestDataSources.cs" />
+    <Compile Include="SS\UserModel\TestDateUtil.cs" />
     <Compile Include="SS\UserModel\TestFractionFormat.cs" />
+    <Compile Include="SS\UserModel\TestHSSFBorderStyle.cs" />
+    <Compile Include="SS\UserModel\TestIndexedColors.cs" />
+    <Compile Include="SS\Util\TestAreaReference.cs" />
+    <Compile Include="SS\Util\TestCellAddress.cs" />
+    <Compile Include="SS\Util\BaseTestCellUtil.cs" />
+    <Compile Include="SS\Util\TestDateFormatConverter.cs" />
+    <Compile Include="SS\Util\TestHSSFCellUtil.cs" />
     <Compile Include="SS\Util\TestSheetUtil.cs" />
+    <Compile Include="TestPOIDocumentMain.cs" />
+    <Compile Include="TestPOITestCase.cs" />
+    <Compile Include="Util\NullOutputStream.cs" />
     <Compile Include="Util\TestBitField.cs" />
     <Compile Include="Util\TestByteField.cs" />
     <Compile Include="Util\TestHexDump.cs" />
@@ -244,6 +263,7 @@
     <Compile Include="Util\TestLongField.cs" />
     <Compile Include="Util\TestPOILogger.cs" />
     <Compile Include="Util\TestPOILogFactory.cs" />
+    <Compile Include="Util\TestRLEDecompressingInputStream.cs" />
     <Compile Include="Util\TestShortField.cs" />
     <Compile Include="Util\TestULongField.cs" />
   </ItemGroup>
@@ -494,7 +514,6 @@
     <Compile Include="HSSF\Model\TestLinkTable.cs" />
     <Compile Include="HSSF\Model\TestOperandClassTransformer.cs" />
     <Compile Include="HSSF\Model\TestRowBlocksReader.cs" />
-    <Compile Include="HSSF\Model\TestShapes.cs" />
     <Compile Include="HSSF\Model\TestWorkbook.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestPageSettingsBlock.cs" />
     <Compile Include="HSSF\Record\Aggregates\TestSharedValueManager.cs" />

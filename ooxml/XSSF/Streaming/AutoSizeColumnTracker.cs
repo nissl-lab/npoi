@@ -45,8 +45,8 @@ namespace NPOI.XSSF.Streaming
 
         private class ColumnWidthPair
         {
-            private static double withSkipMergedCells;
-            private static double withUseMergedCells;
+            private double withSkipMergedCells;
+            private double withUseMergedCells;
 
             public ColumnWidthPair() : this(-1.0, -1.0)
             {
@@ -65,7 +65,7 @@ namespace NPOI.XSSF.Streaming
              * @param useMergedCells true if merged cells are considered into the best-fit column width calculation
              * @return best fit column width, measured in default character widths.
              */
-            public double getMaxColumnWidth(bool useMergedCells)
+            public double GetMaxColumnWidth(bool useMergedCells)
             {
                 return useMergedCells ? withUseMergedCells : withSkipMergedCells;
             }
@@ -76,7 +76,7 @@ namespace NPOI.XSSF.Streaming
              * @param unmergedWidth the best-fit column width calculated with useMergedCells=False
              * @param mergedWidth the best-fit column width calculated with useMergedCells=True
              */
-            public void setMaxColumnWidths(double unmergedWidth, double mergedWidth)
+            public void SetMaxColumnWidths(double unmergedWidth, double mergedWidth)
             {
                 withUseMergedCells = Math.Max(withUseMergedCells, mergedWidth);
                 withSkipMergedCells = Math.Max(withUseMergedCells, unmergedWidth);
@@ -84,15 +84,15 @@ namespace NPOI.XSSF.Streaming
         }
 
         /**
-     * AutoSizeColumnTracker constructor. Holds no reference to <code>sheet</code>
-     *
-     * @param sheet the sheet associated with this auto-size column tracker
-     * @since 3.14beta1
-     */
+         * AutoSizeColumnTracker constructor. Holds no reference to <code>sheet</code>
+         *
+         * @param sheet the sheet associated with this auto-size column tracker
+         * @since 3.14beta1
+         */
         public AutoSizeColumnTracker(ISheet sheet)
         {
             // If sheet needs to be saved, use a java.lang.ref.WeakReference to avoid garbage collector gridlock.
-            defaultCharWidth = SheetUtil.getDefaultCharWidth(sheet.Workbook);
+            defaultCharWidth = SheetUtil.GetDefaultCharWidth(sheet.Workbook);
         }
 
         /**
@@ -103,11 +103,15 @@ namespace NPOI.XSSF.Streaming
          * @return a set of the indices of all tracked columns
          * @since 3.14beta1
          */
-        public SortedSet<int> getTrackedColumns()
+        public ISet<int> TrackedColumns
         {
-            throw new NotImplementedException();
-            //var sorted = new ColumnHelper.TreeSet<int>(maxColumnWidths.Keys);
-            //return Collection.unmodifiableSortedSet(sorted); 
+            get
+            {
+                SortedSet<int> sorted = new SortedSet<int>(maxColumnWidths.Keys);
+                return sorted;
+                //var sorted = new ColumnHelper.TreeSet<int>(maxColumnWidths.Keys);
+                //return Collection.unmodifiableSortedSet(sorted); 
+            }
         }
 
         /**
@@ -117,7 +121,7 @@ namespace NPOI.XSSF.Streaming
          * @return true if column is tracked
          * @since 3.14beta1
          */
-        public bool isColumnTracked(int column)
+        public bool IsColumnTracked(int column)
         {
             return trackAllColumns|| maxColumnWidths.ContainsKey(column);
         }
@@ -128,7 +132,7 @@ namespace NPOI.XSSF.Streaming
          * @return true if all columns are implicitly tracked
          * @since 3.14beta1
          */
-        public bool isAllColumnsTracked()
+        public bool IsAllColumnsTracked()
         {
             return trackAllColumns;
         }
@@ -149,7 +153,7 @@ namespace NPOI.XSSF.Streaming
          * All best-fit column widths are forgotten.
          * @since 3.14beta1
          */
-        public void untrackAllColumns()
+        public void UntrackAllColumns()
         {
             trackAllColumns = false;
             maxColumnWidths.Clear();
@@ -164,11 +168,11 @@ namespace NPOI.XSSF.Streaming
          * @param columns the indices of the columns to track
          * @since 3.14beta1
          */
-        public void trackColumns(Collection<int> columns)
+        public void TrackColumns(ICollection<int> columns)
         {
             foreach ( int column in columns)
             {
-                trackColumn(column);
+                TrackColumn(column);
             }
         }
 
@@ -181,7 +185,7 @@ namespace NPOI.XSSF.Streaming
          * @return if column is already tracked, the call does nothing and returns false
          * @since 3.14beta1
          */
-        public bool trackColumn(int column)
+        public bool TrackColumn(int column)
         {
             untrackedColumns.Remove(column);
             if (!maxColumnWidths.ContainsKey(column))
@@ -200,11 +204,11 @@ namespace NPOI.XSSF.Streaming
          * @param column the column to implicitly track
          * @return false if column has been explicitly untracked, otherwise return true
          */
-        private bool implicitlyTrackColumn(int column)
+        private bool ImplicitlyTrackColumn(int column)
         {
             if (!untrackedColumns.Contains(column))
             {
-                trackColumn(column);
+                TrackColumn(column);
                 return true;
             }
             return false;
@@ -219,7 +223,7 @@ namespace NPOI.XSSF.Streaming
          * @return true if one or more columns were untracked as a result of this call
          * @since 3.14beta1
          */
-        public bool UntrackColumns(Collection<int> columns)
+        public bool UntrackColumns(ICollection<int> columns)
         {
             bool result = false;
             foreach (var col in columns)
@@ -243,7 +247,7 @@ namespace NPOI.XSSF.Streaming
          * @return true if column was tracked prior this call, false if no action was taken
          * @since 3.14beta1
          */
-        public bool untrackColumn(int column)
+        public bool UntrackColumn(int column)
         {
             var result = false;
             if (maxColumnWidths.ContainsKey(column))
@@ -261,17 +265,17 @@ namespace NPOI.XSSF.Streaming
          * @param column the index of the column to get the current best-fit width of
          * @param useMergedCells true if merged cells should be considered when computing the best-fit width
          * @return best-fit column width, measured in number of characters
-         * @throws IllegalStateException if column is not tracked and trackAllColumns is false
+         * @throws InvalidOperationException if column is not tracked and trackAllColumns is false
          * @since 3.14beta1
          */
-        public int getBestFitColumnWidth(int column, bool useMergedCells)
+        public int GetBestFitColumnWidth(int column, bool useMergedCells)
         {
             if (!maxColumnWidths.ContainsKey(column))
             {
                 // if column is not tracked, implicitly track the column if trackAllColumns is True and column has not been explicitly untracked
                 if (trackAllColumns)
                 {
-                    if (!implicitlyTrackColumn(column))
+                    if (!ImplicitlyTrackColumn(column))
                     {
                         var reason = new InvalidOperationException(
                                 "Column was explicitly untracked after trackAllColumns() was called.");
@@ -290,7 +294,7 @@ namespace NPOI.XSSF.Streaming
                             "Either explicitly track the column or track all columns.", reason);
                 }
             }
-            double width = maxColumnWidths[column].getMaxColumnWidth(useMergedCells);
+            double width = maxColumnWidths[column].GetMaxColumnWidth(useMergedCells);
             return (int)(256 * width);
         }
 
@@ -372,7 +376,7 @@ namespace NPOI.XSSF.Streaming
                 foreach (var cell in row)
                 {
                     int column = cell.ColumnIndex;
-                    implicitlyTrackColumn(column);
+                    ImplicitlyTrackColumn(column);
                 }
             }
         }
@@ -388,7 +392,7 @@ namespace NPOI.XSSF.Streaming
         {
             double unmergedWidth = SheetUtil.GetCellWidth(cell, defaultCharWidth, dataFormatter, false);
             double mergedWidth = SheetUtil.GetCellWidth(cell, defaultCharWidth, dataFormatter, true);
-            pair.setMaxColumnWidths(unmergedWidth, mergedWidth);
+            pair.SetMaxColumnWidths(unmergedWidth, mergedWidth);
         }
     }
 

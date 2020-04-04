@@ -142,9 +142,9 @@ namespace NPOI
             return text.ToString();
         }
         /**
-    * Returns the custom document properties, if
-    *  there are any
-    */
+        * Returns the custom document properties, if
+        *  there are any
+        */
         public String GetCustomPropertiesText()
         {
             if (Document == null)
@@ -159,92 +159,92 @@ namespace NPOI
             {
                 String val = "(not implemented!)";
                 //val = property.Item.ToString();
-                //if (property.IsSetLpwstr())
-                //{
-                //    val = property.GetLpwstr();
-                //}
-                //else if (property.IsSetLpstr())
-                //{
-                //    val = property.GetLpstr();
-                //}
-                //else if (property.IsSetDate())
-                //{
-                //    val = property.GetDate().toString();
-                //}
-                //else if (property.IsSetFiletime())
-                //{
-                //    val = property.GetFiletime().toString();
-                //}
-                //else if (property.IsSetBool())
-                //{
-                //    val = Boolean.toString(property.GetBool());
-                //}
+                if (property.IsSetLpwstr())
+                {
+                    val = property.GetLpwstr();
+                }
+                else if (property.IsSetLpstr())
+                {
+                    val = property.GetLpstr();
+                }
+                else if (property.IsSetDate())
+                {
+                    val = property.GetDate().ToString();
+                }
+                else if (property.IsSetFiletime())
+                {
+                    val = property.GetFiletime().ToString();
+                }
+                else if (property.IsSetBool())
+                {
+                    val = property.GetBool().ToString();
+                }
 
-                //// Integers
-                //else if (property.IsSetI1())
-                //{
-                //    val = Integer.toString(property.GetI1());
-                //}
-                //else if (property.IsSetI2())
-                //{
-                //    val = Integer.toString(property.GetI2());
-                //}
-                //else if (property.IsSetI4())
-                //{
-                //    val = Integer.toString(property.GetI4());
-                //}
-                //else if (property.IsSetI8())
-                //{
-                //    val = Long.toString(property.GetI8());
-                //}
-                //else if (property.IsSetInt())
-                //{
-                //    val = Integer.toString(property.GetInt());
-                //}
+                // Integers
+                else if (property.IsSetI1())
+                {
+                    val = property.GetI1().ToString();
+                }
+                else if (property.IsSetI2())
+                {
+                    val = property.GetI2().ToString();
+                }
+                else if (property.IsSetI4())
+                {
+                    val = property.GetI4().ToString();
+                }
+                else if (property.IsSetI8())
+                {
+                    val = property.GetI8().ToString();
+                }
+                else if (property.IsSetInt())
+                {
+                    val = property.GetInt().ToString();
+                }
 
-                //// Unsigned Integers
-                //else if (property.IsSetUi1())
-                //{
-                //    val = Integer.toString(property.GetUi1());
-                //}
-                //else if (property.IsSetUi2())
-                //{
-                //    val = Integer.toString(property.GetUi2());
-                //}
-                //else if (property.IsSetUi4())
-                //{
-                //    val = Long.toString(property.GetUi4());
-                //}
-                //else if (property.IsSetUi8())
-                //{
-                //    val = property.GetUi8().toString();
-                //}
-                //else if (property.IsSetUint())
-                //{
-                //    val = Long.toString(property.GetUint());
-                //}
+                // Unsigned Integers
+                else if (property.IsSetUi1())
+                {
+                    val = property.GetUi1().ToString();
+                }
+                else if (property.IsSetUi2())
+                {
+                    val = property.GetUi2().ToString();
+                }
+                else if (property.IsSetUi4())
+                {
+                    val = property.GetUi4().ToString();
+                }
+                else if (property.IsSetUi8())
+                {
+                    val = property.GetUi8().ToString();
+                }
+                else if (property.IsSetUint())
+                {
+                    val = property.GetUint().ToString();
+                }
 
-                //// Reals
-                //else if (property.IsSetR4())
-                //{
-                //    val = Float.toString(property.GetR4());
-                //}
-                //else if (property.IsSetR8())
-                //{
-                //    val = Double.toString(property.GetR8());
-                //}
-                //else if (property.IsSetDecimal())
-                //{
-                //    BigDecimal d = property.GetDecimal();
-                //    if (d == null)
-                //    {
-                //        val = null;
-                //    }
-                //    else
-                //    {
-                //        val = d.toPlainString();
-                //    }
-                //}
+                // Reals
+                else if (property.IsSetR4())
+                {
+                    val = property.GetR4().ToString();
+                }
+                else if (property.IsSetR8())
+                {
+                    val = property.GetR8().ToString();
+                }
+                else if (property.IsSetDecimal())
+                {
+                    Decimal? d = property.GetDecimal();
+                    if (d == null)
+                    {
+                        val = null;
+                    }
+                    else
+                    {
+                        val = d.ToString();
+                    }
+                }
 
                 //else if (property.IsSetArray())
                 //{

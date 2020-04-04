@@ -17,9 +17,10 @@
 
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NUnit.Framework;
-using NPOI.Util;
 using System;
-namespace NPOI.XSSF.Util
+using NPOI.XSSF.Util;
+
+namespace TestCases.XSSF.Util
 {
 
     [TestFixture]

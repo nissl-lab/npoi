@@ -184,7 +184,7 @@ namespace NPOI.DDF
             StringBuilder builder = new StringBuilder();
             builder.Append(tab).Append("<").Append(GetType().Name).Append(" id=\"0x").Append(HexDump.ToHex(Id))
                     .Append("\" name=\"").Append(Name).Append("\" blipId=\"")
-                    .Append(IsBlipId).Append("\">\n");
+                    .Append(IsBlipId.ToString().ToLower()).Append("\">\n");
             for (int i = 0; i < NumberOfElementsInArray; i++)
             {
                 builder.Append("\t").Append(tab).Append("<Element>").Append(HexDump.ToHex(GetElement(i))).Append("</Element>\n");
@@ -210,7 +210,7 @@ namespace NPOI.DDF
             else
             {
                 short numElements = LittleEndian.GetShort(data, offset);
-                short numReserved = LittleEndian.GetShort(data, offset + 2);
+                //short numReserved = LittleEndian.GetShort(data, offset + 2); // numReserved
                 short sizeOfElements = LittleEndian.GetShort(data, offset + 4);
 
                 int arraySize = GetActualSizeOfElements(sizeOfElements) * numElements;

@@ -25,6 +25,10 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.Util;
 using System.Collections;
 using NPOI.XSSF.UserModel.Helpers;
+using NPOI.SS.UserModel;
+using System.Text.RegularExpressions;
+using System.Globalization;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -40,11 +44,12 @@ namespace NPOI.XSSF.UserModel
      *
      * @author Roberto Manicardi
      */
-    public class XSSFTable : POIXMLDocumentPart
+    public class XSSFTable : POIXMLDocumentPart, ITable
     {
-
         private CT_Table ctTable;
         private List<XSSFXmlColumnPr> xmlColumnPr;
+        private CT_TableColumn[] ctColumns;
+        private Dictionary<String, int> columnMap;
         private CellReference startCellReference;
         private CellReference endCellReference;
         private String commonXPath;
@@ -58,13 +63,19 @@ namespace NPOI.XSSF.UserModel
 
         }
 
-        internal XSSFTable(PackagePart part, PackageRelationship rel)
-            : base(part, rel)
+        internal XSSFTable(PackagePart part)
+            : base(part)
         {
             XmlDocument xml = ConvertStreamToXml(part.GetInputStream());
             ReadFrom(xml);
         }
 
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        protected XSSFTable(PackagePart part, PackageRelationship rel)
+            : this(part)
+        {
+
+        }
         public void ReadFrom(XmlDocument xmlDoc)
         {
             try
@@ -128,7 +139,18 @@ namespace NPOI.XSSF.UserModel
             return maps;
         }
 
-
+        private CT_TableColumn[] TableColumns
+        {
+            get
+            {
+                if (ctColumns == null)
+                {
+                    ctColumns = ctTable.tableColumns.tableColumn.ToArray();
+                }
+                return ctColumns;
+            }
+            
+        }
         /**
          * 
          * Calculates the xpath of the root element for the table. This will be the common part
@@ -144,7 +166,7 @@ namespace NPOI.XSSF.UserModel
 
                 Array commonTokens = null;
 
-                foreach (CT_TableColumn column in ctTable.tableColumns.tableColumn)
+                foreach (CT_TableColumn column in TableColumns)
                 {
                     if (column.xmlColumnPr != null)
                     {
@@ -186,7 +208,10 @@ namespace NPOI.XSSF.UserModel
             return commonXPath;
         }
 
-
+        /**
+         * Note this list is static - once read, it does not notice later changes to the underlying column structures
+         * @return List of XSSFXmlColumnPr
+         */
         public List<XSSFXmlColumnPr> GetXmlColumnPrs()
         {
 
@@ -252,57 +277,94 @@ namespace NPOI.XSSF.UserModel
          * @return The reference for the cell in the top-left part of the table
          * (see Open Office XML Part 4: chapter 3.5.1.2, attribute ref) 
          *
+         * To synchronize with changes to the underlying CTTable,
+         * call {@link #updateReferences()}.
          */
-        public CellReference GetStartCellReference()
+        public CellReference StartCellReference
         {
-
-            if (startCellReference == null)
+            get
             {
-                String ref1 = ctTable.@ref;
-                if(ref1 != null) {
-                    String[] boundaries = ref1.Split(":".ToCharArray());
-                    String from = boundaries[0];
-                    startCellReference = new CellReference(from);
+                if (startCellReference == null)
+                {
+                    SetCellReferences();
                 }
+                return startCellReference;
             }
-            return startCellReference;
+            
         }
 
         /**
          * @return The reference for the cell in the bottom-right part of the table
          * (see Open Office XML Part 4: chapter 3.5.1.2, attribute ref)
          *
+         * Does not track updates to underlying changes to CTTable
+         * To synchronize with changes to the underlying CTTable,
+         * call {@link #updateReferences()}.
          */
-        public CellReference GetEndCellReference()
+        public CellReference EndCellReference
         {
-
-            if (endCellReference == null)
+            get
             {
-
-                String ref1 = ctTable.@ref;
-                String[] boundaries = ref1.Split(new char[] { ':' });
-                String from = boundaries[1];
-                endCellReference = new CellReference(from);
+                if (endCellReference == null)
+                {
+                    SetCellReferences();
+                }
+                return endCellReference;
             }
-            return endCellReference;
+            
         }
 
 
         /**
-         *  @return the total number of rows in the selection. (Note: in this version autofiltering is ignored)
+      * @since POI 3.15 beta 3
+      */
+        private void SetCellReferences()
+        {
+            String ref1 = ctTable.@ref;
+            if (ref1 != null) {
+                String[] boundaries = ref1.Split(new char[] { ':' }, 2);
+                String from = boundaries[0];
+                String to = boundaries[1];
+                startCellReference = new CellReference(from);
+                endCellReference = new CellReference(to);
+            }
+        }
+
+
+        /**
+         * Clears the cached values set by {@link #getStartCellReference()}
+         * and {@link #getEndCellReference()}.
+         * The next call to {@link #getStartCellReference()} and
+         * {@link #getEndCellReference()} will synchronize the
+         * cell references with the underlying <code>CTTable</code>.
+         * Thus, {@link #updateReferences()} is inexpensive.
          *
+         * @since POI 3.15 beta 3
+         */
+        public void UpdateReferences()
+        {
+            startCellReference = null;
+            endCellReference = null;
+        }
+
+        /**
+         * @return the total number of rows in the selection. (Note: in this version autofiltering is ignored)
+         * Returns 0 if the start or end cell references are not set.
+         *  
+         * To synchronize with changes to the underlying CTTable,
+         * call {@link #updateReferences()}.
          */
         public int RowCount
         {
             get
             {
-                CellReference from = GetStartCellReference();
-                CellReference to = GetEndCellReference();
+                CellReference from = StartCellReference;
+                CellReference to = EndCellReference;
 
-                int rowCount = -1;
+                int rowCount = 0;
                 if (from != null && to != null)
                 {
-                    rowCount = to.Row - from.Row;
+                    rowCount = to.Row - from.Row + 1;
                 }
                 return rowCount;
             }
@@ -310,14 +372,18 @@ namespace NPOI.XSSF.UserModel
 
 
         /**
-     * Synchronize table headers with cell values in the parent sheet.
-     * Headers <em>must</em> be in sync, otherwise Excel will display a
-     * "Found unreadable content" message on startup.
-     */
+         * Synchronize table headers with cell values in the parent sheet.
+         * Headers <em>must</em> be in sync, otherwise Excel will display a
+         * "Found unreadable content" message on startup.
+         * 
+         * If calling both {@link #updateReferences()} and
+         * {@link #updateHeaders()}, {@link #updateReferences()}
+         * should be called first.
+         */
         public void UpdateHeaders()
         {
             XSSFSheet sheet = (XSSFSheet)GetParent();
-            CellReference ref1 = GetStartCellReference() as CellReference;
+            CellReference ref1 = StartCellReference;
             if (ref1 == null) return;
 
             int headerRow = ref1.Row;
@@ -336,6 +402,90 @@ namespace NPOI.XSSF.UserModel
                     }
                     cellnum++;
                 }
+                ctColumns = null;
+                columnMap = null;
+            }
+        }
+        /**
+         * Gets the relative column index of a column in this table having the header name <code>column</code>.
+         * The column index is relative to the left-most column in the table, 0-indexed.
+         * Returns <code>-1</code> if <code>column</code> is not a header name in table.
+         *
+         * Column Header names are case-insensitive
+         *
+         * Note: this function caches column names for performance. To flush the cache (because columns
+         * have been moved or column headers have been changed), {@link #updateHeaders()} must be called.
+         *
+         * @since 3.15 beta 2
+         */
+        public int FindColumnIndex(String columnHeader)
+        {
+            if (columnHeader == null) return -1;
+            if (columnMap == null)
+            {
+                columnMap = new Dictionary<string, int>(TableColumns.Length * 3 / 2);
+
+                int i = 0;
+                foreach (CT_TableColumn column in TableColumns)
+                {
+                    columnMap.Add(column.name.ToUpper(CultureInfo.CurrentCulture), i);
+                    i++;
+                }
+            }
+            // Table column names with special characters need a single quote escape
+            // but the escape is not present in the column definition
+            int idx = -1;
+            string testKey = columnHeader.Replace("'", "").ToUpper(CultureInfo.CurrentCulture);
+            if (columnMap.ContainsKey(testKey))
+                idx = columnMap[testKey];
+            return idx;
+        }
+
+        public String SheetName
+        {
+            get
+            {
+                return GetXSSFSheet().SheetName;
+            }
+        }
+
+        public bool IsHasTotalsRow
+        {
+            get
+            {
+                return ctTable.totalsRowShown;
+            }
+        }
+
+        public int StartColIndex
+        {
+            get
+            {
+                return StartCellReference.Col;
+            }
+        }
+
+        public int StartRowIndex
+        {
+            get
+            {
+                return StartCellReference.Row;
+            }
+        }
+
+        public int EndColIndex
+        {
+            get
+            {
+                return EndCellReference.Col;
+            }
+        }
+
+        public int EndRowIndex
+        {
+            get
+            {
+                return EndCellReference.Row;
             }
         }
     }

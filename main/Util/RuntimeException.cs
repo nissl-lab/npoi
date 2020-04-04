@@ -24,4 +24,26 @@ namespace NPOI.Util
 
         }
     }
+
+    //public class InvalidOperationException : RuntimeException
+    //{
+    //    public InvalidOperationException()
+    //        : base()
+    //    {
+
+    //    }
+    //    public InvalidOperationException(string message)
+    //        : base(message)
+    //    {
+    //    }
+    //    public InvalidOperationException(Exception e)
+    //        : base("", e)
+    //    {
+    //    }
+    //    public InvalidOperationException(string exception, Exception ex)
+    //        : base(exception, ex)
+    //    {
+
+    //    }
+    //}
 }

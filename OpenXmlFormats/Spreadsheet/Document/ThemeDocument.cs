@@ -2,6 +2,7 @@
 using System.Xml.Serialization;
 using NPOI.OpenXmlFormats.Dml;
 using System.Diagnostics;
+using System;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -33,6 +34,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             CT_OfficeStyleSheet obj = CT_OfficeStyleSheet.Parse(xmldoc.DocumentElement, namespaceManager);
             return new ThemeDocument(obj);
+        }
+
+        public CT_OfficeStyleSheet AddNewTheme()
+        {
+            stylesheet = new CT_OfficeStyleSheet();
+            return stylesheet;
         }
     }
 }

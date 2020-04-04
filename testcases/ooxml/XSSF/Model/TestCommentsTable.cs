@@ -18,9 +18,12 @@
 using System;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using NPOI.XSSF;
+using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
-namespace NPOI.XSSF.Model
+namespace TestCases.XSSF.Model
 {
 
 
@@ -66,9 +69,9 @@ namespace NPOI.XSSF.Model
             comment1.text = (ctrst1);
 
             // Test Finding the right comment for a cell
-            Assert.AreSame(comment0, sheetComments.GetCTComment("A1"));
-            Assert.AreSame(comment1, sheetComments.GetCTComment("A2"));
-            Assert.IsNull(sheetComments.GetCTComment("A3"));
+            Assert.AreSame(comment0, sheetComments.GetCTComment(new CellAddress("A1")));
+            Assert.AreSame(comment1, sheetComments.GetCTComment(new CellAddress("A2")));
+            Assert.IsNull(sheetComments.GetCTComment(new CellAddress("A3")));
         }
 
         [Test]
@@ -190,33 +193,37 @@ namespace NPOI.XSSF.Model
         [Test]
         public void RemoveComment()
         {
-            CommentsTable sheetComments = new CommentsTable();
-            CT_Comment a1 = sheetComments.NewComment("A1");
-            CT_Comment a2 = sheetComments.NewComment("A2");
-            CT_Comment a3 = sheetComments.NewComment("A3");
+            CellAddress addrA1 = new CellAddress("A1");
+            CellAddress addrA2 = new CellAddress("A2");
+            CellAddress addrA3 = new CellAddress("A3");
 
-            Assert.AreSame(a1, sheetComments.GetCTComment("A1"));
-            Assert.AreSame(a2, sheetComments.GetCTComment("A2"));
-            Assert.AreSame(a3, sheetComments.GetCTComment("A3"));
+            CommentsTable sheetComments = new CommentsTable();
+            CT_Comment a1 = sheetComments.NewComment(addrA1);
+            CT_Comment a2 = sheetComments.NewComment(addrA2);
+            CT_Comment a3 = sheetComments.NewComment(addrA3);
+
+            Assert.AreSame(a1, sheetComments.GetCTComment(addrA1));
+            Assert.AreSame(a2, sheetComments.GetCTComment(addrA2));
+            Assert.AreSame(a3, sheetComments.GetCTComment(addrA3));
             Assert.AreEqual(3, sheetComments.GetNumberOfComments());
 
-            Assert.IsTrue(sheetComments.RemoveComment("A1"));
+            Assert.IsTrue(sheetComments.RemoveComment(addrA1));
             Assert.AreEqual(2, sheetComments.GetNumberOfComments());
-            Assert.IsNull(sheetComments.GetCTComment("A1"));
-            Assert.AreSame(a2, sheetComments.GetCTComment("A2"));
-            Assert.AreSame(a3, sheetComments.GetCTComment("A3"));
+            Assert.IsNull(sheetComments.GetCTComment(addrA1));
+            Assert.AreSame(a2, sheetComments.GetCTComment(addrA2));
+            Assert.AreSame(a3, sheetComments.GetCTComment(addrA3));
 
-            Assert.IsTrue(sheetComments.RemoveComment("A2"));
+            Assert.IsTrue(sheetComments.RemoveComment(addrA2));
             Assert.AreEqual(1, sheetComments.GetNumberOfComments());
-            Assert.IsNull(sheetComments.GetCTComment("A1"));
-            Assert.IsNull(sheetComments.GetCTComment("A2"));
-            Assert.AreSame(a3, sheetComments.GetCTComment("A3"));
+            Assert.IsNull(sheetComments.GetCTComment(addrA1));
+            Assert.IsNull(sheetComments.GetCTComment(addrA2));
+            Assert.AreSame(a3, sheetComments.GetCTComment(addrA3));
 
-            Assert.IsTrue(sheetComments.RemoveComment("A3"));
+            Assert.IsTrue(sheetComments.RemoveComment(addrA3));
             Assert.AreEqual(0, sheetComments.GetNumberOfComments());
-            Assert.IsNull(sheetComments.GetCTComment("A1"));
-            Assert.IsNull(sheetComments.GetCTComment("A2"));
-            Assert.IsNull(sheetComments.GetCTComment("A3"));
+            Assert.IsNull(sheetComments.GetCTComment(addrA1));
+            Assert.IsNull(sheetComments.GetCTComment(addrA2));
+            Assert.IsNull(sheetComments.GetCTComment(addrA3));
         }
         [Test]
         public void Bug54920()

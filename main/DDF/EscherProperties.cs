@@ -177,7 +177,7 @@ namespace NPOI.DDF
         public const short LINESTYLE__LINESTARTARROWHEAD = 464;
         public const short LINESTYLE__LINEENDARROWHEAD = 465;
         public const short LINESTYLE__LINESTARTARROWWIDTH = 466;
-        public const short LINESTYLE__LINEESTARTARROWLength = 467;
+        public const short LINESTYLE__LINESTARTARROWLENGTH = 467;
         public const short LINESTYLE__LINEENDARROWWIDTH = 468;
         public const short LINESTYLE__LINEENDARROWLength = 469;
         public const short LINESTYLE__LINEJOINSTYLE = 470;
@@ -187,6 +187,10 @@ namespace NPOI.DDF
         public const short LINESTYLE__HITLINETEST = 509;
         public const short LINESTYLE__LINEFILLSHAPE = 510;
         public const short LINESTYLE__NOLINEDRAWDASH = 511;
+        public const short LINESTYLE__NOLINEDRAWDASH_LEFT = 0x057F;
+        public const short LINESTYLE__NOLINEDRAWDASH_TOP = 0x05BF;
+        public const short LINESTYLE__NOLINEDRAWDASH_BOTTOM = 0x063F;
+        public const short LINESTYLE__NOLINEDRAWDASH_RIGHT = 0x05FF;
         public const short SHADOWSTYLE__TYPE = 512;
         public const short SHADOWSTYLE__COLOR = 513;
         public const short SHADOWSTYLE__HIGHLIGHT = 514;
@@ -349,7 +353,7 @@ namespace NPOI.DDF
                 AddProp(PROTECTION__LOCKVERTICES, GetData("protection.lockvertices"));
                 AddProp(PROTECTION__LOCKTEXT, GetData("protection.locktext"));
                 AddProp(PROTECTION__LOCKADJUSTHANDLES, GetData("protection.lockadjusthandles"));
-                AddProp(PROTECTION__LOCKAGAINSTGROUPING, GetData("protection.lockagainstgrouping", EscherPropertyMetaData.TYPE_bool));
+                AddProp(PROTECTION__LOCKAGAINSTGROUPING, GetData("protection.lockagainstgrouping", EscherPropertyMetaData.TYPE_BOOL));
                 AddProp(TEXT__TEXTID, GetData("text.textid"));
                 AddProp(TEXT__TEXTLEFT, GetData("text.textleft"));
                 AddProp(TEXT__TEXTTOP, GetData("text.texttop"));
@@ -366,7 +370,7 @@ namespace NPOI.DDF
                 AddProp(TEXT__USEHOSTMARGINS, GetData("text.usehostmargins"));
                 AddProp(TEXT__ROTATETEXTWITHSHAPE, GetData("text.rotatetextwithshape"));
                 AddProp(TEXT__SIZESHAPETOFITTEXT, GetData("text.sizeshapetofittext"));
-                AddProp(TEXT__SIZE_TEXT_TO_FIT_SHAPE, GetData("text.sizetexttofitshape", EscherPropertyMetaData.TYPE_bool));
+                AddProp(TEXT__SIZE_TEXT_TO_FIT_SHAPE, GetData("text.sizetexttofitshape", EscherPropertyMetaData.TYPE_BOOL));
                 AddProp(GEOTEXT__UNICODE, GetData("geotext.unicode"));
                 AddProp(GEOTEXT__RTFTEXT, GetData("geotext.rtftext"));
                 AddProp(GEOTEXT__ALIGNMENTONCURVE, GetData("geotext.alignmentoncurve"));
@@ -433,7 +437,7 @@ namespace NPOI.DDF
                 AddProp(GEOMETRY__LINEOK, GetData("geometry.lineok"));
                 AddProp(GEOMETRY__GEOTEXTOK, GetData("geometry.geotextok"));
                 AddProp(GEOMETRY__FILLSHADESHAPEOK, GetData("geometry.fillshadeshapeok"));
-                AddProp(GEOMETRY__FILLOK, GetData("geometry.fillok", EscherPropertyMetaData.TYPE_bool));
+                AddProp(GEOMETRY__FILLOK, GetData("geometry.fillok", EscherPropertyMetaData.TYPE_BOOL));
                 AddProp(FILL__FILLTYPE, GetData("fill.filltype"));
                 AddProp(FILL__FILLCOLOR, GetData("fill.fillcolor", EscherPropertyMetaData.TYPE_RGB));
                 AddProp(FILL__FILLOPACITY, GetData("fill.fillopacity"));
@@ -467,7 +471,7 @@ namespace NPOI.DDF
                 AddProp(FILL__HITTESTFILL, GetData("fill.hittestfill"));
                 AddProp(FILL__SHAPE, GetData("fill.shape"));
                 AddProp(FILL__USERECT, GetData("fill.userect"));
-                AddProp(FILL__NOFILLHITTEST, GetData("fill.nofillhittest", EscherPropertyMetaData.TYPE_bool));
+                AddProp(FILL__NOFILLHITTEST, GetData("fill.nofillhittest", EscherPropertyMetaData.TYPE_BOOL));
                 AddProp(LINESTYLE__COLOR, GetData("linestyle.color", EscherPropertyMetaData.TYPE_RGB));
                 AddProp(LINESTYLE__OPACITY, GetData("linestyle.opacity"));
                 AddProp(LINESTYLE__BACKCOLOR, GetData("linestyle.backcolor", EscherPropertyMetaData.TYPE_RGB));
@@ -487,7 +491,7 @@ namespace NPOI.DDF
                 AddProp(LINESTYLE__LINESTARTARROWHEAD, GetData("linestyle.linestartarrowhead"));
                 AddProp(LINESTYLE__LINEENDARROWHEAD, GetData("linestyle.lineendarrowhead"));
                 AddProp(LINESTYLE__LINESTARTARROWWIDTH, GetData("linestyle.linestartarrowwidth"));
-                AddProp(LINESTYLE__LINEESTARTARROWLength, GetData("linestyle.lineestartarrowlength"));
+                AddProp(LINESTYLE__LINESTARTARROWLENGTH, GetData("linestyle.linestartarrowlength"));
                 AddProp(LINESTYLE__LINEENDARROWWIDTH, GetData("linestyle.lineendarrowwidth"));
                 AddProp(LINESTYLE__LINEENDARROWLength, GetData("linestyle.lineendarrowlength"));
                 AddProp(LINESTYLE__LINEJOINSTYLE, GetData("linestyle.linejoinstyle"));
@@ -496,7 +500,11 @@ namespace NPOI.DDF
                 AddProp(LINESTYLE__ANYLINE, GetData("linestyle.anyline"));
                 AddProp(LINESTYLE__HITLINETEST, GetData("linestyle.hitlinetest"));
                 AddProp(LINESTYLE__LINEFILLSHAPE, GetData("linestyle.linefillshape"));
-                AddProp(LINESTYLE__NOLINEDRAWDASH, GetData("linestyle.nolinedrawdash", EscherPropertyMetaData.TYPE_bool));
+                AddProp(LINESTYLE__NOLINEDRAWDASH, GetData("linestyle.nolinedrawdash", EscherPropertyMetaData.TYPE_BOOL));
+                AddProp(LINESTYLE__NOLINEDRAWDASH_LEFT, GetData("linestyle.nolinedrawdash.left", EscherPropertyMetaData.TYPE_BOOL));
+                AddProp(LINESTYLE__NOLINEDRAWDASH_TOP, GetData("linestyle.nolinedrawdash.top", EscherPropertyMetaData.TYPE_BOOL));
+                AddProp(LINESTYLE__NOLINEDRAWDASH_BOTTOM, GetData("linestyle.nolinedrawdash.bottom", EscherPropertyMetaData.TYPE_BOOL));
+                AddProp(LINESTYLE__NOLINEDRAWDASH_RIGHT, GetData("linestyle.nolinedrawdash.right", EscherPropertyMetaData.TYPE_BOOL));
                 AddProp(SHADOWSTYLE__TYPE, GetData("shadowstyle.type"));
                 AddProp(SHADOWSTYLE__COLOR, GetData("shadowstyle.color", EscherPropertyMetaData.TYPE_RGB));
                 AddProp(SHADOWSTYLE__HIGHLIGHT, GetData("shadowstyle.highlight"));
@@ -613,7 +621,7 @@ namespace NPOI.DDF
                 AddProp(GROUPSHAPE__ISBUTTON, GetData("groupshape.isbutton"));
                 AddProp(GROUPSHAPE__1DADJUSTMENT, GetData("groupshape.1dadjustment"));
                 AddProp(GROUPSHAPE__HIDDEN, GetData("groupshape.hidden"));
-                AddProp(GROUPSHAPE__PRINT, GetData("groupshape.print", EscherPropertyMetaData.TYPE_bool));
+                AddProp(GROUPSHAPE__PRINT, GetData("groupshape.print", EscherPropertyMetaData.TYPE_BOOL));
             }
         }
 

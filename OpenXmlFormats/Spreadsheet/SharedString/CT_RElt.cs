@@ -87,5 +87,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tField = value;
             }
         }
+
+        public bool isSetRPr()
+        {
+            return this.rPrField != null;
+        }
     }
 }

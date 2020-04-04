@@ -26,6 +26,7 @@ namespace NPOI.HSSF.Record.Aggregates
     using NPOI.SS.Formula;
     using NPOI.HSSF.Model;
     using NPOI.SS.Formula.PTG;
+    using System.Collections.Generic;
 
     /**
      *
@@ -36,7 +37,7 @@ namespace NPOI.HSSF.Record.Aggregates
      * @author Jason Height (jheight at chariot dot net dot au)
      */
 
-    public class ValueRecordsAggregate
+    public class ValueRecordsAggregate : IEnumerable<CellValueRecordInterface>
     {
         const int MAX_ROW_INDEX = 0XFFFF;
         const int INDEX_NOT_SET = -1;
@@ -143,28 +144,7 @@ namespace NPOI.HSSF.Record.Aggregates
 
             records[rowIndex] = null;
         }
-        public CellValueRecordInterface[] GetValueRecords()
-        {
-            ArrayList temp = new ArrayList();
 
-            for (int i = 0; i < records.Length; i++)
-            {
-                CellValueRecordInterface[] rowCells = records[i];
-                if (rowCells == null)
-                {
-                    continue;
-                }
-                for (int j = 0; j < rowCells.Length; j++)
-                {
-                    CellValueRecordInterface cell = rowCells[j];
-                    if (cell != null)
-                    {
-                        temp.Add(cell);
-                    }
-                }
-            }
-             return (CellValueRecordInterface[])temp.ToArray(typeof(CellValueRecordInterface));
-        }
         public int PhysicalNumberOfCells
         {
             get
@@ -271,7 +251,7 @@ namespace NPOI.HSSF.Record.Aggregates
          */
         public int GetRowCellBlockSize(int startRow, int endRow)
         {
-            MyEnumerator itr = new MyEnumerator(ref records,startRow, endRow);
+            ValueEnumerator itr = new ValueEnumerator(ref records,startRow, endRow);
             int size = 0;
             while (itr.MoveNext())
             {
@@ -374,7 +354,7 @@ namespace NPOI.HSSF.Record.Aggregates
         /** Serializes the cells that are allocated to a certain row range*/
         public int SerializeCellRow(int row, int offset, byte[] data)
         {
-            MyEnumerator itr = new MyEnumerator(ref records,row, row);
+            ValueEnumerator itr = new ValueEnumerator(ref records,row, row);
             int pos = offset;
 
             while (itr.MoveNext())
@@ -387,19 +367,24 @@ namespace NPOI.HSSF.Record.Aggregates
             return pos - offset;
         }
 
-        public IEnumerator GetEnumerator()
+        public IEnumerator<CellValueRecordInterface> GetEnumerator()
         {
-            return new MyEnumerator(ref records);
+            return new ValueEnumerator(ref records);
         }
 
-        private class MyEnumerator : IEnumerator
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        private class ValueEnumerator : IEnumerator<CellValueRecordInterface>
         {
             short nextColumn = -1;
             int nextRow, lastRow;
 
             CellValueRecordInterface[][] records;
 
-            public MyEnumerator(ref CellValueRecordInterface[][] _records)
+            public ValueEnumerator(ref CellValueRecordInterface[][] _records)
             {
                 this.records = _records;
                 this.nextRow = 0;
@@ -407,7 +392,7 @@ namespace NPOI.HSSF.Record.Aggregates
                 //FindNext();
             }
 
-            public MyEnumerator(ref CellValueRecordInterface[][] _records,int firstRow, int lastRow)
+            public ValueEnumerator(ref CellValueRecordInterface[][] _records,int firstRow, int lastRow)
             {
                 this.records = _records;
                 this.nextRow = firstRow;
@@ -420,15 +405,18 @@ namespace NPOI.HSSF.Record.Aggregates
                 FindNext();
                 return nextRow <= lastRow; ;
             }
-            public Object Current
+            public CellValueRecordInterface Current
             {
                 get
                 {
-                    Object o = this.records[nextRow][nextColumn];
+                    CellValueRecordInterface o = this.records[nextRow][nextColumn];
 
                     return o;
                 }
             }
+
+            object IEnumerator.Current => this.Current;
+
             public void Remove()
             {
                 throw new InvalidOperationException("gibt's noch nicht");
@@ -457,6 +445,11 @@ namespace NPOI.HSSF.Record.Aggregates
             {
                 nextColumn = -1;
                 nextRow = 0;
+            }
+
+            public void Dispose()
+            {
+                this.records = null;
             }
         }
     }

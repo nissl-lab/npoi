@@ -450,7 +450,7 @@ namespace NPOI.HSSF.Record
                     }
                     if (GetSid(records, loc) == DrawingRecord.sid)
                     {
-                        byte[] data = ((DrawingRecord)records[loc]).Data;
+                        byte[] data = ((DrawingRecord)records[loc]).RecordData;
                         stream.Write(data, 0, data.Length);
                     }
                     else
@@ -625,7 +625,7 @@ namespace NPOI.HSSF.Record
                         DrawingRecord drawing = new DrawingRecord();
                         byte[] buf = new byte[Math.Min(RecordInputStream.MAX_RECORD_DATA_SIZE, drawingData.Length - j)];
                         System.Array.Copy(drawingData, j, buf, 0, Math.Min(RecordInputStream.MAX_RECORD_DATA_SIZE, drawingData.Length - j));
-                        drawing.Data = (buf);
+                        drawing.SetData(buf);
                         temp += drawing.Serialize(pos + temp, data);
                     }
                     else

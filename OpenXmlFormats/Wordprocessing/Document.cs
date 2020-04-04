@@ -6,6 +6,7 @@ using NPOI.OpenXmlFormats.Shared;
 using NPOI.OpenXml4Net.Util;
 using System.IO;
 using System.Collections;
+using System.Linq;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -108,7 +109,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Document()
         {
-            //this.bodyField = new CT_Body();
+            this.bodyField = new CT_Body();
         }
 
         [XmlElement(Order = 0)]
@@ -146,7 +147,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Body()
         {
-            //this.sectPrField = new CT_SectPr();
+            this.sectPrField = new CT_SectPr();
             this.itemsElementNameField = new List<DocumentBodyItemChoiceType>();
             this.itemsField = new ArrayList();
         }
@@ -315,6 +316,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return ctObj;
         }
 
+        public int SizeOfPArray()
+        {
+            return this.itemsElementNameField.Count(p => p == DocumentBodyItemChoiceType.p);
+        }
+
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
@@ -387,6 +393,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (this.sectPr != null)
                 this.sectPr.Write(sw, "sectPr");
             sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+
+        public void AddNewSectPr()
+        {
+            this.sectPrField = new CT_SectPr();
+            //return this.sectPrField;
+        }
+
+        public bool IsSetSectPr()
+        {
+            return this.sectPrField != null;
         }
 
         [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]

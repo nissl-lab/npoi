@@ -24,6 +24,7 @@ namespace NPOI.HSSF.Record.Aggregates
     using NPOI.SS.Util;
     using NPOI.SS.Formula.PTG;
     using NPOI.Util;
+    using NPOI.SS.UserModel;
 
     /// <summary>
     /// The formula record aggregate is used to join toGether the formula record and it's
@@ -350,7 +351,10 @@ namespace NPOI.HSSF.Record.Aggregates
             _stringRecord = null;
             _formulaRecord.SetCachedResultErrorCode(errorCode);
         }
-
+        public void SetCachedErrorResult(FormulaError error)
+        {
+            SetCachedErrorResult(error.Code);
+        }
         #region ICloneable Members
 
         public object Clone()

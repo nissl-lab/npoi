@@ -40,11 +40,54 @@ namespace TestCases.HSSF.UserModel
           
         }
 
+        
+        [Test]
+        public void TestRowBounds()
+        {
+            BaseTestRowBounds(SpreadsheetVersion.EXCEL97.LastRowIndex);
+        }
+        [Test]
+        public void TestCellBounds()
+        {
+            BaseTestCellBounds(SpreadsheetVersion.EXCEL97.LastColumnIndex);
+        }
+
+        [Test]
+        public void TestLastAndFirstColumns_bug46654()
+        {
+            int ROW_IX = 10;
+            int COL_IX = 3;
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet sheet = (HSSFSheet)workbook.CreateSheet("Sheet1");
+            RowRecord rowRec = new RowRecord(ROW_IX);
+            rowRec.FirstCol=((short)2);
+            rowRec.LastCol=((short)5);
+
+            BlankRecord br = new BlankRecord();
+            br.Row=(ROW_IX);
+            br.Column=((short)COL_IX);
+
+            sheet.Sheet.AddValueRecord(ROW_IX, br);
+            HSSFRow row = new HSSFRow(workbook,sheet, rowRec);
+            ICell cell = row.CreateCellFromRecord(br);
+
+            if (row.FirstCellNum == 2 && row.LastCellNum == 5)
+            {
+                Assert.Fail("Identified bug 46654a");
+            }
+            Assert.AreEqual(COL_IX, row.FirstCellNum);
+            Assert.AreEqual(COL_IX + 1, row.LastCellNum);
+            row.RemoveCell(cell);
+            Assert.AreEqual(-1, row.FirstCellNum);
+            Assert.AreEqual(-1, row.LastCellNum);
+            workbook.Close();
+        }
+
         [Test]
         public void TestMoveCell()
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
-            NPOI.SS.UserModel.ISheet sheet = workbook.CreateSheet();
+            ISheet sheet = workbook.CreateSheet();
             IRow row = sheet.CreateRow(0);
             IRow rowB = sheet.CreateRow(1);
 
@@ -92,70 +135,8 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(5, cellB2.ColumnIndex);
             Assert.AreEqual(2, row.FirstCellNum);
             Assert.AreEqual(6, row.LastCellNum);
-        }
-        [Test]
-        public void TestRowBounds()
-        {
-            BaseTestRowBounds(SpreadsheetVersion.EXCEL97.LastRowIndex);
-        }
-        [Test]
-        public void TestCellBounds()
-        {
-            BaseTestCellBounds(SpreadsheetVersion.EXCEL97.LastColumnIndex);
-        }
-        /**
-         * Prior to patch 43901, POI was producing files with the wrong last-column
-         * number on the row
-         */
-        [Test]
-        public new void TestLastCellNumIsCorrectAfterAddCell_bug43901()
-        {
-            HSSFWorkbook book = new HSSFWorkbook();
-            NPOI.SS.UserModel.ISheet sheet = book.CreateSheet("Test");
-            IRow row = sheet.CreateRow(0);
 
-            // New row has last col -1
-            Assert.AreEqual(-1, row.LastCellNum);
-            if (row.LastCellNum == 0)
-            {
-                Assert.Fail("Identified bug 43901");
-            }
-
-            // Create two cells, will return one higher
-            //  than that for the last number
-            row.CreateCell(0);
-            Assert.AreEqual(1, row.LastCellNum);
-            row.CreateCell(255);
-            Assert.AreEqual(256, row.LastCellNum);
-        }
-        [Test]
-        public void TestLastAndFirstColumns_bug46654()
-        {
-            int ROW_IX = 10;
-            int COL_IX = 3;
-            HSSFWorkbook workbook = new HSSFWorkbook();
-            HSSFSheet sheet = (HSSFSheet)workbook.CreateSheet("Sheet1");
-            RowRecord rowRec = new RowRecord(ROW_IX);
-            rowRec.FirstCol=((short)2);
-            rowRec.LastCol=((short)5);
-
-            BlankRecord br = new BlankRecord();
-            br.Row=(ROW_IX);
-            br.Column=((short)COL_IX);
-
-            sheet.Sheet.AddValueRecord(ROW_IX, br);
-            HSSFRow row = new HSSFRow(workbook,sheet, rowRec);
-            ICell cell = row.CreateCellFromRecord(br);
-
-            if (row.FirstCellNum == 2 && row.LastCellNum == 5)
-            {
-                throw new AssertionException("Identified bug 46654a");
-            }
-            Assert.AreEqual(COL_IX, row.FirstCellNum);
-            Assert.AreEqual(COL_IX + 1, row.LastCellNum);
-            row.RemoveCell(cell);
-            Assert.AreEqual(-1, row.FirstCellNum);
-            Assert.AreEqual(-1, row.LastCellNum);
+            workbook.Close();
         }
 
         [Test]
@@ -175,6 +156,7 @@ namespace TestCases.HSSF.UserModel
             row.Height = ((short)-1);
             Assert.AreEqual(row.Height, sheet.DefaultRowHeight);
             Assert.AreEqual(row.RowRecord.BadFontHeight, false);
+            workbook.Close();
         }
     }
 }

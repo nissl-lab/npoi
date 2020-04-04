@@ -36,6 +36,7 @@ using NPOI.POIFS.Common;
 using NPOI.POIFS.Storage;
 using NPOI.POIFS.Properties;
 using TestCases.POIFS.Properties;
+using System.Collections.Generic;
 
 namespace TestCases.POIFS.Properties
 {
@@ -130,8 +131,8 @@ namespace TestCases.POIFS.Properties
 
         private void VerifyChildren(int count)
         {
-            IEnumerator iter = _property.Children;
-            ArrayList children = new ArrayList();
+            IEnumerator<Property> iter = _property.Children;
+            List<Property> children = new List<Property>();
 
             while (iter.MoveNext())
             {
@@ -151,7 +152,7 @@ namespace TestCases.POIFS.Properties
                 iter = children.GetEnumerator();
                 while (iter.MoveNext())
                 {
-                    Property child = (Property)iter.Current;
+                    Property child = iter.Current;
                     Child next = child.NextChild;
 
                     if (next != null)
@@ -209,7 +210,7 @@ namespace TestCases.POIFS.Properties
             {
                 _testblock[index] = (byte)0;
             }
-            byte[] name_bytes = Encoding.UTF8.GetBytes(name);
+            byte[] name_bytes = Encoding.GetEncoding(1252).GetBytes(name);
 
             for (index = 0; index < limit; index++)
             {

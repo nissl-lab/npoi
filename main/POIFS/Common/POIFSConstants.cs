@@ -74,5 +74,8 @@ namespace NPOI.POIFS.Common
         /** The first 4 bytes of an OOXML file, used in detection */
         public static readonly byte[] OOXML_FILE_HEADER =
             new byte[] { 0x50, 0x4b, 0x03, 0x04 };
+        /** The first 5 bytes of a raw XML file, used in detection */
+        public static readonly byte[] RAW_XML_FILE_HEADER =
+            new byte[] { 0x3c, 0x3f, 0x78, 0x6d, 0x6c };
     }
 }
