@@ -470,7 +470,8 @@ namespace NPOI.XSSF.Streaming
                 return;
             }
 
-            SetCellValue(value.Value);
+            bool date1904 = ((SXSSFWorkbook)Sheet.Workbook).XssfWorkbook.IsDate1904();
+            SetCellValue(DateUtil.GetExcelDate(value.Value, date1904));
         }
 
         public void SetCellValue(double value)
@@ -821,8 +822,7 @@ namespace NPOI.XSSF.Streaming
 
         public void SetCellValue(DateTime value)
         {
-            bool date1904 = Sheet.Workbook.IsDate1904();
-            SetCellValue(DateUtil.GetExcelDate(value, date1904));
+            SetCellValue((DateTime?)value);
         }
     }
 }

@@ -362,7 +362,7 @@ namespace NPOI.XSSF.Streaming
             }
 
             public void Dispose()
-            {
+            { 
             }
 
             public IEnumerator<ICell> GetEnumerator()
@@ -411,9 +411,7 @@ namespace NPOI.XSSF.Streaming
             }
 
             public void Dispose()
-            {
-                throw new NotImplementedException();
-            }
+            { }
 
             public IEnumerator<ICell> GetEnumerator()
             {

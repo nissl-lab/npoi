@@ -678,7 +678,7 @@ namespace NPOI.XSSF.Streaming
             {
                 try
                 {
-                    FlushRows(_randomAccessWindowSize);
+                    flushRows(_randomAccessWindowSize, false);
                 }
                 catch (IOException ioe)
                 {
@@ -1243,6 +1243,25 @@ namespace NPOI.XSSF.Streaming
             return _writer.Dispose();
         }
         /**
+ * Specifies how many rows can be accessed at most via getRow().
+ * The exeeding rows (if any) are flushed to the disk while rows
+ * with lower index values are flushed first.
+ */
+        private void FlushRows(int remaining, bool flushOnDisk)
+        {
+            KeyValuePair<int, SXSSFRow>? lastRow = null;
+            var flushedRowsCount = 0;
+            while (_rows.Count > remaining)
+            {
+                flushedRowsCount++;
+                lastRow = flushOneRow();
+            }
+            if (remaining == 0) 
+                allFlushed = true;
+
+            if (lastRow != null && flushOnDisk)
+                _writer.FlushRows(flushedRowsCount, lastRow.Value.Key, lastRow.Value.Value.LastCellNum);
+       }
          * Are all rows flushed to disk?
          */
         public bool AllRowsFlushed
@@ -1262,20 +1281,24 @@ namespace NPOI.XSSF.Streaming
                 return lastFlushedRowNumber;
             }
         }
-        /**
-         * Specifies how many rows can be accessed at most via getRow().
-         * The exeeding rows (if any) are flushed to the disk while rows
-         * with lower index values are flushed first.
-         */
-        private void FlushRows(int remaining)
-        {
-            while (_rows.Count > remaining) FlushOneRow();
-            if (remaining == 0) allFlushed = true;
-        }
 
         public void FlushRows()
         {
-            FlushRows(0);
+            FlushRows(0, true);
+        }
+
+        private KeyValuePair<int, SXSSFRow>? flushOneRow()
+        {
+            if (_rows.Count == 0)
+                return null;
+
+            var firstRow = _rows.FirstOrDefault();
+            // Update the best fit column widths for auto-sizing just before the rows are flushed
+            // _autoSizeColumnTracker.UpdateColumnWidths(row);
+            _writer.WriteRow(firstRow.Key, firstRow.Value);
+            _rows.Remove(firstRow.Key);
+            lastFlushedRowNumber = firstRow.Key;
+            return firstRow;
         }
 
         private void FlushOneRow()
@@ -1299,7 +1322,8 @@ namespace NPOI.XSSF.Streaming
         public Stream GetWorksheetXMLInputStream()
         {
             // flush all remaining data and close the temp file writer
-            FlushRows(0);
+            flushRows(0, true);
+
             _writer.Close();
             return _writer.GetWorksheetXmlInputStream();
         }
