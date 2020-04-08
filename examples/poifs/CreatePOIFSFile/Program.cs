@@ -24,12 +24,8 @@
  * ==============================================================*/
 
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-
 using NPOI.POIFS.FileSystem;
+using System.IO;
 
 
 namespace CreatePOIFSFile
@@ -43,7 +39,7 @@ namespace CreatePOIFSFile
             //get the root directory
             DirectoryEntry dir = fs.Root;
             //create a document entry
-            dir.CreateDocument("Foo", new MemoryStream(new byte[] {0x01,0x02,0x03 }));
+            dir.CreateDocument("Foo", new MemoryStream(new byte[] { 0x01, 0x02, 0x03 }));
 
             //create a folder
             dir.CreateDirectory("Hello");

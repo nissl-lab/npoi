@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NPOI.XWPF.UserModel;
+﻿using NPOI.XWPF.UserModel;
 using System.IO;
 
 namespace CreateBullet
@@ -107,6 +103,5 @@ namespace CreateBullet
             doc.Write(sw);
             sw.Close();
         }
-
     }
 }

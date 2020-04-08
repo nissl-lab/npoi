@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO;
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
+﻿using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using System;
+using System.IO;
 
 namespace CopySheet
 {
@@ -13,7 +12,7 @@ namespace CopySheet
             Console.WriteLine("Hello World! Please Wait while processing...");
             //Excel worksheet combine example
             //Note: This example does not check for duplicate sheet names. Your test files should have different sheet names.
-            
+
             IWorkbook book1 = new XSSFWorkbook(new FileStream("file1.xlsx", FileMode.Open));
             IWorkbook book2 = new XSSFWorkbook(new FileStream("file2.xlsx", FileMode.Open));
             IWorkbook product = new XSSFWorkbook();
@@ -23,13 +22,14 @@ namespace CopySheet
                 ISheet sheet1 = book1.GetSheetAt(i);
                 sheet1.CopyTo(product, sheet1.SheetName, true, true);
             }
+
             for (int j = 0; j < book2.NumberOfSheets; j++)
             {
                 ISheet sheet2 = book2.GetSheetAt(j);
                 sheet2.CopyTo(product, sheet2.SheetName, true, true);
             }
+
             product.Write(new FileStream("test.xlsx", FileMode.Create, FileAccess.ReadWrite));
         }
-
     }
 }

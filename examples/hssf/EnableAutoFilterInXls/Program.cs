@@ -1,17 +1,15 @@
-﻿using System;
-using System.Text;
-using System.IO;
+﻿using NPOI.HPSF;
 using NPOI.HSSF.UserModel;
-using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
-
+using System.IO;
 
 namespace EnableAutoFilterInXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
@@ -21,20 +19,16 @@ namespace EnableAutoFilterInXls
             for (int i = 1; i <= 9; i++)
             {
                 IRow row = sheet1.CreateRow(i);
+
                 //create vertical 1-9
                 for (int j = 1; j <= 9; j++)
-                {
-                    row.CreateCell(j).SetCellValue(i*j);
-                }
+                    row.CreateCell(j).SetCellValue(i * j);
             }
 
-            sheet1.SetAutoFilter(new CellRangeAddress(1,9,1,5));
-            
+            sheet1.SetAutoFilter(new CellRangeAddress(1, 9, 1, 5));
+
             WriteToFile();
         }
-
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

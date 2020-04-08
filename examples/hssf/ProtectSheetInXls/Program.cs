@@ -23,20 +23,18 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using System;
+using System.IO;
 
 namespace ProtectSheetInXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             Console.Read();
@@ -44,9 +42,9 @@ namespace ProtectSheetInXls
 
             HSSFSheet sheet1 = (HSSFSheet)hssfworkbook.CreateSheet("Sheet1");
 
-            ICell cell1=sheet1.CreateRow(0).CreateCell(0);
+            ICell cell1 = sheet1.CreateRow(0).CreateCell(0);
             cell1.SetCellValue("This is a Sample");
-           ICellStyle cs1=hssfworkbook.CreateCellStyle();
+            ICellStyle cs1 = hssfworkbook.CreateCellStyle();
             cs1.IsLocked = true;
             cell1.CellStyle = cs1;
 
@@ -54,8 +52,6 @@ namespace ProtectSheetInXls
 
             WriteToFile();
         }
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

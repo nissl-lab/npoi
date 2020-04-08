@@ -2,11 +2,7 @@
 using NPOI.SS.UserModel.Charts;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace ScatterChart
 {

@@ -40,6 +40,8 @@ namespace SetCellCommentInXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
@@ -56,7 +58,7 @@ namespace SetCellCommentInXls
             //anchor defines size and position of the comment in worksheet
             IComment comment1 = patr.CreateCellComment(new HSSFClientAnchor(0, 0, 0, 0, 4, 2, 6, 5));
 
-             // set text in the comment
+            // set text in the comment
             comment1.String = (new HSSFRichTextString("We can set comments in POI"));
 
             //set comment author.
@@ -80,8 +82,8 @@ namespace SetCellCommentInXls
             //apply custom font to the text in the comment
             IFont font = hssfworkbook.CreateFont();
             font.FontName = ("Arial");
-            font.FontHeightInPoints =10;
-            font.Boldweight = (short)FontBoldWeight.Bold;
+            font.FontHeightInPoints = 10;
+            font.IsBold = true;
             font.Color = HSSFColor.Red.Index;
             str.ApplyFont(font);
 
@@ -100,9 +102,6 @@ namespace SetCellCommentInXls
 
             WriteToFile();
         }
-
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

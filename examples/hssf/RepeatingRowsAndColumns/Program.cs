@@ -24,13 +24,11 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using System.IO;
 
 /* This sample is migrated from poi\hssf\usermodel\examples\RepeatingRowsAndColumns.java */
 
@@ -39,19 +37,21 @@ namespace RepeatingRowsAndColumns
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
 
             ISheet sheet1 = hssfworkbook.CreateSheet("first sheet");
-            hssfworkbook.CreateSheet("second sheet");
-            hssfworkbook.CreateSheet("third sheet");
+            ISheet sheet2 = hssfworkbook.CreateSheet("second sheet");
+            ISheet sheet3 = hssfworkbook.CreateSheet("third sheet");
 
             IFont boldFont = hssfworkbook.CreateFont();
             boldFont.FontHeightInPoints = 22;
-            boldFont.Boldweight = (short)FontBoldWeight.Bold;
+            boldFont.IsBold = true;
 
-           ICellStyle boldStyle = hssfworkbook.CreateCellStyle();
+            ICellStyle boldStyle = hssfworkbook.CreateCellStyle();
             boldStyle.SetFont(boldFont);
 
             IRow row = sheet1.CreateRow(1);
@@ -60,17 +60,18 @@ namespace RepeatingRowsAndColumns
             cell.CellStyle = (boldStyle);
 
             // Set the columns to repeat from column 0 to 2 on the first sheet
-            hssfworkbook.SetRepeatingRowsAndColumns(0, 0, 2, -1, -1);
+            sheet1.RepeatingColumns = new CellRangeAddress(0, 0, 0, 2);
+
             // Set the rows to repeat from row 0 to 2 on the second sheet.
-            hssfworkbook.SetRepeatingRowsAndColumns(1, -1, -1, 0, 2);
+            sheet2.RepeatingRows = new CellRangeAddress(0, 2, 0, 0);
+
             // Set the the repeating rows and columns on the third sheet.
-            hssfworkbook.SetRepeatingRowsAndColumns(2, 4, 5, 1, 2);
+            CellRangeAddress cra = new CellRangeAddress(0, 1, 3, 4);
+            sheet3.RepeatingRows = cra;
+            sheet3.RepeatingColumns = cra;
 
             WriteToFile();
         }
-
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

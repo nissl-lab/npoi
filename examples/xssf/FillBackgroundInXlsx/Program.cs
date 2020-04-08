@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using NPOI.SS.UserModel;
 using System.IO;
 
 namespace NPOI.Examples.XSSF.FillBackgroundInXlsx

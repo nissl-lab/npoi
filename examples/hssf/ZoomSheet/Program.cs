@@ -15,13 +15,10 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using System.IO;
 
 /**
  * Sets the zoom magnication for a sheet.
@@ -33,18 +30,17 @@ namespace ZoomSheet
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
 
             ISheet sheet1 = hssfworkbook.CreateSheet("new sheet");
-            sheet1.SetZoom(3, 4);   // 75 percent magnification
+            sheet1.SetZoom(75);   // 75 percent magnification
 
             WriteToFile();
         }
-
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

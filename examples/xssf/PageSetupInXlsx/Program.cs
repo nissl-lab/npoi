@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NPOI.XSSF.UserModel;
-using NPOI.SS.UserModel;
-using System.IO;
+﻿using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.XSSF.UserModel;
+using System.IO;
 
 namespace NPOI.Examples.XSSF.PageSetupInXlsx
 {
@@ -24,7 +21,6 @@ namespace NPOI.Examples.XSSF.PageSetupInXlsx
             IRow row2 = sheet1.CreateRow(1);
             row2.CreateCell(1).SetCellValue(4);
             row2.CreateCell(2).SetCellValue(5);
-
 
             IRow row3 = sheet2.CreateRow(1);
             row3.CreateCell(0).SetCellValue(2.1);

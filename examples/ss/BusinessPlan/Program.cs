@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NPOI.SS.Util;
+﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-using NPOI.HSSF.UserModel;
+using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
+using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace BusinessPlan
@@ -91,9 +90,9 @@ namespace BusinessPlan
 
             IWorkbook wb;
 
-            if (args.Length > 0 && args[0].Equals("-xls")) 
+            if (args.Length > 0 && args[0].Equals("-xls"))
                 wb = new HSSFWorkbook();
-            else 
+            else
                 wb = new XSSFWorkbook();
 
             Dictionary<String, ICellStyle> styles = createStyles(wb);
@@ -187,7 +186,7 @@ namespace BusinessPlan
                                 //calendar.set(Calendar.YEAR, year);
 
                                 DateTime dt2 = DateTime.Parse(DateTime.Now.Year.ToString() + "-" + data[i][j]);
-                                
+
                                 cell.SetCellValue(dt2);
                                 styleName = isHeader ? "cell_b_date" : "cell_normal_date";
                                 break;
@@ -218,7 +217,7 @@ namespace BusinessPlan
             sheet.SetColumnWidth(0, 256 * 6);
             sheet.SetColumnWidth(1, 256 * 33);
             sheet.SetColumnWidth(2, 256 * 20);
-            sheet.SetZoom(3, 4);
+            sheet.SetZoom(75);
 
 
             // Write the output to a file
@@ -229,7 +228,7 @@ namespace BusinessPlan
                 wb.Write(out1);
                 out1.Close();
             }
-            
+
         }
 
         /**

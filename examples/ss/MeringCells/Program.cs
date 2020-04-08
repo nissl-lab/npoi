@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NPOI.XSSF.UserModel;
-using NPOI.SS.UserModel;
-using System.IO;
+﻿using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.XSSF.UserModel;
+using System.IO;
 
 namespace NPOI.Examples.XSSF.MeringCellsInXlsx
 {

@@ -23,13 +23,10 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using System.IO;
 
 /*
  This sample is copied from poi.hssf.usermodel.examples. Original name is OfficeDrawing.java
@@ -137,7 +134,7 @@ namespace DrawingInXls
             textbox2.String = new HSSFRichTextString("Woo");
             textbox2.SetFillColor(200, 0, 0);
             textbox2.LineStyle = LineStyle.DotGel;
-             
+
             // Create third one with some fancy font styling.
             HSSFTextbox textbox3 = (HSSFTextbox)patriarch.CreateTextbox(
                     new HSSFClientAnchor(0, 0, 900, 100, (short)4, 4, (short)5, 4 + 1));

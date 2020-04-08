@@ -18,6 +18,7 @@
 namespace TestCases.HSSF
 {
     using System;
+    using System.Configuration;
     using System.IO;
     using System.Text;
     using NPOI.HSSF.UserModel;
@@ -86,7 +87,7 @@ namespace TestCases.HSSF
 
         private static void Initialise()
         {
-            String dataDirName = System.Configuration.ConfigurationSettings.AppSettings[TEST_DATA_DIR_SYS_PROPERTY_NAME];
+            String dataDirName = ConfigurationManager.AppSettings[TEST_DATA_DIR_SYS_PROPERTY_NAME];
 
             if(dataDirName=="")
                     throw new Exception("Must set system property '"
@@ -109,7 +110,7 @@ namespace TestCases.HSSF
          */
         private static Stream OpenClasspathResource(String sampleFileName)
         {
-            FileStream file = new FileStream(System.Configuration.ConfigurationSettings.AppSettings["HSSF.testdata.path"] + sampleFileName, FileMode.Open);
+            FileStream file = new FileStream(ConfigurationManager.AppSettings["HSSF.testdata.path"] + sampleFileName, FileMode.Open);
             return file;
         }
 

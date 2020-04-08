@@ -23,14 +23,11 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Text;
-using System.IO;
+using NPOI.HPSF;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
-using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
+using System.IO;
 
 /*
  This sample is copied from poi.hssf.usermodel.examples. Original name is Borders.java
@@ -39,6 +36,8 @@ namespace SetBorderStyleInXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
@@ -54,20 +53,20 @@ namespace SetBorderStyleInXls
 
             // Style the cell with borders all around.
             ICellStyle style = hssfworkbook.CreateCellStyle();
-            style.BorderBottom= BorderStyle.Thin;
-            style.BottomBorderColor= HSSFColor.Black.Index;
+            style.BorderBottom = BorderStyle.Thin;
+            style.BottomBorderColor = HSSFColor.Black.Index;
             style.BorderLeft = BorderStyle.DashDotDot;
-            style.LeftBorderColor= HSSFColor.Green.Index;
+            style.LeftBorderColor = HSSFColor.Green.Index;
             style.BorderRight = BorderStyle.Hair;
-            style.RightBorderColor= HSSFColor.Blue.Index;
+            style.RightBorderColor = HSSFColor.Blue.Index;
             style.BorderTop = BorderStyle.MediumDashed;
-            style.TopBorderColor= HSSFColor.Orange.Index;
+            style.TopBorderColor = HSSFColor.Orange.Index;
 
             style.BorderDiagonal = BorderDiagonal.Forward;
             style.BorderDiagonalColor = HSSFColor.Gold.Index;
             style.BorderDiagonalLineStyle = BorderStyle.Medium;
 
-            cell.CellStyle= style;
+            cell.CellStyle = style;
             // Create a cell and put a value in it.
             ICell cell2 = row.CreateCell(2);
             cell2.SetCellValue(5);
@@ -79,9 +78,6 @@ namespace SetBorderStyleInXls
 
             WriteToFile();
         }
-
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {
