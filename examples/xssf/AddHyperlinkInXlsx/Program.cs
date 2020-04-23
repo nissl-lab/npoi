@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NPOI.XSSF.UserModel;
+﻿using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using System.IO;
-using NPOI.HSSF.Util;
-using NPOI.HSSF.UserModel;
 
 namespace NPOI.Examples.XSSF.AddHyperlinkInXlsx
 {

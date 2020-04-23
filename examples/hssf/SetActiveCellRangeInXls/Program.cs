@@ -23,21 +23,19 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
-using System.Collections.Generic;
-using NPOI.SS.Util;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-
+using NPOI.SS.Util;
+using System.Collections.Generic;
+using System.IO;
 
 namespace SetActiveCellRangeInXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
@@ -51,7 +49,7 @@ namespace SetActiveCellRangeInXls
 
             //use ISheet.SetActiveCell(), the sheet can be empty
             ISheet sheet2 = hssfworkbook.CreateSheet("ISheet B");
-            sheet2.SetActiveCell(1, 5);
+            sheet2.ActiveCell = new CellAddress(1, 5);
 
             //use ISheet.SetActiveCellRange to select a cell range
             ISheet sheet3 = hssfworkbook.CreateSheet("ISheet C");
@@ -64,9 +62,9 @@ namespace SetActiveCellRangeInXls
             ISheet sheet4 = hssfworkbook.CreateSheet("ISheet D");
             CreateCellArray(sheet4);
             List<CellRangeAddress8Bit> cellranges = new List<CellRangeAddress8Bit>();
-            cellranges.Add(new CellRangeAddress8Bit(1,5,10,100));
-            cellranges.Add(new CellRangeAddress8Bit(6,7,8,9));
-            sheet4.SetActiveCellRange(cellranges,1,6,9);
+            cellranges.Add(new CellRangeAddress8Bit(1, 5, 10, 100));
+            cellranges.Add(new CellRangeAddress8Bit(6, 7, 8, 9));
+            sheet4.SetActiveCellRange(cellranges, 1, 6, 9);
 
             WriteToFile();
         }
@@ -75,17 +73,14 @@ namespace SetActiveCellRangeInXls
         {
             for (int i = 0; i < 300; i++)
             {
-                IRow row=sheet.CreateRow(i);
+                IRow row = sheet.CreateRow(i);
                 for (int j = 0; j < 150; j++)
                 {
                     ICell cell = row.CreateCell(j);
-                    cell.SetCellValue(i*j);
+                    cell.SetCellValue(i * j);
                 }
             }
         }
-
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

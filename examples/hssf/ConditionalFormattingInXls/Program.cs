@@ -15,18 +15,6 @@
    limitations under the License.
 ==================================================================== */
 
-
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
-using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
-using NPOI.HSSF.Record;
-using NPOI.SS.Util;
-using NPOI.SS.UserModel;
-
-
 /* ================================================================
  * Author: Tony Qu 
  * Author's email: tonyqus (at) gmail.com 
@@ -34,6 +22,13 @@ using NPOI.SS.UserModel;
  * Contributors:
  * 
  * ==============================================================*/
+
+using NPOI.HPSF;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using System.IO;
+
 namespace ConditionalFormattingInXls
 {
     class Program
@@ -103,4 +98,3 @@ namespace ConditionalFormattingInXls
         }
     }
 }
-

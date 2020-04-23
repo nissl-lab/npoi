@@ -23,24 +23,21 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
-using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using System.IO;
 
 namespace UseBasicFormulaInXlsx
 {
     class Program
     {
+        static IWorkbook workbook;
+
         static void Main(string[] args)
         {
             workbook = new XSSFWorkbook();
 
-            ISheet s1= workbook.CreateSheet("Sheet1");
+            ISheet s1 = workbook.CreateSheet("Sheet1");
             //set A2
             s1.CreateRow(1).CreateCell(0).SetCellValue(-5);
             //set B2
@@ -55,8 +52,7 @@ namespace UseBasicFormulaInXlsx
             //set D2=SUM(A2:C2);
             s1.GetRow(1).CreateCell(3).CellFormula = "SUM(A2:C2)";
             //set A5=cos(5)+sin(10)
-            s1.CreateRow(4).CreateCell(0).CellFormula="cos(5)+sin(10)";
-
+            s1.CreateRow(4).CreateCell(0).CellFormula = "cos(5)+sin(10)";
 
             //create another sheet
             ISheet s2 = workbook.CreateSheet("Sheet2");
@@ -64,12 +60,8 @@ namespace UseBasicFormulaInXlsx
             var cell = s2.CreateRow(0).CreateCell(0);
             cell.CellFormula = "Sheet1!A2+Sheet1!A3";
 
-        
             WriteToFile();
         }
-
-
-        static IWorkbook workbook;
 
         static void WriteToFile()
         {
@@ -78,6 +70,5 @@ namespace UseBasicFormulaInXlsx
             workbook.Write(file);
             file.Close();
         }
-
     }
 }

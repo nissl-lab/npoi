@@ -23,13 +23,9 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-using System.IO;
-using System.Net.Mime;
 using NPOI.OpenXml4Net.OPC;
+using System;
+using System.Net.Mime;
 
 namespace NPOI.Examples.ModifyExistingOOXMLFile
 {
@@ -48,8 +44,6 @@ namespace NPOI.Examples.ModifyExistingOOXMLFile
 
             //don't forget to close it
             p.Close();
-
         }
-
     }
 }

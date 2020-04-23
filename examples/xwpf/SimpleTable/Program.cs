@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NPOI.XWPF.UserModel;
+﻿using NPOI.XWPF.UserModel;
 using System.IO;
 
 namespace SimpleTable
@@ -31,10 +27,9 @@ namespace SimpleTable
 
             r1.FontFamily = "Courier";
             r1.SetUnderline(UnderlinePatterns.DotDotDash);
-            r1.SetTextPosition(100);
+            r1.TextPosition = 100;
             c1.SetColor("FF0000");
             
-
             table.GetRow(2).GetCell(2).SetText("only text");
 
             FileStream out1 = new FileStream("simpleTable.docx", FileMode.Create);

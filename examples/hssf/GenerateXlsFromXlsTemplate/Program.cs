@@ -23,19 +23,17 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-
+using System.IO;
 
 namespace GenerateXlsFromXlsTemplate
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
@@ -61,9 +59,6 @@ namespace GenerateXlsFromXlsTemplate
             WriteToFile();
         }
 
-
-        static HSSFWorkbook hssfworkbook;
-
         static void WriteToFile()
         {
             //Write the stream data of workbook to the root directory
@@ -76,7 +71,7 @@ namespace GenerateXlsFromXlsTemplate
         {
             //read the template via FileStream, it is suggested to use FileAccess.Read to prevent file lock.
             //book1.xls is an Excel-2007-generated file, so some new unknown BIFF records are added. 
-            FileStream file = new FileStream(@"template/book1.xls", FileMode.Open,FileAccess.Read);
+            FileStream file = new FileStream(@"template/book1.xls", FileMode.Open, FileAccess.Read);
 
             hssfworkbook = new HSSFWorkbook(file);
 

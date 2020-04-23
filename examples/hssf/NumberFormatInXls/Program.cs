@@ -23,14 +23,11 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-
+using System;
+using System.IO;
 
 namespace NumberFormatInXls
 {
@@ -51,57 +48,56 @@ namespace NumberFormatInXls
             //set value for the cell
             cell.SetCellValue(1.2);
             //number format with 2 digits after the decimal point - "1.20"
-           ICellStyle cellStyle = hssfworkbook.CreateCellStyle();
+            ICellStyle cellStyle = hssfworkbook.CreateCellStyle();
             cellStyle.DataFormat = HSSFDataFormat.GetBuiltinFormat("0.00");
             cell.CellStyle = cellStyle;
 
             //RMB currency format with comma    -   "¥20,000"
             ICell cell2 = sheet.CreateRow(1).CreateCell(0);
             cell2.SetCellValue(20000);
-           ICellStyle cellStyle2 = hssfworkbook.CreateCellStyle();
+            ICellStyle cellStyle2 = hssfworkbook.CreateCellStyle();
             cellStyle2.DataFormat = format.GetFormat("¥#,##0");
             cell2.CellStyle = cellStyle2;
-            
+
             //scentific number format   -   "3.15E+00"
             ICell cell3 = sheet.CreateRow(2).CreateCell(0);
             cell3.SetCellValue(3.151234);
-           ICellStyle cellStyle3 = hssfworkbook.CreateCellStyle();
+            ICellStyle cellStyle3 = hssfworkbook.CreateCellStyle();
             cellStyle3.DataFormat = HSSFDataFormat.GetBuiltinFormat("0.00E+00");
             cell3.CellStyle = cellStyle3;
 
             //percent format, 2 digits after the decimal point    -  "99.33%"
             ICell cell4 = sheet.CreateRow(3).CreateCell(0);
             cell4.SetCellValue(0.99333);
-           ICellStyle cellStyle4 = hssfworkbook.CreateCellStyle();
+            ICellStyle cellStyle4 = hssfworkbook.CreateCellStyle();
             cellStyle4.DataFormat = HSSFDataFormat.GetBuiltinFormat("0.00%");
             cell4.CellStyle = cellStyle4;
-                     
+
             //phone number format - "021-65881234"
             ICell cell5 = sheet.CreateRow(4).CreateCell(0);
-            cell5.SetCellValue( 02165881234);
-           ICellStyle cellStyle5 = hssfworkbook.CreateCellStyle();
+            cell5.SetCellValue(02165881234);
+            ICellStyle cellStyle5 = hssfworkbook.CreateCellStyle();
             cellStyle5.DataFormat = format.GetFormat("000-00000000");
             cell5.CellStyle = cellStyle5;
 
             //Chinese capitalized character number - 壹贰叁 元
             ICell cell6 = sheet.CreateRow(5).CreateCell(0);
             cell6.SetCellValue(123);
-           ICellStyle cellStyle6 = hssfworkbook.CreateCellStyle();
+            ICellStyle cellStyle6 = hssfworkbook.CreateCellStyle();
             cellStyle6.DataFormat = format.GetFormat("[DbNum2][$-804]0 元");
             cell6.CellStyle = cellStyle6;
 
             //Chinese date string
             ICell cell7 = sheet.CreateRow(6).CreateCell(0);
-            cell7.SetCellValue(new DateTime(2004,5,6));
-           ICellStyle cellStyle7 = hssfworkbook.CreateCellStyle();
+            cell7.SetCellValue(new DateTime(2004, 5, 6));
+            ICellStyle cellStyle7 = hssfworkbook.CreateCellStyle();
             cellStyle7.DataFormat = format.GetFormat("yyyy年m月d日");
             cell7.CellStyle = cellStyle7;
-
 
             //Chinese date string
             ICell cell8 = sheet.CreateRow(7).CreateCell(0);
             cell8.SetCellValue(new DateTime(2005, 11, 6));
-           ICellStyle cellStyle8 = hssfworkbook.CreateCellStyle();
+            ICellStyle cellStyle8 = hssfworkbook.CreateCellStyle();
             cellStyle8.DataFormat = format.GetFormat("yyyy年m月d日");
             cell8.CellStyle = cellStyle8;
 

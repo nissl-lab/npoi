@@ -24,24 +24,24 @@
  * ==============================================================*/
 
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
+using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using System.IO;
 
 namespace ApplyFontInXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
 
-            ISheet sheet1=hssfworkbook.CreateSheet("Sheet1");
+            ISheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
 
             //font style1: underlined, italic, red color, fontsize=20
             IFont font1 = hssfworkbook.CreateFont();
@@ -51,24 +51,24 @@ namespace ApplyFontInXls
             font1.FontHeightInPoints = 20;
 
             //bind font with style 1
-           ICellStyle style1 = hssfworkbook.CreateCellStyle();
+            ICellStyle style1 = hssfworkbook.CreateCellStyle();
             style1.SetFont(font1);
 
             //font style2: strikeout line, green color, fontsize=15, fontname='宋体'
             IFont font2 = hssfworkbook.CreateFont();
             font2.Color = HSSFColor.OliveGreen.Index;
-            font2.IsStrikeout=true;
+            font2.IsStrikeout = true;
             font2.FontHeightInPoints = 15;
             font2.FontName = "宋体";
 
             //bind font with style 2
-           ICellStyle style2 = hssfworkbook.CreateCellStyle();
+            ICellStyle style2 = hssfworkbook.CreateCellStyle();
             style2.SetFont(font2);
-            
+
             //apply font styles
-            ICell cell1 = HSSFCellUtil.CreateCell(sheet1.CreateRow(1), 1, "Hello World!");
+            ICell cell1 = CellUtil.CreateCell(sheet1.CreateRow(1), 1, "Hello World!");
             cell1.CellStyle = style1;
-            ICell cell2 = HSSFCellUtil.CreateCell(sheet1.CreateRow(3), 1, "早上好！");
+            ICell cell2 = CellUtil.CreateCell(sheet1.CreateRow(3), 1, "早上好！");
             cell2.CellStyle = style2;
 
             //cell with rich text 
@@ -80,20 +80,17 @@ namespace ApplyFontInXls
             font4.FontHeightInPoints = 12;
             richtext.ApplyFont(0, 16, font4);
             //apply font to "TM"
-            IFont font3=hssfworkbook.CreateFont();
+            IFont font3 = hssfworkbook.CreateFont();
             font3.TypeOffset = FontSuperScript.Super;
             font3.IsItalic = true;
             font3.Color = HSSFColor.Blue.Index;
-            font3.FontHeightInPoints=8;
-            richtext.ApplyFont(16, 18,font3);
-            
+            font3.FontHeightInPoints = 8;
+            richtext.ApplyFont(16, 18, font3);
+
             cell3.SetCellValue(richtext);
 
             WriteToFile();
         }
-
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

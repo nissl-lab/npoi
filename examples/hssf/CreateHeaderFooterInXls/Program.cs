@@ -23,19 +23,17 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-
+using System.IO;
 
 namespace CreateHeaderFooterInXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
@@ -49,12 +47,9 @@ namespace CreateHeaderFooterInXls
             //set footer text
             s1.Footer.Left = "Copyright NPOI Team";
             s1.Footer.Right = "created by Tony Qu（瞿杰）";
-            
+
             WriteToFile();
         }
-
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

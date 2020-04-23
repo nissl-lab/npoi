@@ -1,10 +1,7 @@
-﻿using System;
-using System.Text;
-using System.IO;
+﻿using NPOI.HPSF;
 using NPOI.HSSF.UserModel;
-using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
+using System.IO;
 
 
 namespace ShrinkToFitColumnInXls
@@ -21,7 +18,7 @@ namespace ShrinkToFitColumnInXls
             ICell cell1 = row.CreateCell(0);
             cell1.SetCellValue("This is a test");
             //apply ShrinkToFit to cellstyle
-           ICellStyle cellstyle1 = hssfworkbook.CreateCellStyle();
+            ICellStyle cellstyle1 = hssfworkbook.CreateCellStyle();
             cellstyle1.ShrinkToFit = true;
             cell1.CellStyle = cellstyle1;
             //create cell value

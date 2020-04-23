@@ -15,19 +15,18 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using System.IO;
 
 /* This sample is migrated from poi\hssf\usermodel\examples\SplitAndFreezePanes.java */
 namespace SplitAndFreezePanes
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
@@ -48,9 +47,6 @@ namespace SplitAndFreezePanes
 
             WriteToFile();
         }
-
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

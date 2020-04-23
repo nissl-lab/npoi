@@ -15,17 +15,6 @@
    limitations under the License.
 ==================================================================== */
 
-
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
-using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
-using NPOI.SS.UserModel;
-using NPOI.SS.Util;
-
-
 /* ================================================================
  * Author: Tony Qu 
  * Author's email: tonyqus (at) gmail.com 
@@ -33,10 +22,19 @@ using NPOI.SS.Util;
  * Contributors:
  * 
  * ==============================================================*/
+
+using NPOI.HPSF;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using System.IO;
+
 namespace CreateDropDownListCellInXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
@@ -56,7 +54,6 @@ namespace CreateDropDownListCellInXls
             cell0 = row0.CreateCell(4);
             cell0.SetCellValue("Product3");
 
-
             CellRangeAddressList rangeList = new CellRangeAddressList();
 
             //add the data validation to the first column (1-100 rows) 
@@ -65,13 +62,10 @@ namespace CreateDropDownListCellInXls
             HSSFDataValidation dataValidation = new
                     HSSFDataValidation(rangeList, dvconstraint);
             //add the data validation to sheet1
-            ((HSSFSheet)sheet1).AddValidationData(dataValidation); 
+            ((HSSFSheet)sheet1).AddValidationData(dataValidation);
 
             WriteToFile();
         }
-
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

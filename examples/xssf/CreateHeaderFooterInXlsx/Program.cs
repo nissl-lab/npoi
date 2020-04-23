@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NPOI.XSSF.UserModel;
+﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-using NPOI.HSSF.UserModel;
+using NPOI.XSSF.UserModel;
 using System.IO;
 
 namespace CreateHeaderFooterInXlsx

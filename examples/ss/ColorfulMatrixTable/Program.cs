@@ -15,17 +15,6 @@
    limitations under the License.
 ==================================================================== */
 
-
-using System;
-using System.Text;
-using System.IO;
-
-using NPOI.HSSF.UserModel;
-using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
-
 /* ================================================================
  * Author: Tony Qu 
  * Author's email: tonyqus (at) gmail.com 
@@ -34,6 +23,10 @@ using NPOI.XSSF.UserModel;
  * 
  * ==============================================================*/
 
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using System.IO;
 
 namespace ColorfulMatrixTable
 {
@@ -47,7 +40,7 @@ namespace ColorfulMatrixTable
             ISheet sheet1 = wb.CreateSheet("Sheet1");
 
             int x = 1;
-            for (int i = 0; i <15; i++)
+            for (int i = 0; i < 15; i++)
             {
                 IRow row = sheet1.CreateRow(i);
                 for (int j = 0; j < 15; j++)
@@ -56,7 +49,7 @@ namespace ColorfulMatrixTable
                     if (x % 2 == 0)
                     {
                         //fill background with blue
-                       ICellStyle style1 = wb.CreateCellStyle();
+                        ICellStyle style1 = wb.CreateCellStyle();
                         style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Blue.Index2;
                         style1.FillPattern = FillPattern.SolidForeground;
                         cell.CellStyle = style1;
@@ -64,7 +57,7 @@ namespace ColorfulMatrixTable
                     else
                     {
                         //fill background with yellow
-                       ICellStyle style1 = wb.CreateCellStyle();
+                        ICellStyle style1 = wb.CreateCellStyle();
                         style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Yellow.Index2;
                         style1.FillPattern = FillPattern.SolidForeground;
                         cell.CellStyle = style1;
@@ -74,9 +67,7 @@ namespace ColorfulMatrixTable
             }
 
             WriteToFile();
-
         }
-
 
         static void WriteToFile()
         {

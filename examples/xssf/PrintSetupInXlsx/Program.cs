@@ -1,10 +1,6 @@
 ﻿using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace PrintSetupInXlsx
 {
@@ -19,11 +15,10 @@ namespace PrintSetupInXlsx
             sheet1.SetMargin(MarginType.LeftMargin, 0.4d);
             sheet1.SetMargin(MarginType.BottomMargin, 0.3d);
 
-
             sheet1.PrintSetup.Copies = 3;
             sheet1.PrintSetup.NoColor = true;
             sheet1.PrintSetup.Landscape = true;
-            sheet1.PrintSetup.PaperSize = (short)PaperSize.A4+1;
+            sheet1.PrintSetup.PaperSize = (short)PaperSize.A4 + 1;
 
             sheet1.FitToPage = true;
             sheet1.PrintSetup.FitHeight = 2;
@@ -35,10 +30,9 @@ namespace PrintSetupInXlsx
             for (int i = 1; i <= 15; i++)
             {
                 IRow row = sheet1.CreateRow(i);
+
                 for (int j = 0; j < 15; j++)
-                {
                     row.CreateCell(j).SetCellValue(x++);
-                }
             }
 
             ISheet sheet2 = wb.CreateSheet("Sheet2");
@@ -47,17 +41,17 @@ namespace PrintSetupInXlsx
             sheet2.PrintSetup.Notes = true;
             //sheet2.PrintSetup.EndNote = true;
             //sheet2.PrintSetup.CellError = DisplayCellErrorType.ErrorAsNA;
-            sheet2.PrintSetup.PaperSize = (short)PaperSize.A5+1;
+            sheet2.PrintSetup.PaperSize = (short)PaperSize.A5 + 1;
 
             x = 100;
             for (int i = 1; i <= 15; i++)
             {
                 IRow row = sheet2.CreateRow(i);
+
                 for (int j = 0; j < 15; j++)
-                {
                     row.CreateCell(j).SetCellValue(x++);
-                }
             }
+
             FileStream sw = File.Create("test.xlsx");
             wb.Write(sw);
             sw.Close();
