@@ -257,6 +257,12 @@ namespace NPOI.SS.UserModel
             return GetJavaDate(date, false, tz, false);
         }
 
+        [Obsolete("The class TimeZone was marked obsolete, Use the Overload using TimeZoneInfo instead.")]
+        public static DateTime GetJavaDate(double date, TimeZone tz)
+        {
+            return GetJavaDate(date, false, tz, false);
+        }
+
         /**
          *  Given an Excel date with either 1900 or 1904 date windowing,
          *  Converts it to a Date.
@@ -278,7 +284,7 @@ namespace NPOI.SS.UserModel
          */
         public static DateTime GetJavaDate(double date, bool use1904windowing)
         {
-            return GetJavaCalendar(date, use1904windowing, null, false);
+            return GetJavaCalendar(date, use1904windowing, (TimeZoneInfo)null, false);
         }
         /**
          *  Given an Excel date with either 1900 or 1904 date windowing,
@@ -312,10 +318,52 @@ namespace NPOI.SS.UserModel
          *  @param tz The TimeZone to evaluate the date in
          *  @param use1904windowing  true if date uses 1904 windowing,
          *   or false if using 1900 date windowing.
+         *  @return Java representation of the date, or null if date is not a valid Excel date
+         */
+        [Obsolete("The class TimeZone was marked obsolete, Use the Overload using TimeZoneInfo instead.")]
+        public static DateTime GetJavaDate(double date, bool use1904windowing, TimeZone tz)
+        {
+            return GetJavaCalendar(date, use1904windowing, tz, false);
+        }
+        /**
+         *  Given an Excel date with either 1900 or 1904 date windowing,
+         *  converts it to a java.util.Date.
+         *  
+         *  Excel Dates and Times are stored without any timezone 
+         *  information. If you know (through other means) that your file 
+         *  uses a different TimeZone to the system default, you can use
+         *  this version of the getJavaDate() method to handle it.
+         *   
+         *  @param date  The Excel date.
+         *  @param tz The TimeZone to evaluate the date in
+         *  @param use1904windowing  true if date uses 1904 windowing,
+         *   or false if using 1900 date windowing.
          *  @param roundSeconds round to closest second
          *  @return Java representation of the date, or null if date is not a valid Excel date
          */
         public static DateTime GetJavaDate(double date, bool use1904windowing, TimeZoneInfo tz, bool roundSeconds)
+        {
+            return GetJavaCalendar(date, use1904windowing, tz, roundSeconds);
+        }
+
+        /**
+         *  Given an Excel date with either 1900 or 1904 date windowing,
+         *  converts it to a java.util.Date.
+         *  
+         *  Excel Dates and Times are stored without any timezone 
+         *  information. If you know (through other means) that your file 
+         *  uses a different TimeZone to the system default, you can use
+         *  this version of the getJavaDate() method to handle it.
+         *   
+         *  @param date  The Excel date.
+         *  @param tz The TimeZone to evaluate the date in
+         *  @param use1904windowing  true if date uses 1904 windowing,
+         *   or false if using 1900 date windowing.
+         *  @param roundSeconds round to closest second
+         *  @return Java representation of the date, or null if date is not a valid Excel date
+         */
+        [Obsolete("The class TimeZone was marked obsolete, Use the Overload using TimeZoneInfo instead.")]
+        public static DateTime GetJavaDate(double date, bool use1904windowing, TimeZone tz, bool roundSeconds)
         {
             return GetJavaCalendar(date, use1904windowing, tz, roundSeconds);
         }
@@ -366,7 +414,7 @@ namespace NPOI.SS.UserModel
 
         public static DateTime GetJavaCalendarUTC(double date, bool use1904windowing)
         {
-            DateTime dt = GetJavaCalendar(date, use1904windowing, null, false);
+            DateTime dt = GetJavaCalendar(date, use1904windowing, (TimeZoneInfo)null, false);
             // Not exactly sure, if this 
             return TimeZoneInfo.ConvertTimeToUtc(dt);
             //or this is better:
@@ -387,6 +435,42 @@ namespace NPOI.SS.UserModel
         /// <param name="roundSeconds"></param>
         /// <returns>null if date is not a valid Excel date</returns>
         public static DateTime GetJavaCalendar(double date, bool use1904windowing, TimeZoneInfo timeZone, bool roundSeconds)
+        {
+            if (!IsValidExcelDate(date))
+            {
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Invalid Excel date double value: {0}", date));
+            }
+            int wholeDays = (int)Math.Floor(date);
+            int millisecondsInDay = (int)((date - wholeDays) * DAY_MILLISECONDS + 0.5);
+            DateTime calendar;
+            if (timeZone != null)
+            {
+                calendar = LocaleUtil.GetLocaleCalendar(timeZone);
+            }
+            else
+            {
+                calendar = LocaleUtil.GetLocaleCalendar(); // using default time-zone
+            }
+            //calendar = DateTime.Now;     // using default time-zone
+            SetCalendar(ref calendar, wholeDays, millisecondsInDay, use1904windowing, roundSeconds);
+            return calendar;
+        }
+
+        [Obsolete("The class TimeZone was marked obsolete, Use the Overload using TimeZoneInfo instead.")]
+        public static DateTime GetJavaCalendar(double date, bool use1904windowing, TimeZone timeZone)
+        {
+            return GetJavaCalendar(date, use1904windowing, timeZone, false);
+        }
+        /// <summary>
+        /// Get EXCEL date as Java Calendar (with default time zone). This is like GetJavaDate(double, boolean) but returns a Calendar object.
+        /// </summary>
+        /// <param name="date">The Excel date.</param>
+        /// <param name="use1904windowing">true if date uses 1904 windowing, or false if using 1900 date windowing.</param>
+        /// <param name="timeZone"></param>
+        /// <param name="roundSeconds"></param>
+        /// <returns>null if date is not a valid Excel date</returns>
+        [Obsolete("The class TimeZone was marked obsolete, Use the Overload using TimeZoneInfo instead.")]
+        public static DateTime GetJavaCalendar(double date, bool use1904windowing, TimeZone timeZone, bool roundSeconds)
         {
             if (!IsValidExcelDate(date))
             {

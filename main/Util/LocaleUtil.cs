@@ -23,6 +23,7 @@ namespace NPOI.Util
         static LocaleUtil()
         {
             userTimeZone = new ThreadLocal<TimeZoneInfo>(()=>TimeZoneInfo.Local);
+            obsUserTimeZone = new ThreadLocal<TimeZone>(() => TimeZone.CurrentTimeZone);
         }
         /**
          * Excel doesn't store TimeZone information in the file, so if in doubt,
@@ -38,6 +39,8 @@ namespace NPOI.Util
         public static string CHARSET_1252 = CodePageUtil.CodepageToEncoding(CodePageUtil.CP_WINDOWS_1252);// ("CP1252");
 
         private static ThreadLocal<TimeZoneInfo> userTimeZone;
+
+        private static ThreadLocal<TimeZone> obsUserTimeZone;
 
         private static ThreadLocal<CultureInfo> userLocale = new ThreadLocal<CultureInfo>(()=>CultureInfo.CurrentCulture);
         //private static ThreadLocal<Locale> userLocale = new ThreadLocal<Locale>();
@@ -55,11 +58,32 @@ namespace NPOI.Util
         }
 
         /**
+         * As time zone information is not stored in any format, it can be
+         * set before any date calculations take place.
+         * This setting is specific to the current thread.
+         *
+         * @param timezone the timezone under which date calculations take place
+         */
+        [Obsolete("The class TimeZone was marked obsolete, Use the Overload using TimeZoneInfo instead.")]
+        public static void SetUserTimeZone(TimeZone timezone)
+        {
+            obsUserTimeZone.Value = (timezone);
+        }
+
+        /**
          * @return the time zone which is used for date calculations, defaults to UTC
          */
-        public static TimeZoneInfo GetUserTimeZone()
+        public static TimeZoneInfo GetUserTimeZoneInfo()
         {
             return userTimeZone.Value;
+        }
+
+        /**
+         * @return the time zone which is used for date calculations, defaults to UTC
+         */
+        public static TimeZone GetUserTimeZone()
+        {
+            return obsUserTimeZone.Value;
         }
 
         /**
@@ -84,7 +108,7 @@ namespace NPOI.Util
          */
         public static DateTime GetLocaleCalendar()
         {
-            return GetLocaleCalendar(GetUserTimeZone());
+            return GetLocaleCalendar(GetUserTimeZoneInfo());
         }
 
         /**
@@ -139,6 +163,16 @@ namespace NPOI.Util
         public static DateTime GetLocaleCalendar(TimeZoneInfo timeZone)
         {
             return TimeZoneInfo.ConvertTime(DateTime.Now, timeZone);
+            //return Calendar.GetInstance(timeZone, GetUserLocale());
+        }
+
+        /**
+         * @return a calendar for the user locale and time zone
+         */
+        [Obsolete("The class TimeZone was marked obsolete, Use the Overload using TimeZoneInfo instead.")]
+        public static DateTime GetLocaleCalendar(TimeZone timeZone)
+        {
+            return timeZone.ToLocalTime(DateTime.Now);
             //return Calendar.GetInstance(timeZone, GetUserLocale());
         }
     }
