@@ -252,7 +252,7 @@ namespace NPOI.SS.UserModel
         {
             return GetJavaDate(date, false);
         }
-        public static DateTime GetJavaDate(double date, TimeZone tz)
+        public static DateTime GetJavaDate(double date, TimeZoneInfo tz)
         {
             return GetJavaDate(date, false, tz, false);
         }
@@ -295,7 +295,7 @@ namespace NPOI.SS.UserModel
          *   or false if using 1900 date windowing.
          *  @return Java representation of the date, or null if date is not a valid Excel date
          */
-        public static DateTime GetJavaDate(double date, bool use1904windowing, TimeZone tz)
+        public static DateTime GetJavaDate(double date, bool use1904windowing, TimeZoneInfo tz)
         {
             return GetJavaCalendar(date, use1904windowing, tz, false);
         }
@@ -315,7 +315,7 @@ namespace NPOI.SS.UserModel
          *  @param roundSeconds round to closest second
          *  @return Java representation of the date, or null if date is not a valid Excel date
          */
-        public static DateTime GetJavaDate(double date, bool use1904windowing, TimeZone tz, bool roundSeconds)
+        public static DateTime GetJavaDate(double date, bool use1904windowing, TimeZoneInfo tz, bool roundSeconds)
         {
             return GetJavaCalendar(date, use1904windowing, tz, roundSeconds);
         }
@@ -348,7 +348,7 @@ namespace NPOI.SS.UserModel
 
         public static DateTime GetJavaCalendar(double date)
         {
-            return GetJavaCalendar(date, false, (TimeZone)null, false);
+            return GetJavaCalendar(date, false, (TimeZoneInfo)null, false);
         }
 
         /**
@@ -361,16 +361,20 @@ namespace NPOI.SS.UserModel
          */
         public static DateTime GetJavaCalendar(double date, bool use1904windowing)
         {
-            return GetJavaCalendar(date, use1904windowing, (TimeZone)null, false);
+            return GetJavaCalendar(date, use1904windowing, (TimeZoneInfo)null, false);
         }
 
         public static DateTime GetJavaCalendarUTC(double date, bool use1904windowing)
         {
             DateTime dt = GetJavaCalendar(date, use1904windowing, null, false);
-            return TimeZone.CurrentTimeZone.ToUniversalTime(dt);
+            // Not exactly sure, if this 
+            return TimeZoneInfo.ConvertTimeToUtc(dt);
+            //or this is better:
+            return TimeZoneInfo.ConvertTimeToUtc(dt, TimeZoneInfo.Local);
+            // -- 
         }
 
-        public static DateTime GetJavaCalendar(double date, bool use1904windowing, TimeZone timeZone)
+        public static DateTime GetJavaCalendar(double date, bool use1904windowing, TimeZoneInfo timeZone)
         {
             return GetJavaCalendar(date, use1904windowing, timeZone, false);
         }
@@ -382,7 +386,7 @@ namespace NPOI.SS.UserModel
         /// <param name="timeZone"></param>
         /// <param name="roundSeconds"></param>
         /// <returns>null if date is not a valid Excel date</returns>
-        public static DateTime GetJavaCalendar(double date, bool use1904windowing, TimeZone timeZone, bool roundSeconds)
+        public static DateTime GetJavaCalendar(double date, bool use1904windowing, TimeZoneInfo timeZone, bool roundSeconds)
         {
             if (!IsValidExcelDate(date))
             {
