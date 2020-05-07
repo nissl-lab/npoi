@@ -81,6 +81,7 @@ namespace NPOI.Util
         /**
          * @return the time zone which is used for date calculations, defaults to UTC
          */
+        [Obsolete("The class TimeZone was marked obsolete, Use GetUserTimeZoneInfo instead.")]
         public static TimeZone GetUserTimeZone()
         {
             return obsUserTimeZone.Value;
