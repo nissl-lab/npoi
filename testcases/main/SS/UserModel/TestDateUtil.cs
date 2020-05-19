@@ -28,6 +28,7 @@ namespace TestCases.SS.UserModel
     using NUnit.Framework;
     using System.Globalization;
 
+    [TestFixture]
     public class TestDateUtil
     {
 
@@ -40,7 +41,7 @@ namespace TestCases.SS.UserModel
         public void GetJavaDate_InvalidValue()
         {
             double dateValue = -1;
-            TimeZone tz = LocaleUtil.GetUserTimeZone();
+            TimeZone tz = TimeZone.CurrentTimeZone;
             bool use1904windowing = false;
             bool roundSeconds = false;
 
@@ -85,7 +86,7 @@ namespace TestCases.SS.UserModel
         public void GetJavaDate_ValidValue()
         {
             double dateValue = 0;
-            TimeZone tz = LocaleUtil.GetUserTimeZone();
+            TimeZone tz = TimeZone.CurrentTimeZone;
             bool use1904windowing = false;
             bool roundSeconds = false;
 
@@ -104,7 +105,7 @@ namespace TestCases.SS.UserModel
         public void GetJavaCalendar_InvalidValue()
         {
             double dateValue = -1;
-            TimeZone tz = LocaleUtil.GetUserTimeZone();
+            TimeZone tz = TimeZone.CurrentTimeZone;
             bool use1904windowing = false;
             bool roundSeconds = false;
 
@@ -142,7 +143,7 @@ namespace TestCases.SS.UserModel
         public void GetJavaCalendar_ValidValue()
         {
             double dateValue = 0;
-            TimeZone tz = LocaleUtil.GetUserTimeZone();
+            TimeZone tz = TimeZone.CurrentTimeZone;
             bool use1904windowing = false;
             bool roundSeconds = false;
 

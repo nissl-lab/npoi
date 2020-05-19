@@ -397,7 +397,7 @@ namespace NPOI.SS.UserModel
             }
             else
             {
-                calendar = LocaleUtil.GetLocaleCalendar(); // using default time-zone
+                calendar = LocaleUtil.GetLocaleCalendar(TimeZone.CurrentTimeZone); // using default time-zone
             }
             //calendar = DateTime.Now;     // using default time-zone
             SetCalendar(ref calendar, wholeDays, millisecondsInDay, use1904windowing, roundSeconds);
