@@ -218,7 +218,7 @@ namespace NPOI.XSSF.Streaming
             OutputStream.Flush();
         }
 
-        private void BeginRow(int rownum, SXSSFRow row1)
+        private void BeginRow(int rownum, SXSSFRow row)
         {
             WriteAsBytes("<row r=\"");
             WriteAsBytes(rownum + 1);

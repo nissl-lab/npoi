@@ -678,7 +678,7 @@ namespace NPOI.XSSF.Streaming
             {
                 try
                 {
-                    flushRows(_randomAccessWindowSize, false);
+                    FlushRows(_randomAccessWindowSize, false);
                 }
                 catch (IOException ioe)
                 {
@@ -1262,7 +1262,7 @@ namespace NPOI.XSSF.Streaming
             if (lastRow != null && flushOnDisk)
                 _writer.FlushRows(flushedRowsCount, lastRow.Value.Key, lastRow.Value.Value.LastCellNum);
        }
-         * Are all rows flushed to disk?
+         /* Are all rows flushed to disk?
          */
         public bool AllRowsFlushed
         {
@@ -1322,7 +1322,7 @@ namespace NPOI.XSSF.Streaming
         public Stream GetWorksheetXMLInputStream()
         {
             // flush all remaining data and close the temp file writer
-            flushRows(0, true);
+            FlushRows(0, true);
 
             _writer.Close();
             return _writer.GetWorksheetXmlInputStream();
