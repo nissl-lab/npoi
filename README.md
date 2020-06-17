@@ -15,7 +15,7 @@ Big thanks to all NPOI contributors!!!
 https://github.com/tonyqus/npoi/wiki/NPOI-Contributors
 
 
-Tech Gossip Group
+Telegram Group
 ================
 https://t.me/techfoodie
 
