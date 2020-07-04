@@ -23,32 +23,29 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
-using System.Drawing;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-
+using System.IO;
 
 namespace InsertPicturesInXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
 
             ISheet sheet1 = hssfworkbook.CreateSheet("PictureSheet");
-            
-            
+
+
             HSSFPatriarch patriarch = (HSSFPatriarch)sheet1.CreateDrawingPatriarch();
             //create the anchor
             HSSFClientAnchor anchor;
             anchor = new HSSFClientAnchor(500, 200, 0, 0, 2, 2, 4, 7);
-            anchor.AnchorType = 2;
+            anchor.AnchorType = AnchorType.MoveDontResize;
             //load the picture and get the picture index in the workbook
             HSSFPicture picture = (HSSFPicture)patriarch.CreatePicture(anchor, LoadImage("../../image/HumpbackWhale.jpg", hssfworkbook));
             //Reset the image to the original size.
@@ -66,8 +63,6 @@ namespace InsertPicturesInXls
             return wb.AddPicture(buffer, PictureType.JPEG);
 
         }
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

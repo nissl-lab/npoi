@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-
-using System.IO;
-using NPOI.HSSF.UserModel;
+﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using System;
+using System.Data;
+using System.IO;
+using System.Windows.Forms;
 
 namespace ImportXlsToDataTable
 {
@@ -39,7 +34,7 @@ namespace ImportXlsToDataTable
             DataTable dt = new DataTable();
             for (int j = 0; j < 5; j++)
             {
-                dt.Columns.Add(Convert.ToChar(((int)'A')+j).ToString());
+                dt.Columns.Add(Convert.ToChar(((int)'A') + j).ToString());
             }
 
             while (rows.MoveNext())
@@ -72,9 +67,6 @@ namespace ImportXlsToDataTable
             ConvertToDataTable();
 
             dataGridView1.DataSource = dataSet1.Tables[0];
-
-            
-            
         }
 
         //switch(cell.CellType)

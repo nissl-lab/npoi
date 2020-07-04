@@ -253,24 +253,4 @@ namespace NPOI.Util
             }
         }
     }
-
-    [Serializable]
-    public class EmptyFileException : IOException
-    {
-        public EmptyFileException()
-        {
-        }
-
-        public EmptyFileException(string message) : base(message)
-        {
-        }
-
-        public EmptyFileException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
-
-        protected EmptyFileException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
-    }
 }

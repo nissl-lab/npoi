@@ -119,6 +119,8 @@ namespace NPOI.SS.UserModel
         //  be wrapped as a {@link PushbackInputStream}!
         public static IWorkbook Create(Stream inputStream, bool bReadonly)
         {
+            if (inputStream.Length == 0)
+                throw new EmptyFileException();
             inputStream = new PushbackStream(inputStream);
             if (POIFSFileSystem.HasPOIFSHeader(inputStream))
             {
@@ -129,7 +131,11 @@ namespace NPOI.SS.UserModel
             {
                 return new XSSFWorkbook(OPCPackage.Open(inputStream, bReadonly));
             }
-            throw new ArgumentException("Your stream was neither an OLE2 stream, nor an OOXML stream.");
+            throw new InvalidFormatException("Your stream was neither an OLE2 stream, nor an OOXML stream.");
+        }
+        public static IWorkbook Create(Stream inputStream)
+        {
+            return Create(inputStream, false);
         }
         public static IWorkbook Create(string file)
         {
@@ -137,41 +143,9 @@ namespace NPOI.SS.UserModel
             {
                 throw new FileNotFoundException(file);
             }
-            FileStream fStream = null;
-            try
+            using (var stream = File.OpenRead(file))
             {
-                using (fStream = new FileStream(file, FileMode.Open, FileAccess.Read))
-                {
-                    IWorkbook wb = new HSSFWorkbook(fStream);
-                    return wb;
-                }
-            }
-            catch (OfficeXmlFileException e)
-            {
-                // opening as .xls failed => try opening as .xlsx
-                OPCPackage pkg = OPCPackage.Open(file);
-                try
-                {
-                    return new XSSFWorkbook(pkg);
-                }
-                catch (IOException ioe)
-                {
-                    // ensure that file handles are closed (use revert() to not re-write the file)
-                    pkg.Revert();
-                    //pkg.close();
-
-                    // rethrow exception
-                    throw ioe;
-                }
-                catch (ArgumentException ioe)
-                {
-                    // ensure that file handles are closed (use revert() to not re-write the file) 
-                    pkg.Revert();
-                    //pkg.close();
-
-                    // rethrow exception
-                    throw ioe;
-                }
+                return Create(stream);
             }
         }
         public static IWorkbook Create(string file, string password)

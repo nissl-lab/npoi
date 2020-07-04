@@ -581,14 +581,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_Drawing)o).Write(sw, "drawing");
                 else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.endnoteRef)
                     sw.Write("<w:endnoteRef/>");
-                else if (o is CT_FtnEdnRef)
+                else if (o is CT_FtnEdnRef && this.ItemsElementName[i] == RunItemsChoiceType.endnoteReference)
                     ((CT_FtnEdnRef)o).Write(sw, "endnoteReference");
+                else if (o is CT_FtnEdnRef && this.ItemsElementName[i] == RunItemsChoiceType.footnoteReference)
+                    ((CT_FtnEdnRef)o).Write(sw, "footnoteReference");
                 else if (o is CT_FldChar)
                     ((CT_FldChar)o).Write(sw, "fldChar");
                 else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.footnoteRef)
                     sw.Write("<w:footnoteRef/>");
-                else if (o is CT_FtnEdnRef)
-                    ((CT_FtnEdnRef)o).Write(sw, "footnoteReference");
                 else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.lastRenderedPageBreak)
                     sw.Write("<w:lastRenderedPageBreak/>");
                 else if (o is CT_Empty && this.ItemsElementName[i] == RunItemsChoiceType.monthLong)

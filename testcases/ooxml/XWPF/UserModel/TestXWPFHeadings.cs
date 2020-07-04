@@ -34,6 +34,7 @@ namespace TestCases.XWPF.UserModel
         [Test]
         public void TestSetParagraphStyle()
         {
+            //System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             //new clean instance of paragraph
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("heading123.docx");
             XWPFParagraph p = doc.CreateParagraph();

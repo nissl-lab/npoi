@@ -23,22 +23,17 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-using System.IO;
 using NPOI.HSSF.UserModel;
-using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
-using NPOI.SS.UserModel;
 using System.Collections;
 using System.Drawing;
+using System.IO;
 
 namespace ExtractPicturesFromXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
@@ -51,7 +46,7 @@ namespace ExtractPicturesFromXls
                 if (ext.Equals("jpeg"))
                 {
                     Image jpg = Image.FromStream(new MemoryStream(pic.Data));
-                    jpg.Save(string.Format("pic{0}.jpg",i++));
+                    jpg.Save(string.Format("pic{0}.jpg", i++));
                 }
                 else if (ext.Equals("png"))
                 {
@@ -62,9 +57,6 @@ namespace ExtractPicturesFromXls
             }
 
         }
-
-        static HSSFWorkbook hssfworkbook;
-
 
         static void InitializeWorkbook()
         {

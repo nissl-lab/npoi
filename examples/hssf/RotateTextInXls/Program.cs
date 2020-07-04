@@ -23,19 +23,17 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-
+using System.IO;
 
 namespace RotateTextInXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
@@ -62,9 +60,6 @@ namespace RotateTextInXls
 
             WriteToFile();
         }
-
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

@@ -695,6 +695,7 @@ namespace TestCases.OpenXml4Net.OPC
          * Verify we give helpful exceptions (or as best we can) when
          *  supplied with non-OOXML file types (eg OLE2, ODF)
          */
+         [Ignore("not found in poi test cases")]
         [Test]
         public void NonOOXMLFileTypes()
         {
@@ -827,67 +828,67 @@ namespace TestCases.OpenXml4Net.OPC
 
 
 
-        [Test, Ignore("need ZipSecureFile and ByteArrayOutputStream class")]
-        public void ZipBombCreateAndHandle()
-        {
-            // #50090 / #56865
-            ZipFile zipFile = ZipHelper.OpenZipFile(OpenXml4NetTestDataSamples.GetSampleFile("sample.xlsx"));
-            Assert.IsNotNull(zipFile);
+        //[Test, Ignore("need ZipSecureFile and ByteArrayOutputStream class")]
+        //public void ZipBombCreateAndHandle()
+        //{
+        //    // #50090 / #56865
+        //    ZipFile zipFile = ZipHelper.OpenZipFile(OpenXml4NetTestDataSamples.GetSampleFile("sample.xlsx"));
+        //    Assert.IsNotNull(zipFile);
 
-            ByteArrayOutputStream bos = new ByteArrayOutputStream(2500000);
-            ZipOutputStream append = new ZipOutputStream(bos);
-            // first, copy contents from existing war
-            IEnumerator entries = zipFile.GetEnumerator();
-            while (entries.MoveNext())
-            {
-                ZipEntry e2 = (ZipEntry)entries.Current;
-                ZipEntry e = new ZipEntry(e2.Name);
+        //    ByteArrayOutputStream bos = new ByteArrayOutputStream(2500000);
+        //    ZipOutputStream append = new ZipOutputStream(bos);
+        //    // first, copy contents from existing war
+        //    IEnumerator entries = zipFile.GetEnumerator();
+        //    while (entries.MoveNext())
+        //    {
+        //        ZipEntry e2 = (ZipEntry)entries.Current;
+        //        ZipEntry e = new ZipEntry(e2.Name);
                 
-                e.DateTime = (e2.DateTime);
-                e.Comment = (e2.Comment);
-                e.Size = (e2.Size);
+        //        e.DateTime = (e2.DateTime);
+        //        e.Comment = (e2.Comment);
+        //        e.Size = (e2.Size);
 
-                append.PutNextEntry(e);
-                if (!e.IsDirectory)
-                {
-                    Stream is1 = zipFile.GetInputStream(e);
-                    if (e.Name.Equals("[Content_Types].xml"))
-                    {
-                        ByteArrayOutputStream bos2 = new ByteArrayOutputStream();
-                        IOUtils.Copy(is1, bos2);
-                        long size = bos2.Length - "</Types>".Length;
-                        append.Write(bos2.ToByteArray(), 0, (int)size);
-                        byte[] spam = new byte[0x7FFF];
-                        for (int i = 0; i < spam.Length; i++) spam[i] = (byte)' ';
-                        // 0x7FFF0000 is the maximum for 32-bit zips, but less still works
-                        while (size < 0x7FFF0000)
-                        {
-                            append.Write(spam, 0, spam.Length);
-                            size += spam.Length;
-                        }
-                        append.Write(Encoding.ASCII.GetBytes("</Types>"), 0, 8);
-                        size += 8;
-                        e.Size = (size);
-                    }
-                    else
-                    {
-                        IOUtils.Copy(is1, append);
-                    }
-                }
-                append.CloseEntry();
-            }
+        //        append.PutNextEntry(e);
+        //        if (!e.IsDirectory)
+        //        {
+        //            Stream is1 = zipFile.GetInputStream(e);
+        //            if (e.Name.Equals("[Content_Types].xml"))
+        //            {
+        //                ByteArrayOutputStream bos2 = new ByteArrayOutputStream();
+        //                IOUtils.Copy(is1, bos2);
+        //                long size = bos2.Length - "</Types>".Length;
+        //                append.Write(bos2.ToByteArray(), 0, (int)size);
+        //                byte[] spam = new byte[0x7FFF];
+        //                for (int i = 0; i < spam.Length; i++) spam[i] = (byte)' ';
+        //                // 0x7FFF0000 is the maximum for 32-bit zips, but less still works
+        //                while (size < 0x7FFF0000)
+        //                {
+        //                    append.Write(spam, 0, spam.Length);
+        //                    size += spam.Length;
+        //                }
+        //                append.Write(Encoding.ASCII.GetBytes("</Types>"), 0, 8);
+        //                size += 8;
+        //                e.Size = (size);
+        //            }
+        //            else
+        //            {
+        //                IOUtils.Copy(is1, append);
+        //            }
+        //        }
+        //        append.CloseEntry();
+        //    }
 
-            append.Close();
-            zipFile.Close();
+        //    append.Close();
+        //    zipFile.Close();
 
-            byte[] buf = bos.ToByteArray();
-            bos = null;
+        //    byte[] buf = bos.ToByteArray();
+        //    bos = null;
 
-            IWorkbook wb = WorkbookFactory.Create(new ByteArrayInputStream(buf));
-            wb.GetSheetAt(0);
-            wb.Close();
-            zipFile.Close();
-        }
+        //    IWorkbook wb = WorkbookFactory.Create(new ByteArrayInputStream(buf));
+        //    wb.GetSheetAt(0);
+        //    wb.Close();
+        //    zipFile.Close();
+        //}
 
         [Test, Ignore("need ZipSecureFile class")]
         public void ZipBombCheckSizes()

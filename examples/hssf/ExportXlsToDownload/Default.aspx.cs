@@ -23,35 +23,25 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using System;
+using System.IO;
 
 namespace ExportXlsToDownload
 {
     public partial class _Default : System.Web.UI.Page
     {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-
-        }
-
         protected void Button1_Click(object sender, EventArgs e)
         {
-            string filename="test.xls";
+            string filename = "test.xls";
             Response.ContentType = "application/vnd.ms-excel";
-            Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}",filename));
+            Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", filename));
             Response.Clear();
 
             InitializeWorkbook();
-            GenerateData();            
+            GenerateData();
             GetExcelStream().WriteTo(Response.OutputStream);
             Response.End();
         }
@@ -59,7 +49,7 @@ namespace ExportXlsToDownload
         HSSFWorkbook hssfworkbook;
 
         MemoryStream GetExcelStream()
-        { 
+        {
             //Write the stream data of workbook to the root directory
             MemoryStream file = new MemoryStream();
             hssfworkbook.Write(file);

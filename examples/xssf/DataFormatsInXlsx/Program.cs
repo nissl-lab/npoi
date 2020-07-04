@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using NPOI.HSSF.UserModel;
+using System;
 using System.IO;
 
 namespace NPOI.Examples.XSSF.DataFormatsInXlsx
@@ -25,7 +22,7 @@ namespace NPOI.Examples.XSSF.DataFormatsInXlsx
             ICell cell = sheet.CreateRow(0).CreateCell(0);
             //number format with 2 digits after the decimal point - "1.20"
             SetValueAndFormat(workbook, cell, 1.2, HSSFDataFormat.GetBuiltinFormat("0.00"));
-            
+
             //RMB currency format with comma    -   "¥20,000"
             ICell cell2 = sheet.CreateRow(1).CreateCell(0);
             SetValueAndFormat(workbook, cell2, 20000, format.GetFormat("¥#,##0"));
@@ -40,7 +37,7 @@ namespace NPOI.Examples.XSSF.DataFormatsInXlsx
 
             //phone number format - "021-65881234"
             ICell cell5 = sheet.CreateRow(4).CreateCell(0);
-            SetValueAndFormat(workbook, cell5, 02165881234,format.GetFormat("000-00000000"));
+            SetValueAndFormat(workbook, cell5, 02165881234, format.GetFormat("000-00000000"));
 
             //Chinese capitalized character number - 壹贰叁 元
             ICell cell6 = sheet.CreateRow(5).CreateCell(0);
@@ -53,7 +50,7 @@ namespace NPOI.Examples.XSSF.DataFormatsInXlsx
 
             //Chinese date string
             ICell cell8 = sheet.CreateRow(7).CreateCell(0);
-            SetValueAndFormat(workbook,cell8,new DateTime(2005, 11, 6),format.GetFormat("yyyy年m月d日"));
+            SetValueAndFormat(workbook, cell8, new DateTime(2005, 11, 6), format.GetFormat("yyyy年m月d日"));
 
             //formula value with datetime style 
             ICell cell9 = sheet.CreateRow(8).CreateCell(0);
@@ -85,10 +82,10 @@ namespace NPOI.Examples.XSSF.DataFormatsInXlsx
             cellStyle.DataFormat = formatId;
             cell.CellStyle = cellStyle;
         }
-        static void SetValueAndFormat(IWorkbook workbook,ICell cell, DateTime value, short formatId)
+        static void SetValueAndFormat(IWorkbook workbook, ICell cell, DateTime value, short formatId)
         {
             //set value for the cell
-            if(value!=null)
+            if (value != null)
                 cell.SetCellValue(value);
 
             ICellStyle cellStyle = workbook.CreateCellStyle();

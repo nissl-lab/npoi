@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NPOI.XWPF.UserModel;
+﻿using NPOI.XWPF.UserModel;
 using System.IO;
 
 namespace SimpleDocument
@@ -29,7 +25,7 @@ namespace SimpleDocument
             r1.IsBold = true;
             r1.FontFamily = "Courier";
             r1.SetUnderline(UnderlinePatterns.DotDotDash);
-            r1.SetTextPosition(100);
+            r1.TextPosition = 100;
 
             XWPFParagraph p2 = doc.CreateParagraph();
             p2.Alignment = ParagraphAlignment.RIGHT;
@@ -43,26 +39,25 @@ namespace SimpleDocument
 
             XWPFRun r2 = p2.CreateRun();
             r2.SetText("jumped over the lazy dog");
-            r2.IsStrike = true;
+            r2.IsStrikeThrough = true;
             r2.FontSize = 20;
-           
 
             XWPFRun r3 = p2.CreateRun();
             r3.SetText("and went away");
-            r3.IsStrike = true;
+            r3.IsStrikeThrough = true;
             r3.FontSize = 20;
             r3.Subscript = VerticalAlign.SUPERSCRIPT;
             r3.SetColor("FF0000");
 
             XWPFParagraph p3 = doc.CreateParagraph();
-            p3.IsWordWrap = true;
+            p3.IsWordWrapped = true;
             p3.IsPageBreak = true;
             p3.Alignment = ParagraphAlignment.BOTH;
             p3.SpacingLineRule = LineSpacingRule.EXACT;
             p3.IndentationFirstLine = 600;
 
             XWPFRun r4 = p3.CreateRun();
-            r4.SetTextPosition(20);
+            r4.TextPosition = 20;
             r4.SetText("To be, or not to be: that is the question: "
                     + "Whether 'tis nobler in the mind to suffer "
                     + "The slings and arrows of outrageous fortune, "
@@ -79,7 +74,7 @@ namespace SimpleDocument
             //This would imply that this break shall be treated as a simple line break, and break the line after that word:
 
             XWPFRun r5 = p3.CreateRun();
-            r5.SetTextPosition(-10);
+            r5.TextPosition = -10;
             r5.SetText("For in that sleep of death what dreams may come");
             r5.AddCarriageReturn();
             r5.SetText("When we have shuffled off this mortal coil,"

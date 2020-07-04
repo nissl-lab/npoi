@@ -43,17 +43,39 @@ namespace NPOI.Util
          *
          * @param timezone the timezone under which date calculations take place
          */
-        public static void SetUserTimeZone(TimeZone timezone)
+        public static void SetUserTimeZone(TimeZoneInfo timezone)
         {
             userTimeZone = (timezone);
         }
 
         /**
+         * As time zone information is not stored in any format, it can be
+         * set before any date calculations take place.
+         * This setting is specific to the current thread.
+         *
+         * @param timezone the timezone under which date calculations take place
+         */
+        [Obsolete("The class TimeZone was marked obsolete, Use the Overload using TimeZoneInfo instead.")]
+        public static void SetUserTimeZone(TimeZone timezone)
+        {
+            obsUserTimeZone.Value = (timezone);
+        }
+
+        /**
          * @return the time zone which is used for date calculations, defaults to UTC
          */
-        public static TimeZone GetUserTimeZone()
+        public static TimeZoneInfo GetUserTimeZoneInfo()
         {
             return userTimeZone ?? (userTimeZone = TimeZone.CurrentTimeZone);
+        }
+
+        /**
+         * @return the time zone which is used for date calculations, defaults to UTC
+         */
+        [Obsolete("The class TimeZone was marked obsolete, Use GetUserTimeZoneInfo instead.")]
+        public static TimeZone GetUserTimeZone()
+        {
+            return obsUserTimeZone.Value;
         }
 
         /**
@@ -78,7 +100,7 @@ namespace NPOI.Util
          */
         public static DateTime GetLocaleCalendar()
         {
-            return GetLocaleCalendar(GetUserTimeZone());
+            return GetLocaleCalendar(GetUserTimeZoneInfo());
         }
 
         /**
@@ -130,6 +152,16 @@ namespace NPOI.Util
         /**
          * @return a calendar for the user locale and time zone
          */
+        public static DateTime GetLocaleCalendar(TimeZoneInfo timeZone)
+        {
+            return TimeZoneInfo.ConvertTime(DateTime.Now, timeZone);
+            //return Calendar.GetInstance(timeZone, GetUserLocale());
+        }
+
+        /**
+         * @return a calendar for the user locale and time zone
+         */
+        [Obsolete("The class TimeZone was marked obsolete, Use the Overload using TimeZoneInfo instead.")]
         public static DateTime GetLocaleCalendar(TimeZone timeZone)
         {
             return timeZone.ToLocalTime(DateTime.Now);

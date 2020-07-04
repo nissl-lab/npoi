@@ -23,12 +23,9 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.IO;
-using System.Text;
-
 using NPOI.HPSF;
 using NPOI.POIFS.FileSystem;
+using System.IO;
 
 namespace CreatePOIFSFileWithProperties
 {
@@ -40,7 +37,7 @@ namespace CreatePOIFSFileWithProperties
 
             //get the root directory
             DirectoryEntry dir = fs.Root;
-            
+
             //create a entry of DocumentSummaryInformation
             DocumentSummaryInformation dsi = PropertySetFactory.CreateDocumentSummaryInformation();
             dsi.Company = "NPOI Team";

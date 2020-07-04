@@ -1,11 +1,7 @@
 ﻿using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace ConditionalFormats
 {
@@ -54,7 +50,7 @@ namespace ConditionalFormats
             IConditionalFormattingRule rule2 = sheetCF.CreateConditionalFormattingRule(ComparisonOperator.LessThan, "50");
             IPatternFormatting fill2 = rule2.CreatePatternFormatting();
             fill2.FillBackgroundColor = (IndexedColors.Green.Index);
-            fill2.FillPattern= FillPattern.SolidForeground;
+            fill2.FillPattern = FillPattern.SolidForeground;
 
             CellRangeAddress[] regions = {
                 CellRangeAddress.ValueOf("A1:A6")
@@ -265,7 +261,7 @@ namespace ConditionalFormats
             IConditionalFormattingRule rule1 = sheetCF.CreateConditionalFormattingRule("AND(A2-TODAY()>=0,A2-TODAY()<=30)");
             IFontFormatting font = rule1.CreateFontFormatting();
             font.SetFontStyle(false, true);
-            font.FontColorIndex= IndexedColors.Blue.Index;
+            font.FontColorIndex = IndexedColors.Blue.Index;
 
             CellRangeAddress[] regions = {
                 CellRangeAddress.ValueOf("A2:A4")

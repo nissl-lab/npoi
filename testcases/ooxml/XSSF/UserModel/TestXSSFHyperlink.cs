@@ -116,7 +116,7 @@ namespace TestCases.XSSF.UserModel
             XSSFCreationHelper CreateHelper = workbook.GetCreationHelper() as XSSFCreationHelper;
 
             String[] invalidURLs = {
-                "http:\\apache.org",
+                //"http:\\apache.org",
                 "www.apache .org",
                 "c:\\temp",
                 "\\poi"};

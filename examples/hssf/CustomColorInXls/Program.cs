@@ -23,25 +23,22 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
-using NPOI.SS.UserModel;
+using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
+using NPOI.SS.UserModel;
+using System.IO;
 
 namespace CustomColorInXls
 {
     class Program
     {
+        static HSSFWorkbook workbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
-
 
             HSSFPalette palette = workbook.GetCustomPalette();
             palette.SetColorAtIndex(HSSFColor.Pink.Index, (byte)255, (byte)234, (byte)222);
@@ -50,13 +47,11 @@ namespace CustomColorInXls
             ISheet sheet1 = workbook.CreateSheet("Sheet1");
             ICellStyle style1 = workbook.CreateCellStyle();
             style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Pink.Index;
-            style1.FillPattern = FillPattern.SolidForeground;
+            style1.FillPattern = FillPatternType.SolidForeground;
             sheet1.CreateRow(0).CreateCell(0).CellStyle = style1;
 
             WriteToFile();
         }
-
-        static HSSFWorkbook workbook;
 
         static void WriteToFile()
         {

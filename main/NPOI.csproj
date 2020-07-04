@@ -10,7 +10,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NPOI</RootNamespace>
     <AssemblyName>NPOI</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
@@ -39,6 +38,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -53,19 +53,8 @@
     <NoWarn>1591</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\solution\Lib\</OutputPath>
-    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>..\solution\Lib\NPOI.XML</DocumentationFile>
-    <NoWarn>1591</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4 Release|AnyCPU'">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <OutputPath>..\solution\Lib\.net4\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <DocumentationFile>..\solution\Lib\.net4\NPOI.XML</DocumentationFile>
@@ -77,17 +66,18 @@
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 2 Release|AnyCPU'">
-    <OutputPath>..\solution\Lib\.net2\</OutputPath>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4.5 release|AnyCPU'">
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <OutputPath>..\solution\Lib\.net45\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
-    <DocumentationFile>..\solution\Lib\.net2\NPOI.XML</DocumentationFile>
+    <DocumentationFile>..\solution\Lib\.net45\NPOI.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>1591</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.6.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
@@ -117,6 +107,7 @@
     <Compile Include="DDF\AbstractEscherOptRecord.cs" />
     <Compile Include="DDF\EscherColorRef.cs" />
     <Compile Include="DDF\EscherTertiaryOptRecord.cs" />
+    <Compile Include="EmptyFileException.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HPSF\Array.cs" />
     <Compile Include="HPSF\Blob.cs" />

@@ -623,7 +623,7 @@ namespace TestCases.SS.UserModel
             workbook.Close();
         }
 
-        [Ignore("")]
+        [Ignore("also ignored in poi")]
         [Test]
         public void ShouldNotBeAbleToCreateArrayFormulaOnPreexistingMergedRegion()
         {

@@ -1,24 +1,12 @@
 ﻿using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace DownloadXlsx
 {
     public partial class DownloadExcel : System.Web.UI.Page
     {
-        
-
-        protected void Page_Load(object sender, EventArgs e)
-        {
-
-        }
-
         protected void Button1_Click(object sender, EventArgs e)
         {
             string filename = "test.xlsx";
@@ -40,10 +28,12 @@ namespace DownloadXlsx
                     row.CreateCell(j).SetCellValue(x++);
                 }
             }
+
             using (var f = File.Create(@"c:\test.xlsx"))
             {
                 workbook.Write(f);
             }
+
             Response.WriteFile(@"c:\test.xlsx");
             //http://social.msdn.microsoft.com/Forums/en-US/3a7bdd79-f926-4a5e-bcb0-ef81b6c09dcf/responseoutputstreamwrite-writes-all-but-insetrs-a-char-every-64k?forum=ncl
             //workbook.Write(Response.OutputStream); cannot be used 

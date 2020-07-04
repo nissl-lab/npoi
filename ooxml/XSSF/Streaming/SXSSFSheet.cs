@@ -1263,7 +1263,8 @@ namespace NPOI.XSSF.Streaming
             if (lastRow != null && flushOnDisk)
                 _writer.FlushRows(flushedRowsCount, lastRow.Value.Key, lastRow.Value.Value.LastCellNum);
        }
-         /* Are all rows flushed to disk?
+        /*
+         * Are all rows flushed to disk?
          */
         public bool AllRowsFlushed
         {

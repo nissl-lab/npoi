@@ -203,8 +203,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "lim", this.lim);
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private int limField;
@@ -262,8 +261,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private ST_PresetLineDashVal valField;

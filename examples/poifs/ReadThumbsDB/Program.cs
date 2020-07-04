@@ -23,15 +23,8 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-using System.IO;
-using NPOI.HSSF.UserModel;
-using NPOI.HPSF;
 using NPOI.POIFS.FileSystem;
-using NPOI.SS.UserModel;
+using System.IO;
 
 namespace NPOI.Examples.ReadThumbsDB
 {

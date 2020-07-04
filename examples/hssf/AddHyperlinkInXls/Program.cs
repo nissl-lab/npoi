@@ -15,15 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
-
+using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
+using System.IO;
 
 
 /* This sample is copied from poi/hssf/usermodel/examples/Hyperlink.java */
@@ -31,13 +27,15 @@ namespace AddHyperlinkInXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
 
             ////cell style for hyperlinks
             ////by default hyperlinks are blue and underlined
-           ICellStyle hlink_style = hssfworkbook.CreateCellStyle();
+            ICellStyle hlink_style = hssfworkbook.CreateCellStyle();
             IFont hlink_font = hssfworkbook.CreateFont();
             hlink_font.Underline = FontUnderlineType.Single;
             hlink_font.Color = HSSFColor.Blue.Index;
@@ -86,9 +84,6 @@ namespace AddHyperlinkInXls
 
             WriteToFile();
         }
-
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

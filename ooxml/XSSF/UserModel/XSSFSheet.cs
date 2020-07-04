@@ -720,18 +720,24 @@ namespace NPOI.XSSF.UserModel
             int i = keys.Count;
             return keys[keys.Count - 1];
         }
-        SortedList<int, XSSFRow> HeadMap(SortedList<int, XSSFRow> rows, int rownum)
+
+        int HeadMapCount(SortedList<int, XSSFRow> rows, int rownum)
         {
-            SortedList<int, XSSFRow> headmap = new SortedList<int, XSSFRow>();
+            int count = 0;
             foreach (int key in rows.Keys)
             {
                 if (key < rownum)
                 {
-                    headmap.Add(key, rows[key]);
+                    count++;
+                }
+                else
+                {
+                    break;
                 }
             }
-            return headmap;
+            return count;
         }
+
         /**
          * Create a new row within the sheet and return the high level representation
          *
@@ -768,7 +774,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     // get number of rows where row index < rownum
                     // --> this tells us where our row should go
-                    int idx = HeadMap(_rows, rownum).Count;
+                    int idx = HeadMapCount(_rows, rownum);
                     ctRow = worksheet.sheetData.InsertNewRow(idx);
                 }
             }

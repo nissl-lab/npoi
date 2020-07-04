@@ -27,20 +27,16 @@
  This sample shows you simple calculation via the cell formulas 
  */
 
-using System;
-using System.Text;
-
-using System.IO;
 using NPOI.HSSF.UserModel;
-using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
+using System;
+using System.IO;
 
 namespace MultplicationTableInXls
 {
     class Program
     {
-        static IWorkbook workbook; 
+        static IWorkbook workbook;
 
         static void Main(string[] args)
         {
@@ -79,7 +75,7 @@ namespace MultplicationTableInXls
         static string GetCellPosition(int row, int col)
         {
             col = Convert.ToInt32('A') + col;
-            row = row+1;
+            row = row + 1;
             return ((char)col) + row.ToString();
         }
 

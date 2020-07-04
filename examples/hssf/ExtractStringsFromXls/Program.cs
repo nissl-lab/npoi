@@ -23,15 +23,9 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Text;
-
-using System.IO;
-
 using NPOI.HSSF.Extractor;
 using NPOI.HSSF.UserModel;
-using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
+using System;
 using TestCases.HSSF;
 
 namespace ExtractStringsFromXls

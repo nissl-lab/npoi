@@ -2243,7 +2243,8 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "flip", this.flip.ToString());
+            if(this.flip!= ST_TileFlipMode.none)
+                XmlHelper.WriteAttribute(sw, "flip", this.flip.ToString());
             XmlHelper.WriteAttribute(sw, "rotWithShape", this.rotWithShape);
             sw.Write(">");
             if (this.gsLst != null)
@@ -2419,8 +2420,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "pos", this.pos);
+            sw.Write(string.Format("<a:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "pos", this.pos, true);
             sw.Write(">");
             if (this.scrgbClr != null)
                 this.scrgbClr.Write(sw, "scrgbClr");
@@ -2434,7 +2435,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.schemeClr.Write(sw, "schemeClr");
             if (this.prstClr != null)
                 this.prstClr.Write(sw, "prstClr");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
         [XmlElement(Order = 0)]
@@ -2559,8 +2560,7 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "ang", this.ang);
             XmlHelper.WriteAttribute(sw, "scaled", this.scaled);
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]

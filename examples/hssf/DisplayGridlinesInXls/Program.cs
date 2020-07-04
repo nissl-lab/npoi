@@ -23,19 +23,17 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-
+using System.IO;
 
 namespace DisplayGridlinesInXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
@@ -47,12 +45,9 @@ namespace DisplayGridlinesInXls
             //sheet2 enables gridline
             ISheet s2 = hssfworkbook.CreateSheet("Sheet2");
             s2.DisplayGridlines = true;
-            
+
             WriteToFile();
         }
-
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {
