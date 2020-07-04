@@ -37,7 +37,7 @@ namespace NPOI.XSSF.Streaming
         private SortedDictionary<int, SXSSFRow> _rows = new SortedDictionary<int, SXSSFRow>();
         private SheetDataWriter _writer;
         private int _randomAccessWindowSize = SXSSFWorkbook.DEFAULT_WINDOW_SIZE;
-        private AutoSizeColumnTracker _autoSizeColumnTracker;
+        private Lazy<AutoSizeColumnTracker> _autoSizeColumnTracker;
         private int outlineLevelRow = 0;
         private int lastFlushedRowNumber = -1;
         private bool allFlushed = false;
@@ -49,8 +49,10 @@ namespace NPOI.XSSF.Streaming
             _sh = xSheet;
             _writer = workbook.CreateSheetDataWriter();
             SetRandomAccessWindowSize(_workbook.RandomAccessWindowSize);
-            _autoSizeColumnTracker = new AutoSizeColumnTracker(this);
+            _autoSizeColumnTracker = new Lazy<AutoSizeColumnTracker>(
+                () => new AutoSizeColumnTracker(this));
         }
+
         public void SetRandomAccessWindowSize(int value)
         {
             if (value == 0 || value < -1)
@@ -59,7 +61,6 @@ namespace NPOI.XSSF.Streaming
             }
             _randomAccessWindowSize = value;
         }
-
 
         public bool Autobreaks
         {
@@ -559,7 +560,7 @@ namespace NPOI.XSSF.Streaming
             try
             {
                 // get the best fit width of rows already flushed to disk
-                flushedWidth = _autoSizeColumnTracker.GetBestFitColumnWidth(column, useMergedCells);
+                flushedWidth = _autoSizeColumnTracker.Value.GetBestFitColumnWidth(column, useMergedCells);
             }
             catch (Exception e)
             {
@@ -979,7 +980,7 @@ namespace NPOI.XSSF.Streaming
          */
         public void TrackColumnForAutoSizing(int column)
         {
-            _autoSizeColumnTracker.TrackColumn(column);
+            _autoSizeColumnTracker.Value.TrackColumn(column);
         }
 
         /**
@@ -992,7 +993,7 @@ namespace NPOI.XSSF.Streaming
          */
         public void TrackColumnsForAutoSizing(ICollection<int> columns)
         {
-            _autoSizeColumnTracker.TrackColumns(columns);
+            _autoSizeColumnTracker.Value.TrackColumns(columns);
         }
 
         /**
@@ -1002,7 +1003,7 @@ namespace NPOI.XSSF.Streaming
          */
         public void TrackAllColumnsForAutoSizing()
         {
-            _autoSizeColumnTracker.TrackAllColumns();
+            _autoSizeColumnTracker.Value.TrackAllColumns();
         }
 
         /**
@@ -1018,7 +1019,7 @@ namespace NPOI.XSSF.Streaming
          */
         public bool UntrackColumnForAutoSizing(int column)
         {
-            return _autoSizeColumnTracker.UntrackColumn(column);
+            return _autoSizeColumnTracker.Value.UntrackColumn(column);
         }
 
         /**
@@ -1034,7 +1035,7 @@ namespace NPOI.XSSF.Streaming
          */
         public bool UntrackColumnsForAutoSizing(ICollection<int> columns)
         {
-            return _autoSizeColumnTracker.UntrackColumns(columns);
+            return _autoSizeColumnTracker.Value.UntrackColumns(columns);
         }
 
         /**
@@ -1044,7 +1045,7 @@ namespace NPOI.XSSF.Streaming
          */
         public void UntrackAllColumnsForAutoSizing()
         {
-            _autoSizeColumnTracker.UntrackAllColumns();
+            _autoSizeColumnTracker.Value.UntrackAllColumns();
         }
 
         /**
@@ -1056,7 +1057,7 @@ namespace NPOI.XSSF.Streaming
          */
         public bool IsColumnTrackedForAutoSizing(int column)
         {
-            return _autoSizeColumnTracker.IsColumnTracked(column);
+            return _autoSizeColumnTracker.Value.IsColumnTracked(column);
         }
 
         /**
@@ -1071,7 +1072,7 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                return _autoSizeColumnTracker.TrackedColumns;
+                return _autoSizeColumnTracker.Value.TrackedColumns;
             }
         }
 
@@ -1312,7 +1313,7 @@ namespace NPOI.XSSF.Streaming
                 int rowIndex = firstRowNum;
                 SXSSFRow row = _rows[firstRowNum];
                 // Update the best fit column widths for auto-sizing just before the rows are flushed
-                _autoSizeColumnTracker.UpdateColumnWidths(row);
+                //_autoSizeColumnTracker.UpdateColumnWidths(row);
                 _writer.WriteRow(rowIndex, row);
                 _rows.Remove(firstRowNum);
                 lastFlushedRowNumber = rowIndex;

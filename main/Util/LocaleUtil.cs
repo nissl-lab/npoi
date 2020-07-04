@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading;
 
 namespace NPOI.Util
 {
@@ -20,11 +16,6 @@ namespace NPOI.Util
  */
     public class LocaleUtil
     {
-        static LocaleUtil()
-        {
-            userTimeZone = new ThreadLocal<TimeZoneInfo>(()=>TimeZoneInfo.Local);
-            obsUserTimeZone = new ThreadLocal<TimeZone>(() => TimeZone.CurrentTimeZone);
-        }
         /**
          * Excel doesn't store TimeZone information in the file, so if in doubt,
          *  use UTC to perform calculations
@@ -38,11 +29,11 @@ namespace NPOI.Util
          */
         public static string CHARSET_1252 = CodePageUtil.CodepageToEncoding(CodePageUtil.CP_WINDOWS_1252);// ("CP1252");
 
-        private static ThreadLocal<TimeZoneInfo> userTimeZone;
+        [ThreadStatic]
+        private static TimeZone userTimeZone;
 
-        private static ThreadLocal<TimeZone> obsUserTimeZone;
-
-        private static ThreadLocal<CultureInfo> userLocale = new ThreadLocal<CultureInfo>(()=>CultureInfo.CurrentCulture);
+        [ThreadStatic]
+        private static CultureInfo userLocale;
         //private static ThreadLocal<Locale> userLocale = new ThreadLocal<Locale>();
 
         /**
@@ -54,7 +45,7 @@ namespace NPOI.Util
          */
         public static void SetUserTimeZone(TimeZoneInfo timezone)
         {
-            userTimeZone.Value = (timezone);
+            userTimeZone = (timezone);
         }
 
         /**
@@ -75,7 +66,7 @@ namespace NPOI.Util
          */
         public static TimeZoneInfo GetUserTimeZoneInfo()
         {
-            return userTimeZone.Value;
+            return userTimeZone ?? (userTimeZone = TimeZone.CurrentTimeZone);
         }
 
         /**
@@ -93,7 +84,7 @@ namespace NPOI.Util
          */
         public static void SetUserLocale(CultureInfo locale)
         {
-            userLocale.Value = (locale);
+            userLocale = (locale);
         }
 
         /**
@@ -101,7 +92,7 @@ namespace NPOI.Util
          */
         public static CultureInfo GetUserLocale()
         {
-            return userLocale.Value;
+            return userLocale ?? (userLocale = CultureInfo.CurrentCulture);
         }
 
         /**
