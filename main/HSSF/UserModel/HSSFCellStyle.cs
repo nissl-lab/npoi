@@ -57,7 +57,7 @@ namespace NPOI.HSSF.UserModel
         {
             this._workbook = workbook;
             this.index = index;
-            _format = rec;
+            this._format = rec;
         }
 
         /// <summary>
