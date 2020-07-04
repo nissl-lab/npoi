@@ -1,10 +1,5 @@
 ﻿using NPOI.XWPF.UserModel;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace InsertPicturesInWord
 {
@@ -33,11 +28,11 @@ namespace InsertPicturesInWord
             {
                 r2.AddPicture(picData, (int)PictureType.PNG, "image1", widthEmus, heightEmus);
             }
+
             using (FileStream sw = File.Create("test.docx"))
             {
                 doc.Write(sw);
             }
         }
-
     }
 }

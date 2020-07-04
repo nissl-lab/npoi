@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using NPOI.SS.UserModel;
 using System.IO;
 
 namespace NPOI.Examples.XSSF.SplitAndFreezePanesInXlsx
@@ -19,13 +16,15 @@ namespace NPOI.Examples.XSSF.SplitAndFreezePanesInXlsx
 
             // Freeze just one row
             sheet1.CreateFreezePane(0, 1, 0, 1);
+
             // Freeze just one column
             sheet2.CreateFreezePane(1, 0, 1, 0);
+
             // Freeze the columns and rows (forget about scrolling position of the lower right quadrant).
             sheet3.CreateFreezePane(2, 2);
+
             // Create a split with the lower left side being the active quadrant
             sheet4.CreateSplitPane(2000, 2000, 0, 0, PanePosition.LowerLeft);
-
 
             FileStream sw = File.Create("test.xlsx");
             workbook.Write(sw);

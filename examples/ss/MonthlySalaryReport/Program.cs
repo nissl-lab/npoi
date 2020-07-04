@@ -1,10 +1,6 @@
 ﻿using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace MonthlySalaryReport
 {
@@ -35,8 +31,6 @@ namespace MonthlySalaryReport
             wb.Write(fs);
             fs.Close();
         }
-
-
 
         static void GenerateRow(ISheet sheet1,int rowid,string firstName, string lastName, double salaryAmount, double taxRate)
         {

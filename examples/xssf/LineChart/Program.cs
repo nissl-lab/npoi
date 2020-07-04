@@ -2,20 +2,16 @@
 using NPOI.SS.UserModel.Charts;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace LineChart
 {
     class Program
     {
         const int NUM_OF_ROWS = 3;
-           const int NUM_OF_COLUMNS = 10;
+        const int NUM_OF_COLUMNS = 10;
 
-          static void CreateChart(IDrawing drawing, ISheet sheet, IClientAnchor anchor, string serie1, string serie2)
+        static void CreateChart(IDrawing drawing, ISheet sheet, IClientAnchor anchor, string serie1, string serie2)
         {
             IChart chart = drawing.CreateChart(anchor);
             IChartLegend legend = chart.GetOrCreateLegend();
@@ -61,10 +57,10 @@ namespace LineChart
 
             IDrawing drawing = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor1 = drawing.CreateAnchor(0, 0, 0, 0, 0, 5, 10, 15);
-            CreateChart(drawing, sheet, anchor1, "title1","title2");
+            CreateChart(drawing, sheet, anchor1, "title1", "title2");
             IClientAnchor anchor2 = drawing.CreateAnchor(0, 0, 0, 0, 0, 20, 10, 35);
             CreateChart(drawing, sheet, anchor2, "s1", "s2");
-            using (FileStream fs =File.Create("test.xlsx"))
+            using (FileStream fs = File.Create("test.xlsx"))
             {
                 wb.Write(fs);
             }

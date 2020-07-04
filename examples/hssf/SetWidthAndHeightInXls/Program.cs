@@ -23,41 +23,36 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-
+using System.IO;
 
 namespace SetWidthAndHeightInXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
 
             ISheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
             //set the width of columns
-            sheet1.SetColumnWidth(0,50 * 256);
+            sheet1.SetColumnWidth(0, 50 * 256);
             sheet1.SetColumnWidth(1, 100 * 256);
             sheet1.SetColumnWidth(2, 150 * 256);
 
             //set the width of height
-            sheet1.CreateRow(0).Height = 100*20;
-            sheet1.CreateRow(1).Height = 200*20;
-            sheet1.CreateRow(2).Height = 300*20;
+            sheet1.CreateRow(0).Height = 100 * 20;
+            sheet1.CreateRow(1).Height = 200 * 20;
+            sheet1.CreateRow(2).Height = 300 * 20;
 
             sheet1.DefaultRowHeightInPoints = 50;
 
             WriteToFile();
         }
-
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

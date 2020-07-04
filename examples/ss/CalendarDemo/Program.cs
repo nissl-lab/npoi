@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
-using NPOI.HSSF.UserModel;
 using NPOI.SS.Util;
+using NPOI.XSSF.UserModel;
+using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace CalendarDemo
@@ -94,7 +92,7 @@ namespace CalendarDemo
                         ICell dayCell_2 = row.CreateCell(i * 2 + 1);
 
                         int day_of_week = (int)dtM.DayOfWeek;
-                        if (cnt >= day_of_week && dtM.Month == (month+1))
+                        if (cnt >= day_of_week && dtM.Month == (month + 1))
                         {
                             dayCell_1.SetCellValue(day);
                             //calendar.set(Calendar.DAY_OF_MONTH, ++day);
@@ -118,7 +116,7 @@ namespace CalendarDemo
                         }
                         cnt++;
                     }
-                    if (dtM.Month > (month+1)) break;
+                    if (dtM.Month > (month + 1)) break;
                 }
             }
 
@@ -152,7 +150,7 @@ namespace CalendarDemo
             IFont monthFont = wb.CreateFont();
             monthFont.FontHeightInPoints = ((short)12);
             monthFont.Color = (IndexedColors.White.Index);
-            monthFont.Boldweight = (short)(FontBoldWeight.Bold);
+            monthFont.IsBold = true;
             style = wb.CreateCellStyle();
             style.Alignment = (HorizontalAlignment.Center);
             style.VerticalAlignment = (VerticalAlignment.Center);
@@ -163,7 +161,7 @@ namespace CalendarDemo
 
             IFont dayFont = wb.CreateFont();
             dayFont.FontHeightInPoints = ((short)14);
-            dayFont.Boldweight = (short)(FontBoldWeight.Bold);
+            dayFont.IsBold = true;
             style = wb.CreateCellStyle();
             style.Alignment = (HorizontalAlignment.Left);
             style.VerticalAlignment = (VerticalAlignment.Top);

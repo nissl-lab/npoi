@@ -23,22 +23,20 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-using System.IO;
 using NPOI.HSSF.UserModel;
-using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace LoanCalculator
 {
     class Program
     {
+        static IWorkbook workbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook(args);
@@ -138,7 +136,6 @@ namespace LoanCalculator
             cell.CellFormula = ("IF(Values_Entered,Monthly_Payment*Number_of_Payments,\"\")");
             cell.CellStyle = styles["formula_$"];
 
-
             WriteToFile();
         }
 
@@ -149,7 +146,7 @@ namespace LoanCalculator
         {
             Dictionary<String, ICellStyle> styles = new Dictionary<String, ICellStyle>();
 
-            ICellStyle style=null;
+            ICellStyle style = null;
             IFont titleFont = wb.CreateFont();
             titleFont.FontHeightInPoints = (short)14;
             titleFont.FontName = "Trebuchet MS";
@@ -211,13 +208,13 @@ namespace LoanCalculator
             style.LeftBorderColor = IndexedColors.Grey40Percent.Index;
             style.BorderTop = BorderStyle.Dotted;
             style.TopBorderColor = IndexedColors.Grey40Percent.Index;
-            style.DataFormat =wb.CreateDataFormat().GetFormat("0");
+            style.DataFormat = wb.CreateDataFormat().GetFormat("0");
             styles.Add("input_i", style);
 
             style = wb.CreateCellStyle();
             style.Alignment = (HorizontalAlignment.Center);
             style.SetFont(itemFont);
-            style.DataFormat =wb.CreateDataFormat().GetFormat("m/d/yy");
+            style.DataFormat = wb.CreateDataFormat().GetFormat("m/d/yy");
             styles.Add("input_d", style);
 
             style = wb.CreateCellStyle();
@@ -231,7 +228,7 @@ namespace LoanCalculator
             style.LeftBorderColor = IndexedColors.Grey40Percent.Index;
             style.BorderTop = BorderStyle.Dotted;
             style.TopBorderColor = IndexedColors.Grey40Percent.Index;
-            style.DataFormat =wb.CreateDataFormat().GetFormat("$##,##0.00");
+            style.DataFormat = wb.CreateDataFormat().GetFormat("$##,##0.00");
             style.BorderBottom = BorderStyle.Dotted;
             style.BottomBorderColor = IndexedColors.Grey40Percent.Index;
             style.FillForegroundColor = IndexedColors.Grey25Percent.Index;
@@ -249,7 +246,7 @@ namespace LoanCalculator
             style.LeftBorderColor = IndexedColors.Grey40Percent.Index;
             style.BorderTop = BorderStyle.Dotted;
             style.TopBorderColor = IndexedColors.Grey40Percent.Index;
-            style.DataFormat =wb.CreateDataFormat().GetFormat("0");
+            style.DataFormat = wb.CreateDataFormat().GetFormat("0");
             style.BorderBottom = BorderStyle.Dotted;
             style.BottomBorderColor = IndexedColors.Grey40Percent.Index;
             style.FillForegroundColor = IndexedColors.Grey25Percent.Index;
@@ -258,7 +255,6 @@ namespace LoanCalculator
 
             return styles;
         }
-
 
         //define named ranges for the inputs and formulas
         public static void CreateNames(IWorkbook wb)
@@ -301,9 +297,6 @@ namespace LoanCalculator
             name.NameName = ("Values_Entered");
             name.RefersToFormula = ("IF(ISBLANK(Loan_Start),0,IF(Loan_Amount*Interest_Rate*Loan_Years>0,1,0))");
         }
-
-
-        static IWorkbook workbook;
 
         static void WriteToFile()
         {

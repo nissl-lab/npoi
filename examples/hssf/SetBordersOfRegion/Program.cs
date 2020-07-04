@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
+﻿using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
+using NPOI.SS.UserModel;
+using System;
 using System.IO;
 
 namespace SetBordersOfRegion
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
 
             ISheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
             //create a common style
-            ICellStyle blackBorder=hssfworkbook.CreateCellStyle();
+            ICellStyle blackBorder = hssfworkbook.CreateCellStyle();
             blackBorder.BorderBottom = BorderStyle.Thin;
             blackBorder.BorderLeft = BorderStyle.Thin;
             blackBorder.BorderRight = BorderStyle.Thin;
@@ -44,7 +44,7 @@ namespace SetBordersOfRegion
                 {
                     //the first cell of each row * the first cell of each column
                     string formula = GetCellPosition(iRow, 0) + "*" + GetCellPosition(0, iCol);
-                    ICell cell=row.CreateCell(iCol);
+                    ICell cell = row.CreateCell(iCol);
                     cell.CellFormula = formula;
                     //set the cellstyle to the cell
                     cell.CellStyle = blackBorder;
@@ -60,7 +60,6 @@ namespace SetBordersOfRegion
             row = row + 1;
             return ((char)col) + row.ToString();
         }
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

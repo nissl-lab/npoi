@@ -1,22 +1,20 @@
-﻿using System;
-using System.Text;
-using System.IO;
+﻿using NPOI.HPSF;
 using NPOI.HSSF.UserModel;
-using NPOI.HPSF;
 using NPOI.HSSF.Util;
-using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
-
+using System.IO;
 
 namespace ChangeSheetTabColorInXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
 
-            ISheet sheet1=hssfworkbook.CreateSheet("Sheet1");
+            ISheet sheet1 = hssfworkbook.CreateSheet("Sheet1");
             sheet1.TabColorIndex = HSSFColor.Red.Index;
             ISheet sheet2 = hssfworkbook.CreateSheet("Sheet2");
             sheet2.TabColorIndex = HSSFColor.Blue.Index;
@@ -25,9 +23,6 @@ namespace ChangeSheetTabColorInXls
 
             WriteToFile();
         }
-
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

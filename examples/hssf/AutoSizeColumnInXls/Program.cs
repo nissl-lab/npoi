@@ -23,34 +23,55 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-
+using System.IO;
 
 namespace AutoSizeColumnInXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
 
-            ISheet sheet=hssfworkbook.CreateSheet("Sheet1");
+            ISheet sheet = hssfworkbook.CreateSheet("Sheet1");
 
+            var row = sheet.CreateRow(0);
+            var cell = row.CreateCell(0);
+            cell.SetCellValue("This column will not be autoSized");
 
+            var cell2 = row.CreateCell(1);
+            cell2.SetCellValue("This column will be autoSized");
+            sheet.AutoSizeColumn(1);
+
+            WriteToFile();
         }
 
-
-        static HSSFWorkbook hssfworkbook;
+        static void WriteToFile()
+        {
+            //Write the stream data of workbook to the root directory
+            FileStream file = new FileStream(@"test.xls", FileMode.Create);
+            hssfworkbook.Write(file);
+            file.Close();
+        }
 
         static void InitializeWorkbook()
         {
             hssfworkbook = new HSSFWorkbook();
+
+            //create a entry of DocumentSummaryInformation
+            DocumentSummaryInformation dsi = PropertySetFactory.CreateDocumentSummaryInformation();
+            dsi.Company = "NPOI Team";
+            hssfworkbook.DocumentSummaryInformation = dsi;
+
+            //create a entry of SummaryInformation
+            SummaryInformation si = PropertySetFactory.CreateSummaryInformation();
+            si.Subject = "NPOI SDK Example";
+            hssfworkbook.SummaryInformation = si;
         }
     }
 }

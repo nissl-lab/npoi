@@ -1,10 +1,6 @@
 ﻿using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace SetRowStyle
 {
@@ -24,7 +20,7 @@ namespace SetRowStyle
             c1Style.FillPattern = FillPattern.SolidForeground;
 
             IRow r1 = s1.CreateRow(1);
-            IRow r2= s1.CreateRow(2);
+            IRow r2 = s1.CreateRow(2);
             r1.RowStyle = rowstyle;
             r2.RowStyle = rowstyle;
 
@@ -35,7 +31,7 @@ namespace SetRowStyle
             ICell c4 = r2.CreateCell(4);
             c4.CellStyle = c1Style;
 
-            using(var fs=File.Create("test.xlsx"))
+            using (var fs = File.Create("test.xlsx"))
             {
                 workbook.Write(fs);
             }

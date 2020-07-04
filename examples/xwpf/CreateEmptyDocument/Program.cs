@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NPOI.XWPF.UserModel;
+﻿using NPOI.XWPF.UserModel;
 using System.IO;
 
 namespace CreateEmptyDocument
@@ -13,6 +9,7 @@ namespace CreateEmptyDocument
         {
             XWPFDocument doc = new XWPFDocument();
             doc.CreateParagraph();
+
             using (FileStream sw = File.Create("blank.docx"))
             {
                 doc.Write(sw);

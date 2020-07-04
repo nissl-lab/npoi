@@ -23,19 +23,17 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
 using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-
+using System.IO;
 
 namespace SetPrintSettingsInXls
 {
     class Program
     {
+        static HSSFWorkbook hssfworkbook;
+
         static void Main(string[] args)
         {
             InitializeWorkbook();
@@ -45,7 +43,6 @@ namespace SetPrintSettingsInXls
             sheet1.SetMargin(MarginType.TopMargin, (double)0.6);
             sheet1.SetMargin(MarginType.LeftMargin, (double)0.4);
             sheet1.SetMargin(MarginType.BottomMargin, (double)0.3);
-
 
             sheet1.PrintSetup.Copies = 3;
             sheet1.PrintSetup.NoColor = true;
@@ -63,34 +60,28 @@ namespace SetPrintSettingsInXls
             {
                 IRow row = sheet1.CreateRow(i);
                 for (int j = 0; j < 15; j++)
-                {
                     row.CreateCell(j).SetCellValue(x++);
-                }
             }
 
             ISheet sheet2 = hssfworkbook.CreateSheet("Sheet2");
             sheet2.PrintSetup.Copies = 1;
             sheet2.PrintSetup.Landscape = false;
             sheet2.PrintSetup.Notes = true;
-            sheet2.PrintSetup.EndNote = true; 
+            sheet2.PrintSetup.EndNote = true;
             sheet2.PrintSetup.CellError = DisplayCellErrorType.ErrorAsNA;
             sheet2.PrintSetup.PaperSize = (short)PaperSize.A5;
-            
+
             x = 100;
             for (int i = 1; i <= 15; i++)
             {
                 IRow row = sheet2.CreateRow(i);
+
                 for (int j = 0; j < 15; j++)
-                {
                     row.CreateCell(j).SetCellValue(x++);
-                }
             }
 
             WriteToFile();
         }
-
-
-        static HSSFWorkbook hssfworkbook;
 
         static void WriteToFile()
         {

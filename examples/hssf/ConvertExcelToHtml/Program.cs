@@ -15,8 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.HSSF.Converter;
 using NPOI.HSSF.UserModel;
+using NPOI.SS.Converter;
 using System;
 using System.IO;
 
@@ -27,6 +27,7 @@ namespace NPOI.Examples.ConvertExcelToHtml
         static void Main(string[] args)
         {
             HSSFWorkbook workbook;
+
             //the excel file to convert
             string fileName = "19599-1.xls";
             fileName = Path.Combine(Environment.CurrentDirectory, fileName);

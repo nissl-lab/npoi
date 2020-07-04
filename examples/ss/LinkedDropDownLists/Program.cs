@@ -1,13 +1,4 @@
-﻿using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
-using NPOI.SS.Util;
-using NPOI.XSSF.UserModel;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-/**
+﻿/**
  * Demonstrates one technique that may be used to create linked or dependent
  * drop down lists. This refers to a situation in which the selection made
  * in one drop down list affects the options that are displayed in the second
@@ -39,6 +30,13 @@ using System.Text;
  * @author Mark Beardsley [msb at apache.org]
  * @version 1.00 30th March 2012
  */
+
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using NPOI.XSSF.UserModel;
+using System.IO;
+
 namespace LinkedDropDownLists
 {
     class Program
@@ -119,81 +117,82 @@ namespace LinkedDropDownLists
      * @param dataSheet An instance of a class that implements the Sheet Sheet
      *        interface (HSSFSheet or XSSFSheet).
      */
-     static void BuildDataSheet(ISheet dataSheet) {
-        IRow row = null;
-        ICell cell = null;
-        IName name = null;
+        static void BuildDataSheet(ISheet dataSheet)
+        {
+            IRow row = null;
+            ICell cell = null;
+            IName name = null;
 
-        // The first row will hold the data for the first validation.
-        row = dataSheet.CreateRow(10);
-        cell = row.CreateCell(0);
-        cell.SetCellValue("Animal");
-        cell = row.CreateCell(1);
-        cell.SetCellValue("Vegetable");
-        cell = row.CreateCell(2);
-        cell.SetCellValue("Mineral");
-        name = dataSheet.Workbook.CreateName();
-        name.RefersToFormula = "'Linked Validations'!$A$11:$C$11";
-        name.NameName = "CHOICES";
+            // The first row will hold the data for the first validation.
+            row = dataSheet.CreateRow(10);
+            cell = row.CreateCell(0);
+            cell.SetCellValue("Animal");
+            cell = row.CreateCell(1);
+            cell.SetCellValue("Vegetable");
+            cell = row.CreateCell(2);
+            cell.SetCellValue("Mineral");
+            name = dataSheet.Workbook.CreateName();
+            name.RefersToFormula = "'Linked Validations'!$A$11:$C$11";
+            name.NameName = "CHOICES";
 
-        // The next three rows will hold the data that will be used to
-        // populate the second, or linked, drop down list.
-        row = dataSheet.CreateRow(11);
-        cell = row.CreateCell(0);
-        cell.SetCellValue("Lion");
-        cell = row.CreateCell(1);
-        cell.SetCellValue("Tiger");
-        cell = row.CreateCell(2);
-        cell.SetCellValue("Leopard");
-        cell = row.CreateCell(3);
-        cell.SetCellValue("Elephant");
-        cell = row.CreateCell(4);
-        cell.SetCellValue("Eagle");
-        cell = row.CreateCell(5);
-        cell.SetCellValue("Horse");
-        cell = row.CreateCell(6);
-        cell.SetCellValue("Zebra");
-        name = dataSheet.Workbook.CreateName();
-        name.RefersToFormula = "'Linked Validations'!$A$12:$G$12";
-        name.NameName = "ANIMAL";
+            // The next three rows will hold the data that will be used to
+            // populate the second, or linked, drop down list.
+            row = dataSheet.CreateRow(11);
+            cell = row.CreateCell(0);
+            cell.SetCellValue("Lion");
+            cell = row.CreateCell(1);
+            cell.SetCellValue("Tiger");
+            cell = row.CreateCell(2);
+            cell.SetCellValue("Leopard");
+            cell = row.CreateCell(3);
+            cell.SetCellValue("Elephant");
+            cell = row.CreateCell(4);
+            cell.SetCellValue("Eagle");
+            cell = row.CreateCell(5);
+            cell.SetCellValue("Horse");
+            cell = row.CreateCell(6);
+            cell.SetCellValue("Zebra");
+            name = dataSheet.Workbook.CreateName();
+            name.RefersToFormula = "'Linked Validations'!$A$12:$G$12";
+            name.NameName = "ANIMAL";
 
-        row = dataSheet.CreateRow(12);
-        cell = row.CreateCell(0);
-        cell.SetCellValue("Cabbage");
-        cell = row.CreateCell(1);
-        cell.SetCellValue("Cauliflower");
-        cell = row.CreateCell(2);
-        cell.SetCellValue("Potato");
-        cell = row.CreateCell(3);
-        cell.SetCellValue("Onion");
-        cell = row.CreateCell(4);
-        cell.SetCellValue("Beetroot");
-        cell = row.CreateCell(5);
-        cell.SetCellValue("Asparagus");
-        cell = row.CreateCell(6);
-        cell.SetCellValue("Spinach");
-        cell = row.CreateCell(7);
-        cell.SetCellValue("Chard");
-        name = dataSheet.Workbook.CreateName();
-        name.RefersToFormula = "'Linked Validations'!$A$13:$H$13";
-        name.NameName = "VEGETABLE";
+            row = dataSheet.CreateRow(12);
+            cell = row.CreateCell(0);
+            cell.SetCellValue("Cabbage");
+            cell = row.CreateCell(1);
+            cell.SetCellValue("Cauliflower");
+            cell = row.CreateCell(2);
+            cell.SetCellValue("Potato");
+            cell = row.CreateCell(3);
+            cell.SetCellValue("Onion");
+            cell = row.CreateCell(4);
+            cell.SetCellValue("Beetroot");
+            cell = row.CreateCell(5);
+            cell.SetCellValue("Asparagus");
+            cell = row.CreateCell(6);
+            cell.SetCellValue("Spinach");
+            cell = row.CreateCell(7);
+            cell.SetCellValue("Chard");
+            name = dataSheet.Workbook.CreateName();
+            name.RefersToFormula = "'Linked Validations'!$A$13:$H$13";
+            name.NameName = "VEGETABLE";
 
-        row = dataSheet.CreateRow(13);
-        cell = row.CreateCell(0);
-        cell.SetCellValue("Bauxite");
-        cell = row.CreateCell(1);
-        cell.SetCellValue("Quartz");
-        cell = row.CreateCell(2);
-        cell.SetCellValue("Feldspar");
-        cell = row.CreateCell(3);
-        cell.SetCellValue("Shist");
-        cell = row.CreateCell(4);
-        cell.SetCellValue("Shale");
-        cell = row.CreateCell(5);
-        cell.SetCellValue("Mica");
-        name = dataSheet.Workbook.CreateName();
-        name.RefersToFormula = "'Linked Validations'!$A$14:$F$14";
-        name.NameName = "MINERAL";
-    }
+            row = dataSheet.CreateRow(13);
+            cell = row.CreateCell(0);
+            cell.SetCellValue("Bauxite");
+            cell = row.CreateCell(1);
+            cell.SetCellValue("Quartz");
+            cell = row.CreateCell(2);
+            cell.SetCellValue("Feldspar");
+            cell = row.CreateCell(3);
+            cell.SetCellValue("Shist");
+            cell = row.CreateCell(4);
+            cell.SetCellValue("Shale");
+            cell = row.CreateCell(5);
+            cell.SetCellValue("Mica");
+            name = dataSheet.Workbook.CreateName();
+            name.RefersToFormula = "'Linked Validations'!$A$14:$F$14";
+            name.NameName = "MINERAL";
+        }
     }
 }

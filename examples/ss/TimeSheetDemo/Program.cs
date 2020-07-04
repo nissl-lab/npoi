@@ -23,17 +23,13 @@
  * 
  * ==============================================================*/
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-using System.IO;
 using NPOI.HSSF.UserModel;
-using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace TimeSheetDemo
 {
@@ -42,8 +38,10 @@ namespace TimeSheetDemo
     /// </summary>
     class Program
     {
+        static IWorkbook workbook;
+
         static String[] titles = {
-            "Person",	"ID", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun",
+            "Person",   "ID", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun",
             "Total\nHrs", "Overtime\nHrs", "Regular\nHrs"
         };
         static Object[,] sample_data = {
@@ -189,7 +187,7 @@ namespace TimeSheetDemo
             Dictionary<String, ICellStyle> styles = new Dictionary<String, ICellStyle>();
             ICellStyle style;
             IFont titleFont = wb.CreateFont();
-            titleFont.FontHeightInPoints =18;
+            titleFont.FontHeightInPoints = 18;
             titleFont.IsBold = true;
             style = wb.CreateCellStyle();
             style.Alignment = HorizontalAlignment.Center;
@@ -240,9 +238,6 @@ namespace TimeSheetDemo
 
             return styles;
         }
-
-
-        static IWorkbook workbook;
 
         static void WriteToFile()
         {

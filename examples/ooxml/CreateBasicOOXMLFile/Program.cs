@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Net.Mime;
+﻿using NPOI.OpenXml4Net.OPC;
+using System;
 using System.IO;
-using NPOI.OpenXml4Net.OPC;
+using System.Net.Mime;
 
 namespace NPOI.Examples.CreateBasicOOXMLFile
 {
@@ -15,7 +13,7 @@ namespace NPOI.Examples.CreateBasicOOXMLFile
             OPCPackage p = OPCPackage.Create(new MemoryStream());
 
             //create package parts
-            PackagePartName pn1=new PackagePartName(new Uri("/a/abcd/e",UriKind.Relative),true);
+            PackagePartName pn1 = new PackagePartName(new Uri("/a/abcd/e", UriKind.Relative), true);
             if (!p.ContainPart(pn1))
                 p.CreatePart(pn1, MediaTypeNames.Text.Plain);
 

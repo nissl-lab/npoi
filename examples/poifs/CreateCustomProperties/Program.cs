@@ -1,9 +1,6 @@
 ﻿using NPOI.HPSF;
 using NPOI.POIFS.FileSystem;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace CreateCustomProperties
 {
@@ -28,7 +25,6 @@ namespace CreateCustomProperties
             dsi.CustomProperties = customProperties;
             //Write the stream data of the DocumentSummaryInformation entry to the root directory
             dsi.Write(dir, DocumentSummaryInformation.DEFAULT_STREAM_NAME);
-
 
             //create a POIFS file called Foo.poifs
             FileStream output = new FileStream("Foo.xls", FileMode.OpenOrCreate);
