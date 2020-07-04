@@ -15,7 +15,7 @@ namespace WorkbookFactoryDemo
             using (var stream= File.OpenRead("TestInput.xlsx"))
             {
                 IWorkbook workbook = WorkbookFactory.Create(stream);
-                workbook.GetSheetAt(0).CopySheet("Data");
+                //workbook.GetSheetAt(0).CopySheet("Folha1");
                 /*for (int i = 0; i < workbook.NumberOfSheets; i++)
                 {
                     ISheet sheet = workbook.GetSheetAt(i);
