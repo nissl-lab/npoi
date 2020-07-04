@@ -777,9 +777,11 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "val", this.val);
-            sw.Write(">");
-            if (this.ItemsElementName != null)
+
+
+            if (this.ItemsElementName.Count>0)
             {
+                sw.Write(">");
                 for (int i = 0; i < itemsElementNameField.Count; i++)
                 {
                     EG_ColorTransform x = itemsElementNameField[i];
@@ -790,8 +792,13 @@ namespace NPOI.OpenXmlFormats.Dml
                         sw.Write(" val=\"" + value + "\"");
                     sw.Write("/>");
                 }
+                sw.Write(string.Format("</a:{0}>", nodeName));
             }
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            else
+            {
+                sw.Write("/>");
+            }
+            
         }
 
     }
@@ -954,9 +961,10 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "hue", this.hue);
             XmlHelper.WriteAttribute(sw, "sat", this.sat);
             XmlHelper.WriteAttribute(sw, "lum", this.lum);
-            sw.Write(">");
-            if (this.ItemsElementName != null)
+
+            if (this.ItemsElementName.Count>0)
             {
+                sw.Write(">");
                 for (int i = 0; i < itemsElementNameField.Count; i++)
                 {
                     EG_ColorTransform x = itemsElementNameField[i];
@@ -967,8 +975,12 @@ namespace NPOI.OpenXmlFormats.Dml
                         sw.Write(" val=\"" + value + "\"");
                     sw.Write("/>");
                 }
+                sw.Write(string.Format("</a:{0}>", nodeName));
             }
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            else
+            {
+                sw.Write("/>");
+            }
         }
 
     }
@@ -1074,21 +1086,25 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
             XmlHelper.WriteAttribute(sw, "lastClr", this.lastClr);
-            sw.Write(">");
-            if (this.ItemsElementName != null)
+            if (this.ItemsElementName.Count > 0)
             {
-                for (int i = 0; i < itemsElementNameField.Count;i++ )
+                sw.Write(">");
+                for (int i = 0; i < itemsElementNameField.Count; i++)
                 {
                     EG_ColorTransform x = itemsElementNameField[i];
                     string value = itemsValueField[i];
 
                     sw.Write(string.Format("<a:{0}", x));
-                    if(value!=null)
-                        sw.Write(" val=\""+value+"\"");
+                    if (value != null)
+                        sw.Write(" val=\"" + value + "\"");
                     sw.Write("/>");
                 }
+                sw.Write(string.Format("</a:{0}>", nodeName));
             }
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            else
+            {
+                sw.Write(string.Format("/>", nodeName));
+            }
         }
         [XmlIgnore]
         public List<EG_ColorTransform> ItemsElementName
@@ -1330,9 +1346,10 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
-            sw.Write(">");
-            if (this.ItemsElementName != null)
+
+            if (this.ItemsElementName.Count>0)
             {
+                sw.Write(">");
                 for (int i = 0; i < itemsElementNameField.Count; i++)
                 {
                     EG_ColorTransform x = itemsElementNameField[i];
@@ -1343,8 +1360,12 @@ namespace NPOI.OpenXmlFormats.Dml
                         sw.Write(" val=\"" + value + "\"");
                     sw.Write("/>");
                 }
+                sw.Write(string.Format("</a:{0}>", nodeName));
             }
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            else
+            {
+                sw.Write("/>");
+            }
         }
 
         [XmlIgnore]
@@ -1569,9 +1590,10 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
-            sw.Write(">");
-            if (this.ItemsElementName != null)
+
+            if (this.ItemsElementName.Count > 0)
             {
+                sw.Write(">");
                 for (int i = 0; i < itemsElementNameField.Count; i++)
                 {
                     EG_ColorTransform x = itemsElementNameField[i];
@@ -1582,8 +1604,13 @@ namespace NPOI.OpenXmlFormats.Dml
                         sw.Write(" val=\"" + value + "\"");
                     sw.Write("/>");
                 }
+                sw.Write(string.Format("</a:{0}>", nodeName));
             }
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            else
+            {
+                sw.Write("/>");
+            }
+            
         }
     }
 

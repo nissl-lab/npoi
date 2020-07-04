@@ -125,10 +125,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "activeTab", this.activeTab);
             if (!this.autoFilterDateGrouping)
                 XmlHelper.WriteAttribute(sw, "autoFilterDateGrouping", this.autoFilterDateGrouping);
-            sw.Write(">");
             if (this.extLst != null)
+            {
+                sw.Write(">");
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</{0}>", nodeName));
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
+            else
+            {
+                sw.Write("/>");
+            }
         }
 
         [XmlElement]

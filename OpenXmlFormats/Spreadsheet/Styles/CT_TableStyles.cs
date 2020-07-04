@@ -347,15 +347,21 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "count", this.count, true);
             XmlHelper.WriteAttribute(sw, "defaultTableStyle", this.defaultTableStyle);
             XmlHelper.WriteAttribute(sw, "defaultPivotStyle", this.defaultPivotStyle);
-            sw.Write(">");
-            if (this.tableStyle != null)
+
+            if (this.tableStyle.Count > 0)
             {
+                sw.Write(">");
                 foreach (CT_TableStyle x in this.tableStyle)
                 {
                     x.Write(sw, "tableStyle");
                 }
+                sw.Write(string.Format("</{0}>", nodeName));
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write("/>");
+            }
+            
         }
 
         public CT_TableStyles()

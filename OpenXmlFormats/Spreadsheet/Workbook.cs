@@ -56,8 +56,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "lowestEdited", this.lowestEdited);
             XmlHelper.WriteAttribute(sw, "rupBuild", this.rupBuild);
             XmlHelper.WriteAttribute(sw, "codeName", this.codeName);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]
@@ -324,7 +323,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.iterate = XmlHelper.ReadBool(node.Attributes["iterate"]);
             ctObj.iterateCount = XmlHelper.ReadUInt(node.Attributes["iterateCount"]);
             ctObj.iterateDelta = XmlHelper.ReadDouble(node.Attributes["iterateDelta"]);
-            ctObj.fullPrecision = XmlHelper.ReadBool(node.Attributes["fullPrecision"], true);
+            ctObj.fullPrecision = XmlHelper.ReadBool(node.Attributes["fullPrecision"]);
             ctObj.calcCompleted = XmlHelper.ReadBool(node.Attributes["calcCompleted"]);
             ctObj.calcOnSave = XmlHelper.ReadBool(node.Attributes["calcOnSave"]);
             ctObj.concurrentCalc = XmlHelper.ReadBool(node.Attributes["concurrentCalc"]);
@@ -339,19 +338,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "calcId", this.calcId);
-            if(calcMode== ST_CalcMode.auto)
+            if(this.calcMode!= ST_CalcMode.auto)
                 XmlHelper.WriteAttribute(sw, "calcMode", this.calcMode.ToString());
-            XmlHelper.WriteAttribute(sw, "fullCalcOnLoad", this.fullCalcOnLoad);
-            XmlHelper.WriteAttribute(sw, "refMode", this.refMode.ToString());
-            XmlHelper.WriteAttribute(sw, "iterate", this.iterate);
-            XmlHelper.WriteAttribute(sw, "iterateCount", this.iterateCount);
+            if(this.fullCalcOnLoad)
+                XmlHelper.WriteAttribute(sw, "fullCalcOnLoad", this.fullCalcOnLoad);
+            if (this.refMode!= ST_RefMode.A1)
+                XmlHelper.WriteAttribute(sw, "refMode", this.refMode.ToString());
+            if (this.iterate)
+                XmlHelper.WriteAttribute(sw, "iterate", this.iterate);
             XmlHelper.WriteAttribute(sw, "iterateDelta", this.iterateDelta);
-            XmlHelper.WriteAttribute(sw, "fullPrecision", this.fullPrecision);
-            XmlHelper.WriteAttribute(sw, "calcCompleted", this.calcCompleted);
-            XmlHelper.WriteAttribute(sw, "calcOnSave", this.calcOnSave);
-            XmlHelper.WriteAttribute(sw, "concurrentCalc", this.concurrentCalc);
+            if (this.fullPrecision)
+                XmlHelper.WriteAttribute(sw, "fullPrecision", this.fullPrecision);
+            if (this.calcCompleted)
+                XmlHelper.WriteAttribute(sw, "calcCompleted", this.calcCompleted);
+            if (this.calcOnSave)
+                XmlHelper.WriteAttribute(sw, "calcOnSave", this.calcOnSave);
+            if(this.concurrentCalc)
+                XmlHelper.WriteAttribute(sw, "concurrentCalc", this.concurrentCalc);
             XmlHelper.WriteAttribute(sw, "concurrentManualCount", this.concurrentManualCount);
-            XmlHelper.WriteAttribute(sw, "forceFullCalc", this.forceFullCalc);
+            if (this.forceFullCalc) 
+                XmlHelper.WriteAttribute(sw, "forceFullCalc", this.forceFullCalc);
             sw.Write("/>");
         }
 
@@ -786,7 +792,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.allowRefreshQuery = XmlHelper.ReadBool(node.Attributes["allowRefreshQuery"]);
             ctObj.publishItems = XmlHelper.ReadBool(node.Attributes["publishItems"]);
             ctObj.checkCompatibility = XmlHelper.ReadBool(node.Attributes["checkCompatibility"]);
-            ctObj.autoCompressPictures = XmlHelper.ReadBool(node.Attributes["autoCompressPictures"], true);
+            ctObj.autoCompressPictures = XmlHelper.ReadBool(node.Attributes["autoCompressPictures"], false);
             ctObj.refreshAllConnections = XmlHelper.ReadBool(node.Attributes["refreshAllConnections"]);
             ctObj.defaultThemeVersion = XmlHelper.ReadUInt(node.Attributes["defaultThemeVersion"]);
             return ctObj;

@@ -16,7 +16,7 @@ namespace NPOI.OpenXmlFormats.Dml
     using System.Xml;
     using NPOI.OpenXml4Net.Util;
     using System.IO;
-
+    using NPOI.OpenXmlFormats.Vml;
 
     [Serializable]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -512,8 +512,7 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "script", this.script);
             XmlHelper.WriteAttribute(sw, "typeface", this.typeface);
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]
@@ -956,7 +955,9 @@ namespace NPOI.OpenXmlFormats.Dml
             ctObj.solidFill = new List<CT_SolidColorFillProperties>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
-                if (childNode.LocalName == "blipFill")
+                if (childNode.LocalName == "solidFill")
+                    ctObj.solidFill.Add(CT_SolidColorFillProperties.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "blipFill")
                     ctObj.blipFill.Add(CT_BlipFillProperties.Parse(childNode, namespaceManager));
                 else if (childNode.LocalName == "gradFill")
                     ctObj.gradFill.Add(CT_GradientFillProperties.Parse(childNode, namespaceManager));
@@ -966,8 +967,6 @@ namespace NPOI.OpenXmlFormats.Dml
                     ctObj.noFill.Add(new CT_NoFillProperties());
                 else if (childNode.LocalName == "pattFill")
                     ctObj.pattFill.Add(CT_PatternFillProperties.Parse(childNode, namespaceManager));
-                else if (childNode.LocalName == "solidFill")
-                    ctObj.solidFill.Add(CT_SolidColorFillProperties.Parse(childNode, namespaceManager));
             }
             return ctObj;
         }
@@ -996,14 +995,14 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 foreach (CT_GroupFillProperties x in this.grpFill)
                 {
-                    sw.Write("<grpFill/>");
+                    sw.Write("<a:grpFill/>");
                 }
             }
             if (this.noFill != null)
             {
                 foreach (CT_NoFillProperties x in this.noFill)
                 {
-                    sw.Write("<noFill/>");
+                    sw.Write("<a:noFill/>");
                 }
             }
             if (this.pattFill != null)
@@ -1114,6 +1113,18 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             this.lnField = new List<CT_LineProperties>();
         }
+        public static CT_LineStyleList Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_LineStyleList ctObj = new CT_LineStyleList();
+            ctObj.ln = new List<CT_LineProperties>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                ctObj.ln.Add(CT_LineProperties.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
 
         [XmlElement("ln", Order = 0)]
         public List<CT_LineProperties> ln
@@ -1126,6 +1137,18 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 this.lnField = value;
             }
+        }
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}>", nodeName));
+            if (this.ln.Count>0)
+            {
+                foreach (CT_LineProperties x in this.ln)
+                {
+                    x.Write(sw, "ln");
+                }
+            }
+            sw.Write(string.Format("</a:{0}>", nodeName));
         }
     }
 
@@ -1155,6 +1178,31 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 this.effectStyleField = value;
             }
+        }
+
+        public static CT_EffectStyleList Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_EffectStyleList ctObj = new CT_EffectStyleList();
+            ctObj.effectStyle = new List<CT_EffectStyleItem>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                ctObj.effectStyle.Add(CT_EffectStyleItem.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}>", nodeName));
+            if (this.effectStyle.Count > 0)
+            {
+                foreach (CT_EffectStyleItem x in this.effectStyle)
+                {
+                    x.Write(sw, "effectStyle");
+                }
+            }
+            sw.Write(string.Format("</a:{0}>", nodeName));
         }
     }
 
@@ -1200,6 +1248,13 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             sw.Write(">");
+            if (this.solidFill != null)
+            {
+                foreach (CT_SolidColorFillProperties x in this.solidFill)
+                {
+                    x.Write(sw, "solidFill");
+                }
+            }
             if (this.blipFill != null)
             {
                 foreach (CT_BlipFillProperties x in this.blipFill)
@@ -1233,13 +1288,6 @@ namespace NPOI.OpenXmlFormats.Dml
                 foreach (CT_PatternFillProperties x in this.pattFill)
                 {
                     x.Write(sw, "pattFill");
-                }
-            }
-            if (this.solidFill != null)
-            {
-                foreach (CT_SolidColorFillProperties x in this.solidFill)
-                {
-                    x.Write(sw, "solidFill");
                 }
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
@@ -1334,9 +1382,9 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private CT_FillStyleList fillStyleLstField;
 
-        private List<CT_LineProperties> lnStyleLstField;
+        private CT_LineStyleList lnStyleLstField;
 
-        private List<CT_EffectStyleItem> effectStyleLstField;
+        private CT_EffectStyleList effectStyleLstField;
 
         private CT_BackgroundFillStyleList bgFillStyleLstField;
 
@@ -1347,8 +1395,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 return null;
             CT_StyleMatrix ctObj = new CT_StyleMatrix();
             ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
-            ctObj.lnStyleLst = new List<CT_LineProperties>();
-            ctObj.effectStyleLst = new List<CT_EffectStyleItem>();
+            
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "fillStyleLst")
@@ -1356,9 +1403,13 @@ namespace NPOI.OpenXmlFormats.Dml
                 else if (childNode.LocalName == "bgFillStyleLst")
                     ctObj.bgFillStyleLst = CT_BackgroundFillStyleList.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "lnStyleLst")
-                    ctObj.lnStyleLst.Add(CT_LineProperties.Parse(childNode, namespaceManager));
+                {
+                    ctObj.lnStyleLst = CT_LineStyleList.Parse(childNode, namespaceManager);
+                }
                 else if (childNode.LocalName == "effectStyleLst")
-                    ctObj.effectStyleLst.Add(CT_EffectStyleItem.Parse(childNode, namespaceManager));
+                {
+                    ctObj.effectStyleLst= CT_EffectStyleList.Parse(childNode, namespaceManager);
+                }
             }
             return ctObj;
         }
@@ -1372,31 +1423,21 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(">");
             if (this.fillStyleLst != null)
                 this.fillStyleLst.Write(sw, "fillStyleLst");
-            if (this.bgFillStyleLst != null)
-                this.bgFillStyleLst.Write(sw, "bgFillStyleLst");
             if (this.lnStyleLst != null)
             {
-                foreach (CT_LineProperties x in this.lnStyleLst)
-                {
-                    x.Write(sw, "lnStyleLst");
-                }
+                this.lnStyleLst.Write(sw, "lnStyleLst");
             }
             if (this.effectStyleLst != null)
             {
-                foreach (CT_EffectStyleItem x in this.effectStyleLst)
-                {
-                    x.Write(sw, "effectStyleLst");
-                }
+                this.effectStyleLst.Write(sw, "effectStyleLst");
             }
+            if (this.bgFillStyleLst != null)
+                this.bgFillStyleLst.Write(sw, "bgFillStyleLst");
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
         public CT_StyleMatrix()
         {
-            //this.bgFillStyleLstField = new CT_BackgroundFillStyleList();
-            //this.effectStyleLstField = new List<CT_EffectStyleItem>();
-            //this.lnStyleLstField = new List<CT_LineProperties>();
-            //this.fillStyleLstField = new CT_FillStyleList();
             this.nameField = "";
         }
 
@@ -1415,7 +1456,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         [XmlArray(Order = 1)]
         [XmlArrayItem("ln", IsNullable = false)]
-        public List<CT_LineProperties> lnStyleLst
+        public CT_LineStyleList lnStyleLst
         {
             get
             {
@@ -1429,7 +1470,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         [XmlArray(Order = 2)]
         [XmlArrayItem("effectStyle", IsNullable = false)]
-        public List<CT_EffectStyleItem> effectStyleLst
+        public CT_EffectStyleList effectStyleLst
         {
             get
             {

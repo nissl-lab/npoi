@@ -449,12 +449,6 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_OfficeStyleSheet()
         {
-            //this.extLstField = new CT_OfficeArtExtensionList();
-            //this.custClrLstField = new List<CT_CustomColor>();
-            //this.extraClrSchemeLstField = new List<CT_ColorSchemeAndMapping>();
-            //this.objectDefaultsField = new CT_ObjectStyleDefaults();
-            //this.themeElementsField = new CT_BaseStyles();
-            //this.nameField = "";
         }
         public static CT_OfficeStyleSheet Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -462,7 +456,6 @@ namespace NPOI.OpenXmlFormats.Dml
                 return null;
             CT_OfficeStyleSheet ctObj = new CT_OfficeStyleSheet();
             ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
-            ctObj.extraClrSchemeLst = new List<CT_ColorSchemeAndMapping>();
             ctObj.custClrLst = new List<CT_CustomColor>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
@@ -473,7 +466,11 @@ namespace NPOI.OpenXmlFormats.Dml
                 else if (childNode.LocalName == "extLst")
                     ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "extraClrSchemeLst")
+                {
+                    if(ctObj.extraClrSchemeLst==null)
+                        ctObj.extraClrSchemeLst= new List<CT_ColorSchemeAndMapping>();
                     ctObj.extraClrSchemeLst.Add(CT_ColorSchemeAndMapping.Parse(childNode, namespaceManager));
+                }
                 else if (childNode.LocalName == "custClrLst")
                     ctObj.custClrLst.Add(CT_CustomColor.Parse(childNode, namespaceManager));
             }

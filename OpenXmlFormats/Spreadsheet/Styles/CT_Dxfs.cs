@@ -24,7 +24,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 return null;
             CT_Dxfs ctObj = new CT_Dxfs();
             ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
-            ctObj.dxf = new List<CT_Dxf>();
+            ctObj.dxfField = new List<CT_Dxf>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "dxf")
@@ -39,20 +39,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count, true);
-            sw.Write(">");
-            if (this.dxf != null)
+
+            if (this.dxf.Count > 0)
             {
+                sw.Write(">");
                 foreach (CT_Dxf x in this.dxf)
                 {
                     x.Write(sw, "dxf");
                 }
+                sw.Write(string.Format("</{0}>", nodeName));
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write("/>");
+            }
+            
         }
 
         public CT_Dxfs()
         {
-            //this.dxfField = new List<CT_Dxf>();
         }
         [XmlElement]
         public List<CT_Dxf> dxf

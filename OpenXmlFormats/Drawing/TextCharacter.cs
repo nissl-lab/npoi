@@ -58,7 +58,7 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "typeface", this.typeface);
+            XmlHelper.WriteAttribute(sw, "typeface", this.typeface,true);
             XmlHelper.WriteAttribute(sw, "panose", this.panose);
             XmlHelper.WriteAttribute(sw, "pitchFamily", this.pitchFamily);
             if(charsetField!=(sbyte)1)
