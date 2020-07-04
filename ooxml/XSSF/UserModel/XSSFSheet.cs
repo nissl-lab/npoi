@@ -1024,7 +1024,7 @@ namespace NPOI.XSSF.UserModel
         public ICellStyle GetColumnStyle(int column)
         {
             int idx = columnHelper.GetColDefaultStyle(column);
-            return Workbook.GetCellStyleAt((short)(idx == -1 ? 0 : idx));
+            return Workbook.GetCellStyleAt(idx == -1 ? 0 : idx);
         }
 
         /**
