@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateEmptyWorkbook", "xssf\CreateEmptyWorkbook\CreateEmptyWorkbook.csproj", "{AFBE86E3-EDBE-45B4-8950-8B883102A47F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetCellValuesInXlsx", "xssf\SetCellValuesInXlsx\SetCellValuesInXlsx.csproj", "{D49F896A-A2E1-4C28-ACB7-73FB2910626D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetWidthAndHeightInXlsx", "xssf\SetWidthAndHeightInXlsx\SetWidthAndHeightInXlsx.csproj", "{D94F543E-F925-44F5-9347-A6DC96D58F17}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FillBackgroundInXlsx", "xssf\FillBackgroundInXlsx\FillBackgroundInXlsx.csproj", "{B6485025-FA2D-4BFB-A98A-A7AE95582EE3}"
@@ -30,8 +28,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddHyperlinkInXlsx", "xssf\AddHyperlinkInXlsx\AddHyperlinkInXlsx.csproj", "{36AEA430-A127-4510-BE7B-2F616F67B10F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplyFontInXlsx", "xssf\ApplyFontInXlsx\ApplyFontInXlsx.csproj", "{BFAF8A3E-ACE7-4FBE-8841-F95F6BB55271}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeringCellsInXlsx", "xssf\MeringCellsInXlsx\MeringCellsInXlsx.csproj", "{E370B5B7-8679-4FBA-BB7B-EDD035245F03}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PageSetupInXlsx", "xssf\PageSetupInXlsx\PageSetupInXlsx.csproj", "{60832BAC-1927-40A9-A9A7-6E9A4FD2CE87}"
 EndProject
@@ -59,8 +55,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LineChart", "xssf\LineChart
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractPicturesFromXlsx", "xssf\ExtractPicturesFromXlsx\ExtractPicturesFromXlsx.csproj", "{ACEDDD5E-EEFF-4A59-ABB4-F70C58B8E644}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseBasicFormulaInXlsx", "xssf\UseBasicFormulaInXlsx\UseBasicFormulaInXlsx.csproj", "{874E25C5-3ECE-4772-90C1-C857AF4C7568}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CopySheet", "xssf\CopySheet\CopySheet.csproj", "{DFBB8F76-A870-479B-A696-E228A2365078}"
 EndProject
 Global
@@ -83,16 +77,6 @@ Global
 		{AFBE86E3-EDBE-45B4-8950-8B883102A47F}.Release|Mixed Platforms.Build.0 = Release|x86
 		{AFBE86E3-EDBE-45B4-8950-8B883102A47F}.Release|x86.ActiveCfg = Release|x86
 		{AFBE86E3-EDBE-45B4-8950-8B883102A47F}.Release|x86.Build.0 = Release|x86
-		{D49F896A-A2E1-4C28-ACB7-73FB2910626D}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{D49F896A-A2E1-4C28-ACB7-73FB2910626D}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{D49F896A-A2E1-4C28-ACB7-73FB2910626D}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{D49F896A-A2E1-4C28-ACB7-73FB2910626D}.Debug|x86.ActiveCfg = Debug|x86
-		{D49F896A-A2E1-4C28-ACB7-73FB2910626D}.Debug|x86.Build.0 = Debug|x86
-		{D49F896A-A2E1-4C28-ACB7-73FB2910626D}.Release|Any CPU.ActiveCfg = Release|x86
-		{D49F896A-A2E1-4C28-ACB7-73FB2910626D}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{D49F896A-A2E1-4C28-ACB7-73FB2910626D}.Release|Mixed Platforms.Build.0 = Release|x86
-		{D49F896A-A2E1-4C28-ACB7-73FB2910626D}.Release|x86.ActiveCfg = Release|x86
-		{D49F896A-A2E1-4C28-ACB7-73FB2910626D}.Release|x86.Build.0 = Release|x86
 		{D94F543E-F925-44F5-9347-A6DC96D58F17}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{D94F543E-F925-44F5-9347-A6DC96D58F17}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{D94F543E-F925-44F5-9347-A6DC96D58F17}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -213,16 +197,6 @@ Global
 		{BFAF8A3E-ACE7-4FBE-8841-F95F6BB55271}.Release|Mixed Platforms.Build.0 = Release|x86
 		{BFAF8A3E-ACE7-4FBE-8841-F95F6BB55271}.Release|x86.ActiveCfg = Release|x86
 		{BFAF8A3E-ACE7-4FBE-8841-F95F6BB55271}.Release|x86.Build.0 = Release|x86
-		{E370B5B7-8679-4FBA-BB7B-EDD035245F03}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{E370B5B7-8679-4FBA-BB7B-EDD035245F03}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{E370B5B7-8679-4FBA-BB7B-EDD035245F03}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{E370B5B7-8679-4FBA-BB7B-EDD035245F03}.Debug|x86.ActiveCfg = Debug|x86
-		{E370B5B7-8679-4FBA-BB7B-EDD035245F03}.Debug|x86.Build.0 = Debug|x86
-		{E370B5B7-8679-4FBA-BB7B-EDD035245F03}.Release|Any CPU.ActiveCfg = Release|x86
-		{E370B5B7-8679-4FBA-BB7B-EDD035245F03}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{E370B5B7-8679-4FBA-BB7B-EDD035245F03}.Release|Mixed Platforms.Build.0 = Release|x86
-		{E370B5B7-8679-4FBA-BB7B-EDD035245F03}.Release|x86.ActiveCfg = Release|x86
-		{E370B5B7-8679-4FBA-BB7B-EDD035245F03}.Release|x86.Build.0 = Release|x86
 		{60832BAC-1927-40A9-A9A7-6E9A4FD2CE87}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{60832BAC-1927-40A9-A9A7-6E9A4FD2CE87}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{60832BAC-1927-40A9-A9A7-6E9A4FD2CE87}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -323,16 +297,6 @@ Global
 		{ACEDDD5E-EEFF-4A59-ABB4-F70C58B8E644}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{ACEDDD5E-EEFF-4A59-ABB4-F70C58B8E644}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{ACEDDD5E-EEFF-4A59-ABB4-F70C58B8E644}.Release|x86.ActiveCfg = Release|Any CPU
-		{874E25C5-3ECE-4772-90C1-C857AF4C7568}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{874E25C5-3ECE-4772-90C1-C857AF4C7568}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{874E25C5-3ECE-4772-90C1-C857AF4C7568}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{874E25C5-3ECE-4772-90C1-C857AF4C7568}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{874E25C5-3ECE-4772-90C1-C857AF4C7568}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{874E25C5-3ECE-4772-90C1-C857AF4C7568}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{874E25C5-3ECE-4772-90C1-C857AF4C7568}.Release|Any CPU.Build.0 = Release|Any CPU
-		{874E25C5-3ECE-4772-90C1-C857AF4C7568}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{874E25C5-3ECE-4772-90C1-C857AF4C7568}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{874E25C5-3ECE-4772-90C1-C857AF4C7568}.Release|x86.ActiveCfg = Release|Any CPU
 		{DFBB8F76-A870-479B-A696-E228A2365078}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DFBB8F76-A870-479B-A696-E228A2365078}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFBB8F76-A870-479B-A696-E228A2365078}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

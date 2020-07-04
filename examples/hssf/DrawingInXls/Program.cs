@@ -52,7 +52,8 @@ namespace DrawingInXls
             DrawSheet1(sheet1);
             DrawSheet2(sheet2);
             DrawSheet3(sheet3);
-            DrawSheet4(sheet4, hssfworkbook);
+            //TODO:something wrong with drawing textbox in sheet
+            //DrawSheet4(sheet4, hssfworkbook);
 
             WriteToFile();
         }

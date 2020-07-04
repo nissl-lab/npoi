@@ -12,14 +12,20 @@ namespace WorkbookFactoryDemo
     {
         static void Main(string[] args)
         {
-            using (var stream= File.OpenRead("multisheets.xlsx"))
+            using (var stream= File.OpenRead("TestInput.xlsx"))
             {
-                IWorkbook workbook = WorkbookFactory.Create(stream, ImportOption.SheetContentOnly);
-                for (int i = 0; i < workbook.NumberOfSheets; i++)
+                IWorkbook workbook = WorkbookFactory.Create(stream);
+                workbook.GetSheetAt(0).CopySheet("Data");
+                /*for (int i = 0; i < workbook.NumberOfSheets; i++)
                 {
                     ISheet sheet = workbook.GetSheetAt(i);
                     Console.WriteLine(sheet.SheetName);
+                }*/
+                using (FileStream fileWriter = new FileStream("TestOutput.xlsx", FileMode.Create, FileAccess.ReadWrite, FileShare.None))
+                {
+                    workbook.Write(fileWriter);
                 }
+
                 Console.ReadLine();
             }
         }

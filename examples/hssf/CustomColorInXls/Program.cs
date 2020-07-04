@@ -50,7 +50,7 @@ namespace CustomColorInXls
             ISheet sheet1 = workbook.CreateSheet("Sheet1");
             ICellStyle style1 = workbook.CreateCellStyle();
             style1.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Pink.Index;
-            style1.FillPattern = FillPattern.SolidForeground;
+            style1.FillPattern = FillPatternType.SolidForeground;
             sheet1.CreateRow(0).CreateCell(0).CellStyle = style1;
 
             WriteToFile();

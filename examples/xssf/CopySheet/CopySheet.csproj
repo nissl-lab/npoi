@@ -2,19 +2,28 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NPOI" Version="2.5.0" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.6" />
+    <PackageReference Include="SharpZipLib" Version="1.2.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\main\NPOI.Core.csproj" />
-    <ProjectReference Include="..\..\..\ooxml\NPOI.OOXML.Core.csproj" />
-    <ProjectReference Include="..\..\..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
-    <ProjectReference Include="..\..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" />
+    <Reference Include="NPOI">
+      <HintPath>..\..\..\solution\Lib\netstandard2.0\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\..\..\solution\Lib\netstandard2.0\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\..\..\solution\Lib\netstandard2.0\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\..\..\solution\Lib\netstandard2.0\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
