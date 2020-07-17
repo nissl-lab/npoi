@@ -2,7 +2,8 @@ NPOI
 ===================
 [![Join the chat at https://gitter.im/tonyqus/npoi](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tonyqus/npoi?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![NuGet Version](https://img.shields.io/nuget/v/NPOI.svg?style=flat)](https://www.nuget.org/packages/NPOI/)
-[![NuGet](https://img.shields.io/nuget/dt/NPOI.svg)](https://www.nuget.org/packages/NPOI) 
+[![NuGet](https://img.shields.io/nuget/dt/NPOI.svg)](https://www.nuget.org/packages/NPOI) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftonyqus%2Fnpoi.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftonyqus%2Fnpoi?ref=badge_shield)
+
 [![Analytics](https://ga-beacon.appspot.com/UA-39118634-1/readme)](https://github.com/tonyqus/npoi)
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
 <br />
@@ -57,3 +58,7 @@ System Requirement
 .NET Standard 2.0 (.NET Core)
 
 .NET Framework 4.0 and above
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftonyqus%2Fnpoi.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftonyqus%2Fnpoi?ref=badge_large)
