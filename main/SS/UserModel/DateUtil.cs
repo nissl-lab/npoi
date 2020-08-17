@@ -368,7 +368,7 @@ namespace NPOI.SS.UserModel
             return GetJavaCalendar(date, use1904windowing, tz, roundSeconds);
         }
 
-        public static void SetCalendar(ref DateTime calendar, int wholeDays,
+        public static DateTime SetCalendar(int wholeDays,
             int millisecondsInDay, bool use1904windowing, bool roundSeconds)
         {
             int startYear = 1900;
@@ -390,8 +390,7 @@ namespace NPOI.SS.UserModel
                 dt = dt.AddMilliseconds(500);
                 dt = dt.AddMilliseconds(-dt.Millisecond);
             }
-            calendar = dt;
-
+            return dt;
         }
 
         public static DateTime GetJavaCalendar(double date)
@@ -415,11 +414,7 @@ namespace NPOI.SS.UserModel
         public static DateTime GetJavaCalendarUTC(double date, bool use1904windowing)
         {
             DateTime dt = GetJavaCalendar(date, use1904windowing, (TimeZoneInfo)null, false);
-            // Not exactly sure, if this 
             return TimeZoneInfo.ConvertTimeToUtc(dt);
-            //or this is better:
-            return TimeZoneInfo.ConvertTimeToUtc(dt, TimeZoneInfo.Local);
-            // -- 
         }
 
         public static DateTime GetJavaCalendar(double date, bool use1904windowing, TimeZoneInfo timeZone)
@@ -452,7 +447,7 @@ namespace NPOI.SS.UserModel
                 calendar = LocaleUtil.GetLocaleCalendar(); // using default time-zone
             }
             //calendar = DateTime.Now;     // using default time-zone
-            SetCalendar(ref calendar, wholeDays, millisecondsInDay, use1904windowing, roundSeconds);
+            calendar = SetCalendar(wholeDays, millisecondsInDay, use1904windowing, roundSeconds);
             return calendar;
         }
 
@@ -487,8 +482,7 @@ namespace NPOI.SS.UserModel
             {
                 calendar = LocaleUtil.GetLocaleCalendar(); // using default time-zone
             }
-            //calendar = DateTime.Now;     // using default time-zone
-            SetCalendar(ref calendar, wholeDays, millisecondsInDay, use1904windowing, roundSeconds);
+            calendar = SetCalendar(wholeDays, millisecondsInDay, use1904windowing, roundSeconds);
             return calendar;
         }
 

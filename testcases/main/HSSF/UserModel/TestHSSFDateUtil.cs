@@ -574,7 +574,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(10, calNoRound.Hour);
             Assert.AreEqual(59, calNoRound.Minute);
             Assert.AreEqual(59, calNoRound.Second);
-            DateTime calRound = HSSFDateUtil.GetJavaCalendar(excelFraction, false, null, true);
+            DateTime calRound = HSSFDateUtil.GetJavaCalendar(excelFraction, false,(TimeZoneInfo)null, true);
             Assert.AreEqual(11, calRound.Hour);
             Assert.AreEqual(0, calRound.Minute);
             Assert.AreEqual(0, calRound.Second);

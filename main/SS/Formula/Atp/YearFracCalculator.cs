@@ -420,8 +420,7 @@ namespace NPOI.SS.Formula.Atp
         /// <returns></returns>
         private static SimpleDate CreateDate(int dayCount)
         {
-            DateTime dt = DateTime.Now;
-            NPOI.SS.UserModel.DateUtil.SetCalendar(ref dt, dayCount, 0, false, false);
+            var dt= NPOI.SS.UserModel.DateUtil.SetCalendar(dayCount, 0, false, false);
             return new SimpleDate(dt);
         }
 

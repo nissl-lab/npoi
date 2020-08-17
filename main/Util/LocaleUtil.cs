@@ -10,9 +10,6 @@ namespace NPOI.Util
  * the locale/time zone specific handling of certain office documents -
  * maybe for different time zones / locales ... - shouldn't affect
  * other java components.
- * 
- * The settings are saved in a {@link java.lang.ThreadLocal},
- * so they only apply to the current thread and can't be set globally.
  */
     public class LocaleUtil
     {
@@ -30,11 +27,10 @@ namespace NPOI.Util
         public static string CHARSET_1252 = CodePageUtil.CodepageToEncoding(CodePageUtil.CP_WINDOWS_1252);// ("CP1252");
 
         [ThreadStatic]
-        private static TimeZone userTimeZone;
+        private static TimeZoneInfo userTimeZone;
 
         [ThreadStatic]
         private static CultureInfo userLocale;
-        //private static ThreadLocal<Locale> userLocale = new ThreadLocal<Locale>();
 
         /**
          * As time zone information is not stored in any format, it can be
@@ -47,35 +43,12 @@ namespace NPOI.Util
         {
             userTimeZone = (timezone);
         }
-
-        /**
-         * As time zone information is not stored in any format, it can be
-         * set before any date calculations take place.
-         * This setting is specific to the current thread.
-         *
-         * @param timezone the timezone under which date calculations take place
-         */
-        [Obsolete("The class TimeZone was marked obsolete, Use the Overload using TimeZoneInfo instead.")]
-        public static void SetUserTimeZone(TimeZone timezone)
-        {
-            obsUserTimeZone.Value = (timezone);
-        }
-
         /**
          * @return the time zone which is used for date calculations, defaults to UTC
          */
         public static TimeZoneInfo GetUserTimeZoneInfo()
         {
-            return userTimeZone ?? (userTimeZone = TimeZone.CurrentTimeZone);
-        }
-
-        /**
-         * @return the time zone which is used for date calculations, defaults to UTC
-         */
-        [Obsolete("The class TimeZone was marked obsolete, Use GetUserTimeZoneInfo instead.")]
-        public static TimeZone GetUserTimeZone()
-        {
-            return obsUserTimeZone.Value;
+            return userTimeZone ?? (userTimeZone = TimeZoneInfo.Local);
         }
 
         /**
@@ -129,9 +102,6 @@ namespace NPOI.Util
          */
         public static DateTime GetLocaleCalendar(int year, int month, int day, int hour, int minute, int second)
         {
-            //DateTime cal = GetLocaleCalendar();
-            //cal.Set(year, month, day, hour, minute, second);
-            //cal.Clear(Calendar.MILLISECOND);
             if (month < 0 || day < 0)
             {
                 throw new ArgumentOutOfRangeException();
@@ -155,7 +125,6 @@ namespace NPOI.Util
         public static DateTime GetLocaleCalendar(TimeZoneInfo timeZone)
         {
             return TimeZoneInfo.ConvertTime(DateTime.Now, timeZone);
-            //return Calendar.GetInstance(timeZone, GetUserLocale());
         }
 
         /**
