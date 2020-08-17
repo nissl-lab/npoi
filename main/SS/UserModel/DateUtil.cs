@@ -438,6 +438,7 @@ namespace NPOI.SS.UserModel
             int wholeDays = (int)Math.Floor(date);
             int millisecondsInDay = (int)((date - wholeDays) * DAY_MILLISECONDS + 0.5);
             DateTime calendar;
+            //TODO: the logic here is not correct. timezone never works
             if (timeZone != null)
             {
                 calendar = LocaleUtil.GetLocaleCalendar(timeZone);
@@ -446,7 +447,6 @@ namespace NPOI.SS.UserModel
             {
                 calendar = LocaleUtil.GetLocaleCalendar(); // using default time-zone
             }
-            //calendar = DateTime.Now;     // using default time-zone
             calendar = SetCalendar(wholeDays, millisecondsInDay, use1904windowing, roundSeconds);
             return calendar;
         }
