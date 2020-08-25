@@ -226,6 +226,7 @@
     <Compile Include="HSSF\UserModel\HSSFIconMultiStateFormatting.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeFactory.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeTypes.cs" />
+    <Compile Include="Iron\HSSF\UserModel\HSSFSheetExtension.cs" />
     <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4Decryptor.cs" />
     <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4EncryptionHeader.cs" />
     <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4EncryptionInfoBuilder.cs" />
@@ -534,6 +535,7 @@
     <Compile Include="SS\UserModel\DifferentialStyleProvider.cs" />
     <Compile Include="SS\UserModel\ExcelNumberFormat.cs" />
     <Compile Include="SS\UserModel\Helpers\RowShifter.cs" />
+    <Compile Include="Iron\SS\UserModel\SheetExtension.cs" />
     <Compile Include="SS\UserModel\TableStyle.cs" />
     <Compile Include="SS\UserModel\TableStyleInfo.cs" />
     <Compile Include="SS\UserModel\TableStyleType.cs" />

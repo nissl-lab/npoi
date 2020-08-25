@@ -89,6 +89,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Iron\XSSF\UserModel\XSSFSheetExtension.cs" />
     <Compile Include="POIFS\Crypt\Agile\AgileDecryptor.cs" />
     <Compile Include="POIFS\Crypt\Agile\AgileEncryptionHeader.cs" />
     <Compile Include="POIFS\Crypt\Agile\AgileEncryptionInfoBuilder.cs" />
@@ -132,7 +133,7 @@
     <Compile Include="SS\UserModel\WorkbookFactory.cs" />
     <Compile Include="Util\IdentifierManager.cs" />
     <Compile Include="Util\PackageHelper.cs" />
-    <Compile Include="Util\XSSFCellUtil.cs" />
+    <Compile Include="Iron\Util\XSSFCellUtil.cs" />
     <Compile Include="XSSF\Extractor\XSSFExcelExtractor.cs" />
     <Compile Include="XSSF\Extractor\XSSFExportToXml.cs" />
     <Compile Include="XSSF\Model\CalculationChain.cs" />
@@ -145,7 +146,7 @@
     <Compile Include="XSSF\Model\SharedStringsTable.cs" />
     <Compile Include="XSSF\Model\SingleXmlCells.cs" />
     <Compile Include="XSSF\Model\StylesTable.cs" />
-    <Compile Include="XSSF\Model\StylesTableExtension.cs" />
+    <Compile Include="Iron\XSSF\Model\StylesTableExtension.cs" />
     <Compile Include="XSSF\Model\ThemesTable.cs" />
     <Compile Include="XSSF\Streaming\AutoSizeColumnTracker.cs" />
     <Compile Include="XSSF\Streaming\GZIPSheetDataWriter.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="XSSF\Streaming\SXSSFFormulaEvaluator.cs" />
     <Compile Include="XSSF\Streaming\SXSSFRow.cs" />
     <Compile Include="XSSF\Streaming\SXSSFSheet.cs" />
+    <Compile Include="Iron\XSSF\Streaming\SXSSFSheetExtension.cs" />
     <Compile Include="XSSF\Streaming\SXSSFWorkbook.cs" />
     <Compile Include="XSSF\Streaming\Values\BlankValue.cs" />
     <Compile Include="XSSF\Streaming\Values\BooleanFormulaValue.cs" />

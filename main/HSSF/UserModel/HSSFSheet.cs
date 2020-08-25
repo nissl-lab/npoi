@@ -50,7 +50,7 @@ namespace NPOI.HSSF.UserModel
     /// @author  Yegor Kozlov (yegor at apache.org) (Autosizing columns)
     /// </remarks>
     [Serializable]
-    public class HSSFSheet : ISheet
+    public partial class HSSFSheet : ISheet
     {
         /**
          * width of 1px in columns with default width in units of 1/256 of a character width
