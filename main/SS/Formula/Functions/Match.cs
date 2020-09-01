@@ -202,6 +202,11 @@ namespace NPOI.SS.Formula.Functions
                 // if the string Parses as a number, it Is OK
                 return d;
             }
+            //if the 3rd argument is missing, use the default value
+            if (match_type is MissingArgEval)
+            {
+                return 1d;
+            }
             throw new Exception("Unexpected match_type type (" + match_type.GetType().Name + ")");
         }
 
