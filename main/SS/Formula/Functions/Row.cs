@@ -33,9 +33,15 @@ namespace NPOI.SS.Formula.Functions
         {
             int rnum;
 
-            if (arg0 is AreaEval)
+            if (arg0 is AreaEval areaArg0)
             {
-                rnum = ((AreaEval)arg0).FirstRow;
+
+                double[] rnums = new double[areaArg0.Height];
+                for (int i = 0; i < areaArg0.Height; i++)
+                {
+                    rnums[i] = areaArg0.FirstRow + i + 1;
+                }
+                return new NumberValueArrayEval(rnums);
             }
             else if (arg0 is RefEval)
             {

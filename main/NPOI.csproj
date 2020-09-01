@@ -282,9 +282,11 @@
     <Compile Include="SS\Formula\Atp\IfError.cs" />
     <Compile Include="SS\Formula\Atp\NetworkdaysFunction.cs" />
     <Compile Include="SS\Formula\BaseFormulaEvaluator.cs" />
+    <Compile Include="SS\Formula\Eval\ArrayEval.cs" />
     <Compile Include="SS\Formula\Eval\NotImplementedFunctionException.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayFunction.cs" />
+    <Compile Include="SS\Formula\Eval\NumberValueArrayEval.cs" />
     <Compile Include="SS\Formula\Functions\Averageifs.cs" />
     <Compile Include="SS\Formula\Functions\BaseNumberUtils.cs" />
     <Compile Include="SS\Formula\Functions\Bin2Dec.cs" />

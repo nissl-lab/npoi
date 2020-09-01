@@ -232,6 +232,11 @@ namespace NPOI.SS.Formula.Functions
                 }
                 return;
             }
+            if (ve is NumberValueArrayEval nvae)
+            {
+                temp.Add(nvae.NumberValues);
+                return;
+            }
             throw new InvalidOperationException("Invalid ValueEval type passed for conversion: ("
                     + ve.GetType() + ")");
         }
