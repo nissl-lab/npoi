@@ -589,6 +589,41 @@ namespace TestCases.XWPF.UserModel
             String s = str.ToString();
             Assert.IsFalse(s.Contains("This is another Test"));
         }
+        
+        [Test]
+        public void Testpullrequest404()
+        {
+            XWPFDocument doc = new XWPFDocument();
+            var paragraph = doc.CreateParagraph();
+            paragraph.CreateRun().AppendText("abc");
+            paragraph.CreateRun().AppendText("de");
+            paragraph.CreateRun().AppendText("f");
+            paragraph.CreateRun().AppendText("g"); 
+            var result = paragraph.SearchText("cdefg",new PositionInParagraph());
+            Assert.AreEqual(result.BeginRun, 0);
+            Assert.AreEqual(result.EndRun, 3);
+            Assert.AreEqual(result.BeginText, 0);
+            Assert.AreEqual(result.EndText, 0);
+            Assert.AreEqual(result.BeginChar, 2);
+            Assert.AreEqual(result.EndChar, 0);
+        }
+        [Test]
+        public void Testpullrequest404_1()
+        {
+            XWPFDocument doc = new XWPFDocument();
+            var paragraph = doc.CreateParagraph();
+            paragraph.CreateRun().AppendText("abc");
+            paragraph.CreateRun().AppendText("de");
+            paragraph.CreateRun().AppendText("fg");
+            paragraph.CreateRun().AppendText("hi"); 
+            var result = paragraph.SearchText("cdefg",new PositionInParagraph());
+            Assert.AreEqual(result.BeginRun, 0);
+            Assert.AreEqual(result.EndRun, 2);
+            Assert.AreEqual(result.BeginText, 0);
+            Assert.AreEqual(result.EndText, 0);
+            Assert.AreEqual(result.BeginChar, 2);
+            Assert.AreEqual(result.EndChar, 1);
+        }
     }
 
 }
