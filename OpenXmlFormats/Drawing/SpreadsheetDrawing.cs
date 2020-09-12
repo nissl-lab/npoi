@@ -308,7 +308,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             if (node == null)
                 return null;
             CT_NonVisualPictureProperties ctObj = new CT_NonVisualPictureProperties();
-            ctObj.preferRelativeResize = XmlHelper.ReadBool(node.Attributes["preferRelativeResize"]);
+            ctObj.preferRelativeResize = XmlHelper.ReadBool(node.Attributes["preferRelativeResize"], true);
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "picLocks")

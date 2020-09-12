@@ -117,11 +117,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if(this.applyNumberFormat)
                 XmlHelper.WriteAttribute(sw, "applyNumberFormat", this.applyNumberFormat);
             XmlHelper.WriteAttribute(sw, "applyFont", this.applyFont, false);
+            if (this.applyFill)
+                XmlHelper.WriteAttribute(sw, "applyFill", this.applyFill);
             if (this.applyBorder)
                 XmlHelper.WriteAttribute(sw, "applyBorder", this.applyBorder, true);
-            if(this.applyFill)
-                XmlHelper.WriteAttribute(sw, "applyFill", this.applyFill);
-            XmlHelper.WriteAttribute(sw, "applyAlignment", this.applyAlignment, true);
+            if (this.applyAlignment)
+                XmlHelper.WriteAttribute(sw, "applyAlignment", this.applyAlignment, true);
             if(this.applyProtection)
                 XmlHelper.WriteAttribute(sw, "applyProtection", this.applyProtection, true);
             if (this.alignment == null && this.protection == null && this.extLst == null)

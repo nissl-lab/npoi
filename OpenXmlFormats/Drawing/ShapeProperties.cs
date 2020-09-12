@@ -1072,7 +1072,7 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node == null)
                 return null;
             CT_NonVisualPictureProperties ctObj = new CT_NonVisualPictureProperties();
-            ctObj.preferRelativeResize = XmlHelper.ReadBool(node.Attributes["preferRelativeResize"]);
+            ctObj.preferRelativeResize = XmlHelper.ReadBool(node.Attributes["preferRelativeResize"], true);
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "picLocks")
@@ -1091,7 +1091,7 @@ namespace NPOI.OpenXmlFormats.Dml
             if (!preferRelativeResize)
                 XmlHelper.WriteAttribute(sw, "preferRelativeResize", this.preferRelativeResize);
             sw.Write(">");
-            if (this.picLocks != null)
+            if (this.picLocks != null)  
                 this.picLocks.Write(sw, "picLocks");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");

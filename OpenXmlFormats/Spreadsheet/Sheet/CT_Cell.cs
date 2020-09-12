@@ -86,8 +86,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 sw.Write(">");
                 if (this.f != null)
                     this.f.Write(sw, "f");
-                if (this.v != null)
+                if (!string.IsNullOrEmpty(this.v))
                     sw.Write(string.Format("<v>{0}</v>", XmlHelper.EncodeXml(this.v)));
+                else
+                    sw.Write("<v/>");
                 if (this.@is != null)
                     this.@is.Write(sw, "is");
                 if (this.extLst != null)
