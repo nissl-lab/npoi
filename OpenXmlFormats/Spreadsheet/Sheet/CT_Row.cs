@@ -43,6 +43,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private bool thickBotField;
 
         private bool phField;
+        private double dyDescentField; //x14ac:dyDescent
 
         public static CT_Row Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -53,6 +54,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.spans = XmlHelper.ReadString(node.Attributes["spans"]);
             ctObj.s = XmlHelper.ReadUInt(node.Attributes["s"]);
             ctObj.customFormat = XmlHelper.ReadBool(node.Attributes["customFormat"]);
+            ctObj.dyDescentField = XmlHelper.ReadDouble(node.Attributes["x14ac:dyDescent"]);
             if (node.Attributes["ht"]!=null)
                 ctObj.ht = XmlHelper.ReadDouble(node.Attributes["ht"]);
             ctObj.hidden = XmlHelper.ReadBool(node.Attributes["hidden"]);
@@ -85,7 +87,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "spans", this.spans);
             XmlHelper.WriteAttribute(sw, "s", this.s);
             XmlHelper.WriteAttribute(sw, "customFormat", this.customFormat,false);
-            if(this.ht>=0)
+            if (this.ht>=0)
                 XmlHelper.WriteAttribute(sw, "ht", this.ht);
             XmlHelper.WriteAttribute(sw, "hidden", this.hidden,false);
             XmlHelper.WriteAttribute(sw, "customHeight", this.customHeight,false);
@@ -94,6 +96,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "thickTop", this.thickTop,false);
             XmlHelper.WriteAttribute(sw, "thickBot", this.thickBot,false);
             XmlHelper.WriteAttribute(sw, "ph", this.ph, false);
+            XmlHelper.WriteAttribute(sw, "x14ac:dyDescent", this.dyDescentField, false);
             sw.Write(">");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");

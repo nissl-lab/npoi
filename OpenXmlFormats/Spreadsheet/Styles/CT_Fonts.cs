@@ -19,6 +19,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private uint countField;
 
         private bool countFieldSpecified;
+        private uint knownFontsField; 
 
         public CT_Fonts()
         {
@@ -30,6 +31,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 return null;
             CT_Fonts ctObj = new CT_Fonts();
             ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
+            ctObj.knownFontsField = XmlHelper.ReadUInt(node.Attributes["x14ac:knownFonts"]);
             ctObj.font = new List<CT_Font>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
@@ -43,6 +45,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
+            XmlHelper.WriteAttribute(sw, "x14ac:knownFonts", this.knownFontsField, false);
             sw.Write(">");
             if (this.font != null)
             {
