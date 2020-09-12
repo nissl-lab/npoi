@@ -261,7 +261,7 @@ namespace NPOI.XSSF.UserModel
         public XSSFWorkbook(FileInfo file)
             : this(OPCPackage.Open(file))
         {
-            ;
+     
         }
 
         /**
