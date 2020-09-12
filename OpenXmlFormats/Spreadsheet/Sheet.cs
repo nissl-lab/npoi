@@ -7833,9 +7833,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             string sqref = XmlHelper.ReadString(node.Attributes["sqref"]);
             if (sqref != null)
             {
-                //sqref is Reference Sequenc, a list of ST_Ref(Cell References, xsd:string)
-                //we don't know how to store this list yet. Try parse it as comma/space split string.
-                ctObj.sqref.AddRange(sqref.Split(','));
+                //sqref use whitespace to split the cell reference, eg."B25:B37 C25:C37 D25:D37"
+                ctObj.sqref.AddRange(sqref.Split(' '));
             }
             return ctObj;
         }
