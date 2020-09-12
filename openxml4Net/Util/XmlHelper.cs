@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPOI.Util;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -125,10 +126,10 @@ namespace NPOI.OpenXml4Net.Util
                 return 0;
             }
         }
-        public static uint ReadUInt(XmlAttribute attr)
+        public static uint ReadUInt(XmlAttribute attr, uint defaultValue)
         {
             if (attr == null)
-                return 0;
+                return defaultValue;
 
             uint i;
             if (uint.TryParse(attr.Value, out i))
@@ -137,8 +138,12 @@ namespace NPOI.OpenXml4Net.Util
             }
             else
             {
-                return 0;
+                return defaultValue;
             }
+        }
+        public static uint ReadUInt(XmlAttribute attr)
+        {
+            return ReadUInt(attr, 0);
         }
         public static ulong ReadULong(XmlAttribute attr)
         {
@@ -214,7 +219,7 @@ namespace NPOI.OpenXml4Net.Util
             {
                 return true;
             }
-            else if (value == "")
+            else if (string.IsNullOrEmpty(value))
             {
                 return blankValue;
             }
@@ -350,6 +355,13 @@ namespace NPOI.OpenXml4Net.Util
                 return;
 
             WriteAttribute(sw, attributeName, BitConverter.ToString(value).Replace("-", ""), false);
+        }
+        public static void WriteAttribute(StreamWriter sw, string attributeName, uint value, uint defaultValue, bool writeIfBlank = false)
+        {
+            if(value != defaultValue)
+                WriteAttribute(sw, attributeName, (int)value, writeIfBlank);
+            else if(writeIfBlank)
+                WriteAttribute(sw, attributeName, (int)value, writeIfBlank);
         }
         public static void WriteAttribute(StreamWriter sw, string attributeName, uint value, bool writeIfBlank = false)
         {
