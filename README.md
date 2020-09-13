@@ -16,9 +16,11 @@ Big thanks to all NPOI contributors!!!
 https://github.com/tonyqus/npoi/wiki/NPOI-Contributors
 
 
-Telegram Group
+Telegram User Group
 ================
-https://t.me/techfoodie
+Join us on telegram: https://t.me/npoidevs
+
+NOTE: Stop using QQ or wechat since big brothers from CCP are watching you
 
 Donation
 ===============
