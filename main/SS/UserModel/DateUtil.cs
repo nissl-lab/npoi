@@ -437,16 +437,16 @@ namespace NPOI.SS.UserModel
             }
             int wholeDays = (int)Math.Floor(date);
             int millisecondsInDay = (int)((date - wholeDays) * DAY_MILLISECONDS + 0.5);
-            DateTime calendar;
-            //TODO: the logic here is not correct. timezone never works
-            if (timeZone != null)
-            {
-                calendar = LocaleUtil.GetLocaleCalendar(timeZone);
-            }
-            else
-            {
-                calendar = LocaleUtil.GetLocaleCalendar(); // using default time-zone
-            }
+            DateTime calendar= DateTime.Now;
+
+            //if (timeZone != null)
+            //{
+            //    calendar = LocaleUtil.GetLocaleCalendar(timeZone);
+            //}
+            //else
+            //{
+            //    calendar = LocaleUtil.GetLocaleCalendar(); // using default time-zone
+            //}
             calendar = SetCalendar(wholeDays, millisecondsInDay, use1904windowing, roundSeconds);
             return calendar;
         }
@@ -473,15 +473,15 @@ namespace NPOI.SS.UserModel
             }
             int wholeDays = (int)Math.Floor(date);
             int millisecondsInDay = (int)((date - wholeDays) * DAY_MILLISECONDS + 0.5);
-            DateTime calendar;
-            if (timeZone != null)
-            {
-                calendar = LocaleUtil.GetLocaleCalendar(timeZone);
-            }
-            else
-            {
-                calendar = LocaleUtil.GetLocaleCalendar(); // using default time-zone
-            }
+            DateTime calendar= DateTime.Now;
+            //if (timeZone != null)
+            //{
+            //    calendar = LocaleUtil.GetLocaleCalendar(timeZone);
+            //}
+            //else
+            //{
+            //    calendar = LocaleUtil.GetLocaleCalendar(); // using default time-zone
+            //}
             calendar = SetCalendar(wholeDays, millisecondsInDay, use1904windowing, roundSeconds);
             return calendar;
         }
