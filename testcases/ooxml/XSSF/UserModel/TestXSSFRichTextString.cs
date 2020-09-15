@@ -22,6 +22,8 @@ using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using System;
+using System.Drawing;
+
 namespace TestCases.XSSF.UserModel
 {
     /**
@@ -246,6 +248,22 @@ namespace TestCases.XSSF.UserModel
             //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">  Apache</t>", rt.GetCTRst().GetRArray(0).xmlText());
             //Assert.AreEqual("<xml-fragment xml:space=\"preserve\"> POI</xml-fragment>", rt.getCTRst().getRArray(1).xgetT().xmlText());
             //Assert.AreEqual("<xml-fragment xml:space=\"preserve\"> </xml-fragment>", rt.getCTRst().getRArray(2).xgetT().xmlText());
+        }
+
+        /**
+         * Ensure that strings with the color set as RGB are treated differently when the color is different.
+         */
+        [Test]
+        public void TestRgbColor()
+        {
+            const string testText = "Apache";
+            XSSFRichTextString rt = new XSSFRichTextString(testText);
+            XSSFFont font = new XSSFFont { FontName = "Times New Roman", FontHeightInPoints = 11 };
+            font.SetColor(new XSSFColor(Color.Red));
+            rt.ApplyFont(0, testText.Length, font);
+            CT_Rst ct = rt.GetCTRst();
+
+            Assert.AreEqual("<r><rPr><color rgb=\"FF0000\"/><rFont val=\"Times New Roman\"/><sz val=\"11\"/></rPr><t>Apache</t></r>", ct.XmlText);
         }
 
         /**

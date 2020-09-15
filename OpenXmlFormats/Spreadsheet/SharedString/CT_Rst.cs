@@ -134,6 +134,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                                 {
                                     sw.Write("<color theme=\"" + r.rPr.color.theme + "\"/>");
                                 }
+                                if (r.rPr.color != null && r.rPr.color.rgbSpecified)
+                                {
+                                    sw.Write("<color rgb=\"" + BitConverter.ToString(r.rPr.color.rgb).Replace("-", string.Empty) + "\"/>");
+                                }
                                 if (r.rPr.rFont != null)
                                 {
                                     sw.Write("<rFont val=\"" + r.rPr.rFont.val + "\"/>");
