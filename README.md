@@ -21,14 +21,6 @@ Join us on telegram: https://t.me/npoidevs
 
 NOTE: Stop using QQ or wechat since big brothers from CCP are watching you
 
-Donation
-===============
-<a href="https://www.buymeacoffee.com/V0BNGi3" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
-
-Paypal account: tonyqus@gmail.com
-
-Alipay account（支付宝）:tonyqus@163.com
-
 Advantage of NPOI
 =================
 a. It's totally free to use
