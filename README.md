@@ -1,3 +1,5 @@
+## This project may be archived in the future. I need your vote on this https://github.com/tonyqus/npoi/issues/416
+
 NPOI
 ===================
 [![NuGet Version](https://img.shields.io/nuget/v/NPOI.svg?style=flat)](https://www.nuget.org/packages/NPOI/)
