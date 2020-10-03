@@ -30,15 +30,6 @@ Paypal account: tonyqus@gmail.com
 
 Alipay account（支付宝）:tonyqus@163.com
 
-Support and Service
-===================
-Neuzilla is the studio behind NPOI.
-Our Email: support@neuzilla.com
-
-To follow us, please visit http://www.linkedin.com/company/neuzilla 
-
-[How to use NPOI in Linux](https://github.com/tonyqus/npoi/wiki/How-to-use-NPOI-on-Linux)
-
 Advantage of NPOI
 =================
 a. It's totally free to use
@@ -54,6 +45,8 @@ e. Support not only export but also import
 f. Real successful cases all over the world
 
 g. [huge amout of basic examples](https://github.com/tonyqus/npoi/tree/master/examples)
+
+h. Works on both Windows and Linux [How to use NPOI in Linux](https://github.com/tonyqus/npoi/wiki/How-to-use-NPOI-on-Linux)
 
 System Requirement
 ===================
