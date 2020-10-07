@@ -10,6 +10,10 @@ NPOI
 <br />
 This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
+Get Started with NPOI
+============
+https://github.com/tonyqus/npoi/wiki/Getting-Started-with-NPOI
+
 Contributors
 ============
 Big thanks to all NPOI contributors!!! 
