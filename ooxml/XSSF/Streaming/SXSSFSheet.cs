@@ -936,7 +936,7 @@ namespace NPOI.XSSF.Streaming
                     invalidatedFirst = true;
                 }
 
-                if (key == _LastRowNum)
+                if (key >= (_LastRowNum -1))
                 {
                     invalidatedLast = true;
                 }
