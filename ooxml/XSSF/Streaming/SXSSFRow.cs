@@ -254,9 +254,9 @@ namespace NPOI.XSSF.Streaming
                 _FirstCellNum = cellnum;
             }
 
-            if (cellnum > _LastCellNum)
+            if (cellnum >= _LastCellNum)
             {
-                _LastCellNum = cellnum;
+                _LastCellNum = cellnum + 1;
             }
         }
 
@@ -324,7 +324,7 @@ namespace NPOI.XSSF.Streaming
                 InvalidateFirstCellNum();
             }
 
-            if (index == _LastCellNum)
+            if (index >= (_LastCellNum -1))
             {
                 InvalidateLastCellNum();
             }
@@ -350,7 +350,7 @@ namespace NPOI.XSSF.Streaming
             }
             else
             {
-                _LastCellNum = _cells.Keys.Max();
+                _LastCellNum = _cells.Keys.Max() + 1;
             }
         }
 
