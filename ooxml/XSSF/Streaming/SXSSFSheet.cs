@@ -308,9 +308,9 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                if (_writer.NumberOfFlushedRows > 0)
-                    return LastFlushedRowNumber;
-                return  _rows.Count == 0 ? 0 : _LastRowNum;
+                if (_rows.Count == 0)
+                    return _writer.NumberOfFlushedRows > 0 ? LastFlushedRowNumber : 0;
+                return  _LastRowNum;
             }
         }
 
