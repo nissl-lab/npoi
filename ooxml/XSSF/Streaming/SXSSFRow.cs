@@ -383,13 +383,13 @@ namespace NPOI.XSSF.Streaming
 
         public class CellIterator : IEnumerator<ICell>
         {
-            private SortedDictionary<int, SXSSFCell> _cells;
+            private IDictionary<int, SXSSFCell> _cells;
             private int maxColumn;
             private int pos;
-            public CellIterator(int lastCellNum, SortedDictionary<int, SXSSFCell> cells)
+            public CellIterator(int lastCellNum, IDictionary<int, SXSSFCell> cells)
             {
                 maxColumn = lastCellNum; //last column PLUS ONE, SHOULD BE DERIVED from cells enum.
-                pos = 0;
+                pos = -1;
                 _cells = cells;
             }
 
@@ -398,16 +398,13 @@ namespace NPOI.XSSF.Streaming
             {
                 get
                 {
-                    throw new NotImplementedException();
+                    return _cells.ContainsKey(pos) ? _cells[pos]: null;
                 }
             }
 
             object IEnumerator.Current
             {
-                get
-                {
-                    throw new NotImplementedException();
-                }
+                get { return Current; }
             }
 
             public void Dispose()
@@ -425,7 +422,13 @@ namespace NPOI.XSSF.Streaming
 
             public bool MoveNext()
             {
-                throw new NotImplementedException();
+                if (HasNext())
+                {
+                    pos++;
+                    return true;
+                }
+
+                return false;
             }
 
             public ICell Next()

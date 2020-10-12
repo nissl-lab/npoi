@@ -192,7 +192,8 @@ namespace NPOI.XSSF.Streaming
         public void WriteRow(int rownum, SXSSFRow row)
         {
             BeginRow(rownum, row);
-            using (var cells = row.GetEnumerator())
+            
+            using (var cells = row.AllCellsIterator())
             {
                 int columnIndex = 0;
                 while (cells.MoveNext())
