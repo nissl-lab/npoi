@@ -1,5 +1,3 @@
-## This project may be archived in the future. I need your vote on [this issue](https://github.com/tonyqus/npoi/issues/416)
-
 NPOI
 ===================
 [![NuGet Version](https://img.shields.io/nuget/v/NPOI.svg?style=flat)](https://www.nuget.org/packages/NPOI/)
@@ -13,6 +11,14 @@ This project is the .NET version of POI Java project. With NPOI, you can read/wr
 Get Started with NPOI
 ============
 https://github.com/tonyqus/npoi/wiki/Getting-Started-with-NPOI
+
+DON'T use dotnetcore/NPOI anymore
+========
+a. This project is NOT in maintainence for at least 2 years (no update after 2018)
+
+b. It's a migrated .net core version of [NPOI 2.2.1](https://www.nuget.org/packages/NPOI/2.2.1) (which is published 4 years ago)
+
+c. They betray the open source spirit. All the git history from NPOI team are deleted. Neuzilla studio info is removed. Original [Readme.txt](https://github.com/tonyqus/npoi/blob/master/Read%20Me.txt) is removed (all the contributors of NPOI are removed.)
 
 Contributors
 ============
