@@ -147,7 +147,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Body()
         {
-            this.sectPrField = new CT_SectPr();
             this.itemsElementNameField = new List<DocumentBodyItemChoiceType>();
             this.itemsField = new ArrayList();
         }

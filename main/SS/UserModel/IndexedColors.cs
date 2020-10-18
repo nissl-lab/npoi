@@ -168,7 +168,7 @@ namespace NPOI.SS.UserModel
             mappingName.Add("grey50percent", IndexedColors.Grey50Percent);
             mappingName.Add("cornflowerblue", IndexedColors.CornflowerBlue);
             mappingName.Add("maroon", IndexedColors.Maroon);
-            mappingName.Add("lemonchilffon", IndexedColors.LemonChiffon);
+            mappingName.Add("lemonchiffon", IndexedColors.LemonChiffon);
             mappingName.Add("orchid", IndexedColors.Orchid);
             mappingName.Add("coral", IndexedColors.Coral);
             mappingName.Add("royalblue", IndexedColors.RoyalBlue);

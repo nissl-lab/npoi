@@ -199,7 +199,7 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<wp:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "id", this.id);
+            XmlHelper.WriteAttribute(sw, "id", this.id, true);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "descr", this.descr);
             if(this.hidden)

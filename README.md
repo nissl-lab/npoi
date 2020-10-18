@@ -1,6 +1,5 @@
 NPOI
 ===================
-[![Join the chat at https://gitter.im/tonyqus/npoi](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tonyqus/npoi?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![NuGet Version](https://img.shields.io/nuget/v/NPOI.svg?style=flat)](https://www.nuget.org/packages/NPOI/)
 [![NuGet](https://img.shields.io/nuget/dt/NPOI.svg)](https://www.nuget.org/packages/NPOI) 
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
@@ -9,35 +8,29 @@ NPOI
 <br />
 This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
+Get Started with NPOI
+============
+https://github.com/tonyqus/npoi/wiki/Getting-Started-with-NPOI
+
+DON'T use dotnetcore/NPOI anymore
+========
+a. This project is NOT in maintainence for at least 2 years (no update after 2018)
+
+b. It's a migrated .net core version of [NPOI 2.2.1](https://www.nuget.org/packages/NPOI/2.2.1) (which is published 4 years ago)
+
+c. They betray the open source spirit. All the git history from NPOI team are deleted. Neuzilla studio info is removed. Original [Readme.txt](https://github.com/tonyqus/npoi/blob/master/Read%20Me.txt) is removed (all the contributors of NPOI are removed.)
+
 Contributors
 ============
 Big thanks to all NPOI contributors!!! 
 
 https://github.com/tonyqus/npoi/wiki/NPOI-Contributors
 
-
 Telegram User Group
 ================
 Join us on telegram: https://t.me/npoidevs
 
-NOTE: Stop using QQ or wechat since big brothers from CCP are watching you
-
-Donation
-===============
-<a href="https://www.buymeacoffee.com/V0BNGi3" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
-
-Paypal account: tonyqus@gmail.com
-
-Alipay account（支付宝）:tonyqus@163.com
-
-Support and Service
-===================
-Neuzilla is the studio behind NPOI.
-Our Email: support@neuzilla.com
-
-To follow us, please visit http://www.linkedin.com/company/neuzilla 
-
-[How to use NPOI in Linux](https://github.com/tonyqus/npoi/wiki/How-to-use-NPOI-on-Linux)
+NOTE: Stop using QQ or wechat since big brothers are watching you
 
 Advantage of NPOI
 =================
@@ -55,12 +48,13 @@ f. Real successful cases all over the world
 
 g. [huge amout of basic examples](https://github.com/tonyqus/npoi/tree/master/examples)
 
+h. Works on both Windows and Linux [How to use NPOI in Linux](https://github.com/tonyqus/npoi/wiki/How-to-use-NPOI-on-Linux)
+
 System Requirement
 ===================
 .NET Standard 2.0 (.NET Core)
 
 .NET Framework 4.0 and above
-
 
 ## License
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftonyqus%2Fnpoi.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftonyqus%2Fnpoi?ref=badge_large)
