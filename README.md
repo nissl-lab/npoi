@@ -55,6 +55,3 @@ System Requirement
 .NET Standard 2.0 (.NET Core)
 
 .NET Framework 4.0 and above
-
-## License
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftonyqus%2Fnpoi.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftonyqus%2Fnpoi?ref=badge_large)
