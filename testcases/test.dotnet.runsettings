@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <RunSettings>
   <RunConfiguration>
-      <ResultsDirectory>.\TestResults</ResultsDirectory>
+      <ResultsDirectory>./TestResults</ResultsDirectory>
    </RunConfiguration>
 
   <TestRunParameters>
     <Parameter name="loggername" value="TestCases.Util.DummyPOILogger,NPOI.TestCases"/>
-    <Parameter name="HSSF.testdata.path" value="..\..\..\testcases\test-data\hssf"/>
-    <Parameter name="POIFS.testdata.path" value="..\..\..\testcases\test-data\poifs"/>
-    <Parameter name="POI.testdata.path" value="..\..\..\testcases\test-data"/>
-    <Parameter name="java.io.tmpdir" value="..\..\..\testcases\test-data"/>
-    <Parameter name="poi.keep.tmp.files" value="..\..\..\testcases\test-data\"/>
-    <Parameter name="font.metrics.filename" value="..\..\..\testcases\test-data\font_metrics.properties"/>
-    <Parameter name="escher.data.path" value="..\..\..\testcases\test-data\ddf\"/>
+    <Parameter name="HSSF.testdata.path" value="../../../../../testcases/test-data/hssf"/>
+    <Parameter name="POIFS.testdata.path" value="../../../../../testcases/test-data/poifs"/>
+    <Parameter name="POI.testdata.path" value="../../../../../testcases/test-data"/>
+    <Parameter name="java.io.tmpdir" value="../../../../../testcases/test-data"/>
+    <Parameter name="poi.keep.tmp.files" value="../../../../../testcases/test-data/"/>
+    <Parameter name="font.metrics.filename" value="../../../../../testcases/test-data/font_metrics.properties"/>
+    <Parameter name="escher.data.path" value="../../../../../testcases/test-data/ddf/"/>
   </TestRunParameters>
 </RunSettings>
