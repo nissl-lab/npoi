@@ -36,12 +36,14 @@ namespace NPOI.SS.Formula.Atp
      */
     class RandBetween : FreeRefFunction
     {
-
+        private Random _rnd;
+        
         public static FreeRefFunction Instance = new RandBetween();
 
         private RandBetween()
         {
             //enforces singleton
+            _rnd = new Random();
         }
 
         /**
@@ -82,9 +84,8 @@ namespace NPOI.SS.Formula.Atp
             {
                 top = bottom;
             }
-            Random rnd = new Random();
 
-            return new NumberEval((bottom + (int)(rnd.NextDouble() * ((top - bottom) + 1))));
+            return new NumberEval((bottom + (int)(_rnd.NextDouble() * ((top - bottom) + 1))));
 
         }
     }
