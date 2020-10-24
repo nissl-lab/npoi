@@ -142,7 +142,7 @@ namespace NPOI.POIFS.Macros
         {
             static ModuleMap()
             {
-#if NETSTANDARD2_0
+#if NETSTANDARD2_1 || NETSTANDARD2_0
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #endif
                 charset =Encoding.GetEncoding(1252);

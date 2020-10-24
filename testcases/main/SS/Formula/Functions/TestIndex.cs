@@ -26,6 +26,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.Util;
     using TestCases.SS.Formula.Functions;
     using NPOI.SS.Formula.Functions;
+    using Index = NPOI.SS.Formula.Functions.Index;
 
     /**
      * Tests for the INDEX() function.</p>

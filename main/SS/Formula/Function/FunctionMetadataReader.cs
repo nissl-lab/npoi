@@ -33,7 +33,7 @@ namespace NPOI.SS.Formula.Function
      */
     class FunctionMetadataReader
     {
-#if NETSTANDARD2_0
+#if NETSTANDARD2_1 || NETSTANDARD2_0
         private const String METADATA_FILE_NAME = "NPOI.Resources.functionMetadata.txt";
 #else
         private const String METADATA_FILE_NAME = "functionMetadata.txt";
