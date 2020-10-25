@@ -86,7 +86,7 @@ namespace NPOI.SS.Formula.Atp {
             r(m, "BIN2OCT", null);
             r(m, "COMPLEX", Complex.Instance);
             r(m, "CONVERT", null);
-            r(m, "COUNTIFS", null);
+            r(m, "COUNTIFS", Countifs.instance);
             r(m, "COUPDAYBS", null);
             r(m, "COUPDAYS", null);
             r(m, "COUPDAYSNC", null);
@@ -123,6 +123,7 @@ namespace NPOI.SS.Formula.Atp {
             r(m, "HEX2DEC", Hex2Dec.instance);
             r(m, "HEX2OCT", null);
             r(m, "IFERROR", IfError.Instance);
+            r(m, "IFS", Ifs.Instance);
             r(m, "IMABS", null);
             r(m, "IMAGINARY", Imaginary.instance);
             r(m, "IMARGUMENT", null);
@@ -145,7 +146,9 @@ namespace NPOI.SS.Formula.Atp {
             r(m, "ISODD", ParityFunction.IS_ODD);
             r(m, "JIS", null);
             r(m, "LCM", null);
+            r(m, "MAXIFS", Maxifs.instance);
             r(m, "MDURATION", null);
+            r(m, "MINIFS", Minifs.instance);
             r(m, "MROUND", MRound.Instance);
             r(m, "MULTINOMIAL", null);
             r(m, "NETWORKDAYS", NetworkdaysFunction.instance);
@@ -178,7 +181,6 @@ namespace NPOI.SS.Formula.Atp {
             r(m, "YIELD", null);
             r(m, "YIELDDISC", null);
             r(m, "YIELDMAT", null);
-            r(m, "COUNTIFS", Countifs.instance);
             return m;
         }
 
