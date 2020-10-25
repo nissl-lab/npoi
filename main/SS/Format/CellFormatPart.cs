@@ -57,7 +57,7 @@ namespace NPOI.SS.Format
 
 
 
-            #region IEqualityComparer<string> ��Ա
+            #region IEqualityComparer<string>
 
             public bool Equals(string x, string y)
             {
