@@ -64,6 +64,7 @@ namespace NPOI.SS.Formula.Functions {
                 }
 
                 ValidateCriteriaRanges(ae, avgRange);
+                Sumifs.ValidateCriteria(mp);
 
                 double result = GetAvgFromMatchingCells(ae, mp, avgRange);
                 return new NumberEval(result);
