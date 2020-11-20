@@ -981,7 +981,7 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 foreach (CT_BlipFillProperties x in this.blipFill)
                 {
-                    x.Write(sw, "a:blipFill");
+                    x.Write(sw, "blipFill");
                 }
             }
             if (this.gradFill != null)
