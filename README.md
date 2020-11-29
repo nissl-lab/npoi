@@ -22,7 +22,7 @@ Telegram User Group
 ================
 Join us on telegram: https://t.me/npoidevs
 
-NOTE: Stop using QQ or wechat since big brothers are watching you
+NOTE: QQ or wechat is not recommended.
 
 Advantage of NPOI
 =================
