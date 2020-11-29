@@ -14,9 +14,7 @@ https://github.com/tonyqus/npoi/wiki/Getting-Started-with-NPOI
 
 Contributors
 ============
-Big thanks to all NPOI contributors!!! 
-
-https://github.com/tonyqus/npoi/wiki/NPOI-Contributors
+Big thanks to all [NPOI contributors](https://github.com/tonyqus/npoi/wiki/NPOI-Contributors)!!! 
 
 Telegram User Group
 ================
