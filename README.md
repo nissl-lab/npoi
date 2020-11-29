@@ -12,14 +12,6 @@ Get Started with NPOI
 ============
 https://github.com/tonyqus/npoi/wiki/Getting-Started-with-NPOI
 
-DON'T use dotnetcore/NPOI anymore
-========
-a. This project is NOT in maintainence for at least 2 years (no update after 2018)
-
-b. It's a migrated .net core version of [NPOI 2.2.1](https://www.nuget.org/packages/NPOI/2.2.1) (which is published 4 years ago)
-
-c. They betray the open source spirit. All the git history from NPOI team are deleted. Neuzilla studio info is removed. Original [Readme.txt](https://github.com/tonyqus/npoi/blob/master/Read%20Me.txt) is removed (all the contributors of NPOI are removed.)
-
 Contributors
 ============
 Big thanks to all NPOI contributors!!! 
@@ -46,7 +38,7 @@ e. Support not only export but also import
 
 f. Real successful cases all over the world
 
-g. [huge amout of basic examples](https://github.com/tonyqus/npoi/tree/master/examples)
+g. [huge amout of basic examples](https://github.com/nissl-lab/npoi-examples)
 
 h. Works on both Windows and Linux [How to use NPOI in Linux](https://github.com/tonyqus/npoi/wiki/How-to-use-NPOI-on-Linux)
 
