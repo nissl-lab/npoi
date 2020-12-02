@@ -6,9 +6,9 @@
 *.user
 *.sln.docstates
 *.snk
+.idea/
 
 # Build results
-
 [Dd]ebug/
 [Rr]elease/
 x64/
