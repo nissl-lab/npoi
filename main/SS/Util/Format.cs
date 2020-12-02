@@ -305,6 +305,8 @@ namespace NPOI.SS.Util
         {
 
         }
+        public string Pattern => _pattern;
+
         public SimpleDateFormat(string pattern, CultureInfo culture)
         {
             if (pattern == null || culture == null)

@@ -129,12 +129,12 @@ namespace NPOI.SS.UserModel
         {
             // Do the normal format
             string s = string.Empty;
-            if (Regex.IsMatch(pattern, "[yYmMdDhHsS\\-/,. :\"\\\\]+0?[ampAMP/]*"))
+            if (Regex.IsMatch(Pattern, "[yYmMdDhHsS\\-/,. :\"\\\\]+0?[ampAMP/]*"))
             {
-                s = date.ToString(pattern, culture);
+                s = date.ToString(Pattern, culture);
             }
             else
-                s = pattern;
+                s = Pattern;
             if (s.IndexOf(QUOTE_SYMBOL) != -1)
             {
                 s = s.Replace(QUOTE_SYMBOL, '"');
