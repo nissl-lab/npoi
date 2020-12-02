@@ -36,8 +36,7 @@ namespace NPOI.SS.UserModel
         private static long serialVersionUID = 1L;
 
         //private static MathContext TO_10_SF = new MathContext(10, RoundingMode.HALF_UP);
-
-        //private DecimalFormatSymbols decimalSymbols;
+        
         private NumberFormatInfo decimalSymbols;
         private DecimalFormat integerFormat;
         private DecimalFormat decimalFormat;
@@ -45,17 +44,14 @@ namespace NPOI.SS.UserModel
         private CultureInfo culture;
         public ExcelGeneralNumberFormat(CultureInfo culture)
         {
-            decimalSymbols = culture.NumberFormat;// DecimalFormatSymbols.GetInstance(locale);
-            scientificFormat = new DecimalFormat("0.#####E0");//, decimalSymbols);
-            //DataFormatter.ExcelStyleRoundingMode = (/*setter*/scientificFormat);
-            integerFormat = new DecimalFormat("#");//, decimalSymbols);
-            //DataFormatter.SetExcelStyleRoundingMode(/*setter*/integerFormat);
-            decimalFormat = new DecimalFormat("#.##########");//, decimalSymbols);
-            //DataFormatter.ExcelStyleRoundingMode = (/*setter*/decimalFormat);
+            decimalSymbols = culture.NumberFormat;
+            scientificFormat = new DecimalFormat("0.#####E0" , decimalSymbols);
+            integerFormat = new DecimalFormat("#", decimalSymbols);
+            decimalFormat = new DecimalFormat("#.##########", decimalSymbols);
             this.culture = culture;
         }
 
-        public override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
+        protected override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
         {
             return Format(obj, toAppendTo, culture);
         }
@@ -103,7 +99,7 @@ namespace NPOI.SS.UserModel
             return decimalFormat.Format(rounded, toAppendTo, culture);
         }
 
-        public override Object ParseObject(String source, int pos)
+        public override object ParseObject(string source, int pos)
         {
             throw new InvalidOperationException();
         }

@@ -222,6 +222,7 @@ namespace NPOI.SS.UserModel
         {
             
         }
+
         /**
          * Constructor
          */
@@ -249,22 +250,22 @@ namespace NPOI.SS.UserModel
             formats = new Hashtable();
 
             // init built-in Formats
-            FormatBase zipFormat = ZipPlusFourFormat.instance;
+            FormatBase zipFormat = ZipPlusFourFormat.Instance;
             AddFormat("00000\\-0000", zipFormat);
             AddFormat("00000-0000", zipFormat);
 
-            FormatBase phoneFormat = PhoneFormat.instance;
+            FormatBase phoneFormat = PhoneFormat.Instance;
             // allow for FormatBase string variations
             AddFormat("[<=9999999]###\\-####;\\(###\\)\\ ###\\-####", phoneFormat);
             AddFormat("[<=9999999]###-####;(###) ###-####", phoneFormat);
             AddFormat("###\\-####;\\(###\\)\\ ###\\-####", phoneFormat);
             AddFormat("###-####;(###) ###-####", phoneFormat);
 
-            FormatBase ssnFormat = SSNFormat.instance;
+            FormatBase ssnFormat = SSNFormat.Instance;
             AddFormat("000\\-00\\-0000", ssnFormat);
             AddFormat("000-00-0000", ssnFormat);
         }
-        
+
         /**
          * Return a FormatBase for the given cell if one exists, otherwise try to
          * Create one. This method will return <c>null</c> if the any of the
@@ -310,7 +311,7 @@ namespace NPOI.SS.UserModel
             //  handle these ourselves in a special way.
             // For now, if we detect 3+ parts, we call out to CellFormat to handle it
             // TODO Going forward, we should really merge the logic between the two classes
-            if (formatStr.IndexOf(";") != -1 &&
+            if (formatStr.IndexOf(';') != -1 &&
                     formatStr.IndexOf(';') != formatStr.LastIndexOf(';'))
             {
                 try
@@ -1102,18 +1103,18 @@ namespace NPOI.SS.UserModel
             // init built-in formats
 
             formats.Clear();
-            FormatBase zipFormat = ZipPlusFourFormat.instance;
+            FormatBase zipFormat = ZipPlusFourFormat.Instance;
             AddFormat("00000\\-0000", zipFormat);
             AddFormat("00000-0000", zipFormat);
 
-            FormatBase phoneFormat = PhoneFormat.instance;
+            FormatBase phoneFormat = PhoneFormat.Instance;
             // allow for format string variations
             AddFormat("[<=9999999]###\\-####;\\(###\\)\\ ###\\-####", phoneFormat);
             AddFormat("[<=9999999]###-####;(###) ###-####", phoneFormat);
             AddFormat("###\\-####;\\(###\\)\\ ###\\-####", phoneFormat);
             AddFormat("###-####;(###) ###-####", phoneFormat);
 
-            FormatBase ssnFormat = SSNFormat.instance;
+            FormatBase ssnFormat = SSNFormat.Instance;
             AddFormat("000\\-00\\-0000", ssnFormat);
             AddFormat("000-00-0000", ssnFormat);
         }
@@ -1131,7 +1132,8 @@ namespace NPOI.SS.UserModel
                 this.emulateCSV = emulateCSV;
                 this.result = result;
             }
-            public override StringBuilder Format(Object obj, StringBuilder toAppendTo, int pos)
+
+            protected override StringBuilder Format(Object obj, StringBuilder toAppendTo, int pos)
             {
                 if (emulateCSV)
                 {
