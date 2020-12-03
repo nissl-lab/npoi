@@ -21,7 +21,6 @@ using NUnit.Framework;
 using NPOI.OpenXmlFormats.Wordprocessing;
 using System;
 using System.Collections.Generic;
-using static NPOI.XWPF.UserModel.XWPFTableCell;
 using NPOI.XWPF.UserModel;
 
 namespace TestCases.XWPF.UserModel
@@ -105,10 +104,10 @@ namespace TestCases.XWPF.UserModel
             XWPFTable table = tables[0];
             List<XWPFTableRow> tableRows = table.Rows;
             Assert.AreEqual(2, tableRows.Count);
-            Assert.AreEqual(XWPFVertAlign.TOP, tableRows[0].GetCell(0).GetVerticalAlignment());
-            Assert.AreEqual(XWPFVertAlign.BOTTOM, tableRows[0].GetCell(1).GetVerticalAlignment());
-            Assert.AreEqual(XWPFVertAlign.CENTER, tableRows[1].GetCell(0).GetVerticalAlignment());
-            Assert.AreEqual(XWPFVertAlign.TOP, tableRows[1].GetCell(1).GetVerticalAlignment());
+            Assert.AreEqual(XWPFTableCell.XWPFVertAlign.TOP, tableRows[0].GetCell(0).GetVerticalAlignment());
+            Assert.AreEqual(XWPFTableCell.XWPFVertAlign.BOTTOM, tableRows[0].GetCell(1).GetVerticalAlignment());
+            Assert.AreEqual(XWPFTableCell.XWPFVertAlign.CENTER, tableRows[1].GetCell(0).GetVerticalAlignment());
+            Assert.AreEqual(XWPFTableCell.XWPFVertAlign.TOP, tableRows[1].GetCell(1).GetVerticalAlignment());
         }
         [Test]
         public void TestCellVerticalAlign2()
