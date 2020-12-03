@@ -431,7 +431,7 @@ namespace NPOI.SS.Formula.Functions
                 }
                 if (!(x is StringEval))
                 {
-                    if (_operator.Code is CmpOp.NE) return true;
+                    if (_operator.Code==CmpOp.NE) return true;
                     // must almost always be string
                     // even if match str is wild, but contains only digits
                     // e.g. '4*7', NumberEval(4567) does not match

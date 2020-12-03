@@ -21,7 +21,7 @@ namespace NPOI.XWPF.Usermodel
             SetFontFamily("Cambria Math", FontCharRange.None);
         }
 
-        public bool IsBold { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool IsBold { get; set; }
         public bool IsItalic {
             get {
                 W.CT_RPr pr = run.rPr1;
@@ -47,16 +47,16 @@ namespace NPOI.XWPF.Usermodel
             return onoff.val;
         }
 
-        public bool IsSmallCaps { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool IsCapitalized { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool IsStrikeThrough { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool IsDoubleStrikeThrough { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool IsShadowed { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool IsEmbossed { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool IsImprinted { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int CharacterSpacing { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int Kerning { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool IsHighlighted => throw new NotImplementedException();
+        public bool IsSmallCaps { get; set; }
+        public bool IsCapitalized { get; set; }
+        public bool IsStrikeThrough { get; set; }
+        public bool IsDoubleStrikeThrough { get; set; }
+        public bool IsShadowed { get; set; }
+        public bool IsEmbossed { get; set; }
+        public bool IsImprinted { get; set; }
+        public int CharacterSpacing { get; set; }
+        public int Kerning { get; set; }
+        public bool IsHighlighted { get; set; }
 
         public string FontName
         {
@@ -152,7 +152,7 @@ namespace NPOI.XWPF.Usermodel
             }
         }
 
-        public int FontSize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int FontSize { get; set; }
 
         public string Text
         {

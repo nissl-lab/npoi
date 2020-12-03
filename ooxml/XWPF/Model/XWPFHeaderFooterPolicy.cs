@@ -19,14 +19,12 @@ namespace NPOI.XWPF.Model
     using System;
     using NPOI.XWPF.UserModel;
     using NPOI.OpenXmlFormats.Wordprocessing;
-    using System.Collections.Generic;
     using System.IO;
     using System.Xml.Serialization;
     using System.Xml;
     using NPOI.OpenXmlFormats.Vml;
     using NPOI.OpenXmlFormats.Vml.Office;
     using System.Diagnostics;
-    using static NPOI.POIXMLDocumentPart;
 
     /**
      * A .docx file can have no headers/footers, the same header/footer
@@ -191,7 +189,7 @@ namespace NPOI.XWPF.Model
         private int GetRelationIndex(XWPFRelation relation)
         {
             int i = 1;
-            foreach (RelationPart rp in doc.RelationParts)
+            foreach (POIXMLDocumentPart.RelationPart rp in doc.RelationParts)
             {
                 if (rp.Relationship.RelationshipType.Equals(relation.Relation))
                 {

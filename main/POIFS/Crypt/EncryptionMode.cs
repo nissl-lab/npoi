@@ -37,10 +37,10 @@ namespace NPOI.POIFS.Crypt
         public static readonly EncryptionMode Agile = new EncryptionMode("NPOI.POIFS.Crypt.Agile.AgileEncryptionInfoBuilder", 4, 4, 0x40);
 
 
-        public string Builder { get; }
-        public int VersionMajor { get; }
-        public int VersionMinor { get; }
-        public int EncryptionFlags { get; }
+        public string Builder { get; private set; }
+        public int VersionMajor { get;private set; }
+        public int VersionMinor { get;private set; }
+        public int EncryptionFlags { get;private set; }
 
         public EncryptionMode(string builder, int versionMajor, int versionMinor, int encryptionFlags)
         {

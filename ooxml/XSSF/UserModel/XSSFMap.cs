@@ -21,8 +21,6 @@ using NPOI.XSSF.UserModel.Helpers;
 using System.Collections.Generic;
 using NPOI.XSSF.Model;
 using NPOI.SS.UserModel;
-using System.Xml;
-using static NPOI.POIXMLDocumentPart;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -112,7 +110,7 @@ namespace NPOI.XSSF.UserModel
 
             foreach (ISheet sheet in mapInfo.Workbook)
             {
-                foreach (RelationPart rp in ((XSSFSheet)sheet).RelationParts)
+                foreach (POIXMLDocumentPart.RelationPart rp in ((XSSFSheet)sheet).RelationParts)
                 {
                     if (rp.Relationship.RelationshipType.Equals(XSSFRelation.TABLE.Relation))
                     {

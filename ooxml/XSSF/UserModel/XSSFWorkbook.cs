@@ -929,7 +929,7 @@ namespace NPOI.XSSF.UserModel
         private void ValidateSheetName(String sheetName)
         {
             if (ContainsSheet(sheetName, sheets.Count))
-                throw new ArgumentException($"The workbook already contains a sheet named '{sheetName}'");
+                throw new ArgumentException(string.Format("The workbook already contains a sheet named '{0}'",sheetName));
         }
         protected XSSFDialogsheet CreateDialogsheet(String sheetname, CT_Dialogsheet dialogsheet)
         {
@@ -1647,7 +1647,7 @@ namespace NPOI.XSSF.UserModel
 
             // Check it isn't already taken
             if (ContainsSheet(sheetname, sheetIndex))
-                throw new ArgumentException($"The workbook already contains a sheet named '{sheetname}'");
+                throw new ArgumentException(string.Format("The workbook already contains a sheet named '{0}'",sheetname));
 
             // Update references to the name
             XSSFFormulaUtils utils = new XSSFFormulaUtils(this);
@@ -2177,7 +2177,8 @@ namespace NPOI.XSSF.UserModel
         {
             foreach (var xssfPivotTable in pivotTables)
             {
-                if (xssfPivotTable.GetParent() is XSSFSheet sheet)
+                var sheet = xssfPivotTable.GetParent();
+                if ( sheet is XSSFSheet )
                 {
                     sheet.RemoveRelation(xssfPivotTable);
                 }
@@ -2185,8 +2186,9 @@ namespace NPOI.XSSF.UserModel
 
             foreach (var poixmlDocumentPart in GetRelations())
             {
-                if (poixmlDocumentPart is XSSFPivotCacheDefinition pivotCacheDefinition)
+                if (poixmlDocumentPart is XSSFPivotCacheDefinition)
                 {
+                    var pivotCacheDefinition = (XSSFPivotCacheDefinition)poixmlDocumentPart; 
                     RemoveRelation(pivotCacheDefinition);
                 }
             }

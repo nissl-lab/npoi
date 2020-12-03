@@ -200,7 +200,10 @@ namespace NPOI.SS.Util
         {
             this._formatInfo = formatInfo;
         }
-        public string Pattern => _pattern;
+        public string Pattern
+        {
+            get { return _pattern; }
+        }
 
         private static readonly Regex RegexFraction = new Regex("#+/#+");
         public override string Format(Object obj)
@@ -241,7 +244,9 @@ namespace NPOI.SS.Util
             return Decimal.Parse(source.Substring(pos), CultureInfo.CurrentCulture);
         }
 
-        public bool ParseIntegerOnly { get; set; } = false;
+        public bool ParseIntegerOnly {
+            get { return false;}
+        } 
     }
 
     public abstract class DateFormat : FormatBase
@@ -300,12 +305,15 @@ namespace NPOI.SS.Util
         private string _pattern;
         private DateTimeFormatInfo _formatData;
         private CultureInfo _culture;
-        public SimpleDateFormat()
-            : this("", CultureInfo.CurrentCulture)
+        public SimpleDateFormat():this("", CultureInfo.CurrentCulture)
         {
 
         }
-        public string Pattern => _pattern;
+
+        public string Pattern
+        {
+            get { return _pattern; }
+        }
 
         public SimpleDateFormat(string pattern, CultureInfo culture)
         {

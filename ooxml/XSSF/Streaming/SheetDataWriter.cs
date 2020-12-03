@@ -331,7 +331,7 @@ namespace NPOI.XSSF.Streaming
                             int sRef = _sharedStringSource.AddEntry(rt.GetCTRst());
 
                             WriteAsBytes(" t=\"");
-                            WriteAsBytes(nameof(ST_CellType.s));
+                            WriteAsBytes("s");
                             WriteAsBytes("\">");
                             WriteAsBytes("<v>");
                             WriteAsBytes(sRef);

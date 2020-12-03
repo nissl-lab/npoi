@@ -342,15 +342,34 @@ namespace NPOI.Util
             this.inner = fs;
         }
 
-        public override bool CanRead => inner.CanRead;
+        public override bool CanRead
+        {
+            get
+            {
+                return inner.CanRead;
+            }
+        }
+        public override bool CanSeek
+        {
+            get { return false; }
+        } 
+        public override bool CanWrite
+        {
+            get { return false; }
+        } 
+        public override long Length
+        {
+            get
+            {
+                return inner.Length;
+            }
+        }
 
-        public override bool CanSeek => false;
-
-        public override bool CanWrite => false;
-
-        public override long Length => inner.Length;
-
-        public override long Position { get => inner.Position; set => inner.Position = value; }
+        public override long Position
+        {
+            get { return inner.Position;}
+            set { inner.Position = value;}
+        }
 
         public override void Flush()
         {

@@ -83,7 +83,10 @@ namespace TestCases.DDF
                 //super(new NullOutputStream(),true,LocaleUtil.CHARSET_1252.name());
             }
 
-            public override Encoding Encoding => Encoding.GetEncoding(1252);
+            public override Encoding Encoding
+            {
+                get { return Encoding.GetEncoding(1252); }
+            }
 
             /**
             * Implementation of an OutputStream which does nothing, used

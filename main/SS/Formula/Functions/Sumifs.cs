@@ -18,7 +18,6 @@
  */
 using System;
 using NPOI.SS.Formula.Eval;
-using static NPOI.SS.Formula.Functions.Countif;
 
 namespace NPOI.SS.Formula.Functions
 {
@@ -77,6 +76,7 @@ namespace NPOI.SS.Formula.Functions
                 return e.GetErrorEval();
             }
         }
+
         /**
          * Verify that each <code>criteria</code> predicate is valid, i.e. not an error
          *
@@ -88,11 +88,13 @@ namespace NPOI.SS.Formula.Functions
             {
 
                 // check for errors in predicate and return immediately using this error code
-                if (predicate is ErrorMatcher) {
-                throw new EvaluationException(ErrorEval.ValueOf(((ErrorMatcher)predicate).Value));
+                if (predicate is NPOI.SS.Formula.Functions.Countif.ErrorMatcher)
+                {
+                    throw new EvaluationException(
+                        ErrorEval.ValueOf(((NPOI.SS.Formula.Functions.Countif.ErrorMatcher) predicate).Value));
+                }
             }
         }
-    }
 
         /**
          * Verify that each <code>criteriaRanges</code> argument contains the same number of rows and columns
