@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	<AssemblyName>NPOI</AssemblyName>
 	<RootNamespace>NPOI</RootNamespace>
@@ -10,6 +9,7 @@
 	<PackageId>NPOI</PackageId>
 	<RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
   <OutputPath>..\solution\Lib</OutputPath>
+  <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
   </PropertyGroup>
 
  

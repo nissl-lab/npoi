@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	<AssemblyName>NPOI.OOXML</AssemblyName>
 	<RootNamespace>NPOI.OOXML</RootNamespace>
 	<SignAssembly>true</SignAssembly>
 	<AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+	<TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
