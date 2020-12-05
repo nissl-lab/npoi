@@ -488,8 +488,6 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.themeElements.Write(sw, "themeElements");
             if (this.objectDefaults != null)
                 this.objectDefaults.Write(sw, "objectDefaults");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
             if (this.extraClrSchemeLst != null)
             {
                 foreach (CT_ColorSchemeAndMapping x in this.extraClrSchemeLst)
@@ -497,6 +495,8 @@ namespace NPOI.OpenXmlFormats.Dml
                     x.Write(sw, "extraClrSchemeLst");
                 }
             }
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
             if (this.custClrLst != null)
             {
                 foreach (CT_CustomColor x in this.custClrLst)

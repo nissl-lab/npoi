@@ -1067,7 +1067,8 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "sy", this.sy);
             XmlHelper.WriteAttribute(sw, "kx", this.kx);
             XmlHelper.WriteAttribute(sw, "ky", this.ky);
-            XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
+            if(this.algn != ST_RectAlignment.tl)
+                XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
             XmlHelper.WriteAttribute(sw, "rotWithShape", this.rotWithShape);
             sw.Write(">");
             if (this.scrgbClr != null)
@@ -1854,10 +1855,10 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(">");
             if (this.noFill != null)
                 sw.Write("<a:noFill/>");
+            if (this.gradFill != null)
+                this.gradFill.Write(sw, "gradFill");            
             if (this.solidFill != null)
                 this.solidFill.Write(sw, "solidFill");
-            if (this.gradFill != null)
-                this.gradFill.Write(sw, "gradFill");
             if (this.blipFill != null)
                 this.blipFill.Write(sw, "a:blipFill");
             if (this.pattFill != null)
@@ -2385,12 +2386,6 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_GradientStop()
         {
-            //this.prstClrField = new CT_PresetColor();
-            //this.schemeClrField = new CT_SchemeColor();
-            //this.sysClrField = new CT_SystemColor();
-            //this.hslClrField = new CT_HslColor();
-            //this.srgbClrField = new CT_SRgbColor();
-            //this.scrgbClrField = new CT_ScRgbColor();
         }
         public static CT_GradientStop Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
