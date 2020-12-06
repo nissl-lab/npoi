@@ -137,7 +137,9 @@ namespace NPOI.SS.Formula.Functions {
                 }
             }
 
-            return valuesCount > 0 ? (sum / valuesCount) : throw new EvaluationException(ErrorEval.VALUE_INVALID);
+            if (valuesCount <= 0)
+                throw new EvaluationException(ErrorEval.VALUE_INVALID);
+            return sum / valuesCount;
         }
 
         private static double? Accumulate(AreaEval aeSum, int relRowIndex,

@@ -10,15 +10,27 @@ namespace NPOI.Util
     {
         protected volatile InputStream input;
 
-        public override bool CanRead => throw new NotImplementedException();
+        public override bool CanRead
+        {
+            get { throw new NotImplementedException(); }
+        }
 
-        public override bool CanSeek => throw new NotImplementedException();
+        public override bool CanSeek
+        {
+            get { throw new NotImplementedException(); }
+        }
 
-        public override bool CanWrite => throw new NotImplementedException();
+        public override bool CanWrite
+        {
+            get { throw new NotImplementedException(); }
+        }
 
-        public override long Length => throw new NotImplementedException();
+        public override long Length
+        {
+            get { throw new NotImplementedException(); }
+        }
 
-        public override long Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override long Position { get; set; }
 
         protected FilterInputStream(InputStream input)
         {

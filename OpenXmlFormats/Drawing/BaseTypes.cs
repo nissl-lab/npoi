@@ -2630,9 +2630,9 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "lat", this.lat);
-            XmlHelper.WriteAttribute(sw, "lon", this.lon);
-            XmlHelper.WriteAttribute(sw, "rev", this.rev);
+            XmlHelper.WriteAttribute(sw, "lat", this.lat, true);
+            XmlHelper.WriteAttribute(sw, "lon", this.lon, true);
+            XmlHelper.WriteAttribute(sw, "rev", this.rev, true);
             sw.Write(">");
             sw.Write(string.Format("</a:{0}>", nodeName));
         }

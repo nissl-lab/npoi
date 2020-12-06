@@ -47,9 +47,10 @@ namespace NPOI.OpenXmlFormats.Dml {
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "w", this.w);
-            XmlHelper.WriteAttribute(sw, "h", this.h);
-            XmlHelper.WriteAttribute(sw, "prst", this.prst.ToString());
+            XmlHelper.WriteAttribute(sw, "w", this.w, true);
+            XmlHelper.WriteAttribute(sw, "h", this.h, true);
+            if(this.prst != ST_BevelPresetType.circle)
+                XmlHelper.WriteAttribute(sw, "prst", this.prst.ToString());
             sw.Write(">");
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
@@ -211,11 +212,6 @@ namespace NPOI.OpenXmlFormats.Dml {
         }
 
         public CT_Shape3D() {
-            //this.extLstField = new CT_OfficeArtExtensionList();
-            //this.contourClrField = new CT_Color();
-            //this.extrusionClrField = new CT_Color();
-            //this.bevelBField = new CT_Bevel();
-            //this.bevelTField = new CT_Bevel();
             this.zField = ((long)(0));
             this.extrusionHField = ((long)(0));
             this.contourWField = ((long)(0));

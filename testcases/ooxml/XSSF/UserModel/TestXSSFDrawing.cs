@@ -24,7 +24,6 @@ using NPOI.Util;
 using System.Drawing;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using System.Text;
-using static NPOI.POIXMLDocumentPart;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
 using NPOI;
@@ -43,9 +42,9 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("WithDrawing.xlsx");
             XSSFSheet sheet = (XSSFSheet)wb.GetSheetAt(0);
             //the sheet has one relationship and it is XSSFDrawing
-            List<RelationPart> rels = sheet.RelationParts;
+            List<POIXMLDocumentPart.RelationPart> rels = sheet.RelationParts;
             Assert.AreEqual(1, rels.Count);
-            RelationPart rp = rels[0];
+            POIXMLDocumentPart.RelationPart rp = rels[0];
             Assert.IsTrue(rp.DocumentPart is XSSFDrawing);
 
             XSSFDrawing drawing = (XSSFDrawing)rp.DocumentPart;
@@ -84,9 +83,9 @@ namespace TestCases.XSSF.UserModel
             XSSFDrawing dr2 = (XSSFDrawing)sheet.CreateDrawingPatriarch();
             Assert.AreSame(dr1, dr2);
 
-            List<RelationPart> rels = sheet.RelationParts;
+            List<POIXMLDocumentPart.RelationPart> rels = sheet.RelationParts;
             Assert.AreEqual(1, rels.Count);
-            RelationPart rp = rels[0];
+            POIXMLDocumentPart.RelationPart rp = rels[0];
             Assert.IsTrue(rp.DocumentPart is XSSFDrawing);
 
             XSSFDrawing drawing = (XSSFDrawing)rp.DocumentPart;
@@ -533,9 +532,9 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("WithDrawing.xlsx");
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
             //the sheet has one relationship and it is XSSFDrawing
-            List<RelationPart> rels = sheet.RelationParts;
+            List<POIXMLDocumentPart.RelationPart> rels = sheet.RelationParts;
             Assert.AreEqual(1, rels.Count);
-            RelationPart rp = rels[0];
+            POIXMLDocumentPart.RelationPart rp = rels[0];
             Assert.IsTrue(rp.DocumentPart is XSSFDrawing);
 
             XSSFDrawing drawing = (XSSFDrawing)rp.DocumentPart;
@@ -569,9 +568,9 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("WithTextBox.xlsx");
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
             //the sheet has one relationship and it is XSSFDrawing
-            List<RelationPart> rels = sheet.RelationParts;
+            List<POIXMLDocumentPart.RelationPart> rels = sheet.RelationParts;
             Assert.AreEqual(1, rels.Count);
-            RelationPart rp = rels[0];
+            POIXMLDocumentPart.RelationPart rp = rels[0];
             Assert.IsTrue(rp.DocumentPart is XSSFDrawing);
 
             XSSFDrawing drawing = (XSSFDrawing)rp.DocumentPart;

@@ -35,7 +35,6 @@ using NPOI.Util;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel.Helpers;
 using NPOI.POIFS.Crypt;
-using static NPOI.XSSF.UserModel.XSSFPivotTable;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -5181,10 +5180,10 @@ namespace NPOI.XSSF.UserModel
                 throw new ArgumentException("The area is referenced in another sheet than the "
                         + "defined source sheet " + sourceSheet.SheetName + ".");
             }
-            IPivotTableReferenceConfigurator refConfig = new PivotTableReferenceConfigurator1(source);
+            XSSFPivotTable.IPivotTableReferenceConfigurator refConfig = new PivotTableReferenceConfigurator1(source);
             return CreatePivotTable(position, sourceSheet, refConfig);
         }
-        public class PivotTableReferenceConfigurator1 : IPivotTableReferenceConfigurator
+        public class PivotTableReferenceConfigurator1 : XSSFPivotTable.IPivotTableReferenceConfigurator
         {
             AreaReference source;
             public PivotTableReferenceConfigurator1(AreaReference source)
@@ -5213,7 +5212,7 @@ namespace NPOI.XSSF.UserModel
          * @throws IllegalArgumentException if source references a sheet different than sourceSheet
          * @return The pivot table
          */
-        private XSSFPivotTable CreatePivotTable(CellReference position, ISheet sourceSheet, IPivotTableReferenceConfigurator refConfig)
+        private XSSFPivotTable CreatePivotTable(CellReference position, ISheet sourceSheet, XSSFPivotTable.IPivotTableReferenceConfigurator refConfig)
         {
 
             XSSFPivotTable pivotTable = CreatePivotTable();
@@ -5268,7 +5267,7 @@ namespace NPOI.XSSF.UserModel
 
             return CreatePivotTable(position, sourceSheet, new PivotTableReferenceConfigurator2(source));
         }
-        public class PivotTableReferenceConfigurator2 : IPivotTableReferenceConfigurator
+        public class PivotTableReferenceConfigurator2 : XSSFPivotTable.IPivotTableReferenceConfigurator
         {
             IName source;
             public PivotTableReferenceConfigurator2(IName source)
@@ -5306,7 +5305,7 @@ namespace NPOI.XSSF.UserModel
             return CreatePivotTable(position, GetWorkbook().GetSheet(source.SheetName), new PivotTableReferenceConfigurator3(source));
         }
 
-        public class PivotTableReferenceConfigurator3 : IPivotTableReferenceConfigurator
+        public class PivotTableReferenceConfigurator3 : XSSFPivotTable.IPivotTableReferenceConfigurator
         {
             ITable source;
             public PivotTableReferenceConfigurator3(ITable source)

@@ -90,40 +90,40 @@ namespace NPOI.POIFS.Crypt
         public EncryptionInfo(ILittleEndianInput dis, bool isCryptoAPI)
         {
             EncryptionMode encryptionMode;
-            VersionMajor = dis.ReadShort();
-            VersionMinor = dis.ReadShort();
+            _versionMajor = dis.ReadShort();
+            _versionMinor = dis.ReadShort();
 
             if (!isCryptoAPI
                 && VersionMajor == EncryptionMode.BinaryRC4.VersionMajor
                 && VersionMinor == EncryptionMode.BinaryRC4.VersionMinor)
             {
                 encryptionMode = EncryptionMode.BinaryRC4;
-                EncryptionFlags = -1;
+                _encryptionFlags = -1;
             }
             else if (!isCryptoAPI
                      && VersionMajor == EncryptionMode.Agile.VersionMajor
                      && VersionMinor == EncryptionMode.Agile.VersionMinor)
             {
                 encryptionMode = EncryptionMode.Agile;
-                EncryptionFlags = dis.ReadInt();
+                _encryptionFlags = dis.ReadInt();
             }
             else if (!isCryptoAPI
                      && 2 <= VersionMajor && VersionMajor <= 4
                      && VersionMinor == EncryptionMode.Standard.VersionMinor)
             {
                 encryptionMode = EncryptionMode.Standard;
-                EncryptionFlags = dis.ReadInt();
+                _encryptionFlags = dis.ReadInt();
             }
             else if (isCryptoAPI
                      && 2 <= VersionMajor && VersionMajor <= 4
                      && VersionMinor == EncryptionMode.CryptoAPI.VersionMinor)
             {
                 encryptionMode = EncryptionMode.CryptoAPI;
-                EncryptionFlags = dis.ReadInt();
+                _encryptionFlags = dis.ReadInt();
             }
             else
             {
-                EncryptionFlags = dis.ReadInt();
+                _encryptionFlags = dis.ReadInt();
                 throw new EncryptedDocumentException(
                     "Unknown encryption: version major: " + VersionMajor +
                     " / version minor: " + VersionMinor +
@@ -144,10 +144,10 @@ namespace NPOI.POIFS.Crypt
             }
 
             eib.Initialize(this, dis);
-            Header = eib.GetHeader();
-            Verifier = eib.GetVerifier();
-            Decryptor = eib.GetDecryptor();
-            Encryptor = eib.GetEncryptor();
+            _header = eib.GetHeader();
+            _verifier = eib.GetVerifier();
+            _decryptor = eib.GetDecryptor();
+            _encryptor = eib.GetEncryptor();
         }
 
         /**
@@ -270,9 +270,9 @@ namespace NPOI.POIFS.Crypt
             , ChainingMode chainingMode
             )
         {
-            VersionMajor = encryptionMode.VersionMajor;
-            VersionMinor = encryptionMode.VersionMinor;
-            EncryptionFlags = encryptionMode.EncryptionFlags;
+            _versionMajor = encryptionMode.VersionMajor;
+            _versionMinor = encryptionMode.VersionMinor;
+            _encryptionFlags = encryptionMode.EncryptionFlags;
 
             IEncryptionInfoBuilder eib;
             try
@@ -286,10 +286,10 @@ namespace NPOI.POIFS.Crypt
 
             eib.Initialize(this, cipherAlgorithm, hashAlgorithm, keyBits, blockSize, chainingMode);
 
-            Header = eib.GetHeader();
-            Verifier = eib.GetVerifier();
-            Decryptor = eib.GetDecryptor();
-            Encryptor = eib.GetEncryptor();
+            _header = eib.GetHeader();
+            _verifier = eib.GetVerifier();
+            _decryptor = eib.GetDecryptor();
+            _encryptor = eib.GetEncryptor();
         }
 
         protected static IEncryptionInfoBuilder GetBuilder(EncryptionMode encryptionMode)
@@ -311,19 +311,42 @@ namespace NPOI.POIFS.Crypt
             return eib;
         }
 
-        public int VersionMajor { get; }
+        private int _versionMajor;
+        public int VersionMajor
+        {
+            get { return _versionMajor; }
+        }
+        
+        private int _versionMinor;
+        public int VersionMinor
+        {
+            get { return _versionMinor; }
+        }
 
-        public int VersionMinor { get; }
-
-        public int EncryptionFlags { get; }
-
-        public EncryptionHeader Header { get; }
-
-        public EncryptionVerifier Verifier { get; }
-
-        public Decryptor Decryptor { get; }
-
-        public Encryptor Encryptor { get; }
+        private int _encryptionFlags;
+        public int EncryptionFlags
+        {
+            get { return _encryptionFlags; }
+        }
+        private EncryptionHeader _header;
+        public EncryptionHeader Header
+        {
+            get { return _header; }
+        }
+        private EncryptionVerifier _verifier;
+        public EncryptionVerifier Verifier
+        {
+            get { return _verifier; }
+        }
+        private Decryptor _decryptor;
+        public Decryptor Decryptor
+        {
+            get { return _decryptor; }
+        }
+        private Encryptor _encryptor;
+        public Encryptor Encryptor
+        {
+            get { return _encryptor; }
+        }
     }
-
 }

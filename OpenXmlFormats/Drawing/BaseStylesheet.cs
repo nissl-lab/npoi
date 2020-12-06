@@ -511,7 +511,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "script", this.script);
-            XmlHelper.WriteAttribute(sw, "typeface", this.typeface);
+            XmlHelper.WriteAttribute(sw, "typeface", this.typeface, true);
             sw.Write("/>");
         }
 
@@ -1255,13 +1255,6 @@ namespace NPOI.OpenXmlFormats.Dml
                     x.Write(sw, "solidFill");
                 }
             }
-            if (this.blipFill != null)
-            {
-                foreach (CT_BlipFillProperties x in this.blipFill)
-                {
-                    x.Write(sw, "blipFill");
-                }
-            }
             if (this.gradFill != null)
             {
                 foreach (CT_GradientFillProperties x in this.gradFill)
@@ -1269,11 +1262,18 @@ namespace NPOI.OpenXmlFormats.Dml
                     x.Write(sw, "gradFill");
                 }
             }
+            if (this.blipFill != null)
+            {
+                foreach (CT_BlipFillProperties x in this.blipFill)
+                {
+                    x.Write(sw, "a:blipFill");
+                }
+            }
             if (this.grpFill != null)
             {
                 foreach (CT_GroupFillProperties x in this.grpFill)
                 {
-                    sw.Write("<grpFill/>");
+                    sw.Write("<a:grpFill/>");
                 }
             }
             if (this.noFill != null)

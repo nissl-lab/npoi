@@ -20,7 +20,6 @@ namespace NPOI.SS.Format
     using System.Collections.Generic;
     using System.Text;
     using System.Text.RegularExpressions;
-    using static NPOI.SS.Format.CellNumberFormatter;
 
     /**
      * Internal helper class for CellNumberFormatter
@@ -30,11 +29,11 @@ namespace NPOI.SS.Format
     {
         private char insertSignForExponent;
         private double scale = 1;
-        private Special decimalPoint;
-        private Special slash;
-        private Special exponent;
-        private Special numerator;
-        private List<Special> specials = new List<Special>();
+        private CellNumberFormatter.Special decimalPoint;
+        private CellNumberFormatter.Special slash;
+        private CellNumberFormatter.Special exponent;
+        private CellNumberFormatter.Special numerator;
+        private List<CellNumberFormatter.Special> specials = new List<CellNumberFormatter.Special>();
         private bool improperFraction;
 
         public String HandlePart(Match m, String part, CellFormatType type, StringBuilder descBuf)
@@ -50,7 +49,7 @@ namespace NPOI.SS.Format
                     // Put it before the first digit of the exponent.
                     if (exponent == null && specials.Count > 0)
                     {
-                        exponent = new Special('.', pos);
+                        exponent = new CellNumberFormatter.Special('.', pos);
                         specials.Add(exponent);
                         insertSignForExponent = part[1];
                         return part.Substring(0, 1);
@@ -62,7 +61,7 @@ namespace NPOI.SS.Format
                 case '#':
                     if (insertSignForExponent != '\0')
                     {
-                        specials.Add(new Special(insertSignForExponent, pos));
+                        specials.Add(new CellNumberFormatter.Special(insertSignForExponent, pos));
                         descBuf.Append(insertSignForExponent);
                         insertSignForExponent = '\0';
                         pos++;
@@ -70,14 +69,14 @@ namespace NPOI.SS.Format
                     for (int i = 0; i < part.Length; i++)
                     {
                         char ch = part[i];
-                        specials.Add(new Special(ch, pos + i));
+                        specials.Add(new CellNumberFormatter.Special(ch, pos + i));
                     }
                     break;
 
                 case '.':
                     if (decimalPoint == null && specials.Count > 0)
                     {
-                        decimalPoint = new Special('.', pos);
+                        decimalPoint = new CellNumberFormatter.Special('.', pos);
                         specials.Add(decimalPoint);
                     }
                     break;
@@ -90,7 +89,7 @@ namespace NPOI.SS.Format
                         // If the first number in the whole format is the numerator, the
                         // entire number should be printed as an improper fraction
                         improperFraction |= (numerator == FirstDigit(specials));
-                        slash = new Special('.', pos);
+                        slash = new CellNumberFormatter.Special('.', pos);
                         specials.Add(slash);
                     }
                     break;
@@ -114,7 +113,7 @@ namespace NPOI.SS.Format
             }
         }
 
-        public Special DecimalPoint
+        public CellNumberFormatter.Special DecimalPoint
         {
             get
             {
@@ -122,7 +121,7 @@ namespace NPOI.SS.Format
             }
         }
 
-        public Special Slash
+        public CellNumberFormatter.Special Slash
         {
             get
             {
@@ -130,7 +129,7 @@ namespace NPOI.SS.Format
             }
         }
 
-        public Special Exponent
+        public CellNumberFormatter.Special Exponent
         {
             get
             {
@@ -138,7 +137,7 @@ namespace NPOI.SS.Format
             }
         }
 
-        public Special Numerator
+        public CellNumberFormatter.Special Numerator
         {
             get
             {
@@ -146,7 +145,7 @@ namespace NPOI.SS.Format
             }
         }
 
-        public List<Special> Specials
+        public List<CellNumberFormatter.Special> Specials
         {
             get
             {
@@ -163,15 +162,15 @@ namespace NPOI.SS.Format
             }
         }
 
-        private Special PreviousNumber()
+        private CellNumberFormatter.Special PreviousNumber()
         {
             for (int i = specials.Count - 1; i >= 0; i--)
             {
-                Special s = specials[i];
+                CellNumberFormatter.Special s = specials[i];
                 if (IsDigitFmt(s))
                 {
                     //Special numStart = s;
-                    Special last = s;
+                    CellNumberFormatter.Special last = s;
                     while (i >= 0)
                     {
                         s = specials[i];
@@ -186,14 +185,14 @@ namespace NPOI.SS.Format
             return null;
         }
 
-        private static bool IsDigitFmt(Special s)
+        private static bool IsDigitFmt(CellNumberFormatter.Special s)
         {
             return s.ch == '0' || s.ch == '?' || s.ch == '#';
         }
 
-        private static Special FirstDigit(List<Special> specials)
+        private static CellNumberFormatter.Special FirstDigit(List<CellNumberFormatter.Special> specials)
         {
-            foreach (Special s in specials)
+            foreach (CellNumberFormatter.Special s in specials)
             {
                 if (IsDigitFmt(s))
                 {
