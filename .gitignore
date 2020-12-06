@@ -8,7 +8,7 @@
 *.snk
 
 # Build results
-
+.idea/
 [Dd]ebug/
 [Rr]elease/
 x64/
