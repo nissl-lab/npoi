@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<AssemblyName>NPOI.OOXML4Net.TestCases</AssemblyName>
-	<SignAssembly>true</SignAssembly>
-	<AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
-	<RootNamespace>TestCases</RootNamespace>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyName>NPOI.OOXML4Net.TestCases</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+    <RootNamespace>TestCases</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,9 +23,9 @@
     <ProjectReference Include="..\ooxml\NPOI.OOXML.TestCases.Core.csproj" />
   </ItemGroup>
 
-	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">
-	  <Copy SourceFiles="app.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
-	</Target>
+  <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+    <Copy SourceFiles="app.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
+  </Target>
 
 
 </Project>

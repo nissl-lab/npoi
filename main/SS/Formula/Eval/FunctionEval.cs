@@ -28,6 +28,7 @@ namespace NPOI.SS.Formula.Eval
     using NPOI.SS.Formula.Function;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using Index = NPOI.SS.Formula.Functions.Index;
 
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;

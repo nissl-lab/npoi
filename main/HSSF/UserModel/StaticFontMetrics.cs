@@ -35,7 +35,7 @@ namespace NPOI.HSSF.UserModel
      */
     class StaticFontMetrics
     {
-#if NETSTANDARD2_0
+#if NETSTANDARD2_1 || NETSTANDARD2_0
         private const String FONT_METRICS_PROPERTIES_FILE_NAME = "NPOI.Resources.font_metrics.properties";
 #else
         private const String FONT_METRICS_PROPERTIES_FILE_NAME = "font_metrics.properties";
