@@ -1338,11 +1338,11 @@ namespace NPOI.XWPF.UserModel
             int startRun = startPos.Run,
                 startText = startPos.Text,
                 startChar = startPos.Char;
-            int beginRunPos = 0, candCharPos = 0;
+            int beginRunPos = 0, beginTextPos = 0, beginCharPos = 0,candCharPos = 0;
             bool newList = false;
             for (int runPos = startRun; runPos < paragraph.GetRList().Count; runPos++)
             {
-                int beginTextPos = 0, beginCharPos = 0, textPos = 0, charPos = 0;
+                int  textPos = 0, charPos = 0;
                 CT_R ctRun = paragraph.GetRList()[runPos];
                 foreach (object o in ctRun.Items)
                 {
