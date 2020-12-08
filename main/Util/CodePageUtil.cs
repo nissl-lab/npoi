@@ -29,6 +29,13 @@ namespace NPOI.Util
      */
     public class CodePageUtil
     {
+        static CodePageUtil() 
+        {
+            #if NETSTANDARD2_1 || NETSTANDARD2_0
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            #endif
+        }
+
         /** <p>Codepage 037, a special case</p> */
         public const int CP_037 = 37;
 

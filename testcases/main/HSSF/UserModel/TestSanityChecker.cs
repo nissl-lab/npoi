@@ -134,12 +134,15 @@ namespace TestCases.HSSF.UserModel
 
         private static void ConfirmBadRecordOrder(SanityChecker.CheckRecord[] Check, Record[] recs)
         {
-
+            TestSanityChecker.check = Check;
             TestSanityChecker.recs = recs;
 
-            ThreadStart ts = new ThreadStart(Run);
-            Thread thread = new Thread(ts);
-            thread.Start();
+            // ThreadStart ts = new ThreadStart(Run);
+            // Thread thread = new Thread(ts);
+            // thread.Start();
+            // thread.Join();
+            Run();
+            
         }
     }
 }

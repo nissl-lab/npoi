@@ -57,7 +57,7 @@ namespace NPOI.SS.Format
 
 
 
-            #region IEqualityComparer<string> ≥…‘±
+            #region IEqualityComparer<string>
 
             public bool Equals(string x, string y)
             {
@@ -597,7 +597,7 @@ namespace NPOI.SS.Format
 
                 // Now the pass for quoted chars: Replace any \u0000 with ''
                 pos = 0;
-                while ((pos = fmt.ToString().IndexOf("\u0000", pos)) >= 0)
+                while ((pos = fmt.ToString().IndexOf('\u0000', pos)) >= 0)
                 {
                     //fmt.Replace(pos, pos + 1, "''");
                     fmt.Remove(pos, 1);
