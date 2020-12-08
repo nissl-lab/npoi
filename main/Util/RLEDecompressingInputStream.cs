@@ -51,7 +51,7 @@ namespace NPOI.Util
     };
 
         /** the wrapped inputstream */
-        private Stream in1;
+        private Stream input;
 
         /** a byte buffer with size 4096 for storing a single chunk */
         private byte[] buf;
@@ -62,15 +62,27 @@ namespace NPOI.Util
         /** the number of bytes in the byte buffer */
         private int len;
 
-        public override bool CanRead => in1.CanRead;
-
-        public override bool CanSeek => in1.CanSeek;
-
-        public override bool CanWrite => in1.CanWrite;
-
-        public override long Length => in1.Length;
-
-        public override long Position { get => in1.Position; set => in1.Position = value; }
+        public override bool CanRead 
+        {
+            get {return input.CanRead; }
+        }
+        public override bool CanSeek
+        {
+            get {return input.CanSeek; }
+        }
+        public override bool CanWrite
+        {
+            get {return input.CanWrite; }
+        }
+        public override long Length
+        {
+            get {return input.Length; }
+        }
+        public override long Position
+        {
+            get { return input.Position; }
+            set { input.Position = value;}
+        }
 
         /**
          * Creates a new wrapper RLE Decompression InputStream.
@@ -78,12 +90,12 @@ namespace NPOI.Util
          * @param in The stream to wrap with the RLE Decompression
          * @throws IOException
          */
-        public RLEDecompressingInputStream(Stream in1)
+        public RLEDecompressingInputStream(Stream input)
         {
-            this.in1 = in1;
+            this.input = input;
             buf = new byte[4096];
             pos = 0;
-            int header = in1.ReadByte();
+            int header = input.ReadByte();
             if (header != 0x01)
             {
                 throw new ArgumentException(String.Format("Header byte 0x01 expected, received 0x{0:X2}", header & 0xFF));
@@ -170,7 +182,7 @@ namespace NPOI.Util
 
         public override void Close()
         {
-            in1.Close();
+            input.Close();
         }
 
         /**
@@ -182,7 +194,7 @@ namespace NPOI.Util
         private int ReadChunk()
         {
             pos = 0;
-            int w = ReadShort(in1);
+            int w = ReadShort(input);
             if (w == -1)
             {
                 return -1;
@@ -195,7 +207,7 @@ namespace NPOI.Util
             bool rawChunk = (w & 0x8000) == 0;
             if (rawChunk)
             {
-                if (in1.Read(buf, 0, chunkSize) < chunkSize)
+                if (input.Read(buf, 0, chunkSize) < chunkSize)
                 {
                     throw new InvalidOperationException(String.Format("Not enough bytes Read, expected {0}", chunkSize));
                 }
@@ -207,7 +219,7 @@ namespace NPOI.Util
                 int outOffset = 0;
                 while (inOffset < chunkSize)
                 {
-                    int tokenFlags = in1.ReadByte();
+                    int tokenFlags = input.ReadByte();
                     inOffset++;
                     if (tokenFlags == -1)
                     {
@@ -222,7 +234,7 @@ namespace NPOI.Util
                         if ((tokenFlags & POWER2[n]) == 0)
                         {
                             // literal
-                            int b = in1.ReadByte();
+                            int b = input.ReadByte();
                             if (b == -1)
                             {
                                 return -1;
@@ -233,7 +245,7 @@ namespace NPOI.Util
                         else
                         {
                             // compressed token
-                            int token = ReadShort(in1);
+                            int token = ReadShort(input);
                             if (token == -1)
                             {
                                 return -1;
@@ -350,22 +362,22 @@ namespace NPOI.Util
 
         public override void Flush()
         {
-            in1.Flush();
+            input.Flush();
         }
 
         public override long Seek(long offset, SeekOrigin origin)
         {
-            return in1.Seek(offset, origin);
+            return input.Seek(offset, origin);
         }
 
         public override void SetLength(long value)
         {
-            in1.SetLength(value);
+            input.SetLength(value);
         }
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            in1.Write(buffer, offset, count);
+            input.Write(buffer, offset, count);
         }
     }
 

@@ -19,8 +19,6 @@ namespace NPOI.HSSF.UserModel
 {
     using System;
 
-    using static NPOI.HSSF.Record.CFRuleBase;
-
     using NPOI.HSSF.Record.CF;
     using NPOI.SS.UserModel;
 
@@ -61,7 +59,7 @@ namespace NPOI.HSSF.UserModel
         public String Formula
         {
             get { return HSSFConditionalFormattingRule.ToFormulaString(threshold.ParsedExpression, workbook); }
-            set { threshold.ParsedExpression = (ParseFormula(value, sheet)); }
+            set { threshold.ParsedExpression = NPOI.HSSF.Record.CFRuleBase.ParseFormula(value, sheet); }
         }
 
         public double? Value

@@ -15,22 +15,23 @@ namespace NPOI.SS.Util
 
         }
 
-        public virtual string Format(Object obj, CultureInfo culture)
+        public virtual string Format(object obj, CultureInfo culture)
         {
             return obj.ToString();
         }
-        public virtual string Format(Object obj)
+        public virtual string Format(object obj)
         {
             return Format(obj, new StringBuilder(), 0).ToString();
         }
-        public virtual StringBuilder Format(Object obj, StringBuilder sb, int pos)
+
+        protected virtual StringBuilder Format(object obj, StringBuilder sb, int pos)
         {
-            return sb.Append(obj.ToString());
+            return sb.Append(obj);
         }
-        public abstract StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture);
+        public abstract StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture);
 
         //public abstract Object Parse(string source);
-        public abstract Object ParseObject(string source, int pos);
+        public abstract object ParseObject(string source, int pos);
         public TimeZoneInfo TimeZone
         {
             get;
@@ -46,7 +47,7 @@ namespace NPOI.SS.Util
     */
     public class SSNFormat : FormatBase
     {
-        public static FormatBase instance = new SSNFormat();
+        public static readonly FormatBase Instance = new SSNFormat();
         private static string df = "000000000";
         private SSNFormat()
         {
@@ -54,27 +55,28 @@ namespace NPOI.SS.Util
         }
 
         /** Format a number as an SSN */
-        public override String Format(object obj, CultureInfo culture)
+        public override string Format(object obj, CultureInfo culture)
         {
-            String result = ((double)obj).ToString(df, culture);
-            StringBuilder sb = new StringBuilder();
+            var result = ((double)obj).ToString(df, culture);
+            var sb = new StringBuilder();
             sb.Append(result.Substring(0, 3)).Append('-');
             sb.Append(result.Substring(3, 2)).Append('-');
             sb.Append(result.Substring(5, 4));
             return sb.ToString();
         }
-        public override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
+
+        protected override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
         {
             return toAppendTo.Append(Format(obj, CultureInfo.CurrentCulture));
         }
-        public override StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture)
+        public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
             return toAppendTo.Append(Format((long)obj, culture));
         }
 
-        public override Object ParseObject(String source, int pos)
+        public override object ParseObject(string source, int pos)
         {
-            string tmp = source.Substring(pos);
+            var tmp = source.Substring(pos);
             return long.Parse(tmp, CultureInfo.InvariantCulture);
         }
     }
@@ -86,7 +88,7 @@ namespace NPOI.SS.Util
      */
     public class ZipPlusFourFormat : FormatBase
     {
-        public static FormatBase instance = new ZipPlusFourFormat();
+        public static readonly FormatBase Instance = new ZipPlusFourFormat();
         private static string df = "000000000";
         private ZipPlusFourFormat()
         {
@@ -94,26 +96,23 @@ namespace NPOI.SS.Util
         }
 
         /** Format a number as Zip + 4 */
-        public override String Format(object obj, CultureInfo culture)
+        public override string Format(object obj, CultureInfo culture)
         {
-            String result = ((double)obj).ToString(df, culture);
-            StringBuilder sb = new StringBuilder();
-            sb.Append(result.Substring(0, 5)).Append('-');
-            sb.Append(result.Substring(5, 4));
-            return sb.ToString();
+            var result = ((double)obj).ToString(df, culture);
+            return result.Substring(0, 5)+'-'+result.Substring(5, 4);
         }
 
-        public override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
+        protected override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
         {
             return toAppendTo.Append(Format(obj, CultureInfo.CurrentCulture));
         }
 
-        public override StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture)
+        public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
             return toAppendTo.Append(Format(obj, culture));
         }
 
-        public override Object ParseObject(String source, int pos)
+        public override object ParseObject(string source, int pos)
         {
             string tmp = source.Substring(pos);
             return long.Parse(tmp, CultureInfo.InvariantCulture);
@@ -127,7 +126,7 @@ namespace NPOI.SS.Util
      */
     public class PhoneFormat : FormatBase
     {
-        public static FormatBase instance = new PhoneFormat();
+        public static readonly FormatBase Instance = new PhoneFormat();
         private static string df = "##########";
         private PhoneFormat()
         {
@@ -135,22 +134,22 @@ namespace NPOI.SS.Util
         }
 
         /** Format a number as a phone number */
-        public override String Format(object obj, CultureInfo culture)
+        public override string Format(object obj, CultureInfo culture)
         {
-            String result = ((double)obj).ToString(df, culture);
-            StringBuilder sb = new StringBuilder();
+            var result = ((double)obj).ToString(df, culture);
+            var sb = new StringBuilder();
             String seg1, seg2, seg3;
-            int len = result.Length;
+            var len = result.Length;
             if (len <= 4)
             {
                 return result;
             }
 
             seg3 = result.Substring(len - 4);
-            int beginpos = Math.Max(0, len - 7);
-            seg2 = result.Substring(Math.Max(0, len - 7), len - 4 - beginpos);
-            beginpos = Math.Max(0, len - 10);
-            seg1 = result.Substring(beginpos, Math.Max(0, len - 7) - beginpos);
+            var beginPos = Math.Max(0, len - 7);
+            seg2 = result.Substring(Math.Max(0, len - 7), len - 4 - beginPos);
+            beginPos = Math.Max(0, len - 10);
+            seg1 = result.Substring(beginPos, Math.Max(0, len - 7) - beginPos);
 
             if (seg1 != null && seg1.Trim().Length > 0)
             {
@@ -163,18 +162,19 @@ namespace NPOI.SS.Util
             sb.Append(seg3);
             return sb.ToString();
         }
-        public override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
+
+        protected override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
         {
             return toAppendTo.Append(Format(obj, CultureInfo.CurrentCulture));
         }
-        public override StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture)
+        public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
             return toAppendTo.Append(Format(obj, culture));
         }
 
-        public override Object ParseObject(String source, int pos)
+        public override object ParseObject(string source, int pos)
         {
-            string tmp = source.Substring(pos);
+            var tmp = source.Substring(pos);
             return long.Parse(tmp, CultureInfo.InvariantCulture);
         }
     }
@@ -186,26 +186,23 @@ namespace NPOI.SS.Util
 
         }
 
-        private string pattern;
-        private NumberFormatInfo formatInfo;
+        private string _pattern;
+        private NumberFormatInfo _formatInfo;
 
         public DecimalFormat(string pattern)
         {
             if (pattern.IndexOf("'", StringComparison.Ordinal) != -1)
                 throw new ArgumentException("invalid pattern");
-            this.pattern = pattern;
+            this._pattern = pattern;
         }
         public DecimalFormat(string pattern, NumberFormatInfo formatInfo)
             : this(pattern)
         {
-            this.formatInfo = formatInfo;
+            this._formatInfo = formatInfo;
         }
         public string Pattern
         {
-            get
-            {
-                return pattern;
-            }
+            get { return _pattern; }
         }
 
         private static readonly Regex RegexFraction = new Regex("#+/#+");
@@ -216,26 +213,24 @@ namespace NPOI.SS.Util
         public override string Format(object obj, CultureInfo culture)
         {
             //invalide fraction
-            pattern = RegexFraction.Replace(pattern, "/");
-            if (formatInfo != null)
+            _pattern = RegexFraction.Replace(_pattern, "/");
+            if (_formatInfo != null)
             {
                 culture = (CultureInfo)culture.Clone();
-                culture.NumberFormat = formatInfo;
+                culture.NumberFormat = _formatInfo;
             }
                 
-            if (pattern.IndexOf("'", StringComparison.Ordinal) != -1)
+            if (_pattern.IndexOf("'", StringComparison.Ordinal) != -1)
             {
-                //return ((double)obj).ToString();
                 return Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(culture);
             }
             else
             {
-                double value = Convert.ToDouble(obj, CultureInfo.InvariantCulture);
-                string ret = value.ToString(pattern, culture);
+                var value = Convert.ToDouble(obj, CultureInfo.InvariantCulture);
+                var ret = value.ToString(_pattern, culture);
                 if (string.IsNullOrEmpty(ret))
                     ret = "0";
                 return ret;
-                //return ((double)obj).ToString(pattern) ;
             }
         }
 
@@ -246,52 +241,105 @@ namespace NPOI.SS.Util
 
         public override object ParseObject(string source, int pos)
         {
-            return System.Decimal.Parse(source.Substring(pos), CultureInfo.CurrentCulture);
-        }
-        private bool _parseIntegerOnly = false;
-        public bool ParseIntegerOnly
-        {
-            get { return _parseIntegerOnly; }
-            set { _parseIntegerOnly = value; }
+            return Decimal.Parse(source.Substring(pos), CultureInfo.CurrentCulture);
         }
 
+        public bool ParseIntegerOnly {
+            get { return false;}
+        } 
     }
 
+    public abstract class DateFormat : FormatBase
+    {
+        public const int FULL = 0;
+        public const int LONG = 1;
+        public const int MEDIUM = 2;
+        public const int SHORT = 3;
+        public const int DEFAULT = MEDIUM;
+
+        public static string GetDateTimePattern(int dateStyle, int timeStyle, CultureInfo locale)
+        {
+            DateTimeFormatInfo dfi = locale.DateTimeFormat;
+            string datePattern = GetDatePattern(dateStyle,locale);
+            string timePattern = GetTimePattern(timeStyle, locale);
+
+            if (locale.TextInfo.IsRightToLeft)
+                return timePattern + " " + datePattern;
+            else
+                return datePattern + " " + timePattern;
+        }
+        public static string GetDatePattern(int dateStyle, CultureInfo locale)
+        {
+            DateTimeFormatInfo dfi = locale.DateTimeFormat;
+            switch (dateStyle)
+            {
+                case DateFormat.SHORT:
+                    return dfi.ShortDatePattern.Replace("yyyy", "yy").Replace("YYYY", "YY");
+                case DateFormat.MEDIUM:
+                    return dfi.ShortDatePattern;
+                case DateFormat.LONG:
+                    return dfi.LongDatePattern.Replace("dddd,", "").Trim();
+                case DateFormat.FULL:
+                    return dfi.LongDatePattern;
+                default:
+                    return dfi.ShortDatePattern;
+            }
+        }
+        public static string GetTimePattern(int timeStyle, CultureInfo locale)
+        {
+            DateTimeFormatInfo dfi = locale.DateTimeFormat;
+            switch (timeStyle)
+            {
+                case DateFormat.SHORT:
+                    return dfi.ShortTimePattern;
+                case DateFormat.MEDIUM:
+                case DateFormat.LONG:
+                case DateFormat.FULL:
+                default:
+                    return dfi.LongTimePattern;
+            }
+        }
+    }
     public class SimpleDateFormat : DateFormat
     {
-        protected string pattern;
-        private DateTimeFormatInfo formatData;
-        private CultureInfo culture;
-        public SimpleDateFormat()
-            : this("", CultureInfo.CurrentCulture)
+        private string _pattern;
+        private DateTimeFormatInfo _formatData;
+        private CultureInfo _culture;
+        public SimpleDateFormat():this("", CultureInfo.CurrentCulture)
         {
 
         }
-        public SimpleDateFormat(String pattern, CultureInfo culture)
+
+        public string Pattern
+        {
+            get { return _pattern; }
+        }
+
+        public SimpleDateFormat(string pattern, CultureInfo culture)
         {
             if (pattern == null || culture == null)
             {
                 throw new ArgumentNullException();
             }
-            this.pattern = pattern;
-            this.formatData = (DateTimeFormatInfo)culture.DateTimeFormat.Clone();
-            this.culture = culture;
+            this._pattern = pattern;
+            this._formatData = (DateTimeFormatInfo)culture.DateTimeFormat.Clone();
+            this._culture = culture;
         }
         
-        public SimpleDateFormat(String pattern, DateTimeFormatInfo formatSymbols)
+        public SimpleDateFormat(string pattern, DateTimeFormatInfo formatSymbols)
         {
             if (pattern == null || formatSymbols == null)
             {
                 throw new ArgumentNullException();
             }
-            this.pattern = pattern;
-            this.formatData = (DateTimeFormatInfo)formatSymbols.Clone();
-            this.culture = CultureInfo.CurrentCulture;
+            this._pattern = pattern;
+            this._formatData = (DateTimeFormatInfo)formatSymbols.Clone();
+            this._culture = CultureInfo.CurrentCulture;
         }
 
         public SimpleDateFormat(string pattern)
         {
-            this.pattern = pattern;
+            this._pattern = pattern;
         }
         public override string Format(Object obj)
         {
@@ -302,8 +350,7 @@ namespace NPOI.SS.Util
             DateTime dt = (DateTime)obj;
             if (TimeZone != null)
                 dt = TimeZoneInfo.ConvertTime(dt, TimeZone);
-            String result = dt.ToString(pattern, culture); //DateTimeFormatInfo.InvariantInfo
-            return result;
+            return  dt.ToString(_pattern, culture); 
         }
 
         public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
@@ -313,17 +360,13 @@ namespace NPOI.SS.Util
 
         public override object ParseObject(string source, int pos)
         {
-            DateTime dt = DateTime.Parse(source.Substring(pos), CultureInfo.InvariantCulture);
-            if (TimeZone != null)
-                return TimeZoneInfo.ConvertTime(dt, TimeZone);
-            return dt;
+            var dt = DateTime.Parse(source.Substring(pos), CultureInfo.InvariantCulture);
+            return TimeZone != null ? TimeZoneInfo.ConvertTime(dt, TimeZone) : dt;
         }
         public DateTime Parse(string source)
         {
-            DateTime dt = DateTime.Parse(source, CultureInfo.InvariantCulture);
-            if (TimeZone != null)
-                return TimeZoneInfo.ConvertTime(dt, TimeZone);
-            return dt;
+            var dt = DateTime.Parse(source, CultureInfo.InvariantCulture);
+            return TimeZone != null ? TimeZoneInfo.ConvertTime(dt, TimeZone) : dt;
         }
         
     }
@@ -340,8 +383,8 @@ namespace NPOI.SS.Util
     public class ConstantStringFormat : FormatBase
     {
         private static DecimalFormat df = new DecimalFormat("##########");
-        private String str;
-        public ConstantStringFormat(String s)
+        private string str;
+        public ConstantStringFormat(string s)
         {
             str = s;
         }
@@ -353,12 +396,12 @@ namespace NPOI.SS.Util
         {
             return str;
         }
-        public override StringBuilder Format(Object obj, StringBuilder toAppendTo, CultureInfo culture)
+        public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
             return toAppendTo.Append(str);
         }
 
-        public override Object ParseObject(String source, int pos)
+        public override object ParseObject(string source, int pos)
         {
             return df.ParseObject(source, pos);
         }

@@ -17,8 +17,6 @@
 namespace NPOI.POIFS.Crypt.Standard
 {
     using System;
-    using static NPOI.POIFS.Crypt.EncryptionInfo;
-    using NPOI.POIFS.Crypt;
     using NPOI.Util;
     using System.Text;
 
@@ -78,8 +76,8 @@ namespace NPOI.POIFS.Crypt.Standard
             KeySize = (keyBits);
             BlockSize = (blockSize);
             CipherProvider = (cipherAlgorithm.provider);
-            Flags = (flagCryptoAPI.SetBoolean(0, true)
-                    | flagAES.SetBoolean(0, cipherAlgorithm.provider == CipherProvider.aes));
+            Flags = (EncryptionInfo.flagCryptoAPI.SetBoolean(0, true)
+                     | EncryptionInfo.flagAES.SetBoolean(0, cipherAlgorithm.provider == CipherProvider.aes));
             // see http://msdn.microsoft.com/en-us/library/windows/desktop/bb931357(v=vs.85).aspx for a full list
             // SetCspName("Microsoft Enhanced RSA and AES Cryptographic Provider");
         }

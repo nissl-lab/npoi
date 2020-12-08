@@ -12,25 +12,15 @@ Get Started with NPOI
 ============
 https://github.com/tonyqus/npoi/wiki/Getting-Started-with-NPOI
 
-DON'T use dotnetcore/NPOI anymore
-========
-a. This project is NOT in maintainence for at least 2 years (no update after 2018)
-
-b. It's a migrated .net core version of [NPOI 2.2.1](https://www.nuget.org/packages/NPOI/2.2.1) (which is published 4 years ago)
-
-c. They betray the open source spirit. All the git history from NPOI team are deleted. Neuzilla studio info is removed. Original [Readme.txt](https://github.com/tonyqus/npoi/blob/master/Read%20Me.txt) is removed (all the contributors of NPOI are removed.)
-
 Contributors
 ============
-Big thanks to all NPOI contributors!!! 
-
-https://github.com/tonyqus/npoi/wiki/NPOI-Contributors
+Big thanks to all [NPOI contributors](https://github.com/tonyqus/npoi/wiki/NPOI-Contributors)!!! 
 
 Telegram User Group
 ================
 Join us on telegram: https://t.me/npoidevs
 
-NOTE: Stop using QQ or wechat since big brothers are watching you
+NOTE: QQ or wechat is not recommended.
 
 Advantage of NPOI
 =================
@@ -46,7 +36,7 @@ e. Support not only export but also import
 
 f. Real successful cases all over the world
 
-g. [huge amout of basic examples](https://github.com/tonyqus/npoi/tree/master/examples)
+g. [huge amout of basic examples](https://github.com/nissl-lab/npoi-examples)
 
 h. Works on both Windows and Linux [How to use NPOI in Linux](https://github.com/tonyqus/npoi/wiki/How-to-use-NPOI-on-Linux)
 
@@ -55,6 +45,3 @@ System Requirement
 .NET Standard 2.0 (.NET Core)
 
 .NET Framework 4.0 and above
-
-## License
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftonyqus%2Fnpoi.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftonyqus%2Fnpoi?ref=badge_large)

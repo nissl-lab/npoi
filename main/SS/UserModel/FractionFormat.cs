@@ -198,7 +198,7 @@ namespace NPOI.SS.UserModel
             return sb1.ToString();
         }
 
-        public override StringBuilder Format(Object obj, StringBuilder toAppendTo, int pos)
+        protected override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
         {
             return toAppendTo.Append(Format(obj.ToString()));
         }
@@ -208,7 +208,7 @@ namespace NPOI.SS.UserModel
             return this.Format(obj.ToString());
         }
 
-        public override Object ParseObject(String source, int pos)
+        public override object ParseObject(string source, int pos)
         {
             throw new NotImplementedException("Reverse parsing not supported");
         }

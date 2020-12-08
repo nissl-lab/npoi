@@ -17,8 +17,6 @@
 namespace NPOI.SS.Format
 {
     using System;
-    using System.Collections.Generic;
-    using static NPOI.SS.Format.CellNumberFormatter;
 
     /**
 * Internal helper class for CellNumberFormatter
@@ -38,29 +36,29 @@ namespace NPOI.SS.Format
         public const int AFTER = 2;
         public const int REPLACE = 3;
 
-        private Special special;
+        private CellNumberFormatter.Special special;
         private int op;
         //private CharSequence toAdd;
         private string toAdd;
-        private Special end;
+        private CellNumberFormatter.Special end;
         private bool startInclusive;
         private bool endInclusive;
 
-        public CellNumberStringMod(Special special, string toAdd, int op)
+        public CellNumberStringMod(CellNumberFormatter.Special special, string toAdd, int op)
         {
             this.special = special;
             this.toAdd = toAdd;
             this.op = op;
         }
 
-        public CellNumberStringMod(Special start, bool startInclusive, Special end, bool endInclusive, char toAdd)
+        public CellNumberStringMod(CellNumberFormatter.Special start, bool startInclusive, CellNumberFormatter.Special end, bool endInclusive, char toAdd)
                 : this(start, startInclusive, end, endInclusive)
         {
             ;
             this.toAdd = toAdd + "";
         }
 
-        public CellNumberStringMod(Special start, bool startInclusive, Special end, bool endInclusive)
+        public CellNumberStringMod(CellNumberFormatter.Special start, bool startInclusive, CellNumberFormatter.Special end, bool endInclusive)
         {
             special = start;
             this.startInclusive = startInclusive;
@@ -96,7 +94,7 @@ namespace NPOI.SS.Format
             return special.GetHashCode() + op;
         }
 
-        public Special GetSpecial()
+        public CellNumberFormatter.Special GetSpecial()
         {
             return special;
         }
@@ -117,7 +115,7 @@ namespace NPOI.SS.Format
             }
         }
 
-        public Special End
+        public CellNumberFormatter.Special End
         {
             get
             {

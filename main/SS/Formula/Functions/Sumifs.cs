@@ -18,7 +18,6 @@
  */
 using System;
 using NPOI.SS.Formula.Eval;
-using static NPOI.SS.Formula.Functions.Countif;
 
 namespace NPOI.SS.Formula.Functions
 {
@@ -69,7 +68,8 @@ namespace NPOI.SS.Formula.Functions
 
                 ValidateCriteriaRanges(ae, sumRange);
                 ValidateCriteria(mp);
-                double result = SumMatchingCells(ae, mp, sumRange);
+
+                double result = CalcMatchingCells(ae, mp, sumRange, 0.0, (init, current) => init + (current.HasValue ? current.Value : 0.0));
                 return new NumberEval(result);
             }
             catch (EvaluationException e)
@@ -77,22 +77,25 @@ namespace NPOI.SS.Formula.Functions
                 return e.GetErrorEval();
             }
         }
+
         /**
          * Verify that each <code>criteria</code> predicate is valid, i.e. not an error
          *
          * @throws EvaluationException if there are criteria which resulted in Errors.
          */
-        private void ValidateCriteria(IMatchPredicate[] criteria)
+        internal static void ValidateCriteria(IMatchPredicate[] criteria)
         {
             foreach (IMatchPredicate predicate in criteria)
             {
 
                 // check for errors in predicate and return immediately using this error code
-                if (predicate is ErrorMatcher) {
-                throw new EvaluationException(ErrorEval.ValueOf(((ErrorMatcher)predicate).Value));
+                if (predicate is NPOI.SS.Formula.Functions.Countif.ErrorMatcher)
+                {
+                    throw new EvaluationException(
+                        ErrorEval.ValueOf(((NPOI.SS.Formula.Functions.Countif.ErrorMatcher) predicate).Value));
+                }
             }
         }
-    }
 
         /**
          * Verify that each <code>criteriaRanges</code> argument contains the same number of rows and columns
@@ -100,7 +103,7 @@ namespace NPOI.SS.Formula.Functions
          *
          * @throws EvaluationException if
          */
-        private void ValidateCriteriaRanges(AreaEval[] criteriaRanges, AreaEval sumRange)
+        internal static void ValidateCriteriaRanges(AreaEval[] criteriaRanges, AreaEval sumRange)
         {
             foreach (AreaEval r in criteriaRanges)
             {
@@ -120,12 +123,12 @@ namespace NPOI.SS.Formula.Functions
          *
          * @return the computed value
          */
-        private static double SumMatchingCells(AreaEval[] ranges, IMatchPredicate[] predicates, AreaEval aeSum)
+        internal static double CalcMatchingCells(AreaEval[] ranges, IMatchPredicate[] predicates, AreaEval aeSum, double initialValue, System.Func<double, double?, double> calc)
         {
             int height = aeSum.Height;
             int width = aeSum.Width;
 
-            double result = 0.0;
+            double result = initialValue;
             for (int r = 0; r < height; r++)
             {
                 for (int c = 0; c < width; c++)
@@ -147,15 +150,17 @@ namespace NPOI.SS.Formula.Functions
 
                     if (matches)
                     { // sum only if all of the corresponding criteria specified are true for that cell.
-                        result += Accumulate(aeSum, r, c);
+                        result = calc(result, ReadValue(aeSum, r, c));
                     }
                 }
             }
             return result;
         }
 
-        private static double Accumulate(AreaEval aeSum, int relRowIndex,
-                int relColIndex)
+        /**
+         * Reads the numeric values from the row/col of the specified area - other values return the indicated missing value.
+         */
+        private static double? ReadValue(AreaEval aeSum, int relRowIndex, int relColIndex)
         {
 
             ValueEval addend = aeSum.GetRelativeValue(relRowIndex, relColIndex);
@@ -164,10 +169,10 @@ namespace NPOI.SS.Formula.Functions
                 return ((NumberEval)addend).NumberValue;
             }
             // everything else (including string and boolean values) counts as zero
-            return 0.0;
+            return null;
         }
 
-        private static AreaEval ConvertRangeArg(ValueEval eval)
+        internal static AreaEval ConvertRangeArg(ValueEval eval)
         {
             if (eval is AreaEval)
             {

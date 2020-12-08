@@ -218,6 +218,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
+
         private void Validate(String address)
         {
             switch (_type)
@@ -226,8 +227,9 @@ namespace NPOI.XSSF.UserModel
                 case HyperlinkType.Email:
                 case HyperlinkType.File:
                 case HyperlinkType.Url:
-                        if(!Uri.TryCreate(address,UriKind.RelativeOrAbsolute,out Uri uri))
-                            throw new ArgumentException("Address of hyperlink must be a valid URI:" + address);
+                    Uri uri;
+                    if (!Uri.TryCreate(address, UriKind.RelativeOrAbsolute, out uri))
+                        throw new ArgumentException("Address of hyperlink must be a valid URI:" + address);
                     break;
                 case HyperlinkType.Document:
                     // currently not evaluating anything.
@@ -238,6 +240,7 @@ namespace NPOI.XSSF.UserModel
                     throw new InvalidOperationException("Invalid Hyperlink type: " + _type);
             }
         }
+
         /**
          * Return text label for this hyperlink
          *

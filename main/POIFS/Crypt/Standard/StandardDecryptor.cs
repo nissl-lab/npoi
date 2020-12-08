@@ -310,7 +310,10 @@ namespace NPOI.POIFS.Crypt.Standard
 
     public class NullBufferedCipher : IBufferedCipher
     {
-        public string AlgorithmName => "Null";
+        public string AlgorithmName
+        {
+            get { return "Null"; }
+        }
 
         public byte[] DoFinal()
         {

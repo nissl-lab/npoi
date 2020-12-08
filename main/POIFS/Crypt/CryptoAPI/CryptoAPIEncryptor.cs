@@ -27,7 +27,6 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
     using NPOI.POIFS.Crypt.Standard;
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
-    using static NPOI.POIFS.Crypt.CryptoAPI.CryptoAPIDecryptor;
 
     public class CryptoAPIEncryptor : Encryptor
     {
@@ -106,17 +105,17 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
             DocumentSummaryInformation.DEFAULT_STREAM_NAME
         };
 
-            List<StreamDescriptorEntry> descList = new List<StreamDescriptorEntry>();
+            List<CryptoAPIDecryptor.StreamDescriptorEntry> descList = new List<CryptoAPIDecryptor.StreamDescriptorEntry>();
 
             int block = 0;
             foreach (String entryName in entryNames)
             {
                 if (!dir.HasEntry(entryName)) continue;
-                StreamDescriptorEntry descEntry = new StreamDescriptorEntry();
+                CryptoAPIDecryptor.StreamDescriptorEntry descEntry = new CryptoAPIDecryptor.StreamDescriptorEntry();
                 descEntry.block = block;
                 descEntry.streamOffset = (int)bos.Length;
                 descEntry.streamName = entryName;
-                descEntry.flags = StreamDescriptorEntry.flagStream.SetValue(0, 1);
+                descEntry.flags = CryptoAPIDecryptor.StreamDescriptorEntry.flagStream.SetValue(0, 1);
                 descEntry.reserved2 = 0;
 
                 bos.SetBlock(block);
@@ -138,7 +137,7 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
             LittleEndian.PutUInt(buf, 0, descList.Count);
             bos.Write(buf, 0, 4);
 
-            foreach (StreamDescriptorEntry sde in descList)
+            foreach (CryptoAPIDecryptor.StreamDescriptorEntry sde in descList)
             {
                 LittleEndian.PutUInt(buf, 0, sde.streamOffset);
                 bos.Write(buf, 0, 4);

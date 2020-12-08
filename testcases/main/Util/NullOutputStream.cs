@@ -26,14 +26,23 @@ namespace TestCases.Util
         public NullOutputStream()
         {
         }
-
-        public override bool CanRead => false;
-
-        public override bool CanSeek => true;
-
-        public override bool CanWrite => true;
+        public override bool CanRead
+        {
+            get { return false;}
+        }
+        public override bool CanSeek
+        {
+            get { return true;}
+        }
+        public override bool CanWrite
+        {
+            get { return true;}
+        }
         private long _length;
-        public override long Length { get { return _length; } }
+        public override long Length
+        {
+            get { return _length; }
+        }
 
         public override long Position { get; set; }
 

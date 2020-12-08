@@ -8,35 +8,34 @@ text from Office documents to help you implement full-text indexing feature (mos
 used to create search engines).
 
 =========================
-* Neuzilla Introduction *
+* Nissl Introduction *
 =========================
-Neuzilla is the studio behind NPOI. While using NPOI, you are becoming one of Neuzilla's clients. 
-
-For commercial cooperation or support service consulting, please contact support@neuzilla.com
+NPOI was used to be maintained by Neuzilla ( Tony's first startup company).  After Neuzilla is closed in 2018, Nissl Lab maintains NPOI. 
+Nissl Lab is a NGO org created by Nissl LLC. The trademake NPOI is hold by Nissl in order to avoid abuse. 
 
 ==================
-*  NPOI Website *
+*  NPOI Source Code *
 ==================
-https://github.com/tonyqus/npoi/ (Latest source code available)
-http://npoi.codeplex.com (Deprecated)
+https://github.com/nissl-lab/npoi/ 
 
+
+==================
+* LICENSE COMPLIANCE *
+==================
+You are NOT allowed to remove NPOI logo or Nissl/Neuzilla brand (even text). This is a must of Apache license. This shows basic respects to the previous contributors of NPOI. 
+You must state that you are using NPOI no matter you are creating a commercial product or an open source project. 
 
 ======================
 * System Requirement *
 ======================
-VS2017
-VS2013
-VS2010 with .NET 2.0 or .NET 4.0
-VS2005 or VS2008 with .NET 2.0 Runtime (SP1) (Deprecated)
-vs2003 with .NET 1.1 (Deprecated)
+VS2015 and above
 medium trust environment in ASP.NET
 
 =================
-*  Neuzilla on Internet  *
+*  Nissl in social network *
 =================
-Homepage on Linkedin: http://www.linkedin.com/company/neuzilla
-User Group on Linkedin: http://www.linkedin.com/groups/NPOI-User-Group-6655065 
-QQ Group: 116053476 
+Linkedin: https://www.linkedin.com/company/nissl
+Github: https://github.com/nissl-lab
 
 ================
 * Team Members *
@@ -50,7 +49,7 @@ Time Zone: GMT+8
 --------------------------------------------------------------------------------
 NPOI 1.2.1
 --------------------------------------------------------------------------------
-H��seyin T��fekcilerli - developer
+Huseyin Turfekcilerli - developer
 --------------------
 From: Istanbul, Turkey
 Participated since Nov, 2008
@@ -132,12 +131,7 @@ Phil Rykoff - developer
 ------------------------------
 Main contribution: XSSF bug fixing and feature implement
 
-NPOI 2.2
+NPOI 2.2 ~ 2.5.2
 --------------------------------------------------------------------------------
 Antony
 Tony Qu
-
-==================
-* How to join us *
-==================
-If you are interested in this project and want to join me, please write mail to npoi@neuzilla.com

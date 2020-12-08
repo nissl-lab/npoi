@@ -126,7 +126,7 @@ namespace NPOI.SS.Formula.Eval
             retval[26] = NumericFunction.SIGN; // SIGN
             retval[27] = NumericFunction.ROUND; // ROUND
             retval[28] = new Lookup(); // LOOKUP
-            retval[29] = new Index(); // INDEX
+            retval[29] = new NPOI.SS.Formula.Functions.Index(); // INDEX
             retval[30] = new Rept(); // REPT
             retval[31] = TextFunction.MID; // MID
             retval[32] = TextFunction.LEN; // LEN
