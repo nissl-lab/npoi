@@ -34,13 +34,16 @@ namespace NPOI.XSSF.Streaming
         internal XSSFSheet _sh;
         private SXSSFWorkbook _workbook;
         //private TreeMap<Integer, SXSSFRow> _rows = new TreeMap<Integer, SXSSFRow>();
-        private SortedDictionary<int, SXSSFRow> _rows = new SortedDictionary<int, SXSSFRow>();
+        private IDictionary<int, SXSSFRow> _rows = new Dictionary<int, SXSSFRow>();
         private SheetDataWriter _writer;
         private int _randomAccessWindowSize = SXSSFWorkbook.DEFAULT_WINDOW_SIZE;
         private Lazy<AutoSizeColumnTracker> _autoSizeColumnTracker;
         private int outlineLevelRow = 0;
         private int lastFlushedRowNumber = -1;
         private bool allFlushed = false;
+
+        private int _FirstRowNum = -1;
+        private int _LastRowNum = -1;
 
 
         public SXSSFSheet(SXSSFWorkbook workbook, XSSFSheet xSheet)
@@ -190,7 +193,7 @@ namespace NPOI.XSSF.Streaming
             {
                 if (_writer.NumberOfFlushedRows > 0)
                     return _writer.LowestIndexOfFlushedRows;
-                return _rows.Count == 0 ? 0 : _rows.Keys.First();
+                return _rows.Count == 0 ? 0 : _FirstRowNum;
             }
         }
 
@@ -305,7 +308,9 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                return _rows.Count == 0 ? 0 : _rows.Keys.Last();
+                if (_rows.Count == 0)
+                    return _writer.NumberOfFlushedRows > 0 ? LastFlushedRowNumber : 0;
+                return  _LastRowNum;
             }
         }
 
@@ -674,6 +679,9 @@ namespace NPOI.XSSF.Streaming
 
             SXSSFRow newRow = new SXSSFRow(this);
             _rows[rownum] = newRow;
+
+            UpdateIndexWhenAdd(rownum);
+
             allFlushed = false;
             if (_randomAccessWindowSize >= 0 && _rows.Count > _randomAccessWindowSize)
             {
@@ -687,6 +695,19 @@ namespace NPOI.XSSF.Streaming
                 }
             }
             return newRow;
+        }
+
+        private void UpdateIndexWhenAdd(int rownum)
+        {
+            if (_FirstRowNum == -1 || rownum < _FirstRowNum)
+            {
+                _FirstRowNum = rownum;
+            }
+
+            if (rownum > _LastRowNum)
+            {
+                _LastRowNum = rownum;
+            }
         }
 
         public void CreateSplitPane(int xSplitPos, int ySplitPos, int leftmostColumn, int topRow, PanePosition activePane)
@@ -757,7 +778,7 @@ namespace NPOI.XSSF.Streaming
 
         public IEnumerator GetEnumerator()
         {
-            return (IEnumerator<IRow>)_rows.Values.GetEnumerator();
+            return (IEnumerator<IRow>)new SortedDictionary<int,SXSSFRow>(_rows).Values.GetEnumerator();
         }
 
         public double GetMargin(MarginType margin)
@@ -889,6 +910,10 @@ namespace NPOI.XSSF.Streaming
         }
         public void RemoveRow(IRow row)
         {
+            if (row == null)
+            {
+                throw new ArgumentException("Invalid row (null)");
+            }
             if (row.Sheet != this)
             {
                 throw new ArgumentException("Specified row does not belong to this sheet");
@@ -901,9 +926,56 @@ namespace NPOI.XSSF.Streaming
                     toRemove.Add(kv.Key);
                 }
             }
+
+            var invalidatedFirst = false;
+            var invalidatedLast = false;
             foreach(var key in toRemove)
             {
+                if (key == _FirstRowNum)
+                {
+                    invalidatedFirst = true;
+                }
+
+                if (key >= (_LastRowNum -1))
+                {
+                    invalidatedLast = true;
+                }
                 _rows.Remove(key);
+            }
+
+            if (invalidatedFirst)
+            {
+                InvalidateFirstRowNum();
+            }
+
+            if (invalidatedLast)
+            {
+                InvalidateLastRowNum();
+            }
+            
+        }
+
+        private void InvalidateFirstRowNum()
+        {
+            if (_rows.Count == 0)
+            {
+                _FirstRowNum = -1;
+            }
+            else
+            {
+                _FirstRowNum = _rows.Keys.Min();
+            }
+        }
+        
+        private void InvalidateLastRowNum()
+        {
+            if (_rows.Count == 0)
+            {
+                _LastRowNum = -1;
+            }
+            else
+            {
+                _LastRowNum = _rows.Keys.Max();
             }
         }
 
@@ -1236,6 +1308,7 @@ namespace NPOI.XSSF.Streaming
 
             RemoveRow(row);
             _rows.Add(newRowNum, row);
+            UpdateIndexWhenAdd(newRowNum);
         }
 
         public bool Dispose()
@@ -1245,21 +1318,27 @@ namespace NPOI.XSSF.Streaming
         }
         /**
  * Specifies how many rows can be accessed at most via getRow().
- * The exeeding rows (if any) are flushed to the disk while rows
+ * The exceeding rows (if any) are flushed to the disk while rows
  * with lower index values are flushed first.
  */
         private void FlushRows(int remaining, bool flushOnDisk)
         {
             KeyValuePair<int, SXSSFRow>? lastRow = null;
             var flushedRowsCount = 0;
+            
             while (_rows.Count > remaining)
             {
                 flushedRowsCount++;
                 lastRow = flushOneRow();
             }
+            
+            InvalidateFirstRowNum();
+            InvalidateLastRowNum();
+
             if (remaining == 0) 
                 allFlushed = true;
 
+            //TODO: review this.
             if (lastRow != null && flushOnDisk)
                 _writer.FlushRows(flushedRowsCount, lastRow.Value.Key, lastRow.Value.Value.LastCellNum);
        }
@@ -1294,30 +1373,14 @@ namespace NPOI.XSSF.Streaming
             if (_rows.Count == 0)
                 return null;
 
-            var firstRow = _rows.FirstOrDefault();
+            var firstRowNum = _rows.Keys.Min();
             // Update the best fit column widths for auto-sizing just before the rows are flushed
             // _autoSizeColumnTracker.UpdateColumnWidths(row);
-            _writer.WriteRow(firstRow.Key, firstRow.Value);
-            _rows.Remove(firstRow.Key);
-            lastFlushedRowNumber = firstRow.Key;
-            return firstRow;
-        }
-
-        private void FlushOneRow()
-        {
-            KeyValuePair<int, SXSSFRow> firstRow = _rows.FirstOrDefault();
-            //KeyValuePair is struct, so check value instead of key
-            if (firstRow.Value != null)
-            {
-                int firstRowNum = firstRow.Key;
-                int rowIndex = firstRowNum;
-                SXSSFRow row = _rows[firstRowNum];
-                // Update the best fit column widths for auto-sizing just before the rows are flushed
-                //_autoSizeColumnTracker.UpdateColumnWidths(row);
-                _writer.WriteRow(rowIndex, row);
-                _rows.Remove(firstRowNum);
-                lastFlushedRowNumber = rowIndex;
-            }
+            var firstRow = _rows[firstRowNum];
+            _writer.WriteRow(firstRowNum, firstRow);
+            _rows.Remove(firstRowNum);
+            lastFlushedRowNumber = firstRowNum;
+            return new KeyValuePair<int, SXSSFRow>(firstRowNum,firstRow);
         }
 
         /* Gets "<sheetData>" document fragment*/

@@ -26,12 +26,13 @@ namespace NPOI.XSSF.Streaming
     public class SXSSFRow : IRow, IComparable<SXSSFRow>
     {
         private SXSSFSheet _sheet; // parent sheet
-        private SortedDictionary<int, SXSSFCell> _cells = new SortedDictionary<int, SXSSFCell>();
+        private IDictionary<int, SXSSFCell> _cells = new Dictionary<int, SXSSFCell>();
         private short _style = -1; // index of cell style in style table
         private bool _zHeight; // row zero-height (this is somehow different than being hidden)
         private float _height = -1;
 
-
+        private int _FirstCellNum = -1;
+        private int _LastCellNum = -1;
         // use Boolean to have a tri-state for on/off/undefined 
         public bool? Hidden { get; set; }
         public bool? Collapsed { get; set; }
@@ -43,7 +44,7 @@ namespace NPOI.XSSF.Streaming
         
         public CellIterator AllCellsIterator()
         {
-            return new CellIterator(LastCellNum, _cells);
+            return new CellIterator(LastCellNum,  new SortedDictionary<int, SXSSFCell>(_cells));
         }
         public bool HasCustomHeight()
         {
@@ -61,12 +62,11 @@ namespace NPOI.XSSF.Streaming
             {
                 try
                 {
-                    return (short) _cells.First().Key;
+                    return (short) _FirstCellNum;
                 }
                 catch
                 {
                     return -1;
-
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                return _cells.Count == 0 ? (short)-1 : Convert.ToInt16(_cells.Last().Key + 1);
+                return (short) _LastCellNum;
 
             }
         }
@@ -243,7 +243,21 @@ namespace NPOI.XSSF.Streaming
             CheckBounds(column);
             SXSSFCell cell = new SXSSFCell(this, type);
             _cells[column] = cell;
+            UpdateIndexWhenAdd(column);
             return cell;
+        }
+
+        private void UpdateIndexWhenAdd(int cellnum)
+        {
+            if (cellnum < _FirstCellNum || _FirstCellNum == -1)
+            {
+                _FirstCellNum = cellnum;
+            }
+
+            if (cellnum >= _LastCellNum)
+            {
+                _LastCellNum = cellnum + 1;
+            }
         }
 
 
@@ -276,6 +290,7 @@ namespace NPOI.XSSF.Streaming
             SXSSFCell cell = null;
             if (_cells.ContainsKey(cellnum))
                 cell = _cells[cellnum];
+            
             switch (policy)
             {
                 case MissingCellPolicy.RETURN_NULL_AND_BLANK:
@@ -292,7 +307,7 @@ namespace NPOI.XSSF.Streaming
         }
         public IEnumerator<ICell> GetEnumerator()
         {
-            return new FilledCellIterator(_cells);
+            return new FilledCellIterator(new SortedDictionary<int, SXSSFCell>(_cells));
         }
 
         public void MoveCell(ICell cell, int newColumn)
@@ -304,7 +319,42 @@ namespace NPOI.XSSF.Streaming
         {
             int index = GetCellIndex((SXSSFCell)cell);
             _cells.Remove(index);
+            if (index == _FirstCellNum)
+            {
+                InvalidateFirstCellNum();
+            }
+
+            if (index >= (_LastCellNum -1))
+            {
+                InvalidateLastCellNum();
+            }
         }
+        
+        private void InvalidateFirstCellNum()
+        {
+            if (_cells.Keys.Count == 0)
+            {
+                _FirstCellNum = 0;
+            }
+            else
+            {
+                _FirstCellNum = _cells.Keys.Min();
+            }
+        }
+        
+        private void InvalidateLastCellNum()
+        {
+            if (_cells.Count == 0)
+            {
+                _LastCellNum = 0;
+            }
+            else
+            {
+                _LastCellNum = _cells.Keys.Max() + 1;
+            }
+        }
+
+        
         /**
          * Return the column number of a cell if it is in this row
          * Otherwise return -1
@@ -325,6 +375,7 @@ namespace NPOI.XSSF.Streaming
             return -1;
         }
 
+        
         IEnumerator IEnumerable.GetEnumerator()
         {
             throw new NotImplementedException();
