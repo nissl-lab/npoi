@@ -10,11 +10,11 @@ This project is the .NET version of POI Java project. With NPOI, you can read/wr
 
 Get Started with NPOI
 ============
-https://github.com/tonyqus/npoi/wiki/Getting-Started-with-NPOI
+https://github.com/nissl-lab/npoi/wiki/Getting-Started-with-NPOI
 
 Contributors
 ============
-Big thanks to all [NPOI contributors](https://github.com/tonyqus/npoi/wiki/NPOI-Contributors)!!! 
+Big thanks to all [NPOI contributors](https://github.com/nissl-lab/npoi/wiki/NPOI-Contributors)!!! 
 
 Telegram User Group
 ================
@@ -38,7 +38,7 @@ f. Real successful cases all over the world
 
 g. [huge amout of basic examples](https://github.com/nissl-lab/npoi-examples)
 
-h. Works on both Windows and Linux [How to use NPOI in Linux](https://github.com/tonyqus/npoi/wiki/How-to-use-NPOI-on-Linux)
+h. Works on both Windows and Linux [How to use NPOI in Linux](https://github.com/nissl-lab/npoi/wiki/How-to-use-NPOI-on-Linux)
 
 System Requirement
 ===================
