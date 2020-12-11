@@ -3,7 +3,6 @@ NPOI
 [![NuGet Version](https://img.shields.io/nuget/v/NPOI.svg?style=flat)](https://www.nuget.org/packages/NPOI/)
 [![NuGet](https://img.shields.io/nuget/dt/NPOI.svg)](https://www.nuget.org/packages/NPOI) 
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftonyqus%2Fnpoi.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftonyqus%2Fnpoi?ref=badge_shield)
 [![Analytics](https://ga-beacon.appspot.com/UA-39118634-1/readme)](https://github.com/tonyqus/npoi)
 <br />
 This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
