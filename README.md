@@ -15,6 +15,10 @@ Contributors
 ============
 Big thanks to all [NPOI contributors](https://github.com/nissl-lab/npoi/wiki/NPOI-Contributors)!!! 
 
+Donation
+=========
+If this project help you reduce time to develop, you can give me a cup of beer [🍺 Donate](https://www.paypal.com/paypalme/tonyqus/10)
+
 Telegram User Group
 ================
 Join us on telegram: https://t.me/npoidevs
