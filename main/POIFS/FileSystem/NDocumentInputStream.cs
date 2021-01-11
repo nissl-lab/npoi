@@ -291,7 +291,10 @@ namespace NPOI.POIFS.FileSystem
                 {
                     _current_block_count++;
                     //_buffer = _data.next();
-                    _data.MoveNext();
+                    if(!_data.MoveNext())
+                    {
+                        return;
+                    }
                     _buffer = _data.Current;
 
                 }
