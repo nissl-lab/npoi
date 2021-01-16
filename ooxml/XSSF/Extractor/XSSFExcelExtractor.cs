@@ -219,9 +219,7 @@ namespace NPOI.XSSF.Extractor
                         bool firsttime = true;
                         for (int j = 0; j < row.LastCellNum; j++)
                         {
-                            ICell cell = row.GetCell(j);
-                            if (cell == null)
-                                continue;
+                            // Add a tab delimiter for each empty cell.
                             if (!firsttime)
                             {
                                 text.Append("\t");
@@ -230,7 +228,10 @@ namespace NPOI.XSSF.Extractor
                             {
                                 firsttime = false;
                             }
-                            
+
+                            ICell cell = row.GetCell(j);
+                            if (cell == null)
+                                continue;
 
                             // Is it a formula one?
                             if (cell.CellType == CellType.Formula)
