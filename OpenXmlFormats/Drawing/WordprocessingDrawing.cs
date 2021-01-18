@@ -1206,17 +1206,17 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             if (node == null)
                 return null;
             CT_Anchor ctObj = new CT_Anchor();
-            ctObj.distT = XmlHelper.ReadUInt(node.Attributes["wp:distT"]);
-            ctObj.distB = XmlHelper.ReadUInt(node.Attributes["wp:distB"]);
-            ctObj.distL = XmlHelper.ReadUInt(node.Attributes["wp:distL"]);
-            ctObj.distR = XmlHelper.ReadUInt(node.Attributes["wp:distR"]);
-            ctObj.simplePos1 = XmlHelper.ReadBool(node.Attributes["wp:simplePos1"]);
-            ctObj.relativeHeight = XmlHelper.ReadUInt(node.Attributes["wp:relativeHeight"]);
-            ctObj.behindDoc = XmlHelper.ReadBool(node.Attributes["wp:behindDoc"]);
-            ctObj.locked = XmlHelper.ReadBool(node.Attributes["wp:locked"]);
-            ctObj.layoutInCell = XmlHelper.ReadBool(node.Attributes["wp:layoutInCell"]);
-            ctObj.hidden = XmlHelper.ReadBool(node.Attributes["wp:hidden"]);
-            ctObj.allowOverlap = XmlHelper.ReadBool(node.Attributes["wp:allowOverlap"]);
+            ctObj.distT = XmlHelper.ReadUInt(node.Attributes["distT"]);
+            ctObj.distB = XmlHelper.ReadUInt(node.Attributes["distB"]);
+            ctObj.distL = XmlHelper.ReadUInt(node.Attributes["distL"]);
+            ctObj.distR = XmlHelper.ReadUInt(node.Attributes["distR"]);
+            ctObj.simplePos1 = XmlHelper.ReadBool(node.Attributes["simplePos"]);
+            ctObj.relativeHeight = XmlHelper.ReadUInt(node.Attributes["relativeHeight"]);
+            ctObj.behindDoc = XmlHelper.ReadBool(node.Attributes["behindDoc"]);
+            ctObj.locked = XmlHelper.ReadBool(node.Attributes["locked"]);
+            ctObj.layoutInCell = XmlHelper.ReadBool(node.Attributes["layoutInCell"]);
+            ctObj.hidden = XmlHelper.ReadBool(node.Attributes["hidden"]);
+            ctObj.allowOverlap = XmlHelper.ReadBool(node.Attributes["allowOverlap"]);
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "simplePos")
@@ -1227,6 +1227,10 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
                     ctObj.positionV = CT_PosV.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "extent")
                     ctObj.extent = CT_PositiveSize2D.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "wrapSquare")
+                    ctObj.wrapSquare = CT_WrapSquare.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "wrapNone")
+                    ctObj.wrapNone = new CT_WrapNone();
                 else if (childNode.LocalName == "effectExtent")
                     ctObj.effectExtent = CT_EffectExtent.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "docPr")
@@ -1244,17 +1248,17 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<wp:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "wp:distT", this.distT);
-            XmlHelper.WriteAttribute(sw, "wp:distB", this.distB);
-            XmlHelper.WriteAttribute(sw, "wp:distL", this.distL);
-            XmlHelper.WriteAttribute(sw, "wp:distR", this.distR);
-            XmlHelper.WriteAttribute(sw, "wp:simplePos1", this.simplePos1);
-            XmlHelper.WriteAttribute(sw, "wp:relativeHeight", this.relativeHeight);
-            XmlHelper.WriteAttribute(sw, "wp:behindDoc", this.behindDoc);
-            XmlHelper.WriteAttribute(sw, "wp:locked", this.locked);
-            XmlHelper.WriteAttribute(sw, "wp:layoutInCell", this.layoutInCell);
-            XmlHelper.WriteAttribute(sw, "wp:hidden", this.hidden);
-            XmlHelper.WriteAttribute(sw, "wp:allowOverlap", this.allowOverlap);
+            XmlHelper.WriteAttribute(sw, "distT", this.distT);
+            XmlHelper.WriteAttribute(sw, "distB", this.distB);
+            XmlHelper.WriteAttribute(sw, "distL", this.distL);
+            XmlHelper.WriteAttribute(sw, "distR", this.distR);
+            XmlHelper.WriteAttribute(sw, "simplePos", this.simplePos1);
+            XmlHelper.WriteAttribute(sw, "relativeHeight", this.relativeHeight);
+            XmlHelper.WriteAttribute(sw, "behindDoc", this.behindDoc);
+            XmlHelper.WriteAttribute(sw, "locked", this.locked);
+            XmlHelper.WriteAttribute(sw, "layoutInCell", this.layoutInCell);
+            XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
+            XmlHelper.WriteAttribute(sw, "allowOverlap", this.allowOverlap);
             sw.Write(">");
             if (this.simplePos != null)
                 this.simplePos.Write(sw, "simplePos");
@@ -1266,6 +1270,10 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
                 this.extent.Write(sw, "extent");
             if (this.effectExtent != null)
                 this.effectExtent.Write(sw, "effectExtent");
+            if (this.wrapSquare != null)
+                this.wrapSquare.Write(sw, "wrapSquare");
+            if (this.wrapNone != null)
+                this.wrapNone.Write(sw, "wrapNone");
             if (this.docPr != null)
                 this.docPr.Write(sw, "docPr");
             if (this.cNvGraphicFramePr != null)
@@ -1277,7 +1285,6 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
 
     }
 
-    
     [Serializable]
     
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
@@ -1289,11 +1296,18 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             if (node == null)
                 return null;
             CT_PosH ctObj = new CT_PosH();
-            ctObj.posOffset = XmlHelper.ReadInt(node.Attributes["wp:posOffset"]);
-            if (node.Attributes["wp:align"] != null)
-                ctObj.align = (ST_AlignH)Enum.Parse(typeof(ST_AlignH), node.Attributes["wp:align"].Value);
-            if (node.Attributes["wp:relativeFrom"] != null)
-                ctObj.relativeFrom = (ST_RelFromH)Enum.Parse(typeof(ST_RelFromH), node.Attributes["wp:relativeFrom"].Value);
+
+            if (node.Attributes["relativeFrom"] != null)
+                ctObj.relativeFrom = (ST_RelFromH)Enum.Parse(typeof(ST_RelFromH), node.Attributes["relativeFrom"].Value);
+
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "posOffset")
+                    ctObj.posOffset = int.TryParse(childNode.InnerText, out var i ) ? i : (int?)null;
+                else if (childNode.LocalName == "align")
+                    ctObj.align = (ST_AlignH)Enum.Parse(typeof(ST_AlignH), childNode.InnerText);
+            }
+
             return ctObj;
         }
 
@@ -1302,24 +1316,29 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<wp:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "wp:posOffset", this.posOffset);
-            XmlHelper.WriteAttribute(sw, "wp:align", this.align.ToString());
-            XmlHelper.WriteAttribute(sw, "wp:relativeFrom", this.relativeFrom.ToString());
+            XmlHelper.WriteAttribute(sw, "relativeFrom", this.relativeFrom.ToString());
             sw.Write(">");
+
+            if (this.posOffset != null)
+                sw.Write(string.Format("<wp:posOffset>{0}</wp:posOffset>", this.posOffset.Value));
+
+            if (this.align != null)
+                sw.Write(string.Format("<wp:align>{0}</wp:align>", this.align.Value));
+
             sw.Write(string.Format("</wp:{0}>", nodeName));
         }
 
         private ST_RelFromH relativeFromField;
 
-        Int32 posOffsetField;
-        public Int32 posOffset
+        int? posOffsetField;
+        public int? posOffset
         {
             get { return this.posOffsetField; }
             set { this.posOffsetField = value; }
         }
 
-        ST_AlignH alignField;
-        public ST_AlignH align
+        ST_AlignH? alignField;
+        public ST_AlignH? align
         {
             get { return this.alignField; }
             set { this.alignField = value; }
@@ -1406,11 +1425,18 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             if (node == null)
                 return null;
             CT_PosV ctObj = new CT_PosV();
-            ctObj.posOffset = XmlHelper.ReadInt(node.Attributes["wp:posOffset"]);
-            if (node.Attributes["wp:align"] != null)
-                ctObj.align = (ST_AlignV)Enum.Parse(typeof(ST_AlignV), node.Attributes["wp:align"].Value);
-            if (node.Attributes["wp:relativeFrom"] != null)
-                ctObj.relativeFrom = (ST_RelFromV)Enum.Parse(typeof(ST_RelFromV), node.Attributes["wp:relativeFrom"].Value);
+
+            if (node.Attributes["relativeFrom"] != null)
+                ctObj.relativeFrom = (ST_RelFromV)Enum.Parse(typeof(ST_RelFromV), node.Attributes["relativeFrom"].Value);
+
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "posOffset")
+                    ctObj.posOffset = int.TryParse(childNode.InnerText, out var i) ? i : (int?)null;
+                else if (childNode.LocalName == "align")
+                    ctObj.align = (ST_AlignV)Enum.Parse(typeof(ST_AlignV), childNode.InnerText);
+            }
+
             return ctObj;
         }
 
@@ -1419,24 +1445,29 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<wp:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "wp:posOffset", this.posOffset);
-            XmlHelper.WriteAttribute(sw, "wp:align", this.align.ToString());
-            XmlHelper.WriteAttribute(sw, "wp:relativeFrom", this.relativeFrom.ToString());
+            XmlHelper.WriteAttribute(sw, "relativeFrom", this.relativeFrom.ToString());
             sw.Write(">");
+
+            if (this.posOffset != null)
+                sw.Write(string.Format("<wp:posOffset>{0}</wp:posOffset>", this.posOffset.Value));
+
+            if (this.align != null)
+                sw.Write(string.Format("<wp:align>{0}</wp:align>", this.align.Value));
+
             sw.Write(string.Format("</wp:{0}>", nodeName));
         }
 
         private ST_RelFromV relativeFromField;
 
-        Int32 posOffsetField;
-        public Int32 posOffset
+        int? posOffsetField;
+        public int? posOffset
         {
             get { return this.posOffsetField; }
             set { this.posOffsetField = value; }
         }
 
-        ST_AlignV alignField;
-        public ST_AlignV align
+        ST_AlignV? alignField;
+        public ST_AlignV? align
         {
             get { return this.alignField; }
             set { this.alignField = value; }
@@ -1518,6 +1549,11 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
     public class CT_WrapNone
     {
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<wp:{0}", nodeName));
+            sw.Write("/>");
+        }
     }
 
     
@@ -1554,6 +1590,23 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
         public CT_WrapSquare()
         {
             this.effectExtentField = new CT_EffectExtent();
+        }
+
+        public static CT_WrapSquare Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+
+            CT_WrapSquare ctObj = new CT_WrapSquare();
+            ctObj.wrapText = (ST_WrapText)Enum.Parse(typeof(ST_WrapText), node.Attributes["wrapText"].Value);
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<wp:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "wrapText", this.wrapText.ToString(), true);
+            sw.Write("/>");
         }
 
         [XmlElement(Order = 0)]
