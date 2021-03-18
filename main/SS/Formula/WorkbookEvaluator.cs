@@ -756,6 +756,11 @@ namespace NPOI.SS.Formula
                 AreaPtg aptg = (AreaPtg)ptg;
                 return ec.GetAreaEval(aptg.FirstRow, aptg.FirstColumn, aptg.LastRow, aptg.LastColumn);
             }
+            if (ptg is ArrayPtg) 
+            {
+                ArrayPtg aptg = (ArrayPtg)ptg;
+                return ec.GetAreaEval(0, 0, aptg.RowCount - 1, aptg.ColumnCount - 1);
+            }
 
             if (ptg is UnknownPtg)
             {
