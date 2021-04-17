@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net461;net472</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AssemblyName>NPOI</AssemblyName>
     <RootNamespace>NPOI</RootNamespace>
@@ -10,6 +10,10 @@
     <PackageId>NPOI</PackageId>
     <RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
     <OutputPath>..\solution\Lib</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <DocumentationFile>..\solution\Lib\NPOI.xml</DocumentationFile>
   </PropertyGroup>
 
 
