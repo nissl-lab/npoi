@@ -39,7 +39,7 @@
     <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -281,6 +281,9 @@
     <Compile Include="SS\Formula\Atp\ArgumentsEvaluator.cs" />
     <Compile Include="SS\Formula\Atp\DateParser.cs" />
     <Compile Include="SS\Formula\Atp\IfError.cs" />
+    <Compile Include="SS\Formula\Atp\Ifs.cs" />
+    <Compile Include="SS\Formula\Atp\Maxifs.cs" />
+    <Compile Include="SS\Formula\Atp\MinIfs.cs" />
     <Compile Include="SS\Formula\Atp\NetworkdaysFunction.cs" />
     <Compile Include="SS\Formula\BaseFormulaEvaluator.cs" />
     <Compile Include="SS\Formula\Eval\NotImplementedFunctionException.cs" />
