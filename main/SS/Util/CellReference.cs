@@ -70,7 +70,7 @@ namespace NPOI.SS.Util
          */
         //private const string CELL_REF_PATTERN = @"^\$?([A-Za-z]+)\$?([0-9]+)";
         //private static final Pattern CELL_REF_PATTERN = Pattern.compile("(\\$?[A-Z]+)?" + "(\\$?[0-9]+)?", Pattern.CASE_INSENSITIVE);
-        private static Regex CELL_REF_PATTERN = new Regex("(\\$?[A-Z]+)?" + "(\\$?[0-9]+)?", RegexOptions.IgnoreCase);
+        private static Regex CELL_REF_PATTERN = new Regex("(\\$?[A-Z]+)?" + "(\\$?[0-9]+)?", RegexOptions.IgnoreCase | RegexOptions.Compiled| RegexOptions.CultureInvariant);
 
         /**
          * Matches references only where row and column are included.
@@ -79,12 +79,12 @@ namespace NPOI.SS.Util
          * References may optionally include a single '$' before each group, but these are excluded from the Matcher.group(int).
          */
         //private static final Pattern STRICTLY_CELL_REF_PATTERN = Pattern.compile("\\$?([A-Z]+)" + "\\$?([0-9]+)", Pattern.CASE_INSENSITIVE);
-        private static Regex STRICTLY_CELL_REF_PATTERN = new Regex("^\\$?([A-Z]+)" + "\\$?([0-9]+)$", RegexOptions.IgnoreCase);
+        private static Regex STRICTLY_CELL_REF_PATTERN = new Regex("^\\$?([A-Z]+)" + "\\$?([0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
         /**
          * Matches a run of one or more letters.  The run of letters is group 1.  
          * References may optionally include a single '$' before the group, but these are excluded from the Matcher.group(int).
          */
-        private static Regex COLUMN_REF_PATTERN = new Regex(@"^\$?([A-Za-z]+)$", RegexOptions.IgnoreCase);
+        private static Regex COLUMN_REF_PATTERN = new Regex(@"^\$?([A-Za-z]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
         /**
          * Matches a run of one or more letters.  The run of numbers is group 1.
          * References may optionally include a single '$' before the group, but these are excluded from the Matcher.group(int).
@@ -95,7 +95,7 @@ namespace NPOI.SS.Util
          * digits or dot.  (They can even end in dot).
          */
         //private static final Pattern NAMED_RANGE_NAME_PATTERN = Pattern.compile("[_A-Z][_.A-Z0-9]*", Pattern.CASE_INSENSITIVE);
-        private static Regex NAMED_RANGE_NAME_PATTERN = new Regex("^[_A-Za-z][_.A-Za-z0-9]*$", RegexOptions.IgnoreCase);
+        private static Regex NAMED_RANGE_NAME_PATTERN = new Regex("^[_A-Za-z][_.A-Za-z0-9]*$", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
         //private static string BIFF8_LAST_COLUMN = "IV";
         //private static int BIFF8_LAST_COLUMN_TEXT_LEN = BIFF8_LAST_COLUMN.Length;
         //private static string BIFF8_LAST_ROW = (0x10000).ToString();
@@ -115,7 +115,7 @@ namespace NPOI.SS.Util
          */
         public CellReference(String cellRef)
         {
-            if (cellRef.EndsWith("#REF!", StringComparison.CurrentCulture))
+            if (cellRef.EndsWith("#REF!", StringComparison.InvariantCulture))
             {
                 throw new ArgumentException("Cell reference invalid: " + cellRef);
             }
@@ -392,7 +392,7 @@ namespace NPOI.SS.Util
             int plingPos = reference.LastIndexOf(SHEET_NAME_DELIMITER);
             String sheetName = ParseSheetName(reference, plingPos);
             int start = plingPos + 1;
-            String cell = reference.Substring(plingPos + 1).ToUpper(CultureInfo.CurrentCulture);
+            String cell = reference.Substring(plingPos + 1).ToUpper(CultureInfo.InvariantCulture);
             Match matcher = CELL_REF_PATTERN.Match(cell);
             if (!matcher.Success)
                 throw new ArgumentException("Invalid CellReference: " + reference);
