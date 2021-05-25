@@ -22,6 +22,7 @@ namespace NPOI.XSSF.UserModel
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.SS.UserModel;
     using System;
+    using System.Globalization;
 
 
     /**
@@ -51,7 +52,7 @@ namespace NPOI.XSSF.UserModel
             set
             {
                 ST_CfvoType xtype = (ST_CfvoType)Enum.Parse(typeof(ST_CfvoType), value.name);
-                cfvo.type = (/*setter*/xtype);
+                cfvo.type = xtype;
             }
         }
 
@@ -83,7 +84,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 if (cfvo.IsSetVal())
                 {
-                    return Double.Parse(cfvo.val);
+                    return Double.Parse(cfvo.val, CultureInfo.InvariantCulture);
                 }
                 else
                 {
@@ -98,7 +99,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 else
                 {
-                    cfvo.val = value.ToString();
+                    cfvo.val = ((double)value).ToString(CultureInfo.InvariantCulture);
                 }
             }
         }
