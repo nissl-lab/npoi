@@ -984,6 +984,13 @@ namespace NPOI.OpenXmlFormats.Dml
                     x.Write(sw, "a:blipFill");
                 }
             }
+            if (this.solidFill != null)
+            {
+                foreach (CT_SolidColorFillProperties x in this.solidFill)
+                {
+                    x.Write(sw, "solidFill");
+                }
+            }
             if (this.gradFill != null)
             {
                 foreach (CT_GradientFillProperties x in this.gradFill)
@@ -1010,13 +1017,6 @@ namespace NPOI.OpenXmlFormats.Dml
                 foreach (CT_PatternFillProperties x in this.pattFill)
                 {
                     x.Write(sw, "pattFill");
-                }
-            }
-            if (this.solidFill != null)
-            {
-                foreach (CT_SolidColorFillProperties x in this.solidFill)
-                {
-                    x.Write(sw, "solidFill");
                 }
             }
             sw.Write(string.Format("</a:{0}>", nodeName));

@@ -318,8 +318,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            sw.Write(">");
+            sw.Write(string.Format("<{0}>", nodeName));
             if (this.ext != null)
             {
                 foreach (CT_Extension x in this.ext)

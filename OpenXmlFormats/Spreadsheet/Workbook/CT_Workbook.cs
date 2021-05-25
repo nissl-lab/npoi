@@ -151,8 +151,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.webPublishing.Write(sw, "webPublishing");
             if (this.webPublishObjects != null)
                 this.webPublishObjects.Write(sw, "webPublishObjects");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
             if (this.fileRecoveryPr != null)
             {
                 foreach (CT_FileRecoveryPr x in this.fileRecoveryPr)
@@ -160,6 +158,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "fileRecoveryPr");
                 }
             }
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
             sw.Write("</workbook>");
         }
 
