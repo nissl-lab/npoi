@@ -46,7 +46,7 @@ namespace NPOI.SS.UserModel
          *  ensure that the Formula and Value parameters
          *  are compatible with it before saving</p>
          */
-        
+
 
         /**
          * Formula to use to calculate the threshold,
@@ -74,29 +74,28 @@ namespace NPOI.SS.UserModel
          * <p>Use <code>null</code> to unset
          */
     }
-}
-public class RangeType
-{
-    /** Number / Parameter */
-    public static RangeType NUMBER = new RangeType(1, "num");
-    /** The minimum value from the range */
-    public static RangeType MIN = new RangeType(2, "min");
-    /** The maximum value from the range */
-    public static RangeType MAX = new RangeType(3, "max");
-    /** Percent of the way from the mi to the max value in the range */
-    public static RangeType PERCENT = new RangeType(4, "percent");
-    /** The minimum value of the cell that is in X percentile of the range */
-    public static RangeType PERCENTILE = new RangeType(5, "percentile");
-    public static RangeType UNALLOCATED = new RangeType(6, null);
-    /** Formula result */
-    public static RangeType FORMULA = new RangeType(7, "formula");
+    public class RangeType
+    {
+        /** Number / Parameter */
+        public static RangeType NUMBER = new RangeType(1, "num");
+        /** The minimum value from the range */
+        public static RangeType MIN = new RangeType(2, "min");
+        /** The maximum value from the range */
+        public static RangeType MAX = new RangeType(3, "max");
+        /** Percent of the way from the mi to the max value in the range */
+        public static RangeType PERCENT = new RangeType(4, "percent");
+        /** The minimum value of the cell that is in X percentile of the range */
+        public static RangeType PERCENTILE = new RangeType(5, "percentile");
+        public static RangeType UNALLOCATED = new RangeType(6, null);
+        /** Formula result */
+        public static RangeType FORMULA = new RangeType(7, "formula");
 
-    /** Numeric ID of the type */
-    public int id;
-    /** Name (system) of the type */
-    public string name;
+        /** Numeric ID of the type */
+        public int id;
+        /** Name (system) of the type */
+        public string name;
 
-    private static List<RangeType> values = new List<RangeType>() {
+        private static List<RangeType> values = new List<RangeType>() {
         NUMBER,
         MIN,
         MAX,
@@ -105,44 +104,45 @@ public class RangeType
         UNALLOCATED,
         FORMULA
     };
-    public static List<RangeType> Values()
-    {
-        return values;
-    }
-    public override string ToString()
-    {
-        return id + " - " + name;
-    }
-    public override bool Equals(object obj)
-    {
-        if (obj == null || !(obj is RangeType))
+        public static List<RangeType> Values()
         {
-            return false;
+            return values;
         }
-        RangeType other = obj as RangeType;
-        return this.id == other.id && this.name == other.name;
-    }
-
-    public override int GetHashCode()
-    {
-        return id.GetHashCode() ^ name.GetHashCode();
-    }
-
-    public static RangeType ById(int id)
-    {
-        return Values()[id - 1]; // 1-based IDs
-    }
-    public static RangeType ByName(string name)
-    {
-        foreach (RangeType t in Values())
+        public override string ToString()
         {
-            if (t.name.Equals(name)) return t;
+            return id + " - " + name;
         }
-        return null;
-    }
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !(obj is RangeType))
+            {
+                return false;
+            }
+            RangeType other = obj as RangeType;
+            return this.id == other.id && this.name == other.name;
+        }
 
-    private RangeType(int id, string name)
-    {
-        this.id = id; this.name = name;
+        public override int GetHashCode()
+        {
+            return id.GetHashCode() ^ name.GetHashCode();
+        }
+
+        public static RangeType ById(int id)
+        {
+            return Values()[id - 1]; // 1-based IDs
+        }
+        public static RangeType ByName(string name)
+        {
+            foreach (RangeType t in Values())
+            {
+                if (t.name.Equals(name)) return t;
+            }
+            return null;
+        }
+
+        private RangeType(int id, string name)
+        {
+            this.id = id; this.name = name;
+        }
     }
 }
