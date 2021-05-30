@@ -51,9 +51,9 @@ namespace NPOI.POIFS.FileSystem
         }
 
         /**
-         * Load the block at the given offset.
+         * Load the block at the given offset, optionally throwing an exception if the offset is beyond the limit of the buffer.
          */
-        public override ByteBuffer GetBlockAt(int offset)
+        private ByteBuffer GetBlockAt(int offset, bool throwIfNotFound)
         {
             // Which big block is this?
             int byteOffset = offset * POIFSConstants.SMALL_BLOCK_SIZE;
@@ -67,19 +67,48 @@ namespace NPOI.POIFS.FileSystem
             {
                 it.Next();
             }
-            ByteBuffer dataBlock = it.Next();
-            if (dataBlock == null)
+            
+            if (!it.HasNext())
             {
-                throw new IndexOutOfRangeException("Big block " + bigBlockNumber + " outside stream");
+                if(throwIfNotFound)
+                    throw new IndexOutOfRangeException("Big block " + bigBlockNumber + " outside stream");
+                return null;
             }
 
             // Position ourselves, and take a slice 
+            ByteBuffer dataBlock = it.Next();
             dataBlock.Position = dataBlock.Position + bigBlockOffset;
             ByteBuffer miniBuffer = dataBlock.Slice();
             miniBuffer.Limit = POIFSConstants.SMALL_BLOCK_SIZE;
             return miniBuffer;
         }
 
+        /**
+         * Load the block at the given offset.
+         */
+        public override ByteBuffer GetBlockAt(int offset)
+        {
+            return GetBlockAt(offset, true);
+        }
+
+
+        /**
+         * Try to load the block at the given offset, and if the offset is beyond the end of the buffer, return false.
+         */
+        public override bool TryGetBlockAt(int offset, out ByteBuffer byteBuffer)
+        {
+            byteBuffer = null;
+            try
+            {
+                byteBuffer = GetBlockAt(offset, false);
+                return byteBuffer!=null;
+            }
+            catch(IndexOutOfRangeException)
+            {
+                // Try to avoid getting here. A point of having this TryDoSomething is to avoid the expense of exception handling.
+                return false;
+            }
+        }
         /**
          * Load the block, extending the underlying stream if needed
          */
@@ -93,12 +122,8 @@ namespace NPOI.POIFS.FileSystem
             }
 
             // Try to Get it without extending the stream
-            if (! firstInStore) {
-                try
-                {
-                    return GetBlockAt(offset);
-                }catch (IndexOutOfRangeException){}
-            }
+            if (!firstInStore && TryGetBlockAt(offset, out var result))
+                return result;             
             
             // Need to extend the stream
             // TODO Replace this with proper append support

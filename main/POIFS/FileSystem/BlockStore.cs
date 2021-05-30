@@ -41,6 +41,16 @@ namespace NPOI.POIFS.FileSystem
         /// <param name="offset"></param>
         /// <returns></returns>
         public abstract ByteBuffer GetBlockAt(int offset);
+
+
+        /// <summary>
+        /// Tries to load the block at the given offset.
+        /// </summary>
+        /// <param name="offset">An offset in the buffer, 0 or greater.</param>
+        /// <param name="byteBuffer">The resulting buffer, if possible.</param>
+        /// <returns>True if it was possible to load the block from the specified offset, false if the offset is beyond the size of the buffer.</returns>
+        public abstract bool TryGetBlockAt(int offset, out ByteBuffer byteBuffer);
+
         /// <summary>
         /// Extends the file if required to hold blocks up to
         /// the specified offset, and return the block from there.
