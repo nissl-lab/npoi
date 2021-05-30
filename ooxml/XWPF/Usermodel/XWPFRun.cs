@@ -178,6 +178,8 @@ namespace NPOI.XWPF.UserModel
             XmlSerializer xmlse = new XmlSerializer(typeof(NPOI.OpenXmlFormats.Dml.Picture.CT_Picture));
             foreach (string el in god.Any)
             {
+                if (el.IndexOf("pic:pic") < 0)
+                    continue;
                 System.IO.StringReader stringReader = new System.IO.StringReader(el);
 
                 NPOI.OpenXmlFormats.Dml.Picture.CT_Picture pict =
