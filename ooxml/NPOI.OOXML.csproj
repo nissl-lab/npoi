@@ -367,6 +367,7 @@
     <Compile Include="XWPF\Usermodel\XWPFTableCell.cs" />
     <Compile Include="XWPF\Usermodel\XWPFTableRow.cs" />
     <Compile Include="Util\EnumConverter.cs" />
+    <Compile Include="XWPF\Util\DocumentStylesBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -391,9 +392,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="XWPF\Util\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\main\NPOI.csproj">
       <Project>{10fa8538-157a-4380-a4f6-8e2c3ee92cae}</Project>
