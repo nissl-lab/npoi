@@ -17,6 +17,8 @@ Get Started with NPOI
 
 [Stop using Dotnetcore/NPOI nuget package. It’s obsolete!](https://tonyqus.medium.com/stop-using-dotnetcore-npoi-nuget-package-its-too-obsolete-6d0aeedb3319)
 
+[中国哪些公司在用.NET](https://github.com/dotnet-cn/jobs)
+
 Contributors
 ============
 Big thanks to all [NPOI contributors](https://github.com/nissl-lab/npoi/wiki/NPOI-Contributors)!!! 
