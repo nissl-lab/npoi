@@ -38,7 +38,7 @@ namespace NPOI.XWPF.UserModel
             CT_SdtPr sdtPr = block.AddNewSdtPr();
             CT_DecimalNumber id = sdtPr.AddNewId();
             id.val=("4844945");
-            sdtPr.AddNewDocPartObj().AddNewDocPartGallery().val=("Table of contents");
+            sdtPr.AddNewDocPartObj().AddNewDocPartGallery().val=("Table of Contents");
             CT_SdtEndPr sdtEndPr = block.AddNewSdtEndPr();
             CT_RPr rPr = sdtEndPr.AddNewRPr();
             CT_Fonts fonts = rPr.AddNewRFonts();
