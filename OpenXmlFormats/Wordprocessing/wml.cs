@@ -2258,7 +2258,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.space = "preserve";
             XmlHelper.WriteAttribute(sw, "xml:space", this.space);
             sw.Write(">");
-            sw.Write(XmlHelper.EncodeXml(this.valueField));
+            if (this.valueField != null)
+            {
+                sw.Write(XmlHelper.EncodeXml(this.valueField));
+            }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
