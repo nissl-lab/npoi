@@ -270,8 +270,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "autoPageBreaks", this.autoPageBreaks, false);
             XmlHelper.WriteAttribute(sw, "fitToPage", this.fitToPage, false);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
         public CT_PageSetUpPr()
         {
@@ -3359,8 +3358,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
             XmlHelper.WriteAttribute(sw, "password", this.password);
             XmlHelper.WriteAttribute(sw, "sheet", this.sheet);
-            XmlHelper.WriteAttribute(sw, "objects", this.objects);
-            XmlHelper.WriteAttribute(sw, "scenarios", this.scenarios);
+            if(this.objects)
+                XmlHelper.WriteAttribute(sw, "objects", this.objects);
+            if(this.scenarios)
+                XmlHelper.WriteAttribute(sw, "scenarios", this.scenarios);
             if (!formatCells)
                 XmlHelper.WriteAttribute(sw, "formatCells", this.formatCells);
             if (!formatColumns)
@@ -5142,8 +5143,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "horizontalCentered", this.horizontalCentered);
-            XmlHelper.WriteAttribute(sw, "verticalCentered", this.verticalCentered);
+            if(this.horizontalCentered)
+                XmlHelper.WriteAttribute(sw, "horizontalCentered", this.horizontalCentered);
+            if(this.verticalCentered)
+                XmlHelper.WriteAttribute(sw, "verticalCentered", this.verticalCentered);
             XmlHelper.WriteAttribute(sw, "headings", this.headings, false);
             XmlHelper.WriteAttribute(sw, "gridLines", this.gridLines, false);
             if (!gridLinesSet)
@@ -8370,8 +8373,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "autoLoad", this.autoLoad);
             XmlHelper.WriteAttribute(sw, "shapeId", this.shapeId);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
     }
@@ -10907,6 +10909,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 if (childNode.LocalName == "oleObject")
                     ctObj.oleObject.Add(CT_OleObject.Parse(childNode, namespaceManager));
             }
+            if (ctObj.oleObject.Count == 0)
+                return null;
             return ctObj;
         }
 

@@ -111,8 +111,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "location", this.location);
             XmlHelper.WriteAttribute(sw, "tooltip", this.tooltip);
             XmlHelper.WriteAttribute(sw, "display", this.display);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
         public CT_Hyperlink Copy()

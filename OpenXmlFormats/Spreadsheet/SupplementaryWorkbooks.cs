@@ -872,15 +872,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlRoot(Namespace="http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable=true)]
     public partial class CT_OleLink {
         
-        private CT_OleItem[] oleItemsField;
+        private List<CT_OleItem> oleItemsField;
         
         private string idField;
         
         private string progIdField;
         
     
-        [XmlArrayItem("oleItem", IsNullable=false)]
-        public CT_OleItem[] oleItems {
+        public List<CT_OleItem> oleItems {
             get {
                 return this.oleItemsField;
             }
@@ -890,7 +889,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         
     
-        [XmlAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id {
             get {
                 return this.idField;
@@ -913,12 +911,40 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal static CT_OleLink Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-            throw new NotImplementedException();
+            CT_OleLink ctObj = new CT_OleLink();
+            ctObj.idField = XmlHelper.ReadString(node.Attributes["r:id"]);
+            ctObj.progIdField = XmlHelper.ReadString(node.Attributes["progId"]);
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "oleItems")
+                {
+                    ctObj.oleItemsField = new List<CT_OleItem>();
+                    foreach (XmlNode subNode in childNode.ChildNodes)
+                    {
+                        ctObj.oleItems.Add(CT_OleItem.Parse(subNode));
+                    }
+                }
+                
+            }
+            return ctObj;
         }
 
-        internal void Write(StreamWriter sw, string p)
+        internal void Write(StreamWriter sw, string nodeName)
         {
-            throw new NotImplementedException();
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "r:id", this.idField);
+            XmlHelper.WriteAttribute(sw, "progId", this.progIdField);
+            sw.Write(">");
+            if (this.oleItemsField.Count > 0)
+            {
+                sw.Write("<oleItems>");
+                foreach (CT_OleItem ctObj in this.oleItemsField)
+                {
+                    ctObj.Write(sw, "oleItem");
+                }
+                sw.Write("</oleItems>");
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
         }
     }
     
@@ -990,6 +1016,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.preferPicField = value;
             }
         }
+        internal static CT_OleItem Parse(XmlNode node)
+        {
+            var ctObj = new CT_OleItem();
+            ctObj.name = XmlHelper.ReadString(node.Attributes["name"]);
+            ctObj.advise = XmlHelper.ReadBool(node.Attributes["advise"]);
+            ctObj.icon = XmlHelper.ReadBool(node.Attributes["icon"]);
+            ctObj.preferPic = XmlHelper.ReadBool(node.Attributes["preferPic"]);
+            return ctObj;
+        }
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "name", this.name);
+            XmlHelper.WriteAttribute(sw, "advise", this.advise);
+            XmlHelper.WriteAttribute(sw, "icon", this.iconField, false);
+            XmlHelper.WriteAttribute(sw, "preferPic", this.preferPic);
+            sw.Write(string.Format("/>", nodeName));
+        }
     }
     
 
@@ -1034,8 +1078,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            sw.Write(">");
+            sw.Write(string.Format("<{0}>", nodeName));
 
             foreach (CT_ExternalSheetName ctObj in this.sheetNameField)
             {
@@ -1087,8 +1130,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            sw.Write(">");
+            sw.Write(string.Format("<{0}>", nodeName));
 
             foreach (CT_ExternalDefinedName ctObj in this.definedNameField)
             {
