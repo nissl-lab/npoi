@@ -216,7 +216,6 @@ namespace TestCases.XSSF.Extractor
         }
 
         [Test]
-        [Ignore("not found in poi")]
         public void TestEmptyCells()
         {
             XSSFExcelExtractor extractor = GetExtractor("SimpleNormal.xlsx");
