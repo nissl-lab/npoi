@@ -231,7 +231,7 @@ namespace NPOI.XWPF.UserModel
                   this.footnotes = (XWPFFootnotes)p;
                   this.footnotes.OnDocumentRead();
                }
-               else if (relation.Equals(XWPFRelation.ENDNOTE.Relation))
+               if (relation.Equals(XWPFRelation.ENDNOTE.Relation))
                {
                    XmlDocument xmldoc = ConvertStreamToXml(p.GetPackagePart().GetInputStream());
                    EndnotesDocument endnotesDocument = EndnotesDocument.Parse(xmldoc, NamespaceManager);

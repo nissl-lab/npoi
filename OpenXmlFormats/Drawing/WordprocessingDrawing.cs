@@ -201,7 +201,7 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             sw.Write(string.Format("<wp:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "id", this.id, true);
             XmlHelper.WriteAttribute(sw, "name", this.name);
-            XmlHelper.WriteAttribute(sw, "descr", this.descr);
+            XmlHelper.WriteAttribute(sw, "descr", this.descr.Replace("\n", "&#xA;").Replace("\r", "&#xD;"));
             if(this.hidden)
                 XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
             sw.Write(">");
@@ -712,8 +712,7 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             XmlHelper.WriteAttribute(sw, "t", this.t, true);
             XmlHelper.WriteAttribute(sw, "r", this.r, true);
             XmlHelper.WriteAttribute(sw, "b", this.b, true);
-            sw.Write(">");
-            sw.Write(string.Format("</wp:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]
