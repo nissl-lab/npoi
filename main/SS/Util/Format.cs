@@ -205,7 +205,7 @@ namespace NPOI.SS.Util
             get { return _pattern; }
         }
 
-        private static readonly Regex RegexFraction = new Regex("#+/#+");
+        private static readonly Regex RegexFraction = new Regex("#+/#+", RegexOptions.Compiled);
         public override string Format(Object obj)
         {
             return Format(obj, CultureInfo.CurrentCulture);

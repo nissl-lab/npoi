@@ -47,13 +47,13 @@ namespace NPOI.SS.UserModel
         /**
          * The following patterns are used in {@link #isADateFormat(int, String)}
          */
-        private static Regex date_ptrn1 = new Regex("^\\[\\$\\-.*?\\]");
-        private static Regex date_ptrn2 = new Regex("^\\[[a-zA-Z]+\\]");
-        private static Regex date_ptrn3a = new Regex("[yYmMdDhHsS]");
-        private static Regex date_ptrn3b = new Regex("^[\\[\\]yYmMdDhHsS\\-T/,. :\"\\\\]+0*[ampAMP/]*$");
+        private static Regex date_ptrn1 = new Regex("^\\[\\$\\-.*?\\]", RegexOptions.Compiled);
+        private static Regex date_ptrn2 = new Regex("^\\[[a-zA-Z]+\\]", RegexOptions.Compiled);
+        private static Regex date_ptrn3a = new Regex("[yYmMdDhHsS]", RegexOptions.Compiled);
+        private static Regex date_ptrn3b = new Regex("^[\\[\\]yYmMdDhHsS\\-T/,. :\"\\\\]+0*[ampAMP/]*$", RegexOptions.Compiled);
         //  elapsed time patterns: [h],[m] and [s]
-        //private static Regex date_ptrn4 = new Regex("^\\[([hH]+|[mM]+|[sS]+)\\]");
-        private static Regex date_ptrn4 = new Regex("^\\[([hH]+|[mM]+|[sS]+)\\]$");
+        //private static Regex date_ptrn4 = new Regex("^\\[([hH]+|[mM]+|[sS]+)\\]", RegexOptions.Compiled);
+        private static Regex date_ptrn4 = new Regex("^\\[([hH]+|[mM]+|[sS]+)\\]$", RegexOptions.Compiled);
 
 
         /// <summary>

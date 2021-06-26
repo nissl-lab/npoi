@@ -119,24 +119,24 @@ namespace NPOI.SS.UserModel
          */
         private static Regex colorPattern = new Regex("(\\[BLACK\\])|(\\[BLUE\\])|(\\[CYAN\\])|(\\[GREEN\\])|" +
             "(\\[MAGENTA\\])|(\\[RED\\])|(\\[WHITE\\])|(\\[YELLOW\\])|" +
-            "(\\[COLOR\\s*\\d\\])|(\\[COLOR\\s*[0-5]\\d\\])", RegexOptions.IgnoreCase);
+            "(\\[COLOR\\s*\\d\\])|(\\[COLOR\\s*[0-5]\\d\\])", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         /**
          * A regex to identify a fraction pattern.
          * This requires that replaceAll("\\?", "#") has already been called 
          */
-        private static Regex fractionPattern = new Regex("(?:([#\\d]+)\\s+)?(#+)\\s*\\/\\s*([#\\d]+)");
+        private static Regex fractionPattern = new Regex("(?:([#\\d]+)\\s+)?(#+)\\s*\\/\\s*([#\\d]+)", RegexOptions.Compiled);
 
         /**
          * A regex to strip junk out of fraction formats
          */
-        private static Regex fractionStripper = new Regex("(\"[^\"]*\")|([^ \\?#\\d\\/]+)");
+        private static Regex fractionStripper = new Regex("(\"[^\"]*\")|([^ \\?#\\d\\/]+)", RegexOptions.Compiled);
 
         /**
          * A regex to detect if an alternate grouping character is used
          *  in a numeric format 
          */
-        private static Regex alternateGrouping = new Regex("([#0]([^.#0])[#0]{3})");
+        private static Regex alternateGrouping = new Regex("([#0]([^.#0])[#0]{3})", RegexOptions.Compiled);
     
         /**
          * Cells formatted with a date or time format and which contain invalid date or time values
@@ -404,9 +404,9 @@ namespace NPOI.SS.UserModel
             return CreateFormat(cell.NumericCellValue, formatIndex, formatStr);
         }
 
-        private static readonly Regex RegexDoubleBackslashAny = new Regex("\\\\.");
-        private static readonly Regex RegexContinueWs = new Regex("\\s");
-        private static readonly Regex RegexAnyInDoubleQuote = new Regex("\"[^\"]*\"");
+        private static readonly Regex RegexDoubleBackslashAny = new Regex("\\\\.", RegexOptions.Compiled);
+        private static readonly Regex RegexContinueWs = new Regex("\\s", RegexOptions.Compiled);
+        private static readonly Regex RegexAnyInDoubleQuote = new Regex("\"[^\"]*\"", RegexOptions.Compiled);
 
         private FormatBase CreateFormat(double cellValue, int formatIndex, String sFormat)
         {

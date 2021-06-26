@@ -67,8 +67,8 @@ namespace NPOI.XSSF.UserModel
         /**
          * regexp to parse shape ids, in VML they have weird form of id="_x0000_s1026"
          */
-        private static Regex ptrn_shapeId = new Regex("_x0000_s(\\d+)");
-        private static Regex ptrn_shapeTypeId = new Regex("_x0000_[tm](\\d+)");
+        private static Regex ptrn_shapeId = new Regex("_x0000_s(\\d+)", RegexOptions.Compiled);
+        private static Regex ptrn_shapeTypeId = new Regex("_x0000_[tm](\\d+)", RegexOptions.Compiled);
 
         private ArrayList _items = new ArrayList();
         private string _shapeTypeId;
