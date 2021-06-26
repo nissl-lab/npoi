@@ -282,13 +282,13 @@ namespace NPOI.HWPF.Model
             start = DateTime.Now.Ticks;
 
             CHPX previous = null;
-            for (List<CHPX>.Enumerator iterator = _textRuns.GetEnumerator(); iterator
-                    .MoveNext(); )
+            for (int iterator = _textRuns.Count; iterator != 0; )
             {
-                CHPX current = iterator.Current;
-                if (previous == null)
+                CHPX current = previous;
+
+                previous = _textRuns[--iterator];
+                if (current == null)
                 {
-                    previous = current;
                     continue;
                 }
 
