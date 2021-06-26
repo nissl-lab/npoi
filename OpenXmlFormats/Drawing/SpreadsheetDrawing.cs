@@ -1689,13 +1689,12 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 this.graphicalObjectField.Write(sw, "graphicFrame");
             else if (this.pictureField != null)
                 this.picture.Write(sw, "pic");
-            sw.Write("</xdr:oneCellAnchor>");
 
             if (this.clientData != null)
             {
                 this.clientData.Write(sw, "clientData");
             }
-            sw.Write("</xdr:absCellAnchor");
+            sw.Write("</xdr:absCellAnchor>");
         }
     }
     [Serializable]

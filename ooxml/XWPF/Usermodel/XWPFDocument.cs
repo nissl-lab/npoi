@@ -26,6 +26,7 @@ namespace NPOI.XWPF.UserModel
     using NPOI.XWPF.Model;
     using System.Xml.Serialization;
     using System.Diagnostics;
+    using NPOI.OOXML.XWPF.Util;
 
     /**
      * <p>High(ish) level class for working with .docx files.</p>
@@ -1047,29 +1048,22 @@ namespace NPOI.XWPF.UserModel
             return table;
         }
 
-        /**
-         * 
-         */
+        /// <summary>
+        /// Create a Table of Contents (TOC) at the end of the document.
+        /// Please set paragraphs style to "Heading{#}" and document
+        /// styles for TOC <see cref="DocumentStylesBuilder.BuildStylesForTOC"/>.
+        /// Otherwise, it renders an empty one.
+        /// </summary>
         public void CreateTOC()
         {
-            CT_SdtBlock block = this.Document.body.AddNewSdt();
-            TOC toc = new TOC(block);
-            foreach (XWPFParagraph par in paragraphs)
-            {
-                String parStyle = par.Style;
-                if (parStyle != null && parStyle.StartsWith("Heading"))
-                {
-                    try
-                    {
-                        int level = Int32.Parse(parStyle.Substring("Heading".Length));
-                        toc.AddRow(level, par.Text, 1, "112723803");
-                    }
-                    catch (FormatException e)
-                    {
-                        Debug.Write(e.StackTrace);
-                    }
-                }
-            }
+            var ctStyles = DocumentStylesBuilder.BuildStylesForTOC();
+            styles.SetStyles(ctStyles);
+
+            CT_SdtBlock tocBlock = Document.body.AddNewSdt();
+            TOC toc = new TOC(tocBlock);
+            toc.Build();
+
+            EnforceUpdateFields(); // one time pop-up to update TOC when opening document
         }
 
         /**Replace content of table in array tables at position pos with a
