@@ -49,7 +49,6 @@ namespace NPOI.XSSF.UserModel
          * The TreeMap ensures that the cells are ordered by columnIndex in the ascending order.
          */
         private SortedDictionary<int, ICell> _cells;
-        private SortedSet<KeyValuePair<int, ICell>> _set;
         /**
          * the parent sheet
          */
@@ -66,9 +65,6 @@ namespace NPOI.XSSF.UserModel
             this._row = row;
             this._sheet = sheet;
             this._cells = new SortedDictionary<int, ICell>();
-            this._set = typeof(SortedDictionary<int, ICell>).GetField("_set", 
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .GetValue(this._cells) as SortedSet<KeyValuePair<int, ICell>>;
             if (0 < row.SizeOfCArray())
             {
                 foreach (CT_Cell c in row.c)
@@ -290,13 +286,13 @@ namespace NPOI.XSSF.UserModel
                     throw new ArgumentException("Illegal policy " + policy + " (" + policy + ")");
             }
         }
-        int GetFirstKey(SortedDictionary<int, ICell>.KeyCollection keys)
+        int GetFirstKey()
         {
-            return _set.Min.Key;
+            return _cells.Keys.Min();
         }
         int GetLastKey()
         {
-            return _set.Max.Key;
+            return _cells.Keys.Max();
         }
         /**
          * Get the number of the first cell Contained in this row.
