@@ -49,7 +49,7 @@ namespace NPOI.XSSF.UserModel
          * The TreeMap ensures that the cells are ordered by columnIndex in the ascending order.
          */
         private SortedDictionary<int, ICell> _cells;
-
+        private SortedSet<KeyValuePair<int, ICell>> _set;
         /**
          * the parent sheet
          */
@@ -63,9 +63,12 @@ namespace NPOI.XSSF.UserModel
          */
         public XSSFRow(CT_Row row, XSSFSheet sheet)
         {
-            _row = row;
-            _sheet = sheet;
-            _cells = new SortedDictionary<int, ICell>();
+            this._row = row;
+            this._sheet = sheet;
+            this._cells = new SortedDictionary<int, ICell>();
+            this._set = typeof(SortedDictionary<int, ICell>).GetField("_set", 
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                .GetValue(this._cells) as SortedSet<KeyValuePair<int, ICell>>;
             if (0 < row.SizeOfCArray())
             {
                 foreach (CT_Cell c in row.c)
@@ -289,24 +292,11 @@ namespace NPOI.XSSF.UserModel
         }
         int GetFirstKey(SortedDictionary<int, ICell>.KeyCollection keys)
         {
-            int i = 0;
-            foreach (int key in keys)
-            {
-                if (i == 0)
-                    return key;
-            }
-            throw new ArgumentOutOfRangeException();
+            return _set.Min.Key;
         }
-        int GetLastKey(SortedDictionary<int, ICell>.KeyCollection keys)
+        int GetLastKey()
         {
-            int i = 0;
-            foreach (int key in keys)
-            {
-                if (i == keys.Count - 1)
-                    return key;
-                i++;
-            }
-            throw new ArgumentOutOfRangeException();
+            return _set.Max.Key;
         }
         /**
          * Get the number of the first cell Contained in this row.
@@ -345,7 +335,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (short)(_cells.Count == 0 ? -1 : (GetLastKey(_cells.Keys) + 1));
+                return (short)(_cells.Count == 0 ? -1 : (GetLastKey() + 1));
             }
         }
 
