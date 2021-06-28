@@ -50,7 +50,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw)
         {
             sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
-            sw.Write("<w:styles xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\">");
+            sw.Write("<w:styles xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\">");
             if (this.docDefaults != null)
                 this.docDefaults.Write(sw, "docDefaults");
             if (this.latentStyles != null)
@@ -417,11 +417,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "w:defLockedState", this.defLockedState.ToString());
+            XmlHelper.WriteAttribute(sw, "w:defLockedState", this.defLockedState== ST_OnOff.off?"0":"1");
             XmlHelper.WriteAttribute(sw, "w:defUIPriority", this.defUIPriority);
-            XmlHelper.WriteAttribute(sw, "w:defSemiHidden", this.defSemiHidden.ToString());
-            XmlHelper.WriteAttribute(sw, "w:defUnhideWhenUsed", this.defUnhideWhenUsed.ToString());
-            XmlHelper.WriteAttribute(sw, "w:defQFormat", this.defQFormat.ToString());
+            XmlHelper.WriteAttribute(sw, "w:defSemiHidden", this.defSemiHidden == ST_OnOff.off ? "0" : "1");
+            XmlHelper.WriteAttribute(sw, "w:defUnhideWhenUsed", this.defUnhideWhenUsed == ST_OnOff.off ? "0" : "1");
+            XmlHelper.WriteAttribute(sw, "w:defQFormat", this.defQFormat == ST_OnOff.off ? "0" : "1");
             XmlHelper.WriteAttribute(sw, "w:count", this.count);
             sw.Write(">");
             if (this.lsdException != null)
@@ -757,7 +757,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
             if(this.@default!= ST_OnOff.off)
-                XmlHelper.WriteAttribute(sw, "w:default", this.@default.ToString());
+                XmlHelper.WriteAttribute(sw, "w:default", "1");
             if (this.customStyle == ST_OnOff.on)
                 XmlHelper.WriteAttribute(sw, "w:customStyle", "1");
             XmlHelper.WriteAttribute(sw, "w:styleId", this.styleId);
@@ -2258,13 +2258,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private byte[] themeShadeField;
 
-        private ulong szField;
+        private ulong? szField;
 
-        private bool szFieldSpecified;
-
-        private ulong spaceField;
-
-        private bool spaceFieldSpecified;
+        private ulong? spaceField;
 
         private ST_OnOff shadowField;
 
@@ -2291,8 +2287,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 ctObj.themeColor = (ST_ThemeColor)Enum.Parse(typeof(ST_ThemeColor), node.Attributes["w:themeColor"].Value);
             ctObj.themeTint = XmlHelper.ReadBytes(node.Attributes["w:themeTint"]);
             ctObj.themeShade = XmlHelper.ReadBytes(node.Attributes["w:themeShade"]);
-            ctObj.sz = XmlHelper.ReadULong(node.Attributes["w:sz"]);
-            ctObj.space = XmlHelper.ReadULong(node.Attributes["w:space"]);
+            if(node.Attributes["w:sz"]!=null)
+                ctObj.sz = XmlHelper.ReadULong(node.Attributes["w:sz"]);
+            if(node.Attributes["w:space"]!=null)
+                ctObj.space = XmlHelper.ReadULong(node.Attributes["w:space"]);
             if (node.Attributes["w:shadow"] != null)
                 ctObj.shadow = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:shadow"].Value,true);
             if (node.Attributes["w:frame"] != null)
@@ -2306,13 +2304,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            if (this.themeColor != ST_ThemeColor.none)
+            if (this.sz != null)
+                XmlHelper.WriteAttribute(sw, "w:sz", (ulong)this.sz, true);
+           if (this.space != null)
+               XmlHelper.WriteAttribute(sw, "w:space", (ulong)this.space, true);
+            XmlHelper.WriteAttribute(sw, "w:color", this.color);
+            if(this.themeColor!= ST_ThemeColor.none)
                 XmlHelper.WriteAttribute(sw, "w:themeColor", this.themeColor.ToString());
             XmlHelper.WriteAttribute(sw, "w:themeTint", this.themeTint);
             XmlHelper.WriteAttribute(sw, "w:themeShade", this.themeShade);
-            XmlHelper.WriteAttribute(sw, "w:sz", this.sz);
-            XmlHelper.WriteAttribute(sw, "w:space", this.space, true);
-            XmlHelper.WriteAttribute(sw, "w:color", this.color);
             if(this.shadow!= ST_OnOff.off)
                 XmlHelper.WriteAttribute(sw, "w:shadow", this.shadow.ToString());
             if (this.frame != ST_OnOff.off)
@@ -2415,7 +2415,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// </summary>
         /// ST_EighthPointMeasure
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ulong sz
+        public ulong? sz
         {
             get
             {
@@ -2427,23 +2427,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [XmlIgnore]
-        public bool szSpecified
-        {
-            get
-            {
-                return this.szFieldSpecified;
-            }
-            set
-            {
-                this.szFieldSpecified = value;
-            }
-        }
         /// <summary>
         /// Border Spacing Measurement
         /// </summary>
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ulong space
+        public ulong? space
         {
             get
             {
@@ -2455,18 +2442,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [XmlIgnore]
-        public bool spaceSpecified
-        {
-            get
-            {
-                return this.spaceFieldSpecified;
-            }
-            set
-            {
-                this.spaceFieldSpecified = value;
-            }
-        }
         /// <summary>
         /// Border Shadow
         /// </summary>

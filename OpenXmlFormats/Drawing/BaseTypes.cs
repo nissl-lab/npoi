@@ -253,11 +253,14 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private long yField;
 
+        private string name;
+
         public static CT_Point2D Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
             CT_Point2D ctObj = new CT_Point2D();
+            ctObj.name = node.Name;
             ctObj.x = XmlHelper.ReadLong(node.Attributes["x"]);
             ctObj.y = XmlHelper.ReadLong(node.Attributes["y"]);
             return ctObj;
@@ -267,7 +270,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            if (name == null)
+                sw.Write(string.Format("<a:{0}", nodeName));
+            else
+                sw.Write(string.Format("<{0}", name));
+
             XmlHelper.WriteAttribute(sw, "x", this.x, true);
             XmlHelper.WriteAttribute(sw, "y", this.y, true);
             sw.Write("/>");

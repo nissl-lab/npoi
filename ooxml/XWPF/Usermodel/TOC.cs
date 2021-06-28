@@ -25,6 +25,7 @@ namespace NPOI.XWPF.UserModel
     {
 
         CT_SdtBlock block;
+        private bool isBuilt = false;
 
         public TOC()
             : this(new CT_SdtBlock())
@@ -37,26 +38,42 @@ namespace NPOI.XWPF.UserModel
             CT_SdtPr sdtPr = block.AddNewSdtPr();
             CT_DecimalNumber id = sdtPr.AddNewId();
             id.val=("4844945");
-            sdtPr.AddNewDocPartObj().AddNewDocPartGallery().val=("Table of contents");
+            sdtPr.AddNewDocPartObj().AddNewDocPartGallery().val=("Table of Contents");
             CT_SdtEndPr sdtEndPr = block.AddNewSdtEndPr();
             CT_RPr rPr = sdtEndPr.AddNewRPr();
             CT_Fonts fonts = rPr.AddNewRFonts();
             fonts.asciiTheme=(ST_Theme.minorHAnsi);
             fonts.eastAsiaTheme = (ST_Theme.minorHAnsi);
             fonts.hAnsiTheme = (ST_Theme.minorHAnsi);
-            fonts.cstheme=(ST_Theme.minorBidi);
-            rPr.AddNewB().val=false;
-            rPr.AddNewBCs().val = false;
-            rPr.AddNewColor().val=("auto");
-            rPr.AddNewSz().val=24;
-            rPr.AddNewSzCs().val = 24;
+            fonts.cstheme = (ST_Theme.minorBidi);
             CT_SdtContentBlock content = block.AddNewSdtContent();
             CT_P p = content.AddNewP();
-            byte[] b = Encoding.GetEncoding(1252).GetBytes("00EF7E24");
+            byte[] b = Encoding.Unicode.GetBytes("00EF7E24");
             p.rsidR = b;
             p.rsidRDefault = b;
-            p.AddNewPPr().AddNewPStyle().val=("TOCHeading");
-            p.AddNewR().AddNewT().Value=("Table of Contents");
+            CT_PPr pPr = p.AddNewPPr();
+            pPr.AddNewPStyle().val = ("TOCHeading");
+            pPr.AddNewJc().val = ST_Jc.center;
+            CT_R run = p.AddNewR();
+            run.AddNewRPr().AddNewSz().val = 48;
+            run.AddNewT().Value = ("Table of Contents");
+            run.AddNewBr().type = ST_BrType.textWrapping; // line break
+
+            // TOC Field
+            p = content.AddNewP();
+            pPr = p.AddNewPPr();
+            pPr.AddNewPStyle().val = "TOC1";
+            pPr.AddNewRPr().AddNewNoProof();
+
+            run = p.AddNewR();
+            run.AddNewFldChar().fldCharType = ST_FldCharType.begin;
+
+            run = p.AddNewR();
+            CT_Text text = run.AddNewInstrText();
+            text.space = "preserve";
+            text.Value = (" TOC \\h \\z ");
+
+            p.AddNewR().AddNewFldChar().fldCharType = ST_FldCharType.separate;
 
         }
 
@@ -70,7 +87,7 @@ namespace NPOI.XWPF.UserModel
         {
             CT_SdtContentBlock contentBlock = this.block.sdtContent;
             CT_P p = contentBlock.AddNewP();
-            byte[] b = Encoding.GetEncoding(1252).GetBytes("00EF7E24");
+            byte[] b = Encoding.Unicode.GetBytes("00EF7E24");
             p.rsidR = b;
             p.rsidRDefault = b;
             CT_PPr pPr = p.AddNewPPr();
@@ -108,6 +125,23 @@ namespace NPOI.XWPF.UserModel
             Run = p.AddNewR();
             Run.AddNewRPr().AddNewNoProof();
             Run.AddNewFldChar().fldCharType=(ST_FldCharType.end);
+        }
+
+        public CT_SdtBlock Build()
+        {
+            // append end field char for TOC - only once
+            if (!isBuilt)
+            {
+                CT_SdtContentBlock contentBlock = block.sdtContent;
+                CT_P p = contentBlock.AddNewP();
+                CT_R run = p.AddNewR();
+                run.AddNewRPr().AddNewNoProof();
+                run.AddNewFldChar().fldCharType = ST_FldCharType.end;
+
+                isBuilt = true;
+            }
+
+            return block;
         }
     }
 

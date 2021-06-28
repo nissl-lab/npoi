@@ -2324,12 +2324,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_TblBorders()
         {
-            //this.insideVField = new CT_Border();
-            //this.insideHField = new CT_Border();
-            //this.rightField = new CT_Border();
-            //this.bottomField = new CT_Border();
-            //this.leftField = new CT_Border();
-            //this.topField = new CT_Border();
         }
         public static CT_TblBorders Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -2533,8 +2527,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -5272,15 +5265,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:num", this.num);
             if(this.sep!= ST_OnOff.off)
                 XmlHelper.WriteAttribute(sw, "w:sep", this.sep.ToString());
-            sw.Write(">");
-            if (this.col != null)
+            if (this.col != null && this.col.Count > 0)
             {
+                sw.Write(">");
                 foreach (CT_Column x in this.col)
                 {
                     x.Write(sw, "col");
                 }
+                sw.Write(string.Format("</w:{0}>", nodeName));
+            } else
+            {
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
 
@@ -5413,6 +5409,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private byte[] rsidDelField;
 
         private byte[] rsidTrField;
+        private byte[] paraIdField;
+        private byte[] textIdField;
 
         public CT_Row()
         {
@@ -5432,6 +5430,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             CT_Row ctObj = new CT_Row();
             if (parent != null)
                 ctObj.parent = parent;
+            if (node.Attributes["w14:paraId"] != null)
+                ctObj.paraIdField = XmlHelper.ReadBytes(node.Attributes["w14:paraId"]);
+            if (node.Attributes["w14:textId"] != null)
+                ctObj.textIdField = XmlHelper.ReadBytes(node.Attributes["w14:textId"]);
             ctObj.rsidRPr = XmlHelper.ReadBytes(node.Attributes["w:rsidRPr"]);
             ctObj.rsidR = XmlHelper.ReadBytes(node.Attributes["w:rsidR"]);
             ctObj.rsidDel = XmlHelper.ReadBytes(node.Attributes["w:rsidDel"]);
@@ -5590,8 +5592,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "w:rsidRPr", this.rsidRPr);
             XmlHelper.WriteAttribute(sw, "w:rsidR", this.rsidR);
+            XmlHelper.WriteAttribute(sw, "w:rsidRPr", this.rsidRPr);
+            //XmlHelper.WriteAttribute(sw, "w14:paraId", this.paraIdField);
+            //XmlHelper.WriteAttribute(sw, "w14:textId", this.textIdField);
             XmlHelper.WriteAttribute(sw, "w:rsidDel", this.rsidDel);
             XmlHelper.WriteAttribute(sw, "w:rsidTr", this.rsidTr);
             sw.Write(">");

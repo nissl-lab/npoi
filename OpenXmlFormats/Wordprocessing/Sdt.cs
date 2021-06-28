@@ -1955,7 +1955,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 object o = Items[i];
                 SdtPrElementType t= this.itemsElementNameField[i];
                 if (o is CT_Empty && t== SdtPrElementType.richText)
-                    sw.Write("<richText/>");
+                    sw.Write("<w:richText/>");
                 else if (o is CT_SdtDocPart&& t  == SdtPrElementType.docPartList)
                     ((CT_SdtDocPart)o).Write(sw, "docPartList");
                 else if (o is CT_SdtDocPart&& t == SdtPrElementType.docPartObj)
@@ -1963,9 +1963,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_SdtDropDownList)
                     ((CT_SdtDropDownList)o).Write(sw, "dropDownList");
                 else if (o is CT_Empty&& t== SdtPrElementType.equation)
-                    sw.Write("<equation/>");
+                    sw.Write("<w:equation/>");
                 else if (o is CT_Empty&& t== SdtPrElementType.group)
-                    sw.Write("<group/>");
+                    sw.Write("<w:group/>");
                 else if (o is CT_DecimalNumber&& t== SdtPrElementType.id)
                     ((CT_DecimalNumber)o).Write(sw, "id");
                 else if (o is CT_Lock)
@@ -1985,13 +1985,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_SdtText)
                     ((CT_SdtText)o).Write(sw, "text");
                 else if (o is CT_Empty && t== SdtPrElementType.picture)
-                    sw.Write("<picture/>");
+                    sw.Write("<w:picture/>");
                 else if (o is CT_String&& t== SdtPrElementType.alias)
                     ((CT_String)o).Write(sw, "alias");
                 else if (o is CT_Empty && t== SdtPrElementType.bibliography)
-                    sw.Write("<bibliography/>");
+                    sw.Write("<w:bibliography/>");
                 else if (o is CT_Empty && t== SdtPrElementType.citation)
-                    sw.Write("<citation/>");
+                    sw.Write("<w:citation/>");
                 else if (o is CT_SdtComboBox)
                     ((CT_SdtComboBox)o).Write(sw, "comboBox");
                 else if (o is CT_DataBinding)

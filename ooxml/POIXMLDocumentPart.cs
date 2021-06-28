@@ -258,6 +258,7 @@ using System.Xml;
             ns.AddNamespace("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
             ns.AddNamespace("m", "http://schemas.openxmlformats.org/officeDocument/2006/math");
             ns.AddNamespace("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006");
+            ns.AddNamespace("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
             ns.AddNamespace("o", "urn:schemas-microsoft-com:office:office");
             ns.AddNamespace("v", "urn:schemas-microsoft-com:vml");
             ns.AddNamespace("wne","http://schemas.microsoft.com/office/word/2006/wordml");

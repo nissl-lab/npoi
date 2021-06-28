@@ -1310,7 +1310,13 @@ namespace NPOI.XWPF.UserModel
         /// <param name="newText">replacement text</param>
         public void ReplaceText(string oldText, string newText)
         {
+            if (string.IsNullOrEmpty(oldText))
+            {
+                throw new ArgumentNullException("oldText should not be null");
+            }
             TextSegment ts= this.SearchText(oldText, new PositionInParagraph() { Run = 0 });
+            if (ts == null)
+                return;
             if (ts.BeginRun == ts.EndRun)
             {
                 this.runs[ts.BeginRun].ReplaceText(oldText, newText);
