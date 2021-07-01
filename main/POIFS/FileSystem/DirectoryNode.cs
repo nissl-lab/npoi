@@ -346,16 +346,8 @@ namespace NPOI.POIFS.FileSystem
             Entry rval = null;
 
             if (name != null)
-            {
-                try
-                {
-                    rval = (Entry)_byname[name];
-                }
-                catch (KeyNotFoundException)
-                {
-                    throw new FileNotFoundException("no such entry: \"" + name + "\"");
-                }
-            }
+                _byname.TryGetValue(name, out rval);
+                                
             if (rval == null)
             {
 
