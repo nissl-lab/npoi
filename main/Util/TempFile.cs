@@ -1,4 +1,4 @@
-﻿
+
 namespace NPOI.Util
 {
     using System;
@@ -21,13 +21,13 @@ namespace NPOI.Util
 
             if (dir == null)
             {
-                dir = Directory.CreateDirectory(Path.GetTempPath() + @"\poifiles").FullName;
+                dir = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "poifiles")).FullName;
             }
             // Generate a unique new filename 
-            string file= dir + "\\" + prefix + Guid.NewGuid().ToString() + suffix;
+            string file = Path.Combine(dir, prefix + Guid.NewGuid().ToString() + suffix);
             while (File.Exists(file))
             {
-                file = dir + "\\" + prefix + Guid.NewGuid().ToString() + suffix;
+                file = Path.Combine(dir, prefix + Guid.NewGuid().ToString() + suffix);
                 Thread.Sleep(1);
             }
             FileStream newFile = new FileStream(file, FileMode.CreateNew, FileAccess.ReadWrite);
@@ -40,12 +40,12 @@ namespace NPOI.Util
         {
             if (dir == null)
             {
-                dir = Directory.CreateDirectory(Path.GetTempPath() + @"\poifiles").FullName;
+                dir = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "poifiles")).FullName;
             }
             Random rnd = new Random(DateTime.Now.Millisecond);
             Thread.Sleep(10);
             //return prefix + rnd.Next() + suffix;
-            return dir + "\\" + prefix + rnd.Next() + suffix;
+            return Path.Combine(dir, prefix + rnd.Next() + suffix);
         }
     }
 }
