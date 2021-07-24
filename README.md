@@ -19,6 +19,8 @@ Get Started with NPOI
 
 [中国哪些公司在用.NET](https://github.com/dotnet-cn/jobs)
 
+[DotnetCore.NPOI的前世今生]https://github.com/nissl-lab/npoi/wiki/DotNetCore.NPOI的前世今生
+
 Donation
 =========
 If this project help you reduce time to develop, you can give me a cup of beer 🍺 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/tonyqus/5)
