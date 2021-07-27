@@ -275,7 +275,7 @@ namespace NPOI.XSSF.UserModel
          * @return the CT_Worksheet bean holding this sheet's data
          */
 
-        internal CT_Worksheet GetCTWorksheet()
+        public CT_Worksheet GetCTWorksheet()
         {
             return this.worksheet;
         }
