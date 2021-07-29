@@ -73,6 +73,7 @@ namespace TestCases.XSSF.Streaming
             Assert.IsFalse(_objectToTest.BooleanCellValue);
         }
         [Test]
+        [Ignore("This test doesn't make sense")]
         public void IfCellTypeIsFormulaBooleanCellValueShouldReturnTrueIfValidBooleanFormulaValue()
         {
             _objectToTest = new SXSSFCell(null, CellType.Formula);
