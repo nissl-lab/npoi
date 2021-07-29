@@ -3468,7 +3468,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetBefore()
         {
-            return !(this.beforeField == 0);
+            return this.beforeField != null;
         }
 
         public bool IsSetBeforeLines()
