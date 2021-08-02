@@ -952,6 +952,10 @@ namespace TestCases.HSSF.UserModel
             {
                 new HSSFWorkbook(fs).Close();
             }
+            catch (ArgumentException ex)
+            {
+                Assert.IsTrue(ex.Message.StartsWith("The supplied POIFSFileSystem does not contain a BIFF8"));
+            }
             finally
             {
                 fs.Close();

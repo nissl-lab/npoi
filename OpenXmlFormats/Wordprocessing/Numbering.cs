@@ -1883,7 +1883,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (this.unhideWhenUsed == ST_OnOff.on)
                 XmlHelper.WriteAttribute(sw, "w:unhideWhenUsed", "1");
             if (qFormat != ST_OnOff.off)
-                XmlHelper.WriteAttribute(sw, "w:qFormat", this.qFormat.ToString());
+                XmlHelper.WriteAttribute(sw, "w:qFormat", "1");
             sw.Write("/>");
         }
 

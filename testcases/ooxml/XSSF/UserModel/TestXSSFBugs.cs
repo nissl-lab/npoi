@@ -2707,6 +2707,7 @@ namespace TestCases.XSSF.UserModel
          *  long time test, run over 1 minute.
          */
         [Test, RunSerialyAndSweepTmpFiles]
+        [Ignore("this test doesn't make sense")]
         public void Bug57880()
         {
             Console.WriteLine("long time test, run over 1 minute.");

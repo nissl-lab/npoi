@@ -20,7 +20,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public bool IsSetPatternType()
         {
-            return this.patternTypeField != ST_PatternType.none;
+            return this.patternTypeField!=null&&this.patternTypeField != ST_PatternType.none;
         }
         public CT_Color AddNewFgColor()
         {

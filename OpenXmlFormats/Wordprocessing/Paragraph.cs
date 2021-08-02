@@ -30,6 +30,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private byte[] rsidPField;
 
         private byte[] rsidRDefaultField;
+        private byte[] paraIdField;
+        private byte[] textIdField;
 
         public CT_P()
         {
@@ -55,6 +57,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (node == null)
                 return null;
             CT_P ctObj = new CT_P();
+            if(node.Attributes["w14:paraId"] !=null)
+                ctObj.paraIdField = XmlHelper.ReadBytes(node.Attributes["w14:paraId"]);
+            if (node.Attributes["w14:textId"] != null)
+                ctObj.textIdField = XmlHelper.ReadBytes(node.Attributes["w14:textId"]);
             ctObj.rsidRPr = XmlHelper.ReadBytes(node.Attributes["w:rsidRPr"]);
             ctObj.rsidR = XmlHelper.ReadBytes(node.Attributes["w:rsidR"]);
             ctObj.rsidDel = XmlHelper.ReadBytes(node.Attributes["w:rsidDel"]);
@@ -239,6 +245,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
+            //XmlHelper.WriteAttribute(sw, "w14:paraId", this.paraIdField);
+            //XmlHelper.WriteAttribute(sw, "w14:textId", this.textIdField);
             XmlHelper.WriteAttribute(sw, "w:rsidR", this.rsidR);
             XmlHelper.WriteAttribute(sw, "w:rsidRPr", this.rsidRPr);
             XmlHelper.WriteAttribute(sw, "w:rsidRDefault", this.rsidRDefault);
@@ -2008,25 +2016,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_SectPrBase()
         {
-            //this.printerSettingsField = new CT_Rel();
-            //this.docGridField = new CT_DocGrid();
-            //this.rtlGutterField = new CT_OnOff();
-            //this.bidiField = new CT_OnOff();
-            this.textDirectionField = new CT_TextDirection();
-            //this.titlePgField = new CT_OnOff();
-            //this.noEndnoteField = new CT_OnOff();
-            //this.vAlignField = new CT_VerticalJc();
-            //this.formProtField = new CT_OnOff();
-            this.colsField = new CT_Columns();
-            //this.pgNumTypeField = new CT_PageNumber();
-            //this.lnNumTypeField = new CT_LineNumber();
-            //this.pgBordersField = new CT_PageBorders();
-            //this.paperSrcField = new CT_PaperSource();
-            //this.pgMarField = new CT_PageMar();
-            //this.pgSzField = new CT_PageSz();
-            //this.typeField = new CT_SectType();
-            //this.endnotePrField = new CT_EdnProps();
-            //this.footnotePrField = new CT_FtnProps();
         }
         public static CT_SectPrBase Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -2489,7 +2478,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_SectPr()
         {
-            this.sectPrChangeField = new CT_SectPrChange();
+            //this.sectPrChangeField = new CT_SectPrChange();
             //this.printerSettingsField = new CT_Rel();
             this.docGridField = new CT_DocGrid();
             this.docGrid.type = ST_DocGrid.lines;
@@ -3271,9 +3260,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_Spacing
     {
 
-        private ulong beforeField;
-
-        private bool beforeFieldSpecified;
+        private ulong? beforeField;
 
         private string beforeLinesField;
 
@@ -3281,9 +3268,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private bool beforeAutospacingFieldSpecified;
 
-        private ulong afterField;
-
-        private bool afterFieldSpecified;
+        private ulong? afterField;
 
         private string afterLinesField;
 
@@ -3301,11 +3286,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (node == null)
                 return null;
             CT_Spacing ctObj = new CT_Spacing();
-            ctObj.before = XmlHelper.ReadULong(node.Attributes["w:before"]);
+            if(node.Attributes["w:before"]!=null)
+                ctObj.before = XmlHelper.ReadULong(node.Attributes["w:before"]);
             ctObj.beforeLines = XmlHelper.ReadString(node.Attributes["w:beforeLines"]);
             if (node.Attributes["w:beforeAutospacing"] != null)
                 ctObj.beforeAutospacing = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:beforeAutospacing"].Value,true);
-            ctObj.after = XmlHelper.ReadULong(node.Attributes["w:after"]);
+            if (node.Attributes["w:after"] != null)
+                ctObj.after = XmlHelper.ReadULong(node.Attributes["w:after"]);
             ctObj.afterLines = XmlHelper.ReadString(node.Attributes["w:afterLines"]);
             if (node.Attributes["w:afterAutospacing"] != null)
                 ctObj.afterAutospacing = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:afterAutospacing"].Value,true);
@@ -3320,11 +3307,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "w:before", this.before);
+            if(this.beforeField != null)
+                XmlHelper.WriteAttribute(sw, "w:before", (ulong)this.before, true);
             XmlHelper.WriteAttribute(sw, "w:beforeLines", this.beforeLines);
             if(this.beforeAutospacing!= ST_OnOff.off)
                 XmlHelper.WriteAttribute(sw, "w:beforeAutospacing", this.beforeAutospacing.ToString());
-            XmlHelper.WriteAttribute(sw, "w:after", this.after,false);
+            if (this.afterField != null)
+                XmlHelper.WriteAttribute(sw, "w:after", (ulong)this.after, true);
             XmlHelper.WriteAttribute(sw, "w:afterLines", this.afterLines);
             if (this.afterAutospacing != ST_OnOff.off)
                 XmlHelper.WriteAttribute(sw, "w:afterAutospacing", this.afterAutospacing.ToString());
@@ -3336,7 +3325,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ulong before
+        public ulong? before
         {
             get
             {
@@ -3345,19 +3334,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.beforeField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool beforeSpecified
-        {
-            get
-            {
-                return this.beforeFieldSpecified;
-            }
-            set
-            {
-                this.beforeFieldSpecified = value;
             }
         }
 
@@ -3400,8 +3376,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ulong after
+        public ulong? after
         {
             get
             {
@@ -3410,19 +3385,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.afterField = value;
-            }
-        }
-
-        [XmlIgnore]
-        public bool afterSpecified
-        {
-            get
-            {
-                return this.afterFieldSpecified;
-            }
-            set
-            {
-                this.afterFieldSpecified = value;
             }
         }
 
@@ -3506,7 +3468,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public bool IsSetBefore()
         {
-            return !(this.beforeField == 0);
+            return this.beforeField != null;
         }
 
         public bool IsSetBeforeLines()

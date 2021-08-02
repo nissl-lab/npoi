@@ -590,10 +590,16 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "noChangeAspect", this.noChangeAspect, false);
             XmlHelper.WriteAttribute(sw, "noMove", this.noMove, false);
             XmlHelper.WriteAttribute(sw, "noResize", this.noResize, false);
-            sw.Write(">");
-            if (this.extLst != null)
+            if (this.extLst != null && this.extLst.ext.Count != 0)
+            {
+                sw.Write(">");
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+                sw.Write(string.Format("</a:{0}>", nodeName));
+            }
+            else
+            {
+                sw.Write("/>");
+            }
         }
 
         [XmlElement(Order = 0)]
