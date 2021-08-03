@@ -304,7 +304,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (short)(_cells.Count == 0 ? -1 : GetFirstKey(_cells.Keys));
+                return (short)(_cells.Count == 0 ? -1 : GetFirstKey());
             }
         }
 
