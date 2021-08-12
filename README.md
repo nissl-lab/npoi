@@ -1,7 +1,6 @@
 NPOI
 ===================
-[![NuGet Version](https://img.shields.io/nuget/v/NPOI.svg?style=flat)](https://www.nuget.org/packages/NPOI/)
-[![NuGet](https://img.shields.io/nuget/dt/NPOI.svg)](https://www.nuget.org/packages/NPOI) 
+[![NuGet Badge](https://buildstats.info/nuget/NPOI)](https://www.nuget.org/packages/NPOI)
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
 [![Analytics](https://ga-beacon.appspot.com/UA-39118634-1/readme)](https://github.com/tonyqus/npoi)
 <br />
