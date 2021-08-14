@@ -78,7 +78,9 @@ namespace NPOI.XSSF.UserModel
             {
                 if (cfvo.type == ST_CfvoType.formula ||
                 cfvo.type == ST_CfvoType.min ||
-                cfvo.type == ST_CfvoType.max)
+                cfvo.type == ST_CfvoType.max || 
+                cfvo.type == ST_CfvoType.autoMax||
+                cfvo.type == ST_CfvoType.autoMin)
                 {
                     return null;
                 }

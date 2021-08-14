@@ -90,20 +90,26 @@ namespace NPOI.SS.UserModel
         /** Formula result */
         public static RangeType FORMULA = new RangeType(7, "formula");
 
+        public static RangeType AUTOMIN = new RangeType(8, "autoMin");
+
+        public static RangeType AUTOMAX = new RangeType(9, "autoMax");
+
         /** Numeric ID of the type */
         public int id;
         /** Name (system) of the type */
         public string name;
 
         private static List<RangeType> values = new List<RangeType>() {
-        NUMBER,
-        MIN,
-        MAX,
-        PERCENT,
-        PERCENTILE,
-        UNALLOCATED,
-        FORMULA
-    };
+            NUMBER,
+            MIN,
+            MAX,
+            PERCENT,
+            PERCENTILE,
+            UNALLOCATED,
+            FORMULA,
+            AUTOMIN,
+            AUTOMAX
+        };
         public static List<RangeType> Values()
         {
             return values;

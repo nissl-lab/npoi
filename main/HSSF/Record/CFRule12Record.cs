@@ -119,30 +119,36 @@ namespace NPOI.HSSF.Record
             return new CFRule12Record(CONDITION_TYPE_CELL_VALUE_IS, comparisonOperation,
                     formula1, formula2, formula3);
         }
-        /**
-         * Creates a new Data Bar formatting
-         */
+        /// <summary>
+        /// Creates a new Data Bar formatting
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
         public static CFRule12Record Create(HSSFSheet sheet, ExtendedColorR color) {
             CFRule12Record r = new CFRule12Record(CONDITION_TYPE_DATA_BAR,
                                                   ComparisonOperator.NO_COMPARISON);
             DataBarFormatting dbf = r.CreateDataBarFormatting();
-            dbf.Color = (/*setter*/color);
-            dbf.PercentMin = (/*setter*/(byte)0);
-            dbf.PercentMax = (/*setter*/(byte)100);
+            dbf.Color = color;
+            dbf.PercentMin = (byte)0;
+            dbf.PercentMax = (byte)100;
 
             DataBarThreshold min = new DataBarThreshold();
             min.SetType(RangeType.MIN.id);
-            dbf.ThresholdMin = (/*setter*/min);
+            dbf.ThresholdMin = min;
 
             DataBarThreshold max = new DataBarThreshold();
             max.SetType(RangeType.MAX.id);
-            dbf.ThresholdMax = (/*setter*/max);
+            dbf.ThresholdMax = max;
 
             return r;
         }
-        /**
-         * Creates a new Icon Set / Multi-State formatting
-         */
+        /// <summary>
+        /// Creates a new Icon Set / Multi-State formatting
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <param name="iconSet"></param>
+        /// <returns></returns>
         public static CFRule12Record Create(HSSFSheet sheet, IconSet iconSet) {
             Threshold[] ts = new Threshold[iconSet.num];
             for (int i = 0; i < ts.Length; i++) {
@@ -152,13 +158,15 @@ namespace NPOI.HSSF.Record
             CFRule12Record r = new CFRule12Record(CONDITION_TYPE_ICON_SET,
                                                   ComparisonOperator.NO_COMPARISON);
             IconMultiStateFormatting imf = r.CreateMultiStateFormatting();
-            imf.IconSet = (/*setter*/iconSet);
-            imf.Thresholds = (/*setter*/ts);
+            imf.IconSet = iconSet;
+            imf.Thresholds = ts;
             return r;
         }
-        /**
-         * Creates a new Color Scale / Color Gradient formatting
-         */
+        /// <summary>
+        /// Creates a new Color Scale / Color Gradient formatting
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <returns></returns>
         public static CFRule12Record CreateColorScale(HSSFSheet sheet) {
             int numPoints = 3;
             ExtendedColorR[] colors = new ExtendedColorR[numPoints];

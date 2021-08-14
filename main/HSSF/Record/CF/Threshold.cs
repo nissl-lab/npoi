@@ -55,7 +55,9 @@ namespace NPOI.HSSF.Record.CF
             }
             // Value is only there for non-formula, non min/max thresholds
             if (formulaLen == 0 && type != RangeType.MIN.id &&
-                    type != RangeType.MAX.id)
+                    type != RangeType.MAX.id && 
+                    type != RangeType.AUTOMIN.id &&
+                    type != RangeType.AUTOMAX.id)
             {
                 value = in1.ReadDouble();
             }
@@ -73,7 +75,9 @@ namespace NPOI.HSSF.Record.CF
 
                 // Ensure the value presence / absence is consistent for the new type
                 if (type == RangeType.MIN.id || type == RangeType.MAX.id ||
-                       type == RangeType.FORMULA.id)
+                       type == RangeType.FORMULA.id || 
+                       type== RangeType.AUTOMIN.id ||
+                       type==RangeType.AUTOMAX.id)
                 {
                     this.value = null;
                 }

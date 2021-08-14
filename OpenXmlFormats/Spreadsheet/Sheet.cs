@@ -6711,6 +6711,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         min,
         formula,
         percentile,
+        autoMin,
+        autoMax
     }
 
     [Serializable]
