@@ -20,6 +20,8 @@ Get Started with NPOI
 
 [DotnetCore.NPOI的前世今生](https://github.com/nissl-lab/npoi/wiki/DotNetCore.NPOI的前世今生)
 
+[NPOI Changelog](https://github.com/nissl-lab/npoi/wiki/Changelog)
+
 Donation
 =========
 If this project help you reduce time to develop, you can give me a cup of beer 🍺 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/tonyqus/5)
@@ -51,6 +53,8 @@ h. Works on both Windows and Linux
 
 System Requirement
 ===================
-.NET Standard 2.0 (.NET Core)
+.NET Standard 2.1 (.NET Core 3.x)
+
+.NET Standard 2.0 (.NET Core 2.x)
 
 .NET Framework 4.0 and above
