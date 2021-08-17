@@ -816,7 +816,7 @@ namespace NPOI.OpenXmlFormats.Vml
         {
             textboxField = new CT_Textbox();
             return this.textboxField;
-            }
+        }
 
         private CT_Wrap wrapField;
         private CT_Fill fillField;
@@ -957,9 +957,8 @@ namespace NPOI.OpenXmlFormats.Vml
             this.pathField = new CT_Path();
             return this.pathField;       
         }
-        List<CT_ClientData> clientDataField = null;
 
-        [XmlElement("ClientData",Namespace = "urn:schemas-microsoft-com:office:excel")]
+        List<CT_ClientData> clientDataField = null;
         public List<CT_ClientData> ClientData
         {
             get
