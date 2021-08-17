@@ -184,8 +184,8 @@ namespace NPOI.POIFS.Storage
 
                 // Give a generic error if the OLE2 signature isn't found
                 throw new NotOLE2FileException("Invalid header signature; read "
-                                    + HexDump.LongToHex(signature) + ", expected "
-                                    + HexDump.LongToHex(_signature) + " - Your file appears "
+                                    + new String(HexDump.LongToHex(signature)) + ", expected "
+                                    + new String(HexDump.LongToHex(_signature)) + " - Your file appears "
                                     + "not to be a valid OLE2 document");
             }
 
