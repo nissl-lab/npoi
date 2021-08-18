@@ -1539,7 +1539,36 @@ namespace NPOI.XWPF.UserModel
         {
             return tables.GetEnumerator();
         }
-
+        /// <summary>
+        /// Change orientation of a Word file
+        /// </summary>
+        /// <param name="orientation"></param>
+        /// <remarks>https://stackoverflow.com/questions/26483837/landscape-and-portrait-pages-in-the-same-word-document-using-apache-poi-xwpf-in</remarks>
+        public void ChangeOrientation(ST_PageOrientation orientation)
+        {
+            var body = this.Document.body;
+            if (body.sectPr == null)
+            {
+                body.AddNewSectPr();
+            }
+            var section = body.sectPr;
+            XWPFParagraph para = this.CreateParagraph();
+            var ctp = para.GetCTP();
+            var br = ctp.AddNewPPr();
+            br.sectPr = section;
+            var pageSize = section.pgSz;
+            pageSize.orient = orientation;
+            if (orientation== ST_PageOrientation.landscape)
+            {
+                pageSize.w = 842 * 20;
+                pageSize.h = 595 * 20;
+            }
+            else
+            {
+                pageSize.h = 842 * 20;
+                pageSize.w = 595 * 20;
+            }
+        }
         public IEnumerator<XWPFParagraph> GetParagraphsEnumerator()
         {
             return paragraphs.GetEnumerator();
