@@ -485,17 +485,37 @@ namespace NPOI.POIFS.FileSystem
          */
         public override ByteBuffer GetBlockAt(int offset)
         {
+            ByteBuffer output = null;
+            if (!TryGetBlockAt(offset, out output))
+            {
+                throw new IndexOutOfRangeException("Block " + offset + " not found");
+            }
+
+            return output;
+        }
+
+        /**
+         * Try to load the block at the given offset, and if the offset is beyond the end of the buffer, return false.
+         */
+        public override bool TryGetBlockAt(int offset, out ByteBuffer buffer)
+        {
             // The header block doesn't count, so add one
             long startAt = (offset + 1) * bigBlockSize.GetBigBlockSize();
+
+            buffer = null;
+
+            if (startAt >= _data.Size)
+                return false;
+
             try
             {
-                return _data.Read(bigBlockSize.GetBigBlockSize(), startAt);
+                buffer = _data.Read(bigBlockSize.GetBigBlockSize(), startAt);
+                return true;
             }
             catch (IndexOutOfRangeException e)
             {
                 throw new IndexOutOfRangeException("Block " + offset + " not found - ", e);
             }
-            
         }
 
         /**
@@ -504,21 +524,18 @@ namespace NPOI.POIFS.FileSystem
          */
         public override ByteBuffer CreateBlockIfNeeded(int offset)
         {
-            try
-            {
-                return GetBlockAt(offset);
-            }
-            catch (IndexOutOfRangeException)
-            {
-                // The header block doesn't count, so add one
-                long startAt = (offset + 1) * bigBlockSize.GetBigBlockSize();
-                // Allocate and write
-                ByteBuffer buffer = ByteBuffer.CreateBuffer(GetBigBlockSize());
-                // byte[] buffer = new byte[GetBigBlockSize()];
-                _data.Write(buffer, startAt);
-                // Retrieve the properly backed block
-                return GetBlockAt(offset);
-            }
+            if (TryGetBlockAt(offset, out var byteBuffer))
+                return byteBuffer;
+
+            // The header block doesn't count, so add one
+            long startAt = (offset + 1) * bigBlockSize.GetBigBlockSize();
+            // Allocate and write
+            ByteBuffer buffer = ByteBuffer.CreateBuffer(GetBigBlockSize());
+            // byte[] buffer = new byte[GetBigBlockSize()];
+            _data.Write(buffer, startAt);
+            // Retrieve the properly backed block
+            return GetBlockAt(offset);
+
         }
 
         /**
