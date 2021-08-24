@@ -2,7 +2,7 @@ NPOI
 ===================
 [![NuGet Badge](https://buildstats.info/nuget/NPOI)](https://www.nuget.org/packages/NPOI)
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
-[![Analytics](https://ga-beacon.appspot.com/UA-39118634-1/readme)](https://github.com/tonyqus/npoi)
+[![Analytics](https://ga-beacon.appspot.com/UA-39118634-1/readme)](https://github.com/nissl-lab/npoi)
 <br />
 This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
