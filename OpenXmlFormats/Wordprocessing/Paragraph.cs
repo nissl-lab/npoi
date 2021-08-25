@@ -245,15 +245,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            //XmlHelper.WriteAttribute(sw, "w14:paraId", this.paraIdField);
-            //XmlHelper.WriteAttribute(sw, "w14:textId", this.textIdField);
+            XmlHelper.WriteAttribute(sw, "w14:paraId", this.paraIdField);
+            XmlHelper.WriteAttribute(sw, "w14:textId", this.textIdField);
             XmlHelper.WriteAttribute(sw, "w:rsidR", this.rsidR);
             XmlHelper.WriteAttribute(sw, "w:rsidRPr", this.rsidRPr);
             XmlHelper.WriteAttribute(sw, "w:rsidRDefault", this.rsidRDefault);
             XmlHelper.WriteAttribute(sw, "w:rsidP", this.rsidP);
             XmlHelper.WriteAttribute(sw, "w:rsidDel", this.rsidDel);
             sw.Write(">");
-            if (this.pPr != null)
+            if (this.pPr != null&&!this.pPr.IsEmpty)
                 this.pPr.Write(sw, "pPr");
 
             int i = 0;
@@ -2487,7 +2487,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             
             //this.rtlGutterField = new CT_OnOff();
             //this.bidiField = new CT_OnOff();
-            this.textDirectionField = new CT_TextDirection();
+            //this.textDirectionField = new CT_TextDirection();
             //this.titlePgField = new CT_OnOff();
             //this.noEndnoteField = new CT_OnOff();
             //this.vAlignField = new CT_VerticalJc();
@@ -2495,7 +2495,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.colsField = new CT_Columns();
             this.cols.space = 425;
             this.cols.spaceSpecified = true;
-            this.pgNumTypeField = new CT_PageNumber();
+            //this.pgNumTypeField = new CT_PageNumber();
             //this.lnNumTypeField = new CT_LineNumber();
             //this.pgBordersField = new CT_PageBorders();
             //this.paperSrcField = new CT_PaperSource();

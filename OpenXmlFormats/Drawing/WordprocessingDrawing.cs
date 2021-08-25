@@ -1207,6 +1207,9 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
                 this.allowOverlapField = value;
             }
         }
+
+        private byte[] anchorIdField;
+        private byte[] editIdField;
         public static CT_Anchor Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -1223,6 +1226,10 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             ctObj.layoutInCell = XmlHelper.ReadBool(node.Attributes["layoutInCell"]);
             ctObj.hidden = XmlHelper.ReadBool(node.Attributes["hidden"]);
             ctObj.allowOverlap = XmlHelper.ReadBool(node.Attributes["allowOverlap"]);
+            if (node.Attributes["wp14:anchorId"] != null)
+                ctObj.anchorIdField = XmlHelper.ReadBytes(node.Attributes["wp14:anchorId"]);
+            if (node.Attributes["wp14:editId"] != null)
+                ctObj.editIdField = XmlHelper.ReadBytes(node.Attributes["wp14:editId"]);
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "simplePos")
@@ -1239,6 +1246,8 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
                     ctObj.wrapNone = new CT_WrapNone();
                 else if (childNode.LocalName == "effectExtent")
                     ctObj.effectExtent = CT_EffectExtent.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "wrapTopAndBottom")
+                    ctObj.wrapTopAndBottom = CT_WrapTopBottom.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "docPr")
                     ctObj.docPr = CT_NonVisualDrawingProps.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "cNvGraphicFramePr")
@@ -1254,8 +1263,8 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<wp:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "distT", this.distT);
-            XmlHelper.WriteAttribute(sw, "distB", this.distB);
+            XmlHelper.WriteAttribute(sw, "distT", this.distT, true);
+            XmlHelper.WriteAttribute(sw, "distB", this.distB ,true);
             XmlHelper.WriteAttribute(sw, "distL", this.distL);
             XmlHelper.WriteAttribute(sw, "distR", this.distR);
             XmlHelper.WriteAttribute(sw, "simplePos", this.simplePos1);
@@ -1263,8 +1272,11 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             XmlHelper.WriteAttribute(sw, "behindDoc", this.behindDoc);
             XmlHelper.WriteAttribute(sw, "locked", this.locked);
             XmlHelper.WriteAttribute(sw, "layoutInCell", this.layoutInCell);
-            XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
+            if(!this.hidden)
+                XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
             XmlHelper.WriteAttribute(sw, "allowOverlap", this.allowOverlap);
+            XmlHelper.WriteAttribute(sw, "wp14:anchorId", this.anchorIdField);
+            XmlHelper.WriteAttribute(sw, "wp14:editId", this.editIdField);
             sw.Write(">");
             if (this.simplePos != null)
                 this.simplePos.Write(sw, "simplePos");
@@ -1276,6 +1288,8 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
                 this.extent.Write(sw, "extent");
             if (this.effectExtent != null)
                 this.effectExtent.Write(sw, "effectExtent");
+            if (this.wrapTopAndBottom != null)
+                this.wrapTopAndBottom.Write(sw, "wrapTopAndBottom");
             if (this.wrapSquare != null)
                 this.wrapSquare.Write(sw, "wrapSquare");
             if (this.wrapNone != null)
@@ -2056,11 +2070,7 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
         }
     }
 
-    
-    [Serializable]
-    
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", IsNullable = true)]
+   
     public class CT_WrapTopBottom
     {
 
@@ -2145,6 +2155,24 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             {
                 this.distBFieldSpecified = value;
             }
+        }
+
+        internal static CT_WrapTopBottom Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_WrapTopBottom ctObj = new CT_WrapTopBottom();
+            ctObj.distB = XmlHelper.ReadUInt(node.Attributes["distB"]);
+            ctObj.distT = XmlHelper.ReadUInt(node.Attributes["distT"]);
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<wp:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "distT", this.distT);
+            XmlHelper.WriteAttribute(sw, "distB", this.distB);
+            sw.Write("/>");
         }
     }
 }
