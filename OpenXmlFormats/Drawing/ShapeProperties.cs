@@ -583,7 +583,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(string.Format("<a:{0} xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\"", nodeName));
             XmlHelper.WriteAttribute(sw, "noGrp", this.noGrp, false);
             XmlHelper.WriteAttribute(sw, "noDrilldown", this.noDrilldown, false);
             XmlHelper.WriteAttribute(sw, "noSelect", this.noSelect, false);
