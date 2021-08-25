@@ -211,11 +211,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
     }
 
-
-    [Serializable]
-
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [XmlRoot("numbering", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = false)]
     public class CT_Numbering
     {
 
@@ -252,10 +247,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw)
         {
-            sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
-            sw.Write("<w:numbering xmlns:ve=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" ");
+            sw.WriteLine("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+            sw.Write("<w:numbering xmlns:wpc=\"http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" ");
             sw.Write("xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:m=\"http://schemas.openxmlformats.org/officeDocument/2006/math\" ");
-            sw.Write("xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\" ");
+            sw.Write("xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:wp14=\"http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing\" xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\" ");
             sw.Write("xmlns:w10=\"urn:schemas-microsoft-com:office:word\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\" ");
             sw.Write("xmlns:wne=\"http://schemas.microsoft.com/office/word/2006/wordml\">");
             if (this.numIdMacAtCleanup != null)
@@ -1292,6 +1287,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             //this.lvlRestartField = new CT_DecimalNumber();
             this.numFmtField = new CT_NumFmt();
             this.startField = new CT_DecimalNumber();
+            this.tentativeField = ST_OnOff.off;
         }
         public static CT_Lvl Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -1301,7 +1297,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             ctObj.ilvl = XmlHelper.ReadString(node.Attributes["w:ilvl"]);
             ctObj.tplc = XmlHelper.ReadBytes(node.Attributes["w:tplc"]);
             if (node.Attributes["w:tentative"] != null)
-                ctObj.tentative = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:tentative"].Value,true);
+            {
+                ctObj.tentative = (ST_OnOff)Enum.Parse(typeof(ST_OnOff), node.Attributes["w:tentative"].Value, true);
+                ctObj.tentativeSpecified = true;
+            }
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "start")
@@ -1339,7 +1338,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:ilvl", this.ilvl);
             XmlHelper.WriteAttribute(sw, "w:tplc", this.tplc);
-            if(this.tentative!= ST_OnOff.off)
+            if(this.tentative!= ST_OnOff.off|| this.tentativeFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "w:tentative", this.tentative.ToString());
             sw.Write(">");
             if (this.start != null)
