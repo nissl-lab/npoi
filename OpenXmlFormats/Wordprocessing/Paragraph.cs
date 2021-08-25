@@ -3571,9 +3571,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:right", this.right);
             XmlHelper.WriteAttribute(sw, "w:hangingChars", this.hangingChars);
             XmlHelper.WriteAttribute(sw, "w:hanging", this.hanging);
-            XmlHelper.WriteAttribute(sw, "w:firstLineChars", this.firstLineChars);
             if(firstLineField>=0)
                 XmlHelper.WriteAttribute(sw, "w:firstLine", this.firstLine, true);
+            XmlHelper.WriteAttribute(sw, "w:firstLineChars", this.firstLineChars);
             sw.Write("/>");
         }
 

@@ -114,8 +114,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
-            sw.Write(">");
+            sw.Write(string.Format("<a:{0} xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">", nodeName));
             if (this.graphicData != null)
                 this.graphicData.Write(sw, "graphicData");
             sw.Write(string.Format("</a:{0}>", nodeName));

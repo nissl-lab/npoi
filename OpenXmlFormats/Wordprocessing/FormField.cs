@@ -151,20 +151,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             get { return this.numberingChangeField; }
             set { this.numberingChangeField = value; }
         }
-        [XmlElement("ffData", typeof(CT_FFData), Order = 0)]
-        [XmlElement("fldData", typeof(CT_Text), Order = 0)]
-        [XmlElement("numberingChange", typeof(CT_TrackChangeNumbering), Order = 0)]
-        public object Item
-        {
-            get
-            {
-                return this.itemField;
-            }
-            set
-            {
-                this.itemField = value;
-            }
-        }
         public static CT_FldChar Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -200,21 +186,31 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:fldCharType", this.fldCharType.ToString());
-            XmlHelper.WriteAttribute(sw, "w:fldLock", this.fldLock.ToString());
-            XmlHelper.WriteAttribute(sw, "w:dirty", this.dirty.ToString());
-            sw.Write(">");
-
-            if (this.ffDataField != null)
+            if(this.fldLock!= ST_OnOff.off)
+                XmlHelper.WriteAttribute(sw, "w:fldLock", this.fldLock.ToString());
+            if (this.dirty != ST_OnOff.off)
+                XmlHelper.WriteAttribute(sw, "w:dirty", this.dirty.ToString());
+            if (this.ffDataField == null && this.fldDataField == null && this.numberingChangeField == null)
             {
-                this.ffDataField.Write(sw, "ffData");
+                sw.Write(string.Format("/>", nodeName));
             }
-            if (this.fldDataField != null)
-                this.fldDataField.Write(sw, "fldData");
-            if (this.numberingChangeField != null)
+            else
             {
-                this.numberingChangeField.Write(sw, "numberingChange");
+                sw.Write(">");
+                if (this.ffDataField != null)
+                {
+                    this.ffDataField.Write(sw, "ffData");
+                }
+                if (this.fldDataField != null)
+                {
+                    this.fldDataField.Write(sw, "fldData");
+                }
+                if (this.numberingChangeField != null)
+                {
+                    this.numberingChangeField.Write(sw, "numberingChange");
+                }
+                sw.Write(string.Format("</w:{0}>", nodeName));
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]

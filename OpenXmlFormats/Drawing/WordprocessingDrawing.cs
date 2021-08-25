@@ -204,14 +204,21 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             XmlHelper.WriteAttribute(sw, "descr", this.descr.Replace("\n", "&#xA;").Replace("\r", "&#xD;"));
             if(this.hidden)
                 XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
-            sw.Write(">");
-            if (this.hlinkClick != null)
-                this.hlinkClick.Write(sw, "hlinkClick");
-            if (this.hlinkHover != null)
-                this.hlinkHover.Write(sw, "hlinkHover");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</wp:{0}>", nodeName));
+            if (this.hlinkClick == null && this.hlinkHover == null && this.extLst == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.hlinkClick != null)
+                    this.hlinkClick.Write(sw, "hlinkClick");
+                if (this.hlinkHover != null)
+                    this.hlinkHover.Write(sw, "hlinkHover");
+                if (this.extLst != null)
+                    this.extLst.Write(sw, "extLst");
+                sw.Write(string.Format("</wp:{0}>", nodeName));
+            }
         }
 
         private CT_Hyperlink hlinkClickField = null;

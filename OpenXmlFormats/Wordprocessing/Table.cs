@@ -5073,7 +5073,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return null;
             CT_VMerge ctObj = new CT_VMerge();
             if (node.Attributes["w:val"] != null)
-                ctObj.val = (ST_Merge)Enum.Parse(typeof(ST_Merge), node.Attributes["w:val"].Value);
+            {
+                ctObj.valField = (ST_Merge)Enum.Parse(typeof(ST_Merge), node.Attributes["w:val"].Value);
+                ctObj.valFieldSpecified = true;
+            }
             return ctObj;
         }
 
@@ -5082,14 +5085,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            if (valField != ST_Merge.@continue)
+            if (valField != ST_Merge.@continue|| this.valFieldSpecified)
             {
-                XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
+                XmlHelper.WriteAttribute(sw, "w:val", this.valField.ToString());
             }
             sw.Write("/>");
         }
 
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public ST_Merge val
         {
             get
@@ -5099,6 +5101,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.valField = value;
+                this.valFieldSpecified = true;
             }
         }
 
