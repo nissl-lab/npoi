@@ -552,8 +552,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "r:id", this.id);
             XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
             sw.Write("/>");
         }
 
@@ -799,8 +799,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write("xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:wp14=\"http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing\" ");
             sw.Write("xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\" ");
             sw.Write("xmlns:w14=\"http://schemas.microsoft.com/office/word/2010/wordml\" xmlns:w15=\"http://schemas.microsoft.com/office/word/2012/wordml\" xmlns:w10=\"urn:schemas-microsoft-com:office:word\" ");
-            sw.Write("xmlns:wpg=\"http://schemas.microsoft.com/office/word/2010/wordprocessingGroup\" xmlns:wpi=\"http://schemas.microsoft.com/office/word/2010/wordprocessingInk\" xmlns:wne=\"http://schemas.microsoft.com/office/word/2006/wordml\">");
-            sw.WriteLine();
+            sw.Write("xmlns:wpg=\"http://schemas.microsoft.com/office/word/2010/wordprocessingGroup\" xmlns:wpi=\"http://schemas.microsoft.com/office/word/2010/wordprocessingInk\" ");
+            sw.Write("xmlns:wne=\"http://schemas.microsoft.com/office/word/2006/wordml\" xmlns:wps=\"http://schemas.microsoft.com/office/word/2010/wordprocessingShape\" ");
+            sw.Write("mc:Ignorable=\"w14 w15 wp14\">");
             if (this.footnote != null)
             {
                 foreach (CT_FtnEdn x in this.footnote)
@@ -1405,10 +1406,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     }
 
 
-    [Serializable]
-
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-    [XmlRoot("endnotes", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = false)]
     public class CT_Endnotes
     {
 
