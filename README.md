@@ -23,10 +23,6 @@ Get Started with NPOI
 
 [NPOI Changelog](https://github.com/nissl-lab/npoi/wiki/Changelog)
 
-Donation
-=========
-If this project help you reduce time to develop, you can give me a cup of beer 🍺 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/tonyqus/5)
-
 Telegram User Group
 ================
 Join us on telegram: https://t.me/npoidevs
