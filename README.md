@@ -21,6 +21,8 @@ Get Started with NPOI
 
 [DotnetCore.NPOI的前世今生](https://github.com/nissl-lab/npoi/wiki/DotNetCore.NPOI的前世今生)
 
+[起底开源邪教NCC组织](https://github.com/nissl-lab/npoi/wiki/起底开源邪教NCC组织)
+
 [NPOI Changelog](https://github.com/nissl-lab/npoi/wiki/Changelog)
 
 Telegram User Group
