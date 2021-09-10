@@ -140,7 +140,7 @@ namespace NPOI.SS.Formula.Functions
                         AreaEval aeRange = ranges[i];
                         IMatchPredicate mp = predicates[i];
 
-                        if (!mp.Matches(aeRange.GetRelativeValue(r, c)))
+                        if (mp == null || !mp.Matches(aeRange.GetRelativeValue(r, c)))
                         {
                             matches = false;
                             break;
