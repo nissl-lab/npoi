@@ -359,7 +359,7 @@ namespace NPOI.OpenXml4Net.Util
         public static void WriteAttribute(StreamWriter sw, string attributeName, uint value, uint defaultValue, bool writeIfBlank = false)
         {
             if(value != defaultValue)
-                WriteAttribute(sw, attributeName, (int)value, writeIfBlank);
+                WriteAttribute(sw, attributeName, (int)value, true);
             else if(writeIfBlank)
                 WriteAttribute(sw, attributeName, (int)value, writeIfBlank);
         }
