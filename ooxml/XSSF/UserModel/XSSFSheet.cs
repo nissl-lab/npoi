@@ -4879,7 +4879,9 @@ namespace NPOI.XSSF.UserModel
                             }
                         }
 
-                        string oldPictureId = anchor.picture.blipFill.blip.embed;
+                        string oldPictureId = anchor.picture?.blipFill?.blip.embed;
+                        if (oldPictureId == null)
+                            continue;
                         if (!pictureIdMapping.ContainsKey(oldPictureId))
                         {
                             XSSFPictureData srcPic = FindPicture(sheetPictures, oldPictureId);
