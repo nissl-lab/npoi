@@ -118,7 +118,7 @@ namespace NPOI.SS.Formula.Functions
                 if (p != 0)
                 {
                     double temp = Math.Pow(10, p);
-                    double nat = Math.Abs(n * temp);
+                    double nat = (double)((decimal)Math.Abs(n * temp));
 
                     retval = Sign(n) *
                         ((nat == (long)nat)

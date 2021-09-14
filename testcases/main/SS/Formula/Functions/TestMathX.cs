@@ -876,6 +876,12 @@ namespace TestCases.SS.Formula.Functions
 
             d = Double.MinValue; p = 1;
             AssertEquals("round ", 0.1d, MathX.RoundUp(d, p));
+
+            d = 20.44; p = 2;
+            AssertEquals("round ", 20.44d, MathX.RoundUp(d, p));
+
+            d = 20.445; p = 2;
+            AssertEquals("round ", 20.45d, MathX.RoundUp(d, p));
         }
         [Test]
         public void TestCeiling()
