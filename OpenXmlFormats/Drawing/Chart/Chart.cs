@@ -10140,8 +10140,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<c:{0}", nodeName));
-            sw.Write(">");
+            sw.Write(string.Format("<c:{0}>", nodeName));
             if (this.layout != null)
                 this.layout.Write(sw, "layout");
             if (this.dTable != null)

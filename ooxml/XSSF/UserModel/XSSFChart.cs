@@ -114,25 +114,20 @@ namespace NPOI.XSSF.UserModel
             pageMargins.footer = 0.30;
             printSettings.AddNewPageSetup();
         }
-
-        /**
-         * Return the underlying CTChartSpace bean, the root element of the SpreadsheetML Chart part.
-         *
-         * @return the underlying CTChartSpace bean
-         */
-
-        internal CT_ChartSpace GetCTChartSpace()
+        /// <summary>
+        /// Return the underlying CTChartSpace bean, the root element of the SpreadsheetML Chart part.
+        /// </summary>
+        /// <returns></returns>
+        public CT_ChartSpace GetCTChartSpace()
         {
             return chartSpaceDocument.GetChartSpace();
         }
 
-        /**
-         * Return the underlying CTChart bean, within the Chart Space
-         *
-         * @return the underlying CTChart bean
-         */
-
-        internal CT_Chart GetCTChart()
+        /// <summary>
+        /// Return the underlying CTChart bean, within the Chart Space
+        /// </summary>
+        /// <returns></returns>
+        public CT_Chart GetCTChart()
         {
             return chart;
         }
@@ -152,11 +147,10 @@ namespace NPOI.XSSF.UserModel
             PackagePart part = GetPackagePart();            
             chartSpaceDocument.Save(part.GetOutputStream());            
         }
-
-        /**
-         * Returns the parent graphic frame.
-         * @return the graphic frame this chart belongs to
-         */
+        /// <summary>
+        /// Returns the parent graphic frame.
+        /// </summary>
+        /// <returns></returns>
         public XSSFGraphicFrame GetGraphicFrame()
         {
             return frame;
