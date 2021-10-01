@@ -42,5 +42,7 @@ namespace NPOI.SS.UserModel
          * @param data a data to plot
          */
         void Plot(IChartData data, params IChartAxis[] axis);
+
+        void SetTitle(string newTitle);
     }
 }

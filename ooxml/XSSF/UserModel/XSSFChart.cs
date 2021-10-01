@@ -283,7 +283,7 @@ namespace NPOI.XSSF.UserModel
         /**
 	     * Sets the title text.
 	     */
-        public void SetTitle(String newTitle)
+        public void SetTitle(string newTitle)
         {
             CT_Title ctTitle;
             if (chart.IsSetTitle())
