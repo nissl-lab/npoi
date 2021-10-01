@@ -662,26 +662,19 @@ namespace NPOI.XSSF.UserModel
 
         public void CloneStyleFrom(IFont src)
         {
-            if (src != null)
-            {
-                if (src is XSSFFont)
-                {
-                    _ctFont = ((XSSFFont)src)._ctFont;
-                }
-                else
-                {
-                    FontName = src.FontName;
-                    FontHeight = src.FontHeight;
-                    IsBold = src.IsBold;
-                    Boldweight = src.Boldweight;
-                    IsItalic = src.IsItalic;
-                    IsStrikeout = src.IsStrikeout;
-                    Color = src.Color;
-                    Underline = src.Underline;
-                    Charset = src.Charset;
-                    TypeOffset = src.TypeOffset;
-                }
-            }
+            if (src == null)
+                return;
+
+            FontName = src.FontName;
+            FontHeight = src.FontHeight;
+            IsBold = src.IsBold;
+            Boldweight = src.Boldweight;
+            IsItalic = src.IsItalic;
+            IsStrikeout = src.IsStrikeout;
+            Color = src.Color;
+            Underline = src.Underline;
+            Charset = src.Charset;
+            TypeOffset = src.TypeOffset;
         }
     }
 }
