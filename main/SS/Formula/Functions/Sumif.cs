@@ -77,8 +77,15 @@ namespace NPOI.SS.Formula.Functions
             {
                 return NumberEval.ZERO;
             }
-            double result = SumMatchingCells(aeRange, mp, aeSum);
-            return new NumberEval(result);
+            try
+            {
+                double result = SumMatchingCells(aeRange, mp, aeSum);
+                return new NumberEval(result);
+            }
+            catch (EvaluationException var)
+            {
+                return var.GetErrorEval();
+            }
 
         }
 
@@ -87,7 +94,7 @@ namespace NPOI.SS.Formula.Functions
             int height = aeRange.Height;
             int width = aeRange.Width;
 
-            double result = 0.0;
+            double result = 0.0D;
 
             for (int r = 0; r < height; r++)
             {
@@ -106,7 +113,7 @@ namespace NPOI.SS.Formula.Functions
         {
             if (!mp.Matches(aeRange.GetRelativeValue(relRowIndex, relColIndex)))
             {
-                return 0.0;
+                return 0.0D;
             }
 
             ValueEval addend = aeSum.GetRelativeValue(relRowIndex, relColIndex);
@@ -114,8 +121,15 @@ namespace NPOI.SS.Formula.Functions
             {
                 return ((NumberEval)addend).NumberValue;
             }
-            // everything else (including string and boolean values) counts as zero
-            return 0.0;
+            else if (addend is ErrorEval)
+            {
+                throw new EvaluationException((ErrorEval)addend);
+            }
+            else
+            {
+                // everything else (including string and boolean values) counts as zero
+                return 0.0;
+            }
         }
 
 

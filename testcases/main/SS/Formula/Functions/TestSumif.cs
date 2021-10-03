@@ -17,9 +17,10 @@
 
 namespace TestCases.SS.Formula.Functions
 {
+    using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-
+    using NPOI.SS.UserModel;
     using NUnit.Framework;
 
     /**
@@ -124,6 +125,130 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumif(-1, -1, BlankEval.instance, new NumberEval(30.0), new NumberEval(30.0)));
             Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumif(-1, -1, new NumberEval(30.0), BlankEval.instance, new NumberEval(30.0)));
             Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumif(-1, -1, new NumberEval(30.0), new NumberEval(30.0), BlankEval.instance));
+        }
+
+        [Test]
+        public void TestMicrosoftExample1()
+        {
+            IWorkbook wb = initWorkbook1();
+
+            IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            ICell cell = wb.GetSheetAt(0).GetRow(0).CreateCell(100);
+            assertDouble(fe, cell, "SUMIF(A2:A5,\">160000\",B2:B5)", 63000);
+            assertDouble(fe, cell, "SUMIF(A2:A5,\">160000\")", 900000);
+            assertDouble(fe, cell, "SUMIF(A2:A5,300000,B2:B5)", 21000);
+            assertDouble(fe, cell, "SUMIF(A2:A5,\">\" & C2,B2:B5)", 49000);
+        }
+
+        [Test]
+        public void TestMicrosoftExample1WithNA()
+        {
+            IWorkbook wb = initWorkbook1WithNA();
+            IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            ICell cell = wb.GetSheetAt(0).GetRow(0).CreateCell(100);
+            assertError(fe, cell, "SUMIF(A2:A6,\">160000\",B2:B6)", FormulaError.NA);
+        }
+
+        [Test]
+        public void TestMicrosoftExample1WithBooleanAndString()
+        {
+            IWorkbook wb = initWorkbook1WithBooleanAndString();
+
+            IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            ICell cell = wb.GetSheetAt(0).GetRow(0).CreateCell(100);
+            assertDouble(fe, cell, "SUMIF(A2:A7,\">160000\",B2:B7)", 63000);
+        }
+
+        [Test]
+        public void TestMicrosoftExample2()
+        {
+            IWorkbook wb = initWorkbook2();
+            IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            ICell cell = wb.GetSheetAt(0).GetRow(0).CreateCell(100);
+            assertDouble(fe, cell, "SUMIF(A2:A7,\"Fruits\",C2:C7)", 2000);
+            assertDouble(fe, cell, "SUMIF(A2:A7,\"Vegetables\",C2:C7)", 12000);
+            assertDouble(fe, cell, "SUMIF(B2:B7,\"*es\",C2:C7)", 4300);
+            assertDouble(fe, cell, "SUMIF(A2:A7,\"\",C2:C7)", 400);
+        }
+
+        //see https://support.microsoft.com/en-us/office/sumif-function-169b8c99-c05c-4483-a712-1697a653039b
+        private IWorkbook initWorkbook1()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            addRow(sheet, 0, "Property Value", "Commission", "Data");
+            addRow(sheet, 1, 100000, 7000, 250000);
+            addRow(sheet, 2, 200000, 14000);
+            addRow(sheet, 3, 300000, 21000);
+            addRow(sheet, 4, 400000, 28000);
+            return wb;
+        }
+
+        private IWorkbook initWorkbook1WithNA()
+        {
+            IWorkbook wb = initWorkbook1();
+            ISheet sheet = wb.GetSheetAt(0);
+            addRow(sheet, 5, 500000, FormulaError.NA);
+            return wb;
+        }
+
+        private IWorkbook initWorkbook1WithBooleanAndString()
+        {
+            IWorkbook wb = initWorkbook1();
+            ISheet sheet = wb.GetSheetAt(0);
+            addRow(sheet, 5, 500000, true);
+            addRow(sheet, 6, 600000, "abc");
+            return wb;
+        }
+
+        private IWorkbook initWorkbook2()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            addRow(sheet, 0, "Category", "Food", "Sales");
+            addRow(sheet, 1, "Vegetables", "Tomatoes", 2300);
+            addRow(sheet, 2, "Vegetables", "Celery", 5500);
+            addRow(sheet, 3, "Fruits", "Oranges", 800);
+            addRow(sheet, 4, null, "Butter", 400);
+            addRow(sheet, 5, "Vegetables", "Carrots", 4200);
+            addRow(sheet, 6, "Fruits", "Apples", 1200);
+            return wb;
+        }
+        private void addRow(ISheet sheet, int rowIndex, params object[] values)
+        {
+            IRow row= sheet.CreateRow(rowIndex);
+            for (int i = 0; i < values.Length; i++)
+            {
+                if (values[i] is string)
+                    row.CreateCell(i).SetCellValue((string)values[i]);
+                else if (values[i] is null)
+                    row.CreateCell(i).SetBlank();
+                else if(values[i] is int)
+                    row.CreateCell(i).SetCellValue((int)values[i]);
+                else if(values[i]==FormulaError.NA)
+                    row.CreateCell(i).SetCellFormula("NA()");
+                else if(values[i] is bool)
+                    row.CreateCell(i).SetCellValue((bool)values[i]);
+                else
+                    row.CreateCell(i).SetCellValue((double)values[i]);
+            }
+        }
+
+        private void assertDouble(IFormulaEvaluator fe, ICell cell, string formula, double expectedResult)
+        {
+            cell.SetCellFormula(formula);
+            var result= fe.Evaluate(cell).NumberValue;
+            fe.ClearAllCachedResultValues();
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        private void assertError(IFormulaEvaluator fe, ICell cell, string formula, FormulaError expectedError)
+        {
+            cell.SetCellFormula(formula);
+            fe.ClearAllCachedResultValues();
+
+            var result = fe.Evaluate(cell).ErrorValue;
+            Assert.AreEqual(expectedError.Code, result);
         }
     }
 }
