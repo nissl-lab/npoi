@@ -345,7 +345,7 @@ namespace NPOI.SS.Formula.Functions
         {
             double c;
 
-            if ((n < 0 && s > 0) || (n > 0 && s < 0))
+            if (n > 0 && s < 0)
             {
                 c = double.NaN;
             }

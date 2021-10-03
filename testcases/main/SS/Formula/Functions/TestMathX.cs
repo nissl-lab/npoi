@@ -936,6 +936,38 @@ namespace TestCases.SS.Formula.Functions
 
             d = 2d / 3; s = 3.33;
             AssertEquals("ceiling ", 3.33, MathX.Ceiling(d, s));
+
+            // samples from http://www.excelfunctions.net/Excel-Ceiling-Function.html
+            // and https://support.office.com/en-us/article/CEILING-function-0a5cd7c8-0720-4f0a-bd2c-c943e510899f
+            d = 22.25; s = 0.1;
+            AssertEquals("ceiling ", 22.3, MathX.Ceiling(d, s));
+            d = 22.25; s = 0.5;
+            AssertEquals("ceiling ", 22.5, MathX.Ceiling(d, s));
+            d = 22.25; s = 1;
+            AssertEquals("ceiling ", 23, MathX.Ceiling(d, s));
+            d = 22.25; s = 10;
+            AssertEquals("ceiling ", 30, MathX.Ceiling(d, s));
+            d = 22.25; s = 20;
+            AssertEquals("ceiling ", 40, MathX.Ceiling(d, s));
+            d = -22.25; s = -0.1;
+            AssertEquals("ceiling ", -22.3, MathX.Ceiling(d, s));
+            d = -22.25; s = -1;
+            AssertEquals("ceiling ", -23, MathX.Ceiling(d, s));
+            d = -22.25; s = -5;
+            AssertEquals("ceiling ", -25, MathX.Ceiling(d, s));
+
+            d = 22.25; s = 1;
+            AssertEquals("ceiling ", 23, MathX.Ceiling(d, s));
+            d = 22.25; s = -1;
+            AssertEquals("ceiling ", Double.NaN, MathX.Ceiling(d, s));
+            d = -22.25; s = 1;
+            AssertEquals("ceiling ", -22, MathX.Ceiling(d, s)); // returns an error in Excel 2007 & earlier
+            d = -22.25; s = -1;
+            AssertEquals("ceiling ", -23, MathX.Ceiling(d, s));
+
+            // test cases for newer versions of Excel where d can be negative for
+            d = -11.12333; s = 0.03499;
+            AssertEquals("ceiling ", -11.09183, MathX.Ceiling(d, s));
         }
         [Test]
         public void TestFloor()
@@ -990,6 +1022,19 @@ namespace TestCases.SS.Formula.Functions
 
             d = 2d / 3; s = 3.33;
             AssertEquals("floor ", 0, MathX.Floor(d, s));
+
+            // samples from http://www.excelfunctions.net/Excel-Ceiling-Function.html
+            // and https://support.office.com/en-us/article/CEILING-function-0a5cd7c8-0720-4f0a-bd2c-c943e510899f
+            d = 3.7; s = 2;
+            AssertEquals("floor ", 2, MathX.Floor(d, s));
+            d = -2.5; s = -2;
+            AssertEquals("floor ", -2, MathX.Floor(d, s));
+            d = 2.5; s = -2;
+            AssertEquals("floor ", Double.NaN, MathX.Floor(d, s));
+            d = 1.58; s = 0.1;
+            AssertEquals("floor ", 1.5, MathX.Floor(d, s));
+            d = 0.234; s = 0.01;
+            AssertEquals("floor ", 0.23, MathX.Floor(d, s));
         }
         [Ignore("not implement")]
         [Test]
