@@ -123,6 +123,7 @@ namespace NPOI.SS.Formula.Atp {
             r(m, "HEX2DEC", Hex2Dec.instance);
             r(m, "HEX2OCT", null);
             r(m, "IFERROR", IfError.Instance);
+            r(m, "IFNA", IfNa.instance);
             r(m, "IFS", Ifs.Instance);
             r(m, "IMABS", null);
             r(m, "IMAGINARY", Imaginary.instance);
@@ -170,9 +171,11 @@ namespace NPOI.SS.Formula.Atp {
             r(m, "SERIESSUM", null);
             r(m, "SQRTPI", null);
             r(m, "SUMIFS", Sumifs.instance);
+            r(m, "SWITCH", Switch.instance);
             r(m, "TBILLEQ", null);
             r(m, "TBILLPRICE", null);
             r(m, "TBILLYIELD", null);
+            r(m, "TEXTJOIN", TextJoinFunction.instance);
             r(m, "WEEKNUM", WeekNum.instance);
             r(m, "WORKDAY", WorkdayFunction.instance);
             r(m, "XIRR", null);
