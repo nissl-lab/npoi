@@ -24,7 +24,7 @@ namespace TestCases.SS.Formula
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
-
+    using NPOI.SS.Util;
     using NUnit.Framework;
 
     using TestCases.HSSF;
@@ -587,6 +587,43 @@ namespace TestCases.SS.Formula
 
             TestIFEqualsFormulaEvaluation_teardown(wb);
         }
+        [Test]
+        public void TestRefToBlankCellInArrayFormula()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+            ICell cellA1 = row.CreateCell(0);
+            ICell cellB1 = row.CreateCell(1);
+            ICell cellC1 = row.CreateCell(2);
+            IRow row2 = sheet.CreateRow(1);
+            ICell cellA2 = row2.CreateCell(0);
+            ICell cellB2 = row2.CreateCell(1);
+            ICell cellC2 = row2.CreateCell(2);
+            IRow row3 = sheet.CreateRow(2);
+            ICell cellA3 = row3.CreateCell(0);
+            ICell cellB3 = row3.CreateCell(1);
+            ICell cellC3 = row3.CreateCell(2);
 
+            cellA1.SetCellValue("1");
+            // cell B1 intentionally left blank
+            cellC1.SetCellValue("3");
+
+            cellA2.SetCellFormula("A1");
+            cellB2.SetCellFormula("B1");
+            cellC2.SetCellFormula("C1");
+
+            sheet.SetArrayFormula("A1:C1", CellRangeAddress.ValueOf("A3:C3"));
+
+            wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+
+            Assert.AreEqual(cellA2.StringCellValue, "1");
+            Assert.AreEqual(cellB2.NumericCellValue, 0, 0.00001);
+            Assert.AreEqual(cellC2.StringCellValue, "3");
+
+            Assert.AreEqual(cellA3.StringCellValue, "1");
+            Assert.AreEqual(cellB3.NumericCellValue, 0, 0.00001);
+            Assert.AreEqual(cellC3.StringCellValue, "3");
+        }
     }
 }
