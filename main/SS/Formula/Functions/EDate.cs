@@ -60,7 +60,10 @@ namespace NPOI.SS.Formula.Functions
 
                 // resolve the arguments
                 DateTime startDate = DateUtil.GetJavaDate(startDateAsNumber);
-
+                if (startDate == null)
+                {
+                    return ErrorEval.VALUE_INVALID;
+                }
                 DateTime resultDate = startDate.AddMonths(offsetInMonthAsNumber);
                 result = DateUtil.GetExcelDate(resultDate);
                     
