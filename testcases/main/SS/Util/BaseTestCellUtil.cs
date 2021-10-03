@@ -343,7 +343,25 @@ namespace TestCases.SS.Util
             Assert.AreEqual(IndexedColors.Blue, IndexedColors.FromInt(style.FillForegroundColor), "fill foreground color");
             Assert.AreEqual(IndexedColors.Red, IndexedColors.FromInt(style.FillBackgroundColor), "fill background color");
         }
+        /**
+ * bug 63268
+ * @since POI 4.1.0
+ */
+        [Test]
+        public void SetFontShouldNotCreateDuplicateStyle()
+        {
+            IWorkbook wb1 = _testDataProvider.CreateWorkbook();
+            ICell c = wb1.CreateSheet().CreateRow(1).CreateCell(1);
+            IFont f = wb1.CreateFont();
 
-    }
+            CellUtil.SetFont(c, f);
+            int num1 = wb1.NumCellStyles;
+
+            CellUtil.SetFont(c, f);
+            int num2 = wb1.NumCellStyles;
+            Assert.AreEqual(num1, num2);
+            wb1.Close();
+        }
+}
 
 }

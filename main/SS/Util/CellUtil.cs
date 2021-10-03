@@ -371,7 +371,7 @@ namespace NPOI.SS.Util
             IWorkbook workbook = cell.Sheet.Workbook;
             ICellStyle originalStyle = cell.CellStyle;
             ICellStyle newStyle = null;
-            Dictionary<String, Object> values = GetFormatProperties(originalStyle);
+            Dictionary<string, object> values = GetFormatProperties(originalStyle);
             PutAll(properties, values);
 
             // index seems like what index the cellstyle is in the list of styles for a workbook.
@@ -381,7 +381,7 @@ namespace NPOI.SS.Util
             for (int i = 0; i < numberCellStyles; i++)
             {
                 ICellStyle wbStyle = workbook.GetCellStyleAt(i);
-                Dictionary<String, Object> wbStyleMap = GetFormatProperties(wbStyle);
+                Dictionary<string, object> wbStyleMap = GetFormatProperties(wbStyle);
 
                 // the desired style already exists in the workbook. Use the existing style.
                 if (DictionaryEqual(wbStyleMap, values, null))
@@ -543,7 +543,7 @@ namespace NPOI.SS.Util
             Put(properties, FILL_PATTERN, style.FillPattern);
             Put(properties, FILL_FOREGROUND_COLOR, style.FillForegroundColor);
             Put(properties, FILL_BACKGROUND_COLOR, style.FillBackgroundColor);
-            Put(properties, FONT, style.FontIndex);
+            Put(properties, FONT, (int)style.FontIndex);
             Put(properties, HIDDEN, style.IsHidden);
             Put(properties, INDENTION, style.Indention);
             Put(properties, LEFT_BORDER_COLOR, style.LeftBorderColor);
