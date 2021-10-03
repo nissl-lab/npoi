@@ -151,7 +151,7 @@ namespace NPOI.XSSF.UserModel
                             SetCellValue(srcCell.StringCellValue);
                             break;
                         case CellType.Blank:
-                            SetBlank();
+                            SetBlankInternal();
                             break;
                         default:
                             throw new ArgumentException("Invalid cell type " + srcCell.CellType);
@@ -159,7 +159,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 else
                 { //srcCell is null
-                    SetBlank();
+                    SetBlankInternal();
                 }
             }
 
@@ -883,12 +883,16 @@ namespace NPOI.XSSF.UserModel
         /// Blanks this cell. Blank cells have no formula or value but may have styling.
         /// This method erases all the data previously associated with this cell.
         /// </summary>
-        private void SetBlank()
+        private void SetBlankInternal()
         {
             CT_Cell blank = new CT_Cell();
             blank.r = (_cell.r);
             if (_cell.IsSetS()) blank.s=(_cell.s);
             _cell.Set(blank);
+        }
+        public void SetBlank()
+        {
+            SetCellType(CellType.Blank);
         }
 
         /// <summary>
@@ -922,7 +926,7 @@ namespace NPOI.XSSF.UserModel
             switch (cellType)
             {
                 case CellType.Blank:
-                    SetBlank();
+                    SetBlankInternal();
                     break;
                 case CellType.Boolean:
                     String newVal = ConvertCellValueToBoolean() ? TRUE_AS_STRING : FALSE_AS_STRING;

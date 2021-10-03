@@ -91,7 +91,7 @@ namespace NPOI.SS.UserModel
         /// <param name="cellType"></param>
         void SetCellType(CellType cellType);
 
-
+        void SetBlank();
         /// <summary>
         /// Only valid for formula cells
         /// </summary>

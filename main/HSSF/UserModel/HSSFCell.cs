@@ -1366,6 +1366,11 @@ namespace NPOI.HSSF.UserModel
             throw new NotImplementedException();
         }
 
+        public void SetBlank()
+        {
+            SetCellType(CellType.Blank);
+        }
+
         public bool IsMergedCell
         {
             get

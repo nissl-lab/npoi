@@ -824,5 +824,10 @@ namespace NPOI.XSSF.Streaming
         {
             SetCellValue((DateTime?)value);
         }
+
+        public void SetBlank()
+        {
+            SetCellType(CellType.Blank);
+        }
     }
 }
