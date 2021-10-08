@@ -39,7 +39,7 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "val", this.val);
+            XmlHelper.WriteAttribute(sw, "val", this.val, true);
             sw.Write("/>");
         }
 
@@ -751,18 +751,23 @@ namespace NPOI.OpenXmlFormats.Dml
             CT_TextParagraphProperties ctObj = new CT_TextParagraphProperties();
             ctObj.marL = XmlHelper.ReadInt(node.Attributes["marL"]);
             ctObj.marR = XmlHelper.ReadInt(node.Attributes["marR"]);
-            ctObj.lvl = XmlHelper.ReadInt(node.Attributes["lvl"]);
+            ctObj.lvlFieldSpecified = node.Attributes["lvl"] != null;
+            ctObj.lvlField = XmlHelper.ReadInt(node.Attributes["lvl"]);
             ctObj.indent = XmlHelper.ReadInt(node.Attributes["indent"]);
+            ctObj.algnFieldSpecified = node.Attributes["algn"] != null;
             if (node.Attributes["algn"] != null)
-                ctObj.algn = (ST_TextAlignType)Enum.Parse(typeof(ST_TextAlignType), node.Attributes["algn"].Value);
+                ctObj.algnField = (ST_TextAlignType)Enum.Parse(typeof(ST_TextAlignType), node.Attributes["algn"].Value);
             else
-                ctObj.algn = ST_TextAlignType.l;
+                ctObj.algnField = ST_TextAlignType.l;
             ctObj.defTabSz = XmlHelper.ReadInt(node.Attributes["defTabSz"]);
-            ctObj.rtl = XmlHelper.ReadBool(node.Attributes["rtl"]);
+            ctObj.rtlFieldSpecified = node.Attributes["rtl"] != null;
+            ctObj.rtlField = XmlHelper.ReadBool(node.Attributes["rtl"]);
             ctObj.eaLnBrk = XmlHelper.ReadBool(node.Attributes["eaLnBrk"]);
+            ctObj.fontAlgnFieldSpecified = node.Attributes["fontAlgn"] != null;
             if (node.Attributes["fontAlgn"] != null)
-                ctObj.fontAlgn = (ST_TextFontAlignType)Enum.Parse(typeof(ST_TextFontAlignType), node.Attributes["fontAlgn"].Value);
-            ctObj.latinLnBrk = XmlHelper.ReadBool(node.Attributes["latinLnBrk"]);
+                ctObj.fontAlgnField = (ST_TextFontAlignType)Enum.Parse(typeof(ST_TextFontAlignType), node.Attributes["fontAlgn"].Value);
+            ctObj.latinLnBrkFieldSpecified = node.Attributes["latinLnBrk"]!=null;
+            ctObj.latinLnBrkField = XmlHelper.ReadBool(node.Attributes["latinLnBrk"]);
             ctObj.hangingPunct = XmlHelper.ReadBool(node.Attributes["hangingPunct"]);
   
             foreach (XmlNode childNode in node.ChildNodes)
@@ -812,16 +817,19 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "marL", this.marL);
             XmlHelper.WriteAttribute(sw, "marR", this.marR);
-            XmlHelper.WriteAttribute(sw, "lvl", this.lvl, true);
+            if(this.lvlFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "lvl", this.lvlField, true);
             XmlHelper.WriteAttribute(sw, "indent", this.indent);
-            if(algn!= ST_TextAlignType.l)
-                XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
+            if(this.algnFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "algn", this.algnField.ToString());
             XmlHelper.WriteAttribute(sw, "defTabSz", this.defTabSz);
-            XmlHelper.WriteAttribute(sw, "rtl", this.rtl, false);
+            if(this.rtlFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "rtl", this.rtlField);
             XmlHelper.WriteAttribute(sw, "eaLnBrk", this.eaLnBrk, false);
-            if(this.fontAlgn!= ST_TextFontAlignType.auto)
-                XmlHelper.WriteAttribute(sw, "fontAlgn", this.fontAlgn.ToString());
-            XmlHelper.WriteAttribute(sw, "latinLnBrk", this.latinLnBrk, false);
+            if(this.fontAlgnFieldSpecified&& this.fontAlgn!= ST_TextFontAlignType.auto)
+                XmlHelper.WriteAttribute(sw, "fontAlgn", this.fontAlgnField.ToString());
+            if(this.latinLnBrkFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "latinLnBrk", this.latinLnBrk, true);
             XmlHelper.WriteAttribute(sw, "hangingPunct", this.hangingPunct, false);
             sw.Write(">");
             if (this.lnSpc != null)
@@ -1152,19 +1160,6 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 this.lvlField = value;
                 this.lvlFieldSpecified = true;
-            }
-        }
-
-        [XmlIgnore]
-        public bool lvlSpecified
-        {
-            get
-            {
-                return this.lvlFieldSpecified;
-            }
-            set
-            {
-                this.lvlFieldSpecified = value;
             }
         }
 

@@ -62,7 +62,7 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "panose", this.panose);
             XmlHelper.WriteAttribute(sw, "pitchFamily", this.pitchFamily);
             if(charsetField!=(sbyte)1)
-                XmlHelper.WriteAttribute(sw, "charset", this.charset);
+                XmlHelper.WriteAttribute(sw, "charset", this.charset, true);
             sw.Write("/>");
         }
 
@@ -404,20 +404,25 @@ namespace NPOI.OpenXmlFormats.Dml
             ctObj.lang = XmlHelper.ReadString(node.Attributes["lang"]);
             ctObj.altLang = XmlHelper.ReadString(node.Attributes["altLang"]);
             ctObj.sz = XmlHelper.ReadInt(node.Attributes["sz"]);
+            ctObj.bFieldSpecified = node.Attributes["b"] != null;
             if (node.Attributes["b"] != null)
-                ctObj.b = XmlHelper.ReadBool(node.Attributes["b"]);
+                ctObj.bField = XmlHelper.ReadBool(node.Attributes["b"]);
+            ctObj.iFieldSpecified = node.Attributes["i"] != null;
             if (node.Attributes["i"] != null)
-                ctObj.i = XmlHelper.ReadBool(node.Attributes["i"]);
+                ctObj.iField = XmlHelper.ReadBool(node.Attributes["i"]);
+            ctObj.uFieldSpecified = node.Attributes["u"]!=null;
             if (node.Attributes["u"] != null)
-                ctObj.u = (ST_TextUnderlineType)Enum.Parse(typeof(ST_TextUnderlineType), node.Attributes["u"].Value);
+                ctObj.uField = (ST_TextUnderlineType)Enum.Parse(typeof(ST_TextUnderlineType), node.Attributes["u"].Value);
+            ctObj.strikeFieldSpecified = node.Attributes["strike"] != null;
             if (node.Attributes["strike"] != null)
-                ctObj.strike = (ST_TextStrikeType)Enum.Parse(typeof(ST_TextStrikeType), node.Attributes["strike"].Value);
+                ctObj.strikeField = (ST_TextStrikeType)Enum.Parse(typeof(ST_TextStrikeType), node.Attributes["strike"].Value);
             ctObj.kern = XmlHelper.ReadInt(node.Attributes["kern"]);
             if (node.Attributes["cap"] != null)
                 ctObj.cap = (ST_TextCapsType)Enum.Parse(typeof(ST_TextCapsType), node.Attributes["cap"].Value);
             ctObj.spc = XmlHelper.ReadInt(node.Attributes["spc"]);
             ctObj.normalizeH = XmlHelper.ReadBool(node.Attributes["normalizeH"]);
-            ctObj.baseline = XmlHelper.ReadInt(node.Attributes["baseline"]);
+            ctObj.baselineFieldSpecified = node.Attributes["baseline"] != null;
+            ctObj.baselineField = XmlHelper.ReadInt(node.Attributes["baseline"]);
             ctObj.noProof = XmlHelper.ReadBool(node.Attributes["noProof"]);
             if (node.Attributes["dirty"]!=null)
                 ctObj.dirty = XmlHelper.ReadBool(node.Attributes["dirty"]);
@@ -483,19 +488,21 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "lang", this.lang);
             XmlHelper.WriteAttribute(sw, "altLang", this.altLang);
             XmlHelper.WriteAttribute(sw, "sz", this.sz);
-            XmlHelper.WriteAttribute(sw, "b", this.b, true);
-            if (this.i)
-                XmlHelper.WriteAttribute(sw, "i", this.i);
-            if(this.u!= ST_TextUnderlineType.none)
-                XmlHelper.WriteAttribute(sw, "u", this.u.ToString());
-            if(strike!= ST_TextStrikeType.noStrike)
-                XmlHelper.WriteAttribute(sw, "strike", this.strike.ToString());
+            if(this.bFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "b", this.bField, true);
+            if (this.iFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "i", this.iField,true);
+            if(this.uFieldSpecified&&this.uField!= ST_TextUnderlineType.none)
+                XmlHelper.WriteAttribute(sw, "u", this.uField.ToString());
+            if(this.strikeFieldSpecified&&strikeField!= ST_TextStrikeType.noStrike)
+                XmlHelper.WriteAttribute(sw, "strike", this.strikeField.ToString());
             XmlHelper.WriteAttribute(sw, "kern", this.kern);
             if(this.cap!= ST_TextCapsType.none)
                 XmlHelper.WriteAttribute(sw, "cap", this.cap.ToString());
             XmlHelper.WriteAttribute(sw, "spc", this.spc);
             XmlHelper.WriteAttribute(sw, "normalizeH", this.normalizeH, false);
-            XmlHelper.WriteAttribute(sw, "baseline", this.baseline);
+            if(this.baselineFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "baseline", this.baseline,true);
             XmlHelper.WriteAttribute(sw, "noProof", this.noProof, false);
             if (!dirty)
                 XmlHelper.WriteAttribute(sw, "dirty", this.dirty);

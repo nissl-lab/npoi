@@ -281,10 +281,13 @@
     <Compile Include="SS\Formula\Atp\ArgumentsEvaluator.cs" />
     <Compile Include="SS\Formula\Atp\DateParser.cs" />
     <Compile Include="SS\Formula\Atp\IfError.cs" />
+    <Compile Include="SS\Formula\Atp\IfNa.cs" />
     <Compile Include="SS\Formula\Atp\Ifs.cs" />
     <Compile Include="SS\Formula\Atp\Maxifs.cs" />
     <Compile Include="SS\Formula\Atp\MinIfs.cs" />
     <Compile Include="SS\Formula\Atp\NetworkdaysFunction.cs" />
+    <Compile Include="SS\Formula\Atp\Switch.cs" />
+    <Compile Include="SS\Formula\Atp\TextJoinFunction.cs" />
     <Compile Include="SS\Formula\BaseFormulaEvaluator.cs" />
     <Compile Include="SS\Formula\Eval\NotImplementedFunctionException.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />

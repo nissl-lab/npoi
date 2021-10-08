@@ -497,16 +497,22 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node == null)
                 return null;
             CT_TextBodyProperties ctObj = new CT_TextBodyProperties();
-            ctObj.rot = XmlHelper.ReadInt(node.Attributes["rot"]);
+            ctObj.rotFieldSpecified = node.Attributes["rot"] != null;
+            ctObj.rotField = XmlHelper.ReadInt(node.Attributes["rot"]);
             ctObj.spcFirstLastPara = XmlHelper.ReadBool(node.Attributes["spcFirstLastPara"]);
+
+            ctObj.vertOverflowFieldSpecified = node.Attributes["vertOverflow"] != null;
             if (node.Attributes["vertOverflow"] != null)
-                ctObj.vertOverflow = (ST_TextVertOverflowType)Enum.Parse(typeof(ST_TextVertOverflowType), node.Attributes["vertOverflow"].Value);
+                ctObj.vertOverflowField = (ST_TextVertOverflowType)Enum.Parse(typeof(ST_TextVertOverflowType), node.Attributes["vertOverflow"].Value);
+            ctObj.horzOverflowFieldSpecified = node.Attributes["horzOverflow"] != null;
             if (node.Attributes["horzOverflow"] != null)
-                ctObj.horzOverflow = (ST_TextHorzOverflowType)Enum.Parse(typeof(ST_TextHorzOverflowType), node.Attributes["horzOverflow"].Value);
+                ctObj.horzOverflowField = (ST_TextHorzOverflowType)Enum.Parse(typeof(ST_TextHorzOverflowType), node.Attributes["horzOverflow"].Value);
+            ctObj.vertFieldSpecified = node.Attributes["vert"] != null;
             if (node.Attributes["vert"] != null)
-                ctObj.vert = (ST_TextVerticalType)Enum.Parse(typeof(ST_TextVerticalType), node.Attributes["vert"].Value);
+                ctObj.vertField = (ST_TextVerticalType)Enum.Parse(typeof(ST_TextVerticalType), node.Attributes["vert"].Value);
+            ctObj.wrapFieldSpecified = node.Attributes["wrap"] != null;
             if (node.Attributes["wrap"] != null)
-                ctObj.wrap = (ST_TextWrappingType)Enum.Parse(typeof(ST_TextWrappingType), node.Attributes["wrap"].Value);
+                ctObj.wrapField = (ST_TextWrappingType)Enum.Parse(typeof(ST_TextWrappingType), node.Attributes["wrap"].Value);
             ctObj.lIns = XmlHelper.ReadInt(node.Attributes["lIns"]);
             ctObj.tIns = XmlHelper.ReadInt(node.Attributes["tIns"]);
             ctObj.rIns = XmlHelper.ReadInt(node.Attributes["rIns"]);
@@ -515,8 +521,9 @@ namespace NPOI.OpenXmlFormats.Dml
             ctObj.spcCol = XmlHelper.ReadInt(node.Attributes["spcCol"]);
             ctObj.rtlCol = XmlHelper.ReadBool(node.Attributes["rtlCol"]);
             ctObj.fromWordArt = XmlHelper.ReadBool(node.Attributes["fromWordArt"]);
+            ctObj.anchorFieldSpecified = node.Attributes["anchor"] != null;
             if (node.Attributes["anchor"] != null)
-                ctObj.anchor = (ST_TextAnchoringType)Enum.Parse(typeof(ST_TextAnchoringType), node.Attributes["anchor"].Value);
+                ctObj.anchorField = (ST_TextAnchoringType)Enum.Parse(typeof(ST_TextAnchoringType), node.Attributes["anchor"].Value);
             ctObj.anchorCtr = XmlHelper.ReadBool(node.Attributes["anchorCtr"]);
             ctObj.forceAA = XmlHelper.ReadBool(node.Attributes["forceAA"]);
             ctObj.upright = XmlHelper.ReadBool(node.Attributes["upright"]);
@@ -548,15 +555,17 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "rot", this.rot,true);
+            if(this.rotFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "rot", this.rotField,true);
             if(spcFirstLastPara)
                 XmlHelper.WriteAttribute(sw, "spcFirstLastPara", this.spcFirstLastPara);
-            XmlHelper.WriteAttribute(sw, "vertOverflow", this.vertOverflow.ToString());
-            if(this.horzOverflow!= ST_TextHorzOverflowType.overflow)
-                XmlHelper.WriteAttribute(sw, "horzOverflow", this.horzOverflow.ToString());
-            if(this.vert!= ST_TextVerticalType.vert)
+            if(this.vertOverflowFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "vertOverflow", this.vertOverflowField.ToString());
+            if(this.horzOverflowFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "horzOverflow", this.horzOverflowField.ToString());
+            if(this.vertFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "vert", this.vert.ToString());
-            if(this.wrap!= ST_TextWrappingType.none)
+            if(this.wrapFieldSpecified && this.wrap!= ST_TextWrappingType.none)
                 XmlHelper.WriteAttribute(sw, "wrap", this.wrap.ToString());
             XmlHelper.WriteAttribute(sw, "lIns", this.lIns);
             XmlHelper.WriteAttribute(sw, "tIns", this.tIns);
@@ -566,7 +575,8 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "spcCol", this.spcCol);
             XmlHelper.WriteAttribute(sw, "rtlCol", this.rtlCol);
             XmlHelper.WriteAttribute(sw, "fromWordArt", this.fromWordArt, false);
-            XmlHelper.WriteAttribute(sw, "anchor", this.anchor.ToString());
+            if(this.anchorFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "anchor", this.anchorField.ToString());
             XmlHelper.WriteAttribute(sw, "anchorCtr", this.anchorCtr, false);
             XmlHelper.WriteAttribute(sw, "forceAA", this.forceAA, false);
             if(upright)
