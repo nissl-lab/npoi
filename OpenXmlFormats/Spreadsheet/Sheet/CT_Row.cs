@@ -160,7 +160,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.htField >=0;
         }
-        public void unSetHt()
+        public void UnsetHt()
         {
             this.htField = -1;
         }
@@ -168,7 +168,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.customHeightField != false;
         }
-        public void unSetCustomHeight()
+        public void UnsetCustomHeight()
         {
             this.customHeightField = false;
         }
@@ -176,7 +176,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.sField != 0;
         }
-        public void unsetHidden()
+        public void UnsetHidden()
         {
             this.hiddenField = false;
         }

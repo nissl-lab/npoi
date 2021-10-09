@@ -1406,8 +1406,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             sw.Write(string.Format("<c:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "val", this.val, true);
-            sw.Write(">");
-            sw.Write(string.Format("</c:{0}>", nodeName));
+            sw.Write("/>");
         }
 
     }
@@ -2342,8 +2341,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             sw.Write(string.Format("<c:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "val", this.val);
-            sw.Write(">");
-            sw.Write(string.Format("</c:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]
@@ -2979,8 +2977,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<c:{0}", nodeName));
-            sw.Write(">");
+            sw.Write(string.Format("<c:{0}>", nodeName));
             if (this.logBase != null)
                 this.logBase.Write(sw, "logBase");
             if (this.orientation != null)
@@ -3125,8 +3122,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             sw.Write(string.Format("<c:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "val", this.val);
-            sw.Write(">");
-            sw.Write(string.Format("</c:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private double valField;
@@ -3176,8 +3172,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             sw.Write(string.Format("<c:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
-            sw.Write(">");
-            sw.Write(string.Format("</c:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]

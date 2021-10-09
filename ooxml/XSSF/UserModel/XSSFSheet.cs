@@ -2896,11 +2896,11 @@ namespace NPOI.XSSF.UserModel
                     if (row.GetCTRow().outlineLevel == ((XSSFRow)GetRow(i)).GetCTRow()
                             .outlineLevel)
                     {
-                        ((XSSFRow)GetRow(i)).GetCTRow().unsetHidden();
+                        ((XSSFRow)GetRow(i)).GetCTRow().UnsetHidden();
                     }
                     else if (!IsRowGroupCollapsed(i))
                     {
-                        ((XSSFRow)GetRow(i)).GetCTRow().unsetHidden();
+                        ((XSSFRow)GetRow(i)).GetCTRow().UnsetHidden();
                     }
                 }
             }
@@ -4986,7 +4986,7 @@ namespace NPOI.XSSF.UserModel
             if (!srcRow.GetCTRow().IsSetCustomHeight())
             {
                 //Copying height sets the custom height flag, but Excel will set a value for height even if it's auto-sized.
-                destRow.GetCTRow().unSetCustomHeight();
+                destRow.GetCTRow().UnsetCustomHeight();
             }
             destRow.Hidden = srcRow.Hidden;
             destRow.Collapsed = srcRow.Collapsed;
