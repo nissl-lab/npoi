@@ -134,7 +134,7 @@ namespace NPOI.XSSF.UserModel
          * @return the underlying CT_Picture bean
          */
 
-        internal CT_Picture GetCTPicture()
+        public CT_Picture GetCTPicture()
         {
             return ctPicture;
         }
