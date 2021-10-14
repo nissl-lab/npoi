@@ -48,41 +48,18 @@ namespace NPOI.SS.Util
                 _propertyName = propertyName;
                 _propertyValue = (short)value;
             }
-
-
             public void SetProperty(IRow row, int column)
             {
                 ICell cell = CellUtil.GetCell(row, column);
                 CellUtil.SetCellStyleProperty(cell, _propertyName, _propertyValue);
             }
         }
-
-        /**
-         * Sets the left border for a region of cells by manipulating the cell style of the individual
-         * cells on the left
-         *
-         * @param border The new border
-         * @param region The region that should have the border
-         * @param workbook The workbook that the region is on.
-         * @param sheet The sheet that the region is on.
-         */
-        [Obsolete("deprecated 3.15 beta 2. Use {@link #setBorderLeft(int, CellRangeAddress, Sheet).")]
-        public static void SetBorderLeft(int border, CellRangeAddress region, ISheet sheet,
-                IWorkbook workbook)
-        {
-            SetBorderLeft(border, region, sheet);
-        }
-        /**
-         * Sets the left border for a region of cells by manipulating the cell style of the individual
-         * cells on the left
-         * 
-         * @see {@link BorderPropertyTemplate#drawBorders} for improved border functionality
-         *
-         * @param border The new border
-         * @param region The region that should have the border
-         * @param workbook The workbook that the region is on.
-         * @param sheet The sheet that the region is on.
-         */
+        /// <summary>
+        /// Sets the left border for a region of cells by manipulating the cell style of the individual cells on the left
+        /// </summary>
+        /// <param name="border">The new border</param>
+        /// <param name="region">The region that should have the border</param>
+        /// <param name="sheet">The sheet that the region is on.</param>
         public static void SetBorderLeft(int border, CellRangeAddress region, ISheet sheet)
         {
             int rowStart = region.FirstRow;
@@ -95,32 +72,12 @@ namespace NPOI.SS.Util
                 cps.SetProperty(CellUtil.GetRow(i, sheet), column);
             }
         }
-
-        /**
-         * Sets the leftBorderColor attribute of the RegionUtil object
-         *
-         * @param color The color of the border
-         * @param region The region that should have the border
-         * @param workbook The workbook that the region is on.
-         * @param sheet The sheet that the region is on.
-         */
-        [Obsolete("deprecated 3.15 beta 2. Use {@link #setLeftBorderColor(int, CellRangeAddress, Sheet).")]
-        public static void SetLeftBorderColor(int color, CellRangeAddress region, ISheet sheet,
-                IWorkbook workbook)
-        {
-            SetLeftBorderColor(color, region, sheet);
-        }
-        /**
-         * Sets the left border color for a region of cells by manipulating the cell style of the individual
-         * cells on the left
-         * 
-         * @see {@link BorderPropertyTemplate#drawBorderColors} for improved border functionality
-         *
-         * @param color The color of the border
-         * @param region The region that should have the border
-         * @param workbook The workbook that the region is on.
-         * @param sheet The sheet that the region is on.
-         */
+        /// <summary>
+        /// Sets the left border color for a region of cells by manipulating the cell style of the individual cells on the left
+        /// </summary>
+        /// <param name="color">The color of the border</param>
+        /// <param name="region">The region that should have the border</param>
+        /// <param name="sheet">The sheet that the region is on.</param>
         public static void SetLeftBorderColor(int color, CellRangeAddress region, ISheet sheet)
         {
             int rowStart = region.FirstRow;
@@ -134,32 +91,12 @@ namespace NPOI.SS.Util
                 cps.SetProperty(CellUtil.GetRow(i, sheet), column);
             }
         }
-
-        /**
-         * Sets the borderRight attribute of the RegionUtil object
-         *
-         * @param border The new border
-         * @param region The region that should have the border
-         * @param workbook The workbook that the region is on.
-         * @param sheet The sheet that the region is on.
-         */
-        [Obsolete("deprecated 3.15 beta 2. Use {@link #setBorderRight(int, CellRangeAddress, Sheet).")]
-        public static void SetBorderRight(int border, CellRangeAddress region, ISheet sheet,
-                IWorkbook workbook)
-        {
-            SetBorderRight(border, region, sheet);
-        }
-        /**
-         * Sets the right border for a region of cells by manipulating the cell style of the individual
-         * cells on the right
-         * 
-         * @see {@link BorderPropertyTemplate#drawBorders} for improved border functionality
-         *
-         * @param border The new border
-         * @param region The region that should have the border
-         * @param workbook The workbook that the region is on.
-         * @param sheet The sheet that the region is on.
-         */
+        /// <summary>
+        /// Sets the right border for a region of cells by manipulating the cell style of the individual cells on the right
+        /// </summary>
+        /// <param name="border">The new border</param>
+        /// <param name="region">The region that should have the border</param>
+        /// <param name="sheet">The sheet that the region is on.</param>
         public static void SetBorderRight(int border, CellRangeAddress region, ISheet sheet)
         {
             int rowStart = region.FirstRow;
@@ -172,32 +109,12 @@ namespace NPOI.SS.Util
                 cps.SetProperty(CellUtil.GetRow(i, sheet), column);
             }
         }
-
-        /**
-         * Sets the rightBorderColor attribute of the RegionUtil object
-         *
-         * @param color The color of the border
-         * @param region The region that should have the border
-         * @param workbook The workbook that the region is on.
-         * @param sheet The sheet that the region is on.
-         */
-        [Obsolete("deprecated 3.15 beta 2. Use {@link #setRightBorderColor(int, CellRangeAddress, Sheet).")]
-        public static void SetRightBorderColor(int color, CellRangeAddress region, ISheet sheet,
-                IWorkbook workbook)
-        {
-            SetRightBorderColor(color, region, sheet);
-        }
-        /**
-         * Sets the right border color for a region of cells by manipulating the cell style of the individual
-         * cells on the right
-         * 
-         * @see {@link BorderPropertyTemplate#drawBorderColors} for improved border functionality
-         *
-         * @param color The color of the border
-         * @param region The region that should have the border
-         * @param workbook The workbook that the region is on.
-         * @param sheet The sheet that the region is on.
-         */
+        /// <summary>
+        /// Sets the right border color for a region of cells by manipulating the cell style of the individual cells on the right
+        /// </summary>
+        /// <param name="color">The color of the border</param>
+        /// <param name="region">The region that should have the border</param>
+        /// <param name="sheet">The sheet that the region is on.</param>
         public static void SetRightBorderColor(int color, CellRangeAddress region, ISheet sheet)
         {
             int rowStart = region.FirstRow;
@@ -211,32 +128,12 @@ namespace NPOI.SS.Util
                 cps.SetProperty(CellUtil.GetRow(i, sheet), column);
             }
         }
-
-        /**
-         * Sets the borderBottom attribute of the RegionUtil object
-         *
-         * @param border The new border
-         * @param region The region that should have the border
-         * @param workbook The workbook that the region is on.
-         * @param sheet The sheet that the region is on.
-         */
-        [Obsolete("deprecated 3.15 beta 2. Use {@link #setBorderBottom(int, CellRangeAddress, Sheet).")]
-        public static void SetBorderBottom(int border, CellRangeAddress region, ISheet sheet,
-                IWorkbook workbook)
-        {
-            SetBorderBottom(border, region, sheet);
-        }
-        /**
-         * Sets the bottom border for a region of cells by manipulating the cell style of the individual
-         * cells on the bottom
-         * 
-         * @see {@link BorderPropertyTemplate#drawBorders} for improved border functionality
-         *
-         * @param border The new border
-         * @param region The region that should have the border
-         * @param workbook The workbook that the region is on.
-         * @param sheet The sheet that the region is on.
-         */
+        /// <summary>
+        /// Sets the bottom border for a region of cells by manipulating the cell style of the individual cells on the bottom
+        /// </summary>
+        /// <param name="border">The new border</param>
+        /// <param name="region">The region that should have the border</param>
+        /// <param name="sheet">The sheet that the region is on</param>
         public static void SetBorderBottom(int border, CellRangeAddress region, ISheet sheet)
         {
             int colStart = region.FirstColumn;
@@ -250,31 +147,12 @@ namespace NPOI.SS.Util
             }
         }
 
-        /**
-         * Sets the bottomBorderColor attribute of the RegionUtil object
-         *
-         * @param color The color of the border
-         * @param region The region that should have the border
-         * @param workbook The workbook that the region is on.
-         * @param sheet The sheet that the region is on.
-         */
-        [Obsolete("deprecated 3.15 beta 2. Use {@link #setBottomBorderColor(int, CellRangeAddress, Sheet).")]
-        public static void SetBottomBorderColor(int color, CellRangeAddress region, ISheet sheet,
-                IWorkbook workbook)
-        {
-            SetBottomBorderColor(color, region, sheet);
-        }
-        /**
-         * Sets the bottom border color for a region of cells by manipulating the cell style of the individual
-         * cells on the bottom
-         * 
-         * @see {@link BorderPropertyTemplate#drawBorderColors} for improved border functionality
-         *
-         * @param color The color of the border
-         * @param region The region that should have the border
-         * @param workbook The workbook that the region is on.
-         * @param sheet The sheet that the region is on.
-         */
+        /// <summary>
+        /// Sets the bottom border color for a region of cells by manipulating the cell style of the individual cells on the bottom
+        /// </summary>
+        /// <param name="color">The color of the border</param>
+        /// <param name="region">The region that should have the border</param>
+        /// <param name="sheet">The sheet that the region is on.</param>
         public static void SetBottomBorderColor(int color, CellRangeAddress region, ISheet sheet)
         {
             int colStart = region.FirstColumn;
@@ -289,31 +167,12 @@ namespace NPOI.SS.Util
             }
         }
 
-        /**
-         * Sets the borderBottom attribute of the RegionUtil object
-         *
-         * @param border The new border
-         * @param region The region that should have the border
-         * @param workbook The workbook that the region is on.
-         * @param sheet The sheet that the region is on.
-         */
-         [Obsolete("deprecated 3.15 beta 2. Use {@link #setBorderTop(int, CellRangeAddress, Sheet).")]
-        public static void SetBorderTop(int border, CellRangeAddress region, ISheet sheet,
-                IWorkbook workbook)
-        {
-            SetBorderTop(border, region, sheet);
-        }
-        /**
-         * Sets the top border for a region of cells by manipulating the cell style of the individual
-         * cells on the top
-         * 
-         * @see {@link BorderPropertyTemplate#drawBorders} for improved border functionality
-         *
-         * @param border The new border
-         * @param region The region that should have the border
-         * @param workbook The workbook that the region is on.
-         * @param sheet The sheet that the region is on.
-         */
+        /// <summary>
+        /// Sets the top border for a region of cells by manipulating the cell style of the individual cells on the top
+        /// </summary>
+        /// <param name="border">The new border</param>
+        /// <param name="region">The region that should have the border</param>
+        /// <param name="sheet">The sheet that the region is on.</param>
         public static void SetBorderTop(int border, CellRangeAddress region, ISheet sheet)
         {
             int colStart = region.FirstColumn;
@@ -327,31 +186,12 @@ namespace NPOI.SS.Util
             }
         }
 
-        /**
-         * Sets the topBorderColor attribute of the RegionUtil object
-         *
-         * @param color The color of the border
-         * @param region The region that should have the border
-         * @param workbook The workbook that the region is on.
-         * @param sheet The sheet that the region is on.
-         */
-         [Obsolete("deprecated 3.15 beta 2. Use {@link #setTopBorderColor(int, CellRangeAddress, Sheet)}.")]
-        public static void SetTopBorderColor(int color, CellRangeAddress region, ISheet sheet,
-                IWorkbook workbook)
-        {
-            SetTopBorderColor(color, region, sheet);
-        }
-        /**
-         * Sets the top border color for a region of cells by manipulating the cell style of the individual
-         * cells on the top
-         * 
-         * @see {@link BorderPropertyTemplate#drawBorderColors} for improved border functionality
-         *
-         * @param color The color of the border
-         * @param region The region that should have the border
-         * @param workbook The workbook that the region is on.
-         * @param sheet The sheet that the region is on.
-         */
+        /// <summary>
+        /// Sets the top border color for a region of cells by manipulating the cell style of the individual cells on the top
+        /// </summary>
+        /// <param name="color">The color of the border</param>
+        /// <param name="region">The region that should have the border</param>
+        /// <param name="sheet">The sheet that the region is on.</param>
         public static void SetTopBorderColor(int color, CellRangeAddress region, ISheet sheet)
         {
             int colStart = region.FirstColumn;
