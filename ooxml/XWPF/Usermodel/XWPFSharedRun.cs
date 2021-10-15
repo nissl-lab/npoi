@@ -152,7 +152,7 @@ namespace NPOI.XWPF.Usermodel
             }
         }
 
-        public int FontSize { get; set; }
+        public double FontSize { get; set; }
 
         public string Text
         {

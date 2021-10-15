@@ -902,7 +902,7 @@ namespace NPOI.XWPF.UserModel
          *
          * @return value representing the font size
          */
-        public int FontSize
+        public double FontSize
         {
             get
             {

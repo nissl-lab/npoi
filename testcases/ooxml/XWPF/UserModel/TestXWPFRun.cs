@@ -187,10 +187,13 @@ namespace TestCases.XWPF.UserModel
             rpr.AddNewSz().val = 14;
 
             XWPFRun run = new XWPFRun(ctRun, p);
-            Assert.AreEqual(7, run.FontSize);
+            Assert.AreEqual(7.0, run.FontSize);
 
-            run.FontSize = (24);
+            run.FontSize = 24;
             Assert.AreEqual(48, (int)rpr.sz.val);
+
+            run.FontSize = 24.5;
+            Assert.AreEqual(24.5, run.FontSize);
         }
 
 

@@ -40,7 +40,7 @@ namespace NPOI.WP.UserModel
 
         bool IsImprinted { get; set; }
 
-        int FontSize { get; set; }
+        double FontSize { get; set; }
 
         int CharacterSpacing { get; set; }
 
