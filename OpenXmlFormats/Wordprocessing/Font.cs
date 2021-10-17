@@ -469,8 +469,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             ctObj.hAnsi = XmlHelper.ReadString(node.Attributes["w:hAnsi"]);
             ctObj.eastAsia = XmlHelper.ReadString(node.Attributes["w:eastAsia"]);
             ctObj.cs = XmlHelper.ReadString(node.Attributes["w:cs"]);
-            if (node.Attributes["w:hint"] != null && node.Attributes["w:hint"].Value!="default")
+            if (node.Attributes["w:hint"] != null)
+            {
                 ctObj.hint = (ST_Hint)Enum.Parse(typeof(ST_Hint), node.Attributes["w:hint"].Value);
+                ctObj.hintFieldSpecified = true;
+            }
             if (node.Attributes["w:asciiTheme"] != null)
                 ctObj.asciiTheme = (ST_Theme)Enum.Parse(typeof(ST_Theme), node.Attributes["w:asciiTheme"].Value);
             if (node.Attributes["w:hAnsiTheme"] != null)
@@ -482,18 +485,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return ctObj;
         }
 
-
-
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "w:ascii", this.ascii);
-            XmlHelper.WriteAttribute(sw, "w:eastAsia", this.eastAsia);
-            XmlHelper.WriteAttribute(sw, "w:hAnsi", this.hAnsi);
-            XmlHelper.WriteAttribute(sw, "w:cs", this.cs);
-            if (this.hint != ST_Hint.@default)
+            if (this.hint != ST_Hint.@default || this.hintFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "w:hint", this.hint.ToString());
-
+            XmlHelper.WriteAttribute(sw, "w:ascii", this.ascii);
+            XmlHelper.WriteAttribute(sw, "w:hAnsi", this.hAnsi);
+            XmlHelper.WriteAttribute(sw, "w:eastAsia", this.eastAsia);
+            XmlHelper.WriteAttribute(sw, "w:cs", this.cs);
             if (this.asciiTheme != null)
                 XmlHelper.WriteAttribute(sw, "w:asciiTheme", this.asciiTheme.ToString());
             if (this.eastAsiaTheme !=null)
