@@ -439,7 +439,7 @@ namespace NPOI.XSSF.UserModel
             for (int i = 0; i < size; i++)
             {
                 CellRangeAddress region = regions[i];
-                foreach (CellRangeAddress other in regions.Skip(i)) //regions.subList(i+1, regions.size()
+                foreach (CellRangeAddress other in regions.Skip(i+1)) //regions.subList(i+1, regions.size()
                 {
                     if (region.Intersects(other))
                     {

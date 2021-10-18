@@ -1398,6 +1398,14 @@ namespace TestCases.SS.UserModel
             Assert.IsTrue(sheet.MergedRegions.Count ==0 );
             wb.Close();
         }
+        [Test]
+        public void MergedRangeValidateError()
+        {
+            var workbook = _testDataProvider.CreateWorkbook();
+            var sheet = workbook.CreateSheet();
+            sheet.AddMergedRegion(new CellRangeAddress(0, 1, 0, 1));
+            sheet.ValidateMergedRegions();
+        }
         /**
          * Tests that the setAsActiveCell and getActiveCell function pairs work together
          */
