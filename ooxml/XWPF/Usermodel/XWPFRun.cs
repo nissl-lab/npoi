@@ -907,13 +907,13 @@ namespace NPOI.XWPF.UserModel
             get
             {
                 CT_RPr pr = run.rPr;
-                return (pr != null && pr.IsSetSz()) ? (int)(pr.sz.val / 2) : -1;
+                return (pr != null && pr.IsSetSz()) ? pr.sz.val / 2.0 : -1;
             }
             set
             {
                 CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
                 CT_HpsMeasure ctSize = pr.IsSetSz() ? pr.sz : pr.AddNewSz();
-                ctSize.val = (ulong)value * 2;
+                ctSize.val = (ulong)(value * 2);
             }
         }
 
