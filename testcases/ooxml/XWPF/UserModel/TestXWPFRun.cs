@@ -246,7 +246,7 @@ namespace TestCases.XWPF.UserModel
             ctRun.AddNewCr();
             ctRun.AddNewT().Value = "TEST2 STRING";
             ctRun.AddNewTab();
-            ctRun.AddNewT().Value ="TEST3 STRING";
+            ctRun.AddNewT().Value = "TEST3 STRING";
             Assert.AreEqual(1, ctRun.SizeOfCrArray());
             Assert.AreEqual(1, ctRun.SizeOfTabArray());
 
@@ -595,8 +595,25 @@ namespace TestCases.XWPF.UserModel
                 // if text has leading whitespace then expect xml-fragment to have xml:space="preserve" set
                 // <xml-fragment xml:space="preserve" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
                 bool isWhitespace = Character.isWhitespace(expected[0]);
-                Assert.AreEqual(isWhitespace, ctText.space=="preserve");
+                Assert.AreEqual(isWhitespace, ctText.space == "preserve");
             }
+        }
+        [Test]
+        public void TestSetStyleId()
+        {
+            XWPFDocument document = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
+             
+            XWPFRun run = document.CreateParagraph().CreateRun();
+
+            String styleId = "bolditalic";
+            run.SetStyle(styleId);
+            String candStyleId = run.GetCTR().rPr.rStyle.val;
+            Assert.IsNotNull(candStyleId, "Expected to find a run style ID");
+            Assert.AreEqual(styleId, candStyleId);
+
+            Assert.AreEqual(styleId, run.GetStyle());
+
+            document.Close();
         }
     }
 }

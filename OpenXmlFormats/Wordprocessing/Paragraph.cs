@@ -4004,7 +4004,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.rPrChange.Write(sw, "rPrChange");
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
-
+        public CT_String AddNewRStyle()
+        {
+            this.rStyleField = new CT_String();
+            return this.rStyleField;
+        }
         [XmlElement(Order = 0)]
         public CT_String rStyle
         {

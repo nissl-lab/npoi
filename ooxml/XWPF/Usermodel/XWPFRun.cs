@@ -1221,7 +1221,36 @@ namespace NPOI.XWPF.UserModel
         {
             return pictures;
         }
+        public void SetStyle(string styleId)
+        {
+            CT_RPr pr = GetCTR().rPr;
+            if (null == pr)
+            {
+                pr = GetCTR().AddNewRPr();
+            }
+            CT_String style = pr.rStyle != null ? pr.rStyle : pr.AddNewRStyle();
+            style.val= styleId;
+        }
+        /// <summary>
+        /// Return this run's style ID. If this run has no style (no run properties or properties without a style), an empty string is returned.
+        /// </summary>
+        /// <returns></returns>
+        public string GetStyle()
+        {
+            CT_RPr pr = GetCTR().rPr;
+            if (pr == null)
+            {
+                return "";
+            }
 
+            CT_String style = pr.rStyle;
+            if (style == null)
+            {
+                return "";
+            }
+
+            return style.val;
+        }
 
         /**
          * Add the xml:spaces="preserve" attribute if the string has leading or trailing white spaces
