@@ -2714,8 +2714,7 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "t", this.t);
             XmlHelper.WriteAttribute(sw, "r", this.r);
             XmlHelper.WriteAttribute(sw, "b", this.b);
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("/>");
         }
 
         [XmlAttribute]

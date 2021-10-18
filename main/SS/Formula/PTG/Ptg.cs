@@ -210,15 +210,7 @@ namespace NPOI.SS.Formula.PTG
         //}
         public virtual object Clone()
         {
-            using (MemoryStream stream = new MemoryStream())
-            {
-
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(stream, this);
-                stream.Position = 0;
-                return formatter.Deserialize(stream);
-            }
-
+            return this.Copy();
         }
 
         /**
