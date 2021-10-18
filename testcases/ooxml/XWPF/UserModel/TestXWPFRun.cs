@@ -242,11 +242,11 @@ namespace TestCases.XWPF.UserModel
         [Test]
         public void TestAddTabsAndLineBreaks()
         {
-            ctRun.AddNewT().Value=("TEST STRING");
+            ctRun.AddNewT().Value = "TEST STRING";
             ctRun.AddNewCr();
-            ctRun.AddNewT().Value = (/*setter*/"TEST2 STRING");
+            ctRun.AddNewT().Value = "TEST2 STRING";
             ctRun.AddNewTab();
-            ctRun.AddNewT().Value = (/*setter*/"TEST3 STRING");
+            ctRun.AddNewT().Value ="TEST3 STRING";
             Assert.AreEqual(1, ctRun.SizeOfCrArray());
             Assert.AreEqual(1, ctRun.SizeOfTabArray());
 
@@ -266,12 +266,12 @@ namespace TestCases.XWPF.UserModel
         [Test]
         public void TestAddPageBreak()
         {
-            ctRun.AddNewT().Value = ("TEST STRING");
+            ctRun.AddNewT().Value = "TEST STRING";
             ctRun.AddNewBr();
-            ctRun.AddNewT().Value = ("TEST2 STRING");
+            ctRun.AddNewT().Value = "TEST2 STRING";
             CT_Br breac = ctRun.AddNewBr();
-            breac.clear = (ST_BrClear.left);
-            ctRun.AddNewT().Value = ("TEST3 STRING");
+            breac.clear = ST_BrClear.left;
+            ctRun.AddNewT().Value = "TEST3 STRING";
             Assert.AreEqual(2, ctRun.SizeOfBrArray());
 
             XWPFRun run = new XWPFRun(new CT_R(), p);
@@ -561,6 +561,42 @@ namespace TestCases.XWPF.UserModel
             Assert.AreEqual(int.MaxValue, run.TextPosition);
             run.TextPosition = -1;
             Assert.AreEqual(-1, run.TextPosition);
+        }
+        [Test]
+        public void TestWhitespace()
+        {
+            String[]
+            text = new String[] {
+                "  The quick brown fox",
+                "\t\tjumped over the lazy dog"
+            };
+            MemoryStream bos = new MemoryStream();
+            XWPFDocument doc = new XWPFDocument();
+            foreach (String s in text) {
+                XWPFParagraph p1 = doc.CreateParagraph();
+                XWPFRun r1 = p1.CreateRun();
+                r1.SetText(s);
+            }
+            doc.Write(bos);
+
+            MemoryStream bis = new MemoryStream(bos.ToArray());
+            var doc2 = new XWPFDocument(bis);
+
+            var paragraphs = doc2.Paragraphs;
+            Assert.AreEqual(2, paragraphs.Count);
+            for (int i = 0; i < text.Length; i++)
+            {
+                XWPFParagraph p1 = paragraphs[i];
+                String expected = text[i];
+                Assert.AreEqual(expected, p1.Text);
+                CT_P ctp = p1.GetCTP();
+                CT_R ctr = ctp.GetRArray(0);
+                CT_Text ctText = ctr.GetTArray(0);
+                // if text has leading whitespace then expect xml-fragment to have xml:space="preserve" set
+                // <xml-fragment xml:space="preserve" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+                bool isWhitespace = Character.isWhitespace(expected[0]);
+                Assert.AreEqual(isWhitespace, ctText.space=="preserve");
+            }
         }
     }
 }

@@ -627,6 +627,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return GetObjectList<CT_R>(ParagraphItemsChoiceType.r);
         }
 
+        public CT_R GetRArray(int pos)
+        {
+            return GetObjectArray<CT_R>(pos, ParagraphItemsChoiceType.r);
+        }
+
         public int SizeOfBookmarkStartArray()
         {
             return SizeOfArray(ParagraphItemsChoiceType.bookmarkStart);
