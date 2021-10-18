@@ -134,10 +134,10 @@ namespace TestCases.SS.Formula.Functions
 
             IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             ICell cell = wb.GetSheetAt(0).GetRow(0).CreateCell(100);
-            assertDouble(fe, cell, "SUMIF(A2:A5,\">160000\",B2:B5)", 63000);
-            assertDouble(fe, cell, "SUMIF(A2:A5,\">160000\")", 900000);
-            assertDouble(fe, cell, "SUMIF(A2:A5,300000,B2:B5)", 21000);
-            assertDouble(fe, cell, "SUMIF(A2:A5,\">\" & C2,B2:B5)", 49000);
+            Util.Utils.AssertDouble(fe, cell, "SUMIF(A2:A5,\">160000\",B2:B5)", 63000);
+            Util.Utils.AssertDouble(fe, cell, "SUMIF(A2:A5,\">160000\")", 900000);
+            Util.Utils.AssertDouble(fe, cell, "SUMIF(A2:A5,300000,B2:B5)", 21000);
+            Util.Utils.AssertDouble(fe, cell, "SUMIF(A2:A5,\">\" & C2,B2:B5)", 49000);
         }
 
         [Test]
@@ -146,7 +146,7 @@ namespace TestCases.SS.Formula.Functions
             IWorkbook wb = initWorkbook1WithNA();
             IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             ICell cell = wb.GetSheetAt(0).GetRow(0).CreateCell(100);
-            assertError(fe, cell, "SUMIF(A2:A6,\">160000\",B2:B6)", FormulaError.NA);
+            Util.Utils.AssertError(fe, cell, "SUMIF(A2:A6,\">160000\",B2:B6)", FormulaError.NA);
         }
 
         [Test]
@@ -156,7 +156,7 @@ namespace TestCases.SS.Formula.Functions
 
             IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             ICell cell = wb.GetSheetAt(0).GetRow(0).CreateCell(100);
-            assertDouble(fe, cell, "SUMIF(A2:A7,\">160000\",B2:B7)", 63000);
+            Util.Utils.AssertDouble(fe, cell, "SUMIF(A2:A7,\">160000\",B2:B7)", 63000);
         }
 
         [Test]
@@ -165,10 +165,10 @@ namespace TestCases.SS.Formula.Functions
             IWorkbook wb = initWorkbook2();
             IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             ICell cell = wb.GetSheetAt(0).GetRow(0).CreateCell(100);
-            assertDouble(fe, cell, "SUMIF(A2:A7,\"Fruits\",C2:C7)", 2000);
-            assertDouble(fe, cell, "SUMIF(A2:A7,\"Vegetables\",C2:C7)", 12000);
-            assertDouble(fe, cell, "SUMIF(B2:B7,\"*es\",C2:C7)", 4300);
-            assertDouble(fe, cell, "SUMIF(A2:A7,\"\",C2:C7)", 400);
+            Util.Utils.AssertDouble(fe, cell, "SUMIF(A2:A7,\"Fruits\",C2:C7)", 2000);
+            Util.Utils.AssertDouble(fe, cell, "SUMIF(A2:A7,\"Vegetables\",C2:C7)", 12000);
+            Util.Utils.AssertDouble(fe, cell, "SUMIF(B2:B7,\"*es\",C2:C7)", 4300);
+            Util.Utils.AssertDouble(fe, cell, "SUMIF(A2:A7,\"\",C2:C7)", 400);
         }
 
         //see https://support.microsoft.com/en-us/office/sumif-function-169b8c99-c05c-4483-a712-1697a653039b
@@ -176,11 +176,11 @@ namespace TestCases.SS.Formula.Functions
         {
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
-            addRow(sheet, 0, "Property Value", "Commission", "Data");
-            addRow(sheet, 1, 100000, 7000, 250000);
-            addRow(sheet, 2, 200000, 14000);
-            addRow(sheet, 3, 300000, 21000);
-            addRow(sheet, 4, 400000, 28000);
+            Util.Utils.AddRow(sheet, 0, "Property Value", "Commission", "Data");
+            Util.Utils.AddRow(sheet, 1, 100000, 7000, 250000);
+            Util.Utils.AddRow(sheet, 2, 200000, 14000);
+            Util.Utils.AddRow(sheet, 3, 300000, 21000);
+            Util.Utils.AddRow(sheet, 4, 400000, 28000);
             return wb;
         }
 
@@ -188,7 +188,7 @@ namespace TestCases.SS.Formula.Functions
         {
             IWorkbook wb = initWorkbook1();
             ISheet sheet = wb.GetSheetAt(0);
-            addRow(sheet, 5, 500000, FormulaError.NA);
+            Util.Utils.AddRow(sheet, 5, 500000, FormulaError.NA);
             return wb;
         }
 
@@ -196,8 +196,8 @@ namespace TestCases.SS.Formula.Functions
         {
             IWorkbook wb = initWorkbook1();
             ISheet sheet = wb.GetSheetAt(0);
-            addRow(sheet, 5, 500000, true);
-            addRow(sheet, 6, 600000, "abc");
+            Util.Utils.AddRow(sheet, 5, 500000, true);
+            Util.Utils.AddRow(sheet, 6, 600000, "abc");
             return wb;
         }
 
@@ -205,50 +205,16 @@ namespace TestCases.SS.Formula.Functions
         {
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
-            addRow(sheet, 0, "Category", "Food", "Sales");
-            addRow(sheet, 1, "Vegetables", "Tomatoes", 2300);
-            addRow(sheet, 2, "Vegetables", "Celery", 5500);
-            addRow(sheet, 3, "Fruits", "Oranges", 800);
-            addRow(sheet, 4, null, "Butter", 400);
-            addRow(sheet, 5, "Vegetables", "Carrots", 4200);
-            addRow(sheet, 6, "Fruits", "Apples", 1200);
+            Util.Utils.AddRow(sheet, 0, "Category", "Food", "Sales");
+            Util.Utils.AddRow(sheet, 1, "Vegetables", "Tomatoes", 2300);
+            Util.Utils.AddRow(sheet, 2, "Vegetables", "Celery", 5500);
+            Util.Utils.AddRow(sheet, 3, "Fruits", "Oranges", 800);
+            Util.Utils.AddRow(sheet, 4, null, "Butter", 400);
+            Util.Utils.AddRow(sheet, 5, "Vegetables", "Carrots", 4200);
+            Util.Utils.AddRow(sheet, 6, "Fruits", "Apples", 1200);
             return wb;
         }
-        private void addRow(ISheet sheet, int rowIndex, params object[] values)
-        {
-            IRow row= sheet.CreateRow(rowIndex);
-            for (int i = 0; i < values.Length; i++)
-            {
-                if (values[i] is string)
-                    row.CreateCell(i).SetCellValue((string)values[i]);
-                else if (values[i] is null)
-                    row.CreateCell(i).SetBlank();
-                else if(values[i] is int)
-                    row.CreateCell(i).SetCellValue((int)values[i]);
-                else if(values[i]==FormulaError.NA)
-                    row.CreateCell(i).SetCellFormula("NA()");
-                else if(values[i] is bool)
-                    row.CreateCell(i).SetCellValue((bool)values[i]);
-                else
-                    row.CreateCell(i).SetCellValue((double)values[i]);
-            }
-        }
 
-        private void assertDouble(IFormulaEvaluator fe, ICell cell, string formula, double expectedResult)
-        {
-            cell.SetCellFormula(formula);
-            var result= fe.Evaluate(cell).NumberValue;
-            fe.ClearAllCachedResultValues();
-            Assert.AreEqual(expectedResult, result);
-        }
 
-        private void assertError(IFormulaEvaluator fe, ICell cell, string formula, FormulaError expectedError)
-        {
-            cell.SetCellFormula(formula);
-            fe.ClearAllCachedResultValues();
-
-            var result = fe.Evaluate(cell).ErrorValue;
-            Assert.AreEqual(expectedError.Code, result);
-        }
     }
 }

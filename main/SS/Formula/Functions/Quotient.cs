@@ -28,7 +28,8 @@ namespace NPOI.SS.Formula.Functions
             double enumerator = 0;
             try
             {
-                enumerator = OperandResolver.CoerceValueToDouble(venumerator);
+                ValueEval ve = OperandResolver.GetSingleValue(venumerator, srcRowIndex, srcColumnIndex);
+                enumerator = OperandResolver.CoerceValueToDouble(ve);
             }
             catch (EvaluationException)
             {
@@ -38,7 +39,8 @@ namespace NPOI.SS.Formula.Functions
             double denominator = 0;
             try
             {
-                denominator = OperandResolver.CoerceValueToDouble(vedenominator);
+                ValueEval ve = OperandResolver.GetSingleValue(vedenominator, srcRowIndex, srcColumnIndex);
+                denominator = OperandResolver.CoerceValueToDouble(ve);
             }
             catch (EvaluationException)
             {
@@ -50,7 +52,7 @@ namespace NPOI.SS.Formula.Functions
                 return ErrorEval.DIV_ZERO;
             }
 
-            return new NumberEval(((int)(enumerator / denominator)));
+            return new NumberEval((int)(enumerator / denominator));
         }
 
         public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
