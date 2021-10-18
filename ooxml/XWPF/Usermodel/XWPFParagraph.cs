@@ -325,11 +325,30 @@ namespace NPOI.XWPF.UserModel
             }
             return null;
         }
-        /**
-         * Returns Ilvl of the numeric style for this paragraph.
-         * Returns null if this paragraph does not have numeric style.
-         * @return Ilvl as BigInteger
-         */
+        /// <summary>
+        /// setNumILvl of Paragraph
+        /// </summary>
+        /// <param name="iLvl"></param>
+        public void SetNumILvl(string iLvl)
+        {
+            if (paragraph.pPr == null)
+            {
+                paragraph.AddNewPPr();
+            }
+            if (paragraph.pPr.numPr == null)
+            {
+                paragraph.pPr.AddNewNumPr();
+            }
+            if (paragraph.pPr.numPr.ilvl == null)
+            {
+                paragraph.pPr.numPr.AddNewIlvl();
+            }
+            paragraph.pPr.numPr.ilvl.val=iLvl;
+        }
+        /// <summary>
+        /// Returns Ilvl of the numeric style for this paragraph.
+        /// </summary>
+        /// <returns></returns>
         public string GetNumIlvl()
         {
             if (paragraph.pPr != null)
@@ -342,12 +361,10 @@ namespace NPOI.XWPF.UserModel
             }
             return null;
         }
-
-        /**
-         * Returns numbering format for this paragraph, eg bullet or
-         *  lowerLetter.
-         * Returns null if this paragraph does not have numeric style.
-         */
+        /// <summary>
+        /// Returns numbering format for this paragraph, eg bullet or lowerLetter.
+        /// </summary>
+        /// <returns></returns>
         public String GetNumFmt()
         {
             string numID = GetNumID();
@@ -376,12 +393,9 @@ namespace NPOI.XWPF.UserModel
             }
             return null;
         }
-
-        /**
-     * Returns the text that should be used around the paragraph level numbers.
-     *
-     * @return a string (e.g. "%1.") or null if the value is not found.
-     */
+        /// <summary>
+        /// Returns the text that should be used around the paragraph level numbers.
+        /// </summary>
         public String NumLevelText
         {
             get
@@ -435,11 +449,10 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-
-        /**
-         * Gets the numstartOverride for the paragraph numbering for this paragraph.
-         * @return returns the overridden start number or null if there is no override for this paragraph.
-         */
+        /// <summary>
+        /// Gets the numstartOverride for the paragraph numbering for this paragraph.
+        /// </summary>
+        /// <returns></returns>
         public string GetNumStartOverride()
         {
             string numID = GetNumID();
@@ -476,11 +489,10 @@ namespace NPOI.XWPF.UserModel
             return null;
         }
 
-
-        /**
-         * SetNumID of Paragraph
-         * @param numPos
-         */
+        /// <summary>
+        /// SetNumID of Paragraph
+        /// </summary>
+        /// <param name="numId"></param>
         public void SetNumID(string numId)
         {
             if (paragraph.pPr == null)
@@ -514,10 +526,9 @@ namespace NPOI.XWPF.UserModel
             paragraph.pPr.numPr.ilvl.val = ilvl;
             paragraph.pPr.numPr.numId.val = (numId);
         }
-        /**
-         * Returns the text of the paragraph, but not of any objects in the
-         * paragraph
-         */
+        /// <summary>
+        /// Returns the text of the paragraph, but not of any objects in the paragraph
+        /// </summary>
         public String ParagraphText
         {
             get
@@ -530,10 +541,9 @@ namespace NPOI.XWPF.UserModel
                 return text.ToString();
             }
         }
-
-        /**
-         * Returns any text from any suitable pictures in the paragraph
-         */
+        /// <summary>
+        /// Returns any text from any suitable pictures in the paragraph
+        /// </summary>
         public String PictureText
         {
             get
@@ -547,11 +557,9 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        /**
-         * Returns the footnote text of the paragraph
-         *
-         * @return  the footnote text or empty string if the paragraph does not have footnotes
-         */
+        /// <summary>
+        /// Returns the footnote text of the paragraph
+        /// </summary>
         public String FootnoteText
         {
             get
@@ -560,19 +568,9 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        /**
-         * Returns the paragraph alignment which shall be applied to text in this
-         * paragraph.
-         * <p>
-         * If this element is not Set on a given paragraph, its value is determined
-         * by the Setting previously Set at any level of the style hierarchy (i.e.
-         * that previous Setting remains unChanged). If this Setting is never
-         * specified in the style hierarchy, then no alignment is applied to the
-         * paragraph.
-         * </p>
-         *
-         * @return the paragraph alignment of this paragraph.
-         */
+        /// <summary>
+        /// Returns the paragraph alignment which shall be applied to text in this paragraph.
+        /// </summary>
         public ParagraphAlignment Alignment
         {
             get
@@ -588,11 +586,9 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        
-        /**
-         * @return The raw alignment value, {@link #getAlignment()} is suggested
-         */
-
+        /// <summary>
+        /// The raw alignment value
+        /// </summary>
         public int FontAlignment
         {
             get

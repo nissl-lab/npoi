@@ -814,7 +814,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
-
+        public CT_DecimalNumber AddNewIlvl()
+        {
+            this.ilvlField = new CT_DecimalNumber();
+            return this.ilvlField;
+        }
 
         [XmlElement(Order = 0)]
         public CT_DecimalNumber ilvl

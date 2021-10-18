@@ -262,7 +262,16 @@ namespace TestCases.XWPF.UserModel
             p.SetNumID("10");
             Assert.AreEqual("10", p.GetNumID());
         }
+        [Test]
+        public void TestGetSetILvl()
+        {
+            XWPFDocument doc = new XWPFDocument();
+            XWPFParagraph p = doc.CreateParagraph();
 
+            p.SetNumILvl("1");
+            Assert.AreEqual("1", p.GetNumIlvl());
+    
+        }
         [Test]
         public void TestAddingRuns()
         {
