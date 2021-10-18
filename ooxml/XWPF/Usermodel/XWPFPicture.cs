@@ -93,6 +93,26 @@ namespace NPOI.XWPF.UserModel
         {
             return description;
         }
+        /// <summary>
+        /// Returns the width of the picture (in points).
+        /// </summary>
+        public long Width
+        {
+            get
+            {
+                return ctPic.spPr.xfrm.ext.cx;
+            }
+        }
+        /// <summary>
+        /// Returns the depth of the picture (in points).
+        /// </summary>
+        public long Height
+        {
+            get
+            {
+                return ctPic.spPr.xfrm.ext.cy;
+            }
+        }
     }
 
 }
