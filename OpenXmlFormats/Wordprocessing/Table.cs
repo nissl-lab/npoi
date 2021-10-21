@@ -2844,6 +2844,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.tblLayout = new CT_TblLayoutType();
             return this.tblLayout;
         }
+
+        public CT_TblPPr AddNewTblPPr()
+        {
+            this.tblpPr = new CT_TblPPr();
+            return this.tblpPr;
+        }
     }
 
 
