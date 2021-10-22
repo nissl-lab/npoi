@@ -442,13 +442,15 @@ namespace NPOI.XWPF.Model
             shape.id = ("PowerPlusWaterMarkObject" + idx);
             shape.spid = ("_x0000_s102" + (4 + idx));
             shape.type = ("#_x0000_t136");
-            shape.style = ("position:absolute;margin-left:0;margin-top:0;width:415pt;height:207.5pt;z-index:-251654144;mso-wrap-edited:f;mso-position-horizontal:center;mso-position-horizontal-relative:margin;mso-position-vertical:center;mso-position-vertical-relative:margin");
-            shape.wrapcoords = ("616 5068 390 16297 39 16921 -39 17155 7265 17545 7186 17467 -39 17467 18904 17467 10507 17467 8710 17545 18904 17077 18787 16843 18358 16297 18279 12554 19178 12476 20701 11774 20779 11228 21131 10059 21248 8811 21248 7563 20975 6316 20935 5380 19490 5146 14022 5068 2616 5068");
-            shape.fillcolor = ("black");
+            shape.style = ("position:absolute;left:0;text-align:left;margin-left:0;margin-top:0;width:415pt;height:73.15pt;rotation:315;z-index:-251654144;mso-wrap-edited:f;mso-position-horizontal:center;mso-position-horizontal-relative:margin;mso-position-vertical:center;mso-position-vertical-relative:margin");
+            //shape.wrapcoords = ("616 5068 390 16297 39 16921 -39 17155 7265 17545 7186 17467 -39 17467 18904 17467 10507 17467 8710 17545 18904 17077 18787 16843 18358 16297 18279 12554 19178 12476 20701 11774 20779 11228 21131 10059 21248 8811 21248 7563 20975 6316 20935 5380 19490 5146 14022 5068 2616 5068");
+            shape.fillcolor = "silver";
             shape.stroked = (NPOI.OpenXmlFormats.Vml.ST_TrueFalse.@false);
             CT_TextPath shapeTextPath = shape.AddNewTextpath();
-            shapeTextPath.style=("font-family:&quot;Cambria&quot;;font-size:1pt");
+            shapeTextPath.style="font-family:\"Cambria\";;font-size:1pt";
             shapeTextPath.@string=(text);
+            var shapefill=shape.AddNewFill();
+            shapefill.opacity = ".5";
             pict.Set(group);
             // end watermark paragraph
             return new XWPFParagraph(p, doc);

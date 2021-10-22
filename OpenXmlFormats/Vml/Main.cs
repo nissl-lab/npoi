@@ -611,7 +611,6 @@ namespace NPOI.OpenXmlFormats.Vml
         [XmlEnum("linear sigma")]
         linearsigma,
     }
-    
     [Serializable]
 
     [System.ComponentModel.DesignerCategory("code")]
@@ -702,16 +701,16 @@ namespace NPOI.OpenXmlFormats.Vml
         public void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<v:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "wrapcoords", this.wrapcoords);
-            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "stroked", this.stroked);
-            XmlHelper.WriteAttribute(sw, "o:spid", this.spid);
             XmlHelper.WriteAttribute(sw, "id", this.id);
-            XmlHelper.WriteAttribute(sw, "fillcolor", this.fillcolor);
-            XmlHelper.WriteAttribute(sw, "o:insetmode", this.insetmode.ToString());
+            XmlHelper.WriteAttribute(sw, "o:spid", this.spid);
             XmlHelper.WriteAttribute(sw, "type", this.type);
+            XmlHelper.WriteAttribute(sw, "style", this.style);
+            XmlHelper.WriteAttribute(sw, "fillcolor", this.fillcolor);
+            NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "stroked", this.stroked);
+            XmlHelper.WriteAttribute(sw, "wrapcoords", this.wrapcoords);
+            XmlHelper.WriteAttribute(sw, "o:insetmode", this.insetmode.ToString());
             XmlHelper.WriteAttribute(sw, "adj", this.adj);
             XmlHelper.WriteAttribute(sw, "equationxml", this.equationxml);
-            XmlHelper.WriteAttribute(sw, "style", this.style);
             sw.Write(">");
 
             if (this.iscomment != null)
@@ -3653,7 +3652,7 @@ namespace NPOI.OpenXmlFormats.Vml
     [XmlType(Namespace="urn:schemas-microsoft-com:vml")]
     [XmlRoot("shapetype",Namespace="urn:schemas-microsoft-com:vml", IsNullable=true)]
     public class CT_Shapetype {
-        
+            
         private CT_Path pathField;
         
         private List<CT_Formulas> formulasField = new List<CT_Formulas>();
@@ -3797,7 +3796,15 @@ namespace NPOI.OpenXmlFormats.Vml
             sw.Write(">");
             if (this.stroke != null)
                 this.stroke.Write(sw, "stroke");
-
+            if (this.path != null)
+                this.path.Write(sw, "path");
+            if (this.textpath != null)
+            {
+                foreach (CT_TextPath x in this.textpath)
+                {
+                    x.Write(sw, "textpath");
+                }
+            }
             if (this.formulas != null)
             {
                 foreach (CT_Formulas x in this.formulas)
@@ -3826,8 +3833,6 @@ namespace NPOI.OpenXmlFormats.Vml
                     x.Write(sw, "shadow");
                 }
             }
-            if (this.path != null)
-                this.path.Write(sw, "path");
             if (this.@lock != null)
                 this.@lock.Write(sw, "lock");
             if (this.textbox != null)
@@ -3835,13 +3840,6 @@ namespace NPOI.OpenXmlFormats.Vml
                 foreach (CT_Textbox x in this.textbox)
                 {
                     x.Write(sw, "textbox");
-                }
-            }
-            if (this.textpath != null)
-            {
-                foreach (CT_TextPath x in this.textpath)
-                {
-                    x.Write(sw, "textpath");
                 }
             }
             if (this.imagedata != null)

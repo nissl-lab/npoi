@@ -18,21 +18,20 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_PictureBase
     {
-
-        private List<XmlNode> itemsField;
+        private List<object> itemsField;
 
         private List<ItemsChoiceType9> itemsElementNameField;
 
         public CT_PictureBase()
         {
             this.itemsElementNameField = new List<ItemsChoiceType9>();
-            this.itemsField = new List<XmlNode>();
+            this.itemsField = new List<object>();
         }
 
         [XmlAnyElement(Namespace = "urn:schemas-microsoft-com:office:office", Order = 0)]
         [XmlAnyElement(Namespace = "urn:schemas-microsoft-com:vml", Order = 0)]
         [XmlChoiceIdentifier("ItemsElementName")]
-        public List<XmlNode> Items
+        public List<object> Items
         {
             get
             {
@@ -65,7 +64,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 var group = (CT_Group)obj;
                 foreach (var item in group.Items)
                 {
-                    XmlSerializer xmlse = new XmlSerializer(item.GetType());
+                    /*XmlSerializer xmlse = new XmlSerializer(item.GetType());
                     StringBuilder output = new StringBuilder();
                     XmlWriterSettings settings = new XmlWriterSettings();
 
@@ -79,11 +78,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
                     XmlDocument xmlDoc = new XmlDocument();
 
-                    xmlDoc.LoadXml(output.ToString());
+                    xmlDoc.LoadXml(output.ToString());*/
 
                     lock (this)
                     {
-                        this.itemsField.Add(xmlDoc.DocumentElement.CloneNode(true));
+                        this.itemsField.Add(item);
                         this.itemsElementNameField.Add(ItemsChoiceType9.vml);
                     }
                 }
@@ -206,9 +205,20 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.movie.Write(sw, "movie");
             if (this.control != null)
                 this.control.Write(sw, "control");
-            foreach (XmlNode childnode in Items)
+            foreach (var childnode in Items)
             {
-                sw.Write(childnode.OuterXml.Replace("&amp;quot", "&quot"));
+                if (childnode is XmlNode)
+                {
+                    sw.Write(((XmlNode)childnode).OuterXml);
+                }
+                else if (childnode is CT_Shape)
+                {
+                    ((CT_Shape)childnode).Write(sw, "shape");
+                }
+                else if (childnode is CT_Shapetype)
+                {
+                    ((CT_Shapetype)childnode).Write(sw, "shapetype");
+                }
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
