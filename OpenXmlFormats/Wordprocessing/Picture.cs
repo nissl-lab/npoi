@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 using NPOI.OpenXml4Net.Util;
+using NPOI.OpenXmlFormats.Vml;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -59,21 +60,57 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void Set(object obj)
         {
-            XmlSerializer xmlse = new XmlSerializer(obj.GetType());
-            StringBuilder output = new StringBuilder();
-            XmlWriterSettings settings = new XmlWriterSettings();
-
-            settings.Encoding = Encoding.UTF8;
-            settings.OmitXmlDeclaration = true;
-            XmlWriter writer = XmlWriter.Create(output, settings);
-            xmlse.Serialize(writer, obj);
-            
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(output.ToString());
-            lock(this)
+            if (obj is CT_Group)
             {
-                this.itemsField.Add(xmlDoc.DocumentElement.CloneNode(true));
-                this.itemsElementNameField.Add(ItemsChoiceType9.vml);
+                var group = (CT_Group)obj;
+                foreach (var item in group.Items)
+                {
+                    XmlSerializer xmlse = new XmlSerializer(item.GetType());
+                    StringBuilder output = new StringBuilder();
+                    XmlWriterSettings settings = new XmlWriterSettings();
+
+                    settings.Encoding = Encoding.UTF8;
+                    settings.OmitXmlDeclaration = true;
+                    XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+                    ns.Add("v", "urn:schemas-microsoft-com:vml");
+                    ns.Add("o", "urn:schemas-microsoft-com:office:office");
+                    XmlWriter writer = XmlWriter.Create(output, settings);
+                    xmlse.Serialize(writer, item, ns);
+
+                    XmlDocument xmlDoc = new XmlDocument();
+
+                    xmlDoc.LoadXml(output.ToString());
+
+                    lock (this)
+                    {
+                        this.itemsField.Add(xmlDoc.DocumentElement.CloneNode(true));
+                        this.itemsElementNameField.Add(ItemsChoiceType9.vml);
+                    }
+                }
+            }
+            else
+            {
+                XmlSerializer xmlse = new XmlSerializer(obj.GetType());
+                StringBuilder output = new StringBuilder();
+                XmlWriterSettings settings = new XmlWriterSettings();
+
+                settings.Encoding = Encoding.UTF8;
+                settings.OmitXmlDeclaration = true;
+                XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+                ns.Add("v", "urn:schemas-microsoft-com:vml");
+                ns.Add("o", "urn:schemas-microsoft-com:office:office");
+                XmlWriter writer = XmlWriter.Create(output, settings);
+                xmlse.Serialize(writer, obj, ns);
+
+                XmlDocument xmlDoc = new XmlDocument();
+
+                xmlDoc.LoadXml(output.ToString());
+
+                lock (this)
+                {
+                    this.itemsField.Add(xmlDoc.DocumentElement.CloneNode(true));
+                    this.itemsElementNameField.Add(ItemsChoiceType9.vml);
+                }
             }
         }
     }
@@ -164,15 +201,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.Write(string.Format("<w:{0}>", nodeName));
             if (this.movie != null)
                 this.movie.Write(sw, "movie");
             if (this.control != null)
                 this.control.Write(sw, "control");
             foreach (XmlNode childnode in Items)
             {
-                sw.Write(childnode.OuterXml);
+                sw.Write(childnode.OuterXml.Replace("&amp;quot", "&quot"));
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
