@@ -3716,6 +3716,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return (this.tcPrField != null);
 
         }
+
+        public CT_Tbl AddNewTbl()
+        {
+            return AddNewObject<CT_Tbl>(ItemsChoiceTableCellType.tbl);
+        }
     }
 
 
