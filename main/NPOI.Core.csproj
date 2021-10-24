@@ -9,11 +9,11 @@
     <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
     <PackageId>NPOI</PackageId>
     <RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
-    <OutputPath>..\solution\Lib</OutputPath>
+    <OutputPath></OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-    <DocumentationFile>..\solution\Lib\NPOI.xml</DocumentationFile>
+    <DocumentationFile>C:\github\npoi\main\NPOI.xml</DocumentationFile>
   </PropertyGroup>
 
 
