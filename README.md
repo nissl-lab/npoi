@@ -4,7 +4,7 @@ NPOI
 [![Ko-Fi](https://img.shields.io/static/v1?style=flat-square&message=Support%20the%20Project&color=success&style=plastic&logo=ko-fi&label=$$)](https://ko-fi.com/tonyqus)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square&logo=Apache)](License.md)
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
-[![traffic](https://api.segment.io/v1/pixel/track?data=eyJ3cml0ZUtleSI6ICJZT1VSX1dSSVRFX0tFWSIsICJ1c2VySWQiOiAiMDI1cGlrYWNodTAyNSIsICJldmVudCI6ICJFbWFpbCBPcGVuZWQiLCAicHJvcGVydGllcyI6IHsgICAic3ViamVjdCI6ICJUaGUgRWxlY3RyaWMgRGFpbHkiLCAgICJlbWFpbCI6ICJwZWVrQXRNZUBlbWFpbC5wb2tlIiB9fQ
+[![traffic](https://api.segment.io/v1/pixel/track?data=ewogICJ3cml0ZUtleSI6ICJBV2NjaWd1UkhKODBuNkJ4WlI4cHRaRzBINzY0RmJObCIsCiAgInVzZXJJZCI6ICJ0b255cXVzIiwKICAiZXZlbnQiOiAiTlBPSSBIb21lcGFnZSIKfQ==
 )](#)
 <br />
 This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
