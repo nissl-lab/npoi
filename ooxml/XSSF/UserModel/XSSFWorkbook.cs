@@ -261,7 +261,7 @@ namespace NPOI.XSSF.UserModel
         public XSSFWorkbook(FileInfo file)
             : this(OPCPackage.Open(file))
         {
-     
+
         }
 
         /**
@@ -429,7 +429,7 @@ namespace NPOI.XSSF.UserModel
                 return;
             }
             sh.sheet = ctSheet;
-            sh.OnDocumentRead();
+            //sh.OnDocumentRead();
             sheets.Add(sh);
         }
         /**
@@ -929,7 +929,7 @@ namespace NPOI.XSSF.UserModel
         private void ValidateSheetName(String sheetName)
         {
             if (ContainsSheet(sheetName, sheets.Count))
-                throw new ArgumentException(string.Format("The workbook already contains a sheet named '{0}'",sheetName));
+                throw new ArgumentException(string.Format("The workbook already contains a sheet named '{0}'", sheetName));
         }
         protected XSSFDialogsheet CreateDialogsheet(String sheetname, CT_Dialogsheet dialogsheet)
         {
@@ -1174,6 +1174,11 @@ namespace NPOI.XSSF.UserModel
             {
                 if (name.Equals(sheet.SheetName, StringComparison.InvariantCultureIgnoreCase))
                 {
+                    if (!sheet.DocumentRead)
+                    {
+                        sheet.OnDocumentRead();
+                        sheet.DocumentRead = true;
+                    }
                     return sheet;
                 }
             }
@@ -1272,7 +1277,7 @@ namespace NPOI.XSSF.UserModel
         public void RemoveName(String name)
         {
             List<XSSFName> names = namedRangesByName[name.ToLower()];
-            if (names.Count==0)
+            if (names.Count == 0)
             {
                 throw new ArgumentException("Named range was not found: " + name);
             }
@@ -1281,7 +1286,7 @@ namespace NPOI.XSSF.UserModel
 
         private bool RemoveMapping(string key, XSSFName item)
         {
-            if(namedRangesByName.ContainsKey(key))
+            if (namedRangesByName.ContainsKey(key))
             {
                 var values = namedRangesByName[key];
                 return values.Remove(item);
@@ -1572,7 +1577,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (!namedRangesByName.ContainsKey(builtInCode.ToLower()))
                 return null;
-            
+
             foreach (XSSFName name in namedRangesByName[builtInCode.ToLower()])
             {
                 if (name.SheetIndex == sheetNumber)
@@ -1647,7 +1652,7 @@ namespace NPOI.XSSF.UserModel
 
             // Check it isn't already taken
             if (ContainsSheet(sheetname, sheetIndex))
-                throw new ArgumentException(string.Format("The workbook already contains a sheet named '{0}'",sheetname));
+                throw new ArgumentException(string.Format("The workbook already contains a sheet named '{0}'", sheetname));
 
             // Update references to the name
             XSSFFormulaUtils utils = new XSSFFormulaUtils(this);
@@ -2178,7 +2183,7 @@ namespace NPOI.XSSF.UserModel
             foreach (var xssfPivotTable in pivotTables)
             {
                 var sheet = xssfPivotTable.GetParent();
-                if ( sheet is XSSFSheet )
+                if (sheet is XSSFSheet)
                 {
                     sheet.RemoveRelation(xssfPivotTable);
                 }
@@ -2188,7 +2193,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (poixmlDocumentPart is XSSFPivotCacheDefinition)
                 {
-                    var pivotCacheDefinition = (XSSFPivotCacheDefinition)poixmlDocumentPart; 
+                    var pivotCacheDefinition = (XSSFPivotCacheDefinition)poixmlDocumentPart;
                     RemoveRelation(pivotCacheDefinition);
                 }
             }

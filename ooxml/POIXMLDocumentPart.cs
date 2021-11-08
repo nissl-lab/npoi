@@ -38,7 +38,7 @@ using System.Xml;
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(POIXMLDocumentPart));
         private String coreDocumentRel = PackageRelationshipTypes.CORE_DOCUMENT;
-
+        public bool DocumentRead { get;  set; }
         private PackagePart packagePart;
         private PackageRelationship packageRel;
         private POIXMLDocumentPart parent;

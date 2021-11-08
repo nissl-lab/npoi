@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Collections;
+using System.IO.Compression;
+using System.Runtime.Serialization.Formatters.Binary;
 using ICSharpCode.SharpZipLib.Zip;
 
 namespace NPOI.OpenXml4Net.Util
@@ -27,25 +29,27 @@ namespace NPOI.OpenXml4Net.Util
          */
         public ZipInputStreamZipEntrySource(ZipInputStream inp)
         {
-            zipEntries = new List<FakeZipEntry>();
-
-            bool going = true;
-            while (going)
+            using (inp)
             {
-                ZipEntry zipEntry = inp.GetNextEntry();
-                if (zipEntry == null)
-                {
-                    going = false;
-                }
-                else
-                {
-                    FakeZipEntry entry = new FakeZipEntry(zipEntry, inp);
-                    //inp.Close();
+                zipEntries = new List<FakeZipEntry>();
 
-                    zipEntries.Add(entry);
+                bool going = true;
+                while (going)
+                {
+                    ZipEntry zipEntry = inp.GetNextEntry();
+                    if (zipEntry == null)
+                    {
+                        going = false;
+                    }
+                    else
+                    {
+                        FakeZipEntry entry = new FakeZipEntry(zipEntry, inp);
+                        //inp.Close();
+
+                        zipEntries.Add(entry);
+                    }
                 }
             }
-            inp.Close();
         }
 
         public IEnumerator Entries
@@ -124,37 +128,74 @@ namespace NPOI.OpenXml4Net.Util
 
                 // Grab the de-compressed contents for later
                 MemoryStream baos = new MemoryStream();
-
-                long entrySize = entry.Size;
-
-                if (entrySize != -1)
+                try
                 {
-                    if (entrySize >= Int32.MaxValue)
+                    long entrySize = entry.Size;
+
+                    if (entrySize != -1)
                     {
-                        throw new IOException("ZIP entry size is too large");
+                        if (entrySize >= Int32.MaxValue)
+                        {
+                            throw new IOException("ZIP entry size is too large");
+                        }
+
+                        baos = new MemoryStream((int) entrySize);
+                    }
+                    else
+                    {
+                        baos = new MemoryStream();
                     }
 
-                    baos = new MemoryStream((int)entrySize);
-                }
-                else
-                {
-                    baos = new MemoryStream();
-                }
+                    byte[] buffer = new byte[4096];
+                    int read = 0;
+                    while ((read = inp.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        baos.Write(buffer, 0, read);
+                    }
 
-                byte[] buffer = new byte[4096];
-                int read = 0;
-                while ((read = inp.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    baos.Write(buffer, 0, read);
+                    data = GZipCompress(baos.ToArray());
                 }
-
-                data = baos.ToArray();
+                finally
+                {
+                    baos?.Dispose();
+                }
             }
 
             public Stream GetInputStream()
             {
-                return new MemoryStream(data);
+                return new MemoryStream(GZipDecompress(data));
             }
+
+            public static byte[] GZipCompress(byte[] source)
+            {
+                using (var outStream = new MemoryStream())
+                {
+                    using (var gzipStream = new GZipStream(outStream, CompressionMode.Compress))
+                    {
+                        using (var ms = new MemoryStream(source))
+                        {
+                            ms.CopyTo(gzipStream);
+                        }
+                    }
+                    return outStream.ToArray();
+                }
+            }
+
+            public static byte[] GZipDecompress(byte[] compressed)
+            {
+                using (var inStream = new MemoryStream(compressed))
+                {
+                    using (var gzipStream = new GZipStream(inStream, CompressionMode.Decompress))
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+                            gzipStream.CopyTo(ms);
+                            return ms.ToArray();
+                        }
+                    }
+                }
+            }
+
         }
     }
 

@@ -4980,6 +4980,7 @@ namespace NPOI.XSSF.UserModel
             }
             CopySheetImages(dest as XSSFWorkbook, newSheet);
         }
+
         private static void CopyRow(XSSFSheet srcSheet, XSSFSheet destSheet, XSSFRow srcRow, XSSFRow destRow, IDictionary<Int32, ICellStyle> styleMap, bool keepFormulas)
         {
             destRow.Height = srcRow.Height;
