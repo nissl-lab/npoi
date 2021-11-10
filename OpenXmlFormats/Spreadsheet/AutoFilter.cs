@@ -63,10 +63,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
             sw.Write(">");
-            if (this.sortState != null)
-                this.sortState.Write(sw, "sortState");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
             if (this.filterColumn != null)
             {
                 foreach (CT_FilterColumn x in this.filterColumn)
@@ -74,6 +70,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "filterColumn");
                 }
             }
+            if (this.sortState != null)
+                this.sortState.Write(sw, "sortState");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
