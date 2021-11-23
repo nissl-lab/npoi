@@ -2183,7 +2183,7 @@ namespace NPOI.XSSF.UserModel
             foreach (var xssfPivotTable in pivotTables)
             {
                 var sheet = xssfPivotTable.GetParent();
-                if (sheet is XSSFSheet)
+                if ( sheet is XSSFSheet )
                 {
                     sheet.RemoveRelation(xssfPivotTable);
                 }
