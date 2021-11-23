@@ -929,7 +929,7 @@ namespace NPOI.XSSF.UserModel
         private void ValidateSheetName(String sheetName)
         {
             if (ContainsSheet(sheetName, sheets.Count))
-                throw new ArgumentException(string.Format("The workbook already contains a sheet named '{0}'", sheetName));
+                throw new ArgumentException(string.Format("The workbook already contains a sheet named '{0}'",sheetName));
         }
         protected XSSFDialogsheet CreateDialogsheet(String sheetname, CT_Dialogsheet dialogsheet)
         {
