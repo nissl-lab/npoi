@@ -1277,7 +1277,7 @@ namespace NPOI.XSSF.UserModel
         public void RemoveName(String name)
         {
             List<XSSFName> names = namedRangesByName[name.ToLower()];
-            if (names.Count == 0)
+            if (names.Count==0)
             {
                 throw new ArgumentException("Named range was not found: " + name);
             }
@@ -1286,7 +1286,7 @@ namespace NPOI.XSSF.UserModel
 
         private bool RemoveMapping(string key, XSSFName item)
         {
-            if (namedRangesByName.ContainsKey(key))
+            if(namedRangesByName.ContainsKey(key))
             {
                 var values = namedRangesByName[key];
                 return values.Remove(item);
@@ -1652,7 +1652,7 @@ namespace NPOI.XSSF.UserModel
 
             // Check it isn't already taken
             if (ContainsSheet(sheetname, sheetIndex))
-                throw new ArgumentException(string.Format("The workbook already contains a sheet named '{0}'", sheetname));
+                throw new ArgumentException(string.Format("The workbook already contains a sheet named '{0}'",sheetname));
 
             // Update references to the name
             XSSFFormulaUtils utils = new XSSFFormulaUtils(this);
@@ -2193,7 +2193,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (poixmlDocumentPart is XSSFPivotCacheDefinition)
                 {
-                    var pivotCacheDefinition = (XSSFPivotCacheDefinition)poixmlDocumentPart;
+                    var pivotCacheDefinition = (XSSFPivotCacheDefinition)poixmlDocumentPart; 
                     RemoveRelation(pivotCacheDefinition);
                 }
             }
