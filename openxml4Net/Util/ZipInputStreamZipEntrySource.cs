@@ -166,7 +166,7 @@ namespace NPOI.OpenXml4Net.Util
                 return new MemoryStream(GZipDecompress(data));
             }
 
-            public static byte[] GZipCompress(byte[] source)
+            private static byte[] GZipCompress(byte[] source)
             {
                 using (var outStream = new MemoryStream())
                 {
@@ -181,7 +181,7 @@ namespace NPOI.OpenXml4Net.Util
                 }
             }
 
-            public static byte[] GZipDecompress(byte[] compressed)
+            private static byte[] GZipDecompress(byte[] compressed)
             {
                 using (var inStream = new MemoryStream(compressed))
                 {
