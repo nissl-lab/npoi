@@ -21,7 +21,7 @@ Get Started with NPOI
 
 [中国哪些公司在用.NET](https://github.com/dotnet-cn/jobs)
 
-[DotnetCore.NPOI的前世今生](https://github.com/nissl-lab/npoi/wiki/DotNetCore.NPOI的前世今生)
+[The real history of Dotnetcore.NPOI](https://tonyqus.medium.com/the-real-history-of-dotnetcore-npoi-999bb5e140c7)
 
 [起底开源邪教NCC组织](https://github.com/nissl-lab/npoi/wiki/起底开源邪教NCC组织)
 
