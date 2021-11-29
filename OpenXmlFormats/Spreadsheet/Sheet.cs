@@ -2090,8 +2090,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_PivotAreaReference()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.xField = new List<CT_Index>();
+            //this.extLstField = new CT_ExtensionList();
+            //this.xField = new List<CT_Index>();
             this.selectedField = true;
             this.byPositionField = false;
             this.relativeField = false;
@@ -2109,6 +2109,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.varPSubtotalField = false;
         }
 
+        [XmlAttribute]
         public List<CT_Index> x
         {
             get
@@ -2121,6 +2122,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         public CT_ExtensionList extLst
         {
             get
@@ -2133,6 +2135,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         public uint field
         {
             get
@@ -2158,6 +2161,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         public uint count
         {
             get
@@ -2183,6 +2187,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool selected
         {
@@ -2196,6 +2201,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool byPosition
         {
@@ -2209,6 +2215,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool relative
         {
@@ -2222,6 +2229,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool defaultSubtotal
         {
@@ -2235,6 +2243,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool sumSubtotal
         {
@@ -2248,6 +2257,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool countASubtotal
         {
@@ -2261,6 +2271,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool avgSubtotal
         {
@@ -2274,6 +2285,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool maxSubtotal
         {
@@ -2287,6 +2299,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool minSubtotal
         {
@@ -2300,6 +2313,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool productSubtotal
         {
@@ -2313,6 +2327,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool countSubtotal
         {
@@ -2326,6 +2341,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool stdDevSubtotal
         {
@@ -2339,6 +2355,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool stdDevPSubtotal
         {
@@ -2352,6 +2369,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool varSubtotal
         {
@@ -2365,6 +2383,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool varPSubtotal
         {
@@ -2386,6 +2405,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private uint vField;
 
+        [XmlAttribute()]
         public uint v
         {
             get
@@ -2409,7 +2429,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "v", this.v);
+            XmlHelper.WriteAttribute(sw, "v", this.v, true);
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));
         }
