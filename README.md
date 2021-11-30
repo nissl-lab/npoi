@@ -9,6 +9,8 @@ NPOI
 <br />
 This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
+[Who is using NPOI?](https://github.com/nissl-lab/npoi/issues/705)
+
 Get Started with NPOI
 ============
 [Getting Started with NPOI](https://github.com/nissl-lab/npoi/wiki/Getting-Started-with-NPOI)
@@ -17,15 +19,13 @@ Get Started with NPOI
 
 [ORM on NPOI](https://github.com/nissl-lab/npoi/wiki/ORM-on-NPOI)
 
+[NPOI Changelog](https://github.com/nissl-lab/npoi/wiki/Changelog)
+
+Replace DotnetCore.NPOI with NPOI ASAP
+===========
 [Stop using Dotnetcore/NPOI nuget package. It’s obsolete!](https://tonyqus.medium.com/stop-using-dotnetcore-npoi-nuget-package-its-too-obsolete-6d0aeedb3319)
 
 [The real history of Dotnetcore.NPOI](https://tonyqus.medium.com/the-real-history-of-dotnetcore-npoi-999bb5e140c7)
-
-[中国哪些公司在用.NET](https://github.com/dotnet-cn/jobs)
-
-[起底开源邪教NCC组织](https://github.com/nissl-lab/npoi/wiki/起底开源邪教NCC组织)
-
-[NPOI Changelog](https://github.com/nissl-lab/npoi/wiki/Changelog)
 
 Telegram User Group
 ================
