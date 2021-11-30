@@ -44,9 +44,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(">");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            foreach (CT_PivotCacheRecord o in this.r)
+            if (this.r != null && this.r.Count > 0)
             {
-                o.Write(sw);
+                foreach (CT_PivotCacheRecord o in this.r)
+                {
+                    o.Write(sw);
+                }
             }
             sw.Write("</pivotCacheRecords>");
         }
