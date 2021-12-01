@@ -92,7 +92,7 @@ namespace NPOI.SS.Formula
         private static bool AddInternal(CellCacheEntry[] arr, CellCacheEntry cce)
         {
 
-            int startIx = cce.GetHashCode() % arr.Length;
+            int startIx = Math.Abs(cce.GetHashCode() % arr.Length);
 
             for (int i = startIx; i < arr.Length; i++)
             {
@@ -156,7 +156,7 @@ namespace NPOI.SS.Formula
             // else - usual case
             // delete single element (without re-Hashing)
 
-            int startIx = cce.GetHashCode() % arr.Length;
+            int startIx = Math.Abs(cce.GetHashCode() % arr.Length);
 
             // note - can't exit loops upon finding null because of potential previous deletes
             for (int i = startIx; i < arr.Length; i++)
