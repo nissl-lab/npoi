@@ -395,6 +395,7 @@ namespace NPOI.SS.Util
             if (newStyle == null)
             {
                 newStyle = workbook.CreateCellStyle();
+                newStyle.CloneStyleFrom(originalStyle);
                 SetFormatProperties(newStyle, workbook, values);
             }
 
