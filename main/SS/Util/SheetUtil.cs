@@ -418,6 +418,10 @@ namespace NPOI.SS.Util
             DataFormatter formatter = new DataFormatter();
             int defaultCharWidth = GetDefaultCharWidth(sheet.Workbook);
 
+            // No need to explore the whole sheet: explore only the first 100 lines
+            const int nbRowMax = 100;
+            if (lastRow - firstRow > nbRowMax) lastRow = firstRow + nbRowMax;
+
             double width = -1;
             for (int rowIdx = firstRow; rowIdx <= lastRow; ++rowIdx)
             {
