@@ -1,3 +1,5 @@
+想通过Github找.NET工作吗？欢迎watch[这个项目](https://github.com/dotnet-cn/jobs/)
+
 NPOI
 ===================
 [![NuGet Badge](https://buildstats.info/nuget/NPOI)](https://www.nuget.org/packages/NPOI)
