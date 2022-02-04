@@ -17,6 +17,7 @@
  * ====================================================================
  */
 
+using EnumsNET;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Model;
@@ -278,7 +279,7 @@ namespace NPOI.XSSF.UserModel
             // Set the type of the icon set
             if (iconSet.name != null)
             {
-                ST_IconSetType xIconSet = XmlEnumParser<ST_IconSetType>.ForName(iconSet.name, ST_IconSetType.Item3TrafficLights1);
+                ST_IconSetType xIconSet =Enums.Parse<ST_IconSetType>(iconSet.name, false, EnumFormat.Description);
                 icons.iconSet = xIconSet;
             }
 
