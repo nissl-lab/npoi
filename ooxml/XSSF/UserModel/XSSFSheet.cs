@@ -4805,7 +4805,7 @@ namespace NPOI.XSSF.UserModel
                     continue;
                 }
                 //skip printerSettings.bin part
-                if (r.GetPackagePart().PartName.Name == "/xl/printerSettings/printerSettings1.bin")
+                if (r.GetPackagePart().PartName.Name.StartsWith("/xl/printerSettings/printerSettings"))
                     continue;
                 PackageRelationship rel = r.GetPackageRelationship();
                 clonedSheet.GetPackagePart().AddRelationship(
