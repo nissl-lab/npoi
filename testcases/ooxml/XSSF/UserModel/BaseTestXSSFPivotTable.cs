@@ -293,34 +293,6 @@ namespace TestCases.XSSF.UserModel
 
             offsetPivotTable.AddColumnLabel(DataConsolidateFunction.SUM, 0);
         }
-        [Ignore("not found in poi")]
-        [Test]
-        public void Test58294()
-        {
-            //XSSFWorkbook wb = new XSSFWorkbook("C:\\temp\\test1.xlsx");
-            //XSSFSheet sheet = wb.GetSheetAt(1) as XSSFSheet;
-            //XSSFSheet sheet0 = wb.GetSheetAt(0) as XSSFSheet;
-            //sheet0.SetActiveCell("A4");
-            //XSSFPivotTable pivotTable = sheet0.CreatePivotTable(new AreaReference("A3:H6"), new CellReference("A4"), sheet);
-            //pivotTable.AddRowLabel(1);
-            //pivotTable.AddRowLabel(3);
-            //pivotTable.AddRowLabel(5);
-            //pivotTable.AddColumnLabel(DataConsolidateFunction.SUM, 6, "Sum of days with hauls");
-            //pivotTable.AddColumnLabel(DataConsolidateFunction.SUM, 7, "Sum of days site cutoff");
-            ////checkPivotTables(wb);
-            //FileStream fileOut = new FileStream("c:\\temp\\test2new.xlsx", FileMode.Create, FileAccess.ReadWrite);
-            //try
-            //{
-            //    wb.Write(fileOut);
-            //}
-            //finally
-            //{
-            //    fileOut.Close();
-            //}
-            //XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
-            ////checkPivotTables(wbBack);
-            //wb.Close();
-        }
         private void checkPivotTables(XSSFWorkbook wb)
         {
             IList<XSSFPivotTable> pivotTables = (wb.GetSheetAt(0) as XSSFSheet).GetPivotTables();
