@@ -364,7 +364,7 @@ namespace NPOI.XSSF.UserModel
                 dataFields = pivotTableDefinition.AddNewDataFields();
             }
             CT_DataField dataField = dataFields.AddNewDataField();
-            dataField.subtotal = (ST_DataConsolidateFunction)(function.Value);
+            dataField.subtotal = (ST_DataConsolidateFunction)(function.Value-1);
             ICell cell = GetDataSheet().GetRow(pivotArea.FirstCell.Row)
                 .GetCell(pivotArea.FirstCell.Col + columnIndex);
             cell.SetCellType(CellType.String);
