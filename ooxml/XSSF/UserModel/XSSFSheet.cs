@@ -4776,7 +4776,6 @@ namespace NPOI.XSSF.UserModel
                 using (MemoryStream ms = new MemoryStream())
                 {
                     this.Write(ms, true);
-                    string decoded = Encoding.UTF8.GetString(ms.ToArray());
                     ms.Position = 0;
                     clonedSheet.Read(ms);
                 }
