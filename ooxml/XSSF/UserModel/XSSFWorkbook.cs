@@ -596,6 +596,7 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 ValidateSheetName(newName);
+                WorkbookUtil.ValidateSheetName(newName);
             }
 
             XSSFSheet clonedSheet = CreateSheet(newName) as XSSFSheet;
@@ -880,9 +881,6 @@ namespace NPOI.XSSF.UserModel
             }
             ValidateSheetName(sheetname);
 
-
-            // YK: Mimic Excel and silently tRuncate sheet names longer than 31 characters
-            if (sheetname.Length > 31) sheetname = sheetname.Substring(0, 31);
             WorkbookUtil.ValidateSheetName(sheetname);
 
             CT_Sheet sheet = AddSheet(sheetname);

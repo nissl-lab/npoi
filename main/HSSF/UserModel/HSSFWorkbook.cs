@@ -877,7 +877,9 @@ namespace NPOI.HSSF.UserModel
             if (workbook.ContainsSheetName(sheetname, _sheets.Count))
                 throw new ArgumentException("The workbook already contains a sheet named '" + sheetname + "'");
 
-            HSSFSheet sheet = new HSSFSheet(this);
+           WorkbookUtil.ValidateSheetName(sheetname);
+
+           HSSFSheet sheet = new HSSFSheet(this);
 
             workbook.SetSheetName(_sheets.Count, sheetname);
             _sheets.Add(sheet);

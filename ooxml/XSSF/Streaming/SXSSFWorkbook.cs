@@ -648,6 +648,7 @@ namespace NPOI.XSSF.Streaming
 
         public ISheet CreateSheet(string sheetname)
         {
+            SS.Util.WorkbookUtil.ValidateSheetName(sheetname);
             return CreateAndRegisterSXSSFSheet(XssfWorkbook.CreateSheet(sheetname));
         }
 

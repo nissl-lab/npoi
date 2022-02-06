@@ -656,10 +656,6 @@ namespace NPOI.HSSF.Model
         {
             CheckSheets(sheetnum);
 
-            // YK: Mimic Excel and silently truncate sheet names longer than 31 characters
-            if (sheetname.Length > 31) 
-                sheetname = sheetname.Substring(0, 31);
-
             BoundSheetRecord sheet =boundsheets[sheetnum];
             sheet.Sheetname=sheetname;
         }
