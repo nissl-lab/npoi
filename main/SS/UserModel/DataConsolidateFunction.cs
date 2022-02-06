@@ -26,17 +26,17 @@ namespace NPOI.SS.UserModel
      */
     public class DataConsolidateFunction
     {
-        public static DataConsolidateFunction AVERAGE = new DataConsolidateFunction(1, "Average"),
-        COUNT = new DataConsolidateFunction(2, "Count"),
-        COUNT_NUMS = new DataConsolidateFunction(3, "Count"),
-        MAX = new DataConsolidateFunction(4, "Max"),
-        MIN = new DataConsolidateFunction(5, "Min"),
-        PRODUCT = new DataConsolidateFunction(6, "Product"),
-        STD_DEV = new DataConsolidateFunction(7, "StdDev"),
-        STD_DEVP = new DataConsolidateFunction(8, "StdDevp"),
-        SUM = new DataConsolidateFunction(9, "Sum"),
-        VAR = new DataConsolidateFunction(10, "Var"),
-        VARP = new DataConsolidateFunction(11, "Varp");
+        public static DataConsolidateFunction AVERAGE = new DataConsolidateFunction(0, "Average"),
+        COUNT = new DataConsolidateFunction(1, "Count"),
+        COUNT_NUMS = new DataConsolidateFunction(2, "Count"),
+        MAX = new DataConsolidateFunction(3, "Max"),
+        MIN = new DataConsolidateFunction(4, "Min"),
+        PRODUCT = new DataConsolidateFunction(5, "Product"),
+        STD_DEV = new DataConsolidateFunction(6, "StdDev"),
+        STD_DEVP = new DataConsolidateFunction(7, "StdDevp"),
+        SUM = new DataConsolidateFunction(8, "Sum"),
+        VAR = new DataConsolidateFunction(9, "Var"),
+        VARP = new DataConsolidateFunction(10, "Varp");
 
         private int value;
         private String name;
