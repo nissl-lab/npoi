@@ -1,1 +1,0 @@
-dir a\*.java | foreach { move-item -literal $_ $_.Name.Replace(".java", ".cs")}
