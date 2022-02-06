@@ -96,7 +96,7 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        internal override void Write(Stream out1)
+        internal override void Write(Stream out1, bool leaveOpen=false)
         {
             new ChartsheetDocument(this.chartsheet).Save(out1);
         }

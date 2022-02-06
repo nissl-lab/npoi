@@ -638,7 +638,7 @@ namespace NPOI.XSSF.UserModel
             {
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    this.Write(ms);
+                    this.Write(ms, true);
                     ms.Position = 0;
                     clonedSheet.Read(ms);
                 }

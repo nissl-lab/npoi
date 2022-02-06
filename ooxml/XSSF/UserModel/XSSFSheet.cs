@@ -3752,7 +3752,7 @@ namespace NPOI.XSSF.UserModel
             out1.Close();
         }
 
-        internal virtual void Write(Stream stream)
+        internal virtual void Write(Stream stream, bool leaveOpen=false)
         {
             bool setToNull = false;
             if (worksheet.sizeOfColsArray() == 1)
@@ -3804,7 +3804,7 @@ namespace NPOI.XSSF.UserModel
             map[ST_RelationshipId.NamespaceURI] = "r";
             //xmlOptions.SetSaveSuggestedPrefixes(map);
 
-            new WorksheetDocument(worksheet).Save(stream);
+            new WorksheetDocument(worksheet).Save(stream, leaveOpen);
 
             // Bug 52233: Ensure that we have a col-array even if write() removed it
             if (setToNull)
@@ -4775,7 +4775,8 @@ namespace NPOI.XSSF.UserModel
             {
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    this.Write(ms);
+                    this.Write(ms, true);
+                    string decoded = Encoding.UTF8.GetString(ms.ToArray());
                     ms.Position = 0;
                     clonedSheet.Read(ms);
                 }
