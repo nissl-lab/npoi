@@ -636,10 +636,11 @@ namespace NPOI.XSSF.UserModel
 
             try
             {
-                using (MemoryStream out1 = new MemoryStream())
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    srcSheet.Write(out1);
-                    clonedSheet.Read(new MemoryStream(out1.ToArray()));
+                    this.Write(ms);
+                    ms.Position = 0;
+                    clonedSheet.Read(ms);
                 }
             }
             catch (IOException e)
