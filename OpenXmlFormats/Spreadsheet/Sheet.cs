@@ -1633,12 +1633,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.field = XmlHelper.ReadInt(node.Attributes["field"]);
             if (node.Attributes["type"] != null)
                 ctObj.type = (ST_PivotAreaType)Enum.Parse(typeof(ST_PivotAreaType), node.Attributes["type"].Value);
-            ctObj.dataOnly = XmlHelper.ReadBool(node.Attributes["dataOnly"]);
+            ctObj.dataOnly = XmlHelper.ReadBool(node.Attributes["dataOnly"], true);
             ctObj.labelOnly = XmlHelper.ReadBool(node.Attributes["labelOnly"]);
             ctObj.grandRow = XmlHelper.ReadBool(node.Attributes["grandRow"]);
             ctObj.grandCol = XmlHelper.ReadBool(node.Attributes["grandCol"]);
             ctObj.cacheIndex = XmlHelper.ReadBool(node.Attributes["cacheIndex"]);
-            ctObj.outline = XmlHelper.ReadBool(node.Attributes["outline"]);
+            ctObj.outline = XmlHelper.ReadBool(node.Attributes["outline"], true);
             ctObj.offset = XmlHelper.ReadString(node.Attributes["offset"]);
             ctObj.collapsedLevelsAreSubtotals = XmlHelper.ReadBool(node.Attributes["collapsedLevelsAreSubtotals"]);
             if (node.Attributes["axis"] != null)
@@ -1658,15 +1658,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "field", this.field);
-            XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
-            XmlHelper.WriteAttribute(sw, "dataOnly", this.dataOnly);
-            XmlHelper.WriteAttribute(sw, "labelOnly", this.labelOnly);
-            XmlHelper.WriteAttribute(sw, "grandRow", this.grandRow);
-            XmlHelper.WriteAttribute(sw, "grandCol", this.grandCol);
-            XmlHelper.WriteAttribute(sw, "cacheIndex", this.cacheIndex);
-            XmlHelper.WriteAttribute(sw, "outline", this.outline);
+            if (this.type != ST_PivotAreaType.normal)
+                XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
+            XmlHelper.WriteAttribute(sw, "dataOnly", this.dataOnly, false, true);
+            XmlHelper.WriteAttribute(sw, "labelOnly", this.labelOnly, false);
+            XmlHelper.WriteAttribute(sw, "grandRow", this.grandRow, false);
+            XmlHelper.WriteAttribute(sw, "grandCol", this.grandCol, false);
+            XmlHelper.WriteAttribute(sw, "cacheIndex", this.cacheIndex, false);
+            XmlHelper.WriteAttribute(sw, "outline", this.outline, false, true);
             XmlHelper.WriteAttribute(sw, "offset", this.offset);
-            XmlHelper.WriteAttribute(sw, "collapsedLevelsAreSubtotals", this.collapsedLevelsAreSubtotals);
+            XmlHelper.WriteAttribute(sw, "collapsedLevelsAreSubtotals", this.collapsedLevelsAreSubtotals, false);
             XmlHelper.WriteAttribute(sw, "axis", this.axis.ToString());
             XmlHelper.WriteAttribute(sw, "fieldPosition", this.fieldPosition);
             sw.Write(">");
@@ -2060,21 +2061,21 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "field", this.field);
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            XmlHelper.WriteAttribute(sw, "selected", this.selected);
-            XmlHelper.WriteAttribute(sw, "byPosition", this.byPosition);
-            XmlHelper.WriteAttribute(sw, "relative", this.relative);
-            XmlHelper.WriteAttribute(sw, "defaultSubtotal", this.defaultSubtotal);
-            XmlHelper.WriteAttribute(sw, "sumSubtotal", this.sumSubtotal);
-            XmlHelper.WriteAttribute(sw, "countASubtotal", this.countASubtotal);
-            XmlHelper.WriteAttribute(sw, "avgSubtotal", this.avgSubtotal);
-            XmlHelper.WriteAttribute(sw, "maxSubtotal", this.maxSubtotal);
-            XmlHelper.WriteAttribute(sw, "minSubtotal", this.minSubtotal);
-            XmlHelper.WriteAttribute(sw, "productSubtotal", this.productSubtotal);
-            XmlHelper.WriteAttribute(sw, "countSubtotal", this.countSubtotal);
-            XmlHelper.WriteAttribute(sw, "stdDevSubtotal", this.stdDevSubtotal);
-            XmlHelper.WriteAttribute(sw, "stdDevPSubtotal", this.stdDevPSubtotal);
-            XmlHelper.WriteAttribute(sw, "varSubtotal", this.varSubtotal);
-            XmlHelper.WriteAttribute(sw, "varPSubtotal", this.varPSubtotal);
+            XmlHelper.WriteAttribute(sw, "selected", this.selected, false, true);
+            XmlHelper.WriteAttribute(sw, "byPosition", this.byPosition, false);
+            XmlHelper.WriteAttribute(sw, "relative", this.relative, false);
+            XmlHelper.WriteAttribute(sw, "defaultSubtotal", this.defaultSubtotal, false);
+            XmlHelper.WriteAttribute(sw, "sumSubtotal", this.sumSubtotal, false);
+            XmlHelper.WriteAttribute(sw, "countASubtotal", this.countASubtotal, false);
+            XmlHelper.WriteAttribute(sw, "avgSubtotal", this.avgSubtotal, false);
+            XmlHelper.WriteAttribute(sw, "maxSubtotal", this.maxSubtotal, false);
+            XmlHelper.WriteAttribute(sw, "minSubtotal", this.minSubtotal, false);
+            XmlHelper.WriteAttribute(sw, "productSubtotal", this.productSubtotal, false);
+            XmlHelper.WriteAttribute(sw, "countSubtotal", this.countSubtotal, false);
+            XmlHelper.WriteAttribute(sw, "stdDevSubtotal", this.stdDevSubtotal, false);
+            XmlHelper.WriteAttribute(sw, "stdDevPSubtotal", this.stdDevPSubtotal, false);
+            XmlHelper.WriteAttribute(sw, "varSubtotal", this.varSubtotal, false);
+            XmlHelper.WriteAttribute(sw, "varPSubtotal", this.varPSubtotal, false);
             sw.Write(">");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
@@ -2090,8 +2091,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_PivotAreaReference()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.xField = new List<CT_Index>();
+            //this.extLstField = new CT_ExtensionList();
+            //this.xField = new List<CT_Index>();
             this.selectedField = true;
             this.byPositionField = false;
             this.relativeField = false;
@@ -2109,6 +2110,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.varPSubtotalField = false;
         }
 
+        [XmlAttribute]
         public List<CT_Index> x
         {
             get
@@ -2121,6 +2123,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         public CT_ExtensionList extLst
         {
             get
@@ -2133,6 +2136,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         public uint field
         {
             get
@@ -2158,6 +2162,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         public uint count
         {
             get
@@ -2183,6 +2188,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(true)]
         public bool selected
         {
@@ -2196,6 +2202,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool byPosition
         {
@@ -2209,6 +2216,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool relative
         {
@@ -2222,6 +2230,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool defaultSubtotal
         {
@@ -2235,6 +2244,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool sumSubtotal
         {
@@ -2248,6 +2258,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool countASubtotal
         {
@@ -2261,6 +2272,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool avgSubtotal
         {
@@ -2274,6 +2286,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool maxSubtotal
         {
@@ -2287,6 +2300,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool minSubtotal
         {
@@ -2300,6 +2314,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool productSubtotal
         {
@@ -2313,6 +2328,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool countSubtotal
         {
@@ -2326,6 +2342,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool stdDevSubtotal
         {
@@ -2339,6 +2356,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool stdDevPSubtotal
         {
@@ -2352,6 +2370,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool varSubtotal
         {
@@ -2365,6 +2384,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
         [DefaultValue(false)]
         public bool varPSubtotal
         {
@@ -2386,6 +2406,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private uint vField;
 
+        [XmlAttribute()]
         public uint v
         {
             get
@@ -2409,7 +2430,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "v", this.v);
+            XmlHelper.WriteAttribute(sw, "v", this.v, true);
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));
         }

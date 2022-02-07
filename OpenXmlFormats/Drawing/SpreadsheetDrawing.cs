@@ -1807,6 +1807,20 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             set { toField = value; }
         }
 
+        private Vml.Spreadsheet.CT_AlternateContent alternateContentField = null;
+
+        public Vml.Spreadsheet.CT_AlternateContent alternateContent
+        {
+            get
+            {
+                return alternateContentField;
+            }
+            set
+            {
+                this.alternateContentField = value;
+            }
+        }
+
         #region Choice - one of CT_Shape, CT_GroupShape, CT_GraphicalObjectFrame, CT_Connector or CT_Picture
 
         [XmlElement]
@@ -1863,6 +1877,10 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 this.graphicalObjectField.Write(sw, "graphicFrame");
             else if (this.pictureField != null)
                 this.picture.Write(sw, "pic");
+            if (this.alternateContent != null)
+            {
+                this.alternateContent.Write(sw, "AlternateContent");
+            }
             if (this.clientData != null)
             {
                 this.clientData.Write(sw, "clientData");
@@ -1905,6 +1923,10 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 else if (childNode.LocalName == "graphicFrame")
                 {
                     twoCellAnchor.graphicFrame = CT_GraphicalObjectFrame.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "AlternateContent")
+                {
+                    twoCellAnchor.alternateContent = Vml.Spreadsheet.CT_AlternateContent.Parse(childNode, namespaceManager);
                 }
                 else if (childNode.LocalName == "clientData")
                 {

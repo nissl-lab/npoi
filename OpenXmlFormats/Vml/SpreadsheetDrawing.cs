@@ -9,10 +9,11 @@ using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
 {
-    public class CT_AlternateContent 
+    public class CT_AlternateContent
     {
-        public string innerXml { get; set; }
-        public CT_AlternateContent() 
+        public string outerXml { get; set; }
+
+        public CT_AlternateContent()
         {
         }
         public static CT_AlternateContent Parse(XmlNode node, XmlNamespaceManager namespaceManager)
@@ -25,23 +26,13 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
             {
                 return ac;
             }
-            ac.innerXml = node.InnerXml;
+            ac.outerXml = node.OuterXml;
             return ac;
         }
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<mc:{0} xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\"", nodeName));
-            if (this.innerXml == null)
-            {
-                sw.Write(string.Format("/>", nodeName));
-            }
-            else
-            {
-                sw.Write(">");
-                sw.Write(this.innerXml);
-                sw.Write(string.Format("</mc:{0}>", nodeName));
-            }
-            
+            if (this.outerXml != null)
+                sw.Write(this.outerXml);
         }
 
     }
