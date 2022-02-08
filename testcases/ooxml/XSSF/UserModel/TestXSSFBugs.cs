@@ -964,7 +964,7 @@ namespace TestCases.XSSF.UserModel
             XSSFFont fr = wb.GetFontAt(cr.CellStyle.FontIndex) as XSSFFont;
             XSSFColor colr = fr.GetXSSFColor();            // No theme, has colours
             Assert.AreEqual(0, colr.Theme);
-            Assert.IsNotNull(colr.GetRgb());
+            Assert.IsNotNull(colr.RGB);
 
             // Column 0 has a font with colours from a theme
             XSSFCell ct = r.GetCell(0) as XSSFCell;
@@ -973,8 +973,8 @@ namespace TestCases.XSSF.UserModel
             // Has a theme, which has the colours on it
             Assert.AreEqual(9, colt.Theme);
             XSSFColor themeC = wb.GetTheme().GetThemeColor(colt.Theme);
-            Assert.IsNotNull(themeC.GetRgb());
-            Assert.IsNotNull(colt.GetRgb());
+            Assert.IsNotNull(themeC.RGB);
+            Assert.IsNotNull(colt.RGB);
             Assert.AreEqual(themeC.ARGBHex, colt.ARGBHex); // The same colour
 
             wb.Close();
@@ -1483,7 +1483,7 @@ namespace TestCases.XSSF.UserModel
             XSSFName name = wb.GetName("Intekon.ProdCodes") as XSSFName;
             Assert.AreEqual("'Abc,1'!$A$1:$A$2", name.RefersToFormula);
 
-            AreaReference ref1 = new AreaReference(name.RefersToFormula);
+            AreaReference ref1 = new AreaReference(name.RefersToFormula, NPOI.SS.SpreadsheetVersion.EXCEL2007);
             Assert.AreEqual(0, ref1.FirstCell.Row);
             Assert.AreEqual(0, ref1.FirstCell.Col);
             Assert.AreEqual(1, ref1.LastCell.Row);
