@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "NPOI.OOXML.TestCases.Core": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "TEST_PROPERTY": "..\\..\\..\\..\\test-data"
+      }
+    }
+  }
+}

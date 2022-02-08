@@ -1176,6 +1176,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_ShortHexNumber tblLookField;
 
+        private CT_String tblCaptionField;
+
+        private CT_String tblDescriptionField;
+
         public CT_TblPrBase()
         {
         }
@@ -1216,6 +1220,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ctObj.tblCellMar = CT_TblCellMar.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "tblLook")
                     ctObj.tblLook = CT_ShortHexNumber.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tblCaption")
+                    ctObj.tblCaption = CT_String.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tblDescription")
+                    ctObj.tblDescription = CT_String.Parse(childNode, namespaceManager);
             }
             return ctObj;
         }
@@ -1256,6 +1264,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.tblCellMar.Write(sw, "tblCellMar");
             if (this.tblLook != null)
                 this.tblLook.Write(sw, "tblLook");
+            if (this.tblCaption != null)
+                this.tblCaption.Write(sw, "tblCaption");
+            if (this.tblDescription != null)
+                this.tblDescription.Write(sw, "tblDescription");
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
@@ -1451,6 +1463,32 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.tblLookField = value;
+            }
+        }
+
+        [XmlElement(Order = 15)]
+        public CT_String tblCaption
+        {
+            get
+            {
+                return this.tblCaptionField;
+            }
+            set
+            {
+                this.tblCaptionField = value;
+            }
+        }
+
+        [XmlElement(Order = 16)]
+        public CT_String tblDescription
+        {
+            get
+            {
+                return this.tblDescriptionField;
+            }
+            set
+            {
+                this.tblDescriptionField = value;
             }
         }
 
@@ -2776,6 +2814,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ctObj.tblCellMar = CT_TblCellMar.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "tblLook")
                     ctObj.tblLook = CT_ShortHexNumber.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tblCaption")
+                    ctObj.tblCaption = CT_String.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tblDescription")
+                    ctObj.tblDescription = CT_String.Parse(childNode, namespaceManager);
             }
             return ctObj;
         }
@@ -2818,6 +2860,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.tblCellMar.Write(sw, "tblCellMar");
             if (this.tblLook != null)
                 this.tblLook.Write(sw, "tblLook");
+            if (this.tblCaption != null)
+                this.tblCaption.Write(sw, "tblCaption");
+            if (this.tblDescription != null)
+                this.tblDescription.Write(sw, "tblDescription");
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
