@@ -35,24 +35,6 @@
     <ProjectReference Include="..\main\NPOI.TestCases.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="App.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
   <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
     <Copy SourceFiles="app.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
   </Target>
