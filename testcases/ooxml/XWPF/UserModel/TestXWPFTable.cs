@@ -21,7 +21,6 @@ namespace TestCases.XWPF.UserModel
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Collections.Generic;
     using NPOI.XWPF.UserModel;
-    using System.Reflection;
 
 
     /**
