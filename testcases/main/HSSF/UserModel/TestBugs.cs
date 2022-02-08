@@ -3485,5 +3485,16 @@ namespace TestCases.HSSF.UserModel
             //fos.Close();
             wb.Close();
         }
+
+
+        // follow https://svn.apache.org/viewvc?view=revision&revision=1896552 to write a unit test for this fix.
+        [Test]
+        public void test52447()
+        {
+            using (IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("52447.xls"))
+            {
+                Assert.IsNotNull(cell.CellFormula);
+            }
+        }
     }
 }
