@@ -19,7 +19,7 @@
 
 namespace NPOI.HSSF.Record
 {
-
+    using NPOI.Util;
     using System;
     using System.IO;
 
@@ -110,7 +110,7 @@ namespace NPOI.HSSF.Record
             // Do it via a re-serialization
             // It's a cheat, but it works...
             byte[] b = Serialize();
-            using (MemoryStream ms = new MemoryStream(b))
+            using (MemoryStream ms = RecyclableMemory.GetStream(b))
             {
                 RecordInputStream rinp = new RecordInputStream(ms);
                 rinp.NextRecord();

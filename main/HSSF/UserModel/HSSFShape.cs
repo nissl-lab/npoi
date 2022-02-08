@@ -387,7 +387,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                using (MemoryStream bos = new MemoryStream())
+                using (MemoryStream bos = RecyclableMemory.GetStream())
                 {
                     EscherSimpleProperty property = (EscherSimpleProperty)GetOptRecord().Lookup(EscherProperties.TRANSFORM__ROTATION);
                     if (null == property)

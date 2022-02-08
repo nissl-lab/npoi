@@ -333,7 +333,7 @@ namespace TestCases.XSSF.UserModel
                     + sheet.FirstRowNum + "-" + sheet.LastRowNum + ")");
             for (int i = sheet.FirstRowNum; i < sheet.LastRowNum; i++)
             {
-                if (collapsed[i - sheet.FirstRowNum] == null)
+                if (i - sheet.FirstRowNum<0 || i - sheet.FirstRowNum>=collapsed.Length)
                 {
                     continue;
                 }

@@ -1403,7 +1403,7 @@ namespace NPOI.HSSF.UserModel
             //  going to be preserving nodes
             List<string> excepts = new List<string>(1);
 
-            using (MemoryStream newMemoryStream = new MemoryStream(GetBytes()))
+            using (MemoryStream newMemoryStream = RecyclableMemory.GetStream(GetBytes()))
             {
                 // Write out the Workbook stream
                 fs.CreateDocument(newMemoryStream, "Workbook");
@@ -2028,9 +2028,11 @@ namespace NPOI.HSSF.UserModel
                 }
             }
 
-            MemoryStream bos = new MemoryStream();
-            poiData.WriteFileSystem(bos);
-            return AddOlePackage(bos.ToArray(), label, fileName, command);
+            using (MemoryStream bos = RecyclableMemory.GetStream())
+            {
+                poiData.WriteFileSystem(bos);
+                return AddOlePackage(bos.ToArray(), label, fileName, command);
+            }
         }
 
         public int AddOlePackage(byte[] oleData, String label, String fileName, String command)
@@ -2062,9 +2064,11 @@ namespace NPOI.HSSF.UserModel
             oleDir.CreateDocument("\u0001Ole", new MemoryStream(oleBytes));
 
             Ole10Native oleNative = new Ole10Native(label, fileName, command, oleData);
-            MemoryStream bos = new MemoryStream();
-            oleNative.WriteOut(bos);
-            oleDir.CreateDocument(Ole10Native.OLE10_NATIVE, new MemoryStream(bos.ToArray()));
+            using (MemoryStream bos = RecyclableMemory.GetStream())
+            {
+                oleNative.WriteOut(bos);
+                oleDir.CreateDocument(Ole10Native.OLE10_NATIVE, new MemoryStream(bos.ToArray()));
+            }
 
             return storageId;
         }

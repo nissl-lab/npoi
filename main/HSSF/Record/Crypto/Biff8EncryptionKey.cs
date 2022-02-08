@@ -135,7 +135,7 @@ namespace NPOI.HSSF.Record.Crypto
         {
             using (MD5 md5 = new MD5CryptoServiceProvider())
             {
-                using (MemoryStream baos = new MemoryStream(4))
+                using (MemoryStream baos = RecyclableMemory.GetStream(4))
                 {
                     new LittleEndianOutputStream(baos).WriteInt(keyBlockNo);
                     byte[] baosToArray = baos.ToArray();
