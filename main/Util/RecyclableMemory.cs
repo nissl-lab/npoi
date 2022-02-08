@@ -26,16 +26,16 @@ namespace NPOI.Util
 			_memoryManager = recyclableMemoryStreamManager;
 		}
 
-		internal static MemoryStream GetStream()
+		public static MemoryStream GetStream()
 		{
 			return MemoryManager.GetStream();
 		}
-		internal static MemoryStream GetStream(byte[] array)
+		public static MemoryStream GetStream(byte[] array)
 		{
 			return MemoryManager.GetStream(array);
 		}
 
-		internal static MemoryStream GetStream(int capacity)
+		public static MemoryStream GetStream(int capacity)
 		{
 			return MemoryManager.GetStream(null, capacity);
 		}

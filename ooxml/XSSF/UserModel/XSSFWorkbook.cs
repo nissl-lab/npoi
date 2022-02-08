@@ -636,7 +636,7 @@ namespace NPOI.XSSF.UserModel
 
             try
             {
-                using (MemoryStream ms = new MemoryStream())
+                using (MemoryStream ms = RecyclableMemory.GetStream())
                 {
                     srcSheet.Write(ms, true);
                     ms.Position = 0;
