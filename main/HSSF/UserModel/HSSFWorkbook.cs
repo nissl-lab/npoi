@@ -1348,19 +1348,7 @@ namespace NPOI.HSSF.UserModel
                 fs.Close();
             }
         }
-    
-        /// <summary>
-        /// Write out this workbook to an Outputstream.  Constructs
-        /// a new POI POIFSFileSystem, passes in the workbook binary representation  and
-        /// Writes it out.
-        /// 
-        /// If {@code stream} is a {@link java.io.FileOutputStream} on a networked drive
-        /// or has a high cost/latency associated with each written byte,
-        /// consider wrapping the OutputStream in a {@link java.io.BufferedOutputStream}
-        /// to improve write performance.
-        /// 
-        /// </summary>
-        /// <param name="stream">the java OutputStream you wish to Write the XLS to</param>
+
         public override void Write(Stream stream)
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem();
@@ -1373,6 +1361,16 @@ namespace NPOI.HSSF.UserModel
             {
                 fs.Close();
             }
+        }
+        /// <summary>
+        /// Write out this workbook to an Outputstream.  Constructs
+        /// a new POI POIFSFileSystem, passes in the workbook binary representation  and
+        /// Writes it out.
+        /// </summary>
+        /// <param name="stream">the stream you wish to Write the XLS to</param>
+        public void Write(Stream stream, bool leaveOpen=false)
+        {
+            this.Write(stream);
         }
 
         /** Writes the workbook out to a brand new, empty POIFS */
