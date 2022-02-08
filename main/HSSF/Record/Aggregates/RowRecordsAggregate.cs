@@ -48,7 +48,10 @@ namespace NPOI.HSSF.Record.Aggregates
         // Cache values to speed up performance of
         // getStartRowNumberForBlock / getEndRowNumberForBlock, see Bugzilla 47405
         private RowRecord[] _rowRecordValues = null;
-        public IEnumerable<HyperlinkRecord> HyperlinkRecordRecords { get => _hyperlinkRecordRecords; }
+        public IEnumerable<HyperlinkRecord> HyperlinkRecordRecords 
+        {
+            get { return _hyperlinkRecordRecords; }
+        }
 
         /** Creates a new instance of ValueRecordsAggregate */
 
