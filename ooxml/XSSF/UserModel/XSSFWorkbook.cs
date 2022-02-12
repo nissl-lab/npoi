@@ -1775,7 +1775,7 @@ namespace NPOI.XSSF.UserModel
         /// <summary>
         /// Write the document to the specified stream, and optionally leave the stream open without closing it.
         /// </summary>
-        public void Write(Stream stream, bool leaveOpen = false)
+        public void Write(Stream stream, bool leaveOpen)
         {
             bool? originalValue = null;
             if (Package is ZipPackage)
