@@ -3485,5 +3485,33 @@ namespace TestCases.HSSF.UserModel
             //fos.Close();
             wb.Close();
         }
+
+
+        // follow https://svn.apache.org/viewvc?view=revision&revision=1896552 to write a unit test for this fix.
+        [Test]
+        public void Test52447()
+        {
+            IWorkbook wb=null;
+            try
+            {
+                wb = HSSFTestDataSamples.OpenSampleWorkbook("52447.xls");
+            } catch { 
+                Assert.IsNotNull(wb);
+            }
+        }
+
+        [Test]
+        public void TestAmazonDownloadFile()
+        {
+            IWorkbook wb = null;
+            try
+            {
+                wb = HSSFTestDataSamples.OpenSampleWorkbook("ca_apparel_browse_tree_guide._TTH_.xls");
+            }
+            catch
+            {
+                Assert.IsNotNull(wb);
+            }
+        }
     }
 }

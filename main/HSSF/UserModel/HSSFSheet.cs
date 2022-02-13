@@ -2419,6 +2419,15 @@ namespace NPOI.HSSF.UserModel
                     {
                         return new HSSFHyperlink(link);
                     }
+                }                
+                else if (rec is RowRecordsAggregate rra) {
+                    foreach (var link in rra.HyperlinkRecordRecords)
+                    {
+                        if (link.FirstColumn == column && link.FirstRow == row)
+                        {
+                            return new HSSFHyperlink(link);
+                        }
+                    }
                 }
             }
             return null;
@@ -2448,6 +2457,14 @@ namespace NPOI.HSSF.UserModel
                 if (rec is HyperlinkRecord){
                     HyperlinkRecord link = (HyperlinkRecord)rec;
                     hyperlinkList.Add(new HSSFHyperlink(link));
+                }                
+                else if (rec is RowRecordsAggregate rra) {
+                    foreach (var link in rra.HyperlinkRecordRecords)
+                    {
+                        if (link is HyperlinkRecord hylink){
+                            hyperlinkList.Add(new HSSFHyperlink(link));
+                        }  
+                    }
                 }
             }
             return hyperlinkList;
