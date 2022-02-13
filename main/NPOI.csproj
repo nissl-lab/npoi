@@ -1308,6 +1308,7 @@
     <Compile Include="Util\PushbackInputStream.cs" />
     <Compile Include="Util\PushbackStream.cs" />
     <Compile Include="Util\RecordFormatException.cs" />
+    <Compile Include="Util\RecyclableMemory.cs" />
     <Compile Include="Util\RLEDecompressingInputStream.cs" />
     <Compile Include="Util\RuntimeException.cs" />
     <Compile Include="Util\ShortField.cs" />

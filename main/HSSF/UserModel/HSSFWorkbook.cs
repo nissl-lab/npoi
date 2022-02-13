@@ -1368,7 +1368,7 @@ namespace NPOI.HSSF.UserModel
         /// Writes it out.
         /// </summary>
         /// <param name="stream">the stream you wish to Write the XLS to</param>
-        public void Write(Stream stream, bool leaveOpen=false)
+        public void Write(Stream stream, bool leaveOpen)
         {
             this.Write(stream);
         }
