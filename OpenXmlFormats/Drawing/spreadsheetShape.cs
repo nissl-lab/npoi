@@ -596,8 +596,14 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         CT_GroupShapeProperties grpSpPrField;
         CT_GroupShapeNonVisual nvGrpSpPrField;
         CT_Connector connectorField = null;
-        CT_Picture pictureField = null;
-        CT_Shape shapeField = null;
+        List<CT_Picture> pictures = null;
+        List<CT_Shape> shapes = null;
+
+        public CT_GroupShape()
+        {
+            this.pictures = new List<CT_Picture>();
+            this.shapes = new List<CT_Shape>();
+        }
 
         public void Set(CT_GroupShape groupShape)
         {
@@ -622,7 +628,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         }
         public CT_Shape AddNewSp()
         {
-            shapeField = new CT_Shape();
+            var shapeField = new CT_Shape();
+            shapes.Add(shapeField);
             return shapeField;
         }
         public CT_Picture AddNewPic()
@@ -653,6 +660,16 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                     ctObj.nvGrpSpPr = CT_GroupShapeNonVisual.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "grpSpPr")
                     ctObj.grpSpPr = CT_GroupShapeProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pic")
+                {
+                    var pic = CT_Picture.Parse(childNode, namespaceManager);
+                    ctObj.pictures.Add(pic);
+                }
+                else if (childNode.LocalName == "sp")
+                {
+                    var shape = CT_Shape.Parse(childNode, namespaceManager);
+                    ctObj.shapes.Add(shape);
+                }
             }
             return ctObj;
         }
@@ -666,7 +683,21 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             if (this.nvGrpSpPr != null)
                 this.nvGrpSpPr.Write(sw, "nvGrpSpPr");
             if (this.grpSpPr != null)
-                this.grpSpPr.Write(sw, "grpSpPr");
+                this.grpSpPr.Write(sw, "xdr:grpSpPr");
+            if (this.shapes.Count > 0)
+            {
+                foreach (var shape in this.shapes)
+                {
+                    shape.Write(sw, "sp");
+                }
+            }
+            if (this.pictures.Count > 0)
+            {
+                foreach (var pic in this.pictures)
+                {
+                    pic.Write(sw, "pic");
+                }
+            }
             sw.Write(string.Format("</xdr:{0}>", nodeName));
         }
 
