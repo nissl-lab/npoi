@@ -96,7 +96,7 @@ namespace TestCases.SS.Formula.Eval
                 try
                 {
                     FileStream fileOut = new FileStream("27405output.xls", FileMode.Create);
-                    wb.Write(fileOut);
+                    wb.Write(fileOut, false);
                     fileOut.Close();
                 }
                 catch (IOException e)
