@@ -245,6 +245,7 @@
     <Compile Include="SS\Util\TestDateFormatConverter.cs" />
     <Compile Include="SS\Util\TestHSSFCellUtil.cs" />
     <Compile Include="SS\Util\TestSheetUtil.cs" />
+    <Compile Include="SS\Util\Utils.cs" />
     <Compile Include="TestPOIDocumentMain.cs" />
     <Compile Include="TestPOITestCase.cs" />
     <Compile Include="Util\NullOutputStream.cs" />

@@ -1928,7 +1928,7 @@ namespace TestCases.XSSF.UserModel
             }
 
             FileStream fileOutStream = new FileStream(outFile.FullName, FileMode.Open, FileAccess.ReadWrite);
-            wb.Write(fileOutStream);
+            wb.Write(fileOutStream, false);
             fileOutStream.Close();
             //System.out.Println("File \""+outFile.Name+"\" has been saved successfully");
 
@@ -3195,7 +3195,7 @@ namespace TestCases.XSSF.UserModel
             ICellStyle style = workbook.CreateCellStyle();
             style.Rotation = ((short)-90);
             cell1.CellStyle = (style);
-            workbook.Write(fileOut);
+            workbook.Write(fileOut,false);
             fileOut.Close();
             workbook.Close();
         }
@@ -3210,7 +3210,7 @@ namespace TestCases.XSSF.UserModel
             ICellStyle style = workbook.CreateCellStyle();
             style.Rotation = ((short)-90);
             cell1.CellStyle = (style);
-            workbook.Write(fileOut);
+            workbook.Write(fileOut, false);
             fileOut.Close();
             workbook.Close();
         }

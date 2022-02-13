@@ -247,7 +247,7 @@ namespace TestCases.XSSF.UserModel
                 Stream stream = new FileStream("55752.xlsx", FileMode.Create, FileAccess.ReadWrite);
                 try
                 {
-                    wb.Write(stream);
+                    wb.Write(stream, false);
                 }
                 finally
                 {

@@ -157,7 +157,7 @@ using System.IO;
             sheet.CreateRow(5).CreateCell(2).SetCellValue("yo dawg i herd you like embeddet objekts, so we Put a ole in your ole so you can save a file while you save a file");
 
             MemoryStream bos = new MemoryStream();
-            wb.Write(bos);
+            wb.Write(bos, false);
             wb.Close();
             POIFSFileSystem poifs = new POIFSFileSystem(new MemoryStream(bos.ToArray()));
             

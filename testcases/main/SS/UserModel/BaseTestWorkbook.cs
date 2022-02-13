@@ -847,7 +847,7 @@ namespace TestCases.SS.UserModel
             OutputStream os = new NullOutputStream();
             try
             {
-                workbook.Write(os);
+                workbook.Write(os, false);
             }
             finally
             {
