@@ -596,8 +596,13 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         CT_GroupShapeProperties grpSpPrField;
         CT_GroupShapeNonVisual nvGrpSpPrField;
         CT_Connector connectorField = null;
-        CT_Picture pictureField = null;
+        List<CT_Picture> pictures = null;
         CT_Shape shapeField = null;
+
+        public CT_GroupShape()
+        {
+            this.pictures = new List<CT_Picture>();
+        }
 
         public void Set(CT_GroupShape groupShape)
         {
@@ -627,8 +632,9 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         }
         public CT_Picture AddNewPic()
         {
-            pictureField = new CT_Picture();
-            return pictureField;
+            var pic=new CT_Picture();
+            pictures.Add(pic);
+            return pic;
         }
 
         public CT_GroupShapeNonVisual nvGrpSpPr
@@ -653,6 +659,11 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                     ctObj.nvGrpSpPr = CT_GroupShapeNonVisual.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "grpSpPr")
                     ctObj.grpSpPr = CT_GroupShapeProperties.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "pic")
+                {
+                    var pic = CT_Picture.Parse(childNode, namespaceManager);
+                    ctObj.pictures.Add(pic);
+                }
             }
             return ctObj;
         }
@@ -664,9 +675,16 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             sw.Write(string.Format("<xdr:{0}", nodeName));
             sw.Write(">");
             if (this.nvGrpSpPr != null)
-                this.nvGrpSpPr.Write(sw, "nvGrpSpPr");
+                this.nvGrpSpPr.Write(sw, "xdr:nvGrpSpPr");
             if (this.grpSpPr != null)
-                this.grpSpPr.Write(sw, "grpSpPr");
+                this.grpSpPr.Write(sw, "xdr:grpSpPr");
+            if (this.pictures.Count > 0)
+            {
+                foreach (var pic in this.pictures)
+                {
+                    pic.Write(sw, "pic");
+                }
+            }
             sw.Write(string.Format("</xdr:{0}>", nodeName));
         }
 
@@ -697,13 +715,13 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<xdr:{0}", nodeName));
+            sw.Write(string.Format("<{0}", nodeName));
             sw.Write(">");
             if (this.cNvPr != null)
                 this.cNvPr.Write(sw, "cNvPr");
             if (this.cNvGrpSpPr != null)
-                this.cNvGrpSpPr.Write(sw, "cNvGrpSpPr");
-            sw.Write(string.Format("</xdr:{0}>", nodeName));
+                this.cNvGrpSpPr.Write(sw, "xdr:cNvGrpSpPr");
+            sw.Write(string.Format("</{0}>", nodeName));
         }
 
         public CT_NonVisualGroupDrawingShapeProps AddNewCNvGrpSpPr()
