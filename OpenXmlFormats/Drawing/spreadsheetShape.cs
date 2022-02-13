@@ -597,11 +597,12 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         CT_GroupShapeNonVisual nvGrpSpPrField;
         CT_Connector connectorField = null;
         List<CT_Picture> pictures = null;
-        CT_Shape shapeField = null;
+        List<CT_Shape> shapes = null;
 
         public CT_GroupShape()
         {
             this.pictures = new List<CT_Picture>();
+            this.shapes = new List<CT_Shape>();
         }
 
         public void Set(CT_GroupShape groupShape)
@@ -627,7 +628,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         }
         public CT_Shape AddNewSp()
         {
-            shapeField = new CT_Shape();
+            var shapeField = new CT_Shape();
+            shapes.Add(shapeField);
             return shapeField;
         }
         public CT_Picture AddNewPic()
@@ -664,6 +666,11 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                     var pic = CT_Picture.Parse(childNode, namespaceManager);
                     ctObj.pictures.Add(pic);
                 }
+                else if (childNode.LocalName == "sp")
+                {
+                    var shape = CT_Shape.Parse(childNode, namespaceManager);
+                    ctObj.shapes.Add(shape);
+                }
             }
             return ctObj;
         }
@@ -678,6 +685,13 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 this.nvGrpSpPr.Write(sw, "xdr:nvGrpSpPr");
             if (this.grpSpPr != null)
                 this.grpSpPr.Write(sw, "xdr:grpSpPr");
+            if (this.shapes.Count > 0)
+            {
+                foreach (var shape in this.shapes)
+                {
+                    shape.Write(sw, "sp");
+                }
+            }
             if (this.pictures.Count > 0)
             {
                 foreach (var pic in this.pictures)

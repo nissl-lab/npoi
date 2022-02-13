@@ -1270,8 +1270,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             sw.Write(string.Format("<xdr:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "fLocksWithSheet", this.fLocksWithSheet, false);
             XmlHelper.WriteAttribute(sw, "fPrintsWithSheet", this.fPrintsWithSheet,false);
-            sw.Write(">");
-            sw.Write(string.Format("</xdr:{0}>", nodeName));
+            sw.Write("/>");
         }
         bool _fLocksWithSheet;
         bool _fPrintsWithSheet;
