@@ -3499,5 +3499,19 @@ namespace TestCases.HSSF.UserModel
                 Assert.IsNotNull(wb);
             }
         }
+
+        [Test]
+        public void TestAmazonDownloadFile()
+        {
+            IWorkbook wb = null;
+            try
+            {
+                wb = HSSFTestDataSamples.OpenSampleWorkbook("ca_apparel_browse_tree_guide._TTH_.xls");
+            }
+            catch
+            {
+                Assert.IsNotNull(wb);
+            }
+        }
     }
 }
