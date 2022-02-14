@@ -172,6 +172,11 @@ namespace NPOI.SS.Formula.Eval.Forked
         {
             _masterBook.ClearAllCachedResultValues();
         }
+
+        public SpreadsheetVersion getSpreadsheetVersion()
+        {
+            return _masterBook.GetSpreadsheetVersion();
+        }
     }
 
 }
