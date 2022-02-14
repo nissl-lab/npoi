@@ -47,8 +47,8 @@ namespace NPOI.XSSF.UserModel
     public class XSSFTable : POIXMLDocumentPart, ITable
     {
         private CT_Table ctTable;
-        private List<XSSFXmlColumnPr> xmlColumnPr;
-        private CT_TableColumn[] ctColumns;
+        private List<XSSFXmlColumnPr> xmlColumnPrs;
+        private List<XSSFTableColumn> tableColumns;
         private Dictionary<String, int> columnMap;
         private CellReference startCellReference;
         private CellReference endCellReference;
@@ -129,7 +129,7 @@ namespace NPOI.XSSF.UserModel
 
             foreach (XSSFXmlColumnPr pointer in pointers)
             {
-                if (pointer.GetMapId() == id)
+                if (pointer.MapId == id)
                 {
                     maps = true;
                     break;
@@ -137,19 +137,6 @@ namespace NPOI.XSSF.UserModel
             }
 
             return maps;
-        }
-
-        private CT_TableColumn[] TableColumns
-        {
-            get
-            {
-                if (ctColumns == null)
-                {
-                    ctColumns = ctTable.tableColumns.tableColumn.ToArray();
-                }
-                return ctColumns;
-            }
-            
         }
         /**
          * 
@@ -166,11 +153,11 @@ namespace NPOI.XSSF.UserModel
 
                 Array commonTokens = null;
 
-                foreach (CT_TableColumn column in TableColumns)
+                foreach (XSSFTableColumn column in GetColumns())
                 {
-                    if (column.xmlColumnPr != null)
+                    if (column.GetXmlColumnPr() != null)
                     {
-                        String xpath = column.xmlColumnPr.xpath;
+                        String xpath = column.GetXmlColumnPr().XPath;
                         String[] tokens = xpath.Split(new char[] { '/' });
                         if (commonTokens==null)
                         {
@@ -212,22 +199,23 @@ namespace NPOI.XSSF.UserModel
          * Note this list is static - once read, it does not notice later changes to the underlying column structures
          * @return List of XSSFXmlColumnPr
          */
+        [Obsolete]
         public List<XSSFXmlColumnPr> GetXmlColumnPrs()
         {
 
-            if (xmlColumnPr == null)
+            if (xmlColumnPrs == null)
             {
-                xmlColumnPr = new List<XSSFXmlColumnPr>();
+                xmlColumnPrs = new List<XSSFXmlColumnPr>();
                 foreach (CT_TableColumn column in ctTable.tableColumns.tableColumn)
                 {
                     if (column.xmlColumnPr != null)
                     {
                         XSSFXmlColumnPr columnPr = new XSSFXmlColumnPr(this, column, column.xmlColumnPr);
-                        xmlColumnPr.Add(columnPr);
+                        xmlColumnPrs.Add(columnPr);
                     }
                 }
             }
-            return xmlColumnPr;
+            return xmlColumnPrs;
         }
 
         /**
@@ -271,8 +259,42 @@ namespace NPOI.XSSF.UserModel
                 return ctTable.tableColumns.count;
             }
         }
-
-
+        public int ColumnCount
+        {
+            get
+            {
+                CT_TableColumns tableColumns = ctTable.tableColumns;
+                if (tableColumns == null)
+                {
+                    return 0;
+                }
+                // Casting to int should be safe here - tables larger than the
+                // sheet (which holds the actual data of the table) can't exists.
+                return (int)tableColumns.count;
+            }
+        }
+        /// <summary>
+        /// 0 for no totals rows, 1 for totals row shown.
+        /// Values > 1 are not currently used by Excel up through 2016, and the OOXML spec
+        /// doesn't define how they would be implemented.
+        /// </summary>
+        public int TotalsRowCount
+        {
+            get { 
+                return (int)ctTable.totalsRowCount;
+            }
+        }
+        /// <summary>
+        /// 0 for no header rows, 1 for table headers shown.
+        /// Values > 1 might be used by Excel for pivot tables?
+        /// </summary>
+        public int HeaderRowCount
+        {
+            get 
+            {
+                return (int)ctTable.headerRowCount;
+            }
+        }
         /**
          * @return The reference for the cell in the top-left part of the table
          * (see Open Office XML Part 4: chapter 3.5.1.2, attribute ref) 
@@ -402,9 +424,11 @@ namespace NPOI.XSSF.UserModel
                     }
                     cellnum++;
                 }
-                ctColumns = null;
-                columnMap = null;
             }
+            tableColumns = null;
+            columnMap = null;
+            xmlColumnPrs = null;
+            commonXPath = null;
         }
         /**
          * Gets the relative column index of a column in this table having the header name <code>column</code>.
@@ -423,12 +447,13 @@ namespace NPOI.XSSF.UserModel
             if (columnHeader == null) return -1;
             if (columnMap == null)
             {
-                columnMap = new Dictionary<string, int>(TableColumns.Length * 3 / 2);
+                int count = ColumnCount;
+                columnMap = new Dictionary<string, int>(count * 3 / 2);
 
                 int i = 0;
-                foreach (CT_TableColumn column in TableColumns)
+                foreach (XSSFTableColumn column in GetColumns())
                 {
-                    columnMap.Add(column.name.ToUpper(CultureInfo.CurrentCulture), i);
+                    columnMap.Add(column.Name.ToUpper(CultureInfo.CurrentCulture), i);
                     i++;
                 }
             }
@@ -440,7 +465,38 @@ namespace NPOI.XSSF.UserModel
                 idx = columnMap[testKey];
             return idx;
         }
-
+        /// <summary>
+        /// Note this list is static - once read, it does not notice later changes to the underlying column structures
+        /// </summary>
+        /// <returns></returns>
+        public List<XSSFTableColumn> GetColumns()
+        {
+            if (tableColumns == null)
+            {
+                var columns = new List<XSSFTableColumn>();
+                CT_TableColumns ctTableColumns = ctTable.tableColumns;
+                if (ctTableColumns != null)
+                {
+                    foreach (CT_TableColumn column in ctTableColumns.tableColumn)
+                    {
+                        XSSFTableColumn tableColumn = new XSSFTableColumn(this, column);
+                        columns.Add(tableColumn);
+                    }
+                }
+                tableColumns = columns;
+            }
+            return tableColumns;
+        }
+        public void RemoveColumn(XSSFTableColumn column)
+        {
+            int columnIndex = GetColumns().IndexOf(column);
+            if (columnIndex >= 0)
+            {
+                ctTable.tableColumns.RemoveTableColumn(columnIndex);
+                UpdateReferences();
+                UpdateHeaders();
+            }
+        }
         public String SheetName
         {
             get
@@ -449,6 +505,10 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// This is misleading.  The Spec indicates this is true if the totals row
+        /// has<b><i>ever</i></b> been shown, not whether or not it is currently displayed.
+        /// </summary>
         public bool IsHasTotalsRow
         {
             get
@@ -487,6 +547,21 @@ namespace NPOI.XSSF.UserModel
             {
                 return EndCellReference.Row;
             }
+        }
+        public bool Contains(CellReference cell)
+        {
+            if (cell == null) return false;
+            // check if cell is on the same sheet as the table
+            if (! SheetName.Equals(cell.SheetName)) return false;
+            // check if the cell is inside the table
+            if (cell.Row >= StartRowIndex
+                && cell.Row <= EndRowIndex
+                && cell.Col >= StartColIndex
+                && cell.Col <= EndColIndex)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

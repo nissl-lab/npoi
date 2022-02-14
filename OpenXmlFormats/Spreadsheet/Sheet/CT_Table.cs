@@ -674,7 +674,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             sw.Write(string.Format("</{0}>", nodeName));
         }
-
+        public void RemoveTableColumn(int columnIndex)
+        {
+            this.tableColumn.RemoveAt(columnIndex);
+        }
         [XmlElement]
         public List<CT_TableColumn> tableColumn
         {
