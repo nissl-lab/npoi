@@ -3,7 +3,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using EnumsNET;
 
 namespace NPOI.OOXML.XSSF.UserModel
 {
@@ -18,52 +18,22 @@ namespace NPOI.OOXML.XSSF.UserModel
             this.name = tableStyle.name;
             this.index = index;
 
-            List<CT_Dxf> dxfList = new List<CT_Dxf>();
-
-            // CT* classes don't handle "mc:AlternateContent" elements, so get the Dxf instances manually
-            XmlCursor cur = dxfs.newCursor();
-            // sometimes there are namespaces sometimes not.
-            String xquery = "declare namespace x='" + XSSFRelation.NS_SPREADSHEETML + "' .//x:dxf | .//dxf";
-            cur.selectPath(xquery);
-            while (cur.toNextSelection())
-            {
-                XmlObject obj = cur.getObject();
-                String parentName = obj.getDomNode().getParentNode().getNodeName();
-                // ignore alternate content choices, we won't know anything about their namespaces
-                if (parentName.Equals("mc:Fallback") || parentName.Equals("x:dxfs") || parentName.contentEquals("dxfs"))
-                {
-                    CTDxf dxf;
-                    try
-                    {
-                        if (obj is CTDxf) {
-                            dxf = (CTDxf)obj;
-                        } else
-                        {
-                            dxf = CT_Dxf.Factory.parse(obj.newXMLStreamReader(), new XmlOptions().setDocumentType(CTDxf.type));
-                        }
-                        if (dxf != null) dxfList.Add(dxf);
-                    }
-                    catch (XmlException e)
-                    {
-                        logger.log(POILogger.WARN, "Error parsing XSSFTableStyle", e);
-                    }
-                }
-            }
+            List<CT_Dxf> dxfList = dxfs.dxf;
 
             foreach (CT_TableStyleElement element in tableStyle.tableStyleElement)
             {
-                TableStyleType type = TableStyleType.valueOf(element.getType().toString());
+                TableStyleType type = Enums.Parse<TableStyleType>(element.type.GetName());
                 DifferentialStyleProvider dstyle = null;
-                if (element.isSetDxfId())
+                if (element.dxfIdSpecified)
                 {
-                    int idx = (int)element.getDxfId();
+                    int idx = (int)element.dxfId;
                     CT_Dxf dxf;
-                    dxf = dxfList.get(idx);
+                    dxf = dxfList[idx];
                     int stripeSize = 0;
-                    if (element.isSetSize()) stripeSize = (int)element.getSize();
+                    if (element.size!=0) stripeSize = (int)element.size;
                     if (dxf != null) dstyle = new XSSFDxfStyleProvider(dxf, stripeSize, colorMap);
                 }
-                elementMap.put(type, dstyle);
+                elementMap.Add(type, dstyle);
             }
         }
         public string Name

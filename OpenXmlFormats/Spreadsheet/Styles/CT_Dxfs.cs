@@ -199,6 +199,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.borderField = border;
             return border;
         }
+        public bool IsSetNumFmt()
+        {
+            return numFmtField != null;
+        }
         public bool IsSetFont()
         {
             return fontField != null;

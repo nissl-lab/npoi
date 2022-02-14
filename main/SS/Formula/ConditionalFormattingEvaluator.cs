@@ -12,7 +12,7 @@ namespace NPOI.SS.Formula
         private IWorkbook workbook;
 
         private Dictionary<String, List<EvaluationConditionalFormatRule>> formats = new Dictionary<string, List<EvaluationConditionalFormatRule>>();
-        private Dictionary<CellReference, List<EvaluationConditionalFormatRule>> values = new Dictionary<CellReference, List<EvaluationConditionalFormatRule>>();
+        private SortedDictionary<CellReference, List<EvaluationConditionalFormatRule>> values = new SortedDictionary<CellReference, List<EvaluationConditionalFormatRule>>();
 
         public ConditionalFormattingEvaluator(IWorkbook wb, IWorkbookEvaluatorProvider provider)
         {
@@ -66,7 +66,7 @@ namespace NPOI.SS.Formula
                         stopIfTrue = rule.Rule.StopIfTrue;
                     }
                 }
-                Collections.sort(rules);
+                rules.Sort();
                 values.Add(cellRef, rules);
             }
 
@@ -107,7 +107,7 @@ namespace NPOI.SS.Formula
                     }
                 }
                 // need them in formatting and priority order so logic works right
-                Collections.sort(rules);
+                rules.Sort();
             }
             return rules;
         }
