@@ -1434,7 +1434,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                CT_Border ct = GetCTBorder(copy: true);
+                CT_Border ct = GetCTBorder();
                 if (value == BorderDiagonal.Both)
                 {
                     ct.diagonalDown = true;
