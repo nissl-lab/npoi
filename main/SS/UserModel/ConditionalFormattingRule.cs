@@ -129,6 +129,8 @@ namespace NPOI.SS.UserModel
          * @return  the second formula
          */
         String Formula2 { get; }
+
+        bool StopIfTrue { get; }
     }
 
 }

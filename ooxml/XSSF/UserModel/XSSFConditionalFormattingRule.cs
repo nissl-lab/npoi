@@ -449,6 +449,13 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        public bool StopIfTrue
+        {
+            get
+            {
+                return _cfRule.stopIfTrue;
+            }
+        }
     }
 }
 

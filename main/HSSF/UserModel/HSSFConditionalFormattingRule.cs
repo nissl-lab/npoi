@@ -358,5 +358,12 @@ namespace NPOI.HSSF.UserModel
             }
             return HSSFFormulaParser.ToFormulaString(workbook, parsedExpression);
         }
+        public bool StopIfTrue
+        {
+            get
+            {
+                return true;
+            }
+        }
     }
 }
