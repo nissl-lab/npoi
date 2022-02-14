@@ -27,6 +27,7 @@ using NPOI.XSSF.UserModel;
 using NPOI.XSSF.UserModel.Extensions;
 using System.Collections.ObjectModel;
 using NPOI.SS;
+using NPOI.OOXML.XSSF.UserModel;
 
 namespace NPOI.XSSF.Model
 {
@@ -48,7 +49,8 @@ namespace NPOI.XSSF.Model
         private List<CT_Xf> xfs = new List<CT_Xf>();
 
         private List<CT_Dxf> dxfs = new List<CT_Dxf>();
-
+        private Dictionary<String, ITableStyle> tableStyles = new Dictionary<string, ITableStyle>();
+        private IIndexedColorMap indexedColors = new DefaultIndexedColorMap();
         /**
          * The first style id available for use as a custom style
          */
@@ -149,7 +151,22 @@ namespace NPOI.XSSF.Model
                 border.SetThemesTable(theme);
             }
         }
-
+        public ITableStyle GetTableStyle(String name)
+        {
+            if (name == null) return null;
+            try
+            {
+                return XSSFBuiltinTableStyle.ValueOf(name).getStyle();
+            }
+            catch (ArgumentException e)
+            {
+                return GetExplicitTableStyle(name);
+            }
+        }
+        public ITableStyle GetExplicitTableStyle(String name)
+        {
+            return tableStyles[name];
+        }
         /**
          * If there isn't currently a {@link ThemesTable} for the
          *  current Workbook, then creates one and sets it up.
@@ -229,6 +246,17 @@ namespace NPOI.XSSF.Model
                 if (styleDxfs != null)
                     dxfs.AddRange(styleDxfs.dxf);
 
+
+                CT_TableStyles ctTableStyles = styleSheet.tableStyles;
+                if (ctTableStyles != null)
+                {
+                    int idx = 0;
+                    foreach (CT_TableStyle style in ctTableStyles.tableStyle)
+                    {
+                        tableStyles.Add(style.name, new XSSFTableStyle(idx, styleDxfs, style, indexedColors));
+                        idx++;
+                    }
+                }
             }
             catch (XmlException e)
             {
