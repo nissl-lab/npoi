@@ -1,4 +1,5 @@
-﻿using NPOI.SS.Formula.Eval;
+﻿using EnumsNET;
+using NPOI.SS.Formula.Eval;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using System;
@@ -7,17 +8,17 @@ using System.Text;
 
 namespace NPOI.SS.Formula
 {
-    public enum OperatorEnum
+    public enum OperatorEnum:byte
     {
-        NO_COMPARISON,
-        BETWEEN,
-        NOT_BETWEEN,
-        EQUAL,
-        NOT_EQUAL,
-        GREATER_THAN,
-        LESS_THAN,
-        GREATER_OR_EQUAL,
-        LESS_OR_EQUAL
+        NO_COMPARISON=0,
+        BETWEEN=1,
+        NOT_BETWEEN=2,
+        EQUAL=3,
+        NOT_EQUAL=4,
+        GREATER_THAN=5,
+        LESS_THAN=6,
+        GREATER_OR_EQUAL=7,
+        LESS_OR_EQUAL=8
     }
     public class EvaluationConditionalFormatRule: IComparable<EvaluationConditionalFormatRule>
     {
@@ -155,6 +156,16 @@ namespace NPOI.SS.Formula
                 return left.CompareTo(right) >= 0;
             }
         }
+        protected interface ValueFunction
+        {
+
+            /**
+             *
+             * @param values
+             * @return the desired values for the rules implemented by the current instance
+             */
+            List<ValueAndFormat> Evaluate(List<ValueAndFormat> values);
+        }
 
         private WorkbookEvaluator workbookEvaluator;
         private ISheet sheet;
@@ -184,7 +195,29 @@ namespace NPOI.SS.Formula
         private ExcelNumberFormat numberFormat;
         // cached for performance, used to format numeric cells for string comparisons.  See Bug #61764 for explanation
         private DecimalFormat decimalTextFormat;
+        public EvaluationConditionalFormatRule(WorkbookEvaluator workbookEvaluator, ISheet sheet, IConditionalFormatting formatting, int formattingIndex, IConditionalFormattingRule rule, int ruleIndex, CellRangeAddress[] regions)
+        {
+            this.workbookEvaluator = workbookEvaluator;
+            this.sheet = sheet;
+            this.formatting = formatting;
+            this.rule = rule;
+            this.formattingIndex = formattingIndex;
+            this.ruleIndex = ruleIndex;
 
+            this.priority = rule.Priority;
+
+            this.regions = regions;
+            formula1 = rule.Formula1;
+            formula2 = rule.Formula2;
+
+            text = rule.Text;
+            lowerText = text == null ? null : text.ToLowerInvariant();
+
+            numberFormat = rule.NumberFormat;
+        
+            @operator = (OperatorEnum)rule.ComparisonOperation;
+            type = rule.ConditionType;
+        }
         public ISheet Sheet { get { return sheet; } }
         public IConditionalFormatting Formatting { get { return formatting; } }
         public int FormattingIndex { get { return formattingIndex; } }
@@ -253,6 +286,49 @@ namespace NPOI.SS.Formula
             }
             return comp;
         }
+        private bool CheckValue(ICell cell, CellRangeAddress region)
+        {
+            if (cell == null || DataValidationEvaluator.IsType(cell, CellType.Blank)
+               || DataValidationEvaluator.IsType(cell, CellType.Error)
+               || (DataValidationEvaluator.IsType(cell, CellType.String)
+                       && string.IsNullOrEmpty(cell.StringCellValue)
+                   )
+               )
+            {
+                return false;
+            }
+
+            ValueEval eval = UnwrapEval(workbookEvaluator.Evaluate(rule.Formula1, ConditionalFormattingEvaluator.GetRef(cell), region));
+
+            String f2 = rule.Formula2;
+            ValueEval eval2 = BlankEval.instance;
+            if (f2 != null && f2.Length > 0)
+            {
+                eval2 = UnwrapEval(workbookEvaluator.Evaluate(f2, ConditionalFormattingEvaluator.GetRef(cell), region));
+            }
+
+            // we assume the cell has been evaluated, and the current formula value stored
+            if (DataValidationEvaluator.IsType(cell, CellType.Boolean)
+                    && (eval == BlankEval.instance || eval is BoolEval) 
+                && (eval2 == BlankEval.instance || eval2 is BoolEval) 
+           ) {
+                return @operator.IsValid(cell.BooleanCellValue, eval == BlankEval.instance ? null : ((BoolEval)eval).BooleanValue, eval2 == BlankEval.instance ? null : ((BoolEval)eval2).BooleanValue);
+            }
+            if (DataValidationEvaluator.IsType(cell, CellType.Numeric)
+                    && (eval == BlankEval.instance || eval is NumberEval )
+                && (eval2 == BlankEval.instance || eval2 is NumberEval) 
+           ) {
+                return @operator.IsValid(cell.NumericCellValue, eval == BlankEval.instance ? null : ((NumberEval)eval).NumberValue, eval2 == BlankEval.instance ? null : ((NumberEval)eval2).NumberValue);
+            }
+            if (DataValidationEvaluator.IsType(cell, CellType.String)
+                    && (eval == BlankEval.instance || eval is StringEval )
+                && (eval2 == BlankEval.instance || eval2 is StringEval) 
+           ) {
+                return @operator.IsValid(cell.StringCellValue, eval == BlankEval.instance ? null : ((StringEval)eval).StringValue, eval2 == BlankEval.instance ? null : ((StringEval)eval2).StringValue);
+            }
+
+            return @operator.IsValidForIncompatibleTypes();
+        }
         private bool CheckFormula(CellReference reference, CellRangeAddress region)
         {
             ValueEval comp = UnwrapEval(workbookEvaluator.Evaluate(rule.Formula1, reference, region));
@@ -273,6 +349,117 @@ namespace NPOI.SS.Formula
                 return ((NumberEval)comp).NumberValue != 0;
             }
             return false; // anything else is false, such as text
+        }
+        internal bool Matches(CellReference reference)
+        {
+            // first check that it is in one of the regions defined for this format
+            CellRangeAddress region = null;
+            foreach (CellRangeAddress r in regions)
+            {
+                if (r.IsInRange(reference))
+                {
+                    region = r;
+                    break;
+                }
+            }
+
+            if (region == null)
+            {
+                // cell not in range of this rule
+                return false;
+            }
+
+            ConditionType ruleType = this.Rule.ConditionType;
+
+            // these rules apply to all cells in a region. Specific condition criteria
+            // may specify no special formatting for that value partition, but that's display logic
+            if (ruleType.Equals(ConditionType.ColorScale)
+                || ruleType.Equals(ConditionType.DataBar)
+                || ruleType.Equals(ConditionType.IconSet))
+            {
+                return true;
+            }
+
+            ICell cell = null;
+            IRow row = sheet.GetRow(reference.Row);
+            if (row != null)
+            {
+                cell = row.GetCell(reference.Col);
+            }
+
+            if (ruleType.Equals(ConditionType.CellValueIs))
+            {
+                // undefined cells never match a VALUE_IS condition
+                if (cell == null) return false;
+                return CheckValue(cell, region);
+            }
+            if (ruleType.Equals(ConditionType.Formula))
+            {
+                return CheckFormula(reference, region);
+            }
+            //if (ruleType.Equals(ConditionType.Filter))
+            //{
+            //    return CheckFilter(cell, reference, region);
+            //}
+
+            // TODO: anything else, we don't handle yet, such as top 10
+            return false;
+        }
+        private List<ValueAndFormat> GetMeaningfulValues(CellRangeAddress region, bool withText, ValueFunction func)
+        {
+            if (meaningfulRegionValues.ContainsKey(region))
+            {
+                return meaningfulRegionValues[region];
+            }
+            List<ValueAndFormat> values = meaningfulRegionValues[region];
+
+            List<ValueAndFormat> allValues = new List<ValueAndFormat>((region.LastColumn - region.FirstColumn + 1) * (region.LastRow - region.FirstRow + 1));
+
+            for (int r = region.FirstRow; r <= region.LastRow; r++)
+            {
+                IRow row = sheet.GetRow(r);
+                if (row == null)
+                {
+                    continue;
+                }
+                for (int c = region.FirstColumn; c <= region.LastColumn; c++)
+                {
+                    ICell cell = row.GetCell(c);
+                    ValueAndFormat cv = GetCellValue(cell);
+                    if (withText || cv.IsNumber)
+                    {
+                        allValues.Add(cv);
+                    }
+                }
+            }
+
+            values = func.Evaluate(allValues);
+            meaningfulRegionValues.Add(region, values);
+
+            return values;
+        }
+        private ValueAndFormat GetCellValue(ICell cell)
+        {
+            if (cell != null)
+            {
+                String format = cell.CellStyle.GetDataFormatString();
+                CellType type = cell.CellType;
+                if (type == CellType.Formula)
+                {
+                    type = cell.CachedFormulaResultType;
+                }
+                switch (type)
+                {
+                    case CellType.Numeric:
+                        return new ValueAndFormat(cell.NumericCellValue, format, decimalTextFormat);
+                    case CellType.String:
+                    case CellType.Boolean:
+                        return new ValueAndFormat(cell.StringCellValue, format);
+                    default:
+                        break;
+                }
+            }
+            return new ValueAndFormat("", "");
         }
         public override int GetHashCode()
         {

@@ -933,6 +933,11 @@ namespace NPOI.XSSF.Model
             }
             return null;
         }
+
+        public IIndexedColorMap GetIndexedColors()
+        {
+            return indexedColors;
+        }
     }
 }
 
