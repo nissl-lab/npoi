@@ -23,6 +23,8 @@ namespace NPOI.SS.Formula
     public class OperatorEnumHelper
     {
         public static bool IsValid(OperatorEnum @operator, object cellValue, object v1, object v2) {
+            if (cellValue == null)
+                return false;
             switch(@operator)
             {
                 case OperatorEnum.NO_COMPARISON:
@@ -43,13 +45,58 @@ namespace NPOI.SS.Formula
                     }
                     else if (cellValue is Boolean)
                         return false;
-                    return false; // just in case - not a typical possibility
+                    return false;
                 case OperatorEnum.EQUAL:
-                    break;
+                    if (v1 == null)
+                        return false;
+                    if (cellValue is Double)
+                    {
+                        return (double)cellValue >= 0;
+                    }
+                    else if (cellValue is String)
+                    {
+                        return string.Compare((String)cellValue, (String)v1, true) >= 0;
+                    }
+                    else if (cellValue is Boolean)
+                    {
+                        bool n1 = (bool)v1;
+                        return (bool)cellValue==n1;
+                    }
+                    return false; 
                 case OperatorEnum.NOT_EQUAL:
-                    break;
+                    if (v1 == null)
+                        return true;
+                    if (cellValue is String)
+                    {
+                        String n1 = (String)v1;
+                        return string.Compare((String)cellValue, n1, true) >= 0;
+                    }
+                    else if (cellValue is Boolean)
+                    {
+                        bool n1 = (bool)v1;
+                        return (bool)cellValue != n1;
+                    }
+                    return false;
                 case OperatorEnum.GREATER_THAN:
-                    break;
+                    if (cellValue is Double)
+                    {
+                        // use zero for null
+                        double n1 = v1 == null ? 0 : (double)v1;
+                        return (double)cellValue>= n1;
+                    }
+                    else if (cellValue is String)
+                    {
+                        String n1 = v1 == null ? "" : (String)v1;
+                        return string.Compare((String)cellValue, n1, true) >= 0;
+                    }
+                    else if (cellValue is Boolean)
+                    {
+                        if (v1 == null)
+                            return true;
+                        bool n1 = (bool)v1;
+                        return ((bool)cellValue).CompareTo(n1)>0;
+                    }
+                    return false;
                 case OperatorEnum.LESS_THAN:
                     break;
                 case OperatorEnum.GREATER_OR_EQUAL:
