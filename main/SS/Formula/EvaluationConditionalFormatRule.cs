@@ -20,6 +20,54 @@ namespace NPOI.SS.Formula
         GREATER_OR_EQUAL=7,
         LESS_OR_EQUAL=8
     }
+    public class OperatorEnumHelper
+    {
+        public static bool IsValid(OperatorEnum @operator, object cellValue, object v1, object v2) {
+            switch(@operator)
+            {
+                case OperatorEnum.NO_COMPARISON:
+                    return false;
+                case OperatorEnum.BETWEEN:
+                    if (cellValue is Double)
+                    {
+                        // use zero for null
+                        double n1 = v1==null? 0:(double)v1;
+                        double n2 = v2 == null ? 0 : (double)v2;
+                        return (double)cellValue - n1 >= 0 && (double)cellValue - n2 <= 0;
+                    }
+                    else if (cellValue is String)
+                    {
+                        String n1 = v1 == null ? "" : (String)v1;
+                        String n2 = v2 == null ? "" : (String)v2;
+                        return string.Compare((String)cellValue, n1, true) >= 0 && string.Compare((String)cellValue, n2, true) <= 0;
+                    }
+                    else if (cellValue is Boolean)
+                        return false;
+                    return false; // just in case - not a typical possibility
+                case OperatorEnum.EQUAL:
+                    break;
+                case OperatorEnum.NOT_EQUAL:
+                    break;
+                case OperatorEnum.GREATER_THAN:
+                    break;
+                case OperatorEnum.LESS_THAN:
+                    break;
+                case OperatorEnum.GREATER_OR_EQUAL:
+                    break;
+                case OperatorEnum.LESS_OR_EQUAL:
+                    break;
+            }
+            
+
+        }
+        public static bool IsValidForIncompatibleTypes(OperatorEnum @operator)
+        {
+            if (@operator == OperatorEnum.NOT_BETWEEN || @operator == OperatorEnum.NOT_EQUAL)
+                return true;
+            else
+                return false;
+        }
+    }
     public class EvaluationConditionalFormatRule: IComparable<EvaluationConditionalFormatRule>
     {
         /**
@@ -306,28 +354,27 @@ namespace NPOI.SS.Formula
             {
                 eval2 = UnwrapEval(workbookEvaluator.Evaluate(f2, ConditionalFormattingEvaluator.GetRef(cell), region));
             }
-
             // we assume the cell has been evaluated, and the current formula value stored
             if (DataValidationEvaluator.IsType(cell, CellType.Boolean)
                     && (eval == BlankEval.instance || eval is BoolEval) 
                 && (eval2 == BlankEval.instance || eval2 is BoolEval) 
            ) {
-                return @operator.IsValid(cell.BooleanCellValue, eval == BlankEval.instance ? null : ((BoolEval)eval).BooleanValue, eval2 == BlankEval.instance ? null : ((BoolEval)eval2).BooleanValue);
+                return OperatorEnumHelper.IsValid(@operator, cell.BooleanCellValue, eval == BlankEval.instance ? (bool?)null : ((BoolEval)eval).BooleanValue, eval2 == BlankEval.instance ? (bool?)null : ((BoolEval)eval2).BooleanValue);
             }
             if (DataValidationEvaluator.IsType(cell, CellType.Numeric)
                     && (eval == BlankEval.instance || eval is NumberEval )
                 && (eval2 == BlankEval.instance || eval2 is NumberEval) 
            ) {
-                return @operator.IsValid(cell.NumericCellValue, eval == BlankEval.instance ? null : ((NumberEval)eval).NumberValue, eval2 == BlankEval.instance ? null : ((NumberEval)eval2).NumberValue);
+                return OperatorEnumHelper.IsValid(@operator, cell.NumericCellValue, eval==BlankEval.instance ? (double?)null : ((NumberEval)eval).NumberValue, eval2 == BlankEval.instance ? (double?)null : ((NumberEval)eval2).NumberValue);
             }
             if (DataValidationEvaluator.IsType(cell, CellType.String)
                     && (eval == BlankEval.instance || eval is StringEval )
                 && (eval2 == BlankEval.instance || eval2 is StringEval) 
            ) {
-                return @operator.IsValid(cell.StringCellValue, eval == BlankEval.instance ? null : ((StringEval)eval).StringValue, eval2 == BlankEval.instance ? null : ((StringEval)eval2).StringValue);
+                return OperatorEnumHelper.IsValid(@operator, cell.StringCellValue, eval == BlankEval.instance ? null : ((StringEval)eval).StringValue, eval2 == BlankEval.instance ? null : ((StringEval)eval2).StringValue);
             }
 
-            return @operator.IsValidForIncompatibleTypes();
+            return OperatorEnumHelper.IsValidForIncompatibleTypes(@operator);
         }
         private bool CheckFormula(CellReference reference, CellRangeAddress region)
         {
