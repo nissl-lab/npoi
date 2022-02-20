@@ -654,6 +654,58 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
+        public string TableCaption
+        {
+            get
+            {
+                CT_TblPr tblPr = GetTrPr();
+                if (tblPr.tblCaption != null)
+                    return tblPr.tblCaption.val;
+                else
+                    return string.Empty;
+            }
+            set
+            {
+                CT_TblPr tblPr = GetTrPr();
+                if (tblPr.tblCaption == null)
+                {
+                    CT_String caption = new CT_String();
+                    caption.val = value;
+                    tblPr.tblCaption = caption;
+                }
+                else
+                {
+                    tblPr.tblCaption.val = value;
+                }
+            }
+        }
+
+        public string TableDescription
+        {
+            get
+            {
+                CT_TblPr tblPr = GetTrPr();
+                if (tblPr.tblDescription != null)
+                    return tblPr.tblDescription.val;
+                else
+                    return string.Empty;
+            }
+            set
+            {
+                CT_TblPr tblPr = GetTrPr();
+                if (tblPr.tblDescription == null)
+                {
+                    CT_String desc = new CT_String();
+                    desc.val = value;
+                    tblPr.tblDescription = desc;
+                }
+                else
+                {
+                    tblPr.tblDescription.val = value;
+                }
+            }
+        }
+
         public void SetCellMargins(int top, int left, int bottom, int right)
         {
             CT_TblPr tblPr = GetTrPr();
@@ -807,6 +859,7 @@ namespace NPOI.XWPF.UserModel
             }
             return null;
         }
+
     }// end class
 
 }
