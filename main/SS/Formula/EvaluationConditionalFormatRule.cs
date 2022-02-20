@@ -1,5 +1,6 @@
 ﻿using EnumsNET;
 using NPOI.SS.Formula.Eval;
+using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using System;
@@ -55,7 +56,7 @@ namespace NPOI.SS.Formula
                     }
                     else if (cellValue is String)
                     {
-                        return string.Compare((String)cellValue, (String)v1, true) >= 0;
+                        return string.Compare((String)cellValue, (String)v1, true) == 0;
                     }
                     else if (cellValue is Boolean)
                     {
@@ -69,7 +70,7 @@ namespace NPOI.SS.Formula
                     if (cellValue is String)
                     {
                         String n1 = (String)v1;
-                        return string.Compare((String)cellValue, n1, true) >= 0;
+                        return string.Compare((String)cellValue, n1, true) != 0;
                     }
                     else if (cellValue is Boolean)
                     {
@@ -82,12 +83,12 @@ namespace NPOI.SS.Formula
                     {
                         // use zero for null
                         double n1 = v1 == null ? 0 : (double)v1;
-                        return (double)cellValue>= n1;
+                        return (double)cellValue> n1;
                     }
                     else if (cellValue is String)
                     {
                         String n1 = v1 == null ? "" : (String)v1;
-                        return string.Compare((String)cellValue, n1, true) >= 0;
+                        return string.Compare((String)cellValue, n1, true) > 0;
                     }
                     else if (cellValue is Boolean)
                     {
@@ -98,13 +99,70 @@ namespace NPOI.SS.Formula
                     }
                     return false;
                 case OperatorEnum.LESS_THAN:
-                    break;
+                    if (cellValue is Double)
+                    {
+                        // use zero for null
+                        double n1 = v1 == null ? 0 : (double)v1;
+                        return (double)cellValue<n1;
+                    }
+                    else if (cellValue is String)
+                    {
+                        if (v1 == null)
+                            return false;
+                        return string.Compare((String)cellValue, (String)v1, true)< 0;
+                    }
+                    else if (cellValue is Boolean)
+                    {
+                        if (v1 == null)
+                            return false;
+                        bool n1 = (bool)v1;
+                        return ((bool)cellValue).CompareTo(n1) < 0;
+                    }
+                    return false;
                 case OperatorEnum.GREATER_OR_EQUAL:
-                    break;
+                    if (cellValue is Double)
+                    {
+                        // use zero for null
+                        double n1 = v1 == null ? 0 : (double)v1;
+                        return (double)cellValue >= n1;
+                    }
+                    else if (cellValue is String)
+                    {
+                        if (v1 == null)
+                            return true;
+                        return string.Compare((String)cellValue, (String)v1, true) >= 0;
+                    }
+                    else if (cellValue is Boolean)
+                    {
+                        if (v1 == null)
+                            return false;
+                        bool n1 = (bool)v1;
+                        return ((bool)cellValue).CompareTo(n1) >= 0;
+                    }
+                    return false;
                 case OperatorEnum.LESS_OR_EQUAL:
-                    break;
+                    if (cellValue is Double)
+                    {
+                        // use zero for null
+                        double n1 = v1 == null ? 0 : (double)v1;
+                        return (double)cellValue <= n1;
+                    }
+                    else if (cellValue is String)
+                    {
+                        if (v1 == null)
+                            return false;
+                        return string.Compare((String)cellValue, (String)v1, true) <= 0;
+                    }
+                    else if (cellValue is Boolean)
+                    {
+                        if (v1 == null)
+                            return false;
+                        bool n1 = (bool)v1;
+                        return ((bool)cellValue).CompareTo(n1) <= 0;
+                    }
+                    return false;
             }
-            
+            return false;
 
         }
         public static bool IsValidForIncompatibleTypes(OperatorEnum @operator)
@@ -250,16 +308,6 @@ namespace NPOI.SS.Formula
             {
                 return left.CompareTo(right) >= 0;
             }
-        }
-        protected interface ValueFunction
-        {
-
-            /**
-             *
-             * @param values
-             * @return the desired values for the rules implemented by the current instance
-             */
-            List<ValueAndFormat> Evaluate(List<ValueAndFormat> values);
         }
 
         private WorkbookEvaluator workbookEvaluator;
@@ -491,22 +539,214 @@ namespace NPOI.SS.Formula
             {
                 return CheckFormula(reference, region);
             }
-            //if (ruleType.Equals(ConditionType.Filter))
-            //{
-            //    return CheckFilter(cell, reference, region);
-            //}
-
+            if (ruleType.Equals(ConditionType.Filter))
+            {
+                return CheckFilter(cell, reference, region);
+            }
             // TODO: anything else, we don't handle yet, such as top 10
             return false;
         }
-        private List<ValueAndFormat> GetMeaningfulValues(CellRangeAddress region, bool withText, ValueFunction func)
+        private bool CheckFilter(ICell cell, CellReference reference, CellRangeAddress region)
+        {
+            ConditionFilterType? filterType = rule.ConditionFilterType;
+            if (filterType == null)
+            {
+                return false;
+            }
+            ValueAndFormat cv = GetCellValue(cell);
+            switch (filterType)
+            {
+                case ConditionFilterType.FILTER:
+                    return false; // we don't evaluate HSSF filters yet
+                case ConditionFilterType.TOP_10:
+                    // from testing, Excel only operates on numbers and dates (which are stored as numbers) in the range.
+                    // numbers stored as text are ignored, but numbers formatted as text are treated as numbers.
+
+                    return GetMeaningfulValues(region, true,  (allValues)=> {
+                        IConditionFilterData fc = rule.FilterConfiguration;
+
+                        if (!fc.Bottom)
+                        {
+                            allValues.Sort();
+                            allValues.Reverse();
+                        }
+                        else
+                        {
+                            allValues.Sort();
+                        }
+
+                        int limit = (int)fc.Rank;
+                        if (fc.Percent)
+                        {
+                            limit = allValues.Count * limit / 100;
+                        }
+                        if (allValues.Count <= limit)
+                        {
+                            return allValues;
+                        }
+                        return allValues.GetRange(0, limit);
+                    }).Contains(cv);
+                case ConditionFilterType.UNIQUE_VALUES:
+                // Per Excel help, "duplicate" means matching value AND format
+                // https://support.office.com/en-us/article/Filter-for-unique-values-or-remove-duplicate-values-ccf664b0-81d6-449b-bbe1-8daaec1e83c2
+                 return GetMeaningfulValues(region, true, (allValues) => {
+                     allValues.Sort();
+                     List<ValueAndFormat> unique = new List<ValueAndFormat>();
+
+                     for (int i = 0; i < allValues.Count; i++)
+                     {
+                         ValueAndFormat v = allValues[i];
+                         // skip this if the current value matches the next one, or is the last one and matches the previous one
+                         if ((i < allValues.Count - 1 && v.Equals(allValues[i + 1])) || (i > 0 && i == allValues.Count - 1 && v.Equals(allValues[i - 1])))
+                         {
+                             // current value matches next value, skip both
+                             i++;
+                             continue;
+                         }
+                         unique.Add(v);
+                     }
+
+                     return unique;
+                 }).Contains(cv);
+                case ConditionFilterType.DUPLICATE_VALUES:
+                    // Per Excel help, "duplicate" means matching value AND format
+                    // https://support.office.com/en-us/article/Filter-for-unique-values-or-remove-duplicate-values-ccf664b0-81d6-449b-bbe1-8daaec1e83c2
+                    return GetMeaningfulValues(region, true, (allValues) => {
+                        allValues.Sort();
+                        List<ValueAndFormat> dup = new List<ValueAndFormat>();
+
+                        for (int i = 0; i < allValues.Count; i++)
+                        {
+                            ValueAndFormat v = allValues[i];
+                            // skip this if the current value matches the next one, or is the last one and matches the previous one
+                            if ((i < allValues.Count - 1 && v.Equals(allValues[i + 1])) || (i > 0 && i == allValues.Count - 1 && v.Equals(allValues[i - 1])))
+                            {
+                                // current value matches next value, add one
+                                dup.Add(v);
+                                i++;
+                            }
+                        }
+                        return dup;
+                    }).Contains(cv);
+                case ConditionFilterType.ABOVE_AVERAGE:
+                    // from testing, Excel only operates on numbers and dates (which are stored as numbers) in the range.
+                    // numbers stored as text are ignored, but numbers formatted as text are treated as numbers.
+
+                    IConditionFilterData conf = rule.FilterConfiguration;
+
+                    // actually ordered, so iteration order is predictable
+                    List<ValueAndFormat> values = GetMeaningfulValues(region, false, (allValues) => {
+                        double total = 0;
+                        ValueEval[] pop = new ValueEval[allValues.Count];
+                        for (int i = 0; i < allValues.Count; i++)
+                        {
+                            ValueAndFormat v = allValues[i];
+                            total += (double)v.Value;
+                            pop[i] = new NumberEval((double)v.Value);
+                        }
+
+                        List<ValueAndFormat> avgSet = new List<ValueAndFormat>(1);
+                        avgSet.Add(new ValueAndFormat(allValues.Count == 0 ? 0 : total / allValues.Count, null, decimalTextFormat));
+
+                        double stdDev2 = allValues.Count <= 1 ? 0 : ((NumberEval)AggregateFunction.STDEV.Evaluate(pop, 0, 0)).NumberValue;
+                        avgSet.Add(new ValueAndFormat(stdDev2, null, decimalTextFormat));
+                        return avgSet;
+                    });
+                    double? val = cv.IsNumber ? cv.Value : null;
+                    if (val == null)
+                    {
+                        return false;
+                    }
+
+                    double avg = (double)values[0].Value;
+                    double stdDev = (double)values[1].Value;
+
+                    /*
+                     * use StdDev, aboveAverage, equalAverage to find:
+                     * comparison value
+                     * operator type
+                     */
+
+                    double comp = conf.StdDev > 0 ? (avg + (conf.AboveAverage ? 1 : -1) * stdDev * conf.StdDev) : avg;
+
+                    OperatorEnum op;
+                    if (conf.AboveAverage)
+                    {
+                        if (conf.EqualAverage)
+                        {
+                            op = OperatorEnum.GREATER_OR_EQUAL;
+                        }
+                        else
+                        {
+                            op = OperatorEnum.GREATER_THAN;
+                        }
+                    }
+                    else
+                    {
+                        if (conf.EqualAverage)
+                        {
+                            op = OperatorEnum.LESS_OR_EQUAL;
+                        }
+                        else
+                        {
+                            op = OperatorEnum.LESS_THAN;
+                        }
+                    }
+                    return OperatorEnumHelper.IsValid(op, val, comp, null);
+                case ConditionFilterType.CONTAINS_TEXT:
+                    // implemented both by a cfRule "text" attribute and a formula.  Use the text.
+                    return text == null ? false : cv.ToString().ToLowerInvariant().Contains(lowerText);
+                case ConditionFilterType.NOT_CONTAINS_TEXT:
+                    // implemented both by a cfRule "text" attribute and a formula.  Use the text.
+                    return text == null ? true : !cv.ToString().ToLowerInvariant().Contains(lowerText);
+                case ConditionFilterType.BEGINS_WITH:
+                    // implemented both by a cfRule "text" attribute and a formula.  Use the text.
+                    return cv.ToString().ToLowerInvariant().StartsWith(lowerText);
+                case ConditionFilterType.ENDS_WITH:
+                    // implemented both by a cfRule "text" attribute and a formula.  Use the text.
+                    return cv.ToString().ToLowerInvariant().EndsWith(lowerText);
+                case ConditionFilterType.CONTAINS_BLANKS:
+                    try
+                    {
+                        String v = cv.String;
+                        // see TextFunction.TRIM for implementation
+                        return v == null || v.Trim().Length == 0;
+                    }
+                    catch (Exception e)
+                    {
+                        // not a valid string value, and not a blank cell (that's checked earlier)
+                        return false;
+                    }
+                case ConditionFilterType.NOT_CONTAINS_BLANKS:
+                    try
+                    {
+                        String v = cv.String;
+                        // see TextFunction.TRIM for implementation
+                        return v != null && v.Trim().Length > 0;
+                    }
+                    catch (Exception e)
+                    {
+                        // not a valid string value, but not blank
+                        return true;
+                    }
+                case ConditionFilterType.CONTAINS_ERRORS:
+                    return cell != null && DataValidationEvaluator.IsType(cell, CellType.Error);
+                case ConditionFilterType.NOT_CONTAINS_ERRORS:
+                    return cell == null || !DataValidationEvaluator.IsType(cell, CellType.Error);
+                case ConditionFilterType.TIME_PERIOD:
+                    // implemented both by a cfRule "text" attribute and a formula.  Use the formula.
+                    return CheckFormula(reference, region);
+                default:
+                    return false;
+            }
+        }
+        private List<ValueAndFormat> GetMeaningfulValues(CellRangeAddress region, bool withText, Func<List<ValueAndFormat>, List<ValueAndFormat>> func)
         {
             if (meaningfulRegionValues.ContainsKey(region))
             {
                 return meaningfulRegionValues[region];
             }
-            List<ValueAndFormat> values = meaningfulRegionValues[region];
-
+            List<ValueAndFormat> values = new List<ValueAndFormat>();
             List<ValueAndFormat> allValues = new List<ValueAndFormat>((region.LastColumn - region.FirstColumn + 1) * (region.LastRow - region.FirstRow + 1));
 
             for (int r = region.FirstRow; r <= region.LastRow; r++)
@@ -526,8 +766,7 @@ namespace NPOI.SS.Formula
                     }
                 }
             }
-
-            values = func.Evaluate(allValues);
+            values = func(allValues);
             meaningfulRegionValues.Add(region, values);
 
             return values;

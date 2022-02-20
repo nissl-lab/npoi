@@ -31,6 +31,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="XSSF\UserModel\presetTableStyles.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="XSSF\UserModel\presetTableStyles.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Security.Cryptography.Xml" Version="4.5.0" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>

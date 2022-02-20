@@ -49,7 +49,7 @@ namespace NPOI.XSSF.Model
         private List<CT_Xf> xfs = new List<CT_Xf>();
 
         private List<CT_Dxf> dxfs = new List<CT_Dxf>();
-        private Dictionary<String, ITableStyle> tableStyles = new Dictionary<string, ITableStyle>();
+        private Dictionary<string, ITableStyle> tableStyles = new Dictionary<string, ITableStyle>();
         private IIndexedColorMap indexedColors = new DefaultIndexedColorMap();
         /**
          * The first style id available for use as a custom style
@@ -156,9 +156,10 @@ namespace NPOI.XSSF.Model
             if (name == null) return null;
             try
             {
-                return XSSFBuiltinTableStyle.ValueOf(name).getStyle();
+                return XSSFBuiltinTableStyle.GetStyle(
+                    (XSSFBuiltinTableStyleEnum)Enum.Parse(typeof(XSSFBuiltinTableStyleEnum), name));
             }
-            catch (ArgumentException e)
+            catch
             {
                 return GetExplicitTableStyle(name);
             }
@@ -185,7 +186,7 @@ namespace NPOI.XSSF.Model
          * @throws IOException if an error occurs while Reading.
          */
 
-        protected void ReadFrom(XmlDocument xmldoc)
+        internal void ReadFrom(XmlDocument xmldoc)
         {
             try
             {
