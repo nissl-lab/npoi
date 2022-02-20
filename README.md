@@ -12,6 +12,12 @@ This project is the .NET version of POI Java project. With NPOI, you can read/wr
 
 [Who is using NPOI?](https://github.com/nissl-lab/npoi/issues/705)
 
+Telegram User Group
+================
+Join us on telegram: https://t.me/npoidevs
+
+NOTE: QQ or wechat is not recommended. 
+
 Get Started with NPOI
 ============
 [Getting Started with NPOI](https://github.com/nissl-lab/npoi/wiki/Getting-Started-with-NPOI)
@@ -31,12 +37,6 @@ NPOI从未加入过中国NCC开源组织，他们在欺骗公众！Dotnetcore.np
 [Stop using Dotnetcore/NPOI nuget package. It’s obsolete!](https://tonyqus.medium.com/stop-using-dotnetcore-npoi-nuget-package-its-too-obsolete-6d0aeedb3319)
 
 [The real history of Dotnetcore.NPOI](https://tonyqus.medium.com/the-real-history-of-dotnetcore-npoi-999bb5e140c7)
-
-Telegram User Group
-================
-Join us on telegram: https://t.me/npoidevs
-
-NOTE: QQ or wechat is not recommended.
 
 Advantage of NPOI
 =================
