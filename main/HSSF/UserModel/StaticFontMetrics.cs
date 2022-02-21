@@ -20,9 +20,9 @@ namespace NPOI.HSSF.UserModel
     using System;
     using System.Collections;
     using System.IO;
-    using System.Drawing;
     using System.Configuration;
     using NPOI.Util.Collections;
+    using SixLabors.Fonts;
 
     /**
      * Allows the user to lookup the font metrics for a particular font without
@@ -108,15 +108,15 @@ namespace NPOI.HSSF.UserModel
             }
 
             // Grab the base name of the font they've asked about
-            String fontName = font.FontFamily.Name;
+            String fontName = font.Family.Name;
 
             // Some fonts support plain/bold/italic/bolditalic variants
             // Others have different font instances for bold etc
             // (eg font.dialog.plain.* vs font.Californian FB Bold.*)
             String fontStyle = "";
             //if(font.IsPlain())  fontStyle += "plain";
-            if (font.Bold) fontStyle += "bold";
-            if (font.Italic) fontStyle += "italic";
+            if (font.IsBold) fontStyle += "bold";
+            if (font.IsItalic) fontStyle += "italic";
 
             // Do we have a definition for this font with just the name?
             // If not, Check with the font style Added

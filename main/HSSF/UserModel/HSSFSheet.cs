@@ -35,6 +35,8 @@ namespace NPOI.HSSF.UserModel
     using NPOI.Util;
     using NPOI.SS.UserModel.Helpers;
     using NPOI.HSSF.UserModel.helpers;
+    using SixLabors.Fonts;
+    using System.Linq;
 
 
 
@@ -2375,9 +2377,9 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="font1">The font.</param>
         /// <returns></returns>
-        public System.Drawing.Font HSSFFont2Font(HSSFFont font1)
+        public Font HSSFFont2Font(HSSFFont font1)
         {
-            return new System.Drawing.Font(font1.FontName, (float)font1.FontHeightInPoints);
+            return new Font(SystemFonts.Families.Where(d => d.Name == font1.FontName).FirstOrDefault(), (float)font1.FontHeightInPoints);
         }
 
         /// <summary>

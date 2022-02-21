@@ -12,7 +12,7 @@ namespace TestCases
         /**
          * Name of the system property that defined path to the test data.
          */
-        public static String TEST_PROPERTY = "POI.testdata.path";
+        public static String TEST_PROPERTY = "TEST_PROPERTY";
 
         private static POIDataSamples _instSlideshow;
         private static POIDataSamples _instSpreadsheet;
@@ -124,7 +124,7 @@ namespace TestCases
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
             String dataDirName = TestContext.Parameters[TEST_PROPERTY];
-
+            dataDirName = "../../../../test-data";
             if (dataDirName == null)
                 throw new Exception("Must set system property '"
                         + TEST_PROPERTY

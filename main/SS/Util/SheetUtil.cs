@@ -22,6 +22,7 @@ namespace NPOI.SS.Util
     using NPOI.SS.UserModel;
     using System.Drawing;
     using System.Collections.Generic;
+    using SixLabors.Fonts;
 
     /**
      * Helper methods for when working with Usermodel sheets
@@ -307,9 +308,6 @@ namespace NPOI.SS.Util
             IFont font = wb.GetFontAt(style.FontIndex);
 
             double width = -1;
-            using (Bitmap bmp = new Bitmap(1,1))
-            using (Graphics g = Graphics.FromImage(bmp))
-            {
                 if (cellType == CellType.String)
                 {
                     IRichTextString rt = cell.RichStringCellValue;
@@ -326,7 +324,7 @@ namespace NPOI.SS.Util
                             // TODO: support rich text fragments
                         }
 
-                        width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, g, windowsFont, cell);
+                        width = GetCellWidth(defaultCharWidth, colspan, style, width, txt,windowsFont, cell);
                     }
                 }
                 else
@@ -354,22 +352,21 @@ namespace NPOI.SS.Util
                         //str = new AttributedString(txt);
                         //copyAttributes(font, str, 0, txt.length());
                         windowsFont = IFont2Font(font);
-                        width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, g, windowsFont, cell);
+                        width = GetCellWidth(defaultCharWidth, colspan, style, width, txt,windowsFont, cell);
                     }
                 }
-            }
             return width;
         }
 
         private static double GetCellWidth(int defaultCharWidth, int colspan,
-            ICellStyle style, double width, string str, Graphics g, Font windowsFont, ICell cell)
+            ICellStyle style, double width, string str, Font windowsFont, ICell cell)
         {
             //Rectangle bounds;
             double actualWidth;
             if (style.Rotation != 0)
             {
                 double angle = style.Rotation * 2.0 * Math.PI / 360.0;
-                SizeF sf = g.MeasureString(str, windowsFont);
+                SizeF sf = MeasureString(str, windowsFont);
                 double x1 = Math.Abs(sf.Height * Math.Sin(angle));
                 double x2 = Math.Abs(sf.Width * Math.Cos(angle));
                 actualWidth = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
@@ -378,7 +375,7 @@ namespace NPOI.SS.Util
             else
             {
                 //bounds = layout.getBounds();
-                actualWidth = Math.Round(g.MeasureString(str, windowsFont, int.MaxValue, StringFormat.GenericTypographic).Width, 0, MidpointRounding.ToEven);                
+                actualWidth = Math.Round(MeasureString(str, windowsFont).Width, 0, MidpointRounding.ToEven);                
             }
             // entireWidth accounts for leading spaces which is excluded from bounds.getWidth()
             //double frameWidth = bounds.getX() + bounds.getWidth();
@@ -449,17 +446,9 @@ namespace NPOI.SS.Util
             //copyAttributes(defaultFont, str, 0, 1);
             //TextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
             //int defaultCharWidth = (int)layout.getAdvance();
-            int defaultCharWidth = 0;
             Font font = IFont2Font(defaultFont);
-            using (var image = new Bitmap(1, 1))
-            {
-                using (var g = Graphics.FromImage(image))
-                {
-                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                    defaultCharWidth = (int)g.MeasureString(new String(defaultChar, 1), font, int.MaxValue, StringFormat.GenericTypographic).Width;
-                }
-            }
-            return defaultCharWidth;
+            double width = TextMeasurer.Measure(new string(defaultChar, 1), new TextOptions(font)).Width;
+            return (int)Math.Round(width, 0, MidpointRounding.ToEven);
         }
 
         /**
@@ -542,11 +531,7 @@ namespace NPOI.SS.Util
             }
             if (font1.IsItalic)
                 style |= FontStyle.Italic;
-            if (font1.Underline == FontUnderlineType.Single)
-            {
-                style |= FontStyle.Underline;
-            }
-            Font font = new Font(font1.FontName, (float)font1.FontHeightInPoints, style, GraphicsUnit.Point);
+            Font font = SystemFonts.CreateFont(font1.FontName, (float)font1.FontHeightInPoints, style);
             return font;
         }
         /// <summary>
@@ -656,6 +641,13 @@ namespace NPOI.SS.Util
             //  live within any merged regions
             return null;
         }
-
+        private static SizeF MeasureString(string text, Font font)
+        {
+            var size = TextMeasurer.Measure(text, new TextOptions(font));
+            // MeasureString adds padding so we do this to remove it
+            // https://stackoverflow.com/a/11708952/1409101
+            var actualWidth = TextMeasurer.Measure(text + text, new TextOptions(font)).Width - size.Width;
+            return new SizeF(actualWidth, size.Height);
+        }
     }
 }

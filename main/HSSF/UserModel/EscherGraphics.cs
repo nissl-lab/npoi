@@ -21,8 +21,11 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Util;
     using NPOI.Util;
 
-    using System.Drawing;
     using NPOI.SS.UserModel;
+    using SixLabors.Fonts;
+    using SixLabors.ImageSharp;
+    using SixLabors.ImageSharp.PixelFormats;
+    using System.Linq;
 
     /**
      * Translates Graphics calls into escher calls.  The translation Is lossy so
@@ -64,7 +67,7 @@ namespace NPOI.HSSF.UserModel
         private HSSFWorkbook workbook;
         private float verticalPointsPerPixel = 1.0f;
         private float verticalPixelsPerPoint;
-        private Color foreground;
+        private Argb32 foreground;
         private Color background = Color.White;
         private Font font;
         private static POILogger Logger = POILogFactory.GetLogger(typeof(EscherGraphics));
@@ -83,8 +86,8 @@ namespace NPOI.HSSF.UserModel
             this.workbook = workbook;
             this.verticalPointsPerPixel = verticalPointsPerPixel;
             this.verticalPixelsPerPoint = 1 / verticalPointsPerPixel;
-            this.font = new Font("Arial", 10);
-            this.foreground = forecolor;
+            this.font = SystemFonts.CreateFont("Arial", 10);
+            this.foreground = forecolor.ToPixel<Argb32>();
             //        background = backcolor;
         }
 
@@ -132,7 +135,6 @@ namespace NPOI.HSSF.UserModel
             {
                 if (null != font)
                 {
-                    font.Dispose();
                     font = null;
                 }
             }
@@ -286,20 +288,19 @@ namespace NPOI.HSSF.UserModel
             if (string.IsNullOrEmpty(str))
                 return;
 
-            using (Font excelFont = new Font(font.Name.Equals("SansSerif") ? "Arial" : font.Name, (int)(font.Size / verticalPixelsPerPoint), font.Style))
-            {
-                FontDetails d = StaticFontMetrics.GetFontDetails(excelFont);
-                int width = (int)((d.GetStringWidth(str) * 8) + 12);
-                int height = (int)((font.Size / verticalPixelsPerPoint) + 6) * 2;
-                y -= Convert.ToInt32((font.Size / verticalPixelsPerPoint) + 2 * verticalPixelsPerPoint);    // we want to Draw the shape from the top-left
-                HSSFTextbox textbox = escherGroup.CreateTextbox(new HSSFChildAnchor(x, y, x + width, y + height));
-                textbox.IsNoFill = (true);
-                textbox.LineStyle = LineStyle.None;
-                HSSFRichTextString s = new HSSFRichTextString(str);
-                HSSFFont hssfFont = MatchFont(excelFont);
-                s.ApplyFont(hssfFont);
-                textbox.String = (s);
-            }
+            var _fontFamily = font.Name.Equals("SansSerif") ? SystemFonts.Families.FirstOrDefault() : SystemFonts.Families.Where(dd => dd.Name == font.Name).FirstOrDefault();
+            var excelFont = new Font(_fontFamily, font.Size / verticalPixelsPerPoint, font.FontMetrics.Description.Style);
+            FontDetails d = StaticFontMetrics.GetFontDetails(excelFont);
+            int width = (int)((d.GetStringWidth(str) * 8) + 12);
+            int height = (int)((font.Size / verticalPixelsPerPoint) + 6) * 2;
+            y -= Convert.ToInt32((font.Size / verticalPixelsPerPoint) + 2 * verticalPixelsPerPoint);    // we want to Draw the shape from the top-left
+            HSSFTextbox textbox = escherGroup.CreateTextbox(new HSSFChildAnchor(x, y, x + width, y + height));
+            textbox.IsNoFill = (true);
+            textbox.LineStyle = LineStyle.None;
+            HSSFRichTextString s = new HSSFRichTextString(str);
+            HSSFFont hssfFont = MatchFont(excelFont);
+            s.ApplyFont(hssfFont);
+            textbox.String = (s);
         }
 
         private HSSFFont MatchFont(Font font)
@@ -308,8 +309,8 @@ namespace NPOI.HSSF.UserModel
                     .FindColor((byte)foreground.R, (byte)foreground.G, (byte)foreground.B);
             if (hssfColor == null)
                 hssfColor = workbook.GetCustomPalette().FindSimilarColor((byte)foreground.R, (byte)foreground.G, (byte)foreground.B);
-            bool bold = font.Bold;
-            bool italic = font.Italic;
+            bool bold = font.IsBold;
+            bool italic = font.IsItalic;
             HSSFFont hssfFont = (HSSFFont)workbook.FindFont(bold ? (short)NPOI.SS.UserModel.FontBoldWeight.Bold : (short)NPOI.SS.UserModel.FontBoldWeight.Normal,
                         hssfColor.Indexed,
                         (short)(font.Size * 20),

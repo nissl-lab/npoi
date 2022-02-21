@@ -68,7 +68,7 @@ namespace NPOI.SS.Format
             int pos = desc.Length - 1;
             for (int i = 0; i < textPos.Length; i++)
             {
-                textPos[i] = desc.LastIndexOf("\u0000", pos);
+                textPos[i] = desc.LastIndexOf("\u0000", pos,StringComparison.Ordinal);
                 pos = textPos[i] - 1;
             }
         }
