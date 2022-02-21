@@ -28,6 +28,8 @@ using NPOI.XSSF.UserModel.Helpers;
 using NPOI.SS.UserModel;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using NPOI.SS;
+using System.Linq;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -232,11 +234,112 @@ namespace NPOI.XSSF.UserModel
                 ctTable.name = value;
             }
         }
+        public XSSFTableColumn CreateColumn(String columnName)
+        {
+            return CreateColumn(columnName, this.ColumnCount);
+        }
+        public XSSFTableColumn CreateColumn(String columnName, int columnIndex)
+        {
 
+            int columnCount = ColumnCount;
+            if (columnIndex < 0 || columnIndex > columnCount)
+            {
+                throw new ArgumentException("Column index out of bounds");
+            }
+
+            // Ensure we have Table Columns
+            CT_TableColumns columns = ctTable.tableColumns;
+            if (columns == null)
+            {
+                columns = ctTable.AddNewTableColumns();
+            }
+
+            // check if name is unique and calculate unique column id 
+            long nextColumnId = 0;
+            foreach (XSSFTableColumn tableColumn in this.GetColumns())
+            {
+                if (columnName != null && columnName.Equals(tableColumn.Name,StringComparison.InvariantCultureIgnoreCase))
+                {
+                    throw new ArgumentException("Column '" + columnName
+                            + "' already exists. Column names must be unique per table.");
+                }
+                nextColumnId = Math.Max(nextColumnId, tableColumn.Id);
+            }
+            // Bug #62740, the logic was just re-using the existing max ID, not incrementing beyond it.
+            nextColumnId++;
+
+            // Add the new Column
+            CT_TableColumn column = columns.InsertNewTableColumn(columnIndex);
+            columns.count = columns.count;
+
+            column.id = (uint)nextColumnId;
+            if (columnName != null)
+            {
+                column.name = columnName;
+            }
+            else
+            {
+                column.name =  "Column " + nextColumnId;
+            }
+
+            if (ctTable.@ref != null)
+            {
+                // calculate new area
+                int newColumnCount = columnCount + 1;
+                CellReference tableStart = StartCellReference;
+                CellReference tableEnd = EndCellReference;
+                SpreadsheetVersion version = GetXSSFSheet().GetWorkbook().SpreadsheetVersion;
+                CellReference newTableEnd = new CellReference(tableEnd.Row,
+                        tableStart.Col + newColumnCount - 1);
+                AreaReference newTableArea = new AreaReference(tableStart, newTableEnd, version);
+
+                SetCellRef(newTableArea);
+            }
+
+            UpdateHeaders();
+
+            return GetColumns()[columnIndex];
+        }
+        protected void SetCellRef(AreaReference refs)
+        {
+
+            // Strip the sheet name,
+            // CTWorksheet.getTableParts defines in which sheet the table is
+            String reference = refs.FormatAsString();
+            if (reference.IndexOf('!') != -1)
+            {
+                reference = reference.Substring(reference.IndexOf('!') + 1);
+            }
+
+            // Update
+            ctTable.@ref = reference;
+            if (ctTable.IsSetAutoFilter)
+            {
+                String filterRef;
+                int totalsRowCount = TotalsRowCount;
+                if (totalsRowCount == 0)
+                {
+                    filterRef = reference;
+                }
+                else
+                {
+                    CellReference start = new CellReference(refs.FirstCell.Row, refs.FirstCell.Col);
+                    // account for footer row(s) in auto-filter range, which doesn't include footers
+                    CellReference end = new CellReference(refs.LastCell.Row - totalsRowCount, refs.LastCell.Col);
+                    // this won't have sheet references because we built the cell references without them
+                    filterRef = new AreaReference(start, end, SpreadsheetVersion.EXCEL2007).FormatAsString();
+                }
+                ctTable.autoFilter.@ref =filterRef;
+            }
+
+            // Have everything recomputed
+            UpdateReferences();
+            UpdateHeaders();
+        }
         /**
          * @return the display name of the Table, if set
          */
-        public String DisplayName
+        public string DisplayName
         {
             get
             {

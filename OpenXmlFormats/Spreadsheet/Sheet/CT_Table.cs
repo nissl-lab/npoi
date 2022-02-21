@@ -198,7 +198,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLst.Write(sw, "extLst");
             sw.Write("</table>");
         }
-
+        public bool IsSetAutoFilter
+        {
+            get { return this.autoFilterField != null; }
+        }
         [XmlElement]
         public CT_AutoFilter autoFilter
         {
@@ -626,6 +629,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.tableStyleInfoField = new CT_TableStyleInfo();
             return this.tableStyleInfoField;
         }
+
+        public CT_TableColumns AddNewTableColumns()
+        {
+            this.tableColumnsField = new CT_TableColumns();
+            return this.tableColumnsField;
+        }
     }
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -658,8 +667,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
-
-
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
@@ -673,6 +680,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 }
             }
             sw.Write(string.Format("</{0}>", nodeName));
+        }
+        public CT_TableColumn InsertNewTableColumn(int columnIndex)
+        {
+            var newTableColumn = new CT_TableColumn();
+            this.tableColumn.Insert(columnIndex,newTableColumn);
+            return newTableColumn;
         }
         public void RemoveTableColumn(int columnIndex)
         {
