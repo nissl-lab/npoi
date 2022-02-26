@@ -5726,14 +5726,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public CT_Row Copy()
         {
             CT_Row ctRow = new CT_Row();
-            ctRow.paraIdField = this.paraIdField.ToArray();
-            ctRow.rsidRField = this.rsidRField.ToArray();
-            ctRow.rsidDelField = this.rsidDelField.ToArray();
-            ctRow.rsidRPrField = this.rsidRPrField.ToArray();
-            ctRow.rsidTrField = this.rsidTrField.ToArray();
-            ctRow.textIdField = this.textIdField.ToArray();
-            ctRow.trPrField = this.trPrField.Copy();
-            ctRow.tblPrExField = this.tblPrExField.Copy();
+            ctRow.paraIdField = this.paraIdField?.ToArray();
+            ctRow.rsidRField = this.rsidRField?.ToArray();
+            ctRow.rsidDelField = this.rsidDelField?.ToArray();
+            ctRow.rsidRPrField = this.rsidRPrField?.ToArray();
+            ctRow.rsidTrField = this.rsidTrField?.ToArray();
+            ctRow.textIdField = this.textIdField?.ToArray();
+            ctRow.trPrField = this.trPrField?.Copy();
+            ctRow.tblPrExField = this.tblPrExField?.Copy();
             ctRow.itemsElementNameField = this.itemsElementNameField.Copy();
             ctRow.itemsField = this.itemsField.Copy();
             return ctRow;
