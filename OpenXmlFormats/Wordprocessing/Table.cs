@@ -6,7 +6,8 @@ using System.IO;
 using System.Xml;
 using System.Collections;
 using NPOI.OpenXml4Net.Util;
-
+using System.Linq;
+using NPOI.Util;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -3884,9 +3885,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_TrPr()
         {
-            //this.trPrChangeField = new CT_TrPrChange();
-            //this.delField = new CT_TrackChange();
-            //this.insField = new CT_TrackChange();
+
         }
         public static new CT_TrPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -5723,6 +5722,21 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_Tc)o).Write(sw, "tc");
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+        public CT_Row Copy()
+        {
+            CT_Row ctRow = new CT_Row();
+            ctRow.paraIdField = this.paraIdField.ToArray();
+            ctRow.rsidRField = this.rsidRField.ToArray();
+            ctRow.rsidDelField = this.rsidDelField.ToArray();
+            ctRow.rsidRPrField = this.rsidRPrField.ToArray();
+            ctRow.rsidTrField = this.rsidTrField.ToArray();
+            ctRow.textIdField = this.textIdField.ToArray();
+            ctRow.trPrField = this.trPrField.Copy();
+            ctRow.tblPrExField = this.tblPrExField.Copy();
+            ctRow.itemsElementNameField = this.itemsElementNameField.Copy();
+            ctRow.itemsField = this.itemsField.Copy();
+            return ctRow;
         }
         public void RemoveTc(int pos)
         {
