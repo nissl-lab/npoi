@@ -291,6 +291,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\main\NPOI.csproj">
+      <Project>{10fa8538-157a-4380-a4f6-8e2c3ee92cae}</Project>
+      <Name>NPOI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.csproj">
       <Project>{c9f265b7-ece3-4755-b0b1-79536575c2a9}</Project>
       <Name>NPOI.OpenXml4Net</Name>
