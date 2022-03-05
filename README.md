@@ -2,7 +2,7 @@
 
 This project fully supports Ukraine people to fight against Russian army. This is definitely an invasion. Ukraine are actually China's friend for a long time. Most core parts of China aircraft carrier, airplane are provided by Ukraine companies. I DON'T see any reason that we should support Russia instead Ukraine.
 
-However, I don't wanna stop Russian developers from using NPOI. They are also victims. They cannot change Putin or Russia Government mind in any case. But if possible, Russian developers may help impact your government although it's risky. Thank you!
+However, I don't wanna stop Russian developers from using NPOI. They are also victims. They cannot change Putin's or Russia Government's mind in any case. But if possible, Russian developers may help impact your government although it's risky. Thank you!
 
 NPOI
 ===================
