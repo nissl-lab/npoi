@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using NPOI.OpenXml4Net.Util;
+using NPOI.OpenXmlFormats.Vml;
 
 namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 {
@@ -1448,8 +1449,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             get { return fromField; }
             set { fromField = value; }
         }
-        Vml.Spreadsheet.CT_AlternateContent alternateContentField = null;
-        public Vml.Spreadsheet.CT_AlternateContent alternateContent
+        CT_AlternateContent alternateContentField = null;
+        public CT_AlternateContent alternateContent
         {
             get
             {
@@ -1562,7 +1563,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 }
                 else if (childNode.LocalName == "AlternateContent")
                 {
-                    oneCellAnchor.alternateContent = Vml.Spreadsheet.CT_AlternateContent.Parse(childNode, namespaceManager);
+                    oneCellAnchor.alternateContent = CT_AlternateContent.Parse(childNode, namespaceManager);
                 }
                 else if (childNode.LocalName == "clientData")
                 {
