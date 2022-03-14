@@ -301,7 +301,12 @@ namespace NPOI.OOXML.XSSF.UserModel
     }
     public class XSSFBuiltinTableStyle
     {
-        const string presetTableStylesResourceName= "NPOI.XSSF.UserModel.presetTableStyles.xml";
+#if NETSTANDARD2_1 || NETSTANDARD2_0
+        const string presetTableStylesResourceName = "NPOI.OOXML.XSSF.UserModel.presetTableStyles.xml";
+#else
+        const string presetTableStylesResourceName= "presetTableStyles.xml";
+#endif
+
         private static Dictionary<XSSFBuiltinTableStyleEnum, ITableStyle> styleMap = new Dictionary<XSSFBuiltinTableStyleEnum, ITableStyle>();
         public static ITableStyle GetStyle(XSSFBuiltinTableStyleEnum style)
         {
@@ -327,7 +332,7 @@ namespace NPOI.OOXML.XSSF.UserModel
                 foreach (XmlNode child in node.ChildNodes)
                 {
                     String styleName = child.Name;
-                    if (Enum.TryParse<XSSFBuiltinTableStyleEnum>(styleName, out XSSFBuiltinTableStyleEnum builtIn))
+                    if (!Enum.TryParse<XSSFBuiltinTableStyleEnum>(styleName, out XSSFBuiltinTableStyleEnum builtIn))
                     {
                         continue;
                     }

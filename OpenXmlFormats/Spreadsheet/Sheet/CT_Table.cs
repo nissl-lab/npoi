@@ -624,7 +624,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        internal CT_TableStyleInfo AddNewTableStyleInfo()
+        public CT_TableStyleInfo AddNewTableStyleInfo()
         {
             this.tableStyleInfoField = new CT_TableStyleInfo();
             return this.tableStyleInfoField;
@@ -634,6 +634,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.tableColumnsField = new CT_TableColumns();
             return this.tableColumnsField;
+        }
+        public bool IsSetTableStyleInfo()
+        {
+            return this.tableStyleInfoField != null;
         }
     }
     [Serializable]
@@ -686,6 +690,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             var newTableColumn = new CT_TableColumn();
             this.tableColumn.Insert(columnIndex,newTableColumn);
             return newTableColumn;
+        }
+        public List<CT_TableColumn> GetTableColumnList()
+        {
+            if (this.tableColumnField == null)
+            {
+                this.tableColumnField = new List<CT_TableColumn>();
+            }
+            return this.tableColumnField;
         }
         public void RemoveTableColumn(int columnIndex)
         {

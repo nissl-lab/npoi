@@ -30,6 +30,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using NPOI.SS;
 using System.Linq;
+using NPOI.OOXML.XSSF.UserModel;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -219,7 +220,7 @@ namespace NPOI.XSSF.UserModel
             }
             return xmlColumnPrs;
         }
-
+        private string name;
         /**
          * @return the name of the Table, if set
          */
@@ -227,11 +228,22 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return ctTable.name;
+                if (name == null)
+                {
+                    Name = ctTable.name;
+                }
+                return name;
             }
             set 
             {
+                if (value == null)
+                {
+                    ctTable.name=null;
+                    name = null;
+                    return;
+                }
                 ctTable.name = value;
+                name = value;
             }
         }
         public XSSFTableColumn CreateColumn(String columnName)
@@ -300,6 +312,41 @@ namespace NPOI.XSSF.UserModel
 
             return GetColumns()[columnIndex];
         }
+        /**
+         * Get the area reference for the cells which this table covers. The area
+         * includes header rows and totals rows.
+         *
+         * Does not track updates to underlying changes to CTTable To synchronize
+         * with changes to the underlying CTTable, call {@link #updateReferences()}.
+         * 
+         * @return the area of the table
+         * @see "Open Office XML Part 4: chapter 3.5.1.2, attribute ref"
+         */
+        public AreaReference GetCellReferences()
+        {
+            return new AreaReference(
+                    StartCellReference,
+                    EndCellReference,
+                    SpreadsheetVersion.EXCEL2007
+            );
+        }
+        /**
+         * Set the area reference for the cells which this table covers. The area
+         * includes includes header rows and totals rows. Automatically synchronizes
+         * any changes by calling {@link #updateHeaders()}.
+         * 
+         * Note: The area's width should be identical to the amount of columns in
+         * the table or the table may be invalid. All header rows, totals rows and
+         * at least one data row must fit inside the area. Updating the area with
+         * this method does not create or remove any columns and does not change any
+         * cell values.
+         * 
+         * @see "Open Office XML Part 4: chapter 3.5.1.2, attribute ref"
+         */
+        public void SetCellReferences(AreaReference refs)
+        {
+            SetCellRef(refs);
+        }
         protected void SetCellRef(AreaReference refs)
         {
 
@@ -336,6 +383,43 @@ namespace NPOI.XSSF.UserModel
             UpdateReferences();
             UpdateHeaders();
         }
+        private String styleName;
+        public string StyleName
+        {
+            get {
+                if (styleName == null && ctTable.IsSetTableStyleInfo())
+                {
+                    StyleName = ctTable.tableStyleInfo.name;
+                }
+                return styleName;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    if (ctTable.IsSetTableStyleInfo())
+                    {
+                        ctTable.tableStyleInfo.name =null;
+                    }
+                    styleName = null;
+                    return;
+                }
+                if (!ctTable.IsSetTableStyleInfo())
+                {
+                    ctTable.AddNewTableStyleInfo();
+                }
+                ctTable.tableStyleInfo.name = value;
+                styleName = value;
+            }
+        }
+        public ITableStyleInfo Style
+        {
+            get
+            {
+                if (!ctTable.IsSetTableStyleInfo()) return null;
+                return new XSSFTableStyleInfo(((XSSFWorkbook)((XSSFSheet)GetParent()).Workbook).GetStylesSource(), ctTable.tableStyleInfo);
+            }
+        }
         /**
          * @return the display name of the Table, if set
          */
@@ -355,6 +439,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return  the number of mapped table columns (see Open Office XML Part 4: chapter 3.5.1.4)
          */
+        [Obsolete]
         public long NumberOfMappedColumns
         {
             get
@@ -580,7 +665,7 @@ namespace NPOI.XSSF.UserModel
                 CT_TableColumns ctTableColumns = ctTable.tableColumns;
                 if (ctTableColumns != null)
                 {
-                    foreach (CT_TableColumn column in ctTableColumns.tableColumn)
+                    foreach (CT_TableColumn column in ctTableColumns.GetTableColumnList())
                     {
                         XSSFTableColumn tableColumn = new XSSFTableColumn(this, column);
                         columns.Add(tableColumn);
