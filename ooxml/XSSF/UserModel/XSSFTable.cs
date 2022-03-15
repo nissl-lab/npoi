@@ -294,7 +294,7 @@ namespace NPOI.XSSF.UserModel
                 column.name =  "Column " + nextColumnId;
             }
 
-            if (ctTable.@ref != null)
+            /*if (ctTable.@ref != null)
             {
                 // calculate new area
                 int newColumnCount = columnCount + 1;
@@ -306,7 +306,7 @@ namespace NPOI.XSSF.UserModel
                 AreaReference newTableArea = new AreaReference(tableStart, newTableEnd, version);
 
                 SetCellRef(newTableArea);
-            }
+            }*/
 
             UpdateHeaders();
 
@@ -458,7 +458,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 // Casting to int should be safe here - tables larger than the
                 // sheet (which holds the actual data of the table) can't exists.
-                return (int)tableColumns.count;
+                return (int)tableColumns.tableColumn.Count();
             }
         }
         /// <summary>
@@ -702,6 +702,10 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 return ctTable.totalsRowShown;
+            }
+            set 
+            {
+                ctTable.totalsRowShown = value;
             }
         }
 
