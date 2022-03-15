@@ -302,7 +302,7 @@ namespace NPOI.OOXML.XSSF.UserModel
     public class XSSFBuiltinTableStyle
     {
 #if NETSTANDARD2_1 || NETSTANDARD2_0
-        const string presetTableStylesResourceName = "NPOI.OOXML.XSSF.UserModel.presetTableStyles.xml";
+        const string presetTableStylesResourceName = "NPOI.OOXML.Resources.presetTableStyles.xml";
 #else
         const string presetTableStylesResourceName= "presetTableStyles.xml";
 #endif

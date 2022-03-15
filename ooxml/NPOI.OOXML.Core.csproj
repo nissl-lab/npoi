@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="XSSF\UserModel\presetTableStyles.xml" />
+    <EmbeddedResource Include="Resources\presetTableStyles.xml" />
   </ItemGroup>
 
   <ItemGroup>
