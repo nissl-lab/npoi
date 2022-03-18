@@ -201,7 +201,8 @@ namespace NPOI.XSSF.Model
                     foreach (CT_NumFmt nfmt in ctfmts.numFmt)
                     {
                         short formatId = (short)nfmt.numFmtId;
-                        numberFormats.Add(formatId, nfmt.formatCode);
+                        if(!numberFormats.ContainsKey(formatId))
+                            numberFormats.Add(formatId, nfmt.formatCode);
                     }
                 }
 
