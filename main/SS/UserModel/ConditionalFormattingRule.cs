@@ -129,6 +129,29 @@ namespace NPOI.SS.UserModel
          * @return  the second formula
          */
         String Formula2 { get; }
+
+        /// <summary>
+        /// XSSF rules store textual condition values as an attribute and also as a formula that needs shifting.  Using the attribute is simpler/faster.
+        /// HSSF rules don't have this and return null.  We can fall back on the formula for those (AFAIK).
+        /// @return condition text if it exists, or null
+        /// </summary>
+        String Text { get; }
+
+        /// <summary>
+        /// The priority of the rule, if defined, otherwise 0.
+        /// For XSSF, this should always be set.For HSSF, only newer style rules
+        /// have this set, older ones will return 0.
+        /// </summary>
+        /// <returns></returns>
+        int Priority {get; }
+
+        bool StopIfTrue { get; }
+
+        ExcelNumberFormat NumberFormat { get; }
+
+        ConditionFilterType? ConditionFilterType { get; }
+
+        IConditionFilterData FilterConfiguration { get; }
     }
 
 }

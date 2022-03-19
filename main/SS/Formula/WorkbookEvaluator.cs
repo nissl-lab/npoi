@@ -32,6 +32,7 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula.PTG;
     using NPOI.Util;
     using NPOI.SS.Formula.Function;
+    using EnumsNET;
 
     /**
      * Evaluates formula cells.<p/>
@@ -258,12 +259,103 @@ namespace NPOI.SS.Formula
             int sheetIndex = GetSheetIndex(srcCell.Sheet);
             return EvaluateAny(srcCell, sheetIndex, srcCell.RowIndex, srcCell.ColumnIndex, new EvaluationTracker(_cache));
         }
-
-
         /**
-         * @return never <c>null</c>, never {@link BlankEval}
-         */
-        private ValueEval EvaluateAny(IEvaluationCell srcCell, int sheetIndex,
+  * Evaluate a formula outside a cell value, e.g. conditional format rules or data validation expressions
+  * 
+  * @param formula to evaluate
+  * @param ref defines the optional sheet and row/column base for the formula, if it is relative
+  * @return value
+  */
+        public ValueEval Evaluate(String formula, CellReference reference)
+        {
+            String sheetName = reference == null ? null : reference.SheetName;
+            int sheetIndex;
+            if (sheetName == null)
+            {
+                sheetIndex = -1; // workbook scope only
+            }
+            else
+            {
+                sheetIndex = Workbook.GetSheetIndex(sheetName);
+            }
+            int rowIndex = reference == null ? -1 : reference.Row;
+            int colIndex = reference == null ? -1 : reference.Col;
+            OperationEvaluationContext ec = new OperationEvaluationContext(
+                    this,
+                    Workbook,
+                    sheetIndex,
+                    rowIndex,
+                    colIndex,
+                    new EvaluationTracker(_cache)
+                );
+            Ptg[] ptgs = FormulaParser.Parse(formula, (IFormulaParsingWorkbook)Workbook, FormulaType.Cell, sheetIndex, rowIndex);
+            return EvaluateNameFormula(ptgs, ec);
+        }
+        public ValueEval Evaluate(String formula, CellReference target, CellRangeAddressBase region)
+        {
+            return Evaluate(formula, target, region, FormulaType.Cell);
+        }
+        private ValueEval Evaluate(String formula, CellReference target, CellRangeAddressBase region, FormulaType formulaType)
+        {
+            String sheetName = target == null ? null : target.SheetName;
+            if (sheetName == null) throw new ArgumentException("Sheet name is required");
+
+            int sheetIndex = Workbook.GetSheetIndex(sheetName);
+            Ptg[] ptgs = FormulaParser.Parse(formula, (IFormulaParsingWorkbook)Workbook, formulaType, sheetIndex, target.Row);
+
+            AdjustRegionRelativeReference(ptgs, target, region);
+
+            OperationEvaluationContext ec = new OperationEvaluationContext(this, Workbook, sheetIndex, target.Row, target.Col, new EvaluationTracker(_cache),formulaType.GetAttributes().Get<SingleValueAttribute>().IsSingleValue);
+            return EvaluateNameFormula(ptgs, ec);
+        }
+        protected bool AdjustRegionRelativeReference(Ptg[] ptgs, CellReference target, CellRangeAddressBase region)
+        {
+            if (!region.IsInRange(target))
+            {
+                throw new ArgumentException(target + " is not within " + region);
+            }
+
+            //return adjustRegionRelativeReference(ptgs, target.getRow() - region.getFirstRow(), target.getCol() - region.getFirstColumn());
+
+            int deltaRow = target.Row;
+            int deltaColumn = target.Col;
+
+            bool shifted = false;
+            foreach(Ptg ptg in ptgs)
+            {
+                // base class for cell reference "things"
+                if (ptg is RefPtgBase) {
+                RefPtgBase reference = (RefPtgBase)ptg;
+                // re-calculate cell references
+                SpreadsheetVersion version = _workbook.GetSpreadsheetVersion();
+                if (reference.IsRowRelative)
+                {
+                    int rowIndex = reference.Row + deltaRow;
+                    if (rowIndex > version.MaxRows)
+                    {
+                        throw new IndexOutOfRangeException(version.Name + " files can only have " + version.MaxRows + " rows, but row " + rowIndex + " was requested.");
+                    }
+                        reference.Row = rowIndex;
+                    shifted = true;
+                }
+                if (reference.IsColRelative)
+                {
+                    int colIndex = reference.Column + deltaColumn;
+                    if (colIndex > version.MaxColumns)
+                    {
+                        throw new IndexOutOfRangeException(version.Name + " files can only have " + version.MaxColumns + " columns, but column " + colIndex + " was requested.");
+                    }
+                    reference.Column = colIndex;
+                    shifted = true;
+                }
+            }
+        }
+        return shifted;
+    }
+    /**
+     * @return never <c>null</c>, never {@link BlankEval}
+     */
+    private ValueEval EvaluateAny(IEvaluationCell srcCell, int sheetIndex,
                     int rowIndex, int columnIndex, EvaluationTracker tracker)
         {
             bool shouldCellDependencyBeRecorded = _stabilityClassifier == null ? true

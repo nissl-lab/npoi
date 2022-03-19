@@ -190,7 +190,7 @@ namespace NPOI.XSSF.Extractor
                                 if (cell != null)
                                 {
                                     XSSFXmlColumnPr pointer = tableColumns[j - startColumnIndex];
-                                    String localXPath = pointer.GetLocalXPath();
+                                    String localXPath = pointer.LocalXPath;
                                     XmlNode currentNode = GetNodeByXPath(localXPath, tableRootNode, doc, false);
                                     ST_XmlDataType dataType = pointer.GetXmlDataType();
 
