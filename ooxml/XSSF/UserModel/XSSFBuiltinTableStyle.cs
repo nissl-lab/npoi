@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 
-namespace NPOI.OOXML.XSSF.UserModel
+namespace NPOI.XSSF.UserModel
 {
     public enum XSSFBuiltinTableStyleEnum:int
     {
