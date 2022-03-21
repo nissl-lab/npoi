@@ -1848,8 +1848,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "containsMixedTypes", this.containsMixedTypes, false);
             XmlHelper.WriteAttribute(sw, "containsNumber", this.containsNumber, false);
             XmlHelper.WriteAttribute(sw, "containsInteger", this.containsInteger, false);
-            XmlHelper.WriteAttribute(sw, "minValue", this.minValue);
-            XmlHelper.WriteAttribute(sw, "maxValue", this.maxValue);
+            if (this.containsNumber)
+            {
+                XmlHelper.WriteAttribute(sw, "minValue", this.minValue, true);
+                XmlHelper.WriteAttribute(sw, "maxValue", this.maxValue, true);
+            }
+            else
+            {
+                XmlHelper.WriteAttribute(sw, "minValue", this.minValue);
+                XmlHelper.WriteAttribute(sw, "maxValue", this.maxValue);
+            }
+
             XmlHelper.WriteAttribute(sw, "minDate", this.minDate);
             XmlHelper.WriteAttribute(sw, "maxDate", this.maxDate);
             XmlHelper.WriteAttribute(sw, "count", this.count);
