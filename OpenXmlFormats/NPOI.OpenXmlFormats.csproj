@@ -81,6 +81,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SAX">
+      <HintPath>..\tools\Libs\SAX.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -135,6 +138,8 @@
     <Compile Include="Spreadsheet\PivotTable\CT_PivotCacheDefinition.cs" />
     <Compile Include="Spreadsheet\Document\ExternalLinkDocument.cs" />
     <Compile Include="Spreadsheet\PivotTable\CT_PivotTableDefinition.cs" />
+    <Compile Include="Spreadsheet\SheetXmlReader.cs" />
+    <Compile Include="Spreadsheet\Sheet\CT_RowProvider.cs" />
     <Compile Include="Spreadsheet\Styles\CT_Dxfs.cs" />
     <Compile Include="Spreadsheet\Sheet\CT_Table.cs" />
     <Compile Include="Spreadsheet\Styles\CT_TableStyles.cs" />

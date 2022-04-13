@@ -61,6 +61,48 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public static CT_Cell Parse(XmlReader reader, XmlNamespaceManager namespaceManager)
+        {
+            if (reader == null)
+            {
+                return null;
+            }
+            CT_Cell ctObj = new CT_Cell();
+            ctObj.r = reader.GetAttribute("r");
+            ctObj.s = XmlReaderHelper.ReadUInt(reader.GetAttribute("s"));
+            if (reader.GetAttribute("t") != null)
+            {
+                ctObj.t = (ST_CellType)Enum.Parse(typeof(ST_CellType), reader.GetAttribute("t"));
+            }
+            ctObj.cm = XmlReaderHelper.ReadUInt(reader.GetAttribute("cm"));
+            ctObj.vm = XmlReaderHelper.ReadUInt(reader.GetAttribute("vm"));
+            ctObj.ph = XmlReaderHelper.ReadBool(reader.GetAttribute("ph"));
+            while (reader.Read())
+            {
+                if (reader.Name == "f")
+                {
+                    //ctObj.f = CT_CellFormula.Parse(reader, namespaceManager);
+                }
+                else if (reader.Name == "v")
+                {
+                    ctObj.v = reader.ReadInnerXml();
+                }
+                else if (reader.Name == "is")
+                {
+                    //ctObj.@is = CT_Rst.Parse(reader, namespaceManager);
+                }
+                else if (reader.Name == "extLst")
+                {
+                    ctObj.extLst = CT_ExtensionList.Parse(reader, namespaceManager);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return ctObj;
+        }
+
 
 
         internal void Write(StreamWriter sw, string nodeName)

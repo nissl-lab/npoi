@@ -70,15 +70,15 @@ namespace TestCases.SS.Formula.Functions
 
             ConfirmValueError("dividing by zero", "3.14159", "0", ErrorEval.DIV_ZERO);
         }
-        [Test]
-        public void TestWithCellRefs()
-        {
-            IWorkbook wb = new HSSFWorkbook();
-            ISheet sheet = wb.CreateSheet();
-            Util.Utils.AddRow(sheet,0, 5, 2);
-            IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-            ICell cell = wb.GetSheetAt(0).GetRow(0).CreateCell(100);
-            Util.Utils.AssertDouble(fe, cell, "QUOTIENT(A1, B1)", 2.0);
-        }
+        //[Test]
+        //public void TestWithCellRefs()
+        //{
+        //    IWorkbook wb = new HSSFWorkbook();
+        //    ISheet sheet = wb.CreateSheet();
+        //    Util.Utils.AddRow(sheet,0, 5, 2);
+        //    IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+        //    ICell cell = wb.GetSheetAt(0).GetRow(0).CreateCell(100);
+        //    Util.Utils.AssertDouble(fe, cell, "QUOTIENT(A1, B1)", 2.0);
+        //}
     }
 }

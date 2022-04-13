@@ -89,6 +89,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataVirtualization\AsyncVirtualizingCollection.cs" />
+    <Compile Include="DataVirtualization\IItemsProvider.cs" />
+    <Compile Include="DataVirtualization\VirtualizingCollection.cs" />
     <Compile Include="Exceptions\InvalidFormatException.cs" />
     <Compile Include="Exceptions\NotOfficeXmlFileException.cs" />
     <Compile Include="Exceptions\ODFNotOfficeXmlFileException.cs" />
@@ -134,7 +137,9 @@
     <Compile Include="OPC\ZipPackagePart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\DocumentHelper.cs" />
+    <Compile Include="Util\VirtualStream.cs" />
     <Compile Include="Util\XMLConstants.cs" />
+    <Compile Include="Util\XmlReaderHelper.cs" />
     <Compile Include="Util\XmlHelper.cs" />
     <Compile Include="Util\ZipEntrySource.cs" />
     <Compile Include="Util\ZipFileZipEntrySource.cs" />

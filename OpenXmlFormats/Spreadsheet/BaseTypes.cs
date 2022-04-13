@@ -63,7 +63,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "position", this.positionField,true);
+            XmlHelper.WriteAttribute(sw, "position", this.positionField, true);
             sw.Write(">");
             if (this.colorField != null)
             {
@@ -227,6 +227,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public static CT_Extension Parse(XmlReader reader, XmlNamespaceManager namespaceManager)
+        {
+            if (reader == null)
+                return null;
+            CT_Extension ctObj = new CT_Extension();
+            ctObj.uri = reader.GetAttribute("uri");
+            ctObj.Any = reader.ReadInnerXml();
+            return ctObj;
+        }
+
 
 
         internal void Write(StreamWriter sw, string nodeName)
@@ -314,6 +324,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public static CT_ExtensionList Parse(XmlReader reader, XmlNamespaceManager namespaceManager)
+        {
+            if (reader == null)
+                return null;
+            CT_ExtensionList ctObj = new CT_ExtensionList();
+            ctObj.ext = new List<CT_Extension>();
+            while (reader.Read())
+            {
+                if (reader.Name == "ext")
+                    ctObj.ext.Add(CT_Extension.Parse(reader, namespaceManager));
+            }
+            return ctObj;
+        }
 
 
         internal void Write(StreamWriter sw, string nodeName)

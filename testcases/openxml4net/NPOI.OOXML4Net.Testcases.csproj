@@ -97,6 +97,7 @@
     <Compile Include="TestContentType.cs" />
     <Compile Include="TestFileHelper.cs" />
     <Compile Include="TestListParts.cs" />
+    <Compile Include="TestXmlReaderHelper.cs" />
     <Compile Include="TestPackage.cs" />
     <Compile Include="TestPackageCoreProperties.cs" />
     <Compile Include="TestPackagePartName.cs" />

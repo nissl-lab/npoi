@@ -28,7 +28,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool customFormatField;
 
-        private double htField=-1;
+        private double htField = -1;
 
         private bool hiddenField;
 
@@ -55,7 +55,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.s = XmlHelper.ReadUInt(node.Attributes["s"]);
             ctObj.customFormat = XmlHelper.ReadBool(node.Attributes["customFormat"]);
             ctObj.dyDescentField = XmlHelper.ReadDouble(node.Attributes["x14ac:dyDescent"]);
-            if (node.Attributes["ht"]!=null)
+            if (node.Attributes["ht"] != null)
                 ctObj.ht = XmlHelper.ReadDouble(node.Attributes["ht"]);
             ctObj.hidden = XmlHelper.ReadBool(node.Attributes["hidden"]);
             ctObj.outlineLevel = XmlHelper.ReadByte(node.Attributes["outlineLevel"]);
@@ -75,6 +75,48 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public static CT_Row Parse(XmlReader reader, XmlNamespaceManager namespaceManager)
+        {
+            if (reader == null)
+                return null;
+            CT_Row ctObj = new CT_Row();
+            ctObj.r = XmlReaderHelper.ReadUInt(reader.GetAttribute("r"));
+            ctObj.spans = reader.GetAttribute("spans");
+            ctObj.s = XmlReaderHelper.ReadUInt(reader.GetAttribute("s"));
+            ctObj.customFormat = XmlReaderHelper.ReadBool(reader.GetAttribute("customFormat"));
+            ctObj.dyDescentField = XmlReaderHelper.ReadDouble(reader.GetAttribute("x14ac:dyDescent"));
+            if (reader.GetAttribute("ht") != null)
+                ctObj.ht = XmlReaderHelper.ReadDouble(reader.GetAttribute("ht"));
+            ctObj.hidden = XmlReaderHelper.ReadBool(reader.GetAttribute("hidden"));
+            ctObj.outlineLevel = XmlReaderHelper.ReadByte(reader.GetAttribute("outlineLevel"));
+            ctObj.customHeight = XmlReaderHelper.ReadBool(reader.GetAttribute("customHeight"));
+            ctObj.collapsed = XmlReaderHelper.ReadBool(reader.GetAttribute("collapsed"));
+            ctObj.thickTop = XmlReaderHelper.ReadBool(reader.GetAttribute("thickTop"));
+            ctObj.thickBot = XmlReaderHelper.ReadBool(reader.GetAttribute("thickBot"));
+            ctObj.ph = XmlReaderHelper.ReadBool(reader.GetAttribute("ph"));
+            ctObj.c = new List<CT_Cell>();
+
+
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element && reader.Name == "extLst")
+                {
+                    ctObj.extLst = CT_ExtensionList.Parse(reader, namespaceManager);
+                    continue;
+                }
+                else if (reader.NodeType == XmlNodeType.Element && reader.Name == "c")
+                {
+                    ctObj.c.Add(CT_Cell.Parse(reader, namespaceManager));
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return ctObj;
+        }
+
         public bool IsSetR()
         {
             return this.rField > 0;
@@ -86,15 +128,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "r", this.r);
             XmlHelper.WriteAttribute(sw, "spans", this.spans);
             XmlHelper.WriteAttribute(sw, "s", this.s);
-            XmlHelper.WriteAttribute(sw, "customFormat", this.customFormat,false);
-            if (this.ht>=0)
+            XmlHelper.WriteAttribute(sw, "customFormat", this.customFormat, false);
+            if (this.ht >= 0)
                 XmlHelper.WriteAttribute(sw, "ht", this.ht);
-            XmlHelper.WriteAttribute(sw, "hidden", this.hidden,false);
-            XmlHelper.WriteAttribute(sw, "customHeight", this.customHeight,false);
+            XmlHelper.WriteAttribute(sw, "hidden", this.hidden, false);
+            XmlHelper.WriteAttribute(sw, "customHeight", this.customHeight, false);
             XmlHelper.WriteAttribute(sw, "outlineLevel", this.outlineLevel);
             XmlHelper.WriteAttribute(sw, "collapsed", this.collapsed, false);
-            XmlHelper.WriteAttribute(sw, "thickTop", this.thickTop,false);
-            XmlHelper.WriteAttribute(sw, "thickBot", this.thickBot,false);
+            XmlHelper.WriteAttribute(sw, "thickTop", this.thickTop, false);
+            XmlHelper.WriteAttribute(sw, "thickBot", this.thickBot, false);
             XmlHelper.WriteAttribute(sw, "ph", this.ph, false);
             XmlHelper.WriteAttribute(sw, "x14ac:dyDescent", this.dyDescentField, false);
             sw.Write(">");
@@ -158,7 +200,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetHt()
         {
-            return this.htField >=0;
+            return this.htField >= 0;
         }
         public void UnsetHt()
         {

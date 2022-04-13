@@ -272,6 +272,7 @@
     <Compile Include="XSSF\UserModel\XSSFPrintSetup.cs" />
     <Compile Include="XSSF\UserModel\XSSFRelation.cs" />
     <Compile Include="XSSF\UserModel\XSSFRichTextString.cs" />
+    <Compile Include="XSSF\UserModel\XSSFRowProvider.cs" />
     <Compile Include="XSSF\UserModel\XSSFRow.cs" />
     <Compile Include="XSSF\UserModel\XSSFShape.cs" />
     <Compile Include="XSSF\UserModel\XSSFShapeGroup.cs" />
