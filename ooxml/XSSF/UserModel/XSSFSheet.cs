@@ -62,7 +62,7 @@ namespace NPOI.XSSF.UserModel
         private static double DEFAULT_MARGIN_RIGHT = 0.7;
         public static int TWIPS_PER_POINT = 20;
 
-        private const int PAGE_SIZE = 10000;
+        private const int PAGE_SIZE = 1000;
 
         //TODO make the two variable below private!
         internal CT_Sheet sheet;

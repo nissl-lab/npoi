@@ -4,6 +4,7 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.Util;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Xml;
 
@@ -25,7 +26,9 @@ namespace NPOI.XSSF.UserModel
         private XmlNamespaceManager _xmlNamespaceManager;
 
         private XmlTextReader _reader;
-        private int _currentIndex = 0;
+        private int _lastIndex = 0;//已获取队列最后一个元素的索引号
+
+        public static Stopwatch Stopwatch;
 
         public XSSFRowProvider(PackagePart packagePart, XSSFSheet sheet, int rowCount, XmlNamespaceManager xmlNamespaceManager)
         {
@@ -33,6 +36,7 @@ namespace NPOI.XSSF.UserModel
             _sheet = sheet;
             _rowCount = rowCount;
             _xmlNamespaceManager = xmlNamespaceManager;
+            Stopwatch = new Stopwatch();
         }
 
         public int FetchCount()
@@ -42,13 +46,21 @@ namespace NPOI.XSSF.UserModel
 
         public IList<XSSFRow> FetchRange(int startIndex, int count)
         {
-            if (_reader == null || startIndex != _currentIndex)
+            Stopwatch.Start();
+            var rows = GetRows(startIndex, count);
+            Stopwatch.Stop();
+            return rows;
+        }
+
+        private IList<XSSFRow> GetRows(int startIndex, int count)
+        {
+            if (_reader == null || startIndex != _lastIndex + 1)
             {
                 _stream = _packagePart.GetInputStream();
                 CloseReader();
                 _reader = new XmlTextReader(_stream);
                 _reader.DtdProcessing = DtdProcessing.Ignore;
-                _currentIndex = 0;
+                _lastIndex = -1;
             }
 
             List<XSSFRow> rows = new List<XSSFRow>();
@@ -72,20 +84,20 @@ namespace NPOI.XSSF.UserModel
                         case XmlNodeType.Element:
                             if (IsRowElement())
                             {
-                                if (_currentIndex >= startIndex && _currentIndex <= endIndex)
+                                if (_lastIndex + 1 >= startIndex && _lastIndex + 1 <= endIndex)
                                 {
                                     var ct_row = CT_Row.Parse(_reader, _xmlNamespaceManager);
                                     rows.Add(TransferRow(ct_row));
+                                    _lastIndex++;
                                 }
-                                if (_currentIndex == endIndex)
-                                {
-                                    return rows;
-                                }
-                                if (_currentIndex == _rowCount - 1)
+                                if (_lastIndex == _rowCount - 1)
                                 {
                                     CloseReader();
                                 }
-                                _currentIndex++;
+                                if (_lastIndex == endIndex)
+                                {
+                                    return rows;
+                                }
                             }
                             break;
                         case XmlNodeType.EndElement:

@@ -1202,7 +1202,7 @@ namespace TestCases.XSSF.UserModel
             Stopwatch watcher = new Stopwatch();
             watcher.Start();
 
-            var filePath = @"D:\Code\OpenSource\npoi\npoi\testcases\test-data\spreadsheet\ExcelBigData.xlsx";
+            var filePath = @"D:\Code\OpenSource\npoi\npoi\testcases\test-data\spreadsheet\ExcelBigData2.xlsx";
             XSSFWorkbook doc = new XSSFWorkbook(filePath);
 
             Trace.WriteLine(string.Format("XSSFWorkbook Load cost: {0}s", watcher.ElapsedMilliseconds / 1000));
@@ -1242,11 +1242,12 @@ namespace TestCases.XSSF.UserModel
             {
                 var row = enumerator.Current as XSSFRow;
                 var str = i++ + ":" + row.Cells[2].StringCellValue;
-                //Trace.WriteLine(i++ + ":" + row.Cells[2].StringCellValue);
+                //Trace.WriteLine(str);
             }
 
             watcher.Stop();
             Trace.WriteLine(string.Format("GetExcelData by NOPI cost: {0}s", watcher.ElapsedMilliseconds / 1000));
+            Trace.WriteLine(string.Format("FetchRange cost: {0}s", XSSFRowProvider.Stopwatch.ElapsedMilliseconds / 1000));
         }
     }
 }
