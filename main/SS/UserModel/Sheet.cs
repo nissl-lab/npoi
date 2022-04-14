@@ -296,6 +296,12 @@ namespace NPOI.SS.UserModel
         IEnumerator GetEnumerator();
 
         /// <summary>
+        /// Get the virtual row enumerator
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator GetVirtualEnumerator();
+
+        /// <summary>
         /// Gets the flag indicating whether the window should show 0 (zero) in cells Containing zero value.
         /// When false, cells with zero value appear blank instead of showing the number zero.
         /// </summary>

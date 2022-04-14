@@ -30,6 +30,7 @@ using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using TestCases.HSSF;
@@ -1195,5 +1196,26 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void TestReadBigExcel()
+        {
+            Stopwatch watcher = new Stopwatch();
+            watcher.Start();
+
+            var filePath = @"D:\Code\OpenSource\npoi\npoi\testcases\test-data\spreadsheet\ExcelBigData.xlsx";
+            XSSFWorkbook doc = new XSSFWorkbook(filePath);
+
+            var sheet = doc.GetSheetAt(0);
+            var enumerator = sheet.GetVirtualEnumerator();
+            int i = 0;
+            while (enumerator.MoveNext())
+            {
+                var row = enumerator.Current as XSSFRow;
+                System.Diagnostics.Trace.WriteLine(i++ + ":" + row.Cells[2].StringCellValue);
+            }
+
+            watcher.Stop();
+            Console.WriteLine("GetExcelData by NOPI cost: {0}s", watcher.ElapsedMilliseconds / 1000);
+        }
     }
 }

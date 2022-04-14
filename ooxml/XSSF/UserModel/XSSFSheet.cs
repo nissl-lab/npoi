@@ -35,6 +35,8 @@ using NPOI.Util;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel.Helpers;
 using NPOI.POIFS.Crypt;
+using NPOI.OpenXml4Net.Util;
+using NPOI.OpenXml4Net.DataVirtualization;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -60,11 +62,15 @@ namespace NPOI.XSSF.UserModel
         private static double DEFAULT_MARGIN_RIGHT = 0.7;
         public static int TWIPS_PER_POINT = 20;
 
+        private const int PAGE_SIZE = 1000;
+
         //TODO make the two variable below private!
         internal CT_Sheet sheet;
         internal CT_Worksheet worksheet;
 
         private SortedList<int, XSSFRow> _rows = new SortedList<int, XSSFRow>();
+        private VirtualizingCollection<XSSFRow> _virtualRows;
+
         private List<XSSFHyperlink> hyperlinks;
         private ColumnHelper columnHelper;
         private CommentsTable sheetComments;
@@ -141,9 +147,11 @@ namespace NPOI.XSSF.UserModel
 
         internal virtual void Read(Stream is1)
         {
+            int rowCount;
             try
             {
-                XmlDocument doc = ConvertStreamToXml(is1);
+                var ms = GetStreamWithOutSheetData(is1, out rowCount);
+                XmlDocument doc = ConvertStreamToXml(ms);
                 worksheet = WorksheetDocument.Parse(doc, NamespaceManager).GetWorksheet();
             }
             catch (XmlException e)
@@ -152,6 +160,8 @@ namespace NPOI.XSSF.UserModel
             }
 
             InitRows(worksheet);
+            _virtualRows = new VirtualizingCollection<XSSFRow>(new XSSFRowProvider(GetPackagePart(), this, rowCount, NamespaceManager), PAGE_SIZE);
+
             columnHelper = new ColumnHelper(worksheet);
 
             // Look for bits we're interested in
@@ -187,6 +197,11 @@ namespace NPOI.XSSF.UserModel
             InitRows(worksheet);
             columnHelper = new ColumnHelper(worksheet);
             hyperlinks = new List<XSSFHyperlink>();
+        }
+
+        private Stream GetStreamWithOutSheetData(Stream is1, out int rowCount)
+        {
+            return XmlReaderHelper.RemoveSheetData(is1, out rowCount);
         }
 
         private void InitRows(CT_Worksheet worksheetParam)
@@ -439,7 +454,7 @@ namespace NPOI.XSSF.UserModel
             for (int i = 0; i < size; i++)
             {
                 CellRangeAddress region = regions[i];
-                foreach (CellRangeAddress other in regions.Skip(i+1)) //regions.subList(i+1, regions.size()
+                foreach (CellRangeAddress other in regions.Skip(i + 1)) //regions.subList(i+1, regions.size()
                 {
                     if (region.Intersects(other))
                     {
@@ -1382,7 +1397,7 @@ namespace NPOI.XSSF.UserModel
                 return null;
             foreach (CT_MergeCell mc in worksheet.mergeCells.mergeCell)
             {
-                if (mc!=null && !string.IsNullOrEmpty(mc.@ref))
+                if (mc != null && !string.IsNullOrEmpty(mc.@ref))
                 {
                     CellRangeAddress range = CellRangeAddress.ValueOf(mc.@ref);
                     if (range.FirstColumn <= mergedRegion.FirstColumn
@@ -2173,7 +2188,7 @@ namespace NPOI.XSSF.UserModel
 
             int idx = _rows.Count(p => p.Key < row.RowNum);// _rows.headMap(row.getRowNum()).size();
             _rows.Remove(row.RowNum);
-            worksheet.sheetData.RemoveRow(row.RowNum+1); // Note that rows in worksheet.sheetData is 1-based.
+            worksheet.sheetData.RemoveRow(row.RowNum + 1); // Note that rows in worksheet.sheetData is 1-based.
 
             // also remove any comment located in that row
             if (sheetComments != null)
@@ -4463,6 +4478,11 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        public IEnumerator GetVirtualEnumerator()
+        {
+            return _virtualRows.GetEnumerator();
+        }
+
         public IEnumerator GetEnumerator()
         {
             return _rows.Values.GetEnumerator();
@@ -4915,7 +4935,7 @@ namespace NPOI.XSSF.UserModel
             StylesTable styles = ((XSSFWorkbook)dest).GetStylesSource();
             if (copyStyle && Workbook.NumberOfFonts > 0)
             {
-                foreach (var font in((XSSFWorkbook)Workbook).GetStylesSource().GetFonts())
+                foreach (var font in ((XSSFWorkbook)Workbook).GetStylesSource().GetFonts())
                 {
                     styles.PutFont(font);  //TODO::create real font mapping, the correct logic may be wrong
                 }

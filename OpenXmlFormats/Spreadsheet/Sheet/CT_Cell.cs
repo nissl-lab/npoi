@@ -61,7 +61,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
-        public static CT_Cell Parse(XmlReader reader, XmlNamespaceManager namespaceManager)
+        public static CT_Cell Parse(XmlTextReader reader, XmlNamespaceManager namespaceManager)
         {
             if (reader == null)
             {
@@ -77,28 +77,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.cm = XmlReaderHelper.ReadUInt(reader.GetAttribute("cm"));
             ctObj.vm = XmlReaderHelper.ReadUInt(reader.GetAttribute("vm"));
             ctObj.ph = XmlReaderHelper.ReadBool(reader.GetAttribute("ph"));
+
+            if (reader.IsEmptyElement)
+            {
+                return ctObj;
+            }
+
             while (reader.Read())
             {
-                if (reader.Name == "f")
+                if (reader.NodeType == XmlNodeType.Element)
                 {
-                    //ctObj.f = CT_CellFormula.Parse(reader, namespaceManager);
+                    if (reader.Name == "f")
+                    {
+                        //ctObj.f = CT_CellFormula.Parse(reader, namespaceManager);
+                    }
+                    else if (reader.Name == "v")
+                    {
+                        ctObj.v = reader.ReadInnerXml();
+                    }
+                    else if (reader.Name == "is")
+                    {
+                        //ctObj.@is = CT_Rst.Parse(reader, namespaceManager);
+                    }
+                    else if (reader.Name == "extLst")
+                    {
+                        ctObj.extLst = CT_ExtensionList.Parse(reader, namespaceManager);
+                    }
                 }
-                else if (reader.Name == "v")
+
+                if (reader.NodeType == XmlNodeType.EndElement && reader.Name == "c")
                 {
-                    ctObj.v = reader.ReadInnerXml();
+                    return ctObj;
                 }
-                else if (reader.Name == "is")
-                {
-                    //ctObj.@is = CT_Rst.Parse(reader, namespaceManager);
-                }
-                else if (reader.Name == "extLst")
-                {
-                    ctObj.extLst = CT_ExtensionList.Parse(reader, namespaceManager);
-                }
-                else
-                {
-                    break;
-                }
+
             }
             return ctObj;
         }

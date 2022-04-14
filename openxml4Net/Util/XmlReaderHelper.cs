@@ -242,231 +242,50 @@ namespace NPOI.OpenXml4Net.Util
             }
         }
 
-        /// <summary>
-        /// xml拆分
-        /// </summary>
-        /// <param name="path">大文件路径</param>
-        /// <param name="nodeCount">小文件中节点数</param>
-        public static void SplitXml(string path, int nodeCount)
+        public static Stream RemoveSheetData(Stream sourceStream, out int rowCount)
         {
-            XmlTextReader reader = new XmlTextReader(path);
-            reader.DtdProcessing = DtdProcessing.Ignore;
-            XmlWriter writer = null;
-            string rootName = string.Empty;
-            string filePath = path.Substring(0, path.LastIndexOf("."));
-            try
-            {
-                List<string[]> rootAttributes = new List<string[]>();
-                int count = 0;
-                while (reader.Read())
-                {
-                    switch (reader.NodeType)
-                    {
-                        case XmlNodeType.Whitespace:
-                            if (writer != null && writer.WriteState != WriteState.Closed)
-                            {
-                                writer.WriteWhitespace(reader.Value);
-                            }
-
-                            break;
-                        case XmlNodeType.Element:
-                            if (reader.Depth == 0) rootName = reader.Name;
-
-                            if (reader.Name == rootName) // root
-                            {
-                                // read root Attributes
-                                if (reader.HasAttributes)
-                                {
-                                    rootAttributes = new List<string[]>();
-                                    for (int i = 0; i < reader.AttributeCount; i++)
-                                    {
-                                        reader.MoveToAttribute(i);
-                                        rootAttributes.Add(new string[] { reader.Name, reader.Value });
-                                    }
-                                    reader.MoveToElement();
-                                }
-                            }
-                            else
-                            {
-                                if (reader.Depth == 1 && count % nodeCount == 0)
-                                {
-                                    writer = XmlWriter.Create(string.Format(filePath + ".part{0}.xml", count / nodeCount + 1));
-
-                                    writer.WriteStartDocument(); // <?xml version="1.0" encoding="utf-8"?>
-                                    writer.WriteWhitespace(Environment.NewLine);
-
-                                    // write root Start Element
-                                    writer.WriteStartElement(rootName);
-                                    // write root Attributes
-                                    foreach (var attribute in rootAttributes)
-                                    {
-                                        writer.WriteStartAttribute(attribute[0]);
-                                        writer.WriteString(attribute[1]);
-                                        writer.WriteEndAttribute();
-                                    }
-                                    writer.WriteWhitespace(Environment.NewLine);
-                                }
-
-                                if (reader.IsEmptyElement) // empty element, <{0} />
-                                {
-                                    writer.WriteRaw(string.Format("<{0} />", reader.Name));
-                                }
-                                else
-                                {
-                                    // writer Start Element
-                                    writer.WriteStartElement(reader.Name);
-                                    // writer Element Attributes
-                                    if (reader.HasAttributes)
-                                    {
-                                        for (int i = 0; i < reader.AttributeCount; i++)
-                                        {
-                                            reader.MoveToAttribute(i);
-                                            writer.WriteStartAttribute(reader.Name);
-                                            writer.WriteString(reader.Value);
-                                            writer.WriteEndAttribute();
-                                        }
-                                        reader.MoveToElement();
-                                    }
-                                }
-                            }
-
-                            break;
-                        case XmlNodeType.Text:
-                            writer.WriteValue(reader.Value);
-
-                            break;
-                        case XmlNodeType.EndElement:
-                            if (reader.Depth == 1)
-                            {
-                                writer.WriteEndElement();
-                                count++;
-
-                                // write root end element
-                                if (count > 0 && count % nodeCount == 0)
-                                {
-                                    writer.WriteWhitespace(Environment.NewLine);
-                                    writer.WriteEndElement();
-                                    writer.Close();
-                                }
-                            }
-                            else
-                            {
-                                if (reader.Name != rootName)
-                                    writer.WriteEndElement();
-                            }
-
-                            // write root end element
-                            if (reader.Depth == 0 && writer.WriteState != WriteState.Closed)
-                            {
-                                writer.WriteWhitespace(Environment.NewLine);
-                                writer.WriteEndElement();
-                                writer.Close();
-                            }
-
-                            break;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            finally
-            {
-                if (writer != null && writer.WriteState != WriteState.Closed)
-                    writer.Close();
-
-                if (reader != null && reader.ReadState != ReadState.Closed)
-                    reader.Close();
-            }
-        }
-
-        public static long[] CountPosition(string sourcePath, int depth, string elementName)
-        {
-            long[] rst = new long[2];
-            long num = 0;
-            var sourceStream = File.Open(sourcePath, FileMode.Open);
             XmlTextReader reader = new XmlTextReader(sourceStream);
-            bool isInRemoveElement = false;
+            reader.DtdProcessing = DtdProcessing.Ignore;
+            rowCount = 0;
+
+            int depth = 1;
+            string removeElementName = "sheetData";
+            string countElementName = "row";
+
+            MemoryStream ms = new MemoryStream();
+            var writer = new XmlTextWriter(ms, reader.Encoding);
             try
             {
+                bool isInRemoveElement = false;
                 while (reader.Read())
                 {
-                    if (isInRemoveElement && reader.NodeType != XmlNodeType.EndElement && reader.Depth <= depth)
+                    //go in sheetData node
+                    if (!isInRemoveElement && reader.NodeType == XmlNodeType.Element && reader.Depth == depth && reader.Name == removeElementName)
+                    {
+                        isInRemoveElement = true;
+                    }
+
+                    //go out sheetData node
+                    if (isInRemoveElement && reader.NodeType == XmlNodeType.EndElement && reader.Depth == depth && reader.Name == removeElementName)
                     {
                         isInRemoveElement = false;
-                        rst[1] = num;
-                        break;
-                    }
-                    if (isInRemoveElement)
-                    {
                         continue;
                     }
 
-                    num += reader.Value.Length;
-
-                    switch (reader.NodeType)
-                    {
-                        case XmlNodeType.Element:
-                            if (reader.Depth == depth && reader.Name == elementName)
-                            {
-                                isInRemoveElement = true;
-                                rst[0] = num;
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            finally
-            {
-                if (reader != null && reader.ReadState != ReadState.Closed)
-                    reader.Close();
-            }
-            return rst;
-        }
-
-        /// <summary>
-        /// Remove element and save to a new file
-        /// </summary>
-        /// <param name="sourcePath"></param>
-        /// <param name="newPath"></param>
-        /// <param name="depth"></param>
-        /// <param name="elementName"></param>
-        public static void RemoveXmlElement(string sourcePath, string newPath, int depth, string elementName)
-        {
-            var sourceStream = File.Open(sourcePath, FileMode.Open);
-
-            //var virtualStream = new VirtualStream(sourceStream, 8192, 67145142);
-            var virtualStream = new VirtualStream(sourceStream, 1172, 33760);
-
-            XmlTextReader reader = new XmlTextReader(virtualStream);
-
-            reader.DtdProcessing = DtdProcessing.Ignore;
-            XmlTextWriter writer = null;
-            bool isInRemoveElement = false;
-            try
-            {
-                while (reader.Read())
-                {
-                    if (isInRemoveElement && reader.NodeType != XmlNodeType.EndElement && reader.Depth <= depth)
-                    {
-                        isInRemoveElement = false;
-                    }
+                    //is in sheetData node
                     if (isInRemoveElement)
                     {
+                        //go in row node
+                        if (reader.NodeType == XmlNodeType.Element && reader.Name == countElementName)
+                        {
+                            rowCount++;
+                        }
                         continue;
                     }
 
                     switch (reader.NodeType)
                     {
                         case XmlNodeType.XmlDeclaration:
-                            writer = new XmlTextWriter(File.Open(newPath, FileMode.OpenOrCreate), reader.Encoding);
                             writer.WriteStartDocument(true);
 
                             break;
@@ -484,12 +303,6 @@ namespace NPOI.OpenXml4Net.Util
                                 break;
                             }
 
-                            if (reader.Depth == depth && reader.Name == elementName)
-                            {
-                                isInRemoveElement = true;
-                                break;
-                            }
-
                             WriteElement(reader, writer);
                             break;
                         case XmlNodeType.Text:
@@ -500,7 +313,8 @@ namespace NPOI.OpenXml4Net.Util
 
                             if (reader.Depth == 0 && writer.WriteState != WriteState.Closed)
                             {
-                                writer.Close();
+                                writer.Flush();
+                                //writer.Close();
                             }
 
                             break;
@@ -514,55 +328,14 @@ namespace NPOI.OpenXml4Net.Util
             finally
             {
                 if (writer != null && writer.WriteState != WriteState.Closed)
-                    writer.Close();
+                    //writer.Close();
 
-                if (reader != null && reader.ReadState != ReadState.Closed)
-                    reader.Close();
+                    if (reader != null && reader.ReadState != ReadState.Closed)
+                        reader.Close();
             }
-        }
 
-        public static XmlTextReader GetTextReaderXmlElement(string sourcePath, int depth, string elementName)
-        {
-            var sourceStream = File.Open(sourcePath, FileMode.Open);
-            var virtualStream = new VirtualStream(sourceStream, 1172, 33760);
-
-            XmlTextReader reader = new XmlTextReader(virtualStream);
-            try
-            {
-                while (reader.Read())
-                {
-                    switch (reader.NodeType)
-                    {
-                        case XmlNodeType.XmlDeclaration:
-
-                            break;
-                        case XmlNodeType.Whitespace:
-
-                            break;
-                        case XmlNodeType.Element:
-
-                            break;
-                        case XmlNodeType.Text:
-                            break;
-                        case XmlNodeType.EndElement:
-
-                            break;
-                        default:
-
-                            break;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            finally
-            {
-                if (reader != null && reader.ReadState != ReadState.Closed)
-                    reader.Close();
-            }
-            return reader;
+            ms.Position = 0;
+            return ms;
         }
 
         private static void WriteElement(XmlTextReader reader, XmlTextWriter writer)

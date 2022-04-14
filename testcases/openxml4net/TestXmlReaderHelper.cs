@@ -15,24 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
+using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using NPOI.OpenXml4Net.OPC;
-using NPOI.OpenXml4Net.OPC.Internal;
-using System.IO;
-using System.Collections.Generic;
-using System;
-using TestCases.OpenXml4Net;
-using NPOI.Util;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using NUnit.Framework;
-using System.Xml;
-using System.Text;
-using ICSharpCode.SharpZipLib.Zip;
-using System.Collections;
-using NPOI.SS.UserModel;
-using NPOI;
-using NPOI.Openxml4Net.Exceptions;
 using NPOI.OpenXml4Net.Util;
+using NPOI.Util;
+using NUnit.Framework;
+using System;
+using System.IO;
+using System.Xml;
 
 namespace TestCases.OpenXml4Net.OPC
 {
@@ -41,74 +31,15 @@ namespace TestCases.OpenXml4Net.OPC
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(TestPackage));
 
-        /**
-         * Test that just opening and closing the file doesn't alter the document.
-         */
-        [Test]
-        public void TestOpenSave()
-        {
-            //var filePath = @"D:\Documents\C04Tencent\02项目建设\20220331管家2022H1性能优化\资料\sheet2.xml";
-            var filePath = @"D:\Documents\C04Tencent\02项目建设\20220331管家2022H1性能优化\资料\test.txt";
-            try
-            {
-                XmlReaderHelper.SplitXml(filePath, 10);
-            }
-            catch (Exception ex)
-            {
-            }
-        }
-
-        [Test]
-        public void TestCountPosition()
-        {
-            var fileName = @"D:\Documents\C04Tencent\02项目建设\20220331管家2022H1性能优化\资料\sheet2-XmlDocument.xml";
-            string filePath = fileName.Substring(0, fileName.LastIndexOf("."));
-            try
-            {
-                var rst = XmlReaderHelper.CountPosition(fileName, 1, "sheetData");
-            }
-            catch (Exception ex)
-            {
-            }
-        }
-
-        [Test]
-        public void TestRemoveXmlElement()
-        {
-            var fileName = @"D:\Documents\C04Tencent\02项目建设\20220331管家2022H1性能优化\资料\sheet2-XmlDocument.xml";
-            string filePath = fileName.Substring(0, fileName.LastIndexOf("."));
-            var outfile = filePath + "_structure.xml";
-
-            if (File.Exists(outfile))
-            {
-                try
-                {
-                    File.Delete(outfile);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-            }
-
-            try
-            {
-                XmlReaderHelper.RemoveXmlElement(fileName, outfile, 1, "sheetData");
-            }
-            catch (Exception ex)
-            {
-            }
-        }
-
+        private string fileName = @"D:\Code\OpenSource\npoi\npoi\testcases\test-data\spreadsheet\ExcelBigData.xlsx";
+        private string xmlfileName = @"D:\Code\OpenSource\npoi\npoi\testcases\test-data\spreadsheet\ExcelBigData_sheet2.xml";
 
         [Test]
         public void TestGetTextReaderXmlElement()
         {
-            var fileName = @"D:\Documents\C04Tencent\02项目建设\20220331管家2022H1性能优化\资料\sheet2-XmlDocument.xml";
-            //var fileName = @"D:\Documents\C04Tencent\02项目建设\20220331管家2022H1性能优化\资料\test.xml";
-            string filePath = fileName.Substring(0, fileName.LastIndexOf("."));
+            string filePath = xmlfileName.Substring(0, xmlfileName.LastIndexOf("."));
 
-            var sourceStream = File.Open(fileName, FileMode.Open);
+            var sourceStream = File.Open(xmlfileName, FileMode.Open);
 
             var strbytes = StreamToBytes(sourceStream);
             var str = ConvertBytes(strbytes);
@@ -125,9 +56,8 @@ namespace TestCases.OpenXml4Net.OPC
 
 
         [Test]
-        public void TestZip()
+        public void TestXmlTextReaderOFZipStream()
         {
-            var fileName = @"D:\Documents\C04Tencent\02项目建设\20220331管家2022H1性能优化\资料\导入关键词30w物料模板.xlsx";
             string filePath = fileName.Substring(0, fileName.LastIndexOf("."));
 
             var opcPackage = OPCPackage.Open(fileName);
@@ -139,22 +69,85 @@ namespace TestCases.OpenXml4Net.OPC
                 {
                     var sourceStream = part.GetInputStream();
 
-                    var strbytes = StreamToBytes(sourceStream);
-                    var str = ConvertBytes(strbytes);
-                    var position1 = str.IndexOf("<sheetData>");
-                    var position2 = str.IndexOf("</sheetData>") + "</sheetData>".Length;
+                    int elementCount = 0;
 
-                    var virtualStream = new VirtualStream(sourceStream, position1, position2);
+                    XmlTextReader reader = new XmlTextReader(sourceStream);
+                    while (reader.Read())
+                    {
+                        switch (reader.NodeType)
+                        {
+                            case XmlNodeType.XmlDeclaration:
 
-                    WriteStream(filePath, virtualStream);
+                                break;
+                            case XmlNodeType.Whitespace:
 
-                    virtualStream.Close();
-                    sourceStream.Close();
+                                break;
+                            case XmlNodeType.Element:
+                                if (reader.Depth == 2 && reader.Name == "row")
+                                {
+                                    elementCount++;
+                                }
+                                reader.MoveToElement();
+                                break;
+                            case XmlNodeType.Text:
+                                break;
+                            case XmlNodeType.EndElement:
+                                break;
+                        }
+                    }
+
+                    reader.Close();
                 }
             }
         }
 
-        private void WriteStream(string filePath, VirtualStream virtualStream)
+
+        [Test]
+        public void TestXmlTextReaderOFVirtualZipStream()
+        {
+            string filePath = fileName.Substring(0, fileName.LastIndexOf("."));
+
+            var opcPackage = OPCPackage.Open(fileName);
+            var list = opcPackage.GetParts();
+
+            foreach (var part in list)
+            {
+                if (part.PartName.Name == "/xl/worksheets/sheet1.xml")
+                {
+                    InflaterInputStream sourceStream = (InflaterInputStream)part.GetInputStream();
+
+                    var virtualStream = new VirtualStream(sourceStream, 1872, 50000);
+
+                }
+            }
+        }
+
+        [Test]
+        public void TestRemoveSheetData()
+        {
+            var opcPackage = OPCPackage.Open(fileName);
+            var list = opcPackage.GetParts();
+
+            foreach (var part in list)
+            {
+                if (part.PartName.Name == "/xl/worksheets/sheet1.xml")
+                {
+                    InflaterInputStream sourceStream = (InflaterInputStream)part.GetInputStream();
+
+                    int rowCount = 0;
+                    var ms = XmlReaderHelper.RemoveSheetData(sourceStream, out rowCount);
+
+                    XmlDocument xmlDoc = new XmlDocument();
+                    XmlHelper.LoadXmlSafe(xmlDoc, ms);
+
+                    string filePath = fileName.Substring(0, fileName.LastIndexOf("."));
+                    WriteStream(filePath, ms);
+                }
+            }
+
+        }
+
+        private void WriteStream(string filePath, Stream stream)
         {
             var outfile = filePath + "_data.xml";
             if (File.Exists(outfile))
@@ -170,7 +163,14 @@ namespace TestCases.OpenXml4Net.OPC
             }
             using (var fs = new FileStream(outfile, FileMode.OpenOrCreate))
             {
-                byte[] srcBuf = StreamToBytes(virtualStream);
+                if (stream is MemoryStream)
+                {
+                    BinaryWriter w = new BinaryWriter(fs);
+                    w.Write(((MemoryStream)stream).ToArray());
+                    fs.Close();
+                    return;
+                }
+                byte[] srcBuf = StreamToBytes(stream);
                 fs.Write(srcBuf, 0, srcBuf.Length);
                 fs.Flush();
             }

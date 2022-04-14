@@ -935,6 +935,11 @@ namespace NPOI.HSSF.UserModel
             get { return _sheet; }
         }
 
+        public IEnumerator GetVirtualEnumerator()
+        {
+            throw new NotSupportedException();
+        }
+
         /// <summary>
         /// Sets the active cell.
         /// </summary>

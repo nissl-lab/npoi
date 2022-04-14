@@ -13,22 +13,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_SheetData
     {
-        private const int PAGE_SIZE = 1000;
-
-        public VirtualizingCollection<CT_Row> RowCollection;
-
-        public static CT_SheetData Parse(string sheetPath, XmlNamespaceManager namespaceManager)
-        {
-            if (sheetPath == null)
-                return null;
-            CT_SheetData ctObj = new CT_SheetData();
-            ctObj.RowCollection = new VirtualizingCollection<CT_Row>(new CT_RowProvider
-            {
-                sheetPath = sheetPath,
-                namespaceManager = namespaceManager
-            }, PAGE_SIZE);
-            return ctObj;
-        }
 
         public static CT_SheetData Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {

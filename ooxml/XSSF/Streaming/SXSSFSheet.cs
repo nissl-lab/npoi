@@ -781,6 +781,11 @@ namespace NPOI.XSSF.Streaming
             return (IEnumerator<IRow>)new SortedDictionary<int,SXSSFRow>(_rows).Values.GetEnumerator();
         }
 
+        public IEnumerator GetVirtualEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
         public double GetMargin(MarginType margin)
         {
             return _sh.GetMargin(margin);
@@ -1428,5 +1433,6 @@ namespace NPOI.XSSF.Streaming
         {
             throw new NotImplementedException();
         }
+
     }
 }

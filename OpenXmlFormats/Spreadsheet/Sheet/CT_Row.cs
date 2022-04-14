@@ -75,7 +75,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
-        public static CT_Row Parse(XmlReader reader, XmlNamespaceManager namespaceManager)
+        public static CT_Row Parse(XmlTextReader reader, XmlNamespaceManager namespaceManager)
         {
             if (reader == null)
                 return null;
@@ -95,7 +95,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.thickBot = XmlReaderHelper.ReadBool(reader.GetAttribute("thickBot"));
             ctObj.ph = XmlReaderHelper.ReadBool(reader.GetAttribute("ph"));
             ctObj.c = new List<CT_Cell>();
-
 
             while (reader.Read())
             {

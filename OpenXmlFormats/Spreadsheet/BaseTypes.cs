@@ -324,16 +324,30 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
-        public static CT_ExtensionList Parse(XmlReader reader, XmlNamespaceManager namespaceManager)
+        //reader.Name is extLst
+        public static CT_ExtensionList Parse(XmlTextReader reader, XmlNamespaceManager namespaceManager)
         {
             if (reader == null)
                 return null;
             CT_ExtensionList ctObj = new CT_ExtensionList();
             ctObj.ext = new List<CT_Extension>();
+
+            if (reader.IsEmptyElement)
+            {
+                return ctObj;
+            }
+
             while (reader.Read())
             {
-                if (reader.Name == "ext")
+                if (reader.NodeType == XmlNodeType.Element && reader.Name == "ext")
+                {
                     ctObj.ext.Add(CT_Extension.Parse(reader, namespaceManager));
+                }
+
+                if (reader.NodeType == XmlNodeType.EndElement && reader.Name == "extLst")
+                {
+                    break;
+                }
             }
             return ctObj;
         }

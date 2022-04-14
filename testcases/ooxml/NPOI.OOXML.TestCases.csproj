@@ -124,7 +124,6 @@
     <Compile Include="TestDetectAsOOXML.cs" />
     <Compile Include="TestEmbeded.cs" />
     <Compile Include="TestPOIXMLDocument.cs" />
-    <Compile Include="TestPOIXMLDocument2.cs" />
     <Compile Include="TestPOIXMLProperties.cs" />
     <Compile Include="Util\TestIdentifierManager.cs" />
     <Compile Include="XSSF\Extractor\TestXSSFExcelExtractor.cs" />
