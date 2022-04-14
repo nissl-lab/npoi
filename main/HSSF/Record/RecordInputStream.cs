@@ -543,7 +543,7 @@ namespace NPOI.HSSF.Record
         {
             //Using a ByteArrayOutputStream is just an easy way to Get a
             //growable array of the data.
-            using (MemoryStream out1 = new MemoryStream(2 * MAX_RECORD_DATA_SIZE))
+            using (MemoryStream out1 = RecyclableMemory.GetStream(2 * MAX_RECORD_DATA_SIZE))
             {
 
                 while (true)

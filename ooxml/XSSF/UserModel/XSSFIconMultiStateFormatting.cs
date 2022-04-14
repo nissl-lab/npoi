@@ -19,6 +19,7 @@
 namespace NPOI.XSSF.UserModel
 {
     using System;
+    using EnumsNET;
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.SS.UserModel;
     using NPOI.XSSF.Util;
@@ -46,7 +47,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                ST_IconSetType xIconSet = XmlEnumParser<ST_IconSetType>.ForName(value.name, ST_IconSetType.Item3TrafficLights1);
+                ST_IconSetType xIconSet = Enums.Parse<ST_IconSetType>(value.name, false, EnumFormat.Description);
                 _iconset.iconSet = (xIconSet);
             }
         }

@@ -63,10 +63,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
             sw.Write(">");
-            if (this.sortState != null)
-                this.sortState.Write(sw, "sortState");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
             if (this.filterColumn != null)
             {
                 foreach (CT_FilterColumn x in this.filterColumn)
@@ -74,6 +70,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "filterColumn");
                 }
             }
+            if (this.sortState != null)
+                this.sortState.Write(sw, "sortState");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
@@ -900,73 +900,71 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
     public enum ST_IconSetType
     {
-
-    
-        [XmlEnum("3Arrows")]
+        [Description("3Arrows")]
         Item3Arrows,
 
     
-        [XmlEnum("3ArrowsGray")]
+        [Description("3ArrowsGray")]
         Item3ArrowsGray,
 
     
-        [XmlEnum("3Flags")]
+        [Description("3Flags")]
         Item3Flags,
 
     
-        [XmlEnum("3TrafficLights1")]
+        [Description("3TrafficLights1")]
         Item3TrafficLights1,
 
     
-        [XmlEnum("3TrafficLights2")]
+        [Description("3TrafficLights2")]
         Item3TrafficLights2,
 
     
-        [XmlEnum("3Signs")]
+        [Description("3Signs")]
         Item3Signs,
 
     
-        [XmlEnum("3Symbols")]
+        [Description("3Symbols")]
         Item3Symbols,
 
     
-        [XmlEnum("3Symbols2")]
+        [Description("3Symbols2")]
         Item3Symbols2,
 
     
-        [XmlEnum("4Arrows")]
+        [Description("4Arrows")]
         Item4Arrows,
 
     
-        [XmlEnum("4ArrowsGray")]
+        [Description("4ArrowsGray")]
         Item4ArrowsGray,
 
     
-        [XmlEnum("4RedToBlack")]
+        [Description("4RedToBlack")]
         Item4RedToBlack,
 
     
-        [XmlEnum("4Rating")]
+        [Description("4Rating")]
         Item4Rating,
 
     
-        [XmlEnum("4TrafficLights")]
+        [Description("4TrafficLights")]
         Item4TrafficLights,
 
     
-        [XmlEnum("5Arrows")]
+        [Description("5Arrows")]
         Item5Arrows,
 
     
-        [XmlEnum("5ArrowsGray")]
+        [Description("5ArrowsGray")]
         Item5ArrowsGray,
 
     
-        [XmlEnum("5Rating")]
+        [Description("5Rating")]
         Item5Rating,
 
     
-        [XmlEnum("5Quarters")]
+        [Description("5Quarters")]
         Item5Quarters,
     }
 

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using System.ArrayExtensions;
+using System;
+using NPOI.Util.ArrayExtensions;
 
-namespace System
+namespace NPOI.Util
 {
     public static class ObjectExtensions
     {

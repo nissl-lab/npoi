@@ -30,6 +30,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private byte[] rsidDelField;
 
         private byte[] rsidRField;
+        
+        Vml.CT_AlternateContent alternateContentField = null;
 
         public CT_R()
         {
@@ -48,6 +50,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.rPrField = value;
+            }
+        }
+        public Vml.CT_AlternateContent alternateContent
+        {
+            get
+            {
+                return alternateContentField;
+            }
+            set
+            {
+                this.alternateContentField = value;
             }
         }
 
@@ -373,6 +386,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             ctObj.rsidRPr = XmlHelper.ReadBytes(node.Attributes["w:rsidRPr"]);
             ctObj.rsidDel = XmlHelper.ReadBytes(node.Attributes["w:rsidDel"]);
             ctObj.rsidR = XmlHelper.ReadBytes(node.Attributes["w:rsidR"]);
+            
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "rPr")
@@ -441,6 +455,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 {
                     ctObj.Items.Add(CT_Drawing.Parse(childNode, namespaceManager));
                     ctObj.ItemsElementName.Add(RunItemsChoiceType.drawing);
+                }
+                else if (childNode.LocalName == "AlternateContent")
+                {
+                    ctObj.alternateContent = Vml.CT_AlternateContent.Parse(childNode, namespaceManager);
                 }
                 else if (childNode.LocalName == "endnoteRef")
                 {
@@ -551,6 +569,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
             int i = 0;
+
+
             foreach (object o in this.Items)
             {
                 if ((o is CT_Text) && this.ItemsElementName[i] == RunItemsChoiceType.instrText)
@@ -618,6 +638,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_Empty&& this.ItemsElementName[i]== RunItemsChoiceType.yearShort)
                     sw.Write("<w:yearShort/>");
                 i++;
+            }
+            if (this.alternateContent != null)
+            {
+                this.alternateContent.Write(sw, "AlternateContent");
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }

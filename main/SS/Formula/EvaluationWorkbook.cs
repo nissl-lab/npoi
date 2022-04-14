@@ -128,6 +128,8 @@ namespace NPOI.SS.Formula
          * @see WorkbookEvaluator#clearAllCachedResultValues()
          */
         void ClearAllCachedResultValues();
+
+        SpreadsheetVersion GetSpreadsheetVersion();
     }
 
     public class ExternalName

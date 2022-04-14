@@ -648,6 +648,7 @@ namespace NPOI.XSSF.Streaming
 
         public ISheet CreateSheet(string sheetname)
         {
+            SS.Util.WorkbookUtil.ValidateSheetName(sheetname);
             return CreateAndRegisterSXSSFSheet(XssfWorkbook.CreateSheet(sheetname));
         }
 
@@ -751,7 +752,10 @@ namespace NPOI.XSSF.Streaming
             //  it's a newly created one
             XssfWorkbook.Close();
         }
-
+        public void Write(Stream stream, bool leaveOpen = false)
+        {
+            this.Write(stream);
+        }
         public void Write(Stream stream)
         {
             FlushSheets();
@@ -967,6 +971,9 @@ namespace NPOI.XSSF.Streaming
         {
             return XssfWorkbook.IsDate1904();
         }
+
+
+
         //TODO: missing method isDate1904, isHidden, setHidden
 
         private class SheetEnumerator<T> : IEnumerator<T> where T : class, ISheet

@@ -122,7 +122,7 @@ namespace TestCases.SS.Util
                 FileStream outputStream = new FileStream(filename, FileMode.Create);
                 try
                 {
-                    workbook.Write(outputStream);
+                    workbook.Write(outputStream, false);
                 }
                 finally
                 {

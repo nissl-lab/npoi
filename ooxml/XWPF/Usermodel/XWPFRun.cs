@@ -1153,7 +1153,7 @@ namespace NPOI.XWPF.UserModel
                 prstGeom.prst = (ST_ShapeType.rect);
                 prstGeom.AddNewAvLst();
 
-                using (var ms = new MemoryStream())
+                using (var ms = RecyclableMemory.GetStream())
                 {
                     StreamWriter sw = new StreamWriter(ms);
                     pic.Write(sw, "pic:pic");

@@ -411,12 +411,16 @@ namespace NPOI.SS.Util
          * @param useMergedCells    whether to use merged cells
          * @param firstRow  0-based index of the first row to consider (inclusive)
          * @param lastRow   0-based index of the last row to consider (inclusive)
+         * @param maxRows   limit the scope to maxRows rows to speed up the function, or leave 0 (optional)
          * @return  the width in pixels or -1 if cell is empty
          */
-        public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells, int firstRow, int lastRow)
+        public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells, int firstRow, int lastRow, int maxRows=0)
         {
             DataFormatter formatter = new DataFormatter();
             int defaultCharWidth = GetDefaultCharWidth(sheet.Workbook);
+
+            // No need to explore the whole sheet: explore only the first maxRows lines
+            if (maxRows > 0 && lastRow - firstRow > maxRows) lastRow = firstRow + maxRows;
 
             double width = -1;
             for (int rowIdx = firstRow; rowIdx <= lastRow; ++rowIdx)

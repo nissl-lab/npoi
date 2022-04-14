@@ -148,7 +148,7 @@ namespace NPOI.POIFS.Storage
                                                     BlockWritable [] store,
                                                     int size)
         {
-            using (MemoryStream stream = new MemoryStream())
+            using (MemoryStream stream = Util.RecyclableMemory.GetStream())
             {
 
                 for (int j = 0; j < store.Length; j++)
@@ -156,11 +156,11 @@ namespace NPOI.POIFS.Storage
                     store[j].WriteBlocks(stream);
                 }
                 byte[] data = stream.ToArray();
-            SmallDocumentBlock[] rval = new SmallDocumentBlock[ ConvertToBlockCount(size) ];
+                SmallDocumentBlock[] rval = new SmallDocumentBlock[ConvertToBlockCount(size)];
 
                 for (int index = 0; index < rval.Length; index++)
                 {
-                rval[index] = new SmallDocumentBlock(bigBlocksSize,data, index);
+                    rval[index] = new SmallDocumentBlock(bigBlocksSize, data, index);
                 }
                 return rval;
             }

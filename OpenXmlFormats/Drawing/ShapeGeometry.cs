@@ -928,15 +928,20 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}>", nodeName);
-            if (this.gdField != null)
+            sw.Write("<a:{0}", nodeName);
+            if (this.gdField == null||this.gdField.Count==0)
             {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
                 foreach (CT_GeomGuide gg in gdField)
                 {
                     gg.Write(sw, "gd");
                 }
+                sw.Write("</a:{0}>", nodeName);
             }
-            sw.Write("</a:{0}>", nodeName);
 
         }
     }

@@ -17,6 +17,8 @@
  * ====================================================================
  */
 
+using EnumsNET;
+using NPOI.OOXML.XSSF.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Model;
@@ -38,6 +40,7 @@ namespace NPOI.XSSF.UserModel
         private XSSFSheet _sh;
         
         private static Dictionary<ST_CfType, ConditionType> typeLookup = new Dictionary<ST_CfType, ConditionType>();
+        private static Dictionary<ST_CfType, ConditionFilterType> filterTypeLookup = new Dictionary<ST_CfType, ConditionFilterType>();
         static XSSFConditionalFormattingRule()
         {
             typeLookup.Add(ST_CfType.cellIs, ConditionTypeClass.CellValueIs);
@@ -60,6 +63,20 @@ namespace NPOI.XSSF.UserModel
             typeLookup.Add(ST_CfType.notContainsErrors, ConditionTypeClass.Filter);
             typeLookup.Add(ST_CfType.timePeriod, ConditionTypeClass.Filter);
             typeLookup.Add(ST_CfType.aboveAverage, ConditionTypeClass.Filter);
+
+            filterTypeLookup.Add(ST_CfType.top10, SS.UserModel.ConditionFilterType.TOP_10);
+            filterTypeLookup.Add(ST_CfType.uniqueValues, SS.UserModel.ConditionFilterType.UNIQUE_VALUES);
+            filterTypeLookup.Add(ST_CfType.duplicateValues, SS.UserModel.ConditionFilterType.DUPLICATE_VALUES);
+            filterTypeLookup.Add(ST_CfType.containsText, SS.UserModel.ConditionFilterType.CONTAINS_TEXT);
+            filterTypeLookup.Add(ST_CfType.notContainsText, SS.UserModel.ConditionFilterType.NOT_CONTAINS_TEXT);
+            filterTypeLookup.Add(ST_CfType.beginsWith, SS.UserModel.ConditionFilterType.BEGINS_WITH);
+            filterTypeLookup.Add(ST_CfType.endsWith, SS.UserModel.ConditionFilterType.ENDS_WITH);
+            filterTypeLookup.Add(ST_CfType.containsBlanks, SS.UserModel.ConditionFilterType.CONTAINS_BLANKS);
+            filterTypeLookup.Add(ST_CfType.notContainsBlanks, SS.UserModel.ConditionFilterType.NOT_CONTAINS_BLANKS);
+            filterTypeLookup.Add(ST_CfType.containsErrors, SS.UserModel.ConditionFilterType.CONTAINS_ERRORS);
+            filterTypeLookup.Add(ST_CfType.notContainsErrors, SS.UserModel.ConditionFilterType.NOT_CONTAINS_ERRORS);
+            filterTypeLookup.Add(ST_CfType.timePeriod, SS.UserModel.ConditionFilterType.TIME_PERIOD);
+            filterTypeLookup.Add(ST_CfType.aboveAverage, SS.UserModel.ConditionFilterType.ABOVE_AVERAGE);
         }
     /*package*/
     public XSSFConditionalFormattingRule(XSSFSheet sh)
@@ -278,7 +295,7 @@ namespace NPOI.XSSF.UserModel
             // Set the type of the icon set
             if (iconSet.name != null)
             {
-                ST_IconSetType xIconSet = XmlEnumParser<ST_IconSetType>.ForName(iconSet.name, ST_IconSetType.Item3TrafficLights1);
+                ST_IconSetType xIconSet =Enums.Parse<ST_IconSetType>(iconSet.name, false, EnumFormat.Description);
                 icons.iconSet = xIconSet;
             }
 
@@ -448,6 +465,57 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        public bool StopIfTrue
+        {
+            get
+            {
+                return _cfRule.stopIfTrue;
+            }
+        }
+        public String Text
+        {
+            get
+            {
+                return _cfRule.text;
+            }
+        }
+        public int Priority
+        {
+            get
+            {
+                int priority = _cfRule.priority;
+                // priorities start at 1, if it is less, it is undefined, use definition order in caller
+                return priority >= 1 ? priority : 0;
+            }
+        }
+        public ExcelNumberFormat NumberFormat
+        {
+            get
+            {
+                CT_Dxf dxf = GetDxf(false);
+                if (dxf == null || !dxf.IsSetNumFmt()) return null;
+
+                CT_NumFmt numFmt = dxf.numFmt;
+                return new ExcelNumberFormat((int)numFmt.numFmtId, numFmt.formatCode);
+            }
+        }
+
+        public ConditionFilterType? ConditionFilterType
+        {
+            get
+            {
+                if (!filterTypeLookup.ContainsKey(_cfRule.type))
+                    return null;
+                return filterTypeLookup[_cfRule.type];
+            }
+        }
+        public IConditionFilterData FilterConfiguration
+        {
+            get
+            {
+                return new XSSFConditionFilterData(_cfRule);
+            }
+        }
     }
 }
 

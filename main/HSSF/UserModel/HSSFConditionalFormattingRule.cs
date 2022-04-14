@@ -79,13 +79,13 @@ namespace NPOI.HSSF.UserModel
             FontFormatting fontFormatting = cfRuleRecord.FontFormatting;
             if (fontFormatting != null)
             {
-                cfRuleRecord.FontFormatting=(fontFormatting);
+                cfRuleRecord.FontFormatting = (fontFormatting);
                 return new HSSFFontFormatting(cfRuleRecord, workbook);
             }
             else if (Create)
             {
                 fontFormatting = new FontFormatting();
-                cfRuleRecord.FontFormatting=(fontFormatting);
+                cfRuleRecord.FontFormatting = (fontFormatting);
                 return new HSSFFontFormatting(cfRuleRecord, workbook);
             }
             else
@@ -116,13 +116,13 @@ namespace NPOI.HSSF.UserModel
             BorderFormatting borderFormatting = cfRuleRecord.BorderFormatting;
             if (borderFormatting != null)
             {
-                cfRuleRecord.BorderFormatting=(borderFormatting);
+                cfRuleRecord.BorderFormatting = (borderFormatting);
                 return new HSSFBorderFormatting(cfRuleRecord, workbook);
             }
             else if (Create)
             {
                 borderFormatting = new BorderFormatting();
-                cfRuleRecord.BorderFormatting=(borderFormatting);
+                cfRuleRecord.BorderFormatting = (borderFormatting);
                 return new HSSFBorderFormatting(cfRuleRecord, workbook);
             }
             else
@@ -152,13 +152,13 @@ namespace NPOI.HSSF.UserModel
             PatternFormatting patternFormatting = cfRuleRecord.PatternFormatting;
             if (patternFormatting != null)
             {
-                cfRuleRecord.PatternFormatting=(patternFormatting);
+                cfRuleRecord.PatternFormatting = (patternFormatting);
                 return new HSSFPatternFormatting(cfRuleRecord, workbook);
             }
             else if (Create)
             {
                 patternFormatting = new PatternFormatting();
-                cfRuleRecord.PatternFormatting=(patternFormatting);
+                cfRuleRecord.PatternFormatting = (patternFormatting);
                 return new HSSFPatternFormatting(cfRuleRecord, workbook);
             }
             else
@@ -284,7 +284,7 @@ namespace NPOI.HSSF.UserModel
             {
                 return GetColorScaleFormatting(false);
             }
-            
+
         }
         /**
          * create a new color scale / gradient formatting object if it does not exist,
@@ -357,6 +357,49 @@ namespace NPOI.HSSF.UserModel
                 return null;
             }
             return HSSFFormulaParser.ToFormulaString(workbook, parsedExpression);
+        }
+        public bool StopIfTrue
+        {
+            get
+            {
+                return true;
+            }
+        }
+        public string Text
+        {
+            get { return null; }
+        }
+        public int Priority
+        {
+            get {
+                CFRule12Record rule12 = GetCFRule12Record(false);
+                if (rule12 == null) return 0;
+                return rule12.Priority;
+            }
+        }
+        public ExcelNumberFormat NumberFormat
+        {
+            get
+            {
+                return null;
+            }
+        }
+        public ConditionFilterType? ConditionFilterType
+        {
+            get
+            {
+                if (ConditionType == ConditionType.Filter)
+                    return null;
+                else
+                    return SS.UserModel.ConditionFilterType.FILTER;
+            }
+        }
+        public IConditionFilterData FilterConfiguration
+        {
+            get
+            {
+                return null;
+            }
         }
     }
 }

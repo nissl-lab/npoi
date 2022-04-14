@@ -450,7 +450,7 @@ namespace TestCases.XSSF.Streaming
                 try
                 {
                     NullOutputStream out1 = new NullOutputStream();
-                    wb.Write(out1);
+                    wb.Write(out1, false);
                     out1.Close();
                 }
                 catch (Exception e)

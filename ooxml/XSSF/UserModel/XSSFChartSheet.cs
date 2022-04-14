@@ -96,23 +96,25 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        internal override void Write(Stream out1)
+        internal override void Write(Stream out1, bool leaveOpen=false)
         {
             new ChartsheetDocument(this.chartsheet).Save(out1);
         }
 
         private static byte[] blankWorksheet()
         {
-            MemoryStream out1 = new MemoryStream();
-            try
-            {
-                new XSSFSheet().Write(out1);
+            using (MemoryStream out1 = RecyclableMemory.GetStream())
+            { 
+                try
+                {
+                    new XSSFSheet().Write(out1);
+                }
+                catch (IOException e)
+                {
+                    throw new RuntimeException(e);
+                }
+                return out1.ToArray();
             }
-            catch (IOException e)
-            {
-                throw new RuntimeException(e);
-            }
-            return out1.ToArray();
         }
     }
 

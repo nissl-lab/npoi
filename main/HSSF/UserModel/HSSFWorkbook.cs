@@ -877,7 +877,9 @@ namespace NPOI.HSSF.UserModel
             if (workbook.ContainsSheetName(sheetname, _sheets.Count))
                 throw new ArgumentException("The workbook already contains a sheet named '" + sheetname + "'");
 
-            HSSFSheet sheet = new HSSFSheet(this);
+           WorkbookUtil.ValidateSheetName(sheetname);
+
+           HSSFSheet sheet = new HSSFSheet(this);
 
             workbook.SetSheetName(_sheets.Count, sheetname);
             _sheets.Add(sheet);
@@ -1346,19 +1348,7 @@ namespace NPOI.HSSF.UserModel
                 fs.Close();
             }
         }
-    
-        /// <summary>
-        /// Write out this workbook to an Outputstream.  Constructs
-        /// a new POI POIFSFileSystem, passes in the workbook binary representation  and
-        /// Writes it out.
-        /// 
-        /// If {@code stream} is a {@link java.io.FileOutputStream} on a networked drive
-        /// or has a high cost/latency associated with each written byte,
-        /// consider wrapping the OutputStream in a {@link java.io.BufferedOutputStream}
-        /// to improve write performance.
-        /// 
-        /// </summary>
-        /// <param name="stream">the java OutputStream you wish to Write the XLS to</param>
+
         public override void Write(Stream stream)
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem();
@@ -1371,6 +1361,16 @@ namespace NPOI.HSSF.UserModel
             {
                 fs.Close();
             }
+        }
+        /// <summary>
+        /// Write out this workbook to an Outputstream.  Constructs
+        /// a new POI POIFSFileSystem, passes in the workbook binary representation  and
+        /// Writes it out.
+        /// </summary>
+        /// <param name="stream">the stream you wish to Write the XLS to</param>
+        public void Write(Stream stream, bool leaveOpen)
+        {
+            this.Write(stream);
         }
 
         /** Writes the workbook out to a brand new, empty POIFS */
@@ -1403,7 +1403,7 @@ namespace NPOI.HSSF.UserModel
             //  going to be preserving nodes
             List<string> excepts = new List<string>(1);
 
-            using (MemoryStream newMemoryStream = new MemoryStream(GetBytes()))
+            using (MemoryStream newMemoryStream = RecyclableMemory.GetStream(GetBytes()))
             {
                 // Write out the Workbook stream
                 fs.CreateDocument(newMemoryStream, "Workbook");
@@ -2028,9 +2028,11 @@ namespace NPOI.HSSF.UserModel
                 }
             }
 
-            MemoryStream bos = new MemoryStream();
-            poiData.WriteFileSystem(bos);
-            return AddOlePackage(bos.ToArray(), label, fileName, command);
+            using (MemoryStream bos = RecyclableMemory.GetStream())
+            {
+                poiData.WriteFileSystem(bos);
+                return AddOlePackage(bos.ToArray(), label, fileName, command);
+            }
         }
 
         public int AddOlePackage(byte[] oleData, String label, String fileName, String command)
@@ -2062,9 +2064,11 @@ namespace NPOI.HSSF.UserModel
             oleDir.CreateDocument("\u0001Ole", new MemoryStream(oleBytes));
 
             Ole10Native oleNative = new Ole10Native(label, fileName, command, oleData);
-            MemoryStream bos = new MemoryStream();
-            oleNative.WriteOut(bos);
-            oleDir.CreateDocument(Ole10Native.OLE10_NATIVE, new MemoryStream(bos.ToArray()));
+            using (MemoryStream bos = RecyclableMemory.GetStream())
+            {
+                oleNative.WriteOut(bos);
+                oleDir.CreateDocument(Ole10Native.OLE10_NATIVE, new MemoryStream(bos.ToArray()));
+            }
 
             return storageId;
         }

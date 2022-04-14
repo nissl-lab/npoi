@@ -596,6 +596,7 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 ValidateSheetName(newName);
+                WorkbookUtil.ValidateSheetName(newName);
             }
 
             XSSFSheet clonedSheet = CreateSheet(newName) as XSSFSheet;
@@ -635,10 +636,11 @@ namespace NPOI.XSSF.UserModel
 
             try
             {
-                using (MemoryStream out1 = new MemoryStream())
+                using (MemoryStream ms = RecyclableMemory.GetStream())
                 {
-                    srcSheet.Write(out1);
-                    clonedSheet.Read(new MemoryStream(out1.ToArray()));
+                    srcSheet.Write(ms, true);
+                    ms.Position = 0;
+                    clonedSheet.Read(ms);
                 }
             }
             catch (IOException e)
@@ -880,9 +882,6 @@ namespace NPOI.XSSF.UserModel
             }
             ValidateSheetName(sheetname);
 
-
-            // YK: Mimic Excel and silently tRuncate sheet names longer than 31 characters
-            if (sheetname.Length > 31) sheetname = sheetname.Substring(0, 31);
             WorkbookUtil.ValidateSheetName(sheetname);
 
             CT_Sheet sheet = AddSheet(sheetname);

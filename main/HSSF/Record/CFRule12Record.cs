@@ -484,6 +484,17 @@ namespace NPOI.HSSF.Record
         public CellRangeAddress GetAssociatedRange() {
             return futureHeader.AssociatedRange;
         }
+
+        public int Priority
+        {
+            get
+            {
+                return priority;
+            }
+            set {
+                this.priority = value;
+            }
+        }
     }
 
 }

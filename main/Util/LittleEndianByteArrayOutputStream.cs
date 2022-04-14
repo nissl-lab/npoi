@@ -123,5 +123,9 @@ namespace NPOI.Util
             _writeIndex += size;
             return result;
         }
+        public override string ToString()
+        {
+            return System.BitConverter.ToString(_buf);
+        }
     }
 }

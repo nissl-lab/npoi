@@ -3767,7 +3767,7 @@ namespace NPOI.XSSF.UserModel
             out1.Close();
         }
 
-        internal virtual void Write(Stream stream)
+        internal virtual void Write(Stream stream, bool leaveOpen=false)
         {
             bool setToNull = false;
             if (worksheet.sizeOfColsArray() == 1)
@@ -3819,7 +3819,7 @@ namespace NPOI.XSSF.UserModel
             map[ST_RelationshipId.NamespaceURI] = "r";
             //xmlOptions.SetSaveSuggestedPrefixes(map);
 
-            new WorksheetDocument(worksheet).Save(stream);
+            new WorksheetDocument(worksheet).Save(stream, leaveOpen);
 
             // Bug 52233: Ensure that we have a col-array even if write() removed it
             if (setToNull)
@@ -4793,10 +4793,11 @@ namespace NPOI.XSSF.UserModel
 
             try
             {
-                using (MemoryStream out1 = new MemoryStream())
+                using (MemoryStream ms = RecyclableMemory.GetStream())
                 {
-                    this.Write(out1);
-                    clonedSheet.Read(new MemoryStream(out1.ToArray()));
+                    this.Write(ms, true);
+                    ms.Position = 0;
+                    clonedSheet.Read(ms);
                 }
             }
             catch (IOException e)
@@ -4825,7 +4826,7 @@ namespace NPOI.XSSF.UserModel
                     continue;
                 }
                 //skip printerSettings.bin part
-                if (r.GetPackagePart().PartName.Name == "/xl/printerSettings/printerSettings1.bin")
+                if (r.GetPackagePart().PartName.Name.StartsWith("/xl/printerSettings/printerSettings"))
                     continue;
                 PackageRelationship rel = r.GetPackageRelationship();
                 clonedSheet.GetPackagePart().AddRelationship(
