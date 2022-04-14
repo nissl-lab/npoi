@@ -52,7 +52,7 @@ namespace NPOI.XSSF.UserModel
             : this()
         {
 
-            ctColor.SetRgb((byte)clr.R, (byte)clr.G, (byte)clr.B);
+            ctColor.SetRgb(clr.R, clr.G, clr.B);
         }
 
         public XSSFColor(byte[] rgb)
