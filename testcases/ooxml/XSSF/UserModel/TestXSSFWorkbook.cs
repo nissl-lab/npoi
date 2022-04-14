@@ -1088,7 +1088,7 @@ namespace TestCases.XSSF.UserModel
                 Assert.IsTrue(!file.Exists);
             }
         }
-        
+
         [Test]
         public void CloseDoesNotModifyWorkbook()
         {
@@ -1197,6 +1197,32 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
+        public void TestReadBigExcelOld()
+        {
+            Stopwatch watcher = new Stopwatch();
+            watcher.Start();
+
+            var filePath = @"D:\Code\OpenSource\npoi\npoi\testcases\test-data\spreadsheet\ExcelBigData.xlsx";
+            XSSFWorkbook doc = new XSSFWorkbook(filePath);
+
+            Trace.WriteLine(string.Format("XSSFWorkbook Load cost: {0}s", watcher.ElapsedMilliseconds / 1000));
+            watcher.Reset();
+            watcher.Start();
+
+            var sheet = doc.GetSheetAt(0);
+            var enumerator = sheet.GetEnumerator();
+            int i = 0;
+            while (enumerator.MoveNext())
+            {
+                var row = enumerator.Current as XSSFRow;
+                var str = i++ + ":" + row.Cells[2].StringCellValue;
+            }
+
+            watcher.Stop();
+            Trace.WriteLine(string.Format("GetExcelData by NOPI cost: {0}s", watcher.ElapsedMilliseconds / 1000));
+        }
+
+        [Test]
         public void TestReadBigExcel()
         {
             Stopwatch watcher = new Stopwatch();
@@ -1205,17 +1231,22 @@ namespace TestCases.XSSF.UserModel
             var filePath = @"D:\Code\OpenSource\npoi\npoi\testcases\test-data\spreadsheet\ExcelBigData.xlsx";
             XSSFWorkbook doc = new XSSFWorkbook(filePath);
 
+            Trace.WriteLine(string.Format("XSSFWorkbook Load cost: {0}s", watcher.ElapsedMilliseconds / 1000));
+            watcher.Reset();
+            watcher.Start();
+
             var sheet = doc.GetSheetAt(0);
             var enumerator = sheet.GetVirtualEnumerator();
             int i = 0;
             while (enumerator.MoveNext())
             {
                 var row = enumerator.Current as XSSFRow;
-                System.Diagnostics.Trace.WriteLine(i++ + ":" + row.Cells[2].StringCellValue);
+                var str = i++ + ":" + row.Cells[2].StringCellValue;
+                //Trace.WriteLine(i++ + ":" + row.Cells[2].StringCellValue);
             }
 
             watcher.Stop();
-            Console.WriteLine("GetExcelData by NOPI cost: {0}s", watcher.ElapsedMilliseconds / 1000);
+            Trace.WriteLine(string.Format("GetExcelData by NOPI cost: {0}s", watcher.ElapsedMilliseconds / 1000));
         }
     }
 }

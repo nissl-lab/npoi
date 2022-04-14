@@ -80,21 +80,41 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (reader == null)
                 return null;
             CT_Row ctObj = new CT_Row();
-            ctObj.r = XmlReaderHelper.ReadUInt(reader.GetAttribute("r"));
-            ctObj.spans = reader.GetAttribute("spans");
-            ctObj.s = XmlReaderHelper.ReadUInt(reader.GetAttribute("s"));
-            ctObj.customFormat = XmlReaderHelper.ReadBool(reader.GetAttribute("customFormat"));
-            ctObj.dyDescentField = XmlReaderHelper.ReadDouble(reader.GetAttribute("x14ac:dyDescent"));
-            if (reader.GetAttribute("ht") != null)
-                ctObj.ht = XmlReaderHelper.ReadDouble(reader.GetAttribute("ht"));
-            ctObj.hidden = XmlReaderHelper.ReadBool(reader.GetAttribute("hidden"));
-            ctObj.outlineLevel = XmlReaderHelper.ReadByte(reader.GetAttribute("outlineLevel"));
-            ctObj.customHeight = XmlReaderHelper.ReadBool(reader.GetAttribute("customHeight"));
-            ctObj.collapsed = XmlReaderHelper.ReadBool(reader.GetAttribute("collapsed"));
-            ctObj.thickTop = XmlReaderHelper.ReadBool(reader.GetAttribute("thickTop"));
-            ctObj.thickBot = XmlReaderHelper.ReadBool(reader.GetAttribute("thickBot"));
-            ctObj.ph = XmlReaderHelper.ReadBool(reader.GetAttribute("ph"));
             ctObj.c = new List<CT_Cell>();
+            while (reader.MoveToNextAttribute())
+            {
+                switch (reader.Name)
+                {
+                    case "r":
+                        ctObj.r = XmlReaderHelper.ReadUInt(reader.Value); break;
+                    case "spans":
+                        ctObj.spans = reader.Value; break;
+                    case "s":
+                        ctObj.s = XmlReaderHelper.ReadUInt(reader.Value); break;
+                    case "customFormat":
+                        ctObj.customFormat = XmlReaderHelper.ReadBool(reader.Value); break;
+                    case "dyDescentField":
+                        ctObj.dyDescentField = XmlReaderHelper.ReadUInt(reader.Value); break;
+                    case "ht":
+                        ctObj.ht = XmlReaderHelper.ReadUInt(reader.Value); break;
+                    case "hidden":
+                        ctObj.hidden = XmlReaderHelper.ReadBool(reader.Value); break;
+                    case "outlineLevel":
+                        ctObj.outlineLevel = XmlReaderHelper.ReadByte(reader.Value); break;
+                    case "customHeight":
+                        ctObj.customHeight = XmlReaderHelper.ReadBool(reader.Value); break;
+                    case "collapsed":
+                        ctObj.collapsed = XmlReaderHelper.ReadBool(reader.Value); break;
+                    case "thickTop":
+                        ctObj.thickTop = XmlReaderHelper.ReadBool(reader.Value); break;
+                    case "thickBot":
+                        ctObj.thickBot = XmlReaderHelper.ReadBool(reader.Value); break;
+                    case "ph":
+                        ctObj.ph = XmlReaderHelper.ReadBool(reader.Value); break;
+                    default:
+                        break;
+                }
+            }
 
             while (reader.Read())
             {

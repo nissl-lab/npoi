@@ -68,15 +68,27 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 return null;
             }
             CT_Cell ctObj = new CT_Cell();
-            ctObj.r = reader.GetAttribute("r");
-            ctObj.s = XmlReaderHelper.ReadUInt(reader.GetAttribute("s"));
-            if (reader.GetAttribute("t") != null)
+
+            while (reader.MoveToNextAttribute())
             {
-                ctObj.t = (ST_CellType)Enum.Parse(typeof(ST_CellType), reader.GetAttribute("t"));
+                switch (reader.Name)
+                {
+                    case "r":
+                        ctObj.r = reader.Value; break;
+                    case "s":
+                        ctObj.s = XmlReaderHelper.ReadUInt(reader.Value); break;
+                    case "t":
+                        ctObj.t = (ST_CellType)Enum.Parse(typeof(ST_CellType), reader.Value); break;
+                    case "cm":
+                        ctObj.cm = XmlReaderHelper.ReadUInt(reader.Value); break;
+                    case "vm":
+                        ctObj.vm = XmlReaderHelper.ReadUInt(reader.Value); break;
+                    case "ph":
+                        ctObj.ph = XmlReaderHelper.ReadBool(reader.Value); break;
+                    default:
+                        break;
+                }
             }
-            ctObj.cm = XmlReaderHelper.ReadUInt(reader.GetAttribute("cm"));
-            ctObj.vm = XmlReaderHelper.ReadUInt(reader.GetAttribute("vm"));
-            ctObj.ph = XmlReaderHelper.ReadBool(reader.GetAttribute("ph"));
 
             if (reader.IsEmptyElement)
             {

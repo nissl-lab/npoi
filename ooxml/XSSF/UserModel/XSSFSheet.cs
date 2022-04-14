@@ -62,7 +62,7 @@ namespace NPOI.XSSF.UserModel
         private static double DEFAULT_MARGIN_RIGHT = 0.7;
         public static int TWIPS_PER_POINT = 20;
 
-        private const int PAGE_SIZE = 1000;
+        private const int PAGE_SIZE = 10000;
 
         //TODO make the two variable below private!
         internal CT_Sheet sheet;
@@ -152,6 +152,9 @@ namespace NPOI.XSSF.UserModel
             {
                 var ms = GetStreamWithOutSheetData(is1, out rowCount);
                 XmlDocument doc = ConvertStreamToXml(ms);
+
+                //XmlDocument doc = ConvertStreamToXml(is1);
+
                 worksheet = WorksheetDocument.Parse(doc, NamespaceManager).GetWorksheet();
             }
             catch (XmlException e)
@@ -160,7 +163,7 @@ namespace NPOI.XSSF.UserModel
             }
 
             InitRows(worksheet);
-            _virtualRows = new VirtualizingCollection<XSSFRow>(new XSSFRowProvider(GetPackagePart(), this, rowCount, NamespaceManager), PAGE_SIZE);
+            _virtualRows = new VirtualizingCollection<XSSFRow>(new XSSFRowProvider(GetPackagePart(), this, rowCount, NamespaceManager), PAGE_SIZE, 5000);
 
             columnHelper = new ColumnHelper(worksheet);
 

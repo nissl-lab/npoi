@@ -457,7 +457,7 @@ namespace NPOI.OpenXml4Net.DataVirtualization
                 {
                     _pages.Remove(key);
                     _pageTouchTimes.Remove(key);
-                    Trace.WriteLine("Removed Page: " + key);
+                    //Trace.WriteLine("Removed Page: " + key);
                 }
             }
         }
@@ -469,7 +469,7 @@ namespace NPOI.OpenXml4Net.DataVirtualization
         /// <param name="page">The page.</param>
         protected virtual void PopulatePage(int pageIndex, IList<T> page)
         {
-            Trace.WriteLine("Page populated: " + pageIndex);
+            //Trace.WriteLine("Page populated: " + pageIndex);
             if (_pages.ContainsKey(pageIndex))
                 _pages[pageIndex] = page;
         }
@@ -485,7 +485,7 @@ namespace NPOI.OpenXml4Net.DataVirtualization
             {
                 _pages.Add(pageIndex, null);
                 _pageTouchTimes.Add(pageIndex, DateTime.Now);
-                Trace.WriteLine("Added page: " + pageIndex);
+                //Trace.WriteLine("Added page: " + pageIndex);
                 LoadPage(pageIndex);
             }
             else
@@ -526,7 +526,7 @@ namespace NPOI.OpenXml4Net.DataVirtualization
         /// <returns></returns>
         protected IList<T> FetchPage(int pageIndex)
         {
-            Trace.WriteLine("FetchPage:" + pageIndex);
+            //Trace.WriteLine("FetchPage:" + pageIndex);
             return ItemsProvider.FetchRange(pageIndex * PageSize, PageSize);
         }
 
