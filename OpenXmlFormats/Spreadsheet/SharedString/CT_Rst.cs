@@ -29,7 +29,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.rPhField = o.rPhField;
             this.phoneticPrField = o.phoneticPrField;
         }
-      
+
 
 
 
@@ -39,8 +39,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (this.t != null)
             {
                 //TODO: diff has-space case and no-space case
-                 sw.Write(string.Format("<t xml:space=\"preserve\">{0}</t>", 
-                      XmlHelper.ExcelEncodeString(XmlHelper.EncodeXml(t))));
+                sw.Write(string.Format("<t xml:space=\"preserve\">{0}</t>",
+                     XmlHelper.ExcelEncodeString(XmlHelper.EncodeXml(t))));
             }
             if (this.r != null)
             {
@@ -105,7 +105,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         [XmlIgnore]
         public string XmlText
         {
-            get {
+            get
+            {
                 StringBuilder sb = new StringBuilder();
                 using (StringWriter sw = new StringWriter(sb))
                 {
@@ -167,7 +168,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                             if (r.t != null)
                             {
                                 sw.Write("<t");
-                                if(r.t.IndexOf(' ')>=0)
+                                if (r.t.IndexOf(' ') >= 0)
                                     sw.Write(" xml:space=\"preserve\"");
                                 sw.Write(">");
                                 sw.Write(XmlHelper.EncodeXml(r.t));
@@ -188,7 +189,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     }
                     xmltext = sb.ToString();
                 }
-                return xmltext; 
+                return xmltext;
             }
             set { xmltext = value; }
         }
@@ -257,6 +258,50 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 else if (childNode.LocalName == "t")
                     ctObj.t = childNode.InnerText.Replace("\r", "");
             }
+            return ctObj;
+        }
+
+        public static CT_Rst Parse(XmlTextReader reader, XmlNamespaceManager namespaceManager)
+        {
+            CT_Rst ctObj = new CT_Rst();
+            ctObj.r = new List<CT_RElt>();
+            ctObj.rPh = new List<CT_PhoneticRun>();
+            if (reader.IsEmptyElement)
+            {
+                return ctObj;
+            }
+
+            var currentDept = reader.Depth;
+            var currentName = reader.Name;
+
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    if (reader.Name == "phoneticPr")
+                    {
+                        ctObj.phoneticPr = CT_PhoneticPr.Parse(reader, namespaceManager);
+                    }
+                    else if (reader.Name == "r")
+                    {
+                        ctObj.r.Add(CT_RElt.Parse(reader, namespaceManager));
+                    }
+                    else if (reader.Name == "rPh")
+                    {
+                        ctObj.rPh.Add(CT_PhoneticRun.Parse(reader, namespaceManager));
+                    }
+                    else if (reader.Name == "t")
+                    {
+                        ctObj.t = reader.ReadInnerXml().Replace("\r", "");
+                    }
+                }
+
+                if (reader.NodeType == XmlNodeType.EndElement && reader.Depth == currentDept && reader.Name == currentName)
+                {
+                    break;
+                }
+            }
+
             return ctObj;
         }
 

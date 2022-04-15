@@ -137,10 +137,11 @@ namespace TestCases.OpenXml4Net.OPC
                     int rowCount = 0;
                     var ms = XmlReaderHelper.RemoveSheetData(sourceStream, out rowCount);
 
-                    XmlDocument xmlDoc = new XmlDocument();
-                    XmlHelper.LoadXmlSafe(xmlDoc, ms);
+                    //XmlDocument xmlDoc = new XmlDocument();
+                    //XmlHelper.LoadXmlSafe(xmlDoc, ms);
 
                     string filePath = fileName.Substring(0, fileName.LastIndexOf("."));
+                    ms.Position = 0;
                     WriteStream(filePath, ms);
                 }
             }

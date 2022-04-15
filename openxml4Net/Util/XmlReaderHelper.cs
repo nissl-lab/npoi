@@ -56,6 +56,10 @@ namespace NPOI.OpenXml4Net.Util
                 return null;
             }
         }
+        public static string ReadString(string attr)
+        {
+            return attr;
+        }
         public static decimal ReadDecimal(string attr)
         {
             if (attr == null)
@@ -242,44 +246,49 @@ namespace NPOI.OpenXml4Net.Util
             }
         }
 
-        public static Stream RemoveSheetData(Stream sourceStream, out int rowCount)
+        /// <summary>
+        /// 删除SheetData节点下第二个及其之后所有Row节点
+        /// </summary>
+        /// <param name="sourceStream"></param>
+        /// <param name="dataRowCount"></param>
+        /// <returns></returns>
+        public static Stream RemoveSheetData(Stream sourceStream, out int dataRowCount)
         {
             XmlTextReader reader = new XmlTextReader(sourceStream);
             reader.DtdProcessing = DtdProcessing.Ignore;
-            rowCount = 0;
+            dataRowCount = 0;
 
             int depth = 1;
             string removeElementName = "sheetData";
-            string countElementName = "row";
+            string rowElementName = "row";
 
             MemoryStream ms = new MemoryStream();
             var writer = new XmlTextWriter(ms, reader.Encoding);
             try
             {
-                bool isInRemoveElement = false;
+                bool isInSheetDataNode = false;
                 while (reader.Read())
                 {
                     //go in sheetData node
-                    if (!isInRemoveElement && reader.NodeType == XmlNodeType.Element && reader.Depth == depth && reader.Name == removeElementName)
+                    if (!isInSheetDataNode && reader.NodeType == XmlNodeType.Element && reader.Depth == depth && reader.Name == removeElementName)
                     {
-                        isInRemoveElement = true;
+                        isInSheetDataNode = true;
                     }
 
-                    //go out sheetData node
-                    if (isInRemoveElement && reader.NodeType == XmlNodeType.EndElement && reader.Depth == depth && reader.Name == removeElementName)
+                    //go in sheetData node
+                    if (isInSheetDataNode && reader.NodeType == XmlNodeType.EndElement && reader.Depth == depth && reader.Name == removeElementName)
                     {
-                        isInRemoveElement = false;
-                        continue;
+                        isInSheetDataNode = false;
                     }
 
-                    //is in sheetData node
-                    if (isInRemoveElement)
+                    //count row if is in the sheetdata node 
+                    if (isInSheetDataNode && reader.NodeType == XmlNodeType.Element && reader.Name == rowElementName)
                     {
-                        //go in row node
-                        if (reader.NodeType == XmlNodeType.Element && reader.Name == countElementName)
-                        {
-                            rowCount++;
-                        }
+                        dataRowCount++;
+                    }
+
+                    if (isInSheetDataNode && dataRowCount > 1)
+                    {
                         continue;
                     }
 
@@ -287,36 +296,25 @@ namespace NPOI.OpenXml4Net.Util
                     {
                         case XmlNodeType.XmlDeclaration:
                             writer.WriteStartDocument(true);
-
                             break;
                         case XmlNodeType.Whitespace:
-                            if (writer != null && writer.WriteState != WriteState.Closed)
-                            {
-                                writer.WriteWhitespace(reader.Value);
-                            }
+                            writer.WriteWhitespace(reader.Value);
                             break;
                         case XmlNodeType.Element:
-
                             if (reader.Depth == 0)
                             {
                                 WriteRootElement(reader, writer);
-                                break;
                             }
-
-                            WriteElement(reader, writer);
+                            else
+                            {
+                                WriteElement(reader, writer);
+                            }
                             break;
                         case XmlNodeType.Text:
                             writer.WriteValue(reader.Value);
                             break;
                         case XmlNodeType.EndElement:
                             writer.WriteEndElement();
-
-                            if (reader.Depth == 0 && writer.WriteState != WriteState.Closed)
-                            {
-                                writer.Flush();
-                                //writer.Close();
-                            }
-
                             break;
                     }
                 }
@@ -328,10 +326,13 @@ namespace NPOI.OpenXml4Net.Util
             finally
             {
                 if (writer != null && writer.WriteState != WriteState.Closed)
+                {
+                    writer.Flush();
                     //writer.Close();
+                }
 
-                    if (reader != null && reader.ReadState != ReadState.Closed)
-                        reader.Close();
+                if (reader != null && reader.ReadState != ReadState.Closed)
+                    reader.Close();
             }
 
             ms.Position = 0;

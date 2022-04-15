@@ -2665,6 +2665,30 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public static CT_CellFormula Parse(XmlTextReader reader, XmlNamespaceManager namespaceManager)
+        {
+            if (reader == null)
+                return null;
+            CT_CellFormula ctObj = new CT_CellFormula();
+            if (reader.GetAttribute("t") != null)
+                ctObj.t = (ST_CellFormulaType)Enum.Parse(typeof(ST_CellFormulaType), reader.GetAttribute("t"));
+            else
+                ctObj.t = ST_CellFormulaType.normal;
+            ctObj.aca = XmlReaderHelper.ReadBool(reader.GetAttribute("aca"));
+            ctObj.@ref = XmlReaderHelper.ReadString(reader.GetAttribute("ref"));
+            ctObj.dt2D = XmlReaderHelper.ReadBool(reader.GetAttribute("dt2D"));
+            ctObj.dtr = XmlReaderHelper.ReadBool(reader.GetAttribute("dtr"));
+            ctObj.del1 = XmlReaderHelper.ReadBool(reader.GetAttribute("del1"));
+            ctObj.del2 = XmlReaderHelper.ReadBool(reader.GetAttribute("del2"));
+            ctObj.r1 = XmlReaderHelper.ReadString(reader.GetAttribute("r1"));
+            ctObj.r2 = XmlReaderHelper.ReadString(reader.GetAttribute("r2"));
+            ctObj.ca = XmlReaderHelper.ReadBool(reader.GetAttribute("ca"));
+            ctObj.si = XmlReaderHelper.ReadUInt(reader.GetAttribute("si"));
+            ctObj.bx = XmlReaderHelper.ReadBool(reader.GetAttribute("bx"));
+            ctObj.Value = reader.ReadInnerXml().Replace("\r", "");
+            return ctObj;
+        }
+
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));

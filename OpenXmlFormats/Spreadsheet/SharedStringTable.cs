@@ -110,7 +110,40 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public static CT_PhoneticRun Parse(XmlTextReader reader, XmlNamespaceManager namespaceManager)
+        {
+            if (reader == null)
+                return null;
+            CT_PhoneticRun ctObj = new CT_PhoneticRun();
+            ctObj.sb = XmlReaderHelper.ReadUInt(reader.GetAttribute("sb"));
+            ctObj.eb = XmlReaderHelper.ReadUInt(reader.GetAttribute("eb"));
 
+            if (reader.IsEmptyElement)
+            {
+                return ctObj;
+            }
+
+            var currentDept = reader.Depth;
+            var currentName = reader.Name;
+
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    if (reader.Name == "t")
+                    {
+                        ctObj.t = reader.ReadInnerXml();
+                    }
+                }
+
+                if (reader.NodeType == XmlNodeType.EndElement && reader.Depth == currentDept && reader.Name == currentName)
+                {
+                    break;
+                }
+            }
+
+            return ctObj;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -158,6 +191,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public static CT_PhoneticPr Parse(XmlTextReader reader, XmlNamespaceManager namespaceManager)
+        {
+            if (reader == null)
+                return null;
+            CT_PhoneticPr ctObj = new CT_PhoneticPr();
+            ctObj.fontId = XmlReaderHelper.ReadUInt(reader.GetAttribute("fontId"));
+            if (reader.GetAttribute("type") != null)
+                ctObj.type = (ST_PhoneticType)Enum.Parse(typeof(ST_PhoneticType), reader.GetAttribute("type"));
+            if (reader.GetAttribute("alignment") != null)
+                ctObj.alignment = (ST_PhoneticAlignment)Enum.Parse(typeof(ST_PhoneticAlignment), reader.GetAttribute("alignment"));
+            return ctObj;
+        }
 
 
         internal void Write(StreamWriter sw, string nodeName)

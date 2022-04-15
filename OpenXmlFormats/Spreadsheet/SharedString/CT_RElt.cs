@@ -27,13 +27,52 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 return null;
             CT_RElt ctObj = new CT_RElt();
             XmlNode tNode = node.SelectSingleNode("d:t", namespaceManager);
-            if(tNode!=null)
+            if (tNode != null)
                 ctObj.t = tNode.InnerText.Replace("\r", ""); ;
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "rPr")
                     ctObj.rPr = CT_RPrElt.Parse(childNode, namespaceManager);
             }
+            return ctObj;
+        }
+
+
+        public static CT_RElt Parse(XmlTextReader reader, XmlNamespaceManager namespaceManager)
+        {
+            if (reader == null)
+                return null;
+            CT_RElt ctObj = new CT_RElt();
+
+            if (reader.IsEmptyElement)
+            {
+                return ctObj;
+            }
+
+            var currentDept = reader.Depth;
+            var currentName = reader.Name;
+
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    if (reader.Name == "d:t")
+                    {
+                        ctObj.t = reader.ReadInnerXml().Replace("\r", "");
+                    }
+                    else if (reader.Name == "rPr")
+                    {
+                        throw new NotSupportedException();
+                        //CT_RPrElt.Parse(reader, namespaceManager);
+                    }
+                }
+
+                if (reader.NodeType == XmlNodeType.EndElement && reader.Depth == currentDept && reader.Name == currentName)
+                {
+                    break;
+                }
+            }
+
             return ctObj;
         }
 

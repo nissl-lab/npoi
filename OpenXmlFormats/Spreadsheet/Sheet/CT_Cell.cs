@@ -101,7 +101,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 {
                     if (reader.Name == "f")
                     {
-                        //ctObj.f = CT_CellFormula.Parse(reader, namespaceManager);
+                        ctObj.f = CT_CellFormula.Parse(reader, namespaceManager);
                     }
                     else if (reader.Name == "v")
                     {
@@ -109,7 +109,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     }
                     else if (reader.Name == "is")
                     {
-                        //ctObj.@is = CT_Rst.Parse(reader, namespaceManager);
+                        ctObj.@is = CT_Rst.Parse(reader, namespaceManager);
                     }
                     else if (reader.Name == "extLst")
                     {
