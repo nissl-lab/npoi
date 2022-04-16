@@ -194,7 +194,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write("xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" ");
             sw.Write("xmlns:s=\"http://schemas.openxmlformats.org/officeDocument/2006/sharedTypes\" ");
             XmlHelper.WriteAttribute(sw, "name", this.name);
-            XmlHelper.WriteAttribute(sw, "cacheId", this.cacheId);
+            XmlHelper.WriteAttribute(sw, "cacheId", this.cacheId, true);
             XmlHelper.WriteAttribute(sw, "dataOnRows", this.dataOnRows);
             XmlHelper.WriteAttribute(sw, "dataPosition", this.dataPosition);
             XmlHelper.WriteAttribute(sw, "autoFormatId", this.autoFormatId);
@@ -4498,7 +4498,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_PageField()
         {
-            this.extLstField = new CT_ExtensionList();
         }
 
         [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
