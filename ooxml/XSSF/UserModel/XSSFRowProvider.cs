@@ -87,8 +87,11 @@ namespace NPOI.XSSF.UserModel
                                 if (_lastIndex + 1 >= startIndex && _lastIndex + 1 <= endIndex)
                                 {
                                     var ct_row = CT_Row.Parse(_reader, _xmlNamespaceManager);
-                                    rows.Add(TransferRow(ct_row));
-                                    _lastIndex++;
+                                    if (!CheckRowIsEmpty(ct_row))
+                                    {
+                                        rows.Add(TransferRow(ct_row));
+                                        _lastIndex++;
+                                    }
                                 }
                                 if (_lastIndex == _rowCount - 1)
                                 {
@@ -132,6 +135,20 @@ namespace NPOI.XSSF.UserModel
         private bool IsOutSheetData()
         {
             return _reader.Depth == SHEET_DATA_DEPTH && _reader.Name == SHEET_DATA_NAME;
+        }
+
+        private bool CheckRowIsEmpty(CT_Row ct_row)
+        {
+            var rst = true;
+            foreach (var cell in ct_row.c)
+            {
+                if (!string.IsNullOrEmpty(cell.v))
+                {
+                    rst = false;
+                }
+            }
+
+            return rst;
         }
 
         private XSSFRow TransferRow(CT_Row ct_row)

@@ -1230,7 +1230,7 @@ namespace TestCases.XSSF.UserModel
             watcher.Start();
 
             var filePath = @"D:\Code\OpenSource\npoi\npoi\testcases\test-data\spreadsheet\ExcelBigData.xlsx";
-            XSSFWorkbook doc = new XSSFWorkbook(filePath);
+            XSSFWorkbook doc = new XSSFWorkbook(filePath, false);
 
             Trace.WriteLine(string.Format("XSSFWorkbook Load cost: {0}s", watcher.ElapsedMilliseconds / 1000));
             watcher.Reset();
@@ -1265,23 +1265,24 @@ namespace TestCases.XSSF.UserModel
             Stopwatch watcher = new Stopwatch();
             watcher.Start();
 
-            var filePath = @"D:\Code\OpenSource\npoi\npoi\testcases\test-data\spreadsheet\ExcelBigData2.xlsx";
-            XSSFWorkbook doc = new XSSFWorkbook(filePath);
-
-            Trace.WriteLine(string.Format("XSSFWorkbook Load cost: {0}s", watcher.ElapsedMilliseconds / 1000));
-            watcher.Reset();
-            watcher.Start();
-
-            var sheet = doc.GetSheetAt(0);
-
-            var enumerator = sheet.GetVirtualEnumerator();
-            int i = 0;
-            while (enumerator.MoveNext())
+            string filePath = @"D:\Documents\C04Tencent\02项目建设\20220331管家2022H1性能优化\资料\导入关键词30w物料模板.xlsx";
+            try
             {
-                var row = enumerator.Current as XSSFRow;
-                var str = i++ + ":" + row.Cells[2].StringCellValue;
-                //Trace.WriteLine(str);
+
+                XSSFWorkbook doc = new XSSFWorkbook(filePath, false);
+
+                var sheetCount = doc.NumberOfSheets;
+                for (var i = 0; i < sheetCount; i++)
+                {
+                    var sheet = doc.GetSheetAt(i);
+                    var count = sheet.GetVirtualRowCount();
+                }
             }
+            catch (Exception ex)
+            {
+
+            }
+            
 
             watcher.Stop();
             Trace.WriteLine(string.Format("GetExcelData by NOPI cost: {0}s", watcher.ElapsedMilliseconds / 1000));
@@ -1298,7 +1299,7 @@ namespace TestCases.XSSF.UserModel
                 XSSFWorkbook xssfworkbook_data = new XSSFWorkbook(fileData);
 
                 DataTable dt = new DataTable();
-                ISheet sheet = xssfworkbook_data.GetSheetAt(1);
+                ISheet sheet = xssfworkbook_data.GetSheetAt(3);
                 dt.TableName = sheet.SheetName;
 
                 IEnumerator rows = sheet.GetVirtualEnumerator();

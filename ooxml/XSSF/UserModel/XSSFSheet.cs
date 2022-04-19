@@ -68,6 +68,8 @@ namespace NPOI.XSSF.UserModel
         internal CT_Sheet sheet;
         internal CT_Worksheet worksheet;
 
+        internal bool loadDataOnInit;
+
         private SortedList<int, XSSFRow> _rows = new SortedList<int, XSSFRow>();
         private VirtualizingCollection<XSSFRow> _virtualRows;
 
@@ -147,23 +149,14 @@ namespace NPOI.XSSF.UserModel
 
         internal virtual void Read(Stream is1)
         {
-            int rowCount;
-            try
+            if (loadDataOnInit)
             {
-                var ms = GetStreamWithOutSheetData(is1, out rowCount);
-                XmlDocument doc = ConvertStreamToXml(ms);
-
-                //XmlDocument doc = ConvertStreamToXml(is1);
-
-                worksheet = WorksheetDocument.Parse(doc, NamespaceManager).GetWorksheet();
+                InitWorkSheetWithData(is1);
             }
-            catch (XmlException e)
+            else
             {
-                throw new POIXMLException(e);
+                InitWorkSheetWithNoData(is1);
             }
-
-            InitRows(worksheet);
-            _virtualRows = new VirtualizingCollection<XSSFRow>(new XSSFRowProvider(GetPackagePart(), this, rowCount, NamespaceManager), PAGE_SIZE, 5000);
 
             columnHelper = new ColumnHelper(worksheet);
 
@@ -190,6 +183,43 @@ namespace NPOI.XSSF.UserModel
             InitHyperlinks();
         }
 
+        private void InitWorkSheetWithData(Stream is1)
+        {
+            try
+            {
+                XmlDocument doc = ConvertStreamToXml(is1);
+
+                worksheet = WorksheetDocument.Parse(doc, NamespaceManager).GetWorksheet();
+            }
+            catch (XmlException e)
+            {
+                throw new POIXMLException(e);
+            }
+
+            InitRows(worksheet);
+        }
+
+        private void InitWorkSheetWithNoData(Stream is1)
+        {
+            int rowCount = 0;
+            try
+            {
+                var ms = GetSheetStreamWithNoData(is1, out rowCount);
+
+                XmlDocument doc = ConvertStreamToXml(ms);
+
+                worksheet = WorksheetDocument.Parse(doc, NamespaceManager).GetWorksheet();
+            }
+            catch (XmlException e)
+            {
+                throw new POIXMLException(e);
+            }
+
+            InitRows(worksheet);
+
+            _virtualRows = new VirtualizingCollection<XSSFRow>(new XSSFRowProvider(GetPackagePart(), this, rowCount, NamespaceManager), PAGE_SIZE, 5000);
+        }
+
         /**
          * Initialize worksheet data when creating a new sheet.
          */
@@ -202,7 +232,7 @@ namespace NPOI.XSSF.UserModel
             hyperlinks = new List<XSSFHyperlink>();
         }
 
-        private Stream GetStreamWithOutSheetData(Stream is1, out int rowCount)
+        private Stream GetSheetStreamWithNoData(Stream is1, out int rowCount)
         {
             return XmlReaderHelper.RemoveSheetData(is1, out rowCount);
         }

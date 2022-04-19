@@ -167,6 +167,9 @@ namespace NPOI.XSSF.UserModel
          */
         private List<XSSFPivotTable> pivotTables;
         private List<CT_PivotCache> pivotCaches;
+
+        private bool _loadDataOnInit;
+
         /**
          * Create a new SpreadsheetML workbook.
          */
@@ -199,9 +202,11 @@ namespace NPOI.XSSF.UserModel
          *
          * @param pkg the OpenXML4J <code>OPC Package</code> object.
          */
-        public XSSFWorkbook(OPCPackage pkg, bool loadSheetData = true)
+        public XSSFWorkbook(OPCPackage pkg, bool loadDataOnInit = true)
             : base(pkg)
         {
+            _loadDataOnInit = loadDataOnInit;
+
             BeforeDocumentRead();
 
             //build a tree of POIXMLDocumentParts, this workbook being the root
@@ -300,8 +305,8 @@ namespace NPOI.XSSF.UserModel
          * 
          * @param      path   the file name.
          */
-        public XSSFWorkbook(String path, bool loadSheetData = true)
-            : this(OpenPackage(path), loadSheetData)
+        public XSSFWorkbook(String path, bool loadDataOnInit = true)
+            : this(OpenPackage(path), loadDataOnInit)
         {
 
         }
@@ -920,6 +925,7 @@ namespace NPOI.XSSF.UserModel
             RelationPart rp = CreateRelationship(XSSFRelation.WORKSHEET, XSSFFactory.GetInstance(), sheetNumber, false);
             XSSFSheet wrapper = rp.DocumentPart as XSSFSheet;
             wrapper.sheet = sheet;
+            wrapper.loadDataOnInit = _loadDataOnInit;
             sheet.id = (rp.Relationship.Id);
             sheet.sheetId = (uint)sheetNumber;
             if (sheets.Count == 0) wrapper.IsSelected = (true);

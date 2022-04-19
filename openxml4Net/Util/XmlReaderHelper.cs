@@ -246,6 +246,10 @@ namespace NPOI.OpenXml4Net.Util
             }
         }
 
+        private static int removeElementDepth = 1;
+        private static string removeElementName = "sheetData";
+        private static string rowElementName = "row";
+
         /// <summary>
         /// 删除SheetData节点下第二个及其之后所有Row节点
         /// </summary>
@@ -258,10 +262,6 @@ namespace NPOI.OpenXml4Net.Util
             reader.DtdProcessing = DtdProcessing.Ignore;
             dataRowCount = 0;
 
-            int depth = 1;
-            string removeElementName = "sheetData";
-            string rowElementName = "row";
-
             MemoryStream ms = new MemoryStream();
             var writer = new XmlTextWriter(ms, reader.Encoding);
             try
@@ -270,13 +270,13 @@ namespace NPOI.OpenXml4Net.Util
                 while (reader.Read())
                 {
                     //go in sheetData node
-                    if (!isInSheetDataNode && reader.NodeType == XmlNodeType.Element && reader.Depth == depth && reader.Name == removeElementName)
+                    if (!isInSheetDataNode && reader.NodeType == XmlNodeType.Element && reader.Depth == removeElementDepth && reader.Name == removeElementName)
                     {
                         isInSheetDataNode = true;
                     }
 
                     //go in sheetData node
-                    if (isInSheetDataNode && reader.NodeType == XmlNodeType.EndElement && reader.Depth == depth && reader.Name == removeElementName)
+                    if (isInSheetDataNode && reader.NodeType == XmlNodeType.EndElement && reader.Depth == removeElementDepth && reader.Name == removeElementName)
                     {
                         isInSheetDataNode = false;
                     }
@@ -284,7 +284,14 @@ namespace NPOI.OpenXml4Net.Util
                     //count row if is in the sheetdata node 
                     if (isInSheetDataNode && reader.NodeType == XmlNodeType.Element && reader.Name == rowElementName)
                     {
-                        dataRowCount++;
+                        if (dataRowCount == 0 || !CheckRowIsEmpry(reader))
+                        {
+                            dataRowCount++;
+                        }
+                        else
+                        {
+                            continue;
+                        }
                     }
 
                     if (isInSheetDataNode && dataRowCount > 1)
@@ -337,6 +344,44 @@ namespace NPOI.OpenXml4Net.Util
 
             ms.Position = 0;
             return ms;
+        }
+
+        public static bool CheckRowIsEmpry(XmlTextReader reader)
+        {
+            try
+            {
+                if (!(reader.NodeType == XmlNodeType.Element && reader.Name == "row"))
+                {
+                    throw new Exception("it is not a row xml node");
+                }
+
+                if (reader.IsEmptyElement)
+                {
+                    return true;
+                }
+
+                while (reader.Read())
+                {
+                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "c")
+                    {
+                        if (!reader.IsEmptyElement)
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (reader.NodeType == XmlNodeType.EndElement && reader.Name == "row")
+                    {
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return true;
         }
 
         private static void WriteElement(XmlTextReader reader, XmlTextWriter writer)
