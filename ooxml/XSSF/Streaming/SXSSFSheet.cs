@@ -786,6 +786,11 @@ namespace NPOI.XSSF.Streaming
             throw new NotImplementedException();
         }
 
+        public int GetVirtualRowCount()
+        {
+            throw new NotSupportedException();
+        }
+
         public double GetMargin(MarginType margin)
         {
             return _sh.GetMargin(margin);

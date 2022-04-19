@@ -940,6 +940,11 @@ namespace NPOI.HSSF.UserModel
             throw new NotSupportedException();
         }
 
+        public int GetVirtualRowCount()
+        {
+            throw new NotSupportedException();
+        }
+
         /// <summary>
         /// Sets the active cell.
         /// </summary>

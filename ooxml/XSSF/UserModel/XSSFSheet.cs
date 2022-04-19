@@ -4486,6 +4486,11 @@ namespace NPOI.XSSF.UserModel
             return _virtualRows.GetEnumerator();
         }
 
+        public int GetVirtualRowCount()
+        {
+            return _virtualRows.ItemsProvider.FetchCount();
+        }
+
         public IEnumerator GetEnumerator()
         {
             return _rows.Values.GetEnumerator();
