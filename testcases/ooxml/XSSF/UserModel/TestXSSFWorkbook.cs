@@ -30,6 +30,7 @@ using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -1286,5 +1287,62 @@ namespace TestCases.XSSF.UserModel
             Trace.WriteLine(string.Format("GetExcelData by NOPI cost: {0}s", watcher.ElapsedMilliseconds / 1000));
             Trace.WriteLine(string.Format("FetchRange cost: {0}s", XSSFRowProvider.Stopwatch.ElapsedMilliseconds / 1000));
         }
+
+        [Test]
+        public void TestGetExcelPlanData()
+        {
+            string fileName = @"D:\Documents\C04Tencent\02项目建设\20220331管家2022H1性能优化\资料\导入关键词30w物料模板.xlsx";
+
+            using (FileStream fileData = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            {
+                XSSFWorkbook xssfworkbook_data = new XSSFWorkbook(fileData);
+
+                DataTable dt = new DataTable();
+                ISheet sheet = xssfworkbook_data.GetSheetAt(1);
+                dt.TableName = sheet.SheetName;
+
+                IEnumerator rows = sheet.GetVirtualEnumerator();
+                int rowcount = 0;
+
+                if (rows.MoveNext())
+                {
+                    XSSFRow row = (XSSFRow)rows.Current;
+                    DataRow dr = dt.NewRow();
+                    rowcount = row.LastCellNum;
+                    for (int j = 0; j < row.LastCellNum; ++j)
+                    {
+                        ICell cell = row.GetCell(j);
+
+                        if (cell != null)
+                        {
+                            dt.Columns.Add(cell.ToString());
+                        }
+                    }
+                }
+
+                while (rows.MoveNext())
+                {
+                    XSSFRow row = (XSSFRow)rows.Current;
+                    DataRow dr = dt.NewRow();
+
+                    for (int k = 0; k < rowcount; ++k)
+                    {
+                        ICell cell = row.GetCell(k);
+
+                        if (cell == null)
+                        {
+                            dr[k] = null;
+                        }
+                        else
+                        {
+                            dr[k] = cell.ToString();
+                        }
+                    }
+                    Trace.WriteLine(row.GetCell(0));
+                    dt.Rows.Add(dr);
+                }
+            }
+        }
+
     }
 }

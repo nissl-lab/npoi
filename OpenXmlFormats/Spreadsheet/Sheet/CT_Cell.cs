@@ -67,7 +67,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 return null;
             }
+
             CT_Cell ctObj = new CT_Cell();
+            var isEmptyElement = reader.IsEmptyElement;
 
             while (reader.MoveToNextAttribute())
             {
@@ -90,7 +92,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 }
             }
 
-            if (reader.IsEmptyElement)
+            if (isEmptyElement)
             {
                 return ctObj;
             }
