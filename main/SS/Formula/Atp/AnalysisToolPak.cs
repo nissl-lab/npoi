@@ -179,6 +179,7 @@ namespace NPOI.SS.Formula.Atp {
             r(m, "WEEKNUM", WeekNum.instance);
             r(m, "WORKDAY", WorkdayFunction.instance);
             r(m, "XIRR", null);
+            r(m, "XLOOKUP", XLookupFunction.instance);
             r(m, "XNPV", null);
             r(m, "YEARFRAC", YearFrac.instance);
             r(m, "YIELD", null);
