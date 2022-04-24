@@ -68,7 +68,7 @@ namespace NPOI.XSSF.UserModel
         internal CT_Sheet sheet;
         internal CT_Worksheet worksheet;
 
-        internal bool loadDataOnInit;
+        internal bool loadDataOnInit = true;
 
         private SortedList<int, XSSFRow> _rows = new SortedList<int, XSSFRow>();
         private VirtualizingCollection<XSSFRow> _virtualRows;
@@ -139,6 +139,8 @@ namespace NPOI.XSSF.UserModel
         {
             try
             {
+                loadDataOnInit = ((XSSFWorkbook)GetParent()).LoadDataOnInit;
+
                 Read(GetPackagePart().GetInputStream());
             }
             catch (IOException e)

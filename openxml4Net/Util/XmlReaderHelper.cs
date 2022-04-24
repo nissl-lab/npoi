@@ -246,6 +246,132 @@ namespace NPOI.OpenXml4Net.Util
             }
         }
 
+        /// <summary>
+        /// Get memory stream from 
+        /// </summary>
+        /// <returns></returns>
+        public static Stream GetMemoryStream(Stream sourceStream)
+        {
+            XmlTextReader reader = new XmlTextReader(sourceStream);
+            reader.DtdProcessing = DtdProcessing.Ignore;
+            MemoryStream ms = new MemoryStream();
+            var writer = new XmlTextWriter(ms, reader.Encoding);
+            try
+            {
+                while (reader.Read())
+                {
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.XmlDeclaration:
+                            writer.WriteStartDocument(true);
+                            break;
+                        case XmlNodeType.Whitespace:
+                            writer.WriteWhitespace(reader.Value);
+                            break;
+                        case XmlNodeType.Element:
+                            if (reader.Depth == 0)
+                            {
+                                WriteRootElement(reader, writer);
+                            }
+                            else
+                            {
+                                WriteElement(reader, writer);
+                            }
+                            break;
+                        case XmlNodeType.Text:
+                            writer.WriteValue(reader.Value);
+                            break;
+                        case XmlNodeType.EndElement:
+                            writer.WriteEndElement();
+                            break;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                if (writer != null && writer.WriteState != WriteState.Closed)
+                {
+                    writer.Flush();
+                    //writer.Close();
+                }
+
+                if (reader != null && reader.ReadState != ReadState.Closed)
+                    reader.Close();
+            }
+
+            ms.Position = 0;
+            return ms;
+        }
+
+        /// <summary>
+        /// Get memory stream from 
+        /// </summary>
+        /// <returns></returns>
+        public static Stream GetShareStringMemoryStream(Stream sourceStream, ref List<long> positions)
+        {
+            XmlTextReader reader = new XmlTextReader(sourceStream);
+            reader.DtdProcessing = DtdProcessing.Ignore;
+            MemoryStream ms = new MemoryStream();
+            var writer = new XmlTextWriter(ms, reader.Encoding);
+
+            var siName = "si";
+            var siDepth = 1;
+
+            try
+            {
+                while (reader.Read())
+                {
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.XmlDeclaration:
+                            writer.WriteStartDocument(true);
+                            break;
+                        case XmlNodeType.Whitespace:
+                            writer.WriteWhitespace(reader.Value);
+                            break;
+                        case XmlNodeType.Element:
+                            if (reader.Depth == 0)
+                            {
+                                WriteRootElement(reader, writer);
+                            }
+                            else
+                            {
+                                WriteElement(reader, writer);
+                            }
+                            break;
+                        case XmlNodeType.Text:
+                            writer.WriteValue(reader.Value);
+                            break;
+                        case XmlNodeType.EndElement:
+                            writer.WriteEndElement();
+                            break;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                if (writer != null && writer.WriteState != WriteState.Closed)
+                {
+                    writer.Flush();
+                    //writer.Close();
+                }
+
+                if (reader != null && reader.ReadState != ReadState.Closed)
+                    reader.Close();
+            }
+
+            ms.Position = 0;
+            return ms;
+        }
+
         private static int removeElementDepth = 1;
         private static string removeElementName = "sheetData";
         private static string rowElementName = "row";

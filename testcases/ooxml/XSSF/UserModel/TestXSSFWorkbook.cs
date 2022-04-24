@@ -1260,33 +1260,110 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
-        public void TestReadColumnBigExcel()
+        public void TestReadColumnBigExcel1()
         {
             Stopwatch watcher = new Stopwatch();
             watcher.Start();
 
-            string filePath = @"D:\Documents\C04Tencent\02项目建设\20220331管家2022H1性能优化\资料\导入关键词30w物料模板.xlsx";
             try
             {
-
-                XSSFWorkbook doc = new XSSFWorkbook(filePath, false);
-
-                var sheetCount = doc.NumberOfSheets;
-                for (var i = 0; i < sheetCount; i++)
-                {
-                    var sheet = doc.GetSheetAt(i);
-                    var count = sheet.GetVirtualRowCount();
-                }
+                new XSSFWorkbook(@"D:\TempFiles\Import\导入关键词30w物料模板12.xlsx", false);
             }
             catch (Exception ex)
             {
 
             }
-            
 
-            watcher.Stop();
-            Trace.WriteLine(string.Format("GetExcelData by NOPI cost: {0}s", watcher.ElapsedMilliseconds / 1000));
-            Trace.WriteLine(string.Format("FetchRange cost: {0}s", XSSFRowProvider.Stopwatch.ElapsedMilliseconds / 1000));
+            string filePath = @"D:\TempFiles\Import\导入关键词30w物料模板4.xlsx";
+            try
+            {
+                watcher.Reset();
+                watcher.Start();
+
+                var package = PackageHelper.Open(File.Open(filePath, FileMode.Open), PackageAccess.READ);
+
+                XSSFWorkbook doc = new XSSFWorkbook(package, false);
+
+                watcher.Stop();
+                Trace.WriteLine(string.Format("GetExcelData, No Data, No SharedStrings hash, by NOPI cost: {0}ms", watcher.ElapsedMilliseconds));
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
+
+        [Test]
+        public void TestReadColumnBigExcel2()
+        {
+            Stopwatch watcher = new Stopwatch();
+            string filePath2 = @"D:\TempFiles\Import\导入关键词30w物料模板2.xlsx";
+            try
+            {
+                watcher.Reset();
+                watcher.Start();
+
+                var package = PackageHelper.Open(File.Open(filePath2, FileMode.Open), PackageAccess.READ_WRITE);
+
+                XSSFWorkbook doc = new XSSFWorkbook(package, true);
+
+                watcher.Stop();
+                Trace.WriteLine(string.Format("GetExcelData, No Data,  SharedStrings hash, by NOPI cost: {0}ms", watcher.ElapsedMilliseconds));
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+
+        }
+
+        [Test]
+        public void TestReadColumnBigExcel3()
+        {
+
+            Stopwatch watcher = new Stopwatch();
+            string filePath3 = @"D:\TempFiles\Import\导入关键词30w物料模板2.xlsx";
+            try
+            {
+                watcher.Reset();
+                watcher.Start();
+
+                XSSFWorkbook doc = new XSSFWorkbook(filePath3, false);
+
+                watcher.Stop();
+                Trace.WriteLine(string.Format("GetExcelData, with Data, No SharedStrings hash, by NOPI cost: {0}ms", watcher.ElapsedMilliseconds));
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+
+        }
+
+        [Test]
+        public void TestReadColumnBigExcel4()
+        {
+
+            Stopwatch watcher = new Stopwatch();
+            string filePath4 = @"D:\TempFiles\Import\导入关键词30w物料模板4.xlsx";
+            try
+            {
+                watcher.Reset();
+                watcher.Start();
+
+                XSSFWorkbook doc = new XSSFWorkbook(filePath4);
+
+                watcher.Stop();
+                Trace.WriteLine(string.Format("GetExcelData, with Data, No SharedStrings hash, by NOPI cost: {0}ms", watcher.ElapsedMilliseconds));
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         [Test]
@@ -1297,6 +1374,9 @@ namespace TestCases.XSSF.UserModel
             using (FileStream fileData = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
                 XSSFWorkbook xssfworkbook_data = new XSSFWorkbook(fileData);
+
+                //var package = PackageHelper.Open(fileData, PackageAccess.READ);
+                //XSSFWorkbook xssfworkbook_data = new XSSFWorkbook(package, false);
 
                 DataTable dt = new DataTable();
                 ISheet sheet = xssfworkbook_data.GetSheetAt(3);

@@ -80,10 +80,11 @@ namespace NPOI.XSSF.Model
 
         private SstDocument _sstDoc;
 
+        private bool _packageReadOnly = false;
+
         public SharedStringsTable()
             : base()
         {
-
             _sstDoc = new SstDocument();
             _sstDoc.AddNewSst();
         }
@@ -91,6 +92,8 @@ namespace NPOI.XSSF.Model
         public SharedStringsTable(PackagePart part)
             : base(part)
         {
+            _packageReadOnly = part.Package.GetPackageAccess() == PackageAccess.READ;
+
             ReadFrom(part.GetInputStream());
         }
 
@@ -105,19 +108,23 @@ namespace NPOI.XSSF.Model
         {
             try
             {
-                int cnt = 0;
                 XmlDocument xml = ConvertStreamToXml(is1);
                 _sstDoc = SstDocument.Parse(xml, NamespaceManager);
                 CT_Sst sst = _sstDoc.GetSst();
                 count = (int)sst.count;
                 uniqueCount = (int)sst.uniqueCount;
-                foreach (CT_Rst st in sst.si)
+                strings.AddRange(sst.si);
+
+                if (!_packageReadOnly)
                 {
-                    string key = GetKey(st);
-                    if (key != null && !stmap.ContainsKey(key))
-                        stmap.Add(key, cnt);
-                    strings.Add(st);
-                    cnt++;
+                    int cnt = 0;
+                    foreach (CT_Rst st in sst.si)
+                    {
+                        string key = GetKey(st);
+                        if (key != null && !stmap.ContainsKey(key))
+                            stmap.Add(key, cnt);
+                        cnt++;
+                    }
                 }
             }
             catch (XmlException e)
@@ -229,10 +236,10 @@ namespace NPOI.XSSF.Model
             //options.SetSaveCDataEntityCountThreshold(-1);
             CT_Sst sst = _sstDoc.GetSst();
             sst.count = count;
-           sst.uniqueCount = uniqueCount;
+            sst.uniqueCount = uniqueCount;
 
-           //re-create the sst table every time saving a workbook
-           _sstDoc.Save(out1);
+            //re-create the sst table every time saving a workbook
+            _sstDoc.Save(out1);
         }
 
 

@@ -280,7 +280,7 @@ namespace NPOI.OpenXml4Net.OPC
                 throw new ArgumentException("file must not be a directory");
 
             OPCPackage pack = new ZipPackage(file, access);
-            
+
             try
             {
                 if (pack.partList == null && access != PackageAccess.WRITE)
@@ -326,9 +326,9 @@ namespace NPOI.OpenXml4Net.OPC
          *            The InputStream to read the package from
          * @return A PackageBase object
          */
-        public static OPCPackage Open(Stream in1)
+        public static OPCPackage Open(Stream in1, PackageAccess access = PackageAccess.READ_WRITE)
         {
-            OPCPackage pack = new ZipPackage(in1, PackageAccess.READ_WRITE);
+            OPCPackage pack = new ZipPackage(in1, access);
             if (pack.partList == null)
             {
                 pack.GetParts();
@@ -336,7 +336,7 @@ namespace NPOI.OpenXml4Net.OPC
             return pack;
         }
 
-        public static OPCPackage Open(Stream in1,bool bReadonly)
+        public static OPCPackage Open(Stream in1, bool bReadonly)
         {
             OPCPackage pack = new ZipPackage(in1, bReadonly ? PackageAccess.READ : PackageAccess.READ_WRITE);
             if (pack.partList == null)
@@ -468,7 +468,7 @@ namespace NPOI.OpenXml4Net.OPC
         {
             if (this.packageAccess == PackageAccess.READ)
             {
-                logger.Log(POILogger.WARN, 
+                logger.Log(POILogger.WARN,
                     "The close() method is intended to SAVE a package. This package is open in READ ONLY mode, use the revert() method instead !");
                 Revert();
                 return;
@@ -489,8 +489,9 @@ namespace NPOI.OpenXml4Net.OPC
                         && !"".Equals(this.originalPackagePath.Trim()))
                 {
                     FileInfo targetFile = new FileInfo(this.originalPackagePath);
-                    if (!File.Exists(this.originalPackagePath)|| !(this.originalPackagePath
-                        		.Equals(targetFile.FullName, StringComparison.InvariantCultureIgnoreCase))) {
+                    if (!File.Exists(this.originalPackagePath) || !(this.originalPackagePath
+                                .Equals(targetFile.FullName, StringComparison.InvariantCultureIgnoreCase)))
+                    {
 
                         // Case of a package Created from scratch
                         Save(originalPackagePath);
@@ -556,7 +557,7 @@ namespace NPOI.OpenXml4Net.OPC
         /// </summary>
         /// <param name="filename"></param>
         /// <param name="data"></param>
-        public void AddThumbnail(String filename, Stream data) 
+        public void AddThumbnail(String filename, Stream data)
         {
             // Check parameter
             if (string.IsNullOrEmpty(filename))
@@ -1450,7 +1451,7 @@ namespace NPOI.OpenXml4Net.OPC
             Uri targetURI;
             try
             {
-                targetURI = PackagingUriHelper.ParseUri(target,UriKind.Absolute);
+                targetURI = PackagingUriHelper.ParseUri(target, UriKind.Absolute);
             }
             catch (UriFormatException e)
             {

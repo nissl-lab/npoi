@@ -168,7 +168,7 @@ namespace NPOI.XSSF.UserModel
         private List<XSSFPivotTable> pivotTables;
         private List<CT_PivotCache> pivotCaches;
 
-        private bool _loadDataOnInit;
+        public bool LoadDataOnInit { get; set; }
 
         /**
          * Create a new SpreadsheetML workbook.
@@ -205,7 +205,7 @@ namespace NPOI.XSSF.UserModel
         public XSSFWorkbook(OPCPackage pkg, bool loadDataOnInit = true)
             : base(pkg)
         {
-            _loadDataOnInit = loadDataOnInit;
+            LoadDataOnInit = loadDataOnInit;
 
             BeforeDocumentRead();
 
@@ -234,9 +234,11 @@ namespace NPOI.XSSF.UserModel
          *       pkg.close(); // gracefully closes the underlying zip file
          *   </code></pre>     
          */
-        public XSSFWorkbook(Stream is1)
+        public XSSFWorkbook(Stream is1, bool loadDataOnInit = true)
             : base(PackageHelper.Open(is1))
         {
+            LoadDataOnInit = loadDataOnInit;
+
             BeforeDocumentRead();
 
             //build a tree of POIXMLDocumentParts, this workbook being the root
@@ -925,7 +927,6 @@ namespace NPOI.XSSF.UserModel
             RelationPart rp = CreateRelationship(XSSFRelation.WORKSHEET, XSSFFactory.GetInstance(), sheetNumber, false);
             XSSFSheet wrapper = rp.DocumentPart as XSSFSheet;
             wrapper.sheet = sheet;
-            wrapper.loadDataOnInit = _loadDataOnInit;
             sheet.id = (rp.Relationship.Id);
             sheet.sheetId = (uint)sheetNumber;
             if (sheets.Count == 0) wrapper.IsSelected = (true);
@@ -2368,7 +2369,6 @@ namespace NPOI.XSSF.UserModel
                 this.pivotTables = value;
             }
         }
-
 
         #region IWorkbook Members
 
