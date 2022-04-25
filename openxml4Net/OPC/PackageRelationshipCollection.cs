@@ -270,7 +270,8 @@ namespace NPOI.OpenXml4Net.OPC
                         if (relationshipsByType.Values[i] == rel)
                             relationshipsByType.RemoveAt(i);
                     }
-                    internalRelationshipsByTargetName.Values.Remove(rel);
+                    
+                    internalRelationshipsByTargetName.RemoveAt(internalRelationshipsByTargetName.IndexOfValue(rel));
                 }
             }
         }
