@@ -4,6 +4,8 @@ This project fully supports Ukraine people to fight against Russian army. This i
 
 However, I don't wanna stop Russian developers from using NPOI. They are also victims. They cannot change Putin's or Russia Government's mind in any case. But if possible, Russian developers may help impact your government although it's risky. Thank you!
 
+Слава Україні!
+
 NPOI
 ===================
 [![NuGet Badge](https://buildstats.info/nuget/NPOI)](https://www.nuget.org/packages/NPOI)
