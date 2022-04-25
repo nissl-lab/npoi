@@ -605,11 +605,6 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             this.shapes = new List<CT_Shape>();
         }
 
-        public CT_GroupShape()
-        {
-            this.pictures = new List<CT_Picture>();
-        }
-
         public void Set(CT_GroupShape groupShape)
         {
             this.grpSpPrField = groupShape.grpSpPr;
