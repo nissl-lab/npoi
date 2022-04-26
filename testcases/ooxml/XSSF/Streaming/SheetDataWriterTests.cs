@@ -16,6 +16,7 @@
 ==================================================================== */
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Streaming;
+using NPOI.XSSF.UserModel;
 using NSubstitute;
 using NUnit.Framework;
 using System.IO;
@@ -32,7 +33,8 @@ namespace TestCases.XSSF.Streaming
         [SetUp]
         public void Init()
         {
-            _row = Substitute.For<SXSSFRow>();
+            var sheet=Substitute.For<SXSSFSheet>(Substitute.For<SXSSFWorkbook>(), Substitute.For<XSSFSheet>());
+            _row = Substitute.For<SXSSFRow>(sheet);
             _cell = Substitute.For<ICell>();
         }
 
