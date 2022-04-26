@@ -183,6 +183,7 @@
     <Compile Include="Spreadsheet\Workbook\CT_PivotCache.cs" />
     <Compile Include="Spreadsheet\Workbook\CT_SmartTags.cs" />
     <Compile Include="Spreadsheet\Workbook\CT_WebPublishObjects.cs" />
+    <Compile Include="Vml\CT_AlternateContent.cs" />
     <Compile Include="Wordprocessing\BaseTypes.cs" />
     <Compile Include="Wordprocessing\Document\CommentsDocument.cs" />
     <Compile Include="Wordprocessing\Document\FootnotesDocument.cs" />
