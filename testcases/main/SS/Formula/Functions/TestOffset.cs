@@ -17,9 +17,10 @@
 
 namespace TestCases.SS.Formula.Functions
 {
-
+    using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
+    using NPOI.SS.UserModel;
     using NUnit.Framework;
 
     /**
@@ -102,6 +103,20 @@ namespace TestCases.SS.Formula.Functions
             lor = lor.NormaliseAndTranslate(16300);
             Assert.IsTrue(lor.IsOutOfBounds(0, 16383));
             Assert.IsFalse(lor.IsOutOfBounds(0, 65535));
+        }
+
+        [Test]
+        public void TestOffsetWithEmpty23Arguments()
+        {
+            IWorkbook workbook = new HSSFWorkbook();
+            ICell cell = workbook.CreateSheet().CreateRow(0).CreateCell(0);
+            cell.SetCellFormula("OFFSET(B1,,)");
+            string value = "EXPECTED_VALUE";
+            ICell valueCell = cell.Row.CreateCell(1);
+            valueCell.SetCellValue(value);
+            workbook.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+            Assert.AreEqual(CellType.String, cell.CachedFormulaResultType);
+            Assert.AreEqual(value, cell.StringCellValue);
         }
     }
 
