@@ -236,7 +236,7 @@ namespace NPOI.SS.Formula.Eval
             retval[137] = new NotImplementedFunction("FWriteLN"); // FWriteLN
             retval[138] = new NotImplementedFunction("FWrite"); // FWrite
             retval[139] = new NotImplementedFunction("FPOS"); // FPOS
-            retval[140] = new NotImplementedFunction("DATEVALUE"); // DATEVALUE
+            retval[140] = new DateValue(); // DATEVALUE
             retval[141] = new NotImplementedFunction("TIMEVALUE"); // TIMEVALUE
             retval[142] = new NotImplementedFunction("SLN"); // SLN
             retval[143] = new NotImplementedFunction("SYD"); // SYD
