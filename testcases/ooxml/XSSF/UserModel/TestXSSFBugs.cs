@@ -300,7 +300,7 @@ namespace TestCases.XSSF.UserModel
             {
                 wb.Close();
             }
-            
+
         }
 
         /**
@@ -690,10 +690,10 @@ namespace TestCases.XSSF.UserModel
             sheet.GetRow(1).GetCell(0).SetCellFormula("A1"); // stay
             sheet.GetRow(2).GetCell(0).SetCellFormula(null);  // go
             sheet.GetRow(3).GetCell(0).SetCellType(CellType.Formula); // stay
-            
+
             XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
             sheet.GetRow(4).GetCell(0).SetCellType(CellType.String);  // go
-            
+
             XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
 
             validateCells(sheet);
@@ -701,14 +701,14 @@ namespace TestCases.XSSF.UserModel
                   sheet.GetRow(5).GetCell(0)  // go
             );
             validateCells(sheet);
-            
+
             XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
 
             sheet.GetRow(6).GetCell(0).SetCellType(CellType.Blank);  // go
-            
+
             XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
             sheet.GetRow(7).GetCell(0).SetCellValue((String)null);  // go
-            
+
             XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
 
             // Save and check
@@ -1497,8 +1497,8 @@ namespace TestCases.XSSF.UserModel
          *  eg =SUM($Sheet1.C1:$Sheet4.C1)
          * DISABLED As we can't currently Evaluate these
          */
-         [Ignore("by poi")]
-         [Test]
+        [Ignore("by poi")]
+        [Test]
         public void Test48703()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("48703.xlsx");
@@ -2644,7 +2644,8 @@ namespace TestCases.XSSF.UserModel
          * Excel treats this as not-bulleted, so now do we
          */
         [Test]
-        public void TestBug57826()  {
+        public void TestBug57826()
+        {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("57826.xlsx");
 
             Assert.IsTrue(workbook.NumberOfSheets >= 1, "no sheets in workbook");
@@ -2664,7 +2665,7 @@ namespace TestCases.XSSF.UserModel
 
             // No bulleting info included
             Assert.AreEqual("test ok", text);
-        
+
             workbook.Close();
         }
 
@@ -3195,7 +3196,7 @@ namespace TestCases.XSSF.UserModel
             ICellStyle style = workbook.CreateCellStyle();
             style.Rotation = ((short)-90);
             cell1.CellStyle = (style);
-            workbook.Write(fileOut,false);
+            workbook.Write(fileOut, false);
             fileOut.Close();
             workbook.Close();
         }
@@ -3358,6 +3359,24 @@ namespace TestCases.XSSF.UserModel
             IFormulaEvaluator evaluator = cell.Sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
             String result = form.FormatCellValue(cell, evaluator);
             Assert.AreEqual("09 Mar 2016", result);
+        }
+
+        [Test]
+        public void Bug61063()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("61063.xlsx");
+
+            IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
+            ISheet s = wb.GetSheetAt(0);
+
+            IRow r = s.GetRow(3);
+            ICell c = r.GetCell(0);
+            Assert.AreEqual(CellType.Formula, c.CellType);
+            eval.DebugEvaluationOutputForNextEval = true;
+            CellValue cv = eval.Evaluate(c);
+            Assert.IsNotNull(cv);
+            Assert.AreEqual(2.0, cv.NumberValue, 0.00001);
+            wb.Close();
         }
     }
 

@@ -555,7 +555,7 @@ namespace NPOI.SS.Formula
                 Ptg ptg = ptgs[i];
                 if (dbgEvaluationOutputIndent > 0)
                 {
-                    EVAL_LOG.Log(POILogger.INFO, dbgIndentStr + "  * ptg " + i + ": " + ptg.ToString());
+                    EVAL_LOG.Log(POILogger.INFO, dbgIndentStr + "  * ptg " + i + ": " + ptg.ToString()+", stack:"+stack);
                 }
                 if (ptg is AttrPtg)
                 {
@@ -647,6 +647,13 @@ namespace NPOI.SS.Formula
                         }
                         continue;
                     }
+                }
+                if (ptg is UnionPtg)
+                {
+                    ValueEval v2 = stack.Pop();
+                    ValueEval v1 = stack.Pop();
+                    stack.Push(new RefListEval(v1, v2));
+                    continue;
                 }
                 if (ptg is ControlPtg)
                 {
