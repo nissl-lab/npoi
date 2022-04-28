@@ -171,7 +171,7 @@ namespace NPOI.SS.Formula.Eval
             retval[72] = CalendarFieldFunction.MINUTE;
             retval[73] = CalendarFieldFunction.SECOND;
             retval[74] = new Now();
-            retval[75] = new NotImplementedFunction("AREAS"); // AREAS
+            retval[75] = new Areas();
             retval[76] = new Rows(); // ROWS
             retval[77] = new Columns(); // COLUMNS
             retval[FunctionID.OFFSET] = new Offset();  //nominally 78
