@@ -17,6 +17,7 @@
 using System;
 using NPOI.SS.Formula;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 
 namespace NPOI.XSSF.Streaming
@@ -137,13 +138,24 @@ namespace NPOI.XSSF.Streaming
                 return _cell.RichStringCellValue.String;
             }
         }
-        /**
-         * Will return {@link CellType} in a future version of POI.
-         * For forwards compatibility, do not hard-code cell type literals in your code.
-         *
-         * @return cell type of cached formula result
-         */
+        public bool IsPartOfArrayFormulaGroup
+        {
+            get
+            {
+                return _cell.IsPartOfArrayFormulaGroup;
+            }
+        }
 
+        public CellRangeAddress ArrayFormulaRange
+        {
+            get 
+            { 
+                return _cell.ArrayFormulaRange; 
+            }
+        }
+        /// <summary>
+        /// Will return CellType in a future version of POI. For forwards compatibility, do not hard-code cell type literals in your code.
+        /// </summary>
         public CellType CachedFormulaResultType
         {
             get
