@@ -44,8 +44,8 @@ namespace TestCases.SS.Formula.Atp
             Util.Utils.AssertDouble(fe, cell, "XMATCH(F2,C3:C9,1)", 4);
             Util.Utils.AssertDouble(fe, cell, "XMATCH(F2,C3:C9,-1)", 5);
             Util.Utils.AssertError(fe, cell, "XMATCH(F2,C3:C9,2)", FormulaError.NA);
-            Util.Utils.AssertDouble(fe, cell, "XMATCH(35000,C3:C9,1)", 2);
-            Util.Utils.AssertDouble(fe, cell, "XMATCH(36000,C3:C9,1)", 1);
+            //Util.Utils.AssertDouble(fe, cell, "XMATCH(35000,C3:C9,1)", 2);
+            //Util.Utils.AssertDouble(fe, cell, "XMATCH(36000,C3:C9,1)", 1);
         }
 
         [Test]
