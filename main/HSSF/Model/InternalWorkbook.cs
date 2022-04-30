@@ -74,6 +74,7 @@ namespace NPOI.HSSF.Model
             "Workbook", // as per BIFF8 spec
             "WORKBOOK", // Typically from third party programs
             "BOOK",     // Typically odd Crystal Reports exports
+            "WorkBook", // Another third party program special
         };
         /**
          * Name of older (pre-Excel 97) Workbook streams, which
