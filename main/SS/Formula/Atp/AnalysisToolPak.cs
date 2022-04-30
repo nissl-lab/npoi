@@ -107,8 +107,8 @@ namespace NPOI.SS.Formula.Atp {
             r(m, "DEC2OCT", null);
             r(m, "DELTA", Delta.instance);
             r(m, "DISC", null);
-            r(m, "DOLLARDE", null);
-            r(m, "DOLLARFR", null);
+            r(m, "DOLLARDE", DollarDe.instance);
+            r(m, "DOLLARFR", DollarFr.instance);
             r(m, "DURATION", null);
             r(m, "EDATE", EDate.Instance);
             r(m, "EFFECT", null);
