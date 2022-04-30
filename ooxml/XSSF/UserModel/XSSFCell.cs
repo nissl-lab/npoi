@@ -617,18 +617,21 @@ namespace NPOI.XSSF.UserModel
 
         private void SetFormula(String formula, FormulaType formulaType)
         {
-            IWorkbook wb = _row.Sheet.Workbook;
+            XSSFWorkbook wb = (XSSFWorkbook)_row.Sheet.Workbook;
             if (formula == null)
             {
                 ((XSSFWorkbook)wb).OnDeleteFormula(this);
-                if (_cell.IsSetF()) _cell.unsetF();
+                if (_cell.IsSetF()) 
+                    _cell.unsetF();
                 return;
             }
 
-            IFormulaParsingWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
-            //validate through the FormulaParser
-            FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(this.Sheet), RowIndex);
-
+            if (wb.CellFormulaValidation)
+            {
+                IFormulaParsingWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
+                //validate through the FormulaParser
+                FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(this.Sheet), RowIndex);
+            }
             CT_CellFormula f = new CT_CellFormula();
             f.Value = formula;
             _cell.f= (f);

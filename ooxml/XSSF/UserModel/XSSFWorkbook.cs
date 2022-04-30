@@ -148,7 +148,7 @@ namespace NPOI.XSSF.UserModel
          * See {@link NPOI.ss.usermodel.Row.MissingCellPolicy}
          */
         private MissingCellPolicy _missingCellPolicy = MissingCellPolicy.RETURN_NULL_AND_BLANK;
-
+        private bool cellFormulaValidation = true;
         /**
          * array of pictures for this workbook
          */
@@ -2361,7 +2361,11 @@ namespace NPOI.XSSF.UserModel
                 this.pivotTables = value;
             }
         }
-
+        public bool CellFormulaValidation
+        {
+            get { return this.cellFormulaValidation; }
+            set { this.cellFormulaValidation = false; }
+        }
 
         #region IWorkbook Members
 
