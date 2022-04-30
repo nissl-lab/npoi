@@ -832,6 +832,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             footnoteField.Add(f);
             return f;
         }
+        public void RemoveFootnote(int pos)
+        {
+            this.footnoteField.RemoveAt(pos);
+        }
+        public int SizeOfFootnoteArray
+        {
+            get
+            {
+                return this.footnoteField.Count;
+            }
+        }
     }
 
 
@@ -849,7 +860,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private bool typeFieldSpecified;
 
-        private string idField = string.Empty;
+        private int idField = -1;
 
         public static CT_FtnEdn Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -858,7 +869,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             CT_FtnEdn ctObj = new CT_FtnEdn();
             if (node.Attributes["w:type"] != null)
                 ctObj.type = (ST_FtnEdn)Enum.Parse(typeof(ST_FtnEdn), node.Attributes["w:type"].Value);
-            ctObj.id = XmlHelper.ReadString(node.Attributes["w:id"]);
+            ctObj.id = XmlHelper.ReadInt(node.Attributes["w:id"]);
 
             foreach (XmlNode childNode in node.ChildNodes)
             {
@@ -1175,7 +1186,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
 
         [XmlAttribute(Form = XmlSchemaForm.Qualified, DataType = "integer", Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main")]
-        public string id
+        public int id
         {
             get
             {

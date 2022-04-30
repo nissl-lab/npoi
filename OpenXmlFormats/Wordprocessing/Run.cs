@@ -20,7 +20,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     {
 
         private CT_RPr rPrField;
-
         private ArrayList itemsField;
 
         private List<RunItemsChoiceType> itemsElementNameField;
@@ -178,6 +177,23 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return this.rPrField;
         }
 
+
+        public CT_Empty AddNewFootnoteRef()
+        {
+            return AddNewObject<CT_Empty>(RunItemsChoiceType.footnoteRef);
+        }
+        public IList<CT_Empty> GetFootnoteRefList()
+        {
+            return GetObjectList<CT_Empty>(RunItemsChoiceType.footnoteRef);
+        }
+        public CT_Empty GetFootnoteRefArray(int pos)
+        {
+            return GetObjectArray<CT_Empty>(pos, RunItemsChoiceType.footnoteRef);
+        }
+        public CT_FtnEdnRef AddNewFootnoteReference()
+        {
+            return AddNewObject<CT_FtnEdnRef>(RunItemsChoiceType.footnoteReference);
+        }
         public CT_Empty AddNewTab()
         {
             return AddNewObject<CT_Empty>(RunItemsChoiceType.tab);
@@ -390,7 +406,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "rPr")
+                {
                     ctObj.rPr = CT_RPr.Parse(childNode, namespaceManager);
+                }
                 else if (childNode.LocalName == "instrText")
                 {
                     ctObj.Items.Add(CT_Text.Parse(childNode, namespaceManager));
@@ -568,9 +586,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(">");
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
+
             int i = 0;
-
-
             foreach (object o in this.Items)
             {
                 if ((o is CT_Text) && this.ItemsElementName[i] == RunItemsChoiceType.instrText)
@@ -655,6 +672,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public IList<CT_Empty> GetTabList()
         {
             return GetObjectList<CT_Empty>(RunItemsChoiceType.tab);
+        }
+
+        public IList<CT_FtnEdnRef> GetFootnoteReferenceList()
+        {
+            return GetObjectList<CT_FtnEdnRef>(RunItemsChoiceType.footnoteReference);
         }
     }
 
