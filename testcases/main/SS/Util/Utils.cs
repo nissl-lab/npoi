@@ -8,7 +8,13 @@ namespace TestCases.SS.Util
 {
     public static class Utils
     {
-
+        public static void AssertString(IFormulaEvaluator fe, ICell cell, string formula, string expectedResult)
+        {
+            cell.SetCellFormula(formula);
+            var result = fe.Evaluate(cell).StringValue;
+            fe.ClearAllCachedResultValues();
+            Assert.AreEqual(expectedResult, result);
+        }
         public static void AssertDouble(IFormulaEvaluator fe, ICell cell, string formula, double expectedResult)
         {
             cell.SetCellFormula(formula);
