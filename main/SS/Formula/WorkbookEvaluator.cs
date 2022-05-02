@@ -707,7 +707,15 @@ namespace NPOI.SS.Formula
             {
                 throw new InvalidOperationException("evaluation stack not empty");
             }
-            ValueEval result = DereferenceResult(value, ec.RowIndex, ec.ColumnIndex);
+            ValueEval result;
+            if (ec.IsSingleValue)
+            {
+                result = DereferenceResult(value, ec);
+            }
+            else
+            {
+                result = value;
+            }
             if (dbgEvaluationOutputIndent > 0)
             {
                 EVAL_LOG.Log(POILogger.INFO, dbgIndentStr + "finshed eval of "
@@ -771,6 +779,42 @@ namespace NPOI.SS.Formula
                 // Formulas _never_ evaluate To blank.  If a formula appears To have evaluated To
                 // blank, the actual value is empty string. This can be verified with ISBLANK().
             }
+            return value;
+        }
+        /**
+ * Dereferences a single value from any AreaEval or RefEval evaluation
+ * result. If the supplied evaluationResult is just a plain value, it is
+ * returned as-is.
+ *
+ * @return a {@link NumberEval}, {@link StringEval}, {@link BoolEval}, or
+ *         {@link ErrorEval}. Never <code>null</code>. {@link BlankEval} is
+ *         converted to {@link NumberEval#ZERO}
+ */
+        public static ValueEval DereferenceResult(ValueEval evaluationResult, OperationEvaluationContext ec)
+        {
+            ValueEval value;
+
+            if (ec == null)
+            {
+                throw new ArgumentNullException("OperationEvaluationContext ec is null");
+            }
+            if (ec.GetWorkbook() == null)
+            {
+                throw new ArgumentNullException("OperationEvaluationContext ec.getWorkbook() is null");
+            }
+
+            IEvaluationSheet evalSheet = ec.GetWorkbook().GetSheet(ec.SheetIndex);
+            IEvaluationCell evalCell = evalSheet.GetCell(ec.RowIndex, ec.ColumnIndex);
+
+            if (evalCell.IsPartOfArrayFormulaGroup && evaluationResult is AreaEval)
+            {
+                value = OperandResolver.GetElementFromArray((AreaEval)evaluationResult, evalCell);
+            }
+            else
+            {
+                value = DereferenceResult(evaluationResult, ec.RowIndex, ec.ColumnIndex);
+            }
+
             return value;
         }
         /**
@@ -854,6 +898,10 @@ namespace NPOI.SS.Formula
             {
                 AreaPtg aptg = (AreaPtg)ptg;
                 return ec.GetAreaEval(aptg.FirstRow, aptg.FirstColumn, aptg.LastRow, aptg.LastColumn);
+            }
+            if (ptg is ArrayPtg) {
+                ArrayPtg aptg = (ArrayPtg)ptg;
+                return ec.GetAreaValueEval(0, 0, aptg.RowCount - 1, aptg.ColumnCount - 1, aptg.GetTokenArrayValues());
             }
 
             if (ptg is UnknownPtg)

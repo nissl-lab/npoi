@@ -95,19 +95,18 @@ namespace NPOI.SS.Formula.PTG
             _reserved1Short = 0;
             _reserved2Byte = 0;
         }
-        public Object[][] GetTokenArrayValues()
+        public Object[,] GetTokenArrayValues()
         {
             if (_arrayValues == null)
             {
                 throw new InvalidOperationException("array values not read yet");
             }
-            Object[][] result = new Object[_nRows][];
+            Object[,] result = new Object[_nRows,_nColumns];
             for (int r = 0; r < _nRows; r++)
             {
-                result[r] = new object[_nColumns];
                 for (int c = 0; c < _nColumns; c++)
                 {
-                    result[r][c] = _arrayValues[GetValueIndex(c, r)];
+                    result[r,c] = _arrayValues[GetValueIndex(c, r)];
                 }
             }
             return result;

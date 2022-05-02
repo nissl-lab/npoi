@@ -395,6 +395,44 @@ namespace NPOI.SS.Formula
             return new LazyAreaEval(aptg.FirstRow, aptg.FirstColumn,
                     aptg.LastRow, aptg.LastColumn, sre);
         }
+        public ValueEval GetAreaValueEval(int firstRowIndex, int firstColumnIndex,
+         int lastRowIndex, int lastColumnIndex, Object[,] tokens)
+        {
+
+            ValueEval[] values = new ValueEval[tokens.Length * tokens.GetLength(1)];
+
+            int index = 0;
+            for (int jdx = 0; jdx < tokens.Length; jdx++)
+            {
+                for (int idx = 0; idx < tokens.GetLength(1); idx++)
+                {
+                    values[index++] = convertObjectEval(tokens[jdx,idx]);
+                }
+            }
+
+            return new CacheAreaEval(firstRowIndex, firstColumnIndex, lastRowIndex,
+                                     lastColumnIndex, values);
+        }
+        private ValueEval convertObjectEval(Object token)
+        {
+            if (token == null)
+            {
+                throw new ArgumentNullException("Array item cannot be null");
+            }
+            if (token is String) {
+                return new StringEval((String)token);
+            }
+            if (token is Double) {
+                return new NumberEval(((Double)token));
+            }
+            if (token is Boolean) {
+                return BoolEval.ValueOf((Boolean)token);
+            }
+            if (token is Constant.ErrorConstant) {
+                return ErrorEval.ValueOf(((Constant.ErrorConstant)token).ErrorCode);
+            }
+            throw new ArgumentException("Unexpected constant class (" + token.GetType().Name + ")");
+        }
         public ValueEval GetNameXEval(NameXPtg nameXPtg)
         {
             ExternalSheet externSheet = _workbook.GetExternalSheet(nameXPtg.SheetRefIndex);
