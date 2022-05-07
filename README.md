@@ -46,7 +46,7 @@ NPOI从未加入过中国NCC开源组织，他们在欺骗公众！Dotnetcore.np
 
 [Stop using Dotnetcore/NPOI nuget package. It’s obsolete!](https://tonyqus.medium.com/stop-using-dotnetcore-npoi-nuget-package-its-too-obsolete-6d0aeedb3319)
 
-[The real history of Dotnetcore.NPOI](https://tonyqus.medium.com/the-real-history-of-dotnetcore-npoi-999bb5e140c7)
+[The real history of Dotnetcore.NPOI](https://tonyqus.medium.com/the-real-history-of-dotnetcore-npoi-999bb5e140c7) [中文版](https://zhuanlan.zhihu.com/p/506975972)
 
 Advantage of NPOI
 =================
