@@ -107,7 +107,12 @@ namespace NPOI.XWPF.UserModel
             tableCells.Add(tableCell);
             return tableCell;
         }
-
+        public XWPFTableRow CloneRow()
+        {
+            XWPFTableRow clonedRow= new XWPFTableRow(ctRow.Copy(), this.table);
+            table.AddRow(clonedRow);
+            return clonedRow;
+        }
 
         /**
          * This element specifies the height of the current table row within the

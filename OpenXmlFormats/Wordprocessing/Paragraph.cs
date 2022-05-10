@@ -4555,6 +4555,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return this.bField;
         }
 
+        public CT_Shd AddNewShd()
+        {
+            if (this.shdField == null)
+                this.shdField = new CT_Shd();
+            return this.shdField;
+        }
+
         public CT_OnOff AddNewBCs()
         {
             if (this.bCsField == null)
@@ -4759,6 +4766,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return this.spacingField != null;
         }
 
+        public CT_Highlight AddNewHighlight()
+        {
+            if (this.highlightField == null)
+                this.highlightField = new CT_Highlight();
+            return this.highlightField;
+        }
+
         public CT_SignedTwipsMeasure AddNewSpacing()
         {
             if (this.spacingField == null)
@@ -4769,12 +4783,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public bool IsSetHighlight()
         {
             return this.highlightField != null;
-        }
-
-        internal CT_Highlight AddNewHighlight()
-        {
-            this.highlightField = new CT_Highlight();
-            return this.highlightField;
         }
     }
 

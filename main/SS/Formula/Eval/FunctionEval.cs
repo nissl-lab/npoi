@@ -171,7 +171,7 @@ namespace NPOI.SS.Formula.Eval
             retval[72] = CalendarFieldFunction.MINUTE;
             retval[73] = CalendarFieldFunction.SECOND;
             retval[74] = new Now();
-            retval[75] = new NotImplementedFunction("AREAS"); // AREAS
+            retval[75] = new Areas();
             retval[76] = new Rows(); // ROWS
             retval[77] = new Columns(); // COLUMNS
             retval[FunctionID.OFFSET] = new Offset();  //nominally 78
@@ -236,7 +236,7 @@ namespace NPOI.SS.Formula.Eval
             retval[137] = new NotImplementedFunction("FWriteLN"); // FWriteLN
             retval[138] = new NotImplementedFunction("FWrite"); // FWrite
             retval[139] = new NotImplementedFunction("FPOS"); // FPOS
-            retval[140] = new NotImplementedFunction("DATEVALUE"); // DATEVALUE
+            retval[140] = new DateValue(); // DATEVALUE
             retval[141] = new NotImplementedFunction("TIMEVALUE"); // TIMEVALUE
             retval[142] = new NotImplementedFunction("SLN"); // SLN
             retval[143] = new NotImplementedFunction("SYD"); // SYD
@@ -310,7 +310,7 @@ namespace NPOI.SS.Formula.Eval
             retval[219] = new Address(); // AddRESS
             retval[220] = new Days360(); // DAYS360
             retval[221] = new Today(); // TODAY
-            retval[222] = new NotImplementedFunction("VDB"); // VDB
+            retval[222] = new NotImplementedFunction("VDB"); // VDB-
             retval[227] = AggregateFunction.MEDIAN; // MEDIAN
             retval[228] = new Sumproduct(); // SUMPRODUCT
             retval[229] = NumericFunction.SINH; // SINH
@@ -411,7 +411,7 @@ namespace NPOI.SS.Formula.Eval
             retval[326] = AggregateFunction.SMALL; // SMALL
             retval[327] = new NotImplementedFunction("QUARTILE"); // QUARTILE
             retval[328] = AggregateFunction.PERCENTILE; // PERCENTILE
-            retval[329] = new NotImplementedFunction("PERCENTRANK"); // PERCENTRANK
+            retval[329] = PercentRank.instance; // PERCENTRANK
             retval[330] = new Mode(); // MODE
             retval[331] = new NotImplementedFunction("TRIMMEAN"); // TRIMMEAN
             retval[332] = new NotImplementedFunction("TINV"); // TINV

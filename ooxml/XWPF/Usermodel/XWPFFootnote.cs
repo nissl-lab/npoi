@@ -249,7 +249,110 @@ namespace NPOI.XWPF.UserModel
                 return footnotes;
             }
         }
+        public int Id
+        {
+            get
+            {
+                return this.ctFtnEdn.id;
+            }
+        }
+        public List<XWPFParagraph> GetParagraphs()
+        {
+            return paragraphs;
+        }
+        /**
+         * Appends a new {@link XWPFParagraph} to this footnote.
+         *
+         * @return The new {@link XWPFParagraph}
+         */
+        public XWPFParagraph CreateParagraph()
+        {
+            XWPFParagraph p = new XWPFParagraph(this.ctFtnEdn.AddNewP(), this);
+            paragraphs.Add(p);
+            bodyElements.Add(p);
 
+            // If the paragraph is the first paragraph in the footnote, 
+            // ensure that it has a footnote reference run.
+
+            if (p.Equals(GetParagraphs()[0]))
+            {
+                EnsureFootnoteRef(p);
+            }
+            return p;
+        }
+
+        /**
+         * Ensure that the specified paragraph has a reference marker for this
+         * footnote by adding a footnote reference if one is not found.
+         * <p>This method is for the first paragraph in the footnote, not 
+         * paragraphs that will refer to the footnote. For references to
+         * the footnote, use {@link XWPFParagraph#addFootnoteReference(XWPFFootnote)}.
+         * </p>
+         * <p>The first run of the first paragraph in a footnote should
+         * contain a {@link CTFtnEdnRef} object.</p>
+         *
+         * @param p The {@link XWPFParagraph} to ensure
+         */
+        public void EnsureFootnoteRef(XWPFParagraph p)
+        {
+
+            XWPFRun r = null;
+            if (p.Runs.Count > 0)
+            {
+                r = p.Runs[0];
+            }
+            if (r == null)
+            {
+                r = p.CreateRun();
+            }
+            CT_R ctr = r.GetCTR();
+            bool foundRef = false;
+            foreach (CT_FtnEdnRef reference in ctr.GetFootnoteReferenceList())
+            {
+                if (Id.ToString().Equals(reference.id))
+                {
+                    foundRef = true;
+                    break;
+                }
+            }
+            if (!foundRef)
+            {
+                ctr.AddNewRPr().AddNewRStyle().val="FootnoteReference";
+                ctr.AddNewFootnoteRef();
+            }
+        }
+
+        /**
+         * Appends a new {@link XWPFTable} to this footnote
+         *
+         * @return The new {@link XWPFTable}
+         */
+        public XWPFTable CreateTable()
+        {
+            XWPFTable table = new XWPFTable(ctFtnEdn.AddNewTbl(), this);
+            if (bodyElements.Count == 0)
+            {
+                XWPFParagraph p = CreateParagraph();
+                EnsureFootnoteRef(p);
+            }
+            bodyElements.Add(table);
+            tables.Add(table);
+            return table;
+        }
+
+        /**
+         * Appends a new {@link XWPFTable} to this footnote
+         * @param rows Number of rows to initialize the table with
+         * @param cols Number of columns to initialize the table with 
+         * @return the new {@link XWPFTable} with the specified number of rows and columns
+         */
+        public XWPFTable CreateTable(int rows, int cols)
+        {
+            XWPFTable table = new XWPFTable(ctFtnEdn.AddNewTbl(), this, rows, cols);
+            bodyElements.Add(table);
+            tables.Add(table);
+            return table;
+        }
         /**
          * 
          * @param cursor

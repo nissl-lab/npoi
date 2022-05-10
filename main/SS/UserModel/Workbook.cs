@@ -241,7 +241,7 @@ namespace NPOI.SS.UserModel
         /// Write out this workbook to an OutPutstream.
         /// </summary>
         /// <param name="stream">the stream you wish to write to</param>
-        void Write(Stream stream);
+        void Write(Stream stream, bool leaveOpen);
 
         /// <summary>
         /// the total number of defined names in this workbook

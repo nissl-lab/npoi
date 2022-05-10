@@ -96,6 +96,10 @@
             return _firstRow <= rowInd && rowInd <= _lastRow && //containsRow
                 _firstCol <= colInd && colInd <= _lastCol; //containsColumn
         }
+        public bool IsInRange(CellReference reference)
+        {
+            return IsInRange(reference.Row, reference.Col);
+        }
         public bool IsFullColumnRange
         {
             get

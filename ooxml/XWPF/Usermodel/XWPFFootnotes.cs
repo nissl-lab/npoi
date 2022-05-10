@@ -123,7 +123,7 @@ namespace NPOI.XWPF.UserModel
         public XWPFFootnote GetFootnoteById(int id)
         {
             foreach(XWPFFootnote note in listFootnote) {
-                if(note.GetCTFtnEdn().id == id.ToString())
+                if(note.GetCTFtnEdn().id == id)
                     return note;
             }
             return null;
@@ -167,7 +167,44 @@ namespace NPOI.XWPF.UserModel
         {
             document = doc;
         }
+        /// <summary>
+        /// Create a new footnote and add it to the document. 
+        /// </summary>
+        /// <remarks>
+        /// The new note will have one paragraph with the style "FootnoteText"
+        /// and one run containing the required footnote reference with the 
+        /// style "FootnoteReference".
+        /// </remarks>
+        /// <returns>New XWPFFootnote</returns>
+        public XWPFFootnote CreateFootnote()
+        {
+            CT_FtnEdn newNote = new CT_FtnEdn();
+            newNote.type = ST_FtnEdn.normal;
 
+            XWPFFootnote footnote = AddFootnote(newNote);
+            int id = ctFootnotes.SizeOfFootnoteArray;
+            footnote.GetCTFtnEdn().id = id;
+            return footnote;
+        }
+
+        /// <summary>
+        /// Remove the specified footnote if present.
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns></returns>
+        public bool RemoveFootnote(int pos)
+        {
+            if (ctFootnotes.SizeOfFootnoteArray >= pos - 1)
+            {
+                ctFootnotes.RemoveFootnote(pos);
+                listFootnote.RemoveAt(pos);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         /**
          * @see NPOI.XWPF.UserModel.IBody#getPart()
          */
@@ -182,6 +219,8 @@ namespace NPOI.XWPF.UserModel
                 return (XWPFDocument)GetParent();
             }
         }
+
+
     }//end class
 
 

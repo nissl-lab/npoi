@@ -27,23 +27,32 @@ namespace TestCases.XWPF.UserModel
     [TestFixture]
     public class TestXWPFFootnotes
     {
-
+        [Test]
+        public void TestCreateFootnotes()
+        {
+            XWPFDocument docOut = new XWPFDocument();
+            XWPFFootnotes footnotes = docOut.CreateFootnotes();
+            Assert.IsNotNull(footnotes);
+            XWPFFootnotes secondFootnotes = docOut.CreateFootnotes();
+            Assert.AreSame(footnotes, secondFootnotes);
+            docOut.Close();
+        }
         [Test]
         public void TestAddFootnotesToDocument()
         {
             XWPFDocument docOut = new XWPFDocument();
 
-            int noteId = 1;
-
-            XWPFFootnotes footnotes = docOut.CreateFootnotes();
-            CT_FtnEdn ctNote = new CT_FtnEdn();
-            ctNote.id = (noteId.ToString());
-            ctNote.type = (ST_FtnEdn.normal);
-            footnotes.AddFootnote(ctNote);
+            // NOTE: XWPFDocument.createFootnote() delegates directly
+            //       to XWPFFootnotes.createFootnote() so this tests
+            //       both creation of new XWPFFootnotes in document
+            //       and XWPFFootnotes.createFootnote();
+            XWPFFootnote footnote = docOut.CreateFootnote();
+            int noteId = footnote.Id;
 
             XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
 
             XWPFFootnote note = docIn.GetFootnoteByID(noteId);
+            Assert.IsNotNull(note);
             Assert.AreEqual(note.GetCTFtnEdn().type, ST_FtnEdn.normal);
         }
 

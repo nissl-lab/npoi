@@ -105,7 +105,59 @@ namespace NPOI.SS.Util
                 _isSingleCell = part0.Equals(part1);
             }
         }
-
+        public AreaReference(CellReference topLeft, CellReference botRight, SpreadsheetVersion version)
+        {
+            _version = (null != version) ? version : DEFAULT_SPREADSHEET_VERSION;
+            bool swapRows = topLeft.Row > botRight.Row;
+            bool swapCols = topLeft.Col > botRight.Col;
+            if (swapRows || swapCols)
+            {
+                int firstRow;
+                int lastRow;
+                int firstColumn;
+                int lastColumn;
+                bool firstRowAbs;
+                bool lastRowAbs;
+                bool firstColAbs;
+                bool lastColAbs;
+                if (swapRows)
+                {
+                    firstRow = botRight.Row;
+                    firstRowAbs = botRight.IsRowAbsolute;
+                    lastRow = topLeft.Row;
+                    lastRowAbs = topLeft.IsRowAbsolute;
+                }
+                else
+                {
+                    firstRow = topLeft.Row;
+                    firstRowAbs = topLeft.IsRowAbsolute;
+                    lastRow = botRight.Row;
+                    lastRowAbs = botRight.IsRowAbsolute;
+                }
+                if (swapCols)
+                {
+                    firstColumn = botRight.Col;
+                    firstColAbs = botRight.IsColAbsolute;
+                    lastColumn = topLeft.Col;
+                    lastColAbs = topLeft.IsColAbsolute;
+                }
+                else
+                {
+                    firstColumn = topLeft.Col;
+                    firstColAbs = topLeft.IsColAbsolute;
+                    lastColumn = botRight.Col;
+                    lastColAbs = botRight.IsColAbsolute;
+                }
+                _firstCell = new CellReference(firstRow, firstColumn, firstRowAbs, firstColAbs);
+                _lastCell = new CellReference(lastRow, lastColumn, lastRowAbs, lastColAbs);
+            }
+            else
+            {
+                _firstCell = topLeft;
+                _lastCell = botRight;
+            }
+            _isSingleCell = false;
+        }
         private static bool IsPlainColumn(String refPart)
         {
             for (int i = refPart.Length - 1; i >= 0; i--)

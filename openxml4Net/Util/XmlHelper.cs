@@ -176,7 +176,7 @@ namespace NPOI.OpenXml4Net.Util
             else
             {
                 double v;
-                if (double.TryParse(s, NumberStyles.Number, CultureInfo.InvariantCulture, out v))
+                if (double.TryParse(s, NumberStyles.Number|NumberStyles.Float| NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out v))
                 {
                     return v;
                 }

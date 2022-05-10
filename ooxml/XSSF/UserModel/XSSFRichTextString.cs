@@ -79,7 +79,7 @@ namespace NPOI.XSSF.UserModel
         {
             st = new CT_Rst();
             st.t = str;
-            PreserveSpaces(st.t);
+            //PreserveSpaces(st.t);
         }
 
 
@@ -279,12 +279,12 @@ namespace NPOI.XSSF.UserModel
                 //convert <t>string</t> into a text Run: <r><t>string</t></r>
                 CT_RElt lt = st.AddNewR();
                 lt.t = st.t;
-                PreserveSpaces(lt.t);
+                //PreserveSpaces(lt.t);
                 st.unsetT();
             }
             CT_RElt lt2 = st.AddNewR();
             lt2.t= (text);
-            PreserveSpaces(lt2.t);
+            //PreserveSpaces(lt2.t);
             
             if (font != null)
             {
@@ -441,7 +441,7 @@ namespace NPOI.XSSF.UserModel
             {
                 ClearFormatting();
                 st.t = value;
-                PreserveSpaces(st.t);
+                //PreserveSpaces(st.t);
             }
         }
 
@@ -692,7 +692,7 @@ namespace NPOI.XSSF.UserModel
                 CT_RElt run = st.AddNewR();
                 String fragment = text.Substring(runStartIdx, runEndIdx - runStartIdx);
                 run.t = (fragment);
-                PreserveSpaces(run.t);
+                //PreserveSpaces(run.t);
                 CT_RPrElt fmt = kv.Value;
                 if (fmt != null)
                 {

@@ -69,7 +69,7 @@ namespace NPOI.XSSF
                 {
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
-                    wb.Write(baos);
+                    wb.Write(baos, false);
                     sw.Stop();
                     Debug.WriteLine("XSSFWorkbook write time: " + sw.ElapsedMilliseconds + "ms");
                     using (Stream is1 = new MemoryStream(baos.ToArray()))
@@ -177,7 +177,7 @@ namespace NPOI.XSSF
             FileStream out1 = file.Create();
             try
             {
-                wb.Write(out1);
+                wb.Write(out1, false);
             }
             finally
             {
@@ -196,7 +196,7 @@ namespace NPOI.XSSF
         public static ByteArrayOutputStream WriteOut<R>(R wb) where R : IWorkbook
         {
             ByteArrayOutputStream out1 = new ByteArrayOutputStream(8192);
-            wb.Write(out1);
+            wb.Write(out1, false);
             return out1;
         }
 

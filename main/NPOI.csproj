@@ -1308,6 +1308,7 @@
     <Compile Include="Util\PushbackInputStream.cs" />
     <Compile Include="Util\PushbackStream.cs" />
     <Compile Include="Util\RecordFormatException.cs" />
+    <Compile Include="Util\RecyclableMemory.cs" />
     <Compile Include="Util\RLEDecompressingInputStream.cs" />
     <Compile Include="Util\RuntimeException.cs" />
     <Compile Include="Util\ShortField.cs" />
@@ -1357,11 +1358,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.IO.RecyclableMemoryStream">
+      <Version>1.4.1</Version>
+    </PackageReference>
     <PackageReference Include="Portable.BouncyCastle">
       <Version>1.8.9</Version>
     </PackageReference>
     <PackageReference Include="SharpZipLib">
-      <Version>1.3.2</Version>
+      <Version>1.3.3</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

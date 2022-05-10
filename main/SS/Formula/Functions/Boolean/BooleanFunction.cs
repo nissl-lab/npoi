@@ -43,7 +43,7 @@ namespace NPOI.SS.Formula.Functions
         {
 
             bool result = InitialResultValue;
-            bool atleastOneNonBlank = false;
+            bool atLeastOneNonBlank = false;
            
             /*
              * Note: no short-circuit bool loop exit because any ErrorEvals will override the result
@@ -65,7 +65,7 @@ namespace NPOI.SS.Formula.Functions
                             if (tempVe != null)
                             {
                                 result = PartialEvaluate(result, Convert.ToBoolean(tempVe, CultureInfo.InvariantCulture));
-                                atleastOneNonBlank = true;
+                                atLeastOneNonBlank = true;
                             }
                         }
                     }
@@ -84,7 +84,7 @@ namespace NPOI.SS.Formula.Functions
                         if (tempVe != null)
                         {
                             result = PartialEvaluate(result, tempVe.Value);
-                            atleastOneNonBlank = true;
+                            atLeastOneNonBlank = true;
                         }
                     }
                     continue;
@@ -96,7 +96,7 @@ namespace NPOI.SS.Formula.Functions
                 //}
                 if (arg == MissingArgEval.instance)
                 {
-                    tempVe = null; // you can leave out parameters, they are simply ignored
+                    tempVe = false; // missing parameters are treated as FALSE
                 }
                 else
                 {
@@ -107,11 +107,11 @@ namespace NPOI.SS.Formula.Functions
                 if (tempVe != null)
                 {
                     result = PartialEvaluate(result, Convert.ToBoolean(tempVe, CultureInfo.InvariantCulture));
-                    atleastOneNonBlank = true;
+                    atLeastOneNonBlank = true;
                 }
             }
 
-            if (!atleastOneNonBlank)
+            if (!atLeastOneNonBlank)
             {
                 throw new EvaluationException(ErrorEval.VALUE_INVALID);
             }

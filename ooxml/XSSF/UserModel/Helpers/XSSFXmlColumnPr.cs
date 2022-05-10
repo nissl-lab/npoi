@@ -36,33 +36,46 @@ namespace NPOI.XSSF.UserModel.Helpers
     {
 
         private XSSFTable table;
-        private CT_TableColumn ctTableColumn;
+        private XSSFTableColumn tableColumn;
         private CT_XmlColumnPr ctXmlColumnPr;
 
+        internal XSSFXmlColumnPr(XSSFTableColumn tableColumn, CT_XmlColumnPr ctXmlColumnPr)
+        {
+            this.table = tableColumn.GetTable();
+            this.tableColumn = tableColumn;
+            this.ctXmlColumnPr = ctXmlColumnPr;
+        }
+        [Obsolete]
         public XSSFXmlColumnPr(XSSFTable table, CT_TableColumn ctTableColum, CT_XmlColumnPr CT_XmlColumnPr)
         {
             this.table = table;
-            this.ctTableColumn = ctTableColum;
+            this.tableColumn = table.GetColumns()[table.FindColumnIndex(ctTableColum.name)];
             this.ctXmlColumnPr = CT_XmlColumnPr;
         }
 
-        public long GetMapId()
+        public long MapId
         {
-            return ctXmlColumnPr.mapId;
+            get { 
+                return ctXmlColumnPr.mapId;
+            }
         }
 
-        public String GetXPath()
+        public String XPath
         {
-            return ctXmlColumnPr.xpath;
+            get { 
+                return ctXmlColumnPr.xpath; 
+            }
             
         }
-        /**
-         * (see Open Office XML Part 4: chapter 3.5.1.3)
-         * @return An integer representing the unique identifier of this column. 
-         */
-        public long GetId()
+        /// <summary>
+        /// (see Open Office XML Part 4: chapter 3.5.1.3) An integer representing the unique identifier of this column. 
+        /// </summary>
+        public long Id
         {
-            return ctTableColumn.id;
+            get
+            {
+                return tableColumn.Id;
+            }
         }
 
 
@@ -71,17 +84,20 @@ namespace NPOI.XSSF.UserModel.Helpers
          * 	
          * @return the local XPath 
          */
-        public String GetLocalXPath()
+        public String LocalXPath
         {
-            StringBuilder localXPath = new StringBuilder();
-            int numberOfCommonXPathAxis = table.GetCommonXpath().Split(new char[] { '/' }).Length - 1;
-
-            String[] xPathTokens = ctXmlColumnPr.xpath.Split(new char[] { '/' });
-            for (int i = numberOfCommonXPathAxis; i < xPathTokens.Length; i++)
+            get
             {
-                localXPath.Append("/" + xPathTokens[i]);
+                StringBuilder localXPath = new StringBuilder();
+                int numberOfCommonXPathAxis = table.GetCommonXpath().Split(new char[] { '/' }).Length - 1;
+
+                String[] xPathTokens = ctXmlColumnPr.xpath.Split(new char[] { '/' });
+                for (int i = numberOfCommonXPathAxis; i < xPathTokens.Length; i++)
+                {
+                    localXPath.Append("/" + xPathTokens[i]);
+                }
+                return localXPath.ToString();
             }
-            return localXPath.ToString();
         }
 
         public ST_XmlDataType GetXmlDataType()

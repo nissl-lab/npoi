@@ -41,13 +41,17 @@ namespace NPOI.HSSF.Record.Aggregates
         private SortedList _rowRecords;
         //private int size = 0;
         private ValueRecordsAggregate _valuesAgg;
+        private List<HyperlinkRecord> _hyperlinkRecordRecords;
         private List<Record> _unknownRecords;
         private SharedValueManager _sharedValueManager;
 
         // Cache values to speed up performance of
         // getStartRowNumberForBlock / getEndRowNumberForBlock, see Bugzilla 47405
         private RowRecord[] _rowRecordValues = null;
-
+        public IEnumerable<HyperlinkRecord> HyperlinkRecordRecords 
+        {
+            get { return _hyperlinkRecordRecords; }
+        }
 
         /** Creates a new instance of ValueRecordsAggregate */
 
@@ -60,6 +64,7 @@ namespace NPOI.HSSF.Record.Aggregates
         {
             _rowRecords = new SortedList();
             _valuesAgg = new ValueRecordsAggregate();
+            _hyperlinkRecordRecords = new List<HyperlinkRecord>();
             _unknownRecords = new List<Record>();
             _sharedValueManager = svm;
         }
@@ -124,6 +129,10 @@ namespace NPOI.HSSF.Record.Aggregates
                 // Calculate Offset from the start of a DBCellRecord to the first Row
                 cellRecord.RowOffset = (pos);
                 rv.VisitRecord(cellRecord);
+            }            
+            foreach (Record _hyperlinkRecord in _hyperlinkRecordRecords)
+            {
+                rv.VisitRecord(_hyperlinkRecord);
             }
             foreach (Record _unknownRecord in _unknownRecords)
             {
@@ -148,6 +157,9 @@ namespace NPOI.HSSF.Record.Aggregates
                         continue;
                     case DConRefRecord.sid:
                         AddUnknownRecord(rec);
+                        continue;
+                    case HyperlinkRecord.sid:
+                        _hyperlinkRecordRecords.Add((HyperlinkRecord)rec);
                         continue;
                     case DBCellRecord.sid:
                         // end of 'Row Block'.  Should only occur after cell records

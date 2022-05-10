@@ -28,6 +28,7 @@ using System.Text;
 using System.Collections.Generic;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
+using NPOI.SS.Formula;
 
 namespace TestCases.XSSF.UserModel
 {
@@ -160,6 +161,51 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(CellType.Blank, cell.CellType);
             Assert.AreEqual(ST_CellType.n, ctCell.t);
             Assert.AreEqual(cell.StringCellValue, "");
+
+            // check behavior with setCellFormulaValidation
+            String invalidFormula = "A", validFormula = "A2";
+            FormulaParseException fpe = null;
+            // check that default is true
+            Assert.IsTrue(wb.CellFormulaValidation);
+
+            // check that valid formula does not throw exception
+            try
+            {
+                cell.SetCellFormula(validFormula);
+            }
+            catch (FormulaParseException e)
+            {
+                fpe = e;
+            }
+            Assert.IsNull(fpe);
+
+            // check that invalid formula does throw exception
+            try
+            {
+                cell.SetCellFormula(invalidFormula);
+            }
+            catch (FormulaParseException e)
+            {
+                fpe = e;
+            }
+            Assert.IsNotNull(fpe);
+            fpe = null;
+
+            // set cell formula validation to false
+            wb.CellFormulaValidation = false;
+            Assert.IsFalse(wb.CellFormulaValidation);
+
+            // check that neither valid nor invalid formula throw an exception
+            try
+            {
+                cell.SetCellFormula(validFormula);
+                cell.SetCellFormula(invalidFormula);
+            }
+            catch (FormulaParseException e)
+            {
+                fpe = e;
+            }
+            Assert.IsNull(fpe);
         }
 
         /**

@@ -4773,7 +4773,7 @@ namespace NPOI.XSSF.UserModel
 
             try
             {
-                using (MemoryStream ms = new MemoryStream())
+                using (MemoryStream ms = RecyclableMemory.GetStream())
                 {
                     this.Write(ms, true);
                     ms.Position = 0;

@@ -1192,13 +1192,13 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(string.Format("<{0}", nodeName));
             sw.Write(">");
             if (this.grpSpLocks != null)
                 this.grpSpLocks.Write(sw, "grpSpLocks");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write(string.Format("</{0}>", nodeName));
         }
 
         public CT_NonVisualGroupDrawingShapeProps()
@@ -1377,10 +1377,17 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "noChangeArrowheads", this.noChangeArrowheads, false);
             XmlHelper.WriteAttribute(sw, "noChangeShapeType", this.noChangeShapeType, false);
             XmlHelper.WriteAttribute(sw, "noTextEdit", this.noTextEdit, false);
-            sw.Write(">");
-            if(this.extLst!=null)
+
+            if (this.extLst == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+                sw.Write(string.Format("</a:{0}>", nodeName));
+            }
         }
         public CT_ShapeLocking()
         {
@@ -1626,17 +1633,23 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "noGrp", this.noGrp);
-            XmlHelper.WriteAttribute(sw, "noUngrp", this.noUngrp);
-            XmlHelper.WriteAttribute(sw, "noSelect", this.noSelect);
-            XmlHelper.WriteAttribute(sw, "noRot", this.noRot);
-            XmlHelper.WriteAttribute(sw, "noChangeAspect", this.noChangeAspect);
-            XmlHelper.WriteAttribute(sw, "noMove", this.noMove);
-            XmlHelper.WriteAttribute(sw, "noResize", this.noResize);
-            sw.Write(">");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            if(this.noGrp)
+                XmlHelper.WriteAttribute(sw, "noGrp", this.noGrp);
+            if(this.noUngrp)
+                XmlHelper.WriteAttribute(sw, "noUngrp", this.noUngrp);
+            if(this.noSelect)
+                XmlHelper.WriteAttribute(sw, "noSelect", this.noSelect);
+            if(this.noRot)
+                XmlHelper.WriteAttribute(sw, "noRot", this.noRot);
+            if(this.noChangeAspect)
+                XmlHelper.WriteAttribute(sw, "noChangeAspect", this.noChangeAspect);
+            if(this.noMove)
+                XmlHelper.WriteAttribute(sw, "noMove", this.noMove);
+            if(this.noResize)
+                XmlHelper.WriteAttribute(sw, "noResize", this.noResize);
+            sw.Write("/>");
+            /*if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");*/
         }
 
         [XmlElement(Order = 0)]
@@ -2198,7 +2211,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write(string.Format("<{0}", nodeName));
             if(this.bwMode!= ST_BlackWhiteMode.none)
                 XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
             sw.Write(">");
@@ -2224,7 +2237,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.scene3d.Write(sw, "scene3d");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write(string.Format("</{0}>", nodeName));
         }
 
         public CT_GroupShapeProperties()

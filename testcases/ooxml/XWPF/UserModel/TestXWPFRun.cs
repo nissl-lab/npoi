@@ -147,7 +147,7 @@ namespace TestCases.XWPF.UserModel
             XWPFRun run = new XWPFRun(ctRun, p);
             Assert.AreEqual(UnderlinePatterns.Dash, run.Underline);
 
-            run.SetUnderline(UnderlinePatterns.None);
+            run.Underline = UnderlinePatterns.None;
             Assert.AreEqual(ST_Underline.none, rpr.u.val);
         }
 

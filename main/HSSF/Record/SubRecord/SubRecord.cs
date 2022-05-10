@@ -65,7 +65,7 @@ namespace NPOI.HSSF.Record
         public byte[] Serialize()
         {
             int size = DataSize + 4;
-            using (MemoryStream baos = new MemoryStream(size))
+            using (MemoryStream baos = RecyclableMemory.GetStream(size))
             {
                 Serialize(new LittleEndianOutputStream(baos));
                 if (baos.Length != size)

@@ -183,7 +183,7 @@ namespace NPOI.HSSF.Record
 
         private static Ptg ReadRefPtg(byte[] formulaRawBytes)
         {
-            using (MemoryStream ms = new MemoryStream(formulaRawBytes))
+            using (MemoryStream ms = RecyclableMemory.GetStream(formulaRawBytes))
             {
                 ILittleEndianInput in1 = new LittleEndianInputStream(ms);
                 byte ptgSid = (byte)in1.ReadByte();

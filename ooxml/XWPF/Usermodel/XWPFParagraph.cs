@@ -1647,6 +1647,19 @@ namespace NPOI.XWPF.UserModel
             iRuns.Add(xwpfRun);
             return xwpfRun;
         }
+        /// <summary>
+        /// Add a new run with a reference to the specified footnote. The footnote reference run will have the style name "FootnoteReference".
+        /// </summary>
+        /// <param name="footnote">Footnote to which to add a reference.</param>
+        public void AddFootnoteReference(XWPFFootnote footnote)
+        {
+            XWPFRun run = CreateRun();
+            CT_R ctRun = run.GetCTR();
+            var rstyle=ctRun.AddNewRPr().AddNewRStyle();
+            rstyle.val="FootnoteReference";
+            var footnoteRef = ctRun.AddNewFootnoteReference();
+            footnoteRef.id= footnote.Id.ToString();
+        }
     }
 
 }

@@ -240,11 +240,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void SetRgb(byte R, byte G, byte B)
         {
-            this.rgbField = new byte[4];
-            this.rgbField[0] = 0;
-            this.rgbField[1] = R;
-            this.rgbField[2] = G;
-            this.rgbField[3] = B;
+            this.rgbField = new byte[3];
+            this.rgbField[0] = R;
+            this.rgbField[1] = G;
+            this.rgbField[2] = B;
             rgbSpecified = true;
         }
         public bool IsSetRgb()

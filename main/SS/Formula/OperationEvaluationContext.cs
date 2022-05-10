@@ -25,8 +25,9 @@ namespace NPOI.SS.Formula
         private int _rowIndex;
         private int _columnIndex;
         private EvaluationTracker _tracker;
+        private bool _isSingleValue;
         private WorkbookEvaluator _bookEvaluator;
-
+        private bool _isInArrayContext;
         public OperationEvaluationContext(WorkbookEvaluator bookEvaluator, IEvaluationWorkbook workbook, int sheetIndex, int srcRowNum,
                 int srcColNum, EvaluationTracker tracker)
         {
@@ -37,12 +38,39 @@ namespace NPOI.SS.Formula
             _columnIndex = srcColNum;
             _tracker = tracker;
         }
-
+        public OperationEvaluationContext(WorkbookEvaluator bookEvaluator, IEvaluationWorkbook workbook, int sheetIndex, int srcRowNum,
+            int srcColNum, EvaluationTracker tracker, bool isSingleValue)
+        {
+            _bookEvaluator = bookEvaluator;
+            _workbook = workbook;
+            _sheetIndex = sheetIndex;
+            _rowIndex = srcRowNum;
+            _columnIndex = srcColNum;
+            _tracker = tracker;
+            _isSingleValue = isSingleValue;
+        }
+        public bool IsArraymode
+        {
+            get
+            {
+                return _isInArrayContext;
+            }
+            set {
+                _isInArrayContext = value;
+            }
+        }
         public IEvaluationWorkbook GetWorkbook()
         {
             return _workbook;
         }
 
+        public bool IsSingleValue
+        {
+            get
+            {
+                return _isSingleValue;
+            }
+        }
         public int RowIndex
         {
             get

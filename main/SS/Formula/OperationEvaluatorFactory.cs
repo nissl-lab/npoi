@@ -67,8 +67,7 @@ namespace NPOI.SS.Formula
             return m;
         }
 
-        private static void Add(Hashtable m, OperationPtg ptgKey,
-            NPOI.SS.Formula.Functions.Function instance)
+        private static void Add(Hashtable m, OperationPtg ptgKey, Functions.Function instance)
         {
             // make sure ptg has single private constructor because map lookups assume singleton keys
             ConstructorInfo[] cc = ptgKey.GetType().GetConstructors();
@@ -94,26 +93,66 @@ namespace NPOI.SS.Formula
             }
             NPOI.SS.Formula.Functions.Function result = _instancesByPtgClass[ptg] as NPOI.SS.Formula.Functions.Function;
 
+            FreeRefFunction udfFunc = null;
+            if (result == null)
+            {
+                if (ptg is AbstractFunctionPtg)
+                {
+                    AbstractFunctionPtg fptg = (AbstractFunctionPtg)ptg;
+                    int functionIndex = fptg.FunctionIndex;
+                    switch (functionIndex)
+                    {
+                        case NPOI.SS.Formula.Function.FunctionMetadataRegistry.FUNCTION_INDEX_INDIRECT:
+                            udfFunc = Indirect.instance;
+                            break;
+                        case NPOI.SS.Formula.Function.FunctionMetadataRegistry.FUNCTION_INDEX_EXTERNAL:
+                            udfFunc = UserDefinedFunction.instance;
+                            break;
+                        default:
+                            result = FunctionEval.GetBasicFunction(functionIndex);
+                            break;
+                    }
+                }
+            }
+
             if (result != null)
             {
+                if (result is ArrayFunction)
+                {
+                    ArrayFunction func = (ArrayFunction)result;
+                    ValueEval eval = EvaluateArrayFunction(func, args, ec);
+                    if (eval != null)
+                    {
+                        return eval;
+                    }
+                }
                 return result.Evaluate(args, ec.RowIndex, (short)ec.ColumnIndex);
             }
-
-            if (ptg is AbstractFunctionPtg)
+            else if (udfFunc != null)
             {
-                AbstractFunctionPtg fptg = (AbstractFunctionPtg)ptg;
-                int functionIndex = fptg.FunctionIndex;
-                switch (functionIndex)
-                {
-                    case NPOI.SS.Formula.Function.FunctionMetadataRegistry.FUNCTION_INDEX_INDIRECT:
-                        return Indirect.instance.Evaluate(args, ec);
-                    case NPOI.SS.Formula.Function.FunctionMetadataRegistry.FUNCTION_INDEX_EXTERNAL:
-                        return UserDefinedFunction.instance.Evaluate(args, ec);
-                }
-
-                return FunctionEval.GetBasicFunction(functionIndex).Evaluate(args, ec.RowIndex, ec.ColumnIndex);
+                return udfFunc.Evaluate(args, ec);
             }
             throw new Exception("Unexpected operation ptg class (" + ptg.GetType().Name + ")");
+        }
+        public static ValueEval EvaluateArrayFunction(ArrayFunction func, ValueEval[] args,
+                                       OperationEvaluationContext ec)
+        {
+            IEvaluationSheet evalSheet = ec.GetWorkbook().GetSheet(ec.SheetIndex);
+            IEvaluationCell evalCell = evalSheet.GetCell(ec.RowIndex, ec.ColumnIndex);
+            if (evalCell != null)
+            {
+                if (evalCell.IsPartOfArrayFormulaGroup)
+                {
+                    // array arguments must be evaluated relative to the function defining range
+                    Util.CellRangeAddress ca = evalCell.ArrayFormulaRange;
+                    return func.EvaluateArray(args, ca.FirstRow, ca.FirstColumn);
+                }
+                else if (ec.IsArraymode)
+                {
+                    return func.EvaluateArray(args, ec.RowIndex, ec.ColumnIndex);
+                }
+            }
+            return null;
         }
     }
 }

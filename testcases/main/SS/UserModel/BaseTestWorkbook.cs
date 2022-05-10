@@ -262,41 +262,27 @@ namespace TestCases.SS.UserModel
             IWorkbook wb1 = _testDataProvider.CreateWorkbook();
 
             String sheetName1 = "My very long sheet name which is longer than 31 chars";
-            String tRuncatedSheetName1 = sheetName1.Substring(0, 31);
-            ISheet sh1 = wb1.CreateSheet(sheetName1);
-            Assert.AreEqual(tRuncatedSheetName1, sh1.SheetName);
-            Assert.AreSame(sh1, wb1.GetSheet(tRuncatedSheetName1));
-            // now via wb.SetSheetName
-            wb1.SetSheetName(0, sheetName1);
-            Assert.AreEqual(tRuncatedSheetName1, sh1.SheetName);
-            Assert.AreSame(sh1, wb1.GetSheet(tRuncatedSheetName1));
-
-            String sheetName2 = "My very long sheet name which is longer than 31 chars " +
-                    "and sheetName2.Substring(0, 31) == sheetName1.Substring(0, 31)";
             try
             {
-                ISheet sh2 = wb1.CreateSheet(sheetName2);
+                ISheet sh1 = wb1.CreateSheet(sheetName1);
                 Assert.Fail("expected exception");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException ex)
             {
-                // expected during successful Test
-                Assert.AreEqual("The workbook already contains a sheet named 'My very long sheet name which is longer than 31 chars and sheetName2.Substring(0, 31) == sheetName1.Substring(0, 31)'", e.Message);
+                Assert.IsTrue(ex.Message.StartsWith("sheetName 'My very long sheet name which is longer than 31 chars' is invalid"));
             }
-
-            String sheetName3 = "POI allows creating sheets with names longer than 31 characters";
-            String tRuncatedSheetName3 = sheetName3.Substring(0, 31);
-            ISheet sh3 = wb1.CreateSheet(sheetName3);
-            Assert.AreEqual(tRuncatedSheetName3, sh3.SheetName);
-            Assert.AreSame(sh3, wb1.GetSheet(tRuncatedSheetName3));
-
-            //serialize and read again
-            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
+            try
+            {
+                 wb1.CreateSheet("test");
+                // now via wb.SetSheetName
+                wb1.SetSheetName(0, sheetName1);
+                Assert.Fail("expected exception");
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.IsTrue(ex.Message.StartsWith("sheetName 'My very long sheet name which is longer than 31 chars' is invalid"));
+            }
             wb1.Close();
-            Assert.AreEqual(2, wb2.NumberOfSheets);
-            Assert.AreEqual(0, wb2.GetSheetIndex(tRuncatedSheetName1));
-            Assert.AreEqual(1, wb2.GetSheetIndex(tRuncatedSheetName3));
-            wb2.Close();
         }
 
         [Test]
@@ -847,7 +833,7 @@ namespace TestCases.SS.UserModel
             OutputStream os = new NullOutputStream();
             try
             {
-                workbook.Write(os);
+                workbook.Write(os, false);
             }
             finally
             {

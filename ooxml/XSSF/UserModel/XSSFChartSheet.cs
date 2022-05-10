@@ -103,16 +103,18 @@ namespace NPOI.XSSF.UserModel
 
         private static byte[] blankWorksheet()
         {
-            MemoryStream out1 = new MemoryStream();
-            try
-            {
-                new XSSFSheet().Write(out1);
+            using (MemoryStream out1 = RecyclableMemory.GetStream())
+            { 
+                try
+                {
+                    new XSSFSheet().Write(out1);
+                }
+                catch (IOException e)
+                {
+                    throw new RuntimeException(e);
+                }
+                return out1.ToArray();
             }
-            catch (IOException e)
-            {
-                throw new RuntimeException(e);
-            }
-            return out1.ToArray();
         }
     }
 

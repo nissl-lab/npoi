@@ -172,23 +172,24 @@ namespace NPOI.POIFS.Storage
 
         public void WriteBlock(ByteBuffer block)
         {
-            MemoryStream ms = new MemoryStream(_header_block.BigBlockSize.GetBigBlockSize());
+            using (MemoryStream ms = RecyclableMemory.GetStream(_header_block.BigBlockSize.GetBigBlockSize()))
+            {
+                _header_block.WriteData(ms);
 
-            _header_block.WriteData(ms);
-
-            block.Write(ms.ToArray());
+                block.Write(ms.ToArray());
+            }
         }
 
 
         public void WriteBlock(byte[] block)
         {
-            MemoryStream ms = new MemoryStream(_header_block.BigBlockSize.GetBigBlockSize());
+            using (MemoryStream ms = RecyclableMemory.GetStream(_header_block.BigBlockSize.GetBigBlockSize()))
+            {
+                _header_block.WriteData(ms);
 
-            _header_block.WriteData(ms);
-
-            //block = ms.ToArray();
-            byte[] temp = ms.ToArray();
-            Array.Copy(temp, 0, block, 0, temp.Length);
+                byte[] temp = ms.ToArray();
+                Array.Copy(temp, 0, block, 0, temp.Length);
+            }
         }
     }
 }

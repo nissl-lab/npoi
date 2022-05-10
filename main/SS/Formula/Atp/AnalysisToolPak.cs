@@ -107,8 +107,8 @@ namespace NPOI.SS.Formula.Atp {
             r(m, "DEC2OCT", null);
             r(m, "DELTA", Delta.instance);
             r(m, "DISC", null);
-            r(m, "DOLLARDE", null);
-            r(m, "DOLLARFR", null);
+            r(m, "DOLLARDE", DollarDe.instance);
+            r(m, "DOLLARFR", DollarFr.instance);
             r(m, "DURATION", null);
             r(m, "EDATE", EDate.Instance);
             r(m, "EFFECT", null);
@@ -154,6 +154,7 @@ namespace NPOI.SS.Formula.Atp {
             r(m, "MULTINOMIAL", null);
             r(m, "NETWORKDAYS", NetworkdaysFunction.instance);
             r(m, "NOMINAL", null);
+            r(m, "NUMBERVALUE", NumberValueFunction.instance);
             r(m, "OCT2BIN", null);
             r(m, "OCT2DEC", Oct2Dec.instance);
             r(m, "OCT2HEX", null);
@@ -178,7 +179,10 @@ namespace NPOI.SS.Formula.Atp {
             r(m, "TEXTJOIN", TextJoinFunction.instance);
             r(m, "WEEKNUM", WeekNum.instance);
             r(m, "WORKDAY", WorkdayFunction.instance);
+            r(m, "WORKDAY.INTL", WorkdayIntlFunction.instance);
             r(m, "XIRR", null);
+            r(m, "XLOOKUP", XLookupFunction.instance);
+            r(m, "XMATCH", XMatchFunction.instance);
             r(m, "XNPV", null);
             r(m, "YEARFRAC", YearFrac.instance);
             r(m, "YIELD", null);

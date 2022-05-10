@@ -148,7 +148,7 @@ namespace NPOI.XSSF.UserModel
          * See {@link NPOI.ss.usermodel.Row.MissingCellPolicy}
          */
         private MissingCellPolicy _missingCellPolicy = MissingCellPolicy.RETURN_NULL_AND_BLANK;
-
+        private bool cellFormulaValidation = true;
         /**
          * array of pictures for this workbook
          */
@@ -636,9 +636,9 @@ namespace NPOI.XSSF.UserModel
 
             try
             {
-                using (MemoryStream ms = new MemoryStream())
+                using (MemoryStream ms = RecyclableMemory.GetStream())
                 {
-                    this.Write(ms, true);
+                    srcSheet.Write(ms, true);
                     ms.Position = 0;
                     clonedSheet.Read(ms);
                 }
@@ -2361,7 +2361,11 @@ namespace NPOI.XSSF.UserModel
                 this.pivotTables = value;
             }
         }
-
+        public bool CellFormulaValidation
+        {
+            get { return this.cellFormulaValidation; }
+            set { this.cellFormulaValidation = false; }
+        }
 
         #region IWorkbook Members
 

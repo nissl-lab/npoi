@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using NPOI.SS.Formula.Eval;
 
 namespace NPOI.SS.Formula.Functions
@@ -52,21 +53,23 @@ namespace NPOI.SS.Formula.Functions
                 {
                     throw new EvaluationException(ErrorEval.NUM_ERROR);
                 }
+                if (arg1 is RefListEval)
+                {
+                    return eval(result, ((RefListEval)arg1), true);
+                }
                 aeRange = ConvertRangeArg(arg1);
+                return eval(result, aeRange, true);
             }
             catch (EvaluationException e)
             {
                 return e.GetErrorEval();
             }
-            return eval(srcRowIndex, srcColumnIndex, result, aeRange, true);
         }
 
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1, ValueEval arg2)
         {
-
-            AreaEval aeRange;
             double result;
-            bool order = false;
+
             try
             {
                 ValueEval ve = OperandResolver.GetSingleValue(arg0, srcRowIndex, srcColumnIndex);
@@ -75,8 +78,7 @@ namespace NPOI.SS.Formula.Functions
                 {
                     throw new EvaluationException(ErrorEval.NUM_ERROR);
                 }
-                aeRange = ConvertRangeArg(arg1);
-
+                bool order = false;
                 ve = OperandResolver.GetSingleValue(arg2, srcRowIndex, srcColumnIndex);
                 int order_value = OperandResolver.CoerceValueToInt(ve);
                 if (order_value == 0)
@@ -89,17 +91,21 @@ namespace NPOI.SS.Formula.Functions
                 }
                 else throw new EvaluationException(ErrorEval.NUM_ERROR);
 
+                if (arg1 is RefListEval)
+                {
+                    return eval(result, ((RefListEval)arg1), order);
+                }
+                AreaEval aeRange = ConvertRangeArg(arg1);
+                return eval(result, aeRange, order);
             }
             catch (EvaluationException e)
             {
                 return e.GetErrorEval();
             }
-            return eval(srcRowIndex, srcColumnIndex, result, aeRange, order);
         }
 
-        private static ValueEval eval(int srcRowIndex, int srcColumnIndex, double arg0, AreaEval aeRange, bool descending_order)
+        private static ValueEval eval(double arg0, AreaEval aeRange, bool descending_order)
         {
-
             int rank = 1;
             int height = aeRange.Height;
             int width = aeRange.Width;
@@ -107,7 +113,6 @@ namespace NPOI.SS.Formula.Functions
             {
                 for (int c = 0; c < width; c++)
                 {
-
                     Double value = GetValue(aeRange, r, c);
                     if (Double.IsNaN(value)) continue;
                     if (descending_order && value > arg0 || !descending_order && value < arg0)
@@ -118,7 +123,43 @@ namespace NPOI.SS.Formula.Functions
             }
             return new NumberEval(rank);
         }
+        private static ValueEval eval(double arg0, RefListEval aeRange, bool descending_order)
+        {
+            int rank = 1;
 
+            List<int> replaceList = new List<int>();
+            for (int i = 0; i < aeRange.GetList().Count; i++)
+            {
+                ValueEval ve = aeRange.GetList()[i];
+                if (ve is RefEval)
+                {
+                    {
+                        replaceList.Add(i);
+                    }
+                }
+                foreach (var index in replaceList)
+                {
+                    ValueEval targetVe = aeRange.GetList()[i];
+                    aeRange.GetList()[index] = ((RefEval)targetVe).GetInnerValueEval(((RefEval)ve).FirstSheetIndex);
+                }
+                Double value;
+                if (ve is NumberEval)
+                {
+                    value = ((NumberEval)ve).NumberValue;
+                }
+                else
+                {
+                    continue;
+                }
+
+                if (descending_order && value > arg0 || !descending_order && value < arg0)
+                {
+                    rank++;
+                }
+            }
+
+            return new NumberEval(rank);
+        }
         private static Double GetValue(AreaEval aeRange, int relRowIndex, int relColIndex)
         {
 

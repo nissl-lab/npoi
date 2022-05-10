@@ -50,7 +50,7 @@ namespace TestCases.HSSF.UserModel
             MemoryStream baos = new MemoryStream(22000);
             try
             {
-                wb.Write(baos);
+                wb.Write(baos, false);
                 baos.Close();
             }
             catch (IOException e)
@@ -165,7 +165,7 @@ namespace TestCases.HSSF.UserModel
             MemoryStream baos = new MemoryStream();
             try
             {
-                wb.Write(baos);
+                wb.Write(baos, false);
             }
             catch (IOException e)
             {

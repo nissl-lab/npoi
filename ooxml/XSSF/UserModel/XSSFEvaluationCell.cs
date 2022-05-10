@@ -19,6 +19,8 @@ using NPOI.SS.Formula;
 using NPOI.XSSF.UserModel;
 using System;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -121,14 +123,22 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        #region IEvaluationCell ≥…‘±
+        public bool IsPartOfArrayFormulaGroup
+        {
+            get
+            {
+                return _cell.IsPartOfArrayFormulaGroup;
+            }
+        }
+        public CellRangeAddress ArrayFormulaRange
+        {
 
+            get { return _cell.ArrayFormulaRange; }
+        }
 
         public virtual CellType CachedFormulaResultType
         {
             get { return _cell.CachedFormulaResultType; }
         }
-
-        #endregion
     }
 }

@@ -31,11 +31,11 @@ namespace NPOI.XSSF.Streaming
         private bool _zHeight; // row zero-height (this is somehow different than being hidden)
         private float _height = -1;
 
-        private int _FirstCellNum = -1;
-        private int _LastCellNum = -1;
+        private int _firstCellNum = -1;
+        private int _lastCellNum = -1;
         // use Boolean to have a tri-state for on/off/undefined 
-        public bool? Hidden { get; set; }
-        public bool? Collapsed { get; set; }
+        public virtual bool? Hidden { get; set; }
+        public virtual bool? Collapsed { get; set; }
 
         public SXSSFRow(SXSSFSheet sheet)
         {
@@ -46,7 +46,7 @@ namespace NPOI.XSSF.Streaming
         {
             return new CellIterator(LastCellNum,  new SortedDictionary<int, SXSSFCell>(_cells));
         }
-        public bool HasCustomHeight()
+        public virtual bool HasCustomHeight()
         {
             return Height != -1;
         }
@@ -60,14 +60,7 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                try
-                {
-                    return (short) _FirstCellNum;
-                }
-                catch
-                {
-                    return -1;
-                }
+                return (short) _firstCellNum;
             }
         }
 
@@ -93,7 +86,7 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        public bool IsFormatted
+        public virtual bool IsFormatted
         {
             get
             {
@@ -105,12 +98,12 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                return (short) _LastCellNum;
+                return (short) _lastCellNum;
 
             }
         }
 
-        public int OutlineLevel { get; set; }
+        public virtual int OutlineLevel { get; set; }
 
         public int PhysicalNumberOfCells
         {
@@ -138,7 +131,7 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        public ICellStyle RowStyle
+        public virtual ICellStyle RowStyle
         {
             get
             {
@@ -165,7 +158,7 @@ namespace NPOI.XSSF.Streaming
             get { return _sheet; }
         }
 
-        public bool ZeroHeight
+        public virtual bool ZeroHeight
         {
             get { return _zHeight; }
 
@@ -249,14 +242,14 @@ namespace NPOI.XSSF.Streaming
 
         private void UpdateIndexWhenAdd(int cellnum)
         {
-            if (cellnum < _FirstCellNum || _FirstCellNum == -1)
+            if (cellnum < _firstCellNum || _firstCellNum == -1)
             {
-                _FirstCellNum = cellnum;
+                _firstCellNum = cellnum;
             }
 
-            if (cellnum >= _LastCellNum)
+            if (cellnum >= _lastCellNum)
             {
-                _LastCellNum = cellnum + 1;
+                _lastCellNum = cellnum + 1;
             }
         }
 
@@ -319,12 +312,12 @@ namespace NPOI.XSSF.Streaming
         {
             int index = GetCellIndex((SXSSFCell)cell);
             _cells.Remove(index);
-            if (index == _FirstCellNum)
+            if (index == _firstCellNum)
             {
                 InvalidateFirstCellNum();
             }
 
-            if (index >= (_LastCellNum -1))
+            if (index >= _lastCellNum -1)
             {
                 InvalidateLastCellNum();
             }
@@ -334,11 +327,11 @@ namespace NPOI.XSSF.Streaming
         {
             if (_cells.Keys.Count == 0)
             {
-                _FirstCellNum = 0;
+                _firstCellNum = -1;
             }
             else
             {
-                _FirstCellNum = _cells.Keys.Min();
+                _firstCellNum = _cells.Keys.Min();
             }
         }
         
@@ -346,11 +339,11 @@ namespace NPOI.XSSF.Streaming
         {
             if (_cells.Count == 0)
             {
-                _LastCellNum = 0;
+                _lastCellNum = -1;
             }
             else
             {
-                _LastCellNum = _cells.Keys.Max() + 1;
+                _lastCellNum = _cells.Keys.Max() + 1;
             }
         }
 
