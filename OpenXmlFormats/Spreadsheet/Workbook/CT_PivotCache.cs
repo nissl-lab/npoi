@@ -102,7 +102,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "cacheId", this.cacheId);
+            XmlHelper.WriteAttribute(sw, "cacheId", this.cacheId, true);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));
