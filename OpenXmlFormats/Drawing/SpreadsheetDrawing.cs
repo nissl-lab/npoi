@@ -1807,9 +1807,9 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             set { toField = value; }
         }
 
-        private Vml.Spreadsheet.CT_AlternateContent alternateContentField = null;
+        private Vml.CT_AlternateContent alternateContentField = null;
 
-        public Vml.Spreadsheet.CT_AlternateContent alternateContent
+        public Vml.CT_AlternateContent alternateContent
         {
             get
             {
@@ -1926,7 +1926,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 }
                 else if (childNode.LocalName == "AlternateContent")
                 {
-                    twoCellAnchor.alternateContent = Vml.Spreadsheet.CT_AlternateContent.Parse(childNode, namespaceManager);
+                    twoCellAnchor.alternateContent = Vml.CT_AlternateContent.Parse(childNode, namespaceManager);
                 }
                 else if (childNode.LocalName == "clientData")
                 {

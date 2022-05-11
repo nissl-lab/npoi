@@ -75,7 +75,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 else if (childNode.LocalName == "roundedCorners")
                     ctObj.roundedCorners = CT_Boolean.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "AlternateContent")
-                    ctObj.alternateContent = Vml.Spreadsheet.CT_AlternateContent.Parse(childNode, namespaceManager);
+                    ctObj.alternateContent = Vml.CT_AlternateContent.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "style")
                     ctObj.style = CT_Style.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "clrMapOvr")
@@ -201,8 +201,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        Vml.Spreadsheet.CT_AlternateContent alternateContentField = null;
-        public Vml.Spreadsheet.CT_AlternateContent alternateContent
+        Vml.CT_AlternateContent alternateContentField = null;
+        public Vml.CT_AlternateContent alternateContent
         {
             get
             {
