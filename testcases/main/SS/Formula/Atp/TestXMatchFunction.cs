@@ -23,7 +23,7 @@ namespace TestCases.SS.Formula.Atp
         [Test]
         public void TestMicrosoftExample1()
         {
-            HSSFWorkbook wb = initNumWorkbook("Gra?");
+            HSSFWorkbook wb = initNumWorkbook("Gra");
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             ICell cell = wb.GetSheetAt(0).GetRow(2).CreateCell(5);
             Util.Utils.AssertDouble(fe, cell, "XMATCH(E3,C3:C7,1)", 2);
