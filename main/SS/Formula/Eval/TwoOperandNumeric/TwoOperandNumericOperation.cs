@@ -83,7 +83,7 @@ namespace NPOI.SS.Formula.Eval
             protected override double[,] Evaluate(double[,] d1, double[,] d2)
             {
                 int width = d1.GetLength(1) < d2.GetLength(1) ? d1.GetLength(1) : d2.GetLength(1);
-                int height = (d1.Length < d2.Length) ? d1.Length : d2.Length;
+                int height = (d1.GetLength(0) < d2.GetLength(0)) ? d1.GetLength(0) : d2.GetLength(0);
 
                 double[,] result = new double[height, width];
 

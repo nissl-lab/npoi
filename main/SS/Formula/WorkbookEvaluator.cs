@@ -305,7 +305,8 @@ namespace NPOI.SS.Formula
 
             AdjustRegionRelativeReference(ptgs, target, region);
 
-            OperationEvaluationContext ec = new OperationEvaluationContext(this, Workbook, sheetIndex, target.Row, target.Col, new EvaluationTracker(_cache),formulaType.GetAttributes().Get<SingleValueAttribute>().IsSingleValue);
+            OperationEvaluationContext ec = new OperationEvaluationContext(this, Workbook, sheetIndex, target.Row, target.Col, new EvaluationTracker(_cache),
+                formulaType.GetAttributes().Get<SingleValueAttribute>().IsSingleValue);
             return EvaluateNameFormula(ptgs, ec);
         }
         protected bool AdjustRegionRelativeReference(Ptg[] ptgs, CellReference target, CellRangeAddressBase region)

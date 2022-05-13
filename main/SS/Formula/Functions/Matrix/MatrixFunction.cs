@@ -7,19 +7,24 @@ namespace NPOI.SS.Formula.Functions
 {
     public class MatrixFunction
     {
+        public static Function MDETERM = new Mdeterm();
+        public static Function TRANSPOSE = new Transpose();
+        public static Function MMULT = new MMulti();
+        public static Function MINVERSE = new Minverse();
+
         /* retrieves 1D array from 2D array after calculations */
         private static double[] extractDoubleArray(double[,] matrix)
         {
             int idx = 0;
 
-            if (matrix == null || matrix.Length < 1 || matrix.GetLength(1) < 1)
+            if (matrix == null || matrix.GetLength(0) < 1 || matrix.GetLength(1) < 1)
             {
                 throw new EvaluationException(ErrorEval.VALUE_INVALID);
             }
 
-            double[] vector = new double[matrix.Length * matrix.GetLength(1)];
+            double[] vector = new double[matrix.GetLength(0) * matrix.GetLength(1)];
 
-            for (int j = 0; j < matrix.Length; j++)
+            for (int j = 0; j < matrix.GetLength(0); j++)
             {
                 for (int i = 0; i < matrix.GetLength(1); i++)
                 {
@@ -52,7 +57,7 @@ namespace NPOI.SS.Formula.Functions
 
             for (int idx = 0; idx < vector.Length; idx++)
             {
-                if (j < matrix.Length)
+                if (j < matrix.GetLength(0))
                 {
                     if (i == matrix.GetLength(1))
                     {
@@ -86,7 +91,7 @@ namespace NPOI.SS.Formula.Functions
                         double[,] array = fillDoubleArray(values, ((AreaEval)arg0).Height, ((AreaEval)arg0).Width);
                         resultArray = Evaluate(array);
                         width = resultArray.GetLength(1);
-                        height = resultArray.Length;
+                        height = resultArray.GetLength(0);
                         result = extractDoubleArray(resultArray);
 
                         CheckValues(result);
@@ -206,7 +211,7 @@ namespace NPOI.SS.Formula.Functions
 
                     resultArray = Evaluate(array0, array1);
                     width = resultArray.GetLength(1);
-                    height = resultArray.Length;
+                    height = resultArray.GetLength(0);
                     result = extractDoubleArray(resultArray);
                     CheckValues(result);
                 }

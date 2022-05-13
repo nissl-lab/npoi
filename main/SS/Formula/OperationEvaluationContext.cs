@@ -399,10 +399,10 @@ namespace NPOI.SS.Formula
          int lastRowIndex, int lastColumnIndex, Object[,] tokens)
         {
 
-            ValueEval[] values = new ValueEval[tokens.Length * tokens.GetLength(1)];
+            ValueEval[] values = new ValueEval[tokens.GetLength(0) * tokens.GetLength(1)];
 
             int index = 0;
-            for (int jdx = 0; jdx < tokens.Length; jdx++)
+            for (int jdx = 0; jdx < tokens.GetLength(0); jdx++)
             {
                 for (int idx = 0; idx < tokens.GetLength(1); idx++)
                 {
