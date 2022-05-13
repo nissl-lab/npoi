@@ -57,15 +57,7 @@ namespace NPOI.SS.Formula.Atp
             arg = WorkbookEvaluator.DereferenceResult(arg, srcCellRow, srcCellCol);
             if (arg is ErrorEval)
             {
-                //if the 2nd argument is missing, use an empty string as default
-                if (iferror is MissingArgEval)
-                {
-                    return new StringEval(string.Empty);
-                }
-                else
-                {
-                    return iferror;
-                }
+               return iferror;
             }
             else
             {

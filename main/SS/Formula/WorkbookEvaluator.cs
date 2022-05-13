@@ -632,6 +632,7 @@ namespace NPOI.SS.Formula
                             {
                                 // this is an if statement without a false param (as opposed to MissingArgPtg as the false param)
                                 i++;
+                                stack.Push(arg0);
                                 stack.Push(BoolEval.FALSE);
                             }
                         }
@@ -649,13 +650,6 @@ namespace NPOI.SS.Formula
                         continue;
                     }
                 }
-                if (ptg is UnionPtg)
-                {
-                    ValueEval v2 = stack.Pop();
-                    ValueEval v1 = stack.Pop();
-                    stack.Push(new RefListEval(v1, v2));
-                    continue;
-                }
                 if (ptg is ControlPtg)
                 {
                     // skip Parentheses, Attr, etc
@@ -666,8 +660,17 @@ namespace NPOI.SS.Formula
                     // can ignore, rest of Tokens for this expression are in OK RPN order
                     continue;
                 }
-                if (ptg is MemErrPtg) { continue; }
-
+                if (ptg is MemErrPtg) 
+                { 
+                    continue; 
+                }
+                if (ptg is UnionPtg)
+                {
+                    ValueEval v2 = stack.Pop();
+                    ValueEval v1 = stack.Pop();
+                    stack.Push(new RefListEval(v1, v2));
+                    continue;
+                }
                 ValueEval opResult;
                 if (ptg is OperationPtg)
                 {
