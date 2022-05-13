@@ -179,7 +179,7 @@ namespace NPOI.SS.Formula.Eval
             retval[80] = new NotImplementedFunction("RELREF"); // RELREF
             retval[81] = new NotImplementedFunction("ARGUMENT"); // ARGUMENT
             retval[82] = TextFunction.SEARCH;
-            retval[83] = new NotImplementedFunction("TRANSPOSE"); // TRANSPOSE
+            retval[83] = MatrixFunction.TRANSPOSE; // TRANSPOSE
             retval[84] = new NotImplementedFunction("ERROR"); // ERROR
             retval[85] = new NotImplementedFunction("STEP"); // STEP
             retval[86] = new NotImplementedFunction("TYPE"); // TYPE
@@ -259,9 +259,9 @@ namespace NPOI.SS.Formula.Eval
             retval[160] = new NotImplementedFunction("GetCHARTITEM"); // GetCHARTITEM
             retval[161] = new NotImplementedFunction("DIALOGBOX"); // DIALOGBOX
             retval[162] = TextFunction.CLEAN; // CLEAN
-            retval[163] = new NotImplementedFunction("MDETERM"); // MDETERM
-            retval[164] = new NotImplementedFunction("MINVERSE"); // MINVERSE
-            retval[165] = new NotImplementedFunction("MMULT"); // MMULT
+            retval[163] = MatrixFunction.MDETERM; // MDETERM
+            retval[164] = MatrixFunction.MINVERSE; // MINVERSE
+            retval[165] = MatrixFunction.MMULT; // MMULT
             retval[166] = new NotImplementedFunction("FILES"); // FILES
             retval[167] = new IPMT();
             retval[168] = new PPMT();

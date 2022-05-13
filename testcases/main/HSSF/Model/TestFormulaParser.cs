@@ -1239,9 +1239,9 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual("{1,2,2,#REF!;FALSE,3,3,2}", ptgs[0].ToFormulaString());
 
             ArrayPtg aptg = (ArrayPtg)ptgs[0];
-            Object[][] values = aptg.GetTokenArrayValues();
-            Assert.AreEqual(ErrorConstant.ValueOf(FormulaError.REF.Code), values[0][3]);
-            Assert.AreEqual(false, values[1][0]);
+            Object[,] values = aptg.GetTokenArrayValues();
+            Assert.AreEqual(ErrorConstant.ValueOf(FormulaError.REF.Code), values[0,3]);
+            Assert.AreEqual(false, values[1,0]);
         }
         [Test]
         public void TestParseStringElementInArray()
@@ -1249,7 +1249,7 @@ namespace TestCases.HSSF.Model
             Ptg[] ptgs;
             ptgs = ParseFormula("MAX({\"5\"},3)");
             ConfirmTokenClasses(ptgs, typeof(ArrayPtg), typeof(IntPtg), typeof(FuncVarPtg));
-            object element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0][0];
+            object element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0,0];
             if (element is UnicodeString)
             {
                 // this would cause ClassCastException below
@@ -1290,14 +1290,14 @@ namespace TestCases.HSSF.Model
                 throw e;
             }
             ConfirmTokenClasses(ptgs, typeof(ArrayPtg));
-            Object element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0][0];
+            Object element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0,0];
 
             Assert.AreEqual(-42.0, (Double)element, 0.0);
 
             // Should be able to handle whitespace between unary minus and digits (Excel
             // accepts this formula after presenting the user with a Confirmation dialog).
             ptgs = ParseFormula("{- 5}");
-            element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0][0];
+            element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0,0];
             Assert.AreEqual(-5.0, (Double)element, 0.0);
         }
         [Test]

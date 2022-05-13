@@ -41,7 +41,10 @@ namespace TestCases.SS.Formula
 
         private static ValueEval EvaluateFormula(Ptg[] ptgs)
         {
-            OperationEvaluationContext ec = new OperationEvaluationContext(null, null, 0, 0, 0, null);
+            HSSFWorkbook wb = new HSSFWorkbook();
+            wb.CreateSheet().CreateRow(0).CreateCell(0);
+            IEvaluationWorkbook ewb = HSSFEvaluationWorkbook.Create(wb);
+            OperationEvaluationContext ec = new OperationEvaluationContext(null, ewb, 0, 0, 0, null);
             return new WorkbookEvaluator(null, null, null).EvaluateFormula(ec, ptgs);
         }
 
