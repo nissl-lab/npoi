@@ -48,52 +48,48 @@ namespace NPOI.SS.UserModel.Helpers
          */
         public List<CellRangeAddress> ShiftMergedRegions(int startRow, int endRow, int n)
         {
-            List<CellRangeAddress> ShiftedRegions = new List<CellRangeAddress>();
-            ISet<int> removedIndices = new HashSet<int>();
-            //move merged regions completely if they fall within the new region boundaries when they are Shifted
-            int size = sheet.NumMergedRegions;
-            for (int i = 0; i < size; i++)
-            {
-                CellRangeAddress merged = sheet.GetMergedRegion(i);
+            var rangesToShift = new List<CellRangeAddress>();
+            var rangesToExpand = new List<CellRangeAddress>();
+            var size = sheet.NumMergedRegions;
 
-                // remove merged region that overlaps Shifting
-                if (startRow + n <= merged.FirstRow && endRow + n >= merged.LastRow)
+            for (var i = 0; i < size; i++)
+            {
+                var merged = sheet.GetMergedRegion(i);
+                if (MergedInsideMovingRange(startRow, endRow, n, merged))
                 {
-                    removedIndices.Add(i);
+                    rangesToShift.Add(merged);
                     continue;
                 }
 
-                bool inStart = (merged.FirstRow >= startRow || merged.LastRow >= startRow);
-                bool inEnd = (merged.FirstRow <= endRow || merged.LastRow <= endRow);
-
-                //don't check if it's not within the Shifted area
-                if (!inStart || !inEnd)
+                if (MovingRangeCrossesMerged(startRow, endRow, n, merged))
                 {
-                    continue;
-                }
-
-                //only shift if the region outside the Shifted rows is not merged too
-                if (!merged.ContainsRow(startRow - 1) && !merged.ContainsRow(endRow + 1))
-                {
-                    merged.FirstRow = (/*setter*/merged.FirstRow + n);
-                    merged.LastRow = (/*setter*/merged.LastRow + n);
-                    //have to Remove/add it back
-                    ShiftedRegions.Add(merged);
-                    removedIndices.Add(i);
+                    rangesToExpand.Add(merged);
                 }
             }
 
-            if (!(removedIndices.Count==0)/*.IsEmpty()*/)
+            foreach (var range in rangesToShift)
             {
-                sheet.RemoveMergedRegions(removedIndices.ToList());
+                range.FirstRow = range.FirstRow + n;
+                range.LastRow = range.LastRow + n;
             }
 
-            //read so it doesn't Get Shifted again
-            foreach (CellRangeAddress region in ShiftedRegions)
+            foreach (var range in rangesToExpand)
             {
-                sheet.AddMergedRegion(region);
+                range.LastRow = range.LastRow + n;
+
             }
-            return ShiftedRegions;
+
+            return rangesToShift;
+        }
+
+        private bool MergedInsideMovingRange(int startRow, int endRow, int n, CellRangeAddress merged)
+        {
+            return startRow <= merged.FirstRow && endRow >= merged.LastRow;
+        }
+
+        private bool MovingRangeCrossesMerged(int startRow, int endRow, int n, CellRangeAddress merged)
+        {
+            return merged.FirstRow <= startRow && startRow <= merged.LastRow;
         }
 
         /**
