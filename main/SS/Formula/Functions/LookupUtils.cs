@@ -389,12 +389,13 @@ namespace NPOI.SS.Formula.Functions
          */
         public static bool ResolveRangeLookupArg(ValueEval rangeLookupArg, int srcCellRow, int srcCellCol)
         {
-            if (rangeLookupArg == null)
-            {
-                // range_lookup arg not provided
-                return true; // default Is TRUE
-            }
             ValueEval valEval = OperandResolver.GetSingleValue(rangeLookupArg, srcCellRow, srcCellCol);
+            if (valEval == MissingArgEval.instance)
+            {
+                // Tricky:
+                // forth arg exists but is not supplied: "=VLOOKUP(A1,A2:A4,2,)"
+                return false;
+            }
             if (valEval is BlankEval)
             {
                 // Tricky:
