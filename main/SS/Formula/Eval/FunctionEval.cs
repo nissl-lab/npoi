@@ -383,7 +383,7 @@ namespace NPOI.SS.Formula.Eval
             retval[298] = new Odd(); // ODD
             retval[299] = new NotImplementedFunction("PERMUT"); // PERMUT
             retval[300] = NumericFunction.POISSON; // POISSON
-            retval[301] = new NotImplementedFunction("TDIST"); // TDIST
+            retval[301] = TDist.instance; // TDIST
             retval[302] = new NotImplementedFunction("WEIBULL"); // WEIBULL
             retval[303] = new Sumxmy2(); // SUMXMY2
             retval[304] = new Sumx2my2(); // SUMX2MY2
