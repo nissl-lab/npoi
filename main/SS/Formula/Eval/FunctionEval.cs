@@ -375,11 +375,11 @@ namespace NPOI.SS.Formula.Eval
             retval[290] = new NotImplementedFunction("LOGNORMDIST"); // LOGNORMDIST
             retval[291] = new NotImplementedFunction("LOGINV"); // LOGINV
             retval[292] = new NotImplementedFunction("NEGBINOMDIST"); // NEGBINOMDIST
-            retval[293] = new NotImplementedFunction("NORMDIST"); // NORMDIST
-            retval[294] = new NotImplementedFunction("NORMSDIST"); // NORMSDIST
-            retval[295] = new NotImplementedFunction("NORMINV"); // NORMINV
-            retval[296] = new NotImplementedFunction("NORMSINV"); // NORMSINV
-            retval[297] = new NotImplementedFunction("STANDARDIZE"); // STANDARDIZE
+            retval[293] = NormDist.instance; // NORMDIST
+            retval[294] = NormSDist.instance; // NORMSDIST
+            retval[295] = NormInv.instance; // NORMINV
+            retval[296] = NormSInv.instance; // NORMSINV
+            retval[297] = Standardize.instance; // STANDARDIZE
             retval[298] = new Odd(); // ODD
             retval[299] = new NotImplementedFunction("PERMUT"); // PERMUT
             retval[300] = NumericFunction.POISSON; // POISSON

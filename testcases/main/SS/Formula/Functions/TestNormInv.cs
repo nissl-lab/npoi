@@ -1,0 +1,83 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.Formula;
+using NPOI.SS.Formula.Eval;
+using NPOI.SS.Formula.Functions;
+using NPOI.SS.UserModel;
+using NUnit.Framework;
+
+namespace TestCases.SS.Formula.Functions
+{
+    [TestFixture]
+    public class TestNormInv
+    {
+        private static OperationEvaluationContext ec = new OperationEvaluationContext(null, null, 0, 0, 0, null);
+
+        [Test]
+        public void TestBasic()
+        {
+            confirmValue("0.908789", "40", "1.5", 42.000002);
+        }
+
+        [Test]
+        public void TestInvalid()
+        {
+            confirmInvalidError("A1", "B2", "C2");
+        }
+
+        [Test]
+        public void TestNumError()
+        {
+            confirmNumError("0.5", "40", "0");
+            confirmNumError("0.5", "40", "-0.1");
+            confirmNumError("-0.5", "40", "0.1");
+            confirmNumError("0", "40", "0.1");
+            confirmNumError("1", "40", "0.1");
+            confirmNumError("1.5", "40", "0.1");
+        }
+        //https://support.microsoft.com/en-us/office/norminv-function-87981ab8-2de0-4cb0-b1aa-e21d4cb879b8
+        //https://support.microsoft.com/en-us/office/norm-inv-function-54b30935-fee7-493c-bedb-2278a9db7e13
+        [Test]
+        public void TestMicrosoftExample1()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            SS.Util.Utils.AddRow(sheet, 0, "Data", "Description");
+            SS.Util.Utils.AddRow(sheet, 1, 0.908789, "Probability corresponding to the normal distribution");
+            SS.Util.Utils.AddRow(sheet, 2, 40, "Arithmetic mean of the distribution");
+            SS.Util.Utils.AddRow(sheet, 3, 1.5, "Standard deviation of the distribution");
+            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            ICell cell = wb.GetSheetAt(0).GetRow(0).CreateCell(100);
+            SS.Util.Utils.AssertDouble(fe, cell, "NORMINV(A2,A3,A4)", 42.000002, 0.000001);
+            SS.Util.Utils.AssertDouble(fe, cell, "NORM.INV(A2,A3,A4)", 42.000002, 0.000001);
+        }
+        private static ValueEval invokeValue(String number1, String number2, String number3)
+        {
+            ValueEval[] args = new ValueEval[] { new StringEval(number1), new StringEval(number2), new StringEval(number3) };
+            return NormInv.instance.Evaluate(args, ec);
+        }
+
+        private static void confirmValue(String number1, String number2, String number3, double expected)
+        {
+            ValueEval result = invokeValue(number1, number2, number3);
+            Assert.IsTrue(result is NumberEval);
+            Assert.AreEqual(expected, ((NumberEval)result).NumberValue, 0.0000001);
+        }
+
+        private static void confirmInvalidError(String number1, String number2, String number3)
+        {
+            ValueEval result = invokeValue(number1, number2, number3);
+            Assert.IsTrue(result is ErrorEval);
+            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+        }
+
+        private static void confirmNumError(String number1, String number2, String number3)
+        {
+            ValueEval result = invokeValue(number1, number2, number3);
+            Assert.IsTrue(result is ErrorEval);
+            Assert.AreEqual(ErrorEval.NUM_ERROR, result);
+        }
+    }
+}

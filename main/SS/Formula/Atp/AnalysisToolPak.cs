@@ -154,6 +154,10 @@ namespace NPOI.SS.Formula.Atp {
             r(m, "MULTINOMIAL", null);
             r(m, "NETWORKDAYS", NetworkdaysFunction.instance);
             r(m, "NOMINAL", null);
+            r(m, "NORM.DIST", NormDist.instance);
+            r(m, "NORM.S.DIST", NormSDist.instance);
+            r(m, "NORM.INV", NormInv.instance);
+            r(m, "NORM.S.INV", NormSInv.instance);
             r(m, "NUMBERVALUE", NumberValueFunction.instance);
             r(m, "OCT2BIN", null);
             r(m, "OCT2DEC", Oct2Dec.instance);
