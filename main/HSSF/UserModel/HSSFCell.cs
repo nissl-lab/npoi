@@ -515,6 +515,20 @@ namespace NPOI.HSSF.UserModel
             SetCellValue(DateUtil.GetExcelDate(value, this.book.IsDate1904()));
         }
 
+#if NET6_0_OR_GREATER
+        /// <summary>
+        /// Set a date value for the cell. Excel treats dates as numeric so you will need to format the cell as
+        /// a date.
+        /// </summary>
+        /// <param name="value">the date value to Set this cell to.  For formulas we'll Set the
+        /// precalculated value, for numerics we'll Set its value. For other types we
+        /// will Change the cell to a numeric cell and Set its value.</param>
+        public void SetCellValue(DateOnly value)
+        {
+            SetCellValue(DateUtil.GetExcelDate(value, this.book.IsDate1904()));
+        }
+#endif
+
 
         /// <summary>
         /// Set a string value for the cell. Please note that if you are using
