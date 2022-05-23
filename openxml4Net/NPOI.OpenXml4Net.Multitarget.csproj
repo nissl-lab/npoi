@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<AssemblyName>NPOI.OpenXml4Net</AssemblyName>
+	<SignAssembly>true</SignAssembly>
+	<AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>..\solution\Lib\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\solution\Lib\Release\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <NoWarn>1701;1702;0108;0618;618;108;0612;612;162;0162</NoWarn>
+    <WarningLevel>1</WarningLevel>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45'">
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Drawing" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\main\NPOI.Multitarget.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -34,7 +34,7 @@
     </TargetFrameworkProfile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
-    <PackageId>NPOI</PackageId>
+    <PackageId>NPOI.OpenXml4Net</PackageId>
     <RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
     <LangVersion>default</LangVersion>
   </PropertyGroup>

@@ -1,0 +1,75 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<AssemblyName>NPOI.OOXML</AssemblyName>
+	<RootNamespace>NPOI.OOXML</RootNamespace>
+	<SignAssembly>true</SignAssembly>
+	<AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>..\solution\Lib\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\solution\Lib\Release\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+    <NoWarn>1701;1702;0108;0618;618;108;0612;612;162;0162</NoWarn>
+    <WarningLevel>1</WarningLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
+    <Compile Remove="XSSF\Extractor\XSSFEventBasedExcelExtractor.cs" />
+    <Compile Remove="XSSF\UserModel\Charts\XSSFNumberCache.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+	<PackageReference Include="System.Security.Cryptography.Xml">
+	  <Version>4.5.0</Version>
+	</PackageReference>
+  </ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="POIFS\Crypt\Dsig\KeyInfoKeySelector.cs" />
+		<Compile Remove="POIFS\Crypt\Dsig\Services\RelationshipTransformService.cs" />
+		<Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
+		<Compile Remove="XSSF\Extractor\XSSFEventBasedExcelExtractor.cs" />
+		<Compile Remove="XSSF\UserModel\Charts\XSSFNumberCache.cs" />
+	</ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45'">
+    <Reference Include="System.Configuration" />
+	<Reference Include="System" />
+	<Reference Include="System.Data" />
+	<Reference Include="System.Drawing" />
+	<Reference Include="System.Security" />
+	<Reference Include="System.Xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\main\NPOI.Multitarget.csproj" />
+    <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj" />
+    <ProjectReference Include="..\OpenXmlFormats\NPOI.OpenXmlFormats.Multitarget.csproj" />
+  </ItemGroup>
+
+</Project>
