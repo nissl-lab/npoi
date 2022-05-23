@@ -156,7 +156,7 @@ namespace NPOI.Util
                     b[off + i] = (byte)c;
                 }
             }
-            catch (IOException ee)
+            catch (IOException )
             {
             }
             return i;

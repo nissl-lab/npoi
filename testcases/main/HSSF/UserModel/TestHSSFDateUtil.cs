@@ -489,7 +489,7 @@ namespace TestCases.HSSF.UserModel
                 HSSFDateUtil.AbsoluteDay(calendar, false);
                 Assert.Fail("Should fail here");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException )
             {
                 // expected here
             }
@@ -500,7 +500,7 @@ namespace TestCases.HSSF.UserModel
                 HSSFDateUtil.AbsoluteDay(calendar, true);
                 Assert.Fail("Should fail here");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException )
             {
                 // expected here
             }

@@ -1628,7 +1628,7 @@ namespace TestCases.XSSF.UserModel
                 WorkbookFactory.Create(inpA);
                 Assert.Fail("Should've raised a EncryptedDocumentException error");
             }
-            catch (EncryptedDocumentException e) { }
+            catch (EncryptedDocumentException ) { }
 
             // Via a POIFSFileSystem
             POIFSFileSystem fsP = new POIFSFileSystem(inpB);
@@ -1637,7 +1637,7 @@ namespace TestCases.XSSF.UserModel
                 WorkbookFactory.Create(fsP);
                 Assert.Fail("Should've raised a EncryptedDocumentException error");
             }
-            catch (EncryptedDocumentException e) { }
+            catch (EncryptedDocumentException) { }
 
             // Via a NPOIFSFileSystem
             NPOIFSFileSystem fsNP = new NPOIFSFileSystem(inpC);
@@ -1646,7 +1646,7 @@ namespace TestCases.XSSF.UserModel
                 WorkbookFactory.Create(fsNP);
                 Assert.Fail("Should've raised a EncryptedDocumentException error");
             }
-            catch (EncryptedDocumentException e) { }
+            catch (EncryptedDocumentException) { }
         }
         [Test]
         public void Bug53282()
@@ -2151,7 +2151,7 @@ namespace TestCases.XSSF.UserModel
                 new XSSFWorkbook(pkg).Close();
                 Assert.Fail(".xlsb files not supported");
             }
-            catch (XLSBUnsupportedException e)
+            catch (XLSBUnsupportedException)
             {
                 // Good, detected and warned
             }
@@ -2162,7 +2162,7 @@ namespace TestCases.XSSF.UserModel
                 WorkbookFactory.Create(pkg).Close();
                 Assert.Fail(".xlsb files not supported");
             }
-            catch (XLSBUnsupportedException e)
+            catch (XLSBUnsupportedException)
             {
                 // Good, detected and warned
             }
@@ -2174,7 +2174,7 @@ namespace TestCases.XSSF.UserModel
                 WorkbookFactory.Create(xlsbFile.FullName).Close();
                 Assert.Fail(".xlsb files not supported");
             }
-            catch (XLSBUnsupportedException e)
+            catch (XLSBUnsupportedException)
             {
                 // Good, detected and warned
             }

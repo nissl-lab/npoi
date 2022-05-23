@@ -54,7 +54,7 @@ namespace TestCases.XSSF
             try {
                 wb.CloneSheet(0, VALID_SHEET_NAME);
                 Assert.Fail("Should fail");
-            } catch (ArgumentException e) {
+            } catch (ArgumentException) {
                 // expected here
             }
             Assert.AreEqual(1, wb.NumberOfSheets);

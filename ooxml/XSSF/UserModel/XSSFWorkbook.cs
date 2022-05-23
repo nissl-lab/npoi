@@ -730,7 +730,7 @@ namespace NPOI.XSSF.UserModel
                     uniqueIndex++;
                     baseName = srcName.Substring(0, bracketPos).Trim();
                 }
-                catch (FormatException e)
+                catch (FormatException)
                 {
                     // contents of brackets not numeric
                 }

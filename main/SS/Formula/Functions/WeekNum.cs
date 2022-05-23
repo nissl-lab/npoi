@@ -67,7 +67,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 serialNumCalendar = DateUtil.GetJavaDate(serialNum, false);
             }
-            catch (Exception e)
+            catch (Exception )
             {
                 return ErrorEval.NUM_ERROR;
             }

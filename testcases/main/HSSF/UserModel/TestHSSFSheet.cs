@@ -696,9 +696,8 @@ namespace TestCases.HSSF.UserModel
 
         /** cell with formula becomes null on cloning a sheet*/
         [Test]
-        public new void Test35084()
+        public void Test35084()
         {
-
             HSSFWorkbook wb = new HSSFWorkbook();
             NPOI.SS.UserModel.ISheet s = wb.CreateSheet("Sheet1");
             IRow r = s.CreateRow(0);

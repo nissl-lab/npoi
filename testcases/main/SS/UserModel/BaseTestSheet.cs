@@ -357,7 +357,7 @@ namespace TestCases.SS.UserModel
                 sheet.AddMergedRegion(region);
                 Assert.Fail("Should not be able to add a single-cell merged region (" + region.FormatAsString() + ")");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 // expected
             }

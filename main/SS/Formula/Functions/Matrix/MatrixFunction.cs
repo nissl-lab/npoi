@@ -219,7 +219,7 @@ namespace NPOI.SS.Formula.Functions
                 {
                     return e.GetErrorEval();
                 }
-                catch (ArgumentException e)
+                catch (ArgumentException )
                 {
                     return ErrorEval.VALUE_INVALID;
                 }

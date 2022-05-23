@@ -167,7 +167,6 @@ namespace NPOI.XWPF.UserModel
             //{
             //    return true;
             //}
-            return false;
         }
 
 

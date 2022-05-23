@@ -352,7 +352,7 @@ namespace TestCases.XSSF.UserModel
                 wb.RemoveSheetAt(0);
                 Assert.Fail("Should catch exception as no more sheets are there");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 // expected
             }

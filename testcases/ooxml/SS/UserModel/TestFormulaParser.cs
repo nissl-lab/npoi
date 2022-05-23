@@ -38,7 +38,7 @@ namespace TestCases.SS.UserModel
                 FormulaParser.Parse("Sheet1!1:65537", workbook, FormulaType.Cell, 0);
                 Assert.Fail("Expected exception");
             }
-            catch (FormulaParseException expected)
+            catch (FormulaParseException)
             {
             }
         }

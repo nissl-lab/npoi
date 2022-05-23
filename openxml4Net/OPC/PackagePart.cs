@@ -511,7 +511,7 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     target = PackagingUriHelper.ParseUri(t.Substring(0, t.IndexOf('#')), UriKind.Absolute);
                 }
-                catch (UriFormatException e)
+                catch (UriFormatException)
                 {
                     throw new InvalidFormatException("Invalid target URI: " + t);
                 }

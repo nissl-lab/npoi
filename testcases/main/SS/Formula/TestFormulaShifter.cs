@@ -271,7 +271,7 @@ namespace TestCases.SS.Formula
                 FormulaShifter.CreateForRowShift(1, "name", 1, 2, 0, SpreadsheetVersion.EXCEL97);
                 Assert.Fail("Should catch exception here");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 // expected here
             }
@@ -280,7 +280,7 @@ namespace TestCases.SS.Formula
                 FormulaShifter.CreateForRowShift(1, "name", 2, 1, 2, SpreadsheetVersion.EXCEL97);
                 Assert.Fail("Should catch exception here");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 // expected here
             }

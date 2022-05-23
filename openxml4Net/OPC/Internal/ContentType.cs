@@ -45,7 +45,6 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         /**
          * Parameters
          */
-        Hashtable p;
         private Dictionary<String, String> parameters;
 
         /**

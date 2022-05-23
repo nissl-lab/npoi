@@ -1359,7 +1359,7 @@ namespace TestCases.HSSF.UserModel
                 wb.Write();
                 Assert.Fail("Shouldn't work for new files");
             }
-            catch (InvalidOperationException e) { }
+            catch (InvalidOperationException) { }
 
             // Can't work for InputStream opened files
             wb = new HSSFWorkbook(
@@ -1369,7 +1369,7 @@ namespace TestCases.HSSF.UserModel
                 wb.Write();
                 Assert.Fail("Shouldn't work for InputStream");
             }
-            catch (InvalidOperationException e) { }
+            catch (InvalidOperationException) { }
 
             // Can't work for OPOIFS
             OPOIFSFileSystem ofs = new OPOIFSFileSystem(
@@ -1380,7 +1380,7 @@ namespace TestCases.HSSF.UserModel
                 wb.Write();
                 Assert.Fail("Shouldn't work for OPOIFSFileSystem");
             }
-            catch (InvalidOperationException e) { }
+            catch (InvalidOperationException) { }
 
             // Can't work for Read-Only files
             NPOIFSFileSystem fs = new NPOIFSFileSystem(
@@ -1391,7 +1391,7 @@ namespace TestCases.HSSF.UserModel
                 wb.Write();
                 Assert.Fail("Shouldn't work for Read Only");
             }
-            catch (InvalidOperationException e) { }
+            catch (InvalidOperationException) { }
         }
 
         [Test]

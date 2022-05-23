@@ -323,7 +323,7 @@ namespace NPOI.XSSF.Model
                 {
                     return GetNumberFormatId(fmt);
                 }
-                catch (InvalidOperationException e)
+                catch (InvalidOperationException )
                 {
                     throw new InvalidOperationException("Found the format, but couldn't figure out where - should never happen!");
                 }

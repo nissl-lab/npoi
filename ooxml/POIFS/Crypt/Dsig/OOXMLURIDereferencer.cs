@@ -102,7 +102,7 @@ namespace NPOI.POIFS.Crypt.Dsig
                     throw new NotImplementedException();
                 }
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 //throw new URIReferenceException("I/O error: " + e.Message, e);
                 throw new NotImplementedException();
@@ -128,7 +128,7 @@ namespace NPOI.POIFS.Crypt.Dsig
             {
                 ppn = PackagingUriHelper.CreatePartName(path);
             }
-            catch (InvalidFormatException e)
+            catch (InvalidFormatException)
             {
                 //Console.WriteLine(POILogger.WARN, "illegal part name (not expected)", uri);
                 return null;

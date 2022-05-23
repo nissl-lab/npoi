@@ -63,7 +63,7 @@ namespace NPOI
                 {
                     return CreateDocumentPart(cls, PARENT_PART, new Object[] { parent, part });
                 }
-                catch (MissingMethodException e)
+                catch (MissingMethodException)
                 {
                     return CreateDocumentPart(cls, ORPHAN_PART, new Object[] { part });
                 }

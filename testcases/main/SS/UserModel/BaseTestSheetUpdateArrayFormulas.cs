@@ -650,7 +650,7 @@ namespace TestCases.SS.UserModel
                 sheet.SetArrayFormula("SUM(A1:A3)",  arrayFormula);
                 Assert.Fail("expected exception: should not be able to create an array formula that intersects with a merged region");
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
                 // expected
             }

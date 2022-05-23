@@ -23,7 +23,7 @@ namespace NPOI.SS.Formula.Atp
             {
                 expression = OperandResolver.GetSingleValue(args[0], ec.RowIndex, ec.ColumnIndex);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return ErrorEval.NA;
             }
@@ -51,7 +51,7 @@ namespace NPOI.SS.Formula.Atp
                     }
 
                 }
-                catch (EvaluationException e)
+                catch (EvaluationException)
                 {
                     return ErrorEval.NA;
                 }

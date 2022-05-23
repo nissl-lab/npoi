@@ -103,7 +103,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
                 ExtractInvalidFormatMessage("OnlyOneCorePropertiesPartFAIL.docx");
                 Assert.Fail("M4.1 should be being relaxed");
             }
-            catch (AssertionException e) { }
+            catch (AssertionException) { }
 
             // We will use the first core properties, and ignore the others
             Stream is1 = OpenXml4NetTestDataSamples.OpenSampleStream("MultipleCoreProperties.docx");
@@ -144,7 +144,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
                 // no longer fail on compliance error
                 //fail("expected OPC compliance exception was not thrown");
             }
-            catch (InvalidFormatException e)
+            catch (InvalidFormatException)
             {
                 throw;
             }

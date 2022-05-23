@@ -76,7 +76,7 @@ namespace TestCases.XSSF.UserModel.Extensions
             XSSFCell cellWithThemeColor = (XSSFCell)wb.GetSheetAt(0).GetRow(10).GetCell(0);
             //color RGB will be extracted from theme
             XSSFColor foregroundColor = (XSSFColor)((XSSFCellStyle)cellWithThemeColor.CellStyle).FillForegroundColorColor;
-            byte[] rgb = foregroundColor.GetRgb();
+            byte[] rgb = foregroundColor.RGB;
             byte[] rgbWithTint = foregroundColor.GetRgbWithTint();
             // Dk2
             Assert.AreEqual(rgb[0], 31);

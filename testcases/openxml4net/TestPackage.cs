@@ -1031,7 +1031,7 @@ namespace TestCases.OpenXml4Net.OPC
             {
                 pkg = OPCPackage.Open(file, PackageAccess.READ);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //System.out.println(e.GetClass().getName());
                 //System.out.println(e.GetMessage());

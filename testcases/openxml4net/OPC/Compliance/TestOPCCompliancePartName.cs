@@ -128,7 +128,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
                 PackagingUriHelper.CreatePartName(new Uri("",UriKind.Relative));
                 Assert.Fail("A part name shall not be empty. [M1.1]");
             }
-            catch (InvalidFormatException e)
+            catch (InvalidFormatException)
             {
                 // Normal behaviour
             }
@@ -210,7 +210,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
                 PackagingUriHelper.CreatePartName(new Uri("document.xml", UriKind.RelativeOrAbsolute));
                 Assert.Fail("A part name shall start with a forward slash ('/') character. [M1.4]");
             }
-            catch (InvalidFormatException e)
+            catch (InvalidFormatException )
             {
                 // Normal behaviour
             }
@@ -227,7 +227,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
                 PackagingUriHelper.CreatePartName(new Uri("/document.xml/", UriKind.Relative));
                 Assert.Fail("A part name shall not have a forward slash as the last character. [M1.5]");
             }
-            catch (InvalidFormatException e)
+            catch (InvalidFormatException)
             {
                 // Normal behaviour
             }

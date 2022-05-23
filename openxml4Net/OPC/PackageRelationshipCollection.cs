@@ -353,7 +353,7 @@ namespace NPOI.OpenXml4Net.OPC
 
                 // Check OPC compliance M4.1 rule
                 bool fCorePropertiesRelationship = false;
-                ///xmlRelationshipsDoc.ChildNodes.GetEnumerator();
+                //xmlRelationshipsDoc.ChildNodes.GetEnumerator();
                 XPathNavigator xpathnav = xmlRelationshipsDoc.CreateNavigator();
                 XmlNamespaceManager nsMgr = new XmlNamespaceManager(xpathnav.NameTable);
                 nsMgr.AddNamespace("x", PackageNamespaces.RELATIONSHIPS);
