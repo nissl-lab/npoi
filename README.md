@@ -1,8 +1,20 @@
-## Statement about Russian Invasion War ##
+This repository is fork of [NPOI](https://github.com/nissl-lab/npoi). Syncing with upstream repository will be implemented like in the following [article](https://medium.com/sweetmeat/how-to-keep-a-downstream-git-repository-current-with-upstream-repository-changes-10b76fad6d97).
 
-This project fully supports Ukraine people to fight against Russian army. This is definitely an invasion. Ukraine are actually China's friend for a long time. Most core parts of China aircraft carrier, airplane are provided by Ukraine companies. I DON'T see any reason that we should support Russia instead Ukraine.
+To work with the repository on local machine:
 
-However, I don't wanna stop Russian developers from using NPOI. They are also victims. They cannot change Putin's or Russia Government's mind in any case. But if possible, Russian developers may help impact your government although it's risky. Thank you!
+Run Git bash or Command Line. In it run commands:
+
+`cd c:/your_folder_with/repos`
+
+`git clone git@github.com:jake-codes-at-5-am/npoi.git # clones this fork to the location c:/your_folder_with/repos/npoi`
+
+`cd npoi # to get into the folder with the repo`
+
+`git remote add upstream git@github.com:nissl-lab/npoi.git # this will add an upstream remote to our repo`
+
+`git pull upstream master # to pull all the changes from an upstream remote, branch master`
+
+
 
 NPOI
 ===================
