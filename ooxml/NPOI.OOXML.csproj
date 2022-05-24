@@ -132,6 +132,7 @@
     <Compile Include="SS\UserModel\WorkbookFactory.cs" />
     <Compile Include="Util\IdentifierManager.cs" />
     <Compile Include="Util\PackageHelper.cs" />
+    <Compile Include="Util\XSSFCellUtil.cs" />
     <Compile Include="XSSF\Extractor\XSSFExcelExtractor.cs" />
     <Compile Include="XSSF\Extractor\XSSFExportToXml.cs" />
     <Compile Include="XSSF\Model\CalculationChain.cs" />
