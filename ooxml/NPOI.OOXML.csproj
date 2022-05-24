@@ -144,6 +144,7 @@
     <Compile Include="XSSF\Model\SharedStringsTable.cs" />
     <Compile Include="XSSF\Model\SingleXmlCells.cs" />
     <Compile Include="XSSF\Model\StylesTable.cs" />
+    <Compile Include="XSSF\Model\StylesTableExtension.cs" />
     <Compile Include="XSSF\Model\ThemesTable.cs" />
     <Compile Include="XSSF\Streaming\AutoSizeColumnTracker.cs" />
     <Compile Include="XSSF\Streaming\GZIPSheetDataWriter.cs" />
