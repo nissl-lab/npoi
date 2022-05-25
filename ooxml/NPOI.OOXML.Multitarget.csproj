@@ -24,46 +24,37 @@
     <WarningLevel>1</WarningLevel>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
-    <Compile Remove="XSSF\Extractor\XSSFEventBasedExcelExtractor.cs" />
-    <Compile Remove="XSSF\UserModel\Charts\XSSFNumberCache.cs" />
-  </ItemGroup>
+	<ItemGroup>
+	  <Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
+	  <Compile Remove="XSSF\Extractor\XSSFEventBasedExcelExtractor.cs" />
+	  <Compile Remove="XSSF\UserModel\Charts\XSSFNumberCache.cs" />
+	  <Compile Remove="POIFS\Crypt\Dsig\KeyInfoKeySelector.cs" />
+	  <Compile Remove="POIFS\Crypt\Dsig\Services\RelationshipTransformService.cs" />
+	</ItemGroup>
 
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-	<PackageReference Include="System.Security.Cryptography.Xml">
-	  <Version>4.5.0</Version>
-	</PackageReference>
+	  <PackageReference Include="System.Security.Cryptography.Xml" Version="4.5.0" />
+	  <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
-	<ItemGroup>
-		<Compile Remove="POIFS\Crypt\Dsig\KeyInfoKeySelector.cs" />
-		<Compile Remove="POIFS\Crypt\Dsig\Services\RelationshipTransformService.cs" />
-		<Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
-		<Compile Remove="XSSF\Extractor\XSSFEventBasedExcelExtractor.cs" />
-		<Compile Remove="XSSF\UserModel\Charts\XSSFNumberCache.cs" />
-	</ItemGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45'">
-    <Reference Include="System.Configuration" />
-	<Reference Include="System" />
-	<Reference Include="System.Data" />
-	<Reference Include="System.Drawing" />
-	<Reference Include="System.Security" />
-	<Reference Include="System.Xml" />
+	  <Reference Include="System" />
+	  <Reference Include="System.Data" />
+	  <Reference Include="System.Drawing" />
+	  <Reference Include="System.Security" />
+	  <Reference Include="System.Xml" />
+
+	  <PackageReference Include="Enums.NET">
+		  <Version>4.0.0</Version>
+	  </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -72,4 +63,11 @@
     <ProjectReference Include="..\OpenXmlFormats\NPOI.OpenXmlFormats.Multitarget.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>
+				IronXL, PublicKey=002400000480000094000000060200000024000052534131000400000100010021f27bed0fcf04daf3141a18630503117e51197ab8b6095139eea41eb8abf3ca0249316a9eb47830adfced94f71274cd5cbee0e1484600db1c53ff89bff6c2aeb798418c4c22779480c2077b57dbeb09b525ca5051bcf0e0486b67e76937486c1f55e000773282b943dd8b24a5e2806fec900f3c41380ee9a1cd53f9442d89e3
+			</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
 </Project>

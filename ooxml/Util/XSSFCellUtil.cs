@@ -116,7 +116,7 @@ namespace NPOI.XSSF.Util
 
         private static Dictionary<string, object> GetFormatProperties(XSSFCellStyle style)
         {
-            Dictionary<string, object> properties = new();
+            Dictionary<string, object> properties = new Dictionary<string, object>();
             PutShort(properties, ALIGNMENT, (short)style.Alignment);
             PutShort(properties, BORDER_BOTTOM, (short)style.BorderBottom);
             PutShort(properties, BORDER_DIAGONAL, (short)style.BorderDiagonal);
