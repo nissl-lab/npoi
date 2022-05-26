@@ -1,8 +1,6 @@
-﻿using System;
+﻿using NPOI.SS.UserModel;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NPOI.XSSF.Streaming
 {
@@ -14,6 +12,11 @@ namespace NPOI.XSSF.Streaming
             {
                 return _rows.Max(r => r.Value.RowNum);
             }
+        }
+
+        IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
+        {
+            return ((IEnumerable<IRow>)_sh).GetEnumerator();
         }
     }
 }

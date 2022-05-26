@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using NPOI.SS.UserModel;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -10,6 +12,11 @@ namespace NPOI.XSSF.UserModel
             {
                 return _rows.Max(r => r.Value.RowNum);
             }
+        }
+
+        IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
+        {
+            return _rows.Values.GetEnumerator();
         }
     }
 }
