@@ -62,12 +62,4 @@
     <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj" />
     <ProjectReference Include="..\OpenXmlFormats\NPOI.OpenXmlFormats.Multitarget.csproj" />
   </ItemGroup>
-
-	<ItemGroup>
-		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-			<_Parameter1>
-				IronXL, PublicKey=002400000480000094000000060200000024000052534131000400000100010021f27bed0fcf04daf3141a18630503117e51197ab8b6095139eea41eb8abf3ca0249316a9eb47830adfced94f71274cd5cbee0e1484600db1c53ff89bff6c2aeb798418c4c22779480c2077b57dbeb09b525ca5051bcf0e0486b67e76937486c1f55e000773282b943dd8b24a5e2806fec900f3c41380ee9a1cd53f9442d89e3
-			</_Parameter1>
-		</AssemblyAttribute>
-	</ItemGroup>
 </Project>
