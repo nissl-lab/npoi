@@ -29,7 +29,7 @@ namespace NPOI.HSSF.UserModel
     /// @author  Andrew C. Oliver (acoliver at apache dot org)
     /// @author Jason Height (jheight at chariot dot net dot au)
     /// </summary>
-    public class HSSFCellStyle : ICellStyle
+    public partial class HSSFCellStyle : ICellStyle
     {
         private ExtendedFormatRecord _format = null;
         private short index = 0;

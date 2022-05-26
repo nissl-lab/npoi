@@ -34,7 +34,7 @@ namespace NPOI.XSSF.UserModel
      * @see NPOI.xssf.usermodel.XSSFWorkbook#getCellStyleAt(short)
      * @see NPOI.xssf.usermodel.XSSFCell#setCellStyle(NPOI.ss.usermodel.CellStyle)
      */
-    public class XSSFCellStyle : ICellStyle
+    public partial class XSSFCellStyle : ICellStyle
     {
 
         private int _cellXfId;

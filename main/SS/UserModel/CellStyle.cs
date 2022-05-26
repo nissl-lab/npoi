@@ -19,7 +19,7 @@ namespace NPOI.SS.UserModel
 {
     using System;
 
-    public interface ICellStyle
+    public partial interface ICellStyle
     {
         /// <summary>
         /// the Cell should be auto-sized to shrink to fit if the text is too long

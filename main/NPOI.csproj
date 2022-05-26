@@ -226,7 +226,9 @@
     <Compile Include="HSSF\UserModel\HSSFIconMultiStateFormatting.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeFactory.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeTypes.cs" />
+    <Compile Include="Iron\HSSF\UserModel\HSSFCellStyleExtension.cs" />
     <Compile Include="Iron\HSSF\UserModel\HSSFSheetExtension.cs" />
+    <Compile Include="Iron\SS\UserModel\CellStyleExtension.cs" />
     <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4Decryptor.cs" />
     <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4EncryptionHeader.cs" />
     <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4EncryptionInfoBuilder.cs" />
