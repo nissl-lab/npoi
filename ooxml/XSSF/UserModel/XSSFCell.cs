@@ -824,6 +824,26 @@ namespace NPOI.XSSF.UserModel
             bool date1904 = Sheet.Workbook.IsDate1904();
             SetCellValue(DateUtil.GetExcelDate(value, date1904));
         }
+
+#if NET6_0_OR_GREATER
+        public void SetCellValue(DateOnly value)
+        {
+            bool date1904 = Sheet.Workbook.IsDate1904();
+            SetCellValue(DateUtil.GetExcelDate(value, date1904));
+        }
+        
+        public void SetCellValue(DateOnly? value)
+        {
+            if (value == null)
+            {
+                SetCellType(CellType.Blank);
+                return;
+            }
+            
+            SetCellValue(value.Value);
+        }
+#endif
+        
         /// <summary>
         /// Returns the error message, such as #VALUE!
         /// </summary>
