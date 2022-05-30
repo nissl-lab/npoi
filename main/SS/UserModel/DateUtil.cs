@@ -239,6 +239,46 @@ namespace NPOI.SS.UserModel
             return value;
         }
 
+#if NET6_0_OR_GREATER
+        /// <summary>
+        /// Given a Date, Converts it into a double representing its internal Excel representation,
+        /// which Is the number of days since 1/1/1900. Fractional days represent hours, minutes, and seconds.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <param name="use1904windowing">Should 1900 or 1904 date windowing be used?</param>
+        /// <returns>Excel representation of Date (-1 if error - test for error by Checking for less than 0.1)</returns>
+        public static double GetExcelDate(DateOnly date, bool use1904windowing)
+        {
+            if ((!use1904windowing && date.Year < 1900)  //1900 date system must bigger than 1900
+                || (use1904windowing && date.Year < 1904))   //1904 date system must bigger than 1904
+            {
+                return BAD_DATE;
+            }
+
+            DateOnly startdate;
+            if (use1904windowing)
+            {
+                startdate = new DateOnly(1904, 1, 1);
+            }
+            else
+            {
+                startdate = new DateOnly(1900, 1, 1);
+            }
+
+            double value = (date.ToDateTime(TimeOnly.MinValue) - startdate.ToDateTime(TimeOnly.MinValue)).TotalDays + 1;
+
+            if (!use1904windowing && value >= 60)
+            {
+                value++;
+            }
+            else if (use1904windowing)
+            {
+                value--;
+            }
+            return value;
+        }
+#endif
+
         /// <summary>
         ///  Given an Excel date with using 1900 date windowing, and converts it to a java.util.Date.
         ///  Excel Dates and Times are stored without any timezone 

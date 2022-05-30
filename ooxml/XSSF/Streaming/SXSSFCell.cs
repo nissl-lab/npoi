@@ -825,6 +825,25 @@ namespace NPOI.XSSF.Streaming
             SetCellValue((DateTime?)value);
         }
 
+#if NET6_0_OR_GREATER
+        public void SetCellValue(DateOnly value)
+        {
+            bool date1904 = ((SXSSFWorkbook)Sheet.Workbook).XssfWorkbook.IsDate1904();
+            SetCellValue(DateUtil.GetExcelDate(value, date1904));
+        }
+
+        public void SetCellValue(DateOnly? value)
+        {
+            if (!value.HasValue)
+            {
+                SetCellType(CellType.Blank);
+                return;
+            }
+            
+            SetCellValue(value.Value);
+        }
+#endif
+
         public void SetBlank()
         {
             SetCellType(CellType.Blank);
