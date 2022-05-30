@@ -28,7 +28,7 @@ using NPOI.XSSF.UserModel;
 
 namespace NPOI.XSSF.Streaming
 {
-    public class SXSSFSheet : ISheet
+    public partial class SXSSFSheet : ISheet
     {
         // TODO: fields should be private and use public property
         internal XSSFSheet _sh;

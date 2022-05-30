@@ -38,13 +38,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45'">
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Drawing" />
-
+	  <Reference Include="System" />
+	  <Reference Include="System.Data" />
+	  <Reference Include="System.Xml" />
   </ItemGroup>
   
   <ItemGroup>

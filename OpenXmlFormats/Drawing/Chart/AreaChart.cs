@@ -510,8 +510,31 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.extLstField = value;
             }
         }
-    }
 
+        public CT_UnsignedInt AddNewIdx()
+        {
+            this.idxField = new CT_UnsignedInt();
+            return this.idxField;
+        }
+
+        public CT_UnsignedInt AddNewOrder()
+        {
+            this.orderField = new CT_UnsignedInt();
+            return this.orderField;
+        }
+
+        public CT_AxDataSource AddNewCat()
+        {
+            this.catField = new CT_AxDataSource();
+            return this.catField;
+        }
+
+        public CT_NumDataSource AddNewVal()
+        {
+            this.valField = new CT_NumDataSource();
+            return this.valField;
+        }
+    }
 
     [Serializable]
 
@@ -699,6 +722,32 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             {
                 this.extLstField = value;
             }
+        }
+
+        public CT_Boolean AddNewVaryColors()
+        {
+            this.varyColorsField = new CT_Boolean();
+            return this.varyColorsField;
+        }
+
+        public CT_UnsignedInt AddNewAxId()
+        {
+            CT_UnsignedInt si = new CT_UnsignedInt();
+            if (this.axIdField == null)
+                this.axIdField = new List<CT_UnsignedInt>();
+            axIdField.Add(si);
+            return si;
+        }
+
+        public CT_AreaSer AddNewSer()
+        {
+            CT_AreaSer newSer = new CT_AreaSer();
+            if (this.serField == null)
+            {
+                this.serField = new List<CT_AreaSer>();
+            }
+            this.serField.Add(newSer);
+            return newSer;
         }
     }
 }

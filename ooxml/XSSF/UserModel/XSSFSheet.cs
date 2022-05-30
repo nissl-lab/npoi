@@ -47,7 +47,7 @@ namespace NPOI.XSSF.UserModel
      * contain text, numbers, dates, and formulas. Cells can also be formatted.
      * </p>
      */
-    public class XSSFSheet : POIXMLDocumentPart, ISheet
+    public partial class XSSFSheet : POIXMLDocumentPart, ISheet
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(XSSFSheet));
 

@@ -38,7 +38,7 @@ namespace NPOI.XSSF.Model
      *
      * @author ugo
      */
-    public class StylesTable : POIXMLDocumentPart
+    public partial class StylesTable : POIXMLDocumentPart
     {
         private SortedDictionary<short, String> numberFormats = new SortedDictionary<short, String>();
         private bool[] usedNumberFormats = new bool[SpreadsheetVersion.EXCEL2007.MaxCellStyles];

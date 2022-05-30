@@ -226,6 +226,9 @@
     <Compile Include="HSSF\UserModel\HSSFIconMultiStateFormatting.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeFactory.cs" />
     <Compile Include="HSSF\UserModel\HSSFShapeTypes.cs" />
+    <Compile Include="Iron\HSSF\UserModel\HSSFCellStyleExtension.cs" />
+    <Compile Include="Iron\HSSF\UserModel\HSSFSheetExtension.cs" />
+    <Compile Include="Iron\SS\UserModel\CellStyleExtension.cs" />
     <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4Decryptor.cs" />
     <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4EncryptionHeader.cs" />
     <Compile Include="POIFS\Crypt\BinaryRC4\BinaryRC4EncryptionInfoBuilder.cs" />
@@ -534,6 +537,7 @@
     <Compile Include="SS\UserModel\DifferentialStyleProvider.cs" />
     <Compile Include="SS\UserModel\ExcelNumberFormat.cs" />
     <Compile Include="SS\UserModel\Helpers\RowShifter.cs" />
+    <Compile Include="Iron\SS\UserModel\SheetExtension.cs" />
     <Compile Include="SS\UserModel\TableStyle.cs" />
     <Compile Include="SS\UserModel\TableStyleInfo.cs" />
     <Compile Include="SS\UserModel\TableStyleType.cs" />
@@ -777,11 +781,15 @@
     <Compile Include="SS\Formula\SharedFormula.cs" />
     <Compile Include="SS\UserModel\BorderDiagonal.cs" />
     <Compile Include="SS\UserModel\CellCopyPolicy.cs" />
+    <Compile Include="SS\UserModel\Charts\AreaChartData.cs" />
+    <Compile Include="SS\UserModel\Charts\AreaChartSeries.cs" />
     <Compile Include="SS\UserModel\Charts\AxisTickMark.cs" />
     <Compile Include="SS\UserModel\Charts\BarChartData.cs" />
     <Compile Include="SS\UserModel\Charts\BarChartSeries.cs" />
     <Compile Include="SS\UserModel\Charts\ChartDataSource.cs" />
     <Compile Include="SS\UserModel\Charts\ChartSeries.cs" />
+    <Compile Include="SS\UserModel\Charts\ColumnChartData.cs" />
+    <Compile Include="SS\UserModel\Charts\ColumnChartSeries.cs" />
     <Compile Include="SS\UserModel\Charts\DataSources.cs" />
     <Compile Include="SS\UserModel\Charts\LineChartData.cs" />
     <Compile Include="SS\UserModel\Charts\LineChartSeries.cs" />
@@ -789,6 +797,8 @@
     <Compile Include="SS\UserModel\ConditionalFormattingThreshold.cs" />
     <Compile Include="SS\UserModel\ConditionType.cs" />
     <Compile Include="SS\UserModel\DataBarFormatting.cs" />
+    <Compile Include="SS\UserModel\Charts\PieChartData.cs" />
+    <Compile Include="SS\UserModel\Charts\PieChartSeries.cs" />
     <Compile Include="SS\UserModel\DataConsolidateFunction.cs" />
     <Compile Include="SS\UserModel\ExcelGeneralNumberFormat.cs" />
     <Compile Include="SS\UserModel\ExtendedColor.cs" />
