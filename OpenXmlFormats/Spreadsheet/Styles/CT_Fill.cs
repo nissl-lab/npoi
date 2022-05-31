@@ -40,6 +40,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.patternFillField = new CT_PatternFill();
             return GetPatternFill();
         }
+        public CT_GradientFill AddNewGradientFill()
+        {
+            this.gradientFillField = new CT_GradientFill();
+            return this.gradientFillField;
+        }
+        public void UnsetPatternFill()
+        {
+            this.patternFillField = null;
+        }
         public bool IsSetPatternFill()
         {
             return this.patternFillField != null;
