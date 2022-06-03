@@ -103,8 +103,6 @@ namespace NPOI.SS.UserModel
         private static String defaultFractionFractionPartFormat = "#/##";
         /** Pattern to find a number FormatBase: "0" or  "#" */
         private static string numPattern = "[0#]+";
-        private readonly static string dotDecimalSeparator = ".";
-        private readonly static string commaDecimalSeparator = ",";
 
         /** Pattern to find "AM/PM" marker */
         private static string amPmPattern = "((A|P)[M/P]*)";
@@ -139,7 +137,7 @@ namespace NPOI.SS.UserModel
          *  in a numeric format 
          */
         private static Regex alternateGrouping = new Regex("([#0]([^.#0])[#0]{3})", RegexOptions.Compiled);
-
+    
         /**
          * Cells formatted with a date or time format and which contain invalid date or time values
          *  show 255 pound signs ("#").
@@ -202,7 +200,7 @@ namespace NPOI.SS.UserModel
         public DataFormatter(bool emulateCSV)
             : this(CultureInfo.CurrentCulture, true, emulateCSV)
         {
-
+            
         }
 
         /**
@@ -211,7 +209,7 @@ namespace NPOI.SS.UserModel
         public DataFormatter(CultureInfo locale)
             : this(locale, false)
         {
-
+            
         }
 
         /**
@@ -222,7 +220,7 @@ namespace NPOI.SS.UserModel
         public DataFormatter(CultureInfo locale, bool emulateCSV)
             : this(locale, false, emulateCSV)
         {
-
+            
         }
 
         /**
@@ -838,8 +836,7 @@ namespace NPOI.SS.UserModel
         private String GetFormattedDateString(ICell cell)
         {
             FormatBase dateFormat = GetFormat(cell);
-            if (dateFormat is ExcelStyleDateFormatter)
-            {
+            if (dateFormat is ExcelStyleDateFormatter) {
                 // Hint about the raw excel value
                 ((ExcelStyleDateFormatter)dateFormat).SetDateToBeFormatted(
                       cell.NumericCellValue
@@ -941,9 +938,6 @@ namespace NPOI.SS.UserModel
             // original method.
             String result;
             String textValue = NumberToTextConverter.ToText(value);
-
-            textValue = ForceDecimalSeparatorToCurrentCulture(textValue);
-
             if (textValue.IndexOf('E') > -1)
             {
                 result = numberFormat.Format(value);
@@ -959,38 +953,19 @@ namespace NPOI.SS.UserModel
             }
             return result;
         }
-
-        private string ForceDecimalSeparatorToCurrentCulture(string textValue)
-        {
-            string currentCultureDecimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-
-            if (textValue.Contains(dotDecimalSeparator) &&
-                currentCultureDecimalSeparator != dotDecimalSeparator)
-            {
-                return textValue.Replace(dotDecimalSeparator, currentCultureDecimalSeparator);
-            }
-            else if (textValue.Contains(commaDecimalSeparator) &&
-                currentCultureDecimalSeparator != commaDecimalSeparator)
-            {
-                return textValue.Replace(commaDecimalSeparator, currentCultureDecimalSeparator);
-            }
-
-            return textValue;
-        }
-
         /**
-        * 
-        * Returns the Formatted value of a cell as a <c>String</c> regardless
-        * of the cell type. If the Excel FormatBase pattern cannot be Parsed then the
-        * cell value will be Formatted using a default FormatBase.
-        * 
-        * When passed a null or blank cell, this method will return an empty
-        * String (""). Formulas in formula type cells will not be evaluated.
-        * 
-        *
-        * @param cell The cell
-        * @return the Formatted cell value as a String
-        */
+         * 
+         * Returns the Formatted value of a cell as a <c>String</c> regardless
+         * of the cell type. If the Excel FormatBase pattern cannot be Parsed then the
+         * cell value will be Formatted using a default FormatBase.
+         * 
+         * When passed a null or blank cell, this method will return an empty
+         * String (""). Formulas in formula type cells will not be evaluated.
+         * 
+         *
+         * @param cell The cell
+         * @return the Formatted cell value as a String
+         */
         public String FormatCellValue(ICell cell)
         {
             return FormatCellValue(cell, null);
