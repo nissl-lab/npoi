@@ -88,7 +88,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.allowPng = XmlHelper.ReadBool(node.Attributes["allowPng"]);
             if (node.Attributes["targetScreenSize"] != null)
             {
-               ctObj.targetScreenSize = Enums.Parse<ST_TargetScreenSize>(node.Attributes["targetScreenSize"].Value,false, EnumFormat.Description);
+               ctObj.targetScreenSize = Enums.Parse<ST_TargetScreenSize>(node.Attributes["targetScreenSize"].Value,false, EnumFormat.Name);
             }
             ctObj.dpi = XmlHelper.ReadUInt(node.Attributes["dpi"]);
             ctObj.codePage = XmlHelper.ReadUInt(node.Attributes["codePage"]);
