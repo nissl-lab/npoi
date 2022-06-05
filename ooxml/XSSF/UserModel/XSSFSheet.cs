@@ -5425,7 +5425,53 @@ namespace NPOI.XSSF.UserModel
             }
             return result;
         }
+        /**
+ *  when a cell with a 'master' shared formula is removed,  the next cell in the range becomes the master
+ * @param cell The cell that is removed
+ * @param evalWb BaseXSSFEvaluationWorkbook in use, if one exists
+ */
+        internal void OnDeleteFormula(XSSFCell cell, XSSFEvaluationWorkbook evalWb)
+        {
 
+            CT_CellFormula f = cell.GetCTCell().f;
+            if (f != null && f.t == ST_CellFormulaType.shared && f.isSetRef() && f.Value != null)
+            {
+                bool breakit = false;
+                CellRangeAddress ref1 = CellRangeAddress.ValueOf(f.@ref);
+                if (ref1.NumberOfCells > 1)
+                {
+                    for (int i = cell.RowIndex; i <= ref1.LastRow; i++)
+                    {
+                        XSSFRow row = (XSSFRow)GetRow(i);
+                        if (row != null)
+                        {
+                            for (int j = cell.ColumnIndex; j <= ref1.LastColumn; j++)
+                            {
+                                XSSFCell nextCell = (XSSFCell)row.GetCell(j);
+                                if (nextCell != null && nextCell != cell && nextCell.CellType == CellType.Formula)
+                                {
+                                    CT_CellFormula nextF = nextCell.GetCTCell().f;
+                                    if (nextF.t == ST_CellFormulaType.shared && nextF.si == f.si)
+                                    {
+                                        nextF.Value = nextCell.GetCellFormula(evalWb);
+                                        CellRangeAddress nextRef = new CellRangeAddress(
+                                                nextCell.RowIndex, ref1.LastRow,
+                                                nextCell.ColumnIndex, ref1.LastColumn);
+                                        nextF.@ref=nextRef.FormatAsString();
+
+                                        sharedFormulas[(int)nextF.si]= nextF;
+                                        breakit = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (breakit)
+                                break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }
