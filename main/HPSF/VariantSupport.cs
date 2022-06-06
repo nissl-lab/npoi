@@ -185,7 +185,7 @@ namespace NPOI.HPSF
                     {
                         Filetime filetime = (Filetime)typedPropertyValue.Value;
                         return Util.FiletimeToDate((int)filetime.High,
-                                (int)filetime.Low);
+                                (int)filetime.Low).ToUniversalTime();
                     }
                 case Variant.VT_LPSTR:
                     {
