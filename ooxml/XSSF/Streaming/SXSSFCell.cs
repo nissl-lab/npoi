@@ -131,7 +131,38 @@ namespace NPOI.XSSF.Streaming
                 ((FormulaValue)_value).Value = value;
             }
         }
-
+        public void RemoveFormula()
+        {
+            if (CellType != CellType.Formula)
+            {
+                return;
+            }
+            switch (CachedFormulaResultType)
+            {
+                case CellType.Numeric:
+                    double numericValue = ((NumericFormulaValue)_value).PreEvaluatedValue;
+                    _value = new NumericValue();
+                    ((NumericValue)_value).Value = numericValue;
+                    break;
+                case CellType.String:
+                    String stringValue = ((StringFormulaValue)_value).PreEvaluatedValue;
+                    _value = new PlainStringValue();
+                    ((PlainStringValue)_value).Value = stringValue;
+                    break;
+                case CellType.Boolean:
+                    bool booleanValue = ((BooleanFormulaValue)_value).PreEvaluatedValue;
+                    _value = new BooleanValue();
+                    ((BooleanValue)_value).Value = booleanValue;
+                    break;
+                case CellType.Error:
+                    byte errorValue = (byte)((ErrorFormulaValue)_value).PreEvaluatedValue;
+                    _value = new ErrorValue();
+                    ((ErrorValue)_value).Value = errorValue;
+                    break;
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
         public ICellStyle CellStyle
         {
             get

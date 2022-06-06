@@ -529,6 +529,24 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        public void RemoveFormula()
+        {
+            if (CellType == CellType.Blank)
+                return;
+
+            if (IsPartOfArrayFormulaGroup)
+            {
+                TryToDeleteArrayFormula(null);
+                return;
+            }
+            ((XSSFWorkbook)_row.Sheet.Workbook).OnDeleteFormula(this);
+            if (_cell.IsSetF())
+            {
+                ((XSSFSheet)_row.Sheet).OnDeleteFormula(this, null);
+                _cell.unsetF();
+            }
+        }
+
         /**
          * package/hierarchy use only - reuse an existing evaluation workbook if available for caching
          *
@@ -614,15 +632,34 @@ namespace NPOI.XSSF.UserModel
             cellFormula.t = (ST_CellFormulaType.array);
             cellFormula.@ref = (range.FormatAsString());
         }
+        /// <summary>
+        /// Called when this an array formula in this cell is deleted.
+        /// </summary>
+        /// <param name="message">a customized exception message for the case if deletion of the cell is impossible. If null, a default message will be generated</param>
+        internal void TryToDeleteArrayFormula(String message)
+        {
+            if (!IsPartOfArrayFormulaGroup)
+                return;
 
+            CellRangeAddress arrayFormulaRange = ArrayFormulaRange;
+            if (arrayFormulaRange.NumberOfCells > 1)
+            {
+                if (message == null)
+                {
+                    message = "Cell " + new CellReference(this).FormatAsString() + " is part of a multi-cell array formula. " +
+                            "You cannot change part of an array.";
+                }
+                throw new InvalidOperationException(message);
+            }
+            //un-register the single-cell array formula from the parent sheet through public interface
+            Row.Sheet.RemoveArrayFormula(this);
+        }
         private void SetFormula(String formula, FormulaType formulaType)
         {
             XSSFWorkbook wb = (XSSFWorkbook)_row.Sheet.Workbook;
             if (formula == null)
             {
-                ((XSSFWorkbook)wb).OnDeleteFormula(this);
-                if (_cell.IsSetF()) 
-                    _cell.unsetF();
+                RemoveFormula();
                 return;
             }
 
