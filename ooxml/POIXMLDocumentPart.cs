@@ -319,7 +319,7 @@ using System.Xml;
                 String partName = GetPackagePart().PartName.Name;
                 foreach (PackageRelationship rel in pkg.Relationships)
                 {
-                    if (rel.TargetUri.ToString().Equals(partName))
+                    if (rel.TargetUri.OriginalString.Equals(partName))
                     {
                         return rel;
                     }

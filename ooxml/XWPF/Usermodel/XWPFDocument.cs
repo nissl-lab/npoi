@@ -214,7 +214,7 @@ namespace NPOI.XWPF.UserModel
                 while (relIter.MoveNext())
                 {
                     PackageRelationship rel = relIter.Current;
-                    hyperlinks.Add(new XWPFHyperlink(rel.Id, rel.TargetUri.ToString()));
+                    hyperlinks.Add(new XWPFHyperlink(rel.Id, rel.TargetUri.OriginalString));
                 }
             }
             catch (InvalidDataException e)
