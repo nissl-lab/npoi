@@ -107,7 +107,7 @@ namespace NPOI.XSSF.Model
                 PackageRelationship rel = GetPackagePart().GetRelationship(rId);
                 if (rel != null && rel.TargetMode == TargetMode.External)
                 {
-                    return rel.TargetUri.ToString();
+                    return rel.TargetUri.OriginalString;
                 }
                 else
                 {
