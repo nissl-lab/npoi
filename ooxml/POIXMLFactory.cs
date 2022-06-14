@@ -138,7 +138,7 @@ namespace NPOI
                 String partName = part.PartName.Name;
                 foreach (PackageRelationship pr in parent.GetPackagePart().Relationships)
                 {
-                    String packName = pr.TargetUri.ToString();// toASCIIString();
+                    String packName = pr.TargetUri.OriginalString;// toASCIIString();
                     if (packName.Equals(partName, StringComparison.CurrentCultureIgnoreCase))
                     {
                         return pr;
