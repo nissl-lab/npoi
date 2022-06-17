@@ -1673,7 +1673,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(">");
             if (this.references != null)
                 this.references.Write(sw, "references");
-            if (this.extLst != null)
+            if (this.extLst != null && this.extLst.ext.Count != 0)
                 this.extLst.Write(sw, "extLst");
             sw.Write(string.Format("</{0}>", nodeName));
         }
@@ -2059,7 +2059,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "field", this.field);
+            XmlHelper.WriteAttribute(sw, "field", this.field, true);
             XmlHelper.WriteAttribute(sw, "count", this.count);
             XmlHelper.WriteAttribute(sw, "selected", this.selected, false, true);
             XmlHelper.WriteAttribute(sw, "byPosition", this.byPosition, false);
