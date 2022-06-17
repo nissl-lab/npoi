@@ -547,6 +547,9 @@ namespace NPOI.SS.Formula
                                    + "): " + Arrays.ToString(ptgs).Replace("\\Qorg.apache.poi.ss.formula.ptg.\\E", ""));
                 dbgEvaluationOutputIndent++;
             }
+           
+            IEvaluationSheet evalSheet = ec.GetWorkbook().GetSheet(ec.SheetIndex);
+            IEvaluationCell evaluationCell = evalSheet.GetCell(ec.RowIndex, ec.ColumnIndex);
 
             Stack<ValueEval> stack = new Stack<ValueEval>();
             for (int i = 0, iSize = ptgs.Length; i < iSize; i++)
@@ -600,45 +603,48 @@ namespace NPOI.SS.Formula
                     }
                     if (attrPtg.IsOptimizedIf)
                     {
-                        ValueEval arg0 = stack.Pop();
-                        bool evaluatedPredicate;
-                        try
+                        if (!evaluationCell.IsPartOfArrayFormulaGroup)
                         {
-                            evaluatedPredicate = IfFunc.EvaluateFirstArg(arg0, ec.RowIndex, ec.ColumnIndex);
-                        }
-                        catch (EvaluationException e)
-                        {
-                            stack.Push(e.GetErrorEval());
-                            int dist = attrPtg.Data;
-                            i += CountTokensToBeSkipped(ptgs, i, dist);
-                            attrPtg = (AttrPtg)ptgs[i];
-                            dist = attrPtg.Data + 1;
-                            i += CountTokensToBeSkipped(ptgs, i, dist);
-                            continue;
-                        }
-                        if (evaluatedPredicate)
-                        {
-                            // nothing to skip - true param folows
-                        }
-                        else
-                        {
-                            int dist = attrPtg.Data;
-                            i += CountTokensToBeSkipped(ptgs, i, dist);
-                            Ptg nextPtg = ptgs[i + 1];
-                            if (ptgs[i] is AttrPtg && nextPtg is FuncVarPtg &&
-                                // in order to verify that there is no third param, we need to check 
-                                // if we really have the IF next or some other FuncVarPtg as third param, e.g. ROW()/COLUMN()!
-                                ((FuncVarPtg)nextPtg).FunctionIndex == FunctionMetadataRegistry.FUNCTION_INDEX_IF)
-                            {
-                                // this is an if statement without a false param (as opposed to MissingArgPtg as the false param)
-                                i++;
-                                stack.Push(arg0);
-                                stack.Push(BoolEval.FALSE);
-                            }
+                           ValueEval arg0 = stack.Pop();
+                           bool evaluatedPredicate;
+                           try
+                           {
+                               evaluatedPredicate = IfFunc.EvaluateFirstArg(arg0, ec.RowIndex, ec.ColumnIndex);
+                           }
+                           catch (EvaluationException e)
+                           {
+                               stack.Push(e.GetErrorEval());
+                               int dist = attrPtg.Data;
+                               i += CountTokensToBeSkipped(ptgs, i, dist);
+                               attrPtg = (AttrPtg)ptgs[i];
+                               dist = attrPtg.Data + 1;
+                               i += CountTokensToBeSkipped(ptgs, i, dist);
+                               continue;
+                           }
+                           if (evaluatedPredicate)
+                           {
+                               // nothing to skip - true param folows
+                           }
+                           else
+                           {
+                               int dist = attrPtg.Data;
+                               i += CountTokensToBeSkipped(ptgs, i, dist);
+                               Ptg nextPtg = ptgs[i + 1];
+                               if (ptgs[i] is AttrPtg && nextPtg is FuncVarPtg &&
+                                   // in order to verify that there is no third param, we need to check 
+                                   // if we really have the IF next or some other FuncVarPtg as third param, e.g. ROW()/COLUMN()!
+                                   ((FuncVarPtg)nextPtg).FunctionIndex == FunctionMetadataRegistry.FUNCTION_INDEX_IF)
+                               {
+                                   // this is an if statement without a false param (as opposed to MissingArgPtg as the false param)
+                                   i++;
+                                   stack.Push(arg0);
+                                   stack.Push(BoolEval.FALSE);
+                               }
+                           }
                         }
                         continue;
                     }
-                    if (attrPtg.IsSkip)
+                    if (attrPtg.IsSkip && !evaluationCell.IsPartOfArrayFormulaGroup)
                     {
                         int dist = attrPtg.Data + 1;
                         i += CountTokensToBeSkipped(ptgs, i, dist);
