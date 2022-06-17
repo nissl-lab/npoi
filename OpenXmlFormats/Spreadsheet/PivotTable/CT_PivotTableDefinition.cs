@@ -5080,9 +5080,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "action", this.action.ToString());
+            XmlHelper.WriteAttribute(sw, "action", this.action.ToString(), false, ST_FormatAction.formatting.ToString());
             XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId);
-            if (this.pivotArea == null && this.extLst == null)
+            if (this.pivotArea == null && (this.extLst == null || this.extLst.ext.Count == 0))
             {
                 sw.Write("/>");
             }
@@ -5091,7 +5091,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 sw.Write(">");
                 if (this.pivotArea != null)
                     this.pivotArea.Write(sw, "pivotArea");
-                if (this.extLst != null)
+                if (this.extLst != null && this.extLst.ext.Count != 0)
                     this.extLst.Write(sw, "extLst");
                 sw.Write(string.Format("</{0}>", nodeName));
             }

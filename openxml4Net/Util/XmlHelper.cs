@@ -356,7 +356,11 @@ namespace NPOI.OpenXml4Net.Util
         }
         public static void WriteAttribute(StreamWriter sw, string attributeName, string value, bool writeIfBlank)
         {
-            if (string.IsNullOrEmpty(value) && !writeIfBlank)
+            WriteAttribute(sw, attributeName, value, writeIfBlank, string.Empty);
+        }
+        public static void WriteAttribute(StreamWriter sw, string attributeName, string value, bool writeIfBlank, string defaultValue)
+        {
+            if ((string.IsNullOrEmpty(value) || defaultValue.Equals(value)) && !writeIfBlank)
                 return;
             sw.Write(string.Format(" {0}=\"{1}\"", attributeName, value == null ? string.Empty : EncodeXml(value)));
         }
