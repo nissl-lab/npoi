@@ -883,7 +883,9 @@ namespace NPOI.SS.UserModel
         public static bool IsValidExcelDate(double value)
         {
             //return true;
-            return value > -Double.Epsilon;
+
+            const int maxDate = 2958465; // 31/12/9999
+            return value > -Double.Epsilon && value <= maxDate;
         }
 
     }
