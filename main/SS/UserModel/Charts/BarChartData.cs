@@ -17,7 +17,7 @@ namespace NPOI.SS.UserModel.Charts
         /// <param name="categories">The categories data source.</param>
         /// <param name="values">The values data source.</param>
         /// <returns>Created series.</returns>
-        IBarChartSeries<Tx, Ty> AddSeries(IChartDataSource<Tx> values, IChartDataSource<Ty> categories);
+        IBarChartSeries<Tx, Ty> AddSeries(IChartDataSource<Tx> categories, IChartDataSource<Ty> values);
 
         /**
          * @return list of all series.
