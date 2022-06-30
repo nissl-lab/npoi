@@ -30,12 +30,12 @@ namespace NPOI.XSSF.UserModel.Charts
             private int id;
             private int order;
             private byte[] fillColor;
-            private IChartDataSource<Tx> values;
-            private IChartDataSource<Ty> categories;
+            private IChartDataSource<Tx> categories;
+            private IChartDataSource<Ty> values;
 
             internal Series(int id, int order,
-                            IChartDataSource<Tx> values,
-                            IChartDataSource<Ty> categories)
+                IChartDataSource<Tx> categories,
+                IChartDataSource<Ty> values)
             {
                 this.id = id;
                 this.order = order;
@@ -61,12 +61,12 @@ namespace NPOI.XSSF.UserModel.Charts
                 fillColor[2] = color.B;
             }
 
-            public IChartDataSource<Ty> GetCategoryAxisData()
+            public IChartDataSource<Tx> GetCategoryAxisData()
             {
                 return categories;
             }
 
-            public IChartDataSource<Tx> GetValues()
+            public IChartDataSource<Ty> GetValues()
             {
                 return values;
             }
@@ -105,14 +105,14 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        public IBarChartSeries<Tx, Ty> AddSeries(IChartDataSource<Tx> values, IChartDataSource<Ty> categoryAxisData)
+        public IBarChartSeries<Tx, Ty> AddSeries(IChartDataSource<Tx> categoryAxisData, IChartDataSource<Ty> values)
         {
             if (!values.IsNumeric)
             {
                 throw new ArgumentException("Value data source must be numeric.");
             }
             int numOfSeries = series.Count;
-            Series newSeries = new Series(numOfSeries, numOfSeries, values, categoryAxisData);
+            Series newSeries = new Series(numOfSeries, numOfSeries, categoryAxisData, values);
             series.Add(newSeries);
             return newSeries;
         }
