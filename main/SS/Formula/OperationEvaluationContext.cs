@@ -28,16 +28,13 @@ namespace NPOI.SS.Formula
         private bool _isSingleValue;
         private WorkbookEvaluator _bookEvaluator;
         private bool _isInArrayContext;
+        
         public OperationEvaluationContext(WorkbookEvaluator bookEvaluator, IEvaluationWorkbook workbook, int sheetIndex, int srcRowNum,
-                int srcColNum, EvaluationTracker tracker)
+                int srcColNum, EvaluationTracker tracker) 
+            : this(bookEvaluator, workbook, sheetIndex, srcRowNum, srcColNum, tracker, isSingleValue: true)
         {
-            _bookEvaluator = bookEvaluator;
-            _workbook = workbook;
-            _sheetIndex = sheetIndex;
-            _rowIndex = srcRowNum;
-            _columnIndex = srcColNum;
-            _tracker = tracker;
         }
+        
         public OperationEvaluationContext(WorkbookEvaluator bookEvaluator, IEvaluationWorkbook workbook, int sheetIndex, int srcRowNum,
             int srcColNum, EvaluationTracker tracker, bool isSingleValue)
         {
