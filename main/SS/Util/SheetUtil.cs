@@ -265,13 +265,12 @@ namespace NPOI.SS.Util
             return newRow;
         }
 
-        public static double GetRowHeight(ISheet sheet, int rowIdx, bool useMergedCells, int firstColumnIdx, int lastColumnIdx)
+        public static double GetRowHeight(IRow row, bool useMergedCells, int firstColumnIdx, int lastColumnIdx)
         {
             double width = -1;
-            
+
             for (int cellIdx = firstColumnIdx; cellIdx <= lastColumnIdx; ++cellIdx)
             {
-                IRow row = sheet.GetRow(rowIdx);
                 ICell cell = row.GetCell(cellIdx);
                 if (row != null && cell != null)
                 {
@@ -279,14 +278,18 @@ namespace NPOI.SS.Util
                     width = Math.Max(width, cellWidth);
                 }
             }
-            
+
             return width;
         }
 
-        public static double GetRowHeight(ISheet sheet, int rowIdx, bool useMergedCells)
+        public static double GetRowHeight(ISheet sheet, int rowIdx, bool useMergedCells, int firstColumnIdx, int lastColumnIdx)
         {
             IRow row = sheet.GetRow(rowIdx);
+            return GetRowHeight(row, useMergedCells, firstColumnIdx, lastColumnIdx);
+        }
 
+        public static double GetRowHeight(IRow row, bool useMergedCells)
+        {
             if (row == null)
             {
                 return -1;
@@ -299,10 +302,17 @@ namespace NPOI.SS.Util
                 double cellHeight = GetCellHeight(cell, useMergedCells);
                 rowHeight = Math.Max(rowHeight, cellHeight);
             }
-            
+
             return rowHeight;
         }
-        
+
+        public static double GetRowHeight(ISheet sheet, int rowIdx, bool useMergedCells)
+        {
+            IRow row = sheet.GetRow(rowIdx);
+
+            return GetRowHeight(row, useMergedCells);
+        }
+
         public static double GetCellHeight(ICell cell, bool useMergedCells)
         {
             ICell cellToMeasure = useMergedCells ? GetFirstCellFromMergedRegion(cell) : cell;
