@@ -356,13 +356,17 @@ namespace NPOI.SS.Util
             IFont defaultFont = wb.GetFontAt(0);
             Font font = IFont2Font(defaultFont);
 
-            using var image = new Bitmap(1, 1);
-            using var g = Graphics.FromImage(image);
-            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            using (var image = new Bitmap(1, 1))
+            {
+                using (var g = Graphics.FromImage(image))
+                {
+                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 
-            var measureResult = g.MeasureString($"{defaultChar}", font, int.MaxValue, StringFormat.GenericTypographic);
+                    var measureResult = g.MeasureString($"{defaultChar}", font, int.MaxValue, StringFormat.GenericTypographic);
 
-            return (int)measureResult.Height;
+                    return (int)measureResult.Height; 
+                }
+            }
         }
 
         private static int GetRowSpan(ICell cell)
@@ -431,27 +435,33 @@ namespace NPOI.SS.Util
 
         private static double GetRotatedContentHeight(ICell cell, string stringValue, Font windowsFont)
         {
-            using Bitmap bmp = new Bitmap(1, 1);
-            using Graphics g = Graphics.FromImage(bmp);
-            
-            var angle = cell.CellStyle.Rotation * 2.0 * Math.PI / 360.0;
-            var measureResult = g.MeasureString(stringValue, windowsFont);
-            
-            var x1 = Math.Abs(measureResult.Height * Math.Cos(angle));
-            var x2 = Math.Abs(measureResult.Width * Math.Sin(angle));
-            
-            return Math.Round(x1 + x2, 0, MidpointRounding.ToEven); ;
+            using (Bitmap bmp = new Bitmap(1, 1))
+            {
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    var angle = cell.CellStyle.Rotation * 2.0 * Math.PI / 360.0;
+                    var measureResult = g.MeasureString(stringValue, windowsFont);
+
+                    var x1 = Math.Abs(measureResult.Height * Math.Cos(angle));
+                    var x2 = Math.Abs(measureResult.Width * Math.Sin(angle));
+
+                    return Math.Round(x1 + x2, 0, MidpointRounding.ToEven); ;  
+                }
+            }
         }
 
         private static double GetContentHeight(string stringValue, Font windowsFont)
         {
 
-            using Bitmap bmp = new Bitmap(1, 1);
-            using Graphics g = Graphics.FromImage(bmp);
-            
-            SizeF measureResult = g.MeasureString(stringValue, windowsFont, int.MaxValue, StringFormat.GenericTypographic);
+            using (Bitmap bmp = new Bitmap(1, 1))
+            {
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    SizeF measureResult = g.MeasureString(stringValue, windowsFont, int.MaxValue, StringFormat.GenericTypographic);
 
-            return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);
+                    return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);  
+                }
+            }
         }
 
         /**
