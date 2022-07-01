@@ -160,16 +160,35 @@ namespace TestCases.SS.Util
             ISheet sheet = wb.CreateSheet("sheet");
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell(0);
-            ICell emptyCell = row.CreateCell(1);
+            row.CreateCell(1);
             row.CreateCell(2);
+
+            cell.SetCellValue("sometext");
+            
+            Assert.IsTrue(SheetUtil.GetRowHeight(sheet, 0, true) > 0, "Having some height for a row with a cell with content");
+            Assert.AreEqual(0.0, SheetUtil.GetRowHeight(sheet, 0, true, 1, 2)
+                    , "Not having any height for row with empty cells");
+            Assert.IsTrue(SheetUtil.GetRowHeight(row, true) > 0, "Having some height for a row with a cell with content");
+            Assert.AreEqual(0.0, SheetUtil.GetRowHeight(row, true, 1, 2)
+                    , "Not having any height for row with empty cells");
+
+            wb.Close();
+        }
+
+
+        [Test]
+        public void testCellHeight()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("sheet");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            ICell emptyCell = row.CreateCell(1);
 
             cell.SetCellValue("sometext");
 
             Assert.IsTrue(SheetUtil.GetCellHeight(cell, false) > 0, "Having some height for a cell with content");
-            Assert.IsTrue(SheetUtil.GetCellHeight(emptyCell, false) == 0, "Having some height for a cell with content");
-            Assert.IsTrue(SheetUtil.GetRowHeight(sheet, 0, true) > 0, "Having some width for rows with actual cells");
-            Assert.AreEqual(0.0, SheetUtil.GetRowHeight(sheet, 0, true, 1, 2)
-                    , "Not having any widht for rows with all empty cells");
+            Assert.AreEqual(0.0, SheetUtil.GetCellHeight(emptyCell, false), "Not having any height for a cell with no content");
 
             wb.Close();
         }
