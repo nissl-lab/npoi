@@ -153,5 +153,25 @@ namespace TestCases.SS.Util
             wb.Close();
         }
 
+        [Test]
+        public void testGetRowHeight()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("sheet");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            ICell emptyCell = row.CreateCell(1);
+            row.CreateCell(2);
+
+            cell.SetCellValue("sometext");
+
+            Assert.IsTrue(SheetUtil.GetCellHeight(cell, false) > 0, "Having some height for a cell with content");
+            Assert.IsTrue(SheetUtil.GetCellHeight(emptyCell, false) == 0, "Having some height for a cell with content");
+            Assert.IsTrue(SheetUtil.GetRowHeight(sheet, 0, true) > 0, "Having some width for rows with actual cells");
+            Assert.AreEqual(0.0, SheetUtil.GetRowHeight(sheet, 0, true, 1, 2)
+                    , "Not having any widht for rows with all empty cells");
+
+            wb.Close();
+        }
     }
 }
