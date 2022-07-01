@@ -265,6 +265,24 @@ namespace NPOI.SS.Util
             return newRow;
         }
 
+        public static double GetRowHeight(ISheet sheet, int rowIdx, bool useMergedCells, int firstColumnIdx, int lastColumnIdx)
+        {
+            double width = -1;
+            
+            for (int cellIdx = firstColumnIdx; cellIdx <= lastColumnIdx; ++cellIdx)
+            {
+                IRow row = sheet.GetRow(rowIdx);
+                ICell cell = row.GetCell(cellIdx);
+                if (row != null && cell != null)
+                {
+                    double cellWidth = GetCellHeight(cell, useMergedCells);
+                    width = Math.Max(width, cellWidth);
+                }
+            }
+            
+            return width;
+        }
+
         public static double GetRowHeight(ISheet sheet, int rowIdx, bool useMergedCells)
         {
             IRow row = sheet.GetRow(rowIdx);
