@@ -318,21 +318,18 @@ namespace NPOI.SS.Util
             ICell cellToMeasure = useMergedCells ? GetFirstCellFromMergedRegion(cell) : cell;
 
             double stringHeight = GetActualHeight(cellToMeasure);
-            int defaultCharHeight = GetDefaultCharHeight(cellToMeasure.Sheet.Workbook);
-            int rowSpan = useMergedCells ? 1 : GetRowSpan(cellToMeasure);
+            int rowSpan = useMergedCells ? GetRowSpan(cellToMeasure) : 1;
 
-            return GetCellConetntHeight(stringHeight, defaultCharHeight, rowSpan);
+            return GetCellConetntHeight(stringHeight, rowSpan);
         }
 
         private static ICell GetFirstCellFromMergedRegion(ICell cell)
         {
-            IRow row = cell.Row;
-
             foreach (var region in cell.Sheet.MergedRegions)
             {
-                if (region.IsInRange(row.RowNum, cell.ColumnIndex))
+                if (region.IsInRange(cell.RowIndex, cell.ColumnIndex))
                 {
-                    return row.GetCell(region.FirstRow);
+                    return cell.Sheet.GetRow(region.FirstRow).GetCell(region.FirstColumn);
                 }
             }
 
@@ -352,24 +349,6 @@ namespace NPOI.SS.Util
             return GetContentHeight(stringValue, windowsFont);
         }
 
-        private static int GetDefaultCharHeight(IWorkbook wb)
-        {
-            IFont defaultFont = wb.GetFontAt(0);
-            Font font = IFont2Font(defaultFont);
-
-            using (var image = new Bitmap(1, 1))
-            {
-                using (var g = Graphics.FromImage(image))
-                {
-                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-
-                    var measureResult = g.MeasureString($"{defaultChar}", font, int.MaxValue, StringFormat.GenericTypographic);
-
-                    return (int)measureResult.Height; 
-                }
-            }
-        }
-
         private static int GetRowSpan(ICell cell)
         {
             ISheet sheet = cell.Sheet;
@@ -386,9 +365,13 @@ namespace NPOI.SS.Util
             return 1;
         }
 
-        private static double GetCellConetntHeight(double actualHeight, int defaultCharHeight, int rowSpan)
+        private static double GetCellConetntHeight(double actualHeight, int rowSpan)
         {
-            return Math.Max(-1, actualHeight / rowSpan / defaultCharHeight);
+            //for some reason the height of the content that Graphics object measures comes back
+            //with a little bit of extra padding.  This is a hack to get the height back to what it should be.
+            double ratioToFixHeight = 0.798;
+
+            return Math.Max(-1, actualHeight / rowSpan * ratioToFixHeight);
         }
 
         private static string GetCellStringValue(ICell cell)
