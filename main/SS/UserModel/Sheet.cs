@@ -722,6 +722,30 @@ namespace NPOI.SS.UserModel
         void AutoSizeColumn(int column, bool useMergedCells);
 
         /// <summary>
+        /// Adjusts the row height to fit the contents.
+        /// </summary>
+        /// <param name="row">the row index</param>
+        /// <remarks>
+        /// This process can be relatively slow on large sheets, so this should
+        /// normally only be called once per row, at the end of your
+        /// processing.
+        /// </remarks>
+        void AutoSizeRow(int row);
+
+        /// <summary>
+        /// Adjusts the row height to fit the contents.
+        /// </summary>
+        /// <param name="row">the row index.</param>
+        /// <param name="useMergedCells">whether to use the contents of merged cells when 
+        /// calculating the height of the row. Default is to ignore merged cells.</param>
+        /// <remarks>
+        /// This process can be relatively slow on large sheets, so this should
+        /// normally only be called once per row, at the end of your
+        /// processing.
+        /// </remarks>
+        void AutoSizeRow(int row, bool useMergedCells);
+
+        /// <summary>
         /// Returns cell comment for the specified row and column
         /// </summary>
         /// <param name="row">The row.</param>
