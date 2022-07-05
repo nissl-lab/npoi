@@ -2359,7 +2359,6 @@ namespace NPOI.HSSF.UserModel
 
             if (height != -1 && height != 0)
             {
-
                 height *= 20;
 
                 int maxRowHeight = 409 * 20; // The maximum row height for an individual cell is 409 points
