@@ -44,7 +44,8 @@ namespace NPOI.XSSF.Util
         private static readonly ISet<string> booleanValues = new HashSet<string>(new string[]{
             LOCKED,
             HIDDEN,
-            WRAP_TEXT
+            WRAP_TEXT,
+            SHRINK_TO_FIT
         });
         private static readonly ISet<string> borderTypeValues = new HashSet<string>(new string[]{
             BORDER_BOTTOM,
