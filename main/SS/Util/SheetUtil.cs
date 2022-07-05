@@ -318,9 +318,9 @@ namespace NPOI.SS.Util
             ICell cellToMeasure = useMergedCells ? GetFirstCellFromMergedRegion(cell) : cell;
 
             double stringHeight = GetActualHeight(cellToMeasure);
-            int rowSpan = useMergedCells ? GetRowSpan(cellToMeasure) : 1;
+            int numberOfRowsInMergedRegion = useMergedCells ? GetNumberOfRowsInMergedRegion(cellToMeasure) : 1;
 
-            return GetCellConetntHeight(stringHeight, rowSpan);
+            return GetCellConetntHeight(stringHeight, numberOfRowsInMergedRegion);
         }
 
         private static ICell GetFirstCellFromMergedRegion(ICell cell)
@@ -349,14 +349,11 @@ namespace NPOI.SS.Util
             return GetContentHeight(stringValue, windowsFont);
         }
 
-        private static int GetRowSpan(ICell cell)
+        private static int GetNumberOfRowsInMergedRegion(ICell cell)
         {
-            ISheet sheet = cell.Sheet;
-            IRow row = cell.Row;
-            
-            foreach (var region in sheet.MergedRegions)
+            foreach (var region in cell.Sheet.MergedRegions)
             {
-                if (region.IsInRange(row.RowNum, cell.ColumnIndex))
+                if (region.IsInRange(cell.RowIndex, cell.ColumnIndex))
                 {
                     return 1 + region.LastColumn - region.FirstColumn;
                 }
@@ -365,13 +362,13 @@ namespace NPOI.SS.Util
             return 1;
         }
 
-        private static double GetCellConetntHeight(double actualHeight, int rowSpan)
+        private static double GetCellConetntHeight(double actualHeight, int numberOfRowsInMergedRegion)
         {
             //for some reason the height of the content that Graphics object measures comes back
             //with a little bit of extra padding.  This is a hack to get the height back to what it should be.
             double ratioToFixHeight = 0.798;
 
-            return Math.Max(-1, actualHeight / rowSpan * ratioToFixHeight);
+            return Math.Max(-1, actualHeight / numberOfRowsInMergedRegion * ratioToFixHeight);
         }
 
         private static string GetCellStringValue(ICell cell)
