@@ -2338,6 +2338,55 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
+        /**
+         * Adjusts the row height to fit the contents.
+         *
+         * This process can be relatively slow on large sheets, so this should
+         *  normally only be called once per row, at the end of your
+         *  Processing.
+         *
+         * @param row the row index
+         */
+        public void AutoSizeRow(int row)
+        {
+            AutoSizeRow(row, false);
+        }
+
+        /**
+         * Adjusts the row height to fit the contents.
+         * <p>
+         * This process can be relatively slow on large sheets, so this should
+         *  normally only be called once per row, at the end of your
+         *  Processing.
+         * </p>
+         * You can specify whether the content of merged cells should be considered or ignored.
+         *  Default is to ignore merged cells.
+         *
+         * @param row the row index
+         * @param useMergedCells whether to use the contents of merged cells when calculating the height of the row
+         */
+        public void AutoSizeRow(int row, bool useMergedCells)
+        {
+            var targetRow = GetRow(row) ?? CreateRow(row);
+
+            double height = SheetUtil.GetRowHeight(this, row, useMergedCells);
+
+            if (height != -1 && height != 0)
+            {
+
+                height *= 20;
+
+                int maxRowHeight = 409 * 20; // The maximum row height for an individual cell is 409 points
+
+                if (height > maxRowHeight)
+                {
+                    height = maxRowHeight;
+                }
+
+                targetRow.Height = (short)height;
+            }
+        }
+
         /// <summary>
         /// Checks if the provided region is part of the merged regions.
         /// </summary>
@@ -3245,16 +3294,6 @@ namespace NPOI.HSSF.UserModel
         }
 
         public bool IsDate1904()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AutoSizeRow(int row)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AutoSizeRow(int row, bool useMergedCells)
         {
             throw new NotImplementedException();
         }

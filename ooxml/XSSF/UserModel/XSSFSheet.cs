@@ -508,7 +508,6 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-
         /**
          * Adjusts the row height to fit the contents.
          *
@@ -538,19 +537,23 @@ namespace NPOI.XSSF.UserModel
          */
         public void AutoSizeRow(int row, bool useMergedCells)
         {
+            var targetRow = GetRow(row) ?? CreateRow(row);
+
             double height = SheetUtil.GetRowHeight(this, row, useMergedCells);
-            height *= 20;
             
             if (height != -1 && height != 0)
             {
-                int maxRowHeight = 409; // The maximum row height for an individual cell is 409 points
+
+                height *= 20;
+
+                int maxRowHeight = 409 * 20; // The maximum row height for an individual cell is 409 points
                 
                 if (height > maxRowHeight)
                 {
                     height = maxRowHeight;
                 }
-                
-                GetRow(row).Height = (short)height;
+
+                targetRow.Height = (short)height;
             }
         }
 
