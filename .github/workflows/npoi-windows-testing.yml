@@ -32,6 +32,6 @@ jobs:
     - name: Publish Test Results
       uses: dorny/test-reporter@v1
       with:
-        path: 'test-results'
-        name: '*.trx'
+        path: 'test-results/*.xml'
+        name: Test Results
         reporter: 'dotnet-trx'
