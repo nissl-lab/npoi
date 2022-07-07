@@ -16,11 +16,15 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: |
-          '3.1.x', '6.0.x'
+        dotnet-version: '6.0.x'
 
     - name: Restore NPOI.Core.Test dependencies
-      run: dotnet restore solution/NPOI.Core.Test.sln
+      run: dotnet restore solution/NPOI.Core.Test.sln    
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '3.1.x'
     - name: Build NPOI.Core.Test
       run: dotnet build solution/NPOI.Core.Test.sln --no-restore --configuration 'Debug' --verbosity n
     - name: Test NPOI.Core.Test
