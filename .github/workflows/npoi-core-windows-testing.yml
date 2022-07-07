@@ -27,7 +27,7 @@ jobs:
     - name: Build NPOI.Core.Test
       run: dotnet build solution/NPOI.Core.Test.sln --no-restore --configuration 'Debug' --verbosity n
     - name: Test NPOI.Core.Test
-      run: dotnet test solution/NPOI.Test.sln --no-build --configuration 'Debug' --verbosity n --logger trx --results-directory test-results
+      run: dotnet test solution/NPOI.Core.Test.sln --no-build --configuration 'Debug' --verbosity n --logger trx --results-directory test-results
 
     - name: Publish Test Results
       uses: dorny/test-reporter@v1
