@@ -16,8 +16,9 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '6.0.x'
-        include-prerelease: true
+        dotnet-version: |
+          '3.1.x'
+          '6.0.x'
 
     - name: Restore NPOI.Core.Test dependencies
       run: dotnet restore solution/NPOI.Core.Test.sln
@@ -32,3 +33,9 @@ jobs:
       run: dotnet build solution/NPOI.Test.sln --no-restore --configuration 'Debug' --verbosity n
     - name: Test NPOI.Test
       run: dotnet test solution/NPOI.Test.sln --no-build --configuration 'Debug' --verbosity normal
+
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action/composite@v1
+      if: always()
+      with:
+        files: "**/*.xml"
