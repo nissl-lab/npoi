@@ -16,8 +16,9 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 3.x
-        
+        dotnet-version: '6.0.x'
+        include-prerelease: true
+
     - name: Restore NPOI.Core.Test dependencies
       run: dotnet restore solution/NPOI.Core.Test.sln
     - name: Build NPOI.Core.Test
