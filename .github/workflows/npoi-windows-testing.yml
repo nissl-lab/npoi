@@ -30,7 +30,7 @@ jobs:
       run: dotnet test solution/NPOI.Test.sln --no-build --configuration 'Debug' --verbosity n --logger trx --results-directory test-results
 
     - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action/composite@v1
-      if: always()
+      uses: dorny/test-reporter@v1
       with:
-        files: "test-results/**/*.xml"
+        path: 'test-results'
+        reporter: 'dotnet-trx'
