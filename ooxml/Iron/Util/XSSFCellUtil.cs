@@ -1,4 +1,5 @@
 ﻿using NPOI.SS.UserModel;
+using NPOI.Util;
 using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,6 @@ namespace NPOI.XSSF.Util
         public const string BORDER_TOP = "borderTop";
         public const string BOTTOM_BORDER_COLOR = "bottomBorderColor";
         public const string DATA_FORMAT = "dataFormat";
-        public const string DIAGONAL_BORDER_COLOR = "diagonalBorderColor";
-        public const string DIAGONAL_BORDER_LINE_STYLE = "diagonalBorderLineStyle";
         public const string FILL_BACKGROUND_COLOR = "fillBackgroundColor";
         public const string FILL_FOREGROUND_COLOR = "fillForegroundColor";
         public const string FILL_PATTERN = "fillPattern";
@@ -34,37 +33,57 @@ namespace NPOI.XSSF.Util
         public const string VERTICAL_ALIGNMENT = "verticalAlignment";
         public const string WRAP_TEXT = "wrapText";
 
+        private static readonly ISet<string> shortValues = new HashSet<string>(new string[]{
+            INDENTION,
+            DATA_FORMAT,
+            ROTATION
+        });
+        private static readonly ISet<string> intValues = new HashSet<string>(new string[]{
+            FONT
+        });
+        private static readonly ISet<string> booleanValues = new HashSet<string>(new string[]{
+            LOCKED,
+            HIDDEN,
+            WRAP_TEXT,
+            SHRINK_TO_FIT
+        });
+        private static readonly ISet<string> borderTypeValues = new HashSet<string>(new string[]{
+            BORDER_BOTTOM,
+            BORDER_LEFT,
+            BORDER_RIGHT,
+            BORDER_TOP
+        });
+        private static readonly ISet<string> stringValues = new HashSet<string>(new string[]
+        {
+            BOTTOM_BORDER_COLOR,
+            LEFT_BORDER_COLOR,
+            RIGHT_BORDER_COLOR,
+            TOP_BORDER_COLOR,
+            FILL_FOREGROUND_COLOR,
+            FILL_BACKGROUND_COLOR,
+        });
+
         private XSSFCellUtil()
         {
-            // no instances of this class
         }
 
         public static void SetFont(ICell cell, XSSFWorkbook workbook, IFont font)
         {
-            SetCellStyleProperty(cell, workbook, FONT, font.Index);
+            SetCellStyleProperty(cell, workbook, FONT, (int)font.Index);
         }
 
         public static void SetCellStyleProperty(ICell cell, XSSFWorkbook workbook, string propertyName, object propertyValue)
         {
-            SetCellStyleProperties(cell, workbook, new List<string> { propertyName }, new List<object> { propertyValue });
+            SetCellStyleProperties(cell, workbook, new Dictionary<string, object>() { { propertyName, propertyValue } });
         }
 
-        public static void SetCellStyleProperties(ICell cell, XSSFWorkbook workbook, List<string> propertyNames, List<object> propertyValues)
+        public static void SetCellStyleProperties(ICell cell, XSSFWorkbook workbook, Dictionary<string, object> properties)
         {
             ICellStyle originalStyle = cell.CellStyle;
             ICellStyle newStyle = null;
             Dictionary<string, object> values = GetFormatProperties(originalStyle as XSSFCellStyle);
-            if (propertyNames.Count != propertyValues.Count)
-            {
-                throw new ArgumentException("Amount of names and properties should be equal");
-            }
 
-            for (var i = 0; i < propertyNames.Count; i++)
-            {
-                var propertyName = propertyNames[i];
-                var propertyValue = propertyValues[i];
-                values[propertyName] = (propertyValue is Enum) ? (short)propertyValue : propertyValue;
-            }
+            PutAll(properties, values);
 
             int numberCellStyles = workbook.NumCellStyles;
 
@@ -79,26 +98,34 @@ namespace NPOI.XSSF.Util
                     continue;
                 }
 
-                bool found = true;
+                bool stylesAreEqual = true;
 
                 foreach (string key in values.Keys)
                 {
                     if (!wbStyleMap.ContainsKey(key))
                     {
-                        found = false;
+                        stylesAreEqual = false;
                         break;
                     }
 
-                    if (values[key] == null && wbStyleMap[key] == null || values[key] != null && values[key].Equals(wbStyleMap[key]))
+                    if (values[key] == null && wbStyleMap[key] == null)
                     {
                         continue;
                     }
 
-                    found = false;
+                    var wbVal = wbStyleMap[key];
+                    var newVal = values[key];
+
+                    if (newVal != null && newVal.Equals(wbVal))
+                    {
+                        continue;
+                    }
+
+                    stylesAreEqual = false;
                     break;
                 }
 
-                if (found)
+                if (stylesAreEqual)
                 {
                     newStyle = wbStyle;
                     break;
@@ -114,23 +141,84 @@ namespace NPOI.XSSF.Util
             cell.CellStyle = newStyle;
         }
 
+        /**
+         * Copies the entries in src to dest, using the preferential data type
+         * so that maps can be compared for equality
+         *
+         * @param src the property map to copy from (read-only)
+         * @param dest the property map to copy into
+         * @since POI 3.15 beta 3
+         */
+        private static void PutAll(Dictionary<string, object> src, Dictionary<string, object> dest)
+        {
+            foreach (string key in src.Keys)
+            {
+                if (shortValues.Contains(key))
+                {
+                    dest[key] = GetShort(src, key);
+                }
+                else if (intValues.Contains(key))
+                {
+                    dest[key] = GetInt(src, key);
+                }
+                else if (stringValues.Contains(key))
+                {
+                    dest[key] = GetString(src, key);
+                }
+                else if (booleanValues.Contains(key))
+                {
+                    dest[key] = GetBoolean(src, key);
+                }
+                else if (borderTypeValues.Contains(key))
+                {
+                    dest[key] = GetBorderStyle(src, key);
+                }
+                else if (ALIGNMENT.Equals(key))
+                {
+                    dest[key] = GetHorizontalAlignment(src, key);
+                }
+                else if (VERTICAL_ALIGNMENT.Equals(key))
+                {
+                    dest[key] = GetVerticalAlignment(src, key);
+                }
+                else if (FILL_PATTERN.Equals(key))
+                {
+                    dest[key] = GetFillPattern(src, key);
+                }
+                else
+                {
+                    //if (log.check(POILogger.INFO))
+                    //{
+                    //    log.log(POILogger.INFO, "Ignoring unrecognized CellUtil format properties key: " + key);
+                    //}
+                }
+
+                /*
+                 * BOTTOM_BORDER_COLOR,
+                    LEFT_BORDER_COLOR,
+                    RIGHT_BORDER_COLOR,
+                    TOP_BORDER_COLOR,
+                    FILL_FOREGROUND_COLOR,
+                    FILL_BACKGROUND_COLOR,
+                */
+            }
+        }
+
         private static Dictionary<string, object> GetFormatProperties(XSSFCellStyle style)
         {
             Dictionary<string, object> properties = new Dictionary<string, object>();
-            PutShort(properties, ALIGNMENT, (short)style.Alignment);
-            PutShort(properties, BORDER_BOTTOM, (short)style.BorderBottom);
+            Put(properties, ALIGNMENT, style.Alignment);
+            Put(properties, BORDER_BOTTOM, style.BorderBottom);
             PutShort(properties, BORDER_DIAGONAL, (short)style.BorderDiagonal);
-            PutShort(properties, BORDER_LEFT, (short)style.BorderLeft);
-            PutShort(properties, BORDER_RIGHT, (short)style.BorderRight);
-            PutShort(properties, BORDER_TOP, (short)style.BorderTop);
+            Put(properties, BORDER_LEFT, style.BorderLeft);
+            Put(properties, BORDER_RIGHT, style.BorderRight);
+            Put(properties, BORDER_TOP, style.BorderTop);
             PutString(properties, BOTTOM_BORDER_COLOR, RgbByteArrayToHexstring(style.BottomBorderXSSFColor?.GetRgbWithTint() ?? style.BottomBorderXSSFColor?.RGB));
             PutShort(properties, DATA_FORMAT, style.DataFormat);
-            PutString(properties, DIAGONAL_BORDER_COLOR, RgbByteArrayToHexstring(style.DiagonalBorderXSSFColor?.GetRgbWithTint() ?? style.DiagonalBorderXSSFColor?.RGB));
-            PutShort(properties, DIAGONAL_BORDER_LINE_STYLE, (short)style.BorderDiagonalLineStyle);
             PutString(properties, FILL_BACKGROUND_COLOR, RgbByteArrayToHexstring(style.FillBackgroundXSSFColor?.GetRgbWithTint() ?? style.FillBackgroundXSSFColor?.RGB));
             PutString(properties, FILL_FOREGROUND_COLOR, RgbByteArrayToHexstring(style.FillForegroundXSSFColor?.GetRgbWithTint() ?? style.FillForegroundXSSFColor?.RGB));
             PutShort(properties, FILL_PATTERN, (short)style.FillPattern);
-            PutShort(properties, FONT, style.FontIndex);
+            PutInt(properties, FONT, (int)style.FontIndex);
             PutBoolean(properties, HIDDEN, style.IsHidden);
             PutShort(properties, INDENTION, style.Indention);
             PutString(properties, LEFT_BORDER_COLOR, RgbByteArrayToHexstring(style.LeftBorderXSSFColor?.GetRgbWithTint() ?? style.LeftBorderXSSFColor?.RGB));
@@ -139,32 +227,33 @@ namespace NPOI.XSSF.Util
             PutShort(properties, ROTATION, style.Rotation);
             PutBoolean(properties, SHRINK_TO_FIT, style.ShrinkToFit);
             PutString(properties, TOP_BORDER_COLOR, RgbByteArrayToHexstring(style.TopBorderXSSFColor?.GetRgbWithTint() ?? style.TopBorderXSSFColor?.RGB));
-            PutShort(properties, VERTICAL_ALIGNMENT, (short)style.VerticalAlignment);
+            Put(properties, VERTICAL_ALIGNMENT, style.VerticalAlignment);
             PutBoolean(properties, WRAP_TEXT, style.WrapText);
             return properties;
         }
 
+        /**
+         * Utility method that puts the given value to the given map.
+         *
+         * @param properties map of properties (String -> Object)
+         * @param name property name
+         * @param value property value
+         */
+        private static void Put(Dictionary<String, Object> properties, String name, Object value)
+        {
+            properties[name] = value;
+        }
+
         private static void SetFormatProperties(XSSFCellStyle style, XSSFWorkbook workbook, Dictionary<string, object> properties)
         {
-            style.Alignment = (HorizontalAlignment)GetShort(properties, ALIGNMENT);
-            style.BorderBottom = (BorderStyle)GetShort(properties, BORDER_BOTTOM);
+            style.Alignment = GetHorizontalAlignment(properties, ALIGNMENT);
+            style.BorderBottom = GetBorderStyle(properties, BORDER_BOTTOM);
 
             style.BorderDiagonal = (BorderDiagonal)GetShort(properties, BORDER_DIAGONAL);
-            style.BorderDiagonalLineStyle = (BorderStyle)GetShort(properties, DIAGONAL_BORDER_LINE_STYLE);
 
-            var diagonalBorderColor = StringToByteArray(GetString(properties, DIAGONAL_BORDER_COLOR));
-            if (diagonalBorderColor != null)
-            {
-                style.SetDiagonalBorderColor(new XSSFColor(diagonalBorderColor));
-            }
-            else
-            {
-                style.BorderDiagonalColor = 0;
-            }
-
-            style.BorderLeft = (BorderStyle)GetShort(properties, BORDER_LEFT);
-            style.BorderRight = (BorderStyle)GetShort(properties, BORDER_RIGHT);
-            style.BorderTop = (BorderStyle)GetShort(properties, BORDER_TOP);
+            style.BorderLeft = GetBorderStyle(properties, BORDER_LEFT);
+            style.BorderRight = GetBorderStyle(properties, BORDER_RIGHT);
+            style.BorderTop = GetBorderStyle(properties, BORDER_TOP);
 
             var bottomBorderColor = StringToByteArray(GetString(properties, BOTTOM_BORDER_COLOR));
             if (bottomBorderColor != null)
@@ -238,54 +327,184 @@ namespace NPOI.XSSF.Util
                 style.TopBorderColor = 0;
             }
 
-            style.VerticalAlignment = (VerticalAlignment)GetShort(properties, VERTICAL_ALIGNMENT);
+            style.VerticalAlignment = GetVerticalAlignment(properties, VERTICAL_ALIGNMENT);
             style.WrapText = GetBoolean(properties, WRAP_TEXT);
         }
 
         /**
          * Utility method that returns the named short value form the given map.
-         * @return zero if the property does not exist, or is not a {@link Short}.
-         *
+         * 
          * @param properties map of named properties (String -> Object)
          * @param name property name
-         * @return property value, or zero
+         * @return zero if the property does not exist, or is not a {@link Short}.
          */
         private static short GetShort(Dictionary<string, object> properties, string name)
         {
             object value = properties[name];
-
-            if (short.TryParse(value.ToString(), out short result))
-            {
-                return result;
-            }
-
-            return (short)(int)value;
+            return short.TryParse(value.ToString(), out short result) ? result : (short)0;
         }
 
-        private static string GetString(Dictionary<string, object> properties, string name)
+        /**
+         * Utility method that returns the named int value from the given map.
+         *
+         * @param properties map of named properties (String -> Object)
+         * @param name property name
+         * @return zero if the property does not exist, or is not a {@link Integer}
+         *         otherwise the property value
+         */
+        private static int GetInt(Dictionary<string, object> properties, string name)
         {
             object value = properties[name];
-            return value?.ToString();
+            if (Number.IsNumber(value))
+            {
+                return int.Parse(value.ToString());
+            }
+            return 0;
+        }
+
+        /**
+	     * Utility method that returns the named BorderStyle value form the given map.
+	     *
+	     * @param properties map of named properties (String -> Object)
+	     * @param name property name
+	     * @return Border style if set, otherwise {@link BorderStyle#NONE}
+	     */
+        private static BorderStyle GetBorderStyle(Dictionary<string, object> properties, string name)
+        {
+            object value = properties[name];
+            BorderStyle border;
+            if (value is BorderStyle borderStyle)
+            {
+                border = borderStyle;
+            }
+            else if (value is short || value is int)
+            {
+                short code = short.Parse(value.ToString());
+                border = (BorderStyle)code;
+            }
+            else if (value == null)
+            {
+                border = BorderStyle.None;
+            }
+            else
+            {
+                throw new RuntimeException("Unexpected border style class. Must be BorderStyle or Short (deprecated).");
+            }
+            return border;
+        }
+
+        /**
+         * Utility method that returns the named FillPattern value from the given map.
+         *
+         * @param properties map of named properties (String -> Object)
+         * @param name property name
+         * @return FillPattern style if set, otherwise {@link FillPattern#NO_FILL}
+         * @since POI 3.15 beta 3
+         */
+        private static FillPattern GetFillPattern(Dictionary<string, object> properties, string name)
+        {
+            object value = properties[name];
+            FillPattern pattern;
+            if (value is FillPattern ptrn)
+            {
+                pattern = ptrn;
+            }
+            else if (value is short code)
+            {
+                pattern = (FillPattern)code;
+            }
+            else if (value == null)
+            {
+                pattern = FillPattern.NoFill;
+            }
+            else
+            {
+                throw new RuntimeException("Unexpected fill pattern style class. Must be FillPattern or Short (deprecated).");
+            }
+            return pattern;
+        }
+
+        /**
+         * Utility method that returns the named HorizontalAlignment value from the given map.
+         *
+         * @param properties map of named properties (String -> Object)
+         * @param name property name
+         * @return HorizontalAlignment style if set, otherwise {@link HorizontalAlignment#GENERAL}
+         * @since POI 3.15 beta 3
+         */
+        private static HorizontalAlignment GetHorizontalAlignment(Dictionary<string, object> properties, string name)
+        {
+            object value = properties[name];
+            HorizontalAlignment align;
+            if (value is HorizontalAlignment alignment)
+            {
+                align = alignment;
+            }
+            else if (value is short code)
+            {
+                align = (HorizontalAlignment)code;
+            }
+            else if (value == null)
+            {
+                align = HorizontalAlignment.General;
+            }
+            else
+            {
+                throw new RuntimeException("Unexpected horizontal alignment style class. Must be HorizontalAlignment or Short (deprecated).");
+            }
+            return align;
+        }
+
+        /**
+         * Utility method that returns the named VerticalAlignment value from the given map.
+         *
+         * @param properties map of named properties (String -> Object)
+         * @param name property name
+         * @return VerticalAlignment style if set, otherwise {@link VerticalAlignment#BOTTOM}
+         * @since POI 3.15 beta 3
+         */
+        private static VerticalAlignment GetVerticalAlignment(Dictionary<string, object> properties, string name)
+        {
+            object value = properties[name];
+            VerticalAlignment align;
+            if (value is VerticalAlignment alignment)
+            {
+                align = alignment;
+            }
+            else if (value is short code)
+            {
+                align = (VerticalAlignment)code;
+            }
+            else if (value == null)
+            {
+                align = VerticalAlignment.Bottom;
+            }
+            else
+            {
+                throw new RuntimeException("Unexpected vertical alignment style class. Must be VerticalAlignment or Short (deprecated).");
+            }
+            return align;
         }
 
         /**
          * Utility method that returns the named boolean value form the given map.
-         * @return false if the property does not exist, or is not a {@link Boolean}.
          *
          * @param properties map of properties (String -> Object)
          * @param name property name
-         * @return property value, or false
+         * @return false if the property does not exist, or is not a {@link Boolean}.
          */
         private static bool GetBoolean(Dictionary<string, object> properties, string name)
         {
             object value = properties[name];
-
             if (bool.TryParse(value.ToString(), out bool result))
-            {
                 return result;
-            }
 
             return false;
+        }
+        private static string GetString(Dictionary<string, object> properties, string name)
+        {
+            object value = properties[name];
+            return value?.ToString();
         }
 
         /**
@@ -296,6 +515,25 @@ namespace NPOI.XSSF.Util
          * @param value property value
          */
         private static void PutShort(Dictionary<string, object> properties, string name, short value)
+        {
+            if (properties.ContainsKey(name))
+            {
+                properties[name] = value;
+            }
+            else
+            {
+                properties.Add(name, value);
+            }
+        }
+
+        /**
+         * Utility method that puts the named short value to the given map.
+         *
+         * @param properties map of properties (String -> Object)
+         * @param name property name
+         * @param value property value
+         */
+        private static void PutInt(Dictionary<string, object> properties, string name, int value)
         {
             if (properties.ContainsKey(name))
             {

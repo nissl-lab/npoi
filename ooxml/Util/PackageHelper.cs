@@ -101,7 +101,7 @@ namespace NPOI.Util
             foreach (PackageRelationship rel in rels) {
             PackagePart p;
             if(rel.TargetMode == TargetMode.External){
-                part_tgt.AddExternalRelationship(rel.TargetUri.ToString(), rel.RelationshipType, rel.Id);
+                part_tgt.AddExternalRelationship(rel.TargetUri.OriginalString, rel.RelationshipType, rel.Id);
                 //external relations don't have associated namespace parts
                 continue;
             }

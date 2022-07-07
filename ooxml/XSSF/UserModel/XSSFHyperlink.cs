@@ -83,7 +83,7 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 Uri target = _externalRel.TargetUri;
-                _location = target.ToString();
+                _location = target.OriginalString;
                 if (ctHyperlink.location != null)
                 {
                     // URI fragment

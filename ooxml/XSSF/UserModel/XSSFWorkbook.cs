@@ -625,7 +625,7 @@ namespace NPOI.XSSF.UserModel
                     if (pr.TargetMode == TargetMode.External)
                     {
                         clonedSheet.GetPackagePart().AddExternalRelationship
-                            (pr.TargetUri.ToString(), pr.RelationshipType, null);
+                            (pr.TargetUri.OriginalString, pr.RelationshipType, null);
                     }
                 }
             }

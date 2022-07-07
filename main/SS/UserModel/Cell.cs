@@ -168,7 +168,14 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <exception cref="InvalidOperationException">if the cell type returned by GetCellType() is not CELL_TYPE_FORMULA </exception>
         String CellFormula { get; set; }
-
+        /// <summary>
+        ///  Removes formula, if any.
+        ///  
+        /// If cell was blank, leaves it as is.
+        /// If it is a part of an array formula group, blanks the cell.
+        /// If has a regular formula, removes the formula preserving the "cached" value.
+        /// </summary>
+        void RemoveFormula();
         /// <summary>
         /// Sets formula for this cell.
         /// </summary>

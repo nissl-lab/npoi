@@ -89,6 +89,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write("<pivotCacheDefinition xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" ");
             sw.Write("xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" ");
             sw.Write("xmlns:s=\"http://schemas.openxmlformats.org/officeDocument/2006/sharedTypes\" ");
+            sw.Write("xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" ");
+            sw.Write("mc:Ignorable=\"xr\" ");
+            sw.Write("xmlns:xr=\"http://schemas.microsoft.com/office/spreadsheetml/2014/revision\" ");
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
             XmlHelper.WriteAttribute(sw, "invalid", this.invalid);
             XmlHelper.WriteAttribute(sw, "saveData", this.saveData);
@@ -2978,7 +2981,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "v", this.v, true);
+            XmlHelper.WriteAttribute(sw, "v", this.v, false);
             sw.Write("/>");
         }
     }
@@ -3529,7 +3532,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "st", this.st, false);
             XmlHelper.WriteAttribute(sw, "b", this.b, false);
 
-            if (this.tpls == null && (this.x == null || this.x.Count == 0))
+            if ((this.tpls == null || this.tpls.tpl.Count == 0) && (this.x == null || this.x.Count == 0))
             {
                 sw.Write("/>");
             }
@@ -4451,7 +4454,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "v", this.v);
+            XmlHelper.WriteAttribute(sw, "v", this.v, true);
             XmlHelper.WriteAttribute(sw, "u", this.u, false);
             XmlHelper.WriteAttribute(sw, "f", this.f, false);
             XmlHelper.WriteAttribute(sw, "c", this.c, false);
@@ -4821,7 +4824,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "v", this.v);
+            XmlHelper.WriteAttribute(sw, "v", this.v, true);
             XmlHelper.WriteAttribute(sw, "u", this.u, false);
             XmlHelper.WriteAttribute(sw, "f", this.f, false);
             XmlHelper.WriteAttribute(sw, "c", this.c, false);

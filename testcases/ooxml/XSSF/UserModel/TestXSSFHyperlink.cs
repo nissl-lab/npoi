@@ -245,7 +245,7 @@ namespace TestCases.XSSF.UserModel
                     sheet.GetRow(16).GetCell(2).Hyperlink.Type);
             Assert.AreEqual(null,
                     sheet.GetRow(16).GetCell(2).Hyperlink.Label);
-            Assert.AreEqual("mailto:dev@poi.apache.org?subject=XSSF Hyperlinks",
+            Assert.AreEqual("mailto:dev@poi.apache.org?subject=XSSF%20Hyperlinks",
                     sheet.GetRow(16).GetCell(2).Hyperlink.Address);
         }
         [Test]
