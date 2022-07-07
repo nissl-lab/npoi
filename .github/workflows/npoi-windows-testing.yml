@@ -1,0 +1,36 @@
+name: Unit testing for NPOI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET Core 3.1	
+      uses: actions/setup-dotnet@v1	
+      with:	
+        dotnet-version: 3.1.x
+    - name: Setup .NET Core 6
+      uses: actions/setup-dotnet@v1	
+      with:	
+        dotnet-version: 6.0.x
+    
+    - name: Restore NPOI.Test dependencies
+      run: dotnet restore solution/NPOI.Test.sln
+    - name: Build NPOI.Test
+      run: dotnet build solution/NPOI.Test.sln --no-restore --configuration 'Debug' --verbosity n
+    - name: Test NPOI.Test
+      run: dotnet test solution/NPOI.Test.sln --no-build --configuration 'Debug' --verbosity normal
+
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action/composite@v1
+      if: always()
+      with:
+        files: "**/*.xml"
