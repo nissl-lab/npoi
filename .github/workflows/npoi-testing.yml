@@ -13,18 +13,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: '6.0.x'
+    - name: Setup .NET Core 3.1	
+      uses: actions/setup-dotnet@v1	
+      with:	
+        dotnet-version: 3.1.x
+    - name: Setup .NET Core 6
+      uses: actions/setup-dotnet@v1	
+      with:	
+        dotnet-version: 6.0.x
 
     - name: Restore NPOI.Core.Test dependencies
-      run: dotnet restore solution/NPOI.Core.Test.sln    
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: '3.1.x'
+      run: dotnet restore solution/NPOI.Core.Test.sln
     - name: Build NPOI.Core.Test
       run: dotnet build solution/NPOI.Core.Test.sln --no-restore --configuration 'Debug' --verbosity n
     - name: Test NPOI.Core.Test
