@@ -27,10 +27,10 @@ jobs:
     - name: Build NPOI.Test
       run: dotnet build solution/NPOI.Test.sln --no-restore --configuration 'Debug' --verbosity n
     - name: Test NPOI.Test
-      run: dotnet test solution/NPOI.Test.sln --no-build --configuration 'Debug' --verbosity normal
+      run: dotnet test solution/NPOI.Test.sln --no-build --configuration 'Debug' --verbosity n --logger trx --results-directory test-results
 
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action/composite@v1
       if: always()
       with:
-        files: "**/*.xml"
+        files: "test-results/**/*.xml"
