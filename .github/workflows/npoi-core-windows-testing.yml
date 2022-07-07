@@ -33,4 +33,5 @@ jobs:
       uses: dorny/test-reporter@v1
       with:
         path: 'test-results'
+        name: '*.trx'
         reporter: 'dotnet-trx'
