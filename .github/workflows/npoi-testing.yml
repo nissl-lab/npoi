@@ -17,8 +17,7 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: |
-          '3.1.x'
-          '6.0.x'
+          '3.1.x', '6.0.x'
 
     - name: Restore NPOI.Core.Test dependencies
       run: dotnet restore solution/NPOI.Core.Test.sln
