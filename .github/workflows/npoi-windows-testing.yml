@@ -33,10 +33,10 @@ jobs:
     - name: Test NPOI.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
       run: dotnet test .\solution\Lib\.net4\NPOI.TestCases.dll --configuration 'Debug' --verbosity n --logger 'trx;logfilename=NPOI.TestCases.Results.trx' --results-directory test-results
-    - name: Test NPOI.TestCases
+    - name: Test NPOI.OOXML.Testcases
       if: always() && steps.build-npoi.outcome == 'success'
       run: dotnet test .\solution\Lib\.net4\NPOI.OOXML.Testcases.dll --configuration 'Debug' --verbosity n --logger 'trx;logfilename=NPOI.OOXML.Testcases.Results.trx' --results-directory test-results
-    - name: Test NPOI.TestCases
+    - name: Test OOXML4Net.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
       run: dotnet test .\solution\Lib\.net4\OOXML4Net.Testcases.dll --configuration 'Debug' --verbosity n --logger 'trx;logfilename=OOXML4Net.Testcases.Results.trx' --results-directory test-results
       
