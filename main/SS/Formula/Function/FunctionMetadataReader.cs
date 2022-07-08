@@ -37,7 +37,7 @@ namespace NPOI.SS.Formula.Function
 #if NETSTANDARD2_1 || NETSTANDARD2_0
         private const String METADATA_FILE_NAME = "NPOI.Resources.functionMetadata.txt";
 #else
-        private const String METADATA_FILE_NAME = "functionMetadata.txt";
+        private const String METADATA_FILE_NAME = "NPOI.Resources.functionMetadata.txt";
 #endif
 
         /** plain ASCII text metadata file uses three dots for ellipsis */
