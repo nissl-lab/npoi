@@ -1,4 +1,4 @@
-name: Unit testing for NPOI on windows-2019
+name: Unit testing for NPOI on ubuntu-latest
 
 on:
   push:
@@ -9,23 +9,12 @@ on:
 jobs:
   testing-npoi:
 
-    runs-on: windows-2019
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.1
-
-    - name: Restore npoi dependencies
-      run: solution\nuget.exe restore solution\NPOI.Test.sln
-
-    - name: Build npoi for testing
-      id: build-npoi
-      run: msbuild solution\NPOI.Test.sln -verbosity:q -property:Configuration=Debug -t:Rebuild
-
     - name: Setup .NET Core 3.1	
-      if: always() && steps.build-npoi.outcome == 'success'
       uses: actions/setup-dotnet@v1	
       with:	
         dotnet-version: 3.1.x
@@ -41,16 +30,6 @@ jobs:
       id: build-npoi-core
       run: dotnet build solution/NPOI.Core.Test.sln --no-restore --configuration 'Debug' --verbosity q
 
-    - name: Test NPOI.TestCases
-      if: always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test .\solution\Lib\.net4\NPOI.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.TestCases.Results.trx' --results-directory test-results
-    - name: Test NPOI.OOXML.Testcases
-      if: always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test .\solution\Lib\.net4\NPOI.OOXML.Testcases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML.Testcases.Results.trx' --results-directory test-results
-    - name: Test OOXML4Net.TestCases
-      if: always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test .\solution\Lib\.net4\OOXML4Net.Testcases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=OOXML4Net.Testcases.Results.trx' --results-directory test-results
-
     - name: Test NPOI.Core.TestCases
       if: always() && steps.build-npoi-core.outcome == 'success'
       run: dotnet test testcases\main\bin\Debug\netcoreapp3.1\NPOI.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.TestCases.Core.Results.trx' --results-directory test-results
@@ -63,7 +42,7 @@ jobs:
       
     - name: Publish Test Results
       uses: dorny/test-reporter@v1
-      if: always() && (steps.build-npoi.outcome == 'success' || steps.build-npoi-core.outcome == 'success')
+      if: always() && steps.build-npoi-core.outcome == 'success'
       with:
         path: 'test-results/*.trx'
         name: NPOI Test Results
