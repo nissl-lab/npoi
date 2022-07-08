@@ -45,5 +45,5 @@ jobs:
       if: always() && steps.build-npoi-core.outcome == 'success'
       with:
         path: 'test-results/*.trx'
-        name: NPOI Test Results
+        name: NPOI macOS Test Results
         reporter: 'dotnet-trx'

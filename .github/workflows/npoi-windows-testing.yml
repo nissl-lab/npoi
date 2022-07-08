@@ -66,5 +66,5 @@ jobs:
       if: always() && (steps.build-npoi.outcome == 'success' || steps.build-npoi-core.outcome == 'success')
       with:
         path: 'test-results/*.trx'
-        name: NPOI Test Results
+        name: NPOI Windows Test Results
         reporter: 'dotnet-trx'
