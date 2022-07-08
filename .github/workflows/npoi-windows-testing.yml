@@ -21,26 +21,29 @@ jobs:
       run: solution\nuget.exe restore solution\NPOI.Test.sln
 
     - name: Build npoi for testing
+      id: build-npoi
       run: msbuild solution\NPOI.Test.sln -verbosity:n -property:Configuration=Debug -t:Rebuild
 
-    - name: Install NUnit.ConsoleRunner
-      id: install-nunit-runner
-      run: solution\nuget.exe install NUnit.ConsoleRunner -Version 3.15.2 -DirectDownload -OutputDirectory solution\Lib
-        
-    - name: Run NPOI.TestCases UnitTests
-      if: always() && steps.install-nunit-runner.outcome == 'success'
-      run: solution\Lib\NUnit.ConsoleRunner.3.15.2\tools\nunit3-console.exe solution\Lib\.net4\NPOI.TestCases.dll --result=test-results\NPOI.TestCases.Results.xml
-    - name: Run NPOI.OOXML.Testcases UnitTests
-      if: always() && steps.install-nunit-runner.outcome == 'success'
-      run: solution\Lib\NUnit.ConsoleRunner.3.15.2\tools\nunit3-console.exe solution\Lib\.net4\NPOI.OOXML.Testcases.dll --result=test-results\NPOI.OOXML.Testcases.Results.xml
-    - name: Run OOXML4Net.Testcases UnitTests
-      if: always() && steps.install-nunit-runner.outcome == 'success'
-      run: solution\Lib\NUnit.ConsoleRunner.3.15.2\tools\nunit3-console.exe solution\Lib\.net4\OOXML4Net.Testcases.dll --result=test-results\OOXML4Net.Testcases.Results.xml
+    - name: Setup .NET Core 3.1	
+      if: always() && steps.build-npoi.outcome == 'success'
+      uses: actions/setup-dotnet@v1	
+      with:	
+        dotnet-version: 3.1.x
 
+    - name: Test NPOI.TestCases
+      if: always() && steps.build-npoi.outcome == 'success'
+      run: dotnet test .\solution\Lib\.net4\NPOI.TestCases.dll --configuration 'Debug' --verbosity n --logger 'trx;logfilename=NPOI.TestCases.Results.trx' --results-directory test-results
+    - name: Test NPOI.TestCases
+      if: always() && steps.build-npoi.outcome == 'success'
+      run: dotnet test .\solution\Lib\.net4\NPOI.OOXML.Testcases.dll --configuration 'Debug' --verbosity n --logger 'trx;logfilename=NPOI.OOXML.Testcases.Results.trx' --results-directory test-results
+    - name: Test NPOI.TestCases
+      if: always() && steps.build-npoi.outcome == 'success'
+      run: dotnet test .\solution\Lib\.net4\OOXML4Net.Testcases.dll --configuration 'Debug' --verbosity n --logger 'trx;logfilename=OOXML4Net.Testcases.Results.trx' --results-directory test-results
+      
     - name: Publish Test Results
       uses: dorny/test-reporter@v1
-      if: always() && steps.install-nunit-runner.outcome == 'success'
+      if: always() && steps.build-npoi.outcome == 'success'
       with:
-        path: 'test-results/*.xml'
+        path: 'test-results/*.trx'
         name: NPOI Test Results
         reporter: 'dotnet-trx'
