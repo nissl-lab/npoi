@@ -13,26 +13,25 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Setup .NET Core 3.1	
-      uses: actions/setup-dotnet@v1	
-      with:	
-        dotnet-version: 3.1.x
-    - name: Setup .NET Core 6
-      uses: actions/setup-dotnet@v1	
-      with:	
-        dotnet-version: 6.0.x
-    
-    - name: Restore NPOI.Test dependencies
-      run: dotnet restore solution/NPOI.Test.sln
-    - name: Build NPOI.Test
-      run: dotnet build solution/NPOI.Test.sln --no-restore --configuration 'Debug' --verbosity n
-    - name: Test NPOI.Test
-      run: dotnet test solution/NPOI.Test.sln --no-build --configuration 'Debug' --verbosity n --logger trx --results-directory test-results
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Build npoi for testing
+      run: msbuild solution\NPOI.Test.sln --verbosity:diag -property:Configuration=Debug -t:Rebuild
+
+    - name: Install NUnit.ConsoleRunner
+      run: .\nuget.exe install NUnit.ConsoleRunner -Version 3.15.2 -DirectDownload -OutputDirectory solution\Lib
+        
+    - name: Run NPOI.TestCases UnitTests
+      run: .\solution\Lib\NUnit.ConsoleRunner.3.15.2\tools\nunit3-console.exe solution\Lib\.net4\NPOI.TestCases.dll --result=test-results\NPOI.TestCases.Results.xml
+    - name: Run NPOI.OOXML.Testcases UnitTests
+      run: .\solution\Lib\NUnit.ConsoleRunner.3.15.2\tools\nunit3-console.exe solution\Lib\.net4\NPOI.OOXML.Testcases.dll --result=test-results\NPOI.OOXML.Testcases.Results.xml        
+    - name: Run OOXML4Net.Testcases UnitTests
+      run: .\solution\Lib\NUnit.ConsoleRunner.3.15.2\tools\nunit3-console.exe solution\Lib\.net4\OOXML4Net.Testcases.dll --result=test-results\OOXML4Net.Testcases.Results.xml
 
     - name: Publish Test Results
-      uses: dorny/test-reporter@v1
+      uses: EnricoMi/publish-unit-test-result-action/composite@v1
       if: always()
       with:
-        path: 'test-results/*.trx'
-        name: Test Results
-        reporter: 'dotnet-trx'
+        files: "test-results/**/*.xml"
