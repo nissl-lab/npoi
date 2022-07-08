@@ -1,4 +1,4 @@
-name: Unit testing for NPOI on windows-2019
+name: Unit testing for NPOI
 
 on:
   push:
