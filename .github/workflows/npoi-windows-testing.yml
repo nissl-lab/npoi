@@ -17,6 +17,9 @@ jobs:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
 
+    - name: Restore npoi dependencies
+      run: solution\nuget.exe restore solution\NPOI.Test.sln
+
     - name: Build npoi for testing
       run: msbuild solution\NPOI.Test.sln -verbosity:n -property:Configuration=Debug -t:Rebuild
 
