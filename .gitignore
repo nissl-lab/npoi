@@ -158,3 +158,6 @@ $RECYCLE.BIN/
 # Examples packages folder
 examples/packages
 examples/.vs/
+
+test-results/
+*.xls
