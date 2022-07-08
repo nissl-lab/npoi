@@ -24,17 +24,23 @@ jobs:
       run: msbuild solution\NPOI.Test.sln -verbosity:n -property:Configuration=Debug -t:Rebuild
 
     - name: Install NUnit.ConsoleRunner
+      id: install-nunit-runner
       run: solution\nuget.exe install NUnit.ConsoleRunner -Version 3.15.2 -DirectDownload -OutputDirectory solution\Lib
         
     - name: Run NPOI.TestCases UnitTests
+      if: always() && steps.install-nunit-runner.outcome == 'success'
       run: solution\Lib\NUnit.ConsoleRunner.3.15.2\tools\nunit3-console.exe solution\Lib\.net4\NPOI.TestCases.dll --result=test-results\NPOI.TestCases.Results.xml
     - name: Run NPOI.OOXML.Testcases UnitTests
+      if: always() && steps.install-nunit-runner.outcome == 'success'
       run: solution\Lib\NUnit.ConsoleRunner.3.15.2\tools\nunit3-console.exe solution\Lib\.net4\NPOI.OOXML.Testcases.dll --result=test-results\NPOI.OOXML.Testcases.Results.xml
     - name: Run OOXML4Net.Testcases UnitTests
+      if: always() && steps.install-nunit-runner.outcome == 'success'
       run: solution\Lib\NUnit.ConsoleRunner.3.15.2\tools\nunit3-console.exe solution\Lib\.net4\OOXML4Net.Testcases.dll --result=test-results\OOXML4Net.Testcases.Results.xml
 
     - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action/composite@v1
-      if: always()
+      uses: dorny/test-reporter@v1
+      if: always() && steps.install-nunit-runner.outcome == 'success'
       with:
-        files: "test-results/**/*.xml"
+        path: 'test-results/*.xml'
+        name: NPOI Test Results
+        reporter: 'dotnet-trx'
