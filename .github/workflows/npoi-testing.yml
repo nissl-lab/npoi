@@ -111,7 +111,7 @@ jobs:
       if: always() && steps.build-npoi-core.outcome == 'success'
       with:
         path: 'test-results/*.trx'
-        name: NPOI Ubuntu Test Results
+        name: NPOI Core Ubuntu Test Results
         reporter: 'dotnet-trx'
 
   testing-npoi-on-macOS:
@@ -150,5 +150,5 @@ jobs:
       if: always() && steps.build-npoi-core.outcome == 'success'
       with:
         path: 'test-results/*.trx'
-        name: NPOI macOS Test Results
+        name: NPOI Core macOS Test Results
         reporter: 'dotnet-trx'
