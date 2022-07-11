@@ -43,7 +43,7 @@ namespace NPOI.XSSF.UserModel
      * cells that have values should be Added.
      * </p>
      */
-    public class XSSFCell : ICell
+    public partial class XSSFCell : ICell
     {
 
         private static String FALSE_AS_STRING = "0";
@@ -1362,6 +1362,4 @@ namespace NPOI.XSSF.UserModel
             throw new NotImplementedException();
         }
     }
-
-
 }
