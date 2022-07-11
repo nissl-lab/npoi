@@ -89,6 +89,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Iron\XSSF\UserModel\XSSFCellExtension.cs" />
     <Compile Include="Iron\XSSF\UserModel\XSSFCellStyleExtension.cs" />
     <Compile Include="Iron\XSSF\UserModel\XSSFSheetExtension.cs" />
     <Compile Include="POIFS\Crypt\Agile\AgileDecryptor.cs" />
