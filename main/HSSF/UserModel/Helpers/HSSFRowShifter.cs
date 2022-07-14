@@ -20,6 +20,7 @@ namespace NPOI.HSSF.UserModel.helpers
     using System;
 
     using NPOI.HSSF.UserModel;
+    using NPOI.HSSF.UserModel.Helpers;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
@@ -52,9 +53,9 @@ namespace NPOI.HSSF.UserModel.helpers
         }
 
 
-        public override void UpdateRowFormulas(IRow row, FormulaShifter Shifter)
+        public override void UpdateRowFormulas(IRow row, FormulaShifter formulaShifter)
         {
-            throw new NotImplementedException("updateRowFormulas");
+            HSSFRowColShifter.UpdateRowFormulas(row, formulaShifter);
         }
 
         public override void UpdateConditionalFormatting(FormulaShifter Shifter)
