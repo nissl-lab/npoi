@@ -58,7 +58,8 @@ namespace NPOI.SS.UserModel.Helpers
                 CellRangeAddress merged = sheet.GetMergedRegion(i);
 
                 // remove merged region that overlaps Shifting
-                if (removalNeeded(merged, startRow, endRow, n ))
+                var lastCol=sheet.GetRow(startRow) != null ? sheet.GetRow(startRow).LastCellNum : sheet.GetRow(endRow) != null ? sheet.GetRow(endRow).LastCellNum : 0;
+                if (removalNeeded(merged, startRow, endRow, n, lastCol ))
                 {
                     removedIndices.Add(i);
                     continue;
@@ -98,7 +99,7 @@ namespace NPOI.SS.UserModel.Helpers
         }
 
         // Keep in sync with {@link ColumnShifter#removalNeeded}
-        private bool removalNeeded(CellRangeAddress merged, int startRow, int endRow, int n)
+        private bool removalNeeded(CellRangeAddress merged, int startRow, int endRow, int n, int lastCol)
         {
             int movedRows = endRow - startRow + 1;
 
@@ -110,14 +111,14 @@ namespace NPOI.SS.UserModel.Helpers
                 // area is moved down => overwritten area is [endRow + n - movedRows, endRow + n]
                  int firstRow = Math.Max(endRow + 1, endRow + n - movedRows);
                  int lastRow = endRow + n;
-                overwrite = new CellRangeAddress(firstRow, lastRow, 0, 0);
+                overwrite = new CellRangeAddress(firstRow, lastRow, 0, lastCol);
             }
             else
             {
                 // area is moved up => overwritten area is [startRow + n, startRow + n + movedRows]
                  int firstRow = startRow + n;
                  int lastRow = Math.Min(startRow - 1, startRow + n + movedRows);
-                overwrite = new CellRangeAddress(firstRow, lastRow, 0, 0 );
+                overwrite = new CellRangeAddress(firstRow, lastRow, 0, lastCol);
             }
 
             // if the merged-region and the overwritten area intersect, we need to remove it
