@@ -26,7 +26,7 @@ namespace NPOI.POIFS.FileSystem
     /// <summary>
     /// A small base class for the various factories, e.g. WorkbookFactory, SlideShowFactory to combine common code here.
     /// </summary>
-    public class DocumentFactoryHelper
+    public static class DocumentFactoryHelper
     {
         /// <summary>
         /// Wrap the OLE2 data in the NPOIFSFileSystem into a decrypted stream by using the given password.
@@ -54,7 +54,7 @@ namespace NPOI.POIFS.FileSystem
                 }
                 if (passwordCorrect)
                 {
-                    return new FilterInputStream1(d.GetDataStream(fs.Root), fs);
+                    return d.GetDataStream(fs.Root);
                 }
                 else
                 {
@@ -70,26 +70,11 @@ namespace NPOI.POIFS.FileSystem
             }
         }
 
-        private class FilterInputStream1 : FilterInputStream
-        {
-            NPOIFSFileSystem fs;
-            public FilterInputStream1(InputStream input, NPOIFSFileSystem fs)
-                : base(input)
-            {
-                this.fs = fs;
-            }
-            public override void Close()
-            {
-                fs.Close();
-                base.Close();
-            }
-        }
         /// <summary>
         /// Checks that the supplied InputStream (which MUST support mark and reset, or be a PushbackInputStream) has a OOXML (zip) header at the start of it.
         /// If your InputStream does not support mark / reset, then wrap it in a PushBackInputStream, then be sure to always use that, and not the original!
         /// </summary>
         /// <param name="inp">An InputStream which supports either mark/reset, or is a PushbackInputStream</param>
-        /// <returns></returns>
         public static bool HasOOXMLHeader(Stream inp)
         {
             // We want to peek at the first 4 bytes

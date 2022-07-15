@@ -20,34 +20,37 @@ namespace NPOI.POIFS.FileSystem
     using System.IO;
     using NPOI.Util;
 
-    /**
-     * This class provides methods to read a DocumentEntry managed by a
-     *  {@link POIFSFileSystem} or {@link NPOIFSFileSystem} instance.
-     * It Creates the appropriate one, and delegates, allowing us to
-     *  work transparently with the two.
-     */
+    /// <summary>
+    /// This class provides methods to read a DocumentEntry managed by a
+    ///  <see cref="POIFSFileSystem"/> or <see cref="NPOIFSFileSystem"/> instance.
+    /// It Creates the appropriate one, and delegates, allowing us to
+    ///  work transparently with the two.
+    /// <seealso cref="NPOI.Util.ByteArrayInputStream" />
+    /// <seealso cref="NPOI.Util.ILittleEndianInput" />
     public class DocumentInputStream : ByteArrayInputStream, ILittleEndianInput
     {
         /** returned by read operations if we're at end of document */
-        protected static int EOF = -1;
+        protected const int EOF = 0;
 
-        protected static int SIZE_SHORT = 2;
-        protected static int SIZE_INT = 4;
-        protected static int SIZE_LONG = 8;
+        protected const int SIZE_SHORT = 2;
+        protected const int SIZE_INT = 4;
+        protected const int SIZE_LONG = 8;
 
-        private DocumentInputStream delegate1;
+        private readonly DocumentInputStream delegate1;
 
-        /** For use by downstream implementations */
+        /// <summary>
+        /// For use by downstream implementations
+        /// </summary>
         protected DocumentInputStream() { }
 
-        /**
-         * Create an InputStream from the specified DocumentEntry
-         * 
-         * @param document the DocumentEntry to be read
-         * 
-         * @exception IOException if the DocumentEntry cannot be opened (like, maybe it has
-         *                been deleted?)
-         */
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DocumentInputStream"/> class.
+        /// Create an <see cref="InputStream"/> from the specified DocumentEntry
+        /// </summary>
+        /// <param name="document">the DocumentEntry to be read</param>
+        /// <exception cref="System.IO.IOException">
+        /// IOException if the DocumentEntry cannot be opened (like, maybe it has been deleted?)
+        /// </exception>
         public DocumentInputStream(DocumentEntry document)
         {
             if (!(document is DocumentNode))
@@ -74,6 +77,27 @@ namespace NPOI.POIFS.FileSystem
                 throw new IOException("No FileSystem bound on the parent, can't read contents");
             }
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DocumentInputStream"/> class.
+        /// Create an <see cref="InputStream"/> from the specified DocumentEntry
+        /// </summary>
+        /// <param name="document">the DocumentEntry to be read</param>
+        public DocumentInputStream(OPOIFSDocument document)
+        {
+            delegate1 = new ODocumentInputStream(document);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DocumentInputStream"/> class.
+        /// Create an <see cref="InputStream"/> from the specified DocumentEntry
+        /// </summary>
+        /// <param name="document">the DocumentEntry to be read</param>
+        public DocumentInputStream(NPOIFSDocument document)
+        {
+            delegate1 = new NDocumentInputStream(document);
+        }
+
         public override long Seek(long offset, SeekOrigin origin)
         {
             return delegate1.Seek(offset, origin);
@@ -97,25 +121,6 @@ namespace NPOI.POIFS.FileSystem
                 delegate1.Position = value;
             }
         }
-        /**
-         * Create an InputStream from the specified Document
-         * 
-         * @param document the Document to be read
-         */
-        public DocumentInputStream(OPOIFSDocument document)
-        {
-            delegate1 = new ODocumentInputStream(document);
-        }
-
-        /**
-         * Create an InputStream from the specified Document
-         * 
-         * @param document the Document to be read
-         */
-        public DocumentInputStream(NPOIFSDocument document)
-        {
-            delegate1 = new NDocumentInputStream(document);
-        }
 
         public override int Available()
         {
@@ -127,16 +132,15 @@ namespace NPOI.POIFS.FileSystem
             delegate1.Close();
         }
 
-        public override void Mark(int ignoredReadlimit)
+        public override void Mark(int readlimit)
         {
-            delegate1.Mark(ignoredReadlimit);
+            delegate1.Mark(readlimit);
         }
 
-        /**
-         * Tests if this input stream supports the mark and reset methods.
-         * 
-         * @return <code>true</code> always
-         */
+        /// <summary>
+        /// Tests if this input stream supports the mark and reset methods.
+        /// </summary>
+        /// <returns><c>true</c> always</returns>
         public override bool MarkSupported()
         {
             return true;
@@ -157,17 +161,17 @@ namespace NPOI.POIFS.FileSystem
             return delegate1.Read(b, off, len);
         }
 
-        /**
-         * Repositions this stream to the position at the time the mark() method was
-         * last called on this input stream. If mark() has not been called this
-         * method repositions the stream to its beginning.
-         */
+        /// <summary>
+        /// Repositions this stream to the position at the time the mark() method was
+        /// last called on this input stream. If mark() has not been called this
+        /// method repositions the stream to its beginning.
+        /// </summary>
         public override void Reset()
         {
             delegate1.Reset();
         }
 
-        public virtual long Skip(long n)
+        public override long Skip(long n)
         {
             return delegate1.Skip(n);
         }
