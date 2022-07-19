@@ -77,68 +77,77 @@ namespace NPOI.XSSF.Util
             SetCellStyleProperties(cell, workbook, new Dictionary<string, object>() { { propertyName, propertyValue } });
         }
 
-        public static void SetCellStyleProperties(ICell cell, XSSFWorkbook workbook, Dictionary<string, object> properties)
+        public static void SetCellStyleProperties(ICell cell, XSSFWorkbook workbook, Dictionary<string, object> propertiesToSet)
         {
-            ICellStyle originalStyle = cell.CellStyle;
-            ICellStyle newStyle = null;
-            Dictionary<string, object> values = GetFormatProperties(originalStyle as XSSFCellStyle);
+            Dictionary<string, object> styleMap = GetFormatProperties(cell.CellStyle as XSSFCellStyle);
+            PutAll(propertiesToSet, styleMap);
 
-            PutAll(properties, values);
+            ICellStyle style = LookUpOrCreateCellStyleInWorkbook(styleMap, workbook);
 
-            int numberCellStyles = workbook.NumCellStyles;
+            cell.CellStyle = style;
+        }
+        
+        public static ICellStyle LookUpOrCreateCellStyleInWorkbook(XSSFCellStyle lookUpStyle, XSSFWorkbook workbook)
+        {
+            Dictionary<string, object> styleMap = GetFormatProperties(lookUpStyle);
 
-            for (short i = 0; i < numberCellStyles; i++)
+            return LookUpOrCreateCellStyleInWorkbook(styleMap, workbook);
+        }
+
+        private static ICellStyle LookUpOrCreateCellStyleInWorkbook(Dictionary<string, object> lookUpStyleMap, XSSFWorkbook workbook)
+        {
+            for (int i = 0; i < workbook.NumCellStyles; i++)
             {
-                ICellStyle wbStyle = workbook.GetCellStyleAt(i);
+                ICellStyle workbookStyle = workbook.GetCellStyleAt(i);
+                Dictionary<string, object> workbookStyleMap = GetFormatProperties(workbookStyle as XSSFCellStyle);
 
-                Dictionary<string, object> wbStyleMap = GetFormatProperties(wbStyle as XSSFCellStyle);
-
-                if (values.Keys.Count != wbStyleMap.Keys.Count)
-                {
-                    continue;
-                }
-
-                bool stylesAreEqual = true;
-
-                foreach (string key in values.Keys)
-                {
-                    if (!wbStyleMap.ContainsKey(key))
-                    {
-                        stylesAreEqual = false;
-                        break;
-                    }
-
-                    if (values[key] == null && wbStyleMap[key] == null)
-                    {
-                        continue;
-                    }
-
-                    var wbVal = wbStyleMap[key];
-                    var newVal = values[key];
-
-                    if (newVal != null && newVal.Equals(wbVal))
-                    {
-                        continue;
-                    }
-
-                    stylesAreEqual = false;
-                    break;
-                }
+                bool stylesAreEqual = CompareStyleMaps(lookUpStyleMap, workbookStyleMap);
 
                 if (stylesAreEqual)
                 {
-                    newStyle = wbStyle;
-                    break;
+                    return workbookStyle;
                 }
             }
 
-            if (newStyle == null)
+            ICellStyle newStyle = workbook.CreateCellStyle();
+            SetFormatProperties(newStyle as XSSFCellStyle, workbook, lookUpStyleMap);
+
+            return newStyle;
+        }
+
+        private static bool CompareStyleMaps(Dictionary<string, object> x, Dictionary<string, object> y)
+        {
+            if (x.Count != y.Count)
             {
-                newStyle = workbook.CreateCellStyle();
-                SetFormatProperties(newStyle as XSSFCellStyle, workbook, values);
+                return false;
             }
 
-            cell.CellStyle = newStyle;
+            if (x.Keys.Except(y.Keys).Any())
+            {
+                return false;
+            }
+
+            if (y.Keys.Except(x.Keys).Any())
+            {
+                return false;
+            }
+
+            foreach (string key in x.Keys)
+            {
+                if (ValuesAreNotEqual(x[key], y[key]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool ValuesAreNotEqual(object xValue, object yValue)
+        {
+            return (xValue != null && yValue == null) ||
+                (xValue == null && yValue != null) ||
+                (xValue != null && yValue != null && !xValue.Equals(yValue));
         }
 
         /**
@@ -185,22 +194,6 @@ namespace NPOI.XSSF.Util
                 {
                     dest[key] = GetFillPattern(src, key);
                 }
-                else
-                {
-                    //if (log.check(POILogger.INFO))
-                    //{
-                    //    log.log(POILogger.INFO, "Ignoring unrecognized CellUtil format properties key: " + key);
-                    //}
-                }
-
-                /*
-                 * BOTTOM_BORDER_COLOR,
-                    LEFT_BORDER_COLOR,
-                    RIGHT_BORDER_COLOR,
-                    TOP_BORDER_COLOR,
-                    FILL_FOREGROUND_COLOR,
-                    FILL_BACKGROUND_COLOR,
-                */
             }
         }
 
@@ -239,7 +232,7 @@ namespace NPOI.XSSF.Util
          * @param name property name
          * @param value property value
          */
-        private static void Put(Dictionary<String, Object> properties, String name, Object value)
+        private static void Put(Dictionary<string, object> properties, string name, object value)
         {
             properties[name] = value;
         }
@@ -496,8 +489,11 @@ namespace NPOI.XSSF.Util
         private static bool GetBoolean(Dictionary<string, object> properties, string name)
         {
             object value = properties[name];
+            
             if (bool.TryParse(value.ToString(), out bool result))
+            {
                 return result;
+            }
 
             return false;
         }
