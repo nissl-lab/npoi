@@ -570,7 +570,7 @@ namespace NPOI.XSSF.Model
 
         internal CT_Xf GetCellStyleXfAt(int idx)
         {
-            if (idx < 0 || idx > styleXfs.Count)
+            if (idx < 0 || idx >= styleXfs.Count)
                 return null;
             return styleXfs[idx];
         }
