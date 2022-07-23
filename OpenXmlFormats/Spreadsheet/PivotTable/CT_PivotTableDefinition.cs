@@ -193,6 +193,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write("<pivotTableDefinition xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" ");
             sw.Write("xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" ");
             sw.Write("xmlns:s=\"http://schemas.openxmlformats.org/officeDocument/2006/sharedTypes\" ");
+            sw.Write("xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" ");
+            sw.Write("mc:Ignorable=\"xr\" ");
+            sw.Write("xmlns:xr=\"http://schemas.microsoft.com/office/spreadsheetml/2014/revision\" ");
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "cacheId", this.cacheId, true);
             XmlHelper.WriteAttribute(sw, "dataOnRows", this.dataOnRows);
@@ -4467,7 +4470,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "name", this.name, false);
             XmlHelper.WriteAttribute(sw, "cap", this.cap, false);
 
-            if (this.extLst == null)
+            if (this.extLst == null || this.extLst.ext.Count == 0)
             {
                 sw.Write("/>");
             }
@@ -5077,9 +5080,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "action", this.action.ToString());
+            XmlHelper.WriteAttribute(sw, "action", this.action.ToString(), false, ST_FormatAction.formatting.ToString());
             XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId);
-            if (this.pivotArea == null && this.extLst == null)
+            if (this.pivotArea == null && (this.extLst == null || this.extLst.ext.Count == 0))
             {
                 sw.Write("/>");
             }
@@ -5088,7 +5091,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 sw.Write(">");
                 if (this.pivotArea != null)
                     this.pivotArea.Write(sw, "pivotArea");
-                if (this.extLst != null)
+                if (this.extLst != null && this.extLst.ext.Count != 0)
                     this.extLst.Write(sw, "extLst");
                 sw.Write(string.Format("</{0}>", nodeName));
             }
@@ -7048,7 +7051,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "evalOrder", this.evalOrder, false);
             XmlHelper.WriteAttribute(sw, "id", this.id, true);
             XmlHelper.WriteAttribute(sw, "iMeasureHier", this.iMeasureHier, false);
-            XmlHelper.WriteAttribute(sw, "iMeasureFld", this.iMeasureFld, false);
+            XmlHelper.WriteAttribute(sw, "iMeasureFld", this.iMeasureFld, true);
             XmlHelper.WriteAttribute(sw, "name", this.name, false);
             XmlHelper.WriteAttribute(sw, "description", this.description, false);
             XmlHelper.WriteAttribute(sw, "stringValue1", this.stringValue1, false);
