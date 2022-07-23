@@ -20,8 +20,9 @@ using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using System;
 using System.Text;
 using NPOI.XSSF.Model;
-using System.Drawing;
 using NPOI.Util;
+using SixLabors.ImageSharp.PixelFormats;
+
 namespace NPOI.XSSF.UserModel
 {
     /**
@@ -340,7 +341,7 @@ namespace NPOI.XSSF.UserModel
          * @return the color of bullet characters within a given paragraph.
          * A <code>null</code> value means to use the text font color.
          */
-        public Color BulletFontColor
+        public Rgb24 BulletFontColor
         {
             get
             {
@@ -369,7 +370,7 @@ namespace NPOI.XSSF.UserModel
                 clr.val = (new byte[] { value.R, value.G, value.B });
             }
         }
-        class ParagraphPropertyFetcherBulletFontColor : ParagraphPropertyFetcher<Color>
+        class ParagraphPropertyFetcherBulletFontColor : ParagraphPropertyFetcher<Rgb24>
         {
             public ParagraphPropertyFetcherBulletFontColor(int level) : base(level) { }
             public override bool Fetch(CT_TextParagraphProperties props)
@@ -380,7 +381,7 @@ namespace NPOI.XSSF.UserModel
                     {
                         CT_SRgbColor clr = props.buClr.srgbClr;
                         byte[] rgb = clr.val;
-                        SetValue(Color.FromArgb(0xFF & rgb[0], 0xFF & rgb[1], 0xFF & rgb[2]));
+                        SetValue(new Rgb24((byte)(0xFF & rgb[0]), (byte)(0xFF & rgb[1]), (byte)(0xFF & rgb[2])));
                         return true;
                     }
                 }

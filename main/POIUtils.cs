@@ -18,6 +18,9 @@ using NPOI.POIFS.FileSystem;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+
 namespace NPOI.Util
 {
     public class POIUtils
@@ -93,6 +96,10 @@ namespace NPOI.Util
             // System.err.println("CopyNodes called");
             CopyNodes(source.Root, target.Root, excepts);
         }
+
+        // TODO-ImageSharp: Not sure how to translate System.Drawing.Color.Empty - should
+        // we use null instead, or is System.Drawing.Color.Empty used in NPOI like RGB=0?
+        public static readonly Rgb24 Color_Empty = new Rgb24(0, 0, 0);  
     }
 
 }

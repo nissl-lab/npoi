@@ -20,9 +20,10 @@ namespace NPOI.HSSF.UserModel
     using System;
     using NPOI.HSSF.Util;
     using NPOI.Util;
-
-    using System.Drawing;
     using NPOI.SS.UserModel;
+    using SixLabors.ImageSharp;
+    using SixLabors.ImageSharp.PixelFormats;
+    using SixLabors.Fonts;
 
     /**
      * Translates Graphics calls into escher calls.  The translation Is lossy so
@@ -64,8 +65,8 @@ namespace NPOI.HSSF.UserModel
         private HSSFWorkbook workbook;
         private float verticalPointsPerPixel = 1.0f;
         private float verticalPixelsPerPoint;
-        private Color foreground;
-        private Color background = Color.White;
+        private Rgb24 foreground;
+        private Rgb24 background = new Rgb24(255, 255, 255);
         private Font font;
         private static POILogger Logger = POILogFactory.GetLogger(typeof(EscherGraphics));
 
@@ -83,7 +84,7 @@ namespace NPOI.HSSF.UserModel
             this.workbook = workbook;
             this.verticalPointsPerPixel = verticalPointsPerPixel;
             this.verticalPixelsPerPoint = 1 / verticalPointsPerPixel;
-            this.font = new Font("Arial", 10);
+            this.font = new Font(SystemFonts.Get("Arial"), 10);
             this.foreground = forecolor;
             //        background = backcolor;
         }
@@ -132,7 +133,6 @@ namespace NPOI.HSSF.UserModel
             {
                 if (null != font)
                 {
-                    font.Dispose();
                     font = null;
                 }
             }
@@ -285,11 +285,11 @@ namespace NPOI.HSSF.UserModel
         {
             if (string.IsNullOrEmpty(str))
                 return;
-
-            using (Font excelFont = new Font(font.Name.Equals("SansSerif") ? "Arial" : font.Name, (int)(font.Size / verticalPixelsPerPoint), font.Style))
+            // TODO-Fonts: Fallback for missing font
+            Font excelFont = new Font(SystemFonts.Get(font.Name.Equals("SansSerif") ? "Arial" : font.Name),
+                (int)(font.Size / verticalPixelsPerPoint), font.FontMetrics.Description.Style);
             {
-                FontDetails d = StaticFontMetrics.GetFontDetails(excelFont);
-                int width = (int)((d.GetStringWidth(str) * 8) + 12);
+                int width = (int)((TextMeasurer.Measure(str, new TextOptions(excelFont)).Width * 8) + 12);
                 int height = (int)((font.Size / verticalPixelsPerPoint) + 6) * 2;
                 y -= Convert.ToInt32((font.Size / verticalPixelsPerPoint) + 2 * verticalPixelsPerPoint);    // we want to Draw the shape from the top-left
                 HSSFTextbox textbox = escherGroup.CreateTextbox(new HSSFChildAnchor(x, y, x + width, y + height));
@@ -308,8 +308,8 @@ namespace NPOI.HSSF.UserModel
                     .FindColor((byte)foreground.R, (byte)foreground.G, (byte)foreground.B);
             if (hssfColor == null)
                 hssfColor = workbook.GetCustomPalette().FindSimilarColor((byte)foreground.R, (byte)foreground.G, (byte)foreground.B);
-            bool bold = font.Bold;
-            bool italic = font.Italic;
+            bool bold = font.IsBold;
+            bool italic = font.IsItalic;
             HSSFFont hssfFont = (HSSFFont)workbook.FindFont(bold ? (short)NPOI.SS.UserModel.FontBoldWeight.Bold : (short)NPOI.SS.UserModel.FontBoldWeight.Normal,
                         hssfColor.Indexed,
                         (short)(font.Size * 20),

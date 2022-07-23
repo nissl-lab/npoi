@@ -16,7 +16,6 @@
 ==================================================================== */
 
 using System;
-using System.Drawing;
 using System.IO;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Dml;
@@ -26,6 +25,7 @@ using NPOI.SS.UserModel;
 using NPOI.Util;
 using System.Xml;
 using NPOI.SS.Util;
+using SixLabors.ImageSharp;
 
 namespace NPOI.XSSF.UserModel
 {

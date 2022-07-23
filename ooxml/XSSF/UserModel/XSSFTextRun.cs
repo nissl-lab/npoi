@@ -16,8 +16,9 @@
 ==================================================================== */
 using System;
 using NPOI.OpenXmlFormats.Dml;
-using System.Drawing;
 using NPOI.Util;
+using SixLabors.ImageSharp.PixelFormats;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -61,7 +62,7 @@ namespace NPOI.XSSF.UserModel
             return _r;
         }
 
-        public Color FontColor
+        public Rgb24 FontColor
         {
             get
             {
@@ -74,11 +75,11 @@ namespace NPOI.XSSF.UserModel
                     {
                         CT_SRgbColor clr = fill.srgbClr;
                         byte[] rgb = clr.val;
-                        return Color.FromArgb(0xFF & rgb[0], 0xFF & rgb[1], 0xFF & rgb[2]);
+                        return new Rgb24((byte)(0xFF & rgb[0]), (byte)(0xFF & rgb[1]), (byte)(0xFF & rgb[2]));
                     }
                 }
 
-                return Color.FromArgb(0, 0, 0);
+                return new Rgb24(0, 0, 0);
             }
             set
             {

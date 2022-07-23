@@ -27,7 +27,7 @@ namespace TestCases.HSSF.UserModel
     using TestCases.HSSF;
     using NUnit.Framework;
     using NPOI.SS.UserModel;
-    using System.Drawing;
+    using SixLabors.ImageSharp.PixelFormats;
 
     /**
      * @author Brian Sanders (bsanders at risklabs dot com)
@@ -277,7 +277,7 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = new HSSFWorkbook();
 
-            Color color = Color.FromArgb(0, 0x6B, 0x6B); //decode("#006B6B");
+            var color = new Rgb24(0, 0x6B, 0x6B); //decode("#006B6B");
             HSSFPalette palette = wb.GetCustomPalette();
 
             HSSFColor hssfColor = palette.FindColor(color.R, color.G, color.B);
