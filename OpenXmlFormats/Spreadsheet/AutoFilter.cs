@@ -140,23 +140,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private bool showButtonField;
 
+        private CT_CustomFilters customFiltersField;
+
         public CT_FilterColumn()
         {
             this.hiddenButtonField = false;
             this.showButtonField = true;
         }
-        //[XmlAttribute]
-        //public object Item
-        //{
-        //    get
-        //    {
-        //        return this.itemField;
-        //    }
-        //    set
-        //    {
-        //        this.itemField = value;
-        //    }
-        //}
+
         [XmlAttribute]
         public uint colId
         {
@@ -196,6 +187,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
+        [XmlAttribute]
+        public CT_CustomFilters customFilters
+        {
+            get
+            {
+                return this.customFiltersField;
+            }
+            set
+            {
+                this.customFiltersField = value;
+            }
+        }
+
         public static CT_FilterColumn Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -204,12 +208,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.colId = XmlHelper.ReadUInt(node.Attributes["colId"]);
             ctObj.hiddenButton = XmlHelper.ReadBool(node.Attributes["hiddenButton"]);
             ctObj.showButton = XmlHelper.ReadBool(node.Attributes["showButton"]);
-            //TODO: implement http://www.schemacentral.com/sc/ooxml/t-ssml_CT_FilterColumn.html
-            //foreach (XmlNode childNode in node.ChildNodes)
-            //{
-            //    if (childNode.LocalName == "Item")
-            //        ctObj.Item = new Object();
-            //}
+            
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "customFilters")
+                    ctObj.customFilters = CT_CustomFilters.Parse(childNode, namespaceManager);
+            }
             return ctObj;
         }
 
@@ -219,10 +223,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "colId", this.colId, true);
-            XmlHelper.WriteAttribute(sw, "hiddenButton", this.hiddenButton);
-            XmlHelper.WriteAttribute(sw, "showButton", this.showButton);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            XmlHelper.WriteAttribute(sw, "hiddenButton", this.hiddenButton, false);
+            XmlHelper.WriteAttribute(sw, "showButton", this.showButton, false);
+
+            if (this.customFilters == null || this.customFilters.customFilter.Count == 0)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.customFilters != null && this.customFilters.customFilter.Count > 0)
+                {
+                    if (this.customFilters != null)
+                        this.customFilters.Write(sw, "customFilters");
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
     }
@@ -317,6 +334,46 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.andField = value;
             }
         }
+
+        public static CT_CustomFilters Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CustomFilters ctObj = new CT_CustomFilters();
+            if (node.Attributes["and"] != null)
+                ctObj.and = XmlHelper.ReadBool(node.Attributes["and"]);
+
+            ctObj.customFilterField = new List<CT_CustomFilter>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "customFilter")
+                    ctObj.customFilter.Add(CT_CustomFilter.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "and", this.and, false);
+
+            if (this.customFilter == null || this.customFilter.Count == 0)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.customFilter != null && this.customFilter.Count > 0)
+                {
+                    foreach (CT_CustomFilter x in this.customFilter)
+                    {
+                        x.Write(sw, "customFilter");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
+        }
     }
 
     public class CT_CustomFilter
@@ -354,6 +411,27 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.valField = value;
             }
+        }
+
+        public static CT_CustomFilter Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_CustomFilter ctObj = new CT_CustomFilter();
+            if (node.Attributes["operator"] != null 
+                && Enum.TryParse<ST_FilterOperator>(XmlHelper.ReadString(node.Attributes["operator"]), out ST_FilterOperator _operator))
+                ctObj.@operator = _operator;
+            if (node.Attributes["val"] != null)
+                ctObj.val = XmlHelper.ReadString(node.Attributes["val"]);
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "operator", this.@operator.ToString(), true);
+            XmlHelper.WriteAttribute(sw, "val", this.val, true);
+            sw.Write("/>");
         }
     }
 
@@ -900,73 +978,71 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
     public enum ST_IconSetType
     {
-
-    
-        [XmlEnum("3Arrows")]
+        [Description("3Arrows")]
         Item3Arrows,
 
     
-        [XmlEnum("3ArrowsGray")]
+        [Description("3ArrowsGray")]
         Item3ArrowsGray,
 
     
-        [XmlEnum("3Flags")]
+        [Description("3Flags")]
         Item3Flags,
 
     
-        [XmlEnum("3TrafficLights1")]
+        [Description("3TrafficLights1")]
         Item3TrafficLights1,
 
     
-        [XmlEnum("3TrafficLights2")]
+        [Description("3TrafficLights2")]
         Item3TrafficLights2,
 
     
-        [XmlEnum("3Signs")]
+        [Description("3Signs")]
         Item3Signs,
 
     
-        [XmlEnum("3Symbols")]
+        [Description("3Symbols")]
         Item3Symbols,
 
     
-        [XmlEnum("3Symbols2")]
+        [Description("3Symbols2")]
         Item3Symbols2,
 
     
-        [XmlEnum("4Arrows")]
+        [Description("4Arrows")]
         Item4Arrows,
 
     
-        [XmlEnum("4ArrowsGray")]
+        [Description("4ArrowsGray")]
         Item4ArrowsGray,
 
     
-        [XmlEnum("4RedToBlack")]
+        [Description("4RedToBlack")]
         Item4RedToBlack,
 
     
-        [XmlEnum("4Rating")]
+        [Description("4Rating")]
         Item4Rating,
 
     
-        [XmlEnum("4TrafficLights")]
+        [Description("4TrafficLights")]
         Item4TrafficLights,
 
     
-        [XmlEnum("5Arrows")]
+        [Description("5Arrows")]
         Item5Arrows,
 
     
-        [XmlEnum("5ArrowsGray")]
+        [Description("5ArrowsGray")]
         Item5ArrowsGray,
 
     
-        [XmlEnum("5Rating")]
+        [Description("5Rating")]
         Item5Rating,
 
     
-        [XmlEnum("5Quarters")]
+        [Description("5Quarters")]
         Item5Quarters,
     }
 

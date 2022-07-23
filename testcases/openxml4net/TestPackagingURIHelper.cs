@@ -132,7 +132,7 @@ namespace TestCases.OpenXml4Net.OPC
                 {
                     Uri Uri = PackagingUriHelper.ToUri(s);
                 }
-                catch (UriFormatException e)
+                catch (UriFormatException)
                 {
                     Assert.Fail("Failed to create Uri from " + s);
                 }

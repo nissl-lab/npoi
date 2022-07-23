@@ -37,7 +37,7 @@ namespace TestCases.POIFS.Crypt
          * Test case for #59841 - this is an example on how to use encrypted temp files,
          * which are streamed into POI opposed to having everything in memory
          */
-        [Test]
+        [Ignore("not implemented")]
         public void ProtectedTempZip()
         {
             FileInfo tmpFile = TempFile.CreateTempFile("protectedXlsx", ".zip");

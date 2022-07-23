@@ -8,13 +8,19 @@ namespace TestCases.SS.Util
 {
     public static class Utils
     {
-
-        public static void AssertDouble(IFormulaEvaluator fe, ICell cell, string formula, double expectedResult)
+        public static void AssertString(IFormulaEvaluator fe, ICell cell, string formula, string expectedResult)
+        {
+            cell.SetCellFormula(formula);
+            var result = fe.Evaluate(cell).StringValue;
+            fe.ClearAllCachedResultValues();
+            Assert.AreEqual(expectedResult, result);
+        }
+        public static void AssertDouble(IFormulaEvaluator fe, ICell cell, string formula, double expectedResult, double delta=0.0)
         {
             cell.SetCellFormula(formula);
             var result = fe.Evaluate(cell).NumberValue;
             fe.ClearAllCachedResultValues();
-            Assert.AreEqual(expectedResult, result);
+            Assert.AreEqual(expectedResult, result, delta);
         }
 
         public static void AssertError(IFormulaEvaluator fe, ICell cell, string formula, FormulaError expectedError)

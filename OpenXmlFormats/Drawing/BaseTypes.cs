@@ -3095,7 +3095,7 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node == null)
                 return null;
             CT_Hyperlink ctObj = new CT_Hyperlink();
-            ctObj.id = XmlHelper.ReadString(node.Attributes["id"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
             ctObj.invalidUrl = XmlHelper.ReadString(node.Attributes["invalidUrl"]);
             ctObj.action = XmlHelper.ReadString(node.Attributes["action"]);
             ctObj.tgtFrame = XmlHelper.ReadString(node.Attributes["tgtFrame"]);
@@ -3117,15 +3117,15 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "id", this.id);
+            sw.Write(string.Format("<a:{0} xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"", nodeName));
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
             XmlHelper.WriteAttribute(sw, "invalidUrl", this.invalidUrl);
             XmlHelper.WriteAttribute(sw, "action", this.action);
             XmlHelper.WriteAttribute(sw, "tgtFrame", this.tgtFrame);
             XmlHelper.WriteAttribute(sw, "tooltip", this.tooltip);
-            XmlHelper.WriteAttribute(sw, "history", this.history);
-            XmlHelper.WriteAttribute(sw, "highlightClick", this.highlightClick);
-            XmlHelper.WriteAttribute(sw, "endSnd", this.endSnd);
+            XmlHelper.WriteAttribute(sw, "history", this.history, false, true);
+            XmlHelper.WriteAttribute(sw, "highlightClick", this.highlightClick, false, false);
+            XmlHelper.WriteAttribute(sw, "endSnd", this.endSnd, false, false);
             sw.Write(">");
             if (this.snd != null)
                 this.snd.Write(sw, "snd");
@@ -3135,8 +3135,6 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         public CT_Hyperlink()
         {
-            //this.extLstField = new CT_OfficeArtExtensionList();
-            //this.sndField = new CT_EmbeddedWAVAudioFile();
             this.invalidUrlField = "";
             this.actionField = "";
             this.tgtFrameField = "";

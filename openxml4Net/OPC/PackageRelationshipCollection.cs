@@ -30,6 +30,10 @@ namespace NPOI.OpenXml4Net.OPC
          * Package relationships ordered by type.
          */
         private SortedList<String, PackageRelationship> relationshipsByType;
+        /**
+ * A lookup of internal relationships to avoid
+ */
+        private SortedList<String, PackageRelationship> internalRelationshipsByTargetName;
 
         /**
          * This relationshipPart.
@@ -62,6 +66,7 @@ namespace NPOI.OpenXml4Net.OPC
         {
             relationshipsByID = new SortedList<String, PackageRelationship>();
             relationshipsByType = new SortedList<String, PackageRelationship>(new DuplicateComparer());
+            internalRelationshipsByTargetName = new SortedList<string, PackageRelationship>();
         }
         class DuplicateComparer : IComparer<string>
         {
@@ -195,6 +200,10 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public void AddRelationship(PackageRelationship relPart)
         {
+            if (relPart == null || string.IsNullOrEmpty(relPart.Id))
+            {
+                throw new ArgumentException("invalid relationship part/id");
+            }
             relationshipsByID[relPart.Id] = relPart;
             relationshipsByType[relPart.RelationshipType] = relPart;
         }
@@ -235,6 +244,10 @@ namespace NPOI.OpenXml4Net.OPC
                     sourcePart, targetUri, targetMode, relationshipType, id);
             relationshipsByID[rel.Id] = rel;
             relationshipsByType[rel.RelationshipType] = rel;
+            if (targetMode == TargetMode.Internal)
+            {
+                internalRelationshipsByTargetName.Add(targetUri.OriginalString, rel);
+            }
             return rel;
         }
 
@@ -257,6 +270,8 @@ namespace NPOI.OpenXml4Net.OPC
                         if (relationshipsByType.Values[i] == rel)
                             relationshipsByType.RemoveAt(i);
                     }
+                    
+                    internalRelationshipsByTargetName.RemoveAt(internalRelationshipsByTargetName.IndexOfValue(rel));
                 }
             }
         }
@@ -338,7 +353,7 @@ namespace NPOI.OpenXml4Net.OPC
 
                 // Check OPC compliance M4.1 rule
                 bool fCorePropertiesRelationship = false;
-                ///xmlRelationshipsDoc.ChildNodes.GetEnumerator();
+                //xmlRelationshipsDoc.ChildNodes.GetEnumerator();
                 XPathNavigator xpathnav = xmlRelationshipsDoc.CreateNavigator();
                 XmlNamespaceManager nsMgr = new XmlNamespaceManager(xpathnav.NameTable);
                 nsMgr.AddNamespace("x", PackageNamespaces.RELATIONSHIPS);
@@ -451,8 +466,15 @@ namespace NPOI.OpenXml4Net.OPC
         {
             relationshipsByID.Clear();
             relationshipsByType.Clear();
+            internalRelationshipsByTargetName.Clear();
         }
-
+        public PackageRelationship FindExistingInternalRelation(PackagePart packagePart)
+        {
+            var pn=packagePart.PartName.Name;
+            if (!internalRelationshipsByTargetName.ContainsKey(pn))
+                return null;
+            return internalRelationshipsByTargetName[pn];
+        }
         public override String ToString()
         {
             String str;

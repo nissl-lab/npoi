@@ -125,6 +125,17 @@ namespace NPOI.SS.UserModel
         /// </param>
         void SetCellValue(DateTime value);
 
+#if NET6_0_OR_GREATER
+        /// <summary>
+        /// Converts the supplied date to its equivalent Excel numeric value and Sets that into the cell.
+        /// </summary>
+        /// <param name="value">the numeric value to set this cell to.  For formulas we'll set the
+        ///  precalculated value, for numerics we'll set its value. For other types we will change 
+        ///  the cell to a numerics cell and set its value.
+        /// </param>
+        void SetCellValue(DateOnly value);
+#endif
+
         /// <summary>
         /// Set a rich string value for the cell.
         /// </summary>
@@ -157,7 +168,14 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <exception cref="InvalidOperationException">if the cell type returned by GetCellType() is not CELL_TYPE_FORMULA </exception>
         String CellFormula { get; set; }
-
+        /// <summary>
+        ///  Removes formula, if any.
+        ///  
+        /// If cell was blank, leaves it as is.
+        /// If it is a part of an array formula group, blanks the cell.
+        /// If has a regular formula, removes the formula preserving the "cached" value.
+        /// </summary>
+        void RemoveFormula();
         /// <summary>
         /// Sets formula for this cell.
         /// </summary>

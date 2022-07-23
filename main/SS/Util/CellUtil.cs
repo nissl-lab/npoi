@@ -366,7 +366,7 @@ namespace NPOI.SS.Util
          * @param properties The properties to be added to a cell style, as {propertyName: propertyValue}.
          * @since POI 3.14 beta 2
          */
-        public static void SetCellStyleProperties(ICell cell, Dictionary<String, Object> properties)
+        public static void SetCellStyleProperties(ICell cell, Dictionary<String, Object> properties, bool cloneExistingStyles=false)
         {
             IWorkbook workbook = cell.Sheet.Workbook;
             ICellStyle originalStyle = cell.CellStyle;
@@ -395,6 +395,10 @@ namespace NPOI.SS.Util
             if (newStyle == null)
             {
                 newStyle = workbook.CreateCellStyle();
+                if (cloneExistingStyles)
+                {
+                    newStyle.CloneStyleFrom(originalStyle);
+                }
                 SetFormatProperties(newStyle, workbook, values);
             }
 

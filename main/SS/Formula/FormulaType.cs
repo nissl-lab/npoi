@@ -15,25 +15,41 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+
 namespace NPOI.SS.Formula
 {
+    internal class SingleValueAttribute : Attribute
+    {
+        private bool _isSingleValue=false;
+        public SingleValueAttribute(bool isSingleValue)
+        {
+            this._isSingleValue = isSingleValue;
+        }
+        public bool IsSingleValue
+        {
+            get { return _isSingleValue; }
+        }
+    }
 
-    /**
-     * Enumeration of various formula types.<br/>
-     * 
-     * For POI internal use only
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// Enumeration of various formula types. For internal use only
+    /// </summary>
     public enum FormulaType:int
     {
+        [SingleValue(true)]
         Cell = 0,
+        [SingleValue(true)]
         Shared = 1,
+        [SingleValue(false)]
         Array = 2,
+        [SingleValue(true)]
         CondFormat = 3,
+        [SingleValue(false)]
         NamedRange = 4,
         // this constant is currently very specific.  The exact differences from general data
         // validation formulas or conditional format formulas is not known yet
+        [SingleValue(false)]
         DataValidationList = 5,
     }
 }

@@ -17,6 +17,7 @@
 
 namespace NPOI.SS.Formula.Eval
 {
+    using NPOI.SS.Util;
     using System;
     using System.Globalization;
 
@@ -386,6 +387,44 @@ namespace NPOI.SS.Formula.Eval
                 throw new EvaluationException((ErrorEval)ve);
             }
             throw new InvalidOperationException("Unexpected eval (" + ve.GetType().Name + ")");
+        }
+        /**
+  * Retrieves a single value from an area evaluation utilizing the 2D indices of the cell
+  * within its own area reference to index the value in the area evaluation.
+  *
+  * @param ae area reference after evaluation
+  * @param cell the source cell of the formula that contains its 2D indices
+  * @return a <tt>NumberEval</tt>, <tt>StringEval</tt>, <tt>BoolEval</tt> or <tt>BlankEval</tt>. or <tt>ErrorEval<tt>
+  * Never <code>null</code>.
+  */
+
+        public static ValueEval GetElementFromArray(AreaEval ae, IEvaluationCell cell)
+        {
+            CellRangeAddress range = cell.ArrayFormulaRange;
+            int relativeRowIndex = cell.RowIndex - range.FirstRow;
+            int relativeColIndex = cell.ColumnIndex - range.FirstColumn;
+
+            if (ae.IsColumn)
+            {
+                if (ae.IsRow)
+                {
+                    return ae.GetRelativeValue(0, 0);
+                }
+                else if (relativeRowIndex < ae.Height)
+                {
+                    return ae.GetRelativeValue(relativeRowIndex, 0);
+                }
+            }
+            else if (!ae.IsRow && relativeRowIndex < ae.Height && relativeColIndex < ae.Width)
+            {
+                return ae.GetRelativeValue(relativeRowIndex, relativeColIndex);
+            }
+            else if (ae.IsRow && relativeColIndex < ae.Width)
+            {
+                return ae.GetRelativeValue(0, relativeColIndex);
+            }
+
+            return ErrorEval.NA;
         }
     }
 }

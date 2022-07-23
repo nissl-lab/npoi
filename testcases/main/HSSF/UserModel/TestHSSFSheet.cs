@@ -696,9 +696,8 @@ namespace TestCases.HSSF.UserModel
 
         /** cell with formula becomes null on cloning a sheet*/
         [Test]
-        public new void Test35084()
+        public void Test35084()
         {
-
             HSSFWorkbook wb = new HSSFWorkbook();
             NPOI.SS.UserModel.ISheet s = wb.CreateSheet("Sheet1");
             IRow r = s.CreateRow(0);
@@ -1066,18 +1065,15 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             String SAME_PREFIX = "A123456789B123456789C123456789"; // 30 chars
 
-            wb.CreateSheet(SAME_PREFIX + "Dxxxx");
             try
             {
                 wb.CreateSheet(SAME_PREFIX + "Dyyyy"); // identical up to the 32nd char
-                throw new AssertionException("Expected exception not thrown");
+                Assert.Fail("Expected exception not thrown");
             }
             catch (ArgumentException e)
             {
-                Assert.AreEqual("The workbook already contains a sheet named 'A123456789B123456789C123456789Dyyyy'", e.Message);
+                Assert.IsTrue(e.Message.StartsWith("sheetName 'A123456789B123456789C123456789Dyyyy' is invalid"));
             }
-            wb.CreateSheet(SAME_PREFIX + "Exxxx"); // OK - differs in the 31st char
-
             wb.Close();
         }
         /**

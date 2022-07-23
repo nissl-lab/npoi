@@ -85,7 +85,7 @@ namespace TestCases.SS.UserModel
                 wb.CloneSheet(2);
                 Assert.Fail("ShouldFail");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 // expected here
             }
@@ -101,7 +101,7 @@ namespace TestCases.SS.UserModel
                 wb.CloneSheet(1);
                 Assert.Fail("Should Fail");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 // expected here
             }

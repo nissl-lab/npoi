@@ -120,9 +120,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_FldChar
     {
-
-        private object itemField;
-
         private ST_FldCharType fldCharTypeField;
 
         private ST_OnOff fldLockField;

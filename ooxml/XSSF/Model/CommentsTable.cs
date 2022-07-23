@@ -24,7 +24,7 @@ namespace NPOI.XSSF.Model
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.XSSF.UserModel;
-    using OpenXmlFormats.Spreadsheet;
+    using NPOI.OpenXmlFormats.Spreadsheet;
 
     public class CommentsTable : POIXMLDocumentPart
     {
@@ -184,7 +184,14 @@ namespace NPOI.XSSF.Model
          [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link CommentsTable#getCTComment(CellAddress)} instead")]
         public CT_Comment GetCTComment(String ref1)
         {
+            prepareCTCommentCache();
             return GetCTComment(new CellAddress(ref1));
+        }
+
+        public List<CellAddress> GetCellAddresses()
+        {
+            prepareCTCommentCache();
+            return new List<CellAddress>(commentRefs.Keys);
         }
 
         /**
@@ -336,6 +343,19 @@ namespace NPOI.XSSF.Model
         public CT_Comments GetCTComments()
         {
             return comments;
+        }
+
+        private void prepareCTCommentCache()
+        {
+            // Create the cache if needed
+            if (commentRefs == null)
+            {
+                commentRefs = new Dictionary<CellAddress, CT_Comment>();
+                foreach (CT_Comment comment in comments.commentList.GetCommentArray())
+                {
+                    commentRefs.Add(new CellAddress(comment.@ref), comment);
+                }
+            }
         }
     }
 

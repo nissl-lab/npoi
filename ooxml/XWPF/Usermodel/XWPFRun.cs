@@ -279,7 +279,7 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                CT_RPr pr = run.rPr;
+                CT_RPr pr = GetRunProperties(false);
                 if (pr == null || !pr.IsSetB())
                 {
                     return false;
@@ -288,7 +288,7 @@ namespace NPOI.XWPF.UserModel
             }
             set
             {
-                CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
+                CT_RPr pr = GetRunProperties(true);
                 CT_OnOff bold = pr.IsSetB() ? pr.b : pr.AddNewB();
                 bold.val = value;
             }
@@ -302,8 +302,8 @@ namespace NPOI.XWPF.UserModel
             String color = null;
             if (run.IsSetRPr())
             {
-                CT_RPr pr = run.rPr;
-                if (pr.IsSetColor())
+                CT_RPr pr = GetRunProperties(false); 
+                if (pr!=null&&pr.IsSetColor())
                 {
                     NPOI.OpenXmlFormats.Wordprocessing.CT_Color clr = pr.color;
                     color = clr.val; //clr.xgetVal().getStringValue();
@@ -318,7 +318,7 @@ namespace NPOI.XWPF.UserModel
          */
         public void SetColor(String rgbStr)
         {
-            CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
+            CT_RPr pr = GetRunProperties(true);
             NPOI.OpenXmlFormats.Wordprocessing.CT_Color color = pr.IsSetColor() ? pr.color : pr.AddNewColor();
             color.val = (rgbStr);
         }
@@ -386,14 +386,14 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                CT_RPr pr = run.rPr;
+                CT_RPr pr = GetRunProperties(false);
                 if (pr == null || !pr.IsSetI())
                     return false;
                 return IsCTOnOff(pr.i);
             }
             set
             {
-                CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
+                CT_RPr pr = GetRunProperties(true);
                 CT_OnOff italic = pr.IsSetI() ? pr.i : pr.AddNewI();
                 italic.val = value;
             }
@@ -411,11 +411,36 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                CT_RPr pr = run.rPr;
-                return (pr != null && pr.IsSetU() && pr.u.val != null) ?
-                    EnumConverter.ValueOf<UnderlinePatterns, ST_Underline>(pr.u.val) : UnderlinePatterns.None;
+                var value = UnderlinePatterns.None;
+                CT_Underline underline = GetCTUnderline(false);
+                if (underline != null)
+                {
+                    ST_Underline baseValue = underline.val;
+                    value = EnumConverter.ValueOf<UnderlinePatterns, ST_Underline>(baseValue);
+                }
+                return value;
+            }
+            set {
+                CT_Underline underline = GetCTUnderline(true);
+                underline.val = EnumConverter.ValueOf<ST_Underline, UnderlinePatterns>(value);
             }
         }
+        /**
+     * Get the CTUnderline for the run.
+     * @param create Create a new underline if necessary
+     * @return The underline, or null create is false and there is no underline.
+     */
+        private CT_Underline GetCTUnderline(bool create)
+        {
+            CT_RPr pr = GetRunProperties(true);
+            CT_Underline underline = pr.u;
+            if (create && underline == null)
+            {
+                underline = pr.AddNewU();
+            }
+            return underline;
+        }
+
         internal void InsertText(CT_Text text, int textIndex)
         {
             run.GetTList().Insert(textIndex, text);
@@ -525,24 +550,6 @@ namespace NPOI.XWPF.UserModel
 
                 return text.ToString();
             }
-        }
-        /**
-         * Specifies that the contents of this run.should be displayed along with an
-         * underline appearing directly below the character heigh
-         * If this element is not present, the default value is to leave the
-         * formatting applied at previous level in the style hierarchy. If this
-         * element is never applied in the style hierarchy, then an underline shall
-         * not be applied to the contents of this run.
-         *
-         * @param value -
-         *              underline type
-         * @see UnderlinePatterns : all possible patterns that could be applied
-         */
-        public void SetUnderline(UnderlinePatterns value)
-        {
-            CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
-            CT_Underline underline = (pr.u == null) ? pr.AddNewU() : pr.u;
-            underline.val = EnumConverter.ValueOf<ST_Underline, UnderlinePatterns>(value);
         }
 
         /**
@@ -1153,7 +1160,7 @@ namespace NPOI.XWPF.UserModel
                 prstGeom.prst = (ST_ShapeType.rect);
                 prstGeom.AddNewAvLst();
 
-                using (var ms = new MemoryStream())
+                using (var ms = RecyclableMemory.GetStream())
                 {
                     StreamWriter sw = new StreamWriter(ms);
                     pic.Write(sw, "pic:pic");
@@ -1269,7 +1276,29 @@ namespace NPOI.XWPF.UserModel
                 xs.space = "preserve";
             }
         }
-
+        public String Lang
+        {
+            get
+            {
+                CT_RPr pr = GetRunProperties(false);
+                Object lang = pr == null || !pr.IsSetLang() ? null : pr.lang.val;
+                return (String)lang;
+            }
+            set {
+                CT_RPr pr = GetRunProperties(true);
+                CT_Language ctLang = pr.IsSetLang() ? pr.lang : pr.AddNewLang();
+                ctLang.val = value;
+            }
+        }
+        protected CT_RPr GetRunProperties(bool create)
+        {
+            CT_RPr pr = run.IsSetRPr() ? run.rPr : null;
+            if (create && pr == null)
+            {
+                pr = run.AddNewRPr();
+            }
+            return pr;
+        }
         /**
          * Returns the string version of the text, with tabs and
          *  carriage returns in place of their xml equivalents.

@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 
 namespace NPOI.XSSF.Util
 {
+    [Obsolete]
     public class XmlEnumParser<TReturn>
     {
         private static Dictionary<string, TReturn> values;

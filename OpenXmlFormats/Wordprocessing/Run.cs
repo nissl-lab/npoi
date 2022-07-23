@@ -20,7 +20,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     {
 
         private CT_RPr rPrField;
-
         private ArrayList itemsField;
 
         private List<RunItemsChoiceType> itemsElementNameField;
@@ -30,6 +29,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private byte[] rsidDelField;
 
         private byte[] rsidRField;
+        
+        Vml.CT_AlternateContent alternateContentField = null;
 
         public CT_R()
         {
@@ -48,6 +49,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.rPrField = value;
+            }
+        }
+        public Vml.CT_AlternateContent alternateContent
+        {
+            get
+            {
+                return alternateContentField;
+            }
+            set
+            {
+                this.alternateContentField = value;
             }
         }
 
@@ -165,6 +177,23 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return this.rPrField;
         }
 
+
+        public CT_Empty AddNewFootnoteRef()
+        {
+            return AddNewObject<CT_Empty>(RunItemsChoiceType.footnoteRef);
+        }
+        public IList<CT_Empty> GetFootnoteRefList()
+        {
+            return GetObjectList<CT_Empty>(RunItemsChoiceType.footnoteRef);
+        }
+        public CT_Empty GetFootnoteRefArray(int pos)
+        {
+            return GetObjectArray<CT_Empty>(pos, RunItemsChoiceType.footnoteRef);
+        }
+        public CT_FtnEdnRef AddNewFootnoteReference()
+        {
+            return AddNewObject<CT_FtnEdnRef>(RunItemsChoiceType.footnoteReference);
+        }
         public CT_Empty AddNewTab()
         {
             return AddNewObject<CT_Empty>(RunItemsChoiceType.tab);
@@ -373,10 +402,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             ctObj.rsidRPr = XmlHelper.ReadBytes(node.Attributes["w:rsidRPr"]);
             ctObj.rsidDel = XmlHelper.ReadBytes(node.Attributes["w:rsidDel"]);
             ctObj.rsidR = XmlHelper.ReadBytes(node.Attributes["w:rsidR"]);
+            
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "rPr")
+                {
                     ctObj.rPr = CT_RPr.Parse(childNode, namespaceManager);
+                }
                 else if (childNode.LocalName == "instrText")
                 {
                     ctObj.Items.Add(CT_Text.Parse(childNode, namespaceManager));
@@ -441,6 +473,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 {
                     ctObj.Items.Add(CT_Drawing.Parse(childNode, namespaceManager));
                     ctObj.ItemsElementName.Add(RunItemsChoiceType.drawing);
+                }
+                else if (childNode.LocalName == "AlternateContent")
+                {
+                    ctObj.alternateContent = Vml.CT_AlternateContent.Parse(childNode, namespaceManager);
                 }
                 else if (childNode.LocalName == "endnoteRef")
                 {
@@ -550,6 +586,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(">");
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
+
             int i = 0;
             foreach (object o in this.Items)
             {
@@ -619,6 +656,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     sw.Write("<w:yearShort/>");
                 i++;
             }
+            if (this.alternateContent != null)
+            {
+                this.alternateContent.Write(sw, "AlternateContent");
+            }
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
@@ -631,6 +672,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public IList<CT_Empty> GetTabList()
         {
             return GetObjectList<CT_Empty>(RunItemsChoiceType.tab);
+        }
+
+        public IList<CT_FtnEdnRef> GetFootnoteReferenceList()
+        {
+            return GetObjectList<CT_FtnEdnRef>(RunItemsChoiceType.footnoteReference);
         }
     }
 

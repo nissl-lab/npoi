@@ -51,7 +51,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
                 pkg.CreatePart(name, ContentTypes.XML);
                 pkg.CreatePart(nameDerived, ContentTypes.EXTENSION_GIF);
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
                 pkg.Revert();
                 return;
@@ -74,7 +74,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             {
                 OPCPackage.Open(POIDataSamples.GetOpenXML4JInstance().OpenResourceAsStream(filename));
             }
-            catch (InvalidFormatException e)
+            catch (InvalidFormatException)
             {
                 return;
             }
@@ -108,7 +108,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             {
                 pkg.CreatePart(name2, ContentTypes.XML);
             }
-            catch (PartAlreadyExistsException e)
+            catch (PartAlreadyExistsException)
             {
                 return;
             }
@@ -138,7 +138,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             {
                 pkg.CreatePart(partName, ContentTypes.XML);
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
                 return;
             }
@@ -163,7 +163,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
                 name1 = PackagingUriHelper
                         .CreatePartName("/test/_rels/document.xml.rels");
             }
-            catch (InvalidFormatException e)
+            catch (InvalidFormatException)
             {
                 Assert.Fail("This exception should never happen !");
             }
@@ -173,7 +173,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
                 pkg.AddRelationship(name1, TargetMode.Internal,
                         PackageRelationshipTypes.CORE_DOCUMENT);
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
                 return;
             }

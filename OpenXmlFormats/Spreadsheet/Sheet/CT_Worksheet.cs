@@ -183,10 +183,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
 
 
-        internal void Write(Stream stream)
+        internal void Write(Stream stream, bool leaveOpen)
         {
-            using (StreamWriter sw = new StreamWriter(stream))
-            {
+            StreamWriter sw = new StreamWriter(stream);
+            try {
                 sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
                 sw.Write("<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"");
                 sw.Write(" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac xr xr2 xr3\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\"");
@@ -279,6 +279,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 if (this.extLst != null)
                     this.extLst.Write(sw, "extLst");
                 sw.Write("</worksheet>");
+                sw.Flush();
+            } finally 
+            {
+                if (!leaveOpen )
+                {
+                    sw?.Close();
+                }
             }
         }
 

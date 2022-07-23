@@ -74,6 +74,7 @@ namespace NPOI.HSSF.Model
             "Workbook", // as per BIFF8 spec
             "WORKBOOK", // Typically from third party programs
             "BOOK",     // Typically odd Crystal Reports exports
+            "WorkBook", // Another third party program special
         };
         /**
          * Name of older (pre-Excel 97) Workbook streams, which
@@ -655,10 +656,6 @@ namespace NPOI.HSSF.Model
         public void SetSheetName(int sheetnum, String sheetname)
         {
             CheckSheets(sheetnum);
-
-            // YK: Mimic Excel and silently truncate sheet names longer than 31 characters
-            if (sheetname.Length > 31) 
-                sheetname = sheetname.Substring(0, 31);
 
             BoundSheetRecord sheet =boundsheets[sheetnum];
             sheet.Sheetname=sheetname;

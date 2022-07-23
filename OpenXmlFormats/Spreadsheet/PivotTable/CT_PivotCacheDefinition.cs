@@ -89,6 +89,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write("<pivotCacheDefinition xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" ");
             sw.Write("xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" ");
             sw.Write("xmlns:s=\"http://schemas.openxmlformats.org/officeDocument/2006/sharedTypes\" ");
+            sw.Write("xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" ");
+            sw.Write("mc:Ignorable=\"xr\" ");
+            sw.Write("xmlns:xr=\"http://schemas.microsoft.com/office/spreadsheetml/2014/revision\" ");
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
             XmlHelper.WriteAttribute(sw, "invalid", this.invalid);
             XmlHelper.WriteAttribute(sw, "saveData", this.saveData);
@@ -213,14 +216,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_PivotCacheDefinition()
         {
             this.extLstField = new CT_ExtensionList();
-            this.mapsField = new CT_MeasureDimensionMaps();
-            this.measureGroupsField = new CT_MeasureGroups();
-            this.dimensionsField = new CT_Dimensions();
-            this.calculatedMembersField = new CT_CalculatedMembers();
-            this.calculatedItemsField = new CT_CalculatedItems();
-            this.tupleCacheField = new CT_TupleCache();
-            this.kpisField = new CT_PCDKPIs();
-            this.cacheHierarchiesField = new CT_CacheHierarchies();
+            //this.mapsField = new CT_MeasureDimensionMaps();
+            //this.measureGroupsField = new CT_MeasureGroups();
+            //this.dimensionsField = new CT_Dimensions();
+            //this.calculatedMembersField = new CT_CalculatedMembers();
+            //this.calculatedItemsField = new CT_CalculatedItems();
+            //this.tupleCacheField = new CT_TupleCache();
+            //this.kpisField = new CT_PCDKPIs();
+            //this.cacheHierarchiesField = new CT_CacheHierarchies();
             this.cacheFieldsField = new CT_CacheFields();
             this.cacheSourceField = new CT_CacheSource();
             this.invalidField = false;
@@ -264,7 +267,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlElement(Order = 2)]
+        [XmlElement(Order = 2, IsNullable = true)]
         public CT_CacheHierarchies cacheHierarchies
         {
             get
@@ -277,7 +280,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlElement(Order = 3)]
+        [XmlElement(Order = 3, IsNullable = true)]
         public CT_PCDKPIs kpis
         {
             get
@@ -290,7 +293,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlElement(Order = 4)]
+        [XmlElement(Order = 4, IsNullable = true)]
         public CT_TupleCache tupleCache
         {
             get
@@ -303,7 +306,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlElement(Order = 5)]
+        [XmlElement(Order = 5, IsNullable = true)]
         public CT_CalculatedItems calculatedItems
         {
             get
@@ -316,7 +319,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlElement(Order = 6)]
+        [XmlElement(Order = 6, IsNullable = true)]
         public CT_CalculatedMembers calculatedMembers
         {
             get
@@ -329,7 +332,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlElement(Order = 7)]
+        [XmlElement(Order = 7, IsNullable = true)]
         public CT_Dimensions dimensions
         {
             get
@@ -342,7 +345,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlElement(Order = 8)]
+        [XmlElement(Order = 8, IsNullable = true)]
         public CT_MeasureGroups measureGroups
         {
             get
@@ -355,7 +358,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlElement(Order = 9)]
+        [XmlElement(Order = 9, IsNullable = true)]
         public CT_MeasureDimensionMaps maps
         {
             get
@@ -736,15 +739,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.page != null)
+
+            if (this.page == null || this.page.Count == 0)
             {
-                foreach (CT_PCDSCPage x in this.page)
-                {
-                    x.Write(sw, "page");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+
+                if (this.page != null && this.page.Count > 0)
+                {
+                    foreach (CT_PCDSCPage x in this.page)
+                    {
+                        x.Write(sw, "page");
+                    }
+                }
+
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_PCDSCPage> pageField;
@@ -827,15 +840,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.pageItem != null)
+
+            if (this.pageItem == null || this.pageItem.Count == 0)
             {
-                foreach (CT_PageItem x in this.pageItem)
-                {
-                    x.Write(sw, "pageItem");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+
+                if (this.pageItem != null && this.pageItem.Count > 0)
+                {
+                    foreach (CT_PageItem x in this.pageItem)
+                    {
+                        x.Write(sw, "pageItem");
+                    }
+                }
+
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_PageItem> pageItemField;
@@ -911,8 +934,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "name", this.name);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private string nameField;
@@ -960,15 +982,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.rangeSet != null)
+
+            if (this.rangeSet == null || this.rangeSet.Count == 0)
             {
-                foreach (CT_RangeSet x in this.rangeSet)
-                {
-                    x.Write(sw, "rangeSet");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+
+                if (this.rangeSet != null && this.rangeSet.Count > 0)
+                {
+                    foreach (CT_RangeSet x in this.rangeSet)
+                    {
+                        x.Write(sw, "rangeSet");
+                    }
+                }
+
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_RangeSet> rangeSetField;
@@ -1062,8 +1094,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "sheet", this.sheet);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private uint i1Field;
@@ -1276,12 +1307,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "autoPage", this.autoPage);
-            sw.Write(">");
-            if (this.pages != null)
-                this.pages.Write(sw, "pages");
-            if (this.rangeSets != null)
-                this.rangeSets.Write(sw, "rangeSets");
-            sw.Write(string.Format("</{0}>", nodeName));
+
+            if (this.pages == null && this.rangeSets == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.pages != null)
+                    this.pages.Write(sw, "pages");
+                if (this.rangeSets != null)
+                    this.rangeSets.Write(sw, "rangeSets");
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private CT_Pages pagesField;
@@ -1366,8 +1405,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "sheet", this.sheet);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private string refField;
@@ -1486,17 +1524,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             XmlHelper.WriteAttribute(sw, "connectionId", this.connectionId);
-            sw.Write(">");
 
-            if (this.worksheetSource != null)
-                this.worksheetSource.Write(sw, "worksheetSource");
-            if (this.consolidation != null)
-                this.consolidation.Write(sw, "consolidation");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</{0}>", nodeName));
+            if (this.worksheetSource == null && this.consolidation == null && this.extLst == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.worksheetSource != null)
+                    this.worksheetSource.Write(sw, "worksheetSource");
+                if (this.consolidation != null)
+                    this.consolidation.Write(sw, "consolidation");
+                if (this.extLst != null)
+                    this.extLst.Write(sw, "extLst");
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
-
 
         private object itemField;
 
@@ -1628,15 +1672,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.cacheField != null)
+
+            if (this.cacheField == null || this.cacheField.Count == 0)
             {
-                foreach (CT_CacheField x in this.cacheField)
-                {
-                    x.Write(sw, "cacheField");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+
+                if (this.cacheField != null && this.cacheField.Count > 0)
+                {
+
+                    foreach (CT_CacheField x in this.cacheField)
+                    {
+                        x.Write(sw, "cacheField");
+                    }
+                }
+
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_CacheField> cacheFieldField;
@@ -1785,39 +1840,62 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "containsSemiMixedTypes", this.containsSemiMixedTypes);
-            XmlHelper.WriteAttribute(sw, "containsNonDate", this.containsNonDate);
-            XmlHelper.WriteAttribute(sw, "containsDate", this.containsDate);
-            XmlHelper.WriteAttribute(sw, "containsString", this.containsString);
-            XmlHelper.WriteAttribute(sw, "containsBlank", this.containsBlank);
-            XmlHelper.WriteAttribute(sw, "containsMixedTypes", this.containsMixedTypes);
-            XmlHelper.WriteAttribute(sw, "containsNumber", this.containsNumber);
-            XmlHelper.WriteAttribute(sw, "containsInteger", this.containsInteger);
-            XmlHelper.WriteAttribute(sw, "minValue", this.minValue);
-            XmlHelper.WriteAttribute(sw, "maxValue", this.maxValue);
+            if (!this.containsSemiMixedTypes)
+                XmlHelper.WriteAttribute(sw, "containsSemiMixedTypes", this.containsSemiMixedTypes);
+            if (!this.containsNonDate)
+                XmlHelper.WriteAttribute(sw, "containsNonDate", this.containsNonDate);
+            XmlHelper.WriteAttribute(sw, "containsDate", this.containsDate, false);
+            if (!this.containsString)
+                XmlHelper.WriteAttribute(sw, "containsString", this.containsString);
+            XmlHelper.WriteAttribute(sw, "containsBlank", this.containsBlank, false);
+            XmlHelper.WriteAttribute(sw, "containsMixedTypes", this.containsMixedTypes, false);
+            XmlHelper.WriteAttribute(sw, "containsNumber", this.containsNumber, false);
+            XmlHelper.WriteAttribute(sw, "containsInteger", this.containsInteger, false);
+            if (this.containsNumber)
+            {
+                XmlHelper.WriteAttribute(sw, "minValue", this.minValue, true);
+                XmlHelper.WriteAttribute(sw, "maxValue", this.maxValue, true);
+            }
+            else
+            {
+                XmlHelper.WriteAttribute(sw, "minValue", this.minValue);
+                XmlHelper.WriteAttribute(sw, "maxValue", this.maxValue);
+            }
+
             XmlHelper.WriteAttribute(sw, "minDate", this.minDate);
             XmlHelper.WriteAttribute(sw, "maxDate", this.maxDate);
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            XmlHelper.WriteAttribute(sw, "longText", this.longText);
-            sw.Write(">");
+            XmlHelper.WriteAttribute(sw, "longText", this.longText, false);
 
-            foreach (object o in this.Items)
+            if (this.Items == null || this.Items.Count == 0)
             {
-                if (o is CT_Number)
-                    ((CT_Number)o).Write(sw, "n");
-                else if (o is CT_Boolean)
-                    ((CT_Boolean)o).Write(sw, "b");
-                else if (o is CT_DateTime)
-                    ((CT_DateTime)o).Write(sw, "d");
-                else if (o is CT_Error)
-                    ((CT_Error)o).Write(sw, "e");
-                else if (o is CT_Missing)
-                    ((CT_Missing)o).Write(sw, "m");
-                else if (o is CT_String)
-                    ((CT_String)o).Write(sw, "s");
+                sw.Write("/>");
             }
+            else
+            {
+                sw.Write(">");
 
-            sw.Write(string.Format("</{0}>", nodeName));
+                if (this.Items != null && this.Items.Count > 0)
+                {
+                    foreach (object o in this.Items)
+                    {
+                        if (o is CT_Number)
+                            ((CT_Number)o).Write(sw, "n");
+                        else if (o is CT_Boolean)
+                            ((CT_Boolean)o).Write(sw, "b");
+                        else if (o is CT_DateTime)
+                            ((CT_DateTime)o).Write(sw, "d");
+                        else if (o is CT_Error)
+                            ((CT_Error)o).Write(sw, "e");
+                        else if (o is CT_Missing)
+                            ((CT_Missing)o).Write(sw, "m");
+                        else if (o is CT_String)
+                            ((CT_String)o).Write(sw, "s");
+                    }
+                }
+
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<object> itemsField;
@@ -2206,31 +2284,44 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "caption", this.caption);
             XmlHelper.WriteAttribute(sw, "propertyName", this.propertyName);
-            XmlHelper.WriteAttribute(sw, "serverField", this.serverField);
-            XmlHelper.WriteAttribute(sw, "uniqueList", this.uniqueList);
-            XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId);
+            XmlHelper.WriteAttribute(sw, "serverField", this.serverField, false);
+            if (!this.uniqueList)
+                XmlHelper.WriteAttribute(sw, "uniqueList", this.uniqueList);
+            XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId, true);
             XmlHelper.WriteAttribute(sw, "formula", this.formula);
             XmlHelper.WriteAttribute(sw, "sqlType", this.sqlType);
             XmlHelper.WriteAttribute(sw, "hierarchy", this.hierarchy);
             XmlHelper.WriteAttribute(sw, "level", this.level);
-            XmlHelper.WriteAttribute(sw, "databaseField", this.databaseField);
+            if (!this.databaseField)
+                XmlHelper.WriteAttribute(sw, "databaseField", this.databaseField);
             XmlHelper.WriteAttribute(sw, "mappingCount", this.mappingCount);
-            XmlHelper.WriteAttribute(sw, "memberPropertyField", this.memberPropertyField);
-            sw.Write(">");
-            if (this.sharedItems != null)
-                this.sharedItems.Write(sw, "sharedItems");
-            if (this.fieldGroup != null)
-                this.fieldGroup.Write(sw, "fieldGroup");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
-            if (this.mpMap != null)
+            XmlHelper.WriteAttribute(sw, "memberPropertyField", this.memberPropertyField, false);
+
+            if (this.sharedItems == null
+                && this.fieldGroup == null
+                && this.extLst == null
+                && (this.mpMap == null || this.mpMap.Count == 0))
             {
-                foreach (CT_X x in this.mpMap)
-                {
-                    x.Write(sw, "mpMap");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.sharedItems != null)
+                    this.sharedItems.Write(sw, "sharedItems");
+                if (this.fieldGroup != null)
+                    this.fieldGroup.Write(sw, "fieldGroup");
+                if (this.extLst != null)
+                    this.extLst.Write(sw, "extLst");
+                if (this.mpMap != null && this.mpMap.Count > 0)
+                {
+                    foreach (CT_X x in this.mpMap)
+                    {
+                        x.Write(sw, "mpMap");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private CT_SharedItems sharedItemsField;
@@ -2273,10 +2364,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_CacheField()
         {
-            this.extLstField = new CT_ExtensionList();
+            //this.extLstField = new CT_ExtensionList();
             this.mpMapField = new List<CT_X>();
-            this.fieldGroupField = new CT_FieldGroup();
-            this.sharedItemsField = new CT_SharedItems();
+            //this.fieldGroupField = new CT_FieldGroup();
+            //this.sharedItemsField = new CT_SharedItems();
             this.serverFieldField = false;
             this.uniqueListField = true;
             this.sqlTypeField = 0;
@@ -2299,7 +2390,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlElement(Order = 1)]
+        [XmlElement(Order = 1, IsNullable = true)]
         public CT_FieldGroup fieldGroup
         {
             get
@@ -2325,7 +2416,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        [XmlElement(Order = 3)]
+        [XmlElement(Order = 3, IsNullable = true)]
         public CT_ExtensionList extLst
         {
             get
@@ -2576,15 +2667,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.cacheHierarchy != null)
+
+            if (this.cacheHierarchy == null || this.cacheHierarchy.Count == 0)
             {
-                foreach (CT_CacheHierarchy x in this.cacheHierarchy)
-                {
-                    x.Write(sw, "cacheHierarchy");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.cacheHierarchy != null && this.cacheHierarchy.Count > 0)
+                {
+                    foreach (CT_CacheHierarchy x in this.cacheHierarchy)
+                    {
+                        x.Write(sw, "cacheHierarchy");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_CacheHierarchy> cacheHierarchyField;
@@ -2673,20 +2772,28 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "v", this.v);
-            XmlHelper.WriteAttribute(sw, "u", this.u);
-            XmlHelper.WriteAttribute(sw, "f", this.f);
-            XmlHelper.WriteAttribute(sw, "c", this.c);
-            XmlHelper.WriteAttribute(sw, "cp", this.cp);
-            sw.Write(">");
-            if (this.x != null)
+            XmlHelper.WriteAttribute(sw, "v", this.v, true);
+            XmlHelper.WriteAttribute(sw, "u", this.u, false);
+            XmlHelper.WriteAttribute(sw, "f", this.f, false);
+            XmlHelper.WriteAttribute(sw, "c", this.c, false);
+            XmlHelper.WriteAttribute(sw, "cp", this.cp, false);
+
+            if (this.x == null || this.x.Count == 0)
             {
-                foreach (CT_X x in this.x)
-                {
-                    x.Write(sw, "x");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.x != null && this.x.Count > 0)
+                {
+                    foreach (CT_X x in this.x)
+                    {
+                        x.Write(sw, "x");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_X> xField;
@@ -2874,11 +2981,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "v", this.v);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            XmlHelper.WriteAttribute(sw, "v", this.v, false);
+            sw.Write("/>");
         }
-
     }
 
     
@@ -2917,19 +3022,27 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "v", this.v);
-            XmlHelper.WriteAttribute(sw, "u", this.u);
-            XmlHelper.WriteAttribute(sw, "f", this.f);
-            XmlHelper.WriteAttribute(sw, "c", this.c);
-            XmlHelper.WriteAttribute(sw, "cp", this.cp);
-            sw.Write(">");
-            if (this.x != null)
+            XmlHelper.WriteAttribute(sw, "u", this.u, false);
+            XmlHelper.WriteAttribute(sw, "f", this.f, false);
+            XmlHelper.WriteAttribute(sw, "c", this.c, false);
+            XmlHelper.WriteAttribute(sw, "cp", this.cp, false);
+
+            if (this.x == null || this.x.Count == 0)
             {
-                foreach (CT_X x in this.x)
-                {
-                    x.Write(sw, "x");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.x != null && this.x.Count > 0)
+                {
+                    foreach (CT_X x in this.x)
+                    {
+                        x.Write(sw, "x");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_X> xField;
@@ -3406,31 +3519,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "v", this.v);
-            XmlHelper.WriteAttribute(sw, "u", this.u);
-            XmlHelper.WriteAttribute(sw, "f", this.f);
-            XmlHelper.WriteAttribute(sw, "c", this.c);
-            XmlHelper.WriteAttribute(sw, "cp", this.cp);
-            XmlHelper.WriteAttribute(sw, "in", this.@in);
+            XmlHelper.WriteAttribute(sw, "v", this.v, true);
+            XmlHelper.WriteAttribute(sw, "u", this.u, false);
+            XmlHelper.WriteAttribute(sw, "f", this.f, false);
+            XmlHelper.WriteAttribute(sw, "c", this.c, false);
+            XmlHelper.WriteAttribute(sw, "cp", this.cp, false);
+            XmlHelper.WriteAttribute(sw, "in", this.@in, false);
             XmlHelper.WriteAttribute(sw, "bc", this.bc);
             XmlHelper.WriteAttribute(sw, "fc", this.fc);
-            XmlHelper.WriteAttribute(sw, "i", this.i);
-            XmlHelper.WriteAttribute(sw, "un", this.un);
-            XmlHelper.WriteAttribute(sw, "st", this.st);
-            XmlHelper.WriteAttribute(sw, "b", this.b);
-            sw.Write(">");
-            if (this.tpls != null)
-                this.tpls.Write(sw, "tpls");
-            if (this.x != null)
-            {
-                foreach (CT_X x in this.x)
-                {
-                    x.Write(sw, "x");
-                }
-            }
-            sw.Write(string.Format("</{0}>", nodeName));
-        }
+            XmlHelper.WriteAttribute(sw, "i", this.i, false);
+            XmlHelper.WriteAttribute(sw, "un", this.un, false);
+            XmlHelper.WriteAttribute(sw, "st", this.st, false);
+            XmlHelper.WriteAttribute(sw, "b", this.b, false);
 
+            if ((this.tpls == null || this.tpls.tpl.Count == 0) && (this.x == null || this.x.Count == 0))
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.tpls != null)
+                    this.tpls.Write(sw, "tpls");
+                if (this.x != null && this.x.Count > 0)
+                {
+                    foreach (CT_X x in this.x)
+                    {
+                        x.Write(sw, "x");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
+        }
     }
 
     
@@ -3513,15 +3633,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "c", this.c);
-            sw.Write(">");
-            if (this.tpl != null)
+
+            if (this.tpl == null || this.tpl.Count == 0)
             {
-                foreach (CT_Tuple x in this.tpl)
-                {
-                    x.Write(sw, "tpl");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.tpl != null && this.tpl.Count > 0)
+                {
+                    foreach (CT_Tuple x in this.tpl)
+                    {
+                        x.Write(sw, "tpl");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
     }
@@ -3631,8 +3759,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "fld", this.fld);
             XmlHelper.WriteAttribute(sw, "hier", this.hier);
             XmlHelper.WriteAttribute(sw, "item", this.item);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
     }
@@ -3955,33 +4082,41 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "u", this.u);
-            XmlHelper.WriteAttribute(sw, "f", this.f);
-            XmlHelper.WriteAttribute(sw, "c", this.c);
-            XmlHelper.WriteAttribute(sw, "cp", this.cp);
-            XmlHelper.WriteAttribute(sw, "in", this.@in);
+            XmlHelper.WriteAttribute(sw, "u", this.u, false);
+            XmlHelper.WriteAttribute(sw, "f", this.f, false);
+            XmlHelper.WriteAttribute(sw, "c", this.c, false);
+            XmlHelper.WriteAttribute(sw, "cp", this.cp, false);
+            XmlHelper.WriteAttribute(sw, "in", this.@in, false);
             XmlHelper.WriteAttribute(sw, "bc", this.bc);
             XmlHelper.WriteAttribute(sw, "fc", this.fc);
-            XmlHelper.WriteAttribute(sw, "i", this.i);
-            XmlHelper.WriteAttribute(sw, "un", this.un);
-            XmlHelper.WriteAttribute(sw, "st", this.st);
-            XmlHelper.WriteAttribute(sw, "b", this.b);
-            sw.Write(">");
-            if (this.tpls != null)
+            XmlHelper.WriteAttribute(sw, "i", this.i, false);
+            XmlHelper.WriteAttribute(sw, "un", this.un, false);
+            XmlHelper.WriteAttribute(sw, "st", this.st, false);
+            XmlHelper.WriteAttribute(sw, "b", this.b, false);
+
+            if ((this.tpls == null || this.tpls.Count == 0) && (this.x == null || this.x.Count == 0))
             {
-                foreach (CT_Tuples x in this.tpls)
-                {
-                    x.Write(sw, "tpls");
-                }
+                sw.Write("/>");
             }
-            if (this.x != null)
+            else
             {
-                foreach (CT_X x in this.x)
+                sw.Write(">");
+                if (this.tpls != null && this.tpls.Count > 0)
                 {
-                    x.Write(sw, "x");
+                    foreach (CT_Tuples x in this.tpls)
+                    {
+                        x.Write(sw, "tpls");
+                    }
                 }
+                if (this.x != null && this.x.Count > 0)
+                {
+                    foreach (CT_X x in this.x)
+                    {
+                        x.Write(sw, "x");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
             }
-            sw.Write(string.Format("</{0}>", nodeName));
         }
 
     }
@@ -4316,46 +4451,48 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
-
-
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "v", this.v);
-            XmlHelper.WriteAttribute(sw, "u", this.u);
-            XmlHelper.WriteAttribute(sw, "f", this.f);
-            XmlHelper.WriteAttribute(sw, "c", this.c);
-            XmlHelper.WriteAttribute(sw, "cp", this.cp);
-            XmlHelper.WriteAttribute(sw, "in", this.@in);
+            XmlHelper.WriteAttribute(sw, "v", this.v, true);
+            XmlHelper.WriteAttribute(sw, "u", this.u, false);
+            XmlHelper.WriteAttribute(sw, "f", this.f, false);
+            XmlHelper.WriteAttribute(sw, "c", this.c, false);
+            XmlHelper.WriteAttribute(sw, "cp", this.cp, false);
+            XmlHelper.WriteAttribute(sw, "in", this.@in, false);
             XmlHelper.WriteAttribute(sw, "bc", this.bc);
             XmlHelper.WriteAttribute(sw, "fc", this.fc);
-            XmlHelper.WriteAttribute(sw, "i", this.i);
-            XmlHelper.WriteAttribute(sw, "un", this.un);
-            XmlHelper.WriteAttribute(sw, "st", this.st);
-            XmlHelper.WriteAttribute(sw, "b", this.b);
-            sw.Write(">");
-            if (this.tpls != null)
-            {
-                foreach (CT_Tuples x in this.tpls)
-                {
-                    x.Write(sw, "tpls");
-                }
-            }
-            if (this.x != null)
-            {
-                foreach (CT_X x in this.x)
-                {
-                    x.Write(sw, "x");
-                }
-            }
-            sw.Write(string.Format("</{0}>", nodeName));
-        }
+            XmlHelper.WriteAttribute(sw, "i", this.i, false);
+            XmlHelper.WriteAttribute(sw, "un", this.un, false);
+            XmlHelper.WriteAttribute(sw, "st", this.st, false);
+            XmlHelper.WriteAttribute(sw, "b", this.b, false);
 
+            if ((this.tpls == null || this.tpls.Count == 0) && (this.x == null || this.x.Count == 0))
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.tpls != null && this.tpls.Count > 0)
+                {
+                    foreach (CT_Tuples x in this.tpls)
+                    {
+                        x.Write(sw, "tpls");
+                    }
+                }
+                if (this.x != null && this.x.Count > 0)
+                {
+                    foreach (CT_X x in this.x)
+                    {
+                        x.Write(sw, "x");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
+        }
     }
 
-    
-    
-    
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
     public partial class CT_String
@@ -4687,34 +4824,42 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "v", this.v);
-            XmlHelper.WriteAttribute(sw, "u", this.u);
-            XmlHelper.WriteAttribute(sw, "f", this.f);
-            XmlHelper.WriteAttribute(sw, "c", this.c);
-            XmlHelper.WriteAttribute(sw, "cp", this.cp);
-            XmlHelper.WriteAttribute(sw, "in", this.@in);
+            XmlHelper.WriteAttribute(sw, "v", this.v, true);
+            XmlHelper.WriteAttribute(sw, "u", this.u, false);
+            XmlHelper.WriteAttribute(sw, "f", this.f, false);
+            XmlHelper.WriteAttribute(sw, "c", this.c, false);
+            XmlHelper.WriteAttribute(sw, "cp", this.cp, false);
+            XmlHelper.WriteAttribute(sw, "in", this.@in, false);
             XmlHelper.WriteAttribute(sw, "bc", this.bc);
             XmlHelper.WriteAttribute(sw, "fc", this.fc);
-            XmlHelper.WriteAttribute(sw, "i", this.i);
-            XmlHelper.WriteAttribute(sw, "un", this.un);
-            XmlHelper.WriteAttribute(sw, "st", this.st);
-            XmlHelper.WriteAttribute(sw, "b", this.b);
-            sw.Write(">");
-            if (this.tpls != null)
+            XmlHelper.WriteAttribute(sw, "i", this.i, false);
+            XmlHelper.WriteAttribute(sw, "un", this.un, false);
+            XmlHelper.WriteAttribute(sw, "st", this.st, false);
+            XmlHelper.WriteAttribute(sw, "b", this.b, false);
+
+            if ((this.tpls == null || this.tpls.Count == 0) && (this.x == null || this.x.Count == 0))
             {
-                foreach (CT_Tuples x in this.tpls)
-                {
-                    x.Write(sw, "tpls");
-                }
+                sw.Write("/>");
             }
-            if (this.x != null)
+            else
             {
-                foreach (CT_X x in this.x)
+                sw.Write(">");
+                if (this.tpls != null && this.tpls.Count > 0)
                 {
-                    x.Write(sw, "x");
+                    foreach (CT_Tuples x in this.tpls)
+                    {
+                        x.Write(sw, "tpls");
+                    }
                 }
+                if (this.x != null && this.x.Count > 0)
+                {
+                    foreach (CT_X x in this.x)
+                    {
+                        x.Write(sw, "x");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
             }
-            sw.Write(string.Format("</{0}>", nodeName));
         }
 
     }
@@ -4754,14 +4899,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "par", this.par);
             XmlHelper.WriteAttribute(sw, "base", this.@base);
-            sw.Write(">");
-            if (this.rangePr != null)
-                this.rangePr.Write(sw, "rangePr");
-            if (this.discretePr != null)
-                this.discretePr.Write(sw, "discretePr");
-            if (this.groupItems != null)
-                this.groupItems.Write(sw, "groupItems");
-            sw.Write(string.Format("</{0}>", nodeName));
+
+            if (this.rangePr == null && this.discretePr == null && this.groupItems == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.rangePr != null)
+                    this.rangePr.Write(sw, "rangePr");
+                if (this.discretePr != null)
+                    this.discretePr.Write(sw, "discretePr");
+                if (this.groupItems != null)
+                    this.groupItems.Write(sw, "groupItems");
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private CT_RangePr rangePrField;
@@ -4921,8 +5074,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "startDate", this.startDate);
             XmlHelper.WriteAttribute(sw, "endDate", this.endDate);
             XmlHelper.WriteAttribute(sw, "groupInterval", this.groupInterval);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private bool autoStartField;
@@ -5179,15 +5331,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.x != null)
+
+            if (this.x == null || this.x.Count == 0)
             {
-                foreach (CT_Index x in this.x)
-                {
-                    x.Write(sw, "x");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.x != null && this.x.Count > 0)
+                {
+                    foreach (CT_Index x in this.x)
+                    {
+                        x.Write(sw, "x");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_Index> xField;
@@ -5292,23 +5452,30 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            sw.Write(">");
-            foreach (object o in this.Items)
+            if (this.Items == null || this.Items.Count == 0)
             {
-                if (o is CT_Error)
-                    ((CT_Error)o).Write(sw, "e");
-                else if (o is CT_Boolean)
-                    ((CT_Boolean)o).Write(sw, "b");
-                else if (o is CT_DateTime)
-                    ((CT_DateTime)o).Write(sw, "d");
-                else if (o is CT_Number)
-                    ((CT_Number)o).Write(sw, "n");
-                else if (o is CT_Missing)
-                    ((CT_Missing)o).Write(sw, "m");
-                else if (o is CT_String)
-                    ((CT_String)o).Write(sw, "s");
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                foreach (object o in this.Items)
+                {
+                    if (o is CT_Error)
+                        ((CT_Error)o).Write(sw, "e");
+                    else if (o is CT_Boolean)
+                        ((CT_Boolean)o).Write(sw, "b");
+                    else if (o is CT_DateTime)
+                        ((CT_DateTime)o).Write(sw, "d");
+                    else if (o is CT_Number)
+                        ((CT_Number)o).Write(sw, "n");
+                    else if (o is CT_Missing)
+                        ((CT_Missing)o).Write(sw, "m");
+                    else if (o is CT_String)
+                        ((CT_String)o).Write(sw, "s");
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<object> itemsField;
@@ -5396,15 +5563,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.fieldUsage != null)
+
+            if (this.fieldUsage == null || this.fieldUsage.Count == 0)
             {
-                foreach (CT_FieldUsage x in this.fieldUsage)
-                {
-                    x.Write(sw, "fieldUsage");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.fieldUsage != null && this.fieldUsage.Count > 0)
+                {
+                    foreach (CT_FieldUsage x in this.fieldUsage)
+                    {
+                        x.Write(sw, "fieldUsage");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_FieldUsage> fieldUsageField;
@@ -5480,9 +5655,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "x", this.x);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            XmlHelper.WriteAttribute(sw, "x", this.x, true);
+            sw.Write("/>");
         }
 
         private int xField;
@@ -5530,15 +5704,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.groupLevel != null)
+
+            if (this.groupLevel == null || this.groupLevel.Count == 0)
             {
-                foreach (CT_GroupLevel x in this.groupLevel)
-                {
-                    x.Write(sw, "groupLevel");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.groupLevel != null && this.groupLevel.Count > 0)
+                {
+                    foreach (CT_GroupLevel x in this.groupLevel)
+                    {
+                        x.Write(sw, "groupLevel");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_GroupLevel> groupLevelField;
@@ -5629,12 +5811,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "caption", this.caption);
             XmlHelper.WriteAttribute(sw, "user", this.user);
             XmlHelper.WriteAttribute(sw, "customRollUp", this.customRollUp);
-            sw.Write(">");
-            if (this.groups != null)
-                this.groups.Write(sw, "groups");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</{0}>", nodeName));
+
+            if (this.groups == null && this.extLst == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.groups != null)
+                    this.groups.Write(sw, "groups");
+                if (this.extLst != null)
+                    this.extLst.Write(sw, "extLst");
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private CT_Groups groupsField;
@@ -5767,15 +5957,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.group != null)
+
+            if (this.group == null || this.group.Count == 0)
             {
-                foreach (CT_LevelGroup x in this.group)
-                {
-                    x.Write(sw, "group");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.group != null && this.group.Count > 0)
+                {
+                    foreach (CT_LevelGroup x in this.group)
+                    {
+                        x.Write(sw, "group");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_LevelGroup> groupField;
@@ -5865,10 +6063,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "caption", this.caption);
             XmlHelper.WriteAttribute(sw, "uniqueParent", this.uniqueParent);
             XmlHelper.WriteAttribute(sw, "id", this.id);
-            sw.Write(">");
-            if (this.groupMembers != null)
-                this.groupMembers.Write(sw, "groupMembers");
-            sw.Write(string.Format("</{0}>", nodeName));
+
+            if (this.groupMembers == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.groupMembers != null)
+                    this.groupMembers.Write(sw, "groupMembers");
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private CT_GroupMembers groupMembersField;
@@ -6011,15 +6217,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.groupMember != null)
+
+            if (this.groupMember == null || this.groupMember.Count == 0)
             {
-                foreach (CT_GroupMember x in this.groupMember)
-                {
-                    x.Write(sw, "groupMember");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.groupMember != null && this.groupMember.Count > 0)
+                {
+                    foreach (CT_GroupMember x in this.groupMember)
+                    {
+                        x.Write(sw, "groupMember");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_GroupMember> groupMemberField;
@@ -6098,8 +6312,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "uniqueName", this.uniqueName);
             XmlHelper.WriteAttribute(sw, "group", this.group);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private string uniqueNameField;
@@ -6205,7 +6418,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "uniqueName", this.uniqueName);
+            XmlHelper.WriteAttribute(sw, "uniqueName", this.uniqueName, true);
             XmlHelper.WriteAttribute(sw, "caption", this.caption);
             XmlHelper.WriteAttribute(sw, "measure", this.measure);
             XmlHelper.WriteAttribute(sw, "set", this.set);
@@ -6221,20 +6434,28 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "displayFolder", this.displayFolder);
             XmlHelper.WriteAttribute(sw, "measureGroup", this.measureGroup);
             XmlHelper.WriteAttribute(sw, "measures", this.measures);
-            XmlHelper.WriteAttribute(sw, "count", this.count);
+            XmlHelper.WriteAttribute(sw, "count", this.count, true);
             XmlHelper.WriteAttribute(sw, "oneField", this.oneField);
             XmlHelper.WriteAttribute(sw, "memberValueDatatype", this.memberValueDatatype);
             XmlHelper.WriteAttribute(sw, "unbalanced", this.unbalanced);
             XmlHelper.WriteAttribute(sw, "unbalancedGroup", this.unbalancedGroup);
             XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
-            sw.Write(">");
-            if (this.fieldsUsage != null)
-                this.fieldsUsage.Write(sw, "fieldsUsage");
-            if (this.groupLevels != null)
-                this.groupLevels.Write(sw, "groupLevels");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</{0}>", nodeName));
+
+            if (this.fieldsUsage == null && this.groupLevels == null && this.extLst == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.fieldsUsage != null)
+                    this.fieldsUsage.Write(sw, "fieldsUsage");
+                if (this.groupLevels != null)
+                    this.groupLevels.Write(sw, "groupLevels");
+                if (this.extLst != null)
+                    this.extLst.Write(sw, "extLst");
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private CT_FieldsUsage fieldsUsageField;
@@ -6297,9 +6518,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_CacheHierarchy()
         {
-            this.extLstField = new CT_ExtensionList();
-            this.groupLevelsField = new CT_GroupLevels();
-            this.fieldsUsageField = new CT_FieldsUsage();
+            //this.extLstField = new CT_ExtensionList();
+            //this.groupLevelsField = new CT_GroupLevels();
+            //this.fieldsUsageField = new CT_FieldsUsage();
             this.measureField = false;
             this.setField = false;
             this.iconSetField = 0;
@@ -6727,15 +6948,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.kpi != null)
+            if (this.kpi == null || this.kpi.Count == 0)
             {
-                foreach (CT_PCDKPI x in this.kpi)
-                {
-                    x.Write(sw, "kpi");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.kpi != null && this.kpi.Count > 0)
+                {
+                    foreach (CT_PCDKPI x in this.kpi)
+                    {
+                        x.Write(sw, "kpi");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_PCDKPI> kpiField;
@@ -6831,8 +7059,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "trend", this.trend);
             XmlHelper.WriteAttribute(sw, "weight", this.weight);
             XmlHelper.WriteAttribute(sw, "time", this.time);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private string uniqueNameField;
@@ -7034,18 +7261,29 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            sw.Write(">");
-            if (this.entries != null)
-                this.entries.Write(sw, "entries");
-            if (this.sets != null)
-                this.sets.Write(sw, "sets");
-            if (this.queryCache != null)
-                this.queryCache.Write(sw, "queryCache");
-            if (this.serverFormats != null)
-                this.serverFormats.Write(sw, "serverFormats");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</{0}>", nodeName));
+            if (this.entries == null
+                && this.sets == null
+                && this.queryCache == null
+                && this.serverFormats == null
+                && this.extLst == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.entries != null)
+                    this.entries.Write(sw, "entries");
+                if (this.sets != null)
+                    this.sets.Write(sw, "sets");
+                if (this.queryCache != null)
+                    this.queryCache.Write(sw, "queryCache");
+                if (this.serverFormats != null)
+                    this.serverFormats.Write(sw, "serverFormats");
+                if (this.extLst != null)
+                    this.extLst.Write(sw, "extLst");
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private CT_PCDSDTCEntries entriesField;
@@ -7174,19 +7412,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            sw.Write(">");
-            foreach (object o in this.Items)
+            if (this.Items == null || this.Items.Count == 0)
             {
-                if (o is CT_Missing)
-                    ((CT_Missing)o).Write(sw, "m");
-                else if (o is CT_Number)
-                    ((CT_Number)o).Write(sw, "n");
-                else if (o is CT_Error)
-                    ((CT_Error)o).Write(sw, "e");
-                else if (o is CT_String)
-                    ((CT_String)o).Write(sw, "s");
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                foreach (object o in this.Items)
+                {
+                    if (o is CT_Missing)
+                        ((CT_Missing)o).Write(sw, "m");
+                    else if (o is CT_Number)
+                        ((CT_Number)o).Write(sw, "n");
+                    else if (o is CT_Error)
+                        ((CT_Error)o).Write(sw, "e");
+                    else if (o is CT_String)
+                        ((CT_String)o).Write(sw, "s");
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<object> itemsField;
@@ -7272,15 +7517,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.set != null)
+
+            if (this.set == null || this.set.Count == 0)
             {
-                foreach (CT_Set x in this.set)
-                {
-                    x.Write(sw, "set");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.set != null && this.set.Count > 0)
+                {
+                    foreach (CT_Set x in this.set)
+                    {
+                        x.Write(sw, "set");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_Set> setField;
@@ -7376,17 +7629,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "setDefinition", this.setDefinition);
             XmlHelper.WriteAttribute(sw, "sortType", this.sortType.ToString());
             XmlHelper.WriteAttribute(sw, "queryFailed", this.queryFailed);
-            sw.Write(">");
-            if (this.sortByTuple != null)
-                this.sortByTuple.Write(sw, "sortByTuple");
-            if (this.tpls != null)
+
+            if (this.sortByTuple == null && (this.tpls == null || this.tpls.Count == 0))
             {
-                foreach (CT_Tuples x in this.tpls)
-                {
-                    x.Write(sw, "tpls");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.sortByTuple != null)
+                    this.sortByTuple.Write(sw, "sortByTuple");
+                if (this.tpls != null && this.tpls.Count > 0)
+                {
+                    foreach (CT_Tuples x in this.tpls)
+                    {
+                        x.Write(sw, "tpls");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_Tuples> tplsField;
@@ -7578,15 +7839,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.query != null)
+            if (this.query == null || this.query.Count == 0)
             {
-                foreach (CT_Query x in this.query)
-                {
-                    x.Write(sw, "query");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.query != null && this.query.Count > 0)
+                {
+                    foreach (CT_Query x in this.query)
+                    {
+                        x.Write(sw, "query");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_Query> queryField;
@@ -7667,10 +7935,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "mdx", this.mdx);
-            sw.Write(">");
-            if (this.tpls != null)
-                this.tpls.Write(sw, "tpls");
-            sw.Write(string.Format("</{0}>", nodeName));
+            if (this.tpls == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.tpls != null)
+                    this.tpls.Write(sw, "tpls");
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private CT_Tuples tplsField;
@@ -7738,15 +8013,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.serverFormat != null)
+
+            if (this.serverFormat == null || this.serverFormat.Count == 0)
             {
-                foreach (CT_ServerFormat x in this.serverFormat)
-                {
-                    x.Write(sw, "serverFormat");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.serverFormat != null && this.serverFormat.Count > 0)
+                {
+                    foreach (CT_ServerFormat x in this.serverFormat)
+                    {
+                        x.Write(sw, "serverFormat");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_ServerFormat> serverFormatField;
@@ -7824,8 +8107,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "culture", this.culture);
             XmlHelper.WriteAttribute(sw, "format", this.format);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private string cultureField;
@@ -7888,15 +8170,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.calculatedItem != null)
+            if (this.calculatedItem == null || this.calculatedItem.Count == 0)
             {
-                foreach (CT_CalculatedItem x in this.calculatedItem)
-                {
-                    x.Write(sw, "calculatedItem");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.calculatedItem != null && this.calculatedItem.Count > 0)
+                {
+                    foreach (CT_CalculatedItem x in this.calculatedItem)
+                    {
+                        x.Write(sw, "calculatedItem");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_CalculatedItem> calculatedItemField;
@@ -7982,12 +8271,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "field", this.field);
             XmlHelper.WriteAttribute(sw, "formula", this.formula);
-            sw.Write(">");
-            if (this.pivotArea != null)
-                this.pivotArea.Write(sw, "pivotArea");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</{0}>", nodeName));
+            if (this.pivotArea == null && this.extLst == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.pivotArea != null)
+                    this.pivotArea.Write(sw, "pivotArea");
+                if (this.extLst != null)
+                    this.extLst.Write(sw, "extLst");
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private CT_PivotArea pivotAreaField;
@@ -8101,15 +8397,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.calculatedMember != null)
+
+            if (this.calculatedMember == null || this.calculatedMember.Count == 0)
             {
-                foreach (CT_CalculatedMember x in this.calculatedMember)
-                {
-                    x.Write(sw, "calculatedMember");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.calculatedMember != null && this.calculatedMember.Count > 0)
+                {
+                    foreach (CT_CalculatedMember x in this.calculatedMember)
+                    {
+                        x.Write(sw, "calculatedMember");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_CalculatedMember> calculatedMemberField;
@@ -8204,10 +8508,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "parent", this.parent);
             XmlHelper.WriteAttribute(sw, "solveOrder", this.solveOrder);
             XmlHelper.WriteAttribute(sw, "set", this.set);
-            sw.Write(">");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</{0}>", nodeName));
+            
+            if (this.extLst == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                if (this.extLst != null)
+                    this.extLst.Write(sw, "extLst");
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private CT_ExtensionList extLstField;
@@ -8369,15 +8681,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.dimension != null)
+            if (this.dimension == null || this.dimension.Count == 0)
             {
-                foreach (CT_PivotDimension x in this.dimension)
-                {
-                    x.Write(sw, "dimension");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.dimension != null && this.dimension.Count > 0)
+                {
+                    foreach (CT_PivotDimension x in this.dimension)
+                    {
+                        x.Write(sw, "dimension");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_PivotDimension> dimensionField;
@@ -8460,8 +8779,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "uniqueName", this.uniqueName);
             XmlHelper.WriteAttribute(sw, "caption", this.caption);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private bool measureField;
@@ -8560,15 +8878,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.measureGroup != null)
+            if (this.measureGroup == null || this.measureGroup.Count == 0)
             {
-                foreach (CT_MeasureGroup x in this.measureGroup)
-                {
-                    x.Write(sw, "measureGroup");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.measureGroup != null && this.measureGroup.Count > 0)
+                {
+                    foreach (CT_MeasureGroup x in this.measureGroup)
+                    {
+                        x.Write(sw, "measureGroup");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_MeasureGroup> measureGroupField;
@@ -8646,8 +8971,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "caption", this.caption);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("/>");
         }
 
         private string nameField;
@@ -8710,15 +9034,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
-            if (this.map != null)
+
+            if (this.map == null || this.map.Count == 0)
             {
-                foreach (CT_MeasureDimensionMap x in this.map)
-                {
-                    x.Write(sw, "map");
-                }
+                sw.Write("/>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            else
+            {
+                sw.Write(">");
+                if (this.map != null && this.map.Count > 0)
+                {
+                    foreach (CT_MeasureDimensionMap x in this.map)
+                    {
+                        x.Write(sw, "map");
+                    }
+                }
+                sw.Write(string.Format("</{0}>", nodeName));
+            }
         }
 
         private List<CT_MeasureDimensionMap> mapField;

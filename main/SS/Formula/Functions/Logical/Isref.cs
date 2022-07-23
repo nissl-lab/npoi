@@ -30,7 +30,7 @@ namespace NPOI.SS.Formula.Functions
     {
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0)
         {
-            if (arg0 is RefEval || arg0 is AreaEval)
+            if (arg0 is RefEval || arg0 is AreaEval || arg0 is RefListEval)
             {
                 return BoolEval.TRUE;
             }

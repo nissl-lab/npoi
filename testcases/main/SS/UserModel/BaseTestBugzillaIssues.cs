@@ -1111,7 +1111,7 @@ namespace TestCases.SS.UserModel
             IFont font = wb.CreateFont();
             font.FontName = ("Arial");
             font.FontHeightInPoints = ((short)14);
-            font.Boldweight = (short)FontBoldWeight.Bold;// (Font.BOLDWEIGHT_BOLD);
+            font.IsBold=true;
             font.Color = (IndexedColors.Red.Index);
             str2.ApplyFont(font);
 

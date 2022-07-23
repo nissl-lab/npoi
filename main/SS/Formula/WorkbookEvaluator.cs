@@ -32,6 +32,7 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula.PTG;
     using NPOI.Util;
     using NPOI.SS.Formula.Function;
+    using EnumsNET;
 
     /**
      * Evaluates formula cells.<p/>
@@ -258,12 +259,104 @@ namespace NPOI.SS.Formula
             int sheetIndex = GetSheetIndex(srcCell.Sheet);
             return EvaluateAny(srcCell, sheetIndex, srcCell.RowIndex, srcCell.ColumnIndex, new EvaluationTracker(_cache));
         }
-
-
         /**
-         * @return never <c>null</c>, never {@link BlankEval}
-         */
-        private ValueEval EvaluateAny(IEvaluationCell srcCell, int sheetIndex,
+  * Evaluate a formula outside a cell value, e.g. conditional format rules or data validation expressions
+  * 
+  * @param formula to evaluate
+  * @param ref defines the optional sheet and row/column base for the formula, if it is relative
+  * @return value
+  */
+        public ValueEval Evaluate(String formula, CellReference reference)
+        {
+            String sheetName = reference == null ? null : reference.SheetName;
+            int sheetIndex;
+            if (sheetName == null)
+            {
+                sheetIndex = -1; // workbook scope only
+            }
+            else
+            {
+                sheetIndex = Workbook.GetSheetIndex(sheetName);
+            }
+            int rowIndex = reference == null ? -1 : reference.Row;
+            int colIndex = reference == null ? -1 : reference.Col;
+            OperationEvaluationContext ec = new OperationEvaluationContext(
+                    this,
+                    Workbook,
+                    sheetIndex,
+                    rowIndex,
+                    colIndex,
+                    new EvaluationTracker(_cache)
+                );
+            Ptg[] ptgs = FormulaParser.Parse(formula, (IFormulaParsingWorkbook)Workbook, FormulaType.Cell, sheetIndex, rowIndex);
+            return EvaluateNameFormula(ptgs, ec);
+        }
+        public ValueEval Evaluate(String formula, CellReference target, CellRangeAddressBase region)
+        {
+            return Evaluate(formula, target, region, FormulaType.Cell);
+        }
+        private ValueEval Evaluate(String formula, CellReference target, CellRangeAddressBase region, FormulaType formulaType)
+        {
+            String sheetName = target == null ? null : target.SheetName;
+            if (sheetName == null) throw new ArgumentException("Sheet name is required");
+
+            int sheetIndex = Workbook.GetSheetIndex(sheetName);
+            Ptg[] ptgs = FormulaParser.Parse(formula, (IFormulaParsingWorkbook)Workbook, formulaType, sheetIndex, target.Row);
+
+            AdjustRegionRelativeReference(ptgs, target, region);
+
+            OperationEvaluationContext ec = new OperationEvaluationContext(this, Workbook, sheetIndex, target.Row, target.Col, new EvaluationTracker(_cache),
+                formulaType.GetAttributes().Get<SingleValueAttribute>().IsSingleValue);
+            return EvaluateNameFormula(ptgs, ec);
+        }
+        protected bool AdjustRegionRelativeReference(Ptg[] ptgs, CellReference target, CellRangeAddressBase region)
+        {
+            if (!region.IsInRange(target))
+            {
+                throw new ArgumentException(target + " is not within " + region);
+            }
+
+            //return adjustRegionRelativeReference(ptgs, target.getRow() - region.getFirstRow(), target.getCol() - region.getFirstColumn());
+
+            int deltaRow = target.Row;
+            int deltaColumn = target.Col;
+
+            bool shifted = false;
+            foreach(Ptg ptg in ptgs)
+            {
+                // base class for cell reference "things"
+                if (ptg is RefPtgBase) {
+                RefPtgBase reference = (RefPtgBase)ptg;
+                // re-calculate cell references
+                SpreadsheetVersion version = _workbook.GetSpreadsheetVersion();
+                if (reference.IsRowRelative)
+                {
+                    int rowIndex = reference.Row + deltaRow;
+                    if (rowIndex > version.MaxRows)
+                    {
+                        throw new IndexOutOfRangeException(version.Name + " files can only have " + version.MaxRows + " rows, but row " + rowIndex + " was requested.");
+                    }
+                        reference.Row = rowIndex;
+                    shifted = true;
+                }
+                if (reference.IsColRelative)
+                {
+                    int colIndex = reference.Column + deltaColumn;
+                    if (colIndex > version.MaxColumns)
+                    {
+                        throw new IndexOutOfRangeException(version.Name + " files can only have " + version.MaxColumns + " columns, but column " + colIndex + " was requested.");
+                    }
+                    reference.Column = colIndex;
+                    shifted = true;
+                }
+            }
+        }
+        return shifted;
+    }
+    /**
+     * @return never <c>null</c>, never {@link BlankEval}
+     */
+    private ValueEval EvaluateAny(IEvaluationCell srcCell, int sheetIndex,
                     int rowIndex, int columnIndex, EvaluationTracker tracker)
         {
             bool shouldCellDependencyBeRecorded = _stabilityClassifier == null ? true
@@ -454,6 +547,9 @@ namespace NPOI.SS.Formula
                                    + "): " + Arrays.ToString(ptgs).Replace("\\Qorg.apache.poi.ss.formula.ptg.\\E", ""));
                 dbgEvaluationOutputIndent++;
             }
+           
+            IEvaluationSheet evalSheet = ec.GetWorkbook().GetSheet(ec.SheetIndex);
+            IEvaluationCell evaluationCell = evalSheet.GetCell(ec.RowIndex, ec.ColumnIndex);
 
             Stack<ValueEval> stack = new Stack<ValueEval>();
             for (int i = 0, iSize = ptgs.Length; i < iSize; i++)
@@ -463,7 +559,7 @@ namespace NPOI.SS.Formula
                 Ptg ptg = ptgs[i];
                 if (dbgEvaluationOutputIndent > 0)
                 {
-                    EVAL_LOG.Log(POILogger.INFO, dbgIndentStr + "  * ptg " + i + ": " + ptg.ToString());
+                    EVAL_LOG.Log(POILogger.INFO, dbgIndentStr + "  * ptg " + i + ": " + ptg.ToString()+", stack:"+stack);
                 }
                 if (ptg is AttrPtg)
                 {
@@ -507,44 +603,48 @@ namespace NPOI.SS.Formula
                     }
                     if (attrPtg.IsOptimizedIf)
                     {
-                        ValueEval arg0 = stack.Pop();
-                        bool evaluatedPredicate;
-                        try
+                        if (!evaluationCell.IsPartOfArrayFormulaGroup)
                         {
-                            evaluatedPredicate = IfFunc.EvaluateFirstArg(arg0, ec.RowIndex, ec.ColumnIndex);
-                        }
-                        catch (EvaluationException e)
-                        {
-                            stack.Push(e.GetErrorEval());
-                            int dist = attrPtg.Data;
-                            i += CountTokensToBeSkipped(ptgs, i, dist);
-                            attrPtg = (AttrPtg)ptgs[i];
-                            dist = attrPtg.Data + 1;
-                            i += CountTokensToBeSkipped(ptgs, i, dist);
-                            continue;
-                        }
-                        if (evaluatedPredicate)
-                        {
-                            // nothing to skip - true param folows
-                        }
-                        else
-                        {
-                            int dist = attrPtg.Data;
-                            i += CountTokensToBeSkipped(ptgs, i, dist);
-                            Ptg nextPtg = ptgs[i + 1];
-                            if (ptgs[i] is AttrPtg && nextPtg is FuncVarPtg &&
-                                // in order to verify that there is no third param, we need to check 
-                                // if we really have the IF next or some other FuncVarPtg as third param, e.g. ROW()/COLUMN()!
-                                ((FuncVarPtg)nextPtg).FunctionIndex == FunctionMetadataRegistry.FUNCTION_INDEX_IF)
-                            {
-                                // this is an if statement without a false param (as opposed to MissingArgPtg as the false param)
-                                i++;
-                                stack.Push(BoolEval.FALSE);
-                            }
+                           ValueEval arg0 = stack.Pop();
+                           bool evaluatedPredicate;
+                           try
+                           {
+                               evaluatedPredicate = IfFunc.EvaluateFirstArg(arg0, ec.RowIndex, ec.ColumnIndex);
+                           }
+                           catch (EvaluationException e)
+                           {
+                               stack.Push(e.GetErrorEval());
+                               int dist = attrPtg.Data;
+                               i += CountTokensToBeSkipped(ptgs, i, dist);
+                               attrPtg = (AttrPtg)ptgs[i];
+                               dist = attrPtg.Data + 1;
+                               i += CountTokensToBeSkipped(ptgs, i, dist);
+                               continue;
+                           }
+                           if (evaluatedPredicate)
+                           {
+                               // nothing to skip - true param folows
+                           }
+                           else
+                           {
+                               int dist = attrPtg.Data;
+                               i += CountTokensToBeSkipped(ptgs, i, dist);
+                               Ptg nextPtg = ptgs[i + 1];
+                               if (ptgs[i] is AttrPtg && nextPtg is FuncVarPtg &&
+                                   // in order to verify that there is no third param, we need to check 
+                                   // if we really have the IF next or some other FuncVarPtg as third param, e.g. ROW()/COLUMN()!
+                                   ((FuncVarPtg)nextPtg).FunctionIndex == FunctionMetadataRegistry.FUNCTION_INDEX_IF)
+                               {
+                                   // this is an if statement without a false param (as opposed to MissingArgPtg as the false param)
+                                   i++;
+                                   stack.Push(arg0);
+                                   stack.Push(BoolEval.FALSE);
+                               }
+                           }
                         }
                         continue;
                     }
-                    if (attrPtg.IsSkip)
+                    if (attrPtg.IsSkip && !evaluationCell.IsPartOfArrayFormulaGroup)
                     {
                         int dist = attrPtg.Data + 1;
                         i += CountTokensToBeSkipped(ptgs, i, dist);
@@ -566,8 +666,17 @@ namespace NPOI.SS.Formula
                     // can ignore, rest of Tokens for this expression are in OK RPN order
                     continue;
                 }
-                if (ptg is MemErrPtg) { continue; }
-
+                if (ptg is MemErrPtg) 
+                { 
+                    continue; 
+                }
+                if (ptg is UnionPtg)
+                {
+                    ValueEval v2 = stack.Pop();
+                    ValueEval v1 = stack.Pop();
+                    stack.Push(new RefListEval(v1, v2));
+                    continue;
+                }
                 ValueEval opResult;
                 if (ptg is OperationPtg)
                 {
@@ -608,7 +717,15 @@ namespace NPOI.SS.Formula
             {
                 throw new InvalidOperationException("evaluation stack not empty");
             }
-            ValueEval result = DereferenceResult(value, ec.RowIndex, ec.ColumnIndex);
+            ValueEval result;
+            if (ec.IsSingleValue)
+            {
+                result = DereferenceResult(value, ec);
+            }
+            else
+            {
+                result = value;
+            }
             if (dbgEvaluationOutputIndent > 0)
             {
                 EVAL_LOG.Log(POILogger.INFO, dbgIndentStr + "finshed eval of "
@@ -672,6 +789,42 @@ namespace NPOI.SS.Formula
                 // Formulas _never_ evaluate To blank.  If a formula appears To have evaluated To
                 // blank, the actual value is empty string. This can be verified with ISBLANK().
             }
+            return value;
+        }
+        /**
+ * Dereferences a single value from any AreaEval or RefEval evaluation
+ * result. If the supplied evaluationResult is just a plain value, it is
+ * returned as-is.
+ *
+ * @return a {@link NumberEval}, {@link StringEval}, {@link BoolEval}, or
+ *         {@link ErrorEval}. Never <code>null</code>. {@link BlankEval} is
+ *         converted to {@link NumberEval#ZERO}
+ */
+        public static ValueEval DereferenceResult(ValueEval evaluationResult, OperationEvaluationContext ec)
+        {
+            ValueEval value;
+
+            if (ec == null)
+            {
+                throw new ArgumentNullException("OperationEvaluationContext ec is null");
+            }
+            if (ec.GetWorkbook() == null)
+            {
+                throw new ArgumentNullException("OperationEvaluationContext ec.getWorkbook() is null");
+            }
+
+            IEvaluationSheet evalSheet = ec.GetWorkbook().GetSheet(ec.SheetIndex);
+            IEvaluationCell evalCell = evalSheet.GetCell(ec.RowIndex, ec.ColumnIndex);
+
+            if (evalCell.IsPartOfArrayFormulaGroup && evaluationResult is AreaEval)
+            {
+                value = OperandResolver.GetElementFromArray((AreaEval)evaluationResult, evalCell);
+            }
+            else
+            {
+                value = DereferenceResult(evaluationResult, ec.RowIndex, ec.ColumnIndex);
+            }
+
             return value;
         }
         /**
@@ -755,6 +908,10 @@ namespace NPOI.SS.Formula
             {
                 AreaPtg aptg = (AreaPtg)ptg;
                 return ec.GetAreaEval(aptg.FirstRow, aptg.FirstColumn, aptg.LastRow, aptg.LastColumn);
+            }
+            if (ptg is ArrayPtg) {
+                ArrayPtg aptg = (ArrayPtg)ptg;
+                return ec.GetAreaValueEval(0, 0, aptg.RowCount - 1, aptg.ColumnCount - 1, aptg.GetTokenArrayValues());
             }
 
             if (ptg is UnknownPtg)

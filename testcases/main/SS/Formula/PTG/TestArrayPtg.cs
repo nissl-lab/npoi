@@ -64,15 +64,15 @@ namespace TestCases.SS.Formula.PTG
             ArrayPtg ptg = Create(ENCODED_PTG_DATA, ENCODED_CONSTANT_DATA);
             Assert.AreEqual(3, ptg.ColumnCount);
             Assert.AreEqual(2, ptg.RowCount);
-            Object[][] values = ptg.GetTokenArrayValues();
+            Object[,] values = ptg.GetTokenArrayValues();
             Assert.AreEqual(2, values.Length);
 
 
-            Assert.AreEqual(true, values[0][0]);
-            Assert.AreEqual("ABCD", values[0][1]);
-            Assert.AreEqual(0d, values[1][0]);
-            Assert.AreEqual(false, values[1][1]);
-            Assert.AreEqual("FG", values[1][2]);
+            Assert.AreEqual(true, values[0,0]);
+            Assert.AreEqual("ABCD", values[0,1]);
+            Assert.AreEqual(0d, values[1,0]);
+            Assert.AreEqual(false, values[1,1]);
+            Assert.AreEqual("FG", values[1,2]);
 
             byte[] outBuf = new byte[ENCODED_CONSTANT_DATA.Length];
             ptg.WriteTokenValueBytes(new LittleEndianByteArrayOutputStream(outBuf, 0));

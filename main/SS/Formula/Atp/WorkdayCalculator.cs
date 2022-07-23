@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 using System;
+using System.Collections.Generic;
 using NPOI.SS.UserModel;
 namespace NPOI.SS.Formula.Atp
 {
@@ -27,13 +28,31 @@ namespace NPOI.SS.Formula.Atp
     {
 
         public static WorkdayCalculator instance = new WorkdayCalculator();
-
+        private static Dictionary<int, List<int>> weekendTypeMap = new Dictionary<int, List<int>>();
         /**
          * Constructor.
          */
         private WorkdayCalculator()
         {
             // enforcing singleton
+        }
+
+        static WorkdayCalculator()
+        {
+            weekendTypeMap.Add(1, new List<int>() { 7, 1 });
+            weekendTypeMap.Add(2, new List<int>() { 1, 2 });
+            weekendTypeMap.Add(3, new List<int>() { 2, 3 });
+            weekendTypeMap.Add(4, new List<int>() { 3, 4 });
+            weekendTypeMap.Add(5, new List<int>() { 4, 5 });
+            weekendTypeMap.Add(6, new List<int>() { 5, 6 });
+            weekendTypeMap.Add(7, new List<int>() { 6, 7 });
+            weekendTypeMap.Add(11, new List<int>() { 2 });
+            weekendTypeMap.Add(12, new List<int>() { 3 });
+            weekendTypeMap.Add(13, new List<int>() { 4 });
+            weekendTypeMap.Add(14, new List<int>() { 5 });
+            weekendTypeMap.Add(15, new List<int>() { 6 });
+            weekendTypeMap.Add(16, new List<int>() { 7 });
+            weekendTypeMap.Add(17, new List<int>() { 1 });
         }
 
         /**
@@ -93,7 +112,60 @@ namespace NPOI.SS.Formula.Atp
             //} while (skippedDays != 0);
             return endDate;
         }
+        /**
+     * Calculate the workday past x workdays from a starting date, considering a range of holidays.
+     *
+     * @param start start date.
+     * @param workdays number of workdays to be past from starting date.
+     * @param weekendType weekend parameter (see https://support.microsoft.com/en-us/office/workday-intl-function-a378391c-9ba7-4678-8a39-39611a9bf81d)
+     * @param holidays an array of holidays.
+     * @return date past x workdays.
+     */
+        public DateTime CalculateWorkdays(double start, int workdays, int weekendType, double[] holidays)
+        {
+            List<int> weekendDays = new List<int>() { 7, 1 };
+            if (weekendTypeMap.ContainsKey(weekendType))
+                weekendDays= weekendTypeMap[weekendType];
+            DateTime startDate = DateUtil.GetJavaDate(start);
+            int direction = workdays < 0 ? -1 : 1;
+            var endDate=startDate;
+            double excelEndDate = DateUtil.GetExcelDate(endDate);
+            while (workdays != 0)
+            {
+                endDate=endDate.AddDays(6*direction);
+                excelEndDate += direction;
+                if (!isWeekend(endDate, weekendDays) && !isHoliday(excelEndDate, holidays))
+                {
+                    workdays -= direction;
+                }
+            }
+            return endDate;
+        }
+        private bool isWeekend(DateTime date, List<int> weekendDays)
+        {
+            return weekendDays.Contains(((int)date.DayOfWeek) + 1);
+        }
 
+        /**
+     * @param aDate a given date.
+     * @param holidays an array of holidays.
+     * @return <code>true</code> if date is a holiday, <code>false</code> otherwise.
+     */
+        protected bool isHoliday(double aDate, double[] holidays)
+        {
+            foreach (double holiday in holidays)
+            {
+                if (Math.Round(holiday) == Math.Round(aDate))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public List<int> GetValidWeekendTypes()
+        {
+            return new List<int>(weekendTypeMap.Keys);
+        }
         /**
          * Calculates how many days of week past between a start and an end date.
          * 

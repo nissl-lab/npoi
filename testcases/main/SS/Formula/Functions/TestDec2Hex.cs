@@ -101,7 +101,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual("549755813887", maxLong);
             ConfirmValue("Converts the max supported value to hexadecimal", maxLong, "7FFFFFFFFF");
 
-            String minLong = (-549755813888l).ToString();
+            String minLong = (-549755813888L).ToString();
             Assert.AreEqual("-549755813888", minLong);
             ConfirmValue("Converts the min supported value to hexadecimal", minLong, "FF80000000");
 

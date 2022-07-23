@@ -657,7 +657,7 @@ namespace TestCases.HSSF.UserModel
             ClassID clsid1 = fs1.Root.StorageClsid;
 
             MemoryStream out1 = new MemoryStream(4096);
-            wb.Write(out1);
+            wb.Write(out1, false);
             byte[] bytes = out1.ToArray();
             POIFSFileSystem fs2 = new POIFSFileSystem(new MemoryStream(bytes));
             ClassID clsid2 = fs2.Root.StorageClsid;
@@ -1173,7 +1173,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("ASheet!A1", name.RefersToFormula);
 
             MemoryStream stream = new MemoryStream();
-            wb.Write(stream);
+            wb.Write(stream, false);
 
             assertSheetOrder(wb, "Sheet1", "Sheet2", "Sheet3", "ASheet");
             Assert.AreEqual("ASheet!A1", name.RefersToFormula);
@@ -1184,7 +1184,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("ASheet!A1", name.RefersToFormula);
 
             MemoryStream stream2 = new MemoryStream();
-            wb.Write(stream2);
+            wb.Write(stream2, false);
 
             assertSheetOrder(wb, "Sheet1", "Sheet3", "ASheet");
             Assert.AreEqual("ASheet!A1", name.RefersToFormula);
@@ -1295,7 +1295,7 @@ namespace TestCases.HSSF.UserModel
         private void WriteAndCloseWorkbook(IWorkbook workbook, FileInfo file)
         {
             ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
-            workbook.Write(bytesOut);
+            workbook.Write(bytesOut, false);
             workbook.Close();
 
             byte[] byteArray = bytesOut.ToByteArray();
@@ -1359,7 +1359,7 @@ namespace TestCases.HSSF.UserModel
                 wb.Write();
                 Assert.Fail("Shouldn't work for new files");
             }
-            catch (InvalidOperationException e) { }
+            catch (InvalidOperationException) { }
 
             // Can't work for InputStream opened files
             wb = new HSSFWorkbook(
@@ -1369,7 +1369,7 @@ namespace TestCases.HSSF.UserModel
                 wb.Write();
                 Assert.Fail("Shouldn't work for InputStream");
             }
-            catch (InvalidOperationException e) { }
+            catch (InvalidOperationException) { }
 
             // Can't work for OPOIFS
             OPOIFSFileSystem ofs = new OPOIFSFileSystem(
@@ -1380,7 +1380,7 @@ namespace TestCases.HSSF.UserModel
                 wb.Write();
                 Assert.Fail("Shouldn't work for OPOIFSFileSystem");
             }
-            catch (InvalidOperationException e) { }
+            catch (InvalidOperationException) { }
 
             // Can't work for Read-Only files
             NPOIFSFileSystem fs = new NPOIFSFileSystem(
@@ -1391,7 +1391,7 @@ namespace TestCases.HSSF.UserModel
                 wb.Write();
                 Assert.Fail("Shouldn't work for Read Only");
             }
-            catch (InvalidOperationException e) { }
+            catch (InvalidOperationException) { }
         }
 
         [Test]

@@ -26,7 +26,7 @@ namespace TestCases.POIFS.Crypt
                 CipherAlgorithm.FromEcmaId(0);
                 Assert.Fail("Should throw exception");
             }
-            catch (EncryptedDocumentException e)
+            catch (EncryptedDocumentException)
             {
                 // expected
             }
@@ -36,7 +36,7 @@ namespace TestCases.POIFS.Crypt
                 CipherAlgorithm.FromXmlId("AES", 1);
                 Assert.Fail("Should throw exception");
             }
-            catch (EncryptedDocumentException e)
+            catch (EncryptedDocumentException)
             {
                 // expected
             }
@@ -46,7 +46,7 @@ namespace TestCases.POIFS.Crypt
                 CipherAlgorithm.FromXmlId("RC1", 0x40);
                 Assert.Fail("Should throw exception");
             }
-            catch (EncryptedDocumentException e)
+            catch (EncryptedDocumentException)
             {
                 // expected
             }

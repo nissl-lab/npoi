@@ -38,9 +38,9 @@ namespace NPOI.POIFS.Crypt.Dsig
     {
 
         private ThreadLocal<OPCPackage> opcPackage = new ThreadLocal<OPCPackage>();
-        ///private ThreadLocal<XMLSignatureFactory> signatureFactory = new ThreadLocal<XMLSignatureFactory>();
-        ///private ThreadLocal<KeyInfoFactory> keyInfoFactory = new ThreadLocal<KeyInfoFactory>();
-        ///private ThreadLocal<Provider> provider = new ThreadLocal<Provider>();
+        //private ThreadLocal<XMLSignatureFactory> signatureFactory = new ThreadLocal<XMLSignatureFactory>();
+        //private ThreadLocal<KeyInfoFactory> keyInfoFactory = new ThreadLocal<KeyInfoFactory>();
+        //private ThreadLocal<Provider> provider = new ThreadLocal<Provider>();
 
         private List<SignatureFacet> signatureFacets = new List<SignatureFacet>();
         private HashAlgorithm digestAlgo = HashAlgorithm.sha1;

@@ -86,7 +86,7 @@ namespace NPOI.SS.Formula.Functions
                     // Excel seems to handle this by accessing past the end of the result vector.
                     throw new Exception("Lookup vector and result vector of differing sizes not supported yet");
                 }
-                int index = LookupUtils.LookupIndexOfValue(lookupValue, lookupVector, true);
+                int index = LookupUtils.lookupFirstIndexOfValue(lookupValue, lookupVector, true);
 
                 return resultVector.GetItem(index);
             }

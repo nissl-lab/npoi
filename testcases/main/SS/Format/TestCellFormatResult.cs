@@ -36,7 +36,7 @@ namespace TestCases.SS.Format
                 CellFormatResult result = new CellFormatResult(applies, text, textColor);
                 Assert.Fail("Cannot Initialize CellFormatResult with null text parameter");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException )
             {
                 //Expected
             }

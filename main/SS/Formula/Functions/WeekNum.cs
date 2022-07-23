@@ -20,6 +20,8 @@ using System;
 using NPOI.SS.Util;
 using NPOI.SS.UserModel;
 using System.Globalization;
+using System.Collections.Generic;
+
 namespace NPOI.SS.Formula.Functions
 {
 
@@ -46,6 +48,8 @@ namespace NPOI.SS.Formula.Functions
     {
 
         public static FreeRefFunction instance = new WeekNum();
+        private static NumberEval DEFAULT_RETURN_TYPE = new NumberEval(1);
+        private static List<int> VALID_RETURN_TYPES = new List<int>() { 1, 2, 11, 12, 13, 14, 15, 16, 17, 21 };
 
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval serialNumVE, ValueEval returnTypeVE)
         {
@@ -58,22 +62,34 @@ namespace NPOI.SS.Formula.Functions
             {
                 return ErrorEval.VALUE_INVALID;
             }
-            //Calendar serialNumCalendar = new GregorianCalendar();
-            //serialNumCalendar.setTime(DateUtil.GetJavaDate(serialNum, false));
-            DateTime serialNumCalendar = DateUtil.GetJavaDate(serialNum, false);
-
+            DateTime serialNumCalendar;
+            try
+            {
+                serialNumCalendar = DateUtil.GetJavaDate(serialNum, false);
+            }
+            catch (Exception )
+            {
+                return ErrorEval.NUM_ERROR;
+            }
             int returnType = 0;
             try
             {
                 ValueEval ve = OperandResolver.GetSingleValue(returnTypeVE, srcRowIndex, srcColumnIndex);
                 returnType = OperandResolver.CoerceValueToInt(ve);
+                if (ve is MissingArgEval)
+                {
+                    returnType = (int)DEFAULT_RETURN_TYPE.NumberValue;
+                }
+                else {
+                    returnType = OperandResolver.CoerceValueToInt(ve);
+                }
             }
             catch (EvaluationException)
             {
                 return ErrorEval.NUM_ERROR;
             }
 
-            if (returnType != 1 && returnType != 2)
+            if (!VALID_RETURN_TYPES.Contains(returnType))
             {
                 return ErrorEval.NUM_ERROR;
             }
@@ -81,24 +97,53 @@ namespace NPOI.SS.Formula.Functions
             return new NumberEval(this.getWeekNo(serialNumCalendar, returnType));
         }
 
+
         public int getWeekNo(DateTime dt, int weekStartOn)
         {
             GregorianCalendar cal = new GregorianCalendar();
             int weekOfYear;
-            if (weekStartOn == 1)
+            if (weekStartOn == 1 || weekStartOn == 17)
             {
                 weekOfYear = cal.GetWeekOfYear(dt, CalendarWeekRule.FirstDay, DayOfWeek.Sunday);
             }
-            else
+            else if (weekStartOn == 2 || weekStartOn == 11)
             {
                 weekOfYear = cal.GetWeekOfYear(dt, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+            }
+            else if (weekStartOn == 12)
+            {
+                weekOfYear = cal.GetWeekOfYear(dt, CalendarWeekRule.FirstDay, DayOfWeek.Tuesday);
+            }
+            else if (weekStartOn == 13)
+            {
+                weekOfYear = cal.GetWeekOfYear(dt, CalendarWeekRule.FirstDay, DayOfWeek.Wednesday);
+            }
+            else if (weekStartOn == 14)
+            {
+                weekOfYear = cal.GetWeekOfYear(dt, CalendarWeekRule.FirstDay, DayOfWeek.Thursday);
+            }
+            else if (weekStartOn == 15)
+            {
+                weekOfYear = cal.GetWeekOfYear(dt, CalendarWeekRule.FirstDay, DayOfWeek.Friday);
+            }
+            else if (weekStartOn == 16)
+            {
+                weekOfYear = cal.GetWeekOfYear(dt, CalendarWeekRule.FirstDay, DayOfWeek.Saturday);
+            }
+            else
+            {
+                weekOfYear = cal.GetWeekOfYear(dt, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
             }
             return weekOfYear;
         }
 
         public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
         {
-            if (args.Length == 2)
+            if (args.Length == 1)
+            {
+                return Evaluate(ec.RowIndex, ec.ColumnIndex, args[0], DEFAULT_RETURN_TYPE);
+            }
+            else if (args.Length == 2)
             {
                 return Evaluate(ec.RowIndex, ec.ColumnIndex, args[0], args[1]);
             }

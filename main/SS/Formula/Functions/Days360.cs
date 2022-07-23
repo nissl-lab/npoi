@@ -49,43 +49,39 @@ namespace NPOI.SS.Formula.Functions
 
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1)
         {
-            double result;
             try
             {
                 double d0 = NumericFunction.SingleOperandEvaluate(arg0, srcRowIndex, srcColumnIndex);
                 double d1 = NumericFunction.SingleOperandEvaluate(arg1, srcRowIndex, srcColumnIndex);
-                result = Evaluate(d0, d1, false);
+                return new NumberEval(Evaluate(d0, d1, false));
             }
             catch (EvaluationException e)
             {
                 return e.GetErrorEval();
             }
-            return new NumberEval(result);
         }
 
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1, ValueEval arg2)
         {
-            double result;
             try
             {
                 double d0 = NumericFunction.SingleOperandEvaluate(arg0, srcRowIndex, srcColumnIndex);
                 double d1 = NumericFunction.SingleOperandEvaluate(arg1, srcRowIndex, srcColumnIndex);
                 ValueEval ve = OperandResolver.GetSingleValue(arg2, srcRowIndex, srcColumnIndex);
                 bool? method = OperandResolver.CoerceValueToBoolean(ve, false);
-                result = Evaluate(d0, d1, method == null ? false : method.Value);
+                return new NumberEval(Evaluate(d0, d1, method != null && (bool)method));
             }
             catch (EvaluationException e)
             {
                 return e.GetErrorEval();
             }
-            return new NumberEval(result);
         }
         private double Evaluate(double d0, double d1, bool method)
         {
             DateTime realStart = GetDate(d0);
             DateTime realEnd = GetDate(d1);
             int[] startingDate = GetStartingDate(realStart, method);
-            int[] endingDate = GetEndingDate(realEnd, realStart, method);
+            int[] endingDate = GetEndingDate(realEnd, startingDate, method);
 
             return
                 (endingDate[0] * 360 + endingDate[1] * 30 + endingDate[2]) -
@@ -97,11 +93,12 @@ namespace NPOI.SS.Formula.Functions
         }
         private int[] GetStartingDate(DateTime realStart, bool method)
         {
-            DateTime d = realStart;
-            int dd = Math.Min(30, d.Day);
-
-            if (method == false && IsLastDayOfMonth(d)) dd = 30;
-            return new int[] { d.Year, d.Month, dd };
+            int yyyy = realStart.Year;
+            int mm = realStart.Month;
+            int dd = Math.Min(30, realStart.Day);
+            
+            if (!method&& IsLastDayOfMonth(realStart)) dd = 30;
+            return new int[] { yyyy, mm, dd };
         }
 
         private static int[] GetEndingDate(DateTime realEnd, DateTime realStart, bool method)
@@ -127,6 +124,27 @@ namespace NPOI.SS.Formula.Functions
                 }
             }
 
+            return new int[] { yyyy, mm, dd };
+        }
+        private static int[] GetEndingDate(DateTime realEnd, int[] startingDate, bool method)
+        {
+            int yyyy = realEnd.Year;
+            int mm = realEnd.Month;
+            int dd = Math.Min(30, realEnd.Day);
+
+            if (!method && realEnd.Day == 31)
+            {
+                if (startingDate[2] < 30)
+                {
+                    yyyy = realEnd.Year;
+                    mm = realEnd.Month+1;
+                    dd = 1;
+                }
+                else
+                {
+                    dd = 30;
+                }
+            }
             return new int[] { yyyy, mm, dd };
         }
         private DateTime GetEndingDateAccordingToStartingDate(double date, DateTime startingDate, bool method)

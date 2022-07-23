@@ -72,7 +72,7 @@
     <OutputPath>..\solution\Lib\.net45\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <Optimize>true</Optimize>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>1591;1587;1570</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>7.3</LangVersion>
@@ -183,6 +183,7 @@
     <Compile Include="Spreadsheet\Workbook\CT_PivotCache.cs" />
     <Compile Include="Spreadsheet\Workbook\CT_SmartTags.cs" />
     <Compile Include="Spreadsheet\Workbook\CT_WebPublishObjects.cs" />
+    <Compile Include="Vml\CT_AlternateContent.cs" />
     <Compile Include="Wordprocessing\BaseTypes.cs" />
     <Compile Include="Wordprocessing\Document\CommentsDocument.cs" />
     <Compile Include="Wordprocessing\Document\FootnotesDocument.cs" />
@@ -291,10 +292,19 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\main\NPOI.csproj">
+      <Project>{10fa8538-157a-4380-a4f6-8e2c3ee92cae}</Project>
+      <Name>NPOI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.csproj">
       <Project>{c9f265b7-ece3-4755-b0b1-79536575c2a9}</Project>
       <Name>NPOI.OpenXml4Net</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Enums.NET">
+      <Version>4.0.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

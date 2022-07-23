@@ -198,7 +198,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.extLst.Write(sw, "extLst");
             sw.Write("</table>");
         }
-
+        public bool IsSetAutoFilter
+        {
+            get { return this.autoFilterField != null; }
+        }
         [XmlElement]
         public CT_AutoFilter autoFilter
         {
@@ -621,10 +624,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        internal CT_TableStyleInfo AddNewTableStyleInfo()
+        public CT_TableStyleInfo AddNewTableStyleInfo()
         {
             this.tableStyleInfoField = new CT_TableStyleInfo();
             return this.tableStyleInfoField;
+        }
+
+        public CT_TableColumns AddNewTableColumns()
+        {
+            this.tableColumnsField = new CT_TableColumns();
+            return this.tableColumnsField;
+        }
+        public bool IsSetTableStyleInfo()
+        {
+            return this.tableStyleInfoField != null;
         }
     }
     [Serializable]
@@ -658,8 +671,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
-
-
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
@@ -674,7 +685,24 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             sw.Write(string.Format("</{0}>", nodeName));
         }
-
+        public CT_TableColumn InsertNewTableColumn(int columnIndex)
+        {
+            var newTableColumn = new CT_TableColumn();
+            this.tableColumn.Insert(columnIndex,newTableColumn);
+            return newTableColumn;
+        }
+        public List<CT_TableColumn> GetTableColumnList()
+        {
+            if (this.tableColumnField == null)
+            {
+                this.tableColumnField = new List<CT_TableColumn>();
+            }
+            return this.tableColumnField;
+        }
+        public void RemoveTableColumn(int columnIndex)
+        {
+            this.tableColumn.RemoveAt(columnIndex);
+        }
         [XmlElement]
         public List<CT_TableColumn> tableColumn
         {

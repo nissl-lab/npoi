@@ -112,7 +112,15 @@ namespace NPOI.OpenXml4Net.OPC
         {
 
         }
-
+        /// <summary>
+        /// Check if the new part was already added before via PackagePart.addRelationship()
+        /// </summary>
+        /// <param name="packagePart">to find the relationship for</param>
+        /// <returns>The existing relationship, or null if there isn't yet one</returns>
+        public PackageRelationship FindExistingRelation(PackagePart packagePart)
+        {
+            return _relationships.FindExistingInternalRelation(packagePart);
+        }
         /**
          * Adds an external relationship to a part (except relationships part).
          * 
@@ -503,7 +511,7 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     target = PackagingUriHelper.ParseUri(t.Substring(0, t.IndexOf('#')), UriKind.Absolute);
                 }
-                catch (UriFormatException e)
+                catch (UriFormatException)
                 {
                     throw new InvalidFormatException("Invalid target URI: " + t);
                 }

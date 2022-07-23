@@ -76,12 +76,6 @@ namespace TestCases.SS.Formula.Functions
             // longer time spans
             Confirm(562, 2008, 8, 11, 2010, 3, 3);
             Confirm(916, 2007, 2, 23, 2009, 9, 9);
-        }
-
-        private static void Confirm(int expResult, int y1, int m1, int d1, int y2, int m2, int d2)
-        {
-            Confirm(expResult, MakeDate(y1, m1, d1), MakeDate(y2, m2, d2), false);
-            Confirm(-expResult, MakeDate(y2, m2, d2), MakeDate(y1, m1, d1), false);
 
             // other tests
             Confirm(1, MakeDate(1993, 2, 28), MakeDate(1993, 3, 1), false);
@@ -89,6 +83,17 @@ namespace TestCases.SS.Formula.Functions
             Confirm(-2, MakeDate(1993, 2, 28), MakeDate(1993, 2, 28), false);
             Confirm(3, MakeDate(1993, 2, 28), MakeDate(1993, 3, 1), true);
             Confirm(2, MakeDate(1996, 2, 29), MakeDate(1996, 3, 1), true);
+
+            // from https://support.office.com/en-us/article/DAYS360-function-B9A509FD-49EF-407E-94DF-0CBDA5718C2A
+            Confirm(1, MakeDate(2011, 1, 30), MakeDate(2011, 2, 1), false);
+            Confirm(360, MakeDate(2011, 1, 1), MakeDate(2011, 12, 31), false);
+            Confirm(30, MakeDate(2011, 1, 1), MakeDate(2011, 2, 1), false);
+        }
+
+        private static void Confirm(int expResult, int y1, int m1, int d1, int y2, int m2, int d2)
+        {
+            Confirm(expResult, MakeDate(y1, m1, d1), MakeDate(y2, m2, d2), false);
+            Confirm(-expResult, MakeDate(y2, m2, d2), MakeDate(y1, m1, d1), false);
         }
         /**
          * The <c>method</c> parameter only Makes a difference when the second parameter
@@ -118,6 +123,24 @@ namespace TestCases.SS.Formula.Functions
             // leap year
             ConfirmMonthBoundary(false, 2012, 2, -1, 1, 2, 3, 4);
             ConfirmMonthBoundary(true, 2012, 2, 0, 1, 2, 3, 4);
+
+            // bug 60029
+            DateTime start = MakeDate(2018, 2, 28);
+            DateTime end = MakeDate(2018, 3, 31);
+            Confirm(30, start, end, false);
+
+            // examples from https://support.office.com/en-us/article/DAYS360-function-B9A509FD-49EF-407E-94DF-0CBDA5718C2A
+            start = MakeDate(2011, 1, 30);
+            end = MakeDate(2011, 2, 1);
+            Confirm(1, start, end, false);
+
+            start = MakeDate(2011, 1, 1);
+            end = MakeDate(2011, 12, 31);
+            Confirm(360, start, end, false);
+
+            start = MakeDate(2011, 1, 1);
+            end = MakeDate(2011, 2, 1);
+            Confirm(30, start, end, false);
         }
 
 
@@ -151,13 +174,11 @@ namespace TestCases.SS.Formula.Functions
             {
                 ve = invokeDays360(Convert(firstArg), Convert(secondArg));
             }
-            if (ve is NumberEval)
-            {
-                Assert.IsTrue(ve is NumberEval, "wrong return type (" + ve.GetType().Name + ")");
-                NumberEval numberEval = (NumberEval)ve;
-                String err = String.Format("days360({0},{1},{2}) wrong result", firstArg, secondArg, method);
-                Assert.AreEqual(expResult, numberEval.NumberValue, err);
-            }
+            Assert.IsTrue(ve is NumberEval, "wrong return type (" + ve.GetType().Name + ")");
+
+            NumberEval numberEval = (NumberEval)ve;
+            String err = String.Format("days360({0},{1},{2}) wrong result", firstArg, secondArg, method);
+            Assert.AreEqual(expResult, numberEval.NumberValue, err);
         }
         private static ValueEval invokeDays360(params ValueEval[] args)
         {

@@ -59,7 +59,7 @@ namespace NPOI.SS.Formula.Functions
                 ValueEval lookupValue = OperandResolver.GetSingleValue(args[0], srcCellRow, srcCellCol);
                 AreaEval tableArray = LookupUtils.ResolveTableArrayArg(args[1]);
                 bool IsRangeLookup = LookupUtils.ResolveRangeLookupArg(arg3, srcCellRow, srcCellCol);
-                int colIndex = LookupUtils.LookupIndexOfValue(lookupValue, LookupUtils.CreateRowVector(tableArray, 0), IsRangeLookup);
+                int colIndex = LookupUtils.lookupFirstIndexOfValue(lookupValue, LookupUtils.CreateRowVector(tableArray, 0), IsRangeLookup);
                 int rowIndex = LookupUtils.ResolveRowOrColIndexArg(args[2], srcCellRow, srcCellCol);
                 ValueVector resultCol = CreateResultColumnVector(tableArray, rowIndex);
                 return resultCol.GetItem(colIndex);

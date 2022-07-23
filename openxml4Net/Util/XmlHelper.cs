@@ -176,7 +176,7 @@ namespace NPOI.OpenXml4Net.Util
             else
             {
                 double v;
-                if (double.TryParse(s, NumberStyles.Number, CultureInfo.InvariantCulture, out v))
+                if (double.TryParse(s, NumberStyles.Number|NumberStyles.Float| NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out v))
                 {
                     return v;
                 }
@@ -312,9 +312,9 @@ namespace NPOI.OpenXml4Net.Util
         {
             WriteAttribute(sw, attributeName, value, true);
         }
-        public static void WriteAttribute(StreamWriter sw, string attributeName, bool value, bool writeIfBlank)
+        public static void WriteAttribute(StreamWriter sw, string attributeName, bool value, bool writeIfBlank, bool defaultValue = false)
         {
-            if (value == false && !writeIfBlank)
+            if (value == defaultValue && !writeIfBlank)
                 return;
             WriteAttribute(sw, attributeName, value ? "1" : "0");
         }
@@ -339,13 +339,28 @@ namespace NPOI.OpenXml4Net.Util
         {
             WriteAttribute(sw, attributeName, value, false);
         }
+        public static void WriteAttribute(StreamWriter sw, string attributeName, uint value, bool writeIfBlank)
+        {
+            if (value == 0 && !writeIfBlank)
+                return;
+
+            WriteAttribute(sw, attributeName, value.ToString(CultureInfo.InvariantCulture));
+        }
+        public static void WriteAttribute(StreamWriter sw, string attributeName, uint value)
+        {
+            WriteAttribute(sw, attributeName, value, false);
+        }
         public static void WriteAttribute(StreamWriter sw, string attributeName, string value)
         {
             WriteAttribute(sw, attributeName, value, false);
         }
         public static void WriteAttribute(StreamWriter sw, string attributeName, string value, bool writeIfBlank)
         {
-            if (string.IsNullOrEmpty(value) && !writeIfBlank)
+            WriteAttribute(sw, attributeName, value, writeIfBlank, string.Empty);
+        }
+        public static void WriteAttribute(StreamWriter sw, string attributeName, string value, bool writeIfBlank, string defaultValue)
+        {
+            if ((string.IsNullOrEmpty(value) || defaultValue.Equals(value)) && !writeIfBlank)
                 return;
             sw.Write(string.Format(" {0}=\"{1}\"", attributeName, value == null ? string.Empty : EncodeXml(value)));
         }
@@ -356,26 +371,22 @@ namespace NPOI.OpenXml4Net.Util
 
             WriteAttribute(sw, attributeName, BitConverter.ToString(value).Replace("-", ""), false);
         }
+
         public static void WriteAttribute(StreamWriter sw, string attributeName, uint value, uint defaultValue, bool writeIfBlank = false)
         {
             if(value != defaultValue)
-                WriteAttribute(sw, attributeName, (int)value, true);
+                WriteAttribute(sw, attributeName, value, true);
             else if(writeIfBlank)
-                WriteAttribute(sw, attributeName, (int)value, writeIfBlank);
-        }
-        public static void WriteAttribute(StreamWriter sw, string attributeName, uint value, bool writeIfBlank = false)
-        {
-            WriteAttribute(sw, attributeName, (int)value, writeIfBlank);
+                WriteAttribute(sw, attributeName, value, writeIfBlank);
         }
 
         public static void WriteAttribute(StreamWriter sw, string attributeName, DateTime? value)
         {
             if (value == null)
                 return;
-            WriteAttribute(sw, attributeName, value.ToString(), false);
-            //how to write xsd:datetime data
-            throw new NotImplementedException();
+            WriteAttribute(sw, attributeName, value.Value.ToString("yyyy-MM-ddTHH:mm:ss"), false);
         }
+
         public static void LoadXmlSafe(XmlDocument xmlDoc, Stream stream)
         {
             XmlReaderSettings settings = new XmlReaderSettings();

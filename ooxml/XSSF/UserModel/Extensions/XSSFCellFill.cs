@@ -160,7 +160,7 @@ namespace NPOI.XSSF.UserModel.Extensions
          * @return CT_Fill
          */
 
-        internal CT_Fill GetCTFill()
+        public CT_Fill GetCTFill()
         {
             return _fill;
         }

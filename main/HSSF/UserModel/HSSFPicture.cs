@@ -208,7 +208,7 @@ namespace NPOI.HSSF.UserModel
             byte[] data = bse.BlipRecord.PictureData;
             //int type = bse.BlipTypeWin32;
 
-            using (MemoryStream ms = new MemoryStream(data))
+            using (MemoryStream ms = RecyclableMemory.GetStream(data))
             {
                 using (Image img = Image.FromStream(ms))
                 {

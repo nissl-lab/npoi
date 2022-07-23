@@ -21,6 +21,7 @@ namespace NPOI.HSSF.UserModel
 {
     using System;
     using NPOI.SS.Formula;
+    using NPOI.SS.Util;
 
     /// <summary>
     /// HSSF wrapper for a cell under evaluation
@@ -129,6 +130,20 @@ namespace NPOI.HSSF.UserModel
         public CellType CachedFormulaResultType
         {
             get { return _cell.CachedFormulaResultType; }
+        }
+
+        public bool IsPartOfArrayFormulaGroup
+        {
+            get
+            {
+                return _cell.IsPartOfArrayFormulaGroup;
+            }
+        }
+
+        public CellRangeAddress ArrayFormulaRange
+        {
+
+            get { return _cell.ArrayFormulaRange; }
         }
     }
 }

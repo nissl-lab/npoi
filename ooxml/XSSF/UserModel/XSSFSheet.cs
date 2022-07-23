@@ -3201,6 +3201,23 @@ namespace NPOI.XSSF.UserModel
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public void ShiftRows(int startRow, int endRow, int n, bool copyRowHeight, bool resetOriginalRowHeight)
         {
+            int sheetIndex = Workbook.GetSheetIndex(this);
+            String sheetName = Workbook.GetSheetName(sheetIndex);
+            FormulaShifter shifter = FormulaShifter.CreateForRowShift(
+                           sheetIndex, sheetName, startRow, endRow, n, SpreadsheetVersion.EXCEL2007);
+            removeOverwritten(startRow, endRow, n);
+            shiftCommentsAndRows(startRow, endRow, n, copyRowHeight);
+
+            XSSFRowShifter rowShifter = new XSSFRowShifter(this);
+            rowShifter.ShiftMergedRegions(startRow, endRow, n);
+            rowShifter.UpdateNamedRanges(shifter);
+            rowShifter.UpdateFormulas(shifter);
+            rowShifter.UpdateConditionalFormatting(shifter);
+            rowShifter.UpdateHyperlinks(shifter);
+            rebuildRows();
+        }
+        private void removeOverwritten(int startRow, int endRow, int n)
+        {
             XSSFVMLDrawing vml = GetVMLDrawing(false);
             List<int> rowsToRemove = new List<int>();
             List<CellAddress> commentsToRemove = new List<CellAddress>();
@@ -3269,78 +3286,9 @@ namespace NPOI.XSSF.UserModel
                 _rows.Remove(rowKey);
             }
             worksheet.sheetData.RemoveRows(ctRowsToRemove);
-            // then do the actual moving and also adjust comments/rowHeight
-            // we need to sort it in a way so the Shifting does not mess up the structures, 
-            // i.e. when Shifting down, start from down and go up, when Shifting up, vice-versa
-            SortedDictionary<XSSFComment, int> commentsToShift = new SortedDictionary<XSSFComment, int>(new ShiftCommentComparator(n));
-
-            foreach (KeyValuePair<int, XSSFRow> rowDict in _rows)
-            {
-                XSSFRow row = rowDict.Value;
-                int rownum = row.RowNum;
-
-                if (sheetComments != null)
-                {
-                    // calculate the new rownum
-                    int newrownum = ShiftedRowNum(startRow, endRow, n, rownum);
-
-                    // is there a change necessary for the current row?
-                    if (newrownum != rownum)
-                    {
-                        CT_CommentList lst = sheetComments.GetCTComments().commentList;
-                        foreach (CT_Comment comment in lst.comment)
-                        {
-                            String oldRef = comment.@ref;
-                            CellReference ref1 = new CellReference(oldRef);
-
-                            // is this comment part of the current row?
-                            if (ref1.Row == rownum)
-                            {
-                                XSSFComment xssfComment = new XSSFComment(sheetComments, comment,
-                                        vml == null ? null : vml.FindCommentShape(rownum, ref1.Col));
-
-                                // we should not perform the Shifting right here as we would then find
-                                // already Shifted comments and would shift them again...
-                                if (commentsToShift.ContainsKey(xssfComment))
-                                    commentsToShift[xssfComment] = newrownum;
-                                else
-                                    commentsToShift.Add(xssfComment, newrownum);
-                            }
-                        }
-                    }
-                }
-
-                if (rownum < startRow || rownum > endRow) continue;
-
-                if (!copyRowHeight)
-                {
-                    row.Height = (/*setter*/(short)-1);
-                }
-
-                row.Shift(n);
-            }
-
-            // adjust all the affected comment-structures now
-            // the Map is sorted and thus provides them in the order that we need here, 
-            // i.e. from down to up if Shifting down, vice-versa otherwise
-            foreach (KeyValuePair<XSSFComment, int> entry in commentsToShift)
-            {
-                entry.Key.Row = (/*setter*/entry.Value);
-            }
-
-            XSSFRowShifter rowShifter = new XSSFRowShifter(this);
-
-            int sheetIndex = Workbook.GetSheetIndex(this);
-            String sheetName = Workbook.GetSheetName(sheetIndex);
-            FormulaShifter shifter = FormulaShifter.CreateForRowShift(
-                                       sheetIndex, sheetName, startRow, endRow, n, SpreadsheetVersion.EXCEL2007);
-
-            rowShifter.UpdateNamedRanges(shifter);
-            rowShifter.UpdateFormulas(shifter);
-            rowShifter.ShiftMergedRegions(startRow, endRow, n);
-            rowShifter.UpdateConditionalFormatting(shifter);
-            rowShifter.UpdateHyperlinks(shifter);
-
+        }
+        private void rebuildRows()
+        {
             //rebuild the _rows map
             Dictionary<int, XSSFRow> map = new Dictionary<int, XSSFRow>();
             foreach (XSSFRow r in _rows.Values)
@@ -3358,6 +3306,62 @@ namespace NPOI.XSSF.UserModel
             // not found at poi 3.15
             if (worksheet.sheetData.row != null)
                 worksheet.sheetData.row.Sort((row1, row2) => row1.r.CompareTo(row2.r));
+        }
+        private void shiftCommentsAndRows(int startRow, int endRow, int n, bool copyRowHeight)
+        {
+            SortedDictionary<XSSFComment, int> commentsToShift = new SortedDictionary<XSSFComment, int>(new ShiftCommentComparator(n));
+
+            foreach (KeyValuePair<int, XSSFRow> rowDict in _rows)
+            {
+                XSSFRow row = rowDict.Value;
+                int rownum = row.RowNum;
+
+                if (sheetComments != null)
+                {
+                    // calculate the new rownum
+                    int newrownum = ShiftedRowNum(startRow, endRow, n, rownum);
+
+                    // is there a change necessary for the current row?
+                    if (newrownum != rownum)
+                    {
+                        var commentAddresses = sheetComments.GetCellAddresses();
+                        foreach (var cellAddress in commentAddresses)
+                        {
+                            if (cellAddress.Row == rownum)
+                            {
+                                XSSFComment oldComment = sheetComments.FindCellComment(cellAddress);
+                                if (oldComment!=null)
+                                {
+                                    XSSFComment xssfComment = new XSSFComment(sheetComments, oldComment.GetCTComment(),
+                                       oldComment.GetCTShape());
+                                    if (commentsToShift.ContainsKey(xssfComment))
+                                        commentsToShift[xssfComment] = newrownum;
+                                    else
+                                        commentsToShift.Add(xssfComment, newrownum);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (rownum < startRow || rownum > endRow) continue;
+
+                if (!copyRowHeight)
+                {
+                    row.Height = (/*setter*/(short)-1);
+                } 
+
+                row.Shift(n);
+            }
+
+            // adjust all the affected comment-structures now
+            // the Map is sorted and thus provides them in the order that we need here, 
+            // i.e. from down to up if Shifting down, vice-versa otherwise
+            foreach (KeyValuePair<XSSFComment, int> entry in commentsToShift)
+            {
+                entry.Key.Row = entry.Value;
+            }
+            rebuildRows();
         }
         private class ShiftCommentComparator : IComparer<XSSFComment>
         {
@@ -3752,7 +3756,7 @@ namespace NPOI.XSSF.UserModel
             out1.Close();
         }
 
-        internal virtual void Write(Stream stream)
+        internal virtual void Write(Stream stream, bool leaveOpen=false)
         {
             bool setToNull = false;
             if (worksheet.sizeOfColsArray() == 1)
@@ -3804,7 +3808,7 @@ namespace NPOI.XSSF.UserModel
             map[ST_RelationshipId.NamespaceURI] = "r";
             //xmlOptions.SetSaveSuggestedPrefixes(map);
 
-            new WorksheetDocument(worksheet).Save(stream);
+            new WorksheetDocument(worksheet).Save(stream, leaveOpen);
 
             // Bug 52233: Ensure that we have a col-array even if write() removed it
             if (setToNull)
@@ -4773,10 +4777,11 @@ namespace NPOI.XSSF.UserModel
 
             try
             {
-                using (MemoryStream out1 = new MemoryStream())
+                using (MemoryStream ms = RecyclableMemory.GetStream())
                 {
-                    this.Write(out1);
-                    clonedSheet.Read(new MemoryStream(out1.ToArray()));
+                    this.Write(ms, true);
+                    ms.Position = 0;
+                    clonedSheet.Read(ms);
                 }
             }
             catch (IOException e)
@@ -4805,7 +4810,7 @@ namespace NPOI.XSSF.UserModel
                     continue;
                 }
                 //skip printerSettings.bin part
-                if (r.GetPackagePart().PartName.Name == "/xl/printerSettings/printerSettings1.bin")
+                if (r.GetPackagePart().PartName.Name.StartsWith("/xl/printerSettings/printerSettings"))
                     continue;
                 PackageRelationship rel = r.GetPackageRelationship();
                 clonedSheet.GetPackagePart().AddRelationship(
@@ -5424,7 +5429,53 @@ namespace NPOI.XSSF.UserModel
             }
             return result;
         }
+        /**
+ *  when a cell with a 'master' shared formula is removed,  the next cell in the range becomes the master
+ * @param cell The cell that is removed
+ * @param evalWb BaseXSSFEvaluationWorkbook in use, if one exists
+ */
+        internal void OnDeleteFormula(XSSFCell cell, XSSFEvaluationWorkbook evalWb)
+        {
 
+            CT_CellFormula f = cell.GetCTCell().f;
+            if (f != null && f.t == ST_CellFormulaType.shared && f.isSetRef() && f.Value != null)
+            {
+                bool breakit = false;
+                CellRangeAddress ref1 = CellRangeAddress.ValueOf(f.@ref);
+                if (ref1.NumberOfCells > 1)
+                {
+                    for (int i = cell.RowIndex; i <= ref1.LastRow; i++)
+                    {
+                        XSSFRow row = (XSSFRow)GetRow(i);
+                        if (row != null)
+                        {
+                            for (int j = cell.ColumnIndex; j <= ref1.LastColumn; j++)
+                            {
+                                XSSFCell nextCell = (XSSFCell)row.GetCell(j);
+                                if (nextCell != null && nextCell != cell && nextCell.CellType == CellType.Formula)
+                                {
+                                    CT_CellFormula nextF = nextCell.GetCTCell().f;
+                                    if (nextF.t == ST_CellFormulaType.shared && nextF.si == f.si)
+                                    {
+                                        nextF.Value = nextCell.GetCellFormula(evalWb);
+                                        CellRangeAddress nextRef = new CellRangeAddress(
+                                                nextCell.RowIndex, ref1.LastRow,
+                                                nextCell.ColumnIndex, ref1.LastColumn);
+                                        nextF.@ref=nextRef.FormatAsString();
+
+                                        sharedFormulas[(int)nextF.si]= nextF;
+                                        breakit = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (breakit)
+                                break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

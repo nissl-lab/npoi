@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using NPOI.OpenXml4Net.Util;
+using NPOI.OpenXmlFormats.Vml;
 
 namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 {
@@ -1270,8 +1271,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             sw.Write(string.Format("<xdr:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "fLocksWithSheet", this.fLocksWithSheet, false);
             XmlHelper.WriteAttribute(sw, "fPrintsWithSheet", this.fPrintsWithSheet,false);
-            sw.Write(">");
-            sw.Write(string.Format("</xdr:{0}>", nodeName));
+            sw.Write("/>");
         }
         bool _fLocksWithSheet;
         bool _fPrintsWithSheet;
@@ -1449,8 +1449,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             get { return fromField; }
             set { fromField = value; }
         }
-        Vml.Spreadsheet.CT_AlternateContent alternateContentField = null;
-        public Vml.Spreadsheet.CT_AlternateContent alternateContent
+        CT_AlternateContent alternateContentField = null;
+        public CT_AlternateContent alternateContent
         {
             get
             {
@@ -1563,7 +1563,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 }
                 else if (childNode.LocalName == "AlternateContent")
                 {
-                    oneCellAnchor.alternateContent = Vml.Spreadsheet.CT_AlternateContent.Parse(childNode, namespaceManager);
+                    oneCellAnchor.alternateContent = CT_AlternateContent.Parse(childNode, namespaceManager);
                 }
                 else if (childNode.LocalName == "clientData")
                 {
@@ -1807,6 +1807,20 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             set { toField = value; }
         }
 
+        private Vml.CT_AlternateContent alternateContentField = null;
+
+        public Vml.CT_AlternateContent alternateContent
+        {
+            get
+            {
+                return alternateContentField;
+            }
+            set
+            {
+                this.alternateContentField = value;
+            }
+        }
+
         #region Choice - one of CT_Shape, CT_GroupShape, CT_GraphicalObjectFrame, CT_Connector or CT_Picture
 
         [XmlElement]
@@ -1863,6 +1877,10 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 this.graphicalObjectField.Write(sw, "graphicFrame");
             else if (this.pictureField != null)
                 this.picture.Write(sw, "pic");
+            if (this.alternateContent != null)
+            {
+                this.alternateContent.Write(sw, "AlternateContent");
+            }
             if (this.clientData != null)
             {
                 this.clientData.Write(sw, "clientData");
@@ -1905,6 +1923,10 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 else if (childNode.LocalName == "graphicFrame")
                 {
                     twoCellAnchor.graphicFrame = CT_GraphicalObjectFrame.Parse(childNode, namespaceManager);
+                }
+                else if (childNode.LocalName == "AlternateContent")
+                {
+                    twoCellAnchor.alternateContent = Vml.CT_AlternateContent.Parse(childNode, namespaceManager);
                 }
                 else if (childNode.LocalName == "clientData")
                 {

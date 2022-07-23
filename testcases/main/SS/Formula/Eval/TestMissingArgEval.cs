@@ -60,6 +60,65 @@ namespace TestCases.SS.Formula.Eval
             Assert.AreEqual("abc", fe.Evaluate(cell).StringValue);
         }
         [Test]
+        public void TestCompareMissingArgs()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
+            ISheet sheet = wb.CreateSheet("Sheet1");
+            ICell cell = sheet.CreateRow(0).CreateCell(0);
+
+            cell.SetCellFormula("iferror(0/0,)<0");
+            fe.ClearAllCachedResultValues();
+            CellValue cv = fe.Evaluate(cell);
+            Assert.IsFalse(cv.BooleanValue);
+
+            cell.SetCellFormula("iferror(0/0,)<=0");
+            fe.ClearAllCachedResultValues();
+            cv = fe.Evaluate(cell);
+            Assert.IsTrue(cv.BooleanValue);
+
+            cell.SetCellFormula("iferror(0/0,)=0");
+            fe.ClearAllCachedResultValues();
+            cv = fe.Evaluate(cell);
+            Assert.IsTrue(cv.BooleanValue);
+
+            cell.SetCellFormula("iferror(0/0,)>=0");
+            fe.ClearAllCachedResultValues();
+            cv = fe.Evaluate(cell);
+            Assert.IsTrue(cv.BooleanValue);
+
+            cell.SetCellFormula("iferror(0/0,)>0");
+            fe.ClearAllCachedResultValues();
+            cv = fe.Evaluate(cell);
+            Assert.IsFalse(cv.BooleanValue);
+
+            // invert above for code coverage
+            cell.SetCellFormula("0<iferror(0/0,)");
+            fe.ClearAllCachedResultValues();
+            cv = fe.Evaluate(cell);
+            Assert.IsFalse(cv.BooleanValue);
+
+            cell.SetCellFormula("0<=iferror(0/0,)");
+            fe.ClearAllCachedResultValues();
+            cv = fe.Evaluate(cell);
+            Assert.IsTrue(cv.BooleanValue);
+
+            cell.SetCellFormula("0=iferror(0/0,)");
+            fe.ClearAllCachedResultValues();
+            cv = fe.Evaluate(cell);
+            Assert.IsTrue(cv.BooleanValue);
+
+            cell.SetCellFormula("0>=iferror(0/0,)");
+            fe.ClearAllCachedResultValues();
+            cv = fe.Evaluate(cell);
+            Assert.IsTrue(cv.BooleanValue);
+
+            cell.SetCellFormula("0>iferror(0/0,)");
+            fe.ClearAllCachedResultValues();
+            cv = fe.Evaluate(cell);
+            Assert.IsFalse(cv.BooleanValue);
+        }
+        [Test]
         public void TestCountFuncs()
         {
             HSSFWorkbook wb = new HSSFWorkbook();

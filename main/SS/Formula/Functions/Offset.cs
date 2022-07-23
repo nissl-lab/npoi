@@ -225,7 +225,7 @@ namespace NPOI.SS.Formula.Functions
         public ValueEval Evaluate(ValueEval[] args, int srcCellRow, int srcCellCol)
         {
 
-            if (args.Length < 3 || args.Length > 5)
+            if (args.Length < 1 || args.Length > 5)
             {
                 return ErrorEval.VALUE_INVALID;
             }
@@ -233,12 +233,14 @@ namespace NPOI.SS.Formula.Functions
             try
             {
                 BaseRef baseRef = EvaluateBaseRef(args[0]);
-                int rowOffset = EvaluateIntArg(args[1], srcCellRow, srcCellCol);
-                int columnOffset = EvaluateIntArg(args[2], srcCellRow, srcCellCol);
+                // optional arguments
+                // If offsets are omitted, it is assumed to be 0.
+                int rowOffset = (args[1] is MissingArgEval) ? 0 : EvaluateIntArg(args[1], srcCellRow, srcCellCol);
+                int columnOffset = (args[2] is MissingArgEval) ? 0 : EvaluateIntArg(args[2], srcCellRow, srcCellCol);
                 int height = baseRef.Height;
                 int width = baseRef.Width;
                 // optional arguments
-                // If height or width is omitted, it is assumed to be the same height or width as reference.
+                // If height or width are omitted, it is assumed to be the same height or width as reference.
                 switch (args.Length)
                 {
                     case 5:

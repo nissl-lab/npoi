@@ -228,7 +228,6 @@
     <Compile Include="XWPF\TestPackageCorePropertiesGetKeywords.cs" />
     <Compile Include="XWPF\TestXWPFBugs.cs" />
     <Compile Include="XWPF\UserModel\TestChangeTracking.cs" />
-    <Compile Include="XWPF\UserModel\TestXWPFBugs.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFDocument.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFFootnotes.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFHeader.cs" />
@@ -311,11 +310,14 @@
     <PackageReference Include="NUnit">
       <Version>3.13.1</Version>
     </PackageReference>
+    <PackageReference Include="NUnit3TestAdapter">
+      <Version>4.2.1</Version>
+    </PackageReference>
     <PackageReference Include="Portable.BouncyCastle">
       <Version>1.8.9</Version>
     </PackageReference>
     <PackageReference Include="SharpZipLib">
-      <Version>1.3.2</Version>
+      <Version>1.3.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup />

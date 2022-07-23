@@ -127,7 +127,7 @@ namespace TestCases.XSSF.UserModel
                 rt.ApplyFont(0, 10, (short)1);
                 Assert.Fail("Fails without styles in the table");
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException )
             {
                 // expected
             }

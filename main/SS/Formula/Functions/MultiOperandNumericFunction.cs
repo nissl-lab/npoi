@@ -233,7 +233,7 @@ namespace NPOI.SS.Formula.Functions
                 return;
             }
             throw new InvalidOperationException("Invalid ValueEval type passed for conversion: ("
-                    + ve.GetType() + ")");
+                    + ve.GetType().Name + ")");
         }
         /**
          * Returns a double array that contains values for the numeric cells

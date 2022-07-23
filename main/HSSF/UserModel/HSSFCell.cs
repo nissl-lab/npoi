@@ -32,6 +32,7 @@ namespace NPOI.HSSF.UserModel
     using System.Globalization;
     using System.Collections.Generic;
     using NPOI.Util;
+    using NPOI.SS.Formula.Eval;
 
     /// <summary>
     /// High level representation of a cell in a row of a spReadsheet.
@@ -515,6 +516,20 @@ namespace NPOI.HSSF.UserModel
             SetCellValue(DateUtil.GetExcelDate(value, this.book.IsDate1904()));
         }
 
+#if NET6_0_OR_GREATER
+        /// <summary>
+        /// Set a date value for the cell. Excel treats dates as numeric so you will need to format the cell as
+        /// a date.
+        /// </summary>
+        /// <param name="value">the date value to Set this cell to.  For formulas we'll Set the
+        /// precalculated value, for numerics we'll Set its value. For other types we
+        /// will Change the cell to a numeric cell and Set its value.</param>
+        public void SetCellValue(DateOnly value)
+        {
+            SetCellValue(DateUtil.GetExcelDate(value, this.book.IsDate1904()));
+        }
+#endif
+
 
         /// <summary>
         /// Set a string value for the cell. Please note that if you are using
@@ -651,7 +666,78 @@ namespace NPOI.HSSF.UserModel
                 SetCellFormula(value);
             }
         }
+        /// <summary>
+        /// Called when this an array formula in this cell is deleted.
+        /// </summary>
+        /// <param name="message">a customized exception message for the case if deletion of the cell is impossible. If null, a default message will be generated</param>
+        internal void TryToDeleteArrayFormula(String message)
+        {
+            if (!IsPartOfArrayFormulaGroup)
+                return;
 
+            CellRangeAddress arrayFormulaRange = ArrayFormulaRange;
+            if (arrayFormulaRange.NumberOfCells > 1)
+            {
+                if (message == null)
+                {
+                    message = "Cell " + new CellReference(this).FormatAsString() + " is part of a multi-cell array formula. " +
+                            "You cannot change part of an array.";
+                }
+                throw new InvalidOperationException(message);
+            }
+            //un-register the single-cell array formula from the parent sheet through public interface
+            Row.Sheet.RemoveArrayFormula(this);
+        }
+        public void RemoveFormula()
+        {
+            if (CellType != CellType.Formula)
+            {
+                return;
+            }
+
+            if (IsPartOfArrayFormulaGroup)
+            {
+                TryToDeleteArrayFormula(null);
+                return;
+            }
+            NotifyFormulaChanging();
+
+            switch (CachedFormulaResultType)
+            {
+                case CellType.Numeric:
+                    double numericValue = ((FormulaRecordAggregate)_record).FormulaRecord.Value;
+                    _record = new NumberRecord();
+                    ((NumberRecord)_record).Value = numericValue;
+                    cellType = CellType.Numeric;
+                    break;
+                case CellType.String:
+                    _record = new NumberRecord();
+                    ((NumberRecord)_record).Value = 0;
+                    cellType = CellType.String;
+                    break;
+                case CellType.Boolean:
+                    bool booleanValue = ((FormulaRecordAggregate)_record).FormulaRecord.CachedBooleanValue;
+                    _record = new BoolErrRecord();
+                    ((BoolErrRecord)_record).SetValue(booleanValue);
+                    cellType = CellType.Boolean;
+                    break;
+                case CellType.Error:
+                    byte errorValue = (byte)((FormulaRecordAggregate)_record).FormulaRecord.CachedErrorValue;
+                    _record = new BoolErrRecord();
+                    try
+                    {
+                        ((BoolErrRecord)_record).SetValue(errorValue);
+                    }
+                    catch (ArgumentException)
+                    {
+                        ((BoolErrRecord)_record).SetValue((byte)ErrorEval.REF_INVALID.ErrorCode);
+                    }
+                    cellType = CellType.Error;
+                    break;
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
         public void SetCellFormula(String formula)
         {
             if (IsPartOfArrayFormulaGroup)

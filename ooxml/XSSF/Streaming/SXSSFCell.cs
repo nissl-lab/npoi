@@ -131,7 +131,38 @@ namespace NPOI.XSSF.Streaming
                 ((FormulaValue)_value).Value = value;
             }
         }
-
+        public void RemoveFormula()
+        {
+            if (CellType != CellType.Formula)
+            {
+                return;
+            }
+            switch (CachedFormulaResultType)
+            {
+                case CellType.Numeric:
+                    double numericValue = ((NumericFormulaValue)_value).PreEvaluatedValue;
+                    _value = new NumericValue();
+                    ((NumericValue)_value).Value = numericValue;
+                    break;
+                case CellType.String:
+                    String stringValue = ((StringFormulaValue)_value).PreEvaluatedValue;
+                    _value = new PlainStringValue();
+                    ((PlainStringValue)_value).Value = stringValue;
+                    break;
+                case CellType.Boolean:
+                    bool booleanValue = ((BooleanFormulaValue)_value).PreEvaluatedValue;
+                    _value = new BooleanValue();
+                    ((BooleanValue)_value).Value = booleanValue;
+                    break;
+                case CellType.Error:
+                    byte errorValue = (byte)((ErrorFormulaValue)_value).PreEvaluatedValue;
+                    _value = new ErrorValue();
+                    ((ErrorValue)_value).Value = errorValue;
+                    break;
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
         public ICellStyle CellStyle
         {
             get
@@ -824,6 +855,25 @@ namespace NPOI.XSSF.Streaming
         {
             SetCellValue((DateTime?)value);
         }
+
+#if NET6_0_OR_GREATER
+        public void SetCellValue(DateOnly value)
+        {
+            bool date1904 = ((SXSSFWorkbook)Sheet.Workbook).XssfWorkbook.IsDate1904();
+            SetCellValue(DateUtil.GetExcelDate(value, date1904));
+        }
+
+        public void SetCellValue(DateOnly? value)
+        {
+            if (!value.HasValue)
+            {
+                SetCellType(CellType.Blank);
+                return;
+            }
+            
+            SetCellValue(value.Value);
+        }
+#endif
 
         public void SetBlank()
         {

@@ -266,10 +266,10 @@ namespace TestCases.OpenXml4Net.OPC
                     pkg.GetParts();
                     Assert.Fail("Shouldn't work");
                 }
-                catch (ODFNotOfficeXmlFileException e)
+                catch (ODFNotOfficeXmlFileException)
                 {
                 }
-                catch (NotOfficeXmlFileException ne) { }
+                catch (NotOfficeXmlFileException) { }
                 pkg.Close();
 
                 Assert.IsNotNull(pkg.ZipArchive);
@@ -285,10 +285,10 @@ namespace TestCases.OpenXml4Net.OPC
                     pkg.GetParts();
                     Assert.Fail("Shouldn't work");
                 }
-                catch (ODFNotOfficeXmlFileException e)
+                catch (ODFNotOfficeXmlFileException)
                 {
                 }
-                catch (NotOfficeXmlFileException ne) { }
+                catch (NotOfficeXmlFileException) { }
                 pkg.Close();
 
                 Assert.IsNotNull(pkg.ZipArchive);

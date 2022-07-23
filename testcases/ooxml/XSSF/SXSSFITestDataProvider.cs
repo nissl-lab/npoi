@@ -66,7 +66,7 @@ namespace NPOI.XSSF
             try
             {
                 MemoryStream baos = new MemoryStream(8192);
-                wb.Write(baos);
+                wb.Write(baos, false);
                 Stream is1 = new MemoryStream(baos.ToArray());
                 result = new XSSFWorkbook(is1);
             }

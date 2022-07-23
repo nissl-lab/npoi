@@ -63,7 +63,7 @@ namespace NPOI
                 {
                     return CreateDocumentPart(cls, PARENT_PART, new Object[] { parent, part });
                 }
-                catch (MissingMethodException e)
+                catch (MissingMethodException)
                 {
                     return CreateDocumentPart(cls, ORPHAN_PART, new Object[] { part });
                 }
@@ -138,7 +138,7 @@ namespace NPOI
                 String partName = part.PartName.Name;
                 foreach (PackageRelationship pr in parent.GetPackagePart().Relationships)
                 {
-                    String packName = pr.TargetUri.ToString();// toASCIIString();
+                    String packName = pr.TargetUri.OriginalString;// toASCIIString();
                     if (packName.Equals(partName, StringComparison.CurrentCultureIgnoreCase))
                     {
                         return pr;

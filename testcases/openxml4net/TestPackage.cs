@@ -247,8 +247,8 @@ namespace TestCases.OpenXml4Net.OPC
                 Assert.AreEqual(1, rels.Size);
                 rel = rels.GetRelationship(0);
                 Assert.IsNotNull(rel);
-                Assert.Warn(" 'Sheet1!A1' and rel.TargetUri.Fragment should be equal.");
-                //Assert.AreEqual("Sheet1!A1", rel.TargetUri.Fragment);
+                //Assert.Warn(" 'Sheet1!A1' and rel.TargetUri.Fragment should be equal.");
+                Assert.AreEqual("/xl/workbook.xml#Sheet1!A1", rel.TargetUri.OriginalString);
 
                 assertMSCompatibility(pkg);
             }
@@ -1031,7 +1031,7 @@ namespace TestCases.OpenXml4Net.OPC
             {
                 pkg = OPCPackage.Open(file, PackageAccess.READ);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //System.out.println(e.GetClass().getName());
                 //System.out.println(e.GetMessage());

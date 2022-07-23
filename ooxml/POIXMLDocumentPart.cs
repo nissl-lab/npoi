@@ -24,6 +24,7 @@ namespace NPOI
     using NPOI.OpenXml4Net.Exceptions;
 using System.Xml;
     using NPOI.OpenXml4Net.OPC.Internal;
+    using System.Diagnostics;
 
     /**
      * Represents an entry of a OOXML namespace.
@@ -318,7 +319,7 @@ using System.Xml;
                 String partName = GetPackagePart().PartName.Name;
                 foreach (PackageRelationship rel in pkg.Relationships)
                 {
-                    if (rel.TargetUri.ToString().Equals(partName))
+                    if (rel.TargetUri.OriginalString.Equals(partName))
                     {
                         return rel;
                     }
@@ -401,32 +402,27 @@ using System.Xml;
             return null;
         }
 
-        /**
-         * Add a new child POIXMLDocumentPart
-         *
-         * @param part the child to add
-         * 
-         * @deprecated in POI 3.14, scheduled for removal in POI 3.16
-         */
-         [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
+        /// <summary>
+        /// Add a new child POIXMLDocumentPart
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="part">the child to add</param>
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
         public void AddRelation(String id, POIXMLDocumentPart part)
         {
             PackageRelationship pr = part.GetPackagePart().GetRelationship(id);
             AddRelation(pr, part);
         }
-
-        /**
-         * Add a new child POIXMLDocumentPart
-         *
-         * @param relId the preferred relation id, when null the next free relation id will be used
-         * @param relationshipType the package relationship type
-         * @param part the child to add
-         *
-         * @since 3.14-Beta1
-         */
+        /// <summary>
+        /// Add a new child POIXMLDocumentPart
+        /// </summary>
+        /// <param name="relId">the preferred relation id, when null the next free relation id will be used</param>
+        /// <param name="relationshipType">the package relationship type</param>
+        /// <param name="part">the child to add</param>
+        /// <returns></returns>
         public RelationPart AddRelation(String relId, POIXMLRelation relationshipType, POIXMLDocumentPart part)
         {
-            PackageRelationship pr = FindExistingRelation(part);
+            PackageRelationship pr = this.packagePart.FindExistingRelation(part.GetPackagePart()); 
             if (pr == null)
             {
                 PackagePartName ppn = part.GetPackagePart().PartName;
@@ -436,13 +432,11 @@ using System.Xml;
             AddRelation(pr, part);
             return new RelationPart(pr, part);
         }
-
-        /**
-         * Add a new child POIXMLDocumentPart
-         *
-         * @param pr the relationship of the child
-         * @param part the child to add
-         */
+        /// <summary>
+        /// Add a new child POIXMLDocumentPart
+        /// </summary>
+        /// <param name="pr">the relationship of the child</param>
+        /// <param name="part">the child to add</param>
         private void AddRelation(PackageRelationship pr, POIXMLDocumentPart part)
         {
             if (relations.ContainsKey(pr.Id))
@@ -451,36 +445,6 @@ using System.Xml;
                 relations.Add(pr.Id, new RelationPart(pr, part));
             part.IncrementRelationCounter();
 
-        }
-
-        /// <summary>
-        /// Check if the new part was already added before via PackagePart.addRelationship()
-        /// </summary>
-        /// <param name="part"> to find the relationship for</param>
-        /// <returns>The existing relationship, or null if there isn't yet one</returns>
-        private PackageRelationship FindExistingRelation(POIXMLDocumentPart part)
-        {
-            String ppn = part.GetPackagePart().PartName.Name;
-            try
-            {
-                foreach (PackageRelationship pr in packagePart.Relationships)
-                {
-                    PackagePart pp = packagePart.GetRelatedPart(pr);
-                    if (pr.TargetMode == TargetMode.External)
-                    {
-                        continue;
-                    }
-                    if (ppn.Equals(pp.PartName.Name))
-                    {
-                        return pr;
-                    }
-                }
-            }
-            catch (InvalidFormatException e)
-            {
-                throw new POIXMLException("invalid package relationships", e);
-            }
-            return null;
         }
 
         /**

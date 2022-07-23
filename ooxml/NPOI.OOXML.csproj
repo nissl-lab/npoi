@@ -73,7 +73,7 @@
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
     <DocumentationFile>..\solution\Lib\.net45\NPOI.OOXML.XML</DocumentationFile>
     <Optimize>true</Optimize>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>1591;1587;1570</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>7.3</LangVersion>
@@ -199,6 +199,7 @@
     <Compile Include="XSSF\UserModel\Charts\XSSFValueAxis.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="XSSF\UserModel\DefaultIndexedColorMap.cs" />
     <Compile Include="XSSF\UserModel\Extensions\XSSFCellAlignment.cs" />
     <Compile Include="XSSF\UserModel\Extensions\XSSFCellBorder.cs" />
     <Compile Include="XSSF\UserModel\Extensions\XSSFCellFill.cs" />
@@ -208,9 +209,11 @@
     <Compile Include="XSSF\UserModel\Helpers\XSSFFormulaUtils.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFIgnoredErrorHelper.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFPasswordHelper.cs" />
+    <Compile Include="XSSF\UserModel\Helpers\XSSFRowColShifter.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFRowShifter.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFSingleXmlCell.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFXmlColumnPr.cs" />
+    <Compile Include="XSSF\UserModel\IndexedColorMap.cs" />
     <Compile Include="XSSF\UserModel\ListAutoNumber.cs" />
     <Compile Include="XSSF\UserModel\TextAlign.cs" />
     <Compile Include="XSSF\UserModel\TextAutofit.cs" />
@@ -222,6 +225,7 @@
     <Compile Include="XSSF\UserModel\XSSFAnchor.cs" />
     <Compile Include="XSSF\UserModel\XSSFAutoFilter.cs" />
     <Compile Include="XSSF\UserModel\XSSFBorderFormatting.cs" />
+    <Compile Include="XSSF\UserModel\XSSFBuiltinTableStyle.cs" />
     <Compile Include="XSSF\UserModel\XSSFCell.cs" />
     <Compile Include="XSSF\UserModel\XSSFCellStyle.cs" />
     <Compile Include="XSSF\UserModel\XSSFChart.cs" />
@@ -234,6 +238,7 @@
     <Compile Include="XSSF\UserModel\XSSFConditionalFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFConditionalFormattingRule.cs" />
     <Compile Include="XSSF\UserModel\XSSFConditionalFormattingThreshold.cs" />
+    <Compile Include="XSSF\UserModel\XSSFConditionFilterData.cs" />
     <Compile Include="XSSF\UserModel\XSSFConnector.cs" />
     <Compile Include="XSSF\UserModel\XSSFCreationHelper.cs" />
     <Compile Include="XSSF\UserModel\XSSFDataBarFormatting.cs" />
@@ -243,6 +248,7 @@
     <Compile Include="XSSF\UserModel\XSSFDataValidationHelper.cs" />
     <Compile Include="XSSF\UserModel\XSSFDialogsheet.cs" />
     <Compile Include="XSSF\UserModel\XSSFDrawing.cs" />
+    <Compile Include="XSSF\UserModel\XSSFDxfStyleProvider.cs" />
     <Compile Include="XSSF\UserModel\XSSFEvaluationCell.cs" />
     <Compile Include="XSSF\UserModel\XSSFEvaluationSheet.cs" />
     <Compile Include="XSSF\UserModel\XSSFEvaluationWorkbook.cs" />
@@ -279,6 +285,9 @@
     <Compile Include="XSSF\UserModel\XSSFSheetConditionalFormatting.cs" />
     <Compile Include="XSSF\UserModel\XSSFSimpleShape.cs" />
     <Compile Include="XSSF\UserModel\XSSFTable.cs" />
+    <Compile Include="XSSF\UserModel\XSSFTableColumn.cs" />
+    <Compile Include="XSSF\UserModel\XSSFTableStyle.cs" />
+    <Compile Include="XSSF\UserModel\XSSFTableStyleInfo.cs" />
     <Compile Include="XSSF\UserModel\XSSFTextBox.cs" />
     <Compile Include="XSSF\UserModel\XSSFTextParagraph.cs" />
     <Compile Include="XSSF\UserModel\XSSFTextRun.cs" />
@@ -386,7 +395,11 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="Enums.NET">
+      <Version>4.0.0</Version>
+    </PackageReference>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\main\NPOI.csproj">
       <Project>{10fa8538-157a-4380-a4f6-8e2c3ee92cae}</Project>

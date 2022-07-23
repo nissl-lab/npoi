@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AssemblyName>NPOI.OOXML</AssemblyName>
     <RootNamespace>NPOI.OOXML</RootNamespace>
@@ -28,6 +28,14 @@
     <Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
     <Compile Remove="XSSF\Extractor\XSSFEventBasedExcelExtractor.cs" />
     <Compile Remove="XSSF\UserModel\Charts\XSSFNumberCache.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="XSSF\UserModel\presetTableStyles.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\presetTableStyles.xml" />
   </ItemGroup>
 
   <ItemGroup>

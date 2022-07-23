@@ -800,7 +800,7 @@ namespace TestCases.XSSF.UserModel
                     Drawing.CreateCellComment(anchor);
                     Assert.Fail("Should fail if we try to add the same comment for the same cell");
                 }
-                catch (ArgumentException e)
+                catch (ArgumentException )
                 {
                     // expected
                 }

@@ -60,6 +60,11 @@ namespace NPOI.SS.UserModel
          */
         public abstract short Index { get; }
 
+        public virtual short Indexed
+        {
+            get { return Index; }
+        }
+
         /**
          * Index of Theme color, if {@link #isThemed()} is true
          */

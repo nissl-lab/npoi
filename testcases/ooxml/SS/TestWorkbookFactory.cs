@@ -359,7 +359,7 @@ namespace TestCases.SS
                 WorkbookFactory.Create(emptyStream,true);
                 Assert.Fail("Shouldn't be able to create for an empty stream");
             }
-            catch (EmptyFileException e)
+            catch (EmptyFileException )
             {
             }
         }
@@ -376,7 +376,7 @@ namespace TestCases.SS
                 WorkbookFactory.Create(emptyFile.FullName);
                 Assert.Fail("Shouldn't be able to create for an empty file");
             }
-            catch (EmptyFileException e)
+            catch (EmptyFileException )
             {
             }
             emptyFile.Delete();

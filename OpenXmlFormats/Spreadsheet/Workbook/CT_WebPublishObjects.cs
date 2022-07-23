@@ -6,55 +6,52 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using EnumsNET;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
-{
-
+{ 
     public enum ST_TargetScreenSize
     {
-
-
-        [XmlEnum("544x376")]
+        [Description("544x376")]
         Item544x376,
 
-
-        [XmlEnum("640x480")]
+        [Description("640x480")]
         Item640x480,
 
 
-        [XmlEnum("720x512")]
+        [Description("720x512")]
         Item720x512,
 
 
-        [XmlEnum("800x600")]
+        [Description("800x600")]
         Item800x600,
 
 
-        [XmlEnum("1024x768")]
+        [Description("1024x768")]
         Item1024x768,
 
 
-        [XmlEnum("1152x882")]
+        [Description("1152x882")]
         Item1152x882,
 
 
-        [XmlEnum("1152x900")]
+        [Description("1152x900")]
         Item1152x900,
 
 
-        [XmlEnum("1280x1024")]
+        [Description("1280x1024")]
         Item1280x1024,
 
 
-        [XmlEnum("1600x1200")]
+        [Description("1600x1200")]
         Item1600x1200,
 
 
-        [XmlEnum("1800x1440")]
+        [Description("1800x1440")]
         Item1800x1440,
 
 
-        [XmlEnum("1920x1200")]
+        [Description("1920x1200")]
         Item1920x1200,
     }
     [Serializable]
@@ -90,7 +87,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.vml = XmlHelper.ReadBool(node.Attributes["vml"]);
             ctObj.allowPng = XmlHelper.ReadBool(node.Attributes["allowPng"]);
             if (node.Attributes["targetScreenSize"] != null)
-                ctObj.targetScreenSize = (ST_TargetScreenSize)Enum.Parse(typeof(ST_TargetScreenSize), node.Attributes["targetScreenSize"].Value);
+            {
+               ctObj.targetScreenSize = Enums.Parse<ST_TargetScreenSize>(node.Attributes["targetScreenSize"].Value,false, EnumFormat.Description);
+            }
             ctObj.dpi = XmlHelper.ReadUInt(node.Attributes["dpi"]);
             ctObj.codePage = XmlHelper.ReadUInt(node.Attributes["codePage"]);
             return ctObj;

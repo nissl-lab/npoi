@@ -148,7 +148,7 @@ namespace NPOI.XSSF.UserModel
          * See {@link NPOI.ss.usermodel.Row.MissingCellPolicy}
          */
         private MissingCellPolicy _missingCellPolicy = MissingCellPolicy.RETURN_NULL_AND_BLANK;
-
+        private bool cellFormulaValidation = true;
         /**
          * array of pictures for this workbook
          */
@@ -596,6 +596,7 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 ValidateSheetName(newName);
+                WorkbookUtil.ValidateSheetName(newName);
             }
 
             XSSFSheet clonedSheet = CreateSheet(newName) as XSSFSheet;
@@ -624,7 +625,7 @@ namespace NPOI.XSSF.UserModel
                     if (pr.TargetMode == TargetMode.External)
                     {
                         clonedSheet.GetPackagePart().AddExternalRelationship
-                            (pr.TargetUri.ToString(), pr.RelationshipType, null);
+                            (pr.TargetUri.OriginalString, pr.RelationshipType, null);
                     }
                 }
             }
@@ -635,10 +636,11 @@ namespace NPOI.XSSF.UserModel
 
             try
             {
-                using (MemoryStream out1 = new MemoryStream())
+                using (MemoryStream ms = RecyclableMemory.GetStream())
                 {
-                    srcSheet.Write(out1);
-                    clonedSheet.Read(new MemoryStream(out1.ToArray()));
+                    srcSheet.Write(ms, true);
+                    ms.Position = 0;
+                    clonedSheet.Read(ms);
                 }
             }
             catch (IOException e)
@@ -728,7 +730,7 @@ namespace NPOI.XSSF.UserModel
                     uniqueIndex++;
                     baseName = srcName.Substring(0, bracketPos).Trim();
                 }
-                catch (FormatException e)
+                catch (FormatException)
                 {
                     // contents of brackets not numeric
                 }
@@ -880,9 +882,6 @@ namespace NPOI.XSSF.UserModel
             }
             ValidateSheetName(sheetname);
 
-
-            // YK: Mimic Excel and silently tRuncate sheet names longer than 31 characters
-            if (sheetname.Length > 31) sheetname = sheetname.Substring(0, 31);
             WorkbookUtil.ValidateSheetName(sheetname);
 
             CT_Sheet sheet = AddSheet(sheetname);
@@ -2362,7 +2361,11 @@ namespace NPOI.XSSF.UserModel
                 this.pivotTables = value;
             }
         }
-
+        public bool CellFormulaValidation
+        {
+            get { return this.cellFormulaValidation; }
+            set { this.cellFormulaValidation = false; }
+        }
 
         #region IWorkbook Members
 

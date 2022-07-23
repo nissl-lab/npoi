@@ -23,6 +23,8 @@ namespace NPOI.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
     using System.Globalization;
     using System.Text.RegularExpressions;
+    using System.Collections.Generic;
+    using EnumsNET;
 
     /**
      * Common functionality used by VLOOKUP, HLOOKUP, LOOKUP and MATCH
@@ -31,6 +33,50 @@ namespace NPOI.SS.Formula.Functions
      */
     internal class LookupUtils
     {
+        private static Dictionary<int, MatchMode> matchModeMap = new Dictionary<int, MatchMode>();
+        private static Dictionary<int, SearchMode> searchModeMap = new Dictionary<int, SearchMode>();
+
+        static LookupUtils()
+        {
+            foreach (var value in Enums.GetValues<MatchMode>())
+            {
+                matchModeMap.Add((int)value, value);
+            }
+            foreach (var value in Enums.GetValues<SearchMode>())
+            {
+                searchModeMap.Add((int)value, value);
+            }
+        }
+        public static MatchMode GetMatchMode(int m)
+        {
+            if (!matchModeMap.ContainsKey(m))
+            {
+                throw new ArgumentException("unknown match mode " + m);
+            }
+            return matchModeMap[m];
+        }
+        public static SearchMode GetSearchMode(int s)
+        {
+            if (!searchModeMap.ContainsKey(s))
+            {
+                throw new ArgumentException("unknown search mode " + s);
+            }
+            return searchModeMap[s];
+        }
+        public enum MatchMode : int
+        {
+            ExactMatch = 0,
+            ExactMatchFallbackToSmallerValue = -1,
+            ExactMatchFallbackToLargerValue = 1,
+            WildcardMatch = 2
+        }
+        public enum SearchMode
+        {
+            IterateForward = 1,
+            IterateBackward = -1,
+            BinarySearchForward = 2,
+            BinarySearchBackward = -2
+        }
         internal class RowVector : ValueVector
         {
 
@@ -170,10 +216,10 @@ namespace NPOI.SS.Formula.Functions
         private class StringLookupComparer : LookupValueComparerBase
         {
 
-            private String _value;
-            private Regex _wildCardPattern;
-            private bool _matchExact;
-            private bool _isMatchFunction;
+            protected String _value;
+            protected Regex _wildCardPattern;
+            protected bool _matchExact;
+            protected bool _isMatchFunction;
 
             public StringLookupComparer(StringEval se, bool matchExact, bool isMatchFunction)
                 : base(se)
@@ -184,22 +230,19 @@ namespace NPOI.SS.Formula.Functions
                 _matchExact = matchExact;
                 _isMatchFunction = isMatchFunction;
             }
-
-            protected override CompareResult CompareSameType(ValueEval other)
+            protected virtual String ConvertToString(ValueEval other)
             {
                 StringEval se = (StringEval)other;
-
-                String stringValue = se.StringValue;
-                if (_wildCardPattern != null)
+                return se.StringValue;
+            }
+            protected override CompareResult CompareSameType(ValueEval other)
+            {
+                String stringValue = ConvertToString(other);
+                if (_wildCardPattern != null && (_isMatchFunction || !_matchExact))
                 {
                     MatchCollection matcher = _wildCardPattern.Matches(stringValue);
                     bool matches = matcher.Count > 0;
-
-                    if (_isMatchFunction ||
-                        !_matchExact)
-                    {
-                        return CompareResult.ValueOf(matches);
-                    }
+                    return CompareResult.ValueOf(matches);
                 }
 
                 return CompareResult.ValueOf(String.Compare(_value, stringValue, true));
@@ -209,6 +252,30 @@ namespace NPOI.SS.Formula.Functions
                 return _value;
             }
         }
+        private class TolerantStringLookupComparer : StringLookupComparer
+        {
+            static StringEval ConvertToStringEval(ValueEval eval)
+            {
+                if (eval is StringEval)
+                {
+                    return (StringEval)eval;
+                }
+                String sv = OperandResolver.CoerceValueToString(eval);
+                return new StringEval(sv);
+            }
+
+            public TolerantStringLookupComparer(ValueEval eval, bool matchExact, bool isMatchFunction) :
+                base(ConvertToStringEval(eval), matchExact, isMatchFunction)
+            {
+
+            }
+
+            protected override String ConvertToString(ValueEval other)
+            {
+                return OperandResolver.CoerceValueToString(other);
+            }
+        }
+
         private class NumberLookupComparer : LookupValueComparerBase
         {
             private double _value;
@@ -256,10 +323,10 @@ namespace NPOI.SS.Formula.Functions
          */
         public static int ResolveRowOrColIndexArg(ValueEval rowColIndexArg, int srcCellRow, int srcCellCol)
         {
-            if(rowColIndexArg == null) {
+            if (rowColIndexArg == null) {
                 throw new ArgumentException("argument must not be null");
             }
-            
+
             ValueEval veRowColIndexArg;
             try {
                 veRowColIndexArg = OperandResolver.GetSingleValue(rowColIndexArg, srcCellRow, (short)srcCellCol);
@@ -268,11 +335,11 @@ namespace NPOI.SS.Formula.Functions
                 throw EvaluationException.InvalidRef();
             }
             int oneBasedIndex;
-            if(veRowColIndexArg is StringEval) {
-                StringEval se = (StringEval) veRowColIndexArg;
+            if (veRowColIndexArg is StringEval) {
+                StringEval se = (StringEval)veRowColIndexArg;
                 String strVal = se.StringValue;
                 Double dVal = OperandResolver.ParseDouble(strVal);
-                if(Double.IsNaN(dVal)) {
+                if (Double.IsNaN(dVal)) {
                     // String does not resolve to a number. Raise #REF! error.
                     throw EvaluationException.InvalidRef();
                     // This includes text booleans "TRUE" and "FALSE".  They are not valid.
@@ -301,8 +368,8 @@ namespace NPOI.SS.Formula.Functions
                 return (AreaEval)eval;
             }
 
-            if(eval is RefEval) {
-                RefEval refEval = (RefEval) eval;
+            if (eval is RefEval) {
+                RefEval refEval = (RefEval)eval;
                 // Make this cell ref look like a 1x1 area ref.
 
                 // It doesn't matter if eval is a 2D or 3D ref, because that detail is never asked of AreaEval.
@@ -322,12 +389,13 @@ namespace NPOI.SS.Formula.Functions
          */
         public static bool ResolveRangeLookupArg(ValueEval rangeLookupArg, int srcCellRow, int srcCellCol)
         {
-            if (rangeLookupArg == null)
-            {
-                // range_lookup arg not provided
-                return true; // default Is TRUE
-            }
             ValueEval valEval = OperandResolver.GetSingleValue(rangeLookupArg, srcCellRow, srcCellCol);
+            if (valEval == MissingArgEval.instance)
+            {
+                // Tricky:
+                // forth arg exists but is not supplied: "=VLOOKUP(A1,A2:A4,2,)"
+                return false;
+            }
             if (valEval is BlankEval)
             {
                 // Tricky:
@@ -353,10 +421,10 @@ namespace NPOI.SS.Formula.Functions
                 }
                 // TODO move parseBoolean to OperandResolver
                 bool? b = Countif.ParseBoolean(stringValue);
-                if (b!=null)
+                if (b != null)
                 {
                     // string Converted to bool OK
-                    return b==true?true:false;
+                    return b == true ? true : false;
                 }
                 //// Even more trickiness:
                 //// Note - even if the StringEval represents a number value (for example "1"), 
@@ -374,7 +442,7 @@ namespace NPOI.SS.Formula.Functions
             throw new Exception("Unexpected eval type (" + valEval.GetType().Name + ")");
         }
 
-        public static int LookupIndexOfValue(ValueEval lookupValue, ValueVector vector, bool isRangeLookup)
+        public static int lookupFirstIndexOfValue(ValueEval lookupValue, ValueVector vector, bool isRangeLookup)
         {
             LookupValueComparer lookupComparer = CreateLookupComparer(lookupValue, isRangeLookup, false);
             int result;
@@ -384,7 +452,25 @@ namespace NPOI.SS.Formula.Functions
             }
             else
             {
-                result = LookupIndexOfExactValue(lookupComparer, vector);
+                result = lookupFirstIndexOfValue(lookupComparer, vector, MatchMode.ExactMatch);
+            }
+            if (result < 0)
+            {
+                throw new EvaluationException(ErrorEval.NA);
+            }
+            return result;
+        }
+        public static int XlookupIndexOfValue(ValueEval lookupValue, ValueVector vector, MatchMode matchMode, SearchMode searchMode)
+        {
+            LookupValueComparer lookupComparer = CreateTolerantLookupComparer(lookupValue, true, true);
+            int result;
+            if (searchMode == SearchMode.IterateBackward || searchMode == SearchMode.BinarySearchBackward)
+            {
+                result = lookupLastIndexOfValue(lookupComparer, vector, matchMode);
+            }
+            else
+            {
+                result = lookupFirstIndexOfValue(lookupComparer, vector, matchMode);
             }
             if (result < 0)
             {
@@ -393,7 +479,6 @@ namespace NPOI.SS.Formula.Functions
             return result;
         }
 
-
         /**
          * Finds first (lowest index) exact occurrence of specified value.
          * @param lookupComparer the value to be found in column or row vector
@@ -401,22 +486,133 @@ namespace NPOI.SS.Formula.Functions
          * 	tableArray. For HLOOKUP this Is the first row of the tableArray. 
          * @return zero based index into the vector, -1 if value cannot be found
          */
-        private static int LookupIndexOfExactValue(LookupValueComparer lookupComparer, ValueVector vector)
+        private static int lookupFirstIndexOfValue(LookupValueComparer lookupComparer, ValueVector vector, MatchMode matchMode)
         {
 
             // Find first occurrence of lookup value
             int size = vector.Size;
+            int bestMatchIdx = -1;
+            ValueEval bestMatchEval = null;
             for (int i = 0; i < size; i++)
             {
-                if (lookupComparer.CompareTo(vector.GetItem(i)).IsEqual)
+                ValueEval valueEval = vector.GetItem(i);
+                CompareResult result = lookupComparer.CompareTo(valueEval);
+                if (result.IsEqual)
                 {
                     return i;
                 }
+                switch (matchMode)
+                {
+                    case MatchMode.ExactMatchFallbackToLargerValue:
+                        if (result.IsLessThan)
+                        {
+                            if (bestMatchEval == null)
+                            {
+                                bestMatchIdx = i;
+                                bestMatchEval = valueEval;
+                            }
+                            else
+                            {
+                                LookupValueComparer matchComparer = CreateTolerantLookupComparer(valueEval, true, true);
+                                if (matchComparer.CompareTo(bestMatchEval).IsLessThan)
+                                {
+                                    bestMatchIdx = i;
+                                    bestMatchEval = valueEval;
+                                }
+                            }
+                        }
+                        break;
+                    case MatchMode.ExactMatchFallbackToSmallerValue:
+                        if (result.IsGreaterThan)
+                        {
+                            if (bestMatchEval == null)
+                            {
+                                bestMatchIdx = i;
+                                bestMatchEval = valueEval;
+                            }
+                            else
+                            {
+                                LookupValueComparer matchComparer = CreateTolerantLookupComparer(valueEval, true, true);
+                                if (matchComparer.CompareTo(bestMatchEval).IsGreaterThan)
+                                {
+                                    bestMatchIdx = i;
+                                    bestMatchEval = valueEval;
+                                }
+                            }
+                        }
+                        break;
+                }
             }
-            return -1;
+            return bestMatchIdx;
         }
 
-
+        /**
+ * Finds last (greatest index) matching occurrence of specified value.
+ * @param lookupComparer the value to be found in column or row vector
+ * @param vector the values to be searched. For VLOOKUP this is the first column of the
+ *  tableArray. For HLOOKUP this is the first row of the tableArray.
+ * @param matchMode
+ * @return zero based index into the vector, -1 if value cannot be found
+ */
+        private static int lookupLastIndexOfValue(LookupValueComparer lookupComparer, ValueVector vector,
+                                                  MatchMode matchMode)
+        {
+            // find last occurrence of lookup value
+            int size = vector.Size;
+            int bestMatchIdx = -1;
+            ValueEval bestMatchEval = null;
+            for (int i = size - 1; i >= 0; i--)
+            {
+                ValueEval valueEval = vector.GetItem(i);
+                CompareResult result = lookupComparer.CompareTo(valueEval);
+                if (result.IsEqual)
+                {
+                    return i;
+                }
+                switch (matchMode)
+                {
+                    case MatchMode.ExactMatchFallbackToLargerValue:
+                        if (result.IsLessThan)
+                        {
+                            if (bestMatchEval == null)
+                            {
+                                bestMatchIdx = i;
+                                bestMatchEval = valueEval;
+                            }
+                            else
+                            {
+                                LookupValueComparer matchComparer = CreateTolerantLookupComparer(valueEval, true, true);
+                                if (matchComparer.CompareTo(bestMatchEval).IsLessThan)
+                                {
+                                    bestMatchIdx = i;
+                                    bestMatchEval = valueEval;
+                                }
+                            }
+                        }
+                        break;
+                    case MatchMode.ExactMatchFallbackToSmallerValue:
+                        if (result.IsGreaterThan)
+                        {
+                            if (bestMatchEval == null)
+                            {
+                                bestMatchIdx = i;
+                                bestMatchEval = valueEval;
+                            }
+                            else
+                            {
+                                LookupValueComparer matchComparer = CreateTolerantLookupComparer(valueEval, true, true);
+                                if (matchComparer.CompareTo(bestMatchEval).IsGreaterThan)
+                                {
+                                    bestMatchIdx = i;
+                                    bestMatchEval = valueEval;
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
+            return bestMatchIdx;
+        }
 
         /**
          * Excel has funny behaviour when the some elements in the search vector are the wrong type.
@@ -541,6 +737,20 @@ namespace NPOI.SS.Formula.Functions
                 return new BooleanLookupComparer((BoolEval)lookupValue);
             }
             throw new ArgumentException("Bad lookup value type (" + lookupValue.GetType().Name + ")");
+        }
+        private static LookupValueComparer CreateTolerantLookupComparer(ValueEval lookupValue, bool matchExact, bool isMatchFunction)
+        {
+            if (lookupValue == BlankEval.instance)
+            {
+                return new TolerantStringLookupComparer(new StringEval(""), matchExact, isMatchFunction);
+            }
+            if (lookupValue is BoolEval) {
+                return new BooleanLookupComparer((BoolEval)lookupValue);
+            }
+            if (matchExact && lookupValue is NumberEval) {
+                return new NumberLookupComparer((NumberEval)lookupValue);
+            }
+            return new TolerantStringLookupComparer(lookupValue, matchExact, isMatchFunction);
         }
     }
     /**

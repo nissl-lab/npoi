@@ -242,7 +242,7 @@ namespace TestCases.POIFS.Crypt
             throw new NotImplementedException();
         }
 
-        [Test]
+        [Ignore("not implemented")]
         public void TestSignEnvelopingDocument() {
             String testFile = "hello-world-unsigned.xlsx";
             //OPCPackage pkg = OPCPackage.Open(copy(testdata.GetFile(testFile)), PackageAccess.READ_WRITE);
@@ -476,7 +476,7 @@ namespace TestCases.POIFS.Crypt
             throw new NotImplementedException();
         }
 
-        [Test]
+        [Ignore("not implemented")]
         public void TestNonSha1() {
             String testFile = "hello-world-unsigned.xlsx";
             InitKeyPair("Test", "CN=Test");

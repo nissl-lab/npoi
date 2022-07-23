@@ -19,6 +19,8 @@ using System;
 using NPOI.SS.Formula;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+
 namespace NPOI.SS.Formula.Eval.Forked
 {
 
@@ -170,6 +172,18 @@ namespace NPOI.SS.Formula.Eval.Forked
             {
                 return _masterCell.ColumnIndex;
             }
+        }
+        public bool IsPartOfArrayFormulaGroup
+        {
+            get
+            {
+                return _masterCell.IsPartOfArrayFormulaGroup;
+            }
+        }
+
+        public CellRangeAddress ArrayFormulaRange
+        {
+            get { return _masterCell.ArrayFormulaRange; }
         }
         public CellType CachedFormulaResultType
         {

@@ -4,20 +4,21 @@ using NPOI.SS.Formula.Functions;
 namespace NPOI.SS.Formula.Eval
 {
 
-    public abstract class TwoOperandNumericOperation : Fixed2ArgFunction
+    public abstract class TwoOperandNumericOperation : Fixed2ArgFunction, ArrayFunction
     {
-        //public int Type
-        //{
-        //    get
-        //    {
-        //        // TODO - remove
-        //        throw new Exception("obsolete code should not be called");
-        //    }
-        //}
         protected double SingleOperandEvaluate(ValueEval arg, int srcCellRow, int srcCellCol)
         {
             ValueEval ve = OperandResolver.GetSingleValue(arg, srcCellRow, srcCellCol);
             return OperandResolver.CoerceValueToDouble(ve);
+        }
+        public ValueEval EvaluateArray(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
+        {
+            if (args.Length != 2)
+            {
+                return ErrorEval.VALUE_INVALID;
+            }
+            Func<double, double, double> func = this.Evaluate;
+            return new ArrayEval(func).Evaluate(srcRowIndex, srcColumnIndex, args[0], args[1]);
         }
 
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1)
@@ -55,5 +56,37 @@ namespace NPOI.SS.Formula.Eval
         public static NPOI.SS.Formula.Functions.Function MultiplyEval = new MultiplyEval();
         public static NPOI.SS.Formula.Functions.Function PowerEval = new PowerEval();
         public static NPOI.SS.Formula.Functions.Function SubtractEval = new SubtractEval();
+
+        private class ArrayEval : MatrixFunction.TwoArrayArg
+        {
+            Func<double, double, double> _evaluateFunc = null;
+            public ArrayEval(Func<double, double, double> evalFunc)
+            {
+                _evaluateFunc = evalFunc;
+            }
+
+            private MatrixFunction.MutableValueCollector instance = new MatrixFunction.MutableValueCollector(false, true);
+
+            protected override double[] CollectValues(ValueEval arg)
+            {
+                return instance.collectValues(arg);
+            }
+
+            protected override double[,] Evaluate(double[,] d1, double[,] d2)
+            {
+                int width = d1.GetLength(1) < d2.GetLength(1) ? d1.GetLength(1) : d2.GetLength(1);
+                int height = (d1.GetLength(0) < d2.GetLength(0)) ? d1.GetLength(0) : d2.GetLength(0);
+
+                double[,] result = new double[height, width];
+
+                for (int j = 0; j < height; j++) {
+                    for (int i = 0; i < width; i++) {
+                        result[j, i] = _evaluateFunc(d1[j, i], d2[j, i]);
+
+                    }
+                }
+                return result;
+            }
+        }
     }
 }

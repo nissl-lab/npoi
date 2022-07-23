@@ -92,7 +92,7 @@ namespace NPOI.HSSF.Record
             //    throw new RecordFormatException(msg);
             //}
             subrecords = new List<SubRecord>();
-            using (MemoryStream bais = new MemoryStream(subRecordData))
+            using (MemoryStream bais = RecyclableMemory.GetStream(subRecordData))
             {
                 LittleEndianInputStream subRecStream = new LittleEndianInputStream(bais);
                 CommonObjectDataSubRecord cmo = (CommonObjectDataSubRecord)SubRecord.CreateSubRecord(subRecStream, 0);

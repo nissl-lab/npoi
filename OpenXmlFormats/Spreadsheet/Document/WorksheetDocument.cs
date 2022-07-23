@@ -29,9 +29,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.sheet = sheet;
         }
-        public void Save(Stream stream)
+        public void Save(Stream stream, bool leaveOpen)
         {
-            this.sheet.Write(stream);
+            this.sheet.Write(stream, leaveOpen);
         }
     }
 }

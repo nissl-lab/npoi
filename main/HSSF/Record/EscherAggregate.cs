@@ -435,84 +435,86 @@ namespace NPOI.HSSF.Record
             IEscherRecordFactory recordFactory = new CustomEscherRecordFactory(shapeRecords);
 
             // Create one big buffer
-            MemoryStream stream = new MemoryStream();
-            EscherAggregate agg = new EscherAggregate(false);
-            int loc = locFirstDrawingRecord;
-            while (loc + 1 < records.Count
-                    && (IsDrawingLayerRecord(GetSid(records, loc))))
+            using (MemoryStream stream = RecyclableMemory.GetStream())
             {
-                try
+                EscherAggregate agg = new EscherAggregate(false);
+                int loc = locFirstDrawingRecord;
+                while (loc + 1 < records.Count
+                        && (IsDrawingLayerRecord(GetSid(records, loc))))
                 {
-                    if (!(GetSid(records, loc) == DrawingRecord.sid || GetSid(records, loc) == ContinueRecord.sid))
+                    try
+                    {
+                        if (!(GetSid(records, loc) == DrawingRecord.sid || GetSid(records, loc) == ContinueRecord.sid))
+                        {
+                            loc++;
+                            continue;
+                        }
+                        if (GetSid(records, loc) == DrawingRecord.sid)
+                        {
+                            byte[] data = ((DrawingRecord)records[loc]).RecordData;
+                            stream.Write(data, 0, data.Length);
+                        }
+                        else
+                        {
+                            byte[] data = ((ContinueRecord)records[loc]).Data;
+                            stream.Write(data, 0, data.Length);
+                        }
+                    }
+                    catch (IOException e)
+                    {
+                        throw new RuntimeException("Couldn't get data from drawing/continue records", e);
+                    }
+                    loc++;
+                }
+
+                // Decode the shapes
+                //        agg.escherRecords = new ArrayList();
+                int pos = 0;
+                byte[] buffer = stream.ToArray();
+                while (pos < buffer.Length)
+                {
+                    EscherRecord r = recordFactory.CreateRecord(buffer, pos);
+                    int bytesRead = r.FillFields(buffer, pos, recordFactory);
+                    agg.AddEscherRecord(r);
+                    pos += bytesRead;
+                }
+
+                // Associate the object records with the shapes
+                loc = locFirstDrawingRecord + 1;
+                int shapeIndex = 0;
+
+                while (loc < records.Count && IsDrawingLayerRecord(GetSid(records, loc)))
+                {
+                    if (!IsObjectRecord(records, loc))
                     {
                         loc++;
                         continue;
                     }
-                    if (GetSid(records, loc) == DrawingRecord.sid)
+                    Record objRecord = (Record)records[loc];
+                    agg.shapeToObj[shapeRecords[shapeIndex++]] = objRecord;
+                    loc++;
+                }
+                // any NoteRecords that follow the drawing block must be aggregated and and saved in the tailRec collection
+                //put noterecord into tailsRec
+                while (loc < records.Count)
+                {
+                    if (GetSid(records, loc) == NoteRecord.sid)
                     {
-                        byte[] data = ((DrawingRecord)records[loc]).RecordData;
-                        stream.Write(data, 0, data.Length);
+                        NoteRecord r = (NoteRecord)records[(loc)];
+                        agg.tailRec[r.ShapeId] = r;
                     }
                     else
                     {
-                        byte[] data = ((ContinueRecord)records[loc]).Data;
-                        stream.Write(data, 0, data.Length);
+                        break;
                     }
-                }
-                catch (IOException e)
-                {
-                    throw new RuntimeException("Couldn't get data from drawing/continue records", e);
-                }
-                loc++;
-            }
-
-            // Decode the shapes
-            //        agg.escherRecords = new ArrayList();
-            int pos = 0;
-            byte[] buffer = stream.ToArray();
-            while (pos < buffer.Length)
-            {
-                EscherRecord r = recordFactory.CreateRecord(buffer, pos);
-                int bytesRead = r.FillFields(buffer, pos, recordFactory);
-                agg.AddEscherRecord(r);
-                pos += bytesRead;
-            }
-
-            // Associate the object records with the shapes
-            loc = locFirstDrawingRecord + 1;
-            int shapeIndex = 0;
-
-            while (loc < records.Count && IsDrawingLayerRecord(GetSid(records, loc)))
-            {
-                if (!IsObjectRecord(records, loc))
-                {
                     loc++;
-                    continue;
                 }
-                Record objRecord = (Record)records[loc];
-                agg.shapeToObj[shapeRecords[shapeIndex++]] = objRecord;
-                loc++;
+                int locLastDrawingRecord = loc;
+                //records.SubList(locFirstDrawingRecord, locLastDrawingRecord).Clear();
+                records.RemoveRange(locFirstDrawingRecord, locLastDrawingRecord - locFirstDrawingRecord);
+                records.Insert(locFirstDrawingRecord, agg);
+                return agg;
             }
-            // any NoteRecords that follow the drawing block must be aggregated and and saved in the tailRec collection
-            //put noterecord into tailsRec
-            while (loc < records.Count)
-            {
-                if (GetSid(records, loc) == NoteRecord.sid)
-                {
-                    NoteRecord r = (NoteRecord)records[(loc)];
-                    agg.tailRec[r.ShapeId] = r;
-                }
-                else
-                {
-                    break;
-                }
-                loc++;
-            }
-            int locLastDrawingRecord = loc;
-            //records.SubList(locFirstDrawingRecord, locLastDrawingRecord).Clear();
-            records.RemoveRange(locFirstDrawingRecord, locLastDrawingRecord - locFirstDrawingRecord);
-            records.Insert(locFirstDrawingRecord, agg);
-            return agg;
 
         }
         /**

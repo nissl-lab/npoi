@@ -529,6 +529,24 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        public void RemoveFormula()
+        {
+            if (CellType == CellType.Blank)
+                return;
+
+            if (IsPartOfArrayFormulaGroup)
+            {
+                TryToDeleteArrayFormula(null);
+                return;
+            }
+            ((XSSFWorkbook)_row.Sheet.Workbook).OnDeleteFormula(this);
+            if (_cell.IsSetF())
+            {
+                ((XSSFSheet)_row.Sheet).OnDeleteFormula(this, null);
+                _cell.unsetF();
+            }
+        }
+
         /**
          * package/hierarchy use only - reuse an existing evaluation workbook if available for caching
          *
@@ -614,21 +632,43 @@ namespace NPOI.XSSF.UserModel
             cellFormula.t = (ST_CellFormulaType.array);
             cellFormula.@ref = (range.FormatAsString());
         }
+        /// <summary>
+        /// Called when this an array formula in this cell is deleted.
+        /// </summary>
+        /// <param name="message">a customized exception message for the case if deletion of the cell is impossible. If null, a default message will be generated</param>
+        internal void TryToDeleteArrayFormula(String message)
+        {
+            if (!IsPartOfArrayFormulaGroup)
+                return;
 
+            CellRangeAddress arrayFormulaRange = ArrayFormulaRange;
+            if (arrayFormulaRange.NumberOfCells > 1)
+            {
+                if (message == null)
+                {
+                    message = "Cell " + new CellReference(this).FormatAsString() + " is part of a multi-cell array formula. " +
+                            "You cannot change part of an array.";
+                }
+                throw new InvalidOperationException(message);
+            }
+            //un-register the single-cell array formula from the parent sheet through public interface
+            Row.Sheet.RemoveArrayFormula(this);
+        }
         private void SetFormula(String formula, FormulaType formulaType)
         {
-            IWorkbook wb = _row.Sheet.Workbook;
+            XSSFWorkbook wb = (XSSFWorkbook)_row.Sheet.Workbook;
             if (formula == null)
             {
-                ((XSSFWorkbook)wb).OnDeleteFormula(this);
-                if (_cell.IsSetF()) _cell.unsetF();
+                RemoveFormula();
                 return;
             }
 
-            IFormulaParsingWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
-            //validate through the FormulaParser
-            FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(this.Sheet), RowIndex);
-
+            if (wb.CellFormulaValidation)
+            {
+                IFormulaParsingWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
+                //validate through the FormulaParser
+                FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(this.Sheet), RowIndex);
+            }
             CT_CellFormula f = new CT_CellFormula();
             f.Value = formula;
             _cell.f= (f);
@@ -821,6 +861,26 @@ namespace NPOI.XSSF.UserModel
             bool date1904 = Sheet.Workbook.IsDate1904();
             SetCellValue(DateUtil.GetExcelDate(value, date1904));
         }
+
+#if NET6_0_OR_GREATER
+        public void SetCellValue(DateOnly value)
+        {
+            bool date1904 = Sheet.Workbook.IsDate1904();
+            SetCellValue(DateUtil.GetExcelDate(value, date1904));
+        }
+        
+        public void SetCellValue(DateOnly? value)
+        {
+            if (value == null)
+            {
+                SetCellType(CellType.Blank);
+                return;
+            }
+            
+            SetCellValue(value.Value);
+        }
+#endif
+        
         /// <summary>
         /// Returns the error message, such as #VALUE!
         /// </summary>

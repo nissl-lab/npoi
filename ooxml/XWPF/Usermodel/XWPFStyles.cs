@@ -35,7 +35,7 @@ namespace NPOI.XWPF.UserModel
     {
         private CT_Styles ctStyles;
         private List<XWPFStyle> listStyle = new List<XWPFStyle>();
-
+        public IReadOnlyList<XWPFStyle> listOfStyles { get => listStyle; }
         private XWPFLatentStyles latentStyles;
         private XWPFDefaultRunStyle defaultRunStyle;
         private XWPFDefaultParagraphStyle defaultParaStyle;

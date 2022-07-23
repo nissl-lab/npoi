@@ -20,6 +20,7 @@ namespace NPOI.SS.UserModel.Helpers
     using NPOI.SS.Formula;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -57,7 +58,8 @@ namespace NPOI.SS.UserModel.Helpers
                 CellRangeAddress merged = sheet.GetMergedRegion(i);
 
                 // remove merged region that overlaps Shifting
-                if (startRow + n <= merged.FirstRow && endRow + n >= merged.LastRow)
+                var lastCol=sheet.GetRow(startRow) != null ? sheet.GetRow(startRow).LastCellNum : sheet.GetRow(endRow) != null ? sheet.GetRow(endRow).LastCellNum : 0;
+                if (removalNeeded(merged, startRow, endRow, n, lastCol ))
                 {
                     removedIndices.Add(i);
                     continue;
@@ -75,15 +77,15 @@ namespace NPOI.SS.UserModel.Helpers
                 //only shift if the region outside the Shifted rows is not merged too
                 if (!merged.ContainsRow(startRow - 1) && !merged.ContainsRow(endRow + 1))
                 {
-                    merged.FirstRow = (/*setter*/merged.FirstRow + n);
-                    merged.LastRow = (/*setter*/merged.LastRow + n);
+                    merged.FirstRow = merged.FirstRow + n;
+                    merged.LastRow =merged.LastRow + n;
                     //have to Remove/add it back
                     ShiftedRegions.Add(merged);
                     removedIndices.Add(i);
                 }
             }
 
-            if (!(removedIndices.Count==0)/*.IsEmpty()*/)
+            if (removedIndices.Count!=0)
             {
                 sheet.RemoveMergedRegions(removedIndices.ToList());
             }
@@ -96,6 +98,68 @@ namespace NPOI.SS.UserModel.Helpers
             return ShiftedRegions;
         }
 
+        // Keep in sync with {@link ColumnShifter#removalNeeded}
+        private bool removalNeeded(CellRangeAddress merged, int startRow, int endRow, int n, int lastCol)
+        {
+            int movedRows = endRow - startRow + 1;
+
+            // build a range of the rows that are overwritten, i.e. the target-area, but without
+            // rows that are moved along
+             CellRangeAddress overwrite;
+            if (n > 0)
+            {
+                // area is moved down => overwritten area is [endRow + n - movedRows, endRow + n]
+                 int firstRow = Math.Max(endRow + 1, endRow + n - movedRows);
+                 int lastRow = endRow + n;
+                overwrite = new CellRangeAddress(firstRow, lastRow, 0, lastCol);
+            }
+            else
+            {
+                // area is moved up => overwritten area is [startRow + n, startRow + n + movedRows]
+                 int firstRow = startRow + n;
+                 int lastRow = Math.Min(startRow - 1, startRow + n + movedRows);
+                overwrite = new CellRangeAddress(firstRow, lastRow, 0, lastCol);
+            }
+
+            // if the merged-region and the overwritten area intersect, we need to remove it
+            return merged.Intersects(overwrite);
+        }
+
+        /**
+ * Verify that the given column indices and step denote a valid range of columns to shift
+ *
+ * @param firstShiftColumnIndex the column to start shifting
+ * @param lastShiftColumnIndex the column to end shifting
+ * @param step length of the shifting step
+ */
+        public static void ValidateShiftParameters(int firstShiftColumnIndex, int lastShiftColumnIndex, int step)
+        {
+            if (step < 0)
+            {
+                throw new ArgumentException("Shifting step may not be negative, but had " + step);
+            }
+            if (firstShiftColumnIndex > lastShiftColumnIndex)
+            {
+                throw new ArgumentException(String.Format("Incorrect shifting range : %d-%d", firstShiftColumnIndex, lastShiftColumnIndex));
+            }
+        }
+
+        /**
+         * Verify that the given column indices and step denote a valid range of columns to shift to the left
+         *
+         * @param firstShiftColumnIndex the column to start shifting
+         * @param lastShiftColumnIndex the column to end shifting
+         * @param step length of the shifting step
+         */
+        public static void ValidateShiftLeftParameters(int firstShiftColumnIndex, int lastShiftColumnIndex, int step)
+        {
+            ValidateShiftParameters(firstShiftColumnIndex, lastShiftColumnIndex, step);
+
+            if (firstShiftColumnIndex - step < 0)
+            {
+                throw new InvalidOperationException("Column index less than zero: " + (firstShiftColumnIndex + step));
+            }
+        }
         /**
          * Updated named ranges
          */

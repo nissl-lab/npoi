@@ -41,15 +41,29 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
     public class CT_GradientStop
     {
-        private int positionField;
+        private double positionField;
         private CT_Color colorField;
+
+        public double position
+        {
+            get {
+                return positionField;
+            }
+            set { positionField = value; }
+        }
+
+        public CT_Color AddNewColor()
+        {
+            this.colorField = new CT_Color();
+            return colorField;
+        }
 
         public static CT_GradientStop Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
             CT_GradientStop ctObj = new CT_GradientStop();
-            ctObj.positionField = XmlHelper.ReadInt(node.Attributes["position"]);
+            ctObj.positionField = XmlHelper.ReadDouble(node.Attributes["position"]);
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "color")
@@ -133,7 +147,22 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             sw.Write(string.Format("</{0}>", nodeName));
         }
-
+        public CT_GradientStop AddNewStop()
+        {
+            var newstop = new CT_GradientStop();
+            if (this.stop == null)
+                this.stop = new List<CT_GradientStop>();
+            this.stop.Add(newstop);
+            return newstop;
+        }
+        public CT_GradientStop GetStopArray(int index)
+        {
+            if (this.stop == null)
+            {
+                return null;
+            }
+            return this.stop[index];
+        }
         [XmlElement]
         public List<CT_GradientStop> stop
         {

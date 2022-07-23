@@ -300,7 +300,7 @@ namespace TestCases.XSSF.UserModel
             {
                 wb.Close();
             }
-            
+
         }
 
         /**
@@ -690,10 +690,10 @@ namespace TestCases.XSSF.UserModel
             sheet.GetRow(1).GetCell(0).SetCellFormula("A1"); // stay
             sheet.GetRow(2).GetCell(0).SetCellFormula(null);  // go
             sheet.GetRow(3).GetCell(0).SetCellType(CellType.Formula); // stay
-            
+
             XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
             sheet.GetRow(4).GetCell(0).SetCellType(CellType.String);  // go
-            
+
             XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
 
             validateCells(sheet);
@@ -701,14 +701,14 @@ namespace TestCases.XSSF.UserModel
                   sheet.GetRow(5).GetCell(0)  // go
             );
             validateCells(sheet);
-            
+
             XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
 
             sheet.GetRow(6).GetCell(0).SetCellType(CellType.Blank);  // go
-            
+
             XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
             sheet.GetRow(7).GetCell(0).SetCellValue((String)null);  // go
-            
+
             XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
 
             // Save and check
@@ -964,7 +964,7 @@ namespace TestCases.XSSF.UserModel
             XSSFFont fr = wb.GetFontAt(cr.CellStyle.FontIndex) as XSSFFont;
             XSSFColor colr = fr.GetXSSFColor();            // No theme, has colours
             Assert.AreEqual(0, colr.Theme);
-            Assert.IsNotNull(colr.GetRgb());
+            Assert.IsNotNull(colr.RGB);
 
             // Column 0 has a font with colours from a theme
             XSSFCell ct = r.GetCell(0) as XSSFCell;
@@ -973,8 +973,8 @@ namespace TestCases.XSSF.UserModel
             // Has a theme, which has the colours on it
             Assert.AreEqual(9, colt.Theme);
             XSSFColor themeC = wb.GetTheme().GetThemeColor(colt.Theme);
-            Assert.IsNotNull(themeC.GetRgb());
-            Assert.IsNotNull(colt.GetRgb());
+            Assert.IsNotNull(themeC.RGB);
+            Assert.IsNotNull(colt.RGB);
             Assert.AreEqual(themeC.ARGBHex, colt.ARGBHex); // The same colour
 
             wb.Close();
@@ -1483,7 +1483,7 @@ namespace TestCases.XSSF.UserModel
             XSSFName name = wb.GetName("Intekon.ProdCodes") as XSSFName;
             Assert.AreEqual("'Abc,1'!$A$1:$A$2", name.RefersToFormula);
 
-            AreaReference ref1 = new AreaReference(name.RefersToFormula);
+            AreaReference ref1 = new AreaReference(name.RefersToFormula, NPOI.SS.SpreadsheetVersion.EXCEL2007);
             Assert.AreEqual(0, ref1.FirstCell.Row);
             Assert.AreEqual(0, ref1.FirstCell.Col);
             Assert.AreEqual(1, ref1.LastCell.Row);
@@ -1497,8 +1497,8 @@ namespace TestCases.XSSF.UserModel
          *  eg =SUM($Sheet1.C1:$Sheet4.C1)
          * DISABLED As we can't currently Evaluate these
          */
-         [Ignore("by poi")]
-         [Test]
+        [Ignore("by poi")]
+        [Test]
         public void Test48703()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("48703.xlsx");
@@ -1628,7 +1628,7 @@ namespace TestCases.XSSF.UserModel
                 WorkbookFactory.Create(inpA);
                 Assert.Fail("Should've raised a EncryptedDocumentException error");
             }
-            catch (EncryptedDocumentException e) { }
+            catch (EncryptedDocumentException ) { }
 
             // Via a POIFSFileSystem
             POIFSFileSystem fsP = new POIFSFileSystem(inpB);
@@ -1637,7 +1637,7 @@ namespace TestCases.XSSF.UserModel
                 WorkbookFactory.Create(fsP);
                 Assert.Fail("Should've raised a EncryptedDocumentException error");
             }
-            catch (EncryptedDocumentException e) { }
+            catch (EncryptedDocumentException) { }
 
             // Via a NPOIFSFileSystem
             NPOIFSFileSystem fsNP = new NPOIFSFileSystem(inpC);
@@ -1646,7 +1646,7 @@ namespace TestCases.XSSF.UserModel
                 WorkbookFactory.Create(fsNP);
                 Assert.Fail("Should've raised a EncryptedDocumentException error");
             }
-            catch (EncryptedDocumentException e) { }
+            catch (EncryptedDocumentException) { }
         }
         [Test]
         public void Bug53282()
@@ -1928,7 +1928,7 @@ namespace TestCases.XSSF.UserModel
             }
 
             FileStream fileOutStream = new FileStream(outFile.FullName, FileMode.Open, FileAccess.ReadWrite);
-            wb.Write(fileOutStream);
+            wb.Write(fileOutStream, false);
             fileOutStream.Close();
             //System.out.Println("File \""+outFile.Name+"\" has been saved successfully");
 
@@ -2151,7 +2151,7 @@ namespace TestCases.XSSF.UserModel
                 new XSSFWorkbook(pkg).Close();
                 Assert.Fail(".xlsb files not supported");
             }
-            catch (XLSBUnsupportedException e)
+            catch (XLSBUnsupportedException)
             {
                 // Good, detected and warned
             }
@@ -2162,7 +2162,7 @@ namespace TestCases.XSSF.UserModel
                 WorkbookFactory.Create(pkg).Close();
                 Assert.Fail(".xlsb files not supported");
             }
-            catch (XLSBUnsupportedException e)
+            catch (XLSBUnsupportedException)
             {
                 // Good, detected and warned
             }
@@ -2174,7 +2174,7 @@ namespace TestCases.XSSF.UserModel
                 WorkbookFactory.Create(xlsbFile.FullName).Close();
                 Assert.Fail(".xlsb files not supported");
             }
-            catch (XLSBUnsupportedException e)
+            catch (XLSBUnsupportedException)
             {
                 // Good, detected and warned
             }
@@ -2644,7 +2644,8 @@ namespace TestCases.XSSF.UserModel
          * Excel treats this as not-bulleted, so now do we
          */
         [Test]
-        public void TestBug57826()  {
+        public void TestBug57826()
+        {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("57826.xlsx");
 
             Assert.IsTrue(workbook.NumberOfSheets >= 1, "no sheets in workbook");
@@ -2664,7 +2665,7 @@ namespace TestCases.XSSF.UserModel
 
             // No bulleting info included
             Assert.AreEqual("test ok", text);
-        
+
             workbook.Close();
         }
 
@@ -3195,7 +3196,7 @@ namespace TestCases.XSSF.UserModel
             ICellStyle style = workbook.CreateCellStyle();
             style.Rotation = ((short)-90);
             cell1.CellStyle = (style);
-            workbook.Write(fileOut);
+            workbook.Write(fileOut, false);
             fileOut.Close();
             workbook.Close();
         }
@@ -3210,7 +3211,7 @@ namespace TestCases.XSSF.UserModel
             ICellStyle style = workbook.CreateCellStyle();
             style.Rotation = ((short)-90);
             cell1.CellStyle = (style);
-            workbook.Write(fileOut);
+            workbook.Write(fileOut, false);
             fileOut.Close();
             workbook.Close();
         }
@@ -3358,6 +3359,24 @@ namespace TestCases.XSSF.UserModel
             IFormulaEvaluator evaluator = cell.Sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
             String result = form.FormatCellValue(cell, evaluator);
             Assert.AreEqual("09 Mar 2016", result);
+        }
+
+        [Test]
+        public void Bug61063()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("61063.xlsx");
+
+            IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
+            ISheet s = wb.GetSheetAt(0);
+
+            IRow r = s.GetRow(3);
+            ICell c = r.GetCell(0);
+            Assert.AreEqual(CellType.Formula, c.CellType);
+            eval.DebugEvaluationOutputForNextEval = true;
+            CellValue cv = eval.Evaluate(c);
+            Assert.IsNotNull(cv);
+            Assert.AreEqual(2.0, cv.NumberValue, 0.00001);
+            wb.Close();
         }
     }
 

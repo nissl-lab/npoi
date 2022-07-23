@@ -6,7 +6,8 @@ using System.IO;
 using System.Xml;
 using System.Collections;
 using NPOI.OpenXml4Net.Util;
-
+using System.Linq;
+using NPOI.Util;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -1176,6 +1177,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_ShortHexNumber tblLookField;
 
+        private CT_String tblCaptionField;
+
+        private CT_String tblDescriptionField;
+
         public CT_TblPrBase()
         {
         }
@@ -1216,6 +1221,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ctObj.tblCellMar = CT_TblCellMar.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "tblLook")
                     ctObj.tblLook = CT_ShortHexNumber.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tblCaption")
+                    ctObj.tblCaption = CT_String.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tblDescription")
+                    ctObj.tblDescription = CT_String.Parse(childNode, namespaceManager);
             }
             return ctObj;
         }
@@ -1256,6 +1265,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.tblCellMar.Write(sw, "tblCellMar");
             if (this.tblLook != null)
                 this.tblLook.Write(sw, "tblLook");
+            if (this.tblCaption != null)
+                this.tblCaption.Write(sw, "tblCaption");
+            if (this.tblDescription != null)
+                this.tblDescription.Write(sw, "tblDescription");
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
@@ -1451,6 +1464,32 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.tblLookField = value;
+            }
+        }
+
+        [XmlElement(Order = 15)]
+        public CT_String tblCaption
+        {
+            get
+            {
+                return this.tblCaptionField;
+            }
+            set
+            {
+                this.tblCaptionField = value;
+            }
+        }
+
+        [XmlElement(Order = 16)]
+        public CT_String tblDescription
+        {
+            get
+            {
+                return this.tblDescriptionField;
+            }
+            set
+            {
+                this.tblDescriptionField = value;
             }
         }
 
@@ -2776,6 +2815,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ctObj.tblCellMar = CT_TblCellMar.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "tblLook")
                     ctObj.tblLook = CT_ShortHexNumber.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tblCaption")
+                    ctObj.tblCaption = CT_String.Parse(childNode, namespaceManager);
+                else if (childNode.LocalName == "tblDescription")
+                    ctObj.tblDescription = CT_String.Parse(childNode, namespaceManager);
             }
             return ctObj;
         }
@@ -2818,6 +2861,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.tblCellMar.Write(sw, "tblCellMar");
             if (this.tblLook != null)
                 this.tblLook.Write(sw, "tblLook");
+            if (this.tblCaption != null)
+                this.tblCaption.Write(sw, "tblCaption");
+            if (this.tblDescription != null)
+                this.tblDescription.Write(sw, "tblDescription");
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
@@ -3838,9 +3885,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_TrPr()
         {
-            //this.trPrChangeField = new CT_TrPrChange();
-            //this.delField = new CT_TrackChange();
-            //this.insField = new CT_TrackChange();
+
         }
         public static new CT_TrPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -5677,6 +5722,21 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_Tc)o).Write(sw, "tc");
             }
             sw.Write(string.Format("</w:{0}>", nodeName));
+        }
+        public CT_Row Copy()
+        {
+            CT_Row ctRow = new CT_Row();
+            ctRow.paraIdField = this.paraIdField?.ToArray();
+            ctRow.rsidRField = this.rsidRField?.ToArray();
+            ctRow.rsidDelField = this.rsidDelField?.ToArray();
+            ctRow.rsidRPrField = this.rsidRPrField?.ToArray();
+            ctRow.rsidTrField = this.rsidTrField?.ToArray();
+            ctRow.textIdField = this.textIdField?.ToArray();
+            ctRow.trPrField = this.trPrField?.Copy();
+            ctRow.tblPrExField = this.tblPrExField?.Copy();
+            ctRow.itemsElementNameField = this.itemsElementNameField.Copy();
+            ctRow.itemsField = this.itemsField.Copy();
+            return ctRow;
         }
         public void RemoveTc(int pos)
         {
