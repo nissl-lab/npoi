@@ -1535,16 +1535,16 @@ namespace NPOI.HSSF.UserModel
                 // Nothing to do
                 return;
             }
-
-            NoteRecord[] noteRecs;
-            // Shift comments
+            // Move comments from the source row to the
+            //  destination row. Note that comments can
+            //  exist for cells which are null
+            // If the row shift would shift the comments off the sheet
+            // (above the first row or below the last row), this code will shift the
+            // comments to the first or last row, rather than moving them out of
+            // bounds or deleting them
             if (moveComments)
             {
-                noteRecs = _sheet.GetNoteRecords();
-            }
-            else
-            {
-                noteRecs = NoteRecord.EMPTY_ARRAY;
+                moveCommentsForRowShift(startRow, endRow, n);
             }
             RowShifter rowShifter = new HSSFRowShifter(this);
             // Shift Merged Regions
@@ -1552,21 +1552,7 @@ namespace NPOI.HSSF.UserModel
 
             // Shift Row Breaks
             _sheet.PageSettings.ShiftRowBreaks(startRow, endRow, n);
-
-            // Delete overwritten hyperlinks
-            int firstOverwrittenRow = startRow + n;
-            int lastOverwrittenRow = endRow + n;
-            foreach (HSSFHyperlink link in GetHyperlinkList())
-            {
-                // If hyperlink is fully contained in the rows that will be overwritten, delete the hyperlink
-                if (firstOverwrittenRow <= link.FirstRow &&
-                        link.FirstRow <= lastOverwrittenRow &&
-                        lastOverwrittenRow <= link.LastRow &&
-                        link.LastRow <= lastOverwrittenRow)
-                {
-                    RemoveHyperlink(link);
-                }
-            }
+            deleteOverwrittenHyperlinksForRowShift(startRow, endRow, n);
 
             for (int rowNum = s; rowNum >= startRow && rowNum <= endRow && rowNum >= 0 && rowNum < 65536; rowNum += inc)
             {
@@ -1624,32 +1610,42 @@ namespace NPOI.HSSF.UserModel
                 }
                 // Now zap all the cells in the source row
                 row.RemoveAllCells();
-
-                // Move comments from the source row to the
-                //  destination row. Note that comments can
-                //  exist for cells which are null
-                if (moveComments)
-                {
-                    // This code would get simpler if NoteRecords could be organised by HSSFRow.
-                    HSSFPatriarch patriarch = CreateDrawingPatriarch() as HSSFPatriarch;
-                    int lastChildIndex = patriarch.Children.Count - 1;
-                    for (int i = lastChildIndex; i >= 0; i--)
-                    {
-                        HSSFShape shape = patriarch.Children[(i)];
-                        if (!(shape is HSSFComment))
-                        {
-                            continue;
-                        }
-                        HSSFComment comment = (HSSFComment)shape;
-                        if (comment.Row != rowNum)
-                        {
-                            continue;
-                        }
-                        comment.Row = (rowNum + n);
-                    }
-                }
             }
             // Re-compute the first and last rows of the sheet as needed
+            recomputeFirstAndLastRowsForRowShift(startRow, endRow, n);
+
+            //if (endRow == lastrow || endRow + n > lastrow) lastrow = Math.Min(endRow + n, SpreadsheetVersion.EXCEL97.LastRowIndex);
+            //if (startRow == firstrow || startRow + n < firstrow) firstrow = Math.Max(startRow + n, 0);
+
+            int sheetIndex = _workbook.GetSheetIndex(this);
+            String sheetName = _workbook.GetSheetName(sheetIndex);
+            int externSheetIndex = book.CheckExternSheet(sheetIndex);
+            FormulaShifter formulaShifter = FormulaShifter.CreateForRowShift(externSheetIndex, sheetName, startRow, endRow, n, SpreadsheetVersion.EXCEL97);
+            // Update formulas that refer to rows that have been moved
+            updateFormulasForShift(formulaShifter);
+        }
+        private void updateFormulasForShift(FormulaShifter formulaShifter)
+        {
+            int sheetIndex = _workbook.GetSheetIndex(this);
+            int externSheetIndex = book.CheckExternSheet(sheetIndex);
+
+            _sheet.UpdateFormulasAfterCellShift(formulaShifter, externSheetIndex);
+
+            int nSheets = _workbook.NumberOfSheets;
+            for (int i = 0; i < nSheets; i++)
+            {
+                InternalSheet otherSheet = ((HSSFSheet)_workbook.GetSheetAt(i)).Sheet;
+                if (otherSheet == this._sheet)
+                {
+                    continue;
+                }
+                int otherExtSheetIx = book.CheckExternSheet(i);
+                otherSheet.UpdateFormulasAfterCellShift(formulaShifter, otherExtSheetIx);
+            }
+            _workbook.Workbook.UpdateNamesAfterCellShift(formulaShifter);
+        }
+        private void recomputeFirstAndLastRowsForRowShift(int startRow, int endRow, int n)
+        {
             if (n > 0)
             {
                 // Rows are moving down
@@ -1692,31 +1688,48 @@ namespace NPOI.HSSF.UserModel
                     }
                 }
             }
-            //if (endRow == lastrow || endRow + n > lastrow) lastrow = Math.Min(endRow + n, SpreadsheetVersion.EXCEL97.LastRowIndex);
-            //if (startRow == firstrow || startRow + n < firstrow) firstrow = Math.Max(startRow + n, 0);
-
-            // Update any formulas on this _sheet that point to
-            //  rows which have been moved
-            int sheetIndex = _workbook.GetSheetIndex(this);
-            String sheetName = _workbook.GetSheetName(sheetIndex);
-            int externSheetIndex = book.CheckExternSheet(sheetIndex);
-            FormulaShifter shifter = FormulaShifter.CreateForRowShift(externSheetIndex, sheetName, startRow, endRow, n, SpreadsheetVersion.EXCEL97);
-            _sheet.UpdateFormulasAfterCellShift(shifter, externSheetIndex);
-
-            int nSheets = _workbook.NumberOfSheets;
-            for (int i = 0; i < nSheets; i++)
+        }
+        private void deleteOverwrittenHyperlinksForRowShift(int startRow, int endRow, int n)
+        {
+            int firstOverwrittenRow = startRow + n;
+            int lastOverwrittenRow = endRow + n;
+            foreach (HSSFHyperlink link in GetHyperlinkList())
             {
-                InternalSheet otherSheet = ((HSSFSheet)_workbook.GetSheetAt(i)).Sheet;
-                if (otherSheet == this._sheet)
+                // If hyperlink is fully contained in the rows that will be overwritten, delete the hyperlink
+                if (firstOverwrittenRow <= link.FirstRow &&
+                        link.FirstRow <= lastOverwrittenRow &&
+                        lastOverwrittenRow <= link.LastRow &&
+                        link.LastRow <= lastOverwrittenRow)
+                {
+                    RemoveHyperlink(link);
+                }
+            }
+        }
+        private void moveCommentsForRowShift(int startRow, int endRow, int n)
+        {
+            HSSFPatriarch patriarch = CreateDrawingPatriarch() as HSSFPatriarch;
+            int lastChildIndex = patriarch.Children.Count - 1;
+            for (int i = lastChildIndex; i >= 0; i--)
+            {
+                HSSFShape shape = patriarch.Children[(i)];
+                if (!(shape is HSSFComment))
                 {
                     continue;
                 }
-                int otherExtSheetIx = book.CheckExternSheet(i);
-                otherSheet.UpdateFormulasAfterCellShift(shifter, otherExtSheetIx);
+                HSSFComment comment = (HSSFComment)shape;
+                int r = comment.Row;
+                if (startRow <= r && r <= endRow)
+                {
+                    comment.Row = clip(r + n);
+                }
             }
-            _workbook.Workbook.UpdateNamesAfterCellShift(shifter);
         }
-
+        private static int clip(int row)
+        {
+            return Math.Min(
+                    Math.Max(0, row),
+                    SpreadsheetVersion.EXCEL97.LastRowIndex);
+        }
         /// <summary>
         /// Inserts the chart records.
         /// </summary>

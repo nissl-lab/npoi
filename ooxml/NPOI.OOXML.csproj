@@ -218,6 +218,7 @@
     <Compile Include="XSSF\UserModel\Helpers\XSSFFormulaUtils.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFIgnoredErrorHelper.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFPasswordHelper.cs" />
+    <Compile Include="XSSF\UserModel\Helpers\XSSFRowColShifter.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFRowShifter.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFSingleXmlCell.cs" />
     <Compile Include="XSSF\UserModel\Helpers\XSSFXmlColumnPr.cs" />

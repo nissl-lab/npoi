@@ -217,6 +217,7 @@
     <Compile Include="HSSF\Record\OldSheetRecord.cs" />
     <Compile Include="HSSF\Record\OldStringRecord.cs" />
     <Compile Include="HSSF\Record\RowDataRecord.cs" />
+    <Compile Include="HSSF\UserModel\Helpers\HSSFRowColShifter.cs" />
     <Compile Include="HSSF\UserModel\Helpers\HSSFRowShifter.cs" />
     <Compile Include="HSSF\UserModel\HSSFColorScaleFormatting.cs" />
     <Compile Include="HSSF\UserModel\HSSFCombobox.cs" />
@@ -297,6 +298,7 @@
     <Compile Include="SS\Formula\Atp\WorkdayCalculator.cs" />
     <Compile Include="SS\Formula\Atp\WorkdayFunction.cs" />
     <Compile Include="SS\Formula\Eval\RefListEval.cs" />
+    <Compile Include="SS\Formula\FormulaShifter.cs" />
     <Compile Include="SS\Formula\Functions\Areas.cs" />
     <Compile Include="SS\Formula\Functions\ArrayFunction.cs" />
     <Compile Include="SS\Formula\Functions\Averageifs.cs" />
@@ -536,6 +538,7 @@
     <Compile Include="SS\UserModel\ConditionFilterType.cs" />
     <Compile Include="SS\UserModel\DifferentialStyleProvider.cs" />
     <Compile Include="SS\UserModel\ExcelNumberFormat.cs" />
+    <Compile Include="SS\UserModel\Helpers\BaseRowColShifter.cs" />
     <Compile Include="SS\UserModel\Helpers\RowShifter.cs" />
     <Compile Include="Iron\SS\UserModel\SheetExtension.cs" />
     <Compile Include="SS\UserModel\TableStyle.cs" />
@@ -1161,7 +1164,6 @@
     <Compile Include="SS\Formula\PTG\ErrPtg.cs" />
     <Compile Include="SS\Formula\PTG\ExpPtg.cs" />
     <Compile Include="SS\Formula\PTG\ExternSheetNameResolver.cs" />
-    <Compile Include="SS\Formula\PTG\FormulaShifter.cs" />
     <Compile Include="SS\Formula\PTG\FuncPtg.cs" />
     <Compile Include="SS\Formula\PTG\FuncVarPtg.cs" />
     <Compile Include="SS\Formula\PTG\GreaterEqualPtg.cs" />
