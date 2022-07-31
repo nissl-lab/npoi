@@ -18,7 +18,6 @@
 namespace NPOI.HSSF.UserModel
 {
     using System;
-    using System.Drawing;
     using System.Text;
     using System.IO;
     using NPOI.DDF;
@@ -27,6 +26,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using NPOI.SS.Util;
+    using SixLabors.ImageSharp;
 
 
     /// <summary>
@@ -194,7 +194,7 @@ namespace NPOI.HSSF.UserModel
         {
             //int hdpi = 96, vdpi = 96;
             //double mm2inch = 25.4;
-            return new Size((int)r.HorizontalResolution, (int)r.VerticalResolution);
+            return new Size((int)r.Metadata.HorizontalResolution, (int)r.Metadata.VerticalResolution);
         }
 
         /// <summary>
@@ -210,9 +210,9 @@ namespace NPOI.HSSF.UserModel
 
             using (MemoryStream ms = RecyclableMemory.GetStream(data))
             {
-                using (Image img = Image.FromStream(ms))
+                using (Image img = Image.Load(ms))
                 {
-                    return img.Size;
+                    return img.Size();
                 }
             }
         }

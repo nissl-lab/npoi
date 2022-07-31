@@ -19,11 +19,11 @@ namespace NPOI.DDF
     using System;
     using System.IO;
     using System.Text;
-    using System.Drawing;
     using NPOI.Util;
     using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
     using ICSharpCode.SharpZipLib.Zip.Compression;
     using NPOI.HSSF.UserModel;
+    using SixLabors.ImageSharp;
 
     /// <summary>
     /// @author Daniel Noll

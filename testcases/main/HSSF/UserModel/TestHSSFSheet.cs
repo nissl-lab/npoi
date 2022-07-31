@@ -754,7 +754,7 @@ namespace TestCases.HSSF.UserModel
             //  thankfully don't overlap!
             int minWithRow1And2 = 6400;
             int maxWithRow1And2 = 7800;
-            int minWithRow1Only = 2750;
+            int minWithRow1Only = 2730;
             int maxWithRow1Only = 3300;
 
             // autoSize the first column and check its size before the merged region (1,0,1,1) is set:
@@ -772,8 +772,8 @@ namespace TestCases.HSSF.UserModel
             // Check that the autoSized column width has ignored the 2nd row
             // because it is included in a merged region (Excel like behavior)
             NPOI.SS.UserModel.ISheet sheet2 = wb2.GetSheet(sheetName);
-            Assert.IsTrue(sheet2.GetColumnWidth(0) >= minWithRow1Only);
-            Assert.IsTrue(sheet2.GetColumnWidth(0) <= maxWithRow1Only);
+            Assert.IsTrue(sheet2.GetColumnWidth(0) >= minWithRow1Only, $"sheet column width:{sheet2.GetColumnWidth(0)}, minWithRow1Only:{minWithRow1Only}");
+            Assert.IsTrue(sheet2.GetColumnWidth(0) <= maxWithRow1Only, $"sheet column width:{sheet2.GetColumnWidth(0)}, maxWithRow1Only:{maxWithRow1Only}");
 
             // Remove the 2nd row merged region and Check that the 2nd row value is used to the AutoSizeColumn width
             sheet2.RemoveMergedRegion(1);

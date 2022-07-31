@@ -21,6 +21,9 @@ using System.Text;
 using NPOI.Util;
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -48,9 +51,15 @@ namespace NPOI.XSSF.UserModel
             this.ctColor = new CT_Color();
         }
 
-        public XSSFColor(System.Drawing.Color clr)
+        public XSSFColor(Color clr)
             : this()
         {
+            var c = clr.ToPixel<Rgb24>();
+            ctColor.SetRgb(c.R, c.G, c.B);
+        }
+
+        public XSSFColor(Rgb24 clr)
+            : this() {
 
             ctColor.SetRgb(clr.R, clr.G, clr.B);
         }

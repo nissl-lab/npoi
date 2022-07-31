@@ -20,7 +20,6 @@ namespace NPOI.HSSF.UserModel
     using System;
     using System.Collections;
     using System.IO;
-    using System.Drawing;
     using System.Configuration;
     using NPOI.Util.Collections;
 
@@ -51,6 +50,7 @@ namespace NPOI.HSSF.UserModel
          * @param font  the font to lookup.
          * @return  the fake font.
          */
+        /* TODO - SixLabors.Fonts:
         public static FontDetails GetFontDetails(Font font)
         {
             // If we haven't alReady identified out font metrics file,
@@ -140,5 +140,6 @@ namespace NPOI.HSSF.UserModel
             }
 
         }
+        */
     }
 }

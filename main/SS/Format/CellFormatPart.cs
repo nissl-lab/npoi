@@ -20,10 +20,11 @@ namespace NPOI.SS.Format
 
     using NPOI.HSSF.Util;
     using System.Collections.Generic;
-    using System.Drawing;
     using System.Collections;
     using System.Text.RegularExpressions;
     using System.Text;
+    using SixLabors.ImageSharp;
+    using NPOI.Util;
 
     /**
      * Objects of this class represent a single part of a cell format expression.
@@ -84,7 +85,7 @@ namespace NPOI.SS.Format
                 if (name.Equals(name.ToUpper()))
                 {
                     byte[] rgb = hc.RGB;
-                    Color c = Color.FromArgb(rgb[0], rgb[1], rgb[2]);
+                    Color c = Color.FromRgb(rgb[0], rgb[1], rgb[2]);
                     if (!NAMED_COLORS.ContainsKey(name))
                     {
                         NAMED_COLORS.Add(name, c);
@@ -282,8 +283,8 @@ namespace NPOI.SS.Format
         {
             String cdesc = m.Groups[(COLOR_GROUP)].Value.ToUpper();
             if (cdesc == null || cdesc.Length == 0)
-                return Color.Empty;
-            Color c = Color.Empty;
+                return POIUtils.Color_Empty;
+            Color c = POIUtils.Color_Empty;
             if (NAMED_COLORS.ContainsKey(cdesc))
                 c = NAMED_COLORS[(cdesc)];
             //if (c == null)
@@ -487,7 +488,7 @@ namespace NPOI.SS.Format
             else
             {
                 text = format.SimpleFormat(value);
-                textColor = Color.Empty;
+                textColor = POIUtils.Color_Empty;
             }
             return new CellFormatResult(applies, text, textColor);
         }
