@@ -20,17 +20,17 @@ namespace NPOI.Util
     using System;
     using System.IO;
 
-    /**
-     * Wrapper of InputStream which provides Run Length Encoding (RLE) 
-     *  decompression on the fly. Uses MS-OVBA decompression algorithm. See
-     * http://download.microsoft.com/download/2/4/8/24862317-78F0-4C4B-B355-C7B2C1D997DB/[MS-OVBA].pdf
-     */
+    /// <summary>
+    /// Wrapper of InputStream which provides Run Length Encoding (RLE) 
+    /// decompression on the fly. Uses MS-OVBA decompression algorithm. See
+    /// http://download.microsoft.com/download/2/4/8/24862317-78F0-4C4B-B355-C7B2C1D997DB/[MS-OVBA].pdf
+    /// </summary>
+    /// <seealso cref="NPOI.Util.InputStream" />
     public class RLEDecompressingInputStream : InputStream
     {
-
-        /**
-         * Bitmasks for performance
-         */
+        /// <summary>
+        /// Bitmasks for performance
+        /// </summary>
         private static int[] POWER2 = new int[] {
             0x0001, // 2^0
             0x0002, // 2^1
@@ -50,46 +50,57 @@ namespace NPOI.Util
             0x8000  // 2^15
     };
 
-        /** the wrapped inputstream */
+        /// <summary>
+        /// the wrapped inputstream
+        /// </summary>
         private Stream input;
 
-        /** a byte buffer with size 4096 for storing a single chunk */
+        /// <summary>
+        /// a byte buffer with size 4096 for storing a single chunk
+        /// </summary>
         private byte[] buf;
 
-        /** the current position in the byte buffer for Reading */
+        /// <summary>
+        /// the current position in the byte buffer for Reading
+        /// </summary>
         private int pos;
 
-        /** the number of bytes in the byte buffer */
+        /// <summary>
+        /// the number of bytes in the byte buffer
+        /// </summary>
         private int len;
 
-        public override bool CanRead 
+        public override bool CanRead
         {
             get {return input.CanRead; }
         }
+
         public override bool CanSeek
         {
             get {return input.CanSeek; }
         }
+
         public override bool CanWrite
         {
             get {return input.CanWrite; }
         }
+
         public override long Length
         {
             get {return input.Length; }
         }
+
         public override long Position
         {
             get { return input.Position; }
             set { input.Position = value;}
         }
 
-        /**
-         * Creates a new wrapper RLE Decompression InputStream.
-         * 
-         * @param in The stream to wrap with the RLE Decompression
-         * @throws IOException
-         */
+        /// <summary>
+        /// Creates a new wrapper RLE Decompression InputStream.
+        ///</summary>
+        ///<param name="input">in The stream to wrap with the RLE Decompression</param>
+        ///<exception cref="IOException"></exception>
         public RLEDecompressingInputStream(Stream input)
         {
             this.input = input;
@@ -102,7 +113,6 @@ namespace NPOI.Util
             }
             len = ReadChunk();
         }
-
 
         public override int Read()
         {
@@ -120,18 +130,16 @@ namespace NPOI.Util
             return buf[pos++];
         }
 
-
         public override int Read(byte[] b)
         {
             return Read(b, 0, b.Length);
         }
 
-
         public override int Read(byte[] b, int off, int l)
         {
             if (len == -1)
             {
-                return -1;
+                return 0;
             }
             int offset = off;
             int length = l;
@@ -141,7 +149,7 @@ namespace NPOI.Util
                 {
                     if ((len = ReadChunk()) == -1)
                     {
-                        return offset > off ? offset - off : -1;
+                        return offset > off ? offset - off : 0;
                     }
                 }
                 int c = Math.Min(length, len - pos);
@@ -152,7 +160,6 @@ namespace NPOI.Util
             }
             return l;
         }
-
 
         public override long Skip(long n)
         {
@@ -173,24 +180,22 @@ namespace NPOI.Util
             return n;
         }
 
-
         public override int Available()
         {
             return (len > 0 ? len - pos : 0);
         }
-
 
         public override void Close()
         {
             input.Close();
         }
 
-        /**
-         * Reads a single chunk from the underlying inputstream.
-         * 
-         * @return number of bytes that were Read, or -1 if the end of the stream was reached.
-         * @throws IOException
-         */
+        ///<summary>
+        /// Reads a single chunk from the underlying inputstream.
+        ///</summary>
+        ///<returns>number of bytes that were Read, or -1 if the end of the stream was reached.</returns>
+        ///@throws IOException
+        ///<
         private int ReadChunk()
         {
             pos = 0;
@@ -267,12 +272,11 @@ namespace NPOI.Util
             }
         }
 
-        /**
-         * Helper method to determine how many bits in the CopyToken are used for the CopyLength.
-         * 
-         * @param offset
-         * @return returns the number of bits in the copy token (a value between 4 and 12)
-         */
+        ///<summary>
+        ///Helper method to determine how many bits in the CopyToken are used for the CopyLength.
+        ///</summary>
+        ///<param name="offset"></param>
+        ///<returns>returns the number of bits in the copy token (a value between 4 and 12)</returns>
         static int GetCopyLenBits(int offset)
         {
             for (int n = 11; n >= 4; n--)
@@ -285,23 +289,21 @@ namespace NPOI.Util
             return 12;
         }
 
-        /**
-         * Convenience method for read a 2-bytes short in little endian encoding.
-         * 
-         * @return short value from the stream, -1 if end of stream is reached
-         * @throws IOException
-         */
+        ///<summary>
+        ///Convenience method for read a 2-bytes short in little endian encoding.
+        ///</summary>
+        ///<returns>short value from the stream, -1 if end of stream is reached</returns>
+        ///<exception cref="IOException"></exception>
         public int ReadShort()
         {
             return ReadShort(this);
         }
 
-        /**
-         * Convenience method for read a 4-bytes int in little endian encoding.
-         * 
-         * @return integer value from the stream, -1 if end of stream is reached
-         * @throws IOException
-         */
+        ///<summary>
+        ///Convenience method for read a 4-bytes int in little endian encoding.
+        ///</summary>
+        ///<returns>integer value from the stream, -1 if end of stream is reached</returns>
+        ///<exception cref="IOException"></exception>
         public int ReadInt()
         {
             return ReadInt(this);

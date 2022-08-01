@@ -21,83 +21,93 @@ namespace NPOI.Util
     using System.IO;
 
     /// <summary>
-    /// Wraps an <see cref="T:System.IO.Stream"/> providing <see cref="T:NPOI.Util.ILittleEndianInput"/><p/>
-    /// 
+    /// <para>Wraps an <see cref="T:System.IO.Stream"/> providing <see cref="T:NPOI.Util.ILittleEndianInput"/><p/></para>
+    /// <para>
     /// This class does not buffer any input, so the stream Read position maintained
     /// by this class is consistent with that of the inner stream.
+    /// </para>
     /// </summary>
     /// <remarks>
     /// @author Josh Micich
     /// </remarks>
-    public class LittleEndianInputStream : ILittleEndianInput
+    public class LittleEndianInputStream : FilterInputStream, ILittleEndianInput
     {
-        Stream in1 = null;
+        private int readLimit = -1;
+        private long markPos = -1;
+
+        public LittleEndianInputStream(Stream is1) : base(new FileInputStream(is1))
+        {
+        }
+
+        public LittleEndianInputStream(InputStream is1) : base(is1)
+        {
+        }
 
         /// <summary>
-        /// Reads up to <code>byte.length</code> bytes of data from this
+        /// <para>
+        /// Reads up to <c>byte.length</c> bytes of data from this
         /// input stream into an array of bytes. This method blocks until some
         /// input is available.
-        /// 
-        /// simulate java FilterInputStream
+        /// </para>
+        /// <para>simulate java FilterInputStream</para>
         /// </summary>
         /// <param name="b"></param>
         /// <returns></returns>
-        public int Read(byte[] b)
+        public override int Read(byte[] b)
         {
             return Read(b, 0, b.Length);
         }
+
         /// <summary>
-        /// Reads up to <code>len</code> bytes of data from this input stream
-        /// into an array of bytes.If<code> len</code> is not zero, the method
+        /// <para>
+        /// Reads up to <c>len</c> bytes of data from this input stream
+        /// into an array of bytes.If<c> len</c> is not zero, the method
         /// blocks until some input is available; otherwise, no
-        /// bytes are read and<code>0</code> is returned.
-        /// 
-        /// simulate java FilterInputStream
+        /// bytes are read and<c>0</c> is returned.
+        /// </para>
+        /// <para>simulate java FilterInputStream</para>
         /// </summary>
         /// <param name="b"></param>
         /// <param name="off"></param>
         /// <param name="len"></param>
         /// <returns></returns>
-        public int Read(byte[] b, int off, int len)
+        public override int Read(byte[] b, int off, int len)
         {
-            return in1.Read(b, off, len);
+            return base.Read(b, off, len);
         }
-        private int readLimit = -1;
-        private long markPos = -1;
-        public void Mark(int readlimit)
+
+        public override void Mark(int readlimit)
         {
             this.readLimit = readlimit;
-            this.markPos = in1.Position;
+            this.markPos = Position;
         }
 
-        public void Reset()
+        public override void Reset()
         {
-            in1.Seek(markPos - in1.Position, SeekOrigin.Current);
+            Seek(markPos - Position, SeekOrigin.Current);
         }
 
-        public long Skip(long n)
+        public override long Skip(long n)
         {
-            return in1.Seek(n, SeekOrigin.Current);
-        }
-        public int Available()
-        {
-            return (int)(in1.Length - in1.Position);
+            return Seek(n, SeekOrigin.Current);
         }
 
-        public LittleEndianInputStream(Stream is1)
+        public override int Available()
         {
-            in1 = is1;
+            return (int)(Length - Position);
         }
-        public int ReadByte()
+
+        public override int ReadByte()
         {
             return (byte)ReadUByte();
         }
+
         public int ReadUByte()
         {
             int ch;
             try
             {
-                ch = in1.ReadByte();
+                ch = Read();
             }
             catch (IOException e)
             {
@@ -106,10 +116,12 @@ namespace NPOI.Util
             CheckEOF(ch);
             return ch;
         }
+
         public double ReadDouble()
         {
             return BitConverter.Int64BitsToDouble(ReadLong());
         }
+
         public int ReadInt()
         {
             int ch1;
@@ -118,10 +130,10 @@ namespace NPOI.Util
             int ch4;
             try
             {
-                ch1 = in1.ReadByte();
-                ch2 = in1.ReadByte();
-                ch3 = in1.ReadByte();
-                ch4 = in1.ReadByte();
+                ch1 = Read();
+                ch2 = Read();
+                ch3 = Read();
+                ch4 = Read();
             }
             catch (IOException e)
             {
@@ -149,14 +161,14 @@ namespace NPOI.Util
             int b7;
             try
             {
-                b0 = in1.ReadByte();
-                b1 = in1.ReadByte();
-                b2 = in1.ReadByte();
-                b3 = in1.ReadByte();
-                b4 = in1.ReadByte();
-                b5 = in1.ReadByte();
-                b6 = in1.ReadByte();
-                b7 = in1.ReadByte();
+                b0 = Read();
+                b1 = Read();
+                b2 = Read();
+                b3 = Read();
+                b4 = Read();
+                b5 = Read();
+                b6 = Read();
+                b7 = Read();
             }
             catch (IOException e)
             {
@@ -172,18 +184,20 @@ namespace NPOI.Util
                     (b1 << 8) +
                     (b0 << 0));
         }
+
         public short ReadShort()
         {
             return (short)ReadUShort();
         }
+
         public int ReadUShort()
         {
             int ch1;
             int ch2;
             try
             {
-                ch1 = in1.ReadByte();
-                ch2 = in1.ReadByte();
+                ch1 = Read();
+                ch2 = Read();
             }
             catch (IOException e)
             {
@@ -192,6 +206,7 @@ namespace NPOI.Util
             CheckEOF(ch1 | ch2);
             return (ch2 << 8) + (ch1 << 0);
         }
+
         private static void CheckEOF(int value)
         {
             if (value < 0)
@@ -213,7 +228,7 @@ namespace NPOI.Util
                 byte ch;
                 try
                 {
-                    ch = (byte)in1.ReadByte();
+                    ch = (byte)Read();
                 }
                 catch (IOException e)
                 {
@@ -222,11 +237,6 @@ namespace NPOI.Util
                 CheckEOF(ch);
                 buf[i] = ch;
             }
-        }
-
-        internal void Close()
-        {
-            in1.Close();
         }
     }
 }

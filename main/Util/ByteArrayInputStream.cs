@@ -5,20 +5,24 @@ namespace NPOI.Util
 {
     public class ByteArrayInputStream : InputStream
     {
-
-        public ByteArrayInputStream()
-        {
-        }
         protected byte[] buf;
         protected int pos;
         protected int mark = 0;
         protected int count;
+
+        private readonly object _lockObject = new object();
+
+        public ByteArrayInputStream()
+        {
+        }
+
         public ByteArrayInputStream(byte[] buf)
         {
             this.buf = buf;
             this.pos = 0;
             this.count = buf.Length;
         }
+
         public ByteArrayInputStream(byte[] buf, int offset, int length)
         {
             this.buf = buf;
@@ -26,17 +30,18 @@ namespace NPOI.Util
             this.count = Math.Min(offset + length, buf.Length);
             this.mark = offset;
         }
-        
+
         public override int Read()
         {
-            lock (this)
+            lock (_lockObject)
             {
                 return (pos < count) ? (buf[pos++] & 0xff) : -1;
             }
         }
+
         public override int Read(byte[] b, int off, int len)
         {
-            lock (this)
+            lock (_lockObject)
             {
                 if (b == null)
                 {
@@ -49,7 +54,7 @@ namespace NPOI.Util
 
                 if (pos >= count)
                 {
-                    return -1;
+                    return 0;
                 }
 
                 int avail = count - pos;
@@ -57,57 +62,53 @@ namespace NPOI.Util
                 {
                     len = avail;
                 }
+
                 if (len <= 0)
                 {
                     return 0;
                 }
+
                 Array.Copy(buf, pos, b, off, len);
                 pos += len;
                 return len;
             }
-            
         }
+
         public override int Available()
         {
             return count - pos;
         }
+
         public override bool MarkSupported()
         {
             return true;
         }
-        public override void Mark(int readAheadLimit)
+
+        public override void Mark(int readlimit)
         {
             mark = pos;
         }
+
         public override void Reset()
         {
             pos = mark;
         }
-        public override void Close()
-        {
-        }
 
+        public override void Close() { }
 
         public override bool CanRead
         {
-            get
-            {
-                return true;
-            }
+            get { return true; }
         }
+
         public override bool CanWrite
         {
-            get
-            {
-                return false;
-            }
+            get { return false; }
         }
+
         public override bool CanSeek
         {
-            get
-            {
-                return true;
-            }
+            get { return true; }
         }
 
         public override void Flush()
@@ -117,22 +118,13 @@ namespace NPOI.Util
 
         public override long Length
         {
-            get
-            {
-                return this.count;
-            }
+            get { return this.count; }
         }
 
         public override long Position
         {
-            get
-            {
-                return this.pos;
-            }
-            set
-            {
-                this.pos = (int)value;
-            }
+            get {  return this.pos; }
+            set { this.pos = (int)value; }
         }
 
         public override long Seek(long offset, SeekOrigin origin)
@@ -145,7 +137,7 @@ namespace NPOI.Util
                 case SeekOrigin.Begin:
                     if (0L > offset)
                     {
-                        throw new ArgumentOutOfRangeException("offset", "offset must be positive");
+                        throw new ArgumentOutOfRangeException(nameof(offset), "offset must be positive");
                     }
                     this.Position = offset < this.Length ? offset : this.Length;
                     break;
@@ -159,7 +151,7 @@ namespace NPOI.Util
                     break;
 
                 default:
-                    throw new ArgumentException("incorrect SeekOrigin", "origin");
+                    throw new ArgumentException("incorrect SeekOrigin", nameof(origin));
             }
             return Position;
         }
@@ -168,12 +160,5 @@ namespace NPOI.Util
         {
             throw new NotImplementedException();
         }
-
-        public override void Write(byte[] buffer, int offset, int count)
-        {
-            throw new NotImplementedException();
-        }
-
-
     }
 }
