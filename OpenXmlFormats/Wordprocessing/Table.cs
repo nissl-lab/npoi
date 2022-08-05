@@ -5734,8 +5734,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             ctRow.textIdField = this.textIdField?.ToArray();
             ctRow.trPrField = this.trPrField?.Copy();
             ctRow.tblPrExField = this.tblPrExField?.Copy();
-            ctRow.itemsElementNameField = this.itemsElementNameField.Copy();
-            ctRow.itemsField = this.itemsField.Copy();
+            ctRow.itemsElementNameField = this.itemsElementNameField?.Copy();
+            ctRow.itemsField = this.itemsField?.Copy();
             return ctRow;
         }
         public void RemoveTc(int pos)
