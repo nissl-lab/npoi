@@ -22,7 +22,7 @@ namespace NPOI.SS.Format
     using NPOI.SS.UserModel;
     using System.Text.RegularExpressions;
     using System.Collections.Generic;
-    using System.Drawing;
+    using NPOI.Util;
 
     /**
      * Format a value according to the standard Excel behavior.  This "standard" is
@@ -112,7 +112,7 @@ namespace NPOI.SS.Format
             public override CellFormatResult Apply(Object value)
             {
                 String text = (new CellGeneralFormatter()).Format(value);
-                return new CellFormatResult(true, text, Color.Empty);
+                return new CellFormatResult(true, text, POIUtils.Color_Empty);
             }
         }
 

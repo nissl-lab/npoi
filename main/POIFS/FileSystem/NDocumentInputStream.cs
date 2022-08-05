@@ -15,23 +15,18 @@
    limitations under the License.
 ==================================================================== */
 
-
-
 using NPOI.POIFS.Properties;
 using NPOI.Util;
 using System.IO;
 using System;
 using System.Collections.Generic;
 
-
 namespace NPOI.POIFS.FileSystem
 {
-
-
-    /**
-     * This class provides methods to read a DocumentEntry managed by a
-     * {@link NPOIFSFileSystem} instance.
-     */
+    /// <summary>
+    /// This class provides methods to read a DocumentEntry managed by a <see cref="NPOIFSFileSystem"/> instance
+    /// </summary>
+    /// <seealso cref="DocumentInputStream" />
     public class NDocumentInputStream : DocumentInputStream//DocumentReader
     {
         /** current offset into the Document */
@@ -45,27 +40,23 @@ namespace NPOI.POIFS.FileSystem
         private int _marked_offset_count;
 
         /** the Document's size */
-        private int _document_size;
+        private readonly int _document_size;
 
         /** have we been closed? */
         private bool _closed;
 
         /** the actual Document */
-        private NPOIFSDocument _document;
+        private readonly NPOIFSDocument _document;
 
         private IEnumerator<ByteBuffer> _data;
         private ByteBuffer _buffer;
 
-        
-
-        /**
-         * Create an InputStream from the specified DocumentEntry
-         * 
-         * @param document the DocumentEntry to be read
-         * 
-         * @exception IOException if the DocumentEntry cannot be opened (like, maybe it has
-         *                been deleted?)
-         */
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NDocumentInputStream"/> class 
+        /// Create an InputStream from the specified DocumentEntry
+        /// </summary>
+        /// <param name="document">the DocumentEntry to be read</param>
+        /// <exception cref="System.IO.IOException">IOException if the DocumentEntry cannot be opened (like, maybe it has been deleted?)</exception>
         public NDocumentInputStream(DocumentEntry document)
         {
             if (!(document is DocumentNode))
@@ -88,11 +79,10 @@ namespace NPOI.POIFS.FileSystem
             _data = _document.GetBlockIterator();
         }
 
-        /**
-         * Create an InputStream from the specified Document
-         * 
-         * @param document the Document to be read
-         */
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NDocumentInputStream"/> class from the specified Document
+        /// </summary>
+        /// <param name="document">the Document to be read</param>
         public NDocumentInputStream(NPOIFSDocument document)
         {
             _current_offset = 0;
@@ -134,7 +124,7 @@ namespace NPOI.POIFS.FileSystem
             DieIfClosed();
             if (atEOD())
             {
-                return EOF;
+                return -1;
             }
             byte[] b = new byte[1];
             int result = Read(b, 0, 1);
@@ -174,12 +164,11 @@ namespace NPOI.POIFS.FileSystem
             return limit;
         }
 
-        /**
-         * Repositions this stream to the position at the time the mark() method was
-         * last called on this input stream. If mark() has not been called this
-         * method repositions the stream to its beginning.
-         */
-
+        /// <summary>
+        /// Repositions this stream to the position at the time the mark() method was
+        /// last called on this input stream. If mark() has not been called this
+        /// method repositions the stream to its beginning.
+        /// </summary>
         public override void Reset()
         {
             // Special case for Reset to the start
@@ -217,7 +206,7 @@ namespace NPOI.POIFS.FileSystem
                 // (It should be positioned already at the start of the block,
                 //  we need to Move further inside the block)
                 int skipBy = _marked_offset - _current_offset;
-                _buffer.Position = (_buffer.Position + skipBy);
+                _buffer.Position = _buffer.Position + skipBy;
             }
 
             // All done
@@ -278,7 +267,6 @@ namespace NPOI.POIFS.FileSystem
             }
         }
 
-
         public override void ReadFully(byte[] buf, int off, int len)
         {
             CheckAvaliable(len);
@@ -303,18 +291,20 @@ namespace NPOI.POIFS.FileSystem
             }
         }
 
-
         public override int ReadByte()
         {
+            if (atEOD())
+            {
+                return -1;
+            }
+
             return ReadUByte();
         }
-
 
         public override double ReadDouble()
         {
             return BitConverter.Int64BitsToDouble(ReadLong());
         }
-
 
         public override long ReadLong()
         {
@@ -329,7 +319,6 @@ namespace NPOI.POIFS.FileSystem
             ReadFully(buf, 0, buf.Length);
         }
 
-
         public override short ReadShort()
         {
             CheckAvaliable(SIZE_SHORT);
@@ -337,7 +326,6 @@ namespace NPOI.POIFS.FileSystem
             ReadFully(data, 0, SIZE_SHORT);
             return LittleEndian.GetShort(data);
         }
-
 
         public override int ReadInt()
         {
@@ -347,7 +335,6 @@ namespace NPOI.POIFS.FileSystem
             return LittleEndian.GetInt(data);
         }
 
-
         public override int ReadUShort()
         {
             CheckAvaliable(SIZE_SHORT);
@@ -355,7 +342,6 @@ namespace NPOI.POIFS.FileSystem
             ReadFully(data, 0, SIZE_SHORT);
             return LittleEndian.GetUShort(data);
         }
-
 
         public override int ReadUByte()
         {
@@ -400,7 +386,6 @@ namespace NPOI.POIFS.FileSystem
             if (offset == 0)
             {
                 Reset();
-
             }
             else
             {

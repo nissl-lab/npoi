@@ -20,8 +20,8 @@ namespace NPOI.SS.Util
     using System;
 
     using NPOI.SS.UserModel;
-    using System.Drawing;
     using System.Collections.Generic;
+    using SixLabors.Fonts;
 
     /**
      * Helper methods for when working with Usermodel sheets
@@ -363,11 +363,7 @@ namespace NPOI.SS.Util
 
         private static double GetCellConetntHeight(double actualHeight, int numberOfRowsInMergedRegion)
         {
-            //for some reason the height of the content that Graphics object measures comes back
-            //with a little bit of extra padding.  This is a hack to get the height back to what it should be.
-            double ratioToFixHeight = 0.798;
-
-            return Math.Max(-1, actualHeight / numberOfRowsInMergedRegion * ratioToFixHeight);
+            return Math.Max(-1, actualHeight / numberOfRowsInMergedRegion);
         }
 
         private static string GetCellStringValue(ICell cell)
@@ -415,33 +411,20 @@ namespace NPOI.SS.Util
 
         private static double GetRotatedContentHeight(ICell cell, string stringValue, Font windowsFont)
         {
-            using (Bitmap bmp = new Bitmap(1, 1))
-            {
-                using (Graphics g = Graphics.FromImage(bmp))
-                {
-                    var angle = cell.CellStyle.Rotation * 2.0 * Math.PI / 360.0;
-                    var measureResult = g.MeasureString(stringValue, windowsFont);
+            var angle = cell.CellStyle.Rotation * 2.0 * Math.PI / 360.0;
+            var measureResult = TextMeasurer.Measure(stringValue, new TextOptions(windowsFont));
 
-                    var x1 = Math.Abs(measureResult.Height * Math.Cos(angle));
-                    var x2 = Math.Abs(measureResult.Width * Math.Sin(angle));
+            var x1 = Math.Abs(measureResult.Height * Math.Cos(angle));
+            var x2 = Math.Abs(measureResult.Width * Math.Sin(angle));
 
-                    return Math.Round(x1 + x2, 0, MidpointRounding.ToEven); ;  
-                }
-            }
+            return Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
         }
 
         private static double GetContentHeight(string stringValue, Font windowsFont)
         {
-
-            using (Bitmap bmp = new Bitmap(1, 1))
-            {
-                using (Graphics g = Graphics.FromImage(bmp))
-                {
-                    SizeF measureResult = g.MeasureString(stringValue, windowsFont, int.MaxValue, StringFormat.GenericTypographic);
-
-                    return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);  
-                }
-            }
+            var measureResult = TextMeasurer.Measure(stringValue, new TextOptions(windowsFont));
+            
+            return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);
         }
 
         /**
@@ -486,8 +469,6 @@ namespace NPOI.SS.Util
             IFont font = wb.GetFontAt(style.FontIndex);
 
             double width = -1;
-            using (Bitmap bmp = new Bitmap(1, 1))
-            using (Graphics g = Graphics.FromImage(bmp))
             {
                 if (cellType == CellType.String)
                 {
@@ -505,7 +486,7 @@ namespace NPOI.SS.Util
                             // TODO: support rich text fragments
                         }
 
-                        width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, g, windowsFont, cell);
+                        width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
                     }
                 }
                 else
@@ -533,7 +514,7 @@ namespace NPOI.SS.Util
                         //str = new AttributedString(txt);
                         //copyAttributes(font, str, 0, txt.length());
                         windowsFont = IFont2Font(font);
-                        width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, g, windowsFont, cell);
+                        width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
                     }
                 }
             }
@@ -541,14 +522,14 @@ namespace NPOI.SS.Util
         }
 
         private static double GetCellWidth(int defaultCharWidth, int colspan,
-            ICellStyle style, double width, string str, Graphics g, Font windowsFont, ICell cell)
+            ICellStyle style, double width, string str, Font windowsFont, ICell cell)
         {
             //Rectangle bounds;
             double actualWidth;
+            FontRectangle sf = TextMeasurer.Measure(str, new TextOptions(windowsFont));
             if (style.Rotation != 0)
             {
                 double angle = style.Rotation * 2.0 * Math.PI / 360.0;
-                SizeF sf = g.MeasureString(str, windowsFont);
                 double x1 = Math.Abs(sf.Height * Math.Sin(angle));
                 double x2 = Math.Abs(sf.Width * Math.Cos(angle));
                 actualWidth = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
@@ -557,7 +538,7 @@ namespace NPOI.SS.Util
             else
             {
                 //bounds = layout.getBounds();
-                actualWidth = Math.Round(g.MeasureString(str, windowsFont, int.MaxValue, StringFormat.GenericTypographic).Width, 0, MidpointRounding.ToEven);
+                actualWidth = Math.Round(sf.Width, 0, MidpointRounding.ToEven);                
             }
             // entireWidth accounts for leading spaces which is excluded from bounds.getWidth()
             //double frameWidth = bounds.getX() + bounds.getWidth();
@@ -629,17 +610,8 @@ namespace NPOI.SS.Util
             //copyAttributes(defaultFont, str, 0, 1);
             //TextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
             //int defaultCharWidth = (int)layout.getAdvance();
-            int defaultCharWidth = 0;
             Font font = IFont2Font(defaultFont);
-            using (var image = new Bitmap(1, 1))
-            {
-                using (var g = Graphics.FromImage(image))
-                {
-                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                    defaultCharWidth = (int)g.MeasureString(new String(defaultChar, 1), font, int.MaxValue, StringFormat.GenericTypographic).Width;
-                }
-            }
-            return defaultCharWidth;
+            return (int)Math.Ceiling(TextMeasurer.Measure(new string(defaultChar, 1), new TextOptions(font)).Width);
         }
 
         /**
@@ -705,7 +677,7 @@ namespace NPOI.SS.Util
         //    str.AddAttribute(TextAttribute.SIZE, (float)font.FontHeightInPoints);
         //    if (font.Boldweight == (short)FontBoldWeight.BOLD) str.AddAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, startIdx, endIdx);
         //    if (font.IsItalic) str.AddAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, startIdx, endIdx);
-        //    if (font.Underline == (byte)FontUnderlineType.SINGLE) str.AddAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);           
+        //    TODO-Fonts: not supported: if (font.Underline == (byte)FontUnderlineType.SINGLE) str.AddAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);           
         //}
 
         /// <summary>
@@ -722,11 +694,26 @@ namespace NPOI.SS.Util
             }
             if (font1.IsItalic)
                 style |= FontStyle.Italic;
+
+            /* TODO-Fonts: not supported
             if (font1.Underline == FontUnderlineType.Single)
             {
                 style |= FontStyle.Underline;
             }
-            Font font = new Font(font1.FontName, (float)font1.FontHeightInPoints, style, GraphicsUnit.Point);
+            */
+
+            // Try to find font in system fonts. If we can not find out,
+            // use "Arial". TODO-Fonts: More fallbacks.
+            SixLabors.Fonts.FontFamily fontFamily;
+            if (false == SystemFonts.TryGet(font1.FontName, out fontFamily))
+            {
+                if (false == SystemFonts.TryGet("Arial", out fontFamily))
+                {
+                    throw new Exception($"Could not find font \"{font1.FontName}\" and also not fallback font \"Arial\"");
+                }
+            }
+
+            Font font = new Font(fontFamily, (float)font1.FontHeightInPoints, style);
             return font;
         }
         /// <summary>

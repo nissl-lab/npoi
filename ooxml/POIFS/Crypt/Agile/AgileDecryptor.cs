@@ -256,9 +256,9 @@ namespace NPOI.POIFS.Crypt.Agile
             DocumentInputStream dis = dir.CreateDocumentInputStream(DEFAULT_POIFS_ENTRY);
             _length = dis.ReadLong();
 
-            ChunkedCipherInputStream cipherStream = new AgileCipherInputStream(dis, _length, builder, this);
-            throw new NotImplementedException("AgileCipherInputStream should be derived from InputStream");
-            //return cipherStream.GetStream();
+            var stream = new AgileCipherInputStream(dis, _length, builder, this);
+            stream.Position = 0;
+            return stream;
         }
 
         public override long GetLength() {
@@ -309,7 +309,7 @@ namespace NPOI.POIFS.Crypt.Agile
          * that the StreamSize field of the EncryptedPackage field specifies the number of bytes of
          * unencrypted data as specified in section 2.3.4.4.
          */
-        private class AgileCipherInputStream : ChunkedCipherInputStream {
+        private sealed class AgileCipherInputStream : ChunkedCipherInputStream {
 
             public AgileCipherInputStream(DocumentInputStream stream, long size,
                 IEncryptionInfoBuilder builder, AgileDecryptor decryptor)

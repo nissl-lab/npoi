@@ -61,7 +61,7 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
 
             public override int Read(byte[] b, int off, int len) {
                 int readLen = base.Read(b, off, len);
-                if (readLen == -1) return -1;
+                if (readLen == -1) return 0;
                 try {
                     cipher.Update(b, off, readLen, b, off);
                 } catch (Exception e) {

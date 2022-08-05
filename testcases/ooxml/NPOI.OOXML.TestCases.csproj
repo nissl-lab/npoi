@@ -12,7 +12,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NPOI.OOXML.Testcases</RootNamespace>
     <AssemblyName>NPOI.OOXML.Testcases</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <FileUpgradeFlags>
@@ -246,19 +246,19 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\main\NPOI.csproj">
-      <Project>{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}</Project>
+      <Project>{10fa8538-157a-4380-a4f6-8e2c3ee92cae}</Project>
       <Name>NPOI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ooxml\NPOI.OOXML.csproj">
-      <Project>{6BEED965-B9A0-4FFA-B96D-0F380A97331A}</Project>
+      <Project>{6beed965-b9a0-4ffa-b96d-0f380a97331a}</Project>
       <Name>NPOI.OOXML</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\openxml4Net\NPOI.OpenXml4Net.csproj">
-      <Project>{C9F265B7-ECE3-4755-B0B1-79536575C2A9}</Project>
+      <Project>{c9f265b7-ece3-4755-b0b1-79536575c2a9}</Project>
       <Name>NPOI.OpenXml4Net</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.csproj">
-      <Project>{A6874784-2875-4F40-9E8F-8385A640F5D6}</Project>
+      <Project>{a6874784-2875-4f40-9e8f-8385a640f5d6}</Project>
       <Name>NPOI.OpenXmlFormats</Name>
     </ProjectReference>
     <ProjectReference Include="..\main\NPOI.TestCases.csproj">

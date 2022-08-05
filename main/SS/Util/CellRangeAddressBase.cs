@@ -1,7 +1,6 @@
 ﻿namespace NPOI.SS.Util
 {
     using System;
-    using System.Drawing;
 
     /**
 * See OOO documentation: excelfileformat.pdf sec 2.5.14 - 'Cell Range Address'<p/>

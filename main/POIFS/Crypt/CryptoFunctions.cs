@@ -26,6 +26,11 @@ namespace NPOI.POIFS.Crypt
      * Helper functions used for standard and agile encryption
      */
     public class CryptoFunctions {
+
+        //arbitrarily selected; may need to increase
+        private const int DEFAULT_MAX_RECORD_LENGTH = 100_000;
+        public const int MAX_RECORD_LENGTH = DEFAULT_MAX_RECORD_LENGTH;
+
         /**
          * <p><cite>2.3.4.7 ECMA-376 Document Encryption Key Generation (Standard Encryption)<br/>
          * 2.3.4.11 Encryption Key Generation (Agile Encryption)</cite></p>
@@ -204,9 +209,9 @@ namespace NPOI.POIFS.Crypt
 
             try {
                 // Ensure the JCE policies files allow for this sized key
-                if (Cipher.GetMaxAllowedKeyLength(cipherAlgorithm.jceId) < keySizeInBytes * 8) {
+                /*if (Cipher.GetMaxAllowedKeyLength(cipherAlgorithm.jceId) < keySizeInBytes * 8) {
                     throw new EncryptedDocumentException("Export Restrictions in place - please install JCE Unlimited Strength Jurisdiction Policy files");
-                }
+                }*/
 
                 Cipher cipher;
                 if (cipherAlgorithm == CipherAlgorithm.rc4) {

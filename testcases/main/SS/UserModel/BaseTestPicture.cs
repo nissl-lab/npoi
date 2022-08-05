@@ -17,11 +17,12 @@
 
 using NPOI.SS.UserModel;
 using NUnit.Framework;
-using System.Drawing;
 using NPOI.Util;
 using NPOI.SS.Util;
 using System.IO;
 using TestCases.HSSF;
+using SixLabors.ImageSharp;
+
 namespace TestCases.SS.UserModel
 {
 
@@ -133,7 +134,7 @@ namespace TestCases.SS.UserModel
 
         private static Point GetImageSize(byte[] image)
         {
-            Image img = Image.FromStream(new MemoryStream(image));
+            Image img = Image.Load(new MemoryStream(image));
 
             Assert.IsNotNull(img);
 
