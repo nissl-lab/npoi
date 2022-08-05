@@ -17,11 +17,11 @@
 namespace NPOI.SS.Util
 {
     using System;
-    using System.Drawing;
     using System.IO;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.Util;
+    using SixLabors.ImageSharp;
 
     /**
      * @author Yegor Kozlov
@@ -35,7 +35,7 @@ namespace NPOI.SS.Util
 
         public static Size GetImageDimension(Stream is1)
         {
-            using (Image img = Image.FromStream(is1))
+            using (Image img = Image.Load(is1))
             {
                 //return img.Size;
                 int[] dpi = GetResolution(img);
@@ -70,7 +70,7 @@ namespace NPOI.SS.Util
                 case PictureType.DIB:
                     //we can calculate the preferred size only for JPEG, PNG and BMP
                     //other formats like WMF, EMF and PICT are not supported in Java
-                    using (Image img = Image.FromStream(is1))
+                    using (Image img = Image.Load(is1))
                     {
                         int[] dpi = GetResolution(img);
 
@@ -103,7 +103,7 @@ namespace NPOI.SS.Util
          */
         public static int[] GetResolution(Image r)
         {
-            return new int[] { (int)r.HorizontalResolution, (int)r.VerticalResolution };
+            return new int[] { (int)r.Metadata.HorizontalResolution, (int)r.Metadata.VerticalResolution };
         }
 
         /**

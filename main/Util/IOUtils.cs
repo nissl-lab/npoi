@@ -34,13 +34,32 @@ namespace NPOI.Util
     public class IOUtils
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(IOUtils));
-        /**
-         * Peeks at the first 8 bytes of the stream. Returns those bytes, but
-         *  with the stream unaffected. Requires a stream that supports mark/reset,
-         *  or a PushbackInputStream. If the stream has &gt;0 but &lt;8 bytes, 
-         *  remaining bytes will be zero.
-         * @throws EmptyFileException if the stream is empty
-         */
+
+        /// <summary>
+        /// The current set global allocation limit override,
+        /// -1 means limits are applied per record type. 
+        /// The current set global allocation limit override,
+        /// </summary>
+        private static int BYTE_ARRAY_MAX_OVERRIDE = -1;
+
+        /// <summary>
+        /// The max init size of ByteArrayOutputStream.
+        /// -1 means init size of ByteArrayOutputStream could be up to Integer.MAX_VALUE
+        /// </summary>
+        private static int MAX_BYTE_ARRAY_INIT_SIZE = -1;
+
+        /// <summary>
+        /// The default size of the bytearray used while reading input streams. This is meant to be pretty small.
+        /// </summary>
+        private static readonly int DEFAULT_BUFFER_SIZE = 4096;
+
+        /// <summary>
+        /// Peeks at the first 8 bytes of the stream. Returns those bytes, but
+        ///  with the stream unaffected. Requires a stream that supports mark/reset,
+        ///  or a PushbackInputStream. If the stream has &gt;0 but &lt;8 bytes, 
+        ///  remaining bytes will be zero.
+        /// @throws EmptyFileException if the stream is empty
+        /// </summary>
         public static byte[] PeekFirst8Bytes(InputStream stream)
         {
             // We want to peek at the first 8 bytes
@@ -63,6 +82,7 @@ namespace NPOI.Util
 
             return header;
         }
+
         public static byte[] PeekFirst8Bytes(Stream stream)
         {
             // We want to peek at the first 8 bytes
@@ -88,6 +108,7 @@ namespace NPOI.Util
 
             return header;
         }
+
         /// <summary>
         /// Reads all the data from the input stream, and returns
         /// the bytes Read.
@@ -170,7 +191,6 @@ namespace NPOI.Util
         /// <param name="off">the start offset in array b at which the data is written.</param>
         /// <param name="len">the maximum number of bytes to read.</param>
         /// <returns></returns>
-
         public static int ReadFully(Stream stream, byte[] b, int off, int len)
         {
             int total = 0;
@@ -187,7 +207,6 @@ namespace NPOI.Util
                     return total;
                 }
             }
-
         }
 
         /// <summary>
@@ -213,13 +232,11 @@ namespace NPOI.Util
             return (long)sum.ByteCRC(ref data);
         }
 
-        /**
-         * Quietly (no exceptions) close Closable resource. In case of error it will
-         * be printed to {@link IOUtils} class logger.
-         * 
-         * @param closeable
-         *            resource to close
-         */
+        ///<summary>
+        ///Quietly (no exceptions) close Closable resource. In case of error it will
+        ///be printed to {@link IOUtils} class logger.
+        ///</summary>
+        ///<param name="closeable">resource to close</param>
         public static void CloseQuietly(Stream closeable )
         {
             // no need to log a NullPointerException here
@@ -236,6 +253,7 @@ namespace NPOI.Util
                 logger.Log(POILogger.ERROR, "Unable to close resource: " + exc, exc);
             }
         }
+
         public static void CloseQuietly(ICloseable closeable)
         {
             // no need to log a NullPointerException here
@@ -251,6 +269,69 @@ namespace NPOI.Util
             {
                 logger.Log(POILogger.ERROR, "Unable to close resource: " + exc, exc);
             }
+        }
+
+        public static byte[] SafelyAllocate(long length, int maxLength)
+        {
+            SafelyAllocateCheck(length, maxLength);
+
+            CheckByteSizeLimit((int)length);
+
+            return new byte[(int)length];
+        }
+
+        public static void SafelyAllocateCheck(long length, int maxLength)
+        {
+            if (length < 0L)
+            {
+                throw new RecordFormatException("Can't allocate an array of length < 0, but had " + length + " and " + maxLength);
+            }
+            if (length > (long)int.MaxValue)
+            {
+                throw new RecordFormatException("Can't allocate an array > " + int.MaxValue);
+            }
+            CheckLength(length, maxLength);
+        }
+
+        private static void CheckByteSizeLimit(int length)
+        {
+            if (BYTE_ARRAY_MAX_OVERRIDE != -1 && length > BYTE_ARRAY_MAX_OVERRIDE)
+            {
+                ThrowRFE(length, BYTE_ARRAY_MAX_OVERRIDE);
+            }
+        }
+
+        private static void CheckLength(long length, int maxLength)
+        {
+            if (BYTE_ARRAY_MAX_OVERRIDE > 0)
+            {
+                if (length > BYTE_ARRAY_MAX_OVERRIDE)
+                {
+                    ThrowRFE(length, BYTE_ARRAY_MAX_OVERRIDE);
+                }
+            }
+            else if (length > maxLength)
+            {
+                ThrowRFE(length, maxLength);
+            }
+        }
+
+        private static void ThrowRFE(long length, int maxLength)
+        {
+            throw new RecordFormatException(string.Format("Tried to allocate an array of length {0}" +
+                            ", but the maximum length for this record type is {1}.\n" +
+                            "If the file is not corrupt and not large, please open an issue on GitHub to request \n" +
+                            "increasing the maximum allowable size for this record type.\n" +
+                            "You can set a higher override value with IOUtils.SetByteArrayMaxOverride()", length, maxLength));
+        }
+
+        private static void ThrowRecordTruncationException(int maxLength)
+        {
+            throw new RecordFormatException(string.Format("Tried to read data but the maximum length " +
+                    "for this record type is {0}.\n" +
+                    "If the file is not corrupt and not large, please open an issue on GitHub to request \n" +
+                    "increasing the maximum allowable size for this record type.\n" +
+                    "You can set a higher override value with IOUtils.SetByteArrayMaxOverride()", maxLength));
         }
     }
 }

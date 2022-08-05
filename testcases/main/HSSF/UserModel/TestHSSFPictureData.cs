@@ -24,10 +24,9 @@ namespace TestCases.HSSF.UserModel
     using NUnit.Framework;
     using System.IO;
     using TestCases.HSSF;
-    using System.Drawing;
-    using System.Drawing.Imaging;
     using NPOI.SS.UserModel;
     using System.Collections.Generic;
+    using SixLabors.ImageSharp;
 
 
     /**
@@ -57,7 +56,7 @@ namespace TestCases.HSSF.UserModel
                 if (ext.Equals("jpeg"))
                 {
                     //try to read image data using javax.imageio.* (JDK 1.4+)
-                    Image jpg = Image.FromStream(new MemoryStream(data));
+                    Image jpg = Image.Load(new MemoryStream(data));
                     Assert.IsNotNull(jpg);
                     Assert.AreEqual(192, jpg.Width);
                     Assert.AreEqual(176, jpg.Height);
@@ -65,7 +64,7 @@ namespace TestCases.HSSF.UserModel
                 else if (ext.Equals("png"))
                 {
                     //try to read image data using javax.imageio.* (JDK 1.4+)
-                    Image png = Image.FromStream(new MemoryStream(data));
+                    Image png = Image.Load(new MemoryStream(data));
                     Assert.IsNotNull(png);
                     Assert.AreEqual(300, png.Width);
                     Assert.AreEqual(300, png.Height);
@@ -95,7 +94,7 @@ namespace TestCases.HSSF.UserModel
             byte[] data = pict.Data;
             using (MemoryStream ms = new MemoryStream(data))
             {
-                Image png = Image.FromStream(ms);
+                Image png = Image.Load(ms);
                 Assert.IsNotNull(png);
                 Assert.AreEqual(78, png.Width);
                 Assert.AreEqual(76, png.Height);

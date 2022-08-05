@@ -18,7 +18,6 @@ namespace TestCases.SS.Format
 {
     using System;
     using System.Collections.Generic;
-    using System.Drawing;
     using System.Text.RegularExpressions;
 
     using NUnit.Framework;
@@ -28,6 +27,7 @@ namespace TestCases.SS.Format
     using NPOI.Util;
     using TestCases.SS;
     using System.Diagnostics;
+    using SixLabors.ImageSharp;
 
     /**
      * This class is a base class for spreadsheet-based tests, such as are used for
