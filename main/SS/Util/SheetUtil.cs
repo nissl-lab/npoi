@@ -363,11 +363,7 @@ namespace NPOI.SS.Util
 
         private static double GetCellConetntHeight(double actualHeight, int numberOfRowsInMergedRegion)
         {
-            //for some reason the height of the content that Graphics object measures comes back
-            //with a little bit of extra padding.  This is a hack to get the height back to what it should be.
-            double ratioToFixHeight = 0.798;
-
-            return Math.Max(-1, actualHeight / numberOfRowsInMergedRegion * ratioToFixHeight);
+            return Math.Max(-1, actualHeight / numberOfRowsInMergedRegion);
         }
 
         private static string GetCellStringValue(ICell cell)
@@ -415,33 +411,20 @@ namespace NPOI.SS.Util
 
         private static double GetRotatedContentHeight(ICell cell, string stringValue, Font windowsFont)
         {
-            using (Bitmap bmp = new Bitmap(1, 1))
-            {
-                using (Graphics g = Graphics.FromImage(bmp))
-                {
-                    var angle = cell.CellStyle.Rotation * 2.0 * Math.PI / 360.0;
-                    var measureResult = g.MeasureString(stringValue, windowsFont);
+            var angle = cell.CellStyle.Rotation * 2.0 * Math.PI / 360.0;
+            var measureResult = TextMeasurer.Measure(stringValue, new TextOptions(windowsFont));
 
-                    var x1 = Math.Abs(measureResult.Height * Math.Cos(angle));
-                    var x2 = Math.Abs(measureResult.Width * Math.Sin(angle));
+            var x1 = Math.Abs(measureResult.Height * Math.Cos(angle));
+            var x2 = Math.Abs(measureResult.Width * Math.Sin(angle));
 
-                    return Math.Round(x1 + x2, 0, MidpointRounding.ToEven); ;  
-                }
-            }
+            return Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
         }
 
         private static double GetContentHeight(string stringValue, Font windowsFont)
         {
-
-            using (Bitmap bmp = new Bitmap(1, 1))
-            {
-                using (Graphics g = Graphics.FromImage(bmp))
-                {
-                    SizeF measureResult = g.MeasureString(stringValue, windowsFont, int.MaxValue, StringFormat.GenericTypographic);
-
-                    return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);  
-                }
-            }
+            var measureResult = TextMeasurer.Measure(stringValue, new TextOptions(windowsFont));
+            
+            return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);
         }
 
         /**
