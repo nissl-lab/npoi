@@ -972,6 +972,11 @@ namespace NPOI.XSSF.Streaming
             return XssfWorkbook.IsDate1904();
         }
 
+        void IDisposable.Dispose()
+        {
+            this.Close();
+        }
+
 
 
         //TODO: missing method isDate1904, isHidden, setHidden
