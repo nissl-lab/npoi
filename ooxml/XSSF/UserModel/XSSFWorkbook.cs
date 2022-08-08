@@ -2550,6 +2550,11 @@ namespace NPOI.XSSF.UserModel
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            this.Close();
+        }
     }
 }
 

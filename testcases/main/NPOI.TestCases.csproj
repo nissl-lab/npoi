@@ -96,6 +96,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4.7.2|AnyCPU'">
+    <OutputPath>bin\.net 4.7.2\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll</HintPath>
@@ -710,8 +713,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\main\NPOI.csproj">
+      <Project>{10fa8538-157a-4380-a4f6-8e2c3ee92cae}</Project>
+      <Name>NPOI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="NUnit">
-      <Version>3.13.1</Version>
+      <Version>3.13.3</Version>
     </PackageReference>
     <PackageReference Include="NUnit3TestAdapter">
       <Version>4.2.1</Version>
@@ -719,18 +728,6 @@
     <PackageReference Include="SharpZipLib">
       <Version>1.3.3</Version>
     </PackageReference>
-    <PackageReference Include="SixLabors.Fonts">
-      <Version>1.0.0-beta18</Version>
-    </PackageReference>
-    <PackageReference Include="SixLabors.ImageSharp">
-      <Version>2.1.3</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\main\NPOI.csproj">
-      <Project>{10fa8538-157a-4380-a4f6-8e2c3ee92cae}</Project>
-      <Name>NPOI</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

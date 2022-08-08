@@ -2339,5 +2339,10 @@ namespace NPOI.HSSF.UserModel
         {
             return Workbook.IsUsing1904DateWindowing;
         }
+
+        public void Dispose()
+        {
+            this.Close();
+        }
     }
 }

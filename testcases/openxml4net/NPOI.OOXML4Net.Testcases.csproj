@@ -79,6 +79,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4.7.2|AnyCPU'">
+    <OutputPath>bin\.net 4.7.2\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -154,13 +157,13 @@
       <Name>NPOI.TestCases</Name>
     </ProjectReference>
     <ProjectReference Include="..\ooxml\NPOI.OOXML.TestCases.csproj">
-      <Project>{0bf8c464-8779-43cf-ad7a-b1109a86eaae}</Project>
+      <Project>{0BF8C464-8779-43CF-AD7A-B1109A86EAAE}</Project>
       <Name>NPOI.OOXML.TestCases</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NUnit">
-      <Version>3.13.1</Version>
+      <Version>3.13.3</Version>
     </PackageReference>
     <PackageReference Include="NUnit3TestAdapter">
       <Version>4.2.1</Version>
