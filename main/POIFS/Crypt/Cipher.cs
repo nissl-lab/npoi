@@ -10,30 +10,16 @@ namespace NPOI.POIFS.Crypt
 {
     public class Cipher
     {
-        public static int DECRYPT_MODE = 2;
-        public static int ENCRYPT_MODE = 1;
-        public static int WRAP_MODE = 3;
-        public static int UNWRAP_MODE = 4;
+        public const int DECRYPT_MODE = 2;
+        public const int ENCRYPT_MODE = 1;
+        public const int WRAP_MODE = 3;
+        public const int UNWRAP_MODE = 4;
 
-        public static int PUBLIC_KEY = 1;
-        public static int PRIVATE_KEY = 2;
-        public static int SECRET_KEY = 3;
+        public const int PUBLIC_KEY = 1;
+        public const int PRIVATE_KEY = 2;
+        public const int SECRET_KEY = 3;
 
         protected IBufferedCipher cipherImpl;
-
-        public byte[] DoFinal(byte[] block)
-        {
-            return cipherImpl.DoFinal(block);
-        }
-        //public byte[] DoFinal(byte[] block, int v, int posInChunk)
-        //{
-        //    return cipherImpl.DoFinal(block, v, posInChunk);
-        //}
-
-        public int DoFinal(byte[] input, int inputOffset, int inputLen, byte[] output)
-        {
-            return cipherImpl.DoFinal(input, inputOffset, inputLen, output, 0);
-        }
 
         public static Cipher GetInstance(string transformation)
         {
@@ -41,13 +27,15 @@ namespace NPOI.POIFS.Crypt
             {
                 cipherImpl = CipherUtilities.GetCipher(transformation)
             };
-             return cihpher;
 
+            return cihpher;
         }
+
         public static Cipher GetInstance(string transformation, string provider)
         {
             return GetInstance(transformation);
         }
+
         public void Init(int cipherMode, IKey key, AlgorithmParameterSpec aps)
         {
             ICipherParameters cp;
@@ -103,34 +91,47 @@ namespace NPOI.POIFS.Crypt
             }
         }
 
-        
-
-        public void Update(byte[] input, int inputOffset, int inputLen, byte[] output)
+        public int Update(byte[] input, int inputOffset, int inputLen, byte[] output)
         {
             if ((input == null) || (inputOffset < 0) || (inputLen > input.Length - inputOffset) || (inputLen < 0))
             {
                 throw new ArgumentException("Bad arguments");
             }
-            cipherImpl.ProcessBytes(input, inputOffset, inputLen, output, 0);
+            return cipherImpl.ProcessBytes(input, inputOffset, inputLen, output, 0);
         }
 
-        public void Update(byte[] input, int inputOffset, int inputLen, byte[] output, int outputOffset)
+        public int Update(byte[] input, int inputOffset, int inputLen, byte[] output, int outputOffset)
         {
             if ((input == null) || (inputOffset < 0) || (inputLen > input.Length - inputOffset) || (inputLen < 0) || (outputOffset < 0))
             {
                 throw new ArgumentException("Bad arguments");
             }
-            cipherImpl.ProcessBytes(input, inputOffset, inputLen, output, outputOffset);
-        }
-
-        public byte[] DoFinal()
-        {
-            return cipherImpl.DoFinal();
+            return cipherImpl.ProcessBytes(input, inputOffset, inputLen, output, outputOffset);
         }
 
         public byte[] Update(byte[] ibuffer, int inOff, int length)
         {
             return cipherImpl.ProcessBytes(ibuffer, inOff, length);
+        }
+
+        public byte[] DoFinal(byte[] block)
+        {
+            return cipherImpl.DoFinal(block);
+        }
+
+        //public byte[] DoFinal(byte[] block, int v, int posInChunk)
+        //{
+        //    return cipherImpl.DoFinal(block, v, posInChunk);
+        //}
+
+        public int DoFinal(byte[] input, int inputOffset, int inputLen, byte[] output)
+        {
+            return cipherImpl.DoFinal(input, inputOffset, inputLen, output, 0);
+        }
+
+        public byte[] DoFinal()
+        {
+            return cipherImpl.DoFinal();
         }
     }
 }

@@ -17,11 +17,11 @@
 namespace NPOI.SS.UserModel
 {
     using System;
-    using System.Drawing;
     using System.Text;
     using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
     using NPOI.Util;
+    using SixLabors.ImageSharp.PixelFormats;
 
     /**
      * Represents a XSSF-style color (based on either a
@@ -30,7 +30,7 @@ namespace NPOI.SS.UserModel
      */
     public abstract class ExtendedColor : IColor
     {
-        protected void SetColor(Color clr)
+        protected void SetColor(Rgb24 clr)
         {
             RGB = (new byte[] { clr.R, clr.G, clr.B });
         }

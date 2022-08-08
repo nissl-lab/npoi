@@ -21,8 +21,8 @@ using NPOI.XSSF;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
+using SixLabors.ImageSharp;
 using System;
-using System.Drawing;
 
 namespace TestCases.XSSF.UserModel
 {

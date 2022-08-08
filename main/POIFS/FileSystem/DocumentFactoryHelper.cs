@@ -20,13 +20,14 @@ using NPOI.POIFS.Crypt;
 using NPOI.Util;
 using System;
 using System.IO;
+using System.Text;
 
 namespace NPOI.POIFS.FileSystem
 {
     /// <summary>
     /// A small base class for the various factories, e.g. WorkbookFactory, SlideShowFactory to combine common code here.
     /// </summary>
-    public class DocumentFactoryHelper
+    public static class DocumentFactoryHelper
     {
         /// <summary>
         /// Wrap the OLE2 data in the NPOIFSFileSystem into a decrypted stream by using the given password.
@@ -54,7 +55,7 @@ namespace NPOI.POIFS.FileSystem
                 }
                 if (passwordCorrect)
                 {
-                    return new FilterInputStream1(d.GetDataStream(fs.Root), fs);
+                    return d.GetDataStream(fs.Root);
                 }
                 else
                 {
@@ -70,26 +71,11 @@ namespace NPOI.POIFS.FileSystem
             }
         }
 
-        private class FilterInputStream1 : FilterInputStream
-        {
-            NPOIFSFileSystem fs;
-            public FilterInputStream1(InputStream input, NPOIFSFileSystem fs)
-                : base(input)
-            {
-                this.fs = fs;
-            }
-            public override void Close()
-            {
-                fs.Close();
-                base.Close();
-            }
-        }
         /// <summary>
         /// Checks that the supplied InputStream (which MUST support mark and reset, or be a PushbackInputStream) has a OOXML (zip) header at the start of it.
         /// If your InputStream does not support mark / reset, then wrap it in a PushBackInputStream, then be sure to always use that, and not the original!
         /// </summary>
         /// <param name="inp">An InputStream which supports either mark/reset, or is a PushbackInputStream</param>
-        /// <returns></returns>
         public static bool HasOOXMLHeader(Stream inp)
         {
             // We want to peek at the first 4 bytes
@@ -120,6 +106,204 @@ namespace NPOI.POIFS.FileSystem
             );
         }
 
-    }
+        /// <summary>
+        /// Detects if a given office document is protected by a password or not.
+        /// Supported formats: Word, Excel and PowerPoint (both legacy and OpenXml).
+        /// </summary>
+        /// <param name="fileName">Path to an office document.</param>
+        /// <returns>True if document is protected by a password, false otherwise.</returns>
+        public static bool IsPasswordProtected(string fileName)
+        {
+            using (var stream = File.OpenRead(fileName))
+                return IsPasswordProtected(stream);
+        }
 
+        /// <summary>
+        /// Detects if a given office document is protected by a password or not.
+        /// Supported formats: Word, Excel and PowerPoint (both legacy and OpenXml).
+        /// </summary>
+        /// <param name="stream">Office document stream.</param>
+        /// <returns>True if document is protected by a password, false otherwise.</returns>
+        public static bool IsPasswordProtected(Stream stream)
+        {
+            return GetPasswordProtected(stream) != OfficeProtectType.Other;
+        }
+
+        /// <summary>
+        /// Detects if a given office document is protected by a password or not.
+        /// Supported formats: Word, Excel and PowerPoint (both legacy and OpenXml).
+        /// </summary>
+        /// <param name="stream">Office document stream.</param>
+        /// <returns>True if document is protected by a password, false otherwise.</returns>
+        public static OfficeProtectType GetPasswordProtected(Stream stream)
+        {
+            // minimum file size for office file is 4k
+            if (stream.Length < 4096)
+                return OfficeProtectType.Other;
+
+            // read file header
+            stream.Seek(0, SeekOrigin.Begin);
+            var compObjHeader = new byte[0x20];
+            ReadFromStream(stream, compObjHeader);
+
+            // check if we have plain zip file
+            if (compObjHeader[0] == 0x50 && compObjHeader[1] == 0x4b && compObjHeader[2] == 0x03 && compObjHeader[4] == 0x04)
+            {
+                // this is a plain OpenXml document (not encrypted)
+                return OfficeProtectType.Other;
+            }
+
+            // check compound object magic bytes
+            if (compObjHeader[0] != 0xD0 || compObjHeader[1] != 0xCF)
+            {
+                // unknown document format
+                return OfficeProtectType.Other;
+            }
+
+            int sectionSizePower = compObjHeader[0x1E];
+            if (sectionSizePower < 8 || sectionSizePower > 16)
+            {
+                // invalid section size
+                return OfficeProtectType.Other;
+            }
+            int sectionSize = 2 << (sectionSizePower - 1);
+
+            const int defaultScanLength = 32768;
+            long scanLength = Math.Min(defaultScanLength, stream.Length);
+
+            // read header part for scan
+            stream.Seek(0, SeekOrigin.Begin);
+            var header = new byte[scanLength];
+            ReadFromStream(stream, header);
+
+            // check if we detected password protection
+
+            var protectType = ScanForPassword(stream, header, sectionSize);
+            if (protectType != OfficeProtectType.Other)
+                return protectType;
+
+            // if not, try to scan footer as well
+
+            // read footer part for scan
+            stream.Seek(-scanLength, SeekOrigin.End);
+            var footer = new byte[scanLength];
+            ReadFromStream(stream, footer);
+
+            // finally return the result
+            return ScanForPassword(stream, footer, sectionSize);
+        }
+
+        private static OfficeProtectType ScanForPassword(Stream stream, byte[] buffer, int sectionSize)
+        {
+            const string afterNamePadding = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+
+            try
+            {
+                string bufferString = Encoding.ASCII.GetString(buffer, 0, buffer.Length);
+
+                // try to detect password protection used in new OpenXml documents
+                // by searching for "EncryptedPackage" or "EncryptedSummary" streams
+                const string encryptedPackageName = "E\0n\0c\0r\0y\0p\0t\0e\0d\0P\0a\0c\0k\0a\0g\0e" + afterNamePadding;
+                const string encryptedSummaryName = "E\0n\0c\0r\0y\0p\0t\0e\0d\0S\0u\0m\0m\0a\0r\0y" + afterNamePadding;
+                if (bufferString.Contains(encryptedPackageName) ||
+                    bufferString.Contains(encryptedSummaryName))
+                {
+                    return OfficeProtectType.ProtectedOOXML;
+                }
+
+                // try to detect password protection for legacy Office documents
+                const int coBaseOffset = 0x200;
+                const int sectionIdOffset = 0x74;
+
+                // check for Word header
+                const string wordDocumentName = "W\0o\0r\0d\0D\0o\0c\0u\0m\0e\0n\0t" + afterNamePadding;
+                int headerOffset = bufferString.IndexOf(wordDocumentName, StringComparison.InvariantCulture);
+                int sectionId;
+                if (headerOffset >= 0)
+                {
+                    sectionId = BitConverter.ToInt32(buffer, headerOffset + sectionIdOffset);
+                    int sectionOffset = coBaseOffset + (sectionId * sectionSize);
+                    const int fibScanSize = 0x10;
+
+                    if (sectionOffset < 0 || sectionOffset + fibScanSize > stream.Length)
+                        return OfficeProtectType.Other; // invalid document
+
+                    var fibHeader = new byte[fibScanSize];
+                    stream.Seek(sectionOffset, SeekOrigin.Begin);
+                    ReadFromStream(stream, fibHeader);
+                    short properties = BitConverter.ToInt16(fibHeader, 0x0A);
+                    // check for fEncrypted FIB bit
+                    const short fEncryptedBit = 0x0100;
+                    if ((properties & fEncryptedBit) == fEncryptedBit)
+                    {
+                        return OfficeProtectType.ProtectedOffice;
+                    }
+                    else
+                    {
+                        return OfficeProtectType.Other;
+                    }
+                }
+
+                // check for Excel header
+                const string workbookName = "W\0o\0r\0k\0b\0o\0o\0k" + afterNamePadding;
+                headerOffset = bufferString.IndexOf(workbookName, StringComparison.InvariantCulture);
+                if (headerOffset >= 0)
+                {
+                    sectionId = BitConverter.ToInt32(buffer, headerOffset + sectionIdOffset);
+                    int sectionOffset = coBaseOffset + (sectionId * sectionSize);
+                    const int streamScanSize = 0x100;
+                    if (sectionOffset < 0 || sectionOffset + streamScanSize > stream.Length)
+                        return OfficeProtectType.Other; // invalid document
+                    var workbookStream = new byte[streamScanSize];
+                    stream.Seek(sectionOffset, SeekOrigin.Begin);
+                    ReadFromStream(stream, workbookStream);
+                    short record = BitConverter.ToInt16(workbookStream, 0);
+                    short recordSize = BitConverter.ToInt16(workbookStream, sizeof(short));
+                    const short bofMagic = 0x0809;
+                    const short eofMagic = 0x000A;
+                    const short filePassMagic = 0x002F;
+                    if (record != bofMagic)
+                        return OfficeProtectType.Other; // invalid BOF
+                                      // scan for FILEPASS record until the end of the buffer
+                    int offset = (sizeof(short) * 2) + recordSize;
+                    int recordsLeft = 16; // simple infinite loop check just in case
+                    do
+                    {
+                        record = BitConverter.ToInt16(workbookStream, offset);
+                        if (record == filePassMagic)
+                            return OfficeProtectType.ProtectedOffice;
+                        recordSize = BitConverter.ToInt16(workbookStream, sizeof(short) + offset);
+                        offset += (sizeof(short) * 2) + recordSize;
+                        recordsLeft--;
+                    } while (record != eofMagic && recordsLeft > 0);
+                }
+            }
+            catch (Exception ex)
+            {
+                // BitConverter exceptions may be related to document format problems
+                // so we just treat them as "password not detected" result
+                if (ex is ArgumentException)
+                    return OfficeProtectType.Other;
+                // respect all the rest exceptions
+                throw;
+            }
+
+            return OfficeProtectType.Other;
+        }
+
+        private static void ReadFromStream(Stream stream, byte[] buffer)
+        {
+            int bytesRead, count = buffer.Length;
+            while (count > 0 && (bytesRead = stream.Read(buffer, 0, count)) > 0)
+                count -= bytesRead;
+            if (count > 0) throw new EndOfStreamException();
+        }
+
+        public enum OfficeProtectType
+        {
+            ProtectedOOXML,
+            ProtectedOffice,
+            Other
+        }
+    }
 }

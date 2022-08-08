@@ -14,7 +14,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-using System.Drawing;
+
+using SixLabors.ImageSharp;
 namespace NPOI.SS.UserModel
 {
     public enum PictureType : int

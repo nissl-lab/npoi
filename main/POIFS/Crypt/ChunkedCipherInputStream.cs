@@ -26,132 +26,299 @@ namespace NPOI.POIFS.Crypt
 
     public abstract class ChunkedCipherInputStream : LittleEndianInputStream
     {
-        private int chunkSize;
-        private int chunkMask;
-        private int chunkBits;
+        private readonly int _chunkSize;
+        private readonly int _chunkBits;
+
+        private readonly long _size;
+        private readonly byte[] _chunk;
+        private readonly byte[] _plain;
+        private readonly Cipher _cipher;
 
         private int _lastIndex = 0;
         private long _pos = 0;
-        private long _size;
-        private byte[] _chunk;
-        private Cipher _cipher;
+        private bool _chunkIsValid;
+
         protected IEncryptionInfoBuilder builder;
         protected Decryptor decryptor;
-        public ChunkedCipherInputStream(ILittleEndianInput stream, long size, int chunkSize
-            , IEncryptionInfoBuilder builder, Decryptor decryptor)
-            : base((Stream)stream)
+
+        protected ChunkedCipherInputStream(
+            InputStream stream,
+            long size,
+            int chunkSize,
+            IEncryptionInfoBuilder builder,
+            Decryptor decryptor)
+            : this(stream, size, chunkSize, 0, builder, decryptor)
+        { }
+
+        protected ChunkedCipherInputStream(
+            InputStream stream,
+            long size,
+            int chunkSize,
+            int initialPos,
+            IEncryptionInfoBuilder builder,
+            Decryptor decryptor)
+            : base(stream)
         {
-            
-            _size = size;
-            this.chunkSize = chunkSize;
-            chunkMask = chunkSize - 1;
-            chunkBits = Number.BitCount(chunkMask);
+            this._size = size;
+            this._pos = initialPos;
+            this._chunkSize = chunkSize;
+
             this.builder = builder;
             this.decryptor = decryptor;
-            _cipher = InitCipherForBlock(null, 0);
+
+            var cs = chunkSize == -1 ? 4096 : chunkSize;
+
+            this._chunk = IOUtils.SafelyAllocate(cs, CryptoFunctions.MAX_RECORD_LENGTH);
+            this._plain = IOUtils.SafelyAllocate(cs, CryptoFunctions.MAX_RECORD_LENGTH);
+            this._chunkBits = Number.BitCount(_chunk.Length - 1);
+            this._lastIndex = (int)(_pos >> _chunkBits);
+            this._cipher = InitCipherForBlock(null, _lastIndex);
+        }
+
+        public Cipher InitCipherForBlock(int block)
+        {
+            if (_chunkSize != -1)
+            {
+                throw new SecurityException("the cipher block can only be set for streaming encryption, e.g. CryptoAPI...");
+            }
+
+            _chunkIsValid = false;
+            return InitCipherForBlock(_cipher, block);
         }
 
         protected abstract Cipher InitCipherForBlock(Cipher existing, int block);
 
-        public int Read()
+        public override int Read()
         {
             byte[] b = new byte[1];
             if (Read(b) == 1)
-                return b[0];
+                return b[0] & 0xFF;
             return -1;
         }
 
         // do not implement! -> recursion
         // public int Read(byte[] b) throws IOException;
 
-        public new int Read(byte[] b, int off, int len)
+        public override int Read(byte[] b, int off, int len)
+        {
+            return Read(b, off, len, false);
+        }
+
+        public int Read(byte[] b, int off, int len, bool readPlain)
         {
             int total = 0;
 
-            if (Available() <= 0) return -1;
+            if (RemainingBytes() <= 0) return 0;
+
+            int chunkMask = GetChunkMask();
 
             while (len > 0)
             {
-                if (_chunk == null)
+                if (!_chunkIsValid)
                 {
                     try
                     {
-                        _chunk = NextChunk();
+                        NextChunk();
+                        _chunkIsValid = true;
                     }
                     catch (SecurityException e)
                     {
                         throw new EncryptedDocumentException(e.Message, e);
                     }
                 }
-                int count = (int) (chunkSize - (_pos & chunkMask));
-                int avail = Available();
+                int count = (int)(_chunk.Length - (_pos & chunkMask));
+                int avail = RemainingBytes();
                 if (avail == 0)
                 {
                     return total;
                 }
                 count = Math.Min(avail, Math.Min(count, len));
-                Array.Copy(_chunk, (int) (_pos & chunkMask), b, off, count);
+
+                Array.Copy(readPlain ? _plain : _chunk, (int)(_pos & chunkMask), b, off, count);
+
                 off += count;
                 len -= count;
                 _pos += count;
                 if ((_pos & chunkMask) == 0)
-                    _chunk = null;
+                {
+                    _chunkIsValid = false;
+                }
                 total += count;
             }
 
             return total;
         }
 
-
-        public new long Skip(long n)
+        public override long Skip(long n)
         {
             long start = _pos;
-            long skip = Math.Min(Available(), n);
+            long skip = Math.Min(RemainingBytes(), n);
 
-            if ((((_pos + skip) ^ start) & ~chunkMask) != 0)
-                _chunk = null;
+            if ((((_pos + skip) ^ start) & ~GetChunkMask()) != 0)
+            {
+                _chunkIsValid = false;
+            }
+
             _pos += skip;
             return skip;
         }
 
-
-        public new int Available()
+        public override int Available()
         {
-            return (int) (_size - _pos);
+            return RemainingBytes();
         }
 
+        /// <summary>
+        /// Helper method for forbidden available call - we know the size beforehand, so it's ok ...
+        /// </summary>
+        /// <returns>the remaining byte until EOF</returns>
+        private int RemainingBytes()
+        {
+            return (int)(_size - _pos);
+        }
 
-        public bool MarkSupported()
+        public override bool MarkSupported()
         {
             return false;
         }
 
-
-        public void Mark(int Readlimit)
+        public override void Mark(int readlimit)
         {
             throw new InvalidOperationException();
         }
 
-
-        public void Reset()
+        public override void Reset()
         {
             throw new InvalidOperationException();
         }
 
-        private byte[] NextChunk()
+        protected int GetChunkMask()
         {
-            int index = (int) (_pos >> chunkBits);
-            InitCipherForBlock(_cipher, index);
+            return _chunk.Length - 1;
+        }
 
-            if (_lastIndex != index)
+        private void NextChunk()
+        {
+            if (_chunkSize != 0)
             {
-                base.Skip((index - _lastIndex) << chunkBits);
+                int index = (int)(_pos >> _chunkBits);
+                InitCipherForBlock(_cipher, index);
+
+                if (_lastIndex != index)
+                {
+                    long skipN = (index - _lastIndex) << _chunkBits;
+                    if (base.Skip(skipN) < skipN)
+                    {
+                        throw new EndOfStreamException("buffer underrun");
+                    }
+                }
+
+                _lastIndex = index + 1;
             }
 
-            byte[] block = new byte[Math.Min(base.Available(), chunkSize)];
-            base.Read(block, 0, block.Length);
-            _lastIndex = index + 1;
-            return _cipher.DoFinal(block);
+            int todo = (int)Math.Min(_size, _chunk.Length);
+            int readBytes, totalBytes = 0;
+            do
+            {
+                readBytes = base.Read(_plain, totalBytes, todo - totalBytes);
+                totalBytes += Math.Max(0, readBytes);
+            } while (readBytes != 0 && totalBytes < todo);
+
+            if (readBytes == 0 && _pos + totalBytes < _size && _size < int.MaxValue)
+            {
+                throw new EndOfStreamException("buffer underrun");
+            }
+
+            Array.Copy(_plain, 0, _chunk, 0, totalBytes);
+
+            InvokeCipher(totalBytes, totalBytes == _chunkSize);
+        }
+
+        /// <summary>
+        /// Helper function for overriding the cipher invocation, i.e. XOR doesn't use a cipher and uses its own implementation
+        /// </summary>
+        /// <param name="totalBytes">The total bytes.</param>
+        /// <param name="doFinal">The do final.</param>
+        /// <returns></returns>
+        protected int InvokeCipher(int totalBytes, bool doFinal)
+        {
+            if (doFinal)
+            {
+                return _cipher.DoFinal(_chunk, 0, totalBytes, _chunk);
+            }
+            else
+            {
+                return _cipher.Update(_chunk, 0, totalBytes, _chunk);
+            }
+        }
+
+        /// <summary>
+        /// Used when BIFF header fields (sid, size) are being read. The internal <see cref="Cipher"/> instance must step even when unencrypted bytes are read
+        /// </summary>
+        /// <param name="b">The buffet.</param>
+        /// <param name="off">The offset.</param>
+        /// <param name="len">The length.</param>
+        /// <exception cref="System.IO.EndOfStreamException">buffer underrun</exception>
+        /// <exception cref="NPOI.Util.RuntimeException"></exception>
+        public void ReadPlain(byte[] b, int off, int len)
+        {
+            if (len <= 0)
+            {
+                return;
+            }
+
+            try
+            {
+                int readBytes, total = 0;
+                do
+                {
+                    readBytes = Read(b, off, len, true);
+                    total += Math.Max(0, readBytes);
+                } while (readBytes > 0 && total < len);
+
+                if (total < len)
+                {
+                    throw new EndOfStreamException("buffer underrun");
+                }
+            }
+            catch (IOException e)
+            {
+                // need to wrap checked exception, because of LittleEndianInput interface :(
+                throw new RuntimeException(e);
+            }
+        }
+
+        /// <summary>
+        /// Some ciphers (actually just XOR) are based on the record size, which needs to be set before decryption
+        /// </summary>
+        /// <param name="recordSize">The size of the next record.</param>
+        public void SetNextRecordSize(int recordSize) { }
+
+        /// <summary>
+        /// Gets the chunk bytes.
+        /// </summary>
+        /// <returns>the chunk bytes</returns>
+        protected byte[] GetChunk()
+        {
+            return _chunk;
+        }
+
+        /// <summary>
+        /// Gets the plain bytes.
+        /// </summary>
+        /// <returns>the plain bytes</returns>
+        protected byte[] GetPlain()
+        {
+            return _plain;
+        }
+
+        /// <summary>
+        /// Gets the position.
+        /// </summary>
+        /// <returns>the absolute position in the stream</returns>
+        public long GetPos()
+        {
+            return _pos;
         }
     }
 

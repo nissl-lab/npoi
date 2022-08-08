@@ -21,12 +21,12 @@ using NPOI.OpenXml4Net.OPC;
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Dml;
 using NPOI.Util;
-using System.Drawing;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using System.Text;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
 using NPOI;
+using SixLabors.ImageSharp;
 
 namespace TestCases.XSSF.UserModel
 {
@@ -232,7 +232,7 @@ namespace TestCases.XSSF.UserModel
             XSSFRichTextString rt = new XSSFRichTextString("Test String");
 
             XSSFFont font = wb.CreateFont() as XSSFFont;
-            font.SetColor(new XSSFColor(Color.FromArgb(0, 128, 128)));
+            font.SetColor(new XSSFColor(Color.FromRgb(0, 128, 128)));
             font.IsItalic = (true);
             font.IsBold = (true);
             font.Underline = FontUnderlineType.Single;
@@ -310,7 +310,7 @@ namespace TestCases.XSSF.UserModel
             XSSFRichTextString rt = new XSSFRichTextString("Test String");
 
             XSSFFont font = wb.CreateFont() as XSSFFont;
-            font.SetColor(new XSSFColor(Color.FromArgb(0, 128, 128)));
+            font.SetColor(new XSSFColor(Color.FromRgb(0, 128, 128)));
             font.FontName = ("Arial");
             rt.ApplyFont(font);
 
@@ -343,7 +343,7 @@ namespace TestCases.XSSF.UserModel
             XSSFRichTextString rt = new XSSFRichTextString("Test String");
 
             XSSFFont font = wb.CreateFont() as XSSFFont;
-            font.SetColor(new XSSFColor(Color.FromArgb(0, 255, 255)));
+            font.SetColor(new XSSFColor(Color.FromRgb(0, 255, 255)));
             font.FontName = ("Arial");
             rt.ApplyFont(font);
 
@@ -357,7 +357,7 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(1, runs.Count);
             Assert.AreEqual("Arial", runs[0].FontFamily);
 
-            Color clr = runs[0].FontColor;
+            var clr = runs[0].FontColor;
             Assert.IsTrue(Arrays.Equals(
                     new int[] { 0, 255, 255 },
                     new int[] { clr.R, clr.G, clr.B }));
@@ -406,12 +406,12 @@ namespace TestCases.XSSF.UserModel
             XSSFRichTextString rt = new XSSFRichTextString("Test Rich Text String");
 
             XSSFFont font = wb1.CreateFont() as XSSFFont;
-            font.SetColor(new XSSFColor(Color.FromArgb(0, 255, 255)));
+            font.SetColor(new XSSFColor(Color.FromRgb(0, 255, 255)));
             font.FontName = ("Arial");
             rt.ApplyFont(font);
 
             XSSFFont midfont = wb1.CreateFont() as XSSFFont;
-            midfont.SetColor(new XSSFColor(Color.FromArgb(0, 255, 0)));
+            midfont.SetColor(new XSSFColor(Color.FromRgb(0, 255, 0)));
             rt.ApplyFont(5, 14, midfont);	// Set the text "Rich Text" to be green and the default font
 
             XSSFTextParagraph para = shape.AddNewTextParagraph(rt);
@@ -440,7 +440,7 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual("Test ", runs[0].Text);
             Assert.AreEqual("Arial", runs[0].FontFamily);
 
-            Color clr = runs[0].FontColor;
+            var clr = runs[0].FontColor;
             Assert.IsTrue(Arrays.Equals(
                     new int[] { 0, 255, 255 },
                     new int[] { clr.R, clr.G, clr.B }));
@@ -602,7 +602,7 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(TextAlign.CENTER, paras[1].TextAlign);
             Assert.AreEqual(TextAlign.RIGHT, paras[2].TextAlign);
 
-            Color clr = paras[0].TextRuns[0].FontColor;
+            var clr = paras[0].TextRuns[0].FontColor;
             Assert.IsTrue(Arrays.Equals(
                     new int[] { 255, 0, 0 },
                     new int[] { clr.R, clr.G, clr.B }));

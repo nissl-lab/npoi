@@ -23,9 +23,9 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.Util;
     using NPOI.Util;
     using NUnit.Framework;
+    using SixLabors.Fonts;
     using System;
     using System.Collections.Generic;
-    using System.Drawing;
     using System.IO;
     using System.Text;
 
@@ -347,6 +347,8 @@ namespace TestCases.SS.UserModel
             fmla.Append(")");
             return fmla.ToString();
         }
+
+        
         [Test]
         public void Bug50681_TestAutoSize()
         {
@@ -460,7 +462,6 @@ namespace TestCases.SS.UserModel
             }
         }
 
-
         private double ComputeCellWidthManually(ICell cell0, IFont font)
         {
             double width;
@@ -480,14 +481,7 @@ namespace TestCases.SS.UserModel
             //TextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
             //width = ((layout.getBounds().getWidth() / 1) / 8);
             Font wfont = SheetUtil.IFont2Font(font);
-            using (var image = new Bitmap(1, 1))
-            {
-                using (var g = Graphics.FromImage(image))
-                {
-                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                    width = (int)g.MeasureString(txt, wfont, int.MaxValue).Width;
-                }
-            }
+            width= (double)TextMeasurer.Measure(txt, new TextOptions(wfont)).Width;
             return width;
         }
 
@@ -495,17 +489,10 @@ namespace TestCases.SS.UserModel
         {
             double width;
             Font wfont = SheetUtil.IFont2Font(font);
-            using (var image = new Bitmap(1, 1))
-            {
-                using (var g = Graphics.FromImage(image))
-                {
-                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                    width = (int)g.MeasureString(txt, wfont, int.MaxValue).Width;
-                }
-            }
+            width = (double)TextMeasurer.Measure(txt, new TextOptions(wfont)).Width;
             return width;
         }
-
+        
         //private static void copyAttributes(Font font, AttributedString str, int startIdx, int endIdx)
         //{
         //    str.addAttribute(TextAttribute.FAMILY, font.getFontName(), startIdx, endIdx);
@@ -1038,9 +1025,9 @@ namespace TestCases.SS.UserModel
 
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ICellStyle vertTop = wb.CreateCellStyle();
-            vertTop.VerticalAlignment = VerticalAlignment.Top;
+            vertTop.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Top;
             ICellStyle vertBottom = wb.CreateCellStyle();
-            vertBottom.VerticalAlignment = VerticalAlignment.Bottom;
+            vertBottom.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Bottom;
             ISheet sheet = wb.CreateSheet("Sheet 1");
             IRow row = sheet.CreateRow(0);
             ICell top = row.CreateCell(0);
@@ -1307,7 +1294,7 @@ namespace TestCases.SS.UserModel
                 {
                     throw new InvalidOperationException("Failed for row " + i, e);
                 }
-                style.Alignment = HorizontalAlignment.Right;
+                style.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Right;
                 if ((wb is HSSFWorkbook))
                 {
                     // there are some predefined styles

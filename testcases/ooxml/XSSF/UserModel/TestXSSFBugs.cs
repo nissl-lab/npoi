@@ -14,35 +14,35 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-
+using NPOI;
+using NPOI.HSSF.UserModel;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.POIFS.FileSystem;
+using NPOI.SS.Formula;
+using NPOI.SS.Formula.Eval;
+using NPOI.SS.Formula.Functions;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using NPOI.Util;
+using NPOI.XSSF;
+using NPOI.XSSF.Model;
+using NPOI.XSSF.Streaming;
+using NPOI.XSSF.UserModel;
+using NPOI.XSSF.UserModel.Extensions;
+using NUnit.Framework;
+using NUnit.Framework.Constraints;
+using SixLabors.ImageSharp;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Text;
+using TestCases;
+using TestCases.HSSF;
 using TestCases.SS.UserModel;
 namespace TestCases.XSSF.UserModel
 {
-    using NPOI;
-    using NPOI.HSSF.UserModel;
-    using NPOI.OpenXml4Net.OPC;
-    using NPOI.OpenXmlFormats.Spreadsheet;
-    using NPOI.POIFS.FileSystem;
-    using NPOI.SS.Formula;
-    using NPOI.SS.Formula.Eval;
-    using NPOI.SS.Formula.Functions;
-    using NPOI.SS.UserModel;
-    using NPOI.SS.Util;
-    using NPOI.Util;
-    using NPOI.XSSF;
-    using NPOI.XSSF.Model;
-    using NPOI.XSSF.Streaming;
-    using NPOI.XSSF.UserModel;
-    using NPOI.XSSF.UserModel.Extensions;
-    using NUnit.Framework;
-    using NUnit.Framework.Constraints;
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.IO;
-    using System.Text;
-    using TestCases;
-    using TestCases.HSSF;
 
     [TestFixture]
     public class TestXSSFBugs : BaseTestBugzillaIssues
@@ -3268,7 +3268,7 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFCell cell = workbook.CreateSheet().CreateRow(0).CreateCell(0) as XSSFCell;
-            XSSFColor color = new XSSFColor(System.Drawing.Color.Red);
+            XSSFColor color = new XSSFColor(Color.Red);
             XSSFCellStyle style = workbook.CreateCellStyle() as XSSFCellStyle;
             style.FillForegroundColorColor = color;
             style.FillPattern = FillPattern.SolidForeground;
@@ -3286,7 +3286,7 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook nwb = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
             workbook.Close();
             XSSFCell ncell = nwb.GetSheetAt(0).GetRow(0).GetCell(0) as XSSFCell;
-            XSSFColor ncolor = new XSSFColor(System.Drawing.Color.Red);
+            XSSFColor ncolor = new XSSFColor(Color.Red);
             // Now the cell is all black
             XSSFColor nactual = ncell.CellStyle.FillBackgroundColorColor as XSSFColor;
             Assert.IsNotNull(nactual);
