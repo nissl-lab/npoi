@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	<AssemblyName>NPOI.OpenXml4Net</AssemblyName>
 	<SignAssembly>true</SignAssembly>
@@ -37,14 +37,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45'">
-	  <Reference Include="System" />
-	  <Reference Include="System.Data" />
-	  <Reference Include="System.Drawing" />
-	  <Reference Include="System.Windows.Forms" />
-	  <Reference Include="System.Xml" />
   </ItemGroup>
 
   <ItemGroup>

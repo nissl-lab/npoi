@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	<AssemblyName>NPOI.OpenXmlFormats</AssemblyName>
 	<SignAssembly>true</SignAssembly>
@@ -40,12 +40,6 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45'">
-	  <Reference Include="System" />
-	  <Reference Include="System.Data" />
-	  <Reference Include="System.Xml" />
-  </ItemGroup>
-  
   <ItemGroup>
     <ProjectReference Include="..\main\NPOI.Multitarget.csproj" />
     <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj" />
