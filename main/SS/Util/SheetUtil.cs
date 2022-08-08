@@ -22,6 +22,7 @@ namespace NPOI.SS.Util
     using NPOI.SS.UserModel;
     using System.Collections.Generic;
     using SixLabors.Fonts;
+    using System.Linq;
 
     /**
      * Helper methods for when working with Usermodel sheets
@@ -705,14 +706,15 @@ namespace NPOI.SS.Util
             // Try to find font in system fonts. If we can not find out,
             // use "Arial". TODO-Fonts: More fallbacks.
             SixLabors.Fonts.FontFamily fontFamily;
+
             if (false == SystemFonts.TryGet(font1.FontName, out fontFamily))
             {
                 if (false == SystemFonts.TryGet("Arial", out fontFamily))
                 {
-                    throw new Exception($"Could not find font \"{font1.FontName}\" and also not fallback font \"Arial\"");
+                    fontFamily = SystemFonts.Families.First();
                 }
             }
-
+            
             Font font = new Font(fontFamily, (float)font1.FontHeightInPoints, style);
             return font;
         }
