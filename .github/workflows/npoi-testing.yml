@@ -16,7 +16,6 @@ jobs:
       uses: microsoft/setup-msbuild@v1.1
       
     - name: Setup .NET Core 3.1	
-      if: always() && steps.build-npoi.outcome == 'success'
       uses: actions/setup-dotnet@v1	
       with:	
         dotnet-version: 3.1.x
