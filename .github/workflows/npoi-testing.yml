@@ -14,14 +14,7 @@ jobs:
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
-
-    - name: Restore npoi dependencies
-      run: solution\nuget.exe restore solution\NPOI.Core.Test.sln
-
-    - name: Build npoi for testing
-      id: build-npoi
-      run: msbuild solution\NPOI.Core.Test.sln -verbosity:q -property:Configuration=Debug -t:Rebuild
-
+      
     - name: Setup .NET Core 3.1	
       if: always() && steps.build-npoi.outcome == 'success'
       uses: actions/setup-dotnet@v1	
@@ -38,7 +31,7 @@ jobs:
     - name: Build NPOI.Core.Test
       id: build-npoi-core
       run: dotnet build solution/NPOI.Core.Test.sln --no-restore --configuration 'Debug' --verbosity q
-
+      
     - name: Test NPOI.Core.TestCases
       if: always() && steps.build-npoi-core.outcome == 'success'
       run: dotnet test testcases\main\bin\Debug\netcoreapp3.1\NPOI.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.TestCases.Core.trx' --results-directory test-results
