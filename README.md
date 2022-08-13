@@ -22,6 +22,12 @@ This project is the .NET version of POI Java project. With NPOI, you can read/wr
 
 [Who is using NPOI?](https://github.com/nissl-lab/npoi/issues/705)
 
+Donation
+============
+ERC20: 0xD9CA5B6F3BcEa3f10b7C3B92f0EC783FbB47cBE1
+
+![image](https://user-images.githubusercontent.com/772561/184463909-01562041-215a-4eb4-8806-d4128b0d3783.png)
+
 Telegram User Group
 ================
 Join us on telegram: https://t.me/npoidevs
