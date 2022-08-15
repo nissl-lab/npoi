@@ -7456,8 +7456,16 @@ cnfStyleField == null;
             CT_Br ctObj = new CT_Br();
             if (node.Attributes["w:type"] != null)
                 ctObj.type = (ST_BrType)Enum.Parse(typeof(ST_BrType), node.Attributes["w:type"].Value);
+            else
+                ctObj.type = ST_BrType.textWrapping; // Default value as http://officeopenxml.com/WPtextSpecialContent-break.php
+
             if (node.Attributes["w:clear"] != null)
                 ctObj.clear = (ST_BrClear)Enum.Parse(typeof(ST_BrClear), node.Attributes["w:clear"].Value);
+            else
+            {
+                if (ctObj.type == ST_BrType.textWrapping)
+                    ctObj.clear = ST_BrClear.none;
+            }
             return ctObj;
         }
 
