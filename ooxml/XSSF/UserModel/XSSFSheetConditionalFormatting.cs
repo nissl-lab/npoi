@@ -210,11 +210,7 @@ namespace NPOI.XSSF.UserModel
             {
                 throw new ArgumentException("cfRules must not be empty");
             }
-            if (cfRules.Length > 3)
-            {
-                throw new ArgumentException("Number of rules must not exceed 3");
-            }
-
+            
             CellRangeAddress[] mergeCellRanges = CellRangeUtil.MergeCellRanges(regions);
             CT_ConditionalFormatting cf = _sheet.GetCTWorksheet().AddNewConditionalFormatting();
             string refs = string.Empty;
