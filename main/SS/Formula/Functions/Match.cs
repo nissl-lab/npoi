@@ -1,4 +1,4 @@
-/*
+﻿/*
 * Licensed to the Apache Software Foundation (ASF) Under one or more
 * contributor license agreements.  See the NOTICE file distributed with
 * this work for Additional information regarding copyright ownership.
@@ -243,6 +243,12 @@ namespace NPOI.SS.Formula.Functions
                     for (int i = 0; i < size; i++)
                     {
                         var item = lookupRange.GetItem(i) as NumericValueEval;
+                        if (item == null)
+                        {
+                            // not a number, skip it
+                            continue;
+                        }
+
                         if (lookupComparer.CompareTo(item).IsEqual)
                         {
                             return i;
