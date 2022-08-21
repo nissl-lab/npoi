@@ -159,8 +159,8 @@ namespace NPOI.SS.Util
             for (int i = 0; i < sourceSheet.NumMergedRegions; i++)
             {
                 CellRangeAddress cellRangeAddress = sourceSheet.GetMergedRegion(i);
-                
-                if (cellRangeAddress!=null && cellRangeAddress.FirstRow == sourceRow.RowNum)
+
+                if (cellRangeAddress != null && cellRangeAddress.FirstRow == sourceRow.RowNum)
                 {
                     CellRangeAddress newCellRangeAddress = new CellRangeAddress(newRow.RowNum,
                             (newRow.RowNum +
@@ -171,7 +171,7 @@ namespace NPOI.SS.Util
                     targetSheet.AddMergedRegion(newCellRangeAddress);
                 }
             }
-            return newRow;           
+            return newRow;
         }
         public static IRow CopyRow(ISheet sheet, int sourceRowIndex, int targetRowIndex)
         {
@@ -265,6 +265,168 @@ namespace NPOI.SS.Util
             return newRow;
         }
 
+        public static double GetRowHeight(IRow row, bool useMergedCells, int firstColumnIdx, int lastColumnIdx)
+        {
+            double width = -1;
+
+            for (int cellIdx = firstColumnIdx; cellIdx <= lastColumnIdx; ++cellIdx)
+            {
+                ICell cell = row.GetCell(cellIdx);
+                if (row != null && cell != null)
+                {
+                    double cellWidth = GetCellHeight(cell, useMergedCells);
+                    width = Math.Max(width, cellWidth);
+                }
+            }
+
+            return width;
+        }
+
+        public static double GetRowHeight(ISheet sheet, int rowIdx, bool useMergedCells, int firstColumnIdx, int lastColumnIdx)
+        {
+            IRow row = sheet.GetRow(rowIdx);
+            return GetRowHeight(row, useMergedCells, firstColumnIdx, lastColumnIdx);
+        }
+
+        public static double GetRowHeight(IRow row, bool useMergedCells)
+        {
+            if (row == null)
+            {
+                return -1;
+            }
+
+            double rowHeight = -1;
+
+            foreach (var cell in row.Cells)
+            {
+                double cellHeight = GetCellHeight(cell, useMergedCells);
+                rowHeight = Math.Max(rowHeight, cellHeight);
+            }
+
+            return rowHeight;
+        }
+
+        public static double GetRowHeight(ISheet sheet, int rowIdx, bool useMergedCells)
+        {
+            IRow row = sheet.GetRow(rowIdx);
+
+            return GetRowHeight(row, useMergedCells);
+        }
+
+        public static double GetCellHeight(ICell cell, bool useMergedCells)
+        {
+            ICell cellToMeasure = useMergedCells ? GetFirstCellFromMergedRegion(cell) : cell;
+
+            double stringHeight = GetActualHeight(cellToMeasure);
+            int numberOfRowsInMergedRegion = useMergedCells ? GetNumberOfRowsInMergedRegion(cellToMeasure) : 1;
+
+            return GetCellConetntHeight(stringHeight, numberOfRowsInMergedRegion);
+        }
+
+        private static ICell GetFirstCellFromMergedRegion(ICell cell)
+        {
+            foreach (var region in cell.Sheet.MergedRegions)
+            {
+                if (region.IsInRange(cell.RowIndex, cell.ColumnIndex))
+                {
+                    return cell.Sheet.GetRow(region.FirstRow).GetCell(region.FirstColumn);
+                }
+            }
+
+            return cell;
+        }
+
+        private static double GetActualHeight(ICell cell)
+        {
+            string stringValue = GetCellStringValue(cell);
+            Font windowsFont = GetWindowsFont(cell);
+
+            if (cell.CellStyle.Rotation != 0)
+            {
+                return GetRotatedContentHeight(cell, stringValue, windowsFont);
+            }
+
+            return GetContentHeight(stringValue, windowsFont);
+        }
+
+        private static int GetNumberOfRowsInMergedRegion(ICell cell)
+        {
+            foreach (var region in cell.Sheet.MergedRegions)
+            {
+                if (region.IsInRange(cell.RowIndex, cell.ColumnIndex))
+                {
+                    return 1 + region.LastColumn - region.FirstColumn;
+                }
+            }
+
+            return 1;
+        }
+
+        private static double GetCellConetntHeight(double actualHeight, int numberOfRowsInMergedRegion)
+        {
+            return Math.Max(-1, actualHeight / numberOfRowsInMergedRegion);
+        }
+
+        private static string GetCellStringValue(ICell cell)
+        {
+            CellType cellType = cell.CellType == CellType.Formula ? cell.CachedFormulaResultType : cell.CellType;
+
+            if (cellType == CellType.String)
+            {
+                return cell.RichStringCellValue.String;
+            }
+
+            if (cellType == CellType.Boolean)
+            {
+                return cell.BooleanCellValue.ToString().ToUpper() + defaultChar;
+            }
+
+            if (cellType == CellType.Numeric)
+            {
+                string stringValue;
+
+                try
+                {
+                    DataFormatter formatter = new DataFormatter();
+                    stringValue = formatter.FormatCellValue(cell, dummyEvaluator);
+                }
+                catch (Exception)
+                {
+                    stringValue = cell.NumericCellValue.ToString();
+                }
+
+                return stringValue + defaultChar;
+            }
+
+            return null;
+        }
+
+        private static Font GetWindowsFont(ICell cell)
+        {
+            var wb = cell.Sheet.Workbook;
+            var style = cell.CellStyle;
+            var font = wb.GetFontAt(style.FontIndex);
+
+            return IFont2Font(font);
+        }
+
+        private static double GetRotatedContentHeight(ICell cell, string stringValue, Font windowsFont)
+        {
+            var angle = cell.CellStyle.Rotation * 2.0 * Math.PI / 360.0;
+            var measureResult = TextMeasurer.Measure(stringValue, new TextOptions(windowsFont));
+
+            var x1 = Math.Abs(measureResult.Height * Math.Cos(angle));
+            var x2 = Math.Abs(measureResult.Width * Math.Sin(angle));
+
+            return Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+        }
+
+        private static double GetContentHeight(string stringValue, Font windowsFont)
+        {
+            var measureResult = TextMeasurer.Measure(stringValue, new TextOptions(windowsFont));
+            
+            return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);
+        }
 
         /**
          * Compute width of a single cell
@@ -385,6 +547,7 @@ namespace NPOI.SS.Util
             width = Math.Max(width, (actualWidth / colspan / defaultCharWidth) + cell.CellStyle.Indention);
             return width;
         }
+
         // /**
         // * Drawing context to measure text
         // */
@@ -413,7 +576,7 @@ namespace NPOI.SS.Util
          * @param maxRows   limit the scope to maxRows rows to speed up the function, or leave 0 (optional)
          * @return  the width in pixels or -1 if cell is empty
          */
-        public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells, int firstRow, int lastRow, int maxRows=0)
+        public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells, int firstRow, int lastRow, int maxRows = 0)
         {
             DataFormatter formatter = new DataFormatter();
             int defaultCharWidth = GetDefaultCharWidth(sheet.Workbook);

@@ -1428,5 +1428,15 @@ namespace NPOI.XSSF.Streaming
         {
             throw new NotImplementedException();
         }
+
+        public void AutoSizeRow(int row)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AutoSizeRow(int row, bool useMergedCells)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
