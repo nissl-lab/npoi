@@ -116,6 +116,7 @@ namespace TestCases.XSSF.UserModel
 
             wb2.Close();
         }
+        
         [Test]
         public void TestGetAllHeadersFooters()
         {
@@ -174,6 +175,27 @@ namespace TestCases.XSSF.UserModel
             workbook.Close();
         }
 
+        [Test]
+        public void TestAutoSizeRow()
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet("Sheet 1");
+
+            var row = sheet.CreateRow(0);
+            var cell = row.CreateCell(13);
+            cell.SetCellValue("test");
+            var font = cell.CellStyle.GetFont(workbook);
+            font.FontHeightInPoints = 20;
+            cell.CellStyle.SetFont(font);
+            row.Height = 100;
+            
+            sheet.AutoSizeRow(row.RowNum);
+
+            Assert.AreNotEqual(100, row.Height);
+            Assert.AreEqual(500, row.Height);
+
+            workbook.Close();
+        }
 
         [Test]
         public void TestSetCellComment()
