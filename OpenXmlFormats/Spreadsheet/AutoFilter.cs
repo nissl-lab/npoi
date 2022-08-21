@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Xml;
 using NPOI.OpenXml4Net.Util;
 using System.IO;
+using EnumsNET;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -1317,7 +1318,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node.Attributes["dxfId"] != null)
                 ctObj.dxfId = XmlHelper.ReadUInt(node.Attributes["dxfId"]);
             if (node.Attributes["iconSet"] != null)
-                ctObj.iconSet = XmlHelper.GetEnumValueFromString<ST_IconSetType>(node.Attributes["iconSet"].Value);
+                ctObj.iconSet = Enums.Parse<ST_IconSetType>(node.Attributes["iconSet"].Value,false, EnumFormat.Description);
             if (node.Attributes["iconId"] != null)
                 ctObj.iconId = XmlHelper.ReadUInt(node.Attributes["iconId"]);
             return ctObj;
@@ -1333,7 +1334,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
             XmlHelper.WriteAttribute(sw, "customList", this.customList);
             XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId);
-            XmlHelper.WriteAttribute(sw, "iconSet",  XmlHelper.GetEnumValue(this.iconSet));
+            XmlHelper.WriteAttribute(sw, "iconSet",  this.iconSet.AsString(EnumFormat.Description));
             XmlHelper.WriteAttribute(sw, "iconId", this.iconId);
             sw.Write("/>");
         }
