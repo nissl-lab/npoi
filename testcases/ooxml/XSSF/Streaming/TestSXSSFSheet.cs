@@ -127,6 +127,7 @@ namespace TestCases.XSSF.Streaming
                 sheet.CreateRow(2);
                 sheet.CreateRow(3);
                 sheet.CreateRow(4);
+                ((SXSSFSheet)sheet).FlushRows();
 
                 Assert.Throws<ArgumentException>(() => {
                     sheet.CreateRow(1);
