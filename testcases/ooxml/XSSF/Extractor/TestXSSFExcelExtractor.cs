@@ -68,11 +68,11 @@ namespace TestCases.XSSF.Extractor
                 "elit\t888\n" +
                 "Nunc\t999\n";
             String CHUNK2 =
-                "The quick brown fox jumps over the lazy dog\n" +
-                "hello, xssf	hello, xssf\n" +
-                "hello, xssf	hello, xssf\n" +
-                "hello, xssf	hello, xssf\n" +
-                "hello, xssf	hello, xssf\n";
+                "The quick brown fox jumps over the lazy dog\n\t" +
+                "hello, xssf		hello, xssf\n\t" +
+                "hello, xssf		hello, xssf\n\t" +
+                "hello, xssf		hello, xssf\n\t" +
+                "hello, xssf		hello, xssf\n";
             Assert.AreEqual(
                     CHUNK1 +
                     "at\t4995\n" +
@@ -113,7 +113,7 @@ namespace TestCases.XSSF.Extractor
             // TODO decide if we should really have the "null" in there
             Assert.IsTrue(text.StartsWith(
                             "Avgtxfull\n" +
-                            "\t(iii) AVERAGE TAX RATES ON ANNUAL"
+                            "\t\t(iii) AVERAGE TAX RATES ON ANNUAL"
             ));
             extractor.Close();
         }

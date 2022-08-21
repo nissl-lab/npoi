@@ -111,18 +111,6 @@ namespace TestCases.SS.UserModel
                 Assert.IsTrue(e.Message.StartsWith("cfRules must not be empty"));
             }
 
-            try
-            {
-                sheetCF.AddConditionalFormatting(
-                        new CellRangeAddress[] { CellRangeAddress.ValueOf("A1:A3") },
-                        new IConditionalFormattingRule[] { rule1, rule2, rule3, rule4 });
-                Assert.Fail("expected exception");
-            }
-            catch (ArgumentException e)
-            {
-                Assert.IsTrue(e.Message.StartsWith("Number of rules must not exceed 3"));
-            }
-
             wb.Close();
         }
 

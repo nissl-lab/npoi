@@ -49,7 +49,7 @@ namespace TestCases.XSSF.UserModel
                 //Assert.IsNotNull(run.XmlObject);
                 Assert.IsNotNull(run.GetRPr());
 
-                Assert.AreEqual(Color.FromRgb(0, 0, 0), run.FontColor);
+                Assert.AreEqual(new Rgb24(0, 0, 0), run.FontColor);
 
                 var color = new Rgb24(0, 255, 255);
                 run.FontColor = color;
