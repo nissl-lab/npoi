@@ -94,7 +94,7 @@ namespace NPOI.XSSF.Util
             return LookUpOrCreateCellStyleInWorkbook(styleMap, workbook);
         }
 
-        private static ICellStyle LookUpOrCreateCellStyleInWorkbook(Dictionary<string, object> lookUpStyleMap, XSSFWorkbook workbook)
+        public static ICellStyle LookUpOrCreateCellStyleInWorkbook(Dictionary<string, object> lookUpStyleMap, XSSFWorkbook workbook)
         {
             for (int i = 0; i < workbook.NumCellStyles; i++)
             {
@@ -197,7 +197,7 @@ namespace NPOI.XSSF.Util
             }
         }
 
-        private static Dictionary<string, object> GetFormatProperties(XSSFCellStyle style)
+        public static Dictionary<string, object> GetFormatProperties(XSSFCellStyle style)
         {
             Dictionary<string, object> properties = new Dictionary<string, object>();
             Put(properties, ALIGNMENT, style.Alignment);
