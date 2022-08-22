@@ -280,7 +280,7 @@ namespace NPOI.XSSF.Util
                 style.FillForegroundColor = 0;
             }
 
-            style.FillPattern = (FillPattern)GetShort(properties, FILL_PATTERN);
+            style.FillPattern = GetFillPattern(properties, FILL_PATTERN);
             style.SetFont(workbook.GetFontAt(GetShort(properties, FONT)));
             style.IsHidden = GetBoolean(properties, HIDDEN);
             style.Indention = GetShort(properties, INDENTION);
