@@ -20,6 +20,7 @@ namespace TestCases.XSSF.UserModel
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;
     using SixLabors.ImageSharp;
+    using SixLabors.ImageSharp.PixelFormats;
     using System.Collections.Generic;
 
     [TestFixture]
@@ -38,9 +39,9 @@ namespace TestCases.XSSF.UserModel
                 XSSFRichTextString rt = new XSSFRichTextString("Test String");
 
                 XSSFFont font = wb.CreateFont() as XSSFFont;
-                Color color = Color.FromRgb(0, 255, 255);
+                Rgb24 color =new Rgb24(0, 255, 255);
                 font.SetColor(new XSSFColor(color));
-                font.FontName = (/*setter*/"Arial");
+                font.FontName = "Arial";
                 rt.ApplyFont(font);
 
                 shape.SetText(rt);
@@ -65,16 +66,16 @@ namespace TestCases.XSSF.UserModel
                 Assert.AreEqual(TextAlign.LEFT, text.TextAlign);
                 text.TextAlign = TextAlign.None;
                 Assert.AreEqual(TextAlign.LEFT, text.TextAlign);
-                text.TextAlign = (/*setter*/TextAlign.CENTER);
+                text.TextAlign = (TextAlign.CENTER);
                 Assert.AreEqual(TextAlign.CENTER, text.TextAlign);
-                text.TextAlign = (/*setter*/TextAlign.RIGHT);
+                text.TextAlign = (TextAlign.RIGHT);
                 Assert.AreEqual(TextAlign.RIGHT, text.TextAlign);
                 text.TextAlign = TextAlign.None;
                 Assert.AreEqual(TextAlign.LEFT, text.TextAlign);
 
-                text.TextFontAlign = (/*setter*/TextFontAlign.BASELINE);
+                text.TextFontAlign = (TextFontAlign.BASELINE);
                 Assert.AreEqual(TextFontAlign.BASELINE, text.TextFontAlign);
-                text.TextFontAlign = (/*setter*/TextFontAlign.BOTTOM);
+                text.TextFontAlign = (TextFontAlign.BOTTOM);
                 Assert.AreEqual(TextFontAlign.BOTTOM, text.TextFontAlign);
                 text.TextFontAlign = TextFontAlign.None;
                 Assert.AreEqual(TextFontAlign.BASELINE, text.TextFontAlign);
@@ -82,54 +83,54 @@ namespace TestCases.XSSF.UserModel
                 Assert.AreEqual(TextFontAlign.BASELINE, text.TextFontAlign);
 
                 Assert.IsNull(text.BulletFont);
-                text.BulletFont = (/*setter*/"Arial");
+                text.BulletFont = ("Arial");
                 Assert.AreEqual("Arial", text.BulletFont);
 
                 Assert.IsNull(text.BulletCharacter);
-                text.BulletCharacter = (/*setter*/".");
+                text.BulletCharacter = (".");
                 Assert.AreEqual(".", text.BulletCharacter);
 
                 //Assert.IsNull(text.BulletFontColor);
                 Assert.AreEqual(POIUtils.Color_Empty, text.BulletFontColor);
-                text.BulletFontColor = (/*setter*/color);
+                text.BulletFontColor = (color);
                 Assert.AreEqual(color, text.BulletFontColor);
 
                 Assert.AreEqual(100.0, text.BulletFontSize, 0.01);
-                text.BulletFontSize = (/*setter*/1.0);
+                text.BulletFontSize = (1.0);
                 Assert.AreEqual(1.0, text.BulletFontSize, 0.01);
-                text.BulletFontSize = (/*setter*/1.0);
+                text.BulletFontSize = (1.0);
                 Assert.AreEqual(1.0, text.BulletFontSize, 0.01);
-                text.BulletFontSize = (/*setter*/-9.0);
+                text.BulletFontSize = (-9.0);
                 Assert.AreEqual(-9.0, text.BulletFontSize, 0.01);
-                text.BulletFontSize = (/*setter*/-9.0);
+                text.BulletFontSize = (-9.0);
                 Assert.AreEqual(-9.0, text.BulletFontSize, 0.01);
-                text.BulletFontSize = (/*setter*/1.0);
+                text.BulletFontSize = (1.0);
                 Assert.AreEqual(1.0, text.BulletFontSize, 0.01);
-                text.BulletFontSize = (/*setter*/-9.0);
+                text.BulletFontSize = (-9.0);
                 Assert.AreEqual(-9.0, text.BulletFontSize, 0.01);
 
                 Assert.AreEqual(0.0, text.Indent, 0.01);
-                text.Indent = (/*setter*/2.0);
+                text.Indent = (2.0);
                 Assert.AreEqual(2.0, text.Indent, 0.01);
-                text.Indent = (/*setter*/-1.0);
+                text.Indent = (-1.0);
                 Assert.AreEqual(0.0, text.Indent, 0.01);
-                text.Indent = (/*setter*/-1.0);
+                text.Indent = (-1.0);
                 Assert.AreEqual(0.0, text.Indent, 0.01);
 
                 Assert.AreEqual(0.0, text.LeftMargin, 0.01);
-                text.LeftMargin = (/*setter*/3.0);
+                text.LeftMargin = (3.0);
                 Assert.AreEqual(3.0, text.LeftMargin, 0.01);
-                text.LeftMargin = (/*setter*/-1.0);
+                text.LeftMargin = (-1.0);
                 Assert.AreEqual(0.0, text.LeftMargin, 0.01);
-                text.LeftMargin = (/*setter*/-1.0);
+                text.LeftMargin = (-1.0);
                 Assert.AreEqual(0.0, text.LeftMargin, 0.01);
 
                 Assert.AreEqual(0.0, text.RightMargin, 0.01);
-                text.RightMargin = (/*setter*/4.5);
+                text.RightMargin = (4.5);
                 Assert.AreEqual(4.5, text.RightMargin, 0.01);
-                text.RightMargin = (/*setter*/-1.0);
+                text.RightMargin = (-1.0);
                 Assert.AreEqual(0.0, text.RightMargin, 0.01);
-                text.RightMargin = (/*setter*/-1.0);
+                text.RightMargin = (-1.0);
                 Assert.AreEqual(0.0, text.RightMargin, 0.01);
 
                 Assert.AreEqual(0.0, text.DefaultTabSize, 0.01);
@@ -139,27 +140,27 @@ namespace TestCases.XSSF.UserModel
                 Assert.AreEqual(3.14, text.GetTabStop(0), 0.01);
 
                 Assert.AreEqual(100.0, text.LineSpacing, 0.01);
-                text.LineSpacing = (/*setter*/3.15);
+                text.LineSpacing = (3.15);
                 Assert.AreEqual(3.15, text.LineSpacing, 0.01);
-                text.LineSpacing = (/*setter*/-2.13);
+                text.LineSpacing = (-2.13);
                 Assert.AreEqual(-2.13, text.LineSpacing, 0.01);
 
                 Assert.AreEqual(0.0, text.SpaceBefore, 0.01);
-                text.SpaceBefore = (/*setter*/3.17);
+                text.SpaceBefore = (3.17);
                 Assert.AreEqual(3.17, text.SpaceBefore, 0.01);
-                text.SpaceBefore = (/*setter*/-4.7);
+                text.SpaceBefore = (-4.7);
                 Assert.AreEqual(-4.7, text.SpaceBefore, 0.01);
 
                 Assert.AreEqual(0.0, text.SpaceAfter, 0.01);
-                text.SpaceAfter = (/*setter*/6.17);
+                text.SpaceAfter = (6.17);
                 Assert.AreEqual(6.17, text.SpaceAfter, 0.01);
-                text.SpaceAfter = (/*setter*/-8.17);
+                text.SpaceAfter = (-8.17);
                 Assert.AreEqual(-8.17, text.SpaceAfter, 0.01);
 
                 Assert.AreEqual(0, text.Level);
-                text.Level = (/*setter*/1);
+                text.Level = (1);
                 Assert.AreEqual(1, text.Level);
-                text.Level = (/*setter*/4);
+                text.Level = (4);
                 Assert.AreEqual(4, text.Level);
 
                 Assert.IsTrue(text.IsBullet);

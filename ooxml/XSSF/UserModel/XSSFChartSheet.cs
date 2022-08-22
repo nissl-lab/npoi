@@ -107,7 +107,7 @@ namespace NPOI.XSSF.UserModel
             { 
                 try
                 {
-                    new XSSFSheet().Write(out1);
+                    new XSSFSheet().Write(out1,true);
                 }
                 catch (IOException e)
                 {

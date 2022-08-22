@@ -294,7 +294,7 @@ namespace NPOI.SS.Formula.Eval
             retval[199] = new NotImplementedFunction("DCOUNTA"); // DCOUNTA
             retval[200] = new NotImplementedFunction("DELETEBAR"); // DELETEBAR
             retval[201] = new NotImplementedFunction("UNREGISTER"); // UNREGISTER
-            retval[204] = new NotImplementedFunction("USDOLLAR"); // USDOLLAR
+            retval[204] = NumericFunction.DOLLAR; // USDOLLAR
             retval[205] = new NotImplementedFunction("FindB"); // FindB
             retval[206] = new NotImplementedFunction("SEARCHB"); // SEARCHB
             retval[207] = new NotImplementedFunction("ReplaceB"); // ReplaceB

@@ -105,7 +105,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "longFileNames", this.longFileNames);
             XmlHelper.WriteAttribute(sw, "vml", this.vml);
             XmlHelper.WriteAttribute(sw, "allowPng", this.allowPng);
-            XmlHelper.WriteAttribute(sw, "targetScreenSize", this.targetScreenSize.ToString());
+            XmlHelper.WriteAttribute(sw, "targetScreenSize", this.targetScreenSize.AsString(EnumFormat.Description));
             XmlHelper.WriteAttribute(sw, "dpi", this.dpi);
             XmlHelper.WriteAttribute(sw, "codePage", this.codePage);
             sw.Write(">");

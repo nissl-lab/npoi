@@ -454,8 +454,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(">");
             if (this.sdtPr != null)
                 this.sdtPr.Write(sw, "sdtPr");
-            if (this.sdtContent != null)
-                this.sdtContent.Write(sw, "sdtContent");
             if (this.sdtEndPr != null)
             {
                 foreach (CT_RPr x in this.sdtEndPr)
@@ -463,6 +461,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "sdtEndPr");
                 }
             }
+            if (this.sdtContent != null)
+                this.sdtContent.Write(sw, "sdtContent");
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
 

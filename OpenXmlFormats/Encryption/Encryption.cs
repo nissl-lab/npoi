@@ -17,6 +17,7 @@ namespace NPOI.OpenXmlFormats.Encryption
     using System.Xml;
     using System.Collections.Generic;
     using NPOI.OpenXml4Net.Util;
+    using EnumsNET;
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3761.0")]
     [System.SerializableAttribute()]
@@ -433,7 +434,7 @@ namespace NPOI.OpenXmlFormats.Encryption
             if (node.Attributes["uri"] != null)
             {
                 ctObj.uriFieldSpecified = true;
-                ctObj.uriField = XmlHelper.GetEnumValueFromString<CT_KeyEncryptorUri>(node.Attributes["uri"].Value);
+                ctObj.uriField = Enums.Parse<CT_KeyEncryptorUri>(node.Attributes["uri"].Value, false, EnumFormat.Description);
             }
             foreach(XmlNode child in node.ChildNodes)
             {
@@ -456,13 +457,12 @@ namespace NPOI.OpenXmlFormats.Encryption
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://schemas.microsoft.com/office/2006/encryption")]
     public enum CT_KeyEncryptorUri
     {
-
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.microsoft.com/office/2006/keyEncryptor/password")]
+        [Description("http://schemas.microsoft.com/office/2006/keyEncryptor/password")]
         httpschemasmicrosoftcomoffice2006keyEncryptorpassword,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("http://schemas.microsoft.com/office/2006/keyEncryptor/certificate")]
+        [Description("http://schemas.microsoft.com/office/2006/keyEncryptor/certificate")]
         httpschemasmicrosoftcomoffice2006keyEncryptorcertificate,
     }
 

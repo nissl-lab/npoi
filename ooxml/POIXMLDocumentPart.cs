@@ -276,6 +276,7 @@ using System.Xml;
             ns.AddNamespace("xsi", PackagePropertiesPart.NAMESPACE_XSI_URI);
 
             ns.AddNamespace("xsd", "http://www.w3.org/2001/XMLSchema");
+            ns.AddNamespace("w14", "http://schemas.microsoft.com/office/word/2010/wordml");
             return ns;
         }
         /**

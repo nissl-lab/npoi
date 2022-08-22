@@ -1317,6 +1317,7 @@
     <Compile Include="Util\Collections\Properties.cs" />
     <Compile Include="Util\Collections\StringTokenizer.cs" />
     <Compile Include="Util\CRC32.cs" />
+    <Compile Include="Util\FileInputStream.cs" />
     <Compile Include="Util\FilterInputStream.cs" />
     <Compile Include="Util\FilterOutputStream.cs" />
     <Compile Include="Util\FixedField.cs" />

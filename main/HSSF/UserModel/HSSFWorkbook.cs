@@ -674,6 +674,7 @@ namespace NPOI.HSSF.UserModel
                 throw new ArgumentException("The workbook already contains a sheet named '" + name + "'");
             }
             ValidateSheetIndex(sheetIx);
+            WorkbookUtil.ValidateSheetName(name);
             workbook.SetSheetName(sheetIx, name);
         }
 
