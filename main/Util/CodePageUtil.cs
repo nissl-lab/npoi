@@ -31,8 +31,8 @@ namespace NPOI.Util
     {
         static CodePageUtil() 
         {
-            #if NETSTANDARD2_1 || NETSTANDARD2_0
-                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            #if NETSTANDARD2_1 || NET6_0_OR_GREATER || NETSTANDARD2_0
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             #endif
         }
 
