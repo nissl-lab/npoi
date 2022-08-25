@@ -236,31 +236,6 @@ namespace NPOI.SS.Formula.Functions
 
             if (FindLargestLessThanOrEqual)
             {
-                //in case the lookupRange area is not sorted, still try to get the right index 
-                if (lookupValue is NumericValueEval nve)
-                {
-                    Dictionary<int, double> dicDeltas = new Dictionary<int, double>();
-                    for (int i = 0; i < size; i++)
-                    {
-                        var item = lookupRange.GetItem(i) as NumericValueEval;
-                        if (item == null)
-                        {
-                            // not a number, skip it
-                            continue;
-                        }
-
-                        if (lookupComparer.CompareTo(item).IsEqual)
-                        {
-                            return i;
-                        }
-                        else
-                        {
-                            dicDeltas.Add(i, item.NumberValue - nve.NumberValue);
-                        }
-                    }
-
-                    return dicDeltas.Where(kv => kv.Value < 0).OrderByDescending(kv => kv.Value).First().Key;
-                }
                 // Note - backward iteration
                 for (int i = size - 1; i >= 0; i--)
                 {
