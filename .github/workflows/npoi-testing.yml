@@ -15,11 +15,6 @@ jobs:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
       
-    - name: Setup .NET Core 3.1	
-      uses: actions/setup-dotnet@v1	
-      with:	
-        dotnet-version: 3.1.x
-    
     - name: Setup .NET Core 6
       uses: actions/setup-dotnet@v1	
       with:	
@@ -33,13 +28,13 @@ jobs:
       
     - name: Test NPOI.Core.TestCases
       if: always() && steps.build-npoi-core.outcome == 'success'
-      run: dotnet test testcases\main\bin\Debug\netcoreapp3.1\NPOI.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.TestCases.Core.trx' --results-directory test-results
+      run: dotnet test testcases\main\bin\Debug\net6.0\NPOI.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.TestCases.Core.trx' --results-directory test-results
     - name: Test NPOI.OOXML.Core.Testcases
       if : always() && steps.build-npoi-core.outcome == 'success'
-      run: dotnet test testcases\ooxml\bin\Debug\netcoreapp3.1\NPOI.OOXML.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML.TestCases.Core.trx' --results-directory test-results
+      run: dotnet test testcases\ooxml\bin\Debug\net6.0\NPOI.OOXML.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML.TestCases.Core.trx' --results-directory test-results
     - name: Test OOXML4Net.Core.TestCases
       if: always() && steps.build-npoi-core.outcome == 'success'
-      run: dotnet test testcases\openxml4net\bin\Debug\netcoreapp3.1\NPOI.OOXML4Net.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.Core.trx' --results-directory test-results
+      run: dotnet test testcases\openxml4net\bin\Debug\net6.0\NPOI.OOXML4Net.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.Core.trx' --results-directory test-results
       
     - name: Publish Test Results
       uses: dorny/test-reporter@v1
@@ -54,11 +49,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Setup .NET Core 3.1	
-      uses: actions/setup-dotnet@v1	
-      with:	
-        dotnet-version: 3.1.x
-    
     - name: Setup .NET Core 6
       uses: actions/setup-dotnet@v1	
       with:	
@@ -72,13 +62,13 @@ jobs:
 
     - name: Test NPOI.Core.TestCases
       if: always() && steps.build-npoi-core.outcome == 'success'
-      run: dotnet test testcases/main/bin/Debug/netcoreapp3.1/NPOI.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/main/bin/Debug/net6.0/NPOI.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.TestCases.trx' --results-directory test-results
     - name: Test NPOI.OOXML.Core.Testcases
       if : always() && steps.build-npoi-core.outcome == 'success'
-      run: dotnet test testcases/ooxml/bin/Debug/netcoreapp3.1/NPOI.OOXML.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/ooxml/bin/Debug/net6.0/NPOI.OOXML.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML.TestCases.trx' --results-directory test-results
     - name: Test OOXML4Net.Core.TestCases
       if: always() && steps.build-npoi-core.outcome == 'success'
-      run: dotnet test testcases/openxml4net/bin/Debug/netcoreapp3.1/NPOI.OOXML4Net.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/openxml4net/bin/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.trx' --results-directory test-results
       
     - name: Publish Test Results
       uses: dorny/test-reporter@v1
@@ -93,11 +83,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Setup .NET Core 3.1	
-      uses: actions/setup-dotnet@v1	
-      with:	
-        dotnet-version: 3.1.x
-    
     - name: Setup .NET Core 6
       uses: actions/setup-dotnet@v1	
       with:	
@@ -111,13 +96,13 @@ jobs:
 
     - name: Test NPOI.Core.TestCases
       if: always() && steps.build-npoi-core.outcome == 'success'
-      run: dotnet test testcases/main/bin/Debug/netcoreapp3.1/NPOI.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/main/bin/Debug/net6.0/NPOI.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.TestCases.trx' --results-directory test-results
     - name: Test NPOI.OOXML.Core.Testcases
       if : always() && steps.build-npoi-core.outcome == 'success'
-      run: dotnet test testcases/ooxml/bin/Debug/netcoreapp3.1/NPOI.OOXML.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/ooxml/bin/Debug/net6.0/NPOI.OOXML.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML.TestCases.trx' --results-directory test-results
     - name: Test OOXML4Net.Core.TestCases
       if: always() && steps.build-npoi-core.outcome == 'success'
-      run: dotnet test testcases/openxml4net/bin/Debug/netcoreapp3.1/NPOI.OOXML4Net.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/openxml4net/bin/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.trx' --results-directory test-results
       
     - name: Publish Test Results
       uses: dorny/test-reporter@v1
