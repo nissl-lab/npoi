@@ -36,9 +36,9 @@ using System.Security;
 [assembly: AssemblyVersion("2.6.0.0")]
 [assembly: AssemblyFileVersion("2.6.0.0")]
 [assembly: AssemblyInformationalVersion("2.0.0.0")]
-#if NETSTANDARD2_1 || NETSTANDARD2_0 || NET40
+#if NETSTANDARD2_1 || NET6_0_OR_GREATER || NETSTANDARD2_0 || NET40
 [assembly: AllowPartiallyTrustedCallers]
 #endif
-#if NETSTANDARD2_1 || NETSTANDARD2_0 || NET40 || NET45
+#if NETSTANDARD2_1 || NET6_0_OR_GREATER || NETSTANDARD2_0 || NET40 || NET45
 [assembly: SecurityRules(SecurityRuleSet.Level1)]
 #endif

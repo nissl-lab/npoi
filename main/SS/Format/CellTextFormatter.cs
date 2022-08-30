@@ -83,12 +83,7 @@ namespace NPOI.SS.Format
                 text = text.ToUpper();
             }
             toAppendTo.Append(desc);
-            for (int i = 0; i < textPos.Length; i++)
-            {
-                int pos = start + textPos[i];
-                //toAppendTo.Replace(pos, pos + 1, text);
-                toAppendTo.Remove(pos, 1).Insert(pos, text);
-            }
+            toAppendTo.Replace("\0", text);
         }
 
         /**

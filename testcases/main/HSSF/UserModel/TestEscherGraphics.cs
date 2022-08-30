@@ -26,6 +26,7 @@ namespace TestCases.HSSF.UserModel
 
     using NUnit.Framework;
     using SixLabors.ImageSharp;
+    using SixLabors.ImageSharp.PixelFormats;
 
 
     /**
@@ -100,7 +101,7 @@ namespace TestCases.HSSF.UserModel
         public void TestSetColor()
         {
             graphics.SetColor(Color.Red);
-            Assert.AreEqual(System.Drawing.Color.Red, graphics.Color);
+            Assert.AreEqual(Color.Red, graphics.Color);
         }
 
         [Test]
