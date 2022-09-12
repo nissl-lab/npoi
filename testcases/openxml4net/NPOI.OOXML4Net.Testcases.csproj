@@ -157,7 +157,7 @@
       <Name>NPOI.TestCases</Name>
     </ProjectReference>
     <ProjectReference Include="..\ooxml\NPOI.OOXML.TestCases.csproj">
-      <Project>{0BF8C464-8779-43CF-AD7A-B1109A86EAAE}</Project>
+      <Project>{0bf8c464-8779-43cf-ad7a-b1109a86eaae}</Project>
       <Name>NPOI.OOXML.TestCases</Name>
     </ProjectReference>
   </ItemGroup>
