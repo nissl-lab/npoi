@@ -115,6 +115,14 @@ namespace NPOI.XSSF.Util
             return newStyle;
         }
 
+        public static bool CompareStyles(XSSFCellStyle styleA, XSSFCellStyle styleB)
+        {
+            var styleMapA = GetFormatProperties(styleA);
+            var styleMapB = GetFormatProperties(styleB);
+
+            return CompareStyleMaps(styleMapA, styleMapB);
+        }
+
         private static bool CompareStyleMaps(Dictionary<string, object> x, Dictionary<string, object> y)
         {
             if (x.Count != y.Count)
@@ -210,7 +218,7 @@ namespace NPOI.XSSF.Util
             PutShort(properties, DATA_FORMAT, style.DataFormat);
             PutString(properties, FILL_BACKGROUND_COLOR, RgbByteArrayToHexstring(style.FillBackgroundXSSFColor?.GetRgbWithTint() ?? style.FillBackgroundXSSFColor?.RGB));
             PutString(properties, FILL_FOREGROUND_COLOR, RgbByteArrayToHexstring(style.FillForegroundXSSFColor?.GetRgbWithTint() ?? style.FillForegroundXSSFColor?.RGB));
-            PutShort(properties, FILL_PATTERN, (short)style.FillPattern);
+            Put(properties, FILL_PATTERN, style.FillPattern);
             PutInt(properties, FONT, (int)style.FontIndex);
             PutBoolean(properties, HIDDEN, style.IsHidden);
             PutShort(properties, INDENTION, style.Indention);
