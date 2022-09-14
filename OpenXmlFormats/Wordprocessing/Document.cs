@@ -404,10 +404,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("</w:{0}>", nodeName));
         }
 
-        public void AddNewSectPr()
+        public CT_SectPr AddNewSectPr()
         {
             this.sectPrField = new CT_SectPr();
-            //return this.sectPrField;
+            return this.sectPrField;
         }
 
         public bool IsSetSectPr()

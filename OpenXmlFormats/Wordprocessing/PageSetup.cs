@@ -166,11 +166,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public class CT_PageMar
     {
 
-        private string topField;
+        private ulong topField;
 
         private ulong rightField;
 
-        private string bottomField;
+        private ulong bottomField;
 
         private ulong leftField;
 
@@ -185,9 +185,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (node == null)
                 return null;
             CT_PageMar ctObj = new CT_PageMar();
-            ctObj.top = XmlHelper.ReadString(node.Attributes["w:top"]);
+            ctObj.top = XmlHelper.ReadULong(node.Attributes["w:top"]);
             ctObj.right = XmlHelper.ReadULong(node.Attributes["w:right"]);
-            ctObj.bottom = XmlHelper.ReadString(node.Attributes["w:bottom"]);
+            ctObj.bottom = XmlHelper.ReadULong(node.Attributes["w:bottom"]);
             ctObj.left = XmlHelper.ReadULong(node.Attributes["w:left"]);
             ctObj.header = XmlHelper.ReadULong(node.Attributes["w:header"]);
             ctObj.footer = XmlHelper.ReadULong(node.Attributes["w:footer"]);
@@ -211,7 +211,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
-        public string top
+        public ulong top
         {
             get
             {
@@ -237,7 +237,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "integer")]
-        public string bottom
+        public ulong bottom
         {
             get
             {

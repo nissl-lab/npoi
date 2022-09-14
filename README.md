@@ -34,17 +34,13 @@ This project is the .NET version of POI Java project. With NPOI, you can read/wr
 
 [Who is using NPOI?](https://github.com/nissl-lab/npoi/issues/705)
 
-Donation
+About Donation
 ============
-ERC20: 0xD9CA5B6F3BcEa3f10b7C3B92f0EC783FbB47cBE1
-
-![image](https://user-images.githubusercontent.com/772561/184463909-01562041-215a-4eb4-8806-d4128b0d3783.png)
+Since Github sponsorship is not supported in China so far, it's hard to get donation from Github channel. I'm strictly limiting my contribution time on NPOI these 2 years although it looks to be still maintained well. If you profits/benefits from NPOI and you believe it's useful, please [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
 
 Telegram User Group
 ================
 Join us on telegram: https://t.me/npoidevs
-
-NOTE: QQ or wechat is not recommended. 
 
 Get Started with NPOI
 ============
