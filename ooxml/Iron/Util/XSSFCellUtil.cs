@@ -7,7 +7,6 @@ using System.Linq;
 
 namespace NPOI.XSSF.Util
 {
-    //For XLSX files we need to copy and find colors by rgb string, not by color index.
     public class XSSFCellUtil
     {
         public const string ALIGNMENT = "alignment";
@@ -36,22 +35,22 @@ namespace NPOI.XSSF.Util
         private static readonly ISet<string> shortValues = new HashSet<string>(new string[]{
             INDENTION,
             DATA_FORMAT,
-            ROTATION
+            ROTATION,
         });
         private static readonly ISet<string> intValues = new HashSet<string>(new string[]{
-            FONT
+            FONT,
         });
         private static readonly ISet<string> booleanValues = new HashSet<string>(new string[]{
             LOCKED,
             HIDDEN,
             WRAP_TEXT,
-            SHRINK_TO_FIT
+            SHRINK_TO_FIT,
         });
         private static readonly ISet<string> borderTypeValues = new HashSet<string>(new string[]{
             BORDER_BOTTOM,
             BORDER_LEFT,
             BORDER_RIGHT,
-            BORDER_TOP
+            BORDER_TOP,
         });
         private static readonly ISet<string> stringValues = new HashSet<string>(new string[]
         {
@@ -79,29 +78,29 @@ namespace NPOI.XSSF.Util
 
         public static void SetCellStyleProperties(ICell cell, XSSFWorkbook workbook, Dictionary<string, object> propertiesToSet)
         {
-            Dictionary<string, object> styleMap = GetFormatProperties(cell.CellStyle as XSSFCellStyle);
+            var styleMap = GetFormatProperties(cell.CellStyle as XSSFCellStyle);
             PutAll(propertiesToSet, styleMap);
 
-            ICellStyle style = LookUpOrCreateCellStyleInWorkbook(styleMap, workbook);
+            var style = LookUpOrCreateCellStyleInWorkbook(styleMap, workbook);
 
             cell.CellStyle = style;
         }
-        
+
         public static ICellStyle LookUpOrCreateCellStyleInWorkbook(XSSFCellStyle lookUpStyle, XSSFWorkbook workbook)
         {
-            Dictionary<string, object> styleMap = GetFormatProperties(lookUpStyle);
+            var styleMap = GetFormatProperties(lookUpStyle);
 
             return LookUpOrCreateCellStyleInWorkbook(styleMap, workbook);
         }
 
         public static ICellStyle LookUpOrCreateCellStyleInWorkbook(Dictionary<string, object> lookUpStyleMap, XSSFWorkbook workbook)
         {
-            for (int i = 0; i < workbook.NumCellStyles; i++)
+            for (var i = 0; i < workbook.NumCellStyles; i++)
             {
-                ICellStyle workbookStyle = workbook.GetCellStyleAt(i);
-                Dictionary<string, object> workbookStyleMap = GetFormatProperties(workbookStyle as XSSFCellStyle);
+                var workbookStyle = workbook.GetCellStyleAt(i);
+                var workbookStyleMap = GetFormatProperties(workbookStyle as XSSFCellStyle);
 
-                bool stylesAreEqual = CompareStyleMaps(lookUpStyleMap, workbookStyleMap);
+                var stylesAreEqual = CompareStyleMaps(lookUpStyleMap, workbookStyleMap);
 
                 if (stylesAreEqual)
                 {
@@ -109,7 +108,7 @@ namespace NPOI.XSSF.Util
                 }
             }
 
-            ICellStyle newStyle = workbook.CreateCellStyle();
+            var newStyle = workbook.CreateCellStyle();
             SetFormatProperties(newStyle as XSSFCellStyle, workbook, lookUpStyleMap);
 
             return newStyle;
@@ -140,7 +139,7 @@ namespace NPOI.XSSF.Util
                 return false;
             }
 
-            foreach (string key in x.Keys)
+            foreach (var key in x.Keys)
             {
                 if (ValuesAreNotEqual(x[key], y[key]))
                 {
@@ -158,17 +157,9 @@ namespace NPOI.XSSF.Util
                 (xValue != null && yValue != null && !xValue.Equals(yValue));
         }
 
-        /**
-         * Copies the entries in src to dest, using the preferential data type
-         * so that maps can be compared for equality
-         *
-         * @param src the property map to copy from (read-only)
-         * @param dest the property map to copy into
-         * @since POI 3.15 beta 3
-         */
         private static void PutAll(Dictionary<string, object> src, Dictionary<string, object> dest)
         {
-            foreach (string key in src.Keys)
+            foreach (var key in src.Keys)
             {
                 if (shortValues.Contains(key))
                 {
@@ -207,7 +198,7 @@ namespace NPOI.XSSF.Util
 
         public static Dictionary<string, object> GetFormatProperties(XSSFCellStyle style)
         {
-            Dictionary<string, object> properties = new Dictionary<string, object>();
+            var properties = new Dictionary<string, object>();
             Put(properties, ALIGNMENT, style.Alignment);
             Put(properties, BORDER_BOTTOM, style.BorderBottom);
             PutShort(properties, BORDER_DIAGONAL, (short)style.BorderDiagonal);
@@ -219,7 +210,7 @@ namespace NPOI.XSSF.Util
             PutString(properties, FILL_BACKGROUND_COLOR, RgbByteArrayToHexstring(style.FillBackgroundXSSFColor?.GetRgbWithTint() ?? style.FillBackgroundXSSFColor?.RGB));
             PutString(properties, FILL_FOREGROUND_COLOR, RgbByteArrayToHexstring(style.FillForegroundXSSFColor?.GetRgbWithTint() ?? style.FillForegroundXSSFColor?.RGB));
             Put(properties, FILL_PATTERN, style.FillPattern);
-            PutInt(properties, FONT, (int)style.FontIndex);
+            PutInt(properties, FONT, style.FontIndex);
             PutBoolean(properties, HIDDEN, style.IsHidden);
             PutShort(properties, INDENTION, style.Indention);
             PutString(properties, LEFT_BORDER_COLOR, RgbByteArrayToHexstring(style.LeftBorderXSSFColor?.GetRgbWithTint() ?? style.LeftBorderXSSFColor?.RGB));
@@ -232,14 +223,7 @@ namespace NPOI.XSSF.Util
             PutBoolean(properties, WRAP_TEXT, style.WrapText);
             return properties;
         }
-
-        /**
-         * Utility method that puts the given value to the given map.
-         *
-         * @param properties map of properties (String -> Object)
-         * @param name property name
-         * @param value property value
-         */
+        
         private static void Put(Dictionary<string, object> properties, string name, object value)
         {
             properties[name] = value;
@@ -332,47 +316,26 @@ namespace NPOI.XSSF.Util
             style.WrapText = GetBoolean(properties, WRAP_TEXT);
         }
 
-        /**
-         * Utility method that returns the named short value form the given map.
-         * 
-         * @param properties map of named properties (String -> Object)
-         * @param name property name
-         * @return zero if the property does not exist, or is not a {@link Short}.
-         */
         private static short GetShort(Dictionary<string, object> properties, string name)
         {
-            object value = properties[name];
-            return short.TryParse(value.ToString(), out short result) ? result : (short)0;
+            var value = properties[name];
+            return short.TryParse(value.ToString(), out var result) ? result : (short)0;
         }
 
-        /**
-         * Utility method that returns the named int value from the given map.
-         *
-         * @param properties map of named properties (String -> Object)
-         * @param name property name
-         * @return zero if the property does not exist, or is not a {@link Integer}
-         *         otherwise the property value
-         */
         private static int GetInt(Dictionary<string, object> properties, string name)
         {
-            object value = properties[name];
+            var value = properties[name];
             if (Number.IsNumber(value))
             {
                 return int.Parse(value.ToString());
             }
+
             return 0;
         }
 
-        /**
-	     * Utility method that returns the named BorderStyle value form the given map.
-	     *
-	     * @param properties map of named properties (String -> Object)
-	     * @param name property name
-	     * @return Border style if set, otherwise {@link BorderStyle#NONE}
-	     */
         private static BorderStyle GetBorderStyle(Dictionary<string, object> properties, string name)
         {
-            object value = properties[name];
+            var value = properties[name];
             BorderStyle border;
             if (value is BorderStyle borderStyle)
             {
@@ -380,7 +343,7 @@ namespace NPOI.XSSF.Util
             }
             else if (value is short || value is int)
             {
-                short code = short.Parse(value.ToString());
+                var code = short.Parse(value.ToString());
                 border = (BorderStyle)code;
             }
             else if (value == null)
@@ -391,20 +354,13 @@ namespace NPOI.XSSF.Util
             {
                 throw new RuntimeException("Unexpected border style class. Must be BorderStyle or Short (deprecated).");
             }
+
             return border;
         }
 
-        /**
-         * Utility method that returns the named FillPattern value from the given map.
-         *
-         * @param properties map of named properties (String -> Object)
-         * @param name property name
-         * @return FillPattern style if set, otherwise {@link FillPattern#NO_FILL}
-         * @since POI 3.15 beta 3
-         */
         private static FillPattern GetFillPattern(Dictionary<string, object> properties, string name)
         {
-            object value = properties[name];
+            var value = properties[name];
             FillPattern pattern;
             if (value is FillPattern ptrn)
             {
@@ -422,20 +378,13 @@ namespace NPOI.XSSF.Util
             {
                 throw new RuntimeException("Unexpected fill pattern style class. Must be FillPattern or Short (deprecated).");
             }
+
             return pattern;
         }
 
-        /**
-         * Utility method that returns the named HorizontalAlignment value from the given map.
-         *
-         * @param properties map of named properties (String -> Object)
-         * @param name property name
-         * @return HorizontalAlignment style if set, otherwise {@link HorizontalAlignment#GENERAL}
-         * @since POI 3.15 beta 3
-         */
         private static HorizontalAlignment GetHorizontalAlignment(Dictionary<string, object> properties, string name)
         {
-            object value = properties[name];
+            var value = properties[name];
             HorizontalAlignment align;
             if (value is HorizontalAlignment alignment)
             {
@@ -453,20 +402,13 @@ namespace NPOI.XSSF.Util
             {
                 throw new RuntimeException("Unexpected horizontal alignment style class. Must be HorizontalAlignment or Short (deprecated).");
             }
+
             return align;
         }
 
-        /**
-         * Utility method that returns the named VerticalAlignment value from the given map.
-         *
-         * @param properties map of named properties (String -> Object)
-         * @param name property name
-         * @return VerticalAlignment style if set, otherwise {@link VerticalAlignment#BOTTOM}
-         * @since POI 3.15 beta 3
-         */
         private static VerticalAlignment GetVerticalAlignment(Dictionary<string, object> properties, string name)
         {
-            object value = properties[name];
+            var value = properties[name];
             VerticalAlignment align;
             if (value is VerticalAlignment alignment)
             {
@@ -484,21 +426,15 @@ namespace NPOI.XSSF.Util
             {
                 throw new RuntimeException("Unexpected vertical alignment style class. Must be VerticalAlignment or Short (deprecated).");
             }
+
             return align;
         }
 
-        /**
-         * Utility method that returns the named boolean value form the given map.
-         *
-         * @param properties map of properties (String -> Object)
-         * @param name property name
-         * @return false if the property does not exist, or is not a {@link Boolean}.
-         */
         private static bool GetBoolean(Dictionary<string, object> properties, string name)
         {
-            object value = properties[name];
-            
-            if (bool.TryParse(value.ToString(), out bool result))
+            var value = properties[name];
+
+            if (bool.TryParse(value.ToString(), out var result))
             {
                 return result;
             }
@@ -507,17 +443,10 @@ namespace NPOI.XSSF.Util
         }
         private static string GetString(Dictionary<string, object> properties, string name)
         {
-            object value = properties[name];
+            var value = properties[name];
             return value?.ToString();
         }
 
-        /**
-         * Utility method that puts the named short value to the given map.
-         *
-         * @param properties map of properties (String -> Object)
-         * @param name property name
-         * @param value property value
-         */
         private static void PutShort(Dictionary<string, object> properties, string name, short value)
         {
             if (properties.ContainsKey(name))
@@ -530,13 +459,6 @@ namespace NPOI.XSSF.Util
             }
         }
 
-        /**
-         * Utility method that puts the named short value to the given map.
-         *
-         * @param properties map of properties (String -> Object)
-         * @param name property name
-         * @param value property value
-         */
         private static void PutInt(Dictionary<string, object> properties, string name, int value)
         {
             if (properties.ContainsKey(name))
@@ -561,13 +483,6 @@ namespace NPOI.XSSF.Util
             }
         }
 
-        /**
-         * Utility method that puts the named boolean value to the given map.
-         *
-         * @param properties map of properties (String -> Object)
-         * @param name property name
-         * @param value property value
-         */
         private static void PutBoolean(Dictionary<string, object> properties, string name, bool value)
         {
             if (properties.ContainsKey(name))
