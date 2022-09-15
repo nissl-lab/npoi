@@ -512,6 +512,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.colorField.Add(newColor);
             return newColor;
         }
+        public int AddColor(CT_Color value)
+        {
+            colorField = colorField ?? new List<CT_Color>();
+
+            colorField.Add(value);
+
+            return this.colorField.Count - 1;
+        }
         #endregion color
 
         #region sz
