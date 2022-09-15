@@ -498,7 +498,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void SetColorArray(int index, CT_Color value)
         {
-            this.colorField[index] = value;
+            if (colorField is null)
+            {
+                new List<CT_Color>() { value };
+            }
+            else
+            {
+                if (colorField.Count >= index + 1)
+                {
+                    this.colorField[index] = value;
+                }
+            }
         }
         public void SetColorArray(List<CT_Color> array)
         {
