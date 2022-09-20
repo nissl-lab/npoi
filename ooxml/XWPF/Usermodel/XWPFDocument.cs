@@ -40,7 +40,7 @@ namespace NPOI.XWPF.UserModel
      *  http://www.ecma-international.org/publications/standards/Ecma-376.htm
      *  at some point in your use.</p>
      */
-    public class XWPFDocument : POIXMLDocument, Document, IBody
+    public class XWPFDocument : POIXMLDocument, Document, IBody, IDisposable
     {
 
         private CT_Document ctDocument;
@@ -1679,5 +1679,9 @@ namespace NPOI.XWPF.UserModel
             return this;
         }
 
+        public void Dispose()
+        {
+            this.Close();
+        }
     } // end class
 }
