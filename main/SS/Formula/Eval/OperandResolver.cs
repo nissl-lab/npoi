@@ -274,7 +274,8 @@ namespace NPOI.SS.Formula.Eval
             //if (Regex.Match(fpRegex, pText).Success)
                 try
                 {
-                    double ret = double.Parse(pText, CultureInfo.CurrentCulture);
+                // Added NumberStyle.Any to parse "$1.00" strings (e.g. DOLLAR function)
+                double ret = double.Parse(pText, NumberStyles.Any, CultureInfo.CurrentCulture);
                     if (double.IsInfinity(ret))
                         return double.NaN;
                     return ret;

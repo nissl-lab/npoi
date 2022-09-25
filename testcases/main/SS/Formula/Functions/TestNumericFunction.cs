@@ -20,8 +20,8 @@ namespace TestCases.SS.Formula.Functions
             //the following INT(-880000000.0001) resulting in -880000001.0 has been observed in excel
             //see also https://support.microsoft.com/en-us/office/int-function-a6c4af9e-356d-4369-ab6a-cb1fd9d343ef
             SS.Util.Utils.AssertDouble(fe, cell, "INT(-880000000.0001)", -880000001.0);
-            SS.Util.Utils.AssertDouble(fe, cell, "880000000*0.00849", 7471200.0);
-            SS.Util.Utils.AssertDouble(fe, cell, "880000000*0.00849/3", 2490400.0);
+            SS.Util.Utils.AssertDouble(fe, cell, "880000000*0.00849", 7471200.0, 0.000000001);
+            SS.Util.Utils.AssertDouble(fe, cell, "880000000*0.00849/3", 2490400.0, 0.000000001);
             SS.Util.Utils.AssertDouble(fe, cell, "INT(880000000*0.00849/3)", 2490400.0);
         }
 

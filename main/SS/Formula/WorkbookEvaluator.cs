@@ -637,7 +637,7 @@ namespace NPOI.SS.Formula
                                {
                                    // this is an if statement without a false param (as opposed to MissingArgPtg as the false param)
                                    i++;
-                                   stack.Push(arg0);
+                                   //stack.Push(arg0);
                                    stack.Push(BoolEval.FALSE);
                                }
                            }
