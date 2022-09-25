@@ -68,11 +68,11 @@ namespace TestCases.XSSF.Extractor
                 "elit\t888\n" +
                 "Nunc\t999\n";
             String CHUNK2 =
-                "The quick brown fox jumps over the lazy dog\n\t" +
-                "hello, xssf		hello, xssf\n\t" +
-                "hello, xssf		hello, xssf\n\t" +
-                "hello, xssf		hello, xssf\n\t" +
-                "hello, xssf		hello, xssf\n";
+                "The quick brown fox jumps over the lazy dog\n" +
+                "\thello, xssf\t\thello, xssf\n" +
+                "\thello, xssf\t\thello, xssf\n" +
+                "\thello, xssf\t\thello, xssf\n" +
+                "\thello, xssf\t\thello, xssf\n";
             Assert.AreEqual(
                     CHUNK1 +
                     "at\t4995\n" +
