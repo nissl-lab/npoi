@@ -108,7 +108,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 else
                 {
-                    _font.SetColorArray(0, xcolor.GetCTColor());
+                    _font.AddColor(xcolor.GetCTColor());
                 }
             }
         }
