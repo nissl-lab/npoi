@@ -13,8 +13,6 @@ What's NPOI
 <br />
 This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
-[Who is using NPOI?](https://github.com/nissl-lab/npoi/issues/705)
-
 About Donation
 ============
 Since Github sponsorship is not supported in China so far, it's hard to get donation from Github channel. I'm strictly limiting my contribution time on NPOI these 2 years although it looks to be still maintained well. If you profits/benefits from NPOI and you believe it's useful, please [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
@@ -25,6 +23,8 @@ Join us on telegram: https://t.me/npoidevs
 
 Get Started with NPOI
 ============
+[Who is using NPOI?](https://github.com/nissl-lab/npoi/issues/705)
+
 [Getting Started with NPOI](https://github.com/nissl-lab/npoi/wiki/Getting-Started-with-NPOI)
 
 [How to use NPOI on Linux](https://github.com/nissl-lab/npoi/wiki/How-to-use-NPOI-on-Linux)
