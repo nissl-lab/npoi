@@ -43,7 +43,7 @@ jobs:
       uses: dorny/test-reporter@v1
       if: always() && steps.build-npoi.outcome == 'success'
       with:
-        path: 'test-results/*.Core.trx'
+        path: 'test-results/*.trx'
         name: NPOI .NET 6 Windows Test Results
         reporter: 'dotnet-trx'
 
