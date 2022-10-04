@@ -1679,13 +1679,12 @@ namespace NPOI.XSSF.UserModel
                 sheets[i].sheet = sheetArray[i];
             }
 
+
             // adjust named ranges if necessary
-            for (var i = 0; i < namedRanges.Count; i++)
+            foreach (var item in GetAllNames())
             {
-                if (namedRanges[i].SheetIndex == idx)
-                {
-                    namedRanges[i].SheetIndex = pos;
-                }
+                if (item.SheetIndex == idx)
+                    item.SheetIndex = pos;
             }
 
             // adjust active sheet if necessary
