@@ -44,6 +44,8 @@ Get Started with NPOI
 ============
 [Who is using NPOI?](https://github.com/nissl-lab/npoi/issues/705)
 
+[NPOI examples](https://github.com/nissl-lab/npoi-examples)
+
 [Getting Started with NPOI](https://github.com/nissl-lab/npoi/wiki/Getting-Started-with-NPOI)
 
 [How to use NPOI on Linux](https://github.com/nissl-lab/npoi/wiki/How-to-use-NPOI-on-Linux)
