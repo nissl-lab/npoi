@@ -18,8 +18,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     using System.Xml;
     using NPOI.OpenXml4Net.Util;
     using System.Text;
-
-
+    using System.Globalization;
 
     [Serializable]
     
@@ -8944,7 +8943,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             XmlHelper.WriteAttribute(sw, "formatCode", this.formatCode);
             sw.Write(">");
             if (this.v != null)
-                sw.Write(string.Format("<c:v>{0}</c:v>", this.v));
+                sw.Write(string.Format("<c:v>{0}</c:v>", this.v.ToString(CultureInfo.InvariantCulture));
             sw.Write(string.Format("</c:{0}>", nodeName));
         }
 
