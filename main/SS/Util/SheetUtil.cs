@@ -355,7 +355,7 @@ namespace NPOI.SS.Util
             {
                 if (region.IsInRange(cell.RowIndex, cell.ColumnIndex))
                 {
-                    return 1 + region.LastColumn - region.FirstColumn;
+                    return 1 + region.LastRow - region.FirstRow;
                 }
             }
 
