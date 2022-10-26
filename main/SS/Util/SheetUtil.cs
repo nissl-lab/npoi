@@ -355,7 +355,7 @@ namespace NPOI.SS.Util
             {
                 if (region.IsInRange(cell.RowIndex, cell.ColumnIndex))
                 {
-                    return 1 + region.LastColumn - region.FirstColumn;
+                    return 1 + region.LastRow - region.FirstRow;
                 }
             }
 
@@ -364,7 +364,8 @@ namespace NPOI.SS.Util
 
         private static double GetCellConetntHeight(double actualHeight, int numberOfRowsInMergedRegion)
         {
-            return Math.Max(-1, actualHeight / numberOfRowsInMergedRegion);
+            var correction = 1.1;
+            return Math.Max(-1, actualHeight / numberOfRowsInMergedRegion * correction);
         }
 
         private static string GetCellStringValue(ICell cell)
@@ -544,7 +545,8 @@ namespace NPOI.SS.Util
             // entireWidth accounts for leading spaces which is excluded from bounds.getWidth()
             //double frameWidth = bounds.getX() + bounds.getWidth();
             //width = Math.max(width, ((frameWidth / colspan) / defaultCharWidth) + style.getIndention());
-            width = Math.Max(width, (actualWidth / colspan / defaultCharWidth) + cell.CellStyle.Indention);
+            var correction = 1.1;
+            width = Math.Max(width, (actualWidth / colspan / defaultCharWidth * correction) + cell.CellStyle.Indention);
             return width;
         }
 
