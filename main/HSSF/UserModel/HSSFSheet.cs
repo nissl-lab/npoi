@@ -3005,7 +3005,11 @@ namespace NPOI.HSSF.UserModel
             foreach (var srcRegion in this.MergedRegions)
             {
                 var destRegion = srcRegion.Copy();
-                newSheet.AddMergedRegion(destRegion);
+                // Additional check here as Sheet.CloneSheet() should already have copied the merged regions
+                if (!newSheet.IsMergedRegion(destRegion))
+                {
+                    newSheet.AddMergedRegion(destRegion);
+                }
             }
 
             for (int i = 0; i <= maxColumnNum; i++)
