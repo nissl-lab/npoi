@@ -4983,9 +4983,19 @@ namespace NPOI.XSSF.UserModel
                 XSSFRow destRow = (XSSFRow)newSheet.CreateRow(i);
                 if (srcRow != null)
                 {
-                    CopyRow(this, newSheet, srcRow, destRow, styleMap, keepFormulas);
+                    // avoid O(N^2) performance scanning through all regions for each row
+                    // merged regions will be copied after all the rows have been copied
+                    CopyRow(this, newSheet, srcRow, destRow, styleMap, keepFormulas, keepMergedRegion: false);
                 }
             }
+
+            // Copying merged regions
+            foreach (var srcRegion in this.MergedRegions)
+            {
+                var destRegion = srcRegion.Copy();
+                newSheet.AddMergedRegion(destRegion);
+            }
+
             List<CT_Cols> srcCols = worksheet.GetColsList();
             List<CT_Cols> dstCols = newSheet.worksheet.GetColsList();
             dstCols.Clear(); //Should already be empty since this is a new sheet.
@@ -5034,7 +5044,8 @@ namespace NPOI.XSSF.UserModel
             }
             CopySheetImages(dest as XSSFWorkbook, newSheet);
         }
-        private static void CopyRow(XSSFSheet srcSheet, XSSFSheet destSheet, XSSFRow srcRow, XSSFRow destRow, IDictionary<Int32, ICellStyle> styleMap, bool keepFormulas)
+
+        private static void CopyRow(XSSFSheet srcSheet, XSSFSheet destSheet, XSSFRow srcRow, XSSFRow destRow, IDictionary<Int32, ICellStyle> styleMap, bool keepFormulas, bool keepMergedRegion)
         {
             destRow.Height = srcRow.Height;
             if (!srcRow.GetCTRow().IsSetCustomHeight())
@@ -5050,6 +5061,7 @@ namespace NPOI.XSSF.UserModel
             {
                 return; //Row has no cells, this sometimes happens with hidden or blank rows
             }
+
             for (int j = srcRow.FirstCellNum; j <= srcRow.LastCellNum; j++)
             {
                 XSSFCell oldCell = (XSSFCell)srcRow.GetCell(j);
@@ -5065,20 +5077,25 @@ namespace NPOI.XSSF.UserModel
                         newCell = (XSSFCell)destRow.CreateCell(j);
                     }
                     XSSFSheet.CopyCell(oldCell, newCell, styleMap, keepFormulas);
-                    CellRangeAddress mergedRegion = srcSheet.GetMergedRegion(new CellRangeAddress(srcRow.RowNum, srcRow.RowNum, (short)oldCell.ColumnIndex, (short)oldCell.ColumnIndex));
-                    if (mergedRegion != null)
-                    {
-                        CellRangeAddress newMergedRegion = new CellRangeAddress(mergedRegion.FirstRow,
-                                mergedRegion.LastRow, mergedRegion.FirstColumn, mergedRegion.LastColumn);
 
-                        if (!destSheet.IsMergedRegion(newMergedRegion))
+                    if (keepMergedRegion)
+                    {
+                        CellRangeAddress mergedRegion = srcSheet.GetMergedRegion(new CellRangeAddress(srcRow.RowNum, srcRow.RowNum, (short)oldCell.ColumnIndex, (short)oldCell.ColumnIndex));
+                        if (mergedRegion != null)
                         {
-                            destSheet.AddMergedRegion(newMergedRegion);
+                            CellRangeAddress newMergedRegion = new CellRangeAddress(mergedRegion.FirstRow,
+                                    mergedRegion.LastRow, mergedRegion.FirstColumn, mergedRegion.LastColumn);
+
+                            if (!destSheet.IsMergedRegion(newMergedRegion))
+                            {
+                                destSheet.AddMergedRegion(newMergedRegion);
+                            }
                         }
                     }
                 }
             }
         }
+
         private static void CopyCell(ICell oldCell, ICell newCell, IDictionary<Int32, ICellStyle> styleMap, Boolean keepFormulas)
         {
             if (styleMap != null)
