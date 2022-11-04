@@ -30,34 +30,34 @@ using System.Linq;
 namespace NPOI.XSSF.UserModel
 {
 
-    /**
-     * High level representation of a row of a spreadsheet.
-     */
+    /// <summary>
+    /// High level representation of a row of a spreadsheet.
+    /// </summary>
     public class XSSFRow : IRow, IComparable<XSSFRow>
     {
         private static readonly POILogger _logger = POILogFactory.GetLogger(typeof(XSSFRow));
 
-        /**
-         * the xml bean Containing all cell defInitions for this row
-         */
+        /// <summary>
+        /// the xml node Containing all cell defInitions for this row
+        /// </summary>
         private readonly CT_Row _row;
 
-        /**
-         * Cells of this row keyed by their column indexes.
-         * The TreeMap ensures that the cells are ordered by columnIndex in the ascending order.
-         */
+        /// <summary>
+        /// Cells of this row keyed by their column indexes.
+        /// The SortedDictionary ensures that the cells are ordered by columnIndex in the ascending order.
+        /// </summary>
         private readonly SortedDictionary<int, ICell> _cells;
-        /**
-         * the parent sheet
-         */
+
+        /// <summary>
+        /// the parent sheet
+        /// </summary>
         private readonly XSSFSheet _sheet;
 
-        /**
-         * Construct a XSSFRow.
-         *
-         * @param row the xml bean Containing all cell defInitions for this row.
-         * @param sheet the parent sheet.
-         */
+        /// <summary>
+        /// Construct an XSSFRow.
+        /// </summary>
+        /// <param name="row">the xml node Containing all cell defInitions for this row.</param>
+        /// <param name="sheet">the parent sheet.</param>
         public XSSFRow(CT_Row row, XSSFSheet sheet)
         {
             _row = row;
@@ -87,59 +87,37 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Returns the XSSFSheet this row belongs to
-         *
-         * @return the XSSFSheet that owns this row
-         */
+        /// <summary>
+        /// XSSFSheet this row belongs to
+        /// </summary>
         public ISheet Sheet => _sheet;
 
-        /**
-         * Cell iterator over the physically defined cells:
-         * <blockquote><pre>
-         * for (Iterator<Cell> it = row.cellIterator(); it.HasNext(); ) {
-         *     Cell cell = it.next();
-         *     ...
-         * }
-         * </pre></blockquote>
-         *
-         * @return an iterator over cells in this row.
-         */
+        /// <summary>
+        /// Cell iterator over the physically defined cell
+        /// </summary>
+        /// <returns>an iterator over cells in this row.</returns>
         public SortedDictionary<int, ICell>.ValueCollection.Enumerator CellIterator() => _cells.Values.GetEnumerator();
 
-        /**
-         * Alias for {@link #cellIterator()} to allow  foreach loops:
-         * <blockquote><pre>
-         * for(Cell cell : row){
-         *     ...
-         * }
-         * </pre></blockquote>
-         *
-         * @return an iterator over cells in this row.
-         */
+        /// <summary>
+        /// Alias for <see cref="CellIterator"/> to allow  foreach loops
+        /// </summary>
+        /// <returns>an iterator over cells in this row.</returns>
         public IEnumerator<ICell> GetEnumerator() => CellIterator();
 
-        /**
-         * Compares two <code>XSSFRow</code> objects.  Two rows are equal if they belong to the same worksheet and
-         * their row indexes are equal.
-         *
-         * @param   row   the <code>XSSFRow</code> to be compared.
-         * @return  <ul>
-         *      <li>
-         *      the value <code>0</code> if the row number of this <code>XSSFRow</code> is
-         *      equal to the row number of the argument <code>XSSFRow</code>
-         *      </li>
-         *      <li>
-         *      a value less than <code>0</code> if the row number of this this <code>XSSFRow</code> is
-         *      numerically less than the row number of the argument <code>XSSFRow</code>
-         *      </li>
-         *      <li>
-         *      a value greater than <code>0</code> if the row number of this this <code>XSSFRow</code> is
-         *      numerically greater than the row number of the argument <code>XSSFRow</code>
-         *      </li>
-         *      </ul>
-         * @throws IllegalArgumentException if the argument row belongs to a different worksheet
-         */
+        /// <summary>
+        /// Compares two <see cref="XSSFRow"/> objects. Two rows are equal if they belong to the 
+        /// same worksheet and their row indexes are equal.
+        /// </summary>
+        /// <param name="other">the <see cref="XSSFRow"/> to be compared.</param>
+        /// <returns>
+        /// the value 0 if the row number of this <see cref="XSSFRow"/> is
+        /// equal to the row number of the argument <see cref="XSSFRow"/>
+        /// a value less than 0 if the row number of this this <see cref="XSSFRow"/> is
+        /// numerically less than the row number of the argument <see cref="XSSFRow"/>
+        /// a value greater than 0 if the row number of this this <see cref="XSSFRow"/> is
+        /// numerically greater than the row number of the argument <see cref="XSSFRow"/>
+        /// </returns>
+        /// <exception cref="ArgumentException">if the argument row belongs to a different worksheet</exception>
         public int CompareTo(XSSFRow other)
         {
             if (Sheet != other.Sheet)
@@ -165,34 +143,25 @@ namespace NPOI.XSSF.UserModel
 
         public override int GetHashCode() => _row.GetHashCode();
 
-        /**
-         * Use this to create new cells within the row and return it.
-         * <p>
-         * The cell that is returned is a {@link Cell#CELL_TYPE_BLANK}. The type can be Changed
-         * either through calling <code>SetCellValue</code> or <code>SetCellType</code>.
-         * </p>
-         * @param columnIndex - the column number this cell represents
-         * @return Cell a high level representation of the Created cell.
-         * @throws ArgumentException if columnIndex < 0 or greater than 16384,
-         *   the maximum number of columns supported by the SpreadsheetML format (.xlsx)
-         */
+        /// <summary>
+        /// Use this to create new cells within the row and return it.
+        /// The cell that is returned is a <see cref="CellType.Blank"/>. The type can be Changed
+        /// either through calling <see cref="ICell.SetCellValue"/> or <see cref="ICell.SetCellType"/>.
+        /// </summary>
+        /// <param name="columnIndex">the column number this cell represents</param>
+        /// <returns>a high level representation of the Created cell</returns>
+        /// <exception cref="ArgumentException">if columnIndex is less than 0 or greater than 16384, 
+        /// the maximum number of columns supported by the SpreadsheetML format(.xlsx)</exception>
         public ICell CreateCell(int columnIndex) => CreateCell(columnIndex, CellType.Blank);
 
-        /**
-         * Use this to create new cells within the row and return it.
-         *
-         * @param columnIndex - the column number this cell represents
-         * @param type - the cell's data type
-         * @return XSSFCell a high level representation of the Created cell.
-         * @throws ArgumentException if the specified cell type is invalid, columnIndex < 0
-         *   or greater than 16384, the maximum number of columns supported by the SpreadsheetML format (.xlsx)
-         * @see Cell#CELL_TYPE_BLANK
-         * @see Cell#CELL_TYPE_BOOLEAN
-         * @see Cell#CELL_TYPE_ERROR
-         * @see Cell#CELL_TYPE_FORMULA
-         * @see Cell#CELL_TYPE_NUMERIC
-         * @see Cell#CELL_TYPE_STRING
-         */
+        /// <summary>
+        /// Use this to create new cells within the row and return it.
+        /// </summary>
+        /// <param name="columnIndex">the column number this cell represents</param>
+        /// <param name="type">the cell's data type</param>
+        /// <returns>a high level representation of the Created cell.</returns>
+        /// <exception cref="ArgumentException">if columnIndex is less than 0 or greater than 16384, 
+        /// the maximum number of columns supported by the SpreadsheetML format(.xlsx)</exception>
         public ICell CreateCell(int columnIndex, CellType type)
         {
             CT_Cell ctCell;
@@ -218,13 +187,14 @@ namespace NPOI.XSSF.UserModel
             return xcell;
         }
 
-        /**
-         * Returns the cell at the given (0 based) index,
-         *  with the {@link NPOI.SS.usermodel.Row.MissingCellPolicy} from the parent Workbook.
-         *
-         * @return the cell at the given (0 based) index
-         */
+        /// <summary>
+        /// Returns the cell at the given (0 based) index,
+        /// with the <see cref="MissingCellPolicy"/> from the parent Workbook.
+        /// </summary>
+        /// <param name="cellnum"></param>
+        /// <returns>the cell at the given (0 based) index</returns>
         public ICell GetCell(int cellnum) => GetCell(cellnum, _sheet.Workbook.MissingCellPolicy);
+
         /// <summary>
         /// Get the hssfcell representing a given column (logical cell)
         /// 0-based. If you ask for a cell that is not defined, then
@@ -242,15 +212,14 @@ namespace NPOI.XSSF.UserModel
             //if (cellnum < 0 || cellnum >= cells.Count) return null;
             return _cells[cellnum];
         }
-        /**
-         * Returns the cell at the given (0 based) index, with the specified {@link NPOI.SS.usermodel.Row.MissingCellPolicy}
-         *
-         * @return the cell at the given (0 based) index
-         * @throws ArgumentException if cellnum < 0 or the specified MissingCellPolicy is invalid
-         * @see Row#RETURN_NULL_AND_BLANK
-         * @see Row#RETURN_BLANK_AS_NULL
-         * @see Row#CREATE_NULL_AS_BLANK
-         */
+
+        /// <summary>
+        /// Returns the cell at the given (0 based) index, with the specified <see cref="MissingCellPolicy"/>
+        /// </summary>
+        /// <param name="cellnum"></param>
+        /// <param name="policy"></param>
+        /// <returns>the cell at the given (0 based) index</returns>
+        /// <exception cref="ArgumentException">if cellnum is less than 0 or the specified MissingCellPolicy is invalid</exception>
         public ICell GetCell(int cellnum, MissingCellPolicy policy)
         {
             if (cellnum < 0)
@@ -276,41 +245,29 @@ namespace NPOI.XSSF.UserModel
         private int GetFirstKey() => _cells.Keys.Min();
 
         private int GetLastKey() => _cells.Keys.Max();
-        /**
-         * Get the number of the first cell Contained in this row.
-         *
-         * @return short representing the first logical cell in the row,
-         *  or -1 if the row does not contain any cells.
-         */
+
+        /// <summary>
+        /// Get the number of the first cell Contained in this row.
+        /// </summary>
+        /// <returns>short representing the first logical cell in the row,
+        /// or -1 if the row does not contain any cells.</returns>
         public short FirstCellNum => (short)(_cells.Count == 0 ? -1 : GetFirstKey());
 
-        /**
-         * Gets the index of the last cell Contained in this row <b>PLUS ONE</b>. The result also
-         * happens to be the 1-based column number of the last cell.  This value can be used as a
-         * standard upper bound when iterating over cells:
-         * <pre>
-         * short minColIx = row.GetFirstCellNum();
-         * short maxColIx = row.GetLastCellNum();
-         * for(short colIx=minColIx; colIx&lt;maxColIx; colIx++) {
-         *   XSSFCell cell = row.GetCell(colIx);
-         *   if(cell == null) {
-         *     continue;
-         *   }
-         *   //... do something with cell
-         * }
-         * </pre>
-         *
-         * @return short representing the last logical cell in the row <b>PLUS ONE</b>,
-         *   or -1 if the row does not contain any cells.
-         */
+        /// <summary>
+        /// Gets the index of the last cell Contained in this row <b>PLUS ONE</b>. The result also
+        /// happens to be the 1-based column number of the last cell. This value can be used as a
+        /// standard upper bound when iterating over cells:
+        /// </summary>
+        /// <returns>short representing the last logical cell in the row <b>PLUS ONE</b>,
+        /// or -1 if the row does not contain any cells.</returns>
         public short LastCellNum => (short)(_cells.Count == 0 ? -1 : (GetLastKey() + 1));
 
-        /**
-         * Get the row's height measured in twips (1/20th of a point). If the height is not Set, the default worksheet value is returned,
-         * See {@link NPOI.XSSF.usermodel.XSSFSheet#GetDefaultRowHeightInPoints()}
-         *
-         * @return row height measured in twips (1/20th of a point)
-         */
+        /// <summary>
+        /// Get the row's height measured in twips (1/20th of a point). 
+        /// If the height is not Set, the default worksheet value is returned,
+        /// See <see cref="XSSFSheet.DefaultRowHeight"/>
+        /// </summary>
+        /// <returns>row height measured in twips (1/20th of a point)</returns>
         public short Height
         {
             get => (short)(HeightInPoints * 20);
@@ -337,13 +294,10 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Returns row height measured in point size. If the height is not Set, the default worksheet value is returned,
-         * See {@link NPOI.XSSF.usermodel.XSSFSheet#GetDefaultRowHeightInPoints()}
-         *
-         * @return row height measured in point size
-         * @see NPOI.XSSF.usermodel.XSSFSheet#GetDefaultRowHeightInPoints()
-         */
+        /// <summary>
+        /// Returns row height measured in point size. If the height is not Set, 
+        /// the default worksheet value is returned,See <see cref="XSSFSheet.DefaultRowHeightInPoints"/>
+        /// </summary>
         public float HeightInPoints
         {
             get
@@ -358,19 +312,17 @@ namespace NPOI.XSSF.UserModel
             set => Height = (short)(value == -1 ? -1 : (value * 20));
         }
 
-        /**
-         * Gets the number of defined cells (NOT number of cells in the actual row!).
-         * That is to say if only columns 0,4,5 have values then there would be 3.
-         *
-         * @return int representing the number of defined cells in the row.
-         */
+        /// <summary>
+        /// Gets the number of defined cells (NOT number of cells in the actual row!).
+        /// That is to say if only columns 0,4,5 have values then there would be 3.
+        /// </summary>
+        /// <returns>int representing the number of defined cells in the row.</returns>
         public int PhysicalNumberOfCells => _cells.Count;
 
-        /**
-         * Get row number this row represents
-         *
-         * @return the row number (0 based)
-         */
+        /// <summary>
+        /// Get row number this row represents
+        /// </summary>
+        /// <returns>the row number (0 based)</returns>
         public int RowNum
         {
             get => (int)_row.r - 1;
@@ -387,28 +339,27 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Get whether or not to display this row with 0 height
-         *
-         * @return - height is zero or not.
-         */
+        /// <summary>
+        /// Get whether or not to display this row with 0 height
+        /// </summary>
         public bool ZeroHeight
         {
             get => _row.hidden;
             set => _row.hidden = value;
         }
 
-        /**
-         * Is this row formatted? Most aren't, but some rows
-         *  do have whole-row styles. For those that do, you
-         *  can get the formatting from {@link #GetRowStyle()}
-         */
+        /// <summary>
+        /// Is this row formatted? Most aren't, but some rows
+        /// do have whole-row styles. For those that do, you
+        /// can get the formatting from <see cref="RowStyle"/>
+        /// </summary>
         public bool IsFormatted => _row.IsSetS();
-        /**
-         * Returns the whole-row cell style. Most rows won't
-         *  have one of these, so will return null. Call
-         *  {@link #isFormatted()} to check first.
-         */
+
+        /// <summary>
+        /// Returns the whole-row cell style. Most rows won't
+        /// have one of these, so will return null. Call
+        /// <see cref="IsFormatted"/> to check first.
+        /// </summary>
         public ICellStyle RowStyle
         {
             get
@@ -452,21 +403,22 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /**
-         * Applies a whole-row cell styling to the row.
-         * If the value is null then the style information is Removed,
-         *  causing the cell to used the default workbook style.
-         */
+        /// <summary>
+        /// Applies a whole-row cell styling to the row.
+        /// If the value is null then the style information is Removed,
+        /// causing the cell to used the default workbook style.
+        /// </summary>
+        /// <param name="style"></param>
         public void SetRowStyle(ICellStyle style)
         {
 
         }
-
-        /**
-         * Remove the Cell from this row.
-         *
-         * @param cell the cell to remove
-         */
+        
+        /// <summary>
+        /// Remove the Cell from this row.
+        /// </summary>
+        /// <param name="cell">the cell to remove</param>
+        /// <exception cref="ArgumentException"></exception>
         public void RemoveCell(ICell cell)
         {
             if (cell.Row != this)
@@ -487,19 +439,17 @@ namespace NPOI.XSSF.UserModel
 
             _cells.Remove(cell.ColumnIndex);
         }
-
-        /**
-         * Returns the underlying CT_Row xml bean Containing all cell defInitions in this row
-         *
-         * @return the underlying CT_Row xml bean
-         */
+        
+        /// <summary>
+        /// Returns the underlying CT_Row xml node Containing all cell defInitions in this row
+        /// </summary>
+        /// <returns>the underlying CT_Row xml node</returns>
         public CT_Row GetCTRow() => _row;
 
-        /**
-         * Fired when the document is written to an output stream.
-         *
-         * @see NPOI.XSSF.usermodel.XSSFSheet#Write(java.io.OutputStream) ()
-         */
+        /// <summary>
+        /// Fired when the document is written to an output stream.
+        /// See <see cref="XSSFSheet.Write"/>
+        /// </summary>
         internal void OnDocumentWrite()
         {
             // check if cells in the CT_Row are ordered
@@ -538,17 +488,17 @@ namespace NPOI.XSSF.UserModel
                 _row.SetCArray(cArray);
             }
         }
-
-        /**
-         * @return formatted xml representation of this row
-         */
+        
+        /// <summary>
+        /// formatted xml representation of this row
+        /// </summary>
+        /// <returns>formatted xml representation of this row</returns>
         public override string ToString() => _row.ToString();
 
-        /**
-         * update cell references when Shifting rows
-         *
-         * @param n the number of rows to move
-         */
+        /// <summary>
+        /// update cell references when Shifting rows
+        /// </summary>
+        /// <param name="n">n the number of rows to move</param>
         internal void Shift(int n)
         {
             var rownum = RowNum + n;
@@ -578,15 +528,15 @@ namespace NPOI.XSSF.UserModel
             RowNum = rownum;
         }
 
-        /**
-         * Copy the cells from srcRow to this row
-         * If this row is not a blank row, this will merge the two rows, overwriting
-         * the cells in this row with the cells in srcRow
-         * If srcRow is null, overwrite cells in destination row with blank values, styles, etc per cell copy policy
-         * srcRow may be from a different sheet in the same workbook
-         * @param srcRow the rows to copy from
-         * @param policy the policy to determine what gets copied
-         */
+        /// <summary>
+        /// Copy the cells from srcRow to this row
+        /// If this row is not a blank row, this will merge the two rows, overwriting
+        /// the cells in this row with the cells in srcRow
+        /// If srcRow is null, overwrite cells in destination row with blank values, styles, etc per cell copy policy
+        /// srcRow may be from a different sheet in the same workbook
+        /// </summary>
+        /// <param name="srcRow">the rows to copy from</param>
+        /// <param name="policy">policy the policy to determine what gets copied</param>
         public void CopyRowFrom(IRow srcRow, CellCopyPolicy policy)
         {
             if (srcRow == null)
@@ -687,7 +637,10 @@ namespace NPOI.XSSF.UserModel
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public bool HasCustomHeight() => throw new NotImplementedException();
+        public bool HasCustomHeight()
+        {
+            throw new NotImplementedException();
+        }
 
         public int OutlineLevel
         {
