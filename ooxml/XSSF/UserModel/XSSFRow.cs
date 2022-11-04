@@ -92,13 +92,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the XSSFSheet that owns this row
          */
-        public ISheet Sheet
-        {
-            get
-            {
-                return _sheet;
-            }
-        }
+        public ISheet Sheet => _sheet;
 
         /**
          * Cell iterator over the physically defined cells:
@@ -111,10 +105,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return an iterator over cells in this row.
          */
-        public SortedDictionary<int, ICell>.ValueCollection.Enumerator CellIterator()
-        {
-            return _cells.Values.GetEnumerator();
-        }
+        public SortedDictionary<int, ICell>.ValueCollection.Enumerator CellIterator() => _cells.Values.GetEnumerator();
 
         /**
          * Alias for {@link #cellIterator()} to allow  foreach loops:
@@ -126,10 +117,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return an iterator over cells in this row.
          */
-        public IEnumerator<ICell> GetEnumerator()
-        {
-            return CellIterator();
-        }
+        public IEnumerator<ICell> GetEnumerator() => CellIterator();
 
         /**
          * Compares two <code>XSSFRow</code> objects.  Two rows are equal if they belong to the same worksheet and
@@ -175,10 +163,7 @@ namespace NPOI.XSSF.UserModel
                    (Sheet == other.Sheet);
         }
 
-        public override int GetHashCode()
-        {
-            return _row.GetHashCode();
-        }
+        public override int GetHashCode() => _row.GetHashCode();
 
         /**
          * Use this to create new cells within the row and return it.
@@ -191,10 +176,7 @@ namespace NPOI.XSSF.UserModel
          * @throws ArgumentException if columnIndex < 0 or greater than 16384,
          *   the maximum number of columns supported by the SpreadsheetML format (.xlsx)
          */
-        public ICell CreateCell(int columnIndex)
-        {
-            return CreateCell(columnIndex, CellType.Blank);
-        }
+        public ICell CreateCell(int columnIndex) => CreateCell(columnIndex, CellType.Blank);
 
         /**
          * Use this to create new cells within the row and return it.
@@ -242,10 +224,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the cell at the given (0 based) index
          */
-        public ICell GetCell(int cellnum)
-        {
-            return GetCell(cellnum, _sheet.Workbook.MissingCellPolicy);
-        }
+        public ICell GetCell(int cellnum) => GetCell(cellnum, _sheet.Workbook.MissingCellPolicy);
         /// <summary>
         /// Get the hssfcell representing a given column (logical cell)
         /// 0-based. If you ask for a cell that is not defined, then
@@ -294,28 +273,16 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        private int GetFirstKey()
-        {
-            return _cells.Keys.Min();
-        }
+        private int GetFirstKey() => _cells.Keys.Min();
 
-        private int GetLastKey()
-        {
-            return _cells.Keys.Max();
-        }
+        private int GetLastKey() => _cells.Keys.Max();
         /**
          * Get the number of the first cell Contained in this row.
          *
          * @return short representing the first logical cell in the row,
          *  or -1 if the row does not contain any cells.
          */
-        public short FirstCellNum
-        {
-            get
-            {
-                return (short)(_cells.Count == 0 ? -1 : GetFirstKey());
-            }
-        }
+        public short FirstCellNum => (short)(_cells.Count == 0 ? -1 : GetFirstKey());
 
         /**
          * Gets the index of the last cell Contained in this row <b>PLUS ONE</b>. The result also
@@ -336,13 +303,7 @@ namespace NPOI.XSSF.UserModel
          * @return short representing the last logical cell in the row <b>PLUS ONE</b>,
          *   or -1 if the row does not contain any cells.
          */
-        public short LastCellNum
-        {
-            get
-            {
-                return (short)(_cells.Count == 0 ? -1 : (GetLastKey() + 1));
-            }
-        }
+        public short LastCellNum => (short)(_cells.Count == 0 ? -1 : (GetLastKey() + 1));
 
         /**
          * Get the row's height measured in twips (1/20th of a point). If the height is not Set, the default worksheet value is returned,
@@ -352,10 +313,7 @@ namespace NPOI.XSSF.UserModel
          */
         public short Height
         {
-            get
-            {
-                return (short)(HeightInPoints * 20);
-            }
+            get => (short)(HeightInPoints * 20);
             set
             {
                 if (value < 0)
@@ -397,10 +355,7 @@ namespace NPOI.XSSF.UserModel
 
                 return _sheet.DefaultRowHeightInPoints;
             }
-            set
-            {
-                Height = (short)(value == -1 ? -1 : (value * 20));
-            }
+            set => Height = (short)(value == -1 ? -1 : (value * 20));
         }
 
         /**
@@ -409,13 +364,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return int representing the number of defined cells in the row.
          */
-        public int PhysicalNumberOfCells
-        {
-            get
-            {
-                return _cells.Count;
-            }
-        }
+        public int PhysicalNumberOfCells => _cells.Count;
 
         /**
          * Get row number this row represents
@@ -424,10 +373,7 @@ namespace NPOI.XSSF.UserModel
          */
         public int RowNum
         {
-            get
-            {
-                return (int)_row.r - 1;
-            }
+            get => (int)_row.r - 1;
             set
             {
                 var maxrow = SpreadsheetVersion.EXCEL2007.LastRowIndex;
@@ -448,14 +394,8 @@ namespace NPOI.XSSF.UserModel
          */
         public bool ZeroHeight
         {
-            get
-            {
-                return _row.hidden;
-            }
-            set
-            {
-                _row.hidden = value;
-            }
+            get => _row.hidden;
+            set => _row.hidden = value;
         }
 
         /**
@@ -463,13 +403,7 @@ namespace NPOI.XSSF.UserModel
          *  do have whole-row styles. For those that do, you
          *  can get the formatting from {@link #GetRowStyle()}
          */
-        public bool IsFormatted
-        {
-            get
-            {
-                return _row.IsSetS();
-            }
-        }
+        public bool IsFormatted => _row.IsSetS();
         /**
          * Returns the whole-row cell style. Most rows won't
          *  have one of these, so will return null. Call
@@ -559,10 +493,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return the underlying CT_Row xml bean
          */
-        public CT_Row GetCTRow()
-        {
-            return _row;
-        }
+        public CT_Row GetCTRow() => _row;
 
         /**
          * Fired when the document is written to an output stream.
@@ -611,10 +542,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return formatted xml representation of this row
          */
-        public override string ToString()
-        {
-            return _row.ToString();
-        }
+        public override string ToString() => _row.ToString();
 
         /**
          * update cell references when Shifting rows
@@ -737,7 +665,6 @@ namespace NPOI.XSSF.UserModel
         }
 
         #region IRow Members
-
         public List<ICell> Cells
         {
             get
@@ -752,67 +679,32 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public void MoveCell(ICell cell, int newColumn)
-        {
-            throw new NotImplementedException();
-        }
+        public void MoveCell(ICell cell, int newColumn) => throw new NotImplementedException();
 
-        public IRow CopyRowTo(int targetIndex)
-        {
-            return Sheet.CopyRow(RowNum, targetIndex);
-        }
+        public IRow CopyRowTo(int targetIndex) => Sheet.CopyRow(RowNum, targetIndex);
 
-        public ICell CopyCell(int sourceIndex, int targetIndex)
-        {
-            return CellUtil.CopyCell(this, sourceIndex, targetIndex);
-        }
+        public ICell CopyCell(int sourceIndex, int targetIndex) => CellUtil.CopyCell(this, sourceIndex, targetIndex);
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public bool HasCustomHeight()
-        {
-            throw new NotImplementedException();
-        }
+        public bool HasCustomHeight() => throw new NotImplementedException();
 
         public int OutlineLevel
         {
-            get
-            {
-                return _row.outlineLevel;
-            }
-            set
-            {
-                _row.outlineLevel = (byte)value;
-            }
+            get => _row.outlineLevel;
+            set => _row.outlineLevel = (byte)value;
         }
 
         public bool? Hidden
         {
-            get
-            {
-                return _row.hidden;
-            }
-
-            set
-            {
-                _row.hidden = value ?? false;
-            }
+            get => _row.hidden;
+            set => _row.hidden = value ?? false;
         }
 
         public bool? Collapsed
         {
-            get
-            {
-                return _row.collapsed;
-            }
-
-            set
-            {
-                _row.collapsed = value ?? false;
-            }
+            get => _row.collapsed;
+            set => _row.collapsed = value ?? false;
         }
         #endregion
     }
