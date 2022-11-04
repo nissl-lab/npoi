@@ -35,6 +35,7 @@ namespace NPOI.XSSF.UserModel
     /// </summary>
     public class XSSFRow : IRow, IComparable<XSSFRow>
     {
+        #region Private properties
         private static readonly POILogger _logger = POILogFactory.GetLogger(typeof(XSSFRow));
 
         /// <summary>
@@ -52,199 +53,13 @@ namespace NPOI.XSSF.UserModel
         /// the parent sheet
         /// </summary>
         private readonly XSSFSheet _sheet;
+        #endregion
 
-        /// <summary>
-        /// Construct an XSSFRow.
-        /// </summary>
-        /// <param name="row">the xml node Containing all cell defInitions for this row.</param>
-        /// <param name="sheet">the parent sheet.</param>
-        public XSSFRow(CT_Row row, XSSFSheet sheet)
-        {
-            _row = row;
-            _sheet = sheet;
-            _cells = new SortedDictionary<int, ICell>();
-            if (0 < row.SizeOfCArray())
-            {
-                foreach (var c in row.c)
-                {
-                    var cell = new XSSFCell(this, c);
-                    _cells.Add(cell.ColumnIndex, cell);
-                    sheet.OnReadCell(cell);
-                }
-            }
-
-            if (!row.IsSetR())
-            {
-                // Certain file format writers skip the row number
-                // Assume no gaps, and give this the next row number
-                var nextRowNum = sheet.LastRowNum + 2;
-                if (nextRowNum == 2 && sheet.PhysicalNumberOfRows == 0)
-                {
-                    nextRowNum = 1;
-                }
-
-                row.r = (uint)nextRowNum;
-            }
-        }
-
+        #region Public properties
         /// <summary>
         /// XSSFSheet this row belongs to
         /// </summary>
         public ISheet Sheet => _sheet;
-
-        /// <summary>
-        /// Cell iterator over the physically defined cell
-        /// </summary>
-        /// <returns>an iterator over cells in this row.</returns>
-        public SortedDictionary<int, ICell>.ValueCollection.Enumerator CellIterator() => _cells.Values.GetEnumerator();
-
-        /// <summary>
-        /// Alias for <see cref="CellIterator"/> to allow  foreach loops
-        /// </summary>
-        /// <returns>an iterator over cells in this row.</returns>
-        public IEnumerator<ICell> GetEnumerator() => CellIterator();
-
-        /// <summary>
-        /// Compares two <see cref="XSSFRow"/> objects. Two rows are equal if they belong to the 
-        /// same worksheet and their row indexes are equal.
-        /// </summary>
-        /// <param name="other">the <see cref="XSSFRow"/> to be compared.</param>
-        /// <returns>
-        /// the value 0 if the row number of this <see cref="XSSFRow"/> is
-        /// equal to the row number of the argument <see cref="XSSFRow"/>
-        /// a value less than 0 if the row number of this this <see cref="XSSFRow"/> is
-        /// numerically less than the row number of the argument <see cref="XSSFRow"/>
-        /// a value greater than 0 if the row number of this this <see cref="XSSFRow"/> is
-        /// numerically greater than the row number of the argument <see cref="XSSFRow"/>
-        /// </returns>
-        /// <exception cref="ArgumentException">if the argument row belongs to a different worksheet</exception>
-        public int CompareTo(XSSFRow other)
-        {
-            if (Sheet != other.Sheet)
-            {
-                throw new ArgumentException("The compared rows must belong to the same sheet");
-            }
-
-            return RowNum.CompareTo(other.RowNum);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (!(obj is XSSFRow))
-            {
-                return false;
-            }
-
-            var other = (XSSFRow)obj;
-
-            return (RowNum == other.RowNum) &&
-                   (Sheet == other.Sheet);
-        }
-
-        public override int GetHashCode() => _row.GetHashCode();
-
-        /// <summary>
-        /// Use this to create new cells within the row and return it.
-        /// The cell that is returned is a <see cref="CellType.Blank"/>. The type can be Changed
-        /// either through calling <see cref="ICell.SetCellValue"/> or <see cref="ICell.SetCellType"/>.
-        /// </summary>
-        /// <param name="columnIndex">the column number this cell represents</param>
-        /// <returns>a high level representation of the Created cell</returns>
-        /// <exception cref="ArgumentException">if columnIndex is less than 0 or greater than 16384, 
-        /// the maximum number of columns supported by the SpreadsheetML format(.xlsx)</exception>
-        public ICell CreateCell(int columnIndex) => CreateCell(columnIndex, CellType.Blank);
-
-        /// <summary>
-        /// Use this to create new cells within the row and return it.
-        /// </summary>
-        /// <param name="columnIndex">the column number this cell represents</param>
-        /// <param name="type">the cell's data type</param>
-        /// <returns>a high level representation of the Created cell.</returns>
-        /// <exception cref="ArgumentException">if columnIndex is less than 0 or greater than 16384, 
-        /// the maximum number of columns supported by the SpreadsheetML format(.xlsx)</exception>
-        public ICell CreateCell(int columnIndex, CellType type)
-        {
-            CT_Cell ctCell;
-            var prev = _cells.ContainsKey(columnIndex) ? (XSSFCell)_cells[columnIndex] : null;
-            if (prev != null)
-            {
-                ctCell = prev.GetCTCell();
-                ctCell.Set(new CT_Cell());
-            }
-            else
-            {
-                ctCell = _row.AddNewC();
-            }
-
-            var xcell = new XSSFCell(this, ctCell);
-            xcell.SetCellNum(columnIndex);
-            if (type != CellType.Blank)
-            {
-                xcell.SetCellType(type);
-            }
-
-            _cells[columnIndex] = xcell;
-            return xcell;
-        }
-
-        /// <summary>
-        /// Returns the cell at the given (0 based) index,
-        /// with the <see cref="MissingCellPolicy"/> from the parent Workbook.
-        /// </summary>
-        /// <param name="cellnum"></param>
-        /// <returns>the cell at the given (0 based) index</returns>
-        public ICell GetCell(int cellnum) => GetCell(cellnum, _sheet.Workbook.MissingCellPolicy);
-
-        /// <summary>
-        /// Get the hssfcell representing a given column (logical cell)
-        /// 0-based. If you ask for a cell that is not defined, then
-        /// you Get a null.
-        /// This is the basic call, with no policies applied
-        /// </summary>
-        /// <param name="cellnum">0 based column number</param>
-        /// <returns>Cell representing that column or null if Undefined.</returns>
-        private ICell RetrieveCell(int cellnum)
-        {
-            if (!_cells.ContainsKey(cellnum))
-            {
-                return null;
-            }
-            //if (cellnum < 0 || cellnum >= cells.Count) return null;
-            return _cells[cellnum];
-        }
-
-        /// <summary>
-        /// Returns the cell at the given (0 based) index, with the specified <see cref="MissingCellPolicy"/>
-        /// </summary>
-        /// <param name="cellnum"></param>
-        /// <param name="policy"></param>
-        /// <returns>the cell at the given (0 based) index</returns>
-        /// <exception cref="ArgumentException">if cellnum is less than 0 or the specified MissingCellPolicy is invalid</exception>
-        public ICell GetCell(int cellnum, MissingCellPolicy policy)
-        {
-            if (cellnum < 0)
-            {
-                throw new ArgumentException("Cell index must be >= 0");
-            }
-
-            var cell = (XSSFCell)RetrieveCell(cellnum);
-            switch (policy)
-            {
-                case MissingCellPolicy.RETURN_NULL_AND_BLANK:
-                    return cell;
-                case MissingCellPolicy.RETURN_BLANK_AS_NULL:
-                    var isBlank = cell != null && cell.CellType == CellType.Blank;
-                    return isBlank ? null : cell;
-                case MissingCellPolicy.CREATE_NULL_AS_BLANK:
-                    return cell ?? CreateCell(cellnum, CellType.Blank);
-                default:
-                    throw new ArgumentException("Illegal policy " + policy + " (" + policy + ")");
-            }
-        }
-
-        private int GetFirstKey() => _cells.Keys.Min();
-
-        private int GetLastKey() => _cells.Keys.Max();
 
         /// <summary>
         /// Get the number of the first cell Contained in this row.
@@ -403,17 +218,126 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /// <summary>
-        /// Applies a whole-row cell styling to the row.
-        /// If the value is null then the style information is Removed,
-        /// causing the cell to used the default workbook style.
-        /// </summary>
-        /// <param name="style"></param>
-        public void SetRowStyle(ICellStyle style)
-        {
+        #endregion
 
+        #region Constructor
+        /// <summary>
+        /// Construct an XSSFRow.
+        /// </summary>
+        /// <param name="row">the xml node Containing all cell defInitions for this row.</param>
+        /// <param name="sheet">the parent sheet.</param>
+        public XSSFRow(CT_Row row, XSSFSheet sheet)
+        {
+            _row = row;
+            _sheet = sheet;
+            _cells = new SortedDictionary<int, ICell>();
+            if (0 < row.SizeOfCArray())
+            {
+                foreach (var c in row.c)
+                {
+                    var cell = new XSSFCell(this, c);
+                    _cells.Add(cell.ColumnIndex, cell);
+                    sheet.OnReadCell(cell);
+                }
+            }
+
+            if (!row.IsSetR())
+            {
+                // Certain file format writers skip the row number
+                // Assume no gaps, and give this the next row number
+                var nextRowNum = sheet.LastRowNum + 2;
+                if (nextRowNum == 2 && sheet.PhysicalNumberOfRows == 0)
+                {
+                    nextRowNum = 1;
+                }
+
+                row.r = (uint)nextRowNum;
+            }
         }
-        
+        #endregion
+
+        #region Public methods
+        /// <summary>
+        /// Use this to create new cells within the row and return it.
+        /// The cell that is returned is a <see cref="CellType.Blank"/>. The type can be Changed
+        /// either through calling <see cref="ICell.SetCellValue"/> or <see cref="ICell.SetCellType"/>.
+        /// </summary>
+        /// <param name="columnIndex">the column number this cell represents</param>
+        /// <returns>a high level representation of the Created cell</returns>
+        /// <exception cref="ArgumentException">if columnIndex is less than 0 or greater than 16384, 
+        /// the maximum number of columns supported by the SpreadsheetML format(.xlsx)</exception>
+        public ICell CreateCell(int columnIndex) => CreateCell(columnIndex, CellType.Blank);
+
+        /// <summary>
+        /// Use this to create new cells within the row and return it.
+        /// </summary>
+        /// <param name="columnIndex">the column number this cell represents</param>
+        /// <param name="type">the cell's data type</param>
+        /// <returns>a high level representation of the Created cell.</returns>
+        /// <exception cref="ArgumentException">if columnIndex is less than 0 or greater than 16384, 
+        /// the maximum number of columns supported by the SpreadsheetML format(.xlsx)</exception>
+        public ICell CreateCell(int columnIndex, CellType type)
+        {
+            CT_Cell ctCell;
+            var prev = _cells.ContainsKey(columnIndex) ? (XSSFCell)_cells[columnIndex] : null;
+            if (prev != null)
+            {
+                ctCell = prev.GetCTCell();
+                ctCell.Set(new CT_Cell());
+            }
+            else
+            {
+                ctCell = _row.AddNewC();
+            }
+
+            var xcell = new XSSFCell(this, ctCell);
+            xcell.SetCellNum(columnIndex);
+            if (type != CellType.Blank)
+            {
+                xcell.SetCellType(type);
+            }
+
+            _cells[columnIndex] = xcell;
+            return xcell;
+        }
+
+        /// <summary>
+        /// Returns the cell at the given (0 based) index,
+        /// with the <see cref="MissingCellPolicy"/> from the parent Workbook.
+        /// </summary>
+        /// <param name="cellnum"></param>
+        /// <returns>the cell at the given (0 based) index</returns>
+        public ICell GetCell(int cellnum) => GetCell(cellnum, _sheet.Workbook.MissingCellPolicy);
+
+        /// <summary>
+        /// Returns the cell at the given (0 based) index, with the specified <see cref="MissingCellPolicy"/>
+        /// </summary>
+        /// <param name="cellnum"></param>
+        /// <param name="policy"></param>
+        /// <returns>the cell at the given (0 based) index</returns>
+        /// <exception cref="ArgumentException">if cellnum is less than 0 or the specified MissingCellPolicy is invalid</exception>
+        public ICell GetCell(int cellnum, MissingCellPolicy policy)
+        {
+            if (cellnum < 0)
+            {
+                throw new ArgumentException("Cell index must be >= 0");
+            }
+
+            var cell = (XSSFCell)RetrieveCell(cellnum);
+            switch (policy)
+            {
+                case MissingCellPolicy.RETURN_NULL_AND_BLANK:
+                    return cell;
+                case MissingCellPolicy.RETURN_BLANK_AS_NULL:
+                    var isBlank = cell != null && cell.CellType == CellType.Blank;
+                    return isBlank ? null : cell;
+                case MissingCellPolicy.CREATE_NULL_AS_BLANK:
+                    return cell ?? CreateCell(cellnum, CellType.Blank);
+                default:
+                    throw new ArgumentException("Illegal policy " + policy + " (" + policy + ")");
+            }
+        }
+
         /// <summary>
         /// Remove the Cell from this row.
         /// </summary>
@@ -438,94 +362,6 @@ namespace NPOI.XSSF.UserModel
             }
 
             _cells.Remove(cell.ColumnIndex);
-        }
-        
-        /// <summary>
-        /// Returns the underlying CT_Row xml node Containing all cell defInitions in this row
-        /// </summary>
-        /// <returns>the underlying CT_Row xml node</returns>
-        public CT_Row GetCTRow() => _row;
-
-        /// <summary>
-        /// Fired when the document is written to an output stream.
-        /// See <see cref="XSSFSheet.Write"/>
-        /// </summary>
-        internal void OnDocumentWrite()
-        {
-            // check if cells in the CT_Row are ordered
-            var isOrdered = true;
-            if (_row.SizeOfCArray() != _cells.Count)
-            {
-                isOrdered = false;
-            }
-            else
-            {
-                var i = 0;
-                foreach (var cell in _cells.Values.Cast<XSSFCell>())
-                {
-                    var c1 = cell.GetCTCell();
-                    var c2 = _row.GetCArray(i++);
-
-                    var r1 = c1.r;
-                    var r2 = c2.r;
-                    if (!(r1 == null ? r2 == null : r1.Equals(r2)))
-                    {
-                        isOrdered = false;
-                        break;
-                    }
-                }
-            }
-
-            if (!isOrdered)
-            {
-                var cArray = new CT_Cell[_cells.Count];
-                var i = 0;
-                foreach (var c in _cells.Values.Cast<XSSFCell>())
-                {
-                    cArray[i++] = c.GetCTCell();
-                }
-
-                _row.SetCArray(cArray);
-            }
-        }
-        
-        /// <summary>
-        /// formatted xml representation of this row
-        /// </summary>
-        /// <returns>formatted xml representation of this row</returns>
-        public override string ToString() => _row.ToString();
-
-        /// <summary>
-        /// update cell references when Shifting rows
-        /// </summary>
-        /// <param name="n">n the number of rows to move</param>
-        internal void Shift(int n)
-        {
-            var rownum = RowNum + n;
-            var calcChain = ((XSSFWorkbook)_sheet.Workbook).GetCalculationChain();
-            var sheetId = (int)_sheet.sheet.sheetId;
-            var msg = "Row[rownum=" + RowNum + "] contains cell(s) included in a multi-cell array formula. " +
-                    "You cannot change part of an array.";
-            foreach (var c in this)
-            {
-                var cell = (XSSFCell)c;
-                if (cell.IsPartOfArrayFormulaGroup)
-                {
-                    cell.NotifyArrayFormulaChanging(msg);
-                }
-
-                //remove the reference in the calculation chain
-                if (calcChain != null)
-                {
-                    calcChain.RemoveItem(sheetId, cell.GetReference());
-                }
-
-                var CT_Cell = cell.GetCTCell();
-                var r = new CellReference(rownum, cell.ColumnIndex).FormatAsString();
-                CT_Cell.r = r;
-            }
-
-            RowNum = rownum;
         }
 
         /// <summary>
@@ -614,6 +450,155 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// Applies a whole-row cell styling to the row.
+        /// If the value is null then the style information is Removed,
+        /// causing the cell to used the default workbook style.
+        /// </summary>
+        /// <param name="style"></param>
+        public void SetRowStyle(ICellStyle style)
+        {
+
+        }
+
+        /// <summary>
+        /// Returns the underlying CT_Row xml node Containing all cell defInitions in this row
+        /// </summary>
+        /// <returns>the underlying CT_Row xml node</returns>
+        public CT_Row GetCTRow() => _row;
+
+        /// <summary>
+        /// Fired when the document is written to an output stream.
+        /// See <see cref="XSSFSheet.Write"/>
+        /// </summary>
+        internal void OnDocumentWrite()
+        {
+            // check if cells in the CT_Row are ordered
+            var isOrdered = true;
+            if (_row.SizeOfCArray() != _cells.Count)
+            {
+                isOrdered = false;
+            }
+            else
+            {
+                var i = 0;
+                foreach (var cell in _cells.Values.Cast<XSSFCell>())
+                {
+                    var c1 = cell.GetCTCell();
+                    var c2 = _row.GetCArray(i++);
+
+                    var r1 = c1.r;
+                    var r2 = c2.r;
+                    if (!(r1 == null ? r2 == null : r1.Equals(r2)))
+                    {
+                        isOrdered = false;
+                        break;
+                    }
+                }
+            }
+
+            if (!isOrdered)
+            {
+                var cArray = new CT_Cell[_cells.Count];
+                var i = 0;
+                foreach (var c in _cells.Values.Cast<XSSFCell>())
+                {
+                    cArray[i++] = c.GetCTCell();
+                }
+
+                _row.SetCArray(cArray);
+            }
+        }
+        #endregion
+
+        #region Internal methods
+        /// <summary>
+        /// update cell references when Shifting rows
+        /// </summary>
+        /// <param name="n">n the number of rows to move</param>
+        internal void Shift(int n)
+        {
+            var rownum = RowNum + n;
+            var calcChain = ((XSSFWorkbook)_sheet.Workbook).GetCalculationChain();
+            var sheetId = (int)_sheet.sheet.sheetId;
+            var msg = "Row[rownum=" + RowNum + "] contains cell(s) included in a multi-cell array formula. " +
+                    "You cannot change part of an array.";
+            foreach (var c in this)
+            {
+                var cell = (XSSFCell)c;
+                if (cell.IsPartOfArrayFormulaGroup)
+                {
+                    cell.NotifyArrayFormulaChanging(msg);
+                }
+
+                //remove the reference in the calculation chain
+                if (calcChain != null)
+                {
+                    calcChain.RemoveItem(sheetId, cell.GetReference());
+                }
+
+                var CT_Cell = cell.GetCTCell();
+                var r = new CellReference(rownum, cell.ColumnIndex).FormatAsString();
+                CT_Cell.r = r;
+            }
+
+            RowNum = rownum;
+        }
+        #endregion
+
+        #region IEnumerable and IComparable members
+        /// <summary>
+        /// Cell iterator over the physically defined cell
+        /// </summary>
+        /// <returns>an iterator over cells in this row.</returns>
+        public SortedDictionary<int, ICell>.ValueCollection.Enumerator CellIterator() => _cells.Values.GetEnumerator();
+
+        /// <summary>
+        /// Alias for <see cref="CellIterator"/> to allow  foreach loops
+        /// </summary>
+        /// <returns>an iterator over cells in this row.</returns>
+        public IEnumerator<ICell> GetEnumerator() => CellIterator();
+
+        /// <summary>
+        /// Compares two <see cref="XSSFRow"/> objects. Two rows are equal if they belong to the 
+        /// same worksheet and their row indexes are equal.
+        /// </summary>
+        /// <param name="other">the <see cref="XSSFRow"/> to be compared.</param>
+        /// <returns>
+        /// the value 0 if the row number of this <see cref="XSSFRow"/> is
+        /// equal to the row number of the argument <see cref="XSSFRow"/>
+        /// a value less than 0 if the row number of this this <see cref="XSSFRow"/> is
+        /// numerically less than the row number of the argument <see cref="XSSFRow"/>
+        /// a value greater than 0 if the row number of this this <see cref="XSSFRow"/> is
+        /// numerically greater than the row number of the argument <see cref="XSSFRow"/>
+        /// </returns>
+        /// <exception cref="ArgumentException">if the argument row belongs to a different worksheet</exception>
+        public int CompareTo(XSSFRow other)
+        {
+            if (Sheet != other.Sheet)
+            {
+                throw new ArgumentException("The compared rows must belong to the same sheet");
+            }
+
+            return RowNum.CompareTo(other.RowNum);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is XSSFRow))
+            {
+                return false;
+            }
+
+            var other = (XSSFRow)obj;
+
+            return (RowNum == other.RowNum) &&
+                   (Sheet == other.Sheet);
+        }
+
+        public override int GetHashCode() => _row.GetHashCode();
+        #endregion
+
         #region IRow Members
         public List<ICell> Cells
         {
@@ -659,6 +644,36 @@ namespace NPOI.XSSF.UserModel
             get => _row.collapsed;
             set => _row.collapsed = value ?? false;
         }
+        #endregion
+
+        #region Private methods
+        /// <summary>
+        /// formatted xml representation of this row
+        /// </summary>
+        /// <returns>formatted xml representation of this row</returns>
+        public override string ToString() => _row.ToString();
+
+        /// <summary>
+        /// Get the hssfcell representing a given column (logical cell)
+        /// 0-based. If you ask for a cell that is not defined, then
+        /// you Get a null.
+        /// This is the basic call, with no policies applied
+        /// </summary>
+        /// <param name="cellnum">0 based column number</param>
+        /// <returns>Cell representing that column or null if Undefined.</returns>
+        private ICell RetrieveCell(int cellnum)
+        {
+            if (!_cells.ContainsKey(cellnum))
+            {
+                return null;
+            }
+            //if (cellnum < 0 || cellnum >= cells.Count) return null;
+            return _cells[cellnum];
+        }
+
+        private int GetFirstKey() => _cells.Keys.Min();
+
+        private int GetLastKey() => _cells.Keys.Max();
         #endregion
     }
 }
