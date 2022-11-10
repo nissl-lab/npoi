@@ -111,8 +111,8 @@ namespace NPOI.OpenXml4Net.OPC
         public override int GetHashCode()
         {
             return this.id.GetHashCode() + this.relationshipType.GetHashCode()
-                    + this.source.GetHashCode() + this.targetMode.GetHashCode()
-                    + this.targetUri.GetHashCode();
+                + this.source?.GetHashCode() ?? 0 + this.targetMode.GetHashCode()
+                + this.targetUri.GetHashCode();
         }
 
         /* Getters */
