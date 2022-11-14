@@ -40,7 +40,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.colField.RemoveAt(index);
         }
-
+        public void RemoveCols(IList<CT_Col> toRemove)
+        {
+            if (colField == null) return;
+            foreach (CT_Col c in toRemove)
+            {
+                colField.Remove(c);
+            }
+        }
         public int sizeOfColArray()
         {
             return col.Count;
