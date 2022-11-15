@@ -71,5 +71,3 @@ System Requirement
 .NET Standard 2.0 (.NET Core 2.x)
 
 .NET Framework 4.0 and above
-
-No Loongson CPU (NPOI will NOT support any issues running on LoognArch architecture. This CPU is a shit)
