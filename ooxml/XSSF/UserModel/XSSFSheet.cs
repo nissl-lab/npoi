@@ -1892,7 +1892,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     // get number of rows where row index < rownum
                     // --> this tells us where our row should go
-                    int idx = HeadMapCount(_rows, rownum);
+                    int idx = HeadMapCount(_rows.Keys, rownum);
                     ctRow = worksheet.sheetData.InsertNewRow(idx);
                 }
             }
@@ -2866,7 +2866,7 @@ namespace NPOI.XSSF.UserModel
             string sheetName = Workbook.GetSheetName(sheetIndex);
             FormulaShifter shifter = FormulaShifter.CreateForRowShift(
                            sheetIndex, sheetName, startRow, endRow, n, SpreadsheetVersion.EXCEL2007);
-            RemoveOverwritten(startRow, endRow, n);
+            RemoveOverwrittenRows(startRow, endRow, n);
             ShiftCommentsAndRows(startRow, endRow, n, copyRowHeight);
 
             XSSFRowShifter rowShifter = new XSSFRowShifter(this);
@@ -4154,10 +4154,10 @@ namespace NPOI.XSSF.UserModel
             return keys[keys.Count - 1];
         }
 
-        private int HeadMapCount(SortedList<int, XSSFRow> rows, int rownum)
+        private int HeadMapCount(IList<int> keys, int rownum)
         {
             int count = 0;
-            foreach (int key in rows.Keys)
+            foreach (int key in keys)
             {
                 if (key < rownum)
                 {
@@ -4955,7 +4955,7 @@ namespace NPOI.XSSF.UserModel
             return ((XSSFRow)GetRow(collapseRow)).GetCTRow().collapsed;
         }
 
-        private void RemoveOverwritten(int startRow, int endRow, int n)
+        private void RemoveOverwrittenRows(int startRow, int endRow, int n)
         {
             XSSFVMLDrawing vml = GetVMLDrawing(false);
             List<int> rowsToRemove = new List<int>();
@@ -4969,7 +4969,7 @@ namespace NPOI.XSSF.UserModel
 
                 // check if we should remove this row as it will be overwritten
                 // by the data later
-                if (ShouldRemoveRow(startRow, endRow, n, rownum))
+                if (ShouldRemoveAtIndex(startRow, endRow, n, rownum))
                 {
                     // remove row from worksheet.GetSheetData row array
                     //int idx = _rows.headMap(row.getRowNum()).size();
@@ -5066,7 +5066,7 @@ namespace NPOI.XSSF.UserModel
                 if (sheetComments != null)
                 {
                     // calculate the new rownum
-                    int newrownum = ShiftedRowNum(startRow, endRow, n, rownum);
+                    int newrownum = ShiftedRowOrColumnNumber(startRow, endRow, n, rownum);
 
                     // is there a change necessary for the current row?
                     if (newrownum != rownum)
@@ -5123,36 +5123,36 @@ namespace NPOI.XSSF.UserModel
             RebuildRows();
         }
 
-        private int ShiftedRowNum(int startRow, int endRow, int n, int rownum)
+        private int ShiftedRowOrColumnNumber(int startIndex, int endIndex, int n, int index)
         {
-            // no change if before any affected row
-            if (rownum < startRow && (n > 0 || (startRow - rownum) > n))
+            // no change if before any affected index
+            if (index < startIndex && (n > 0 || (startIndex - index) > n))
             {
-                return rownum;
+                return index;
             }
 
-            // no change if After any affected row
-            if (rownum > endRow && (n < 0 || (rownum - endRow) > n))
+            // no change if After any affected index
+            if (index > endIndex && (n < 0 || (index - endIndex) > n))
             {
-                return rownum;
+                return index;
             }
 
-            // row before and things are Moved up
-            if (rownum < startRow)
+            // index before and things are Moved up/left
+            if (index < startIndex)
             {
-                // row is Moved down by the Shifting
-                return rownum + (endRow - startRow);
+                // index is Moved down/right by the Shifting
+                return index + (endIndex - startIndex);
             }
 
-            // row is After and things are Moved down
-            if (rownum > endRow)
+            // index is After and things are Moved down/right
+            if (index > endIndex)
             {
-                // row is Moved up by the Shifting
-                return rownum - (endRow - startRow);
+                // index is Moved up/left by the Shifting
+                return index - (endIndex - startIndex);
             }
 
-            // row is part of the Shifted block
-            return rownum + n;
+            // index is part of the Shifted block
+            return index + n;
         }
 
         private CT_Selection GetSheetTypeSelection()
@@ -5196,15 +5196,15 @@ namespace NPOI.XSSF.UserModel
             return sheetPr.IsSetPageSetUpPr() ? sheetPr.pageSetUpPr : sheetPr.AddNewPageSetUpPr();
         }
 
-        private static bool ShouldRemoveRow(int startRow, int endRow, int n, int rownum)
+        private static bool ShouldRemoveAtIndex(int startIndex, int endIndex, int n, int currentIndex)
         {
-            if (rownum >= (startRow + n) && rownum <= (endRow + n))
+            if (currentIndex >= (startIndex + n) && currentIndex <= (endIndex + n))
             {
-                if (n > 0 && rownum > endRow)
+                if (n > 0 && currentIndex > endIndex)
                 {
                     return true;
                 }
-                else if (n < 0 && rownum < startRow)
+                else if (n < 0 && currentIndex < startIndex)
                 {
                     return true;
                 }
