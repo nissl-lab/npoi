@@ -443,6 +443,7 @@ namespace NPOI.XSSF.Streaming
                 ZipOutputStream zos = new ZipOutputStream(outStream);
                 try
                 {
+                    zos.UseZip64 = UseZip64.Off;
                     //ZipEntrySource zipEntrySource = new ZipFileZipEntrySource(zip);
                     //var en =  zipEntrySource.Entries;
                     var en = zip.GetEnumerator();
