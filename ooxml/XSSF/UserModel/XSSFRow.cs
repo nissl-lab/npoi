@@ -601,6 +601,25 @@ namespace NPOI.XSSF.UserModel
 
             RowNum = rownum;
         }
+
+        internal void RebuildCells()
+        {
+            Dictionary<int, XSSFCell> map = new Dictionary<int, XSSFCell>();
+            foreach (XSSFCell c in _cells.Values)
+            {
+                map.Add(c.ColumnIndex, c);
+            }
+
+            _cells.Clear();
+
+            foreach (KeyValuePair<int, XSSFCell> kv in map)
+            {
+                _cells.Add(kv.Key, kv.Value);
+            }
+
+            // Sort CT_Cols by index asc.
+            _row.c.Sort((col1, col2) => col1.r.CompareTo(col2.r));
+        }
         #endregion
 
         #region IEnumerable and IComparable members
