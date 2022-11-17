@@ -592,6 +592,17 @@ namespace NPOI.XSSF.Streaming
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Copies comment from one cell to another
+        /// </summary>
+        /// <param name="sourceCell">Cell with a comment to copy</param>
+        /// <param name="targetCell">Cell to paste the comment to</param>
+        /// <returns>Copied comment</returns>
+        public IComment CopyComment(ICell sourceCell, ICell targetCell)
+        {
+            throw new NotImplementedException();
+        }
+
         public ISheet CopySheet(string Name)
         {
             throw new NotImplementedException();
