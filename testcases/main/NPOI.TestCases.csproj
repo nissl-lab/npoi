@@ -242,6 +242,7 @@
     <Compile Include="SS\Util\TestAreaReference.cs" />
     <Compile Include="SS\Util\TestCellAddress.cs" />
     <Compile Include="SS\Util\BaseTestCellUtil.cs" />
+    <Compile Include="SS\Util\TestSimpleDateFormat.cs" />
     <Compile Include="SS\Util\TestDateFormatConverter.cs" />
     <Compile Include="SS\Util\TestHSSFCellUtil.cs" />
     <Compile Include="SS\Util\TestSheetUtil.cs" />
