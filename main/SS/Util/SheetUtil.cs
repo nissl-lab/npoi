@@ -119,7 +119,7 @@ namespace NPOI.SS.Util
                 // If there is a cell comment, copy
                 if (oldCell.CellComment != null)
                 {
-                    newCell.CellComment = oldCell.CellComment;
+                    sourceSheet.CopyComment(oldCell, newCell);
                 }
 
                 // If there is a cell hyperlink, copy
@@ -173,6 +173,7 @@ namespace NPOI.SS.Util
             }
             return newRow;
         }
+
         public static IRow CopyRow(ISheet sheet, int sourceRowIndex, int targetRowIndex)
         {
             if (sourceRowIndex == targetRowIndex)
@@ -211,7 +212,7 @@ namespace NPOI.SS.Util
                 // If there is a cell comment, copy
                 if (oldCell.CellComment != null)
                 {
-                    newCell.CellComment = oldCell.CellComment;
+                    sheet.CopyComment(oldCell, newCell);
                 }
 
                 // If there is a cell hyperlink, copy

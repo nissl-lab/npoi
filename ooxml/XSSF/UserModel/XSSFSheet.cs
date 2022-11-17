@@ -34,6 +34,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using CT_Shape = NPOI.OpenXmlFormats.Vml.CT_Shape;
+using ST_EditAs = NPOI.OpenXmlFormats.Dml.Spreadsheet.ST_EditAs;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -3912,6 +3914,39 @@ namespace NPOI.XSSF.UserModel
 
             return result;
         }
+
+        /// <summary>
+        /// Copies comment from one cell to another
+        /// </summary>
+        /// <param name="sourceCell">Cell with a comment to copy</param>
+        /// <param name="targetCell">Cell to paste the comment to</param>
+        /// <returns>Copied comment</returns>
+        public IComment CopyComment(ICell sourceCell, ICell targetCell)
+        {
+            ValidateCellsForCopyComment(sourceCell, targetCell);
+
+            XSSFComment sourceComment =
+                sheetComments.FindCellComment(sourceCell.Address);
+            CT_Comment sourceCtComment = sourceComment.GetCTComment();
+            CT_Shape sourceCommentShape = GetVMLDrawing(false).FindCommentShape(
+                sourceComment.Row,
+                sourceComment.Column);
+
+            CT_Comment targetCtComment = sheetComments.NewComment(targetCell.Address);
+            targetCtComment.Set(sourceCtComment);
+
+            CT_Shape targetCommentShape = GetVMLDrawing(false).newCommentShape();
+            targetCommentShape.Set(sourceCommentShape);
+
+            IComment targetComment = new XSSFComment(
+                sheetComments,
+                targetCtComment,
+                targetCommentShape);
+
+            targetCell.CellComment = targetComment;
+
+            return targetComment;
+        }
         #endregion
 
         #region Private methods
@@ -5121,6 +5156,29 @@ namespace NPOI.XSSF.UserModel
             }
 
             RebuildRows();
+        }
+
+        private void ValidateCellsForCopyComment(ICell sourceCell, ICell targetCell)
+        {
+            if (sourceCell == null || targetCell == null)
+            {
+                throw new ArgumentException("Cells can not be null");
+            }
+
+            if (sourceCell.Sheet != targetCell.Sheet || sourceCell.Sheet != this)
+            {
+                throw new ArgumentException("Cells should belong to the same worksheet");
+            }
+
+            if (sheetComments == null)
+            {
+                throw new ArgumentException("Source cell doesn't have a comment");
+            }
+
+            if (sheetComments.FindCellComment(sourceCell.Address) == null)
+            {
+                throw new ArgumentException("Source cell doesn't have a comment");
+            }
         }
 
         private int ShiftedRowOrColumnNumber(int startIndex, int endIndex, int n, int index)
