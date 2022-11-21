@@ -11,7 +11,7 @@ jobs:
     runs-on: windows-2019
     steps:
     - uses: actions/checkout@v3
-
+    
     - name: ADD msbuild TO PATH
       uses: microsoft/setup-msbuild@v1.1
       
@@ -29,15 +29,15 @@ jobs:
       
     - name: RUN NPOI.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test testcases\main\bin\Debug\net6.0\NPOI.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.TestCases.net6.trx' --results-directory test-results
+      run: dotnet test testcases/main/bin/Debug/net6.0/NPOI.TestCases.dll --configuration 'Debug' --settings ./testcases/test.core.runsettings --verbosity q --logger 'trx;logfilename=NPOI.TestCases.net6.trx' --results-directory test-results
       
     - name: RUN NPOI.OOXML.Multitarget.Testcases
       if : always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test testcases\ooxml\bin\Debug\net6.0\NPOI.OOXML.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML.TestCases.net6.trx' --results-directory test-results
+      run: dotnet test testcases/ooxml/bin/Debug/net6.0/NPOI.OOXML.TestCases.dll --configuration 'Debug' --settings ./testcases/test.core.runsettings --verbosity q --logger 'trx;logfilename=NPOI.OOXML.TestCases.net6.trx' --results-directory test-results
       
     - name: RUN NPOI.OOXML4Net.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test testcases\openxml4net\bin\Debug\net6.0\NPOI.OOXML4Net.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.net6.trx' --results-directory test-results
+      run: dotnet test testcases/openxml4net/bin/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll --configuration 'Debug' --settings ./testcases/test.core.runsettings --verbosity q --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.net6.trx' --results-directory test-results
       
     - name: PUBLISH TEST RESULTS
       uses: dorny/test-reporter@v1
@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-
+    
     - name: SETUP .NET 6
       uses: actions/setup-dotnet@v1	
       with:	
@@ -63,19 +63,19 @@ jobs:
     - name: BUILD NPOI.Multitarget.Test
       id: build-npoi
       run: dotnet build solution/NPOI.Multitarget.Test.sln --no-restore --configuration 'Debug' --verbosity q
-
+      
     - name: RUN NPOI.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test testcases/main/bin/Debug/net6.0/NPOI.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/main/bin/Debug/net6.0/NPOI.TestCases.dll --configuration 'Debug' --settings ./testcases/test.core.runsettings --verbosity q --logger 'trx;logfilename=NPOI.TestCases.trx' --results-directory test-results
       
     - name: RUN NPOI.OOXML.Multitarget.Testcases
       if : always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test testcases/ooxml/bin/Debug/net6.0/NPOI.OOXML.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/ooxml/bin/Debug/net6.0/NPOI.OOXML.TestCases.dll --configuration 'Debug' --settings ./testcases/test.core.runsettings --verbosity q --logger 'trx;logfilename=NPOI.OOXML.TestCases.trx' --results-directory test-results
       
     - name: RUN NPOI.OOXML4Net.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test testcases/openxml4net/bin/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.trx' --results-directory test-results
-      
+      run: dotnet test testcases/openxml4net/bin/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll --configuration 'Debug' --settings ./testcases/test.core.runsettings --verbosity q --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.trx' --results-directory test-results
+    
     - name: PUBLISH TEST RESULTS
       uses: dorny/test-reporter@v1
       if: always() && steps.build-npoi.outcome == 'success'
@@ -103,15 +103,15 @@ jobs:
 
     - name: RUN NPOI.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test testcases/main/bin/Debug/net6.0/NPOI.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/main/bin/Debug/net6.0/NPOI.TestCases.dll --configuration 'Debug' --settings ./testcases/test.core.runsettings --verbosity q --logger 'trx;logfilename=NPOI.TestCases.trx' --results-directory test-results
       
     - name: RUN NPOI.OOXML.Multitarget.Testcases
       if : always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test testcases/ooxml/bin/Debug/net6.0/NPOI.OOXML.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/ooxml/bin/Debug/net6.0/NPOI.OOXML.TestCases.dll --configuration 'Debug' --settings ./testcases/test.core.runsettings --verbosity q --logger 'trx;logfilename=NPOI.OOXML.TestCases.trx' --results-directory test-results
       
     - name: RUN NPOI.OOXML4Net.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test testcases/openxml4net/bin/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll --configuration 'Debug' --verbosity q --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/openxml4net/bin/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll --configuration 'Debug' --settings ./testcases/test.core.runsettings --verbosity q --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.trx' --results-directory test-results
       
     - name: PUBLISH TEST RESULTS
       uses: dorny/test-reporter@v1
