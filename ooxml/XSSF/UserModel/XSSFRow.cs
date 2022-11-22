@@ -236,8 +236,8 @@ namespace NPOI.XSSF.UserModel
                     return _stylesSource.GetStyleAt((int)_row.s);
                 }
 
-                    return null;
-                }
+                return null;
+            }
 
             set
             {
@@ -422,6 +422,8 @@ namespace NPOI.XSSF.UserModel
             }
 
             _cells.Remove(cell.ColumnIndex);
+
+            CheckColumnAndRemove(cell.ColumnIndex, cell.RowIndex);
         }
 
         /// <summary>
@@ -778,6 +780,18 @@ namespace NPOI.XSSF.UserModel
         public override string ToString()
         {
             return _row.ToString();
+        }
+
+        private void CheckColumnAndRemove(int columnIndex, int rowIndex)
+        {
+            XSSFColumn column = (XSSFColumn)((XSSFSheet)Sheet).GetColumn(columnIndex);
+
+            if (column == null)
+            {
+                return;
+            }
+
+            column.RemoveCell(rowIndex);
         }
 
         /// <summary>
