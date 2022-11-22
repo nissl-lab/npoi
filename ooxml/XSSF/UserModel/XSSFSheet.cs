@@ -65,6 +65,7 @@ namespace NPOI.XSSF.UserModel
         internal CT_Worksheet worksheet;
 
         private readonly SortedList<int, XSSFRow> _rows = new SortedList<int, XSSFRow>();
+        private readonly SortedList<int, XSSFColumn> _columns = new SortedList<int, XSSFColumn>();
         private List<XSSFHyperlink> hyperlinks;
         private ColumnHelper columnHelper;
         private CommentsTable sheetComments;
@@ -277,6 +278,29 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
+        /// Gets the first column on the sheet
+        /// </summary>
+        public int FirstColumnNum
+        {
+            get
+            {
+                if (_columns.Count == 0)
+                {
+                    return 0;
+                }
+                else
+                {
+                    foreach (int key in _columns.Keys)
+                    {
+                        return key;
+                    }
+
+                    throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        /// <summary>
         /// Flag indicating whether the Fit to Page print option is enabled.
         /// </summary>
         public bool FitToPage
@@ -423,6 +447,14 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        public int LastColumnNum
+        {
+            get
+            {
+                return _columns.Count == 0 ? 0 : GetLastKey(_columns.Keys);
+            }
+        }
+
         /// <summary>
         /// Returns the list of merged regions. If you want multiple regions, 
         /// this is faster than calling {@link #getMergedRegion(int)} each time.
@@ -509,6 +541,18 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 return _rows.Count;
+            }
+        }
+
+        /// <summary>
+        /// Returns the number of phsyically defined columns (NOT the number of 
+        /// columns in the sheet)
+        /// </summary>
+        public int PhysicalNumberOfColumns
+        {
+            get
+            {
+                return _columns.Count;
             }
         }
 
@@ -1219,6 +1263,7 @@ namespace NPOI.XSSF.UserModel
             }
 
             InitRows(worksheet);
+            InitColumns(worksheet);
             columnHelper = new ColumnHelper(worksheet);
 
             // Look for bits we're interested in
@@ -1253,6 +1298,7 @@ namespace NPOI.XSSF.UserModel
         {
             worksheet = NewSheet();
             InitRows(worksheet);
+            InitColumns(worksheet);
             columnHelper = new ColumnHelper(worksheet);
             hyperlinks = new List<XSSFHyperlink>();
         }
@@ -1461,6 +1507,11 @@ namespace NPOI.XSSF.UserModel
             foreach (XSSFRow row in _rows.Values)
             {
                 row.OnDocumentWrite();
+            }
+
+            foreach (XSSFColumn column in _columns.Values)
+            {
+                column.OnDocumentWrite();
             }
 
             new WorksheetDocument(worksheet).Save(stream, leaveOpen);
@@ -1908,6 +1959,65 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
+        /// Create a new column within the sheet and return the high level 
+        /// representation. See <see cref="RemoveColumn"/>
+        /// </summary>
+        /// <param name="columnnum">column number</param>
+        /// <returns>High level <see cref="XSSFColumn"/> object representing a 
+        /// column in the sheet</returns>
+        public virtual IColumn CreateColumn(int columnnum)
+        {
+            CT_Col ctCol;
+            XSSFColumn prev = _columns.ContainsKey(columnnum) ? _columns[columnnum] : null;
+            if (prev != null)
+            {
+                // the Cells in an existing column are invalidated on-purpose, in
+                // order to clean up correctly, we need to call the remove, so
+                // things like ArrayFormulas and CalculationChain updates are
+                // done correctly. We remove the cell this way as the internal
+                // cell-list is changed by the remove call and thus would cause
+                // ConcurrentModificationException otherwise
+                while (prev.FirstCellNum != -1)
+                {
+                    prev.RemoveCell(prev.GetCell(prev.FirstCellNum));
+                }
+
+                ctCol = prev.GetCTCol();
+                ctCol.Set(new CT_Col());
+            }
+            else
+            {
+                if (_columns.Count == 0 || columnnum > GetLastKey(_columns.Keys))
+                {
+                    // we can append the new column at the end
+                    ctCol = worksheet.cols.FirstOrDefault().AddNewCol();
+                }
+                else
+                {
+                    // get number of columns where column index < columnnum
+                    // --> this tells us where our column should go
+                    int idx = HeadMapCount(_columns.Keys, columnnum);
+                    if (worksheet.cols.FirstOrDefault() is null)
+                    {
+                        worksheet.AddNewCols();
+                    }
+
+                    ctCol = worksheet.cols.FirstOrDefault().InsertNewCol(idx);
+                }
+            }
+
+            ctCol.SetNumber((uint)columnnum + 1);
+
+            XSSFColumn c = new XSSFColumn(ctCol, this)
+            {
+                ColumnNum = columnnum
+            };
+
+            _columns[columnnum] = c;
+            return c;
+        }
+
+        /// <summary>
         /// Creates a split pane. Any existing freezepane or split pane is 
         /// overwritten.
         /// </summary>
@@ -2267,6 +2377,29 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
+        /// Returns the logical column ( 0-based).  If you ask for a column that is 
+        /// not defined you get a null.  This is to say column 4 represents the 
+        /// fifth column on a sheet.
+        /// </summary>
+        /// <param name="columnnum">column to get</param>
+        /// <returns><see cref="XSSFColumn"/> representing the columnnumber or null 
+        /// if its not defined on the sheet</returns>
+        public IColumn GetColumn(int columnnum, bool createIfNull = false)
+        {
+            if (_columns.ContainsKey(columnnum))
+            {
+                return _columns[columnnum];
+            }
+
+            if (createIfNull)
+            {
+                CreateColumn(columnnum);
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Group between (0 based) columns
         /// </summary>
         /// <param name="fromColumn"></param>
@@ -2490,6 +2623,52 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Remove a column from this sheet.  All cells Contained in the column are 
+        /// Removed as well
+        /// </summary>
+        /// <param name="column">the column to Remove.</param>
+        /// <exception cref="ArgumentException"></exception>
+        public void RemoveColumn(IColumn column)
+        {
+            if (column == null)
+            {
+                throw new ArgumentException("Column can't be null");
+            }
+
+            if (column.Sheet != this)
+            {
+                throw new ArgumentException("Specified column does not belong to" +
+                    " this sheet");
+            }
+
+            // collect cells into a temporary array to avoid ConcurrentModificationException
+            List<XSSFCell> cellsToDelete = new List<XSSFCell>();
+            foreach (ICell cell in column)
+            {
+                cellsToDelete.Add((XSSFCell)cell);
+            }
+
+            foreach (XSSFCell cell in cellsToDelete)
+            {
+                column.RemoveCell(cell);
+            }
+
+            // also remove any comment located in that column
+            if (sheetComments != null)
+            {
+                foreach (CellAddress ref1 in GetCellComments().Keys)
+                {
+                    if (ref1.Column == column.ColumnNum)
+                    {
+                        sheetComments.RemoveComment(ref1);
+                    }
+                }
+            }
+
+            DestroyColumn(column);
         }
 
         /// <summary>
@@ -2857,6 +3036,24 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
+        /// Shifts columns between startColumn and endColumn n number of columns. If you 
+        /// use a negative number, it will shift columns left. Code ensures that 
+        /// columns don't wrap around. 
+        /// Calls ShiftColumns(startColumn, endColumn, n, false, false);
+        /// <para>
+        /// Additionally Shifts merged regions that are completely defined in 
+        /// these columns (ie. merged 2 cells on a column to be Shifted).
+        /// </para>
+        /// </summary>
+        /// <param name="startColumn">the column to start Shifting</param>
+        /// <param name="endColumn">the column to end Shifting</param>
+        /// <param name="n">the number of column to shift</param>
+        public void ShiftColumns(int startColumn, int endColumn, int n)
+        {
+            ShiftColumns(startColumn, endColumn, n, false, false);
+        }
+
+        /// <summary>
         /// Shifts rows between startRow and endRow n number of rows. If you 
         /// use a negative number, it will shift rows up. Code ensures that 
         /// rows don't wrap around
@@ -2889,6 +3086,46 @@ namespace NPOI.XSSF.UserModel
             rowShifter.UpdateConditionalFormatting(shifter);
             rowShifter.UpdateHyperlinks(shifter);
             RebuildRows();
+        }
+
+        /// <summary>
+        /// Shifts columns between startColumn and endColumn n number of columns. If you 
+        /// use a negative number, it will shift columns left. Code ensures that 
+        /// columns don't wrap around
+        /// <para>
+        /// Additionally Shifts merged regions thatare completely defined in 
+        /// these columns (ie. merged 2 cells on a column to be Shifted).
+        /// </para>
+        /// </summary>
+        /// <param name="startColumn">the column to start Shifting</param>
+        /// <param name="endColumn">the column to end Shifting</param>
+        /// <param name="n">the number of columns to shift</param>
+        /// <param name="copyColumnWidth">whether to copy the column width during 
+        /// the shift</param>
+        /// <param name="resetOriginalColumnWidth">whether to set the original 
+        /// column's width to the default</param>
+        //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
+        public void ShiftColumns(
+            int startColumn,
+            int endColumn,
+            int n,
+            bool copyColumnWidth,
+            bool resetOriginalColumnWidth)
+        {
+            int sheetIndex = Workbook.GetSheetIndex(this);
+            string sheetName = Workbook.GetSheetName(sheetIndex);
+            FormulaShifter shifter = FormulaShifter.CreateForColumnShift(
+                           sheetIndex, sheetName, startColumn, endColumn, n, SpreadsheetVersion.EXCEL2007);
+            RemoveOverwrittenColumns(startColumn, endColumn, n);
+            ShiftCommentsAndColumns(startColumn, endColumn, n, copyColumnWidth);
+
+            XSSFColumnShifter columnShifter = new XSSFColumnShifter(this);
+            columnShifter.ShiftMergedRegions(startColumn, endColumn, n);
+            columnShifter.UpdateNamedRanges(shifter);
+            columnShifter.UpdateFormulas(shifter);
+            columnShifter.UpdateConditionalFormatting(shifter);
+            columnShifter.UpdateHyperlinks(shifter);
+            RebuildColumns();
         }
 
         /// <summary>
@@ -3550,6 +3787,114 @@ namespace NPOI.XSSF.UserModel
             return SheetUtil.CopyRow(this, sourceIndex, targetIndex);
         }
 
+        /// <summary>
+        /// Copy the source column to the target column. If the target column 
+        /// exists, the new copied column will be inserted before the 
+        /// existing one
+        /// </summary>
+        /// <param name="sourceIndex">source index</param>
+        /// <param name="targetIndex">target index</param>
+        /// <returns>the new copied column object</returns>
+        public IColumn CopyColumn(int sourceIndex, int targetIndex)
+        {
+            if (sourceIndex == targetIndex)
+            {
+                throw new ArgumentException(
+                    "sourceIndex and targetIndex cannot be same");
+            }
+
+            // Get the source / new column
+            IColumn newColumn = GetColumn(targetIndex);
+            IColumn sourceColumn = GetColumn(sourceIndex);
+
+            // If the column exist in destination, push right all columns
+            // by 1 else create a new column
+            if (newColumn != null)
+            {
+                ShiftColumns(targetIndex, LastColumnNum, 1);
+            }
+
+            newColumn = CreateColumn(targetIndex);
+            newColumn.Width = sourceColumn.Width;   //copy column width
+
+            // Loop through source cells to add to new column
+            for (int i = sourceColumn.FirstCellNum; i < sourceColumn.LastCellNum; i++)
+            {
+                // Grab a copy of the old/new cell
+                ICell oldCell = sourceColumn.GetCell(i);
+
+                // If the old cell is null jump to next cell
+                if (oldCell == null)
+                {
+                    continue;
+                }
+
+                ICell newCell = newColumn.CreateCell(i);
+
+                if (oldCell.CellStyle != null)
+                {
+                    // apply style from old cell to new cell 
+                    newCell.CellStyle = oldCell.CellStyle;
+                }
+
+                if (oldCell.CellComment != null)
+                {
+                    CopyComment(oldCell, newCell);
+                }
+
+                // If there is a cell hyperlink, copy
+                if (oldCell.Hyperlink != null)
+                {
+                    newCell.Hyperlink = oldCell.Hyperlink;
+                }
+
+                // Set the cell data type
+                newCell.SetCellType(oldCell.CellType);
+
+                // Set the cell data value
+                switch (oldCell.CellType)
+                {
+                    case CellType.Blank:
+                        newCell.SetCellValue(oldCell.StringCellValue);
+                        break;
+                    case CellType.Boolean:
+                        newCell.SetCellValue(oldCell.BooleanCellValue);
+                        break;
+                    case CellType.Error:
+                        newCell.SetCellErrorValue(oldCell.ErrorCellValue);
+                        break;
+                    case CellType.Formula:
+                        newCell.SetCellFormula(oldCell.CellFormula);
+                        break;
+                    case CellType.Numeric:
+                        newCell.SetCellValue(oldCell.NumericCellValue);
+                        break;
+                    case CellType.String:
+                        newCell.SetCellValue(oldCell.RichStringCellValue);
+                        break;
+                }
+            }
+
+            // If there are are any merged regions in the source column,
+            // copy to new column
+            for (int i = 0; i < NumMergedRegions; i++)
+            {
+                CellRangeAddress cellRangeAddress = GetMergedRegion(i);
+                if (cellRangeAddress != null
+                    && cellRangeAddress.FirstColumn == sourceColumn.ColumnNum)
+                {
+                    CellRangeAddress newCellRangeAddress = new CellRangeAddress(
+                            cellRangeAddress.FirstRow,
+                            cellRangeAddress.LastRow,
+                            newColumn.ColumnNum,
+                            newColumn.ColumnNum + cellRangeAddress.LastColumn - cellRangeAddress.FirstColumn);
+                    AddMergedRegion(newCellRangeAddress);
+                }
+            }
+
+            return newColumn;
+        }
+
         public void ShowInPane(int toprow, int leftcol)
         {
             CellReference cellReference = new CellReference(toprow, leftcol);
@@ -4030,6 +4375,22 @@ namespace NPOI.XSSF.UserModel
                     if (!_rows.ContainsKey(r.RowNum))
                     {
                         _rows.Add(r.RowNum, r);
+                    }
+                }
+            }
+        }
+
+        private void InitColumns(CT_Worksheet worksheetParam)
+        {
+            _columns.Clear();
+            if (0 < worksheetParam.cols.FirstOrDefault()?.sizeOfColArray())
+            {
+                foreach (CT_Col column in worksheetParam.cols.FirstOrDefault().col)
+                {
+                    XSSFColumn c = new XSSFColumn(column, this);
+                    if (!_columns.ContainsKey(c.ColumnNum))
+                    {
+                        _columns.Add(c.ColumnNum, c);
                     }
                 }
             }
@@ -5093,6 +5454,80 @@ namespace NPOI.XSSF.UserModel
 
             worksheet.sheetData.RemoveRows(ctRowsToRemove);
         }
+
+        private void RemoveOverwrittenColumns(int startColumn, int endColumn, int n)
+        {
+            if (worksheet.cols.FirstOrDefault() is null)
+            {
+                throw new RuntimeException("There is no columns in XML part");
+            }
+
+            XSSFVMLDrawing vml = GetVMLDrawing(false);
+            List<int> columnsToRemove = new List<int>();
+            List<CellAddress> commentsToRemove = new List<CellAddress>();
+            List<CT_Col> ctColsToRemove = new List<CT_Col>();
+            // first remove all columns which will be overwritten
+            foreach (KeyValuePair<int, XSSFColumn> columnDict in _columns)
+            {
+                XSSFColumn column = columnDict.Value;
+                int columnNum = column.ColumnNum;
+
+                // check if we should remove this column as it will be overwritten
+                // by the data later
+                if (ShouldRemoveAtIndex(startColumn, endColumn, n, columnNum))
+                {
+                    int idx = _columns.IndexOfValue(column);
+                    ctColsToRemove.Add(worksheet.cols.FirstOrDefault().GetColArray(idx));
+
+                    // remove column from _columns
+                    columnsToRemove.Add(columnDict.Key);
+
+                    commentsToRemove.Clear();
+
+                    if (sheetComments != null)
+                    {
+                        CT_CommentList lst = sheetComments.GetCTComments().commentList;
+                        foreach (CT_Comment comment in lst.comment)
+                        {
+                            string strRef = comment.@ref;
+                            CellAddress ref1 = new CellAddress(strRef);
+
+                            // is this comment part of the current column?
+                            if (ref1.Column == columnNum)
+                            {
+                                commentsToRemove.Add(ref1);
+                            }
+                        }
+                    }
+
+                    foreach (CellAddress ref1 in commentsToRemove)
+                    {
+                        sheetComments.RemoveComment(ref1);
+                        vml.RemoveCommentShape(ref1.Row, ref1.Column);
+                    }
+
+                    if (hyperlinks != null)
+                    {
+                        foreach (XSSFHyperlink link in new List<XSSFHyperlink>(hyperlinks))
+                        {
+                            CellReference ref1 = new CellReference(link.CellRef);
+                            if (ref1.Col == columnNum)
+                            {
+                                hyperlinks.Remove(link);
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (int columnKey in columnsToRemove)
+            {
+                _columns.Remove(columnKey);
+            }
+
+            worksheet.cols.FirstOrDefault().RemoveCols(ctColsToRemove);
+        }
+
         private void RebuildRows()
         {
             //rebuild the _rows map
@@ -5116,6 +5551,27 @@ namespace NPOI.XSSF.UserModel
                 worksheet.sheetData.row.Sort((row1, row2) => row1.r.CompareTo(row2.r));
             }
         }
+
+        private void RebuildColumns()
+        {
+            //rebuild the _columns map
+            Dictionary<int, XSSFColumn> map = new Dictionary<int, XSSFColumn>();
+            foreach (XSSFColumn c in _columns.Values)
+            {
+                map.Add(c.ColumnNum, c);
+            }
+
+            _columns.Clear();
+
+            foreach (KeyValuePair<int, XSSFColumn> kv in map)
+            {
+                _columns.Add(kv.Key, kv.Value);
+            }
+
+            // Sort CT_Cols by index asc.
+            worksheet.cols.FirstOrDefault()?.col.Sort((col1, col2) => col1.min.CompareTo(col2.min));
+        }
+
         private void ShiftCommentsAndRows(int startRow, int endRow, int n, bool copyRowHeight)
         {
             SortedDictionary<XSSFComment, int> commentsToShift =
@@ -5206,6 +5662,133 @@ namespace NPOI.XSSF.UserModel
             if (sheetComments.FindCellComment(sourceCell.Address) == null)
             {
                 throw new ArgumentException("Source cell doesn't have a comment");
+            }
+        }
+
+        private void ShiftCommentsAndColumns(int startColumn, int endColumn, int n, bool copyColumnWidth)
+        {
+            SortedDictionary<XSSFComment, int> commentsToShift =
+                new SortedDictionary<XSSFComment, int>(new ShiftCommentComparator(n));
+
+            List<IColumn> columnsToDestroy = new List<IColumn>();
+
+            for (int i = startColumn; i <= endColumn; i++)
+            {
+                if(!_columns.ContainsKey(i))
+                {
+                    columnsToDestroy.Add(CreateColumn(i));
+                }
+            }
+
+            foreach (KeyValuePair<int, XSSFColumn> columnDict in _columns)
+            {
+                XSSFColumn column = columnDict.Value;
+                int columnNum = column.ColumnNum;
+
+                if (sheetComments != null)
+                {
+                    // calculate the new columnNum
+                    int newColumnNum = ShiftedRowOrColumnNumber(startColumn, endColumn, n, columnNum);
+
+                    // is there a change necessary for the current column?
+                    if (newColumnNum != columnNum)
+                    {
+                        List<CellAddress> commentAddresses = sheetComments.GetCellAddresses();
+                        foreach (CellAddress cellAddress in commentAddresses)
+                        {
+                            if (cellAddress.Column == columnNum)
+                            {
+                                XSSFComment oldComment = sheetComments
+                                    .FindCellComment(cellAddress);
+                                if (oldComment != null)
+                                {
+                                    CT_Shape commentShape = 
+                                        GetVMLDrawing(false)
+                                        .FindCommentShape(
+                                            oldComment.Row, 
+                                            oldComment.Column);
+
+                                    XSSFComment xssfComment =
+                                        new XSSFComment(
+                                            sheetComments,
+                                            oldComment.GetCTComment(),
+                                            commentShape);
+
+                                    if (commentsToShift.ContainsKey(xssfComment))
+                                    {
+                                        commentsToShift[xssfComment] = newColumnNum;
+                                    }
+                                    else
+                                    {
+                                        commentsToShift.Add(xssfComment, newColumnNum);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (columnNum < startColumn || columnNum > endColumn)
+                {
+                    continue;
+                }
+
+                if (!copyColumnWidth)
+                {
+                    column.Width = -1;
+                }
+
+                column.Shift(n);
+            }
+
+            // adjust all the affected comment-structures now
+            // the Map is sorted and thus provides them in the order that we need here, 
+            // i.e. from right to left if Shifting right, vice-versa otherwise
+            foreach (KeyValuePair<XSSFComment, int> entry in commentsToShift)
+            {
+                entry.Key.Column = entry.Value;
+            }
+
+            RebuildColumns();
+            RebuildRowCells();
+            DestroyColumns(columnsToDestroy);
+        }
+
+        private void DestroyColumns(List<IColumn> columnsToDestroy)
+        {
+            foreach (var column in columnsToDestroy)
+            {
+                DestroyColumn(column);
+            }
+        }
+
+        private void DestroyColumn(IColumn column)
+        {
+            if (column == null)
+            {
+                throw new ArgumentException("Column can't be null");
+            }
+
+            if (column.Sheet != this)
+            {
+                throw new ArgumentException("Specified column does not belong to" +
+                    " this sheet");
+            }
+
+            _columns.Remove(column.ColumnNum);
+
+            CT_Cols ctCols = worksheet.cols.FirstOrDefault();
+            CT_Col ctCol = ((XSSFColumn)column).GetCTCol();
+            int colIndex = columnHelper.GetIndexOfColumn(ctCols, ctCol);
+
+            ctCols.RemoveCol(colIndex); // Note that columns in worksheet.sheetData is 1-based.
+        }
+
+        private void RebuildRowCells()
+        {
+            foreach(var row in _rows.Values)
+            {
+                row.RebuildCells();
             }
         }
 
