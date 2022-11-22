@@ -578,7 +578,7 @@ namespace NPOI.XSSF.UserModel
 
         public IColumn CopyColumnTo(int targetIndex)
         {
-            return Sheet.CopyColumn(ColumnNum, targetIndex);
+            return ((XSSFSheet)Sheet).CopyColumn(ColumnNum, targetIndex);
         }
 
         public ICell CopyCell(int sourceIndex, int targetIndex)
