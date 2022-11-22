@@ -107,7 +107,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetStyle()
         {
-            return this.styleField!=null;
+            return this.styleField != null && this.styleField != 0;
         }
         public bool IsSetWidth()
         {
