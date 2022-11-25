@@ -151,6 +151,15 @@ namespace NPOI.SS.UserModel
         /// <param name="targetIndex">target index</param>
         /// <returns>the new copied row object</returns>
         IRow CopyRow(int sourceIndex, int targetIndex);
+
+        /// <summary>
+        /// Copies comment from one cell to another
+        /// </summary>
+        /// <param name="sourceCell">Cell with a comment to copy</param>
+        /// <param name="targetCell">Cell to paste the comment to</param>
+        /// <returns>Copied comment</returns>
+        IComment CopyComment(ICell sourceCell, ICell targetCell);
+
         /// <summary>
         /// Set the width (in units of 1/256th of a character width)
         /// </summary>

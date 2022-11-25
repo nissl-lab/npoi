@@ -107,12 +107,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetStyle()
         {
-            return this.styleField!=null;
+            return this.styleField != null && this.styleField != 0;
         }
         public bool IsSetWidth()
         {
             return this.widthField > 0;
         }
+
+        public bool IsSetNumber()
+        {
+            return min > 0 && max > 0;
+        }
+
         public bool IsSetCollapsed()
         {
             return this.collapsedSpecifiedField;
@@ -125,6 +131,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.outlineLevelField != 0;
         }
+
+        public void SetNumber(uint number)
+        {
+            min = number;
+            max = number;
+        }
+
         public void UnsetHidden()
         {
             this.hiddenField = false;
@@ -135,7 +148,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.collapsedSpecified = false;
         }
 
+        public void UnsetWidth()
+        {
+            this.widthField = -1;
+        }
 
+        public void UnsetCustomWidth()
+        {
+            this.customWidthField = false;
+        }
+
+        public void UnsetStyle()
+        {
+            this.styleField = 0;
+        }
 
         [XmlAttribute]
         public uint? style
@@ -286,9 +312,21 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write("/>");
         }
 
-
-
-
+        public void Set(CT_Col col)
+        {
+            bestFitField = col.bestFitField;
+            collapsedField = col.collapsedField;
+            collapsedSpecifiedField = col.collapsedSpecifiedField;
+            customWidthField = col.customWidthField;
+            hiddenField = col.hiddenField;
+            maxField = col.maxField;
+            minField = col.minField;
+            outlineLevelField = col.outlineLevelField;
+            phoneticField = col.phoneticField;
+            styleField = col.styleField;
+            widthField = col.widthField;
+            widthSpecifiedField = col.widthSpecifiedField;
+        }
 
         public CT_Col Copy()
         {

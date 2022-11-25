@@ -15,14 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
-
-
 namespace NPOI.SS.Formula
 {
 
+    using NPOI.SS.Formula.PTG;
     using System;
     using System.Text;
-    using NPOI.SS.Formula.PTG;
     /**
      * @author Josh Micich
      */
@@ -34,40 +32,54 @@ namespace NPOI.SS.Formula
             RowCopy,
             SheetMove
         }
-        /**
-         * Extern sheet index of sheet where moving is occurring
-         */
-        private int _externSheetIndex;
-        /**
-         * Sheet name of the sheet where moving is occurring, 
-         *  used for updating XSSF style 3D references on row shifts.
-         */
-        private String _sheetName;
-        private int _firstMovedIndex;
-        private int _lastMovedIndex;
-        private int _amountToMove;
-        private int _srcSheetIndex;
-        private int _dstSheetIndex;
-        private SpreadsheetVersion _version;
+        /// <summary>
+        /// Extern sheet index of sheet where moving is occurring
+        /// </summary>
+        private readonly int _externSheetIndex;
+        /// <summary>
+        /// Sheet name of the sheet where moving is occurring, used for 
+        /// updating XSSF style 3D references on row shifts.
+        /// </summary>
+        private readonly string _sheetName;
+        private readonly int _firstMovedIndex;
+        private readonly int _lastMovedIndex;
+        private readonly int _amountToMove;
+        private readonly int _srcSheetIndex;
+        private readonly int _dstSheetIndex;
+        private readonly SpreadsheetVersion _version;
+        private readonly ShiftMode _mode;
 
-        private ShiftMode _mode;
-
-        /**
-         * Create an instance for Shifting row.
-         *
-         * For example, this will be called on {@link NPOI.HSSF.UserModel.HSSFSheet#ShiftRows(int, int, int)} }
-         */
-        private FormulaShifter(int externSheetIndex, String sheetName, int firstMovedIndex, int lastMovedIndex, int amountToMove,
+        /// <summary>
+        /// Create an instance for Shifting row. For example, this will be 
+        /// called on <see cref="HSSF.UserModel.HSSFSheet.ShiftRows"/>
+        /// </summary>
+        /// <param name="externSheetIndex"></param>
+        /// <param name="sheetName"></param>
+        /// <param name="firstMovedIndex"></param>
+        /// <param name="lastMovedIndex"></param>
+        /// <param name="amountToMove"></param>
+        /// <param name="mode"></param>
+        /// <param name="version"></param>
+        /// <exception cref="ArgumentException"></exception>
+        private FormulaShifter(
+            int externSheetIndex, 
+            string sheetName, 
+            int firstMovedIndex, 
+            int lastMovedIndex, 
+            int amountToMove,
             ShiftMode mode, SpreadsheetVersion version)
         {
             if (amountToMove == 0)
             {
                 throw new ArgumentException("amountToMove must not be zero");
             }
+
             if (firstMovedIndex > lastMovedIndex)
             {
-                throw new ArgumentException("firstMovedIndex, lastMovedIndex out of order");
+                throw new ArgumentException("firstMovedIndex, lastMovedIndex " +
+                    "out of order");
             }
+
             _externSheetIndex = externSheetIndex;
             _sheetName = sheetName;
             _firstMovedIndex = firstMovedIndex;
@@ -79,14 +91,18 @@ namespace NPOI.SS.Formula
             _srcSheetIndex = _dstSheetIndex = -1;
         }
 
-        /**
-        * Create an instance for shifting sheets.
-        *
-        * For example, this will be called on {@link org.apache.poi.hssf.usermodel.HSSFWorkbook#setSheetOrder(String, int)}  
-        */
+        /// <summary>
+        /// Create an instance for shifting sheets. For example, this will be 
+        /// called on <see cref="HSSF.UserModel.HSSFWorkbook.SetSheetOrder"/>
+        /// </summary>
+        /// <param name="srcSheetIndex"></param>
+        /// <param name="dstSheetIndex"></param>
         private FormulaShifter(int srcSheetIndex, int dstSheetIndex)
         {
-            _externSheetIndex = _firstMovedIndex = _lastMovedIndex = _amountToMove = -1;
+            _externSheetIndex = 
+                _firstMovedIndex = 
+                _lastMovedIndex = 
+                _amountToMove = -1;
             _sheetName = null;
             _version = null;
 
@@ -96,28 +112,65 @@ namespace NPOI.SS.Formula
         }
 
         [Obsolete("deprecated As of 3.14 beta 1 (November 2015), replaced by CreateForRowShift(int, String, int, int, int, SpreadsheetVersion)")]
-        public static FormulaShifter CreateForRowShift(int externSheetIndex, String sheetName, int firstMovedRowIndex, int lastMovedRowIndex, int numberOfRowsToMove)
+        public static FormulaShifter CreateForRowShift(
+            int externSheetIndex,
+            string sheetName,
+            int firstMovedRowIndex,
+            int lastMovedRowIndex,
+            int numberOfRowsToMove)
         {
-            return CreateForRowShift(externSheetIndex, sheetName, firstMovedRowIndex, lastMovedRowIndex, numberOfRowsToMove, SpreadsheetVersion.EXCEL97);
+            return CreateForRowShift(
+                externSheetIndex,
+                sheetName,
+                firstMovedRowIndex,
+                lastMovedRowIndex,
+                numberOfRowsToMove,
+                SpreadsheetVersion.EXCEL97);
         }
 
-        public static FormulaShifter CreateForRowShift(int externSheetIndex, String sheetName, int firstMovedRowIndex, int lastMovedRowIndex, int numberOfRowsToMove,
+        public static FormulaShifter CreateForRowShift(
+            int externSheetIndex,
+            string sheetName,
+            int firstMovedRowIndex,
+            int lastMovedRowIndex,
+            int numberOfRowsToMove,
             SpreadsheetVersion version)
         {
-            return new FormulaShifter(externSheetIndex, sheetName, firstMovedRowIndex, lastMovedRowIndex, numberOfRowsToMove, ShiftMode.RowMove, version);
+            return new FormulaShifter(
+                externSheetIndex,
+                sheetName,
+                firstMovedRowIndex,
+                lastMovedRowIndex,
+                numberOfRowsToMove,
+                ShiftMode.RowMove,
+                version);
         }
 
-        public static FormulaShifter CreateForRowCopy(int externSheetIndex, String sheetName, int firstMovedRowIndex, int lastMovedRowIndex, int numberOfRowsToMove,
-                SpreadsheetVersion version)
+        public static FormulaShifter CreateForRowCopy(
+            int externSheetIndex,
+            string sheetName,
+            int firstMovedRowIndex,
+            int lastMovedRowIndex,
+            int numberOfRowsToMove,
+            SpreadsheetVersion version)
         {
-            return new FormulaShifter(externSheetIndex, sheetName, firstMovedRowIndex, lastMovedRowIndex, numberOfRowsToMove, ShiftMode.RowCopy, version);
+            return new FormulaShifter(
+                externSheetIndex,
+                sheetName,
+                firstMovedRowIndex,
+                lastMovedRowIndex,
+                numberOfRowsToMove,
+                ShiftMode.RowCopy,
+                version);
         }
 
-        public static FormulaShifter CreateForSheetShift(int srcSheetIndex, int dstSheetIndex)
+        public static FormulaShifter CreateForSheetShift(
+            int srcSheetIndex, 
+            int dstSheetIndex)
         {
             return new FormulaShifter(srcSheetIndex, dstSheetIndex);
         }
-        public override String ToString()
+        public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
 
@@ -129,11 +182,13 @@ namespace NPOI.SS.Formula
             return sb.ToString();
         }
 
-        /**
-         * @param ptgs - if necessary, will get modified by this method
-         * @param currentExternSheetIx - the extern sheet index of the sheet that contains the formula being adjusted
-         * @return <c>true</c> if a change was made to the formula tokens
-         */
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ptgs">if necessary, will get modified by this method</param>
+        /// <param name="currentExternSheetIx">the extern sheet index of the 
+        /// sheet that contains the formula being adjusted</param>
+        /// <returns><code>true</code> if a change was made to the formula tokens</returns>
         public bool AdjustFormula(Ptg[] ptgs, int currentExternSheetIx)
         {
             bool refsWereChanged = false;
@@ -146,6 +201,7 @@ namespace NPOI.SS.Formula
                     ptgs[i] = newPtg;
                 }
             }
+
             return refsWereChanged;
         }
 
@@ -164,7 +220,8 @@ namespace NPOI.SS.Formula
                 case ShiftMode.SheetMove:
                     return AdjustPtgDueToSheetMove(ptg);
                 default:
-                    throw new InvalidOperationException("Unsupported shift mode: " + _mode);
+                    throw new InvalidOperationException(
+                        "Unsupported shift mode: " + _mode);
             }
         }
 
@@ -173,134 +230,143 @@ namespace NPOI.SS.Formula
         /// </summary>
         /// <param name="ptg"></param>
         /// <param name="currentExternSheetIx"></param>
-        /// <returns>in-place modified ptg (if row move would cause Ptg to change),
-        /// deleted ref ptg (if row move causes an error),
+        /// <returns>in-place modified ptg (if row move would cause Ptg to 
+        /// change), deleted ref ptg (if row move causes an error),
         /// or null (if no Ptg change is needed)</returns>
         private Ptg AdjustPtgDueToRowMove(Ptg ptg, int currentExternSheetIx)
         {
-            if (ptg is RefPtg)
+            if (ptg is RefPtg refPtg)
             {
                 if (currentExternSheetIx != _externSheetIndex)
                 {
                     // local refs on other sheets are unaffected
                     return null;
                 }
-                RefPtg rptg = (RefPtg)ptg;
-                return RowMoveRefPtg(rptg);
+
+                return RowMoveRefPtg(refPtg);
             }
-            if (ptg is Ref3DPtg)
+
+            if (ptg is Ref3DPtg rptg)
             {
-                Ref3DPtg rptg = (Ref3DPtg)ptg;
                 if (_externSheetIndex != rptg.ExternSheetIndex)
                 {
-                    // only move 3D refs that refer to the sheet with cells being moved
-                    // (currentExternSheetIx is irrelevant)
+                    // only move 3D refs that refer to the sheet with
+                    // cells being moved (currentExternSheetIx is irrelevant)
                     return null;
                 }
+
                 return RowMoveRefPtg(rptg);
             }
 
-            if (ptg is Ref3DPxg)
+            if (ptg is Ref3DPxg rpxg)
             {
-                Ref3DPxg rpxg = (Ref3DPxg)ptg;
                 if (rpxg.ExternalWorkbookNumber > 0 ||
                        !_sheetName.Equals(rpxg.SheetName))
                 {
-                    // only move 3D refs that refer to the sheet with cells being moved
+                    // only move 3D refs that refer to the sheet with cells
+                    // being moved
                     return null;
                 }
+
                 return RowMoveRefPtg(rpxg);
             }
-            if (ptg is Area2DPtgBase)
+
+            if (ptg is Area2DPtgBase areaPtgBase)
             {
                 if (currentExternSheetIx != _externSheetIndex)
                 {
                     // local refs on other sheets are unaffected
                     return ptg;
                 }
-                return RowMoveAreaPtg((Area2DPtgBase)ptg);
+
+                return RowMoveAreaPtg(areaPtgBase);
             }
-            if (ptg is Area3DPtg)
+
+            if (ptg is Area3DPtg aptg)
             {
-                Area3DPtg aptg = (Area3DPtg)ptg;
                 if (_externSheetIndex != aptg.ExternSheetIndex)
                 {
-                    // only move 3D refs that refer to the sheet with cells being moved
-                    // (currentExternSheetIx is irrelevant)
+                    // only move 3D refs that refer to the sheet with cells
+                    // being moved (currentExternSheetIx is irrelevant)
                     return null;
                 }
+
                 return RowMoveAreaPtg(aptg);
             }
 
-            if (ptg is Area3DPxg)
+            if (ptg is Area3DPxg apxg)
             {
-                Area3DPxg apxg = (Area3DPxg)ptg;
                 if (apxg.ExternalWorkbookNumber > 0 ||
                         !_sheetName.Equals(apxg.SheetName))
                 {
-                    // only move 3D refs that refer to the sheet with cells being moved
+                    // only move 3D refs that refer to the sheet with cells
+                    // being moved
                     return null;
                 }
+
                 return RowMoveAreaPtg(apxg);
             }
+
             return null;
         }
 
-        /**
-        * Call this on any ptg reference contained in a row of cells that was copied.
-        * If the ptg reference is relative, the references will be shifted by the distance
-        * that the rows were copied.
-        * In the future similar functions could be written due to column copying or
-        * individual cell copying. Just make sure to only call adjustPtgDueToRowCopy on
-        * formula cells that are copied (unless row shifting, where references outside
-        * of the shifted region need to be updated to reflect the shift, a copy is self-contained).
-        * 
-        * @param ptg the ptg to shift
-        * @return deleted ref ptg, in-place modified ptg, or null
-        * If Ptg would be shifted off the first or last row of a sheet, return deleted ref
-        * If Ptg needs to be changed, modifies Ptg in-place
-        * If Ptg doesn't need to be changed, returns <code>null</code>
-        */
+        /// <summary>
+        /// Call this on any ptg reference contained in a row of cells that was
+        /// copied. If the ptg reference is relative, the references will be 
+        /// shifted by the distance that the rows were copied. In the future 
+        /// similar functions could be written due to column copying or 
+        /// individual cell copying. Just make sure to only call 
+        /// adjustPtgDueToRowCopy on formula cells that are copied (unless row 
+        /// shifting, where references outside of the shifted region need to be
+        /// updated to reflect the shift, a copy is self-contained).
+        /// </summary>
+        /// <param name="ptg">the ptg to shift</param>
+        /// <returns>deleted ref ptg, in-place modified ptg, or null 
+        /// <para>If Ptg would be shifted off the first or last row of a sheet, 
+        /// return deleted ref </para>
+        /// <para>If Ptg needs to be changed, modifies Ptg in-place </para>
+        /// <para>If Ptg doesn't need to be changed, returns <code>null</code>
+        /// </para></returns>
         private Ptg AdjustPtgDueToRowCopy(Ptg ptg)
         {
-            if (ptg is RefPtg)
+            if (ptg is RefPtg refPtg)
             {
-                RefPtg rptg = (RefPtg)ptg;
+                return RowCopyRefPtg(refPtg);
+            }
+
+            if (ptg is Ref3DPtg rptg)
+            {
                 return RowCopyRefPtg(rptg);
             }
-            if (ptg is Ref3DPtg)
+
+            if (ptg is Ref3DPxg rpxg)
             {
-                Ref3DPtg rptg = (Ref3DPtg)ptg;
-                return RowCopyRefPtg(rptg);
-            }
-            if (ptg is Ref3DPxg)
-            {
-                Ref3DPxg rpxg = (Ref3DPxg)ptg;
                 return RowCopyRefPtg(rpxg);
             }
-            if (ptg is Area2DPtgBase)
+
+            if (ptg is Area2DPtgBase areaPtgBase)
             {
-                return RowCopyAreaPtg((Area2DPtgBase)ptg);
+                return RowCopyAreaPtg(areaPtgBase);
             }
-            if (ptg is Area3DPtg)
+
+            if (ptg is Area3DPtg aptg)
             {
-                Area3DPtg aptg = (Area3DPtg)ptg;
                 return RowCopyAreaPtg(aptg);
             }
-            if (ptg is Area3DPxg)
+
+            if (ptg is Area3DPxg apxg)
             {
-                Area3DPxg apxg = (Area3DPxg)ptg;
                 return RowCopyAreaPtg(apxg);
             }
+
             return null;
         }
 
         private Ptg AdjustPtgDueToSheetMove(Ptg ptg)
         {
-            if (ptg is Ref3DPtg)
+            if (ptg is Ref3DPtg refPtg)
             {
-                Ref3DPtg ref1 = (Ref3DPtg)ptg;
-                int oldSheetIndex = ref1.ExternSheetIndex;
+                int oldSheetIndex = refPtg.ExternSheetIndex;
 
                 // we have to handle a few cases here
 
@@ -310,6 +376,7 @@ namespace NPOI.SS.Formula
                 {
                     return null;
                 }
+
                 if (oldSheetIndex > _srcSheetIndex &&
                         oldSheetIndex > _dstSheetIndex)
                 {
@@ -319,24 +386,25 @@ namespace NPOI.SS.Formula
                 // 2. ptg refers to the moved sheet
                 if (oldSheetIndex == _srcSheetIndex)
                 {
-                    ref1.ExternSheetIndex = (_dstSheetIndex);
-                    return ref1;
+                    refPtg.ExternSheetIndex = _dstSheetIndex;
+                    return refPtg;
                 }
 
                 // 3. new index is lower than old one => sheets get moved up
                 if (_dstSheetIndex < _srcSheetIndex)
                 {
-                    ref1.ExternSheetIndex = (oldSheetIndex + 1);
-                    return ref1;
+                    refPtg.ExternSheetIndex = oldSheetIndex + 1;
+                    return refPtg;
                 }
 
                 // 4. new index is higher than old one => sheets get moved down
                 if (_dstSheetIndex > _srcSheetIndex)
                 {
-                    ref1.ExternSheetIndex = (oldSheetIndex - 1);
-                    return ref1;
+                    refPtg.ExternSheetIndex = oldSheetIndex - 1;
+                    return refPtg;
                 }
             }
+
             return null;
         }
         private Ptg RowMoveRefPtg(RefPtgBase rptg)
@@ -344,12 +412,13 @@ namespace NPOI.SS.Formula
             int refRow = rptg.Row;
             if (_firstMovedIndex <= refRow && refRow <= _lastMovedIndex)
             {
-                // Rows being moved completely enclose the ref.
-                // - move the area ref along with the rows regardless of destination
-                rptg.Row = (refRow + _amountToMove);
+                // Rows being moved completely enclose the ref. - move the area
+                // ref along with the rows regardless of destination
+                rptg.Row = refRow + _amountToMove;
                 return rptg;
             }
-            // else rules for adjusting area may also depend on the destination of the moved rows
+            // else rules for adjusting area may also depend on the destination
+            // of the moved rows
 
             int destFirstRowIndex = _firstMovedIndex + _amountToMove;
             int destLastRowIndex = _lastMovedIndex + _amountToMove;
@@ -368,8 +437,11 @@ namespace NPOI.SS.Formula
                 // destination rows enclose the area (possibly exactly)
                 return CreateDeletedRef(rptg);
             }
-            throw new InvalidOperationException("Situation not covered: (" + _firstMovedIndex + ", " +
-                        _lastMovedIndex + ", " + _amountToMove + ", " + refRow + ", " + refRow + ")");
+
+            throw new InvalidOperationException(
+                "Situation not covered: (" + _firstMovedIndex + ", " +
+                        _lastMovedIndex + ", " + _amountToMove + ", " + 
+                        refRow + ", " + refRow + ")");
         }
 
         private Ptg RowMoveAreaPtg(AreaPtgBase aptg)
@@ -378,13 +450,14 @@ namespace NPOI.SS.Formula
             int aLastRow = aptg.LastRow;
             if (_firstMovedIndex <= aFirstRow && aLastRow <= _lastMovedIndex)
             {
-                // Rows being moved completely enclose the area ref.
-                // - move the area ref along with the rows regardless of destination
-                aptg.FirstRow = (aFirstRow + _amountToMove);
-                aptg.LastRow = (aLastRow + _amountToMove);
+                // Rows being moved completely enclose the area ref. - move the
+                // area ref along with the rows regardless of destination
+                aptg.FirstRow = aFirstRow + _amountToMove;
+                aptg.LastRow = aLastRow + _amountToMove;
                 return aptg;
             }
-            // else rules for adjusting area may also depend on the destination of the moved rows
+            // else rules for adjusting area may also depend on the destination
+            // of the moved rows
 
             int destFirstRowIndex = _firstMovedIndex + _amountToMove;
             int destLastRowIndex = _lastMovedIndex + _amountToMove;
@@ -395,88 +468,102 @@ namespace NPOI.SS.Formula
 
                 // If the destination of the rows overlaps either the top
                 // or bottom of the area ref there will be a change
-                if (destFirstRowIndex < aFirstRow && aFirstRow <= destLastRowIndex)
+                if (destFirstRowIndex < aFirstRow 
+                    && aFirstRow <= destLastRowIndex)
                 {
                     // truncate the top of the area by the moved rows
-                    aptg.FirstRow = (destLastRowIndex + 1);
+                    aptg.FirstRow = destLastRowIndex + 1;
                     return aptg;
                 }
-                else if (destFirstRowIndex <= aLastRow && aLastRow < destLastRowIndex)
+                else if (destFirstRowIndex <= aLastRow 
+                    && aLastRow < destLastRowIndex)
                 {
                     // truncate the bottom of the area by the moved rows
-                    aptg.LastRow = (destFirstRowIndex - 1);
+                    aptg.LastRow = destFirstRowIndex - 1;
                     return aptg;
                 }
                 // else - rows have moved completely outside the area ref,
                 // or still remain completely within the area ref
                 return null; // - no change to the area
             }
+
             if (_firstMovedIndex <= aFirstRow && aFirstRow <= _lastMovedIndex)
             {
-                // Rows moved include the first row of the area ref, but not the last row
-                // btw: (aLastRow > _lastMovedIndex)
+                // Rows moved include the first row of the area ref, but not
+                // the last row btw: (aLastRow > _lastMovedIndex)
                 if (_amountToMove < 0)
                 {
                     // simple case - expand area by shifting top upward
-                    aptg.FirstRow = (aFirstRow + _amountToMove);
+                    aptg.FirstRow = aFirstRow + _amountToMove;
                     return aptg;
                 }
+
                 if (destFirstRowIndex > aLastRow)
                 {
                     // in this case, excel ignores the row move
                     return null;
                 }
+
                 int newFirstRowIx = aFirstRow + _amountToMove;
                 if (destLastRowIndex < aLastRow)
                 {
                     // end of area is preserved (will remain exact same row)
                     // the top area row is moved simply
-                    aptg.FirstRow = (newFirstRowIx);
+                    aptg.FirstRow = newFirstRowIx;
                     return aptg;
                 }
-                // else - bottom area row has been replaced - both area top and bottom may move now
+                // else - bottom area row has been replaced - both area top and
+                // bottom may move now
                 int areaRemainingTopRowIx = _lastMovedIndex + 1;
                 if (destFirstRowIndex > areaRemainingTopRowIx)
                 {
-                    // old top row of area has moved deep within the area, and exposed a new top row
+                    // old top row of area has moved deep within the area, and
+                    // exposed a new top row
                     newFirstRowIx = areaRemainingTopRowIx;
                 }
-                aptg.FirstRow = (newFirstRowIx);
-                aptg.LastRow = (Math.Max(aLastRow, destLastRowIndex));
+
+                aptg.FirstRow = newFirstRowIx;
+                aptg.LastRow = Math.Max(aLastRow, destLastRowIndex);
                 return aptg;
             }
+
             if (_firstMovedIndex <= aLastRow && aLastRow <= _lastMovedIndex)
             {
-                // Rows moved include the last row of the area ref, but not the first
-                // btw: (aFirstRow < _firstMovedIndex)
+                // Rows moved include the last row of the area ref, but not the
+                // first. btw: (aFirstRow < _firstMovedIndex)
                 if (_amountToMove > 0)
                 {
                     // simple case - expand area by shifting bottom downward
-                    aptg.LastRow = (aLastRow + _amountToMove);
+                    aptg.LastRow = aLastRow + _amountToMove;
                     return aptg;
                 }
+
                 if (destLastRowIndex < aFirstRow)
                 {
                     // in this case, excel ignores the row move
                     return null;
                 }
+
                 int newLastRowIx = aLastRow + _amountToMove;
                 if (destFirstRowIndex > aFirstRow)
                 {
                     // top of area is preserved (will remain exact same row)
                     // the bottom area row is moved simply
-                    aptg.LastRow = (newLastRowIx);
+                    aptg.LastRow = newLastRowIx;
                     return aptg;
                 }
-                // else - top area row has been replaced - both area top and bottom may move now
+                // else - top area row has been replaced - both area top and
+                // bottom may move now
                 int areaRemainingBottomRowIx = _firstMovedIndex - 1;
                 if (destLastRowIndex < areaRemainingBottomRowIx)
                 {
-                    // old bottom row of area has moved up deep within the area, and exposed a new bottom row
+                    // old bottom row of area has moved up deep within the
+                    // area, and exposed a new bottom row
                     newLastRowIx = areaRemainingBottomRowIx;
                 }
-                aptg.FirstRow = (Math.Min(aFirstRow, destFirstRowIndex));
-                aptg.LastRow = (newLastRowIx);
+
+                aptg.FirstRow = Math.Min(aFirstRow, destFirstRowIndex);
+                aptg.LastRow = newLastRowIx;
                 return aptg;
             }
             // else source rows include none of the rows of the area ref
@@ -496,7 +583,8 @@ namespace NPOI.SS.Formula
 
             if (aFirstRow <= destFirstRowIndex && destLastRowIndex <= aLastRow)
             {
-                // destination rows are within area ref (possibly exact on top or bottom, but not both)
+                // destination rows are within area ref (possibly exact on top
+                // or bottom, but not both)
                 return null; // - no change to area
             }
 
@@ -504,29 +592,31 @@ namespace NPOI.SS.Formula
             {
                 // dest rows overlap top of area
                 // - truncate the top
-                aptg.FirstRow = (destLastRowIndex + 1);
+                aptg.FirstRow = destLastRowIndex + 1;
                 return aptg;
             }
+
             if (destFirstRowIndex <= aLastRow && aLastRow < destLastRowIndex)
             {
                 // dest rows overlap bottom of area
                 // - truncate the bottom
-                aptg.LastRow = (destFirstRowIndex - 1);
+                aptg.LastRow = destFirstRowIndex - 1;
                 return aptg;
             }
-            throw new InvalidOperationException("Situation not covered: (" + _firstMovedIndex + ", " +
-                        _lastMovedIndex + ", " + _amountToMove + ", " + aFirstRow + ", " + aLastRow + ")");
+
+            throw new InvalidOperationException(
+                "Situation not covered: (" + _firstMovedIndex + ", " +
+                        _lastMovedIndex + ", " + _amountToMove + ", " + 
+                        aFirstRow + ", " + aLastRow + ")");
         }
 
-
-        /**
-         * Modifies rptg in-place and return a reference to rptg if the cell reference
-         * would move due to a row copy operation
-         * Returns <code>null</code> or {@link #RefErrorPtg} if no change was made
-         *
-         * @param aptg
-         * @return
-         */
+        /// <summary>
+        /// Modifies rptg in-place and return a reference to rptg if the cell 
+        /// reference would move due to a row copy operation
+        /// </summary>
+        /// <param name="rptg"></param>
+        /// <returns><code>null</code> or {@link #RefErrorPtg} if no change was
+        /// made</returns>
         private Ptg RowCopyRefPtg(RefPtgBase rptg)
         {
             int refRow = rptg.Row;
@@ -534,21 +624,25 @@ namespace NPOI.SS.Formula
             {
                 int destRowIndex = _firstMovedIndex + _amountToMove;
                 if (destRowIndex < 0 || _version.LastRowIndex < destRowIndex)
+                {
                     return CreateDeletedRef(rptg);
-                rptg.Row = (refRow + _amountToMove);
+                }
+
+                rptg.Row = refRow + _amountToMove;
                 return rptg;
             }
+
             return null;
         }
 
-        /**
-         * Modifies aptg in-place and return a reference to aptg if the first or last row of
-         * of the Area reference would move due to a row copy operation
-         * Returns <code>null</code> or {@link #AreaErrPtg} if no change was made
-         *
-         * @param aptg
-         * @return null, AreaErrPtg, or modified aptg
-         */
+        /// <summary>
+        /// Modifies aptg in-place and return a reference to aptg if the first 
+        /// or last row of of the Area reference would move due to a row 
+        /// copy operation
+        /// </summary>
+        /// <param name="aptg"></param>
+        /// <returns><code>null</code> or <see cref="AreaErrPtg"/>if no change 
+        /// was made</returns>
         private Ptg RowCopyAreaPtg(AreaPtgBase aptg)
         {
             bool changed = false;
@@ -559,19 +653,29 @@ namespace NPOI.SS.Formula
             if (aptg.IsFirstRowRelative)
             {
                 int destFirstRowIndex = aFirstRow + _amountToMove;
-                if (destFirstRowIndex < 0 || _version.LastRowIndex < destFirstRowIndex)
+                if (destFirstRowIndex < 0 
+                    || _version.LastRowIndex < destFirstRowIndex)
+                {
                     return CreateDeletedRef(aptg);
-                aptg.FirstRow = (destFirstRowIndex);
+                }
+
+                aptg.FirstRow = destFirstRowIndex;
                 changed = true;
             }
+
             if (aptg.IsLastRowRelative)
             {
                 int destLastRowIndex = aLastRow + _amountToMove;
-                if (destLastRowIndex < 0 || _version.LastRowIndex < destLastRowIndex)
+                if (destLastRowIndex < 0 
+                    || _version.LastRowIndex < destLastRowIndex)
+                {
                     return CreateDeletedRef(aptg);
-                aptg.LastRow = (destLastRowIndex);
+                }
+
+                aptg.LastRow = destLastRowIndex;
                 changed = true;
             }
+
             if (changed)
             {
                 aptg.SortTopLeftToBottomRight();
@@ -586,31 +690,37 @@ namespace NPOI.SS.Formula
             {
                 return new RefErrorPtg();
             }
-            if (ptg is Ref3DPtg)
+
+            if (ptg is Ref3DPtg rptg)
             {
-                Ref3DPtg rptg = (Ref3DPtg)ptg;
                 return new DeletedRef3DPtg(rptg.ExternSheetIndex);
             }
+
             if (ptg is AreaPtg)
             {
                 return new AreaErrPtg();
             }
-            if (ptg is Area3DPtg)
+
+            if (ptg is Area3DPtg area3DPtg)
             {
-                Area3DPtg area3DPtg = (Area3DPtg)ptg;
                 return new DeletedArea3DPtg(area3DPtg.ExternSheetIndex);
             }
-            if (ptg is Ref3DPxg)
+
+            if (ptg is Ref3DPxg pxg)
             {
-                Ref3DPxg pxg = (Ref3DPxg)ptg;
-                return new Deleted3DPxg(pxg.ExternalWorkbookNumber, pxg.SheetName);
+                return 
+                    new Deleted3DPxg(pxg.ExternalWorkbookNumber, pxg.SheetName);
             }
-            if (ptg is Area3DPxg)
+
+            if (ptg is Area3DPxg areaPxg)
             {
-                Area3DPxg pxg = (Area3DPxg)ptg;
-                return new Deleted3DPxg(pxg.ExternalWorkbookNumber, pxg.SheetName);
+                return new Deleted3DPxg(
+                    areaPxg.ExternalWorkbookNumber, 
+                    areaPxg.SheetName);
             }
-            throw new ArgumentException("Unexpected ref ptg class (" + ptg.GetType().Name + ")");
+
+            throw new ArgumentException(
+                "Unexpected ref ptg class (" + ptg.GetType().Name + ")");
         }
     }
 }
