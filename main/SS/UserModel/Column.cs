@@ -59,6 +59,26 @@ namespace NPOI.SS.UserModel
         int ColumnNum { get; set; }
 
         /// <summary>
+        /// Excel column objects might contain a number actual physical columns.
+        /// This property returns the 0-based number of the first column in this
+        /// <see cref="IColumn"/>
+        /// </summary>
+        int FirstColumnNum { get; set; }
+
+        /// <summary>
+        /// Excel column objects might contain a number actual physical columns.
+        /// This property returns the 0-based number of the last column in this
+        /// <see cref="IColumn"/>
+        /// </summary>
+        int LastColumnNum { get; set; }
+
+        /// <summary>
+        /// Indicates wether this <see cref="IColumn"/> contains only one 
+        /// physical column
+        /// </summary>
+        bool IsSimpleColumn { get; }
+
+        /// <summary>
         /// Returns the cell at the given (0 based) index,
         /// with the <see cref="MissingCellPolicy"/> from the parent Workbook.
         /// </summary>
