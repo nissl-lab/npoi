@@ -6,13 +6,15 @@ using System.Text;
 
 namespace NPOI.Util
 {
-    public abstract class OutputStream : Stream
+    public abstract class OutputStream : MemoryStream
     {
+        
         public abstract void Write(int b);
         public virtual void Write(byte[] b)
         {
             Write(b, 0, b.Length);
         }
+
         public override void Write(byte[] b, int off, int len)
         {
             if (b == null)
@@ -33,5 +35,6 @@ namespace NPOI.Util
                 Write(b[off + i]);
             }
         }
+
     }
 }

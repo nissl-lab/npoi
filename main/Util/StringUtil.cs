@@ -173,6 +173,80 @@ namespace NPOI.Util
             return ISO_8859_1.GetString(str, offset, len_to_use);
         }
 
+        /**
+     * Given a byte array of 16-bit unicode characters in Little Endian
+     * format (most important byte last), return a Java String representation
+     * of it.
+     *
+     * Scans the byte array for two continous 0 bytes and returns the string before.
+     * <p>
+     *
+     * #61881: there seem to be programs out there, which write the 0-termination also
+     * at the beginning of the string. Check if the next two bytes contain a valid ascii char
+     * and correct the _recdata with a '?' char
+     *
+     *
+     * @param string the byte array to be converted
+     * @param offset the initial offset into the
+     *               byte array. it is assumed that string[ offset ] and string[ offset +
+     *               1 ] contain the first 16-bit unicode character
+     * @param len    the max. length of the final string
+     * @return the converted string, never {@code null}.
+     * @throws ArrayIndexOutOfBoundsException if offset is out of bounds for
+     *                                        the byte array (i.e., is negative or is greater than or equal to
+     *                                        string.length)
+     * @throws IllegalArgumentException       if len is too large (i.e.,
+     *                                        there is not enough data in string to create a String of that
+     *                                        length)
+     */
+        public static String GetFromUnicodeLE0Terminated(byte[] _string, int offset, int len)
+        {
+            if ((offset < 0) || (offset >= _string.Length))
+            {
+                throw new ArgumentOutOfRangeException("Illegal offset " + offset + " (String data is of length " + _string.Length + ")");
+            }
+
+            if ((len < 0) || (((_string.Length - offset) / 2) < len))
+            {
+                throw new ArgumentOutOfRangeException("Illegal length " + len);
+            }
+
+            int newOffset;
+            int newMaxLen;
+            string prefix;
+
+            // #61881 - for now we only check the first char
+            if (len > 0 && offset < (_string.Length - 1) && _string[offset] == 0 && _string[offset + 1] == 0)
+            {
+                newOffset = offset + 2;
+                prefix = "?";
+
+                // check if the next char is garbage and limit the len if necessary
+                int cp = (len > 1) ? LittleEndian.GetShort(_string, offset + 2) : 0;
+                newMaxLen = Character.IsIdentifierPart(cp) ? len - 1 : 0;
+            }
+            else
+            {
+                newOffset = offset;
+                prefix = "";
+                newMaxLen = len;
+            }
+
+            int newLen = 0;
+
+            // loop until we find a null-terminated end
+            for (; newLen < newMaxLen; newLen++)
+            {
+                if (_string[newOffset + newLen * 2] == 0 && _string[newOffset + newLen * 2 + 1] == 0)
+                {
+                    break;
+                }
+            }
+            newLen = Math.Min(newLen, newMaxLen);
+
+            return prefix + ((newLen == 0) ? "" : Encoding.Unicode.GetString(_string, newOffset, newLen * 2));// new string(_string, newOffset, newLen * 2, UTF16LE));
+        }
+
 
         /// <summary>
         /// Takes a unicode (java) string, and returns it as 8 bit data (in IsO-8859-1
@@ -571,7 +645,7 @@ namespace NPOI.Util
      *         specified surrogate pair.
      * @since  1.5
      */
-        public static int toCodePoint(char high, char low)
+        public static int ToCodePoint(char high, char low)
         {
             // Optimized form of:
             // return ((high - MIN_HIGH_SURROGATE) << 10)
@@ -582,7 +656,7 @@ namespace NPOI.Util
                                            - MIN_LOW_SURROGATE);
         }
         // throws ArrayIndexOutOfBoundsException if index out of bounds
-        static int codePointAt(char[] a, int index, int limit)
+        static int CodePointAt(char[] a, int index, int limit)
         {
             char c1 = a[index];
             if (char.IsHighSurrogate(c1) && ++index < limit)
@@ -590,7 +664,7 @@ namespace NPOI.Util
                 char c2 = a[index];
                 if (char.IsLowSurrogate(c2))
                 {
-                    return toCodePoint(c1, c2);
+                    return ToCodePoint(c1, c2);
                 }
             }
             return c1;
@@ -616,7 +690,7 @@ namespace NPOI.Util
         {
             return codePoint >= MIN_SUPPLEMENTARY_CODE_POINT ? 2 : 1;
         }
-        public static void mapMsCodepoint(int msCodepoint, int unicodeCodepoint)
+        public static void MapMsCodepoint(int msCodepoint, int unicodeCodepoint)
         {
             InitMsCodepointMap();
             msCodepointToUnicode.Add(msCodepoint, unicodeCodepoint);

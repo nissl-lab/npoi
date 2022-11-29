@@ -296,7 +296,15 @@ namespace NPOI.Util
             return result;
         }
 
-        internal static int[] CopyOfRange(int[] original, int from, int to)
+		public static T[] CopyOf<T>(T[] source, int newLength)
+		{
+			T[] result = new T[newLength];
+			Array.Copy(source, 0, result, 0,
+					Math.Min(source.Length, newLength));
+			return result;
+		}
+
+		internal static int[] CopyOfRange(int[] original, int from, int to)
         {
             int newLength = to - from;
             if (newLength < 0)
@@ -316,8 +324,18 @@ namespace NPOI.Util
                              Math.Min(original.Length - from, newLength));
             return copy;
         }
+		internal static T[] CopyOfRange<T>(T[] original, int from, int to)
+		{
+			int newLength = to - from;
+			if (newLength < 0)
+				throw new ArgumentException(from + " > " + to);
+			T[] copy = new T[newLength];
+			Array.Copy(original, from, copy, 0,
+							 Math.Min(original.Length - from, newLength));
+			return copy;
+		}
 
-        /**
+		/**
          * Returns a hash code based on the contents of the specified array.
          * For any two <tt>long</tt> arrays <tt>a</tt> and <tt>b</tt>
          * such that <tt>Arrays.Equals(a, b)</tt>, it is also the case that
@@ -333,7 +351,7 @@ namespace NPOI.Util
          * @return a content-based hash code for <tt>a</tt>
          * @since 1.5
          */
-        public static int HashCode(long[] a) {
+		public static int HashCode(long[] a) {
             if (a == null)
                 return 0;
 

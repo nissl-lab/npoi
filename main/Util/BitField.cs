@@ -275,5 +275,10 @@ namespace NPOI.Util
         {
             return (byte)this.Set(holder);
         }
-    }
+
+		public int GetMask()
+		{
+			return _mask;
+		}
+	}
 }

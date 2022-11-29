@@ -293,7 +293,25 @@ namespace NPOI.Util
             CheckLength(length, maxLength);
         }
 
-        private static void CheckByteSizeLimit(int length)
+		public static byte[] SafelyClone(byte[] src, int offset, int length, int maxLength)
+		{
+			if (src == null)
+			{
+				return null;
+			}
+
+			if (offset < 0 || length < 0 || maxLength < 0)
+			{
+				throw new RecordFormatException("Invalid offset/length specified: "
+						+ "offset: " + offset + ", lenght: " + length + ", maxLength: " + maxLength);
+			}
+
+			int realLength = Math.Min(src.Length - offset, length);
+			SafelyAllocateCheck(realLength, maxLength);
+			return Arrays.CopyOfRange(src, offset, offset + realLength);
+		}
+
+		private static void CheckByteSizeLimit(int length)
         {
             if (BYTE_ARRAY_MAX_OVERRIDE != -1 && length > BYTE_ARRAY_MAX_OVERRIDE)
             {
