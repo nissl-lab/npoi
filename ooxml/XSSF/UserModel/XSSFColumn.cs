@@ -130,6 +130,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     _column.width = value;
                     _column.customWidth = true;
+
                 }
             }
         }
@@ -161,74 +162,15 @@ namespace NPOI.XSSF.UserModel
 
             set
             {
-                EvaluateColumnNumber(value);
+                int maxColumn = SpreadsheetVersion.EXCEL2007.LastColumnIndex;
+                if (value < 0 || value > maxColumn)
+                {
+                    throw new ArgumentException("Invalid column number (" + value
+                            + ") outside allowable range (0.." + maxColumn + ")");
+                }
 
                 _column.min = (uint)(value + 1);
                 _column.max = (uint)(value + 1);
-            }
-        }
-
-        /// <summary>
-        /// Excel column objects might contain a number actual physical columns.
-        /// This property returns the 0-based number of the first column in this
-        /// <see cref="XSSFColumn"/>
-        /// </summary>
-        public int FirstColumnNum
-        {
-            get
-            {
-                return (int)_column.min - 1;
-            }
-
-            set
-            {
-                EvaluateColumnNumber(value);
-
-                _column.min = (uint)(value + 1);
-
-                if (_column.max == 0 || _column.max < _column.min)
-                {
-                    _column.max = _column.min;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Excel column objects might contain a number actual physical columns.
-        /// This property returns the 0-based number of the last column in this
-        /// <see cref="XSSFColumn"/>
-        /// </summary>
-        public int LastColumnNum
-        {
-            get
-            {
-                return (int)_column.max - 1;
-            }
-
-            set
-            {
-                EvaluateColumnNumber(value);
-
-                if (value < FirstColumnNum)
-                {
-                    throw new ArgumentException("Invalid last column number ("
-                        + value + ") is less than first column number (" +
-                        LastColumnNum + ")");
-                }
-
-                _column.max = (uint)(value + 1);
-            }
-        }
-
-        /// <summary>
-        /// Indicates wether this <see cref="IColumn"/> contains only one 
-        /// physical column
-        /// </summary>
-        public bool IsSimpleColumn
-        {
-            get
-            {
-                return _column.min == _column.max;
             }
         }
 
@@ -402,12 +344,7 @@ namespace NPOI.XSSF.UserModel
 
             foreach (XSSFRow row in sheet.Cast<XSSFRow>())
             {
-                IEnumerable<XSSFCell> cells = row
-                    .Where(c => c.ColumnIndex >= FirstColumnNum 
-                        && c.ColumnIndex <= LastColumnNum)
-                    .Cast<XSSFCell>();
-
-                foreach (XSSFCell cell in cells)
+                foreach (XSSFCell cell in row.Where(c => c.ColumnIndex == ColumnNum).Cast<XSSFCell>())
                 {
                     _cells.Add(cell.RowIndex, cell);
                     sheet.OnReadCell(cell);
@@ -808,18 +745,6 @@ namespace NPOI.XSSF.UserModel
                     break;
                 default:
                     throw new ArgumentException("Illegal cell type: " + cellType);
-            }
-        }
-
-        private static void EvaluateColumnNumber(int value)
-        {
-            int maxColumn = SpreadsheetVersion.EXCEL2007.LastColumnIndex;
-
-            if (value < 0 || value > maxColumn)
-            {
-                throw new ArgumentException("Invalid column number ("
-                    + value + ") outside allowable range " +
-                    "(0.." + maxColumn + ")");
             }
         }
 
