@@ -1,49 +1,50 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<AssemblyName>NPOI.OpenXml4Net</AssemblyName>
-	<SignAssembly>true</SignAssembly>
-	<AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AssemblyName>NPOI.OpenXml4Net</AssemblyName>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE</DefineConstants>
-    <OutputPath>..\solution\Lib\Debug\</OutputPath>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>TRACE</DefineConstants>
+		<OutputPath>..\solution\Lib\Debug\</OutputPath>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\solution\Lib\Release\</OutputPath>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<OutputPath>..\solution\Lib\Release\</OutputPath>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
-    <NoWarn>1701;1702;0108;0618;618;108;0612;612;162;0162</NoWarn>
-    <WarningLevel>1</WarningLevel>
-  </PropertyGroup>
+	<PropertyGroup>
+		<DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
+		<NoWarn>1701;1702;0108;0618;618;108;0612;612;162;0162</NoWarn>
+		<WarningLevel>1</WarningLevel>
+	</PropertyGroup>
 
 
-  <ItemGroup>
-    <Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="IronDevTools.PerformanceAnalyzer" Version="2022.11.10663" />
+		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\main\NPOI.Multitarget.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\main\NPOI.Multitarget.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
 
 </Project>

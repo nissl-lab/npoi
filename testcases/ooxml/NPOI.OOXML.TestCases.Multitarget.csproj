@@ -1,42 +1,43 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net6.0</TargetFrameworks>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <AssemblyName>NPOI.OOXML.TestCases</AssemblyName>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
-    <RootNamespace>TestCases</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net6.0</TargetFrameworks>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AssemblyName>NPOI.OOXML.TestCases</AssemblyName>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+		<RootNamespace>TestCases</RootNamespace>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="OpenXmlFormats\**" />
-    <EmbeddedResource Remove="OpenXmlFormats\**" />
-    <None Remove="OpenXmlFormats\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="OpenXmlFormats\**" />
+		<EmbeddedResource Remove="OpenXmlFormats\**" />
+		<None Remove="OpenXmlFormats\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="XSSF\TestWorkbookProtection.cs" />
-    <Compile Remove="XSSF\UserModel\Charts\TestXSSFNumberCache.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="XSSF\TestWorkbookProtection.cs" />
+		<Compile Remove="XSSF\UserModel\Charts\TestXSSFNumberCache.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
-    <PackageReference Include="NSubstitute" Version="3.1.0" />
-    <PackageReference Include="NUnit" Version="3.10.1" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="IronDevTools.PerformanceAnalyzer" Version="2022.11.10663" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+		<PackageReference Include="NSubstitute" Version="3.1.0" />
+		<PackageReference Include="NUnit" Version="3.10.1" />
+		<PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\main\NPOI.Multitarget.csproj" />
-    <ProjectReference Include="..\..\ooxml\NPOI.OOXML.Multitarget.csproj" />
-    <ProjectReference Include="..\..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj" />
-    <ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Multitarget.csproj" />
-    <ProjectReference Include="..\main\NPOI.TestCases.Multitarget.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\main\NPOI.Multitarget.csproj" />
+		<ProjectReference Include="..\..\ooxml\NPOI.OOXML.Multitarget.csproj" />
+		<ProjectReference Include="..\..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj" />
+		<ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Multitarget.csproj" />
+		<ProjectReference Include="..\main\NPOI.TestCases.Multitarget.csproj" />
+	</ItemGroup>
 
-  <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
-    <Copy SourceFiles="App.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
-  </Target>
+	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+		<Copy SourceFiles="App.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
+	</Target>
 
 </Project>
