@@ -95,12 +95,41 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "col")
-                    ctObj.col.Add(CT_Col.Parse(childNode, namespaceManager));
+                {
+                    CT_Col ctCol = CT_Col.Parse(childNode, namespaceManager);
+
+                    if (ctCol.min != ctCol.max)
+                    {
+                        BreakUpCtCol(ctObj, ctCol);
+                    }
+                    else
+                    {
+                        ctObj.col.Add(ctCol);
+                    }
+                }
             }
+
             return ctObj;
         }
 
+        /// <summary>
+        /// For ease of use of columns in NPOI break up <see cref="CT_Col"/>s
+        /// that span over multiple physical columns into individual
+        /// <see cref="CT_Col"/>s for each physical column.
+        /// </summary>
+        /// <param name="ctObj"></param>
+        /// <param name="ctCol"></param>
+        private static void BreakUpCtCol(CT_Cols ctObj, CT_Col ctCol)
+        {
+            for (int i = (int)ctCol.min; i <= (int)ctCol.max; i++)
+            {
+                CT_Col breakOffCtCol = ctCol.Copy();
+                breakOffCtCol.min = (uint)i;
+                breakOffCtCol.max = (uint)i;
 
+                ctObj.col.Add(breakOffCtCol);
+            }
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
