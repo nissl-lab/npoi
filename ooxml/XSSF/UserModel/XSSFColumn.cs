@@ -289,7 +289,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public bool? Hidden
+        public bool Hidden
         {
             get
             {
@@ -298,11 +298,11 @@ namespace NPOI.XSSF.UserModel
 
             set
             {
-                _column.hidden = value ?? false;
+                _column.hidden = value;
             }
         }
 
-        public bool? Collapsed
+        public bool Collapsed
         {
             get
             {
@@ -311,7 +311,7 @@ namespace NPOI.XSSF.UserModel
 
             set
             {
-                _column.collapsed = value ?? false;
+                _column.collapsed = value;
             }
         }
         #endregion

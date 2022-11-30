@@ -167,10 +167,10 @@ namespace NPOI.SS.UserModel
         /// put it into more groups (outlines), reduced as
         /// you take it out of them.
         /// </summary>
-        int OutlineLevel { get; }
+        int OutlineLevel { get; set; }
 
-        bool? Hidden { get; set; }
+        bool Hidden { get; set; }
 
-        bool? Collapsed { get; set; }
+        bool Collapsed { get; set; }
     }
 }
