@@ -42,13 +42,6 @@ namespace NPOI.XSSF.UserModel
         private readonly CT_Col _column;
 
         /// <summary>
-        /// Cells of this column keyed by their row indexes.
-        /// The SortedDictionary ensures that the cells are ordered by 
-        /// columnIndex in the ascending order.
-        /// </summary>
-        private readonly SortedDictionary<int, ICell> _cells;
-
-        /// <summary>
         /// the parent sheet
         /// </summary>
         private readonly XSSFSheet _sheet;
@@ -77,7 +70,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (short)(_cells.Count == 0 ? -1 : GetFirstKey());
+                return (short)(Cells.Count == 0 ? -1 : GetFirstKey());
             }
         }
 
@@ -93,7 +86,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (short)(_cells.Count == 0 ? -1 : GetLastKey() + 1);
+                return (short)(Cells.Count == 0 ? -1 : GetLastKey() + 1);
             }
         }
 
@@ -145,7 +138,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _cells.Count;
+                return Cells.Count;
             }
         }
 
@@ -255,7 +248,7 @@ namespace NPOI.XSSF.UserModel
                     _column.style = (uint)idx;
                 }
 
-                foreach (ICell cell in _cells.Values)
+                foreach (ICell cell in Cells)
                 {
                     cell.CellStyle = value;
                 }
@@ -267,9 +260,14 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 List<ICell> cells = new List<ICell>();
-                foreach (ICell cell in _cells.Values)
+
+                foreach (IRow row in _sheet.Cast<IRow>())
                 {
-                    cells.Add(cell);
+                    foreach (ICell cell in row.Where(c => c.ColumnIndex == ColumnNum))
+                    {
+                        cells.Add(cell);
+                        _sheet.OnReadCell((XSSFCell)cell);
+                    }
                 }
 
                 return cells;
@@ -326,7 +324,6 @@ namespace NPOI.XSSF.UserModel
         {
             _column = column;
             _sheet = sheet;
-            _cells = new SortedDictionary<int, ICell>();
 
             if (!column.IsSetNumber())
             {
@@ -340,15 +337,6 @@ namespace NPOI.XSSF.UserModel
 
                 _column.min = (uint)nextColumnNum + 1;
                 _column.max = (uint)nextColumnNum + 1;
-            }
-
-            foreach (XSSFRow row in sheet.Cast<XSSFRow>())
-            {
-                foreach (XSSFCell cell in row.Where(c => c.ColumnIndex == ColumnNum).Cast<XSSFCell>())
-                {
-                    _cells.Add(cell.RowIndex, cell);
-                    sheet.OnReadCell(cell);
-                }
             }
 
             _stylesSource = ((XSSFWorkbook)sheet.Workbook).GetStylesSource();
@@ -402,7 +390,6 @@ namespace NPOI.XSSF.UserModel
                 newCell.CellStyle = ColumnStyle;
             }
 
-            _cells[rowIndex] = newCell;
             return newCell;
         }
 
@@ -642,11 +629,6 @@ namespace NPOI.XSSF.UserModel
             ColumnNum = columnNum;
         }
 
-        internal void RemoveCell(int cellIndex)
-        {
-            _cells.Remove(cellIndex);
-        }
-
         /// <summary>
         /// Fired when the document is written to an output stream.
         /// See <see cref="XSSFSheet.Write"/>
@@ -662,9 +644,9 @@ namespace NPOI.XSSF.UserModel
         /// Cell iterator over the physically defined cell
         /// </summary>
         /// <returns>an iterator over cells in this column.</returns>
-        public SortedDictionary<int, ICell>.ValueCollection.Enumerator CellIterator()
+        public List<ICell>.Enumerator CellIterator()
         {
-            return _cells.Values.GetEnumerator();
+            return Cells.GetEnumerator();
         }
 
         /// <summary>
@@ -758,46 +740,24 @@ namespace NPOI.XSSF.UserModel
         /// <returns>Cell representing that row or null if Undefined.</returns>
         private ICell RetrieveCell(int cellnum)
         {
-            if (!_cells.ContainsKey(cellnum))
-            {
-                if (!CheckRowForCell(cellnum))
-                {
-                    return null;
-                }
-            }
-
-            return _cells[cellnum];
-        }
-
-        private bool CheckRowForCell(int cellnum)
-        {
             IRow row = Sheet.GetRow(cellnum);
 
             if (row == null)
             {
-                return false;
+                return null;
             }
 
-            ICell cell = row.GetCell(ColumnNum);
-
-            if (cell == null)
-            {
-                return false;
-            }
-
-            _cells[cellnum] = cell;
-
-            return true;
+            return row.GetCell(ColumnNum);
         }
 
         private int GetFirstKey()
         {
-            return _cells.Keys.Min();
+            return Cells.Min(c => c.RowIndex);
         }
 
         private int GetLastKey()
         {
-            return _cells.Keys.Max();
+            return Cells.Max(c => c.RowIndex);
         }
         #endregion
     }
