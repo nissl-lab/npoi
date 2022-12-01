@@ -37,8 +37,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private byte outlineLevelField;
 
-        private bool collapsedField = true;
-        private bool collapsedSpecifiedField = true;
+        private bool collapsedField = false;
+        private bool collapsedSpecifiedField = false;
 
         [XmlAttribute]
         public uint min
