@@ -381,6 +381,102 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
+        public void UngroupColumn_SimpleOneLevelUngroupNoOverlaps_ColumnsUngroupedAndDestroyed()
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet();
+            ICellStyle style = workbook.CreateCellStyle();
+            style.BorderLeft = BorderStyle.Double;
+
+            sheet.GroupColumn(2, 7);
+            sheet.GroupColumn(10, 11);
+            sheet.GetColumn(2).CreateCell(0);
+            sheet.GetColumn(10).ColumnStyle = style;
+
+            Assert.AreEqual(8, sheet.GetCTWorksheet().cols[0].col.Count);
+
+            for (int i = 2; i <= 7; i++)
+            {
+                Assert.AreEqual(1, sheet.GetColumn(i).OutlineLevel);
+            }
+
+            for (int i = 10; i <= 11; i++)
+            {
+                Assert.AreEqual(1, sheet.GetColumn(i).OutlineLevel);
+            }
+
+            sheet.UngroupColumn(2, 7);
+            sheet.UngroupColumn(10, 11);
+
+            Assert.AreEqual(2, sheet.GetCTWorksheet().cols[0].col.Count);
+            Assert.AreEqual(0, sheet.GetColumn(2).OutlineLevel);
+            Assert.AreEqual(0, sheet.GetColumn(10).OutlineLevel);
+
+            FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
+            Stream output = File.OpenWrite(file.FullName);
+            workbook.Write(output);
+            output.Close();
+
+            XSSFWorkbook wbLoaded = new XSSFWorkbook(file.ToString());
+            XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheetAt(0);
+
+            Assert.AreEqual(2, sheetLoaded.GetCTWorksheet().cols[0].col.Count);
+            Assert.AreEqual(0, sheetLoaded.GetColumn(2).OutlineLevel);
+            Assert.AreEqual(0, sheetLoaded.GetColumn(10).OutlineLevel);
+
+            wbLoaded.Close();
+        }
+
+        [Test]
+        public void UngroupColumn_TwoOverlappingGroups_ColumnsUngroupedAndDestroyed()
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet();
+            ICellStyle style = workbook.CreateCellStyle();
+            style.BorderLeft = BorderStyle.Double;
+
+            sheet.GroupColumn(2, 7);
+            sheet.GroupColumn(6, 11);
+            sheet.GetColumn(2).CreateCell(0);
+            sheet.GetColumn(6).ColumnStyle = style;
+
+            Assert.AreEqual(10, sheet.GetCTWorksheet().cols[0].col.Count);
+
+            for (int i = 2; i <= 11; i++)
+            {
+                if (i == 6 || i == 7)
+                {
+                    Assert.AreEqual(2, sheet.GetColumn(i).OutlineLevel);
+                }
+                else
+                {
+                    Assert.AreEqual(1, sheet.GetColumn(i).OutlineLevel);
+                }
+            }
+
+            sheet.UngroupColumn(2, 7);
+            sheet.UngroupColumn(6, 11);
+
+            Assert.AreEqual(2, sheet.GetCTWorksheet().cols[0].col.Count);
+            Assert.AreEqual(0, sheet.GetColumn(2).OutlineLevel);
+            Assert.AreEqual(0, sheet.GetColumn(6).OutlineLevel);
+
+            FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
+            Stream output = File.OpenWrite(file.FullName);
+            workbook.Write(output);
+            output.Close();
+
+            XSSFWorkbook wbLoaded = new XSSFWorkbook(file.ToString());
+            XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheetAt(0);
+
+            Assert.AreEqual(2, sheetLoaded.GetCTWorksheet().cols[0].col.Count);
+            Assert.AreEqual(0, sheetLoaded.GetColumn(2).OutlineLevel);
+            Assert.AreEqual(0, sheetLoaded.GetColumn(6).OutlineLevel);
+
+            wbLoaded.Close();
+        }
+
+        [Test]
         public void TestGroupUngroupRow()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
