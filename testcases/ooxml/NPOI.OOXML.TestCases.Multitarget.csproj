@@ -22,7 +22,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="IronDevTools.PerformanceAnalyzer" Version="2022.11.10663" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
 		<PackageReference Include="NSubstitute" Version="3.1.0" />
 		<PackageReference Include="NUnit" Version="3.10.1" />
 		<PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
@@ -34,6 +34,13 @@
 		<ProjectReference Include="..\..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj" />
 		<ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Multitarget.csproj" />
 		<ProjectReference Include="..\main\NPOI.TestCases.Multitarget.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+	  </PackageReference>
 	</ItemGroup>
 
 	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">

@@ -35,7 +35,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="IronDevTools.PerformanceAnalyzer" Version="2022.11.10663" />
-		<PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
+		<PackageReference Include="System.Security.Cryptography.Xml" Version="7.0.0" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
 	</ItemGroup>
 
