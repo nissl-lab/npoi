@@ -1264,7 +1264,6 @@ namespace NPOI.XSSF.UserModel
 
             InitRows(worksheet);
             InitColumns(worksheet);
-            columnHelper = new ColumnHelper(worksheet);
 
             // Look for bits we're interested in
             foreach (RelationPart rp in RelationParts)
@@ -1618,9 +1617,10 @@ namespace NPOI.XSSF.UserModel
         {
             return worksheet;
         }
-
+        
         public ColumnHelper GetColumnHelper()
         {
+            columnHelper = columnHelper ?? new ColumnHelper(worksheet);
             return columnHelper;
         }
 
@@ -1700,8 +1700,9 @@ namespace NPOI.XSSF.UserModel
                     width = maxColumnWidth;
                 }
 
-                SetColumnWidth(column, width);
-                columnHelper.SetColBestFit(column, true);
+                IColumn col = GetColumn(column, true);
+                col.Width = width / 256;
+                col.IsBestFit = true;
             }
         }
 
@@ -1987,6 +1988,11 @@ namespace NPOI.XSSF.UserModel
             }
             else
             {
+                if (worksheet.cols.FirstOrDefault() is null)
+                {
+                    worksheet.AddNewCols();
+                }
+
                 if (_columns.Count == 0 || columnnum > GetLastKey(_columns.Keys))
                 {
                     // we can append the new column at the end
@@ -1997,10 +2003,6 @@ namespace NPOI.XSSF.UserModel
                     // get number of columns where column index < columnnum
                     // --> this tells us where our column should go
                     int idx = HeadMapCount(_columns.Keys, columnnum);
-                    if (worksheet.cols.FirstOrDefault() is null)
-                    {
-                        worksheet.AddNewCols();
-                    }
 
                     ctCol = worksheet.cols.FirstOrDefault().InsertNewCol(idx);
                 }
@@ -2140,28 +2142,12 @@ namespace NPOI.XSSF.UserModel
         /// <returns>the width in units of 1/256th of a character width</returns>
         public double GetColumnWidth(int columnIndex)
         {
-            CT_Col col = columnHelper.GetColumn(columnIndex, false);
+            IColumn col = GetColumn(columnIndex);
 
-            double width = 0;
-
-            if (col != null && col.IsSetWidth())
-                width = col.width;
-            else
-            {
-                CT_SheetFormatPr pr = worksheet.sheetFormatPr;
-                if (pr != null)
-                {
-                    if (pr.defaultColWidth != 0.0)
-                        width = pr.defaultColWidth;
-                    else if (pr.baseColWidth != 0)
-                        width = pr.baseColWidth + 5; 
-                }
-
-                if (width == 0)
-                    width = DefaultColumnWidth;
-            }
-
-            return Math.Round(width * 256, 2);
+            double width = (col == null)
+                ? DefaultColumnWidth
+                : col.Width;
+            return (int)(width * 256);
         }
 
         /// <summary>
@@ -2393,7 +2379,7 @@ namespace NPOI.XSSF.UserModel
 
             if (createIfNull)
             {
-                CreateColumn(columnnum);
+                return CreateColumn(columnnum);
             }
 
             return null;
@@ -2406,7 +2392,13 @@ namespace NPOI.XSSF.UserModel
         /// <param name="toColumn"></param>
         public void GroupColumn(int fromColumn, int toColumn)
         {
-            GroupColumn1Based(fromColumn + 1, toColumn + 1);
+            for (int i = fromColumn; i <= toColumn; i++)
+            {
+                IColumn column = GetColumn(i, true);
+                column.OutlineLevel++;
+            }
+
+            SetSheetFormatPrOutlineLevelCol();
         }
 
         /// <summary>
@@ -2435,8 +2427,8 @@ namespace NPOI.XSSF.UserModel
         /// <returns>hidden - false if the column is visible</returns>
         public bool IsColumnHidden(int columnIndex)
         {
-            CT_Col col = columnHelper.GetColumn(columnIndex, false);
-            return col != null && col.hidden;
+            IColumn col = GetColumn(columnIndex);
+            return col != null && col.Hidden;
         }
 
         /// <summary>
@@ -2722,13 +2714,27 @@ namespace NPOI.XSSF.UserModel
 
         public void SetColumnGroupCollapsed(int columnNumber, bool collapsed)
         {
-            if (collapsed)
+            IColumn col = GetColumn(columnNumber);
+
+            if (col == null)
             {
-                CollapseColumn(columnNumber);
+                return;
             }
-            else
+
+            SortedDictionary<int, IColumn> group = GetAdjacentOutlineColumns(col);
+
+            int lastColumnIndex = group.Keys.Max();
+
+            foreach (KeyValuePair<int, IColumn> columnEntry in group)
             {
-                ExpandColumn(columnNumber);
+                if (columnEntry.Key == lastColumnIndex)
+                {
+                    columnEntry.Value.Collapsed = collapsed;
+                }
+                else
+                {
+                    columnEntry.Value.Hidden = collapsed;
+                }
             }
         }
 
@@ -2739,7 +2745,8 @@ namespace NPOI.XSSF.UserModel
         /// <param name="hidden">the visiblity state of the column</param>
         public void SetColumnHidden(int columnIndex, bool hidden)
         {
-            columnHelper.SetColHidden(columnIndex, hidden);
+            IColumn column = GetColumn(columnIndex, true);
+            column.Hidden = hidden;
         }
 
         /// <summary>
@@ -2809,13 +2816,14 @@ namespace NPOI.XSSF.UserModel
                     "individual cell is 255 characters.");
             }
 
-            columnHelper.SetColWidth(columnIndex, width / 256);
-            columnHelper.SetCustomWidth(columnIndex, true);
+            IColumn column = GetColumn(columnIndex, true);
+            column.Width = (double)width / 256;
         }
 
         public void SetDefaultColumnStyle(int column, ICellStyle style)
         {
-            columnHelper.SetColDefaultStyle(column, style);
+            IColumn col = GetColumn(column, true);
+            col.ColumnStyle = style;
         }
 
         /// <summary>
@@ -3136,8 +3144,14 @@ namespace NPOI.XSSF.UserModel
         /// <returns></returns>
         public ICellStyle GetColumnStyle(int column)
         {
-            int idx = columnHelper.GetColDefaultStyle(column);
-            return Workbook.GetCellStyleAt(idx == -1 ? 0 : idx);
+            IColumn col = GetColumn(column);
+
+            if (col != null)
+            {
+                return col.ColumnStyle;
+            }
+
+            return Workbook.GetCellStyleAt(0);
         }
 
         /// <summary>
@@ -3188,25 +3202,24 @@ namespace NPOI.XSSF.UserModel
 
         public void UngroupColumn(int fromColumn, int toColumn)
         {
-            CT_Cols cols = worksheet.GetColsArray(0);
             for (int index = fromColumn; index <= toColumn; index++)
             {
-                CT_Col col = columnHelper.GetColumn(index, false);
+                IColumn col = GetColumn(index);
                 if (col != null)
                 {
-                    short outlineLevel = col.outlineLevel;
-                    col.outlineLevel = (byte)(outlineLevel - 1);
-                    index = (int)col.max;
+                    int outlineLevel = col.OutlineLevel;
+                    col.OutlineLevel = outlineLevel - 1 < 0 ? 0 : outlineLevel - 1;
 
-                    if (col.outlineLevel <= 0)
+                    if (col.OutlineLevel == 0
+                        && col.FirstCellNum == -1
+                        && (col.ColumnStyle == null 
+                        || col.ColumnStyle.Index == Workbook.GetCellStyleAt(0).Index))
                     {
-                        int colIndex = columnHelper.GetIndexOfColumn(cols, col);
-                        worksheet.GetColsArray(0).RemoveCol(colIndex);
+                        DestroyColumn(col);
                     }
                 }
             }
 
-            worksheet.SetColsArray(0, cols);
             SetSheetFormatPrOutlineLevelCol();
         }
 
@@ -4222,13 +4235,13 @@ namespace NPOI.XSSF.UserModel
 
         public int GetColumnOutlineLevel(int columnIndex)
         {
-            CT_Col col = columnHelper.GetColumn(columnIndex, false);
+            IColumn col = GetColumn(columnIndex);
             if (col == null)
             {
                 return 0;
             }
 
-            return col.outlineLevel;
+            return col.OutlineLevel;
         }
 
         public bool IsDate1904()
@@ -4383,9 +4396,12 @@ namespace NPOI.XSSF.UserModel
         private void InitColumns(CT_Worksheet worksheetParam)
         {
             _columns.Clear();
-            if (0 < worksheetParam.cols.FirstOrDefault()?.sizeOfColArray())
+
+            CT_Cols ctCols = worksheetParam.cols.FirstOrDefault() ?? worksheetParam.AddNewCols();
+
+            if (ctCols.sizeOfColArray() > 0)
             {
-                foreach (CT_Col column in worksheetParam.cols.FirstOrDefault().col)
+                foreach (CT_Col column in ctCols.col)
                 {
                     XSSFColumn c = new XSSFColumn(column, this);
                     if (!_columns.ContainsKey(c.ColumnNum))
@@ -4683,43 +4699,6 @@ namespace NPOI.XSSF.UserModel
 
         }
 
-        private void GroupColumn1Based(int fromColumn, int toColumn)
-        {
-            CT_Cols ctCols = worksheet.GetColsArray(0);
-            CT_Col ctCol = new CT_Col();
-
-            // copy attributes, as they might be removed by merging with the
-            // new column TODO: check if this fix is really necessary or if the
-            // sweeping algorithm in addCleanColIntoCols needs to be adapted...
-            CT_Col fixCol_before = columnHelper.GetColumn1Based(toColumn, false);
-            if (fixCol_before != null)
-            {
-                fixCol_before = fixCol_before.Copy();
-            }
-
-            ctCol.min = (uint)fromColumn;
-            ctCol.max = (uint)toColumn;
-            columnHelper.AddCleanColIntoCols(ctCols, ctCol);
-
-            CT_Col fixCol_after = columnHelper.GetColumn1Based(toColumn, false);
-            if (fixCol_before != null && fixCol_after != null)
-            {
-                columnHelper.SetColumnAttributes(fixCol_before, fixCol_after);
-            }
-
-            for (int index = fromColumn; index <= toColumn; index++)
-            {
-                CT_Col col = columnHelper.GetColumn1Based(index, false);
-                //col must exist
-                short outlineLevel = col.outlineLevel;
-                col.outlineLevel = (byte)(outlineLevel + 1);
-                index = (int)col.max;
-            }
-
-            worksheet.SetColsArray(0, ctCols);
-            SetSheetFormatPrOutlineLevelCol();
-        }
-
         /// <summary>
         /// Do not leave the width attribute undefined (see #52186).
         /// </summary>
@@ -4778,405 +4757,40 @@ namespace NPOI.XSSF.UserModel
             return true;
         }
 
-        private void CollapseColumn(int columnNumber)
+        private SortedDictionary<int, IColumn> GetAdjacentOutlineColumns(IColumn col)
         {
-            CT_Cols cols = worksheet.GetColsArray(0);
-            CT_Col col = columnHelper.GetColumn(columnNumber, false);
-            int colInfoIx = columnHelper.GetIndexOfColumn(cols, col);
-            if (colInfoIx == -1)
+            SortedDictionary<int, IColumn> group = new SortedDictionary<int, IColumn>() { { col.ColumnNum, col } };
+
+            for (int i = col.ColumnNum - 1; i >= 0; i--)
             {
-                return;
-            }
-            // Find the start of the group.
-            int groupStartColInfoIx = FindStartOfColumnOutlineGroup(colInfoIx);
+                IColumn columnToTheLeft = GetColumn(i);
 
-            CT_Col columnInfo = cols.GetColArray(groupStartColInfoIx);
-
-            // Hide all the columns until the end of the group
-            int lastColMax = SetGroupHidden(groupStartColInfoIx, columnInfo
-                .outlineLevel, true);
-
-            // write collapse field
-            SetColumn(lastColMax + 1, 0, null, null, true);
-
-        }
-
-        private void SetColumn(int targetColumnIx, int? style,
-                int? level, bool? hidden, bool? collapsed)
-        {
-            CT_Cols cols = worksheet.GetColsArray(0);
-            CT_Col ci = null;
-
-            for (int k = 0; k < cols.sizeOfColArray(); k++)
-            {
-                CT_Col tci = cols.GetColArray(k);
-                if (tci.min >= targetColumnIx
-                        && tci.max <= targetColumnIx)
-                {
-                    ci = tci;
-                    break;
-                }
-
-                if (tci.min > targetColumnIx)
-                {
-                    // call column infos after k are for later columns
-                    break; // exit now so k will be the correct insert pos
-                }
-            }
-
-            if (ci == null)
-            {
-                // okay so there ISN'T a column info record that covers this
-                // column so lets create one!
-                CT_Col nci = new CT_Col
-                {
-                    min = (uint)targetColumnIx,
-                    max = (uint)targetColumnIx
-                };
-                UnsetCollapsed((bool)collapsed, nci);
-                columnHelper.AddCleanColIntoCols(cols, nci);
-                return;
-            }
-
-            bool styleChanged = style != null
-            && ci.style != style;
-            bool levelChanged = level != null
-            && ci.outlineLevel != level;
-            bool hiddenChanged = hidden != null
-            && ci.hidden != hidden;
-            bool collapsedChanged = collapsed != null
-            && ci.collapsed != collapsed;
-            bool columnChanged = levelChanged || hiddenChanged
-            || collapsedChanged || styleChanged;
-            if (!columnChanged)
-            {
-                // do nothing...nothing Changed.
-                return;
-            }
-
-            if (ci.min == targetColumnIx && ci.max == targetColumnIx)
-            {
-                // ColumnInfo ci for a single column, the target column
-                UnsetCollapsed((bool)collapsed, ci);
-                return;
-            }
-
-            if (ci.min == targetColumnIx || ci.max == targetColumnIx)
-            {
-                // The target column is at either end of the multi-column
-                // ColumnInfo ci we'll just divide the info and create a
-                // new one
-                if (ci.min == targetColumnIx)
-                {
-                    ci.min = (uint)(targetColumnIx + 1);
-                }
-                else
-                {
-                    ci.max = (uint)(targetColumnIx - 1);
-                }
-
-                CT_Col nci = columnHelper.CloneCol(cols, ci);
-                nci.min = (uint)targetColumnIx;
-                UnsetCollapsed((bool)collapsed, nci);
-                columnHelper.AddCleanColIntoCols(cols, nci);
-
-            }
-            else
-            {
-                // split to 3 records
-                CT_Col ciStart = ci;
-                CT_Col ciMid = columnHelper.CloneCol(cols, ci);
-                CT_Col ciEnd = columnHelper.CloneCol(cols, ci);
-                int lastcolumn = (int)ci.max;
-
-                ciStart.max = (uint)(targetColumnIx - 1);
-
-                ciMid.min = (uint)targetColumnIx;
-                ciMid.max = (uint)targetColumnIx;
-                UnsetCollapsed((bool)collapsed, ciMid);
-                columnHelper.AddCleanColIntoCols(cols, ciMid);
-
-                ciEnd.min = (uint)(targetColumnIx + 1);
-                ciEnd.max = (uint)lastcolumn;
-                columnHelper.AddCleanColIntoCols(cols, ciEnd);
-            }
-        }
-
-        private void UnsetCollapsed(bool collapsed, CT_Col ci)
-        {
-            if (collapsed)
-            {
-                ci.collapsed = collapsed;
-            }
-            else
-            {
-                ci.UnsetCollapsed();
-            }
-        }
-
-        /// <summary>
-        /// Sets all adjacent columns of the same outline level to the 
-        /// specified hidden status.
-        /// </summary>
-        /// <param name="pIdx">the col info index of the start of the 
-        /// outline group</param>
-        /// <param name="level"></param>
-        /// <param name="hidden"></param>
-        /// <returns>the column index of the last column in the
-        /// outline group</returns>
-        private int SetGroupHidden(int pIdx, int level, bool hidden)
-        {
-            CT_Cols cols = worksheet.GetColsArray(0);
-            int idx = pIdx;
-            CT_Col columnInfo = cols.GetColArray(idx);
-            while (idx < cols.sizeOfColArray())
-            {
-                columnInfo.hidden = hidden;
-                if (idx + 1 < cols.sizeOfColArray())
-                {
-                    CT_Col nextColumnInfo = cols.GetColArray(idx + 1);
-
-                    if (!IsAdjacentBefore(columnInfo, nextColumnInfo))
-                    {
-                        break;
-                    }
-
-                    if (nextColumnInfo.outlineLevel < level)
-                    {
-                        break;
-                    }
-
-                    columnInfo = nextColumnInfo;
-                }
-
-                idx++;
-            }
-
-            return (int)columnInfo.max;
-        }
-
-        private bool IsAdjacentBefore(CT_Col col, CT_Col other_col)
-        {
-            return col.max == (other_col.min - 1);
-        }
-
-        private int FindStartOfColumnOutlineGroup(int pIdx)
-        {
-            // Find the start of the group.
-            CT_Cols cols = worksheet.GetColsArray(0);
-            CT_Col columnInfo = cols.GetColArray(pIdx);
-            int level = columnInfo.outlineLevel;
-            int idx = pIdx;
-            while (idx != 0)
-            {
-                CT_Col prevColumnInfo = cols.GetColArray(idx - 1);
-                if (!IsAdjacentBefore(prevColumnInfo, columnInfo))
+                if (columnToTheLeft == null || columnToTheLeft.OutlineLevel < col.OutlineLevel)
                 {
                     break;
                 }
 
-                if (prevColumnInfo.outlineLevel < level)
+                group.Add(i, columnToTheLeft);
+            }
+
+            int idx;
+
+            for (idx = col.ColumnNum + 1; idx <= SpreadsheetVersion.EXCEL2007.LastColumnIndex; idx++)
+            {
+                IColumn columnToTheRight = GetColumn(idx);
+
+                if (columnToTheRight == null || columnToTheRight.OutlineLevel < col.OutlineLevel)
                 {
                     break;
                 }
 
-                idx--;
-                columnInfo = prevColumnInfo;
+                group.Add(idx, columnToTheRight);
             }
 
-            return idx;
-        }
+            // add the column behind the group to set colapsed to
+            group.Add(idx, GetColumn(idx, true));
 
-        private int FindEndOfColumnOutlineGroup(int colInfoIndex)
-        {
-            CT_Cols cols = worksheet.GetColsArray(0);
-            // Find the end of the group.
-            CT_Col columnInfo = cols.GetColArray(colInfoIndex);
-            int level = columnInfo.outlineLevel;
-            int idx = colInfoIndex;
-            while (idx < cols.sizeOfColArray() - 1)
-            {
-                CT_Col nextColumnInfo = cols.GetColArray(idx + 1);
-                if (!IsAdjacentBefore(columnInfo, nextColumnInfo))
-                {
-                    break;
-                }
-
-                if (nextColumnInfo.outlineLevel < level)
-                {
-                    break;
-                }
-
-                idx++;
-                columnInfo = nextColumnInfo;
-            }
-
-            return idx;
-        }
-
-        private void ExpandColumn(int columnIndex)
-        {
-            CT_Cols cols = worksheet.GetColsArray(0);
-            CT_Col col = columnHelper.GetColumn(columnIndex, false);
-            int colInfoIx = columnHelper.GetIndexOfColumn(cols, col);
-
-            int idx = FindColInfoIdx((int)col.max, colInfoIx);
-            if (idx == -1)
-            {
-                return;
-            }
-
-            // If it is already expanded do nothing.
-            if (!IsColumnGroupCollapsed(idx))
-            {
-                return;
-            }
-
-            // Find the start/end of the group.
-            int startIdx = FindStartOfColumnOutlineGroup(idx);
-            int endIdx = FindEndOfColumnOutlineGroup(idx);
-
-            // expand: colapsed bit must be unset hidden bit Gets unset _if_
-            // surrounding groups are expanded you can determine this by
-            // looking at the hidden bit of the enclosing group. You will have
-            // to look at the start and the end of the current group to
-            // determine which is the enclosing group hidden bit only is
-            // altered for this outline level. ie. don't uncollapse Contained
-            // groups
-            CT_Col columnInfo = cols.GetColArray(endIdx);
-            if (!IsColumnGroupHiddenByParent(idx))
-            {
-                int outlineLevel = columnInfo.outlineLevel;
-                bool nestedGroup = false;
-                for (int i = startIdx; i <= endIdx; i++)
-                {
-                    CT_Col ci = cols.GetColArray(i);
-                    if (outlineLevel == ci.outlineLevel)
-                    {
-                        ci.UnsetHidden();
-                        if (nestedGroup)
-                        {
-                            nestedGroup = false;
-                            ci.collapsed = true;
-                        }
-                    }
-                    else
-                    {
-                        nestedGroup = true;
-                    }
-                }
-            }
-            // Write collapse flag (stored in a single col info record after
-            // this outline group)
-            SetColumn((int)columnInfo.max + 1, null, null,
-                    false, false);
-        }
-
-        private bool IsColumnGroupHiddenByParent(int idx)
-        {
-            CT_Cols cols = worksheet.GetColsArray(0);
-            // Look out outline details of end
-            int endLevel = 0;
-            bool endHidden = false;
-            int endOfOutlineGroupIdx = FindEndOfColumnOutlineGroup(idx);
-            if (endOfOutlineGroupIdx < cols.sizeOfColArray())
-            {
-                CT_Col nextInfo = cols.GetColArray(endOfOutlineGroupIdx + 1);
-                if (IsAdjacentBefore(cols.GetColArray(endOfOutlineGroupIdx),
-                        nextInfo))
-                {
-                    endLevel = nextInfo.outlineLevel;
-                    endHidden = nextInfo.hidden;
-                }
-            }
-            // Look out outline details of start
-            int startLevel = 0;
-            bool startHidden = false;
-            int startOfOutlineGroupIdx = FindStartOfColumnOutlineGroup(idx);
-            if (startOfOutlineGroupIdx > 0)
-            {
-                CT_Col prevInfo = cols.GetColArray(startOfOutlineGroupIdx - 1);
-
-                if (IsAdjacentBefore(prevInfo, cols
-                        .GetColArray(startOfOutlineGroupIdx)))
-                {
-                    startLevel = prevInfo.outlineLevel;
-                    startHidden = prevInfo.hidden;
-                }
-            }
-
-            if (endLevel > startLevel)
-            {
-                return endHidden;
-            }
-
-            return startHidden;
-        }
-
-        private int FindColInfoIdx(int columnValue, int fromColInfoIdx)
-        {
-            CT_Cols cols = worksheet.GetColsArray(0);
-
-            if (columnValue < 0)
-            {
-                throw new ArgumentException(
-                        "column parameter out of range: " + columnValue);
-            }
-
-            if (fromColInfoIdx < 0)
-            {
-                throw new ArgumentException(
-                        "fromIdx parameter out of range: " + fromColInfoIdx);
-            }
-
-            for (int k = fromColInfoIdx; k < cols.sizeOfColArray(); k++)
-            {
-                CT_Col ci = cols.GetColArray(k);
-
-                if (ContainsColumn(ci, columnValue))
-                {
-                    return k;
-                }
-
-                if (ci.min > fromColInfoIdx)
-                {
-                    break;
-                }
-            }
-
-            return -1;
-        }
-
-        private bool ContainsColumn(CT_Col col, int columnIndex)
-        {
-            return col.min <= columnIndex && columnIndex <= col.max;
-        }
-
-        /// <summary>
-        /// 'Collapsed' state is stored in a single column col info record 
-        /// immediately after the outline group
-        /// </summary>
-        /// <param name="idx"></param>
-        /// <returns>a bool represented if the column is collapsed</returns>
-        private bool IsColumnGroupCollapsed(int idx)
-        {
-            CT_Cols cols = worksheet.GetColsArray(0);
-            int endOfOutlineGroupIdx = FindEndOfColumnOutlineGroup(idx);
-            int nextColInfoIx = endOfOutlineGroupIdx + 1;
-            if (nextColInfoIx >= cols.sizeOfColArray())
-            {
-                return false;
-            }
-
-            CT_Col nextColInfo = cols.GetColArray(nextColInfoIx);
-
-            CT_Col col = cols.GetColArray(endOfOutlineGroupIdx);
-            if (!IsAdjacentBefore(col, nextColInfo))
-            {
-                return false;
-            }
-
-            return nextColInfo.collapsed;
+            return group;
         }
 
         private CT_SheetView GetSheetTypeSheetView()
@@ -5674,7 +5288,7 @@ namespace NPOI.XSSF.UserModel
 
             for (int i = startColumn; i <= endColumn; i++)
             {
-                if(!_columns.ContainsKey(i))
+                if (!_columns.ContainsKey(i))
                 {
                     columnsToDestroy.Add(CreateColumn(i));
                 }
@@ -5702,10 +5316,10 @@ namespace NPOI.XSSF.UserModel
                                     .FindCellComment(cellAddress);
                                 if (oldComment != null)
                                 {
-                                    CT_Shape commentShape = 
+                                    CT_Shape commentShape =
                                         GetVMLDrawing(false)
                                         .FindCommentShape(
-                                            oldComment.Row, 
+                                            oldComment.Row,
                                             oldComment.Column);
 
                                     XSSFComment xssfComment =
@@ -5756,7 +5370,7 @@ namespace NPOI.XSSF.UserModel
 
         private void DestroyColumns(List<IColumn> columnsToDestroy)
         {
-            foreach (var column in columnsToDestroy)
+            foreach (IColumn column in columnsToDestroy)
             {
                 DestroyColumn(column);
             }
@@ -5779,14 +5393,28 @@ namespace NPOI.XSSF.UserModel
 
             CT_Cols ctCols = worksheet.cols.FirstOrDefault();
             CT_Col ctCol = ((XSSFColumn)column).GetCTCol();
-            int colIndex = columnHelper.GetIndexOfColumn(ctCols, ctCol);
+            int colIndex = GetIndexOfColumn(ctCols, ctCol);
 
             ctCols.RemoveCol(colIndex); // Note that columns in worksheet.sheetData is 1-based.
         }
 
+        private int GetIndexOfColumn(CT_Cols ctCols, CT_Col ctCol)
+        {
+            for (int i = 0; i < ctCols.sizeOfColArray(); i++)
+            {
+                if (ctCols.GetColArray(i).min == ctCol.min
+                    && ctCols.GetColArray(i).max == ctCol.max)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
         private void RebuildRowCells()
         {
-            foreach(var row in _rows.Values)
+            foreach (XSSFRow row in _rows.Values)
             {
                 row.RebuildCells();
             }
