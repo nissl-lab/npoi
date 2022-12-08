@@ -682,7 +682,7 @@ namespace NPOI.SS.Converter
                 else if (cellStyle.FillPattern == FillPattern.SolidForeground)
                 {
                     //cellStyle
-                    IndexedColors clr=IndexedColors.ValueOf(cellStyle.FillForegroundColor);
+                    IndexedColors clr = GetIndexedColor(cellStyle.FillForegroundColor);
                     string hexstring=null;
                     if(clr!=null)
                     {
@@ -698,7 +698,7 @@ namespace NPOI.SS.Converter
                 }
                 else
                 {
-                    IndexedColors clr = IndexedColors.ValueOf(cellStyle.FillBackgroundColor);
+                    IndexedColors clr = GetIndexedColor(cellStyle.FillBackgroundColor);
                     string hexstring = null;
                     if (clr != null)
                     {
@@ -752,7 +752,7 @@ namespace NPOI.SS.Converter
             }
             else 
             {
-                IndexedColors clr = IndexedColors.ValueOf(borderColor);
+                IndexedColors clr = GetIndexedColor(borderColor);
                 if (clr != null)
                 {
                    borderStyle.Append(' ');
@@ -803,7 +803,8 @@ namespace NPOI.SS.Converter
             }
             else
             {
-                IndexedColors clr = IndexedColors.ValueOf(font.Color);
+                IndexedColors clr = GetIndexedColor(font.Color);
+
                 string hexstring = null;
                 if (clr != null)
                 {
@@ -833,6 +834,18 @@ namespace NPOI.SS.Converter
             if (font.IsItalic)
             {
                 style.Append("font-style: italic; ");
+            }
+        }
+
+        private static IndexedColors GetIndexedColor(short index)
+        {
+            try
+            {
+                return IndexedColors.ValueOf(index);
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
     }
