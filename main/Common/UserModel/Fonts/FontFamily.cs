@@ -35,7 +35,7 @@ namespace NPOI.Common.UserModel.Fonts
 			this.native = (FontFamilyEnum)nativeId;
 		}
 
-		public int getFlag()
+		public int GetFlag()
 		{
 			return nativeId;
 		}

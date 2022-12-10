@@ -25,6 +25,11 @@ namespace NPOI.Util
 			return GetGenericProperties(v1, sup1, v2, sup2,v3, sup3, v4, sup4, null, null, null, null);
 		}
 
+		public static IDictionary<string, Func<object>> GetGenericProperties(string v1, Func<object> sup1, string v2, Func<object> sup2, string v3, Func<object> sup3, string v4, Func<object> sup4, string v5, Func<object> sup5)
+		{
+			return GetGenericProperties(v1, sup1, v2, sup2, v3, sup3, v4, sup4, v5, sup5, null, null);
+		}
+
 		public static IDictionary<string, Func<object>> GetGenericProperties(string v1, Func<object> sup1, string v2, Func<object> sup2, string v3, Func<object> sup3, string v4, Func<object> sup4, string v5, Func<object> sup5, string v6, Func<object> sup6)
 		{
 			string[] vals = new string[] { v1,v2,v3,v4,v5,v6};

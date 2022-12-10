@@ -14,10 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-
-using NPOI.HSSF.Record;
 using NPOI.POIFS.FileSystem;
-using NPOI.SS.Formula.Functions;
 using NPOI.Util;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
@@ -25,6 +22,7 @@ using System.Text;
 using System;
 using System.IO;
 using NPOI.HSLF.Record;
+using NPOI.HSLF.UserModel;
 
 namespace NPOI.HSLF.Extractor
 {
@@ -180,14 +178,14 @@ namespace NPOI.HSLF.Extractor
 			if (type == RecordTypes.TextBytesAtom.typeID)
 			{
 				TextBytesAtom tba = (TextBytesAtom)Record.Record.CreateRecordForType(type, pptContents, startPos, len + 8);
-				string text = HSLFTextParagraph.toExternalString(tba.GetText(), -1);
+				string text = HSLFTextParagraph.ToExternalString(tba.GetText(), -1);
 				textV.Add(text);
 			}
 			// TextCharsAtom
 			if (type == RecordTypes.TextCharsAtom.typeID)
 			{
 				TextCharsAtom tca = (TextCharsAtom)Record.Record.CreateRecordForType(type, pptContents, startPos, len + 8);
-				String text = HSLFTextParagraph.toExternalString(tca.getText(), -1);
+				String text = HSLFTextParagraph.ToExternalString(tca.getText(), -1);
 				textV.Add(text);
 			}
 

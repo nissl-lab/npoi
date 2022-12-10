@@ -88,8 +88,8 @@ namespace NPOI.SL.UserModel
 
 	public interface BulletStyle
 	{
-		String getBulletCharacter();
-		String getBulletFont();
+		String GetBulletCharacter();
+		String GetBulletFont();
 
 		/**
 		 * The bullet point font size
@@ -98,28 +98,28 @@ namespace NPOI.SL.UserModel
 		 *
 		 * @return the bullet point font size
 		 */
-		Double getBulletFontSize();
+		Double GetBulletFontSize();
 
 		/**
 		 * Convenience function to set a solid color
 		 */
-		void setBulletFontColor(Color color);
+		void SetBulletFontColor(Color color);
 
-		void setBulletFontColor(PaintStyle color);
+		void SetBulletFontColor(PaintStyle color);
 
 		/**
 		 *
 		 * @return the color of bullet characters within a given paragraph.
 		 * A {@code null} value means to use the text font color.
 		 */
-		PaintStyle getBulletFontColor();
+		PaintStyle GetBulletFontColor();
 
-		AutoNumberingScheme getAutoNumberingScheme();
+		AutoNumberingScheme GetAutoNumberingScheme();
 		/**
 		 * Index (1-based) of the first auto number value, or null if auto numbering scheme
 		 * wasn't assigned.
 		 */
-		int getAutoNumberingStartAt();
+		int GetAutoNumberingStartAt();
 	}
 
 	public interface TextParagraph<S, P, T>: IEnumerable<T>

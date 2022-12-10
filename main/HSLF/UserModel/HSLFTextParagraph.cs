@@ -8,6 +8,8 @@ using static NPOI.HSLF.Model.TextPropCollection;
 using NPOI.Util;
 using NPOI.Common.UserModel.Fonts;
 using System.Linq;
+using NPOI.HSLF.Exceptions;
+using System.Drawing;
 
 namespace NPOI.HSLF.UserModel
 {
@@ -23,7 +25,7 @@ namespace NPOI.HSLF.UserModel
 		private TextPropCollection _paragraphStyle;
 
 		protected TextRulerAtom _ruler;
-		protected List<HSLFTextRun> _runs = new ArrayList<>();
+		protected List<HSLFTextRun> _runs = new List<HSLFTextRun>();
 		protected HSLFTextShape _parentShape;
 		private HSLFSheet _sheet;
 		private int shapeId;
@@ -39,1214 +41,1154 @@ namespace NPOI.HSLF.UserModel
 			HSLFTabStop tabStop;
 
 			HSLFTabStopDecorator(HSLFTabStop tabStop) {
-            this.tabStop = tabStop;
-        }
+				this.tabStop = tabStop;
+			}
 
-	//@Override
-		public double GetPositionInPoints()
-	{
-		return tabStop.GetPositionInPoints();
-	}
-
-	//@Override
-		public void SetPositionInPoints(double position)
-	{
-		tabStop.SetPositionInPoints(position);
-		SetDirty();
-	}
-
-	//@Override
-		public new TabStopType GetType()
-	{
-		return tabStop.GetType();
-	}
-
-	//@Override
-		public void SetType(TabStopType type)
-	{
-		tabStop.SetType(type);
-		SetDirty();
-	}
-}
-
-
-/**
-* Constructs a Text Run from a Unicode text block.
-* Either a {@link TextCharsAtom} or a {@link TextBytesAtom} needs to be provided.
- *
-* @param tha the TextHeaderAtom that defines what's what
-* @param tba the TextBytesAtom containing the text or null if {@link TextCharsAtom} is provided
-* @param tca the TextCharsAtom containing the text or null if {@link TextBytesAtom} is provided
-* @param parentList the list which contains this paragraph
- */
-/* package */
-HSLFTextParagraph(
-TextHeaderAtom tha,
-TextBytesAtom tba,
-TextCharsAtom tca,
-List < HSLFTextParagraph > parentList
-) {
-	if (tha == null)
-	{
-		throw new InvalidOperationException("TextHeaderAtom must be set.");
-	}
-	_headerAtom = tha;
-	_byteAtom = tba;
-	_charAtom = tca;
-	this.parentList = parentList;
-	SetParagraphStyle(new TextPropCollection(1, TextPropType.paragraph));
-}
-
-public void AddTextRun(HSLFTextRun run)
-{
-	_runs.Add(run);
-}
-
-//@Override
-	public List<HSLFTextRun> GetTextRuns()
-{
-	return _runs;
-}
-
-public TextPropCollection GetParagraphStyle()
-{
-	return _paragraphStyle;
-}
-
-public void SetParagraphStyle(TextPropCollection paragraphStyle)
-{
-	_paragraphStyle = paragraphStyle;
-}
-
-/**
- * Supply the Sheet we belong to, which might have an assigned SlideShow
- * Also passes it on to our child RichTextRuns
- */
-public static void SupplySheet(List<HSLFTextParagraph> paragraphs, HSLFSheet sheet)
-{
-	if (paragraphs == null)
-	{
-		return;
-	}
-	foreach (HSLFTextParagraph p in paragraphs) {
-	p.supplySheet(sheet);
-}
-
-//assert(sheet.getSlideShow() != null);
-    }
-
-    /**
-     * Supply the Sheet we belong to, which might have an assigned SlideShow
-     * Also passes it on to our child RichTextRuns
-     */
-    private void SupplySheet(HSLFSheet sheet)
-{
-	this._sheet = sheet;
-
-	foreach (HSLFTextRun rt in _runs) {
-	rt.UpdateSheet();
-}
-    }
-
-    public HSLFSheet GetSheet()
-{
-	return this._sheet;
-}
-
-/**
- * @return Shape ID
- */
-protected int GetShapeId()
-{
-	return shapeId;
-}
-
-/**
- * @param id Shape ID
- */
-protected void SetShapeId(int id)
-{
-	shapeId = id;
-}
-
-/**
- * @return 0-based index of the text run in the SLWT container
- */
-protected int GetIndex()
-{
-	return (_headerAtom != null) ? _headerAtom.getIndex() : -1;
-}
-
-/**
- * Sets the index of the paragraph in the SLWT container
- */
-protected void SetIndex(int index)
-{
-	if (_headerAtom != null)
-	{
-		_headerAtom.setIndex(index);
-	}
-}
-
-/**
- * Returns the type of the text, from the TextHeaderAtom.
- * Possible values can be seen from TextHeaderAtom
- * @see TextHeaderAtom
- */
-public int GetRunType()
-{
-	return (_headerAtom != null) ? _headerAtom.getTextType() : -1;
-}
-
-public void SetRunType(int runType)
-{
-	if (_headerAtom != null)
-	{
-		_headerAtom.setTextType(runType);
-	}
-}
-
-/**
- * Is this Text Run one from a {@link PPDrawing}, or is it
- *  one from the {@link SlideListWithText}?
- */
-public bool IsDrawingBased()
-{
-	return (GetIndex() == -1);
-}
-
-public TextRulerAtom GetTextRuler()
-{
-	return _ruler;
-}
-
-public TextRulerAtom CreateTextRuler()
-{
-	_ruler = GetTextRuler();
-	if (_ruler == null)
-	{
-		_ruler = TextRulerAtom.GetParagraphInstance();
-		Record.Record childAfter = _byteAtom;
-		if (childAfter == null)
-		{
-			childAfter = _charAtom;
-		}
-		if (childAfter == null)
-		{
-			childAfter = _headerAtom;
-		}
-		_headerAtom.getParentRecord().addChildAfter(_ruler, childAfter);
-	}
-	return _ruler;
-}
-
-/**
- * Returns records that make up the list of text paragraphs
- * (there can be misc InteractiveInfo, TxInteractiveInfo and other records)
- *
- * @return text run records
- */
-public Record.Record[] GetRecords()
-{
-	Record.Record[] r = _headerAtom.GetParentRecord().GetChildRecords();
-	return GetRecords(r, new int[] { 0 }, _headerAtom);
-}
-
-private static Record.Record[] GetRecords(Record.Record[] records, int[] startIdx, TextHeaderAtom headerAtom)
-{
-	if (records == null)
-	{
-		throw new NullReferenceException("records need to be set.");
-	}
-
-	for (; startIdx[0] < records.Length; startIdx[0]++)
-	{
-		Record.Record r = records[startIdx[0]];
-		if (r is TextHeaderAtom && (headerAtom == null || r == headerAtom)) {
-	break;
-}
-        }
-
-        if (startIdx[0] >= records.Length)
-{
-	//LOG.atInfo().log("header atom wasn't found - container might contain only an OutlineTextRefAtom");
-	return new Record.Record[0];
-}
-
-int length;
-for (length = 1; startIdx[0] + length < records.Length; length++)
-{
-	Record.Record r = records[startIdx[0] + length];
-	if (r is TextHeaderAtom || r is SlidePersistAtom) {
-	break;
-}
-        }
-
-			Record.Record[] result = Arrays.CopyOfRange<Record.Record> (records, startIdx[0], startIdx[0] + length);
-startIdx[0] += length;
-
-return result;
-    }
-
-    /** Numbered List info */
-    public void SetStyleTextProp9Atom(StyleTextProp9Atom styleTextProp9Atom)
-{
-	this.styleTextProp9Atom = styleTextProp9Atom;
-}
-
-/** Numbered List info */
-public StyleTextProp9Atom GetStyleTextProp9Atom()
-{
-	return this.styleTextProp9Atom;
-}
-
-//@Override
-	public Iterator<HSLFTextRun> iterator()
-{
-	return _runs.iterator();
-}
-
-/**
- * @since POI 5.2.0
- */
-//@Override
-	public Spliterator<HSLFTextRun> spliterator()
-{
-	return _runs.spliterator();
-}
-
-//@Override
-	public Double GetLeftMargin()
-{
-	int val = 0;
-	if (_ruler != null)
-	{
-		Integer[] toList = _ruler.GetTextOffsets();
-		val = (toList.Length > GetIndentLevel()) ? toList[GetIndentLevel()] : null;
-	}
-
-	if (val == 0)
-	{
-		TextProp tp = GetPropVal(_paragraphStyle, "text.offset");
-		val = (tp == null) ? 0 : tp.GetValue();
-	}
-
-	return (val == 0) ? 0 : Units.MasterToPoints(val);
-}
-
-//@Override
-	public void SetLeftMargin(Double leftMargin)
-{
-	Integer val = (leftMargin == 0) ? null : Units.PointsToMaster(leftMargin);
-	SetParagraphTextPropVal("text.offset", val);
-}
-
-//@Override
-	public Double GetRightMargin()
-{
-	// TODO: find out, how to determine this value
-	return 0;
-}
-
-//@Override
-	public void SetRightMargin(Double rightMargin)
-{
-	// TODO: find out, how to set this value
-}
-
-//@Override
-	public Double GetIndent()
-{
-	int val = 0;
-	if (_ruler != null)
-	{
-		Integer[] toList = _ruler.GetBulletOffsets();
-		val = (toList.Length > GetIndentLevel()) ? toList[GetIndentLevel()] : null;
-	}
-
-	if (val == 0)
-	{
-		TextProp tp = GetPropVal(_paragraphStyle, "bullet.offset");
-		val = (tp == null) ? 0 : tp.GetValue();
-	}
-
-	return (val == 0) ? 0 : Units.MasterToPoints(val);
-}
-
-//@Override
-	public void SetIndent(Double indent)
-{
-	int val = (indent == 0) ? 0 : Units.PointsToMaster(indent);
-	SetParagraphTextPropVal("bullet.offset", val);
-}
-
-//@Override
-	public String GetDefaultFontFamily()
-{
-	FontInfo fontInfo = null;
-	if (!_runs.IsEmpty())
-	{
-		HSLFTextRun tr = _runs.ElementAt(0);
-		fontInfo = tr.GetFontInfo(null);
-		// fallback to LATIN if the font for the font group wasn't defined
-		if (fontInfo == null)
-		{
-			fontInfo = tr.GetFontInfo(FontGroupEnum.LATIN);
-		}
-	}
-	if (fontInfo == null)
-	{
-		fontInfo = HSLFFontInfoPredefined.ARIAL;
-	}
-
-	return fontInfo.GetTypeface();
-}
-
-//@Override
-	public Double GetDefaultFontSize()
-{
-	Double d = 0;
-	if (!_runs.IsEmpty())
-	{
-		d = _runs.ElementAt(0).GetFontSize();
-	}
-
-	return (d != 0) ? d : 12d;
-}
-
-//@Override
-	public void SetTextAlign(TextAlign align)
-{
-	int alignInt = 0;
-	if (align != null)
-	{
-		switch (align)
-		{
-			default:
-			case LEFT: alignInt = TextAlignmentProp.LEFT; break;
-			case CENTER: alignInt = TextAlignmentProp.CENTER; break;
-			case RIGHT: alignInt = TextAlignmentProp.RIGHT; break;
-			case DIST: alignInt = TextAlignmentProp.DISTRIBUTED; break;
-			case JUSTIFY: alignInt = TextAlignmentProp.JUSTIFY; break;
-			case JUSTIFY_LOW: alignInt = TextAlignmentProp.JUSTIFYLOW; break;
-			case THAI_DIST: alignInt = TextAlignmentProp.THAIDISTRIBUTED; break;
-		}
-	}
-	SetParagraphTextPropVal("alignment", alignInt);
-}
-
-//@Override
-	public TextAlign GetTextAlign()
-{
-	TextProp tp = GetPropVal(_paragraphStyle, "alignment");
-	if (tp == null)
-	{
-		return null;
-	}
-	switch (tp.GetValue())
-	{
-		default:
-		case TextAlignmentProp.LEFT: return TextAlign.LEFT;
-		case TextAlignmentProp.CENTER: return TextAlign.CENTER;
-		case TextAlignmentProp.RIGHT: return TextAlign.RIGHT;
-		case TextAlignmentProp.JUSTIFY: return TextAlign.JUSTIFY;
-		case TextAlignmentProp.JUSTIFYLOW: return TextAlign.JUSTIFY_LOW;
-		case TextAlignmentProp.DISTRIBUTED: return TextAlign.DIST;
-		case TextAlignmentProp.THAIDISTRIBUTED: return TextAlign.THAI_DIST;
-	}
-}
-
-//@Override
-	public FontAlign GetFontAlign()
-{
-	TextProp tp = GetPropVal(_paragraphStyle, FontAlignmentProp.NAME);
-	if (tp == null)
-	{
-		return null;
-	}
-
-	switch (tp.GetValue())
-	{
-		case FontAlignmentProp.BASELINE: return FontAlign.BASELINE;
-		case FontAlignmentProp.TOP: return FontAlign.TOP;
-		case FontAlignmentProp.CENTER: return FontAlign.CENTER;
-		case FontAlignmentProp.BOTTOM: return FontAlign.BOTTOM;
-		default: return FontAlign.AUTO;
-	}
-}
-
-public AutoNumberingScheme GetAutoNumberingScheme()
-{
-	if (styleTextProp9Atom == null)
-	{
-		return null;
-	}
-	TextPFException9[] ant = styleTextProp9Atom.GetAutoNumberTypes();
-	int level = GetIndentLevel();
-	if (ant == null || level == -1 || level >= ant.length)
-	{
-		return null;
-	}
-	return ant[level].GetAutoNumberScheme();
-}
-
-public int GetAutoNumberingStartAt()
-{
-	if (styleTextProp9Atom == null)
-	{
-		return null;
-	}
-	TextPFException9[] ant = styleTextProp9Atom.GetAutoNumberTypes();
-	int level = GetIndentLevel();
-	if (ant == null || level >= ant.Length)
-	{
-		return 0;
-	}
-	short startAt = ant[level].GetAutoNumberStartNumber();
-	//assert(startAt != null);
-	return startAt;
-}
-
-
-//@Override
-	public BulletStyle GetBulletStyle()
-{
-	if (!IsBullet() && etAutoNumberingScheme() == null)
-	{
-		return null;
-	}
-
-	return new BulletStyle() {
 			//@Override
-
-			public String getBulletCharacter()
-	{
-		Character chr = HSLFTextParagraph.this.getBulletChar();
-		return (chr == null || chr == 0) ? "" : "" + chr;
-	}
-
-	//@Override
-
-			public String getBulletFont()
-	{
-		return HSLFTextParagraph.this.getBulletFont();
-	}
-
-	//@Override
-
-			public Double getBulletFontSize()
-	{
-		return HSLFTextParagraph.this.getBulletSize();
-	}
-
-	//@Override
-
-			public void setBulletFontColor(Color color)
-	{
-		setBulletFontColor(DrawPaint.createSolidPaint(color));
-	}
-
-	//@Override
-
-			public void setBulletFontColor(PaintStyle color)
-	{
-		if (!(color instanceof SolidPaint)) {
-	throw new IllegalArgumentException("HSLF only supports SolidPaint");
-}
-SolidPaint sp = (SolidPaint)color;
-Color col = DrawPaint.applyColorTransform(sp.getSolidColor());
-HSLFTextParagraph.this.setBulletColor(col);
-            }
-
-            //@Override
-			public PaintStyle getBulletFontColor()
-{
-	Color col = HSLFTextParagraph.this.getBulletColor();
-	return DrawPaint.createSolidPaint(col);
-}
-
-//@Override
-			public AutoNumberingScheme getAutoNumberingScheme()
-{
-	return HSLFTextParagraph.this.getAutoNumberingScheme();
-}
-
-//@Override
-			public Integer getAutoNumberingStartAt()
-{
-	return HSLFTextParagraph.this.getAutoNumberingStartAt();
-}
-        };
-    }
-
-    //@Override
-	public void setBulletStyle(Object...styles)
-{
-	if (styles.length == 0)
-	{
-		setBullet(false);
-	}
-	else
-	{
-		setBullet(true);
-		for (Object ostyle : styles) {
-	if (ostyle instanceof Number) {
-		setBulletSize(((Number)ostyle).doubleValue());
-	} else if (ostyle instanceof Color) {
-		setBulletColor((Color)ostyle);
-	} else if (ostyle instanceof Character) {
-		setBulletChar((Character)ostyle);
-	} else if (ostyle instanceof String) {
-		setBulletFont((String)ostyle);
-	} else if (ostyle instanceof AutoNumberingScheme) {
-		throw new HSLFException("setting bullet auto-numberin scheme for HSLF not supported ... yet");
-	}
-}
-        }
-    }
-
-    //@Override
-	public HSLFTextShape getParentShape()
-{
-	return _parentShape;
-}
-
-public void setParentShape(HSLFTextShape parentShape)
-{
-	_parentShape = parentShape;
-}
-
-//@Override
-	public int GetIndentLevel()
-{
-	return _paragraphStyle == null ? 0 : _paragraphStyle.GetIndentLevel();
-}
-
-//@Override
-	public void setIndentLevel(int level)
-{
-	if (_paragraphStyle != null)
-	{
-		_paragraphStyle.setIndentLevel((short)level);
-	}
-}
-
-/**
- * Sets whether this rich text run has bullets
- */
-public void setBullet(bool flag)
-{
-	setFlag(ParagraphFlagsTextProp.BULLET_IDX, flag);
-}
-
-/**
- * Returns whether this rich text run has bullets
- */
-public bool isBullet()
-{
-	return getFlag(ParagraphFlagsTextProp.BULLET_IDX);
-}
-
-/**
- * Sets the bullet character
- */
-public void setBulletChar(Character c)
-{
-	Integer val = (c == null) ? null : (int)c;
-	setParagraphTextPropVal("bullet.char", val);
-}
-
-/**
- * Returns the bullet character
- */
-public Character getBulletChar()
-{
-	TextProp tp = getPropVal(_paragraphStyle, "bullet.char");
-	return (tp == null) ? null : (char)tp.getValue();
-}
-
-/**
- * Sets the bullet size
- */
-public void setBulletSize(Double size)
-{
-	setPctOrPoints("bullet.size", size);
-}
-
-/**
- * Returns the bullet size, null if unset
- */
-public Double getBulletSize()
-{
-	return getPctOrPoints("bullet.size");
-}
-
-/**
- * Sets the bullet color
- */
-public void setBulletColor(Color color)
-{
-	Integer val = (color == null) ? null : new Color(color.getBlue(), color.getGreen(), color.getRed(), 254).getRGB();
-	setParagraphTextPropVal("bullet.color", val);
-	setFlag(ParagraphFlagsTextProp.BULLET_HARDCOLOR_IDX, (color != null));
-}
-
-/**
- * Returns the bullet color
- */
-public Color getBulletColor()
-{
-	TextProp tp = getPropVal(_paragraphStyle, "bullet.color");
-	bool hasColor = getFlag(ParagraphFlagsTextProp.BULLET_HARDCOLOR_IDX);
-	if (tp == null || !hasColor)
-	{
-		// if bullet color is undefined, return color of first run
-		if (_runs.isEmpty())
-		{
-			return null;
-		}
-
-		SolidPaint sp = _runs.get(0).getFontColor();
-		if (sp == null)
-		{
-			return null;
-		}
-
-		return DrawPaint.applyColorTransform(sp.getSolidColor());
-	}
-
-	return getColorFromColorIndexStruct(tp.getValue(), _sheet);
-}
-
-/**
- * Sets the bullet font
- */
-public void setBulletFont(String typeface)
-{
-	if (typeface == null)
-	{
-		setPropVal(_paragraphStyle, "bullet.font", null);
-		setFlag(ParagraphFlagsTextProp.BULLET_HARDFONT_IDX, false);
-		return;
-	}
-
-	HSLFFontInfo fi = new HSLFFontInfo(typeface);
-	fi = getSheet().getSlideShow().addFont(fi);
-
-	setParagraphTextPropVal("bullet.font", fi.getIndex());
-	setFlag(ParagraphFlagsTextProp.BULLET_HARDFONT_IDX, true);
-}
-
-/**
- * Returns the bullet font
- */
-public String getBulletFont()
-{
-	TextProp tp = getPropVal(_paragraphStyle, "bullet.font");
-	bool hasFont = getFlag(ParagraphFlagsTextProp.BULLET_HARDFONT_IDX);
-	if (tp == null || !hasFont)
-	{
-		return getDefaultFontFamily();
-	}
-	HSLFFontInfo ppFont = getSheet().getSlideShow().getFont(tp.getValue());
-	assert(ppFont != null);
-	return ppFont.getTypeface();
-}
-
-//@Override
-	public void setLineSpacing(Double lineSpacing)
-{
-	setPctOrPoints("linespacing", lineSpacing);
-}
-
-//@Override
-	public Double getLineSpacing()
-{
-	return getPctOrPoints("linespacing");
-}
-
-//@Override
-	public void setSpaceBefore(Double spaceBefore)
-{
-	setPctOrPoints("spacebefore", spaceBefore);
-}
-
-//@Override
-	public Double getSpaceBefore()
-{
-	return getPctOrPoints("spacebefore");
-}
-
-//@Override
-	public void setSpaceAfter(Double spaceAfter)
-{
-	setPctOrPoints("spaceafter", spaceAfter);
-}
-
-//@Override
-	public Double getSpaceAfter()
-{
-	return getPctOrPoints("spaceafter");
-}
-
-//@Override
-	public Double getDefaultTabSize()
-{
-	// TODO: implement
-	return null;
-}
-
-
-//@Override
-	public List<? extends TabStop> getTabStops()
-{
-	List<HSLFTabStop> tabStops;
-	if (getSheet() instanceof HSLFSlideMaster) {
-	HSLFTabStopPropCollection tpc = getMasterPropVal(_paragraphStyle, HSLFTabStopPropCollection.NAME);
-	if (tpc == null)
-	{
-		return null;
-	}
-	tabStops = tpc.getTabStops();
-} else
-{
-	TextRulerAtom textRuler = (TextRulerAtom)_headerAtom.getParentRecord().findFirstOfType(RecordTypes.TextRulerAtom.typeID);
-	if (textRuler == null)
-	{
-		return null;
-	}
-	tabStops = textRuler.getTabStops();
-}
-
-return tabStops.stream().map(HSLFTabStopDecorator::new).collect(Collectors.toList());
-    }
-
-    //@Override
-	public void addTabStops(double positionInPoints, TabStopType tabStopType)
-{
-	HSLFTabStop ts = new HSLFTabStop(0, tabStopType);
-	ts.setPositionInPoints(positionInPoints);
-
-	if (getSheet() instanceof HSLFSlideMaster) {
-	Consumer<HSLFTabStopPropCollection> con = (tp)->tp.addTabStop(ts);
-	setPropValInner(_paragraphStyle, HSLFTabStopPropCollection.NAME, con);
-} else
-{
-	RecordContainer cont = _headerAtom.getParentRecord();
-	TextRulerAtom textRuler = (TextRulerAtom)cont.findFirstOfType(RecordTypes.TextRulerAtom.typeID);
-	if (textRuler == null)
-	{
-		textRuler = TextRulerAtom.getParagraphInstance();
-		cont.appendChildRecord(textRuler);
-	}
-	textRuler.getTabStops().add(ts);
-}
-    }
-
-    //@Override
-	public void clearTabStops()
-{
-	if (getSheet() instanceof HSLFSlideMaster) {
-	setPropValInner(_paragraphStyle, HSLFTabStopPropCollection.NAME, null);
-} else
-{
-	RecordContainer cont = _headerAtom.getParentRecord();
-	TextRulerAtom textRuler = (TextRulerAtom)cont.findFirstOfType(RecordTypes.TextRulerAtom.typeID);
-	if (textRuler == null)
-	{
-		return;
-	}
-	textRuler.getTabStops().clear();
-}
-    }
-
-    private Double getPctOrPoints(String propName)
-{
-	TextProp tp = getPropVal(_paragraphStyle, propName);
-	if (tp == null)
-	{
-		return null;
-	}
-	int val = tp.getValue();
-	return (val < 0) ? Units.masterToPoints(val) : val;
-}
-
-private void setPctOrPoints(String propName, Double dval)
-{
-	Integer ival = null;
-	if (dval != null)
-	{
-		ival = (dval < 0) ? Units.pointsToMaster(dval) : dval.intValue();
-	}
-	setParagraphTextPropVal(propName, ival);
-}
-
-private bool getFlag(int index)
-{
-	BitMaskTextProp tp = getPropVal(_paragraphStyle, ParagraphFlagsTextProp.NAME);
-	return tp != null && tp.getSubValue(index);
-}
-
-private void setFlag(int index, bool value)
-{
-	BitMaskTextProp tp = _paragraphStyle.addWithName(ParagraphFlagsTextProp.NAME);
-	tp.setSubValue(value, index);
-	setDirty();
-}
-
-/**
- * Fetch the value of the given Paragraph related TextProp. Returns null if
- * that TextProp isn't present. If the TextProp isn't present, the value
- * from the appropriate Master Sheet will apply.
- *
- * The propName can be a comma-separated list, in case multiple equivalent values
- * are queried
- */
-protected < T extends TextProp> T getPropVal(TextPropCollection props, String propName) {
-	String[] propNames = propName.split(",");
-	for (String pn : propNames)
-	{
-		T prop = props.findByName(pn);
-		if (isValidProp(prop))
-		{
-			return prop;
-		}
-	}
-
-	return getMasterPropVal(props, propName);
-}
-
-private < T extends TextProp> T getMasterPropVal(TextPropCollection props, String propName) {
-	bool isChar = props.getTextPropType() == TextPropType.character;
-
-	// check if we can delegate to master for the property
-	if (!isChar)
-	{
-		BitMaskTextProp maskProp = props.findByName(ParagraphFlagsTextProp.NAME);
-		bool hardAttribute = (maskProp != null && maskProp.getValue() == 0);
-		if (hardAttribute)
-		{
-			return null;
-		}
-	}
-
-	String[] propNames = propName.split(",");
-	HSLFSheet sheet = getSheet();
-	int txtype = getRunType();
-	HSLFMasterSheet master;
-	if (sheet instanceof HSLFMasterSheet) {
-		master = (HSLFMasterSheet)sheet;
-	} else
-	{
-		master = sheet.getMasterSheet();
-		if (master == null)
-		{
-			LOG.atWarn().log("MasterSheet is not available");
-			return null;
-		}
-	}
-
-	for (String pn : propNames)
-	{
-		TextPropCollection masterProps = master.getPropCollection(txtype, GetIndentLevel(), pn, isChar);
-		if (masterProps != null)
-		{
-			T prop = masterProps.findByName(pn);
-			if (isValidProp(prop))
+			public double GetPositionInPoints()
 			{
-				return prop;
+				return tabStop.GetPositionInPoints();
+			}
+
+			//@Override
+			public void SetPositionInPoints(double position)
+			{
+				tabStop.SetPositionInPoints(position);
+				SetDirty();
+			}
+
+			//@Override
+			public new TabStopType GetType()
+			{
+				return tabStop.GetType();
+			}
+
+			//@Override
+			public void SetType(TabStopType type)
+			{
+				tabStop.SetType(type);
+				SetDirty();
+			}
+
+
+		}
+
+
+		/**
+		* Constructs a Text Run from a Unicode text block.
+		* Either a {@link TextCharsAtom} or a {@link TextBytesAtom} needs to be provided.
+		 *
+		* @param tha the TextHeaderAtom that defines what's what
+		* @param tba the TextBytesAtom containing the text or null if {@link TextCharsAtom} is provided
+		* @param tca the TextCharsAtom containing the text or null if {@link TextBytesAtom} is provided
+		* @param parentList the list which contains this paragraph
+		 */
+		/* package */
+		public HSLFTextParagraph(TextHeaderAtom tha, TextBytesAtom tba, TextCharsAtom tca, List<HSLFTextParagraph> parentList)
+		{
+			if (tha == null)
+			{
+				throw new InvalidOperationException("TextHeaderAtom must be set.");
+			}
+			_headerAtom = tha;
+			_byteAtom = tba;
+			_charAtom = tca;
+			this.parentList = parentList;
+			SetParagraphStyle(new TextPropCollection(1, TextPropType.paragraph));
+		}
+
+		public void AddTextRun(HSLFTextRun run)
+		{
+			_runs.Add(run);
+		}
+
+		//@Override
+		public List<HSLFTextRun> GetTextRuns()
+		{
+			return _runs;
+		}
+
+		public TextPropCollection GetParagraphStyle()
+		{
+			return _paragraphStyle;
+		}
+
+		public void SetParagraphStyle(TextPropCollection paragraphStyle)
+		{
+			_paragraphStyle = paragraphStyle;
+		}
+
+		/**
+		 * Supply the Sheet we belong to, which might have an assigned SlideShow
+		 * Also passes it on to our child RichTextRuns
+		 */
+		public static void SupplySheet(List<HSLFTextParagraph> paragraphs, HSLFSheet sheet)
+		{
+			if (paragraphs == null)
+			{
+				return;
+			}
+			foreach (HSLFTextParagraph p in paragraphs) {
+				p.SupplySheet(sheet);
+			}
+
+			//assert(sheet.getSlideShow() != null);
+		}
+
+		/**
+		 * Supply the Sheet we belong to, which might have an assigned SlideShow
+		 * Also passes it on to our child RichTextRuns
+		 */
+		private void SupplySheet(HSLFSheet sheet)
+		{
+			this._sheet = sheet;
+
+			foreach (HSLFTextRun rt in _runs) {
+				rt.UpdateSheet();
 			}
 		}
-	}
 
-	return null;
-}
-
-private static bool isValidProp(TextProp prop)
-{
-	// Font properties (maybe other too???) can have an index of -1
-	// so we check the master for this font index then
-	return prop != null && (!prop.getName().contains("font") || prop.getValue() != -1);
-}
-
-/**
- * Returns the named TextProp, either by fetching it (if it exists) or
- * adding it (if it didn't)
- *
- * @param props the TextPropCollection to fetch from / add into
- * @param name the name of the TextProp to fetch/add
- * @param val the value, null if unset
- */
-protected void setPropVal(TextPropCollection props, String name, Integer val)
-{
-	setPropValInner(props, name, val == null ? null : tp->tp.setValue(val));
-}
-
-private void setPropValInner(TextPropCollection props, String name, Consumer<? extends TextProp> handler)
-{
-	bool isChar = props.getTextPropType() == TextPropType.character;
-
-	TextPropCollection pc;
-	if (_sheet instanceof HSLFMasterSheet) {
-	pc = ((HSLFMasterSheet)_sheet).getPropCollection(getRunType(), GetIndentLevel(), "*", isChar);
-	if (pc == null)
-	{
-		throw new HSLFException("Master text property collection can't be determined.");
-	}
-} else
-{
-	pc = props;
-}
-
-if (handler == null)
-{
-	pc.removeByName(name);
-}
-else
-{
-	// Fetch / Add the TextProp
-	handler.accept(pc.addWithName(name));
-}
-setDirty();
-    }
-
-
-    /**
-     * Check and add linebreaks to text runs leading other paragraphs
-     */
-    protected static void fixLineEndings(List<HSLFTextParagraph> paragraphs)
-{
-	HSLFTextRun lastRun = null;
-	for (HSLFTextParagraph p : paragraphs) {
-	if (lastRun != null && !lastRun.getRawText().endsWith("\r"))
-	{
-		lastRun.setText(lastRun.getRawText() + "\r");
-	}
-	List<HSLFTextRun> ltr = p.getTextRuns();
-	if (ltr.isEmpty())
-	{
-		throw new HSLFException("paragraph without textruns found");
-	}
-	lastRun = ltr.get(ltr.size() - 1);
-	assert(lastRun.getRawText() != null);
-}
-    }
-
-    /**
-     * Search for a StyleTextPropAtom is for this text header (list of paragraphs)
-     *
-     * @param header the header
-     * @param textLen the length of the rawtext, or -1 if the length is not known
-     */
-    private static StyleTextPropAtom findStyleAtomPresent(TextHeaderAtom header, int textLen)
-{
-	bool afterHeader = false;
-	StyleTextPropAtom style = null;
-	for (Record record : header.getParentRecord().getChildRecords()) {
-	long rt = record.getRecordType();
-	if (afterHeader && rt == RecordTypes.TextHeaderAtom.typeID)
-	{
-		// already on the next header, quit searching
-		break;
-	}
-	afterHeader |= (header == record);
-	if (afterHeader && rt == RecordTypes.StyleTextPropAtom.typeID)
-	{
-		// found it
-		style = (StyleTextPropAtom)record;
-	}
-}
-
-if (style == null)
-{
-	LOG.atInfo().log("styles atom doesn't exist. Creating dummy record for later saving.");
-	style = new StyleTextPropAtom((textLen < 0) ? 1 : textLen);
-}
-else
-{
-	if (textLen >= 0)
-	{
-		style.setParentTextSize(textLen);
-	}
-}
-
-return style;
-    }
-
-    /**
-     * Saves the modified paragraphs/textrun to the records.
-     * Also updates the styles to the correct text length.
-     */
-    protected static void storeText(List<HSLFTextParagraph> paragraphs)
-{
-	fixLineEndings(paragraphs);
-	updateTextAtom(paragraphs);
-	updateStyles(paragraphs);
-	updateHyperlinks(paragraphs);
-	refreshRecords(paragraphs);
-
-	for (HSLFTextParagraph p : paragraphs) {
-	p._dirty = false;
-}
-    }
-
-    /**
-     * Set the correct text atom depending on the multibyte usage
-     */
-    private static void updateTextAtom(List<HSLFTextParagraph> paragraphs)
-{
-	String rawText = toInternalString(getRawText(paragraphs));
-
-	// Will it fit in a 8 bit atom?
-	bool isUnicode = StringUtil.hasMultibyte(rawText);
-	// isUnicode = true;
-
-	TextHeaderAtom headerAtom = paragraphs.get(0)._headerAtom;
-	TextBytesAtom byteAtom = paragraphs.get(0)._byteAtom;
-	TextCharsAtom charAtom = paragraphs.get(0)._charAtom;
-	StyleTextPropAtom styleAtom = findStyleAtomPresent(headerAtom, rawText.length());
-
-	// Store in the appropriate record
-	Record oldRecord = null, newRecord;
-	if (isUnicode)
-	{
-		if (byteAtom != null || charAtom == null)
+		public HSLFSheet GetSheet()
 		{
-			oldRecord = byteAtom;
-			charAtom = new TextCharsAtom();
+			return this._sheet;
 		}
-		newRecord = charAtom;
-		charAtom.setText(rawText);
-	}
-	else
-	{
-		if (charAtom != null || byteAtom == null)
+
+		/**
+		 * @return Shape ID
+		 */
+		protected int GetShapeId()
 		{
-			oldRecord = charAtom;
-			byteAtom = new TextBytesAtom();
+			return shapeId;
 		}
-		newRecord = byteAtom;
-		byte[] byteText = new byte[rawText.length()];
-		StringUtil.putCompressedUnicode(rawText, byteText, 0);
-		byteAtom.setText(byteText);
-	}
 
-	RecordContainer _txtbox = headerAtom.getParentRecord();
-	Record[] cr = _txtbox.getChildRecords();
-	int /* headerIdx = -1, */ textIdx = -1, styleIdx = -1;
-	for (int i = 0; i < cr.length; i++)
-	{
-		Record r = cr[i];
-		if (r == headerAtom)
+		/**
+		 * @param id Shape ID
+		 */
+		protected void SetShapeId(int id)
 		{
-			// headerIdx = i;
+			shapeId = id;
 		}
-		else if (r == oldRecord || r == newRecord)
+
+		/**
+		 * @return 0-based index of the text run in the SLWT container
+		 */
+		protected int GetIndex()
 		{
-			textIdx = i;
+			return (_headerAtom != null) ? _headerAtom.GetIndex() : -1;
 		}
-		else if (r == styleAtom)
+
+		/**
+		 * Sets the index of the paragraph in the SLWT container
+		 */
+		protected void SetIndex(int index)
 		{
-			styleIdx = i;
+			if (_headerAtom != null)
+			{
+				_headerAtom.SetIndex(index);
+			}
 		}
-	}
 
-	if (textIdx == -1)
-	{
-		// the old record was never registered, ignore it
-		_txtbox.addChildAfter(newRecord, headerAtom);
-		// textIdx = headerIdx + 1;
-	}
-	else
-	{
-		// swap not appropriated records - noop if unchanged
-		cr[textIdx] = newRecord;
-	}
-
-	if (styleIdx == -1)
-	{
-		// Add the new StyleTextPropAtom after the TextCharsAtom / TextBytesAtom
-		_txtbox.addChildAfter(styleAtom, newRecord);
-	}
-
-	for (HSLFTextParagraph p : paragraphs) {
-	if (newRecord == byteAtom)
-	{
-		p._byteAtom = byteAtom;
-		p._charAtom = null;
-	}
-	else
-	{
-		p._byteAtom = null;
-		p._charAtom = charAtom;
-	}
-}
-
-    }
-
-    /**
-     * Update paragraph and character styles - merges them when subsequential styles match
-     */
-    private static void updateStyles(List<HSLFTextParagraph> paragraphs)
-{
-	String rawText = toInternalString(getRawText(paragraphs));
-	TextHeaderAtom headerAtom = paragraphs.get(0)._headerAtom;
-	StyleTextPropAtom styleAtom = findStyleAtomPresent(headerAtom, rawText.length());
-
-	// Update the text length for its Paragraph and Character stylings
-	// * reset the length, to the new string's length
-	// * add on +1 if the last block
-
-	styleAtom.clearStyles();
-
-	TextPropCollection lastPTPC = null, lastRTPC = null, ptpc = null, rtpc = null;
-	for (HSLFTextParagraph para : paragraphs) {
-	ptpc = para.getParagraphStyle();
-	ptpc.updateTextSize(0);
-	if (!ptpc.equals(lastPTPC))
-	{
-		lastPTPC = ptpc.copy();
-		lastPTPC.updateTextSize(0);
-		styleAtom.addParagraphTextPropCollection(lastPTPC);
-	}
-	for (HSLFTextRun tr : para.getTextRuns())
-	{
-		rtpc = tr.getCharacterStyle();
-		rtpc.updateTextSize(0);
-		if (!rtpc.equals(lastRTPC))
+		/**
+		 * Returns the type of the text, from the TextHeaderAtom.
+		 * Possible values can be seen from TextHeaderAtom
+		 * @see TextHeaderAtom
+		 */
+		public int GetRunType()
 		{
-			lastRTPC = rtpc.copy();
-			lastRTPC.updateTextSize(0);
-			styleAtom.addCharacterTextPropCollection(lastRTPC);
+			return (_headerAtom != null) ? _headerAtom.GetTextType() : -1;
 		}
-		int len = tr.getLength();
-		ptpc.updateTextSize(ptpc.getCharactersCovered() + len);
-		rtpc.updateTextSize(len);
-		lastPTPC.updateTextSize(lastPTPC.getCharactersCovered() + len);
-		lastRTPC.updateTextSize(lastRTPC.getCharactersCovered() + len);
-	}
-}
 
-if (lastPTPC == null || lastRTPC == null || ptpc == null || rtpc == null)
-{ // NOSONAR
-	throw new HSLFException("Not all TextPropCollection could be determined.");
-}
+		public void SetRunType(int runType)
+		{
+			if (_headerAtom != null)
+			{
+				_headerAtom.SetTextType(runType);
+			}
+		}
 
-ptpc.updateTextSize(ptpc.getCharactersCovered() + 1);
-rtpc.updateTextSize(rtpc.getCharactersCovered() + 1);
-lastPTPC.updateTextSize(lastPTPC.getCharactersCovered() + 1);
-lastRTPC.updateTextSize(lastRTPC.getCharactersCovered() + 1);
+		/**
+		 * Is this Text Run one from a {@link PPDrawing}, or is it
+		 *  one from the {@link SlideListWithText}?
+		 */
+		public bool IsDrawingBased()
+		{
+			return (GetIndex() == -1);
+		}
 
-// If TextSpecInfoAtom is present, we must update the text size in it,
-// otherwise the ppt will be corrupted
-for (Record r : paragraphs.get(0).getRecords())
-{
-	if (r instanceof TextSpecInfoAtom) {
-	((TextSpecInfoAtom)r).setParentSize(rawText.length() + 1);
-	break;
-}
-        }
-    }
+		public TextRulerAtom GetTextRuler()
+		{
+			return _ruler;
+		}
+
+		public TextRulerAtom CreateTextRuler()
+		{
+			_ruler = GetTextRuler();
+			if (_ruler == null)
+			{
+				_ruler = TextRulerAtom.GetParagraphInstance();
+				Record.Record childAfter = _byteAtom;
+				if (childAfter == null)
+				{
+					childAfter = _charAtom;
+				}
+				if (childAfter == null)
+				{
+					childAfter = _headerAtom;
+				}
+				_headerAtom.GetParentRecord().AddChildAfter(_ruler, childAfter);
+			}
+			return _ruler;
+		}
+
+		/**
+		 * Returns records that make up the list of text paragraphs
+		 * (there can be misc InteractiveInfo, TxInteractiveInfo and other records)
+		 *
+		 * @return text run records
+		 */
+		public Record.Record[] GetRecords()
+		{
+			Record.Record[] r = _headerAtom.GetParentRecord().GetChildRecords();
+			return GetRecords(r, new int[] { 0 }, _headerAtom);
+		}
+
+		private static Record.Record[] GetRecords(Record.Record[] records, int[] startIdx, TextHeaderAtom headerAtom)
+		{
+			if (records == null)
+			{
+				throw new NullReferenceException("records need to be set.");
+			}
+
+			for (; startIdx[0] < records.Length; startIdx[0]++)
+			{
+				Record.Record r = records[startIdx[0]];
+				if (r is TextHeaderAtom && (headerAtom == null || r == headerAtom))
+				{
+					break;
+				}
+			}
+
+			if (startIdx[0] >= records.Length)
+			{
+				//LOG.atInfo().log("header atom wasn't found - container might contain only an OutlineTextRefAtom");
+				return new Record.Record[0];
+			}
+
+			int length;
+			for (length = 1; startIdx[0] + length < records.Length; length++)
+			{
+				Record.Record r = records[startIdx[0] + length];
+				if (r is TextHeaderAtom || r is SlidePersistAtom) {
+					break;
+				}
+			}
+
+			Record.Record[] result = Arrays.CopyOfRange<Record.Record>(records, startIdx[0], startIdx[0] + length);
+			startIdx[0] += length;
+
+			return result;
+		}
+
+		/** Numbered List info */
+		public void SetStyleTextProp9Atom(StyleTextProp9Atom styleTextProp9Atom)
+		{
+			this.styleTextProp9Atom = styleTextProp9Atom;
+		}
+
+		/** Numbered List info */
+		public StyleTextProp9Atom GetStyleTextProp9Atom()
+		{
+			return this.styleTextProp9Atom;
+		}
+
+		//@Override
+		public IEnumerator<HSLFTextRun> Iterator()
+		{
+			return _runs.GetEnumerator();
+		}
+
+		/**
+		 * @since POI 5.2.0
+		 */
+		//@Override
+		public IEnumerator<HSLFTextRun> Spliterator()
+		{
+			return _runs.GetEnumerator();
+		}
+
+		//@Override
+		public Double GetLeftMargin()
+		{
+			int val = 0;
+			if (_ruler != null)
+			{
+				int[] toList = _ruler.GetTextOffsets();
+				val = (toList.Length > GetIndentLevel()) ? toList[GetIndentLevel()] : 0;
+			}
+
+			if (val == 0)
+			{
+				TextProp tp = GetPropVal(_paragraphStyle, "text.offset");
+				val = (tp == null) ? 0 : tp.GetValue();
+			}
+
+			return (val == 0) ? 0 : Units.MasterToPoints(val);
+		}
+
+		//@Override
+		public void SetLeftMargin(Double leftMargin)
+		{
+			Integer val = (leftMargin == 0) ? null : Units.PointsToMaster(leftMargin);
+			SetParagraphTextPropVal("text.offset", val);
+		}
+
+		//@Override
+		public Double GetRightMargin()
+		{
+			// TODO: find out, how to determine this value
+			return 0;
+		}
+
+		//@Override
+		public void SetRightMargin(Double rightMargin)
+		{
+			// TODO: find out, how to set this value
+		}
+
+		//@Override
+		public Double GetIndent()
+		{
+			int val = 0;
+			if (_ruler != null)
+			{
+				int[] toList = _ruler.GetBulletOffsets();
+				val = (toList.Length > GetIndentLevel()) ? toList[GetIndentLevel()] : 0;
+			}
+
+			if (val == 0)
+			{
+				TextProp tp = GetPropVal(_paragraphStyle, "bullet.offset");
+				val = (tp == null) ? 0 : tp.GetValue();
+			}
+
+			return (val == 0) ? 0 : Units.MasterToPoints(val);
+		}
+
+		//@Override
+		public void SetIndent(Double indent)
+		{
+			int val = (indent == 0) ? 0 : Units.PointsToMaster(indent);
+			SetParagraphTextPropVal("bullet.offset", val);
+		}
+
+		//@Override
+		public String GetDefaultFontFamily()
+		{
+			FontInfo fontInfo = null;
+			if (!(_runs.Count ==0))
+			{
+				HSLFTextRun tr = _runs.ElementAt(0);
+				fontInfo = tr.GetFontInfo(null);
+				// fallback to LATIN if the font for the font group wasn't defined
+				if (fontInfo == null)
+				{
+					fontInfo = tr.GetFontInfo(FontGroupEnum.LATIN);
+				}
+			}
+			if (fontInfo == null)
+			{
+				fontInfo = HSLFFontInfoPredefined.ARIAL;
+			}
+
+			return fontInfo.GetTypeface();
+		}
+
+		//@Override
+		public Double GetDefaultFontSize()
+		{
+			Double d = 0;
+			if (!(_runs.Count == 0))
+			{
+				d = _runs.ElementAt(0).GetFontSize();
+			}
+
+			return (d != 0) ? d : 12d;
+		}
+
+		//@Override
+		public void SetTextAlign(TextAlign align)
+		{
+			int alignInt = 0;
+			if (align != null)
+			{
+				switch (align)
+				{
+					default:
+					case TextAlign.LEFT: alignInt = TextAlignmentProp.LEFT; break;
+					case TextAlign.CENTER: alignInt = TextAlignmentProp.CENTER; break;
+					case TextAlign.RIGHT: alignInt = TextAlignmentProp.RIGHT; break;
+					case TextAlign.DIST: alignInt = TextAlignmentProp.DISTRIBUTED; break;
+					case TextAlign.JUSTIFY: alignInt = TextAlignmentProp.JUSTIFY; break;
+					case TextAlign.JUSTIFY_LOW: alignInt = TextAlignmentProp.JUSTIFYLOW; break;
+					case TextAlign.THAI_DIST: alignInt = TextAlignmentProp.THAIDISTRIBUTED; break;
+				}
+			}
+			SetParagraphTextPropVal("alignment", alignInt);
+		}
+
+		//@Override
+		public TextAlign GetTextAlign()
+		{
+			TextProp tp = GetPropVal(_paragraphStyle, "alignment");
+			if (tp == null)
+			{
+				return TextAlign.LEFT;
+			}
+			switch (tp.GetValue())
+			{
+				default:
+				case TextAlignmentProp.LEFT: return TextAlign.LEFT;
+				case TextAlignmentProp.CENTER: return TextAlign.CENTER;
+				case TextAlignmentProp.RIGHT: return TextAlign.RIGHT;
+				case TextAlignmentProp.JUSTIFY: return TextAlign.JUSTIFY;
+				case TextAlignmentProp.JUSTIFYLOW: return TextAlign.JUSTIFY_LOW;
+				case TextAlignmentProp.DISTRIBUTED: return TextAlign.DIST;
+				case TextAlignmentProp.THAIDISTRIBUTED: return TextAlign.THAI_DIST;
+			}
+		}
+
+		//@Override
+		public FontAlign GetFontAlign()
+		{
+			TextProp tp = GetPropVal(_paragraphStyle, FontAlignmentProp.NAME);
+			if (tp == null)
+			{
+				return FontAlign.AUTO;
+			}
+
+			switch (tp.GetValue())
+			{
+				case FontAlignmentProp.BASELINE: return FontAlign.BASELINE;
+				case FontAlignmentProp.TOP: return FontAlign.TOP;
+				case FontAlignmentProp.CENTER: return FontAlign.CENTER;
+				case FontAlignmentProp.BOTTOM: return FontAlign.BOTTOM;
+				default: return FontAlign.AUTO;
+			}
+		}
+
+		public AutoNumberingScheme GetAutoNumberingScheme()
+		{
+			if (styleTextProp9Atom == null)
+			{
+				return null;
+			}
+			TextPFException9[] ant = styleTextProp9Atom.GetAutoNumberTypes();
+			int level = GetIndentLevel();
+			if (ant == null || level == -1 || level >= ant.Length)
+			{
+				return null;
+			}
+			return ant[level].GetAutoNumberScheme();
+		}
+
+		public int GetAutoNumberingStartAt()
+		{
+			if (styleTextProp9Atom == null)
+			{
+				return 0;
+			}
+			TextPFException9[] ant = styleTextProp9Atom.GetAutoNumberTypes();
+			int level = GetIndentLevel();
+			if (ant == null || level >= ant.Length)
+			{
+				return 0;
+			}
+			short startAt = ant[level].GetAutoNumberStartNumber();
+			//assert(startAt != null);
+			return startAt;
+		}
+
+
+		//@Override
+		public BulletStyle GetBulletStyle()
+		{
+			if (!IsBullet() && GetAutoNumberingScheme() == null)
+			{
+				return null;
+			}
+
+			return new BaseBulletStyle(this);
+		}
+
+		//@Override
+		public void SetBulletStyle(params object[] styles)
+		{
+			if (styles.Length == 0)
+			{
+				SetBullet(false);
+			}
+			else
+			{
+				SetBullet(true);
+				foreach (Object ostyle in styles) {
+					if (ostyle is Number) {
+						setBulletSize(((Number)ostyle).DoubleValue());
+					} else if (ostyle is Color) {
+						setBulletColor((Color)ostyle);
+					} else if (ostyle is Character) {
+						setBulletChar((Character)ostyle);
+					} else if (ostyle is String) {
+						setBulletFont((String)ostyle);
+					} else if (ostyle is AutoNumberingScheme) {
+						throw new HSLFException("setting bullet auto-numberin scheme for HSLF not supported ... yet");
+					}
+				}
+			}
+		}
+
+		//@Override
+		public HSLFTextShape GetParentShape()
+		{
+			return _parentShape;
+		}
+
+		public void SetParentShape(HSLFTextShape parentShape)
+		{
+			_parentShape = parentShape;
+		}
+
+		//@Override
+		public int GetIndentLevel()
+		{
+			return _paragraphStyle == null ? 0 : _paragraphStyle.GetIndentLevel();
+		}
+
+		//@Override
+		public void SetIndentLevel(int level)
+		{
+			if (_paragraphStyle != null)
+			{
+				_paragraphStyle.setIndentLevel((short)level);
+			}
+		}
+
+		/**
+		 * Sets whether this rich text run has bullets
+		 */
+		public void SetBullet(bool flag)
+		{
+			setFlag(ParagraphFlagsTextProp.BULLET_IDX, flag);
+		}
+
+		/**
+		 * Returns whether this rich text run has bullets
+		 */
+		public bool IsBullet()
+		{
+			return GetFlag(ParagraphFlagsTextProp.BULLET_IDX);
+		}
+
+		/**
+		 * Sets the bullet character
+		 */
+		public void SetBulletChar(Character c)
+		{
+			int val = (c == null) ? 0 : Convert.ToInt32(c);
+			SetParagraphTextPropVal("bullet.char", val);
+		}
+
+		/**
+		 * Returns the bullet character
+		 */
+		public Character GetBulletChar()
+		{
+			TextProp tp = GetPropVal(_paragraphStyle, "bullet.char");
+			return (tp == null) ? null : (char)tp.GetValue();
+		}
+
+		/**
+		 * Sets the bullet size
+		 */
+		public void SetBulletSize(Double size)
+		{
+			setPctOrPoints("bullet.size", size);
+		}
+
+		/**
+		 * Returns the bullet size, null if unset
+		 */
+		public Double GetBulletSize()
+		{
+			return getPctOrPoints("bullet.size");
+		}
+
+		/**
+		 * Sets the bullet color
+		 */
+		public void SetBulletColor(Color color)
+		{
+			int val = (color == null) ? null : new Color(color.getBlue(), color.getGreen(), color.getRed(), 254).getRGB();
+			setParagraphTextPropVal("bullet.color", val);
+			setFlag(ParagraphFlagsTextProp.BULLET_HARDCOLOR_IDX, (color != null));
+		}
+
+		/**
+		 * Returns the bullet color
+		 */
+		//public Color GetBulletColor()
+		//{
+		//	TextProp tp = GetPropVal(_paragraphStyle, "bullet.color");
+		//	bool hasColor = GetFlag(ParagraphFlagsTextProp.BULLET_HARDCOLOR_IDX);
+		//	if (tp == null || !hasColor)
+		//	{
+		//		// if bullet color is undefined, return color of first run
+		//		if (_runs.Count == 0)
+		//		{
+		//			return Color.White;
+		//		}
+
+		//		SolidPaint sp = _runs.ElementAt(0).GetFontColor();
+		//		if (sp == null)
+		//		{
+		//			return Color.White;
+		//		}
+
+		//		return DrawPaint.ApplyColorTransform(sp.getSolidColor());
+		//	}
+
+		//	return getColorFromColorIndexStruct(tp.GetValue(), _sheet);
+		//}
+
+		/**
+		 * Sets the bullet font
+		 */
+		public void SetBulletFont(String typeface)
+		{
+			if (typeface == null)
+			{
+				setPropVal(_paragraphStyle, "bullet.font", null);
+				setFlag(ParagraphFlagsTextProp.BULLET_HARDFONT_IDX, false);
+				return;
+			}
+
+			HSLFFontInfo fi = new HSLFFontInfo(typeface);
+			fi = GetSheet().GetSlideShow().AddFont(fi);
+
+			SetParagraphTextPropVal("bullet.font", fi.GetIndex());
+			SetFlag(ParagraphFlagsTextProp.BULLET_HARDFONT_IDX, true);
+		}
+
+		/**
+		 * Returns the bullet font
+		 */
+		public String GetBulletFont()
+		{
+			TextProp tp = GetPropVal(_paragraphStyle, "bullet.font");
+			bool hasFont = GetFlag(ParagraphFlagsTextProp.BULLET_HARDFONT_IDX);
+			if (tp == null || !hasFont)
+			{
+				return GetDefaultFontFamily();
+			}
+			HSLFFontInfo ppFont = GetSheet().GetSlideShow().GetFont(tp.getValue());
+			//assert(ppFont != null);
+			return ppFont.GetTypeface();
+		}
+
+		//@Override
+		public void SetLineSpacing(Double lineSpacing)
+		{
+			SetPctOrPoints("linespacing", lineSpacing);
+		}
+
+		//@Override
+		public Double GetLineSpacing()
+		{
+			return GetPctOrPoints("linespacing");
+		}
+
+		//@Override
+		public void SetSpaceBefore(Double spaceBefore)
+		{
+			SetPctOrPoints("spacebefore", spaceBefore);
+		}
+
+		//@Override
+		public Double GetSpaceBefore()
+		{
+			return GetPctOrPoints("spacebefore");
+		}
+
+		//@Override
+		public void SetSpaceAfter(Double spaceAfter)
+		{
+			SetPctOrPoints("spaceafter", spaceAfter);
+		}
+
+		//@Override
+		public Double GetSpaceAfter()
+		{
+			return GetPctOrPoints("spaceafter");
+		}
+
+		//@Override
+		public Double GetDefaultTabSize()
+		{
+			// TODO: implement
+			return null;
+		}
+
+
+		//@Override
+		public List<T> GetTabStops<T>() where T : TabStop
+		{
+			List<HSLFTabStop> tabStops;
+			if (GetSheet() is HSLFSlideMaster) {
+				HSLFTabStopPropCollection tpc = getMasterPropVal(_paragraphStyle, HSLFTabStopPropCollection.NAME);
+				if (tpc == null)
+				{
+					return null;
+				}
+				tabStops = tpc.GetTabStops();
+			} else
+			{
+				TextRulerAtom textRuler = (TextRulerAtom)_headerAtom.GetParentRecord().FindFirstOfType(RecordTypes.TextRulerAtom.typeID);
+				if (textRuler == null)
+				{
+					return null;
+				}
+				tabStops = textRuler.GetTabStops();
+			}
+			//.stream().map(HSLFTabStopDecorator::new).collect(Collectors.toList());
+			return tabStops as List<T>;
+		}
+
+		//@Override
+		public void AddTabStops(double positionInPoints, TabStopType tabStopType)
+		{
+			HSLFTabStop ts = new HSLFTabStop(0, tabStopType);
+			ts.SetPositionInPoints(positionInPoints);
+
+			if (GetSheet() is HSLFSlideMaster) {
+				Action<HSLFTabStopPropCollection> con = (tp) => tp.AddTabStop(ts);
+				SetPropValInner(_paragraphStyle, HSLFTabStopPropCollection.NAME, con);
+			} else
+			{
+				RecordContainer cont = _headerAtom.GetParentRecord();
+				TextRulerAtom textRuler = (TextRulerAtom)cont.FindFirstOfType(RecordTypes.TextRulerAtom.typeID);
+				if (textRuler == null)
+				{
+					textRuler = TextRulerAtom.GetParagraphInstance();
+					cont.AppendChildRecord(textRuler);
+				}
+				textRuler.GetTabStops().Add(ts);
+			}
+		}
+
+		//@Override
+		public void ClearTabStops()
+		{
+			if (GetSheet() is HSLFSlideMaster) {
+				setPropValInner(_paragraphStyle, HSLFTabStopPropCollection.NAME, null);
+			} else
+			{
+				RecordContainer cont = _headerAtom.GetParentRecord();
+				TextRulerAtom textRuler = (TextRulerAtom)cont.FindFirstOfType(RecordTypes.TextRulerAtom.typeID);
+				if (textRuler == null)
+				{
+					return;
+				}
+				textRuler.GetTabStops().Clear();
+			}
+		}
+
+		private Double GetPctOrPoints(String propName)
+		{
+			TextProp tp = GetPropVal(_paragraphStyle, propName);
+			if (tp == null)
+			{
+				return null;
+			}
+			int val = tp.GetValue();
+			return (val < 0) ? Units.MasterToPoints(val) : val;
+		}
+
+		private void SetPctOrPoints(String propName, Double dval)
+		{
+			int ival = 0;
+			if (dval != null)
+			{
+				ival = (dval < 0) ? Units.PointsToMaster(dval) : (int)dval;
+			}
+			SetParagraphTextPropVal(propName, ival);
+		}
+
+		private bool GetFlag(int index)
+		{
+			BitMaskTextProp tp = GetPropVal<BitMaskTextProp>(_paragraphStyle, ParagraphFlagsTextProp.NAME);
+			return tp != null && tp.GetSubValue(index);
+		}
+
+		private void SetFlag(int index, bool value)
+		{
+			BitMaskTextProp tp = _paragraphStyle.AddWithName<BitMaskTextProp>(ParagraphFlagsTextProp.NAME);
+			tp.SetSubValue(value, index);
+			SetDirty();
+		}
+
+		/**
+		 * Fetch the value of the given Paragraph related TextProp. Returns null if
+		 * that TextProp isn't present. If the TextProp isn't present, the value
+		 * from the appropriate Master Sheet will apply.
+		 *
+		 * The propName can be a comma-separated list, in case multiple equivalent values
+		 * are queried
+		 */
+		protected T GetPropVal<T>(TextPropCollection props, String propName) where T : TextProp {
+			String[] propNames = propName.Split(',');
+			foreach (String pn in propNames)
+			{
+				T prop = props.FindByName<T>(pn);
+				if (isValidProp(prop))
+				{
+					return prop;
+				}
+			}
+
+			return GetMasterPropVal<T>(props, propName);
+		}
+
+		private T GetMasterPropVal<T>(TextPropCollection props, String propName) where T : TextProp {
+			bool isChar = props.GetTextPropType() == TextPropType.character;
+
+			// check if we can delegate to master for the property
+			if (!isChar)
+			{
+				BitMaskTextProp maskProp = props.FindByName<BitMaskTextProp>(ParagraphFlagsTextProp.NAME);
+				bool hardAttribute = (maskProp != null && maskProp.GetValue() == 0);
+				if (hardAttribute)
+				{
+					return null;
+				}
+			}
+
+			String[] propNames = propName.Split(',');
+			HSLFSheet sheet = GetSheet();
+			int txtype = GetRunType();
+			HSLFMasterSheet master;
+			if (sheet is HSLFMasterSheet) {
+				master = (HSLFMasterSheet)sheet;
+			} else
+			{
+				master = sheet.GetMasterSheet();
+				if (master == null)
+				{
+					//LOG.atWarn().log("MasterSheet is not available");
+					return null;
+				}
+			}
+
+			foreach (String pn in propNames)
+			{
+				TextPropCollection masterProps = master.GetPropCollection(txtype, GetIndentLevel(), pn, isChar);
+				if (masterProps != null)
+				{
+					T prop = masterProps.FindByName(pn);
+					if (isValidProp(prop))
+					{
+						return prop;
+					}
+				}
+			}
+
+			return null;
+		}
+
+		private static bool IsValidProp(TextProp prop)
+		{
+			// Font properties (maybe other too???) can have an index of -1
+			// so we check the master for this font index then
+			return prop != null && (!prop.GetName().Contains("font") || prop.GetValue() != -1);
+		}
+
+		/**
+		 * Returns the named TextProp, either by fetching it (if it exists) or
+		 * adding it (if it didn't)
+		 *
+		 * @param props the TextPropCollection to fetch from / add into
+		 * @param name the name of the TextProp to fetch/add
+		 * @param val the value, null if unset
+		 */
+		protected void SetPropVal(TextPropCollection props, String name, Integer val)
+		{
+			SetPropValInner(props, name, val == null ? null : tp => tp.SetValue(val));
+		}
+
+		private void SetPropValInner(TextPropCollection props, String name, Action<TextProp> handler)
+		{
+			bool isChar = props.GetTextPropType() == TextPropType.character;
+
+			TextPropCollection pc;
+			if (_sheet is HSLFMasterSheet) {
+				pc = ((HSLFMasterSheet)_sheet).GetPropCollection(GetRunType(), GetIndentLevel(), "*", isChar);
+				if (pc == null)
+				{
+					throw new HSLFException("Master text property collection can't be determined.");
+				}
+			} else
+			{
+				pc = props;
+			}
+
+			if (handler == null)
+			{
+				pc.RemoveByName(name);
+			}
+			else
+			{
+				// Fetch / Add the TextProp
+				handler(pc.AddWithName(name));
+			}
+			SetDirty();
+		}
+
+
+		/**
+		 * Check and add linebreaks to text runs leading other paragraphs
+		 */
+		protected static void FixLineEndings(List<HSLFTextParagraph> paragraphs)
+		{
+			HSLFTextRun lastRun = null;
+			foreach (HSLFTextParagraph p in paragraphs) {
+				if (lastRun != null && !lastRun.GetRawText().EndsWith("\r"))
+				{
+					lastRun.SetText(lastRun.GetRawText() + "\r");
+				}
+				List<HSLFTextRun> ltr = p.GetTextRuns();
+				if (ltr.Count == 0)
+				{
+					throw new HSLFException("paragraph without textruns found");
+				}
+				lastRun = ltr.ElementAt(ltr.Count - 1);
+				//assert(lastRun.getRawText() != null);
+			}
+		}
+
+		/**
+		 * Search for a StyleTextPropAtom is for this text header (list of paragraphs)
+		 *
+		 * @param header the header
+		 * @param textLen the length of the rawtext, or -1 if the length is not known
+		 */
+		private static StyleTextPropAtom FindStyleAtomPresent(TextHeaderAtom header, int textLen)
+		{
+			bool afterHeader = false;
+			StyleTextPropAtom style = null;
+			foreach (Record.Record record in header.GetParentRecord().GetChildRecords())
+			{
+				long rt = record.GetRecordType();
+				if (afterHeader && rt == RecordTypes.TextHeaderAtom.typeID)
+				{
+					// already on the next header, quit searching
+					break;
+				}
+				afterHeader |= (header == record);
+				if (afterHeader && rt == RecordTypes.StyleTextPropAtom.typeID)
+				{
+					// found it
+					style = (StyleTextPropAtom)record;
+				}
+			}
+
+			if (style == null)
+			{
+				//LOG.atInfo().log("styles atom doesn't exist. Creating dummy record for later saving.");
+				style = new StyleTextPropAtom((textLen < 0) ? 1 : textLen);
+			}
+			else
+			{
+				if (textLen >= 0)
+				{
+					style.SetParentTextSize(textLen);
+				}
+			}
+
+			return style;
+		}
+
+		/**
+		 * Saves the modified paragraphs/textrun to the records.
+		 * Also updates the styles to the correct text length.
+		 */
+		protected static void StoreText(List<HSLFTextParagraph> paragraphs)
+		{
+			FixLineEndings(paragraphs);
+			UpdateTextAtom(paragraphs);
+			UpdateStyles(paragraphs);
+			UpdateHyperlinks(paragraphs);
+			RefreshRecords(paragraphs);
+
+			foreach (HSLFTextParagraph p in paragraphs) {
+				p._dirty = false;
+			}
+		}
+
+		/**
+		 * Set the correct text atom depending on the multibyte usage
+		 */
+		private static void UpdateTextAtom(List<HSLFTextParagraph> paragraphs)
+		{
+			String rawText = ToInternalString(GetRawText(paragraphs));
+
+			// Will it fit in a 8 bit atom?
+			bool isUnicode = StringUtil.HasMultibyte(rawText);
+			// isUnicode = true;
+
+			TextHeaderAtom headerAtom = paragraphs.ElementAt(0)._headerAtom;
+			TextBytesAtom byteAtom = paragraphs.ElementAt(0)._byteAtom;
+			TextCharsAtom charAtom = paragraphs.ElementAt(0)._charAtom;
+			StyleTextPropAtom styleAtom = FindStyleAtomPresent(headerAtom, rawText.Length);
+
+			// Store in the appropriate record
+			Record.Record oldRecord = null, newRecord;
+			if (isUnicode)
+			{
+				if (byteAtom != null || charAtom == null)
+				{
+					oldRecord = byteAtom;
+					charAtom = new TextCharsAtom();
+				}
+				newRecord = charAtom;
+				charAtom.SetText(rawText);
+			}
+			else
+			{
+				if (charAtom != null || byteAtom == null)
+				{
+					oldRecord = charAtom;
+					byteAtom = new TextBytesAtom();
+				}
+				newRecord = byteAtom;
+				byte[] byteText = new byte[rawText.Length];
+				StringUtil.PutCompressedUnicode(rawText, byteText, 0);
+				byteAtom.SetText(byteText);
+			}
+
+			RecordContainer _txtbox = headerAtom.GetParentRecord();
+			Record.Record[] cr = _txtbox.GetChildRecords();
+			int /* headerIdx = -1, */ textIdx = -1, styleIdx = -1;
+			for (int i = 0; i < cr.Length; i++)
+			{
+				Record.Record r = cr[i];
+				if (r == headerAtom)
+				{
+					// headerIdx = i;
+				}
+				else if (r == oldRecord || r == newRecord)
+				{
+					textIdx = i;
+				}
+				else if (r == styleAtom)
+				{
+					styleIdx = i;
+				}
+			}
+
+			if (textIdx == -1)
+			{
+				// the old record was never registered, ignore it
+				_txtbox.AddChildAfter(newRecord, headerAtom);
+				// textIdx = headerIdx + 1;
+			}
+			else
+			{
+				// swap not appropriated records - noop if unchanged
+				cr[textIdx] = newRecord;
+			}
+
+			if (styleIdx == -1)
+			{
+				// Add the new StyleTextPropAtom after the TextCharsAtom / TextBytesAtom
+				_txtbox.AddChildAfter(styleAtom, newRecord);
+			}
+
+			foreach (HSLFTextParagraph p in paragraphs) {
+				if (newRecord == byteAtom)
+				{
+					p._byteAtom = byteAtom;
+					p._charAtom = null;
+				}
+				else
+				{
+					p._byteAtom = null;
+					p._charAtom = charAtom;
+				}
+			}
+
+		}
+
+		/**
+		 * Update paragraph and character styles - merges them when subsequential styles match
+		 */
+		private static void UpdateStyles(List<HSLFTextParagraph> paragraphs)
+		{
+			String rawText = ToInternalString(GetRawText(paragraphs));
+			TextHeaderAtom headerAtom = paragraphs.ElementAt(0)._headerAtom;
+			StyleTextPropAtom styleAtom = FindStyleAtomPresent(headerAtom, rawText.Length());
+
+			// Update the text length for its Paragraph and Character stylings
+			// * reset the length, to the new string's length
+			// * add on +1 if the last block
+
+			styleAtom.ClearStyles();
+
+			TextPropCollection lastPTPC = null, lastRTPC = null, ptpc = null, rtpc = null;
+			foreach (HSLFTextParagraph para in paragraphs) {
+				ptpc = para.GetParagraphStyle();
+				ptpc.UpdateTextSize(0);
+				if (!ptpc.Equals(lastPTPC))
+				{
+					lastPTPC = ptpc.Copy();
+					lastPTPC.UpdateTextSize(0);
+					styleAtom.AddParagraphTextPropCollection(lastPTPC);
+				}
+				foreach (HSLFTextRun tr in para.GetTextRuns())
+				{
+					rtpc = tr.GetCharacterStyle();
+					rtpc.UpdateTextSize(0);
+					if (!rtpc.Equals(lastRTPC))
+					{
+						lastRTPC = rtpc.Copy();
+						lastRTPC.UpdateTextSize(0);
+						styleAtom.AddCharacterTextPropCollection(lastRTPC);
+					}
+					int len = tr.GetLength();
+					ptpc.UpdateTextSize(ptpc.GetCharactersCovered() + len);
+					rtpc.UpdateTextSize(len);
+					lastPTPC.UpdateTextSize(lastPTPC.GetCharactersCovered() + len);
+					lastRTPC.UpdateTextSize(lastRTPC.GetCharactersCovered() + len);
+				}
+			}
+
+			if (lastPTPC == null || lastRTPC == null || ptpc == null || rtpc == null)
+			{ // NOSONAR
+				throw new HSLFException("Not all TextPropCollection could be determined.");
+			}
+
+			ptpc.UpdateTextSize(ptpc.GetCharactersCovered() + 1);
+			rtpc.UpdateTextSize(rtpc.GetCharactersCovered() + 1);
+			lastPTPC.UpdateTextSize(lastPTPC.GetCharactersCovered() + 1);
+			lastRTPC.UpdateTextSize(lastRTPC.GetCharactersCovered() + 1);
+
+			// If TextSpecInfoAtom is present, we must update the text size in it,
+			// otherwise the ppt will be corrupted
+			foreach (Record.Record r in paragraphs.ElementAt(0).GetRecords())
+			{
+				if (r is TextSpecInfoAtom) {
+					((TextSpecInfoAtom)r).SetParentSize(rawText.Length + 1);
+					break;
+				}
+			}
+		}
 
     private static void updateHyperlinks(List<HSLFTextParagraph> paragraphs)
 {
@@ -1664,7 +1606,7 @@ for (String para : rawText.split("(?<=\r)"))
 	HSLFTextParagraph tpara = new HSLFTextParagraph(header, tbytes, tchars, paragraphs);
 	paragraphs.add(tpara);
 	tpara._ruler = ruler;
-	tpara.getParagraphStyle().updateTextSize(para.length());
+	tpara.getParagraphStyle().UpdateTextSize(para.length());
 
 	HSLFTextRun trun = new HSLFTextRun(tpara);
 	tpara.addTextRun(trun);
@@ -1746,7 +1688,7 @@ return paragraphCollection;
 	for (int csIdx = 0; csIdx < charStyles.size(); csIdx++)
 	{
 		TextPropCollection p = charStyles.get(csIdx);
-		int ccStyle = p.getCharactersCovered();
+		int ccStyle = p.GetCharactersCovered();
 		if (ccStyle > MAX_NUMBER_OF_STYLES)
 		{
 			throw new IllegalStateException("Cannot process more than " + MAX_NUMBER_OF_STYLES + " styles, but had paragraph with " + ccStyle);
@@ -1789,7 +1731,7 @@ return paragraphCollection;
 				else
 				{
 					// need to add +1 to the last run of the last paragraph
-					trun.getCharacterStyle().updateTextSize(trun.getLength() + 1);
+					trun.getCharacterStyle().UpdateTextSize(trun.getLength() + 1);
 					ccRun++;
 				}
 			}
@@ -1808,7 +1750,7 @@ protected static void applyParagraphStyles(List<HSLFTextParagraph> paragraphs, L
 {
 	int paraIdx = 0;
 	for (TextPropCollection p : paraStyles) {
-	for (int ccPara = 0, ccStyle = p.getCharactersCovered(); ccPara < ccStyle; paraIdx++)
+	for (int ccPara = 0, ccStyle = p.GetCharactersCovered(); ccPara < ccStyle; paraIdx++)
 	{
 		if (paraIdx >= paragraphs.size())
 		{
@@ -1826,7 +1768,7 @@ protected static void applyParagraphStyles(List<HSLFTextParagraph> paragraphs, L
 		{
 			len++;
 		}
-		pCopy.updateTextSize(len);
+		pCopy.UpdateTextSize(len);
 		ccPara += len;
 	}
 }
@@ -1836,7 +1778,7 @@ protected static void applyParagraphStyles(List<HSLFTextParagraph> paragraphs, L
 {
 	int paraIdx = 0;
 	for (IndentProp p : paraStyles) {
-	for (int ccPara = 0, ccStyle = p.getCharactersCovered(); ccPara < ccStyle; paraIdx++)
+	for (int ccPara = 0, ccStyle = p.GetCharactersCovered(); ccPara < ccStyle; paraIdx++)
 	{
 		if (paraIdx >= paragraphs.size() || ccPara >= ccStyle - 1)
 		{

@@ -15,38 +15,20 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.Common.UserModel.Fonts;
 using System;
 
 namespace NPOI.HSLF.Record
 {
-	public class HSLFFontInfo
-	{
-		public HSLFFontInfo(FontEntityAtom r)
-		{
-		}
+    public class SheetContainer
+    {
+        internal PPDrawing GetPPDrawing()
+        {
+            throw new NotImplementedException();
+        }
 
-		public HSLFFontInfo(FontInfo fontInfo)
-		{
-		}
-
-		public HSLFFontInfo(string typeface)
-		{
-		}
-
-		internal void AddFacet(FontEmbeddedData fed)
-		{
-			throw new NotImplementedException();
-		}
-
-		internal FontEntityAtom CreateRecord()
-		{
-			throw new NotImplementedException();
-		}
-
-		internal int GetIndex()
-		{
-			throw new NotImplementedException();
-		}
-	}
+        internal int GetSheetId()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

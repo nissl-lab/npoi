@@ -17,18 +17,18 @@ namespace NPOI.SL.UserModel
 	     * 
 	     * @return position in points
 	     */
-	    double getPositionInPoints();
+	    double GetPositionInPoints();
 	
 	    /**
 	     * Sets the position in points relative to the left side of the paragraph
 	     *
 	     * @param position position in points
 	     */
-	    void setPositionInPoints(double position);
+	    void SetPositionInPoints(double position);
 	
-	    TabStopType getType();
+	    TabStopType GetType();
 	
-	    void setType(TabStopType type);
+	    void SetType(TabStopType type);
 	}
 
 	public class TabStopType

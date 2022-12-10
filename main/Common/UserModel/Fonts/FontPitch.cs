@@ -45,7 +45,7 @@ namespace NPOI.Common.UserModel.Fonts
 	     */
 	    public static byte GetNativeId(FontPitch pitch, FontFamily family)
 		{
-			return (byte)(pitch.GetNativeId() | (family.getFlag() << 4));
+			return (byte)(pitch.GetNativeId() | (family.GetFlag() << 4));
 		}
 	
 	    /**

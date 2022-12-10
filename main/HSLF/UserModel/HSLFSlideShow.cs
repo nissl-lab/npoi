@@ -14,37 +14,14 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-
-using NPOI.Common.UserModel.Fonts;
+using NPOI.HSLF.Record;
 using System;
 
-namespace NPOI.HSLF.Record
+namespace NPOI.HSLF.UserModel
 {
-	public class HSLFFontInfo
+	public class HSLFSlideShow
 	{
-		public HSLFFontInfo(FontEntityAtom r)
-		{
-		}
-
-		public HSLFFontInfo(FontInfo fontInfo)
-		{
-		}
-
-		public HSLFFontInfo(string typeface)
-		{
-		}
-
-		internal void AddFacet(FontEmbeddedData fed)
-		{
-			throw new NotImplementedException();
-		}
-
-		internal FontEntityAtom CreateRecord()
-		{
-			throw new NotImplementedException();
-		}
-
-		internal int GetIndex()
+		internal HSLFFontInfo AddFont(HSLFFontInfo fi)
 		{
 			throw new NotImplementedException();
 		}
