@@ -349,6 +349,19 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        public void SetTitleOverlay(bool shouldBeOvrlayed)
+        {
+            if(chart.IsSetTitle())
+            {
+                if (chart.title.overlay == null)
+                {
+                    chart.title.overlay = new CT_Boolean();
+                }
+
+                chart.title.overlay.val = shouldBeOvrlayed ? 1 : 0;
+            }
+        }
+
         public IChartLegend GetOrCreateLegend()
         {
             return new XSSFChartLegend(this);
