@@ -353,6 +353,11 @@ namespace NPOI.XSSF.UserModel
         {
             if(chart.IsSetTitle())
             {
+                if (chart.title.overlay == null)
+                {
+                    chart.title.overlay = new CT_Boolean();
+                }
+
                 chart.title.overlay.val = shouldBeOvrlayed ? 1 : 0;
             }
         }
