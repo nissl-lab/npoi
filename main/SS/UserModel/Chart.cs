@@ -44,5 +44,6 @@ namespace NPOI.SS.UserModel
         void Plot(IChartData data, params IChartAxis[] axis);
 
         void SetTitle(string newTitle);
+        void SetTitleOverlay(bool shouldBeOvrlayed);
     }
 }
