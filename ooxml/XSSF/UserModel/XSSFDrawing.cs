@@ -184,6 +184,28 @@ namespace NPOI.XSSF.UserModel
             return chart;
         }
 
+        /// <summary>
+        /// Removes chart.
+        /// </summary>
+        /// <param name="chart">The chart to be removed.</param>
+        public void RemoveChart(XSSFChart chart)
+        {
+            CT_Drawing ctDrawing = GetCTDrawing();
+            XSSFGraphicFrame frame = chart.GetGraphicFrame();
+            CT_GraphicalObjectFrame internalFrame = frame.GetCTGraphicalObjectFrame();
+            int anchorIndex = ctDrawing.CellAnchors.FindIndex(anchor => anchor.graphicFrame == internalFrame);
+
+            if (anchorIndex != -1)
+            {
+                ctDrawing.CellAnchors.RemoveAt(anchorIndex);
+
+                foreach (var part in GetRelations().Where(part => part is XSSFChart && part == chart))
+                {
+                    RemoveRelation(part);
+                }
+            }
+        }
+
         private int GetNewChartNumber()
         {
             List<PackagePart> existingCharts = GetPackagePart().Package.
