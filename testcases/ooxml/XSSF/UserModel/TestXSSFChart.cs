@@ -21,6 +21,8 @@ using System.Collections.Generic;
 using NPOI.SS.UserModel.Charts;
 using NPOI.XSSF.UserModel;
 using NPOI.XSSF;
+using NPOI.OpenXmlFormats.Dml.Spreadsheet;
+using System.Linq;
 
 namespace TestCases.XSSF.UserModel
 {
@@ -66,6 +68,7 @@ namespace TestCases.XSSF.UserModel
 
             Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
+
         [Test]
         public void TestAddChartsToNewWorkbook()
         {
@@ -86,6 +89,47 @@ namespace TestCases.XSSF.UserModel
             Assert.IsNotNull(c2);
             Assert.AreEqual(2, d1.GetCharts().Count);
             Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
+        }
+
+        [Test]
+        public void TestRemoveChart()
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet();
+            XSSFDrawing drawingPatriarch = (XSSFDrawing)sheet.CreateDrawingPatriarch();
+            XSSFClientAnchor anchor1 = new XSSFClientAnchor(0, 0, 0, 0, 1, 1, 10, 30);
+            XSSFChart chart = (XSSFChart)drawingPatriarch.CreateChart(anchor1);
+            XSSFClientAnchor anchor2 = new XSSFClientAnchor(0, 0, 0, 0, 1, 11, 10, 60);
+            _ = (XSSFChart)drawingPatriarch.CreateChart(anchor2);
+
+            Assert.AreEqual(2, drawingPatriarch.GetCharts().Count);
+
+            drawingPatriarch.RemoveChart(chart);
+
+            Assert.AreEqual(1, drawingPatriarch.GetCharts().Count);
+        }
+
+        [Test]
+        public void TestRemoveOneOfTwoChartsAndAddNewOne()
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet();
+            XSSFDrawing drawingPatriarch = (XSSFDrawing)sheet.CreateDrawingPatriarch();
+            XSSFClientAnchor anchor1 = new XSSFClientAnchor(0, 0, 0, 0, 1, 1, 10, 30);
+            XSSFChart chart = (XSSFChart)drawingPatriarch.CreateChart(anchor1);
+            XSSFClientAnchor anchor2 = new XSSFClientAnchor(0, 0, 0, 0, 1, 11, 10, 60);
+            _ = (XSSFChart)drawingPatriarch.CreateChart(anchor2);
+
+            Assert.AreEqual(2, drawingPatriarch.GetCharts().Count);
+
+            drawingPatriarch.RemoveChart(chart);
+
+            Assert.AreEqual(1, drawingPatriarch.GetCharts().Count);
+
+            XSSFClientAnchor a3 = new XSSFClientAnchor(0, 0, 0, 0, 1, 111, 10, 90);
+            _ = (XSSFChart)drawingPatriarch.CreateChart(a3);
+
+            Assert.AreEqual(2, drawingPatriarch.GetCharts().Count);
         }
 
         [Test]
