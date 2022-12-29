@@ -68,6 +68,7 @@ namespace TestCases.XSSF.UserModel
 
             Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
+
         [Test]
         public void TestAddChartsToNewWorkbook()
         {
@@ -91,6 +92,24 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
+        public void TestRemoveChart()
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet();
+            XSSFDrawing drawingPatriarch = (XSSFDrawing)sheet.CreateDrawingPatriarch();
+            XSSFClientAnchor anchor1 = new XSSFClientAnchor(0, 0, 0, 0, 1, 1, 10, 30);
+            XSSFChart chart = (XSSFChart)drawingPatriarch.CreateChart(anchor1);
+            XSSFClientAnchor anchor2 = new XSSFClientAnchor(0, 0, 0, 0, 1, 11, 10, 60);
+            _ = (XSSFChart)drawingPatriarch.CreateChart(anchor2);
+
+            Assert.AreEqual(2, drawingPatriarch.GetCharts().Count);
+
+            drawingPatriarch.RemoveChart(chart);
+
+            Assert.AreEqual(1, drawingPatriarch.GetCharts().Count);
+        }
+
+        [Test]
         public void TestRemoveOneOfTwoChartsAndAddNewOne()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -103,7 +122,7 @@ namespace TestCases.XSSF.UserModel
 
             Assert.AreEqual(2, drawingPatriarch.GetCharts().Count);
 
-            RemoveChart(drawingPatriarch, chart);
+            drawingPatriarch.RemoveChart(chart);
 
             Assert.AreEqual(1, drawingPatriarch.GetCharts().Count);
 
@@ -111,32 +130,6 @@ namespace TestCases.XSSF.UserModel
             _ = (XSSFChart)drawingPatriarch.CreateChart(a3);
 
             Assert.AreEqual(2, drawingPatriarch.GetCharts().Count);
-        }
-
-        private static void RemoveChart(XSSFDrawing drawingPatriarch, XSSFChart chart)
-        {
-            CT_Drawing ctDrawing = drawingPatriarch.GetCTDrawing();
-            XSSFGraphicFrame frame = chart.GetGraphicFrame();
-            CT_GraphicalObjectFrame internalFrame = frame.GetCTGraphicalObjectFrame();
-            int anchorIndex = ctDrawing.CellAnchors.FindIndex(anchor => anchor.graphicFrame == internalFrame);
-            
-            if (anchorIndex != -1)
-            {
-                ctDrawing.CellAnchors.RemoveAt(anchorIndex);
-
-                foreach (var part in drawingPatriarch.GetRelations().Where(part => part is XSSFChart && part == chart))
-                {
-                    drawingPatriarch.RemoveRelation(part);
-                }
-            }
-        }
-
-        private static void RemoveChartFromDrawing(XSSFDrawing xssfDrawing, XSSFChart chart)
-        {
-            foreach (var part in xssfDrawing.GetRelations().Where(part => part is XSSFChart && part == chart))
-            {
-                xssfDrawing.RemoveRelation(part);
-            }
         }
 
         [Test]
