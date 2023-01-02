@@ -19,6 +19,9 @@ jobs:
       uses: actions/setup-dotnet@v1	
       with:	
         dotnet-version: 6.0.x
+
+    - name: MODIFY CSPROJ FILES
+      run: powershell -File modify-csproj.ps1
     
     - name: RESTORE NPOI.Multitarget.Test DEPENDENCIES
       run: dotnet restore solution/NPOI.Multitarget.Test.sln
@@ -56,6 +59,10 @@ jobs:
       uses: actions/setup-dotnet@v1	
       with:	
         dotnet-version: 6.0.x
+       
+    - name: MODIFY CSPROJ FILES
+      shell: pwsh
+      run:  ./modify-csproj.ps1
     
     - name: RESTORE NPOI.Multitarget.Test DEPENDENCIES
       run: dotnet restore solution/NPOI.Multitarget.Test.sln
@@ -63,18 +70,21 @@ jobs:
     - name: BUILD NPOI.Multitarget.Test
       id: build-npoi
       run: dotnet build solution/NPOI.Multitarget.Test.sln --no-restore --configuration 'Debug' --verbosity q
-      
+   
+    - name: PWD
+      run: pwd
+   
     - name: RUN NPOI.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test testcases/main/bin/Debug/net6.0/NPOI.TestCases.dll --configuration 'Debug' --settings ./testcases/test.core.runsettings --verbosity q --logger 'trx;logfilename=NPOI.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/main/bin/Debug/net6.0/NPOI.TestCases.dll --configuration 'Debug' --settings ./testcases/ubuntu.workflow.runsettings --verbosity q --logger 'trx;logfilename=NPOI.TestCases.trx' --results-directory test-results
       
     - name: RUN NPOI.OOXML.Multitarget.Testcases
       if : always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test testcases/ooxml/bin/Debug/net6.0/NPOI.OOXML.TestCases.dll --configuration 'Debug' --settings ./testcases/test.core.runsettings --verbosity q --logger 'trx;logfilename=NPOI.OOXML.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/ooxml/bin/Debug/net6.0/NPOI.OOXML.TestCases.dll --configuration 'Debug' --settings ./testcases/ubuntu.workflow.runsettings --verbosity q --logger 'trx;logfilename=NPOI.OOXML.TestCases.trx' --results-directory test-results
       
     - name: RUN NPOI.OOXML4Net.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test testcases/openxml4net/bin/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll --configuration 'Debug' --settings ./testcases/test.core.runsettings --verbosity q --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/openxml4net/bin/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll --configuration 'Debug' --settings ./testcases/ubuntu.workflow.runsettings --verbosity q --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.trx' --results-directory test-results
     
     - name: PUBLISH TEST RESULTS
       uses: dorny/test-reporter@v1
@@ -94,6 +104,9 @@ jobs:
       with:	
         dotnet-version: 6.0.x
     
+    - name: MODIFY CSPROJ FILES
+      run: powershell -File modify-csproj.ps1
+    
     - name: RESTORE NPOI.Multitarget.Test DEPENDENCIES
       run: dotnet restore solution/NPOI.Multitarget.Test.sln
       
@@ -101,17 +114,20 @@ jobs:
       id: build-npoi
       run: dotnet build solution/NPOI.Multitarget.Test.sln --no-restore --configuration 'Debug' --verbosity q
 
+    - name: PWD
+      run: pwd
+   
     - name: RUN NPOI.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test testcases/main/bin/Debug/net6.0/NPOI.TestCases.dll --configuration 'Debug' --settings ./testcases/test.core.runsettings --verbosity q --logger 'trx;logfilename=NPOI.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/main/bin/Debug/net6.0/NPOI.TestCases.dll --configuration 'Debug' --settings ./testcases/macos.workflow.runsettings --verbosity q --logger 'trx;logfilename=NPOI.TestCases.trx' --results-directory test-results
       
     - name: RUN NPOI.OOXML.Multitarget.Testcases
       if : always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test testcases/ooxml/bin/Debug/net6.0/NPOI.OOXML.TestCases.dll --configuration 'Debug' --settings ./testcases/test.core.runsettings --verbosity q --logger 'trx;logfilename=NPOI.OOXML.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/ooxml/bin/Debug/net6.0/NPOI.OOXML.TestCases.dll --configuration 'Debug' --settings ./testcases/macos.workflow.runsettings --verbosity q --logger 'trx;logfilename=NPOI.OOXML.TestCases.trx' --results-directory test-results
       
     - name: RUN NPOI.OOXML4Net.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
-      run: dotnet test testcases/openxml4net/bin/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll --configuration 'Debug' --settings ./testcases/test.core.runsettings --verbosity q --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.trx' --results-directory test-results
+      run: dotnet test testcases/openxml4net/bin/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll --configuration 'Debug' --settings ./testcases/macos.workflow.runsettings --verbosity q --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.trx' --results-directory test-results
       
     - name: PUBLISH TEST RESULTS
       uses: dorny/test-reporter@v1
