@@ -651,7 +651,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                         pos++;
                 }
             }
-            if(pos == p && index == -1)
+            // Check if the position should be the last position when index cannot be find in for loop
+            if( index == -1&&pos == p)
                 index = items1Field.Count;
             return index;
         }
