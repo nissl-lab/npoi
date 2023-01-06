@@ -186,11 +186,6 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        public void AddNewRowBetween(int start, int end)
-        {
-            throw new NotImplementedException();
-        }
-
         /**
          * add a new column for each row in this table
          */
