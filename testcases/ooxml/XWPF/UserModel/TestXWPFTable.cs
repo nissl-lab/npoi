@@ -122,7 +122,7 @@ namespace TestCases.XWPF.UserModel
             Assert.AreEqual(1, xtab.GetCTTbl().GetTrArray(0).SizeOfTcArray());
         }
         [Test]
-        public void TestInsertCreateRow()
+        public void TestInsertRow()
         {
             XWPFDocument doc = new XWPFDocument();
 
