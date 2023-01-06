@@ -198,7 +198,7 @@ namespace NPOI.OpenXml4Net.OPC
         public static String GetFilenameWithoutExtension(Uri uri)
         {
             String filename = GetFilename(uri);
-            int dotIndex = filename.LastIndexOf(".");
+            int dotIndex = filename.LastIndexOf(".", StringComparison.Ordinal);
             if (dotIndex == -1)
                 return filename;
             return filename.Substring(0, dotIndex);

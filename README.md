@@ -13,9 +13,14 @@ What's NPOI
 <br />
 This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
-About Donation
+About Donation 关于捐款
 ============
-Since Github sponsorship is not supported in China so far, it's hard to get donation from Github channel. I'm strictly limiting my contribution time on NPOI these 2 years although it looks to be still maintained well. If you profits/benefits from NPOI and you believe it's useful, please [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
+Since Github sponsorship is not supported in China so far, it's hard to get donation from Github channel. I'm strictly limiting my contribution time on NPOI these 2 years although it looks to be still maintained well. 
+
+If you profits/benefits from NPOI and you believe it's useful, please [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
+
+如果您从NPOI受益或实现盈利，请[给该项目捐款](https://github.com/nissl-lab/npoi/discussions/923)，谢谢！
+
 
 Telegram User Group
 ================
@@ -71,5 +76,3 @@ System Requirement
 .NET Standard 2.0 (.NET Core 2.x)
 
 .NET Framework 4.0 and above
-
-No Loongson CPU (NPOI will NOT support any issues running on LoognArch architecture. This CPU is a shit)

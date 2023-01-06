@@ -134,7 +134,7 @@ namespace NPOI.XSSF.UserModel.Charts
                 {
                     CT_NumVal ctNumVal = cache.AddNewPt();
                     ctNumVal.idx = (uint)(i);
-                    ctNumVal.v = (value.ToString());
+                    ctNumVal.v = (value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                 }
             }
         }
