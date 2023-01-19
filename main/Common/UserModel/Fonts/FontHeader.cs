@@ -17,6 +17,8 @@
 
 namespace NPOI.Common.UserModel.Fonts
 {
+    using NPOI.HSLF.Record;
+    using NPOI.Util;
 	using System;
 	using System.Collections.Generic;
 	using System.Text;
@@ -86,19 +88,19 @@ namespace NPOI.Common.UserModel.Fonts
 			ANY, NO_FIT, CONSTANT_SMALL, CONSTANT_STD, CONSTANT_LARGE, DUCKING_SMALL, DUCKING_STD, DUCKING_LARGE
 		}
 
-		private static final int[] FLAGS_MASKS = {
+		private static int[] FLAGS_MASKS = {
 			0x00000001, 0x00000004, 0x00000010, 0x00000020, 0x00000040, 0x00000080, 0x10000000
 		};
 
-		private static final String[] FLAGS_NAMES = {
+		private static String[] FLAGS_NAMES = {
 	        "SUBSET", "TTCOMPRESSED", "FAILIFVARIATIONSIMULATED", "EMBEDEUDC", "VALIDATIONTESTS", "WEBOBJECT", "XORENCRYPTDATA"
 	    };
 	
-	    private static final int[] FSTYPE_MASKS = {
+	    private static int[] FSTYPE_MASKS = {
 			0x0000, 0x0002, 0x0004, 0x0008, 0x0100, 0x0200
 		};
 
-		private static final String[] FSTYPE_NAMES = {
+		private static String[] FSTYPE_NAMES = {
 	        "INSTALLABLE_EMBEDDING",
 	        "RESTRICTED_LICENSE_EMBEDDING",
 	        "PREVIEW_PRINT_EMBEDDING",
@@ -111,13 +113,13 @@ namespace NPOI.Common.UserModel.Fonts
 	     * Fonts with a font weight of 400 are regarded as regular weighted.
 	     * Higher font weights (up to 1000) are bold - lower weights are thin.
 	     */
-	    public static final int REGULAR_WEIGHT = 400;
+	    public static int REGULAR_WEIGHT = 400;
 
 		private int eotSize;
 		private int fontDataSize;
 		private int version;
 		private int flags;
-		private final byte[] panose = new byte[10];
+		private byte[] panose = new byte[10];
 		private byte charset;
 		private byte italic;
 		private int weight;
@@ -140,37 +142,37 @@ namespace NPOI.Common.UserModel.Fonts
 			init(new LittleEndianByteArrayInputStream(source, offset, length));
 		}
 
-		public void init(LittleEndianInput leis)
+		public void init(ILittleEndianInput leis)
 		{
-			eotSize = leis.readInt();
-			fontDataSize = leis.readInt();
-			version = leis.readInt();
+			eotSize = leis.ReadInt();
+			fontDataSize = leis.ReadInt();
+			version = leis.ReadInt();
 			if (version != 0x00010000 && version != 0x00020001 && version != 0x00020002)
 			{
 				throw new RuntimeException("not a EOT font data stream");
 			}
-			flags = leis.readInt();
-			leis.readFully(panose);
-			charset = leis.readByte();
-			italic = leis.readByte();
-			weight = leis.readInt();
-			fsType = leis.readUShort();
-			magic = leis.readUShort();
+			flags = leis.ReadInt();
+			leis.ReadFully(panose);
+			charset = (byte)leis.ReadByte();
+			italic = (byte)leis.ReadByte();
+			weight = leis.ReadInt();
+			fsType = leis.ReadUShort();
+			magic = leis.ReadUShort();
 			if (magic != 0x504C)
 			{
 				throw new RuntimeException("not a EOT font data stream");
 			}
-			unicodeRange1 = leis.readInt();
-			unicodeRange2 = leis.readInt();
-			unicodeRange3 = leis.readInt();
-			unicodeRange4 = leis.readInt();
-			codePageRange1 = leis.readInt();
-			codePageRange2 = leis.readInt();
-			checkSumAdjustment = leis.readInt();
-			int reserved1 = leis.readInt();
-			int reserved2 = leis.readInt();
-			int reserved3 = leis.readInt();
-			int reserved4 = leis.readInt();
+			unicodeRange1 = leis.ReadInt();
+			unicodeRange2 = leis.ReadInt();
+			unicodeRange3 = leis.ReadInt();
+			unicodeRange4 = leis.ReadInt();
+			codePageRange1 = leis.ReadInt();
+			codePageRange2 = leis.ReadInt();
+			checkSumAdjustment = leis.ReadInt();
+			int reserved1 = leis.ReadInt();
+			int reserved2 = leis.ReadInt();
+			int reserved3 = leis.ReadInt();
+			int reserved4 = leis.ReadInt();
 			familyName = readName(leis);
 			styleName = readName(leis);
 			versionName = readName(leis);
@@ -178,39 +180,39 @@ namespace NPOI.Common.UserModel.Fonts
 
 		}
 
-		public InputStream bufferInit(InputStream fontStream) throws IOException
+		public InputStream bufferInit(InputStream fontStream)
 		{
-			LittleEndianInputStream is = new LittleEndianInputStream(fontStream);
-	        is.mark(1000);
-		init(is);
-	        is.reset();
-	        return is;
-	    }
+			LittleEndianInputStream inputStream = new LittleEndianInputStream(fontStream);
+			inputStream.Mark(1000);
+			init(inputStream);
+			inputStream.Reset();
+			return inputStream;
+		}
 
-	private String readName(LittleEndianInput leis)
+	private String readName(ILittleEndianInput leis)
 	{
 		// padding
-		leis.readShort();
-		int nameSize = leis.readUShort();
-		byte[] nameBuf = IOUtils.safelyAllocate(nameSize, 1000);
-		leis.readFully(nameBuf);
+		leis.ReadShort();
+		int nameSize = leis.ReadUShort();
+		byte[] nameBuf = IOUtils.SafelyAllocate(nameSize, 1000);
+		leis.ReadFully(nameBuf);
 		// may be 0-terminated, just trim it away
-		return new String(nameBuf, 0, nameSize, StandardCharsets.UTF_16LE).trim();
+		return Encoding.Unicode.GetString(nameBuf).Trim();
 	}
 
-	public boolean isItalic()
+	public bool isItalic()
 	{
 		return italic != 0;
 	}
 
-	public int getWeight()
+	public int GetWeight()
 	{
 		return weight;
 	}
 
-	public boolean isBold()
+	public bool isBold()
 	{
-		return getWeight() > REGULAR_WEIGHT;
+		return GetWeight() > REGULAR_WEIGHT;
 	}
 
 	public byte getCharsetByte()
@@ -218,66 +220,76 @@ namespace NPOI.Common.UserModel.Fonts
 		return charset;
 	}
 
-	public FontCharset getCharset()
+	public FontCharset GetCharset()
 	{
-		return FontCharset.valueOf(getCharsetByte());
+		return (FontCharset)getCharsetByte();
 	}
 
-	public FontPitch getPitch()
+	public FontPitch GetPitch()
+	{
+		return FontPitch.ValueOf((int)GetPitchEnum());
+	}
+
+	public FontPitchEnum GetPitchEnum()
 	{
 		switch (getPanoseFamily())
 		{
 			default:
-			case ANY:
-			case NO_FIT:
-				return FontPitch.VARIABLE;
+			case PanoseFamily.ANY:
+			case PanoseFamily.NO_FIT:
+				return FontPitchEnum.VARIABLE;
 
 			// Latin Text
-			case TEXT_DISPLAY:
+			case PanoseFamily.TEXT_DISPLAY:
 			// Latin Decorative
-			case DECORATIVE:
-				return (getPanoseProportion() == PanoseProportion.MONOSPACED) ? FontPitch.FIXED : FontPitch.VARIABLE;
+			case PanoseFamily.DECORATIVE:
+				return (getPanoseProportion() == PanoseProportion.MONOSPACED) ? FontPitchEnum.FIXED : FontPitchEnum.VARIABLE;
 
 			// Latin Hand Written
-			case SCRIPT:
+			case PanoseFamily.SCRIPT:
 			// Latin Symbol
-			case PICTORIAL:
-				return (getPanoseProportion() == PanoseProportion.MODERN) ? FontPitch.FIXED : FontPitch.VARIABLE;
+			case PanoseFamily.PICTORIAL:
+				return (getPanoseProportion() == PanoseProportion.MODERN) ? FontPitchEnum.FIXED : FontPitchEnum.VARIABLE;
 		}
 
 	}
 
-	public FontFamily getFamily()
+	public FontFamily GetFamily()
+	{
+		return FontFamily.ValueOf((int)GetFamilyEnum());
+	}
+
+	public FontFamilyEnum GetFamilyEnum()
 	{
 		switch (getPanoseFamily())
 		{
-			case ANY:
-			case NO_FIT:
-				return FontFamily.FF_DONTCARE;
+			case PanoseFamily.ANY:
+			case PanoseFamily.NO_FIT:
+				return FontFamilyEnum.FF_DONTCARE;
 			// Latin Text
-			case TEXT_DISPLAY:
+			case PanoseFamily.TEXT_DISPLAY:
 				switch (getPanoseSerif())
 				{
-					case TRIANGLE:
-					case NORMAL_SANS:
-					case OBTUSE_SANS:
-					case PERP_SANS:
-					case FLARED:
-					case ROUNDED:
-						return FontFamily.FF_SWISS;
+					case PanoseSerif.TRIANGLE:
+					case PanoseSerif.NORMAL_SANS:
+					case PanoseSerif.OBTUSE_SANS:
+					case PanoseSerif.PERP_SANS:
+					case PanoseSerif.FLARED:
+					case PanoseSerif.ROUNDED:
+						return FontFamilyEnum.FF_SWISS;
 					default:
-						return FontFamily.FF_ROMAN;
+						return FontFamilyEnum.FF_ROMAN;
 				}
 			// Latin Hand Written
-			case SCRIPT:
-				return FontFamily.FF_SCRIPT;
+			case PanoseFamily.SCRIPT:
+				return FontFamilyEnum.FF_SCRIPT;
 			// Latin Decorative
 			default:
-			case DECORATIVE:
-				return FontFamily.FF_DECORATIVE;
+			case PanoseFamily.DECORATIVE:
+				return FontFamilyEnum.FF_DECORATIVE;
 			// Latin Symbol
-			case PICTORIAL:
-				return FontFamily.FF_MODERN;
+			case PanoseFamily.PICTORIAL:
+				return FontFamilyEnum.FF_MODERN;
 		}
 	}
 
@@ -296,18 +308,17 @@ namespace NPOI.Common.UserModel.Fonts
 		return versionName;
 	}
 
-	public String getFullName()
+	public string getFullName()
 	{
 		return fullName;
 	}
 
-	public byte[] getPanose()
+	public byte[] GetPanose()
 	{
 		return panose;
 	}
 
-	@Override
-		public String getTypeface()
+	public string GetTypeface()
 	{
 		return getFamilyName();
 	}
@@ -317,90 +328,144 @@ namespace NPOI.Common.UserModel.Fonts
 		return flags;
 	}
 
-	@Override
-		public Map<String, Supplier<?>> getGenericProperties()
+		public IReadOnlyDictionary<string, Func<object>> getGenericProperties()
 	{
-		final Map<String, Supplier<?>> m = new LinkedHashMap<>();
-		m.put("eotSize", ()->eotSize);
-		m.put("fontDataSize", ()->fontDataSize);
-		m.put("version", ()->version);
-		m.put("flags", getBitsAsString(this::getFlags, FLAGS_MASKS, FLAGS_NAMES));
-		m.put("panose.familyType", this::getPanoseFamily);
-		m.put("panose.serifType", this::getPanoseSerif);
-		m.put("panose.weight", this::getPanoseWeight);
-		m.put("panose.proportion", this::getPanoseProportion);
-		m.put("panose.contrast", this::getPanoseContrast);
-		m.put("panose.stroke", this::getPanoseStroke);
-		m.put("panose.armStyle", this::getPanoseArmStyle);
-		m.put("panose.letterForm", this::getPanoseLetterForm);
-		m.put("panose.midLine", this::getPanoseMidLine);
-		m.put("panose.xHeight", this::getPanoseXHeight);
-		m.put("charset", this::getCharset);
-		m.put("italic", this::isItalic);
-		m.put("weight", this::getWeight);
-		m.put("fsType", getBitsAsString(()->fsType, FSTYPE_MASKS, FSTYPE_NAMES));
-		m.put("unicodeRange1", ()->unicodeRange1);
-		m.put("unicodeRange2", ()->unicodeRange2);
-		m.put("unicodeRange3", ()->unicodeRange3);
-		m.put("unicodeRange4", ()->unicodeRange4);
-		m.put("codePageRange1", ()->codePageRange1);
-		m.put("codePageRange2", ()->codePageRange2);
-		m.put("checkSumAdjustment", ()->checkSumAdjustment);
-		m.put("familyName", this::getFamilyName);
-		m.put("styleName", this::getStyleName);
-		m.put("versionName", this::getVersionName);
-		m.put("fullName", this::getFullName);
-		return Collections.unmodifiableMap(m);
+            Dictionary<string, Func<object>> m = new Dictionary<string, Func<object>>();
+		m.Add("eotSize", () => eotSize);
+		m.Add("fontDataSize", () => fontDataSize);
+		m.Add("version", () => version);
+		m.Add("flags", GenericRecordUtil.GetBitsAsString(this.getFlags, FLAGS_MASKS, FLAGS_NAMES));
+		m.Add("panose.familyType", () => getPanoseFamily());
+		m.Add("panose.serifType", () => getPanoseSerif());
+		m.Add("panose.weight", () => getPanoseWeight());
+		m.Add("panose.proportion", () => getPanoseProportion());
+		m.Add("panose.contrast", () => getPanoseContrast());
+		m.Add("panose.stroke", () => getPanoseStroke());
+		m.Add("panose.armStyle", () => getPanoseArmStyle());
+		m.Add("panose.letterForm", () => getPanoseLetterForm());
+		m.Add("panose.midLine", () => getPanoseMidLine());
+		m.Add("panose.xHeight", () => getPanoseXHeight());
+		m.Add("charset", () => GetCharset());
+		m.Add("italic", () => isItalic());
+		m.Add("weight", () => GetWeight());
+		m.Add("fsType", GenericRecordUtil.GetBitsAsString(() => fsType, FSTYPE_MASKS, FSTYPE_NAMES));
+		m.Add("unicodeRange1", () => unicodeRange1);
+		m.Add("unicodeRange2", () => unicodeRange2);
+		m.Add("unicodeRange3", () => unicodeRange3);
+		m.Add("unicodeRange4", () => unicodeRange4);
+		m.Add("codePageRange1", () => codePageRange1);
+		m.Add("codePageRange2", () => codePageRange2);
+		m.Add("checkSumAdjustment", () => checkSumAdjustment);
+		m.Add("familyName", this.getFamilyName);
+		m.Add("styleName", this.getStyleName);
+		m.Add("versionName", this.getVersionName);
+		m.Add("fullName", this.getFullName);
+		return m;
 	}
 
 	public PanoseFamily getPanoseFamily()
 	{
-		return safeEnum(PanoseFamily.values(), ()->panose[0]).get();
+		return GenericRecordUtil.SafeEnum((PanoseFamily[])Enum.GetValues(typeof(PanoseFamily)), () => panose[0], PanoseFamily.ANY)();
 	}
 
 	public PanoseSerif getPanoseSerif()
 	{
-		return safeEnum(PanoseSerif.values(), ()->panose[1]).get();
+		return GenericRecordUtil.SafeEnum((PanoseSerif[])Enum.GetValues(typeof(PanoseSerif)), () => panose[1], PanoseSerif.ANY)();
 	}
 
 	public PanoseWeight getPanoseWeight()
 	{
-		return safeEnum(PanoseWeight.values(), ()->panose[2]).get();
+		return GenericRecordUtil.SafeEnum((PanoseWeight[])Enum.GetValues(typeof(PanoseWeight)), () => panose[2], PanoseWeight.ANY)();
 	}
 
 	public PanoseProportion getPanoseProportion()
 	{
-		return safeEnum(PanoseProportion.values(), ()->panose[3]).get();
+		return GenericRecordUtil.SafeEnum((PanoseProportion[])Enum.GetValues(typeof(PanoseProportion)), () => panose[3], PanoseProportion.ANY)();
 	}
 
 	public PanoseContrast getPanoseContrast()
 	{
-		return safeEnum(PanoseContrast.values(), ()->panose[4]).get();
+		return GenericRecordUtil.SafeEnum((PanoseContrast[])Enum.GetValues(typeof(PanoseContrast)), () => panose[4], PanoseContrast.ANY)();
 	}
 
 	public PanoseStroke getPanoseStroke()
 	{
-		return safeEnum(PanoseStroke.values(), ()->panose[5]).get();
+		return GenericRecordUtil.SafeEnum((PanoseStroke[])Enum.GetValues(typeof(PanoseStroke)), () => panose[5], PanoseStroke.ANY)();
 	}
 
 	public PanoseArmStyle getPanoseArmStyle()
 	{
-		return safeEnum(PanoseArmStyle.values(), ()->panose[6]).get();
+		return GenericRecordUtil.SafeEnum((PanoseArmStyle[])Enum.GetValues(typeof(PanoseArmStyle)), () => panose[6], PanoseArmStyle.ANY)();
 	}
 
 	public PanoseLetterForm getPanoseLetterForm()
 	{
-		return safeEnum(PanoseLetterForm.values(), ()->panose[7]).get();
+		return GenericRecordUtil.SafeEnum((PanoseLetterForm[])Enum.GetValues(typeof(PanoseLetterForm)), () => panose[7], PanoseLetterForm.ANY)();
 	}
 
 	public PanoseMidLine getPanoseMidLine()
 	{
-		return safeEnum(PanoseMidLine.values(), ()->panose[8]).get();
+		return GenericRecordUtil.SafeEnum((PanoseMidLine[])Enum.GetValues(typeof(PanoseMidLine)), () => panose[8], PanoseMidLine.ANY)();
 	}
 
 	public PanoseXHeight getPanoseXHeight()
 	{
-		return safeEnum(PanoseXHeight.values(), ()->panose[9]).get();
+		return GenericRecordUtil.SafeEnum((PanoseXHeight[])Enum.GetValues(typeof(PanoseXHeight)), () => panose[9], PanoseXHeight.ANY)();
 	}
-}
+
+        public int GetIndex()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetIndex(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetTypeface(string typeface)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetCharset(FontCharset charset)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetFamily(FontFamily family)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetPitch(FontPitch pitch)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetPanose(byte[] panose)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<T> GetFacets<T>()
+        {
+            throw new NotImplementedException();
+        }
+
+        public RecordTypes GetGenericRecordType()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDictionary<string, Func<T>> GetGenericProperties<T>()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<GenericRecord> GetGenericChildren()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
