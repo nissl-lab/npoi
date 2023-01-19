@@ -16,17 +16,30 @@
 ==================================================================== */
 
 using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace NPOI.HSLF.Record
+namespace NPOI.Common.UserModel
 {
-    public abstract class SheetContainer: PositionDependentRecordContainer
+	public enum HyperlinkType
 	{
+		/** Not a hyperlink */
+		NONE =-1,
 		/**
-     * Returns the PPDrawing of this sheet, which has all the
-     *  interesting data in it
-     */
-		public abstract PPDrawing GetPPDrawing();
-
-		public abstract ColorSchemeAtom GetColorScheme();
+		 * Link to an existing file or web page
+		 */
+		URL=1,
+		/**
+		 * Link to a place in this document
+		 */
+		DOCUMENT=2,
+		/**
+		 * Link to an E-mail address
+		 */
+		EMAIL=3,
+		/**
+		 * Link to a file
+		 */
+		FILE=4
 	}
 }

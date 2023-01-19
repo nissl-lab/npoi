@@ -15,9 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI.HSLF.Exceptions;
 using NPOI.Util;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace NPOI.HSLF.Record
@@ -93,60 +95,66 @@ namespace NPOI.HSLF.Record
 			LittleEndian.PutInt(_data, 0, size);
 		}
 
-	/**
-     * Reset the content to one info run with the default values
-     * @param size  the site of parent text
-     */
-	public void Reset(int size)
-	{
-		TextSpecInfoRun sir = new TextSpecInfoRun(size);
-		UnsynchronizedByteArrayOutputStream bos = new UnsynchronizedByteArrayOutputStream();
-		try
+		/**
+		 * Reset the content to one info run with the default values
+		 * @param size  the site of parent text
+		 */
+		public void Reset(int size)
 		{
-			sir.writeOut(bos);
-		}
-		catch (IOException e)
-		{
-			throw new HSLFException(e);
-		}
-		_data = bos.toByteArray();
+			TextSpecInfoRun sir = new TextSpecInfoRun(size);
+			using (MemoryStream bos = new MemoryStream())
+			{
+				try
+				{
+					sir.WriteOut((OutputStream)bos);
+				}
+				catch (IOException e)
+				{
+					throw new HSLFException(e);
+				}
+				_data = bos.ToArray();
 
-		// Update the size (header bytes 5-8)
-		LittleEndian.putInt(_header, 4, _data.length);
-	}
+			}
+			// Update the size (header bytes 5-8)
+			LittleEndian.PutInt(_header, 4, _data.Length);
+		}
 
 	/**
      * Adapts the size by enlarging the last {@link TextSpecInfoRun}
      * or chopping the runs to the given length
      */
-	public void setParentSize(int size)
+	public void SetParentSize(int size)
 	{
-		assert(size > 0);
-
-		try (UnsynchronizedByteArrayOutputStream bos = new UnsynchronizedByteArrayOutputStream()) {
-			TextSpecInfoRun[] runs = getTextSpecInfoRuns();
-			int remaining = size;
-			int idx = 0;
-			for (TextSpecInfoRun run : runs)
+			//assert(size > 0);
+			try
 			{
-				int len = run.getLength();
-				if (len > remaining || idx == runs.length - 1)
+				using (MemoryStream bos = new MemoryStream())
 				{
-					run.setLength(len = remaining);
+					TextSpecInfoRun[] runs = GetTextSpecInfoRuns();
+					int remaining = size;
+					int idx = 0;
+					foreach (TextSpecInfoRun run in runs)
+					{
+						int len = run.GetLength();
+						if (len > remaining || idx == runs.Length - 1)
+						{
+							run.SetLength(len = remaining);
+						}
+						remaining -= len;
+						run.WriteOut((OutputStream)bos);
+						idx++;
+					}
+
+					_data = bos.ToArray();
+
+					// Update the size (header bytes 5-8)
+					LittleEndian.PutInt(_header, 4, _data.Length);
 				}
-				remaining -= len;
-				run.writeOut(bos);
-				idx++;
 			}
-
-			_data = bos.toByteArray();
-
-			// Update the size (header bytes 5-8)
-			LittleEndian.putInt(_header, 4, _data.length);
-		} catch (IOException e)
-		{
-			throw new HSLFException(e);
-		}
+			catch (IOException e)
+			{
+				throw new HSLFException(e);
+			}
 	}
 
 	/**
@@ -154,33 +162,33 @@ namespace NPOI.HSLF.Record
      *
      * @return the number of characters covered by this records
      */
-	public int getCharactersCovered()
+	public int GetCharactersCovered()
 	{
 		int covered = 0;
-		for (TextSpecInfoRun r : getTextSpecInfoRuns())
+		foreach (TextSpecInfoRun r in GetTextSpecInfoRuns())
 		{
-			covered += r.getLength();
+			covered += r.GetLength();
 		}
 		return covered;
 	}
 
-	public TextSpecInfoRun[] getTextSpecInfoRuns()
+	public TextSpecInfoRun[] GetTextSpecInfoRuns()
 	{
 		LittleEndianByteArrayInputStream bis = new LittleEndianByteArrayInputStream(_data); // NOSONAR
-		List<TextSpecInfoRun> lst = new ArrayList<>();
-		while (bis.getReadIndex() < _data.length)
+			List<TextSpecInfoRun> lst = new List<TextSpecInfoRun>();
+		while (bis.GetReadIndex() < _data.Length)
 		{
-			lst.add(new TextSpecInfoRun(bis));
+			lst.Add(new TextSpecInfoRun(bis));
 		}
-		return lst.toArray(new TextSpecInfoRun[0]);
+		return lst.ToArray();
 	}
 
 	//@Override
-	public Map<String, Supplier<?>> getGenericProperties()
+	public override IDictionary<string, Func<T>> GetGenericProperties<T>()
 	{
-		return GenericRecordUtil.getGenericProperties(
-			"charactersCovered", this::getCharactersCovered,
-			"textSpecInfoRuns", this::getTextSpecInfoRuns
+		return (IDictionary<string, Func<T>>)GenericRecordUtil.GetGenericProperties(
+			"charactersCovered", ()=> GetCharactersCovered(),
+			"textSpecInfoRuns", GetTextSpecInfoRuns
 		);
 	}
 }

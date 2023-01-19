@@ -3,7 +3,7 @@ using System;
 
 namespace NPOI.HSLF.UserModel
 {
-	internal class HSLFMasterSheet
+	public class HSLFMasterSheet
 	{
 		internal TextPropCollection GetPropCollection(int txtype, int v, string pn, bool isChar)
 		{

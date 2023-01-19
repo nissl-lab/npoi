@@ -1190,14 +1190,14 @@ namespace NPOI.HSLF.UserModel
 			}
 		}
 
-    private static void updateHyperlinks(List<HSLFTextParagraph> paragraphs)
+    private static void UpdateHyperlinks(List<HSLFTextParagraph> paragraphs)
 {
-	TextHeaderAtom headerAtom = paragraphs.get(0)._headerAtom;
-	RecordContainer _txtbox = headerAtom.getParentRecord();
+	TextHeaderAtom headerAtom = paragraphs.ElementAt(0)._headerAtom;
+	RecordContainer _txtbox = headerAtom.GetParentRecord();
 	// remove existing hyperlink records
-	for (Record r : _txtbox.getChildRecords()) {
-	if (r instanceof InteractiveInfo || r instanceof TxInteractiveInfoAtom) {
-		_txtbox.removeChild(r);
+	foreach (Record.Record r in _txtbox.GetChildRecords()) {
+	if (r is InteractiveInfo || r is TxInteractiveInfoAtom) {
+		_txtbox.RemoveChild(r);
 	}
 }
 // now go through all the textruns and check for hyperlinks
