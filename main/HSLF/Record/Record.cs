@@ -214,6 +214,6 @@ namespace NPOI.HSLF.Record
 		return toReturn;
 		}
 
-		public abstract IDictionary<string, Func<T>> GetGenericProperties<T>();
+		public abstract IDictionary<string, Func<object>> GetGenericProperties();
 	}
 }
