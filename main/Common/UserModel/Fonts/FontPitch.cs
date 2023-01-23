@@ -15,6 +15,11 @@ namespace NPOI.Common.UserModel.Fonts
 			this.nativeId = nativeId;
 			this.native = (FontPitchEnum)nativeId;
 		}
+
+		public FontPitchEnum GetNative()
+		{
+			return native;
+		}
 	
 	    public int GetNativeId()
 		{
@@ -55,9 +60,9 @@ namespace NPOI.Common.UserModel.Fonts
 	     *
 	     * @return The resulting FontPitch enumeration value
 	     */
-	    public static FontPitch ValueOfPitchFamily(byte pitchAndFamily)
+	    public static FontPitchEnum ValueOfPitchFamily(byte pitchAndFamily)
 		{
-			return ValueOf(pitchAndFamily & 0x3);
+			return ValueOf(pitchAndFamily & 0x3).native;
 		}
 	}
 }

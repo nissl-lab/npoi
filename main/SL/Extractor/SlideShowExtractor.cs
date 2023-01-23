@@ -457,8 +457,8 @@ namespace NPOI.SL.Extractor
 			TextRun tr = (TextRun)o;
 			return
 				typeface.Equals(tr.getFontFamily(), StringComparison.InvariantCultureIgnoreCase) &&
-				(italic == null || tr.isItalic() == italic) &&
-				(bold == null || tr.isBold() == bold);
+				(italic == null || tr.IsItalic() == italic) &&
+				(bold == null || tr.IsBold() == bold);
 		}
 		//@Override
 		public void setCloseFilesystem(bool doCloseFilesystem)

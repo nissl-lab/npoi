@@ -71,5 +71,10 @@ namespace NPOI.Util
         {
             return (int)_value;
         }
-    }
+
+		public double DoubleValue()
+		{
+            return (double)_value;
+		}
+	}
 }

@@ -328,7 +328,7 @@ namespace NPOI.HSLF.UserModel
 
 			if (val == 0)
 			{
-				TextProp tp = GetPropVal(_paragraphStyle, "text.offset");
+				TextProp tp = GetPropVal<TextProp>(_paragraphStyle, "text.offset");
 				val = (tp == null) ? 0 : tp.GetValue();
 			}
 
@@ -338,7 +338,7 @@ namespace NPOI.HSLF.UserModel
 		//@Override
 		public void SetLeftMargin(Double leftMargin)
 		{
-			Integer val = (leftMargin == 0) ? null : Units.PointsToMaster(leftMargin);
+			int val = (leftMargin == 0) ? 0 : Units.PointsToMaster(leftMargin);
 			SetParagraphTextPropVal("text.offset", val);
 		}
 
@@ -367,7 +367,7 @@ namespace NPOI.HSLF.UserModel
 
 			if (val == 0)
 			{
-				TextProp tp = GetPropVal(_paragraphStyle, "bullet.offset");
+				TextProp tp = GetPropVal<TextProp>(_paragraphStyle, "bullet.offset");
 				val = (tp == null) ? 0 : tp.GetValue();
 			}
 
@@ -388,7 +388,7 @@ namespace NPOI.HSLF.UserModel
 			if (!(_runs.Count ==0))
 			{
 				HSLFTextRun tr = _runs.ElementAt(0);
-				fontInfo = tr.GetFontInfo(null);
+				fontInfo = tr.GetFontInfo(FontGroupEnum.LATIN);
 				// fallback to LATIN if the font for the font group wasn't defined
 				if (fontInfo == null)
 				{
@@ -439,7 +439,7 @@ namespace NPOI.HSLF.UserModel
 		//@Override
 		public TextAlign GetTextAlign()
 		{
-			TextProp tp = GetPropVal(_paragraphStyle, "alignment");
+			TextProp tp = GetPropVal<TextProp>(_paragraphStyle, "alignment");
 			if (tp == null)
 			{
 				return TextAlign.LEFT;
@@ -460,7 +460,7 @@ namespace NPOI.HSLF.UserModel
 		//@Override
 		public FontAlign GetFontAlign()
 		{
-			TextProp tp = GetPropVal(_paragraphStyle, FontAlignmentProp.NAME);
+			TextProp tp = GetPropVal<TextProp>(_paragraphStyle, FontAlignmentProp.NAME);
 			if (tp == null)
 			{
 				return FontAlign.AUTO;
@@ -532,13 +532,13 @@ namespace NPOI.HSLF.UserModel
 				SetBullet(true);
 				foreach (Object ostyle in styles) {
 					if (ostyle is Number) {
-						setBulletSize(((Number)ostyle).DoubleValue());
+						SetBulletSize(((Number)ostyle).DoubleValue());
 					} else if (ostyle is Color) {
-						setBulletColor((Color)ostyle);
+						//SetBulletColor((Color)ostyle);
 					} else if (ostyle is Character) {
-						setBulletChar((Character)ostyle);
+						SetBulletChar((Character)ostyle);
 					} else if (ostyle is String) {
-						setBulletFont((String)ostyle);
+						SetBulletFont((String)ostyle);
 					} else if (ostyle is AutoNumberingScheme) {
 						throw new HSLFException("setting bullet auto-numberin scheme for HSLF not supported ... yet");
 					}
@@ -577,7 +577,7 @@ namespace NPOI.HSLF.UserModel
 		 */
 		public void SetBullet(bool flag)
 		{
-			setFlag(ParagraphFlagsTextProp.BULLET_IDX, flag);
+			SetFlag(ParagraphFlagsTextProp.BULLET_IDX, flag);
 		}
 
 		/**
@@ -600,10 +600,10 @@ namespace NPOI.HSLF.UserModel
 		/**
 		 * Returns the bullet character
 		 */
-		public Character GetBulletChar()
+		public char GetBulletChar()
 		{
-			TextProp tp = GetPropVal(_paragraphStyle, "bullet.char");
-			return (tp == null) ? null : (char)tp.GetValue();
+			TextProp tp = GetPropVal<TextProp>(_paragraphStyle, "bullet.char");
+			return (tp == null) ? ' ' : (char)tp.GetValue();
 		}
 
 		/**
@@ -611,7 +611,7 @@ namespace NPOI.HSLF.UserModel
 		 */
 		public void SetBulletSize(Double size)
 		{
-			setPctOrPoints("bullet.size", size);
+			SetPctOrPoints("bullet.size", size);
 		}
 
 		/**
@@ -619,18 +619,18 @@ namespace NPOI.HSLF.UserModel
 		 */
 		public Double GetBulletSize()
 		{
-			return getPctOrPoints("bullet.size");
+			return GetPctOrPoints("bullet.size");
 		}
 
 		/**
 		 * Sets the bullet color
 		 */
-		public void SetBulletColor(Color color)
-		{
-			int val = (color == null) ? null : new Color(color.getBlue(), color.getGreen(), color.getRed(), 254).getRGB();
-			setParagraphTextPropVal("bullet.color", val);
-			setFlag(ParagraphFlagsTextProp.BULLET_HARDCOLOR_IDX, (color != null));
-		}
+		//public void SetBulletColor(Color color)
+		//{
+		//	int val = (color == null) ? null : new Color(color.getBlue(), color.getGreen(), color.getRed(), 254).getRGB();
+		//	setParagraphTextPropVal("bullet.color", val);
+		//	setFlag(ParagraphFlagsTextProp.BULLET_HARDCOLOR_IDX, (color != null));
+		//}
 
 		/**
 		 * Returns the bullet color
@@ -666,8 +666,8 @@ namespace NPOI.HSLF.UserModel
 		{
 			if (typeface == null)
 			{
-				setPropVal(_paragraphStyle, "bullet.font", null);
-				setFlag(ParagraphFlagsTextProp.BULLET_HARDFONT_IDX, false);
+				SetPropVal(_paragraphStyle, "bullet.font", 0);
+				SetFlag(ParagraphFlagsTextProp.BULLET_HARDFONT_IDX, false);
 				return;
 			}
 
@@ -683,13 +683,13 @@ namespace NPOI.HSLF.UserModel
 		 */
 		public String GetBulletFont()
 		{
-			TextProp tp = GetPropVal(_paragraphStyle, "bullet.font");
+			TextProp tp = GetPropVal<TextProp>(_paragraphStyle, "bullet.font");
 			bool hasFont = GetFlag(ParagraphFlagsTextProp.BULLET_HARDFONT_IDX);
 			if (tp == null || !hasFont)
 			{
 				return GetDefaultFontFamily();
 			}
-			HSLFFontInfo ppFont = GetSheet().GetSlideShow().GetFont(tp.getValue());
+			HSLFFontInfo ppFont = GetSheet().GetSlideShow().GetFont(tp.GetValue());
 			//assert(ppFont != null);
 			return ppFont.GetTypeface();
 		}
@@ -734,7 +734,7 @@ namespace NPOI.HSLF.UserModel
 		public Double GetDefaultTabSize()
 		{
 			// TODO: implement
-			return null;
+			return 0;
 		}
 
 
@@ -743,7 +743,7 @@ namespace NPOI.HSLF.UserModel
 		{
 			List<HSLFTabStop> tabStops;
 			if (GetSheet() is HSLFSlideMaster) {
-				HSLFTabStopPropCollection tpc = getMasterPropVal(_paragraphStyle, HSLFTabStopPropCollection.NAME);
+				HSLFTabStopPropCollection tpc = GetMasterPropVal<HSLFTabStopPropCollection>(_paragraphStyle, HSLFTabStopPropCollection.NAME);
 				if (tpc == null)
 				{
 					return null;
@@ -770,7 +770,7 @@ namespace NPOI.HSLF.UserModel
 
 			if (GetSheet() is HSLFSlideMaster) {
 				Action<HSLFTabStopPropCollection> con = (tp) => tp.AddTabStop(ts);
-				SetPropValInner(_paragraphStyle, HSLFTabStopPropCollection.NAME, con);
+				SetPropValInner(_paragraphStyle, HSLFTabStopPropCollection.NAME, (Action<TextProp>)con);
 			} else
 			{
 				RecordContainer cont = _headerAtom.GetParentRecord();
@@ -788,7 +788,7 @@ namespace NPOI.HSLF.UserModel
 		public void ClearTabStops()
 		{
 			if (GetSheet() is HSLFSlideMaster) {
-				setPropValInner(_paragraphStyle, HSLFTabStopPropCollection.NAME, null);
+				SetPropValInner(_paragraphStyle, HSLFTabStopPropCollection.NAME, null);
 			} else
 			{
 				RecordContainer cont = _headerAtom.GetParentRecord();
@@ -803,10 +803,10 @@ namespace NPOI.HSLF.UserModel
 
 		private Double GetPctOrPoints(String propName)
 		{
-			TextProp tp = GetPropVal(_paragraphStyle, propName);
+			TextProp tp = GetPropVal<TextProp>(_paragraphStyle, propName);
 			if (tp == null)
 			{
-				return null;
+				return 0;
 			}
 			int val = tp.GetValue();
 			return (val < 0) ? Units.MasterToPoints(val) : val;
@@ -843,12 +843,12 @@ namespace NPOI.HSLF.UserModel
 		 * The propName can be a comma-separated list, in case multiple equivalent values
 		 * are queried
 		 */
-		protected T GetPropVal<T>(TextPropCollection props, String propName) where T : TextProp {
+		public T GetPropVal<T>(TextPropCollection props, String propName) where T : TextProp {
 			String[] propNames = propName.Split(',');
 			foreach (String pn in propNames)
 			{
 				T prop = props.FindByName<T>(pn);
-				if (isValidProp(prop))
+				if (IsValidProp(prop))
 				{
 					return prop;
 				}
@@ -918,7 +918,7 @@ namespace NPOI.HSLF.UserModel
 		 * @param name the name of the TextProp to fetch/add
 		 * @param val the value, null if unset
 		 */
-		protected void SetPropVal(TextPropCollection props, String name, Integer val)
+		public void SetPropVal(TextPropCollection props, String name, int val)
 		{
 			SetPropValInner(props, name, val == null ? null : tp => tp.SetValue(val));
 		}
@@ -1133,7 +1133,7 @@ namespace NPOI.HSLF.UserModel
 		{
 			String rawText = ToInternalString(GetRawText(paragraphs));
 			TextHeaderAtom headerAtom = paragraphs.ElementAt(0)._headerAtom;
-			StyleTextPropAtom styleAtom = FindStyleAtomPresent(headerAtom, rawText.Length());
+			StyleTextPropAtom styleAtom = FindStyleAtomPresent(headerAtom, rawText.Length);
 
 			// Update the text length for its Paragraph and Character stylings
 			// * reset the length, to the new string's length
@@ -1190,53 +1190,59 @@ namespace NPOI.HSLF.UserModel
 			}
 		}
 
-    private static void UpdateHyperlinks(List<HSLFTextParagraph> paragraphs)
-{
-	TextHeaderAtom headerAtom = paragraphs.ElementAt(0)._headerAtom;
-	RecordContainer _txtbox = headerAtom.GetParentRecord();
-	// remove existing hyperlink records
-	foreach (Record.Record r in _txtbox.GetChildRecords()) {
-	if (r is InteractiveInfo || r is TxInteractiveInfoAtom) {
-		_txtbox.RemoveChild(r);
-	}
-}
-// now go through all the textruns and check for hyperlinks
-HSLFHyperlink lastLink = null;
-for (HSLFTextParagraph para : paragraphs)
-{
-	for (HSLFTextRun run : para)
-	{
-		HSLFHyperlink thisLink = run.getHyperlink();
-		if (thisLink != null && thisLink == lastLink)
+		private static void UpdateHyperlinks(List<HSLFTextParagraph> paragraphs)
 		{
-			// the hyperlink extends over this text run, increase its length
-			// TODO: the text run might be longer than the hyperlink
-			thisLink.setEndIndex(thisLink.getEndIndex() + run.getLength());
-		}
-		else
-		{
+			TextHeaderAtom headerAtom = paragraphs.ElementAt(0)._headerAtom;
+			RecordContainer _txtbox = headerAtom.GetParentRecord();
+			// remove existing hyperlink records
+			foreach (Record.Record r in _txtbox.GetChildRecords())
+			{
+				if (r is InteractiveInfo || r is TxInteractiveInfoAtom)
+				{
+					_txtbox.RemoveChild(r);
+				}
+			}
+			// now go through all the textruns and check for hyperlinks
+			HSLFHyperlink lastLink = null;
+			foreach (HSLFTextParagraph para in paragraphs)
+			{
+				foreach (HSLFTextRun run in para)
+				{
+					HSLFHyperlink thisLink = run.GetHyperlink();
+					if (thisLink != null && thisLink == lastLink)
+					{
+						// the hyperlink extends over this text run, increase its length
+						// TODO: the text run might be longer than the hyperlink
+						thisLink.SetEndIndex(thisLink.GetEndIndex() + run.GetLength());
+					}
+					else
+					{
+						if (lastLink != null)
+						{
+							InteractiveInfo info = lastLink.GetInfo();
+							TxInteractiveInfoAtom txinfo = lastLink.GetTextRunInfo();
+							if (info != null && txinfo != null)
+							{
+								_txtbox.AppendChildRecord(info);
+								_txtbox.AppendChildRecord(txinfo);
+							}
+						}
+					}
+					lastLink = thisLink;
+				}
+			}
+
 			if (lastLink != null)
 			{
-				InteractiveInfo info = lastLink.getInfo();
-				TxInteractiveInfoAtom txinfo = lastLink.getTextRunInfo();
-				assert(info != null && txinfo != null);
-				_txtbox.appendChildRecord(info);
-				_txtbox.appendChildRecord(txinfo);
+				InteractiveInfo info = lastLink.GetInfo();
+				TxInteractiveInfoAtom txinfo = lastLink.GetTextRunInfo();
+				if (info != null && txinfo != null)
+				{
+					_txtbox.AppendChildRecord(info);
+					_txtbox.AppendChildRecord(txinfo);
+				}
 			}
 		}
-		lastLink = thisLink;
-	}
-}
-
-if (lastLink != null)
-{
-	InteractiveInfo info = lastLink.getInfo();
-	TxInteractiveInfoAtom txinfo = lastLink.getTextRunInfo();
-	assert(info != null && txinfo != null);
-	_txtbox.appendChildRecord(info);
-	_txtbox.appendChildRecord(txinfo);
-}
-    }
 
     /**
      * Writes the textbox records back to the document record
@@ -1245,7 +1251,7 @@ if (lastLink != null)
 {
 	TextHeaderAtom headerAtom = paragraphs.get(0)._headerAtom;
 	RecordContainer _txtbox = headerAtom.getParentRecord();
-	if (_txtbox instanceof EscherTextboxWrapper) {
+	if (_txtbox is EscherTextboxWrapper) {
 	try
 	{
 		_txtbox.writeOut(null);
@@ -1257,101 +1263,108 @@ if (lastLink != null)
 }
     }
 
-    /**
-     * Adds the supplied text onto the end of the TextParagraphs,
-     * creating a new RichTextRun for it to sit in.
-     *
-     * @param text the text string used by this object.
-     */
-    protected static HSLFTextRun appendText(List<HSLFTextParagraph> paragraphs, String text, bool newParagraph)
-{
-	text = toInternalString(text);
-
-	// check paragraphs
-	assert(!paragraphs.isEmpty() && !paragraphs.get(0).getTextRuns().isEmpty());
-
-	HSLFTextParagraph htp = paragraphs.get(paragraphs.size() - 1);
-	HSLFTextRun htr = htp.getTextRuns().get(htp.getTextRuns().size() - 1);
-
-	bool addParagraph = newParagraph;
-	for (String rawText : text.split("(?<=\r)")) {
-	// special case, if last text paragraph or run is empty, we will reuse it
-	bool lastRunEmpty = (htr.getLength() == 0);
-	bool lastParaEmpty = lastRunEmpty && (htp.getTextRuns().size() == 1);
-
-	if (addParagraph && !lastParaEmpty)
-	{
-		TextPropCollection tpc = htp.getParagraphStyle();
-		HSLFTextParagraph prevHtp = htp;
-		htp = new HSLFTextParagraph(htp._headerAtom, htp._byteAtom, htp._charAtom, paragraphs);
-		htp.setParagraphStyle(tpc.copy());
-		htp.setParentShape(prevHtp.getParentShape());
-		htp.setShapeId(prevHtp.getShapeId());
-		htp.supplySheet(prevHtp.getSheet());
-		paragraphs.add(htp);
-	}
-	addParagraph = true;
-
-	if (!lastRunEmpty)
-	{
-		TextPropCollection tpc = htr.getCharacterStyle();
-		htr = new HSLFTextRun(htp);
-		htr.setCharacterStyle(tpc.copy());
-		htp.addTextRun(htr);
-	}
-	htr.setText(rawText);
-}
-
-storeText(paragraphs);
-
-return htr;
-    }
-
-    /**
-     * Sets (overwrites) the current text.
-     * Uses the properties of the first paragraph / textrun
-     *
-     * @param text the text string used by this object.
-     */
-    public static HSLFTextRun setText(List<HSLFTextParagraph> paragraphs, String text)
-{
-	// check paragraphs
-	assert(!paragraphs.isEmpty() && !paragraphs.get(0).getTextRuns().isEmpty());
-
-	Iterator<HSLFTextParagraph> paraIter = paragraphs.iterator();
-	HSLFTextParagraph htp = paraIter.hasNext() ? paraIter.next() : null; // keep first
-	assert(htp != null);
-	while (paraIter.hasNext())
-	{
-		paraIter.next();
-		paraIter.remove();
-	}
-
-	Iterator<HSLFTextRun> runIter = htp.getTextRuns().iterator();
-	if (runIter.hasNext())
-	{
-		HSLFTextRun htr = runIter.next();
-		htr.setText("");
-		while (runIter.hasNext())
+		/**
+		 * Adds the supplied text onto the end of the TextParagraphs,
+		 * creating a new RichTextRun for it to sit in.
+		 *
+		 * @param text the text string used by this object.
+		 */
+		protected static HSLFTextRun AppendText(List<HSLFTextParagraph> paragraphs, String text, bool newParagraph)
 		{
-			runIter.next();
-			runIter.remove();
-		}
-	}
-	else
-	{
-		HSLFTextRun trun = new HSLFTextRun(htp);
-		htp.addTextRun(trun);
-	}
+			text = toInternalString(text);
 
-	return appendText(paragraphs, text, false);
-}
+			// check paragraphs
+			//assert(!paragraphs.isEmpty() && !paragraphs.get(0).getTextRuns().isEmpty());
+
+			HSLFTextParagraph htp = paragraphs.Get(paragraphs.size() - 1);
+			HSLFTextRun htr = htp.GetTextRuns().Get(htp.GetTextRuns().Size() - 1);
+
+			bool addParagraph = newParagraph;
+			foreach (String rawText in text.Split("(?<=\r)")) {
+				// special case, if last text paragraph or run is empty, we will reuse it
+				bool lastRunEmpty = (htr.GetLength() == 0);
+				bool lastParaEmpty = lastRunEmpty && (htp.GetTextRuns().Size() == 1);
+
+				if (addParagraph && !lastParaEmpty)
+				{
+					TextPropCollection tpc = htp.GetParagraphStyle();
+					HSLFTextParagraph prevHtp = htp;
+					htp = new HSLFTextParagraph(htp._headerAtom, htp._byteAtom, htp._charAtom, paragraphs);
+					htp.SetParagraphStyle(tpc.Copy());
+					htp.SetParentShape(prevHtp.GetParentShape());
+					htp.SetShapeId(prevHtp.GetShapeId());
+					htp.SupplySheet(prevHtp.GetSheet());
+					paragraphs.Add(htp);
+				}
+				addParagraph = true;
+
+				if (!lastRunEmpty)
+				{
+					TextPropCollection tpc = htr.GetCharacterStyle();
+					htr = new HSLFTextRun(htp);
+					htr.SetCharacterStyle(tpc.Copy());
+					htp.AddTextRun(htr);
+				}
+				htr.SetText(rawText);
+			}
+
+			StoreText(paragraphs);
+
+			return htr;
+		}
+
+		/**
+		 * Sets (overwrites) the current text.
+		 * Uses the properties of the first paragraph / textrun
+		 *
+		 * @param text the text string used by this object.
+		 */
+		public static HSLFTextRun SetText(List<HSLFTextParagraph> paragraphs, String text)
+		{
+			// check paragraphs
+			if (!(paragraphs.Count==0) && !(paragraphs.ElementAt(0).GetTextRuns().Count==0))
+			{
+
+				//Iterator<HSLFTextParagraph> paraIter = paragraphs.iterator();
+				//HSLFTextParagraph htp = paraIter.hasNext() ? paraIter.next() : null; // keep first
+				HSLFTextParagraph htp = paraIter.hasNext() ? paraIter.next() : null; // keep first
+				if (htp != null)
+				{
+					while (paraIter.hasNext())
+					{
+						paraIter.next();
+						paraIter.remove();
+					}
+
+					Iterator<HSLFTextRun> runIter = htp.GetTextRuns().iterator();
+					if (runIter.hasNext())
+					{
+						HSLFTextRun htr = runIter.next();
+						htr.SetText("");
+						while (runIter.hasNext())
+						{
+							runIter.next();
+							runIter.remove();
+						}
+					}
+					else
+					{
+						HSLFTextRun trun = new HSLFTextRun(htp);
+						htp.AddTextRun(trun);
+					}
+				}
+			}
+
+			return AppendText(paragraphs, text, false);
+		}
 
 public static String getText(List<HSLFTextParagraph> paragraphs)
 {
-	assert(!paragraphs.isEmpty());
-	String rawText = getRawText(paragraphs);
-	return toExternalString(rawText, paragraphs.get(0).getRunType());
+			if (!paragraphs.isEmpty())
+			{
+				String rawText = getRawText(paragraphs);
+			}
+	return toExternalString(rawText, paragraphs.ElementAt(0).GetRunType());
 }
 
 public static String getRawText(List<HSLFTextParagraph> paragraphs)
@@ -1360,7 +1373,7 @@ public static String getRawText(List<HSLFTextParagraph> paragraphs)
 	for (HSLFTextParagraph p : paragraphs) {
 	for (HSLFTextRun r : p.getTextRuns())
 	{
-		sb.append(r.getRawText());
+		sb.append(r.GetRawText());
 	}
 }
 return sb.toString();
@@ -1371,7 +1384,7 @@ return sb.toString();
 {
 	StringBuilder sb = new StringBuilder();
 	for (HSLFTextRun r : getTextRuns()) {
-	sb.append(r.getRawText());
+	sb.append(r.GetRawText());
 }
 return toExternalString(sb.toString(), getRunType());
     }
@@ -1380,7 +1393,7 @@ return toExternalString(sb.toString(), getRunType());
      * Returns a new string with line breaks converted into internal ppt
      * representation
      */
-    protected static String toInternalString(String s)
+    public static String toInternalString(String s)
 {
 	return s.replaceAll("\\r?\\n", "\r");
 }
@@ -1610,7 +1623,7 @@ for (String para : rawText.split("(?<=\r)"))
 
 	HSLFTextRun trun = new HSLFTextRun(tpara);
 	tpara.addTextRun(trun);
-	trun.setText(para);
+	trun.SetText(para);
 }
 
 applyCharacterStyles(paragraphs, styles.getCharacterStyles());
@@ -1840,21 +1853,21 @@ protected static Color getColorFromColorIndexStruct(int rgb, HSLFSheet sheet)
  * @param propName The name of the Paragraph TextProp
  * @param val The value to set for the TextProp
  */
-public void setParagraphTextPropVal(String propName, Integer val)
+public void SetParagraphTextPropVal(String propName, int val)
 {
-	setPropVal(_paragraphStyle, propName, val);
-	setDirty();
+	SetPropVal(_paragraphStyle, propName, val);
+	SetDirty();
 }
 
 /**
  * marks this paragraph dirty, so its records will be renewed on save
  */
-public void setDirty()
+public void SetDirty()
 {
 	_dirty = true;
 }
 
-public bool isDirty()
+public bool IsDirty()
 {
 	return _dirty;
 }

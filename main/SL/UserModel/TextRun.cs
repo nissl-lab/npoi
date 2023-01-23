@@ -127,70 +127,70 @@ namespace NPOI.SL.UserModel
 	     *
 	     * @since POI 3.17-beta2
 	     */
-		void setFontInfo(FontInfo fontInfo, FontGroupEnum fontGroup);
+		void SetFontInfo(FontInfo fontInfo, FontGroupEnum fontGroup);
 
 		/**
 	     * @return true, if text is bold
 	     */
-		bool isBold();
+		bool IsBold();
 
 		/**
 	     * Sets the bold state
 	     *
 	     * @param bold set to true for bold text, false for normal weight
 	     */
-		void setBold(bool bold);
+		void SetBold(bool bold);
 
 		/**
 	     * @return true, if text is italic
 	     */
-		bool isItalic();
+		bool IsItalic();
 
 		/**
 	     * Sets the italic state
 	     *
 	     * @param italic set to true for italic text, false for non-italics
 	     */
-		void setItalic(bool italic);
+		void SetItalic(bool italic);
 
 		/**
 	     * @return true, if text is underlined
 	     */
-		bool isUnderlined();
+		bool IsUnderlined();
 
 		/**
 	     * Sets the underlined state
 	     *
 	     * @param underlined set to true for underlined text, false for no underlining
 	     */
-		void setUnderlined(bool underlined);
+		void SetUnderlined(bool underlined);
 
 		/**
 	     * @return true, if text is stroked
 	     */
-		bool isStrikethrough();
+		bool IsStrikethrough();
 
 		/**
 	     * Sets the strikethrough state
 	     *
 	     * @param stroked set to true for stroked text, false for no stroking
 	     */
-		void setStrikethrough(bool stroked);
+		void SetStrikethrough(bool stroked);
 
 		/**
 	     * @return true, if text is sub scripted
 	     */
-		bool isSubscript();
+		bool IsSubscript();
 
 		/**
 	     * @return true, if text is super scripted
 	     */
-		bool isSuperscript();
+		bool IsSuperscript();
 
 		/**
 	     * @return the pitch and family id or -1 if not applicable
 	     */
-		byte getPitchAndFamily();
+		byte GetPitchAndFamily();
 
 		/**
 	     * Return the associated hyperlink
@@ -219,7 +219,7 @@ namespace NPOI.SL.UserModel
 	     * @return the field type or {@code null} if text run is not a field
 	     */
 		//@Internal
-		FieldType getFieldType();
+		FieldType GetFieldType();
 
 		/**
 	     * @return the paragraph which contains this TextRun

@@ -37,7 +37,7 @@ namespace NPOI.HSLF.UserModel
     private static int DEFAULT_MAX_RECORD_LENGTH = 10_000_000;
 		private static int MAX_RECORD_LENGTH = DEFAULT_MAX_RECORD_LENGTH;
 
-		enum LoadSavePhase
+		public enum LoadSavePhase
 		{
 			INIT, LOADED
 		}
@@ -162,7 +162,7 @@ namespace NPOI.HSLF.UserModel
     /**
      * @return the current loading/saving phase
      */
-    static LoadSavePhase GetLoadSavePhase()
+    public static LoadSavePhase GetLoadSavePhase()
 {
 	return loadSavePhase.Get();
 }
