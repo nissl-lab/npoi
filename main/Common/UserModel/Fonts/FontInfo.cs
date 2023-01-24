@@ -81,19 +81,19 @@ namespace NPOI.Common.UserModel.Fonts
 		/**
 		 * @return the family class
 		 */
-		FontFamily GetFamily();
+		FontFamilyEnum GetFamily();
 
 		/**
 		 * Sets the font family class
 		 *
 		 * @param family the font family class
 		 */
-		void SetFamily(FontFamily family);
+		void SetFamily(FontFamilyEnum family);
 
 		/**
 		 * @return the font pitch or {@code null} if unsupported
 		 */
-		FontPitch GetPitch();
+		FontPitchEnum GetPitch();
 
 		/**
 		 * Set the font pitch
@@ -102,7 +102,7 @@ namespace NPOI.Common.UserModel.Fonts
 		 *
 		 * @throws UnsupportedOperationException if unsupported
 		 */
-		void SetPitch(FontPitch pitch);
+		void SetPitch(FontPitchEnum pitch);
 
 		/**
 		 * @return panose info in binary form or {@code null} if unknown

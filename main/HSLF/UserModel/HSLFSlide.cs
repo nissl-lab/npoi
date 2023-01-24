@@ -53,7 +53,7 @@ namespace NPOI.HSLF.UserModel
 			if (_atomSet != null && _atomSet.getSlideRecords().length > 0)
 			{
 				// Grab text from SlideListWithTexts entries
-				_paragraphs.AddRange(HSLFTextParagraph.findTextParagraphs(_atomSet.getSlideRecords()));
+				_paragraphs.AddRange(HSLFTextParagraph.FindTextParagraphs(_atomSet.getSlideRecords()));
 				if (_paragraphs.Count ==0)
 				{
 					throw new HSLFException("No text records found for slide");
@@ -61,7 +61,7 @@ namespace NPOI.HSLF.UserModel
 			}
 
 			// Grab text from slide's PPDrawing
-			foreach (List<HSLFTextParagraph> l in HSLFTextParagraph.findTextParagraphs(GetPPDrawing(), this))
+			foreach (List<HSLFTextParagraph> l in HSLFTextParagraph.FindTextParagraphs(GetPPDrawing(), this))
 			{
 				if (!_paragraphs.Contains(l))
 				{
@@ -212,8 +212,8 @@ namespace NPOI.HSLF.UserModel
 				int type = tp.get(0).getRunType();
 				if (TextPlaceholder.isTitle(type))
 				{
-					String str = HSLFTextParagraph.getRawText(tp);
-					return HSLFTextParagraph.toExternalString(str, type);
+					String str = HSLFTextParagraph.GetRawText(tp);
+					return HSLFTextParagraph.ToExternalString(str, type);
 				}
 			}
 			return null;

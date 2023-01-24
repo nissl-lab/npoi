@@ -352,7 +352,7 @@ namespace NPOI.SL.UserModel
 	     *
 	     * @since POI 3.15-beta2
 	     */
-	    bool isHeaderOrFooter();
+	    bool IsHeaderOrFooter();
 
 		/**
 	     * Get the {@link TabStop TabStops} - the list can't be and it's entries shouldn't be modified.

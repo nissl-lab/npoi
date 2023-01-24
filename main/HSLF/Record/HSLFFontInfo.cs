@@ -86,7 +86,7 @@ namespace NPOI.HSLF.Record
 
 			byte pitchAndFamily = (byte)fontAtom.GetPitchAndFamily();
 			SetPitch(FontPitch.ValueOfPitchFamily(pitchAndFamily));
-			SetFamily(FontFamily.ValueOfPitchFamily(pitchAndFamily));
+			SetFamily(FontFamily.ValueOfPitchFamily(pitchAndFamily).native);
 			SetEmbedSubsetted(FLAGS_EMBED_SUBSETTED.IsSet(fontAtom.GetFontFlags()));
 			SetFontSubstitutable(!FLAGS_NO_FONT_SUBSTITUTION.IsSet(fontAtom.GetFontType()));
 		}
@@ -97,7 +97,7 @@ namespace NPOI.HSLF.Record
 			SetTypeface(fontInfo.GetTypeface());
 			SetCharset(fontInfo.GetCharset());
 			SetFamily(fontInfo.GetFamily());
-			SetPitch(fontInfo.GetPitch().GetNative());
+			SetPitch(fontInfo.GetPitch());
 			if (fontInfo is HSLFFontInfo) {
 				HSLFFontInfo hFontInfo = (HSLFFontInfo)fontInfo;
 				SetRenderType(hFontInfo.GetRenderType());
@@ -227,28 +227,43 @@ namespace NPOI.HSLF.Record
 					typeFlag = FLAGS_RENDER_FONTTYPE.SetValue(0, 4);
 					break;
 			}
-			typeFlag = FLAGS_NO_FONT_SUBSTITUTION.Setbool(typeFlag, IsFontSubstitutable());
+			typeFlag = FLAGS_NO_FONT_SUBSTITUTION.SetBoolean(typeFlag, IsFontSubstitutable());
 			fnt.SetFontType(typeFlag);
 
-			fnt.SetPitchAndFamily(FontPitch.GetNativeId(pitch, family));
+			fnt.SetPitchAndFamily(FontPitch.GetNativeId(new FontPitch((int)pitch), new FontFamily((int)family)));
 			return fnt;
 		}
 
-		public void addFacet(FontEmbeddedData facet)
+		public void AddFacet(FontEmbeddedData facet)
 		{
-			facets.add(facet);
+			facets.Add(facet);
 		}
 
-		@Override
-	public List<FontEmbeddedData> getFacets()
+		//@Override
+	public List<FontEmbeddedData> GetFacets()
 		{
 			return facets;
 		}
 
-		@Internal
-	public FontEntityAtom getFontEntityAtom()
+		//@Internal
+	public FontEntityAtom GetFontEntityAtom()
 		{
 			return fontEntityAtom;
+		}
+
+		public byte[] GetPanose()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SetPanose(byte[] panose)
+		{
+			throw new NotImplementedException();
+		}
+
+		List<T> FontInfo.GetFacets<T>()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

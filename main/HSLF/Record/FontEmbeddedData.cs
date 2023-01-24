@@ -16,13 +16,40 @@
 ==================================================================== */
 
 using NPOI.Common.UserModel.Fonts;
+using NPOI.Util;
 using System;
+using System.Collections.Generic;
 
 namespace NPOI.HSLF.Record
 {
-	internal class FontEmbeddedData : Record
+	public class FontEmbeddedData : Record
 	{
-		internal FontHeader GetFontHeader()
+		public override Record[] GetChildRecords()
+		{
+			throw new NotImplementedException();
+		}
+
+		public FontHeader GetFontHeader()
+		{
+			throw new NotImplementedException();
+		}
+
+		public override IDictionary<string, Func<object>> GetGenericProperties()
+		{
+			throw new NotImplementedException();
+		}
+
+		public override long GetRecordType()
+		{
+			throw new NotImplementedException();
+		}
+
+		public override bool IsAnAtom()
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void WriteOut(OutputStream o)
 		{
 			throw new NotImplementedException();
 		}

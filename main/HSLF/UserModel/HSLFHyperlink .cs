@@ -304,11 +304,11 @@ namespace NPOI.HSLF.UserModel
      * @return found hyperlinks
      */
     //@SuppressWarnings("resource")
-    protected static List<HSLFHyperlink> Find(List<HSLFTextParagraph> paragraphs){
+    public static List<HSLFHyperlink> Find(List<HSLFTextParagraph> paragraphs){
             List<HSLFHyperlink> lst = new List<HSLFHyperlink>();
         if (paragraphs == null || paragraphs.Count == 0) return lst;
 
-        HSLFTextParagraph firstPara = paragraphs.Get(0);
+        HSLFTextParagraph firstPara = paragraphs.ElementAt(0);
 
         HSLFSlideShow ppt = firstPara.GetSheet().GetSlideShow();
         //document-level container which stores info about all links in a presentation

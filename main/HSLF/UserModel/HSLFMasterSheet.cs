@@ -1,13 +1,18 @@
 ﻿using NPOI.HSLF.Model;
+using NPOI.HSLF.Record;
+using NPOI.SL.UserModel;
 using System;
 
 namespace NPOI.HSLF.UserModel
 {
-	public class HSLFMasterSheet
+	public abstract class HSLFMasterSheet: HSLFSheet, MasterSheet<HSLFShape, HSLFTextParagraph>
 	{
-		internal TextPropCollection GetPropCollection(int txtype, int v, string pn, bool isChar)
+		public HSLFMasterSheet(SheetContainer container, int sheetNo)
+			: base(container, sheetNo)
 		{
-			throw new NotImplementedException();
+			
 		}
+		public abstract TextPropCollection GetPropCollection(int txtype, int v, string pn, bool isChar);
+		
 	}
 }

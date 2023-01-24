@@ -41,7 +41,7 @@ namespace NPOI.HSLF.UserModel
 			// Now, build up TextRuns from pairs of TextHeaderAtom and
 			// one of TextBytesAtom or TextCharsAtom, found inside
 			// EscherTextboxWrapper's in the PPDrawing
-			foreach (List<HSLFTextParagraph> l in HSLFTextParagraph.findTextParagraphs(GetPPDrawing(), this))
+			foreach (List<HSLFTextParagraph> l in HSLFTextParagraph.FindTextParagraphs(GetPPDrawing(), this))
 			{
 				if (!_paragraphs.Contains(l)) _paragraphs.Add(l);
 			}

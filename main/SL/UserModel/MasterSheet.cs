@@ -11,6 +11,6 @@
 	     * 
 	     * @since POI 4.0.0
 	     */
-	    SimpleShape<S, P> getPlaceholder(Placeholder type);
+	    SimpleShape<S, P> GetPlaceholder(Placeholder type);
 	}
 }

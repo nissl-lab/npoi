@@ -28,8 +28,8 @@ namespace NPOI.Common.UserModel.Fonts
 	public class FontFamily
 	{
 		private int nativeId;
-		private FontFamilyEnum native;
-		private FontFamily(int nativeId)
+		public FontFamilyEnum native;
+		public FontFamily(int nativeId)
 		{
 			this.nativeId = nativeId;
 			this.native = (FontFamilyEnum)nativeId;

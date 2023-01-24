@@ -104,7 +104,7 @@ namespace NPOI.HSLF.UserModel
 			{
 				throw new HSLFException("text must not be null");
 			}
-			String newText = HSLFTextParagraph.toInternalString(text);
+			String newText = HSLFTextParagraph.ToInternalString(text);
 			if (!newText.Equals(_runText))
 			{
 				_runText = newText;
@@ -518,7 +518,7 @@ namespace NPOI.HSLF.UserModel
 		 * @param link the hyperlink
 		 */
 		/* package */
-		void SetHyperlink(HSLFHyperlink link)
+		public void SetHyperlink(HSLFHyperlink link)
 		{
 			this.link = link;
 		}
