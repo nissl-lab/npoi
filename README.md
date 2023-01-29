@@ -40,16 +40,6 @@ Get Started with NPOI
 
 [NPOI Changelog](https://github.com/nissl-lab/npoi/wiki/Changelog)
 
-Replace DotnetCore.NPOI with NPOI ASAP
-===========
-NPOI NEVER joins China NCC (.NET Core Community) group. They are cheating. The readme.md in Dotnetcore.npoi repo is full of lies. What they want to do is just to destory NPOI since they cannot make use of reputation of this component any more. That's why I'm always saying they are evil. The whole NCC group is evil. 
-
-NPOI从未加入过中国NCC开源组织，他们在欺骗公众！Dotnetcore.npoi的readme.md完全是诽谤，一堆谎言。他们想做的无非就是想毁掉NPOI，因为他们不能再用NPOI来行骗了。这也是我为什么一直说他们很邪恶，整个NCC组织就是一个邪教。
-
-[Stop using Dotnetcore/NPOI nuget package. It’s obsolete!](https://tonyqus.medium.com/stop-using-dotnetcore-npoi-nuget-package-its-too-obsolete-6d0aeedb3319)
-
-[The real history of Dotnetcore.NPOI](https://tonyqus.medium.com/the-real-history-of-dotnetcore-npoi-999bb5e140c7) [中文版](https://zhuanlan.zhihu.com/p/506975972)
-
 Advantage of NPOI
 =================
 a. It's totally free to use
