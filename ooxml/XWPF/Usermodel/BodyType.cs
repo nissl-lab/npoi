@@ -29,8 +29,8 @@ namespace NPOI.XWPF.UserModel
         HEADER,
         FOOTER,
         FOOTNOTE,
-        TABLECELL
-
+        TABLECELL,
+        COMMENT,
     }
 
 }

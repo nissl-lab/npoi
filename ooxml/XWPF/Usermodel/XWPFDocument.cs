@@ -51,7 +51,6 @@ namespace NPOI.XWPF.UserModel
         private IdentifierManager drawingIdManager = new IdentifierManager(0L, 4294967295L);
         protected List<XWPFFooter> footers = new List<XWPFFooter>();
         protected List<XWPFHeader> headers = new List<XWPFHeader>();
-        protected List<XWPFComment> comments = new List<XWPFComment>();
         protected List<XWPFHyperlink> hyperlinks = new List<XWPFHyperlink>();
         protected List<XWPFParagraph> paragraphs = new List<XWPFParagraph>();
         protected List<XWPFTable> tables = new List<XWPFTable>();
@@ -63,6 +62,7 @@ namespace NPOI.XWPF.UserModel
         protected XWPFNumbering numbering;
         protected XWPFStyles styles;
         protected XWPFFootnotes footnotes;
+        private XWPFComments comments;
 
         /** Handles the joy of different headers/footers for different pages */
         private XWPFHeaderFooterPolicy headerFooterPolicy;
@@ -153,12 +153,8 @@ namespace NPOI.XWPF.UserModel
                     }
                     else if (relation.Equals(XWPFRelation.COMMENT.Relation))
                     {
-                        XmlDocument xml = ConvertStreamToXml(p.GetPackagePart().GetInputStream());
-                        CommentsDocument cmntdoc = CommentsDocument.Parse(xml ,NamespaceManager);
-                        foreach (CT_Comment ctcomment in cmntdoc.Comments.comment)
-                        {
-                            comments.Add(new XWPFComment(ctcomment, this));
-                        }
+                        this.comments = (XWPFComments)p;
+                        this.comments.OnDocumentRead();
                     }
                     else if (relation.Equals(XWPFRelation.SETTINGS.Relation))
                     {
@@ -487,22 +483,32 @@ namespace NPOI.XWPF.UserModel
             return hyperlinks.ToArray();
         }
 
+        /**
+         * Get Comments
+         *
+         * @return comments
+         */
+        public XWPFComments GetDocComments()
+        {
+            return comments;
+        }
+
         public XWPFComment GetCommentByID(String id)
         {
-            IEnumerator<XWPFComment> iter = comments.GetEnumerator();
-            while (iter.MoveNext())
+            if (null == comments)
             {
-                XWPFComment comment = iter.Current;
-                if (comment.Id.Equals(id))
-                    return comment;
+                return null;
             }
-
-            return null;
+            return comments.GetCommentByID(id);
         }
 
         public XWPFComment[] GetComments()
         {
-            return comments.ToArray();
+            if (null == comments)
+            {
+                return null;
+            }
+            return comments.GetComments().ToArray();
         }
 
         /**
@@ -894,6 +900,28 @@ namespace NPOI.XWPF.UserModel
             bodyElements.Add(p);
             paragraphs.Add(p);
             return p;
+        }
+
+        /**
+         * Creates an empty comments for the document if one does not already exist
+         *
+         * @return comments
+         */
+        public XWPFComments CreateComments()
+        {
+            if (comments == null)
+            {
+                CommentsDocument commentsDoc = new CommentsDocument();
+
+                XWPFRelation relation = XWPFRelation.COMMENT;
+                int i = GetRelationIndex(relation);
+
+                XWPFComments wrapper = (XWPFComments)CreateRelationship(relation, XWPFFactory.GetInstance(), i);
+                wrapper.SetCtComments(commentsDoc.AddNewComments());
+                wrapper.SetXWPFDocument(GetXWPFDocument());
+                comments = wrapper;
+            }
+            return comments;
         }
 
         /**

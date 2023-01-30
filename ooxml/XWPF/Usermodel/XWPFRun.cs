@@ -1072,6 +1072,12 @@ namespace NPOI.XWPF.UserModel
                 relationId = headerFooter.AddPictureData(pictureData, pictureType);
                 picData = (XWPFPictureData)headerFooter.GetRelationById(relationId);
             }
+            else if (parent.Part is XWPFComments)
+            {
+                XWPFComments comments = (XWPFComments)parent.Part;
+                relationId = comments.AddPictureData(pictureData, pictureType);
+                picData = (XWPFPictureData)comments.GetRelationById(relationId);
+            }
             else
             {
                 doc = parent.Document;

@@ -331,6 +331,7 @@
     <Compile Include="XWPF\Usermodel\VerticalAlign.cs" />
     <Compile Include="XWPF\Usermodel\XWPFAbstractNum.cs" />
     <Compile Include="XWPF\Usermodel\XWPFComment.cs" />
+    <Compile Include="XWPF\Usermodel\XWPFComments.cs" />
     <Compile Include="XWPF\Usermodel\XWPFDefaultParagraphStyle.cs" />
     <Compile Include="XWPF\Usermodel\XWPFDefaultRunStyle.cs" />
     <Compile Include="XWPF\Usermodel\XWPFDocument.cs" />
