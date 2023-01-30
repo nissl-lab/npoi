@@ -184,7 +184,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Comments()
         {
-            //this.commentField = new List<CT_Comment>();
+            this.commentField = new List<CT_Comment>();
         }
         public static CT_Comments Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -233,6 +233,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.commentField = value;
             }
+        }
+
+        public CT_Comment AddNewComment()
+        {
+            var comment = new CT_Comment();
+            commentField.Add(comment);
+            return comment;
+        }
+
+        public void RemoveComment(int i)
+        {
+            commentField.RemoveAt(i);
         }
     }
 
