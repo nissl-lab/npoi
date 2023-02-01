@@ -61,7 +61,7 @@ h. Works on both Windows and Linux
 
 System Requirement
 ===================
-.NET Standard 2.1 (.NET Core 3.x)
+.NET Standard 2.1 (.NET Core 3.x, .NET 5, .NET 6)
 
 .NET Standard 2.0 (.NET Core 2.x)
 
