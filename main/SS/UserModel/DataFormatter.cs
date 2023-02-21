@@ -427,7 +427,7 @@ namespace NPOI.SS.UserModel
                     StringBuilder sb = new StringBuilder();
                     sb.Append(symbol.Substring(0, symbol.IndexOf('$')));
                     sb.Append('\\');
-                    sb.Append(symbol.Substring(symbol.IndexOf('$'), symbol.Length));
+                    sb.Append(symbol.Substring(symbol.IndexOf('$'), symbol.Length- symbol.IndexOf('$')));
                     symbol = sb.ToString();
                 }
                 matchedstring = Regex.Replace(matchedstring, localePatternGroup, symbol);
