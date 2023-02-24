@@ -1665,6 +1665,7 @@ namespace NPOI.XSSF.UserModel
             XSSFSheet sheet = sheets[idx];
             sheets.RemoveAt(idx);
             sheets.Insert(pos, sheet);
+
             // Reorder CT_Sheets
             CT_Sheets ct = workbook.sheets;
             CT_Sheet cts = ct.GetSheetArray(idx).Copy();
@@ -1674,34 +1675,75 @@ namespace NPOI.XSSF.UserModel
 
             //notify sheets
             List<CT_Sheet> sheetArray = ct.sheet;
-            for (int i = 0; i < sheets.Count; i++)
+            for (int i = 0; i < sheetArray.Count; i++)
             {
                 sheets[i].sheet = sheetArray[i];
             }
 
+            UpdateNamedRangesAfterSheetReorder(idx, pos);
+            UpdateActiveSheetAfterSheetReorder(idx, pos);
+        }
+
+        /**
+         * update sheet-scoped named ranges in this workbook after changing the sheet order
+         * of a sheet at oldIndex to newIndex.
+         * Sheets between these indices will move left or right by 1.
+         *
+         * @param oldIndex the original index of the re-ordered sheet
+         * @param newIndex the new index of the re-ordered sheet
+         */
+        private void UpdateNamedRangesAfterSheetReorder(int oldIndex, int newIndex)
+        {
+            // update sheet index of sheet-scoped named ranges
+            foreach (XSSFName name in namedRanges)
+            {
+                int i = name.SheetIndex;
+                // name has sheet-level scope
+                if (i != -1)
+                {
+                    // name refers to this sheet
+                    if (i == oldIndex)
+                    {
+                        name.SheetIndex = newIndex;
+                    }
+                    // if oldIndex > newIndex then this sheet moved left and sheets between newIndex and oldIndex moved right
+                    else if (newIndex <= i && i < oldIndex)
+                    {
+                        name.SheetIndex = i + 1;
+                    }
+                    // if oldIndex < newIndex then this sheet moved right and sheets between oldIndex and newIndex moved left
+                    else if (oldIndex < i && i <= newIndex)
+                    {
+                        name.SheetIndex = i - 1;
+                    }
+                }
+            }
+        }
+
+        private void UpdateActiveSheetAfterSheetReorder(int oldIndex, int newIndex)
+        {
             // adjust active sheet if necessary
             int active = ActiveSheetIndex;
-            if (active == idx)
+            if (active == oldIndex)
             {
-                // Moved sheet was the active one
-                SetActiveSheet(pos);
+                // moved sheet was the active one
+                SetActiveSheet(newIndex);
             }
-            else if ((active < idx && active < pos) ||
-                  (active > idx && active > pos))
+            else if ((active < oldIndex && active < newIndex) ||
+                     (active > oldIndex && active > newIndex))
             {
                 // not affected
             }
-            else if (pos > idx)
+            else if (newIndex > oldIndex)
             {
-                // Moved sheet was below before and is above now => active is one less
+                // moved sheet was below before and is above now => active is one less
                 SetActiveSheet(active - 1);
             }
             else
             {
-                // remaining case: Moved sheet was higher than active before and is lower now => active is one more
+                // remaining case: moved sheet was higher than active before and is lower now => active is one more
                 SetActiveSheet(active + 1);
             }
-
         }
 
         /**

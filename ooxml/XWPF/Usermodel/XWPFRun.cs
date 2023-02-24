@@ -453,7 +453,7 @@ namespace NPOI.XWPF.UserModel
         /// <param name="startIndex">start index of the insertion in the run text</param>
         public void InsertText(string text, int startIndex)
         {
-            List<CT_Text> texts = run.GetTList();
+            IList<CT_Text> texts = run.GetTList();
             int endPos = 0;
             int startPos = 0;
             for (int i = 0; i < texts.Count; i++)
@@ -1071,6 +1071,12 @@ namespace NPOI.XWPF.UserModel
                 XWPFHeaderFooter headerFooter = (XWPFHeaderFooter)parent.Part;
                 relationId = headerFooter.AddPictureData(pictureData, pictureType);
                 picData = (XWPFPictureData)headerFooter.GetRelationById(relationId);
+            }
+            else if (parent.Part is XWPFComments)
+            {
+                XWPFComments comments = (XWPFComments)parent.Part;
+                relationId = comments.AddPictureData(pictureData, pictureType);
+                picData = (XWPFPictureData)comments.GetRelationById(relationId);
             }
             else
             {

@@ -31,6 +31,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return this.comments;
             }
         }
+
+        public CT_Comments AddNewComments()
+        {
+            if (comments == null)
+            {
+                comments = new CT_Comments();
+            }
+            return comments;
+        }
+
         public void Save(Stream stream)
         {
             using (StreamWriter sw = new StreamWriter(stream))

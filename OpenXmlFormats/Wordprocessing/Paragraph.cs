@@ -52,6 +52,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.pPrField = value;
             }
         }
+
+        public bool IsSetPPr()
+        {
+            return this.pPrField != null;
+        }
+
         public static CT_P Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -373,28 +379,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        public CT_R AddNewR()
-        {
-            CT_R r = new CT_R();
-            lock (this)
-            {
-                itemsField.Add(r);
-                itemsElementNameField.Add(ParagraphItemsChoiceType.r);
-            }
-            return r;
-        }
-
-        public CT_OMath AddNewOMath()
-        {
-            CT_OMath oMath = new CT_OMath();
-            lock (this)
-            {
-                itemsField.Add(oMath);
-                itemsElementNameField.Add(ParagraphItemsChoiceType.oMath);
-            }
-            return oMath;
-        }
-
         [XmlElement("ItemsElementName", Order = 2)]
         [XmlIgnore]
         public List<ParagraphItemsChoiceType> ItemsElementName
@@ -481,38 +465,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return this.pPrField;
         }
 
-        public void SetRArray(int pos, CT_R Run)
-        {
-            SetObject<CT_R>(ParagraphItemsChoiceType.r, pos, Run);
-        }
-
-        public CT_R InsertNewR(int pos)
-        {
-            return InsertNewObject<CT_R>(ParagraphItemsChoiceType.r, pos);
-        }
-
-        public int SizeOfRArray()
-        {
-            return SizeOfArray(ParagraphItemsChoiceType.r);
-        }
-
-        public void RemoveR(int pos)
-        {
-            RemoveObject(ParagraphItemsChoiceType.r, pos);
-        }
-
-        public IEnumerable<CT_MarkupRange> GetCommentRangeStartList()
-        {
-            return GetObjectList<CT_MarkupRange>(ParagraphItemsChoiceType.commentRangeStart);
-        }
-        public CT_Hyperlink1 AddNewHyperlink()
-        {
-            return AddNewObject<CT_Hyperlink1>(ParagraphItemsChoiceType.hyperlink);
-        }
-        public IEnumerable<CT_Hyperlink1> GetHyperlinkList()
-        {
-            return GetObjectList<CT_Hyperlink1>(ParagraphItemsChoiceType.hyperlink);
-        }
         #region Generic methods for object operation
 
         private List<T> GetObjectList<T>(ParagraphItemsChoiceType type) where T : class
@@ -621,36 +573,238 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         #endregion
 
+        #pragma warning disable format
+        public CT_MarkupRange      AddNewBookmarkEnd()                     { return AddNewObject<CT_MarkupRange>   (ParagraphItemsChoiceType.bookmarkEnd); }
+        public CT_Bookmark         AddNewBookmarkStart()                   { return AddNewObject<CT_Bookmark>      (ParagraphItemsChoiceType.bookmarkStart); }
+        public CT_MarkupRange      AddNewCommentRangeEnd()                 { return AddNewObject<CT_MarkupRange>   (ParagraphItemsChoiceType.commentRangeEnd); }
+        public CT_MarkupRange      AddNewCommentRangeStart()               { return AddNewObject<CT_MarkupRange>   (ParagraphItemsChoiceType.commentRangeStart); }
+        public CT_CustomXmlRun     AddNewCustomXml()                       { return AddNewObject<CT_CustomXmlRun>  (ParagraphItemsChoiceType.customXml); }
+        public CT_Markup           AddNewCustomXmlDelRangeEnd()            { return AddNewObject<CT_Markup>        (ParagraphItemsChoiceType.customXmlDelRangeEnd); }
+        public CT_TrackChange      AddNewCustomXmlDelRangeStart()          { return AddNewObject<CT_TrackChange>   (ParagraphItemsChoiceType.customXmlDelRangeStart); }
+        public CT_Markup           AddNewCustomXmlInsRangeEnd()            { return AddNewObject<CT_Markup>        (ParagraphItemsChoiceType.customXmlInsRangeEnd); }
+        public CT_TrackChange      AddNewCustomXmlInsRangeStart()          { return AddNewObject<CT_TrackChange>   (ParagraphItemsChoiceType.customXmlInsRangeStart); }
+        public CT_Markup           AddNewCustomXmlMoveFromRangeEnd()       { return AddNewObject<CT_Markup>        (ParagraphItemsChoiceType.customXmlMoveFromRangeEnd); }
+        public CT_TrackChange      AddNewCustomXmlMoveFromRangeStart()     { return AddNewObject<CT_TrackChange>   (ParagraphItemsChoiceType.customXmlMoveFromRangeStart); }
+        public CT_Markup           AddNewCustomXmlMoveToRangeEnd()         { return AddNewObject<CT_Markup>        (ParagraphItemsChoiceType.customXmlMoveToRangeEnd); }
+        public CT_TrackChange      AddNewCustomXmlMoveToRangeStart()       { return AddNewObject<CT_TrackChange>   (ParagraphItemsChoiceType.customXmlMoveToRangeStart); }
+        public CT_RunTrackChange   AddNewDel()                             { return AddNewObject<CT_RunTrackChange>(ParagraphItemsChoiceType.del); }
+        public CT_SimpleField      AddNewFldSimple()                       { return AddNewObject<CT_SimpleField>   (ParagraphItemsChoiceType.fldSimple); }
+        public CT_Hyperlink1       AddNewHyperlink()                       { return AddNewObject<CT_Hyperlink1>    (ParagraphItemsChoiceType.hyperlink); }
+        public CT_RunTrackChange   AddNewIns()                             { return AddNewObject<CT_RunTrackChange>(ParagraphItemsChoiceType.ins); }
+        public CT_RunTrackChange   AddNewMoveFrom()                        { return AddNewObject<CT_RunTrackChange>(ParagraphItemsChoiceType.moveFrom); }
+        public CT_MarkupRange      AddNewMoveFromRangeEnd()                { return AddNewObject<CT_MarkupRange>   (ParagraphItemsChoiceType.moveFromRangeEnd); }
+        public CT_MoveBookmark     AddNewMoveFromRangeStart()              { return AddNewObject<CT_MoveBookmark>  (ParagraphItemsChoiceType.moveFromRangeStart); }
+        public CT_RunTrackChange   AddNewMoveTo()                          { return AddNewObject<CT_RunTrackChange>(ParagraphItemsChoiceType.moveTo); }
+        public CT_MarkupRange      AddNewMoveToRangeEnd()                  { return AddNewObject<CT_MarkupRange>   (ParagraphItemsChoiceType.moveToRangeEnd); }
+        public CT_MoveBookmark     AddNewMoveToRangeStart()                { return AddNewObject<CT_MoveBookmark>  (ParagraphItemsChoiceType.moveToRangeStart); }
+        public CT_OMath            AddNewOMath()                           { return AddNewObject<CT_OMath>         (ParagraphItemsChoiceType.oMath); }
+        public CT_OMathPara        AddNewOMathPara()                       { return AddNewObject<CT_OMathPara>     (ParagraphItemsChoiceType.oMathPara); }
+        public CT_Perm             AddNewPermEnd()                         { return AddNewObject<CT_Perm>          (ParagraphItemsChoiceType.permEnd); }
+        public CT_PermStart        AddNewPermStart()                       { return AddNewObject<CT_PermStart>     (ParagraphItemsChoiceType.permStart); }
+        public CT_ProofErr         AddNewProofErr()                        { return AddNewObject<CT_ProofErr>      (ParagraphItemsChoiceType.proofErr); }
+        public CT_R                AddNewR()                               { return AddNewObject<CT_R>             (ParagraphItemsChoiceType.r); }
+        public CT_SdtRun           AddNewSdt()                             { return AddNewObject<CT_SdtRun>        (ParagraphItemsChoiceType.sdt); }
+        public CT_SmartTagRun      AddNewSmartTag()                        { return AddNewObject<CT_SmartTagRun>   (ParagraphItemsChoiceType.smartTag); }
+        public CT_Rel              AddNewSubDoc()                          { return AddNewObject<CT_Rel>           (ParagraphItemsChoiceType.subDoc); }
 
-        public IList<CT_R> GetRList()
-        {
-            return GetObjectList<CT_R>(ParagraphItemsChoiceType.r);
-        }
+        public CT_MarkupRange      GetBookmarkEndArray(int p)                     { return GetObjectArray<CT_MarkupRange>   (p, ParagraphItemsChoiceType.bookmarkEnd); }
+        public CT_Bookmark         GetBookmarkStartArray(int p)                   { return GetObjectArray<CT_Bookmark>      (p, ParagraphItemsChoiceType.bookmarkStart); }
+        public CT_MarkupRange      GetCommentRangeEndArray(int p)                 { return GetObjectArray<CT_MarkupRange>   (p, ParagraphItemsChoiceType.commentRangeEnd); }
+        public CT_MarkupRange      GetCommentRangeStartArray(int p)               { return GetObjectArray<CT_MarkupRange>   (p, ParagraphItemsChoiceType.commentRangeStart); }
+        public CT_CustomXmlRun     GetCustomXmlArray(int p)                       { return GetObjectArray<CT_CustomXmlRun>  (p, ParagraphItemsChoiceType.customXml); }
+        public CT_Markup           GetCustomXmlDelRangeEndArray(int p)            { return GetObjectArray<CT_Markup>        (p, ParagraphItemsChoiceType.customXmlDelRangeEnd); }
+        public CT_TrackChange      GetCustomXmlDelRangeStartArray(int p)          { return GetObjectArray<CT_TrackChange>   (p, ParagraphItemsChoiceType.customXmlDelRangeStart); }
+        public CT_Markup           GetCustomXmlInsRangeEndArray(int p)            { return GetObjectArray<CT_Markup>        (p, ParagraphItemsChoiceType.customXmlInsRangeEnd); }
+        public CT_TrackChange      GetCustomXmlInsRangeStartArray(int p)          { return GetObjectArray<CT_TrackChange>   (p, ParagraphItemsChoiceType.customXmlInsRangeStart); }
+        public CT_Markup           GetCustomXmlMoveFromRangeEndArray(int p)       { return GetObjectArray<CT_Markup>        (p, ParagraphItemsChoiceType.customXmlMoveFromRangeEnd); }
+        public CT_TrackChange      GetCustomXmlMoveFromRangeStartArray(int p)     { return GetObjectArray<CT_TrackChange>   (p, ParagraphItemsChoiceType.customXmlMoveFromRangeStart); }
+        public CT_Markup           GetCustomXmlMoveToRangeEndArray(int p)         { return GetObjectArray<CT_Markup>        (p, ParagraphItemsChoiceType.customXmlMoveToRangeEnd); }
+        public CT_TrackChange      GetCustomXmlMoveToRangeStartArray(int p)       { return GetObjectArray<CT_TrackChange>   (p, ParagraphItemsChoiceType.customXmlMoveToRangeStart); }
+        public CT_RunTrackChange   GetDelArray(int p)                             { return GetObjectArray<CT_RunTrackChange>(p, ParagraphItemsChoiceType.del); }
+        public CT_SimpleField      GetFldSimpleArray(int p)                       { return GetObjectArray<CT_SimpleField>   (p, ParagraphItemsChoiceType.fldSimple); }
+        public CT_Hyperlink1       GetHyperlinkArray(int p)                       { return GetObjectArray<CT_Hyperlink1>    (p, ParagraphItemsChoiceType.hyperlink); }
+        public CT_RunTrackChange   GetInsArray(int p)                             { return GetObjectArray<CT_RunTrackChange>(p, ParagraphItemsChoiceType.ins); }
+        public CT_RunTrackChange   GetMoveFromArray(int p)                        { return GetObjectArray<CT_RunTrackChange>(p, ParagraphItemsChoiceType.moveFrom); }
+        public CT_MarkupRange      GetMoveFromRangeEndArray(int p)                { return GetObjectArray<CT_MarkupRange>   (p, ParagraphItemsChoiceType.moveFromRangeEnd); }
+        public CT_MoveBookmark     GetMoveFromRangeStartArray(int p)              { return GetObjectArray<CT_MoveBookmark>  (p, ParagraphItemsChoiceType.moveFromRangeStart); }
+        public CT_RunTrackChange   GetMoveToArray(int p)                          { return GetObjectArray<CT_RunTrackChange>(p, ParagraphItemsChoiceType.moveTo); }
+        public CT_MarkupRange      GetMoveToRangeEndArray(int p)                  { return GetObjectArray<CT_MarkupRange>   (p, ParagraphItemsChoiceType.moveToRangeEnd); }
+        public CT_MoveBookmark     GetMoveToRangeStartArray(int p)                { return GetObjectArray<CT_MoveBookmark>  (p, ParagraphItemsChoiceType.moveToRangeStart); }
+        public CT_OMath            GetOMathArray(int p)                           { return GetObjectArray<CT_OMath>         (p, ParagraphItemsChoiceType.oMath); }
+        public CT_OMathPara        GetOMathParaArray(int p)                       { return GetObjectArray<CT_OMathPara>     (p, ParagraphItemsChoiceType.oMathPara); }
+        public CT_Perm             GetPermEndArray(int p)                         { return GetObjectArray<CT_Perm>          (p, ParagraphItemsChoiceType.permEnd); }
+        public CT_PermStart        GetPermStartArray(int p)                       { return GetObjectArray<CT_PermStart>     (p, ParagraphItemsChoiceType.permStart); }
+        public CT_ProofErr         GetProofErrArray(int p)                        { return GetObjectArray<CT_ProofErr>      (p, ParagraphItemsChoiceType.proofErr); }
+        public CT_R                GetRArray(int p)                               { return GetObjectArray<CT_R>             (p, ParagraphItemsChoiceType.r); }
+        public CT_SdtRun           GetSdtArray(int p)                             { return GetObjectArray<CT_SdtRun>        (p, ParagraphItemsChoiceType.sdt); }
+        public CT_SmartTagRun      GetSmartTagArray(int p)                        { return GetObjectArray<CT_SmartTagRun>   (p, ParagraphItemsChoiceType.smartTag); }
+        public CT_Rel              GetSubDocArray(int p)                          { return GetObjectArray<CT_Rel>           (p, ParagraphItemsChoiceType.subDoc); }
 
-        public CT_R GetRArray(int pos)
-        {
-            return GetObjectArray<CT_R>(pos, ParagraphItemsChoiceType.r);
-        }
+        public IList<CT_MarkupRange>      GetBookmarkEndList()                     { return GetObjectList<CT_MarkupRange>   (ParagraphItemsChoiceType.bookmarkEnd); }
+        public IList<CT_Bookmark>         GetBookmarkStartList()                   { return GetObjectList<CT_Bookmark>      (ParagraphItemsChoiceType.bookmarkStart); }
+        public IList<CT_MarkupRange>      GetCommentRangeEndList()                 { return GetObjectList<CT_MarkupRange>   (ParagraphItemsChoiceType.commentRangeEnd); }
+        public IList<CT_MarkupRange>      GetCommentRangeStartList()               { return GetObjectList<CT_MarkupRange>   (ParagraphItemsChoiceType.commentRangeStart); }
+        public IList<CT_CustomXmlRun>     GetCustomXmlList()                       { return GetObjectList<CT_CustomXmlRun>  (ParagraphItemsChoiceType.customXml); }
+        public IList<CT_Markup>           GetCustomXmlDelRangeEndList()            { return GetObjectList<CT_Markup>        (ParagraphItemsChoiceType.customXmlDelRangeEnd); }
+        public IList<CT_TrackChange>      GetCustomXmlDelRangeStartList()          { return GetObjectList<CT_TrackChange>   (ParagraphItemsChoiceType.customXmlDelRangeStart); }
+        public IList<CT_Markup>           GetCustomXmlInsRangeEndList()            { return GetObjectList<CT_Markup>        (ParagraphItemsChoiceType.customXmlInsRangeEnd); }
+        public IList<CT_TrackChange>      GetCustomXmlInsRangeStartList()          { return GetObjectList<CT_TrackChange>   (ParagraphItemsChoiceType.customXmlInsRangeStart); }
+        public IList<CT_Markup>           GetCustomXmlMoveFromRangeEndList()       { return GetObjectList<CT_Markup>        (ParagraphItemsChoiceType.customXmlMoveFromRangeEnd); }
+        public IList<CT_TrackChange>      GetCustomXmlMoveFromRangeStartList()     { return GetObjectList<CT_TrackChange>   (ParagraphItemsChoiceType.customXmlMoveFromRangeStart); }
+        public IList<CT_Markup>           GetCustomXmlMoveToRangeEndList()         { return GetObjectList<CT_Markup>        (ParagraphItemsChoiceType.customXmlMoveToRangeEnd); }
+        public IList<CT_TrackChange>      GetCustomXmlMoveToRangeStartList()       { return GetObjectList<CT_TrackChange>   (ParagraphItemsChoiceType.customXmlMoveToRangeStart); }
+        public IList<CT_RunTrackChange>   GetDelList()                             { return GetObjectList<CT_RunTrackChange>(ParagraphItemsChoiceType.del); }
+        public IList<CT_SimpleField>      GetFldSimpleList()                       { return GetObjectList<CT_SimpleField>   (ParagraphItemsChoiceType.fldSimple); }
+        public IList<CT_Hyperlink1>       GetHyperlinkList()                       { return GetObjectList<CT_Hyperlink1>    (ParagraphItemsChoiceType.hyperlink); }
+        public IList<CT_RunTrackChange>   GetInsList()                             { return GetObjectList<CT_RunTrackChange>(ParagraphItemsChoiceType.ins); }
+        public IList<CT_RunTrackChange>   GetMoveFromList()                        { return GetObjectList<CT_RunTrackChange>(ParagraphItemsChoiceType.moveFrom); }
+        public IList<CT_MarkupRange>      GetMoveFromRangeEndList()                { return GetObjectList<CT_MarkupRange>   (ParagraphItemsChoiceType.moveFromRangeEnd); }
+        public IList<CT_MoveBookmark>     GetMoveFromRangeStartList()              { return GetObjectList<CT_MoveBookmark>  (ParagraphItemsChoiceType.moveFromRangeStart); }
+        public IList<CT_RunTrackChange>   GetMoveToList()                          { return GetObjectList<CT_RunTrackChange>(ParagraphItemsChoiceType.moveTo); }
+        public IList<CT_MarkupRange>      GetMoveToRangeEndList()                  { return GetObjectList<CT_MarkupRange>   (ParagraphItemsChoiceType.moveToRangeEnd); }
+        public IList<CT_MoveBookmark>     GetMoveToRangeStartList()                { return GetObjectList<CT_MoveBookmark>  (ParagraphItemsChoiceType.moveToRangeStart); }
+        public IList<CT_OMath>            GetOMathList()                           { return GetObjectList<CT_OMath>         (ParagraphItemsChoiceType.oMath); }
+        public IList<CT_OMathPara>        GetOMathParaList()                       { return GetObjectList<CT_OMathPara>     (ParagraphItemsChoiceType.oMathPara); }
+        public IList<CT_Perm>             GetPermEndList()                         { return GetObjectList<CT_Perm>          (ParagraphItemsChoiceType.permEnd); }
+        public IList<CT_PermStart>        GetPermStartList()                       { return GetObjectList<CT_PermStart>     (ParagraphItemsChoiceType.permStart); }
+        public IList<CT_ProofErr>         GetProofErrList()                        { return GetObjectList<CT_ProofErr>      (ParagraphItemsChoiceType.proofErr); }
+        public IList<CT_R>                GetRList()                               { return GetObjectList<CT_R>             (ParagraphItemsChoiceType.r); }
+        public IList<CT_SdtRun>           GetSdtList()                             { return GetObjectList<CT_SdtRun>        (ParagraphItemsChoiceType.sdt); }
+        public IList<CT_SmartTagRun>      GetSmartTagList()                        { return GetObjectList<CT_SmartTagRun>   (ParagraphItemsChoiceType.smartTag); }
+        public IList<CT_Rel>              GetSubDocList()                          { return GetObjectList<CT_Rel>           (ParagraphItemsChoiceType.subDoc); }
 
-        public int SizeOfBookmarkStartArray()
-        {
-            return SizeOfArray(ParagraphItemsChoiceType.bookmarkStart);
-        }
+        public CT_MarkupRange      InsertNewBookmarkEnd(int p)                     { return InsertNewObject<CT_MarkupRange>   (ParagraphItemsChoiceType.bookmarkEnd, p); }
+        public CT_Bookmark         InsertNewBookmarkStart(int p)                   { return InsertNewObject<CT_Bookmark>      (ParagraphItemsChoiceType.bookmarkStart, p); }
+        public CT_MarkupRange      InsertNewCommentRangeEnd(int p)                 { return InsertNewObject<CT_MarkupRange>   (ParagraphItemsChoiceType.commentRangeEnd, p); }
+        public CT_MarkupRange      InsertNewCommentRangeStart(int p)               { return InsertNewObject<CT_MarkupRange>   (ParagraphItemsChoiceType.commentRangeStart, p); }
+        public CT_CustomXmlRun     InsertNewCustomXml(int p)                       { return InsertNewObject<CT_CustomXmlRun>  (ParagraphItemsChoiceType.customXml, p); }
+        public CT_Markup           InsertNewCustomXmlDelRangeEnd(int p)            { return InsertNewObject<CT_Markup>        (ParagraphItemsChoiceType.customXmlDelRangeEnd, p); }
+        public CT_TrackChange      InsertNewCustomXmlDelRangeStart(int p)          { return InsertNewObject<CT_TrackChange>   (ParagraphItemsChoiceType.customXmlDelRangeStart, p); }
+        public CT_Markup           InsertNewCustomXmlInsRangeEnd(int p)            { return InsertNewObject<CT_Markup>        (ParagraphItemsChoiceType.customXmlInsRangeEnd, p); }
+        public CT_TrackChange      InsertNewCustomXmlInsRangeStart(int p)          { return InsertNewObject<CT_TrackChange>   (ParagraphItemsChoiceType.customXmlInsRangeStart, p); }
+        public CT_Markup           InsertNewCustomXmlMoveFromRangeEnd(int p)       { return InsertNewObject<CT_Markup>        (ParagraphItemsChoiceType.customXmlMoveFromRangeEnd, p); }
+        public CT_TrackChange      InsertNewCustomXmlMoveFromRangeStart(int p)     { return InsertNewObject<CT_TrackChange>   (ParagraphItemsChoiceType.customXmlMoveFromRangeStart, p); }
+        public CT_Markup           InsertNewCustomXmlMoveToRangeEnd(int p)         { return InsertNewObject<CT_Markup>        (ParagraphItemsChoiceType.customXmlMoveToRangeEnd, p); }
+        public CT_TrackChange      InsertNewCustomXmlMoveToRangeStart(int p)       { return InsertNewObject<CT_TrackChange>   (ParagraphItemsChoiceType.customXmlMoveToRangeStart, p); }
+        public CT_RunTrackChange   InsertNewDel(int p)                             { return InsertNewObject<CT_RunTrackChange>(ParagraphItemsChoiceType.del, p); }
+        public CT_SimpleField      InsertNewFldSimple(int p)                       { return InsertNewObject<CT_SimpleField>   (ParagraphItemsChoiceType.fldSimple, p); }
+        public CT_Hyperlink1       InsertNewHyperlink(int p)                       { return InsertNewObject<CT_Hyperlink1>    (ParagraphItemsChoiceType.hyperlink, p); }
+        public CT_RunTrackChange   InsertNewIns(int p)                             { return InsertNewObject<CT_RunTrackChange>(ParagraphItemsChoiceType.ins, p); }
+        public CT_RunTrackChange   InsertNewMoveFrom(int p)                        { return InsertNewObject<CT_RunTrackChange>(ParagraphItemsChoiceType.moveFrom, p); }
+        public CT_MarkupRange      InsertNewMoveFromRangeEnd(int p)                { return InsertNewObject<CT_MarkupRange>   (ParagraphItemsChoiceType.moveFromRangeEnd, p); }
+        public CT_MoveBookmark     InsertNewMoveFromRangeStart(int p)              { return InsertNewObject<CT_MoveBookmark>  (ParagraphItemsChoiceType.moveFromRangeStart, p); }
+        public CT_RunTrackChange   InsertNewMoveTo(int p)                          { return InsertNewObject<CT_RunTrackChange>(ParagraphItemsChoiceType.moveTo, p); }
+        public CT_MarkupRange      InsertNewMoveToRangeEnd(int p)                  { return InsertNewObject<CT_MarkupRange>   (ParagraphItemsChoiceType.moveToRangeEnd, p); }
+        public CT_MoveBookmark     InsertNewMoveToRangeStart(int p)                { return InsertNewObject<CT_MoveBookmark>  (ParagraphItemsChoiceType.moveToRangeStart, p); }
+        public CT_OMath            InsertNewOMath(int p)                           { return InsertNewObject<CT_OMath>         (ParagraphItemsChoiceType.oMath, p); }
+        public CT_OMathPara        InsertNewOMathPara(int p)                       { return InsertNewObject<CT_OMathPara>     (ParagraphItemsChoiceType.oMathPara, p); }
+        public CT_Perm             InsertNewPermEnd(int p)                         { return InsertNewObject<CT_Perm>          (ParagraphItemsChoiceType.permEnd, p); }
+        public CT_PermStart        InsertNewPermStart(int p)                       { return InsertNewObject<CT_PermStart>     (ParagraphItemsChoiceType.permStart, p); }
+        public CT_ProofErr         InsertNewProofErr(int p)                        { return InsertNewObject<CT_ProofErr>      (ParagraphItemsChoiceType.proofErr, p); }
+        public CT_R                InsertNewR(int p)                               { return InsertNewObject<CT_R>             (ParagraphItemsChoiceType.r, p); }
+        public CT_SdtRun           InsertNewSdt(int p)                             { return InsertNewObject<CT_SdtRun>        (ParagraphItemsChoiceType.sdt, p); }
+        public CT_SmartTagRun      InsertNewSmartTag(int p)                        { return InsertNewObject<CT_SmartTagRun>   (ParagraphItemsChoiceType.smartTag, p); }
+        public CT_Rel              InsertNewSubDoc(int p)                          { return InsertNewObject<CT_Rel>           (ParagraphItemsChoiceType.subDoc, p); }
 
-        public int SizeOfBookmarkEndArray()
-        {
-            return SizeOfArray(ParagraphItemsChoiceType.bookmarkEnd);
-        }
+        public void RemoveBookmarkEnd(int p)                     { RemoveObject(ParagraphItemsChoiceType.bookmarkEnd, p); }
+        public void RemoveBookmarkStart(int p)                   { RemoveObject(ParagraphItemsChoiceType.bookmarkStart, p); }
+        public void RemoveCommentRangeEnd(int p)                 { RemoveObject(ParagraphItemsChoiceType.commentRangeEnd, p); }
+        public void RemoveCommentRangeStart(int p)               { RemoveObject(ParagraphItemsChoiceType.commentRangeStart, p); }
+        public void RemoveCustomXml(int p)                       { RemoveObject(ParagraphItemsChoiceType.customXml, p); }
+        public void RemoveCustomXmlDelRangeEnd(int p)            { RemoveObject(ParagraphItemsChoiceType.customXmlDelRangeEnd, p); }
+        public void RemoveCustomXmlDelRangeStart(int p)          { RemoveObject(ParagraphItemsChoiceType.customXmlDelRangeStart, p); }
+        public void RemoveCustomXmlInsRangeEnd(int p)            { RemoveObject(ParagraphItemsChoiceType.customXmlInsRangeEnd, p); }
+        public void RemoveCustomXmlInsRangeStart(int p)          { RemoveObject(ParagraphItemsChoiceType.customXmlInsRangeStart, p); }
+        public void RemoveCustomXmlMoveFromRangeEnd(int p)       { RemoveObject(ParagraphItemsChoiceType.customXmlMoveFromRangeEnd, p); }
+        public void RemoveCustomXmlMoveFromRangeStart(int p)     { RemoveObject(ParagraphItemsChoiceType.customXmlMoveFromRangeStart, p); }
+        public void RemoveCustomXmlMoveToRangeEnd(int p)         { RemoveObject(ParagraphItemsChoiceType.customXmlMoveToRangeEnd, p); }
+        public void RemoveCustomXmlMoveToRangeStart(int p)       { RemoveObject(ParagraphItemsChoiceType.customXmlMoveToRangeStart, p); }
+        public void RemoveDel(int p)                             { RemoveObject(ParagraphItemsChoiceType.del, p); }
+        public void RemoveFldSimple(int p)                       { RemoveObject(ParagraphItemsChoiceType.fldSimple, p); }
+        public void RemoveHyperlink(int p)                       { RemoveObject(ParagraphItemsChoiceType.hyperlink, p); }
+        public void RemoveIns(int p)                             { RemoveObject(ParagraphItemsChoiceType.ins, p); }
+        public void RemoveMoveFrom(int p)                        { RemoveObject(ParagraphItemsChoiceType.moveFrom, p); }
+        public void RemoveMoveFromRangeEnd(int p)                { RemoveObject(ParagraphItemsChoiceType.moveFromRangeEnd, p); }
+        public void RemoveMoveFromRangeStart(int p)              { RemoveObject(ParagraphItemsChoiceType.moveFromRangeStart, p); }
+        public void RemoveMoveTo(int p)                          { RemoveObject(ParagraphItemsChoiceType.moveTo, p); }
+        public void RemoveMoveToRangeEnd(int p)                  { RemoveObject(ParagraphItemsChoiceType.moveToRangeEnd, p); }
+        public void RemoveMoveToRangeStart(int p)                { RemoveObject(ParagraphItemsChoiceType.moveToRangeStart, p); }
+        public void RemoveOMath(int p)                           { RemoveObject(ParagraphItemsChoiceType.oMath, p); }
+        public void RemoveOMathPara(int p)                       { RemoveObject(ParagraphItemsChoiceType.oMathPara, p); }
+        public void RemovePermEnd(int p)                         { RemoveObject(ParagraphItemsChoiceType.permEnd, p); }
+        public void RemovePermStart(int p)                       { RemoveObject(ParagraphItemsChoiceType.permStart, p); }
+        public void RemoveProofErr(int p)                        { RemoveObject(ParagraphItemsChoiceType.proofErr, p); }
+        public void RemoveR(int p)                               { RemoveObject(ParagraphItemsChoiceType.r, p); }
+        public void RemoveSdt(int p)                             { RemoveObject(ParagraphItemsChoiceType.sdt, p); }
+        public void RemoveSmartTag(int p)                        { RemoveObject(ParagraphItemsChoiceType.smartTag, p); }
+        public void RemoveSubDoc(int p)                          { RemoveObject(ParagraphItemsChoiceType.subDoc, p); }
 
-        public CT_Bookmark GetBookmarkStartArray(int p)
-        {
-            return GetObjectArray<CT_Bookmark>(p, ParagraphItemsChoiceType.bookmarkStart);
-        }
+        public void SetBookmarkEndArray(int p, CT_MarkupRange obj)                 { SetObject(ParagraphItemsChoiceType.bookmarkEnd, p, obj); }
+        public void SetBookmarkStartArray(int p, CT_Bookmark obj)                  { SetObject(ParagraphItemsChoiceType.bookmarkStart, p, obj); }
+        public void SetCommentRangeEndArray(int p, CT_MarkupRange obj)             { SetObject(ParagraphItemsChoiceType.commentRangeEnd, p, obj); }
+        public void SetCommentRangeStartArray(int p, CT_MarkupRange obj)           { SetObject(ParagraphItemsChoiceType.commentRangeStart, p, obj); }
+        public void SetCustomXmlArray(int p, CT_CustomXmlRun obj)                  { SetObject(ParagraphItemsChoiceType.customXml, p, obj); }
+        public void SetCustomXmlDelRangeEndArray(int p, CT_Markup obj)             { SetObject(ParagraphItemsChoiceType.customXmlDelRangeEnd, p, obj); }
+        public void SetCustomXmlDelRangeStartArray(int p, CT_TrackChange obj)      { SetObject(ParagraphItemsChoiceType.customXmlDelRangeStart, p, obj); }
+        public void SetCustomXmlInsRangeEndArray(int p, CT_Markup obj)             { SetObject(ParagraphItemsChoiceType.customXmlInsRangeEnd, p, obj); }
+        public void SetCustomXmlInsRangeStartArray(int p, CT_TrackChange obj)      { SetObject(ParagraphItemsChoiceType.customXmlInsRangeStart, p, obj); }
+        public void SetCustomXmlMoveFromRangeEndArray(int p, CT_Markup obj)        { SetObject(ParagraphItemsChoiceType.customXmlMoveFromRangeEnd, p, obj); }
+        public void SetCustomXmlMoveFromRangeStartArray(int p, CT_TrackChange obj) { SetObject(ParagraphItemsChoiceType.customXmlMoveFromRangeStart, p, obj); }
+        public void SetCustomXmlMoveToRangeEndArray(int p, CT_Markup obj)          { SetObject(ParagraphItemsChoiceType.customXmlMoveToRangeEnd, p, obj); }
+        public void SetCustomXmlMoveToRangeStartArray(int p, CT_TrackChange obj)   { SetObject(ParagraphItemsChoiceType.customXmlMoveToRangeStart, p, obj); }
+        public void SetDelArray(int p, CT_RunTrackChange obj)                      { SetObject(ParagraphItemsChoiceType.del, p, obj); }
+        public void SetFldSimpleArray(int p, CT_SimpleField obj)                   { SetObject(ParagraphItemsChoiceType.fldSimple, p, obj); }
+        public void SetHyperlinkArray(int p, CT_Hyperlink1 obj)                    { SetObject(ParagraphItemsChoiceType.hyperlink, p, obj); }
+        public void SetInsArray(int p, CT_RunTrackChange obj)                      { SetObject(ParagraphItemsChoiceType.ins, p, obj); }
+        public void SetMoveFromArray(int p, CT_RunTrackChange obj)                 { SetObject(ParagraphItemsChoiceType.moveFrom, p, obj); }
+        public void SetMoveFromRangeEndArray(int p, CT_MarkupRange obj)            { SetObject(ParagraphItemsChoiceType.moveFromRangeEnd, p, obj); }
+        public void SetMoveFromRangeStartArray(int p, CT_MoveBookmark obj)         { SetObject(ParagraphItemsChoiceType.moveFromRangeStart, p, obj); }
+        public void SetMoveToArray(int p, CT_RunTrackChange obj)                   { SetObject(ParagraphItemsChoiceType.moveTo, p, obj); }
+        public void SetMoveToRangeEndArray(int p, CT_MarkupRange obj)              { SetObject(ParagraphItemsChoiceType.moveToRangeEnd, p, obj); }
+        public void SetMoveToRangeStartArray(int p, CT_MoveBookmark obj)           { SetObject(ParagraphItemsChoiceType.moveToRangeStart, p, obj); }
+        public void SetOMathArray(int p, CT_OMath obj)                             { SetObject(ParagraphItemsChoiceType.oMath, p, obj); }
+        public void SetOMathParaArray(int p, CT_OMathPara obj)                     { SetObject(ParagraphItemsChoiceType.oMathPara, p, obj); }
+        public void SetPermEndArray(int p, CT_Perm obj)                            { SetObject(ParagraphItemsChoiceType.permEnd, p, obj); }
+        public void SetPermStartArray(int p, CT_PermStart obj)                     { SetObject(ParagraphItemsChoiceType.permStart, p, obj); }
+        public void SetProofErrArray(int p, CT_ProofErr obj)                       { SetObject(ParagraphItemsChoiceType.proofErr, p, obj); }
+        public void SetRArray(int p, CT_R obj)                                     { SetObject(ParagraphItemsChoiceType.r, p, obj); }
+        public void SetSdtArray(int p, CT_SdtRun obj)                              { SetObject(ParagraphItemsChoiceType.sdt, p, obj); }
+        public void SetSmartTagArray(int p, CT_SmartTagRun obj)                    { SetObject(ParagraphItemsChoiceType.smartTag, p, obj); }
+        public void SetSubDocArray(int p, CT_Rel obj)                              { SetObject(ParagraphItemsChoiceType.subDoc, p, obj); }
 
-        public IEnumerable<CT_Bookmark> GetBookmarkStartList()
-        {
-            return GetObjectList<CT_Bookmark>(ParagraphItemsChoiceType.bookmarkStart);
-        }
+        public int SizeOfBookmarkEndArray()                     { return SizeOfArray(ParagraphItemsChoiceType.bookmarkEnd); }
+        public int SizeOfBookmarkStartArray()                   { return SizeOfArray(ParagraphItemsChoiceType.bookmarkStart); }
+        public int SizeOfCommentRangeEndArray()                 { return SizeOfArray(ParagraphItemsChoiceType.commentRangeEnd); }
+        public int SizeOfCommentRangeStartArray()               { return SizeOfArray(ParagraphItemsChoiceType.commentRangeStart); }
+        public int SizeOfCustomXmlArray()                       { return SizeOfArray(ParagraphItemsChoiceType.customXml); }
+        public int SizeOfCustomXmlDelRangeEndArray()            { return SizeOfArray(ParagraphItemsChoiceType.customXmlDelRangeEnd); }
+        public int SizeOfCustomXmlDelRangeStartArray()          { return SizeOfArray(ParagraphItemsChoiceType.customXmlDelRangeStart); }
+        public int SizeOfCustomXmlInsRangeEndArray()            { return SizeOfArray(ParagraphItemsChoiceType.customXmlInsRangeEnd); }
+        public int SizeOfCustomXmlInsRangeStartArray()          { return SizeOfArray(ParagraphItemsChoiceType.customXmlInsRangeStart); }
+        public int SizeOfCustomXmlMoveFromRangeEndArray()       { return SizeOfArray(ParagraphItemsChoiceType.customXmlMoveFromRangeEnd); }
+        public int SizeOfCustomXmlMoveFromRangeStartArray()     { return SizeOfArray(ParagraphItemsChoiceType.customXmlMoveFromRangeStart); }
+        public int SizeOfCustomXmlMoveToRangeEndArray()         { return SizeOfArray(ParagraphItemsChoiceType.customXmlMoveToRangeEnd); }
+        public int SizeOfCustomXmlMoveToRangeStartArray()       { return SizeOfArray(ParagraphItemsChoiceType.customXmlMoveToRangeStart); }
+        public int SizeOfDelArray()                             { return SizeOfArray(ParagraphItemsChoiceType.del); }
+        public int SizeOfFldSimpleArray()                       { return SizeOfArray(ParagraphItemsChoiceType.fldSimple); }
+        public int SizeOfHyperlinkArray()                       { return SizeOfArray(ParagraphItemsChoiceType.hyperlink); }
+        public int SizeOfInsArray()                             { return SizeOfArray(ParagraphItemsChoiceType.ins); }
+        public int SizeOfMoveFromArray()                        { return SizeOfArray(ParagraphItemsChoiceType.moveFrom); }
+        public int SizeOfMoveFromRangeEndArray()                { return SizeOfArray(ParagraphItemsChoiceType.moveFromRangeEnd); }
+        public int SizeOfMoveFromRangeStartArray()              { return SizeOfArray(ParagraphItemsChoiceType.moveFromRangeStart); }
+        public int SizeOfMoveToArray()                          { return SizeOfArray(ParagraphItemsChoiceType.moveTo); }
+        public int SizeOfMoveToRangeEndArray()                  { return SizeOfArray(ParagraphItemsChoiceType.moveToRangeEnd); }
+        public int SizeOfMoveToRangeStartArray()                { return SizeOfArray(ParagraphItemsChoiceType.moveToRangeStart); }
+        public int SizeOfOMathArray()                           { return SizeOfArray(ParagraphItemsChoiceType.oMath); }
+        public int SizeOfOMathParaArray()                       { return SizeOfArray(ParagraphItemsChoiceType.oMathPara); }
+        public int SizeOfPermEndArray()                         { return SizeOfArray(ParagraphItemsChoiceType.permEnd); }
+        public int SizeOfPermStartArray()                       { return SizeOfArray(ParagraphItemsChoiceType.permStart); }
+        public int SizeOfProofErrArray()                        { return SizeOfArray(ParagraphItemsChoiceType.proofErr); }
+        public int SizeOfRArray()                               { return SizeOfArray(ParagraphItemsChoiceType.r); }
+        public int SizeOfSdtArray()                             { return SizeOfArray(ParagraphItemsChoiceType.sdt); }
+        public int SizeOfSmartTagArray()                        { return SizeOfArray(ParagraphItemsChoiceType.smartTag); }
+        public int SizeOfSubDocArray()                          { return SizeOfArray(ParagraphItemsChoiceType.subDoc); }
+        #pragma warning restore format
     }
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]
