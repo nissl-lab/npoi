@@ -1,8 +1,10 @@
 ﻿using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.Streaming;
 using NUnit.Framework;
+using System.IO;
 using TestCases.SS.UserModel;
 
 namespace TestCases.XSSF.Streaming
@@ -24,7 +26,7 @@ namespace TestCases.XSSF.Streaming
         [Ignore("Reading data is not supported")] public override void Bug57798() { /* Reading data is not supported */ }
 
         [Test]
-        public void Tug49253()
+        public void Bug49253()
         {
             IWorkbook wb1 = new SXSSFWorkbook();
             IWorkbook wb2 = new SXSSFWorkbook();
@@ -56,6 +58,31 @@ namespace TestCases.XSSF.Streaming
 
             wb1.Close();
             wb2.Close();
+        }
+
+        // bug 60197: setSheetOrder should update sheet-scoped named ranges to maintain references to the sheets before the re-order
+        [Test]
+        override
+        public void bug60197_NamedRangesReferToCorrectSheetWhenSheetOrderIsChanged()
+        {
+            try
+            {
+                base.bug60197_NamedRangesReferToCorrectSheetWhenSheetOrderIsChanged();
+            }
+            catch (RuntimeException e)
+            {
+                var cause = e.InnerException;
+                if (cause is IOException && cause.Message == "Stream closed")
+                {
+                    // expected on the second time that _testDataProvider.writeOutAndReadBack(SXSSFWorkbook) is called
+                    // if the test makes it this far, then we know that XSSFName sheet indices are updated when sheet
+                    // order is changed, which is the purpose of this test. Therefore, consider this a passing test.
+                }
+                else
+                {
+                    throw e;
+                }
+            }
         }
     }
 }
