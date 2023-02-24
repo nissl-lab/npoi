@@ -682,14 +682,21 @@ namespace NPOI.SS.Util
         //    if (font.IsItalic) str.AddAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, startIdx, endIdx);
         //    TODO-Fonts: not supported: if (font.Underline == (byte)FontUnderlineType.SINGLE) str.AddAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);           
         //}
-
+        
         /// <summary>
         /// Convert HSSFFont to Font.
         /// </summary>
         /// <param name="font1">The font.</param>
         /// <returns></returns>
+        /// <exception cref="FontException">Will throw this if no font are 
+        /// found by SixLabors in the current environment.</exception>
         internal static Font IFont2Font(IFont font1)
         {
+            if (SystemFonts.Families == null || SystemFonts.Families.Count() == 0)
+            {
+                throw new FontException("No fonts found installed on the machine.");
+            }
+
             FontStyle style = FontStyle.Regular;
             if (font1.IsBold)
             {
