@@ -12,7 +12,7 @@
     <AssemblyName>NPOI</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
     <ReleaseVersion>1.2.4</ReleaseVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -1359,7 +1359,6 @@
     <Compile Include="WP\UserModel\IParagraph.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="npoi.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
