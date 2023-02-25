@@ -230,7 +230,10 @@ namespace NPOI.HPSF
         {
             long id = p.ID;
             RemoveProperty(id);
-            preprops.Add(p);
+            if (p.Value != null)
+            {
+                preprops.Add(p);
+            }
             dirty = true;
         }
 
