@@ -1459,7 +1459,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "id", this.id);
-            XmlHelper.WriteAttribute(sw, "idx", this.idx);
+            XmlHelper.WriteAttribute(sw, "idx", this.idx, true);
             sw.Write("/>");
         }
 

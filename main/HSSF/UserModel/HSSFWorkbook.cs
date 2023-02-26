@@ -460,20 +460,64 @@ namespace NPOI.HSSF.UserModel
             }
 
             workbook.UpdateNamesAfterCellShift(shifter);
+            UpdateNamedRangesAfterSheetReorder(oldSheetIndex, pos);
 
+            UpdateActiveSheetAfterSheetReorder(oldSheetIndex, pos);
+        }
+
+        /**
+         * copy-pasted from XSSFWorkbook#updateNamedRangesAfterSheetReorder(int, int)
+         * <p>
+         * update sheet-scoped named ranges in this workbook after changing the sheet order
+         * of a sheet at oldIndex to newIndex.
+         * Sheets between these indices will move left or right by 1.
+         *
+         * @param oldIndex the original index of the re-ordered sheet
+         * @param newIndex the new index of the re-ordered sheet
+         */
+        private void UpdateNamedRangesAfterSheetReorder(int oldIndex, int newIndex)
+        {
+            // update sheet index of sheet-scoped named ranges
+            foreach (HSSFName name in names)
+            {
+                int i = name.SheetIndex;
+                // name has sheet-level scope
+                if (i != -1)
+                {
+                    // name refers to this sheet
+                    if (i == oldIndex)
+                    {
+                        name.SheetIndex = newIndex;
+                    }
+                    // if oldIndex > newIndex then this sheet moved left and sheets between newIndex and oldIndex moved right
+                    else if (newIndex <= i && i < oldIndex)
+                    {
+                        name.SheetIndex = i + 1;
+                    }
+                    // if oldIndex < newIndex then this sheet moved right and sheets between oldIndex and newIndex moved left
+                    else if (oldIndex < i && i <= newIndex)
+                    {
+                        name.SheetIndex = i - 1;
+                    }
+                }
+            }
+        }
+
+        private void UpdateActiveSheetAfterSheetReorder(int oldIndex, int newIndex)
+        {
             // adjust active sheet if necessary
             int active = ActiveSheetIndex;
-            if (active == oldSheetIndex)
+            if (active == oldIndex)
             {
                 // moved sheet was the active one
-                SetActiveSheet(pos);
+                SetActiveSheet(newIndex);
             }
-            else if ((active < oldSheetIndex && active < pos) ||
-                  (active > oldSheetIndex && active > pos))
+            else if ((active < oldIndex && active < newIndex) ||
+                     (active > oldIndex && active > newIndex))
             {
                 // not affected
             }
-            else if (pos > oldSheetIndex)
+            else if (newIndex > oldIndex)
             {
                 // moved sheet was below before and is above now => active is one less
                 SetActiveSheet(active - 1);
