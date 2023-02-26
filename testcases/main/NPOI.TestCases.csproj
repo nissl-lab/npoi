@@ -365,9 +365,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="POIFS\Data\excel_with_embeded.xls" />
     <None Include="POIFS\Data\ppt_with_embeded.ppt" />
     <None Include="POIFS\Data\ShortLastBlock.qwp" />

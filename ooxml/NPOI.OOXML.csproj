@@ -390,9 +390,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Enums.NET">
       <Version>4.0.0</Version>
     </PackageReference>

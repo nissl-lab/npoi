@@ -1359,9 +1359,6 @@
     <Compile Include="WP\UserModel\IParagraph.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\functionMetadata.txt">
       <LogicalName>functionMetadata.txt</LogicalName>
     </EmbeddedResource>
