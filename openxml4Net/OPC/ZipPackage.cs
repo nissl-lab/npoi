@@ -332,7 +332,7 @@ namespace NPOI.OpenXml4Net.OPC
                 return PackagingUriHelper.CreatePartName(ZipHelper
                         .GetOPCNameFromZipItemName(entry.Name));
             }
-            catch (Exception)
+            catch
             {
                 // We assume we can continue, even in degraded mode ...
                 //logger.log(POILogger.WARN,"Entry "

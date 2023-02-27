@@ -190,7 +190,7 @@ namespace NPOI.POIFS.Crypt.Standard
             {
                 this.obuffer = this.cipher.Update(this.ibuffer, 0, i);
             }
-            catch (Exception)
+            catch
             {
                 this.obuffer = null;
                 throw;
@@ -293,7 +293,7 @@ namespace NPOI.POIFS.Crypt.Standard
                 {
                     this.cipher.DoFinal();
                 }
-                catch (Exception)
+                catch
                 {
                 }
             }

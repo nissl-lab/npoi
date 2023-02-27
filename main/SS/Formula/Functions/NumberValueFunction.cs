@@ -89,7 +89,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 return e.GetErrorEval();
             }
-            catch (Exception)
+            catch
             {
                 return ErrorEval.VALUE_INVALID; //If any of the arguments are not valid, NUMBERVALUE returns the #VALUE! error value.
             }
