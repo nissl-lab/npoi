@@ -40,7 +40,7 @@
 		<PackageReference Include="IronDevTools.PerformanceAnalyzer" Version="2022.11.10663" />
 		<PackageReference Include="Enums.NET" Version="4.0.1" />
 		<PackageReference Include="MathNet.Numerics.Signed" Version="5.0.0" />
-		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.2.1" />
+		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.1" />
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 		<PackageReference Include="SharpZipLib" Version="1.4.2" />
 		<PackageReference Include="SixLabors.Fonts" Version="1.0.0-beta18" />

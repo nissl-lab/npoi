@@ -1,0 +1,13 @@
+<UserSettings>
+	<ApplicationIdentity version="17.0"/>
+	<ToolsOptions>
+		<ToolsOptionsCategory name="TextEditor"
+		                      RegisteredName="TextEditor">
+			<ToolsOptionsSubCategory name="CSharp-Specific"
+			                         RegisteredName="CSharp-Specific"
+			                         PackageName="CSharpPackage">
+				<PropertyValue name="Style_UseImplicitTypeWhereApparent">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="false" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+			</ToolsOptionsSubCategory>
+		</ToolsOptionsCategory>
+	</ToolsOptions>
+</UserSettings>
