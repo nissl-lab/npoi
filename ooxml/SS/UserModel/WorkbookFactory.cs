@@ -241,7 +241,7 @@ namespace NPOI.SS.UserModel
                         //pkg.close();
 
                         // rethrow exception
-                        throw ioe;
+                        throw;
                     }
                     catch (Exception ioe)
                     {
@@ -250,7 +250,7 @@ namespace NPOI.SS.UserModel
                         //pkg.close();
 
                         // rethrow exception
-                        throw ioe;
+                        throw;
                     }
                 }
             }

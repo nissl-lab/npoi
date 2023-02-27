@@ -401,25 +401,17 @@ namespace NPOI.POIFS.FileSystem
 
         public DocumentEntry CreateDocument(NPOIFSDocument document)
         {
-            try
-            {
-                DocumentProperty property = document.DocumentProperty;
-                DocumentNode rval = new DocumentNode(property, this);
+            DocumentProperty property = document.DocumentProperty;
+            DocumentNode rval = new DocumentNode(property, this);
 
-                ((DirectoryProperty)Property).AddChild(property);
+            ((DirectoryProperty)Property).AddChild(property);
 
-                _nFilesSystem.AddDocument(document);
+            _nFilesSystem.AddDocument(document);
 
-                _entries.Add(rval);
-                _byname[property.Name] = rval;
+            _entries.Add(rval);
+            _byname[property.Name] = rval;
 
-                return rval;
-
-            }
-            catch (IOException ex)
-        {
-                throw ex;
-            }
+            return rval;
         }
 
 
@@ -529,20 +521,13 @@ namespace NPOI.POIFS.FileSystem
 
         public DocumentEntry CreateDocument(string name, Stream stream)
         {
-            try
+            if (_nFilesSystem != null)
             {
-                if (_nFilesSystem != null)
-                {
-                    return CreateDocument(new NPOIFSDocument(name, _nFilesSystem, stream));
-                }
-                else
-                {
-                    return CreateDocument(new OPOIFSDocument(name, stream));
-                }
+                return CreateDocument(new NPOIFSDocument(name, _nFilesSystem, stream));
             }
-            catch (IOException ex)
+            else
             {
-                throw ex;
+                return CreateDocument(new OPOIFSDocument(name, stream));
             }
         }
 

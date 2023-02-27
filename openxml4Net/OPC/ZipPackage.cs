@@ -611,10 +611,10 @@ namespace NPOI.OpenXml4Net.OPC
                 else
                     zos.Close();
             }
-            catch (OpenXML4NetRuntimeException e)
+            catch (OpenXML4NetRuntimeException)
             {
                 // no need to wrap this type of Exception
-                throw e;
+                throw;
             }
             catch (IOException e)
             {

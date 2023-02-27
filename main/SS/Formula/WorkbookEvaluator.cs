@@ -435,7 +435,7 @@ namespace NPOI.SS.Formula
                     }
                     else
                     {
-                        throw re;
+                        throw;
                     }
                 }
                 finally

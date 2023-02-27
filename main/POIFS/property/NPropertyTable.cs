@@ -117,27 +117,21 @@ namespace NPOI.POIFS.Properties
         public void Write(NPOIFSStream stream)
         {
             Stream os = stream.GetOutputStream();
-            try
+
+            //Leon ByteArrayOutputStream  -->MemoryStream
+            MemoryStream ms = new MemoryStream();
+            foreach (Property property in _properties)
             {
-                //Leon ByteArrayOutputStream  -->MemoryStream
-                MemoryStream ms = new MemoryStream();
-                foreach (Property property in _properties)
-                {
-                    if (property != null)
-                        property.WriteData(os);
-                }
-
-                os.Close();
-
-                // Update the start position if needed
-                if (StartBlock != stream.GetStartBlock())
-                {
-                    StartBlock = stream.GetStartBlock();
-                }
+                if (property != null)
+                    property.WriteData(os);
             }
-            catch (System.IO.IOException ex)
+
+            os.Close();
+
+            // Update the start position if needed
+            if (StartBlock != stream.GetStartBlock())
             {
-                throw ex;
+                StartBlock = stream.GetStartBlock();
             }
         }
     }
