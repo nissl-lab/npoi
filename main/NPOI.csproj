@@ -33,7 +33,6 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <PackageId>NPOI</PackageId>
     <RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
     <TargetFrameworkProfile />
     <LangVersion>default</LangVersion>
