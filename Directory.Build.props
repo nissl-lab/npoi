@@ -13,6 +13,8 @@
     <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <RunSettingsFilePath>$(MSBuildThisFileDirectory)\test.runsettings</RunSettingsFilePath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
