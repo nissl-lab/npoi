@@ -136,7 +136,7 @@ namespace NPOI.SS.Formula.Functions
                 {
                     areaPtg = FormulaParser.ParseStructuredReference(refText, (IFormulaParsingWorkbook)ec.GetWorkbook(), ec.RowIndex);
                 }
-                catch (FormulaParseException e)
+                catch (FormulaParseException)
                 {
                     return ErrorEval.REF_INVALID;
                 }
