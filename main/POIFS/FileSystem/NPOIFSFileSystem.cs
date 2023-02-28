@@ -216,26 +216,22 @@ namespace NPOI.POIFS.FileSystem
                     //_data = new FileBackedDataSource(channel, readOnly);
                     ReadCoreContents();
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
                 finally
                 {
                     if (channel != null)
                         channel.Close();
                 }
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 if (closeChannelOnError && channel != null)
                 {
                     channel.Close();
                     channel = null;
                 }
-                throw e;
+                throw;
             }
-            catch (RuntimeException e)
+            catch (RuntimeException)
             {
                 // Comes from Iterators etc.
                 // TODO Decide if we can handle these better whilst
@@ -245,7 +241,7 @@ namespace NPOI.POIFS.FileSystem
                     channel.Close();
                     channel = null;
                 }
-                throw e;
+                throw;
             }
         }
 

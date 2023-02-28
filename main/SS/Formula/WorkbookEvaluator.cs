@@ -435,7 +435,7 @@ namespace NPOI.SS.Formula
                     }
                     else
                     {
-                        throw re;
+                        throw;
                     }
                 }
                 finally
@@ -478,7 +478,7 @@ namespace NPOI.SS.Formula
                 String msg = "Error evaluating cell " + cr.FormatAsString();
                 return new NotImplementedException(msg, inner);
             }
-            catch (Exception)
+            catch
             {
                 // avoid bombing out during exception handling
                 //e.printStackTrace();

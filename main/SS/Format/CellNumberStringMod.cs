@@ -81,7 +81,7 @@ namespace NPOI.SS.Format
             {
                 return CompareTo((CellNumberStringMod)that) == 0;
             }
-            catch (Exception)
+            catch
             {
                 // NullPointerException or CastException
                 return false;

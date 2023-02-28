@@ -279,7 +279,7 @@ namespace NPOI.SS.Formula.Eval
                         return double.NaN;
                     return ret;
                 }
-                catch (Exception)
+                catch
                 {
                     return Double.NaN;
                 }

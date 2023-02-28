@@ -200,7 +200,7 @@ namespace NPOI.DDF
                     theDumpHex += HexDump.Dump(_thedata, 0, 0);
                 }
             }
-            catch (Exception)
+            catch
             {
                 theDumpHex = "Error!!";
             }

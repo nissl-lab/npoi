@@ -105,21 +105,13 @@ namespace NPOI.POIFS.Storage
         /// <param name="stream">the source Stream</param>
         public HeaderBlock(Stream stream)
         {
-            try
+            stream.Position = 0;
+            PrivateHeaderBlock(ReadFirst512(stream));
+            if (bigBlockSize.GetBigBlockSize() != 512)
             {
-                stream.Position = 0;
-                PrivateHeaderBlock(ReadFirst512(stream));
-                if (bigBlockSize.GetBigBlockSize() != 512)
-                {
-                    int rest = bigBlockSize.GetBigBlockSize() - 512;
-                    byte[] temp = new byte[rest];
-                    IOUtils.ReadFully(stream, temp);
-                }
-
-            }
-            catch(IOException ex)
-            {
-                throw ex;
+                int rest = bigBlockSize.GetBigBlockSize() - 512;
+                byte[] temp = new byte[rest];
+                IOUtils.ReadFully(stream, temp);
             }
         }
 
@@ -130,15 +122,9 @@ namespace NPOI.POIFS.Storage
 
         public HeaderBlock(byte[] buffer)
         {
-            try
-            {
-                PrivateHeaderBlock(buffer);
-            }
-            catch (IOException ex)
-            {
-                throw ex;
-            }
+            PrivateHeaderBlock(buffer);
         }
+
         public void PrivateHeaderBlock(byte[] data)
         {
             _data = data;
@@ -425,26 +411,19 @@ namespace NPOI.POIFS.Storage
 
         public void WriteData(Stream stream)
         {
-            try
-            {
-                new IntegerField(_bat_count_offset, _bat_count, _data);
-                new IntegerField(_property_start_offset, _property_start, _data);
-                new IntegerField(_sbat_start_offset, _sbat_start, _data);
-                new IntegerField(_sbat_block_count_offset, _sbat_count, _data);
-                new IntegerField(_xbat_start_offset, _xbat_start, _data);
-                new IntegerField(_xbat_count_offset, _xbat_count, _data);
+            new IntegerField(_bat_count_offset, _bat_count, _data);
+            new IntegerField(_property_start_offset, _property_start, _data);
+            new IntegerField(_sbat_start_offset, _sbat_start, _data);
+            new IntegerField(_sbat_block_count_offset, _sbat_count, _data);
+            new IntegerField(_xbat_start_offset, _xbat_start, _data);
+            new IntegerField(_xbat_count_offset, _xbat_count, _data);
 
-                stream.Write(_data, 0, 512);
+            stream.Write(_data, 0, 512);
 
-                for (int i = POIFSConstants.SMALLER_BIG_BLOCK_SIZE; i < bigBlockSize.GetBigBlockSize(); i++)
-                {
-                    //stream.Write(Write(0);
-                    stream.WriteByte(0);
-                }
-            }
-            catch (IOException ex)
+            for (int i = POIFSConstants.SMALLER_BIG_BLOCK_SIZE; i < bigBlockSize.GetBigBlockSize(); i++)
             {
-                throw ex;
+                //stream.Write(Write(0);
+                stream.WriteByte(0);
             }
         }
 

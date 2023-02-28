@@ -60,30 +60,23 @@ namespace NPOI.SS.Formula.Function
 
                 FunctionDataBuilder fdb = new FunctionDataBuilder(400);
 
-                try
+                while (true)
                 {
-                    while (true)
+                    String line = br.ReadLine();
+                    if (line == null)
                     {
-                        String line = br.ReadLine();
-                        if (line == null)
-                        {
-                            break;
-                        }
-                        if (line.Length < 1 || line[0] == '#')
-                        {
-                            continue;
-                        }
-                        String TrimLine = line.Trim();
-                        if (TrimLine.Length < 1)
-                        {
-                            continue;
-                        }
-                        ProcessLine(fdb, line);
+                        break;
                     }
-                }
-                catch (IOException)
-                {
-                    throw;
+                    if (line.Length < 1 || line[0] == '#')
+                    {
+                        continue;
+                    }
+                    String TrimLine = line.Trim();
+                    if (TrimLine.Length < 1)
+                    {
+                        continue;
+                    }
+                    ProcessLine(fdb, line);
                 }
 
                 return fdb.Build();
