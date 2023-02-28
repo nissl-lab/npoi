@@ -8,7 +8,11 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
     <RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
-    <OutputPath></OutputPath>
+    <OutputPath>..\solution\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <DocumentationFile>C:\github\npoi\main\NPOI.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
