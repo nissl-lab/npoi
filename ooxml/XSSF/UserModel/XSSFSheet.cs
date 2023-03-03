@@ -5751,7 +5751,7 @@ namespace NPOI.XSSF.UserModel
                             newCell.SetCellType(CellType.Numeric);
                             newCell.SetCellValue(oldCell.NumericCellValue);
                         }
-                        catch (Exception)
+                        catch
                         {
                             newCell.SetCellType(CellType.String);
                             newCell.SetCellValue(oldCell.ToString());

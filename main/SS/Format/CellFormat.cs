@@ -168,7 +168,7 @@ namespace NPOI.SS.Format
 
                     parts.Add(new CellFormatPart(valueDesc));
                 }
-                catch (Exception)
+                catch
                 {
                     //CellFormatter.logger.Log(Level.WARNING,
                     //        "Invalid format: " + CellFormatter.Quote(m.Group()), e);

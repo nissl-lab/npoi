@@ -1243,7 +1243,7 @@ namespace NPOI.SS.Formula
                 {
                     i = Int32.Parse(rep.Replace("$", ""), CultureInfo.InvariantCulture);
                 }
-                catch (Exception)
+                catch
                 {
                     return null;
                 }
@@ -2435,7 +2435,7 @@ namespace NPOI.SS.Formula
                         hasIntersections = true;
                         continue;
                     }
-                    catch (FormulaParseException e)
+                    catch (FormulaParseException)
                     {
                         // if parsing for intersection fails we assume that we actually had an arbitrary
                         // whitespace and thus should simply skip this whitespace

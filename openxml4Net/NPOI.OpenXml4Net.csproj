@@ -35,6 +35,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
     <PackageId>NPOI.OpenXml4Net</PackageId>
+    <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
     <RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
     <LangVersion>default</LangVersion>
   </PropertyGroup>
@@ -54,20 +55,7 @@
     <NoWarn>1591</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4 Release|AnyCPU'">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <OutputPath>..\solution\Lib\.net4\</OutputPath>
-    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>1591</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>..\solution\Lib\.net4\NPOI.OpenXml4Net.XML</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4.5 release|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <OutputPath>..\solution\Lib\.net45\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
@@ -156,10 +144,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="npoi.snk" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\main\NPOI.csproj">

@@ -12,7 +12,7 @@
     <AssemblyName>NPOI</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
     <ReleaseVersion>1.2.4</ReleaseVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -53,20 +53,7 @@
     <NoWarn>1591</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4 Release|AnyCPU'">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <OutputPath>..\solution\Lib\.net4\</OutputPath>
-    <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
-    <DocumentationFile>..\solution\Lib\.net4\NPOI.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <NoWarn>1591</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.net 4.5 release|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <OutputPath>..\solution\Lib\.net45\</OutputPath>
     <DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
@@ -1367,10 +1354,6 @@
     <Compile Include="Util\Units.cs" />
     <Compile Include="WP\UserModel\ICharacterRun.cs" />
     <Compile Include="WP\UserModel\IParagraph.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="npoi.snk" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\functionMetadata.txt">

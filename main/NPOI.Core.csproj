@@ -6,7 +6,7 @@
     <AssemblyName>NPOI</AssemblyName>
     <RootNamespace>NPOI</RootNamespace>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
     <RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
     <OutputPath></OutputPath>
   </PropertyGroup>

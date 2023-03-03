@@ -86,14 +86,7 @@ namespace NPOI.HSSF.UserModel
             }
 
             ConstructorInfo constructor;
-            try
-            {
-                constructor = evalClass.GetConstructor(OPERATION_CONSTRUCTOR_CLASS_ARRAY);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            constructor = evalClass.GetConstructor(OPERATION_CONSTRUCTOR_CLASS_ARRAY);
             if (!constructor.IsPublic)
             {
                 throw new Exception("Eval constructor must be public");
@@ -128,14 +121,7 @@ namespace NPOI.HSSF.UserModel
 
             Object result;
             Object[] initargs = { ptg };
-            try
-            {
-                result = constructor.Invoke(initargs);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            result = constructor.Invoke(initargs);
             return (OperationEval)result;
         }
     }

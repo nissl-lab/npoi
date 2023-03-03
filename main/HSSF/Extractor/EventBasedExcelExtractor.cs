@@ -123,19 +123,12 @@ namespace NPOI.HSSF.Extractor
             get
             {
                 String text = null;
-                try
-                {
-                    TextListener tl = TriggerExtraction();
+                TextListener tl = TriggerExtraction();
 
-                    text = tl.text.ToString();
-                    if (!text.EndsWith("\n", StringComparison.Ordinal))
-                    {
-                        text = text + "\n";
-                    }
-                }
-                catch (IOException)
+                text = tl.text.ToString();
+                if (!text.EndsWith("\n", StringComparison.Ordinal))
                 {
-                    throw;
+                    text = text + "\n";
                 }
 
                 return text;

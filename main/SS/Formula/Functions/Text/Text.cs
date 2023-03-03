@@ -34,7 +34,7 @@ namespace NPOI.SS.Formula.Functions
                 String formattedStr = Formatter.FormatRawCellContents(s0, -1, s1);
                 return new StringEval(formattedStr);
             }
-            catch (Exception)
+            catch
             {
                 return ErrorEval.VALUE_INVALID;
             }

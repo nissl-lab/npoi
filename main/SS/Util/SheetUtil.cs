@@ -392,7 +392,7 @@ namespace NPOI.SS.Util
                     DataFormatter formatter = new DataFormatter();
                     stringValue = formatter.FormatCellValue(cell, dummyEvaluator);
                 }
-                catch (Exception)
+                catch
                 {
                     stringValue = cell.NumericCellValue.ToString();
                 }
@@ -502,7 +502,7 @@ namespace NPOI.SS.Util
                         {
                             sval = formatter.FormatCellValue(cell, dummyEvaluator);
                         }
-                        catch (Exception)
+                        catch
                         {
                             sval = cell.NumericCellValue.ToString();
                         }
