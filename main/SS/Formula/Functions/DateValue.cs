@@ -76,7 +76,7 @@ namespace NPOI.SS.Formula.Functions
                     }
                 }
             }
-            catch (FormatException e)
+            catch (FormatException)
             {
                 return ErrorEval.VALUE_INVALID;
             }
@@ -92,7 +92,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 return int.Parse(monthPart);
             }
-            catch (FormatException ignored)
+            catch (FormatException)
             {
             }
 
