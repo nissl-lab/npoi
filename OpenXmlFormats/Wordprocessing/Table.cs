@@ -651,6 +651,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                         pos++;
                 }
             }
+            // Check if the position should be the last position when index cannot be find in for loop
+            if( index == -1&&pos == p)
+                index = items1Field.Count;
             return index;
         }
         private void RemoveItems1(Items1ChoiceType type, int p)
