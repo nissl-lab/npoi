@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NPOI.SS.UserModel.Charts
 {
     /// <summary>
-    /// Data for a Bar Chart
+    /// Data for a Pie Chart
     /// </summary>
-    /// <typeparam name="Tx"></typeparam>
-    /// <typeparam name="Ty"></typeparam>
-    public interface IBarChartData<Tx, Ty> : IChartData
+    public interface IPieChartData<Tx, Ty> : IChartData
     {
         /// <summary>
         /// Adds the series.
@@ -17,11 +17,11 @@ namespace NPOI.SS.UserModel.Charts
         /// <param name="categories">The categories data source.</param>
         /// <param name="values">The values data source.</param>
         /// <returns>Created series.</returns>
-        IBarChartSeries<Tx, Ty> AddSeries(IChartDataSource<Tx> categories, IChartDataSource<Ty> values);
+        IPieChartSeries<Tx, Ty> AddSeries(IChartDataSource<Tx> categories, IChartDataSource<Ty> values);
 
-        /**
-         * @return list of all series.
-         */
-        List<IBarChartSeries<Tx, Ty>> GetSeries();
+        /// <summary>
+        /// Return list of all series.
+        /// </summary>
+        List<IPieChartSeries<Tx, Ty>> GetSeries();
     }
 }

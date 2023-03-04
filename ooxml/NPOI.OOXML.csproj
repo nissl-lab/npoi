@@ -162,6 +162,7 @@
     <Compile Include="XSSF\UserModel\BaseXSSFEvaluationWorkbook.cs" />
     <Compile Include="XSSF\UserModel\BaseXSSFFormulaEvaluator.cs" />
     <Compile Include="XSSF\UserModel\Charts\AbstractXSSFChartSeries.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFAreaChartData.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFBarChartData.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFCategoryAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFChartAxis.cs">
@@ -174,11 +175,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="XSSF\UserModel\Charts\XSSFChartUtil.cs" />
+    <Compile Include="XSSF\UserModel\Charts\XSSFColumnChartData.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFDateAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFLineChartData.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFManualLayout.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="XSSF\UserModel\Charts\XSSFPieChartData.cs" />
     <Compile Include="XSSF\UserModel\Charts\XSSFScatterChartData.cs">
       <SubType>Code</SubType>
     </Compile>

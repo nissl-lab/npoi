@@ -10370,6 +10370,15 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             return newobj;
         }
 
+        public CT_PieChart AddNewPieChart()
+        {
+            if (this.pieChartField == null)
+                this.pieChartField = new List<CT_PieChart>();
+            CT_PieChart newobj = new CT_PieChart();
+            this.pieChartField.Add(newobj);
+            return newobj;
+        }
+
         public CT_ScatterChart AddNewScatterChart()
         {
             if (this.scatterChartField == null)
@@ -10608,6 +10617,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.barChartField = new List<CT_BarChart>();
             }
             this.barChartField.Add(ctchart);
+            return ctchart;
+        }
+
+        public CT_AreaChart AddNewAreaChart()
+        {
+            CT_AreaChart ctchart = new CT_AreaChart();
+            if (this.areaChartField == null)
+            {
+                this.areaChartField = new List<CT_AreaChart>();
+            }
+            this.areaChartField.Add(ctchart);
             return ctchart;
         }
 

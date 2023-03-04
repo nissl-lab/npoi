@@ -279,6 +279,23 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.extLstField = value;
             }
         }
+
+        public CT_PieSer AddNewSer()
+        {
+            CT_PieSer newSer = new CT_PieSer();
+            if (this.serField == null)
+            {
+                this.serField = new List<CT_PieSer>();
+            }
+            this.serField.Add(newSer);
+            return newSer;
+        }
+
+        public CT_Boolean AddNewVaryColors()
+        {
+            this.varyColorsField = new CT_Boolean();
+            return this.varyColorsField;
+        }
     }
 
     [Serializable]
@@ -311,7 +328,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_PieSer()
         {
-
+            dPt = new List<CT_DPt>();
         }
         public static CT_PieSer Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -514,6 +531,30 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             {
                 this.extLstField = value;
             }
+        }
+
+        public CT_UnsignedInt AddNewIdx()
+        {
+            this.idxField = new CT_UnsignedInt();
+            return this.idxField;
+        }
+
+        public CT_UnsignedInt AddNewOrder()
+        {
+            this.orderField = new CT_UnsignedInt();
+            return this.orderField;
+        }
+
+        public CT_AxDataSource AddNewCat()
+        {
+            this.catField = new CT_AxDataSource();
+            return this.catField;
+        }
+
+        public CT_NumDataSource AddNewVal()
+        {
+            this.valField = new CT_NumDataSource();
+            return this.valField;
         }
     }
 

@@ -113,8 +113,11 @@ namespace NPOI.XSSF.UserModel.Charts
                 scatterSer.AddNewIdx().val = (uint)this.id;
                 scatterSer.AddNewOrder().val = (uint)this.order;
 
-                CT_AxDataSource xVal = scatterSer.AddNewXVal();
-                XSSFChartUtil.BuildAxDataSource<Tx>(xVal, xs);
+                if (xs != null)
+                {
+                    CT_AxDataSource xVal = scatterSer.AddNewXVal();
+                    XSSFChartUtil.BuildAxDataSource<Tx>(xVal, xs);
+                }
                 CT_NumDataSource yVal = scatterSer.AddNewYVal();
                 XSSFChartUtil.BuildNumDataSource<Ty>(yVal, ys);
 
@@ -135,6 +138,11 @@ namespace NPOI.XSSF.UserModel.Charts
             Series newSerie = new Series(numOfSeries, numOfSeries, xs, ys);
             series.Add(newSerie);
             return newSerie;
+        }
+
+        public IScatterChartSeries<Tx, Ty> AddSeries(IChartDataSource<Ty> values)
+        {
+            return AddSeries(null, values);
         }
 
         public void FillChart(IChart chart, IChartAxis[] axis)
@@ -171,6 +179,7 @@ namespace NPOI.XSSF.UserModel.Charts
 
         private void AddStyle(CT_ScatterChart ctScatterChart)
         {
+            ctScatterChart.varyColors = new CT_Boolean { val = 0 };
             CT_ScatterStyle scatterStyle = ctScatterChart.AddNewScatterStyle();
             scatterStyle.val = ST_ScatterStyle.lineMarker;
         }
