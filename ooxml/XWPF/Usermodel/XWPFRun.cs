@@ -492,7 +492,7 @@ namespace NPOI.XWPF.UserModel
                             {
                                 foreach (CT_FFCheckBox checkBox in ctfldChar.ffData.GetCheckBoxList())
                                 {
-                                    if (checkBox.@default.val == true)
+                                    if (checkBox.@default != null && checkBox.@default.val == true)
                                     {
                                         text.Append("|X|");
                                     }
