@@ -224,5 +224,13 @@ namespace TestCases.XWPF.UserModel
         {
             // TODO
         }
-   }
+
+        [Test]
+        public void Bug60293()
+        {
+            //test handling of non-standard header/footer options
+            XWPFDocument xwpf = XWPFTestDataSamples.OpenSampleDocument("60293.docx");
+            Assert.AreEqual(3, xwpf.HeaderList.Count);
+        }
+    }
 }

@@ -547,7 +547,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return null;
             CT_HdrFtrRef ctObj = new CT_HdrFtrRef();
             if (node.Attributes["w:type"] != null)
-                ctObj.type = (ST_HdrFtr)Enum.Parse(typeof(ST_HdrFtr), node.Attributes["w:type"].Value);
+            {
+                try
+                {
+                    ctObj.type = (ST_HdrFtr)Enum.Parse(typeof(ST_HdrFtr), node.Attributes["w:type"].Value);
+                }
+                catch (ArgumentException)
+                {
+                    ctObj.type = ST_HdrFtr.@default;
+                }
+            }
             ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
             return ctObj;
         }
