@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DDF\AbstractEscherOptRecord.cs" />
+    <Compile Include="DDF\EscherBlipWMFRecord.cs" />
     <Compile Include="DDF\EscherColorRef.cs" />
     <Compile Include="DDF\EscherTertiaryOptRecord.cs" />
     <Compile Include="EmptyFileException.cs" />
@@ -153,9 +154,11 @@
     <Compile Include="HSSF\Record\Chart\AxisUsedRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BopPopCustomRecord.cs" />
     <Compile Include="HSSF\Record\Chart\BopPopRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\BRAIRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CategorySeriesAxisRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CatSerRangeRecord.cs" />
     <Compile Include="HSSF\Record\Chart\Chart3DBarShapeRecord.cs" />
+    <Compile Include="HSSF\Record\Chart\ChartTitleFormatRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CrtLineRecord.cs" />
     <Compile Include="HSSF\Record\Chart\CrtMlFrtContinueRecord.cs" />
     <Compile Include="HSSF\Record\Chart\DataLabExtContentsRecord.cs" />

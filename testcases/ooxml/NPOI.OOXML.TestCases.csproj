@@ -104,6 +104,7 @@
     <Compile Include="TestEmbeded.cs" />
     <Compile Include="TestPOIXMLDocument.cs" />
     <Compile Include="TestPOIXMLProperties.cs" />
+    <Compile Include="TestXMLPropertiesTextExtractor.cs" />
     <Compile Include="Util\TestIdentifierManager.cs" />
     <Compile Include="XSSF\Extractor\TestXSSFExcelExtractor.cs" />
     <Compile Include="XSSF\Extractor\TestXSSFExportToXML.cs" />
@@ -117,6 +118,8 @@
     <Compile Include="XSSF\Model\TestThemesTable.cs" />
     <Compile Include="XSSF\Streaming\AutoSizeColumnTrackerTests.cs" />
     <Compile Include="XSSF\Streaming\GZIPSheetDataWriterTests.cs" />
+    <Compile Include="XSSF\Streaming\SheetDataWriterTests.cs" />
+    <Compile Include="XSSF\Streaming\SXSSFCellTests.cs" />
     <Compile Include="XSSF\Streaming\SXSSFCreationHelperTests.cs" />
     <Compile Include="XSSF\Streaming\SXSSFEvaluationCellTests.cs" />
     <Compile Include="XSSF\Streaming\SXSSFEvaluationWorkbookTests.cs" />
@@ -134,7 +137,9 @@
     <Compile Include="XSSF\Streaming\TestSXSSFWorkbook.cs" />
     <Compile Include="XSSF\SXSSFITestDataProvider.cs" />
     <Compile Include="XSSF\TestSheetProtection.cs" />
+    <Compile Include="XSSF\TestXLookupFunction.cs" />
     <Compile Include="XSSF\TestXSSFCloneSheet.cs" />
+    <Compile Include="XSSF\TestXSSFOffset.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFCategoryAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFChartAxis.cs" />
     <Compile Include="XSSF\UserModel\Charts\TestXSSFChartLegend.cs" />
@@ -207,7 +212,10 @@
     <Compile Include="XWPF\TestPackageCorePropertiesGetKeywords.cs" />
     <Compile Include="XWPF\TestXWPFBugs.cs" />
     <Compile Include="XWPF\UserModel\TestChangeTracking.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFComment.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFComments.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFDocument.cs" />
+    <Compile Include="XWPF\UserModel\TestXWPFFootnote.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFFootnotes.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFHeader.cs" />
     <Compile Include="XWPF\UserModel\TestXWPFHeadings.cs" />
