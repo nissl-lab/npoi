@@ -1,5 +1,6 @@
 /* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
+
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
    The ASF licenses this file to You under the Apache License, Version 2.0
@@ -14,6 +15,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+
 namespace NPOI.XWPF.UserModel
 {
     using System;
@@ -23,6 +25,7 @@ namespace NPOI.XWPF.UserModel
     using NPOI.OpenXml4Net.OPC;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Xml;
+    using NPOI.WP.UserModel;
     using NPOI.XWPF.Model;
     using System.Xml.Serialization;
     using System.Diagnostics;
@@ -547,14 +550,81 @@ namespace NPOI.XWPF.UserModel
         {
             if (headerFooterPolicy == null)
             {
-                if (!ctDocument.body.IsSetSectPr())
-                {
-                    ctDocument.body.AddNewSectPr();
-                }
+                //if (!ctDocument.body.IsSetSectPr())
+                //{
+                //    ctDocument.body.AddNewSectPr();
+                //}
                 headerFooterPolicy = new XWPFHeaderFooterPolicy(this);
             }
             return headerFooterPolicy;
         }
+
+        /**
+         * Create a header of the given type
+         *
+         * @param type {@link HeaderFooterType} enum
+         * @return object of type {@link XWPFHeader}
+         */
+        public XWPFHeader CreateHeader(HeaderFooterType type)
+        {
+            XWPFHeaderFooterPolicy hfPolicy = CreateHeaderFooterPolicy();
+            // TODO this needs to be migrated out into section code
+            if (type == HeaderFooterType.FIRST)
+            {
+                CT_SectPr ctSectPr = GetSection();
+                if (ctSectPr.IsSetTitlePg() == false)
+                {
+                    CT_OnOff titlePg = ctSectPr.AddNewTitlePg();
+                    titlePg.val = true;//ST_OnOff.on;
+                }
+            }
+            else if (type == HeaderFooterType.EVEN)
+            {
+                // TODO Add support for Even/Odd headings and footers
+            }
+            return hfPolicy.CreateHeader(EnumConverter.ValueOf<ST_HdrFtr, HeaderFooterType>(type));
+        }
+
+        /**
+         * Create a footer of the given type
+         *
+         * @param type {@link HeaderFooterType} enum
+         * @return object of type {@link XWPFFooter}
+         */
+        public XWPFFooter CreateFooter(HeaderFooterType type)
+        {
+            XWPFHeaderFooterPolicy hfPolicy = CreateHeaderFooterPolicy();
+            // TODO this needs to be migrated out into section code
+            if (type == HeaderFooterType.FIRST)
+            {
+                CT_SectPr ctSectPr = GetSection();
+                if (ctSectPr.IsSetTitlePg() == false)
+                {
+                    CT_OnOff titlePg = ctSectPr.AddNewTitlePg();
+                    titlePg.val = true;//ST_OnOff.on;
+                }
+            }
+            else if (type == HeaderFooterType.EVEN)
+            {
+                // TODO Add support for Even/Odd headings and footers
+            }
+            return hfPolicy.CreateFooter(EnumConverter.ValueOf<ST_HdrFtr, HeaderFooterType>(type));
+        }
+
+        /**
+         * Return the {@link CTSectPr} object that corresponds with the
+         * last section in this document.
+         *
+         * @return {@link CTSectPr} object
+         */
+        private CT_SectPr GetSection()
+        {
+            CT_Body ctBody = Document.body;
+            return (ctBody.IsSetSectPr() ?
+                    ctBody.sectPr :
+                    ctBody.AddNewSectPr());
+        }
+
         /**
          * Returns the styles object used
          */
@@ -1818,5 +1888,5 @@ namespace NPOI.XWPF.UserModel
         {
             this.Close();
         }
-    } // end class
+    }
 }

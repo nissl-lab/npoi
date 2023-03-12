@@ -2587,7 +2587,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IsNullable = true)]
     public class CT_SectPr
     {
-                private CT_FtnProps footnotePrField;
+        private CT_FtnProps footnotePrField;
 
         private CT_EdnProps endnotePrField;
 
@@ -3004,6 +3004,19 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.rsidSectField = value;
             }
         }
+
+        public bool IsSetTitlePg()
+        {
+            return this.titlePgField != null;
+        }
+
+        public CT_OnOff AddNewTitlePg()
+        {
+            if (this.titlePgField == null)
+                this.titlePgField = new CT_OnOff();
+            return this.titlePgField;
+        }
+
         public CT_PageMar AddPageMar()
         {
             this.pgMar = new CT_PageMar();
