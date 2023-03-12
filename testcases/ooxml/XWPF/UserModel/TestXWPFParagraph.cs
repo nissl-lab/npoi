@@ -636,6 +636,90 @@ namespace TestCases.XWPF.UserModel
             Assert.AreEqual(result.BeginChar, 2);
             Assert.AreEqual(result.EndChar, 1);
         }
-    }
 
+        [Test]
+        public void TestNumberedLists()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("ComplexNumberedLists.docx");
+            XWPFParagraph p;
+        
+            p = doc.GetParagraphArray(0);
+            Assert.AreEqual("This is a document with numbered lists", p.Text);
+            Assert.AreEqual(null, p.GetNumID());
+            Assert.AreEqual(null, p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(1);
+            Assert.AreEqual("Entry #1", p.Text);
+            Assert.AreEqual("1", p.GetNumID());
+            Assert.AreEqual("0", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(2);
+            Assert.AreEqual("Entry #2, with children", p.Text);
+            Assert.AreEqual("1", p.GetNumID());
+            Assert.AreEqual("0", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(3);
+            Assert.AreEqual("2-a", p.Text);
+            Assert.AreEqual("1", p.GetNumID());
+            Assert.AreEqual("1", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(4);
+            Assert.AreEqual("2-b", p.Text);
+            Assert.AreEqual("1", p.GetNumID());
+            Assert.AreEqual("1", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(5);
+            Assert.AreEqual("2-c", p.Text);
+            Assert.AreEqual("1", p.GetNumID());
+            Assert.AreEqual("1", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(6);
+            Assert.AreEqual("Entry #3", p.Text);
+            Assert.AreEqual("1", p.GetNumID());
+            Assert.AreEqual("0", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(7);
+            Assert.AreEqual("Entry #4", p.Text);
+            Assert.AreEqual("1", p.GetNumID());
+            Assert.AreEqual("0", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            // New list
+            p = doc.GetParagraphArray(8);
+            Assert.AreEqual("Restarted to 1 from 5", p.Text);
+            Assert.AreEqual("2", p.GetNumID());
+            Assert.AreEqual("0", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(9);
+            Assert.AreEqual("Restarted @ 2", p.Text);
+            Assert.AreEqual("2", p.GetNumID());
+            Assert.AreEqual("0", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(10);
+            Assert.AreEqual("Restarted @ 3", p.Text);
+            Assert.AreEqual("2", p.GetNumID());
+            Assert.AreEqual("0", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            // New list starting at 10
+            p = doc.GetParagraphArray(11);
+            Assert.AreEqual("Jump to new list at 10", p.Text);
+            Assert.AreEqual("6", p.GetNumID());
+            Assert.AreEqual("0", p.GetNumIlvl());
+            // TODO Why isn't this seen as 10?
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            // TODO Shouldn't we use XWPFNumbering or similar here?
+            // TODO Make it easier to change
+        }
+    }
 }
