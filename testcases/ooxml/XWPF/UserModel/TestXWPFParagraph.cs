@@ -369,6 +369,7 @@ namespace TestCases.XWPF.UserModel
             //PicDocument pd = new PicDocumentImpl(null);
             //assertTrue(pd.isNil());
         }
+
         [Test]
         public void TestTika792()
         {
@@ -376,7 +377,9 @@ namespace TestCases.XWPF.UserModel
             //CTMoveBookmarkImpl into ooxml-lite.
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Tika-792.docx");
             XWPFParagraph paragraph = doc.Paragraphs[(0)];
-            Assert.AreEqual("s", paragraph.Text);
+            Assert.AreEqual("", paragraph.Text);
+            paragraph = doc.Paragraphs[1];
+            Assert.AreEqual("b", paragraph.Text);
         }
 
         [Test]
