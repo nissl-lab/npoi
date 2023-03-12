@@ -9,10 +9,6 @@
     <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>C:\github\npoi\ooxml\NPOI.OOXML.xml</DocumentationFile>
-  </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\solution\Lib</OutputPath>
   </PropertyGroup>
