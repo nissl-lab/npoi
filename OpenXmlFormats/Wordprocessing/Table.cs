@@ -3134,52 +3134,99 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.itemsElementNameField = value;
             }
         }
-        public int SizeOfTrHeightArray()
-        {
-            return SizeOfArray(ItemsChoiceType2.trHeight);
-        }
 
-        public CT_Height GetTrHeightArray(int p)
-        {
-            return GetObjectArray<CT_Height>(p, ItemsChoiceType2.trHeight);
-        }
+        public List<CT_OnOff        > GetCantSplitList     () { return GetObjectList<CT_OnOff        >(ItemsChoiceType2.cantSplit     ); }
+        public List<CT_Cnf          > GetCnfStyleList      () { return GetObjectList<CT_Cnf          >(ItemsChoiceType2.cnfStyle      ); }
+        public List<CT_DecimalNumber> GetDivIdList         () { return GetObjectList<CT_DecimalNumber>(ItemsChoiceType2.divId         ); }
+        public List<CT_DecimalNumber> GetGridAfterList     () { return GetObjectList<CT_DecimalNumber>(ItemsChoiceType2.gridAfter     ); }
+        public List<CT_DecimalNumber> GetGridBeforeList    () { return GetObjectList<CT_DecimalNumber>(ItemsChoiceType2.gridBefore    ); }
+        public List<CT_OnOff        > GetHiddenList        () { return GetObjectList<CT_OnOff        >(ItemsChoiceType2.hidden        ); }
+        public List<CT_Jc           > GetJcList            () { return GetObjectList<CT_Jc           >(ItemsChoiceType2.jc            ); }
+        public List<CT_TblWidth     > GetTblCellSpacingList() { return GetObjectList<CT_TblWidth     >(ItemsChoiceType2.tblCellSpacing); }
+        public List<CT_OnOff        > GetTblHeaderList     () { return GetObjectList<CT_OnOff        >(ItemsChoiceType2.tblHeader     ); }
+        public List<CT_Height       > GetTrHeightList      () { return GetObjectList<CT_Height       >(ItemsChoiceType2.trHeight      ); }
+        public List<CT_TblWidth     > GetWAfterList        () { return GetObjectList<CT_TblWidth     >(ItemsChoiceType2.wAfter        ); }
+        public List<CT_TblWidth     > GetWBeforeList       () { return GetObjectList<CT_TblWidth     >(ItemsChoiceType2.wBefore       ); }
 
-        public CT_Height AddNewTrHeight()
-        {
-            return AddNewObject<CT_Height>(ItemsChoiceType2.trHeight);
-        }
+        public int SizeOfCantSplitArray     () { return SizeOfArray(ItemsChoiceType2.cantSplit     ); }
+        public int SizeOfCnfStyleArray      () { return SizeOfArray(ItemsChoiceType2.cnfStyle      ); }
+        public int SizeOfDivIdArray         () { return SizeOfArray(ItemsChoiceType2.divId         ); }
+        public int SizeOfGridAfterArray     () { return SizeOfArray(ItemsChoiceType2.gridAfter     ); }
+        public int SizeOfGridBeforeArray    () { return SizeOfArray(ItemsChoiceType2.gridBefore    ); }
+        public int SizeOfHiddenArray        () { return SizeOfArray(ItemsChoiceType2.hidden        ); }
+        public int SizeOfJcArray            () { return SizeOfArray(ItemsChoiceType2.jc            ); }
+        public int SizeOfTblCellSpacingArray() { return SizeOfArray(ItemsChoiceType2.tblCellSpacing); }
+        public int SizeOfTblHeaderArray     () { return SizeOfArray(ItemsChoiceType2.tblHeader     ); }
+        public int SizeOfTrHeightArray      () { return SizeOfArray(ItemsChoiceType2.trHeight      ); }
+        public int SizeOfWAfterArray        () { return SizeOfArray(ItemsChoiceType2.wAfter        ); }
+        public int SizeOfWBeforeArray       () { return SizeOfArray(ItemsChoiceType2.wBefore       ); }
 
-        public CT_OnOff AddNewCantSplit()
-        {
-            return AddNewObject<CT_OnOff>(ItemsChoiceType2.cantSplit);
-        }
+        public CT_OnOff         GetCantSplitArray     (int p) { return GetObjectArray<CT_OnOff        >(p, ItemsChoiceType2.cantSplit     ); }
+        public CT_Cnf           GetCnfStyleArray      (int p) { return GetObjectArray<CT_Cnf          >(p, ItemsChoiceType2.cnfStyle      ); }
+        public CT_DecimalNumber GetDivIdArray         (int p) { return GetObjectArray<CT_DecimalNumber>(p, ItemsChoiceType2.divId         ); }
+        public CT_DecimalNumber GetGridAfterArray     (int p) { return GetObjectArray<CT_DecimalNumber>(p, ItemsChoiceType2.gridAfter     ); }
+        public CT_DecimalNumber GetGridBeforeArray    (int p) { return GetObjectArray<CT_DecimalNumber>(p, ItemsChoiceType2.gridBefore    ); }
+        public CT_OnOff         GetHiddenArray        (int p) { return GetObjectArray<CT_OnOff        >(p, ItemsChoiceType2.hidden        ); }
+        public CT_Jc            GetJcArray            (int p) { return GetObjectArray<CT_Jc           >(p, ItemsChoiceType2.jc            ); }
+        public CT_TblWidth      GetTblCellSpacingArray(int p) { return GetObjectArray<CT_TblWidth     >(p, ItemsChoiceType2.tblCellSpacing); }
+        public CT_OnOff         GetTblHeaderArray     (int p) { return GetObjectArray<CT_OnOff        >(p, ItemsChoiceType2.tblHeader     ); }
+        public CT_Height        GetTrHeightArray      (int p) { return GetObjectArray<CT_Height       >(p, ItemsChoiceType2.trHeight      ); }
+        public CT_TblWidth      GetWAfterArray        (int p) { return GetObjectArray<CT_TblWidth     >(p, ItemsChoiceType2.wAfter        ); }
+        public CT_TblWidth      GetWBeforeArray       (int p) { return GetObjectArray<CT_TblWidth     >(p, ItemsChoiceType2.wBefore       ); }
 
-        public List<CT_OnOff> GetCantSplitList()
-        {
-            return GetObjectList<CT_OnOff>(ItemsChoiceType2.cantSplit);
-        }
+        public CT_OnOff         InsertNewNewCantSplit     (int p) { return InsertNewObject<CT_OnOff        >(ItemsChoiceType2.cantSplit     , p); }
+        public CT_Cnf           InsertNewNewCnfStyle      (int p) { return InsertNewObject<CT_Cnf          >(ItemsChoiceType2.cnfStyle      , p); }
+        public CT_DecimalNumber InsertNewNewDivId         (int p) { return InsertNewObject<CT_DecimalNumber>(ItemsChoiceType2.divId         , p); }
+        public CT_DecimalNumber InsertNewNewGridAfter     (int p) { return InsertNewObject<CT_DecimalNumber>(ItemsChoiceType2.gridAfter     , p); }
+        public CT_DecimalNumber InsertNewNewGridBefore    (int p) { return InsertNewObject<CT_DecimalNumber>(ItemsChoiceType2.gridBefore    , p); }
+        public CT_OnOff         InsertNewNewHidden        (int p) { return InsertNewObject<CT_OnOff        >(ItemsChoiceType2.hidden        , p); }
+        public CT_Jc            InsertNewNewJc            (int p) { return InsertNewObject<CT_Jc           >(ItemsChoiceType2.jc            , p); }
+        public CT_TblWidth      InsertNewNewTblCellSpacing(int p) { return InsertNewObject<CT_TblWidth     >(ItemsChoiceType2.tblCellSpacing, p); }
+        public CT_OnOff         InsertNewNewTblHeader     (int p) { return InsertNewObject<CT_OnOff        >(ItemsChoiceType2.tblHeader     , p); }
+        public CT_Height        InsertNewNewTrHeight      (int p) { return InsertNewObject<CT_Height       >(ItemsChoiceType2.trHeight      , p); }
+        public CT_TblWidth      InsertNewNewWAfter        (int p) { return InsertNewObject<CT_TblWidth     >(ItemsChoiceType2.wAfter        , p); }
+        public CT_TblWidth      InsertNewNewWBefore       (int p) { return InsertNewObject<CT_TblWidth     >(ItemsChoiceType2.wBefore       , p); }
 
-        public CT_OnOff AddNewTblHeader()
-        {
-            return AddNewObject<CT_OnOff>(ItemsChoiceType2.tblHeader);
-        }
+        public CT_OnOff         AddNewCantSplit     () { return AddNewObject<CT_OnOff        >(ItemsChoiceType2.cantSplit     ); }
+        public CT_Cnf           AddNewCnfStyle      () { return AddNewObject<CT_Cnf          >(ItemsChoiceType2.cnfStyle      ); }
+        public CT_DecimalNumber AddNewDivId         () { return AddNewObject<CT_DecimalNumber>(ItemsChoiceType2.divId         ); }
+        public CT_DecimalNumber AddNewGridAfter     () { return AddNewObject<CT_DecimalNumber>(ItemsChoiceType2.gridAfter     ); }
+        public CT_DecimalNumber AddNewGridBefore    () { return AddNewObject<CT_DecimalNumber>(ItemsChoiceType2.gridBefore    ); }
+        public CT_OnOff         AddNewHidden        () { return AddNewObject<CT_OnOff        >(ItemsChoiceType2.hidden        ); }
+        public CT_Jc            AddNewJc            () { return AddNewObject<CT_Jc           >(ItemsChoiceType2.jc            ); }
+        public CT_TblWidth      AddNewTblCellSpacing() { return AddNewObject<CT_TblWidth     >(ItemsChoiceType2.tblCellSpacing); }
+        public CT_OnOff         AddNewTblHeader     () { return AddNewObject<CT_OnOff        >(ItemsChoiceType2.tblHeader     ); }
+        public CT_Height        AddNewTrHeight      () { return AddNewObject<CT_Height       >(ItemsChoiceType2.trHeight      ); }
+        public CT_TblWidth      AddNewWAfter        () { return AddNewObject<CT_TblWidth     >(ItemsChoiceType2.wAfter        ); }
+        public CT_TblWidth      AddNewWBefore       () { return AddNewObject<CT_TblWidth     >(ItemsChoiceType2.wBefore       ); }
 
-        public List<CT_OnOff> GetTblHeaderList()
-        {
-            return GetObjectList<CT_OnOff>(ItemsChoiceType2.tblHeader);
-        }
+        public void SetCantSplit     (int p, CT_OnOff         obj) { SetObject(ItemsChoiceType2.cantSplit     , p, obj); }
+        public void SetCnfStyle      (int p, CT_Cnf           obj) { SetObject(ItemsChoiceType2.cnfStyle      , p, obj); }
+        public void SetDivId         (int p, CT_DecimalNumber obj) { SetObject(ItemsChoiceType2.divId         , p, obj); }
+        public void SetGridAfter     (int p, CT_DecimalNumber obj) { SetObject(ItemsChoiceType2.gridAfter     , p, obj); }
+        public void SetGridBefore    (int p, CT_DecimalNumber obj) { SetObject(ItemsChoiceType2.gridBefore    , p, obj); }
+        public void SetHidden        (int p, CT_OnOff         obj) { SetObject(ItemsChoiceType2.hidden        , p, obj); }
+        public void SetJc            (int p, CT_Jc            obj) { SetObject(ItemsChoiceType2.jc            , p, obj); }
+        public void SetTblCellSpacing(int p, CT_TblWidth      obj) { SetObject(ItemsChoiceType2.tblCellSpacing, p, obj); }
+        public void SetTblHeader     (int p, CT_OnOff         obj) { SetObject(ItemsChoiceType2.tblHeader     , p, obj); }
+        public void SetTrHeight      (int p, CT_Height        obj) { SetObject(ItemsChoiceType2.trHeight      , p, obj); }
+        public void SetWAfter        (int p, CT_TblWidth      obj) { SetObject(ItemsChoiceType2.wAfter        , p, obj); }
+        public void SetWBefore       (int p, CT_TblWidth      obj) { SetObject(ItemsChoiceType2.wBefore       , p, obj); }
 
-        public int SizeOfTblHeaderArray()
-        {
-            return SizeOfArray(ItemsChoiceType2.tblHeader);
-        }
+        public void RemoveCantSplit     (int p) { RemoveObject(ItemsChoiceType2.cantSplit     , p); }
+        public void RemoveCnfStyle      (int p) { RemoveObject(ItemsChoiceType2.cnfStyle      , p); }
+        public void RemoveDivId         (int p) { RemoveObject(ItemsChoiceType2.divId         , p); }
+        public void RemoveGridAfter     (int p) { RemoveObject(ItemsChoiceType2.gridAfter     , p); }
+        public void RemoveGridBefore    (int p) { RemoveObject(ItemsChoiceType2.gridBefore    , p); }
+        public void RemoveHidden        (int p) { RemoveObject(ItemsChoiceType2.hidden        , p); }
+        public void RemoveJc            (int p) { RemoveObject(ItemsChoiceType2.jc            , p); }
+        public void RemoveTblCellSpacing(int p) { RemoveObject(ItemsChoiceType2.tblCellSpacing, p); }
+        public void RemoveTblHeader     (int p) { RemoveObject(ItemsChoiceType2.tblHeader     , p); }
+        public void RemoveTrHeight      (int p) { RemoveObject(ItemsChoiceType2.trHeight      , p); }
+        public void RemoveWAfter        (int p) { RemoveObject(ItemsChoiceType2.wAfter        , p); }
+        public void RemoveWBefore       (int p) { RemoveObject(ItemsChoiceType2.wBefore       , p); }
 
-        public int SizeOfCantSplitArray()
-        {
-            return SizeOfArray(ItemsChoiceType2.cantSplit);
-        }
         #region Generic methods for object operation
-
         private List<T> GetObjectList<T>(ItemsChoiceType2 type) where T : class
         {
             lock (this)
