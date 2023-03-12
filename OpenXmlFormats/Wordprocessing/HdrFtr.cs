@@ -306,6 +306,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return AddNewObject<CT_P>(ItemsChoiceType8.p);
         }
 
+        public CT_Tbl AddNewTbl()
+        {
+            return AddNewObject<CT_Tbl>(ItemsChoiceType8.tbl);
+        }
+
         public void SetPArray(int i, CT_P cT_P)
         {
             SetObject<CT_P>(ItemsChoiceType8.p, i, cT_P);
