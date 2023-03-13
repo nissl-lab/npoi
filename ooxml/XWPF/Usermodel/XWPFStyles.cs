@@ -200,8 +200,15 @@ namespace NPOI.XWPF.UserModel
         {
             foreach (XWPFStyle style in listStyle)
             {
-                if (style.StyleId.Equals(styleID))
-                    return style;
+                try
+                {
+                    if (style.StyleId.Equals(styleID))
+                        return style;
+                }
+                catch (NullReferenceException e)
+                {
+                    // Ignore NPE
+                }
             }
             return null;
         }
