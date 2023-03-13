@@ -17,7 +17,11 @@
 namespace TestCases.XWPF.UserModel
 {
     using NPOI.OpenXmlFormats.Wordprocessing;
+    using CT_Blip = NPOI.OpenXmlFormats.Dml.CT_Blip;
+    using CT_BlipFillProperties = NPOI.OpenXmlFormats.Dml.CT_BlipFillProperties;
+    using CT_Picture = NPOI.OpenXmlFormats.Dml.Picture.CT_Picture;
     using NPOI.Util;
+    using NPOI.WP.UserModel;
     using NPOI.XWPF.Model;
     using NPOI.XWPF.UserModel;
     using NUnit.Framework;
@@ -479,6 +483,48 @@ namespace TestCases.XWPF.UserModel
             Assert.AreEqual(1, doc.AllPictures.Count);
             Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
         }
+
+        /**
+         * Bugzilla #58237 - Unable to add image to word document header
+         *
+         * @throws Exception
+         */
+        [Test]
+        public void TestAddPictureInHeader()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("TestDocument.docx");
+            XWPFHeader hdr = doc.CreateHeader(HeaderFooterType.DEFAULT);
+            XWPFParagraph p = hdr.CreateParagraph();
+            XWPFRun r = p.CreateRun();
+
+            Assert.AreEqual(0, hdr.AllPictures.Count);
+            Assert.AreEqual(0, r.GetEmbeddedPictures().Count);
+
+            r.AddPicture(new ByteArrayInputStream(new byte[0]), (int)PictureType.JPEG, "test.jpg", 21, 32);
+
+            Assert.AreEqual(1, hdr.AllPictures.Count);
+            Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
+
+            XWPFPicture pic = r.GetEmbeddedPictures()[0];
+            CT_Picture ctPic = pic.GetCTPicture();
+            CT_BlipFillProperties ctBlipFill = ctPic.blipFill;
+
+            Assert.IsNotNull(ctBlipFill);
+
+            CT_Blip ctBlip = ctBlipFill.blip;
+
+            Assert.IsNotNull(ctBlip);
+            Assert.AreEqual("rId1", ctBlip.embed);
+
+            XWPFDocument docBack = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            XWPFHeader hdrBack = docBack.GetHeaderArray(0);
+            XWPFParagraph pBack = hdrBack.GetParagraphArray(0);
+            XWPFRun rBack = pBack.Runs[0];
+
+            Assert.AreEqual(1, hdrBack.AllPictures.Count);
+            Assert.AreEqual(1, rBack.GetEmbeddedPictures().Count);
+        }
+
         /**
          * Bugzilla #52288 - setting the font family on the
          *  run mustn't NPE
