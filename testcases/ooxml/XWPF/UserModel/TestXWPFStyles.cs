@@ -223,6 +223,11 @@ namespace TestCases.XWPF.UserModel
                 Assert.IsNotNull(styles.GetStyle("NoList"));
                 Assert.IsNull(styles.GetStyle("EmptyCellLayoutStyle"));
                 Assert.IsNotNull(styles.GetStyle("BalloonText"));
+
+                // Bug 64600: styleExist throws NPE
+                Assert.IsTrue(styles.StyleExist("NoList"));
+                Assert.IsFalse(styles.StyleExist("EmptyCellLayoutStyle"));
+                Assert.IsTrue(styles.StyleExist("BalloonText"));
             }
             catch (NullReferenceException e)
             {
