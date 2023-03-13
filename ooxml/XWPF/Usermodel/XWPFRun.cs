@@ -919,6 +919,12 @@ namespace NPOI.XWPF.UserModel
             set
             {
                 CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
+                if (value < 1)
+                {
+                    // fix for TestBug58922() in NPOI
+                    pr.sz = null; // unset
+                    return;
+                }
                 CT_HpsMeasure ctSize = pr.IsSetSz() ? pr.sz : pr.AddNewSz();
                 ctSize.val = (ulong)(value * 2);
             }

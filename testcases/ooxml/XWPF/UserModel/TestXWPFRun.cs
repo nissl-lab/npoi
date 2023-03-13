@@ -524,6 +524,7 @@ namespace TestCases.XWPF.UserModel
             }*/
             document.Close();
         }
+
         [Test]
         public void TestBug58922()
         {
@@ -562,6 +563,7 @@ namespace TestCases.XWPF.UserModel
             run.TextPosition = -1;
             Assert.AreEqual(-1, run.TextPosition);
         }
+
         [Test]
         public void TestWhitespace()
         {
