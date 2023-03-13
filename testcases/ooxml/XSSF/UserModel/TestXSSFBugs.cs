@@ -168,7 +168,7 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(1, wb1.NumberOfSheets);
             XSSFSheet sh = wb1.GetSheetAt(0) as XSSFSheet;
             XSSFDrawing drawing = sh.CreateDrawingPatriarch() as XSSFDrawing;
-            List<POIXMLDocumentPart.RelationPart> rels = drawing.RelationParts;
+            IList<POIXMLDocumentPart.RelationPart> rels = drawing.RelationParts;
             Assert.AreEqual(1, rels.Count);
             Uri baseUri = new Uri("ooxml://npoi.org"); //For test only.
             Uri target = new Uri(baseUri, rels[0].Relationship.TargetUri.ToString());
@@ -1383,8 +1383,8 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("51470.xlsx");
             XSSFSheet sh0 = wb.GetSheetAt(0) as XSSFSheet;
             XSSFSheet sh1 = wb.CloneSheet(0) as XSSFSheet;
-            List<POIXMLDocumentPart.RelationPart> rels0 = sh0.RelationParts;
-            List<POIXMLDocumentPart.RelationPart> rels1 = sh1.RelationParts;
+            IList<POIXMLDocumentPart.RelationPart> rels0 = sh0.RelationParts;
+            IList<POIXMLDocumentPart.RelationPart> rels1 = sh1.RelationParts;
             Assert.AreEqual(1, rels0.Count);
             Assert.AreEqual(1, rels1.Count);
 

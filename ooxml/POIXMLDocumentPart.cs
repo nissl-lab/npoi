@@ -38,10 +38,9 @@ using System.Xml;
     public class POIXMLDocumentPart
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(POIXMLDocumentPart));
-        private String coreDocumentRel = PackageRelationshipTypes.CORE_DOCUMENT;
 
+        private String coreDocumentRel = PackageRelationshipTypes.CORE_DOCUMENT;
         private PackagePart packagePart;
-        private PackageRelationship packageRel;
         private POIXMLDocumentPart parent;
         private Dictionary<String, RelationPart> relations = new Dictionary<String, RelationPart>();
 
@@ -128,22 +127,6 @@ using System.Xml;
             : this(GetPartFromOPCPackage(pkg, coreDocumentRel))
         {
             this.coreDocumentRel = coreDocumentRel;
-
-            PackageRelationship coreRel = pkg.GetRelationshipsByType(this.coreDocumentRel).GetRelationship(0);
-            if (coreRel == null)
-            {
-                coreRel = pkg.GetRelationshipsByType(PackageRelationshipTypes.STRICT_CORE_DOCUMENT).GetRelationship(0);
-                if (coreRel != null)
-                {
-                    throw new POIXMLException("Strict OOXML isn't currently supported, please see bug #57699");
-                }
-            }
-            if (coreRel == null)
-            {
-                throw new POIXMLException("OOXML file structure broken/invalid - no core document found!");
-            }
-            this.packagePart = pkg.GetPart(coreRel);
-            this.packageRel = coreRel;
         }
 
         /**
@@ -210,9 +193,6 @@ using System.Xml;
         public POIXMLDocumentPart(POIXMLDocumentPart parent, PackagePart part, PackageRelationship rel)
             : this(null, part)
         {
-            this.packagePart = part;
-            this.packageRel = rel;
-            this.parent = parent;
         }
 
         /**
@@ -334,14 +314,14 @@ using System.Xml;
          *
          * @return child relations
          */
-        public List<POIXMLDocumentPart> GetRelations()
+        public IList<POIXMLDocumentPart> GetRelations()
         {
             List<POIXMLDocumentPart> l = new List<POIXMLDocumentPart>();
             foreach (RelationPart rp in relations.Values)
             {
                 l.Add(rp.DocumentPart);
             }
-            return l;
+            return l.AsReadOnly();
         }
 
         /**
@@ -349,12 +329,12 @@ using System.Xml;
          *
          * @return child relations
          */
-        public List<RelationPart> RelationParts
+        public IList<RelationPart> RelationParts
         {
             get
             {
                 List<RelationPart> l = new List<RelationPart>(relations.Values);
-                return l;
+                return l.AsReadOnly();
             }
         }
 
@@ -393,11 +373,11 @@ using System.Xml;
          */
         public String GetRelationId(POIXMLDocumentPart part)
         {
-            foreach (KeyValuePair<String, RelationPart> entry in relations)
+            foreach (RelationPart rp in relations.Values)
             {
-                if (entry.Value.DocumentPart == part)
+                if (rp.DocumentPart == part)
                 {
-                    return entry.Value.Relationship.Id;
+                    return rp.Relationship.Id;
                 }
             }
             return null;
@@ -615,7 +595,6 @@ using System.Xml;
                     rel = packagePart.AddRelationship(ppName, TargetMode.Internal, descriptor.Relation);
                 }
                 POIXMLDocumentPart doc = factory.NewDocumentPart(descriptor);
-                doc.packageRel = rel;
                 doc.packagePart = part;
                 doc.parent = this;
                 if (!noRelation)

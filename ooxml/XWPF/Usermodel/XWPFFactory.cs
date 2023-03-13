@@ -28,9 +28,6 @@ namespace NPOI.XWPF.UserModel
      */
     public class XWPFFactory : POIXMLFactory
     {
-
-        private static POILogger logger = POILogFactory.GetLogger(typeof(XWPFFactory));
-
         private XWPFFactory()
         {
 

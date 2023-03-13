@@ -3572,7 +3572,7 @@ namespace NPOI.XSSF.UserModel
             clonedSheet.IsSelected = false;
 
             // copy sheet's relations
-            List<POIXMLDocumentPart> rels = GetRelations();
+            IList<POIXMLDocumentPart> rels = GetRelations();
             // if the sheet being cloned has a drawing then remember it and re-create too
             XSSFDrawing dg = null;
             foreach (POIXMLDocumentPart r in rels)
@@ -3616,7 +3616,7 @@ namespace NPOI.XSSF.UserModel
                 clonedDg = clonedSheet.CreateDrawingPatriarch() as XSSFDrawing;
 
                 // Clone drawing relations
-                List<POIXMLDocumentPart> srcRels = dg.GetRelations();
+                IList<POIXMLDocumentPart> srcRels = dg.GetRelations();
                 foreach (POIXMLDocumentPart rel in srcRels)
                 {
                     PackageRelationship relation = rel.GetPackageRelationship();
@@ -5535,7 +5535,7 @@ namespace NPOI.XSSF.UserModel
             if (sheetDrawing != null)
             {
                 IDrawing destDraw = destSheet.CreateDrawingPatriarch();
-                List<POIXMLDocumentPart> sheetPictures = sheetDrawing.GetRelations();
+                IList<POIXMLDocumentPart> sheetPictures = sheetDrawing.GetRelations();
                 Dictionary<string, uint> pictureIdMapping = new Dictionary<string, uint>();
                 foreach (IEG_Anchor anchor in sheetDrawing.GetCTDrawing().CellAnchors)
                 {
@@ -5596,7 +5596,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        private XSSFPictureData FindPicture(List<POIXMLDocumentPart> sheetPictures, string id)
+        private XSSFPictureData FindPicture(IList<POIXMLDocumentPart> sheetPictures, string id)
         {
             foreach (POIXMLDocumentPart item in sheetPictures)
             {

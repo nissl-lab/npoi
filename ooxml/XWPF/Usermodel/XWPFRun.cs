@@ -1150,7 +1150,7 @@ namespace NPOI.XWPF.UserModel
 
                 CT_BlipFillProperties blipFill = pic.AddNewBlipFill();
                 CT_Blip blip = blipFill.AddNewBlip();
-                blip.embed = (picData.GetPackageRelationship().Id);
+                blip.embed = parent.Document.GetRelationId(picData);
                 if (doc != null)
                 {
                     extAct(doc, blip);
