@@ -134,14 +134,36 @@ namespace TestCases.XWPF.UserModel
             CT_P ctp = p.GetCTP();
             CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
 
+            Assert.AreEqual(-1, p.SpacingBefore);
             Assert.AreEqual(-1, p.SpacingAfter);
+            Assert.AreEqual(-1, p.SpacingBetween, 0.1);
+            Assert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
 
             CT_Spacing spacing = ppr.AddNewSpacing();
             spacing.after = 10;
             Assert.AreEqual(10, p.SpacingAfter);
+            spacing.before = 10;
+            Assert.AreEqual(10, p.SpacingBefore);
 
             p.SpacingAfter = 100;
             Assert.AreEqual(100, (int)spacing.after);
+            p.SpacingBefore = 100;
+            Assert.AreEqual(100, spacing.before);
+
+            p.SetSpacingBetween(.25, LineSpacingRule.EXACT);
+            Assert.AreEqual(.25, p.SpacingBetween, 0.01);
+            Assert.AreEqual(LineSpacingRule.EXACT, p.SpacingLineRule);
+            p.SetSpacingBetween(1.25, LineSpacingRule.AUTO);
+            Assert.AreEqual(1.25, p.SpacingBetween, 0.01);
+            Assert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
+            p.SetSpacingBetween(.5, LineSpacingRule.ATLEAST);
+            Assert.AreEqual(.5, p.SpacingBetween, 0.01);
+            Assert.AreEqual(LineSpacingRule.ATLEAST, p.SpacingLineRule);
+            p.SetSpacingBetween(1.15);
+            Assert.AreEqual(1.15, p.SpacingBetween, 0.01);
+            Assert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
+
+            doc.Close();
         }
 
         [Test]
