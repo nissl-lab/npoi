@@ -208,6 +208,8 @@ namespace NPOI.OpenXml4Net.OPC
          * @throws InvalidFormatException
          *             If the specified file doesn't exist, and a parsing error
          *             occur.
+	     * @throws InvalidOperationException If the zip file cannot be opened.
+	     * @throws InvalidFormatException if the package is not valid.
          */
         public static OPCPackage Open(String path, PackageAccess access)
         {
@@ -231,14 +233,7 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     if (!success)
                     {
-                        try
-                        {
-                            pack.Close();
-                        }
-                        catch (IOException e)
-                        {
-                            throw new InvalidOperationException("Could not close OPCPackage while cleaning up", e);
-                        }
+                        IOUtils.CloseQuietly(pack);
                     }
                 }
             }
@@ -393,11 +388,6 @@ namespace NPOI.OpenXml4Net.OPC
             return pkg;
         }
 
-        /**
-         * Configure the package.
-         * 
-         * @param pkg
-         */
         private static void ConfigurePackage(OPCPackage pkg)
         {
             // Content type manager
@@ -599,8 +589,7 @@ namespace NPOI.OpenXml4Net.OPC
          * (PackageAccess.Write). This method is call when other methods need write
          * right.
          * 
-         * @throws InvalidOperationException
-         *             Throws if a read operation is done on a write only package.
+    	 * @throws InvalidOperationException if a read operation is done on a write only package.
          * @see org.apache.poi.OpenXml4Net.opc.PackageAccess
          */
         internal void ThrowExceptionIfWriteOnly()
@@ -788,11 +777,14 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Load the parts of the archive if it has not been done yet. The
          * relationships of each part are not loaded.
+         * 
          * Note - Rule M4.1 states that there may only ever be one Core
          *  Properties Part, but Office produced files will sometimes
          *  have multiple! As Office ignores all but the first, we relax
          *  Compliance with Rule M4.1, and ignore all others silently too. 
+         *
          * @return All this package's parts.
+         * @throws InvalidFormatException if the package is not valid.
          */
         public List<PackagePart> GetParts()
         {
@@ -1051,14 +1043,14 @@ namespace NPOI.OpenXml4Net.OPC
          * Add the specified part to the package. If a part already exists in the
          * package with the same name as the one specified, then we replace the old
          * part by the specified part.
-         * 
+         *
          * @param part
-         *            The part to Add (or replace).
-         * @return The part Added to the package, the same as the one specified.
-         * @throws InvalidFormatException
+         *            The part to add (or replace).
+         * @return The part added to the package, the same as the one specified.
+         * @throws InvalidOperationException
          *             If rule M1.12 is not verified : Packages shall not contain
          *             equivalent part names and package implementers shall neither
-         *             Create nor recognize packages with equivalent part names.
+         *             create nor recognize packages with equivalent part names.
          */
         protected PackagePart AddPackagePart(PackagePart part)
         {
@@ -1457,9 +1449,9 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Retrieves all package relationships.
-         * 
+         *
          * @return All package relationships of this package.
-         * @throws OpenXml4NetException
+         * @throws InvalidOperationException if a read operation is done on a write only package.
          * @see #GetRelationshipsHelper(String)
          */
         public PackageRelationshipCollection Relationships
