@@ -15,9 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+
 namespace NPOI.SS.UserModel
 {
-
+    /**
+     * This interface isn't implemented ...
+     */
+    [Obsolete("deprecated in POI 3.16 beta1, scheduled for removal in 3.18")]
     public interface ITextbox : IShape
     {
 
