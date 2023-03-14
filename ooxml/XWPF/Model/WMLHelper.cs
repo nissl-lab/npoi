@@ -21,7 +21,7 @@ namespace NPOI.XWPF.Model
 
     public sealed class WMLHelper
     {
-        public static bool STOnOffToBoolean(ST_OnOff value)
+        public static bool ConvertSTOnOffToBoolean(ST_OnOff value)
         {
             if (value == ST_OnOff.True || value == ST_OnOff.on/* || value == ST_OnOff.X_1*/)
             {
@@ -30,7 +30,7 @@ namespace NPOI.XWPF.Model
             return false;
         }
 
-        public static ST_OnOff BooleanToSTOnOff(bool value)
+        public static ST_OnOff ConvertBooleanToSTOnOff(bool value)
         {
             return (value ? ST_OnOff.True : ST_OnOff.False);
         }

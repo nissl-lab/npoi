@@ -861,10 +861,10 @@ namespace NPOI.XWPF.UserModel
             get
             {
                 CT_PPr ppr = GetCTPPr();
-                CT_OnOff ct_pageBreak = ppr.IsSetPageBreakBefore() ? ppr
+                CT_OnOff ctPageBreak = ppr.IsSetPageBreakBefore() ? ppr
                         .pageBreakBefore : null;
-                if (ct_pageBreak != null
-                        && ct_pageBreak.val)
+                if (ctPageBreak != null
+                        && ctPageBreak.val)
                 {
                     return true;
                 }
@@ -1409,6 +1409,7 @@ namespace NPOI.XWPF.UserModel
                                 charPos = startChar;
                             else
                                 charPos = 0;
+
                             for (; charPos < candidate.Length; charPos++)
                             {
                                 if ((candidate[charPos] == searched[0]) && (candCharPos == 0))
