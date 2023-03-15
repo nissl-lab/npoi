@@ -84,7 +84,10 @@ namespace NPOI.OOXML.XSSF.UserModel
         public string Name
         {
             get => _pivotStyle.name;
-            set => _style = _stylesTable.GetTableStyle(value);
+            set {
+                _pivotStyle.name = value;
+                _style = _stylesTable.GetTableStyle(value);
+            }
         }
 
         public ITableStyle Style => _style;

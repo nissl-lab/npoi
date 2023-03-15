@@ -25,6 +25,8 @@ namespace NPOI.XSSF.UserModel
     using NPOI.SS.Util;
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.SS;
+    using NPOI.OOXML.XSSF.UserModel;
+    using NPOI.XSSF.Model;
 
     public class XSSFPivotTable : POIXMLDocumentPart
     {
@@ -39,6 +41,7 @@ namespace NPOI.XSSF.UserModel
         private XSSFPivotCacheRecords pivotCacheRecords;
         private ISheet parentSheet;
         private ISheet dataSheet;
+        private IPivotTableStyleInfo styleInfo;
 
 
         public XSSFPivotTable()
@@ -155,13 +158,20 @@ namespace NPOI.XSSF.UserModel
             return dataSheet;
         }
 
+        public string StyleName
+        {
+            get => pivotTableDefinition.pivotTableStyleInfo.name;
+            set => pivotTableDefinition.pivotTableStyleInfo.name = StylesSource.GetTableStyle(value).Name;
+        }
+
+        public IPivotTableStyleInfo Style => styleInfo;
+
+        protected StylesTable StylesSource => ((XSSFWorkbook)((XSSFSheet)GetParent()).Workbook).GetStylesSource();
 
         private void SetDataSheet(ISheet dataSheet)
         {
             this.dataSheet = dataSheet;
         }
-
-
 
         protected internal override void Commit()
         {
@@ -207,12 +217,16 @@ namespace NPOI.XSSF.UserModel
 
             //Set the default style for the pivot table
             CT_PivotTableStyle style = pivotTableDefinition.AddNewPivotTableStyleInfo();
-            style.name = (/*setter*/"PivotStyleLight16");
-            style.showLastColumn = (/*setter*/true);
-            style.showColStripes = (/*setter*/false);
-            style.showRowStripes = (/*setter*/false);
-            style.showColHeaders = (/*setter*/true);
-            style.showRowHeaders = (/*setter*/true);
+
+            styleInfo = new XSSFPivotTableStyleInfo(StylesSource, style)
+            {
+                Name = "PivotStyleLight16",
+                IsShowLastColumn = true,
+                IsShowColumnStripes = false,
+                IsShowRowStripes = false,
+                IsShowRowHeaders = true,
+                IsShowColumnHeaders = true
+            };
         }
 
         protected AreaReference GetPivotArea()

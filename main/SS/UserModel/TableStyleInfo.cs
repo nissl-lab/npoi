@@ -23,7 +23,7 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// return the name of the style (may reference a built-in style)
         /// </summary>
-        String Name { get; set; }
+        string Name { get; set; }
 
         /// <summary>
         /// style definition
