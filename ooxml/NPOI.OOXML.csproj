@@ -264,6 +264,7 @@
     <Compile Include="XSSF\UserModel\XSSFPivotCacheDefinition.cs" />
     <Compile Include="XSSF\UserModel\XSSFPivotCacheRecords.cs" />
     <Compile Include="XSSF\UserModel\XSSFPivotTable.cs" />
+    <Compile Include="XSSF\UserModel\XSSFPivotTableStyleInfo.cs" />
     <Compile Include="XSSF\UserModel\XSSFPrintSetup.cs" />
     <Compile Include="XSSF\UserModel\XSSFRelation.cs" />
     <Compile Include="XSSF\UserModel\XSSFRichTextString.cs" />

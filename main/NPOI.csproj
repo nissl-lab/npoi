@@ -523,6 +523,7 @@
     <Compile Include="SS\UserModel\ExcelNumberFormat.cs" />
     <Compile Include="SS\UserModel\Helpers\BaseRowColShifter.cs" />
     <Compile Include="SS\UserModel\Helpers\RowShifter.cs" />
+    <Compile Include="SS\UserModel\PivotTableStyleInfo.cs" />
     <Compile Include="SS\UserModel\TableStyle.cs" />
     <Compile Include="SS\UserModel\TableStyleInfo.cs" />
     <Compile Include="SS\UserModel\TableStyleType.cs" />
