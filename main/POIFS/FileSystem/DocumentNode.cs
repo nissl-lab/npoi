@@ -16,12 +16,11 @@
 ==================================================================== */
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 
 using NPOI.POIFS.FileSystem;
 using NPOI.POIFS.Properties;
 using NPOI.POIFS.Dev;
-
 
 namespace NPOI.POIFS.FileSystem
 {
@@ -104,7 +103,7 @@ namespace NPOI.POIFS.FileSystem
          * @return an array of Object; may not be null, but may be empty
          */
 
-        public Array ViewableArray
+        public Object[] ViewableArray
         {
             get { return new Object[0]; }
         }
@@ -117,11 +116,11 @@ namespace NPOI.POIFS.FileSystem
          * back end store
          */
 
-        public IEnumerator ViewableIterator
+        public IEnumerator<Object> ViewableIterator
         {
             get
             {
-                IList components = new ArrayList();
+                List<Object> components = new List<Object>();
 
                 components.Add(Property);
                 if (_document != null)

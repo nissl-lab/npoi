@@ -965,11 +965,11 @@ namespace NPOI.POIFS.FileSystem
          * back end store
          */
 
-        protected IEnumerator GetViewableIterator()
+        protected IEnumerator<Object> GetViewableIterator()
         {
             if (!PreferArray)
             {
-                return ((POIFSViewable)Root).ViewableIterator;
+                return Root.ViewableIterator;
             }
             return null;
         }
@@ -1019,12 +1019,12 @@ namespace NPOI.POIFS.FileSystem
             get { return GetShortDescription(); }
         }
 
-        public Array ViewableArray
+        public Object[] ViewableArray
         {
             get { return GetViewableArray(); }
         }
 
-        public IEnumerator ViewableIterator
+        public IEnumerator<Object> ViewableIterator
         {
             get { return GetViewableIterator(); }
         }
