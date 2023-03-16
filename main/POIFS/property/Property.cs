@@ -469,20 +469,21 @@ namespace NPOI.POIFS.Properties
         {
             get
             {
-                Array results = new string[5];
+                Object[] results = new string[6];
 
-                results.SetValue("Name          = \"" + Name + "\"", 0);
-                results.SetValue("Property Type = " + _property_type.Value, 1);
-                results.SetValue("Node Color    = " + _node_color.Value, 2);
+                results[0] = "Name          = \"" + Name + "\"";
+                results[1] = "Property Type = " + _property_type.Value;
+                results[2] = "Node Color    = " + _node_color.Value;
                 long time = _days_1.Value;
 
                 time <<= 32;
                 time += ((long)_seconds_1.Value) & 0x0000FFFFL;
-                results.SetValue("Time 1        = " + time, 3);
+                results[3] = "Time 1        = " + time;
                 time = _days_2.Value;
                 time <<= 32;
                 time += ((long)_seconds_2.Value) & 0x0000FFFFL;
-                results.SetValue("Time 2        = " + time, 4);
+                results[4] = "Time 2        = " + time;
+                results[5] = "Size          = " + Size;
                 return results;
             }
         }
