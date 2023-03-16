@@ -1027,6 +1027,8 @@ namespace TestCases.SS.UserModel
                     Assert.Fail("unexpected cell type: " + cell.CellType);
                     break;
             }
+
+            wb.Close();
         }
     }
 }

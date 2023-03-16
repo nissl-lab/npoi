@@ -18,7 +18,7 @@ namespace NPOI.OpenXml4Net.OPC
      * @author Julien Chable, CDubet
      * @version 0.1
      */
-    public abstract class OPCPackage : RelationshipSource
+    public abstract class OPCPackage : RelationshipSource, ICloseable
     {
 
         /**
@@ -147,6 +147,7 @@ namespace NPOI.OpenXml4Net.OPC
         {
             return Open(path, defaultPackageAccess);
         }
+
         /**
         * Open a package with read/write permission.
         *
@@ -186,31 +187,15 @@ namespace NPOI.OpenXml4Net.OPC
             }
             catch (InvalidFormatException e)
             {
-                try
-                {
-                    pack.Close();
-                }
-                catch (IOException ex)
-                {
-                    throw new InvalidOperationException(ex.Message, e);
-                }
+                IOUtils.CloseQuietly(pack);
                 throw;
             }
             catch (RuntimeException e)
             {
-                try
-                {
-                    pack.Close();
-                }
-                catch (IOException ex)
-                {
-                    throw new InvalidOperationException(ex.Message, e);
-                }
+                IOUtils.CloseQuietly(pack);
                 throw;
             }
         }
-
-
 
         /**
          * Open a package.
@@ -257,9 +242,11 @@ namespace NPOI.OpenXml4Net.OPC
                     }
                 }
             }
+
             pack.originalPackagePath = new DirectoryInfo(path).FullName;
             return pack;
         }
+
         /**
         * Open a package.
         *
@@ -280,7 +267,6 @@ namespace NPOI.OpenXml4Net.OPC
                 throw new ArgumentException("file must not be a directory");
 
             OPCPackage pack = new ZipPackage(file, access);
-            
             try
             {
                 if (pack.partList == null && access != PackageAccess.WRITE)
@@ -292,29 +278,16 @@ namespace NPOI.OpenXml4Net.OPC
             }
             catch (InvalidFormatException e)
             {
-                try
-                {
-                    pack.Close();
-                }
-                catch (IOException ex)
-                {
-                    throw new InvalidOperationException(ex.Message, e);
-                }
+                IOUtils.CloseQuietly(pack);
                 throw;
             }
             catch (RuntimeException e)
             {
-                try
-                {
-                    pack.Close();
-                }
-                catch (IOException ex)
-                {
-                    throw new InvalidOperationException(ex.Message, e);
-                }
+                IOUtils.CloseQuietly(pack);
                 throw;
             }
         }
+
         /**
          * Open a package.
          * 
@@ -329,9 +302,22 @@ namespace NPOI.OpenXml4Net.OPC
         public static OPCPackage Open(Stream in1)
         {
             OPCPackage pack = new ZipPackage(in1, PackageAccess.READ_WRITE);
-            if (pack.partList == null)
+            try
             {
-                pack.GetParts();
+                if (pack.partList == null)
+                {
+                    pack.GetParts();
+                }
+            }
+            catch (InvalidFormatException e)
+            {
+                IOUtils.CloseQuietly(pack);
+                throw;
+            }
+            catch (RuntimeException e)
+            {
+                IOUtils.CloseQuietly(pack);
+                throw;
             }
             return pack;
         }
@@ -359,16 +345,14 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public static OPCPackage OpenOrCreate(string path)
         {
-            OPCPackage retPackage = null;
             if (File.Exists(path))
             {
-                retPackage = Open(path);
+                return Open(path);
             }
             else
             {
-                retPackage = Create(path);
+                return Create(path);
             }
-            return retPackage;
         }
 
         /**

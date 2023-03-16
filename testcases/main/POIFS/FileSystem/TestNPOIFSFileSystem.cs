@@ -97,6 +97,7 @@ namespace TestCases.POIFS.FileSystem
             HeaderBlock header = new HeaderBlock(new MemoryStream(baos.ToArray()));
             return header;
         }
+
         public static NPOIFSFileSystem WriteOutAndReadBack(NPOIFSFileSystem original)
         {
             MemoryStream baos = new MemoryStream();
