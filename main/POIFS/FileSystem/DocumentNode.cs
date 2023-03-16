@@ -124,7 +124,10 @@ namespace NPOI.POIFS.FileSystem
                 IList components = new ArrayList();
 
                 components.Add(Property);
-                components.Add(_document);
+                if (_document != null)
+                {
+                    components.Add(_document);
+                }
                 return components.GetEnumerator();
             }
         }
