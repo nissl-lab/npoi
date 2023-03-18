@@ -106,12 +106,13 @@ namespace TestCases.XWPF.UserModel
             XWPFTable table = tables[0];
             List<XWPFTableRow> tableRows = table.Rows;
             Assert.AreEqual(2, tableRows.Count);
-            Assert.AreEqual(XWPFTableCell.XWPFVertAlign.TOP, tableRows[0].GetCell(0).GetVerticalAlignment());
+            Assert.IsNull(tableRows[0].GetCell(0).GetVerticalAlignment());
             Assert.AreEqual(XWPFTableCell.XWPFVertAlign.BOTTOM, tableRows[0].GetCell(1).GetVerticalAlignment());
             Assert.AreEqual(XWPFTableCell.XWPFVertAlign.CENTER, tableRows[1].GetCell(0).GetVerticalAlignment());
-            Assert.AreEqual(XWPFTableCell.XWPFVertAlign.TOP, tableRows[1].GetCell(1).GetVerticalAlignment());
+            Assert.IsNull(tableRows[1].GetCell(1).GetVerticalAlignment()); // should return null since alignment isn't set
         }
 
+        [Ignore("This is not a very useful test as written. It is not worth the execution time for a unit test")]
         [Test]
         public void TestCellVerticalAlignShouldNotThrowNPE()
         {
@@ -125,7 +126,8 @@ namespace TestCases.XWPF.UserModel
                     List<XWPFTableCell> tableCells = tableRow.GetTableCells();
                     foreach (XWPFTableCell tableCell in tableCells)
                     {
-                        Assert.IsNotNull(tableCell.GetVerticalAlignment());
+                        // getVerticalAlignment should return either an XWPFVertAlign enum or null if not set
+                        tableCell.GetVerticalAlignment();
                     }
                 }
             }
