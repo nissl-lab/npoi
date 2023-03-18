@@ -57,6 +57,7 @@ namespace TestCases.XWPF.UserModel
             XWPFTableCell.XWPFVertAlign al = cell.GetVerticalAlignment().Value;
             Assert.AreEqual(XWPFTableCell.XWPFVertAlign.BOTH, al);
         }
+
         [Test]
         public void TestSetGetColor()
         {
@@ -76,7 +77,7 @@ namespace TestCases.XWPF.UserModel
         }
 
         /**
-         * ensure that CTHMerge & CTTcBorders go in poi-ooxml.jar
+         * ensure that CTHMerge and CTTcBorders go in poi-ooxml.jar
          */
         [Test]
         public void Test54099()
@@ -96,6 +97,7 @@ namespace TestCases.XWPF.UserModel
             CT_VMerge vMerge = tcPr.AddNewVMerge();
         }
 
+        [Test]
         public void TestCellVerticalAlign()
         {
             XWPFDocument docx = XWPFTestDataSamples.OpenSampleDocument("59030.docx");
@@ -109,8 +111,9 @@ namespace TestCases.XWPF.UserModel
             Assert.AreEqual(XWPFTableCell.XWPFVertAlign.CENTER, tableRows[1].GetCell(0).GetVerticalAlignment());
             Assert.AreEqual(XWPFTableCell.XWPFVertAlign.TOP, tableRows[1].GetCell(1).GetVerticalAlignment());
         }
+
         [Test]
-        public void TestCellVerticalAlign2()
+        public void TestCellVerticalAlignShouldNotThrowNPE()
         {
             XWPFDocument docx = XWPFTestDataSamples.OpenSampleDocument("TestTableCellAlign.docx");
             IList<XWPFTable> tables = docx.Tables;
@@ -128,5 +131,4 @@ namespace TestCases.XWPF.UserModel
             }
         }
     }
-
 }
