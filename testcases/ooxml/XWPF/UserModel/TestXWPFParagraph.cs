@@ -31,7 +31,6 @@ namespace TestCases.XWPF.UserModel
     [TestFixture]
     public class TestXWPFParagraph
     {
-
         /**
          * Check that we Get the right paragraph from the header
          * @throws IOException 
@@ -123,7 +122,6 @@ namespace TestCases.XWPF.UserModel
             p.Alignment = (ParagraphAlignment.BOTH);
             Assert.AreEqual((int)ST_Jc.both, (int)ppr.jc.val);
         }
-
 
         [Test]
         public void TestSetGetSpacing()
@@ -241,7 +239,6 @@ namespace TestCases.XWPF.UserModel
             Assert.AreEqual(true, ppr.wordWrap.val);
         }
 
-
         [Test]
         public void TestSetGetPageBreak()
         {
@@ -284,6 +281,7 @@ namespace TestCases.XWPF.UserModel
             p.SetNumID("10");
             Assert.AreEqual("10", p.GetNumID());
         }
+
         [Test]
         public void TestGetSetILvl()
         {
@@ -294,6 +292,7 @@ namespace TestCases.XWPF.UserModel
             Assert.AreEqual("1", p.GetNumIlvl());
     
         }
+
         [Test]
         public void TestAddingRuns()
         {
@@ -585,6 +584,7 @@ namespace TestCases.XWPF.UserModel
             Assert.IsNotNull(p.GetRun(run));
             Assert.IsNull(p.GetRun(null));
         }
+
         [Test]
         public void Test58067()
         {
@@ -597,6 +597,7 @@ namespace TestCases.XWPF.UserModel
             }
             Assert.AreEqual("This is a test.\n\n\n\n3\n4\n5\n\n\n\nThis is a whole paragraph where one word is deleted.\n", str.ToString());
         }
+
         [Test]
         public void Test61787()
         {
@@ -610,6 +611,7 @@ namespace TestCases.XWPF.UserModel
             String s = str.ToString();
             Assert.IsTrue(s.Trim().Length > 0, "Having text: \n" + s + "\nTrimmed lenght: " + s.Trim().Length);
         }
+
         [Test]
         public void Test61787_1()
         {
@@ -641,6 +643,7 @@ namespace TestCases.XWPF.UserModel
             Assert.AreEqual(result.BeginChar, 2);
             Assert.AreEqual(result.EndChar, 0);
         }
+
         [Test]
         public void Testpullrequest404_1()
         {
@@ -659,6 +662,12 @@ namespace TestCases.XWPF.UserModel
             Assert.AreEqual(result.EndChar, 1);
         }
 
+        /**
+         * Tests for numbered lists
+         * 
+         * See also https://github.com/jimklo/apache-poi-sample/blob/master/src/main/java/com/sri/jklo/StyledDocument.java
+         * for someone else trying a similar thing
+         */
         [Test]
         public void TestNumberedLists()
         {
