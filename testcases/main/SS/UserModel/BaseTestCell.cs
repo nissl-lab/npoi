@@ -247,7 +247,7 @@ namespace TestCases.SS.UserModel
             IFont f = wb.CreateFont();
             f.FontHeightInPoints = 20;
             f.Color = (HSSFColor.Red.Index);
-            f.Boldweight = (int)FontBoldWeight.Bold;
+            f.IsBold = true;
             f.FontName = "Arial Unicode MS";
             cs.FillBackgroundColor = 3;
             cs.SetFont(f);
@@ -712,6 +712,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(CellType.Error, cell2.CellType);
             Assert.AreEqual(FormulaError.DIV0, FormulaError.ForInt(cell2.ErrorCellValue));
         }
+
         [Test]
         public void TestDefaultStyleProperties()
         {
@@ -724,7 +725,7 @@ namespace TestCases.SS.UserModel
             Assert.IsFalse(style.IsHidden);
             Assert.AreEqual(0, style.Indention);
             Assert.AreEqual(0, style.FontIndex);
-            Assert.AreEqual(0, (int)style.Alignment);
+            Assert.AreEqual(HorizontalAlignment.General, style.Alignment);
             Assert.AreEqual(0, style.DataFormat);
             Assert.AreEqual(false, style.WrapText);
 

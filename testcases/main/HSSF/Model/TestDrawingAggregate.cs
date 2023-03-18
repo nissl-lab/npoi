@@ -27,8 +27,7 @@ using TestCases.HSSF.UserModel;
 using NPOI.HSSF.Model;
 using NPOI.DDF;
 using NPOI.HSSF.Record.Aggregates;
-using ICSharpCode.SharpZipLib.GZip;
-using ICSharpCode.SharpZipLib.Zip;
+using static TestCases.POIFS.Storage.RawDataUtil;
 
 namespace TestCases.HSSF.Model
 {
@@ -224,7 +223,7 @@ namespace TestCases.HSSF.Model
             "H4sIAAAAAAAAAGWOOw7CQAxE32YTsSRIWSgQJSUloqSm5g4ICURBg+iBK3APGi6wBWeh9xGYbEps2WON" +
             "P+OWwpYeIsECMFC8S2jxNvMdlrYQ5xha5N8K6ryHdir6+avwOer5l3hq2NPYWuWN0n1dIsgfbgshuSj1" +
             "+2eqbvLdxQ0ndhy5KJ/lc1ZZK9okY5X/gSbrHZTH1vE/ozagTcwAAAA=";
-            byte[] dgBytes = decompress(data);
+            byte[] dgBytes = Decompress(data);
 
             List<EscherRecord> records = new List<EscherRecord>();
             IEscherRecordFactory recordFactory = new DefaultEscherRecordFactory();
@@ -736,7 +735,7 @@ namespace TestCases.HSSF.Model
             "IppKQdVys+cLtUY6Un0+hI2Z0wMzAxO8Lr0LbaILk8WtNsxpaFYMrTjC22723OH5GFkUi+ux8An2Hi0F" +
             "fvcr1v8aFU6POn+OCqfj4ffS/e+pcOEMKhABrCdUAAPhwB+pQHYGFcT/BBUEz6LC/wGpc+eRNSkAAA==";
 
-            byte[] dgBytes = decompress(data);
+            byte[] dgBytes = Decompress(data);
 
             IList<NPOI.HSSF.Record.Record> dgRecords = RecordFactory.CreateRecords(new MemoryStream(dgBytes));
             Assert.AreEqual(20, dgRecords.Count);
@@ -916,7 +915,7 @@ namespace TestCases.HSSF.Model
             "p9IQmzVDjm0LdSLqeHM8ILiJRsdoNYS93WyEhi7IOdKXZLTCvCLifxTMEi+snNzAtfevk8DpkejvSeB0" +
             "BPza/oPKABD5z4SARKQEELP1WQsFMc+QwP8ATkmhK404AAA=";
 
-            byte[] dgBytes = decompress(data);
+            byte[] dgBytes = Decompress(data);
 
             IList<NPOI.HSSF.Record.Record> dgRecords = RecordFactory.CreateRecords(new MemoryStream(dgBytes));
             Assert.AreEqual(14, dgRecords.Count);
@@ -962,35 +961,5 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
             Assert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data brefpore and After save is different");
         }
-
-        /**
-         * Decompress previously gziped/base64ed data
-         *
-         * @param data the gziped/base64ed data
-         * @return the raw bytes
-         * @ if you copy and pasted the data wrong
-         */
-        public static byte[] decompress(String data)
-        {
-            byte[] base64Bytes = Convert.FromBase64String(data);
-            return IOUtils.ToByteArray(new GZipInputStream(new ByteArrayInputStream(base64Bytes)));
-        }
-
-        /**
-         * Compress raw data for test runs - usually called while debugging :)
-         *
-         * @param data the raw data
-         * @return the gziped/base64ed data as String
-         * @ usually not ...
-         */
-        public static String compress(byte[] data)
-        {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            GZipOutputStream gz = new GZipOutputStream(bos);
-            gz.Write(data, 0, data.Length);
-            gz.Finish();
-            return Convert.ToBase64String(bos.ToByteArray());
-        }
-
     }
 }

@@ -21,7 +21,6 @@ namespace TestCases.XWPF
     using NPOI.POIFS.Crypt;
     using NPOI.Util;
     using NPOI.XWPF.UserModel;
-    using NPOI.XWPF;
 
     [TestFixture]
     public class TestDocumentProtection
@@ -34,36 +33,42 @@ namespace TestCases.XWPF
             Assert.IsFalse(documentWithoutDocumentProtectionTag.IsEnforcedFillingFormsProtection());
             Assert.IsFalse(documentWithoutDocumentProtectionTag.IsEnforcedCommentsProtection());
             Assert.IsFalse(documentWithoutDocumentProtectionTag.IsEnforcedTrackedChangesProtection());
+            documentWithoutDocumentProtectionTag.Close();
 
             XWPFDocument documentWithoutEnforcement = XWPFTestDataSamples.OpenSampleDocument("documentProtection_no_protection_tag_existing.docx");
             Assert.IsFalse(documentWithoutEnforcement.IsEnforcedReadonlyProtection());
             Assert.IsFalse(documentWithoutEnforcement.IsEnforcedFillingFormsProtection());
             Assert.IsFalse(documentWithoutEnforcement.IsEnforcedCommentsProtection());
             Assert.IsFalse(documentWithoutEnforcement.IsEnforcedTrackedChangesProtection());
+            documentWithoutEnforcement.Close();
 
             XWPFDocument documentWithReadonlyEnforcement = XWPFTestDataSamples.OpenSampleDocument("documentProtection_readonly_no_password.docx");
             Assert.IsTrue(documentWithReadonlyEnforcement.IsEnforcedReadonlyProtection());
             Assert.IsFalse(documentWithReadonlyEnforcement.IsEnforcedFillingFormsProtection());
             Assert.IsFalse(documentWithReadonlyEnforcement.IsEnforcedCommentsProtection());
             Assert.IsFalse(documentWithReadonlyEnforcement.IsEnforcedTrackedChangesProtection());
+            documentWithReadonlyEnforcement.Close();
 
             XWPFDocument documentWithFillingFormsEnforcement = XWPFTestDataSamples.OpenSampleDocument("documentProtection_forms_no_password.docx");
             Assert.IsTrue(documentWithFillingFormsEnforcement.IsEnforcedFillingFormsProtection());
             Assert.IsFalse(documentWithFillingFormsEnforcement.IsEnforcedReadonlyProtection());
             Assert.IsFalse(documentWithFillingFormsEnforcement.IsEnforcedCommentsProtection());
             Assert.IsFalse(documentWithFillingFormsEnforcement.IsEnforcedTrackedChangesProtection());
+            documentWithFillingFormsEnforcement.Close();
 
             XWPFDocument documentWithCommentsEnforcement = XWPFTestDataSamples.OpenSampleDocument("documentProtection_comments_no_password.docx");
             Assert.IsFalse(documentWithCommentsEnforcement.IsEnforcedFillingFormsProtection());
             Assert.IsFalse(documentWithCommentsEnforcement.IsEnforcedReadonlyProtection());
             Assert.IsTrue(documentWithCommentsEnforcement.IsEnforcedCommentsProtection());
             Assert.IsFalse(documentWithCommentsEnforcement.IsEnforcedTrackedChangesProtection());
+            documentWithCommentsEnforcement.Close();
 
             XWPFDocument documentWithTrackedChangesEnforcement = XWPFTestDataSamples.OpenSampleDocument("documentProtection_trackedChanges_no_password.docx");
             Assert.IsFalse(documentWithTrackedChangesEnforcement.IsEnforcedFillingFormsProtection());
             Assert.IsFalse(documentWithTrackedChangesEnforcement.IsEnforcedReadonlyProtection());
             Assert.IsFalse(documentWithTrackedChangesEnforcement.IsEnforcedCommentsProtection());
             Assert.IsTrue(documentWithTrackedChangesEnforcement.IsEnforcedTrackedChangesProtection());
+            documentWithTrackedChangesEnforcement.Close();
         }
 
         [Test]
@@ -76,6 +81,7 @@ namespace TestCases.XWPF
             document.EnforceReadonlyProtection();
 
             Assert.IsTrue(document.IsEnforcedReadonlyProtection());
+            document.Close();
         }
 
         [Test]
@@ -87,6 +93,7 @@ namespace TestCases.XWPF
             document.EnforceFillingFormsProtection();
 
             Assert.IsTrue(document.IsEnforcedFillingFormsProtection());
+            document.Close();
         }
 
         [Test]
@@ -98,6 +105,7 @@ namespace TestCases.XWPF
             document.EnforceCommentsProtection();
 
             Assert.IsTrue(document.IsEnforcedCommentsProtection());
+            document.Close();
         }
 
         [Test]
@@ -109,6 +117,7 @@ namespace TestCases.XWPF
             document.EnforceTrackedChangesProtection();
 
             Assert.IsTrue(document.IsEnforcedTrackedChangesProtection());
+            document.Close();
         }
 
         [Test]
@@ -120,32 +129,35 @@ namespace TestCases.XWPF
             document.RemoveProtectionEnforcement();
 
             Assert.IsFalse(document.IsEnforcedReadonlyProtection());
+            document.Close();
         }
 
         [Test]
         public void TestIntegration()
         {
-            XWPFDocument doc = new XWPFDocument();
+            XWPFDocument doc1 = new XWPFDocument();
 
-            XWPFParagraph p1 = doc.CreateParagraph();
+            XWPFParagraph p1 = doc1.CreateParagraph();
 
             XWPFRun r1 = p1.CreateRun();
             r1.SetText("Lorem ipsum dolor sit amet.");
-            doc.EnforceCommentsProtection();
+            doc1.EnforceCommentsProtection();
 
             FileInfo tempFile = TempFile.CreateTempFile("documentProtectionFile", ".docx");
             if (File.Exists(tempFile.FullName))
                 File.Delete(tempFile.FullName);
             Stream out1 = new FileStream(tempFile.FullName, FileMode.CreateNew);
 
-            doc.Write(out1);
+            doc1.Write(out1);
             out1.Close();
 
             FileStream inputStream = new FileStream(tempFile.FullName, FileMode.Open);
-            XWPFDocument document = new XWPFDocument(inputStream);
+            XWPFDocument doc2 = new XWPFDocument(inputStream);
             inputStream.Close();
 
-            Assert.IsTrue(document.IsEnforcedCommentsProtection());
+            Assert.IsTrue(doc2.IsEnforcedCommentsProtection());
+            doc2.Close();
+            doc1.Close();
         }
 
         [Test]
@@ -155,6 +167,7 @@ namespace TestCases.XWPF
             Assert.IsFalse(doc.IsEnforcedUpdateFields());
             doc.EnforceUpdateFields();
             Assert.IsTrue(doc.IsEnforcedUpdateFields());
+            doc.Close();
         }
 
         [Test]

@@ -3268,12 +3268,15 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFCell cell = workbook.CreateSheet().CreateRow(0).CreateCell(0) as XSSFCell;
+
             XSSFColor color = new XSSFColor(Color.Red);
             XSSFCellStyle style = workbook.CreateCellStyle() as XSSFCellStyle;
             style.FillForegroundColorColor = color;
             style.FillPattern = FillPattern.SolidForeground;
             cell.CellStyle = style;
+
             // Everything is fine at this point, cell is red
+
             Dictionary<String, Object> properties = new Dictionary<String, Object>();
             properties.Add(CellUtil.BORDER_BOTTOM, BorderStyle.Thin); //or BorderStyle.THIN
             CellUtil.SetCellStyleProperties(cell, properties);
@@ -3287,6 +3290,7 @@ namespace TestCases.XSSF.UserModel
             workbook.Close();
             XSSFCell ncell = nwb.GetSheetAt(0).GetRow(0).GetCell(0) as XSSFCell;
             XSSFColor ncolor = new XSSFColor(Color.Red);
+
             // Now the cell is all black
             XSSFColor nactual = ncell.CellStyle.FillBackgroundColorColor as XSSFColor;
             Assert.IsNotNull(nactual);

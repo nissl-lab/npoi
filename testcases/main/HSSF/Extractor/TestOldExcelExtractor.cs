@@ -216,45 +216,42 @@ namespace TestCases.HSSF.Extractor
             }
         }
 
-        [Test]
-        public void TestOpenInvalidFile()
+        [Test]//(expected=OfficeXmlFileException.class)
+        public void TestOpenInvalidFile1() => Assert.Throws<OfficeXmlFileException>(() =>
         {
             // a file that exists, but is a different format
-            try
-            {
-                CreateExtractor("WithVariousData.xlsx");
-                Assert.Fail("Should catch Exception here");
-            }
-            catch (OfficeXmlFileException)
-            {
-                // expected here
-            }
+            CreateExtractor("WithVariousData.xlsx");
+        });
+
+        [Test]//(expected=RecordFormatException.class)
+        public void TestOpenInvalidFile2() => Assert.Throws<RecordFormatException>(() =>
+        {
             // a completely different type of file
+            CreateExtractor("48936-strings.txt");
+        });
+
+        [Test]//(expected=FileNotFoundException.class)
+        public void TestOpenInvalidFile3() => Assert.Throws<NotSupportedException>(() =>
+        {
+            // a POIFS file which is not a Workbook
+            Stream @is = POIDataSamples.GetDocumentInstance().OpenResourceAsStream("47304.doc");
             try
             {
-                CreateExtractor("48936-strings.txt");
-                Assert.Fail("Should catch Exception here");
+                new OldExcelExtractor(@is).Close();
             }
-            catch (RecordFormatException)
+            finally
             {
-                // expected here
+                @is.Close();
             }
-        }
-        [Test]
-        public void TestOpenNonExistingFile()
+        });
+
+        [Test]//(expected= EmptyFileException.class)
+        public void TestOpenNonExistingFile() => Assert.Throws<FileNotFoundException>(() =>
         {
             // a file that exists, but is a different format
-            try
-            {
-                OldExcelExtractor extractor = new OldExcelExtractor(new FileInfo("notexistingfile.xls"));
-                extractor.Close();
-                Assert.Fail("Should catch Exception here");
-            }
-            catch (FileNotFoundException)
-            {
-                // expected here
-            }
-        }
+            OldExcelExtractor extractor = new OldExcelExtractor(new FileInfo("notexistingfile.xls"));
+            extractor.Close();
+        });
 
         [Test]
         public void TestInputStream()
