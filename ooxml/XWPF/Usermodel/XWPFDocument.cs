@@ -28,6 +28,7 @@ namespace NPOI.XWPF.UserModel
     using System.Diagnostics;
     using NPOI.OOXML.XWPF.Util;
     using System.Linq;
+    using NPOI.POIFS.Crypt;
 
     /**
      * <p>High(ish) level class for working with .docx files.</p>
@@ -43,9 +44,9 @@ namespace NPOI.XWPF.UserModel
      */
     public class XWPFDocument : POIXMLDocument, Document, IBody, IDisposable
     {
-
         private CT_Document ctDocument;
-        private XWPFSettings Settings;
+        private XWPFSettings settings;
+
         /**
          * Keeps track on all id-values used in this document and included parts, like headers, footers, etc.
          */
@@ -159,8 +160,8 @@ namespace NPOI.XWPF.UserModel
                     }
                     else if (relation.Equals(XWPFRelation.SETTINGS.Relation))
                     {
-                        Settings = (XWPFSettings)p;
-                        Settings.OnDocumentRead();
+                        settings = (XWPFSettings)p;
+                        settings.OnDocumentRead();
                     }
                     else if (relation.Equals(XWPFRelation.IMAGES.Relation))
                     {
@@ -279,7 +280,7 @@ namespace NPOI.XWPF.UserModel
             ctDocument.AddNewBody();
             
 
-            Settings = (XWPFSettings) CreateRelationship(XWPFRelation.SETTINGS,XWPFFactory.GetInstance());
+            settings = (XWPFSettings) CreateRelationship(XWPFRelation.SETTINGS,XWPFFactory.GetInstance());
             CreateStyles();
 
             ExtendedProperties expProps = GetProperties().ExtendedProperties;
@@ -1157,7 +1158,7 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsEnforcedProtection()
         {
-            return Settings.IsEnforcedWith();
+            return settings.IsEnforcedWith();
         }
 
         /**
@@ -1175,7 +1176,7 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsEnforcedReadonlyProtection()
         {
-            return Settings.IsEnforcedWith(ST_DocProtect.readOnly);
+            return settings.IsEnforcedWith(ST_DocProtect.readOnly);
         }
 
         /**
@@ -1193,7 +1194,7 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsEnforcedFillingFormsProtection()
         {
-            return Settings.IsEnforcedWith(ST_DocProtect.forms);
+            return settings.IsEnforcedWith(ST_DocProtect.forms);
         }
 
         /**
@@ -1211,7 +1212,7 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsEnforcedCommentsProtection()
         {
-            return Settings.IsEnforcedWith(ST_DocProtect.comments);
+            return settings.IsEnforcedWith(ST_DocProtect.comments);
         }
 
         /**
@@ -1229,12 +1230,14 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsEnforcedTrackedChangesProtection()
         {
-            return Settings.IsEnforcedWith(ST_DocProtect.trackedChanges);
+            return settings.IsEnforcedWith(ST_DocProtect.trackedChanges);
         }
+
         public bool IsEnforcedUpdateFields()
         {
-            return Settings.IsUpdateFields();
+            return settings.IsUpdateFields();
         }
+
         /**
          * Enforces the ReadOnly protection.<br/>
          * In the documentProtection tag inside Settings.xml file, <br/>
@@ -1249,7 +1252,28 @@ namespace NPOI.XWPF.UserModel
          */
         public void EnforceReadonlyProtection()
         {
-            Settings.SetEnforcementEditValue(ST_DocProtect.readOnly);
+            settings.SetEnforcementEditValue(ST_DocProtect.readOnly);
+        }
+
+        /**
+         * Enforces the readOnly protection with a password.<br/>
+         * <br/>
+         * sample snippet from settings.xml
+         * <pre>
+         *   &lt;w:documentProtection w:edit=&quot;readOnly&quot; w:enforcement=&quot;1&quot; 
+         *       w:cryptProviderType=&quot;rsaAES&quot; w:cryptAlgorithmClass=&quot;hash&quot;
+         *       w:cryptAlgorithmType=&quot;typeAny&quot; w:cryptAlgorithmSid=&quot;14&quot;
+         *       w:cryptSpinCount=&quot;100000&quot; w:hash=&quot;...&quot; w:salt=&quot;....&quot;
+         *   /&gt;
+         * </pre>
+         * 
+         * @param password the plaintext password, if null no password will be applied
+         * @param hashAlgo the hash algorithm - only md2, m5, sha1, sha256, sha384 and sha512 are supported.
+         *   if null, it will default default to sha1
+         */
+        public void EnforceReadonlyProtection(String password, HashAlgorithm hashAlgo)
+        {
+            settings.SetEnforcementEditValue(ST_DocProtect.readOnly, password, hashAlgo);
         }
 
         /**
@@ -1266,7 +1290,28 @@ namespace NPOI.XWPF.UserModel
          */
         public void EnforceFillingFormsProtection()
         {
-            Settings.SetEnforcementEditValue(ST_DocProtect.forms);
+            settings.SetEnforcementEditValue(ST_DocProtect.forms);
+        }
+
+        /**
+         * Enforce the Filling Forms protection.<br/>
+         * <br/>
+         * sample snippet from settings.xml
+         * <pre>
+         *   &lt;w:documentProtection w:edit=&quot;forms&quot; w:enforcement=&quot;1&quot; 
+         *       w:cryptProviderType=&quot;rsaAES&quot; w:cryptAlgorithmClass=&quot;hash&quot;
+         *       w:cryptAlgorithmType=&quot;typeAny&quot; w:cryptAlgorithmSid=&quot;14&quot;
+         *       w:cryptSpinCount=&quot;100000&quot; w:hash=&quot;...&quot; w:salt=&quot;....&quot;
+         *   /&gt;
+         * </pre>
+         * 
+         * @param password the plaintext password, if null no password will be applied
+         * @param hashAlgo the hash algorithm - only md2, m5, sha1, sha256, sha384 and sha512 are supported.
+         *   if null, it will default default to sha1
+         */
+        public void EnforceFillingFormsProtection(String password, HashAlgorithm hashAlgo)
+        {
+            settings.SetEnforcementEditValue(ST_DocProtect.forms, password, hashAlgo);
         }
 
         /**
@@ -1283,7 +1328,28 @@ namespace NPOI.XWPF.UserModel
          */
         public void EnforceCommentsProtection()
         {
-            Settings.SetEnforcementEditValue(ST_DocProtect.comments);
+            settings.SetEnforcementEditValue(ST_DocProtect.comments);
+        }
+
+        /**
+         * Enforce the Comments protection.<br/>
+         * <br/>
+         * sample snippet from settings.xml
+         * <pre>
+         *   &lt;w:documentProtection w:edit=&quot;comments&quot; w:enforcement=&quot;1&quot; 
+         *       w:cryptProviderType=&quot;rsaAES&quot; w:cryptAlgorithmClass=&quot;hash&quot;
+         *       w:cryptAlgorithmType=&quot;typeAny&quot; w:cryptAlgorithmSid=&quot;14&quot;
+         *       w:cryptSpinCount=&quot;100000&quot; w:hash=&quot;...&quot; w:salt=&quot;....&quot;
+         *   /&gt;
+         * </pre>
+         * 
+         * @param password the plaintext password, if null no password will be applied
+         * @param hashAlgo the hash algorithm - only md2, m5, sha1, sha256, sha384 and sha512 are supported.
+         *   if null, it will default default to sha1
+         */
+        public void EnforceCommentsProtection(String password, HashAlgorithm hashAlgo)
+        {
+            settings.SetEnforcementEditValue(ST_DocProtect.comments, password, hashAlgo);
         }
 
         /**
@@ -1300,7 +1366,39 @@ namespace NPOI.XWPF.UserModel
          */
         public void EnforceTrackedChangesProtection()
         {
-            Settings.SetEnforcementEditValue(ST_DocProtect.trackedChanges);
+            settings.SetEnforcementEditValue(ST_DocProtect.trackedChanges);
+        }
+
+        /**
+         * Enforce the Tracked Changes protection.<br/>
+         * <br/>
+         * sample snippet from settings.xml
+         * <pre>
+         *   &lt;w:documentProtection w:edit=&quot;trackedChanges&quot; w:enforcement=&quot;1&quot; 
+         *       w:cryptProviderType=&quot;rsaAES&quot; w:cryptAlgorithmClass=&quot;hash&quot;
+         *       w:cryptAlgorithmType=&quot;typeAny&quot; w:cryptAlgorithmSid=&quot;14&quot;
+         *       w:cryptSpinCount=&quot;100000&quot; w:hash=&quot;...&quot; w:salt=&quot;....&quot;
+         *   /&gt;
+         * </pre>
+         * 
+         * @param password the plaintext password, if null no password will be applied
+         * @param hashAlgo the hash algorithm - only md2, m5, sha1, sha256, sha384 and sha512 are supported.
+         *   if null, it will default default to sha1
+         */
+        public void EnforceTrackedChangesProtection(String password, HashAlgorithm hashAlgo)
+        {
+            settings.SetEnforcementEditValue(ST_DocProtect.trackedChanges, password, hashAlgo);
+        }
+
+        /**
+         * Validates the existing password
+         *
+         * @param password
+         * @return true, only if password was set and equals, false otherwise
+         */
+        public bool ValidateProtectionPassword(String password)
+        {
+            return settings.ValidateProtectionPassword(password);
         }
 
         /**
@@ -1310,8 +1408,9 @@ namespace NPOI.XWPF.UserModel
          */
         public void RemoveProtectionEnforcement()
         {
-            Settings.RemoveEnforcement();
+            settings.RemoveEnforcement();
         }
+
         /**
          * Enforces fields update on document open (in Word).
          * In the settings.xml file <br/>
@@ -1326,7 +1425,7 @@ namespace NPOI.XWPF.UserModel
          */
         public void EnforceUpdateFields()
         {
-            Settings.SetUpdateFields();
+            settings.SetUpdateFields();
         }
 
         /**
@@ -1338,13 +1437,14 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                return Settings.IsTrackRevisions;
+                return settings.IsTrackRevisions;
             }
             set
             {
-                Settings.IsTrackRevisions = value;
+                settings.IsTrackRevisions = value;
             }
         }
+
         /**
          * inserts an existing XWPFTable to the arrays bodyElements and tables
          * @param pos
@@ -1636,6 +1736,7 @@ namespace NPOI.XWPF.UserModel
                 pageSize.w = 595 * 20;
             }
         }
+
         public IEnumerator<XWPFParagraph> GetParagraphsEnumerator()
         {
             return paragraphs.GetEnumerator();

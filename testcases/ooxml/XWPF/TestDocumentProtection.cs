@@ -18,6 +18,7 @@ namespace TestCases.XWPF
 {
     using System.IO;
     using NUnit.Framework;
+    using NPOI.POIFS.Crypt;
     using NPOI.Util;
     using NPOI.XWPF.UserModel;
     using NPOI.XWPF;
@@ -25,11 +26,9 @@ namespace TestCases.XWPF
     [TestFixture]
     public class TestDocumentProtection
     {
-
         [Test]
         public void TestShouldReadEnforcementProperties()
         {
-
             XWPFDocument documentWithoutDocumentProtectionTag = XWPFTestDataSamples.OpenSampleDocument("documentProtection_no_protection.docx");
             Assert.IsFalse(documentWithoutDocumentProtectionTag.IsEnforcedReadonlyProtection());
             Assert.IsFalse(documentWithoutDocumentProtectionTag.IsEnforcedFillingFormsProtection());
@@ -65,7 +64,6 @@ namespace TestCases.XWPF
             Assert.IsFalse(documentWithTrackedChangesEnforcement.IsEnforcedReadonlyProtection());
             Assert.IsFalse(documentWithTrackedChangesEnforcement.IsEnforcedCommentsProtection());
             Assert.IsTrue(documentWithTrackedChangesEnforcement.IsEnforcedTrackedChangesProtection());
-
         }
 
         [Test]
@@ -149,6 +147,7 @@ namespace TestCases.XWPF
 
             Assert.IsTrue(document.IsEnforcedCommentsProtection());
         }
+
         [Test]
         public void TestUpdateFields()
         {
@@ -157,6 +156,30 @@ namespace TestCases.XWPF
             doc.EnforceUpdateFields();
             Assert.IsTrue(doc.IsEnforcedUpdateFields());
         }
-    }
 
+        [Test]
+        public void Bug56076_read()
+        {
+            // test legacy xored-hashed password
+            Assert.AreEqual("64CEED7E", CryptoFunctions.XorHashPassword("Example"));
+            // check leading 0
+            Assert.AreEqual("0005CB00", CryptoFunctions.XorHashPassword("34579"));
+
+            // test document write protection with password
+            XWPFDocument document = XWPFTestDataSamples.OpenSampleDocument("bug56076.docx");
+            bool isValid = document.ValidateProtectionPassword("Example");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Bug56076_write()
+        {
+            // test document write protection with password
+            XWPFDocument document = new XWPFDocument();
+            document.EnforceCommentsProtection("Example", HashAlgorithm.sha512);
+            document = XWPFTestDataSamples.WriteOutAndReadBack(document);
+            bool isValid = document.ValidateProtectionPassword("Example");
+            Assert.IsTrue(isValid);
+        }
+    }
 }
