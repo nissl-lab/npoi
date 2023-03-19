@@ -15,7 +15,6 @@ namespace NPOI.OOXML.XSSF.UserModel
         private bool _showColHeaders;
         private bool _showRowHeaders;
         private bool _showLastColumn;
-        private ITableStyle _style;
 
         public XSSFPivotTableStyleInfo(StylesTable stylesTable, CT_PivotTableStyle pivotTableStyle)
         {
@@ -24,21 +23,30 @@ namespace NPOI.OOXML.XSSF.UserModel
             _showColHeaders = pivotTableStyle.showColHeaders;
             _showRowHeaders = pivotTableStyle.showRowHeaders;
             _showLastColumn = pivotTableStyle.showLastColumn;
-            _style = stylesTable.GetTableStyle(pivotTableStyle.name);
             _stylesTable = stylesTable;
             _pivotStyle = pivotTableStyle;
+            Style = stylesTable.GetTableStyle(pivotTableStyle.name);
         }
 
-        public bool IsShowColumnStripes {
-            get => _showColStripes;
+        public bool IsShowColumnStripes 
+        {
+            get { 
+                return _showColStripes; 
+            }
+
             set {
                 _showColStripes = value;
                 _pivotStyle.showColStripes = value;
             }
         }
 
-        public bool IsShowRowStripes {
-            get => _showRowStripes;
+        public bool IsShowRowStripes 
+        {
+            get
+            {
+                return _showRowStripes;
+            }
+
             set
             {
                 _showRowStripes = value;
@@ -48,7 +56,11 @@ namespace NPOI.OOXML.XSSF.UserModel
 
         public bool IsShowColumnHeaders
         {
-            get => _showColHeaders;
+            get
+            {
+                return _showColHeaders;
+            }
+
             set
             {
                 _showColHeaders = value;
@@ -58,7 +70,11 @@ namespace NPOI.OOXML.XSSF.UserModel
 
         public bool IsShowRowHeaders
         {
-            get => _showRowHeaders;
+            get
+            {
+                return _showRowHeaders;
+            }
+
             set
             {
                 _showRowHeaders = value;
@@ -66,8 +82,13 @@ namespace NPOI.OOXML.XSSF.UserModel
             }
         }
 
-        public bool IsShowLastColumn {
-            get => _showLastColumn;
+        public bool IsShowLastColumn
+        {
+            get
+            {
+                return _showLastColumn;
+            }
+
             set
             {
                 _showLastColumn = value;
@@ -77,19 +98,28 @@ namespace NPOI.OOXML.XSSF.UserModel
 
         public bool IsShowFirstColumn
         {
-            get => true;
+            get
+            {
+                return true;
+            }
+
             set => throw new NotSupportedException();
         }
 
         public string Name
         {
-            get => _pivotStyle.name;
-            set {
+            get
+            {
+                return _pivotStyle.name;
+            }
+
+            set
+            {
                 _pivotStyle.name = value;
-                _style = _stylesTable.GetTableStyle(value);
+                Style = _stylesTable.GetTableStyle(value);
             }
         }
 
-        public ITableStyle Style => _style;
+        public ITableStyle Style { get; private set; }
     }
 }
