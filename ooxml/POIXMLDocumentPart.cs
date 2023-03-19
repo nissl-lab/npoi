@@ -625,11 +625,11 @@ using System.Xml;
                 }
                 return new RelationPart(rel, doc);
             }
-            catch (PartAlreadyExistsException pae)
+            catch (PartAlreadyExistsException)
             {
                 // Return the specific exception so the user knows
                 //  that the name is already taken
-                throw pae;
+                throw;
             }
             catch (Exception e)
             {

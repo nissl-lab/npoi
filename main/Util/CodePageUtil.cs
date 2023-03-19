@@ -219,7 +219,7 @@ namespace NPOI.Util
             {
                 encoding = Encoding.GetEncoding(cp);
             }
-            catch (Exception)
+            catch
             {
                 encoding = Encoding.ASCII;
             }

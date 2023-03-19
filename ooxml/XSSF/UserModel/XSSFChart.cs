@@ -97,6 +97,7 @@ namespace NPOI.XSSF.UserModel
         private void CreateChart()
         {
             chartSpaceDocument = new ChartSpaceDocument();
+            chartSpaceDocument.GetChartSpace().roundedCorners = new CT_Boolean {val = 0};
             chart = chartSpaceDocument.GetChartSpace().AddNewChart();
             CT_PlotArea plotArea = chart.AddNewPlotArea();
 

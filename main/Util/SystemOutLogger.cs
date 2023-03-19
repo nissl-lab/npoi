@@ -82,7 +82,7 @@ namespace NPOI.Util
                     temp = WARN.ToString(CultureInfo.InvariantCulture);
                 currentLevel = int.Parse(temp, CultureInfo.InvariantCulture);
             }
-            catch (Exception)
+            catch
             {
                 currentLevel = POILogger.DEBUG;
             }

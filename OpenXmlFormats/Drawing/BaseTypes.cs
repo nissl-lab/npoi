@@ -1274,6 +1274,23 @@ namespace NPOI.OpenXmlFormats.Dml
             this.itemsValueField.Add(null);
             return obj;
         }
+
+        public void AddNewLum(int dpIndex)
+        {
+            var accentsLoopIndex = dpIndex / 6;
+            //modValue and offValue allows to set custom tint on accent color
+            //in such a way we can get unique colors for each pie sector.
+            if (accentsLoopIndex != 0)
+            {
+                var modValue = 10000 * new Random().Next(2, 9);
+                var offValue = 10000 * new Random().Next(1, 5);
+                itemsElementNameField.Add(EG_ColorTransform.lumMod);
+                itemsValueField.Add(modValue.ToString());
+                itemsElementNameField.Add(EG_ColorTransform.lumOff);
+                itemsValueField.Add(offValue.ToString());
+            }
+        }
+
         public static CT_SchemeColor Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
