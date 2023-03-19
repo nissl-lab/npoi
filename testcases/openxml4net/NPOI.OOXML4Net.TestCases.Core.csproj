@@ -1,12 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>net472;net6.0</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AssemblyName>NPOI.OOXML4Net.TestCases</AssemblyName>
+    <RootNamespace>TestCases</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\npoi.snk</AssemblyOriginatorKeyFile>
-    <RootNamespace>TestCases</RootNamespace>
+    <OutputPath>..\..\solution\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
