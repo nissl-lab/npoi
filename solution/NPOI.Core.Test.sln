@@ -16,6 +16,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.OOXML4Net.TestCases.Core", "..\testcases\openxml4net\NPOI.OOXML4Net.TestCases.Core.csproj", "{CD477B37-197E-4C6C-B1A3-6188014A2A4E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestCases", "TestCases", "{8DEC9AD4-5CB5-417D-AE89-A465D2048954}"
+	ProjectSection(SolutionItems) = preProject
+		..\test.runsettings = ..\test.runsettings
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.OOXML.TestCases.Core", "..\testcases\ooxml\NPOI.OOXML.TestCases.Core.csproj", "{DA2CA3BD-1CAC-470C-9FA2-611A5768A76A}"
 EndProject
