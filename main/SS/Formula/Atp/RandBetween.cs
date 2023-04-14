@@ -85,7 +85,7 @@ namespace NPOI.SS.Formula.Atp
                 top = bottom;
             }
 
-            return new NumberEval((bottom + (int)(_rnd.NextDouble() * ((top - bottom) + 1))));
+            return new NumberEval(bottom + (long)(_rnd.NextDouble() * (top - bottom + 1)));
 
         }
     }
