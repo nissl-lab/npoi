@@ -37,7 +37,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="IronSoftware.System.Drawing" Version="2023.4.3-prerelease" />
+		<PackageReference Include="IronSoftware.System.Drawing" Version="2023.4.4" />
 		<PackageReference Include="Enums.NET" Version="4.0.1" />
 		<PackageReference Include="MathNet.Numerics.Signed" Version="5.0.0" />
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.2" />
