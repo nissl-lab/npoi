@@ -91,7 +91,7 @@ namespace NPOI.SS.Formula.Atp
                 {
                     return e.GetErrorEval();
                 }
-                catch (Exception)
+                catch
                 {
                     return ErrorEval.VALUE_INVALID;
                 }

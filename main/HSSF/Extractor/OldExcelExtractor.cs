@@ -84,19 +84,19 @@ namespace NPOI.HSSF.Extractor
             {
                 Open(biffStream);
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 // ensure that the stream is properly closed here if an Exception
                 // is thrown while opening
                 biffStream.Close();
-                throw e;
+                throw;
             }
-            catch (RuntimeException e)
+            catch (RuntimeException)
             {
                 // ensure that the stream is properly closed here if an Exception
                 // is thrown while opening
                 biffStream.Close();
-                throw e;
+                throw;
             }
         }
         public OldExcelExtractor(NPOIFSFileSystem fs)

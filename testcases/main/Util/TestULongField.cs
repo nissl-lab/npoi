@@ -40,7 +40,6 @@ namespace TestCases.Util
     /// <summary>
     /// Summary description for TestLongField
     /// </summary>
-#if !HIDE_UNREACHABLE_CODE
     // ULongField is declared obsolete so ommit this test class.
     [TestFixture]
     public class TestULongField
@@ -253,5 +252,4 @@ namespace TestCases.Util
             }
         }
     }
-#endif
 }

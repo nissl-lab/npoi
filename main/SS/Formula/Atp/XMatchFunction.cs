@@ -44,7 +44,7 @@ namespace NPOI.SS.Formula.Atp
                 {
                     return e.GetErrorEval();
                 }
-                catch (Exception e)
+                catch
                 {
                     return ErrorEval.VALUE_INVALID;
                 }
@@ -62,7 +62,7 @@ namespace NPOI.SS.Formula.Atp
                 {
                     return e.GetErrorEval();
                 }
-                catch (Exception e)
+                catch
                 {
                     return ErrorEval.VALUE_INVALID;
                 }

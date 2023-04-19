@@ -6,6 +6,7 @@
 		<AssemblyName>NPOI.OpenXmlFormats</AssemblyName>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -31,6 +32,7 @@
 	<ItemGroup>
 		<PackageReference Include="IronDevTools.PerformanceAnalyzer" Version="2022.11.10663" />
 		<PackageReference Include="Enums.NET" Version="4.0.0" />
+		<PackageReference Include="Enums.NET" Version="4.0.1" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

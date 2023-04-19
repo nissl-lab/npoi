@@ -18,6 +18,7 @@
 namespace NPOI.HSSF.UserModel
 {
     using System;
+    using IronSoftware.Drawing;
     using System.Text;
     using System.IO;
     using NPOI.DDF;
@@ -210,9 +211,9 @@ namespace NPOI.HSSF.UserModel
 
             using (MemoryStream ms = RecyclableMemory.GetStream(data))
             {
-                using (Image img = Image.Load(ms))
+                using (AnyBitmap img = new AnyBitmap(ms))
                 {
-                    return img.Size();
+                    return new Size(img.Width, img.Height);
                 }
             }
         }

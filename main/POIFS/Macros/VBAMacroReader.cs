@@ -83,13 +83,13 @@ namespace NPOI.POIFS.Macros
                         this.fs = new NPOIFSFileSystem(zis);
                         return;
                     }
-                    catch (IOException e)
+                    catch (IOException)
                     {
                         // Tidy up
                         zis.Close();
 
                         // Pass on
-                        throw e;
+                        throw;
                     }
                 }
             }

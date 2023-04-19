@@ -26,7 +26,8 @@ using System.Xml;
 using NPOI.OpenXmlFormats.Dml;
 using NPOI.SS.Util;
 using NPOI.Util;
-
+using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -170,8 +171,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns>the newly created chart</returns>
         public IChart CreateChart(IClientAnchor anchor)
         {
-            int chartNumber = GetPackagePart().Package.
-                GetPartsByContentType(XSSFRelation.CHART.ContentType).Count + 1;
+            int chartNumber = GetNewChartNumber();
 
             RelationPart rp = CreateRelationship(
             XSSFRelation.CHART, XSSFFactory.GetInstance(), chartNumber, false);
@@ -182,6 +182,54 @@ namespace NPOI.XSSF.UserModel
             frame.SetChart(chart, chartRelId);
 
             return chart;
+        }
+
+        /// <summary>
+        /// Removes chart.
+        /// </summary>
+        /// <param name="chart">The chart to be removed.</param>
+        public void RemoveChart(XSSFChart chart)
+        {
+            CT_Drawing ctDrawing = GetCTDrawing();
+            XSSFGraphicFrame frame = chart.GetGraphicFrame();
+            CT_GraphicalObjectFrame internalFrame = frame.GetCTGraphicalObjectFrame();
+            int anchorIndex = ctDrawing.CellAnchors.FindIndex(anchor => anchor.graphicFrame == internalFrame);
+
+            if (anchorIndex != -1)
+            {
+                ctDrawing.CellAnchors.RemoveAt(anchorIndex);
+
+                foreach (var part in GetRelations().Where(part => part is XSSFChart && part == chart))
+                {
+                    RemoveRelation(part);
+                }
+            }
+        }
+
+        private int GetNewChartNumber()
+        {
+            List<PackagePart> existingCharts = GetPackagePart().Package.
+                GetPartsByContentType(XSSFRelation.CHART.ContentType);
+            HashSet<int> numbers = new HashSet<int>();
+
+            foreach (PackagePart chart in existingCharts)
+            {
+                var match = Regex.Match(chart.PartName.Name, @"\d+");
+
+                if (match.Success)
+                {
+                    numbers.Add(int.Parse(match.Value));
+                }
+            }
+
+            var newChartNumber = 1;
+
+            while (numbers.Contains(newChartNumber))
+            {
+                newChartNumber++;
+            }
+
+            return newChartNumber;
         }
 
         //public XSSFChart CreateChart(IClientAnchor anchor)

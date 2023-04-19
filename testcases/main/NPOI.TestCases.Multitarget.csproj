@@ -6,6 +6,11 @@
 		<AssemblyName>NPOI.TestCases</AssemblyName>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
+		<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AssemblyName>NPOI.TestCases</AssemblyName>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\npoi.snk</AssemblyOriginatorKeyFile>
 		<RootNamespace>TestCases</RootNamespace>
 	</PropertyGroup>
 
@@ -20,10 +25,20 @@
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
 		<PackageReference Include="NUnit" Version="3.10.1" />
 		<PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+		<PackageReference Include="NUnit" Version="3.13.3" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\main\NPOI.Multitarget.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+	  </PackageReference>
 	</ItemGroup>
 
 	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">

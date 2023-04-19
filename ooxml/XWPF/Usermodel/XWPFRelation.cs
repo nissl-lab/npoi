@@ -117,10 +117,10 @@ namespace NPOI.XWPF.UserModel
                 null
         );
         public static XWPFRelation COMMENT = new XWPFRelation(
-                null,
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml",
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments",
-                null,
-                null
+                "/word/comments.xml",
+                typeof(XWPFComments)
         );
         public static XWPFRelation FOOTNOTE = new XWPFRelation(
                "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml",

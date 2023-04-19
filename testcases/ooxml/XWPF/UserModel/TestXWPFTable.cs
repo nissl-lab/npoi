@@ -121,6 +121,37 @@ namespace TestCases.XWPF.UserModel
             xtab = new XWPFTable(new CT_Tbl(), doc);
             Assert.AreEqual(1, xtab.GetCTTbl().GetTrArray(0).SizeOfTcArray());
         }
+        [Test]
+        public void TestInsertRow()
+        {
+            XWPFDocument doc = new XWPFDocument();
+
+            CT_Tbl table = new CT_Tbl();
+            CT_Row r1 = table.AddNewTr();
+            r1.AddNewTc().AddNewP();
+            r1.AddNewTc().AddNewP();
+            CT_Row r2 = table.AddNewTr();
+            r2.AddNewTc().AddNewP();
+            r2.AddNewTc().AddNewP();
+            CT_Row r3 = table.AddNewTr();
+            r3.AddNewTc().AddNewP();
+            r3.AddNewTc().AddNewP();
+
+            XWPFTable xtab = new XWPFTable(table, doc);
+            Assert.AreEqual(3, xtab.NumberOfRows);
+            Assert.IsNotNull(xtab.GetRow(2));
+
+            //add a new row
+            xtab.CreateRow();
+            Assert.AreEqual(4, xtab.NumberOfRows);
+
+            xtab.InsertNewTableRow(0);
+            Assert.AreEqual(5, xtab.NumberOfRows);
+            xtab.InsertNewTableRow(xtab.NumberOfRows);
+            Assert.AreEqual(6, xtab.NumberOfRows);
+
+
+        }
 
         [Test]
         public void TestSetGetWidth()

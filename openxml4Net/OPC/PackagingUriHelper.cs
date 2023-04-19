@@ -198,7 +198,7 @@ namespace NPOI.OpenXml4Net.OPC
         public static String GetFilenameWithoutExtension(Uri uri)
         {
             String filename = GetFilename(uri);
-            int dotIndex = filename.LastIndexOf(".");
+            int dotIndex = filename.LastIndexOf(".", StringComparison.Ordinal);
             if (dotIndex == -1)
                 return filename;
             return filename.Substring(0, dotIndex);
@@ -315,7 +315,7 @@ namespace NPOI.OpenXml4Net.OPC
                     {
                         targetURI = ParseUri(path.Substring(1), UriKind.RelativeOrAbsolute);
                     }
-                    catch (Exception)
+                    catch
                     {
                         //_logger.log(POILogger.WARN, e);
                         return null;
@@ -362,7 +362,7 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     return ParseUri(retVal.ToString(),UriKind.RelativeOrAbsolute);
                 }
-                catch (Exception)
+                catch
                 {
                     //System.err.println(e);
                     return null;
@@ -421,7 +421,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 return ParseUri(retVal.ToString(), UriKind.RelativeOrAbsolute);
             }
-            catch (Exception)
+            catch
             {
                 //System.err.println(e);
                 return null;
@@ -678,7 +678,7 @@ namespace NPOI.OpenXml4Net.OPC
                 CreatePartName(partUri);
                 return true;
             }
-            catch (Exception)
+            catch
             {
                 return false;
             }

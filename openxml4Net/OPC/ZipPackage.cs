@@ -332,7 +332,7 @@ namespace NPOI.OpenXml4Net.OPC
                 return PackagingUriHelper.CreatePartName(ZipHelper
                         .GetOPCNameFromZipItemName(entry.Name));
             }
-            catch (Exception)
+            catch
             {
                 // We assume we can continue, even in degraded mode ...
                 //logger.log(POILogger.WARN,"Entry "
@@ -611,16 +611,10 @@ namespace NPOI.OpenXml4Net.OPC
                 else
                     zos.Close();
             }
-            catch (OpenXML4NetRuntimeException e)
+            catch (OpenXML4NetRuntimeException)
             {
                 // no need to wrap this type of Exception
-                throw e;
-            }
-            catch (IOException e)
-            {
-                throw new OpenXML4NetRuntimeException(
-                    "Fail to save: an error occurs while saving the package : "
-                            + e.Message, e);
+                throw;
             }
             catch (Exception e)
             {

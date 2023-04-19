@@ -302,7 +302,7 @@ namespace NPOI.POIFS.Crypt.Standard
             {
                 this.obuffer = this.cipher.DoFinal();
             }
-            catch (Exception)
+            catch
             {
                 this.obuffer = null;
             }
