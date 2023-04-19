@@ -61,7 +61,7 @@ namespace NPOI.OOXML.XSSF.UserModel.Helpers
 
         public static void UpdateSheetFormulas(ISheet sh, FormulaShifter Shifter)
         {
-            foreach (IRow r in sh.Cast<IRow>())
+            foreach (IRow r in sh)
             {
                 XSSFRow row = (XSSFRow)r;
                 UpdateRowFormulas(row, Shifter);
