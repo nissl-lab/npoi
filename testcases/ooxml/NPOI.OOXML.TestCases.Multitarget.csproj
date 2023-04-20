@@ -9,9 +9,10 @@
 		<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AssemblyName>NPOI.OOXML.TestCases</AssemblyName>
+		<RootNamespace>TestCases</RootNamespace>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\npoi.snk</AssemblyOriginatorKeyFile>
-		<RootNamespace>TestCases</RootNamespace>
+		<OutputPath>..\..\solution\$(Configuration)\</OutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -43,13 +44,6 @@
 		<ProjectReference Include="..\..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj" />
 		<ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Multitarget.csproj" />
 		<ProjectReference Include="..\main\NPOI.TestCases.Multitarget.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1">
-	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-	  </PackageReference>
 	</ItemGroup>
 
 	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">
