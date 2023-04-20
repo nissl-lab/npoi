@@ -1,12 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AssemblyName>NPOI.OOXML4Net.TestCases</AssemblyName>
+		<RootNamespace>TestCases</RootNamespace>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\npoi.snk</AssemblyOriginatorKeyFile>
-		<RootNamespace>TestCases</RootNamespace>
+		<OutputPath>..\..\solution\$(Configuration)\</OutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,16 +24,8 @@
 		<ProjectReference Include="..\ooxml\NPOI.OOXML.TestCases.Multitarget.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1">
-	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-	  </PackageReference>
-	</ItemGroup>
-
 	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">
 		<Copy SourceFiles="App.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
 	</Target>
-
 
 </Project>
