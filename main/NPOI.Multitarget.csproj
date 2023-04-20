@@ -7,15 +7,11 @@
 		<RootNamespace>NPOI</RootNamespace>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
+		<OutputPath>..\..\solution\$(Configuration)\</OutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DefineConstants>TRACE</DefineConstants>
-		<OutputPath>..\solution\Lib\Debug\</OutputPath>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<OutputPath>..\solution\Lib\Release\</OutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup>

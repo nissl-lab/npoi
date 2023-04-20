@@ -36,7 +36,7 @@ jobs:
     - name: RUN .NET 6 NPOI.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
       run: >-
-        dotnet test testcases/main/bin/Debug/net6.0/NPOI.TestCases.dll
+        dotnet test solution/Debug/net6.0/NPOI.TestCases.dll
         --configuration 'Debug'
         --settings ./test.runsettings
         --verbosity q
@@ -46,7 +46,7 @@ jobs:
     - name: RUN .NET 6 NPOI.OOXML.Multitarget.Testcases
       if : always() && steps.build-npoi.outcome == 'success'
       run: >-
-        dotnet test testcases/ooxml/bin/Debug/net6.0/NPOI.OOXML.TestCases.dll
+        dotnet test solution/Debug/net6.0/NPOI.OOXML.TestCases.dll
         --configuration 'Debug'
         --settings ./test.runsettings
         --verbosity q
@@ -56,7 +56,7 @@ jobs:
     - name: RUN .NET 6 NPOI.OOXML4Net.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
       run: >-
-        dotnet test testcases/openxml4net/bin/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll
+        dotnet test solution/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll
         --configuration 'Debug'
         --settings ./test.runsettings
         --verbosity q
@@ -100,7 +100,7 @@ jobs:
     - name: RUN .NET 6 NPOI.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
       run: >-
-        dotnet test testcases/main/bin/Debug/net6.0/NPOI.TestCases.dll
+        dotnet test solution/Debug/net6.0/NPOI.TestCases.dll
         --configuration 'Debug'
         --settings ./testcases/ubuntu.workflow.runsettings
         --verbosity q
@@ -110,7 +110,7 @@ jobs:
     - name: RUN .NET 6 NPOI.OOXML.Multitarget.Testcases
       if : always() && steps.build-npoi.outcome == 'success'
       run: >-
-        dotnet test testcases/ooxml/bin/Debug/net6.0/NPOI.OOXML.TestCases.dll
+        dotnet test solution/Debug/net6.0/NPOI.OOXML.TestCases.dll
         --configuration 'Debug'
         --settings ./testcases/ubuntu.workflow.runsettings
         --verbosity q
@@ -120,7 +120,7 @@ jobs:
     - name: RUN .NET 6 NPOI.OOXML4Net.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
       run: >-
-        dotnet test testcases/openxml4net/bin/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll
+        dotnet test solution/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll
         --configuration 'Debug'
         --settings ./testcases/ubuntu.workflow.runsettings
         --verbosity q
@@ -164,7 +164,7 @@ jobs:
     - name: RUN .NET 6 NPOI.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
       run: >-
-        dotnet test testcases/main/bin/Debug/net6.0/NPOI.TestCases.dll
+        dotnet test solution/Debug/net6.0/NPOI.TestCases.dll
         --configuration 'Debug'
         --settings ./testcases/macos.workflow.runsettings
         --verbosity q
@@ -174,7 +174,7 @@ jobs:
     - name: RUN .NET 6 NPOI.OOXML.Multitarget.Testcases
       if : always() && steps.build-npoi.outcome == 'success'
       run: >-
-        dotnet test testcases/ooxml/bin/Debug/net6.0/NPOI.OOXML.TestCases.dll
+        dotnet test solution/Debug/net6.0/NPOI.OOXML.TestCases.dll
         --configuration 'Debug'
         --settings ./testcases/macos.workflow.runsettings
         --verbosity q
@@ -184,7 +184,7 @@ jobs:
     - name: RUN .NET 6 NPOI.OOXML4Net.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
       run: >-
-        dotnet test testcases/openxml4net/bin/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll
+        dotnet test solution/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll
         --configuration 'Debug'
         --settings ./testcases/macos.workflow.runsettings
         --verbosity q
