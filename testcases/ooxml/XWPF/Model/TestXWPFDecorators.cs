@@ -32,6 +32,8 @@ namespace TestCases.XWPF.Model
         private XWPFDocument hyperlink;
         private XWPFDocument comments;
         private XWPFDocument footerhyperlink;
+        private XWPFDocument footnotehyperlink;
+
         [SetUp]
         public void SetUp()
         {
@@ -39,6 +41,7 @@ namespace TestCases.XWPF.Model
             hyperlink = XWPFTestDataSamples.OpenSampleDocument("TestDocument.docx");
             comments = XWPFTestDataSamples.OpenSampleDocument("WordWithAttachments.docx");
             footerhyperlink = XWPFTestDataSamples.OpenSampleDocument("TestHyperlinkInFooterDocument.docx");
+            footnotehyperlink = XWPFTestDataSamples.OpenSampleDocument("TestHyperlinkInFootnotes.docx");
         }
 
         [Test]
@@ -89,6 +92,27 @@ namespace TestCases.XWPF.Model
             Assert.AreEqual(1, footerhyperlink.FooterList[2].GetHyperlinks().Count);
 
             XWPFHyperlink link = footerhyperlink.GetHyperlinks().First();
+            Assert.AreEqual("http://poi.apache.org/", link.URL);
+        }
+
+        [Test]
+        public void TestHyperlinkInFootnotes()
+        {
+            Assert.AreEqual(1, footerhyperlink.Paragraphs.Count);
+
+            // Simple text
+            XWPFParagraph paragraph = footnotehyperlink.Paragraphs[(0)];
+            Assert.AreEqual("This is a test document.[footnoteRef:1]", paragraph.ParagraphText);
+            Assert.AreEqual(3, paragraph.Runs.Count);
+
+            Assert.AreEqual(3, footnotehyperlink.GetFootnotes().Count);
+
+            Assert.AreEqual(1, footnotehyperlink.GetHyperlinks().Length);
+
+            XWPFHyperlinkRun run = (XWPFHyperlinkRun)footnotehyperlink.GetFootnotes()[2].Paragraphs[0].Runs[3];
+            Assert.AreEqual("http://poi.apache.org/", run.GetHyperlink(footerhyperlink).URL);
+
+            XWPFHyperlink link = footnotehyperlink.GetHyperlinks().First();
             Assert.AreEqual("http://poi.apache.org/", link.URL);
         }
 

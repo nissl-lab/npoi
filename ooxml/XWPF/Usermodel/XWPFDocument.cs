@@ -219,6 +219,10 @@ namespace NPOI.XWPF.UserModel
                 throw new POIXMLException(e);
             }
             hyperlinks.AddRange(footers.SelectMany(footer => footer.GetHyperlinks()));
+            if (footnotes != null)
+            {
+                hyperlinks.AddRange(footnotes.GetHyperlinks());
+            }
         }
 
         private void InitFootnotes()
