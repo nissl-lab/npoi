@@ -600,7 +600,9 @@ namespace NPOI.XSSF.UserModel
             int headerRow = ref1.Row;
             int firstHeaderColumn = ref1.Col;
 
-            if (sheet.GetRow(headerRow) is XSSFRow row)
+            XSSFRow row = sheet.GetRow(headerRow) as XSSFRow;
+
+            if (row != null && row.GetCTRow() != null)
             {
                 int cellnum = firstHeaderColumn;
                 CT_TableColumns tableColumns = GetCTTable().tableColumns;
