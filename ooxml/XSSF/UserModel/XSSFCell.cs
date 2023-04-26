@@ -191,14 +191,13 @@ namespace NPOI.XSSF.UserModel
             {
                 // overwrite the hyperlink at dest cell with srcCell's hyperlink
                 // if srcCell doesn't have a hyperlink, clear the hyperlink (if one exists) at destCell
-                IHyperlink srcHyperlink = srcCell.Hyperlink;
-                if (srcHyperlink == null)
+                if (srcCell == null || srcCell.Hyperlink == null)
                 {
                     Hyperlink = (null);
                 }
                 else
                 {
-                    Hyperlink = new XSSFHyperlink(srcHyperlink);
+                    Hyperlink = new XSSFHyperlink(srcCell.Hyperlink);
                 }
             }
         }

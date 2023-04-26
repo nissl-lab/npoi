@@ -21,6 +21,7 @@ using NPOI.SS.Formula;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
+using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel.Helpers;
 using System;
 using System.Collections;
@@ -53,6 +54,8 @@ namespace NPOI.XSSF.UserModel
         /// the parent sheet
         /// </summary>
         private readonly XSSFSheet _sheet;
+
+        private readonly StylesTable _stylesSource;
         #endregion
 
         #region Public properties
@@ -227,21 +230,15 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (!IsFormatted)
+                if (IsFormatted && _stylesSource != null
+                    && _stylesSource.NumCellStyles > 0)
                 {
+                    return _stylesSource.GetStyleAt((int)_row.s);
+                }
+
                     return null;
                 }
 
-                Model.StylesTable stylesSource = ((XSSFWorkbook)Sheet.Workbook).GetStylesSource();
-                if (stylesSource.NumCellStyles > 0)
-                {
-                    return stylesSource.GetStyleAt((int)_row.s);
-                }
-                else
-                {
-                    return null;
-                }
-            }
             set
             {
                 if (value == null)
@@ -254,18 +251,20 @@ namespace NPOI.XSSF.UserModel
                 }
                 else
                 {
-                    Model.StylesTable styleSource = ((XSSFWorkbook)Sheet.Workbook).GetStylesSource();
-
                     XSSFCellStyle xStyle = (XSSFCellStyle)value;
-                    xStyle.VerifyBelongsToStylesSource(styleSource);
+                    xStyle.VerifyBelongsToStylesSource(_stylesSource);
 
-                    long idx = styleSource.PutStyle(xStyle);
+                    long idx = _stylesSource.PutStyle(xStyle);
                     _row.s = (uint)idx;
                     _row.customFormat = true;
                 }
+
+                foreach (var cell in _cells.Values)
+                {
+                    cell.CellStyle = value;
+                }
             }
         }
-
         #endregion
 
         #region Constructor
@@ -301,6 +300,8 @@ namespace NPOI.XSSF.UserModel
 
                 row.r = (uint)nextRowNum;
             }
+
+            _stylesSource = ((XSSFWorkbook)sheet.Workbook).GetStylesSource();
         }
         #endregion
 
@@ -346,6 +347,11 @@ namespace NPOI.XSSF.UserModel
             if (type != CellType.Blank)
             {
                 xcell.SetCellType(type);
+            }
+
+            if (IsFormatted)
+            {
+                xcell.CellStyle = RowStyle;
             }
 
             _cells[columnIndex] = xcell;
@@ -600,6 +606,25 @@ namespace NPOI.XSSF.UserModel
             }
 
             RowNum = rownum;
+        }
+
+        internal void RebuildCells()
+        {
+            Dictionary<int, XSSFCell> map = new Dictionary<int, XSSFCell>();
+            foreach (XSSFCell c in _cells.Values)
+            {
+                map.Add(c.ColumnIndex, c);
+            }
+
+            _cells.Clear();
+
+            foreach (KeyValuePair<int, XSSFCell> kv in map)
+            {
+                _cells.Add(kv.Key, kv.Value);
+            }
+
+            // Sort CT_Cols by index asc.
+            _row.c.Sort((col1, col2) => col1.r.CompareTo(col2.r));
         }
         #endregion
 

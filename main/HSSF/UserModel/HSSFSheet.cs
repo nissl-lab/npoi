@@ -152,6 +152,20 @@ namespace NPOI.HSSF.UserModel
         {
             return SheetUtil.CopyRow(this, sourceIndex, targetIndex);
         }
+
+        /// <summary>
+        /// Copies comment from one cell to another
+        /// </summary>
+        /// <param name="sourceCell">Cell with a comment to copy</param>
+        /// <param name="targetCell">Cell to paste the comment to</param>
+        /// <returns>Copied comment</returns>
+        public IComment CopyComment(ICell sourceCell, ICell targetCell)
+        {
+            targetCell.CellComment = sourceCell.CellComment;
+
+            return targetCell.CellComment;
+        }
+
         /// <summary>
         /// used internally to Set the properties given a Sheet object
         /// </summary>

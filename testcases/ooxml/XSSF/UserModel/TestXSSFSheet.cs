@@ -192,7 +192,7 @@ namespace TestCases.XSSF.UserModel
             sheet.AutoSizeRow(row.RowNum);
 
             Assert.AreNotEqual(100, row.Height);
-            Assert.AreEqual(500, row.Height);
+            Assert.AreEqual(550, row.Height);
 
             workbook.Close();
         }
