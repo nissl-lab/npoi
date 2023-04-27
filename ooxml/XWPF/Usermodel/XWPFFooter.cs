@@ -22,12 +22,14 @@ namespace NPOI.XWPF.UserModel
     using System.IO;
     using System.Xml;
     using System.Xml.Serialization;
+    using System.Collections.Generic;
 
     /**
      * Sketch of XWPF footer class
      */
     public class XWPFFooter : XWPFHeaderFooter
     {
+        protected List<XWPFHyperlink> hyperlinks = new List<XWPFHyperlink>();
         public XWPFFooter()
             //: base()
         {
@@ -68,6 +70,7 @@ namespace NPOI.XWPF.UserModel
                     tables.Add(t);
                 }
             }
+
         }
 
         public XWPFFooter(POIXMLDocumentPart parent, PackagePart part)
@@ -112,7 +115,8 @@ namespace NPOI.XWPF.UserModel
         {
             base.OnDocumentRead();
             FtrDocument ftrDocument = null;
-            try {
+            try
+            {
                 XmlDocument xmldoc = ConvertStreamToXml(GetPackagePart().GetInputStream());
                 ftrDocument = FtrDocument.Parse(xmldoc, NamespaceManager);
                 headerFooter = ftrDocument.Ftr;
@@ -138,9 +142,48 @@ namespace NPOI.XWPF.UserModel
                         bodyElements.Add(c);
                     }
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 throw new POIXMLException(e);
             }
+            InitHyperlinks();
+        }
+
+        private void InitHyperlinks()
+        {
+            try
+            {
+                IEnumerator<PackageRelationship> relIter =
+                    GetPackagePart().GetRelationshipsByType(XWPFRelation.HYPERLINK.Relation).GetEnumerator();
+                while (relIter.MoveNext())
+                {
+                    PackageRelationship rel = relIter.Current;
+                    hyperlinks.Add(new XWPFHyperlink(rel.Id, rel.TargetUri.OriginalString));
+                }
+            }
+            catch (InvalidDataException e)
+            {
+                throw new POIXMLException(e);
+            }
+        }
+
+        public List<XWPFHyperlink> GetHyperlinks()
+        {
+            return hyperlinks;
+        }
+
+        public XWPFHyperlink GetHyperlinkByID(string id)
+        {
+            IEnumerator<XWPFHyperlink> iter = hyperlinks.GetEnumerator();
+            while (iter.MoveNext())
+            {
+                XWPFHyperlink link = iter.Current;
+                if (link.Id.Equals(id))
+                    return link;
+            }
+
+            return null;
         }
 
         /**

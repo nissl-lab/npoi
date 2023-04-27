@@ -27,6 +27,7 @@ namespace NPOI.XWPF.UserModel
     using System.Xml.Serialization;
     using System.Diagnostics;
     using NPOI.OOXML.XWPF.Util;
+    using System.Linq;
 
     /**
      * <p>High(ish) level class for working with .docx files.</p>
@@ -216,6 +217,11 @@ namespace NPOI.XWPF.UserModel
             catch (InvalidDataException e)
             {
                 throw new POIXMLException(e);
+            }
+            hyperlinks.AddRange(footers.SelectMany(footer => footer.GetHyperlinks()));
+            if (footnotes != null)
+            {
+                hyperlinks.AddRange(footnotes.GetHyperlinks());
             }
         }
 
