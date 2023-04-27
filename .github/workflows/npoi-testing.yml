@@ -102,7 +102,7 @@ jobs:
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.TestCases.dll
         --configuration 'Debug'
-        --settings ./testcases/ubuntu.workflow.runsettings
+        --settings ./ubuntu.workflow.runsettings
         --verbosity q
         --logger 'trx;logfilename=NPOI.TestCases.trx'
         --results-directory test-results
@@ -112,7 +112,7 @@ jobs:
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.OOXML.TestCases.dll
         --configuration 'Debug'
-        --settings ./testcases/ubuntu.workflow.runsettings
+        --settings ./ubuntu.workflow.runsettings
         --verbosity q
         --logger 'trx;logfilename=NPOI.OOXML.TestCases.trx'
         --results-directory test-results
@@ -122,7 +122,7 @@ jobs:
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll
         --configuration 'Debug'
-        --settings ./testcases/ubuntu.workflow.runsettings
+        --settings ./ubuntu.workflow.runsettings
         --verbosity q
         --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.trx'
         --results-directory test-results
@@ -166,7 +166,7 @@ jobs:
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.TestCases.dll
         --configuration 'Debug'
-        --settings ./testcases/macos.workflow.runsettings
+        --settings ./macos.workflow.runsettings
         --verbosity q
         --logger 'trx;logfilename=NPOI.TestCases.trx'
         --results-directory test-results
@@ -176,7 +176,7 @@ jobs:
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.OOXML.TestCases.dll
         --configuration 'Debug'
-        --settings ./testcases/macos.workflow.runsettings
+        --settings ./macos.workflow.runsettings
         --verbosity q
         --logger 'trx;logfilename=NPOI.OOXML.TestCases.trx'
         --results-directory test-results
@@ -186,7 +186,7 @@ jobs:
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll
         --configuration 'Debug'
-        --settings ./testcases/macos.workflow.runsettings
+        --settings ./macos.workflow.runsettings
         --verbosity q
         --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.trx'
         --results-directory test-results
