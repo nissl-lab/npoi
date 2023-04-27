@@ -1,32 +1,28 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AssemblyName>NPOI.TestCases</AssemblyName>
 		<RootNamespace>TestCases</RootNamespace>
 		<SignAssembly>true</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\..\npoi.snk</AssemblyOriginatorKeyFile>
-		<OutputPath>..\..\solution\$(Configuration)\</OutputPath>
+		<AssemblyOriginatorKeyFile>../../npoi.snk</AssemblyOriginatorKeyFile>
+		<OutputPath>../../solution/$(Configuration)/</OutputPath>
+		<RunSettingsFilePath>../../macos.workflow.runsettings</RunSettingsFilePath>
 	</PropertyGroup>
-
 	<ItemGroup>
 		<Compile Remove="HSSF\UserModel\TestEscherGraphics2d.cs" />
 		<Compile Remove="SS\Formula\Function\ExcelFileFormatDocFunctionExtractor.cs" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
 		<PackageReference Include="NUnit" Version="3.13.3" />
 		<PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<ProjectReference Include="..\..\main\NPOI.Multitarget.csproj" />
 	</ItemGroup>
-
 	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">
 		<Copy SourceFiles="App.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
 	</Target>
-
 </Project>

@@ -1,29 +1,24 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AssemblyName>NPOI.OpenXmlFormats</AssemblyName>
 		<SignAssembly>true</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
-		<OutputPath>..\..\solution\$(Configuration)\</OutputPath>
+		<AssemblyOriginatorKeyFile>../npoi.snk</AssemblyOriginatorKeyFile>
+		<OutputPath>../solution/$(Configuration)/</OutputPath>
 	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DefineConstants>TRACE</DefineConstants>
 	</PropertyGroup>
-
 	<PropertyGroup>
 		<DefineConstants>TRACE;HIDE_UNREACHABLE_CODE</DefineConstants>
 		<NoWarn>1701;1702;0108;0618;618;108;0612;612;162;0162</NoWarn>
 		<WarningLevel>1</WarningLevel>
 	</PropertyGroup>
-
-
 	<ItemGroup>
 		<Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="Enums.NET" Version="4.0.1" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
@@ -31,17 +26,14 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
-
 	<ItemGroup>
 		<ProjectReference Include="..\main\NPOI.Multitarget.csproj" />
 		<ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
-
 </Project>
