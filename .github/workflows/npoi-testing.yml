@@ -37,7 +37,7 @@ jobs:
       if: always() && steps.build-npoi.outcome == 'success'
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.TestCases.dll
-        --settings ./macos.workflow.runsettings
+        --settings ./test.runsettings
         --verbosity q
         --logger 'trx;logfilename=NPOI.TestCases.net6.trx'
         --results-directory test-results
@@ -46,7 +46,7 @@ jobs:
       if : always() && steps.build-npoi.outcome == 'success'
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.OOXML.TestCases.dll
-        --settings ./macos.workflow.runsettings
+        --settings ./test.runsettings
         --verbosity q
         --logger 'trx;logfilename=NPOI.OOXML.TestCases.net6.trx'
         --results-directory test-results
@@ -55,7 +55,7 @@ jobs:
       if: always() && steps.build-npoi.outcome == 'success'
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll
-        --settings ./macos.workflow.runsettings
+        --settings ./test.runsettings
         --verbosity q
         --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.net6.trx'
         --results-directory test-results
@@ -98,7 +98,7 @@ jobs:
       if: always() && steps.build-npoi.outcome == 'success'
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.TestCases.dll
-        --settings ./macos.workflow.runsettings
+        --settings ./test.runsettings
         --verbosity q
         --logger 'trx;logfilename=NPOI.TestCases.trx'
         --results-directory test-results
@@ -107,7 +107,7 @@ jobs:
       if : always() && steps.build-npoi.outcome == 'success'
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.OOXML.TestCases.dll
-        --settings ./macos.workflow.runsettings
+        --settings ./test.runsettings
         --verbosity q
         --logger 'trx;logfilename=NPOI.OOXML.TestCases.trx'
         --results-directory test-results
@@ -116,7 +116,7 @@ jobs:
       if: always() && steps.build-npoi.outcome == 'success'
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll
-        --settings ./macos.workflow.runsettings
+        --settings ./test.runsettings
         --verbosity q
         --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.trx'
         --results-directory test-results
@@ -159,7 +159,7 @@ jobs:
       if: always() && steps.build-npoi.outcome == 'success'
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.TestCases.dll
-        --settings ./macos.workflow.runsettings
+        --settings ./test.runsettings
         --verbosity q
         --logger 'trx;logfilename=NPOI.TestCases.trx'
         --results-directory test-results
@@ -168,7 +168,7 @@ jobs:
       if : always() && steps.build-npoi.outcome == 'success'
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.OOXML.TestCases.dll
-        --settings ./macos.workflow.runsettings
+        --settings ./test.runsettings
         --verbosity q
         --logger 'trx;logfilename=NPOI.OOXML.TestCases.trx'
         --results-directory test-results
@@ -177,7 +177,7 @@ jobs:
       if: always() && steps.build-npoi.outcome == 'success'
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.OOXML4Net.TestCases.dll
-        --settings ./macos.workflow.runsettings
+        --settings ./test.runsettings
         --verbosity q
         --logger 'trx;logfilename=NPOI.OOXML4Net.TestCases.trx'
         --results-directory test-results

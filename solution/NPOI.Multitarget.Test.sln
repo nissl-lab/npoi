@@ -26,9 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "runsettings", "runsettings", "{5BBCBA27-8F5A-473D-9C19-5B484349D04F}"
 	ProjectSection(SolutionItems) = preProject
-		..\macos.workflow.runsettings = ..\macos.workflow.runsettings
 		..\test.runsettings = ..\test.runsettings
-		..\ubuntu.workflow.runsettings = ..\ubuntu.workflow.runsettings
 	EndProjectSection
 EndProject
 Global
