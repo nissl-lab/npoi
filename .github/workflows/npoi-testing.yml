@@ -30,7 +30,7 @@ jobs:
       run: >-
         dotnet build solution/NPOI.Multitarget.Test.sln
         --no-restore
-        --configuration 'Release'
+        --configuration 'Debug'
         --verbosity q
       
     - name: RUN .NET 6 NPOI.Multitarget.TestCases
@@ -88,7 +88,7 @@ jobs:
       run: >-
         dotnet build solution/NPOI.Multitarget.Test.sln
         --no-restore
-        --configuration 'Release'
+        --configuration 'Debug'
         --verbosity q
    
     - name: PWD
@@ -149,7 +149,7 @@ jobs:
       run: >-
         dotnet build solution/NPOI.Multitarget.Test.sln
         --no-restore
-        --configuration 'Release'
+        --configuration 'Debug'
         --verbosity q
 
     - name: PWD
