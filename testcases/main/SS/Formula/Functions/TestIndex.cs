@@ -44,13 +44,13 @@ namespace TestCases.SS.Formula.Functions
 
         private static Index FUNC_INST = new Index();
         private static double[] TEST_VALUES0 = {
-			1, 2,
-			3, 4,
-			5, 6,
-			7, 8,
-			9, 10,
-			11, 12,
-	};
+            1, 2,
+            3, 4,
+            5, 6,
+            7, 8,
+            9, 10,
+            11, 12,
+    };
 
         /**
          * For the case when the first argument to INDEX() is an area reference
@@ -115,10 +115,10 @@ namespace TestCases.SS.Formula.Functions
         public void TestMissingArg()
         {
             ValueEval[] values = {
-				new NumberEval(25.0),
-				new NumberEval(26.0),
-				new NumberEval(28.0),
-		};
+                new NumberEval(25.0),
+                new NumberEval(26.0),
+                new NumberEval(28.0),
+        };
             AreaEval arg0 = EvalFactory.CreateAreaEval("A10:C10", values);
             ValueEval[] args = new ValueEval[] { arg0, MissingArgEval.instance, new NumberEval(2), };
             ValueEval actualResult;
@@ -132,7 +132,7 @@ namespace TestCases.SS.Formula.Functions
                 {
                     throw new AssertionException("Identified bug 47048b - INDEX() should support missing-arg");
                 }
-                throw e;
+                throw;
             }
             // result should be an area eval "B10:B10"
             AreaEval ae = ConfirmAreaEval("B10:B10", actualResult);

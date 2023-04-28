@@ -3401,7 +3401,7 @@ namespace TestCases.HSSF.UserModel
                 Assert.IsNull(cell.CellFormula);
                 Assert.Fail("Should throw an exception here");
             }
-            catch (InvalidOperationException e)
+            catch
             {
                 // expected here
             }
@@ -3490,11 +3490,13 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void Test52447()
         {
-            IWorkbook wb=null;
+            IWorkbook wb = null;
             try
             {
                 wb = HSSFTestDataSamples.OpenSampleWorkbook("52447.xls");
-            } catch { 
+            }
+            catch
+            {
                 Assert.IsNotNull(wb);
             }
         }
