@@ -389,7 +389,7 @@ namespace TestCases.POIFS.FileSystem
             {
                 ministore.GetNextBlock(0);
             }
-            catch (ArgumentOutOfRangeException e) { }
+            catch { }
 
             // Write a very small new document, will populate the ministore for us
             byte[] data = new byte[8];
@@ -429,7 +429,7 @@ namespace TestCases.POIFS.FileSystem
             dis = new DocumentInputStream(entry);
             IOUtils.ReadFully(dis, rdata);
             CollectionAssert.AreEqual(data, rdata);
-            
+
             dis.Close();
 
             entry = (DocumentEntry)fs.Root.GetEntry("mini2");

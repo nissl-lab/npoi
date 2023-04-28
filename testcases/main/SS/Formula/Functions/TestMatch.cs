@@ -65,12 +65,12 @@ namespace TestCases.SS.Formula.Functions
         {
 
             ValueEval[] values = {
-			new NumberEval(4),
-			new NumberEval(5),
-			new NumberEval(10),
-			new NumberEval(10),
-			new NumberEval(25),
-		};
+            new NumberEval(4),
+            new NumberEval(5),
+            new NumberEval(10),
+            new NumberEval(10),
+            new NumberEval(25),
+        };
 
             AreaEval ae = EvalFactory.CreateAreaEval("A1:A5", values);
 
@@ -87,12 +87,12 @@ namespace TestCases.SS.Formula.Functions
         {
 
             ValueEval[] values = {
-			new NumberEval(25),
-			new NumberEval(10),
-			new NumberEval(10),
-			new NumberEval(10),
-			new NumberEval(4),
-		};
+            new NumberEval(25),
+            new NumberEval(10),
+            new NumberEval(10),
+            new NumberEval(10),
+            new NumberEval(4),
+        };
 
             AreaEval ae = EvalFactory.CreateAreaEval("A1:A5", values);
 
@@ -109,12 +109,12 @@ namespace TestCases.SS.Formula.Functions
         {
 
             ValueEval[] values = {
-			new StringEval("Albert"),
-			new StringEval("Charles"),
-			new StringEval("Ed"),
-			new StringEval("Greg"),
-			new StringEval("Ian"),
-		};
+            new StringEval("Albert"),
+            new StringEval("Charles"),
+            new StringEval("Ed"),
+            new StringEval("Greg"),
+            new StringEval("Ian"),
+        };
 
             AreaEval ae = EvalFactory.CreateAreaEval("A1:A5", values);
 
@@ -175,11 +175,11 @@ namespace TestCases.SS.Formula.Functions
         {
 
             ValueEval[] values = {
-				BoolEval.FALSE,
-				BoolEval.FALSE,
-				BoolEval.TRUE,
-				BoolEval.TRUE,
-		};
+                BoolEval.FALSE,
+                BoolEval.FALSE,
+                BoolEval.TRUE,
+                BoolEval.TRUE,
+        };
 
             AreaEval ae = EvalFactory.CreateAreaEval("A1:A4", values);
 
@@ -194,20 +194,20 @@ namespace TestCases.SS.Formula.Functions
         {
 
             ValueEval[] values = {
-				new NumberEval(4),
-				BoolEval.FALSE,
-				new NumberEval(5),
-				new StringEval("Albert"),
-				BoolEval.FALSE,
-				BoolEval.TRUE,
-				new NumberEval(10),
-				new StringEval("Charles"),
-				new StringEval("Ed"),
-				new NumberEval(10),
-				new NumberEval(25),
-				BoolEval.TRUE,
-				new StringEval("Ed"),
-		};
+                new NumberEval(4),
+                BoolEval.FALSE,
+                new NumberEval(5),
+                new StringEval("Albert"),
+                BoolEval.FALSE,
+                BoolEval.TRUE,
+                new NumberEval(10),
+                new StringEval("Charles"),
+                new StringEval("Ed"),
+                new NumberEval(10),
+                new NumberEval(25),
+                BoolEval.TRUE,
+                new StringEval("Ed"),
+        };
 
             AreaEval ae = EvalFactory.CreateAreaEval("A1:A13", values);
 
@@ -242,12 +242,12 @@ namespace TestCases.SS.Formula.Functions
         {
 
             ValueEval[] values = {
-			new NumberEval(4),
-			new NumberEval(5),
-			new NumberEval(10),
-			new NumberEval(10),
-			new NumberEval(25),
-		};
+            new NumberEval(4),
+            new NumberEval(5),
+            new NumberEval(10),
+            new NumberEval(10),
+            new NumberEval(25),
+        };
 
             AreaEval ae = EvalFactory.CreateAreaEval("A1:A5", values);
 
@@ -265,7 +265,7 @@ namespace TestCases.SS.Formula.Functions
                     Assert.Fail(e.Message);
                 }
                 // some other error ??
-                throw e;
+                throw;
             }
         }
 

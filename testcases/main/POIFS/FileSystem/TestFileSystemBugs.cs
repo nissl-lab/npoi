@@ -36,7 +36,7 @@ namespace TestCases.POIFS.FileSystem
         protected List<NPOIFSFileSystem> openedFSs;
         protected void tearDown()
         {
-            if (openedFSs != null && openedFSs.Count>0)
+            if (openedFSs != null && openedFSs.Count > 0)
             {
                 foreach (NPOIFSFileSystem fs in openedFSs)
                 {
@@ -70,21 +70,25 @@ namespace TestCases.POIFS.FileSystem
         protected DirectoryNode[] openSamples(Stream[] inps, bool oldFails)
         {
             NPOIFSFileSystem nfs = new NPOIFSFileSystem(inps[0]);
-            if (openedFSs == null) openedFSs = new List<NPOIFSFileSystem>();
+            if (openedFSs == null)
+                openedFSs = new List<NPOIFSFileSystem>();
             openedFSs.Add(nfs);
 
             OPOIFSFileSystem ofs = null;
             try
             {
                 ofs = new OPOIFSFileSystem(inps[1]);
-                if (oldFails) Assert.Fail("POIFSFileSystem should have failed but didn't");
+                if (oldFails)
+                    Assert.Fail("POIFSFileSystem should have failed but didn't");
             }
-            catch (Exception e)
+            catch
             {
-                if (!oldFails) throw e;
+                if (!oldFails)
+                    throw;
             }
 
-            if (ofs == null) return new DirectoryNode[] { nfs.Root };
+            if (ofs == null)
+                return new DirectoryNode[] { nfs.Root };
             return new DirectoryNode[] { ofs.Root, nfs.Root };
         }
 

@@ -36,7 +36,7 @@ namespace TestCases.HSSF.UserModel
                 {
                     throw new AssertionException("Identified bug 45046 b");
                 }
-                throw e;
+                throw;
             }
             // some other sanity Checks
             Assert.AreEqual(3, wb.NumberOfSheets);
@@ -66,7 +66,7 @@ namespace TestCases.HSSF.UserModel
                 {
                     throw new AssertionException("Identified bug 45698");
                 }
-                throw e;
+                throw;
             }
             // some other sanity Checks
             Assert.AreEqual(7, wb.NumberOfSheets);
