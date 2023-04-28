@@ -199,6 +199,7 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
         [Test]
+        [Obsolete]
         public void GetNumberOfMappedColumns()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");

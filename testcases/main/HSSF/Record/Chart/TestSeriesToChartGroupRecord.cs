@@ -34,10 +34,11 @@ namespace TestCases.HSSF.Record.Chart
      * @author Andrew C. Oliver (acoliver at apache.org)
      */
     [TestFixture]
+    [Obsolete]
     public class TestSeriesToChartGroupRecord
     {
         byte[] data = new byte[] {
-	        (byte)0x0, (byte)0x0
+            (byte)0x0, (byte)0x0
         };
 
         public TestSeriesToChartGroupRecord()

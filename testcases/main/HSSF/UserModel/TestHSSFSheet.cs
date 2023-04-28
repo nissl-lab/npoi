@@ -567,7 +567,9 @@ namespace TestCases.HSSF.UserModel
 
             workbook.Close();
         }
+
         [Test]
+        [Obsolete]
         public void TestZoom()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -734,7 +736,8 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb2 = HSSFTestDataSamples.OpenSampleWorkbook("Simple.xls");
 
             sheet = wb2.GetSheetAt(0);
-            for (int i = 3; i < 10; i++) sheet.CreateRow(i);
+            for (int i = 3; i < 10; i++)
+                sheet.CreateRow(i);
 
             HSSFTestDataSamples.WriteOutAndReadBack(wb2).Close();
 
