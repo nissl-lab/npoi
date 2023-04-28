@@ -34,6 +34,7 @@ namespace TestCases.HSSF.Util
     using NPOI.SS.Formula.PTG;
 
     [TestFixture]
+    [Obsolete]
     public class TestAreaReference
     {
 
