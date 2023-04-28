@@ -10,6 +10,12 @@
     <OutputPath>..\..\solution\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
+	<PropertyGroup>
+		<DefineConstants>HIDE_UNREACHABLE_CODE</DefineConstants>
+		<NoWarn>1701;1702;0108;0618;618;108;0612;612;162;0162</NoWarn>
+		<WarningLevel>1</WarningLevel>
+	</PropertyGroup>
+	
   <ItemGroup>
     <Compile Remove="HSSF\UserModel\TestEscherGraphics2d.cs" />
     <Compile Remove="SS\Formula\Function\ExcelFileFormatDocFunctionExtractor.cs" />
