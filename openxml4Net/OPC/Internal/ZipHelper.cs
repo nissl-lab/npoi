@@ -183,10 +183,6 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             {
                 stream.Reset();
             }
-            else if (stream is FileStream)
-            {
-                // File open check, about to be closed, nothing to do
-            }
             else
             {
                 // Oh dear... I hope you know what you're doing!
