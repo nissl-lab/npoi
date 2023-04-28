@@ -118,7 +118,7 @@ namespace TestCases.XSSF.UserModel
                     Assert.AreEqual(CellType.Error, actual.CellType, msg);
                     if (false)
                     { // TODO: fix ~45 functions which are currently returning incorrect error values
-                        Assert.AreEqual(expected.ErrorCellValue, actual.ErrorValue, msg);
+                        // Assert.AreEqual(expected.ErrorCellValue, actual.ErrorValue, msg);
                     }
                     break;
                 case CellType.Formula: // will never be used, since we will call method After formula Evaluation
@@ -217,8 +217,12 @@ namespace TestCases.XSSF.UserModel
 
                         switch (ProcessFunctionRow(evaluator, targetFunctionName, targetTestName, r, expectedValueCell))
                         {
-                            case Result.ALL_EVALUATIONS_SUCCEEDED: _functionSuccessCount++; break;
-                            case Result.SOME_EVALUATIONS_FAILED: _functionFailureCount++; break;
+                            case Result.ALL_EVALUATIONS_SUCCEEDED:
+                                _functionSuccessCount++;
+                                break;
+                            case Result.SOME_EVALUATIONS_FAILED:
+                                _functionFailureCount++;
+                                break;
                             default:
                                 throw new Exception("unexpected result");
                             case Result.NO_EVALUATIONS_FOUND: // do nothing
