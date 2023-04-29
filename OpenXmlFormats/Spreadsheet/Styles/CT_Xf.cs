@@ -193,12 +193,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return IsSetProtection() &&  (protectionField.locked == true);
         }
 
-        public void UnsetXfId()
-        {
-            this.xfIdField = 0;
-            this.xfIdSpecifiedField = false;
-        }
-
         public CT_CellProtection AddNewProtection()
         {
             this.protectionField = new CT_CellProtection();
@@ -312,12 +306,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public bool xfIdSpecified
         {
             get { return xfIdSpecifiedField; }
-            set 
-            {
-                xfIdSpecifiedField = value;
-                if (xfIdSpecifiedField)
-                    xfIdField = 0;
-            }
+            set { xfIdSpecifiedField = value; }
         }
 
         [XmlAttribute]

@@ -887,11 +887,11 @@ namespace NPOI.XSSF.Model
             ctXf.borderId = 0;
             if (xfSize > 0)
             {
-                ctXf.xfId = (uint)(xfSize - 1);
+                ctXf.xfId = 0; //default styleXf
             }
             
             int indexXf = PutCellXf(ctXf);
-            return new XSSFCellStyle(indexXf - 1, xfSize - 1, this, theme);
+            return new XSSFCellStyle(indexXf - 1, ctXf.xfIdSpecified ? (int)ctXf.xfId : -1, this, theme);
         }
 
         /**
