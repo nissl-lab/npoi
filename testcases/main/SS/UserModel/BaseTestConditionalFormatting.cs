@@ -434,7 +434,7 @@ namespace TestCases.SS.UserModel
                 {
                     Assert.Fail("Indentified bug 45682");
                 }
-                throw e;
+                throw;
             }
             finally
             {
@@ -461,7 +461,7 @@ namespace TestCases.SS.UserModel
             IConditionalFormattingRule rule2 = sheetCF.CreateConditionalFormattingRule(
                 ComparisonOperator.Between, "SUM(A10:A15)", "1+SUM(B16:B30)");
             IBorderFormatting borderFmt = rule2.CreateBorderFormatting();
-            borderFmt.BorderDiagonal= BorderStyle.Medium;
+            borderFmt.BorderDiagonal = BorderStyle.Medium;
 
 
             CellRangeAddress[] regions = {
@@ -614,9 +614,12 @@ namespace TestCases.SS.UserModel
                 if (cf is HSSFConditionalFormatting)
                 {
                     String str = cf.ToString();
-                    if (str.Contains("[CF]")) fCF++;
-                    if (str.Contains("[CF12]")) fCF12++;
-                    if (str.Contains("[CFEX]")) fCFEX++;
+                    if (str.Contains("[CF]"))
+                        fCF++;
+                    if (str.Contains("[CF12]"))
+                        fCF12++;
+                    if (str.Contains("[CFEX]"))
+                        fCFEX++;
                 }
                 else
                 {
@@ -681,10 +684,13 @@ namespace TestCases.SS.UserModel
             //   Sets the font colour to dark red
             //   Sets the background colour to lighter red
             // TODO Should the colours be slightly different between formats?
-            if (cr is HSSFConditionalFormattingRule) {
+            if (cr is HSSFConditionalFormattingRule)
+            {
                 AssertColour("8080:0:8080", cr.FontFormatting.FontColor);
                 AssertColour("FFFF:9999:CCCC", cr.PatternFormatting.FillBackgroundColorColor);
-            } else {
+            }
+            else
+            {
                 AssertColour("9C0006", cr.FontFormatting.FontColor);
                 AssertColour("FFC7CE", cr.PatternFormatting.FillBackgroundColorColor);
             }
@@ -894,7 +900,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(null, cr.Formula2);
 
             // TODO Implement
-            if (cr is HSSFConditionalFormattingRule) return;
+            if (cr is HSSFConditionalFormattingRule)
+                return;
             IColorScaleFormatting color = cr.ColorScaleFormatting;
             Assert.IsNotNull(color);
             Assert.IsNotNull(color.Colors);
@@ -904,25 +911,32 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(colors.Length, color.Thresholds.Length);
 
             // Thresholds should be Min / (evenly spaced) / Max
-            int steps = 100 / (colors.Length-1);
-            for (int i=0; i<colors.Length; i++) {
+            int steps = 100 / (colors.Length - 1);
+            for (int i = 0; i < colors.Length; i++)
+            {
                 IConditionalFormattingThreshold th = color.Thresholds[i];
-                if (i == 0) {
+                if (i == 0)
+                {
                     Assert.AreEqual(RangeType.MIN, th.RangeType);
-                } else if (i == colors.Length-1) {
+                }
+                else if (i == colors.Length - 1)
+                {
                     Assert.AreEqual(RangeType.MAX, th.RangeType);
-                } else {
+                }
+                else
+                {
                     Assert.AreEqual(RangeType.PERCENTILE, th.RangeType);
-                    Assert.AreEqual(steps*i, (int)th.Value.Value);
+                    Assert.AreEqual(steps * i, (int)th.Value.Value);
                 }
                 Assert.AreEqual(null, th.Formula);
             }
 
             // Colors should match
-            for (int i=0; i<colors.Length; i++) {
+            for (int i = 0; i < colors.Length; i++)
+            {
                 AssertColour(colors[i], color.Colors[i]);
             }
-            
+
         }
         [Test]
         public void TestCreateFontFormatting()
@@ -1188,8 +1202,8 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(RangeType.PERCENT, iconFmt.Thresholds[2].RangeType);
             Assert.AreEqual(RangeType.MAX, iconFmt.Thresholds[3].RangeType);
             Assert.AreEqual(null, iconFmt.Thresholds[0].Value);
-            Assert.AreEqual(10d, iconFmt.Thresholds[1].Value, 0);
-            Assert.AreEqual(75d, iconFmt.Thresholds[2].Value, 0);
+            Assert.AreEqual(10d, iconFmt.Thresholds[1].Value);
+            Assert.AreEqual(75d, iconFmt.Thresholds[2].Value);
             Assert.AreEqual(null, iconFmt.Thresholds[3].Value);
 
             wb2.Close();
@@ -1238,7 +1252,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(RangeType.NUMBER, clrFmt.Thresholds[1].RangeType);
             Assert.AreEqual(RangeType.MAX, clrFmt.Thresholds[2].RangeType);
             Assert.AreEqual(null, clrFmt.Thresholds[0].Value);
-            Assert.AreEqual(10d, clrFmt.Thresholds[1].Value, 0);
+            Assert.AreEqual(10d, clrFmt.Thresholds[1].Value);
             Assert.AreEqual(null, clrFmt.Thresholds[2].Value);
 
             wb2.Close();

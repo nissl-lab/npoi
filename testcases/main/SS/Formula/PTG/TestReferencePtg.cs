@@ -80,11 +80,11 @@ namespace TestCases.SS.Formula.PTG
                 {
                     throw new AssertionException("Identified bug 44921");
                 }
-                throw e;
+                throw;
             }
         }
         private static byte[] tRefN_data = {
-    	0x2C, 33, 44, 55, 66,
+        0x2C, 33, 44, 55, 66,
     };
         [Test]
         public void TestReadWrite_tRefN_bug45091()

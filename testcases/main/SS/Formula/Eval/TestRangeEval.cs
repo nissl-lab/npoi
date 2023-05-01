@@ -27,6 +27,7 @@ namespace TestCases.SS.Formula.Eval
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.Util;
+    using NPOI.HSSF.Util;
 
     /**
      * Test for unary plus operator Evaluator.
@@ -40,29 +41,35 @@ namespace TestCases.SS.Formula.Eval
         public void TestPermutations()
         {
 
-            Confirm("B3", "D7", "B3:D7");
-            Confirm("B1", "B1", "B1:B1");
+            Confirm("B3", "D7", 2, 6, 1, 3);
+            Confirm("B1", "B1", 0, 0, 1, 1);
 
-            Confirm("B7", "D3", "B3:D7");
-            Confirm("D3", "B7", "B3:D7");
-            Confirm("D7", "B3", "B3:D7");
+            Confirm("B7", "D3", 2, 6, 1, 3);
+            Confirm("D3", "B7", 2, 6, 1, 3);
+            Confirm("D7", "B3", 2, 6, 1, 3);
         }
 
-        private static void Confirm(String refA, String refB, String expectedAreaRef)
+        private static void Confirm(
+            String refA,
+            String refB,
+            int firstRow,
+            int lastRow,
+            int firstColumn,
+            int lastColumn)
         {
+            ValueEval[] args =
+            {
+                CreateRefEval(refA),
+                CreateRefEval(refB),
+            };
 
-            ValueEval[] args = {
-            CreateRefEval(refA),
-            CreateRefEval(refB),
-        };
-            AreaReference ar = new AreaReference(expectedAreaRef);
             ValueEval result = EvalInstances.Range.Evaluate(args, 0, (short)0);
             Assert.IsTrue(result is AreaEval);
             AreaEval ae = (AreaEval)result;
-            Assert.AreEqual(ar.FirstCell.Row, ae.FirstRow);
-            Assert.AreEqual(ar.LastCell.Row, ae.LastRow);
-            Assert.AreEqual(ar.FirstCell.Col, ae.FirstColumn);
-            Assert.AreEqual(ar.LastCell.Col, ae.LastColumn);
+            Assert.AreEqual(firstRow, ae.FirstRow);
+            Assert.AreEqual(lastRow, ae.LastRow);
+            Assert.AreEqual(firstColumn, ae.FirstColumn);
+            Assert.AreEqual(lastColumn, ae.LastColumn);
         }
 
         private static ValueEval CreateRefEval(String refStr)

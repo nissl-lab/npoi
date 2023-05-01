@@ -52,6 +52,7 @@ namespace TestCases.SS.Util
         }
 
         [Test]
+        [Obsolete]
         public void TestFallbackToExcel97IfVersionNotSupplied()
         {
             Assert.IsTrue(new AreaReference("A:B").IsWholeColumnReference());

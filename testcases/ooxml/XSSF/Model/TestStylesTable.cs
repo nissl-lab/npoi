@@ -30,7 +30,7 @@ namespace TestCases.XSSF.Model
     {
         private String testFile = "Formatting.xlsx";
         private static String customDataFormat = "YYYY-mm-dd";
-    
+
         [SetUp]
         public static void assumeCustomDataFormatIsNotBuiltIn()
         {
@@ -104,8 +104,8 @@ namespace TestCases.XSSF.Model
             Assert.AreEqual(2, st.GetFills().Count);
             Assert.AreEqual(1, st.GetBorders().Count);
 
-            Assert.AreEqual("yyyy/mm/dd", st.GetNumberFormatAt(165));
-            Assert.AreEqual("yy/mm/dd", st.GetNumberFormatAt(167));
+            Assert.AreEqual("yyyy/mm/dd", st.GetNumberFormatAt((short)165));
+            Assert.AreEqual("yy/mm/dd", st.GetNumberFormatAt((short)167));
 
             Assert.IsNotNull(st.GetStyleAt(0));
             Assert.IsNotNull(st.GetStyleAt(1));
@@ -143,7 +143,7 @@ namespace TestCases.XSSF.Model
             Assert.AreEqual(1, st.StyleXfsSize);
             Assert.AreEqual(2, st.NumDataFormats);
 
-            Assert.AreEqual("yyyy-mm-dd", st.GetNumberFormatAt(nf1));
+            Assert.AreEqual("yyyy-mm-dd", st.GetNumberFormatAt((short)nf1));
             Assert.AreEqual(nf1, st.PutNumberFormat("yyyy-mm-dd"));
             Assert.AreEqual(nf2, st.PutNumberFormat("yyyy-mm-DD"));
 
@@ -170,7 +170,7 @@ namespace TestCases.XSSF.Model
             Assert.AreEqual(1, st.StyleXfsSize);
             Assert.AreEqual(10, st.NumDataFormats);
 
-            Assert.AreEqual("YYYY-mm-dd", st.GetNumberFormatAt(nf1));
+            Assert.AreEqual("YYYY-mm-dd", st.GetNumberFormatAt((short)nf1));
             Assert.AreEqual(nf1, st.PutNumberFormat("YYYY-mm-dd"));
             Assert.AreEqual(nf2, st.PutNumberFormat("YYYY-mm-DD"));
 
@@ -254,7 +254,9 @@ namespace TestCases.XSSF.Model
                 // The default style shouldn't be added back to the styles source because it's built-in
                 Assert.AreEqual(0, wb.GetStylesSource().NumDataFormats);
 
-                cell = null; style = null; numberFormats = null;
+                cell = null;
+                style = null;
+                numberFormats = null;
                 wb = XSSFTestDataSamples.WriteOutCloseAndReadBack(wb);
 
                 cell = wb.GetSheet("test").GetRow(0).GetCell(0);
