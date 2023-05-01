@@ -499,7 +499,7 @@ namespace TestCases.SS.UserModel
             RangeAddress aref = new RangeAddress(aNamedCell.RefersToFormula);
             Assert.IsTrue(aref.Height == 1 && aref.Width == 1, "Should be exactly 1 cell in the named cell :'" + cellName + "'");
 
-            CellReference cref = new CellReference(aref.ToCell);
+            CellReference cref = new CellReference($"\'{aref.SheetName}\'!{aref.ToCell}");
             Assert.IsNotNull(cref);
             ISheet s = wb.GetSheet(cref.SheetName);
             Assert.IsNotNull(s);
