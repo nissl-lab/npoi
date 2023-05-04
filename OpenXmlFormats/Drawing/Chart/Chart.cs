@@ -21,7 +21,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     using System.Globalization;
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot("chartSpace", Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = false)]
@@ -360,7 +360,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -408,7 +408,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot("chart", Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = false)]
@@ -451,7 +451,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -676,7 +676,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -809,7 +809,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -1021,7 +1021,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -1148,7 +1148,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -1218,7 +1218,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -1283,7 +1283,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -1383,7 +1383,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -1426,7 +1426,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -1468,8 +1468,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 return null;
             CT_Extension ctObj = new CT_Extension();
             ctObj.uri = XmlHelper.ReadString(node.Attributes["uri"]);
-             ctObj.Any = node.InnerXml;
-            
+            ctObj.Any = node.InnerXml;
+
             return ctObj;
         }
 
@@ -1489,7 +1489,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -1562,7 +1562,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -1786,7 +1786,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -1874,7 +1874,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -2067,7 +2067,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.xField == null)
                 this.xField = new CT_Double();
             return xField;
-        }        
+        }
         [XmlElement(Order = 0)]
         public CT_LayoutTarget layoutTarget
         {
@@ -2201,7 +2201,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -2264,7 +2264,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -2328,7 +2328,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -2370,7 +2370,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -2543,7 +2543,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -2941,7 +2941,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -3110,7 +3110,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -3153,7 +3153,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -3214,7 +3214,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -3276,7 +3276,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -3324,7 +3324,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -3492,7 +3492,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -3564,7 +3564,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -3667,7 +3667,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -3787,7 +3787,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -3819,7 +3819,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             XmlHelper.WriteAttribute(sw, "idx", this.idx, true);
             sw.Write(">");
             if (this.v != null)
-                sw.Write(string.Format("<c:v>{0}</c:v>", this.v));
+                sw.Write(string.Format("<c:v>{0}</c:v>", XmlHelper.EncodeXml(this.v)));
             sw.Write(string.Format("</c:{0}>", nodeName));
         }
 
@@ -3852,7 +3852,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -3912,7 +3912,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -3980,7 +3980,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -4048,7 +4048,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -4107,7 +4107,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -4150,7 +4150,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -4215,7 +4215,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -4760,7 +4760,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -4809,7 +4809,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -4852,7 +4852,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -4911,7 +4911,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -5447,7 +5447,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -5557,7 +5557,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -5622,7 +5622,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -5695,7 +5695,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -5751,7 +5751,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -5924,36 +5924,36 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             return this.crossesField;
         }
 
-         public CT_UnsignedInt AddNewAxId()
-         {
+        public CT_UnsignedInt AddNewAxId()
+        {
             this.axIdField=new CT_UnsignedInt();
             return this.axIdField;
-         }
-         public CT_AxPos AddNewAxPos()
-         {
+        }
+        public CT_AxPos AddNewAxPos()
+        {
             this.axPosField=new CT_AxPos();
             return this.axPosField;
-         }
-         public CT_Scaling AddNewScaling()
-         {
+        }
+        public CT_Scaling AddNewScaling()
+        {
             this.scalingField=new CT_Scaling();
             return this.scalingField;
-         }
-         public CT_CrossBetween AddNewCrossBetween()
-         {
+        }
+        public CT_CrossBetween AddNewCrossBetween()
+        {
             this.crossBetweenField=new CT_CrossBetween();
             return this.crossBetweenField;
-         }   
-         public CT_UnsignedInt AddNewCrossAx()
-         {
+        }
+        public CT_UnsignedInt AddNewCrossAx()
+        {
             this.crossAxField= new CT_UnsignedInt();
             return this.crossAxField;
-         }
-         public CT_TickLblPos AddNewTickLblPos()
-         {
+        }
+        public CT_TickLblPos AddNewTickLblPos()
+        {
             this.tickLblPosField = new CT_TickLblPos();
-             return this.tickLblPosField;
-         }
+            return this.tickLblPosField;
+        }
         [XmlElement(Order = 0)]
         public CT_UnsignedInt axId
         {
@@ -6146,7 +6146,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             set
             {
                 this.crossesField = value;
-            } 
+            }
         }
         CT_Double crossesAtField;
         [XmlElement(Order = 15)]
@@ -6258,7 +6258,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -6316,7 +6316,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -6514,7 +6514,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -6638,7 +6638,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -6722,7 +6722,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -6772,7 +6772,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -6901,7 +6901,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -6960,7 +6960,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -7002,7 +7002,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -7159,7 +7159,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             {
                 this.numFmtField = value;
             }
-        }       
+        }
         CT_ShapeProperties spPrField;
         [XmlElement(Order = 4)]
         public CT_ShapeProperties spPr
@@ -7283,7 +7283,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.separatorField = value;
             }
         }
-        
+
         //[XmlElement("leaderLines", typeof(CT_ChartLines), Order = 1)]
         [XmlElement(Order = 17)]
         public CT_Boolean showLeaderLines
@@ -7314,7 +7314,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -7500,7 +7500,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.txPrField = value;
             }
         }
-        
+
         [XmlElement(Order = 8)]
         public CT_Boolean delete
         {
@@ -7598,7 +7598,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
-        
+
         //[XmlElement("tx", typeof(CT_Tx), Order = 1)]
 
         [XmlElement(Order = 18)]
@@ -7617,7 +7617,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -7693,10 +7693,10 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         t,
     }
 
-        
+
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -7965,7 +7965,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -8039,7 +8039,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -8088,7 +8088,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -8137,7 +8137,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -8294,7 +8294,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -8505,7 +8505,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -8561,7 +8561,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -8626,7 +8626,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -8697,7 +8697,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -8770,7 +8770,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -8906,7 +8906,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -8989,7 +8989,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -9090,7 +9090,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -9141,71 +9141,71 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             sw.Write(string.Format("</c:{0}>", nodeName));
         }
 
-         public CT_NumRef AddNewNumRef()
-         {
-             this.numRefField = new CT_NumRef();
-             return this.numRefField;
-         }
-         public CT_NumData AddNewNumLit()
-         {
-             numLit = new CT_NumData();
-             return numLit;
-         }
-         public CT_NumData numLit
-         {
-             get
-             {
-                 return this.numLitField;
-             }
-             set
-             {
-                 this.numLitField = value;
-             }
-         }
-         public CT_NumRef numRef
-         {
-             get
-             {
-                 return this.numRefField;
-             }
-             set
-             {
-                 this.numRefField = value;
-             }
-         }
-         public CT_StrData strLit
-         {
-             get
-             {
-                 return this.strLitField;
-             }
-             set
-             {
-                 this.strLitField = value;
-             }
-         }
-         public CT_StrRef strRef
-         {
-             get
-             {
-                 return this.strRefField;
-             }
-             set
-             {
-                 this.strRefField = value;
-             }
-         }
-         public CT_MultiLvlStrRef multiLvlStrRef
-         {
-             get
-             {
-                 return this.multiLvlStrRefField;
-             }
-             set
-             {
-                 this.multiLvlStrRefField = value;
-             }
-         }
+        public CT_NumRef AddNewNumRef()
+        {
+            this.numRefField = new CT_NumRef();
+            return this.numRefField;
+        }
+        public CT_NumData AddNewNumLit()
+        {
+            numLit = new CT_NumData();
+            return numLit;
+        }
+        public CT_NumData numLit
+        {
+            get
+            {
+                return this.numLitField;
+            }
+            set
+            {
+                this.numLitField = value;
+            }
+        }
+        public CT_NumRef numRef
+        {
+            get
+            {
+                return this.numRefField;
+            }
+            set
+            {
+                this.numRefField = value;
+            }
+        }
+        public CT_StrData strLit
+        {
+            get
+            {
+                return this.strLitField;
+            }
+            set
+            {
+                this.strLitField = value;
+            }
+        }
+        public CT_StrRef strRef
+        {
+            get
+            {
+                return this.strRefField;
+            }
+            set
+            {
+                this.strRefField = value;
+            }
+        }
+        public CT_MultiLvlStrRef multiLvlStrRef
+        {
+            get
+            {
+                return this.multiLvlStrRefField;
+            }
+            set
+            {
+                this.multiLvlStrRefField = value;
+            }
+        }
         //private object itemField;
 
         //[XmlElement("multiLvlStrRef", typeof(CT_MultiLvlStrRef), Order = 0)]
@@ -9227,22 +9227,22 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
 
-         public CT_StrRef AddNewStrRef()
-         {
-             strRef = new CT_StrRef();
-             return strRef;
-         }
+        public CT_StrRef AddNewStrRef()
+        {
+            strRef = new CT_StrRef();
+            return strRef;
+        }
 
-         public CT_StrData AddNewStrLit()
-         {
-             strLit = new CT_StrData();
-             return strLit;
-         }
+        public CT_StrData AddNewStrLit()
+        {
+            strLit = new CT_StrData();
+            return strLit;
+        }
     }
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -9338,7 +9338,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -9441,7 +9441,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -9454,7 +9454,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_BandFmt()
         {
-           
+
         }
         public static CT_BandFmt Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -9514,7 +9514,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -9671,7 +9671,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -9720,7 +9720,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -9791,7 +9791,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -9841,7 +9841,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -9915,7 +9915,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -9965,7 +9965,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -10031,7 +10031,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -10664,7 +10664,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -10714,7 +10714,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -10765,7 +10765,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -10814,7 +10814,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -10863,7 +10863,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -10912,7 +10912,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -11085,7 +11085,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -11242,7 +11242,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart",ElementName = "chart", IsNullable = true)]
@@ -11345,7 +11345,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.dispBlanksAs.Write(sw, "dispBlanksAs");
             if (this.showDLblsOverMax != null)
                 this.showDLblsOverMax.Write(sw, "showDLblsOverMax");
-            
+
             if (this.extLst != null)
             {
                 foreach (CT_Extension x in this.extLst)
@@ -11563,7 +11563,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -11696,7 +11696,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -11793,7 +11793,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -11835,7 +11835,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -11878,7 +11878,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -11908,7 +11908,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -11961,7 +11961,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -11991,7 +11991,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
@@ -12021,7 +12021,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
 
     [Serializable]
-    
+
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
