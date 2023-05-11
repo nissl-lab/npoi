@@ -565,12 +565,12 @@ namespace NPOI.OpenXmlFormats.Dml
                 XmlHelper.WriteAttribute(sw, "horzOverflow", this.horzOverflowField.ToString());
             if(this.vertFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "vert", this.vert.ToString());
-            if(this.wrapFieldSpecified && this.wrap!= ST_TextWrappingType.none)
+            if(this.wrapFieldSpecified && this.wrap == ST_TextWrappingType.none)
                 XmlHelper.WriteAttribute(sw, "wrap", this.wrap.ToString());
-            XmlHelper.WriteAttribute(sw, "lIns", this.lIns);
-            XmlHelper.WriteAttribute(sw, "tIns", this.tIns);
-            XmlHelper.WriteAttribute(sw, "rIns", this.rIns);
-            XmlHelper.WriteAttribute(sw, "bIns", this.bIns);
+            XmlHelper.WriteAttribute(sw, "lIns", this.lIns, true);
+            XmlHelper.WriteAttribute(sw, "tIns", this.tIns, true);
+            XmlHelper.WriteAttribute(sw, "rIns", this.rIns, true);
+            XmlHelper.WriteAttribute(sw, "bIns", this.bIns, true);
             XmlHelper.WriteAttribute(sw, "numCol", this.numCol);
             XmlHelper.WriteAttribute(sw, "spcCol", this.spcCol);
             XmlHelper.WriteAttribute(sw, "rtlCol", this.rtlCol);
