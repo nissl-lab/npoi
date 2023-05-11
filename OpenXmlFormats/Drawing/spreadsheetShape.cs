@@ -595,14 +595,17 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
     {
         CT_GroupShapeProperties grpSpPrField;
         CT_GroupShapeNonVisual nvGrpSpPrField;
-        CT_Connector connectorField = null;
+        List<CT_Connector> connectors = null;
         List<CT_Picture> pictures = null;
         List<CT_Shape> shapes = null;
+        List<CT_GroupShape> groups = null;
 
         public CT_GroupShape()
         {
+            this.connectors = new List<CT_Connector>();
             this.pictures = new List<CT_Picture>();
             this.shapes = new List<CT_Shape>();
+            this.groups = new List<CT_GroupShape>();
         }
 
         public void Set(CT_GroupShape groupShape)
@@ -623,7 +626,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         }
         public CT_Connector AddNewCxnSp()
         {
-            connectorField = new CT_Connector();
+            var connectorField = new CT_Connector();
+            connectors.Add(connectorField);
             return connectorField;
         }
         public CT_Shape AddNewSp()
@@ -637,6 +641,12 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             var pic=new CT_Picture();
             pictures.Add(pic);
             return pic;
+        }
+        public CT_GroupShape AddNewGroup()
+        {
+            var group = new CT_GroupShape();
+            groups.Add(group);
+            return group;
         }
 
         public CT_GroupShapeNonVisual nvGrpSpPr
@@ -671,6 +681,16 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                     var shape = CT_Shape.Parse(childNode, namespaceManager);
                     ctObj.shapes.Add(shape);
                 }
+                else if (childNode.LocalName == "cxnSp")
+                {
+                    var connector = CT_Connector.Parse(childNode, namespaceManager);
+                    ctObj.connectors.Add(connector);
+                }
+                else if (childNode.LocalName == "grpSp")
+                {
+                    var group = CT_GroupShape.Parse(childNode, namespaceManager);
+                    ctObj.groups.Add(group);
+                }
             }
             return ctObj;
         }
@@ -697,6 +717,20 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 foreach (var pic in this.pictures)
                 {
                     pic.Write(sw, "pic");
+                }
+            }
+            if (this.connectors.Count > 0)
+            {
+                foreach(var con in this.connectors)
+                {
+                    con.Write(sw, "cxnSp");
+                }
+            }
+            if (this.groups.Count > 0)
+            {
+                foreach(var group in this.groups)
+                {
+                    group.Write(sw, "grpSp");
                 }
             }
             sw.Write(string.Format("</xdr:{0}>", nodeName));
