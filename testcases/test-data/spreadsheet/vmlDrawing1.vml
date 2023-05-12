@@ -13,6 +13,9 @@
     <v:path o:connecttype="none"/>
     <v:textbox style="mso-direction-alt:auto">
       <div style="text-align:left"/>
+      <div style='text-align:center'>
+        <b>Some Text<br></br></b>
+      </div>
     </v:textbox>
     <x:ClientData ObjectType="Note">
       <x:MoveWithCells/>
