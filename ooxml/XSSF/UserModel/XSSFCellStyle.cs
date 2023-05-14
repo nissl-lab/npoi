@@ -1279,7 +1279,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     return (int)_cellXf.fontId;
                 }
-                return (int) (_cellStyleXf != null ? _cellStyleXf.fontId : 0);
+                return _cellStyleXf != null ? (int)_cellStyleXf.fontId : -1;
             }
         }
 
