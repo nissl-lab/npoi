@@ -16,11 +16,9 @@ namespace TestCases.SS.Formula.Atp
         private IFormulaEvaluator evaluator;
         private ICell textCell1;
         private ICell textCell2;
-        private ICell textCell3;
         private ICell numericCell1;
         private ICell numericCell2;
         private ICell blankCell;
-        private ICell emptyCell;
         private ICell formulaCell;
 
         private IWorkbook InitWorkbook1()

@@ -74,15 +74,18 @@ namespace TestCases.HSSF.Model
             Assert.IsTrue(outRecs[pos++] is EOFRecord);
         }
 
-       private class MergedCellListener:RecordVisitor 
-       {
+        private class MergedCellListener : RecordVisitor
+        {
 
             private int _count;
-            public MergedCellListener() {
+            public MergedCellListener()
+            {
                 _count = 0;
             }
-            public void VisitRecord(Record r) {
-                if (r is MergeCellsRecord) {
+            public void VisitRecord(Record r)
+            {
+                if (r is MergeCellsRecord)
+                {
                     _count++;
                 }
             }
@@ -115,7 +118,7 @@ namespace TestCases.HSSF.Model
             //test that the regions were spread out over the appropriate number of records
             MergedCellListener mcListener = new MergedCellListener();
             sheet.VisitContainedRecords(mcListener, 0);
-            int recordsAdded = mcListener.Count; 
+            int recordsAdded = mcListener.Count;
             int recordsExpected = regionsToAdd / 1027;
             if ((regionsToAdd % 1027) != 0)
                 recordsExpected++;
@@ -149,7 +152,7 @@ namespace TestCases.HSSF.Model
             int regionsToAdd = 4096;
 
             for (int n = 0; n < regionsToAdd; n++)
-                sheet.AddMergedRegion(0, 0, 1,1);
+                sheet.AddMergedRegion(0, 0, 1, 1);
 
             int nSheetRecords = sheet.Records.Count;
 
@@ -158,7 +161,7 @@ namespace TestCases.HSSF.Model
             {
                 sheet.RemoveMergedRegion(0);
                 //assert they have been deleted
-                Assert.AreEqual(sheet.NumMergedRegions,regionsToAdd - n - 1, "Num of regions should be " + (regionsToAdd - n - 1) + " not " + sheet.NumMergedRegions);
+                Assert.AreEqual(sheet.NumMergedRegions, regionsToAdd - n - 1, "Num of regions should be " + (regionsToAdd - n - 1) + " not " + sheet.NumMergedRegions);
             }
 
             // merge records are removed from within the MergedCellsTable, 
@@ -211,12 +214,12 @@ namespace TestCases.HSSF.Model
         private static Record CreateWindow2Record()
         {
             WindowTwoRecord result = new WindowTwoRecord();
-            result.Options=((short)0x6b6);
-            result.TopRow=((short)0);
-            result.LeftCol=((short)0);
-            result.HeaderColor=(0x40);
-            result.PageBreakZoom=((short)0);
-            result.NormalZoom=((short)0);
+            result.Options = ((short)0x6b6);
+            result.TopRow = ((short)0);
+            result.LeftCol = ((short)0);
+            result.HeaderColor = (0x40);
+            result.PageBreakZoom = ((short)0);
+            result.NormalZoom = ((short)0);
             return result;
         }
 
@@ -284,10 +287,14 @@ namespace TestCases.HSSF.Model
             for (int i = 0; i < rowBreaks.Length; i++)
             {
                 int main = rowBreaks[i];
-                if (main != 0 && main != 10 && main != 11) Assert.Fail("Invalid page break");
-                if (main == 0) is0 = true;
-                if (main == 10) is10 = true;
-                if (main == 11) is11 = true;
+                if (main != 0 && main != 10 && main != 11)
+                    Assert.Fail("Invalid page break");
+                if (main == 0)
+                    is0 = true;
+                if (main == 10)
+                    is10 = true;
+                if (main == 11)
+                    is11 = true;
             }
 
             Assert.IsTrue(is0 && is10 && is11, "one of the breaks didnt make it");
@@ -344,11 +351,16 @@ namespace TestCases.HSSF.Model
             for (int i = 0; i < colBreaks.Length; i++)
             {
                 int main = colBreaks[i];
-                if (main != 0 && main != 1 && main != 10 && main != 15) Assert.Fail("Invalid page break");
-                if (main == 0) is0 = true;
-                if (main == 1) is1 = true;
-                if (main == 10) is10 = true;
-                if (main == 15) is15 = true;
+                if (main != 0 && main != 1 && main != 10 && main != 15)
+                    Assert.Fail("Invalid page break");
+                if (main == 0)
+                    is0 = true;
+                if (main == 1)
+                    is1 = true;
+                if (main == 10)
+                    is10 = true;
+                if (main == 15)
+                    is15 = true;
             }
 
             Assert.IsTrue(is0 && is1 && is10 && is15, "one of the breaks didnt make it");
@@ -568,31 +580,35 @@ namespace TestCases.HSSF.Model
  * Checks for bug introduced around r682282-r683880 that caused a second GUTS records
  * which in turn got the dimensions record out of alignment
  */
-        public void TestGutsRecord_bug45640() {
+        public void TestGutsRecord_bug45640()
+        {
 
             InternalSheet sheet = InternalSheet.CreateSheet();
-        sheet.AddRow(new RowRecord(0));
-        sheet.AddRow(new RowRecord(1));
-        sheet.GroupRowRange( 0, 1, true );
-        sheet.ToString();
-        IList recs = sheet.Records;
-        int count=0;
-        for(int i=0; i< recs.Count; i++) {
-            if (recs[i] is GutsRecord) {
-                count++;
+            sheet.AddRow(new RowRecord(0));
+            sheet.AddRow(new RowRecord(1));
+            sheet.GroupRowRange(0, 1, true);
+            sheet.ToString();
+            IList recs = sheet.Records;
+            int count = 0;
+            for (int i = 0; i < recs.Count; i++)
+            {
+                if (recs[i] is GutsRecord)
+                {
+                    count++;
+                }
             }
+            if (count == 2)
+            {
+                throw new AssertionException("Identified bug 45640");
+            }
+            Assert.AreEqual(1, count);
         }
-        if (count == 2) {
-            throw new AssertionException("Identified bug 45640");
-        }
-        Assert.AreEqual(1, count);
-    }
 
         public void TestMisplacedMergedCellsRecords_bug45699()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("ex45698-22488.xls");
 
-            HSSFSheet sheet =(HSSFSheet)wb.GetSheetAt(0);
+            HSSFSheet sheet = (HSSFSheet)wb.GetSheetAt(0);
             HSSFRow row = (HSSFRow)sheet.GetRow(3);
             HSSFCell cell = (HSSFCell)row.GetCell(4);
             if (cell == null)
@@ -658,7 +674,7 @@ namespace TestCases.HSSF.Model
                 {
                     throw new AssertionException("Identified bug 46206");
                 }
-                throw e;
+                throw;
             }
 
             RecordInspector.RecordCollector rv = new RecordInspector.RecordCollector();
@@ -689,7 +705,7 @@ namespace TestCases.HSSF.Model
             //Assert.AreEqual(23, sheetRecs.Count);
             Assert.AreEqual(24, sheetRecs.Count); //for SheetExtRecord
 
-            FormulaShifter shifter = FormulaShifter.CreateForRowShift(0,"", 0, 0, 1, SpreadsheetVersion.EXCEL97);
+            FormulaShifter shifter = FormulaShifter.CreateForRowShift(0, "", 0, 0, 1, SpreadsheetVersion.EXCEL97);
             sheet.UpdateFormulasAfterCellShift(shifter, 0);
             if (sheetRecs.Count == 25 && sheetRecs[22] is ConditionalFormattingTable)
             {
@@ -748,7 +764,7 @@ namespace TestCases.HSSF.Model
                 {
                     throw new AssertionException("Identified bug 46776");
                 }
-                throw e;
+                throw;
             }
 
             TestCases.HSSF.UserModel.RecordInspector.RecordCollector rc = new TestCases.HSSF.UserModel.RecordInspector.RecordCollector();

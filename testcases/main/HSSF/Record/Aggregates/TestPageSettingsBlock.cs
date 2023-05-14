@@ -72,20 +72,20 @@ namespace TestCases.HSSF.Record.Aggregates
             nr.Value = (3.0);
 
             NPOI.HSSF.Record.Record[] recs = {
-				BOFRecord.CreateSheetBOF(),
-				new HeaderRecord("&LSales Figures"),
-				new FooterRecord("&LJanuary"),
-				new HeaderFooterRecord(HexRead.ReadFromString("9C 08 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 C4 60 00 00 00 00 00 00 00 00")),
-				new DimensionsRecord(),
-				new WindowTwoRecord(),
-				new UserSViewBegin(HexRead.ReadFromString("ED 77 3B 86 BC 3F 37 4C A9 58 60 23 43 68 54 4B 01 00 00 00 64 00 00 00 40 00 00 00 02 00 00 00 3D 80 04 00 00 00 00 00 00 00 0C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 F0 3F FF FF 01 00")),
-				new HeaderRecord("&LSales Figures"),
-				new FooterRecord("&LJanuary"),
-				new HeaderFooterRecord(HexRead.ReadFromString("9C 08 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 C4 60 00 00 00 00 00 00 00 00")),
-				new UserSViewEnd(HexRead.ReadFromString("01, 00")),
+                BOFRecord.CreateSheetBOF(),
+                new HeaderRecord("&LSales Figures"),
+                new FooterRecord("&LJanuary"),
+                new HeaderFooterRecord(HexRead.ReadFromString("9C 08 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 C4 60 00 00 00 00 00 00 00 00")),
+                new DimensionsRecord(),
+                new WindowTwoRecord(),
+                new UserSViewBegin(HexRead.ReadFromString("ED 77 3B 86 BC 3F 37 4C A9 58 60 23 43 68 54 4B 01 00 00 00 64 00 00 00 40 00 00 00 02 00 00 00 3D 80 04 00 00 00 00 00 00 00 0C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 F0 3F FF FF 01 00")),
+                new HeaderRecord("&LSales Figures"),
+                new FooterRecord("&LJanuary"),
+                new HeaderFooterRecord(HexRead.ReadFromString("9C 08 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 C4 60 00 00 00 00 00 00 00 00")),
+                new UserSViewEnd(HexRead.ReadFromString("01, 00")),
 
-				EOFRecord.instance,
-		};
+                EOFRecord.instance,
+        };
             RecordStream rs = new RecordStream(Arrays.AsList(recs), 0);
             InternalSheet sheet;
             try
@@ -98,7 +98,7 @@ namespace TestCases.HSSF.Record.Aggregates
                 {
                     throw new AssertionException("Identified bug 46480");
                 }
-                throw e;
+                throw;
             }
 
             TestCases.HSSF.UserModel.RecordInspector.RecordCollector rv = new TestCases.HSSF.UserModel.RecordInspector.RecordCollector();
@@ -122,14 +122,14 @@ namespace TestCases.HSSF.Record.Aggregates
             nr.Value = (3.0);
 
             NPOI.HSSF.Record.Record[] recs = {
-				BOFRecord.CreateSheetBOF(),
-				new HeaderRecord("&LSales Figures"),
-				new FooterRecord("&LJanuary"),
-				new DimensionsRecord(),
-				new WindowTwoRecord(),
-				new HeaderFooterRecord(HexRead.ReadFromString("9C 08 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 C4 60 00 00 00 00 00 00 00 00")),
-				EOFRecord.instance,
-		};
+                BOFRecord.CreateSheetBOF(),
+                new HeaderRecord("&LSales Figures"),
+                new FooterRecord("&LJanuary"),
+                new DimensionsRecord(),
+                new WindowTwoRecord(),
+                new HeaderFooterRecord(HexRead.ReadFromString("9C 08 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 C4 60 00 00 00 00 00 00 00 00")),
+                EOFRecord.instance,
+        };
             RecordStream rs = new RecordStream(Arrays.AsList(recs), 0);
             InternalSheet sheet = InternalSheet.CreateSheet(rs);
 
@@ -168,14 +168,14 @@ namespace TestCases.HSSF.Record.Aggregates
         {
 
             NPOI.HSSF.Record.Record[] recs = {
-				BOFRecord.CreateSheetBOF(),
-				new HeaderRecord("&LSales Figures"),
-				new FooterRecord("&LJanuary"),
-				new DimensionsRecord(),
-				CreateBottomMargin(0.787F),
-				new WindowTwoRecord(),
-				EOFRecord.instance,
-		};
+                BOFRecord.CreateSheetBOF(),
+                new HeaderRecord("&LSales Figures"),
+                new FooterRecord("&LJanuary"),
+                new DimensionsRecord(),
+                CreateBottomMargin(0.787F),
+                new WindowTwoRecord(),
+                EOFRecord.instance,
+        };
             RecordStream rs = new RecordStream(Arrays.AsList(recs), 0);
 
             InternalSheet sheet;
@@ -189,7 +189,7 @@ namespace TestCases.HSSF.Record.Aggregates
                 {
                     throw new AssertionException("Identified bug 47199a - failed to process late margings records");
                 }
-                throw e;
+                throw;
             }
 
             TestCases.HSSF.UserModel.RecordInspector.RecordCollector rv = new TestCases.HSSF.UserModel.RecordInspector.RecordCollector();
@@ -223,9 +223,9 @@ namespace TestCases.HSSF.Record.Aggregates
 
             // Hypothetical Setup of PSB records which should cause POI to crash
             NPOI.HSSF.Record.Record[] recs = {
-				new HeaderRecord("&LSales Figures"),
-				new HeaderRecord("&LInventory"),
-		};
+                new HeaderRecord("&LSales Figures"),
+                new HeaderRecord("&LInventory"),
+        };
             RecordStream rs = new RecordStream(Arrays.AsList(recs), 0);
 
             try
@@ -261,9 +261,9 @@ namespace TestCases.HSSF.Record.Aggregates
         {
             // Initialise PSB with some records, but not the header / footer
             NPOI.HSSF.Record.Record[] recs = {
-				new HCenterRecord(),
-				new VCenterRecord(),
-		};
+                new HCenterRecord(),
+                new VCenterRecord(),
+        };
             RecordStream rs = new RecordStream(Arrays.AsList(recs), 0);
             PageSettingsBlock psb = new PageSettingsBlock(rs);
 
@@ -306,12 +306,12 @@ namespace TestCases.HSSF.Record.Aggregates
             NPOI.HSSF.Record.Record contB1 = new ContinueRecord(HexRead.ReadFromString("FE ED"));
             NPOI.HSSF.Record.Record contB2 = new ContinueRecord(HexRead.ReadFromString("FA CE"));
             NPOI.HSSF.Record.Record[] recs = {
-				new HeaderRecord("&LSales Figures"),
-				new FooterRecord("&LInventory"),
-				new HCenterRecord(),
-				new VCenterRecord(),
-				plsA,
-				plsB, contB1, contB2, // make sure continuing PLS is still OK
+                new HeaderRecord("&LSales Figures"),
+                new FooterRecord("&LInventory"),
+                new HCenterRecord(),
+                new VCenterRecord(),
+                plsA,
+                plsB, contB1, contB2, // make sure continuing PLS is still OK
 		};
             RecordStream rs = new RecordStream(Arrays.AsList(recs), 0);
             PageSettingsBlock psb;
@@ -375,7 +375,7 @@ namespace TestCases.HSSF.Record.Aggregates
                 {
                     throw new AssertionException("Identified bug 48026");
                 }
-                throw e;
+                throw;
             }
 
             RecordInspector.RecordCollector rv = new RecordInspector.RecordCollector();

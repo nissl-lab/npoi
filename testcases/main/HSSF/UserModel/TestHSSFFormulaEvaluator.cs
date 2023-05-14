@@ -146,7 +146,7 @@ namespace TestCases.HSSF.UserModel
                 {
                     Assert.Fail("Identified bug 47048a");
                 }
-                throw e;
+                throw;
             }
             finally
             {

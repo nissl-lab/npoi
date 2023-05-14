@@ -51,7 +51,7 @@ namespace TestCases.XSSF.Streaming
                     File.Delete(_objectToTest.TemporaryFilePath());
                 }
             }
-            
+
         }
         [Test]
         public void IfCallingEmptyConstructorShouldCreateNonZippedTempFileNonDecoratedStream()
@@ -74,7 +74,7 @@ namespace TestCases.XSSF.Streaming
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
             Assert.True(lines.Length == 2);
-            Assert.AreEqual("<row r=\"" + 1 + "\" customHeight=\"true\"  ht=\"" + row.HeightInPoints + "\">", lines[0]);
+            Assert.AreEqual("<row r=\"" + 1 + "\" customHeight=\"true\" ht=\"" + row.HeightInPoints + "\">", lines[0]);
             Assert.AreEqual("</row>", lines[1]);
 
 

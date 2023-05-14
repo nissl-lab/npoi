@@ -288,7 +288,7 @@ namespace TestCases.SS.Formula
         [Test]
         public void TestConstructor()
         {
-            Assert.IsNotNull(FormulaShifter.CreateForRowShift(1, "name", 1, 2, 2));
+            Assert.IsNotNull(FormulaShifter.CreateForRowShift(1, "name", 1, 2, 2, SpreadsheetVersion.EXCEL2007));
         }
         [Test]
         public void TestToString()
