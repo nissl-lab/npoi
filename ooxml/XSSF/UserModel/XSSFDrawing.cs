@@ -73,6 +73,8 @@ namespace NPOI.XSSF.UserModel
             XmlDocument xmldoc = ConvertStreamToXml(part.GetInputStream());
             drawing = CT_Drawing.Parse(xmldoc, NamespaceManager);
         }
+
+        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
         public XSSFDrawing(PackagePart part, PackageRelationship rel)
             : this(part)
         {

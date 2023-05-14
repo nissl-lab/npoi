@@ -393,7 +393,7 @@ namespace NPOI.POIFS.FileSystem
         /// Get an array of objects, some of which may implement POIFSViewable
         /// </summary>
         /// <value>The viewable array.</value>
-        public Array ViewableArray
+        public Object[] ViewableArray
         {
             get
             {
@@ -437,11 +437,11 @@ namespace NPOI.POIFS.FileSystem
         /// Give viewers a hint as to whether to call ViewableArray or ViewableIterator
         /// </summary>
         /// <value>The viewable iterator.</value>
-        public virtual IEnumerator ViewableIterator
+        public virtual IEnumerator<Object> ViewableIterator
         {
             get
             {
-                return ArrayList.ReadOnly(new ArrayList()).GetEnumerator();
+                return new List<Object>().AsReadOnly().GetEnumerator();
             }
         }
         public event POIFSWriterEventHandler BeforeWriting;

@@ -26,7 +26,7 @@
  * ==============================================================*/
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace NPOI.POIFS.Dev
 {
@@ -36,34 +36,40 @@ namespace NPOI.POIFS.Dev
     /// viewer. The content is returned to the viewer as an array or as an
     /// Iterator, and the object provides a clue as to which technique the
     /// viewer should use to get its content.
+    /// 
     /// A POIFSViewable object is also expected to provide a short
     /// description of itself, that can be used by a viewer when the
     /// viewable object is collapsed.
-    /// @author Marc Johnson (mjohnson at apache dot org)
     /// </summary>
     public interface POIFSViewable
     {
         /// <summary>
-        /// Provides a short description of the object to be used when a 
+        /// Get an array of objects, some of which may implement
+        /// POIFSViewable
+        /// </summary>
+        /// <value>an array of Object; may not be null, but may be empty</value>
+        Object[] ViewableArray { get; }
+
+        /// <summary>
+        /// Get an Iterator of objects, some of which may implement POIFSViewable
+        /// </summary>
+        /// <value>an Iterator; may not be null, but may have an empty
+        /// back end store</value>
+        IEnumerator<Object> ViewableIterator { get; }
+
+        /// <summary>
+        /// Give viewers a hint as to whether to call <see cref="ViewableArray"/> or
+        /// <see cref="ViewableIterator"/>
+        /// </summary>
+        /// <value><see langword="true"/> if a viewer should call <see cref="ViewableArray"/>, <see langword="false"/> if
+        /// a viewer should call <see cref="ViewableIterator"/></value>
+        bool PreferArray { get; }
+
+        /// <summary>
+        /// Provides a short description of the object, to be used when a
         /// POIFSViewable object has not provided its contents.
         /// </summary>
-        /// <value><c>true</c> if [prefer array]; otherwise, <c>false</c>.</value>
-        bool PreferArray { get; }
-        /// <summary>
-        /// Gets the short description.
-        /// </summary>
-        /// <value>The short description.</value>
+        /// <value>short description</value>
         string ShortDescription { get; }
-        /// <summary>
-        /// Get an array of objects, some of which may implement POIFSViewable
-        /// </summary>
-        /// <value>The viewable array.</value>
-        Array ViewableArray { get; }
-        /// <summary>
-        /// Give viewers a hint as to whether to call ViewableArray or ViewableIterator
-        /// </summary>
-        /// <value>The viewable iterator.</value>
-        IEnumerator ViewableIterator { get; }
-
     }
 }

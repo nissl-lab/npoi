@@ -208,9 +208,33 @@ namespace TestCases.XWPF.UserModel
 
             Assert.AreEqual(11, styles.DefaultRunStyle.FontSize);
             Assert.AreEqual(200, styles.DefaultParagraphStyle.SpacingAfter);
-
         }
 
-    }
+        // Bug 60329: style with missing StyleID throws NPE
+        [Test]
+        public void TestMissingStyleId()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("60329.docx");
+            XWPFStyles styles = doc.GetStyles();
+            // Styles exist in the test document in this order, EmptyCellLayoutStyle
+            // is missing a StyleId
+            try
+            {
+                Assert.IsNotNull(styles.GetStyle("NoList"));
+                Assert.IsNull(styles.GetStyle("EmptyCellLayoutStyle"));
+                Assert.IsNotNull(styles.GetStyle("BalloonText"));
 
+                // Bug 64600: styleExist throws NPE
+                Assert.IsTrue(styles.StyleExist("NoList"));
+                Assert.IsFalse(styles.StyleExist("EmptyCellLayoutStyle"));
+                Assert.IsTrue(styles.StyleExist("BalloonText"));
+            }
+            catch (NullReferenceException e)
+            {
+                Assert.Fail(e.ToString());
+            }
+
+            doc.Close();
+        }
+    }
 }

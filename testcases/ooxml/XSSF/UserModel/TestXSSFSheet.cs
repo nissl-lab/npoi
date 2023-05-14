@@ -2064,10 +2064,14 @@ namespace TestCases.XSSF.UserModel
                 comment.String = (helper.CreateRichTextString("BugTesting"));
                 IRow row = sheet.GetRow(0 + i);
                 if (row == null)
+                {
                     row = sheet.CreateRow(0 + i);
+                }
                 ICell cell = row.GetCell(0);
                 if (cell == null)
+                {
                     cell = row.CreateCell(0);
+                }
                 cell.CellComment = comment;
             }
         }

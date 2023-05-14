@@ -26,16 +26,16 @@ namespace TestCases.XSSF.UserModel.Charts
 {
     /**
      * Tests for XSSFScatterChartData.
-     * @author Roman Kashitsyn
      */
     [TestFixture]
     public class TestXSSFScatterChartData
     {
-
-        private static Object[][] plotData = new Object[][] {
+        private static Object[][] plotData = new Object[][]
+        {
             new object[] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"},
-            new object[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-            };
+            new object[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+        };
+
         [Test]
         public void TestOneSeriePlot()
         {
@@ -61,8 +61,7 @@ namespace TestCases.XSSF.UserModel.Charts
             Assert.IsTrue(scatterChartData.GetSeries().Contains(series));
 
             chart.Plot(scatterChartData, bottomAxis, leftAxis);
+            wb.Close();
         }
-
     }
 }
-

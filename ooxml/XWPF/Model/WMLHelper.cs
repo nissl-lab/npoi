@@ -1,7 +1,7 @@
-/* ====================================================================
+﻿/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
-   this work for Additional information regarding copyright ownership.
+   this work for additional information regarding copyright ownership.
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
@@ -15,17 +15,24 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HWPF.UserModel
+namespace NPOI.XWPF.Model
 {
+    using NPOI.OpenXmlFormats.Wordprocessing;
 
-    public class DocumentPosition
-      : Range
+    public sealed class WMLHelper
     {
-        public DocumentPosition(HWPFDocument doc, int pos):base(pos, pos, doc)
+        public static bool ConvertSTOnOffToBoolean(ST_OnOff value)
         {
-            
+            if (value == ST_OnOff.True || value == ST_OnOff.on/* || value == ST_OnOff.X_1*/)
+            {
+                return true;
+            }
+            return false;
         }
 
+        public static ST_OnOff ConvertBooleanToSTOnOff(bool value)
+        {
+            return (value ? ST_OnOff.True : ST_OnOff.False);
+        }
     }
 }
-

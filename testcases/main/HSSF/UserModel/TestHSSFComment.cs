@@ -27,12 +27,13 @@ namespace TestCases.HSSF.UserModel
     using NPOI.DDF;
     using NPOI.Util;
     using NPOI.HSSF.Model;
+    using static TestCases.POIFS.Storage.RawDataUtil;
 
     /**
-* Tests TestHSSFCellComment.
-*
-* @author  Yegor Kozlov
-*/
+     * Tests TestHSSFCellComment.
+     *
+     * @author  Yegor Kozlov
+     */
     [TestFixture]
     public class TestHSSFComment:BaseTestCellComment
     {
@@ -218,25 +219,25 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(comment.GetEscherContainer().ChildRecords.Count, 5);
 
             //sp record
-            byte[] expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAFvEw/WBg4GBgZEFSHAxMAAA9gX7nhAAAAA=");
+            byte[] expected = Decompress("H4sIAAAAAAAAAFvEw/WBg4GBgZEFSHAxMAAA9gX7nhAAAAA=");
             byte[] actual = comment.GetEscherContainer().GetChild(0).Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
             Assert.IsTrue(Arrays.Equals(expected, actual));
 
-            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNgEPggxIANAABK4+laGgAAAA==");
+            expected = Decompress("H4sIAAAAAAAAAGNgEPggxIANAABK4+laGgAAAA==");
             actual = comment.GetEscherContainer().GetChild(2).Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
             Assert.IsTrue(Arrays.Equals(expected, actual));
 
-            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNgEPzAAAQACl6c5QgAAAA=");
+            expected = Decompress("H4sIAAAAAAAAAGNgEPzAAAQACl6c5QgAAAA=");
             actual = comment.GetEscherContainer().GetChild(3).Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
             Assert.IsTrue(Arrays.Equals(expected, actual));
 
-            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNg4P3AAAQA6pyIkQgAAAA=");
+            expected = Decompress("H4sIAAAAAAAAAGNg4P3AAAQA6pyIkQgAAAA=");
             actual = comment.GetEscherContainer().GetChild(4).Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
@@ -244,7 +245,7 @@ namespace TestCases.HSSF.UserModel
 
             ObjRecord obj = comment.GetObjRecord();
 
-            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAItlMGEQZRBikGRgZBF0YEACvAxiDLgBAJZsuoU4AAAA");
+            expected = Decompress("H4sIAAAAAAAAAItlMGEQZRBikGRgZBF0YEACvAxiDLgBAJZsuoU4AAAA");
             actual = obj.Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
@@ -252,7 +253,7 @@ namespace TestCases.HSSF.UserModel
 
             TextObjectRecord tor = comment.GetTextObjectRecord();
 
-            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAANvGKMQgxMSABgBGi8T+FgAAAA==");
+            expected = Decompress("H4sIAAAAAAAAANvGKMQgxMSABgBGi8T+FgAAAA==");
             actual = tor.Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
@@ -260,7 +261,7 @@ namespace TestCases.HSSF.UserModel
 
             NoteRecord note = comment.NoteRecord;
 
-            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAJNh4GGAAEYWEAkAS0KXuRAAAAA=");
+            expected = Decompress("H4sIAAAAAAAAAJNh4GGAAEYWEAkAS0KXuRAAAAA=");
             actual = note.Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);

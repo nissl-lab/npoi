@@ -56,7 +56,7 @@ namespace NPOI.XWPF.Model
          *  as required.
          */
         public XWPFHeaderFooterPolicy(XWPFDocument doc)
-            : this(doc, doc.Document.body.sectPr)
+            : this(doc, null)
         {
         }
 
@@ -71,6 +71,13 @@ namespace NPOI.XWPF.Model
             // For now, we don't care about different ranges, as it
             //  doesn't seem that .docx properly supports that
             //  feature of the file format yet
+            if (sectPr == null)
+            {
+                CT_Body ctBody = doc.Document.body;
+                sectPr = ctBody.IsSetSectPr()
+                        ? ctBody.sectPr
+                        : ctBody.AddNewSectPr();
+            }
             this.doc = doc;
             for (int i = 0; i < sectPr.SizeOfHeaderReferenceArray(); i++)
             {
@@ -141,23 +148,28 @@ namespace NPOI.XWPF.Model
 
         public XWPFHeader CreateHeader(ST_HdrFtr type, XWPFParagraph[] pars)
         {
-            XWPFRelation relation = XWPFRelation.HEADER;
-            String pStyle = "Header";
-            int i = GetRelationIndex(relation);
-            HdrDocument hdrDoc = new HdrDocument();
-            XWPFHeader wrapper = (XWPFHeader)doc.CreateRelationship(relation, XWPFFactory.GetInstance(), i);
-            wrapper.SetXWPFDocument(doc);
-            CT_HdrFtr hdr = buildHdr(type, pStyle, wrapper, pars);
-            wrapper.SetHeaderFooter(hdr);
+            XWPFHeader header = GetHeader(type);
 
-            hdrDoc.SetHdr((CT_Hdr)hdr);
-
-            assignHeader(wrapper, type);
-            using (Stream outputStream = wrapper.GetPackagePart().GetOutputStream())
+            if (header == null)
             {
-                hdrDoc.Save(outputStream);
+                HdrDocument hdrDoc = new HdrDocument();
+
+                XWPFRelation relation = XWPFRelation.HEADER;
+                int i = GetRelationIndex(relation);
+
+                XWPFHeader wrapper = (XWPFHeader)doc.CreateRelationship(relation,
+                        XWPFFactory.GetInstance(), i);
+                wrapper.SetXWPFDocument(doc);
+
+                String pStyle = "Header";
+                CT_HdrFtr hdr = buildHdr(type, pStyle, wrapper, pars);
+                wrapper.SetHeaderFooter(hdr);
+                hdrDoc.SetHdr((CT_Hdr)hdr);
+                assignHeader(wrapper, type);
+                header = wrapper;
             }
-            return wrapper;
+
+            return header;
         }
 
         public XWPFFooter CreateFooter(ST_HdrFtr type)
@@ -167,23 +179,28 @@ namespace NPOI.XWPF.Model
 
         public XWPFFooter CreateFooter(ST_HdrFtr type, XWPFParagraph[] pars)
         {
-            XWPFRelation relation = XWPFRelation.FOOTER;
-            String pStyle = "Footer";
-            int i = GetRelationIndex(relation);
-            FtrDocument ftrDoc = new FtrDocument();
-            XWPFFooter wrapper = (XWPFFooter)doc.CreateRelationship(relation, XWPFFactory.GetInstance(), i);
-            wrapper.SetXWPFDocument(doc);
-            CT_HdrFtr ftr = buildFtr(type, pStyle, wrapper, pars);
-            wrapper.SetHeaderFooter(ftr);
+            XWPFFooter footer = GetFooter(type);
 
-            ftrDoc.SetFtr((CT_Ftr)ftr);
-
-            assignFooter(wrapper, type);
-            using (Stream outputStream = wrapper.GetPackagePart().GetOutputStream())
+            if (footer == null)
             {
-                ftrDoc.Save(outputStream);
+                FtrDocument ftrDoc = new FtrDocument();
+
+                XWPFRelation relation = XWPFRelation.FOOTER;
+                int i = GetRelationIndex(relation);
+
+                XWPFFooter wrapper = (XWPFFooter)doc.CreateRelationship(relation,
+                        XWPFFactory.GetInstance(), i);
+                wrapper.SetXWPFDocument(doc);
+
+                String pStyle = "Footer";
+                CT_HdrFtr ftr = buildFtr(type, pStyle, wrapper, pars);
+                wrapper.SetHeaderFooter(ftr);
+                ftrDoc.SetFtr((CT_Ftr)ftr);
+                assignFooter(wrapper, type);
+                footer = wrapper;
             }
-            return wrapper;
+
+            return footer;
         }
 
         private int GetRelationIndex(XWPFRelation relation)
@@ -237,21 +254,21 @@ namespace NPOI.XWPF.Model
                 }
             }
             else {
-                CT_P p = ftr.AddNewP();
-                CT_Body body = doc.Document.body;
-                if (body.SizeOfPArray() > 0)
-                {
-                    CT_P p0 = body.GetPArray(0);
-                    if (p0.IsSetRsidR())
-                    {
-                        byte[] rsidr = p0.rsidR;
-                        byte[] rsidrdefault = p0.rsidRDefault;
-                        p.rsidP = rsidr;
-                        p.rsidRDefault = rsidrdefault;
-                    }
-                }
-                CT_PPr pPr = p.AddNewPPr();
-                pPr.AddNewPStyle().val = (pStyle);
+                //CT_P p = ftr.AddNewP();
+                //CT_Body body = doc.Document.body;
+                //if (body.SizeOfPArray() > 0)
+                //{
+                //    CT_P p0 = body.GetPArray(0);
+                //    if (p0.IsSetRsidR())
+                //    {
+                //        byte[] rsidr = p0.rsidR;
+                //        byte[] rsidrdefault = p0.rsidRDefault;
+                //        p.rsidP = rsidr;
+                //        p.rsidRDefault = rsidrdefault;
+                //    }
+                //}
+                //CT_PPr pPr = p.AddNewPPr();
+                //pPr.AddNewPStyle().val = (pStyle);
             }
             return ftr;
         }
@@ -346,6 +363,26 @@ namespace NPOI.XWPF.Model
             }
             return defaultHeader;
         }
+
+        /**
+         * Get this section header for the given type
+         *
+         * @param type of header to return
+         * @return {@link XWPFHeader} object
+         */
+        public XWPFHeader GetHeader(ST_HdrFtr type)
+        {
+            if (type == ST_HdrFtr.even)
+            {
+                return evenPageHeader;
+            }
+            else if (type == ST_HdrFtr.first)
+            {
+                return firstPageHeader;
+            }
+            return defaultHeader;
+        }
+
         /**
          * Get the footer that applies to the given
          *  (1 based) page.
@@ -364,23 +401,34 @@ namespace NPOI.XWPF.Model
             return defaultFooter;
         }
 
+        /**
+         * Get this section footer for the given type
+         *
+         * @param type of footer to return
+         * @return {@link XWPFFooter} object
+         */
+        public XWPFFooter GetFooter(ST_HdrFtr type)
+        {
+            if (type == ST_HdrFtr.even)
+            {
+                return evenPageFooter;
+            }
+            else if (type == ST_HdrFtr.first)
+            {
+                return firstPageFooter;
+            }
+            return defaultFooter;
+        }
+
         public void CreateWatermark(String text)
         {
             XWPFParagraph[] pars = new XWPFParagraph[1];
-            try
-            {
-                pars[0] = GetWatermarkParagraph(text, 1);
-                CreateHeader(DEFAULT, pars);
-                pars[0] = GetWatermarkParagraph(text, 2);
-                CreateHeader(FIRST, pars);
-                pars[0] = GetWatermarkParagraph(text, 3);
-                CreateHeader(EVEN, pars);
-            }
-            catch (IOException e)
-            {
-                // TODO Auto-generated catch block
-                Trace.Write(e.StackTrace);
-            }
+            pars[0] = GetWatermarkParagraph(text, 1);
+            CreateHeader(DEFAULT, pars);
+            pars[0] = GetWatermarkParagraph(text, 2);
+            CreateHeader(FIRST, pars);
+            pars[0] = GetWatermarkParagraph(text, 3);
+            CreateHeader(EVEN, pars);
         }
 
         /*

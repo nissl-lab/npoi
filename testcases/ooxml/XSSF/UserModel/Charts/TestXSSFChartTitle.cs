@@ -26,8 +26,6 @@ namespace TestCases.XSSF.UserModel.Charts
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;
 
-
-
     /**
      * Test Get/set chart title.
      */
@@ -114,6 +112,7 @@ namespace TestCases.XSSF.UserModel.Charts
             XSSFRichTextString queryTitle = chart.Title;
             Assert.IsNotNull(queryTitle);
             Assert.AreEqual(myTitle, queryTitle.ToString());
+            wb.Close();
         }
 
         [Test]
@@ -130,6 +129,7 @@ namespace TestCases.XSSF.UserModel.Charts
             XSSFRichTextString queryTitle = chart.Title;
             Assert.IsNotNull(queryTitle);
             Assert.AreEqual(myTitle, queryTitle.ToString());
+            wb.Close();
         }
 
         [Test]
@@ -144,8 +144,7 @@ namespace TestCases.XSSF.UserModel.Charts
             XSSFRichTextString queryTitle = chart.Title;
             Assert.IsNotNull(queryTitle);
             Assert.AreEqual(myTitle, queryTitle.ToString());
+            wb.Close();
         }
-
     }
-
 }

@@ -306,6 +306,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return AddNewObject<CT_P>(ItemsChoiceType8.p);
         }
 
+        public CT_Tbl AddNewTbl()
+        {
+            return AddNewObject<CT_Tbl>(ItemsChoiceType8.tbl);
+        }
+
         public void SetPArray(int i, CT_P cT_P)
         {
             SetObject<CT_P>(ItemsChoiceType8.p, i, cT_P);
@@ -542,7 +547,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return null;
             CT_HdrFtrRef ctObj = new CT_HdrFtrRef();
             if (node.Attributes["w:type"] != null)
-                ctObj.type = (ST_HdrFtr)Enum.Parse(typeof(ST_HdrFtr), node.Attributes["w:type"].Value);
+            {
+                try
+                {
+                    ctObj.type = (ST_HdrFtr)Enum.Parse(typeof(ST_HdrFtr), node.Attributes["w:type"].Value);
+                }
+                catch (ArgumentException)
+                {
+                    ctObj.type = ST_HdrFtr.@default;
+                }
+            }
             ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
             return ctObj;
         }

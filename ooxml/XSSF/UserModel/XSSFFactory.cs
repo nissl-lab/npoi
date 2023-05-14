@@ -30,8 +30,6 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFFactory : POIXMLFactory
     {
-        private static POILogger logger = POILogFactory.GetLogger(typeof(XSSFFactory));
-
         private XSSFFactory()
         {
 
