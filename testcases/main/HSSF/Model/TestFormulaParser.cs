@@ -805,14 +805,14 @@ namespace TestCases.HSSF.Model
 
             Type[] expClss;
 
-            expClss = new Type[] { 
-                typeof(RefPtg), 
+            expClss = new Type[] {
+                typeof(RefPtg),
                 typeof(AttrPtg), // tAttrIf
-                typeof(MissingArgPtg), 
+                typeof(MissingArgPtg),
                 typeof(AttrPtg), // tAttrSkip
                 typeof(RefPtg),
                 typeof(AttrPtg), // tAttrSkip
-                typeof(FuncVarPtg), 
+                typeof(FuncVarPtg),
         };
 
             ConfirmTokenClasses("if(A1, ,C1)", expClss);
@@ -868,7 +868,7 @@ namespace TestCases.HSSF.Model
                 {
                     Assert.Fail("Identified bug 28754a");
                 }
-                throw e;
+                throw;
             }
             Assert.AreEqual("test\"ing", sp.Value);
 
@@ -1240,8 +1240,8 @@ namespace TestCases.HSSF.Model
 
             ArrayPtg aptg = (ArrayPtg)ptgs[0];
             Object[,] values = aptg.GetTokenArrayValues();
-            Assert.AreEqual(ErrorConstant.ValueOf(FormulaError.REF.Code), values[0,3]);
-            Assert.AreEqual(false, values[1,0]);
+            Assert.AreEqual(ErrorConstant.ValueOf(FormulaError.REF.Code), values[0, 3]);
+            Assert.AreEqual(false, values[1, 0]);
         }
         [Test]
         public void TestParseStringElementInArray()
@@ -1249,7 +1249,7 @@ namespace TestCases.HSSF.Model
             Ptg[] ptgs;
             ptgs = ParseFormula("MAX({\"5\"},3)");
             ConfirmTokenClasses(ptgs, typeof(ArrayPtg), typeof(IntPtg), typeof(FuncVarPtg));
-            object element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0,0];
+            object element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0, 0];
             if (element is UnicodeString)
             {
                 // this would cause ClassCastException below
@@ -1290,14 +1290,14 @@ namespace TestCases.HSSF.Model
                 throw e;
             }
             ConfirmTokenClasses(ptgs, typeof(ArrayPtg));
-            Object element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0,0];
+            Object element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0, 0];
 
             Assert.AreEqual(-42.0, (Double)element, 0.0);
 
             // Should be able to handle whitespace between unary minus and digits (Excel
             // accepts this formula after presenting the user with a Confirmation dialog).
             ptgs = ParseFormula("{- 5}");
-            element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0,0];
+            element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0, 0];
             Assert.AreEqual(-5.0, (Double)element, 0.0);
         }
         [Test]
@@ -1378,7 +1378,7 @@ namespace TestCases.HSSF.Model
             Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.Cell, -1, -1);
 
             ConfirmTokenClasses(ptgs,
-                // TODO - AttrPtg), // Excel prepends this
+                    // TODO - AttrPtg), // Excel prepends this
                     typeof(MemFuncPtg),
                     typeof(Area3DPtg),
                     typeof(Area3DPtg),
@@ -1406,7 +1406,7 @@ namespace TestCases.HSSF.Model
             wb.CreateSheet("Sheet1");
             Ptg[] ptgs = FormulaParser.Parse(formula, HSSFEvaluationWorkbook.Create(wb), FormulaType.Cell, -1);
             ConfirmTokenClasses(ptgs,
-                    // TODO - AttrPtg.class, // Excel prepends this
+                // TODO - AttrPtg.class, // Excel prepends this
                 typeof(MemFuncPtg),
                 typeof(Area3DPtg),
                 typeof(Area3DPtg),
@@ -1456,7 +1456,7 @@ namespace TestCases.HSSF.Model
                     typeof(ParenthesisPtg)
                 );
         }
-    
+
 
         /** Named ranges with backslashes, e.g. 'POI\\2009' */
         [Test]
@@ -1520,7 +1520,7 @@ namespace TestCases.HSSF.Model
                     Assert.Fail("Identified bug 46951");
                 }
                 wb.Close();
-                throw e;
+                throw;
             }
             ConfirmTokenClasses(ptgs,
                 typeof(MemFuncPtg), // [len=23]
@@ -1627,7 +1627,7 @@ namespace TestCases.HSSF.Model
 
             ptgs = ParseFormula("SUM(A1:B2:C3:D4)");
             ConfirmTokenClasses(ptgs,
-                // AttrPtg), // [volatile ] // POI doesn't do this yet (Apr 2009)
+                    // AttrPtg), // [volatile ] // POI doesn't do this yet (Apr 2009)
                     typeof(MemAreaPtg), // len 19
                     typeof(AreaPtg), // [A1:B2]
                     typeof(AreaPtg), // [C3:D4]

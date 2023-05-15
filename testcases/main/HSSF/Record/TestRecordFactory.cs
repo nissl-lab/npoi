@@ -171,14 +171,14 @@ namespace TestCases.HSSF.Record
              *  Taken from a real test sample file 39512.xls. See Bug 39512 for details.
              */
             String dump =
-                //OBJ
+                    //OBJ
                     "5D 00 48 00 15 00 12 00 0C 00 3C 00 11 00 A0 2E 03 01 CC 42 " +
                     "CF 00 00 00 00 00 0A 00 0C 00 00 00 00 00 00 00 00 00 00 00 " +
                     "03 00 0B 00 06 00 28 01 03 01 00 00 12 00 08 00 00 00 00 00 " +
                     "00 00 03 00 11 00 04 00 3D 00 00 00 00 00 00 00 " +
-                //MSODRAWING
+                    //MSODRAWING
                     "EC 00 08 00 00 00 0D F0 00 00 00 00 " +
-                //TXO (and 2 trailing CONTINUE records)
+                    //TXO (and 2 trailing CONTINUE records)
                     //"B6 01 12 00 22 02 00 00 00 00 00 00 00 00 10 00 10 00 00 00 " +
                     //"00 00 3C 00 21 00 01 4F 00 70 00 74 00 69 00 6F 00 6E 00 20 " +
                     //"00 42 00 75 00 74 00 74 00 6F 00 6E 00 20 00 33 00 39 00 3C " +
@@ -186,7 +186,7 @@ namespace TestCases.HSSF.Record
                     "B6 01 12 00 22 02 00 00 00 00 00 00 00 00 10 00 10 00 00 00 00 00 " +
                     "3C 00 11 00 00 4F 70 74 69 6F 6E 20 42 75 74 74 6F 6E 20 33 39 " +
                     "3C 00 10 00 00 00 05 00 00 00 00 00 10 00 00 00 00 00 00 00 " +
-                // another CONTINUE
+                    // another CONTINUE
                     "3C 00 7E 00 0F 00 04 F0 7E 00 00 00 92 0C 0A F0 08 00 00 00 " +
                     "3D 04 00 00 00 0A 00 00 A3 00 0B F0 3C 00 00 00 7F 00 00 01 " +
                     "00 01 80 00 8C 01 03 01 85 00 01 00 00 00 8B 00 02 00 00 00 " +
@@ -194,7 +194,7 @@ namespace TestCases.HSSF.Record
                     "00 00 10 00 C0 01 40 00 00 08 FF 01 00 00 08 00 00 00 10 F0 " +
                     "12 00 00 00 02 00 02 00 A0 03 18 00 B5 00 04 00 30 02 1A 00 " +
                     "00 00 00 00 11 F0 00 00 00 00 " +
-                //OBJ
+                    //OBJ
                     "5D 00 48 00 15 00 12 00 0C 00 3D 00 11 00 8C 01 03 01 C8 59 CF 00 00 " +
                     "00 00 00 0A 00 0C 00 00 00 00 00 00 00 00 00 00 00 03 00 0B 00 06 00 " +
                     "7C 16 03 01 00 00 12 00 08 00 00 00 00 00 00 00 03 00 11 00 04 00 01 " +
@@ -211,7 +211,7 @@ namespace TestCases.HSSF.Record
 
             //Serialize and verify that the Serialized data is1 the same as the original
             MemoryStream out1 = new MemoryStream();
-            for (IEnumerator it = records.GetEnumerator(); it.MoveNext(); )
+            for (IEnumerator it = records.GetEnumerator(); it.MoveNext();)
             {
                 Record rec = (Record)it.Current;
                 byte[] serialdata = rec.Serialize();
@@ -226,17 +226,17 @@ namespace TestCases.HSSF.Record
         public void TestNonZeroPadding_bug46987()
         {
             Record[] recs = {
-			    new BOFRecord(),
-			    new WriteAccessRecord(), // need *something* between BOF and EOF
+                new BOFRecord(),
+                new WriteAccessRecord(), // need *something* between BOF and EOF
 			    EOFRecord.instance,
-			    BOFRecord.CreateSheetBOF(),
-			    EOFRecord.instance,
-		    };
+                BOFRecord.CreateSheetBOF(),
+                EOFRecord.instance,
+            };
             MemoryStream baos = new MemoryStream();
             for (int i = 0; i < recs.Length; i++)
             {
                 byte[] data = recs[i].Serialize();
-                baos.Write(data,0,data.Length);
+                baos.Write(data, 0, data.Length);
             }
             //simulate the bad padding at the end of the workbook stream in attachment 23483 of bug 46987
             baos.WriteByte(0x00);
@@ -266,7 +266,7 @@ namespace TestCases.HSSF.Record
                 {
                     throw new AssertionException("Identified bug 46987");
                 }
-                throw e;
+                throw;
             }
             Assert.AreEqual(5, outRecs.Count);
         }

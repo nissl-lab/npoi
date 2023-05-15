@@ -23,6 +23,7 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.Util;
     using System.Collections.Generic;
     using NPOI.Util;
+    using NPOI.HSSF.Util;
 
     /**
      * Tests of implementations of {@link NPOI.ss.usermodel.Name}.
@@ -495,10 +496,10 @@ namespace TestCases.SS.UserModel
             Assert.IsNotNull(aNamedCell);
 
             // retrieve the cell at the named range and Test its contents
-            AreaReference aref = new AreaReference(aNamedCell.RefersToFormula);
-            Assert.IsTrue(aref.IsSingleCell, "Should be exactly 1 cell in the named cell :'" + cellName + "'");
+            RangeAddress aref = new RangeAddress(aNamedCell.RefersToFormula);
+            Assert.IsTrue(aref.Height == 1 && aref.Width == 1, "Should be exactly 1 cell in the named cell :'" + cellName + "'");
 
-            CellReference cref = aref.FirstCell;
+            CellReference cref = new CellReference($"\'{aref.SheetName}\'!{aref.ToCell}");
             Assert.IsNotNull(cref);
             ISheet s = wb.GetSheet(cref.SheetName);
             Assert.IsNotNull(s);
