@@ -131,7 +131,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     // Nice and easy
                     _cellXf = src.GetCoreXf().Copy();
-                    _cellStyleXf = src.GetStyleXf().Copy();
+                    _cellStyleXf = src.GetStyleXf() != null ? src.GetStyleXf().Copy() : null;
                 }
                 else
                 {
@@ -161,7 +161,7 @@ namespace NPOI.XSSF.UserModel
                         CT_Border border = CT_Border.Parse(src.GetCTBorder().ToString());
                         AddBorder(border);
 
-                        if (src._cellStyleXf.applyBorder)
+                        if (src._cellStyleXf != null && src._cellStyleXf.applyBorder)
                         {
                             _cellStyleXf.borderId = FindAddBorder(src.GetCTBorder());
                         }
@@ -1279,7 +1279,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     return (int)_cellXf.fontId;
                 }
-                return (int)_cellStyleXf.fontId;
+                return _cellStyleXf != null ? (int)_cellStyleXf.fontId : -1;
             }
         }
 
