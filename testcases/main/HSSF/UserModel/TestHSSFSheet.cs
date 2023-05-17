@@ -449,7 +449,7 @@ namespace TestCases.HSSF.UserModel
             Assert.IsTrue(hssfSheet.ObjectProtect);
             Assert.AreEqual(expectedHashA, hssfSheet.Password);
             Assert.AreEqual(expectedHashA, hssfSheet.Sheet.ProtectionBlock.PasswordHash);
-            
+
 
             // Clone the sheet, and make sure the password hash is preserved
             HSSFSheet sheet2 = (HSSFSheet)workbook.CloneSheet(0);
@@ -567,7 +567,9 @@ namespace TestCases.HSSF.UserModel
 
             workbook.Close();
         }
+
         [Test]
+        [Obsolete]
         public void TestZoom()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -734,7 +736,8 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb2 = HSSFTestDataSamples.OpenSampleWorkbook("Simple.xls");
 
             sheet = wb2.GetSheetAt(0);
-            for (int i = 3; i < 10; i++) sheet.CreateRow(i);
+            for (int i = 3; i < 10; i++)
+                sheet.CreateRow(i);
 
             HSSFTestDataSamples.WriteOutAndReadBack(wb2).Close();
 
@@ -1129,7 +1132,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(11 * 20, bs.GetFont(wbSimple).FontHeight);
             Assert.AreEqual(8, bs.GetFont(wbSimple).Color);
             Assert.IsFalse(bs.GetFont(wbSimple).IsItalic);
-            Assert.AreEqual((int)FontBoldWeight.Normal, bs.GetFont(wbSimple).Boldweight);
+            Assert.IsFalse(bs.GetFont(wbSimple).IsBold);
 
 
             ICellStyle cs = wbComplex.GetSheetAt(0).GetColumnStyle(1);
@@ -1139,7 +1142,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(8 * 20, cs.GetFont(wbComplex).FontHeight);
             Assert.AreEqual(10, cs.GetFont(wbComplex).Color);
             Assert.IsFalse(cs.GetFont(wbComplex).IsItalic);
-            Assert.AreEqual((int)FontBoldWeight.Bold, cs.GetFont(wbComplex).Boldweight);
+            Assert.IsTrue(cs.GetFont(wbComplex).IsBold);
 
             wbComplex.Close();
             wbSimple.Close();

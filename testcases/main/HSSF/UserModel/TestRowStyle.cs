@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-        
+
 
 /*
  * TestRowStyle.java
@@ -68,13 +68,13 @@ namespace TestCases.HSSF.UserModel
             IFont fnt = wb.CreateFont();
             NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
 
-            fnt.Color=(NPOI.HSSF.Util.HSSFColor.Red.Index);
-            fnt.Boldweight=(short)FontBoldWeight.Bold;
+            fnt.Color = (NPOI.HSSF.Util.HSSFColor.Red.Index);
+            fnt.IsBold = true;
             cs.SetFont(fnt);
             for (short rownum = (short)0; rownum < 100; rownum++)
             {
                 r = s.CreateRow(rownum);
-                r.RowStyle=(cs);
+                r.RowStyle = (cs);
                 r.CreateCell(0);
             }
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
@@ -97,15 +97,15 @@ namespace TestCases.HSSF.UserModel
             IRow row = s.CreateRow((short)0);
 
             // with Date:
-            cs.DataFormat=(HSSFDataFormat.GetBuiltinFormat("m/d/yy"));
-            row.RowStyle=(cs);
+            cs.DataFormat = (HSSFDataFormat.GetBuiltinFormat("m/d/yy"));
+            row.RowStyle = (cs);
             row.CreateCell(0);
 
 
             // with Calendar:
             row = s.CreateRow((short)1);
-            cs.DataFormat= (HSSFDataFormat.GetBuiltinFormat("m/d/yy"));
-            row.RowStyle=(cs);
+            cs.DataFormat = (HSSFDataFormat.GetBuiltinFormat("m/d/yy"));
+            row.RowStyle = (cs);
             row.CreateCell(0);
 
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
@@ -138,28 +138,29 @@ namespace TestCases.HSSF.UserModel
             NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
             NPOI.SS.UserModel.ICellStyle cs2 = wb.CreateCellStyle();
 
-            cs.BorderBottom=(BorderStyle.Thin);
-            cs.BorderLeft=(BorderStyle.Thin);
-            cs.BorderRight=(BorderStyle.Thin);
-            cs.BorderTop=(BorderStyle.Thin);
-            cs.FillForegroundColor=((short)0xA);
+            cs.BorderBottom = (BorderStyle.Thin);
+            cs.BorderLeft = (BorderStyle.Thin);
+            cs.BorderRight = (BorderStyle.Thin);
+            cs.BorderTop = (BorderStyle.Thin);
+            cs.FillForegroundColor = ((short)0xA);
             cs.FillPattern = FillPattern.SolidForeground;
-            fnt.Color=((short)0xf);
-            fnt.IsItalic=(true);
-            cs2.FillForegroundColor=((short)0x0);
+            fnt.Color = ((short)0xf);
+            fnt.IsItalic = (true);
+            cs2.FillForegroundColor = ((short)0x0);
             cs2.FillPattern = FillPattern.SolidForeground;
             cs2.SetFont(fnt);
             for (short rownum = (short)0; rownum < 100; rownum++)
             {
                 r = s.CreateRow(rownum);
-                r.RowStyle=(cs);
+                r.RowStyle = (cs);
                 r.CreateCell(0);
 
                 rownum++;
-                if (rownum >= 100) break; // I feel too lazy to Check if this isreqd :-/ 
+                if (rownum >= 100)
+                    break; // I feel too lazy to Check if this isreqd :-/ 
 
                 r = s.CreateRow(rownum);
-                r.RowStyle=(cs2);
+                r.RowStyle = (cs2);
                 r.CreateCell(0);
             }
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
@@ -182,11 +183,12 @@ namespace TestCases.HSSF.UserModel
                 Assert.AreEqual(cs.BorderLeft, BorderStyle.Thin, "Left Border Style for row: ");
                 Assert.AreEqual(cs.BorderRight, BorderStyle.Thin, "Right Border Style for row: ");
                 Assert.AreEqual(cs.BorderTop, BorderStyle.Thin, "Top Border Style for row: ");
-                Assert.AreEqual(0xA, cs.FillForegroundColor,  "FillForegroundColor for row: ");
-                Assert.AreEqual((short)0x1, (short)cs.FillPattern,  "FillPattern for row: ");
+                Assert.AreEqual(0xA, cs.FillForegroundColor, "FillForegroundColor for row: ");
+                Assert.AreEqual((short)0x1, (short)cs.FillPattern, "FillPattern for row: ");
 
                 rownum++;
-                if (rownum >= 100) break; // I feel too lazy to Check if this isreqd :-/ 
+                if (rownum >= 100)
+                    break; // I feel too lazy to Check if this isreqd :-/ 
 
                 r = s.GetRow(rownum);
                 Assert.IsNotNull(r, "Row is not null");

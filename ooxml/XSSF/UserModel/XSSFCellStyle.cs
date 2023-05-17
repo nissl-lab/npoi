@@ -165,7 +165,7 @@ namespace NPOI.XSSF.UserModel
                         // bug 58084: set borders correctly
                         CT_Border border = CT_Border.Parse(src.GetCTBorder().ToString());
                         AddBorder(border);
-
+                        
                         // Swap it over
                         _stylesSource.ReplaceCellXfAt(_cellXfId, _cellXf);
                     }

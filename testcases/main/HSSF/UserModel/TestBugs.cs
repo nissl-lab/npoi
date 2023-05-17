@@ -222,7 +222,8 @@ namespace TestCases.HSSF.UserModel
         [Ignore("this test was not found in poi 3.8beta4")]
         public void Test22568()
         {
-            int r = 2000; int c = 3;
+            int r = 2000;
+            int c = 3;
 
             HSSFWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet("ExcelTest");
@@ -1241,7 +1242,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(4, wb.NumberOfFonts);
 
             IFont f1 = wb.GetFontAt((short)0);
-            Assert.AreEqual(400, f1.Boldweight);
+            Assert.IsFalse(f1.IsBold);
 
             // Check that asking for the same font
             //  multiple times gives you the same thing.
@@ -1264,7 +1265,7 @@ namespace TestCases.HSSF.UserModel
             //  yet to Add
             Assert.IsNull(
                 wb.FindFont(
-                    (short)11, (short)123, (short)22,
+                    true, (short)123, (short)22,
                     "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                 )
             );
@@ -1275,7 +1276,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(5, nf.Index);
             Assert.AreEqual(nf, wb.GetFontAt((short)5));
 
-            nf.Boldweight = ((short)11);
+            nf.IsBold = true;
             nf.Color = ((short)123);
             nf.FontHeight = ((short)22);
             nf.FontName = ("Thingy");
@@ -1290,20 +1291,20 @@ namespace TestCases.HSSF.UserModel
             // Find it now
             Assert.IsNotNull(
                 wb.FindFont(
-                    (short)11, (short)123, (short)22,
+                    true, (short)123, (short)22,
                     "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                 )
             );
             Assert.AreEqual(
                 5,
                 wb.FindFont(
-                       (short)11, (short)123, (short)22,
+                       true, (short)123, (short)22,
                        "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                    ).Index
             );
             Assert.AreEqual(nf,
                    wb.FindFont(
-                       (short)11, (short)123, (short)22,
+                       true, (short)123, (short)22,
                        "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                    )
             );
@@ -1558,7 +1559,8 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = OpenSample("44958.xls");
             ISheet sh = wb.GetSheetAt(0);
-            for (short i = 0; i < 30; i++) sh.AutoSizeColumn(i);
+            for (short i = 0; i < 30; i++)
+                sh.AutoSizeColumn(i);
         }
 
         /**
@@ -3401,7 +3403,7 @@ namespace TestCases.HSSF.UserModel
                 Assert.IsNull(cell.CellFormula);
                 Assert.Fail("Should throw an exception here");
             }
-            catch (InvalidOperationException e)
+            catch
             {
                 // expected here
             }
@@ -3490,11 +3492,13 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void Test52447()
         {
-            IWorkbook wb=null;
+            IWorkbook wb = null;
             try
             {
                 wb = HSSFTestDataSamples.OpenSampleWorkbook("52447.xls");
-            } catch { 
+            }
+            catch
+            {
                 Assert.IsNotNull(wb);
             }
         }

@@ -49,7 +49,8 @@ namespace TestCases.HSSF.UserModel
     {
         public TestHSSFWorkbook()
             : base(HSSFITestDataProvider.Instance)
-        { }
+        {
+        }
         /**
      * gives test code access to the {@link InternalWorkbook} within {@link HSSFWorkbook}
      */
@@ -178,7 +179,7 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(1, b.ActiveSheetIndex);
             Assert.AreEqual(1, b.FirstVisibleTab);
         }
-        
+
         [Test]
         public void ReadWriteWithCharts()
         {
@@ -636,7 +637,7 @@ namespace TestCases.HSSF.UserModel
                     // there was a problem in the code which locates the existing print titles name record 
                     throw new Exception("Identified bug 45720b");
                 }
-                throw e;
+                throw;
             }
             HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
             wb1.Close();

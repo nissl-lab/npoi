@@ -60,7 +60,7 @@ namespace TestCases.HSSF.Model
                 {
                     throw new AssertionException("Identified bug 45046 b");
                 }
-                throw e;
+                throw;
             }
             // some other sanity Checks
             Assert.AreEqual(3, wb.NumberOfSheets);
@@ -90,7 +90,7 @@ namespace TestCases.HSSF.Model
                 {
                     throw new AssertionException("Identified bug 45698");
                 }
-                throw e;
+                throw;
             }
             // some other sanity Checks
             Assert.AreEqual(7, wb.NumberOfSheets);
@@ -169,7 +169,7 @@ namespace TestCases.HSSF.Model
                     throw new AssertionException("Identified bug 47001b");
                 }
 
-                throw e;
+                throw;
             }
             Assert.IsNotNull(lt);
         }

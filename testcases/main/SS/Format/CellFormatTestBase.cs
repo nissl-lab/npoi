@@ -207,18 +207,14 @@ namespace TestCases.SS.Format
         }
 
         Color labelForeColor;
-        string labelText;
         private void tryFormat(int row, String expectedText, String desc,
                 CellValue getter, ICell cell)
         {
 
             Object value = getter.GetValue(cell);
             Color testColor = getter.GetColor(cell);
-            if (testColor == null)
-                testColor = TEST_COLOR;
 
             labelForeColor = testColor;
-            labelText = "xyzzy";
 
             logger.Log(POILogger.INFO, String.Format("Row %d: \"%s\" -> \"%s\": expected \"%s\"", row + 1,
                     value.ToString(), desc, expectedText));
@@ -256,7 +252,7 @@ namespace TestCases.SS.Format
             Color actualColor = labelForeColor;
             getter.Equivalent(expectedText, actualText, format);
             Assert.AreEqual(
-                    expectedColor, actualColor,cname == null ? "no color" : "color " + cname);
+                    expectedColor, actualColor, cname == null ? "no color" : "color " + cname);
             return actualText;
         }
         /// <summary>

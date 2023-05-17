@@ -128,6 +128,17 @@ namespace TestCases.XSSF.UserModel
             Assert.AreSame(sh_a1, newVml.FindCommentShape(0, 1));
         }
         [Test]
+        public void TestRead()
+        {
+            XSSFVMLDrawing vml = new XSSFVMLDrawing();
+
+            // Act
+            TestDelegate testDelegate = () => vml.Read(POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("vmlDrawing1.vml"));
+
+            // Assert
+            Assert.DoesNotThrow(testDelegate);
+        }
+        [Test]
         public void TestRemoveCommentShape()
         {
             XSSFVMLDrawing vml = new XSSFVMLDrawing();

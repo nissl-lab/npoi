@@ -15,7 +15,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-        
+
 
 /*
  * TestCellStyle.java
@@ -67,82 +67,82 @@ namespace TestCases.HSSF.UserModel
          */
         [Test]
         public void TestWriteSheetFont()
-    {
-        string             filepath = TempFile.GetTempFilePath("TestWriteSheetFont",
-                                                    ".xls");
-        FileStream out1  = new FileStream(filepath,FileMode.OpenOrCreate);
-        HSSFWorkbook     wb   = new HSSFWorkbook();
-        NPOI.SS.UserModel.ISheet        s    = wb.CreateSheet();
-        IRow          r    = null;
-        ICell         c    = null;
-        IFont         fnt  = wb.CreateFont();
-        NPOI.SS.UserModel.ICellStyle    cs   = wb.CreateCellStyle();
-
-        fnt.Color=(HSSFColor.Red.Index);
-        fnt.Boldweight= (short)FontBoldWeight.Bold;
-        cs.SetFont(fnt);
-        for (short rownum = ( short ) 0; rownum < 100; rownum++)
         {
-            r = s.CreateRow(rownum);
+            string filepath = TempFile.GetTempFilePath("TestWriteSheetFont",
+                                                        ".xls");
+            FileStream out1 = new FileStream(filepath, FileMode.OpenOrCreate);
+            HSSFWorkbook wb = new HSSFWorkbook();
+            NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
+            IRow r = null;
+            ICell c = null;
+            IFont fnt = wb.CreateFont();
+            NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
 
-            // r.SetRowNum(( short ) rownum);
-            for (short cellnum = ( short ) 0; cellnum < 50; cellnum += 2)
+            fnt.Color = (HSSFColor.Red.Index);
+            fnt.IsBold = true;
+            cs.SetFont(fnt);
+            for (short rownum = (short)0; rownum < 100; rownum++)
             {
-                c = r.CreateCell(cellnum);
-                c.SetCellValue(rownum * 10000 + cellnum
-                               + ((( double ) rownum / 1000)
-                                  + (( double ) cellnum / 10000)));
-                c = r.CreateCell(cellnum + 1);
-                c.SetCellValue("TEST");
-                c.CellStyle = (cs);
-            }
-        }
-        wb.Write(out1);
-        out1.Close();
-        SanityChecker sanityChecker = new SanityChecker();
-        sanityChecker.CheckHSSFWorkbook(wb);
-        Assert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
-        Assert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
+                r = s.CreateRow(rownum);
 
-        // assert((s.LastRowNum == 99));
-    }
+                // r.SetRowNum(( short ) rownum);
+                for (short cellnum = (short)0; cellnum < 50; cellnum += 2)
+                {
+                    c = r.CreateCell(cellnum);
+                    c.SetCellValue(rownum * 10000 + cellnum
+                                   + (((double)rownum / 1000)
+                                      + ((double)cellnum / 10000)));
+                    c = r.CreateCell(cellnum + 1);
+                    c.SetCellValue("TEST");
+                    c.CellStyle = (cs);
+                }
+            }
+            wb.Write(out1);
+            out1.Close();
+            SanityChecker sanityChecker = new SanityChecker();
+            sanityChecker.CheckHSSFWorkbook(wb);
+            Assert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
+            Assert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
+
+            // assert((s.LastRowNum == 99));
+        }
 
         /**
          * Tests that is creating a file with a date or an calendar works correctly.
          */
         [Test]
         public void TestDataStyle()
-            
-    {
-        string             filepath = TempFile.GetTempFilePath("TestWriteSheetStyleDate",
-                                                    ".xls");
-        FileStream out1  = new FileStream(filepath,FileMode.OpenOrCreate);
-        HSSFWorkbook     wb   = new HSSFWorkbook();
-        NPOI.SS.UserModel.ISheet        s    = wb.CreateSheet();
-        NPOI.SS.UserModel.ICellStyle    cs   = wb.CreateCellStyle();
-        IRow row = s.CreateRow(0);
 
-        // with Date:
-        ICell cell = row.CreateCell(1);
-        cs.DataFormat=(HSSFDataFormat.GetBuiltinFormat("m/d/yy"));
-        cell.CellStyle = (cs);
-        cell.SetCellValue(DateTime.Now);
+        {
+            string filepath = TempFile.GetTempFilePath("TestWriteSheetStyleDate",
+                                                        ".xls");
+            FileStream out1 = new FileStream(filepath, FileMode.OpenOrCreate);
+            HSSFWorkbook wb = new HSSFWorkbook();
+            NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
+            NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
+            IRow row = s.CreateRow(0);
 
-        // with Calendar:
-        cell = row.CreateCell(2);
-        cs.DataFormat=(HSSFDataFormat.GetBuiltinFormat("m/d/yy"));
-        cell.CellStyle = (cs);
-        cell.SetCellValue(DateTime.Now);
+            // with Date:
+            ICell cell = row.CreateCell(1);
+            cs.DataFormat = (HSSFDataFormat.GetBuiltinFormat("m/d/yy"));
+            cell.CellStyle = (cs);
+            cell.SetCellValue(DateTime.Now);
 
-        wb.Write(out1);
-        out1.Close();
-        SanityChecker sanityChecker = new SanityChecker();
-        sanityChecker.CheckHSSFWorkbook(wb);
+            // with Calendar:
+            cell = row.CreateCell(2);
+            cs.DataFormat = (HSSFDataFormat.GetBuiltinFormat("m/d/yy"));
+            cell.CellStyle = (cs);
+            cell.SetCellValue(DateTime.Now);
 
-        Assert.AreEqual(0, s.LastRowNum, "LAST ROW ");
-        Assert.AreEqual(0, s.FirstRowNum,"FIRST ROW ");
+            wb.Write(out1);
+            out1.Close();
+            SanityChecker sanityChecker = new SanityChecker();
+            sanityChecker.CheckHSSFWorkbook(wb);
 
-    }
+            Assert.AreEqual(0, s.LastRowNum, "LAST ROW ");
+            Assert.AreEqual(0, s.FirstRowNum, "FIRST ROW ");
+
+        }
         [Test]
         public void TestHashEquals()
         {
@@ -188,55 +188,55 @@ namespace TestCases.HSSF.UserModel
          */
         [Test]
         public void TestWriteSheetStyle()
-    {
-        string             filepath = TempFile.GetTempFilePath("TestWriteSheetStyle",
-                                                    ".xls");
-        FileStream out1  = new FileStream(filepath,FileMode.OpenOrCreate);
-        HSSFWorkbook     wb   = new HSSFWorkbook();
-        NPOI.SS.UserModel.ISheet        s    = wb.CreateSheet();
-        IRow          r    = null;
-        ICell         c    = null;
-        IFont         fnt  = wb.CreateFont();
-        NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
-        NPOI.SS.UserModel.ICellStyle cs2 = wb.CreateCellStyle();
-
-        cs.BorderBottom= (BorderStyle.Thin);
-        cs.BorderLeft= (BorderStyle.Thin);
-        cs.BorderRight= (BorderStyle.Thin);
-        cs.BorderTop= (BorderStyle.Thin);
-        cs.FillForegroundColor= ( short ) 0xA;
-        cs.FillPattern = FillPattern.SolidForeground;
-        fnt.Color= ( short ) 0xf;
-        fnt.IsItalic= (true);
-        cs2.FillForegroundColor= ( short ) 0x0;
-        cs2.FillPattern= FillPattern.SolidForeground;
-        cs2.SetFont(fnt);
-        for (short rownum = ( short ) 0; rownum < 100; rownum++)
         {
-            r = s.CreateRow(rownum);
+            string filepath = TempFile.GetTempFilePath("TestWriteSheetStyle",
+                                                        ".xls");
+            FileStream out1 = new FileStream(filepath, FileMode.OpenOrCreate);
+            HSSFWorkbook wb = new HSSFWorkbook();
+            NPOI.SS.UserModel.ISheet s = wb.CreateSheet();
+            IRow r = null;
+            ICell c = null;
+            IFont fnt = wb.CreateFont();
+            NPOI.SS.UserModel.ICellStyle cs = wb.CreateCellStyle();
+            NPOI.SS.UserModel.ICellStyle cs2 = wb.CreateCellStyle();
 
-            // r.SetRowNum(( short ) rownum);
-            for (short cellnum = ( short ) 0; cellnum < 50; cellnum += 2)
+            cs.BorderBottom = (BorderStyle.Thin);
+            cs.BorderLeft = (BorderStyle.Thin);
+            cs.BorderRight = (BorderStyle.Thin);
+            cs.BorderTop = (BorderStyle.Thin);
+            cs.FillForegroundColor = (short)0xA;
+            cs.FillPattern = FillPattern.SolidForeground;
+            fnt.Color = (short)0xf;
+            fnt.IsItalic = (true);
+            cs2.FillForegroundColor = (short)0x0;
+            cs2.FillPattern = FillPattern.SolidForeground;
+            cs2.SetFont(fnt);
+            for (short rownum = (short)0; rownum < 100; rownum++)
             {
-                c = r.CreateCell(cellnum);
-                c.SetCellValue(rownum * 10000 + cellnum
-                               + ((( double ) rownum / 1000)
-                                  + (( double ) cellnum / 10000)));
-                c.CellStyle = (cs);
-                c = r.CreateCell(cellnum + 1);
-                c.SetCellValue("TEST");
-                c.CellStyle = (cs2);
-            }
-        }
-        wb.Write(out1);
-        out1.Close();
-        SanityChecker sanityChecker = new SanityChecker();
-        sanityChecker.CheckHSSFWorkbook(wb);
-        Assert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
-        Assert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
+                r = s.CreateRow(rownum);
 
-        // assert((s.LastRowNum == 99));
-    }
+                // r.SetRowNum(( short ) rownum);
+                for (short cellnum = (short)0; cellnum < 50; cellnum += 2)
+                {
+                    c = r.CreateCell(cellnum);
+                    c.SetCellValue(rownum * 10000 + cellnum
+                                   + (((double)rownum / 1000)
+                                      + ((double)cellnum / 10000)));
+                    c.CellStyle = (cs);
+                    c = r.CreateCell(cellnum + 1);
+                    c.SetCellValue("TEST");
+                    c.CellStyle = (cs2);
+                }
+            }
+            wb.Write(out1);
+            out1.Close();
+            SanityChecker sanityChecker = new SanityChecker();
+            sanityChecker.CheckHSSFWorkbook(wb);
+            Assert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
+            Assert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
+
+            // assert((s.LastRowNum == 99));
+        }
 
         /**
          * Cloning one NPOI.SS.UserModel.CellType onto Another, same
@@ -247,20 +247,20 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             IFont fnt = wb.CreateFont();
-            fnt.FontName=("TestingFont");
+            fnt.FontName = ("TestingFont");
             Assert.AreEqual(5, wb.NumberOfFonts);
 
             NPOI.SS.UserModel.ICellStyle orig = wb.CreateCellStyle();
-            orig.Alignment=(HorizontalAlignment.Right);
+            orig.Alignment = (HorizontalAlignment.Right);
             orig.SetFont(fnt);
-            orig.DataFormat=((short)18);
+            orig.DataFormat = ((short)18);
 
-            Assert.AreEqual(HorizontalAlignment.Right,orig.Alignment);
-            Assert.AreEqual(fnt,orig.GetFont(wb));
-            Assert.AreEqual(18,orig.DataFormat);
+            Assert.AreEqual(HorizontalAlignment.Right, orig.Alignment);
+            Assert.AreEqual(fnt, orig.GetFont(wb));
+            Assert.AreEqual(18, orig.DataFormat);
 
             NPOI.SS.UserModel.ICellStyle clone = wb.CreateCellStyle();
-            Assert.AreNotEqual(HorizontalAlignment.Right , clone.Alignment);
+            Assert.AreNotEqual(HorizontalAlignment.Right, clone.Alignment);
             Assert.AreNotEqual(fnt, clone.GetFont(wb));
             Assert.AreNotEqual(18, clone.DataFormat);
 
@@ -284,7 +284,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wbOrig = new HSSFWorkbook();
 
             IFont fnt = wbOrig.CreateFont();
-            fnt.FontName=("TestingFont");
+            fnt.FontName = ("TestingFont");
             Assert.AreEqual(5, wbOrig.NumberOfFonts);
 
             IDataFormat fmt = wbOrig.CreateDataFormat();
@@ -294,11 +294,11 @@ namespace TestCases.HSSF.UserModel
             NPOI.SS.UserModel.ICellStyle orig = wbOrig.CreateCellStyle();
             orig.Alignment = (HorizontalAlignment.Right);
             orig.SetFont(fnt);
-            orig.DataFormat=(fmt.GetFormat("Test##"));
+            orig.DataFormat = (fmt.GetFormat("Test##"));
 
             Assert.AreEqual(HorizontalAlignment.Right, orig.Alignment);
-            Assert.AreEqual(fnt,orig.GetFont(wbOrig));
-            Assert.AreEqual(fmt.GetFormat("Test##") , orig.DataFormat);
+            Assert.AreEqual(fnt, orig.GetFont(wbOrig));
+            Assert.AreEqual(fmt.GetFormat("Test##"), orig.DataFormat);
 
             // Now a style on another workbook
             HSSFWorkbook wbClone = new HSSFWorkbook();
@@ -308,14 +308,14 @@ namespace TestCases.HSSF.UserModel
             NPOI.SS.UserModel.ICellStyle clone = wbClone.CreateCellStyle();
             Assert.AreEqual(4, wbClone.NumberOfFonts);
 
-            Assert.AreNotEqual(HorizontalAlignment.Right,clone.Alignment);
+            Assert.AreNotEqual(HorizontalAlignment.Right, clone.Alignment);
             Assert.AreNotEqual("TestingFont", clone.GetFont(wbClone).FontName);
 
             clone.CloneStyleFrom(orig);
             Assert.AreEqual(HorizontalAlignment.Right, clone.Alignment);
-            Assert.AreEqual("TestingFont" ,clone.GetFont(wbClone).FontName);
-            Assert.AreEqual(fmtClone.GetFormat("Test##"),clone.DataFormat);
-            Assert.AreNotEqual(fmtClone.GetFormat("Test##") , fmt.GetFormat("Test##"));
+            Assert.AreEqual("TestingFont", clone.GetFont(wbClone).FontName);
+            Assert.AreEqual(fmtClone.GetFormat("Test##"), clone.DataFormat);
+            Assert.AreNotEqual(fmtClone.GetFormat("Test##"), fmt.GetFormat("Test##"));
             Assert.AreEqual(5, wbClone.NumberOfFonts);
         }
         [Test]
@@ -521,6 +521,6 @@ namespace TestCases.HSSF.UserModel
 
             wb.Close();
         }
-        
+
     }
 }
