@@ -18,6 +18,7 @@
 namespace NPOI.SS.Formula
 {
     using System.Collections;
+    using System.Collections.Generic;
     using NPOI.SS.Formula.Eval;
 
 
@@ -105,19 +106,27 @@ namespace NPOI.SS.Formula
             {
                 return;
             }
-            ArrayList usedSet;
+            
+            HashSet<CellCacheEntry> usedSet;
             if (nUsed < 1)
             {
-                usedSet = new ArrayList();
+                usedSet = new HashSet<CellCacheEntry>();
             }
             else
             {
-                usedSet = new ArrayList(nUsed * 3 / 2);
+
+#if NETSTANDARD2_1_OR_GREATER || NET6_0_OR_GREATER
+                usedSet = new HashSet<CellCacheEntry>(nUsed * 3 / 2);
+#else
+                usedSet = new HashSet<CellCacheEntry>();
+#endif
+
                 for (int i = 0; i < nUsed; i++)
                 {
                     usedSet.Add(usedCells[i]);
                 }
             }
+
             for (int i = 0; i < nPrevUsed; i++)
             {
                 CellCacheEntry prevUsed = prevUsedCells[i];

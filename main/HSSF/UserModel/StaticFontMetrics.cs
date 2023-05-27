@@ -34,11 +34,7 @@ namespace NPOI.HSSF.UserModel
      */
     class StaticFontMetrics
     {
-#if NETSTANDARD2_1 || NET6_0_OR_GREATER || NETSTANDARD2_0
         private const String FONT_METRICS_PROPERTIES_FILE_NAME = "NPOI.Resources.font_metrics.properties";
-#else
-        private const String FONT_METRICS_PROPERTIES_FILE_NAME = "font_metrics.properties";
-#endif
         
         /** The font metrics property file we're using */
         private static Properties fontMetricsProps;
