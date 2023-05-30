@@ -1,0 +1,4 @@
+{
+  "$schema": "./build.schema.json",
+  "Solution": "solution/NPOI.Core.Test.sln"
+}
