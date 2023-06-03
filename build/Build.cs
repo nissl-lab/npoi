@@ -1,6 +1,9 @@
+using System.Runtime.InteropServices;
 using Nuke.Common;
+using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
+using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
@@ -63,7 +66,9 @@ partial class Build : NukeBuild
                 .SetDeterministic(IsServerBuild)
                 .SetContinuousIntegrationBuild(IsServerBuild)
                 .SetVerbosity(DotNetVerbosity.Minimal)
-                .AddNoWarns(1591) // missing XML documentation comment
+                // obsolete missing XML documentation comment, XML comment on not valid language element, XML comment has badly formed XML, no matching tag in XML comment
+                // need to use escaped separator in order for this to work
+                .AddProperty("NoWarn", string.Join("%3B", new [] { 618, 1591, 1587, 1570, 1573 }))
                 .SetProjectFile(Solution)
             );
         });
@@ -77,6 +82,8 @@ partial class Build : NukeBuild
                 .EnableNoRestore()
                 .SetConfiguration(Configuration)
                 .SetProjectFile(Solution)
+                .When(Host is GitHubActions, settings => settings.SetLoggers("GitHubActions"))
+                .When(!RuntimeInformation.IsOSPlatform(OSPlatform.Windows), settings => settings.SetFramework("net6.0"))
             );
         });
 

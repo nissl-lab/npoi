@@ -177,6 +177,7 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
+        [Platform("Win")]
         public void TestAutoSizeRow()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
