@@ -82,6 +82,34 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Returns the shape group id.
+         * @return id of the shape group
+         */
+        public override uint ID
+        {
+            get
+            {
+                return ctGroup.nvGrpSpPr.cNvPr.id;
+            }
+        }
+
+        /**
+         * Returns the shape group name.
+         * @return name of the shape group
+         */
+        public override String Name
+        {
+            get
+            {
+                return ctGroup.nvGrpSpPr.cNvPr.name;
+            }
+            set
+            {
+                ctGroup.nvGrpSpPr.cNvPr.name = value;
+            }
+        }
+
+        /**
          * Constructs a textbox.
          *
          * @param anchor the child anchor describes how this shape is attached
