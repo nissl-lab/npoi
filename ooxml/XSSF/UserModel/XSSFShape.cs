@@ -85,6 +85,17 @@ namespace NPOI.XSSF.UserModel
          */
         protected internal abstract NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties GetShapeProperties();
 
+        public abstract uint ID
+        {
+            get;
+        }
+
+        public abstract string Name
+        {
+            get;
+            set;
+        }
+
         /**
          * Whether this shape is not Filled with a color
          *

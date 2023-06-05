@@ -125,6 +125,31 @@ namespace NPOI.XSSF.UserModel
             return ctShape;
         }
 
+        /**
+         * Returns the simple shape id.
+         * @return id of the simple shape
+         */
+        public override uint ID {
+            get
+            {
+                return ctShape.nvSpPr.cNvPr.id;
+            }
+        }
+
+        /**
+         * Returns the simple shape name.
+         * @return name of the simple shape
+         */
+        public override String Name {
+            get
+            {
+                return ctShape.nvSpPr.cNvPr.name;
+            }
+            set
+            {
+                ctShape.nvSpPr.cNvPr.name = value;
+            }
+        }
 
         public IEnumerator<XSSFTextParagraph> GetEnumerator()
         {
