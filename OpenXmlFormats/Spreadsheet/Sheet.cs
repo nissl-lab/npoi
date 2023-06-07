@@ -2599,7 +2599,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_SheetFormatPr ctObj = new CT_SheetFormatPr();
-            ctObj.baseColWidth = XmlHelper.ReadUInt(node.Attributes["baseColWidth"]);
+            ctObj.baseColWidth = XmlHelper.ReadUInt(node.Attributes["baseColWidth"],8);
             ctObj.defaultColWidth = XmlHelper.ReadDouble(node.Attributes["defaultColWidth"]);
             ctObj.defaultRowHeight = XmlHelper.ReadDouble(node.Attributes["defaultRowHeight"]);
             ctObj.customHeight = XmlHelper.ReadBool(node.Attributes["customHeight"]);

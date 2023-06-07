@@ -39,6 +39,7 @@ namespace NPOI.XSSF.UserModel
          */
         protected XSSFDrawing drawing;
 
+        protected CT_TwoCellAnchor _twocellanchor;
         /**
          * The parent shape, always not-null for shapes in groups
          */
@@ -78,6 +79,27 @@ namespace NPOI.XSSF.UserModel
             return anchor;
         }
 
+        public CT_TwoCellAnchor cttwocellanchor
+        {
+            get
+            {
+                if(_twocellanchor == null) {
+                    return parent.cttwocellanchor;
+                }
+                return _twocellanchor;
+            }
+            set
+            {
+                if(parent == null)
+                {
+                    _twocellanchor = value;
+                }
+                else
+                {
+                    parent.cttwocellanchor = value;
+                }
+            }
+        }
         /**
          * Returns xml bean with shape properties.
          *
