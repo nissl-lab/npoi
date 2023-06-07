@@ -120,6 +120,10 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Shape ctShape = ctGroup.AddNewSp();
             ctShape.Set(XSSFSimpleShape.Prototype());
+            ctShape.spPr.xfrm.off.x = anchor.Dx1;
+            ctShape.spPr.xfrm.off.y = anchor.Dy1;
+            ctShape.spPr.xfrm.ext.cx = anchor.Dx2;
+            ctShape.spPr.xfrm.ext.cy = anchor.Dy2;
 
             XSSFTextBox shape = new XSSFTextBox(GetDrawing(), ctShape);
             shape.parent = this;
@@ -140,6 +144,10 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Shape ctShape = ctGroup.AddNewSp();
             ctShape.Set(XSSFSimpleShape.Prototype());
+            ctShape.spPr.xfrm.off.x = anchor.Dx1;
+            ctShape.spPr.xfrm.off.y = anchor.Dy1;
+            ctShape.spPr.xfrm.ext.cx = anchor.Dx2;
+            ctShape.spPr.xfrm.ext.cy = anchor.Dy2;
 
             XSSFSimpleShape shape = new XSSFSimpleShape(GetDrawing(), ctShape);
             shape.parent = (this);
@@ -160,6 +168,10 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Connector ctShape = ctGroup.AddNewCxnSp();
             ctShape.Set(XSSFConnector.Prototype());
+            ctShape.spPr.xfrm.off.x = anchor.Dx1;
+            ctShape.spPr.xfrm.off.y = anchor.Dy1;
+            ctShape.spPr.xfrm.ext.cx = anchor.Dx2;
+            ctShape.spPr.xfrm.ext.cy = anchor.Dy2;
 
             XSSFConnector shape = new XSSFConnector(GetDrawing(), ctShape);
             shape.parent = this;
@@ -182,6 +194,10 @@ namespace NPOI.XSSF.UserModel
 
             CT_Picture ctShape = ctGroup.AddNewPic();
             ctShape.Set(XSSFPicture.Prototype());
+            ctShape.spPr.xfrm.off.x = anchor.Dx1;
+            ctShape.spPr.xfrm.off.y = anchor.Dy1;
+            ctShape.spPr.xfrm.ext.cx = anchor.Dx2;
+            ctShape.spPr.xfrm.ext.cy = anchor.Dy2;
 
             XSSFPicture shape = new XSSFPicture(GetDrawing(), ctShape);
             shape.parent = this;
@@ -190,6 +206,20 @@ namespace NPOI.XSSF.UserModel
             return shape;
         }
 
+        public XSSFShapeGroup CreateGroup(XSSFChildGroupAnchor anchor)
+        {
+            CT_GroupShape ctShape = ctGroup.AddNewGroup();
+            ctShape.Set(XSSFShapeGroup.Prototype());
+
+            XSSFShapeGroup group = new XSSFShapeGroup(GetDrawing(), ctShape)
+            {
+                parent = this,
+                anchor = anchor
+            };
+            group.GetCTGroupShape().grpSpPr.xfrm = anchor.GetCTTransform2D();
+
+            return group;
+        }
 
         public CT_GroupShape GetCTGroupShape()
         {

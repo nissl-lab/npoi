@@ -660,6 +660,39 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             set { grpSpPrField = value; }
 
         }
+        public void GetShapes(List<object> aShapes)         // a:Argument
+        {
+            aShapes.Add(this);
+            if(connectors != null)
+            {
+                foreach(var c in connectors)
+                {
+                    aShapes.Add(c);
+                }
+            }
+            if(pictures != null)
+            {
+                foreach(var p in pictures)
+                {
+                    aShapes.Add(p);
+                }
+            }
+            if(shapes != null)
+            {
+                foreach(var s in shapes)
+                {
+                    aShapes.Add(s);
+                }
+            }
+            if(groups != null)
+            {
+                foreach(var shp in groups)
+                {
+                    shp.GetShapes(aShapes);
+                }
+            }
+        }
+
         public static CT_GroupShape Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
