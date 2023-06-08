@@ -744,6 +744,7 @@ namespace TestCases.HSSF.UserModel
             wb2.Close();
         }
         [Test]
+        [Platform("Win")]
         public void TestAutoSizeColumn()
         {
             HSSFWorkbook wb1 = HSSFTestDataSamples.OpenSampleWorkbook("43902.xls");

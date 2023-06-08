@@ -44,7 +44,7 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void Resize()
         {
-            XSSFWorkbook wb = XSSFITestDataProvider.instance.OpenSampleWorkbook("resize_Compare.xlsx") as XSSFWorkbook;
+            XSSFWorkbook wb = XSSFITestDataProvider.instance.OpenSampleWorkbook("resize_compare.xlsx") as XSSFWorkbook;
             XSSFDrawing dp = wb.GetSheetAt(0).CreateDrawingPatriarch() as XSSFDrawing;
             List<XSSFShape> pics = dp.GetShapes();
             XSSFPicture inpPic = (XSSFPicture)pics[(0)];

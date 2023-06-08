@@ -44,7 +44,7 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void Resize()
         {
-            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("resize_Compare.xls");
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("resize_compare.xls");
             HSSFPatriarch dp = wb.GetSheetAt(0).CreateDrawingPatriarch() as HSSFPatriarch;
             IList<HSSFShape> pics = dp.Children;
             HSSFPicture inpPic = (HSSFPicture)pics[(0)];
