@@ -491,7 +491,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:hRule", this.hRule.ToString());
             XmlHelper.WriteAttribute(sw, "w:anchorLock", this.anchorLock.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
 

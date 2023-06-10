@@ -57,15 +57,27 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             foreach (CT_CalcCell cc in calcChain.c)
             {
                 sw.Write("<c");
-                sw.Write(" r=\""+cc.r+"\"");
-                if(cc.i>0)
-                    sw.Write(" i=\"" + cc.i + "\"");
-                if(cc.s)
-                    sw.Write(" s=\"" + (cc.s?1:0) + "\"");
+                sw.WriteAttribute("r", cc.r);
+
+                if (cc.i > 0)
+                {
+                    sw.WriteAttribute("i", cc.i);
+                }
+
+                if (cc.s)
+                {
+                    sw.WriteBooleanAttribute("s", cc.s);
+                }
+
                 if (cc.t)
-                    sw.Write(" t=\"" + (cc.t?1:0) + "\"");
+                {
+                    sw.WriteBooleanAttribute("t", cc.t);
+                }
+
                 if (cc.l)
-                    sw.Write(" l=\"" + (cc.l?1:0) + "\"");
+                {
+                    sw.WriteBooleanAttribute("l", cc.l);
+                }
                 sw.Write("/>");
 
             }

@@ -82,7 +82,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<");
+            sw.Write(nodeName);
             XmlHelper.WriteAttribute(sw, "r", this.r);
             XmlHelper.WriteAttribute(sw, "spans", this.spans);
             XmlHelper.WriteAttribute(sw, "s", this.s);
@@ -107,7 +108,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "c");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
 
