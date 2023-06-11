@@ -17,11 +17,35 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
     <RunSettingsFilePath>$(MSBuildThisFileDirectory)\test.runsettings</RunSettingsFilePath>
+
+    <VersionPrefix>2.6.1</VersionPrefix>
+    <Title>NPOI</Title>
+    <Authors>Tony Qu,NPOI Contributors</Authors>
+    <Owners>Nissl Lab</Owners>
+    <Description>.NET port of Apache POI | Contact us on telegram: https://t.me/npoidevs</Description>
+    <Summary>NPOI can read and write xls (Excel 97-2003), xlsx(Excel 2007+) and docx(Word 2007+)</Summary>
+    <RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
+
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageIcon>logo\60_60.jpg</PackageIcon>
+    <PackageProjectUrl>https://github.com/nissl-lab/npoi</PackageProjectUrl>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <Copyright>Nissl LLC</Copyright>
+    <PackageTags>xlsx xls Excel Word docx office ole</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE" Pack="true" Visible="false" PackagePath="" />
+    <None Include="..\Read Me.txt" Pack="true" Visible="false" PackagePath="" />
+    <None Include="..\logo\*.png" Pack="true" Visible="false" PackagePath="logo\" />
+    <None Include="..\logo\*.jpg" Pack="true" Visible="false" PackagePath="logo\" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+
 </Project>

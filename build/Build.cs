@@ -68,7 +68,7 @@ partial class Build : NukeBuild
                 .SetVerbosity(DotNetVerbosity.Minimal)
                 // obsolete missing XML documentation comment, XML comment on not valid language element, XML comment has badly formed XML, no matching tag in XML comment
                 // need to use escaped separator in order for this to work
-                .AddProperty("NoWarn", string.Join("%3B", new [] { 618, 1591, 1587, 1570, 1573 }))
+                .AddProperty("NoWarn", string.Join("%3B", new [] { 618, 1591, 1587, 1570, 1572, 1573 }))
                 .SetProjectFile(Solution)
             );
         });
@@ -97,6 +97,9 @@ partial class Build : NukeBuild
                 .SetOutputDirectory(ArtifactsDirectory)
                 .SetDeterministic(IsServerBuild)
                 .SetContinuousIntegrationBuild(IsServerBuild)
+                // obsolete missing XML documentation comment, XML comment on not valid language element, XML comment has badly formed XML, no matching tag in XML comment
+                // need to use escaped separator in order for this to work
+                .AddProperty("NoWarn", string.Join("%3B", new [] { 618, 1591, 1587, 1570, 1572, 1573 }))
                 .SetProject(Solution.GetProject("NPOI.Core"))
             );
         });
