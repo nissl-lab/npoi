@@ -36,7 +36,6 @@
 
   <ItemGroup>
     <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
