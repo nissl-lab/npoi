@@ -63,10 +63,16 @@ namespace NPOI.OpenXml4Net.Util
 
             throw new ArgumentException("No XmlEnumAttribute code exists for type " + typeof(T).ToString() + " corresponding to value of " + value);
         }
-        public static int ReadInt(XmlAttribute attr)
+        public static int ReadInt(XmlAttribute attr, int? defaultValue = null)
         {
-            if (attr == null)
+            if(attr == null)
+            {
+                if(defaultValue != null)
+                {
+                    return (int)defaultValue;
+                }
                 return 0;
+            }
             int i;
             if (int.TryParse(attr.Value, out i))
             {
@@ -331,6 +337,13 @@ namespace NPOI.OpenXml4Net.Util
         public static void WriteAttribute(StreamWriter sw, string attributeName, int value, bool writeIfBlank)
         {
             if (value == 0 && !writeIfBlank)
+                return;
+
+            WriteAttribute(sw, attributeName, value.ToString(CultureInfo.InvariantCulture));
+        }
+        public static void WriteAttribute(StreamWriter sw, string attributeName, int value, int defaultValue)
+        {
+            if(value == defaultValue)
                 return;
 
             WriteAttribute(sw, attributeName, value.ToString(CultureInfo.InvariantCulture));

@@ -39,7 +39,7 @@ namespace NPOI.XSSF.UserModel
          */
         protected XSSFDrawing drawing;
 
-        protected CT_TwoCellAnchor _twocellanchor;
+        protected IEG_Anchor IEGanchor;
         /**
          * The parent shape, always not-null for shapes in groups
          */
@@ -79,24 +79,24 @@ namespace NPOI.XSSF.UserModel
             return anchor;
         }
 
-        public CT_TwoCellAnchor cttwocellanchor
+        public IEG_Anchor cellanchor
         {
             get
             {
-                if(_twocellanchor == null) {
-                    return parent.cttwocellanchor;
+                if(IEGanchor == null) {
+                    return parent.cellanchor;
                 }
-                return _twocellanchor;
+                return IEGanchor;
             }
             set
             {
                 if(parent == null)
                 {
-                    _twocellanchor = value;
+                    IEGanchor = value;
                 }
                 else
                 {
-                    parent.cttwocellanchor = value;
+                    parent.cellanchor = value;
                 }
             }
         }
