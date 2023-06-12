@@ -281,7 +281,7 @@ namespace NPOI.XSSF.UserModel
             ctShape.spPr.xfrm.ext.cy = anchor.height;
             XSSFSimpleShape shape = new XSSFSimpleShape(this, ctShape);
             shape.anchor = anchor;
-            shape.cttwocellanchor = ctAnchor;
+            shape.cellanchor = ctAnchor;
 
             return shape;
         }
@@ -308,7 +308,7 @@ namespace NPOI.XSSF.UserModel
 
             XSSFConnector shape = new XSSFConnector(this, ctShape);
             shape.anchor = anchor;
-            shape.cttwocellanchor = ctAnchor;
+            shape.cellanchor = ctAnchor;
 
             return shape;
         }
@@ -339,7 +339,7 @@ namespace NPOI.XSSF.UserModel
 
             XSSFShapeGroup shape = new XSSFShapeGroup(this, ctGroup);
             shape.anchor = anchor;
-            shape.cttwocellanchor = ctAnchor;
+            shape.cellanchor = ctAnchor;
 
             return shape;
         }
@@ -401,7 +401,7 @@ namespace NPOI.XSSF.UserModel
             graphicFrame.Anchor = anchor;
             graphicFrame.Id = frameId;
             graphicFrame.Name = "Diagramm" + frameId;
-            graphicFrame.cttwocellanchor = ctAnchor;
+            graphicFrame.cellanchor = ctAnchor;
 
             return graphicFrame;
         }
@@ -517,7 +517,7 @@ namespace NPOI.XSSF.UserModel
                         if(gShape != null)
                         {
                             gShape.anchor = GetAnchorFromIEGAnchor(anchor);
-                            gShape.cttwocellanchor = (CT_TwoCellAnchor)anchor;
+                            gShape.cellanchor = anchor;
                             lst.Add(gShape);
                         }
                     }
@@ -533,7 +533,7 @@ namespace NPOI.XSSF.UserModel
                 if (shape != null)
                 {
                     shape.anchor = GetAnchorFromIEGAnchor(anchor);
-                    shape.cttwocellanchor = (CT_TwoCellAnchor)anchor;
+                    shape.cellanchor = anchor;
                     lst.Add(shape);
                 }
             }
