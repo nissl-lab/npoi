@@ -31,10 +31,10 @@ namespace TestCases.XWPF.UserModel
         public void Detection()
         {
 
-            XWPFDocument documentWithoutChangeTracking = XWPFTestDataSamples.OpenSampleDocument("bug56075-ChangeTracking_off.docx");
+            XWPFDocument documentWithoutChangeTracking = XWPFTestDataSamples.OpenSampleDocument("bug56075-changeTracking_off.docx");
             Assert.IsFalse(documentWithoutChangeTracking.IsTrackRevisions);
 
-            XWPFDocument documentWithChangeTracking = XWPFTestDataSamples.OpenSampleDocument("bug56075-ChangeTracking_on.docx");
+            XWPFDocument documentWithChangeTracking = XWPFTestDataSamples.OpenSampleDocument("bug56075-changeTracking_on.docx");
             Assert.IsTrue(documentWithChangeTracking.IsTrackRevisions);
 
         }
@@ -42,7 +42,7 @@ namespace TestCases.XWPF.UserModel
         [Test]
         public void ActivateChangeTracking()
         {
-            XWPFDocument document = XWPFTestDataSamples.OpenSampleDocument("bug56075-ChangeTracking_off.docx");
+            XWPFDocument document = XWPFTestDataSamples.OpenSampleDocument("bug56075-changeTracking_off.docx");
             Assert.IsFalse(document.IsTrackRevisions);
 
             document.IsTrackRevisions = (/*setter*/true);

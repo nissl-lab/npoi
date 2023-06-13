@@ -159,3 +159,5 @@ $RECYCLE.BIN/
 examples/packages
 examples/.vs/
 /artifacts
+
+BenchmarkDotNet.Artifacts

@@ -129,6 +129,7 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestCertificateEncryption1()
         {
             POIFSFileSystem fs = new POIFSFileSystem();

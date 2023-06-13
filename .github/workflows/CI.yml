@@ -35,8 +35,8 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
-      - name: 'Run: Clean, Compile, Pack'
-        run: ./build.cmd Clean Compile Pack
+      - name: 'Run: Clean, Test, Pack'
+        run: ./build.cmd Clean Test Pack
       - name: 'Publish: artifacts'
         uses: actions/upload-artifact@v3
         with:
@@ -54,8 +54,8 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
-      - name: 'Run: Clean, Compile, Pack'
-        run: ./build.cmd Clean Compile Pack
+      - name: 'Run: Clean, Test, Pack'
+        run: ./build.cmd Clean Test Pack
       - name: 'Publish: artifacts'
         uses: actions/upload-artifact@v3
         with:
