@@ -1412,8 +1412,9 @@ namespace NPOI.HSSF.UserModel
         /// a new POI POIFSFileSystem, passes in the workbook binary representation  and
         /// Writes it out.
         /// </summary>
-        /// <param name="stream">the stream you wish to Write the XLS to</param>
-        public void Write(Stream stream, bool leaveOpen)
+        /// <param name="stream">the stream you wish to write the XLS to</param>
+        /// <param name="leaveOpen">leave stream open or not</param>
+        public void Write(Stream stream, bool leaveOpen = false)
         {
             this.Write(stream);
         }
