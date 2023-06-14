@@ -10,9 +10,6 @@
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-  </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
@@ -21,10 +18,4 @@
     <ProjectReference Include="..\main\NPOI.Core.csproj" />
     <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Enums.NET" Version="4.0.1" />
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
-  </ItemGroup>
-
 </Project>
