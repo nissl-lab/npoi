@@ -41,7 +41,6 @@ namespace NPOI.XSSF.Model
     public class StylesTable : POIXMLDocumentPart
     {
         private SortedDictionary<short, String> numberFormats = new SortedDictionary<short, String>();
-        private bool[] usedNumberFormats = new bool[SpreadsheetVersion.EXCEL2007.MaxCellStyles];
         private List<XSSFFont> fonts = new List<XSSFFont>();
         private List<XSSFCellFill> fills = new List<XSSFCellFill>();
         private List<XSSFCellBorder> borders = new List<XSSFCellBorder>();
@@ -886,10 +885,13 @@ namespace NPOI.XSSF.Model
             ctXf.fontId = 0;
             ctXf.fillId = 0;
             ctXf.borderId = 0;
-            ctXf.xfId = 0;
+            if (xfSize > 0)
+            {
+                ctXf.xfId = 0; //default styleXf
+            }
             
             int indexXf = PutCellXf(ctXf);
-            return new XSSFCellStyle(indexXf - 1, xfSize - 1, this, theme);
+            return new XSSFCellStyle(indexXf - 1, ctXf.xfIdSpecified ? (int)ctXf.xfId : -1, this, theme);
         }
 
         /**
