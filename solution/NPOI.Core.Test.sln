@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29613.14
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.Core", "..\main\NPOI.Core.csproj", "{ABACCCA8-0E50-4008-9D4A-41A87348CA2B}"
 EndProject
@@ -22,9 +22,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestCases", "TestCases", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.OOXML.TestCases.Core", "..\testcases\ooxml\NPOI.OOXML.TestCases.Core.csproj", "{DA2CA3BD-1CAC-470C-9FA2-611A5768A76A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_build", "..\build\_build.csproj", "{94B18BCF-84E8-401F-BAAB-0496AA136628}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "..\build\_build.csproj", "{94B18BCF-84E8-401F-BAAB-0496AA136628}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.Benchmarks", "..\benchmarks\NPOI.Benchmarks\NPOI.Benchmarks.csproj", "{3DA1149D-46F8-4181-9976-E002BF2BFB76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.Benchmarks", "..\benchmarks\NPOI.Benchmarks\NPOI.Benchmarks.csproj", "{3DA1149D-46F8-4181-9976-E002BF2BFB76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +61,7 @@ Global
 		{DA2CA3BD-1CAC-470C-9FA2-611A5768A76A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA2CA3BD-1CAC-470C-9FA2-611A5768A76A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{94B18BCF-84E8-401F-BAAB-0496AA136628}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94B18BCF-84E8-401F-BAAB-0496AA136628}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94B18BCF-84E8-401F-BAAB-0496AA136628}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94B18BCF-84E8-401F-BAAB-0496AA136628}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3DA1149D-46F8-4181-9976-E002BF2BFB76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

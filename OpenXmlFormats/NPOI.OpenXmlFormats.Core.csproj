@@ -7,7 +7,6 @@
     <RootNamespace>NPOI.OpenXmlFormats</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
-    <RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
@@ -19,5 +18,4 @@
     <ProjectReference Include="..\main\NPOI.Core.csproj" />
     <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
   </ItemGroup>
-
 </Project>

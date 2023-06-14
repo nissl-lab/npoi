@@ -1815,7 +1815,9 @@ namespace NPOI.XSSF.UserModel
         /// <summary>
         /// Write the document to the specified stream, and optionally leave the stream open without closing it.
         /// </summary>
-        public void Write(Stream stream, bool leaveOpen)
+        /// <param name="stream">the stream you wish to write the xlsx to</param>
+        /// <param name="leaveOpen">leave stream open or not</param>
+        public void Write(Stream stream, bool leaveOpen = false)
         {
             bool? originalValue = null;
             if (Package is ZipPackage)
