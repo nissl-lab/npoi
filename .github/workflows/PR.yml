@@ -22,6 +22,7 @@ jobs:
   windows-latest:
     name: windows-latest
     runs-on: windows-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v3
       - name: 'Cache: .nuke/temp, ~/.nuget/packages'
@@ -41,6 +42,7 @@ jobs:
   ubuntu-latest:
     name: ubuntu-latest
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v3
       - name: 'Cache: .nuke/temp, ~/.nuget/packages'

@@ -79,6 +79,7 @@
             "enum": [
               "Clean",
               "Compile",
+              "InstallFonts",
               "Pack",
               "Restore",
               "Test"
@@ -97,6 +98,7 @@
             "enum": [
               "Clean",
               "Compile",
+              "InstallFonts",
               "Pack",
               "Restore",
               "Test"

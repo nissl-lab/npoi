@@ -74,7 +74,7 @@ partial class Build : NukeBuild
         });
 
     Target Test => _ => _
-        .DependsOn(Compile)
+        .DependsOn(Compile, InstallFonts)
         .Executes(() =>
         {
             DotNetTest(_ =>_
@@ -85,6 +85,17 @@ partial class Build : NukeBuild
                 .When(Host is GitHubActions, settings => settings.SetLoggers("GitHubActions"))
                 .When(!RuntimeInformation.IsOSPlatform(OSPlatform.Windows), settings => settings.SetFramework("net6.0"))
             );
+        });
+
+    Target InstallFonts => _ => _
+        .OnlyWhenDynamic(() => RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && Host is GitHubActions)
+        .Executes(() =>
+        {
+            ProcessTasks.StartProcess("sudo", "apt install -y fonts-noto-color-emoji");
+            ProcessTasks.StartProcess("mkdir", "-p /usr/local/share/fonts");
+            ProcessTasks.StartProcess("cp", "/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf /usr/local/share/fonts/");
+            ProcessTasks.StartProcess("chmod", "644 /usr/local/share/fonts/NotoColorEmoji.ttf");
+            ProcessTasks.StartProcess("fc-cache", "-fv");
         });
 
     Target Pack => _ => _
