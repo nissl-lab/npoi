@@ -1396,6 +1396,18 @@ namespace NPOI.HSSF.UserModel
 
         public override void Write(Stream stream)
         {
+            this.Write(stream, false);
+        }
+
+        /// <summary>
+        /// Write out this workbook to an Outputstream.  Constructs
+        /// a new POI POIFSFileSystem, passes in the workbook binary representation  and
+        /// Writes it out.
+        /// </summary>
+        /// <param name="stream">the stream you wish to write the XLS to</param>
+        /// <param name="leaveOpen">leave stream open or not</param>
+        public void Write(Stream stream, bool leaveOpen = false)
+        {
             NPOIFSFileSystem fs = new NPOIFSFileSystem();
             try
             {
@@ -1406,17 +1418,6 @@ namespace NPOI.HSSF.UserModel
             {
                 fs.Close();
             }
-        }
-        /// <summary>
-        /// Write out this workbook to an Outputstream.  Constructs
-        /// a new POI POIFSFileSystem, passes in the workbook binary representation  and
-        /// Writes it out.
-        /// </summary>
-        /// <param name="stream">the stream you wish to write the XLS to</param>
-        /// <param name="leaveOpen">leave stream open or not</param>
-        public void Write(Stream stream, bool leaveOpen = false)
-        {
-            this.Write(stream);
         }
 
         /** Writes the workbook out to a brand new, empty POIFS */

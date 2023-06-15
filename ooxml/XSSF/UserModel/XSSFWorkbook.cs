@@ -1826,7 +1826,7 @@ namespace NPOI.XSSF.UserModel
                 originalValue = ((ZipPackage)Package).IsExternalStream;
                 ((ZipPackage)Package).IsExternalStream = leaveOpen;
             }
-            Write(stream);
+            base.Write(stream);
             if (originalValue.HasValue && Package is ZipPackage)
             {
                 ((ZipPackage)Package).IsExternalStream = originalValue.Value;
