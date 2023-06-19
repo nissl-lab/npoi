@@ -44,7 +44,7 @@ namespace TestCases.SS.Formula.Eval
         public void Test27349()
         {
             // 27349-vLookupAcrossSheets.xls is bugzilla/attachment.cgi?id=10622
-            Stream is1 = HSSFTestDataSamples.OpenSampleFileStream("27349-vLookupAcrossSheets.xls");
+            Stream is1 = HSSFTestDataSamples.OpenSampleFileStream("27349-vlookupAcrossSheets.xls");
             IWorkbook wb = new HSSFWorkbook(is1);
             ISheet sheet = wb.GetSheetAt(0);
             IRow row = sheet.GetRow(1);

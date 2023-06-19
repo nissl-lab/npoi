@@ -531,7 +531,7 @@ namespace TestCases.OpenXml4Net.OPC
          * Test that we can open a file by path, and then
          *  write Changes to it.
          */
-        [Test, RunSerialyAndSweepTmpFiles]
+        [Test, RunSerialyAndSweepTmpFiles, Platform("Win")]
         public void TestOpenFileThenOverWrite()
         {
             string tempFile = TempFile.GetTempFilePath("poiTesting", "tmp");

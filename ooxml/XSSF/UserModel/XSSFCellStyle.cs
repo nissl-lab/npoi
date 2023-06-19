@@ -130,8 +130,18 @@ namespace NPOI.XSSF.UserModel
                 if (src._stylesSource == _stylesSource)
                 {
                     // Nice and easy
-                    _cellXf = src.GetCoreXf().Copy();
-                    _cellStyleXf = src.GetStyleXf() != null ? src.GetStyleXf().Copy() : null;
+                    src.GetCoreXf().CopyTo(_cellXf);
+
+                    // There is no need to copy _cellStyleXf couse XSSFCellStyle does not modify any _cellStyleXf properties.
+                    // Just update _cellStyleXf reference
+                    if (_cellXf.xfIdSpecified)
+                    {
+                        _cellStyleXf = _stylesSource.GetCellStyleXfAt((int)_cellXf.xfId);
+                    }
+                    else
+                    {
+                        _cellStyleXf = null;
+                    }
                 }
                 else
                 {
@@ -147,11 +157,6 @@ namespace NPOI.XSSF.UserModel
 
                         // Create a new Xf with the same contents
                         _cellXf = src.GetCoreXf().Copy();
-                        if (_cellXf.applyBorder)
-                        {
-                            //CellXF is copied with existing Ids, but those are different if you're copying between two documents
-                            _cellXf.borderId = FindAddBorder(src._stylesSource.GetBorderAt((int)_cellXf.borderId).GetCTBorder());
-                        }
 
                         // bug 56295: ensure that the fills is available and set correctly
                         CT_Fill fill = CT_Fill.Parse(src.GetCTFill().ToString());
@@ -160,12 +165,7 @@ namespace NPOI.XSSF.UserModel
                         // bug 58084: set borders correctly
                         CT_Border border = CT_Border.Parse(src.GetCTBorder().ToString());
                         AddBorder(border);
-
-                        if (src._cellStyleXf != null && src._cellStyleXf.applyBorder)
-                        {
-                            _cellStyleXf.borderId = FindAddBorder(src.GetCTBorder());
-                        }
-
+                        
                         // Swap it over
                         _stylesSource.ReplaceCellXfAt(_cellXfId, _cellXf);
                     }
@@ -658,7 +658,6 @@ namespace NPOI.XSSF.UserModel
                 AddFill(ct);
             }
         }
-
 
         /**
         * Gets the font for this style
@@ -1271,6 +1270,7 @@ namespace NPOI.XSSF.UserModel
                     break;
             }
         }
+
         private int FontId
         {
             get
@@ -1279,7 +1279,13 @@ namespace NPOI.XSSF.UserModel
                 {
                     return (int)_cellXf.fontId;
                 }
-                return _cellStyleXf != null ? (int)_cellStyleXf.fontId : -1;
+
+                if (_cellStyleXf != null && _cellStyleXf.IsSetFontId())
+                {
+                    return (int)_cellStyleXf.fontId;
+                }
+
+                return 0; //default font
             }
         }
 

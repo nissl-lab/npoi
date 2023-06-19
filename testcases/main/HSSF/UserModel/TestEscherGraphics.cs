@@ -39,6 +39,7 @@ namespace TestCases.HSSF.UserModel
      * @author Glen Stampoultzis (glens at apache.org)
      */
     [TestFixture]
+    [Platform("Win", Reason = "Fonts might not available on non-Windows platforms")]
     public class TestEscherGraphics
     {
         private HSSFWorkbook workbook;

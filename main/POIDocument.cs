@@ -411,7 +411,7 @@ namespace NPOI
          * @ thrown on errors writing to the stream
          */
 
-        public abstract void Write(Stream out1);
+        public abstract void Write(Stream stream);
 
         /**
          * Closes the underlying {@link NPOIFSFileSystem} from which
