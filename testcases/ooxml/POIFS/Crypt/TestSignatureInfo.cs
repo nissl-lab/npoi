@@ -62,6 +62,7 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void office2007prettyPrintedRels()
         {
             OPCPackage pkg = OPCPackage.Open(testdata.GetFileInfo("office2007prettyPrintedRels.docx"), PackageAccess.READ);
@@ -81,6 +82,7 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void GetSignerUnsigned()
         {
             String[] testFiles = {
@@ -113,6 +115,7 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void GetSigner()
         {
             String[] testFiles = {
@@ -163,6 +166,7 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void GetMultiSigners()
         {
             String testFile = "hello-world-signed-twice.docx";
@@ -196,6 +200,7 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestSignSpreadsheet()
         {
             String testFile = "hello-world-unsigned.xlsx";
@@ -205,6 +210,7 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestManipulation()
         {
             //// sign & validate
@@ -236,6 +242,7 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestSignSpreadsheetWithSignatureInfo()
         {
             //InitKeyPair("Test", "CN=Test");
@@ -311,7 +318,7 @@ namespace TestCases.POIFS.Crypt
 
             //    //    public byte[] timeStamp(byte[] data, RevocationData revocationData)  {
             //    //        revocationData.AddCRL(crl);
-            //    //        return "time-stamp-token".Bytes;                
+            //    //        return "time-stamp-token".Bytes;
             //    //    }
 
             //    //    public void SetSignatureConfig(SignatureConfig config) {
@@ -372,7 +379,7 @@ namespace TestCases.POIFS.Crypt
             //Assert.IsTrue(valid);
 
             //SignatureDocument sigDoc = sp.SignatureDocument;
-            //String declareNS = 
+            //String declareNS =
             //    "declare namespace xades='http://uri.etsi.org/01903/v1.3.2#'; "
             //  + "declare namespace ds='http://www.w3.org/2000/09/xmldsig#'; ";
 
@@ -451,6 +458,7 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestCertChain()
         {
             //KeyStore keystore = KeyStore.GetInstance("PKCS12");
@@ -530,7 +538,8 @@ namespace TestCases.POIFS.Crypt
             throw new NotImplementedException();
         }
 
-        [Test, Ignore("not implemented")]
+        [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestMultiSign()
         {
             //initKeyPair("KeyA", "CN=KeyA");

@@ -301,7 +301,7 @@ namespace NPOI.XSSF.UserModel
     }
     public class XSSFBuiltinTableStyle
     {
-        const string presetTableStylesResourceName = "NPOI.OOXML.Resources.presetTableStyles.xml";
+        const string presetTableStylesResourceName = "NPOI.Resources.presetTableStyles.xml";
 
         private static Dictionary<XSSFBuiltinTableStyleEnum, ITableStyle> styleMap = new Dictionary<XSSFBuiltinTableStyleEnum, ITableStyle>();
         public static ITableStyle GetStyle(XSSFBuiltinTableStyleEnum style)

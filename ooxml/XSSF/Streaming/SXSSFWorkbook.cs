@@ -755,10 +755,6 @@ namespace NPOI.XSSF.Streaming
         }
         public void Write(Stream stream, bool leaveOpen = false)
         {
-            this.Write(stream);
-        }
-        public void Write(Stream stream)
-        {
             FlushSheets();
 
             //Save the template

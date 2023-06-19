@@ -7,7 +7,6 @@
     <RootNamespace>NPOI</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
-    <RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
@@ -36,7 +35,6 @@
 
   <ItemGroup>
     <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>

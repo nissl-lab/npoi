@@ -162,3 +162,5 @@ examples/.vs/
 test-results/
 *.xls
 /artifacts
+
+BenchmarkDotNet.Artifacts
