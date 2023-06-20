@@ -153,7 +153,7 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        protected override byte[] StoredRBG
+        protected override byte[] StoredRGB
         {
             get
             {

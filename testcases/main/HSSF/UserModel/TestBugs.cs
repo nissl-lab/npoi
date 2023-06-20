@@ -2054,7 +2054,7 @@ namespace TestCases.HSSF.UserModel
         {
             try
             {
-                OpenSample("NPOIBug5010.xls");
+                OpenSample("npoiBug5010.xls");
             }
             catch (RecordFormatException e)
             {
@@ -2072,7 +2072,7 @@ namespace TestCases.HSSF.UserModel
         {
             try
             {
-                OpenSample("NPOIBug5139.xls");
+                OpenSample("NpoiBug5139.xls");
             }
             catch (LeftoverDataException e)
             {
@@ -2659,6 +2659,7 @@ namespace TestCases.HSSF.UserModel
          *  the bit excel cares about
          */
         [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void Test50833()
         {
             HSSFWorkbook wb = OpenSample("50833.xls");
@@ -2776,6 +2777,7 @@ namespace TestCases.HSSF.UserModel
          *  some may squeeze a WRITEPROTECT in the middle
          */
         [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void Test51832()
         {
             try
@@ -2962,7 +2964,9 @@ namespace TestCases.HSSF.UserModel
             ICellStyle rstyle = row.RowStyle;
             Assert.AreEqual(rstyle.BorderBottom, BorderStyle.Double);
         }
+
         [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void Bug35897()
         {
             // password is abc

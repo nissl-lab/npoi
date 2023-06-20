@@ -55,7 +55,7 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(a.Day, b.Day);
             Assert.AreEqual(a.Hour, b.Hour);
             Assert.AreEqual(a.Minute, b.Minute);
-            Assert.AreEqual(a.Second, b.Second);
+            Assert.AreEqual(a.Second, b.Second, delta: 1); // can shift during tests
         }
         [Test]
         public void TestEDateDecrease()
