@@ -130,5 +130,25 @@ namespace TestCases.HSSF.Record
 
             Assert.AreEqual("At a dinner party orAt At At ", strings[0] + "");
         }
+
+        /**
+        * Ensure that invalid SST records with an incorrect number of strings specified, does not consume non-continuation records.
+        */
+        [Test]
+        public void TestInvalidSTTRecord()
+        {
+            byte[] sstRecord = ReadSampleHexData("notenoughstrings.txt", "sst-record", SSTRecord.sid);
+            byte[] nonContinuationRecord = ReadSampleHexData("notenoughstrings.txt", "non-continuation-record", ExtSSTRecord.sid);
+            RecordInputStream in1 = TestcaseRecordInputStream.Create(Concat(sstRecord, nonContinuationRecord));
+
+            IntMapper<UnicodeString> strings = new IntMapper<UnicodeString>();
+            SSTDeserializer deserializer = new SSTDeserializer(strings);
+
+            // The record data in notenoughstrings.txt only contains 1 string, deliberately pass in a larger number.
+            deserializer.ManufactureStrings(2, in1);
+
+            Assert.AreEqual("At a dinner party or", strings[0] + "");
+            Assert.AreEqual("", strings[1] + "");
+        }
     }
 }

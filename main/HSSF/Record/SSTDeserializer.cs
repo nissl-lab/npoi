@@ -48,7 +48,7 @@ namespace NPOI.HSSF.Record
             {
                 // Extract exactly the count of strings from the SST record.
                 UnicodeString str;
-                if (in1.Available() == 0 && !in1.HasNextRecord)
+                if (in1.Available() == 0 && (!in1.HasNextRecord || in1.GetNextSid() != ContinueRecord.sid))
                 {
                     System.Console.WriteLine("Ran out of data before creating all the strings! String at index " + i + "");
                     str = new UnicodeString("");
