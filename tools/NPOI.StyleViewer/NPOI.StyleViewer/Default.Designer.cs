@@ -60,7 +60,7 @@
             this.Name = "Default";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "NOPI 2.0  StyleViewer";
+            this.Text = "NPOI 2.0  StyleViewer";
             this.Load += new System.EventHandler(this.Default_Load);
             this.ResumeLayout(false);
 
