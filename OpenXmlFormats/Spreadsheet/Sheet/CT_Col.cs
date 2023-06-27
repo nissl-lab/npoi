@@ -279,7 +279,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             CT_Col ctObj = new CT_Col();
             ctObj.min = XmlHelper.ReadUInt(node.Attributes["min"]);
             ctObj.max = XmlHelper.ReadUInt(node.Attributes["max"]);
-            ctObj.width = XmlHelper.ReadDouble(node.Attributes["width"]);
+            ctObj.widthField = XmlHelper.ReadDouble(node.Attributes["width"]);
             if (node.Attributes["style"] != null)
                 ctObj.style = XmlHelper.ReadUInt(node.Attributes["style"]);
             else
@@ -287,9 +287,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.hidden = XmlHelper.ReadBool(node.Attributes["hidden"]);
             ctObj.bestFit = XmlHelper.ReadBool(node.Attributes["bestFit"]);
             ctObj.outlineLevel = XmlHelper.ReadByte(node.Attributes["outlineLevel"]);
-            ctObj.customWidth = XmlHelper.ReadBool(node.Attributes["customWidth"]);
+            ctObj.customWidthField = XmlHelper.ReadBool(node.Attributes["customWidth"]);
             ctObj.phonetic = XmlHelper.ReadBool(node.Attributes["phonetic"]);
-            ctObj.collapsed = XmlHelper.ReadBool(node.Attributes["collapsed"]);
+            ctObj.collapsedField = XmlHelper.ReadBool(node.Attributes["collapsed"]);
             return ctObj;
         }
 
