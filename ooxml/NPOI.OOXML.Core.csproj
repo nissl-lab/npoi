@@ -1,47 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net472;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <AssemblyName>NPOI.OOXML</AssemblyName>
-    <RootNamespace>NPOI</RootNamespace>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
-    <OutputPath>..\solution\$(Configuration)\</OutputPath>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks>net472;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AssemblyName>NPOI.OOXML</AssemblyName>
+        <RootNamespace>NPOI</RootNamespace>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
+        <OutputPath>..\solution\$(Configuration)\</OutputPath>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="POIFS\Crypt\Dsig\KeyInfoKeySelector.cs" />
-    <Compile Remove="POIFS\Crypt\Dsig\Services\RelationshipTransformService.cs" />
-    <Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
-    <Compile Remove="XSSF\Extractor\XSSFEventBasedExcelExtractor.cs" />
-    <Compile Remove="XSSF\UserModel\Charts\XSSFNumberCache.cs" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="POIFS\Crypt\Dsig\KeyInfoKeySelector.cs" />
+        <Compile Remove="POIFS\Crypt\Dsig\Services\RelationshipTransformService.cs" />
+        <Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
+        <Compile Remove="XSSF\Extractor\XSSFEventBasedExcelExtractor.cs" />
+        <Compile Remove="XSSF\UserModel\Charts\XSSFNumberCache.cs" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="XSSF\UserModel\presetTableStyles.xml" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Remove="XSSF\UserModel\presetTableStyles.xml" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\presetTableStyles.xml" />
-  </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\presetTableStyles.xml" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\main\NPOI.Core.csproj" />
-    <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
-    <ProjectReference Include="..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\main\NPOI.Core.csproj" />
+        <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
+        <ProjectReference Include="..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" />
+    </ItemGroup>
 
 </Project>
