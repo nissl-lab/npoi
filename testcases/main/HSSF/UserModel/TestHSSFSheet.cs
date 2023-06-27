@@ -20,6 +20,7 @@ namespace TestCases.HSSF.UserModel
     using System.IO;
     using System;
     using System.Configuration;
+    using System.Runtime.InteropServices;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
@@ -853,7 +854,10 @@ namespace TestCases.HSSF.UserModel
             sheet.AutoSizeRow(row.RowNum);
 
             Assert.AreNotEqual(100, row.Height);
-            Assert.AreEqual(506, row.Height);
+
+            // there's slight difference due to fonts
+            var expectedRowHeight = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 506 : 528;
+            Assert.AreEqual(expectedRowHeight, row.Height);
 
             workbook.Close();
         }
