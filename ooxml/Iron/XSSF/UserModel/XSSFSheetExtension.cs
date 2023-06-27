@@ -10,7 +10,9 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _rows.Max(r => r.Value.RowNum);
+                return _rows.Count == 0
+                    ? 0
+                    :_rows.Max(r => r.Value.RowNum);
             }
         }
 

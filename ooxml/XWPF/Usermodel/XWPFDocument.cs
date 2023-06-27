@@ -27,6 +27,7 @@ namespace NPOI.XWPF.UserModel
     using System.Xml.Serialization;
     using System.Diagnostics;
     using NPOI.OOXML.XWPF.Util;
+    using System.Linq;
 
     /**
      * <p>High(ish) level class for working with .docx files.</p>
@@ -216,6 +217,11 @@ namespace NPOI.XWPF.UserModel
             catch (InvalidDataException e)
             {
                 throw new POIXMLException(e);
+            }
+            hyperlinks.AddRange(footers.SelectMany(footer => footer.GetHyperlinks()));
+            if (footnotes != null)
+            {
+                hyperlinks.AddRange(footnotes.GetHyperlinks());
             }
         }
 
@@ -1706,7 +1712,80 @@ namespace NPOI.XWPF.UserModel
         {
             return this;
         }
+        private void FindAndReplaceTextInParagraph(XWPFParagraph paragraph, string oldValue, string newValue)
+        {
+            var index = paragraph?.Text.IndexOf(oldValue) ?? -1;
+            if (index != -1)
+            {
+                int? firstIndex = null;
+                int? lastIndex = null;
+                for (var i = 0; i < paragraph.Runs.Count; ++i)
+                {
+                    if (index < paragraph.Runs[i].Text.Length)
+                    {
+                        if (-index <= oldValue.Length)
+                        {
+                            if (firstIndex == null)
+                            {
+                                firstIndex = i;
+                            }
+                        }
+                        else
+                        {
+                            lastIndex = i;
+                            break;
+                        }
+                    }
+                    index -= paragraph.Runs[i].Text.Length;
+                }
+                if (lastIndex == null)
+                {
+                    lastIndex = paragraph.Runs.Count - 1;
+                }
+                var newText = String.Concat(paragraph.Runs.Skip(firstIndex ?? 0).Take((lastIndex ?? 0) - (firstIndex ?? 0) + 1).Select(_ => _.Text));
+                newText = newText.Replace(oldValue, newValue);
+                paragraph.Runs[firstIndex ?? 0].SetText(newText);
+                for (var i = (firstIndex ?? 0) + 1; i <= lastIndex; ++i)
+                {
+                    paragraph.RemoveRun((firstIndex ?? 0) + 1);
+                }
+            }
+        }
+        public void FindAndReplaceText(XWPFDocument doc, string oldValue, string newValue)
+        {
+            foreach (var paragraph in doc.Paragraphs)
+            {
+                FindAndReplaceTextInParagraph(paragraph, oldValue, newValue);
+            }
 
+            foreach (var table in doc.Tables)
+            {
+                foreach (var row in table.Rows)
+                {
+                    foreach (var cell in row.GetTableCells())
+                    {
+                        foreach (var paragraph in cell.Paragraphs)
+                        {
+                            FindAndReplaceTextInParagraph(paragraph, oldValue, newValue);
+                        }
+                    }
+                }
+            }
+            foreach (var footer in doc.FooterList)
+            {
+                foreach (var paragraph in footer.Paragraphs)
+                {
+                    FindAndReplaceTextInParagraph(paragraph, oldValue, newValue);
+                }
+            }
+            foreach (var header in doc.HeaderList)
+            {
+                foreach (var paragraph in header.Paragraphs)
+                {
+                    FindAndReplaceTextInParagraph(paragraph, oldValue, newValue);
+                }
+            }
+        }
         public void Dispose()
         {
             this.Close();

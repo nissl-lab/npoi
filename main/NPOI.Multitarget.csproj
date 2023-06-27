@@ -1,5 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -9,29 +9,27 @@
 		<AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
 		<AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
 		<OutputPath>..\..\solution\$(Configuration)\</OutputPath>
+		<AssemblyOriginatorKeyFile>../npoi.snk</AssemblyOriginatorKeyFile>
+		<OutputPath>../solution/$(Configuration)/</OutputPath>
 	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DefineConstants>TRACE</DefineConstants>
 	</PropertyGroup>
-
 	<PropertyGroup>
 		<DefineConstants>HIDE_UNREACHABLE_CODE</DefineConstants>
 		<NoWarn>1701;1702;0108;0618;618;108;0612;612;162;0162</NoWarn>
 		<WarningLevel>1</WarningLevel>
-		<BaseOutputPath></BaseOutputPath>
+		<BaseOutputPath>
+		</BaseOutputPath>
 	</PropertyGroup>
-
 	<ItemGroup>
 		<None Remove="Resources\font_metrics.properties" />
 		<None Remove="Resources\functionMetadata.txt" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\font_metrics.properties" />
 		<EmbeddedResource Include="Resources\functionMetadata.txt" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="IronDevTools.PerformanceAnalyzer" Version="2022.11.10663" />
 		<PackageReference Include="Enums.NET" Version="4.0.0" />
@@ -45,6 +43,7 @@
 		<PackageReference Include="System.Text.Encoding" Version="4.3.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
 		<PackageReference Include="IronSoftware.System.Drawing" Version="2023.4.4" />
+		<PackageReference Include="IronSoftware.System.Drawing" Version="2023.7.1" />
 		<PackageReference Include="Enums.NET" Version="4.0.1" />
 		<PackageReference Include="MathNet.Numerics.Signed" Version="5.0.0" />
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.2" />
@@ -55,18 +54,15 @@
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>IronXL</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
-	
 </Project>

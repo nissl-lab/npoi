@@ -78,7 +78,7 @@ namespace TestCases.SS.Util
             IRow row = sheet.CreateRow(0);
             ICellStyle style = wb.CreateCellStyle();
             IFont font = wb.CreateFont();
-            font.Boldweight = (short)FontBoldWeight.Bold;
+            font.IsBold = true;
             style.SetFont(font);
             WriteHeaderCell(row, 0, "Raw Long Bits A", style);
             WriteHeaderCell(row, 1, "Raw Long Bits B", style);

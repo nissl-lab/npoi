@@ -594,23 +594,29 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFSheet sheet = (XSSFSheet)GetParent();
             CellReference ref1 = StartCellReference;
+            
             if (ref1 == null) return;
 
             int headerRow = ref1.Row;
             int firstHeaderColumn = ref1.Col;
+
             XSSFRow row = sheet.GetRow(headerRow) as XSSFRow;
 
             if (row != null && row.GetCTRow() != null)
             {
                 int cellnum = firstHeaderColumn;
-                foreach (CT_TableColumn col in GetCTTable().tableColumns.tableColumn)
+                CT_TableColumns tableColumns = GetCTTable().tableColumns;
+
+                if (tableColumns != null)
                 {
-                    XSSFCell cell = row.GetCell(cellnum) as XSSFCell;
-                    if (cell != null)
+                    foreach (CT_TableColumn col in tableColumns.tableColumn)
                     {
-                        col.name = (cell.StringCellValue);
+                        if (row.GetCell(cellnum) is XSSFCell cell)
+                        {
+                            col.name = cell.StringCellValue;
+                        }
+                        cellnum++;
                     }
-                    cellnum++;
                 }
             }
             tableColumns = null;

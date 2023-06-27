@@ -35,6 +35,7 @@ namespace NPOI.XWPF.UserModel
     {
         private List<XWPFFootnote> listFootnote = new List<XWPFFootnote>();
         private CT_Footnotes ctFootnotes;
+        private List<XWPFHyperlink> hyperlinks = new List<XWPFHyperlink>();
 
         protected XWPFDocument document;
 
@@ -96,8 +97,26 @@ namespace NPOI.XWPF.UserModel
                     listFootnote.Add(new XWPFFootnote(note, this));
                 }
             }
+            InitHyperlinks();
         }
 
+        private void InitHyperlinks()
+        {
+            try
+            {
+                IEnumerator<PackageRelationship> relIter =
+                    GetPackagePart().GetRelationshipsByType(XWPFRelation.HYPERLINK.Relation).GetEnumerator();
+                while (relIter.MoveNext())
+                {
+                    PackageRelationship rel = relIter.Current;
+                    hyperlinks.Add(new XWPFHyperlink(rel.Id, rel.TargetUri.OriginalString));
+                }
+            }
+            catch (InvalidDataException e)
+            {
+                throw new POIXMLException(e);
+            }
+        }
 
         protected internal override void Commit()
         {
@@ -220,6 +239,23 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
+        public XWPFHyperlink GetHyperlinkByID(String id)
+        {
+            IEnumerator<XWPFHyperlink> iter = hyperlinks.GetEnumerator();
+            while (iter.MoveNext())
+            {
+                XWPFHyperlink link = iter.Current;
+                if (link.Id.Equals(id))
+                    return link;
+            }
+
+            return null;
+        }
+
+        public List<XWPFHyperlink> GetHyperlinks()
+        {
+            return hyperlinks;
+        }
 
     }//end class
 

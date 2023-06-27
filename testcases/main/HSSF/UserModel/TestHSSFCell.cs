@@ -142,7 +142,7 @@ namespace TestCases.HSSF.UserModel
             // string to error code
             cell.SetCellValue("abc");
             ConfirmStringRecord(sheet, true);
-            cell.SetCellErrorValue(FormulaError.REF.Code);
+            cell.SetCellErrorValue(FormulaError.REF);
             ConfirmStringRecord(sheet, false);
 
             // string to boolean

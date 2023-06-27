@@ -65,7 +65,7 @@ namespace TestCases.POIFS.Crypt
 
             // test the source
             OPCPackage opc = OPCPackage.Open(source);
-            String expected = "This is an Encrypted Excel spreadsheet.";
+            // String expected = "This is an Encrypted Excel spreadsheet.";
 
             //XSSFEventBasedExcelExtractor extractor = new XSSFEventBasedExcelExtractor(opc);
             //extractor.IncludeSheetNames = (/*setter*/false);
@@ -177,7 +177,10 @@ namespace TestCases.POIFS.Crypt
 
             public bool IsClosed
             {
-                get { return closed; }
+                get
+                {
+                    return closed;
+                }
             }
         }
     }

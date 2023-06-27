@@ -94,7 +94,7 @@ namespace TestCases.SS.Util
             ICellStyle style = wb.CreateCellStyle();
             IFont font = wb.CreateFont();
             WriteHeaderCell(row, 0, "Value", style);
-            font.Boldweight = (short)FontBoldWeight.Bold;
+            font.IsBold = true;
             style.SetFont(font);
             WriteHeaderCell(row, 1, "Raw Long Bits", style);
             WriteHeaderCell(row, 2, "JDK Double Rendering", style);

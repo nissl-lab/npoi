@@ -33,6 +33,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using TestCases.HSSF;
 using TestCases.SS.UserModel;
 
@@ -177,6 +178,7 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
+        [Platform("Win")]
         public void TestAutoSizeRow()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -1490,7 +1492,7 @@ namespace TestCases.XSSF.UserModel
 
             comment1 = sheet1.GetCommentsTable(true);
             Assert.IsNotNull(comment1);
-            Assert.AreEqual("/xl/comments1.xml", comment1.GetPackageRelationship().TargetUri.ToString());
+            Assert.AreEqual("/xl/comments1.xml", comment1.GetPackagePart().PartName.Name);
 
             Assert.AreSame(comment1, sheet1.GetCommentsTable(true));
 
@@ -1503,7 +1505,7 @@ namespace TestCases.XSSF.UserModel
             Assert.IsNotNull(comment2);
 
             Assert.AreSame(comment2, sheet2.GetCommentsTable(true));
-            Assert.AreEqual("/xl/comments2.xml", comment2.GetPackageRelationship().TargetUri.ToString());
+            Assert.AreEqual("/xl/comments2.xml", comment2.GetPackagePart().PartName.Name);
 
             //comment1 and  comment2 are different objects
             Assert.AreNotSame(comment1, comment2);
@@ -1514,7 +1516,7 @@ namespace TestCases.XSSF.UserModel
             sheet1 = (XSSFSheet)wb2.GetSheetAt(0);
             comment1 = sheet1.GetCommentsTable(true);
             Assert.IsNotNull(comment1);
-            Assert.AreEqual("/xl/comments1.xml", comment1.GetPackageRelationship().TargetUri.ToString());
+            Assert.AreEqual("/xl/comments1.xml", comment1.GetPackagePart().PartName.Name);
             Assert.AreSame(comment1, sheet1.GetCommentsTable(true));
 
             wb2.Close();

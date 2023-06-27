@@ -1,5 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    
 	<PropertyGroup>
 		<TargetFrameworks>net6.0</TargetFrameworks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -11,21 +12,27 @@
 		<AssemblyName>NPOI.OOXML.TestCases</AssemblyName>
 		<RootNamespace>TestCases</RootNamespace>
 		<SignAssembly>true</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\..\npoi.snk</AssemblyOriginatorKeyFile>
-		<OutputPath>..\..\solution\$(Configuration)\</OutputPath>
+		<AssemblyOriginatorKeyFile>../../npoi.snk</AssemblyOriginatorKeyFile>
+		<OutputPath>../../solution/$(Configuration)/</OutputPath>
 	</PropertyGroup>
-
+    
+	<PropertyGroup>
+		<DefineConstants>HIDE_UNREACHABLE_CODE</DefineConstants>
+		<NoWarn>1701;1702;0108;0618;618;108;0612;612;162;0162</NoWarn>
+		<WarningLevel>1</WarningLevel>
+	</PropertyGroup>
+    
 	<ItemGroup>
 		<Compile Remove="OpenXmlFormats\**" />
 		<EmbeddedResource Remove="OpenXmlFormats\**" />
 		<None Remove="OpenXmlFormats\**" />
 	</ItemGroup>
-
+    
 	<ItemGroup>
 		<Compile Remove="XSSF\TestWorkbookProtection.cs" />
 		<Compile Remove="XSSF\UserModel\Charts\TestXSSFNumberCache.cs" />
 	</ItemGroup>
-
+    
 	<ItemGroup>
 		<PackageReference Include="IronDevTools.PerformanceAnalyzer" Version="2022.11.10663" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
@@ -33,11 +40,12 @@
 		<PackageReference Include="NUnit" Version="3.10.1" />
 		<PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.2" />
 		<PackageReference Include="NSubstitute" Version="5.0.0" />
 		<PackageReference Include="NUnit" Version="3.13.3" />
-		<PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
 	</ItemGroup>
-
+    
 	<ItemGroup>
 		<ProjectReference Include="..\..\main\NPOI.Multitarget.csproj" />
 		<ProjectReference Include="..\..\ooxml\NPOI.OOXML.Multitarget.csproj" />
@@ -45,9 +53,15 @@
 		<ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Multitarget.csproj" />
 		<ProjectReference Include="..\main\NPOI.TestCases.Multitarget.csproj" />
 	</ItemGroup>
-
+    
+	<ItemGroup>
+        <None Update="test.runsettings">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+    
 	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">
 		<Copy SourceFiles="App.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
 	</Target>
-
+    
 </Project>

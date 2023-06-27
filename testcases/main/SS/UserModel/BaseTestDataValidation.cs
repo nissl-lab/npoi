@@ -42,6 +42,7 @@ namespace TestCases.SS.UserModel
             : this(HSSFITestDataProvider.Instance)
         {
         }
+
         protected BaseTestDataValidation(ITestDataProvider TestDataProvider)
         {
             _testDataProvider = TestDataProvider;
@@ -227,10 +228,7 @@ namespace TestCases.SS.UserModel
                     bool bold)
             {
                 IFont font = wb.CreateFont();
-                if (bold)
-                {
-                    font.Boldweight = (short)(/*setter*/FontBoldWeight.Bold);
-                }
+                font.IsBold = bold;
 
                 ICellStyle cellStyle = wb.CreateCellStyle();
                 cellStyle.SetFont(font);
@@ -258,7 +256,7 @@ namespace TestCases.SS.UserModel
             {
                 IFont font = wb.CreateFont();
                 font.Color = (/*setter*/ HSSFColor.White.Index);
-                font.Boldweight = (short)(/*setter*/FontBoldWeight.Bold);
+                font.IsBold = true;
 
                 ICellStyle cellStyle = wb.CreateCellStyle();
                 cellStyle.FillForegroundColor = (/*setter*/HSSFColor.BlueGrey.Index);

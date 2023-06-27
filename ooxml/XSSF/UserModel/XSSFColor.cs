@@ -170,7 +170,7 @@ namespace NPOI.XSSF.UserModel
             return this.RGB;
         }
 
-        protected override byte[] StoredRBG
+        protected override byte[] StoredRGB
         {
             get
             {

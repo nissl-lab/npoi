@@ -116,7 +116,7 @@ namespace NPOI.XSSF.UserModel
             //Stream vmlsm = new EvilUnclosedBRFixingInputStream(is1); --TODO:: add later
             
              doc.LoadXml(
-                  data.Replace("<br>","")
+                  data.Replace("<br>","").Replace("</br>", "")
             );
 
              XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);

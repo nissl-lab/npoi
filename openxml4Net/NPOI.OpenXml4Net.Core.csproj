@@ -7,11 +7,7 @@
     <RootNamespace>NPOI.OpenXml4Net</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
-    <RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
