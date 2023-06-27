@@ -496,7 +496,7 @@ namespace NPOI.XSSF.UserModel
                         if (destColumnNum == destRegion.FirstColumn
                             && destColumnNum == destRegion.LastColumn)
                         {
-                            indices.Add(index);
+                            _ = indices.Add(index);
                         }
 
                         index++;
@@ -546,7 +546,7 @@ namespace NPOI.XSSF.UserModel
                             CellRangeAddress destRegion = srcRegion.Copy();
                             destRegion.FirstColumn = destColumnNum;
                             destRegion.LastColumn = destColumnNum;
-                            Sheet.AddMergedRegion(destRegion);
+                            _ = Sheet.AddMergedRegion(destRegion);
                         }
                     }
                 }
@@ -614,10 +614,7 @@ namespace NPOI.XSSF.UserModel
                 }
 
                 //remove the reference in the calculation chain
-                if (calcChain != null)
-                {
-                    calcChain.RemoveItem(sheetId, cell.GetReference());
-                }
+                calcChain?.RemoveItem(sheetId, cell.GetReference());
 
                 CT_Cell CT_Cell = cell.GetCTCell();
                 string r = new CellReference(cell.RowIndex, columnNum)

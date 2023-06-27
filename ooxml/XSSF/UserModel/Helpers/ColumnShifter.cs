@@ -72,7 +72,7 @@ namespace NPOI.XSSF.UserModel.Helpers
 
                 if (RemovalNeeded(merged, startColumn, endColumn, n, lastCol))
                 {
-                    removedIndices.Add(i);
+                    _ = removedIndices.Add(i);
                     continue;
                 }
 
@@ -96,7 +96,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                     merged.LastColumn += n;
                     //have to Remove/add it back
                     ShiftedRegions.Add(merged);
-                    removedIndices.Add(i);
+                    _ = removedIndices.Add(i);
                 }
             }
 
@@ -108,7 +108,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             //read so it doesn't Get Shifted again
             foreach (CellRangeAddress region in ShiftedRegions)
             {
-                sheet.AddMergedRegion(region);
+                _ = sheet.AddMergedRegion(region);
             }
 
             return ShiftedRegions;
