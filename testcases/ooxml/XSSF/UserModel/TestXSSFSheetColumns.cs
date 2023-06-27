@@ -39,7 +39,7 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
 
-            sheet.CreateColumn(10);
+            _ = sheet.CreateColumn(10);
 
             Assert.AreEqual(10, sheet.FirstColumnNum);
 
@@ -60,7 +60,7 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
 
-            sheet.CreateColumn(10);
+            _ = sheet.CreateColumn(10);
 
             Assert.AreEqual(10, sheet.LastColumnNum);
 
@@ -84,7 +84,7 @@ namespace TestCases.XSSF.UserModel
 
             for (int i = 0; i < colNumber; i++)
             {
-                sheet.CreateColumn(i);
+                _ = sheet.CreateColumn(i);
             }
 
             Assert.AreEqual(0, sheet.FirstColumnNum);
@@ -111,7 +111,7 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
             int colIndex = 6;
 
-            sheet.CreateColumn(colIndex);
+            _ = sheet.CreateColumn(colIndex);
 
             IColumn column = sheet.GetColumn(colIndex);
 
@@ -171,7 +171,7 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
 
-            sheet.CreateColumn(10);
+            _ = sheet.CreateColumn(10);
             IColumn column = sheet.GetColumn(10);
 
             Assert.NotNull(column);
@@ -218,9 +218,9 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
 
-            sheet.CreateColumn(1);
-            sheet.CreateColumn(2);
-            sheet.CreateColumn(3);
+            _ = sheet.CreateColumn(1);
+            _ = sheet.CreateColumn(2);
+            _ = sheet.CreateColumn(3);
 
             Assert.NotNull(sheet.GetColumn(1));
             Assert.NotNull(sheet.GetColumn(2));
@@ -234,7 +234,7 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(1, sheet.FirstColumnNum);
             Assert.AreEqual(2, sheet.LastColumnNum);
 
-            sheet.CreateColumn(3);
+            _ = sheet.CreateColumn(3);
 
             sheet.RemoveColumn(sheet.GetColumn(1));
 
@@ -242,7 +242,7 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(2, sheet.FirstColumnNum);
             Assert.AreEqual(3, sheet.LastColumnNum);
 
-            sheet.CreateColumn(1);
+            _ = sheet.CreateColumn(1);
 
             Assert.NotNull(sheet.GetColumn(3));
             Assert.AreEqual(3, sheet.LastColumnNum);
@@ -272,9 +272,9 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
 
-            sheet.CreateColumn(1);
-            sheet.CreateColumn(2);
-            sheet.CreateColumn(3);
+            _ = sheet.CreateColumn(1);
+            _ = sheet.CreateColumn(2);
+            _ = sheet.CreateColumn(3);
 
             Assert.NotNull(sheet.GetColumn(1));
             Assert.NotNull(sheet.GetColumn(2));
@@ -282,7 +282,7 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(1, sheet.FirstColumnNum);
             Assert.AreEqual(3, sheet.LastColumnNum);
 
-            Assert.Throws<ArgumentException>(() => sheet.RemoveColumn(sheet.GetColumn(4)));
+            _ = Assert.Throws<ArgumentException>(() => sheet.RemoveColumn(sheet.GetColumn(4)));
         }
 
         /// <summary>
@@ -315,11 +315,11 @@ namespace TestCases.XSSF.UserModel
             sheet.CreateColumn(originalColIndex + 1).CreateCell(0).SetCellValue(10);
             sheet.CreateColumn(originalColIndex + 2).CreateCell(0).SetCellValue(20);
             originalColumn.CreateCell(mergedRegionFirstRow).SetCellValue("POI");
-            sheet.AddMergedRegion(
+            _ = sheet.AddMergedRegion(
                 new CellRangeAddress(
-                    mergedRegionFirstRow, 
-                    mergedRegionLastRow, 
-                    originalColumn.ColumnNum, 
+                    mergedRegionFirstRow,
+                    mergedRegionLastRow,
+                    originalColumn.ColumnNum,
                     originalColumn.ColumnNum + 1));
             CellRangeAddress originaMergedRegion = sheet.GetMergedRegion(0);
 
@@ -422,7 +422,7 @@ namespace TestCases.XSSF.UserModel
             sheet.CreateColumn(originalColIndex + 1).CreateCell(0).SetCellValue(10);
             sheet.CreateColumn(originalColIndex + 2).CreateCell(0).SetCellValue(20);
             originalColumn.CreateCell(mergedRegionFirstRow).SetCellValue("POI");
-            sheet.AddMergedRegion(
+            _ = sheet.AddMergedRegion(
                 new CellRangeAddress(
                     mergedRegionFirstRow,
                     mergedRegionLastRow,

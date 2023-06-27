@@ -18,7 +18,6 @@
 using NPOI.OOXML.XSSF.UserModel.Helpers;
 using NPOI.SS.Formula;
 using NPOI.SS.UserModel;
-using NPOI.SS.UserModel.Helpers;
 
 namespace NPOI.XSSF.UserModel.Helpers
 {

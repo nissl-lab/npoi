@@ -71,12 +71,12 @@ namespace TestCases.XSSF.UserModel
 
             for (int i = 0; i < numOfCells; i++)
             {
-                column2.CreateCell(firstRowNum + i);
+                _ = column2.CreateCell(firstRowNum + i);
             }
 
             for (int i = 0; i < numOfCells; i++)
             {
-                column2.CreateCell(firstRowNum + 20 + i);
+                _ = column2.CreateCell(firstRowNum + 20 + i);
             }
 
             Assert.AreEqual(-1, column1.FirstCellNum);
@@ -109,12 +109,12 @@ namespace TestCases.XSSF.UserModel
 
             for (int i = 0; i < numOfCells; i++)
             {
-                column2.CreateCell(firstRowNum + i);
+                _ = column2.CreateCell(firstRowNum + i);
             }
 
             for (int i = 0; i < numOfCells; i++)
             {
-                column2.CreateCell(firstRowNum + 20 + i);
+                _ = column2.CreateCell(firstRowNum + 20 + i);
             }
 
             Assert.AreEqual(-1, column1.LastCellNum);
@@ -176,12 +176,12 @@ namespace TestCases.XSSF.UserModel
 
             for (int i = 0; i < numOfCells; i++)
             {
-                column2.CreateCell(firstRowNum + i);
+                _ = column2.CreateCell(firstRowNum + i);
             }
 
             for (int i = 0; i < numOfCells; i++)
             {
-                column2.CreateCell(firstRowNum + 20 + i);
+                _ = column2.CreateCell(firstRowNum + 20 + i);
             }
 
             column2.RemoveCell(
@@ -357,8 +357,8 @@ namespace TestCases.XSSF.UserModel
 
             IColumn column = sheet.CreateColumn(columnIndex);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => column.CreateCell(-1));
-            Assert.Throws<ArgumentOutOfRangeException>(() => column.CreateCell(2000000));
+            _ = Assert.Throws<ArgumentOutOfRangeException>(() => column.CreateCell(-1));
+            _ = Assert.Throws<ArgumentOutOfRangeException>(() => column.CreateCell(2000000));
         }
 
         [Test]
@@ -368,12 +368,12 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
             int columnIndex = 10;
             IColumn column = sheet.CreateColumn(columnIndex);
-            column.CreateCell(0, CellType.Blank);
-            column.CreateCell(1, CellType.Boolean);
-            column.CreateCell(2, CellType.Error);
-            column.CreateCell(3, CellType.Formula);
-            column.CreateCell(4, CellType.Numeric);
-            column.CreateCell(5, CellType.String);
+            _ = column.CreateCell(0, CellType.Blank);
+            _ = column.CreateCell(1, CellType.Boolean);
+            _ = column.CreateCell(2, CellType.Error);
+            _ = column.CreateCell(3, CellType.Formula);
+            _ = column.CreateCell(4, CellType.Numeric);
+            _ = column.CreateCell(5, CellType.String);
 
             for (int i = 0; i <= 5; i++)
             {
@@ -388,7 +388,7 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(CellType.Blank, sheet.GetRow(4).GetCell(columnIndex).CellType); // Numeric cell with no data will return blank by default
             Assert.AreEqual(CellType.String, sheet.GetRow(5).GetCell(columnIndex).CellType);
 
-            Assert.Throws<ArgumentException>(() => column.CreateCell(6, CellType.Unknown));
+            _ = Assert.Throws<ArgumentException>(() => column.CreateCell(6, CellType.Unknown));
             Assert.IsNull(sheet.GetRow(6));
             Assert.IsNull(column.GetCell(6));
 
@@ -425,9 +425,9 @@ namespace TestCases.XSSF.UserModel
             int columnIndex = 10;
             int rowIndex = 10;
             IColumn column = sheet.CreateColumn(columnIndex);
-            column.CreateCell(rowIndex);
+            _ = column.CreateCell(rowIndex);
             ICell cell = column.GetCell(rowIndex);
-            sheet.CreateRow(rowIndex + 1).CreateCell(columnIndex);
+            _ = sheet.CreateRow(rowIndex + 1).CreateCell(columnIndex);
 
             Assert.IsNotNull(cell);
             Assert.AreEqual(columnIndex, cell.ColumnIndex);
@@ -461,9 +461,9 @@ namespace TestCases.XSSF.UserModel
             int rowIndex = 10;
             IColumn column = sheet.CreateColumn(columnIndex);
 
-            column.CreateCell(rowIndex, CellType.Blank);
+            _ = column.CreateCell(rowIndex, CellType.Blank);
             column.CreateCell(rowIndex + 1, CellType.Blank).SetCellValue(1);
-            column.CreateCell(rowIndex + 2, CellType.Numeric);
+            _ = column.CreateCell(rowIndex + 2, CellType.Numeric);
             column.CreateCell(rowIndex + 3, CellType.Numeric).SetCellValue(1);
 
             Assert.IsNotNull(column.GetCell(rowIndex, MissingCellPolicy.RETURN_NULL_AND_BLANK));
@@ -498,7 +498,7 @@ namespace TestCases.XSSF.UserModel
 
             for (int i = 0; i < initialNumberOfCells; i++)
             {
-                column.CreateCell(rowIndex + i);
+                _ = column.CreateCell(rowIndex + i);
             }
 
             Assert.AreEqual(initialNumberOfCells, column.PhysicalNumberOfCells);
@@ -531,8 +531,8 @@ namespace TestCases.XSSF.UserModel
             IRow row = sheet.CreateRow(rowIndex);
             ICell cell = row.CreateCell(columnIndex + 1);
 
-            Assert.Throws<ArgumentException>(() => column.RemoveCell(cell));
-            Assert.Throws<ArgumentException>(() => column.RemoveCell(null));
+            _ = Assert.Throws<ArgumentException>(() => column.RemoveCell(cell));
+            _ = Assert.Throws<ArgumentException>(() => column.RemoveCell(null));
             Assert.IsNotNull(row.GetCell(columnIndex + 1));
         }
 
@@ -571,7 +571,7 @@ namespace TestCases.XSSF.UserModel
             sheet.GetRow(0).CreateCell(originalColIndex + 1 + 3).SetCellValue(firstFormulaCellValue);
             sheet.GetRow(0).CreateCell(originalColIndex + 2 + 3).SetCellValue(secondFormulaCellValue);
             originalColumn.CreateCell(mergedRegionFirstRow).SetCellValue("POI");
-            sheet.AddMergedRegion(
+            _ = sheet.AddMergedRegion(
                 new CellRangeAddress(
                     mergedRegionFirstRow,
                     mergedRegionLastRow,
@@ -675,7 +675,7 @@ namespace TestCases.XSSF.UserModel
             sheet.GetRow(0).CreateCell(originalColIndex + 1 + 3).SetCellValue(firstFormulaCellValue);
             sheet.GetRow(0).CreateCell(originalColIndex + 2 + 3).SetCellValue(secondFormulaCellValue);
             originalColumn.CreateCell(mergedRegionFirstRow).SetCellValue("POI");
-            sheet.AddMergedRegion(
+            _ = sheet.AddMergedRegion(
                 new CellRangeAddress(
                     mergedRegionFirstRow,
                     mergedRegionLastRow,
@@ -776,7 +776,7 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFSheet srcSheet = (XSSFSheet)workbook.CreateSheet("src");
             XSSFSheet destSheet = workbook.CreateSheet("dest") as XSSFSheet;
-            workbook.CreateSheet("other");
+            _ = workbook.CreateSheet("other");
 
             IColumn srcColumn = srcSheet.CreateColumn(0);
             int col = 0;
