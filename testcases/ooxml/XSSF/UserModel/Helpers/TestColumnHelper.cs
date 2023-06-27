@@ -20,6 +20,7 @@ using NUnit.Framework;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel.Helpers;
 using NPOI.XSSF.UserModel;
+using System;
 
 namespace TestCases.XSSF.UserModel.Helpers
 {
@@ -28,6 +29,7 @@ namespace TestCases.XSSF.UserModel.Helpers
      *
      */
     [TestFixture]
+    [Obsolete("Use XSSFColumn object for all things column")]
     public class TestColumnHelper
     {
         [Test]
