@@ -2,13 +2,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
     
 	<PropertyGroup>
-        <TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <AssemblyName>NPOI.OOXML.TestCases</AssemblyName>
-        <RootNamespace>TestCases</RootNamespace>
-        <SignAssembly>true</SignAssembly>
-        <AssemblyOriginatorKeyFile>../../npoi.snk</AssemblyOriginatorKeyFile>
-        <OutputPath>../../solution/$(Configuration)/</OutputPath>
+		<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AssemblyName>NPOI.OOXML.TestCases</AssemblyName>
+		<RootNamespace>TestCases</RootNamespace>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>../../npoi.snk</AssemblyOriginatorKeyFile>
+		<OutputPath>../../solution/$(Configuration)/</OutputPath>
 	</PropertyGroup>
     
 	<PropertyGroup>
@@ -29,18 +29,18 @@
 	</ItemGroup>
     
 	<ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.2" />
-        <PackageReference Include="NSubstitute" Version="5.0.0" />
-        <PackageReference Include="NUnit" Version="3.13.3" />
-        <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.2" />
+		<PackageReference Include="NSubstitute" Version="5.0.0" />
+		<PackageReference Include="NUnit" Version="3.13.3" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
 	</ItemGroup>
     
 	<ItemGroup>
-        <ProjectReference Include="..\..\main\NPOI.Multitarget.csproj" />
-        <ProjectReference Include="..\..\ooxml\NPOI.OOXML.Multitarget.csproj" />
-        <ProjectReference Include="..\..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj" />
-        <ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Multitarget.csproj" />
-        <ProjectReference Include="..\main\NPOI.TestCases.Multitarget.csproj" />
+		<ProjectReference Include="..\..\main\NPOI.Multitarget.csproj" />
+		<ProjectReference Include="..\..\ooxml\NPOI.OOXML.Multitarget.csproj" />
+		<ProjectReference Include="..\..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj" />
+		<ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Multitarget.csproj" />
+		<ProjectReference Include="..\main\NPOI.TestCases.Multitarget.csproj" />
 	</ItemGroup>
     
 	<ItemGroup>

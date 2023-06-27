@@ -1,38 +1,39 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFrameworks>net472;net6.0</TargetFrameworks>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <AssemblyName>NPOI.OOXML4Net.TestCases</AssemblyName>
-        <RootNamespace>TestCases</RootNamespace>
-        <SignAssembly>true</SignAssembly>
-        <AssemblyOriginatorKeyFile>..\..\npoi.snk</AssemblyOriginatorKeyFile>
-        <OutputPath>..\..\solution\$(Configuration)\</OutputPath>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>net472;net6.0</TargetFrameworks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyName>NPOI.OOXML4Net.TestCases</AssemblyName>
+    <RootNamespace>TestCases</RootNamespace>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\npoi.snk</AssemblyOriginatorKeyFile>
+    <OutputPath>..\..\solution\$(Configuration)\</OutputPath>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <DefineConstants>HIDE_UNREACHABLE_CODE</DefineConstants>
-        <NoWarn>1701;1702;0108;0618;618;108;0612;612;162;0162</NoWarn>
-        <WarningLevel>1</WarningLevel>
-    </PropertyGroup>
+	<PropertyGroup>
+		<DefineConstants>HIDE_UNREACHABLE_CODE</DefineConstants>
+		<NoWarn>1701;1702;0108;0618;618;108;0612;612;162;0162</NoWarn>
+		<WarningLevel>1</WarningLevel>
+	</PropertyGroup>
+	
+  <ItemGroup>
+    <PackageReference Include="GitHubActionsTestLogger" Version="2.3.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.1" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="GitHubActionsTestLogger" Version="2.3.2" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.1" />
-        <PackageReference Include="NUnit" Version="3.13.3" />
-        <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\main\NPOI.Core.csproj" />
+    <ProjectReference Include="..\..\ooxml\NPOI.OOXML.Core.csproj" />
+    <ProjectReference Include="..\..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
+    <ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" />
+    <ProjectReference Include="..\ooxml\NPOI.OOXML.TestCases.Core.csproj" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\..\main\NPOI.Core.csproj" />
-        <ProjectReference Include="..\..\ooxml\NPOI.OOXML.Core.csproj" />
-        <ProjectReference Include="..\..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
-        <ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" />
-        <ProjectReference Include="..\ooxml\NPOI.OOXML.TestCases.Core.csproj" />
-    </ItemGroup>
+  <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+    <Copy SourceFiles="App.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
+  </Target>
 
-    <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
-        <Copy SourceFiles="App.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
-    </Target>
 
 </Project>

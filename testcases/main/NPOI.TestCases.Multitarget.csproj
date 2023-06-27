@@ -2,30 +2,30 @@
 <Project Sdk="Microsoft.NET.Sdk">
     
 	<PropertyGroup>
-        <TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <AssemblyName>NPOI.TestCases</AssemblyName>
-        <RootNamespace>TestCases</RootNamespace>
-        <SignAssembly>true</SignAssembly>
-        <AssemblyOriginatorKeyFile>../../npoi.snk</AssemblyOriginatorKeyFile>
-        <OutputPath>../../solution/$(Configuration)/</OutputPath>
+		<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AssemblyName>NPOI.TestCases</AssemblyName>
+		<RootNamespace>TestCases</RootNamespace>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>../../npoi.snk</AssemblyOriginatorKeyFile>
+		<OutputPath>../../solution/$(Configuration)/</OutputPath>
 	</PropertyGroup>
     
 	<PropertyGroup>
-        <DefineConstants>HIDE_UNREACHABLE_CODE</DefineConstants>
-        <NoWarn>1701;1702;0108;0618;618;108;0612;612;162;0162</NoWarn>
-        <WarningLevel>1</WarningLevel>
+		<DefineConstants>HIDE_UNREACHABLE_CODE</DefineConstants>
+		<NoWarn>1701;1702;0108;0618;618;108;0612;612;162;0162</NoWarn>
+		<WarningLevel>1</WarningLevel>
 	</PropertyGroup>
     
 	<ItemGroup>
-        <Compile Remove="HSSF\UserModel\TestEscherGraphics2d.cs" />
-        <Compile Remove="SS\Formula\Function\ExcelFileFormatDocFunctionExtractor.cs" />
+		<Compile Remove="HSSF\UserModel\TestEscherGraphics2d.cs" />
+		<Compile Remove="SS\Formula\Function\ExcelFileFormatDocFunctionExtractor.cs" />
 	</ItemGroup>
     
 	<ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.2" />
-        <PackageReference Include="NUnit" Version="3.13.3" />
-        <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.2" />
+		<PackageReference Include="NUnit" Version="3.13.3" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
 	</ItemGroup>
     
 	<ItemGroup>
