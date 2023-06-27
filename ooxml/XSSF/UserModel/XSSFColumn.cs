@@ -162,6 +162,9 @@ namespace NPOI.XSSF.UserModel
                             + ") outside allowable range (0.." + maxColumn + ")");
                 }
 
+                // As current implementation of XSSFColumn is breaking CT_Col 
+                // objects that span over multiple columns into individual
+                // columns we need to set min and max values to the same value.
                 _column.min = (uint)(value + 1);
                 _column.max = (uint)(value + 1);
             }
@@ -221,13 +224,11 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (IsFormatted && _stylesSource != null
-                    && _stylesSource.NumCellStyles > 0)
-                {
-                    return _stylesSource.GetStyleAt((int)_column.style);
-                }
-
-                return null;
+                return IsFormatted
+                    && _stylesSource != null
+                    && _stylesSource.NumCellStyles > 0
+                    ? _stylesSource.GetStyleAt((int)_column.style)
+                    : (ICellStyle)null;
             }
 
             set
@@ -318,7 +319,7 @@ namespace NPOI.XSSF.UserModel
         /// <summary>
         /// Construct an XSSFColumn.
         /// </summary>
-        /// <param name="column">the xml node Containing defInitions for this row.</param>
+        /// <param name="column">the xml node Containing defInitions for this column.</param>
         /// <param name="sheet">the parent sheet.</param>
         public XSSFColumn(CT_Col column, XSSFSheet sheet)
         {
@@ -327,14 +328,17 @@ namespace NPOI.XSSF.UserModel
 
             if (!column.IsSetNumber())
             {
-                // Certain file format writers skip the row number
-                // Assume no gaps, and give this the next row number
+                // Certain file format writers skip the column number
+                // Assume no gaps, and give this the next column number
                 int nextColumnNum = sheet.LastColumnNum + 2;
                 if (nextColumnNum == 2 && sheet.PhysicalNumberOfColumns == 0)
                 {
                     nextColumnNum = 1;
                 }
 
+                // As current implementation of XSSFColumn is breaking CT_Col 
+                // objects that span over multiple columns into individual
+                // columns we need to set min and max values to the same value.
                 _column.min = (uint)nextColumnNum + 1;
                 _column.max = (uint)nextColumnNum + 1;
             }
@@ -616,10 +620,10 @@ namespace NPOI.XSSF.UserModel
                 //remove the reference in the calculation chain
                 calcChain?.RemoveItem(sheetId, cell.GetReference());
 
-                CT_Cell CT_Cell = cell.GetCTCell();
+                CT_Cell ctCell = cell.GetCTCell();
                 string r = new CellReference(cell.RowIndex, columnNum)
                     .FormatAsString();
-                CT_Cell.r = r;
+                ctCell.r = r;
                 cell.ColumnIndex = columnNum;
             }
 
@@ -675,24 +679,17 @@ namespace NPOI.XSSF.UserModel
         /// to a different worksheet</exception>
         public int CompareTo(XSSFColumn other)
         {
-            if (Sheet != other.Sheet)
-            {
-                throw new ArgumentException(
-                    "The compared columns must belong to the same sheet");
-            }
-
-            return ColumnNum.CompareTo(other.ColumnNum);
+            return Sheet != other.Sheet
+                ? throw new ArgumentException(
+                    "The compared columns must belong to the same sheet")
+                : ColumnNum.CompareTo(other.ColumnNum);
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is XSSFColumn other)
-            {
-                return (ColumnNum == other.ColumnNum) &&
-                       (Sheet == other.Sheet);
-            }
-
-            return false;
+            return obj is XSSFColumn other
+                && ColumnNum == other.ColumnNum
+                && Sheet == other.Sheet;
         }
 
         public override int GetHashCode()
@@ -739,12 +736,7 @@ namespace NPOI.XSSF.UserModel
         {
             IRow row = Sheet.GetRow(cellnum);
 
-            if (row == null)
-            {
-                return null;
-            }
-
-            return row.GetCell(ColumnNum);
+            return row?.GetCell(ColumnNum);
         }
 
         private int GetFirstKey()
