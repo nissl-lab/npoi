@@ -3,24 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.Multitarget", "..\main\NPOI.Multitarget.csproj", "{ABACCCA8-0E50-4008-9D4A-41A87348CA2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.Multitarget", "..\main\NPOI.Multitarget.csproj", "{ABACCCA8-0E50-4008-9D4A-41A87348CA2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.OOXML.Multitarget", "..\ooxml\NPOI.OOXML.Multitarget.csproj", "{C0200521-265C-4ADB-82D8-54C93F0E9CE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.OOXML.Multitarget", "..\ooxml\NPOI.OOXML.Multitarget.csproj", "{C0200521-265C-4ADB-82D8-54C93F0E9CE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.OpenXml4Net.Multitarget", "..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj", "{5AD4BFA9-BC25-4513-A4CB-173F90BB882A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.OpenXml4Net.Multitarget", "..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj", "{5AD4BFA9-BC25-4513-A4CB-173F90BB882A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.OpenXmlFormats.Multitarget", "..\OpenXmlFormats\NPOI.OpenXmlFormats.Multitarget.csproj", "{66A6935B-BCDB-4F95-9E79-E755958B786B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.OpenXmlFormats.Multitarget", "..\OpenXmlFormats\NPOI.OpenXmlFormats.Multitarget.csproj", "{66A6935B-BCDB-4F95-9E79-E755958B786B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.TestCases.Multitarget", "..\testcases\main\NPOI.TestCases.Multitarget.csproj", "{27FA1D08-5C1A-404E-91C2-2ECFA381A5F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.TestCases.Multitarget", "..\testcases\main\NPOI.TestCases.Multitarget.csproj", "{27FA1D08-5C1A-404E-91C2-2ECFA381A5F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.OOXML4Net.TestCases.Multitarget", "..\testcases\openxml4net\NPOI.OOXML4Net.TestCases.Multitarget.csproj", "{CD477B37-197E-4C6C-B1A3-6188014A2A4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.OOXML4Net.TestCases.Multitarget", "..\testcases\openxml4net\NPOI.OOXML4Net.TestCases.Multitarget.csproj", "{CD477B37-197E-4C6C-B1A3-6188014A2A4E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestCases", "TestCases", "{8DEC9AD4-5CB5-417D-AE89-A465D2048954}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPOI.OOXML.TestCases.Multitarget", "..\testcases\ooxml\NPOI.OOXML.TestCases.Multitarget.csproj", "{DA2CA3BD-1CAC-470C-9FA2-611A5768A76A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.OOXML.TestCases.Multitarget", "..\testcases\ooxml\NPOI.OOXML.TestCases.Multitarget.csproj", "{DA2CA3BD-1CAC-470C-9FA2-611A5768A76A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F4ABE511-F470-496F-A58D-FEEB150265C8}"
 	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
 		..\.github\workflows\npoi-testing.yml = ..\.github\workflows\npoi-testing.yml
 	EndProjectSection
 EndProject
