@@ -26,6 +26,7 @@ using NPOI.SS;
 using NPOI.Util;
 using NPOI.SS.Formula.Eval;
 using System.Globalization;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -681,7 +682,12 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return this._cellNum;
+                return _cellNum;
+            }
+
+            internal set
+            {
+                _cellNum = value;
             }
         }
 

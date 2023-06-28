@@ -33,6 +33,9 @@ namespace NPOI.SS.UserModel
         public static bool DEFAULT_COPY_ROW_HEIGHT_POLICY = true;
         public static bool DEFAULT_CONDENSE_ROWS_POLICY = false;
 
+        // column-level policies
+        public static bool DEFAULT_COPY_COLUMN_WIDTH_POLICY = true;
+
         // sheet-level policies
         public static bool DEFAULT_COPY_MERGED_REGIONS_POLICY = true;
 
@@ -46,6 +49,9 @@ namespace NPOI.SS.UserModel
         // row-level policies
         private bool copyRowHeight = DEFAULT_COPY_ROW_HEIGHT_POLICY;
         private bool condenseRows = DEFAULT_CONDENSE_ROWS_POLICY;
+
+        // column-level policies
+        private bool copyColumnWidth = DEFAULT_COPY_COLUMN_WIDTH_POLICY;
 
         // sheet-level policies
         private bool copyMergedRegions = DEFAULT_COPY_MERGED_REGIONS_POLICY;
@@ -72,6 +78,8 @@ namespace NPOI.SS.UserModel
             copyRowHeight = other.IsCopyRowHeight;
             condenseRows = other.IsCondenseRows;
 
+            copyColumnWidth = other.copyColumnWidth;
+
             copyMergedRegions = other.IsCopyMergedRegions;
         }
 
@@ -89,6 +97,8 @@ namespace NPOI.SS.UserModel
             copyRowHeight = builder.copyRowHeight;
             condenseRows = builder.condenseRows;
 
+            copyColumnWidth = builder.copyColumnWidth;
+
             copyMergedRegions = builder.copyMergedRegions;
         }
 
@@ -104,6 +114,9 @@ namespace NPOI.SS.UserModel
             // row-level policies
             internal bool copyRowHeight = DEFAULT_COPY_ROW_HEIGHT_POLICY;
             internal bool condenseRows = DEFAULT_CONDENSE_ROWS_POLICY;
+
+            // column-level policies
+            internal bool copyColumnWidth = DEFAULT_COPY_COLUMN_WIDTH_POLICY;
 
             // sheet-level policies
             internal bool copyMergedRegions = DEFAULT_COPY_MERGED_REGIONS_POLICY;
@@ -148,9 +161,17 @@ namespace NPOI.SS.UserModel
                 this.copyRowHeight = copyRowHeight;
                 return this;
             }
+
             public Builder CondenseRows(bool condenseRows)
             {
                 this.condenseRows = condenseRows;
+                return this;
+            }
+
+            // column-level policies
+            public Builder ColumnWidth(bool copyColumnWidth)
+            {
+                this.copyColumnWidth = copyColumnWidth;
                 return this;
             }
 
@@ -176,6 +197,7 @@ namespace NPOI.SS.UserModel
                     .MergeHyperlink(mergeHyperlink)
                     .RowHeight(copyRowHeight)
                     .CondenseRows(condenseRows)
+                    .ColumnWidth(copyColumnWidth)
                     .MergedRegions(copyMergedRegions);
             return builder;
         }
@@ -292,6 +314,24 @@ namespace NPOI.SS.UserModel
             set
             {
                 this.condenseRows = value;
+            }
+        }
+
+        /*
+         * Column-level policies 
+         */
+        /**
+         * @return the copyColumnWidth
+         */
+        public bool IsCopyColumnWidth
+        {
+            get
+            {
+                return copyColumnWidth;
+            }
+            set
+            {
+                this.copyColumnWidth = value;
             }
         }
 

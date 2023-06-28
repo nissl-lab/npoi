@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using System.Text;
-using System.Xml.Serialization;
-using System.Xml;
 using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -53,10 +51,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void RemoveCols(IList<CT_Col> toRemove)
         {
-            if (colField == null) return;
+            if (colField == null)
+            {
+                return;
+            }
+
             foreach (CT_Col c in toRemove)
             {
-                colField.Remove(c);
+                _ = colField.Remove(c);
             }
         }
         public int sizeOfColArray()
@@ -67,7 +69,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return colField[index];
         }
-
 
         public List<CT_Col> GetColList()
         {
@@ -89,34 +90,108 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public static CT_Cols Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
+            {
                 return null;
-            CT_Cols ctObj = new CT_Cols();
-            ctObj.col = new List<CT_Col>();
+            }
+
+            CT_Cols ctObj = new CT_Cols
+            {
+                col = new List<CT_Col>()
+            };
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "col")
-                    ctObj.col.Add(CT_Col.Parse(childNode, namespaceManager));
+                {
+                    CT_Col ctCol = CT_Col.Parse(childNode, namespaceManager);
+
+                    if (ctCol.min != ctCol.max)
+                    {
+                        BreakUpCtCol(ctObj, ctCol);
+                    }
+                    else
+                    {
+                        ctObj.col.Add(ctCol);
+                    }
+                }
             }
+
             return ctObj;
         }
 
+        /// <summary>
+        /// For ease of use of columns in NPOI break up <see cref="CT_Col"/>s
+        /// that span over multiple physical columns into individual
+        /// <see cref="CT_Col"/>s for each physical column.
+        /// </summary>
+        /// <param name="ctObj"></param>
+        /// <param name="ctCol"></param>
+        private static void BreakUpCtCol(CT_Cols ctObj, CT_Col ctCol)
+        {
+            for (int i = (int)ctCol.min; i <= (int)ctCol.max; i++)
+            {
+                CT_Col breakOffCtCol = ctCol.Copy();
+                breakOffCtCol.min = (uint)i;
+                breakOffCtCol.max = (uint)i;
 
+                ctObj.col.Add(breakOffCtCol);
+            }
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
+            List<CT_Col> combinedCols = CombineCols(col);
+
             sw.Write(string.Format("<{0}", nodeName));
             sw.Write(">");
-            if (this.col != null)
+
+            if (combinedCols != null)
             {
-                foreach (CT_Col x in this.col)
+                foreach (CT_Col x in combinedCols)
                 {
                     x.Write(sw, "col");
                 }
             }
+
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
+        /// <summary>
+        /// Broken up by the <see cref="BreakUpCtCol(CT_Cols, CT_Col)"/> method
+        /// <see cref="CT_Col"/>s are combined into <see cref="CT_Col"/> spans
+        /// </summary>
+        private static List<CT_Col> CombineCols(List<CT_Col> cols)
+        {
+            List<CT_Col> combinedCols = new List<CT_Col>();
 
+            cols.Sort((c1, c2) => c1.min.CompareTo(c2.min));
+
+            CT_Col lastCol = null;
+
+            foreach (CT_Col col in cols)
+            {
+                if (lastCol == null)
+                {
+                    lastCol = col;
+                    continue;
+                }
+
+                if (col.IsAdjacentAndCanBeCombined(lastCol))
+                {
+                    lastCol.CombineWith(col);
+                    continue;
+                }
+                
+                combinedCols.Add(lastCol);
+                lastCol = col;
+            }
+
+            if (lastCol != null)
+            {
+                combinedCols.Add(lastCol);
+            }
+
+            return combinedCols;
+        }
 
         public void SetColArray(CT_Col[] colArray)
         {

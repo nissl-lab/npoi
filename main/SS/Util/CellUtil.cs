@@ -129,6 +129,30 @@ namespace NPOI.SS.Util
             return CopyCell(oldCell, newCell, sourceIndex, targetIndex);
         }
 
+        public static ICell CopyCell(IColumn column, int sourceIndex, int targetIndex)
+        {
+            // Grab a copy of the old/new cell
+            ICell oldCell = column.GetCell(sourceIndex);
+
+            // If the old cell is null jump to next cell
+            if (oldCell == null)
+            {
+                return null;
+            }
+
+            ICell newCell = column.GetCell(targetIndex);
+            if (newCell == null) //not exist
+            {
+                newCell = column.CreateCell(targetIndex);
+            }
+            else
+            {
+                //TODO:shift cells                
+            }
+
+            return CopyCell(oldCell, newCell, sourceIndex, targetIndex);
+        }
+
         private static ICell CopyCell(ICell oldCell, ICell newCell, int sourceIndex, int targetIndex)
         {
             if (sourceIndex == targetIndex)
