@@ -53,7 +53,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             int endColumn,
             int n)
         {
-            List<CellRangeAddress> ShiftedRegions = new List<CellRangeAddress>();
+            List<CellRangeAddress> shiftedRegions = new List<CellRangeAddress>();
             ISet<int> removedIndices = new HashSet<int>();
             //move merged regions completely if they fall within the new region
             //boundaries when they are Shifted
@@ -64,13 +64,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                 CellRangeAddress merged = sheet.GetMergedRegion(i);
 
                 // remove merged region that overlaps Shifting
-                int lastCol = sheet.GetColumn(startColumn) != null
-                    ? sheet.GetColumn(startColumn).LastCellNum
-                    : sheet.GetColumn(endColumn) != null
-                        ? sheet.GetColumn(endColumn).LastCellNum
-                        : 0;
-
-                if (RemovalNeeded(merged, startColumn, endColumn, n, lastCol))
+                if (RemovalNeeded(merged, startColumn, endColumn, n))
                 {
                     _ = removedIndices.Add(i);
                     continue;
@@ -95,7 +89,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                     merged.FirstColumn += n;
                     merged.LastColumn += n;
                     //have to Remove/add it back
-                    ShiftedRegions.Add(merged);
+                    shiftedRegions.Add(merged);
                     _ = removedIndices.Add(i);
                 }
             }
@@ -106,12 +100,12 @@ namespace NPOI.XSSF.UserModel.Helpers
             }
 
             //read so it doesn't Get Shifted again
-            foreach (CellRangeAddress region in ShiftedRegions)
+            foreach (CellRangeAddress region in shiftedRegions)
             {
                 _ = sheet.AddMergedRegion(region);
             }
 
-            return ShiftedRegions;
+            return shiftedRegions;
         }
 
         // Keep in sync with {@link ColumnShifter#removalNeeded}
@@ -119,35 +113,12 @@ namespace NPOI.XSSF.UserModel.Helpers
             CellRangeAddress merged,
             int startColumn,
             int endColumn,
-            int n,
-            int lastCol)
+            int n)
         {
-            int movedColumns = endColumn - startColumn + 1;
-
-            // build a range of the columns that are overwritten, i.e. the
-            // target-area, but without columns that are moved along
-            CellRangeAddress overwrite;
-
-            if (n > 0)
-            {
-                // area is moved down => overwritten area is
-                // [endColumn + n - movedColumns, endColumn + n]
-                int firstColumn =
-                    Math.Max(endColumn + 1, endColumn + n - movedColumns);
-                int lastColumn = endColumn + n;
-                overwrite =
-                    new CellRangeAddress(firstColumn, lastColumn, 0, lastCol);
-            }
-            else
-            {
-                // area is moved up => overwritten area is
-                // [startColumn + n, startColumn + n + movedColumns]
-                int firstColumn = startColumn + n;
-                int lastColumn =
-                    Math.Min(startColumn - 1, startColumn + n + movedColumns);
-                overwrite =
-                    new CellRangeAddress(firstColumn, lastColumn, 0, lastCol);
-            }
+            int firstColumn = startColumn + n;
+            int lastColumn = endColumn + n;
+            CellRangeAddress overwrite =
+                new CellRangeAddress(0, sheet.LastRowNum, firstColumn, lastColumn);
 
             // if the merged-region and the overwritten area intersect,
             // we need to remove it
