@@ -67,22 +67,25 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
-            sheet.CreateRow(2).CreateCell(0).SetCellValue("2");
-            sheet.CreateRow(3).CreateCell(0).SetCellValue("3");
 
-            sheet.CreateRow(1).CreateCell(1).SetCellValue("regionOutsideShiftedRowsOnTop");
+            for (int i = 0; i < 12; i++)
+            {
+                sheet.CreateRow(i).CreateCell(0).SetCellValue(i);
+            }
+
+            sheet.GetRow(1).CreateCell(1).SetCellValue("regionOutsideShiftedRowsOnTop");
             int regionOutsideToTheLeftId = sheet.AddMergedRegion(new CellRangeAddress(1, 1, 1, 2));
 
             sheet.GetRow(2).CreateCell(3).SetCellValue("regionInsideShiftedRows");
             int regionInsideId = sheet.AddMergedRegion(new CellRangeAddress(2, 3, 3, 4));
 
-            sheet.CreateRow(4).CreateCell(5).SetCellValue("regionRighBelowTheShiftedRows");
+            sheet.GetRow(4).CreateCell(5).SetCellValue("regionRighBelowTheShiftedRows");
             int regionRighNextToId = sheet.AddMergedRegion(new CellRangeAddress(4, 5, 5, 6));
 
-            sheet.CreateRow(6).CreateCell(7).SetCellValue("regionInTheWayOfTheShift");
+            sheet.GetRow(6).CreateCell(7).SetCellValue("regionInTheWayOfTheShift");
             int regionInTheWayOfTheShiftId = sheet.AddMergedRegion(new CellRangeAddress(6, 7, 7, 8));
 
-            sheet.CreateRow(10).CreateCell(9).SetCellValue("regionOutsideShiftedRowsBelow");
+            sheet.GetRow(10).CreateCell(9).SetCellValue("regionOutsideShiftedRowsBelow");
             int regionOutsideToTheRightId = sheet.AddMergedRegion(new CellRangeAddress(10, 11, 9, 10));
 
             sheet.GetRow(1).CreateCell(11).SetCellValue("regionThatEndsWithinShiftedRows");
@@ -194,8 +197,12 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
-            sheet.CreateRow(0).CreateCell(2).SetCellValue("2");
-            sheet.GetRow(0).CreateCell(3).SetCellValue("3");
+            _ = sheet.CreateRow(0);
+
+            for (int i = 0; i < 12; i++)
+            {
+                sheet.GetRow(0).CreateCell(i).SetCellValue(i);
+            }
 
             sheet.CreateRow(1).CreateCell(1).SetCellValue("regionOutsideShiftedColumnsToTheLeft");
             int regionOutsideToTheLeftId = sheet.AddMergedRegion(new CellRangeAddress(1, 2, 1, 1));
