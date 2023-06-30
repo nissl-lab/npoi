@@ -115,32 +115,10 @@ namespace NPOI.XSSF.UserModel.Helpers
             int endColumn,
             int n)
         {
-            int movedColumns = endColumn - startColumn + 1;
-
-            // build a range of the columns that are overwritten, i.e. the
-            // target-area, but without columns that are moved along
-            CellRangeAddress overwrite;
-
-            if (n > 0)
-            {
-                // area is moved right => overwritten area is
-                // [endColumn + n - movedColumns, endColumn + n]
-                int firstColumn =
-                    Math.Max(endColumn + 1, endColumn + n - movedColumns);
-                int lastColumn = endColumn + n;
-                overwrite =
-                    new CellRangeAddress(0, sheet.LastRowNum, firstColumn, lastColumn);
-            }
-            else
-            {
-                // area is moved up => overwritten area is
-                // [startColumn + n, startColumn + n + movedColumns]
-                int firstColumn = startColumn + n;
-                int lastColumn =
-                    Math.Min(startColumn - 1, startColumn + n + movedColumns);
-                overwrite =
-                    new CellRangeAddress(0, sheet.LastRowNum, firstColumn, lastColumn);
-            }
+            int firstColumn = startColumn + n;
+            int lastColumn = endColumn + n;
+            CellRangeAddress overwrite =
+                new CellRangeAddress(0, sheet.LastRowNum, firstColumn, lastColumn);
 
             // if the merged-region and the overwritten area intersect,
             // we need to remove it

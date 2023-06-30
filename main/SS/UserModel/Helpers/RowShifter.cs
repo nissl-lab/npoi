@@ -101,25 +101,11 @@ namespace NPOI.SS.UserModel.Helpers
         // Keep in sync with {@link ColumnShifter#removalNeeded}
         private bool RemovalNeeded(CellRangeAddress merged, int startRow, int endRow, int n, int lastCol)
         {
-            var movedRows = endRow - startRow + 1;
-
             // build a range of the rows that are overwritten, i.e. the target-area, but without
             // rows that are moved along
-            CellRangeAddress overwrite;
-            if (n > 0)
-            {
-                // area is moved down => overwritten area is [endRow + n - movedRows, endRow + n]
-                var firstRow = Math.Max(endRow + 1, endRow + n - movedRows);
-                var lastRow = endRow + n;
-                overwrite = new CellRangeAddress(firstRow, lastRow, 0, lastCol);
-            }
-            else
-            {
-                // area is moved up => overwritten area is [startRow + n, startRow + n + movedRows]
-                var firstRow = startRow + n;
-                var lastRow = Math.Min(startRow - 1, startRow + n + movedRows);
-                overwrite = new CellRangeAddress(firstRow, lastRow, 0, lastCol);
-            }
+            var firstRow = startRow + n;
+            var lastRow = endRow + n;
+            CellRangeAddress overwrite = new CellRangeAddress(firstRow, lastRow, 0, lastCol);
 
             // if the merged-region and the overwritten area intersect, we need to remove it
             return merged.Intersects(overwrite);
