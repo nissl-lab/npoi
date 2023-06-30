@@ -51,17 +51,13 @@ namespace NPOI.SS.UserModel.Helpers
             ISet<int> removedIndices = new HashSet<int>();
             //move merged regions completely if they fall within the new region boundaries when they are Shifted
             var size = sheet.NumMergedRegions;
+            var lastCol = sheet.Max(r => r.LastCellNum);
 
             for (var i = 0; i < size; i++)
             {
                 var merged = sheet.GetMergedRegion(i);
 
                 // remove merged region that overlaps Shifting
-                var lastCol = sheet.GetRow(startRow) != null 
-                    ? sheet.GetRow(startRow).LastCellNum 
-                    : sheet.GetRow(endRow) != null 
-                        ? sheet.GetRow(endRow).LastCellNum 
-                        : 0;
                 if (RemovalNeeded(merged, startRow, endRow, n, lastCol))
                 {
                     removedIndices.Add(i);
