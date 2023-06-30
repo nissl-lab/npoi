@@ -2666,6 +2666,18 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
+            if (hyperlinks != null)
+            {
+                foreach (XSSFHyperlink link in new List<XSSFHyperlink>(hyperlinks))
+                {
+                    CellReference ref1 = new CellReference(link.CellRef);
+                    if (ref1.Col == column.ColumnNum)
+                    {
+                        hyperlinks.Remove(link);
+                    }
+                }
+            }
+
             DestroyColumn(column);
         }
 
@@ -5065,10 +5077,13 @@ namespace NPOI.XSSF.UserModel
                 throw new RuntimeException("There is no columns in XML part");
             }
 
-            XSSFVMLDrawing vml = GetVMLDrawing(false);
-            List<int> columnsToRemove = new List<int>();
-            List<CellAddress> commentsToRemove = new List<CellAddress>();
-            List<CT_Col> ctColsToRemove = new List<CT_Col>();
+            for (int i = startColumn + n; i <= endColumn + n; i++)
+            {
+                _ = GetColumn(i) ?? CreateColumn(i);
+            }
+
+            List<IColumn> columnsToRemove = new List<IColumn>();
+
             // first remove all columns which will be overwritten
             foreach (KeyValuePair<int, XSSFColumn> columnDict in _columns)
             {
@@ -5079,56 +5094,14 @@ namespace NPOI.XSSF.UserModel
                 // by the data later
                 if (ShouldRemoveAtIndex(startColumn, endColumn, n, columnNum))
                 {
-                    int idx = _columns.IndexOfValue(column);
-                    ctColsToRemove.Add(worksheet.cols.FirstOrDefault().GetColArray(idx));
-
-                    // remove column from _columns
-                    columnsToRemove.Add(columnDict.Key);
-
-                    commentsToRemove.Clear();
-
-                    if (sheetComments != null)
-                    {
-                        CT_CommentList lst = sheetComments.GetCTComments().commentList;
-                        foreach (CT_Comment comment in lst.comment)
-                        {
-                            string strRef = comment.@ref;
-                            CellAddress ref1 = new CellAddress(strRef);
-
-                            // is this comment part of the current column?
-                            if (ref1.Column == columnNum)
-                            {
-                                commentsToRemove.Add(ref1);
-                            }
-                        }
-                    }
-
-                    foreach (CellAddress ref1 in commentsToRemove)
-                    {
-                        sheetComments.RemoveComment(ref1);
-                        vml.RemoveCommentShape(ref1.Row, ref1.Column);
-                    }
-
-                    if (hyperlinks != null)
-                    {
-                        foreach (XSSFHyperlink link in new List<XSSFHyperlink>(hyperlinks))
-                        {
-                            CellReference ref1 = new CellReference(link.CellRef);
-                            if (ref1.Col == columnNum)
-                            {
-                                hyperlinks.Remove(link);
-                            }
-                        }
-                    }
+                    columnsToRemove.Add(column);
                 }
             }
 
-            foreach (int columnKey in columnsToRemove)
+            foreach (IColumn column in columnsToRemove)
             {
-                _columns.Remove(columnKey);
+                RemoveColumn(column);
             }
-
-            worksheet.cols.FirstOrDefault().RemoveCols(ctColsToRemove);
         }
 
         private void RebuildRows()
