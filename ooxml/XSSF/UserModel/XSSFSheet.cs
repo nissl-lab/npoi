@@ -4466,7 +4466,7 @@ namespace NPOI.XSSF.UserModel
                 : worksheet.AddNewMergeCells();
             CT_MergeCell ctMergeCell = ctMergeCells.AddNewMergeCell();
             ctMergeCell.@ref = region.FormatAsString();
-            return ctMergeCells.sizeOfMergeCellArray();
+            return ctMergeCells.sizeOfMergeCellArray() - 1;
         }
 
         /// <summary>
