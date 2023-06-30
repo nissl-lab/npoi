@@ -499,7 +499,7 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
-        public void ShiftColumns_Shift2ColumnsWithCommentsAndFormulas_ColumnsShiftedCommentsShiftedFormulasAreUpdated()
+        public void ShiftColumns_Shift2ColumnsWithCommentsAndFormulasAndOverlapingMergedRegion_ColumnsShiftedCommentsShiftedFormulasAreUpdatedMergedRegionRemoved()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFFormulaEvaluator fe = new XSSFFormulaEvaluator(wb);
@@ -508,6 +508,11 @@ namespace TestCases.XSSF.UserModel
             XSSFComment comment = (XSSFComment)dg.CreateCellComment(new XSSFClientAnchor());
             comment.Author = "POI";
             comment.String = new XSSFRichTextString("A new comment");
+
+            XSSFCell mergedRegionStart = (XSSFCell)sheet.CreateRow(10).CreateCell(0);
+            mergedRegionStart.SetCellValue("MERGED");
+            int mergedRegionIndex = sheet.AddMergedRegion(new CellRangeAddress(10, 11, 0, 10));
+            CellRangeAddress mergedRegion = sheet.GetMergedRegion(mergedRegionIndex);
 
             XSSFCell formulaCell = (XSSFCell)sheet.CreateColumn(1).CreateCell(0);
             formulaCell.SetCellFormula("C1 + D1");
@@ -520,6 +525,10 @@ namespace TestCases.XSSF.UserModel
 
             Assert.AreEqual("POI", sheet.GetColumn(2).GetCell(0).CellComment.Author);
             Assert.AreEqual(30, formulaCell.NumericCellValue);
+            Assert.AreEqual("MERGED", sheet.GetRow(10).GetCell(0).StringCellValue);
+            Assert.AreEqual(1, sheet.NumMergedRegions);
+            Assert.NotNull(mergedRegion);
+            Assert.AreEqual("A11:K12", mergedRegion.FormatAsString());
 
             sheet.ShiftColumns(2, 3, 4);
             fe.EvaluateAll();
@@ -532,6 +541,8 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual("POI", cell1.CellComment.Author);
             Assert.AreEqual("G1+H1", formulaCell.CellFormula);
             Assert.AreEqual(30, formulaCell.NumericCellValue);
+            Assert.AreEqual("MERGED", sheet.GetRow(10).GetCell(0).StringCellValue);
+            Assert.AreEqual(0, sheet.NumMergedRegions);
 
             FileInfo file = TempFile.CreateTempFile("ShiftCols-", ".xlsx");
             Stream output = File.OpenWrite(file.FullName);
@@ -553,6 +564,8 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual("POI", sheetLoaded.GetColumn(6).GetCell(0).CellComment.Author);
             Assert.AreEqual("G1+H1", formulaCellLoaded.CellFormula);
             Assert.AreEqual(30, formulaCellLoaded.NumericCellValue);
+            Assert.AreEqual("MERGED", sheetLoaded.GetRow(10).GetCell(0).StringCellValue);
+            Assert.AreEqual(0, sheetLoaded.NumMergedRegions);
         }
 
         [Test]
