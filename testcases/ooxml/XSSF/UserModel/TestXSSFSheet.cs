@@ -61,6 +61,261 @@ namespace TestCases.XSSF.UserModel
         {
             BaseTestGetSetMargin(new double[] { 0.7, 0.7, 0.75, 0.75, 0.3, 0.3 });
         }
+
+        [Test]
+        public void ShiftRows_ShiftRowsWithVariousMergedRegions_RowsShiftedWithMergedRegion()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
+            sheet.CreateRow(2).CreateCell(0).SetCellValue("2");
+            sheet.CreateRow(3).CreateCell(0).SetCellValue("3");
+
+            sheet.CreateRow(1).CreateCell(1).SetCellValue("regionOutsideShiftedRowsOnTop");
+            int regionOutsideToTheLeftId = sheet.AddMergedRegion(new CellRangeAddress(1, 1, 1, 2));
+
+            sheet.GetRow(2).CreateCell(3).SetCellValue("regionInsideShiftedRows");
+            int regionInsideId = sheet.AddMergedRegion(new CellRangeAddress(2, 3, 3, 4));
+
+            sheet.CreateRow(4).CreateCell(5).SetCellValue("regionRighBelowTheShiftedRows");
+            int regionRighNextToId = sheet.AddMergedRegion(new CellRangeAddress(4, 5, 5, 6));
+
+            sheet.CreateRow(6).CreateCell(7).SetCellValue("regionInTheWayOfTheShift");
+            int regionInTheWayOfTheShiftId = sheet.AddMergedRegion(new CellRangeAddress(6, 7, 7, 8));
+
+            sheet.CreateRow(10).CreateCell(9).SetCellValue("regionOutsideShiftedRowsBelow");
+            int regionOutsideToTheRightId = sheet.AddMergedRegion(new CellRangeAddress(10, 11, 9, 10));
+
+            sheet.GetRow(1).CreateCell(11).SetCellValue("regionThatEndsWithinShiftedRows");
+            int regionThatEndsWithinShiftedRowsId = sheet.AddMergedRegion(new CellRangeAddress(1, 2, 11, 12));
+
+            sheet.GetRow(1).CreateCell(13).SetCellValue("regionThatEndsOnLastShiftedRow");
+            int regionThatEndsOnLastShiftedRowId = sheet.AddMergedRegion(new CellRangeAddress(1, 3, 13, 14));
+
+            sheet.GetRow(1).CreateCell(15).SetCellValue("regionThatEndsOutsideShiftedRows");
+            int regionThatEndsOutsideShiftedRowsId = sheet.AddMergedRegion(new CellRangeAddress(1, 4, 15, 16));
+
+            sheet.GetRow(1).CreateCell(17).SetCellValue("reallyLongRegion");
+            int reallyLongRegionId = sheet.AddMergedRegion(new CellRangeAddress(1, 11, 17, 18));
+
+            Assert.AreEqual("regionOutsideShiftedRowsOnTop", sheet.GetRow(1).GetCell(1).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("B2:C2")));
+
+            Assert.AreEqual("regionInsideShiftedRows", sheet.GetRow(2).GetCell(3).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("D3:E4")));
+
+            Assert.AreEqual("regionRighBelowTheShiftedRows", sheet.GetRow(4).GetCell(5).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("F5:G6")));
+
+            Assert.AreEqual("regionInTheWayOfTheShift", sheet.GetRow(6).GetCell(7).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("H7:I8")));
+
+            Assert.AreEqual("regionOutsideShiftedRowsBelow", sheet.GetRow(10).GetCell(9).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("J11:K12")));
+
+            Assert.AreEqual("regionThatEndsWithinShiftedRows", sheet.GetRow(1).GetCell(11).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("L2:M3")));
+
+            Assert.AreEqual("regionThatEndsOnLastShiftedRow", sheet.GetRow(1).GetCell(13).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("N2:O4")));
+
+            Assert.AreEqual("regionThatEndsOutsideShiftedRows", sheet.GetRow(1).GetCell(15).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("P2:Q5")));
+
+            Assert.AreEqual("reallyLongRegion", sheet.GetRow(1).GetCell(17).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("R2:S12")));
+
+            sheet.ShiftRows(2, 3, 4);
+
+            Assert.AreEqual("regionOutsideShiftedRowsOnTop", sheet.GetRow(1).GetCell(1).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("B2:C2")));
+
+            Assert.AreEqual("regionInsideShiftedRows", sheet.GetRow(6).GetCell(3).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("D7:E8")));
+
+            Assert.AreEqual("regionRighBelowTheShiftedRows", sheet.GetRow(4).GetCell(5).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("F5:G6")));
+
+            Assert.IsNull(sheet.GetRow(6).GetCell(7));
+            Assert.False(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("H7:I8")));
+
+            Assert.AreEqual("regionOutsideShiftedRowsBelow", sheet.GetRow(10).GetCell(9).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("J11:K12")));
+
+            Assert.AreEqual("regionThatEndsWithinShiftedRows", sheet.GetRow(1).GetCell(11).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("L2:M3")));
+
+            Assert.AreEqual("regionThatEndsOnLastShiftedRow", sheet.GetRow(1).GetCell(13).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("N2:O4")));
+
+            Assert.AreEqual("regionThatEndsOutsideShiftedRows", sheet.GetRow(1).GetCell(15).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("P2:Q5")));
+
+            Assert.AreEqual("reallyLongRegion", sheet.GetRow(1).GetCell(17).StringCellValue);
+            Assert.False(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("R2:S12")));
+
+            FileInfo file = TempFile.CreateTempFile("ShiftRows-", ".xlsx");
+            Stream output = File.OpenWrite(file.FullName);
+            wb.Write(output);
+            output.Close();
+
+            XSSFWorkbook wbLoaded = new XSSFWorkbook(file.ToString());
+            XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheet("sheet1");
+
+            Assert.AreEqual("regionOutsideShiftedRowsOnTop", sheetLoaded.GetRow(1).GetCell(1).StringCellValue);
+            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("B2:C2")));
+
+            Assert.AreEqual("regionInsideShiftedRows", sheetLoaded.GetRow(6).GetCell(3).StringCellValue);
+            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("D7:E8")));
+
+            Assert.AreEqual("regionRighBelowTheShiftedRows", sheetLoaded.GetRow(4).GetCell(5).StringCellValue);
+            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("F5:G6")));
+
+            Assert.IsNull(sheetLoaded.GetRow(6).GetCell(7));
+            Assert.False(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("H7:I8")));
+
+            Assert.AreEqual("regionOutsideShiftedRowsBelow", sheetLoaded.GetRow(10).GetCell(9).StringCellValue);
+            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("J11:K12")));
+
+            Assert.AreEqual("regionThatEndsWithinShiftedRows", sheetLoaded.GetRow(1).GetCell(11).StringCellValue);
+            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("L2:M3")));
+
+            Assert.AreEqual("regionThatEndsOnLastShiftedRow", sheetLoaded.GetRow(1).GetCell(13).StringCellValue);
+            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("N2:O4")));
+
+            Assert.AreEqual("regionThatEndsOutsideShiftedRows", sheetLoaded.GetRow(1).GetCell(15).StringCellValue);
+            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("P2:Q5")));
+
+            Assert.AreEqual("reallyLongRegion", sheetLoaded.GetRow(1).GetCell(17).StringCellValue);
+            Assert.False(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("R2:S12")));
+        }
+
+        [Test]
+        public void ShiftColumns_ShiftColumnsWithVariousMergedRegions_ColumnsShiftedWithMergedRegion()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
+            sheet.CreateRow(0).CreateCell(2).SetCellValue("2");
+            sheet.GetRow(0).CreateCell(3).SetCellValue("3");
+
+            sheet.CreateRow(1).CreateCell(1).SetCellValue("regionOutsideShiftedColumnsToTheLeft");
+            int regionOutsideToTheLeftId = sheet.AddMergedRegion(new CellRangeAddress(1, 2, 1, 1));
+
+            sheet.CreateRow(3).CreateCell(2).SetCellValue("regionInsideShiftedColumns");
+            int regionInsideId = sheet.AddMergedRegion(new CellRangeAddress(3, 4, 2, 3));
+
+            sheet.CreateRow(5).CreateCell(4).SetCellValue("regionRighNextToTheShiftedColumns");
+            int regionRighNextToId = sheet.AddMergedRegion(new CellRangeAddress(5, 6, 4, 5));
+
+            sheet.CreateRow(7).CreateCell(6).SetCellValue("regionInTheWayOfTheShift");
+            int regionInTheWayOfTheShiftId = sheet.AddMergedRegion(new CellRangeAddress(7, 8, 6, 7));
+
+            sheet.CreateRow(9).CreateCell(10).SetCellValue("regionOutsideShiftedColumnsToTheRight");
+            int regionOutsideToTheRightId = sheet.AddMergedRegion(new CellRangeAddress(9, 10, 10, 11));
+
+            sheet.CreateRow(11).CreateCell(1).SetCellValue("regionThatEndsWithinShiftedColumns");
+            int regionThatEndsWithinShiftedColumnsId = sheet.AddMergedRegion(new CellRangeAddress(11, 12, 1, 2));
+
+            sheet.CreateRow(13).CreateCell(1).SetCellValue("regionThatEndsOnLastShiftedColumn");
+            int regionThatEndsOnLastShiftedColumnId = sheet.AddMergedRegion(new CellRangeAddress(13, 14, 1, 3));
+
+            sheet.CreateRow(15).CreateCell(1).SetCellValue("regionThatEndsOutsideShiftedColumns");
+            int regionThatEndsOutsideShiftedColumnsId = sheet.AddMergedRegion(new CellRangeAddress(15, 16, 1, 4));
+
+            sheet.CreateRow(17).CreateCell(1).SetCellValue("reallyLongRegion");
+            int reallyLongRegionId = sheet.AddMergedRegion(new CellRangeAddress(17, 18, 1, 11));
+
+            Assert.AreEqual("regionOutsideShiftedColumnsToTheLeft", sheet.GetRow(1).GetCell(1).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("B2:B3")));
+
+            Assert.AreEqual("regionInsideShiftedColumns", sheet.GetRow(3).GetCell(2).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("C4:D5")));
+
+            Assert.AreEqual("regionRighNextToTheShiftedColumns", sheet.GetRow(5).GetCell(4).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("E6:F7")));
+
+            Assert.AreEqual("regionInTheWayOfTheShift", sheet.GetRow(7).GetCell(6).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("G8:H9")));
+
+            Assert.AreEqual("regionOutsideShiftedColumnsToTheRight", sheet.GetRow(9).GetCell(10).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("K10:L11")));
+
+            Assert.AreEqual("regionThatEndsWithinShiftedColumns", sheet.GetRow(11).GetCell(1).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("B12:C13")));
+
+            Assert.AreEqual("regionThatEndsOnLastShiftedColumn", sheet.GetRow(13).GetCell(1).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("B14:D15")));
+
+            Assert.AreEqual("regionThatEndsOutsideShiftedColumns", sheet.GetRow(15).GetCell(1).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("B16:E17")));
+
+            Assert.AreEqual("reallyLongRegion", sheet.GetRow(17).GetCell(1).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("B18:L19")));
+
+            sheet.ShiftColumns(2, 3, 4);
+
+            Assert.AreEqual("regionOutsideShiftedColumnsToTheLeft", sheet.GetRow(1).GetCell(1).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("B2:B3")));
+
+            Assert.AreEqual("regionInsideShiftedColumns", sheet.GetRow(3).GetCell(6).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("G4:H5")));
+
+            Assert.AreEqual("regionRighNextToTheShiftedColumns", sheet.GetRow(5).GetCell(4).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("E6:F7")));
+
+            Assert.IsNull(sheet.GetRow(7).GetCell(6));
+            Assert.False(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("G8:H9")));
+
+            Assert.AreEqual("regionOutsideShiftedColumnsToTheRight", sheet.GetRow(9).GetCell(10).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("K10:L11")));
+
+            Assert.AreEqual("regionThatEndsWithinShiftedColumns", sheet.GetRow(11).GetCell(1).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("B12:C13")));
+
+            Assert.AreEqual("regionThatEndsOnLastShiftedColumn", sheet.GetRow(13).GetCell(1).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("B14:D15")));
+
+            Assert.AreEqual("regionThatEndsOutsideShiftedColumns", sheet.GetRow(15).GetCell(1).StringCellValue);
+            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("B16:E17")));
+
+            Assert.AreEqual("reallyLongRegion", sheet.GetRow(17).GetCell(1).StringCellValue);
+            Assert.False(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("B18:L19")));
+
+            FileInfo file = TempFile.CreateTempFile("ShiftCols1-", ".xlsx");
+            Stream output = File.OpenWrite(file.FullName);
+            wb.Write(output);
+            output.Close();
+
+            XSSFWorkbook wbLoaded = new XSSFWorkbook(file.ToString());
+            XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheet("sheet1");
+
+            Assert.AreEqual("regionOutsideShiftedColumnsToTheLeft", sheetLoaded.GetRow(1).GetCell(1).StringCellValue);
+            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("B2:B3")));
+
+            Assert.AreEqual("regionInsideShiftedColumns", sheetLoaded.GetRow(3).GetCell(6).StringCellValue);
+            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("G4:H5")));
+
+            Assert.AreEqual("regionRighNextToTheShiftedColumns", sheetLoaded.GetRow(5).GetCell(4).StringCellValue);
+            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("E6:F7")));
+
+            Assert.IsNull(sheetLoaded.GetRow(7).GetCell(6));
+            Assert.False(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("G8:H9")));
+
+            Assert.AreEqual("regionOutsideShiftedColumnsToTheRight", sheetLoaded.GetRow(9).GetCell(10).StringCellValue);
+            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("K10:L11")));
+
+            Assert.AreEqual("regionThatEndsWithinShiftedColumns", sheetLoaded.GetRow(11).GetCell(1).StringCellValue);
+            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("B12:C13")));
+
+            Assert.AreEqual("regionThatEndsOnLastShiftedColumn", sheetLoaded.GetRow(13).GetCell(1).StringCellValue);
+            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("B14:D15")));
+
+            Assert.AreEqual("regionThatEndsOutsideShiftedColumns", sheetLoaded.GetRow(15).GetCell(1).StringCellValue);
+            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("B16:E17")));
+
+            Assert.AreEqual("reallyLongRegion", sheetLoaded.GetRow(17).GetCell(1).StringCellValue);
+            Assert.False(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("B18:L19")));
+        }
+
         [Test]
         public void TestExistingHeaderFooter()
         {
