@@ -51,7 +51,7 @@ namespace NPOI.SS.UserModel.Helpers
             ISet<int> removedIndices = new HashSet<int>();
             //move merged regions completely if they fall within the new region boundaries when they are Shifted
             var size = sheet.NumMergedRegions;
-            var lastCol = sheet.Max(r => r.LastCellNum);
+            var lastCol = sheet.Any() ? sheet.Max(r => r.LastCellNum) : 0;
 
             for (var i = 0; i < size; i++)
             {
