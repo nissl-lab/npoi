@@ -5088,23 +5088,17 @@ namespace NPOI.XSSF.UserModel
                 throw new RuntimeException("There is no columns in XML part");
             }
 
-            for (int i = startColumn + n; i <= endColumn + n; i++)
-            {
-                _ = GetColumn(i) ?? CreateColumn(i);
-            }
-
             List<IColumn> columnsToRemove = new List<IColumn>();
 
             // first remove all columns which will be overwritten
-            foreach (KeyValuePair<int, XSSFColumn> columnDict in _columns)
+            for (int i = startColumn + n; i <= endColumn + n; i++)
             {
-                XSSFColumn column = columnDict.Value;
-                int columnNum = column.ColumnNum;
-
                 // check if we should remove this column as it will be overwritten
                 // by the data later
-                if (ShouldRemoveAtIndex(startColumn, endColumn, n, columnNum))
+                if (ShouldRemoveAtIndex(startColumn, endColumn, n, i))
                 {
+                    IColumn column = GetColumn(i, true);
+
                     columnsToRemove.Add(column);
                 }
             }
