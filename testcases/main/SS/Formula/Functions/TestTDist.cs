@@ -16,6 +16,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestBasic()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             confirmValue("5.968191467", "8", "1", 0.00016754180265310392);
             confirmValue("5.968191467", "8", "2", 0.00033508360530620784);
             confirmValue("5.968191467", "8.2", "2.2", 0.00033508360530620784);
@@ -34,6 +35,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestNumError()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             confirmNumError("5.968191467", "8", "0");
             confirmNumError("-5.968191467", "8", "2");
         }
@@ -42,6 +44,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void testMicrosoftExample1()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             HSSFWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
             SS.Util.Utils.AddRow(sheet, 0, "Data", "Description");

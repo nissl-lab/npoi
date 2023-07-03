@@ -17,6 +17,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestBasic()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             confirmValue("0.9088", 1.3334);
         }
 
