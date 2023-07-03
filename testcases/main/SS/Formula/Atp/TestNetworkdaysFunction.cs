@@ -47,6 +47,12 @@ namespace TestCases.SS.Formula.Atp
         private static String THIRD_HOLIDAY = formatter.Format(new DateTime(2009, JANUARY, 21), CultureInfo.CurrentCulture);
 
         private static OperationEvaluationContext EC = new OperationEvaluationContext(null, null, 1, 1, 1, null);
+
+        public TestNetworkdaysFunction()
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
+
         [Test]
         public void TestFailWhenNoArguments()
         {

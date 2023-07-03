@@ -873,6 +873,7 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void AddPivotTableToWorkbookWithLoadedPivotTable()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             String fileName = "ooxml-pivottable.xlsx";
 
             XSSFWorkbook wb = new XSSFWorkbook();
