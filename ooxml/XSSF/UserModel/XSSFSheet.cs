@@ -3918,6 +3918,55 @@ namespace NPOI.XSSF.UserModel
             return newColumn;
         }
 
+        /// <summary>
+        /// This method will destroy the List <see cref="IColumn"/> object
+        /// without affecting the cells, formulas, styles, etc contained in the
+        /// sheet. It isuseful for when you've just created an IColumn to do
+        /// some manipulation on and don't need it anymore, and don't want to
+        /// leave it around in the sheet.</summary>
+        /// <param name="column"><see cref="IColumn"/> to destroy</param>
+        /// <exception cref="ArgumentException">If <paramref name="column"/> is
+        /// null or if it doesn't belong to this <see cref="XSSFSheet"/></exception>
+        public void DestroyColumns(List<IColumn> columnsToDestroy)
+        {
+            foreach (IColumn column in columnsToDestroy)
+            {
+                DestroyColumn(column);
+            }
+        }
+
+        /// <summary>
+        /// This method will destroy the <see cref="IColumn"/> object without
+        /// affecting the cells, formulas, styles, etc contained in the sheet.
+        /// It isuseful for when you've just created an IColumn to do some
+        /// manipulation on and don't need it anymore, and don't want to leave
+        /// it around in the sheet.
+        /// </summary>
+        /// <param name="column"><see cref="IColumn"/> to destroy</param>
+        /// <exception cref="ArgumentException">If <paramref name="column"/> is
+        /// null or if it doesn't belong to this <see cref="XSSFSheet"/></exception>
+        public void DestroyColumn(IColumn column)
+        {
+            if (column == null)
+            {
+                throw new ArgumentException("Column can't be null");
+            }
+
+            if (column.Sheet != this)
+            {
+                throw new ArgumentException("Specified column does not belong to" +
+                    " this sheet");
+            }
+
+            _columns.Remove(column.ColumnNum);
+
+            CT_Cols ctCols = worksheet.cols.FirstOrDefault();
+            CT_Col ctCol = ((XSSFColumn)column).GetCTCol();
+            int colIndex = GetIndexOfColumn(ctCols, ctCol);
+
+            ctCols.RemoveCol(colIndex); // Note that columns in worksheet.sheetData is 1-based.
+        }
+
         public void ShowInPane(int toprow, int leftcol)
         {
             CellReference cellReference = new CellReference(toprow, leftcol);
@@ -5322,36 +5371,6 @@ namespace NPOI.XSSF.UserModel
             RebuildColumns();
             RebuildRowCells();
             DestroyColumns(columnsToDestroy);
-        }
-
-        private void DestroyColumns(List<IColumn> columnsToDestroy)
-        {
-            foreach (IColumn column in columnsToDestroy)
-            {
-                DestroyColumn(column);
-            }
-        }
-
-        private void DestroyColumn(IColumn column)
-        {
-            if (column == null)
-            {
-                throw new ArgumentException("Column can't be null");
-            }
-
-            if (column.Sheet != this)
-            {
-                throw new ArgumentException("Specified column does not belong to" +
-                    " this sheet");
-            }
-
-            _columns.Remove(column.ColumnNum);
-
-            CT_Cols ctCols = worksheet.cols.FirstOrDefault();
-            CT_Col ctCol = ((XSSFColumn)column).GetCTCol();
-            int colIndex = GetIndexOfColumn(ctCols, ctCol);
-
-            ctCols.RemoveCol(colIndex); // Note that columns in worksheet.sheetData is 1-based.
         }
 
         private int GetIndexOfColumn(CT_Cols ctCols, CT_Col ctCol)
