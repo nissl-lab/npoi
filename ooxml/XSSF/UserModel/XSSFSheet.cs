@@ -5299,7 +5299,11 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
-            foreach (KeyValuePair<int, XSSFColumn> columnDict in _columns)
+            var sortedColumns = n < 0
+                ? new SortedDictionary<int, XSSFColumn>(_columns)
+                : new SortedDictionary<int, XSSFColumn>(_columns).Reverse();
+
+            foreach (KeyValuePair<int, XSSFColumn> columnDict in sortedColumns)
             {
                 XSSFColumn column = columnDict.Value;
                 int columnNum = column.ColumnNum;
