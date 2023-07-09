@@ -29,33 +29,34 @@ namespace NPOI.SS.Formula.Functions
      * </p>
      */
 
-    public class Countifs : FreeRefFunction
+    public class Countifs : Baseifs
     {
         public static FreeRefFunction instance = new Countifs();
 
-        public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
+        
+        public override bool HasInitialRange()
         {
-            Double result = double.NaN;
-            if (args.Length == 0 || args.Length % 2 > 0)
+            return false;
+        }
+
+        public class MyAggregator : IAggregator
+        {
+            double accumulator = 0.0;
+
+            public void AddValue(ValueEval d)
             {
-                return ErrorEval.VALUE_INVALID;
+                accumulator += 1.0;
             }
-            for (int i = 0; i < args.Length; )
+
+            public ValueEval GetResult()
             {
-                ValueEval firstArg = args[i];
-                ValueEval secondArg = args[i + 1];
-                i += 2;
-                NumberEval Evaluate = (NumberEval)new Countif().Evaluate(new ValueEval[] { firstArg, secondArg }, ec.RowIndex, ec.ColumnIndex);
-                if (double.IsNaN(result))
-                {
-                    result = Evaluate.NumberValue;
-                }
-                else if (Evaluate.NumberValue < result)
-                {
-                    result = Evaluate.NumberValue;
-                }
+                return new NumberEval(accumulator);
             }
-            return new NumberEval(double.IsNaN(result) ? 0 : result);
+        }
+
+        public override IAggregator CreateAggregator()
+        {
+            return new MyAggregator();
         }
     }
 
