@@ -51,6 +51,41 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(1.0d, Evaluate.NumberValue);
         }
 
+        // issue#825
+        [Test]
+        public void TestMultiRows()
+        {
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet("test");
+            IRow row1 = sheet.CreateRow(0);
+            IRow row2 = sheet.CreateRow(1);
+            IRow row3 = sheet.CreateRow(2);
+
+            ICell cellA1 = row1.CreateCell(0, CellType.Formula);
+
+            ICell cellB1 = row2.CreateCell(1, CellType.Numeric);
+            ICell cellC1 = row1.CreateCell(2, CellType.Numeric);
+            ICell cellB2 = row2.CreateCell(1, CellType.Numeric);
+            ICell cellC2 = row2.CreateCell(2, CellType.Numeric);
+            ICell cellB3 = row3.CreateCell(1, CellType.Numeric);
+            ICell cellC3 = row3.CreateCell(2, CellType.Numeric);
+
+
+            cellB1.SetCellValue(1);
+            cellB2.SetCellValue(2);
+            cellB3.SetCellValue(2);
+
+            cellC1.SetCellValue(2);
+            cellC2.SetCellValue(2);
+            cellC3.SetCellValue(3);
+
+            // Only Row2 satisfy both conditions, so result should be 1
+            cellA1.SetCellFormula("COUNTIFS(B1:B3,2, C1:C3,2)");
+            IFormulaEvaluator Evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
+            CellValue Evaluate = Evaluator.Evaluate(cellA1);
+            Assert.AreEqual(1.0d, Evaluate.NumberValue);
+        }
+
         [Test]
         public void TestCallFunction_invalidArgs()
         {
