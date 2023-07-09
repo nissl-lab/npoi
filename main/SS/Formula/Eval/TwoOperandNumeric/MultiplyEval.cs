@@ -25,7 +25,10 @@ namespace NPOI.SS.Formula.Eval
     {
         public override double Evaluate(double d0, double d1)
         {
-            return d0 * d1;
+            decimal dec0 = (decimal)d0;
+            decimal dec1 = (decimal)d1;
+
+            return decimal.ToDouble(dec0 * dec1);
         }
     }
 }
