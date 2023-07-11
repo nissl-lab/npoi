@@ -15,49 +15,41 @@
    limitations under the License.
 ==================================================================== */
 
-
-namespace NPOI.SS.Formula.Functions
+namespace TestCases.SS.Formula.Eval
 {
-    using System;
-    using NPOI.SS.Formula;
+
+    using NUnit.Framework;
     using NPOI.SS.Formula.Eval;
+    using TestCases.SS.Formula.Functions;
 
     /**
-     * Implementation for the function COUNTIFS
-     * <p>
-     * Syntax: COUNTIFS(criteria_range1, criteria1, [criteria_range2, criteria2])
-     * </p>
+     *  Test for multiply operator Evaluator.
+     *  
+     *  
      */
-
-    public class Countifs : Baseifs
+    [TestFixture]
+    public class TestMultiplyEval
     {
-        public static FreeRefFunction instance = new Countifs();
 
+        private static void Confirm(ValueEval arg0, ValueEval arg1, double expectedResult)
+        {
+            ValueEval[] args = {
+			    arg0, arg1,
+		    };
+
+            double result = NumericFunctionInvoker.Invoke(EvalInstances.Multiply, args, 0, 0);
+
+            Assert.AreEqual(expectedResult, result, 0);
+        }
+        [Test]
+        public void TestBasic()
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
+            // issue #1055, use decimal to handle precision issue like (20000 * 0.000027 = 0.539999 in double)
+            Confirm(new NumberEval(20000), new NumberEval(0.000027), 0.54);            
+        }
         
-        public override bool HasInitialRange()
-        {
-            return false;
-        }
-
-        public class MyAggregator : IAggregator
-        {
-            double accumulator = 0.0;
-
-            public void AddValue(ValueEval d)
-            {
-                accumulator += 1.0;
-            }
-
-            public ValueEval GetResult()
-            {
-                return new NumberEval(accumulator);
-            }
-        }
-
-        public override IAggregator CreateAggregator()
-        {
-            return new MyAggregator();
-        }
     }
 
 }
