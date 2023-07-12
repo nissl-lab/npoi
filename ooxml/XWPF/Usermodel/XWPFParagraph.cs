@@ -861,10 +861,10 @@ namespace NPOI.XWPF.UserModel
             get
             {
                 CT_PPr ppr = GetCTPPr();
-                CT_OnOff ct_pageBreak = ppr.IsSetPageBreakBefore() ? ppr
+                CT_OnOff ctPageBreak = ppr.IsSetPageBreakBefore() ? ppr
                         .pageBreakBefore : null;
-                if (ct_pageBreak != null
-                        && ct_pageBreak.val)
+                if (ctPageBreak != null
+                        && ctPageBreak.val)
                 {
                     return true;
                 }
@@ -909,7 +909,7 @@ namespace NPOI.XWPF.UserModel
          * Specifies the spacing that should be Added After the last line in this
          * paragraph in the document in absolute units.
          *
-         * @return bigint - value representing the spacing After the paragraph
+         * @return int - value representing the spacing After the paragraph
          * @see #setSpacingAfterLines(int)
          */
         public int SpacingAfterLines
@@ -987,6 +987,8 @@ namespace NPOI.XWPF.UserModel
                 return (spacing != null && spacing.IsSetLineRule()) ?
                     EnumConverter.ValueOf<LineSpacingRule, ST_LineSpacingRule>(spacing.lineRule) : LineSpacingRule.AUTO;
             }
+            // TODO Fix this to convert line to equivalent value, or deprecate this in
+            //      favor of setSpacingLine(double, LineSpacingRule)
             set
             {
                 CT_Spacing spacing = GetCTSpacing(true);
@@ -1003,13 +1005,64 @@ namespace NPOI.XWPF.UserModel
         ///</summary>
         public double SpacingBetween
         {
-            set
-            {
-                setSpacingBetween(value, LineSpacingRule.AUTO);
-            }
-
+            get => GetSpacingBetween();
+            set => SetSpacingBetween(value);
         }
-        public void setSpacingBetween(double spacing, LineSpacingRule rule)
+
+        /**
+         * Return the spacing between lines of a paragraph. The units of the return value depends on the
+         * {@link LineSpacingRule}. If AUTO, the return value is in lines, otherwise the return
+         * value is in points
+         *
+         * @return a double specifying points or lines.
+         */
+        public double GetSpacingBetween()
+        {
+            CT_Spacing spacing = GetCTSpacing(false);
+            if (spacing == null || !spacing.IsSetLine())
+            {
+                return -1;
+            }
+            else if (/*spacing.lineRule == null || */spacing.lineRule == ST_LineSpacingRule.auto)
+            {
+                //BigInteger[] val = spacing.getLine().divideAndRemainder(BigInteger.valueOf(240L));
+                //return val[0].doubleValue() + (val[1].doubleValue() / 240L);
+                var quo = Math.DivRem(long.Parse(spacing.line), 240L, out var rem);
+                return (double)quo + ((double)rem / 240L);
+            }
+            else
+            {
+                //BigInteger[] val = spacing.getLine().divideAndRemainder(BigInteger.valueOf(20L));
+                //return val[0].doubleValue() + (val[1].doubleValue() / 20L);
+                var quo = Math.DivRem(long.Parse(spacing.line), 20L, out var rem);
+                return (double)quo + ((double)rem / 20L);
+            }
+        }
+
+        /**
+         * Sets the spacing between lines in a paragraph
+         *
+         * @param spacing - A double specifying spacing in lines.
+         */
+        public void SetSpacingBetween(double spacing)
+        {
+            SetSpacingBetween(spacing, LineSpacingRule.AUTO);
+        }
+
+        /**
+         * Sets the spacing between lines in a paragraph
+         *
+         * @param spacing - A double specifying spacing in inches or lines. If rule is
+         *                  AUTO, then spacing is in lines. Otherwise spacing is in points.
+         * @param rule - {@link LineSpacingRule} indicating how spacing is interpreted. If
+         *               AUTO, then spacing value is in lines, and the height depends on the
+         *               font size. If AT_LEAST, then spacing value is in inches, and is the
+         *               minimum size of the line. If the line height is taller, then the
+         *               line expands to match. If EXACT, then spacing is the exact line
+         *               height. If the text is taller than the line height, then it is 
+         *               clipped at the top. 
+         */
+        public void SetSpacingBetween(double spacing, LineSpacingRule rule)
         {
             CT_Spacing ctSp = GetCTSpacing(true);
             switch(rule)
@@ -1022,7 +1075,6 @@ namespace NPOI.XWPF.UserModel
                     break;
             }
             ctSp.lineRule = EnumConverter.ValueOf<ST_LineSpacingRule, LineSpacingRule>(rule);
-
         }
 
         /**
@@ -1357,6 +1409,7 @@ namespace NPOI.XWPF.UserModel
                                 charPos = startChar;
                             else
                                 charPos = 0;
+
                             for (; charPos < candidate.Length; charPos++)
                             {
                                 if ((candidate[charPos] == searched[0]) && (candCharPos == 0))

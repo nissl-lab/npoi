@@ -4181,15 +4181,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private bool enforcementFieldSpecified;
 
-        private ST_CryptProv cryptProviderTypeField;
+        private ST_CryptProv? cryptProviderTypeField;
 
         private bool cryptProviderTypeFieldSpecified;
 
-        private ST_AlgClass cryptAlgorithmClassField;
+        private ST_AlgClass? cryptAlgorithmClassField;
 
         private bool cryptAlgorithmClassFieldSpecified;
 
-        private ST_AlgType cryptAlgorithmTypeField;
+        private ST_AlgType? cryptAlgorithmTypeField;
 
         private bool cryptAlgorithmTypeFieldSpecified;
 
@@ -4247,9 +4247,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:edit", this.edit.ToString());
             XmlHelper.WriteAttribute(sw, "w:formatting", this.formatting.ToString());
             XmlHelper.WriteAttribute(sw, "w:enforcement", this.enforcement.ToString());
-            XmlHelper.WriteAttribute(sw, "w:cryptProviderType", this.cryptProviderType.ToString());
-            XmlHelper.WriteAttribute(sw, "w:cryptAlgorithmClass", this.cryptAlgorithmClass.ToString());
-            XmlHelper.WriteAttribute(sw, "w:cryptAlgorithmType", this.cryptAlgorithmType.ToString());
+            if (this.cryptProviderType != null)
+                XmlHelper.WriteAttribute(sw, "w:cryptProviderType", this.cryptProviderType.ToString());
+            if (this.cryptAlgorithmClass != null)
+                XmlHelper.WriteAttribute(sw, "w:cryptAlgorithmClass", this.cryptAlgorithmClass.ToString());
+            if (this.cryptAlgorithmType != null)
+                XmlHelper.WriteAttribute(sw, "w:cryptAlgorithmType", this.cryptAlgorithmType.ToString());
             XmlHelper.WriteAttribute(sw, "w:cryptAlgorithmSid", this.cryptAlgorithmSid);
             XmlHelper.WriteAttribute(sw, "w:cryptSpinCount", this.cryptSpinCount);
             XmlHelper.WriteAttribute(sw, "w:cryptProvider", this.cryptProvider);
@@ -4343,7 +4346,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_CryptProv cryptProviderType
+        public ST_CryptProv? cryptProviderType
         {
             get
             {
@@ -4369,7 +4372,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_AlgClass cryptAlgorithmClass
+        public ST_AlgClass? cryptAlgorithmClass
         {
             get
             {
@@ -4395,7 +4398,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
-        public ST_AlgType cryptAlgorithmType
+        public ST_AlgType? cryptAlgorithmType
         {
             get
             {
@@ -4536,6 +4539,22 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.saltField = value;
             }
         }
+
+        public bool IsSetCryptProviderType() => cryptProviderType != null;
+        public bool IsSetCryptAlgorithmClass() => cryptAlgorithmClass != null;
+        public bool IsSetCryptAlgorithmType() => cryptAlgorithmType != null;
+        public bool IsSetCryptAlgorithmSid() => !string.IsNullOrEmpty(cryptAlgorithmSid);
+        public bool IsSetCryptSpinCount() => !string.IsNullOrEmpty(cryptSpinCount);
+        public bool IsSetHash() => !string.IsNullOrEmpty(hash);
+        public bool IsSetSalt() => !string.IsNullOrEmpty(salt);
+
+        public void UnsetCryptProviderType() => cryptProviderType = null;
+        public void UnsetCryptAlgorithmClass() => cryptAlgorithmClass = null;
+        public void UnsetCryptAlgorithmType() => cryptAlgorithmType = null;
+        public void UnsetCryptAlgorithmSid() => cryptAlgorithmSid = null;
+        public void UnsetCryptSpinCount() => cryptSpinCount = null;
+        public void UnsetHash() => hash = null;
+        public void UnsetSalt() => salt = null;
     }
 
 

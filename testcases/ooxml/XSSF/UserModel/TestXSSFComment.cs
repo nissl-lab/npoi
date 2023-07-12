@@ -28,11 +28,9 @@ using NPOI.XSSF.Streaming;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using TestCases.SS.UserModel;
+
 namespace TestCases.XSSF.UserModel
 {
-    /**
-     * @author Yegor Kozlov
-     */
     [TestFixture]
     public class TestXSSFComment : BaseTestCellComment
     {

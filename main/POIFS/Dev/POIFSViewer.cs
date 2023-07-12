@@ -28,8 +28,7 @@
 using System;
 using System.Text;
 using System.IO;
-using System.Collections;
-
+using System.Collections.Generic;
 
 namespace NPOI.POIFS.Dev
 {
@@ -57,15 +56,12 @@ namespace NPOI.POIFS.Dev
             {
                 using (Stream fileStream = File.OpenRead(filename))
                 {
-                    POIFSViewable fs = (POIFSViewable)new NPOIFSFileSystem(fileStream);
-                
-                    IList strings = POIFSViewEngine.InspectViewable(fs, true,
-                                                0, "  ");
-                    IEnumerator iter = strings.GetEnumerator();
+                    POIFSViewable fs = new NPOIFSFileSystem(fileStream);
 
-                    while (iter.MoveNext())
+                    IList<String> strings = POIFSViewEngine.InspectViewable(fs, true, 0, "  ");
+                    foreach (var s in strings)
                     {
-                        Console.Write(iter.Current);
+                        Console.Write(s);
                     }
                 }
             }

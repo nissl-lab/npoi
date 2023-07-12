@@ -22,10 +22,29 @@ using NPOI.XSSF.UserModel;
 
 namespace TestCases.XSSF.UserModel.Charts
 {
-
     [TestFixture]
     public class TestXSSFManualLayout
     {
+        private IWorkbook wb;
+        private IManualLayout layout;
+
+        [SetUp]
+        public void CreateEmptyLayout()
+        {
+            wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            IClientAnchor anchor = drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
+            IChart chart = drawing.CreateChart(anchor);
+            IChartLegend legend = chart.GetOrCreateLegend();
+            layout = legend.GetManualLayout();
+        }
+
+        [TearDown]
+        public void CloseWB()
+        {
+            wb.Close();
+        }
 
         /*
          * Accessor methods are not trivial. They use lazy underlying bean
@@ -38,8 +57,6 @@ namespace TestCases.XSSF.UserModel.Charts
             double newCoordinate = 0.3;
             LayoutMode nonDefaultMode = LayoutMode.Factor;
             LayoutTarget nonDefaultTarget = LayoutTarget.Outer;
-
-            IManualLayout layout = GetEmptyLayout();
 
             layout.SetWidthRatio(newRatio);
             Assert.IsTrue(layout.GetWidthRatio() == newRatio);
@@ -67,7 +84,6 @@ namespace TestCases.XSSF.UserModel.Charts
 
             layout.SetTarget(nonDefaultTarget);
             Assert.IsTrue(layout.GetTarget() == nonDefaultTarget);
-
         }
 
         /*
@@ -77,8 +93,6 @@ namespace TestCases.XSSF.UserModel.Charts
         [Test]
         public void TestDefaultValues()
         {
-            IManualLayout layout = GetEmptyLayout();
-
             Assert.IsNotNull(layout.GetTarget());
             Assert.IsNotNull(layout.GetXMode());
             Assert.IsNotNull(layout.GetYMode());
@@ -93,18 +107,5 @@ namespace TestCases.XSSF.UserModel.Charts
             Assert.IsTrue(layout.GetWidthRatio() == 0.0);
             Assert.IsTrue(layout.GetHeightRatio() == 0.0);
         }
-
-        private IManualLayout GetEmptyLayout()
-        {
-            IWorkbook wb = new XSSFWorkbook();
-            ISheet sheet = wb.CreateSheet();
-            IDrawing Drawing = sheet.CreateDrawingPatriarch();
-            IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
-            IChart chart = Drawing.CreateChart(anchor);
-            IChartLegend legend = chart.GetOrCreateLegend();
-            return legend.GetManualLayout();
-        }
     }
-
-
 }

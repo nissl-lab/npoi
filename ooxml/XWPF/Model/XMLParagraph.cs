@@ -21,10 +21,10 @@ namespace NPOI.XWPF.Model
 
     /**
      * Base class for XWPF paragraphs
-     *
-     * @author Yury Batrakov (batrakov at gmail.com)
      * 
+     * This class isn't used ...
      */
+    [Obsolete("deprecated 3.16 beta1, scheduled for removal in 3.18")]
     public class XMLParagraph
     {
         protected CT_P paragraph;

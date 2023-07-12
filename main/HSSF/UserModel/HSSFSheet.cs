@@ -1692,6 +1692,7 @@ namespace NPOI.HSSF.UserModel
                 if (endRow == lastrow)
                 {
                     // Need to walk backward to find the last non-blank row
+                    // NOTE: n is always negative here
                     lastrow = Math.Min(endRow + n, SpreadsheetVersion.EXCEL97.LastRowIndex);
                     for (int i = endRow - 1; i > endRow + n; i++)
                     {

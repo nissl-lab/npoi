@@ -76,7 +76,7 @@ namespace TestCases.XWPF.UserModel
 
             Assert.AreEqual(contents.Length, sdts.Count, "number of sdts");
 
-            for (int i = 0; i <contents.Length; i++)
+            for (int i = 0; i < contents.Length; i++)
             {//contents.Length; i++){
                 AbstractXWPFSDT sdt = sdts[i];
 
@@ -139,6 +139,16 @@ namespace TestCases.XWPF.UserModel
             }
         }
 
+        [Test]
+        public void Test60341()
+        {
+            //handle sdtbody without an sdtpr
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Bug60341.docx");
+            List<AbstractXWPFSDT> sdts = ExtractAllSDTs(doc);
+            Assert.AreEqual(1, sdts.Count);
+            Assert.AreEqual("", sdts[0].GetTag());
+            Assert.AreEqual("", sdts[0].GetTitle());
+        }
 
         private List<AbstractXWPFSDT> ExtractAllSDTs(XWPFDocument doc)
         {

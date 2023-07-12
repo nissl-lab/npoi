@@ -172,13 +172,9 @@ namespace NPOI.XWPF.UserModel
          */
         public bool StyleExist(String styleID)
         {
-            foreach (XWPFStyle style in listStyle)
-            {
-                if (style.StyleId.Equals(styleID))
-                    return true;
-            }
-            return false;
+            return null != GetStyle(styleID);
         }
+
         /**
          * add a style to the document
          * @param style				
@@ -191,6 +187,7 @@ namespace NPOI.XWPF.UserModel
             int pos = (ctStyles.GetStyleList().Count) - 1;
             ctStyles.SetStyleArray(pos, style.GetCTStyle());
         }
+
         /**
          *get style by a styleID 
          * @param styleID	styleID of the searched style
@@ -200,7 +197,7 @@ namespace NPOI.XWPF.UserModel
         {
             foreach (XWPFStyle style in listStyle)
             {
-                if (style.StyleId.Equals(styleID))
+                if (style.StyleId?.Equals(styleID) ?? false)
                     return style;
             }
             return null;

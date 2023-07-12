@@ -1361,7 +1361,11 @@ namespace TestCases.HSSF.UserModel
                 wb.Write();
                 Assert.Fail("Shouldn't work for new files");
             }
-            catch (InvalidOperationException) { }
+            catch (InvalidOperationException)
+            {
+                // expected here
+            }
+            wb.Close();
 
             // Can't work for InputStream opened files
             wb = new HSSFWorkbook(
@@ -1371,7 +1375,11 @@ namespace TestCases.HSSF.UserModel
                 wb.Write();
                 Assert.Fail("Shouldn't work for InputStream");
             }
-            catch (InvalidOperationException) { }
+            catch (InvalidOperationException)
+            {
+                // expected here
+            }
+            wb.Close();
 
             // Can't work for OPOIFS
             OPOIFSFileSystem ofs = new OPOIFSFileSystem(
@@ -1382,7 +1390,11 @@ namespace TestCases.HSSF.UserModel
                 wb.Write();
                 Assert.Fail("Shouldn't work for OPOIFSFileSystem");
             }
-            catch (InvalidOperationException) { }
+            catch (InvalidOperationException)
+            {
+                // expected here
+            }
+            wb.Close();
 
             // Can't work for Read-Only files
             NPOIFSFileSystem fs = new NPOIFSFileSystem(
@@ -1393,7 +1405,11 @@ namespace TestCases.HSSF.UserModel
                 wb.Write();
                 Assert.Fail("Shouldn't work for Read Only");
             }
-            catch (InvalidOperationException) { }
+            catch (InvalidOperationException)
+            {
+                // expected here
+            }
+            wb.Close();
         }
 
         [Test]
@@ -1402,14 +1418,23 @@ namespace TestCases.HSSF.UserModel
         {
             // Setup as a copy of a known-good file
             FileInfo file = TempFile.CreateTempFile("TestHSSFWorkbook", ".xls");
-            Stream outStream = file.Open(FileMode.Open, FileAccess.ReadWrite);
-            Stream inStream = POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("SampleSS.xls");
-            IOUtils.Copy(
-                    inStream,
-                    outStream
-            );
-            outStream.Close();
-            inStream.Close();
+            Stream inputStream = POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("SampleSS.xls");
+            try
+            {
+                Stream outputStream = file.Open(FileMode.Open, FileAccess.ReadWrite);
+                try
+                {
+                    IOUtils.Copy(inputStream, outputStream);
+                }
+                finally
+                {
+                    outputStream.Close();
+                }
+            }
+            finally
+            {
+                inputStream.Close();
+            }
 
             // Open from the temp file in read-write mode
             HSSFWorkbook wb = new HSSFWorkbook(new NPOIFSFileSystem(file, false));
@@ -1427,6 +1452,8 @@ namespace TestCases.HSSF.UserModel
             wb = new HSSFWorkbook(new NPOIFSFileSystem(file));
             Assert.AreEqual(1, wb.NumberOfSheets);
             Assert.AreEqual("Changed!", wb.GetSheetAt(0).GetRow(0).GetCell(0).ToString());
+
+            wb.Close();
         }
 
         [Test]

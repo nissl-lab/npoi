@@ -492,7 +492,7 @@ namespace NPOI.XWPF.UserModel
                             {
                                 foreach (CT_FFCheckBox checkBox in ctfldChar.ffData.GetCheckBoxList())
                                 {
-                                    if (checkBox.@default.val == true)
+                                    if (checkBox.@default != null && checkBox.@default.val == true)
                                     {
                                         text.Append("|X|");
                                     }
@@ -919,6 +919,12 @@ namespace NPOI.XWPF.UserModel
             set
             {
                 CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
+                if (value < 1)
+                {
+                    // fix for TestBug58922() in NPOI
+                    pr.sz = null; // unset
+                    return;
+                }
                 CT_HpsMeasure ctSize = pr.IsSetSz() ? pr.sz : pr.AddNewSz();
                 ctSize.val = (ulong)(value * 2);
             }
@@ -1144,7 +1150,7 @@ namespace NPOI.XWPF.UserModel
 
                 CT_BlipFillProperties blipFill = pic.AddNewBlipFill();
                 CT_Blip blip = blipFill.AddNewBlip();
-                blip.embed = (picData.GetPackageRelationship().Id);
+                blip.embed = parent.Part.GetRelationId(picData);
                 if (doc != null)
                 {
                     extAct(doc, blip);

@@ -602,7 +602,7 @@ namespace NPOI.XSSF.UserModel
             XSSFSheet clonedSheet = CreateSheet(newName) as XSSFSheet;
 
             // copy sheet's relations
-            List<RelationPart> rels = srcSheet.RelationParts;
+            IList<RelationPart> rels = srcSheet.RelationParts;
             // if the sheet being cloned has a drawing then rememebr it and re-create it too
             XSSFDrawing dg = null;
             foreach (RelationPart rp in rels)
@@ -678,7 +678,7 @@ namespace NPOI.XSSF.UserModel
                 clonedDg = clonedSheet.CreateDrawingPatriarch() as XSSFDrawing;
 
                 // Clone drawing relations
-                List<RelationPart> srcRels = (srcSheet.CreateDrawingPatriarch() as XSSFDrawing).RelationParts;
+                IList<RelationPart> srcRels = (srcSheet.CreateDrawingPatriarch() as XSSFDrawing).RelationParts;
                 foreach (RelationPart rp in srcRels)
                 {
                     AddRelation(rp, clonedDg);
