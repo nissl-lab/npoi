@@ -1,4 +1,4 @@
-/* ====================================================================
+﻿/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
@@ -14,51 +14,59 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-
-using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using NPOI.OpenXmlFormats.Dml;
-namespace NPOI.XSSF.UserModel
-{
-    public class XSSFChildAnchor : XSSFAnchor
-    {
-        private CT_Transform2D t2d;
 
-        public XSSFChildAnchor(int x, int y, int cx, int cy)
+namespace NPOI.XSSF.UserModel {
+    public class XSSFChildGroupAnchor : XSSFAnchor
+    {
+        private CT_GroupTransform2D gt2d;
+        public XSSFChildGroupAnchor(int x, int y, int cx, int cy)
         {
-            t2d = new CT_Transform2D();
-            CT_Point2D off = t2d.AddNewOff();
-            CT_PositiveSize2D ext = t2d.AddNewExt();
+            gt2d = new CT_GroupTransform2D();
+            CT_Point2D off = gt2d.AddNewOff();
+            CT_PositiveSize2D ext = gt2d.AddNewExt();
+            CT_Point2D chOff = gt2d.AddNewChOff();
+            CT_PositiveSize2D chExt = gt2d.AddNewChExt();
 
             off.x = Math.Min(x, cx);
             off.y = Math.Min(y, cy);
             ext.cx = Math.Abs(cx - x);
             ext.cy = Math.Abs(cy - y);
-            if (x > cx) t2d.flipH = true;
-            if (y > cy) t2d.flipV = true;
+            if (x > cx) gt2d.flipH = true;
+            if (y > cy) gt2d.flipV = true;
+
+            chOff.x = off.x;
+            chOff.y = off.y;
+            chExt.cx = ext.cx;
+            chExt.cy = ext.cy;
         }
 
-        public XSSFChildAnchor(CT_Transform2D t2d)
+        public XSSFChildGroupAnchor(CT_GroupTransform2D gt2d)
         {
-            this.t2d = t2d;
+            this.gt2d = gt2d;
         }
 
 
-        public CT_Transform2D GetCTTransform2D()
+        public CT_GroupTransform2D GetCTTransform2D()
         {
-            return t2d;
+            return gt2d;
         }
 
         public override int Dx1
         {
             get
             {
-                return (int)t2d.off.x;
+                return (int)gt2d.off.x;
 
             }
             set 
             {
-                t2d.off.y = (value);
+                gt2d.off.y = (value);
             }
         }
 
@@ -66,11 +74,11 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (int)t2d.off.y;
+                return (int)gt2d.off.y;
             }
             set 
             {
-                t2d.off.y = (value);
+                gt2d.off.y = (value);
             }
         }
 
@@ -78,28 +86,24 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (int)(Dy1 + t2d.ext.cy);
+                return (int)(Dy1 + gt2d.ext.cy);
             }
             set 
             {
-                t2d.ext.cy = (value - Dy1);
+                gt2d.ext.cy = (value - Dy1);
             }
         }
-
 
         public override int Dx2
         {
             get
             {
-                return (int)(Dx1 + t2d.ext.cx);
+                return (int)(Dx1 + gt2d.ext.cx);
             }
             set 
             {
-                t2d.ext.cx = (value - Dx1);
+                gt2d.ext.cx = (value - Dx1);
             }
         }
     }
-
-
-
 }
