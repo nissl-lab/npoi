@@ -24,10 +24,8 @@
 	</ItemGroup>
     
 	<ItemGroup>
-		<ProjectReference Include="..\..\main\NPOI.Multitarget.csproj" />
 		<ProjectReference Include="..\..\ooxml\NPOI.OOXML.Multitarget.csproj" />
 		<ProjectReference Include="..\..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj" />
-		<ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Multitarget.csproj" />
 		<ProjectReference Include="..\ooxml\NPOI.OOXML.TestCases.Multitarget.csproj" />
 	</ItemGroup>
     
