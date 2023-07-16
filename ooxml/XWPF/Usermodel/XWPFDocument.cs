@@ -1921,14 +1921,14 @@ namespace NPOI.XWPF.UserModel
                 }
             }
         }
-        public void FindAndReplaceText(XWPFDocument doc, string oldValue, string newValue)
+        public void FindAndReplaceText(string oldValue, string newValue)
         {
-            foreach (var paragraph in doc.Paragraphs)
+            foreach (var paragraph in this.Paragraphs)
             {
                 FindAndReplaceTextInParagraph(paragraph, oldValue, newValue);
             }
 
-            foreach (var table in doc.Tables)
+            foreach (var table in this.Tables)
             {
                 foreach (var row in table.Rows)
                 {
@@ -1941,14 +1941,14 @@ namespace NPOI.XWPF.UserModel
                     }
                 }
             }
-            foreach (var footer in doc.FooterList)
+            foreach (var footer in this.FooterList)
             {
                 foreach (var paragraph in footer.Paragraphs)
                 {
                     FindAndReplaceTextInParagraph(paragraph, oldValue, newValue);
                 }
             }
-            foreach (var header in doc.HeaderList)
+            foreach (var header in this.HeaderList)
             {
                 foreach (var paragraph in header.Paragraphs)
                 {
