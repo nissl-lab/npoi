@@ -859,7 +859,7 @@ namespace NPOI.HSSF.UserModel
             {
                 if (cellType == CellType.Blank)
                 {
-                    return DateTime.MaxValue;
+                    throw new InvalidDataException("You cannot get a date value from a blank cell");
                 }
                 if (cellType == CellType.String)
                 {
@@ -877,17 +877,41 @@ namespace NPOI.HSSF.UserModel
                         "You cannot get a date value from an error cell");
                 }
                 double value = this.NumericCellValue;
+                return DateUtil.GetJavaDate(value, book.IsDate1904());
+            }
+        }
+#if NET6_0_OR_GREATER
+        public DateOnly? DateOnlyCellValue 
+        { 
+            get{
+                if (CellType == CellType.Blank||CellType == CellType.String||CellType == CellType.Boolean||CellType == CellType.Error)
+                {
+                    return null;
+                }
+                double value = this.NumericCellValue;
                 if (book.IsDate1904())
                 {
-                    return DateUtil.GetJavaDate(value, true);
+                    return DateOnly.FromDateTime(DateUtil.GetJavaDate(value, true));
                 }
                 else
                 {
-                    return DateUtil.GetJavaDate(value, false);
+                    return DateOnly.FromDateTime(DateUtil.GetJavaDate(value, false));
                 }
+            } 
+        }
+        public TimeOnly? TimeOnlyCellValue 
+        { 
+            get{
+                if (CellType == CellType.Blank||CellType == CellType.String||CellType == CellType.Boolean||CellType == CellType.Error)
+                {
+                    return null;
+                }
+                double value = NumericCellValue;
+                bool date1904 = Sheet.Workbook.IsDate1904();
+                return TimeOnly.FromDateTime(DateUtil.GetJavaDate(value, date1904));
             }
         }
-
+#endif
         /// <summary>
         /// Get the value of the cell as a string - for numeric cells we throw an exception.
         /// For blank cells we return an empty string.

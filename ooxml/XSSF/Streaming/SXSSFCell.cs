@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 using System;
+using System.IO;
 using NPOI.SS;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.UserModel;
@@ -196,15 +197,16 @@ namespace NPOI.XSSF.Streaming
                 return _row.GetCellIndex(this);
             }
         }
-
+        /// <summary>
+        /// Get DateTime-type cell value
+        /// </summary>
         public DateTime DateCellValue
         {
             get
             {
-                CellType cellType = _value.GetType();
-                if (cellType == CellType.Blank)
+                if (CellType == CellType.Blank)
                 {
-                    return new DateTime();
+                    throw new InvalidDataException("You cannot get a date value from a blank cell");
                 }
 
                 double value = NumericCellValue;
@@ -212,7 +214,35 @@ namespace NPOI.XSSF.Streaming
                 return DateUtil.GetJavaDate(value, date1904);
             }
         }
-
+#if NET6_0_OR_GREATER
+        /// <summary>
+        /// Get DateOnly-type cell value
+        /// </summary>
+        public DateOnly? DateOnlyCellValue 
+        { 
+            get{
+                if (CellType == CellType.Blank||CellType == CellType.String||CellType == CellType.Boolean||CellType == CellType.Error)
+                {
+                    return null;
+                }
+                double value = NumericCellValue;
+                bool date1904 = Sheet.Workbook.IsDate1904();
+                return DateOnly.FromDateTime(DateUtil.GetJavaDate(value, date1904));
+            }
+        }
+        public TimeOnly? TimeOnlyCellValue 
+        { 
+            get{
+                if (CellType == CellType.Blank||CellType == CellType.String||CellType == CellType.Boolean||CellType == CellType.Error)
+                {
+                    return null;
+                }
+                double value = NumericCellValue;
+                bool date1904 = Sheet.Workbook.IsDate1904();
+                return TimeOnly.FromDateTime(DateUtil.GetJavaDate(value, date1904));
+            }
+        }
+#endif
         public byte ErrorCellValue
         {
             get

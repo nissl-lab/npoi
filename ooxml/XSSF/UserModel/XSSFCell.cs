@@ -26,6 +26,8 @@ using NPOI.SS;
 using NPOI.Util;
 using NPOI.SS.Formula.Eval;
 using System.Globalization;
+using System.IO;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -833,7 +835,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (CellType == CellType.Blank)
                 {
-                    return DateTime.MinValue;
+                    throw new InvalidDataException("You cannot get a date value from a blank cell");
                 }
 
                 double value = NumericCellValue;
@@ -841,6 +843,33 @@ namespace NPOI.XSSF.UserModel
                 return DateUtil.GetJavaDate(value, date1904);
             }
         }
+#if NET6_0_OR_GREATER
+        public DateOnly? DateOnlyCellValue 
+        { 
+            get{
+                if (CellType == CellType.Blank||CellType == CellType.String||CellType == CellType.Boolean||CellType == CellType.Error)
+                {
+                    return null;
+                }
+                double value = NumericCellValue;
+                bool date1904 = Sheet.Workbook.IsDate1904();
+                return DateOnly.FromDateTime(DateUtil.GetJavaDate(value, date1904));
+            }
+        }
+
+        public TimeOnly? TimeOnlyCellValue 
+        { 
+            get{
+                if (CellType == CellType.Blank||CellType == CellType.String||CellType == CellType.Boolean||CellType == CellType.Error)
+                {
+                    return null;
+                }
+                double value = NumericCellValue;
+                bool date1904 = Sheet.Workbook.IsDate1904();
+                return TimeOnly.FromDateTime(DateUtil.GetJavaDate(value, date1904));
+            }
+        }
+#endif
         public void SetCellValue(DateTime? value)
         {
             if (value == null)
