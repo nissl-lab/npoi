@@ -1751,6 +1751,25 @@ namespace NPOI.XWPF.UserModel
                 }
             }
         }
+
+        private void FindAndReplaceTextInTable(XWPFTable table, string oldValue, string newValue)
+        {
+            foreach (var row in table.Rows)
+            {
+                foreach (var cell in row.GetTableCells())
+                {
+                    foreach (var innerTable in cell.Tables)
+                    {
+                        FindAndReplaceTextInTable(innerTable, oldValue, newValue);
+                    }
+                    foreach (var paragraph in cell.Paragraphs)
+                    {
+                        FindAndReplaceTextInParagraph(paragraph, oldValue, newValue);
+                    }
+                }
+            }
+        }
+
         public void FindAndReplaceText(string oldValue, string newValue)
         {
             foreach (var paragraph in this.Paragraphs)
@@ -1760,17 +1779,9 @@ namespace NPOI.XWPF.UserModel
 
             foreach (var table in this.Tables)
             {
-                foreach (var row in table.Rows)
-                {
-                    foreach (var cell in row.GetTableCells())
-                    {
-                        foreach (var paragraph in cell.Paragraphs)
-                        {
-                            FindAndReplaceTextInParagraph(paragraph, oldValue, newValue);
-                        }
-                    }
-                }
+                FindAndReplaceTextInTable(table, oldValue, newValue);
             }
+            
             foreach (var footer in this.FooterList)
             {
                 foreach (var paragraph in footer.Paragraphs)
