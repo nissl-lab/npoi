@@ -200,18 +200,17 @@ namespace NPOI.XSSF.Streaming
         /// <summary>
         /// Get DateTime-type cell value
         /// </summary>
-        public DateTime DateCellValue
+        public DateTime? DateCellValue
         {
             get
             {
-                if (CellType == CellType.Blank)
+                if (CellType != CellType.Numeric && CellType != CellType.Formula)
                 {
-                    throw new InvalidDataException("You cannot get a date value from a blank cell");
+                    return null;
                 }
-
                 double value = NumericCellValue;
                 bool date1904 = Sheet.Workbook.IsDate1904();
-                return DateUtil.GetJavaDate(value, date1904);
+                return DateUtil.GetJavaDate(value,date1904);
             }
         }
 #if NET6_0_OR_GREATER
@@ -221,7 +220,7 @@ namespace NPOI.XSSF.Streaming
         public DateOnly? DateOnlyCellValue 
         { 
             get{
-                if (CellType == CellType.Blank||CellType == CellType.String||CellType == CellType.Boolean||CellType == CellType.Error)
+                if (CellType != CellType.Numeric && CellType != CellType.Formula)
                 {
                     return null;
                 }
@@ -233,7 +232,7 @@ namespace NPOI.XSSF.Streaming
         public TimeOnly? TimeOnlyCellValue 
         { 
             get{
-                if (CellType == CellType.Blank||CellType == CellType.String||CellType == CellType.Boolean||CellType == CellType.Error)
+                if (CellType != CellType.Numeric && CellType != CellType.Formula)
                 {
                     return null;
                 }

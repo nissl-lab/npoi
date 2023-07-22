@@ -829,13 +829,13 @@ namespace NPOI.XSSF.UserModel
         /// <summary>
         /// Get the value of the cell as a date.
         /// </summary>
-        public DateTime DateCellValue
+        public DateTime? DateCellValue
         {
             get
             {
-                if (CellType == CellType.Blank)
+                if (CellType != CellType.Numeric && CellType != CellType.Formula)
                 {
-                    throw new InvalidDataException("You cannot get a date value from a blank cell");
+                    return null;
                 }
 
                 double value = NumericCellValue;
