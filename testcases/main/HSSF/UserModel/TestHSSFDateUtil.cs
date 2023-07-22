@@ -549,7 +549,7 @@ namespace TestCases.HSSF.UserModel
 
             cell.SetCellValue(valueToTest);
 
-            DateTime returnedValue = cell.DateCellValue;
+            DateTime returnedValue = (DateTime)cell.DateCellValue;
 
             Assert.AreEqual(valueToTest.TimeOfDay, returnedValue.TimeOfDay);
         }
