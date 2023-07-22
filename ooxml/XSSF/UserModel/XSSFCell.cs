@@ -847,7 +847,7 @@ namespace NPOI.XSSF.UserModel
         public DateOnly? DateOnlyCellValue 
         { 
             get{
-                if (CellType == CellType.Blank||CellType == CellType.String||CellType == CellType.Boolean||CellType == CellType.Error)
+                if (CellType != CellType.Numeric && CellType != CellType.Formula)
                 {
                     return null;
                 }
@@ -860,7 +860,7 @@ namespace NPOI.XSSF.UserModel
         public TimeOnly? TimeOnlyCellValue 
         { 
             get{
-                if (CellType == CellType.Blank||CellType == CellType.String||CellType == CellType.Boolean||CellType == CellType.Error)
+                if (CellType != CellType.Numeric && CellType != CellType.Formula)
                 {
                     return null;
                 }
