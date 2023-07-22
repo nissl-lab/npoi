@@ -794,7 +794,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.alternateContent.Write(sw, "AlternateContent");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
     }
 
@@ -927,7 +927,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -1039,7 +1039,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.lid.Write(sw, "lid");
             if (this.dirty != null)
                 this.dirty.Write(sw, "dirty");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -1394,7 +1394,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_R)o).Write(sw, "r");
                 i++;
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
     }
@@ -1535,7 +1535,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.rt.Write(sw, "rt");
             if (this.rubyBase != null)
                 this.rubyBase.Write(sw, "rubyBase");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -1813,7 +1813,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         private ST_TextboxTightWrap valField;
@@ -1879,7 +1879,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
 

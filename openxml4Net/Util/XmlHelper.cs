@@ -221,7 +221,7 @@ namespace NPOI.OpenXml4Net.Util
                 return blankValue;
 
             string value = attr.Value;
-            if (value == "1" || value == "-1" || value.ToLower() == "true" || value.ToLower() == "on")
+            if (value == "1" || value == "-1" || string.Equals(value, "true", StringComparison.OrdinalIgnoreCase) || string.Equals(value, "on", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
@@ -310,10 +310,24 @@ namespace NPOI.OpenXml4Net.Util
             ret.Append(t.Substring(prevIndex, t.Length - prevIndex));
             return ret.ToString();
         }
+
+        private static readonly char[] xmlEncodeCharsToReplace = { '&', '<', '>', '"' };
+
         public static string EncodeXml(string xml)
         {
-            return xml.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;");//.Replace("'", "&apos;");
+            // quick check whether needed
+            if (xml.IndexOfAny(xmlEncodeCharsToReplace) == -1)
+            {
+                return xml;
+            }
+
+            return xml
+                .Replace("&", "&amp;")
+                .Replace("<", "&lt;")
+                .Replace(">", "&gt;")
+                .Replace("\"", "&quot;");//.Replace("'", "&apos;");
         }
+
         public static void WriteAttribute(StreamWriter sw, string attributeName, bool value)
         {
             WriteAttribute(sw, attributeName, value, true);
@@ -339,7 +353,11 @@ namespace NPOI.OpenXml4Net.Util
             if (value == 0 && !writeIfBlank)
                 return;
 
-            WriteAttribute(sw, attributeName, value.ToString(CultureInfo.InvariantCulture));
+            sw.Write(" ");
+            sw.Write(attributeName);
+            sw.Write("=\"");
+            sw.Write(value);
+            sw.Write("\"");
         }
         public static void WriteAttribute(StreamWriter sw, string attributeName, int value, int defaultValue)
         {
@@ -357,7 +375,11 @@ namespace NPOI.OpenXml4Net.Util
             if (value == 0 && !writeIfBlank)
                 return;
 
-            WriteAttribute(sw, attributeName, value.ToString(CultureInfo.InvariantCulture));
+            sw.Write(" ");
+            sw.Write(attributeName);
+            sw.Write("=\"");
+            sw.Write(value);
+            sw.Write("\"");
         }
         public static void WriteAttribute(StreamWriter sw, string attributeName, uint value)
         {
@@ -375,7 +397,12 @@ namespace NPOI.OpenXml4Net.Util
         {
             if ((string.IsNullOrEmpty(value) || defaultValue.Equals(value)) && !writeIfBlank)
                 return;
-            sw.Write(string.Format(" {0}=\"{1}\"", attributeName, value == null ? string.Empty : EncodeXml(value)));
+
+            sw.Write(" ");
+            sw.Write(attributeName);
+            sw.Write("=\"");
+            sw.Write(value == null ? string.Empty : EncodeXml(value));
+            sw.Write("\"");
         }
         public static void WriteAttribute(StreamWriter sw, string attributeName, byte[] value)
         {

@@ -258,7 +258,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_MarkupRange)
                     ((CT_MarkupRange)o).Write(sw, "commentRangeEnd");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -463,7 +463,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
             if (this.sdtContent != null)
                 this.sdtContent.Write(sw, "sdtContent");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -583,7 +583,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "sdtEndPr");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -682,7 +682,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "sdtEndPr");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -761,7 +761,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "listItem");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         private List<CT_SdtListItem> listItemField;
@@ -849,7 +849,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.docPartCategory.Write(sw, "docPartCategory");
             if (this.docPartUnique != null)
                 this.docPartUnique.Write(sw, "docPartUnique");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -944,7 +944,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "listItem");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement("listItem", Order = 0)]
@@ -1211,7 +1211,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_Tbl)
                     ((CT_Tbl)o).Write(sw, "tbl");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -1705,7 +1705,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_Row)
                     ((CT_Row)o).Write(sw, "tr");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -1998,7 +1998,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_DataBinding)o).Write(sw, "dataBinding");
                 
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         public CT_DecimalNumber AddNewId()
@@ -2485,7 +2485,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_MarkupRange)
                     ((CT_MarkupRange)o).Write(sw, "bookmarkEnd");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -2789,7 +2789,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:displayText", this.displayText);
             XmlHelper.WriteAttribute(sw, "w:value", this.value);
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -2847,7 +2847,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -2922,7 +2922,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
 
@@ -3052,7 +3052,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.storeMappedDataAs.Write(sw, "storeMappedDataAs");
             if (this.calendar != null)
                 this.calendar.Write(sw, "calendar");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -3188,7 +3188,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "sdtEndPr");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -3258,7 +3258,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:multiLine", this.multiLine.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -3311,7 +3311,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         private ST_Lock valField;

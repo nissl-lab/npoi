@@ -206,7 +206,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 {
                     this.numberingChangeField.Write(sw, "numberingChange");
                 }
-                sw.Write(string.Format("</w:{0}>", nodeName));
+                sw.WriteEndW(nodeName);
             }
         }
 
@@ -416,7 +416,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     (this.itemsField[i] as CT_FFTextInput).Write(sw, "textInput");
             }
 
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
         private void AddNewObject(object obj, FFDataItemsType type)
         {
@@ -642,7 +642,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else
                     (this.itemField as CT_HpsMeasure).Write(sw, "size");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
     }
 
@@ -742,7 +742,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 str.Write(sw, "listEntry");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
     }
 
@@ -1034,7 +1034,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (this.maxLengthField != null)
                 this.maxLengthField.Write(sw, "maxLength");
             
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
     }
 

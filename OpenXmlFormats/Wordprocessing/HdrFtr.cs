@@ -262,7 +262,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_Markup)
                     ((CT_Markup)o).Write(sw, "customXmlInsRangeEnd");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         public ArrayList Items
@@ -662,7 +662,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.numStart.Write(sw, "numStart");
             if (this.numRestart != null)
                 this.numRestart.Write(sw, "numRestart");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -742,7 +742,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         private ST_FtnPos valField;
@@ -1112,7 +1112,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_CustomXmlBlock)o).Write(sw, "customXml");
                 i++;
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
 
@@ -1537,7 +1537,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "footnote");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement("footnote", Order = 0)]
@@ -1649,7 +1649,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.numStart.Write(sw, "numStart");
             if (this.numRestart != null)
                 this.numRestart.Write(sw, "numRestart");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -1729,7 +1729,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         private ST_EdnPos valField;
@@ -1811,7 +1811,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "endnote");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         private List<CT_FtnEdnSepRef> endnoteField;
@@ -1871,7 +1871,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:customMarkFollows", this.customMarkFollows.ToString());
             XmlHelper.WriteAttribute(sw, "w:id", this.id);
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]

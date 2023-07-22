@@ -379,7 +379,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_MarkupRange)
                     ((CT_MarkupRange)o).Write(sw, "commentRangeEnd");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement("bookmarkEnd", typeof(CT_MarkupRange), Order = 0)]
@@ -771,7 +771,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "tblGrid");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlArray(Order = 0)]
@@ -908,7 +908,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "gridCol");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -958,7 +958,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         private ST_TblOverlap valField;
@@ -1117,7 +1117,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(">");
             if (this.tblPr != null)
                 this.tblPr.Write(sw, "tblPr");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         private CT_TblPrBase tblPrField;
@@ -1272,7 +1272,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.tblCaption.Write(sw, "tblCaption");
             if (this.tblDescription != null)
                 this.tblDescription.Write(sw, "tblDescription");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -1643,7 +1643,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 XmlHelper.WriteAttribute(sw, "w:tblpYSpec", this.tblpYSpec.ToString());
             XmlHelper.WriteAttribute(sw, "w:tblpY", this.tblpY);
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -2028,7 +2028,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(">");
             if (this.tblPrEx != null)
                 this.tblPrEx.Write(sw, "tblPrEx");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -2124,7 +2124,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.tblCellMar.Write(sw, "tblCellMar");
             if (this.tblLook != null)
                 this.tblLook.Write(sw, "tblLook");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         public CT_TblPrExBase()
@@ -2324,7 +2324,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.tblCellMar.Write(sw, "tblCellMar");
             if (this.tblLook != null)
                 this.tblLook.Write(sw, "tblLook");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         public CT_TblPrEx()
@@ -2408,7 +2408,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.insideH.Write(sw, "insideH");
             if (this.insideV != null)
                 this.insideV.Write(sw, "insideV");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -2660,7 +2660,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.bottom.Write(sw, "bottom");
             if (this.right != null)
                 this.right.Write(sw, "right");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         public CT_TblCellMar()
@@ -2868,7 +2868,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.tblCaption.Write(sw, "tblCaption");
             if (this.tblDescription != null)
                 this.tblDescription.Write(sw, "tblDescription");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         public CT_TblPr()
@@ -2943,7 +2943,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(">");
             if (this.trPr != null)
                 this.trPr.Write(sw, "trPr");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -3093,7 +3093,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     && this.ItemsElementName[i] == ItemsChoiceType2.wBefore)
                     ((CT_TblWidth)o).Write(sw, "wBefore");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement("cantSplit", typeof(CT_OnOff), Order = 0)]
@@ -3604,7 +3604,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_Tbl)
                     ((CT_Tbl)o).Write(sw, "tbl");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
@@ -4066,7 +4066,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     && this.ItemsElementName[i] == ItemsChoiceType2.wBefore)
                     ((CT_TblWidth)o).Write(sw, "wBefore");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -4143,7 +4143,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(">");
             if (this.tcPr != null)
                 this.tcPr.Write(sw, "tcPr");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         private CT_TcPrInner tcPrField;
@@ -4267,7 +4267,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.vAlign.Write(sw, "vAlign");
             if (this.hideMark != null)
                 this.hideMark.Write(sw, "hideMark");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -4351,7 +4351,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:date", this.date);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -4493,7 +4493,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.tl2br.Write(sw, "tl2br");
             if (this.tr2bl != null)
                 this.tr2bl.Write(sw, "tr2bl");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         public CT_TcBorders()
@@ -4662,7 +4662,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.bottom.Write(sw, "bottom");
             if (this.right != null)
                 this.right.Write(sw, "right");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -4816,7 +4816,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.vAlign.Write(sw, "vAlign");
             if (this.hideMark != null)
                 this.hideMark.Write(sw, "hideMark");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         public CT_TcPr()
@@ -5116,7 +5116,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -5259,7 +5259,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:w", this.w);
             XmlHelper.WriteAttribute(sw, "w:space", this.space);
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -5381,7 +5381,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 {
                     x.Write(sw, "col");
                 }
-                sw.Write(string.Format("</w:{0}>", nodeName));
+                sw.WriteEndW(nodeName);
             } else
             {
                 sw.Write("/>");
@@ -5771,7 +5771,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_Tc)
                     ((CT_Tc)o).Write(sw, "tc");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
         public CT_Row Copy()
         {
