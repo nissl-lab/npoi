@@ -695,11 +695,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (!_cellXf.IsSetProtection() || !_cellXf.protection.IsSetHidden())
-                {
-                    return false;
-                }
-                return _cellXf.protection.hidden;
+                return _cellXf.IsSetProtection() && _cellXf.protection.IsSetHidden() && _cellXf.protection.hidden;
             }
             set
             {
