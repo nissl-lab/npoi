@@ -806,11 +806,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (!_cellXf.IsSetProtection() || !_cellXf.protection.IsSetLocked())
-                {
-                    return false;
-                }
-                return _cellXf.protection.locked;
+                return !_cellXf.IsSetProtection() || !_cellXf.protection.IsSetLocked() || _cellXf.protection.locked;
             }
             set
             {
