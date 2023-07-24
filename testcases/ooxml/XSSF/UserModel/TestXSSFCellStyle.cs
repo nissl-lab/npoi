@@ -718,7 +718,7 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestGetSetLocked()
         {
-            Assert.IsTrue(cellStyle.IsLocked);
+            Assert.IsFalse(cellStyle.IsLocked);
             cellStyle.IsLocked = (true);
             Assert.IsTrue(cellStyle.IsLocked);
             cellStyle.IsLocked = (false);
