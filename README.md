@@ -30,8 +30,6 @@ Get Started with NPOI
 ============
 [How NPOI succeeds](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb)
 
-[Who is using NPOI?](https://github.com/nissl-lab/npoi/issues/705)
-
 [NPOI examples](https://github.com/nissl-lab/npoi-examples)
 
 [Getting Started with NPOI](https://github.com/nissl-lab/npoi/wiki/Getting-Started-with-NPOI)
