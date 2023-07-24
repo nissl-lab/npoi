@@ -718,15 +718,30 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestGetSetLocked()
         {
-            Assert.IsFalse(cellStyle.IsLocked);
+            Assert.IsTrue(cellStyle.IsLocked);
             cellStyle.IsLocked = (true);
             Assert.IsTrue(cellStyle.IsLocked);
             cellStyle.IsLocked = (false);
             Assert.IsFalse(cellStyle.IsLocked);
         }
         [Test]
+        public void TestBug738()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("738.xlsx");
+
+            ISheet sheet = wb.GetSheet("Sheet1");
+            IRow row = sheet.GetRow(0);
+            ICell cell = row.GetCell(0);
+            Assert.IsTrue(cell.CellStyle.IsLocked);
+            cell.CellStyle.IsLocked = true;
+            Assert.IsTrue(cell.CellStyle.IsLocked);
+            Assert.IsTrue(cell.CellStyle.IsHidden);
+        }
+
+        [Test]
         public void TestGetSetIndent()
         {
+            
             Assert.AreEqual((short)0, cellStyle.Indention);
             cellStyle.Indention = ((short)3);
             Assert.AreEqual((short)3, cellStyle.Indention);
