@@ -1473,5 +1473,12 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(3, wb.NumberOfSheets);
             wb.Close();
         }
+
+
+        [Test]
+        public void TestBug854()
+        {
+            Assert.DoesNotThrow(() => HSSFTestDataSamples.OpenSampleWorkbook("ATM.xls"));
+        }
     }
 }
