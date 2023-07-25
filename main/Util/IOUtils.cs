@@ -195,8 +195,8 @@ namespace NPOI.Util
             int total = 0;
             while (true)
             {
-                int got = stream.Read(b, off + total, len - total);
-                if (got < 0)
+                int got = stream.Read(b, off + total, len - total - off);
+                if (got <= 0)
                 {
                     return (total == 0) ? -1 : total;
                 }
