@@ -84,13 +84,13 @@ namespace TestCases.SS.UserModel
 
             DateTime dt = DateTime.Now.AddMilliseconds(123456789);
             cell.SetCellValue(dt);
-            Assert.IsTrue((dt.Ticks - cell.DateCellValue.Ticks) >= -20000);
+            Assert.IsTrue((dt.Ticks - ((DateTime)cell.DateCellValue).Ticks) >= -20000);
             Assert.AreEqual(CellType.Numeric, cell.CellType);
             AssertProhibitedValueAccess(cell, CellType.Boolean, CellType.String,
                     CellType.Formula, CellType.Error);
 
             cell.SetCellValue(dt);
-            Assert.IsTrue((dt.Ticks - cell.DateCellValue.Ticks) >= -20000);
+            Assert.IsTrue((dt.Ticks - ((DateTime)cell.DateCellValue).Ticks) >= -20000);
             Assert.AreEqual(CellType.Numeric, cell.CellType);
             AssertProhibitedValueAccess(cell, CellType.Boolean, CellType.String,
                     CellType.Formula, CellType.Error);
