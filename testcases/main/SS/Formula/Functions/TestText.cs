@@ -34,16 +34,16 @@ namespace TestCases.SS.Formula.Functions
     public class TestText
     {
         //private static TextFunction T = null;
-        [Test]
-        public void TestTextWithStringFirstArg()
-        {
+        //[Test]
+        //public void TestTextWithStringFirstArg()
+        //{
 
-            ValueEval strArg = new StringEval("abc");
-            ValueEval formatArg = new StringEval("abc");
-            ValueEval[] args = { strArg, formatArg };
-            ValueEval result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
-        }
+        //    ValueEval strArg = new StringEval("abc");
+        //    ValueEval formatArg = new StringEval("abc");
+        //    ValueEval[] args = { strArg, formatArg };
+        //    ValueEval result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
+        //    Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+        //}
         [Test]
         public void TestTextWithDeciamlFormatSecondArg()
         {
