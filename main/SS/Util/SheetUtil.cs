@@ -41,6 +41,7 @@ namespace NPOI.SS.Util
 
         // Default dpi
         private static int dpi = 96;
+
         // /**
         // * This is the multiple that the font height is scaled by when determining the
         // * boundary of rotated text.
@@ -480,7 +481,7 @@ namespace NPOI.SS.Util
                     String[] lines = rt.String.Split("\n".ToCharArray());
                     for (int i = 0; i < lines.Length; i++)
                     {
-                        String txt = lines[i] + defaultChar;
+                        String txt = lines[i];
 
                         //AttributedString str = new AttributedString(txt);
                         //copyAttributes(font, str, 0, txt.length());
@@ -514,7 +515,7 @@ namespace NPOI.SS.Util
                     }
                     if (sval != null)
                     {
-                        String txt = sval + defaultChar;
+                        String txt = sval;
                         //str = new AttributedString(txt);
                         //copyAttributes(font, str, 0, txt.length());
                         windowsFont = IFont2Font(font);
@@ -537,13 +538,13 @@ namespace NPOI.SS.Util
                 double x1 = Math.Abs(sf.Height * Math.Sin(angle));
                 double x2 = Math.Abs(sf.Width * Math.Cos(angle));
                 actualWidth = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
-                //bounds = layout.getOutline(trans).getBounds();
             }
             else
                 actualWidth = Math.Round(sf.Width, 0, MidpointRounding.ToEven);
 
             int padding = 5;
-            width = Math.Max(width, ((actualWidth + padding) / colspan / defaultCharWidth) + cell.CellStyle.Indention);
+            double correction = 1.05;
+            width = Math.Max(width, ((actualWidth + padding) / colspan / defaultCharWidth * correction) + cell.CellStyle.Indention);
             return width;
         }
 
@@ -605,6 +606,7 @@ namespace NPOI.SS.Util
         public static int GetDefaultCharWidth(IWorkbook wb)
         {
             IFont defaultFont = wb.GetFontAt((short)0);
+            Font font = IFont2Font(defaultFont);
 
             //AttributedString str = new AttributedString(String.valueOf(defaultChar));
             //copyAttributes(defaultFont, str, 0, 1);
