@@ -540,15 +540,10 @@ namespace NPOI.SS.Util
                 //bounds = layout.getOutline(trans).getBounds();
             }
             else
-            {
-                //bounds = layout.getBounds();
-                actualWidth = Math.Round(sf.Width, 0, MidpointRounding.ToEven);                
-            }
-            // entireWidth accounts for leading spaces which is excluded from bounds.getWidth()
-            //double frameWidth = bounds.getX() + bounds.getWidth();
-            //width = Math.max(width, ((frameWidth / colspan) / defaultCharWidth) + style.getIndention());
-            var correction = 1.1;
-            width = Math.Max(width, (actualWidth / colspan / defaultCharWidth * correction) + cell.CellStyle.Indention);
+                actualWidth = Math.Round(sf.Width, 0, MidpointRounding.ToEven);
+
+            int padding = 5;
+            width = Math.Max(width, ((actualWidth + padding) / colspan / defaultCharWidth) + cell.CellStyle.Indention);
             return width;
         }
 
