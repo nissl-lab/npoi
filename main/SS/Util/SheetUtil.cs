@@ -40,6 +40,9 @@ namespace NPOI.SS.Util
         // */
         private static char defaultChar = '0';
 
+        // Default dpi
+        private static int dpi = 96;
+
         // /**
         // * This is the multiple that the font height is scaled by when determining the
         // * boundary of rotated text.
@@ -416,7 +419,7 @@ namespace NPOI.SS.Util
         private static double GetRotatedContentHeight(ICell cell, string stringValue, Font windowsFont)
         {
             var angle = cell.CellStyle.Rotation * 2.0 * Math.PI / 360.0;
-            var measureResult = TextMeasurer.Measure(stringValue, new TextOptions(windowsFont));
+            var measureResult = TextMeasurer.Measure(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
 
             var x1 = Math.Abs(measureResult.Height * Math.Cos(angle));
             var x2 = Math.Abs(measureResult.Width * Math.Sin(angle));
@@ -426,7 +429,7 @@ namespace NPOI.SS.Util
 
         private static double GetContentHeight(string stringValue, Font windowsFont)
         {
-            var measureResult = TextMeasurer.Measure(stringValue, new TextOptions(windowsFont));
+            var measureResult = TextMeasurer.Measure(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
             
             return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);
         }
@@ -480,7 +483,7 @@ namespace NPOI.SS.Util
                     String[] lines = rt.String.Split("\n".ToCharArray());
                     for (int i = 0; i < lines.Length; i++)
                     {
-                        String txt = lines[i] + defaultChar;
+                        String txt = lines[i];
 
                         //AttributedString str = new AttributedString(txt);
                         //copyAttributes(font, str, 0, txt.length());
@@ -514,7 +517,7 @@ namespace NPOI.SS.Util
                     }
                     if (sval != null)
                     {
-                        String txt = sval + defaultChar;
+                        String txt = sval;
                         //str = new AttributedString(txt);
                         //copyAttributes(font, str, 0, txt.length());
                         windowsFont = IFont2Font(font);
@@ -530,25 +533,19 @@ namespace NPOI.SS.Util
         {
             //Rectangle bounds;
             double actualWidth;
-            FontRectangle sf = TextMeasurer.Measure(str, new TextOptions(windowsFont));
+            FontRectangle sf = TextMeasurer.Measure(str, new TextOptions(windowsFont) { Dpi = dpi });
             if (style.Rotation != 0)
             {
                 double angle = style.Rotation * 2.0 * Math.PI / 360.0;
                 double x1 = Math.Abs(sf.Height * Math.Sin(angle));
                 double x2 = Math.Abs(sf.Width * Math.Cos(angle));
                 actualWidth = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
-                //bounds = layout.getOutline(trans).getBounds();
             }
             else
-            {
-                //bounds = layout.getBounds();
-                actualWidth = Math.Round(sf.Width, 0, MidpointRounding.ToEven);                
-            }
-            // entireWidth accounts for leading spaces which is excluded from bounds.getWidth()
-            //double frameWidth = bounds.getX() + bounds.getWidth();
-            //width = Math.max(width, ((frameWidth / colspan) / defaultCharWidth) + style.getIndention());
-            var correction = 1.1;
-            width = Math.Max(width, (actualWidth / colspan / defaultCharWidth * correction) + cell.CellStyle.Indention);
+                actualWidth = Math.Round(sf.Width, 0, MidpointRounding.ToEven);
+
+            int padding = 5;
+            width = Math.Max(width, ((actualWidth + padding + cell.CellStyle.Indention) / colspan / defaultCharWidth));
             return width;
         }
 
@@ -610,13 +607,9 @@ namespace NPOI.SS.Util
         public static int GetDefaultCharWidth(IWorkbook wb)
         {
             IFont defaultFont = wb.GetFontAt((short)0);
-
-            //AttributedString str = new AttributedString(String.valueOf(defaultChar));
-            //copyAttributes(defaultFont, str, 0, 1);
-            //TextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
-            //int defaultCharWidth = (int)layout.getAdvance();
             Font font = IFont2Font(defaultFont);
-            return (int)Math.Ceiling(TextMeasurer.Measure(new string(defaultChar, 1), new TextOptions(font)).Width);
+
+            return (int)Math.Ceiling(TextMeasurer.Measure(new string(defaultChar, 1), new TextOptions(font) { Dpi = dpi }).Width);
         }
 
         /**
