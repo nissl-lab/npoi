@@ -18,10 +18,11 @@ namespace NPOI.Util
          */
         public static FileInfo CreateTempFile(String prefix, String suffix)
         {
-            string tempDir = Path.Combine(Path.GetTempPath(), "poifiles");
-
-            if (dir == null)
+            if (string.IsNullOrWhiteSpace(dir))
+            {
+                string tempDir = Path.Combine(Path.GetTempPath(), "poifiles");
                 dir = Directory.CreateDirectory(tempDir).FullName;
+            }
 
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
@@ -41,10 +42,11 @@ namespace NPOI.Util
 
         public static string GetTempFilePath(String prefix, String suffix)
         {
-            string tempDir = Path.Combine(Path.GetTempPath(), "poifiles");
-
-            if (dir == null)
+            if (string.IsNullOrWhiteSpace(dir))
+            {
+                string tempDir = Path.Combine(Path.GetTempPath(), "poifiles");
                 dir = Directory.CreateDirectory(tempDir).FullName;
+            }
 
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
