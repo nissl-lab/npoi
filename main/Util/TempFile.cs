@@ -18,11 +18,14 @@ namespace NPOI.Util
          */
         public static FileInfo CreateTempFile(String prefix, String suffix)
         {
+            string tempDir = Path.Combine(Path.GetTempPath(), "poifiles");
 
             if (dir == null)
-            {
-                dir = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "poifiles")).FullName;
-            }
+                dir = Directory.CreateDirectory(tempDir).FullName;
+
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
             // Generate a unique new filename 
             string file = Path.Combine(dir, prefix + Guid.NewGuid().ToString() + suffix);
             while (File.Exists(file))
@@ -38,10 +41,14 @@ namespace NPOI.Util
 
         public static string GetTempFilePath(String prefix, String suffix)
         {
+            string tempDir = Path.Combine(Path.GetTempPath(), "poifiles");
+
             if (dir == null)
-            {
-                dir = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "poifiles")).FullName;
-            }
+                dir = Directory.CreateDirectory(tempDir).FullName;
+
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
             Random rnd = new Random(DateTime.Now.Millisecond);
             Thread.Sleep(10);
             //return prefix + rnd.Next() + suffix;
