@@ -36,6 +36,7 @@ namespace TestCases.XSSF.Streaming
     using TestCases.Util;
 
     [TestFixture]
+    [NonParallelizable]
     public class TestSXSSFWorkbook : BaseTestXWorkbook
     {
 
