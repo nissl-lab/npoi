@@ -1053,7 +1053,7 @@ namespace TestCases.XSSF.UserModel
 
                 // read-only mode works!
                 workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ));
-                DateTime dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
+                var dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
                 Assert.AreEqual(dateExp, dateAct);
                 workbook.Close();
                 workbook = null;
