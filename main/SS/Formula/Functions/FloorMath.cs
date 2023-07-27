@@ -13,7 +13,6 @@ namespace NPOI.SS.Formula.Functions
 
         }
         public static readonly FloorMath Instance = new();
-
         protected override double EvaluateMajorDirection(double number)
             => Math.Floor(number);
 

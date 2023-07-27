@@ -12,7 +12,6 @@ namespace NPOI.SS.Formula.Functions
         {
         }
         public static readonly CeilingMath Instance = new();
-
         protected override double EvaluateMajorDirection(double number)
             => Math.Ceiling(number);
 
