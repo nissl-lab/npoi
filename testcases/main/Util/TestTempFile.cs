@@ -1,7 +1,6 @@
 ﻿using NPOI.Util;
 using NUnit.Framework;
 using System.IO;
-using System.Reflection;
 
 namespace TestCases.Util
 {
@@ -9,6 +8,7 @@ namespace TestCases.Util
     /// Tests of creating temp files
     /// </summary>
     [TestFixture]
+    [SingleThreaded]
     internal class TestTempFile
     {
         [Test]
