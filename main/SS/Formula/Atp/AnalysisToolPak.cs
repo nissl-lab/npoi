@@ -197,6 +197,11 @@ namespace NPOI.SS.Formula.Atp
             r(m, "CEILING.MATH", CeilingMath.Instance);
             r(m, "FLOOR.MATH", FloorMath.Instance);
 
+            r(m, "STDEV.S", StdevS.Instance);
+            r(m, "STDEV.P", StdevP.Instance);
+            r(m, "VAR.S", VarS.Instance);
+            r(m, "VAR.P", VarP.Instance);
+
             return m;
         }
 
