@@ -50,6 +50,9 @@ namespace NPOI.XSSF.UserModel
         {
             
         }
+
+        internal static POIXMLDocumentPart InternalCreateInstance(PackagePart part) => new(part);
+
         [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
         protected XSSFChartSheet(PackagePart part, PackageRelationship rel)
             : base(part)

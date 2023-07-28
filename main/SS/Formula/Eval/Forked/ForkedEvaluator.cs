@@ -16,7 +16,6 @@
 ==================================================================== */
 
 using System;
-//using System.Reflection;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula;
 using NPOI.SS.Formula.Eval;
@@ -62,8 +61,11 @@ namespace NPOI.SS.Formula.Eval.Forked
                 {
                     // TODO: check if this is Java 9 compatible ...
                     /*Type evalWB = Type.GetType("NPOI.XSSF.UserModel.XSSFEvaluationWorkbook");
-                    Type xssfWB = Type.GetType("NPOI.XSSF.UserModel.XSSFWorkbook");
-                    MethodInfo createM = evalWB.GetMethod("create", new Type[] { xssfWB });
+                    Type xssfWB = Type.GetType("NPOI.XSSF.UserMode.XSSFWorkbook");*/
+
+                    // REMOVE-REFLECTION: The code is Java-specific and different from the current NPOI object model
+
+                    /*var createM = evalWB.GetMethod("create", new Type[] { xssfWB });
                     return (IEvaluationWorkbook)createM.Invoke(null, new object[] { wb });*/
 
                     throw new NotSupportedException();

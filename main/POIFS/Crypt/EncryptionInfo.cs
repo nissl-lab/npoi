@@ -24,8 +24,6 @@ namespace NPOI.POIFS.Crypt
     using System;
     using System.Net.Security;
 
-    using System.Reflection;
-
     public class EncryptionInfo
     {
 

@@ -21,7 +21,7 @@ namespace NPOI.XWPF.UserModel
 
     using NPOI.OpenXml4Net.OPC;
     using NPOI.Util;
-    using System.Reflection;
+    using NPOI.XSSF.UserModel;
 
     /**
      * @author Yegor Kozlov
@@ -55,19 +55,8 @@ namespace NPOI.XWPF.UserModel
 
         protected override POIXMLDocumentPart CreateDocumentPart(Type cls, Type[] classes, Object[] values)
         {
-            if (classes == null)
-            {
-                classes = new Type[0];
-            }
-            ConstructorInfo constructor = cls.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public,
-                    null, classes, null);
-            if (constructor == null)
-                throw new MissingMethodException();
-            if (values == null)
-            {
-                values = new object[0];
-            }
-            return constructor.Invoke(values) as POIXMLDocumentPart;
+            // REMOVE-REFLECTION: Reflection is replaced with static dispatch.
+            return DocumentPartCreationHelper.CreateDocumentPart(cls, classes, values);
         }
 
     }

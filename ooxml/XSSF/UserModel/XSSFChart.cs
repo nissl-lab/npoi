@@ -84,6 +84,8 @@ namespace NPOI.XSSF.UserModel
             chart = chartSpaceDocument.GetChartSpace().chart;
         }
 
+        internal static POIXMLDocumentPart InternalCreateInstance(PackagePart part) => new(part);
+
         [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
         protected XSSFChart(PackagePart part, PackageRelationship rel)
             : this(part)

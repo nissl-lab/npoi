@@ -6,7 +6,8 @@ using System.Reflection;
 using System.Text;
 using System.Xml.Serialization;
 
-// REMOVE-REFLECTION: Reflection used is unremovable but the class is obsolete.
+// REMOVE-REFLECTION: Reflection used is unremovable but the class is obsolete and not used elsewhere.
+// AOT should automatically trim this class if the end user is not using it.
 
 namespace NPOI.XSSF.Util
 {

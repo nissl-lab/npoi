@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.OpenXml4Net.Core", "..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPOI.OpenXmlFormats.Core", "..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj", "{66A6935B-BCDB-4F95-9E79-E755958B786B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testclass", "testclass\testclass.csproj", "{EAB32473-17CD-459B-8089-7A7A18D2DB93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleSourceGenerator", "SimpleSourceGenerator\SimpleSourceGenerator.csproj", "{EAB32473-17CD-459B-8089-7A7A18D2DB93}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C4E6AFB-7F7B-491B-9800-C47BABB6FEE9}"
 	ProjectSection(SolutionItems) = preProject
