@@ -20,7 +20,6 @@ using System;
 using NPOI.Util;
 using System.Collections.Generic;
 using System.Security;
-using System.Reflection;
 //using System.IO.MemoryMappedFiles;
 namespace NPOI.POIFS.NIO
 {

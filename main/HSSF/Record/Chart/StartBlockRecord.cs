@@ -28,7 +28,7 @@ namespace NPOI.HSSF.Record.Chart
      */
     public class StartBlockRecord : StandardRecord
     {
-        public static short sid = 0x0852;
+        public const short sid = 0x0852;
 
         private short rt;
         private short grbitFrt;

@@ -37,7 +37,8 @@ namespace NPOI.SS.Formula.PTG
         {
             try
             {
-                return (OperandPtg)Clone();
+                // REMOVE-REFLECTION: After careful inspection, MemberwiseClone() should be enough for all built-in OpreandPtgs.
+                return (OperandPtg)MemberwiseClone();
             }
             catch (NotSupportedException e)
             {

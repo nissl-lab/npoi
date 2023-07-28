@@ -3,9 +3,19 @@ using System.Reflection;
 using System;
 using NPOI.Util.ArrayExtensions;
 
+// REMOVE-REFLECTION: The DeepCopy function is difficult to remove.
+// I tested derived classes of Ptg and removes Ptg's IClonable interface and refactored OperandPtg's deepcopy logic.
+// However, XWPFTableRow.CloneRow relies on deepcopy and I would recommend `rd.xml` to let AOT engine keep metadata.
+// Or turn to some sort of source generators, generating deepcopy code for all CT_* classes.
+
 namespace NPOI.Util
 {
-    public static class ObjectExtensions
+    public static partial class ObjectExtensions
+    {
+        public static List<T> ReflectionlessDeepCopy<T>(this List<T> list) where T : struct
+            => new List<T>(list);
+    }
+    public static partial class ObjectExtensions
     {
         private static readonly MethodInfo CloneMethod = typeof(Object).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance);
 

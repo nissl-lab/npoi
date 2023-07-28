@@ -5784,7 +5784,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             ctRow.textIdField = this.textIdField?.ToArray();
             ctRow.trPrField = this.trPrField?.Copy();
             ctRow.tblPrExField = this.tblPrExField?.Copy();
-            ctRow.itemsElementNameField = this.itemsElementNameField?.Copy();
+            ctRow.itemsElementNameField = this.itemsElementNameField?.ReflectionlessDeepCopy();
             ctRow.itemsField = this.itemsField?.Copy();
             return ctRow;
         }

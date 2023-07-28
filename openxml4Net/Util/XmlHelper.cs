@@ -8,6 +8,9 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 
+// REMOVE-REFLECTION: Reflection uses here are unremovable.
+// Although the relating methods are a part of the API, they are not called from elsewhere in NPOI. Can they be safely removed?
+// or at least be marked as Obsolete
 namespace NPOI.OpenXml4Net.Util
 {
     public static class XmlHelper

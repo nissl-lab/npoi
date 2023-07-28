@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using System;
-using System.Reflection;
+//using System.Reflection;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula;
 using NPOI.SS.Formula.Eval;
@@ -36,6 +36,9 @@ namespace NPOI.SS.Formula.Eval.Forked
      *
      * @author Josh Micich
      */
+
+    // REMOVE-REFLECTION: This class doesn't work from the beginning because of typo.
+    // And no elsewhere in NPOI uses this class. Consider removing it.
     public class ForkedEvaluator
     {
 
@@ -58,10 +61,12 @@ namespace NPOI.SS.Formula.Eval.Forked
                 try
                 {
                     // TODO: check if this is Java 9 compatible ...
-                    Type evalWB = Type.GetType("NPOI.XSSF.UserModel.XSSFEvaluationWorkbook");
-                    Type xssfWB = Type.GetType("NPOI.XSSF.UserMode.XSSFWorkbook");
+                    /*Type evalWB = Type.GetType("NPOI.XSSF.UserModel.XSSFEvaluationWorkbook");
+                    Type xssfWB = Type.GetType("NPOI.XSSF.UserModel.XSSFWorkbook");
                     MethodInfo createM = evalWB.GetMethod("create", new Type[] { xssfWB });
-                    return (IEvaluationWorkbook)createM.Invoke(null, new object[] { wb });
+                    return (IEvaluationWorkbook)createM.Invoke(null, new object[] { wb });*/
+
+                    throw new NotSupportedException();
                 }
                 catch (Exception e)
                 {

@@ -215,7 +215,15 @@ namespace NPOI
             if (!this.GetProperties().CustomProperties.Contains("Generator"))
                 this.GetProperties().CustomProperties.AddProperty("Generator", "NPOI");
             if (!this.GetProperties().CustomProperties.Contains("Generator Version"))
-                this.GetProperties().CustomProperties.AddProperty("Generator Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
+                // REMOVE-REFLECTION: Reflection here is used to extract assembly version.
+                try
+                {
+                    this.GetProperties().CustomProperties.AddProperty("Generator Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
+                }
+                catch
+                {
+                    // Silent fail for native AOT.
+                }
             //force all children to commit their Changes into the underlying OOXML Package
             List<PackagePart> context = new List<PackagePart>();
             OnSave(context);

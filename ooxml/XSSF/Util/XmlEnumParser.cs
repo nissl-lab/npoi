@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Text;
 using System.Xml.Serialization;
 
+// REMOVE-REFLECTION: Reflection used is unremovable but the class is obsolete.
+
 namespace NPOI.XSSF.Util
 {
     [Obsolete]

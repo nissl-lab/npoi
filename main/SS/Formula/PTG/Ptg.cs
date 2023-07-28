@@ -44,7 +44,7 @@ namespace NPOI.SS.Formula.PTG
      * @author Jason Height (jheight at chariot dot net dot au)
      */
     [Serializable]
-    public abstract class Ptg : ICloneable
+    public abstract class Ptg //: ICloneable
     {
         public static Ptg[] EMPTY_PTG_ARRAY = { };
 
@@ -208,10 +208,10 @@ namespace NPOI.SS.Formula.PTG
         //    }
         //    return (Ptg)Clone();
         //}
-        public virtual object Clone()
-        {
-            return this.Copy();
-        }
+        // private virtual object Clone()
+        //{
+            //return this.Copy();
+        //}
 
         /**
 	     * This method will return the same result as {@link #getEncodedSizeWithoutArrayData(Ptg[])}
@@ -358,14 +358,14 @@ namespace NPOI.SS.Formula.PTG
             }
         }
 
-        #region ICloneable Members
+        /*#region ICloneable Members
 
         object ICloneable.Clone()
         {
             throw new NotImplementedException();
         }
 
-        #endregion
+        #endregion*/
 
         public static bool DoesFormulaReferToDeletedCell(Ptg[] ptgs)
         {

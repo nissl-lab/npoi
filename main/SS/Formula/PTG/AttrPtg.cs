@@ -337,7 +337,7 @@ namespace NPOI.SS.Formula.PTG
             return "UNKNOWN ATTRIBUTE";
         }
 
-        public override Object Clone()
+        /*public override Object Clone()
         {
             int[] jt;
             if (_jumpTable == null)
@@ -349,6 +349,6 @@ namespace NPOI.SS.Formula.PTG
                 jt = (int[])_jumpTable.Clone();
             }
             return new AttrPtg(field_1_options, field_2_data, jt, _chooseFuncOffset);
-        }
+        }*/
     }
 }

@@ -29,7 +29,7 @@ namespace NPOI.HSSF.Record
      */
     public class CFHeader12Record : CFHeaderBase, IFutureRecord, ICloneable
     {
-        public static short sid = 0x0879;
+        public const short sid = 0x0879;
 
         private FtrHeader futureHeader;
 

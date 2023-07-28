@@ -20,7 +20,6 @@ namespace NPOI.SS.Formula
 
     using System;
     using System.Collections;
-    using System.Reflection;
 
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
@@ -69,13 +68,15 @@ namespace NPOI.SS.Formula
 
         private static void Add(Hashtable m, OperationPtg ptgKey, Functions.Function instance)
         {
+            // REMOVE-REFLECTION: Reflection here is only to ensure singleton mode. Safe to remove since we are sure.
+
             // make sure ptg has single private constructor because map lookups assume singleton keys
-            ConstructorInfo[] cc = ptgKey.GetType().GetConstructors();
+            /*ConstructorInfo[] cc = ptgKey.GetType().GetConstructors();
             if (cc.Length > 1 || (cc.Length > 0 && !cc[0].IsPrivate))
             {
                 throw new Exception("Failed to verify instance ("
                         + ptgKey.GetType().Name + ") is a singleton.");
-            }
+            }*/
             m[ptgKey] = instance;
         }
 

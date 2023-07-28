@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 
 namespace NPOI.OpenXml4Net.Util
@@ -110,6 +109,8 @@ namespace NPOI.OpenXml4Net.Util
 
         public static ThresholdInputStream AddThreshold(Stream zipIS)
         {
+            // REMOVE-REFLCETION: Meaningless reflection is used here as the type FilterInputStream doesn't have a field named "in".
+            // And obviously this stub does nothing.
 
             ThresholdInputStream newInner = null;
             if (zipIS is InflaterInputStream)
@@ -117,7 +118,7 @@ namespace NPOI.OpenXml4Net.Util
                 //replace inner stream of zipIS by using a ThresholdInputStream instance??
                 try
                 {
-                    FieldInfo f = typeof(FilterInputStream).GetField("in");
+                    // FieldInfo f = typeof(FilterInputStream).GetField("in");
                     //f.SetAccessible(true);
                     //InputStream oldInner = (InputStream)f.Get(zipIS);
                     //newInner = new ThresholdInputStream(oldInner, null);
