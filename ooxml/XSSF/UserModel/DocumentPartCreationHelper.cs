@@ -38,7 +38,7 @@ namespace NPOI.XSSF.UserModel
 
             if (values.Length == 1 && types.Length == 1 && types[0] == typeof(PackagePart))
             {
-                return CreateDocumentPartOneParam(cls, (PackagePart)values[1]);
+                return CreateDocumentPartOneParam(cls, (PackagePart)values[0]);
             }
 
             if (values.Length == 2 && types.Length == 2 && types[0] == typeof(POIXMLDocumentPart) && types[1] == typeof(PackagePart))
