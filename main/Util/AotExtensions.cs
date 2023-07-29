@@ -33,6 +33,11 @@ namespace NPOI.Util
         {
             return Enum.GetName(typeof(T), val);
         }
+
+        public static string[] GetEnumNames<T>() where T : struct, Enum
+        {
+            return Enum.GetNames(typeof(T));
+        }
 #else
         // AOT-friendly
         public static T[] GetEnumValues<T>() where T : struct, Enum
@@ -43,6 +48,11 @@ namespace NPOI.Util
         public static string GetEnumName<T>(T val) where T : struct, Enum
         {
             return Enum.GetName<T>(val);
+        }
+
+        public static string[] GetEnumNames<T>() where T : struct, Enum
+        {
+            return Enum.GetNames<T>();
         }
 #endif
     }

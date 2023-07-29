@@ -17,7 +17,6 @@ namespace NPOI.OpenXmlFormats.Encryption
     using System.Xml;
     using System.Collections.Generic;
     using NPOI.OpenXml4Net.Util;
-    using EnumsNET;
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3761.0")]
     [System.SerializableAttribute()]
@@ -434,7 +433,7 @@ namespace NPOI.OpenXmlFormats.Encryption
             if (node.Attributes["uri"] != null)
             {
                 ctObj.uriFieldSpecified = true;
-                ctObj.uriField = Enums.Parse<CT_KeyEncryptorUri>(node.Attributes["uri"].Value, false, EnumFormat.Description);
+                ctObj.uriField = CT_KeyEncryptorUriParser.Parse(node.Attributes["uri"].Value);
             }
             foreach(XmlNode child in node.ChildNodes)
             {
@@ -458,12 +457,25 @@ namespace NPOI.OpenXmlFormats.Encryption
     public enum CT_KeyEncryptorUri
     {
         /// <remarks/>
-        [Description("http://schemas.microsoft.com/office/2006/keyEncryptor/password")]
+        [Description(CT_KeyEncryptorUriParser.httpschemasmicrosoftcomoffice2006keyEncryptorpassword)]
         httpschemasmicrosoftcomoffice2006keyEncryptorpassword,
 
         /// <remarks/>
-        [Description("http://schemas.microsoft.com/office/2006/keyEncryptor/certificate")]
+        [Description(CT_KeyEncryptorUriParser.httpschemasmicrosoftcomoffice2006keyEncryptorcertificate)]
         httpschemasmicrosoftcomoffice2006keyEncryptorcertificate,
+    }
+
+    internal static class CT_KeyEncryptorUriParser
+    {
+        public const string httpschemasmicrosoftcomoffice2006keyEncryptorpassword = "http://schemas.microsoft.com/office/2006/keyEncryptor/password";
+        public const string httpschemasmicrosoftcomoffice2006keyEncryptorcertificate = "http://schemas.microsoft.com/office/2006/keyEncryptor/certificate";
+
+        public static CT_KeyEncryptorUri Parse(string uri) => uri switch
+        {
+            httpschemasmicrosoftcomoffice2006keyEncryptorcertificate => CT_KeyEncryptorUri.httpschemasmicrosoftcomoffice2006keyEncryptorcertificate,
+            httpschemasmicrosoftcomoffice2006keyEncryptorpassword => CT_KeyEncryptorUri.httpschemasmicrosoftcomoffice2006keyEncryptorpassword,
+            _ => throw new ArgumentOutOfRangeException(nameof(uri))
+        };
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3761.0")]
