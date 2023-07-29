@@ -63,7 +63,7 @@ namespace NPOI.XWPF.UserModel
         {
         }
 
-        internal static POIXMLDocumentPart InternalCreateInstance() => new();
+        internal static XWPFPictureData InternalCreateInstance() => new();
 
         /**
          * Construct XWPFPictureData from a package part

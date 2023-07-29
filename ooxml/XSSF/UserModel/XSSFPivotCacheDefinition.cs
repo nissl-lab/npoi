@@ -53,7 +53,7 @@ namespace NPOI.XSSF.UserModel
             ReadFrom(part.GetInputStream());
         }
 
-        internal static POIXMLDocumentPart InternalCreateInstance(PackagePart part) => new(part);
+        internal static XSSFPivotCacheDefinition InternalCreateInstance(PackagePart part) => new(part);
 
         [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
         protected XSSFPivotCacheDefinition(PackagePart part, PackageRelationship rel)
