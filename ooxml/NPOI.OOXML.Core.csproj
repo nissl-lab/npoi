@@ -9,6 +9,10 @@
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+    <IsAotCompatible>true</IsAotCompatible>
+  </PropertyGroup>
+  
   <ItemGroup>
     <Compile Remove="POIFS\Crypt\Dsig\KeyInfoKeySelector.cs" />
     <Compile Remove="POIFS\Crypt\Dsig\Services\RelationshipTransformService.cs" />

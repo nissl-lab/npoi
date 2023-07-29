@@ -187,7 +187,7 @@ namespace NPOI.SS.Formula.PTG
                 return EMPTY_PTG_ARRAY;
             }
 
-            Ptg[] result = (Ptg[])l.ToArray(typeof(Ptg));
+            Ptg[] result = l.ToArray<Ptg>();
             return result;
         }
         /**

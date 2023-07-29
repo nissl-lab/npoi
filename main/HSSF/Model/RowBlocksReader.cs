@@ -24,6 +24,7 @@ namespace NPOI.HSSF.Model
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
     using System.Collections;
+    using NPOI.Util;
 
     /**
      * Segregates the 'Row Blocks' section of a single sheet into plain row/cell records and 
@@ -92,20 +93,19 @@ namespace NPOI.HSSF.Model
                 dest.Add(rec);
                 prevRec = rec;
             }
-            SharedFormulaRecord[] sharedFormulaRecs = new SharedFormulaRecord[shFrmRecords.Count];
-            List<ArrayRecord> arrayRecs = new List<ArrayRecord>(arrayRecords.Count);
-            List<TableRecord> tableRecs = new List<TableRecord>(tableRecords.Count);
-            sharedFormulaRecs = (SharedFormulaRecord[])shFrmRecords.ToArray(typeof(SharedFormulaRecord));
+            SharedFormulaRecord[] sharedFormulaRecs;
+            List<ArrayRecord> arrayRecs;
+            List<TableRecord> tableRecs;
+            sharedFormulaRecs = shFrmRecords.ToArray<SharedFormulaRecord>();
 
-            CellReference[] firstCells = new CellReference[firstCellRefs.Count];
-            firstCells=firstCellRefs.ToArray();
-            arrayRecs = new List<ArrayRecord>((ArrayRecord[])arrayRecords.ToArray(typeof(ArrayRecord)));
-            tableRecs = new List<TableRecord>((TableRecord[])tableRecords.ToArray(typeof(TableRecord)));
+            CellReference[] firstCells;
+            firstCells = firstCellRefs.ToArray();
+            arrayRecs = new List<ArrayRecord>(arrayRecords.ToArray<ArrayRecord>());
+            tableRecs = new List<TableRecord>(tableRecords.ToArray<TableRecord>());
 
             _plainRecords = plainRecords;
             _sfm = SharedValueManager.Create(sharedFormulaRecs,firstCells, arrayRecs, tableRecs);
-            _mergedCellsRecords = new MergeCellsRecord[mergeCellRecords.Count];
-            _mergedCellsRecords = (MergeCellsRecord[])mergeCellRecords.ToArray(typeof(MergeCellsRecord));
+            _mergedCellsRecords = mergeCellRecords.ToArray<MergeCellsRecord>();
         }
 
         /**

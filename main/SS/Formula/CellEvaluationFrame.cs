@@ -22,6 +22,7 @@ namespace NPOI.SS.Formula
     using System.Collections;
     using System.Text;
     using NPOI.SS.Formula.Eval;
+    using NPOI.Util;
 
     /**
      * Stores details about the current evaluation of a cell.<br/>
@@ -69,7 +70,7 @@ namespace NPOI.SS.Formula
                 return CellCacheEntry.EMPTY_ARRAY;
             }
             CellCacheEntry[] result = new CellCacheEntry[nItems];
-            result = (CellCacheEntry[])_sensitiveInputCells.ToArray(typeof(CellCacheEntry));
+            result = _sensitiveInputCells.ToArray<CellCacheEntry>();
             return result;
         }
         public void AddUsedBlankCell(int bookIndex, int sheetIndex, int rowIndex, int columnIndex)

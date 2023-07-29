@@ -54,8 +54,7 @@ namespace NPOI.SS.Util
                 throw new ArgumentException("Array size mismatch.");
             }
 
-            K[] flattenedArray = (K[])Array.CreateInstance(cellClass, nItems);
-            flattenedArray=flattenedList.ToArray();
+            K[] flattenedArray = flattenedList.ToArray();
             return new SSCellRange<K>(firstRow, firstColumn, height, width, flattenedArray);
         }
 
@@ -155,12 +154,10 @@ namespace NPOI.SS.Util
         public K[][] Cells
         {
             get {
-                Type itemCls = _flattenedArray.GetType();
-                K[][] result = (K[][])Array.CreateInstance(itemCls, _height);
-                itemCls = itemCls.GetElementType();
+                K[][] result = new K[_height][];
                 for (int r = _height - 1; r >= 0; r--)
                 {
-                    K[] row = (K[])Array.CreateInstance(itemCls, _width);
+                    K[] row = new K[_width];
                     int flatIndex = _width * r;
                     Array.Copy(_flattenedArray, flatIndex, row, 0, _width);
                 }

@@ -21,6 +21,7 @@ namespace NPOI.SS.Util
     using System.Collections;
     using NPOI.SS.Util;
     using System.Collections.Generic;
+    using NPOI.Util;
 
     /**
      * Utility class that builds on {@link CellRangeAddress}
@@ -297,7 +298,7 @@ namespace NPOI.SS.Util
         private static CellRangeAddress[] ToArray(ArrayList temp)
         {
             CellRangeAddress[] result = new CellRangeAddress[temp.Count];
-            result = (CellRangeAddress[])temp.ToArray(typeof(CellRangeAddress));
+            result = temp.ToArray<CellRangeAddress>();
             return result;
         }
 

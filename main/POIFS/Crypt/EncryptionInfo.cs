@@ -22,6 +22,7 @@ using NPOI.Util;
 namespace NPOI.POIFS.Crypt
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Net.Security;
 
     public class EncryptionInfo
@@ -318,6 +319,10 @@ namespace NPOI.POIFS.Crypt
         }
 
         private static Type AgileEncrpytionInfo;
+
+#if NET6_0_OR_GREATER
+        [RequiresUnreferencedCode("Agile must be dynamically loaded from NPOI.OOXML. TODO.")]
+#endif
         private static IEncryptionInfoBuilder CreateAgileInstanceFallback()
         {
             if (AgileEncrpytionInfo is null)

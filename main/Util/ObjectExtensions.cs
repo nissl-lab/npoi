@@ -2,6 +2,7 @@
 using System.Reflection;
 using System;
 using NPOI.Util.ArrayExtensions;
+using System.Diagnostics.CodeAnalysis;
 
 // REMOVE-REFLECTION: The DeepCopy function is difficult to remove.
 // I tested derived classes of Ptg and removes Ptg's IClonable interface and refactored OperandPtg's deepcopy logic.
@@ -53,7 +54,11 @@ namespace NPOI.Util
             return cloneObject;
         }
 
-        private static void RecursiveCopyBaseTypePrivateFields(object originalObject, IDictionary<object, object> visited, object cloneObject, Type typeToReflect)
+        private static void RecursiveCopyBaseTypePrivateFields(object originalObject, IDictionary<object, object> visited, object cloneObject,
+#if NET6_0_OR_GREATER
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+#endif
+            Type typeToReflect)
         {
             if (typeToReflect.BaseType != null)
             {
@@ -62,7 +67,12 @@ namespace NPOI.Util
             }
         }
 
-        private static void CopyFields(object originalObject, IDictionary<object, object> visited, object cloneObject, Type typeToReflect, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy, Func<FieldInfo, bool> filter = null)
+        private static void CopyFields(object originalObject, IDictionary<object, object> visited, object cloneObject,
+#if NET6_0_OR_GREATER
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] 
+#endif
+            Type typeToReflect, 
+            BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy, Func<FieldInfo, bool> filter = null)
         {
             foreach (FieldInfo fieldInfo in typeToReflect.GetFields(bindingFlags))
             {

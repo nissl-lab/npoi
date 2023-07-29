@@ -22,6 +22,7 @@ namespace NPOI.SS.Formula
     using System.Collections;
     using System.Collections.Generic;
     using NPOI.SS.UserModel;
+    using NPOI.Util;
 
     [Serializable]
     public class WorkbookNotFoundException : Exception
@@ -169,7 +170,7 @@ namespace NPOI.SS.Formula
                 oldEnvs.Add(evaluators[i].GetEnvironment());
             }
             CollaboratingWorkbooksEnvironment[] oldCWEs = new CollaboratingWorkbooksEnvironment[oldEnvs.Count];
-            oldCWEs = (CollaboratingWorkbooksEnvironment[])oldEnvs.ToArray(typeof(CollaboratingWorkbooksEnvironment));
+            oldCWEs = oldEnvs.ToArray<CollaboratingWorkbooksEnvironment>();
             for (int i = 0; i < oldCWEs.Length; i++)
             {
                 oldCWEs[i].Unhook();

@@ -174,10 +174,8 @@ namespace NPOI.XSSF.UserModel
                                 if (!commonTokens.GetValue(i).Equals(tokens[i]))
                                 {
                                     ArrayList subCommonTokens = Arrays.AsList(commonTokens).GetRange(0, i);
-                                    commonTokens = subCommonTokens.ToArray(typeof(string));
+                                    commonTokens = subCommonTokens.ToArray<string>();
                                     break;
-
-
                                 }
                             }
                         }

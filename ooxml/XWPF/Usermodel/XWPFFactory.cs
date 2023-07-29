@@ -18,7 +18,6 @@
 namespace NPOI.XWPF.UserModel
 {
     using System;
-    using System.Reflection;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.Util;
     using NPOI.XSSF.UserModel;

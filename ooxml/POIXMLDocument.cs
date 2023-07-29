@@ -216,6 +216,7 @@ namespace NPOI
                 this.GetProperties().CustomProperties.AddProperty("Generator", "NPOI");
             if (!this.GetProperties().CustomProperties.Contains("Generator Version"))
                 // REMOVE-REFLECTION: Reflection here is used to extract assembly version.
+                // This will work on AOT.
                 try
                 {
                     this.GetProperties().CustomProperties.AddProperty("Generator Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3));

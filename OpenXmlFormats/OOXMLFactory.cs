@@ -6,7 +6,7 @@ using System.IO;
 
 namespace NPOI.OpenXmlFormats
 {
-    public class OOXMLFactory<T>
+    public class OOXMLFactory<T> where T : new()
     {
         XmlSerializer serializerObj = null; 
         public OOXMLFactory()
@@ -22,7 +22,7 @@ namespace NPOI.OpenXmlFormats
         }
         public T Create()
         {
-            return (T)Activator.CreateInstance(typeof(T));
+            return new T();
         }
     }
 }

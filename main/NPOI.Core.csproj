@@ -8,6 +8,10 @@
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+    <IsAotCompatible>true</IsAotCompatible>
+  </PropertyGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="Resources\font_metrics.properties" />
     <EmbeddedResource Include="Resources\functionMetadata.txt" />

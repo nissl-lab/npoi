@@ -23,6 +23,7 @@ namespace NPOI.HSSF.EventUserModel
     using NPOI.HSSF.Record;
     using NPOI.HSSF.UserModel;
     using System.Collections.Generic;
+    using NPOI.Util;
 
     /// <summary>
     /// When working with the EventUserModel, if you want to
@@ -134,9 +135,7 @@ namespace NPOI.HSSF.EventUserModel
             /// <returns></returns>
             public BoundSheetRecord[] GetBoundSheetRecords()
             {
-                return (BoundSheetRecord[])boundSheetRecords.ToArray(
-                        typeof(BoundSheetRecord)
-                );
+                return boundSheetRecords.ToArray<BoundSheetRecord>();
             }
             /// <summary>
             /// Gets the extern sheet records.
@@ -144,9 +143,7 @@ namespace NPOI.HSSF.EventUserModel
             /// <returns></returns>
             public ExternSheetRecord[] GetExternSheetRecords()
             {
-                return (ExternSheetRecord[])externSheetRecords.ToArray(
-                        typeof(ExternSheetRecord)
-                );
+                return externSheetRecords.ToArray<ExternSheetRecord>();
             }
             /// <summary>
             /// Gets the SST record.

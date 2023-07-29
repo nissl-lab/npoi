@@ -135,7 +135,7 @@ namespace NPOI.HSSF.Model
                 {
                     temp.Add(rs.GetNext());
                 }
-                _externalNameRecords = (ExternalNameRecord[])temp.ToArray(typeof(ExternalNameRecord));
+                _externalNameRecords = temp.ToArray<ExternalNameRecord>();
 
                 temp.Clear();
 
@@ -143,7 +143,7 @@ namespace NPOI.HSSF.Model
                 {
                     temp.Add(new CRNBlock(rs));
                 }
-                _crnBlocks = (CRNBlock[])temp.ToArray(typeof(CRNBlock));
+                _crnBlocks = temp.ToArray<CRNBlock>();
             }
 
             /**
@@ -235,7 +235,7 @@ namespace NPOI.HSSF.Model
             }
 
             //_externalBookBlocks = new ExternalBookBlock[temp.Count];
-            _externalBookBlocks = (ExternalBookBlock[])temp.ToArray(typeof(ExternalBookBlock));
+            _externalBookBlocks = temp.ToArray<ExternalBookBlock>();
             temp.Clear();
 
             if (_externalBookBlocks.Length > 0)
