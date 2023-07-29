@@ -26,24 +26,32 @@ namespace NPOI.Util
             return (type.IsValueType & type.IsPrimitive);
         }
 
-        public static Object Copy(this Object originalObject)
+        public static T Copy<
+#if NET6_0_OR_GREATER
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+# endif
+            T>(this T originalObject) where T : class
         {
             return InternalCopy(originalObject, new Dictionary<Object, Object>(new ReferenceEqualityComparer()));
         }
-        private static Object InternalCopy(Object originalObject, IDictionary<Object, Object> visited)
+        private static T InternalCopy<
+#if NET6_0_OR_GREATER
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+# endif
+            T>(T originalObject, Dictionary<Object, Object> visited) where T : class
         {
             if (originalObject == null) return null;
-            var typeToReflect = originalObject.GetType();
+            var typeToReflect = typeof(T);
             if (IsPrimitive(typeToReflect)) return originalObject;
-            if (visited.ContainsKey(originalObject)) return visited[originalObject];
+            if (visited.ContainsKey(originalObject)) return (T)visited[originalObject];
             if (typeof(Delegate).IsAssignableFrom(typeToReflect)) return null;
-            var cloneObject = CloneMethod.Invoke(originalObject, null);
-            if (typeToReflect.IsArray)
+            var cloneObject = (T)CloneMethod.Invoke(originalObject, null);
+            if (originalObject is Array)
             {
                 var arrayType = typeToReflect.GetElementType();
                 if (IsPrimitive(arrayType) == false)
                 {
-                    Array clonedArray = (Array)cloneObject;
+                    Array clonedArray = (Array)(object)cloneObject;
                     clonedArray.ForEach((array, indices) => array.SetValue(InternalCopy(clonedArray.GetValue(indices), visited), indices));
                 }
 
@@ -54,7 +62,7 @@ namespace NPOI.Util
             return cloneObject;
         }
 
-        private static void RecursiveCopyBaseTypePrivateFields(object originalObject, IDictionary<object, object> visited, object cloneObject,
+        private static void RecursiveCopyBaseTypePrivateFields(object originalObject, Dictionary<object, object> visited, object cloneObject,
 #if NET6_0_OR_GREATER
             [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 #endif
@@ -67,7 +75,7 @@ namespace NPOI.Util
             }
         }
 
-        private static void CopyFields(object originalObject, IDictionary<object, object> visited, object cloneObject,
+        private static void CopyFields(object originalObject, Dictionary<object, object> visited, object cloneObject,
 #if NET6_0_OR_GREATER
             [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] 
 #endif
@@ -82,10 +90,6 @@ namespace NPOI.Util
                 var clonedFieldValue = InternalCopy(originalFieldValue, visited);
                 fieldInfo.SetValue(cloneObject, clonedFieldValue);
             }
-        }
-        public static T Copy<T>(this T original)
-        {
-            return (T)Copy((Object)original);
         }
     }
 
