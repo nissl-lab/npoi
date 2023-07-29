@@ -418,6 +418,15 @@ namespace NPOI.XSSF.Streaming
 
         public void RemoveCellComment()
         {
+            IComment comment = this.CellComment;
+            if (comment != null)
+            {
+                CellAddress ref1 = new CellAddress(RowIndex, ColumnIndex);
+                XSSFSheet sh = ((SXSSFSheet)Sheet)._sh;
+                sh.GetCommentsTable(false).RemoveComment(ref1);
+                sh.GetVMLDrawing(false).RemoveCommentShape(RowIndex, ColumnIndex);
+            }
+
             RemoveProperty(Property.COMMENT);
         }
 
