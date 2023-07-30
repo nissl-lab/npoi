@@ -59,11 +59,16 @@ namespace NPOI.SS.Formula.Functions
                 int offsetInMonthAsNumber = (int)GetValue(args[1]);
 
                 // resolve the arguments
-                DateTime startDate = DateUtil.GetJavaDate(startDateAsNumber);
-                if (startDate == null)
+                DateTime startDate;
+                try
+                {
+                    startDate = DateUtil.GetJavaDate(startDateAsNumber);
+                }
+                catch (ArgumentException)
                 {
                     return ErrorEval.VALUE_INVALID;
                 }
+
                 DateTime resultDate = startDate.AddMonths(offsetInMonthAsNumber);
                 result = DateUtil.GetExcelDate(resultDate);
                     
