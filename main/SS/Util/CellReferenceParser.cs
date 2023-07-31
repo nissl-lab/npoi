@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NPOI;
+namespace NPOI.SS.Util;
 
 internal static class CellReferenceParser
 {
