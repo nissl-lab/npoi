@@ -655,7 +655,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                throw new NotImplementedException();
+                GetSheetTypeSheetView().topLeftCell = "A" + value.ToString();
             }
         }
 
