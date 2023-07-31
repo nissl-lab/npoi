@@ -2688,8 +2688,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<");
-            sw.Write(nodeName);
+            sw.WriteBeginElementHalf(nodeName);
             if (this.t != ST_CellFormulaType.normal)
                 XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
             XmlHelper.WriteAttribute(sw, "aca", this.aca, false);

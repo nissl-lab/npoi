@@ -114,7 +114,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteBeginElementHalf(nodeName);
             XmlHelper.WriteAttribute(sw, "sb", this.sb.ToString(), true);
             XmlHelper.WriteAttribute(sw, "eb", this.eb.ToString(), true);
             sw.Write(">");
@@ -124,7 +124,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 sw.Write(XmlHelper.EncodeXml(this.t));
             }
             sw.Write("</t>");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
     }

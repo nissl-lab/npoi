@@ -65,8 +65,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<");
-            sw.Write(nodeName);
+            sw.WriteBeginElementHalf(nodeName);
 
             XmlHelper.WriteAttribute(sw, "r", this.r);
             XmlHelper.WriteAttribute(sw, "s", this.s);

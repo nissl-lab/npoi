@@ -35,7 +35,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}>", nodeName));
+            sw.WriteBeginElement(nodeName);
             if (this.t != null)
             {
                 //TODO: diff has-space case and no-space case
@@ -58,7 +58,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             if (this.phoneticPr != null)
                 this.phoneticPr.Write(sw, "phoneticPr");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
 

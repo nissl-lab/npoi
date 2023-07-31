@@ -357,7 +357,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteBeginElementHalf(nodeName);
             XmlHelper.WriteAttribute(sw, "auto", this.auto,false);
             if (indexedSpecified)
                 XmlHelper.WriteAttribute(sw, "indexed", this.indexed, true);

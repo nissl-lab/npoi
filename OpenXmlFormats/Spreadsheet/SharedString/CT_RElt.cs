@@ -41,12 +41,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}>", nodeName));
+            sw.WriteBeginElement(nodeName);
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
             if (this.t != null)
-                sw.Write(string.Format("<t xml:space=\"preserve\">{0}</t>", XmlHelper.ExcelEncodeString(XmlHelper.EncodeXml(this.t))));
-            sw.Write(string.Format("</{0}>", nodeName));
+            {
+                sw.Write("<t xml:space=\"preserve\">");
+                sw.Write(XmlHelper.ExcelEncodeString(XmlHelper.EncodeXml(this.t)));
+                sw.Write("</t>");
+            } 
+            sw.WriteEndElement(nodeName);
         }
 
 

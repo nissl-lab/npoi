@@ -46,7 +46,19 @@ internal static class StreamWriterExtensions
         sw.Write(name);
         sw.Write(">");
     }
-
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void WriteBeginElementHalf(this StreamWriter sw, string name)
+    {
+        sw.Write("<");
+        sw.Write(name);
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void WriteBeginElement(this StreamWriter sw, string name)
+    {
+        sw.Write("<");
+        sw.Write(name);
+        sw.Write(">");
+    }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void WriteEndElement(this StreamWriter sw, string name)
     {

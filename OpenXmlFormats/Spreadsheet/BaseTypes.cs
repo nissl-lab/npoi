@@ -347,7 +347,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}>", nodeName));
+            sw.WriteBeginElement(nodeName);
             if (this.ext != null)
             {
                 foreach (CT_Extension x in this.ext)
@@ -355,7 +355,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "ext");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
     }

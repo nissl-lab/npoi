@@ -309,7 +309,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteBeginElementHalf(nodeName);
             XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
             sw.Write("/>");
         }
@@ -339,7 +339,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteBeginElementHalf(nodeName);
             XmlHelper.WriteAttribute(sw, "val", this.val);
             sw.Write("/>");
         }
@@ -377,7 +377,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteBeginElementHalf(nodeName);
             XmlHelper.WriteAttribute(sw, "val", this.val);
             sw.Write("/>");
         }
@@ -440,7 +440,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteBeginElementHalf(nodeName);
             XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
             sw.Write("/>");
         }
@@ -522,7 +522,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteBeginElementHalf(nodeName);
             XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
             sw.Write("/>");
         }
@@ -568,7 +568,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteBeginElementHalf(nodeName);
             if(!val)
                 XmlHelper.WriteAttribute(sw, "val", this.val);
             sw.Write("/>");
@@ -621,7 +621,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteBeginElementHalf(nodeName);
             XmlHelper.WriteAttribute(sw, "val", this.val, true);
             sw.Write("/>");
         }
