@@ -310,8 +310,8 @@ namespace NPOI.POIFS.FileSystem
                 data.Write(headerBuffer.Buffer);
                 data.Position = headerBuffer.Length;
 
-                //IOUtils.ReadFully(channel, data);
-                data.Position += IOUtils.ReadFully(channel, data.Buffer, data.Position, (int)channel.Length);
+                //IOUtils.ReadFully(channel, data.Buffer);
+                data.Position += IOUtils.ReadFully(channel, data.Buffer, data.Position, (int)maxSize);
                 success = true;
 
                 // Turn it into a DataSource
