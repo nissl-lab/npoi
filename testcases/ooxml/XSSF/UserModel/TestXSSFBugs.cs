@@ -3383,6 +3383,15 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(2.0, cv.NumberValue, 0.00001);
             wb.Close();
         }
+
+        [Test]
+        public void TestBug806()
+        {
+            using (var wb = XSSFTestDataSamples.OpenSampleWorkbook("EIOPA_RFR_20220331_Term_Structures.xlsx"))
+            {
+                Assert.DoesNotThrow(() => XSSFFormulaEvaluator.EvaluateAllFormulaCells(wb));
+            }
+        }
     }
 
 }
