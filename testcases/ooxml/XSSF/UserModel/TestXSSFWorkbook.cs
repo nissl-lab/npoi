@@ -1196,5 +1196,56 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void TestRemoveSheetMethod()
+        {
+            byte[] contents;
+            {
+                XSSFWorkbook wb = new XSSFWorkbook();
+                var sheet1 = wb.CreateSheet("Sheet1");
+                var sheet2 = wb.CreateSheet("Sheet2");
+                Assert.True(wb.Remove(sheet2));
+                Assert.AreEqual(1, wb.NumberOfSheets);
+                Assert.AreEqual("Sheet1", wb.GetSheetName(0));
+                Assert.AreEqual(sheet1, wb.GetSheet("Sheet1"));
+                var stream = new MemoryStream();
+                wb.Write(stream);
+                contents = stream.ToArray();
+                wb.Close();
+            }
+
+            {
+                XSSFWorkbook wb = new XSSFWorkbook(new MemoryStream(contents, false));
+                Assert.AreEqual(1, wb.NumberOfSheets);
+                Assert.AreEqual("Sheet1", wb.GetSheetName(0));
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void TestRemoveSheetAtMethod()
+        {
+            byte[] contents;
+            {
+                XSSFWorkbook wb = new XSSFWorkbook();
+                var sheet1 = wb.CreateSheet("Sheet1");
+                var sheet2 = wb.CreateSheet("Sheet2");
+                wb.RemoveSheetAt(1);
+                Assert.AreEqual(1, wb.NumberOfSheets);
+                Assert.AreEqual("Sheet1", wb.GetSheetName(0));
+                Assert.AreEqual(sheet1, wb.GetSheet("Sheet1"));
+                var stream = new MemoryStream();
+                wb.Write(stream);
+                contents = stream.ToArray();
+                wb.Close();
+            }
+
+            {
+                XSSFWorkbook wb = new XSSFWorkbook(new MemoryStream(contents, false));
+                Assert.AreEqual(1, wb.NumberOfSheets);
+                Assert.AreEqual("Sheet1", wb.GetSheetName(0));
+                wb.Close();
+            }
+        }
     }
 }
