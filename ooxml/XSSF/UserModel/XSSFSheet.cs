@@ -1435,13 +1435,10 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
-            if (hyperlinks.Count > 0)
+            // Now re-generate our CT_Hyperlinks, if needed
+            if (worksheet.hyperlinks == null)
             {
-                // Now re-generate our CT_Hyperlinks, if needed
-                if (worksheet.hyperlinks == null)
-                {
-                    worksheet.AddNewHyperlinks();
-                }
+                worksheet.AddNewHyperlinks();
             }
 
             CT_Hyperlink[] ctHls
