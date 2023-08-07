@@ -26,7 +26,7 @@ using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NPOI.SS.Formula.Functions
+namespace NPOI.SS.Util
 {
     internal static class DoublePrecisionHelper
     {
@@ -58,13 +58,17 @@ namespace NPOI.SS.Formula.Functions
 
         public static bool IsIntegerWithDigitsDropped(this BigDecimal number, int significantDigits)
         {
-            const int PADDING_ONE = 1;
+            if (number.IsZero())
+                return true;
+
+            if (number.IsNegative())
+                number = -number;
 
             int decimalPlaces = number.DecimalPlaces;
             int realSigDigits = number.SignifigantDigits;
             int integerPlaces = realSigDigits - decimalPlaces;
 
-            if (integerPlaces > significantDigits)
+            if (integerPlaces >= significantDigits)
             {
                 return true;
             }
@@ -78,21 +82,11 @@ namespace NPOI.SS.Formula.Functions
 
             decimalPlaces = Math.Min(decimalPlaces, significantDigits - integerPlaces);
 
-            BigDecimal exp = BigDecimal.Pow(10, decimalPlaces + PADDING_ONE);
+            BigDecimal exp = BigDecimal.Pow(10, decimalPlaces);
             fracPart *= exp;
-            fracPart = BigDecimal.Truncate(fracPart);
+            fracPart = BigDecimal.Round(fracPart);
 
-            if (fracPart.IsZero())
-            {
-                return true;
-            }
-
-            if (fracPart == exp || (fracPart + BigDecimal.One) == exp)
-            {
-                return true;
-            }
-
-            return false;
+            return fracPart.IsZero() || fracPart == exp;
         }
     }
 }

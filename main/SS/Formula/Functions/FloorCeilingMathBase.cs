@@ -18,12 +18,9 @@
  */
 using ExtendedNumerics;
 using NPOI.SS.Formula.Eval;
+using NPOI.SS.Util;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NPOI.SS.Formula.Functions
 {
@@ -33,7 +30,7 @@ namespace NPOI.SS.Formula.Functions
         private const int SignificantDigits = 15;
         // Use high-precision decimal calculations or customized double workaround
         private const bool UseHighPrecisionCalculation = true;
-        private const int SignificantDigitsForHighPrecision = SignificantDigits + 1;
+        private const int SignificantDigitsForHighPrecision = SignificantDigits + 2;
 
         public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
             => args.Length switch
@@ -82,6 +79,8 @@ namespace NPOI.SS.Formula.Functions
                 significance = -significance;
             }
 
+            double numberToTest = number / significance;
+
             if (UseHighPrecisionCalculation)
             {
                 BigDecimal.Precision = SignificantDigitsForHighPrecision;
@@ -95,51 +94,31 @@ namespace NPOI.SS.Formula.Functions
                 if (bigNumberWithPrecisionDropped.IsIntegerWithDigitsDropped(SignificantDigits))
                     return number;
 
-                var numberToTest = number / significance;
-
-                if (number > 0)
-                {
-                    // mode is meaningless when number is positive
-                    return EvaluateMajorDirection(numberToTest) * significance;
-                }
-                else
-                {
-                    if (mode)
-                    {
-                        // Towards zero for FLOOR && Away from zero for CEILING
-                        return EvaluateAlternativeDirection(-numberToTest) * -significance;
-                    }
-                    else
-                    {
-                        // Vice versa
-                        return EvaluateMajorDirection(-numberToTest) * -significance;
-                    }
-                }
+                // High-precision number is only for integer determination. We don't need it later.
             }
             else
             {
                 // Workaround without BigDecimal
-                double numberToTest = number / significance;
                 if (numberToTest.IsIntegerWithDigitsDropped(SignificantDigits))
                     return number;
+            }
 
-                if (number > 0)
+            if (number > 0)
+            {
+                // mode is meaningless when number is positive
+                return EvaluateMajorDirection(numberToTest) * significance;
+            }
+            else
+            {
+                if (mode)
                 {
-                    // mode is meaningless when number is positive
-                    return EvaluateMajorDirection(numberToTest) * significance;
+                    // Towards zero for FLOOR && Away from zero for CEILING
+                    return EvaluateAlternativeDirection(-numberToTest) * -significance;
                 }
                 else
                 {
-                    if (mode)
-                    {
-                        // Towards zero for FLOOR && Away from zero for CEILING
-                        return EvaluateAlternativeDirection(-numberToTest) * -significance;
-                    }
-                    else
-                    {
-                        // Vice versa
-                        return EvaluateMajorDirection(-numberToTest) * -significance;
-                    }
+                    // Vice versa
+                    return EvaluateMajorDirection(-numberToTest) * -significance;
                 }
             }
         }
