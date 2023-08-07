@@ -112,14 +112,6 @@ namespace TestCases.SS.Formula.Functions
                         var expected = row.GetCell(j + StartColumnIndex).NumericCellValue;
 
                         var functionResult = function.Evaluate(number, significance);
-
-                        // Excel also has bugs on =FLOOR.MATH(4, -2, FALSE|TRUE)
-                        // as it recognizes auto-filled 4 as 3.99999999999999.
-                        // See the cell of AF13 in the test data file.
-                        // So the specific pair is skipped.
-
-                        if (Math.Abs(number - (4)) < Tolerance && Math.Abs(significance - (-2)) < Tolerance)
-                            continue;
                         
                         Assert.AreEqual(expected, functionResult, Tolerance, $"{function}, {number}, {significance}");
                     }

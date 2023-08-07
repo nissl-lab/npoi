@@ -89,9 +89,8 @@ namespace NPOI.SS.Formula.Functions
                 var bigSignificance = new BigDecimal(significance);
 
                 BigDecimal bigNumberToTest = bigNumber / bigSignificance;
-                BigDecimal bigNumberWithPrecisionDropped = BigDecimal.Round(bigNumberToTest, SignificantDigits);
 
-                if (bigNumberWithPrecisionDropped.IsIntegerWithDigitsDropped(SignificantDigits))
+                if (bigNumberToTest.IsIntegerWithDigitsDropped(SignificantDigits))
                     return number;
 
                 // High-precision number is only for integer determination. We don't need it later.
