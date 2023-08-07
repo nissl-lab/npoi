@@ -16,6 +16,7 @@
  *    limitations under the License.
  * ====================================================================
  */
+using ExtendedNumerics;
 using NPOI.SS.Formula.Eval;
 using System;
 using System.Collections.Generic;
@@ -29,24 +30,19 @@ namespace NPOI.SS.Formula.Functions
     public abstract class FloorCeilingMathBase : FreeRefFunction
     {
         // Excel has an internal precision of 15 significant digits
-        private const int SignificantThreshold = 15;
+        private const int SignificantDigits = 15;
+        // Use high-precision decimal calculations or customized double workaround
+        private const bool UseHighPrecisionCalculation = true;
+        private const int SignificantDigitsForHighPrecision = SignificantDigits + 1;
 
         public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
             => args.Length switch
             {
-                1 => Evaluate(ec.RowIndex, ec.ColumnIndex, args[0]),
-                2 => Evaluate(ec.RowIndex, ec.ColumnIndex, args[0], args[1]),
+                1 => Evaluate(ec.RowIndex, ec.ColumnIndex, args[0], null, null),
+                2 => Evaluate(ec.RowIndex, ec.ColumnIndex, args[0], args[1], null),
                 3 => Evaluate(ec.RowIndex, ec.ColumnIndex, args[0], args[1], args[2]),
                 _ => ErrorEval.VALUE_INVALID
             };
-        private ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0)
-        {
-            return Evaluate(srcRowIndex, srcColumnIndex, arg0, null, null);
-        }
-        private ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1)
-        {
-            return Evaluate(srcRowIndex, srcColumnIndex, arg0, arg1, null);
-        }
         private ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1, ValueEval arg2)
         {
             try
@@ -86,27 +82,64 @@ namespace NPOI.SS.Formula.Functions
                 significance = -significance;
             }
 
-            // Workaround without BigDecimal
-            var numberToTest = number / significance;
-            if (DoublePrecisionHelper.IsIntegerWithDigitsDropped(numberToTest, SignificantThreshold))
-                return number;
+            if (UseHighPrecisionCalculation)
+            {
+                BigDecimal.Precision = SignificantDigitsForHighPrecision;
 
-            if (number > 0)
-            {
-                // mode is meaningless when number is positive
-                return EvaluateMajorDirection(numberToTest) * significance;
-            }
-            else
-            {
-                if (mode)
+                var bigNumber = new BigDecimal(number);
+                var bigSignificance = new BigDecimal(significance);
+
+                BigDecimal bigNumberToTest = bigNumber / bigSignificance;
+                BigDecimal bigNumberWithPrecisionDropped = BigDecimal.Round(bigNumberToTest, SignificantDigits);
+
+                if (bigNumberWithPrecisionDropped.IsIntegerWithDigitsDropped(SignificantDigits))
+                    return number;
+
+                var numberToTest = number / significance;
+
+                if (number > 0)
                 {
-                    // Towards zero for FLOOR && Away from zero for CEILING
-                    return EvaluateAlternativeDirection(-numberToTest) * -significance;
+                    // mode is meaningless when number is positive
+                    return EvaluateMajorDirection(numberToTest) * significance;
                 }
                 else
                 {
-                    // Vice versa
-                    return EvaluateMajorDirection(-numberToTest) * -significance;
+                    if (mode)
+                    {
+                        // Towards zero for FLOOR && Away from zero for CEILING
+                        return EvaluateAlternativeDirection(-numberToTest) * -significance;
+                    }
+                    else
+                    {
+                        // Vice versa
+                        return EvaluateMajorDirection(-numberToTest) * -significance;
+                    }
+                }
+            }
+            else
+            {
+                // Workaround without BigDecimal
+                double numberToTest = number / significance;
+                if (numberToTest.IsIntegerWithDigitsDropped(SignificantDigits))
+                    return number;
+
+                if (number > 0)
+                {
+                    // mode is meaningless when number is positive
+                    return EvaluateMajorDirection(numberToTest) * significance;
+                }
+                else
+                {
+                    if (mode)
+                    {
+                        // Towards zero for FLOOR && Away from zero for CEILING
+                        return EvaluateAlternativeDirection(-numberToTest) * -significance;
+                    }
+                    else
+                    {
+                        // Vice versa
+                        return EvaluateMajorDirection(-numberToTest) * -significance;
+                    }
                 }
             }
         }

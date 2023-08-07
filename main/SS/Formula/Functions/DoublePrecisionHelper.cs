@@ -16,6 +16,7 @@
  *    limitations under the License.
  * ====================================================================
  */
+using ExtendedNumerics;
 using NPOI.SS.Formula.UDF;
 using System;
 using System.Collections.Generic;
@@ -50,9 +51,48 @@ namespace NPOI.SS.Formula.Functions
             return isNegative ? -newNumber : newNumber;
         }
 
-        public static bool IsIntegerWithDigitsDropped(double number, int significantDigits)
+        public static bool IsIntegerWithDigitsDropped(this double number, int significantDigits)
         {
             return Math.Abs(GetFractionPart(DropDigitsAfterSignificantOnes(number, significantDigits))) == 0.0;
+        }
+
+        public static bool IsIntegerWithDigitsDropped(this BigDecimal number, int significantDigits)
+        {
+            const int PADDING_ONE = 1;
+
+            int decimalPlaces = number.DecimalPlaces;
+            int realSigDigits = number.SignifigantDigits;
+            int integerPlaces = realSigDigits - decimalPlaces;
+
+            if (integerPlaces > significantDigits)
+            {
+                return true;
+            }
+
+            BigDecimal fracPart = number.GetFractionalPart();
+
+            if (fracPart.IsZero())
+            {
+                return true;
+            }
+
+            decimalPlaces = Math.Min(decimalPlaces, significantDigits - integerPlaces);
+
+            BigDecimal exp = BigDecimal.Pow(10, decimalPlaces + PADDING_ONE);
+            fracPart *= exp;
+            fracPart = BigDecimal.Truncate(fracPart);
+
+            if (fracPart.IsZero())
+            {
+                return true;
+            }
+
+            if (fracPart == exp || (fracPart + BigDecimal.One) == exp)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
