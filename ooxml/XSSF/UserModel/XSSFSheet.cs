@@ -1436,12 +1436,10 @@ namespace NPOI.XSSF.UserModel
             }
 
             // Now re-generate our CT_Hyperlinks, if needed
-            if (hyperlinks.Count > 0)
+            if (worksheet.hyperlinks == null)
             {
-                if (worksheet.hyperlinks == null)
-                {
-                    worksheet.AddNewHyperlinks();
-                }
+                worksheet.AddNewHyperlinks();
+            }
 
                 CT_Hyperlink[] ctHls
                     = new CT_Hyperlink[hyperlinks.Count];
