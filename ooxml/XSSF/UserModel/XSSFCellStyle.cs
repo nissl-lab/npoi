@@ -806,7 +806,6 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-
                 if (!_cellXf.IsSetProtection())
                 {
                     return true;

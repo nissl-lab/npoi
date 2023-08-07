@@ -1136,8 +1136,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return ctObj;
         }
 
-
-
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
@@ -1165,7 +1163,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.WriteEndW(nodeName);
         }
 
-
+        public CT_Lvl AddNewLvl()
+        {
+            if (this.lvl == null)
+                this.lvlField = new List<CT_Lvl>();
+            CT_Lvl lvl = new CT_Lvl();
+            this.lvlField.Add(lvl);
+            return lvl;
+        }
 
 
         public int SizeOfLvlArray()
@@ -1581,6 +1586,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.tentativeFieldSpecified = value;
             }
+        }
+
+        public CT_NumFmt AddNewNumFmt()
+        {
+            this.numFmtField = new CT_NumFmt();
+            return this.numFmtField;
+        }
+
+        public CT_LevelText AddNewLvlText()
+        {
+            this.lvlText = new CT_LevelText();
+            return this.lvlText;
         }
     }
 

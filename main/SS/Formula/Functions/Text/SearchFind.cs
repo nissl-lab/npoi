@@ -47,6 +47,11 @@ namespace NPOI.SS.Formula.Functions
         }
         private ValueEval Eval(String haystack, String needle, int startIndex)
         {
+            if (startIndex >= haystack.Length)
+            {
+                return ErrorEval.VALUE_INVALID;
+            }
+            
             int result;
             if (_isCaseSensitive)
             {
