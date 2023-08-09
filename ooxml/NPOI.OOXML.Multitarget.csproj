@@ -25,7 +25,7 @@
 		<Compile Remove="POIFS\Crypt\Dsig\Services\RelationshipTransformService.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
+		<PackageReference Include="System.Security.Cryptography.Xml" Version="[6.0.1]" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
 	</ItemGroup>
 	<ItemGroup>
@@ -37,6 +37,10 @@
 		<PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
+		<PackageReference Update="NuGetizer" Version="1.0.5">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 </Project>
