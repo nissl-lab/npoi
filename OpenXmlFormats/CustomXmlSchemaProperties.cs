@@ -71,7 +71,7 @@ namespace NPOI.OpenXmlFormats
             XmlHelper.WriteAttribute(sw, "w:manifestLocation", this.manifestLocation);
             XmlHelper.WriteAttribute(sw, "w:schemaLocation", this.schemaLocation);
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         public CT_Schema()

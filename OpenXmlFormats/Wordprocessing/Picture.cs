@@ -220,7 +220,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_Shapetype)childnode).Write(sw, "shapetype");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
     }
 
@@ -451,7 +451,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(">");
             if (this.control != null)
                 this.control.Write(sw, "control");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
     }
@@ -482,7 +482,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:shapeid", this.shapeid);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
 

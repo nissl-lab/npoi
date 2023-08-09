@@ -49,7 +49,9 @@ namespace TestCases.SS.UserModel
             double diff = Math.Abs(expected - actual);
             double fuzz = expected * factor;
             if (diff > fuzz)
+            {
                 Assert.Fail(actual + " not within " + fuzz + " of " + expected);
+            }
         }
         /**
          * Test writing a hyperlink
@@ -341,7 +343,10 @@ namespace TestCases.SS.UserModel
             fmla.Append("(");
             for (int i = 0; i < maxArgs; i++)
             {
-                if (i > 0) fmla.Append(',');
+                if (i > 0)
+                {
+                    fmla.Append(',');
+                }
                 fmla.Append("A1");
             }
             fmla.Append(")");
@@ -473,6 +478,7 @@ namespace TestCases.SS.UserModel
 
             //AttributedString str = new AttributedString(txt);
             //copyAttributes(font, str, 0, txt.length());
+
             // TODO: support rich text fragments
             //if (rt.NumFormattingRuns > 0)
             //{
@@ -497,9 +503,18 @@ namespace TestCases.SS.UserModel
         //{
         //    str.addAttribute(TextAttribute.FAMILY, font.getFontName(), startIdx, endIdx);
         //    str.addAttribute(TextAttribute.SIZE, (float)font.getFontHeightInPoints());
-        //    if (font.getBoldweight() == Font.BOLDWEIGHT_BOLD) str.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, startIdx, endIdx);
-        //    if (font.getItalic()) str.addAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, startIdx, endIdx);
-        //    if (font.getUnderline() == Font.U_SINGLE) str.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);
+        //    if (font.getBoldweight() == Font.BOLDWEIGHT_BOLD)
+        //    {
+        //        str.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, startIdx, endIdx);
+        //    }
+        //    if (font.getItalic())
+        //    {
+        //        str.addAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, startIdx, endIdx);
+        //    }
+        //    if (font.getUnderline() == Font.U_SINGLE)
+        //    {
+        //        str.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);
+        //    }
         //}
 
         /**
@@ -1637,6 +1652,7 @@ namespace TestCases.SS.UserModel
                 wb.Close();
             }
         }
+
         private void checkFormulaPreevaluatedString(IWorkbook readFile)
         {
             ISheet sheet = readFile.GetSheetAt(0);
@@ -1653,6 +1669,9 @@ namespace TestCases.SS.UserModel
                     case CellType.Formula:
                         cellValue = cell.CellFormula;
                         break;
+                    default:
+                        Assert.Fail("unexpected cell type");
+                        return;
                 }
                 Assert.IsNotNull(cellValue);
                 cellValue = string.IsNullOrEmpty(cellValue) ? null : cellValue;

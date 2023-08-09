@@ -65,12 +65,13 @@ namespace NPOI.OpenXml4Net.OPC
         }
 
         /**
-         * Constructor. Opens a Zip based Open XML document.
+         * Constructor. Opens a Zip based Open XML document from a file.
          *
          * @param path
          *            The path of the file to open or create.
          * @param access
          *            The package access mode.
+         * @throws InvalidOperationException If the zip file cannot be opened.
          */
         public ZipPackage(String path, PackageAccess access)
             : this(new FileInfo(path), access)
@@ -78,12 +79,13 @@ namespace NPOI.OpenXml4Net.OPC
         }
 
         /**
-         * Constructor. Opens a Zip based Open XML document.
+         * Constructor. Opens a Zip based Open XML document from a File.
          *
          * @param file
          *            The file to open or create.
          * @param access
          *            The package access mode.
+         * @throws InvalidOperationException If the zip file cannot be opened.
          */
         public ZipPackage(FileInfo file, PackageAccess access)
             : base(access)
@@ -171,10 +173,8 @@ namespace NPOI.OpenXml4Net.OPC
          * list is not empty, it will be emptied.
          *
          * @return All parts contain in this package.
-         * @throws InvalidFormatException
-         *             Throws if the package is not valid.
+         * @throws InvalidFormatException if the package is not valid.
          */
-
         protected override PackagePart[] GetPartsImpl()
         {
             if (this.partList == null)

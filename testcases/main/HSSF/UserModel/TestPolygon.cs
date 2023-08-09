@@ -9,6 +9,7 @@ using NPOI.DDF;
 using TestCases.HSSF.Model;
 using NPOI.Util;
 using NPOI.HSSF.Record;
+using static TestCases.POIFS.Storage.RawDataUtil;
 
 namespace TestCases.HSSF.UserModel
 {
@@ -30,19 +31,19 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(polygon.GetEscherContainer().ChildRecords.Count, 4);
 
             //sp record
-            byte[] expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNi4PrAwQAELEDMxcAAAAU6ZlwQAAAA");
+            byte[] expected = Decompress("H4sIAAAAAAAAAGNi4PrAwQAELEDMxcAAAAU6ZlwQAAAA");
             byte[] actual = polygon.GetEscherContainer().GetChild(0).Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
             Assert.IsTrue(Arrays.Equals(expected, actual));
 
-            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNgEPggxIANAABK4+laGgAAAA==");
+            expected = Decompress("H4sIAAAAAAAAAGNgEPggxIANAABK4+laGgAAAA==");
             actual = polygon.GetEscherContainer().GetChild(2).Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
             Assert.IsTrue(Arrays.Equals(expected, actual));
 
-            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNgEPzAAAQACl6c5QgAAAA=");
+            expected = Decompress("H4sIAAAAAAAAAGNgEPzAAAQACl6c5QgAAAA=");
             actual = polygon.GetEscherContainer().GetChild(3).Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);
@@ -50,7 +51,7 @@ namespace TestCases.HSSF.UserModel
 
             ObjRecord obj = polygon.GetObjRecord();
 
-            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAItlkGIQZRBikGNgYBBMYEADAOAV/ZkeAAAA");
+            expected = Decompress("H4sIAAAAAAAAAItlkGIQZRBikGNgYBBMYEADAOAV/ZkeAAAA");
             actual = obj.Serialize();
 
             Assert.AreEqual(expected.Length, actual.Length);

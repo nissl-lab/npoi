@@ -17,8 +17,6 @@
 
 namespace TestCases.XWPF.UserModel
 {
-
-    using NPOI.OpenXmlFormats.Wordprocessing;
     using NPOI.XWPF.UserModel;
     using NUnit.Framework;
 
@@ -28,42 +26,116 @@ namespace TestCases.XWPF.UserModel
         [Test]
         public void TestCreateRow()
         {
-            CT_Row ctRow = new CT_Row();
-            Assert.IsNotNull(ctRow);
+            XWPFDocument doc = new XWPFDocument();
+            XWPFTable table = doc.CreateTable(1, 1);
+            XWPFTableRow tr = table.CreateRow();
+            Assert.IsNotNull(tr);
+            doc.Close();
         }
 
-         [Test]
+        [Test]
         public void TestSetGetCantSplitRow()
         {
             // create a table
             XWPFDocument doc = new XWPFDocument();
-            CT_Tbl ctTable = new CT_Tbl();
-            XWPFTable table = new XWPFTable(ctTable, doc);
+            XWPFTable table = doc.CreateTable(1, 1);
             // table has a single row by default; grab it
             XWPFTableRow tr = table.GetRow(0);
             Assert.IsNotNull(tr);
 
-            tr.IsCantSplitRow = true;
-            bool isCant = tr.IsCantSplitRow;
+            // Assert the repeat header is false by default
+            bool isCantSplit = tr.IsCantSplitRow;
+            Assert.IsFalse(isCantSplit);
 
-            Assert.IsTrue(isCant);
+            // Repeat the header
+            tr.SetCantSplitRow(true);
+            isCantSplit = tr.IsCantSplitRow;
+            Assert.IsTrue(isCantSplit);
+
+            // Make the header no longer repeating
+            tr.SetCantSplitRow(false);
+            isCantSplit = tr.IsCantSplitRow;
+            Assert.IsFalse(isCantSplit);
+
+            doc.Close();
         }
-         [Test]
+
+        [Test]
         public void TestSetGetRepeatHeader()
         {
             // create a table
             XWPFDocument doc = new XWPFDocument();
-            CT_Tbl ctTable = new CT_Tbl();
-            XWPFTable table = new XWPFTable(ctTable, doc);
+            XWPFTable table = doc.CreateTable(3, 1);
             // table has a single row by default; grab it
             XWPFTableRow tr = table.GetRow(0);
             Assert.IsNotNull(tr);
 
-            tr.IsRepeatHeader =true;
+            // Assert the repeat header is false by default
             bool isRpt = tr.IsRepeatHeader;
-            
+            Assert.IsFalse(isRpt);
+
+            // Repeat the header
+            tr.SetRepeatHeader(true);
+            isRpt = tr.IsRepeatHeader;
             Assert.IsTrue(isRpt);
+
+            // Make the header no longer repeating
+            tr.SetRepeatHeader(false);
+            isRpt = tr.IsRepeatHeader;
+            Assert.IsFalse(isRpt);
+
+            // If the third row is set to repeat, but not the second,
+            // isRepeatHeader should report false because Word will
+            // ignore it.
+            tr = table.GetRow(2);
+            tr.SetRepeatHeader(true);
+            isRpt = tr.IsRepeatHeader;
+            Assert.IsFalse(isRpt);
+
+            doc.Close();
+        }
+
+        // Test that validates the table header value can be parsed from a document
+        // generated in Word
+        [Test]
+        public void TestIsRepeatHeader()
+        {
+            XWPFDocument doc = XWPFTestDataSamples
+                    .OpenSampleDocument("Bug60337.docx");
+            XWPFTable table = doc.Tables[0];
+            XWPFTableRow tr = table.GetRow(0);
+            bool isRpt = tr.IsRepeatHeader;
+            Assert.IsTrue(isRpt);
+
+            tr = table.GetRow(1);
+            isRpt = tr.IsRepeatHeader;
+            Assert.IsFalse(isRpt);
+
+            tr = table.GetRow(2);
+            isRpt = tr.IsRepeatHeader;
+            Assert.IsFalse(isRpt);
+        }
+
+
+        // Test that validates the table header value can be parsed from a document
+        // generated in Word
+        [Test]
+        public void TestIsCantSplit()
+        {
+            XWPFDocument doc = XWPFTestDataSamples
+                    .OpenSampleDocument("Bug60337.docx");
+            XWPFTable table = doc.Tables[0];
+            XWPFTableRow tr = table.GetRow(0);
+            bool isCantSplit = tr.IsCantSplitRow;
+            Assert.IsFalse(isCantSplit);
+
+            tr = table.GetRow(1);
+            isCantSplit = tr.IsCantSplitRow;
+            Assert.IsFalse(isCantSplit);
+
+            tr = table.GetRow(2);
+            isCantSplit = tr.IsCantSplitRow;
+            Assert.IsTrue(isCantSplit);
         }
     }
-
 }

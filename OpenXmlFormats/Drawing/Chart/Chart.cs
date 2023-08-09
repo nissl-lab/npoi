@@ -6718,6 +6718,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         /// <remarks/>
         x,
+
+        auto
     }
 
 

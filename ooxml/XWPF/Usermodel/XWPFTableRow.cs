@@ -19,6 +19,7 @@ namespace NPOI.XWPF.UserModel
     using System;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Collections.Generic;
+    using NPOI.XWPF.Model;
 
 
     /**
@@ -225,48 +226,109 @@ namespace NPOI.XWPF.UserModel
             get
             {
                 bool isCant = false;
-                CT_TrPr trpr = GetTrPr();
-                if (trpr.SizeOfCantSplitArray() > 0)
+                if (ctRow.IsSetTrPr())
                 {
-                    CT_OnOff onoff = trpr.GetCantSplitList()[0];
-                    isCant = onoff.val;
+                    CT_TrPr trpr = GetTrPr();
+                    if (trpr.SizeOfCantSplitArray() > 0)
+                    {
+                        CT_OnOff onoff = trpr.GetCantSplitList()[0];
+                        isCant = onoff.IsSetVal() ? onoff.val : true;
+                        //isCant = (onoff.IsSetVal() ? WMLHelper.STOnOffToBoolean(onoff.getVal()) : true);
+                    }
                 }
                 return isCant;
             }
             set 
             {
-                CT_TrPr trpr = GetTrPr();
-                CT_OnOff onoff = trpr.AddNewCantSplit();
-                onoff.val = value;
+                SetCantSplitRow(value);
             }
         }
 
         /**
+         * Controls whether to allow this table row to split across pages.
+         * The logic for this attribute is a little unusual: a true value means
+         * DON'T allow rows to split, false means allow rows to split.
+         *
+         * @param split - if true, don't allow row to be split. If false, allow
+         *              row to be split.
+         */
+        public void SetCantSplitRow(bool split)
+        {
+            CT_TrPr trpr = GetTrPr();
+            CT_OnOff onoff = (trpr.SizeOfCantSplitArray() > 0 ? trpr.GetCantSplitArray(0) : trpr.AddNewCantSplit());
+            onoff.val = split;
+            //onoff.SetVal(WMLHelper.BooleanToSTOnOff(split));
+        }
+
+        /**
          * Return true if a table's header row should be repeated at the top of a
-         * table split across pages.
+         * table split across pages. NOTE - Word will not repeat a table row unless
+         * all preceding rows of the table are also repeated. This function returns
+         * false if the row will not be repeated even if the repeat tag is present
+         * for this row. 
+         *
          * @return true if table's header row should be repeated at the top of each
          *         page of table, false otherwise.
+         */
+        /**
+         * This attribute controls whether to repeat a table's header row at the top
+         * of a table split across pages. NOTE - for a row to be repeated, all preceding
+         * rows in the table must also be repeated.
+         *
+         * @param repeat - if TRUE, repeat header row at the top of each page of table;
+         *               if FALSE, don't repeat header row.
          */
         public bool IsRepeatHeader
         {
             get
             {
                 bool repeat = false;
-                CT_TrPr trpr = GetTrPr();
-                if (trpr.SizeOfTblHeaderArray() > 0)
+                foreach (XWPFTableRow row in table.Rows)
                 {
-                    CT_OnOff rpt = trpr.GetTblHeaderList()[0];
-                    repeat = rpt.val;
+                    repeat = row.GetRepeat();
+                    if (row == this || !repeat)
+                    {
+                        break;
+                    }
                 }
                 return repeat;
             }
             set 
             {
-                CT_TrPr trpr = GetTrPr();
-                CT_OnOff onoff = trpr.AddNewTblHeader();
-                onoff.val = value;
+                SetRepeatHeader(value);
             }
         }
-    }// end class
 
+        private bool GetRepeat()
+        {
+            bool repeat = false;
+            if (ctRow.IsSetTrPr())
+            {
+                CT_TrPr trpr = GetTrPr();
+                if (trpr.SizeOfTblHeaderArray() > 0)
+                {
+                    CT_OnOff rpt = trpr.GetTblHeaderArray(0);
+                    repeat = (rpt.IsSetVal() ? rpt.val : true);
+                    //repeat = (rpt.IsSetVal() ? WMLHelper.STOnOffToBoolean(rpt.getVal()) : true);
+                }
+            }
+            return repeat;
+        }
+
+        /**
+         * This attribute controls whether to repeat a table's header row at the top
+         * of a table split across pages. NOTE - for a row to be repeated, all preceding
+         * rows in the table must also be repeated.
+         *
+         * @param repeat - if TRUE, repeat header row at the top of each page of table;
+         *               if FALSE, don't repeat header row.
+         */
+        public void SetRepeatHeader(bool repeat)
+        {
+            CT_TrPr trpr = GetTrPr();
+            CT_OnOff onoff = (trpr.SizeOfTblHeaderArray() > 0 ? trpr.GetTblHeaderArray(0) : trpr.AddNewTblHeader());
+            onoff.val = repeat;
+            //onoff.setVal(WMLHelper.BooleanToSTOnOff(repeat));
+        }
+    }
 }

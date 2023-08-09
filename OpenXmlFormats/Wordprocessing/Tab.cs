@@ -220,7 +220,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:relativeTo", this.relativeTo.ToString());
             XmlHelper.WriteAttribute(sw, "w:leader", this.leader.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]

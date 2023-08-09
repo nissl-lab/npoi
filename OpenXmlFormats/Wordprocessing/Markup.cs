@@ -503,7 +503,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_MarkupRange)
                     ((CT_MarkupRange)o).Write(sw, "moveFromRangeEnd");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [System.Xml.Serialization.XmlElementAttribute("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]

@@ -30,10 +30,10 @@ namespace NPOI.XWPF.UserModel
      */
     public abstract class XWPFHeaderFooter : POIXMLDocumentPart, IBody
     {
-        protected List<XWPFParagraph> paragraphs = new List<XWPFParagraph>(1);
-        protected List<XWPFTable> tables = new List<XWPFTable>(1);
+        protected List<XWPFParagraph> paragraphs = new List<XWPFParagraph>();
+        protected List<XWPFTable> tables = new List<XWPFTable>();
         protected List<XWPFPictureData> pictures = new List<XWPFPictureData>();
-        protected List<IBodyElement> bodyElements = new List<IBodyElement>(1);
+        protected List<IBodyElement> bodyElements = new List<IBodyElement>();
 
         protected CT_HdrFtr headerFooter;
         protected XWPFDocument document;
@@ -368,6 +368,86 @@ namespace NPOI.XWPF.UserModel
         }
 
         /**
+         * Adds a new paragraph at the end of the header or footer
+         * 
+         * @return new {@link XWPFParagraph} object
+         */
+        public XWPFParagraph CreateParagraph()
+        {
+            XWPFParagraph paragraph = new XWPFParagraph(headerFooter.AddNewP(), this);
+            paragraphs.Add(paragraph);
+            bodyElements.Add(paragraph);
+            return paragraph;
+        }
+
+        /**
+         * Adds a new table at the end of the header or footer
+         *
+         * @param rows - number of rows in the table
+         * @param cols - number of columns in the table
+         * @return new {@link XWPFTable} object
+         */
+        public XWPFTable CreateTable(int rows, int cols)
+        {
+            XWPFTable table = new XWPFTable(headerFooter.AddNewTbl(), this, rows, cols);
+            tables.Add(table);
+            bodyElements.Add(table);
+            return table;
+        }
+
+        /**
+         * Removes a specific paragraph from this header / footer
+         *
+         * @param paragraph - {@link XWPFParagraph} object to remove
+         */
+        public void RemoveParagraph(XWPFParagraph paragraph)
+        {
+            throw new NotImplementedException();
+            //if (paragraphs.Contains(paragraph))
+            //{
+            //    CT_P ctP = paragraph.GetCTP();
+            //    XmlCursor c = ctP.newCursor();
+            //    c.removeXml();
+            //    c.dispose();
+            //    paragraphs.Remove(paragraph);
+            //    bodyElements.Remove(paragraph);
+            //}
+        }
+
+        /**
+         * Removes a specific table from this header / footer
+         *
+         * @param table - {@link XWPFTable} object to remove
+         */
+        public void RemoveTable(XWPFTable table)
+        {
+            throw new NotImplementedException();
+            //if (tables.Contains(table))
+            //{
+            //    CT_Tbl ctTbl = table.GetCTTbl();
+            //    XmlCursor c = ctTbl.newCursor();
+            //    c.removeXml();
+            //    c.dispose();
+            //    tables.Remove(table);
+            //    bodyElements.Remove(table);
+            //}
+        }
+
+        /**
+         * Clears all paragraphs and tables from this header / footer
+         */
+        public void ClearHeaderFooter()
+        {
+            throw new NotImplementedException();
+            //XmlCursor c = headerFooter.newCursor();
+            //c.removeXmlContents();
+            //c.dispose();
+            //paragraphs.Clear();
+            //tables.Clear();
+            //bodyElements.Clear();
+        }
+
+        /**
          * add a new paragraph at position of the cursor
          * @param cursor
          * @return the inserted paragraph
@@ -629,15 +709,6 @@ namespace NPOI.XWPF.UserModel
                 throw new NotImplementedException();
             }
         }
-        /**
-         * Adds a new paragraph at the end of the header or footer
-         */
-        public XWPFParagraph CreateParagraph()
-        {
-            XWPFParagraph paragraph = new XWPFParagraph(headerFooter.AddNewP(), this);
-            paragraphs.Add(paragraph);
-            return paragraph;
-        }
         public XWPFParagraph InsertNewParagraph(System.Xml.XmlDocument cursor)
         {
             throw new NotImplementedException();
@@ -649,6 +720,30 @@ namespace NPOI.XWPF.UserModel
         }
 
         #endregion
-    }//end class
 
+        protected internal override void PrepareForCommit()
+        {
+            // must contain at least an empty paragraph
+            if (bodyElements.Count == 0)
+            {
+                CreateParagraph();
+            }
+
+            // Cells must contain at least an empty paragraph
+            foreach (XWPFTable tbl in tables)
+            {
+                foreach (XWPFTableRow row in tbl.tableRows)
+                {
+                    foreach (XWPFTableCell cell in row.GetTableCells())
+                    {
+                        if (cell.BodyElements.Count == 0)
+                        {
+                            cell.AddParagraph();
+                        }
+                    }
+                }
+            }
+            base.PrepareForCommit();
+        }
+    }
 }

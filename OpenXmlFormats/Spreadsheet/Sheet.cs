@@ -2599,7 +2599,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_SheetFormatPr ctObj = new CT_SheetFormatPr();
-            ctObj.baseColWidth = XmlHelper.ReadUInt(node.Attributes["baseColWidth"]);
+            ctObj.baseColWidth = XmlHelper.ReadUInt(node.Attributes["baseColWidth"],8);
             ctObj.defaultColWidth = XmlHelper.ReadDouble(node.Attributes["defaultColWidth"]);
             ctObj.defaultRowHeight = XmlHelper.ReadDouble(node.Attributes["defaultRowHeight"]);
             ctObj.customHeight = XmlHelper.ReadBool(node.Attributes["customHeight"]);
@@ -2688,7 +2688,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<");
+            sw.Write(nodeName);
             if (this.t != ST_CellFormulaType.normal)
                 XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
             XmlHelper.WriteAttribute(sw, "aca", this.aca, false);
@@ -2707,7 +2708,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 sw.Write(">");
                 sw.Write(XmlHelper.EncodeXml(this.valueField).Replace("&quot;", "\""));
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.Write("</");
+                sw.Write(nodeName);
+                sw.Write(">");
             }
             else
             {

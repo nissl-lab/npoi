@@ -28,6 +28,7 @@
 using System;
 using System.Text;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 using NPOI.POIFS.Dev;
@@ -465,24 +466,25 @@ namespace NPOI.POIFS.Properties
         /// POIFSViewable
         /// </summary>
         /// <value>an array of Object; may not be null, but may be empty</value>
-        public Array ViewableArray
+        public Object[] ViewableArray
         {
             get
             {
-                Array results = new string[5];
+                Object[] results = new string[6];
 
-                results.SetValue("Name          = \"" + Name + "\"", 0);
-                results.SetValue("Property Type = " + _property_type.Value, 1);
-                results.SetValue("Node Color    = " + _node_color.Value, 2);
+                results[0] = "Name          = \"" + Name + "\"";
+                results[1] = "Property Type = " + _property_type.Value;
+                results[2] = "Node Color    = " + _node_color.Value;
                 long time = _days_1.Value;
 
                 time <<= 32;
                 time += ((long)_seconds_1.Value) & 0x0000FFFFL;
-                results.SetValue("Time 1        = " + time, 3);
+                results[3] = "Time 1        = " + time;
                 time = _days_2.Value;
                 time <<= 32;
                 time += ((long)_seconds_2.Value) & 0x0000FFFFL;
-                results.SetValue("Time 2        = " + time, 4);
+                results[4] = "Time 2        = " + time;
+                results[5] = "Size          = " + Size;
                 return results;
             }
         }
@@ -492,11 +494,11 @@ namespace NPOI.POIFS.Properties
         /// </summary>
         /// <value> may not be null, but may have an empty
         /// back end store</value>
-        public IEnumerator ViewableIterator
+        public IEnumerator<Object> ViewableIterator
         {
             get
             {
-                return ArrayList.ReadOnly(new ArrayList()).GetEnumerator();
+                return new List<Object>().AsReadOnly().GetEnumerator();
             }
         }
 

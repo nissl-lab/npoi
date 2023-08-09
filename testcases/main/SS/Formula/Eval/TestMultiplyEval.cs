@@ -15,24 +15,41 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
-namespace NPOI.HSLF.Exceptions
+namespace TestCases.SS.Formula.Eval
 {
 
+    using NUnit.Framework;
+    using NPOI.SS.Formula.Eval;
+    using TestCases.SS.Formula.Functions;
+
     /**
-     * This exception is thrown when we try to create a record, and the
-     *  underlying data just doesn't match up
-     *
-     * @author Nick Burch
+     *  Test for multiply operator Evaluator.
+     *  
+     *  
      */
-
-    public class InvalidRecordFormatException : Exception
+    [TestFixture]
+    public class TestMultiplyEval
     {
-        public InvalidRecordFormatException(String s):base(s)
-        {
- 
-        }
-    }
 
+        private static void Confirm(ValueEval arg0, ValueEval arg1, double expectedResult)
+        {
+            ValueEval[] args = {
+			    arg0, arg1,
+		    };
+
+            double result = NumericFunctionInvoker.Invoke(EvalInstances.Multiply, args, 0, 0);
+
+            Assert.AreEqual(expectedResult, result, 0);
+        }
+        [Test]
+        public void TestBasic()
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
+            // issue #1055, use decimal to handle precision issue like (20000 * 0.000027 = 0.539999 in double)
+            Confirm(new NumberEval(20000), new NumberEval(0.000027), 0.54);            
+        }
+        
+    }
 
 }

@@ -470,17 +470,18 @@ namespace NPOI.POIFS.FileSystem
         /// POIFSViewable        
         /// </summary>
         /// <value>an array of Object; may not be null, but may be empty</value>
-        public Array ViewableArray
+        public Object[] ViewableArray
         {
-            get{
-            if (PreferArray)
+            get
             {
+                if (PreferArray)
+                {
                     return ((POIFSViewable)this.Root).ViewableArray;
-            }
-            else
-            {
+                }
+                else
+                {
                     return new Object[0];
-            }
+                }
             }
         }
 
@@ -490,16 +491,17 @@ namespace NPOI.POIFS.FileSystem
         /// </summary>
         /// <value>an Iterator; may not be null, but may have an empty
         /// back end store</value>
-        public IEnumerator ViewableIterator
+        public IEnumerator<Object> ViewableIterator
         {
-            get{
+            get
+            {
                 if (!this.PreferArray)
                 {
-                    return (( POIFSViewable ) this.Root).ViewableIterator;
+                    return this.Root.ViewableIterator;
                 }
                 else
                 {
-                    return ArrayList.ReadOnly(new ArrayList()).GetEnumerator();
+                    return new List<Object>().AsReadOnly().GetEnumerator();
                 }
             }
         }

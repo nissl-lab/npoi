@@ -182,7 +182,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.rPrDefault.Write(sw, "rPrDefault");
             if (this.pPrDefault != null)
                 this.pPrDefault.Write(sw, "pPrDefault");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -269,7 +269,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(">");
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -331,7 +331,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(">");
             if (this.pPr != null)
                 this.pPr.Write(sw, "pPr");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -431,7 +431,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "lsdException");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         public CT_LatentStyles()
@@ -811,7 +811,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "tblStylePr");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -1219,7 +1219,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
 
@@ -1697,7 +1697,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val);
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
 
@@ -1744,7 +1744,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
 

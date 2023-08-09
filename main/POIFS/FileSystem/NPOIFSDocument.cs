@@ -272,12 +272,12 @@ namespace NPOI.POIFS.FileSystem
         }
 
         /**
-              * Get an Iterator of objects, some of which may implement POIFSViewable
-              *
-              * @return an Iterator; may not be null, but may have an empty back end
-              *		 store
-              */
-        protected IEnumerator GetViewableIterator()
+         * Get an Iterator of objects, some of which may implement POIFSViewable
+         *
+         * @return an Iterator; may not be null, but may have an empty back end
+         *		 store
+         */
+        protected IEnumerator<Object> GetViewableIterator()
         {
             //  return Collections.EMPTY_LIST.iterator();
             return null;
@@ -286,11 +286,11 @@ namespace NPOI.POIFS.FileSystem
 
 
         /**
-    * Provides a short description of the object, to be used when a
-    * POIFSViewable object has not provided its contents.
-    *
-    * @return short description
-    */
+         * Provides a short description of the object, to be used when a
+         * POIFSViewable object has not provided its contents.
+         *
+         * @return short description
+         */
         protected String GetShortDescription()
         {
             StringBuilder buffer = new StringBuilder();
@@ -312,12 +312,12 @@ namespace NPOI.POIFS.FileSystem
             get { return GetShortDescription(); }
         }
 
-        public Array ViewableArray
+        public Object[] ViewableArray
         {
             get { return GetViewableArray(); }
         }
 
-        public IEnumerator ViewableIterator
+        public IEnumerator<Object> ViewableIterator
         {
             get { return GetViewableIterator(); }
         }

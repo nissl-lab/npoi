@@ -30,12 +30,12 @@ namespace NPOI.XSSF.UserModel
             CT_Point2D off = t2d.AddNewOff();
             CT_PositiveSize2D ext = t2d.AddNewExt();
 
-            off.x = (x);
-            off.y = (y);
-            ext.cx = (Math.Abs(cx - x));
-            ext.cy = (Math.Abs(cy - y));
-            if (x > cx) t2d.flipH = (true);
-            if (y > cy) t2d.flipV = (true);
+            off.x = Math.Min(x, cx);
+            off.y = Math.Min(y, cy);
+            ext.cx = Math.Abs(cx - x);
+            ext.cy = Math.Abs(cy - y);
+            if (x > cx) t2d.flipH = true;
+            if (y > cy) t2d.flipV = true;
         }
 
         public XSSFChildAnchor(CT_Transform2D t2d)

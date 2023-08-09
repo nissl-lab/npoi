@@ -30,7 +30,7 @@ NPOI
     />
   </a>
 <br />
-This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
+This project is the .NET version of Apache POI project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
 About Donation 关于捐款
 ============
@@ -48,8 +48,6 @@ Join us on telegram: https://t.me/npoidevs
 Get Started with NPOI
 ============
 [How NPOI succeeds](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb)
-
-[Who is using NPOI?](https://github.com/nissl-lab/npoi/issues/705)
 
 [NPOI examples](https://github.com/nissl-lab/npoi-examples)
 

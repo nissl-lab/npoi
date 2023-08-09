@@ -104,9 +104,7 @@ namespace NPOI.XSSF.UserModel
          */
         public List<XSSFTable> GetRelatedTables()
         {
-
             List<XSSFTable> tables = new List<XSSFTable>();
-            int sheetNumber = mapInfo.Workbook.NumberOfSheets;
 
             foreach (ISheet sheet in mapInfo.Workbook)
             {

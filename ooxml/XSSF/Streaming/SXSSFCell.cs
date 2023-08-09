@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 using System;
+using System.IO;
 using NPOI.SS;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.UserModel;
@@ -196,23 +197,51 @@ namespace NPOI.XSSF.Streaming
                 return _row.GetCellIndex(this);
             }
         }
-
-        public DateTime DateCellValue
+        /// <summary>
+        /// Get DateTime-type cell value
+        /// </summary>
+        public DateTime? DateCellValue
         {
             get
             {
-                CellType cellType = _value.GetType();
-                if (cellType == CellType.Blank)
+                if (CellType != CellType.Numeric && CellType != CellType.Formula)
                 {
-                    return new DateTime();
+                    return null;
                 }
-
                 double value = NumericCellValue;
                 bool date1904 = Sheet.Workbook.IsDate1904();
-                return DateUtil.GetJavaDate(value, date1904);
+                return DateUtil.GetJavaDate(value,date1904);
             }
         }
-
+#if NET6_0_OR_GREATER
+        /// <summary>
+        /// Get DateOnly-type cell value
+        /// </summary>
+        public DateOnly? DateOnlyCellValue 
+        { 
+            get{
+                if (CellType != CellType.Numeric && CellType != CellType.Formula)
+                {
+                    return null;
+                }
+                double value = NumericCellValue;
+                bool date1904 = Sheet.Workbook.IsDate1904();
+                return DateOnly.FromDateTime(DateUtil.GetJavaDate(value, date1904));
+            }
+        }
+        public TimeOnly? TimeOnlyCellValue 
+        { 
+            get{
+                if (CellType != CellType.Numeric && CellType != CellType.Formula)
+                {
+                    return null;
+                }
+                double value = NumericCellValue;
+                bool date1904 = Sheet.Workbook.IsDate1904();
+                return TimeOnly.FromDateTime(DateUtil.GetJavaDate(value, date1904));
+            }
+        }
+#endif
         public byte ErrorCellValue
         {
             get
@@ -389,6 +418,15 @@ namespace NPOI.XSSF.Streaming
 
         public void RemoveCellComment()
         {
+            IComment comment = this.CellComment;
+            if (comment != null)
+            {
+                CellAddress ref1 = new CellAddress(RowIndex, ColumnIndex);
+                XSSFSheet sh = ((SXSSFSheet)Sheet)._sh;
+                sh.GetCommentsTable(false).RemoveComment(ref1);
+                sh.GetVMLDrawing(false).RemoveCommentShape(RowIndex, ColumnIndex);
+            }
+
             RemoveProperty(Property.COMMENT);
         }
 

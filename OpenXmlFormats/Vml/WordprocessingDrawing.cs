@@ -44,7 +44,7 @@ namespace NPOI.OpenXmlFormats.Vml.Wordprocessing
             XmlHelper.WriteAttribute(sw, "width", this.width);
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "shadow", this.shadow);
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlAttribute]
@@ -260,7 +260,7 @@ namespace NPOI.OpenXmlFormats.Vml.Wordprocessing
             XmlHelper.WriteAttribute(sw, "anchorx", this.anchorx.ToString());
             XmlHelper.WriteAttribute(sw, "anchory", this.anchory.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlAttribute]

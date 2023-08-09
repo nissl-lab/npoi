@@ -84,13 +84,13 @@ namespace TestCases.SS.UserModel
 
             DateTime dt = DateTime.Now.AddMilliseconds(123456789);
             cell.SetCellValue(dt);
-            Assert.IsTrue((dt.Ticks - cell.DateCellValue.Ticks) >= -20000);
+            Assert.IsTrue((dt.Ticks - ((DateTime)cell.DateCellValue).Ticks) >= -20000);
             Assert.AreEqual(CellType.Numeric, cell.CellType);
             AssertProhibitedValueAccess(cell, CellType.Boolean, CellType.String,
                     CellType.Formula, CellType.Error);
 
             cell.SetCellValue(dt);
-            Assert.IsTrue((dt.Ticks - cell.DateCellValue.Ticks) >= -20000);
+            Assert.IsTrue((dt.Ticks - ((DateTime)cell.DateCellValue).Ticks) >= -20000);
             Assert.AreEqual(CellType.Numeric, cell.CellType);
             AssertProhibitedValueAccess(cell, CellType.Boolean, CellType.String,
                     CellType.Formula, CellType.Error);
@@ -712,6 +712,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(CellType.Error, cell2.CellType);
             Assert.AreEqual(FormulaError.DIV0, FormulaError.ForInt(cell2.ErrorCellValue));
         }
+
         [Test]
         public void TestDefaultStyleProperties()
         {
@@ -724,7 +725,7 @@ namespace TestCases.SS.UserModel
             Assert.IsFalse(style.IsHidden);
             Assert.AreEqual(0, style.Indention);
             Assert.AreEqual(0, style.FontIndex);
-            Assert.AreEqual(0, (int)style.Alignment);
+            Assert.AreEqual(HorizontalAlignment.General, style.Alignment);
             Assert.AreEqual(0, style.DataFormat);
             Assert.AreEqual(false, style.WrapText);
 
@@ -1027,6 +1028,8 @@ namespace TestCases.SS.UserModel
                     Assert.Fail("unexpected cell type: " + cell.CellType);
                     break;
             }
+
+            wb.Close();
         }
     }
 }

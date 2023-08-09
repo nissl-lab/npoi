@@ -192,7 +192,9 @@ namespace NPOI.XSSF.Streaming
             get
             {
                 if (_writer.NumberOfFlushedRows > 0)
+                {
                     return _writer.LowestIndexOfFlushedRows;
+                }
                 return _rows.Count == 0 ? 0 : _FirstRowNum;
             }
         }
@@ -830,26 +832,29 @@ namespace NPOI.XSSF.Streaming
                 int level = row.OutlineLevel + 1;
                 row.OutlineLevel = level;
 
-                if (level > outlineLevelRow) outlineLevelRow = level;
+                if (level > outlineLevelRow)
+                {
+                    outlineLevelRow = level;
+                }
             }
 
             SetWorksheetOutlineLevelRow();
         }
 
         /**
- * Set row groupings (like groupRow) in a stream-friendly manner
- *
- * <p>
- *    groupRows requires all rows in the group to be in the current window.
- *    This is not always practical.  Instead use setRowOutlineLevel to 
- *    explicitly set the group level.  Level 1 is the top level group, 
- *    followed by 2, etc.  It is up to the user to ensure that level 2
- *    groups are correctly nested under level 1, etc.
- * </p>
- *
- * @param rownum    index of row to update (0-based)
- * @param level     outline level (greater than 0)
- */
+         * Set row groupings (like groupRow) in a stream-friendly manner
+         *
+         * <p>
+         *    groupRows requires all rows in the group to be in the current window.
+         *    This is not always practical.  Instead use setRowOutlineLevel to 
+         *    explicitly set the group level.  Level 1 is the top level group, 
+         *    followed by 2, etc.  It is up to the user to ensure that level 2
+         *    groups are correctly nested under level 1, etc.
+         * </p>
+         *
+         * @param rownum    index of row to update (0-based)
+         * @param level     outline level (greater than 0)
+         */
         public void SetRowOutlineLevel(int rownum, int level)
         {
             SXSSFRow row = _rows[rownum];
@@ -868,7 +873,10 @@ namespace NPOI.XSSF.Streaming
             var pr = ct.IsSetSheetFormatPr() ?
                 ct.sheetFormatPr :
                 ct.AddNewSheetFormatPr();
-            if (outlineLevelRow > 0) pr.outlineLevelRow = (byte)outlineLevelRow;
+            if (outlineLevelRow > 0)
+            {
+                pr.outlineLevelRow = (byte)outlineLevelRow;
+            }
         }
 
         public bool IsColumnBroken(int column)
@@ -1224,7 +1232,9 @@ namespace NPOI.XSSF.Streaming
             while (GetRow(currentRow) != null)
             {
                 if (GetRow(currentRow).OutlineLevel < level)
+                {
                     return currentRow + 1;
+                }
                 currentRow--;
             }
             return currentRow + 1;
@@ -1305,15 +1315,19 @@ namespace NPOI.XSSF.Streaming
         {
             return _workbook.IsDate1904();
         }
+
         public int GetRowNum(SXSSFRow row)
         {
             foreach (KeyValuePair<int, SXSSFRow> entry in _rows)
             {
                 if (entry.Value == row)
+                {
                     return entry.Key;
+                }
             }
             return -1;
         }
+
         public void ChangeRowNum(SXSSFRow row, int newRowNum)
         {
 
@@ -1324,14 +1338,18 @@ namespace NPOI.XSSF.Streaming
 
         public bool Dispose()
         {
-            if (!allFlushed) FlushRows();
+            if (!allFlushed)
+            {
+                FlushRows();
+            }
             return _writer.Dispose();
         }
+
         /**
- * Specifies how many rows can be accessed at most via getRow().
- * The exceeding rows (if any) are flushed to the disk while rows
- * with lower index values are flushed first.
- */
+         * Specifies how many rows can be accessed at most via getRow().
+         * The exceeding rows (if any) are flushed to the disk while rows
+         * with lower index values are flushed first.
+         */
         private void FlushRows(int remaining, bool flushOnDisk)
         {
             KeyValuePair<int, SXSSFRow>? lastRow = null;
@@ -1352,7 +1370,8 @@ namespace NPOI.XSSF.Streaming
             //TODO: review this.
             if (lastRow != null && flushOnDisk)
                 _writer.FlushRows(flushedRowsCount, lastRow.Value.Key, lastRow.Value.Value.LastCellNum);
-       }
+        }
+
         /*
          * Are all rows flushed to disk?
          */
@@ -1363,6 +1382,7 @@ namespace NPOI.XSSF.Streaming
                 return allFlushed;
             }
         }
+
         /**
          * @return Last row number to be flushed to disk, or -1 if none flushed yet
          */

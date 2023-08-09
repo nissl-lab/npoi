@@ -25,6 +25,7 @@ using NPOI.HSSF.Model;
 using TestCases.HSSF.Model;
 using NPOI.Util;
 using NPOI.HSSF.Record;
+using static TestCases.POIFS.Storage.RawDataUtil;
 
 namespace TestCases.HSSF.UserModel
 {
@@ -44,31 +45,31 @@ namespace TestCases.HSSF.UserModel
             HSSFTextbox textbox = patriarch.CreateTextbox(new HSSFClientAnchor()) as HSSFTextbox;
             Assert.AreEqual(textbox.GetEscherContainer().ChildRecords.Count, 5);
             //sp record
-            byte[] expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAFvEw/WBg4GBgZEFSHAxMAAA9gX7nhAAAAA=");
+            byte[] expected = Decompress("H4sIAAAAAAAAAFvEw/WBg4GBgZEFSHAxMAAA9gX7nhAAAAA=");
             byte[] actual = textbox.GetEscherContainer().GetChild(0).Serialize();
             Assert.AreEqual(expected.Length, actual.Length);
             //assertArrayEquals(expected, actual)
             CollectionAssert.AreEqual(expected, actual);
-            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNgEPggxIANAABK4+laGgAAAA==");
+            expected = Decompress("H4sIAAAAAAAAAGNgEPggxIANAABK4+laGgAAAA==");
             actual = textbox.GetEscherContainer().GetChild(2).Serialize();
             Assert.AreEqual(expected.Length, actual.Length);
             CollectionAssert.AreEqual(expected, actual);
-            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNgEPzAAAQACl6c5QgAAAA=");
+            expected = Decompress("H4sIAAAAAAAAAGNgEPzAAAQACl6c5QgAAAA=");
             actual = textbox.GetEscherContainer().GetChild(3).Serialize();
             Assert.AreEqual(expected.Length, actual.Length);
             CollectionAssert.AreEqual(expected, actual);
-            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAGNg4P3AAAQA6pyIkQgAAAA=");
+            expected = Decompress("H4sIAAAAAAAAAGNg4P3AAAQA6pyIkQgAAAA=");
             actual = textbox.GetEscherContainer().GetChild(4).Serialize();
             Assert.AreEqual(expected.Length, actual.Length);
             CollectionAssert.AreEqual(expected, actual);
             ObjRecord obj = textbox.GetObjRecord();
-            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAAItlkGIQZRBiYGNgZBBMYEADAOdCLuweAAAA");
+            expected = Decompress("H4sIAAAAAAAAAItlkGIQZRBiYGNgZBBMYEADAOdCLuweAAAA");
             actual = obj.Serialize();
             Assert.AreEqual(expected.Length, actual.Length);
             CollectionAssert.AreEqual(expected, actual);
 
             TextObjectRecord tor = textbox.GetTextObjectRecord();
-            expected = TestDrawingAggregate.decompress("H4sIAAAAAAAAANvGKMQgxMSABgBGi8T+FgAAAA==");
+            expected = Decompress("H4sIAAAAAAAAANvGKMQgxMSABgBGi8T+FgAAAA==");
             actual = tor.Serialize();
             Assert.AreEqual(expected.Length, actual.Length);
             CollectionAssert.AreEqual(expected, actual);
