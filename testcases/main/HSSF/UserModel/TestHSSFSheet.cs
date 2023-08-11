@@ -854,10 +854,7 @@ namespace TestCases.HSSF.UserModel
             sheet.AutoSizeRow(row.RowNum);
 
             Assert.AreNotEqual(100, row.Height);
-
-            // there's slight difference due to fonts
-            var expectedRowHeight = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 506 : 528;
-            Assert.AreEqual(expectedRowHeight, row.Height);
+            Assert.AreEqual(506, row.Height);
 
             workbook.Close();
         }
