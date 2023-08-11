@@ -434,7 +434,7 @@ namespace NPOI.XSSF.Streaming
             return null;
         }
 
-        private void InjectData(FileInfo zipfile, Stream outStream)
+        private void InjectData(FileInfo zipfile, Stream outStream, bool leaveOpen)
         {
             // don't use ZipHelper.openZipFile here - see #59743
             ZipFile zip = new ZipFile(zipfile.FullName);
@@ -443,6 +443,7 @@ namespace NPOI.XSSF.Streaming
                 ZipOutputStream zos = new ZipOutputStream(outStream);
                 try
                 {
+                    zos.IsStreamOwner = !leaveOpen;
                     zos.UseZip64 = UseZip64.Off;
                     //ZipEntrySource zipEntrySource = new ZipFileZipEntrySource(zip);
                     //var en =  zipEntrySource.Entries;
@@ -773,7 +774,7 @@ namespace NPOI.XSSF.Streaming
 
                 //Substitute the template entries with the generated sheet data files
                 
-                InjectData(tmplFile, stream);
+                InjectData(tmplFile, stream, leaveOpen);
             }
             finally
             {
