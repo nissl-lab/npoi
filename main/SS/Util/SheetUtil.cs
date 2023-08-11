@@ -419,7 +419,7 @@ namespace NPOI.SS.Util
         private static double GetRotatedContentHeight(ICell cell, string stringValue, Font windowsFont)
         {
             var angle = cell.CellStyle.Rotation * 2.0 * Math.PI / 360.0;
-            var measureResult = TextMeasurer.Measure(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
+            var measureResult = TextMeasurer.MeasureSize(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
 
             var x1 = Math.Abs(measureResult.Height * Math.Cos(angle));
             var x2 = Math.Abs(measureResult.Width * Math.Sin(angle));
@@ -429,7 +429,7 @@ namespace NPOI.SS.Util
 
         private static double GetContentHeight(string stringValue, Font windowsFont)
         {
-            var measureResult = TextMeasurer.Measure(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
+            var measureResult = TextMeasurer.MeasureSize(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
             
             return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);
         }
@@ -533,7 +533,7 @@ namespace NPOI.SS.Util
         {
             //Rectangle bounds;
             double actualWidth;
-            FontRectangle sf = TextMeasurer.Measure(str, new TextOptions(windowsFont) { Dpi = dpi });
+            FontRectangle sf = TextMeasurer.MeasureSize(str, new TextOptions(windowsFont) { Dpi = dpi });
             if (style.Rotation != 0)
             {
                 double angle = style.Rotation * 2.0 * Math.PI / 360.0;
@@ -609,7 +609,7 @@ namespace NPOI.SS.Util
             IFont defaultFont = wb.GetFontAt((short)0);
             Font font = IFont2Font(defaultFont);
 
-            return (int)Math.Ceiling(TextMeasurer.Measure(new string(defaultChar, 1), new TextOptions(font) { Dpi = dpi }).Width);
+            return (int)Math.Ceiling(TextMeasurer.MeasureSize(new string(defaultChar, 1), new TextOptions(font) { Dpi = dpi }).Width);
         }
 
         /**
