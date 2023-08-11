@@ -39,6 +39,8 @@ namespace NPOI.SS.Util
         // */
         private static char defaultChar = '0';
 
+        // Default dpi
+        private static int dpi = 96;
         // /**
         // * This is the multiple that the font height is scaled by when determining the
         // * boundary of rotated text.
@@ -528,7 +530,7 @@ namespace NPOI.SS.Util
         {
             //Rectangle bounds;
             double actualWidth;
-            FontRectangle sf = TextMeasurer.MeasureAdvance(str, new TextOptions(windowsFont) { Dpi = dpi });
+            FontRectangle sf = TextMeasurer.MeasureSize(str, new TextOptions(windowsFont) { Dpi = dpi });
             if (style.Rotation != 0)
             {
                 double angle = style.Rotation * 2.0 * Math.PI / 360.0;
@@ -614,7 +616,8 @@ namespace NPOI.SS.Util
             //TextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
             //int defaultCharWidth = (int)layout.getAdvance();
             Font font = IFont2Font(defaultFont);
-            return (int)Math.Ceiling(TextMeasurer.Measure(new string(defaultChar, 1), new TextOptions(font)).Width);
+
+            return (int)Math.Ceiling(TextMeasurer.MeasureSize(new string(defaultChar, 1), new TextOptions(font) { Dpi = dpi }).Width);
         }
 
         /**

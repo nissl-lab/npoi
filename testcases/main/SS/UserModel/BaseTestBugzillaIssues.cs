@@ -38,6 +38,7 @@ namespace TestCases.SS.UserModel
     {
 
         private ITestDataProvider _testDataProvider;
+        private static int dpi = 96;
 
         protected BaseTestBugzillaIssues(ITestDataProvider TestDataProvider)
         {
@@ -481,7 +482,8 @@ namespace TestCases.SS.UserModel
             //TextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
             //width = ((layout.getBounds().getWidth() / 1) / 8);
             Font wfont = SheetUtil.IFont2Font(font);
-            width = (double)TextMeasurer.Measure(txt, new TextOptions(wfont)).Width;
+            var textOptions = new TextOptions(wfont) { Dpi = dpi };
+            width = (double)TextMeasurer.MeasureSize(txt, textOptions).Width;
             return width;
         }
 
@@ -489,7 +491,8 @@ namespace TestCases.SS.UserModel
         {
             double width;
             Font wfont = SheetUtil.IFont2Font(font);
-            width = (double)TextMeasurer.Measure(txt, new TextOptions(wfont)).Width;
+            var textOptions = new TextOptions(wfont) { Dpi = dpi };
+            width = (double)TextMeasurer.MeasureSize(txt, textOptions).Width;
             return width;
         }
 
