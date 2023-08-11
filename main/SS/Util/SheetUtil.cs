@@ -370,8 +370,8 @@ namespace NPOI.SS.Util
         private static double GetCellConetntHeight(double actualHeight, int numberOfRowsInMergedRegion)
         {
             var correction = 1.1;
-            int width = (int)(actualHeight / numberOfRowsInMergedRegion * correction);
-            var height = Math.Max(-1, width);
+            int correctedHeight = (int)(actualHeight / numberOfRowsInMergedRegion * correction);
+            var height = Math.Max(-1, correctedHeight);
 
             return height * 72 / dpi;
         }
