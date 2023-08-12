@@ -10,7 +10,7 @@ namespace NPOI.Util
     /// <summary>
     /// This class provides helper methods that reduce dynamic code / reflection use, for better AOT performance.
     /// </summary>
-    public static class EnumExtensions
+    internal static class EnumExtensions
     {
 #if !NET6_0_OR_GREATER
         public static T[] GetEnumValues<T>() where T : struct, Enum
