@@ -21,7 +21,7 @@ namespace NPOI.SS.Formula
 {
     internal class SingleValueAttribute : Attribute
     {
-        private bool _isSingleValue = false;
+        private bool _isSingleValue=false;
         public SingleValueAttribute(bool isSingleValue)
         {
             this._isSingleValue = isSingleValue;
@@ -35,7 +35,7 @@ namespace NPOI.SS.Formula
     /// <summary>
     /// Enumeration of various formula types. For internal use only
     /// </summary>
-    public enum FormulaType : int
+    public enum FormulaType:int
     {
         [SingleValue(true)]
         Cell = 0,
@@ -51,14 +51,5 @@ namespace NPOI.SS.Formula
         // validation formulas or conditional format formulas is not known yet
         [SingleValue(false)]
         DataValidationList = 5,
-    }
-
-    internal static class FormulaTypeExtensions
-    {
-        public static bool IsSingleValue(this FormulaType val) => val switch
-        {
-            FormulaType.Cell or FormulaType.Shared or FormulaType.CondFormat => true,
-            _ => false,
-        };
     }
 }

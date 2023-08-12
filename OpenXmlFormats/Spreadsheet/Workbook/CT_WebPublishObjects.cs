@@ -6,96 +6,53 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using EnumsNET;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
-{
+{ 
     public enum ST_TargetScreenSize
     {
-        [Description(ST_TargetScreenSizeParser.Item544x376)]
+        [Description("544x376")]
         Item544x376,
 
-        [Description(ST_TargetScreenSizeParser.Item640x480)]
+        [Description("640x480")]
         Item640x480,
 
 
-        [Description(ST_TargetScreenSizeParser.Item720x512)]
+        [Description("720x512")]
         Item720x512,
 
 
-        [Description(ST_TargetScreenSizeParser.Item800x600)]
+        [Description("800x600")]
         Item800x600,
 
 
-        [Description(ST_TargetScreenSizeParser.Item1024x768)]
+        [Description("1024x768")]
         Item1024x768,
 
 
-        [Description(ST_TargetScreenSizeParser.Item1152x882)]
+        [Description("1152x882")]
         Item1152x882,
 
 
-        [Description(ST_TargetScreenSizeParser.Item1152x900)]
+        [Description("1152x900")]
         Item1152x900,
 
 
-        [Description(ST_TargetScreenSizeParser.Item1280x1024)]
+        [Description("1280x1024")]
         Item1280x1024,
 
 
-        [Description(ST_TargetScreenSizeParser.Item1600x1200)]
+        [Description("1600x1200")]
         Item1600x1200,
 
 
-        [Description(ST_TargetScreenSizeParser.Item1800x1440)]
+        [Description("1800x1440")]
         Item1800x1440,
 
 
-        [Description(ST_TargetScreenSizeParser.Item1920x1200)]
+        [Description("1920x1200")]
         Item1920x1200,
-    }
-    internal static class ST_TargetScreenSizeParser
-    {
-        public const string Item544x376 = "544x376";
-        public const string Item640x480 = "640x480";
-        public const string Item720x512 = "720x512";
-        public const string Item800x600 = "800x600";
-        public const string Item1024x768 = "1024x768";
-        public const string Item1152x882 = "1152x882";
-        public const string Item1152x900 = "1152x900";
-        public const string Item1280x1024 = "1280x1024";
-        public const string Item1600x1200 = "1600x1200";
-        public const string Item1800x1440 = "1800x1440";
-        public const string Item1920x1200 = "1920x1200";
-        public static string AsString(this ST_TargetScreenSize targetScreenSize) => targetScreenSize switch
-        {
-            ST_TargetScreenSize.Item544x376 => Item544x376,
-            ST_TargetScreenSize.Item640x480 => Item640x480,
-            ST_TargetScreenSize.Item720x512 => Item720x512,
-            ST_TargetScreenSize.Item800x600 => Item800x600,
-            ST_TargetScreenSize.Item1024x768 => Item1024x768,
-            ST_TargetScreenSize.Item1152x882 => Item1152x882,
-            ST_TargetScreenSize.Item1152x900 => Item1152x900,
-            ST_TargetScreenSize.Item1280x1024 => Item1280x1024,
-            ST_TargetScreenSize.Item1600x1200 => Item1600x1200,
-            ST_TargetScreenSize.Item1800x1440 => Item1800x1440,
-            ST_TargetScreenSize.Item1920x1200 => Item1920x1200,
-            _ => targetScreenSize.ToString()
-        };
-        public static ST_TargetScreenSize Parse(string desc) => desc switch
-        {
-            Item544x376 => ST_TargetScreenSize.Item544x376,
-            Item640x480 => ST_TargetScreenSize.Item640x480,
-            Item720x512 => ST_TargetScreenSize.Item720x512,
-            Item800x600 => ST_TargetScreenSize.Item800x600,
-            Item1024x768 => ST_TargetScreenSize.Item1024x768,
-            Item1152x882 => ST_TargetScreenSize.Item1152x882,
-            Item1152x900 => ST_TargetScreenSize.Item1152x900,
-            Item1280x1024 => ST_TargetScreenSize.Item1280x1024,
-            Item1600x1200 => ST_TargetScreenSize.Item1600x1200,
-            Item1800x1440 => ST_TargetScreenSize.Item1800x1440,
-            Item1920x1200 => ST_TargetScreenSize.Item1920x1200,
-            _ => throw new ArgumentException(nameof(desc))
-        };
     }
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
@@ -131,7 +88,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.allowPng = XmlHelper.ReadBool(node.Attributes["allowPng"]);
             if (node.Attributes["targetScreenSize"] != null)
             {
-               ctObj.targetScreenSize = ST_TargetScreenSizeParser.Parse(node.Attributes["targetScreenSize"].Value);
+               ctObj.targetScreenSize = Enums.Parse<ST_TargetScreenSize>(node.Attributes["targetScreenSize"].Value,false, EnumFormat.Description);
             }
             ctObj.dpi = XmlHelper.ReadUInt(node.Attributes["dpi"]);
             ctObj.codePage = XmlHelper.ReadUInt(node.Attributes["codePage"]);
@@ -148,7 +105,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "longFileNames", this.longFileNames);
             XmlHelper.WriteAttribute(sw, "vml", this.vml);
             XmlHelper.WriteAttribute(sw, "allowPng", this.allowPng);
-            XmlHelper.WriteAttribute(sw, "targetScreenSize", this.targetScreenSize.AsString());
+            XmlHelper.WriteAttribute(sw, "targetScreenSize", this.targetScreenSize.AsString(EnumFormat.Description));
             XmlHelper.WriteAttribute(sw, "dpi", this.dpi);
             XmlHelper.WriteAttribute(sw, "codePage", this.codePage);
             sw.Write(">");

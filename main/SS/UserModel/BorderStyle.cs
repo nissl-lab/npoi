@@ -16,7 +16,6 @@
 ==================================================================== */
 
 using System;
-using NPOI.Util;
 
 namespace NPOI.SS.UserModel
 {
@@ -107,7 +106,7 @@ namespace NPOI.SS.UserModel
             
         static BorderStyleEnum()
         {
-            foreach (BorderStyle c in AotExtensions.GetEnumValues<BorderStyle>())
+            foreach (BorderStyle c in Enum.GetValues(typeof(BorderStyle)))
             {
                 _table[(int)c] = c;
             }

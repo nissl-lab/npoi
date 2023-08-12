@@ -24,7 +24,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Record.Chart;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Util;
-    using NPOI.Util;
+
 
     public enum HSSFChartType : int
     {
@@ -207,7 +207,7 @@ namespace NPOI.HSSF.UserModel
                     if (lastChart != null)
                     {
                         Record record = (Record)r;
-                        foreach (int type in AotExtensions.GetEnumValues<HSSFChartType>())
+                        foreach (int type in Enum.GetValues(typeof(HSSFChartType)))
                         {
                             if (type == 0)
                             {

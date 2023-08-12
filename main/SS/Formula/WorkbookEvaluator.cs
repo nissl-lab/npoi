@@ -32,6 +32,7 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula.PTG;
     using NPOI.Util;
     using NPOI.SS.Formula.Function;
+    using EnumsNET;
 
     /**
      * Evaluates formula cells.<p/>
@@ -305,7 +306,7 @@ namespace NPOI.SS.Formula
             AdjustRegionRelativeReference(ptgs, target, region);
 
             OperationEvaluationContext ec = new OperationEvaluationContext(this, Workbook, sheetIndex, target.Row, target.Col, new EvaluationTracker(_cache),
-                formulaType.IsSingleValue());
+                formulaType.GetAttributes().Get<SingleValueAttribute>().IsSingleValue);
             return EvaluateNameFormula(ptgs, ec);
         }
         protected bool AdjustRegionRelativeReference(Ptg[] ptgs, CellReference target, CellRangeAddressBase region)

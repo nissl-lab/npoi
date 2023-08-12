@@ -17,6 +17,7 @@
  * ====================================================================
  */
 
+using EnumsNET;
 using NPOI.OOXML.XSSF.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
@@ -294,7 +295,7 @@ namespace NPOI.XSSF.UserModel
             // Set the type of the icon set
             if (iconSet.name != null)
             {
-                ST_IconSetType xIconSet = ST_IconSetTypeParser.Parse(iconSet.name);
+                ST_IconSetType xIconSet =Enums.Parse<ST_IconSetType>(iconSet.name, false, EnumFormat.Description);
                 icons.iconSet = xIconSet;
             }
 

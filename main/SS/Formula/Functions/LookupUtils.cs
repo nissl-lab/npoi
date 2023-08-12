@@ -24,7 +24,7 @@ namespace NPOI.SS.Formula.Functions
     using System.Globalization;
     using System.Text.RegularExpressions;
     using System.Collections.Generic;
-    using NPOI.Util;
+    using EnumsNET;
 
     /**
      * Common functionality used by VLOOKUP, HLOOKUP, LOOKUP and MATCH
@@ -38,11 +38,11 @@ namespace NPOI.SS.Formula.Functions
 
         static LookupUtils()
         {
-            foreach (var value in AotExtensions.GetEnumValues<MatchMode>())
+            foreach (var value in Enums.GetValues<MatchMode>())
             {
                 matchModeMap.Add((int)value, value);
             }
-            foreach (var value in AotExtensions.GetEnumValues<SearchMode>())
+            foreach (var value in Enums.GetValues<SearchMode>())
             {
                 searchModeMap.Add((int)value, value);
             }

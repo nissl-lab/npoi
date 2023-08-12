@@ -15,7 +15,7 @@ using System.Xml;
 using NPOI.OpenXml4Net.Util;
 using NPOI.OpenXmlFormats.Dml.WordProcessing;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using EnumsNET;
 
 namespace NPOI.OpenXmlFormats.Shared
 {
@@ -720,7 +720,7 @@ namespace NPOI.OpenXmlFormats.Shared
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<m:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "m:val", this.val.AsString());
+            XmlHelper.WriteAttribute(sw, "m:val", this.val.AsString(EnumFormat.Description));
             sw.Write("/>");
         }
 
@@ -758,32 +758,18 @@ namespace NPOI.OpenXmlFormats.Shared
     {
 
     
-        [Description(ST_BreakBinSubParser.Item)]
+        [Description("--")]
         Item,
 
     
-        [Description(ST_BreakBinSubParser.Item1)]
+        [Description("-+")]
         Item1,
 
     
-        [Description(ST_BreakBinSubParser.Item2)]
+        [Description("+-")]
         Item2,
     }
 
-    internal static class ST_BreakBinSubParser
-    {
-        public const string Item = "--";
-        public const string Item1 = "-+";
-        public const string Item2 = "+-";
-
-        public static string AsString(this ST_BreakBinSub val) => val switch
-        {
-            ST_BreakBinSub.Item => Item,
-            ST_BreakBinSub.Item1 => Item1,
-            ST_BreakBinSub.Item2 => Item2,
-            _ => throw new ArgumentException(nameof(val))
-        };
-    }
     
     [Serializable]
     

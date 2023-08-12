@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Xml;
 using NPOI.OpenXml4Net.Util;
 using System.IO;
+using EnumsNET;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -978,138 +979,74 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
     public enum ST_IconSetType
     {
-        [Description(ST_IconSetTypeParser.Item3Arrows)]
+        [Description("3Arrows")]
         Item3Arrows,
 
     
-        [Description(ST_IconSetTypeParser.Item3ArrowsGray)]
+        [Description("3ArrowsGray")]
         Item3ArrowsGray,
 
     
-        [Description(ST_IconSetTypeParser.Item3Flags)]
+        [Description("3Flags")]
         Item3Flags,
 
     
-        [Description(ST_IconSetTypeParser.Item3TrafficLights1)]
+        [Description("3TrafficLights1")]
         Item3TrafficLights1,
 
     
-        [Description(ST_IconSetTypeParser.Item3TrafficLights2)]
+        [Description("3TrafficLights2")]
         Item3TrafficLights2,
 
     
-        [Description(ST_IconSetTypeParser.Item3Signs)]
+        [Description("3Signs")]
         Item3Signs,
 
     
-        [Description(ST_IconSetTypeParser.Item3Symbols)]
+        [Description("3Symbols")]
         Item3Symbols,
 
     
-        [Description(ST_IconSetTypeParser.Item3Symbols2)]
+        [Description("3Symbols2")]
         Item3Symbols2,
 
     
-        [Description(ST_IconSetTypeParser.Item4Arrows)]
+        [Description("4Arrows")]
         Item4Arrows,
 
     
-        [Description(ST_IconSetTypeParser.Item4ArrowsGray)]
+        [Description("4ArrowsGray")]
         Item4ArrowsGray,
 
     
-        [Description(ST_IconSetTypeParser.Item4RedToBlack)]
+        [Description("4RedToBlack")]
         Item4RedToBlack,
 
     
-        [Description(ST_IconSetTypeParser.Item4Rating)]
+        [Description("4Rating")]
         Item4Rating,
 
     
-        [Description(ST_IconSetTypeParser.Item4TrafficLights)]
+        [Description("4TrafficLights")]
         Item4TrafficLights,
 
     
-        [Description(ST_IconSetTypeParser.Item5Arrows)]
+        [Description("5Arrows")]
         Item5Arrows,
 
     
-        [Description(ST_IconSetTypeParser.Item5ArrowsGray)]
+        [Description("5ArrowsGray")]
         Item5ArrowsGray,
 
     
-        [Description(ST_IconSetTypeParser.Item5Rating)]
+        [Description("5Rating")]
         Item5Rating,
 
     
-        [Description(ST_IconSetTypeParser.Item5Quarters)]
+        [Description("5Quarters")]
         Item5Quarters,
     }
 
-    public static class ST_IconSetTypeParser
-    {
-        public const string Item3Arrows = "3Arrows";
-        public const string Item3ArrowsGray = "3ArrowsGray";
-        public const string Item3Flags = "3Flags";
-        public const string Item3TrafficLights1 = "3TrafficLights1";
-        public const string Item3TrafficLights2 = "3TrafficLights2";
-        public const string Item3Signs = "3Signs";
-        public const string Item3Symbols = "3Symbols";
-        public const string Item3Symbols2 = "3Symbols2";
-        public const string Item4Arrows = "4Arrows";
-        public const string Item4ArrowsGray = "4ArrowsGray";
-        public const string Item4RedToBlack = "4RedToBlack";
-        public const string Item4Rating = "4Rating";
-        public const string Item4TrafficLights = "4TrafficLights";
-        public const string Item5Arrows = "5Arrows";
-        public const string Item5ArrowsGray = "5ArrowsGray";
-        public const string Item5Rating = "5Rating";
-        public const string Item5Quarters = "5Quarters";
-
-        public static ST_IconSetType Parse(string name) => name switch
-        {
-            Item3Arrows => ST_IconSetType.Item3Arrows,
-            Item3ArrowsGray => ST_IconSetType.Item3ArrowsGray,
-            Item3Flags => ST_IconSetType.Item3Flags,
-            Item3TrafficLights1 => ST_IconSetType.Item3TrafficLights1,
-            Item3TrafficLights2 => ST_IconSetType.Item3TrafficLights2,
-            Item3Signs => ST_IconSetType.Item3Signs,
-            Item3Symbols => ST_IconSetType.Item3Symbols,
-            Item3Symbols2 => ST_IconSetType.Item3Symbols2,
-            Item4Arrows => ST_IconSetType.Item4Arrows,
-            Item4ArrowsGray => ST_IconSetType.Item4ArrowsGray,
-            Item4RedToBlack => ST_IconSetType.Item4RedToBlack,
-            Item4Rating => ST_IconSetType.Item4Rating,
-            Item4TrafficLights => ST_IconSetType.Item4TrafficLights,
-            Item5Arrows => ST_IconSetType.Item5Arrows,
-            Item5ArrowsGray => ST_IconSetType.Item5ArrowsGray,
-            Item5Rating => ST_IconSetType.Item5Rating,
-            Item5Quarters => ST_IconSetType.Item5Quarters,
-            _ => throw new ArgumentException(nameof(name))
-        };
-
-        public static string AsString(this ST_IconSetType val) => val switch
-        {
-            ST_IconSetType.Item3Arrows => Item3Arrows,
-            ST_IconSetType.Item3ArrowsGray => Item3ArrowsGray,
-            ST_IconSetType.Item3Flags => Item3Flags,
-            ST_IconSetType.Item3TrafficLights1 => Item3TrafficLights1,
-            ST_IconSetType.Item3TrafficLights2 => Item3TrafficLights2,
-            ST_IconSetType.Item3Signs => Item3Signs,
-            ST_IconSetType.Item3Symbols => Item3Symbols,
-            ST_IconSetType.Item3Symbols2 => Item3Symbols2,
-            ST_IconSetType.Item4Arrows => Item4Arrows,
-            ST_IconSetType.Item4ArrowsGray => Item4ArrowsGray,
-            ST_IconSetType.Item4RedToBlack => Item4RedToBlack,
-            ST_IconSetType.Item4Rating => Item4Rating,
-            ST_IconSetType.Item4TrafficLights => Item4TrafficLights,
-            ST_IconSetType.Item5Arrows => Item5Arrows,
-            ST_IconSetType.Item5ArrowsGray => Item5ArrowsGray,
-            ST_IconSetType.Item5Rating => Item5Rating,
-            ST_IconSetType.Item5Quarters => Item5Quarters,
-            _ => ((int)val).ToString()
-        };
-    }
     public class CT_Top10
     {
 
@@ -1381,7 +1318,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node.Attributes["dxfId"] != null)
                 ctObj.dxfId = XmlHelper.ReadUInt(node.Attributes["dxfId"]);
             if (node.Attributes["iconSet"] != null)
-                ctObj.iconSet = ST_IconSetTypeParser.Parse(node.Attributes["iconSet"].Value);
+                ctObj.iconSet = Enums.Parse<ST_IconSetType>(node.Attributes["iconSet"].Value,false, EnumFormat.Description);
             if (node.Attributes["iconId"] != null)
                 ctObj.iconId = XmlHelper.ReadUInt(node.Attributes["iconId"]);
             return ctObj;
@@ -1397,7 +1334,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
             XmlHelper.WriteAttribute(sw, "customList", this.customList);
             XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId);
-            XmlHelper.WriteAttribute(sw, "iconSet",  this.iconSet.AsString());
+            XmlHelper.WriteAttribute(sw, "iconSet",  this.iconSet.AsString(EnumFormat.Description));
             XmlHelper.WriteAttribute(sw, "iconId", this.iconId);
             sw.Write("/>");
         }
