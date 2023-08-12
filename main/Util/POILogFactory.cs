@@ -28,7 +28,6 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Configuration;
 
 namespace NPOI.Util
@@ -51,14 +50,6 @@ namespace NPOI.Util
          *  first time we need it
          */
         private static String _loggerClassName = null;
-
-        private static readonly string BuiltInNameNullLogger = typeof(NullLogger).Name;
-        private static readonly string BuiltInNameSystemOutLogger = typeof(SystemOutLogger).Name;
-
-        private static readonly string BuiltInFullNameNullLogger = typeof(NullLogger).FullName;
-        private static readonly string BuiltInFullNameSystemOutLogger = typeof(SystemOutLogger).FullName;
-
-        public static List<CustomPOILoggerFactory> CustomFactories { get; } = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="POILogFactory"/> class.
@@ -117,15 +108,8 @@ namespace NPOI.Util
             } else {
                 try {
                     //logger=assembly.CreateInstance(_loggerClassName) as POILogger;
-
-                    // REMOVE-REFLECTION: I doubt if the following line would work,
-                    // because _loggerClassName is Name of the type but Type.GetType requires FullName.
-                    // It all ends up using the null logger.
-
-                    //Type loggerClass = Type.GetType(_loggerClassName);
-                    // logger =  Activator.CreateInstance(loggerClass) as POILogger;
-
-                    logger = CreateLoggerByTypeName(_loggerClassName);
+                    Type loggerClass = Type.GetType(_loggerClassName);
+                    logger =  Activator.CreateInstance(loggerClass) as POILogger;
                     logger.Initialize(cat);
                 } catch(Exception) {
                   // Give up and use the null logger
@@ -136,23 +120,6 @@ namespace NPOI.Util
                 _loggers[cat] = logger;
             }
             return logger;
-        }
-
-        private static POILogger CreateLoggerByTypeName(string typeName)
-        {
-            if (typeName == BuiltInNameNullLogger || typeName == BuiltInFullNameNullLogger)
-                return _nullLogger;
-
-            if (typeName == BuiltInNameSystemOutLogger || typeName == BuiltInFullNameSystemOutLogger)
-                return new SystemOutLogger();
-
-            foreach (var it in CustomFactories)
-            {
-                var logger = it.Create(typeName);
-                if (logger is not null) return logger;
-            }
-
-            return _nullLogger;
         }
     }
 }
