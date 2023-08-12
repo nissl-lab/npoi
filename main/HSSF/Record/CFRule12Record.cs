@@ -41,7 +41,7 @@ namespace NPOI.HSSF.Record
      */
     public class CFRule12Record : CFRuleBase, IFutureRecord, ICloneable
     {
-        public const short sid = 0x087A;
+        public static short sid = 0x087A;
 
         private FtrHeader futureHeader;
         private int ext_formatting_length;

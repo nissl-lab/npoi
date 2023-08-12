@@ -34,7 +34,7 @@ namespace NPOI.HSSF.Record
      */
     public class CFRuleRecord : CFRuleBase, ICloneable
     {
-        public const short sid = 0x01B1;
+        public static short sid = 0x01B1;
 
         /** Creates new CFRuleRecord */
         private CFRuleRecord(byte conditionType, byte comparisonOperation)

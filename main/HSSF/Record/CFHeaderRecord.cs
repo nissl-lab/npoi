@@ -28,7 +28,7 @@ namespace NPOI.HSSF.Record
      */
     public class CFHeaderRecord : CFHeaderBase, ICloneable
     {
-        public const short sid = 0x01B0;
+        public static short sid = 0x01B0;
 
         /** Creates new CFHeaderRecord */
         public CFHeaderRecord()

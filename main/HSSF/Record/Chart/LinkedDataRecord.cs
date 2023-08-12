@@ -32,7 +32,7 @@ namespace NPOI.HSSF.Record.Chart
      */
     public class LinkedDataRecord : StandardRecord, ICloneable
     {
-        public const short sid = 0x1051;
+        public static short sid = 0x1051;
 
         private static BitField customNumberFormat = BitFieldFactory.GetInstance(0x1);
 
