@@ -98,9 +98,6 @@ namespace NPOI.XSSF.UserModel
         {
             Read(GetPackagePart().GetInputStream());
         }
-
-        internal static XSSFVMLDrawing InternalCreateInstance(PackagePart part) => new(part);
-
         [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
         protected XSSFVMLDrawing(PackagePart part, PackageRelationship rel)
             : this(part)

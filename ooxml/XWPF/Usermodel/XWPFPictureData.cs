@@ -63,8 +63,6 @@ namespace NPOI.XWPF.UserModel
         {
         }
 
-        internal static XWPFPictureData InternalCreateInstance() => new();
-
         /**
          * Construct XWPFPictureData from a package part
          *

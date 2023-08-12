@@ -68,8 +68,6 @@ namespace NPOI.XSSF.UserModel
             ReadFrom(part.GetInputStream());
         }
 
-        internal static XSSFPivotTable InternalCreateInstance(PackagePart part) => new(part);
-
         [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
         protected XSSFPivotTable(PackagePart part, PackageRelationship rel)
             : this(part)
