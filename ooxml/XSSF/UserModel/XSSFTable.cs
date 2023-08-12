@@ -31,6 +31,7 @@ using System.Globalization;
 using NPOI.SS;
 using System.Linq;
 using NPOI.OOXML.XSSF.UserModel;
+using NPOI.OOXML.Util;
 
 namespace NPOI.XSSF.UserModel
 {
