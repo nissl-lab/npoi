@@ -474,7 +474,7 @@ namespace NPOI.OpenXmlFormats.Encryption
         {
             httpschemasmicrosoftcomoffice2006keyEncryptorcertificate => CT_KeyEncryptorUri.httpschemasmicrosoftcomoffice2006keyEncryptorcertificate,
             httpschemasmicrosoftcomoffice2006keyEncryptorpassword => CT_KeyEncryptorUri.httpschemasmicrosoftcomoffice2006keyEncryptorpassword,
-            _ => throw new ArgumentOutOfRangeException(nameof(uri))
+            _ => throw new ArgumentException(nameof(uri))
         };
     }
 

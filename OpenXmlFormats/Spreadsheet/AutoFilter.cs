@@ -1085,7 +1085,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             Item5ArrowsGray => ST_IconSetType.Item5ArrowsGray,
             Item5Rating => ST_IconSetType.Item5Rating,
             Item5Quarters => ST_IconSetType.Item5Quarters,
-            _ => throw new ArgumentOutOfRangeException(nameof(name))
+            _ => throw new ArgumentException(nameof(name))
         };
 
         public static string AsString(this ST_IconSetType val) => val switch
@@ -1107,7 +1107,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ST_IconSetType.Item5ArrowsGray => Item5ArrowsGray,
             ST_IconSetType.Item5Rating => Item5Rating,
             ST_IconSetType.Item5Quarters => Item5Quarters,
-            _ => throw new ArgumentOutOfRangeException(nameof(val))
+            _ => ((int)val).ToString()
         };
     }
     public class CT_Top10

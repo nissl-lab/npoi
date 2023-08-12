@@ -781,7 +781,7 @@ namespace NPOI.OpenXmlFormats.Shared
             ST_BreakBinSub.Item => Item,
             ST_BreakBinSub.Item1 => Item1,
             ST_BreakBinSub.Item2 => Item2,
-            _ => throw new ArgumentOutOfRangeException(nameof(val))
+            _ => throw new ArgumentException(nameof(val))
         };
     }
     

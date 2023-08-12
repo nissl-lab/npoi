@@ -79,7 +79,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ST_TargetScreenSize.Item1600x1200 => Item1600x1200,
             ST_TargetScreenSize.Item1800x1440 => Item1800x1440,
             ST_TargetScreenSize.Item1920x1200 => Item1920x1200,
-            _ => throw new ArgumentOutOfRangeException(nameof(targetScreenSize))
+            _ => targetScreenSize.ToString()
         };
         public static ST_TargetScreenSize Parse(string desc) => desc switch
         {
@@ -94,7 +94,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             Item1600x1200 => ST_TargetScreenSize.Item1600x1200,
             Item1800x1440 => ST_TargetScreenSize.Item1800x1440,
             Item1920x1200 => ST_TargetScreenSize.Item1920x1200,
-            _ => throw new ArgumentOutOfRangeException(nameof(desc))
+            _ => throw new ArgumentException(nameof(desc))
         };
     }
     [Serializable]
