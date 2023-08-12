@@ -365,8 +365,7 @@ namespace NPOI.SS.Util
 
         private static double GetCellConetntHeight(double actualHeight, int numberOfRowsInMergedRegion)
         {
-            var correction = 1.1;
-            return Math.Max(-1, actualHeight / numberOfRowsInMergedRegion * correction);
+            return Math.Max(-1, actualHeight / numberOfRowsInMergedRegion);
         }
 
         private static string GetCellStringValue(ICell cell)
@@ -415,7 +414,7 @@ namespace NPOI.SS.Util
         private static double GetRotatedContentHeight(ICell cell, string stringValue, Font windowsFont)
         {
             var angle = cell.CellStyle.Rotation * 2.0 * Math.PI / 360.0;
-            var measureResult = TextMeasurer.Measure(stringValue, new TextOptions(windowsFont));
+            var measureResult = TextMeasurer.MeasureAdvance(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
 
             var x1 = Math.Abs(measureResult.Height * Math.Cos(angle));
             var x2 = Math.Abs(measureResult.Width * Math.Sin(angle));
@@ -425,7 +424,7 @@ namespace NPOI.SS.Util
 
         private static double GetContentHeight(string stringValue, Font windowsFont)
         {
-            var measureResult = TextMeasurer.Measure(stringValue, new TextOptions(windowsFont));
+            var measureResult = TextMeasurer.MeasureAdvance(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
             
             return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);
         }
