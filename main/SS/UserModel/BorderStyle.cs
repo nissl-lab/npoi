@@ -107,7 +107,7 @@ namespace NPOI.SS.UserModel
             
         static BorderStyleEnum()
         {
-            foreach (BorderStyle c in AotExtensions.GetEnumValues<BorderStyle>())
+            foreach (BorderStyle c in EnumExtensions.GetEnumValues<BorderStyle>())
             {
                 _table[(int)c] = c;
             }

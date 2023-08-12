@@ -46,7 +46,7 @@ namespace NPOI.OpenXml4Net.Util
         {
             // http://stackoverflow.com/q/3047125/194717
             Type type = pEnumVal.GetType();
-            FieldInfo info = type.GetField(AotExtensions.GetEnumName<T>(pEnumVal));
+            FieldInfo info = type.GetField(EnumExtensions.GetEnumName<T>(pEnumVal));
             XmlEnumAttribute att = (XmlEnumAttribute)info.GetCustomAttributes(typeof(XmlEnumAttribute), false)[0];
             //If there is an xmlattribute defined, return the name
 
@@ -55,7 +55,7 @@ namespace NPOI.OpenXml4Net.Util
         public static T GetEnumValueFromString<T>(string value) where T : struct, Enum
         {
             // http://stackoverflow.com/a/3073272/194717
-            foreach (T o in AotExtensions.GetEnumValues<T>())
+            foreach (T o in EnumExtensions.GetEnumValues<T>())
             {
                 T enumValue = (T)o;
                 if (GetXmlAttrNameFromEnumValue<T>(enumValue).Equals(value, StringComparison.OrdinalIgnoreCase))

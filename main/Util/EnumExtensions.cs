@@ -10,19 +10,8 @@ namespace NPOI.Util
     /// <summary>
     /// This class provides helper methods that reduce dynamic code / reflection use, for better AOT performance.
     /// </summary>
-    public static class AotExtensions
+    public static class EnumExtensions
     {
-        public static T[] ToArray<T>(this ArrayList arrayList)
-        {
-            if (arrayList.Count == 0)
-                return Array.Empty<T>();
-
-            var array = new T[arrayList.Count];
-            arrayList.CopyTo(array);
-
-            return array;
-        }
-
 #if !NET6_0_OR_GREATER
         public static T[] GetEnumValues<T>() where T : struct, Enum
         {

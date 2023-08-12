@@ -309,7 +309,7 @@ namespace NPOI.XSSF.UserModel
             Init();
             return styleMap[style];
         }
-        private static readonly HashSet<string> BuiltInStyleNames = new HashSet<string>(AotExtensions.GetEnumNames<XSSFBuiltinTableStyleEnum>());
+        private static readonly HashSet<string> BuiltInStyleNames = new HashSet<string>(EnumExtensions.GetEnumNames<XSSFBuiltinTableStyleEnum>());
         public static bool IsBuiltinStyle(ITableStyle style)
         {
             if (style == null) 

@@ -38,11 +38,11 @@ namespace NPOI.SS.Formula.Functions
 
         static LookupUtils()
         {
-            foreach (var value in AotExtensions.GetEnumValues<MatchMode>())
+            foreach (var value in EnumExtensions.GetEnumValues<MatchMode>())
             {
                 matchModeMap.Add((int)value, value);
             }
-            foreach (var value in AotExtensions.GetEnumValues<SearchMode>())
+            foreach (var value in EnumExtensions.GetEnumValues<SearchMode>())
             {
                 searchModeMap.Add((int)value, value);
             }
