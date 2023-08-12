@@ -8,6 +8,9 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 
+// REMOVE-REFLECTION: Reflection uses here are unremovable.
+// Although the relating methods are a part of the API, they are not called from elsewhere in NPOI. Can they be safely removed?
+// or at least be marked as Obsolete
 namespace NPOI.OpenXml4Net.Util
 {
     public static class XmlHelper
@@ -39,20 +42,20 @@ namespace NPOI.OpenXml4Net.Util
             return att.Name;
         }
 
-        public static string GetXmlAttrNameFromEnumValue<T>(T pEnumVal)
+        public static string GetXmlAttrNameFromEnumValue<T>(T pEnumVal) where T : struct, Enum
         {
             // http://stackoverflow.com/q/3047125/194717
             Type type = pEnumVal.GetType();
-            FieldInfo info = type.GetField(Enum.GetName(typeof(T), pEnumVal));
+            FieldInfo info = type.GetField(AotExtensions.GetEnumName<T>(pEnumVal));
             XmlEnumAttribute att = (XmlEnumAttribute)info.GetCustomAttributes(typeof(XmlEnumAttribute), false)[0];
             //If there is an xmlattribute defined, return the name
 
             return att.Name;
         }
-        public static T GetEnumValueFromString<T>(string value)
+        public static T GetEnumValueFromString<T>(string value) where T : struct, Enum
         {
             // http://stackoverflow.com/a/3073272/194717
-            foreach (object o in System.Enum.GetValues(typeof(T)))
+            foreach (T o in AotExtensions.GetEnumValues<T>())
             {
                 T enumValue = (T)o;
                 if (GetXmlAttrNameFromEnumValue<T>(enumValue).Equals(value, StringComparison.OrdinalIgnoreCase))
