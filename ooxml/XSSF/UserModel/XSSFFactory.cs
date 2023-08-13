@@ -16,7 +16,6 @@
 ==================================================================== */
 
 using NPOI.Util;
-using NPOI.XSSF.UserModel;
 using System;
 using NPOI.OpenXml4Net.OPC;
 namespace NPOI.XSSF.UserModel

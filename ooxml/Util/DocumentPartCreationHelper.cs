@@ -18,6 +18,7 @@
  */
 using NPOI.OpenXml4Net.OPC;
 using NPOI.XSSF.Model;
+using NPOI.XSSF.UserModel;
 using NPOI.XWPF.UserModel;
 using System;
 using System.Collections.Generic;
@@ -25,11 +26,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NPOI.XSSF.UserModel
+namespace NPOI.Util
 {
     internal static class DocumentPartCreationHelper
     {
-        public static POIXMLDocumentPart CreateDocumentPart(Type cls, Type[] types, Object[] values)
+        public static POIXMLDocumentPart CreateDocumentPart(Type cls, Type[] types, object[] values)
         {
             if ((values is null || values.Length == 0) && (types is null || types.Length == 0))
             {
@@ -93,9 +94,9 @@ namespace NPOI.XSSF.UserModel
             if (cls == typeof(XSSFSheet))
                 return new XSSFSheet();
             //if (cls == typeof(XSSFChartSheet))
-                //return new XSSFChartSheet();
+            //return new XSSFChartSheet();
             //if (cls == typeof(XSSFDialogsheet))
-                //return new XSSFDialogsheet();
+            //return new XSSFDialogsheet();
             if (cls == typeof(XSSFTable))
                 return new XSSFTable();
             if (cls == typeof(XSSFVBAPart))
@@ -125,17 +126,17 @@ namespace NPOI.XSSF.UserModel
         private static POIXMLDocumentPart CreateDocumentPartOneParam(Type cls, PackagePart part)
         {
             //if (cls == typeof(XWPFDocument))
-                //return new XWPFDocument(part);
+            //return new XWPFDocument(part);
             //if (cls == typeof(XSSFWorkbook))
-                //return new XSSFWorkbook(part);
+            //return new XSSFWorkbook(part);
             //if (cls == typeof(XWPFComments))
-                //return new XWPFComments(part);
+            //return new XWPFComments(part);
             if (cls == typeof(XWPFFootnotes))
                 return new XWPFFootnotes(part);
             //if (cls == typeof(XWPFFooter))
-                //return new XWPFFooter(part);
+            //return new XWPFFooter(part);
             //if (cls == typeof(XWPFHeader))
-                //return new XWPFHeader(part);
+            //return new XWPFHeader(part);
             if (cls == typeof(XWPFNumbering))
                 return new XWPFNumbering(part);
             if (cls == typeof(XWPFPictureData))
@@ -163,7 +164,7 @@ namespace NPOI.XSSF.UserModel
             if (cls == typeof(XSSFChartSheet))
                 return XSSFChartSheet.InternalCreateInstance(part);
             //if (cls == typeof(XSSFDialogsheet))
-                //return new XSSFDialogsheet(part);
+            //return new XSSFDialogsheet(part);
             if (cls == typeof(XSSFTable))
                 return new XSSFTable(part);
             if (cls == typeof(XSSFVBAPart))
@@ -193,67 +194,67 @@ namespace NPOI.XSSF.UserModel
         private static POIXMLDocumentPart CreateDocumentPartTwoParams(Type cls, POIXMLDocumentPart parent, PackagePart part)
         {
             //if (cls == typeof(XWPFDocument))
-                //return new XWPFDocument(parent, part);
+            //return new XWPFDocument(parent, part);
             //if (cls == typeof(XSSFWorkbook))
-                //return new XSSFWorkbook(parent, part);
+            //return new XSSFWorkbook(parent, part);
             if (cls == typeof(XWPFComments))
                 return new XWPFComments(parent, part);
             //if (cls == typeof(XWPFFootnotes))
-                //return new XWPFFootnotes(parent, part);
+            //return new XWPFFootnotes(parent, part);
             if (cls == typeof(XWPFFooter))
                 return new XWPFFooter(parent, part);
             if (cls == typeof(XWPFHeader))
                 return new XWPFHeader(parent, part);
             //if (cls == typeof(XWPFNumbering))
-                //return new XWPFNumbering(parent, part);
+            //return new XWPFNumbering(parent, part);
             //if (cls == typeof(XWPFPictureData))
-                //return new XWPFPictureData(parent, part);
+            //return new XWPFPictureData(parent, part);
             //if (cls == typeof(XWPFSettings))
-                //return new XWPFSettings(parent, part);
+            //return new XWPFSettings(parent, part);
             //if (cls == typeof(XWPFStyles))
-                //return new XWPFStyles(parent, part);
+            //return new XWPFStyles(parent, part);
             //if (cls == typeof(XSSFChart))
-                //return new XSSFChart(parent, part);
+            //return new XSSFChart(parent, part);
             //if (cls == typeof(XSSFDrawing))
-                //return new XSSFDrawing(parent, part);
+            //return new XSSFDrawing(parent, part);
             //if (cls == typeof(XSSFPictureData))
-                //return new XSSFPictureData(parent, part);
+            //return new XSSFPictureData(parent, part);
             //if (cls == typeof(XSSFPivotCache))
-                //return new XSSFPivotCache(parent, part);
+            //return new XSSFPivotCache(parent, part);
             //if (cls == typeof(XSSFPivotCacheDefinition))
-                //return new XSSFPivotCacheDefinition(parent, part);
+            //return new XSSFPivotCacheDefinition(parent, part);
             //if (cls == typeof(XSSFPivotCacheRecords))
-                //return new XSSFPivotCacheRecords(parent, part);
+            //return new XSSFPivotCacheRecords(parent, part);
             //if (cls == typeof(XSSFPivotTable))
-                //return new XSSFPivotTable(parent, part);
+            //return new XSSFPivotTable(parent, part);
             //if (cls == typeof(XSSFSheet))
-                //return new XSSFSheet(parent, part);
+            //return new XSSFSheet(parent, part);
             //if (cls == typeof(XSSFChartSheet))
-                //return new XSSFChartSheet(parent, part);
+            //return new XSSFChartSheet(parent, part);
             //if (cls == typeof(XSSFDialogsheet))
-                //return new XSSFDialogsheet(parent, part);
+            //return new XSSFDialogsheet(parent, part);
             //if (cls == typeof(XSSFTable))
-                //return new XSSFTable(parent, part);
+            //return new XSSFTable(parent, part);
             //if (cls == typeof(XSSFVBAPart))
-                //return new XSSFVBAPart(parent, part);
+            //return new XSSFVBAPart(parent, part);
             //if (cls == typeof(XSSFVMLDrawing))
-                //return new XSSFVMLDrawing(parent, part);
+            //return new XSSFVMLDrawing(parent, part);
             //if (cls == typeof(CalculationChain))
-                //return new CalculationChain(parent, part);
+            //return new CalculationChain(parent, part);
             //if (cls == typeof(CommentsTable))
-                //return new CommentsTable(parent, part);
+            //return new CommentsTable(parent, part);
             //if (cls == typeof(ExternalLinksTable))
-                //return new ExternalLinksTable(parent, part);
+            //return new ExternalLinksTable(parent, part);
             //if (cls == typeof(MapInfo))
-                //return new MapInfo(parent, part);
+            //return new MapInfo(parent, part);
             //if (cls == typeof(SharedStringsTable))
-                //return new SharedStringsTable(parent, part);
+            //return new SharedStringsTable(parent, part);
             //if (cls == typeof(SingleXmlCells))
-                //return new SingleXmlCells(parent, part);
+            //return new SingleXmlCells(parent, part);
             //if (cls == typeof(StylesTable))
-                //return new StylesTable(parent, part);
+            //return new StylesTable(parent, part);
             //if (cls == typeof(ThemesTable))
-                //return new ThemesTable(parent, part);
+            //return new ThemesTable(parent, part);
 
             ThrowHelper_MissingMethod();
             return null;

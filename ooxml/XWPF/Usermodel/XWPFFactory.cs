@@ -20,7 +20,6 @@ namespace NPOI.XWPF.UserModel
     using System;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.Util;
-    using NPOI.XSSF.UserModel;
 
     /**
      * @author Yegor Kozlov
