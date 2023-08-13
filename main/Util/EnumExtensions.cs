@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace NPOI.Util
 {
     /// <summary>
-    /// This class provides helper methods that reduce dynamic code / reflection use, for better AOT performance.
+    /// This class provides helper methods that reduce dynamic code / reflection use on Enums
     /// </summary>
     public static class EnumExtensions
     {
@@ -27,6 +27,11 @@ namespace NPOI.Util
         {
             return Enum.GetNames(typeof(T));
         }
+
+        public static T Parse<T>(string name, bool ignoreCase = false) where T : struct, Enum
+        {
+            return (T)Enum.Parse(typeof(T), name, ignoreCase);
+        }
 #else
         // AOT-friendly
         public static T[] GetEnumValues<T>() where T : struct, Enum
@@ -42,6 +47,11 @@ namespace NPOI.Util
         public static string[] GetEnumNames<T>() where T : struct, Enum
         {
             return Enum.GetNames<T>();
+        }
+
+        public static T Parse<T>(string name, bool ignoreCase = false) where T : struct, Enum
+        {
+            return Enum.Parse<T>(name, ignoreCase);
         }
 #endif
     }
