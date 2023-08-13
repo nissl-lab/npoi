@@ -296,6 +296,10 @@ namespace NPOI.POIFS.Crypt
         // REMOVE-REFLECTION: Remove reflections here will prevent NPOI from creating custom encryptors.
         // Is it OK? Remove reflection-related code for now.
         // It might be better to move Agile classes definition into this library. Now it's defined in NPOI.OOXML.Core.
+#if NET6_0_OR_GREATER
+        [DynamicDependency(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.Interfaces 
+        | DynamicallyAccessedMemberTypes.PublicMethods, EncryptionMode.BuilderNameAgile, "NPOI.OOXML")]
+#endif
         protected static IEncryptionInfoBuilder GetBuilder(EncryptionMode encryptionMode)
         {
             switch (encryptionMode.Builder)
@@ -307,8 +311,6 @@ namespace NPOI.POIFS.Crypt
                 case EncryptionMode.BuilderNameStandard:
                     return new Standard.StandardEncryptionInfoBuilder();
                 case EncryptionMode.BuilderNameAgile:
-                    // return new Agile.AgileEncryptionInfoBuilder();
-                    // TODO
                     IEncryptionInfoBuilder instance = CreateAgileInstanceFallback();
                     if (instance is not null)
                         return instance;
@@ -318,24 +320,20 @@ namespace NPOI.POIFS.Crypt
             throw new EncryptedDocumentException("Not found type " + encryptionMode.Builder);
         }
 
-        private static Type AgileEncrpytionInfo;
-
-#if NET6_0_OR_GREATER
-        [RequiresUnreferencedCode("Agile must be dynamically loaded from NPOI.OOXML. TODO.")]
-#endif
+        private static Type AgileEncryptionInfo;
         private static IEncryptionInfoBuilder CreateAgileInstanceFallback()
         {
-            if (AgileEncrpytionInfo is null)
+            if (AgileEncryptionInfo is null)
             {
                 foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-                    if ((AgileEncrpytionInfo = assembly.GetType(EncryptionMode.BuilderNameAgile)) != null)
+                    if ((AgileEncryptionInfo = assembly.GetType(EncryptionMode.BuilderNameAgile)) != null)
                         break;
             }
 
-            if (AgileEncrpytionInfo is null)
+            if (AgileEncryptionInfo is null)
                 return null;
 
-            return (IEncryptionInfoBuilder)Activator.CreateInstance(AgileEncrpytionInfo);
+            return (IEncryptionInfoBuilder)Activator.CreateInstance(AgileEncryptionInfo);
         }
 
         private int _versionMajor;
