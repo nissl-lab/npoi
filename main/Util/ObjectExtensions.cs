@@ -13,7 +13,7 @@ namespace NPOI.Util
 {
     public static partial class ObjectExtensions
     {
-        public static List<T> ReflectionlessDeepCopy<T>(this List<T> list) where T : struct
+        public static List<T> ReflectionlessDeepCopy<T>(this List<T> list) where T : unmanaged
             => new List<T>(list);
     }
     public static partial class ObjectExtensions
