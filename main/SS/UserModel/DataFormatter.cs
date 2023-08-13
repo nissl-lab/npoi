@@ -842,8 +842,10 @@ namespace NPOI.SS.UserModel
                       cell.NumericCellValue
                 );
             }
-            DateTime d = cell.DateCellValue;
-            return PerformDateFormatting(d, dateFormat);
+            var d = cell.DateCellValue;
+            if (d == null)
+                return "";
+            return PerformDateFormatting((DateTime)d, dateFormat);
         }
 
         /**

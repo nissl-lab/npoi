@@ -178,19 +178,18 @@ namespace NPOI.Util
 
         /// <summary>
         /// Same as the normal InputStream#read(byte[], int, int), but tries to ensure
-        /// that the buffer is filled completely if possible, i.e. b.remaining()
-        /// returns 0.
-        /// If the end of file is reached before any bytes are Read, returns -1.
+        /// that the entire len number of bytes is read
+        /// 
+        /// If the end of file is reached before any bytes are read, returns -1.
         /// If the end of the file is reached after some bytes are read, returns the
         /// number of bytes read. If the end of the file isn't reached before the
-        /// buffer has no more remaining capacity, will return the number of bytes
-        /// that were read.
+        /// buffer has no more remaining capacity, will return len bytes
         /// </summary>
         /// <param name="stream">the stream from which the data is read.</param>
         /// <param name="b">the buffer into which the data is read.</param>
         /// <param name="off">the start offset in array b at which the data is written.</param>
         /// <param name="len">the maximum number of bytes to read.</param>
-        /// <returns></returns>
+        /// <returns>the number of bytes read or -1 if no bytes were read</returns>
         public static int ReadFully(Stream stream, byte[] b, int off, int len)
         {
             int total = 0;

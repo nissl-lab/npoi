@@ -142,6 +142,7 @@ namespace TestCases.XSSF.Streaming
         }
 
         [Test]
+        [Platform("Win")]
         public void updateColumnWidths_and_getBestFitColumnWidth() {
             tracker.TrackAllColumns();
             IRow row1 = sheet.CreateRow(0);

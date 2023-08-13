@@ -17,7 +17,9 @@ namespace NPOI.SS.Formula.Functions
         public static DataFormatter Formatter = new DataFormatter();
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1)
         {
-            double s0;
+            if (arg0 is StringEval) return arg0;
+	    
+	    double s0;
             String s1;
             try
             {
