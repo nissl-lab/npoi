@@ -1436,27 +1436,24 @@ namespace NPOI.XSSF.UserModel
             }
 
             // Now re-generate our CT_Hyperlinks, if needed
-            if (hyperlinks.Count > 0)
+            if (worksheet.hyperlinks == null)
             {
-                if (worksheet.hyperlinks == null)
-                {
-                    worksheet.AddNewHyperlinks();
-                }
-
-                CT_Hyperlink[] ctHls
-                    = new CT_Hyperlink[hyperlinks.Count];
-                for (int i = 0; i < ctHls.Length; i++)
-                {
-                    // If our sheet has hyperlinks, have them add
-                    //  any relationships that they might need
-                    XSSFHyperlink hyperlink = hyperlinks[i];
-                    hyperlink.GenerateRelationIfNeeded(GetPackagePart());
-                    // Now grab their underling object
-                    ctHls[i] = hyperlink.GetCTHyperlink();
-                }
-
-                worksheet.hyperlinks.SetHyperlinkArray(ctHls);
+                worksheet.AddNewHyperlinks();
             }
+
+            CT_Hyperlink[] ctHls
+                = new CT_Hyperlink[hyperlinks.Count];
+            for (int i = 0; i < ctHls.Length; i++)
+            {
+                // If our sheet has hyperlinks, have them add
+                //  any relationships that they might need
+                XSSFHyperlink hyperlink = hyperlinks[i];
+                hyperlink.GenerateRelationIfNeeded(GetPackagePart());
+                // Now grab their underling object
+                ctHls[i] = hyperlink.GetCTHyperlink();
+            }
+
+            worksheet.hyperlinks.SetHyperlinkArray(ctHls);
 
             foreach (XSSFRow row in _rows.Values)
             {
@@ -5961,7 +5958,7 @@ namespace NPOI.XSSF.UserModel
             double width_px;
 
             var width = worksheet.sheetFormatPr.defaultColWidth;                        //string length with padding
-            if(width != 0.0 )
+            if (width != 0.0)
             {
                 width_px = width * MaximumDigitWidth;
             }
@@ -5969,7 +5966,7 @@ namespace NPOI.XSSF.UserModel
             {
                 double MDW = MaximumDigitWidth;
                 var length = worksheet.sheetFormatPr.baseColWidth;                      //string length with out padding
-                fontwidth = Math.Truncate(( length * MDW + 5 ) / MDW * 256) / 256;
+                fontwidth = Math.Truncate((length * MDW + 5) / MDW * 256) / 256;
                 double tmp = 256 * fontwidth + Math.Truncate(128 / MDW);
                 width_px = Math.Truncate((tmp / 256) * MDW) + 3;                        // +3 ???
             }
@@ -5981,16 +5978,17 @@ namespace NPOI.XSSF.UserModel
             , int dy1
             , int dx2
             , int dy2
-        ) {
-            int left    = Math.Min(dx1, dx2);
-            int right   = Math.Max(dx1, dx2);
-            int top     = Math.Min(dy1, dy2);
-            int bottom  = Math.Max(dy1, dy2);
+        )
+        {
+            int left = Math.Min(dx1, dx2);
+            int right = Math.Max(dx1, dx2);
+            int top = Math.Min(dy1, dy2);
+            int bottom = Math.Max(dy1, dy2);
 
             CT_Marker mk1 = EMUtoMarker(left, top);
             CT_Marker mk2 = EMUtoMarker(right, bottom);
 
-            if(mk1.colOff >= 0 && mk1.rowOff >= 0 && mk2.colOff >= 0 && mk2.rowOff >= 0)
+            if (mk1.colOff >= 0 && mk1.rowOff >= 0 && mk2.colOff >= 0 && mk2.rowOff >= 0)
             {
                 return new XSSFClientAnchor(mk1, mk2, left, top, right, bottom);
             }
@@ -6000,9 +5998,9 @@ namespace NPOI.XSSF.UserModel
         private CT_Marker EMUtoMarker(int x, int y)
         {
             CT_Marker mkr = new CT_Marker();
-            mkr.colOff  = EMUtoColOff(x, out int col);
+            mkr.colOff = EMUtoColOff(x, out int col);
             mkr.col = col;
-            mkr.rowOff  = EMUtoRowOff(y, out int row);
+            mkr.rowOff = EMUtoRowOff(y, out int row);
             mkr.row = row;
             return mkr;
         }
@@ -6010,14 +6008,15 @@ namespace NPOI.XSSF.UserModel
         public int EMUtoRowOff(
               int y
             , out int cell
-        ) {
+        )
+        {
             double height;
             cell = 0;
-            for(int iRow = 0; iRow < SpreadsheetVersion.EXCEL2007.MaxRows; iRow++)
+            for (int iRow = 0; iRow < SpreadsheetVersion.EXCEL2007.MaxRows; iRow++)
             {
                 height = _rows.ContainsKey(iRow) ? _rows[iRow].HeightInPoints
                                                  : DefaultRowHeightInPoints;
-                if(y >= Units.ToEMU(height))
+                if (y >= Units.ToEMU(height))
                 {
                     y -= Units.ToEMU(height);
                     cell++;
@@ -6034,27 +6033,28 @@ namespace NPOI.XSSF.UserModel
         public int EMUtoColOff(
               int x
             , out int cell
-        ) {
+        )
+        {
 
             double width_px;
             cell = 0;
-            for(int iCol = 0; iCol < SpreadsheetVersion.EXCEL2007.MaxColumns; iCol++)
+            for (int iCol = 0; iCol < SpreadsheetVersion.EXCEL2007.MaxColumns; iCol++)
             {
                 width_px = GetDefaultColWidthInPixel();
-                foreach(var cols in worksheet.cols)
+                foreach (var cols in worksheet.cols)
                 {
-                    foreach(var col in cols.col)
+                    foreach (var col in cols.col)
                     {
-                        if(col.min <= iCol + 1 && iCol + 1 <= col.max)
+                        if (col.min <= iCol + 1 && iCol + 1 <= col.max)
                         {
                             width_px = col.width * MaximumDigitWidth;
                             goto lblforbreak;
                         }
                     }
                 }
-lblforbreak:
-                int EMUwidth = Units.PixelToEMU((int)Math.Round(width_px,1));
-                if(x >= EMUwidth)
+            lblforbreak:
+                int EMUwidth = Units.PixelToEMU((int)Math.Round(width_px, 1));
+                if (x >= EMUwidth)
                 {
                     x -= EMUwidth;
                     cell++;
