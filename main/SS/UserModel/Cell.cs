@@ -190,12 +190,21 @@ namespace NPOI.SS.UserModel
         double NumericCellValue { get; }
 
         /// <summary>
-        /// Get the value of the cell as a date.
+        /// Get the value of the cell as a date. For non-Numeric cells including blank cell we return a null.
         /// </summary>
         /// <exception cref="InvalidOperationException">if the cell type returned by GetCellType() is CELL_TYPE_STRING</exception>
         /// <exception cref="FormatException">if the cell value isn't a parsable double</exception>
-        DateTime DateCellValue { get; }
-
+        DateTime? DateCellValue { get; }
+#if NET6_0_OR_GREATER
+        /// <summary>
+        /// Get DateOnly-type cell value
+        /// </summary>
+        DateOnly? DateOnlyCellValue { get; }
+        /// <summary>
+        /// Get TimeOnly-type cell value
+        /// </summary>
+        TimeOnly? TimeOnlyCellValue { get; }
+#endif
         /// <summary>
         /// Get the value of the cell RichTextString
         /// </summary>
