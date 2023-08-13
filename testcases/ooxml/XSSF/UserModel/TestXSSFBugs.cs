@@ -1628,7 +1628,7 @@ namespace TestCases.XSSF.UserModel
                 WorkbookFactory.Create(inpA);
                 Assert.Fail("Should've raised a EncryptedDocumentException error");
             }
-            catch (EncryptedDocumentException ) { }
+            catch (EncryptedDocumentException) { }
 
             // Via a POIFSFileSystem
             POIFSFileSystem fsP = new POIFSFileSystem(inpB);
@@ -3424,6 +3424,34 @@ namespace TestCases.XSSF.UserModel
                 }
             }
         }
-    }
 
+        [Test]
+        public void TestCopyEmptyRow()
+        {
+            using (var wb = new XSSFWorkbook())
+            {
+                var sheet = wb.CreateSheet();
+                var row = sheet.CreateRow(1);
+
+                row.CreateCell(1).SetCellValue("B2");
+                row.CreateCell(2).SetCellValue("C2");
+                row.CreateCell(3).SetCellValue("D2");
+
+                Assert.DoesNotThrow(() =>
+                {
+                    sheet.CopyRow(0, 1);
+                });
+
+                var movedRow = sheet.GetRow(1);
+                Assert.IsNull(movedRow);
+
+                var shiftedRow = sheet.GetRow(2);
+                Assert.IsNotNull(shiftedRow);
+
+                Assert.IsTrue(shiftedRow.GetCell(1).StringCellValue.Equals("B2"));
+                Assert.IsTrue(shiftedRow.GetCell(2).StringCellValue.Equals("C2"));
+                Assert.IsTrue(shiftedRow.GetCell(3).StringCellValue.Equals("D2"));
+            }
+        }
+    }
 }
