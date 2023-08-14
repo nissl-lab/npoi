@@ -529,7 +529,7 @@ namespace NPOI.SS.Util
         {
             //Rectangle bounds;
             double actualWidth;
-            FontRectangle sf = TextMeasurer.Measure(str, new TextOptions(windowsFont));
+            FontRectangle sf = TextMeasurer.MeasureAdvance(str, new TextOptions(windowsFont) { Dpi = dpi });
             if (style.Rotation != 0)
             {
                 double angle = style.Rotation * 2.0 * Math.PI / 360.0;
