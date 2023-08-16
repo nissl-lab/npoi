@@ -446,12 +446,14 @@ namespace TestCases.SS.UserModel
             // if the default font or margins change.
             double expectedRatioThreshold = 1.2f;
             double leadingWhitespaceRatio = ((double)leadingWhitespaceColWidth) / noWhitespaceColWidth;
-            double trailingWhitespaceRatio = ((double)leadingWhitespaceColWidth) / noWhitespaceColWidth;
+            double trailingWhitespaceRatio = ((double)trailingWhitespaceColWidth) / noWhitespaceColWidth;
 
             assertGreaterThan("leading whitespace is longer than no whitespace", leadingWhitespaceRatio, expectedRatioThreshold);
             assertGreaterThan("trailing whitespace is longer than no whitespace", trailingWhitespaceRatio, expectedRatioThreshold);
-            Assert.AreEqual(leadingWhitespaceColWidth, trailingWhitespaceColWidth,
-                "cells with equal leading and trailing whitespace have equal width");
+
+            //This is not correct https://github.com/SixLabors/Fonts/discussions/349
+            //Assert.AreEqual(leadingWhitespaceColWidth, trailingWhitespaceColWidth,
+            //"cells with equal leading and trailing whitespace have equal width");
 
             wb.Close();
         }
