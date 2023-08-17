@@ -23,6 +23,7 @@ namespace NPOI.SS.Util
     using System.Collections.Generic;
     using SixLabors.Fonts;
     using System.Linq;
+    using System.Globalization;
 
     /**
      * Helper methods for when working with Usermodel sheets
@@ -717,9 +718,9 @@ namespace NPOI.SS.Util
             // use "Arial". TODO-Fonts: More fallbacks.
             SixLabors.Fonts.FontFamily fontFamily;
 
-            if (false == SystemFonts.TryGet(font1.FontName, out fontFamily))
+            if (false == SystemFonts.TryGet(font1.FontName, CultureInfo.CurrentCulture, out fontFamily))
             {
-                if (false == SystemFonts.TryGet("Arial", out fontFamily))
+                if (false == SystemFonts.TryGet("Arial", CultureInfo.CurrentCulture, out fontFamily))
                 {
                     fontFamily = SystemFonts.Families.First();
                 }
