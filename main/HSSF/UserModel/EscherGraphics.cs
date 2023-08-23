@@ -70,6 +70,9 @@ namespace NPOI.HSSF.UserModel
         private Font font;
         private static POILogger Logger = POILogFactory.GetLogger(typeof(EscherGraphics));
 
+        // Default dpi
+        private static int dpi = 96;
+
         /**
          * Construct an escher graphics object.
          *
@@ -289,7 +292,8 @@ namespace NPOI.HSSF.UserModel
             Font excelFont = new Font(SystemFonts.Get(font.Name.Equals("SansSerif") ? "Arial" : font.Name),
                 (int)(font.Size / verticalPixelsPerPoint), font.FontMetrics.Description.Style);
             {
-                int width = (int)((TextMeasurer.Measure(str, new TextOptions(excelFont)).Width * 8) + 12);
+                var textOptions = new TextOptions(excelFont) { Dpi = dpi };
+                int width = (int)((TextMeasurer.MeasureSize(str, textOptions).Width * 8) + 12);
                 int height = (int)((font.Size / verticalPixelsPerPoint) + 6) * 2;
                 y -= Convert.ToInt32((font.Size / verticalPixelsPerPoint) + 2 * verticalPixelsPerPoint);    // we want to Draw the shape from the top-left
                 HSSFTextbox textbox = escherGroup.CreateTextbox(new HSSFChildAnchor(x, y, x + width, y + height));
