@@ -608,12 +608,6 @@ namespace NPOI.SS.Util
             IFont defaultFont = wb.GetFontAt((short)0);
             Font font = IFont2Font(defaultFont);
 
-            //AttributedString str = new AttributedString(String.valueOf(defaultChar));
-            //copyAttributes(defaultFont, str, 0, 1);
-            //TextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
-            //int defaultCharWidth = (int)layout.getAdvance();
-            Font font = IFont2Font(defaultFont);
-
             return (int)Math.Ceiling(TextMeasurer.MeasureSize(new string(defaultChar, 1), new TextOptions(font) { Dpi = dpi }).Width);
         }
 
