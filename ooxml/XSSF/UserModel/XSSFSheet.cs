@@ -1436,24 +1436,27 @@ namespace NPOI.XSSF.UserModel
             }
 
             // Now re-generate our CT_Hyperlinks, if needed
-            if (worksheet.hyperlinks == null)
+            if (hyperlinks.Count > 0)
             {
-                worksheet.AddNewHyperlinks();
-            }
+                if (worksheet.hyperlinks == null)
+                {
+                    worksheet.AddNewHyperlinks();
+                }
 
-            CT_Hyperlink[] ctHls
-                = new CT_Hyperlink[hyperlinks.Count];
-            for (int i = 0; i < ctHls.Length; i++)
-            {
-                // If our sheet has hyperlinks, have them add
-                //  any relationships that they might need
-                XSSFHyperlink hyperlink = hyperlinks[i];
-                hyperlink.GenerateRelationIfNeeded(GetPackagePart());
-                // Now grab their underling object
-                ctHls[i] = hyperlink.GetCTHyperlink();
-            }
+                CT_Hyperlink[] ctHls
+                    = new CT_Hyperlink[hyperlinks.Count];
+                for (int i = 0; i < ctHls.Length; i++)
+                {
+                    // If our sheet has hyperlinks, have them add
+                    //  any relationships that they might need
+                    XSSFHyperlink hyperlink = hyperlinks[i];
+                    hyperlink.GenerateRelationIfNeeded(GetPackagePart());
+                    // Now grab their underling object
+                    ctHls[i] = hyperlink.GetCTHyperlink();
+                }
 
-            worksheet.hyperlinks.SetHyperlinkArray(ctHls);
+                worksheet.hyperlinks.SetHyperlinkArray(ctHls);
+            }
 
             foreach (XSSFRow row in _rows.Values)
             {
@@ -3011,6 +3014,14 @@ namespace NPOI.XSSF.UserModel
                 XSSFHyperlink hyperlink = hyperlinks[index];
                 if (hyperlink.CellRef.Equals(ref1))
                 {
+                    if (worksheet != null
+                        && worksheet.hyperlinks != null
+                        && worksheet.hyperlinks.hyperlink != null
+                        && worksheet.hyperlinks.hyperlink.Contains(hyperlink.GetCTHyperlink()))
+                    {
+                        worksheet.hyperlinks.hyperlink.Remove(hyperlink.GetCTHyperlink());
+                    }
+
                     hyperlinks.RemoveAt(index);
                     return;
                 }
