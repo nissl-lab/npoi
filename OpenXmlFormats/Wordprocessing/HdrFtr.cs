@@ -191,14 +191,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.WriteLine("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
             sw.Write(string.Format("<w:{0} ", nodeName));
             sw.Write("xmlns:wpc=\"http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" ");
+            sw.Write("xmlns:cx=\"http://schemas.microsoft.com/office/drawing/2014/chartex\" xmlns:cx1=\"http://schemas.microsoft.com/office/drawing/2015/9/8/chartex\" xmlns:cx2=\"http://schemas.microsoft.com/office/drawing/2015/10/21/chartex\" xmlns:cx3=\"http://schemas.microsoft.com/office/drawing/2016/5/9/chartex\" xmlns:cx4=\"http://schemas.microsoft.com/office/drawing/2016/5/10/chartex\" xmlns:cx5=\"http://schemas.microsoft.com/office/drawing/2016/5/11/chartex\" xmlns:cx6=\"http://schemas.microsoft.com/office/drawing/2016/5/12/chartex\" xmlns:cx7=\"http://schemas.microsoft.com/office/drawing/2016/5/13/chartex\" xmlns:cx8=\"http://schemas.microsoft.com/office/drawing/2016/5/14/chartex\" ");
+            sw.Write("xmlns:aink=\"http://schemas.microsoft.com/office/drawing/2016/ink\" xmlns:am3d=\"http://schemas.microsoft.com/office/drawing/2017/model3d\" ");
             //sw.Write("xmlns:ve=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" ");
-            sw.Write("xmlns:o=\"urn:schemas-microsoft-com:office:office\" ");
+            sw.Write("xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:oel=\"http://schemas.microsoft.com/office/2019/extlst\" ");
             sw.Write("xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:m=\"http://schemas.openxmlformats.org/officeDocument/2006/math\" ");
             sw.Write("xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:wp14=\"http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing\" xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\" ");
             sw.Write("xmlns:w10=\"urn:schemas-microsoft-com:office:word\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\" ");
             sw.Write("xmlns:w14=\"http://schemas.microsoft.com/office/word/2010/wordml\" xmlns:w15=\"http://schemas.microsoft.com/office/word/2012/wordml\" ");
-            sw.Write("xmlns:wpg=\"http://schemas.microsoft.com/office/word/2010/wordprocessingGroup\" xmlns:wpi=\"http://schemas.microsoft.com/office/word/2010/wordprocessingInk\" xmlns:wne=\"http://schemas.microsoft.com/office/word/2006/wordml\"");
-            sw.Write(">");
+            sw.Write("xmlns:w16cex=\"http://schemas.microsoft.com/office/word/2018/wordml/cex\" xmlns:w16cid=\"http://schemas.microsoft.com/office/word/2016/wordml/cid\" xmlns:w16=\"http://schemas.microsoft.com/office/word/2018/wordml\" xmlns:w16du=\"http://schemas.microsoft.com/office/word/2023/wordml/word16du\" xmlns:w16sdtdh=\"http://schemas.microsoft.com/office/word/2020/wordml/sdtdatahash\" xmlns:w16se=\"http://schemas.microsoft.com/office/word/2015/wordml/symex\" ");
+            sw.Write("xmlns:wpg=\"http://schemas.microsoft.com/office/word/2010/wordprocessingGroup\" xmlns:wpi=\"http://schemas.microsoft.com/office/word/2010/wordprocessingInk\" xmlns:wne=\"http://schemas.microsoft.com/office/word/2006/wordml\" xmlns:wps=\"http://schemas.microsoft.com/office/word/2010/wordprocessingShape\" ");
+            sw.Write("mc:Ignorable=\"w14 w15 w16se w16cid w16 w16cex w16sdtdh wp14\">");
             foreach (object o in this.Items)
             {
                 if (o is CT_TrackChange)
@@ -262,7 +265,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_Markup)
                     ((CT_Markup)o).Write(sw, "customXmlInsRangeEnd");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         public ArrayList Items
@@ -304,6 +307,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public CT_P AddNewP()
         {
             return AddNewObject<CT_P>(ItemsChoiceType8.p);
+        }
+
+        public CT_Tbl AddNewTbl()
+        {
+            return AddNewObject<CT_Tbl>(ItemsChoiceType8.tbl);
         }
 
         public void SetPArray(int i, CT_P cT_P)
@@ -542,7 +550,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return null;
             CT_HdrFtrRef ctObj = new CT_HdrFtrRef();
             if (node.Attributes["w:type"] != null)
-                ctObj.type = (ST_HdrFtr)Enum.Parse(typeof(ST_HdrFtr), node.Attributes["w:type"].Value);
+            {
+                try
+                {
+                    ctObj.type = (ST_HdrFtr)Enum.Parse(typeof(ST_HdrFtr), node.Attributes["w:type"].Value);
+                }
+                catch (ArgumentException)
+                {
+                    ctObj.type = ST_HdrFtr.@default;
+                }
+            }
             ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
             return ctObj;
         }
@@ -648,7 +665,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.numStart.Write(sw, "numStart");
             if (this.numRestart != null)
                 this.numRestart.Write(sw, "numRestart");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -728,7 +745,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         private ST_FtnPos valField;
@@ -1031,7 +1048,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
-            XmlHelper.WriteAttribute(sw, "w:id", this.id);
+            XmlHelper.WriteAttribute(sw, "w:id", this.id, true);
             sw.Write(">");
             int i = 0;
             foreach (object o in this.Items)
@@ -1098,7 +1115,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_CustomXmlBlock)o).Write(sw, "customXml");
                 i++;
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
 
@@ -1523,7 +1540,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "footnote");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement("footnote", Order = 0)]
@@ -1635,7 +1652,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.numStart.Write(sw, "numStart");
             if (this.numRestart != null)
                 this.numRestart.Write(sw, "numRestart");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -1715,7 +1732,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         private ST_EdnPos valField;
@@ -1797,7 +1814,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "endnote");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         private List<CT_FtnEdnSepRef> endnoteField;
@@ -1857,7 +1874,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:customMarkFollows", this.customMarkFollows.ToString());
             XmlHelper.WriteAttribute(sw, "w:id", this.id);
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]

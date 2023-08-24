@@ -31,7 +31,6 @@ namespace TestCases.XWPF.UserModel
     [TestFixture]
     public class TestXWPFParagraph
     {
-
         /**
          * Check that we Get the right paragraph from the header
          * @throws IOException 
@@ -124,7 +123,6 @@ namespace TestCases.XWPF.UserModel
             Assert.AreEqual((int)ST_Jc.both, (int)ppr.jc.val);
         }
 
-
         [Test]
         public void TestSetGetSpacing()
         {
@@ -134,14 +132,36 @@ namespace TestCases.XWPF.UserModel
             CT_P ctp = p.GetCTP();
             CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
 
+            Assert.AreEqual(-1, p.SpacingBefore);
             Assert.AreEqual(-1, p.SpacingAfter);
+            Assert.AreEqual(-1, p.SpacingBetween, 0.1);
+            Assert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
 
             CT_Spacing spacing = ppr.AddNewSpacing();
             spacing.after = 10;
             Assert.AreEqual(10, p.SpacingAfter);
+            spacing.before = 10;
+            Assert.AreEqual(10, p.SpacingBefore);
 
             p.SpacingAfter = 100;
             Assert.AreEqual(100, (int)spacing.after);
+            p.SpacingBefore = 100;
+            Assert.AreEqual(100, spacing.before);
+
+            p.SetSpacingBetween(.25, LineSpacingRule.EXACT);
+            Assert.AreEqual(.25, p.SpacingBetween, 0.01);
+            Assert.AreEqual(LineSpacingRule.EXACT, p.SpacingLineRule);
+            p.SetSpacingBetween(1.25, LineSpacingRule.AUTO);
+            Assert.AreEqual(1.25, p.SpacingBetween, 0.01);
+            Assert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
+            p.SetSpacingBetween(.5, LineSpacingRule.ATLEAST);
+            Assert.AreEqual(.5, p.SpacingBetween, 0.01);
+            Assert.AreEqual(LineSpacingRule.ATLEAST, p.SpacingLineRule);
+            p.SetSpacingBetween(1.15);
+            Assert.AreEqual(1.15, p.SpacingBetween, 0.01);
+            Assert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
+
+            doc.Close();
         }
 
         [Test]
@@ -219,7 +239,6 @@ namespace TestCases.XWPF.UserModel
             Assert.AreEqual(true, ppr.wordWrap.val);
         }
 
-
         [Test]
         public void TestSetGetPageBreak()
         {
@@ -262,6 +281,7 @@ namespace TestCases.XWPF.UserModel
             p.SetNumID("10");
             Assert.AreEqual("10", p.GetNumID());
         }
+
         [Test]
         public void TestGetSetILvl()
         {
@@ -272,6 +292,7 @@ namespace TestCases.XWPF.UserModel
             Assert.AreEqual("1", p.GetNumIlvl());
 
         }
+
         [Test]
         public void TestAddingRuns()
         {
@@ -369,6 +390,7 @@ namespace TestCases.XWPF.UserModel
             //PicDocument pd = new PicDocumentImpl(null);
             //assertTrue(pd.isNil());
         }
+
         [Test]
         [Ignore("TODO FIX CI TESTS")]
         public void TestTika792()
@@ -377,7 +399,9 @@ namespace TestCases.XWPF.UserModel
             //CTMoveBookmarkImpl into ooxml-lite.
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Tika-792.docx");
             XWPFParagraph paragraph = doc.Paragraphs[(0)];
-            Assert.AreEqual("s", paragraph.Text);
+            Assert.AreEqual("", paragraph.Text);
+            paragraph = doc.Paragraphs[1];
+            Assert.AreEqual("b", paragraph.Text);
         }
 
         [Test]
@@ -562,6 +586,7 @@ namespace TestCases.XWPF.UserModel
             Assert.IsNotNull(p.GetRun(run));
             Assert.IsNull(p.GetRun(null));
         }
+
         [Test]
         public void Test58067()
         {
@@ -574,6 +599,7 @@ namespace TestCases.XWPF.UserModel
             }
             Assert.AreEqual("This is a test.\n\n\n\n3\n4\n5\n\n\n\nThis is a whole paragraph where one word is deleted.\n", str.ToString());
         }
+
         [Test]
         public void Test61787()
         {
@@ -587,6 +613,7 @@ namespace TestCases.XWPF.UserModel
             String s = str.ToString();
             Assert.IsTrue(s.Trim().Length > 0, "Having text: \n" + s + "\nTrimmed lenght: " + s.Trim().Length);
         }
+
         [Test]
         public void Test61787_1()
         {
@@ -618,6 +645,7 @@ namespace TestCases.XWPF.UserModel
             Assert.AreEqual(result.BeginChar, 2);
             Assert.AreEqual(result.EndChar, 0);
         }
+
         [Test]
         public void Testpullrequest404_1()
         {
@@ -635,6 +663,96 @@ namespace TestCases.XWPF.UserModel
             Assert.AreEqual(result.BeginChar, 2);
             Assert.AreEqual(result.EndChar, 1);
         }
-    }
 
+        /**
+         * Tests for numbered lists
+         * 
+         * See also https://github.com/jimklo/apache-poi-sample/blob/master/src/main/java/com/sri/jklo/StyledDocument.java
+         * for someone else trying a similar thing
+         */
+        [Test]
+        public void TestNumberedLists()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("ComplexNumberedLists.docx");
+            XWPFParagraph p;
+        
+            p = doc.GetParagraphArray(0);
+            Assert.AreEqual("This is a document with numbered lists", p.Text);
+            Assert.AreEqual(null, p.GetNumID());
+            Assert.AreEqual(null, p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(1);
+            Assert.AreEqual("Entry #1", p.Text);
+            Assert.AreEqual("1", p.GetNumID());
+            Assert.AreEqual("0", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(2);
+            Assert.AreEqual("Entry #2, with children", p.Text);
+            Assert.AreEqual("1", p.GetNumID());
+            Assert.AreEqual("0", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(3);
+            Assert.AreEqual("2-a", p.Text);
+            Assert.AreEqual("1", p.GetNumID());
+            Assert.AreEqual("1", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(4);
+            Assert.AreEqual("2-b", p.Text);
+            Assert.AreEqual("1", p.GetNumID());
+            Assert.AreEqual("1", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(5);
+            Assert.AreEqual("2-c", p.Text);
+            Assert.AreEqual("1", p.GetNumID());
+            Assert.AreEqual("1", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(6);
+            Assert.AreEqual("Entry #3", p.Text);
+            Assert.AreEqual("1", p.GetNumID());
+            Assert.AreEqual("0", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(7);
+            Assert.AreEqual("Entry #4", p.Text);
+            Assert.AreEqual("1", p.GetNumID());
+            Assert.AreEqual("0", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            // New list
+            p = doc.GetParagraphArray(8);
+            Assert.AreEqual("Restarted to 1 from 5", p.Text);
+            Assert.AreEqual("2", p.GetNumID());
+            Assert.AreEqual("0", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(9);
+            Assert.AreEqual("Restarted @ 2", p.Text);
+            Assert.AreEqual("2", p.GetNumID());
+            Assert.AreEqual("0", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            p = doc.GetParagraphArray(10);
+            Assert.AreEqual("Restarted @ 3", p.Text);
+            Assert.AreEqual("2", p.GetNumID());
+            Assert.AreEqual("0", p.GetNumIlvl());
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            // New list starting at 10
+            p = doc.GetParagraphArray(11);
+            Assert.AreEqual("Jump to new list at 10", p.Text);
+            Assert.AreEqual("6", p.GetNumID());
+            Assert.AreEqual("0", p.GetNumIlvl());
+            // TODO Why isn't this seen as 10?
+            Assert.AreEqual(null, p.GetNumStartOverride());
+        
+            // TODO Shouldn't we use XWPFNumbering or similar here?
+            // TODO Make it easier to change
+        }
+    }
 }

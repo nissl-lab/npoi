@@ -45,6 +45,12 @@ namespace NPOI.XWPF.UserModel
         public XWPFSDTContentCell(CT_SdtContentCell sdtContentCell,
                                   XWPFTableRow xwpfTableRow, IBody part)
         {
+            //sdtContentCell is allowed to be null:  minOccurs="0" maxOccurs="1"
+            if (sdtContentCell == null)
+            {
+                return;
+            }
+
             StringBuilder sb = new StringBuilder();
             
 

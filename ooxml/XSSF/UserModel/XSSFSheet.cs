@@ -699,7 +699,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                throw new NotImplementedException();
+                GetSheetTypeSheetView().topLeftCell = "A" + value.ToString();
             }
         }
 
@@ -1481,27 +1481,24 @@ namespace NPOI.XSSF.UserModel
             }
 
             // Now re-generate our CT_Hyperlinks, if needed
-            if (hyperlinks.Count > 0)
+            if (worksheet.hyperlinks == null)
             {
-                if (worksheet.hyperlinks == null)
-                {
-                    worksheet.AddNewHyperlinks();
-                }
-
-                CT_Hyperlink[] ctHls
-                    = new CT_Hyperlink[hyperlinks.Count];
-                for (int i = 0; i < ctHls.Length; i++)
-                {
-                    // If our sheet has hyperlinks, have them add
-                    //  any relationships that they might need
-                    XSSFHyperlink hyperlink = hyperlinks[i];
-                    hyperlink.GenerateRelationIfNeeded(GetPackagePart());
-                    // Now grab their underling object
-                    ctHls[i] = hyperlink.GetCTHyperlink();
-                }
-
-                worksheet.hyperlinks.SetHyperlinkArray(ctHls);
+                worksheet.AddNewHyperlinks();
             }
+
+            CT_Hyperlink[] ctHls
+                = new CT_Hyperlink[hyperlinks.Count];
+            for (int i = 0; i < ctHls.Length; i++)
+            {
+                // If our sheet has hyperlinks, have them add
+                //  any relationships that they might need
+                XSSFHyperlink hyperlink = hyperlinks[i];
+                hyperlink.GenerateRelationIfNeeded(GetPackagePart());
+                // Now grab their underling object
+                ctHls[i] = hyperlink.GetCTHyperlink();
+            }
+
+            worksheet.hyperlinks.SetHyperlinkArray(ctHls);
 
             foreach (XSSFRow row in _rows.Values)
             {
@@ -4008,7 +4005,7 @@ namespace NPOI.XSSF.UserModel
             clonedSheet.IsSelected = false;
 
             // copy sheet's relations
-            List<POIXMLDocumentPart> rels = GetRelations();
+            IList<POIXMLDocumentPart> rels = GetRelations();
             // if the sheet being cloned has a drawing then remember it and re-create too
             XSSFDrawing dg = null;
             foreach (POIXMLDocumentPart r in rels)
@@ -4052,7 +4049,7 @@ namespace NPOI.XSSF.UserModel
                 clonedDg = clonedSheet.CreateDrawingPatriarch() as XSSFDrawing;
 
                 // Clone drawing relations
-                List<POIXMLDocumentPart> srcRels = dg.GetRelations();
+                IList<POIXMLDocumentPart> srcRels = dg.GetRelations();
                 foreach (POIXMLDocumentPart rel in srcRels)
                 {
                     PackageRelationship relation = rel.GetPackageRelationship();
@@ -5753,7 +5750,7 @@ namespace NPOI.XSSF.UserModel
             if (sheetDrawing != null)
             {
                 IDrawing destDraw = destSheet.CreateDrawingPatriarch();
-                List<POIXMLDocumentPart> sheetPictures = sheetDrawing.GetRelations();
+                IList<POIXMLDocumentPart> sheetPictures = sheetDrawing.GetRelations();
                 Dictionary<string, uint> pictureIdMapping = new Dictionary<string, uint>();
                 foreach (IEG_Anchor anchor in sheetDrawing.GetCTDrawing().CellAnchors)
                 {
@@ -5814,7 +5811,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        private XSSFPictureData FindPicture(List<POIXMLDocumentPart> sheetPictures, string id)
+        private XSSFPictureData FindPicture(IList<POIXMLDocumentPart> sheetPictures, string id)
         {
             foreach (POIXMLDocumentPart item in sheetPictures)
             {
@@ -6166,6 +6163,127 @@ namespace NPOI.XSSF.UserModel
                     return row1 > row2 ? 1 : -1;
                 }
             }
+        }
+        public double MaximumDigitWidth
+        {
+            set;
+            get;
+        } = 7.0;
+
+        public double GetDefaultColWidthInPixel()
+        {
+            double fontwidth;
+            double width_px;
+
+            var width = worksheet.sheetFormatPr.defaultColWidth;                        //string length with padding
+            if (width != 0.0)
+            {
+                width_px = width * MaximumDigitWidth;
+            }
+            else
+            {
+                double MDW = MaximumDigitWidth;
+                var length = worksheet.sheetFormatPr.baseColWidth;                      //string length with out padding
+                fontwidth = Math.Truncate((length * MDW + 5) / MDW * 256) / 256;
+                double tmp = 256 * fontwidth + Math.Truncate(128 / MDW);
+                width_px = Math.Truncate((tmp / 256) * MDW) + 3;                        // +3 ???
+            }
+            return width_px;
+        }
+
+        public XSSFClientAnchor CreateClientAnchor(
+              int dx1
+            , int dy1
+            , int dx2
+            , int dy2
+        )
+        {
+            int left = Math.Min(dx1, dx2);
+            int right = Math.Max(dx1, dx2);
+            int top = Math.Min(dy1, dy2);
+            int bottom = Math.Max(dy1, dy2);
+
+            CT_Marker mk1 = EMUtoMarker(left, top);
+            CT_Marker mk2 = EMUtoMarker(right, bottom);
+
+            if (mk1.colOff >= 0 && mk1.rowOff >= 0 && mk2.colOff >= 0 && mk2.rowOff >= 0)
+            {
+                return new XSSFClientAnchor(mk1, mk2, left, top, right, bottom);
+            }
+            return null;
+        }
+
+        private CT_Marker EMUtoMarker(int x, int y)
+        {
+            CT_Marker mkr = new CT_Marker();
+            mkr.colOff = EMUtoColOff(x, out int col);
+            mkr.col = col;
+            mkr.rowOff = EMUtoRowOff(y, out int row);
+            mkr.row = row;
+            return mkr;
+        }
+
+        public int EMUtoRowOff(
+              int y
+            , out int cell
+        )
+        {
+            double height;
+            cell = 0;
+            for (int iRow = 0; iRow < SpreadsheetVersion.EXCEL2007.MaxRows; iRow++)
+            {
+                height = _rows.ContainsKey(iRow) ? _rows[iRow].HeightInPoints
+                                                 : DefaultRowHeightInPoints;
+                if (y >= Units.ToEMU(height))
+                {
+                    y -= Units.ToEMU(height);
+                    cell++;
+                }
+                else
+                {
+                    return y;
+                }
+            }
+
+            return -1;
+        }
+
+        public int EMUtoColOff(
+              int x
+            , out int cell
+        )
+        {
+
+            double width_px;
+            cell = 0;
+            for (int iCol = 0; iCol < SpreadsheetVersion.EXCEL2007.MaxColumns; iCol++)
+            {
+                width_px = GetDefaultColWidthInPixel();
+                foreach (var cols in worksheet.cols)
+                {
+                    foreach (var col in cols.col)
+                    {
+                        if (col.min <= iCol + 1 && iCol + 1 <= col.max)
+                        {
+                            width_px = col.width * MaximumDigitWidth;
+                            goto lblforbreak;
+                        }
+                    }
+                }
+            lblforbreak:
+                int EMUwidth = Units.PixelToEMU((int)Math.Round(width_px, 1));
+                if (x >= EMUwidth)
+                {
+                    x -= EMUwidth;
+                    cell++;
+                }
+                else
+                {
+                    return x;
+                }
+            }
+
+            return -1;
         }
         #endregion
     }

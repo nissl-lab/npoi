@@ -17,6 +17,7 @@
 
 using System;
 using System.IO;
+using ICSharpCode.SharpZipLib.GZip;
 using NPOI.Util;
 
 namespace TestCases.POIFS.Storage
@@ -82,6 +83,35 @@ namespace TestCases.POIFS.Storage
             {
                 throw new System.Exception("different");
             }
+        }
+
+        /**
+         * Decompress previously gziped/base64ed data
+         *
+         * @param data the gziped/base64ed data
+         * @return the raw bytes
+         * @throws IOException if you copy and pasted the data wrong
+         */
+        public static byte[] Decompress(String data)
+        {
+            byte[] base64Bytes = Convert.FromBase64String(data);
+            return IOUtils.ToByteArray(new GZipInputStream(new ByteArrayInputStream(base64Bytes)));
+        }
+
+        /**
+         * Compress raw data for test runs - usually called while debugging :)
+         *
+         * @param data the raw data
+         * @return the gziped/base64ed data as String
+         * @throws IOException usually not ...
+         */
+        public static String Compress(byte[] data)
+        {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            GZipOutputStream gz = new GZipOutputStream(bos);
+            gz.Write(data, 0, data.Length);
+            gz.Finish();
+            return Convert.ToBase64String(bos.ToByteArray());
         }
     }
 }

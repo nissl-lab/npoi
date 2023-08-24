@@ -222,14 +222,7 @@ namespace NPOI.XWPF.UserModel
         private XWPFRelation(String type, String rel, String defaultName, Type cls)
             : base(type, rel, defaultName, cls)
         {
-            if (_table.ContainsKey(rel))
-            {
-                _table[rel] = this;
-            }
-            else
-            {
-                _table.Add(rel, this);
-            }
+            _table[rel] = this;
         }
 
         /**

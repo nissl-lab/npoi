@@ -63,9 +63,10 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument readBack = XWPFTestDataSamples.WriteOutAndReadBack(sampleDoc);
             verifyOneHeaderPicture(readBack);
         }
+
         [Test]
         public void TestCreateHeaderPicture()
-        { // TODO Fix
+        {
             XWPFDocument doc = new XWPFDocument();
 
             // Starts with no header
@@ -74,9 +75,8 @@ namespace TestCases.XWPF.UserModel
 
             // Add a default header
             policy = doc.CreateHeaderFooterPolicy();
-
             XWPFHeader header = policy.CreateHeader(XWPFHeaderFooterPolicy.DEFAULT);
-            header.Paragraphs[0].CreateRun().SetText("Hello, Header World!");
+            header.CreateParagraph().CreateRun().SetText("Hello, Header World!");
             header.CreateParagraph().CreateRun().SetText("Paragraph 2");
             Assert.AreEqual(0, header.AllPictures.Count);
             Assert.AreEqual(2, header.Paragraphs.Count);
@@ -93,7 +93,6 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument readBack = XWPFTestDataSamples.WriteOutAndReadBack(doc);
             verifyOneHeaderPicture(readBack);
         }
-
 
         private void verifyOneHeaderPicture(XWPFDocument sampleDoc)
         {

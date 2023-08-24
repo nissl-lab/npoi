@@ -850,44 +850,53 @@ namespace NPOI.HSSF.UserModel
 
         /// <summary>
         /// Get the value of the cell as a date.  For strings we throw an exception.
-        /// For blank cells we return a null.
+        /// For non-Numeric cells including blank cell we return a null.
         /// </summary>
         /// <value>The date cell value.</value>
-        public DateTime DateCellValue
+        public DateTime? DateCellValue
         {
             get
             {
-                if (cellType == CellType.Blank)
+                if (CellType != CellType.Numeric && CellType != CellType.Formula)
                 {
-                    return DateTime.MaxValue;
+                    return null;
                 }
-                if (cellType == CellType.String)
+                double value = this.NumericCellValue;
+                return DateUtil.GetJavaDate(value, book.IsDate1904());
+            }
+        }
+#if NET6_0_OR_GREATER
+        public DateOnly? DateOnlyCellValue 
+        { 
+            get{
+                if (CellType != CellType.Numeric && CellType != CellType.Formula)
                 {
-                    throw new InvalidDataException(
-                        "You cannot get a date value from a String based cell");
-                }
-                if (cellType == CellType.Boolean)
-                {
-                    throw new InvalidDataException(
-                        "You cannot get a date value from a bool cell");
-                }
-                if (cellType == CellType.Error)
-                {
-                    throw new InvalidDataException(
-                        "You cannot get a date value from an error cell");
+                    return null;
                 }
                 double value = this.NumericCellValue;
                 if (book.IsDate1904())
                 {
-                    return DateUtil.GetJavaDate(value, true);
+                    return DateOnly.FromDateTime(DateUtil.GetJavaDate(value, true));
                 }
                 else
                 {
-                    return DateUtil.GetJavaDate(value, false);
+                    return DateOnly.FromDateTime(DateUtil.GetJavaDate(value, false));
                 }
+            } 
+        }
+        public TimeOnly? TimeOnlyCellValue 
+        { 
+            get{
+                if (CellType != CellType.Numeric && CellType != CellType.Formula)
+                {
+                    return null;
+                }
+                double value = NumericCellValue;
+                bool date1904 = Sheet.Workbook.IsDate1904();
+                return TimeOnly.FromDateTime(DateUtil.GetJavaDate(value, date1904));
             }
         }
-
+#endif
         /// <summary>
         /// Get the value of the cell as a string - for numeric cells we throw an exception.
         /// For blank cells we return an empty string.

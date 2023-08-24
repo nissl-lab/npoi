@@ -1085,7 +1085,7 @@ namespace TestCases.XSSF.UserModel
 
                 // read-only mode works!
                 workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ));
-                DateTime dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
+                var dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
                 Assert.AreEqual(dateExp, dateAct);
                 workbook.Close();
                 workbook = null;
@@ -1228,5 +1228,25 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void TestRemoveSheetMethod()
+        {
+            using (XSSFWorkbook wb = new XSSFWorkbook())
+            {
+                var sheet1 = wb.CreateSheet("Sheet1");
+                var sheet2 = wb.CreateSheet("Sheet2");
+
+                Assert.True(wb.Remove(sheet2));
+                Assert.AreEqual(1, wb.NumberOfSheets);
+                Assert.AreEqual("Sheet1", wb.GetSheetName(0));
+                Assert.AreEqual(sheet1, wb.GetSheet("Sheet1"));
+
+                using (var wbCopy = XSSFTestDataSamples.WriteOutAndReadBack(wb))
+                {
+                    Assert.AreEqual(1, wbCopy.NumberOfSheets);
+                    Assert.AreEqual("Sheet1", wb.GetSheetName(0));
+                }
+            }
+        }
     }
 }

@@ -38,6 +38,7 @@ namespace TestCases.SS.UserModel
     {
 
         private ITestDataProvider _testDataProvider;
+        private static int dpi = 96;
 
         protected BaseTestBugzillaIssues(ITestDataProvider TestDataProvider)
         {
@@ -49,7 +50,9 @@ namespace TestCases.SS.UserModel
             double diff = Math.Abs(expected - actual);
             double fuzz = expected * factor;
             if (diff > fuzz)
+            {
                 Assert.Fail(actual + " not within " + fuzz + " of " + expected);
+            }
         }
         /**
          * Test writing a hyperlink
@@ -341,7 +344,10 @@ namespace TestCases.SS.UserModel
             fmla.Append("(");
             for (int i = 0; i < maxArgs; i++)
             {
-                if (i > 0) fmla.Append(',');
+                if (i > 0)
+                {
+                    fmla.Append(',');
+                }
                 fmla.Append("A1");
             }
             fmla.Append(")");
@@ -440,12 +446,14 @@ namespace TestCases.SS.UserModel
             // if the default font or margins change.
             double expectedRatioThreshold = 1.2f;
             double leadingWhitespaceRatio = ((double)leadingWhitespaceColWidth) / noWhitespaceColWidth;
-            double trailingWhitespaceRatio = ((double)leadingWhitespaceColWidth) / noWhitespaceColWidth;
+            double trailingWhitespaceRatio = ((double)trailingWhitespaceColWidth) / noWhitespaceColWidth;
 
             assertGreaterThan("leading whitespace is longer than no whitespace", leadingWhitespaceRatio, expectedRatioThreshold);
             assertGreaterThan("trailing whitespace is longer than no whitespace", trailingWhitespaceRatio, expectedRatioThreshold);
-            Assert.AreEqual(leadingWhitespaceColWidth, trailingWhitespaceColWidth,
-                "cells with equal leading and trailing whitespace have equal width");
+
+            //This is not correct https://github.com/SixLabors/Fonts/discussions/349
+            //Assert.AreEqual(leadingWhitespaceColWidth, trailingWhitespaceColWidth,
+            //"cells with equal leading and trailing whitespace have equal width");
 
             wb.Close();
         }
@@ -473,6 +481,7 @@ namespace TestCases.SS.UserModel
 
             //AttributedString str = new AttributedString(txt);
             //copyAttributes(font, str, 0, txt.length());
+
             // TODO: support rich text fragments
             //if (rt.NumFormattingRuns > 0)
             //{
@@ -481,7 +490,8 @@ namespace TestCases.SS.UserModel
             //TextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
             //width = ((layout.getBounds().getWidth() / 1) / 8);
             Font wfont = SheetUtil.IFont2Font(font);
-            width = (double)TextMeasurer.Measure(txt, new TextOptions(wfont)).Width;
+            var textOptions = new TextOptions(wfont) { Dpi = dpi };
+            width = (double)TextMeasurer.MeasureSize(txt, textOptions).Width;
             return width;
         }
 
@@ -489,7 +499,8 @@ namespace TestCases.SS.UserModel
         {
             double width;
             Font wfont = SheetUtil.IFont2Font(font);
-            width = (double)TextMeasurer.Measure(txt, new TextOptions(wfont)).Width;
+            var textOptions = new TextOptions(wfont) { Dpi = dpi };
+            width = (double)TextMeasurer.MeasureSize(txt, textOptions).Width;
             return width;
         }
 
@@ -497,9 +508,18 @@ namespace TestCases.SS.UserModel
         //{
         //    str.addAttribute(TextAttribute.FAMILY, font.getFontName(), startIdx, endIdx);
         //    str.addAttribute(TextAttribute.SIZE, (float)font.getFontHeightInPoints());
-        //    if (font.getBoldweight() == Font.BOLDWEIGHT_BOLD) str.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, startIdx, endIdx);
-        //    if (font.getItalic()) str.addAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, startIdx, endIdx);
-        //    if (font.getUnderline() == Font.U_SINGLE) str.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);
+        //    if (font.getBoldweight() == Font.BOLDWEIGHT_BOLD)
+        //    {
+        //        str.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, startIdx, endIdx);
+        //    }
+        //    if (font.getItalic())
+        //    {
+        //        str.addAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, startIdx, endIdx);
+        //    }
+        //    if (font.getUnderline() == Font.U_SINGLE)
+        //    {
+        //        str.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);
+        //    }
         //}
 
         /**
@@ -1637,6 +1657,7 @@ namespace TestCases.SS.UserModel
                 wb.Close();
             }
         }
+
         private void checkFormulaPreevaluatedString(IWorkbook readFile)
         {
             ISheet sheet = readFile.GetSheetAt(0);
@@ -1653,6 +1674,9 @@ namespace TestCases.SS.UserModel
                     case CellType.Formula:
                         cellValue = cell.CellFormula;
                         break;
+                    default:
+                        Assert.Fail("unexpected cell type");
+                        return;
                 }
                 Assert.IsNotNull(cellValue);
                 cellValue = string.IsNullOrEmpty(cellValue) ? null : cellValue;

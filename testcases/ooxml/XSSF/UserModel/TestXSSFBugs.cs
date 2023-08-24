@@ -168,7 +168,7 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(1, wb1.NumberOfSheets);
             XSSFSheet sh = wb1.GetSheetAt(0) as XSSFSheet;
             XSSFDrawing drawing = sh.CreateDrawingPatriarch() as XSSFDrawing;
-            List<POIXMLDocumentPart.RelationPart> rels = drawing.RelationParts;
+            IList<POIXMLDocumentPart.RelationPart> rels = drawing.RelationParts;
             Assert.AreEqual(1, rels.Count);
             Uri baseUri = new Uri("ooxml://npoi.org"); //For test only.
             Uri target = new Uri(baseUri, rels[0].Relationship.TargetUri.ToString());
@@ -1383,8 +1383,8 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("51470.xlsx");
             XSSFSheet sh0 = wb.GetSheetAt(0) as XSSFSheet;
             XSSFSheet sh1 = wb.CloneSheet(0) as XSSFSheet;
-            List<POIXMLDocumentPart.RelationPart> rels0 = sh0.RelationParts;
-            List<POIXMLDocumentPart.RelationPart> rels1 = sh1.RelationParts;
+            IList<POIXMLDocumentPart.RelationPart> rels0 = sh0.RelationParts;
+            IList<POIXMLDocumentPart.RelationPart> rels1 = sh1.RelationParts;
             Assert.AreEqual(1, rels0.Count);
             Assert.AreEqual(1, rels1.Count);
 
@@ -3268,12 +3268,15 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFCell cell = workbook.CreateSheet().CreateRow(0).CreateCell(0) as XSSFCell;
+
             XSSFColor color = new XSSFColor(Color.Red);
             XSSFCellStyle style = workbook.CreateCellStyle() as XSSFCellStyle;
             style.FillForegroundColorColor = color;
             style.FillPattern = FillPattern.SolidForeground;
             cell.CellStyle = style;
+
             // Everything is fine at this point, cell is red
+
             Dictionary<String, Object> properties = new Dictionary<String, Object>();
             properties.Add(CellUtil.BORDER_BOTTOM, BorderStyle.Thin); //or BorderStyle.THIN
             CellUtil.SetCellStyleProperties(cell, properties);
@@ -3287,6 +3290,7 @@ namespace TestCases.XSSF.UserModel
             workbook.Close();
             XSSFCell ncell = nwb.GetSheetAt(0).GetRow(0).GetCell(0) as XSSFCell;
             XSSFColor ncolor = new XSSFColor(Color.Red);
+
             // Now the cell is all black
             XSSFColor nactual = ncell.CellStyle.FillBackgroundColorColor as XSSFColor;
             Assert.IsNotNull(nactual);
@@ -3378,6 +3382,47 @@ namespace TestCases.XSSF.UserModel
             Assert.IsNotNull(cv);
             Assert.AreEqual(2.0, cv.NumberValue, 0.00001);
             wb.Close();
+        }
+
+        [Test]
+        public void TestBug690()
+        {
+            using (var workbook = new XSSFWorkbook())
+            {
+                XSSFSheet sheet = workbook.CreateSheet() as XSSFSheet;
+                XSSFCreationHelper creationHelper = workbook.GetCreationHelper() as XSSFCreationHelper;
+                XSSFHyperlink hyperlink;
+
+                hyperlink = creationHelper.CreateHyperlink(HyperlinkType.Url) as XSSFHyperlink;
+                sheet.AddHyperlink(hyperlink);
+
+                string address = "http://myurl";
+                hyperlink.Address = address;
+                hyperlink.SetCellReference("A1");
+
+                var cellAddress = new CellAddress("A1");
+
+                var comment = sheet.GetHyperlink(cellAddress);
+                Assert.IsNotNull(comment);
+                Assert.IsTrue(comment.Address.Equals(address));
+
+                using (var wbCopy = XSSFTestDataSamples.WriteOutAndReadBack(workbook))
+                {
+                    sheet = wbCopy.GetSheetAt(0) as XSSFSheet;
+                    var comment2 = sheet.GetHyperlink(cellAddress);
+                    Assert.IsNotNull(comment2);
+                    Assert.IsTrue(comment2.Address.Equals(address));
+
+                    sheet.RemoveHyperlink(cellAddress.Row, cellAddress.Column);
+
+                    using (var wbCopy2 = XSSFTestDataSamples.WriteOutAndReadBack(wbCopy))
+                    {
+                        sheet = wbCopy2.GetSheetAt(0) as XSSFSheet;
+                        var comment3 = sheet.GetHyperlink(cellAddress);
+                        Assert.IsNull(comment3);
+                    }
+                }
+            }
         }
     }
 

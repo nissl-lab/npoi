@@ -120,7 +120,8 @@ namespace TestCases.SS.Formula.PTG
             Evaluator.EvaluateFormulaCell(ccell);
             Evaluator.EvaluateFormulaCell(tccell);
             Assert.AreEqual(NEW_PART_COST, uccell.NumericCellValue);
-            Assert.AreEqual(NEW_PART_COST * NEW_QUANT, ccell.NumericCellValue);
+            double ctotal = decimal.ToDouble((decimal)NEW_PART_COST * (decimal)NEW_QUANT);
+            Assert.AreEqual(ctotal, ccell.NumericCellValue);
             Assert.AreEqual(NEW_PART_COST * NEW_QUANT * MARKUP_COST_2, tccell.NumericCellValue);
         }
     }

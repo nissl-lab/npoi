@@ -27,8 +27,6 @@ namespace TestCases.HSSF.Record
      * Tests the serialization and deserialization of the StringRecord
      * class works correctly.  Test data taken directly from a real
      * Excel file.
-     *
-     * @author Glen Stampoultzis (glens at apache.org)
      */
     [TestFixture]
     public class TestStringRecord
@@ -36,18 +34,19 @@ namespace TestCases.HSSF.Record
         private static byte[] data = HexRead.ReadFromString(
                 "0B 00 " + // length
                 "00 " +    // option
-            // string
+                // string
                 "46 61 68 72 7A 65 75 67 74 79 70"
         );
+
         [Test]
         public void TestLoad()
         {
-
             StringRecord record = new StringRecord(TestcaseRecordInputStream.Create(0x207, data));
             Assert.AreEqual("Fahrzeugtyp", record.String);
 
             Assert.AreEqual(18, record.RecordSize);
         }
+
         [Test]
         public void TestStore()
         {
@@ -57,8 +56,11 @@ namespace TestCases.HSSF.Record
             byte[] recordBytes = record.Serialize();
             Assert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
+            {
                 Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+            }
         }
+
         [Test]
         public void TestContinue()
         {
@@ -78,15 +80,15 @@ namespace TestCases.HSSF.Record
             Assert.AreEqual(StringRecord.sid, LittleEndian.GetUShort(ser, 0));
             if (LittleEndian.GetUShort(ser, 2) > MAX_BIFF_DATA)
             {
-                throw new AssertionException(
-                        "StringRecord should have been split with a continue record");
+                Assert.Fail("StringRecord should have been split with a continue record");
             }
+
             // Confirm expected size of first record, and ushort strLen.
             Assert.AreEqual(MAX_BIFF_DATA, LittleEndian.GetUShort(ser, 2));
             Assert.AreEqual(TEXT_LEN, LittleEndian.GetUShort(ser, 4));
 
             // Confirm first few bytes of ContinueRecord
-            ILittleEndianInput crIn = new LittleEndianByteArrayInputStream(ser, (MAX_BIFF_DATA + 4));
+            LittleEndianByteArrayInputStream crIn = new LittleEndianByteArrayInputStream(ser, (MAX_BIFF_DATA + 4));
             int nCharsInFirstRec = MAX_BIFF_DATA - (2 + 1); // strLen, optionFlags
             int nCharsInSecondRec = TEXT_LEN - nCharsInFirstRec;
             Assert.AreEqual(ContinueRecord.sid, crIn.ReadUShort());

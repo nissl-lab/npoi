@@ -34,27 +34,33 @@ namespace NPOI.XWPF.UserModel
 
         public AbstractXWPFSDT(CT_SdtPr pr, IBody part)
         {
-
-            CT_String[] aliases = pr.GetAliasArray();
-            if (aliases != null && aliases.Length > 0)
-            {
-                title = aliases[0].val;
-            }
-            else
+            if (pr == null)
             {
                 title = "";
-            }
-            CT_String[] tags = pr.GetAliasArray();
-            if (tags != null && tags.Length > 0)
-            {
-                tag = tags[0].val;
+                tag = "";
             }
             else
             {
-                tag = "";
+                CT_String[] aliases = pr.GetAliasArray();
+                if (aliases != null && aliases.Length > 0)
+                {
+                    title = aliases[0].val;
+                }
+                else
+                {
+                    title = "";
+                }
+                CT_String[] tags = pr.GetAliasArray();
+                if (tags != null && tags.Length > 0)
+                {
+                    tag = tags[0].val;
+                }
+                else
+                {
+                    tag = "";
+                }
             }
             this.part = part;
-
         }
 
         /**

@@ -29,13 +29,6 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v3
-      - name: 'Cache: .nuke/temp, ~/.nuget/packages'
-        uses: actions/cache@v3
-        with:
-          path: |
-            .nuke/temp
-            ~/.nuget/packages
-          key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
       - name: 'Run: Clean, Test, Pack'
         run: ./build.cmd Clean Test Pack
       - name: 'Publish: artifacts'
@@ -49,13 +42,6 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v3
-      - name: 'Cache: .nuke/temp, ~/.nuget/packages'
-        uses: actions/cache@v3
-        with:
-          path: |
-            .nuke/temp
-            ~/.nuget/packages
-          key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
       - name: 'Run: Clean, Test, Pack'
         run: ./build.cmd Clean Test Pack
       - name: 'Publish: artifacts'

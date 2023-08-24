@@ -258,7 +258,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_CustomXmlRow)
                     ((CT_CustomXmlRow)o).Write(sw, "customXml");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -404,7 +404,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "attr");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -467,7 +467,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:name", this.name);
             XmlHelper.WriteAttribute(sw, "w:val", this.val);
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -1067,7 +1067,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_OMathPara)
                     ((CT_OMathPara)o).Write(sw, "oMathPara");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
     }
@@ -1559,7 +1559,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_Markup)
                     ((CT_Markup)o).Write(sw, "customXmlMoveToRangeEnd");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
     }
@@ -1932,7 +1932,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_OMathPara)
                     ((CT_OMathPara)o).Write(sw, "oMathPara");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 1)]
@@ -2363,7 +2363,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_Markup)
                     ((CT_Markup)o).Write(sw, "customXmlInsRangeEnd");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]

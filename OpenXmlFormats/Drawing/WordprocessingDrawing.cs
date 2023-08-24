@@ -64,7 +64,7 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
                     x.Write(sw, "inline");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         List<CT_Anchor> anchorField;

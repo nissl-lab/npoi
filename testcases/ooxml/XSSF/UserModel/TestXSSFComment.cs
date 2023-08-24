@@ -28,11 +28,9 @@ using NPOI.XSSF.Streaming;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using TestCases.SS.UserModel;
+
 namespace TestCases.XSSF.UserModel
 {
-    /**
-     * @author Yegor Kozlov
-     */
     [TestFixture]
     public class TestXSSFComment : BaseTestCellComment
     {
@@ -318,6 +316,109 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void TestRemoveXSSFCellComment()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                ISheet sheet = wb.CreateSheet();
+                IRow row = sheet.CreateRow(1);
+                ICell cell = row.CreateCell(0);
+                cell.SetCellValue("test");
+
+                IDrawing drawing = sheet.CreateDrawingPatriarch();
+                ICreationHelper factory = wb.GetCreationHelper();
+                // When the comment box is visible, have it show in a 1x3 space
+                IClientAnchor anchor = factory.CreateClientAnchor();
+                anchor.Col1 = cell.ColumnIndex;
+                anchor.Col2 = cell.ColumnIndex + 1;
+                anchor.Row1 = row.RowNum;
+                anchor.Row2 = row.RowNum + 3;
+                // Create the comment and set the text+author
+                IComment comment = drawing.CreateCellComment(anchor);
+                IRichTextString str = factory.CreateRichTextString("Hello, World!");
+                comment.String = str;
+                comment.Author = "Apache POI";
+
+                cell.CellComment = comment;
+
+                var exCellComment = sheet.GetCellComment(new CellAddress(1, 0));
+                Assert.IsNotNull(exCellComment);
+                Assert.IsTrue(exCellComment.String.String.Equals("Hello, World!"));
+                Assert.IsTrue(exCellComment.Author.Equals("Apache POI"));
+
+                cell.RemoveCellComment();
+                exCellComment = sheet.GetCellComment(new CellAddress(1, 0));
+                Assert.IsNull(exCellComment);
+
+                IComment newComment = drawing.CreateCellComment(anchor);
+                newComment.String = str;
+                newComment.Author = "Apache POI";
+                cell.CellComment = newComment;
+
+                exCellComment = sheet.GetCellComment(new CellAddress(1, 0));
+                Assert.NotNull(exCellComment);
+                Assert.IsTrue(exCellComment.String.String.Equals("Hello, World!"));
+                Assert.IsTrue(exCellComment.Author.Equals("Apache POI"));
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        [Test]
+        public void TestRemoveSXSSFCellComment()
+        {
+            IWorkbook wb = new SXSSFWorkbook();
+            try
+            {
+                ISheet sheet = wb.CreateSheet();
+                IRow row = sheet.CreateRow(1);
+                ICell cell = row.CreateCell(0);
+                cell.SetCellValue("test");
+
+                IDrawing drawing = sheet.CreateDrawingPatriarch();
+                ICreationHelper factory = wb.GetCreationHelper();
+                // When the comment box is visible, have it show in a 1x3 space
+                IClientAnchor anchor = factory.CreateClientAnchor();
+                anchor.Col1 = cell.ColumnIndex;
+                anchor.Col2 = cell.ColumnIndex + 1;
+                anchor.Row1 = row.RowNum;
+                anchor.Row2 = row.RowNum + 3;
+                // Create the comment and set the text+author
+                IComment comment = drawing.CreateCellComment(anchor);
+                IRichTextString str = factory.CreateRichTextString("Hello, World!");
+                comment.String = str;
+                comment.Author = "Apache POI";
+
+                cell.CellComment = comment;
+
+                var exCellComment = sheet.GetCellComment(new CellAddress(1, 0));
+                Assert.IsNotNull(exCellComment);
+                Assert.IsTrue(exCellComment.String.String.Equals("Hello, World!"));
+                Assert.IsTrue(exCellComment.Author.Equals("Apache POI"));
+
+                cell.RemoveCellComment();
+                exCellComment = sheet.GetCellComment(new CellAddress(1, 0));
+                Assert.IsNull(exCellComment);
+
+                IComment newComment = drawing.CreateCellComment(anchor);
+                newComment.String = str;
+                newComment.Author = "Apache POI";
+                cell.CellComment = newComment;
+
+                exCellComment = sheet.GetCellComment(new CellAddress(1, 0));
+                Assert.NotNull(exCellComment);
+                Assert.IsTrue(exCellComment.String.String.Equals("Hello, World!"));
+                Assert.IsTrue(exCellComment.Author.Equals("Apache POI"));
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
     }
 
 }
