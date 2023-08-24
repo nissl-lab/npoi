@@ -3391,34 +3391,44 @@ namespace TestCases.XSSF.UserModel
             {
                 XSSFSheet sheet = workbook.CreateSheet() as XSSFSheet;
                 XSSFCreationHelper creationHelper = workbook.GetCreationHelper() as XSSFCreationHelper;
-                XSSFHyperlink hyperlink;
 
-                hyperlink = creationHelper.CreateHyperlink(HyperlinkType.Url) as XSSFHyperlink;
-                sheet.AddHyperlink(hyperlink);
+                XSSFHyperlink hyperlink1 = creationHelper.CreateHyperlink(HyperlinkType.Url) as XSSFHyperlink;
+                sheet.AddHyperlink(hyperlink1);
+                string address1 = "http://myurl1";
+                hyperlink1.Address = address1;
+                hyperlink1.SetCellReference("A1");
 
-                string address = "http://myurl";
-                hyperlink.Address = address;
-                hyperlink.SetCellReference("A1");
+                XSSFHyperlink hyperlink2 = creationHelper.CreateHyperlink(HyperlinkType.Url) as XSSFHyperlink;
+                sheet.AddHyperlink(hyperlink2);
+                string address2 = "http://myurl2";
+                hyperlink2.Address = address2;
+                hyperlink2.SetCellReference("B2");
 
-                var cellAddress = new CellAddress("A1");
+                XSSFHyperlink hyperlink3 = creationHelper.CreateHyperlink(HyperlinkType.Url) as XSSFHyperlink;
+                sheet.AddHyperlink(hyperlink3);
+                string address3 = "http://myurl3";
+                hyperlink3.Address = address3;
+                hyperlink3.SetCellReference("C3");
 
-                var comment = sheet.GetHyperlink(cellAddress);
+                var cellAddressToRemoveHL = new CellAddress("B2");
+
+                var comment = sheet.GetHyperlink(cellAddressToRemoveHL);
                 Assert.IsNotNull(comment);
-                Assert.IsTrue(comment.Address.Equals(address));
+                Assert.IsTrue(comment.Address.Equals(address2));
 
                 using (var wbCopy = XSSFTestDataSamples.WriteOutAndReadBack(workbook))
                 {
                     sheet = wbCopy.GetSheetAt(0) as XSSFSheet;
-                    var comment2 = sheet.GetHyperlink(cellAddress);
+                    var comment2 = sheet.GetHyperlink(cellAddressToRemoveHL);
                     Assert.IsNotNull(comment2);
-                    Assert.IsTrue(comment2.Address.Equals(address));
+                    Assert.IsTrue(comment2.Address.Equals(address2));
 
-                    sheet.RemoveHyperlink(cellAddress.Row, cellAddress.Column);
+                    sheet.RemoveHyperlink(cellAddressToRemoveHL.Row, cellAddressToRemoveHL.Column);
 
                     using (var wbCopy2 = XSSFTestDataSamples.WriteOutAndReadBack(wbCopy))
                     {
                         sheet = wbCopy2.GetSheetAt(0) as XSSFSheet;
-                        var comment3 = sheet.GetHyperlink(cellAddress);
+                        var comment3 = sheet.GetHyperlink(cellAddressToRemoveHL);
                         Assert.IsNull(comment3);
                     }
                 }
