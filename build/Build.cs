@@ -103,11 +103,11 @@ partial class Build : NukeBuild
         .OnlyWhenDynamic(() => RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && Host is GitHubActions)
         .Executes(() =>
         {
-            ProcessTasks.StartProcess("sudo", "apt install -y fonts-noto-color-emoji");
-            ProcessTasks.StartProcess("mkdir", "-p /usr/local/share/fonts");
-            ProcessTasks.StartProcess("cp", "/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf /usr/local/share/fonts/");
-            ProcessTasks.StartProcess("chmod", "644 /usr/local/share/fonts/NotoColorEmoji.ttf");
-            ProcessTasks.StartProcess("fc-cache", "-fv");
+            static void StartSudoProcess(string arguments) => ProcessTasks.StartProcess("sudo", arguments).WaitForExit();
+
+            // replace broken font - the one coming from APT doesn't contain all expected tables
+            StartSudoProcess("rm /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf");
+            StartSudoProcess("curl -sS -L -o /usr/share/fonts/truetype/noto/NotoColorEmoji-Regular.ttf https://fonts.gstatic.com/s/notocoloremoji/v25/Yq6P-KqIXTD0t4D9z1ESnKM3-HpFab5s79iz64w.ttf");
         });
 
     Target Pack => _ => _
