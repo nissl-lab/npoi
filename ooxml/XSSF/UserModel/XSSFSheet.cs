@@ -3014,7 +3014,14 @@ namespace NPOI.XSSF.UserModel
                 XSSFHyperlink hyperlink = hyperlinks[index];
                 if (hyperlink.CellRef.Equals(ref1))
                 {
-                    worksheet.hyperlinks.hyperlink.Remove(hyperlink.GetCTHyperlink());
+                    if (worksheet != null
+                        && worksheet.hyperlinks != null
+                        && worksheet.hyperlinks.hyperlink != null
+                        && worksheet.hyperlinks.hyperlink.Contains(hyperlink.GetCTHyperlink()))
+                    {
+                        worksheet.hyperlinks.hyperlink.Remove(hyperlink.GetCTHyperlink());
+                    }
+
                     hyperlinks.RemoveAt(index);
                     return;
                 }
