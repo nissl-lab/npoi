@@ -1,11 +1,15 @@
+using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
+using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Utilities.Collections;
+
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 partial class Build : NukeBuild
@@ -22,10 +26,26 @@ partial class Build : NukeBuild
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
     [Solution] Solution Solution;
+    [GitRepository] readonly GitRepository GitRepository;
 
     static AbsolutePath SourceDirectory => RootDirectory / "src";
 
-    static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
+    static AbsolutePath ArtifactsDirectory => RootDirectory / "publish";
+
+    string TagVersion => GitRepository.Tags.SingleOrDefault(x => x.StartsWith("v"))?[1..];
+
+    string BranchVersion => GitRepository.Branch?.StartsWith("release") == true
+        ? GitRepository.Branch[7..]
+        : null;
+
+    // either from tag or branch
+    string PublishVersion => TagVersion ?? BranchVersion;
+
+    bool IsPublishBuild => !string.IsNullOrWhiteSpace(PublishVersion);
+
+    string VersionSuffix;
+
+    static bool IsRunningOnWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
     [Secret]
     [Parameter("GitHub API token")]
@@ -33,9 +53,20 @@ partial class Build : NukeBuild
 
     protected override void OnBuildInitialized()
     {
+        VersionSuffix = !IsPublishBuild
+            ? $"preview-{DateTime.UtcNow:yyyyMMdd-HHmm}"
+            : "";
+
+        if (IsLocalBuild)
+        {
+            VersionSuffix = $"dev-{DateTime.UtcNow:yyyyMMdd-HHmm}";
+        }
+
         Serilog.Log.Information("BUILD SETUP");
         Serilog.Log.Information("\tSolution: {Solution}", Solution);
         Serilog.Log.Information("\tConfiguration: {Configuration}", Configuration);
+        Serilog.Log.Information("\tVersion suffix: {VersionSuffix}", VersionSuffix);
+        Serilog.Log.Information("\tPublish version: {PublishVersion}", PublishVersion);
 
         Serilog.Log.Information("Build environment:");
         Serilog.Log.Information("\tHost: {Host}", Host.GetType());
@@ -120,16 +151,31 @@ partial class Build : NukeBuild
 
             var packTarget = Solution.GetProject("NPOI.Pack");
 
-            DotNetPack(_ =>_
-                .SetConfiguration(Configuration)
-                .SetOutputDirectory(ArtifactsDirectory)
-                .SetDeterministic(IsServerBuild)
-                .SetContinuousIntegrationBuild(IsServerBuild)
-                // obsolete missing XML documentation comment, XML comment on not valid language element, XML comment has badly formed XML, no matching tag in XML comment
-                // need to use escaped separator in order for this to work
-                .AddProperty("NoWarn", string.Join("%3B", new [] { 169, 612, 618, 1591, 1587, 1570, 1572, 1573, 1574 }))
-                .SetProperty("EnablePackageValidation", "false")
-                .SetProject(packTarget)
-            );
+            DotNetPack(_ =>
+            {
+                var packSettings = _
+                    .SetProject(packTarget)
+                    .SetConfiguration(Configuration)
+                    .SetOutputDirectory(ArtifactsDirectory)
+                    .SetDeterministic(IsServerBuild)
+                    .SetContinuousIntegrationBuild(IsServerBuild)
+                    // obsolete missing XML documentation comment, XML comment on not valid language element, XML comment has badly formed XML, no matching tag in XML comment
+                    // need to use escaped separator in order for this to work
+                    .AddProperty("NoWarn", string.Join("%3B", new[] { 169, 612, 618, 1591, 1587, 1570, 1572, 1573, 1574 }))
+                    .SetProperty("EnablePackageValidation", "false");
+
+                if (IsPublishBuild)
+                {
+                    // force version from tag/branch
+                    packSettings = packSettings
+                        .SetAssemblyVersion(PublishVersion)
+                        .SetFileVersion(PublishVersion)
+                        .SetInformationalVersion(PublishVersion)
+                        .SetVersionSuffix(VersionSuffix)
+                        .SetVersionPrefix(PublishVersion);
+                }
+
+                return packSettings;
+            });
         });
 }
