@@ -27,14 +27,19 @@ namespace NPOI.POIFS.Crypt
      */
     public class EncryptionMode
     {
+        public const string BuilderNameBinaryRC4 = "NPOI.POIFS.Crypt.BinaryRC4.BinaryRC4EncryptionInfoBuilder";
+        public const string BuilderNameCryptoAPI = "NPOI.POIFS.Crypt.CryptoAPI.CryptoAPIEncryptionInfoBuilder";
+        public const string BuilderNameStandard = "NPOI.POIFS.Crypt.Standard.StandardEncryptionInfoBuilder";
+        public const string BuilderNameAgile = "NPOI.POIFS.Crypt.Agile.AgileEncryptionInfoBuilder";
+
         /* @see <a href="http://msdn.microsoft.com/en-us/library/dd907466(v=office.12).aspx">2.3.6 Office Binary Document RC4 Encryption</a> */
-        public static readonly EncryptionMode BinaryRC4 = new EncryptionMode("NPOI.POIFS.Crypt.BinaryRC4.BinaryRC4EncryptionInfoBuilder", 1, 1, 0x0);
+        public static readonly EncryptionMode BinaryRC4 = new EncryptionMode(BuilderNameBinaryRC4, 1, 1, 0x0);
         /* @see <a href="http://msdn.microsoft.com/en-us/library/dd905225(v=office.12).aspx">2.3.5 Office Binary Document RC4 CryptoAPI Encryption</a> */
-        public static readonly EncryptionMode CryptoAPI = new EncryptionMode("NPOI.POIFS.Crypt.CryptoAPI.CryptoAPIEncryptionInfoBuilder", 4, 2, 0x04);
+        public static readonly EncryptionMode CryptoAPI = new EncryptionMode(BuilderNameCryptoAPI, 4, 2, 0x04);
         /* @see <a href="http://msdn.microsoft.com/en-us/library/dd906097(v=office.12).aspx">2.3.4.5 \EncryptionInfo Stream (Standard Encryption)</a> */
-        public static readonly EncryptionMode Standard = new EncryptionMode("NPOI.POIFS.Crypt.Standard.StandardEncryptionInfoBuilder", 4, 2, 0x24);
+        public static readonly EncryptionMode Standard = new EncryptionMode(BuilderNameStandard, 4, 2, 0x24);
         /* @see <a href="http://msdn.microsoft.com/en-us/library/dd925810(v=office.12).aspx">2.3.4.10 \EncryptionInfo Stream (Agile Encryption)</a> */
-        public static readonly EncryptionMode Agile = new EncryptionMode("NPOI.POIFS.Crypt.Agile.AgileEncryptionInfoBuilder", 4, 4, 0x40);
+        public static readonly EncryptionMode Agile = new EncryptionMode(BuilderNameAgile, 4, 4, 0x40);
 
 
         public string Builder { get; private set; }

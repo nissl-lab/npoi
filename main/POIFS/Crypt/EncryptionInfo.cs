@@ -22,7 +22,8 @@ using NPOI.Util;
 namespace NPOI.POIFS.Crypt
 {
     using System;
-    using System.Reflection;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Net.Security;
 
     public class EncryptionInfo
     {
@@ -292,23 +293,47 @@ namespace NPOI.POIFS.Crypt
             _encryptor = eib.GetEncryptor();
         }
 
+        // REMOVE-REFLECTION: Remove reflections here will prevent NPOI from creating custom encryptors.
+        // Is it OK? Remove reflection-related code for now.
+        // It might be better to move Agile classes definition into this library. Now it's defined in NPOI.OOXML.Core.
+#if NET6_0_OR_GREATER
+        [DynamicDependency(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.Interfaces 
+        | DynamicallyAccessedMemberTypes.PublicMethods, EncryptionMode.BuilderNameAgile, "NPOI.OOXML")]
+#endif
         protected static IEncryptionInfoBuilder GetBuilder(EncryptionMode encryptionMode)
         {
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            Type t = null;
-            foreach (Assembly assembly in assemblies)
+            switch (encryptionMode.Builder)
             {
-                t = assembly.GetType(encryptionMode.Builder);
-                if (t != null)
+                case EncryptionMode.BuilderNameBinaryRC4:
+                    return new BinaryRC4.BinaryRC4EncryptionInfoBuilder();
+                case EncryptionMode.BuilderNameCryptoAPI:
+                    return new CryptoAPI.CryptoAPIEncryptionInfoBuilder();
+                case EncryptionMode.BuilderNameStandard:
+                    return new Standard.StandardEncryptionInfoBuilder();
+                case EncryptionMode.BuilderNameAgile:
+                    IEncryptionInfoBuilder instance = CreateAgileInstanceFallback();
+                    if (instance is not null)
+                        return instance;
                     break;
             }
-            if (t == null)
+
+            throw new EncryptedDocumentException("Not found type " + encryptionMode.Builder);
+        }
+
+        private static Type AgileEncryptionInfo;
+        private static IEncryptionInfoBuilder CreateAgileInstanceFallback()
+        {
+            if (AgileEncryptionInfo is null)
             {
-                throw new EncryptedDocumentException("Not found type " + encryptionMode.Builder);
+                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                    if ((AgileEncryptionInfo = assembly.GetType(EncryptionMode.BuilderNameAgile)) != null)
+                        break;
             }
-            IEncryptionInfoBuilder eib = null;
-            eib = (IEncryptionInfoBuilder)t.Assembly.CreateInstance(encryptionMode.Builder);
-            return eib;
+
+            if (AgileEncryptionInfo is null)
+                return null;
+
+            return (IEncryptionInfoBuilder)Activator.CreateInstance(AgileEncryptionInfo);
         }
 
         private int _versionMajor;
