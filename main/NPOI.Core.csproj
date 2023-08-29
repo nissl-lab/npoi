@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Enums.NET" Version="4.0.1" />
+    <PackageReference Include="ExtendedNumerics.BigDecimal" Version="2023.1000.0.230" />
     <PackageReference Include="MathNet.Numerics.Signed" Version="4.15.0" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.2" />
     <PackageReference Include="BouncyCastle.Cryptography" Version="2.2.1" />
