@@ -19,4 +19,24 @@ namespace NPOI.SS.UserModel
         LongDashDotGel = 9, // long dash short dash
         LongDashDotDotGel = 10, // long dash short dash short dash
     }
+
+    // End Line Cap
+    public enum LineEndingCapType : int
+    {
+        None,
+        Round,      // Rounded ends. Semi-circle protrudes by half line width.
+        Square,     // Square protrudes by half line width.
+        Flat,       // Line ends at end point.
+    }
+
+    // Compound Line Type
+    public enum CompoundLineType : int
+    {
+        None,
+        SingleLine,     // Single line: one normal width
+        DoubleLines,    // Double lines of equal width
+        ThickThin,      // Double lines: one thick, one thin
+        ThinThick,      // Double lines: one thin, one thick
+        TripleLines     // Three lines: thin, thick, thin
+	}
 }

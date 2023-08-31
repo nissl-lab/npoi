@@ -118,6 +118,17 @@ namespace NPOI.XSSF.UserModel
                 ctShape.spPr.prstGeom.prst = value;
             }
         }
+
+        public override uint ID
+        {
+            get => ctShape.nvCxnSpPr.cNvPr.id;
+        }
+
+        public override string Name
+        {
+            get => ctShape.nvCxnSpPr.cNvPr.name;
+            set => ctShape.nvCxnSpPr.cNvPr.name = value;
+        }
         protected internal override NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties GetShapeProperties()
         {
             return ctShape.spPr;
