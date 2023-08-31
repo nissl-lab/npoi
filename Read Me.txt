@@ -7,17 +7,10 @@ server and more efficient than call Microsoft Excel ActiveX at background; you c
 text from Office documents to help you implement full-text indexing feature (most of time this feature is 
 used to create search engines).
 
-=========================
-* Nissl Introduction *
-=========================
-NPOI was used to be maintained by Neuzilla ( Tony's first startup company).  After Neuzilla is closed in 2018, Nissl Lab maintains NPOI. 
-Nissl Lab is a NGO org created by Nissl LLC. The trademake NPOI is hold by Nissl in order to avoid abuse. 
-
 ==================
 *  NPOI Source Code *
 ==================
 https://github.com/nissl-lab/npoi/ 
-
 
 ==================
 * LICENSE COMPLIANCE *
@@ -28,14 +21,8 @@ You must state that you are using NPOI no matter you are creating a commercial p
 ======================
 * System Requirement *
 ======================
-VS2015 and above
+VS2019 or VS2022
 medium trust environment in ASP.NET
-
-=================
-*  Nissl in social network *
-=================
-Linkedin: https://www.linkedin.com/company/nissl
-Github: https://github.com/nissl-lab
 
 ================
 * Team Members *
