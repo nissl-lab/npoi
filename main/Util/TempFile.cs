@@ -34,7 +34,7 @@ namespace NPOI.Util
                 file = Path.Combine(dir, prefix + Guid.NewGuid().ToString() + suffix);
                 Thread.Sleep(1);
             }
-            FileStream newFile = new FileStream(file, FileMode.CreateNew, FileAccess.ReadWrite);
+            FileStream newFile = new FileStream(file, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.ReadWrite);
             newFile.Close();
 
             return new FileInfo(file);
