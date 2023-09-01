@@ -62,38 +62,6 @@ namespace NPOI.SS.Util
         /** The character (') used to quote sheet names when they contain special characters */
         private const char SPECIAL_NAME_DELIMITER = '\'';
 
-        /**
-         * Matches a run of one or more letters followed by a run of one or more digits.
-         * Both the letter and number groups are optional.
-         * The run of letters is group 1 and the run of digits is group 2.
-         * Each group may optionally be prefixed with a single '$'.
-         */
-        //private const string CELL_REF_PATTERN = @"^\$?([A-Za-z]+)\$?([0-9]+)";
-        //private static final Pattern CELL_REF_PATTERN = Pattern.compile("(\\$?[A-Z]+)?" + "(\\$?[0-9]+)?", Pattern.CASE_INSENSITIVE);
-        private static Regex CELL_REF_PATTERN = new Regex("(\\$?[A-Z]+)?" + "(\\$?[0-9]+)?", RegexOptions.IgnoreCase | RegexOptions.Compiled| RegexOptions.CultureInvariant);
-
-        /**
-         * Matches references only where row and column are included.
-         * Matches a run of one or more letters followed by a run of one or more digits.
-         * If a reference does not match this pattern, it might match COLUMN_REF_PATTERN or ROW_REF_PATTERN
-         * References may optionally include a single '$' before each group, but these are excluded from the Matcher.group(int).
-         */
-        //private static final Pattern STRICTLY_CELL_REF_PATTERN = Pattern.compile("\\$?([A-Z]+)" + "\\$?([0-9]+)", Pattern.CASE_INSENSITIVE);
-        private static Regex STRICTLY_CELL_REF_PATTERN = new Regex("^\\$?([A-Z]+)" + "\\$?([0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
-        /**
-         * Matches a run of one or more letters.  The run of letters is group 1.  
-         * References may optionally include a single '$' before the group, but these are excluded from the Matcher.group(int).
-         */
-        private static Regex COLUMN_REF_PATTERN = new Regex(@"^\$?([A-Za-z]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
-        /**
-         * Matches a run of one or more letters.  The run of numbers is group 1.
-         * References may optionally include a single '$' before the group, but these are excluded from the Matcher.group(int).
-         */
-        private static Regex ROW_REF_PATTERN = new Regex(@"^\$?([0-9]+)$");
-        /**
-         * Named range names must start with a letter or underscore.  Subsequent characters may include
-         * digits or dot.  (They can even end in dot).
-         */
         //private static final Pattern NAMED_RANGE_NAME_PATTERN = Pattern.compile("[_A-Z][_.A-Z0-9]*", Pattern.CASE_INSENSITIVE);
         private static Regex NAMED_RANGE_NAME_PATTERN = new Regex("^[_A-Za-z][_.A-Za-z0-9]*$", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
         //private static string BIFF8_LAST_COLUMN = "IV";
@@ -113,25 +81,20 @@ namespace NPOI.SS.Util
          * Create an cell ref from a string representation.  Sheet names containing special characters should be
          * delimited and escaped as per normal syntax rules for formulas.
          */
-        public CellReference(String cellRef)
+        public CellReference(String cellRef) : this(cellRef.AsSpan())
         {
-            if (cellRef.EndsWith("#REF!", StringComparison.InvariantCulture))
+        }
+
+        public CellReference(ReadOnlySpan<char> cellRef)
+        {
+            if (cellRef.EndsWith("#REF!".AsSpan(), StringComparison.InvariantCulture))
             {
-                throw new ArgumentException("Cell reference invalid: " + cellRef);
+                throw new ArgumentException("Cell reference invalid: " + cellRef.ToString());
             }
             CellRefPartsInner parts = SeparateRefParts(cellRef);
             _sheetName = parts.sheetName;//parts[0];
-            String colRef = parts.colRef;// parts[1];
-            //if (colRef.Length < 1)
-            //{
-            //    throw new ArgumentException("Invalid Formula cell reference: '" + cellRef + "'");
-            //}
-            _isColAbs = (colRef.Length > 0) && colRef[0] == '$';
-            //_isColAbs = colRef[0] == '$';
-            if (_isColAbs)
-            {
-                colRef = colRef.Substring(1);
-            }
+            ReadOnlySpan<char> colRef = parts.colRef;// parts[1];
+            _isColAbs = parts.columnPrefix == '$';
             if (colRef.Length == 0)
             {
                 _colIndex = -1;
@@ -142,24 +105,16 @@ namespace NPOI.SS.Util
             }
 
 
-            String rowRef = parts.rowRef;// parts[2];
-            //if (rowRef.Length < 1)
-            //{
-            //    throw new ArgumentException("Invalid Formula cell reference: '" + cellRef + "'");
-            //}
-            //_isRowAbs = rowRef[0] == '$';
-            _isRowAbs = (rowRef.Length > 0) && rowRef[0] == '$';
-            if (_isRowAbs)
-            {
-                rowRef = rowRef.Substring(1);
-            }
+            ReadOnlySpan<char> rowRef = parts.rowRef;// parts[2];
+            _isRowAbs = parts.rowPrefix == '$';
             if (rowRef.Length == 0)
             {
                 _rowIndex = -1;
             }
             else
             {
-                _rowIndex = int.Parse(rowRef, CultureInfo.InvariantCulture) - 1; // -1 to convert 1-based to zero-based
+                CellReferenceParser.TryParsePositiveInt32Fast(rowRef, out var rowRefNumber);
+                _rowIndex = rowRefNumber - 1; // -1 to convert 1-based to zero-based
             }
         }
         public CellReference(ICell cell):this(cell.RowIndex, cell.ColumnIndex, false, false)
@@ -237,18 +192,19 @@ namespace NPOI.SS.Util
          * 'IV' -> 255
          * @return zero based column index
          */
-        public static int ConvertColStringToIndex(String ref1)
+        public static int ConvertColStringToIndex(String refs) => ConvertColStringToIndex(refs.AsSpan());
+
+        public static int ConvertColStringToIndex(ReadOnlySpan<char> refs)
         {
             int retval = 0;
-            char[] refs = ref1.ToUpper().ToCharArray();
             for (int k = 0; k < refs.Length; k++)
             {
-                char thechar = refs[k];
+                char thechar = char.ToUpperInvariant(refs[k]);
                 if (thechar == ABSOLUTE_REFERENCE_MARKER)
                 {
                     if (k != 0)
                     {
-                        throw new ArgumentException("Bad col ref format '" + ref1 + "'");
+                        throw new ArgumentException("Bad col ref format '" + refs.ToString() + "'");
                     }
                     continue;
                 }
@@ -258,11 +214,15 @@ namespace NPOI.SS.Util
             }
             return retval - 1;
         }
+
         public static bool IsPartAbsolute(String part)
         {
             return part[0] == ABSOLUTE_REFERENCE_MARKER;
         }
-        public static NameType ClassifyCellReference(String str, SpreadsheetVersion ssVersion)
+
+        public static NameType ClassifyCellReference(String str, SpreadsheetVersion ssVersion) => ClassifyCellReference(str.AsSpan(), ssVersion);
+
+        public static NameType ClassifyCellReference(ReadOnlySpan<char> str, SpreadsheetVersion ssVersion)
         {
             int len = str.Length;
             if (len < 1)
@@ -289,14 +249,12 @@ namespace NPOI.SS.Util
                 // no digits at end of str
                 return ValidateNamedRangeName(str, ssVersion);
             }
-            Regex cellRefPatternMatcher = STRICTLY_CELL_REF_PATTERN;
-            if (!cellRefPatternMatcher.IsMatch(str))
+
+            if (!CellReferenceParser.TryParseStrictCellReference(str, out var lettersGroup, out var digitsGroup))
             {
                 return ValidateNamedRangeName(str, ssVersion);
             }
-            MatchCollection matches = cellRefPatternMatcher.Matches(str);
-            string lettersGroup = matches[0].Groups[1].Value;
-            string digitsGroup = matches[0].Groups[2].Value;
+
             if (CellReferenceIsWithinRange(lettersGroup, digitsGroup, ssVersion))
             {
                 // valid cell reference
@@ -314,28 +272,25 @@ namespace NPOI.SS.Util
             }
             return NameType.NamedRange;
         }
-        private static NameType ValidateNamedRangeName(String str, SpreadsheetVersion ssVersion)
-        {
-            Regex colMatcher = COLUMN_REF_PATTERN;
 
-            if (colMatcher.IsMatch(str))
+        private static NameType ValidateNamedRangeName(ReadOnlySpan<char> str, SpreadsheetVersion ssVersion)
+        {
+            if (CellReferenceParser.TryParseColumnReference(str, out var colStr))
             {
-                Group colStr = colMatcher.Matches(str)[0].Groups[1];
-                if (IsColumnWithinRange(colStr.Value, ssVersion))
+                if (IsColumnWithinRange(colStr, ssVersion))
                 {
                     return NameType.Column;
                 }
             }
-            Regex rowMatcher = ROW_REF_PATTERN;
-            if (rowMatcher.IsMatch(str))
+            if (CellReferenceParser.TryParseRowReference(str, out var rowStr))
             {
-                Group rowStr = rowMatcher.Matches(str)[0].Groups[1];
-                if (IsRowWithinRange(rowStr.Value, ssVersion))
+                if (IsRowWithinRange(rowStr, ssVersion))
                 {
                     return NameType.Row;
                 }
             }
-            if (!NAMED_RANGE_NAME_PATTERN.IsMatch(str))
+            // TODO
+            if (!NAMED_RANGE_NAME_PATTERN.IsMatch(str.ToString()))
             {
                 return NameType.BadCellOrNamedRange;
             }
@@ -368,17 +323,21 @@ namespace NPOI.SS.Util
 
             return colRef.ToString();
         }
-        internal class CellRefPartsInner
+        internal readonly ref struct CellRefPartsInner
         {
-            public String sheetName;
-            public String rowRef;
-            public String colRef;
+            public readonly String sheetName;
+            public readonly char rowPrefix;
+            public readonly char columnPrefix;
+            public readonly ReadOnlySpan<char> rowRef;
+            public readonly ReadOnlySpan<char> colRef;
 
-            public CellRefPartsInner(String sheetName, String rowRef, String colRef)
+            public CellRefPartsInner(string sheetName, char rowPrefix, ReadOnlySpan<char> rowRef, char columnPrefix, ReadOnlySpan<char> colRef)
             {
                 this.sheetName = sheetName;
-                this.rowRef = rowRef ?? "";
-                this.colRef = colRef ?? "";
+                this.rowPrefix = rowPrefix;
+                this.rowRef = rowRef;
+                this.columnPrefix = columnPrefix;
+                this.colRef = colRef;
             }
         }
         /**
@@ -386,24 +345,21 @@ namespace NPOI.SS.Util
          * is the sheet name. Only the first element may be null.  The second element in is the column 
          * name still in ALPHA-26 number format.  The third element is the row.
          */
-        private static CellRefPartsInner SeparateRefParts(String reference)
+        private static CellRefPartsInner SeparateRefParts(ReadOnlySpan<char> reference)
         {
 
             int plingPos = reference.LastIndexOf(SHEET_NAME_DELIMITER);
             String sheetName = ParseSheetName(reference, plingPos);
             int start = plingPos + 1;
-            String cell = reference.Substring(plingPos + 1).ToUpper(CultureInfo.InvariantCulture);
-            Match matcher = CELL_REF_PATTERN.Match(cell);
-            if (!matcher.Success)
-                throw new ArgumentException("Invalid CellReference: " + reference);
-            String col = matcher.Groups[1].Value;
-            String row = matcher.Groups[2].Value;
+            String cell = reference.ToString().Substring(plingPos + 1).ToUpper(CultureInfo.InvariantCulture);
+            if (!CellReferenceParser.TryParseCellReference(cell.AsSpan(), out var columnPrefix, out var column, out var rowPrefix, out var row))
+                throw new ArgumentException("Invalid CellReference: " + reference.ToString());
 
-            CellRefPartsInner cellRefParts = new CellRefPartsInner(sheetName, row, col);
+            CellRefPartsInner cellRefParts = new CellRefPartsInner(sheetName, rowPrefix, row, columnPrefix, column);
             return cellRefParts;
         }
 
-        private static String ParseSheetName(String reference, int indexOfSheetNameDelimiter)
+        private static String ParseSheetName(ReadOnlySpan<char> reference, int indexOfSheetNameDelimiter)
         {
             if (indexOfSheetNameDelimiter < 0)
             {
@@ -416,17 +372,17 @@ namespace NPOI.SS.Util
                 // sheet names with spaces must be quoted
                 if (reference.IndexOf(' ') == -1)
                 {
-                    return reference.Substring(0, indexOfSheetNameDelimiter);
+                    return reference.Slice(0, indexOfSheetNameDelimiter).ToString();
                 }
                 else
                 {
-                    throw new ArgumentException("Sheet names containing spaces must be quoted: (" + reference + ")");
+                    throw new ArgumentException("Sheet names containing spaces must be quoted: (" + reference.ToString() + ")");
                 }
             }
             int lastQuotePos = indexOfSheetNameDelimiter - 1;
             if (reference[lastQuotePos] != SPECIAL_NAME_DELIMITER)
             {
-                throw new ArgumentException("Mismatched quotes: (" + reference + ")");
+                throw new ArgumentException("Mismatched quotes: (" + reference.ToString() + ")");
             }
 
             // TODO - refactor cell reference parsing logic to one place.
@@ -456,7 +412,7 @@ namespace NPOI.SS.Util
                         continue;
                     }
                 }
-                throw new ArgumentException("Bad sheet name quote escaping: (" + reference + ")");
+                throw new ArgumentException("Bad sheet name quote escaping: (" + reference.ToString() + ")");
             }
             return sb.ToString();
         }
@@ -577,6 +533,9 @@ namespace NPOI.SS.Util
          * @return <c>true</c> if the row and col parameters are within range of a BIFF8 spreadsheet.
          */
         public static bool CellReferenceIsWithinRange(String colStr, String rowStr, SpreadsheetVersion ssVersion)
+            => CellReferenceIsWithinRange(colStr.AsSpan(), rowStr.AsSpan(), ssVersion);
+
+        public static bool CellReferenceIsWithinRange(ReadOnlySpan<char> colStr, ReadOnlySpan<char> rowStr, SpreadsheetVersion ssVersion)
         {
             if (!IsColumnWithinRange(colStr, ssVersion))
             {
@@ -593,9 +552,14 @@ namespace NPOI.SS.Util
         {
             return IsColumnWithinRange(colStr, ssVersion);
         }
+
         public static bool IsRowWithinRange(String rowStr, SpreadsheetVersion ssVersion)
+            => IsRowWithinRange(rowStr.AsSpan(), ssVersion);
+
+        public static bool IsRowWithinRange(ReadOnlySpan<char> rowStr, SpreadsheetVersion ssVersion)
         {
-            int rowNum = int.Parse(rowStr) - 1;
+            CellReferenceParser.TryParsePositiveInt32Fast(rowStr, out var rowNum);
+            rowNum -= 1;
             return 0 <= rowNum && rowNum <= ssVersion.LastRowIndex;
         }
 
@@ -604,7 +568,11 @@ namespace NPOI.SS.Util
         {
             return IsRowWithinRange(rowStr, ssVersion);
         }
+
         public static bool IsColumnWithinRange(String colStr, SpreadsheetVersion ssVersion)
+            => IsColumnWithinRange(colStr.AsSpan(), ssVersion);
+
+        public static bool IsColumnWithinRange(ReadOnlySpan<char> colStr, SpreadsheetVersion ssVersion)
         {
             String lastCol = ssVersion.LastColumnName;
             int lastColLength = lastCol.Length;
@@ -618,7 +586,7 @@ namespace NPOI.SS.Util
             if (numberOfLetters == lastColLength)
             {
                 //if (colStr.ToUpper().CompareTo(lastCol) > 0)
-                if (string.Compare(colStr.ToUpper(), lastCol, StringComparison.Ordinal) > 0)
+                if (colStr.CompareTo(lastCol.AsSpan(), StringComparison.OrdinalIgnoreCase) > 0)
                 {
                     return false;
                 }

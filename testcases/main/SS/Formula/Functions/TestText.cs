@@ -42,7 +42,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval formatArg = new StringEval("abc");
             ValueEval[] args = { strArg, formatArg };
             ValueEval result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+            Assert.AreEqual(strArg, result);
         }
         [Test]
         public void TestTextWithDeciamlFormatSecondArg()
