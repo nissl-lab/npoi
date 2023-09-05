@@ -309,7 +309,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          * @return A string representation of the modified date.
          */
         public String GetModifiedPropertyString() {
-            if (modified.Value == null)
+            if (modified == null)
                 return GetDateValue(new Nullable<DateTime>(new DateTime()));
             else
                 return GetDateValue(modified);
@@ -570,10 +570,12 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 {
                     SimpleDateFormat df = new SimpleDateFormat(fStr);
                     df.TimeZone = TimeZoneInfo.Utc;
-                    DateTime d = df.Parse(dateTzStr);
-                    if (d != null)
+                    try
                     {
-                        return new DateTime?(d);
+                        return df.Parse(dateTzStr);
+                    }
+                    catch (FormatException)
+                    {
                     }
                 }
             }
@@ -582,10 +584,12 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             {
                 SimpleDateFormat df = new SimpleDateFormat(fStr);
                 df.TimeZone = TimeZoneInfo.Utc;
-                DateTime d = df.Parse(dateTzStr).ToUniversalTime();
-                if (d != null)
+                try
                 {
-                    return new DateTime?(d);
+                    return df.Parse(dateTzStr).ToUniversalTime();
+                }
+                catch (FormatException)
+                {
                 }
             }
             //if you're here, no pattern matched, throw exception
