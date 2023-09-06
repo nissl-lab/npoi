@@ -20,6 +20,7 @@ namespace NPOI.SS.Util
     using System;
 
     using NPOI.SS.UserModel;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using SixLabors.Fonts;
     using System.Linq;
@@ -434,7 +435,7 @@ namespace NPOI.SS.Util
         private static double GetContentHeight(string stringValue, Font windowsFont)
         {
             var measureResult = TextMeasurer.MeasureAdvance(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
-
+            
             return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);
         }
 
@@ -472,62 +473,63 @@ namespace NPOI.SS.Util
 
             ICellStyle style = cell.CellStyle;
             CellType cellType = cell.CellType;
-
+            IFont defaultFont = wb.GetFontAt((short)0);
+            Font windowsFont = IFont2Font(defaultFont);
             // for formula cells we compute the cell width for the cached formula result
-            if (cellType == CellType.Formula)
-                cellType = cell.CachedFormulaResultType;
+            if (cellType == CellType.Formula) cellType = cell.CachedFormulaResultType;
 
             IFont font = wb.GetFontAt(style.FontIndex);
-            Font windowsFont = IFont2Font(font);
 
             double width = -1;
-
-            if (cellType == CellType.String)
             {
-                IRichTextString rt = cell.RichStringCellValue;
-                String[] lines = rt.String.Split("\n".ToCharArray());
-                for (int i = 0; i < lines.Length; i++)
+                if (cellType == CellType.String)
                 {
-                    String txt = lines[i];
-
-                    //AttributedString str = new AttributedString(txt);
-                    //copyAttributes(font, str, 0, txt.length());
-                    if (rt.NumFormattingRuns > 0)
+                    IRichTextString rt = cell.RichStringCellValue;
+                    String[] lines = rt.String.Split("\n".ToCharArray());
+                    for (int i = 0; i < lines.Length; i++)
                     {
-                        // TODO: support rich text fragments
-                    }
+                        String txt = lines[i];
 
-                    width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
+                        //AttributedString str = new AttributedString(txt);
+                        //copyAttributes(font, str, 0, txt.length());
+                        windowsFont = IFont2Font(font);
+                        if (rt.NumFormattingRuns > 0)
+                        {
+                            // TODO: support rich text fragments
+                        }
+
+                        width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
+                    }
+                }
+                else
+                {
+                    String sval = null;
+                    if (cellType == CellType.Numeric)
+                    {
+                        // Try to get it formatted to look the same as excel
+                        try
+                        {
+                            sval = formatter.FormatCellValue(cell, dummyEvaluator);
+                        }
+                        catch
+                        {
+                            sval = cell.NumericCellValue.ToString();
+                        }
+                    }
+                    else if (cellType == CellType.Boolean)
+                    {
+                        sval = cell.BooleanCellValue.ToString().ToUpper();
+                    }
+                    if (sval != null)
+                    {
+                        String txt = sval;
+                        //str = new AttributedString(txt);
+                        //copyAttributes(font, str, 0, txt.length());
+                        windowsFont = IFont2Font(font);
+                        width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
+                    }
                 }
             }
-            else
-            {
-                String sval = null;
-                if (cellType == CellType.Numeric)
-                {
-                    // Try to get it formatted to look the same as excel
-                    try
-                    {
-                        sval = formatter.FormatCellValue(cell, dummyEvaluator);
-                    }
-                    catch
-                    {
-                        sval = cell.NumericCellValue.ToString();
-                    }
-                }
-                else if (cellType == CellType.Boolean)
-                {
-                    sval = cell.BooleanCellValue.ToString().ToUpper();
-                }
-                if (sval != null)
-                {
-                    String txt = sval;
-                    //str = new AttributedString(txt);
-                    //copyAttributes(font, str, 0, txt.length());
-                    width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
-                }
-            }
-
             return width;
         }
 
@@ -679,8 +681,46 @@ namespace NPOI.SS.Util
         //    str.AddAttribute(TextAttribute.SIZE, (float)font.FontHeightInPoints);
         //    if (font.Boldweight == (short)FontBoldWeight.BOLD) str.AddAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, startIdx, endIdx);
         //    if (font.IsItalic) str.AddAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, startIdx, endIdx);
-        //    TODO-Fonts: not supported: if (font.Underline == (byte)FontUnderlineType.SINGLE) str.AddAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);           
+        //    TODO-Fonts: not supported: if (font.Underline == (byte)FontUnderlineType.SINGLE) str.AddAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);
         //}
+
+        private readonly struct FontCacheKey : IEquatable<FontCacheKey>
+        {
+            public FontCacheKey(string fontName, float fontHeightInPoints, FontStyle style)
+            {
+                FontName = fontName;
+                FontHeightInPoints = fontHeightInPoints;
+                Style = style;
+            }
+
+            public readonly string FontName;
+            public readonly float FontHeightInPoints;
+            public readonly FontStyle Style;
+
+            public bool Equals(FontCacheKey other)
+            {
+                return FontName == other.FontName && FontHeightInPoints.Equals(other.FontHeightInPoints) && Style == other.Style;
+            }
+
+            public override bool Equals(object obj)
+            {
+                return obj is FontCacheKey other && Equals(other);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    var hashCode = FontName != null ? FontName.GetHashCode() : 0;
+                    hashCode = (hashCode * 397) ^ FontHeightInPoints.GetHashCode();
+                    hashCode = (hashCode * 397) ^ (int)Style;
+                    return hashCode;
+                }
+            }
+        }
+
+        private static readonly CultureInfo StartupCulture = CultureInfo.CurrentCulture;
+        private static readonly ConcurrentDictionary<FontCacheKey, Font> FontCache = new();
 
         /// <summary>
         /// Convert HSSFFont to Font.
@@ -691,11 +731,6 @@ namespace NPOI.SS.Util
         /// found by SixLabors in the current environment.</exception>
         internal static Font IFont2Font(IFont font1)
         {
-            if (SystemFonts.Families == null || SystemFonts.Families.Count() == 0)
-            {
-                throw new FontException("No fonts found installed on the machine.");
-            }
-
             FontStyle style = FontStyle.Regular;
             if (font1.IsBold)
             {
@@ -711,21 +746,39 @@ namespace NPOI.SS.Util
             }
             */
 
+            var key = new FontCacheKey(font1.FontName, (float)font1.FontHeightInPoints, style);
+
+            // only use cache if font size is an integer and culture is original to prevent cache size explosion
+            if (font1.FontHeightInPoints == (int) font1.FontHeightInPoints && CultureInfo.CurrentCulture.Equals(StartupCulture))
+            {
+                return FontCache.GetOrAdd(key, IFont2FontImpl);
+            }
+
+            // skip cache
+            return IFont2FontImpl(key);
+        }
+
+        private static Font IFont2FontImpl(FontCacheKey cacheKey)
+        {
             // Try to find font in system fonts. If we can not find out,
             // use "Arial". TODO-Fonts: More fallbacks.
-            SixLabors.Fonts.FontFamily fontFamily;
 
-            if (false == SystemFonts.TryGet(font1.FontName, CultureInfo.CurrentCulture, out fontFamily))
+            if (!SystemFonts.TryGet(cacheKey.FontName, CultureInfo.CurrentCulture, out var fontFamily))
             {
-                if (false == SystemFonts.TryGet("Arial", CultureInfo.CurrentCulture, out fontFamily))
+                if (!SystemFonts.TryGet("Arial", CultureInfo.CurrentCulture, out fontFamily))
                 {
+                    if (!SystemFonts.Families.Any())
+                    {
+                        throw new FontException("No fonts found installed on the machine.");
+                    }
+
                     fontFamily = SystemFonts.Families.First();
                 }
             }
 
-            Font font = new Font(fontFamily, (float)font1.FontHeightInPoints, style);
-            return font;
+            return new Font(fontFamily, cacheKey.FontHeightInPoints, cacheKey.Style);
         }
+
         /// <summary>
         /// Check if the cell is in the specified cell range
         /// </summary>
