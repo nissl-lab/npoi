@@ -31,6 +31,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using TestCases.HSSF;
@@ -2089,9 +2090,11 @@ namespace TestCases.XSSF.UserModel
             List<XSSFShape> shapes = drawing.GetShapes();
             XSSFClientAnchor anchor;
 
-            foreach(var shape in shapes) {
+            foreach (var shape in shapes)
+            {
                 XSSFClientAnchor sa = (XSSFClientAnchor)shape.anchor;
-                switch(shape.Name) {
+                switch (shape.Name)
+                {
                     case "cxn1":
                         anchor = sheet.CreateClientAnchor(Units.ToEMU(50), Units.ToEMU(75), Units.ToEMU(125), Units.ToEMU(150));
                         break;
@@ -2109,13 +2112,35 @@ namespace TestCases.XSSF.UserModel
                         return;
                 }
                 Assert.IsTrue(sa.From.col == anchor.From.col,       /**/"From.col   [{0}]({1}={2})", new object[] { shape.Name, sa.From.col, anchor.From.col });
-                Assert.IsTrue(sa.From.colOff== anchor.From.colOff,  /**/"From.colOff[{0}]({1}={2})", new object[] { shape.Name, sa.From.colOff, anchor.From.colOff });
+                Assert.IsTrue(sa.From.colOff == anchor.From.colOff,  /**/"From.colOff[{0}]({1}={2})", new object[] { shape.Name, sa.From.colOff, anchor.From.colOff });
                 Assert.IsTrue(sa.From.row == anchor.From.row,       /**/"From.row   [{0}]({1}={2})", new object[] { shape.Name, sa.From.row, anchor.From.row });
                 Assert.IsTrue(sa.From.rowOff == anchor.From.rowOff, /**/"From.rowOff[{0}]({1}={2})", new object[] { shape.Name, sa.From.rowOff, anchor.From.rowOff });
                 Assert.IsTrue(sa.To.col == anchor.To.col,           /**/"To.col     [{0}]({1}={2})", new object[] { shape.Name, sa.To.col, anchor.To.col });
                 Assert.IsTrue(sa.To.colOff == anchor.To.colOff,     /**/"To.colOff  [{0}]({1}={2})", new object[] { shape.Name, sa.To.colOff, anchor.To.colOff });
                 Assert.IsTrue(sa.To.row == anchor.To.row,           /**/"To.row     [{0}]({1}={2})", new object[] { shape.Name, sa.To.row, anchor.To.row });
-                Assert.IsTrue(sa.To.rowOff ==  anchor.To.rowOff,    /**/"To.rowOff  [{0}]({1}={2})", new object[] { shape.Name, sa.To.rowOff, anchor.To.rowOff });
+                Assert.IsTrue(sa.To.rowOff == anchor.To.rowOff,    /**/"To.rowOff  [{0}]({1}={2})", new object[] { shape.Name, sa.To.rowOff, anchor.To.rowOff });
+            }
+        }
+
+        [Test]
+        public void TestDefaultColumnWidth()
+        {
+            using (var book = new XSSFWorkbook())
+            {
+                var sheet = book.CreateSheet("Sheet1");
+                var row = sheet.CreateRow(1);
+
+                var cell = row.CreateCell(0);
+
+                Assert.AreEqual(sheet.GetColumnWidth(0) / 256, sheet.DefaultColumnWidth);
+                Assert.AreEqual(sheet.DefaultColumnWidth, 8);
+
+                sheet.DefaultColumnWidth = 50.1;
+                Assert.AreEqual(sheet.GetColumnWidth(0) / 256, sheet.DefaultColumnWidth);
+
+                sheet.SetColumnWidth(0, 100);
+                Assert.AreEqual(sheet.GetColumnWidth(0), 100);
+                Assert.AreNotEqual(sheet.GetColumnWidth(0) / 256, sheet.DefaultColumnWidth);
             }
         }
     }

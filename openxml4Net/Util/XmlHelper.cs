@@ -170,14 +170,14 @@ namespace NPOI.OpenXml4Net.Util
         {
             return ReadBool(attr, false);
         }
-        public static double ReadDouble(XmlAttribute attr)
+        public static double ReadDouble(XmlAttribute attr, uint defaultValue)
         {
             if (attr == null)
-                return 0.0;
+                return defaultValue;
             string s = attr.Value;
             if (s == "")
             {
-                return 0.0;
+                return defaultValue;
             }
             else
             {
@@ -188,10 +188,16 @@ namespace NPOI.OpenXml4Net.Util
                 }
                 else
                 {
-                    return 0.0;
+                    return defaultValue;
                 }
             }
         }
+
+        public static double ReadDouble(XmlAttribute attr)
+        {
+            return ReadDouble(attr, 0);
+        } 
+
         public static double? ReadDoubleNull(XmlAttribute attr)
         {
             if (attr == null)

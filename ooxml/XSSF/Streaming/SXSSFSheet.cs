@@ -84,7 +84,7 @@ namespace NPOI.XSSF.Streaming
             //set { _sh.ColumnBreaks = value; }
         }
 
-        public int DefaultColumnWidth
+        public double DefaultColumnWidth
         {
             get
             {
@@ -768,12 +768,12 @@ namespace NPOI.XSSF.Streaming
             return _sh.GetColumnStyle(column);
         }
 
-        public int GetColumnWidth(int columnIndex)
+        public double GetColumnWidth(int columnIndex)
         {
             return _sh.GetColumnWidth(columnIndex);
         }
 
-        public float GetColumnWidthInPixels(int columnIndex)
+        public double GetColumnWidthInPixels(int columnIndex)
         {
             return _sh.GetColumnWidthInPixels(columnIndex);
         }
@@ -1048,7 +1048,7 @@ namespace NPOI.XSSF.Streaming
             _sh.SetColumnHidden(columnIndex, hidden);
         }
 
-        public void SetColumnWidth(int columnIndex, int width)
+        public void SetColumnWidth(int columnIndex, double width)
         {
             _sh.SetColumnWidth(columnIndex, width);
         }

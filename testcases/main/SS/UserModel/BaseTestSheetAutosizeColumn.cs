@@ -249,8 +249,8 @@ namespace TestCases.SS.UserModel
 
             for (int i = 0; i < 2; i++) sheet.AutoSizeColumn(i);
 
-            int w0 = sheet.GetColumnWidth(0);
-            int w1 = sheet.GetColumnWidth(1);
+            double w0 = sheet.GetColumnWidth(0);
+            double w1 = sheet.GetColumnWidth(1);
 
             Assert.IsTrue(w0 * 5 < w1); // rotated text occupies at least five times less horizontal space than normal text
 
@@ -270,7 +270,7 @@ namespace TestCases.SS.UserModel
             ICell cell0 = row.CreateCell(0);
             cell0.SetCellValue("Apache Software Foundation");
 
-            int defaulWidth = sheet.GetColumnWidth(0);
+            double defaulWidth = sheet.GetColumnWidth(0);
             sheet.AutoSizeColumn(0);
             // column is unChanged if merged regions are ignored (Excel like behavior)
             Assert.AreEqual(defaulWidth, sheet.GetColumnWidth(0));

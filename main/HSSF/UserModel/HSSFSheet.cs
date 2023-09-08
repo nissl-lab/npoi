@@ -574,7 +574,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="column">the column to Set (0-based)</param>
         /// <param name="width">the width in Units of 1/256th of a Char width</param>
-        public void SetColumnWidth(int column, int width)
+        public void SetColumnWidth(int column, double width)
         {
             _sheet.SetColumnWidth(column, width);
         }
@@ -584,16 +584,16 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="column">the column to Set (0-based)</param>
         /// <returns>the width in Units of 1/256th of a Char width</returns>
-        public int GetColumnWidth(int column)
+        public double GetColumnWidth(int column)
         {
             return _sheet.GetColumnWidth(column);
         }
 
-        public float GetColumnWidthInPixels(int column)
+        public double GetColumnWidthInPixels(int column)
         {
-            int cw = GetColumnWidth(column);
-            int def = DefaultColumnWidth * 256;
-            float px = (cw == def ? PX_DEFAULT : PX_MODIFIED);
+            double cw = GetColumnWidth(column);
+            double def = DefaultColumnWidth * 256;
+            double px = (cw == def ? PX_DEFAULT : PX_MODIFIED);
 
             return cw / px;
         }
@@ -602,7 +602,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the default width of the column.
         /// </summary>
         /// <value>The default width of the column.</value>
-        public int DefaultColumnWidth
+        public double DefaultColumnWidth
         {
             get { return _sheet.DefaultColumnWidth; }
             set { _sheet.DefaultColumnWidth = value; }

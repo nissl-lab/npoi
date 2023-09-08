@@ -434,9 +434,9 @@ namespace TestCases.SS.UserModel
             sheet.AutoSizeColumn(1);
             sheet.AutoSizeColumn(2);
 
-            int noWhitespaceColWidth = sheet.GetColumnWidth(0);
-            int leadingWhitespaceColWidth = sheet.GetColumnWidth(1);
-            int trailingWhitespaceColWidth = sheet.GetColumnWidth(2);
+            double noWhitespaceColWidth = sheet.GetColumnWidth(0);
+            double leadingWhitespaceColWidth = sheet.GetColumnWidth(1);
+            double trailingWhitespaceColWidth = sheet.GetColumnWidth(2);
 
             // Based on the amount of text and whitespace used, and the default font
             // assume that the cell with whitespace should be at least 20% wider than

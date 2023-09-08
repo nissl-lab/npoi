@@ -218,12 +218,12 @@ namespace NPOI.SS.Converter
      * "http://apache-poi.1045710.n5.nabble.com/Excel-Column-Width-Unit-Converter-pixels-excel-column-width-units-td2301481.html"
      * >here</a> for Xio explanation and details
      */
-        public static int GetColumnWidthInPx(int widthUnits)
+        public static double GetColumnWidthInPx(double widthUnits)
         {
-            int pixels = (widthUnits / EXCEL_COLUMN_WIDTH_FACTOR)
+            double pixels = (widthUnits / EXCEL_COLUMN_WIDTH_FACTOR)
                     * UNIT_OFFSET_LENGTH;
 
-            int offsetWidthUnits = widthUnits % EXCEL_COLUMN_WIDTH_FACTOR;
+            double offsetWidthUnits = widthUnits % EXCEL_COLUMN_WIDTH_FACTOR;
             pixels += (int)Math.Round(offsetWidthUnits / ((float)EXCEL_COLUMN_WIDTH_FACTOR / UNIT_OFFSET_LENGTH));
 
             return pixels;
