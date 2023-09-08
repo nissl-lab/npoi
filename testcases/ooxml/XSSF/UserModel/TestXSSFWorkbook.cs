@@ -573,7 +573,7 @@ namespace TestCases.XSSF.UserModel
             workbook.GetSheetAt(1).SetColumnGroupCollapsed(4, false);
 
             Assert.AreEqual("hello world", workbook.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
-            Assert.AreEqual(2048, workbook.GetSheetAt(0).GetColumnWidth(0)); // <-works
+            Assert.AreEqual(2158.08, workbook.GetSheetAt(0).GetColumnWidth(0)); // <-works
         }
 
         [Test]

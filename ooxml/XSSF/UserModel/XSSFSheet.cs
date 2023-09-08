@@ -2032,7 +2032,7 @@ namespace NPOI.XSSF.UserModel
             double width = (col == null || !col.IsSetWidth())
                 ? DefaultColumnWidth
                 : col.width;
-            return width * 256;
+            return Math.Round(width * 256, 2);
         }
 
         /// <summary>
