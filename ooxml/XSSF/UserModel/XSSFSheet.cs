@@ -152,7 +152,7 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 CT_SheetFormatPr pr = worksheet.sheetFormatPr;
-                return pr == null ? 8 : pr.defaultColWidth;
+                return pr == null ? 8.43 : pr.defaultColWidth;
             }
             set
             {
@@ -5960,12 +5960,7 @@ namespace NPOI.XSSF.UserModel
             double fontwidth;
             double width_px;
 
-            var width = worksheet.sheetFormatPr.defaultColWidth;                        //string length with padding
-            if (width != 0.0)
-            {
-                width_px = width * MaximumDigitWidth;
-            }
-            else
+            if (worksheet.sheetFormatPr.baseColWidth != 0.0)
             {
                 double MDW = MaximumDigitWidth;
                 var length = worksheet.sheetFormatPr.baseColWidth;                      //string length with out padding
@@ -5973,6 +5968,12 @@ namespace NPOI.XSSF.UserModel
                 double tmp = 256 * fontwidth + Math.Truncate(128 / MDW);
                 width_px = Math.Truncate((tmp / 256) * MDW) + 3;                        // +3 ???
             }
+            else
+            {
+                var width = worksheet.sheetFormatPr.defaultColWidth;                        //string length with padding
+                width_px = width * MaximumDigitWidth;
+            }
+
             return width_px;
         }
 

@@ -170,7 +170,7 @@ namespace NPOI.OpenXml4Net.Util
         {
             return ReadBool(attr, false);
         }
-        public static double ReadDouble(XmlAttribute attr, uint defaultValue)
+        public static double ReadDouble(XmlAttribute attr, double defaultValue)
         {
             if (attr == null)
                 return defaultValue;

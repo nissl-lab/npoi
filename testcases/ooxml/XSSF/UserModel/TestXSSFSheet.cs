@@ -2133,7 +2133,7 @@ namespace TestCases.XSSF.UserModel
                 var cell = row.CreateCell(0);
 
                 Assert.AreEqual(sheet.GetColumnWidth(0) / 256, sheet.DefaultColumnWidth);
-                Assert.AreEqual(sheet.DefaultColumnWidth, 8);
+                Assert.AreEqual(sheet.DefaultColumnWidth, 8.43);
 
                 sheet.DefaultColumnWidth = 50.1;
                 Assert.AreEqual(sheet.GetColumnWidth(0) / 256, sheet.DefaultColumnWidth);
