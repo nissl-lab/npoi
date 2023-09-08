@@ -5971,7 +5971,8 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 var width = worksheet.sheetFormatPr.defaultColWidth;                        //string length with padding
-                width_px = width * MaximumDigitWidth;
+                double widthInPx = width * MaximumDigitWidth;
+                width_px = widthInPx + (8 - widthInPx % 8); // round up to the nearest multiple of 8 pixels
             }
 
             return width_px;
