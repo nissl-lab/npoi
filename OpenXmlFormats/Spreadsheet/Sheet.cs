@@ -2600,7 +2600,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 return null;
             CT_SheetFormatPr ctObj = new CT_SheetFormatPr();
             ctObj.baseColWidth = XmlHelper.ReadUInt(node.Attributes["baseColWidth"]);
-            ctObj.defaultColWidth = XmlHelper.ReadDouble(node.Attributes["defaultColWidth"], 8.43);
+            ctObj.defaultColWidth = XmlHelper.ReadDouble(node.Attributes["defaultColWidth"]);
             ctObj.defaultRowHeight = XmlHelper.ReadDouble(node.Attributes["defaultRowHeight"]);
             ctObj.customHeight = XmlHelper.ReadBool(node.Attributes["customHeight"]);
             ctObj.zeroHeight = XmlHelper.ReadBool(node.Attributes["zeroHeight"]);
