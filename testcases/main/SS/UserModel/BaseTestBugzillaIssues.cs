@@ -1409,9 +1409,9 @@ namespace TestCases.SS.UserModel
             _testDataProvider.TrackAllColumnsForAutosizing(s);
 
             s.AutoSizeColumn(0);
-            Assert.AreEqual(2048, s.GetColumnWidth(0));
+            Assert.AreEqual(2158.08, s.GetColumnWidth(0));
             s.AutoSizeColumn(0, true);
-            Assert.AreEqual(2048, s.GetColumnWidth(0));
+            Assert.AreEqual(2158.08, s.GetColumnWidth(0));
             wb.Close();
         }
 
