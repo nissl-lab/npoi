@@ -2043,7 +2043,7 @@ namespace NPOI.XSSF.UserModel
                     if (pr.defaultColWidth != 0.0)
                         width = pr.defaultColWidth;
                     else if (pr.baseColWidth != 0)
-                        width = pr.baseColWidth;
+                        width = pr.baseColWidth + 5; 
                 }
 
                 if (width == 0)
