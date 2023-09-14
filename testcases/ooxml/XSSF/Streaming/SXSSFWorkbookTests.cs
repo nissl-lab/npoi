@@ -86,6 +86,8 @@ namespace TestCases.XSSF.Streaming
 
             Assert.IsTrue(result is SheetDataWriter);
 
+            if (result != null)
+                result.Close();
         }
 
         [Test]
