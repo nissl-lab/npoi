@@ -31,6 +31,13 @@ namespace TestCases.XSSF.Streaming
     {
         private SXSSFWorkbook _objectToTest { get; set; }
 
+        [TearDown]
+        public void CleanUp()
+        {
+            if (_objectToTest != null)
+                _objectToTest.Dispose();
+        }
+
         [Test]
         public void
             CallingEmptyConstructorShouldInstanstiateNewXssfWorkbookDefaultRowAccessWindowSizeCompressTempFilesAsFalseAndUseSharedStringsTableFalse
@@ -76,6 +83,8 @@ namespace TestCases.XSSF.Streaming
 
             Assert.IsTrue(result is GZIPSheetDataWriter);
 
+            if (result != null)
+                result.Close();
         }
 
         [Test]
@@ -113,7 +122,6 @@ namespace TestCases.XSSF.Streaming
             _objectToTest.SetSelectedTab(0);
 
             Assert.IsTrue(_objectToTest.GetSheetAt(0).IsSelected);
-
         }
 
         [Test]
@@ -137,7 +145,6 @@ namespace TestCases.XSSF.Streaming
             _objectToTest.SetSheetName(0, "renamed");
 
             Assert.AreEqual("renamed", _objectToTest.GetSheetAt(0).SheetName);
-
         }
 
         [Test]
@@ -201,9 +208,7 @@ namespace TestCases.XSSF.Streaming
 
             Assert.AreEqual("1", sheet1.SheetName);
             Assert.AreEqual("2", sheet2.SheetName);
-
         }
-
 
         [Test]
         public void IfGivenTheIndexOfAnExistingSheetShouldReturnTheSheet()
@@ -217,7 +222,6 @@ namespace TestCases.XSSF.Streaming
 
             Assert.AreEqual("1", sheet1.SheetName);
             Assert.AreEqual("2", sheet2.SheetName);
-
         }
 
         [Test]
