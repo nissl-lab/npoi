@@ -544,6 +544,7 @@ namespace NPOI.XSSF.Streaming
             bool ret;
             try
             {
+                _outputWriter.Close();
                 OutputStream.Close();
             }
             finally

@@ -23,7 +23,7 @@ using System.IO;
 
 namespace TestCases.XSSF.Streaming
 {
-    /*[TestFixture]
+    [TestFixture]
     class SXSSFWorkbookTests
     {
         private SXSSFWorkbook _objectToTest { get; set; }
@@ -534,5 +534,5 @@ namespace TestCases.XSSF.Streaming
                 }
             }
         }
-    }*/
+    }
 }
