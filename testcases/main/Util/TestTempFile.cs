@@ -8,7 +8,6 @@ namespace TestCases.Util
     /// Tests of creating temp files
     /// </summary>
     [TestFixture]
-    [NonParallelizable]
     internal class TestTempFile
     {
         [Test]

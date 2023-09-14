@@ -22,7 +22,6 @@ using System.IO;
 namespace TestCases.XSSF.Streaming
 {
     [TestFixture]
-    [NonParallelizable]
     public class GZIPSheetDataWriterTests
     {
         private GZIPSheetDataWriter _objectToTest;

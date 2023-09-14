@@ -24,7 +24,6 @@ using System.IO;
 namespace TestCases.XSSF.Streaming
 {
     [TestFixture]
-    [NonParallelizable]
     public class SheetDataWriterTests
     {
         private SheetDataWriter _objectToTest;

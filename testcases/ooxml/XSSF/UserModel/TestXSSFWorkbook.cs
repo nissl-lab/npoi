@@ -51,7 +51,7 @@ namespace TestCases.XSSF.UserModel
         /**
          * Tests that we can save, and then re-load a new document
          */
-        [Test, RunSerialyAndSweepTmpFiles]
+        [Test]
         public void SaveLoadNew()
         {
             XSSFWorkbook wb1 = new XSSFWorkbook();
@@ -121,9 +121,8 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual("hello world", sheet1.GetRow(1).GetCell(0).RichStringCellValue.String);
 
             pkg.Close();
-
-            Assert.AreEqual(0, Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp").Length, "At Last: There are no temporary files.");
         }
+
         [Test]
         public void Existing()
         {

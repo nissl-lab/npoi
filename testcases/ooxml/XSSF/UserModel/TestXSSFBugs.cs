@@ -2707,7 +2707,7 @@ namespace TestCases.XSSF.UserModel
          *  32,767 must not be -32,768, then -32,767, -32,766
          *  long time test, run over 1 minute.
          */
-        [Test, RunSerialyAndSweepTmpFiles]
+        [Test]
         [Ignore("this test doesn't make sense")]
         public void Bug57880()
         {
