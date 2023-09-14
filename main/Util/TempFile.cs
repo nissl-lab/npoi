@@ -32,7 +32,6 @@ namespace NPOI.Util
             while (File.Exists(file))
             {
                 file = Path.Combine(dir, prefix + Guid.NewGuid().ToString() + suffix);
-                Thread.Sleep(1);
             }
 
             using (FileStream newFile = new FileStream(file, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.ReadWrite)) { };
