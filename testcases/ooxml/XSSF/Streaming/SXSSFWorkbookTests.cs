@@ -14,15 +14,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Streaming;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
+using System;
+using System.IO;
 
 namespace TestCases.XSSF.Streaming
 {
@@ -134,7 +131,6 @@ namespace TestCases.XSSF.Streaming
             _objectToTest.SetSelectedTab(0);
 
             Assert.IsTrue(_objectToTest.GetSheetAt(0).IsSelected);
-
         }
 
         [Test]
@@ -457,7 +453,6 @@ namespace TestCases.XSSF.Streaming
             File.Delete(savePath);
         }
 
-
         private void AddCells(IWorkbook wb, int sheets, int rows, int columns, CellType type)
         {
             for (int j = 0; j < sheets; j++)
@@ -473,7 +468,6 @@ namespace TestCases.XSSF.Streaming
                 }
             }
         }
-
 
         private void WriteFile(string saveAsPath, SXSSFWorkbook wb)
         {
