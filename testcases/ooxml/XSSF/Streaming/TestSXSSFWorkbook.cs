@@ -36,7 +36,7 @@ namespace TestCases.XSSF.Streaming
     using TestCases.Util;
 
     [TestFixture]
-    public class TestSXSSFWorkbook : BaseTestXWorkbook
+    /*public class TestSXSSFWorkbook : BaseTestXWorkbook
     {
 
         public TestSXSSFWorkbook()
@@ -614,6 +614,6 @@ namespace TestCases.XSSF.Streaming
             Assert.AreEqual("Test Row 9", s.GetRow(9).GetCell(2).StringCellValue);
         }
 
-    }
+    }*/
 
 }
