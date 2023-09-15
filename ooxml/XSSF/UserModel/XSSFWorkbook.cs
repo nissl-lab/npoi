@@ -661,6 +661,12 @@ namespace NPOI.XSSF.UserModel
                 ct.UnsetPageSetup();
             }
 
+            if (srcSheet.RepeatingRows != null)
+                clonedSheet.RepeatingRows = srcSheet.RepeatingRows;
+
+            if (srcSheet.RepeatingColumns != null)
+                clonedSheet.RepeatingColumns = srcSheet.RepeatingColumns;
+
             clonedSheet.IsSelected = (false);
 
             // clone the sheet drawing alongs with its relationships

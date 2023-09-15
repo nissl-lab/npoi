@@ -2078,6 +2078,7 @@ namespace TestCases.XSSF.UserModel
                 cell.CellComment = comment;
             }
         }
+
         [Test]
         public void TestCoordinate()
         {
@@ -2116,6 +2117,36 @@ namespace TestCases.XSSF.UserModel
                 Assert.IsTrue(sa.To.colOff == anchor.To.colOff,     /**/"To.colOff  [{0}]({1}={2})", new object[] { shape.Name, sa.To.colOff, anchor.To.colOff });
                 Assert.IsTrue(sa.To.row == anchor.To.row,           /**/"To.row     [{0}]({1}={2})", new object[] { shape.Name, sa.To.row, anchor.To.row });
                 Assert.IsTrue(sa.To.rowOff ==  anchor.To.rowOff,    /**/"To.rowOff  [{0}]({1}={2})", new object[] { shape.Name, sa.To.rowOff, anchor.To.rowOff });
+            }
+        }
+
+
+        [Test]
+        public void TestCopyRepeatingRowsAndColumns()
+        {
+            using (var book = new XSSFWorkbook())
+            {
+                var sheet = book.CreateSheet("Sheet1");
+                
+                var row1 = sheet.CreateRow(0);
+                row1.CreateCell(0);
+
+                var row2 = sheet.CreateRow(1);
+                row2.CreateCell(0);
+
+                sheet.RepeatingRows = CellRangeAddress.ValueOf("1:1");
+                sheet.RepeatingColumns = CellRangeAddress.ValueOf("A1:B1");
+
+                var clonedSheet = book.CloneSheet(0);
+
+                Assert.IsNotNull(clonedSheet.RepeatingRows, "RepeatingRows is null");
+                Assert.AreEqual(clonedSheet.RepeatingRows.FirstRow, sheet.RepeatingRows.FirstRow, "RepeatingRows.FirstRow are not equal");
+                Assert.AreEqual(clonedSheet.RepeatingRows.LastRow, sheet.RepeatingRows.LastRow, "RepeatingRows.LastRow are not equal");
+
+                Assert.IsNotNull(clonedSheet.RepeatingColumns, "RepeatingColumns is null");
+                Assert.AreEqual(clonedSheet.RepeatingColumns.FirstColumn, sheet.RepeatingColumns.FirstColumn, "RepeatingColumns.FirstColumn are not equal");
+                Assert.AreEqual(clonedSheet.RepeatingColumns.LastColumn, sheet.RepeatingColumns.LastColumn, "RepeatingColumns.LastColumn are not equal");
+
             }
         }
     }
