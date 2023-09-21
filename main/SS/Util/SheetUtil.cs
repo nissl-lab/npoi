@@ -20,6 +20,7 @@ namespace NPOI.SS.Util
     using System;
 
     using NPOI.SS.UserModel;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using SixLabors.Fonts;
     using System.Linq;
@@ -191,82 +192,87 @@ namespace NPOI.SS.Util
             {
                 sheet.ShiftRows(targetRowIndex, sheet.LastRowNum, 1);
             }
-            newRow = sheet.CreateRow(targetRowIndex);
-            newRow.Height = sourceRow.Height;   //copy row height
 
-            // Loop through source columns to add to new row
-            for (int i = sourceRow.FirstCellNum; i < sourceRow.LastCellNum; i++)
+            if (sourceRow != null)
             {
-                // Grab a copy of the old/new cell
-                ICell oldCell = sourceRow.GetCell(i);
+                newRow = sheet.CreateRow(targetRowIndex);
+                newRow.Height = sourceRow.Height;   //copy row height
 
-                // If the old cell is null jump to next cell
-                if (oldCell == null)
+                // Loop through source columns to add to new row
+                for (int i = sourceRow.FirstCellNum; i < sourceRow.LastCellNum; i++)
                 {
-                    continue;
+                    // Grab a copy of the old/new cell
+                    ICell oldCell = sourceRow.GetCell(i);
+
+                    // If the old cell is null jump to next cell
+                    if (oldCell == null)
+                    {
+                        continue;
+                    }
+                    ICell newCell = newRow.CreateCell(i);
+
+                    if (oldCell.CellStyle != null)
+                    {
+                        // apply style from old cell to new cell 
+                        newCell.CellStyle = oldCell.CellStyle;
+                    }
+
+                    // If there is a cell comment, copy
+                    if (oldCell.CellComment != null)
+                    {
+                        sheet.CopyComment(oldCell, newCell);
+                    }
+
+                    // If there is a cell hyperlink, copy
+                    if (oldCell.Hyperlink != null)
+                    {
+                        newCell.Hyperlink = oldCell.Hyperlink;
+                    }
+
+                    // Set the cell data type
+                    newCell.SetCellType(oldCell.CellType);
+
+                    // Set the cell data value
+                    switch (oldCell.CellType)
+                    {
+                        case CellType.Blank:
+                            newCell.SetCellValue(oldCell.StringCellValue);
+                            break;
+                        case CellType.Boolean:
+                            newCell.SetCellValue(oldCell.BooleanCellValue);
+                            break;
+                        case CellType.Error:
+                            newCell.SetCellErrorValue(oldCell.ErrorCellValue);
+                            break;
+                        case CellType.Formula:
+                            newCell.SetCellFormula(oldCell.CellFormula);
+                            break;
+                        case CellType.Numeric:
+                            newCell.SetCellValue(oldCell.NumericCellValue);
+                            break;
+                        case CellType.String:
+                            newCell.SetCellValue(oldCell.RichStringCellValue);
+                            break;
+                    }
                 }
-                ICell newCell = newRow.CreateCell(i);
 
-                if (oldCell.CellStyle != null)
+                // If there are are any merged regions in the source row, copy to new row
+                for (int i = 0; i < sheet.NumMergedRegions; i++)
                 {
-                    // apply style from old cell to new cell 
-                    newCell.CellStyle = oldCell.CellStyle;
-                }
-
-                // If there is a cell comment, copy
-                if (oldCell.CellComment != null)
-                {
-                    sheet.CopyComment(oldCell, newCell);
-                }
-
-                // If there is a cell hyperlink, copy
-                if (oldCell.Hyperlink != null)
-                {
-                    newCell.Hyperlink = oldCell.Hyperlink;
-                }
-
-                // Set the cell data type
-                newCell.SetCellType(oldCell.CellType);
-
-                // Set the cell data value
-                switch (oldCell.CellType)
-                {
-                    case CellType.Blank:
-                        newCell.SetCellValue(oldCell.StringCellValue);
-                        break;
-                    case CellType.Boolean:
-                        newCell.SetCellValue(oldCell.BooleanCellValue);
-                        break;
-                    case CellType.Error:
-                        newCell.SetCellErrorValue(oldCell.ErrorCellValue);
-                        break;
-                    case CellType.Formula:
-                        newCell.SetCellFormula(oldCell.CellFormula);
-                        break;
-                    case CellType.Numeric:
-                        newCell.SetCellValue(oldCell.NumericCellValue);
-                        break;
-                    case CellType.String:
-                        newCell.SetCellValue(oldCell.RichStringCellValue);
-                        break;
+                    CellRangeAddress cellRangeAddress = sheet.GetMergedRegion(i);
+                    if (cellRangeAddress != null && cellRangeAddress.FirstRow == sourceRow.RowNum)
+                    {
+                        CellRangeAddress newCellRangeAddress = new CellRangeAddress(newRow.RowNum,
+                                (newRow.RowNum +
+                                        (cellRangeAddress.LastRow - cellRangeAddress.FirstRow
+                                                )),
+                                cellRangeAddress.FirstColumn,
+                                cellRangeAddress.LastColumn);
+                        sheet.AddMergedRegion(newCellRangeAddress);
+                    }
                 }
             }
 
-            // If there are are any merged regions in the source row, copy to new row
-            for (int i = 0; i < sheet.NumMergedRegions; i++)
-            {
-                CellRangeAddress cellRangeAddress = sheet.GetMergedRegion(i);
-                if (cellRangeAddress != null && cellRangeAddress.FirstRow == sourceRow.RowNum)
-                {
-                    CellRangeAddress newCellRangeAddress = new CellRangeAddress(newRow.RowNum,
-                            (newRow.RowNum +
-                                    (cellRangeAddress.LastRow - cellRangeAddress.FirstRow
-                                            )),
-                            cellRangeAddress.FirstColumn,
-                            cellRangeAddress.LastColumn);
-                    sheet.AddMergedRegion(newCellRangeAddress);
-                }
-            }
             return newRow;
         }
 
@@ -675,9 +681,47 @@ namespace NPOI.SS.Util
         //    str.AddAttribute(TextAttribute.SIZE, (float)font.FontHeightInPoints);
         //    if (font.Boldweight == (short)FontBoldWeight.BOLD) str.AddAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, startIdx, endIdx);
         //    if (font.IsItalic) str.AddAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, startIdx, endIdx);
-        //    TODO-Fonts: not supported: if (font.Underline == (byte)FontUnderlineType.SINGLE) str.AddAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);           
+        //    TODO-Fonts: not supported: if (font.Underline == (byte)FontUnderlineType.SINGLE) str.AddAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);
         //}
-        
+
+        private readonly struct FontCacheKey : IEquatable<FontCacheKey>
+        {
+            public FontCacheKey(string fontName, float fontHeightInPoints, FontStyle style)
+            {
+                FontName = fontName;
+                FontHeightInPoints = fontHeightInPoints;
+                Style = style;
+            }
+
+            public readonly string FontName;
+            public readonly float FontHeightInPoints;
+            public readonly FontStyle Style;
+
+            public bool Equals(FontCacheKey other)
+            {
+                return FontName == other.FontName && FontHeightInPoints.Equals(other.FontHeightInPoints) && Style == other.Style;
+            }
+
+            public override bool Equals(object obj)
+            {
+                return obj is FontCacheKey other && Equals(other);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    var hashCode = FontName != null ? FontName.GetHashCode() : 0;
+                    hashCode = (hashCode * 397) ^ FontHeightInPoints.GetHashCode();
+                    hashCode = (hashCode * 397) ^ (int)Style;
+                    return hashCode;
+                }
+            }
+        }
+
+        private static readonly CultureInfo StartupCulture = CultureInfo.CurrentCulture;
+        private static readonly ConcurrentDictionary<FontCacheKey, Font> FontCache = new();
+
         /// <summary>
         /// Convert HSSFFont to Font.
         /// </summary>
@@ -687,11 +731,6 @@ namespace NPOI.SS.Util
         /// found by SixLabors in the current environment.</exception>
         internal static Font IFont2Font(IFont font1)
         {
-            if (SystemFonts.Families == null || SystemFonts.Families.Count() == 0)
-            {
-                throw new FontException("No fonts found installed on the machine.");
-            }
-
             FontStyle style = FontStyle.Regular;
             if (font1.IsBold)
             {
@@ -707,21 +746,39 @@ namespace NPOI.SS.Util
             }
             */
 
+            var key = new FontCacheKey(font1.FontName, (float)font1.FontHeightInPoints, style);
+
+            // only use cache if font size is an integer and culture is original to prevent cache size explosion
+            if (font1.FontHeightInPoints == (int) font1.FontHeightInPoints && CultureInfo.CurrentCulture.Equals(StartupCulture))
+            {
+                return FontCache.GetOrAdd(key, IFont2FontImpl);
+            }
+
+            // skip cache
+            return IFont2FontImpl(key);
+        }
+
+        private static Font IFont2FontImpl(FontCacheKey cacheKey)
+        {
             // Try to find font in system fonts. If we can not find out,
             // use "Arial". TODO-Fonts: More fallbacks.
-            SixLabors.Fonts.FontFamily fontFamily;
 
-            if (false == SystemFonts.TryGet(font1.FontName, CultureInfo.CurrentCulture, out fontFamily))
+            if (!SystemFonts.TryGet(cacheKey.FontName, CultureInfo.CurrentCulture, out var fontFamily))
             {
-                if (false == SystemFonts.TryGet("Arial", CultureInfo.CurrentCulture, out fontFamily))
+                if (!SystemFonts.TryGet("Arial", CultureInfo.CurrentCulture, out fontFamily))
                 {
+                    if (!SystemFonts.Families.Any())
+                    {
+                        throw new FontException("No fonts found installed on the machine.");
+                    }
+
                     fontFamily = SystemFonts.Families.First();
                 }
             }
-            
-            Font font = new Font(fontFamily, (float)font1.FontHeightInPoints, style);
-            return font;
+
+            return new Font(fontFamily, cacheKey.FontHeightInPoints, cacheKey.Style);
         }
+
         /// <summary>
         /// Check if the cell is in the specified cell range
         /// </summary>
