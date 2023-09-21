@@ -17,13 +17,14 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="IronSoftware.System.Drawing" Version="2023.9.2" />
+		<PackageReference Include="IronSoftware.System.Drawing" Version="2023.10.1" />
 		<PackageReference Include="Enums.NET" Version="4.0.1" />
+		<PackageReference Include="ExtendedNumerics.BigDecimal" Version="2023.1000.0.230" />
 		<PackageReference Include="MathNet.Numerics.Signed" Version="5.0.0" />
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.2" />
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 		<PackageReference Include="SharpZipLib" Version="1.4.2" />
-		<PackageReference Include="SixLabors.Fonts" Version="1.0.0" />
+		<PackageReference Include="SixLabors.Fonts" Version="[1.0.1]" />
 	</ItemGroup>
 	
 	<ItemGroup>

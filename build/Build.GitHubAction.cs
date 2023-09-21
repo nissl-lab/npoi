@@ -1,10 +1,9 @@
-using System;
 using Nuke.Common.CI.GitHubActions;
 
 [GitHubActions("CI",
     GitHubActionsImage.WindowsLatest,
     GitHubActionsImage.UbuntuLatest,
-    OnPushBranches = new[] { "main", "master" },
+    OnPushBranches = new[] { "main", "master", "release*" },
     InvokedTargets = new[] { nameof(Clean), nameof(Test), nameof(Pack) },
     TimeoutMinutes = 20,
     CacheKeyFiles = new string[0]
