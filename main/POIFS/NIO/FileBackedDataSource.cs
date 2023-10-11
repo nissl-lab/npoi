@@ -20,7 +20,6 @@ using System;
 using NPOI.Util;
 using System.Collections.Generic;
 using System.Security;
-using System.Reflection;
 //using System.IO.MemoryMappedFiles;
 namespace NPOI.POIFS.NIO
 {
@@ -209,38 +208,7 @@ namespace NPOI.POIFS.NIO
         // but we at least have unit-tests which will indicate this when run on Windows
         private static void unmap(ByteBuffer bb)
         {
-            //TODO: try add clean method for ByteBuffer class.
-            //Type fcClass = bb.GetType();
-            //try
-            //{
-            //    // invoke bb.cleaner().clean(), but do not depend on sun.nio
-            //    // interfaces
-            //    MethodInfo cleanerMethod = fcClass.GetMethod("cleaner");
-            //    //cleanerMethod.setAccessible(true);
-            //    Object cleaner = cleanerMethod.Invoke(bb, null);
-            //    MethodInfo cleanMethod = cleaner.GetType().GetMethod("clean");
-            //    cleanMethod.Invoke(cleaner, null);
-            //}
-            //catch (NotSupportedException e)
-            //{
-            //    // e.printStackTrace();
-            //}
-            //catch (SecurityException e)
-            //{
-            //    // e.printStackTrace();
-            //}
-            //catch (MethodAccessException e)
-            //{
-            //    // e.printStackTrace();
-            //}
-            //catch (ArgumentException e)
-            //{
-            //    // e.printStackTrace();
-            //}
-            //catch (TargetException e)
-            //{
-            //    // e.printStackTrace();
-            //}
+            // REMOVE-REFLECTION: This method is Java-specific.
         }
     }
 

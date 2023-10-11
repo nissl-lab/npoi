@@ -21,9 +21,10 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula.Eval;
 
     using System.Collections;
-    using System.Reflection;
     using NPOI.SS.Formula.PTG;
 
+
+    // REMOVE-REFLECTION: This class won't work as intended, and not used elsewhere in NPOI. Obsolete and remove.
 
     /**
      * This class Creates <c>OperationEval</c> instances to help evaluate <c>OperationPtg</c>
@@ -85,44 +86,39 @@ namespace NPOI.HSSF.UserModel
                 throw new Exception("Eval class must not be abstract");
             }
 
-            ConstructorInfo constructor;
+            /*ConstructorInfo constructor;
             constructor = evalClass.GetConstructor(OPERATION_CONSTRUCTOR_CLASS_ARRAY);
             if (!constructor.IsPublic)
             {
                 throw new Exception("Eval constructor must be public");
             }
-            m[ptgClass] = constructor;
+            m[ptgClass] = constructor;*/
         }
 
         /**
          * returns the OperationEval concrete impl instance corresponding
          * to the supplied operationPtg
          */
+        [Obsolete]
         public static OperationEval Create(OperationPtg ptg)
         {
+            throw new NotSupportedException();
+
             if (ptg == null)
             {
                 throw new ArgumentException("ptg must not be null");
             }
 
-            Type ptgClass = ptg.GetType();
+            // (original comment)
+            // ExpPtg Is used for array formulas and shared formulas.
+            // it Is currently Unsupported, and may not even Get implemented here
 
-            ConstructorInfo constructor = (ConstructorInfo)_constructorsByPtgClass[ptgClass];
-            if (constructor == null)
-            {
-                if (ptgClass == typeof(ExpPtg))
-                {
-                    // ExpPtg Is used for array formulas and shared formulas.
-                    // it Is currently Unsupported, and may not even Get implemented here
-                    throw new Exception("ExpPtg currently not supported");
-                }
-                throw new Exception("Unexpected operation ptg class (" + ptgClass.Name + ")");
-            }
+            /*Type ptgClass = ptg.GetType();
 
             Object result;
             Object[] initargs = { ptg };
             result = constructor.Invoke(initargs);
-            return (OperationEval)result;
+            return (OperationEval)result;*/
         }
     }
 }
