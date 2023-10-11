@@ -168,7 +168,7 @@ namespace NPOI.Util
                     }
                 }
             }
-            byte[] polished = (byte[]) bytes.ToArray(typeof(byte) );
+            byte[] polished = bytes.ToArray<byte>();
             //byte[] rval = new byte[polished.Length];
             //for ( int j = 0; j < polished.Length; j++ )
             //{

@@ -1805,7 +1805,7 @@ namespace NPOI.SS.Formula
                     throw expected("',' or ')'");
                 }
             }
-            ParseNode[] result = (ParseNode[])temp.ToArray(typeof(ParseNode));
+            ParseNode[] result = temp.ToArray<ParseNode>();
             return result;
         }
 

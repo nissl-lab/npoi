@@ -1,5 +1,4 @@
-﻿using EnumsNET;
-using NPOI.SS.Formula.Eval;
+﻿using NPOI.SS.Formula.Eval;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;

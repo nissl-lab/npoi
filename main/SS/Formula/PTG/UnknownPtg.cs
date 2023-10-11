@@ -64,9 +64,9 @@ namespace NPOI.SS.Formula.PTG
             get { return Ptg.CLASS_VALUE; }
         }
 
-        public override Object Clone()
+        /*public override Object Clone()
         {
             return new UnknownPtg();
-        }
+        }*/
     }
 }

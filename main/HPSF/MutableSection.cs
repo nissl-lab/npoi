@@ -557,7 +557,7 @@ namespace NPOI.HPSF
         /// </summary>
         public void EnsureProperties()
         {
-            properties = (Property[])preprops.ToArray(typeof(Property));
+            properties = preprops.ToArray<Property>();
         }
 
 

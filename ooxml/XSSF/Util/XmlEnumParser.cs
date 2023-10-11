@@ -1,24 +1,31 @@
 ﻿using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.Util;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Xml.Serialization;
 
+// REMOVE-REFLECTION: Reflection used is unremovable but the class is obsolete and not used elsewhere.
+// AOT should automatically trim this class if the end user is not using it.
+
 namespace NPOI.XSSF.Util
 {
     [Obsolete]
-    public class XmlEnumParser<TReturn>
+    public class XmlEnumParser<
+#if NET6_0_OR_GREATER
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields)]
+#endif
+        TReturn> where TReturn : struct, Enum
     {
         private static Dictionary<string, TReturn> values;
         static XmlEnumParser()
         {
             Type type = typeof(TReturn);
-            MemberInfo[] members = type.GetMembers(BindingFlags.Public | BindingFlags.Static);
-            string[] names = Enum.GetNames(type);
+            MemberInfo[] members = type.GetFields(BindingFlags.Public | BindingFlags.Static);
             values = new Dictionary<string, TReturn>();
-            Array array = type.GetEnumValues();
             foreach (var member in members)
             {
                 object[] cas = member.GetCustomAttributes(typeof(XmlEnumAttribute), false);

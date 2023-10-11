@@ -31,6 +31,7 @@ using System.Globalization;
 using NPOI.SS;
 using System.Linq;
 using NPOI.OOXML.XSSF.UserModel;
+using NPOI.OOXML.Util;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -174,10 +175,8 @@ namespace NPOI.XSSF.UserModel
                                 if (!commonTokens.GetValue(i).Equals(tokens[i]))
                                 {
                                     ArrayList subCommonTokens = Arrays.AsList(commonTokens).GetRange(0, i);
-                                    commonTokens = subCommonTokens.ToArray(typeof(string));
+                                    commonTokens = subCommonTokens.ToArray<string>();
                                     break;
-
-
                                 }
                             }
                         }

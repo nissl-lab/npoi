@@ -21,6 +21,7 @@ namespace NPOI.SS.Util
     using System;
     using System.Text;
     using System.Collections;
+    using NPOI.Util;
 
     public class AreaReference
     {
@@ -315,7 +316,7 @@ namespace NPOI.SS.Util
                         new AreaReference(t)
                 );
             }
-            return (AreaReference[])refs.ToArray(typeof(AreaReference));
+            return refs.ToArray<AreaReference>();
         }
 
         /**
@@ -373,7 +374,7 @@ namespace NPOI.SS.Util
                     refs.Add(ref1);
                 }
             }
-            return (CellReference[])refs.ToArray(typeof(CellReference));
+            return refs.ToArray<CellReference>();
         }
 
         /**

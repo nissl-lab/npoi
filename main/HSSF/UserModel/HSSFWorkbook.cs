@@ -23,7 +23,6 @@ namespace NPOI.HSSF.UserModel
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
-    using System.Reflection;
     using System.Security.Cryptography;
     using System.Text;
     using NPOI.DDF;

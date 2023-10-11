@@ -146,7 +146,7 @@ namespace NPOI.SS.Util
             get
             {
                 CellRangeAddress[] result =
-                    (CellRangeAddress[])_list.ToArray(typeof(CellRangeAddress));
+                    _list.ToArray<CellRangeAddress>();
                 return result;
             }
         }
