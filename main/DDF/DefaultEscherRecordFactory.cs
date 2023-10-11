@@ -19,7 +19,6 @@
 namespace NPOI.DDF
 {
     using System;
-    using System.Reflection;
     using NPOI.Util;
     using System.Collections.Generic;
 
@@ -30,16 +29,6 @@ namespace NPOI.DDF
     /// </summary>
     public class DefaultEscherRecordFactory : IEscherRecordFactory
     {
-        private static Type[] escherRecordClasses = {
-            
-            typeof(EscherBSERecord), typeof(EscherOptRecord), typeof(EscherTertiaryOptRecord),
-            typeof(EscherClientAnchorRecord), 
-            typeof(EscherDgRecord), typeof(EscherSpgrRecord), typeof(EscherSpRecord), 
-            typeof(EscherClientDataRecord), typeof(EscherDggRecord),
-            typeof(EscherSplitMenuColorsRecord), typeof(EscherChildAnchorRecord), typeof(EscherTextboxRecord)
-        };
-        private static Dictionary<short,ConstructorInfo> recordsMap = RecordsToMap(escherRecordClasses);
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultEscherRecordFactory"/> class.
         /// </summary>
@@ -96,26 +85,10 @@ namespace NPOI.DDF
                 return r;
             }
 
-            //ConstructorInfo recordConstructor = (ConstructorInfo) recordsMap[header.RecordId];
-            ConstructorInfo recordConstructor = null;
-            if (recordsMap.ContainsKey(recordId))
-                recordConstructor = recordsMap[recordId];
-
-            EscherRecord escherRecord = null;
-            if (recordConstructor == null)
-            {
+            var escherRecord = CreateRecordById(recordId);
+            if (escherRecord is null)
                 return new UnknownEscherRecord();
-            }
 
-            try
-            {
-                escherRecord = (EscherRecord)recordConstructor.Invoke(new object[] { });
-                //escherRecord = (EscherRecord)Activator.CreateInstance(recordConstructor);
-            }
-            catch
-            {
-                return new UnknownEscherRecord();
-            }
             escherRecord.RecordId = recordId;
             escherRecord.Options = options;
             return escherRecord;
@@ -123,45 +96,27 @@ namespace NPOI.DDF
         }
 
         /// <summary>
-        /// Converts from a list of classes into a map that Contains the record id as the key and
-        /// the Constructor in the value part of the map.  It does this by using reflection to look up
-        /// the RECORD_ID field then using reflection again to find a reference to the constructor.
+        /// REMOVE-REFLECTION: Change reflection-based to a lookup.
         /// </summary>
-        /// <param name="records">The records to convert</param>
-        /// <returns>The map containing the id/constructor pairs.</returns>
-        private static Dictionary<short, ConstructorInfo> RecordsToMap(Type[] records)
-        {
-            Dictionary<short, ConstructorInfo> result = new Dictionary<short, ConstructorInfo>();
-            //ConstructorInfo constructor;
-            Type[] EMPTY_CLASS_ARRAY = new Type[0];
-            for (int i = 0; i < records.Length; i++)
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private static EscherRecord CreateRecordById(short id)
+            => id switch
             {
-                Type recordType = records[i];
-                short sid = 0;
-
-                try
-                {
-                    sid = (short)recordType.GetField("RECORD_ID").GetValue(null);
-                }
-                catch
-                {
-                    throw new RecordFormatException(
-                            "Unable to determine record types");
-                }
-                ConstructorInfo ci;
-                try
-                {
-                    ci = recordType.GetConstructor(EMPTY_CLASS_ARRAY);
-                }
-                catch(Exception e)
-                {
-                    throw new RuntimeException(e);
-                }
-                //result[sid] = recordType;        //constructor;
-                result.Add(sid, ci);
-            }
-            return result;
-        }
+                EscherBSERecord.RECORD_ID => new EscherBSERecord(),
+                EscherOptRecord.RECORD_ID => new EscherOptRecord(),
+                EscherTertiaryOptRecord.RECORD_ID => new EscherTertiaryOptRecord(),
+                EscherClientAnchorRecord.RECORD_ID => new EscherClientAnchorRecord(),
+                EscherDgRecord.RECORD_ID => new EscherDgRecord(),
+                EscherSpgrRecord.RECORD_ID => new EscherSpgrRecord(),
+                EscherSpRecord.RECORD_ID => new EscherSpRecord(),
+                EscherClientDataRecord.RECORD_ID => new EscherClientDataRecord(),
+                EscherDggRecord.RECORD_ID => new EscherDggRecord(),
+                EscherSplitMenuColorsRecord.RECORD_ID => new EscherSplitMenuColorsRecord(),
+                EscherChildAnchorRecord.RECORD_ID => new EscherChildAnchorRecord(),
+                EscherTextboxRecord.RECORD_ID => new EscherTextboxRecord(),
+                _ => null
+            };
 
         public static bool IsContainer(short options, short recordId)
         {
