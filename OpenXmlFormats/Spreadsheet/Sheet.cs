@@ -2694,14 +2694,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
             XmlHelper.WriteAttribute(sw, "aca", this.aca, false);
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
-            XmlHelper.WriteAttribute(sw, "dt2D", this.dt2D, false);
-            XmlHelper.WriteAttribute(sw, "dtr", this.dtr, false);
+            XmlHelper.WriteAttribute(sw, "dt2D", this.dt2D, true);
+            XmlHelper.WriteAttribute(sw, "dtr", this.dtr, true);
             XmlHelper.WriteAttribute(sw, "del1", this.del1, false);
             XmlHelper.WriteAttribute(sw, "del2", this.del2, false);
             XmlHelper.WriteAttribute(sw, "r1", this.r1);
             XmlHelper.WriteAttribute(sw, "r2", this.r2);
             XmlHelper.WriteAttribute(sw, "ca", this.ca, false);
-            if (this.t != ST_CellFormulaType.normal)
+            if(this.si!=0)
                 XmlHelper.WriteAttribute(sw, "si", this.si, true);
             XmlHelper.WriteAttribute(sw, "bx", this.bx, false);
             if (!string.IsNullOrEmpty(this.valueField))
