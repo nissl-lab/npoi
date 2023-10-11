@@ -435,7 +435,7 @@ namespace NPOI.SS.Util
         private static double GetContentHeight(string stringValue, Font windowsFont)
         {
             var measureResult = TextMeasurer.MeasureAdvance(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
-            
+
             return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);
         }
 
@@ -473,63 +473,62 @@ namespace NPOI.SS.Util
 
             ICellStyle style = cell.CellStyle;
             CellType cellType = cell.CellType;
-            IFont defaultFont = wb.GetFontAt((short)0);
-            Font windowsFont = IFont2Font(defaultFont);
+
             // for formula cells we compute the cell width for the cached formula result
-            if (cellType == CellType.Formula) cellType = cell.CachedFormulaResultType;
+            if (cellType == CellType.Formula)
+                cellType = cell.CachedFormulaResultType;
 
             IFont font = wb.GetFontAt(style.FontIndex);
+            Font windowsFont = IFont2Font(font);
 
             double width = -1;
+
+            if (cellType == CellType.String)
             {
-                if (cellType == CellType.String)
+                IRichTextString rt = cell.RichStringCellValue;
+                String[] lines = rt.String.Split("\n".ToCharArray());
+                for (int i = 0; i < lines.Length; i++)
                 {
-                    IRichTextString rt = cell.RichStringCellValue;
-                    String[] lines = rt.String.Split("\n".ToCharArray());
-                    for (int i = 0; i < lines.Length; i++)
-                    {
-                        String txt = lines[i];
+                    String txt = lines[i];
 
-                        //AttributedString str = new AttributedString(txt);
-                        //copyAttributes(font, str, 0, txt.length());
-                        windowsFont = IFont2Font(font);
-                        if (rt.NumFormattingRuns > 0)
-                        {
-                            // TODO: support rich text fragments
-                        }
+                    //AttributedString str = new AttributedString(txt);
+                    //copyAttributes(font, str, 0, txt.length());
+                    if (rt.NumFormattingRuns > 0)
+                    {
+                        // TODO: support rich text fragments
+                    }
 
-                        width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
-                    }
-                }
-                else
-                {
-                    String sval = null;
-                    if (cellType == CellType.Numeric)
-                    {
-                        // Try to get it formatted to look the same as excel
-                        try
-                        {
-                            sval = formatter.FormatCellValue(cell, dummyEvaluator);
-                        }
-                        catch
-                        {
-                            sval = cell.NumericCellValue.ToString();
-                        }
-                    }
-                    else if (cellType == CellType.Boolean)
-                    {
-                        sval = cell.BooleanCellValue.ToString().ToUpper();
-                    }
-                    if (sval != null)
-                    {
-                        String txt = sval;
-                        //str = new AttributedString(txt);
-                        //copyAttributes(font, str, 0, txt.length());
-                        windowsFont = IFont2Font(font);
-                        width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
-                    }
+                    width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
                 }
             }
+            else
+            {
+                String sval = null;
+                if (cellType == CellType.Numeric)
+                {
+                    // Try to get it formatted to look the same as excel
+                    try
+                    {
+                        sval = formatter.FormatCellValue(cell, dummyEvaluator);
+                    }
+                    catch
+                    {
+                        sval = cell.NumericCellValue.ToString();
+                    }
+                }
+                else if (cellType == CellType.Boolean)
+                {
+                    sval = cell.BooleanCellValue.ToString().ToUpper();
+                }
+                if (sval != null)
+                {
+                    String txt = sval;
+                    //str = new AttributedString(txt);
+                    //copyAttributes(font, str, 0, txt.length());
+                    width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
+                }
+            }
+
             return width;
         }
 
@@ -749,7 +748,7 @@ namespace NPOI.SS.Util
             var key = new FontCacheKey(font1.FontName, (float)font1.FontHeightInPoints, style);
 
             // only use cache if font size is an integer and culture is original to prevent cache size explosion
-            if (font1.FontHeightInPoints == (int) font1.FontHeightInPoints && CultureInfo.CurrentCulture.Equals(StartupCulture))
+            if (font1.FontHeightInPoints == (int)font1.FontHeightInPoints && CultureInfo.CurrentCulture.Equals(StartupCulture))
             {
                 return FontCache.GetOrAdd(key, IFont2FontImpl);
             }
