@@ -5101,7 +5101,7 @@ namespace NPOI.XSSF.UserModel
             SortedDictionary<XSSFComment, int> commentsToShift =
                 new SortedDictionary<XSSFComment, int>(new ShiftCommentComparator(n));
 
-            IEnumerable<CT_Shape> ctShapes = GetVMLDrawing(false).GetItems().OfType<CT_Shape>();
+            IEnumerable<CT_Shape> ctShapes = GetVMLDrawing(false)?.GetItems().OfType<CT_Shape>();
 
             foreach (KeyValuePair<int, XSSFRow> rowDict in _rows)
             {
@@ -5127,7 +5127,7 @@ namespace NPOI.XSSF.UserModel
                                 {
                                     var ctShape = oldComment.GetCTShape();
 
-                                    if (ctShape == null)
+                                    if (ctShape == null && ctShapes != null)
                                     {
                                         ctShape = ctShapes.FirstOrDefault
                                             (x => 
