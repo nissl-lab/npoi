@@ -409,7 +409,7 @@ namespace NPOI.HSSF.Record.Aggregates
         /**
          * Sets all non null fields into the <c>ci</c> parameter.
          */
-        private static void SetColumnInfoFields(ColumnInfoRecord ci, short? xfStyle, int? width,
+        private static void SetColumnInfoFields(ColumnInfoRecord ci, short? xfStyle, double? width,
                     int? level, Boolean? hidden, Boolean? collapsed)
         {
             if (xfStyle != null)
@@ -517,7 +517,7 @@ namespace NPOI.HSSF.Record.Aggregates
         /// <param name="level">The level.</param>
         /// <param name="hidden">The hidden.</param>
         /// <param name="collapsed">The collapsed.</param>
-        public void SetColumn(int targetColumnIx, short? xfIndex, int? width, int? level, bool? hidden, bool? collapsed)
+        public void SetColumn(int targetColumnIx, short? xfIndex, double? width, int? level, bool? hidden, bool? collapsed)
         {
             ColumnInfoRecord ci = null;
             int k = 0;

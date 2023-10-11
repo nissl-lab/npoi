@@ -2469,10 +2469,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private double dyDescentField;
         public CT_SheetFormatPr()
         {
-            this.baseColWidth = 8;
+            this.defaultColWidth = 8.43;
         }
         [XmlAttribute]
-        [DefaultValue(typeof(uint), "8")]
         public uint baseColWidth
         {
             get
@@ -2486,6 +2485,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [XmlAttribute]
+        [DefaultValue(typeof(double), "8.43")]
         public double defaultColWidth
         {
             get
@@ -2599,7 +2599,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_SheetFormatPr ctObj = new CT_SheetFormatPr();
-            ctObj.baseColWidth = XmlHelper.ReadUInt(node.Attributes["baseColWidth"],8);
+            ctObj.baseColWidth = XmlHelper.ReadUInt(node.Attributes["baseColWidth"]);
             ctObj.defaultColWidth = XmlHelper.ReadDouble(node.Attributes["defaultColWidth"]);
             ctObj.defaultRowHeight = XmlHelper.ReadDouble(node.Attributes["defaultRowHeight"]);
             ctObj.customHeight = XmlHelper.ReadBool(node.Attributes["customHeight"]);

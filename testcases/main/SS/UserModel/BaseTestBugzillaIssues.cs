@@ -434,9 +434,9 @@ namespace TestCases.SS.UserModel
             sheet.AutoSizeColumn(1);
             sheet.AutoSizeColumn(2);
 
-            int noWhitespaceColWidth = sheet.GetColumnWidth(0);
-            int leadingWhitespaceColWidth = sheet.GetColumnWidth(1);
-            int trailingWhitespaceColWidth = sheet.GetColumnWidth(2);
+            double noWhitespaceColWidth = sheet.GetColumnWidth(0);
+            double leadingWhitespaceColWidth = sheet.GetColumnWidth(1);
+            double trailingWhitespaceColWidth = sheet.GetColumnWidth(2);
 
             // Based on the amount of text and whitespace used, and the default font
             // assume that the cell with whitespace should be at least 20% wider than
@@ -1409,9 +1409,9 @@ namespace TestCases.SS.UserModel
             _testDataProvider.TrackAllColumnsForAutosizing(s);
 
             s.AutoSizeColumn(0);
-            Assert.AreEqual(2048, s.GetColumnWidth(0));
+            Assert.AreEqual(2158.08, s.GetColumnWidth(0));
             s.AutoSizeColumn(0, true);
-            Assert.AreEqual(2048, s.GetColumnWidth(0));
+            Assert.AreEqual(2158.08, s.GetColumnWidth(0));
             wb.Close();
         }
 

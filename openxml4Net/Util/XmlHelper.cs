@@ -192,6 +192,7 @@ namespace NPOI.OpenXml4Net.Util
                 }
             }
         }
+
         public static double? ReadDoubleNull(XmlAttribute attr)
         {
             if (attr == null)
