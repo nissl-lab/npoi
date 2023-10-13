@@ -660,6 +660,11 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             set { grpSpPrField = value; }
 
         }
+        public List<CT_Connector> Connectors { get => connectors; }
+        public List<CT_Picture> Pictures { get => pictures; }
+        public List<CT_Shape> Shapes { get => shapes; }
+        public List<CT_GroupShape> Groups { get => groups; }
+
         public void GetShapes(List<object> aShapes)         // a:Argument
         {
             aShapes.Add(this);

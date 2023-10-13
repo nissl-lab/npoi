@@ -1729,7 +1729,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 		private CT_Path2DMoveTo moveToFeild = null;
 
-		private List<CT_Path2DCubicBezierTo> cubicBezTo = null;
+		private List<CT_Path2DCubicBezierTo> cubicBezToLst = null;
 
 		public static CT_Path2D Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -1749,7 +1749,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 if(childNode.LocalName == "moveTo")
                     ctObj.moveToFeild = CT_Path2DMoveTo.Parse(childNode, namespaceManager);
 				if(childNode.LocalName == "cubicBezTo")
-                    ctObj.cubicBezTo.Add( CT_Path2DCubicBezierTo.Parse(childNode, namespaceManager));
+                    ctObj.cubicBezToLst.Add( CT_Path2DCubicBezierTo.Parse(childNode, namespaceManager));
 			}
 			return ctObj;
         }
@@ -1769,8 +1769,8 @@ namespace NPOI.OpenXmlFormats.Dml
 			//    this.ItemsElementName.Write(sw, "ItemsElementName");
 			if(this.moveToFeild != null)
 				moveToFeild.Write(sw, "moveTo");
-			if(cubicBezTo.Count > 0) {
-				foreach(CT_Path2DCubicBezierTo cub in cubicBezTo) {
+			if(cubicBezToLst.Count > 0) {
+				foreach(CT_Path2DCubicBezierTo cub in cubicBezToLst) {
 					cub.Write(sw, "cubicBezTo");
 				}
 			}
@@ -1785,7 +1785,7 @@ namespace NPOI.OpenXmlFormats.Dml
             this.strokeField = true;
             this.extrusionOkField = true;
 
-			this.cubicBezTo = new List<CT_Path2DCubicBezierTo>();
+			this.cubicBezToLst = new List<CT_Path2DCubicBezierTo>();
 		}
 
 
@@ -1823,6 +1823,8 @@ namespace NPOI.OpenXmlFormats.Dml
         //    }
         //}
 
+        public CT_Path2DMoveTo moveto { get => moveToFeild; set => moveToFeild = value; }
+        public List<CT_Path2DCubicBezierTo> cubicBezTo { get => this.cubicBezToLst; }
 
         [XmlAttribute]
         [DefaultValue(typeof(long), "0")]
