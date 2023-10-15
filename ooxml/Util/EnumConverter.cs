@@ -36,9 +36,11 @@ namespace NPOI.Util
             }
         }
         public static T ValueOf<T, F>(F val)
+            where T : struct, Enum
+            where F : struct, Enum
         {
-            string value = Enum.GetName(val.GetType(), val);
-            return (T)Enum.Parse(typeof(T), value, true);
+            string value = EnumExtensions.GetEnumName(val);
+            return EnumExtensions.Parse<T>(value, true);
         }
     }
 }

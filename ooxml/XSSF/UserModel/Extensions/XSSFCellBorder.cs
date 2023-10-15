@@ -113,7 +113,8 @@ namespace NPOI.XSSF.UserModel.Extensions
          */
         public void SetBorderStyle(BorderSide side, BorderStyle style)
         {
-            GetBorder(side, true).style = (ST_BorderStyle)Enum.GetValues(typeof(ST_BorderStyle)).GetValue((int)style + 1);
+            // REMOVE-REFLECTION: The following line be changed into a cast.
+            GetBorder(side, true).style = (ST_BorderStyle)style;
         }
 
         /**
