@@ -400,7 +400,7 @@ namespace TestCases.XSSF.Streaming
             return firstCell;
         }
 
-        private static void assertColumnWidthStrictlyWithinRange(int actualColumnWidth, int lowerBoundExclusive, int upperBoundExclusive)
+        private static void assertColumnWidthStrictlyWithinRange(double actualColumnWidth, int lowerBoundExclusive, int upperBoundExclusive)
         {
             Assert.IsTrue(actualColumnWidth > lowerBoundExclusive,
                 "Expected a column width greater than " + lowerBoundExclusive + " but found " + actualColumnWidth);

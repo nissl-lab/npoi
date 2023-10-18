@@ -170,14 +170,14 @@ namespace NPOI.SS.UserModel
         /// This value represents the number of characters that can be displayed
         /// in a cell that is formatted with the standard font.
         /// </remarks>
-        void SetColumnWidth(int columnIndex, int width);
+        void SetColumnWidth(int columnIndex, double width);
 
         /// <summary>
         /// get the width (in units of 1/256th of a character width )
         /// </summary>
         /// <param name="columnIndex">the column to get (0-based)</param>
         /// <returns>the width in units of 1/256th of a character width</returns>
-        int GetColumnWidth(int columnIndex);
+        double GetColumnWidth(int columnIndex);
 
         /// <summary>
         /// get the width in pixel
@@ -189,14 +189,14 @@ namespace NPOI.SS.UserModel
         /// with the default font size (Arial 10pt for .xls and Calibri 11pt for .xlsx).
         /// If the default font is changed the column width can be streched
         /// </remarks>
-        float GetColumnWidthInPixels(int columnIndex);
+        double GetColumnWidthInPixels(int columnIndex);
 
         /// <summary>
         /// Get the default column width for the sheet (if the columns do not define their own width)
         /// in characters
         /// </summary>
         /// <value>default column width measured in characters.</value>
-        int DefaultColumnWidth { get; set; }
+        double DefaultColumnWidth { get; set; }
 
         /// <summary>
         /// Get the default row height for the sheet (if the rows do not define their own height) in

@@ -636,7 +636,7 @@ namespace NPOI.SS.Formula
                                    ((FuncVarPtg)nextPtg).FunctionIndex == FunctionMetadataRegistry.FUNCTION_INDEX_IF)
                                {
                                    // this is an if statement without a false param (as opposed to MissingArgPtg as the false param)
-                                   i++;
+                                   //i++;
                                    stack.Push(arg0);
                                    stack.Push(BoolEval.FALSE);
                                }
