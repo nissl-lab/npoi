@@ -166,3 +166,4 @@ test-results/
 BenchmarkDotNet.Artifacts
 /build.cmd
 /build.sh
+/Directory.Build.props
