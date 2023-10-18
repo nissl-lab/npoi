@@ -2146,7 +2146,7 @@ namespace NPOI.XSSF.UserModel
             double width = (col == null)
                 ? DefaultColumnWidth
                 : col.Width;
-            return (int)(width * 256);
+            return width * 256;
         }
 
         /// <summary>
@@ -2819,7 +2819,7 @@ namespace NPOI.XSSF.UserModel
         /// width</param>
         /// <exception cref="ArgumentException">if width more than 255*256 (the
         /// maximum column width in Excel is 255 characters)</exception>
-        public void SetColumnWidth(int columnIndex, int width)
+        public void SetColumnWidth(int columnIndex, double width)
         {
             if (width > 255 * 256)
             {
@@ -2828,7 +2828,7 @@ namespace NPOI.XSSF.UserModel
             }
 
             IColumn column = GetColumn(columnIndex, true);
-            column.Width = (double)width / 256;
+            column.Width = width / 256;
         }
 
         public void SetDefaultColumnStyle(int column, ICellStyle style)
