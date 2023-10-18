@@ -146,21 +146,20 @@ namespace NPOI.XSSF.UserModel
 
         /// <summary>
         /// Get the default column width for the sheet (if the columns do not 
-        /// define their own width) in characters. Note, this value is different 
-        /// from <see cref="GetColumnWidth"/>. The latter is always greater and 
-        /// includes 4 pixels of margin pAdding(two on each side), plus 1 pixel 
-        /// pAdding for the gridlines.
+        /// define their own width) in characters.
         /// </summary>
-        public int DefaultColumnWidth
+        public double DefaultColumnWidth
         {
             get
             {
                 CT_SheetFormatPr pr = worksheet.sheetFormatPr;
-                return pr == null ? 8 : (int)pr.baseColWidth;
+                return (pr == null || pr.defaultColWidth == 0.0) ? 8.43 : pr.defaultColWidth;
             }
             set
             {
-                GetSheetTypeSheetFormatPr().baseColWidth = (uint)value;
+                var pr = GetSheetTypeSheetFormatPr();
+                pr.defaultColWidth = value;
+                pr.baseColWidth = 0;
             }
         }
 
@@ -2137,23 +2136,17 @@ namespace NPOI.XSSF.UserModel
 
         /// <summary>
         /// Get the actual column width (in units of 1/256th of a character width)
-        /// Note, the returned  value is always gerater that <see cref="DefaultColumnWidth"/> 
-        /// because the latter does not include margins. Actual column width 
-        /// measured as the number of characters of the maximum digit width of 
-        /// thenumbers 0, 1, 2, ..., 9 as rendered in the normal style's font. 
-        /// There are 4 pixels of margin pAdding(two on each side), plus 1 pixel 
-        /// pAdding for the gridlines.
         /// </summary>
         /// <param name="columnIndex">the column to set (0-based)</param>
         /// <returns>the width in units of 1/256th of a character width</returns>
-        public int GetColumnWidth(int columnIndex)
+        public double GetColumnWidth(int columnIndex)
         {
             IColumn col = GetColumn(columnIndex);
 
             double width = (col == null)
                 ? DefaultColumnWidth
                 : col.Width;
-            return (int)(width * 256);
+            return width * 256;
         }
 
         /// <summary>
@@ -2163,10 +2156,10 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         /// <param name="columnIndex"></param>
         /// <returns></returns>
-        public float GetColumnWidthInPixels(int columnIndex)
+        public double GetColumnWidthInPixels(int columnIndex)
         {
-            float widthIn256 = GetColumnWidth(columnIndex);
-            return (float)(widthIn256 / 256.0 * XSSFWorkbook.DEFAULT_CHARACTER_WIDTH);
+            double widthIn256 = GetColumnWidth(columnIndex);
+            return widthIn256 / 256.0 * XSSFWorkbook.DEFAULT_CHARACTER_WIDTH;
         }
 
         /// <summary>
@@ -2826,7 +2819,7 @@ namespace NPOI.XSSF.UserModel
         /// width</param>
         /// <exception cref="ArgumentException">if width more than 255*256 (the
         /// maximum column width in Excel is 255 characters)</exception>
-        public void SetColumnWidth(int columnIndex, int width)
+        public void SetColumnWidth(int columnIndex, double width)
         {
             if (width > 255 * 256)
             {
@@ -2835,7 +2828,7 @@ namespace NPOI.XSSF.UserModel
             }
 
             IColumn column = GetColumn(columnIndex, true);
-            column.Width = (double)width / 256;
+            column.Width = width / 256;
         }
 
         public void SetDefaultColumnStyle(int column, ICellStyle style)
@@ -6186,12 +6179,13 @@ namespace NPOI.XSSF.UserModel
             double fontwidth;
             double width_px;
 
-            var width = worksheet.sheetFormatPr.defaultColWidth;                        //string length with padding
+            var width = worksheet.sheetFormatPr.defaultColWidth; //string length with padding
             if (width != 0.0)
             {
-                width_px = width * MaximumDigitWidth;
+                double widthInPx = width * MaximumDigitWidth;
+                width_px = widthInPx + (8 - widthInPx % 8); // round up to the nearest multiple of 8 pixels
             }
-            else
+            else if (worksheet.sheetFormatPr.baseColWidth != 0)
             {
                 double MDW = MaximumDigitWidth;
                 var length = worksheet.sheetFormatPr.baseColWidth;                      //string length with out padding
@@ -6199,6 +6193,12 @@ namespace NPOI.XSSF.UserModel
                 double tmp = 256 * fontwidth + Math.Truncate(128 / MDW);
                 width_px = Math.Truncate((tmp / 256) * MDW) + 3;                        // +3 ???
             }
+            else
+            {
+                double widthInPx = DefaultColumnWidth * MaximumDigitWidth;
+                width_px = widthInPx + (8 - widthInPx % 8); // round up to the nearest multiple of 8 pixels
+            }
+
             return width_px;
         }
 
@@ -6281,7 +6281,7 @@ namespace NPOI.XSSF.UserModel
                         }
                     }
                 }
-            lblforbreak:
+                lblforbreak:
                 int EMUwidth = Units.PixelToEMU((int)Math.Round(width_px, 1));
                 if (x >= EMUwidth)
                 {

@@ -936,17 +936,17 @@ namespace TestCases.HSSF.UserModel
             for (char i = 'A'; i <= 'S'; i++)
             {
                 int idx = i - 'A';
-                int w = sh.GetColumnWidth(idx);
+                double w = sh.GetColumnWidth(idx);
                 Assert.AreEqual(ref1[idx], w);
             }
 
             //the second sheet doesn't have overridden column widths
             sh = wb1.GetSheetAt(1);
-            int def_width = sh.DefaultColumnWidth;
+            double def_width = sh.DefaultColumnWidth;
             for (char i = 'A'; i <= 'S'; i++)
             {
                 int idx = i - 'A';
-                int w = sh.GetColumnWidth(idx);
+                double w = sh.GetColumnWidth(idx);
                 //getDefaultColumnWidth returns width measured in characters
                 //getColumnWidth returns width measured in 1/256th units
                 Assert.AreEqual(def_width * 256, w);
@@ -1008,9 +1008,9 @@ namespace TestCases.HSSF.UserModel
             // second and third sheets miss DefaultColWidthRecord
             for (int i = 1; i <= 2; i++)
             {
-                int dw = wb2.GetSheetAt(i).DefaultColumnWidth;
+                double dw = wb2.GetSheetAt(i).DefaultColumnWidth;
                 Assert.AreEqual(8, dw);
-                int cw = wb2.GetSheetAt(i).GetColumnWidth(0);
+                double cw = wb2.GetSheetAt(i).GetColumnWidth(0);
                 Assert.AreEqual(8 * 256, cw);
 
                 Assert.AreEqual(0xFF, sheet.DefaultRowHeight);
