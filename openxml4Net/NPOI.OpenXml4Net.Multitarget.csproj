@@ -8,6 +8,7 @@
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>../npoi.snk</AssemblyOriginatorKeyFile>
 		<OutputPath>../solution/$(Configuration)/</OutputPath>
+		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	
 	<ItemGroup>
