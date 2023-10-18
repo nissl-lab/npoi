@@ -32,6 +32,10 @@
 		<ProjectReference Include="..\main\NPOI.Multitarget.csproj" />
 		<ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj" />
 		<ProjectReference Include="..\OpenXmlFormats\NPOI.OpenXmlFormats.Multitarget.csproj" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 	
 </Project>
