@@ -164,3 +164,5 @@ test-results/
 /artifacts
 
 BenchmarkDotNet.Artifacts
+/build.cmd
+/build.sh
