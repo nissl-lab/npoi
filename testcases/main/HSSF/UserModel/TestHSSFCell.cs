@@ -531,10 +531,6 @@ namespace TestCases.HSSF.UserModel
             cell.SetCellValue(new DateTime(2022, 5, 10, 13, 20, 50));
             Assert.IsNotNull(cell.DateCellValue);
             Assert.AreEqual(new DateTime(2022, 5, 10, 13, 20, 50), cell.DateCellValue);
-#if NET6_0_OR_GREATER
-            Assert.AreEqual(new DateOnly(2022, 5, 10), cell.DateOnlyCellValue);
-            Assert.AreEqual(new TimeOnly(13, 20, 50), cell.TimeOnlyCellValue);
-#endif
             HSSFCell cell2 = row.CreateCell(1) as HSSFCell;
             cell2.SetCellValue("test");
             Assert.IsNull(cell2.DateCellValue);

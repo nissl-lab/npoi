@@ -2,13 +2,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	
 	<PropertyGroup>
-		<TargetFrameworks>net472;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AssemblyName>NPOI</AssemblyName>
 		<RootNamespace>NPOI</RootNamespace>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>../npoi.snk</AssemblyOriginatorKeyFile>
 		<OutputPath>../solution/$(Configuration)/</OutputPath>
+		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	
 	<ItemGroup>
@@ -17,14 +18,17 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="IronSoftware.System.Drawing" Version="2023.10.1" />
+		<PackageReference Include="IronSoftware.System.Drawing" Version="2023.11.1" />
 		<PackageReference Include="Enums.NET" Version="4.0.1" />
-		<PackageReference Include="ExtendedNumerics.BigDecimal" Version="2023.1000.0.230" />
+		<PackageReference Include="ExtendedNumerics.BigDecimal" Version="2023.1000.1.258" />
 		<PackageReference Include="MathNet.Numerics.Signed" Version="5.0.0" />
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.2" />
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 		<PackageReference Include="SharpZipLib" Version="1.4.2" />
-		<PackageReference Include="SixLabors.Fonts" Version="[1.0.1]" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 	
 	<ItemGroup>

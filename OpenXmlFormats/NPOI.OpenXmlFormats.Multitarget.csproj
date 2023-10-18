@@ -2,16 +2,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net472;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AssemblyName>NPOI.OpenXmlFormats</AssemblyName>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>../npoi.snk</AssemblyOriginatorKeyFile>
 		<OutputPath>../solution/$(Configuration)/</OutputPath>
+		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\main\NPOI.Multitarget.csproj" />
 		<ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 
 </Project>

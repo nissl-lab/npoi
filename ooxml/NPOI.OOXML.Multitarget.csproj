@@ -2,12 +2,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	
 	<PropertyGroup>
-		<TargetFrameworks>net472;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AssemblyName>NPOI.OOXML</AssemblyName>
 		<RootNamespace>NPOI.OOXML</RootNamespace>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>../npoi.snk</AssemblyOriginatorKeyFile>
 		<OutputPath>../solution/$(Configuration)/</OutputPath>
+		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -30,6 +32,10 @@
 		<ProjectReference Include="..\main\NPOI.Multitarget.csproj" />
 		<ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj" />
 		<ProjectReference Include="..\OpenXmlFormats\NPOI.OpenXmlFormats.Multitarget.csproj" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 	
 </Project>
