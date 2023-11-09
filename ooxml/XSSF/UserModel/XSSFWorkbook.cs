@@ -2415,7 +2415,29 @@ namespace NPOI.XSSF.UserModel
 
         public int AddPicture(byte[] pictureData, PictureType format)
         {
-            int imageNumber = GetAllPictures().Count + 1;
+            int imageNumber = 1;
+            List<XSSFPictureData> allPics = (List<XSSFPictureData>)GetAllPictures();
+
+            if (allPics.Any())
+            {
+                var sortedIndexs =
+                    allPics
+                        .Select(pic => XSSFPictureData.RELATIONS[(int)pic.PictureType].GetFileNameIndex(pic))
+                        .OrderBy(i => i)
+                        .ToList();
+
+                int previous = sortedIndexs[0];
+                for (int index = 1; index < sortedIndexs.Count; index++)
+                {
+                    if (sortedIndexs[index] > previous + 1)
+                        break;
+
+                    previous = sortedIndexs[index];
+                }
+
+                imageNumber = previous + 1;
+            }
+            
             XSSFPictureData img = (XSSFPictureData)CreateRelationship(XSSFPictureData.RELATIONS[(int)format], XSSFFactory.GetInstance(), imageNumber, true).DocumentPart;
             try
             {
