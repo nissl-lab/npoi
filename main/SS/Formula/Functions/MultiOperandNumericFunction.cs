@@ -109,7 +109,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private const int DEFAULT_MAX_NUM_OPERANDS = 30;
+        private static readonly int DEFAULT_MAX_NUM_OPERANDS = SpreadsheetVersion.EXCEL2007.MaxFunctionArgs;
 
         /**
          * Maximum number of operands accepted by this function.
