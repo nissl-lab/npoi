@@ -2420,11 +2420,15 @@ namespace NPOI.XSSF.UserModel
 
             if (allPics.Any())
             {
-                var sortedIndexs =
-                    allPics
-                        .Select(pic => XSSFPictureData.RELATIONS[(int)pic.PictureType].GetFileNameIndex(pic))
-                        .OrderBy(i => i)
-                        .ToList();
+                List<int> sortedIndexs = new List<int> { 0 };
+
+                sortedIndexs.AddRange
+                    (
+                        allPics
+                            .Select(pic => XSSFPictureData.RELATIONS[(int)pic.PictureType].GetFileNameIndex(pic))
+                            .OrderBy(i => i)
+                            .ToList()
+                    );
 
                 int previous = sortedIndexs[0];
                 for (int index = 1; index < sortedIndexs.Count; index++)
