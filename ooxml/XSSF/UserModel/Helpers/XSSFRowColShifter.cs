@@ -97,21 +97,26 @@ namespace NPOI.OOXML.XSSF.UserModel.Helpers
                                 int si = (int)f.si;
                                 CT_CellFormula sf = sheet.GetSharedFormula(si);
                                 sf.Value = ShiftedFormula;
+                                UpdateRefInCTCellFormula(row, Shifter, sf);
                             }
                         }
                     }
 
-                    if (f.isSetRef())
-                    { //Range of cells which the formula applies to.
-                        string ref1 = f.@ref;
-                        string ShiftedRef = ShiftFormula(row, ref1, Shifter);
-                        if (ShiftedRef != null)
-                        {
-                            f.@ref = ShiftedRef;
-                    }
+                    //Range of cells which the formula applies to.
+                    UpdateRefInCTCellFormula(row, Shifter, f);
                 }
             }
         }
+
+
+        private static void UpdateRefInCTCellFormula(IRow row, FormulaShifter Shifter, CT_CellFormula f)
+        {
+            if (f.isSetRef())
+            {
+                string ref1 = f.@ref;
+                string shiftedRef = ShiftFormula(row, ref1, Shifter);
+                if (shiftedRef != null) f.@ref = shiftedRef;
+            }
         }
 
         /// <summary>
