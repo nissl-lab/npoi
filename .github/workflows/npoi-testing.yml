@@ -8,7 +8,7 @@ on:
 
 jobs:
   RUN-WINDOWS-TESTS:
-    runs-on: windows-2019
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
     
@@ -19,11 +19,13 @@ jobs:
       uses: actions/setup-dotnet@v1	
       with:	
         dotnet-version: | 
-          3.1.x
           6.0.x
           
     - name: RESTORE NPOI.Multitarget.Test NUGET PACKAGES
-      run: dotnet restore solution/NPOI.Multitarget.Test.sln
+      run: >-
+        dotnet restore solution/NPOI.Multitarget.Test.sln
+        --property:TargetFrameworks=net6.0
+        --property:WarningLevel=0
       
     - name: BUILD NPOI.Multitarget.Test.sln
       id: build-npoi
@@ -32,6 +34,8 @@ jobs:
         --no-restore
         --configuration 'Debug'
         --verbosity q
+        --property:TargetFrameworks=net6.0
+        --property:WarningLevel=0
       
     - name: RUN .NET 6 NPOI.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
@@ -77,11 +81,13 @@ jobs:
       uses: actions/setup-dotnet@v1	
       with:	
         dotnet-version: | 
-          3.1.x
           6.0.x
           
     - name: RESTORE NPOI.Multitarget.Test NUGET PACKAGES
-      run: dotnet restore solution/NPOI.Multitarget.Test.sln
+      run: >-
+        dotnet restore solution/NPOI.Multitarget.Test.sln
+        --property:TargetFrameworks=net6.0
+        --property:WarningLevel=0
       
     - name: BUILD NPOI.Multitarget.Test.sln
       id: build-npoi
@@ -90,9 +96,8 @@ jobs:
         --no-restore
         --configuration 'Debug'
         --verbosity q
-   
-    - name: PWD
-      run: pwd
+        --property:TargetFrameworks=net6.0
+        --property:WarningLevel=0
    
     - name: RUN .NET 6 NPOI.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
@@ -138,11 +143,13 @@ jobs:
       uses: actions/setup-dotnet@v1	
       with:	
         dotnet-version: | 
-          3.1.x
           6.0.x
           
     - name: RESTORE NPOI.Multitarget.Test NUGET PACKAGES
-      run: dotnet restore solution/NPOI.Multitarget.Test.sln
+      run: >-
+        dotnet restore solution/NPOI.Multitarget.Test.sln
+        --property:TargetFrameworks=net6.0
+        --property:WarningLevel=0
       
     - name: BUILD NPOI.Multitarget.Test.sln
       id: build-npoi
@@ -151,10 +158,9 @@ jobs:
         --no-restore
         --configuration 'Debug'
         --verbosity q
+        --property:TargetFrameworks=net6.0
+        --property:WarningLevel=0
 
-    - name: PWD
-      run: pwd
-   
     - name: RUN .NET 6 NPOI.Multitarget.TestCases
       if: always() && steps.build-npoi.outcome == 'success'
       run: >-
