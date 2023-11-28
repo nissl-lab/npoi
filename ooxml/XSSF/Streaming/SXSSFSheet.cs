@@ -495,11 +495,16 @@ namespace NPOI.XSSF.Streaming
             _sh.ValidateMergedRegions();
         }
 
-
         public void AddValidationData(IDataValidation dataValidation)
         {
             _sh.AddValidationData(dataValidation);
         }
+
+        public void RemoveValidationData(IDataValidation dataValidation)
+        {
+            _sh.RemoveValidationData(dataValidation);
+        }
+        
         /**
          * Adjusts the column width to fit the contents.
          *
