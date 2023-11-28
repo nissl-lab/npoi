@@ -7133,6 +7133,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
+            if (this.countField == 0)
+                return;
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "disablePrompts", this.disablePrompts);
             XmlHelper.WriteAttribute(sw, "xWindow", this.xWindow);
