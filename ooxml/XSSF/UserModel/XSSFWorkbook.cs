@@ -2454,8 +2454,9 @@ namespace NPOI.XSSF.UserModel
                 throw new POIXMLException(e);
             }
             pictures.Add(img);
-            return imageNumber - 1;
 
+            // returns image Index
+            return allPics.Count - 1;
         }
 
         public XSSFWorkbookType WorkbookType
