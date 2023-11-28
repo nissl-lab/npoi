@@ -185,7 +185,36 @@ namespace NPOI.HSSF.Record
             set { this._option_flags = this.opt_data_type.SetValue(this._option_flags, value); }
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !(obj is DVRecord))
+            {
+                return false;
+            }
 
+            DVRecord dv = (DVRecord)obj;
+            return DataType == dv.DataType
+                && ErrorStyle == dv.ErrorStyle
+                && EmptyCellAllowed == dv.EmptyCellAllowed
+                && ShowErrorOnInvalidValue == dv.ShowErrorOnInvalidValue
+                && ShowPromptOnCellSelected == dv.ShowPromptOnCellSelected
+                && SuppressDropdownArrow == dv.SuppressDropdownArrow
+                && ListExplicitFormula == dv.ListExplicitFormula
+                && ConditionOperator == dv.ConditionOperator
+                && PromptTitle == dv.PromptTitle
+                && PromptText == dv.PromptText
+                && ErrorTitle == dv.ErrorTitle
+                && ErrorText == dv.ErrorText
+                && ((Formula1 == null && dv.Formula1 == null) 
+                    || Formula1 != null && dv.Formula1 != null 
+                    && Formula1.ToString() == dv.Formula1.ToString())
+                && ((Formula2 == null && dv.Formula2 == null) 
+                    || Formula2 != null && dv.Formula2 != null 
+                    && Formula2.ToString() == dv.Formula2.ToString())
+                && (CellRangeAddress == null && dv.CellRangeAddress == null
+                    || CellRangeAddress != null && dv.CellRangeAddress != null 
+                    && CellRangeAddress.ToString() == dv.CellRangeAddress.ToString());
+        }
 
         /**
          * Get the condition error style
