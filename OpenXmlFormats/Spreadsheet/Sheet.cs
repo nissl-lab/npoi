@@ -7387,6 +7387,33 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             promptField = obj.promptField;
             sqrefField = obj.sqrefField;
         }
+
+        public override bool Equals(object obj)
+        {
+            CT_DataValidation o = (CT_DataValidation)obj;
+
+            if (o is null)
+            {
+                return false;
+            }
+
+            return formula1Field == o.formula1Field
+                && formula2Field == o.formula2Field
+                && typeField == o.typeField
+                && errorStyleField == o.errorStyleField
+                && imeModeField == o.imeModeField
+                && operatorField == o.operatorField
+                && allowBlankField == o.allowBlankField
+                && showDropDownField == o.showDropDownField
+                && showInputMessageField == o.showInputMessageField
+                && showErrorMessageField == o.showErrorMessageField
+                && errorTitleField == o.errorTitleField
+                && errorField == o.errorField
+                && promptTitleField == o.promptTitleField
+                && promptField == o.promptField
+                && sqrefField == o.sqrefField;
+        }
+
         [XmlElement(Order = 0)]
         public string formula1
         {
