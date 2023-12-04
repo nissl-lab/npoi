@@ -5688,18 +5688,9 @@ namespace NPOI.XSSF.UserModel
                                 mergedRegion.FirstColumn,
                                 mergedRegion.LastColumn);
 
-                        if (keepMergedRegion)
-                        {
-                            CellRangeAddress mergedRegion = srcSheet.GetMergedRegion(new CellRangeAddress(srcRow.RowNum, srcRow.RowNum, (short)oldCell.ColumnIndex, (short)oldCell.ColumnIndex));
-                            if (mergedRegion != null)
+                            if (!destSheet.IsMergedRegion(newMergedRegion))
                             {
-                                CellRangeAddress newMergedRegion = new CellRangeAddress(mergedRegion.FirstRow,
-                                        mergedRegion.LastRow, mergedRegion.FirstColumn, mergedRegion.LastColumn);
-
-                                if (!destSheet.IsMergedRegion(newMergedRegion))
-                                {
-                                    destSheet.AddMergedRegion(newMergedRegion);
-                                }
+                                destSheet.AddMergedRegion(newMergedRegion);
                             }
                         }
                     }
