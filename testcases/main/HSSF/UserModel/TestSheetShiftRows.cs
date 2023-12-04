@@ -24,6 +24,7 @@ namespace TestCases.HSSF.UserModel
     using NUnit.Framework;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
 
     /**
      * Tests row shifting capabilities.
@@ -60,11 +61,11 @@ namespace TestCases.HSSF.UserModel
             // row (in original file each row was unique)
             s = wb.GetSheetAt(0);
 
-            Assert.AreEqual(1,s.GetRow(0).PhysicalNumberOfCells);
+            Assert.AreEqual(1, s.GetRow(0).PhysicalNumberOfCells);
             ConfirmEmptyRow(s, 1);
             Assert.AreEqual(2, s.GetRow(2).PhysicalNumberOfCells);
-            Assert.AreEqual(4,s.GetRow(3).PhysicalNumberOfCells);
-            Assert.AreEqual(5,s.GetRow(4).PhysicalNumberOfCells);
+            Assert.AreEqual(4, s.GetRow(3).PhysicalNumberOfCells);
+            Assert.AreEqual(5, s.GetRow(4).PhysicalNumberOfCells);
 
             // Shift rows 1-3 down 3 in the current one.  This Tests when
             // 1 row is blank.  Write to a another temp file
@@ -76,9 +77,9 @@ namespace TestCases.HSSF.UserModel
             ConfirmEmptyRow(s, 0);
             ConfirmEmptyRow(s, 1);
             ConfirmEmptyRow(s, 2);
-            Assert.AreEqual(1,s.GetRow(3).PhysicalNumberOfCells);
+            Assert.AreEqual(1, s.GetRow(3).PhysicalNumberOfCells);
             ConfirmEmptyRow(s, 4);
-            Assert.AreEqual(2,s.GetRow(5).PhysicalNumberOfCells);
+            Assert.AreEqual(2, s.GetRow(5).PhysicalNumberOfCells);
 
             // Read the first file again
             wb = HSSFTestDataSamples.OpenSampleWorkbook("SimpleMultiCell.xls");
@@ -156,16 +157,16 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(3, sheet.LastRowNum);
 
             // Verify comments are in the position expected
-            Assert.IsNotNull(sheet.GetCellComment(0, 0));
-            Assert.IsNull(sheet.GetCellComment(1, 0));
-            Assert.IsNotNull(sheet.GetCellComment(2, 0));
-            Assert.IsNotNull(sheet.GetCellComment(3, 0));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(2, 0)));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
 
-            String comment1 = sheet.GetCellComment(0, 0).String.String;
+            String comment1 = sheet.GetCellComment(new CellAddress(0, 0)).String.String;
             Assert.AreEqual(comment1, "comment top row1 (index0)\n");
-            String comment3 = sheet.GetCellComment(2, 0).String.String;
+            String comment3 = sheet.GetCellComment(new CellAddress(2, 0)).String.String;
             Assert.AreEqual(comment3, "comment top row3 (index2)\n");
-            String comment4 = sheet.GetCellComment(3, 0).String.String;
+            String comment4 = sheet.GetCellComment(new CellAddress(3, 0)).String.String;
             Assert.AreEqual(comment4, "comment top row4 (index3)\n");
 
             // Shifting all but first line down to Test comments shifting
@@ -175,17 +176,17 @@ namespace TestCases.HSSF.UserModel
 
             // Test that comments were shifted as expected
             Assert.AreEqual(4, sheet.LastRowNum);
-            Assert.IsNotNull(sheet.GetCellComment(0, 0));
-            Assert.IsNull(sheet.GetCellComment(1, 0));
-            Assert.IsNull(sheet.GetCellComment(2, 0));
-            Assert.IsNotNull(sheet.GetCellComment(3, 0));
-            Assert.IsNotNull(sheet.GetCellComment(4, 0));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(2, 0)));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(4, 0)));
 
-            String comment1_shifted = sheet.GetCellComment(0, 0).String.String;
+            String comment1_shifted = sheet.GetCellComment(new CellAddress(0, 0)).String.String;
             Assert.AreEqual(comment1, comment1_shifted);
-            String comment3_shifted = sheet.GetCellComment(3, 0).String.String;
+            String comment3_shifted = sheet.GetCellComment(new CellAddress(3, 0)).String.String;
             Assert.AreEqual(comment3, comment3_shifted);
-            String comment4_shifted = sheet.GetCellComment(4, 0).String.String;
+            String comment4_shifted = sheet.GetCellComment(new CellAddress(4, 0)).String.String;
             Assert.AreEqual(comment4, comment4_shifted);
 
             // Write out and read back in again
@@ -195,17 +196,17 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(4, sheet.LastRowNum);
 
             // Verify comments are in the position expected after the shift
-            Assert.IsNotNull(sheet.GetCellComment(0, 0));
-            Assert.IsNull(sheet.GetCellComment(1, 0));
-            Assert.IsNull(sheet.GetCellComment(2, 0));
-            Assert.IsNotNull(sheet.GetCellComment(3, 0));
-            Assert.IsNotNull(sheet.GetCellComment(4, 0));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(2, 0)));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
+            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(4, 0)));
 
-            comment1_shifted = sheet.GetCellComment(0, 0).String.String;
+            comment1_shifted = sheet.GetCellComment(new CellAddress(0, 0)).String.String;
             Assert.AreEqual(comment1, comment1_shifted);
-            comment3_shifted = sheet.GetCellComment(3, 0).String.String;
+            comment3_shifted = sheet.GetCellComment(new CellAddress(3, 0)).String.String;
             Assert.AreEqual(comment3, comment3_shifted);
-            comment4_shifted = sheet.GetCellComment(4, 0).String.String;
+            comment4_shifted = sheet.GetCellComment(new CellAddress(4, 0)).String.String;
             Assert.AreEqual(comment4, comment4_shifted);
         }
 

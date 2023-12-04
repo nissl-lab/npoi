@@ -513,10 +513,10 @@ namespace NPOI.OpenXmlFormats.Dml
             ctObj.wrapFieldSpecified = node.Attributes["wrap"] != null;
             if (node.Attributes["wrap"] != null)
                 ctObj.wrapField = (ST_TextWrappingType)Enum.Parse(typeof(ST_TextWrappingType), node.Attributes["wrap"].Value);
-            ctObj.lIns = XmlHelper.ReadInt(node.Attributes["lIns"]);
-            ctObj.tIns = XmlHelper.ReadInt(node.Attributes["tIns"]);
-            ctObj.rIns = XmlHelper.ReadInt(node.Attributes["rIns"]);
-            ctObj.bIns = XmlHelper.ReadInt(node.Attributes["bIns"]);
+            ctObj.lIns = XmlHelper.ReadInt(node.Attributes["lIns"], 91440);
+            ctObj.tIns = XmlHelper.ReadInt(node.Attributes["tIns"], 45720);
+            ctObj.rIns = XmlHelper.ReadInt(node.Attributes["rIns"], 91440);
+            ctObj.bIns = XmlHelper.ReadInt(node.Attributes["bIns"], 45720);
             ctObj.numCol = XmlHelper.ReadInt(node.Attributes["numCol"]);
             ctObj.spcCol = XmlHelper.ReadInt(node.Attributes["spcCol"]);
             ctObj.rtlCol = XmlHelper.ReadBool(node.Attributes["rtlCol"]);
@@ -565,12 +565,12 @@ namespace NPOI.OpenXmlFormats.Dml
                 XmlHelper.WriteAttribute(sw, "horzOverflow", this.horzOverflowField.ToString());
             if(this.vertFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "vert", this.vert.ToString());
-            if(this.wrapFieldSpecified && this.wrap!= ST_TextWrappingType.none)
+            if(this.wrapFieldSpecified && this.wrap == ST_TextWrappingType.none)
                 XmlHelper.WriteAttribute(sw, "wrap", this.wrap.ToString());
-            XmlHelper.WriteAttribute(sw, "lIns", this.lIns);
-            XmlHelper.WriteAttribute(sw, "tIns", this.tIns);
-            XmlHelper.WriteAttribute(sw, "rIns", this.rIns);
-            XmlHelper.WriteAttribute(sw, "bIns", this.bIns);
+            XmlHelper.WriteAttribute(sw, "lIns", this.lIns, 91440);
+            XmlHelper.WriteAttribute(sw, "tIns", this.tIns, 45720);
+            XmlHelper.WriteAttribute(sw, "rIns", this.rIns, 91440);
+            XmlHelper.WriteAttribute(sw, "bIns", this.bIns, 45720);
             XmlHelper.WriteAttribute(sw, "numCol", this.numCol);
             XmlHelper.WriteAttribute(sw, "spcCol", this.spcCol);
             XmlHelper.WriteAttribute(sw, "rtlCol", this.rtlCol);
@@ -887,7 +887,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.lInsField = value;
-                this.lInsFieldSpecified = true;
+                this.lInsFieldSpecified = value == 91440 ? false : true;
             }
         }
 
@@ -916,7 +916,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.tInsField = value;
-                this.tInsFieldSpecified = true;
+                this.tInsFieldSpecified = value == 45720 ? false : true;
             }
         }
 
@@ -945,7 +945,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.rInsField = value;
-                this.rInsFieldSpecified = true;
+                this.rInsFieldSpecified = value == 91440 ? false : true;
             }
         }
 
@@ -974,7 +974,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.bInsField = value;
-                this.bInsFieldSpecified = true;
+                this.bInsFieldSpecified = value == 45720 ? false : true;
             }
         }
 

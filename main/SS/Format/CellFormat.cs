@@ -168,7 +168,7 @@ namespace NPOI.SS.Format
 
                     parts.Add(new CellFormatPart(valueDesc));
                 }
-                catch (Exception)
+                catch
                 {
                     //CellFormatter.logger.Log(Level.WARNING,
                     //        "Invalid format: " + CellFormatter.Quote(m.Group()), e);
@@ -292,7 +292,7 @@ namespace NPOI.SS.Format
                     {
                         if (DateUtil.IsValidExcelDate(value))
                         {
-                            return Apply(c.DateCellValue, value);
+                            return Apply((DateTime)c.DateCellValue, value);
                         }
                         else
                         {

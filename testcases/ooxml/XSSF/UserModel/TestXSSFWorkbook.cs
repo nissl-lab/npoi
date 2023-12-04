@@ -31,6 +31,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using TestCases.HSSF;
 using TestCases.SS.UserModel;
@@ -390,17 +391,17 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(2, wb.NumberOfNames);
             Assert.IsNotNull(wb.GetCalculationChain());
 
-            XSSFName nm0 = (XSSFName)wb.GetNameAt(0);
+            XSSFName nm0 = (XSSFName)wb.GetAllNames().First();
             Assert.IsTrue(nm0.GetCTName().IsSetLocalSheetId());
             Assert.AreEqual(0u, nm0.GetCTName().localSheetId);
 
-            XSSFName nm1 = (XSSFName)wb.GetNameAt(1);
+            XSSFName nm1 = (XSSFName)wb.GetAllNames().ToArray()[1];
             Assert.IsTrue(nm1.GetCTName().IsSetLocalSheetId());
             Assert.AreEqual(1u, nm1.GetCTName().localSheetId);
 
             wb.RemoveSheetAt(0);
             Assert.AreEqual(1, wb.NumberOfNames);
-            XSSFName nm2 = (XSSFName)wb.GetNameAt(0);
+            XSSFName nm2 = (XSSFName)wb.GetAllNames().First();
             Assert.IsTrue(nm2.GetCTName().IsSetLocalSheetId());
             Assert.AreEqual(0u, nm2.GetCTName().localSheetId);
             //calculation chain is Removed as well
@@ -572,7 +573,7 @@ namespace TestCases.XSSF.UserModel
             workbook.GetSheetAt(1).SetColumnGroupCollapsed(4, false);
 
             Assert.AreEqual("hello world", workbook.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
-            Assert.AreEqual(2048, workbook.GetSheetAt(0).GetColumnWidth(0)); // <-works
+            Assert.AreEqual(2158.08, workbook.GetSheetAt(0).GetColumnWidth(0)); // <-works
         }
 
         [Test]
@@ -585,7 +586,8 @@ namespace TestCases.XSSF.UserModel
             ISheet sheet = wb.GetSheetAt(0);
             sheet.ShiftRows(2, sheet.LastRowNum, 1, true, false);
             IRow newRow = sheet.GetRow(2);
-            if (newRow == null) newRow = sheet.CreateRow(2);
+            if (newRow == null)
+                newRow = sheet.CreateRow(2);
             newRow.CreateCell(0).SetCellValue(" Another Header");
             wb.CloneSheet(0);
 
@@ -1051,7 +1053,7 @@ namespace TestCases.XSSF.UserModel
 
                 // read-only mode works!
                 workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ));
-                DateTime dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
+                var dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
                 Assert.AreEqual(dateExp, dateAct);
                 workbook.Close();
                 workbook = null;
@@ -1087,7 +1089,7 @@ namespace TestCases.XSSF.UserModel
                 Assert.IsTrue(!file.Exists);
             }
         }
-        
+
         [Test]
         public void CloseDoesNotModifyWorkbook()
         {
@@ -1190,10 +1192,29 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(sheet2Name, wb.GetNames("name1")[0]);
             // Check by index as well for sanity
             Assert.AreEqual(1, wb.NumberOfNames);
-            Assert.AreEqual(0, wb.GetNameIndex("name1"));
-            Assert.AreEqual(sheet2Name, wb.GetNameAt(0));
+            Assert.AreEqual(sheet2Name, wb.GetName(sheet2Name.NameName));
             wb.Close();
         }
 
+        [Test]
+        public void TestRemoveSheetMethod()
+        {
+            using (XSSFWorkbook wb = new XSSFWorkbook())
+            {
+                var sheet1 = wb.CreateSheet("Sheet1");
+                var sheet2 = wb.CreateSheet("Sheet2");
+
+                Assert.True(wb.Remove(sheet2));
+                Assert.AreEqual(1, wb.NumberOfSheets);
+                Assert.AreEqual("Sheet1", wb.GetSheetName(0));
+                Assert.AreEqual(sheet1, wb.GetSheet("Sheet1"));
+
+                using (var wbCopy = XSSFTestDataSamples.WriteOutAndReadBack(wb))
+                {
+                    Assert.AreEqual(1, wbCopy.NumberOfSheets);
+                    Assert.AreEqual("Sheet1", wb.GetSheetName(0));
+                }
+            }
+        }
     }
 }

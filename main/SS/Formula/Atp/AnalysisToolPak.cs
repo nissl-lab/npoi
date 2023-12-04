@@ -19,7 +19,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NPOI.SS.Formula.Function;
 
-namespace NPOI.SS.Formula.Atp {
+namespace NPOI.SS.Formula.Atp
+{
     using System;
     using System.Collections;
     using NPOI.SS.Formula;
@@ -192,6 +193,15 @@ namespace NPOI.SS.Formula.Atp {
             r(m, "YIELD", null);
             r(m, "YIELDDISC", null);
             r(m, "YIELDMAT", null);
+
+            r(m, "CEILING.MATH", CeilingMath.Instance);
+            r(m, "FLOOR.MATH", FloorMath.Instance);
+
+            r(m, "STDEV.S", StdevS.Instance);
+            r(m, "STDEV.P", StdevP.Instance);
+            r(m, "VAR.S", VarS.Instance);
+            r(m, "VAR.P", VarP.Instance);
+
             return m;
         }
 

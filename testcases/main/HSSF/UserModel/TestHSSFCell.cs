@@ -142,7 +142,7 @@ namespace TestCases.HSSF.UserModel
             // string to error code
             cell.SetCellValue("abc");
             ConfirmStringRecord(sheet, true);
-            cell.SetCellErrorValue(FormulaError.REF.Code);
+            cell.SetCellErrorValue(FormulaError.REF);
             ConfirmStringRecord(sheet, false);
 
             // string to boolean
@@ -186,7 +186,7 @@ namespace TestCases.HSSF.UserModel
             cell.SetCellValue(date);
         }
 
-        private static DateTime ReadCell(HSSFWorkbook workbook, int rowIdx, int colIdx)
+        private static DateTime? ReadCell(HSSFWorkbook workbook, int rowIdx, int colIdx)
         {
             NPOI.SS.UserModel.ISheet sheet = workbook.GetSheetAt(0);
             IRow row = sheet.GetRow(rowIdx);
@@ -485,7 +485,7 @@ namespace TestCases.HSSF.UserModel
             HSSFCell cell = row.CreateCell(0) as HSSFCell;
 
             cell.SetCellType(CellType.Blank);
-            Assert.AreEqual("9999-12-31 23:59:59.999", cell.DateCellValue.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+            Assert.IsNull(cell.DateCellValue);
             Assert.IsFalse(cell.BooleanCellValue);
             Assert.AreEqual("", cell.ToString());
 
@@ -519,6 +519,25 @@ namespace TestCases.HSSF.UserModel
             cell.SetCellValue((String)null);
             cell.SetCellValue((IRichTextString)null);
             wb.Close();
+        }
+
+        [Test]
+        public void TestGetDateTimeCellValue()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+            HSSFRow row = sheet.CreateRow(0) as HSSFRow;
+            HSSFCell cell = row.CreateCell(0) as HSSFCell;
+            cell.SetCellValue(new DateTime(2022, 5, 10, 13, 20, 50));
+            Assert.IsNotNull(cell.DateCellValue);
+            Assert.AreEqual(new DateTime(2022, 5, 10, 13, 20, 50), cell.DateCellValue);
+#if NET6_0_OR_GREATER
+            Assert.AreEqual(new DateOnly(2022, 5, 10), cell.DateOnlyCellValue);
+            Assert.AreEqual(new TimeOnly(13, 20, 50), cell.TimeOnlyCellValue);
+#endif
+            HSSFCell cell2 = row.CreateCell(1) as HSSFCell;
+            cell2.SetCellValue("test");
+            Assert.IsNull(cell2.DateCellValue);
         }
     }
 

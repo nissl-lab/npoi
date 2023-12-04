@@ -365,7 +365,17 @@ namespace NPOI.SS.Util
         }
         public DateTime Parse(string source)
         {
-            var dt = DateTime.Parse(source, CultureInfo.InvariantCulture);
+            if (!DateTime.TryParse(source, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt))
+            {
+                // Compatibility stub for SAS-generated ill-formed datetime, such as 2020-07-03T 9:41:11-04:00
+                // There should be a leading zero before the one-digit hour.
+                // See https://github.com/nissl-lab/npoi/issues/846 for more information.
+
+                const string AlternativeDateTimeFormat = "yyyy-MM-ddT H:mm:sszzz";
+
+                dt = DateTime.ParseExact(source, AlternativeDateTimeFormat, CultureInfo.InvariantCulture);
+            }
+
             return TimeZone != null ? TimeZoneInfo.ConvertTime(dt, TimeZone) : dt;
         }
         

@@ -84,7 +84,7 @@ namespace NPOI.XSSF.Streaming
             {
                 outputStream = DecorateOutputStream(fos);
             }
-            catch (Exception)
+            catch
             {
                 fos.Close();
                 throw;
@@ -119,7 +119,7 @@ namespace NPOI.XSSF.Streaming
                 _outputWriter.Flush();
                 OutputStream.Flush();
             }
-            catch (Exception)
+            catch
             {
 
             }
@@ -127,7 +127,7 @@ namespace NPOI.XSSF.Streaming
             {
                 OutputStream.Close();
             }
-            catch (Exception)
+            catch
             {
 
             }
@@ -228,7 +228,7 @@ namespace NPOI.XSSF.Streaming
 
             if (row.HasCustomHeight())
             {
-                WriteAsBytes(" customHeight=\"true\"  ht=\"");
+                WriteAsBytes(" customHeight=\"true\" ht=\"");
                 WriteAsBytes(row.HeightInPoints);
                 WriteAsBytes("\"");
             }

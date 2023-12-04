@@ -98,10 +98,22 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
+         * Returns the frame id.
+         * @return id of the frame
+         */
+        public override uint ID
+        {
+            get
+            {
+                return GetNonVisualProperties().id;
+            }
+        }
+
+        /**
          * Returns the frame name.
          * @return name of the frame
          */
-        public String Name
+        public override String Name
         {
             get
             {

@@ -711,7 +711,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [DebuggerStepThrough]
+    //[DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -772,33 +772,56 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_Path2DCubicBezierTo
     {
 
-        private CT_AdjPoint2D[] ptField;
+        private List<CT_AdjPoint2D> pts = null;
 
+		public static CT_Path2DCubicBezierTo Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+			CT_Path2DCubicBezierTo obj = new CT_Path2DCubicBezierTo();
+			foreach(XmlNode childNode in node.ChildNodes) {
+				if(childNode.LocalName == "pt") {
+					obj.pts.Add(CT_AdjPoint2D.Parse(childNode, namespaceManager));
+				}
+			}
+			return obj;
+		}
 
-        [XmlElement("pt", Order = 0)]
-        public CT_AdjPoint2D[] pt
+		internal void Write(StreamWriter sw, string nodeName) {
+
+			sw.Write("<a:{0}>", nodeName);
+			foreach(var cub in pts) {
+				cub.Write(sw, "pt");
+			}
+			sw.Write("</a:{0}>", nodeName);
+		}
+
+		public CT_Path2DCubicBezierTo() {
+			pts = new List<CT_AdjPoint2D>();
+		}
+
+		[XmlElement("pt", Order = 0)]
+        public List<CT_AdjPoint2D> pt
         {
             get
             {
-                return this.ptField;
+                return this.pts;
             }
             set
             {
-                this.ptField = value;
+                this.pts = value;
             }
         }
     }
 
 
     [Serializable]
-    [DebuggerStepThrough]
+    //[DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -826,8 +849,8 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "x", this.x);
             XmlHelper.WriteAttribute(sw, "y", this.y);
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("/>");
+
         }
 
         [XmlAttribute]
@@ -860,7 +883,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -886,7 +909,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -948,7 +971,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1045,7 +1068,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1166,7 +1189,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1287,7 +1310,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [DebuggerStepThrough]
+    //[DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1353,7 +1376,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1380,7 +1403,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1433,7 +1456,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1459,7 +1482,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "id", this.id);
-            XmlHelper.WriteAttribute(sw, "idx", this.idx);
+            XmlHelper.WriteAttribute(sw, "idx", this.idx, true);
             sw.Write("/>");
         }
 
@@ -1494,19 +1517,41 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_Path2DMoveTo
     {
 
-        private CT_AdjPoint2D ptField;
+        private CT_AdjPoint2D ptField = null;
         public CT_Path2DMoveTo()
         {
             this.ptField = new CT_AdjPoint2D();
         }
-        [XmlElement(Order = 0)]
+
+		public static CT_Path2DMoveTo Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+			CT_Path2DMoveTo obj = new CT_Path2DMoveTo();
+			foreach(XmlNode childNode in node.ChildNodes) {
+				if(childNode.LocalName == "pt") {
+					obj.ptField = CT_AdjPoint2D.Parse(childNode, namespaceManager);
+				}	
+			}
+			return obj;
+		}
+
+		internal void Write(StreamWriter sw, string nodeName) {
+
+			sw.Write("<a:{0}>", nodeName);
+
+			if(this.ptField != null) {
+				this.ptField.Write(sw, "pt");
+			}
+			sw.Write("</a:{0}>", nodeName);
+		}
+
+		[XmlElement(Order = 0)]
         public CT_AdjPoint2D pt
         {
             get
@@ -1522,7 +1567,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1552,7 +1597,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1626,7 +1671,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1661,7 +1706,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1681,7 +1726,12 @@ namespace NPOI.OpenXmlFormats.Dml
         private bool strokeField;
 
         private bool extrusionOkField;
-        public static CT_Path2D Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+
+		private CT_Path2DMoveTo moveToFeild = null;
+
+		private List<CT_Path2DCubicBezierTo> cubicBezTo = null;
+
+		public static CT_Path2D Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
@@ -1690,14 +1740,18 @@ namespace NPOI.OpenXmlFormats.Dml
             ctObj.h = XmlHelper.ReadLong(node.Attributes["h"]);
             if (node.Attributes["fill"] != null)
                 ctObj.fill = (ST_PathFillMode)Enum.Parse(typeof(ST_PathFillMode), node.Attributes["fill"].Value);
-            ctObj.stroke = XmlHelper.ReadBool(node.Attributes["stroke"]);
+            ctObj.stroke = XmlHelper.ReadBool(node.Attributes["stroke"], true);
             ctObj.extrusionOk = XmlHelper.ReadBool(node.Attributes["extrusionOk"]);
-            //foreach(XmlNode childNode in node.ChildNodes)
-            //{
+            foreach(XmlNode childNode in node.ChildNodes)
+            {
             //    if(childNode.LocalName == "ItemsElementName")
             //        ctObj.ItemsElementName = ItemsChoiceType[].Parse(childNode, namespaceManager);
-            //}
-            return ctObj;
+                if(childNode.LocalName == "moveTo")
+                    ctObj.moveToFeild = CT_Path2DMoveTo.Parse(childNode, namespaceManager);
+				if(childNode.LocalName == "cubicBezTo")
+                    ctObj.cubicBezTo.Add( CT_Path2DCubicBezierTo.Parse(childNode, namespaceManager));
+			}
+			return ctObj;
         }
 
 
@@ -1711,9 +1765,16 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "stroke", this.stroke);
             XmlHelper.WriteAttribute(sw, "extrusionOk", this.extrusionOk);
             sw.Write(">");
-            //if (this.ItemsElementName != null)
-            //    this.ItemsElementName.Write(sw, "ItemsElementName");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+			//if (this.ItemsElementName != null)
+			//    this.ItemsElementName.Write(sw, "ItemsElementName");
+			if(this.moveToFeild != null)
+				moveToFeild.Write(sw, "moveTo");
+			if(cubicBezTo.Count > 0) {
+				foreach(CT_Path2DCubicBezierTo cub in cubicBezTo) {
+					cub.Write(sw, "cubicBezTo");
+				}
+			}
+			sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
         public CT_Path2D()
@@ -1723,7 +1784,9 @@ namespace NPOI.OpenXmlFormats.Dml
             this.fillField = ST_PathFillMode.norm;
             this.strokeField = true;
             this.extrusionOkField = true;
-        }
+
+			this.cubicBezTo = new List<CT_Path2DCubicBezierTo>();
+		}
 
 
         //[XmlElement("arcTo", typeof(CT_Path2DArcTo))]
@@ -1863,7 +1926,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -1917,7 +1980,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -2000,7 +2063,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
@@ -2074,7 +2137,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
     [Serializable]
-    [System.Diagnostics.DebuggerStepThrough]
+    //[System.Diagnostics.DebuggerStepThrough]
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main")]
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]

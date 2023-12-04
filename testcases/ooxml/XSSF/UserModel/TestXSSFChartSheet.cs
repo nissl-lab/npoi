@@ -44,9 +44,9 @@ namespace TestCases.XSSF.UserModel
         public void TestGetAccessors()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("chart_sheet.xlsx");
-            XSSFChartSheet sheet = (XSSFChartSheet) wb.GetSheetAt(2);
+            XSSFChartSheet sheet = (XSSFChartSheet)wb.GetSheetAt(2);
 
-            Assert.IsFalse(sheet.GetEnumerator().MoveNext(), 
+            Assert.IsFalse(sheet.GetEnumerator().MoveNext(),
                 "Row iterator for charts sheets should return zero rows");
 
             //access to a arbitrary row
@@ -58,7 +58,7 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(0, sheet.NumMergedRegions);
             Assert.IsNull(sheet.ActiveCell);
             Assert.IsTrue(sheet.Autobreaks);
-            Assert.IsNull(sheet.GetCellComment(0, 0));
+            Assert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
             Assert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
             Assert.AreEqual(0, sheet.ColumnBreaks.Length);
             Assert.IsTrue(sheet.RowSumsBelow);
@@ -73,8 +73,8 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("chart_sheet.xlsx");
 
-            XSSFSheet ns = (XSSFSheet) wb.GetSheetAt(0);
-            XSSFChartSheet cs = (XSSFChartSheet) wb.GetSheetAt(2);
+            XSSFSheet ns = (XSSFSheet)wb.GetSheetAt(0);
+            XSSFChartSheet cs = (XSSFChartSheet)wb.GetSheetAt(2);
 
             Assert.AreEqual(0, (ns.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
             Assert.AreEqual(1, (cs.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);

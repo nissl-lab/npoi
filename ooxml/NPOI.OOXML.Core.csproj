@@ -1,25 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TargetFrameworks>net472;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
     <AssemblyName>NPOI.OOXML</AssemblyName>
-    <RootNamespace>NPOI.OOXML</RootNamespace>
+    <RootNamespace>NPOI</RootNamespace>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>C:\github\npoi\ooxml\NPOI.OOXML.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\solution\Lib</OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-    <OutputPath></OutputPath>
-    <WarningLevel>5</WarningLevel>
+    <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
+    <OutputPath>..\solution\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,20 +27,12 @@
 
   <ItemGroup>
     <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\main\NPOI.Core.csproj" />
     <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
     <ProjectReference Include="..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
 </Project>

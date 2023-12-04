@@ -91,9 +91,9 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
                 Uri uri = null;
                 try
                 {
-                    uri = new Uri(s,UriKind.Relative);
+                    uri = new Uri(s, UriKind.Relative);
                 }
-                catch (UriFormatException e)
+                catch
                 {
                     Assert.IsTrue(s.Equals("[Content_Types].xml"));
                     continue;
@@ -110,10 +110,10 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         public void TestValidPartNames()
         {
             String[] validNames = { "/xml/item1.xml", "/document.xml",
-				"/a/%D1%86.xml" };
+                "/a/%D1%86.xml" };
             foreach (String s in validNames)
                 Assert.IsTrue(
-                        PackagingUriHelper.IsValidPartName(new Uri(s,UriKind.RelativeOrAbsolute)),
+                        PackagingUriHelper.IsValidPartName(new Uri(s, UriKind.RelativeOrAbsolute)),
                         "This part name SHOULD be valid: " + s);
         }
 
@@ -125,7 +125,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         {
             try
             {
-                PackagingUriHelper.CreatePartName(new Uri("",UriKind.Relative));
+                PackagingUriHelper.CreatePartName(new Uri("", UriKind.Relative));
                 Assert.Fail("A part name shall not be empty. [M1.1]");
             }
             catch (InvalidFormatException)
@@ -145,13 +145,13 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         public void TestPartNameWithInvalidSegmentsFailure()
         {
             String[] invalidNames = { "//document.xml", "//word/document.xml",
-				"/word//document.rels", "/word//rels//document.rels",
-				"/xml./doc.xml", "/document.", "/./document.xml",
-				"/word/./doc.rels", "/%2F/document.xml" };
-                foreach (String s in invalidNames)
-                    Assert.IsFalse(
-                            PackagingUriHelper.IsValidPartName(new Uri(s,UriKind.RelativeOrAbsolute)),
-                            "A part name shall not have empty segments. [M1.3]");
+                "/word//document.rels", "/word//rels//document.rels",
+                "/xml./doc.xml", "/document.", "/./document.xml",
+                "/word/./doc.rels", "/%2F/document.xml" };
+            foreach (String s in invalidNames)
+                Assert.IsFalse(
+                        PackagingUriHelper.IsValidPartName(new Uri(s, UriKind.RelativeOrAbsolute)),
+                        "A part name shall not have empty segments. [M1.3]");
         }
 
         /**
@@ -210,7 +210,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
                 PackagingUriHelper.CreatePartName(new Uri("document.xml", UriKind.RelativeOrAbsolute));
                 Assert.Fail("A part name shall start with a forward slash ('/') character. [M1.4]");
             }
-            catch (InvalidFormatException )
+            catch (InvalidFormatException)
             {
                 // Normal behaviour
             }

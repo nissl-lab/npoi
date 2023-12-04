@@ -33,11 +33,7 @@ namespace NPOI.SS.Formula.Function
      */
     class FunctionMetadataReader
     {
-#if NETSTANDARD2_1 || NET6_0_OR_GREATER || NETSTANDARD2_0
         private const String METADATA_FILE_NAME = "NPOI.Resources.functionMetadata.txt";
-#else
-        private const String METADATA_FILE_NAME = "functionMetadata.txt";
-#endif
 
         /** plain ASCII text metadata file uses three dots for ellipsis */
         private const string ELLIPSIS = "...";
@@ -60,30 +56,23 @@ namespace NPOI.SS.Formula.Function
 
                 FunctionDataBuilder fdb = new FunctionDataBuilder(400);
 
-                try
+                while (true)
                 {
-                    while (true)
+                    String line = br.ReadLine();
+                    if (line == null)
                     {
-                        String line = br.ReadLine();
-                        if (line == null)
-                        {
-                            break;
-                        }
-                        if (line.Length < 1 || line[0] == '#')
-                        {
-                            continue;
-                        }
-                        String TrimLine = line.Trim();
-                        if (TrimLine.Length < 1)
-                        {
-                            continue;
-                        }
-                        ProcessLine(fdb, line);
+                        break;
                     }
-                }
-                catch (IOException)
-                {
-                    throw;
+                    if (line.Length < 1 || line[0] == '#')
+                    {
+                        continue;
+                    }
+                    String TrimLine = line.Trim();
+                    if (TrimLine.Length < 1)
+                    {
+                        continue;
+                    }
+                    ProcessLine(fdb, line);
                 }
 
                 return fdb.Build();

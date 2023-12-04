@@ -1,5 +1,6 @@
 /* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
+
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
    The ASF licenses this file to You under the Apache License, Version 2.0
@@ -14,6 +15,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+
 namespace NPOI.XWPF.UserModel
 {
     using System;
@@ -23,10 +25,13 @@ namespace NPOI.XWPF.UserModel
     using NPOI.OpenXml4Net.OPC;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Xml;
+    using NPOI.WP.UserModel;
     using NPOI.XWPF.Model;
     using System.Xml.Serialization;
     using System.Diagnostics;
     using NPOI.OOXML.XWPF.Util;
+    using System.Linq;
+    using NPOI.POIFS.Crypt;
 
     /**
      * <p>High(ish) level class for working with .docx files.</p>
@@ -42,16 +47,15 @@ namespace NPOI.XWPF.UserModel
      */
     public class XWPFDocument : POIXMLDocument, Document, IBody, IDisposable
     {
-
         private CT_Document ctDocument;
-        private XWPFSettings Settings;
+        private XWPFSettings settings;
+
         /**
          * Keeps track on all id-values used in this document and included parts, like headers, footers, etc.
          */
         private IdentifierManager drawingIdManager = new IdentifierManager(0L, 4294967295L);
         protected List<XWPFFooter> footers = new List<XWPFFooter>();
         protected List<XWPFHeader> headers = new List<XWPFHeader>();
-        protected List<XWPFComment> comments = new List<XWPFComment>();
         protected List<XWPFHyperlink> hyperlinks = new List<XWPFHyperlink>();
         protected List<XWPFParagraph> paragraphs = new List<XWPFParagraph>();
         protected List<XWPFTable> tables = new List<XWPFTable>();
@@ -63,6 +67,7 @@ namespace NPOI.XWPF.UserModel
         protected XWPFNumbering numbering;
         protected XWPFStyles styles;
         protected XWPFFootnotes footnotes;
+        private XWPFComments comments;
 
         /** Handles the joy of different headers/footers for different pages */
         private XWPFHeaderFooterPolicy headerFooterPolicy;
@@ -153,17 +158,13 @@ namespace NPOI.XWPF.UserModel
                     }
                     else if (relation.Equals(XWPFRelation.COMMENT.Relation))
                     {
-                        XmlDocument xml = ConvertStreamToXml(p.GetPackagePart().GetInputStream());
-                        CommentsDocument cmntdoc = CommentsDocument.Parse(xml ,NamespaceManager);
-                        foreach (CT_Comment ctcomment in cmntdoc.Comments.comment)
-                        {
-                            comments.Add(new XWPFComment(ctcomment, this));
-                        }
+                        this.comments = (XWPFComments)p;
+                        this.comments.OnDocumentRead();
                     }
                     else if (relation.Equals(XWPFRelation.SETTINGS.Relation))
                     {
-                        Settings = (XWPFSettings)p;
-                        Settings.OnDocumentRead();
+                        settings = (XWPFSettings)p;
+                        settings.OnDocumentRead();
                     }
                     else if (relation.Equals(XWPFRelation.IMAGES.Relation))
                     {
@@ -221,6 +222,11 @@ namespace NPOI.XWPF.UserModel
             {
                 throw new POIXMLException(e);
             }
+            hyperlinks.AddRange(footers.SelectMany(footer => footer.GetHyperlinks()));
+            if (footnotes != null)
+            {
+                hyperlinks.AddRange(footnotes.GetHyperlinks());
+            }
         }
 
         private void InitFootnotes()
@@ -277,7 +283,7 @@ namespace NPOI.XWPF.UserModel
             ctDocument.AddNewBody();
             
 
-            Settings = (XWPFSettings) CreateRelationship(XWPFRelation.SETTINGS,XWPFFactory.GetInstance());
+            settings = (XWPFSettings) CreateRelationship(XWPFRelation.SETTINGS,XWPFFactory.GetInstance());
             CreateStyles();
 
             ExtendedProperties expProps = GetProperties().ExtendedProperties;
@@ -487,22 +493,32 @@ namespace NPOI.XWPF.UserModel
             return hyperlinks.ToArray();
         }
 
+        /**
+         * Get Comments
+         *
+         * @return comments
+         */
+        public XWPFComments GetDocComments()
+        {
+            return comments;
+        }
+
         public XWPFComment GetCommentByID(String id)
         {
-            IEnumerator<XWPFComment> iter = comments.GetEnumerator();
-            while (iter.MoveNext())
+            if (null == comments)
             {
-                XWPFComment comment = iter.Current;
-                if (comment.Id.Equals(id))
-                    return comment;
+                return null;
             }
-
-            return null;
+            return comments.GetCommentByID(id);
         }
 
         public XWPFComment[] GetComments()
         {
-            return comments.ToArray();
+            if (null == comments)
+            {
+                return null;
+            }
+            return comments.GetComments().ToArray();
         }
 
         /**
@@ -534,14 +550,81 @@ namespace NPOI.XWPF.UserModel
         {
             if (headerFooterPolicy == null)
             {
-                if (!ctDocument.body.IsSetSectPr())
-                {
-                    ctDocument.body.AddNewSectPr();
-                }
+                //if (!ctDocument.body.IsSetSectPr())
+                //{
+                //    ctDocument.body.AddNewSectPr();
+                //}
                 headerFooterPolicy = new XWPFHeaderFooterPolicy(this);
             }
             return headerFooterPolicy;
         }
+
+        /**
+         * Create a header of the given type
+         *
+         * @param type {@link HeaderFooterType} enum
+         * @return object of type {@link XWPFHeader}
+         */
+        public XWPFHeader CreateHeader(HeaderFooterType type)
+        {
+            XWPFHeaderFooterPolicy hfPolicy = CreateHeaderFooterPolicy();
+            // TODO this needs to be migrated out into section code
+            if (type == HeaderFooterType.FIRST)
+            {
+                CT_SectPr ctSectPr = GetSection();
+                if (ctSectPr.IsSetTitlePg() == false)
+                {
+                    CT_OnOff titlePg = ctSectPr.AddNewTitlePg();
+                    titlePg.val = true;//ST_OnOff.on;
+                }
+            }
+            else if (type == HeaderFooterType.EVEN)
+            {
+                // TODO Add support for Even/Odd headings and footers
+            }
+            return hfPolicy.CreateHeader(EnumConverter.ValueOf<ST_HdrFtr, HeaderFooterType>(type));
+        }
+
+        /**
+         * Create a footer of the given type
+         *
+         * @param type {@link HeaderFooterType} enum
+         * @return object of type {@link XWPFFooter}
+         */
+        public XWPFFooter CreateFooter(HeaderFooterType type)
+        {
+            XWPFHeaderFooterPolicy hfPolicy = CreateHeaderFooterPolicy();
+            // TODO this needs to be migrated out into section code
+            if (type == HeaderFooterType.FIRST)
+            {
+                CT_SectPr ctSectPr = GetSection();
+                if (ctSectPr.IsSetTitlePg() == false)
+                {
+                    CT_OnOff titlePg = ctSectPr.AddNewTitlePg();
+                    titlePg.val = true;//ST_OnOff.on;
+                }
+            }
+            else if (type == HeaderFooterType.EVEN)
+            {
+                // TODO Add support for Even/Odd headings and footers
+            }
+            return hfPolicy.CreateFooter(EnumConverter.ValueOf<ST_HdrFtr, HeaderFooterType>(type));
+        }
+
+        /**
+         * Return the {@link CTSectPr} object that corresponds with the
+         * last section in this document.
+         *
+         * @return {@link CTSectPr} object
+         */
+        private CT_SectPr GetSection()
+        {
+            CT_Body ctBody = Document.body;
+            return (ctBody.IsSetSectPr() ?
+                    ctBody.sectPr :
+                    ctBody.AddNewSectPr());
+        }
+
         /**
          * Returns the styles object used
          */
@@ -897,6 +980,28 @@ namespace NPOI.XWPF.UserModel
         }
 
         /**
+         * Creates an empty comments for the document if one does not already exist
+         *
+         * @return comments
+         */
+        public XWPFComments CreateComments()
+        {
+            if (comments == null)
+            {
+                CommentsDocument commentsDoc = new CommentsDocument();
+
+                XWPFRelation relation = XWPFRelation.COMMENT;
+                int i = GetRelationIndex(relation);
+
+                XWPFComments wrapper = (XWPFComments)CreateRelationship(relation, XWPFFactory.GetInstance(), i);
+                wrapper.SetCtComments(commentsDoc.AddNewComments());
+                wrapper.SetXWPFDocument(GetXWPFDocument());
+                comments = wrapper;
+            }
+            return comments;
+        }
+
+        /**
          * Creates an empty numbering if one does not already exist and Sets the numbering member
          * @return numbering
          */
@@ -1123,7 +1228,7 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsEnforcedProtection()
         {
-            return Settings.IsEnforcedWith();
+            return settings.IsEnforcedWith();
         }
 
         /**
@@ -1141,7 +1246,7 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsEnforcedReadonlyProtection()
         {
-            return Settings.IsEnforcedWith(ST_DocProtect.readOnly);
+            return settings.IsEnforcedWith(ST_DocProtect.readOnly);
         }
 
         /**
@@ -1159,7 +1264,7 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsEnforcedFillingFormsProtection()
         {
-            return Settings.IsEnforcedWith(ST_DocProtect.forms);
+            return settings.IsEnforcedWith(ST_DocProtect.forms);
         }
 
         /**
@@ -1177,7 +1282,7 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsEnforcedCommentsProtection()
         {
-            return Settings.IsEnforcedWith(ST_DocProtect.comments);
+            return settings.IsEnforcedWith(ST_DocProtect.comments);
         }
 
         /**
@@ -1195,12 +1300,14 @@ namespace NPOI.XWPF.UserModel
          */
         public bool IsEnforcedTrackedChangesProtection()
         {
-            return Settings.IsEnforcedWith(ST_DocProtect.trackedChanges);
+            return settings.IsEnforcedWith(ST_DocProtect.trackedChanges);
         }
+
         public bool IsEnforcedUpdateFields()
         {
-            return Settings.IsUpdateFields();
+            return settings.IsUpdateFields();
         }
+
         /**
          * Enforces the ReadOnly protection.<br/>
          * In the documentProtection tag inside Settings.xml file, <br/>
@@ -1215,7 +1322,28 @@ namespace NPOI.XWPF.UserModel
          */
         public void EnforceReadonlyProtection()
         {
-            Settings.SetEnforcementEditValue(ST_DocProtect.readOnly);
+            settings.SetEnforcementEditValue(ST_DocProtect.readOnly);
+        }
+
+        /**
+         * Enforces the readOnly protection with a password.<br/>
+         * <br/>
+         * sample snippet from settings.xml
+         * <pre>
+         *   &lt;w:documentProtection w:edit=&quot;readOnly&quot; w:enforcement=&quot;1&quot; 
+         *       w:cryptProviderType=&quot;rsaAES&quot; w:cryptAlgorithmClass=&quot;hash&quot;
+         *       w:cryptAlgorithmType=&quot;typeAny&quot; w:cryptAlgorithmSid=&quot;14&quot;
+         *       w:cryptSpinCount=&quot;100000&quot; w:hash=&quot;...&quot; w:salt=&quot;....&quot;
+         *   /&gt;
+         * </pre>
+         * 
+         * @param password the plaintext password, if null no password will be applied
+         * @param hashAlgo the hash algorithm - only md2, m5, sha1, sha256, sha384 and sha512 are supported.
+         *   if null, it will default default to sha1
+         */
+        public void EnforceReadonlyProtection(String password, HashAlgorithm hashAlgo)
+        {
+            settings.SetEnforcementEditValue(ST_DocProtect.readOnly, password, hashAlgo);
         }
 
         /**
@@ -1232,7 +1360,28 @@ namespace NPOI.XWPF.UserModel
          */
         public void EnforceFillingFormsProtection()
         {
-            Settings.SetEnforcementEditValue(ST_DocProtect.forms);
+            settings.SetEnforcementEditValue(ST_DocProtect.forms);
+        }
+
+        /**
+         * Enforce the Filling Forms protection.<br/>
+         * <br/>
+         * sample snippet from settings.xml
+         * <pre>
+         *   &lt;w:documentProtection w:edit=&quot;forms&quot; w:enforcement=&quot;1&quot; 
+         *       w:cryptProviderType=&quot;rsaAES&quot; w:cryptAlgorithmClass=&quot;hash&quot;
+         *       w:cryptAlgorithmType=&quot;typeAny&quot; w:cryptAlgorithmSid=&quot;14&quot;
+         *       w:cryptSpinCount=&quot;100000&quot; w:hash=&quot;...&quot; w:salt=&quot;....&quot;
+         *   /&gt;
+         * </pre>
+         * 
+         * @param password the plaintext password, if null no password will be applied
+         * @param hashAlgo the hash algorithm - only md2, m5, sha1, sha256, sha384 and sha512 are supported.
+         *   if null, it will default default to sha1
+         */
+        public void EnforceFillingFormsProtection(String password, HashAlgorithm hashAlgo)
+        {
+            settings.SetEnforcementEditValue(ST_DocProtect.forms, password, hashAlgo);
         }
 
         /**
@@ -1249,7 +1398,28 @@ namespace NPOI.XWPF.UserModel
          */
         public void EnforceCommentsProtection()
         {
-            Settings.SetEnforcementEditValue(ST_DocProtect.comments);
+            settings.SetEnforcementEditValue(ST_DocProtect.comments);
+        }
+
+        /**
+         * Enforce the Comments protection.<br/>
+         * <br/>
+         * sample snippet from settings.xml
+         * <pre>
+         *   &lt;w:documentProtection w:edit=&quot;comments&quot; w:enforcement=&quot;1&quot; 
+         *       w:cryptProviderType=&quot;rsaAES&quot; w:cryptAlgorithmClass=&quot;hash&quot;
+         *       w:cryptAlgorithmType=&quot;typeAny&quot; w:cryptAlgorithmSid=&quot;14&quot;
+         *       w:cryptSpinCount=&quot;100000&quot; w:hash=&quot;...&quot; w:salt=&quot;....&quot;
+         *   /&gt;
+         * </pre>
+         * 
+         * @param password the plaintext password, if null no password will be applied
+         * @param hashAlgo the hash algorithm - only md2, m5, sha1, sha256, sha384 and sha512 are supported.
+         *   if null, it will default default to sha1
+         */
+        public void EnforceCommentsProtection(String password, HashAlgorithm hashAlgo)
+        {
+            settings.SetEnforcementEditValue(ST_DocProtect.comments, password, hashAlgo);
         }
 
         /**
@@ -1266,7 +1436,39 @@ namespace NPOI.XWPF.UserModel
          */
         public void EnforceTrackedChangesProtection()
         {
-            Settings.SetEnforcementEditValue(ST_DocProtect.trackedChanges);
+            settings.SetEnforcementEditValue(ST_DocProtect.trackedChanges);
+        }
+
+        /**
+         * Enforce the Tracked Changes protection.<br/>
+         * <br/>
+         * sample snippet from settings.xml
+         * <pre>
+         *   &lt;w:documentProtection w:edit=&quot;trackedChanges&quot; w:enforcement=&quot;1&quot; 
+         *       w:cryptProviderType=&quot;rsaAES&quot; w:cryptAlgorithmClass=&quot;hash&quot;
+         *       w:cryptAlgorithmType=&quot;typeAny&quot; w:cryptAlgorithmSid=&quot;14&quot;
+         *       w:cryptSpinCount=&quot;100000&quot; w:hash=&quot;...&quot; w:salt=&quot;....&quot;
+         *   /&gt;
+         * </pre>
+         * 
+         * @param password the plaintext password, if null no password will be applied
+         * @param hashAlgo the hash algorithm - only md2, m5, sha1, sha256, sha384 and sha512 are supported.
+         *   if null, it will default default to sha1
+         */
+        public void EnforceTrackedChangesProtection(String password, HashAlgorithm hashAlgo)
+        {
+            settings.SetEnforcementEditValue(ST_DocProtect.trackedChanges, password, hashAlgo);
+        }
+
+        /**
+         * Validates the existing password
+         *
+         * @param password
+         * @return true, only if password was set and equals, false otherwise
+         */
+        public bool ValidateProtectionPassword(String password)
+        {
+            return settings.ValidateProtectionPassword(password);
         }
 
         /**
@@ -1276,8 +1478,9 @@ namespace NPOI.XWPF.UserModel
          */
         public void RemoveProtectionEnforcement()
         {
-            Settings.RemoveEnforcement();
+            settings.RemoveEnforcement();
         }
+
         /**
          * Enforces fields update on document open (in Word).
          * In the settings.xml file <br/>
@@ -1292,7 +1495,7 @@ namespace NPOI.XWPF.UserModel
          */
         public void EnforceUpdateFields()
         {
-            Settings.SetUpdateFields();
+            settings.SetUpdateFields();
         }
 
         /**
@@ -1304,13 +1507,14 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                return Settings.IsTrackRevisions;
+                return settings.IsTrackRevisions;
             }
             set
             {
-                Settings.IsTrackRevisions = value;
+                settings.IsTrackRevisions = value;
             }
         }
+
         /**
          * inserts an existing XWPFTable to the arrays bodyElements and tables
          * @param pos
@@ -1451,7 +1655,6 @@ namespace NPOI.XWPF.UserModel
                  * relationship to the already existing part and update
                  * POIXMLDocumentPart data.
                  */
-                PackagePart picDataPart = xwpfPicData.GetPackagePart();
                 // TODO add support for TargetMode.EXTERNAL relations.
                 RelationPart rp = AddRelation(null, XWPFRelation.IMAGES, xwpfPicData);
                 return rp.Relationship.Id;
@@ -1602,6 +1805,7 @@ namespace NPOI.XWPF.UserModel
                 pageSize.w = 595 * 20;
             }
         }
+
         public IEnumerator<XWPFParagraph> GetParagraphsEnumerator()
         {
             return paragraphs.GetEnumerator();
@@ -1678,10 +1882,94 @@ namespace NPOI.XWPF.UserModel
         {
             return this;
         }
+        private void FindAndReplaceTextInParagraph(XWPFParagraph paragraph, string oldValue, string newValue)
+        {
+            var index = paragraph?.Text.IndexOf(oldValue) ?? -1;
+            if (index != -1)
+            {
+                int? firstIndex = null;
+                int? lastIndex = null;
+                for (var i = 0; i < paragraph.Runs.Count; ++i)
+                {
+                    if (index < paragraph.Runs[i].Text.Length)
+                    {
+                        if (-index <= oldValue.Length)
+                        {
+                            if (firstIndex == null)
+                            {
+                                firstIndex = i;
+                            }
+                        }
+                        else
+                        {
+                            lastIndex = i;
+                            break;
+                        }
+                    }
+                    index -= paragraph.Runs[i].Text.Length;
+                }
+                if (lastIndex == null)
+                {
+                    lastIndex = paragraph.Runs.Count - 1;
+                }
+                var newText = String.Concat(paragraph.Runs.Skip(firstIndex ?? 0).Take((lastIndex ?? 0) - (firstIndex ?? 0) + 1).Select(_ => _.Text));
+                newText = newText.Replace(oldValue, newValue);
+                paragraph.Runs[firstIndex ?? 0].SetText(newText);
+                for (var i = (firstIndex ?? 0) + 1; i <= lastIndex; ++i)
+                {
+                    paragraph.RemoveRun((firstIndex ?? 0) + 1);
+                }
+            }
+        }
 
+        private void FindAndReplaceTextInTable(XWPFTable table, string oldValue, string newValue)
+        {
+            foreach (var row in table.Rows)
+            {
+                foreach (var cell in row.GetTableCells())
+                {
+                    foreach (var innerTable in cell.Tables)
+                    {
+                        FindAndReplaceTextInTable(innerTable, oldValue, newValue);
+                    }
+                    foreach (var paragraph in cell.Paragraphs)
+                    {
+                        FindAndReplaceTextInParagraph(paragraph, oldValue, newValue);
+                    }
+                }
+            }
+        }
+
+        public void FindAndReplaceText(string oldValue, string newValue)
+        {
+            foreach (var paragraph in this.Paragraphs)
+            {
+                FindAndReplaceTextInParagraph(paragraph, oldValue, newValue);
+            }
+
+            foreach (var table in this.Tables)
+            {
+                FindAndReplaceTextInTable(table, oldValue, newValue);
+            }
+            
+            foreach (var footer in this.FooterList)
+            {
+                foreach (var paragraph in footer.Paragraphs)
+                {
+                    FindAndReplaceTextInParagraph(paragraph, oldValue, newValue);
+                }
+            }
+            foreach (var header in this.HeaderList)
+            {
+                foreach (var paragraph in header.Paragraphs)
+                {
+                    FindAndReplaceTextInParagraph(paragraph, oldValue, newValue);
+                }
+            }
+        }
         public void Dispose()
         {
             this.Close();
         }
-    } // end class
+    }
 }

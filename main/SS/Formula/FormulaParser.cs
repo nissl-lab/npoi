@@ -1173,9 +1173,6 @@ namespace NPOI.SS.Formula
             }
             return new AreaReference(part1.CellReference, part2.CellReference);
         }
-        private string CELL_REF_PATTERN = "(\\$?[A-Za-z]+)?(\\$?[0-9]+)?";
-
-
 
 
         /**
@@ -1213,11 +1210,9 @@ namespace NPOI.SS.Formula
             {
                 return null;
             }
-            String rep = _formulaString.Substring(_pointer - 1, ptr - _pointer + 1);
+            ReadOnlySpan<char> rep = _formulaString.AsSpan(_pointer - 1, ptr - _pointer + 1);
 
-            Regex pattern = new Regex(CELL_REF_PATTERN);
-
-            if (!pattern.IsMatch(rep))
+            if (!CellReferenceParser.TryParseCellReference(rep, out _, out var column, out _, out var row))
             {
                 return null;
             }
@@ -1231,19 +1226,14 @@ namespace NPOI.SS.Formula
             }
             else if (hasLetters)
             {
-                if (!CellReference.IsColumnWithinRange(rep.Replace("$", ""), _ssVersion))
+                if (!CellReference.IsColumnWithinRange(column, _ssVersion))
                 {
                     return null;
                 }
             }
             else if (hasDigits)
             {
-                int i;
-                try
-                {
-                    i = Int32.Parse(rep.Replace("$", ""), CultureInfo.InvariantCulture);
-                }
-                catch (Exception)
+                if (!CellReferenceParser.TryParsePositiveInt32Fast(row, out int i))
                 {
                     return null;
                 }
@@ -1260,7 +1250,7 @@ namespace NPOI.SS.Formula
 
 
             ResetPointer(ptr + 1); // stepping forward
-            return new SimpleRangePart(rep, hasLetters, hasDigits);
+            return new SimpleRangePart(rep.ToString(), hasLetters, hasDigits);
         }
 
 
@@ -1544,7 +1534,9 @@ namespace NPOI.SS.Formula
         /**
          * @return <c>true</c> if the specified name is a valid cell reference
          */
-        private bool IsValidCellReference(String str)
+        private bool IsValidCellReference(String str) => IsValidCellReference(str.AsSpan());
+
+        private bool IsValidCellReference(ReadOnlySpan<char> str)
         {
             //check range bounds against grid max
             bool result = CellReference.ClassifyCellReference(str, _ssVersion) == NameType.Cell;
@@ -1557,7 +1549,7 @@ namespace NPOI.SS.Formula
                  * (b) LOG10 + 1
                  * In (a) LOG10 is a name of a built-in function. In (b) LOG10 is a cell reference
                  */
-                bool isFunc = FunctionMetadataRegistry.GetFunctionByName(str.ToUpper()) != null;
+                bool isFunc = FunctionMetadataRegistry.GetFunctionByName(str.ToString().ToUpper()) != null;
                 if (isFunc)
                 {
                     int savePointer = _pointer;
@@ -2435,7 +2427,7 @@ namespace NPOI.SS.Formula
                         hasIntersections = true;
                         continue;
                     }
-                    catch (FormulaParseException e)
+                    catch (FormulaParseException)
                     {
                         // if parsing for intersection fails we assume that we actually had an arbitrary
                         // whitespace and thus should simply skip this whitespace

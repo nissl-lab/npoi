@@ -107,8 +107,6 @@ namespace NPOI.SS.Util
 
         public static ICell CopyCell(IRow row, int sourceIndex, int targetIndex)
         {
-            if (sourceIndex == targetIndex)
-                throw new ArgumentException("sourceIndex and targetIndex cannot be same");
             // Grab a copy of the old/new cell
             ICell oldCell = row.GetCell(sourceIndex);
 
@@ -127,6 +125,15 @@ namespace NPOI.SS.Util
             {
                 //TODO:shift cells                
             }
+
+            return CopyCell(oldCell, newCell, sourceIndex, targetIndex);
+        }
+
+        private static ICell CopyCell(ICell oldCell, ICell newCell, int sourceIndex, int targetIndex)
+        {
+            if (sourceIndex == targetIndex)
+                throw new ArgumentException("sourceIndex and targetIndex cannot be same");
+            
             // Copy style from old cell and apply to new cell
             if (oldCell.CellStyle != null)
             {

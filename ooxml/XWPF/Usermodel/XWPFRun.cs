@@ -453,7 +453,7 @@ namespace NPOI.XWPF.UserModel
         /// <param name="startIndex">start index of the insertion in the run text</param>
         public void InsertText(string text, int startIndex)
         {
-            List<CT_Text> texts = run.GetTList();
+            IList<CT_Text> texts = run.GetTList();
             int endPos = 0;
             int startPos = 0;
             for (int i = 0; i < texts.Count; i++)
@@ -492,7 +492,7 @@ namespace NPOI.XWPF.UserModel
                             {
                                 foreach (CT_FFCheckBox checkBox in ctfldChar.ffData.GetCheckBoxList())
                                 {
-                                    if (checkBox.@default.val == true)
+                                    if (checkBox.@default != null && checkBox.@default.val == true)
                                     {
                                         text.Append("|X|");
                                     }
@@ -919,6 +919,12 @@ namespace NPOI.XWPF.UserModel
             set
             {
                 CT_RPr pr = run.IsSetRPr() ? run.rPr : run.AddNewRPr();
+                if (value < 1)
+                {
+                    // fix for TestBug58922() in NPOI
+                    pr.sz = null; // unset
+                    return;
+                }
                 CT_HpsMeasure ctSize = pr.IsSetSz() ? pr.sz : pr.AddNewSz();
                 ctSize.val = (ulong)(value * 2);
             }
@@ -1072,6 +1078,12 @@ namespace NPOI.XWPF.UserModel
                 relationId = headerFooter.AddPictureData(pictureData, pictureType);
                 picData = (XWPFPictureData)headerFooter.GetRelationById(relationId);
             }
+            else if (parent.Part is XWPFComments)
+            {
+                XWPFComments comments = (XWPFComments)parent.Part;
+                relationId = comments.AddPictureData(pictureData, pictureType);
+                picData = (XWPFPictureData)comments.GetRelationById(relationId);
+            }
             else
             {
                 doc = parent.Document;
@@ -1138,7 +1150,7 @@ namespace NPOI.XWPF.UserModel
 
                 CT_BlipFillProperties blipFill = pic.AddNewBlipFill();
                 CT_Blip blip = blipFill.AddNewBlip();
-                blip.embed = (picData.GetPackageRelationship().Id);
+                blip.embed = parent.Part.GetRelationId(picData);
                 if (doc != null)
                 {
                     extAct(doc, blip);

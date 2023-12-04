@@ -105,5 +105,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.guidField = value;
             }
         }
+
+        public void Set(CT_Comment comment)
+        {
+            this.authorId = comment.authorId;
+            this.text = comment.text;
+        }
     }
 }

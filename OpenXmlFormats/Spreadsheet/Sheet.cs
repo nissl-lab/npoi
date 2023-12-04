@@ -2469,10 +2469,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private double dyDescentField;
         public CT_SheetFormatPr()
         {
-            this.baseColWidth = 8;
+            this.defaultColWidth = 8.43;
         }
         [XmlAttribute]
-        [DefaultValue(typeof(uint), "8")]
         public uint baseColWidth
         {
             get
@@ -2486,6 +2485,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [XmlAttribute]
+        [DefaultValue(typeof(double), "8.43")]
         public double defaultColWidth
         {
             get
@@ -2688,26 +2688,29 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<");
+            sw.Write(nodeName);
             if (this.t != ST_CellFormulaType.normal)
                 XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
             XmlHelper.WriteAttribute(sw, "aca", this.aca, false);
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
-            XmlHelper.WriteAttribute(sw, "dt2D", this.dt2D, false);
-            XmlHelper.WriteAttribute(sw, "dtr", this.dtr, false);
+            XmlHelper.WriteAttribute(sw, "dt2D", this.dt2D, true);
+            XmlHelper.WriteAttribute(sw, "dtr", this.dtr, true);
             XmlHelper.WriteAttribute(sw, "del1", this.del1, false);
             XmlHelper.WriteAttribute(sw, "del2", this.del2, false);
             XmlHelper.WriteAttribute(sw, "r1", this.r1);
             XmlHelper.WriteAttribute(sw, "r2", this.r2);
             XmlHelper.WriteAttribute(sw, "ca", this.ca, false);
-            if (this.t != ST_CellFormulaType.normal)
+            if(this.si!=0)
                 XmlHelper.WriteAttribute(sw, "si", this.si, true);
             XmlHelper.WriteAttribute(sw, "bx", this.bx, false);
             if (!string.IsNullOrEmpty(this.valueField))
             {
                 sw.Write(">");
                 sw.Write(XmlHelper.EncodeXml(this.valueField).Replace("&quot;", "\""));
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.Write("</");
+                sw.Write(nodeName);
+                sw.Write(">");
             }
             else
             {

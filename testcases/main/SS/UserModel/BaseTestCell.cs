@@ -84,13 +84,13 @@ namespace TestCases.SS.UserModel
 
             DateTime dt = DateTime.Now.AddMilliseconds(123456789);
             cell.SetCellValue(dt);
-            Assert.IsTrue((dt.Ticks - cell.DateCellValue.Ticks) >= -20000);
+            Assert.IsTrue((dt.Ticks - ((DateTime)cell.DateCellValue).Ticks) >= -20000);
             Assert.AreEqual(CellType.Numeric, cell.CellType);
             AssertProhibitedValueAccess(cell, CellType.Boolean, CellType.String,
                     CellType.Formula, CellType.Error);
 
             cell.SetCellValue(dt);
-            Assert.IsTrue((dt.Ticks - cell.DateCellValue.Ticks) >= -20000);
+            Assert.IsTrue((dt.Ticks - ((DateTime)cell.DateCellValue).Ticks) >= -20000);
             Assert.AreEqual(CellType.Numeric, cell.CellType);
             AssertProhibitedValueAccess(cell, CellType.Boolean, CellType.String,
                     CellType.Formula, CellType.Error);
@@ -247,7 +247,7 @@ namespace TestCases.SS.UserModel
             IFont f = wb.CreateFont();
             f.FontHeightInPoints = 20;
             f.Color = (HSSFColor.Red.Index);
-            f.Boldweight = (int)FontBoldWeight.Bold;
+            f.IsBold = true;
             f.FontName = "Arial Unicode MS";
             cs.FillBackgroundColor = 3;
             cs.SetFont(f);
@@ -271,7 +271,7 @@ namespace TestCases.SS.UserModel
 
             Assert.IsNotNull(cs, "Formula Cell Style");
             Assert.AreEqual(f.Index, cs.FontIndex, "Font Index Matches");
-            Assert.AreEqual(BorderStyle.Thin, cs.BorderTop , "Top Border");
+            Assert.AreEqual(BorderStyle.Thin, cs.BorderTop, "Top Border");
             Assert.AreEqual(BorderStyle.Thin, cs.BorderLeft, "Left Border");
             Assert.AreEqual(BorderStyle.Thin, cs.BorderRight, "Right Border");
             Assert.AreEqual(BorderStyle.Thin, cs.BorderBottom, "Bottom Border");
@@ -428,7 +428,7 @@ namespace TestCases.SS.UserModel
             cell.SetCellValue("TRUE");
             Assert.AreEqual(CellType.String, cell.CellType);
             // test conversion of cell from text to boolean
-            cell.SetCellType(CellType.Boolean);            
+            cell.SetCellType(CellType.Boolean);
 
             Assert.AreEqual(CellType.Boolean, cell.CellType);
             Assert.AreEqual(true, cell.BooleanCellValue);
@@ -456,7 +456,7 @@ namespace TestCases.SS.UserModel
             cell.SetCellValue(true);
             // test conversion of cell from boolean to text
             cell.SetCellType(CellType.String);
-   
+
             Assert.AreEqual("TRUE", cell.RichStringCellValue.String);
             wb.Close();
         }
@@ -712,6 +712,7 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(CellType.Error, cell2.CellType);
             Assert.AreEqual(FormulaError.DIV0, FormulaError.ForInt(cell2.ErrorCellValue));
         }
+
         [Test]
         public void TestDefaultStyleProperties()
         {
@@ -724,7 +725,7 @@ namespace TestCases.SS.UserModel
             Assert.IsFalse(style.IsHidden);
             Assert.AreEqual(0, style.Indention);
             Assert.AreEqual(0, style.FontIndex);
-            Assert.AreEqual(0, (int)style.Alignment);
+            Assert.AreEqual(HorizontalAlignment.General, style.Alignment);
             Assert.AreEqual(0, style.DataFormat);
             Assert.AreEqual(false, style.WrapText);
 
@@ -1027,6 +1028,8 @@ namespace TestCases.SS.UserModel
                     Assert.Fail("unexpected cell type: " + cell.CellType);
                     break;
             }
+
+            wb.Close();
         }
     }
 }

@@ -66,12 +66,14 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Construct a SpreadsheetML chart from a namespace part.
+         * Construct a SpreadsheetML chart from a package part.
          *
-         * @param part the namespace part holding the chart data,
-         * the content type must be <code>application/vnd.Openxmlformats-officedocument.Drawingml.chart+xml</code>
-         * @param rel  the namespace relationship holding this chart,
-         * the relationship type must be http://schemas.Openxmlformats.org/officeDocument/2006/relationships/chart
+         * @param part the package part holding the chart data,
+         * the content type must be <code>application/vnd.openxmlformats-officedocument.drawingml.chart+xml</code>
+         * @param rel  the package relationship holding this chart,
+         * the relationship type must be http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart
+         * 
+         * @since POI 3.14-Beta1
          */
         protected XSSFChart(PackagePart part)
             : base(part)
@@ -97,6 +99,7 @@ namespace NPOI.XSSF.UserModel
         private void CreateChart()
         {
             chartSpaceDocument = new ChartSpaceDocument();
+            chartSpaceDocument.GetChartSpace().roundedCorners = new CT_Boolean {val = 0};
             chart = chartSpaceDocument.GetChartSpace().AddNewChart();
             CT_PlotArea plotArea = chart.AddNewPlotArea();
 

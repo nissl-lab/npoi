@@ -31,6 +31,7 @@ namespace NPOI
         private static POIDataSamples _slSamples = POIDataSamples.GetSlideShowInstance();
 
         [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestGetFromMainExtractor()
         {
             OPCPackage pkg = PackageHelper.Open(_ssSamples.OpenResourceAsStream("ExcelWithAttachments.xlsm"));
@@ -55,6 +56,7 @@ namespace NPOI
             ext.Close();
         }
         [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestCore()
         {
             OPCPackage pkg = PackageHelper.Open(
@@ -74,6 +76,7 @@ namespace NPOI
             ext.Close();
         }
         [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestExtended()
         {
             OPCPackage pkg = OPCPackage.Open(

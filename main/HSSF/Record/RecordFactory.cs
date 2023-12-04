@@ -656,7 +656,7 @@ namespace NPOI.HSSF.Record
                 if (constructor != null)
                     return new ReflectionConstructorRecordCreator(constructor);
             }
-            catch (Exception)
+            catch
             {
                 // fall through and look for other construction methods
             }
@@ -665,7 +665,7 @@ namespace NPOI.HSSF.Record
                 MethodInfo m = recClass.GetMethod("Create", CONSTRUCTOR_ARGS);
                 return new ReflectionMethodRecordCreator(m);
             }
-            catch (Exception)
+            catch
             {
                 throw new RuntimeException("Failed to find constructor or create method for (" + recClass.Name + ").");
             }

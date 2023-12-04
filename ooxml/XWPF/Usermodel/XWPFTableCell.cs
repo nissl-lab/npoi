@@ -329,14 +329,6 @@ namespace NPOI.XWPF.UserModel
                 {
                     vAlign = stVertAlignTypeMap[va.val.Value];
                 }
-                else
-                {
-                    vAlign = XWPFVertAlign.TOP;
-                }
-                if (va != null && va.val != null)
-                {
-                    vAlign = stVertAlignTypeMap[va.val.Value];
-                }
             }
             return vAlign;
         }

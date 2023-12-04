@@ -216,26 +216,22 @@ namespace NPOI.POIFS.FileSystem
                     //_data = new FileBackedDataSource(channel, readOnly);
                     ReadCoreContents();
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
                 finally
                 {
                     if (channel != null)
                         channel.Close();
                 }
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 if (closeChannelOnError && channel != null)
                 {
                     channel.Close();
                     channel = null;
                 }
-                throw e;
+                throw;
             }
-            catch (RuntimeException e)
+            catch (RuntimeException)
             {
                 // Comes from Iterators etc.
                 // TODO Decide if we can handle these better whilst
@@ -245,7 +241,7 @@ namespace NPOI.POIFS.FileSystem
                     channel.Close();
                     channel = null;
                 }
-                throw e;
+                throw;
             }
         }
 
@@ -314,8 +310,8 @@ namespace NPOI.POIFS.FileSystem
                 data.Write(headerBuffer.Buffer);
                 data.Position = headerBuffer.Length;
 
-                //IOUtils.ReadFully(channel, data);
-                data.Position += IOUtils.ReadFully(channel, data.Buffer, data.Position, (int)channel.Length);
+                //IOUtils.ReadFully(channel, data.Buffer);
+                data.Position += IOUtils.ReadFully(channel, data.Buffer, data.Position, (int)maxSize);
                 success = true;
 
                 // Turn it into a DataSource
@@ -969,11 +965,11 @@ namespace NPOI.POIFS.FileSystem
          * back end store
          */
 
-        protected IEnumerator GetViewableIterator()
+        protected IEnumerator<Object> GetViewableIterator()
         {
             if (!PreferArray)
             {
-                return ((POIFSViewable)Root).ViewableIterator;
+                return Root.ViewableIterator;
             }
             return null;
         }
@@ -1023,12 +1019,12 @@ namespace NPOI.POIFS.FileSystem
             get { return GetShortDescription(); }
         }
 
-        public Array ViewableArray
+        public Object[] ViewableArray
         {
             get { return GetViewableArray(); }
         }
 
-        public IEnumerator ViewableIterator
+        public IEnumerator<Object> ViewableIterator
         {
             get { return GetViewableIterator(); }
         }

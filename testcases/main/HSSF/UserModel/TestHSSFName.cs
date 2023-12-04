@@ -43,7 +43,7 @@ namespace TestCases.HSSF.UserModel
         public TestHSSFName()
             : base(HSSFITestDataProvider.Instance)
         {
-            
+
         }
 
         /**
@@ -56,7 +56,7 @@ namespace TestCases.HSSF.UserModel
         {
 
             FieldInfo f;
-            f = typeof(HSSFName).GetField("_definedNameRec",BindingFlags.Instance|BindingFlags.NonPublic);
+            f = typeof(HSSFName).GetField("_definedNameRec", BindingFlags.Instance | BindingFlags.NonPublic);
             //f.SetAccessible(true);
             return (NameRecord)f.GetValue(definedName);
         }
@@ -204,6 +204,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
+        [Obsolete]
         public void TestDeletedReference()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("24207.xls");

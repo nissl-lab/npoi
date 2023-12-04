@@ -244,7 +244,8 @@ namespace NPOI.OpenXml4Net.OPC
                     sourcePart, targetUri, targetMode, relationshipType, id);
             relationshipsByID[rel.Id] = rel;
             relationshipsByType[rel.RelationshipType] = rel;
-            if (targetMode == TargetMode.Internal)
+            if (targetMode == TargetMode.Internal
+                && !internalRelationshipsByTargetName.ContainsKey(targetUri.OriginalString))
             {
                 internalRelationshipsByTargetName.Add(targetUri.OriginalString, rel);
             }

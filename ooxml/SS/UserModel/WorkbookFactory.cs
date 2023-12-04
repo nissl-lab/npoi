@@ -234,23 +234,14 @@ namespace NPOI.SS.UserModel
                     {
                         return new XSSFWorkbook(pkg);
                     }
-                    catch (IOException ioe)
-                    {
-                        // ensure that file handles are closed (use revert() to not re-write the file)
-                        pkg.Revert();
-                        //pkg.close();
-
-                        // rethrow exception
-                        throw ioe;
-                    }
-                    catch (Exception ioe)
+                    catch
                     {
                         // ensure that file handles are closed (use revert() to not re-write the file) 
                         pkg.Revert();
                         //pkg.close();
 
                         // rethrow exception
-                        throw ioe;
+                        throw;
                     }
                 }
             }

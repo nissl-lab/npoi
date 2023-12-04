@@ -434,8 +434,9 @@ namespace NPOI.HSSF.Model
                 case DVALRecord.sid:
                     return true;
                 case EOFRecord.sid:
-                    // WINDOW2 should always be present, so shouldn't have got this far
-                    throw new InvalidOperationException("Found EOFRecord before WindowTwoRecord was encountered");
+                    // WINDOW2 should always be present, but there can be files that are non-compliant to spec
+                    // which are automatically fixed when saved again using Excel, so ignoring the problem when reading
+                    return true;
             }
             return PageSettingsBlock.IsComponentRecord(sid);
         }

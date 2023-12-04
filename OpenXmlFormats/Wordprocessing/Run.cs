@@ -51,6 +51,19 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.rPrField = value;
             }
         }
+
+        public bool IsSetRPr()
+        {
+            return this.rPrField != null;
+        }
+
+        public CT_RPr AddNewRPr()
+        {
+            if (this.rPrField == null)
+                this.rPrField = new CT_RPr();
+            return this.rPrField;
+        }
+
         public Vml.CT_AlternateContent alternateContent
         {
             get
@@ -135,6 +148,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
+        public bool IsSetRsidRPr()
+        {
+            return this.rsidRPrField != null;
+        }
+
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
         public byte[] rsidDel
         {
@@ -146,6 +164,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.rsidDelField = value;
             }
+        }
+
+        public bool IsSetRsidDel()
+        {
+            return this.rsidDelField != null;
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "hexBinary")]
@@ -161,108 +184,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        public CT_Text AddNewT()
+        public bool IsSetRsidR()
         {
-            return AddNewObject<CT_Text>(RunItemsChoiceType.t);
-        }
-        public void RemoveT(int pos)
-        {
-            RemoveObject(RunItemsChoiceType.t, pos);
+            return this.rsidRField != null;
         }
 
-        public CT_RPr AddNewRPr()
-        {
-            if (this.rPrField == null)
-                this.rPrField = new CT_RPr();
-            return this.rPrField;
-        }
-
-
-        public CT_Empty AddNewFootnoteRef()
-        {
-            return AddNewObject<CT_Empty>(RunItemsChoiceType.footnoteRef);
-        }
-        public IList<CT_Empty> GetFootnoteRefList()
-        {
-            return GetObjectList<CT_Empty>(RunItemsChoiceType.footnoteRef);
-        }
-        public CT_Empty GetFootnoteRefArray(int pos)
-        {
-            return GetObjectArray<CT_Empty>(pos, RunItemsChoiceType.footnoteRef);
-        }
-        public CT_FtnEdnRef AddNewFootnoteReference()
-        {
-            return AddNewObject<CT_FtnEdnRef>(RunItemsChoiceType.footnoteReference);
-        }
-        public CT_Empty AddNewTab()
-        {
-            return AddNewObject<CT_Empty>(RunItemsChoiceType.tab);
-        }
-
-        public CT_FldChar AddNewFldChar()
-        {
-            return AddNewObject<CT_FldChar>(RunItemsChoiceType.fldChar);
-        }
-
-        public CT_Text AddNewInstrText()
-        {
-            return AddNewObject<CT_Text>(RunItemsChoiceType.instrText);
-        }
-
-        public CT_Empty AddNewCr()
-        {
-            return AddNewObject<CT_Empty>(RunItemsChoiceType.cr);
-        }
-
-        public CT_Br AddNewBr()
-        {
-            return AddNewObject<CT_Br>(RunItemsChoiceType.br);
-        }
-
-        public bool IsSetRPr()
-        {
-            return this.rPrField != null;
-        }
-
-        public int SizeOfTArray()
-        {
-            return SizeOfArray(RunItemsChoiceType.t);
-        }
-
-        public CT_Text GetTArray(int pos)
-        {
-            return GetObjectArray<CT_Text>(pos, RunItemsChoiceType.t);
-        }
-
-        public List<CT_Text> GetTList()
-        {
-            return GetObjectList<CT_Text>(RunItemsChoiceType.t);
-        }
-
-        public CT_Drawing AddNewDrawing()
-        {
-            return AddNewObject<CT_Drawing>(RunItemsChoiceType.drawing);
-        }
-
-        public IList<CT_Drawing> GetDrawingList()
-        {
-            return GetObjectList<CT_Drawing>(RunItemsChoiceType.drawing);
-        }
-
-        public IList<CT_Text> GetDelTextList()
-        {
-            return GetObjectList<CT_Text>(RunItemsChoiceType.delText);
-        }
-
-        public IList<CT_Picture> GetPictList()
-        {
-            return GetObjectList<CT_Picture>(RunItemsChoiceType.pict);
-        }
-
-        public CT_Picture AddNewPict()
-        {
-            return AddNewObject<CT_Picture>(RunItemsChoiceType.pict);
-        }
         #region Generic methods for object operation
 
         private List<T> GetObjectList<T>(RunItemsChoiceType type) where T : class
@@ -337,11 +263,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        public bool IsSetRsidDel()
-        {
-            return this.rsidDelField != null;
-        }
-
         private int GetObjectIndex(RunItemsChoiceType type, int p)
         {
             int index = -1;
@@ -374,25 +295,238 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         #endregion
 
-        public CT_Drawing GetDrawingArray(int p)
-        {
-            return GetObjectArray<CT_Drawing>(p, RunItemsChoiceType.drawing);
-        }
+        #pragma warning disable format
+        public CT_Empty     AddNewAnnotationRef()         { return AddNewObject<CT_Empty>    (RunItemsChoiceType.annotationRef); }
+        public CT_Br        AddNewBr()                    { return AddNewObject<CT_Br>       (RunItemsChoiceType.br); }
+        public CT_Markup    AddNewCommentReference()      { return AddNewObject<CT_Markup>   (RunItemsChoiceType.commentReference); }
+        public CT_Empty     AddNewContinuationSeparator() { return AddNewObject<CT_Empty>    (RunItemsChoiceType.continuationSeparator); }
+        public CT_Empty     AddNewCr()                    { return AddNewObject<CT_Empty>    (RunItemsChoiceType.cr); }
+        public CT_Empty     AddNewDayLong()               { return AddNewObject<CT_Empty>    (RunItemsChoiceType.dayLong); }
+        public CT_Empty     AddNewDayShort()              { return AddNewObject<CT_Empty>    (RunItemsChoiceType.dayShort); }
+        public CT_Text      AddNewDelInstrText()          { return AddNewObject<CT_Text>     (RunItemsChoiceType.delInstrText); }
+        public CT_Text      AddNewDelText()               { return AddNewObject<CT_Text>     (RunItemsChoiceType.delText); }
+        public CT_Drawing   AddNewDrawing()               { return AddNewObject<CT_Drawing>  (RunItemsChoiceType.drawing); }
+        public CT_Empty     AddNewEndnoteRef()            { return AddNewObject<CT_Empty>    (RunItemsChoiceType.endnoteRef); }
+        public CT_FtnEdnRef AddNewEndnoteReference()      { return AddNewObject<CT_FtnEdnRef>(RunItemsChoiceType.endnoteReference); }
+        public CT_FldChar   AddNewFldChar()               { return AddNewObject<CT_FldChar>  (RunItemsChoiceType.fldChar); }
+        public CT_Empty     AddNewFootnoteRef()           { return AddNewObject<CT_Empty>    (RunItemsChoiceType.footnoteRef); }
+        public CT_FtnEdnRef AddNewFootnoteReference()     { return AddNewObject<CT_FtnEdnRef>(RunItemsChoiceType.footnoteReference); }
+        public CT_Text      AddNewInstrText()             { return AddNewObject<CT_Text>     (RunItemsChoiceType.instrText); }
+        public CT_Empty     AddNewLastRenderedPageBreak() { return AddNewObject<CT_Empty>    (RunItemsChoiceType.lastRenderedPageBreak); }
+        public CT_Empty     AddNewMonthLong()             { return AddNewObject<CT_Empty>    (RunItemsChoiceType.monthLong); }
+        public CT_Empty     AddNewMonthShort()            { return AddNewObject<CT_Empty>    (RunItemsChoiceType.monthShort); }
+        public CT_Empty     AddNewNoBreakHyphen()         { return AddNewObject<CT_Empty>    (RunItemsChoiceType.noBreakHyphen); }
+        public CT_Object    AddNewObject()                { return AddNewObject<CT_Object>   (RunItemsChoiceType.@object); }
+        public CT_Empty     AddNewPgNum()                 { return AddNewObject<CT_Empty>    (RunItemsChoiceType.pgNum); }
+        public CT_Picture   AddNewPict()                  { return AddNewObject<CT_Picture>  (RunItemsChoiceType.pict); }
+        public CT_PTab      AddNewPtab()                  { return AddNewObject<CT_PTab>     (RunItemsChoiceType.ptab); }
+        public CT_Ruby      AddNewRuby()                  { return AddNewObject<CT_Ruby>     (RunItemsChoiceType.ruby); }
+        public CT_Empty     AddNewSeparator()             { return AddNewObject<CT_Empty>    (RunItemsChoiceType.separator); }
+        public CT_Empty     AddNewSoftHyphen()            { return AddNewObject<CT_Empty>    (RunItemsChoiceType.softHyphen); }
+        public CT_Sym       AddNewSym()                   { return AddNewObject<CT_Sym>      (RunItemsChoiceType.sym); }
+        public CT_Text      AddNewT()                     { return AddNewObject<CT_Text>     (RunItemsChoiceType.t); }
+        public CT_Empty     AddNewTab()                   { return AddNewObject<CT_Empty>    (RunItemsChoiceType.tab); }
+        public CT_Empty     AddNewYearLong()              { return AddNewObject<CT_Empty>    (RunItemsChoiceType.yearLong); }
+        public CT_Empty     AddNewYearShort()             { return AddNewObject<CT_Empty>    (RunItemsChoiceType.yearShort); }
 
-        public int SizeOfCrArray()
-        {
-            return SizeOfArray(RunItemsChoiceType.cr);
-        }
+        public CT_Empty     GetAnnotationRefArray(int pos)         { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.annotationRef); }
+        public CT_Br        GetBrArray(int pos)                    { return GetObjectArray<CT_Br>       (pos, RunItemsChoiceType.br); }
+        public CT_Markup    GetCommentReferenceArray(int pos)      { return GetObjectArray<CT_Markup>   (pos, RunItemsChoiceType.commentReference); }
+        public CT_Empty     GetContinuationSeparatorArray(int pos) { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.continuationSeparator); }
+        public CT_Empty     GetCrArray(int pos)                    { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.cr); }
+        public CT_Empty     GetDayLongArray(int pos)               { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.dayLong); }
+        public CT_Empty     GetDayShortArray(int pos)              { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.dayShort); }
+        public CT_Text      GetDelInstrTextArray(int pos)          { return GetObjectArray<CT_Text>     (pos, RunItemsChoiceType.delInstrText); }
+        public CT_Text      GetDelTextArray(int pos)               { return GetObjectArray<CT_Text>     (pos, RunItemsChoiceType.delText); }
+        public CT_Drawing   GetDrawingArray(int pos)               { return GetObjectArray<CT_Drawing>  (pos, RunItemsChoiceType.drawing); }
+        public CT_Empty     GetEndnoteRefArray(int pos)            { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.endnoteRef); }
+        public CT_FtnEdnRef GetEndnoteReferenceArray(int pos)      { return GetObjectArray<CT_FtnEdnRef>(pos, RunItemsChoiceType.endnoteReference); }
+        public CT_FldChar   GetFldCharArray(int pos)               { return GetObjectArray<CT_FldChar>  (pos, RunItemsChoiceType.fldChar); }
+        public CT_Empty     GetFootnoteRefArray(int pos)           { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.footnoteRef); }
+        public CT_FtnEdnRef GetFootnoteReferenceArray(int pos)     { return GetObjectArray<CT_FtnEdnRef>(pos, RunItemsChoiceType.footnoteReference); }
+        public CT_Text      GetInstrTextArray(int pos)             { return GetObjectArray<CT_Text>     (pos, RunItemsChoiceType.instrText); }
+        public CT_Empty     GetLastRenderedPageBreakArray(int pos) { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.lastRenderedPageBreak); }
+        public CT_Empty     GetMonthLongArray(int pos)             { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.monthLong); }
+        public CT_Empty     GetMonthShortArray(int pos)            { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.monthShort); }
+        public CT_Empty     GetNoBreakHyphenArray(int pos)         { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.noBreakHyphen); }
+        public CT_Object    GetObjectArray(int pos)                { return GetObjectArray<CT_Object>   (pos, RunItemsChoiceType.@object); }
+        public CT_Empty     GetPgNumArray(int pos)                 { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.pgNum); }
+        public CT_Picture   GetPictArray(int pos)                  { return GetObjectArray<CT_Picture>  (pos, RunItemsChoiceType.pict); }
+        public CT_PTab      GetPtabArray(int pos)                  { return GetObjectArray<CT_PTab>     (pos, RunItemsChoiceType.ptab); }
+        public CT_Ruby      GetRubyArray(int pos)                  { return GetObjectArray<CT_Ruby>     (pos, RunItemsChoiceType.ruby); }
+        public CT_Empty     GetSeparatorArray(int pos)             { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.separator); }
+        public CT_Empty     GetSoftHyphenArray(int pos)            { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.softHyphen); }
+        public CT_Sym       GetSymArray(int pos)                   { return GetObjectArray<CT_Sym>      (pos, RunItemsChoiceType.sym); }
+        public CT_Text      GetTArray(int pos)                     { return GetObjectArray<CT_Text>     (pos, RunItemsChoiceType.t); }
+        public CT_Empty     GetTabArray(int pos)                   { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.tab); }
+        public CT_Empty     GetYearLongArray(int pos)              { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.yearLong); }
+        public CT_Empty     GetYearShortArray(int pos)             { return GetObjectArray<CT_Empty>    (pos, RunItemsChoiceType.yearShort); }
 
-        public IList<CT_Empty> GetCrList()
-        {
-            return GetObjectList<CT_Empty>(RunItemsChoiceType.cr);
-        }
+        public IList<CT_Empty>     GetAnnotationRefList()         { return GetObjectList<CT_Empty>    (RunItemsChoiceType.annotationRef); }
+        public IList<CT_Br>        GetBrList()                    { return GetObjectList<CT_Br>       (RunItemsChoiceType.br); }
+        public IList<CT_Markup>    GetCommentReferenceList()      { return GetObjectList<CT_Markup>   (RunItemsChoiceType.commentReference); }
+        public IList<CT_Empty>     GetContinuationSeparatorList() { return GetObjectList<CT_Empty>    (RunItemsChoiceType.continuationSeparator); }
+        public IList<CT_Empty>     GetCrList()                    { return GetObjectList<CT_Empty>    (RunItemsChoiceType.cr); }
+        public IList<CT_Empty>     GetDayLongList()               { return GetObjectList<CT_Empty>    (RunItemsChoiceType.dayLong); }
+        public IList<CT_Empty>     GetDayShortList()              { return GetObjectList<CT_Empty>    (RunItemsChoiceType.dayShort); }
+        public IList<CT_Text>      GetDelInstrTextList()          { return GetObjectList<CT_Text>     (RunItemsChoiceType.delInstrText); }
+        public IList<CT_Text>      GetDelTextList()               { return GetObjectList<CT_Text>     (RunItemsChoiceType.delText); }
+        public IList<CT_Drawing>   GetDrawingList()               { return GetObjectList<CT_Drawing>  (RunItemsChoiceType.drawing); }
+        public IList<CT_Empty>     GetEndnoteRefList()            { return GetObjectList<CT_Empty>    (RunItemsChoiceType.endnoteRef); }
+        public IList<CT_FtnEdnRef> GetEndnoteReferenceList()      { return GetObjectList<CT_FtnEdnRef>(RunItemsChoiceType.endnoteReference); }
+        public IList<CT_FldChar>   GetFldCharList()               { return GetObjectList<CT_FldChar>  (RunItemsChoiceType.fldChar); }
+        public IList<CT_Empty>     GetFootnoteRefList()           { return GetObjectList<CT_Empty>    (RunItemsChoiceType.footnoteRef); }
+        public IList<CT_FtnEdnRef> GetFootnoteReferenceList()     { return GetObjectList<CT_FtnEdnRef>(RunItemsChoiceType.footnoteReference); }
+        public IList<CT_Text>      GetInstrTextList()             { return GetObjectList<CT_Text>     (RunItemsChoiceType.instrText); }
+        public IList<CT_Empty>     GetLastRenderedPageBreakList() { return GetObjectList<CT_Empty>    (RunItemsChoiceType.lastRenderedPageBreak); }
+        public IList<CT_Empty>     GetMonthLongList()             { return GetObjectList<CT_Empty>    (RunItemsChoiceType.monthLong); }
+        public IList<CT_Empty>     GetMonthShortList()            { return GetObjectList<CT_Empty>    (RunItemsChoiceType.monthShort); }
+        public IList<CT_Empty>     GetNoBreakHyphenList()         { return GetObjectList<CT_Empty>    (RunItemsChoiceType.noBreakHyphen); }
+        public IList<CT_Object>    GetObjectList()                { return GetObjectList<CT_Object>   (RunItemsChoiceType.@object); }
+        public IList<CT_Empty>     GetPgNumList()                 { return GetObjectList<CT_Empty>    (RunItemsChoiceType.pgNum); }
+        public IList<CT_Picture>   GetPictList()                  { return GetObjectList<CT_Picture>  (RunItemsChoiceType.pict); }
+        public IList<CT_PTab>      GetPtabList()                  { return GetObjectList<CT_PTab>     (RunItemsChoiceType.ptab); }
+        public IList<CT_Ruby>      GetRubyList()                  { return GetObjectList<CT_Ruby>     (RunItemsChoiceType.ruby); }
+        public IList<CT_Empty>     GetSeparatorList()             { return GetObjectList<CT_Empty>    (RunItemsChoiceType.separator); }
+        public IList<CT_Empty>     GetSoftHyphenList()            { return GetObjectList<CT_Empty>    (RunItemsChoiceType.softHyphen); }
+        public IList<CT_Sym>       GetSymList()                   { return GetObjectList<CT_Sym>      (RunItemsChoiceType.sym); }
+        public IList<CT_Text>      GetTList()                     { return GetObjectList<CT_Text>     (RunItemsChoiceType.t); }
+        public IList<CT_Empty>     GetTabList()                   { return GetObjectList<CT_Empty>    (RunItemsChoiceType.tab); }
+        public IList<CT_Empty>     GetYearLongList()              { return GetObjectList<CT_Empty>    (RunItemsChoiceType.yearLong); }
+        public IList<CT_Empty>     GetYearShortList()             { return GetObjectList<CT_Empty>    (RunItemsChoiceType.yearShort); }
 
-        public int SizeOfBrArray()
-        {
-            return SizeOfArray(RunItemsChoiceType.br);
-        }
+        public CT_Empty     InsertNewAnnotationRef(int p)         { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.annotationRef, p); }
+        public CT_Br        InsertNewBr(int p)                    { return InsertNewObject<CT_Br>       (RunItemsChoiceType.br, p); }
+        public CT_Markup    InsertNewCommentReference(int p)      { return InsertNewObject<CT_Markup>   (RunItemsChoiceType.commentReference, p); }
+        public CT_Empty     InsertNewContinuationSeparator(int p) { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.continuationSeparator, p); }
+        public CT_Empty     InsertNewCr(int p)                    { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.cr, p); }
+        public CT_Empty     InsertNewDayLong(int p)               { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.dayLong, p); }
+        public CT_Empty     InsertNewDayShort(int p)              { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.dayShort, p); }
+        public CT_Text      InsertNewDelInstrText(int p)          { return InsertNewObject<CT_Text>     (RunItemsChoiceType.delInstrText, p); }
+        public CT_Text      InsertNewDelText(int p)               { return InsertNewObject<CT_Text>     (RunItemsChoiceType.delText, p); }
+        public CT_Drawing   InsertNewDrawing(int p)               { return InsertNewObject<CT_Drawing>  (RunItemsChoiceType.drawing, p); }
+        public CT_Empty     InsertNewEndnoteRef(int p)            { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.endnoteRef, p); }
+        public CT_FtnEdnRef InsertNewEndnoteReference(int p)      { return InsertNewObject<CT_FtnEdnRef>(RunItemsChoiceType.endnoteReference, p); }
+        public CT_FldChar   InsertNewFldChar(int p)               { return InsertNewObject<CT_FldChar>  (RunItemsChoiceType.fldChar, p); }
+        public CT_Empty     InsertNewFootnoteRef(int p)           { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.footnoteRef, p); }
+        public CT_FtnEdnRef InsertNewFootnoteReference(int p)     { return InsertNewObject<CT_FtnEdnRef>(RunItemsChoiceType.footnoteReference, p); }
+        public CT_Text      InsertNewInstrText(int p)             { return InsertNewObject<CT_Text>     (RunItemsChoiceType.instrText, p); }
+        public CT_Empty     InsertNewLastRenderedPageBreak(int p) { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.lastRenderedPageBreak, p); }
+        public CT_Empty     InsertNewMonthLong(int p)             { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.monthLong, p); }
+        public CT_Empty     InsertNewMonthShort(int p)            { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.monthShort, p); }
+        public CT_Empty     InsertNewNoBreakHyphen(int p)         { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.noBreakHyphen, p); }
+        public CT_Object    InsertNewObject(int p)                { return InsertNewObject<CT_Object>   (RunItemsChoiceType.@object, p); }
+        public CT_Empty     InsertNewPgNum(int p)                 { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.pgNum, p); }
+        public CT_Picture   InsertNewPict(int p)                  { return InsertNewObject<CT_Picture>  (RunItemsChoiceType.pict, p); }
+        public CT_PTab      InsertNewPtab(int p)                  { return InsertNewObject<CT_PTab>     (RunItemsChoiceType.ptab, p); }
+        public CT_Ruby      InsertNewRuby(int p)                  { return InsertNewObject<CT_Ruby>     (RunItemsChoiceType.ruby, p); }
+        public CT_Empty     InsertNewSeparator(int p)             { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.separator, p); }
+        public CT_Empty     InsertNewSoftHyphen(int p)            { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.softHyphen, p); }
+        public CT_Sym       InsertNewSym(int p)                   { return InsertNewObject<CT_Sym>      (RunItemsChoiceType.sym, p); }
+        public CT_Text      InsertNewT(int p)                     { return InsertNewObject<CT_Text>     (RunItemsChoiceType.t, p); }
+        public CT_Empty     InsertNewTab(int p)                   { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.tab, p); }
+        public CT_Empty     InsertNewYearLong(int p)              { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.yearLong, p); }
+        public CT_Empty     InsertNewYearShort(int p)             { return InsertNewObject<CT_Empty>    (RunItemsChoiceType.yearShort, p); }
+
+        public void RemoveAnnotationRef(int p)         { RemoveObject(RunItemsChoiceType.annotationRef, p); }
+        public void RemoveBr(int p)                    { RemoveObject(RunItemsChoiceType.br, p); }
+        public void RemoveCommentReference(int p)      { RemoveObject(RunItemsChoiceType.commentReference, p); }
+        public void RemoveContinuationSeparator(int p) { RemoveObject(RunItemsChoiceType.continuationSeparator, p); }
+        public void RemoveCr(int p)                    { RemoveObject(RunItemsChoiceType.cr, p); }
+        public void RemoveDayLong(int p)               { RemoveObject(RunItemsChoiceType.dayLong, p); }
+        public void RemoveDayShort(int p)              { RemoveObject(RunItemsChoiceType.dayShort, p); }
+        public void RemoveDelInstrText(int p)          { RemoveObject(RunItemsChoiceType.delInstrText, p); }
+        public void RemoveDelText(int p)               { RemoveObject(RunItemsChoiceType.delText, p); }
+        public void RemoveDrawing(int p)               { RemoveObject(RunItemsChoiceType.drawing, p); }
+        public void RemoveEndnoteRef(int p)            { RemoveObject(RunItemsChoiceType.endnoteRef, p); }
+        public void RemoveEndnoteReference(int p)      { RemoveObject(RunItemsChoiceType.endnoteReference, p); }
+        public void RemoveFldChar(int p)               { RemoveObject(RunItemsChoiceType.fldChar, p); }
+        public void RemoveFootnoteRef(int p)           { RemoveObject(RunItemsChoiceType.footnoteRef, p); }
+        public void RemoveFootnoteReference(int p)     { RemoveObject(RunItemsChoiceType.footnoteReference, p); }
+        public void RemoveInstrText(int p)             { RemoveObject(RunItemsChoiceType.instrText, p); }
+        public void RemoveLastRenderedPageBreak(int p) { RemoveObject(RunItemsChoiceType.lastRenderedPageBreak, p); }
+        public void RemoveMonthLong(int p)             { RemoveObject(RunItemsChoiceType.monthLong, p); }
+        public void RemoveMonthShort(int p)            { RemoveObject(RunItemsChoiceType.monthShort, p); }
+        public void RemoveNoBreakHyphen(int p)         { RemoveObject(RunItemsChoiceType.noBreakHyphen, p); }
+        public void RemoveObject(int p)                { RemoveObject(RunItemsChoiceType.@object, p); }
+        public void RemovePgNum(int p)                 { RemoveObject(RunItemsChoiceType.pgNum, p); }
+        public void RemovePict(int p)                  { RemoveObject(RunItemsChoiceType.pict, p); }
+        public void RemovePtab(int p)                  { RemoveObject(RunItemsChoiceType.ptab, p); }
+        public void RemoveRuby(int p)                  { RemoveObject(RunItemsChoiceType.ruby, p); }
+        public void RemoveSeparator(int p)             { RemoveObject(RunItemsChoiceType.separator, p); }
+        public void RemoveSoftHyphen(int p)            { RemoveObject(RunItemsChoiceType.softHyphen, p); }
+        public void RemoveSym(int p)                   { RemoveObject(RunItemsChoiceType.sym, p); }
+        public void RemoveT(int p)                     { RemoveObject(RunItemsChoiceType.t, p); }
+        public void RemoveTab(int p)                   { RemoveObject(RunItemsChoiceType.tab, p); }
+        public void RemoveYearLong(int p)              { RemoveObject(RunItemsChoiceType.yearLong, p); }
+        public void RemoveYearShort(int p)             { RemoveObject(RunItemsChoiceType.yearShort, p); }
+
+        public void SetAnnotationRef(int p, CT_Empty obj)             { SetObject(RunItemsChoiceType.annotationRef, p, obj); }
+        public void SetBr(int p, CT_Br obj)                           { SetObject(RunItemsChoiceType.br, p, obj); }
+        public void SetCommentReference(int p, CT_Markup obj)         { SetObject(RunItemsChoiceType.commentReference, p, obj); }
+        public void SetContinuationSeparator(int p, CT_Empty obj)     { SetObject(RunItemsChoiceType.continuationSeparator, p, obj); }
+        public void SetCr(int p, CT_Empty obj)                        { SetObject(RunItemsChoiceType.cr, p, obj); }
+        public void SetDayLong(int p, CT_Empty obj)                   { SetObject(RunItemsChoiceType.dayLong, p, obj); }
+        public void SetDayShort(int p, CT_Empty obj)                  { SetObject(RunItemsChoiceType.dayShort, p, obj); }
+        public void SetDelInstrText(int p, CT_Text obj)               { SetObject(RunItemsChoiceType.delInstrText, p, obj); }
+        public void SetDelText(int p, CT_Text obj)                    { SetObject(RunItemsChoiceType.delText, p, obj); }
+        public void SetDrawing(int p, CT_Drawing obj)                 { SetObject(RunItemsChoiceType.drawing, p, obj); }
+        public void SetEndnoteRef(int p, CT_Empty obj)                { SetObject(RunItemsChoiceType.endnoteRef, p, obj); }
+        public void SetEndnoteReference(int p, CT_FtnEdnRef obj)      { SetObject(RunItemsChoiceType.endnoteReference, p, obj); }
+        public void SetFldChar(int p, CT_FldChar obj)                 { SetObject(RunItemsChoiceType.fldChar, p, obj); }
+        public void SetFootnoteRef(int p, CT_Empty obj)               { SetObject(RunItemsChoiceType.footnoteRef, p, obj); }
+        public void SetFootnoteReference(int p, CT_FtnEdnRef obj)     { SetObject(RunItemsChoiceType.footnoteReference, p, obj); }
+        public void SetInstrText(int p, CT_Text obj)                  { SetObject(RunItemsChoiceType.instrText, p, obj); }
+        public void SetLastRenderedPageBreak(int p, CT_Empty obj)     { SetObject(RunItemsChoiceType.lastRenderedPageBreak, p, obj); }
+        public void SetMonthLong(int p, CT_Empty obj)                 { SetObject(RunItemsChoiceType.monthLong, p, obj); }
+        public void SetMonthShort(int p, CT_Empty obj)                { SetObject(RunItemsChoiceType.monthShort, p, obj); }
+        public void SetNoBreakHyphen(int p, CT_Empty obj)             { SetObject(RunItemsChoiceType.noBreakHyphen, p, obj); }
+        public void SetObject(int p, CT_Object obj)                   { SetObject(RunItemsChoiceType.@object, p, obj); }
+        public void SetPgNum(int p, CT_Empty obj)                     { SetObject(RunItemsChoiceType.pgNum, p, obj); }
+        public void SetPict(int p, CT_Picture obj)                    { SetObject(RunItemsChoiceType.pict, p, obj); }
+        public void SetPtab(int p, CT_PTab obj)                       { SetObject(RunItemsChoiceType.ptab, p, obj); }
+        public void SetRuby(int p, CT_Ruby obj)                       { SetObject(RunItemsChoiceType.ruby, p, obj); }
+        public void SetSeparator(int p, CT_Empty obj)                 { SetObject(RunItemsChoiceType.separator, p, obj); }
+        public void SetSoftHyphen(int p, CT_Empty obj)                { SetObject(RunItemsChoiceType.softHyphen, p, obj); }
+        public void SetSym(int p, CT_Sym obj)                         { SetObject(RunItemsChoiceType.sym, p, obj); }
+        public void SetT(int p, CT_Text obj)                          { SetObject(RunItemsChoiceType.t, p, obj); }
+        public void SetTab(int p, CT_Empty obj)                       { SetObject(RunItemsChoiceType.tab, p, obj); }
+        public void SetYearLong(int p, CT_Empty obj)                  { SetObject(RunItemsChoiceType.yearLong, p, obj); }
+        public void SetYearShort(int p, CT_Empty obj)                 { SetObject(RunItemsChoiceType.yearShort, p, obj); }
+
+        public int SizeOfAnnotationRefArray()         { return SizeOfArray(RunItemsChoiceType.annotationRef); }
+        public int SizeOfBrArray()                    { return SizeOfArray(RunItemsChoiceType.br); }
+        public int SizeOfCommentReferenceArray()      { return SizeOfArray(RunItemsChoiceType.commentReference); }
+        public int SizeOfContinuationSeparatorArray() { return SizeOfArray(RunItemsChoiceType.continuationSeparator); }
+        public int SizeOfCrArray()                    { return SizeOfArray(RunItemsChoiceType.cr); }
+        public int SizeOfDayLongArray()               { return SizeOfArray(RunItemsChoiceType.dayLong); }
+        public int SizeOfDayShortArray()              { return SizeOfArray(RunItemsChoiceType.dayShort); }
+        public int SizeOfDelInstrTextArray()          { return SizeOfArray(RunItemsChoiceType.delInstrText); }
+        public int SizeOfDelTextArray()               { return SizeOfArray(RunItemsChoiceType.delText); }
+        public int SizeOfDrawingArray()               { return SizeOfArray(RunItemsChoiceType.drawing); }
+        public int SizeOfEndnoteRefArray()            { return SizeOfArray(RunItemsChoiceType.endnoteRef); }
+        public int SizeOfEndnoteReferenceArray()      { return SizeOfArray(RunItemsChoiceType.endnoteReference); }
+        public int SizeOfFldCharArray()               { return SizeOfArray(RunItemsChoiceType.fldChar); }
+        public int SizeOfFootnoteRefArray()           { return SizeOfArray(RunItemsChoiceType.footnoteRef); }
+        public int SizeOfFootnoteReferenceArray()     { return SizeOfArray(RunItemsChoiceType.footnoteReference); }
+        public int SizeOfInstrTextArray()             { return SizeOfArray(RunItemsChoiceType.instrText); }
+        public int SizeOfLastRenderedPageBreakArray() { return SizeOfArray(RunItemsChoiceType.lastRenderedPageBreak); }
+        public int SizeOfMonthLongArray()             { return SizeOfArray(RunItemsChoiceType.monthLong); }
+        public int SizeOfMonthShortArray()            { return SizeOfArray(RunItemsChoiceType.monthShort); }
+        public int SizeOfNoBreakHyphenArray()         { return SizeOfArray(RunItemsChoiceType.noBreakHyphen); }
+        public int SizeOfObjectArray()                { return SizeOfArray(RunItemsChoiceType.@object); }
+        public int SizeOfPgNumArray()                 { return SizeOfArray(RunItemsChoiceType.pgNum); }
+        public int SizeOfPictArray()                  { return SizeOfArray(RunItemsChoiceType.pict); }
+        public int SizeOfPtabArray()                  { return SizeOfArray(RunItemsChoiceType.ptab); }
+        public int SizeOfRubyArray()                  { return SizeOfArray(RunItemsChoiceType.ruby); }
+        public int SizeOfSeparatorArray()             { return SizeOfArray(RunItemsChoiceType.separator); }
+        public int SizeOfSoftHyphenArray()            { return SizeOfArray(RunItemsChoiceType.softHyphen); }
+        public int SizeOfSymArray()                   { return SizeOfArray(RunItemsChoiceType.sym); }
+        public int SizeOfTArray()                     { return SizeOfArray(RunItemsChoiceType.t); }
+        public int SizeOfTabArray()                   { return SizeOfArray(RunItemsChoiceType.tab); }
+        public int SizeOfYearLongArray()              { return SizeOfArray(RunItemsChoiceType.yearLong); }
+        public int SizeOfYearShortArray()             { return SizeOfArray(RunItemsChoiceType.yearShort); }
+        #pragma warning restore format
 
         public static CT_R Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -660,23 +794,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.alternateContent.Write(sw, "AlternateContent");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
-        }
-
-
-        public int SizeOfTabArray()
-        {
-            return SizeOfArray(RunItemsChoiceType.tab);
-        }
-
-        public IList<CT_Empty> GetTabList()
-        {
-            return GetObjectList<CT_Empty>(RunItemsChoiceType.tab);
-        }
-
-        public IList<CT_FtnEdnRef> GetFootnoteReferenceList()
-        {
-            return GetObjectList<CT_FtnEdnRef>(RunItemsChoiceType.footnoteReference);
+            sw.WriteEndW(nodeName);
         }
     }
 
@@ -809,7 +927,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -921,7 +1039,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.lid.Write(sw, "lid");
             if (this.dirty != null)
                 this.dirty.Write(sw, "dirty");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -1276,7 +1394,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     ((CT_R)o).Write(sw, "r");
                 i++;
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
     }
@@ -1417,7 +1535,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.rt.Write(sw, "rt");
             if (this.rubyBase != null)
                 this.rubyBase.Write(sw, "rubyBase");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -1695,7 +1813,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         private ST_TextboxTightWrap valField;
@@ -1761,7 +1879,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
 

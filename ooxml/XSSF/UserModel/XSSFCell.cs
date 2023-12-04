@@ -26,6 +26,8 @@ using NPOI.SS;
 using NPOI.Util;
 using NPOI.SS.Formula.Eval;
 using System.Globalization;
+using System.IO;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -191,14 +193,13 @@ namespace NPOI.XSSF.UserModel
             {
                 // overwrite the hyperlink at dest cell with srcCell's hyperlink
                 // if srcCell doesn't have a hyperlink, clear the hyperlink (if one exists) at destCell
-                IHyperlink srcHyperlink = srcCell.Hyperlink;
-                if (srcHyperlink == null)
+                if (srcCell == null || srcCell.Hyperlink == null)
                 {
                     Hyperlink = (null);
                 }
                 else
                 {
-                    Hyperlink = new XSSFHyperlink(srcHyperlink);
+                    Hyperlink = new XSSFHyperlink(srcCell.Hyperlink);
                 }
             }
         }
@@ -828,13 +829,13 @@ namespace NPOI.XSSF.UserModel
         /// <summary>
         /// Get the value of the cell as a date.
         /// </summary>
-        public DateTime DateCellValue
+        public DateTime? DateCellValue
         {
             get
             {
-                if (CellType == CellType.Blank)
+                if (CellType != CellType.Numeric && CellType != CellType.Formula)
                 {
-                    return DateTime.MinValue;
+                    return null;
                 }
 
                 double value = NumericCellValue;
@@ -842,6 +843,33 @@ namespace NPOI.XSSF.UserModel
                 return DateUtil.GetJavaDate(value, date1904);
             }
         }
+#if NET6_0_OR_GREATER
+        public DateOnly? DateOnlyCellValue 
+        { 
+            get{
+                if (CellType != CellType.Numeric && CellType != CellType.Formula)
+                {
+                    return null;
+                }
+                double value = NumericCellValue;
+                bool date1904 = Sheet.Workbook.IsDate1904();
+                return DateOnly.FromDateTime(DateUtil.GetJavaDate(value, date1904));
+            }
+        }
+
+        public TimeOnly? TimeOnlyCellValue 
+        { 
+            get{
+                if (CellType != CellType.Numeric && CellType != CellType.Formula)
+                {
+                    return null;
+                }
+                double value = NumericCellValue;
+                bool date1904 = Sheet.Workbook.IsDate1904();
+                return TimeOnly.FromDateTime(DateUtil.GetJavaDate(value, date1904));
+            }
+        }
+#endif
         public void SetCellValue(DateTime? value)
         {
             if (value == null)

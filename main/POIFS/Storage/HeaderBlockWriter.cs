@@ -160,14 +160,7 @@ namespace NPOI.POIFS.Storage
         /// </param>
         public void WriteBlocks(Stream stream)
         {
-            try
-            {
-                _header_block.WriteData(stream);
-            }
-            catch (IOException ex)
-            {
-                throw ex;
-            }
+            _header_block.WriteData(stream);
         }
 
         public void WriteBlock(ByteBuffer block)

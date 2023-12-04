@@ -41,6 +41,23 @@ namespace NPOI.XSSF.UserModel
          */
         private CT_Marker cell2;
 
+        public int left
+        {
+            get;
+        }
+        public int top
+        {
+            get;
+        }
+        public int width
+        {
+            get;
+        }
+        public int height
+        {
+            get;
+        }
+
         /**
          * Creates a new client anchor and defaults all the anchor positions to 0.
          */
@@ -97,9 +114,22 @@ namespace NPOI.XSSF.UserModel
             this.cell2 = cell2;
         }
 
- 
+        /**
+         * Create XSSFClientAnchor from existing xml beans
+         *
+         * @param cell1 starting anchor point
+         * @param cell2 ending anchor point
+         */
+        internal XSSFClientAnchor(CT_Marker cell1, CT_Marker cell2, int left, int top, int right, int bottom)
+        {
+            this.cell1 = cell1;
+            this.cell2 = cell2;
 
-
+            this.left   = left;
+            this.top    = top;
+            this.width  = Math.Abs(right- left);
+            this.height = Math.Abs(bottom - top);
+        }
 
         public override bool Equals(Object o)
         {

@@ -1,0 +1,10 @@
+<Project>
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <RunSettingsFilePath>$(MSBuildProjectDirectory)\..\..\test.runsettings</RunSettingsFilePath>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+</Project>

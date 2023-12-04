@@ -171,17 +171,17 @@ namespace NPOI.XSSF.UserModel
             throw new System.NotImplementedException();
         }
 
-        void ISheet.SetColumnWidth(int columnIndex, int width)
+        void ISheet.SetColumnWidth(int columnIndex, double width)
         {
             throw new System.NotImplementedException();
         }
 
-        int ISheet.GetColumnWidth(int columnIndex)
+        double ISheet.GetColumnWidth(int columnIndex)
         {
             throw new System.NotImplementedException();
         }
 
-        int ISheet.DefaultColumnWidth
+        double ISheet.DefaultColumnWidth
         {
             get
             {

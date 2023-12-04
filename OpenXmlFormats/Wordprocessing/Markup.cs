@@ -184,7 +184,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Comments()
         {
-            //this.commentField = new List<CT_Comment>();
+            this.commentField = new List<CT_Comment>();
         }
         public static CT_Comments Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -233,6 +233,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.commentField = value;
             }
+        }
+
+        public CT_Comment AddNewComment()
+        {
+            var comment = new CT_Comment();
+            commentField.Add(comment);
+            return comment;
+        }
+
+        public void RemoveComment(int i)
+        {
+            commentField.RemoveAt(i);
         }
     }
 
@@ -491,7 +503,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_MarkupRange)
                     ((CT_MarkupRange)o).Write(sw, "moveFromRangeEnd");
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [System.Xml.Serialization.XmlElementAttribute("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]
@@ -566,10 +578,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        public IList<CT_P> GetPList()
-        {
-            return GetObjectList<CT_P>(ItemsChoiceType50.p);
-        }
         #region Generic methods for object operation
 
         private List<T> GetObjectList<T>(ItemsChoiceType50 type) where T : class
@@ -674,6 +682,225 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
         #endregion
+
+        #pragma warning disable format
+        public CT_AltChunk       AddNewAltChunk()                    { return AddNewObject<CT_AltChunk>      (ItemsChoiceType50.altChunk); }
+        public CT_MarkupRange    AddNewBookmarkEnd()                 { return AddNewObject<CT_MarkupRange>   (ItemsChoiceType50.bookmarkEnd); }
+        public CT_Bookmark       AddNewBookmarkStart()               { return AddNewObject<CT_Bookmark>      (ItemsChoiceType50.bookmarkStart); }
+        public CT_MarkupRange    AddNewCommentRangeEnd()             { return AddNewObject<CT_MarkupRange>   (ItemsChoiceType50.commentRangeEnd); }
+        public CT_MarkupRange    AddNewCommentRangeStart()           { return AddNewObject<CT_MarkupRange>   (ItemsChoiceType50.commentRangeStart); }
+        public CT_CustomXmlBlock AddNewCustomXml()                   { return AddNewObject<CT_CustomXmlBlock>(ItemsChoiceType50.customXml); }
+        public CT_Markup         AddNewCustomXmlDelRangeEnd()        { return AddNewObject<CT_Markup>        (ItemsChoiceType50.customXmlDelRangeEnd); }
+        public CT_TrackChange    AddNewCustomXmlDelRangeStart()      { return AddNewObject<CT_TrackChange>   (ItemsChoiceType50.customXmlDelRangeStart); }
+        public CT_Markup         AddNewCustomXmlInsRangeEnd()        { return AddNewObject<CT_Markup>        (ItemsChoiceType50.customXmlInsRangeEnd); }
+        public CT_TrackChange    AddNewCustomXmlInsRangeStart()      { return AddNewObject<CT_TrackChange>   (ItemsChoiceType50.customXmlInsRangeStart); }
+        public CT_Markup         AddNewCustomXmlMoveFromRangeEnd()   { return AddNewObject<CT_Markup>        (ItemsChoiceType50.customXmlMoveFromRangeEnd); }
+        public CT_TrackChange    AddNewCustomXmlMoveFromRangeStart() { return AddNewObject<CT_TrackChange>   (ItemsChoiceType50.customXmlMoveFromRangeStart); }
+        public CT_Markup         AddNewCustomXmlMoveToRangeEnd()     { return AddNewObject<CT_Markup>        (ItemsChoiceType50.customXmlMoveToRangeEnd); }
+        public CT_TrackChange    AddNewCustomXmlMoveToRangeStart()   { return AddNewObject<CT_TrackChange>   (ItemsChoiceType50.customXmlMoveToRangeStart); }
+        public CT_RunTrackChange AddNewDel()                         { return AddNewObject<CT_RunTrackChange>(ItemsChoiceType50.del); }
+        public CT_RunTrackChange AddNewIns()                         { return AddNewObject<CT_RunTrackChange>(ItemsChoiceType50.ins); }
+        public CT_RunTrackChange AddNewMoveFrom()                    { return AddNewObject<CT_RunTrackChange>(ItemsChoiceType50.moveFrom); }
+        public CT_MarkupRange    AddNewMoveFromRangeEnd()            { return AddNewObject<CT_MarkupRange>   (ItemsChoiceType50.moveFromRangeEnd); }
+        public CT_MoveBookmark   AddNewMoveFromRangeStart()          { return AddNewObject<CT_MoveBookmark>  (ItemsChoiceType50.moveFromRangeStart); }
+        public CT_RunTrackChange AddNewMoveTo()                      { return AddNewObject<CT_RunTrackChange>(ItemsChoiceType50.moveTo); }
+        public CT_MarkupRange    AddNewMoveToRangeEnd()              { return AddNewObject<CT_MarkupRange>   (ItemsChoiceType50.moveToRangeEnd); }
+        public CT_MoveBookmark   AddNewMoveToRangeStart()            { return AddNewObject<CT_MoveBookmark>  (ItemsChoiceType50.moveToRangeStart); }
+        public CT_OMath          AddNewOMath()                       { return AddNewObject<CT_OMath>         (ItemsChoiceType50.oMath); }
+        public CT_OMathPara      AddNewOMathPara()                   { return AddNewObject<CT_OMathPara>     (ItemsChoiceType50.oMathPara); }
+        public CT_P              AddNewP()                           { return AddNewObject<CT_P>             (ItemsChoiceType50.p); }
+        public CT_Perm           AddNewPermEnd()                     { return AddNewObject<CT_Perm>          (ItemsChoiceType50.permEnd); }
+        public CT_PermStart      AddNewPermStart()                   { return AddNewObject<CT_PermStart>     (ItemsChoiceType50.permStart); }
+        public CT_ProofErr       AddNewProofErr()                    { return AddNewObject<CT_ProofErr>      (ItemsChoiceType50.proofErr); }
+        public CT_SdtBlock       AddNewSdt()                         { return AddNewObject<CT_SdtBlock>      (ItemsChoiceType50.sdt); }
+        public CT_Tbl            AddNewTbl()                         { return AddNewObject<CT_Tbl>           (ItemsChoiceType50.tbl); }
+
+        public CT_AltChunk       GetAltChunkArray(int p)                    { return GetObjectArray<CT_AltChunk>      (p, ItemsChoiceType50.altChunk); }
+        public CT_MarkupRange    GetBookmarkEndArray(int p)                 { return GetObjectArray<CT_MarkupRange>   (p, ItemsChoiceType50.bookmarkEnd); }
+        public CT_Bookmark       GetBookmarkStartArray(int p)               { return GetObjectArray<CT_Bookmark>      (p, ItemsChoiceType50.bookmarkStart); }
+        public CT_MarkupRange    GetCommentRangeEndArray(int p)             { return GetObjectArray<CT_MarkupRange>   (p, ItemsChoiceType50.commentRangeEnd); }
+        public CT_MarkupRange    GetCommentRangeStartArray(int p)           { return GetObjectArray<CT_MarkupRange>   (p, ItemsChoiceType50.commentRangeStart); }
+        public CT_CustomXmlBlock GetCustomXmlArray(int p)                   { return GetObjectArray<CT_CustomXmlBlock>(p, ItemsChoiceType50.customXml); }
+        public CT_Markup         GetCustomXmlDelRangeEndArray(int p)        { return GetObjectArray<CT_Markup>        (p, ItemsChoiceType50.customXmlDelRangeEnd); }
+        public CT_TrackChange    GetCustomXmlDelRangeStartArray(int p)      { return GetObjectArray<CT_TrackChange>   (p, ItemsChoiceType50.customXmlDelRangeStart); }
+        public CT_Markup         GetCustomXmlInsRangeEndArray(int p)        { return GetObjectArray<CT_Markup>        (p, ItemsChoiceType50.customXmlInsRangeEnd); }
+        public CT_TrackChange    GetCustomXmlInsRangeStartArray(int p)      { return GetObjectArray<CT_TrackChange>   (p, ItemsChoiceType50.customXmlInsRangeStart); }
+        public CT_Markup         GetCustomXmlMoveFromRangeEndArray(int p)   { return GetObjectArray<CT_Markup>        (p, ItemsChoiceType50.customXmlMoveFromRangeEnd); }
+        public CT_TrackChange    GetCustomXmlMoveFromRangeStartArray(int p) { return GetObjectArray<CT_TrackChange>   (p, ItemsChoiceType50.customXmlMoveFromRangeStart); }
+        public CT_Markup         GetCustomXmlMoveToRangeEndArray(int p)     { return GetObjectArray<CT_Markup>        (p, ItemsChoiceType50.customXmlMoveToRangeEnd); }
+        public CT_TrackChange    GetCustomXmlMoveToRangeStartArray(int p)   { return GetObjectArray<CT_TrackChange>   (p, ItemsChoiceType50.customXmlMoveToRangeStart); }
+        public CT_RunTrackChange GetDelArray(int p)                         { return GetObjectArray<CT_RunTrackChange>(p, ItemsChoiceType50.del); }
+        public CT_RunTrackChange GetInsArray(int p)                         { return GetObjectArray<CT_RunTrackChange>(p, ItemsChoiceType50.ins); }
+        public CT_RunTrackChange GetMoveFromArray(int p)                    { return GetObjectArray<CT_RunTrackChange>(p, ItemsChoiceType50.moveFrom); }
+        public CT_MarkupRange    GetMoveFromRangeEndArray(int p)            { return GetObjectArray<CT_MarkupRange>   (p, ItemsChoiceType50.moveFromRangeEnd); }
+        public CT_MoveBookmark   GetMoveFromRangeStartArray(int p)          { return GetObjectArray<CT_MoveBookmark>  (p, ItemsChoiceType50.moveFromRangeStart); }
+        public CT_RunTrackChange GetMoveToArray(int p)                      { return GetObjectArray<CT_RunTrackChange>(p, ItemsChoiceType50.moveTo); }
+        public CT_MarkupRange    GetMoveToRangeEndArray(int p)              { return GetObjectArray<CT_MarkupRange>   (p, ItemsChoiceType50.moveToRangeEnd); }
+        public CT_MoveBookmark   GetMoveToRangeStartArray(int p)            { return GetObjectArray<CT_MoveBookmark>  (p, ItemsChoiceType50.moveToRangeStart); }
+        public CT_OMath          GetOMathArray(int p)                       { return GetObjectArray<CT_OMath>         (p, ItemsChoiceType50.oMath); }
+        public CT_OMathPara      GetOMathParaArray(int p)                   { return GetObjectArray<CT_OMathPara>     (p, ItemsChoiceType50.oMathPara); }
+        public CT_P              GetPArray(int p)                           { return GetObjectArray<CT_P>             (p, ItemsChoiceType50.p); }
+        public CT_Perm           GetPermEndArray(int p)                     { return GetObjectArray<CT_Perm>          (p, ItemsChoiceType50.permEnd); }
+        public CT_PermStart      GetPermStartArray(int p)                   { return GetObjectArray<CT_PermStart>     (p, ItemsChoiceType50.permStart); }
+        public CT_ProofErr       GetProofErrArray(int p)                    { return GetObjectArray<CT_ProofErr>      (p, ItemsChoiceType50.proofErr); }
+        public CT_SdtBlock       GetSdtArray(int p)                         { return GetObjectArray<CT_SdtBlock>      (p, ItemsChoiceType50.sdt); }
+        public CT_Tbl            GetTblArray(int p)                         { return GetObjectArray<CT_Tbl>           (p, ItemsChoiceType50.tbl); }
+
+        public IList<CT_AltChunk>       GetAltChunkList()                    { return GetObjectList<CT_AltChunk>      (ItemsChoiceType50.altChunk); }
+        public IList<CT_MarkupRange>    GetBookmarkEndList()                 { return GetObjectList<CT_MarkupRange>   (ItemsChoiceType50.bookmarkEnd); }
+        public IList<CT_Bookmark>       GetBookmarkStartList()               { return GetObjectList<CT_Bookmark>      (ItemsChoiceType50.bookmarkStart); }
+        public IList<CT_MarkupRange>    GetCommentRangeEndList()             { return GetObjectList<CT_MarkupRange>   (ItemsChoiceType50.commentRangeEnd); }
+        public IList<CT_MarkupRange>    GetCommentRangeStartList()           { return GetObjectList<CT_MarkupRange>   (ItemsChoiceType50.commentRangeStart); }
+        public IList<CT_CustomXmlBlock> GetCustomXmlList()                   { return GetObjectList<CT_CustomXmlBlock>(ItemsChoiceType50.customXml); }
+        public IList<CT_Markup>         GetCustomXmlDelRangeEndList()        { return GetObjectList<CT_Markup>        (ItemsChoiceType50.customXmlDelRangeEnd); }
+        public IList<CT_TrackChange>    GetCustomXmlDelRangeStartList()      { return GetObjectList<CT_TrackChange>   (ItemsChoiceType50.customXmlDelRangeStart); }
+        public IList<CT_Markup>         GetCustomXmlInsRangeEndList()        { return GetObjectList<CT_Markup>        (ItemsChoiceType50.customXmlInsRangeEnd); }
+        public IList<CT_TrackChange>    GetCustomXmlInsRangeStartList()      { return GetObjectList<CT_TrackChange>   (ItemsChoiceType50.customXmlInsRangeStart); }
+        public IList<CT_Markup>         GetCustomXmlMoveFromRangeEndList()   { return GetObjectList<CT_Markup>        (ItemsChoiceType50.customXmlMoveFromRangeEnd); }
+        public IList<CT_TrackChange>    GetCustomXmlMoveFromRangeStartList() { return GetObjectList<CT_TrackChange>   (ItemsChoiceType50.customXmlMoveFromRangeStart); }
+        public IList<CT_Markup>         GetCustomXmlMoveToRangeEndList()     { return GetObjectList<CT_Markup>        (ItemsChoiceType50.customXmlMoveToRangeEnd); }
+        public IList<CT_TrackChange>    GetCustomXmlMoveToRangeStartList()   { return GetObjectList<CT_TrackChange>   (ItemsChoiceType50.customXmlMoveToRangeStart); }
+        public IList<CT_RunTrackChange> GetDelList()                         { return GetObjectList<CT_RunTrackChange>(ItemsChoiceType50.del); }
+        public IList<CT_RunTrackChange> GetInsList()                         { return GetObjectList<CT_RunTrackChange>(ItemsChoiceType50.ins); }
+        public IList<CT_RunTrackChange> GetMoveFromList()                    { return GetObjectList<CT_RunTrackChange>(ItemsChoiceType50.moveFrom); }
+        public IList<CT_MarkupRange>    GetMoveFromRangeEndList()            { return GetObjectList<CT_MarkupRange>   (ItemsChoiceType50.moveFromRangeEnd); }
+        public IList<CT_MoveBookmark>   GetMoveFromRangeStartList()          { return GetObjectList<CT_MoveBookmark>  (ItemsChoiceType50.moveFromRangeStart); }
+        public IList<CT_RunTrackChange> GetMoveToList()                      { return GetObjectList<CT_RunTrackChange>(ItemsChoiceType50.moveTo); }
+        public IList<CT_MarkupRange>    GetMoveToRangeEndList()              { return GetObjectList<CT_MarkupRange>   (ItemsChoiceType50.moveToRangeEnd); }
+        public IList<CT_MoveBookmark>   GetMoveToRangeStartList()            { return GetObjectList<CT_MoveBookmark>  (ItemsChoiceType50.moveToRangeStart); }
+        public IList<CT_OMath>          GetOMathList()                       { return GetObjectList<CT_OMath>         (ItemsChoiceType50.oMath); }
+        public IList<CT_OMathPara>      GetOMathParaList()                   { return GetObjectList<CT_OMathPara>     (ItemsChoiceType50.oMathPara); }
+        public IList<CT_P>              GetPList()                           { return GetObjectList<CT_P>             (ItemsChoiceType50.p); }
+        public IList<CT_Perm>           GetPermEndList()                     { return GetObjectList<CT_Perm>          (ItemsChoiceType50.permEnd); }
+        public IList<CT_PermStart>      GetPermStartList()                   { return GetObjectList<CT_PermStart>     (ItemsChoiceType50.permStart); }
+        public IList<CT_ProofErr>       GetProofErrList()                    { return GetObjectList<CT_ProofErr>      (ItemsChoiceType50.proofErr); }
+        public IList<CT_SdtBlock>       GetSdtList()                         { return GetObjectList<CT_SdtBlock>      (ItemsChoiceType50.sdt); }
+        public IList<CT_Tbl>            GetTblList()                         { return GetObjectList<CT_Tbl>           (ItemsChoiceType50.tbl); }
+
+        public CT_AltChunk       InsertNewAltChunk(int p)                    { return InsertNewObject<CT_AltChunk>      (ItemsChoiceType50.altChunk, p); }
+        public CT_MarkupRange    InsertNewBookmarkEnd(int p)                 { return InsertNewObject<CT_MarkupRange>   (ItemsChoiceType50.bookmarkEnd, p); }
+        public CT_Bookmark       InsertNewBookmarkStart(int p)               { return InsertNewObject<CT_Bookmark>      (ItemsChoiceType50.bookmarkStart, p); }
+        public CT_MarkupRange    InsertNewCommentRangeEnd(int p)             { return InsertNewObject<CT_MarkupRange>   (ItemsChoiceType50.commentRangeEnd, p); }
+        public CT_MarkupRange    InsertNewCommentRangeStart(int p)           { return InsertNewObject<CT_MarkupRange>   (ItemsChoiceType50.commentRangeStart, p); }
+        public CT_CustomXmlBlock InsertNewCustomXml(int p)                   { return InsertNewObject<CT_CustomXmlBlock>(ItemsChoiceType50.customXml, p); }
+        public CT_Markup         InsertNewCustomXmlDelRangeEnd(int p)        { return InsertNewObject<CT_Markup>        (ItemsChoiceType50.customXmlDelRangeEnd, p); }
+        public CT_TrackChange    InsertNewCustomXmlDelRangeStart(int p)      { return InsertNewObject<CT_TrackChange>   (ItemsChoiceType50.customXmlDelRangeStart, p); }
+        public CT_Markup         InsertNewCustomXmlInsRangeEnd(int p)        { return InsertNewObject<CT_Markup>        (ItemsChoiceType50.customXmlInsRangeEnd, p); }
+        public CT_TrackChange    InsertNewCustomXmlInsRangeStart(int p)      { return InsertNewObject<CT_TrackChange>   (ItemsChoiceType50.customXmlInsRangeStart, p); }
+        public CT_Markup         InsertNewCustomXmlMoveFromRangeEnd(int p)   { return InsertNewObject<CT_Markup>        (ItemsChoiceType50.customXmlMoveFromRangeEnd, p); }
+        public CT_TrackChange    InsertNewCustomXmlMoveFromRangeStart(int p) { return InsertNewObject<CT_TrackChange>   (ItemsChoiceType50.customXmlMoveFromRangeStart, p); }
+        public CT_Markup         InsertNewCustomXmlMoveToRangeEnd(int p)     { return InsertNewObject<CT_Markup>        (ItemsChoiceType50.customXmlMoveToRangeEnd, p); }
+        public CT_TrackChange    InsertNewCustomXmlMoveToRangeStart(int p)   { return InsertNewObject<CT_TrackChange>   (ItemsChoiceType50.customXmlMoveToRangeStart, p); }
+        public CT_RunTrackChange InsertNewDel(int p)                         { return InsertNewObject<CT_RunTrackChange>(ItemsChoiceType50.del, p); }
+        public CT_RunTrackChange InsertNewIns(int p)                         { return InsertNewObject<CT_RunTrackChange>(ItemsChoiceType50.ins, p); }
+        public CT_RunTrackChange InsertNewMoveFrom(int p)                    { return InsertNewObject<CT_RunTrackChange>(ItemsChoiceType50.moveFrom, p); }
+        public CT_MarkupRange    InsertNewMoveFromRangeEnd(int p)            { return InsertNewObject<CT_MarkupRange>   (ItemsChoiceType50.moveFromRangeEnd, p); }
+        public CT_MoveBookmark   InsertNewMoveFromRangeStart(int p)          { return InsertNewObject<CT_MoveBookmark>  (ItemsChoiceType50.moveFromRangeStart, p); }
+        public CT_RunTrackChange InsertNewMoveTo(int p)                      { return InsertNewObject<CT_RunTrackChange>(ItemsChoiceType50.moveTo, p); }
+        public CT_MarkupRange    InsertNewMoveToRangeEnd(int p)              { return InsertNewObject<CT_MarkupRange>   (ItemsChoiceType50.moveToRangeEnd, p); }
+        public CT_MoveBookmark   InsertNewMoveToRangeStart(int p)            { return InsertNewObject<CT_MoveBookmark>  (ItemsChoiceType50.moveToRangeStart, p); }
+        public CT_OMath          InsertNewOMath(int p)                       { return InsertNewObject<CT_OMath>         (ItemsChoiceType50.oMath, p); }
+        public CT_OMathPara      InsertNewOMathPara(int p)                   { return InsertNewObject<CT_OMathPara>     (ItemsChoiceType50.oMathPara, p); }
+        public CT_P              InsertNewP(int p)                           { return InsertNewObject<CT_P>             (ItemsChoiceType50.p, p); }
+        public CT_Perm           InsertNewPermEnd(int p)                     { return InsertNewObject<CT_Perm>          (ItemsChoiceType50.permEnd, p); }
+        public CT_PermStart      InsertNewPermStart(int p)                   { return InsertNewObject<CT_PermStart>     (ItemsChoiceType50.permStart, p); }
+        public CT_ProofErr       InsertNewProofErr(int p)                    { return InsertNewObject<CT_ProofErr>      (ItemsChoiceType50.proofErr, p); }
+        public CT_SdtBlock       InsertNewSdt(int p)                         { return InsertNewObject<CT_SdtBlock>      (ItemsChoiceType50.sdt, p); }
+        public CT_Tbl            InsertNewTbl(int p)                         { return InsertNewObject<CT_Tbl>           (ItemsChoiceType50.tbl, p); }
+
+        public void RemoveAltChunk(int p)                    { RemoveObject(ItemsChoiceType50.altChunk, p); }
+        public void RemoveBookmarkEnd(int p)                 { RemoveObject(ItemsChoiceType50.bookmarkEnd, p); }
+        public void RemoveBookmarkStart(int p)               { RemoveObject(ItemsChoiceType50.bookmarkStart, p); }
+        public void RemoveCommentRangeEnd(int p)             { RemoveObject(ItemsChoiceType50.commentRangeEnd, p); }
+        public void RemoveCommentRangeStart(int p)           { RemoveObject(ItemsChoiceType50.commentRangeStart, p); }
+        public void RemoveCustomXml(int p)                   { RemoveObject(ItemsChoiceType50.customXml, p); }
+        public void RemoveCustomXmlDelRangeEnd(int p)        { RemoveObject(ItemsChoiceType50.customXmlDelRangeEnd, p); }
+        public void RemoveCustomXmlDelRangeStart(int p)      { RemoveObject(ItemsChoiceType50.customXmlDelRangeStart, p); }
+        public void RemoveCustomXmlInsRangeEnd(int p)        { RemoveObject(ItemsChoiceType50.customXmlInsRangeEnd, p); }
+        public void RemoveCustomXmlInsRangeStart(int p)      { RemoveObject(ItemsChoiceType50.customXmlInsRangeStart, p); }
+        public void RemoveCustomXmlMoveFromRangeEnd(int p)   { RemoveObject(ItemsChoiceType50.customXmlMoveFromRangeEnd, p); }
+        public void RemoveCustomXmlMoveFromRangeStart(int p) { RemoveObject(ItemsChoiceType50.customXmlMoveFromRangeStart, p); }
+        public void RemoveCustomXmlMoveToRangeEnd(int p)     { RemoveObject(ItemsChoiceType50.customXmlMoveToRangeEnd, p); }
+        public void RemoveCustomXmlMoveToRangeStart(int p)   { RemoveObject(ItemsChoiceType50.customXmlMoveToRangeStart, p); }
+        public void RemoveDel(int p)                         { RemoveObject(ItemsChoiceType50.del, p); }
+        public void RemoveIns(int p)                         { RemoveObject(ItemsChoiceType50.ins, p); }
+        public void RemoveMoveFrom(int p)                    { RemoveObject(ItemsChoiceType50.moveFrom, p); }
+        public void RemoveMoveFromRangeEnd(int p)            { RemoveObject(ItemsChoiceType50.moveFromRangeEnd, p); }
+        public void RemoveMoveFromRangeStart(int p)          { RemoveObject(ItemsChoiceType50.moveFromRangeStart, p); }
+        public void RemoveMoveTo(int p)                      { RemoveObject(ItemsChoiceType50.moveTo, p); }
+        public void RemoveMoveToRangeEnd(int p)              { RemoveObject(ItemsChoiceType50.moveToRangeEnd, p); }
+        public void RemoveMoveToRangeStart(int p)            { RemoveObject(ItemsChoiceType50.moveToRangeStart, p); }
+        public void RemoveOMath(int p)                       { RemoveObject(ItemsChoiceType50.oMath, p); }
+        public void RemoveOMathPara(int p)                   { RemoveObject(ItemsChoiceType50.oMathPara, p); }
+        public void RemoveP(int p)                           { RemoveObject(ItemsChoiceType50.p, p); }
+        public void RemovePermEnd(int p)                     { RemoveObject(ItemsChoiceType50.permEnd, p); }
+        public void RemovePermStart(int p)                   { RemoveObject(ItemsChoiceType50.permStart, p); }
+        public void RemoveProofErr(int p)                    { RemoveObject(ItemsChoiceType50.proofErr, p); }
+        public void RemoveSdt(int p)                         { RemoveObject(ItemsChoiceType50.sdt, p); }
+        public void RemoveTbl(int p)                         { RemoveObject(ItemsChoiceType50.tbl, p); }
+
+        public void SetAltChunkArray(int p, CT_AltChunk obj)                       { SetObject(ItemsChoiceType50.altChunk, p, obj); }
+        public void SetBookmarkEndArray(int p, CT_MarkupRange obj)                 { SetObject(ItemsChoiceType50.bookmarkEnd, p, obj); }
+        public void SetBookmarkStartArray(int p, CT_Bookmark obj)                  { SetObject(ItemsChoiceType50.bookmarkStart, p, obj); }
+        public void SetCommentRangeEndArray(int p, CT_MarkupRange obj)             { SetObject(ItemsChoiceType50.commentRangeEnd, p, obj); }
+        public void SetCommentRangeStartArray(int p, CT_MarkupRange obj)           { SetObject(ItemsChoiceType50.commentRangeStart, p, obj); }
+        public void SetCustomXmlArray(int p, CT_CustomXmlBlock obj)                { SetObject(ItemsChoiceType50.customXml, p, obj); }
+        public void SetCustomXmlDelRangeEndArray(int p, CT_Markup obj)             { SetObject(ItemsChoiceType50.customXmlDelRangeEnd, p, obj); }
+        public void SetCustomXmlDelRangeStartArray(int p, CT_TrackChange obj)      { SetObject(ItemsChoiceType50.customXmlDelRangeStart, p, obj); }
+        public void SetCustomXmlInsRangeEndArray(int p, CT_Markup obj)             { SetObject(ItemsChoiceType50.customXmlInsRangeEnd, p, obj); }
+        public void SetCustomXmlInsRangeStartArray(int p, CT_TrackChange obj)      { SetObject(ItemsChoiceType50.customXmlInsRangeStart, p, obj); }
+        public void SetCustomXmlMoveFromRangeEndArray(int p, CT_Markup obj)        { SetObject(ItemsChoiceType50.customXmlMoveFromRangeEnd, p, obj); }
+        public void SetCustomXmlMoveFromRangeStartArray(int p, CT_TrackChange obj) { SetObject(ItemsChoiceType50.customXmlMoveFromRangeStart, p, obj); }
+        public void SetCustomXmlMoveToRangeEndArray(int p, CT_Markup obj)          { SetObject(ItemsChoiceType50.customXmlMoveToRangeEnd, p, obj); }
+        public void SetCustomXmlMoveToRangeStartArray(int p, CT_TrackChange obj)   { SetObject(ItemsChoiceType50.customXmlMoveToRangeStart, p, obj); }
+        public void SetDelArray(int p, CT_RunTrackChange obj)                      { SetObject(ItemsChoiceType50.del, p, obj); }
+        public void SetInsArray(int p, CT_RunTrackChange obj)                      { SetObject(ItemsChoiceType50.ins, p, obj); }
+        public void SetMoveFromArray(int p, CT_RunTrackChange obj)                 { SetObject(ItemsChoiceType50.moveFrom, p, obj); }
+        public void SetMoveFromRangeEndArray(int p, CT_MarkupRange obj)            { SetObject(ItemsChoiceType50.moveFromRangeEnd, p, obj); }
+        public void SetMoveFromRangeStartArray(int p, CT_MoveBookmark obj)         { SetObject(ItemsChoiceType50.moveFromRangeStart, p, obj); }
+        public void SetMoveToArray(int p, CT_RunTrackChange obj)                   { SetObject(ItemsChoiceType50.moveTo, p, obj); }
+        public void SetMoveToRangeEndArray(int p, CT_MarkupRange obj)              { SetObject(ItemsChoiceType50.moveToRangeEnd, p, obj); }
+        public void SetMoveToRangeStartArray(int p, CT_MoveBookmark obj)           { SetObject(ItemsChoiceType50.moveToRangeStart, p, obj); }
+        public void SetOMathArray(int p, CT_OMath obj)                             { SetObject(ItemsChoiceType50.oMath, p, obj); }
+        public void SetOMathParaArray(int p, CT_OMathPara obj)                     { SetObject(ItemsChoiceType50.oMathPara, p, obj); }
+        public void SetPArray(int p, CT_P obj)                                     { SetObject(ItemsChoiceType50.p, p, obj); }
+        public void SetPermEndArray(int p, CT_Perm obj)                            { SetObject(ItemsChoiceType50.permEnd, p, obj); }
+        public void SetPermStartArray(int p, CT_PermStart obj)                     { SetObject(ItemsChoiceType50.permStart, p, obj); }
+        public void SetProofErrArray(int p, CT_ProofErr obj)                       { SetObject(ItemsChoiceType50.proofErr, p, obj); }
+        public void SetSdtArray(int p, CT_SdtBlock obj)                            { SetObject(ItemsChoiceType50.sdt, p, obj); }
+        public void SetTblArray(int p, CT_Tbl obj)                                 { SetObject(ItemsChoiceType50.tbl, p, obj); }
+
+        public int SizeOfAltChunkArray()                    { return SizeOfArray(ItemsChoiceType50.altChunk); }
+        public int SizeOfBookmarkEndArray()                 { return SizeOfArray(ItemsChoiceType50.bookmarkEnd); }
+        public int SizeOfBookmarkStartArray()               { return SizeOfArray(ItemsChoiceType50.bookmarkStart); }
+        public int SizeOfCommentRangeEndArray()             { return SizeOfArray(ItemsChoiceType50.commentRangeEnd); }
+        public int SizeOfCommentRangeStartArray()           { return SizeOfArray(ItemsChoiceType50.commentRangeStart); }
+        public int SizeOfCustomXmlArray()                   { return SizeOfArray(ItemsChoiceType50.customXml); }
+        public int SizeOfCustomXmlDelRangeEndArray()        { return SizeOfArray(ItemsChoiceType50.customXmlDelRangeEnd); }
+        public int SizeOfCustomXmlDelRangeStartArray()      { return SizeOfArray(ItemsChoiceType50.customXmlDelRangeStart); }
+        public int SizeOfCustomXmlInsRangeEndArray()        { return SizeOfArray(ItemsChoiceType50.customXmlInsRangeEnd); }
+        public int SizeOfCustomXmlInsRangeStartArray()      { return SizeOfArray(ItemsChoiceType50.customXmlInsRangeStart); }
+        public int SizeOfCustomXmlMoveFromRangeEndArray()   { return SizeOfArray(ItemsChoiceType50.customXmlMoveFromRangeEnd); }
+        public int SizeOfCustomXmlMoveFromRangeStartArray() { return SizeOfArray(ItemsChoiceType50.customXmlMoveFromRangeStart); }
+        public int SizeOfCustomXmlMoveToRangeEndArray()     { return SizeOfArray(ItemsChoiceType50.customXmlMoveToRangeEnd); }
+        public int SizeOfCustomXmlMoveToRangeStartArray()   { return SizeOfArray(ItemsChoiceType50.customXmlMoveToRangeStart); }
+        public int SizeOfDelArray()                         { return SizeOfArray(ItemsChoiceType50.del); }
+        public int SizeOfInsArray()                         { return SizeOfArray(ItemsChoiceType50.ins); }
+        public int SizeOfMoveFromArray()                    { return SizeOfArray(ItemsChoiceType50.moveFrom); }
+        public int SizeOfMoveFromRangeEndArray()            { return SizeOfArray(ItemsChoiceType50.moveFromRangeEnd); }
+        public int SizeOfMoveFromRangeStartArray()          { return SizeOfArray(ItemsChoiceType50.moveFromRangeStart); }
+        public int SizeOfMoveToArray()                      { return SizeOfArray(ItemsChoiceType50.moveTo); }
+        public int SizeOfMoveToRangeEndArray()              { return SizeOfArray(ItemsChoiceType50.moveToRangeEnd); }
+        public int SizeOfMoveToRangeStartArray()            { return SizeOfArray(ItemsChoiceType50.moveToRangeStart); }
+        public int SizeOfOMathArray()                       { return SizeOfArray(ItemsChoiceType50.oMath); }
+        public int SizeOfOMathParaArray()                   { return SizeOfArray(ItemsChoiceType50.oMathPara); }
+        public int SizeOfPArray()                           { return SizeOfArray(ItemsChoiceType50.p); }
+        public int SizeOfPermEndArray()                     { return SizeOfArray(ItemsChoiceType50.permEnd); }
+        public int SizeOfPermStartArray()                   { return SizeOfArray(ItemsChoiceType50.permStart); }
+        public int SizeOfProofErrArray()                    { return SizeOfArray(ItemsChoiceType50.proofErr); }
+        public int SizeOfSdtArray()                         { return SizeOfArray(ItemsChoiceType50.sdt); }
+        public int SizeOfTblArray()                         { return SizeOfArray(ItemsChoiceType50.tbl); }
+        #pragma warning restore format
     }
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main", IncludeInSchema = false)]

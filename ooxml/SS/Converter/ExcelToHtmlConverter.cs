@@ -42,7 +42,7 @@ namespace NPOI.SS.Converter
             cssClassTable = htmlDocumentFacade.GetOrCreateCssClass("table", "t",
                     "border-collapse:collapse;border-spacing:0;");
         }
-        protected static int GetColumnWidth(ISheet sheet, int columnIndex)
+        protected static double GetColumnWidth(ISheet sheet, int columnIndex)
         {
             return ExcelToHtmlUtils.GetColumnWidthInPx(sheet.GetColumnWidth(columnIndex));
         }
@@ -295,7 +295,7 @@ namespace NPOI.SS.Converter
 
                 ICell cell = (ICell)row.GetCell(colIx);
 
-                int divWidthPx = 0;
+                double divWidthPx = 0;
                 if (UseDivsToSpan)
                 {
                     divWidthPx = GetColumnWidth(sheet, colIx);
@@ -481,7 +481,7 @@ namespace NPOI.SS.Converter
         }
 
         protected bool ProcessCell(ICell cell, XmlElement tableCellElement,
-                int normalWidthPx, int maxSpannedWidthPx, float normalHeightPt)
+                double normalWidthPx, double maxSpannedWidthPx, float normalHeightPt)
         {
             ICellStyle cellStyle = cell.CellStyle as ICellStyle;
 

@@ -11,11 +11,16 @@ What's NPOI
     />
   </a>
 <br />
-This project is the .NET version of POI Java project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
+This project is the .NET version of Apache POI project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
-About Donation
+About Donation 关于捐款
 ============
-Since Github sponsorship is not supported in China so far, it's hard to get donation from Github channel. I'm strictly limiting my contribution time on NPOI these 2 years although it looks to be still maintained well. If you profits/benefits from NPOI and you believe it's useful, please [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
+Since Github sponsorship is not supported in China so far, it's hard to get donation from Github channel. I'm strictly limiting my contribution time on NPOI these 2 years although it looks to be still maintained well. 
+
+If you profits/benefits from NPOI and you believe it's useful, please [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
+
+如果您从NPOI受益或实现盈利，请[给该项目捐款](https://github.com/nissl-lab/npoi/discussions/923)，谢谢！
+
 
 Telegram User Group
 ================
@@ -23,7 +28,7 @@ Join us on telegram: https://t.me/npoidevs
 
 Get Started with NPOI
 ============
-[Who is using NPOI?](https://github.com/nissl-lab/npoi/issues/705)
+[How NPOI succeeds](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb)
 
 [NPOI examples](https://github.com/nissl-lab/npoi-examples)
 
@@ -34,16 +39,6 @@ Get Started with NPOI
 [ORM on NPOI](https://github.com/nissl-lab/npoi/wiki/ORM-on-NPOI)
 
 [NPOI Changelog](https://github.com/nissl-lab/npoi/wiki/Changelog)
-
-Replace DotnetCore.NPOI with NPOI ASAP
-===========
-NPOI NEVER joins China NCC (.NET Core Community) group. They are cheating. The readme.md in Dotnetcore.npoi repo is full of lies. What they want to do is just to destory NPOI since they cannot make use of reputation of this component any more. That's why I'm always saying they are evil. The whole NCC group is evil. 
-
-NPOI从未加入过中国NCC开源组织，他们在欺骗公众！Dotnetcore.npoi的readme.md完全是诽谤，一堆谎言。他们想做的无非就是想毁掉NPOI，因为他们不能再用NPOI来行骗了。这也是我为什么一直说他们很邪恶，整个NCC组织就是一个邪教。
-
-[Stop using Dotnetcore/NPOI nuget package. It’s obsolete!](https://tonyqus.medium.com/stop-using-dotnetcore-npoi-nuget-package-its-too-obsolete-6d0aeedb3319)
-
-[The real history of Dotnetcore.NPOI](https://tonyqus.medium.com/the-real-history-of-dotnetcore-npoi-999bb5e140c7) [中文版](https://zhuanlan.zhihu.com/p/506975972)
 
 Advantage of NPOI
 =================
@@ -66,10 +61,12 @@ h. Works on both Windows and Linux
 
 System Requirement
 ===================
-.NET Standard 2.1 (.NET Core 3.x)
+.NET Standard 2.1 (.NET Core 3.x, .NET 5, .NET 6)
 
 .NET Standard 2.0 (.NET Core 2.x)
 
 .NET Framework 4.0 and above
 
-No Loongson CPU (NPOI will NOT support any issues running on LoognArch architecture. This CPU is a shit)
+Contributors
+===================
+![Contributors](https://contrib.rocks/image?repo=nissl-lab/npoi)

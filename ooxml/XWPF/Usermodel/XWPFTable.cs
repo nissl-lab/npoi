@@ -31,7 +31,7 @@ namespace NPOI.XWPF.UserModel
 
         protected StringBuilder text = new StringBuilder();
         private CT_Tbl ctTbl;
-        protected List<XWPFTableRow> tableRows;
+        protected internal List<XWPFTableRow> tableRows;
         //protected List<String> styleIDs;
 
         // Create a map from this XWPF-level enum to the STBorder.Enum values
@@ -184,11 +184,6 @@ namespace NPOI.XWPF.UserModel
             {
                 return text.ToString();
             }
-        }
-
-        public void AddNewRowBetween(int start, int end)
-        {
-            throw new NotImplementedException();
         }
 
         /**

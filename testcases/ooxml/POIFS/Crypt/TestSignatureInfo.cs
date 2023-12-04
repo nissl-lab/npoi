@@ -40,10 +40,10 @@ namespace TestCases.POIFS.Crypt
 
         //private static Calendar cal;
         //private KeyPair keyPair = null;
-        private X509Certificate x509 = null;
 
         [SetUp]
-        public static void InitBouncy() {
+        public static void InitBouncy()
+        {
             throw new NotImplementedException();
             //CryptoFunctions.RegisterBouncyCastle();
 
@@ -62,22 +62,29 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
-        public void office2007prettyPrintedRels() {
+        [Ignore("TODO NOT IMPLEMENTED")]
+        public void office2007prettyPrintedRels()
+        {
             OPCPackage pkg = OPCPackage.Open(testdata.GetFileInfo("office2007prettyPrintedRels.docx"), PackageAccess.READ);
-            try {
+            try
+            {
                 SignatureConfig sic = new SignatureConfig();
                 sic.SetOpcPackage(pkg);
                 SignatureInfo si = new SignatureInfo();
                 si.SetSignatureConfig(sic);
                 bool isValid = si.VerifySignature();
                 Assert.IsTrue(isValid);
-            } finally {
+            }
+            finally
+            {
                 pkg.Close();
             }
         }
 
         [Test]
-        public void GetSignerUnsigned() {
+        [Ignore("TODO NOT IMPLEMENTED")]
+        public void GetSignerUnsigned()
+        {
             String[] testFiles = {
                 "hello-world-unsigned.docx",
                 "hello-world-unsigned.pptx",
@@ -85,15 +92,18 @@ namespace TestCases.POIFS.Crypt
                 "hello-world-office-2010-technical-preview-unsigned.docx"
             };
 
-            foreach (String testFile in testFiles) {
+            foreach (String testFile in testFiles)
+            {
                 OPCPackage pkg = OPCPackage.Open(testdata.GetFileInfo(testFile), PackageAccess.READ);
                 SignatureConfig sic = new SignatureConfig();
                 sic.SetOpcPackage(pkg);
                 SignatureInfo si = new SignatureInfo();
                 si.SetSignatureConfig(sic);
                 List<X509Certificate> result = new List<X509Certificate>();
-                foreach (SignatureInfo.SignaturePart sp in si.GetSignatureParts()) {
-                    if (sp.Validate()) {
+                foreach (SignatureInfo.SignaturePart sp in si.GetSignatureParts())
+                {
+                    if (sp.Validate())
+                    {
                         result.Add(sp.GetSigner());
                     }
                 }
@@ -105,7 +115,9 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
-        public void GetSigner() {
+        [Ignore("TODO NOT IMPLEMENTED")]
+        public void GetSigner()
+        {
             String[] testFiles = {
                 "hyperlink-example-signed.docx",
                 "hello-world-signed.docx",
@@ -119,16 +131,20 @@ namespace TestCases.POIFS.Crypt
                 "signed.docx",
             };
 
-            foreach (String testFile in testFiles) {
+            foreach (String testFile in testFiles)
+            {
                 OPCPackage pkg = OPCPackage.Open(testdata.GetFileInfo(testFile), PackageAccess.READ);
-                try {
+                try
+                {
                     SignatureConfig sic = new SignatureConfig();
                     sic.SetOpcPackage(pkg);
                     SignatureInfo si = new SignatureInfo();
                     si.SetSignatureConfig(sic);
                     List<X509Certificate> result = new List<X509Certificate>();
-                    foreach (SignatureInfo.SignaturePart sp in si.GetSignatureParts()) {
-                        if (sp.Validate()) {
+                    foreach (SignatureInfo.SignaturePart sp in si.GetSignatureParts())
+                    {
+                        if (sp.Validate())
+                        {
                             result.Add(sp.GetSigner());
                         }
                     }
@@ -141,14 +157,18 @@ namespace TestCases.POIFS.Crypt
                     bool b = si.VerifySignature();
                     Assert.IsTrue(b, "test-file: " + testFile);
                     pkg.Revert();
-                } finally {
+                }
+                finally
+                {
                     pkg.Close();
                 }
             }
         }
 
         [Test]
-        public void GetMultiSigners() {
+        [Ignore("TODO NOT IMPLEMENTED")]
+        public void GetMultiSigners()
+        {
             String testFile = "hello-world-signed-twice.docx";
             OPCPackage pkg = OPCPackage.Open(testdata.GetFileInfo(testFile), PackageAccess.READ);
             //try {
@@ -180,6 +200,7 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestSignSpreadsheet()
         {
             String testFile = "hello-world-unsigned.xlsx";
@@ -189,7 +210,9 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
-        public void TestManipulation() {
+        [Ignore("TODO NOT IMPLEMENTED")]
+        public void TestManipulation()
+        {
             //// sign & validate
             //String testFile = "hello-world-unsigned.xlsx";
             //OPCPackage pkg = OPCPackage.Open(copy(testdata.GetFile(testFile)), PackageAccess.READ_WRITE);
@@ -219,7 +242,9 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
-        public void TestSignSpreadsheetWithSignatureInfo() {
+        [Ignore("TODO NOT IMPLEMENTED")]
+        public void TestSignSpreadsheetWithSignatureInfo()
+        {
             //InitKeyPair("Test", "CN=Test");
             //String testFile = "hello-world-unsigned.xlsx";
             //OPCPackage pkg = OPCPackage.Open(copy(testdata.GetFile(testFile)), PackageAccess.READ_WRITE);
@@ -243,8 +268,9 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Ignore("not implemented")]
-        public void TestSignEnvelopingDocument() {
-            String testFile = "hello-world-unsigned.xlsx";
+        public void TestSignEnvelopingDocument()
+        {
+            //String testFile = "hello-world-unsigned.xlsx";
             //OPCPackage pkg = OPCPackage.Open(copy(testdata.GetFile(testFile)), PackageAccess.READ_WRITE);
 
             //InitKeyPair("Test", "CN=Test");
@@ -292,7 +318,7 @@ namespace TestCases.POIFS.Crypt
 
             //    //    public byte[] timeStamp(byte[] data, RevocationData revocationData)  {
             //    //        revocationData.AddCRL(crl);
-            //    //        return "time-stamp-token".Bytes;                
+            //    //        return "time-stamp-token".Bytes;
             //    //    }
 
             //    //    public void SetSignatureConfig(SignatureConfig config) {
@@ -353,7 +379,7 @@ namespace TestCases.POIFS.Crypt
             //Assert.IsTrue(valid);
 
             //SignatureDocument sigDoc = sp.SignatureDocument;
-            //String declareNS = 
+            //String declareNS =
             //    "declare namespace xades='http://uri.etsi.org/01903/v1.3.2#'; "
             //  + "declare namespace ds='http://www.w3.org/2000/09/xmldsig#'; ";
 
@@ -383,7 +409,8 @@ namespace TestCases.POIFS.Crypt
             throw new NotImplementedException();
         }
 
-        public static String GetAccessError(String destinationUrl, bool fireRequest, int timeout) {
+        public static String GetAccessError(String destinationUrl, bool fireRequest, int timeout)
+        {
             //URL url;
             //try {
             //    url = new URL(destinationUrl);
@@ -431,7 +458,9 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
-        public void TestCertChain() {
+        [Ignore("TODO NOT IMPLEMENTED")]
+        public void TestCertChain()
+        {
             //KeyStore keystore = KeyStore.GetInstance("PKCS12");
             //String password = "test";
             //InputStream is1 = testdata.OpenResourceAsStream("chaintest.pfx");
@@ -477,11 +506,12 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Ignore("not implemented")]
-        public void TestNonSha1() {
-            String testFile = "hello-world-unsigned.xlsx";
-            InitKeyPair("Test", "CN=Test");
+        public void TestNonSha1()
+        {
+            //String testFile = "hello-world-unsigned.xlsx";
+            //InitKeyPair("Test", "CN=Test");
 
-            SignatureConfig signatureConfig = new SignatureConfig();
+            //SignatureConfig signatureConfig = new SignatureConfig();
             //signatureConfig.Key = (/*setter*/keyPair.Private);
             //signatureConfig.SigningCertificateChain = (/*setter*/Collections.SingletonList(x509));
 
@@ -508,7 +538,8 @@ namespace TestCases.POIFS.Crypt
             throw new NotImplementedException();
         }
 
-        [Test, Ignore("not implemented")]
+        [Test]
+        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestMultiSign()
         {
             //initKeyPair("KeyA", "CN=KeyA");
@@ -524,7 +555,8 @@ namespace TestCases.POIFS.Crypt
 
 
         }
-        private void sign(OPCPackage pkgCopy, String alias, String signerDn, int signerCount) {
+        private void sign(OPCPackage pkgCopy, String alias, String signerDn, int signerCount)
+        {
             throw new NotImplementedException();
             //InitKeyPair(alias, signerDn);
 
@@ -568,7 +600,8 @@ namespace TestCases.POIFS.Crypt
             //Assert.AreEqual(signerCount, result.Size());
         }
 
-        private void InitKeyPair(String alias, String subjectDN) {
+        private void InitKeyPair(String alias, String subjectDN)
+        {
             throw new NotImplementedException();
             //char password[] = "test".ToCharArray();
             //File file = new File("build/test.pfx");
@@ -605,11 +638,12 @@ namespace TestCases.POIFS.Crypt
             //}
         }
 
-        private static FileInfo copy(FileInfo input) {
+        private static FileInfo copy(FileInfo input)
+        {
             String extension = input.Name.Replace(".*?(\\.[^.]+)?$", "$1");
             if (extension == null || "".Equals(extension))
                 extension = ".zip";
-            FileInfo tmpFile = new FileInfo("build" + Path.DirectorySeparatorChar+ "sigtest" + extension);
+            FileInfo tmpFile = new FileInfo("build" + Path.DirectorySeparatorChar + "sigtest" + extension);
             throw new NotImplementedException();
             //FileStream fos = tmpFile.Create();// FileOutputStream(tmpFile);
             //FileStream fis = input.Create();// new FileInputStream(input);

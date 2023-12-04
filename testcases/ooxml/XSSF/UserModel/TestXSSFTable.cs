@@ -39,7 +39,7 @@ namespace TestCases.XSSF.UserModel
 
             // read the original sheet header order
             XSSFRow row = inputWorkbook.GetSheetAt(0).GetRow(0) as XSSFRow;
-            List<String> headers = new List<String>();
+            List<string> headers = new List<string>();
             foreach (ICell cell in row)
             {
                 headers.Add(cell.StringCellValue);
@@ -53,7 +53,7 @@ namespace TestCases.XSSF.UserModel
 
             // re-read the saved file and make sure headers in the xml are in the original order
             //inputWorkbook = new NPOI.XSSF.UserModel.XSSFWorkbook(new FileStream(outputFile));
-            inputWorkbook = XSSFTestDataSamples.WriteOutAndReadBack(inputWorkbook) as XSSFWorkbook;
+            inputWorkbook = XSSFTestDataSamples.WriteOutAndReadBack(inputWorkbook);
             CT_Table ctTable = (inputWorkbook.GetSheetAt(0) as XSSFSheet).GetTables()[0].GetCTTable();
             List<CT_TableColumn> ctTableColumnList = ctTable.tableColumns.tableColumn;
 
@@ -65,6 +65,7 @@ namespace TestCases.XSSF.UserModel
                     "header name in xml table should match number of header cells in worksheet");
             }
             //Assert.IsTrue(outputFile.Delete());
+            inputWorkbook.Close();
         }
         [Test]
         public void TestCTTableStyleInfo()
@@ -83,7 +84,7 @@ namespace TestCases.XSSF.UserModel
             outputStyleInfo.showColumnStripes = (false);
             outputStyleInfo.showRowStripes = (true);
 
-            XSSFWorkbook inputWorkbook = XSSFTestDataSamples.WriteOutAndReadBack(outputWorkbook) as XSSFWorkbook;
+            XSSFWorkbook inputWorkbook = XSSFTestDataSamples.WriteOutAndReadBack(outputWorkbook);
             List<XSSFTable> tables = (inputWorkbook.GetSheetAt(0) as XSSFSheet).GetTables();
             Assert.AreEqual(1, tables.Count, "Tables number");
 
@@ -94,6 +95,7 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(outputStyleInfo.name, inputStyleInfo.name, "Style name");
             Assert.AreEqual(outputStyleInfo.showColumnStripes, inputStyleInfo.showColumnStripes, "Show column stripes");
             Assert.AreEqual(outputStyleInfo.showRowStripes, inputStyleInfo.showRowStripes, "Show row stripes");
+            outputWorkbook.Close();
 
         }
 
@@ -197,6 +199,7 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
         [Test]
+        [Obsolete]
         public void GetNumberOfMappedColumns()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
@@ -226,7 +229,7 @@ namespace TestCases.XSSF.UserModel
             // can be synchronized with the underlying CTTable
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
-            XSSFTable table = sh.CreateTable() as XSSFTable;
+            XSSFTable table = sh.CreateTable();
             CT_Table ctTable = table.GetCTTable();
             ctTable.@ref = "B2:E8";
             Assert.AreEqual(new CellReference("B2"), table.StartCellReference);
@@ -241,6 +244,7 @@ namespace TestCases.XSSF.UserModel
             table.UpdateReferences();
             Assert.AreEqual(new CellReference("C1"), table.StartCellReference);
             Assert.AreEqual(new CellReference("M3"), table.EndCellReference);
+            wb.Close();
         }
 
         [Test]
@@ -248,7 +252,7 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
-            XSSFTable table = sh.CreateTable() as XSSFTable;
+            XSSFTable table = sh.CreateTable();
             CT_Table ctTable = table.GetCTTable();
             Assert.AreEqual(0, table.RowCount);
             ctTable.@ref = "B2:B2";
@@ -259,6 +263,28 @@ namespace TestCases.XSSF.UserModel
             // update cell references to clear the cache
             table.UpdateReferences();
             Assert.AreEqual(11, table.RowCount);
+            wb.Close();
+        }
+
+        [Test]
+        public void FormatAsTable()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
+
+            XSSFRow row = sh.CreateRow(0) as XSSFRow;
+            row.CreateCell(0).SetCellValue("Col1");
+            row.CreateCell(1).SetCellValue("Col2");
+            row.CreateCell(2).SetCellValue("Col3");
+
+            row = sh.CreateRow(1) as XSSFRow;
+            row.CreateCell(0).SetCellValue("Value1");
+            row.CreateCell(1).SetCellValue("Value2");
+            row.CreateCell(2).SetCellValue("Value3");
+
+            XSSFTable table = sh.CreateTable();
+            table.SetCellReferences(new AreaReference(new CellReference(0, 0), new CellReference(1, 2)));
+            wb.Close();
         }
 
     }

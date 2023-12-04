@@ -54,7 +54,7 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestEvaluateSimple()
         {
-            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("TestNames.xls");
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("testNames.xls");
             ISheet sheet = wb.GetSheetAt(0);
             ICell cell = sheet.GetRow(8).GetCell(0);
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
@@ -146,7 +146,7 @@ namespace TestCases.HSSF.UserModel
                 {
                     Assert.Fail("Identified bug 47048a");
                 }
-                throw e;
+                throw;
             }
             finally
             {

@@ -63,6 +63,7 @@ namespace TestCases.XWPF.UserModel
             Assert.IsNull(policy.GetDefaultHeader());
             Assert.IsNull(policy.GetFirstPageHeader());
             Assert.IsNull(policy.GetDefaultFooter());
+            Assert.IsNull(policy.GetFirstPageFooter());
 
             CT_P ctP1 = new CT_P();
             CT_R ctR1 = ctP1.AddNewR();
@@ -102,31 +103,31 @@ namespace TestCases.XWPF.UserModel
             XWPFHeader headerD = policy.CreateHeader(XWPFHeaderFooterPolicy.DEFAULT, pars);
             XWPFHeader headerF = policy.CreateHeader(XWPFHeaderFooterPolicy.FIRST);
             // Set a default footer and capture the returned XWPFFooter object.
-            XWPFFooter footer = policy.CreateFooter(XWPFHeaderFooterPolicy.DEFAULT, pars2);
+            XWPFFooter footerD = policy.CreateFooter(XWPFHeaderFooterPolicy.DEFAULT, pars2);
+            XWPFFooter footerF = policy.CreateFooter(XWPFHeaderFooterPolicy.FIRST);
 
             // Ensure the headers and footer were Set correctly....
             Assert.IsNotNull(policy.GetDefaultHeader());
             Assert.IsNotNull(policy.GetFirstPageHeader());
             Assert.IsNotNull(policy.GetDefaultFooter());
+            Assert.IsNotNull(policy.GetFirstPageFooter());
             // ....and that the footer object captured above Contains two
             // paragraphs of text.
-            Assert.AreEqual(2, footer.Paragraphs.Count);
+            Assert.AreEqual(2, footerD.Paragraphs.Count);
+            Assert.AreEqual(0, footerF.Paragraphs.Count);
 
             // Check the header created with the paragraph got them, and the one
-            // created without got an empty one
+            // created without got none
             Assert.AreEqual(1, headerD.Paragraphs.Count);
-            Assert.AreEqual(1, headerF.Paragraphs.Count);
-
             Assert.AreEqual(tText, headerD.Paragraphs[0].Text);
-            Assert.AreEqual("", headerF.Paragraphs[0].Text);
-        
+
+            Assert.AreEqual(0, headerF.Paragraphs.Count);
 
             // As an Additional Check, recover the defauls footer and
             // make sure that it Contains two paragraphs of text and that
             // both do hold what is expected.
-            footer = policy.GetDefaultFooter();
-
-            XWPFParagraph[] paras = new List<XWPFParagraph>(footer.Paragraphs).ToArray();
+            footerD = policy.GetDefaultFooter();
+            XWPFParagraph[] paras = new List<XWPFParagraph>(footerD.Paragraphs).ToArray();
 
             Assert.AreEqual(2, paras.Length);
             Assert.AreEqual("First paragraph for the footer", paras[0].Text);
@@ -135,12 +136,15 @@ namespace TestCases.XWPF.UserModel
 
             // Add some text to the empty header
             String fText1 = "New Text!";
-            headerF.Paragraphs[0].InsertNewRun(0).SetText(fText1);
-            // TODO Add another paragraph and check
+            String fText2 = "More Text!";
+            headerF.CreateParagraph().InsertNewRun(0).SetText(fText1);
+            headerF.CreateParagraph().InsertNewRun(0).SetText(fText2);
+            //headerF.Paragraphs[0].InsertNewRun(0).SetText(fText1);
 
             // Check it
             Assert.AreEqual(tText, headerD.Paragraphs[0].Text);
             Assert.AreEqual(fText1, headerF.Paragraphs[0].Text);
+            Assert.AreEqual(fText2, headerF.Paragraphs[1].Text);
 
 
             // Save, re-open, ensure it's all still there
@@ -150,7 +154,7 @@ namespace TestCases.XWPF.UserModel
             Assert.IsNotNull(policy.GetFirstPageHeader());
             Assert.IsNull(policy.GetEvenPageHeader());
             Assert.IsNotNull(policy.GetDefaultFooter());
-            Assert.IsNull(policy.GetFirstPageFooter());
+            Assert.IsNotNull(policy.GetFirstPageFooter());
             Assert.IsNull(policy.GetEvenPageFooter());
 
             // Check the new headers still have their text
@@ -158,15 +162,17 @@ namespace TestCases.XWPF.UserModel
             headerF = policy.GetFirstPageHeader();
             Assert.AreEqual(tText, headerD.Paragraphs[0].Text);
             Assert.AreEqual(fText1, headerF.Paragraphs[0].Text);
+            Assert.AreEqual(fText2, headerF.Paragraphs[1].Text);
 
             // Check the new footers have their new text too
-            footer = policy.GetDefaultFooter();
-            paras = new List<XWPFParagraph>(footer.Paragraphs).ToArray();
-        
+            footerD = policy.GetDefaultFooter();
+            paras = new List<XWPFParagraph>(footerD.Paragraphs).ToArray();
+            footerF = policy.GetFirstPageFooter();
 
             Assert.AreEqual(2, paras.Length);
             Assert.AreEqual("First paragraph for the footer", paras[0].Text);
             Assert.AreEqual("Second paragraph for the footer", paras[1].Text);
+            Assert.AreEqual(1, footerF.Paragraphs.Count);
         }
 
         [Test]
@@ -195,6 +201,36 @@ namespace TestCases.XWPF.UserModel
             Assert.IsNotNull(policy.GetEvenPageHeader());
         }
 
-    }
+        [Test]
+        public void TestAddPictureData()
+        {
+            // TODO
+        }
 
+        [Test]
+        public void TestGetAllPictures()
+        {
+            // TODO
+        }
+
+        [Test]
+        public void TestGetAllPackagePictures()
+        {
+            // TODO
+        }
+
+        [Test]
+        public void TestGetPictureDataById()
+        {
+            // TODO
+        }
+
+        [Test]
+        public void Bug60293()
+        {
+            //test handling of non-standard header/footer options
+            XWPFDocument xwpf = XWPFTestDataSamples.OpenSampleDocument("60293.docx");
+            Assert.AreEqual(3, xwpf.HeaderList.Count);
+        }
+    }
 }

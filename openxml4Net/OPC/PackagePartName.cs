@@ -475,7 +475,7 @@ namespace NPOI.OpenXml4Net.OPC
                 String fragment = this.partNameURI.OriginalString;
                 if (fragment.Length > 0)
                 {
-                    int i = fragment.LastIndexOf(".");
+                    int i = fragment.LastIndexOf(".", StringComparison.Ordinal);
                     if (i > -1)
                         return fragment.Substring(i + 1);
                 }

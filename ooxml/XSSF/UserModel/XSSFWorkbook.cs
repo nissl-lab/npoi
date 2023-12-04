@@ -35,6 +35,7 @@ using System.Collections;
 using NPOI.OpenXml4Net.Exceptions;
 using NPOI.SS;
 using System.Globalization;
+using System.Linq;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -261,7 +262,7 @@ namespace NPOI.XSSF.UserModel
         public XSSFWorkbook(FileInfo file)
             : this(OPCPackage.Open(file))
         {
-     
+
         }
 
         /**
@@ -602,7 +603,7 @@ namespace NPOI.XSSF.UserModel
             XSSFSheet clonedSheet = CreateSheet(newName) as XSSFSheet;
 
             // copy sheet's relations
-            List<RelationPart> rels = srcSheet.RelationParts;
+            IList<RelationPart> rels = srcSheet.RelationParts;
             // if the sheet being cloned has a drawing then rememebr it and re-create it too
             XSSFDrawing dg = null;
             foreach (RelationPart rp in rels)
@@ -660,6 +661,12 @@ namespace NPOI.XSSF.UserModel
                 ct.UnsetPageSetup();
             }
 
+            if (srcSheet.RepeatingRows != null)
+                clonedSheet.RepeatingRows = srcSheet.RepeatingRows;
+
+            if (srcSheet.RepeatingColumns != null)
+                clonedSheet.RepeatingColumns = srcSheet.RepeatingColumns;
+
             clonedSheet.IsSelected = (false);
 
             // clone the sheet drawing alongs with its relationships
@@ -678,7 +685,7 @@ namespace NPOI.XSSF.UserModel
                 clonedDg = clonedSheet.CreateDrawingPatriarch() as XSSFDrawing;
 
                 // Clone drawing relations
-                List<RelationPart> srcRels = (srcSheet.CreateDrawingPatriarch() as XSSFDrawing).RelationParts;
+                IList<RelationPart> srcRels = (srcSheet.CreateDrawingPatriarch() as XSSFDrawing).RelationParts;
                 foreach (RelationPart rp in srcRels)
                 {
                     AddRelation(rp, clonedDg);
@@ -928,7 +935,7 @@ namespace NPOI.XSSF.UserModel
         private void ValidateSheetName(String sheetName)
         {
             if (ContainsSheet(sheetName, sheets.Count))
-                throw new ArgumentException(string.Format("The workbook already contains a sheet named '{0}'",sheetName));
+                throw new ArgumentException(string.Format("The workbook already contains a sheet named '{0}'", sheetName));
         }
         protected XSSFDialogsheet CreateDialogsheet(String sheetname, CT_Dialogsheet dialogsheet)
         {
@@ -1271,7 +1278,7 @@ namespace NPOI.XSSF.UserModel
         public void RemoveName(String name)
         {
             List<XSSFName> names = namedRangesByName[name.ToLower()];
-            if (names.Count==0)
+            if (names.Count == 0)
             {
                 throw new ArgumentException("Named range was not found: " + name);
             }
@@ -1280,7 +1287,7 @@ namespace NPOI.XSSF.UserModel
 
         private bool RemoveMapping(string key, XSSFName item)
         {
-            if(namedRangesByName.ContainsKey(key))
+            if (namedRangesByName.ContainsKey(key))
             {
                 var values = namedRangesByName[key];
                 return values.Remove(item);
@@ -1571,7 +1578,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (!namedRangesByName.ContainsKey(builtInCode.ToLower()))
                 return null;
-            
+
             foreach (XSSFName name in namedRangesByName[builtInCode.ToLower()])
             {
                 if (name.SheetIndex == sheetNumber)
@@ -1644,7 +1651,7 @@ namespace NPOI.XSSF.UserModel
 
             // Check it isn't already taken
             if (ContainsSheet(sheetname, sheetIndex))
-                throw new ArgumentException(string.Format("The workbook already contains a sheet named '{0}'",sheetname));
+                throw new ArgumentException(string.Format("The workbook already contains a sheet named '{0}'", sheetname));
 
             // Update references to the name
             XSSFFormulaUtils utils = new XSSFFormulaUtils(this);
@@ -1665,6 +1672,7 @@ namespace NPOI.XSSF.UserModel
             XSSFSheet sheet = sheets[idx];
             sheets.RemoveAt(idx);
             sheets.Insert(pos, sheet);
+
             // Reorder CT_Sheets
             CT_Sheets ct = workbook.sheets;
             CT_Sheet cts = ct.GetSheetArray(idx).Copy();
@@ -1674,34 +1682,75 @@ namespace NPOI.XSSF.UserModel
 
             //notify sheets
             List<CT_Sheet> sheetArray = ct.sheet;
-            for (int i = 0; i < sheets.Count; i++)
+            for (int i = 0; i < sheetArray.Count; i++)
             {
                 sheets[i].sheet = sheetArray[i];
             }
 
+            UpdateNamedRangesAfterSheetReorder(idx, pos);
+            UpdateActiveSheetAfterSheetReorder(idx, pos);
+        }
+
+        /**
+         * update sheet-scoped named ranges in this workbook after changing the sheet order
+         * of a sheet at oldIndex to newIndex.
+         * Sheets between these indices will move left or right by 1.
+         *
+         * @param oldIndex the original index of the re-ordered sheet
+         * @param newIndex the new index of the re-ordered sheet
+         */
+        private void UpdateNamedRangesAfterSheetReorder(int oldIndex, int newIndex)
+        {
+            // update sheet index of sheet-scoped named ranges
+            foreach (XSSFName name in namedRanges)
+            {
+                int i = name.SheetIndex;
+                // name has sheet-level scope
+                if (i != -1)
+                {
+                    // name refers to this sheet
+                    if (i == oldIndex)
+                    {
+                        name.SheetIndex = newIndex;
+                    }
+                    // if oldIndex > newIndex then this sheet moved left and sheets between newIndex and oldIndex moved right
+                    else if (newIndex <= i && i < oldIndex)
+                    {
+                        name.SheetIndex = i + 1;
+                    }
+                    // if oldIndex < newIndex then this sheet moved right and sheets between oldIndex and newIndex moved left
+                    else if (oldIndex < i && i <= newIndex)
+                    {
+                        name.SheetIndex = i - 1;
+                    }
+                }
+            }
+        }
+
+        private void UpdateActiveSheetAfterSheetReorder(int oldIndex, int newIndex)
+        {
             // adjust active sheet if necessary
             int active = ActiveSheetIndex;
-            if (active == idx)
+            if (active == oldIndex)
             {
-                // Moved sheet was the active one
-                SetActiveSheet(pos);
+                // moved sheet was the active one
+                SetActiveSheet(newIndex);
             }
-            else if ((active < idx && active < pos) ||
-                  (active > idx && active > pos))
+            else if ((active < oldIndex && active < newIndex) ||
+                     (active > oldIndex && active > newIndex))
             {
                 // not affected
             }
-            else if (pos > idx)
+            else if (newIndex > oldIndex)
             {
-                // Moved sheet was below before and is above now => active is one less
+                // moved sheet was below before and is above now => active is one less
                 SetActiveSheet(active - 1);
             }
             else
             {
-                // remaining case: Moved sheet was higher than active before and is lower now => active is one more
+                // remaining case: moved sheet was higher than active before and is lower now => active is one more
                 SetActiveSheet(active + 1);
             }
-
         }
 
         /**
@@ -1773,7 +1822,9 @@ namespace NPOI.XSSF.UserModel
         /// <summary>
         /// Write the document to the specified stream, and optionally leave the stream open without closing it.
         /// </summary>
-        public void Write(Stream stream, bool leaveOpen)
+        /// <param name="stream">the stream you wish to write the xlsx to</param>
+        /// <param name="leaveOpen">leave stream open or not</param>
+        public void Write(Stream stream, bool leaveOpen = false)
         {
             bool? originalValue = null;
             if (Package is ZipPackage)
@@ -1782,7 +1833,7 @@ namespace NPOI.XSSF.UserModel
                 originalValue = ((ZipPackage)Package).IsExternalStream;
                 ((ZipPackage)Package).IsExternalStream = leaveOpen;
             }
-            Write(stream);
+            base.Write(stream);
             if (originalValue.HasValue && Package is ZipPackage)
             {
                 ((ZipPackage)Package).IsExternalStream = originalValue.Value;
@@ -2175,7 +2226,7 @@ namespace NPOI.XSSF.UserModel
             foreach (var xssfPivotTable in pivotTables)
             {
                 var sheet = xssfPivotTable.GetParent();
-                if ( sheet is XSSFSheet )
+                if (sheet is XSSFSheet)
                 {
                     sheet.RemoveRelation(xssfPivotTable);
                 }
@@ -2185,7 +2236,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (poixmlDocumentPart is XSSFPivotCacheDefinition)
                 {
-                    var pivotCacheDefinition = (XSSFPivotCacheDefinition)poixmlDocumentPart; 
+                    var pivotCacheDefinition = (XSSFPivotCacheDefinition)poixmlDocumentPart;
                     RemoveRelation(pivotCacheDefinition);
                 }
             }
@@ -2543,8 +2594,16 @@ namespace NPOI.XSSF.UserModel
 
         public bool Remove(ISheet item)
         {
+            string sheetName = item.SheetName;
+            int idx = sheets.FindIndex(_ => _.SheetName.Equals(sheetName, StringComparison.CurrentCultureIgnoreCase));
 
-            return this.sheets.Remove((XSSFSheet)item);
+            if (idx != -1)
+            {
+                RemoveSheetAt(idx);
+                return true;
+            }
+
+            return false;
         }
 
         #endregion

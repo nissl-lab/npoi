@@ -33,6 +33,8 @@ namespace NPOI.SS.UserModel.Charts
          */
         IScatterChartSeries<Tx, Ty> AddSeries(IChartDataSource<Tx> xs, IChartDataSource<Ty> ys);
 
+        IScatterChartSeries<Tx, Ty> AddSeries(IChartDataSource<Ty> values);
+
         /**
          * @return list of all series
          */

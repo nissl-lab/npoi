@@ -18,7 +18,7 @@ namespace NPOI.OpenXml4Net.OPC
      * @author Julien Chable, CDubet
      * @version 0.1
      */
-    public abstract class OPCPackage : RelationshipSource
+    public abstract class OPCPackage : RelationshipSource, ICloseable
     {
 
         /**
@@ -147,6 +147,7 @@ namespace NPOI.OpenXml4Net.OPC
         {
             return Open(path, defaultPackageAccess);
         }
+
         /**
         * Open a package with read/write permission.
         *
@@ -186,31 +187,15 @@ namespace NPOI.OpenXml4Net.OPC
             }
             catch (InvalidFormatException e)
             {
-                try
-                {
-                    pack.Close();
-                }
-                catch (IOException ex)
-                {
-                    throw new InvalidOperationException(ex.Message, e);
-                }
-                throw e;
+                IOUtils.CloseQuietly(pack);
+                throw;
             }
             catch (RuntimeException e)
             {
-                try
-                {
-                    pack.Close();
-                }
-                catch (IOException ex)
-                {
-                    throw new InvalidOperationException(ex.Message, e);
-                }
-                throw e;
+                IOUtils.CloseQuietly(pack);
+                throw;
             }
         }
-
-
 
         /**
          * Open a package.
@@ -223,6 +208,8 @@ namespace NPOI.OpenXml4Net.OPC
          * @throws InvalidFormatException
          *             If the specified file doesn't exist, and a parsing error
          *             occur.
+	     * @throws InvalidOperationException If the zip file cannot be opened.
+	     * @throws InvalidFormatException if the package is not valid.
          */
         public static OPCPackage Open(String path, PackageAccess access)
         {
@@ -246,20 +233,15 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     if (!success)
                     {
-                        try
-                        {
-                            pack.Close();
-                        }
-                        catch (IOException e)
-                        {
-                            throw new InvalidOperationException("Could not close OPCPackage while cleaning up", e);
-                        }
+                        IOUtils.CloseQuietly(pack);
                     }
                 }
             }
+
             pack.originalPackagePath = new DirectoryInfo(path).FullName;
             return pack;
         }
+
         /**
         * Open a package.
         *
@@ -280,7 +262,6 @@ namespace NPOI.OpenXml4Net.OPC
                 throw new ArgumentException("file must not be a directory");
 
             OPCPackage pack = new ZipPackage(file, access);
-            
             try
             {
                 if (pack.partList == null && access != PackageAccess.WRITE)
@@ -292,29 +273,16 @@ namespace NPOI.OpenXml4Net.OPC
             }
             catch (InvalidFormatException e)
             {
-                try
-                {
-                    pack.Close();
-                }
-                catch (IOException ex)
-                {
-                    throw new InvalidOperationException(ex.Message, e);
-                }
-                throw e;
+                IOUtils.CloseQuietly(pack);
+                throw;
             }
             catch (RuntimeException e)
             {
-                try
-                {
-                    pack.Close();
-                }
-                catch (IOException ex)
-                {
-                    throw new InvalidOperationException(ex.Message, e);
-                }
-                throw e;
+                IOUtils.CloseQuietly(pack);
+                throw;
             }
         }
+
         /**
          * Open a package.
          * 
@@ -329,9 +297,22 @@ namespace NPOI.OpenXml4Net.OPC
         public static OPCPackage Open(Stream in1)
         {
             OPCPackage pack = new ZipPackage(in1, PackageAccess.READ_WRITE);
-            if (pack.partList == null)
+            try
             {
-                pack.GetParts();
+                if (pack.partList == null)
+                {
+                    pack.GetParts();
+                }
+            }
+            catch (InvalidFormatException e)
+            {
+                IOUtils.CloseQuietly(pack);
+                throw;
+            }
+            catch (RuntimeException e)
+            {
+                IOUtils.CloseQuietly(pack);
+                throw;
             }
             return pack;
         }
@@ -359,16 +340,14 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public static OPCPackage OpenOrCreate(string path)
         {
-            OPCPackage retPackage = null;
             if (File.Exists(path))
             {
-                retPackage = Open(path);
+                return Open(path);
             }
             else
             {
-                retPackage = Create(path);
+                return Create(path);
             }
-            return retPackage;
         }
 
         /**
@@ -409,36 +388,23 @@ namespace NPOI.OpenXml4Net.OPC
             return pkg;
         }
 
-        /**
-         * Configure the package.
-         * 
-         * @param pkg
-         */
         private static void ConfigurePackage(OPCPackage pkg)
         {
-            try
-            {
-                // Content type manager
-                pkg.contentTypeManager = new ZipContentTypeManager(null, pkg);
-                // Add default content types for .xml and .rels
-                pkg.contentTypeManager.AddContentType(
-                                PackagingUriHelper.CreatePartName(PackagingUriHelper.PACKAGE_RELATIONSHIPS_ROOT_URI),
-                                ContentTypes.RELATIONSHIPS_PART);
-                pkg.contentTypeManager.AddContentType(PackagingUriHelper
-                                .CreatePartName("/default.xml"),
-                                ContentTypes.PLAIN_OLD_XML);
+            // Content type manager
+            pkg.contentTypeManager = new ZipContentTypeManager(null, pkg);
+            // Add default content types for .xml and .rels
+            pkg.contentTypeManager.AddContentType(
+                PackagingUriHelper.CreatePartName(PackagingUriHelper.PACKAGE_RELATIONSHIPS_ROOT_URI),
+                ContentTypes.RELATIONSHIPS_PART);
+            pkg.contentTypeManager.AddContentType(PackagingUriHelper
+                    .CreatePartName("/default.xml"),
+                ContentTypes.PLAIN_OLD_XML);
 
-                // Init some PackageBase properties
-                pkg.packageProperties = new PackagePropertiesPart(pkg,
-                        PackagingUriHelper.CORE_PROPERTIES_PART_NAME);
-                pkg.packageProperties.SetCreatorProperty("Generated by OpenXml4Net");
-                pkg.packageProperties.SetCreatedProperty(new Nullable<DateTime>(DateTime.Now));
-            }
-            catch (InvalidFormatException)
-            {
-                // Should never happen
-                throw;
-            }
+            // Init some PackageBase properties
+            pkg.packageProperties = new PackagePropertiesPart(pkg,
+                PackagingUriHelper.CORE_PROPERTIES_PART_NAME);
+            pkg.packageProperties.SetCreatorProperty("Generated by OpenXml4Net");
+            pkg.packageProperties.SetCreatedProperty(new Nullable<DateTime>(DateTime.Now));
         }
 
         /**
@@ -623,8 +589,7 @@ namespace NPOI.OpenXml4Net.OPC
          * (PackageAccess.Write). This method is call when other methods need write
          * right.
          * 
-         * @throws InvalidOperationException
-         *             Throws if a read operation is done on a write only package.
+    	 * @throws InvalidOperationException if a read operation is done on a write only package.
          * @see org.apache.poi.OpenXml4Net.opc.PackageAccess
          */
         internal void ThrowExceptionIfWriteOnly()
@@ -812,11 +777,14 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Load the parts of the archive if it has not been done yet. The
          * relationships of each part are not loaded.
+         * 
          * Note - Rule M4.1 states that there may only ever be one Core
          *  Properties Part, but Office produced files will sometimes
          *  have multiple! As Office ignores all but the first, we relax
          *  Compliance with Rule M4.1, and ignore all others silently too. 
+         *
          * @return All this package's parts.
+         * @throws InvalidFormatException if the package is not valid.
          */
         public List<PackagePart> GetParts()
         {
@@ -1075,14 +1043,14 @@ namespace NPOI.OpenXml4Net.OPC
          * Add the specified part to the package. If a part already exists in the
          * package with the same name as the one specified, then we replace the old
          * part by the specified part.
-         * 
+         *
          * @param part
-         *            The part to Add (or replace).
-         * @return The part Added to the package, the same as the one specified.
-         * @throws InvalidFormatException
+         *            The part to add (or replace).
+         * @return The part added to the package, the same as the one specified.
+         * @throws InvalidOperationException
          *             If rule M1.12 is not verified : Packages shall not contain
          *             equivalent part names and package implementers shall neither
-         *             Create nor recognize packages with equivalent part names.
+         *             create nor recognize packages with equivalent part names.
          */
         protected PackagePart AddPackagePart(PackagePart part)
         {
@@ -1481,9 +1449,9 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Retrieves all package relationships.
-         * 
+         *
          * @return All package relationships of this package.
-         * @throws OpenXml4NetException
+         * @throws InvalidOperationException if a read operation is done on a write only package.
          * @see #GetRelationshipsHelper(String)
          */
         public PackageRelationshipCollection Relationships

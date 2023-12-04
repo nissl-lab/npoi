@@ -20,8 +20,7 @@ namespace NPOI.XWPF.UserModel
     using NPOI.OpenXmlFormats.Wordprocessing;
 
     /**
-     * @author Philipp Epp
-     *
+     * TODO Bring more of the logic over from XWPFParagraph
      */
     public class XWPFNum
     {

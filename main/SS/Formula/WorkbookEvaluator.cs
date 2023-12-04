@@ -435,7 +435,7 @@ namespace NPOI.SS.Formula
                     }
                     else
                     {
-                        throw re;
+                        throw;
                     }
                 }
                 finally
@@ -478,7 +478,7 @@ namespace NPOI.SS.Formula
                 String msg = "Error evaluating cell " + cr.FormatAsString();
                 return new NotImplementedException(msg, inner);
             }
-            catch (Exception)
+            catch
             {
                 // avoid bombing out during exception handling
                 //e.printStackTrace();
@@ -636,7 +636,7 @@ namespace NPOI.SS.Formula
                                    ((FuncVarPtg)nextPtg).FunctionIndex == FunctionMetadataRegistry.FUNCTION_INDEX_IF)
                                {
                                    // this is an if statement without a false param (as opposed to MissingArgPtg as the false param)
-                                   i++;
+                                   //i++;
                                    stack.Push(arg0);
                                    stack.Push(BoolEval.FALSE);
                                }

@@ -149,7 +149,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 Array.Copy(evalArgs, 0, args, 0, maxN);
             }
-            catch (Exception)
+            catch
             {
                 // one of the other args was not an AreaRef
                 return ErrorEval.VALUE_INVALID;

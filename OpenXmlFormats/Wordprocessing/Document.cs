@@ -401,7 +401,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
             if (this.sectPr != null)
                 this.sectPr.Write(sw, "sectPr");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         public CT_SectPr AddNewSectPr()

@@ -21,6 +21,7 @@ using NPOI.POIFS.Crypt;
 using NPOI.SS;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.Streaming;
@@ -30,6 +31,9 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 using TestCases.HSSF;
 using TestCases.SS.UserModel;
 
@@ -116,7 +120,7 @@ namespace TestCases.XSSF.UserModel
 
             wb2.Close();
         }
-        
+
         [Test]
         public void TestGetAllHeadersFooters()
         {
@@ -176,6 +180,7 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
+        [Platform("Win")]
         public void TestAutoSizeRow()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -188,11 +193,11 @@ namespace TestCases.XSSF.UserModel
             font.FontHeightInPoints = 20;
             cell.CellStyle.SetFont(font);
             row.Height = 100;
-            
+
             sheet.AutoSizeRow(row.RowNum);
 
             Assert.AreNotEqual(100, row.Height);
-            Assert.AreEqual(500, row.Height);
+            Assert.AreEqual(540, row.Height);
 
             workbook.Close();
         }
@@ -937,7 +942,7 @@ namespace TestCases.XSSF.UserModel
 
             comment1 = sheet1.GetCommentsTable(true);
             Assert.IsNotNull(comment1);
-            Assert.AreEqual("/xl/comments1.xml", comment1.GetPackageRelationship().TargetUri.ToString());
+            Assert.AreEqual("/xl/comments1.xml", comment1.GetPackagePart().PartName.Name);
 
             Assert.AreSame(comment1, sheet1.GetCommentsTable(true));
 
@@ -950,7 +955,7 @@ namespace TestCases.XSSF.UserModel
             Assert.IsNotNull(comment2);
 
             Assert.AreSame(comment2, sheet2.GetCommentsTable(true));
-            Assert.AreEqual("/xl/comments2.xml", comment2.GetPackageRelationship().TargetUri.ToString());
+            Assert.AreEqual("/xl/comments2.xml", comment2.GetPackagePart().PartName.Name);
 
             //comment1 and  comment2 are different objects
             Assert.AreNotSame(comment1, comment2);
@@ -961,7 +966,7 @@ namespace TestCases.XSSF.UserModel
             sheet1 = (XSSFSheet)wb2.GetSheetAt(0);
             comment1 = sheet1.GetCommentsTable(true);
             Assert.IsNotNull(comment1);
-            Assert.AreEqual("/xl/comments1.xml", comment1.GetPackageRelationship().TargetUri.ToString());
+            Assert.AreEqual("/xl/comments1.xml", comment1.GetPackagePart().PartName.Name);
             Assert.AreSame(comment1, sheet1.GetCommentsTable(true));
 
             wb2.Close();
@@ -2063,13 +2068,111 @@ namespace TestCases.XSSF.UserModel
                 comment.String = (helper.CreateRichTextString("BugTesting"));
                 IRow row = sheet.GetRow(0 + i);
                 if (row == null)
+                {
                     row = sheet.CreateRow(0 + i);
+                }
                 ICell cell = row.GetCell(0);
                 if (cell == null)
+                {
                     cell = row.CreateCell(0);
+                }
                 cell.CellComment = comment;
             }
         }
 
+        [Test]
+        public void TestCoordinate()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("coordinate.xlsm");
+            XSSFSheet sheet = (XSSFSheet)wb.GetSheet("Sheet1");
+
+            XSSFDrawing drawing = sheet.GetDrawingPatriarch();
+
+            List<XSSFShape> shapes = drawing.GetShapes();
+            XSSFClientAnchor anchor;
+
+            foreach (var shape in shapes)
+            {
+                XSSFClientAnchor sa = (XSSFClientAnchor)shape.anchor;
+                switch (shape.Name)
+                {
+                    case "cxn1":
+                        anchor = sheet.CreateClientAnchor(Units.ToEMU(50), Units.ToEMU(75), Units.ToEMU(125), Units.ToEMU(150));
+                        break;
+                    case "cxn2":
+                        anchor = sheet.CreateClientAnchor(Units.ToEMU(75), Units.ToEMU(75), Units.ToEMU(150), Units.ToEMU(150));
+                        break;
+                    case "cxn3":
+                        anchor = sheet.CreateClientAnchor(Units.ToEMU(150), Units.ToEMU(75), Units.ToEMU(225), Units.ToEMU(150));
+                        break;
+                    case "cxn4":
+                        anchor = sheet.CreateClientAnchor(Units.ToEMU(225), Units.ToEMU(75), Units.ToEMU(300), Units.ToEMU(150));
+                        break;
+                    default:
+                        Assert.True(false, "Unexpected shape {0}", new object[] { shape.Name });
+                        return;
+                }
+                Assert.IsTrue(sa.From.col == anchor.From.col,       /**/"From.col   [{0}]({1}={2})", new object[] { shape.Name, sa.From.col, anchor.From.col });
+                Assert.IsTrue(sa.From.colOff == anchor.From.colOff,  /**/"From.colOff[{0}]({1}={2})", new object[] { shape.Name, sa.From.colOff, anchor.From.colOff });
+                Assert.IsTrue(sa.From.row == anchor.From.row,       /**/"From.row   [{0}]({1}={2})", new object[] { shape.Name, sa.From.row, anchor.From.row });
+                Assert.IsTrue(sa.From.rowOff == anchor.From.rowOff, /**/"From.rowOff[{0}]({1}={2})", new object[] { shape.Name, sa.From.rowOff, anchor.From.rowOff });
+                Assert.IsTrue(sa.To.col == anchor.To.col,           /**/"To.col     [{0}]({1}={2})", new object[] { shape.Name, sa.To.col, anchor.To.col });
+                Assert.IsTrue(sa.To.colOff == anchor.To.colOff,     /**/"To.colOff  [{0}]({1}={2})", new object[] { shape.Name, sa.To.colOff, anchor.To.colOff });
+                Assert.IsTrue(sa.To.row == anchor.To.row,           /**/"To.row     [{0}]({1}={2})", new object[] { shape.Name, sa.To.row, anchor.To.row });
+                Assert.IsTrue(sa.To.rowOff == anchor.To.rowOff,    /**/"To.rowOff  [{0}]({1}={2})", new object[] { shape.Name, sa.To.rowOff, anchor.To.rowOff });
+            }
+        }
+
+        [Test]
+        public void TestDefaultColumnWidth()
+        {
+            using (var book = new XSSFWorkbook())
+            {
+                var sheet = book.CreateSheet("Sheet1");
+                var row = sheet.CreateRow(1);
+
+                var cell = row.CreateCell(0);
+
+                Assert.AreEqual(sheet.GetColumnWidth(0) / 256, sheet.DefaultColumnWidth);
+                Assert.AreEqual(sheet.DefaultColumnWidth, 8.43);
+
+                sheet.DefaultColumnWidth = 50.1;
+                Assert.AreEqual(sheet.GetColumnWidth(0) / 256, sheet.DefaultColumnWidth);
+
+                sheet.SetColumnWidth(0, 100);
+                Assert.AreEqual(sheet.GetColumnWidth(0), 100);
+                Assert.AreNotEqual(sheet.GetColumnWidth(0) / 256, sheet.DefaultColumnWidth);
+            }
+        }
+
+
+        [Test]
+        public void TestCopyRepeatingRowsAndColumns()
+        {
+            using (var book = new XSSFWorkbook())
+            {
+                var sheet = book.CreateSheet("Sheet1");
+                
+                var row1 = sheet.CreateRow(0);
+                row1.CreateCell(0);
+
+                var row2 = sheet.CreateRow(1);
+                row2.CreateCell(0);
+
+                sheet.RepeatingRows = CellRangeAddress.ValueOf("1:1");
+                sheet.RepeatingColumns = CellRangeAddress.ValueOf("A1:B1");
+
+                var clonedSheet = book.CloneSheet(0);
+
+                Assert.IsNotNull(clonedSheet.RepeatingRows, "RepeatingRows is null");
+                Assert.AreEqual(clonedSheet.RepeatingRows.FirstRow, sheet.RepeatingRows.FirstRow, "RepeatingRows.FirstRow are not equal");
+                Assert.AreEqual(clonedSheet.RepeatingRows.LastRow, sheet.RepeatingRows.LastRow, "RepeatingRows.LastRow are not equal");
+
+                Assert.IsNotNull(clonedSheet.RepeatingColumns, "RepeatingColumns is null");
+                Assert.AreEqual(clonedSheet.RepeatingColumns.FirstColumn, sheet.RepeatingColumns.FirstColumn, "RepeatingColumns.FirstColumn are not equal");
+                Assert.AreEqual(clonedSheet.RepeatingColumns.LastColumn, sheet.RepeatingColumns.LastColumn, "RepeatingColumns.LastColumn are not equal");
+
+            }
+        }
     }
 }

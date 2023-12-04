@@ -60,49 +60,41 @@ namespace NPOI.POIFS.Properties
 
         protected void PopulatePropertyTree(DirectoryProperty root)
         {
-            try
+            int index = root.ChildIndex;
+
+            if (!Property.IsValidIndex(index))
+                return;
+
+            Stack<Property> children = new Stack<Property>();
+
+            children.Push(_properties[index]);
+
+            while (children.Count != 0)
             {
-                int index = root.ChildIndex;
-
-                if (!Property.IsValidIndex(index))
-                    return;
-
-                Stack<Property> children = new Stack<Property>();
-
-                children.Push(_properties[index]);
-
-                while (children.Count != 0)
+                Property property = children.Pop();
+                if (property == null)
                 {
-                    Property property = children.Pop();
-                    if (property == null)
-                    {
-                        // unknown / unsupported / corrupted property, skip
-                        continue;
-                    }
-                    root.AddChild(property);
+                    // unknown / unsupported / corrupted property, skip
+                    continue;
+                }
+                root.AddChild(property);
 
-                    if (property.IsDirectory)
-                    {
-                        PopulatePropertyTree((DirectoryProperty)property);
-                    }
-
-                    index = property.PreviousChildIndex;
-                    if (Property.IsValidIndex(index))
-                    {
-                        children.Push(_properties[index]);
-                    }
-
-                    index = property.NextChildIndex;
-                    if (Property.IsValidIndex(index))
-                    {
-                        children.Push(_properties[index]);
-                    }
+                if (property.IsDirectory)
+                {
+                    PopulatePropertyTree((DirectoryProperty)property);
                 }
 
-            }
-            catch (IOException ex)
-            {
-                throw ex;
+                index = property.PreviousChildIndex;
+                if (Property.IsValidIndex(index))
+                {
+                    children.Push(_properties[index]);
+                }
+
+                index = property.NextChildIndex;
+                if (Property.IsValidIndex(index))
+                {
+                    children.Push(_properties[index]);
+                }
             }
         }
 

@@ -1078,6 +1078,36 @@ namespace NPOI.OpenXmlFormats.Vml
             }
         }
 
+        public void Set(CT_Shape shape)
+        {
+            this.adj = shape.adj;
+            this.anchorlock = shape.anchorlock;
+            this.borderbottom = shape.borderbottom;
+            this.borderleft = shape.borderleft;
+            this.borderright = shape.borderright;
+            this.bordertop = shape.bordertop;
+            this.equationxml = shape.equationxml;
+            this.fill = shape.fill;
+            this.fillcolor = shape.fillcolor;
+            this.formulas = shape.formulas;
+            this.handles = shape.handles;
+            this.imagedata = shape.imagedata;
+            this.insetmode = shape.insetmode;
+            this.iscomment = shape.iscomment;
+            this.@lock = shape.@lock;
+            this.path = shape.path;
+            this.shadow = shape.shadow;
+            this.spid = shape.spid;
+            this.stroke = shape.stroke;
+            this.stroked = shape.stroked;
+            this.style = shape.style;
+            this.textbox = shape.textbox;
+            this.textdata = shape.textdata;
+            this.textpath = shape.textpath;
+            this.wrap = shape.wrap;
+            this.wrapcoords = shape.wrapcoords;
+        }
+
         public CT_TextPath AddNewTextpath()
         {
             this.textpathField = new CT_TextPath();

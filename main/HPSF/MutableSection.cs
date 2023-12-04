@@ -230,7 +230,10 @@ namespace NPOI.HPSF
         {
             long id = p.ID;
             RemoveProperty(id);
-            preprops.Add(p);
+            if (p.Value != null)
+            {
+                preprops.Add(p);
+            }
             dirty = true;
         }
 
@@ -276,15 +279,8 @@ namespace NPOI.HPSF
             {
                 if (dirty)
                 {
-                    try
-                    {
-                        size = CalcSize();
-                        dirty = false;
-                    }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
+                    size = CalcSize();
+                    dirty = false;
                 }
                 return size;
             }

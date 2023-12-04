@@ -26,12 +26,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_Col AddNewCol()
         {
+            if (null == colField)
+            {
+                colField = new List<CT_Col>();
+            }
+
             CT_Col newCol = new CT_Col();
             this.colField.Add(newCol);
             return newCol;
         }
+
         public CT_Col InsertNewCol(int index)
         {
+            if (null == colField)
+            {
+                colField = new List<CT_Col>();
+            }
+
             CT_Col newCol = new CT_Col();
             this.colField.Insert(index, newCol);
             return newCol;
@@ -40,7 +51,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.colField.RemoveAt(index);
         }
-
+        public void RemoveCols(IList<CT_Col> toRemove)
+        {
+            if (colField == null) return;
+            foreach (CT_Col c in toRemove)
+            {
+                colField.Remove(c);
+            }
+        }
         public int sizeOfColArray()
         {
             return col.Count;

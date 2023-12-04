@@ -48,7 +48,7 @@ namespace NPOI.XSSF.Streaming
         }
         public virtual bool HasCustomHeight()
         {
-            return Height != -1;
+            return _height != -1;
         }
 
         public List<ICell> Cells

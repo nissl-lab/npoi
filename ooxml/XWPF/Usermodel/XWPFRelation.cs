@@ -117,10 +117,10 @@ namespace NPOI.XWPF.UserModel
                 null
         );
         public static XWPFRelation COMMENT = new XWPFRelation(
-                null,
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml",
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments",
-                null,
-                null
+                "/word/comments.xml",
+                typeof(XWPFComments)
         );
         public static XWPFRelation FOOTNOTE = new XWPFRelation(
                "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml",
@@ -222,14 +222,7 @@ namespace NPOI.XWPF.UserModel
         private XWPFRelation(String type, String rel, String defaultName, Type cls)
             : base(type, rel, defaultName, cls)
         {
-            if (_table.ContainsKey(rel))
-            {
-                _table[rel] = this;
-            }
-            else
-            {
-                _table.Add(rel, this);
-            }
+            _table[rel] = this;
         }
 
         /**

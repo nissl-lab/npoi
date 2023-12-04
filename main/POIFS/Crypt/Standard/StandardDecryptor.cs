@@ -190,10 +190,10 @@ namespace NPOI.POIFS.Crypt.Standard
             {
                 this.obuffer = this.cipher.Update(this.ibuffer, 0, i);
             }
-            catch (Exception ex)
+            catch
             {
                 this.obuffer = null;
-                throw ex;
+                throw;
             }
             this.ostart = 0;
             if (this.obuffer == null)
@@ -293,7 +293,7 @@ namespace NPOI.POIFS.Crypt.Standard
                 {
                     this.cipher.DoFinal();
                 }
-                catch (Exception)
+                catch
                 {
                 }
             }
@@ -399,6 +399,28 @@ namespace NPOI.POIFS.Crypt.Standard
         {
             
         }
+
+#if NET6_0_OR_GREATER
+        public int ProcessByte(byte input, Span<byte> output)
+        {
+            return 0;
+        }
+
+        public int ProcessBytes(ReadOnlySpan<byte> input, Span<byte> output)
+        {
+            return 0;
+        }
+
+        public int DoFinal(Span<byte> output)
+        {
+            return 0;
+        }
+
+        public int DoFinal(ReadOnlySpan<byte> input, Span<byte> output)
+        {
+            return 0;
+        }
+#endif
     }
     public class NullCipher : Cipher
     {

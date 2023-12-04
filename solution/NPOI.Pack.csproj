@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- This is an umbrella project that gathers dependencies for dotnet pack -->
+  
+  <PropertyGroup>
+    <TargetFrameworks>net472;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <PackageId>NPOI</PackageId>
+    <OutputPath>..\solution\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\main\NPOI.Core.csproj" />
+    <ProjectReference Include="..\ooxml\NPOI.OOXML.Core.csproj" />
+    <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
+    <ProjectReference Include="..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" />
+  </ItemGroup>
+
+</Project>

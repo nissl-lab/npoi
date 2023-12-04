@@ -29,6 +29,7 @@ namespace TestCases.POIFS.Macros
     using TestCases;
 
     [TestFixture]
+    [Platform("Win", Reason = "Expected to run on Windows platform")]
     public class TestVBAMacroReader
     {
         private static IReadOnlyDictionary<POIDataSamples, String> expectedMacroContents;

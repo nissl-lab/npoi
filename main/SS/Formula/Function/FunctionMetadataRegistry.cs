@@ -93,10 +93,8 @@ namespace NPOI.SS.Formula.Function
 
         private FunctionMetadata GetFunctionByNameInternal(String name)
         {
-            if (_functionDataByName.ContainsKey(name))
-                return _functionDataByName[name];
-            else
-                return null;
+            _functionDataByName.TryGetValue(name, out var metadata);
+            return metadata;
         }
 
 

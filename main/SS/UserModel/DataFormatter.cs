@@ -427,7 +427,7 @@ namespace NPOI.SS.UserModel
                     StringBuilder sb = new StringBuilder();
                     sb.Append(symbol.Substring(0, symbol.IndexOf('$')));
                     sb.Append('\\');
-                    sb.Append(symbol.Substring(symbol.IndexOf('$'), symbol.Length));
+                    sb.Append(symbol.Substring(symbol.IndexOf('$'), symbol.Length- symbol.IndexOf('$')));
                     symbol = sb.ToString();
                 }
                 matchedstring = Regex.Replace(matchedstring, localePatternGroup, symbol);
@@ -842,8 +842,10 @@ namespace NPOI.SS.UserModel
                       cell.NumericCellValue
                 );
             }
-            DateTime d = cell.DateCellValue;
-            return PerformDateFormatting(d, dateFormat);
+            var d = cell.DateCellValue;
+            if (d == null)
+                return "";
+            return PerformDateFormatting((DateTime)d, dateFormat);
         }
 
         /**

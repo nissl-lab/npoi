@@ -1,33 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TargetFrameworks>net472;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
     <AssemblyName>NPOI.OpenXml4Net</AssemblyName>
+    <RootNamespace>NPOI.OpenXml4Net</RootNamespace>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\solution\Lib</OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-    <WarningLevel>5</WarningLevel>
+    <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
+    <OutputPath>..\solution\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\main\NPOI.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
 </Project>

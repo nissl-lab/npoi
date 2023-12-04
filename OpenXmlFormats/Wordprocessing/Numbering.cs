@@ -58,7 +58,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "lvlOverride");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
 
@@ -166,7 +166,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.startOverride.Write(sw, "startOverride");
             if (this.lvl != null)
                 this.lvl.Write(sw, "lvl");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
 
@@ -459,7 +459,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(">");
             if (this.pict != null)
                 this.pict.Write(sw, "pict");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
 
@@ -722,7 +722,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         private ST_RestartNumber valField;
@@ -811,7 +811,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.numberingChange.Write(sw, "numberingChange");
             if (this.ins != null)
                 this.ins.Write(sw, "ins");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         public CT_DecimalNumber AddNewIlvl()
@@ -908,7 +908,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:font", this.font);
             XmlHelper.WriteAttribute(sw, "w:char", this.@char);
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
@@ -1136,8 +1136,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return ctObj;
         }
 
-
-
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
@@ -1162,10 +1160,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     x.Write(sw, "lvl");
                 }
             }
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
-
+        public CT_Lvl AddNewLvl()
+        {
+            if (this.lvl == null)
+                this.lvlField = new List<CT_Lvl>();
+            CT_Lvl lvl = new CT_Lvl();
+            this.lvlField.Add(lvl);
+            return lvl;
+        }
 
 
         public int SizeOfLvlArray()
@@ -1369,7 +1374,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.pPr.Write(sw, "pPr");
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
 
@@ -1582,6 +1587,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.tentativeFieldSpecified = value;
             }
         }
+
+        public CT_NumFmt AddNewNumFmt()
+        {
+            this.numFmtField = new CT_NumFmt();
+            return this.numFmtField;
+        }
+
+        public CT_LevelText AddNewLvlText()
+        {
+            this.lvlText = new CT_LevelText();
+            return this.lvlText;
+        }
     }
 
 
@@ -1750,7 +1767,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:legacySpace", this.legacySpace);
             XmlHelper.WriteAttribute(sw, "w:legacyIndent", this.legacyIndent);
             sw.Write(">");
-            sw.Write(string.Format("</w:{0}>", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
 

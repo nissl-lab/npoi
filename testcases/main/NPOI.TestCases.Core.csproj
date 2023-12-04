@@ -1,24 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TargetFrameworks>net472;net6.0</TargetFrameworks>
     <AssemblyName>NPOI.TestCases</AssemblyName>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
     <RootNamespace>TestCases</RootNamespace>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\npoi.snk</AssemblyOriginatorKeyFile>
+    <OutputPath>..\..\solution\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="HSSF\UserModel\TestEscherGraphics2d.cs" />
-    <Compile Remove="SS\Formula\Eval\TestMultiSheetEval.cs" />
     <Compile Remove="SS\Formula\Function\ExcelFileFormatDocFunctionExtractor.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
-    <PackageReference Include="NUnit" Version="3.10.1" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+    <PackageReference Include="GitHubActionsTestLogger" Version="2.3.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.1" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
-    <Copy SourceFiles="app.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
+    <Copy SourceFiles="App.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
   </Target>
 
 </Project>

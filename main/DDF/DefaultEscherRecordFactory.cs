@@ -112,7 +112,7 @@ namespace NPOI.DDF
                 escherRecord = (EscherRecord)recordConstructor.Invoke(new object[] { });
                 //escherRecord = (EscherRecord)Activator.CreateInstance(recordConstructor);
             }
-            catch (Exception)
+            catch
             {
                 return new UnknownEscherRecord();
             }
@@ -143,7 +143,7 @@ namespace NPOI.DDF
                 {
                     sid = (short)recordType.GetField("RECORD_ID").GetValue(null);
                 }
-                catch (Exception)
+                catch
                 {
                     throw new RecordFormatException(
                             "Unable to determine record types");

@@ -9,7 +9,7 @@ using System.Text;
 namespace NPOI.XSSF.UserModel.Charts
 {
     /// <summary>
-    /// Holds data for a XSSF Line Chart
+    /// Holds data for a XSSF Bar Chart
     /// </summary>
     /// <typeparam name="Tx"></typeparam>
     /// <typeparam name="Ty"></typeparam>
@@ -34,8 +34,8 @@ namespace NPOI.XSSF.UserModel.Charts
             private IChartDataSource<Ty> values;
 
             internal Series(int id, int order,
-                            IChartDataSource<Tx> categories,
-                            IChartDataSource<Ty> values)
+                IChartDataSource<Tx> categories,
+                IChartDataSource<Ty> values)
             {
                 this.id = id;
                 this.order = order;
@@ -83,7 +83,7 @@ namespace NPOI.XSSF.UserModel.Charts
                 ctBarSer.invertIfNegative = ctNoInvertIfNegative;
 
                 CT_BarDir ctBarDir = ctBarChart.AddNewBarDir();
-                ctBarDir.val = ST_BarDir.col;
+                ctBarDir.val = ST_BarDir.bar;
 
                 CT_AxDataSource catDS = ctBarSer.AddNewCat();
                 XSSFChartUtil.BuildAxDataSource(catDS, categories);

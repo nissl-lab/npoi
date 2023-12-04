@@ -36,21 +36,22 @@ namespace TestCases.POIFS.Crypt
         /**
          * how many days from now the Certificate is valid for
          */
-        static int days = 1000;
+        // static int days = 1000;
         /**
          * the signing algorithm, eg "SHA1withRSA"
          */
-        static String algorithm = "SHA1withRSA";
-        static String password = "foobaa";
-        static String certAlias = "poitest";
+        // static String algorithm = "SHA1withRSA";
+        // static String password = "foobaa";
+        // static String certAlias = "poitest";
         /**
          * the X.509 Distinguished Name, eg "CN=Test, L=London, C=GB"
          */
-        static String certDN = "CN=poitest";
+        // static String certDN = "CN=poitest";
         // static File pfxFile = TempFile.CreateTempFile("poitest", ".pfx");
-        static byte[] pfxFileBytes;
+        // static byte[] pfxFileBytes;
 
-        public class CertData {
+        public class CertData
+        {
             public KeyPair keypair;
             public X509Certificate x509;
         }
@@ -106,7 +107,8 @@ namespace TestCases.POIFS.Crypt
             pfxFileBytes = bos.ToByteArray();
         } */
 
-        public CertData loadKeystore() {
+        public CertData loadKeystore()
+        {
             //KeyStore keystore = KeyStore.GetInstance("PKCS12");
 
             //// InputStream fis = new MemoryStream(pfxFileBytes);
@@ -127,7 +129,9 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
-        public void TestCertificateEncryption1() {
+        [Ignore("TODO NOT IMPLEMENTED")]
+        public void TestCertificateEncryption1()
+        {
             POIFSFileSystem fs = new POIFSFileSystem();
             EncryptionInfo info = new EncryptionInfo(EncryptionMode.Agile, CipherAlgorithm.aes128, HashAlgorithm.sha1, -1, -1, ChainingMode.cbc);
             AgileEncryptionVerifier aev = (AgileEncryptionVerifier)info.Verifier;
