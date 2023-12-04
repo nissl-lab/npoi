@@ -3669,8 +3669,17 @@ namespace NPOI.XSSF.UserModel
                 XSSFRow destRow = (XSSFRow)newSheet.CreateRow(i);
                 if (srcRow != null)
                 {
-                    CopyRow(this, newSheet, srcRow, destRow, styleMap, keepFormulas);
+                    // avoid O(N^2) performance scanning through all regions for each row
+                    // merged regions will be copied after all the rows have been copied
+                    CopyRow(this, newSheet, srcRow, destRow, styleMap, keepFormulas, keepMergedRegion: false);
                 }
+            }
+
+            // Copying merged regions
+            foreach (var srcRegion in this.MergedRegions)
+            {
+                var destRegion = srcRegion.Copy();
+                newSheet.AddMergedRegion(destRegion);
             }
 
             List<CT_Cols> srcCols = worksheet.GetColsList();
@@ -5627,7 +5636,7 @@ namespace NPOI.XSSF.UserModel
             return null;
         }
 
-        private static void CopyRow(XSSFSheet srcSheet, XSSFSheet destSheet, XSSFRow srcRow, XSSFRow destRow, IDictionary<int, ICellStyle> styleMap, bool keepFormulas)
+        private static void CopyRow(XSSFSheet srcSheet, XSSFSheet destSheet, XSSFRow srcRow, XSSFRow destRow, IDictionary<int, ICellStyle> styleMap, bool keepFormulas, bool keepMergedRegion)
         {
             destRow.Height = srcRow.Height;
             if (!srcRow.GetCTRow().IsSetCustomHeight())
@@ -5663,30 +5672,34 @@ namespace NPOI.XSSF.UserModel
                     }
 
                     CopyCell(oldCell, newCell, styleMap, keepFormulas);
-                    CellRangeAddress mergedRegion = srcSheet.GetMergedRegion(
-                        new CellRangeAddress(srcRow.RowNum, srcRow.RowNum,
-                        (short)oldCell.ColumnIndex,
-                        (short)oldCell.ColumnIndex));
-
-                    if (mergedRegion != null)
-                    {
-                        CellRangeAddress newMergedRegion = new CellRangeAddress(
-                            mergedRegion.FirstRow,
-                            mergedRegion.LastRow,
-                            mergedRegion.FirstColumn,
-                            mergedRegion.LastColumn);
-
+                    
                     if (keepMergedRegion)
                     {
-                        CellRangeAddress mergedRegion = srcSheet.GetMergedRegion(new CellRangeAddress(srcRow.RowNum, srcRow.RowNum, (short)oldCell.ColumnIndex, (short)oldCell.ColumnIndex));
+                        CellRangeAddress mergedRegion = srcSheet.GetMergedRegion(
+                            new CellRangeAddress(srcRow.RowNum, srcRow.RowNum,
+                            (short)oldCell.ColumnIndex,
+                            (short)oldCell.ColumnIndex));
+
                         if (mergedRegion != null)
                         {
-                            CellRangeAddress newMergedRegion = new CellRangeAddress(mergedRegion.FirstRow,
-                                    mergedRegion.LastRow, mergedRegion.FirstColumn, mergedRegion.LastColumn);
+                            CellRangeAddress newMergedRegion = new CellRangeAddress(
+                                mergedRegion.FirstRow,
+                                mergedRegion.LastRow,
+                                mergedRegion.FirstColumn,
+                                mergedRegion.LastColumn);
 
-                            if (!destSheet.IsMergedRegion(newMergedRegion))
+                        if (keepMergedRegion)
+                        {
+                            CellRangeAddress mergedRegion = srcSheet.GetMergedRegion(new CellRangeAddress(srcRow.RowNum, srcRow.RowNum, (short)oldCell.ColumnIndex, (short)oldCell.ColumnIndex));
+                            if (mergedRegion != null)
                             {
-                                destSheet.AddMergedRegion(newMergedRegion);
+                                CellRangeAddress newMergedRegion = new CellRangeAddress(mergedRegion.FirstRow,
+                                        mergedRegion.LastRow, mergedRegion.FirstColumn, mergedRegion.LastColumn);
+
+                                if (!destSheet.IsMergedRegion(newMergedRegion))
+                                {
+                                    destSheet.AddMergedRegion(newMergedRegion);
+                                }
                             }
                         }
                     }
