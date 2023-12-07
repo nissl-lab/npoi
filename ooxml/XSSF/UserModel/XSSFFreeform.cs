@@ -295,25 +295,21 @@ namespace NPOI.XSSF.UserModel
             {
                 cv = nd.Previous.Value + nd.Value;
                 double ip = 1;   //Relevance(nd.Previous.Value, nd.Value);
-                mVect.AddBefore(mVect.Last, cv * (Relevance(cv, nd.Previous.Value) * -ip));
-                mVect.AddLast(cv * (Relevance(cv, nd.Value) * ip));
+                mVect.AddBefore(mVect.Last, cv / -6);
+                mVect.AddLast(cv / 6);
                 mVect.AddLast(new DblVect2D(nd.Value.x, nd.Value.y));
             }
 
             nd = mVect.First;
             cv = nd.Value + nd.Next.Value;
-            mVect.AddBefore(nd, cv * Relevance(cv, nd.Value));
+            mVect.AddBefore(nd, cv / 2);
 
             nd = mVect.Last;
             cv = nd.Value - nd.Previous.Value;
-            mVect.AddBefore(nd, cv * (Relevance(cv, nd.Value) * -1));
+            mVect.AddBefore(nd, cv / -2);
 
             return true;
         }
 
-        protected double Relevance(DblVect2D Base, DblVect2D Val)
-        {
-            return Base.InnerProduct(Val) * -0.35 + 0.4;
-        }
     }
 }

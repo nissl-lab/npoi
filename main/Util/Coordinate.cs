@@ -315,6 +315,11 @@ namespace NPOI.Util
         }
 
         /*=======+=========+=========+=========+=========+=========+=========+=========+														+*/
+        public static DblVect2D operator /(DblVect2D V, double Constant)
+        {
+            return new DblVect2D((long) (V.x/Constant), (long) (V.y/Constant));
+        }
+        /*=======+=========+=========+=========+=========+=========+=========+=========+														+*/
         /// <summary>
         /// 
         /// </summary>
