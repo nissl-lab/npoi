@@ -27,6 +27,7 @@ using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel.Helpers;
+using SixLabors.Fonts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5980,12 +5981,29 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Width">In EMU</param>
+        public void SetDefaultColWidth(int Width) {
+            IFont   ift = GetWorkbook().GetStylesSource().GetFontAt(0);
+            Font    ft  = SheetUtil.IFont2Font(ift);
+            var     rt  = TextMeasurer.MeasureSize("0", new TextOptions(ft));
+            double  MDW = rt.Width + 1;                                                     //MaximumDigitWidth
+
+            worksheet.sheetFormatPr.defaultColWidth = Width / Units.EMU_PER_PIXEL / MDW;
+            worksheet.cols.Clear();
+        }
+
+        [Obsolete("")]
         public double MaximumDigitWidth
         {
             set;
             get;
         } = 7.0;
 
+        [Obsolete("")]
         public double GetDefaultColWidthInPixel()
         {
             double fontwidth;
@@ -6014,6 +6032,7 @@ namespace NPOI.XSSF.UserModel
             return width_px;
         }
 
+        [Obsolete("")]
         public XSSFClientAnchor CreateClientAnchor(
               int dx1
             , int dy1
@@ -6036,6 +6055,7 @@ namespace NPOI.XSSF.UserModel
             return null;
         }
 
+        [Obsolete("")]
         private CT_Marker EMUtoMarker(int x, int y)
         {
             CT_Marker mkr = new CT_Marker();
@@ -6046,6 +6066,7 @@ namespace NPOI.XSSF.UserModel
             return mkr;
         }
 
+        [Obsolete("")]
         public int EMUtoRowOff(
               int y
             , out int cell
@@ -6071,6 +6092,7 @@ namespace NPOI.XSSF.UserModel
             return -1;
         }
 
+        [Obsolete("")]
         public int EMUtoColOff(
               int x
             , out int cell

@@ -438,6 +438,26 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// Page margin top (In inch)
+        /// </summary>
+        public double TopMargin { get => pageMargins.top; set => pageMargins.top = value; }             //In Inch
+
+        /// <summary>
+        /// Page margin left (In inch)
+        /// </summary>
+        public double LeftMargin { get => pageMargins.left; set => pageMargins.left = value; }
+
+        /// <summary>
+        /// Page margin right (In inch)
+        /// </summary>
+        public double RightMargin { get => pageMargins.right; set => pageMargins.right = value; }
+
+        /// <summary>
+        /// Page margin bottom (In inch)
+        /// </summary>
+        public double BottomMargin { get => pageMargins.bottom; set => pageMargins.bottom = value; }
+
         /**
          * Returns the number of copies.
          *
