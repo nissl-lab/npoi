@@ -18,14 +18,14 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="IronSoftware.System.Drawing" Version="2023.12.1" />
+		<PackageReference Include="IronSoftware.System.Drawing" Version="2024.1.1" />
 		<PackageReference Include="Enums.NET" Version="4.0.1" />
-		<PackageReference Include="ExtendedNumerics.BigDecimal" Version="2023.1000.1.258" />
+		<PackageReference Include="ExtendedNumerics.BigDecimal" Version="2023.1000.3.328" />
 		<PackageReference Include="MathNet.Numerics.Signed" Version="5.0.0" />
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.2" />
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 		<PackageReference Include="SharpZipLib" Version="1.4.2" />
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
