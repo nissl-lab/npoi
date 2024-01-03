@@ -19,7 +19,7 @@ namespace NPOI.Util
         public static FileInfo CreateTempFile(String prefix, String suffix)
         {
 
-            if (dir == null)
+            if (dir == null || !Directory.Exists(dir))
             {
                 dir = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "poifiles")).FullName;
             }
