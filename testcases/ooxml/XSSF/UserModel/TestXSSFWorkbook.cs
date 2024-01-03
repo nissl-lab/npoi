@@ -911,14 +911,16 @@ namespace TestCases.XSSF.UserModel
                 allBytes[i] = (byte)(i - 128);
             }
 
-            XSSFWorkbook wb1 = new XSSFWorkbook();
-            wb1.CreateSheet();
-            wb1.SetVBAProject(new ByteArrayInputStream(allBytes));
-            file = TempFile.CreateTempFile("poi-", ".xlsm");
-            Stream out1 = new FileStream(file.FullName, FileMode.Open, FileAccess.ReadWrite);
-            wb1.Write(out1);
-            out1.Close();
-            wb1.Close();
+            using(XSSFWorkbook wb1 = new XSSFWorkbook())
+            {
+                wb1.CreateSheet();
+                wb1.SetVBAProject(new ByteArrayInputStream(allBytes));
+                file = TempFile.CreateTempFile("poi-", ".xlsm");
+                using(Stream out1 = new FileStream(file.FullName, FileMode.Open, FileAccess.ReadWrite))
+                {
+                    wb1.Write(out1);
+                }
+            }
 
 
             // Check the package contains what we'd expect it to
