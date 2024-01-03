@@ -23,8 +23,13 @@ namespace TestCases.Util
             if(Directory.Exists(tempDirPath))
                 Directory.Delete(tempDirPath, true);
 
-            Assert.IsFalse(fileInfo!=null && fileInfo.Exists);
             Assert.IsFalse(Directory.Exists(tempDirPath));
+
+            if(fileInfo!=null)
+            {
+                fileInfo.Refresh();
+                Assert.IsFalse(fileInfo.Exists);
+            }
 
             FileInfo file = null;
             Assert.DoesNotThrow(() => file = TempFile.CreateTempFile("test2", ".xls"));
