@@ -20,14 +20,18 @@ namespace TestCases.Util
 
             string tempDirPath = Path.GetDirectoryName(fileInfo.FullName);
 
-            if (Directory.Exists(tempDirPath))
+            if(Directory.Exists(tempDirPath))
                 Directory.Delete(tempDirPath, true);
-            
+
             Assert.IsFalse(File.Exists(fileInfo.FullName));
             Assert.IsFalse(Directory.Exists(tempDirPath));
 
-            Assert.DoesNotThrow(() => TempFile.CreateTempFile("test2", ".xls"));
+            FileInfo file = null;
+            Assert.DoesNotThrow(() => file = TempFile.CreateTempFile("test2", ".xls"));
             Assert.IsTrue(Directory.Exists(tempDirPath));
+
+            if(file !=null && file.Exists)
+                file.Delete();
         }
 
         [Test]
@@ -40,13 +44,17 @@ namespace TestCases.Util
 
             string tempDirPath = Path.GetDirectoryName(path);
 
-            if (Directory.Exists(tempDirPath))
+            if(Directory.Exists(tempDirPath))
                 Directory.Delete(tempDirPath, true);
 
             Assert.IsFalse(Directory.Exists(tempDirPath));
 
-            Assert.DoesNotThrow(() => TempFile.GetTempFilePath("test", ".xls"));
+            string fileName = "";
+            Assert.DoesNotThrow(() => fileName =  TempFile.GetTempFilePath("test", ".xls"));
             Assert.IsTrue(Directory.Exists(tempDirPath));
+
+            if(File.Exists(fileName))
+                File.Delete(fileName);
         }
     }
 }
