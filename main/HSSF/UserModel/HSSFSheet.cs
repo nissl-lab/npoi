@@ -574,7 +574,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="column">the column to Set (0-based)</param>
         /// <param name="width">the width in Units of 1/256th of a Char width</param>
-        public void SetColumnWidth(int column, int width)
+        public void SetColumnWidth(int column, double width)
         {
             _sheet.SetColumnWidth(column, width);
         }
@@ -584,16 +584,16 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="column">the column to Set (0-based)</param>
         /// <returns>the width in Units of 1/256th of a Char width</returns>
-        public int GetColumnWidth(int column)
+        public double GetColumnWidth(int column)
         {
             return _sheet.GetColumnWidth(column);
         }
 
-        public float GetColumnWidthInPixels(int column)
+        public double GetColumnWidthInPixels(int column)
         {
-            int cw = GetColumnWidth(column);
-            int def = DefaultColumnWidth * 256;
-            float px = (cw == def ? PX_DEFAULT : PX_MODIFIED);
+            double cw = GetColumnWidth(column);
+            double def = DefaultColumnWidth * 256;
+            double px = (cw == def ? PX_DEFAULT : PX_MODIFIED);
 
             return cw / px;
         }
@@ -602,7 +602,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the default width of the column.
         /// </summary>
         /// <value>The default width of the column.</value>
-        public int DefaultColumnWidth
+        public double DefaultColumnWidth
         {
             get { return _sheet.DefaultColumnWidth; }
             set { _sheet.DefaultColumnWidth = value; }
@@ -3006,13 +3006,27 @@ namespace NPOI.HSSF.UserModel
                 HSSFRow destRow = (HSSFRow)newSheet.CreateRow(i);
                 if (srcRow != null)
                 {
-                    CopyRow(this, newSheet, srcRow, destRow, styleMap, new Dictionary<short, short>(), true);
+                    // avoid O(N^2) performance scanning through all regions for each row
+                    // merged regions will be copied after all the rows have been copied
+                    CopyRow(this, newSheet, srcRow, destRow, styleMap, new Dictionary<short, short>(), true, keepMergedRegions: false);
                     if (srcRow.LastCellNum > maxColumnNum)
                     {
                         maxColumnNum = srcRow.LastCellNum;
                     }
                 }
             }
+
+            // Copying merged regions
+            foreach (var srcRegion in this.MergedRegions)
+            {
+                var destRegion = srcRegion.Copy();
+                // Additional check here as Sheet.CloneSheet() should already have copied the merged regions
+                if (!newSheet.IsMergedRegion(destRegion))
+                {
+                    newSheet.AddMergedRegion(destRegion);
+                }
+            }
+
             for (int i = 0; i <= maxColumnNum; i++)
             {
                 newSheet.SetColumnWidth(i, GetColumnWidth(i));
@@ -3062,13 +3076,27 @@ namespace NPOI.HSSF.UserModel
                 HSSFRow destRow = (HSSFRow)newSheet.CreateRow(i);
                 if (srcRow != null)
                 {
-                    CopyRow(this, newSheet, srcRow, destRow, styleMap, paletteMap, keepFormulas);
+                    // avoid O(N^2) performance scanning through all regions for each row
+                    // merged regions will be copied after all the rows have been copied
+                    CopyRow(this, newSheet, srcRow, destRow, styleMap, paletteMap, keepFormulas, keepMergedRegions: false);
                     if (srcRow.LastCellNum > maxColumnNum)
                     {
                         maxColumnNum = srcRow.LastCellNum;
                     }
                 }
             }
+
+            // Copying merged regions
+            foreach (var srcRegion in this.MergedRegions)
+            {
+                var destRegion = srcRegion.Copy();
+                // Additional check here as Sheet.CloneSheet() should already have copied the merged regions
+                if (!newSheet.IsMergedRegion(destRegion))
+                {
+                    newSheet.AddMergedRegion(destRegion);
+                }
+            }
+
             for (int i = 0; i < maxColumnNum; i++)
             {
                 newSheet.SetColumnWidth(i, GetColumnWidth(i));
@@ -3222,7 +3250,7 @@ namespace NPOI.HSSF.UserModel
             }
             return retval;
         }
-        private static void CopyRow(HSSFSheet srcSheet, HSSFSheet destSheet, HSSFRow srcRow, HSSFRow destRow, IDictionary<Int32, HSSFCellStyle> styleMap, Dictionary<short, short> paletteMap, bool keepFormulas)
+        private static void CopyRow(HSSFSheet srcSheet, HSSFSheet destSheet, HSSFRow srcRow, HSSFRow destRow, IDictionary<Int32, HSSFCellStyle> styleMap, Dictionary<short, short> paletteMap, bool keepFormulas, bool keepMergedRegions)
         {
             List<SS.Util.CellRangeAddress> mergedRegions = destSheet.Sheet.MergedRecords.MergedRegions;
             destRow.Height = srcRow.Height;
@@ -3243,17 +3271,20 @@ namespace NPOI.HSSF.UserModel
                         newCell = (HSSFCell)destRow.CreateCell(j);
                     }
                     HSSFCellUtil.CopyCell(oldCell, newCell, styleMap, paletteMap, keepFormulas);
-                    CellRangeAddress mergedRegion = GetMergedRegion(srcSheet, srcRow.RowNum, (short)oldCell.ColumnIndex);
-                    if (mergedRegion != null)
+
+                    if (keepMergedRegions)
                     {
-                        CellRangeAddress newMergedRegion = new CellRangeAddress(mergedRegion.FirstRow,
-                                mergedRegion.LastRow, mergedRegion.FirstColumn, mergedRegion.LastColumn);
-                        if (IsNewMergedRegion(newMergedRegion, mergedRegions))
+                        CellRangeAddress mergedRegion = GetMergedRegion(srcSheet, srcRow.RowNum, (short)oldCell.ColumnIndex);
+                        if (mergedRegion != null)
                         {
-                            mergedRegions.Add(newMergedRegion);
+                            CellRangeAddress newMergedRegion = new CellRangeAddress(mergedRegion.FirstRow,
+                                    mergedRegion.LastRow, mergedRegion.FirstColumn, mergedRegion.LastColumn);
+                            if (IsNewMergedRegion(newMergedRegion, mergedRegions))
+                            {
+                                mergedRegions.Add(newMergedRegion);
+                            }
                         }
                     }
-
                 }
             }
         }

@@ -1,9 +1,11 @@
-﻿using NPOI.OpenXmlFormats.Dml.Spreadsheet;
+﻿using NPOI.OpenXmlFormats.Dml;
+using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -130,7 +132,7 @@ namespace TestCases.XSSF.UserModel
             XSSFDrawing drawing = (XSSFDrawing)sht0.CreateDrawingPatriarch();
 
             //----- create
-            var ca0 = sht0.CreateClientAnchor(Units.ToEMU(100), Units.ToEMU(100), Units.ToEMU(200), Units.ToEMU(200));
+            var ca0 = new XSSFClientAnchor(sht0, Units.ToEMU(100), Units.ToEMU(100), Units.ToEMU(200), Units.ToEMU(200));
             var sp0 = drawing.CreateSimpleShape(ca0);
             sp0.LineStyle = LineStyle.Solid;
             sp0.LineStyleColor = 0xff00000;
@@ -192,14 +194,14 @@ namespace TestCases.XSSF.UserModel
 
             // simple shape
             XSSFClientAnchor ca0;
-            ca0 = sheet.CreateClientAnchor(Units.ToEMU(100), Units.ToEMU(100), Units.ToEMU(200), Units.ToEMU(200));
+            ca0 = new XSSFClientAnchor(sheet, Units.ToEMU(100), Units.ToEMU(100), Units.ToEMU(200), Units.ToEMU(200));
             XSSFSimpleShape shp0 = drawing.CreateSimpleShape(ca0);
-            shp0.Name = "S00"; 
+            shp0.Name = "S00";
             shp0.cellanchor.clientData.fLocksWithSheet = true;
 
             // connector shape
             XSSFClientAnchor ca1;
-            ca1 = sheet.CreateClientAnchor(Units.ToEMU(250), Units.ToEMU(250), Units.ToEMU(350), Units.ToEMU(350));
+            ca1 = new XSSFClientAnchor(sheet, Units.ToEMU(250), Units.ToEMU(250), Units.ToEMU(350), Units.ToEMU(350));
             XSSFConnector shp1 = drawing.CreateConnector(ca1);
             shp1.Name = "L00";
             shp1.cellanchor.clientData.fLocksWithSheet = true;
@@ -257,7 +259,7 @@ namespace TestCases.XSSF.UserModel
 
             //----- first group
             XSSFClientAnchor ganchor1;
-            ganchor1 = sheet.CreateClientAnchor(Units.ToEMU(100), Units.ToEMU(200), Units.ToEMU(200), Units.ToEMU(100));
+            ganchor1 = new XSSFClientAnchor(sheet, Units.ToEMU(100), Units.ToEMU(200), Units.ToEMU(200), Units.ToEMU(100));
             ganchor1.AnchorType = AnchorType.DontMoveAndResize;
             XSSFShapeGroup grp1= drawing.CreateGroup( ganchor1 );
             grp1.Name = "first";
@@ -306,10 +308,12 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet();
             XSSFDrawing drawing = (XSSFDrawing)sheet.CreateDrawingPatriarch();
+            XSSFFont font = wb.GetStylesSource().GetFontAt( 0 );
+            font.SetScheme(FontScheme.NONE);
 
             //----- first group
             XSSFClientAnchor ganchor1;
-            ganchor1 = sheet.CreateClientAnchor(Units.ToEMU(100), Units.ToEMU(400), Units.ToEMU(400), Units.ToEMU(100));
+            ganchor1 = new XSSFClientAnchor(sheet, Units.ToEMU(50), Units.ToEMU(400), Units.ToEMU(400), Units.ToEMU(50));
             ganchor1.AnchorType = AnchorType.DontMoveAndResize;
             XSSFShapeGroup grp1= drawing.CreateGroup( ganchor1 );
             grp1.Name = "G00";
@@ -336,8 +340,8 @@ namespace TestCases.XSSF.UserModel
             {
                 //----- second group
                 XSSFChildGroupAnchor ganchor;
-                ganchor = new XSSFChildGroupAnchor(Units.ToEMU(x), Units.ToEMU(y), Units.ToEMU(cx), Units.ToEMU(cy));
-                grp = grp.CreateGroup( ganchor );
+                ganchor = new XSSFChildGroupAnchor(Units.ToEMU(x - 25), Units.ToEMU(y - 25), Units.ToEMU(cx+25), Units.ToEMU(cy+25));
+                grp = grp.CreateGroup(ganchor);
                 grp.Name = $"G{ct}";
 
                 // simple shape
@@ -359,7 +363,196 @@ namespace TestCases.XSSF.UserModel
                 cx += 25;
                 cy += 25;
             }
+
+            grp1.AutoFit(sheet);
             XSSFTestDataSamples.WriteOut(wb, "TestRecursiveGroup");
+        }
+
+        [Test]
+        public void TestInnerPproduct()
+        {
+            DblVect2D b = new DblVect2D(1, 0);
+            for(double Theta = 0; Theta < Math.PI; Theta+=Math.PI/180.0)
+            {
+                DblVect2D c = new DblVect2D(Math.Cos(Theta), Math.Sin(Theta));
+
+                Debug.WriteLine($"{Theta/Math.PI*180}\t{Theta}\t{c.x}\t{c.y}\t={b.InnerProduct(c)}+$E$1");
+            }
+        }
+
+        [Test]
+        public void TestBuildFreeform_base()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)wb.CreateSheet();
+            XSSFDrawing drawing = (XSSFDrawing)sheet.CreateDrawingPatriarch();
+            XSSFFont font = wb.GetStylesSource().GetFontAt( 0 );
+            font.SetScheme(FontScheme.NONE);
+
+            // free form shape
+            var bff = new BuildFreeForm();
+            bff.AddNode(new Coords(Units.ToEMU(100), Units.ToEMU(180)));
+            bff.AddNode(new Coords(Units.ToEMU(200), Units.ToEMU(200)));
+            bff.AddNode(new Coords(Units.ToEMU(300), Units.ToEMU(150)));
+            bff.AddNode(new Coords(Units.ToEMU(400), Units.ToEMU(50)));
+            if(bff.Build())
+            {
+                var shp = drawing.CreateFreeform(sheet, bff);
+                shp.SetLineStyleColor(0, 0, 0);
+
+                XSSFTestDataSamples.WriteOut(wb, "TestBuildFreeform_base");
+            }
+        }
+
+        [Test]
+        public void TestBuildFreeform()
+        {
+            XSSFWorkbook wb0 = XSSFTestDataSamples.OpenSampleWorkbook("TestBuildFreeform.xlsx");
+            XSSFSheet sheet0 = (XSSFSheet)wb0.GetSheet("Sheet1");
+            XSSFDrawing drawing0 = sheet0.GetDrawingPatriarch();
+            List<XSSFShape> lstShp0 = drawing0.GetShapes();
+
+            XSSFWorkbook wb1        = new XSSFWorkbook();
+            XSSFSheet sheet1        = (XSSFSheet)wb1.CreateSheet(sheet0.SheetName);
+            XSSFDrawing drawing1    = (XSSFDrawing)sheet1.CreateDrawingPatriarch();
+            XSSFFont font           = wb1.GetStylesSource().GetFontAt( 0 );
+            font.SetScheme(FontScheme.NONE);
+
+            foreach(var sp in lstShp0)
+            {
+                if(sp.Name.Substring(0, 2) == "FF")
+                //if(sp.Name.Substring(0, 4) == "FF06")
+                {
+                    var bff = new BuildFreeForm();
+
+                    var spPr = ((XSSFSimpleShape)sp).GetCTShape().spPr;
+                    var cg = spPr.custGeom;
+                    for(int ct = 0; ct< cg.cxnLst.cxn.Count; ct++)
+                    {
+                        var cd = GetGeomGuide(cg.gdLst.gd, ct);
+                        if( cd != null){
+                            cd.Add(new Coords(spPr.xfrm.off.x, spPr.xfrm.off.y));
+                            bff.AddNode(cd);
+                        }
+                    }
+                    if(bff.Build())
+                    {
+                        var shp = drawing1.CreateFreeform(sheet1, bff);
+                        shp.SetLineStyleColor(0, 0, 0);
+                        shp.Name = sp.Name;
+                    }
+                }
+            }
+            XSSFTestDataSamples.WriteOut(wb1, "TestBuildFreeform");
+
+            var rbwb = (XSSFWorkbook)XSSFITestDataProvider.instance.WriteOutAndReadBack(wb1);
+            var rbsheet = (XSSFSheet) rbwb.GetSheet("Sheet1");
+            var rbdrawing = rbsheet.GetDrawingPatriarch();
+            var rblstShp = rbdrawing.GetShapes();
+            foreach(var sp0 in lstShp0)
+            {
+                if(sp0.Name.Substring(0, 2) == "FF")
+                {
+                    var spPr0 = ((XSSFSimpleShape)sp0).GetCTShape().spPr;
+                    var cg0 = spPr0.custGeom;
+
+                    foreach(var rbsp in rblstShp)
+                    {
+                        if(sp0.Name == rbsp.Name)
+                        {
+                            var rbspPr = ((XSSFSimpleShape)rbsp).GetCTShape().spPr;
+                            var rbcg = rbspPr.custGeom; //read back custom geometry
+
+                            //Assert.AreEqual(spPr0.xfrm.off.x, rbspPr.xfrm.off.x, $"{sp0.Name}-xfrm.off.x:{spPr0.xfrm.off.x}!={rbspPr.xfrm.off.x}");
+                            //Assert.AreEqual(spPr0.xfrm.off.y, rbspPr.xfrm.off.y, $"{sp0.Name}-xfrm.off.y:{spPr0.xfrm.off.y}!={rbspPr.xfrm.off.y}");
+                            //Assert.AreEqual(spPr0.xfrm.ext.cx, rbspPr.xfrm.ext.cx, $"{sp0.Name}-xfrm.off.x:{spPr0.xfrm.ext.cx}!={rbspPr.xfrm.ext.cx}");
+                            //Assert.AreEqual(spPr0.xfrm.ext.cy, rbspPr.xfrm.ext.cy, $"{sp0.Name}-xfrm.off.y:{spPr0.xfrm.ext.cy}!={rbspPr.xfrm.ext.cy}");
+
+                            Assert.AreEqual(cg0.cxnLst.cxn.Count, rbcg.cxnLst.cxn.Count, $"Count:{cg0.cxnLst.cxn.Count}!={rbcg.cxnLst.cxn.Count}");
+
+                            for(int ct = 0; ct< cg0.cxnLst.cxn.Count; ct++)
+                            {
+                                var cd0 = GetGeomGuide(cg0.gdLst.gd, ct);
+                                if(cd0 != null)
+                                {
+                                    var rbcd = GetGeomGuide(rbcg.gdLst.gd, ct);
+                                    if(rbcd != null)
+                                    {
+                                        //Assert.AreEqual(cd0.x, rbcd.x, $"{sp0.Name}-gdLst.x{ct}:{cd0.x}!={rbcd.x}");
+                                        //Assert.AreEqual(cd0.y, rbcd.y, $"{sp0.Name}-gdLst.y{ct}:{cd0.y}!={rbcd.y}");
+                                    }
+                                    else
+                                    {
+                                        throw new Exception();
+                                    }
+                                }
+                                else
+                                {
+                                    throw new Exception();
+                                }
+                            }
+                            var ogph = cg0.pathLst.path[0];
+                            var rbph = rbcg.pathLst.path[0];
+                            //Assert.AreEqual(ogph.w, rbph.w, $"{sp0.Name}-path.w:{ogph.w}!={rbph.w}");
+                            //Assert.AreEqual(ogph.h, rbph.h, $"{sp0.Name}-path.h:{ogph.h}!={rbph.h}");
+
+                            //Assert.AreEqual(ogph.moveto.pt.x, rbph.moveto.pt.x, $"{sp0.Name}-moveto.x:{ogph.moveto.pt.x}!={rbph.moveto.pt.x}");
+                            //Assert.AreEqual(ogph.moveto.pt.y, rbph.moveto.pt.y, $"{sp0.Name}-moveto.y:{ogph.moveto.pt.y}!={rbph.moveto.pt.y}");
+
+                            Assert.AreEqual(ogph.cubicBezTo.Count, rbph.cubicBezTo.Count, $"cubicBezTo.Count:{ogph.cubicBezTo.Count}!={rbph.cubicBezTo.Count}");
+
+                            for(int i = 0; i<ogph.cubicBezTo.Count; i++)
+                            {
+                                //Assert.AreEqual(ogph.cubicBezTo[i].pt[0].x, rbph.cubicBezTo[i].pt[0].x, $"{ogph.cubicBezTo[i].pt[0].x},{rbph.cubicBezTo[i].pt[0].x}");
+                                //Assert.AreEqual(ogph.cubicBezTo[i].pt[0].y, rbph.cubicBezTo[i].pt[0].y, $"{ogph.cubicBezTo[i].pt[0].y},{rbph.cubicBezTo[i].pt[0].y}");
+                                //Assert.AreEqual(ogph.cubicBezTo[i].pt[1].x, rbph.cubicBezTo[i].pt[1].x, $"{ogph.cubicBezTo[i].pt[1].x},{rbph.cubicBezTo[i].pt[1].x}");
+                                //Assert.AreEqual(ogph.cubicBezTo[i].pt[1].y, rbph.cubicBezTo[i].pt[1].y, $"{ogph.cubicBezTo[i].pt[1].y},{rbph.cubicBezTo[i].pt[1].y}");
+                                //Assert.AreEqual(ogph.cubicBezTo[i].pt[2].x, rbph.cubicBezTo[i].pt[2].x, $"{sp0.Name}-cubicBezTo[{i}].pt[2].x:{ogph.cubicBezTo[i].pt[2].x},{rbph.cubicBezTo[i].pt[2].x}");
+                                //Assert.AreEqual(ogph.cubicBezTo[i].pt[2].y, rbph.cubicBezTo[i].pt[2].y, $"{sp0.Name}-cubicBezTo[{i}].pt[2].y:{ogph.cubicBezTo[i].pt[2].y},{rbph.cubicBezTo[i].pt[2].y}");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private Coords GetGeomGuide(
+              List<CT_GeomGuide> ggs
+            , int ct
+        ) {
+            long x = 0;
+            long y = 0;
+
+            var gdX = Search(ggs, $"connsiteX{ct}");
+            if(gdX != null)
+            {
+                string[] fmla = gdX.fmla.Split(new char[] { ' ' });
+                x = long.Parse(fmla[1]);
+            }
+            var gdY = Search(ggs, $"connsiteY{ct}");
+            if(gdY != null)
+            {
+                string[] fmla = gdY.fmla.Split(new char[] { ' ' });
+                y = long.Parse(fmla[1]);
+            }
+            if(gdX == null || gdY ==null)
+            {
+                return null;
+            }
+
+            return new Coords(x, y);
+        }
+
+        private CT_GeomGuide Search(List<CT_GeomGuide> Gds, string name)
+        {
+            foreach(var gd in Gds)
+            {
+                if(gd.name == name)
+                {
+                    return gd;
+                }
+            }
+            return null;
         }
     }
 }

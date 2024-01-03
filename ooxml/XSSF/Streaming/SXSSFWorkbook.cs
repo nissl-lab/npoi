@@ -102,6 +102,12 @@ namespace NPOI.XSSF.Streaming
         private bool _compressTmpFiles = false;
 
         /// <summary>
+        /// setting this flag On allows to write large files;
+        /// however, this can lead to compatibility issues
+        /// </summary>
+        private UseZip64 _useZip64 = UseZip64.Off;
+
+        /// <summary>
         /// shared string table - a cache of strings in this workbook.
         /// </summary>
         private SharedStringsTable _sharedStringSource;
@@ -150,6 +156,13 @@ namespace NPOI.XSSF.Streaming
             get { return XssfWorkbook.IsHidden; }
 
             set { XssfWorkbook.IsHidden = value; }
+        }
+
+        public UseZip64 UseZip64
+        {
+            get { return _useZip64; }
+
+            set { _useZip64 = value; }
         }
 
 
@@ -444,7 +457,7 @@ namespace NPOI.XSSF.Streaming
                 try
                 {
                     zos.IsStreamOwner = !leaveOpen;
-                    zos.UseZip64 = UseZip64.Off;
+                    zos.UseZip64 = _useZip64;
                     //ZipEntrySource zipEntrySource = new ZipFileZipEntrySource(zip);
                     //var en =  zipEntrySource.Entries;
                     var en = zip.GetEnumerator();

@@ -27,6 +27,7 @@ using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel.Helpers;
+using SixLabors.Fonts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -145,21 +146,20 @@ namespace NPOI.XSSF.UserModel
 
         /// <summary>
         /// Get the default column width for the sheet (if the columns do not 
-        /// define their own width) in characters. Note, this value is different 
-        /// from <see cref="GetColumnWidth"/>. The latter is always greater and 
-        /// includes 4 pixels of margin pAdding(two on each side), plus 1 pixel 
-        /// pAdding for the gridlines.
+        /// define their own width) in characters.
         /// </summary>
-        public int DefaultColumnWidth
+        public double DefaultColumnWidth
         {
             get
             {
                 CT_SheetFormatPr pr = worksheet.sheetFormatPr;
-                return pr == null ? 8 : (int)pr.baseColWidth;
+                return (pr == null || pr.defaultColWidth == 0.0) ? 8.43 : pr.defaultColWidth;
             }
             set
             {
-                GetSheetTypeSheetFormatPr().baseColWidth = (uint)value;
+                var pr = GetSheetTypeSheetFormatPr();
+                pr.defaultColWidth = value;
+                pr.baseColWidth = 0;
             }
         }
 
@@ -1649,7 +1649,7 @@ namespace NPOI.XSSF.UserModel
                     width = maxColumnWidth;
                 }
 
-                SetColumnWidth(column, (int)width);
+                SetColumnWidth(column, width);
                 columnHelper.SetColBestFit(column, true);
             }
         }
@@ -2025,22 +2025,33 @@ namespace NPOI.XSSF.UserModel
 
         /// <summary>
         /// Get the actual column width (in units of 1/256th of a character width)
-        /// Note, the returned  value is always gerater that <see cref="DefaultColumnWidth"/> 
-        /// because the latter does not include margins. Actual column width 
-        /// measured as the number of characters of the maximum digit width of 
-        /// thenumbers 0, 1, 2, ..., 9 as rendered in the normal style's font. 
-        /// There are 4 pixels of margin pAdding(two on each side), plus 1 pixel 
-        /// pAdding for the gridlines.
         /// </summary>
         /// <param name="columnIndex">the column to set (0-based)</param>
         /// <returns>the width in units of 1/256th of a character width</returns>
-        public int GetColumnWidth(int columnIndex)
+        public double GetColumnWidth(int columnIndex)
         {
             CT_Col col = columnHelper.GetColumn(columnIndex, false);
-            double width = (col == null || !col.IsSetWidth())
-                ? DefaultColumnWidth
-                : col.width;
-            return (int)(width * 256);
+
+            double width = 0;
+
+            if (col != null && col.IsSetWidth())
+                width = col.width;
+            else
+            {
+                CT_SheetFormatPr pr = worksheet.sheetFormatPr;
+                if (pr != null)
+                {
+                    if (pr.defaultColWidth != 0.0)
+                        width = pr.defaultColWidth;
+                    else if (pr.baseColWidth != 0)
+                        width = pr.baseColWidth + 5; 
+                }
+
+                if (width == 0)
+                    width = DefaultColumnWidth;
+            }
+
+            return Math.Round(width * 256, 2);
         }
 
         /// <summary>
@@ -2050,10 +2061,10 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         /// <param name="columnIndex"></param>
         /// <returns></returns>
-        public float GetColumnWidthInPixels(int columnIndex)
+        public double GetColumnWidthInPixels(int columnIndex)
         {
-            float widthIn256 = GetColumnWidth(columnIndex);
-            return (float)(widthIn256 / 256.0 * XSSFWorkbook.DEFAULT_CHARACTER_WIDTH);
+            double widthIn256 = GetColumnWidth(columnIndex);
+            return widthIn256 / 256.0 * XSSFWorkbook.DEFAULT_CHARACTER_WIDTH;
         }
 
         /// <summary>
@@ -2611,7 +2622,7 @@ namespace NPOI.XSSF.UserModel
         /// width</param>
         /// <exception cref="ArgumentException">if width more than 255*256 (the
         /// maximum column width in Excel is 255 characters)</exception>
-        public void SetColumnWidth(int columnIndex, int width)
+        public void SetColumnWidth(int columnIndex, double width)
         {
             if (width > 255 * 256)
             {
@@ -2619,7 +2630,7 @@ namespace NPOI.XSSF.UserModel
                     "individual cell is 255 characters.");
             }
 
-            columnHelper.SetColWidth(columnIndex, (double)width / 256);
+            columnHelper.SetColWidth(columnIndex, width / 256);
             columnHelper.SetCustomWidth(columnIndex, true);
         }
 
@@ -3659,8 +3670,17 @@ namespace NPOI.XSSF.UserModel
                 XSSFRow destRow = (XSSFRow)newSheet.CreateRow(i);
                 if (srcRow != null)
                 {
-                    CopyRow(this, newSheet, srcRow, destRow, styleMap, keepFormulas);
+                    // avoid O(N^2) performance scanning through all regions for each row
+                    // merged regions will be copied after all the rows have been copied
+                    CopyRow(this, newSheet, srcRow, destRow, styleMap, keepFormulas, keepMergedRegion: false);
                 }
+            }
+
+            // Copying merged regions
+            foreach (var srcRegion in this.MergedRegions)
+            {
+                var destRegion = srcRegion.Copy();
+                newSheet.AddMergedRegion(destRegion);
             }
 
             List<CT_Cols> srcCols = worksheet.GetColsList();
@@ -5617,7 +5637,7 @@ namespace NPOI.XSSF.UserModel
             return null;
         }
 
-        private static void CopyRow(XSSFSheet srcSheet, XSSFSheet destSheet, XSSFRow srcRow, XSSFRow destRow, IDictionary<int, ICellStyle> styleMap, bool keepFormulas)
+        private static void CopyRow(XSSFSheet srcSheet, XSSFSheet destSheet, XSSFRow srcRow, XSSFRow destRow, IDictionary<int, ICellStyle> styleMap, bool keepFormulas, bool keepMergedRegion)
         {
             destRow.Height = srcRow.Height;
             if (!srcRow.GetCTRow().IsSetCustomHeight())
@@ -5653,22 +5673,26 @@ namespace NPOI.XSSF.UserModel
                     }
 
                     CopyCell(oldCell, newCell, styleMap, keepFormulas);
-                    CellRangeAddress mergedRegion = srcSheet.GetMergedRegion(
-                        new CellRangeAddress(srcRow.RowNum, srcRow.RowNum,
-                        (short)oldCell.ColumnIndex,
-                        (short)oldCell.ColumnIndex));
-
-                    if (mergedRegion != null)
+                    
+                    if (keepMergedRegion)
                     {
-                        CellRangeAddress newMergedRegion = new CellRangeAddress(
-                            mergedRegion.FirstRow,
-                            mergedRegion.LastRow,
-                            mergedRegion.FirstColumn,
-                            mergedRegion.LastColumn);
+                        CellRangeAddress mergedRegion = srcSheet.GetMergedRegion(
+                            new CellRangeAddress(srcRow.RowNum, srcRow.RowNum,
+                            (short)oldCell.ColumnIndex,
+                            (short)oldCell.ColumnIndex));
 
-                        if (!destSheet.IsMergedRegion(newMergedRegion))
+                        if (mergedRegion != null)
                         {
-                            destSheet.AddMergedRegion(newMergedRegion);
+                            CellRangeAddress newMergedRegion = new CellRangeAddress(
+                                mergedRegion.FirstRow,
+                                mergedRegion.LastRow,
+                                mergedRegion.FirstColumn,
+                                mergedRegion.LastColumn);
+
+                            if (!destSheet.IsMergedRegion(newMergedRegion))
+                            {
+                                destSheet.AddMergedRegion(newMergedRegion);
+                            }
                         }
                     }
                 }
@@ -5957,23 +5981,41 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Width">In EMU</param>
+        public void SetDefaultColWidth(int Width) {
+            IFont   ift = GetWorkbook().GetStylesSource().GetFontAt(0);
+            Font    ft  = SheetUtil.IFont2Font(ift);
+            var     rt  = TextMeasurer.MeasureSize("0", new TextOptions(ft));
+            double  MDW = rt.Width + 1;                                                     //MaximumDigitWidth
+
+            worksheet.sheetFormatPr.defaultColWidth = Width / Units.EMU_PER_PIXEL / MDW;
+            worksheet.cols.Clear();
+        }
+
+        [Obsolete("")]
         public double MaximumDigitWidth
         {
             set;
             get;
         } = 7.0;
 
+        [Obsolete("")]
         public double GetDefaultColWidthInPixel()
         {
             double fontwidth;
             double width_px;
 
-            var width = worksheet.sheetFormatPr.defaultColWidth;                        //string length with padding
+            var width = worksheet.sheetFormatPr.defaultColWidth; //string length with padding
             if (width != 0.0)
             {
-                width_px = width * MaximumDigitWidth;
+                double widthInPx = width * MaximumDigitWidth;
+                width_px = widthInPx + (8 - widthInPx % 8); // round up to the nearest multiple of 8 pixels
             }
-            else
+            else if (worksheet.sheetFormatPr.baseColWidth != 0)
             {
                 double MDW = MaximumDigitWidth;
                 var length = worksheet.sheetFormatPr.baseColWidth;                      //string length with out padding
@@ -5981,9 +6023,16 @@ namespace NPOI.XSSF.UserModel
                 double tmp = 256 * fontwidth + Math.Truncate(128 / MDW);
                 width_px = Math.Truncate((tmp / 256) * MDW) + 3;                        // +3 ???
             }
+            else
+            {
+                double widthInPx = DefaultColumnWidth * MaximumDigitWidth;
+                width_px = widthInPx + (8 - widthInPx % 8); // round up to the nearest multiple of 8 pixels
+            }
+
             return width_px;
         }
 
+        [Obsolete("")]
         public XSSFClientAnchor CreateClientAnchor(
               int dx1
             , int dy1
@@ -6006,6 +6055,7 @@ namespace NPOI.XSSF.UserModel
             return null;
         }
 
+        [Obsolete("")]
         private CT_Marker EMUtoMarker(int x, int y)
         {
             CT_Marker mkr = new CT_Marker();
@@ -6016,6 +6066,7 @@ namespace NPOI.XSSF.UserModel
             return mkr;
         }
 
+        [Obsolete("")]
         public int EMUtoRowOff(
               int y
             , out int cell
@@ -6041,6 +6092,7 @@ namespace NPOI.XSSF.UserModel
             return -1;
         }
 
+        [Obsolete("")]
         public int EMUtoColOff(
               int x
             , out int cell
@@ -6063,7 +6115,7 @@ namespace NPOI.XSSF.UserModel
                         }
                     }
                 }
-            lblforbreak:
+                lblforbreak:
                 int EMUwidth = Units.PixelToEMU((int)Math.Round(width_px, 1));
                 if (x >= EMUwidth)
                 {

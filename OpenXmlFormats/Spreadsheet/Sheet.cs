@@ -2469,10 +2469,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private double dyDescentField;
         public CT_SheetFormatPr()
         {
-            this.baseColWidth = 8;
+            this.defaultColWidth = 8.43;
         }
         [XmlAttribute]
-        [DefaultValue(typeof(uint), "8")]
         public uint baseColWidth
         {
             get
@@ -2486,6 +2485,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         [XmlAttribute]
+        [DefaultValue(typeof(double), "8.43")]
         public double defaultColWidth
         {
             get
@@ -2599,7 +2599,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_SheetFormatPr ctObj = new CT_SheetFormatPr();
-            ctObj.baseColWidth = XmlHelper.ReadUInt(node.Attributes["baseColWidth"],8);
+            ctObj.baseColWidth = XmlHelper.ReadUInt(node.Attributes["baseColWidth"]);
             ctObj.defaultColWidth = XmlHelper.ReadDouble(node.Attributes["defaultColWidth"]);
             ctObj.defaultRowHeight = XmlHelper.ReadDouble(node.Attributes["defaultRowHeight"]);
             ctObj.customHeight = XmlHelper.ReadBool(node.Attributes["customHeight"]);
@@ -2694,14 +2694,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
             XmlHelper.WriteAttribute(sw, "aca", this.aca, false);
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
-            XmlHelper.WriteAttribute(sw, "dt2D", this.dt2D, false);
-            XmlHelper.WriteAttribute(sw, "dtr", this.dtr, false);
+            XmlHelper.WriteAttribute(sw, "dt2D", this.dt2D, true);
+            XmlHelper.WriteAttribute(sw, "dtr", this.dtr, true);
             XmlHelper.WriteAttribute(sw, "del1", this.del1, false);
             XmlHelper.WriteAttribute(sw, "del2", this.del2, false);
             XmlHelper.WriteAttribute(sw, "r1", this.r1);
             XmlHelper.WriteAttribute(sw, "r2", this.r2);
             XmlHelper.WriteAttribute(sw, "ca", this.ca, false);
-            if (this.t != ST_CellFormulaType.normal)
+            if(this.si!=0)
                 XmlHelper.WriteAttribute(sw, "si", this.si, true);
             XmlHelper.WriteAttribute(sw, "bx", this.bx, false);
             if (!string.IsNullOrEmpty(this.valueField))
