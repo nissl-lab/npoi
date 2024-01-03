@@ -20,8 +20,14 @@ namespace TestCases.Util
 
             string tempDirPath = Path.GetDirectoryName(fileInfo.FullName);
 
-            if(Directory.Exists(tempDirPath))
-                Directory.Delete(tempDirPath, true);
+            while(Directory.Exists(tempDirPath))
+            {
+                try
+                {
+                    Directory.Delete(tempDirPath, true);
+                }
+                catch { }
+            }
 
             Assert.IsFalse(Directory.Exists(tempDirPath));
 
@@ -49,8 +55,14 @@ namespace TestCases.Util
 
             string tempDirPath = Path.GetDirectoryName(path);
 
-            if(Directory.Exists(tempDirPath))
-                Directory.Delete(tempDirPath, true);
+            while(Directory.Exists(tempDirPath))
+            {
+                try
+                {
+                    Directory.Delete(tempDirPath, true);
+                }
+                catch { }
+            }
 
             Assert.IsFalse(Directory.Exists(tempDirPath));
 
