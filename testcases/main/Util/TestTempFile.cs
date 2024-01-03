@@ -1,6 +1,7 @@
 ﻿using NPOI.Util;
 using NUnit.Framework;
 using System.IO;
+using System.Threading;
 
 namespace TestCases.Util
 {
@@ -26,7 +27,10 @@ namespace TestCases.Util
                 {
                     Directory.Delete(tempDirPath, true);
                 }
-                catch { }
+                catch 
+                {
+                    Thread.Sleep(5);
+                }
             }
 
             Assert.IsFalse(Directory.Exists(tempDirPath));
@@ -61,7 +65,10 @@ namespace TestCases.Util
                 {
                     Directory.Delete(tempDirPath, true);
                 }
-                catch { }
+                catch 
+                {
+                    Thread.Sleep(10);
+                }
             }
 
             Assert.IsFalse(Directory.Exists(tempDirPath));

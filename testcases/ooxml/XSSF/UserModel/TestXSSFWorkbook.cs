@@ -922,6 +922,8 @@ namespace TestCases.XSSF.UserModel
                 }
             }
 
+            if(file != null)
+                file.Refresh();
 
             // Check the package contains what we'd expect it to
             OPCPackage pkg = OPCPackage.Open(file);
