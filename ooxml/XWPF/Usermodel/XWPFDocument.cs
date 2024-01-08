@@ -127,7 +127,7 @@ namespace NPOI.XWPF.UserModel
                     }
                 }
                 // Sort out headers and footers
-                if (doc.Document.body.sectPr != null)
+                if (doc.Document.body?.sectPr != null)
                     headerFooterPolicy = new XWPFHeaderFooterPolicy(this);
 
                 // Create for each XML-part in the Package a PartClass
