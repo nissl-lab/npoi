@@ -99,6 +99,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             CT_Worksheet ctObj = new CT_Worksheet();
             ctObj.cols = new List<CT_Cols>();
             ctObj.conditionalFormatting = new List<CT_ConditionalFormatting>();
+            XmlNode cols = null;
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "sheetPr")
@@ -174,10 +175,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 else if (childNode.LocalName == "extLst")
                     ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "cols")
-                    ctObj.cols.Add(CT_Cols.Parse(childNode, namespaceManager));
+                    cols =childNode;
                 else if (childNode.LocalName == "conditionalFormatting")
                     ctObj.conditionalFormatting.Add(CT_ConditionalFormatting.Parse(childNode, namespaceManager));
             }
+
+            if (cols != null)
+            {
+                ctObj.cols.Add(CT_Cols.Parse(cols, namespaceManager, ctObj.sheetData.lastColumn));
+            }
+
             return ctObj;
         }
 
@@ -280,7 +287,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     this.extLst.Write(sw, "extLst");
                 sw.Write("</worksheet>");
                 sw.Flush();
-            } finally 
+            } finally
             {
                 if (!leaveOpen )
                 {

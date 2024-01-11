@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using System.Xml;
 using NPOI.OpenXml4Net.Util;
 using System.IO;
+using NPOI.SS.Util;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -45,6 +46,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private bool phField;
         private double dyDescentField; //x14ac:dyDescent
 
+        private int lastCellField = -1;
+
         public static CT_Row Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -68,9 +71,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "extLst")
+                {
                     ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+                }
                 else if (childNode.LocalName == "c")
-                    ctObj.c.Add(CT_Cell.Parse(childNode, namespaceManager));
+                {
+                    CT_Cell cell = CT_Cell.Parse(childNode, namespaceManager);
+                    ctObj.c.Add(cell);
+
+                    if (cell.r == null)
+                    {
+                        continue;
+                    }
+
+                    var cellNum = new CellReference(cell.r).Col;
+
+                    if (cellNum > ctObj.lastCellField)
+                    {
+                        ctObj.lastCellField = cellNum;
+                    }
+                }
             }
             return ctObj;
         }
@@ -381,6 +401,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             set
             {
                 this.phField = value;
+            }
+        }
+
+        /// <summary>
+        /// An index of the last non-empty cell in the row
+        /// </summary>
+        public int lastCell
+        {
+            get
+            {
+                return this.lastCellField;
             }
         }
     }
