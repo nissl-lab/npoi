@@ -16,9 +16,12 @@
 ==================================================================== */
 
 using System;
+using System.Collections.Generic;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Dml;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
+using NPOI.SS.UserModel;
+using NPOI.Util;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -120,10 +123,6 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Shape ctShape = ctGroup.AddNewSp();
             ctShape.Set(XSSFSimpleShape.Prototype());
-            ctShape.spPr.xfrm.off.x = anchor.Dx1;
-            ctShape.spPr.xfrm.off.y = anchor.Dy1;
-            ctShape.spPr.xfrm.ext.cx = anchor.Dx2;
-            ctShape.spPr.xfrm.ext.cy = anchor.Dy2;
 
             XSSFTextBox shape = new XSSFTextBox(GetDrawing(), ctShape);
             shape.parent = this;
@@ -144,10 +143,6 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Shape ctShape = ctGroup.AddNewSp();
             ctShape.Set(XSSFSimpleShape.Prototype());
-            ctShape.spPr.xfrm.off.x = anchor.Dx1;
-            ctShape.spPr.xfrm.off.y = anchor.Dy1;
-            ctShape.spPr.xfrm.ext.cx = anchor.Dx2;
-            ctShape.spPr.xfrm.ext.cy = anchor.Dy2;
 
             XSSFSimpleShape shape = new XSSFSimpleShape(GetDrawing(), ctShape);
             shape.parent = (this);
@@ -168,10 +163,6 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Connector ctShape = ctGroup.AddNewCxnSp();
             ctShape.Set(XSSFConnector.Prototype());
-            ctShape.spPr.xfrm.off.x = anchor.Dx1;
-            ctShape.spPr.xfrm.off.y = anchor.Dy1;
-            ctShape.spPr.xfrm.ext.cx = anchor.Dx2;
-            ctShape.spPr.xfrm.ext.cy = anchor.Dy2;
 
             XSSFConnector shape = new XSSFConnector(GetDrawing(), ctShape);
             shape.parent = this;
@@ -188,22 +179,46 @@ namespace NPOI.XSSF.UserModel
          *                     {@link XSSFWorkbook#getAllPictures()} .
          * @return the newly Created picture shape.
          */
-        public XSSFPicture CreatePicture(XSSFClientAnchor anchor, int pictureIndex)
+        public XSSFPicture CreatePicture(XSSFChildAnchor anchor, int pictureIndex)
         {
             PackageRelationship rel = GetDrawing().AddPictureReference(pictureIndex);
 
             CT_Picture ctShape = ctGroup.AddNewPic();
             ctShape.Set(XSSFPicture.Prototype());
-            ctShape.spPr.xfrm.off.x = anchor.Dx1;
-            ctShape.spPr.xfrm.off.y = anchor.Dy1;
-            ctShape.spPr.xfrm.ext.cx = anchor.Dx2;
-            ctShape.spPr.xfrm.ext.cy = anchor.Dy2;
 
             XSSFPicture shape = new XSSFPicture(GetDrawing(), ctShape);
             shape.parent = this;
             shape.anchor = anchor;
             shape.SetPictureReference(rel);
+            shape.GetCTPicture().spPr.xfrm = (anchor.GetCTTransform2D());
             return shape;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Sheet"></param>
+        /// <param name="anchor"></param>
+        /// <param name="coords"></param>
+        /// <returns></returns>
+        public XSSFFreeform CreateFreeform(
+              BuildFreeForm BFF
+        ) {
+            var anchor = new XSSFChildAnchor((int)BFF.Min.x, (int)BFF.Min.y
+                                            , (int)BFF.Max.x, (int)BFF.Max.y);
+            //long shapeId = newShapeId();
+            CT_Shape ctShape = ctGroup.AddNewSp();
+            ctShape.Set(XSSFFreeform.Prototype());
+            //ctShape.nvSpPr.cNvPr.id = (uint) (shapeId);
+            var freeform = new XSSFFreeform(GetDrawing(), ctShape);
+            freeform.parent = this;
+            freeform.anchor = anchor;
+
+            freeform.Build(BFF);
+
+            freeform.GetCTShape().spPr.xfrm = (anchor.GetCTTransform2D());
+
+            return freeform;
         }
 
         public XSSFShapeGroup CreateGroup(XSSFChildGroupAnchor anchor)
@@ -253,7 +268,73 @@ namespace NPOI.XSSF.UserModel
             throw new InvalidOperationException("Not supported for shape group");
         }
 
+        public void AutoFit(SS.UserModel.ISheet Sheet) {
+            var min = new Coords(long.MaxValue, long.MaxValue);
+            var max = new Coords(long.MinValue, long.MinValue);
+
+            AutoFit(ctGroup, min, max);
+
+            ctGroup.grpSpPr.xfrm.off.x      = min.x;
+            ctGroup.grpSpPr.xfrm.off.y      = min.y;
+            ctGroup.grpSpPr.xfrm.ext.cx     = max.x - min.x;
+            ctGroup.grpSpPr.xfrm.ext.cy     = max.y - min.y;
+            ctGroup.grpSpPr.xfrm.chOff.x    = ctGroup.grpSpPr.xfrm.off.x;
+            ctGroup.grpSpPr.xfrm.chOff.y    = ctGroup.grpSpPr.xfrm.off.y;
+            ctGroup.grpSpPr.xfrm.chExt.cx   = ctGroup.grpSpPr.xfrm.ext.cx;
+            ctGroup.grpSpPr.xfrm.chExt.cy   = ctGroup.grpSpPr.xfrm.ext.cy;
+
+            if(parent == null) { // top level group
+                var ac = new XSSFClientAnchor(Sheet, (int)min.x, (int)min.y, (int)max.x, (int)max.y);
+                if(cellanchor is CT_TwoCellAnchor) {
+                    ((CT_TwoCellAnchor) cellanchor).from = ac.From;
+                    ((CT_TwoCellAnchor) cellanchor).to= ac.To;
+                }
+            }
+        }
+
+        private void AutoFit(CT_GroupShape CtGroup, Coords Min, Coords Max) {
+            foreach(var cxn in CtGroup.Connectors) {
+                var cd = new Coords(cxn.spPr.xfrm.off.x, cxn.spPr.xfrm.off.y);
+                Min.Min(cd);
+                Max.Max(cd);
+                cd += new Coords(cxn.spPr.xfrm.ext.cx, cxn.spPr.xfrm.ext.cy);
+                Min.Min(cd);
+                Max.Max(cd);
+            }
+            foreach(var pic in CtGroup.Pictures) {
+                var cd = new Coords(pic.spPr.xfrm.off.x, pic.spPr.xfrm.off.y);
+                Min.Min(cd);
+                Max.Max(cd);
+                cd += new Coords(pic.spPr.xfrm.ext.cx, pic.spPr.xfrm.ext.cy);
+                Min.Min(cd);
+                Max.Max(cd);
+            }
+            foreach(var sp in CtGroup.Shapes) {
+                var cd = new Coords(sp.spPr.xfrm.off.x, sp.spPr.xfrm.off.y);
+                Min.Min(cd);
+                Max.Max(cd);
+                cd += new Coords(sp.spPr.xfrm.ext.cx, sp.spPr.xfrm.ext.cy);
+                Min.Min(cd);
+                Max.Max(cd);
+            }
+            foreach(var gp in CtGroup.Groups) {
+                var min = new Coords(long.MaxValue, long.MaxValue);
+                var max = new Coords(long.MinValue, long.MinValue);
+
+                AutoFit(gp, min, max);
+
+                gp.grpSpPr.xfrm.off.x = min.x;
+                gp.grpSpPr.xfrm.off.y = min.y;
+                gp.grpSpPr.xfrm.ext.cx = max.x - min.x;
+                gp.grpSpPr.xfrm.ext.cy = max.y - min.y;
+                gp.grpSpPr.xfrm.chOff.x = gp.grpSpPr.xfrm.off.x;
+                gp.grpSpPr.xfrm.chOff.y = gp.grpSpPr.xfrm.off.y;
+                gp.grpSpPr.xfrm.chExt.cx = gp.grpSpPr.xfrm.ext.cx;
+                gp.grpSpPr.xfrm.chExt.cy = gp.grpSpPr.xfrm.ext.cy;
+
+                Min.Min(min);
+                Max.Max(max);
+            }
+        }
     }
-
-
 }

@@ -1,13 +1,14 @@
 ﻿using System.IO;
-
+using System.Linq;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 using NUnit.Framework;
 
 namespace TestCases.HSSF.UserModel
 {
     [TestFixture]
-    public class TestCopySheet
+    public class TestHSSFSheetCopy
     {
         [Test]
         public void TestBasicCopySheet()
@@ -123,6 +124,67 @@ namespace TestCases.HSSF.UserModel
                 //2nd sheet copied, make sure we have two images now, because sheet 2 had one image
                 Assert.IsTrue(sanityCheck.GetAllPictures().Count == 2);
             }
+        }
+
+        [Test]
+        public void CopySheetToWorkbookShouldCopyFormulasOver()
+        {
+            HSSFWorkbook srcWorkbook = new HSSFWorkbook();
+            HSSFSheet srcSheet = srcWorkbook.CreateSheet("Sheet1") as HSSFSheet;
+
+            // Set some values
+            IRow row1 = srcSheet.CreateRow((short)0);
+            ICell cell = row1.CreateCell((short)0);
+            cell.SetCellValue(1);
+            ICell cell2 = row1.CreateCell((short)1);
+            cell2.SetCellFormula("A1+1");
+            HSSFWorkbook destWorkbook = new HSSFWorkbook();
+            srcSheet.CopyTo(destWorkbook, srcSheet.SheetName, true, true);
+
+            var destSheet = destWorkbook.GetSheet("Sheet1");
+            Assert.NotNull(destSheet);
+
+            Assert.AreEqual(1, destSheet.GetRow(0)?.GetCell(0).NumericCellValue);
+            Assert.AreEqual("A1+1", destSheet.GetRow(0)?.GetCell(1).CellFormula);
+
+            destSheet.GetRow(0)?.GetCell(0).SetCellValue(10);
+            var evaluator = destWorkbook.GetCreationHelper()
+                                        .CreateFormulaEvaluator();
+
+            var destCell = destSheet.GetRow(0)?.GetCell(1);
+            evaluator.EvaluateFormulaCell(destCell);
+            var destCellValue = evaluator.Evaluate(destCell);
+
+            Assert.AreEqual(11, destCellValue.NumberValue);
+        }
+
+        [Test]
+        public void CopySheetToWorkbookShouldCopyMergedRegionsOver()
+        {
+            HSSFWorkbook srcWorkbook = new HSSFWorkbook();
+            HSSFSheet srcSheet = srcWorkbook.CreateSheet("Sheet1") as HSSFSheet;
+
+            // Set some merged regions 
+            srcSheet.AddMergedRegion(CellRangeAddress.ValueOf("A1:B4"));
+            srcSheet.AddMergedRegion(CellRangeAddress.ValueOf("C1:F40"));
+
+
+            HSSFWorkbook destWorkbook = new HSSFWorkbook();
+            srcSheet.CopyTo(destWorkbook, srcSheet.SheetName, true, true);
+
+            var destSheet = destWorkbook.GetSheet("Sheet1");
+            Assert.NotNull(destSheet);
+            Assert.AreEqual(2, destSheet.MergedRegions.Count);
+
+            Assert.IsTrue(
+                new string[]
+                {
+                    "A1:B4",
+                    "C1:F40"
+                }
+                .SequenceEqual(
+                    destSheet.MergedRegions
+                             .Select(r => r.FormatAsString())));
         }
     }
 }

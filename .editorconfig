@@ -234,11 +234,11 @@ dotnet_naming_rule.namespace_should_be_pascalcase.style = pascalcase
 
 dotnet_naming_symbols.interface.applicable_kinds = interface
 dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.interface.required_modifiers = 
+dotnet_naming_symbols.interface.required_modifiers =
 
 dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum
 dotnet_naming_symbols.types.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.types.required_modifiers = 
+dotnet_naming_symbols.types.required_modifiers =
 
 dotnet_naming_symbols.const.applicable_kinds = property, field
 dotnet_naming_symbols.const.applicable_accessibilities = *
@@ -246,23 +246,23 @@ dotnet_naming_symbols.const.required_modifiers = const
 
 dotnet_naming_symbols.private_properties.applicable_kinds = property, field
 dotnet_naming_symbols.private_properties.applicable_accessibilities = internal, private, protected_internal, private_protected
-dotnet_naming_symbols.private_properties.required_modifiers = 
+dotnet_naming_symbols.private_properties.required_modifiers =
 
 dotnet_naming_symbols.public_members.applicable_kinds = property, field, event, delegate
 dotnet_naming_symbols.public_members.applicable_accessibilities = public, protected, private_protected
-dotnet_naming_symbols.public_members.required_modifiers = 
+dotnet_naming_symbols.public_members.required_modifiers =
 
 dotnet_naming_symbols.parameter.applicable_kinds = parameter
 dotnet_naming_symbols.parameter.applicable_accessibilities = *
-dotnet_naming_symbols.parameter.required_modifiers = 
+dotnet_naming_symbols.parameter.required_modifiers =
 
 dotnet_naming_symbols.method.applicable_kinds = method
 dotnet_naming_symbols.method.applicable_accessibilities = *
-dotnet_naming_symbols.method.required_modifiers = 
+dotnet_naming_symbols.method.required_modifiers =
 
 dotnet_naming_symbols.local.applicable_kinds = local
 dotnet_naming_symbols.local.applicable_accessibilities = local
-dotnet_naming_symbols.local.required_modifiers = 
+dotnet_naming_symbols.local.required_modifiers =
 
 dotnet_naming_symbols.async_method.applicable_kinds = method
 dotnet_naming_symbols.async_method.applicable_accessibilities = *
@@ -270,36 +270,36 @@ dotnet_naming_symbols.async_method.required_modifiers = async
 
 dotnet_naming_symbols.namespace.applicable_kinds = namespace
 dotnet_naming_symbols.namespace.applicable_accessibilities = *
-dotnet_naming_symbols.namespace.required_modifiers = 
+dotnet_naming_symbols.namespace.required_modifiers =
 
 # Naming styles
 
-dotnet_naming_style.pascalcase.required_prefix = 
-dotnet_naming_style.pascalcase.required_suffix = 
-dotnet_naming_style.pascalcase.word_separator = 
+dotnet_naming_style.pascalcase.required_prefix =
+dotnet_naming_style.pascalcase.required_suffix =
+dotnet_naming_style.pascalcase.word_separator =
 dotnet_naming_style.pascalcase.capitalization = pascal_case
 
 dotnet_naming_style.ipascalcase.required_prefix = I
-dotnet_naming_style.ipascalcase.required_suffix = 
-dotnet_naming_style.ipascalcase.word_separator = 
+dotnet_naming_style.ipascalcase.required_suffix =
+dotnet_naming_style.ipascalcase.word_separator =
 dotnet_naming_style.ipascalcase.capitalization = pascal_case
 
-dotnet_naming_style.all_caps.required_prefix = 
-dotnet_naming_style.all_caps.required_suffix = 
+dotnet_naming_style.all_caps.required_prefix =
+dotnet_naming_style.all_caps.required_suffix =
 dotnet_naming_style.all_caps.word_separator = _
 dotnet_naming_style.all_caps.capitalization = all_upper
 
 dotnet_naming_style._camelcase.required_prefix = _
-dotnet_naming_style._camelcase.required_suffix = 
-dotnet_naming_style._camelcase.word_separator = 
+dotnet_naming_style._camelcase.required_suffix =
+dotnet_naming_style._camelcase.word_separator =
 dotnet_naming_style._camelcase.capitalization = camel_case
 
-dotnet_naming_style.camelcase.required_prefix = 
-dotnet_naming_style.camelcase.required_suffix = 
-dotnet_naming_style.camelcase.word_separator = 
+dotnet_naming_style.camelcase.required_prefix =
+dotnet_naming_style.camelcase.required_suffix =
+dotnet_naming_style.camelcase.word_separator =
 dotnet_naming_style.camelcase.capitalization = camel_case
 
-dotnet_naming_style.pascalcaseasync.required_prefix = 
+dotnet_naming_style.pascalcaseasync.required_prefix =
 dotnet_naming_style.pascalcaseasync.required_suffix = Async
-dotnet_naming_style.pascalcaseasync.word_separator = 
+dotnet_naming_style.pascalcaseasync.word_separator =
 dotnet_naming_style.pascalcaseasync.capitalization = pascal_case

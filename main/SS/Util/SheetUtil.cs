@@ -728,7 +728,7 @@ namespace NPOI.SS.Util
         /// <returns></returns>
         /// <exception cref="FontException">Will throw this if no font are 
         /// found by SixLabors in the current environment.</exception>
-        internal static Font IFont2Font(IFont font1)
+        public static Font IFont2Font(IFont font1)
         {
             FontStyle style = FontStyle.Regular;
             if (font1.IsBold)
