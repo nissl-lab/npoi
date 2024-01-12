@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-	
+
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -21,13 +21,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Remove="XSSF\UserModel\presetTableStyles.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<EmbeddedResource Include="Resources\presetTableStyles.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="System.Security.Cryptography.Xml" Version="[6.0.1]" />
+		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="[6.0.3]" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<ProjectReference Include="..\main\NPOI.Multitarget.csproj" />
 		<ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Multitarget.csproj" />
@@ -37,5 +42,5 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
-	
+
 </Project>

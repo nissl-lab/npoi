@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-	
+
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -10,16 +10,13 @@
 		<OutputPath>../solution/$(Configuration)/</OutputPath>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
-	
-	<ItemGroup>
-		<ProjectReference Include="..\main\NPOI.Multitarget.csproj" />
-	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\main\NPOI.Multitarget.csproj" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
-	
+
 </Project>
