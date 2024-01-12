@@ -245,10 +245,6 @@ namespace NPOI.XSSF.Util
             {
                 style.SetBottomBorderColor(new XSSFColor(bottomBorderColor));
             }
-            else
-            {
-                style.BottomBorderColor = 0;
-            }
 
             style.DataFormat = GetShort(properties, DATA_FORMAT);
 
@@ -257,19 +253,11 @@ namespace NPOI.XSSF.Util
             {
                 style.SetFillBackgroundColor(new XSSFColor(backgroundColor));
             }
-            else
-            {
-                style.FillBackgroundColor = 0;
-            }
 
             var foregroundColor = StringToByteArray(GetString(properties, FILL_FOREGROUND_COLOR));
             if (foregroundColor != null)
             {
                 style.SetFillForegroundColor(new XSSFColor(foregroundColor));
-            }
-            else
-            {
-                style.FillForegroundColor = 0;
             }
 
             style.FillPattern = GetFillPattern(properties, FILL_PATTERN);
@@ -282,10 +270,6 @@ namespace NPOI.XSSF.Util
             {
                 style.SetLeftBorderColor(new XSSFColor(leftBorderColor));
             }
-            else
-            {
-                style.LeftBorderColor = 0;
-            }
 
             style.IsLocked = GetBoolean(properties, LOCKED);
 
@@ -293,10 +277,6 @@ namespace NPOI.XSSF.Util
             if (rightBorderColor != null)
             {
                 style.SetRightBorderColor(new XSSFColor(rightBorderColor));
-            }
-            else
-            {
-                style.RightBorderColor = 0;
             }
 
             style.Rotation = GetShort(properties, ROTATION);
@@ -306,10 +286,6 @@ namespace NPOI.XSSF.Util
             if (topBorderColor != null)
             {
                 style.SetTopBorderColor(new XSSFColor(topBorderColor));
-            }
-            else
-            {
-                style.TopBorderColor = 0;
             }
 
             style.VerticalAlignment = GetVerticalAlignment(properties, VERTICAL_ALIGNMENT);
