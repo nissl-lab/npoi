@@ -27,6 +27,7 @@ using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel.Helpers;
+using SixLabors.Fonts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -4112,8 +4113,17 @@ namespace NPOI.XSSF.UserModel
                 XSSFRow destRow = (XSSFRow)newSheet.CreateRow(i);
                 if (srcRow != null)
                 {
-                    CopyRow(this, newSheet, srcRow, destRow, styleMap, keepFormulas);
+                    // avoid O(N^2) performance scanning through all regions for each row
+                    // merged regions will be copied after all the rows have been copied
+                    CopyRow(this, newSheet, srcRow, destRow, styleMap, keepFormulas, keepMergedRegion: false);
                 }
+            }
+
+            // Copying merged regions
+            foreach (var srcRegion in this.MergedRegions)
+            {
+                var destRegion = srcRegion.Copy();
+                newSheet.AddMergedRegion(destRegion);
             }
 
             List<CT_Cols> srcCols = worksheet.GetColsList();
@@ -5852,7 +5862,7 @@ namespace NPOI.XSSF.UserModel
             return null;
         }
 
-        private static void CopyRow(XSSFSheet srcSheet, XSSFSheet destSheet, XSSFRow srcRow, XSSFRow destRow, IDictionary<int, ICellStyle> styleMap, bool keepFormulas)
+        private static void CopyRow(XSSFSheet srcSheet, XSSFSheet destSheet, XSSFRow srcRow, XSSFRow destRow, IDictionary<int, ICellStyle> styleMap, bool keepFormulas, bool keepMergedRegion)
         {
             destRow.Height = srcRow.Height;
             if (!srcRow.GetCTRow().IsSetCustomHeight())
@@ -5888,22 +5898,26 @@ namespace NPOI.XSSF.UserModel
                     }
 
                     CopyCell(oldCell, newCell, styleMap, keepFormulas);
-                    CellRangeAddress mergedRegion = srcSheet.GetMergedRegion(
-                        new CellRangeAddress(srcRow.RowNum, srcRow.RowNum,
-                        (short)oldCell.ColumnIndex,
-                        (short)oldCell.ColumnIndex));
-
-                    if (mergedRegion != null)
+                    
+                    if (keepMergedRegion)
                     {
-                        CellRangeAddress newMergedRegion = new CellRangeAddress(
-                            mergedRegion.FirstRow,
-                            mergedRegion.LastRow,
-                            mergedRegion.FirstColumn,
-                            mergedRegion.LastColumn);
+                        CellRangeAddress mergedRegion = srcSheet.GetMergedRegion(
+                            new CellRangeAddress(srcRow.RowNum, srcRow.RowNum,
+                            (short)oldCell.ColumnIndex,
+                            (short)oldCell.ColumnIndex));
 
-                        if (!destSheet.IsMergedRegion(newMergedRegion))
+                        if (mergedRegion != null)
                         {
-                            destSheet.AddMergedRegion(newMergedRegion);
+                            CellRangeAddress newMergedRegion = new CellRangeAddress(
+                                mergedRegion.FirstRow,
+                                mergedRegion.LastRow,
+                                mergedRegion.FirstColumn,
+                                mergedRegion.LastColumn);
+
+                            if (!destSheet.IsMergedRegion(newMergedRegion))
+                            {
+                                destSheet.AddMergedRegion(newMergedRegion);
+                            }
                         }
                     }
                 }
@@ -6192,12 +6206,29 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Width">In EMU</param>
+        public void SetDefaultColWidth(int Width) {
+            IFont   ift = GetWorkbook().GetStylesSource().GetFontAt(0);
+            Font    ft  = SheetUtil.IFont2Font(ift);
+            var     rt  = TextMeasurer.MeasureSize("0", new TextOptions(ft));
+            double  MDW = rt.Width + 1;                                                     //MaximumDigitWidth
+
+            worksheet.sheetFormatPr.defaultColWidth = Width / Units.EMU_PER_PIXEL / MDW;
+            worksheet.cols.Clear();
+        }
+
+        [Obsolete("")]
         public double MaximumDigitWidth
         {
             set;
             get;
         } = 7.0;
 
+        [Obsolete("")]
         public double GetDefaultColWidthInPixel()
         {
             double fontwidth;
@@ -6226,6 +6257,7 @@ namespace NPOI.XSSF.UserModel
             return width_px;
         }
 
+        [Obsolete("")]
         public XSSFClientAnchor CreateClientAnchor(
               int dx1
             , int dy1
@@ -6248,6 +6280,7 @@ namespace NPOI.XSSF.UserModel
             return null;
         }
 
+        [Obsolete("")]
         private CT_Marker EMUtoMarker(int x, int y)
         {
             CT_Marker mkr = new CT_Marker();
@@ -6258,6 +6291,7 @@ namespace NPOI.XSSF.UserModel
             return mkr;
         }
 
+        [Obsolete("")]
         public int EMUtoRowOff(
               int y
             , out int cell
@@ -6283,6 +6317,7 @@ namespace NPOI.XSSF.UserModel
             return -1;
         }
 
+        [Obsolete("")]
         public int EMUtoColOff(
               int x
             , out int cell

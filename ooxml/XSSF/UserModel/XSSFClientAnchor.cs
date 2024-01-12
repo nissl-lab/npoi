@@ -16,8 +16,14 @@
 ==================================================================== */
 
 using System;
+using System.Security.Cryptography;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.SS;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using NPOI.Util;
+using SixLabors.Fonts;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -100,6 +106,97 @@ namespace NPOI.XSSF.UserModel
             cell2.colOff = (dx2);
             cell2.row = (row2);
             cell2.rowOff = (dy2);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Sheet"></param>
+        /// <param name="dx1"></param>
+        /// <param name="dy1"></param>
+        /// <param name="dx2"></param>
+        /// <param name="dy2"></param>
+        public XSSFClientAnchor(
+              ISheet Sheet
+            , int dx1
+            , int dy1
+            , int dx2
+            , int dy2
+        ) : this() {
+            IFont   ift = ((XSSFWorkbook)Sheet.Workbook).GetStylesSource().GetFontAt(0);
+            Font    ft  = SheetUtil.IFont2Font(ift);
+            var     rt  = TextMeasurer.MeasureSize("0", new TextOptions(ft));
+            double  MDW = rt.Width + 1;                                                     //MaximumDigitWidth
+
+            double colwidth;                                                                //default or base column width (in pixel)
+            var width = ((XSSFSheet)Sheet).worksheet.sheetFormatPr.defaultColWidth;         //string length with padding
+            if(width != 0.0) {
+                colwidth = width * MDW;
+            } else {
+                var length = ((XSSFSheet)Sheet).worksheet.sheetFormatPr.baseColWidth;       //string length with out padding
+                var fontwidth = Math.Truncate((length * MDW + 5) / MDW * 256) / 256;
+                var tmp = 256 * fontwidth + Math.Truncate(128 / MDW);
+                colwidth = Math.Truncate((tmp / 256) * MDW) + 3;                            // +3 ???
+            }
+            int _left = Math.Min(dx1, dx2);
+            int _top = Math.Min(dy1, dy2);
+            int _right = Math.Max(dx1, dx2);
+            int _bottom = Math.Max(dy1, dy2);
+
+            cell1.colOff = EMUtoMakerCol(Sheet, MDW, colwidth, _left, cell1);
+            cell1.rowOff = EMUtoMakerRow(Sheet, _top, cell1);
+            cell2.colOff = EMUtoMakerCol(Sheet, MDW, colwidth, _right, cell2);
+            cell2.rowOff = EMUtoMakerRow(Sheet, _bottom, cell2);
+
+            this.left   = Math.Min(dx1, dx2);
+            this.top    = Math.Min(dy1, dy2);
+            this.width  = Math.Abs(dx1 - dx2);
+            this.height = Math.Abs(dy1 - dy2);
+        }
+
+        protected long EMUtoMakerCol(ISheet Sheet, double MDW, double Colwith, int EMU, CT_Marker Mkr) {
+            double width_px;
+            Mkr.colOff = EMU;
+            Mkr.col = 0;
+            for(int iCol = 0; iCol < SpreadsheetVersion.EXCEL2007.MaxColumns; iCol++) {
+                width_px = Colwith;
+                foreach(var cols in ((XSSFSheet)Sheet).worksheet.cols) {
+                    foreach(var col in cols.col) {
+                        if(col.min <= iCol + 1 && iCol + 1 <= col.max) {
+                            width_px = col.width * MDW;
+                            goto lblforbreak;
+                        }
+                    }
+                }
+lblforbreak:
+                int EMUwidth = Units.PixelToEMU((int)Math.Round(width_px, 1));
+                if(Mkr.colOff >= EMUwidth) {
+                    Mkr.colOff -= EMUwidth;
+                    Mkr.col++;
+                } else {
+                    return Mkr.colOff;
+                }
+            }
+            return -1;
+        }
+
+        protected long EMUtoMakerRow(ISheet Sheet, int EMU, CT_Marker Mkr) {
+            Mkr.rowOff = EMU;
+            Mkr.row= 0;
+            for(int iRow = 0; iRow < SpreadsheetVersion.EXCEL2007.MaxRows; iRow++) {
+                double height = ((XSSFSheet) Sheet).DefaultRowHeightInPoints;
+                var row = (XSSFRow)((XSSFSheet) Sheet).GetRow(iRow);
+                if(row != null) {
+                    height = row.HeightInPoints;
+                }
+                if(Mkr.rowOff >= Units.ToEMU(height)) {
+                    Mkr.rowOff -= Units.ToEMU(height);
+                    Mkr.row++;
+                } else {
+                    return Mkr.rowOff;
+                }
+            }
+            return -1;
         }
 
         /**

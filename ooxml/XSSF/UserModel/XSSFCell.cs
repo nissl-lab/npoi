@@ -1392,7 +1392,12 @@ namespace NPOI.XSSF.UserModel
 
         public CellType GetCachedFormulaResultTypeEnum()
         {
-            throw new NotImplementedException();
+            if(!IsFormulaCell)
+            {
+                throw new InvalidOperationException("Only formula cells have cached results");
+            }
+
+            return GetBaseCellType(false);
         }
     }
 }

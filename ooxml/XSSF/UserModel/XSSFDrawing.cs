@@ -315,6 +315,33 @@ namespace NPOI.XSSF.UserModel
             return shape;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Sheet"></param>
+        /// <param name="anchor"></param>
+        /// <param name="coords"></param>
+        /// <returns></returns>
+        public XSSFFreeform CreateFreeform(
+              SS.UserModel.ISheet Sheet
+            , BuildFreeForm BFF
+        ) {
+            var anchor = new XSSFClientAnchor(Sheet, (int)BFF.Min.x, (int)BFF.Min.y
+                                                   , (int)BFF.Max.x, (int)BFF.Max.y);
+            long shapeId = newShapeId();
+            CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
+            CT_Shape ctShape = ctAnchor.AddNewSp();
+            ctShape.Set(XSSFFreeform.Prototype());
+            ctShape.nvSpPr.cNvPr.id = (uint) (shapeId);
+            var freeform = new XSSFFreeform(this, ctShape);
+            freeform.anchor = anchor;
+            freeform.cellanchor = ctAnchor;
+                
+            freeform.Build(BFF);
+
+            return freeform;
+        }
+
         /**
          * Creates a simple shape.  This includes such shapes as lines, rectangles,
          * and ovals.
