@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-	
+
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -11,38 +11,25 @@
 		<OutputPath>../solution/$(Configuration)/</OutputPath>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
-	
+
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\font_metrics.properties" />
 		<EmbeddedResource Include="Resources\functionMetadata.txt" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<PackageReference Include="IronSoftware.System.Drawing" Version="2024.1.1" />
 		<PackageReference Include="Enums.NET" Version="4.0.1" />
 		<PackageReference Include="ExtendedNumerics.BigDecimal" Version="2023.1000.3.328" />
 		<PackageReference Include="MathNet.Numerics.Signed" Version="5.0.0" />
-		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.2" />
-		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.0" />
+		<PackageReference Include="BouncyCastle.Cryptography" Version="2.2.1" />
 		<PackageReference Include="SharpZipLib" Version="1.4.2" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
-	</ItemGroup>
-	
-	<ItemGroup>
-		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-			<_Parameter1>IronXL</_Parameter1>
-		</AssemblyAttribute>
-	</ItemGroup>
-
-	<ItemGroup Condition=" '$(TargetFramework)' != 'net472' ">
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="[6.0.1]" />
-	</ItemGroup>
-
-	<ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
-		<Reference Include="System.Configuration" />
 	</ItemGroup>
 
 </Project>
