@@ -54,7 +54,7 @@ e. Support not only export but also import
 
 f. Real successful cases all over the world
 
-g. [huge amount of basic examples](https://github.com/nissl-lab/npoi-examples)
+g. [huge amount of code examples for you to learn how to use NPOI](https://github.com/nissl-lab/npoi-examples)
 
 h. Works on both Windows and Linux 
 
