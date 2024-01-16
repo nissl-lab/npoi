@@ -191,18 +191,18 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="r">The image.</param>
         /// <returns>the resolution</returns>
-        protected Size GetResolution(Image r)
+        protected SixLabors.ImageSharp.Size GetResolution(Image r)
         {
             //int hdpi = 96, vdpi = 96;
             //double mm2inch = 25.4;
-            return new Size((int)r.Metadata.HorizontalResolution, (int)r.Metadata.VerticalResolution);
+            return new SixLabors.ImageSharp.Size((int)r.Metadata.HorizontalResolution, (int)r.Metadata.VerticalResolution);
         }
 
         /// <summary>
         /// Return the dimension of the embedded image in pixel
         /// </summary>
         /// <returns>image dimension</returns>
-        public Size GetImageDimension()
+        public SixLabors.ImageSharp.Size GetImageDimension()
         {
             InternalWorkbook iwb = (_patriarch.Sheet.Workbook as HSSFWorkbook).Workbook;
             EscherBSERecord bse = iwb.GetBSERecord(PictureIndex);
@@ -213,7 +213,7 @@ namespace NPOI.HSSF.UserModel
             {
                 using (AnyBitmap img = new AnyBitmap(ms))
                 {
-                    return new Size(img.Width, img.Height);
+                    return new SixLabors.ImageSharp.Size(img.Width, img.Height);
                 }
             }
         }
