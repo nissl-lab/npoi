@@ -175,7 +175,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 else if (childNode.LocalName == "extLst")
                     ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "cols")
-                    cols =childNode;
+                    cols = childNode;
                 else if (childNode.LocalName == "conditionalFormatting")
                     ctObj.conditionalFormatting.Add(CT_ConditionalFormatting.Parse(childNode, namespaceManager));
             }
@@ -193,7 +193,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(Stream stream, bool leaveOpen)
         {
             StreamWriter sw = new StreamWriter(stream);
-            try {
+            try
+            {
                 sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
                 sw.Write("<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"");
                 sw.Write(" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac xr xr2 xr3\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\"");
@@ -287,9 +288,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     this.extLst.Write(sw, "extLst");
                 sw.Write("</worksheet>");
                 sw.Flush();
-            } finally
+            }
+            finally
             {
-                if (!leaveOpen )
+                if (!leaveOpen)
                 {
                     sw?.Close();
                 }
@@ -359,7 +361,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_ConditionalFormatting AddNewConditionalFormatting()
         {
-            if (null == conditionalFormattingField) { conditionalFormattingField = new List<CT_ConditionalFormatting>(); }
+            if (null == conditionalFormattingField)
+            { conditionalFormattingField = new List<CT_ConditionalFormatting>(); }
             CT_ConditionalFormatting cf = new CT_ConditionalFormatting();
             this.conditionalFormattingField.Add(cf);
             return cf;
@@ -451,7 +454,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_Cols AddNewCols()
         {
-            if (null == colsField) { colsField = new List<CT_Cols>(); }
+            if (null == colsField)
+            { colsField = new List<CT_Cols>(); }
             CT_Cols newCols = new CT_Cols();
             this.colsField.Add(newCols);
             return newCols;
