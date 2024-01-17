@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPOI.SS;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -87,7 +88,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
         }
 
-        public static CT_Cols Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        public static CT_Cols Parse(XmlNode node, XmlNamespaceManager namespaceManager, int lastColumn)
         {
             if (node == null)
             {
@@ -106,7 +107,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
                     if (ctCol.min != ctCol.max)
                     {
-                        BreakUpCtCol(ctObj, ctCol);
+                        BreakUpCtCol(ctObj, ctCol, lastColumn);
                     }
                     else
                     {
@@ -125,9 +126,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         /// </summary>
         /// <param name="ctObj"></param>
         /// <param name="ctCol"></param>
-        private static void BreakUpCtCol(CT_Cols ctObj, CT_Col ctCol)
+        private static void BreakUpCtCol(CT_Cols ctObj, CT_Col ctCol, int lastColumn)
         {
-            for (int i = (int)ctCol.min; i <= (int)ctCol.max; i++)
+            int max = ctCol.max >= SpreadsheetVersion.EXCEL2007.LastColumnIndex - 1
+                ? lastColumn
+                : (int)ctCol.max;
+
+            for (int i = (int)ctCol.min; i <= max; i++)
             {
                 CT_Col breakOffCtCol = ctCol.Copy();
                 breakOffCtCol.min = (uint)i;
@@ -180,7 +185,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     lastCol.CombineWith(col);
                     continue;
                 }
-                
+
                 combinedCols.Add(lastCol);
                 lastCol = col;
             }
