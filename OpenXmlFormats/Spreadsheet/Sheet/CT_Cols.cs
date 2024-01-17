@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPOI.SS;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -127,9 +128,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         /// <param name="ctCol"></param>
         private static void BreakUpCtCol(CT_Cols ctObj, CT_Col ctCol, int lastColumn)
         {
-            int max = (int)Math.Min(ctCol.max, lastColumn);
+            int max = ctCol.max >= SpreadsheetVersion.EXCEL2007.LastColumnIndex - 1
+                ? lastColumn
+                : (int)ctCol.max;
 
-            for (int i = (int)ctCol.min; i <= (int)max; i++)
+            for (int i = (int)ctCol.min; i <= max; i++)
             {
                 CT_Col breakOffCtCol = ctCol.Copy();
                 breakOffCtCol.min = (uint)i;
