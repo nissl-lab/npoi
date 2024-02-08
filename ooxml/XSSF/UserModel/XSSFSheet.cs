@@ -1606,6 +1606,11 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
+
+        IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
+        {
+            return _rows.Values.GetEnumerator();
+        }
         #endregion
 
         #region Public methods
