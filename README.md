@@ -15,11 +15,9 @@ This project is the .NET version of Apache POI project. With NPOI, you can read/
 
 About Donation 关于捐款
 ============
-Since Github sponsorship is not supported in China so far, it's hard to get donation from Github channel. I'm strictly limiting my contribution time on NPOI these 2 years although it looks to be still maintained well. 
+If you profits/benefits from NPOI and you believe it's useful, please [sponsor me via Github Sponsor](https://github.com/sponsors/tonyqus) or [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
 
-If you profits/benefits from NPOI and you believe it's useful, please [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
-
-如果您从NPOI受益或实现盈利，请[给该项目捐款](https://github.com/nissl-lab/npoi/discussions/923)，谢谢！
+如果您从NPOI受益或实现盈利，请通过[Github Sponsor赞助我](https://github.com/sponsors/tonyqus)或[给该项目捐款](https://github.com/nissl-lab/npoi/discussions/923)，谢谢！
 
 
 Telegram User Group
@@ -54,7 +52,7 @@ e. Support not only export but also import
 
 f. Real successful cases all over the world
 
-g. [huge amount of basic examples](https://github.com/nissl-lab/npoi-examples)
+g. [huge amount of code examples for you to learn how to use NPOI](https://github.com/nissl-lab/npoi-examples)
 
 h. Works on both Windows and Linux 
 
