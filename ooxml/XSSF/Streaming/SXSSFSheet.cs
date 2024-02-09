@@ -500,9 +500,9 @@ namespace NPOI.XSSF.Streaming
             _sh.AddValidationData(dataValidation);
         }
 
-        public void RemoveValidationData(IDataValidation dataValidation)
+        public void RemoveDataValidation(IDataValidation dataValidation)
         {
-            _sh.RemoveValidationData(dataValidation);
+            _sh.RemoveDataValidation(dataValidation);
         }
         
         /**

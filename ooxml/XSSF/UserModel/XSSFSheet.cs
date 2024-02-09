@@ -3328,7 +3328,7 @@ namespace NPOI.XSSF.UserModel
             dataValidations.count = (uint)currentCount + 1;
         }
 
-        public void RemoveValidationData(IDataValidation dataValidation)
+        public void RemoveDataValidation(IDataValidation dataValidation)
         {
             XSSFDataValidation xssfDataValidation = (XSSFDataValidation)dataValidation;
             CT_DataValidations dataValidations = worksheet.dataValidations;

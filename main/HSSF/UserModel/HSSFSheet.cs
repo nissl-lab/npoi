@@ -548,7 +548,7 @@ namespace NPOI.HSSF.UserModel
             dvt.AddDataValidation(dvRecord);
         }
 
-        public void RemoveValidationData(IDataValidation dataValidation)
+        public void RemoveDataValidation(IDataValidation dataValidation)
         {
             if (dataValidation == null)
             {

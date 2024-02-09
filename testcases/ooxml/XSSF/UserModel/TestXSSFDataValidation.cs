@@ -373,7 +373,7 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
-        public void TestRemoveValidationData()
+        public void TestRemoveDataValidation()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             try {
@@ -389,7 +389,7 @@ namespace TestCases.XSSF.UserModel
 
                 Assert.AreEqual(1, sheet.GetDataValidations().Count);
 
-                sheet.RemoveValidationData(dataValidation);
+                sheet.RemoveDataValidation(dataValidation);
 
                 Assert.AreEqual(0, sheet.GetDataValidations().Count);
             }
