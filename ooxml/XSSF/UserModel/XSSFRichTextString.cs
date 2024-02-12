@@ -146,19 +146,20 @@ namespace NPOI.XSSF.UserModel
             ApplyFont(startIndex, endIndex, font);
         }
         internal void ApplyFont(SortedDictionary<int, CT_RPrElt> formats, int startIndex, int endIndex, CT_RPrElt fmt) 
-        {
-            
+        {   
             // delete format runs that fit between startIndex and endIndex
             // runs intersecting startIndex and endIndex remain
-            //int runStartIdx = 0;
+            int runStartIdx = 0;
             List<int> toRemoveKeys=new List<int>();
             for (SortedDictionary<int, CT_RPrElt>.KeyCollection.Enumerator it = formats.Keys.GetEnumerator(); it.MoveNext(); )
             {
-                int runIdx = it.Current;
-                if (runIdx >= startIndex && runIdx < endIndex)
+                int runEndIdx = it.Current;
+                if (runStartIdx  >= startIndex && runEndIdx < endIndex)
                 {
-                    toRemoveKeys.Add(runIdx);
+                    toRemoveKeys.Add(runEndIdx);
                 }
+
+                runStartIdx = runEndIdx;
             }
             foreach (int key in toRemoveKeys)
             {
