@@ -23,7 +23,6 @@ using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using SixLabors.ImageSharp;
 using System;
-using System.IO;
 
 namespace TestCases.XSSF.UserModel
 {
@@ -78,7 +77,7 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(false, rt.HasFormatting());
 
             XSSFFont font1 = new XSSFFont();
-            font1.IsBold = (true);
+            font1.IsBold = true;
 
             rt.ApplyFont(2, 5, font1);
             Assert.AreEqual(true, rt.HasFormatting());
