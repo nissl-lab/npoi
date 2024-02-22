@@ -28,8 +28,6 @@ partial class Build : NukeBuild
     [Solution] Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
 
-    static AbsolutePath SourceDirectory => RootDirectory / "src";
-
     static AbsolutePath ArtifactsDirectory => RootDirectory / "publish";
 
     string TagVersion => GitRepository.Tags.SingleOrDefault(x => x.StartsWith("v"))?[1..];
@@ -44,8 +42,6 @@ partial class Build : NukeBuild
     bool IsPublishBuild => !string.IsNullOrWhiteSpace(PublishVersion);
 
     string VersionSuffix;
-
-    static bool IsRunningOnWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
     [Secret]
     [Parameter("GitHub API token")]
@@ -101,11 +97,11 @@ partial class Build : NukeBuild
         .Executes(() =>
         {
             DotNetBuild(_ =>_
-                .EnableNoRestore()
+                .SetNoRestore(SucceededTargets.Contains(Restore))
                 .SetConfiguration(Configuration)
                 .SetDeterministic(IsServerBuild)
                 .SetContinuousIntegrationBuild(IsServerBuild)
-                .SetVerbosity(DotNetVerbosity.Minimal)
+                .SetVerbosity(DotNetVerbosity.minimal)
                 // obsolete missing XML documentation comment, XML comment on not valid language element, XML comment has badly formed XML, no matching tag in XML comment
                 // need to use escaped separator in order for this to work
                 .AddProperty("NoWarn", string.Join("%3B", new [] { 169, 612, 618, 1591, 1587, 1570, 1572, 1573, 1574 }))
