@@ -89,7 +89,7 @@ namespace NPOI.SS.UserModel
         private HSSFColor hssfColor;
         
 
-        IndexedColors(int idx, HSSFColor color)
+        public IndexedColors(int idx, HSSFColor color)
         {
             index = idx;
             this.hssfColor = color;
@@ -261,6 +261,17 @@ namespace NPOI.SS.UserModel
             if(mappingIndex.ContainsKey(index))
                 return mappingIndex[index];
             throw new ArgumentException("Illegal IndexedColor index: " + index);
+        }
+
+        public static void AddCustomColor(string colorName, IndexedColors color)
+        {
+            if (mappingName.ContainsKey(colorName.ToLower()))
+                throw new ArgumentException("Illegal IndexedColor name, already existed: " + colorName);
+            if (mappingIndex.ContainsKey(color.index))
+                throw new ArgumentException("Illegal IndexedColor index, already existed: " + color.index);
+
+            mappingName.Add(colorName.ToLower(),  color);
+            mappingIndex.Add(color.index, color);
         }
 
         /**
