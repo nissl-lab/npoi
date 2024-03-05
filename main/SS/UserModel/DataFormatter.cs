@@ -191,7 +191,9 @@ namespace NPOI.SS.UserModel
         /** stores if the locale should change according to {@link LocaleUtil#getUserLocale()} */
         private readonly bool localeIsAdapting;
 
-        /** whether years in dates should be displayed with 4 digits even if the formatString specifies only 2 **/
+        /// <summary>
+        /// Whether years in dates should be displayed with 4 digits even if the formatString specifies only 2
+        /// </summary>
         public bool Use4DigitYearsInAllDateFormats { get; set; } = false;
 
         /// <summary>
@@ -426,6 +428,7 @@ namespace NPOI.SS.UserModel
 
             // Strip off the locale information, we use an instance-wide locale for everything
             MatchCollection matches = Regex.Matches(formatStr, localePatternGroup);
+
             foreach (Match match in matches)
             {
                 string matchedstring = match.Value;
@@ -521,8 +524,8 @@ namespace NPOI.SS.UserModel
                     
                     if(ypos4 == ypos2)
                     {
-                        string part1 = format.Substring(0, ypos2 + 4);
-                        string part2 = format.Substring(ypos2 + 4);
+                        string part1 = format[..(ypos2 + 4)];
+                        string part2 = format[(ypos2 + 4)..];
                         return part1 + AdjustTo4DigitYearsIfConfigured(part2);
                     }
                     else if(ypos3 == ypos2)
@@ -531,8 +534,8 @@ namespace NPOI.SS.UserModel
                     }
                     else
                     {
-                        string part1 = format.Substring(0, ypos2 + 2);
-                        string part2 = format.Substring(ypos2 + 2);
+                        string part1 = format[..(ypos2 + 2)];
+                        string part2 = format[(ypos2 + 2)..];
                         
                         return part1 + "yy" + AdjustTo4DigitYearsIfConfigured(part2);
                     }
