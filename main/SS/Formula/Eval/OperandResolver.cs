@@ -30,9 +30,9 @@ namespace NPOI.SS.Formula.Eval
     {
         // Based on regular expression defined in JavaDoc at {@link java.lang.Double#valueOf}
         // modified to remove support for NaN, Infinity, Hexadecimal support and floating type suffixes
-        private const String Digits = "\\d+";
-        private const String Exp = "[eE][+-]?" + Digits;
-        private const String fpRegex =
+        private const string Digits = "\\d+";
+        private const string Exp = "[eE][+-]?" + Digits;
+        private const string fpRegex =
                     ("[\\x00-\\x20]*" +
                      "[+-]?(" +
                      "(((" + Digits + "(\\.)?(" + Digits + "?)(" + Exp + ")?)|" +
@@ -58,21 +58,21 @@ namespace NPOI.SS.Formula.Eval
         public static ValueEval GetSingleValue(ValueEval arg, int srcCellRow, int srcCellCol)
         {
             ValueEval result;
-            if (arg is RefEval)
+            if (arg is RefEval rev)
             {
-                result = ChooseSingleElementFromRef((RefEval)arg);
+                result = ChooseSingleElementFromRef(rev);
             }
-            else if (arg is AreaEval)
+            else if (arg is AreaEval aev)
             {
-                result = ChooseSingleElementFromArea((AreaEval)arg, srcCellRow, srcCellCol);
+                result = ChooseSingleElementFromArea(aev, srcCellRow, srcCellCol);
             }
             else
             {
                 result = arg;
             }
-            if (result is ErrorEval)
+            if (result is ErrorEval eva)
             {
-                throw new EvaluationException((ErrorEval)result);
+                throw new EvaluationException(eva);
             }
             return result;
         }
@@ -126,9 +126,9 @@ namespace NPOI.SS.Formula.Eval
         {
             ValueEval result = ChooseSingleElementFromAreaInternal(ae, srcCellRow, srcCellCol);
             
-            if (result is ErrorEval)
+            if (result is ErrorEval eva)
             {
-                throw new EvaluationException((ErrorEval)result);
+                throw new EvaluationException(eva);
 
             }
             return result;
@@ -236,14 +236,14 @@ namespace NPOI.SS.Formula.Eval
             {
                 return 0.0;
             }
-            if (ev is NumericValueEval)
+            if (ev is NumericValueEval nve)
             {
                 // this also handles bools
-                return ((NumericValueEval)ev).NumberValue;
+                return nve.NumberValue;
             }
-            if (ev is StringEval)
+            if (ev is StringEval sev)
             {
-                double dd = ParseDouble(((StringEval)ev).StringValue);
+                double dd = ParseDouble(sev.StringValue);
                 if (double.IsNaN(dd))
                 {
                     throw EvaluationException.InvalidValue();
@@ -269,64 +269,29 @@ namespace NPOI.SS.Formula.Eval
          * @param text
          * @return <c>null</c> if the specified text cannot be Parsed as a number
          */
-        public static double ParseDouble(String pText)
+        public static double ParseDouble(string pText)
         {
-            //if (Regex.Match(fpRegex, pText).Success)
-                try
-                {
-                    double ret = double.Parse(pText, CultureInfo.CurrentCulture);
-                    if (double.IsInfinity(ret))
-                        return double.NaN;
-                    return ret;
-                }
-                catch
-                {
-                    return Double.NaN;
-                }
-            //else
+            try
             {
-                //return Double.NaN;
+                double ret = double.Parse(pText, CultureInfo.CurrentCulture);
+                if (double.IsInfinity(ret))
+                    return double.NaN;
+                return ret;
             }
-            //String text = pText.Trim();
-            //if (text.Length < 1)
-            //{
-            //    return double.NaN;
-            //}
-            //bool isPositive = true;
-            //if (text[0] == '-')
-            //{
-            //    isPositive = false;
-            //    text = text.Substring(1).Trim();
-            //}
-
-            //if (text.Length == 0 || !Char.IsDigit(text[0]))
-            //{
-            //    // avoid using Exception to tell when string is not a number
-            //    return double.NaN;
-            //}
-            //// TODO - support notation like '1E3' (==1000)
-
-            //double val;
-            //try
-            //{
-            //    val = double.Parse(text);
-            //}
-            //catch
-            //{
-            //    return double.NaN;
-            //}
-            //return isPositive ? +val : -val;
+            catch
+            {
+                return double.NaN;
+            }
         }
 
         /**
          * @param ve must be a <c>NumberEval</c>, <c>StringEval</c>, <c>BoolEval</c>, or <c>BlankEval</c>
          * @return the Converted string value. never <c>null</c>
          */
-        public static String CoerceValueToString(ValueEval ve)
+        public static string CoerceValueToString(ValueEval ve)
         {
-            if (ve is StringValueEval)
+            if (ve is StringValueEval sve)
             {
-                StringValueEval sve = (StringValueEval)ve;
                 return sve.StringValue;
             }
 
@@ -336,11 +301,12 @@ namespace NPOI.SS.Formula.Eval
             }
             throw new ArgumentException("Unexpected eval class (" + ve.GetType().Name + ")");
         }
+
         /**
- * @return <c>null</c> to represent blank values
- * @throws EvaluationException if ve is an ErrorEval, or if a string value cannot be converted
- */
-        public static Boolean? CoerceValueToBoolean(ValueEval ve, bool stringsAreBlanks)
+        * @return <c>null</c> to represent blank values
+        * @throws EvaluationException if ve is an ErrorEval, or if a string value cannot be converted
+        */
+        public static bool? CoerceValueToBoolean(ValueEval ve, bool stringsAreBlanks)
         {
 
             if (ve == null || ve == BlankEval.instance)
@@ -348,18 +314,18 @@ namespace NPOI.SS.Formula.Eval
                 // TODO - remove 've == null' condition once AreaEval is fixed
                 return null;
             }
-            if (ve is BoolEval)
+            if (ve is BoolEval be)
             {
-                return ((BoolEval)ve).BooleanValue;
+                return be.BooleanValue;
             }
 
-            if (ve is StringEval)
+            if (ve is StringEval se)
             {
                 if (stringsAreBlanks)
                 {
                     return null;
                 }
-                String str = ((StringEval)ve).StringValue;
+                string str = se.StringValue;
                 if (str.Equals("true", StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
@@ -372,32 +338,31 @@ namespace NPOI.SS.Formula.Eval
                 throw new EvaluationException(ErrorEval.VALUE_INVALID);
             }
 
-            if (ve is NumericValueEval)
+            if(ve is NumericValueEval ne)
             {
-                NumericValueEval ne = (NumericValueEval)ve;
                 double d = ne.NumberValue;
-                if (Double.IsNaN(d))
+                if(double.IsNaN(d))
                 {
                     throw new EvaluationException(ErrorEval.VALUE_INVALID);
                 }
                 return d != 0;
             }
-            if (ve is ErrorEval)
+            if (ve is ErrorEval ee)
             {
-                throw new EvaluationException((ErrorEval)ve);
+                throw new EvaluationException(ee);
             }
             throw new InvalidOperationException("Unexpected eval (" + ve.GetType().Name + ")");
         }
-        /**
-  * Retrieves a single value from an area evaluation utilizing the 2D indices of the cell
-  * within its own area reference to index the value in the area evaluation.
-  *
-  * @param ae area reference after evaluation
-  * @param cell the source cell of the formula that contains its 2D indices
-  * @return a <tt>NumberEval</tt>, <tt>StringEval</tt>, <tt>BoolEval</tt> or <tt>BlankEval</tt>. or <tt>ErrorEval<tt>
-  * Never <code>null</code>.
-  */
 
+        /**
+        * Retrieves a single value from an area evaluation utilizing the 2D indices of the cell
+        * within its own area reference to index the value in the area evaluation.
+        *
+        * @param ae area reference after evaluation
+        * @param cell the source cell of the formula that contains its 2D indices
+        * @return a <tt>NumberEval</tt>, <tt>StringEval</tt>, <tt>BoolEval</tt> or <tt>BlankEval</tt>. or <tt>ErrorEval<tt>
+        * Never <code>null</code>.
+        */
         public static ValueEval GetElementFromArray(AreaEval ae, IEvaluationCell cell)
         {
             CellRangeAddress range = cell.ArrayFormulaRange;

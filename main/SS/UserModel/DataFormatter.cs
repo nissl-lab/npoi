@@ -881,7 +881,7 @@ namespace NPOI.SS.UserModel
          *  FormatBase index and string, according to excel style rules.
          * @see #FormatCellValue(Cell)
          */
-        public String FormatRawCellContents(double value, int formatIndex, String formatString)
+        public string FormatRawCellContents(double value, int formatIndex, string formatString)
         {
             return FormatRawCellContents(value, formatIndex, formatString, false);
         }
@@ -889,7 +889,7 @@ namespace NPOI.SS.UserModel
          * Performs Excel-style date formatting, using the
          *  supplied Date and format
          */
-        private String PerformDateFormatting(DateTime d, FormatBase dateFormat)
+        private string PerformDateFormatting(DateTime d, FormatBase dateFormat)
         {
             if (dateFormat != null)
             {
@@ -902,7 +902,7 @@ namespace NPOI.SS.UserModel
      *  format index and string, according to excel style rules.
      * @see #formatCellValue(Cell)
      */
-        public String FormatRawCellContents(double value, int formatIndex, String formatString, bool use1904Windowing)
+        public string FormatRawCellContents(double value, int formatIndex, string formatString, bool use1904Windowing)
         {
             // Is it a date?
             if (DateUtil.IsADateFormat(formatIndex, formatString))
@@ -911,10 +911,10 @@ namespace NPOI.SS.UserModel
                 {
                     FormatBase dateFormat = GetFormat(value, formatIndex, formatString);
 
-                    if (dateFormat is ExcelStyleDateFormatter)
+                    if (dateFormat is ExcelStyleDateFormatter excelStyleDateFormat)
                     {
                         // Hint about the raw excel value
-                        ((ExcelStyleDateFormatter)dateFormat).SetDateToBeFormatted(value);
+                        excelStyleDateFormat.SetDateToBeFormatted(value);
                     }
 
                     DateTime d = DateUtil.GetJavaDate(value, use1904Windowing);
@@ -938,18 +938,23 @@ namespace NPOI.SS.UserModel
             // previous versions). However, if the value contains E notation, this
             // would expand the values, which we do not want, so revert to
             // original method.
-            String result;
-            String textValue = NumberToTextConverter.ToText(value);
+            string result;
+            string textValue = NumberToTextConverter.ToText(value);
             if (textValue.IndexOf('E') > -1)
             {
                 result = numberFormat.Format(value);
             }
             else
             {
-                result = numberFormat.Format(decimal.Parse(textValue));
+                var parsed = decimal.Parse(textValue, currentCulture);
+                result = numberFormat.Format(parsed);
             }
-            // Complete scientific notation by adding the missing +.
-            if (result.Contains("E") && !result.Contains("E-"))
+
+            // If they requested a non-abbreviated Scientific format,
+            //  and there's an E## (but not E-##), add the missing '+' for E+##
+            string fslc = formatString.ToLower(currentCulture);
+            if((fslc.Contains("general") || fslc.Contains("e+0")) &&
+                result.Contains("E") && !result.Contains("E-"))
             {
                 result = result.Replace("E", "E+");
             }
