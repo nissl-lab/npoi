@@ -77,7 +77,7 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(false, rt.HasFormatting());
 
             XSSFFont font1 = new XSSFFont();
-            font1.IsBold = (true);
+            font1.IsBold = true;
 
             rt.ApplyFont(2, 5, font1);
             Assert.AreEqual(true, rt.HasFormatting());
@@ -594,6 +594,31 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(font, rts.GetFontAtIndex(s2 - 1));
             //Assert.AreEqual("<xml-fragment/>", rts.GetFontAtIndex(s3 - 1).ToString());
             Assert.AreEqual("<font></font>", rts.GetFontAtIndex(s3 - 1).ToString());
+        }
+
+        [Test]
+        public void TestMultipleFonts()
+        {
+            var f1 = new XSSFFont();
+            f1.FontName = "Arial";
+            f1.FontHeight = 18 * 20;
+            f1.IsBold = false;
+            f1.Color = IndexedColors.Red.Index;
+
+            var f2 = new XSSFFont();
+            f2.FontName = "Arial";
+            f2.FontHeight = 18 * 20;
+            f2.IsBold = true;
+            f2.Color = IndexedColors.Blue.Index;
+
+            XSSFRichTextString s = new XSSFRichTextString("0123");
+            s.ApplyFont(0, 2, f1);
+            s.ApplyFont(2, 4, f2);
+
+            Assert.AreEqual(s.GetFontAtIndex(0).Color, IndexedColors.Red.Index);
+            Assert.AreEqual(s.GetFontAtIndex(1).Color, IndexedColors.Red.Index);
+            Assert.AreEqual(s.GetFontAtIndex(2).Color, IndexedColors.Blue.Index);
+            Assert.AreEqual(s.GetFontAtIndex(3).Color, IndexedColors.Blue.Index);
         }
     }
 }
