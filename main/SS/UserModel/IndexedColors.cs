@@ -191,7 +191,7 @@ namespace NPOI.SS.UserModel
             mappingName.Add("darkteal", IndexedColors.DarkTeal);
             mappingName.Add("seagreen", IndexedColors.SeaGreen);
             mappingName.Add("darkgreen", IndexedColors.DarkGreen);
-            mappingName.Add("olivergreen", IndexedColors.OliveGreen);
+            mappingName.Add("olivegreen", IndexedColors.OliveGreen);
             mappingName.Add("brown", IndexedColors.Brown);
             mappingName.Add("plum", IndexedColors.Plum);
             mappingName.Add("indigo", IndexedColors.Indigo);
