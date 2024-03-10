@@ -9,7 +9,7 @@
     <DebugType>portable</DebugType>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 
-    <VersionPrefix>2.6.1</VersionPrefix>
+    <VersionPrefix>2.7.0</VersionPrefix>
     <Title>NPOI</Title>
     <Authors>Tony Qu,NPOI Contributors</Authors>
     <Owners>Nissl Lab</Owners>
