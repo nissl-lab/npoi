@@ -287,5 +287,14 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void GetEndCellReferenceFromSingleCellTable()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("SingleCellTable.xlsx");
+            XSSFTable table = wb.GetTable("Table3");
+            Assert.AreEqual(new CellReference("A2"), table.EndCellReference);
+            wb.Close();
+        }
+
     }
 }
