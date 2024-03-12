@@ -1474,6 +1474,13 @@ namespace TestCases.HSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        [Ignore("poi")]
+        public override void CreateDrawing()
+        {
+            base.CreateDrawing();
+            // the dimensions for this image are different than for XSSF and SXSSF
+        }
 
         [Test]
         public void TestBug854()
