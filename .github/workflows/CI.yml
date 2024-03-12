@@ -22,7 +22,7 @@ on:
       - main
       - master
       - 'release*'
-      - 'poi*'
+      - 'poi/*'
 
 jobs:
   windows-latest:
