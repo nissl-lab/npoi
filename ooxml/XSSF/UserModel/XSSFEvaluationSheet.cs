@@ -49,10 +49,8 @@ namespace NPOI.XSSF.UserModel
             _cellCache = null;
         }
 
-        public XSSFSheet GetXSSFSheet()
-        {
-            return _xs;
-        }
+        public XSSFSheet XSSFSheet => _xs;
+        
         public IEvaluationCell GetCell(int rowIndex, int columnIndex)
         {
             // cache for performance: ~30% speedup due to caching

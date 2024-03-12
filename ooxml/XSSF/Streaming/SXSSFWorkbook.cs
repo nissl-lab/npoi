@@ -386,7 +386,7 @@ namespace NPOI.XSSF.Streaming
         }
 
 
-        private XSSFSheet GetXSSFSheet(SXSSFSheet sheet)
+        public XSSFSheet GetXSSFSheet(SXSSFSheet sheet)
         {
             if (sheet != null && _sxFromXHash.ContainsKey(sheet))
                 return _sxFromXHash[sheet];
@@ -394,7 +394,7 @@ namespace NPOI.XSSF.Streaming
                 return null;
         }
 
-        private SXSSFSheet GetSXSSFSheet(XSSFSheet sheet)
+        public SXSSFSheet GetSXSSFSheet(XSSFSheet sheet)
         {
             if (sheet != null && _xFromSxHash.ContainsKey(sheet))
                 return _xFromSxHash[sheet];

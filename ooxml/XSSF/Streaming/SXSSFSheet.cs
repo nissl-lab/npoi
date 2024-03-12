@@ -652,7 +652,7 @@ namespace NPOI.XSSF.Streaming
 
         public IDrawing CreateDrawingPatriarch()
         {
-            return _sh.CreateDrawingPatriarch();
+            return new SXSSFDrawing((SXSSFWorkbook)Workbook, (XSSFDrawing)_sh.CreateDrawingPatriarch());
         }
 
         public void CreateFreezePane(int colSplit, int rowSplit)

@@ -132,8 +132,12 @@ namespace TestCases.HSSF.Model
 
             HSSFPatriarch drawing = sheet.CreateDrawingPatriarch() as HSSFPatriarch;
             HSSFClientAnchor anchor = new HSSFClientAnchor(10, 10, 50, 50, (short)2, 2, (short)4, 4);
-            anchor.AnchorType = (AnchorType)(2);
-            Assert.AreEqual(anchor.AnchorType, 2);
+            anchor.AnchorType = AnchorType.MoveDontResize;
+            Assert.AreEqual(AnchorType.MoveDontResize, anchor.AnchorType);
+
+            //noinspection deprecation
+            //anchor.AnchorType = (AnchorType.MoveDontResize.value);
+            //Assert.AreEqual(AnchorType.MoveDontResize, anchor.AnchorType);
 
             HSSFSimpleShape rectangle = drawing.CreateSimpleShape(anchor);
             rectangle.ShapeType=(HSSFSimpleShape.OBJECT_TYPE_RECTANGLE);
@@ -149,8 +153,16 @@ namespace TestCases.HSSF.Model
             rectangle.WrapText=(HSSFSimpleShape.WRAP_NONE);
             rectangle.String=(new HSSFRichTextString("teeeest"));
             Assert.AreEqual(rectangle.LineStyleColor, 1111);
-            Assert.AreEqual(((EscherSimpleProperty)((EscherOptRecord)HSSFTestHelper.GetEscherContainer(rectangle).GetChildById(EscherOptRecord.RECORD_ID))
-                    .Lookup(EscherProperties.TEXT__TEXTID)).PropertyValue, "teeeest".GetHashCode());
+            //Assert.AreEqual(((EscherSimpleProperty)((EscherOptRecord)HSSFTestHelper.GetEscherContainer(rectangle).GetChildById(EscherOptRecord.RECORD_ID))
+            //        .Lookup(EscherProperties.TEXT__TEXTID)).PropertyValue, "teeeest".GetHashCode());
+            EscherContainerRecord escherContainer = HSSFTestHelper.GetEscherContainer(rectangle);
+            Assert.IsNotNull(escherContainer);
+            EscherRecord childById = escherContainer.GetChildById(EscherOptRecord.RECORD_ID);
+            Assert.IsNotNull(childById);
+            EscherProperty lookup = ((EscherOptRecord)childById).Lookup(EscherProperties.TEXT__TEXTID);
+            Assert.IsNotNull(lookup);
+            Assert.AreEqual("teeeest".GetHashCode(), ((EscherSimpleProperty)lookup).PropertyValue);
+
             Assert.AreEqual(rectangle.IsNoFill, true);
             Assert.AreEqual(rectangle.WrapText, HSSFSimpleShape.WRAP_NONE);
             Assert.AreEqual(rectangle.String.String, "teeeest");

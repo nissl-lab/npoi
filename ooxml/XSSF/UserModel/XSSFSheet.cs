@@ -2484,7 +2484,7 @@ namespace NPOI.XSSF.UserModel
             {
                 foreach (CellAddress ref1 in GetCellComments().Keys)
                 {
-                    if (ref1.Row == idx)
+                    if (ref1.Row == row.RowNum)
                     {
                         sheetComments.RemoveComment(ref1);
                     }

@@ -99,6 +99,16 @@ namespace NPOI.SS.Util
         }
 
         /**
+         * Create a new CellAddress object
+         * 
+         * @param address a CellAddress
+         */
+        public CellAddress(CellAddress address)
+            : this(address.Row, address.Column)
+        {
+        }
+
+        /**
          * Create a new CellAddress object.
          *
          * @param cell the Cell to Get the location of
