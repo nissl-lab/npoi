@@ -632,6 +632,7 @@ namespace NPOI.HSSF.UserModel
                 if (value == -1)
                 {
                     row.Height = unchecked(((short)(0xFF | 0x8000)));
+                    row.BadFontHeight = (false);
                 }
                 else
                 {
