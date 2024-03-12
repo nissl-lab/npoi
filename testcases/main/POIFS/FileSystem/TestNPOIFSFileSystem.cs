@@ -110,10 +110,15 @@ namespace TestCases.POIFS.FileSystem
         {
             FileInfo file = TempFile.CreateTempFile("TestPOIFS", ".ole2");
             using (FileStream fout = file.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            try
             {
                 original.WriteFileSystem(fout);
-                original.Close();
             }
+            finally
+            {
+                fout.Close();
+            }
+            original.Close();
             return new NPOIFSFileSystem(file, false);
         }
 
