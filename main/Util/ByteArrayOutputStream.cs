@@ -33,5 +33,9 @@ namespace NPOI.Util
         {
             return this.ToArray();
         }
+        public string ToString(string encoding)
+        {
+            return Encoding.GetEncoding(encoding).GetString(this.ToArray());
+        }
     }
 }

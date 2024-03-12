@@ -25,6 +25,7 @@ namespace NPOI.XWPF.Model
     using NPOI.OpenXmlFormats.Vml;
     using NPOI.OpenXmlFormats.Vml.Office;
     using System.Diagnostics;
+    using static System.Net.WebRequestMethods;
 
     /**
      * A .docx file can have no headers/footers, the same header/footer
@@ -438,12 +439,23 @@ namespace NPOI.XWPF.Model
         private XWPFParagraph GetWatermarkParagraph(String text, int idx)
         {
             CT_P p = new CT_P();
-            byte[] rsidr = doc.Document.body.GetPArray(0).rsidR;
-            byte[] rsidrdefault = doc.Document.body.GetPArray(0).rsidRDefault;
-            p.rsidP = (rsidr);
-            p.rsidRDefault = (rsidrdefault);
+            byte[] rsidr = null;
+            byte[] rsidrdefault = null;
+            CT_Body ctBody = doc.Document.body;
+            if(ctBody.SizeOfPArray() != 0)
+            {
+                CT_P ctp = ctBody.GetPArray(0);
+                rsidr = ctp.rsidR;
+                rsidrdefault = ctp.rsidRDefault;
+            }
+            else
+            {
+                // TODO generate rsidr and rsidrdefault
+            }
+            p.rsidP = rsidr;
+            p.rsidRDefault = rsidrdefault;
             CT_PPr pPr = p.AddNewPPr();
-            pPr.AddNewPStyle().val = ("Header");
+            pPr.AddNewPStyle().val = "Header";
             // start watermark paragraph
             NPOI.OpenXmlFormats.Wordprocessing.CT_R r = p.AddNewR();
             CT_RPr rPr = r.AddNewRPr();

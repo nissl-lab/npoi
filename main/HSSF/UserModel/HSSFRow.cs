@@ -290,7 +290,8 @@ namespace NPOI.HSSF.UserModel
             cells.Values.CopyTo(cellsToRemove, 0);
             foreach (ICell cell in cellsToRemove)
             {
-                RemoveCell(cell, true);
+                if(cell != null)
+                    RemoveCell(cell, true);
             }
         }
 
@@ -631,6 +632,7 @@ namespace NPOI.HSSF.UserModel
                 if (value == -1)
                 {
                     row.Height = unchecked(((short)(0xFF | 0x8000)));
+                    row.BadFontHeight = (false);
                 }
                 else
                 {

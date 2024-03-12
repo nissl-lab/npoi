@@ -495,13 +495,21 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.sectPrField = value;
             }
         }
-        public CT_Tbl AddNewTbl()
+        public CT_Tbl AddNewTbl(int? pos = null)
         {
             CT_Tbl tbl = new CT_Tbl();
             lock (this)
             {
-                this.itemsField.Add(tbl);
-                this.itemsElementNameField.Add(DocumentBodyItemChoiceType.tbl);
+                if(pos.HasValue)
+                {
+                    this.itemsField.Insert(pos.Value, tbl);
+                    this.itemsElementNameField.Insert(pos.Value, DocumentBodyItemChoiceType.tbl);
+                }
+                else
+                {
+                    this.itemsField.Add(tbl);
+                    this.itemsElementNameField.Add(DocumentBodyItemChoiceType.tbl);
+                }
             }
             return tbl;
         }

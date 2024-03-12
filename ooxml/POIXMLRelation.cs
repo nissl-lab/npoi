@@ -140,7 +140,7 @@ namespace NPOI
         public int GetFileNameIndex(POIXMLDocumentPart part)
         {
             Regex regex = new Regex(_defaultName.Replace("#", "(\\d+)"));
-            return int.Parse(regex.Match(part.GetPackagePart().PartName.Name).Value);
+            return int.Parse(regex.Match(part.GetPackagePart().PartName.Name).Groups[1].Value);
             //return Integer.valueOf(part.getPackagePart().getPartName().getName().replaceAll(regex, "$1"));
         }
         /**

@@ -2080,6 +2080,25 @@ namespace TestCases.XSSF.UserModel
             }
         }
 
+
+        // bug 59687:  XSSFSheet.RemoveRow doesn't handle row gaps properly when removing row comments
+        [Test]
+        public void TestRemoveRowWithCommentAndGapAbove()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("59687.xlsx");
+            ISheet sheet = wb.GetSheetAt(0);
+
+            // comment exists
+            CellAddress commentCellAddress = new CellAddress("A4");
+            Assert.IsNotNull(sheet.GetCellComment(commentCellAddress));
+
+            Assert.AreEqual(1, sheet.GetCellComments().Count, "Wrong starting # of comments");
+
+            sheet.RemoveRow(sheet.GetRow(commentCellAddress.Row));
+
+            Assert.AreEqual(0, sheet.GetCellComments().Count, "There should not be any comments left!");
+        }
+
         //[Test]
         //public void TestCoordinate()
         //{

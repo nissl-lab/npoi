@@ -37,6 +37,8 @@ namespace NPOI.SS.Formula.Functions
                 throw new EvaluationException(ErrorEval.VALUE_INVALID);
 
             double result;
+            ValueEval v5 =null;
+            ValueEval v6 =null;
 
             ValueEval v1 = OperandResolver.GetSingleValue(args[0], srcCellRow, srcCellCol);
             ValueEval v2 = OperandResolver.GetSingleValue(args[1], srcCellRow, srcCellCol);
@@ -48,7 +50,24 @@ namespace NPOI.SS.Formula.Functions
             int numberPayments = OperandResolver.CoerceValueToInt(v3);
             double PV = OperandResolver.CoerceValueToDouble(v4);
 
-            result = Finance.PPMT(interestRate, period, numberPayments, PV);
+            if(args.Length==4)
+            {
+                result = Finance.PPMT(interestRate, period, numberPayments, PV);
+            }
+            else if(args.Length==5)
+            {
+                v5=OperandResolver.GetSingleValue(args[4], srcCellRow, srcCellCol);
+                double FV = OperandResolver.CoerceValueToDouble(v5);
+                result = Finance.PPMT(interestRate, period, numberPayments, PV, FV);
+            }
+            else
+            {
+                v5=OperandResolver.GetSingleValue(args[4], srcCellRow, srcCellCol);
+                v6 = OperandResolver.GetSingleValue(args[5], srcCellRow, srcCellCol);
+                double FV = OperandResolver.CoerceValueToDouble(v5);
+                int type = OperandResolver.CoerceValueToInt(v6);
+                result = Finance.PPMT(interestRate, period, numberPayments, PV, FV,type);
+            }
 
             CheckValue(result);
 

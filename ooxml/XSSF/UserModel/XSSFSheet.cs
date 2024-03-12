@@ -2484,7 +2484,7 @@ namespace NPOI.XSSF.UserModel
             {
                 foreach (CellAddress ref1 in GetCellComments().Keys)
                 {
-                    if (ref1.Row == idx)
+                    if (ref1.Row == row.RowNum)
                     {
                         sheetComments.RemoveComment(ref1);
                     }
@@ -5121,6 +5121,8 @@ namespace NPOI.XSSF.UserModel
             SortedDictionary<XSSFComment, int> commentsToShift =
                 new SortedDictionary<XSSFComment, int>(new ShiftCommentComparator(n));
 
+            IEnumerable<CT_Shape> ctShapes = GetVMLDrawing(false)?.GetItems().OfType<CT_Shape>();
+
             foreach (KeyValuePair<int, XSSFRow> rowDict in _rows)
             {
                 XSSFRow row = rowDict.Value;
@@ -5143,11 +5145,22 @@ namespace NPOI.XSSF.UserModel
                                     .FindCellComment(cellAddress);
                                 if (oldComment != null)
                                 {
+                                    var ctShape = oldComment.GetCTShape();
+
+                                    if (ctShape == null && ctShapes != null)
+                                    {
+                                        ctShape = ctShapes.FirstOrDefault
+                                            (x => 
+                                                x.ClientData[0].row[0] == cellAddress.Row && 
+                                                x.ClientData[0].column[0] == cellAddress.Column
+                                            );
+                                    }
+
                                     XSSFComment xssfComment =
                                         new XSSFComment(
                                             sheetComments,
                                             oldComment.GetCTComment(),
-                                       oldComment.GetCTShape());
+                                            ctShape);
                                     if (commentsToShift.ContainsKey(xssfComment))
                                     {
                                         commentsToShift[xssfComment] = newrownum;

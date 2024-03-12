@@ -30,22 +30,23 @@ namespace NPOI.XSSF.UserModel.Helpers
     /// </summary>
     public class ColumnHelper
     {
-
         private readonly CT_Worksheet worksheet;
 
         #region Constructor
+
         public ColumnHelper(CT_Worksheet worksheet)
         {
-
             this.worksheet = worksheet;
             CleanColumns();
         }
-        #endregion
+
+        #endregion Constructor
 
         #region Public methods
+
         public void CleanColumns()
         {
-            TreeSet<CT_Col> trackedCols = 
+            TreeSet<CT_Col> trackedCols =
                 new TreeSet<CT_Col>(CTColComparator.BY_MIN_MAX);
             CT_Cols newCols = new CT_Cols();
             CT_Cols[] colsArray = worksheet.GetColsList().ToArray();
@@ -79,7 +80,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             // this class then we could keep trackedCols as state, making this
             // log(N) rather than Nlog(N). We do this for the initial
             // read above.
-            TreeSet<CT_Col> trackedCols = 
+            TreeSet<CT_Col> trackedCols =
                 new TreeSet<CT_Col>(CTColComparator.BY_MIN_MAX);
             trackedCols.AddAll(cols.GetColList());
             AddCleanColIntoCols(cols, newCol, trackedCols);
@@ -141,18 +142,18 @@ namespace NPOI.XSSF.UserModel.Helpers
                         if (colMin < index1)
                         {
                             InsertCol(
-                                colsArray, 
-                                colMin, 
-                                index1 - 1, 
+                                colsArray,
+                                colMin,
+                                index1 - 1,
                                 new CT_Col[] { colArray });
                         }
 
                         if (colMax > index1)
                         {
                             InsertCol(
-                                colsArray, 
-                                index1 + 1, 
-                                colMax, 
+                                colsArray,
+                                index1 + 1,
+                                colMax,
                                 new CT_Col[] { colArray });
                         }
 
@@ -181,7 +182,6 @@ namespace NPOI.XSSF.UserModel.Helpers
 
         public void SetColumnAttributes(CT_Col fromCol, CT_Col toCol)
         {
-
             if (fromCol.IsSetBestFit())
             {
                 toCol.bestFit = fromCol.bestFit;
@@ -235,6 +235,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             CT_Col col = GetOrCreateColumn1Based(index + 1, false);
             col.bestFit = bestFit;
         }
+
         public void SetCustomWidth(long index, bool width)
         {
             CT_Col col = GetOrCreateColumn1Based(index + 1, true);
@@ -281,12 +282,13 @@ namespace NPOI.XSSF.UserModel.Helpers
             return -1;
         }
 
-        public int GetIndexOfColumn(CT_Cols cols, CT_Col col)
+        public int GetIndexOfColumn(CT_Cols cols, CT_Col searchCol)
         {
+            if (cols == null || searchCol == null) return -1;
             for (int i = 0; i < cols.sizeOfColArray(); i++)
             {
-                if (cols.GetColArray(i).min == col.min 
-                    && cols.GetColArray(i).max == col.max)
+                if (cols.GetColArray(i).min == searchCol.min
+                    && cols.GetColArray(i).max == searchCol.max)
                 {
                     return i;
                 }
@@ -294,9 +296,11 @@ namespace NPOI.XSSF.UserModel.Helpers
 
             return -1;
         }
-        #endregion
+
+        #endregion Public methods
 
         #region Internal methods
+
         /// <summary>
         /// Return the CT_Col at the given (0 based) column index, creating 
         /// it if required.
@@ -316,9 +320,11 @@ namespace NPOI.XSSF.UserModel.Helpers
 
             return col;
         }
-        #endregion
+
+        #endregion Internal methods
 
         #region Private methods
+
         private void AddCleanColIntoCols(CT_Cols cols, CT_Col newCol, TreeSet<CT_Col> trackedCols)
         {
             List<CT_Col> overlapping = GetOverlappingCols(newCol, trackedCols);
@@ -376,9 +382,9 @@ namespace NPOI.XSSF.UserModel.Helpers
         private List<CT_Col> GetOverlappingCols(CT_Col newCol, TreeSet<CT_Col> trackedCols)
         {
             CT_Col lower = trackedCols.Lower(newCol);
-            TreeSet<CT_Col> potentiallyOverlapping = 
-                lower == null 
-                ? trackedCols 
+            TreeSet<CT_Col> potentiallyOverlapping =
+                lower == null
+                ? trackedCols
                 : trackedCols.TailSet(lower, Overlaps(lower, newCol));
             List<CT_Col> overlapping = new List<CT_Col>();
             foreach (CT_Col existing in potentiallyOverlapping)
@@ -428,11 +434,11 @@ namespace NPOI.XSSF.UserModel.Helpers
         }
 
         private CT_Col InsertCol(
-            CT_Cols cols, 
-            long min, 
+            CT_Cols cols,
+            long min,
             long max,
-            CT_Col[] colsWithAttributes, 
-            bool ignoreExistsCheck, 
+            CT_Col[] colsWithAttributes,
+            bool ignoreExistsCheck,
             CT_Col overrideColumn)
         {
             if (ignoreExistsCheck || !ColumnExists(cols, min, max))
@@ -473,7 +479,7 @@ namespace NPOI.XSSF.UserModel.Helpers
         {
             for (int i = 0; i < cols.sizeOfColArray(); i++)
             {
-                if (cols.GetColArray(i).min == min 
+                if (cols.GetColArray(i).min == min
                     && cols.GetColArray(i).max == max)
                 {
                     return true;
@@ -482,9 +488,11 @@ namespace NPOI.XSSF.UserModel.Helpers
 
             return false;
         }
-        #endregion
+
+        #endregion Private methods
 
         #region TreeSet class
+
         public class TreeSet<T>
         {
             private readonly SortedList<T, object> innerObj;
@@ -640,6 +648,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                 return set;
             }
         }
-        #endregion
+
+        #endregion TreeSet class
     }
 }
