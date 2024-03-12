@@ -16,19 +16,34 @@
  *    limitations under the License.
  * ====================================================================
  */
-using NPOI.HSSF.UserModel;
-using NPOI.SS.Formula;
-using NPOI.SS.Formula.PTG;
-using NPOI.XSSF;
-using NPOI.XSSF.UserModel;
-using NUnit.Framework;
-using System;
 
-namespace TestCases.SS.UserModel
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+
+namespace TestCases.SS.Formula
 {
+
+
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
+    using NPOI.Util;
+    using NPOI.XSSF;
+    using NPOI.XSSF.UserModel;
+    using NUnit.Framework;
+
+    /// <summary>
+    /// Test <see cref="FormulaParser"/>'s handling of row numbers at the edge of the
+    /// HSSF/XSSF ranges.
+    /// </summary>
+    /// @author David North
     [TestFixture]
     public class TestFormulaParser
     {
+
         [Test]
         public void TestHSSFFailsForOver65536()
         {
@@ -38,22 +53,44 @@ namespace TestCases.SS.UserModel
                 FormulaParser.Parse("Sheet1!1:65537", workbook, FormulaType.Cell, 0);
                 Assert.Fail("Expected exception");
             }
-            catch (FormulaParseException)
+            catch(FormulaParseException)
             {
+                // expected here
             }
         }
+
+        private static void CheckHSSFFormula(String formula)
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            IFormulaParsingWorkbook workbook = HSSFEvaluationWorkbook.Create(wb);
+            FormulaParser.Parse(formula, workbook, FormulaType.Cell, 0);
+            IOUtils.CloseQuietly(wb);
+        }
+        private static void CheckXSSFFormula(String formula)
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            IFormulaParsingWorkbook workbook = XSSFEvaluationWorkbook.Create(wb);
+            FormulaParser.Parse(formula, workbook, FormulaType.Cell, 0);
+            IOUtils.CloseQuietly(wb);
+        }
+        private static void checkFormula(String formula)
+        {
+            CheckHSSFFormula(formula);
+            CheckXSSFFormula(formula);
+        }
+
         [Test]
         public void TestHSSFPassCase()
         {
-            IFormulaParsingWorkbook workbook = HSSFEvaluationWorkbook.Create(new HSSFWorkbook());
-            FormulaParser.Parse("Sheet1!1:65536", workbook, FormulaType.Cell, 0);
+            CheckHSSFFormula("Sheet1!1:65536");
         }
+
         [Test]
         public void TestXSSFWorksForOver65536()
         {
-            IFormulaParsingWorkbook workbook = XSSFEvaluationWorkbook.Create(new XSSFWorkbook());
-            FormulaParser.Parse("Sheet1!1:65537", workbook, FormulaType.Cell, 0);
+            CheckXSSFFormula("Sheet1!1:65537");
         }
+
         [Test]
         public void TestXSSFFailCase()
         {
@@ -63,15 +100,17 @@ namespace TestCases.SS.UserModel
                 FormulaParser.Parse("Sheet1!1:1048577", workbook, FormulaType.Cell, 0); // one more than max rows.
                 Assert.Fail("Expected exception");
             }
-            catch (FormulaParseException)
+            catch(FormulaParseException)
             {
+                // expected here
             }
         }
 
+        // copied from NPOI.HSSF.Model.TestFormulaParser
         [Test]
-        // copied from org.apache.poi.hssf.model.TestFormulaParser
         public void TestMacroFunction()
         {
+
             // testNames.xlsm contains a VB function called 'myFunc'
             String testFile = "testNames.xlsm";
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook(testFile);
@@ -83,18 +122,18 @@ namespace TestCases.SS.UserModel
                 Ptg[] ptg = FormulaParser.Parse("myFunc(\"arg\")", workbook, FormulaType.Cell, -1);
                 Assert.AreEqual(3, ptg.Length);
 
-                // the name gets encoded as the first operand on the stack
-                NameXPxg tname = (NameXPxg)ptg[0];
+                // the name Gets encoded as the first operand on the stack
+                NameXPxg tname = (NameXPxg) ptg[0];
                 Assert.AreEqual("myFunc", tname.ToFormulaString());
 
                 // the function's arguments are pushed onto the stack from left-to-right as OperandPtgs
-                StringPtg arg = (StringPtg)ptg[1];
+                StringPtg arg = (StringPtg) ptg[1];
                 Assert.AreEqual("arg", arg.Value);
 
                 // The external FunctionPtg is the last Ptg added to the stack
                 // During formula evaluation, this Ptg pops off the the appropriate number of
                 // arguments (getNumberOfOperands()) and pushes the result on the stack 
-                AbstractFunctionPtg tfunc = (AbstractFunctionPtg)ptg[2];
+                AbstractFunctionPtg tfunc = (AbstractFunctionPtg) ptg[2];
                 Assert.IsTrue(tfunc.IsExternalFunction);
 
                 // confirm formula parsing is case-insensitive
@@ -116,10 +155,10 @@ namespace TestCases.SS.UserModel
                 // TODO: develop a process for occasionally manually reviewing workbooks
                 // to verify workbooks are not corrupted
                 /*
-                FileInfo fileIn = XSSFTestDataSamples.GetSampleFile(testFile);
-                FileInfo reSavedFile = new FileInfo(fileIn.FullName.Replace(".xlsm", "-saved.xlsm"));
-                FileStream fos = new FileStream(reSavedFile.FullName, FileMode.Create, FileAccess.ReadWrite);
-                wb.Write(fos);
+                final File fileIn = XSSFTestDataSamples.GetSampleFile(testFile);
+                final File reSavedFile = new File(fileIn.ParentFile, fileIn.Name.replace(".xlsm", "-saved.xlsm"));
+                final FileOutputStream fos = new FileOutputStream(reSavedFile);
+                wb.write(fos);
                 fos.Close();
                 */
             }
@@ -132,43 +171,93 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestParserErrors()
         {
+
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("testNames.xlsm");
-            try {
+            try
+            {
                 XSSFEvaluationWorkbook workbook = XSSFEvaluationWorkbook.Create(wb);
 
-                parseExpectedException("(");
-                parseExpectedException(")");
-                parseExpectedException("+");
-                parseExpectedException("42+");
-                parseExpectedException("IF()");
-                parseExpectedException("IF("); //no closing paren
-                parseExpectedException("myFunc(", workbook); //no closing paren
-            } finally {
+                ParseExpectedException("(");
+                ParseExpectedException(")");
+                ParseExpectedException("+");
+                ParseExpectedException("42+");
+                ParseExpectedException("IF()");
+                ParseExpectedException("IF("); //no closing paren
+                ParseExpectedException("myFunc(", workbook); //no closing paren
+            }
+            finally
+            {
                 wb.Close();
             }
         }
 
-        private static void parseExpectedException(String formula)
+        private static void ParseExpectedException(String formula)
         {
-            parseExpectedException(formula, null);
+            ParseExpectedException(formula, null);
         }
 
-        /** confirm formula has invalid syntax and parsing the formula results in FormulaParseException
-         * @param formula
-         * @param wb
-         */
-        private static void parseExpectedException(String formula, IFormulaParsingWorkbook wb)
+        /// <summary>
+        /// confirm formula has invalid syntax and parsing the formula results in FormulaParseException
+        /// </summary>
+        private static void ParseExpectedException(String formula, IFormulaParsingWorkbook wb)
         {
             try
             {
                 FormulaParser.Parse(formula, wb, FormulaType.Cell, -1);
                 Assert.Fail("Expected FormulaParseException: " + formula);
             }
-            catch (FormulaParseException e)
+            catch(FormulaParseException e)
             {
                 // expected during successful test
                 Assert.IsNotNull(e.Message);
             }
         }
+
+        // trivial case for bug 60219: FormulaParser can't parse external references when sheet name is quoted
+        [Test]
+        public void TestParseExternalReferencesWithUnquotedSheetName()
+        {
+
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFEvaluationWorkbook fpwb = XSSFEvaluationWorkbook.Create(wb);
+            Ptg[] ptgs = FormulaParser.Parse("[1]Sheet1!A1", fpwb, FormulaType.Cell, -1);
+            // NPOI.SS.Formula.PTG.Ref3DPxg [ [workbook=1] sheet=Sheet 1 ! A1]
+            Assert.AreEqual(1, ptgs.Length, "Ptgs length");
+            Assert.IsTrue(ptgs[0] is Ref3DPxg, "Ptg class");
+            Ref3DPxg pxg = (Ref3DPxg) ptgs[0];
+            Assert.AreEqual(1, pxg.ExternalWorkbookNumber, "External workbook number");
+            Assert.AreEqual("Sheet1", pxg.SheetName, "Sheet name");
+            Assert.AreEqual(0, pxg.Row, "Row");
+            Assert.AreEqual(0, pxg.Column, "Column");
+            wb.Close();
+        }
+
+        // bug 60219: FormulaParser can't parse external references when sheet name is quoted
+        [Ignore("bug 60219: FormulaParser can't parse external references when sheet name is quoted")]
+        [Test]
+        public void TestParseExternalReferencesWithQuotedSheetName()
+        {
+
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFEvaluationWorkbook fpwb = XSSFEvaluationWorkbook.Create(wb);
+            Ptg[] ptgs = FormulaParser.Parse("'[1]Sheet 1'!A1", fpwb, FormulaType.Cell, -1);
+            // NPOI.SS.Formula.PTG.Ref3DPxg [ [workbook=1] sheet=Sheet 1 ! A1]
+            Assert.AreEqual(1, ptgs.Length, "Ptgs length");
+            Assert.IsTrue(ptgs[0] is Ref3DPxg, "Ptg class");
+            Ref3DPxg pxg = (Ref3DPxg) ptgs[0];
+            Assert.AreEqual(1, pxg.ExternalWorkbookNumber, "External workbook number");
+            Assert.AreEqual("Sheet 1", pxg.SheetName, "Sheet name");
+            Assert.AreEqual(0, pxg.Row, "Row");
+            Assert.AreEqual(0, pxg.Column, "Column");
+            wb.Close();
+        }
+
+        // bug 60260
+        [Test]
+        public void TestUnicodeSheetName()
+        {
+            checkFormula("'Sheet\u30FB1'!A1:A6");
+        }
     }
 }
+

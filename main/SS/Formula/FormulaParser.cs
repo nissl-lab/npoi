@@ -123,7 +123,7 @@ namespace NPOI.SS.Formula
          * @param formulaType the type of the formula, see {@link FormulaType}
          * @param sheetIndex  the 0-based index of the sheet this formula belongs to.
          * @param rowIndex  - the related cell's row index in 0-based form (-1 if the formula is not cell related)
-	     *                     used to handle structured references that have the "#This Row" quantifier.
+         *                     used to handle structured references that have the "#This Row" quantifier.
          * The sheet index is required to resolve sheet-level names. <code>-1</code> means that
          * the scope of the name will be ignored and  the parser will match names only by name
          *
@@ -1641,9 +1641,9 @@ namespace NPOI.SS.Formula
             return GetFunction(name, nameToken, args);
         }
         /**
-	     * Adds a name (named range or user defined function) to underlying workbook's names table
-	     * @param functionName
-	     */
+         * Adds a name (named range or user defined function) to underlying workbook's names table
+         * @param functionName
+         */
         private void AddName(String functionName)
         {
             IName name = _book.CreateName();
