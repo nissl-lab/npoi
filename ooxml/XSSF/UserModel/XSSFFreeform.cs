@@ -19,7 +19,6 @@ using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using NPOI.Util;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -126,10 +125,10 @@ namespace NPOI.XSSF.UserModel
         public void Build(BuildFreeForm BFF)
         {
             //-----
-            ctShape.spPr.xfrm.off.x = (long)BFF.Min.x;
-            ctShape.spPr.xfrm.off.y = (long)BFF.Min.y;
-            ctShape.spPr.xfrm.ext.cx = (long)BFF.Width;
-            ctShape.spPr.xfrm.ext.cy = (long)BFF.Height;
+            ctShape.spPr.xfrm.off.x = BFF.Left;
+            ctShape.spPr.xfrm.off.y = BFF.Top;
+            ctShape.spPr.xfrm.ext.cx = BFF.Width;
+            ctShape.spPr.xfrm.ext.cy = BFF.Height;
 
             //-----
             ctShape.spPr.custGeom.avLst = new CT_GeomGuideList();
@@ -179,13 +178,13 @@ namespace NPOI.XSSF.UserModel
             var ctp = new CT_Path2D();
             ctp.moveto = new CT_Path2DMoveTo();
             ctp.moveto.pt = new CT_AdjPoint2D();
-            ctp.w = (long)BFF.Width;
-            ctp.h = (long)BFF.Height;
+            ctp.w = BFF.Width;
+            ctp.h = BFF.Height;
 
             //-----
-            ctp.moveto.pt.x = $"{BFF.Points.First.Value.x}";
-            ctp.moveto.pt.y = $"{BFF.Points.First.Value.y}";
-            for(var bze = BFF.ControlPoints.First; bze!=null; )
+            ctp.moveto.pt.x = $"{Math.Floor(BFF.mCtrlPoint.First.Value.x - BFF.dLeft)}";
+            ctp.moveto.pt.y = $"{Math.Floor(BFF.mCtrlPoint.First.Value.y - BFF.dTop)}";
+            for(var bze = BFF.mCtrlPoint.First.Next; bze!=null;)
             {
                 CT_Path2DCubicBezierTo cubBze = new CT_Path2DCubicBezierTo();
                 cubBze.pt = new List<CT_AdjPoint2D>();
@@ -193,8 +192,8 @@ namespace NPOI.XSSF.UserModel
                 {
                     CT_AdjPoint2D pt;
                     pt = new CT_AdjPoint2D();
-                    pt.x = $"{bze.Value.x}";
-                    pt.y = $"{bze.Value.y}";
+                    pt.x = $"{Math.Floor(bze.Value.x - BFF.dLeft)}";
+                    pt.y = $"{Math.Floor(bze.Value.y - BFF.dTop)}";
                     cubBze.pt.Add(pt);
                     bze = bze.Next;
                 }
@@ -209,17 +208,41 @@ namespace NPOI.XSSF.UserModel
     /// </summary>
     public class BuildFreeForm
     {
-        public          DblVect2D  mMin;
-        public          DblVect2D  mMax;
+        private DblVect2D  mMin;
+        private DblVect2D  mMax;
 
-        protected LinkedList<DblVect2D> mPoints { get; }
-        protected LinkedList<DblVect2D> mInterVect{ get; }         //intermediate vector
-        protected LinkedList<DblVect2D> mVect { get; set; }
+        public long Left
+        {
+            get { return (long )Math.Round(mMin.x); }
+        }
+        public long Rigth
+        {
+            get { return (long) Math.Round(mMax.x); }
+        }
+        public long Top
+        {
+            get { return (long)Math.Round(mMin.y); }
+        }
+        public long Bottom
+        {
+            get { return (long)Math.Round(mMax.y); }
+        }
+        internal double dLeft
+        {
+            get => mMin.x;
+        }
+        internal double dTop
+        {
+            get => mMin.y;
+        }
 
-        public DblVect2D Min { get => mMin; }
-        public DblVect2D Max { get => mMax; }
-        public double Width { get => Math.Abs(mMax.x - mMin.x); }
-        public double Height { get => Math.Abs(mMax.y - mMin.y); }
+        protected LinkedList<DblVect2D> mPoints { get; }                //coordinate
+        protected LinkedList<DblVect2D> mInterVect { get; }             //intermediate vector
+
+        public LinkedList<DblVect2D> mCtrlPoint { get; private set; }   //Control point coordinate
+
+        public long Width   { get => Math.Abs(Rigth - Left); }
+        public long Height  { get => Math.Abs(Top - Bottom); }
         public LinkedList<Coords> Points
         {
             get
@@ -227,31 +250,8 @@ namespace NPOI.XSSF.UserModel
                 LinkedList<Coords> res = new LinkedList<Coords>();
                 for(var nd = mPoints.First; nd!=null; nd = nd.Next)
                 {
-                    res.AddLast(new Coords((long)(nd.Value.x-mMin.x), (long)(nd.Value.y-mMin.y)));
-                }
-
-                return res;
-            }
-        }
-
-        public LinkedList<Coords> ControlPoints
-        {
-            get
-            {
-                LinkedList<Coords> res = new LinkedList<Coords>();
-                double x = Points.First.Value.x;
-                double y = Points.First.Value.y;
-                LinkedListNode<DblVect2D> nd = mVect.First;
-
-                for(; nd!=null; nd=nd.Next)
-                {
-                    res.AddLast(new Coords((long)(x+nd.Value.x), (long)(y+nd.Value.y)));
-                    nd = nd.Next.Next;
-                    x += nd.Value.x;
-                    y += nd.Value.y;
-                    res.AddLast(new Coords((long)(x+nd.Previous.Value.x)
-                                         , (long)(y+nd.Previous.Value.y)));
-                    res.AddLast(new Coords((long)x, (long)y));
+                    res.AddLast(new Coords((long) (nd.Value.x-Left)
+                                         , (long) (nd.Value.y-Top)));
                 }
 
                 return res;
@@ -268,9 +268,6 @@ namespace NPOI.XSSF.UserModel
 
         public void AddNode(Coords Pt)
         {
-            mMin.Min(DblVect2D.Conv(Pt));
-            mMax.Max(DblVect2D.Conv(Pt));
-
             var nd = mPoints.AddLast(DblVect2D.Conv(Pt));
             if(nd.Previous != null)
             {
@@ -285,31 +282,114 @@ namespace NPOI.XSSF.UserModel
                 return false;
             }
 
-            DblVect2D cv;                              //control vector
+            //========== Calculate vector ==========
+            LinkedList<DblVect2D> cv = new LinkedList<DblVect2D>();     //control vectors
             LinkedListNode<DblVect2D> nd;
-            mVect = new LinkedList<DblVect2D>();       //new control vectors
+            DblVect2D hv;                                               //handle vector
 
-            mVect.AddFirst(new DblVect2D(mInterVect.First.Value.x
-                                       , mInterVect.First.Value.y));
+            cv.AddFirst(new DblVect2D(mInterVect.First.Value.x
+                                    , mInterVect.First.Value.y));
             for(nd = mInterVect.First.Next; nd != null; nd = nd.Next)
             {
-                cv = nd.Previous.Value + nd.Value;
-                double ip = 1;   //Relevance(nd.Previous.Value, nd.Value);
-                mVect.AddBefore(mVect.Last, cv / -6);
-                mVect.AddLast(cv / 6);
-                mVect.AddLast(new DblVect2D(nd.Value.x, nd.Value.y));
+                hv = nd.Previous.Value + nd.Value;
+                cv.AddBefore(cv.Last, hv / -6);
+                cv.AddLast(hv / 6);
+                cv.AddLast(new DblVect2D(nd.Value.x, nd.Value.y));
             }
 
-            nd = mVect.First;
-            cv = nd.Value + nd.Next.Value;
-            mVect.AddBefore(nd, cv / 2);
+            nd = cv.First;
+            hv = nd.Value + nd.Next.Value;
+            cv.AddBefore(nd, hv / 2);
 
-            nd = mVect.Last;
-            cv = nd.Value - nd.Previous.Value;
-            mVect.AddBefore(nd, cv / -2);
+            nd = cv.Last;
+            hv = nd.Value - nd.Previous.Value;
+            cv.AddBefore(nd, hv / -2);
+
+            //========== Convert vector to coordinate ==========
+            mCtrlPoint = new LinkedList<DblVect2D>();
+            double x = mPoints.First.Value.x;
+            double y = mPoints.First.Value.y;
+            mCtrlPoint.AddLast(new DblVect2D(x, y));
+            nd = cv.First;
+
+            for(; nd!=null; nd=nd.Next)
+            {
+                mCtrlPoint.AddLast(new DblVect2D(x+nd.Value.x, y+nd.Value.y));
+                nd = nd.Next.Next;
+                x += nd.Value.x;
+                y += nd.Value.y;
+                mCtrlPoint.AddLast(new DblVect2D(x+nd.Previous.Value.x
+                                               , y+nd.Previous.Value.y));
+                mCtrlPoint.AddLast(new DblVect2D((long) x, (long) y));
+            }
+            //int i = 0;
+            //for(var v = mCtrlPoint.First; v != null; v=v.Next)
+            //{
+            //    Console.WriteLine($"{i++:00}:{v.Value.x},{v.Value.y}");
+            //}
+            //========== Build Rectangle ==========
+            mMin = new DblVect2D(double.MaxValue, double.MaxValue);
+            mMax = new DblVect2D(double.MinValue, double.MinValue);
+            for(var v = mCtrlPoint.First; v.Next != null;)
+            {
+                List<DblVect2D> point = new();
+                point.Add(v.Value);
+                v = v.Next;
+                point.Add(v.Value);
+                v = v.Next;
+                point.Add(v.Value);
+                v = v.Next;
+                point.Add(v.Value);
+                for(double t = 0.0; t < 1.0; t += 0.0025)
+                {
+                    DblVect2D bez = Bezier(point, t);
+                    mMin.Min(bez);
+                    mMax.Max(bez);
+                    //Console.WriteLine($"{t:#0.00}:{bez.x:0000000.00},{bez.y:0000000.00}");
+                }
+            }
 
             return true;
         }
 
+        /// <summary>
+        /// P(t)=sigma(k=0..N,nCk*t^k*(1-t)^(N-k)Pk)
+        /// </summary>
+        /// <param name="p"></param>
+        private DblVect2D Bezier(List<DblVect2D> p, double t)
+        {
+            int n = p.Count - 1;
+            DblVect2D res = new(0.0,0.0);
+
+            for(int k = 0; k<p.Count; k++)
+            {
+                double a = BinomialCoefficients(n,k) * Math.Pow(t, k) * Math.Pow(1-t, n-k);
+                DblVect2D val = new( a * p[k].x, a * p[k].y );
+                res.Add(val);
+                //Console.WriteLine($"{t},{k},{BinomialCoefficients(n, k)},{Math.Pow(t, k)},{Math.Pow(1-t, n-k)},{p[k].x},{p[k].y}");
+            }
+            return res;
+        }
+
+        /// <summary>
+        /// nCk
+        /// </summary>
+        /// <param name="n"></param>
+        /// <param name="k"></param>
+        /// <returns></returns>
+        private long BinomialCoefficients(int n, int k)
+        {
+            return Factorial(n)/(Factorial(k)*Factorial(n-k));
+        }
+
+        /// <summary>
+        /// n! (n>=0)
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        private long Factorial(int n)
+        {
+            return n < 1 ? 1L : n * Factorial(n-1);
+        }
     }
 }

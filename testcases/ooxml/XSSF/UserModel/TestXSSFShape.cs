@@ -421,7 +421,7 @@ namespace TestCases.XSSF.UserModel
             foreach(var sp in lstShp0)
             {
                 if(sp.Name.Substring(0, 2) == "FF")
-                //if(sp.Name.Substring(0, 4) == "FF06")
+                //if(sp.Name.Substring(0, 4) == "FF01")
                 {
                     var bff = new BuildFreeForm();
 
@@ -463,10 +463,10 @@ namespace TestCases.XSSF.UserModel
                             var rbspPr = ((XSSFSimpleShape)rbsp).GetCTShape().spPr;
                             var rbcg = rbspPr.custGeom; //read back custom geometry
 
-                            //Assert.AreEqual(spPr0.xfrm.off.x, rbspPr.xfrm.off.x, $"{sp0.Name}-xfrm.off.x:{spPr0.xfrm.off.x}!={rbspPr.xfrm.off.x}");
-                            //Assert.AreEqual(spPr0.xfrm.off.y, rbspPr.xfrm.off.y, $"{sp0.Name}-xfrm.off.y:{spPr0.xfrm.off.y}!={rbspPr.xfrm.off.y}");
-                            //Assert.AreEqual(spPr0.xfrm.ext.cx, rbspPr.xfrm.ext.cx, $"{sp0.Name}-xfrm.off.x:{spPr0.xfrm.ext.cx}!={rbspPr.xfrm.ext.cx}");
-                            //Assert.AreEqual(spPr0.xfrm.ext.cy, rbspPr.xfrm.ext.cy, $"{sp0.Name}-xfrm.off.y:{spPr0.xfrm.ext.cy}!={rbspPr.xfrm.ext.cy}");
+                            Assert.IsFalse(!Compeare(spPr0.xfrm.off.x, rbspPr.xfrm.off.x), $"{sp0.Name}-xfrm.off.x:{spPr0.xfrm.off.x}!={rbspPr.xfrm.off.x}");
+                            Assert.IsFalse(!Compeare(spPr0.xfrm.off.y, rbspPr.xfrm.off.y), $"{sp0.Name}-xfrm.off.y:{spPr0.xfrm.off.y}!={rbspPr.xfrm.off.y}");
+                            Assert.IsFalse(!Compeare(spPr0.xfrm.ext.cx, rbspPr.xfrm.ext.cx), $"{sp0.Name}-xfrm.off.x:{spPr0.xfrm.ext.cx}!={rbspPr.xfrm.ext.cx}");
+                            Assert.IsFalse(!Compeare(spPr0.xfrm.ext.cy, rbspPr.xfrm.ext.cy), $"{sp0.Name}-xfrm.off.y:{spPr0.xfrm.ext.cy}!={rbspPr.xfrm.ext.cy}");
 
                             Assert.AreEqual(cg0.cxnLst.cxn.Count, rbcg.cxnLst.cxn.Count, $"Count:{cg0.cxnLst.cxn.Count}!={rbcg.cxnLst.cxn.Count}");
 
@@ -478,8 +478,8 @@ namespace TestCases.XSSF.UserModel
                                     var rbcd = GetGeomGuide(rbcg.gdLst.gd, ct);
                                     if(rbcd != null)
                                     {
-                                        //Assert.AreEqual(cd0.x, rbcd.x, $"{sp0.Name}-gdLst.x{ct}:{cd0.x}!={rbcd.x}");
-                                        //Assert.AreEqual(cd0.y, rbcd.y, $"{sp0.Name}-gdLst.y{ct}:{cd0.y}!={rbcd.y}");
+                                        Assert.IsFalse(!Compeare(cd0.x, rbcd.x), $"{sp0.Name}-gdLst.x{ct}:{cd0.x}!={rbcd.x}");
+                                        Assert.IsFalse(!Compeare(cd0.y, rbcd.y), $"{sp0.Name}-gdLst.y{ct}:{cd0.y}!={rbcd.y}");
                                     }
                                     else
                                     {
@@ -493,22 +493,22 @@ namespace TestCases.XSSF.UserModel
                             }
                             var ogph = cg0.pathLst.path[0];
                             var rbph = rbcg.pathLst.path[0];
-                            //Assert.AreEqual(ogph.w, rbph.w, $"{sp0.Name}-path.w:{ogph.w}!={rbph.w}");
-                            //Assert.AreEqual(ogph.h, rbph.h, $"{sp0.Name}-path.h:{ogph.h}!={rbph.h}");
+                            Assert.IsFalse(!Compeare(ogph.w, rbph.w), $"{sp0.Name}-path.w:{ogph.w}!={rbph.w}");
+                            Assert.IsFalse(!Compeare(ogph.h, rbph.h), $"{sp0.Name}-path.h:{ogph.h}!={rbph.h}");
 
-                            //Assert.AreEqual(ogph.moveto.pt.x, rbph.moveto.pt.x, $"{sp0.Name}-moveto.x:{ogph.moveto.pt.x}!={rbph.moveto.pt.x}");
-                            //Assert.AreEqual(ogph.moveto.pt.y, rbph.moveto.pt.y, $"{sp0.Name}-moveto.y:{ogph.moveto.pt.y}!={rbph.moveto.pt.y}");
+                            Assert.IsFalse(!Compeare(ogph.moveto.pt.x, rbph.moveto.pt.x), $"{sp0.Name}-moveto.x:{ogph.moveto.pt.x}!={rbph.moveto.pt.x}");
+                            Assert.IsFalse(!Compeare(ogph.moveto.pt.y, rbph.moveto.pt.y), $"{sp0.Name}-moveto.y:{ogph.moveto.pt.y}!={rbph.moveto.pt.y}");
 
                             Assert.AreEqual(ogph.cubicBezTo.Count, rbph.cubicBezTo.Count, $"cubicBezTo.Count:{ogph.cubicBezTo.Count}!={rbph.cubicBezTo.Count}");
 
                             for(int i = 0; i<ogph.cubicBezTo.Count; i++)
                             {
-                                //Assert.AreEqual(ogph.cubicBezTo[i].pt[0].x, rbph.cubicBezTo[i].pt[0].x, $"{ogph.cubicBezTo[i].pt[0].x},{rbph.cubicBezTo[i].pt[0].x}");
-                                //Assert.AreEqual(ogph.cubicBezTo[i].pt[0].y, rbph.cubicBezTo[i].pt[0].y, $"{ogph.cubicBezTo[i].pt[0].y},{rbph.cubicBezTo[i].pt[0].y}");
-                                //Assert.AreEqual(ogph.cubicBezTo[i].pt[1].x, rbph.cubicBezTo[i].pt[1].x, $"{ogph.cubicBezTo[i].pt[1].x},{rbph.cubicBezTo[i].pt[1].x}");
-                                //Assert.AreEqual(ogph.cubicBezTo[i].pt[1].y, rbph.cubicBezTo[i].pt[1].y, $"{ogph.cubicBezTo[i].pt[1].y},{rbph.cubicBezTo[i].pt[1].y}");
-                                //Assert.AreEqual(ogph.cubicBezTo[i].pt[2].x, rbph.cubicBezTo[i].pt[2].x, $"{sp0.Name}-cubicBezTo[{i}].pt[2].x:{ogph.cubicBezTo[i].pt[2].x},{rbph.cubicBezTo[i].pt[2].x}");
-                                //Assert.AreEqual(ogph.cubicBezTo[i].pt[2].y, rbph.cubicBezTo[i].pt[2].y, $"{sp0.Name}-cubicBezTo[{i}].pt[2].y:{ogph.cubicBezTo[i].pt[2].y},{rbph.cubicBezTo[i].pt[2].y}");
+                                Assert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[0].x, rbph.cubicBezTo[i].pt[0].x), $"{ogph.cubicBezTo[i].pt[0].x},{rbph.cubicBezTo[i].pt[0].x}");
+                                Assert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[0].y, rbph.cubicBezTo[i].pt[0].y), $"{ogph.cubicBezTo[i].pt[0].y},{rbph.cubicBezTo[i].pt[0].y}");
+                                Assert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[1].x, rbph.cubicBezTo[i].pt[1].x), $"{ogph.cubicBezTo[i].pt[1].x},{rbph.cubicBezTo[i].pt[1].x}");
+                                Assert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[1].y, rbph.cubicBezTo[i].pt[1].y), $"{ogph.cubicBezTo[i].pt[1].y},{rbph.cubicBezTo[i].pt[1].y}");
+                                Assert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[2].x, rbph.cubicBezTo[i].pt[2].x), $"{sp0.Name}-cubicBezTo[{i}].pt[2].x:{ogph.cubicBezTo[i].pt[2].x},{rbph.cubicBezTo[i].pt[2].x}");
+                                Assert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[2].y, rbph.cubicBezTo[i].pt[2].y), $"{sp0.Name}-cubicBezTo[{i}].pt[2].y:{ogph.cubicBezTo[i].pt[2].y},{rbph.cubicBezTo[i].pt[2].y}");
                             }
                         }
                     }
@@ -553,6 +553,25 @@ namespace TestCases.XSSF.UserModel
                 }
             }
             return null;
+        }
+        private bool Compeare(long B, long C, long a = 5)
+        {
+            if(B-a<=C && C<=B+a)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool Compeare(string B, string C, long a = 5)
+        {
+            long b = long.Parse(B);
+            long c = long.Parse(C);
+            if(b-a<=c && c<=b+a)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
