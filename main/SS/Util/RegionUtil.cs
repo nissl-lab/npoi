@@ -40,7 +40,7 @@ namespace NPOI.SS.Util
         private class CellPropertySetter
         {
             private String _propertyName;
-            private short _propertyValue;
+            private object _propertyValue;
 
 
             public CellPropertySetter(String propertyName, int value)
@@ -48,18 +48,26 @@ namespace NPOI.SS.Util
                 _propertyName = propertyName;
                 _propertyValue = (short)value;
             }
+
+            public CellPropertySetter(String propertyName, BorderStyle value)
+            {
+                _propertyName = propertyName;
+                _propertyValue = value;
+            }
             public void SetProperty(IRow row, int column)
             {
+                // create cell if it does not exist
                 ICell cell = CellUtil.GetCell(row, column);
                 CellUtil.SetCellStyleProperty(cell, _propertyName, _propertyValue);
             }
         }
         /// <summary>
-        /// Sets the left border for a region of cells by manipulating the cell style of the individual cells on the left
+        /// Sets the left border style for a region of cells by manipulating the cell style of the individual cells on the left
         /// </summary>
         /// <param name="border">The new border</param>
         /// <param name="region">The region that should have the border</param>
         /// <param name="sheet">The sheet that the region is on.</param>
+        [Obsolete("use SetBorderLeft(BorderStyle, CellRangeAddress, ISheet) instead")]
         public static void SetBorderLeft(int border, CellRangeAddress region, ISheet sheet)
         {
             int rowStart = region.FirstRow;
@@ -72,6 +80,27 @@ namespace NPOI.SS.Util
                 cps.SetProperty(CellUtil.GetRow(i, sheet), column);
             }
         }
+
+        /// <summary>
+        /// Sets the left border style for a region of cells by manipulating the cell style of the individual cells on the left
+        /// </summary>
+        /// <param name="border">The new border</param>
+        /// <param name="region">The region that should have the border</param>
+        /// <param name="sheet">The sheet that the region is on.</param>
+        /// <remarks>since POI 3.16 beta 1</remarks>
+        public static void SetBorderLeft(BorderStyle border, CellRangeAddress region, ISheet sheet)
+        {
+            int rowStart = region.FirstRow;
+            int rowEnd = region.LastRow;
+            int column = region.FirstColumn;
+
+            CellPropertySetter cps = new CellPropertySetter(CellUtil.BORDER_LEFT, border);
+            for (int i = rowStart; i <= rowEnd; i++)
+            {
+                cps.SetProperty(CellUtil.GetRow(i, sheet), column);
+            }
+        }
+
         /// <summary>
         /// Sets the left border color for a region of cells by manipulating the cell style of the individual cells on the left
         /// </summary>
@@ -97,6 +126,7 @@ namespace NPOI.SS.Util
         /// <param name="border">The new border</param>
         /// <param name="region">The region that should have the border</param>
         /// <param name="sheet">The sheet that the region is on.</param>
+        [Obsolete("use SetBorderRight(BorderStyle, CellRangeAddress, ISheet) instead")]
         public static void SetBorderRight(int border, CellRangeAddress region, ISheet sheet)
         {
             int rowStart = region.FirstRow;
@@ -109,6 +139,26 @@ namespace NPOI.SS.Util
                 cps.SetProperty(CellUtil.GetRow(i, sheet), column);
             }
         }
+
+        /// <summary>
+        /// Sets the right border style for a region of cells by manipulating the cell style of the individual cells on the right
+        /// </summary>
+        /// <param name="border">The new border</param>
+        /// <param name="region">The region that should have the border</param>
+        /// <param name="sheet">The sheet that the region is on.</param>
+        public static void SetBorderRight(BorderStyle border, CellRangeAddress region, ISheet sheet)
+        {
+            int rowStart = region.FirstRow;
+            int rowEnd = region.LastRow;
+            int column = region.LastColumn;
+
+            CellPropertySetter cps = new CellPropertySetter(CellUtil.BORDER_RIGHT, border);
+            for (int i = rowStart; i <= rowEnd; i++)
+            {
+                cps.SetProperty(CellUtil.GetRow(i, sheet), column);
+            }
+        }
+
         /// <summary>
         /// Sets the right border color for a region of cells by manipulating the cell style of the individual cells on the right
         /// </summary>
@@ -128,13 +178,34 @@ namespace NPOI.SS.Util
                 cps.SetProperty(CellUtil.GetRow(i, sheet), column);
             }
         }
+
         /// <summary>
         /// Sets the bottom border for a region of cells by manipulating the cell style of the individual cells on the bottom
         /// </summary>
         /// <param name="border">The new border</param>
         /// <param name="region">The region that should have the border</param>
         /// <param name="sheet">The sheet that the region is on</param>
+        [Obsolete("use SetBorderBottom(BorderStyle, CellRangeAddress, ISheet) instead")]
         public static void SetBorderBottom(int border, CellRangeAddress region, ISheet sheet)
+        {
+            int colStart = region.FirstColumn;
+            int colEnd = region.LastColumn;
+            int rowIndex = region.LastRow;
+            CellPropertySetter cps = new CellPropertySetter(CellUtil.BORDER_BOTTOM, border);
+            IRow row = CellUtil.GetRow(rowIndex, sheet);
+            for (int i = colStart; i <= colEnd; i++)
+            {
+                cps.SetProperty(row, i);
+            }
+        }
+
+        /// <summary>
+        /// Sets the bottom border style for a region of cells by manipulating the cell style of the individual cells on the bottom
+        /// </summary>
+        /// <param name="border">The new border</param>
+        /// <param name="region">The region that should have the border</param>
+        /// <param name="sheet">The sheet that the region is on</param>
+        public static void SetBorderBottom(BorderStyle border, CellRangeAddress region, ISheet sheet)
         {
             int colStart = region.FirstColumn;
             int colEnd = region.LastColumn;
@@ -173,7 +244,27 @@ namespace NPOI.SS.Util
         /// <param name="border">The new border</param>
         /// <param name="region">The region that should have the border</param>
         /// <param name="sheet">The sheet that the region is on.</param>
+        [Obsolete("use SetBorderTop(BorderStyle, CellRangeAddress, ISheet) instead")]
         public static void SetBorderTop(int border, CellRangeAddress region, ISheet sheet)
+        {
+            int colStart = region.FirstColumn;
+            int colEnd = region.LastColumn;
+            int rowIndex = region.FirstRow;
+            CellPropertySetter cps = new CellPropertySetter(CellUtil.BORDER_TOP, border);
+            IRow row = CellUtil.GetRow(rowIndex, sheet);
+            for (int i = colStart; i <= colEnd; i++)
+            {
+                cps.SetProperty(row, i);
+            }
+        }
+
+        /// <summary>
+        /// Sets the top border for a region of cells by manipulating the cell style of the individual cells on the top
+        /// </summary>
+        /// <param name="border">The new border</param>
+        /// <param name="region">The region that should have the border</param>
+        /// <param name="sheet">The sheet that the region is on.</param>
+        public static void SetBorderTop(BorderStyle border, CellRangeAddress region, ISheet sheet)
         {
             int colStart = region.FirstColumn;
             int colEnd = region.LastColumn;
