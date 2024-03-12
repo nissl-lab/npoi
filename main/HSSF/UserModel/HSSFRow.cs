@@ -290,7 +290,8 @@ namespace NPOI.HSSF.UserModel
             cells.Values.CopyTo(cellsToRemove, 0);
             foreach (ICell cell in cellsToRemove)
             {
-                RemoveCell(cell, true);
+                if(cell != null)
+                    RemoveCell(cell, true);
             }
         }
 
