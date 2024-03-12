@@ -38,8 +38,8 @@ namespace NPOI.SS.Formula.Functions
                 return ErrorEval.VALUE_INVALID;
             }
 
-            String s0 = EvaluateStringArg(args[0], srcCellRow, srcCellCol);
-            String s1 = EvaluateStringArg(args[1], srcCellRow, srcCellCol);
+            string s0 = EvaluateStringArg(args[0], srcCellRow, srcCellCol);
+            string s1 = EvaluateStringArg(args[1], srcCellRow, srcCellCol);
             return BoolEval.ValueOf(s0.Equals(s1));
         }
     }
