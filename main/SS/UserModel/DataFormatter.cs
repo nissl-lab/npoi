@@ -99,25 +99,25 @@ namespace NPOI.SS.UserModel
      */
     public class DataFormatter
     {
-        private static String defaultFractionWholePartFormat = "#";
-        private static String defaultFractionFractionPartFormat = "#/##";
+        private static readonly string defaultFractionWholePartFormat = "#";
+        private static readonly string defaultFractionFractionPartFormat = "#/##";
         /** Pattern to find a number FormatBase: "0" or  "#" */
-        private static string numPattern = "[0#]+";
+        private static readonly string numPattern = "[0#]+";
 
         /** Pattern to find "AM/PM" marker */
-        private static string amPmPattern = "((A|P)[M/P]*)";
+        private static readonly string amPmPattern = "((A|P)[M/P]*)";
 
         /** A regex to find patterns like [$$-1009] and [$�-452]. 
          *  Note that we don't currently process these into locales 
          */
-        private static string localePatternGroup = "(\\[\\$[^-\\]]*-[0-9A-Z]+\\])";
+        private static readonly string localePatternGroup = "(\\[\\$[^-\\]]*-[0-9A-Z]+\\])";
 
         /*
          * A regex to match the colour formattings rules.
          * Allowed colours are: Black, Blue, Cyan, Green,
          *  Magenta, Red, White, Yellow, "Color n" (1<=n<=56)
          */
-        private static Regex colorPattern = new Regex("(\\[BLACK\\])|(\\[BLUE\\])|(\\[CYAN\\])|(\\[GREEN\\])|" +
+        private static readonly Regex colorPattern = new Regex("(\\[BLACK\\])|(\\[BLUE\\])|(\\[CYAN\\])|(\\[GREEN\\])|" +
             "(\\[MAGENTA\\])|(\\[RED\\])|(\\[WHITE\\])|(\\[YELLOW\\])|" +
             "(\\[COLOR\\s*\\d\\])|(\\[COLOR\\s*[0-5]\\d\\])", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -125,24 +125,25 @@ namespace NPOI.SS.UserModel
          * A regex to identify a fraction pattern.
          * This requires that replaceAll("\\?", "#") has already been called 
          */
-        private static Regex fractionPattern = new Regex("(?:([#\\d]+)\\s+)?(#+)\\s*\\/\\s*([#\\d]+)", RegexOptions.Compiled);
+        private static readonly Regex fractionPattern = new Regex("(?:([#\\d]+)\\s+)?(#+)\\s*\\/\\s*([#\\d]+)", RegexOptions.Compiled);
 
         /**
          * A regex to strip junk out of fraction formats
          */
-        private static Regex fractionStripper = new Regex("(\"[^\"]*\")|([^ \\?#\\d\\/]+)", RegexOptions.Compiled);
+        private static readonly Regex fractionStripper = new Regex("(\"[^\"]*\")|([^ \\?#\\d\\/]+)", RegexOptions.Compiled);
 
         /**
          * A regex to detect if an alternate grouping character is used
          *  in a numeric format 
          */
-        private static Regex alternateGrouping = new Regex("([#0]([^.#0])[#0]{3})", RegexOptions.Compiled);
+        private static readonly Regex alternateGrouping = new Regex("([#0]([^.#0])[#0]{3})", RegexOptions.Compiled);
     
         /**
          * Cells formatted with a date or time format and which contain invalid date or time values
          *  show 255 pound signs ("#").
          */
-        private static String invalidDateTimeString;
+        private static readonly string invalidDateTimeString;
+
         static DataFormatter()
         {
             StringBuilder buf = new StringBuilder();
@@ -150,21 +151,20 @@ namespace NPOI.SS.UserModel
             invalidDateTimeString = buf.ToString();
         }
 
-
         /**
          * The decimal symbols of the locale used for formatting values.
          */
-        private NumberFormatInfo decimalSymbols;
+        private readonly NumberFormatInfo decimalSymbols;
 
         /**
          * The date symbols of the locale used for formatting values.
          */
-        private DateTimeFormatInfo dateSymbols;
+        private readonly DateTimeFormatInfo dateSymbols;
 
         /**
          * A default date format, if no date format was given
          */
-        private DateFormat defaultDateformat;
+        private readonly DateFormat defaultDateformat;
 
         /** <em>General</em> FormatBase for whole numbers. */
         //private static DecimalFormat generalWholeNumFormat = new DecimalFormat("0");
@@ -176,22 +176,37 @@ namespace NPOI.SS.UserModel
         /** A default FormatBase to use when a number pattern cannot be Parsed. */
         private FormatBase defaultNumFormat;
         private CultureInfo currentCulture;
+        
         /*
          * A map to cache formats.
          *  Map<String,FormatBase> Formats
          */
-        private Hashtable formats;
-        private bool emulateCSV = false;
+        private readonly Hashtable formats;
+
+        /** whether CSV friendly adjustments should be made to the formatted text **/
+        private readonly bool emulateCSV = false;
 
         /** For logging any problems we find */
-        private static POILogger logger = POILogFactory.GetLogger(typeof(DataFormatter));
+        private static readonly POILogger logger = POILogFactory.GetLogger(typeof(DataFormatter));
         /** stores if the locale should change according to {@link LocaleUtil#getUserLocale()} */
-        private bool localeIsAdapting;
+        private readonly bool localeIsAdapting;
+
+        /** whether years in dates should be displayed with 4 digits even if the formatString specifies only 2 **/
+        public bool Use4DigitYearsInAllDateFormats { get; set; } = false;
+
+        /// <summary>
+        /// If set to true, when you do not provide a <see cref="IFormulaEvaluator"/>,
+        /// for cells with formulas, we will return the cached value for the cell (if available),
+        /// otherwise - we return the formula itself.
+        /// The default is false and this means we return the formula itself.
+        /// </summary>
+        public bool UseCachedValuesForFormulaCells { get; set; } = false;
 
         public DataFormatter()
             : this(false)
         {
         }
+
         /**
          * Creates a formatter using the {@link Locale#getDefault() default locale}.
          *
@@ -287,7 +302,7 @@ namespace NPOI.SS.UserModel
             }
 
             int formatIndex = cell.CellStyle.DataFormat;
-            String formatStr = cell.CellStyle.GetDataFormatString();
+            string formatStr = cell.CellStyle.GetDataFormatString();
             if (formatStr == null || formatStr.Trim().Length == 0)
             {
                 return null;
@@ -295,15 +310,15 @@ namespace NPOI.SS.UserModel
             return GetFormat(cell.NumericCellValue, formatIndex, formatStr);
         }
 
-        private FormatBase GetFormat(double cellValue, int formatIndex, String formatStrIn)
+        private FormatBase GetFormat(double cellValue, int formatIndex, string formatStrIn)
         {
             //      // Might be better to separate out the n p and z formats, falling back to p when n and z are not set.
             //      // That however would require other code to be re factored.
             //      String[] formatBits = formatStrIn.split(";");
             //      int i = cellValue > 0.0 ? 0 : cellValue < 0.0 ? 1 : 2; 
-            //      String formatStr = (i < formatBits.length) ? formatBits[i] : formatBits[0];
+            //      string formatStr = (i < formatBits.length) ? formatBits[i] : formatBits[0];
 
-            String formatStr = formatStrIn;
+            string formatStr = formatStrIn;
 
             // Excel supports 3+ part conditional data formats, eg positive/negative/zero,
             //  or (>1000),(>0),(0),(negative). As Java doesn't handle these kinds
@@ -400,18 +415,14 @@ namespace NPOI.SS.UserModel
         {
 
             int formatIndex = cell.CellStyle.DataFormat;
-            String formatStr = cell.CellStyle.GetDataFormatString();
+            string formatStr = cell.CellStyle.GetDataFormatString();
             return CreateFormat(cell.NumericCellValue, formatIndex, formatStr);
         }
 
-        private static readonly Regex RegexDoubleBackslashAny = new Regex("\\\\.", RegexOptions.Compiled);
-        private static readonly Regex RegexContinueWs = new Regex("\\s", RegexOptions.Compiled);
-        private static readonly Regex RegexAnyInDoubleQuote = new Regex("\"[^\"]*\"", RegexOptions.Compiled);
-
-        private FormatBase CreateFormat(double cellValue, int formatIndex, String sFormat)
+        private FormatBase CreateFormat(double cellValue, int formatIndex, string sFormat)
         {
             // remove color Formatting if present
-            String formatStr = colorPattern.Replace(sFormat, "");
+            string formatStr = colorPattern.Replace(sFormat, "");
 
             // Strip off the locale information, we use an instance-wide locale for everything
             MatchCollection matches = Regex.Matches(formatStr, localePatternGroup);
@@ -420,7 +431,7 @@ namespace NPOI.SS.UserModel
                 string matchedstring = match.Value;
                 int beginpos = matchedstring.IndexOf('$') + 1;
                 int endpos = matchedstring.IndexOf('-');
-                String symbol = matchedstring.Substring(beginpos, endpos - beginpos);
+                string symbol = matchedstring.Substring(beginpos, endpos - beginpos);
 
                 if (symbol.IndexOf('$') > -1)
                 {
@@ -460,7 +471,7 @@ namespace NPOI.SS.UserModel
                 String[] chunks = formatStr.Split(";".ToCharArray());
                 for (int i = 0; i < chunks.Length; i++)
                 {
-                    String chunk = chunks[i].Replace("?", "#");
+                    string chunk = chunks[i].Replace("?", "#");
                     //Match matcher = fractionStripper.Match(chunk);
                     //chunk = matcher.Replace(" ");
                     chunk = fractionStripper.Replace(chunk, " ");
@@ -469,7 +480,7 @@ namespace NPOI.SS.UserModel
                     //take the first match
                     if (fractionMatcher.Success)
                     {
-                        String wholePart = (fractionMatcher.Groups[1] == null || !fractionMatcher.Groups[1].Success) ? "" : defaultFractionWholePartFormat;
+                        string wholePart = (fractionMatcher.Groups[1] == null || !fractionMatcher.Groups[1].Success) ? "" : defaultFractionWholePartFormat;
                         return new FractionFormat(wholePart, fractionMatcher.Groups[3].Value);
                     }
                 }
@@ -492,22 +503,47 @@ namespace NPOI.SS.UserModel
             // TODO - when does this occur?
             return null;
         }
-        private int IndexOfFraction(String format)
+
+        string AdjustTo4DigitYearsIfConfigured(string format)
         {
-            int i = format.IndexOf("#/#");
-            int j = format.IndexOf("?/?");
-            return i == -1 ? j : j == -1 ? i : Math.Min(i, j);
+            if(Use4DigitYearsInAllDateFormats)
+            {
+                int ypos2 = format.IndexOf("yy");
+                
+                if(ypos2 < 0)
+                {
+                    return format;
+                }
+                else
+                {
+                    int ypos3 = format.IndexOf("yyy");
+                    int ypos4 = format.IndexOf("yyyy");
+                    
+                    if(ypos4 == ypos2)
+                    {
+                        string part1 = format.Substring(0, ypos2 + 4);
+                        string part2 = format.Substring(ypos2 + 4);
+                        return part1 + AdjustTo4DigitYearsIfConfigured(part2);
+                    }
+                    else if(ypos3 == ypos2)
+                    {
+                        return format;
+                    }
+                    else
+                    {
+                        string part1 = format.Substring(0, ypos2 + 2);
+                        string part2 = format.Substring(ypos2 + 2);
+                        
+                        return part1 + "yy" + AdjustTo4DigitYearsIfConfigured(part2);
+                    }
+                }
+            }
+            return format;
         }
 
-        private int LastIndexOfFraction(String format)
+        private FormatBase CreateDateFormat(string pformatStr, double cellValue)
         {
-            int i = format.LastIndexOf("#/#");
-            int j = format.LastIndexOf("?/?");
-            return i == -1 ? j : j == -1 ? i : Math.Max(i, j);
-        }
-        private FormatBase CreateDateFormat(String pformatStr, double cellValue)
-        {
-            String formatStr = pformatStr;
+            string formatStr = AdjustTo4DigitYearsIfConfigured(pformatStr);
             formatStr = formatStr.Replace("\\-", "-");
             formatStr = formatStr.Replace("\\,", ",");
             formatStr = formatStr.Replace("\\.", ".");
@@ -630,7 +666,7 @@ namespace NPOI.SS.UserModel
                     mIsMonth = true;
                     ms.Clear();
                 }
-                else if (Char.IsLetter(c))
+                else if (char.IsLetter(c))
                 {
                     mIsMonth = true;
                     ms.Clear();
@@ -669,7 +705,7 @@ namespace NPOI.SS.UserModel
 
         }
 
-        private String cleanFormatForNumber(String formatStr)
+        private string cleanFormatForNumber(string formatStr)
         {
             StringBuilder sb = new StringBuilder(formatStr);
 
@@ -765,9 +801,9 @@ namespace NPOI.SS.UserModel
 
             return sb.ToString();
         }
-        private FormatBase CreateNumberFormat(String formatStr, double cellValue)
+        private FormatBase CreateNumberFormat(string formatStr, double cellValue)
         {
-            String format = cleanFormatForNumber(formatStr);
+            string format = cleanFormatForNumber(formatStr);
             NumberFormatInfo symbols = decimalSymbols;
 
             // Do we need to change the grouping character?
@@ -783,8 +819,8 @@ namespace NPOI.SS.UserModel
                 {
                     symbols = currentCulture.NumberFormat.Clone() as NumberFormatInfo;
                     symbols.NumberGroupSeparator = grouping.ToString();
-                    String oldPart = agm.Groups[1].Value;
-                    String newPart = oldPart.Replace(grouping, ',');
+                    string oldPart = agm.Groups[1].Value;
+                    string newPart = oldPart.Replace(grouping, ',');
                     format = format.Replace(oldPart, newPart);
                 }
             }
@@ -833,12 +869,12 @@ namespace NPOI.SS.UserModel
          * @param cell The cell
          * @return a Formatted date string
          */
-        private String GetFormattedDateString(ICell cell)
+        private string GetFormattedDateString(ICell cell)
         {
             FormatBase dateFormat = GetFormat(cell);
-            if (dateFormat is ExcelStyleDateFormatter) {
+            if (dateFormat is ExcelStyleDateFormatter formatter) {
                 // Hint about the raw excel value
-                ((ExcelStyleDateFormatter)dateFormat).SetDateToBeFormatted(
+                formatter.SetDateToBeFormatted(
                       cell.NumericCellValue
                 );
             }
@@ -857,7 +893,7 @@ namespace NPOI.SS.UserModel
          * @param cell The cell
          * @return a Formatted number string
          */
-        private String GetFormattedNumberString(ICell cell)
+        private string GetFormattedNumberString(ICell cell)
         {
 
             FormatBase numberFormat = GetFormat(cell);
@@ -867,7 +903,7 @@ namespace NPOI.SS.UserModel
                 return d.ToString(currentCulture);
             }
             //return numberFormat.Format(d, currentCulture);
-            String formatted = numberFormat.Format(d);
+            string formatted = numberFormat.Format(d);
             if (formatted.StartsWith("."))
                 formatted = "0" + formatted;
             if (formatted.StartsWith("-."))
@@ -881,7 +917,7 @@ namespace NPOI.SS.UserModel
          *  FormatBase index and string, according to excel style rules.
          * @see #FormatCellValue(Cell)
          */
-        public String FormatRawCellContents(double value, int formatIndex, String formatString)
+        public string FormatRawCellContents(double value, int formatIndex, string formatString)
         {
             return FormatRawCellContents(value, formatIndex, formatString, false);
         }
@@ -889,7 +925,7 @@ namespace NPOI.SS.UserModel
          * Performs Excel-style date formatting, using the
          *  supplied Date and format
          */
-        private String PerformDateFormatting(DateTime d, FormatBase dateFormat)
+        private string PerformDateFormatting(DateTime d, FormatBase dateFormat)
         {
             if (dateFormat != null)
             {
@@ -902,7 +938,7 @@ namespace NPOI.SS.UserModel
      *  format index and string, according to excel style rules.
      * @see #formatCellValue(Cell)
      */
-        public String FormatRawCellContents(double value, int formatIndex, String formatString, bool use1904Windowing)
+        public string FormatRawCellContents(double value, int formatIndex, string formatString, bool use1904Windowing)
         {
             // Is it a date?
             if (DateUtil.IsADateFormat(formatIndex, formatString))
@@ -938,8 +974,8 @@ namespace NPOI.SS.UserModel
             // previous versions). However, if the value contains E notation, this
             // would expand the values, which we do not want, so revert to
             // original method.
-            String result;
-            String textValue = NumberToTextConverter.ToText(value);
+            string result;
+            string textValue = NumberToTextConverter.ToText(value);
             if (textValue.IndexOf('E') > -1)
             {
                 result = numberFormat.Format(value);
@@ -955,20 +991,20 @@ namespace NPOI.SS.UserModel
             }
             return result;
         }
-        /**
-         * 
-         * Returns the Formatted value of a cell as a <c>String</c> regardless
-         * of the cell type. If the Excel FormatBase pattern cannot be Parsed then the
-         * cell value will be Formatted using a default FormatBase.
-         * 
-         * When passed a null or blank cell, this method will return an empty
-         * String (""). Formulas in formula type cells will not be evaluated.
-         * 
-         *
-         * @param cell The cell
-         * @return the Formatted cell value as a String
-         */
-        public String FormatCellValue(ICell cell)
+
+        /// <summary>
+        /// Returns the Formatted value of a cell as a <c>String</c> regardless
+        /// of the cell type. If the Excel FormatBase pattern cannot be Parsed then the
+        /// cell value will be Formatted using a default FormatBase.
+        /// 
+        /// When passed a null or blank cell, this method will return an empty
+        /// string (""). Formulas in formula type cells will not be evaluated.
+        /// <see cref="UseCachedValuesForFormulaCells"/> controls how these cells are evaluated. 
+        /// 
+        /// </summary>
+        /// <param name="cell">The cell</param>
+        /// <returns>the Formatted cell value as a String</returns>
+        public string FormatCellValue(ICell cell)
         {
             return FormatCellValue(cell, null);
         }
@@ -980,9 +1016,9 @@ namespace NPOI.SS.UserModel
          * cell value will be Formatted using a default FormatBase.
          * 
          * When passed a null or blank cell, this method will return an empty
-         * String (""). Formula cells will be evaluated using the given
+         * string (""). Formula cells will be evaluated using the given
          * {@link HSSFFormulaEvaluator} if the evaluator is non-null. If the
-         * evaluator is null, then the formula String will be returned. The caller
+         * evaluator is null, then the formula string will be returned. The caller
          * is responsible for setting the currentRow on the evaluator
          *
          *
@@ -990,7 +1026,7 @@ namespace NPOI.SS.UserModel
          * @param evaluator The HSSFFormulaEvaluator (can be null)
          * @return a string value of the cell
          */
-        public String FormatCellValue(ICell cell, IFormulaEvaluator evaluator)
+        public string FormatCellValue(ICell cell, IFormulaEvaluator evaluator)
         {
 
             if (cell == null)
@@ -999,13 +1035,31 @@ namespace NPOI.SS.UserModel
             }
 
             CellType cellType = cell.CellType;
-            if (evaluator != null && cellType == CellType.Formula)
+
+            if (cellType == CellType.Formula)
             {
                 if (evaluator == null)
                 {
-                    return cell.CellFormula;
+                    if(UseCachedValuesForFormulaCells)
+                    {
+                        try
+                        {
+                            cellType = cell.GetCachedFormulaResultTypeEnum();
+                        }
+                        catch(Exception)
+                        {
+                            return cell.CellFormula;
+                        }
+                    }
+                    else
+                    {
+                        return cell.CellFormula;
+                    }
                 }
-                cellType = evaluator.EvaluateFormulaCell(cell);
+                else
+                {
+                    cellType = evaluator.EvaluateFormulaCell(cell);
+                }
             }
             switch (cellType)
             {
@@ -1077,7 +1131,7 @@ namespace NPOI.SS.UserModel
          * @param excelformatStr The data FormatBase string
          * @param FormatBase A FormatBase instance
          */
-        public void AddFormat(String excelformatStr, FormatBase format)
+        public void AddFormat(string excelformatStr, FormatBase format)
         {
             formats[excelformatStr] = format;
         }
@@ -1092,7 +1146,7 @@ namespace NPOI.SS.UserModel
      */
         public void Update(IObservable<object> observable, object localeObj)
         {
-            if (!(localeObj is CultureInfo)) return;
+            if (localeObj is not CultureInfo) return;
             CultureInfo newLocale = (CultureInfo)localeObj;
             if (newLocale.Equals(currentCulture)) return;
 
@@ -1127,15 +1181,15 @@ namespace NPOI.SS.UserModel
          */
         private class CellFormatResultWrapper : FormatBase
         {
-            private CellFormatResult result;
-            private bool emulateCSV;
+            private readonly CellFormatResult result;
+            private readonly bool emulateCSV;
             internal CellFormatResultWrapper(CellFormatResult result, bool emulateCSV)
             {
                 this.emulateCSV = emulateCSV;
                 this.result = result;
             }
 
-            protected override StringBuilder Format(Object obj, StringBuilder toAppendTo, int pos)
+            protected override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)
             {
                 if (emulateCSV)
                 {
@@ -1152,7 +1206,7 @@ namespace NPOI.SS.UserModel
                 throw new NotImplementedException();
             }
 
-            public override Object ParseObject(String source, int pos)
+            public override object ParseObject(string source, int pos)
             {
                 return null; // Not supported
             }

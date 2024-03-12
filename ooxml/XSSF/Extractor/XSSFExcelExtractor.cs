@@ -19,7 +19,6 @@ using System;
 using NPOI.OpenXml4Net.OPC;
 using System.Text;
 using NPOI.SS.UserModel;
-using System.Collections;
 using System.Globalization;
 using System.Collections.Generic;
 
@@ -36,7 +35,8 @@ namespace NPOI.XSSF.Extractor
       XSSFRelation.MACROS_WORKBOOK
    };
 
-        private XSSFWorkbook workbook;
+        private readonly XSSFWorkbook workbook;
+        private readonly DataFormatter dataFormatter;
         private bool includeSheetNames = true;
         private bool formulasNotResults = false;
         private bool includeCellComments = false;
@@ -53,6 +53,9 @@ namespace NPOI.XSSF.Extractor
         {
 
             this.workbook = workbook;
+            dataFormatter = new DataFormatter {
+                UseCachedValuesForFormulaCells = true
+            };
         }
         /// <summary>
         ///  Should header and footer be included? Default is true
@@ -61,11 +64,11 @@ namespace NPOI.XSSF.Extractor
         {
             get
             {
-                return this.includeHeadersFooters;
+                return includeHeadersFooters;
             }
             set
             {
-                this.includeHeadersFooters = value;
+                includeHeadersFooters = value;
             }
         }
         /// <summary>
@@ -76,11 +79,11 @@ namespace NPOI.XSSF.Extractor
         {
             get
             {
-                return this.includeSheetNames;
+                return includeSheetNames;
             }
             set
             {
-                this.includeSheetNames = value;
+                includeSheetNames = value;
             }
         }
         /// <summary>
@@ -92,11 +95,11 @@ namespace NPOI.XSSF.Extractor
         {
             get
             {
-                return this.formulasNotResults;
+                return formulasNotResults;
             }
             set
             {
-                this.formulasNotResults = value;
+                formulasNotResults = value;
             }
         }
         /// <summary>
@@ -107,11 +110,11 @@ namespace NPOI.XSSF.Extractor
         {
             get
             {
-                return this.includeCellComments;
+                return includeCellComments;
             }
             set
             {
-                this.includeCellComments = value;
+                includeCellComments = value;
             }
         }
 
@@ -173,7 +176,7 @@ namespace NPOI.XSSF.Extractor
         /**
          * Retreives the text contents of the file
          */
-        public override String Text
+        public override string Text
         {
             get
             {
@@ -212,7 +215,7 @@ namespace NPOI.XSSF.Extractor
                     }
 
                     // Rows and cells
-                    foreach (Object rawR in sheet)
+                    foreach (object rawR in sheet)
                     {
                         IRow row = (IRow)rawR;
                         IEnumerator<ICell> ri = row.GetEnumerator();
@@ -340,10 +343,20 @@ namespace NPOI.XSSF.Extractor
             }
 
             // No supported styling applies to this cell
-            XSSFCell xcell = (XSSFCell)cell;
-            text.Append(xcell.GetRawValue());
+            string contents = dataFormatter.FormatCellValue(cell);
+
+            if(contents != null)
+            {
+                if(type == CellType.Error)
+                {
+                    // to match what XSSFEventBasedExcelExtractor does
+                    contents = "ERROR:" + contents;
+                }
+
+                text.Append(contents);
+            }
         }
-        private String ExtractHeaderFooter(IHeaderFooter hf)
+        private string ExtractHeaderFooter(IHeaderFooter hf)
         {
             return NPOI.HSSF.Extractor.ExcelExtractor.ExtractHeaderFooter(hf);
         }
