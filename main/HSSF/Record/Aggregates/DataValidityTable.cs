@@ -72,5 +72,11 @@ namespace NPOI.HSSF.Record.Aggregates
             _validationList.Add(dvRecord);
             _headerRec.DVRecNo = (_validationList.Count);
         }
+
+        public void RemoveDataValidation(DVRecord dvRecord)
+        {
+            _validationList.Remove(dvRecord);
+            _headerRec.DVRecNo = _validationList.Count;
+        }
     }
 }

@@ -841,6 +841,12 @@ namespace NPOI.SS.UserModel
         void AddValidationData(IDataValidation dataValidation);
 
         /// <summary>
+        /// Removes a data validation object
+        /// </summary>
+        /// <param name="dataValidation">The data validation object settings</param>
+        void RemoveDataValidation(IDataValidation dataValidation);
+
+        /// <summary>
         /// Enable filtering for a range of cells
         /// </summary>
         /// <param name="range">the range of cells to filter</param>
