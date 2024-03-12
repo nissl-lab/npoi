@@ -54,6 +54,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestBasic()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             ConfirmValue("int portion of 5/2 (2)", "5", "2", "2");
             ConfirmValue("int portion of 4.5/3.1 (1)", "4.5", "3.1", "1");
 
@@ -65,6 +66,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestErrors()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             ConfirmValueError("numerator is nonnumeric", "ABCD", "", ErrorEval.VALUE_INVALID);
             ConfirmValueError("denominator is nonnumeric", "", "ABCD", ErrorEval.VALUE_INVALID);
 

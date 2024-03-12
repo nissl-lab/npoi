@@ -51,6 +51,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestValid()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             // thousands separator
             Confirm("FIXED(1234.56789,2,TRUE)", "1234.57");
             Confirm("FIXED(1234.56789,2,FALSE)", "1,234.57");
@@ -88,6 +89,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestOptionalParams()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             Fixed fixedFunc = new Fixed();
             ValueEval Evaluate = fixedFunc.Evaluate(0, 0, new NumberEval(1234.56789));
             Assert.IsTrue(Evaluate is StringEval);

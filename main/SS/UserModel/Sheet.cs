@@ -82,7 +82,7 @@ namespace NPOI.SS.UserModel
     /// The most common type of sheet is the worksheet, which is represented as a grid of cells. Worksheet cells can
     /// contain text, numbers, dates, and formulas. Cells can also be formatted.
     /// </remarks>
-    public interface ISheet
+    public interface ISheet : IEnumerable<IRow>
     {
 
         /// <summary>

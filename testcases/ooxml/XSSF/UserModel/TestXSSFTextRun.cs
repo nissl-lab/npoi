@@ -22,6 +22,7 @@ namespace TestCases.XSSF.UserModel
     using NPOI.XSSF.UserModel;
     using SixLabors.ImageSharp;
     using SixLabors.ImageSharp.PixelFormats;
+    using System.Threading;
 
     [TestFixture]
     public class TestXSSFTextRun
@@ -29,6 +30,7 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestXSSFTextParagraph()
         {
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             XSSFWorkbook wb = new XSSFWorkbook();
             try
             {

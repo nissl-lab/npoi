@@ -33,6 +33,10 @@ namespace TestCases.SS.Formula.Functions
     [TestFixture]
     public class TestDec2Bin
     {
+        public TestDec2Bin()
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
 
         private static ValueEval invokeValue(String number1)
         {

@@ -33,6 +33,10 @@ namespace TestCases.SS.Formula.Functions
     [TestFixture]
     public class TestDec2Hex
     {
+        public TestDec2Hex()
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
 
         private static ValueEval invokeValue(String number1, String number2)
         {

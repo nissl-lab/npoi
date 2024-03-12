@@ -107,17 +107,14 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("test");
 
-            CT_Cols cols = sheet.GetCTWorksheet().GetColsArray(0);
-            CT_Col col = cols.AddNewCol();
-            col.min=(1 + 1);
-            col.max=(4 + 1);
-            col.width=(20);
-            col.customWidth=(true);
+            sheet.CreateColumn(1).Width = 20;
+            sheet.CreateColumn(2).Width = 20;
+            sheet.CreateColumn(3).Width = 20;
+            sheet.CreateColumn(4).Width = 20;
 
             sheet.GroupColumn((short)2, (short)3);
 
-            sheet.GetCTWorksheet().GetColsArray(0);
-            //logger.log(POILogger.DEBUG, "testMergingOverlappingCols_OVERLAPS_2_WRAPS/cols:" + cols);
+            CT_Cols cols = sheet.GetCTWorksheet().GetColsArray(0);
 
             Assert.AreEqual(0, cols.GetColArray(0).outlineLevel);
             Assert.AreEqual(2, cols.GetColArray(0).min); // 1 based
@@ -126,15 +123,20 @@ namespace TestCases.XSSF.UserModel
 
             Assert.AreEqual(1, cols.GetColArray(1).outlineLevel);
             Assert.AreEqual(3, cols.GetColArray(1).min); // 1 based
-            Assert.AreEqual(4, cols.GetColArray(1).max); // 1 based        
+            Assert.AreEqual(3, cols.GetColArray(1).max); // 1 based        
             Assert.AreEqual(true, cols.GetColArray(1).customWidth);
 
-            Assert.AreEqual(0, cols.GetColArray(2).outlineLevel);
-            Assert.AreEqual(5, cols.GetColArray(2).min); // 1 based
-            Assert.AreEqual(5, cols.GetColArray(2).max); // 1 based
+            Assert.AreEqual(1, cols.GetColArray(2).outlineLevel);
+            Assert.AreEqual(4, cols.GetColArray(2).min); // 1 based
+            Assert.AreEqual(4, cols.GetColArray(2).max); // 1 based        
             Assert.AreEqual(true, cols.GetColArray(2).customWidth);
 
-            Assert.AreEqual(3, cols.sizeOfColArray());
+            Assert.AreEqual(0, cols.GetColArray(3).outlineLevel);
+            Assert.AreEqual(5, cols.GetColArray(3).min); // 1 based
+            Assert.AreEqual(5, cols.GetColArray(3).max); // 1 based
+            Assert.AreEqual(true, cols.GetColArray(3).customWidth);
+
+            Assert.AreEqual(4, cols.sizeOfColArray());
 
             wb = XSSFTestDataSamples.WriteOutAndReadBack(wb, "testMergingOverlappingCols_OVERLAPS_2_WRAPS");
             sheet = (XSSFSheet)wb.GetSheet("test");
@@ -154,17 +156,13 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("test");
 
-            CT_Cols cols = sheet.GetCTWorksheet().GetColsArray(0);
-            CT_Col col = cols.AddNewCol();
-            col.min=(2 + 1);
-            col.max=(4 + 1);
-            col.width=(20);
-            col.customWidth=(true);
+            sheet.CreateColumn(2).Width = 20;
+            sheet.CreateColumn(3).Width = 20;
+            sheet.CreateColumn(4).Width = 20;
 
             sheet.GroupColumn((short)1, (short)5);
 
-            cols = sheet.GetCTWorksheet().GetColsArray(0);
-            //logger.log(POILogger.DEBUG, "testMergingOverlappingCols_OVERLAPS_1_WRAPS/cols:" + cols);
+            CT_Cols cols = sheet.GetCTWorksheet().GetColsArray(0);
 
             Assert.AreEqual(1, cols.GetColArray(0).outlineLevel);
             Assert.AreEqual(2, cols.GetColArray(0).min); // 1 based
@@ -173,15 +171,25 @@ namespace TestCases.XSSF.UserModel
 
             Assert.AreEqual(1, cols.GetColArray(1).outlineLevel);
             Assert.AreEqual(3, cols.GetColArray(1).min); // 1 based
-            Assert.AreEqual(5, cols.GetColArray(1).max); // 1 based        
+            Assert.AreEqual(3, cols.GetColArray(1).max); // 1 based        
             Assert.AreEqual(true, cols.GetColArray(1).customWidth);
 
             Assert.AreEqual(1, cols.GetColArray(2).outlineLevel);
-            Assert.AreEqual(6, cols.GetColArray(2).min); // 1 based
-            Assert.AreEqual(6, cols.GetColArray(2).max); // 1 based
-            Assert.AreEqual(false, cols.GetColArray(2).customWidth);
+            Assert.AreEqual(4, cols.GetColArray(2).min); // 1 based
+            Assert.AreEqual(4, cols.GetColArray(2).max); // 1 based        
+            Assert.AreEqual(true, cols.GetColArray(2).customWidth);
 
-            Assert.AreEqual(3, cols.sizeOfColArray());
+            Assert.AreEqual(1, cols.GetColArray(3).outlineLevel);
+            Assert.AreEqual(5, cols.GetColArray(3).min); // 1 based
+            Assert.AreEqual(5, cols.GetColArray(3).max); // 1 based        
+            Assert.AreEqual(true, cols.GetColArray(3).customWidth);
+
+            Assert.AreEqual(1, cols.GetColArray(4).outlineLevel);
+            Assert.AreEqual(6, cols.GetColArray(4).min); // 1 based
+            Assert.AreEqual(6, cols.GetColArray(4).max); // 1 based
+            Assert.AreEqual(false, cols.GetColArray(4).customWidth);
+
+            Assert.AreEqual(5, cols.sizeOfColArray());
 
             wb = XSSFTestDataSamples.WriteOutAndReadBack(wb, "testMergingOverlappingCols_OVERLAPS_1_WRAPS");
             sheet = (XSSFSheet)wb.GetSheet("test");
@@ -201,17 +209,13 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("test");
 
+            sheet.CreateColumn(2).Width = 20;
+            sheet.CreateColumn(3).Width = 20;
+            sheet.CreateColumn(4).Width = 20;
+
+            sheet.GroupColumn(3, 5);
+
             CT_Cols cols = sheet.GetCTWorksheet().GetColsArray(0);
-            CT_Col col = cols.AddNewCol();
-            col.min=(2 + 1);
-            col.max=(4 + 1);
-            col.width=(20);
-            col.customWidth=(true);
-
-            sheet.GroupColumn((short)3, (short)5);
-
-            cols = sheet.GetCTWorksheet().GetColsArray(0);
-            //logger.log(POILogger.DEBUG, "testMergingOverlappingCols_OVERLAPS_1_MINOR/cols:" + cols);
 
             Assert.AreEqual(0, cols.GetColArray(0).outlineLevel);
             Assert.AreEqual(3, cols.GetColArray(0).min); // 1 based
@@ -220,15 +224,20 @@ namespace TestCases.XSSF.UserModel
 
             Assert.AreEqual(1, cols.GetColArray(1).outlineLevel);
             Assert.AreEqual(4, cols.GetColArray(1).min); // 1 based
-            Assert.AreEqual(5, cols.GetColArray(1).max); // 1 based        
+            Assert.AreEqual(4, cols.GetColArray(1).max); // 1 based        
             Assert.AreEqual(true, cols.GetColArray(1).customWidth);
 
             Assert.AreEqual(1, cols.GetColArray(2).outlineLevel);
-            Assert.AreEqual(6, cols.GetColArray(2).min); // 1 based
-            Assert.AreEqual(6, cols.GetColArray(2).max); // 1 based
-            Assert.AreEqual(false, cols.GetColArray(2).customWidth);
+            Assert.AreEqual(5, cols.GetColArray(2).min); // 1 based
+            Assert.AreEqual(5, cols.GetColArray(2).max); // 1 based        
+            Assert.AreEqual(true, cols.GetColArray(2).customWidth);
 
-            Assert.AreEqual(3, cols.sizeOfColArray());
+            Assert.AreEqual(1, cols.GetColArray(3).outlineLevel);
+            Assert.AreEqual(6, cols.GetColArray(3).min); // 1 based
+            Assert.AreEqual(6, cols.GetColArray(3).max); // 1 based
+            Assert.AreEqual(false, cols.GetColArray(3).customWidth);
+
+            Assert.AreEqual(4, cols.sizeOfColArray());
 
             wb = XSSFTestDataSamples.WriteOutAndReadBack(wb, "testMergingOverlappingCols_OVERLAPS_1_MINOR");
             sheet = (XSSFSheet)wb.GetSheet("test");
@@ -249,14 +258,13 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("test");
 
-            CT_Cols cols = sheet.GetCTWorksheet().GetColsArray(0);
-            CT_Col col = cols.AddNewCol();
-            col.min=(2 + 1);
-            col.max=(4 + 1);
-            col.width=(20);
-            col.customWidth=(true);
+            sheet.CreateColumn(2).Width = 20;
+            sheet.CreateColumn(3).Width = 20;
+            sheet.CreateColumn(4).Width = 20;
 
-            sheet.GroupColumn((short)1, (short)3);
+            sheet.GroupColumn(1, 3);
+
+            CT_Cols cols = sheet.GetCTWorksheet().GetColsArray(0);
 
             cols = sheet.GetCTWorksheet().GetColsArray(0);
             //logger.log(POILogger.DEBUG, "testMergingOverlappingCols_OVERLAPS_2_MINOR/cols:" + cols);
@@ -268,15 +276,20 @@ namespace TestCases.XSSF.UserModel
 
             Assert.AreEqual(1, cols.GetColArray(1).outlineLevel);
             Assert.AreEqual(3, cols.GetColArray(1).min); // 1 based
-            Assert.AreEqual(4, cols.GetColArray(1).max); // 1 based        
+            Assert.AreEqual(3, cols.GetColArray(1).max); // 1 based        
             Assert.AreEqual(true, cols.GetColArray(1).customWidth);
 
-            Assert.AreEqual(0, cols.GetColArray(2).outlineLevel);
-            Assert.AreEqual(5, cols.GetColArray(2).min); // 1 based
-            Assert.AreEqual(5, cols.GetColArray(2).max); // 1 based
+            Assert.AreEqual(1, cols.GetColArray(2).outlineLevel);
+            Assert.AreEqual(4, cols.GetColArray(2).min); // 1 based
+            Assert.AreEqual(4, cols.GetColArray(2).max); // 1 based        
             Assert.AreEqual(true, cols.GetColArray(2).customWidth);
 
-            Assert.AreEqual(3, cols.sizeOfColArray());
+            Assert.AreEqual(0, cols.GetColArray(3).outlineLevel);
+            Assert.AreEqual(5, cols.GetColArray(3).min); // 1 based
+            Assert.AreEqual(5, cols.GetColArray(3).max); // 1 based
+            Assert.AreEqual(true, cols.GetColArray(3).customWidth);
+
+            Assert.AreEqual(4, cols.sizeOfColArray());
 
             wb = XSSFTestDataSamples.WriteOutAndReadBack(wb, "testMergingOverlappingCols_OVERLAPS_2_MINOR");
             sheet = (XSSFSheet)wb.GetSheet("test");

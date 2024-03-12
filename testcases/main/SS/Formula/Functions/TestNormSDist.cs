@@ -17,6 +17,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestBasic()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             confirmValue("1.333333", 0.908788726);
         }
 
@@ -28,6 +29,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestMicrosoftExample1()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             HSSFWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
             IRow row = sheet.CreateRow(0);
