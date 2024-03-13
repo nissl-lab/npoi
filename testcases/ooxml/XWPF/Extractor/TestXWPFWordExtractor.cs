@@ -17,6 +17,7 @@
 
 namespace TestCases.XWPF.Extractor
 {
+    using NPOI.Util;
     using NPOI.XWPF.Extractor;
     using NPOI.XWPF.UserModel;
     using NUnit.Framework;
@@ -53,16 +54,9 @@ namespace TestCases.XWPF.Extractor
             ));
 
             // Check number of paragraphs
-            int ps = 0;
-            char[] t = text.ToCharArray();
-            for (int i = 0; i < t.Length; i++)
-            {
-                if (t[i] == '\n')
-                {
-                    ps++;
-                }
-            }
-            Assert.AreEqual(3, ps);
+            // Check number of paragraphs by counting number of newlines
+            int numberOfParagraphs = StringUtil.CountMatches(text, '\n');
+            Assert.AreEqual(3, numberOfParagraphs);
         }
 
         /**
