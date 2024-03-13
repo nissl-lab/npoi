@@ -31,6 +31,7 @@ namespace NPOI.POIFS.Macros
      * 
      * @since 3.15-beta2
      */
+
     public class VBAMacroReader : ICloseable
     {
         protected static String VBA_PROJECT_OOXML = "vbaProject.bin";
@@ -64,6 +65,7 @@ namespace NPOI.POIFS.Macros
                 OpenOOXML(file.OpenRead());
             }
         }
+
         public VBAMacroReader(NPOIFSFileSystem fs)
         {
             this.fs = fs;
@@ -109,6 +111,7 @@ namespace NPOI.POIFS.Macros
          *
          * @since 3.15-beta2
          */
+
         public Dictionary<String, String> ReadMacros()
         {
             ModuleMap modules = new ModuleMap();
@@ -130,6 +133,7 @@ namespace NPOI.POIFS.Macros
         {
             public int? offset;
             public byte[] buf;
+
             public void Read(Stream in1)
             {
                 MemoryStream out1 = new MemoryStream();
@@ -138,6 +142,7 @@ namespace NPOI.POIFS.Macros
                 buf = out1.ToArray();
             }
         }
+
         protected class ModuleMap : Dictionary<String, Module>
         {
             static ModuleMap()
@@ -145,14 +150,17 @@ namespace NPOI.POIFS.Macros
 #if NETSTANDARD2_1 || NET6_0_OR_GREATER || NETSTANDARD2_0
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #endif
-                charset =Encoding.GetEncoding(1252);
+                charset = Encoding.GetEncoding(1252);
             }
+
             public static Encoding charset = null;
+
             //Charset charset = Charset.ForName("Cp1252"); // default charset
             public Module Get(string key)
             {
                 return ContainsKey(key) ? this[key] : null;
             }
+
             public Module Put(string key, Module value)
             {
                 Module oldValue = null;
@@ -179,6 +187,7 @@ namespace NPOI.POIFS.Macros
          * @throws IOException
          * @since 3.15-beta2
          */
+
         protected void FindMacros(DirectoryNode dir, ModuleMap modules)
         {
             if (VBA_PROJECT_POIFS.Equals(dir.Name, StringComparison.OrdinalIgnoreCase))
@@ -208,6 +217,7 @@ namespace NPOI.POIFS.Macros
          * @return a java String in the supplied character Set
          * @throws IOException
          */
+
         private static String ReadString(InputStream stream, int length, Encoding charset)
         {
             byte[] buffer = new byte[length];
@@ -228,6 +238,7 @@ namespace NPOI.POIFS.Macros
          * @param modules a map to store the modules
          * @throws IOException
          */
+
         private static void ReadModule(RLEDecompressingInputStream in1, String streamName, ModuleMap modules)
         {
             int moduleOffset = in1.ReadInt();
@@ -279,7 +290,6 @@ namespace NPOI.POIFS.Macros
                 module.Read(stream);
                 stream.Close();
             }
-
         }
 
         /**
@@ -287,6 +297,7 @@ namespace NPOI.POIFS.Macros
           * number of bytes skipped is different than requested.
           * @throws IOException
           */
+
         private static void TrySkip(InputStream in1, long n)
         {
             long skippedBytes = in1.Skip(n);
@@ -309,6 +320,7 @@ namespace NPOI.POIFS.Macros
 
         // Constants from MS-OVBA: https://msdn.microsoft.com/en-us/library/office/cc313094(v=office.12).aspx
         private const int EOF = -1;
+
         private const int VERSION_INDEPENDENT_TERMINATOR = 0x0010;
         private const int VERSION_DEPENDENT_TERMINATOR = 0x002B;
         private const int PROJECTVERSION = 0x0009;
@@ -318,13 +330,16 @@ namespace NPOI.POIFS.Macros
         private const int MODULETYPE_PROCEDURAL = 0x0021;
         private const int MODULETYPE_DOCUMENT_CLASS_OR_DESIGNER = 0x0022;
         private const int PROJECTLCID = 0x0002;
-
+        private const int MODULE_NAME = 0x0019;
+        private const int MODULE_NAME_UNICODE = 0x0047;
+        private const int MODULE_DOC_STRING = 0x001c;
         /**
          * Reads VBA Project modules from a VBA Project directory located at
          * <tt>macroDir</tt> into <tt>modules</tt>.
          *
          * @since 3.15-beta2
          */
+
         protected void ReadMacros(DirectoryNode macroDir, ModuleMap modules)
         {
             foreach (Entry entry in macroDir)
@@ -358,16 +373,20 @@ namespace NPOI.POIFS.Macros
                                     case PROJECTVERSION:
                                         TrySkip(in1, 6);
                                         break;
+
                                     case PROJECTCODEPAGE:
                                         int codepage = in1.ReadShort();
                                         ModuleMap.charset = Encoding.GetEncoding(codepage); //Charset.ForName("Cp" + codepage);
                                         break;
+
                                     case STREAMNAME:
                                         streamName = ReadString(in1, recordLength, ModuleMap.charset);
                                         break;
+
                                     case MODULEOFFSET:
                                         ReadModule(in1, streamName, modules);
                                         break;
+
                                     default:
                                         TrySkip(in1, recordLength);
                                         break;
@@ -399,5 +418,4 @@ namespace NPOI.POIFS.Macros
             }
         }
     }
-
 }

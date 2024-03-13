@@ -72,28 +72,28 @@ namespace NPOI.Util
 
         public override bool CanRead
         {
-            get {return input.CanRead; }
+            get { return input.CanRead; }
         }
 
         public override bool CanSeek
         {
-            get {return input.CanSeek; }
+            get { return input.CanSeek; }
         }
 
         public override bool CanWrite
         {
-            get {return input.CanWrite; }
+            get { return input.CanWrite; }
         }
 
         public override long Length
         {
-            get {return input.Length; }
+            get { return input.Length; }
         }
 
         public override long Position
         {
             get { return input.Position; }
-            set { input.Position = value;}
+            set { input.Position = value; }
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace NPOI.Util
                     return -1;
                 }
             }
-            return buf[pos++];
+            return buf[pos++] & 0xFF;
         }
 
         public override int Read(byte[] b)
@@ -277,7 +277,7 @@ namespace NPOI.Util
         ///</summary>
         ///<param name="offset"></param>
         ///<returns>returns the number of bits in the copy token (a value between 4 and 12)</returns>
-        static int GetCopyLenBits(int offset)
+        private static int GetCopyLenBits(int offset)
         {
             for (int n = 11; n >= 4; n--)
             {
@@ -361,7 +361,6 @@ namespace NPOI.Util
             return out1.ToArray();
         }
 
-
         public override void Flush()
         {
             input.Flush();
@@ -382,5 +381,4 @@ namespace NPOI.Util
             input.Write(buffer, offset, count);
         }
     }
-
 }
