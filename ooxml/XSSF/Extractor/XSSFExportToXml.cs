@@ -285,7 +285,7 @@ namespace NPOI.XSSF.Extractor
                 case CellType.Boolean: value += cell.BooleanCellValue; break;
                 case CellType.Error: value = cell.ErrorCellString; break;
                 case CellType.Formula:
-                    if(cell.GetCachedFormulaResultTypeEnum()== CellType.String)
+                    if(cell.CachedFormulaResultType== CellType.String)
                     {
                         value = cell.StringCellValue;
                     }
@@ -295,7 +295,7 @@ namespace NPOI.XSSF.Extractor
                         {
                             value = GetFormattedDate(cell);
                         }
-                        else if(cell.GetCachedFormulaResultTypeEnum()== CellType.Numeric)
+                        else if(cell.CachedFormulaResultType== CellType.Numeric)
                         {
                             value=cell.GetRawValue();
                         }

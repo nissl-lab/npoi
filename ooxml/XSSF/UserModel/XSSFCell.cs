@@ -1384,16 +1384,6 @@ namespace NPOI.XSSF.UserModel
         {
             return CellUtil.CopyCell(this.Row, this.ColumnIndex, targetIndex);
         }
-
-        public CellType GetCachedFormulaResultTypeEnum()
-        {
-            if(!IsFormulaCell)
-            {
-                throw new InvalidOperationException("Only formula cells have cached results");
-            }
-
-            return GetBaseCellType(false);
-        }
     }
 
 

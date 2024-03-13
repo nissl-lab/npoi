@@ -309,7 +309,7 @@ namespace NPOI.XSSF.Streaming
 
                         WriteAsBytes("</f>");
 
-                        switch (cell.GetCachedFormulaResultTypeEnum())
+                        switch (cell.CachedFormulaResultType)
                         {
                             case CellType.Numeric:
                                 double nval = cell.NumericCellValue;

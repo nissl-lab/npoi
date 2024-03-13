@@ -163,16 +163,5 @@ namespace NPOI.XSSF.Streaming
                 return _cell.CachedFormulaResultType;
             }
         }
-        /**
-         * @since POI 3.15 beta 3
-         * @deprecated POI 3.15 beta 3.
-         * Will be deleted when we make the CellType enum transition. See bug 59791.
-         */
-        //@Internal(since= "POI 3.15 beta 3")
-
-        public CellType GetCachedFormulaResultTypeEnum()
-        {
-            return _cell.GetCachedFormulaResultTypeEnum();
-        }
     }
 }

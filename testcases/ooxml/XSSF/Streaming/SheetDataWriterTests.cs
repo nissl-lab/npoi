@@ -234,7 +234,7 @@ namespace TestCases.XSSF.Streaming
             _cell.CellStyle.Index.Returns((short)0);
             _cell.CellType.Returns(CellType.Formula);
             _cell.CellFormula.Returns("SUM(A1:A3)");
-            _cell.GetCachedFormulaResultTypeEnum().Returns(CellType.Numeric);
+            _cell.CachedFormulaResultType.Returns(CellType.Numeric);
             _cell.NumericCellValue.Returns(1);
 
             _objectToTest.WriteCell(0, _cell);
