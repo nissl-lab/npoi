@@ -1743,13 +1743,14 @@ namespace NPOI.XSSF.UserModel
                 return GetDrawingPatriarch();
             }
 
-            //drawingNumber = #drawings.Count + 1
-            int DrawingNumber = GetPackagePart()
+            // Default drawingNumber = #drawings.Count + 1
+            int drawingNumber = GetPackagePart()
                 .Package.GetPartsByContentType(XSSFRelation.DRAWINGS.ContentType).Count + 1;
+            drawingNumber = GetNextPartNumber(XSSFRelation.DRAWINGS, drawingNumber);
             RelationPart rp = CreateRelationship(
                 XSSFRelation.DRAWINGS,
                 XSSFFactory.GetInstance(),
-                DrawingNumber,
+                drawingNumber,
                 false);
             XSSFDrawing drawing = rp.DocumentPart as XSSFDrawing;
             string relId = rp.Relationship.Id;

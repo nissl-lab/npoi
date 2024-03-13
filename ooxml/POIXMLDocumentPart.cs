@@ -574,6 +574,65 @@ using System.Xml;
         }
 
         /**
+         * Identifies the next available part number for a part of the given type,
+         *  if possible, otherwise -1 if none are available.
+         * The found (valid) index can then be safely given to
+         *  {@link #createRelationship(POIXMLRelation, POIXMLFactory, int)} or
+         *  {@link #createRelationship(POIXMLRelation, POIXMLFactory, int, boolean)}
+         *  without naming clashes.
+         * If parts with other types are already claiming a name for this relationship
+         *  type (eg a {@link XSSFRelation#CHART} using the drawing part namespace 
+         *  normally used by {@link XSSFRelation#DRAWINGS}), those will be considered
+         *  when finding the next spare number.
+         *
+         * @param descriptor The relationship type to find the part number for
+         * @param minIdx The minimum free index to assign, use -1 for any
+         * @return The next free part number, or -1 if none available
+         */
+        protected internal int GetNextPartNumber(POIXMLRelation descriptor, int minIdx)
+        {
+            OPCPackage pkg = packagePart.Package;
+
+            try
+            {
+                if (descriptor.DefaultFileName.Equals(descriptor.GetFileName(9999)))
+                {
+                    // Non-index based, check if default is free
+                    PackagePartName ppName = PackagingUriHelper.CreatePartName(descriptor.DefaultFileName);
+                    if (pkg.ContainPart(ppName))
+                    {
+                        // Default name already taken, not index based, nothing free
+                        return -1;
+                    }
+                    else
+                    {
+                        // Default name free
+                        return 0;
+                    }
+                }
+
+                // Default to searching from 1, unless they asked for 0+
+                int idx = minIdx;
+                if (minIdx < 0) idx = 1;
+                while (idx < 1000)
+                {
+                    String name = descriptor.GetFileName(idx);
+                    if (!pkg.ContainPart(PackagingUriHelper.CreatePartName(name)))
+                    {
+                        return idx;
+                    }
+                    idx++;
+                }
+            }
+            catch (InvalidFormatException e)
+            {
+                // Give a general wrapped exception for the problem
+                throw new POIXMLException(e);
+            }
+            return -1;
+        }
+
+        /**
          * Create a new child POIXMLDocumentPart
          *
          * @param descriptor the part descriptor
