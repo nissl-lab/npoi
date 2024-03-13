@@ -324,25 +324,11 @@ namespace TestCases.POIFS.Macros
         [Test]
         public void Bug59858()
         {
-            try
-            {
-                FromFile(POIDataSamples.GetSpreadSheetInstance(), "59858.xls");
-                POITestCase.TestPassesNow(59858);
-            }
-            catch (IOException e)
-            {
-                if (Regex.Match(e.Message, "Module offset for '.+' was never Read.").Success)
-                {
-                    //e.PrintStackTrace();
-                    // NPE when Reading module.offset in VBAMacroReader.ReadMacros (approx line 258)
-                    POITestCase.SkipTest(e);
-                }
-                else
-                {
-                    // something unexpected failed
-                    throw;
-                }
-            }
+            FileInfo f = POIDataSamples.GetSpreadSheetInstance().GetFileInfo("59858.xls");
+            VBAMacroReader r = new VBAMacroReader(f);
+            Dictionary<string, string> macros = r.ReadMacros();
+            Assert.IsNotNull(macros["Sheet4"]);
+            StringAssert.Contains("intentional constituent", macros["Sheet4"]);
         }
 
         // This test is written as expected-to-fail and should be rewritten

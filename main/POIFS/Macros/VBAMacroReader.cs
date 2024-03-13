@@ -273,8 +273,9 @@ namespace NPOI.POIFS.Macros
                 modules.Put(name, module);
                 module.Read(dis);
             }
-            else
-            {
+            else if(module.buf == null)
+            {   
+                //if we haven't already read the bytes for the module keyed off this name...
                 if (module.offset == null)
                 {
                     //This should not happen. bug 59858
