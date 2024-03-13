@@ -403,6 +403,7 @@ namespace TestCases.HSSF.Extractor
             {
                 Assert.IsTrue(true, "correct exception thrown");
             }
+            ex.Close();
         }
     }
 
