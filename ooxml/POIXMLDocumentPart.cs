@@ -650,7 +650,8 @@ namespace NPOI
                 // Default to searching from 1, unless they asked for 0+
                 int idx = minIdx;
                 if (minIdx < 0) idx = 1;
-                while (idx < 1000)
+                int maxIdx = minIdx + pkg.GetParts().Count;
+                while (idx < maxIdx)
                 {
                     name = descriptor.GetFileName(idx);
                     PackagePartName ppName = PackagingUriHelper.CreatePartName(name);
