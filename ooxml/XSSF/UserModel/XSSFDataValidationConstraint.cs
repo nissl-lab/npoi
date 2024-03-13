@@ -245,7 +245,6 @@ namespace NPOI.XSSF.UserModel
             if (validationType != ValidationType.ANY)
             {
                 if (validationType != ValidationType.LIST
-                    && validationType != ValidationType.ANY
                     && validationType != ValidationType.FORMULA)
                 {
                     builder.Append(LIST_SEPARATOR).Append(ot).Append(", ");
