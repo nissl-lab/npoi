@@ -308,23 +308,15 @@ namespace TestCases.POIFS.Macros
             POITestCase.AssertContains(content, testMacroNoSub);
         }
 
-        [Ignore("by poi")]
         [Test]
         public void Bug59830()
         {
-            // This file is intentionally omitted from the test-data directory
-            // unless we can extract the vbaProject.bin from this Word 97-2003 file
-            // so that it's less likely to be opened and executed on a Windows computer.
-            // The file is attached to bug 59830.
-            // The Macro Virus only affects Windows computers, as it Makes a
-            // subprocess call to powershell.exe with an encoded payload
-            // The document Contains macros that execute on workbook open if macros
-            // are enabled
-            FileInfo doc = POIDataSamples.GetDocumentInstance().GetFileInfo("macro_virus.doc.do_not_open");
-            VBAMacroReader Reader = new VBAMacroReader(doc);
-            Dictionary<string, string> macros = Reader.ReadMacros();
-            Assert.IsNotNull(macros);
-            Reader.Close();
+            //test file is "609751.xls" in govdocs1
+            FileInfo f = POIDataSamples.GetSpreadSheetInstance().GetFileInfo("59830.xls");
+            VBAMacroReader r = new VBAMacroReader(f);
+            Dictionary<string, string> macros = r.ReadMacros();
+            Assert.IsNotNull(macros["Module20"]);
+            StringAssert.Contains("here start of superscripting", macros["Module20"]);
         }
 
         // This test is written as expected-to-fail and should be rewritten

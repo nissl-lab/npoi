@@ -333,6 +333,8 @@ namespace NPOI.POIFS.Macros
         private const int MODULE_NAME = 0x0019;
         private const int MODULE_NAME_UNICODE = 0x0047;
         private const int MODULE_DOC_STRING = 0x001c;
+        private const int STREAMNAME_RESERVED = 0x0032;
+
         /**
          * Reads VBA Project modules from a VBA Project directory located at
          * <tt>macroDir</tt> into <tt>modules</tt>.
@@ -355,7 +357,8 @@ namespace NPOI.POIFS.Macros
                     {
                         // process DIR
                         RLEDecompressingInputStream in1 = new RLEDecompressingInputStream(dis);
-                        String streamName = null;
+                        string streamName = null;
+                        string streamNameUnicode = null;
                         int recordId = 0;
                         try
                         {
@@ -381,6 +384,15 @@ namespace NPOI.POIFS.Macros
 
                                     case STREAMNAME:
                                         streamName = ReadString(in1, recordLength, ModuleMap.charset);
+                                        int reserved = in1.ReadShort();
+                                        if (reserved != STREAMNAME_RESERVED)
+                                        {
+                                            throw new IOException("Expected x0032 after stream name before Unicode stream name, but found: " +
+                                                    HexDump.ToHex(reserved));
+                                        }
+                                        int unicodeNameRecordLength = in1.ReadInt();
+                                        streamNameUnicode = ReadUnicodeString(in1, unicodeNameRecordLength);
+                                        //do something with this at some point
                                         break;
 
                                     case MODULEOFFSET:
@@ -416,6 +428,19 @@ namespace NPOI.POIFS.Macros
                     dis.Close();
                 }
             }
+        }
+
+        private string ReadUnicodeString(RLEDecompressingInputStream in1, int unicodeNameRecordLength)
+        {
+            byte[] buffer = new byte[unicodeNameRecordLength];
+            IOUtils.ReadFully(in1, buffer);
+            return Encoding.GetEncoding("UTF-16").GetString(buffer);
+            //return new string(buffer, Charset.forName("UTF-16LE"));
+
+            //There is no codepage "UTF-16LE"  in NETFX, according to the following lines, it maybe utf-16.
+            //Name               CodePage  BodyName           HeaderName         WebName            Encoding.EncodingName
+            //utf-16             1200      utf-16             utf-16             utf-16             Unicode 
+            //utf-16BE           1201      utf-16BE           utf-16BE           utf-16BE           Unicode (Big-Endian)
         }
     }
 }
