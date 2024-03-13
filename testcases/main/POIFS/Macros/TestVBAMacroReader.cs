@@ -342,5 +342,16 @@ namespace TestCases.POIFS.Macros
             Assert.IsNotNull(macros["NewMacros"]);
             StringAssert.Contains("' dirty", macros["NewMacros"]);
         }
+
+        [Test]
+        public void Bug60273()
+        {
+            //test file derives from govdocs1 147240.xls
+            FileInfo f = POIDataSamples.GetSpreadSheetInstance().GetFileInfo("60273.xls");
+            VBAMacroReader r = new VBAMacroReader(f);
+            Dictionary<string, string> macros = r.ReadMacros();
+            Assert.IsNotNull(macros["Module1"]);
+            StringAssert.Contains("9/8/2004", macros["Module1"]);
+        }
     }
 }
