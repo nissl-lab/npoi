@@ -267,7 +267,7 @@ namespace NPOI.HSSF.UserModel
             }
 
             throw new ArgumentException("The supplied POIFSFileSystem does not contain a BIFF8 'Workbook' entry. "
-                + "Is it really an excel file?");
+                + "Is it really an excel file? Had: " + string.Join("\n", directory.EntryNames));
         }
 
         /// <summary>
