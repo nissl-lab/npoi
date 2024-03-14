@@ -285,19 +285,19 @@ namespace NPOI.HSSF.UserModel
             : this(directory, preserveNodes)
         {
         }
-            /**
-     * given a POI POIFSFileSystem object, and a specific directory
-     *  within it, read in its Workbook and populate the high and
-     *  low level models.  If you're reading in a workbook...start here.
-     *
-     * @param directory the POI filesystem directory to process from
-     * @param preserveNodes whether to preseve other nodes, such as
-     *        macros.  This takes more memory, so only say yes if you
-     *        need to. If set, will store all of the POIFSFileSystem
-     *        in memory
-     * @see org.apache.poi.poifs.filesystem.POIFSFileSystem
-     * @exception IOException if the stream cannot be read
-     */
+        /**
+         * given a POI POIFSFileSystem object, and a specific directory
+         *  within it, read in its Workbook and populate the high and
+         *  low level models.  If you're reading in a workbook...start here.
+         *
+         * @param directory the POI filesystem directory to process from
+         * @param preserveNodes whether to preseve other nodes, such as
+         *        macros.  This takes more memory, so only say yes if you
+         *        need to. If set, will store all of the POIFSFileSystem
+         *        in memory
+         * @see org.apache.poi.poifs.filesystem.POIFSFileSystem
+         * @exception IOException if the stream cannot be read
+         */
         public HSSFWorkbook(DirectoryNode directory, bool preserveNodes):base(directory)
         {
 
@@ -309,7 +309,7 @@ namespace NPOI.HSSF.UserModel
             //  POIFS any more
             if (!preserveNodes)
             {
-                this.directory = null;
+                ClearDirectory();
             }
 
             _sheets = new List<HSSFSheet>(INITIAL_CAPACITY);
@@ -1354,10 +1354,10 @@ namespace NPOI.HSSF.UserModel
         public override void Write()
         {
             ValidateInPlaceWritePossible();
-
+            DirectoryNode dir = Directory;
             // Update the Workbook stream in the file
-            DocumentNode workbookNode = (DocumentNode)directory.GetEntry(
-                    GetWorkbookDirEntryName(directory));
+            DocumentNode workbookNode = (DocumentNode)dir.GetEntry(
+                    GetWorkbookDirEntryName(dir));
             NPOIFSDocument workbookDoc = new NPOIFSDocument(workbookNode);
             workbookDoc.ReplaceContents(new ByteArrayInputStream(GetBytes()));
 
@@ -1365,7 +1365,7 @@ namespace NPOI.HSSF.UserModel
             WriteProperties();
 
             // Sync with the File on disk
-            directory.FileSystem.WriteFileSystem();
+            dir.FileSystem.WriteFileSystem();
         }
 
         /**
@@ -1467,12 +1467,12 @@ namespace NPOI.HSSF.UserModel
 
                     // Copy over all the other nodes to our new poifs
                     EntryUtils.CopyNodes(
-                            new FilteringDirectoryNode(this.directory, excepts)
+                            new FilteringDirectoryNode(Directory, excepts)
                             , new FilteringDirectoryNode(fs.Root, excepts)
                     );
                     // YK: preserve StorageClsid, it is important for embedded workbooks,
                     // see Bugzilla 47920
-                    fs.Root.StorageClsid = (this.directory.StorageClsid);
+                    fs.Root.StorageClsid = (Directory.StorageClsid);
                 }
             }
         }
@@ -2085,9 +2085,8 @@ namespace NPOI.HSSF.UserModel
         public int AddOlePackage(byte[] oleData, String label, String fileName, String command)
         {
             // check if we were Created by POIFS otherwise create a new dummy POIFS for storing the package data
-            if (directory == null)
+            if (InitDirectory())
             {
-                directory = new POIFSFileSystem().Root;
                 preserveNodes = true;
             }
 
@@ -2097,9 +2096,9 @@ namespace NPOI.HSSF.UserModel
             do
             {
                 String storageStr = "MBD" + HexDump.ToHex(++storageId);
-                if (!directory.HasEntry(storageStr))
+                if (!Directory.HasEntry(storageStr))
                 {
-                    oleDir = directory.CreateDirectory(storageStr);
+                    oleDir = Directory.CreateDirectory(storageStr);
                     oleDir.StorageClsid = (/*setter*/ClassID.OLE10_PACKAGE);
                 }
             } while (oleDir == null);
@@ -2299,11 +2298,12 @@ namespace NPOI.HSSF.UserModel
             return workbook.ChangeExternalReference(oldUrl, newUrl);
         }
 
+        [Obsolete("use {@link POIDocument#getDirectory()} instead")]
         public DirectoryNode RootDirectory
         {
             get
             {
-                return directory;
+                return Directory;
             }
         }
 
