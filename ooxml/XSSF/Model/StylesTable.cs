@@ -268,17 +268,7 @@ namespace NPOI.XSSF.Model
         // ===========================================================
         //  Start of style related Getters and Setters
         // ===========================================================
-        /**
-         * Get number format string given its id
-         * 
-         * @param idx number format id
-         * @return number format code
-         */
-         [Obsolete("deprecated POI 3.14-beta2. Use {@link #getNumberFormatAt(short)} instead.")]
-        public String GetNumberFormatAt(int idx)
-        {
-            return GetNumberFormatAt((short)idx);
-        }
+
         /**
          * Get number format string given its id
          * 
