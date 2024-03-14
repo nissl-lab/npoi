@@ -38,7 +38,7 @@ namespace NPOI.DDF
         {
             get
             {
-                Instance = ((short)properties.Count);
+                Instance = ((short)EscherProperties.Count);
                 return base.Instance;
             }
         }

@@ -31,17 +31,17 @@ namespace NPOI
         /**
          * Describes the content stored in a part.
          */
-        protected String _type;
+        private String _type;
 
         /**
          * The kind of connection between a source part and a target part in a namespace.
          */
-        protected String _relation;
+        private String _relation;
 
         /**
          * The path component of a pack URI.
          */
-        protected String _defaultName;
+        private String _defaultName;
 
         /**
          * Defines what object is used to construct instances of this relationship

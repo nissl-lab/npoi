@@ -22,6 +22,8 @@ namespace NPOI.DDF
     using System.Diagnostics;
     public class SysIndexSource
     {
+        private int opid = -1;
+        private int colorRef = 0;
         internal static SysIndexSource[] Values()
         {
             return new SysIndexSource[] {
