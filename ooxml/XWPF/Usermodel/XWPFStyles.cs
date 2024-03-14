@@ -197,12 +197,18 @@ namespace NPOI.XWPF.UserModel
         {
             foreach (XWPFStyle style in listStyle)
             {
-                if (style.StyleId?.Equals(styleID) ?? false)
-                    return style;
+                try
+                {
+                    if (style.StyleId?.Equals(styleID) ?? false)
+                        return style;
+                }
+                catch (NullReferenceException)
+                {
+                    // Ignore NPE
+                }
             }
             return null;
         }
-
         /**
          *get the style with the specified name, if any.
          * @param styleName The name of the style to get, e.g., "Heading 1"
