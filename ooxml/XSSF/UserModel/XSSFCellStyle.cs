@@ -823,6 +823,24 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
+        /// Turn on or off "Quote Prefix" or "123 Prefix" for the style,
+        /// which is used to tell Excel that the thing which looks like
+        /// a number or a formula shouldn't be treated as on.
+        /// </summary>
+        /// <value>Is "Quote Prefix" or "123 Prefix" enabled for the cell?</value>
+        public bool IsQuotePrefixed
+        {
+            get
+            {
+                return _cellXf.quotePrefix;
+            }
+            set
+            {
+                _cellXf.quotePrefix = value;
+            }
+        }
+
+        /// <summary>
         /// Get the color to use for the right border
         /// </summary>
         public short RightBorderColor
