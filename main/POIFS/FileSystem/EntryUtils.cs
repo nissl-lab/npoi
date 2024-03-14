@@ -83,31 +83,6 @@ namespace NPOI.POIFS.FileSystem
             CopyNodes((DirectoryEntry)filteredSource, (DirectoryEntry)filteredTarget);
         }
 
-        /**
-         * Copies nodes from one Directory to the other minus the excepts
-         * 
-         * @param sourceRoot
-         *            is the source Directory to copy from
-         * @param targetRoot
-         *            is the target Directory to copy to
-         * @param excepts
-         *            is a list of Strings specifying what nodes NOT to copy
-         * @deprecated use {@link FilteringDirectoryNode} instead
-         */
-        [Obsolete]
-        public static void CopyNodes(DirectoryEntry sourceRoot,
-                DirectoryEntry targetRoot, List<String> excepts)
-        {
-            IEnumerator entries = sourceRoot.Entries;
-            while (entries.MoveNext())
-            {
-                Entry entry = (Entry)entries.Current;
-                if (!excepts.Contains(entry.Name))
-                {
-                    CopyNodeRecursively(entry, targetRoot);
-                }
-            }
-        }
 
         /**
          * Copies all nodes from one POIFS to the other
