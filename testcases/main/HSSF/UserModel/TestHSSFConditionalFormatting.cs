@@ -126,7 +126,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        public void test52122()
+        public void Test52122()
         {
             IWorkbook workbook = new HSSFWorkbook();
             ISheet sheet = workbook.CreateSheet("Conditional Formatting Test");

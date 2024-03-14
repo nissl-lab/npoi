@@ -135,7 +135,7 @@ namespace NPOI.HSSF.Record
             {
                 if (value == null)
                 {
-                    throw new ArgumentException("cellRanges must not be null");
+                    throw new ArgumentNullException("cellRanges must not be null");
                 }
                 CellRangeAddressList cral = new CellRangeAddressList();
                 CellRangeAddress enclosingRange = null;

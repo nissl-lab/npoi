@@ -82,7 +82,11 @@ namespace NPOI.SS.UserModel
          * @return array of <c>CellRangeAddress</c>s. Never <code>null</code>
          */
         CellRangeAddress[] GetFormattingRanges();
-
+        /**
+         * Sets the cell ranges the rule conditional formatting must be applied to.
+         * @param ranges non-null array of <tt>CellRangeAddress</tt>s
+         */
+        void SetFormattingRanges(CellRangeAddress[] ranges);
         /**
          * Replaces an existing Conditional Formatting rule at position idx.
          * Excel allows to create up to 3 Conditional Formatting rules.

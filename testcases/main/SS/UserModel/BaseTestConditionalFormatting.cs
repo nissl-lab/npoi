@@ -1322,6 +1322,88 @@ namespace TestCases.SS.UserModel
 
             wb.Close();
         }
+
+        [Test]
+        public void TestSetCellRangeAddresswithSingleRange()
+        {
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("S1");
+            ISheetConditionalFormatting cf = sheet.SheetConditionalFormatting;
+            Assert.AreEqual(0, cf.NumConditionalFormattings);
+            IConditionalFormattingRule rule1 = cf.CreateConditionalFormattingRule("$A$1>0");
+            cf.AddConditionalFormatting(new CellRangeAddress[] {
+                CellRangeAddress.ValueOf("A1:A5")
+            }, rule1);
+
+            Assert.AreEqual(1, cf.NumConditionalFormattings);
+            IConditionalFormatting ReadCf = cf.GetConditionalFormattingAt(0);
+            CellRangeAddress[] formattingRanges = ReadCf.GetFormattingRanges();
+            Assert.AreEqual(1, formattingRanges.Length);
+            CellRangeAddress formattingRange = formattingRanges[0];
+            Assert.AreEqual("A1:A5", formattingRange.FormatAsString());
+
+            ReadCf.SetFormattingRanges(new CellRangeAddress[] {
+                CellRangeAddress.ValueOf("A1:A6")
+            });
+
+            ReadCf = cf.GetConditionalFormattingAt(0);
+            formattingRanges = ReadCf.GetFormattingRanges();
+            Assert.AreEqual(1, formattingRanges.Length);
+            formattingRange = formattingRanges[0];
+            Assert.AreEqual("A1:A6", formattingRange.FormatAsString());
+        }
+
+        [Test]
+        public void TestSetCellRangeAddressWithMultipleRanges()
+        {
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("S1");
+            ISheetConditionalFormatting cf = sheet.SheetConditionalFormatting;
+            Assert.AreEqual(0, cf.NumConditionalFormattings);
+            IConditionalFormattingRule rule1 = cf.CreateConditionalFormattingRule("$A$1>0");
+            cf.AddConditionalFormatting(new CellRangeAddress[] {
+                CellRangeAddress.ValueOf("A1:A5")
+            }, rule1);
+
+            Assert.AreEqual(1, cf.NumConditionalFormattings);
+            IConditionalFormatting ReadCf = cf.GetConditionalFormattingAt(0);
+            CellRangeAddress[] formattingRanges = ReadCf.GetFormattingRanges();
+            Assert.AreEqual(1, formattingRanges.Length);
+            CellRangeAddress formattingRange = formattingRanges[0];
+            Assert.AreEqual("A1:A5", formattingRange.FormatAsString());
+
+            ReadCf.SetFormattingRanges(new CellRangeAddress[] {
+                CellRangeAddress.ValueOf("A1:A6"),
+                CellRangeAddress.ValueOf("B1:B6")
+            });
+
+            ReadCf = cf.GetConditionalFormattingAt(0);
+            formattingRanges = ReadCf.GetFormattingRanges();
+            Assert.AreEqual(2, formattingRanges.Length);
+            formattingRange = formattingRanges[0];
+            Assert.AreEqual("A1:A6", formattingRange.FormatAsString());
+            formattingRange = formattingRanges[1];
+            Assert.AreEqual("B1:B6", formattingRange.FormatAsString());
+        }
+
+        [Test]
+        public void TestSetCellRangeAddressWithNullRanges()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("S1");
+            ISheetConditionalFormatting cf = sheet.SheetConditionalFormatting;
+            Assert.AreEqual(0, cf.NumConditionalFormattings);
+            IConditionalFormattingRule rule1 = cf.CreateConditionalFormattingRule("$A$1>0");
+            cf.AddConditionalFormatting(new CellRangeAddress[] {
+                CellRangeAddress.ValueOf("A1:A5")
+            }, rule1);
+
+            Assert.AreEqual(1, cf.NumConditionalFormattings);
+            IConditionalFormatting ReadCf = cf.GetConditionalFormattingAt(0);
+            Assert.Throws<ArgumentNullException>(() => ReadCf.SetFormattingRanges(null));
+        }
     }
 
 }

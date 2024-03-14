@@ -22,6 +22,8 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using System.Collections.Generic;
 using NPOI.SS.Util;
 using System;
+using System.Text;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -69,6 +71,29 @@ namespace NPOI.XSSF.UserModel
             return lst.ToArray();
         }
 
+        public void SetFormattingRanges(CellRangeAddress[] ranges)
+        {
+            if (ranges == null)
+            {
+                throw new ArgumentNullException("cellRanges must not be null");
+            }
+            StringBuilder sb = new StringBuilder();
+            bool first = true;
+            foreach (CellRangeAddress range in ranges)
+            {
+                if (!first)
+                {
+                    sb.Append(" ");
+                }
+                else
+                {
+                    first = false;
+                }
+                sb.Append(range.FormatAsString());
+            }
+            _cf.sqref = sb.ToString();
+            //_cf.setSqref(Collections.singletonList(sb.ToString()));
+        }
         /**
          * Replaces an existing Conditional Formatting rule at position idx.
          * Excel allows to create up to 3 Conditional Formatting rules.
