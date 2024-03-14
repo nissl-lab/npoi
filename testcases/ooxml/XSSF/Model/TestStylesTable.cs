@@ -200,7 +200,7 @@ namespace TestCases.XSSF.Model
                     }
                     else
                     {
-                        throw e;
+                        throw;
                     }
                 }
             }
@@ -315,7 +315,7 @@ namespace TestCases.XSSF.Model
                     }
                     else
                     {
-                        throw e;
+                        throw;
                     }
                 }
             }
@@ -349,7 +349,7 @@ namespace TestCases.XSSF.Model
                     }
                     else
                     {
-                        throw e;
+                        throw;
                     }
                 }
             }
@@ -383,7 +383,7 @@ namespace TestCases.XSSF.Model
                     }
                     else
                     {
-                        throw e;
+                        throw;
                     }
                 }
             }
