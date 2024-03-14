@@ -285,7 +285,7 @@ namespace NPOI.XSSF.UserModel
             _ctHyperlink.@ref = ref1;
         }
 
-        protected void SetCellReference(CellReference ref1)
+        public void SetCellReference(CellReference ref1)
         {
             SetCellReference(ref1.FormatAsString());
         }
