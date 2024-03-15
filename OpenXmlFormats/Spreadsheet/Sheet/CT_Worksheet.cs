@@ -415,6 +415,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.dimensionField != null;
         }
+
+        public void UnsetHyperlinks()
+        {
+            this.hyperlinksField = null;
+        }
+
         public CT_SheetProtection AddNewSheetProtection()
         {
             this.sheetProtectionField = new CT_SheetProtection();
@@ -483,10 +489,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.pageMarginsField != null;
         }
-        public bool IsSetHyperLinks()
-        {
-            return this.hyperlinksField != null;
-        }
+
         public bool IsSetSheetPr()
         {
             return this.sheetPrField != null;
@@ -1014,6 +1017,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.ignoredErrorsField = new CT_IgnoredErrors();
             return this.ignoredErrorsField;
         }
+
     }
 
 }
