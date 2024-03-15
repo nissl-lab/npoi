@@ -649,6 +649,10 @@ namespace NPOI.SS.UserModel
                 }
                 else
                 {
+                    if (Char.IsWhiteSpace(c))
+                    {
+                        ms.Clear();
+                    }
                     sb.Append(c);
                 }
             }
