@@ -58,11 +58,12 @@ namespace NPOI.SS.Formula.Atp
         {
             // functions that are available in Excel 2007+ have a prefix _xlfn.
             // if you save such a .xlsx workbook as .xls
-            if (name.StartsWith("_xlfn.")) name = name.Substring(6);
+            String prefix = "_xlfn.";
+            if (name.StartsWith(prefix)) name = name.Substring(prefix.Length);
 
             string key = name.ToUpper();
             if (_functionsByName.ContainsKey(key))
-                return (FreeRefFunction)_functionsByName[key];
+                return _functionsByName[key];
 
             return null;
         }
