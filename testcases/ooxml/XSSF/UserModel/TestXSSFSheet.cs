@@ -438,186 +438,90 @@ namespace TestCases.XSSF.UserModel
             CT_Cols cols = sheet1.GetCTWorksheet().GetColsArray(0);
             Assert.AreEqual(0, cols.sizeOfColArray());
 
-            sheet1.GroupColumn((short)4, (short)7);
-            sheet1.GroupColumn((short)9, (short)12);
+            sheet1.GroupColumn(4, 7);
+            Assert.AreEqual(1, cols.sizeOfColArray());
+            checkColumnGroup(cols.GetColArray(0), 4, 7); // false, true
+
+            sheet1.GroupColumn(9, 12);
 
             Assert.AreEqual(2, cols.sizeOfColArray());
+            checkColumnGroup(cols.GetColArray(0), 4, 7); // false, true
+            checkColumnGroup(cols.GetColArray(1), 9, 12); // false, true
 
-            Assert.IsFalse(cols.GetColArray(0).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(0).IsSetCollapsed());
-            Assert.AreEqual(5, cols.GetColArray(0).min); // 1 based
-            Assert.AreEqual(8, cols.GetColArray(0).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(1).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(1).IsSetCollapsed());
-            Assert.AreEqual(10, cols.GetColArray(1).min); // 1 based
-            Assert.AreEqual(13, cols.GetColArray(1).max); // 1 based
-
-            sheet1.GroupColumn((short)10, (short)11);
+            sheet1.GroupColumn(10, 11);
             Assert.AreEqual(4, cols.sizeOfColArray());
 
-            Assert.IsFalse(cols.GetColArray(0).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(0).IsSetCollapsed());
-            Assert.AreEqual(5, cols.GetColArray(0).min); // 1 based
-            Assert.AreEqual(8, cols.GetColArray(0).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(1).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(1).IsSetCollapsed());
-            Assert.AreEqual(10, cols.GetColArray(1).min); // 1 based
-            Assert.AreEqual(10, cols.GetColArray(1).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(2).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(2).IsSetCollapsed());
-            Assert.AreEqual(11, cols.GetColArray(2).min); // 1 based
-            Assert.AreEqual(12, cols.GetColArray(2).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(3).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(3).IsSetCollapsed());
-            Assert.AreEqual(13, cols.GetColArray(3).min); // 1 based
-            Assert.AreEqual(13, cols.GetColArray(3).max); // 1 based
+            Assert.AreEqual(4, cols.sizeOfColArray());
+            checkColumnGroup(cols.GetColArray(0), 4, 7); // false, true
+            checkColumnGroup(cols.GetColArray(1), 9, 9); // false, true
+            checkColumnGroup(cols.GetColArray(2), 10, 11); // false, true
+            checkColumnGroup(cols.GetColArray(3), 12, 12); // false, true
 
             // collapse columns - 1
-            sheet1.SetColumnGroupCollapsed((short)5, true);
-            Assert.AreEqual(5, cols.sizeOfColArray());
+            sheet1.SetColumnGroupCollapsed(5, true);
 
-            Assert.IsTrue(cols.GetColArray(0).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(0).IsSetCollapsed());
-            Assert.AreEqual(5, cols.GetColArray(0).min); // 1 based
-            Assert.AreEqual(8, cols.GetColArray(0).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(1).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(1).IsSetCollapsed());
-            Assert.AreEqual(9, cols.GetColArray(1).min); // 1 based
-            Assert.AreEqual(9, cols.GetColArray(1).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(2).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(2).IsSetCollapsed());
-            Assert.AreEqual(10, cols.GetColArray(2).min); // 1 based
-            Assert.AreEqual(10, cols.GetColArray(2).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(3).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(3).IsSetCollapsed());
-            Assert.AreEqual(11, cols.GetColArray(3).min); // 1 based
-            Assert.AreEqual(12, cols.GetColArray(3).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(4).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(4).IsSetCollapsed());
-            Assert.AreEqual(13, cols.GetColArray(4).min); // 1 based
-            Assert.AreEqual(13, cols.GetColArray(4).max); // 1 based
+            // FIXME: we grew a column?
+            Assert.AreEqual(5, cols.sizeOfColArray());
+            checkColumnGroupIsCollapsed(cols.GetColArray(0), 4, 7); // true, true
+            checkColumnGroup(cols.GetColArray(1), 8, 8); // false, true
+            checkColumnGroup(cols.GetColArray(2), 9, 9); // false, true
+            checkColumnGroup(cols.GetColArray(3), 10, 11); // false, true
+            checkColumnGroup(cols.GetColArray(4), 12, 12); // false, true
 
 
             // expand columns - 1
-            sheet1.SetColumnGroupCollapsed((short)5, false);
+            sheet1.SetColumnGroupCollapsed(5, false);
+            Assert.AreEqual(5, cols.sizeOfColArray());
 
-            Assert.IsFalse(cols.GetColArray(0).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(0).IsSetCollapsed());
-            Assert.AreEqual(5, cols.GetColArray(0).min); // 1 based
-            Assert.AreEqual(8, cols.GetColArray(0).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(1).IsSetHidden());
-            Assert.IsFalse(cols.GetColArray(1).IsSetCollapsed());
-            Assert.AreEqual(9, cols.GetColArray(1).min); // 1 based
-            Assert.AreEqual(9, cols.GetColArray(1).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(2).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(2).IsSetCollapsed());
-            Assert.AreEqual(10, cols.GetColArray(2).min); // 1 based
-            Assert.AreEqual(10, cols.GetColArray(2).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(3).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(3).IsSetCollapsed());
-            Assert.AreEqual(11, cols.GetColArray(3).min); // 1 based
-            Assert.AreEqual(12, cols.GetColArray(3).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(4).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(4).IsSetCollapsed());
-            Assert.AreEqual(13, cols.GetColArray(4).min); // 1 based
-            Assert.AreEqual(13, cols.GetColArray(4).max); // 1 based
+            checkColumnGroupIsExpanded(cols.GetColArray(0), 4, 7); // false, true
+            checkColumnGroup(cols.GetColArray(1), 8, 8, false, false);
+            checkColumnGroup(cols.GetColArray(2), 9, 9); // false, true
+            checkColumnGroup(cols.GetColArray(3), 10, 11); // false, true
+            checkColumnGroup(cols.GetColArray(4), 12, 12); // false, true
 
 
             //collapse - 2
-            sheet1.SetColumnGroupCollapsed((short)9, true);
+            sheet1.SetColumnGroupCollapsed(9, true);
+            // it grew again?
             Assert.AreEqual(6, cols.sizeOfColArray());
-            Assert.IsFalse(cols.GetColArray(0).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(0).IsSetCollapsed());
-            Assert.AreEqual(5, cols.GetColArray(0).min); // 1 based
-            Assert.AreEqual(8, cols.GetColArray(0).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(1).IsSetHidden());
-            Assert.IsFalse(cols.GetColArray(1).IsSetCollapsed());
-            Assert.AreEqual(9, cols.GetColArray(1).min); // 1 based
-            Assert.AreEqual(9, cols.GetColArray(1).max); // 1 based
-            Assert.IsTrue(cols.GetColArray(2).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(2).IsSetCollapsed());
-            Assert.AreEqual(10, cols.GetColArray(2).min); // 1 based
-            Assert.AreEqual(10, cols.GetColArray(2).max); // 1 based
-            Assert.IsTrue(cols.GetColArray(3).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(3).IsSetCollapsed());
-            Assert.AreEqual(11, cols.GetColArray(3).min); // 1 based
-            Assert.AreEqual(12, cols.GetColArray(3).max); // 1 based
-            Assert.IsTrue(cols.GetColArray(4).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(4).IsSetCollapsed());
-            Assert.AreEqual(13, cols.GetColArray(4).min); // 1 based
-            Assert.AreEqual(13, cols.GetColArray(4).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(5).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(5).IsSetCollapsed());
-            Assert.AreEqual(14, cols.GetColArray(5).min); // 1 based
-            Assert.AreEqual(14, cols.GetColArray(5).max); // 1 based
+            checkColumnGroup(cols.GetColArray(0), 4, 7); // false, true
+            checkColumnGroup(cols.GetColArray(1), 8, 8, false, false);
+            checkColumnGroupIsCollapsed(cols.GetColArray(2), 9, 9); // true, true
+            checkColumnGroupIsCollapsed(cols.GetColArray(3), 10, 11); // true, true
+            checkColumnGroupIsCollapsed(cols.GetColArray(4), 12, 12); // true, true
+                                                                      // why was this column group added?
+            checkColumnGroup(cols.GetColArray(5), 13, 13); // false, true
 
 
             //expand - 2
-            sheet1.SetColumnGroupCollapsed((short)9, false);
+            sheet1.SetColumnGroupCollapsed(9, false);
             Assert.AreEqual(6, cols.sizeOfColArray());
-            Assert.AreEqual(14, cols.GetColArray(5).min);
 
             //outline level 2: the line under ==> collapsed==True
             Assert.AreEqual(2, cols.GetColArray(3).outlineLevel);
             Assert.IsTrue(cols.GetColArray(4).IsSetCollapsed());
 
-            Assert.IsFalse(cols.GetColArray(0).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(0).IsSetCollapsed());
-            Assert.AreEqual(5, cols.GetColArray(0).min); // 1 based
-            Assert.AreEqual(8, cols.GetColArray(0).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(1).IsSetHidden());
-            Assert.IsFalse(cols.GetColArray(1).IsSetCollapsed());
-            Assert.AreEqual(9, cols.GetColArray(1).min); // 1 based
-            Assert.AreEqual(9, cols.GetColArray(1).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(2).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(2).IsSetCollapsed());
-            Assert.AreEqual(10, cols.GetColArray(2).min); // 1 based
-            Assert.AreEqual(10, cols.GetColArray(2).max); // 1 based
-            Assert.IsTrue(cols.GetColArray(3).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(3).IsSetCollapsed());
-            Assert.AreEqual(11, cols.GetColArray(3).min); // 1 based
-            Assert.AreEqual(12, cols.GetColArray(3).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(4).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(4).IsSetCollapsed());
-            Assert.AreEqual(13, cols.GetColArray(4).min); // 1 based
-            Assert.AreEqual(13, cols.GetColArray(4).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(5).IsSetHidden());
-            Assert.IsFalse(cols.GetColArray(5).IsSetCollapsed());
-            Assert.AreEqual(14, cols.GetColArray(5).min); // 1 based
-            Assert.AreEqual(14, cols.GetColArray(5).max); // 1 based
+            checkColumnGroup(cols.GetColArray(0), 4, 7);
+            checkColumnGroup(cols.GetColArray(1), 8, 8, false, false);
+            checkColumnGroup(cols.GetColArray(2), 9, 9); // false, true
+            checkColumnGroupIsCollapsed(cols.GetColArray(3), 10, 11); // true, true
+            checkColumnGroup(cols.GetColArray(4), 12, 12); // false, true
+            checkColumnGroup(cols.GetColArray(5), 13, 13, false, false);
 
             //DOCUMENTARE MEGLIO IL DISCORSO DEL LIVELLO
             //collapse - 3
-            sheet1.SetColumnGroupCollapsed((short)10, true);
+            sheet1.SetColumnGroupCollapsed(10, true);
             Assert.AreEqual(6, cols.sizeOfColArray());
-            Assert.IsFalse(cols.GetColArray(0).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(0).IsSetCollapsed());
-            Assert.AreEqual(5, cols.GetColArray(0).min); // 1 based
-            Assert.AreEqual(8, cols.GetColArray(0).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(1).IsSetHidden());
-            Assert.IsFalse(cols.GetColArray(1).IsSetCollapsed());
-            Assert.AreEqual(9, cols.GetColArray(1).min); // 1 based
-            Assert.AreEqual(9, cols.GetColArray(1).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(2).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(2).IsSetCollapsed());
-            Assert.AreEqual(10, cols.GetColArray(2).min); // 1 based
-            Assert.AreEqual(10, cols.GetColArray(2).max); // 1 based
-            Assert.IsTrue(cols.GetColArray(3).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(3).IsSetCollapsed());
-            Assert.AreEqual(11, cols.GetColArray(3).min); // 1 based
-            Assert.AreEqual(12, cols.GetColArray(3).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(4).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(4).IsSetCollapsed());
-            Assert.AreEqual(13, cols.GetColArray(4).min); // 1 based
-            Assert.AreEqual(13, cols.GetColArray(4).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(5).IsSetHidden());
-            Assert.IsFalse(cols.GetColArray(5).IsSetCollapsed());
-            Assert.AreEqual(14, cols.GetColArray(5).min); // 1 based
-            Assert.AreEqual(14, cols.GetColArray(5).max); // 1 based
+            checkColumnGroup(cols.GetColArray(0), 4, 7);
+            checkColumnGroup(cols.GetColArray(1), 8, 8, false, false);
+            checkColumnGroup(cols.GetColArray(2), 9, 9); // false, true
+            checkColumnGroupIsCollapsed(cols.GetColArray(3), 10, 11); // true, true
+            checkColumnGroup(cols.GetColArray(4), 12, 12); // false, true
+            checkColumnGroup(cols.GetColArray(5), 13, 13, false, false);
 
 
             //expand - 3
-            sheet1.SetColumnGroupCollapsed((short)10, false);
+            sheet1.SetColumnGroupCollapsed(10, false);
             Assert.AreEqual(6, cols.sizeOfColArray());
             Assert.IsFalse(cols.GetColArray(0).hidden);
             Assert.IsFalse(cols.GetColArray(5).hidden);
@@ -627,35 +531,93 @@ namespace TestCases.XSSF.UserModel
             // Save and re-load
             XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1);
             wb1.Close();
-            sheet1 = (XSSFSheet)wb2.GetSheetAt(0);
-            Assert.AreEqual(6, cols.sizeOfColArray());
+            sheet1 = wb2.GetSheetAt(0) as XSSFSheet;
+            // FIXME: forgot to reassign!
+            //cols = sheet1.getCTWorksheet().getColsArray(0);
 
-            Assert.IsFalse(cols.GetColArray(0).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(0).IsSetCollapsed());
-            Assert.AreEqual(5, cols.GetColArray(0).min); // 1 based
-            Assert.AreEqual(8, cols.GetColArray(0).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(1).IsSetHidden());
-            Assert.IsFalse(cols.GetColArray(1).IsSetCollapsed());
-            Assert.AreEqual(9, cols.GetColArray(1).min); // 1 based
-            Assert.AreEqual(9, cols.GetColArray(1).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(2).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(2).IsSetCollapsed());
-            Assert.AreEqual(10, cols.GetColArray(2).min); // 1 based
-            Assert.AreEqual(10, cols.GetColArray(2).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(3).IsSetHidden());
-            Assert.IsTrue(cols.GetColArray(3).IsSetCollapsed());
-            Assert.AreEqual(11, cols.GetColArray(3).min); // 1 based
-            Assert.AreEqual(12, cols.GetColArray(3).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(4).IsSetHidden());
-            Assert.IsFalse(cols.GetColArray(4).IsSetCollapsed());
-            Assert.AreEqual(13, cols.GetColArray(4).min); // 1 based
-            Assert.AreEqual(13, cols.GetColArray(4).max); // 1 based
-            Assert.IsFalse(cols.GetColArray(5).IsSetHidden());
-            Assert.IsFalse(cols.GetColArray(5).IsSetCollapsed());
-            Assert.AreEqual(14, cols.GetColArray(5).min); // 1 based
-            Assert.AreEqual(14, cols.GetColArray(5).max); // 1 based
+            Assert.AreEqual(6, cols.sizeOfColArray());
+            checkColumnGroup(cols.GetColArray(0), 4, 7); // false, true
+            checkColumnGroup(cols.GetColArray(1), 8, 8, false, false);
+            checkColumnGroup(cols.GetColArray(2), 9, 9); // false, true
+            checkColumnGroup(cols.GetColArray(3), 10, 11); // false, true
+            checkColumnGroup(cols.GetColArray(4), 12, 12, false, false);
+            checkColumnGroup(cols.GetColArray(5), 13, 13, false, false);
 
             wb2.Close();
+        }
+
+        /**
+     * Verify that column groups were created correctly after Sheet.groupColumn
+     *
+     * @param col the column group xml bean
+     * @param fromColumnIndex 0-indexed
+     * @param toColumnIndex 0-indexed
+     */
+        private static void checkColumnGroup(
+                CT_Col col,
+                int fromColumnIndex, int toColumnIndex,
+                bool isSetHidden, bool isSetCollapsed
+                )
+        {
+            Assert.AreEqual(fromColumnIndex, col.min - 1, "from column index"); // 1 based
+            Assert.AreEqual(toColumnIndex, col.max - 1, "to column index"); // 1 based
+            Assert.AreEqual(isSetHidden, col.IsSetHidden(), "isSetHidden");
+            Assert.AreEqual(isSetCollapsed, col.IsSetCollapsed(), "isSetCollapsed"); //not necessarily set
+        }
+
+        /**
+         * Verify that column groups were created correctly after Sheet.groupColumn
+         *
+         * @param col the column group xml bean
+         * @param fromColumnIndex 0-indexed
+         * @param toColumnIndex 0-indexed
+         */
+        private static void checkColumnGroup(
+                CT_Col col,
+                int fromColumnIndex, int toColumnIndex
+                )
+        {
+            Assert.AreEqual(fromColumnIndex, col.min - 1, "from column index"); // 1 based
+            Assert.AreEqual(toColumnIndex, col.max - 1, "to column index"); // 1 based
+            Assert.IsFalse(col.IsSetHidden(), "isSetHidden");
+            Assert.IsTrue(col.IsSetCollapsed(), "isSetCollapsed"); //not necessarily set
+        }
+        /**
+         * Verify that column groups were created correctly after Sheet.groupColumn
+         *
+         * @param col the column group xml bean
+         * @param fromColumnIndex 0-indexed
+         * @param toColumnIndex 0-indexed
+         */
+        private static void checkColumnGroupIsCollapsed(
+                CT_Col col,
+                int fromColumnIndex, int toColumnIndex
+                )
+        {
+            Assert.AreEqual(fromColumnIndex, col.min - 1, "from column index"); // 1 based
+            Assert.AreEqual(toColumnIndex, col.max - 1, "to column index"); // 1 based
+            Assert.IsTrue(col.IsSetHidden(), "isSetHidden");
+            Assert.IsTrue(col.IsSetCollapsed(), "isSetCollapsed");
+            //assertTrue("getCollapsed", col.getCollapsed());
+        }
+        /**
+         * Verify that column groups were created correctly after Sheet.groupColumn
+         *
+         * @param col the column group xml bean
+         * @param fromColumnIndex 0-indexed
+         * @param toColumnIndex 0-indexed
+         */
+        private static void checkColumnGroupIsExpanded(
+                CT_Col col,
+                int fromColumnIndex, int toColumnIndex
+                )
+        {
+            Assert.AreEqual(fromColumnIndex, col.min - 1, "from column index"); // 1 based
+            Assert.AreEqual(toColumnIndex, col.max - 1, "to column index"); // 1 based
+            Assert.IsFalse(col.IsSetHidden(), "isSetHidden");
+            Assert.IsTrue(col.IsSetCollapsed(), "isSetCollapsed");
+            //assertTrue("isSetCollapsed", !col.isSetCollapsed() || !col.getCollapsed());
+            //assertFalse("getCollapsed", col.getCollapsed());
         }
 
         /**
@@ -1376,26 +1338,25 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
 
-            IRow row1 = sheet.CreateRow((short)0);
-            ICell cell = row1.CreateCell((short)0);
+            IRow row1 = sheet.CreateRow(0);
+            ICell cell = row1.CreateCell(0);
             cell.SetCellValue("Names");
-            ICell cell2 = row1.CreateCell((short)1);
+            ICell cell2 = row1.CreateCell(1);
             cell2.SetCellValue("#");
 
-            IRow row2 = sheet.CreateRow((short)1);
-            ICell cell3 = row2.CreateCell((short)0);
+            IRow row2 = sheet.CreateRow(1);
+            ICell cell3 = row2.CreateCell(0);
             cell3.SetCellValue("Jane");
-            ICell cell4 = row2.CreateCell((short)1);
+            ICell cell4 = row2.CreateCell(1);
             cell4.SetCellValue(3);
 
-            IRow row3 = sheet.CreateRow((short)2);
-            ICell cell5 = row3.CreateCell((short)0);
+            IRow row3 = sheet.CreateRow(2);
+            ICell cell5 = row3.CreateCell(0);
             cell5.SetCellValue("John");
-            ICell cell6 = row3.CreateCell((short)1);
+            ICell cell6 = row3.CreateCell(1);
             cell6.SetCellValue(3);
 
-            return wb;
-        }
+            return wb;        }
 
         [Test]
         public void TestCreateTwoPivotTablesInOneSheet()
