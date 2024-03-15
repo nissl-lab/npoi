@@ -1993,6 +1993,26 @@ namespace NPOI.XSSF.UserModel
             return ctSheet.state == ST_SheetState.veryHidden;
         }
 
+        public SheetVisibility GetSheetVisibility(int sheetIx)
+        {
+            ValidateSheetIndex(sheetIx);
+            CT_Sheet ctSheet = sheets[sheetIx].sheet;
+            ST_SheetState state = ctSheet.state;
+            if(state == ST_SheetState.visible)
+            {
+                return SheetVisibility.Visible;
+            }
+            if(state == ST_SheetState.hidden)
+            {
+                return SheetVisibility.Hidden;
+            }
+            if(state == ST_SheetState.veryHidden)
+            {
+                return SheetVisibility.VeryHidden;
+            }
+            throw new ArgumentException("This should never happen");
+        }
+
         /**
          * Sets the visible state of this sheet.
          * <p>
@@ -2009,7 +2029,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void SetSheetHidden(int sheetIx, bool hidden)
         {
-            SetSheetHidden(sheetIx, hidden ? SheetState.Hidden : SheetState.Visible);
+            SetSheetHidden(sheetIx, hidden ? SheetVisibility.Hidden : SheetVisibility.Visible);
         }
 
         /**
@@ -2027,12 +2047,10 @@ namespace NPOI.XSSF.UserModel
          *        <code>Workbook.SHEET_STATE_VERY_HIDDEN</code>.
          * @throws ArgumentException if the supplied sheet index or state is invalid
          */
-        public void SetSheetHidden(int sheetIx, SheetState state)
+        [Obsolete]
+        public void SetSheetHidden(int sheetIx, SheetVisibility state)
         {
-            ValidateSheetIndex(sheetIx);
-            WorkbookUtil.ValidateSheetState(state);
-            CT_Sheet ctSheet = sheets[sheetIx].sheet;
-            ctSheet.state = (ST_SheetState)state;
+            SetSheetVisibility(sheetIx, state);
         }
 
         /// <summary>
@@ -2040,10 +2058,32 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         /// <param name="sheetIx">The sheet number</param>
         /// <param name="hidden">0 for not hidden, 1 for hidden, 2 for very hidden</param>
-        public void SetSheetHidden(int sheetIx, int hidden)
+        [Obsolete]
+        public void SetSheetHidden(int sheetIx, int state)
+        {
+            WorkbookUtil.ValidateSheetState((SheetVisibility)state);
+            SetSheetVisibility(sheetIx, (SheetVisibility) state);
+        }
+
+        public void SetSheetVisibility(int sheetIx, SheetVisibility visibility)
         {
             ValidateSheetIndex(sheetIx);
-            this.SetSheetHidden(sheetIx, (SheetState)hidden);
+
+            CT_Sheet ctSheet = sheets[sheetIx].sheet;
+            switch(visibility)
+            {
+                case SheetVisibility.Visible:
+                    ctSheet.state = (ST_SheetState.visible);
+                    break;
+                case SheetVisibility.Hidden:
+                    ctSheet.state = (ST_SheetState.hidden);
+                    break;
+                case SheetVisibility.VeryHidden:
+                    ctSheet.state = (ST_SheetState.veryHidden);
+                    break;
+                default:
+                    throw new ArgumentException("This should never happen");
+            }
         }
 
         /**

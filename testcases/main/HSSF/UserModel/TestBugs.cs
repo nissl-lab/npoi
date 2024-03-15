@@ -1601,8 +1601,8 @@ namespace TestCases.HSSF.UserModel
             Assert.IsFalse(wb.IsSheetHidden(2));
             Assert.IsTrue(wb.IsSheetVeryHidden(2));
 
-            // Change 0 to be very hidden, and re-load
-            wb.SetSheetHidden(0, 2);
+            // Change sheet 0 to be very hidden, and re-load
+            wb.SetSheetVisibility(0, SheetVisibility.VeryHidden);
 
             HSSFWorkbook nwb = WriteOutAndReadBack(wb);
 
