@@ -59,7 +59,7 @@ namespace NPOI.SS.UserModel
             //DataFormatter.SetExcelStyleRoundingMode(format4digits);
         }
 
-        private double dateToBeFormatted = 0.0;
+        private double dateToBeFormatted;
 
         public ExcelStyleDateFormatter()
             : base()
@@ -73,16 +73,18 @@ namespace NPOI.SS.UserModel
         }
 
 
-        //public ExcelStyleDateFormatter(String pattern,
-        //                           DateFormatSymbols formatSymbols)
-        //{
-        //    super(processFormatPattern(pattern), formatSymbols);
-        //}
+        public ExcelStyleDateFormatter(String pattern,
+                                   DateTimeFormatInfo formatSymbols)
+            : base(ProcessFormatPattern(pattern), formatSymbols)
+        {
+            
+        }
 
-        //public ExcelStyleDateFormatter(String pattern, Locale locale)
-        //{
-        //    super(processFormatPattern(pattern), locale);
-        //}
+        public ExcelStyleDateFormatter(String pattern, CultureInfo locale)
+            : base(ProcessFormatPattern(pattern), locale)
+        {
+
+        }
         private static string DateTimeMatchEvaluator(Match match)
         {
             return match.Groups[1].Value;
@@ -94,12 +96,12 @@ namespace NPOI.SS.UserModel
         private static String ProcessFormatPattern(String f)
         {
             String t = f.Replace("MMMMM", MMMMM_START_SYMBOL + "MMM" + MMMMM_TRUNCATE_SYMBOL);
-            t = Regex.Replace(t, "\\[H\\]", (H_BRACKET_SYMBOL).ToString(), RegexOptions.IgnoreCase);
-            t = Regex.Replace(t, "\\[HH\\]", (HH_BRACKET_SYMBOL).ToString(), RegexOptions.IgnoreCase);
-            t = Regex.Replace(t, "\\[m\\]", (M_BRACKET_SYMBOL).ToString(), RegexOptions.IgnoreCase);
-            t = Regex.Replace(t, "\\[mm\\]", (MM_BRACKET_SYMBOL).ToString(), RegexOptions.IgnoreCase);
-            t = Regex.Replace(t, "\\[s\\]", (S_BRACKET_SYMBOL).ToString(), RegexOptions.IgnoreCase);
-            t = Regex.Replace(t, "\\[ss\\]", (SS_BRACKET_SYMBOL).ToString(), RegexOptions.IgnoreCase);
+            t = Regex.Replace(t, "\\[H]", (H_BRACKET_SYMBOL).ToString(), RegexOptions.IgnoreCase);
+            t = Regex.Replace(t, "\\[HH]", (HH_BRACKET_SYMBOL).ToString(), RegexOptions.IgnoreCase);
+            t = Regex.Replace(t, "\\[m]", (M_BRACKET_SYMBOL).ToString(), RegexOptions.IgnoreCase);
+            t = Regex.Replace(t, "\\[mm]", (MM_BRACKET_SYMBOL).ToString(), RegexOptions.IgnoreCase);
+            t = Regex.Replace(t, "\\[s]", (S_BRACKET_SYMBOL).ToString(), RegexOptions.IgnoreCase);
+            t = Regex.Replace(t, "\\[ss]", (SS_BRACKET_SYMBOL).ToString(), RegexOptions.IgnoreCase);
             t = t.Replace("s.000", "s.fff");
             t = t.Replace("s.00", "s." + LL_BRACKET_SYMBOL);
             t = t.Replace("s.0", "s." + L_BRACKET_SYMBOL);
@@ -142,7 +144,7 @@ namespace NPOI.SS.UserModel
             // Now handle our special cases
             if (s.IndexOf(MMMMM_START_SYMBOL) != -1)
             {
-                Regex reg = new Regex(MMMMM_START_SYMBOL + "(\\w)\\w+" + MMMMM_TRUNCATE_SYMBOL, RegexOptions.IgnoreCase);
+                Regex reg = new Regex(MMMMM_START_SYMBOL + "(\\p{L}|\\p{P}|\\p{N})[\\p{L}|\\p{P}|\\p{N}]+" + MMMMM_TRUNCATE_SYMBOL, RegexOptions.IgnoreCase);
                 Match m = reg.Match(s);
                 if (m.Success)
                 {
