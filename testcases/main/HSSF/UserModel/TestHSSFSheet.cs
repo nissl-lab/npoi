@@ -17,29 +17,20 @@
 
 namespace TestCases.HSSF.UserModel
 {
-    using System.IO;
-    using System;
-    using System.Configuration;
-    using System.Runtime.InteropServices;
-    using NPOI.HSSF.UserModel;
+    using NPOI.DDF;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
-    using NPOI.SS.Util;
-    using NPOI.DDF;
-
-    using TestCases.HSSF;
-    using NPOI.HSSF.Record.Aggregates;
-    using TestCases.SS;
-    using TestCases.SS.UserModel;
-    using NPOI.SS.UserModel;
-    using NPOI.Util;
     using NPOI.HSSF.Record.AutoFilter;
-    using System.Collections.Generic;
-    using System.Collections;
-    using NPOI.SS.Formula;
+    using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+    using NPOI.Util;
     using NUnit.Framework;
-    using NPOI.SS;
+    using System;
+    using System.Collections;
+    using TestCases.HSSF;
+    using TestCases.SS.UserModel;
 
     /**
      * Tests NPOI.SS.UserModel.Sheet.  This Test case is very incomplete at the moment.
@@ -764,12 +755,10 @@ namespace TestCases.HSSF.UserModel
             s.AutoSizeColumn((short)1);
 
             // Size ranges due to different fonts on different machines
-            Assert.IsTrue(s.GetColumnWidth(0) > 350, "Single number column too small: " + s.GetColumnWidth(0));
-            //Assert.IsTrue(s.GetColumnWidth(0) < 550, "Single number column too big: " + s.GetColumnWidth(0));
-            //Todo: find a algorithm of function SheetUtil.GetColumnWidth to make the test statement above succeed.
-            Assert.IsTrue(s.GetColumnWidth(0) < 650, "Single number column too big: " + s.GetColumnWidth(0));
-            Assert.IsTrue(s.GetColumnWidth(1) > 1500, "6 digit number column too small: " + s.GetColumnWidth(1));
-            Assert.IsTrue(s.GetColumnWidth(1) < 2000, "6 digit number column too big: " + s.GetColumnWidth(1));
+            //Assert.That(s.GetColumnWidth(0), Is.InRange(350, 550), "Single number column width");
+            //Assert.That(s.GetColumnWidth(1), Is.InRange(1500, 2000), "6 digit number column width");
+            POITestCase.AssertBetween("Single number column width", (int) s.GetColumnWidth(0), 350, 550);
+            POITestCase.AssertBetween("6 digit number column width", (int) s.GetColumnWidth(1), 1500, 2000);
 
             // Set a date format
             ICellStyle cs = wb.CreateCellStyle();
@@ -785,10 +774,10 @@ namespace TestCases.HSSF.UserModel
             s.AutoSizeColumn((short)0);
             s.AutoSizeColumn((short)1);
 
-            Assert.IsTrue(s.GetColumnWidth(0) > 4750, "Date column too small: " + s.GetColumnWidth(0));
-            Assert.IsTrue(s.GetColumnWidth(1) > 4750, "Date column too small: " + s.GetColumnWidth(1));
-            Assert.IsTrue(s.GetColumnWidth(0) < 6500, "Date column too big: " + s.GetColumnWidth(0));
-            Assert.IsTrue(s.GetColumnWidth(0) < 6500, "Date column too big: " + s.GetColumnWidth(0));
+            //Assert.That(s.GetColumnWidth(0), Is.InRange(4750, 7000), "Date column width");
+            //Assert.That(s.GetColumnWidth(1), Is.InRange(4750, 7000), "Date column width");
+            POITestCase.AssertBetween("Date column width", (int) s.GetColumnWidth(0), 4750, 7000);
+            POITestCase.AssertBetween("Date column width", (int) s.GetColumnWidth(1), 4750, 7000);
 
             wb.Close();
         }
