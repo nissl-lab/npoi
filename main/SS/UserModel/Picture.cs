@@ -74,7 +74,7 @@ namespace NPOI.SS.UserModel
      *
      * @author Yegor Kozlov
      */
-    public interface IPicture
+    public interface IPicture: IShape
     {
 
         /**

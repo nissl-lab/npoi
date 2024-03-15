@@ -14,18 +14,15 @@
    See the License for the specific language governing permissions and
    limitations Under the License.
 ==================================================================== */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using NPOI.HSSF.UserModel;
-using NPOI.HSSF.Model;
 using NPOI.DDF;
 using NPOI.HSSF.Record;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-using TestCases.HSSF.UserModel;
 using NPOI.Util;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using TestCases.HSSF.UserModel;
 
 namespace TestCases.HSSF.Model
 {
@@ -796,7 +793,7 @@ namespace TestCases.HSSF.Model
             Assert.AreEqual(4, children.Count);
             HSSFShape hssfShape = children[(0)];
             Assert.IsTrue(hssfShape is HSSFSimpleShape);
-            HSSFAnchor anchor = hssfShape.Anchor;
+            HSSFAnchor anchor = hssfShape.Anchor as HSSFAnchor;
             Assert.IsTrue(anchor is HSSFClientAnchor);
             Assert.AreEqual(0, anchor.Dx1);
             Assert.AreEqual(512, anchor.Dx2);
@@ -810,7 +807,7 @@ namespace TestCases.HSSF.Model
 
             hssfShape = children[(1)];
             Assert.IsTrue(hssfShape is HSSFSimpleShape);
-            anchor = hssfShape.Anchor;
+            anchor = hssfShape.Anchor as HSSFAnchor;
             Assert.IsTrue(anchor is HSSFClientAnchor);
             Assert.AreEqual(512, anchor.Dx1);
             Assert.AreEqual(1023, anchor.Dx2);
@@ -824,7 +821,7 @@ namespace TestCases.HSSF.Model
 
             hssfShape = children[(2)];
             Assert.IsTrue(hssfShape is HSSFSimpleShape);
-            anchor = hssfShape.Anchor;
+            anchor = hssfShape.Anchor as HSSFAnchor;
             Assert.IsTrue(anchor is HSSFClientAnchor);
             Assert.AreEqual(0, anchor.Dx1);
             Assert.AreEqual(512, anchor.Dx2);
@@ -838,7 +835,7 @@ namespace TestCases.HSSF.Model
 
             hssfShape = children[(3)];
             Assert.IsTrue(hssfShape is HSSFSimpleShape);
-            anchor = hssfShape.Anchor;
+            anchor = hssfShape.Anchor as HSSFAnchor;
             Assert.IsTrue(anchor is HSSFClientAnchor);
             Assert.AreEqual(0, anchor.Dx1);
             Assert.AreEqual(512, anchor.Dx2);

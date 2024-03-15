@@ -95,7 +95,7 @@ namespace NPOI.HSSF.UserModel
 
             opt.SetEscherProperty(new EscherBoolProperty(EscherProperties.GROUPSHAPE__PRINT, 0x080000));
 
-            EscherRecord anchor = Anchor.GetEscherAnchor();
+            EscherRecord anchor = (Anchor as HSSFAnchor).GetEscherAnchor();
             clientData.RecordId = (EscherClientDataRecord.RECORD_ID);
             clientData.Options = ((short)0x0000);
 

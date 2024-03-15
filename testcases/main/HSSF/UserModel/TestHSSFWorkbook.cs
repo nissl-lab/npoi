@@ -17,29 +17,23 @@
 
 namespace TestCases.HSSF.UserModel
 {
-    using System;
-    using System.IO;
-    using System.Collections;
-
-    using TestCases.HSSF;
+    using NPOI.DDF;
+    using NPOI.HSSF;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
-    using NPOI.SS.Formula;
-    using NPOI.Util;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
-    using NPOI.DDF;
-    using TestCases.SS.UserModel;
+    using NPOI.POIFS.FileSystem;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
-    using NPOI.POIFS.FileSystem;
     using NPOI.SS.Util;
+    using NPOI.Util;
+    using NUnit.Framework;
+    using System;
+    using System.Collections;
     using System.Collections.Generic;
-    using System.Text;
-    using NPOI.HSSF;
-    using System.Threading;
-    using System.Globalization;
-    using NPOI.SS;
+    using System.IO;
+    using TestCases.HSSF;
+    using TestCases.SS.UserModel;
 
     /**
 *
@@ -1219,11 +1213,10 @@ namespace TestCases.HSSF.UserModel
                 IList<HSSFShape> shapes = (sheet.DrawingPatriarch as HSSFPatriarch).Children;
                 foreach (HSSFShape shape in shapes)
                 {
-                    HSSFAnchor anchor = shape.Anchor;
+                    HSSFAnchor anchor = shape.Anchor as HSSFAnchor;
 
                     if (anchor is HSSFClientAnchor)
-                    {
-                        // absolute coordinates
+                    {                        // absolute coordinates
                         HSSFClientAnchor clientAnchor = (HSSFClientAnchor)anchor;
                         Assert.IsNotNull(clientAnchor);
                         //System.out.Println(clientAnchor.Row1 + "," + clientAnchor.Row2);
