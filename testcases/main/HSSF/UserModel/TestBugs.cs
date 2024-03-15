@@ -2274,16 +2274,16 @@ namespace TestCases.HSSF.UserModel
             }
         }
         /**
-     * Problems with formula references to 
-     *  sheets via URLs
-     */
+         * Problems with formula references to 
+         *  sheets via URLs
+         */
         [Test]
-        public void Test45970()
+        public void Bug45970()
         {
-            HSSFWorkbook wb = OpenSample("FormulaRefs.xls");
-            Assert.AreEqual(3, wb.NumberOfSheets);
+            HSSFWorkbook wb1 = OpenSample("FormulaRefs.xls");
+            Assert.AreEqual(3, wb1.NumberOfSheets);
 
-            ISheet s = wb.GetSheetAt(0);
+            ISheet s = wb1.GetSheetAt(0);
             IRow row;
 
             row = s.GetRow(0);
@@ -2310,9 +2310,19 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("'[$http://gagravarr.org/FormulaRefs.xls]Sheet1'!B1", row.GetCell(1).CellFormula);
             Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
 
+            // Link our new workbook
+            IWorkbook externalWb1 = new HSSFWorkbook();
+            externalWb1.CreateSheet("Sheet1");
+            wb1.LinkExternalWorkbook("$http://gagravarr.org/FormulaRefs2.xls", externalWb1);
+
             // Change 4
             row.GetCell(1).CellFormula = ("'[$http://gagravarr.org/FormulaRefs2.xls]Sheet1'!B2");
             row.GetCell(1).SetCellValue(123.0);
+
+            // Link our new workbook
+            IWorkbook externalWb2 = new HSSFWorkbook();
+            externalWb2.CreateSheet("Sheet1");
+            wb1.LinkExternalWorkbook("$http://example.com/FormulaRefs.xls", externalWb2);
 
             // Add 5
             row = s.CreateRow(5);
@@ -2322,8 +2332,9 @@ namespace TestCases.HSSF.UserModel
 
 
             // Re-test
-            wb = WriteOutAndReadBack(wb);
-            s = wb.GetSheetAt(0);
+            HSSFWorkbook wb2 = WriteOutAndReadBack(wb1);
+            wb1.Close();
+            s = wb2.GetSheetAt(0);
 
             row = s.GetRow(0);
             Assert.AreEqual(CellType.Numeric, row.GetCell(1).CellType);
@@ -2344,25 +2355,20 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual("[Formulas2.xls]Sheet1!B2", row.GetCell(1).CellFormula);
             Assert.AreEqual(112.0, row.GetCell(1).NumericCellValue);
 
-#if !HIDE_UNREACHABLE_CODE
-            // TODO - Fix these so they work...
-            if (1 == 2)
-            {
-                row = s.GetRow(4);
-                Assert.AreEqual(CellType.Formula, row.GetCell(1).CellType);
-                Assert.AreEqual("'[\u0005$http://gagravarr.org/FormulaRefs2.xls]Sheet1'!B2", row.GetCell(1).CellFormula);
-                Assert.AreEqual(123.0, row.GetCell(1).NumericCellValue);
+            row = s.GetRow(4);
+            Assert.AreEqual(CellType.Formula, row.GetCell(1).CellType);
+            Assert.AreEqual("'[$http://gagravarr.org/FormulaRefs2.xls]Sheet1'!B2", row.GetCell(1).CellFormula);
+            Assert.AreEqual(123.0, row.GetCell(1).NumericCellValue);
 
-                row = s.GetRow(5);
-                Assert.AreEqual(CellType.Formula, row.GetCell(1).CellType);
-                Assert.AreEqual("'[\u0005$http://example.com/FormulaRefs.xls]Sheet1'!B1", row.GetCell(1).CellFormula);
-                Assert.AreEqual(234.0, row.GetCell(1).NumericCellValue);
-            }
-#endif
+            row = s.GetRow(5);
+            Assert.AreEqual(CellType.Formula, row.GetCell(1).CellType);
+            Assert.AreEqual("'[$http://example.com/FormulaRefs.xls]Sheet1'!B1", row.GetCell(1).CellFormula);
+            Assert.AreEqual(234.0, row.GetCell(1).NumericCellValue);
+
+            wb2.Close();
         }
         [Test]
-        public void Test47251()
-        {
+        public void Test47251()        {
             // Firstly, try with one that triggers on InterfaceHdrRecord
             OpenSample("47251.xls");
 

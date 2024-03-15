@@ -81,7 +81,7 @@ namespace NPOI.SS.Formula
          * Tracks whether the run of whitespace preceeding "look" could be an
          * intersection operator.  See GetChar.
          */
-        private bool _inIntersection = false;
+        private bool _inIntersection;
 
         private IFormulaParsingWorkbook _book;
         private static SpreadsheetVersion _ssVersion;
@@ -759,7 +759,7 @@ namespace NPOI.SS.Formula
                 GetChar();
             }
             // parse column quantifier
-            String startColumnName = null;
+            String startColumnName;
             String endColumnName = null;
             int nColQuantifiers = 0;
             savePtr1 = _pointer;
@@ -1386,12 +1386,21 @@ namespace NPOI.SS.Formula
 
             public override String ToString()
             {
-                StringBuilder sb = new StringBuilder(64);
-                sb.Append(this.GetType().Name).Append(" [");
-                sb.Append(_rep);
-                sb.Append("]");
-                return sb.ToString();
+                return this.GetType().Name + " [" + _rep + "]";
             }
+        }
+
+        private String GetBookName()
+        {
+            StringBuilder sb = new StringBuilder();
+            GetChar();
+            while (look != ']')
+            {
+                sb.Append(look);
+                GetChar();
+            }
+            GetChar();
+            return sb.ToString();
         }
         /**
          * Note - caller should reset {@link #_pointer} upon <code>null</code> result
@@ -1403,15 +1412,7 @@ namespace NPOI.SS.Formula
             String bookName;
             if (look == '[')
             {
-                StringBuilder sb = new StringBuilder();
-                GetChar();
-                while (look != ']')
-                {
-                    sb.Append(look);
-                    GetChar();
-                }
-                GetChar();
-                bookName = sb.ToString();
+                bookName = GetBookName();
             }
             else
             {
@@ -1420,9 +1421,13 @@ namespace NPOI.SS.Formula
 
             if (look == '\'')
             {
-                StringBuilder sb = new StringBuilder();
-
                 Match('\'');
+                if (look == '[')
+                {
+                    bookName = GetBookName();
+                }
+
+                StringBuilder sb = new StringBuilder();
                 bool done = look == '\'';
                 while (!done)
                 {
@@ -1655,7 +1660,7 @@ namespace NPOI.SS.Formula
          * Generates the variable Function ptg for the formula.
          * 
          * For IF Formulas, Additional PTGs are Added To the Tokens
-     * @param name a {@link NamePtg} or {@link NameXPtg} or <code>null</code>
+         * @param name a {@link NamePtg} or {@link NameXPtg} or <code>null</code>
          * @return Ptg a null is returned if we're in an IF formula, it needs extreme manipulation and is handled in this Function
          */
         private ParseNode GetFunction(String name, Ptg namePtg, ParseNode[] args)
