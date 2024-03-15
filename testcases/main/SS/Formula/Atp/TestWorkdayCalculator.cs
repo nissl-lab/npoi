@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using NPOI.SS.Formula.Atp;
 using NPOI.SS.UserModel;
 using NUnit.Framework;
@@ -67,6 +68,27 @@ namespace TestCases.SS.Formula.Atp
         }
 
         [Test]
+        public void TestCalculateWorkdaysOnSameDayShouldReturn1ForWeekdays()
+        {
+            double A_MONDAY = DateUtil.GetExcelDate(new DateTime(2017, 1, 2));
+            Assert.AreEqual(1, WorkdayCalculator.instance.CalculateWorkdays(A_MONDAY, A_MONDAY, new double[0]));
+        }
+
+        [Test]
+        public void TestCalculateWorkdaysOnSameDayShouldReturn0ForHolidays()
+        {
+            double A_MONDAY = DateUtil.GetExcelDate(new DateTime(2017, 1, 2));
+            Assert.AreEqual(0, WorkdayCalculator.instance.CalculateWorkdays(A_MONDAY, A_MONDAY, new double[] { A_MONDAY }));
+        }
+
+        [Test]
+        public void TestCalculateWorkdaysOnSameDayShouldReturn0ForWeekends()
+        {
+            double A_SUNDAY = DateUtil.GetExcelDate(new DateTime(2017, 1, 1));
+            Assert.AreEqual(0, WorkdayCalculator.instance.CalculateWorkdays(A_SUNDAY, A_SUNDAY, new double[0]));
+        }
+
+        [Test]
         public void TestCalculateWorkdaysNumberOfDays()
         {
             double start = 41553.0;
@@ -109,6 +131,44 @@ namespace TestCases.SS.Formula.Atp
             double A_THURSDAY = DateUtil.GetExcelDate(new DateTime(2011, December, 8));
             double A_SATURDAY = DateUtil.GetExcelDate(new DateTime(2011, December, 10));
             Assert.AreEqual(1, WorkdayCalculator.instance.PastDaysOfWeek(A_THURSDAY, A_SATURDAY,  DayOfWeek.Saturday));
+        }
+
+        [Test]
+        public void TestCalculateNonWeekendHolidays()
+        {
+            double start = DateUtil.GetExcelDate(new DateTime(2016, 12, 24));
+            double end = DateUtil.GetExcelDate(new DateTime(2016, 12, 31));
+            double holiday1 = DateUtil.GetExcelDate(new DateTime(2016, 12, 25));
+            double holiday2 = DateUtil.GetExcelDate(new DateTime(2016, 12, 26));
+            int count = WorkdayCalculator.instance.CalculateNonWeekendHolidays(start, end, new double[] { holiday1, holiday2 });
+            Assert.AreEqual(1, count,
+                "Expected 1 non-weekend-holiday for " + start + " to " + end + " and " + holiday1 + " and " + holiday2);
+        }
+
+        [Test]
+        public void TestCalculateNonWeekendHolidaysOneDay()
+        {
+            double start = DateUtil.GetExcelDate(new DateTime(2016, 12, 26));
+            double end = DateUtil.GetExcelDate(new DateTime(2016, 12, 26));
+            double holiday1 = DateUtil.GetExcelDate(new DateTime(2016, 12, 25));
+            double holiday2 = DateUtil.GetExcelDate(new DateTime(2016, 12, 26));
+            int count = WorkdayCalculator.instance.CalculateNonWeekendHolidays(start, end, new double[] { holiday1, holiday2 });
+            Assert.AreEqual(1, count,
+                "Expected 1 non-weekend-holiday for " + start + " to " + end + " and " + holiday1 + " and " + holiday2);
+        }
+
+        [Test]
+        public void TestIsNonWorkday()
+        {
+            double weekend = DateUtil.GetExcelDate(new DateTime(2016, 12, 25));
+            double holiday = DateUtil.GetExcelDate(new DateTime(2016, 12, 26));
+            double workday = DateUtil.GetExcelDate(new DateTime(2016, 12, 27));
+#pragma warning disable CS0618 // 类型或成员已过时
+            Assert.AreEqual(1, WorkdayCalculator.instance.IsNonWorkday(weekend, new double[] { holiday }));
+            Assert.AreEqual(1, WorkdayCalculator.instance.IsNonWorkday(holiday, new double[] { holiday }));
+            Assert.AreEqual(0, WorkdayCalculator.instance.IsNonWorkday(workday, new double[] { holiday }));
+#pragma warning restore CS0618 // 类型或成员已过时
+
         }
     }
 
