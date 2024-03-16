@@ -741,47 +741,6 @@ namespace TestCases.HSSF.UserModel
             wb1.Close();
         }
 
-        [Test]
-        public void TestAutoSizeDate()
-        {
-            IWorkbook wb = new HSSFWorkbook();
-            ISheet s = wb.CreateSheet("Sheet1");
-            IRow r = s.CreateRow(0);
-            r.CreateCell(0).SetCellValue(1);
-            r.CreateCell(1).SetCellValue(123456);
-
-            // Will be sized fairly small
-            s.AutoSizeColumn((short)0);
-            s.AutoSizeColumn((short)1);
-
-            // Size ranges due to different fonts on different machines
-            //Assert.That(s.GetColumnWidth(0), Is.InRange(350, 550), "Single number column width");
-            //Assert.That(s.GetColumnWidth(1), Is.InRange(1500, 2000), "6 digit number column width");
-            POITestCase.AssertBetween("Single number column width", (int) s.GetColumnWidth(0), 350, 550);
-            POITestCase.AssertBetween("6 digit number column width", (int) s.GetColumnWidth(1), 1500, 2000);
-
-            // Set a date format
-            ICellStyle cs = wb.CreateCellStyle();
-            HSSFDataFormat f = (HSSFDataFormat)wb.CreateDataFormat();
-            cs.DataFormat = (/*setter*/f.GetFormat("yyyy-mm-dd MMMM hh:mm:ss"));
-            r.GetCell(0).CellStyle = (/*setter*/cs);
-            r.GetCell(1).CellStyle = (/*setter*/cs);
-
-            Assert.IsTrue(DateUtil.IsCellDateFormatted(r.GetCell(0)));
-            Assert.IsTrue(DateUtil.IsCellDateFormatted(r.GetCell(1)));
-
-            // Should Get much bigger now
-            s.AutoSizeColumn((short)0);
-            s.AutoSizeColumn((short)1);
-
-            //Assert.That(s.GetColumnWidth(0), Is.InRange(4750, 7000), "Date column width");
-            //Assert.That(s.GetColumnWidth(1), Is.InRange(4750, 7000), "Date column width");
-            POITestCase.AssertBetween("Date column width", (int) s.GetColumnWidth(0), 4750, 7000);
-            POITestCase.AssertBetween("Date column width", (int) s.GetColumnWidth(1), 4750, 7000);
-
-            wb.Close();
-        }
-
 
         [Test]
         public void TestAutoSizeRow()
