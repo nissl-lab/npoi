@@ -11,6 +11,7 @@ using System.Xml;
 using System.Text;
 using System.ComponentModel;
 using NPOI.OpenXml4Net.Util;
+using NPOI.Util;
 
 namespace NPOI.OpenXmlFormats.Vml
 {
@@ -634,6 +635,7 @@ namespace NPOI.OpenXmlFormats.Vml
         private ST_TrueFalse strokedField;
         private string wrapcoordsField;
 
+        private string _xml;
         public static CT_Shape Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -693,11 +695,28 @@ namespace NPOI.OpenXmlFormats.Vml
                 else if (childNode.LocalName == "ClientData")
                     ctObj.ClientData.Add(CT_ClientData.Parse(childNode, namespaceManager));
             }
+            ctObj._xml = node.OuterXml;
             return ctObj;
         }
 
 
-
+        public override string ToString()
+        {
+            if(string.IsNullOrEmpty(this._xml))
+            {
+                using(MemoryStream out1 = new MemoryStream())
+                using(StreamWriter sw = new StreamWriter(out1))
+                {
+                    Write(sw, "shape");
+                    return Encoding.UTF8.GetString(out1.ToArray());
+                }
+            }
+            else
+            {
+                return this._xml;
+            }
+            
+        }
         public void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<v:{0}", nodeName));
@@ -3370,11 +3389,14 @@ namespace NPOI.OpenXmlFormats.Vml
             ctObj.id = XmlHelper.ReadString(node.Attributes["id"]);
             ctObj.style = XmlHelper.ReadString(node.Attributes["style"]);
             ctObj.inset = XmlHelper.ReadString(node.Attributes["inset"]);
-            ctObj.ItemXml = node.InnerXml;
+            ctObj.ItemXml = node.OuterXml;
             return ctObj;
         }
 
-
+        public override string ToString()
+        {
+            return this.ItemXml;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -3736,7 +3758,7 @@ namespace NPOI.OpenXmlFormats.Vml
         //    CT_Shapetype obj = (CT_Shapetype)serializer.Deserialize(tr);
         //    return obj;
         //}
-
+        private string _xml;
         public static CT_Shapetype Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -3807,10 +3829,15 @@ namespace NPOI.OpenXmlFormats.Vml
                 else if (childNode.LocalName == "textdata")
                     ctObj.textdata.Add(CT_Rel.Parse(childNode, namespaceManager));
             }
+
+            ctObj._xml = node.OuterXml;
             return ctObj;
         }
 
-
+        public override string ToString()
+        {
+            return _xml;
+        }
 
         public void Write(StreamWriter sw, string nodeName)
         {
