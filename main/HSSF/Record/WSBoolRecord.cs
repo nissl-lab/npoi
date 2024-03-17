@@ -23,18 +23,11 @@ namespace NPOI.HSSF.Record
     using System.Text;
     using NPOI.Util;
 
-
-    /**
-     * Title:        WSBool Record.
-     * Description:  stores workbook Settings  (aka its a big "everything we didn't
-     *               put somewhere else")
-     * REFERENCE:  PG 425 Microsoft Excel 97 Developer's Kit (ISBN: 1-57231-498-2)
-     * @author Andrew C. Oliver (acoliver at apache dot org)
-     * @author Glen Stampoultzis (gstamp@iprimus.com.au)
-     * @author Jason Height (jheight at chariot dot net dot au)
-     * @version 2.0-pre
-     */
-
+    /// <summary>
+    /// WSBool Record. Stores workbook Settings  (aka its a big "everything we didn't put somewhere else")
+    /// </summary>
+    /// <remarks>REFERENCE:  PG 425 Microsoft Excel 97 Developer's Kit (ISBN: 1-57231-498-2)
+    /// </remarks>
     public class WSBoolRecord
        : StandardRecord
     {
@@ -66,11 +59,11 @@ namespace NPOI.HSSF.Record
         {
         }
 
-        /**
-         * Constructs a WSBool record and Sets its fields appropriately.
-         * @param in the RecordInputstream to Read the record from
-         */
 
+        /// <summary>
+        /// Constructs a WSBool record and Sets its fields appropriately.
+        /// </summary>
+        /// <param name="in1">the RecordInputstream to Read the record from</param>
         public WSBoolRecord(RecordInputStream in1)
         {
             byte[] data = in1.ReadRemainder();
@@ -80,11 +73,9 @@ namespace NPOI.HSSF.Record
                 data[1];
         }
 
-
-        /**
-         * Get first byte (see bit Getters)
-         */
-
+        /// <summary>
+        /// Get first byte (see bit Getters)
+        /// </summary>
         public byte WSBool1
         {
             get
@@ -214,33 +205,20 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        public override String ToString()
+        public override string ToString()
         {
-            StringBuilder buffer = new StringBuilder();
-
-            buffer.Append("[WSBOOL]\n");
-            buffer.Append("    .wsbool1        = ")
-                .Append(StringUtil.ToHexString(WSBool1)).Append("\n");
-            buffer.Append("        .autobreaks = ").Append(Autobreaks)
-                .Append("\n");
-            buffer.Append("        .dialog     = ").Append(Dialog)
-                .Append("\n");
-            buffer.Append("        .rowsumsbelw= ").Append(RowSumsBelow)
-                .Append("\n");
-            buffer.Append("        .rowsumsrigt= ").Append(RowSumsRight)
-                .Append("\n");
-            buffer.Append("    .wsbool2        = ")
-                .Append(StringUtil.ToHexString(WSBool2)).Append("\n");
-            buffer.Append("        .fittopage  = ").Append(FitToPage)
-                .Append("\n");
-            buffer.Append("        .Displayguts= ").Append(DisplayGuts)
-                .Append("\n");
-            buffer.Append("        .alternateex= ")
-                .Append(AlternateExpression).Append("\n");
-            buffer.Append("        .alternatefo= ").Append(AlternateFormula)
-                .Append("\n");
-            buffer.Append("[/WSBOOL]\n");
-            return buffer.ToString();
+            return "[WSBOOL]\n" +
+                "    .wsbool1        = " + HexDump.ToHex(WSBool1) + "\n" +
+                "        .autobreaks = " + Autobreaks + "\n" +
+                "        .dialog     = " + Dialog + "\n" +
+                "        .rowsumsbelw= " + RowSumsBelow + "\n" +
+                "        .rowsumsrigt= " + RowSumsRight + "\n" +
+                "    .wsbool2        = " + HexDump.ToHex(WSBool2) + "\n" +
+                "        .fittopage  = " + FitToPage + "\n" +
+                "        .displayguts= " + DisplayGuts + "\n" +
+                "        .alternateex= " + AlternateExpression + "\n" +
+                "        .alternatefo= " + AlternateFormula + "\n" +
+                "[/WSBOOL]\n";
         }
 
         public override void Serialize(ILittleEndianOutput out1)

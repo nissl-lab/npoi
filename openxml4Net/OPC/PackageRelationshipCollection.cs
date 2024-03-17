@@ -31,8 +31,8 @@ namespace NPOI.OpenXml4Net.OPC
          */
         private SortedList<String, PackageRelationship> relationshipsByType;
         /**
- * A lookup of internal relationships to avoid
- */
+         * A lookup of internal relationships to avoid
+         */
         private SortedList<String, PackageRelationship> internalRelationshipsByTargetName;
 
         /**
@@ -150,7 +150,7 @@ namespace NPOI.OpenXml4Net.OPC
 
 
             if (container == null)
-                throw new ArgumentException("container");
+                throw new ArgumentException("container needs to be specified");
 
             // Check if the specified part is not a relationship part
             if (part != null && part.IsRelationshipPart)
@@ -427,9 +427,7 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public PackageRelationshipCollection GetRelationships(String typeFilter)
         {
-            PackageRelationshipCollection coll = new PackageRelationshipCollection(
-                    this, typeFilter);
-            return coll;
+            return new PackageRelationshipCollection(this, typeFilter);
         }
 
         /**

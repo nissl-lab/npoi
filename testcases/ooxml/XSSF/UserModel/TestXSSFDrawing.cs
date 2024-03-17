@@ -647,6 +647,7 @@ namespace TestCases.XSSF.UserModel
             String paraString10 = "Fifth Bullet";
 
             XSSFTextParagraph para = shape.AddNewTextParagraph(paraString1);
+            Assert.IsNotNull(para);
             para = shape.AddNewTextParagraph(paraString2);
             para.SetBullet(true);
 
@@ -658,6 +659,7 @@ namespace TestCases.XSSF.UserModel
             para.SetBullet(true);
 
             para = shape.AddNewTextParagraph(paraString5);
+            Assert.IsNotNull(para);
             para = shape.AddNewTextParagraph(paraString6);
             para.SetBullet(ListAutoNumber.ARABIC_PERIOD);
 
@@ -696,39 +698,38 @@ namespace TestCases.XSSF.UserModel
             List<XSSFTextParagraph> paras = sshape.TextParagraphs;
             Assert.AreEqual(12, paras.Count);  // this should be 12 as XSSFSimpleShape Creates a default paragraph (no text), and then we Added to that
 
-            StringBuilder builder = new StringBuilder();
+            String builder =
+                paraString1 +
+                "\n" +
+                "\u2022 " +
+                paraString2 +
+                "\n" +
+                "\t\u2022 " +
+                paraString3 +
+                "\n" +
+                "\u2022 " +
+                paraString4 +
+                "\n" +
+                paraString5 +
+                "\n" +
+                "1. " +
+                paraString6 +
+                "\n" +
+                "\t3. " +
+                paraString7 +
+                "\n" +
+                "\t4. " +
+                paraString8 +
+                "\n" +
+                "\t" +   // should be empty
+                "\n" +
+                "\t5. " +
+                paraString9 +
+                "\n" +
+                "2. " +
+                paraString10;
 
-            builder.Append(paraString1);
-            builder.Append("\n");
-            builder.Append("\u2022 ");
-            builder.Append(paraString2);
-            builder.Append("\n");
-            builder.Append("\t\u2022 ");
-            builder.Append(paraString3);
-            builder.Append("\n");
-            builder.Append("\u2022 ");
-            builder.Append(paraString4);
-            builder.Append("\n");
-            builder.Append(paraString5);
-            builder.Append("\n");
-            builder.Append("1. ");
-            builder.Append(paraString6);
-            builder.Append("\n");
-            builder.Append("\t3. ");
-            builder.Append(paraString7);
-            builder.Append("\n");
-            builder.Append("\t4. ");
-            builder.Append(paraString8);
-            builder.Append("\n");
-            builder.Append("\t");   // should be empty
-            builder.Append("\n");
-            builder.Append("\t5. ");
-            builder.Append(paraString9);
-            builder.Append("\n");
-            builder.Append("2. ");
-            builder.Append(paraString10);
-
-            Assert.AreEqual(builder.ToString(), sshape.Text);
+            Assert.AreEqual(builder, sshape.Text);
 
             checkRewrite(wb2);
             wb2.Close();
@@ -746,22 +747,21 @@ namespace TestCases.XSSF.UserModel
             List<XSSFShape> shapes = drawing.GetShapes();
             XSSFSimpleShape textbox = (XSSFSimpleShape)shapes[0];
             String extracted = textbox.Text;
-            StringBuilder sb = new StringBuilder();
-            sb.Append("1. content1A\n");
-            sb.Append("\t1. content1B\n");
-            sb.Append("\t2. content2B\n");
-            sb.Append("\t3. content3B\n");
-            sb.Append("2. content2A\n");
-            sb.Append("\t3. content2BStartAt3\n");
-            sb.Append("\t\n\t\n\t");
-            sb.Append("4. content2BStartAt3Incremented\n");
-            sb.Append("\t\n\t\n\t\n\t");
+            String sb =
+                "1. content1A\n" +
+                "\t1. content1B\n" +
+                "\t2. content2B\n" +
+                "\t3. content3B\n" +
+                "2. content2A\n" +
+                "\t3. content2BStartAt3\n" +
+                "\t\n\t\n\t" +
+                "4. content2BStartAt3Incremented\n" +
+                "\t\n\t\n\t\n\t";
 
-            Assert.AreEqual(sb.ToString(), extracted);
+            Assert.AreEqual(sb, extracted);
 
             checkRewrite(wb);
-            wb.Close();
-        }
+            wb.Close();        }
 
         [Test]
         public void TestXSSFSimpleShapeCausesNPE56514()
