@@ -11,6 +11,7 @@ using System.Xml;
 using System.Text;
 using System.ComponentModel;
 using NPOI.OpenXml4Net.Util;
+using NPOI.Util;
 
 namespace NPOI.OpenXmlFormats.Vml
 {
@@ -634,6 +635,7 @@ namespace NPOI.OpenXmlFormats.Vml
         private ST_TrueFalse strokedField;
         private string wrapcoordsField;
 
+        private string _xml;
         public static CT_Shape Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -693,13 +695,27 @@ namespace NPOI.OpenXmlFormats.Vml
                 else if (childNode.LocalName == "ClientData")
                     ctObj.ClientData.Add(CT_ClientData.Parse(childNode, namespaceManager));
             }
+            ctObj._xml = node.OuterXml;
             return ctObj;
         }
 
 
         public override string ToString()
         {
-            return this.textboxField == null ? string.Empty : textboxField.ToString();
+            if(string.IsNullOrEmpty(this._xml))
+            {
+                using(MemoryStream out1 = new MemoryStream())
+                using(StreamWriter sw = new StreamWriter(out1))
+                {
+                    Write(sw, "shape");
+                    return Encoding.UTF8.GetString(out1.ToArray());
+                }
+            }
+            else
+            {
+                return this._xml;
+            }
+            
         }
         public void Write(StreamWriter sw, string nodeName)
         {
@@ -3373,7 +3389,7 @@ namespace NPOI.OpenXmlFormats.Vml
             ctObj.id = XmlHelper.ReadString(node.Attributes["id"]);
             ctObj.style = XmlHelper.ReadString(node.Attributes["style"]);
             ctObj.inset = XmlHelper.ReadString(node.Attributes["inset"]);
-            ctObj.ItemXml = node.InnerXml;
+            ctObj.ItemXml = node.OuterXml;
             return ctObj;
         }
 
@@ -3742,7 +3758,7 @@ namespace NPOI.OpenXmlFormats.Vml
         //    CT_Shapetype obj = (CT_Shapetype)serializer.Deserialize(tr);
         //    return obj;
         //}
-
+        private string _xml;
         public static CT_Shapetype Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -3813,21 +3829,14 @@ namespace NPOI.OpenXmlFormats.Vml
                 else if (childNode.LocalName == "textdata")
                     ctObj.textdata.Add(CT_Rel.Parse(childNode, namespaceManager));
             }
+
+            ctObj._xml = node.OuterXml;
             return ctObj;
         }
 
         public override string ToString()
         {
-            string text = string.Empty;
-            if(this.textboxField != null)
-            {
-                foreach(var tb in textboxField)
-                {
-                    text += tb.ItemXml;
-                }
-            }
-
-            return text;
+            return _xml;
         }
 
         public void Write(StreamWriter sw, string nodeName)
