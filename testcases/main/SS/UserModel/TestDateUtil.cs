@@ -159,5 +159,36 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual(expCal, actCal[2]);
             Assert.AreEqual(expCal, actCal[3]);
         }
+
+        [Test]
+        public void IsADateFormat()
+        {
+            // Cell content 2016-12-8 as an example
+            // Cell show "12/8/2016"
+            Assert.IsTrue(DateUtil.IsADateFormat(14, "m/d/yy"));
+            // Cell show "Thursday, December 8, 2016"
+            Assert.IsTrue(DateUtil.IsADateFormat(182, "[$-F800]dddd\\,\\ mmmm\\ dd\\,\\ yyyy"));
+            // Cell show "12/8"
+            Assert.IsTrue(DateUtil.IsADateFormat(183, "m/d;@"));
+            // Cell show "12/08/16"
+            Assert.IsTrue(DateUtil.IsADateFormat(184, "mm/dd/yy;@"));
+            // Cell show "8-Dec-16"
+            Assert.IsTrue(DateUtil.IsADateFormat(185, "[$-409]d\\-mmm\\-yy;@"));
+            // Cell show "D-16"
+            Assert.IsTrue(DateUtil.IsADateFormat(186, "[$-409]mmmmm\\-yy;@"));
+
+            // Cell show "2016年12月8日"
+            Assert.IsTrue(DateUtil.IsADateFormat(165, "yyyy\"年\"m\"月\"d\"日\";@"));
+            // Cell show "2016年12月"
+            Assert.IsTrue(DateUtil.IsADateFormat(164, "yyyy\"年\"m\"月\";@"));
+            // Cell show "12月8日"
+            Assert.IsTrue(DateUtil.IsADateFormat(168, "m\"月\"d\"日\";@"));
+            // Cell show "十二月八日"
+            Assert.IsTrue(DateUtil.IsADateFormat(181, "[DBNum1][$-404]m\"月\"d\"日\";@"));
+            // Cell show "贰零壹陆年壹拾贰月捌日"
+            Assert.IsTrue(DateUtil.IsADateFormat(177, "[DBNum2][$-804]yyyy\"年\"m\"月\"d\"日\";@"));
+            // Cell show "２０１６年１２月８日"
+            Assert.IsTrue(DateUtil.IsADateFormat(178, "[DBNum3][$-804]yyyy\"年\"m\"月\"d\"日\";@"));
+        }
     }
 }
