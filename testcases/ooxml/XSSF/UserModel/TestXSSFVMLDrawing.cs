@@ -22,6 +22,7 @@ using NUnit.Framework;
 using System;
 using System.Collections;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace TestCases.XSSF.UserModel
 {
@@ -47,7 +48,7 @@ namespace TestCases.XSSF.UserModel
             Assert.IsTrue(items[1] is CT_Shapetype);
             CT_Shapetype type = (CT_Shapetype)items[1];
             Assert.AreEqual("21600,21600", type.coordsize);
-            Assert.AreEqual(202.0f, type.spt);
+            Assert.AreEqual(202.0f, type.spt, 0);
             Assert.AreEqual("m,l,21600r21600,l21600,xe", type.path2);
             Assert.AreEqual("_x0000_t202", type.id);
             Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, type.path.gradientshapeok);
@@ -79,7 +80,7 @@ namespace TestCases.XSSF.UserModel
             //each of the properties of CT_ClientData should occurs 0 or 1 times, and CT_ClientData has multiple properties.
             //Assert.AreEqual("[]", cldata.GetVisibleList().ToString());
             Assert.AreEqual(ST_TrueFalseBlank.NONE, cldata.visible);
-            cldata.visible = (ST_TrueFalseBlank)Enum.Parse(typeof(ST_TrueFalseBlank), "true");
+            cldata.visible = (ST_TrueFalseBlank) Enum.Parse(typeof(ST_TrueFalseBlank), "true");
             Assert.AreEqual(ST_TrueFalseBlank.@true, cldata.visible);
             //serialize and read again
             MemoryStream out1 = new MemoryStream();
@@ -173,27 +174,27 @@ namespace TestCases.XSSF.UserModel
             XSSFVMLDrawing vml = sheet.GetVMLDrawing(false);
             CT_Shapetype shapetype = null;
             ArrayList items = vml.GetItems();
-            foreach (object o in items)
-                if (o is CT_Shapetype)
-                    shapetype = (CT_Shapetype)o;
+            foreach(object o in items)
+                if(o is CT_Shapetype)
+                    shapetype = (CT_Shapetype) o;
             Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shapetype.stroked);
             Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shapetype.filled);
 
-            using (MemoryStream ws = new MemoryStream())
+            using(MemoryStream ws = new MemoryStream())
             {
                 wb.Write(ws);
 
-                using (MemoryStream rs = new MemoryStream(ws.GetBuffer()))
+                using(MemoryStream rs = new MemoryStream(ws.GetBuffer()))
                 {
                     wb = new XSSFWorkbook(rs);
-                    sheet = (XSSFSheet)wb.GetSheetAt(0);
+                    sheet = (XSSFSheet) wb.GetSheetAt(0);
 
                     vml = sheet.GetVMLDrawing(false);
                     shapetype = null;
                     items = vml.GetItems();
-                    foreach (object o in items)
-                        if (o is CT_Shapetype)
-                            shapetype = (CT_Shapetype)o;
+                    foreach(object o in items)
+                        if(o is CT_Shapetype)
+                            shapetype = (CT_Shapetype) o;
 
                     //wb.Write(new FileStream("comments.xlsx", FileMode.Create));
                     //using (MemoryStream ws2 = new MemoryStream())
@@ -206,6 +207,27 @@ namespace TestCases.XSSF.UserModel
                     Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shapetype.filled);
                 }
             }
+        }
+
+        [Test]
+        public void TestEvilUnclosedBRFixing() {
+            XSSFVMLDrawing vml = new XSSFVMLDrawing();
+            Stream stream = POIDataSamples.GetOpenXML4JInstance().OpenResourceAsStream("bug-60626.vml");
+            try {
+                vml.Read(stream);
+            } finally {
+                stream.Close();
+            }
+            Regex p = new Regex("<br\\s?/>", RegexOptions.Compiled);
+            int count = 0;
+            foreach(Object xo in vml.GetItems())
+            {
+                var t = xo.ToString();
+                String[] split = p.Split(t);
+                count += split.Length-1;
+            }
+
+            Assert.AreEqual(16, count);
         }
     }
 }

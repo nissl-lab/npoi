@@ -697,7 +697,10 @@ namespace NPOI.OpenXmlFormats.Vml
         }
 
 
-
+        public override string ToString()
+        {
+            return this.textboxField == null ? string.Empty : textboxField.ToString();
+        }
         public void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<v:{0}", nodeName));
@@ -3374,7 +3377,10 @@ namespace NPOI.OpenXmlFormats.Vml
             return ctObj;
         }
 
-
+        public override string ToString()
+        {
+            return this.ItemXml;
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -3810,7 +3816,19 @@ namespace NPOI.OpenXmlFormats.Vml
             return ctObj;
         }
 
+        public override string ToString()
+        {
+            string text = string.Empty;
+            if(this.textboxField != null)
+            {
+                foreach(var tb in textboxField)
+                {
+                    text += tb.ItemXml;
+                }
+            }
 
+            return text;
+        }
 
         public void Write(StreamWriter sw, string nodeName)
         {
