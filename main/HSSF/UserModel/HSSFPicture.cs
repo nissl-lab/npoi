@@ -225,11 +225,22 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                InternalWorkbook iwb = ((_patriarch.Sheet.Workbook) as HSSFWorkbook).Workbook;
+                HSSFPatriarch patriarch = Patriarch;
+                HSSFShape parent = Parent as HSSFShape;
+                while (patriarch == null && parent != null)
+                {
+                    patriarch = parent.Patriarch;
+                    parent = parent.Parent as HSSFShape;
+                }
+                if (patriarch == null)
+                {
+                    throw new InvalidOperationException("Could not find a patriarch for a HSSPicture");
+                }
+
+                InternalWorkbook iwb = (patriarch.Sheet.Workbook as HSSFWorkbook).Workbook;
                 EscherBSERecord bse = iwb.GetBSERecord(PictureIndex);
                 EscherBlipRecord blipRecord = bse.BlipRecord;
-                return new HSSFPictureData(blipRecord);
-            }
+                return new HSSFPictureData(blipRecord);            }
         }
 
 
