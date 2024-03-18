@@ -47,6 +47,42 @@ namespace TestCases.POIFS.FileSystem
             dataMap = new Hashtable();
         }
 
+        /**
+         * Method main
+         *
+         *
+         * @param args
+         *
+         * @exception IOException
+         *
+         */
+
+        //public static void Main(String[] args)
+        //{
+        //    if (args.Length != 2)
+        //    {
+        //        Console.Error.WriteLine(
+        //            "two arguments required: one input file name and one output file name");
+        //    }
+        //    else
+        //    {
+        //        POIFSReader reader = new POIFSReader();
+        //        POIFSFileSystem filesystem = new POIFSFileSystem();
+
+        //        reader.RegisterListener(new ReaderWriter(filesystem));
+        //        FileStream istream = new FileStream(args[0], FileMode.Open, FileAccess.Read);
+
+        //        reader.Read(istream);
+        //        istream.Close();
+        //        FileStream ostream = new FileStream(args[1], FileMode.OpenOrCreate, FileAccess.ReadWrite);
+
+        //        filesystem.WriteFileSystem(ostream);
+        //        ostream.Close();
+
+        //        filesystem.Close();
+        //    }
+        //}
+
         /* ********** START implementation of POIFSReaderListener ********** */
 
         /**

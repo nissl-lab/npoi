@@ -90,15 +90,8 @@ namespace TestCases.Util
             Assert.AreEqual(testdata3[ 2 ], unchecked((byte)0xFF));
             Assert.AreEqual(expected[ 2 ], LittleEndian.GetUShort(testdata3));
             Assert.AreEqual(expected[ 3 ], LittleEndian.GetUShort(testdata3, 1));
-            //System.out.println("TD[1][0]: "+LittleEndian.GetUShort(testdata)+" expecting 65281");
-            //System.out.println("TD[1][1]: "+LittleEndian.GetUShort(testdata, 1)+" expecting 767");
-            //System.out.println("TD[2][0]: "+LittleEndian.GetUShort(testdata2)+" expecting 37645");
-            //System.out.println("TD[2][1]: "+LittleEndian.GetUShort(testdata2, 1)+" expecting 65427");
-            //System.out.println("TD[3][0]: "+LittleEndian.GetUShort(testdata3)+" expecting 37645");
-            //System.out.println("TD[3][1]: "+LittleEndian.GetUShort(testdata3, 1)+" expecting 65427");
             
         }
-
         private static byte[]   _DOUBLE_array =
         {
             56, 50, unchecked((byte)-113), unchecked((byte)-4), unchecked((byte)-63), unchecked((byte)-64), unchecked((byte)-13), 63, 76, unchecked((byte)-32), unchecked((byte)-42), unchecked((byte)-35), 60, unchecked((byte)-43), 3, 64
