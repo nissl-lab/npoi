@@ -87,6 +87,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "BIN2HEX", null);
             r(m, "BIN2OCT", null);
             r(m, "COMPLEX", Complex.Instance);
+            r(m, "CEILING.MATH", CeilingMath.Instance);
             r(m, "CONVERT", null);
             r(m, "COUNTIFS", Countifs.instance);
             r(m, "COUPDAYBS", null);
@@ -118,6 +119,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "ERF", null);
             r(m, "ERFC", null);
             r(m, "FACTDOUBLE", FactDouble.instance);
+            r(m, "FLOOR.MATH", FloorMath.Instance);
             r(m, "FVSCHEDULE", null);
             r(m, "GCD", null);
             r(m, "GESTEP", null);
@@ -194,10 +196,6 @@ namespace NPOI.SS.Formula.Atp
             r(m, "YIELD", null);
             r(m, "YIELDDISC", null);
             r(m, "YIELDMAT", null);
-
-            r(m, "CEILING.MATH", CeilingMath.Instance);
-            r(m, "FLOOR.MATH", FloorMath.Instance);
-
             r(m, "STDEV.S", StdevS.Instance);
             r(m, "STDEV.P", StdevP.Instance);
             r(m, "VAR.S", VarS.Instance);

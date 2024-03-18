@@ -331,26 +331,19 @@ namespace NPOI.SS.Formula.Functions
                 int testValue;
                 if (x is StringEval)
                 {
-#if !HIDE_UNREACHABLE_CODE
-                    if (true)
-                    { // change to false to observe more intuitive behaviour
-                        // Note - Unlike with numbers, it seems that COUNTIF never matches
-                        // boolean values when the target(x) is a string
-                        return false;
-                    }
-                    StringEval se = (StringEval)x;
-                    Boolean? val = ParseBoolean(se.StringValue);
-                    if (val == null)
-                    {
-                        // x is text that is not a boolean
-                        return false;
-                    }
-                    testValue = BoolToInt(val.Value);
-#else
+                    // Note - Unlike with numbers, it seems that COUNTIF never matches
+                    // boolean values when the target(x) is a string
                     return false;
-#endif
+                    // uncomment to observe more intuitive behaviour
+                    // StringEval se = (StringEval)x;
+                    // Boolean val = parseBoolean(se.getStringValue());
+                    // if(val == null) {
+                    //     // x is text that is not a boolean
+                    //     return false;
+                    // }
+                    // testValue = boolToInt(val.booleanValue());
                 }
-                else if ((x is BoolEval))
+                else if (x is BoolEval)
                 {
                     BoolEval be = (BoolEval)x;
                     testValue = BoolToInt(be.BooleanValue);
@@ -369,14 +362,14 @@ namespace NPOI.SS.Formula.Functions
                 else if ((x is NumberEval))
                 {
                     switch (Code)
-                {
-                    case CmpOp.NE:
-                        // not-equals comparison of a number to boolean always returnes false
-                        return true;
-                    default:
-                        return false;
+                    {
+                        case CmpOp.NE:
+                            // not-equals comparison of a number to boolean always returnes false
+                            return true;
+                        default:
+                            return false;
+                    }
                 }
-            }
                 else
                 {
                     return false;
