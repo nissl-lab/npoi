@@ -77,17 +77,6 @@ namespace TestCases.XSSF
             IWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
             Assert.IsNotNull(wbBack);
             wbBack.Close();
-            FileInfo fi = TempFile.CreateTempFile("60512", ".xlsx");
-            //Stream str = new FileStream("/tmp/60512.xlsx", FileMode.Create, FileAccess.Write);
-            Stream str = new FileStream(fi.FullName, FileMode.Create, FileAccess.Write);
-            try
-            {
-                wb.Write(str);
-            }
-            finally
-            {
-                str.Close();
-            }
 
             wb.Close();
         }
