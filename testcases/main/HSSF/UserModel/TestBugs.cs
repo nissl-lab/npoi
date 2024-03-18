@@ -3481,10 +3481,24 @@ namespace TestCases.HSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Test45353a()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("named-cell-in-formula-test.xls");
+            wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+            wb.Close();
+        }
+
+        [Test]
+        public void Test45353b()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("named-cell-test.xls");
+            wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+            wb.Close();
+        }
 
         // follow https://svn.apache.org/viewvc?view=revision&revision=1896552 to write a unit test for this fix.
-        [Test]
-        public void Test52447()
+        [Test]        public void Test52447()
         {
             IWorkbook wb = null;
             try
