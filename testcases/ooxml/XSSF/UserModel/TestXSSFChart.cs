@@ -58,13 +58,13 @@ namespace TestCases.XSSF.UserModel
 
             // Check the titles
             XSSFChart chart = (s2.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[(0)];
-            Assert.AreEqual(null, chart.Title);
+            Assert.AreEqual(null, chart.TitleText);
 
             chart = (s2.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[(1)];
-            Assert.AreEqual("Pie Chart Title Thingy", chart.Title.String);
+            Assert.AreEqual("Pie Chart Title Thingy", chart.TitleText.String);
 
             chart = (s3.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[(0)];
-            Assert.AreEqual("Sheet 3 Chart with Title", chart.Title.String);
+            Assert.AreEqual("Sheet 3 Chart with Title", chart.TitleText.String);
 
             Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }

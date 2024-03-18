@@ -106,12 +106,21 @@ namespace TestCases.XSSF.UserModel.Charts
             IWorkbook wb = CreateWorkbookWithChart();
             XSSFChart chart = GetChartFromWorkbook(wb, "linechart");
             Assert.IsNotNull(chart);
-            Assert.IsNull(chart.Title);
+            Assert.IsNull(chart.TitleText);
             String myTitle = "My chart title";
-            chart.SetTitle(myTitle);
-            XSSFRichTextString queryTitle = chart.Title;
+            chart.SetTitleText(myTitle);
+            XSSFRichTextString queryTitle = chart.TitleText;
             Assert.IsNotNull(queryTitle);
             Assert.AreEqual(myTitle, queryTitle.ToString());
+
+            String myTitleFormula = "1 & \" and \" & 2";
+            chart.TitleFormula = myTitleFormula;
+            // setting formula should unset text, but since there is a formula, returns an empty string
+            Assert.AreEqual("", chart.TitleText.ToString());
+            String titleFormula = chart.TitleFormula;
+            Assert.IsNotNull(titleFormula);
+            Assert.AreEqual(myTitleFormula, titleFormula);
+
             wb.Close();
         }
 
@@ -121,12 +130,12 @@ namespace TestCases.XSSF.UserModel.Charts
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("chartTitle_withTitle.xlsx");
             XSSFChart chart = GetChartFromWorkbook(wb, "Sheet1");
             Assert.IsNotNull(chart);
-            XSSFRichTextString originalTitle = chart.Title;
+            XSSFRichTextString originalTitle = chart.TitleText;
             Assert.IsNotNull(originalTitle);
             String myTitle = "My chart title";
             Assert.IsFalse(myTitle.Equals(originalTitle.ToString()));
-            chart.SetTitle(myTitle);
-            XSSFRichTextString queryTitle = chart.Title;
+            chart.SetTitleText(myTitle);
+            XSSFRichTextString queryTitle = chart.TitleText;
             Assert.IsNotNull(queryTitle);
             Assert.AreEqual(myTitle, queryTitle.ToString());
             wb.Close();
@@ -138,12 +147,27 @@ namespace TestCases.XSSF.UserModel.Charts
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("chartTitle_noTitle.xlsx");
             XSSFChart chart = GetChartFromWorkbook(wb, "Sheet1");
             Assert.IsNotNull(chart);
-            Assert.IsNull(chart.Title);
+            Assert.IsNull(chart.TitleText);
             String myTitle = "My chart title";
-            chart.SetTitle(myTitle);
-            XSSFRichTextString queryTitle = chart.Title;
+            chart.SetTitleText(myTitle);
+            XSSFRichTextString queryTitle = chart.TitleText;
             Assert.IsNotNull(queryTitle);
             Assert.AreEqual(myTitle, queryTitle.ToString());
+            wb.Close();
+        }
+
+        [Test]
+        public void TestExistingChartWithFormulaTitle() 
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("chartTitle_withTitleFormula.xlsx");
+            XSSFChart chart = GetChartFromWorkbook(wb, "Sheet1");
+            Assert.IsNotNull(chart);
+            XSSFRichTextString originalTitle = chart.TitleText;
+            Assert.IsNotNull(originalTitle);
+            Assert.AreEqual("", originalTitle.ToString());
+            String formula = chart.TitleFormula;
+            Assert.IsNotNull(formula);
+            Assert.AreEqual("Sheet1!$E$1", formula);
             wb.Close();
         }
     }

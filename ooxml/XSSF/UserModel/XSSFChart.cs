@@ -264,7 +264,22 @@ namespace NPOI.XSSF.UserModel
         /**
          * Returns the title, or null if none is Set
          */
+        [Obsolete("deprecated POI 3.16, use TitleText instead. Schedule for removal in version 4.0")]
         public XSSFRichTextString Title
+        {
+            get { return TitleText; }
+        }
+
+        /**
+         * Returns the title static text, or null if none is set.
+         * Note that a title formula may be set instead.
+         * Empty text result is for backward compatibility, and could mean the title text is empty or there is a formula instead.
+         * Check for a formula first, falling back on text for cleaner logic.
+         * @return static title text if set, 
+         *         null if there is no title, 
+         *         empty string if the title text is empty or the title uses a formula instead
+         */
+        public XSSFRichTextString TitleText
         {
             get
             {
@@ -274,19 +289,44 @@ namespace NPOI.XSSF.UserModel
                 }
 
                 CT_Title title = chart.title;
-
-                if (title.tx==null)
-                    return null;
-                if(title.tx.rich==null)
-                    return null;
-                return new XSSFRichTextString(title.tx.rich.ToString());
+                //XmlObject[] t = title.selectPath("declare namespace a='" + XSSFDrawing.NAMESPACE_A + "' .//a:t");
+                StringBuilder sb = new StringBuilder();
+                if (title != null && title.tx != null && title.tx.rich != null
+                    && title.tx.rich.p != null)
+                {
+                    OpenXmlFormats.Dml.Chart.CT_TextBody rich = title.tx.rich;
+                    foreach (var p in rich.p)
+                    {
+                        foreach (var item in p.items)
+                        {
+                            if (item is CT_RegularTextRun r)
+                            {
+                                sb.Append(r.t);
+                            }
+                            else if (item is OpenXmlFormats.Dml.CT_TextField fld)
+                            {
+                                sb.Append(fld.t);
+                            }
+                        }
+                    }
+                }
+                    
+                return new XSSFRichTextString(sb.ToString());
             }
         }
 
         /**
-	     * Sets the title text.
-	     */
+         * Sets the title text.
+         */
+        [Obsolete("deprecated POI 3.16, use SetTitleText instead. Schedule for removal in version 4.0")]
         public void SetTitle(string newTitle)
+        {
+        }
+        /**
+         * Sets the title text as a static string.
+         * @param newTitle to use
+         */
+        public void SetTitleText(String newTitle)
         {
             CT_Title ctTitle;
             if (chart.IsSetTitle())
@@ -348,6 +388,76 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_RegularTextRun run = para.AddNewR();
                 run.t = (newTitle);
+            }
+        }
+
+        /**
+         * Get or set the formula expression to use for the chart title
+         * @return formula expression or null
+         */
+        public string TitleFormula
+        {
+            get
+            {
+                if (!chart.IsSetTitle())
+                {
+                    return null;
+                }
+
+                CT_Title title = chart.title;
+
+                if (!title.IsSetTx())
+                {
+                    return null;
+                }
+
+                CT_Tx tx = title.tx;
+
+                if (!tx.IsSetStrRef())
+                {
+                    return null;
+                }
+
+                return tx.strRef.f;
+            }
+            set
+            {
+                CT_Title ctTitle;
+                if (chart.IsSetTitle())
+                {
+                    ctTitle = chart.title;
+                }
+                else
+                {
+                    ctTitle = chart.AddNewTitle();
+                }
+
+                CT_Tx tx;
+                if (ctTitle.IsSetTx())
+                {
+                    tx = ctTitle.tx;
+                }
+                else
+                {
+                    tx = ctTitle.AddNewTx();
+                }
+
+                if (tx.IsSetRich())
+                {
+                    tx.UnsetRich();
+                }
+
+                CT_StrRef strRef;
+                if (tx.IsSetStrRef())
+                {
+                    strRef = tx.strRef;
+                }
+                else
+                {
+                    strRef = tx.AddNewStrRef();
+                }
+
+                strRef.f = value;
             }
         }
 
