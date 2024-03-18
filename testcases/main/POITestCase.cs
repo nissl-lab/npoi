@@ -32,31 +32,58 @@ namespace TestCases
      */
     public class POITestCase
     {
-        public static void AssertContains(String haystack, String needle)
+        public static void AssertStartsWith(String actual, String prefix)
         {
-            Assert.IsTrue(
-                  haystack.Contains(needle),
-                  "Unable to find expected text '" + needle + "' in text:\n" + haystack
-            );
-        }
-        public static void AssertContainsIgnoreCase(String haystack, String needle, CultureInfo locale)
-        {
-            Assert.IsNotNull(haystack);
-            Assert.IsNotNull(needle);
-            String hay = haystack.ToLower(locale);
-            String n = needle.ToLower(locale);
-            Assert.IsTrue(hay.Contains(n), "Unable to find expected text '" + needle + "' in1 text:\n" + haystack);
-        }
-        public static void AssertContainsIgnoreCase(String haystack, String needle)
-        {
-            AssertContainsIgnoreCase(haystack, needle, CultureInfo.CurrentCulture);
+            Assert.IsNotNull(actual);
+            Assert.IsNotNull(prefix);
+            StringAssert.StartsWith(prefix, actual);
         }
 
-        public static void AssertNotContained(String haystack, String needle)
+        public static void AssertStartsWith(String message, String actual, String prefix)
         {
-            Assert.IsFalse(haystack.Contains(needle),
-                  "Unexpectedly found text '" + needle + "' in text:\n" + haystack
-            );
+            Assert.IsNotNull(message, actual);
+            Assert.IsNotNull(message, prefix);
+            StringAssert.StartsWith(prefix, actual, message);
+        }
+
+        public static void AssertEndsWith(String actual, String suffix)
+        {
+            Assert.IsNotNull(actual);
+            Assert.IsNotNull(suffix);
+            StringAssert.EndsWith(suffix, actual);
+        }
+
+        public static void AssertContains(String actual, String expected)
+        {
+            Assert.IsNotNull(actual);
+            Assert.IsNotNull(expected);
+            StringAssert.Contains(expected, actual);
+        }
+        public static void AssertContains(String message, String actual, String expected)
+        {
+            Assert.IsNotNull(actual, message);
+            Assert.IsNotNull(expected, message);
+            StringAssert.Contains(expected, actual, message);
+        }
+
+        public static void AssertContainsIgnoreCase(String actual, String expected, CultureInfo locale)
+        {
+            Assert.IsNotNull(actual);
+            Assert.IsNotNull(expected);
+            string hay = actual.ToLower(locale);
+            string n = expected.ToLower(locale);
+            StringAssert.Contains(n, hay, "Unable to find expected text '" + expected + "' in1 text:\n" + actual);
+        }
+        public static void AssertContainsIgnoreCase(String actual, String expected)
+        {
+            AssertContainsIgnoreCase(actual, expected, CultureInfo.CurrentCulture);
+        }
+
+        public static void AssertNotContained(String actual, String expected)
+        {
+            Assert.IsNotNull(actual);
+            Assert.IsNotNull(expected);
+            StringAssert.DoesNotContain(expected, actual, "Unexpectedly found text '" + expected + "' in text:\n" + actual);
         }
 
         /**
@@ -65,7 +92,7 @@ namespace TestCases
          */
         public static void AssertContains<TKey, TValue>(Dictionary<TKey, TValue> map, TKey key)
         {
-            if (map.ContainsKey(key))
+            if(map.ContainsKey(key))
             {
                 return;
             }
@@ -74,7 +101,7 @@ namespace TestCases
         public static void AssertEquals<T>(T[] expected, T[] actual)
         {
             Assert.AreEqual(expected.Length, actual.Length, "Non-matching lengths");
-            for (int i = 0; i < expected.Length; i++)
+            for(int i = 0; i < expected.Length; i++)
             {
                 Assert.AreEqual(expected[i], actual[i], "Mis-match at offset " + i);
             }
@@ -82,7 +109,7 @@ namespace TestCases
         public static void AssertEquals(byte[] expected, byte[] actual)
         {
             Assert.AreEqual(expected.Length, actual.Length, "Non-matching lengths");
-            for (int i = 0; i < expected.Length; i++)
+            for(int i = 0; i < expected.Length; i++)
             {
                 Assert.AreEqual(expected[i], actual[i], "Mis-match at offset " + i);
             }
@@ -90,9 +117,9 @@ namespace TestCases
         public static void AssertContains<T>(T needle, T[] haystack)
         {
             // Check
-            foreach (T thing in haystack)
+            foreach(T thing in haystack)
             {
-                if (thing.Equals(needle))
+                if(thing.Equals(needle))
                 {
                     return;
                 }
@@ -101,7 +128,7 @@ namespace TestCases
             // Failed, try to build a nice error
             StringBuilder sb = new StringBuilder();
             sb.Append("Unable to find ").Append(needle).Append(" in [");
-            foreach (T thing in haystack)
+            foreach(T thing in haystack)
             {
                 sb.Append(" ").Append(thing.ToString()).Append(" ,");
             }
@@ -112,7 +139,7 @@ namespace TestCases
 
         public static void AssertContains<T>(T needle, IList<T> haystack)
         {
-            if (haystack.Contains(needle))
+            if(haystack.Contains(needle))
             {
                 return;
             }
@@ -125,10 +152,10 @@ namespace TestCases
             try
             {
                 FieldInfo fieldInfo = clazz.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance);
-                return (R)fieldInfo.GetValue(instance);
+                return (R) fieldInfo.GetValue(instance);
 
             }
-            catch (Exception pae)
+            catch(Exception pae)
             {
                 throw new RuntimeException("Cannot access field '" + fieldName + "' of class " + clazz, pae.InnerException);
             }

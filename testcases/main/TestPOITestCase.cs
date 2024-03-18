@@ -29,6 +29,22 @@ namespace TestCases
     public class TestPOITestCase
     {
         [Test]
+        public void AssertStartsWith()
+        {
+            POITestCase.AssertStartsWith("Apache POI", "");
+            POITestCase.AssertStartsWith("Apache POI", "Apache");
+            POITestCase.AssertStartsWith("Apache POI", "Apache POI");
+        }
+
+        [Test]
+        public void AssertEndsWith()
+        {
+            POITestCase.AssertEndsWith("Apache POI", "");
+            POITestCase.AssertEndsWith("Apache POI", "POI");
+            POITestCase.AssertEndsWith("Apache POI", "Apache POI");
+        }
+
+        [Test]
         public void AssertContains()
         {
             POITestCase.AssertContains("There is a needle in this haystack", "needle");
