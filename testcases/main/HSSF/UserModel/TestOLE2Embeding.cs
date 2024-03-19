@@ -36,10 +36,14 @@ using System.IO;
     [TestFixture]
     public class TestOLE2Embeding
     {
+        [SetUp]
+        public void Setup()
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
         [Test]
         public void TestEmbeding()
-        {
-            // This used to break, until bug #43116 was fixed
+        {            // This used to break, until bug #43116 was fixed
             HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("ole2-embedding.xls");
 
             // Check we can get at the Escher layer still

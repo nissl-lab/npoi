@@ -123,7 +123,7 @@ namespace TestCases.HPSF.Basic
             };
             for (int i = 0; i < expected.Length; i++)
             {
-                Stream in1 = new ByteArrayInputStream(poiFiles[i].GetBytes());
+                InputStream in1 = new ByteArrayInputStream(poiFiles[i].GetBytes());
                 Object o;
                 try
                 {
@@ -191,10 +191,10 @@ namespace TestCases.HPSF.Basic
             Assert.IsTrue(Arrays.Equals
                 (s.FormatID.Bytes, SectionIDMap.SUMMARY_INFORMATION_ID));
             Assert.IsNotNull(s.Properties);
-            Assert.AreEqual(18, s.PropertyCount);
+            Assert.AreEqual(17, s.PropertyCount);
             Assert.AreEqual("Titel", s.GetProperty(2));
             //Assert.assertEquals(1764, s.getSize());
-            Assert.AreEqual(1776, s.Size);
+            Assert.AreEqual(1764, s.Size);
         }
 
     }
