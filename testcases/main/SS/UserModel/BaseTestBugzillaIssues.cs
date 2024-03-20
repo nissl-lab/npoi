@@ -648,6 +648,7 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
+        [Platform("Win")]
         public void Stackoverflow23114397()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
