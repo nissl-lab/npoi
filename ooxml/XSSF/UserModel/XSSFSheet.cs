@@ -5979,15 +5979,22 @@ namespace NPOI.XSSF.UserModel
             }
 
             CT_OleObjects objs = GetCTWorksheet().oleObjects;
+            CT_OleObject coo = null;
             foreach(var obj in objs.oleObject)
             {
-                if((long) obj.shapeId==shapeId)
+                if((long) obj.shapeId!=shapeId)
                 {
-                    return obj;
+                    continue;
+                }
+                coo = obj;
+                if(coo.objectPr!=null)
+                {
+                    break;
                 }
             }
-            // TODO: Parse CT_ObjectPr xml node
-            return null;
+
+            return coo;
+
             // we use a XmlCursor here to handle oleObject with-/out AlternateContent wrappers
             //String xquery = "declare namespace p='" + XSSFRelation.NS_SPREADSHEETML + "' .//p:oleObject";
             //XmlCursor cur = GetCTWorksheet().oleObjects.newCursor();
