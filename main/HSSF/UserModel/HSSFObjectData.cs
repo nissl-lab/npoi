@@ -25,6 +25,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.Util;
     using NPOI.POIFS.FileSystem;
     using NPOI.DDF;
+    using NPOI.SS.UserModel;
 
 
     /**
@@ -32,7 +33,7 @@ namespace NPOI.HSSF.UserModel
      *
      * @author Daniel Noll
      */
-    public class HSSFObjectData : HSSFPicture
+    public class HSSFObjectData : HSSFPicture, IObjectData
     {
 
         /**
@@ -64,22 +65,26 @@ namespace NPOI.HSSF.UserModel
          * @return the object data as an OLE2 directory.
          * @ if there was an error Reading the data.
          */
-        public DirectoryEntry GetDirectory()
+        public DirectoryEntry Directory
         {
-            EmbeddedObjectRefSubRecord subRecord = FindObjectRecord();
-
-            int? streamId = ((EmbeddedObjectRefSubRecord)subRecord).StreamId;
-            String streamName = "MBD" + HexDump.ToHex((int)streamId);
-
-            Entry entry = _root.GetEntry(streamName);
-            if (entry is DirectoryEntry)
+            get
             {
-                return (DirectoryEntry)entry;
+                EmbeddedObjectRefSubRecord subRecord = FindObjectRecord();
+
+                int? streamId = ((EmbeddedObjectRefSubRecord)subRecord).StreamId;
+                String streamName = "MBD" + HexDump.ToHex((int)streamId);
+
+                Entry entry = _root.GetEntry(streamName);
+                if (entry is DirectoryEntry)
+                {
+                    return (DirectoryEntry)entry;
+                }
+                else
+                {
+                    throw new IOException("Stream " + streamName + " was not an OLE2 directory");
+                }
             }
-            else
-            {
-                throw new IOException("Stream " + streamName + " was not an OLE2 directory");
-            }
+            
         }
 
         /**
@@ -87,9 +92,12 @@ namespace NPOI.HSSF.UserModel
          *  that doesn't have an associated POIFS Directory
          *  Entry
          */
-        public byte[] GetObjectData()
+        public byte[] ObjectData
         {
-            return FindObjectRecord().ObjectData;
+            get
+            {
+                return FindObjectRecord().ObjectData;
+            }
         }
 
         /**

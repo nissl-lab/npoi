@@ -216,15 +216,19 @@ namespace NPOI.HSSF.UserModel
                 }
             }
         }
-        /**
-         * Return picture data for this shape
-         *
-         * @return picture data for this shape
-         */
+
+        /// <summary>
+        /// Return picture data for this shape
+        /// </summary>
         public IPictureData PictureData
         {
             get
             {
+                if(PictureIndex == -1)
+                {
+                    return null;
+                }
+
                 HSSFPatriarch patriarch = Patriarch;
                 HSSFShape parent = Parent as HSSFShape;
                 while (patriarch == null && parent != null)
@@ -240,7 +244,8 @@ namespace NPOI.HSSF.UserModel
                 InternalWorkbook iwb = (patriarch.Sheet.Workbook as HSSFWorkbook).Workbook;
                 EscherBSERecord bse = iwb.GetBSERecord(PictureIndex);
                 EscherBlipRecord blipRecord = bse.BlipRecord;
-                return new HSSFPictureData(blipRecord);            }
+                return new HSSFPictureData(blipRecord);
+            }
         }
 
 

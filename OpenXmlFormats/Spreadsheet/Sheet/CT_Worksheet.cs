@@ -1018,6 +1018,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return this.ignoredErrorsField;
         }
 
+        public bool IsSetOleObjects()
+        {
+            return this.oleObjectsField!=null;
+        }
     }
 
 }

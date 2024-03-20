@@ -677,7 +677,7 @@ namespace TestCases.HSSF.UserModel
                 {
                     if (embeddedObject.HasDirectoryEntry())
                     {
-                        DirectoryEntry dir = embeddedObject.GetDirectory();
+                        DirectoryEntry dir = embeddedObject.Directory;
                         if (dir is DirectoryNode)
                         {
                             DirectoryNode dNode = (DirectoryNode)dir;

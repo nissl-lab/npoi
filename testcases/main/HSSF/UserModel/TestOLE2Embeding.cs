@@ -17,18 +17,15 @@
 
 namespace TestCases.HSSF.UserModel
 {
-    using System;
-    using System.Collections;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
-
-    using TestCases.HSSF;
-    using System.Collections.Generic;
-using NPOI.SS.UserModel;
-using NPOI.POIFS.FileSystem;
-using System.IO;
-    using System.Text;
+    using NPOI.POIFS.FileSystem;
+    using NPOI.SS.UserModel;
     using NPOI.Util;
+    using NUnit.Framework;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using TestCases.HSSF;
 
     /**
      * 
@@ -58,9 +55,9 @@ using System.IO;
 
             IList<HSSFObjectData> objects = workbook.GetAllEmbeddedObjects();
             Assert.AreEqual(2, objects.Count, "Wrong number of objects");
-            Assert.AreEqual("MBD06CAB431", objects[0].GetDirectory().Name,
+            Assert.AreEqual("MBD06CAB431", objects[0].Directory.Name,
                     "Wrong name for first object");
-            Assert.AreEqual("MBD06CAC85A", objects[1].GetDirectory().Name, "Wrong name for second object");
+            Assert.AreEqual("MBD06CAC85A", objects[1].Directory.Name, "Wrong name for second object");
 
             workbook.Close();
         }
@@ -124,23 +121,22 @@ using System.IO;
 
             MemoryStream bos = new MemoryStream();
             HSSFObjectData od = wb2.GetAllEmbeddedObjects()[0];
-            Ole10Native ole10 = Ole10Native.CreateFromEmbeddedOleObject((DirectoryNode)od.GetDirectory());
+            Ole10Native ole10 = Ole10Native.CreateFromEmbeddedOleObject((DirectoryNode)od.Directory);
             bos = new MemoryStream();
             pptPoifs.WriteFileSystem(bos);
             Assert.IsTrue(Arrays.Equals(ole10.DataBuffer, bos.ToArray()));
 
             od = wb2.GetAllEmbeddedObjects()[1];
-            ole10 = Ole10Native.CreateFromEmbeddedOleObject((DirectoryNode)od.GetDirectory());
+            ole10 = Ole10Native.CreateFromEmbeddedOleObject((DirectoryNode)od.Directory);
             bos = new MemoryStream();
             xlsPoifs.WriteFileSystem(bos);
             Assert.IsTrue(Arrays.Equals(ole10.DataBuffer, bos.ToArray()));
 
             od = wb2.GetAllEmbeddedObjects()[2];
-            ole10 = Ole10Native.CreateFromEmbeddedOleObject((DirectoryNode)od.GetDirectory());
+            ole10 = Ole10Native.CreateFromEmbeddedOleObject((DirectoryNode)od.Directory);
             Assert.IsTrue(Arrays.Equals(ole10.DataBuffer, GetSampleTXT()));
 
-            xlsPoifs.Close();
-            pptPoifs.Close();
+            xlsPoifs.Close();            pptPoifs.Close();
             wb2.Close();
         }
 

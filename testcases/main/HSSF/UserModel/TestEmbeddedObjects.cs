@@ -36,8 +36,8 @@ namespace TestCases.HSSF.UserModel
             IList<HSSFObjectData> list = wb.GetAllEmbeddedObjects();
             Assert.AreEqual(list.Count, 1);
             HSSFObjectData obj = list[0];
-            Assert.IsNotNull(obj.GetObjectData());
-            Assert.IsNotNull(obj.GetDirectory());
+            Assert.IsNotNull(obj.ObjectData);
+            Assert.IsNotNull(obj.Directory);
             Assert.IsNotNull(obj.OLE2ClassName);
         }
 
@@ -52,7 +52,7 @@ namespace TestCases.HSSF.UserModel
             IList<HSSFObjectData> list = wb.GetAllEmbeddedObjects();
             Assert.AreEqual(list.Count, 1);
             HSSFObjectData obj = list[0];
-            Assert.IsNotNull(obj.GetObjectData());
+            Assert.IsNotNull(obj.ObjectData);
             Assert.IsNotNull(obj.OLE2ClassName);
         }
 

@@ -172,6 +172,12 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         {
             get { return (null != hiddenField); }
         }
+
+        public CT_OfficeArtExtensionList AddNewExtLst()
+        {
+            this.extLstField = new CT_OfficeArtExtensionList();
+            return this.extLst;
+        }
     }
     [Serializable]
     [System.ComponentModel.DesignerCategoryAttribute("code")]

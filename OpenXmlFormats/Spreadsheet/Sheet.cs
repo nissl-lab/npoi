@@ -8249,7 +8249,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_OleObject
     {
-
         private string progIdField;
 
         private ST_DvAspect dvAspectField;
@@ -8265,7 +8264,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private uint shapeIdField;
 
         private string idField;
-
+        // TODO: Parse CT_ObjectPr xml node
+        //private CT_ObjectPr objectPr;
         public CT_OleObject()
         {
             this.dvAspectField = ST_DvAspect.DVASPECT_CONTENT;
@@ -8360,7 +8360,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
 
         // TODO is the following correct?
-        [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
+        [XmlAttribute(Form = XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
         public string id
         {
             get
@@ -8371,6 +8371,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.idField = value;
             }
+        }
+
+        public bool IsSetId()
+        {
+            return !string.IsNullOrEmpty(this.idField);
+        }
+
+        public string Any
+        {
+            get;
+            set;
         }
         public static CT_OleObject Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -8386,6 +8397,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.autoLoad = XmlHelper.ReadBool(node.Attributes["autoLoad"]);
             ctObj.shapeId = XmlHelper.ReadUInt(node.Attributes["shapeId"]);
             ctObj.id = XmlHelper.ReadString(node.Attributes["id", PackageNamespaces.SCHEMA_RELATIONSHIPS]);
+            ctObj.Any = node.InnerXml;
             return ctObj;
         }
 
