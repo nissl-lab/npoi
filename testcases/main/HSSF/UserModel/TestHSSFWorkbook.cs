@@ -18,6 +18,7 @@
 namespace TestCases.HSSF.UserModel
 {
     using NPOI.DDF;
+    using NPOI.HPSF;
     using NPOI.HSSF;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;

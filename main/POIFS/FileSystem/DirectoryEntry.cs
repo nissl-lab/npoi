@@ -32,6 +32,7 @@ using System.IO;
 using NPOI.Util;
 using NPOI.POIFS.EventFileSystem;
 using NPOI.Util.Collections;
+using NPOI.HPSF;
 
 
 namespace NPOI.POIFS.FileSystem
