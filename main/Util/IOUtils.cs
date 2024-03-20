@@ -68,34 +68,11 @@ namespace NPOI.Util
             byte[] header = new byte[8];
             int read = IOUtils.ReadFully(stream, header);
 
-            if (read < 1)
+            if(read < 1)
                 throw new EmptyFileException();
 
             // Wind back those 8 bytes
-            if (stream is PushbackInputStream) {
-                //PushbackInputStream pin = (PushbackInputStream)stream;
-                //pin.Unread(header, 0, read);
-                stream.Position -= read;
-            } else {
-                stream.Reset();
-            }
-
-            return header;
-        }
-
-        public static byte[] PeekFirst8Bytes(Stream stream)
-        {
-            // We want to peek at the first 8 bytes
-            long mark =  stream.Position;
-
-            byte[] header = new byte[8];
-            int read = IOUtils.ReadFully(stream, header);
-
-            if (read < 1)
-                throw new EmptyFileException();
-
-            // Wind back those 8 bytes
-            if (stream is PushbackInputStream)
+            if(stream is PushbackInputStream)
             {
                 //PushbackInputStream pin = (PushbackInputStream)stream;
                 //pin.Unread(header, 0, read);
@@ -103,10 +80,49 @@ namespace NPOI.Util
             }
             else
             {
-                stream.Position = mark;
+                stream.Reset();
             }
 
             return header;
+        }
+
+        public static byte[] PeekFirstNBytes(Stream stream, int limit)
+        {
+            long mark =  stream.Position;
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(limit);
+            if(stream is ByteArrayInputStream)
+                Copy(new BoundedInputStream((ByteArrayInputStream) stream, limit), bos);
+            else
+            {
+                MemoryStream ms = new MemoryStream();
+                stream.CopyTo(ms, limit);
+                Copy(new BoundedInputStream(new ByteArrayInputStream(ms.GetBuffer()), limit), bos);
+            }
+
+            int readBytes = (int)bos.Length;
+            if(readBytes == 0)
+            {
+                throw new EmptyFileException();
+            }
+            if(readBytes < limit)
+            {
+                bos.Write(new byte[limit - readBytes]);
+            }
+            byte[] peekedBytes = bos.ToByteArray();
+            if(stream is PushbackInputStream)
+            {
+                //PushbackInputStream pin = (PushbackInputStream)stream;
+                //pin.unread(peekedBytes, 0, readBytes);
+                stream.Position -= peekedBytes.Length;
+            }
+            else
+            {
+                stream.Position = mark;
+                (stream as InputStream)?.Reset();
+            }
+
+            return peekedBytes;
         }
 
         /// <summary>
@@ -137,13 +153,13 @@ namespace NPOI.Util
             {
                 readBytes = stream.Read(buffer, 0, Math.Min(buffer.Length, length - totalBytes));
                 totalBytes += Math.Max(readBytes, 0);
-                if (readBytes > 0)
+                if(readBytes > 0)
                 {
                     baos.Write(buffer, 0, readBytes);
                 }
-            } while (totalBytes < length && readBytes > 0);
+            } while(totalBytes < length && readBytes > 0);
 
-            if (length != Int32.MaxValue && totalBytes < length)
+            if(length != Int32.MaxValue && totalBytes < length)
             {
                 throw new IOException("unexpected EOF");
             }
@@ -153,7 +169,7 @@ namespace NPOI.Util
 
         public static byte[] ToByteArray(ByteBuffer buffer, int length)
         {
-            if (buffer.HasBuffer && buffer.Offset == 0)
+            if(buffer.HasBuffer && buffer.Offset == 0)
             {
                 // The backing array should work out fine for us
                 return buffer.Buffer;
@@ -193,15 +209,15 @@ namespace NPOI.Util
         public static int ReadFully(Stream stream, byte[] b, int off, int len)
         {
             int total = 0;
-            while (true)
+            while(true)
             {
                 int got = stream.Read(b, off + total, len - total - off);
-                if (got <= 0)
+                if(got <= 0)
                 {
                     return (total == 0) ? -1 : total;
                 }
                 total += got;
-                if (total == len)
+                if(total == len)
                 {
                     return total;
                 }
@@ -219,7 +235,7 @@ namespace NPOI.Util
             byte[] buff = new byte[4096];
             //inp.Position = 0;
             int count;
-            while ((count = inp.Read(buff, 0, buff.Length)) >0)
+            while((count = inp.Read(buff, 0, buff.Length)) >0)
             {
                 out1.Write(buff, 0, count);
             }
@@ -228,7 +244,7 @@ namespace NPOI.Util
         public static long CalculateChecksum(byte[] data)
         {
             CRC32 sum = new CRC32();
-            return (long)sum.ByteCRC(ref data);
+            return (long) sum.ByteCRC(ref data);
         }
 
         ///<summary>
@@ -236,10 +252,10 @@ namespace NPOI.Util
         ///be printed to {@link IOUtils} class logger.
         ///</summary>
         ///<param name="closeable">resource to close</param>
-        public static void CloseQuietly(Stream closeable )
+        public static void CloseQuietly(Stream closeable)
         {
             // no need to log a NullPointerException here
-            if (closeable == null)
+            if(closeable == null)
             {
                 return;
             }
@@ -247,7 +263,7 @@ namespace NPOI.Util
             {
                 closeable.Close();
             }
-            catch (Exception exc)
+            catch(Exception exc)
             {
                 logger.Log(POILogger.ERROR, "Unable to close resource: " + exc, exc);
             }
@@ -256,7 +272,7 @@ namespace NPOI.Util
         public static void CloseQuietly(ICloseable closeable)
         {
             // no need to log a NullPointerException here
-            if (closeable == null)
+            if(closeable == null)
             {
                 return;
             }
@@ -264,7 +280,7 @@ namespace NPOI.Util
             {
                 closeable.Close();
             }
-            catch (Exception exc)
+            catch(Exception exc)
             {
                 logger.Log(POILogger.ERROR, "Unable to close resource: " + exc, exc);
             }
@@ -274,18 +290,18 @@ namespace NPOI.Util
         {
             SafelyAllocateCheck(length, maxLength);
 
-            CheckByteSizeLimit((int)length);
+            CheckByteSizeLimit((int) length);
 
-            return new byte[(int)length];
+            return new byte[(int) length];
         }
 
         public static void SafelyAllocateCheck(long length, int maxLength)
         {
-            if (length < 0L)
+            if(length < 0L)
             {
                 throw new RecordFormatException("Can't allocate an array of length < 0, but had " + length + " and " + maxLength);
             }
-            if (length > (long)int.MaxValue)
+            if(length > (long) int.MaxValue)
             {
                 throw new RecordFormatException("Can't allocate an array > " + int.MaxValue);
             }
@@ -294,7 +310,7 @@ namespace NPOI.Util
 
         private static void CheckByteSizeLimit(int length)
         {
-            if (BYTE_ARRAY_MAX_OVERRIDE != -1 && length > BYTE_ARRAY_MAX_OVERRIDE)
+            if(BYTE_ARRAY_MAX_OVERRIDE != -1 && length > BYTE_ARRAY_MAX_OVERRIDE)
             {
                 ThrowRFE(length, BYTE_ARRAY_MAX_OVERRIDE);
             }
@@ -302,14 +318,14 @@ namespace NPOI.Util
 
         private static void CheckLength(long length, int maxLength)
         {
-            if (BYTE_ARRAY_MAX_OVERRIDE > 0)
+            if(BYTE_ARRAY_MAX_OVERRIDE > 0)
             {
-                if (length > BYTE_ARRAY_MAX_OVERRIDE)
+                if(length > BYTE_ARRAY_MAX_OVERRIDE)
                 {
                     ThrowRFE(length, BYTE_ARRAY_MAX_OVERRIDE);
                 }
             }
-            else if (length > maxLength)
+            else if(length > maxLength)
             {
                 ThrowRFE(length, maxLength);
             }

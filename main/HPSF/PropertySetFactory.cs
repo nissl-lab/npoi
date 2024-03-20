@@ -25,12 +25,14 @@
  * 
  * ==============================================================*/
 
+using NPOI.Util;
+
 namespace NPOI.HPSF
 {
     using System.IO;
     using NPOI.HPSF.Wellknown;
     using System;
-using NPOI.POIFS.FileSystem;
+    using NPOI.POIFS.FileSystem;
 
     /// <summary>
     /// Factory class To Create instances of {@link SummaryInformation},
@@ -61,7 +63,7 @@ using NPOI.POIFS.FileSystem;
          */
         public static PropertySet Create(DirectoryEntry dir, String name)
         {
-            Stream inp = null;
+            InputStream inp = null;
             try
             {
                 DocumentEntry entry = (DocumentEntry)dir.GetEntry(name);
@@ -70,11 +72,12 @@ using NPOI.POIFS.FileSystem;
                 {
                     return Create(inp);
                 }
-                catch (MarkUnsupportedException) { return null; }
+                catch(MarkUnsupportedException) { return null; }
             }
             finally
             {
-                if (inp != null) inp.Close();
+                if(inp != null)
+                    inp.Close();
             }
         }
 
@@ -88,19 +91,19 @@ using NPOI.POIFS.FileSystem;
         /// </summary>
         /// <param name="stream">Contains the property set stream's data.</param>
         /// <returns>The Created {@link PropertySet}.</returns>
-        public static PropertySet Create(Stream stream)
+        public static PropertySet Create(InputStream stream)
         {
             PropertySet ps = new PropertySet(stream);
             try
             {
-                if (ps.IsSummaryInformation)
+                if(ps.IsSummaryInformation)
                     return new SummaryInformation(ps);
-                else if (ps.IsDocumentSummaryInformation)
+                else if(ps.IsDocumentSummaryInformation)
                     return new DocumentSummaryInformation(ps);
                 else
                     return ps;
             }
-            catch (UnexpectedPropertySetTypeException ex)
+            catch(UnexpectedPropertySetTypeException ex)
             {
                 /* This exception will never be throws because we alReady checked
                  * explicitly for this case above. */
@@ -123,7 +126,7 @@ using NPOI.POIFS.FileSystem;
             {
                 return new SummaryInformation(ps);
             }
-            catch (UnexpectedPropertySetTypeException ex)
+            catch(UnexpectedPropertySetTypeException ex)
             {
                 /* This should never happen. */
                 throw new HPSFRuntimeException(ex);
@@ -140,12 +143,12 @@ using NPOI.POIFS.FileSystem;
         {
             MutablePropertySet ps = new MutablePropertySet();
             MutableSection s = (MutableSection)ps.FirstSection;
-            s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
+            s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0]);
             try
             {
                 return new DocumentSummaryInformation(ps);
             }
-            catch (UnexpectedPropertySetTypeException ex)
+            catch(UnexpectedPropertySetTypeException ex)
             {
                 /* This should never happen. */
                 throw new HPSFRuntimeException(ex);
@@ -156,12 +159,12 @@ using NPOI.POIFS.FileSystem;
         {
             MutablePropertySet ps = new MutablePropertySet();
             MutableSection s = (MutableSection)ps.FirstSection;
-            s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
+            s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0]);
             try
             {
                 return new DocumentSummaryInformation(ps);
             }
-            catch (UnexpectedPropertySetTypeException ex)
+            catch(UnexpectedPropertySetTypeException ex)
             {
                 /* This should never happen. */
                 throw new HPSFRuntimeException(ex);

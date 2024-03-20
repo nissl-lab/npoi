@@ -21,7 +21,7 @@ namespace TestCases.HPSF.Basic
 
     using NUnit.Framework;
 
-    using NPOI.Util;
+    using NPOI.HPSF;
 
     /**
      * <p>Tests ClassID structure.</p>
