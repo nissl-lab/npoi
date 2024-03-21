@@ -10,9 +10,16 @@ using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 {
+    /// <summary>
+    /// Hold xml data
+    /// </summary>
+    public class XmlObject
+    {
+        public XmlNode Node { get; set; }
+    }
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
-    public class CT_Shape // empty interface: EG_ObjectChoices
+    public class CT_Shape : XmlObject // empty interface: EG_ObjectChoices
     {
         private CT_ShapeNonVisual nvSpPrField;
         private CT_ShapeProperties spPrField;
@@ -56,6 +63,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 else if (childNode.LocalName == "style")
                     ctObj.style = CT_ShapeStyle.Parse(childNode, namespaceManager);
             }
+            ctObj.Node = node;
             return ctObj;
         }
 
@@ -178,7 +186,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
     [System.ComponentModel.DesignerCategory("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
-    public class CT_TextBody
+    public class CT_TextBody : XmlObject
     {
 
         private CT_TextBodyProperties bodyPrField;
@@ -202,6 +210,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 else if (childNode.LocalName == "p")
                     ctObj.p.Add(CT_TextParagraph.Parse(childNode, namespaceManager));
             }
+            ctObj.Node = node;
             return ctObj;
         }
 
@@ -437,7 +446,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
-    public class CT_ShapeNonVisual
+    public class CT_ShapeNonVisual : XmlObject
     {
         private CT_NonVisualDrawingProps cNvPrField;
         private CT_NonVisualDrawingShapeProps cNvSpPrField;
@@ -487,6 +496,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 else if (childNode.LocalName == "cNvSpPr")
                     ctObj.cNvSpPr = CT_NonVisualDrawingShapeProps.Parse(childNode, namespaceManager);
             }
+            ctObj.Node = node;
             return ctObj;
         }
 
@@ -591,7 +601,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
     }
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
-    public class CT_GroupShape
+    public class CT_GroupShape: XmlObject
     {
         CT_GroupShapeProperties grpSpPrField;
         CT_GroupShapeNonVisual nvGrpSpPrField;
@@ -642,7 +652,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             pictures.Add(pic);
             return pic;
         }
-        public CT_GroupShape AddNewGroup()
+        public CT_GroupShape AddNewGroupShape()
         {
             var group = new CT_GroupShape();
             groups.Add(group);
@@ -730,6 +740,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                     ctObj.groups.Add(group);
                 }
             }
+            ctObj.Node = node;
             return ctObj;
         }
 
@@ -778,7 +789,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
-    public class CT_GroupShapeNonVisual
+    public class CT_GroupShapeNonVisual : XmlObject
     {
         CT_NonVisualDrawingProps cNvPrField;
         CT_NonVisualGroupDrawingShapeProps cNvGrpSpPrField;
@@ -794,6 +805,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 else if (childNode.LocalName == "cNvGrpSpPr")
                     ctObj.cNvGrpSpPr = CT_NonVisualGroupDrawingShapeProps.Parse(childNode, namespaceManager);
             }
+            ctObj.Node = node;
             return ctObj;
         }
 

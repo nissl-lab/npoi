@@ -598,10 +598,54 @@ namespace NPOI.XSSF.UserModel
 
         #endregion
 
+
+        /// <summary>
+        /// get shapes in this shape group
+        /// </summary>
+        /// <param name="groupshape"></param>
+        /// <returns>list of shapes in this shape group</returns>
+        public List<XSSFShape> GetShapes(XSSFShapeGroup groupshape)
+        {
+            List<XSSFShape> lst = new List<XSSFShape>();
+            var gs = groupshape.GetCTGroupShape();
+            AddShapes(gs, lst);
+            return lst;
+        }
+
+        private void AddShapes(CT_GroupShape gs, List<XSSFShape> lst)
+        {
+            XSSFShape shape = null;
+            foreach(var sp in gs.Shapes)
+            {
+                shape = HasOleLink(sp)
+                        ? new XSSFObjectData(this, sp)
+                        : new XSSFSimpleShape(this, sp);
+                shape.anchor = GetAnchorFromParent(sp.Node);
+                lst.Add(shape);
+            }
+            foreach(var p in gs.Pictures)
+            {
+                shape = new XSSFPicture(this, p);
+                shape.anchor = GetAnchorFromParent(p.Node);
+                lst.Add(shape);
+            }
+            foreach (var c in gs.Connectors)
+            {
+                shape = new XSSFConnector(this, c);
+                shape.anchor = GetAnchorFromParent(c.Node);
+                lst.Add(shape);
+            }
+            foreach(var g in gs.Groups)
+            {
+                shape = new XSSFShapeGroup(this, g);
+                shape.anchor = GetAnchorFromParent(g.Node);
+                lst.Add(shape);
+            }
+        }
         /**
-     *
-     * @return list of shapes in this drawing
-     */
+         *
+         * @return list of shapes in this drawing
+         */
         public List<XSSFShape> GetShapes()
         {
             List<XSSFShape> lst = new List<XSSFShape>();
@@ -624,47 +668,44 @@ namespace NPOI.XSSF.UserModel
                 }
                 else if (anchor.groupShape != null)
                 {
-                    List<object> lstCtShapes = new List<object>();
-                    anchor.groupShape.GetShapes(lstCtShapes);
+                    shape = new XSSFShapeGroup(this, anchor.groupShape);
+                    //List<object> lstCtShapes = new List<object>();
+                    //anchor.groupShape.GetShapes(lstCtShapes);
 
-                    foreach(var s in lstCtShapes)
-                    {
-                        XSSFShape gShape = null;
-                        if(s is CT_Connector)
-                        {
-                            gShape = new XSSFConnector(this, (CT_Connector)s);
-                        }
-                        else if(s is CT_Picture)
-                        {
-                            gShape = new XSSFPicture(this, (CT_Picture)s);
-                        }
-                        else if(s is CT_Shape)
-                        {
-                            gShape = new XSSFSimpleShape(this, (CT_Shape)s);
-                        }
-                        else if(s is CT_GroupShape)
-                        {
-                            gShape = new XSSFShapeGroup(this, (CT_GroupShape)s);
-                        }
-                        else if(s is CT_GraphicalObjectFrame)
-                        {
-                            gShape = new XSSFGraphicFrame(this, (CT_GraphicalObjectFrame)s);
-                        }
-                        if(gShape != null)
-                        {
-                            gShape.anchor = GetAnchorFromIEGAnchor(anchor);
-                            gShape.cellanchor = anchor;
-                            lst.Add(gShape);
-                        }
-                    }
+                    //foreach(var s in lstCtShapes)
+                    //{
+                    //    XSSFShape gShape = null;
+                    //    if(s is CT_Connector)
+                    //    {
+                    //        gShape = new XSSFConnector(this, (CT_Connector)s);
+                    //    }
+                    //    else if(s is CT_Picture)
+                    //    {
+                    //        gShape = new XSSFPicture(this, (CT_Picture)s);
+                    //    }
+                    //    else if(s is CT_Shape)
+                    //    {
+                    //        gShape = new XSSFSimpleShape(this, (CT_Shape)s);
+                    //    }
+                    //    else if(s is CT_GroupShape)
+                    //    {
+                    //        gShape = new XSSFShapeGroup(this, (CT_GroupShape)s);
+                    //    }
+                    //    else if(s is CT_GraphicalObjectFrame)
+                    //    {
+                    //        gShape = new XSSFGraphicFrame(this, (CT_GraphicalObjectFrame)s);
+                    //    }
+                    //    if(gShape != null)
+                    //    {
+                    //        gShape.anchor = GetAnchorFromIEGAnchor(anchor);
+                    //        gShape.cellanchor = anchor;
+                    //        lst.Add(gShape);
+                    //    }
+                    //}
                 }
                 else if (anchor.graphicFrame != null)
                 {
                     shape = new XSSFGraphicFrame(this, anchor.graphicFrame);
-                }
-                else if (anchor.sp != null)
-                {
-                   shape = new XSSFSimpleShape(this, anchor.sp);
                 }
                 if (shape != null)
                 {
@@ -673,29 +714,7 @@ namespace NPOI.XSSF.UserModel
                     lst.Add(shape);
                 }
             }
-            //foreach (XmlNode obj in xmldoc.SelectNodes("./*/*/*"))
-            //{
-            //    XSSFShape shape = null;
-            //    if (obj.LocalName == "sp")
-            //    {
-            //        shape = new XSSFSimpleShape(this, obj);
-            //    }
-            //    else if (obj.LocalName == "pic")
-            //    {
-            //        shape = new XSSFPicture(this, obj);
-            //    }
-            //    else if (obj.LocalName == "cxnSp")
-            //    {
-            //        shape = new XSSFConnector(this, obj);
-            //    }
-            //    //    else if (obj is CT_GraphicalObjectFrame) shape = new XSSFGraphicFrame(this, (CT_GraphicalObjectFrame)obj);
-            //    //    else if (obj is CT_GroupShape) shape = new XSSFShapeGroup(this, (CT_GroupShape)obj);
-            //    if (shape != null)
-            //    {
-            //        shape.anchor = GetAnchorFromParent(obj);
-            //        lst.Add(shape);
-            //    }
-            //}
+
             return lst;
         }
 
@@ -735,17 +754,24 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFAnchor anchor = null;
             XmlNode parentNode = obj.ParentNode;
-            XmlNode fromNode = parentNode.SelectSingleNode("xdr:from", POIXMLDocumentPart.NamespaceManager);
-            if(fromNode==null)
-                throw new InvalidDataException("xdr:from node is missing");
-            CT_Marker ctFrom = CT_Marker.Parse(fromNode, POIXMLDocumentPart.NamespaceManager);
-            XmlNode toNode = parentNode.SelectSingleNode("xdr:to", POIXMLDocumentPart.NamespaceManager);
-            CT_Marker ctTo=null;
-            if (toNode != null)
+            while(parentNode!=null && parentNode.LocalName.IndexOf("CellAnchor")==-1)
             {
-                ctTo = CT_Marker.Parse(toNode, POIXMLDocumentPart.NamespaceManager);
+                parentNode = parentNode.ParentNode;
             }
-            anchor = new XSSFClientAnchor(ctFrom, ctTo);
+            if(parentNode!=null)
+            {
+                XmlNode fromNode = parentNode.SelectSingleNode("xdr:from", POIXMLDocumentPart.NamespaceManager);
+                if(fromNode==null)
+                    throw new InvalidDataException("xdr:from node is missing");
+                CT_Marker ctFrom = CT_Marker.Parse(fromNode, POIXMLDocumentPart.NamespaceManager);
+                XmlNode toNode = parentNode.SelectSingleNode("xdr:to", POIXMLDocumentPart.NamespaceManager);
+                CT_Marker ctTo=null;
+                if(toNode != null)
+                {
+                    ctTo = CT_Marker.Parse(toNode, POIXMLDocumentPart.NamespaceManager);
+                }
+                anchor = new XSSFClientAnchor(ctFrom, ctTo);
+            }
             return anchor;
         }
 
