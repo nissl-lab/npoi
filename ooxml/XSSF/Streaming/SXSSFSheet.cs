@@ -179,7 +179,7 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        public IDrawing DrawingPatriarch
+        public IDrawing<IShape> DrawingPatriarch
         {
             get
             {
@@ -650,7 +650,7 @@ namespace NPOI.XSSF.Streaming
             return _sh.GetHyperlinkList();
         }
 
-        public IDrawing CreateDrawingPatriarch()
+        public IDrawing<IShape> CreateDrawingPatriarch()
         {
             return new SXSSFDrawing((SXSSFWorkbook)Workbook, (XSSFDrawing)_sh.CreateDrawingPatriarch());
         }

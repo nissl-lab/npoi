@@ -1322,7 +1322,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
     {
         private List<IEG_Anchor> cellAnchors = new List<IEG_Anchor>();
         //private List<CT_AbsoulteCellAnchor> absoluteCellAnchors = new List<CT_AbsoulteCellAnchor>();
-
+        private bool inAlternateContent = false;
         public CT_TwoCellAnchor AddNewTwoCellAnchor()
         {
             CT_TwoCellAnchor anchor = new CT_TwoCellAnchor();
@@ -1399,11 +1399,17 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         public static CT_Drawing Parse(XmlDocument xmldoc, XmlNamespaceManager namespaceManager)
         {
-            XmlNodeList cellanchorNodes = xmldoc.SelectNodes("/xdr:wsDr/*", namespaceManager);
+            XmlNodeList childNodes = xmldoc.SelectNodes("/xdr:wsDr/*", namespaceManager);
             CT_Drawing ctDrawing = new CT_Drawing();
-            foreach (XmlNode node in cellanchorNodes)
+            
+            foreach (XmlNode node in childNodes)
             {
-                if (node.LocalName == "twoCellAnchor")
+                if(node.LocalName == "AlternateContent")
+                {
+                    ctDrawing.inAlternateContent = true;
+                    ctDrawing.cellAnchors.Add(ParseAlternateContent(node, namespaceManager));
+                }
+                else if (node.LocalName == "twoCellAnchor")
                 {
                     CT_TwoCellAnchor twoCellAnchor = CT_TwoCellAnchor.Parse(node, namespaceManager);
                     ctDrawing.cellAnchors.Add(twoCellAnchor);
@@ -1420,6 +1426,40 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 }
             }
             return ctDrawing;
+        }
+
+        private static IEG_Anchor ParseAlternateContent(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            IEG_Anchor anchor = null;
+            if(node.ChildNodes.Count == 0)
+                return null;
+            if(node.ChildNodes[0].LocalName == "Choice")
+            {
+                foreach(XmlNode cnode in node.ChildNodes[0].ChildNodes)
+                {
+                    if(cnode.LocalName == "twoCellAnchor")
+                    {
+                        anchor = CT_TwoCellAnchor.Parse(cnode, namespaceManager);
+                    }
+                    else if(cnode.LocalName == "oneCellAnchor")
+                    {
+                        anchor = CT_OneCellAnchor.Parse(cnode, namespaceManager);
+                    }
+                    else if(cnode.LocalName == "absCellAnchor")
+                    {
+                        anchor = CT_AbsoluteCellAnchor.Parse(cnode, namespaceManager);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException($"invalid localname {cnode.LocalName}");
+                    }
+                }
+            }
+            else
+            {
+                throw new NotImplementedException($"invalid localname {node.ChildNodes[0].LocalName}");
+            }
+            return anchor;
         }
     }
     [Serializable]

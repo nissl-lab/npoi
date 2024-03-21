@@ -270,7 +270,7 @@ namespace NPOI.HSSF.UserModel
             {
                 EscherComplexProperty propFile = (EscherComplexProperty)GetOptRecord().Lookup(
                               EscherProperties.BLIP__BLIPFILENAME);
-                return (null == propFile) ? "" : Trim(StringUtil.GetFromUnicodeLE(propFile.ComplexData));
+                return (null == propFile) ? "" : StringUtil.Trim(StringUtil.GetFromUnicodeLE(propFile.ComplexData));
             }
             set
             {
@@ -279,23 +279,6 @@ namespace NPOI.HSSF.UserModel
                 EscherComplexProperty prop = new EscherComplexProperty(EscherProperties.BLIP__BLIPFILENAME, true, bytes);
                 SetPropertyValue(prop);
             }
-        }
-        private String Trim(string value)
-        {
-            int end = value.Length;
-            int st = 0;
-            //int off = offset;      /* avoid getfield opcode */
-            char[] val = value.ToCharArray();    /* avoid getfield opcode */
-
-            while ((st < end) && (val[st] <= ' '))
-            {
-                st++;
-            }
-            while ((st < end) && (val[end - 1] <= ' '))
-            {
-                end--;
-            }
-            return ((st > 0) || (end < value.Length)) ? value.Substring(st, end - st) : value;
         }
 
         public override int ShapeType

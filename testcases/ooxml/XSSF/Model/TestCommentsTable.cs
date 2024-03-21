@@ -126,7 +126,7 @@ namespace TestCases.XSSF.Model
             ICell c1r2s2 = r2s2.CreateCell(1);
             Assert.IsNull(c1r2s2.CellComment);
 
-            IDrawing dg = sheet2.CreateDrawingPatriarch();
+            IDrawing<IShape> dg = sheet2.CreateDrawingPatriarch();
             IComment cc2 = dg.CreateCellComment(new XSSFClientAnchor());
             cc2.Author = ("Also POI");
             cc2.String = (new XSSFRichTextString("A new comment"));
@@ -238,7 +238,7 @@ namespace TestCases.XSSF.Model
             // NOTE - only occurs if a comment is placed in A1 first
             ICell A1 = GetCell(sheet, 0, 0);
             //Cell A1 = getCell(sheet, 2, 2);
-            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
             setComment(sheet, A1, drawing, "for A1", helper, anchor);
 
             // find comment in A1 before we set the comment in B2
@@ -262,7 +262,7 @@ namespace TestCases.XSSF.Model
 
         // Set the comment on a sheet
         //
-        private static void setComment(ISheet sheet, ICell cell, IDrawing drawing, String commentText, ICreationHelper helper, IClientAnchor anchor)
+        private static void setComment(ISheet sheet, ICell cell, IDrawing<IShape> drawing, String commentText, ICreationHelper helper, IClientAnchor anchor)
         {
             //System.out.println("Setting col: " + cell.getColumnIndex() + " and row " + cell.getRowIndex());
             anchor.Col1 = (cell.ColumnIndex);

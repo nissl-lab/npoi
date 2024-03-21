@@ -407,7 +407,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        IDrawing ISheet.DrawingPatriarch
+        IDrawing<IShape> ISheet.DrawingPatriarch
         {
             get { throw new System.NotImplementedException(); }
         }
@@ -619,7 +619,7 @@ namespace NPOI.XSSF.UserModel
             throw new System.NotImplementedException();
         }
 
-        IDrawing ISheet.CreateDrawingPatriarch()
+        IDrawing<IShape> ISheet.CreateDrawingPatriarch()
         {
             throw new System.NotImplementedException();
         }

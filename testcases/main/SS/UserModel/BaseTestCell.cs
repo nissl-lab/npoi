@@ -987,7 +987,7 @@ namespace TestCases.SS.UserModel
             anchor.Col2 = cell.ColumnIndex + 1;
             anchor.Row1 = row.RowNum;
             anchor.Row2 = row.RowNum + 3;
-            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
             IComment comment = drawing.CreateCellComment(anchor);
             IRichTextString str = factory.CreateRichTextString("Hello, World!");
             comment.String = str;

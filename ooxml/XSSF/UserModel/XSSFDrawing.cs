@@ -28,6 +28,8 @@ using NPOI.SS.Util;
 using NPOI.Util;
 using System.Text.RegularExpressions;
 using System.Linq;
+using NPOI.OpenXml4Net.Exceptions;
+using System.Collections;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -37,7 +39,7 @@ namespace NPOI.XSSF.UserModel
      *
      * @author Yegor Kozlov
      */
-    public class XSSFDrawing : POIXMLDocumentPart, IDrawing
+    public class XSSFDrawing : POIXMLDocumentPart, IDrawing<XSSFShape>
     {
         public static String NAMESPACE_A = XSSFRelation.NS_DRAWINGML;
         public static String NAMESPACE_C = XSSFRelation.NS_CHART;
@@ -45,7 +47,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Root element of the SpreadsheetML Drawing part
          */
-        private NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Drawing drawing = NewDrawing();
+        private CT_Drawing drawing;
        // private bool isNew = true; not used so far
         private long numOfGraphicFrames = 0L;
 
@@ -435,6 +437,105 @@ namespace NPOI.XSSF.UserModel
             return graphicFrame;
         }
 
+        public IObjectData CreateObjectData(IClientAnchor anchor, int storageId, int pictureIndex)
+        {
+            XSSFSheet sh = Sheet;
+            PackagePart sheetPart = sh.GetPackagePart();
+
+            /*
+             * The shape id of the ole object seems to be a legacy shape id.
+             * 
+             * see 5.3.2.1 legacyDrawing (Legacy Drawing Object):
+             * Legacy Shape ID that is unique throughout the entire document.
+             * Legacy shape IDs should be assigned based on which portion of the document the
+             * drawing resides on. The assignment of these ids is broken down into clusters of
+             * 1024 values. The first cluster is 1-1024, the second 1025-2048 and so on.
+             *
+             * Ole shapes seem to start with 1025 on the first sheet ...
+             * and not sure, if the ids need to be reindexed when sheets are removed
+             * or more than 1024 shapes are on a given sheet (see #51332 for a similar issue)
+             */
+            XSSFSheet sheet = Sheet;
+            XSSFWorkbook wb = sheet.Workbook as XSSFWorkbook;
+            int sheetIndex = wb.GetSheetIndex(sheet);
+            long shapeId = (sheetIndex+1)*1024 + newShapeId();
+
+            // add reference to OLE part
+            PackagePartName olePN;
+            try
+            {
+                olePN = PackagingUriHelper.CreatePartName("/xl/embeddings/oleObject"+storageId+".bin");
+            }
+            catch(InvalidFormatException e)
+            {
+                throw new POIXMLException(e);
+            }
+            PackageRelationship olePR = sheetPart.AddRelationship( olePN, TargetMode.Internal, POIXMLDocument.OLE_OBJECT_REL_TYPE );
+
+            // add reference to image part
+            XSSFPictureData imgPD = sh.Workbook.GetAllPictures()[pictureIndex] as XSSFPictureData;
+            PackagePartName imgPN = imgPD.GetPackagePart().PartName;
+            PackageRelationship imgSheetPR = sheetPart.AddRelationship( imgPN, TargetMode.Internal, PackageRelationshipTypes.IMAGE_PART );
+            PackageRelationship imgDrawPR = GetPackagePart().AddRelationship( imgPN, TargetMode.Internal, PackageRelationshipTypes.IMAGE_PART );
+
+
+            // add OLE part metadata to sheet
+            //NPOI.OpenXmlFormats.Spreadsheet.CT_Worksheet cwb = sh.GetCTWorksheet();
+            //NPOI.OpenXmlFormats.Spreadsheet.CT_OleObjects oo = cwb.IsSetOleObjects() ? cwb.oleObjects : cwb.AddNewOleObjects();
+
+            //NPOI.OpenXmlFormats.Spreadsheet.CT_OleObject ole1 = oo.AddNewOleObject();
+            //ole1.progId = "Package";
+            //ole1.shapeId = (uint)shapeId;
+            //ole1.id = olePR.Id;
+
+            //XmlCursor cur1 = ole1.newCursor();
+            //cur1.toEndToken();
+            //cur1.beginElement("objectPr", XSSFRelation.NS_SPREADSHEETML);
+            //cur1.insertAttributeWithValue("id", PackageRelationshipTypes.CORE_PROPERTIES_ECMA376_NS, imgSheetPR.Id);
+            //cur1.insertAttributeWithValue("defaultSize", "0");
+            //cur1.beginElement("anchor", XSSFRelation.NS_SPREADSHEETML);
+            //cur1.insertAttributeWithValue("moveWithCells", "1");
+
+            //CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor((XSSFClientAnchor)anchor);
+
+            //XmlCursor cur2 = ctAnchor.newCursor();
+            //cur2.copyXmlContents(cur1);
+            //cur2.dispose();
+
+            //cur1.toParent();
+            //cur1.toFirstChild();
+            //cur1.setName(new QName(XSSFRelation.NS_SPREADSHEETML, "from"));
+            //cur1.toNextSibling();
+            //cur1.setName(new QName(XSSFRelation.NS_SPREADSHEETML, "to"));
+
+            //cur1.dispose();
+
+            //// add a new shape and link OLE & image part
+            //CT_Shape ctShape = ctAnchor.AddNewSp();
+            //ctShape.set(XSSFObjectData.prototype());
+            //ctShape.getSpPr().setXfrm(CreateXfrm((XSSFClientAnchor) anchor));
+
+            //// workaround for not having the vmlDrawing filled
+            //CT_BlipFillProperties blipFill = ctShape.getSpPr().addNewBlipFill();
+            //blipFill.addNewBlip().setEmbed(imgDrawPR.getId());
+            //blipFill.addNewStretch().addNewFillRect();
+
+            //CT_NonVisualDrawingProps cNvPr = ctShape.getNvSpPr().getCNvPr();
+            //cNvPr.setId(shapeId);
+            //cNvPr.setName("Object "+shapeId);
+
+            //XmlCursor extCur = cNvPr.getExtLst().getExtArray(0).newCursor();
+            //extCur.toFirstChild();
+            //extCur.setAttributeText(new QName("spid"), "_x0000_s"+shapeId);
+            //extCur.dispose();
+
+            //XSSFObjectData shape = new XSSFObjectData(this, ctShape);
+            //shape.anchor = (XSSFClientAnchor) anchor;
+
+            //return shape;
+            throw new NotImplementedException();
+        }
+
         /**
          * Returns all charts in this Drawing.
          */
@@ -515,6 +616,12 @@ namespace NPOI.XSSF.UserModel
                 {
                     shape = new XSSFConnector(this, anchor.connector);
                 }
+                else if(anchor.sp != null)
+                {
+                    shape = HasOleLink(anchor.sp)
+                        ? new XSSFObjectData(this, anchor.sp)
+                        : new XSSFSimpleShape(this, anchor.sp);
+                }
                 else if (anchor.groupShape != null)
                 {
                     List<object> lstCtShapes = new List<object>();
@@ -591,7 +698,24 @@ namespace NPOI.XSSF.UserModel
             //}
             return lst;
         }
- 
+
+        private bool HasOleLink(CT_Shape shape)
+        {
+            try
+            {
+                string uri = shape.nvSpPr.cNvPr.extLst.ext[0].uri;
+                if("{63B3BB69-23CF-44E3-9099-C40C66FF867C}".Equals(uri))
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return false;
+        }
+
         private XSSFAnchor GetAnchorFromIEGAnchor(IEG_Anchor ctAnchor)
         {
             CT_Marker ctFrom=null, ctTo=null;
@@ -624,6 +748,18 @@ namespace NPOI.XSSF.UserModel
             anchor = new XSSFClientAnchor(ctFrom, ctTo);
             return anchor;
         }
+
+        public IEnumerator<XSSFShape> GetEnumerator()
+        {
+            return GetShapes().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetShapes().GetEnumerator();
+        }
+
+        public XSSFSheet Sheet => (XSSFSheet)GetParent();
     }
 }
 

@@ -1420,7 +1420,7 @@ namespace TestCases.XSSF.UserModel
 
             // Try to add comments to Sheet 1
             ICreationHelper factory = wb1.GetCreationHelper();
-            IDrawing Drawing = sh1.CreateDrawingPatriarch();
+            IDrawing<IShape> Drawing = sh1.CreateDrawingPatriarch();
 
             IClientAnchor anchor = factory.CreateClientAnchor();
             anchor.Col1 = (0);
@@ -2552,7 +2552,7 @@ namespace TestCases.XSSF.UserModel
                 Assert.IsNotNull(orig);
 
                 ISheet sheet = wb.CloneSheet(0);
-                IDrawing Drawing = sheet.CreateDrawingPatriarch();
+                IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
                 foreach (XSSFShape shape in ((XSSFDrawing)Drawing).GetShapes())
                 {
                     if (shape is XSSFPicture)

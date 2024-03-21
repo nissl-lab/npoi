@@ -63,7 +63,7 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             NPOI.SS.UserModel.ISheet sh1 = wb.CreateSheet();
-            IDrawing p1 = sh1.CreateDrawingPatriarch();
+            IDrawing<IShape> p1 = sh1.CreateDrawingPatriarch();
 
             byte[] pictureData = HSSFTestDataSamples.GetTestDataFileContent("45829.png");
             int idx1 = wb.AddPicture(pictureData, PictureType.PNG);
@@ -78,7 +78,7 @@ namespace TestCases.HSSF.UserModel
             IWorkbook wb = new HSSFWorkbook();
 
             ISheet sh = wb.CreateSheet("Pictures");
-            IDrawing dr = sh.CreateDrawingPatriarch();
+            IDrawing<IShape> dr = sh.CreateDrawingPatriarch();
             Assert.AreEqual(0, ((HSSFPatriarch)dr).Children.Count);
             IClientAnchor anchor = wb.GetCreationHelper().CreateClientAnchor();
 

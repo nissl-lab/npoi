@@ -118,7 +118,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>the cloned sheet</returns>
         public ISheet CloneSheet(HSSFWorkbook workbook)
         {
-            IDrawing iDrawing = this.DrawingPatriarch;/*Aggregate drawing records*/
+            IDrawing<IShape> iDrawing = this.DrawingPatriarch;/*Aggregate drawing records*/
             HSSFSheet sheet = new HSSFSheet(workbook, _sheet.CloneSheet());
             int pos = sheet._sheet.FindFirstRecordLocBySid(DrawingRecord.sid);
             DrawingRecord dr = (DrawingRecord)sheet._sheet.FindFirstRecordBySid(DrawingRecord.sid);
@@ -2069,7 +2069,7 @@ namespace NPOI.HSSF.UserModel
      *
      * @return the top-level drawing patriarch, if there is one, else returns null
      */
-        public IDrawing DrawingPatriarch
+        public IDrawing<IShape> DrawingPatriarch
         {
             get
             {
@@ -2086,7 +2086,7 @@ namespace NPOI.HSSF.UserModel
          *
          * @return The new patriarch.
          */
-        public IDrawing CreateDrawingPatriarch()
+        public IDrawing<IShape> CreateDrawingPatriarch()
         {
             _patriarch = GetPatriarch(true);
             return _patriarch;

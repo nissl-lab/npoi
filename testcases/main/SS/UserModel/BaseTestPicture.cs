@@ -80,11 +80,11 @@ namespace TestCases.SS.UserModel
 
                 IRow row = sheet.CreateRow(0);
 
-                handleResize(wb, sheet, row);
+                HandleResize(wb, sheet, row);
             }
             finally
             {
-                //wb.Close();
+                wb.Close();
             }
         }
 
@@ -99,19 +99,19 @@ namespace TestCases.SS.UserModel
                 IRow row = sheet.CreateRow(0);
                 row.CreateCell(0);
 
-                handleResize(wb, sheet, row);
+                HandleResize(wb, sheet, row);
             }
             finally
             {
-                //wb.Close();
+                wb.Close();
             }
         }
 
 
-        private void handleResize(IWorkbook wb, ISheet sheet, IRow row)
+        private void HandleResize(IWorkbook wb, ISheet sheet, IRow row)
         {
-            IDrawing Drawing = sheet.CreateDrawingPatriarch();
-            ICreationHelper CreateHelper = wb.GetCreationHelper();
+            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
+            ICreationHelper createHelper = wb.GetCreationHelper();
 
             byte[] bytes = HSSFITestDataProvider.Instance.GetTestDataFileContent("logoKarmokar4.png");
 
@@ -120,13 +120,13 @@ namespace TestCases.SS.UserModel
             int pictureIdx = wb.AddPicture(bytes, PictureType.PNG);
 
             //add a picture shape
-            IClientAnchor anchor = CreateHelper.CreateClientAnchor();
+            IClientAnchor anchor = createHelper.CreateClientAnchor();
             //set top-left corner of the picture,
             //subsequent call of Picture#resize() will operate relative to it
             anchor.Col1 = (/*setter*/0);
             anchor.Row1 = (/*setter*/0);
 
-            IPicture pict = Drawing.CreatePicture(anchor, pictureIdx);
+            IPicture pict = drawing.CreatePicture(anchor, pictureIdx);
 
             //auto-size picture relative to its top-left corner
             pict.Resize();

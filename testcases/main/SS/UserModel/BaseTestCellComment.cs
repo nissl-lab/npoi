@@ -73,7 +73,7 @@ namespace TestCases.SS.UserModel
             Assert.IsNull(cell.CellComment);
             Assert.IsNull(sheet.GetCellComment(new CellAddress(cellRow, cellColumn)));
 
-            IDrawing patr = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> patr = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = factory.CreateClientAnchor();
             anchor.Col1=(2);
             anchor.Col2=(5);
@@ -264,7 +264,7 @@ namespace TestCases.SS.UserModel
             ICell cell = sheet.CreateRow(3).CreateCell(5);
             cell.SetCellValue("F4");
 
-            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
 
             IClientAnchor anchor = factory.CreateClientAnchor();
             IComment comment = drawing.CreateCellComment(anchor);
@@ -299,7 +299,7 @@ namespace TestCases.SS.UserModel
             ICell cell = row.CreateCell(5);
             ICreationHelper factory = wb.GetCreationHelper();
 
-            IDrawing Drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
 
             double r_mul, c_mul;
             if (sheet is HSSFSheet)
@@ -376,7 +376,7 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sh = wb.CreateSheet();
             ICreationHelper factory = wb.GetCreationHelper();
-            IDrawing patriarch = sh.CreateDrawingPatriarch();
+            IDrawing<IShape> patriarch = sh.CreateDrawingPatriarch();
             patriarch.CreateCellComment(factory.CreateClientAnchor());
 
             try
@@ -407,7 +407,7 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sh = wb.CreateSheet();
             ICreationHelper factory = wb.GetCreationHelper();
-            IDrawing patriarch = sh.CreateDrawingPatriarch();
+            IDrawing<IShape> patriarch = sh.CreateDrawingPatriarch();
             IComment comment = patriarch.CreateCellComment(factory.CreateClientAnchor());
 
             Assert.AreEqual(CellAddress.A1, comment.Address);
@@ -422,7 +422,7 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sh = wb.CreateSheet();
             ICreationHelper factory = wb.GetCreationHelper();
-            IDrawing patriarch = sh.CreateDrawingPatriarch();
+            IDrawing<IShape> patriarch = sh.CreateDrawingPatriarch();
             IComment comment = patriarch.CreateCellComment(factory.CreateClientAnchor());
 
             Assert.AreEqual(CellAddress.A1, comment.Address);

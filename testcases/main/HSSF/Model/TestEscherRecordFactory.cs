@@ -91,7 +91,7 @@ namespace TestCases.HSSF.Model
             // records to be aggregated
             List<RecordBase> dgRecords = records.GetRange(19, 23 - 19);
             byte[] dgBytes = toByteArray(dgRecords);
-            IDrawing d = sh.DrawingPatriarch;
+            IDrawing<IShape> d = sh.DrawingPatriarch;
             EscherAggregate agg = (EscherAggregate)ish.FindFirstRecordBySid(EscherAggregate.sid);
             Assert.AreEqual(true, agg.EscherRecords[0] is EscherContainerRecord);
             Assert.AreEqual(EscherContainerRecord.DG_CONTAINER, agg.EscherRecords[0].RecordId);

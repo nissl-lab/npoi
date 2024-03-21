@@ -15,6 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Text.RegularExpressions;
+
 namespace NPOI.SS.Extractor
 
 {
@@ -38,6 +40,7 @@ namespace NPOI.SS.Extractor
             _contentType = contentType;
         }
 
+        private Regex regFile = new Regex("[^/\\\\]*[/\\\\]", RegexOptions.Compiled);
         /// <summary>
         /// </summary>
         /// <return>filename </return>
@@ -52,7 +55,7 @@ namespace NPOI.SS.Extractor
                 }
                 else
                 {
-                    this._filename = value.Replace("[^/\\\\]*[/\\\\]", "").Trim();
+                    this._filename = regFile.Replace(value, "").Trim();
                 }
             }
         }
