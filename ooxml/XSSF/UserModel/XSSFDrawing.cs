@@ -426,6 +426,7 @@ namespace NPOI.XSSF.UserModel
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_GraphicalObjectFrame ctGraphicFrame = ctAnchor.AddNewGraphicFrame();
             ctGraphicFrame.Set(XSSFGraphicFrame.Prototype());
+            ctGraphicFrame.xfrm = CreateXfrm(anchor);
 
             long frameId = numOfGraphicFrames++;
             XSSFGraphicFrame graphicFrame = new XSSFGraphicFrame(this, ctGraphicFrame);
@@ -480,13 +481,13 @@ namespace NPOI.XSSF.UserModel
 
 
             // add OLE part metadata to sheet
-            //NPOI.OpenXmlFormats.Spreadsheet.CT_Worksheet cwb = sh.GetCTWorksheet();
-            //NPOI.OpenXmlFormats.Spreadsheet.CT_OleObjects oo = cwb.IsSetOleObjects() ? cwb.oleObjects : cwb.AddNewOleObjects();
+            NPOI.OpenXmlFormats.Spreadsheet.CT_Worksheet cwb = sh.GetCTWorksheet();
+            NPOI.OpenXmlFormats.Spreadsheet.CT_OleObjects oo = cwb.IsSetOleObjects() ? cwb.oleObjects : cwb.AddNewOleObjects();
 
-            //NPOI.OpenXmlFormats.Spreadsheet.CT_OleObject ole1 = oo.AddNewOleObject();
-            //ole1.progId = "Package";
-            //ole1.shapeId = (uint)shapeId;
-            //ole1.id = olePR.Id;
+            NPOI.OpenXmlFormats.Spreadsheet.CT_OleObject ole1 = oo.AddNewOleObject();
+            ole1.progId = "Package";
+            ole1.shapeId = (uint)shapeId;
+            ole1.id = olePR.Id;
 
             //XmlCursor cur1 = ole1.newCursor();
             //cur1.toEndToken();
@@ -496,7 +497,11 @@ namespace NPOI.XSSF.UserModel
             //cur1.beginElement("anchor", XSSFRelation.NS_SPREADSHEETML);
             //cur1.insertAttributeWithValue("moveWithCells", "1");
 
-            //CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor((XSSFClientAnchor)anchor);
+            ole1.objectPr.id = imgSheetPR.Id;
+            ole1.objectPr.defaultSize = false;
+            ole1.objectPr.anchor.moveWithCells = true;
+
+            CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor((XSSFClientAnchor)anchor);
 
             //XmlCursor cur2 = ctAnchor.newCursor();
             //cur2.copyXmlContents(cur1);
@@ -510,30 +515,35 @@ namespace NPOI.XSSF.UserModel
 
             //cur1.dispose();
 
-            //// add a new shape and link OLE & image part
-            //CT_Shape ctShape = ctAnchor.AddNewSp();
-            //ctShape.set(XSSFObjectData.prototype());
-            //ctShape.getSpPr().setXfrm(CreateXfrm((XSSFClientAnchor) anchor));
+            // add a new shape and link OLE & image part
+            CT_Shape ctShape = ctAnchor.AddNewSp();
+            ctShape.Set(XSSFObjectData.Prototype());
+            ctShape.spPr.xfrm = (CreateXfrm((XSSFClientAnchor) anchor));
 
-            //// workaround for not having the vmlDrawing filled
-            //CT_BlipFillProperties blipFill = ctShape.getSpPr().addNewBlipFill();
-            //blipFill.addNewBlip().setEmbed(imgDrawPR.getId());
-            //blipFill.addNewStretch().addNewFillRect();
+            // workaround for not having the vmlDrawing filled
+            NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_BlipFillProperties blipFill = ctShape.spPr.AddNewBlipFill();
+            blipFill.AddNewBlip().embed = imgDrawPR.Id;
+            blipFill.AddNewStretch().AddNewFillRect();
 
-            //CT_NonVisualDrawingProps cNvPr = ctShape.getNvSpPr().getCNvPr();
-            //cNvPr.setId(shapeId);
-            //cNvPr.setName("Object "+shapeId);
+            NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_NonVisualDrawingProps cNvPr = ctShape.nvSpPr.cNvPr;
+            cNvPr.id = (uint)shapeId;
+            cNvPr.name = "Object "+shapeId;
 
             //XmlCursor extCur = cNvPr.getExtLst().getExtArray(0).newCursor();
             //extCur.toFirstChild();
             //extCur.setAttributeText(new QName("spid"), "_x0000_s"+shapeId);
             //extCur.dispose();
+            var ext = cNvPr.extLst.ext[0];
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(ext.Any);
+            doc.FirstChild.Attributes["spid"].Value = "_x0000_s"+shapeId;
 
-            //XSSFObjectData shape = new XSSFObjectData(this, ctShape);
-            //shape.anchor = (XSSFClientAnchor) anchor;
+            ext.Any = doc.InnerXml;
 
-            //return shape;
-            throw new NotImplementedException();
+            XSSFObjectData shape = new XSSFObjectData(this, ctShape);
+            shape.anchor = (XSSFClientAnchor) anchor;
+
+            return shape;
         }
 
         /**
@@ -582,6 +592,33 @@ namespace NPOI.XSSF.UserModel
             ctAnchor.editAs = aditAs;
             ctAnchor.editAsSpecified = true;
             return ctAnchor;
+        }
+
+        private CT_Transform2D CreateXfrm(XSSFClientAnchor anchor)
+        {
+            CT_Transform2D xfrm = new CT_Transform2D();
+            CT_Point2D off = xfrm.AddNewOff();
+            off.x = anchor.Dx1;
+            off.y = anchor.Dy1;
+            XSSFSheet sheet = Sheet;
+            double widthPx = 0;
+            for(int col = anchor.Col1; col<anchor.Col2; col++)
+            {
+                widthPx += sheet.GetColumnWidthInPixels(col);
+            }
+            double heightPx = 0;
+            for(int row = anchor.Row1; row<anchor.Row2; row++)
+            {
+                heightPx += ImageUtils.GetRowHeightInPixels(sheet, row);
+            }
+            long width = Units.PixelToEMU((int)widthPx);
+            long height = Units.PixelToEMU((int)heightPx);
+            CT_PositiveSize2D ext = xfrm.AddNewExt();
+            ext.cx = (width - anchor.Dx1 + anchor.Dx2);
+            ext.cy = (height - anchor.Dy1 + anchor.Dy2);
+
+            // TODO: handle vflip/hflip
+            return xfrm;
         }
 
         private long newShapeId()

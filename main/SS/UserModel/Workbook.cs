@@ -449,5 +449,16 @@ namespace NPOI.SS.UserModel
         /// Returns the spreadsheet version (EXCLE97) of this workbook
         /// </summary>
         SpreadsheetVersion SpreadsheetVersion { get; }
+
+        /// <summary>
+        /// Adds an OLE package manager object with the given content to the sheet
+        /// </summary>
+        /// <param name="oleData">the payload</param>
+        /// <param name="label">the label of the payload</param>
+        /// <param name="fileName">the original filename</param>
+        /// <param name="command">the command to open the payload</param>
+        /// <return>the index of the added ole object, i.e. the storage id</return>
+        /// <exception cref="IOException">if the object can't be embedded</exception>
+        int AddOlePackage(byte[] oleData, String label, String fileName, String command);
     }
 }

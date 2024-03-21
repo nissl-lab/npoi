@@ -36,6 +36,7 @@ using NPOI.OpenXml4Net.Exceptions;
 using NPOI.SS;
 using System.Globalization;
 using System.Linq;
+using NPOI.POIFS.FileSystem;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -2587,6 +2588,54 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// Adds an OLE package manager object with the given content to the sheet
+        /// </summary>
+        /// <param name="oleData">the payload</param>
+        /// <param name="label">the label of the payload</param>
+        /// <param name="fileName">the original filename</param>
+        /// <param name="command">the command to open the payload</param>
+        /// <return>the index of the added ole object, i.e. the storage id</return>
+        /// <exception cref="IOException">if the object can't be embedded</exception>
+        public int AddOlePackage(byte[] oleData, String label, String fileName, String command)
+        {
+            // find an unused part name
+            OPCPackage opc = Package;
+            PackagePartName pnOLE;
+            int oleId=0;
+            do
+            {
+                try
+                {
+                    pnOLE = PackagingUriHelper.CreatePartName("/xl/embeddings/oleObject"+(++oleId)+".bin");
+                }
+                catch(InvalidFormatException e)
+                {
+                    throw new IOException("ole object name not recognized", e);
+                }
+            } while(opc.ContainPart(pnOLE));
+
+            PackagePart pp = opc.CreatePart( pnOLE, "application/vnd.openxmlformats-officedocument.oleObject" );
+
+            Ole10Native ole10 = new Ole10Native(label, fileName, command, oleData);
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(oleData.Length+500);
+            ole10.WriteOut(bos);
+
+            POIFSFileSystem poifs = new POIFSFileSystem();
+            DirectoryNode root = poifs.Root;
+            root.CreateDocument(Ole10Native.OLE10_NATIVE, new ByteArrayInputStream(bos.ToByteArray()));
+            root.StorageClsid = (HPSF.ClassID.OLE10_PACKAGE);
+
+            // TODO: generate CombObj stream
+
+            Stream os = pp.GetOutputStream();
+            poifs.WriteFileSystem(os);
+            os.Close();
+            poifs.Close();
+
+            return oleId;
+        }
         #endregion
 
         #region IList<XSSFSheet> Members

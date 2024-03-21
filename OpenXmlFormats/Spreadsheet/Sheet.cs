@@ -11297,6 +11297,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.oleObjectField = value;
             }
         }
+        public CT_OleObject AddNewOleObject()
+        {
+            if(this.oleObjectField==null)
+            {
+                this.oleObjectField = new List<CT_OleObject>();
+            }
+            CT_OleObject obj = new CT_OleObject();
+            this.oleObjectField.Add(obj);
+            return obj;
+        }
     }
 
     [Serializable]

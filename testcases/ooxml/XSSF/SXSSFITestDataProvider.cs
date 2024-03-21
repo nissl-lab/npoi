@@ -33,7 +33,6 @@ namespace NPOI.XSSF
     /**
      * @author Yegor Kozlov
      */
-    [TestFixture]
     public class SXSSFITestDataProvider : ITestDataProvider
     {
         public static SXSSFITestDataProvider instance = new SXSSFITestDataProvider();

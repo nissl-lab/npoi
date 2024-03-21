@@ -982,6 +982,10 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
+        public int AddOlePackage(byte[] oleData, String label, String fileName, String command) 
+        {
+            return _wb.AddOlePackage(oleData, label, fileName, command);
+        }
         /// <summary>
         /// Gets a bool value that indicates whether the date systems used in the workbook starts in 1904.
         /// The default value is false, meaning that the workbook uses the 1900 date system,

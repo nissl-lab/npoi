@@ -288,7 +288,7 @@ namespace NPOI.SS.Util
         }
 
 
-        private static double GetRowHeightInPixels(ISheet sheet, int rowNum)
+        public static double GetRowHeightInPixels(ISheet sheet, int rowNum)
         {
             IRow r = sheet.GetRow(rowNum);
             double points = (r == null) ? sheet.DefaultRowHeightInPoints : r.HeightInPoints;

@@ -189,6 +189,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             try {
                 sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
                 sw.Write("<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"");
+                sw.Write(" xmlns:xdr=\"http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing\"");
                 sw.Write(" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac xr xr2 xr3\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\"");
                 sw.Write(" xmlns:xr=\"http://schemas.microsoft.com/office/spreadsheetml/2014/revision\" xmlns:xr2=\"http://schemas.microsoft.com/office/spreadsheetml/2015/revision2\" xmlns:xr3=\"http://schemas.microsoft.com/office/spreadsheetml/2016/revision3\"");
                 sw.Write(">");
@@ -1021,6 +1022,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public bool IsSetOleObjects()
         {
             return this.oleObjectsField!=null;
+        }
+
+        public CT_OleObjects AddNewOleObjects()
+        {
+            this.oleObjectsField = new CT_OleObjects();
+            return this.oleObjectsField;
         }
     }
 

@@ -632,6 +632,11 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             this.solidFillField = new CT_SolidColorFillProperties();
             return this.solidFillField;
         }
+        public CT_BlipFillProperties AddNewBlipFill()
+        {
+            this.blipFillField = new CT_BlipFillProperties();
+            return this.blipFillField;
+        }
         public CT_CustomGeometry2D AddNewCustGeom()
         {
             this.custGeomField = new CT_CustomGeometry2D();
