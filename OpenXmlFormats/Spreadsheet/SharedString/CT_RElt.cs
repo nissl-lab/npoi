@@ -87,7 +87,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.tField = value;
             }
         }
-
+        //just for testing
+        public string xgetT()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<xml-fragment");
+            if(string.IsNullOrWhiteSpace(t) || string.IsNullOrWhiteSpace(t[0].ToString())||
+                string.IsNullOrWhiteSpace(t[t.Length-1].ToString()))
+            {
+                sb.Append(" xml:space=\"preserve\"");
+            }
+            sb.Append(">").Append(t).Append("</xml-fragment>");
+            return sb.ToString();
+        }
         public bool isSetRPr()
         {
             return this.rPrField != null;

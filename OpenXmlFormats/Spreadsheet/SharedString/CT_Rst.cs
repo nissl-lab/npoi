@@ -30,8 +30,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.phoneticPrField = o.phoneticPrField;
         }
       
-
-
+        //just for test
+        public string xgetT()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<xml-fragment");
+            if(string.IsNullOrWhiteSpace(t) || string.IsNullOrWhiteSpace(t[0].ToString())||
+                string.IsNullOrWhiteSpace(t[t.Length-1].ToString()))
+            {
+                sb.Append(" xml:space=\"preserve\"");
+            }
+            sb.Append(">").Append(t).Append("</xml-fragment>");
+            return sb.ToString();
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {

@@ -430,65 +430,66 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual("Apache", str.GetCTRst().GetRArray(0).t);
             Assert.AreEqual(" Software Foundation", str.GetCTRst().GetRArray(1).t);
         }
-        [Ignore("implement STXString")]
+
+        [Test]
         public void TestLineBreaks_bug48877()
         {
-            //XSSFFont font = new XSSFFont();
-            //font.Boldweight = (short)FontBoldWeight.Bold;
-            //font.FontHeightInPoints = ((short)14);
-            //XSSFRichTextString str;
-            //STXstring t1, t2, t3;
+            XSSFFont font = new XSSFFont();
+            font.IsBold = true;
+            font.FontHeightInPoints = (short)14;
+            XSSFRichTextString str;
+            //ST_Xstring 
+            string t1, t2, t3;
 
-            //str = new XSSFRichTextString("Incorrect\nLine-Breaking");
-            //str.ApplyFont(0, 8, font);
-            //t1 = str.GetCTRst().r[0].xgetT();
-            //t2 = str.GetCTRst().r[1].xgetT();
-            //Assert.AreEqual("<xml-fragment>Incorrec</xml-fragment>", t1.xmlText());
-            //Assert.AreEqual("<xml-fragment>t\nLine-Breaking</xml-fragment>", t2.xmlText());
+            str = new XSSFRichTextString("Incorrect\nLine-Breaking");
+            str.ApplyFont(0, 8, font);
+            t1 = str.GetCTRst().r[0].xgetT();
+            t2 = str.GetCTRst().r[1].xgetT();
+            Assert.AreEqual("<xml-fragment>Incorrec</xml-fragment>", t1);
+            Assert.AreEqual("<xml-fragment>t\nLine-Breaking</xml-fragment>", t2);
 
-            //str = new XSSFRichTextString("Incorrect\nLine-Breaking");
-            //str.ApplyFont(0, 9, font);
-            //t1 = str.GetCTRst().r[0].xgetT();
-            //t2 = str.GetCTRst().r[1].xgetT();
-            //Assert.AreEqual("<xml-fragment>Incorrect</xml-fragment>", t1.xmlText());
-            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\nLine-Breaking</xml-fragment>", t2.xmlText());
+            str = new XSSFRichTextString("Incorrect\nLine-Breaking");
+            str.ApplyFont(0, 9, font);
+            t1 = str.GetCTRst().r[0].xgetT();
+            t2 = str.GetCTRst().r[1].xgetT();
+            Assert.AreEqual("<xml-fragment>Incorrect</xml-fragment>", t1);
+            Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\nLine-Breaking</xml-fragment>", t2);
 
-            //str = new XSSFRichTextString("Incorrect\n Line-Breaking");
-            //str.ApplyFont(0, 9, font);
-            //t1 = str.GetCTRst().r[0].xgetT();
-            //t2 = str.GetCTRst().r[1].xgetT();
-            //Assert.AreEqual("<xml-fragment>Incorrect</xml-fragment>", t1.xmlText());
-            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\n Line-Breaking</xml-fragment>", t2.xmlText());
+            str = new XSSFRichTextString("Incorrect\n Line-Breaking");
+            str.ApplyFont(0, 9, font);
+            t1 = str.GetCTRst().r[0].xgetT();
+            t2 = str.GetCTRst().r[1].xgetT();
+            Assert.AreEqual("<xml-fragment>Incorrect</xml-fragment>", t1);
+            Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\n Line-Breaking</xml-fragment>", t2);
 
-            //str = new XSSFRichTextString("Tab\tSeparated\n");
-            //t1 = str.GetCTRst().xgetT();
-            //// trailing \n causes must be preserved
-            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">Tab\tSeparated\n</xml-fragment>", t1.xmlText());
+            str = new XSSFRichTextString("Tab\tSeparated\n");
+            t1 = str.GetCTRst().xgetT();
+            // trailing \n causes must be preserved
+            Assert.AreEqual("<xml-fragment xml:space=\"preserve\">Tab\tSeparated\n</xml-fragment>", t1);
 
-            //str.ApplyFont(0, 3, font);
-            //t1 = str.GetCTRst().r[0].xgetT();
-            //t2 = str.GetCTRst().r[1].xgetT();
-            //Assert.AreEqual("<xml-fragment>Tab</xml-fragment>", t1.xmlText());
-            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\tSeparated\n</xml-fragment>", t2.xmlText());
+            str.ApplyFont(0, 3, font);
+            t1 = str.GetCTRst().r[0].xgetT();
+            t2 = str.GetCTRst().r[1].xgetT();
+            Assert.AreEqual("<xml-fragment>Tab</xml-fragment>", t1);
+            Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\tSeparated\n</xml-fragment>", t2);
 
-            //str = new XSSFRichTextString("Tab\tSeparated\n");
-            //str.ApplyFont(0, 4, font);
-            //t1 = str.GetCTRst().r[0].xgetT();
-            //t2 = str.GetCTRst().r[1].xgetT();
-            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">Tab\t</xml-fragment>", t1.xmlText());
-            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">Separated\n</xml-fragment>", t2.xmlText());
+            str = new XSSFRichTextString("Tab\tSeparated\n");
+            str.ApplyFont(0, 4, font);
+            t1 = str.GetCTRst().r[0].xgetT();
+            t2 = str.GetCTRst().r[1].xgetT();
+            Assert.AreEqual("<xml-fragment xml:space=\"preserve\">Tab\t</xml-fragment>", t1);
+            Assert.AreEqual("<xml-fragment xml:space=\"preserve\">Separated\n</xml-fragment>", t2);
 
-            //str = new XSSFRichTextString("\n\n\nNew Line\n\n");
-            //str.ApplyFont(0, 3, font);
-            //str.ApplyFont(11, 13, font);
-            //t1 = str.GetCTRst().r[0].xgetT();
-            //t2 = str.GetCTRst().r[1].xgetT();
-            //t3 = str.GetCTRst().r[2].xgetT();
-            //// YK: don't know why, but XmlBeans Converts leading tab characters to spaces
-            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\n\n\n</xml-fragment>", t1.xmlText());
-            //Assert.AreEqual("<xml-fragment>New Line</xml-fragment>", t2.xmlText());
-            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\n\n</xml-fragment>", t3.xmlText());
-            Assert.Fail("implement STXString");
+            str = new XSSFRichTextString("\n\n\nNew Line\n\n");
+            str.ApplyFont(0, 3, font);
+            str.ApplyFont(11, 13, font);
+            t1 = str.GetCTRst().r[0].xgetT();
+            t2 = str.GetCTRst().r[1].xgetT();
+            t3 = str.GetCTRst().r[2].xgetT();
+            // YK: don't know why, but XmlBeans Converts leading tab characters to spaces
+            Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\n\n\n</xml-fragment>", t1);
+            Assert.AreEqual("<xml-fragment>New Line</xml-fragment>", t2);
+            Assert.AreEqual("<xml-fragment xml:space=\"preserve\">\n\n</xml-fragment>", t3);
         }
 
         [Test]
