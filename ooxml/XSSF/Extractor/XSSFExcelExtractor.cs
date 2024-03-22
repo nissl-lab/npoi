@@ -31,10 +31,10 @@ namespace NPOI.XSSF.Extractor
     public class XSSFExcelExtractor : POIXMLTextExtractor, NPOI.SS.Extractor.IExcelExtractor
     {
         public static XSSFRelation[] SUPPORTED_TYPES = new XSSFRelation[] {
-      XSSFRelation.WORKBOOK, XSSFRelation.MACRO_TEMPLATE_WORKBOOK,
-      XSSFRelation.MACRO_ADDIN_WORKBOOK, XSSFRelation.TEMPLATE_WORKBOOK,
-      XSSFRelation.MACROS_WORKBOOK
-   };
+          XSSFRelation.WORKBOOK, XSSFRelation.MACRO_TEMPLATE_WORKBOOK,
+          XSSFRelation.MACRO_ADDIN_WORKBOOK, XSSFRelation.TEMPLATE_WORKBOOK,
+          XSSFRelation.MACROS_WORKBOOK
+        };
 
         private XSSFWorkbook workbook;
         private bool includeSheetNames = true;
@@ -57,7 +57,7 @@ namespace NPOI.XSSF.Extractor
         /// <summary>
         ///  Should header and footer be included? Default is true
         /// </summary>
-        public bool IncludeHeaderFooter
+        public bool IncludeHeadersFooters
         {
             get
             {
@@ -126,44 +126,7 @@ namespace NPOI.XSSF.Extractor
                 includeTextBoxes = value;
             }
         }
-        /**
-         * Should sheet names be included? Default is true
-         */
-        public void SetIncludeSheetNames(bool includeSheetNames)
-        {
-            this.includeSheetNames = includeSheetNames;
-        }
-        /**
-         * Should we return the formula itself, and not
-         *  the result it produces? Default is false
-         */
-        public void SetFormulasNotResults(bool formulasNotResults)
-        {
-            this.formulasNotResults = formulasNotResults;
-        }
-        /**
-         * Should cell comments be included? Default is false
-         */
-        public void SetIncludeCellComments(bool includeCellComments)
-        {
-            this.includeCellComments = includeCellComments;
-        }
-        /**
-         * Should headers and footers be included? Default is true
-         */
-        public void SetIncludeHeadersFooters(bool includeHeadersFooters)
-        {
-            this.includeHeadersFooters = includeHeadersFooters;
-        }
-
-        /**
-         * Should text within textboxes be included? Default is true
-         * @param includeTextBoxes
-         */
-        public void SetIncludeTextBoxes(bool includeTextBoxes)
-        {
-            this.includeTextBoxes = includeTextBoxes;
-        }
+        public bool AddTabEachEmptyCell { get; set; } = true;
         public void SetLocale(CultureInfo locale)
         {
             this.locale = locale;
@@ -220,13 +183,16 @@ namespace NPOI.XSSF.Extractor
                         for (int j = 0; j < row.LastCellNum; j++)
                         {
                             // Add a tab delimiter for each empty cell.
-                            if (!firsttime)
+                            if(AddTabEachEmptyCell)
                             {
-                                text.Append("\t");
-                            }
-                            else
-                            {
-                                firsttime = false;
+                                if(!firsttime)
+                                {
+                                    text.Append("\t");
+                                }
+                                else
+                                {
+                                    firsttime = false;
+                                }
                             }
 
                             ICell cell = row.GetCell(j);
@@ -238,7 +204,9 @@ namespace NPOI.XSSF.Extractor
                             {
                                 if (formulasNotResults)
                                 {
-                                    text.Append(cell.CellFormula);
+                                    String contents = cell.CellFormula;
+                                    CheckMaxTextSize(text, contents);
+                                    text.Append(contents);
                                 }
                                 else
                                 {

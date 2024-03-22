@@ -14,7 +14,8 @@ namespace NPOI.OpenXml4Net.Util
     {
         private static double MIN_INFLATE_RATIO = 0.01d;
         private static long MAX_ENTRY_SIZE = 0xFFFFFFFFL;
-
+        // The default maximum size of extracted text 
+        private static long MAX_TEXT_SIZE = 10*1024*1024L;
         /**
          * Sets the ratio between de- and inflated bytes to detect zipbomb.
          * It defaults to 1% (= 0.01d), i.e. when the compression is better than
@@ -68,6 +69,37 @@ namespace NPOI.OpenXml4Net.Util
         public static long GetMaxEntrySize()
         {
             return MAX_ENTRY_SIZE;
+        }
+
+        /**
+     * Sets the maximum number of characters of text that are
+     * extracted before an exception is thrown during extracting
+     * text from documents.
+     * 
+     * This can be used to limit memory consumption and protect against 
+     * security vulnerabilities when documents are provided by users.
+     *
+     * @param maxTextSize the max. file size of a single zip entry
+     */
+        public static void SetMaxTextSize(long maxTextSize)
+        {
+            if(maxTextSize < 0 || maxTextSize > 0xFFFFFFFFL)
+            {     // don't use MAX_ENTRY_SIZE here!
+                throw new ArgumentException("Max text size is bounded [0-4GB], but had " + maxTextSize);
+            }
+            MAX_TEXT_SIZE = maxTextSize;
+        }
+
+        /**
+         * Returns the current maximum allowed text size.
+         * 
+         * See setMaxTextSize() for details.
+         *
+         * @return The max accepted text size. 
+         */
+        public static long GetMaxTextSize()
+        {
+            return MAX_TEXT_SIZE;
         }
 
         public ZipSecureFile(FileStream file, int mode)

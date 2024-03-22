@@ -55,7 +55,7 @@ namespace TestCases.XSSF.Extractor
             Assert.IsTrue(text.EndsWith("Sheet3\n"));
 
             // Now without, will have text
-            extractor.SetIncludeSheetNames(false);
+            extractor.IncludeSheetNames = (false);
             text = extractor.Text;
             String CHUNK1 =
                 "Lorem\t111\n" +
@@ -80,7 +80,7 @@ namespace TestCases.XSSF.Extractor
                     , text);
 
             // Now Get formulas not their values
-            extractor.SetFormulasNotResults(true);
+            extractor.FormulasNotResults = (true);
             text = extractor.Text;
             Assert.AreEqual(
                     CHUNK1 +
@@ -88,7 +88,7 @@ namespace TestCases.XSSF.Extractor
                     CHUNK2, text);
 
             // With sheet names too
-            extractor.SetIncludeSheetNames(true);
+            extractor.IncludeSheetNames = (true);
             text = extractor.Text;
             Assert.AreEqual(
                     "Sheet1\n" +
@@ -184,7 +184,7 @@ namespace TestCases.XSSF.Extractor
             Assert.IsFalse(text.Contains("test phrase"), "Unable to find expected word in text\n" + text);
 
             // Turn on comment extraction, will then be
-            extractor.SetIncludeCellComments(true);
+            extractor.IncludeCellComments = (true);
             text = extractor.Text;
             Assert.IsTrue(text.Contains("testdoc"), "Unable to find expected word in text\n" + text);
             Assert.IsTrue(text.Contains("test phrase"), "Unable to find expected word in text\n" + text);
@@ -194,7 +194,7 @@ namespace TestCases.XSSF.Extractor
         public void TestInlineStrings()
         {
             XSSFExcelExtractor extractor = GetExtractor("InlineStrings.xlsx");
-            extractor.SetFormulasNotResults(true);
+            extractor.FormulasNotResults = (true);
             String text = extractor.Text;
 
             // Numbers
@@ -256,7 +256,7 @@ namespace TestCases.XSSF.Extractor
             XSSFExcelExtractor extractor = GetExtractor("WithTextBox.xlsx");
             try
             {
-                extractor.SetFormulasNotResults(true);
+                extractor.FormulasNotResults = (true);
                 String text = extractor.Text;
                 Assert.IsTrue(text.IndexOf("Line 1") > -1);
                 Assert.IsTrue(text.IndexOf("Line 2") > -1);
