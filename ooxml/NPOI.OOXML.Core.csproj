@@ -8,7 +8,13 @@
     <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
   </PropertyGroup>
+    <ItemGroup Condition=" '$(TargetFramework)' != 'net472' ">
+        <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
+    </ItemGroup>
 
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
+        <Reference Include="System.Configuration" />
+    </ItemGroup>
   <ItemGroup>
     <Compile Remove="POIFS\Crypt\Dsig\KeyInfoKeySelector.cs" />
     <Compile Remove="POIFS\Crypt\Dsig\Services\RelationshipTransformService.cs" />
