@@ -248,7 +248,7 @@ namespace TestCases.XSSF.UserModel
             // Has 8 number formats
             Assert.AreEqual(8, st.NumDataFormats);
             // Has 2 fonts
-            Assert.AreEqual(2, st.GetFonts().Count);
+            Assert.AreEqual(2, st.Fonts.Count);
             // Has 2 Fills
             Assert.AreEqual(2, st.GetFills().Count);
             // Has 1 border
@@ -272,7 +272,7 @@ namespace TestCases.XSSF.UserModel
             Assert.IsNotNull(ss);
 
             Assert.AreEqual(10, st.NumDataFormats);
-            Assert.AreEqual(2, st.GetFonts().Count);
+            Assert.AreEqual(2, st.Fonts.Count);
             Assert.AreEqual(2, st.GetFills().Count);
             Assert.AreEqual(1, st.GetBorders().Count);
 

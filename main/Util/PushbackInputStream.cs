@@ -31,14 +31,14 @@ namespace NPOI.Util
     using System;
     using System.IO;
 
-	public class PushbackInputStream : FilterInputStream
+    public class PushbackInputStream : FilterInputStream
     {
         protected byte[] buf;
         private int bufint = -1;
         protected int pos;
         public PushbackInputStream(InputStream input): this(input, 1)
-		{
-		}
+        {
+        }
         public PushbackInputStream(InputStream input, int size)
             : base(input)
         {
@@ -68,17 +68,17 @@ namespace NPOI.Util
         /// <exception cref="T:System.ObjectDisposedException">
         /// Methods were called after the stream was closed.
         /// </exception>
-		public override int ReadByte()
-		{
-			if (bufint != -1)
-			{
-				int tmp = bufint;
-				bufint = -1;
-				return tmp;
-			}
+        public override int ReadByte()
+        {
+            if (bufint != -1)
+            {
+                int tmp = bufint;
+                bufint = -1;
+                return tmp;
+            }
 
-			return input.ReadByte();
-		}
+            return input.ReadByte();
+        }
 
         public override int Read()
         {
@@ -156,24 +156,24 @@ namespace NPOI.Util
         /// Methods were called after the stream was closed.
         /// </exception>
   //      public override int Read(byte[] buffer, int offset, int count)
-		//{
-		//	if (bufint != -1 && count > 0)
-		//	{
-		//		// TODO Can this case be made more efficient?
-		//		buffer[offset] = (byte) bufint;
-		//		bufint = -1;
-		//		return 1;
-		//	}
+        //{
+        //	if (bufint != -1 && count > 0)
+        //	{
+        //		// TODO Can this case be made more efficient?
+        //		buffer[offset] = (byte) bufint;
+        //		bufint = -1;
+        //		return 1;
+        //	}
 
-		//	return input.Read(buffer, offset, count);
-		//}
+        //	return input.Read(buffer, offset, count);
+        //}
 
         /// <summary>
         /// Unreads the specified b.
         /// </summary>
         /// <param name="b">The b.</param>
-		public virtual void Unread(int b)
-		{
+        public virtual void Unread(int b)
+        {
             ensureOpen();
             if (pos == 0)
             {
@@ -418,5 +418,5 @@ namespace NPOI.Util
         {
             input.WriteByte(value);
         }
-	}
+    }
 }

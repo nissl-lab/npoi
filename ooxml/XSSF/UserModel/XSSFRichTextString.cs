@@ -755,7 +755,7 @@ namespace NPOI.XSSF.UserModel
         {
             if(styles == null)
                 return null;
-            return styles.GetTheme();
+            return styles.Theme;
         }
     }
 }

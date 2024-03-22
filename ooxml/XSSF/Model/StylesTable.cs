@@ -130,26 +130,29 @@ namespace NPOI.XSSF.Model
         {
             this.workbook = wb;
         }
-        public ThemesTable GetTheme()
+        public ThemesTable Theme 
         {
-            return theme;
+            get
+            {
+                return theme;
+            }
+            set
+            {
+                this.theme = value;
+
+                // Pass the themes table along to things which need to 
+                //  know about it, but have already been Created by now
+                foreach(XSSFFont font in fonts)
+                {
+                    font.SetThemesTable(theme);
+                }
+                foreach(XSSFCellBorder border in borders)
+                {
+                    border.SetThemesTable(theme);
+                }
+            }
         }
 
-        public void SetTheme(ThemesTable theme)
-        {
-            this.theme = theme;
-
-            // Pass the themes table along to things which need to 
-            //  know about it, but have already been Created by now
-            foreach (XSSFFont font in fonts)
-            {
-                font.SetThemesTable(theme);
-            }
-            foreach (XSSFCellBorder border in borders)
-            {
-                border.SetThemesTable(theme);
-            }
-        }
         public ITableStyle GetTableStyle(String name)
         {
             if (name == null) return null;
@@ -519,10 +522,7 @@ namespace NPOI.XSSF.Model
             return fills.AsReadOnly();
         }
 
-        public ReadOnlyCollection<XSSFFont> GetFonts()
-        {
-            return fonts.AsReadOnly();
-        }
+        public ReadOnlyCollection<XSSFFont> Fonts => fonts.AsReadOnly();
 
         public IDictionary<short, String> GetNumberFormats()
         {

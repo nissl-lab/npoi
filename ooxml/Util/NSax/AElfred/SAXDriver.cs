@@ -402,9 +402,9 @@ namespace NSAX.AElfred {
           //    entityStack.push ("illegal:unknown system ID");
 
           _parser.DoParse(systemId, source.PublicId, source.Reader, source.Stream, source.Encoding);
-        } catch (SAXException e) {
+        } catch (SAXException) {
           throw;
-        } catch (IOException e) {
+        } catch (IOException) {
           throw;
         } catch (Exception e) {
           throw new SAXException(e.Message, e);

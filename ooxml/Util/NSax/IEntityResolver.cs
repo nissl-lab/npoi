@@ -39,7 +39,7 @@ namespace NSAX {
   ///       public class MyResolver : IEntityResolver {
   ///         public InputSource ResolveEntity (string publicId, string systemId)
   ///         {
-  ///           if (systemId.equals("http://www.myhost.com/today")) {
+  ///           if (systemId.Equals("http://www.myhost.com/today")) {
   ///             MyReader reader = new MyReader();
   ///             return new InputSource(reader);
   ///         } else {

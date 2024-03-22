@@ -53,7 +53,7 @@ namespace TestCases.XSSF.UserModel
             Assert.IsNotNull(sheetComments.GetCTComments().commentList);
             Assert.IsNotNull(sheetComments.GetCTComments().authors);
             Assert.AreEqual(1, sheetComments.GetCTComments().authors.SizeOfAuthorArray());
-            Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
+            Assert.AreEqual(1, sheetComments.NumberOfAuthors);
 
             CT_Comment ctComment = sheetComments.NewComment(CellAddress.A1);
             CT_Shape vmlShape = new CT_Shape();
@@ -167,17 +167,17 @@ namespace TestCases.XSSF.UserModel
             CommentsTable sheetComments = new CommentsTable();
             CT_Comment ctComment = sheetComments.NewComment(CellAddress.A1);
 
-            Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
+            Assert.AreEqual(1, sheetComments.NumberOfAuthors);
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, null);
             Assert.AreEqual("", comment.Author);
             comment.Author = ("Apache POI");
             Assert.AreEqual("Apache POI", comment.Author);
-            Assert.AreEqual(2, sheetComments.GetNumberOfAuthors());
+            Assert.AreEqual(2, sheetComments.NumberOfAuthors);
             comment.Author = ("Apache POI");
-            Assert.AreEqual(2, sheetComments.GetNumberOfAuthors());
+            Assert.AreEqual(2, sheetComments.NumberOfAuthors);
             comment.Author = ("");
             Assert.AreEqual("", comment.Author);
-            Assert.AreEqual(2, sheetComments.GetNumberOfAuthors());
+            Assert.AreEqual(2, sheetComments.NumberOfAuthors);
         }
 
         [Test]

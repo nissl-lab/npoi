@@ -366,7 +366,7 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
                 stylesSource.SetWorkbook(this);
-                stylesSource.SetTheme(theme);
+                stylesSource.Theme = theme;
 
                 if (sharedStringSource == null)
                 {
@@ -1125,7 +1125,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (short)stylesSource.GetFonts().Count;
+                return (short)stylesSource.Fonts.Count;
             }
         }
 
@@ -1867,7 +1867,7 @@ namespace NPOI.XSSF.UserModel
         public ThemesTable GetTheme()
         {
             if (stylesSource == null) return null;
-            return stylesSource.GetTheme();
+            return stylesSource.Theme;
         }
 
         /**

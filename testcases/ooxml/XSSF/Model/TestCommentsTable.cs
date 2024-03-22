@@ -38,7 +38,7 @@ namespace TestCases.XSSF.Model
         public void FindAuthor()
         {
             CommentsTable sheetComments = new CommentsTable();
-            Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
+            Assert.AreEqual(1, sheetComments.NumberOfAuthors);
             Assert.AreEqual(0, sheetComments.FindAuthor(""));
             Assert.AreEqual("", sheetComments.GetAuthor(0));
 
@@ -205,22 +205,22 @@ namespace TestCases.XSSF.Model
             Assert.AreSame(a1, sheetComments.GetCTComment(addrA1));
             Assert.AreSame(a2, sheetComments.GetCTComment(addrA2));
             Assert.AreSame(a3, sheetComments.GetCTComment(addrA3));
-            Assert.AreEqual(3, sheetComments.GetNumberOfComments());
+            Assert.AreEqual(3, sheetComments.NumberOfComments);
 
             Assert.IsTrue(sheetComments.RemoveComment(addrA1));
-            Assert.AreEqual(2, sheetComments.GetNumberOfComments());
+            Assert.AreEqual(2, sheetComments.NumberOfComments);
             Assert.IsNull(sheetComments.GetCTComment(addrA1));
             Assert.AreSame(a2, sheetComments.GetCTComment(addrA2));
             Assert.AreSame(a3, sheetComments.GetCTComment(addrA3));
 
             Assert.IsTrue(sheetComments.RemoveComment(addrA2));
-            Assert.AreEqual(1, sheetComments.GetNumberOfComments());
+            Assert.AreEqual(1, sheetComments.NumberOfComments);
             Assert.IsNull(sheetComments.GetCTComment(addrA1));
             Assert.IsNull(sheetComments.GetCTComment(addrA2));
             Assert.AreSame(a3, sheetComments.GetCTComment(addrA3));
 
             Assert.IsTrue(sheetComments.RemoveComment(addrA3));
-            Assert.AreEqual(0, sheetComments.GetNumberOfComments());
+            Assert.AreEqual(0, sheetComments.NumberOfComments);
             Assert.IsNull(sheetComments.GetCTComment(addrA1));
             Assert.IsNull(sheetComments.GetCTComment(addrA2));
             Assert.IsNull(sheetComments.GetCTComment(addrA3));

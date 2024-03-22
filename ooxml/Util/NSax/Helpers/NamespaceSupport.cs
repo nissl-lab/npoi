@@ -481,8 +481,8 @@ namespace NSAX.Helpers {
 
     internal sealed class Context {
       /**
-	 * Create the root-level Namespace context.
-	 */
+     * Create the root-level Namespace context.
+     */
 
       internal bool DeclsOK = true;
       private Hashtable _attributeNameTable;
@@ -499,12 +499,12 @@ namespace NSAX.Helpers {
       }
 
       /**
-	 * (Re)set the parent of this Namespace context.
-	 * The context must either have been freshly constructed,
-	 * or must have been cleared.
-	 *
-	 * @param context The parent Namespace context object.
-	 */
+     * (Re)set the parent of this Namespace context.
+     * The context must either have been freshly constructed,
+     * or must have been cleared.
+     *
+     * @param context The parent Namespace context object.
+     */
 
       public void SetParent(Context parent) {
         _parent = parent;
@@ -519,11 +519,11 @@ namespace NSAX.Helpers {
       }
 
       /**
-	 * Makes associated state become collectible,
-	 * invalidating this context.
-	 * {@link #setParent} must be called before
-	 * this context may be used again.
-	 */
+     * Makes associated state become collectible,
+     * invalidating this context.
+     * {@link #setParent} must be called before
+     * this context may be used again.
+     */
 
       public void Clear() {
         _parent = null;
@@ -535,12 +535,12 @@ namespace NSAX.Helpers {
       }
 
       /**
-	 * Declare a Namespace prefix for this context.
-	 *
-	 * @param prefix The prefix to declare.
-	 * @param uri The associated Namespace URI.
-	 * @see org.xml.sax.helpers.NamespaceSupport#declarePrefix
-	 */
+     * Declare a Namespace prefix for this context.
+     *
+     * @param prefix The prefix to declare.
+     * @param uri The associated Namespace URI.
+     * @see org.xml.sax.helpers.NamespaceSupport#declarePrefix
+     */
 
       public void DeclarePrefix(string prefix, string uri) {
         // Lazy processing...
@@ -563,23 +563,25 @@ namespace NSAX.Helpers {
             _defaultNs = uri;
           }
         } else {
-          _prefixTable.Add(prefix, uri);
-          _uriTable.Add(uri, prefix); // may wipe out another prefix
+          if(!_prefixTable.ContainsKey(prefix))
+            _prefixTable.Add(prefix, uri);
+        if(!_uriTable.ContainsKey(uri))
+            _uriTable.Add(uri, prefix); // may wipe out another prefix
         }
         _declarations.Add(prefix);
       }
 
       /**
-	 * Process an XML qualified name in this context.
-	 *
-	 * @param qName The XML qualified name.
-	 * @param isAttribute true if this is an attribute name.
-	 * @return An array of three strings containing the
-	 *         URI part (or empty string), the local part,
-	 *         and the raw name, all internalized, or null
-	 *         if there is an undeclared prefix.
-	 * @see org.xml.sax.helpers.NamespaceSupport#processName
-	 */
+     * Process an XML qualified name in this context.
+     *
+     * @param qName The XML qualified name.
+     * @param isAttribute true if this is an attribute name.
+     * @return An array of three strings containing the
+     *         URI part (or empty string), the local part,
+     *         and the raw name, all internalized, or null
+     *         if there is an undeclared prefix.
+     * @see org.xml.sax.helpers.NamespaceSupport#processName
+     */
 
       internal string[] ProcessName(string qName, bool isAttribute, bool namespaceDeclUris) {
         string[] name;
@@ -625,7 +627,7 @@ namespace NSAX.Helpers {
           }
           name[1] = name[2];
         }
-	    
+        
           // Prefix
         else {
           string prefix = qName.Substring(0, index);
@@ -650,13 +652,13 @@ namespace NSAX.Helpers {
       }
 
       /**
-	 * Look up the URI associated with a prefix in this context.
-	 *
-	 * @param prefix The prefix to look up.
-	 * @return The associated Namespace URI, or null if none is
-	 *         declared.	
-	 * @see org.xml.sax.helpers.NamespaceSupport#getURI
-	 */
+     * Look up the URI associated with a prefix in this context.
+     *
+     * @param prefix The prefix to look up.
+     * @return The associated Namespace URI, or null if none is
+     *         declared.	
+     * @see org.xml.sax.helpers.NamespaceSupport#getURI
+     */
 
       internal string GetURI(string prefix) {
         if ("".Equals(prefix)) {
@@ -672,15 +674,15 @@ namespace NSAX.Helpers {
       }
 
       /**
-	 * Look up one of the prefixes associated with a URI in this context.
-	 *
-	 * <p>Since many prefixes may be mapped to the same URI,
-	 * the return value may be unreliable.</p>
-	 *
-	 * @param uri The URI to look up.
-	 * @return The associated prefix, or null if none is declared.
-	 * @see org.xml.sax.helpers.NamespaceSupport#getPrefix
-	 */
+     * Look up one of the prefixes associated with a URI in this context.
+     *
+     * <p>Since many prefixes may be mapped to the same URI,
+     * the return value may be unreliable.</p>
+     *
+     * @param uri The URI to look up.
+     * @return The associated prefix, or null if none is declared.
+     * @see org.xml.sax.helpers.NamespaceSupport#getPrefix
+     */
 
       internal string GetPrefix(string uri) {
         if (_uriTable == null) {
@@ -693,11 +695,11 @@ namespace NSAX.Helpers {
       }
 
       /**
-	 * Return an enumeration of prefixes declared in this context.
-	 *
-	 * @return An enumeration of prefixes (possibly empty).
-	 * @see org.xml.sax.helpers.NamespaceSupport#getDeclaredPrefixes
-	 */
+     * Return an enumeration of prefixes declared in this context.
+     *
+     * @return An enumeration of prefixes (possibly empty).
+     * @see org.xml.sax.helpers.NamespaceSupport#getDeclaredPrefixes
+     */
 
       internal IEnumerable GetDeclaredPrefixes() {
         if (_declarations == null) {
@@ -707,14 +709,14 @@ namespace NSAX.Helpers {
       }
 
       /**
-	 * Return an enumeration of all prefixes currently in force.
-	 *
-	 * <p>The default prefix, if in force, is <em>not</em>
-	 * returned, and will have to be checked for separately.</p>
-	 *
-	 * @return An enumeration of prefixes (never empty).
-	 * @see org.xml.sax.helpers.NamespaceSupport#getPrefixes
-	 */
+     * Return an enumeration of all prefixes currently in force.
+     *
+     * <p>The default prefix, if in force, is <em>not</em>
+     * returned, and will have to be checked for separately.</p>
+     *
+     * @return An enumeration of prefixes (never empty).
+     * @see org.xml.sax.helpers.NamespaceSupport#getPrefixes
+     */
 
       internal IEnumerable GetPrefixes() {
         if (_prefixTable == null) {
@@ -728,11 +730,11 @@ namespace NSAX.Helpers {
       ////////////////////////////////////////////////////////////////
 
       /**
-	 * Copy on write for the internal tables in this context.
-	 *
-	 * <p>This class is optimized for the normal case where most
-	 * elements do not contain Namespace declarations.</p>
-	 */
+     * Copy on write for the internal tables in this context.
+     *
+     * <p>This class is optimized for the normal case where most
+     * elements do not contain Namespace declarations.</p>
+     */
 
       private void CopyTables() {
         if (_prefixTable != null) {

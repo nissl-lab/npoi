@@ -893,7 +893,7 @@ namespace NPOI.XSSF.UserModel
                     return false;
                 }
 
-                return sheetComments.GetNumberOfComments() > 0;
+                return sheetComments.NumberOfComments > 0;
             }
         }
 
@@ -906,7 +906,7 @@ namespace NPOI.XSSF.UserModel
                     return 0;
                 }
 
-                return sheetComments.GetNumberOfComments();
+                return sheetComments.NumberOfComments;
             }
         }
 
@@ -3706,7 +3706,7 @@ namespace NPOI.XSSF.UserModel
             StylesTable styles = ((XSSFWorkbook)dest).GetStylesSource();
             if (copyStyle && Workbook.NumberOfFonts > 0)
             {
-                foreach (XSSFFont font in ((XSSFWorkbook)Workbook).GetStylesSource().GetFonts())
+                foreach (XSSFFont font in ((XSSFWorkbook)Workbook).GetStylesSource().Fonts)
                 {
                     styles.PutFont(font);
                 }

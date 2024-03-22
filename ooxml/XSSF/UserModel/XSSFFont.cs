@@ -560,7 +560,7 @@ namespace NPOI.XSSF.UserModel
         // */
         public long RegisterTo(StylesTable styles)
         {
-            this._themes = styles.GetTheme();
+            this._themes = styles.Theme;
             short idx = (short)styles.PutFont(this, true);
             this._index = idx;
             return idx;

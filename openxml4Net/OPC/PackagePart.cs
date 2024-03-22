@@ -552,13 +552,13 @@ namespace NPOI.OpenXml4Net.OPC
         }
 
         /**
- * Get the output stream of this part. If the part is originally embedded in
- * Zip package, it'll be transform intot a <i>MemoryPackagePart</i> in
- * order to write inside (the standard Java API doesn't allow to write in
- * the file)
- *
- * @see org.apache.poi.openxml4j.opc.internal.MemoryPackagePart
- */
+         * Get the output stream of this part. If the part is originally embedded in
+         * Zip package, it'll be transform intot a <i>MemoryPackagePart</i> in
+         * order to write inside (the standard Java API doesn't allow to write in
+         * the file)
+         *
+         * @see org.apache.poi.openxml4j.opc.internal.MemoryPackagePart
+         */
         public Stream GetOutputStream()
         {
             Stream outStream;
