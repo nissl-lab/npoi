@@ -70,7 +70,7 @@ namespace NPOI.XSSF.UserModel
          *
          * @return Name of the original comment author. Default value is blank.
          */
-        public String Author
+        public virtual String Author
         {
             get
             {
@@ -84,7 +84,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public CellAddress Address
+        public virtual CellAddress Address
         {
             get
             {
@@ -114,14 +114,14 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
-        public void SetAddress(int row, int col)
+        public virtual void SetAddress(int row, int col)
         {
             Address = new CellAddress(row, col);
         }
         /**
          * @return the 0-based column of the cell that the comment is associated with.
          */
-        public int Column
+        public virtual int Column
         {
             get
             {
@@ -136,7 +136,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return the 0-based row index of the cell that the comment is associated with.
          */
-        public int Row
+        public virtual int Row
         {
             get
             {
@@ -151,7 +151,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return whether the comment is visible
          */
-        public bool Visible
+        public virtual bool Visible
         {
             get
             {
@@ -197,7 +197,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return the rich text string of the comment
          */
-        public IRichTextString String
+        public virtual IRichTextString String
         {
             get
             {
@@ -228,7 +228,7 @@ namespace NPOI.XSSF.UserModel
             this.String = (new XSSFRichTextString(str));
         }
 
-        public IClientAnchor ClientAnchor
+        public virtual IClientAnchor ClientAnchor
         {
             get
             {

@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI.XSSF.Binary;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -199,7 +200,7 @@ namespace NPOI.XSSF.Extractor
         /// Processes the given sheet
         /// </summary>
         public void ProcessSheet(
-                SheetContentsHandler sheetContentsExtractor,
+                ISheetContentsHandler sheetContentsExtractor,
                 StylesTable styles,
                 CommentsTable comments,
                 ReadOnlySharedStringsTable strings,
@@ -295,10 +296,10 @@ namespace NPOI.XSSF.Extractor
                     return null;
                 }
             }
-            
+
         }
 
-        void processShapes(List<XSSFShape> shapes, StringBuilder text)
+        public void processShapes(List<XSSFShape> shapes, StringBuilder text)
         {
             if(shapes == null)
             {
@@ -327,7 +328,7 @@ namespace NPOI.XSSF.Extractor
             base.Close();
         }
 
-        protected class SheetTextExtractor : SheetContentsHandler
+        protected class SheetTextExtractor : ISheetContentsHandler
         {
             private  StringBuilder output;
             private bool firstCellOfRow;

@@ -40,7 +40,7 @@ namespace NPOI.Util
 
         public override void Flush()
         {
-            throw new NotImplementedException();
+            inner.Flush();
         }
 
         public override int Read()
@@ -50,12 +50,12 @@ namespace NPOI.Util
 
         public override long Seek(long offset, SeekOrigin origin)
         {
-            throw new NotImplementedException();
+            return inner.Seek(offset, origin);
         }
 
         public override void SetLength(long value)
         {
-            throw new NotImplementedException();
+            inner.SetLength(value);
         }
 
         public override void Write(byte[] buffer, int offset, int count)

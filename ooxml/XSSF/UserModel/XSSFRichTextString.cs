@@ -454,7 +454,7 @@ namespace NPOI.XSSF.UserModel
             return r.t.Length;
         }
 
-        public String String
+        public virtual String String
         {
             get
             {
@@ -489,7 +489,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Returns the number of characters in this string.
          */
-        public int Length
+        public virtual int Length
         {
             get
             {
@@ -500,7 +500,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * @return  The number of formatting Runs used.
          */
-        public int NumFormattingRuns
+        public virtual int NumFormattingRuns
         {
             get
             {
