@@ -10,14 +10,13 @@ namespace NPOI.SS.Util
     public class CellRangeAddress : CellRangeAddressBase
     {
         public const int ENCODED_SIZE = 8;
-        /**
-         * Creates new cell range. Indexes are zero-based.
-         * 
-         * @param firstRow Index of first row
-         * @param lastRow Index of last row (inclusive), must be equal to or larger than {@code firstRow}
-         * @param firstCol Index of first column
-         * @param lastCol Index of last column (inclusive), must be equal to or larger than {@code firstCol}
-         */
+        /// <summary>
+        /// Creates new cell range. Indexes are zero-based.
+        /// </summary>
+        /// <param name="firstRow">Index of first row</param>
+        /// <param name="lastRow">Index of last row (inclusive), must be equal to or larger than <c>firstRow</c></param>
+        /// <param name="firstCol">Index of first column</param>
+        /// <param name="lastCol">Index of last column (inclusive), must be equal to or larger than <c>firstCol</c></param>
         public CellRangeAddress(int firstRow, int lastRow, int firstCol, int lastCol)
             : base(firstRow, lastRow, firstCol, lastCol)
         {
@@ -52,9 +51,13 @@ namespace NPOI.SS.Util
         {
             return FormatAsString(null, false);
         }
-        /**
-         * @return the text format of this range using specified sheet name.
-         */
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sheetName"></param>
+        /// <param name="useAbsoluteAddress"></param>
+        /// <returns>the text format of this range using specified sheet name.</returns>
         public String FormatAsString(String sheetName, bool useAbsoluteAddress)
         {
             StringBuilder sb = new StringBuilder();

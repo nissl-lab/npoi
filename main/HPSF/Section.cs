@@ -563,9 +563,9 @@ namespace NPOI.HPSF
                         size = CalcSize();
                         dirty = false;
                     }
-                    catch(HPSFRuntimeException ex)
+                    catch(HPSFRuntimeException)
                     {
-                        throw ex;
+                        throw;
                     }
                     catch(Exception ex)
                     {

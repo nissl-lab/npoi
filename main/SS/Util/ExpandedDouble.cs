@@ -20,20 +20,23 @@ namespace NPOI.SS.Util
 {
 
     using NPOI.Util;
-    /*
-     * Represents a 64 bit IEEE double quantity expressed with both decimal and binary exponents
-     * Does not handle negative numbers or zero
-     * <p/>
-     * The value of a {@link ExpandedDouble} is given by<br/>
-     * <c> a &times; 2<sup>b</sup></c>
-     * <br/>
-     * where:<br/>
-     *
-     * <c>a</c> = <i>significand</i><br/>
-     * <c>b</c> = <i>binaryExponent</i> - bitLength(significand) + 1<br/>
-     *
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// <para>
+    /// Represents a 64 bit IEEE double quantity expressed with both decimal and binary exponents
+    /// Does not handle negative numbers or zero
+    /// </para>
+    /// <para>
+    /// The value of a <see cref="ExpandedDouble"/> is given by<br/>
+    /// <c> a ¡Á power(2,b)</c>
+    /// <br/>
+    /// where:<br/>
+    /// </para>
+    /// <para>
+    /// <c>a</c> = <i>significand</i><br/>
+    /// <c>b</c> = <i>binaryExponent</i> - bitLength(significand) + 1<br/>
+    /// </para>
+    /// </summary>
+    /// @author Josh Micich
     public class ExpandedDouble
     {
         private static readonly BigInteger BI_FRAC_MASK = new BigInteger(IEEEDouble.FRAC_MASK);
@@ -50,16 +53,16 @@ namespace NPOI.SS.Util
             return new ExpandedDouble(GetFrac(rawBits), exp);
         }
 
-        /**
-         * Always 64 bits long (MSB, bit-63 is '1')
-         */
+        /// <summary>
+        /// Always 64 bits long (MSB, bit-63 is '1')
+        /// </summary>
         private BigInteger _significand;
         private int _binaryExponent;
 
         public ExpandedDouble(long rawBits)
         {
             int biasedExp = (int)(rawBits >> 52);
-            if (biasedExp == 0)
+            if(biasedExp == 0)
             {
                 // sub-normal numbers
                 BigInteger frac = new BigInteger(rawBits)&BI_FRAC_MASK;
@@ -77,7 +80,7 @@ namespace NPOI.SS.Util
 
         public ExpandedDouble(BigInteger frac, int binaryExp)
         {
-            if (frac.BitLength() != 64)
+            if(frac.BitLength() != 64)
             {
                 throw new ArgumentException("bad bit length");
             }
@@ -86,18 +89,18 @@ namespace NPOI.SS.Util
         }
 
 
-        /**
-         * Convert to an equivalent {@link NormalisedDecimal} representation having 15 decimal digits of precision in the
-         * non-fractional bits of the significand.
-         */
+        /// <summary>
+        /// Convert to an equivalent <see cref="NormalisedDecimal"/> representation having 15 decimal digits of precision in the
+        /// non-fractional bits of the significand.
+        /// </summary>
         public NormalisedDecimal NormaliseBaseTen()
         {
             return NormalisedDecimal.Create(_significand, _binaryExponent);
         }
 
-        /**
-         * @return the number of non-fractional bits after the MSB of the significand
-         */
+        /// <summary>
+        /// </summary>
+        /// <return>the number of non-fractional bits after the MSB of the significand</return>
         public int GetBinaryExponent()
         {
             return _binaryExponent;

@@ -23,16 +23,15 @@ namespace NPOI.SS.Util
     using NPOI.Util;
 
 
-    /**
-     * Various utility functions that make working with a cells and rows easier. The various methods
-     * that deal with style's allow you to create your CellStyles as you need them. When you apply a
-     * style change to a cell, the code will attempt to see if a style already exists that meets your
-     * needs. If not, then it will create a new style. This is to prevent creating too many styles.
-     * there is an upper limit in Excel on the number of styles that can be supported.
-     *
-     *@author Eric Pugh epugh@upstate.com
-     *@author (secondary) Avinash Kewalramani akewalramani@accelrys.com
-     */
+    /// <summary>
+    /// Various utility functions that make working with a cells and rows easier. The various methods
+    /// that deal with style's allow you to create your CellStyles as you need them. When you apply a
+    /// style change to a cell, the code will attempt to see if a style already exists that meets your
+    /// needs. If not, then it will create a new style. This is to prevent creating too many styles.
+    /// there is an upper limit in Excel on the number of styles that can be supported.
+    /// </summary>
+    /// @author Eric Pugh epugh@upstate.com
+    /// @author (secondary) Avinash Kewalramani akewalramani@accelrys.com
     public class CellUtil
     {
         public const string ALIGNMENT = "alignment";
@@ -111,13 +110,13 @@ namespace NPOI.SS.Util
             ICell oldCell = row.GetCell(sourceIndex);
 
             // If the old cell is null jump to next cell
-            if (oldCell == null)
+            if(oldCell == null)
             {
                 return null;
             }
 
             ICell newCell = row.GetCell(targetIndex);
-            if (newCell == null) //not exist
+            if(newCell == null) //not exist
             {
                 newCell = row.CreateCell(targetIndex);
             }
@@ -131,22 +130,22 @@ namespace NPOI.SS.Util
 
         private static ICell CopyCell(ICell oldCell, ICell newCell, int sourceIndex, int targetIndex)
         {
-            if (sourceIndex == targetIndex)
+            if(sourceIndex == targetIndex)
                 throw new ArgumentException("sourceIndex and targetIndex cannot be same");
-            
+
             // Copy style from old cell and apply to new cell
-            if (oldCell.CellStyle != null)
+            if(oldCell.CellStyle != null)
             {
                 newCell.CellStyle = oldCell.CellStyle;
             }
             // If there is a cell comment, copy
-            if (oldCell.CellComment != null)
+            if(oldCell.CellComment != null)
             {
                 newCell.CellComment = oldCell.CellComment;
             }
 
             // If there is a cell hyperlink, copy
-            if (oldCell.Hyperlink != null)
+            if(oldCell.Hyperlink != null)
             {
                 newCell.Hyperlink = oldCell.Hyperlink;
             }
@@ -155,7 +154,7 @@ namespace NPOI.SS.Util
             newCell.SetCellType(oldCell.CellType);
 
             // Set the cell data value
-            switch (oldCell.CellType)
+            switch(oldCell.CellType)
             {
                 case CellType.Blank:
                     newCell.SetCellValue(oldCell.StringCellValue);
@@ -179,143 +178,141 @@ namespace NPOI.SS.Util
             return newCell;
         }
 
-        /**
-         * Get a row from the spreadsheet, and create it if it doesn't exist.
-         *
-         *@param rowIndex The 0 based row number
-         *@param sheet The sheet that the row is part of.
-         *@return The row indicated by the rowCounter
-         */
+        /// <summary>
+        /// Get a row from the spreadsheet, and create it if it doesn't exist.
+        /// </summary>
+        /// <param name="rowIndex">The 0 based row number</param>
+        /// <param name="sheet">The sheet that the row is part of.</param>
+        /// <return>The row indicated by the rowCounter</return>
         public static IRow GetRow(int rowIndex, ISheet sheet)
         {
             IRow row = sheet.GetRow(rowIndex);
-            if (row == null)
+            if(row == null)
             {
                 row = sheet.CreateRow(rowIndex);
             }
             return row;
         }
 
-        /**
-         * Get a specific cell from a row. If the cell doesn't exist, then create it.
-         *
-         *@param row The row that the cell is part of
-         *@param columnIndex The column index that the cell is in.
-         *@return The cell indicated by the column.
-         */
+        /// <summary>
+        /// Get a specific cell from a row. If the cell doesn't exist, then create it.
+        /// </summary>
+        /// <param name="row">The row that the cell is part of</param>
+        /// <param name="columnIndex">The column index that the cell is in.</param>
+        /// <return>The cell indicated by the column.</return>
         public static ICell GetCell(IRow row, int columnIndex)
         {
             ICell cell = row.GetCell(columnIndex);
 
-            if (cell == null)
+            if(cell == null)
             {
                 cell = row.CreateCell(columnIndex);
             }
             return cell;
         }
 
-        /**
-         * Creates a cell, gives it a value, and applies a style if provided
-         *
-         * @param  row     the row to create the cell in
-         * @param  column  the column index to create the cell in
-         * @param  value   The value of the cell
-         * @param  style   If the style is not null, then set
-         * @return         A new Cell
-         */
+        /// <summary>
+        /// Creates a cell, gives it a value, and applies a style if provided
+        /// </summary>
+        /// <param name="row">    the row to create the cell in</param>
+        /// <param name="column"> the column index to create the cell in</param>
+        /// <param name="value">  The value of the cell</param>
+        /// <param name="style">  If the style is not null, then set</param>
+        /// <return>A new Cell</return>
         public static ICell CreateCell(IRow row, int column, String value, ICellStyle style)
         {
             ICell cell = GetCell(row, column);
 
             cell.SetCellValue(cell.Row.Sheet.Workbook.GetCreationHelper()
                     .CreateRichTextString(value));
-            if (style != null)
+            if(style != null)
             {
                 cell.CellStyle = style;
             }
             return cell;
         }
 
-        /**
-         * Create a cell, and give it a value.
-         *
-         *@param  row     the row to create the cell in
-         *@param  column  the column index to create the cell in
-         *@param  value   The value of the cell
-         *@return         A new Cell.
-         */
+        /// <summary>
+        /// Create a cell, and give it a value.
+        /// </summary>
+        /// <param name="row">    the row to create the cell in</param>
+        /// <param name="column"> the column index to create the cell in</param>
+        /// <param name="value">  The value of the cell</param>
+        /// <return>A new Cell.</return>
         public static ICell CreateCell(IRow row, int column, String value)
         {
             return CreateCell(row, column, value, null);
         }
 
-        /**
-         * Take a cell, and align it.
-         *
-         *@param cell the cell to set the alignment for
-         *@param workbook The workbook that is being worked with.
-         *@param align the column alignment to use.
-         *
-         * @see CellStyle for alignment options
-         */
+        /// <summary>
+        /// Take a cell, and align it.
+        /// </summary>
+        /// <param name="cell">the cell to set the alignment for</param>
+        /// <param name="workbook">The workbook that is being worked with.</param>
+        /// <param name="align">the column alignment to use.</param>
+        /// 
+        /// <see cref="CellStyle for alignment options" />
         [Obsolete("deprecated 3.15-beta2. Use {@link #SetAlignment(ICell, HorizontalAlignment)} instead.")]
         public static void SetAlignment(ICell cell, IWorkbook workbook, short align)
         {
             SetCellStyleProperty(cell, workbook, ALIGNMENT, align);
         }
-        /**
-         * Take a cell, and align it.
-         * 
-         * This is superior to cell.getCellStyle().setAlignment(align) because
-         * this method will not modify the CellStyle object that may be referenced
-         * by multiple cells. Instead, this method will search for existing CellStyles
-         * that match the desired CellStyle, creating a new CellStyle with the desired
-         * style if no match exists.
-         *
-         * @param cell the cell to set the alignment for
-         * @param align the horizontal alignment to use.
-         *
-         * @see HorizontalAlignment for alignment options
-         * @since POI 3.15 beta 3
-         */
+        /// <summary>
+        /// <para>
+        /// Take a cell, and align it.
+        /// </para>
+        /// <para>
+        /// This is superior to cell.getCellStyle().setAlignment(align) because
+        /// this method will not modify the CellStyle object that may be referenced
+        /// by multiple cells. Instead, this method will search for existing CellStyles
+        /// that match the desired CellStyle, creating a new CellStyle with the desired
+        /// style if no match exists.
+        /// </para>
+        /// </summary>
+        /// <param name="cell">the cell to set the alignment for</param>
+        /// <param name="align">the horizontal alignment to use.</param>
+        /// 
+        /// <see cref="HorizontalAlignment for alignment options" />
+        /// @since POI 3.15 beta 3
         public static void SetAlignment(ICell cell, HorizontalAlignment align)
         {
             SetCellStyleProperty(cell, ALIGNMENT, align);
         }
 
-        /**
-         * Take a cell, and vertically align it.
-         * 
-         * This is superior to cell.getCellStyle().setVerticalAlignment(align) because
-         * this method will not modify the CellStyle object that may be referenced
-         * by multiple cells. Instead, this method will search for existing CellStyles
-         * that match the desired CellStyle, creating a new CellStyle with the desired
-         * style if no match exists.
-         *
-         * @param cell the cell to set the alignment for
-         * @param align the vertical alignment to use.
-         *
-         * @see VerticalAlignment for alignment options
-         * @since POI 3.15 beta 3
-         */
+        /// <summary>
+        /// <para>
+        /// Take a cell, and vertically align it.
+        /// </para>
+        /// <para>
+        /// This is superior to cell.getCellStyle().setVerticalAlignment(align) because
+        /// this method will not modify the CellStyle object that may be referenced
+        /// by multiple cells. Instead, this method will search for existing CellStyles
+        /// that match the desired CellStyle, creating a new CellStyle with the desired
+        /// style if no match exists.
+        /// </para>
+        /// </summary>
+        /// <param name="cell">the cell to set the alignment for</param>
+        /// <param name="align">the vertical alignment to use.</param>
+        /// 
+        /// <see cref="VerticalAlignment" /> for alignment options
+        /// @since POI 3.15 beta 3
         public static void SetVerticalAlignment(ICell cell, VerticalAlignment align)
         {
             SetCellStyleProperty(cell, VERTICAL_ALIGNMENT, align);
         }
 
-        /**
-         * Take a cell, and apply a font to it
-         *
-         *@param cell the cell to set the alignment for
-         *@param workbook The workbook that is being worked with.
-         *@param font The Font that you want to set...
-         */
+        /// <summary>
+        /// Take a cell, and apply a font to it
+        /// </summary>
+        /// <param name="cell">the cell to set the alignment for</param>
+        /// <param name="workbook">The workbook that is being worked with.</param>
+        /// <param name="font">The Font that you want to set...</param>
         [Obsolete("deprecated 3.15-beta2. Use {@link #SetFont(ICell, IFont)} instead.")]
         public static void SetFont(ICell cell, IWorkbook workbook, IFont font)
         {
             // Check if font belongs to workbook
             short fontIndex = font.Index;
-            if (!workbook.GetFontAt(fontIndex).Equals(font))
+            if(!workbook.GetFontAt(fontIndex).Equals(font))
             {
                 throw new ArgumentException("Font does not belong to this workbook");
             }
@@ -325,19 +322,18 @@ namespace NPOI.SS.Util
 
             SetCellStyleProperty(cell, workbook, FONT, fontIndex);
         }
-        /**
-         * Take a cell, and apply a font to it
-         *
-         * @param cell the cell to set the alignment for
-         * @param font The Font that you want to set.
-         * @throws IllegalArgumentException if <tt>font</tt> and <tt>cell</tt> do not belong to the same workbook
-         */
+        /// <summary>
+        /// Take a cell, and apply a font to it
+        /// </summary>
+        /// <param name="cell">the cell to set the alignment for</param>
+        /// <param name="font">The Font that you want to set.</param>
+        /// <exception cref="ArgumentException">if <tt>font</tt> and <tt>cell</tt> do not belong to the same workbook</exception>
         public static void SetFont(ICell cell, IFont font)
         {
             // Check if font belongs to workbook
             IWorkbook wb = cell.Sheet.Workbook;
             short fontIndex = font.Index;
-            if (!wb.GetFontAt(fontIndex).Equals(font))
+            if(!wb.GetFontAt(fontIndex).Equals(font))
             {
                 throw new ArgumentException("Font does not belong to this workbook");
             }
@@ -348,32 +344,36 @@ namespace NPOI.SS.Util
             SetCellStyleProperty(cell, FONT, fontIndex);
         }
 
-        /**
-         * <p>This method attempts to find an existing CellStyle that matches the <code>cell</code>'s 
-         * current style plus styles properties in <code>properties</code>. A new style is created if the
-         * workbook does not contain a matching style.</p>
-         * 
-         * <p>Modifies the cell style of <code>cell</code> without affecting other cells that use the
-         * same style.</p>
-         * 
-         * <p>This is necessary because Excel has an upper limit on the number of styles that it supports.</p>
-         * 
-         * <p>This function is more efficient than multiple calls to
-         * {@link #setCellStyleProperty(org.apache.poi.ss.usermodel.Cell, org.apache.poi.ss.usermodel.Workbook, String, Object)}
-         * if adding multiple cell styles.</p>
-         * 
-         * <p>For performance reasons, if this is the only cell in a workbook that uses a cell style,
-         * this method does NOT remove the old style from the workbook.
-         * <!-- NOT IMPLEMENTED: Unused styles should be
-         * pruned from the workbook with [@link #removeUnusedCellStyles(Workbook)] or
-         * [@link #removeStyleFromWorkbookIfUnused(CellStyle, Workbook)]. -->
-         * </p>
-         *
-         * @param cell The cell to change the style of
-         * @param properties The properties to be added to a cell style, as {propertyName: propertyValue}.
-         * @since POI 3.14 beta 2
-         */
-        public static void SetCellStyleProperties(ICell cell, Dictionary<String, Object> properties, bool cloneExistingStyles=false)
+        /// <summary>
+        /// <para>
+        /// This method attempts to find an existing CellStyle that matches the <c>cell</c>'s
+        /// current style plus styles properties in <c>properties</c>. A new style is created if the
+        /// workbook does not contain a matching style.
+        /// </para>
+        /// <para>
+        /// Modifies the cell style of <c>cell</c> without affecting other cells that use the
+        /// same style.
+        /// </para>
+        /// <para>
+        /// This is necessary because Excel has an upper limit on the number of styles that it supports.
+        /// </para>
+        /// <para>
+        /// This function is more efficient than multiple calls to
+        /// <see cref="SetCellStyleProperty(ICell, IWorkbook, String, Object)" />
+        /// if adding multiple cell styles.
+        /// </para>
+        /// <para>
+        /// For performance reasons, if this is the only cell in a workbook that uses a cell style,
+        /// this method does NOT remove the old style from the workbook.
+        /// <!-- NOT IMPLEMENTED: Unused styles should be
+        /// pruned from the workbook with [@link #removeUnusedCellStyles(Workbook)] or
+        /// [@link #removeStyleFromWorkbookIfUnused(CellStyle, Workbook)]. -->
+        /// </para>
+        /// </summary>
+        /// <param name="cell">The cell to change the style of</param>
+        /// <param name="properties">The properties to be added to a cell style, as {propertyName: propertyValue}.</param>
+        /// @since POI 3.14 beta 2
+        public static void SetCellStyleProperties(ICell cell, Dictionary<String, Object> properties, bool cloneExistingStyles = false)
         {
             IWorkbook workbook = cell.Sheet.Workbook;
             ICellStyle originalStyle = cell.CellStyle;
@@ -385,13 +385,13 @@ namespace NPOI.SS.Util
             // not good to compare on!
             int numberCellStyles = workbook.NumCellStyles;
 
-            for (int i = 0; i < numberCellStyles; i++)
+            for(int i = 0; i < numberCellStyles; i++)
             {
                 ICellStyle wbStyle = workbook.GetCellStyleAt(i);
                 Dictionary<string, object> wbStyleMap = GetFormatProperties(wbStyle);
 
                 // the desired style already exists in the workbook. Use the existing style.
-                if (DictionaryEqual(wbStyleMap, values, null))
+                if(DictionaryEqual(wbStyleMap, values, null))
                 {
                     newStyle = wbStyle;
                     break;
@@ -399,10 +399,10 @@ namespace NPOI.SS.Util
             }
 
             // the desired style does not exist in the workbook. Create a new style with desired properties.
-            if (newStyle == null)
+            if(newStyle == null)
             {
                 newStyle = workbook.CreateCellStyle();
-                if (cloneExistingStyles)
+                if(cloneExistingStyles)
                 {
                     newStyle.CloneStyleFrom(originalStyle);
                 }
@@ -411,68 +411,83 @@ namespace NPOI.SS.Util
 
             cell.CellStyle = newStyle;
         }
-        public static bool DictionaryEqual<TKey, TValue>(IDictionary<TKey, TValue> first, 
+        public static bool DictionaryEqual<TKey, TValue>(IDictionary<TKey, TValue> first,
             IDictionary<TKey, TValue> second, IEqualityComparer<TValue> valueComparer)
         {
-            if (first == second) return true;
-            if ((first == null) || (second == null)) return false;
-            if (first.Count != second.Count) return false;
+            if(first == second)
+                return true;
+            if((first == null) || (second == null))
+                return false;
+            if(first.Count != second.Count)
+                return false;
 
             valueComparer = valueComparer ?? EqualityComparer<TValue>.Default;
 
-            foreach (var kvp in first)
+            foreach(var kvp in first)
             {
                 TValue secondValue;
-                if (!second.TryGetValue(kvp.Key, out secondValue)) return false;
-                if (!valueComparer.Equals(kvp.Value, secondValue)) return false;
+                if(!second.TryGetValue(kvp.Key, out secondValue))
+                    return false;
+                if(!valueComparer.Equals(kvp.Value, secondValue))
+                    return false;
             }
             return true;
         }
-        /**
-         * <p>This method attempts to find an existing CellStyle that matches the <code>cell</code>'s
-         * current style plus a single style property <code>propertyName</code> with value
-         * <code>propertyValue</code>.
-         * A new style is created if the workbook does not contain a matching style.</p>
-         * 
-         * <p>Modifies the cell style of <code>cell</code> without affecting other cells that use the
-         * same style.</p>
-         * 
-         * <p>If setting more than one cell style property on a cell, use
-         * {@link #setCellStyleProperties(org.apache.poi.ss.usermodel.Cell, Map)},
-         * which is faster and does not add unnecessary intermediate CellStyles to the workbook.</p>
-         * 
-         * @param cell The cell that is to be changed.
-         * @param propertyName The name of the property that is to be changed.
-         * @param propertyValue The value of the property that is to be changed.
-         */
+        /// <summary>
+        /// <para>
+        /// This method attempts to find an existing CellStyle that matches the <c>cell</c>'s
+        /// current style plus a single style property <c>propertyName</c> with value
+        /// <c>propertyValue</c>.
+        /// A new style is created if the workbook does not contain a matching style.
+        /// </para>
+        /// <para>
+        /// 
+        /// Modifies the cell style of <c>cell</c> without affecting other cells that use the
+        /// same style.
+        /// </para>
+        /// <para>
+        /// 
+        /// If setting more than one cell style property on a cell, use
+        /// <see cref="SetCellStyleProperties(ICell, Dictionary<string, object>)" />,
+        /// which is faster and does not add unnecessary intermediate CellStyles to the workbook.
+        /// </para>
+        /// </summary>
+        /// <param name="cell">The cell that is to be changed.</param>
+        /// <param name="propertyName">The name of the property that is to be changed.</param>
+        /// <param name="propertyValue">The value of the property that is to be changed.</param>
         public static void SetCellStyleProperty(ICell cell, String propertyName, Object propertyValue)
         {
             Dictionary<String, Object> values = new Dictionary<string, object>() { { propertyName, propertyValue } };
             SetCellStyleProperties(cell, values);
         }
-        /**
-	     * <p>This method attempts to find an existing CellStyle that matches the <code>cell</code>'s
-	     * current style plus a single style property <code>propertyName</code> with value
-	     * <code>propertyValue</code>.
-	     * A new style is created if the workbook does not contain a matching style.</p>
-	     * 
-	     * <p>Modifies the cell style of <code>cell</code> without affecting other cells that use the
-	     * same style.</p>
-	     * 
-	     * <p>If setting more than one cell style property on a cell, use
-	     * {@link #setCellStyleProperties(Cell, Map)},
-	     * which is faster and does not add unnecessary intermediate CellStyles to the workbook.</p>
-	     * 
-	     * @param workbook The workbook that is being worked with.
-	     * @param propertyName The name of the property that is to be changed.
-	     * @param propertyValue The value of the property that is to be changed.
-	     * @param cell The cell that needs it's style changes
-	     */
+        /// <summary>
+        /// <para>
+        /// This method attempts to find an existing CellStyle that matches the <c>cell</c>'s
+        /// current style plus a single style property <c>propertyName</c> with value
+        /// <c>propertyValue</c>.
+        /// A new style is created if the workbook does not contain a matching style.
+        /// </para>
+        /// <para>
+        /// 
+        /// Modifies the cell style of <c>cell</c> without affecting other cells that use the
+        /// same style.
+        /// </para>
+        /// <para>
+        /// 
+        /// If setting more than one cell style property on a cell, use
+        /// <see cref="SetCellStyleProperties(ICell, Dictionary<string, object>)" />,
+        /// which is faster and does not add unnecessary intermediate CellStyles to the workbook.
+        /// </para>
+        /// </summary>
+        /// <param name="workbook">The workbook that is being worked with.</param>
+        /// <param name="propertyName">The name of the property that is to be changed.</param>
+        /// <param name="propertyValue">The value of the property that is to be changed.</param>
+        /// <param name="cell">The cell that needs it's style changes</param>
         [Obsolete("deprecated 3.15-beta2. Use {@link #setCellStyleProperty(Cell, String, Object)} instead.")]
         public static void SetCellStyleProperty(ICell cell, IWorkbook workbook, String propertyName,
                Object propertyValue)
         {
-            if (cell.Sheet.Workbook != workbook)
+            if(cell.Sheet.Workbook != workbook)
             {
                 throw new ArgumentException("Cannot set cell style property. Cell does not belong to workbook.");
             }
@@ -481,43 +496,42 @@ namespace NPOI.SS.Util
             SetCellStyleProperties(cell, values);
         }
 
-        /**
-         * Copies the entries in src to dest, using the preferential data type
-         * so that maps can be compared for equality
-         *
-         * @param src the property map to copy from (read-only)
-         * @param dest the property map to copy into
-         * @since POI 3.15 beta 3
-         */
+        /// <summary>
+        /// Copies the entries in src to dest, using the preferential data type
+        /// so that maps can be compared for equality
+        /// </summary>
+        /// <param name="src">the property map to copy from (read-only)</param>
+        /// <param name="dest">the property map to copy into</param>
+        /// @since POI 3.15 beta 3
         private static void PutAll(Dictionary<String, Object> src, Dictionary<String, Object> dest)
         {
-            foreach (String key in src.Keys)
+            foreach(String key in src.Keys)
             {
-                if (shortValues.Contains(key))
+                if(shortValues.Contains(key))
                 {
                     dest[key] = GetShort(src, key);
                 }
-                else if (intValues.Contains(key))
+                else if(intValues.Contains(key))
                 {
                     dest[key] = GetInt(src, key);
                 }
-                else if (booleanValues.Contains(key))
+                else if(booleanValues.Contains(key))
                 {
                     dest[key] = GetBoolean(src, key);
                 }
-                else if (borderTypeValues.Contains(key))
+                else if(borderTypeValues.Contains(key))
                 {
                     dest[key] = GetBorderStyle(src, key);
                 }
-                else if (ALIGNMENT.Equals(key))
+                else if(ALIGNMENT.Equals(key))
                 {
                     dest[key] = GetHorizontalAlignment(src, key);
                 }
-                else if (VERTICAL_ALIGNMENT.Equals(key))
+                else if(VERTICAL_ALIGNMENT.Equals(key))
                 {
                     dest[key] = GetVerticalAlignment(src, key);
                 }
-                else if (FILL_PATTERN.Equals(key))
+                else if(FILL_PATTERN.Equals(key))
                 {
                     dest[key] = GetFillPattern(src, key);
                 }
@@ -531,15 +545,15 @@ namespace NPOI.SS.Util
             }
         }
 
-        /**
-         * Returns a map containing the format properties of the given cell style.
-         * The returned map is not tied to <code>style</code>, so subsequent changes
-         * to <code>style</code> will not modify the map, and changes to the returned
-         * map will not modify the cell style. The returned map is mutable.
-         * @param style cell style
-         * @return map of format properties (String -> Object)
-         * @see #setFormatProperties(org.apache.poi.ss.usermodel.CellStyle, org.apache.poi.ss.usermodel.Workbook, java.util.Map)
-         */
+        /// <summary>
+        /// Returns a map containing the format properties of the given cell style.
+        /// The returned map is not tied to <c>style</c>, so subsequent changes
+        /// to <c>style</c> will not modify the map, and changes to the returned
+        /// map will not modify the cell style. The returned map is mutable.
+        /// </summary>
+        /// <param name="style">cell style</param>
+        /// <return>map of format properties (String -> Object)</return>
+        /// <see cref="SetFormatProperties(ICellStyle, IWorkbook, IDictionary)" />
         private static Dictionary<String, Object> GetFormatProperties(ICellStyle style)
         {
             Dictionary<String, Object> properties = new Dictionary<String, Object>();
@@ -554,7 +568,7 @@ namespace NPOI.SS.Util
             Put(properties, FILL_PATTERN, style.FillPattern);
             Put(properties, FILL_FOREGROUND_COLOR, style.FillForegroundColor);
             Put(properties, FILL_BACKGROUND_COLOR, style.FillBackgroundColor);
-            Put(properties, FONT, (int)style.FontIndex);
+            Put(properties, FONT, (int) style.FontIndex);
             Put(properties, HIDDEN, style.IsHidden);
             Put(properties, INDENTION, style.Indention);
             Put(properties, LEFT_BORDER_COLOR, style.LeftBorderColor);
@@ -567,14 +581,13 @@ namespace NPOI.SS.Util
             return properties;
         }
 
-        /**
-         * Sets the format properties of the given style based on the given map.
-         *
-         * @param style cell style
-         * @param workbook parent workbook
-         * @param properties map of format properties (String -> Object)
-         * @see #getFormatProperties(CellStyle)
-         */
+        /// <summary>
+        /// Sets the format properties of the given style based on the given map.
+        /// </summary>
+        /// <param name="style">cell style</param>
+        /// <param name="workbook">parent workbook</param>
+        /// <param name="properties">map of format properties (String -> Object)</param>
+        /// <see cref="GetFormatProperties(ICellStyle)" />
         private static void SetFormatProperties(ICellStyle style, IWorkbook workbook, Dictionary<String, Object> properties)
         {
             style.Alignment = GetHorizontalAlignment(properties, ALIGNMENT);
@@ -600,57 +613,55 @@ namespace NPOI.SS.Util
             style.WrapText = GetBoolean(properties, WRAP_TEXT);
         }
 
-        /**
-         * Utility method that returns the named short value form the given map.
-         * 
-         * @param properties map of named properties (String -> Object)
-         * @param name property name
-         * @return zero if the property does not exist, or is not a {@link Short}.
-         */
+        /// <summary>
+        /// Utility method that returns the named short value form the given map.
+        /// </summary>
+        /// <param name="properties">map of named properties (String -> Object)</param>
+        /// <param name="name">property name</param>
+        /// <return>zero if the property does not exist, or is not a <see cref="short"/>.</return>
         private static short GetShort(Dictionary<String, Object> properties, String name)
         {
             Object value = properties[name];
             short result = 0;
-            if (short.TryParse(value.ToString(), out result))
+            if(short.TryParse(value.ToString(), out result))
                 return result;
             return 0;
         }
 
-        /**
-         * Utility method that returns the named int value from the given map.
-         *
-         * @param properties map of named properties (String -> Object)
-         * @param name property name
-         * @return zero if the property does not exist, or is not a {@link Integer}
-         *         otherwise the property value
-         */
+        /// <summary>
+        /// Utility method that returns the named int value from the given map.
+        /// </summary>
+        /// <param name="properties">map of named properties (String -> Object)</param>
+        /// <param name="name">property name</param>
+        /// <return>zero if the property does not exist, or is not a <see cref="Integer"/>
+        /// otherwise the property value
+        /// </return>
         private static int GetInt(Dictionary<String, Object> properties, String name)
         {
             Object value = properties[name];
-            if (Number.IsNumber(value))
+            if(Number.IsNumber(value))
             {
                 return int.Parse(value.ToString());
             }
             return 0;
         }
 
-        /**
-	     * Utility method that returns the named BorderStyle value form the given map.
-	     *
-	     * @param properties map of named properties (String -> Object)
-	     * @param name property name
-	     * @return Border style if set, otherwise {@link BorderStyle#NONE}
-	     */
+        /// <summary>
+        /// Utility method that returns the named BorderStyle value form the given map.
+        /// </summary>
+        /// <param name="properties">map of named properties (String -> Object)</param>
+        /// <param name="name">property name</param>
+        /// <return>Border style if set, otherwise <see cref="BorderStyle.None" /></return>
         private static BorderStyle GetBorderStyle(Dictionary<String, Object> properties, String name)
         {
             Object value = properties[name];
             BorderStyle border;
-            if (value is BorderStyle)
+            if(value is BorderStyle)
             {
-                border = (BorderStyle)value;
+                border = (BorderStyle) value;
             }
             // @deprecated 3.15 beta 2. getBorderStyle will only work on BorderStyle enums instead of codes in the future.
-            else if (value is short || value is int)
+            else if(value is short || value is int)
             {
                 //if (log.check(POILogger.WARN))
                 //{
@@ -658,9 +669,9 @@ namespace NPOI.SS.Util
                 //            + name + ". Should use BorderStyle enums instead.");
                 //}
                 short code = short.Parse(value.ToString());
-                border = (BorderStyle)code;
+                border = (BorderStyle) code;
             }
-            else if (value == null)
+            else if(value == null)
             {
                 border = BorderStyle.None;
             }
@@ -671,24 +682,23 @@ namespace NPOI.SS.Util
             return border;
         }
 
-        /**
-         * Utility method that returns the named FillPattern value from the given map.
-         *
-         * @param properties map of named properties (String -> Object)
-         * @param name property name
-         * @return FillPattern style if set, otherwise {@link FillPattern#NO_FILL}
-         * @since POI 3.15 beta 3
-         */
+        /// <summary>
+        /// Utility method that returns the named FillPattern value from the given map.
+        /// </summary>
+        /// <param name="properties">map of named properties (String -> Object)</param>
+        /// <param name="name">property name</param>
+        /// <return>FillPattern style if set, otherwise <see cref="FillPattern.NoFill" /></return>
+        /// @since POI 3.15 beta 3
         private static FillPattern GetFillPattern(Dictionary<String, Object> properties, String name)
         {
             Object value = properties[name];
             FillPattern pattern;
-            if (value is FillPattern)
+            if(value is FillPattern)
             {
-                pattern = (FillPattern)value;
+                pattern = (FillPattern) value;
             }
             // @deprecated 3.15 beta 2. getFillPattern will only work on FillPattern enums instead of codes in the future.
-            else if (value is short)
+            else if(value is short)
             {
                 //if (log.check(POILogger.WARN))
                 //{
@@ -696,9 +706,9 @@ namespace NPOI.SS.Util
                 //            + name + ". Should use FillPattern enums instead.");
                 //}
                 short code = (short)value;
-                pattern = (FillPattern)code;
+                pattern = (FillPattern) code;
             }
-            else if (value == null)
+            else if(value == null)
             {
                 pattern = FillPattern.NoFill;
             }
@@ -709,24 +719,23 @@ namespace NPOI.SS.Util
             return pattern;
         }
 
-        /**
-         * Utility method that returns the named HorizontalAlignment value from the given map.
-         *
-         * @param properties map of named properties (String -> Object)
-         * @param name property name
-         * @return HorizontalAlignment style if set, otherwise {@link HorizontalAlignment#GENERAL}
-         * @since POI 3.15 beta 3
-         */
+        /// <summary>
+        /// Utility method that returns the named HorizontalAlignment value from the given map.
+        /// </summary>
+        /// <param name="properties">map of named properties (String -> Object)</param>
+        /// <param name="name">property name</param>
+        /// <return>HorizontalAlignment style if set, otherwise <see cref="HorizontalAlignment.General" /></return>
+        /// @since POI 3.15 beta 3
         private static HorizontalAlignment GetHorizontalAlignment(Dictionary<String, Object> properties, String name)
         {
             Object value = properties[name];
             HorizontalAlignment align;
-            if (value is HorizontalAlignment)
+            if(value is HorizontalAlignment)
             {
-                align = (HorizontalAlignment)value;
+                align = (HorizontalAlignment) value;
             }
             // @deprecated 3.15 beta 2. getHorizontalAlignment will only work on HorizontalAlignment enums instead of codes in the future.
-            else if (value is short)
+            else if(value is short)
             {
                 //if (log.check(POILogger.WARN))
                 //{
@@ -734,9 +743,9 @@ namespace NPOI.SS.Util
                 //            + name + ". Should use HorizontalAlignment enums instead.");
                 //}
                 short code = (short)value;
-                align = (HorizontalAlignment)code;
+                align = (HorizontalAlignment) code;
             }
-            else if (value == null)
+            else if(value == null)
             {
                 align = HorizontalAlignment.General;
             }
@@ -747,24 +756,23 @@ namespace NPOI.SS.Util
             return align;
         }
 
-        /**
-         * Utility method that returns the named VerticalAlignment value from the given map.
-         *
-         * @param properties map of named properties (String -> Object)
-         * @param name property name
-         * @return VerticalAlignment style if set, otherwise {@link VerticalAlignment#BOTTOM}
-         * @since POI 3.15 beta 3
-         */
+        /// <summary>
+        /// Utility method that returns the named VerticalAlignment value from the given map.
+        /// </summary>
+        /// <param name="properties">map of named properties (String -> Object)</param>
+        /// <param name="name">property name</param>
+        /// <return>VerticalAlignment style if set, otherwise <see cref="VerticalAlignment.Bottom" /></return>
+        /// @since POI 3.15 beta 3
         private static VerticalAlignment GetVerticalAlignment(Dictionary<String, Object> properties, String name)
         {
             Object value = properties[name];
             VerticalAlignment align;
-            if (value is VerticalAlignment)
+            if(value is VerticalAlignment)
             {
-                align = (VerticalAlignment)value;
+                align = (VerticalAlignment) value;
             }
             // @deprecated 3.15 beta 2. getVerticalAlignment will only work on VerticalAlignment enums instead of codes in the future.
-            else if (value is short)
+            else if(value is short)
             {
                 //if (log.check(POILogger.WARN))
                 //{
@@ -772,9 +780,9 @@ namespace NPOI.SS.Util
                 //            + name + ". Should use VerticalAlignment enums instead.");
                 //}
                 short code = (short)value;
-                align = (VerticalAlignment)code;
+                align = (VerticalAlignment) code;
             }
-            else if (value == null)
+            else if(value == null)
             {
                 align = VerticalAlignment.Bottom;
             }
@@ -785,90 +793,84 @@ namespace NPOI.SS.Util
             return align;
         }
 
-        /**
-         * Utility method that returns the named boolean value form the given map.
-         *
-         * @param properties map of properties (String -> Object)
-         * @param name property name
-         * @return false if the property does not exist, or is not a {@link Boolean}.
-         */
+        /// <summary>
+        /// Utility method that returns the named boolean value form the given map.
+        /// </summary>
+        /// <param name="properties">map of properties (String -> Object)</param>
+        /// <param name="name">property name</param>
+        /// <return>false if the property does not exist, or is not a <see cref="Boolean"/>.</return>
         private static bool GetBoolean(Dictionary<String, Object> properties, String name)
         {
             Object value = properties[name];
             bool result = false;
-            if (bool.TryParse(value.ToString(), out result))
+            if(bool.TryParse(value.ToString(), out result))
                 return result;
 
             return false;
         }
-        /**
-         * Utility method that puts the given value to the given map.
-         *
-         * @param properties map of properties (String -> Object)
-         * @param name property name
-         * @param value property value
-         */
+        /// <summary>
+        /// Utility method that puts the given value to the given map.
+        /// </summary>
+        /// <param name="properties">map of properties (String -> Object)</param>
+        /// <param name="name">property name</param>
+        /// <param name="value">property value</param>
         private static void Put(Dictionary<String, Object> properties, String name, Object value)
         {
             properties[name] = value;
         }
-        /**
-         * Utility method that puts the named short value to the given map.
-         *
-         * @param properties map of properties (String -> Object)
-         * @param name property name
-         * @param value property value
-         */
+        /// <summary>
+        /// Utility method that puts the named short value to the given map.
+        /// </summary>
+        /// <param name="properties">map of properties (String -> Object)</param>
+        /// <param name="name">property name</param>
+        /// <param name="value">property value</param>
         private static void PutShort(Dictionary<String, Object> properties, String name, short value)
         {
             properties[name] = value;
         }
-        /**
-       * Utility method that puts the named short value to the given map.
-       *
-       * @param properties map of properties (String -> Object)
-       * @param name property name
-       * @param value property value
-       */
+        /// <summary>
+        /// Utility method that puts the named short value to the given map.
+        /// </summary>
+        /// <param name="properties">map of properties (String -> Object)</param>
+        /// <param name="name">property name</param>
+        /// <param name="value">property value</param>
         private static void PutEnum(Dictionary<String, Object> properties, String name, Enum value)
         {
             properties[name] = value;
         }
-        /**
-         * Utility method that puts the named boolean value to the given map.
-         *
-         * @param properties map of properties (String -> Object)
-         * @param name property name
-         * @param value property value
-         */
+        /// <summary>
+        /// Utility method that puts the named boolean value to the given map.
+        /// </summary>
+        /// <param name="properties">map of properties (String -> Object)</param>
+        /// <param name="name">property name</param>
+        /// <param name="value">property value</param>
         private static void PutBoolean(Dictionary<String, Object> properties, String name, bool value)
         {
             properties[name] = value;
         }
 
-        /**
-         *  Looks for text in the cell that should be unicode, like an alpha and provides the
-         *  unicode version of it.
-         *
-         *@param  cell  The cell to check for unicode values
-         *@return       translated to unicode
-         */
+        /// <summary>
+        ///  Looks for text in the cell that should be unicode, like an alpha and provides the
+        ///  unicode version of it.
+        /// </summary>
+        /// <param name="cell"> The cell to check for unicode values</param>
+        /// <return>translated to unicode</return>
         public static ICell TranslateUnicodeValues(ICell cell)
         {
             String s = cell.RichStringCellValue.String;
             bool foundUnicode = false;
             String lowerCaseStr = s.ToLower();
 
-            foreach (UnicodeMapping entry in unicodeMappings)
+            foreach(UnicodeMapping entry in unicodeMappings)
             {
                 String key = entry.entityName;
-                if (lowerCaseStr.Contains(key))
+                if(lowerCaseStr.Contains(key))
                 {
                     s = s.Replace(key, entry.resolvedValue);
                     foundUnicode = true;
                 }
             }
-            if (foundUnicode)
+            if(foundUnicode)
             {
                 cell.SetCellValue(cell.Row.Sheet.Workbook.GetCreationHelper()
                         .CreateRichTextString(s));

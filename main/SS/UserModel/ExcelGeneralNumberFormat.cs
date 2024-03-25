@@ -32,9 +32,6 @@ namespace NPOI.SS.UserModel
      **/
     public class ExcelGeneralNumberFormat : FormatBase
     {
-
-        private static long serialVersionUID = 1L;
-
         //private static MathContext TO_10_SF = new MathContext(10, RoundingMode.HALF_UP);
         
         private NumberFormatInfo decimalSymbols;

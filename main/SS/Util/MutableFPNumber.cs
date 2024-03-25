@@ -24,35 +24,38 @@ namespace NPOI.SS.Util
 
 
         // TODO - what about values between (10<sup>14</sup>-0.5) and (10<sup>14</sup>-0.05) ?
-        /**
-         * The minimum value in 'Base-10 normalised form'.<br/>
-         * When {@link #_binaryExponent} == 46 this is the the minimum {@link #_frac} value
-         *  (10<sup>14</sup>-0.05) * 2^17
-         *  <br/>
-         *  Values between (10<sup>14</sup>-0.05) and 10<sup>14</sup> will be represented as '1'
-         *  followed by 14 zeros.
-         *  Values less than (10<sup>14</sup>-0.05) will get Shifted by one more power of 10
-         *
-         *  This frac value rounds to '1' followed by fourteen zeros with an incremented decimal exponent
-         */
+        /// <summary>
+        /// <para>
+        /// The minimum value in 'Base-10 normalised form'.<br/>
+        /// When <see cref="_binaryExponent"/> == 46 this is the the minimum <see cref="_frac"/> value
+        ///  (10<sup>14</sup>-0.05) * 2^17
+        ///  <br/>
+        ///  Values between (10<sup>14</sup>-0.05) and 10<sup>14</sup> will be represented as '1'
+        ///  followed by 14 zeros.
+        ///  Values less than (10<sup>14</sup>-0.05) will get Shifted by one more power of 10
+        /// </para>
+        /// <para>
+        ///  This frac value rounds to '1' followed by fourteen zeros with an incremented decimal exponent
+        /// </para>
+        /// </summary>
         //private static BigInteger BI_MIN_BASE = new BigInteger("0B5E620F47FFFE666", 16);
         private static readonly BigInteger BI_MIN_BASE = new BigInteger(new int[] { -1243209484, 2147477094 }, 1);
-        /**
-         * For 'Base-10 normalised form'<br/>
-         * The maximum {@link #_frac} value when {@link #_binaryExponent} == 49
-         * (10^15-0.5) * 2^14
-         */
+        /// <summary>
+        /// For 'Base-10 normalised form'<br/>
+        /// The maximum <see cref="_frac"/> value when <see cref="_binaryExponent"/> == 49
+        /// (10^15-0.5) * 2^14
+        /// </summary>
         //private static BigInteger BI_MAX_BASE = new BigInteger("0E35FA9319FFFE000", 16);
         private static readonly BigInteger BI_MAX_BASE = new BigInteger(new int[] { -480270031, -1610620928 }, 1);
 
-        /**
-         * Width of a long
-         */
+        /// <summary>
+        /// Width of a long
+        /// </summary>
         private const int C_64 = 64;
 
-        /**
-         * Minimum precision after discarding whole 32-bit words from the significand
-         */
+        /// <summary>
+        /// Minimum precision after discarding whole 32-bit words from the significand
+        /// </summary>
         private const int MIN_PRECISION = 72;
         private BigInteger _significand;
         private int _binaryExponent;
@@ -71,28 +74,28 @@ namespace NPOI.SS.Util
         {
             int oldBitLen = _significand.BitLength();
             int sc = oldBitLen - C_64;
-            if (sc == 0)
+            if(sc == 0)
             {
                 return;
             }
-            if (sc < 0)
+            if(sc < 0)
             {
                 throw new InvalidOperationException("Not enough precision");
             }
             _binaryExponent += sc;
-            if (sc > 32)
+            if(sc > 32)
             {
                 int highShift = (sc - 1) & 0xFFFFE0;
                 _significand = _significand>>(highShift);
                 sc -= highShift;
                 oldBitLen -= highShift;
             }
-            if (sc < 1)
+            if(sc < 1)
             {
                 throw new InvalidOperationException();
             }
             _significand = Rounder.Round(_significand, sc);
-            if (_significand.BitLength() > oldBitLen)
+            if(_significand.BitLength() > oldBitLen)
             {
                 sc++;
                 _binaryExponent++;
@@ -128,7 +131,7 @@ namespace NPOI.SS.Util
         public void multiplyByPowerOfTen(int pow10)
         {
             TenPower tp = TenPower.GetInstance(Math.Abs(pow10));
-            if (pow10 < 0)
+            if(pow10 < 0)
             {
                 mulShift(tp._divisor, tp._divisorShift);
             }
@@ -144,7 +147,7 @@ namespace NPOI.SS.Util
             // check for too much precision
             int sc = (_significand.BitLength() - MIN_PRECISION) & unchecked((int)0xFFFFFFE0);
             // mask Makes multiples of 32 which optimises BigInt32.ShiftRight
-            if (sc > 0)
+            if(sc > 0)
             {
                 // no need to round because we have at least 8 bits of extra precision
                 _significand = _significand>>(sc);
@@ -160,19 +163,19 @@ namespace NPOI.SS.Util
             {
                 BigInteger[] bis = new BigInteger[33];
                 long acc = 1;
-                for (int i = 1; i < bis.Length; i++)
+                for(int i = 1; i < bis.Length; i++)
                 {
                     bis[i] = new BigInteger(acc);
                     acc <<= 1;
                 }
                 HALF_BITS = bis;
             }
-            /**
-             * @param nBits number of bits to shift right
-             */
+            /// <summary>
+            /// </summary>
+            /// <param name="nBits">number of bits to shift right</param>
             public static BigInteger Round(BigInteger bi, int nBits)
             {
-                if (nBits < 1)
+                if(nBits < 1)
                 {
                     return bi;
                 }
@@ -180,9 +183,9 @@ namespace NPOI.SS.Util
             }
         }
 
-        /**
-         * Holds values for quick multiplication and division by 10
-         */
+        /// <summary>
+        /// Holds values for quick multiplication and division by 10
+        /// </summary>
         private class TenPower
         {
             private static readonly BigInteger FIVE = new BigInteger(5L);// new BigInteger("5",10);
@@ -206,7 +209,7 @@ namespace NPOI.SS.Util
 
                 _divisorShift = -(bitsDueToFiveFactors + index + 80);
                 int sc = fivePowIndex.BitLength() - 68;
-                if (sc > 0)
+                if(sc > 0)
                 {
                     _multiplierShift = index + sc;
                     _multiplicand = fivePowIndex>>(sc);
@@ -221,7 +224,7 @@ namespace NPOI.SS.Util
             public static TenPower GetInstance(int index)
             {
                 TenPower result = _cache[index];
-                if (result == null)
+                if(result == null)
                 {
                     result = new TenPower(index);
                     _cache[index] = result;

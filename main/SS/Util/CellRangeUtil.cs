@@ -22,11 +22,14 @@ namespace NPOI.SS.Util
     using NPOI.SS.Util;
     using System.Collections.Generic;
 
-    /**
-     * Utility class that builds on {@link CellRangeAddress}
-     * 
-     * Portions of this class may be moved to {@link CellRangeAddressBase}
-     */
+    /// <summary>
+    /// <para>
+    /// Utility class that builds on <see cref="CellRangeAddress"/>
+    /// </para>
+    /// <para>
+    /// Portions of this class may be moved to <see cref="CellRangeAddressBase"/>
+    /// </para>
+    /// </summary>
     public class CellRangeUtil
     {
 
@@ -37,22 +40,26 @@ namespace NPOI.SS.Util
 
         public const int NO_INTERSECTION = 1;
         public const int OVERLAP = 2;
-        /** first range is within the second range */
+        /// <summary>
+        /// first range is within the second range */
+        /// </summary>
         public const int INSIDE = 3;
-        /** first range encloses or is equal to the second */
+        /// <summary>
+        /// first range encloses or is equal to the second */
+        /// </summary>
         public const int ENCLOSES = 4;
 
-        /**
-         * Get the type of intersection between two cell ranges
-         * 
-         * @param crB - the specified range
-         * @return code which reflects how the specified range is related to this range.<br/>
-         * Possible return codes are:	
-         * 		NO_INTERSECTION - the specified range is outside of this range;<br/> 
-         * 		OVERLAP - both ranges partially overlap;<br/>
-         * 		INSIDE - the specified range is inside of this one<br/>
-         * 		ENCLOSES - the specified range encloses (possibly exactly the same as) this range<br/>
-         */
+        /// <summary>
+        /// Get the type of intersection between two cell ranges
+        /// </summary>
+        /// <param name="crB">- the specified range</param>
+        /// <return>code which reflects how the specified range is related to this range.<br/>
+        /// Possible return codes are:
+        /// NO_INTERSECTION - the specified range is outside of this range;<br/>
+        /// OVERLAP - both ranges partially overlap;<br/>
+        /// INSIDE - the specified range is inside of this one<br/>
+        /// ENCLOSES - the specified range encloses (possibly exactly the same as) this range<br/>
+        /// </return>
         public static int Intersect(CellRangeAddress crA, CellRangeAddress crB)
         {
 
@@ -71,11 +78,11 @@ namespace NPOI.SS.Util
             {
                 return NO_INTERSECTION;
             }
-            else if (Contains(crA, crB))
+            else if(Contains(crA, crB))
             {
                 return INSIDE;
             }
-            else if (Contains(crB, crA))
+            else if(Contains(crB, crA))
             {
                 return ENCLOSES;
             }
@@ -86,16 +93,16 @@ namespace NPOI.SS.Util
 
         }
 
-        /**
-         * Do all possible cell merges between cells of the list so that:
-         * 	if a cell range is completely inside of another cell range, it s removed from the list 
-         * 	if two cells have a shared border, merge them into one bigger cell range
-         * @param cellRangeList
-         * @return updated List of cell ranges
-         */
+        /// <summary>
+        /// Do all possible cell merges between cells of the list so that:
+        /// 	if a cell range is completely inside of another cell range, it s removed from the list
+        /// 	if two cells have a shared border, merge them into one bigger cell range
+        /// </summary>
+        /// <param name="cellRangeList">cellRangeList</param>
+        /// <return>updated List of cell ranges</return>
         public static CellRangeAddress[] MergeCellRanges(CellRangeAddress[] cellRanges)
         {
-            if (cellRanges.Length < 1)
+            if(cellRanges.Length < 1)
             {
                 return new CellRangeAddress[] { };
             }
@@ -107,20 +114,20 @@ namespace NPOI.SS.Util
         private static List<CellRangeAddress> MergeCellRanges(List<CellRangeAddress> cellRangeList)
         {
             // loop until either only one item is left or we did not merge anything any more
-            while (cellRangeList.Count > 1)
+            while(cellRangeList.Count > 1)
             {
                 bool somethingGotMerged = false;
                 // look at all cell-ranges
-                for (int i = 0; i < cellRangeList.Count; i++)
+                for(int i = 0; i < cellRangeList.Count; i++)
                 {
                     CellRangeAddress range1 = cellRangeList[i];
                     // compare each cell range to all other cell-ranges
-                    for (int j = i + 1; j < cellRangeList.Count; j++)
+                    for(int j = i + 1; j < cellRangeList.Count; j++)
                     {
                         CellRangeAddress range2 = cellRangeList[j];
 
                         CellRangeAddress[] mergeResult = MergeRanges(range1, range2);
-                        if (mergeResult == null)
+                        if(mergeResult == null)
                         {
                             continue;
                         }
@@ -130,14 +137,14 @@ namespace NPOI.SS.Util
                         // remove range2
                         cellRangeList.RemoveAt(j--);
                         // Add any extra results beyond the first
-                        for (int k = 1; k < mergeResult.Length; k++)
+                        for(int k = 1; k < mergeResult.Length; k++)
                         {
                             j++;
                             cellRangeList.Insert(j, mergeResult[k]);
                         }
                     }
                 }
-                if (!somethingGotMerged)
+                if(!somethingGotMerged)
                 {
                     break;
                 }
@@ -147,18 +154,18 @@ namespace NPOI.SS.Util
             return cellRangeList;
         }
 
-        /**
-         * @return the new range(s) to replace the supplied ones.  <c>null</c> if no merge is possible
-         */
+        /// <summary>
+        /// </summary>
+        /// <return>the new range(s) to replace the supplied ones.  <c>null</c> if no merge is possible</return>
         private static CellRangeAddress[] MergeRanges(CellRangeAddress range1, CellRangeAddress range2)
         {
 
             int x = Intersect(range1, range2);
-            switch (x)
+            switch(x)
             {
                 // nothing in common: at most they could be adjacent to each other and thus form a single bigger area  
                 case CellRangeUtil.NO_INTERSECTION:
-                    if (HasExactSharedBorder(range1, range2))
+                    if(HasExactSharedBorder(range1, range2))
                     {
                         return new CellRangeAddress[] { CreateEnclosingCellRange(range1, range2), };
                     }
@@ -212,11 +219,12 @@ namespace NPOI.SS.Util
         //    return SliceUp(rangeA, rangeB);
         //}
 
-        ///**
-        // * @param crB never a full row or full column range
-        // * @return an array including <b>this</b> <c>CellRange</c> and all parts of <c>range</c> 
-        // * outside of this range  
-        // */
+        ///// <summary>
+        /// </summary>
+        /// <param name="crB">never a full row or full column range</param>
+        /// <return>an array including <b>this</b> <c>CellRange</c> and all parts of <c>range</c>
+        /// outside of this range
+        /// </return>
         //private static CellRangeAddress[] SliceUp(CellRangeAddress crA, CellRangeAddress crB)
         //{
 
@@ -297,18 +305,17 @@ namespace NPOI.SS.Util
         private static CellRangeAddress[] ToArray(ArrayList temp)
         {
             CellRangeAddress[] result = new CellRangeAddress[temp.Count];
-            result = (CellRangeAddress[])temp.ToArray(typeof(CellRangeAddress));
+            result = (CellRangeAddress[]) temp.ToArray(typeof(CellRangeAddress));
             return result;
         }
 
 
 
-        /**
-         *  Check if the specified range is located inside of this cell range.
-         *  
-         * @param crB
-         * @return true if this cell range Contains the argument range inside if it's area
-         */
+        /// <summary>
+        ///  Check if the specified range is located inside of this cell range.
+        /// </summary>
+        /// <param name="crB">crB</param>
+        /// <return>true if this cell range Contains the argument range inside if it's area</return>
         public static bool Contains(CellRangeAddress crA, CellRangeAddress crB)
         {
             return le(crA.FirstRow, crB.FirstRow) &&
@@ -317,12 +324,12 @@ namespace NPOI.SS.Util
                 ge(crA.LastColumn, crB.LastColumn);
         }
 
-        /**
-         * Check if the specified cell range has a shared border with the current range.
-         * 
-         * @return <c>true</c> if the ranges have a complete shared border (i.e.
-         * the two ranges toher make a simple rectangular region.
-         */
+        /// <summary>
+        /// Check if the specified cell range has a shared border with the current range.
+        /// </summary>
+        /// <return><c>true</c> if the ranges have a complete shared border (i.e.
+        /// the two ranges toher make a simple rectangular region.
+        /// </return>
         public static bool HasExactSharedBorder(CellRangeAddress crA, CellRangeAddress crB)
         {
             int oFirstRow = crB.FirstRow;
@@ -330,7 +337,7 @@ namespace NPOI.SS.Util
             int oFirstCol = crB.FirstColumn;
             int oLastCol = crB.LastColumn;
 
-            if (crA.FirstRow > 0 && crA.FirstRow - 1 == oLastRow ||
+            if(crA.FirstRow > 0 && crA.FirstRow - 1 == oLastRow ||
                 oFirstRow > 0 && oFirstRow - 1 == crA.LastRow)
             {
                 // ranges have a horizontal border in common
@@ -338,7 +345,7 @@ namespace NPOI.SS.Util
                 return crA.FirstColumn == oFirstCol && crA.LastColumn == oLastCol;
             }
 
-            if (crA.FirstColumn > 0 && crA.FirstColumn - 1 == oLastCol ||
+            if(crA.FirstColumn > 0 && crA.FirstColumn - 1 == oLastCol ||
                 oFirstCol > 0 && crA.LastColumn == oFirstCol - 1)
             {
                 // ranges have a vertical border in common
@@ -348,14 +355,13 @@ namespace NPOI.SS.Util
             return false;
         }
 
-        /**
-         * Create an enclosing CellRange for the two cell ranges.
-         * 
-         * @return enclosing CellRange
-         */
+        /// <summary>
+        /// Create an enclosing CellRange for the two cell ranges.
+        /// </summary>
+        /// <return>enclosing CellRange</return>
         public static CellRangeAddress CreateEnclosingCellRange(CellRangeAddress crA, CellRangeAddress crB)
         {
-            if (crB == null)
+            if(crB == null)
             {
                 return crA.Copy();
             }
@@ -369,33 +375,33 @@ namespace NPOI.SS.Util
 
         }
 
-        /**
-         * @return true if a &lt; b
-         */
+        /// <summary>
+        /// </summary>
+        /// <return>true if a &lt; b</return>
         private static bool lt(int a, int b)
         {
             return a == -1 ? false : (b == -1 ? true : a < b);
         }
 
-        /**
-         * @return true if a &lt;= b
-         */
+        /// <summary>
+        /// </summary>
+        /// <return>true if a &lt;= b</return>
         private static bool le(int a, int b)
         {
             return a == b || lt(a, b);
         }
 
-        /**
-         * @return true if a > b
-         */
+        /// <summary>
+        /// </summary>
+        /// <return>true if a > b</return>
         private static bool gt(int a, int b)
         {
             return lt(b, a);
         }
 
-        /**
-         * @return true if a >= b
-         */
+        /// <summary>
+        /// </summary>
+        /// <return>true if a >= b</return>
         private static bool ge(int a, int b)
         {
             return !lt(a, b);

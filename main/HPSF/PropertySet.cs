@@ -400,7 +400,7 @@ namespace NPOI.HPSF
                 bool isPropertySetStream = IsPropertySetStream(buffer, 0, buffer.Length);
                 return isPropertySetStream;
             }
-            catch(EmptyFileException e)
+            catch(EmptyFileException)
             {
                 return false;
             }
@@ -562,7 +562,7 @@ namespace NPOI.HPSF
                     {
                         throw new IllegalPropertySetDataException(cause);
                     }
-                    throw ex;
+                    throw;
                 }
             }
 

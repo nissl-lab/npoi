@@ -26,7 +26,7 @@ namespace NPOI.SS.Util
     using NPOI.SS.UserModel;
     using System.Globalization;
 
-    public enum NameType:int
+    public enum NameType : int
     {
         /// <summary>
         /// Allow accessing the Initial value.
@@ -39,27 +39,37 @@ namespace NPOI.SS.Util
         BadCellOrNamedRange = -1
     }
 
-    /**
-     * <p>Common conversion functions between Excel style A1, C27 style
-     *  cell references, and POI usermodel style row=0, column=0
-     *  style references. Handles sheet-based and sheet-free references
-     *  as well, eg "Sheet1!A1" and "$B$72"</p>
-     *  
-     *  <p>Use <tt>CellReference</tt> when the concept of
-     * relative/absolute does apply (such as a cell reference in a formula).
-     * Use {@link CellAddress} when you want to refer to the location of a cell in a sheet
-     * when the concept of relative/absolute does not apply (such as the anchor location 
-     * of a cell comment).
-     * <tt>CellReference</tt>s have a concept of "sheet", while <tt>CellAddress</tt>es do not.</p>
-     */
+    /// <summary>
+    /// <para>
+    /// Common conversion functions between Excel style A1, C27 style
+    ///  cell references, and POI usermodel style row=0, column=0
+    ///  style references. Handles sheet-based and sheet-free references
+    ///  as well, eg "Sheet1!A1" and "$B$72"
+    /// </para>
+    /// <para>
+    /// 
+    /// Use <tt>CellReference</tt> when the concept of
+    /// relative/absolute does apply (such as a cell reference in a formula).
+    /// Use <see cref="CellAddress"/> when you want to refer to the location of a cell in a sheet
+    /// when the concept of relative/absolute does not apply (such as the anchor location
+    /// of a cell comment).
+    /// <tt>CellReference</tt>s have a concept of "sheet", while <tt>CellAddress</tt>es do not.
+    /// </para>
+    /// </summary>
 
     public class CellReference
     {
-        /** The character ($) that signifies a row or column value is absolute instead of relative */
+        /// <summary>
+        /// The character ($) that signifies a row or column value is absolute instead of relative */
+        /// </summary>
         private const char ABSOLUTE_REFERENCE_MARKER = '$';
-        /** The character (!) that Separates sheet names from cell references */
+        /// <summary>
+        /// The character (!) that Separates sheet names from cell references */
+        /// </summary>
         private const char SHEET_NAME_DELIMITER = '!';
-        /** The character (') used to quote sheet names when they contain special characters */
+        /// <summary>
+        /// The character (') used to quote sheet names when they contain special characters */
+        /// </summary>
         private const char SPECIAL_NAME_DELIMITER = '\'';
 
         //private static final Pattern NAMED_RANGE_NAME_PATTERN = Pattern.compile("[_A-Z][_.A-Z0-9]*", Pattern.CASE_INSENSITIVE);
@@ -77,17 +87,17 @@ namespace NPOI.SS.Util
         private bool _isRowAbs;
         private bool _isColAbs;
 
-        /**
-         * Create an cell ref from a string representation.  Sheet names containing special characters should be
-         * delimited and escaped as per normal syntax rules for formulas.
-         */
+        /// <summary>
+        /// Create an cell ref from a string representation.  Sheet names containing special characters should be
+        /// delimited and escaped as per normal syntax rules for formulas.
+        /// </summary>
         public CellReference(String cellRef) : this(cellRef.AsSpan())
         {
         }
 
         public CellReference(ReadOnlySpan<char> cellRef)
         {
-            if (cellRef.EndsWith("#REF!".AsSpan(), StringComparison.OrdinalIgnoreCase))
+            if(cellRef.EndsWith("#REF!".AsSpan(), StringComparison.OrdinalIgnoreCase))
             {
                 throw new ArgumentException("Cell reference invalid: " + cellRef.ToString());
             }
@@ -95,7 +105,7 @@ namespace NPOI.SS.Util
             _sheetName = parts.sheetName;//parts[0];
             ReadOnlySpan<char> colRef = parts.colRef;// parts[1];
             _isColAbs = parts.columnPrefix == '$';
-            if (colRef.Length == 0)
+            if(colRef.Length == 0)
             {
                 _colIndex = -1;
             }
@@ -107,7 +117,7 @@ namespace NPOI.SS.Util
 
             ReadOnlySpan<char> rowRef = parts.rowRef;// parts[2];
             _isRowAbs = parts.rowPrefix == '$';
-            if (rowRef.Length == 0)
+            if(rowRef.Length == 0)
             {
                 _rowIndex = -1;
             }
@@ -117,9 +127,9 @@ namespace NPOI.SS.Util
                 _rowIndex = rowRefNumber - 1; // -1 to convert 1-based to zero-based
             }
         }
-        public CellReference(ICell cell):this(cell.RowIndex, cell.ColumnIndex, false, false)
+        public CellReference(ICell cell) : this(cell.RowIndex, cell.ColumnIndex, false, false)
         {
-            
+
         }
         public CellReference(int pRow, int pCol)
             : this(pRow, pCol, false, false)
@@ -140,11 +150,11 @@ namespace NPOI.SS.Util
         {
             // TODO - "-1" is a special value being temporarily used for whole row and whole column area references.
             // so these Checks are currently N.Q.R.
-            if (pRow < -1)
+            if(pRow < -1)
             {
                 throw new ArgumentException("row index may not be negative, but had " + pRow);
             }
-            if (pCol < -1)
+            if(pCol < -1)
             {
                 throw new ArgumentException("column index may not be negative, but had " + pCol);
             }
@@ -163,7 +173,7 @@ namespace NPOI.SS.Util
         {
             get
             {
-                return (short)_colIndex;
+                return (short) _colIndex;
             }
         }
         public bool IsRowAbsolute
@@ -174,35 +184,35 @@ namespace NPOI.SS.Util
         {
             get { return _isColAbs; }
         }
-        /**
-          * @return possibly <c>null</c> if this is a 2D reference.  Special characters are not
-          * escaped or delimited
-          */
+        /// <summary>
+        /// possibly <c>null</c> if this is a 2D reference.  Special characters are not
+        /// escaped or delimited
+        /// </summary>
         public String SheetName
         {
             get { return _sheetName; }
         }
 
-        /**
-         * takes in a column reference portion of a CellRef and converts it from
-         * ALPHA-26 number format to 0-based base 10.
-         * 'A' -> 0
-         * 'Z' -> 25
-         * 'AA' -> 26
-         * 'IV' -> 255
-         * @return zero based column index
-         */
+        /// <summary>
+        /// takes in a column reference portion of a CellRef and converts it from
+        /// ALPHA-26 number format to 0-based base 10.
+        /// 'A' -> 0
+        /// 'Z' -> 25
+        /// 'AA' -> 26
+        /// 'IV' -> 255
+        /// </summary>
+        /// <return>zero based column index</return>
         public static int ConvertColStringToIndex(String refs) => ConvertColStringToIndex(refs.AsSpan());
 
         public static int ConvertColStringToIndex(ReadOnlySpan<char> refs)
         {
             int retval = 0;
-            for (int k = 0; k < refs.Length; k++)
+            for(int k = 0; k < refs.Length; k++)
             {
                 char thechar = char.ToUpperInvariant(refs[k]);
-                if (thechar == ABSOLUTE_REFERENCE_MARKER)
+                if(thechar == ABSOLUTE_REFERENCE_MARKER)
                 {
-                    if (k != 0)
+                    if(k != 0)
                     {
                         throw new ArgumentException("Bad col ref format '" + refs.ToString() + "'");
                     }
@@ -225,37 +235,37 @@ namespace NPOI.SS.Util
         public static NameType ClassifyCellReference(ReadOnlySpan<char> str, SpreadsheetVersion ssVersion)
         {
             int len = str.Length;
-            if (len < 1)
+            if(len < 1)
             {
                 throw new ArgumentException("Empty string not allowed");
             }
             char firstChar = str[0];
-            switch (firstChar)
+            switch(firstChar)
             {
                 case ABSOLUTE_REFERENCE_MARKER:
                 case '.':
                 case '_':
                     break;
                 default:
-                    if (!Char.IsLetter(firstChar) && !Char.IsDigit(firstChar))
+                    if(!Char.IsLetter(firstChar) && !Char.IsDigit(firstChar))
                     {
                         throw new ArgumentException("Invalid first char (" + firstChar
                                 + ") of cell reference or named range.  Letter expected");
                     }
                     break;
             }
-            if (!Char.IsDigit(str[len - 1]))
+            if(!Char.IsDigit(str[len - 1]))
             {
                 // no digits at end of str
                 return ValidateNamedRangeName(str, ssVersion);
             }
 
-            if (!CellReferenceParser.TryParseStrictCellReference(str, out var lettersGroup, out var digitsGroup))
+            if(!CellReferenceParser.TryParseStrictCellReference(str, out var lettersGroup, out var digitsGroup))
             {
                 return ValidateNamedRangeName(str, ssVersion);
             }
 
-            if (CellReferenceIsWithinRange(lettersGroup, digitsGroup, ssVersion))
+            if(CellReferenceIsWithinRange(lettersGroup, digitsGroup, ssVersion))
             {
                 // valid cell reference
                 return NameType.Cell;
@@ -265,7 +275,7 @@ namespace NPOI.SS.Util
             // This behaviour is a little weird.  For example, "IW123" is a valid named range name
             // because the column "IW" is beyond the maximum "IV".  Note - this behaviour is version
             // dependent.  In BIFF12, "IW123" is not a valid named range name, but in BIFF8 it is.
-            if (str.IndexOf(ABSOLUTE_REFERENCE_MARKER) >= 0)
+            if(str.IndexOf(ABSOLUTE_REFERENCE_MARKER) >= 0)
             {
                 // Of course, named range names cannot have '$'
                 return NameType.BadCellOrNamedRange;
@@ -275,32 +285,32 @@ namespace NPOI.SS.Util
 
         private static NameType ValidateNamedRangeName(ReadOnlySpan<char> str, SpreadsheetVersion ssVersion)
         {
-            if (CellReferenceParser.TryParseColumnReference(str, out var colStr))
+            if(CellReferenceParser.TryParseColumnReference(str, out var colStr))
             {
-                if (IsColumnWithinRange(colStr, ssVersion))
+                if(IsColumnWithinRange(colStr, ssVersion))
                 {
                     return NameType.Column;
                 }
             }
-            if (CellReferenceParser.TryParseRowReference(str, out var rowStr))
+            if(CellReferenceParser.TryParseRowReference(str, out var rowStr))
             {
-                if (IsRowWithinRange(rowStr, ssVersion))
+                if(IsRowWithinRange(rowStr, ssVersion))
                 {
                     return NameType.Row;
                 }
             }
             // TODO
-            if (!NAMED_RANGE_NAME_PATTERN.IsMatch(str.ToString()))
+            if(!NAMED_RANGE_NAME_PATTERN.IsMatch(str.ToString()))
             {
                 return NameType.BadCellOrNamedRange;
             }
             return NameType.NamedRange;
         }
-        /**
-         * Takes in a 0-based base-10 column and returns a ALPHA-26
-         *  representation.
-         * eg column #3 -> D
-         */
+        /// <summary>
+        /// Takes in a 0-based base-10 column and returns a ALPHA-26
+        ///  representation.
+        /// eg column #3 -> D
+        /// </summary>
         public static String ConvertNumToColString(int col)
         {
             // Excel counts column A as the 1st column, we
@@ -310,10 +320,11 @@ namespace NPOI.SS.Util
             StringBuilder colRef = new StringBuilder(2);
             int colRemain = excelColNum;
 
-            while (colRemain > 0)
+            while(colRemain > 0)
             {
                 int thisPart = colRemain % 26;
-                if (thisPart == 0) { thisPart = 26; }
+                if(thisPart == 0)
+                { thisPart = 26; }
                 colRemain = (colRemain - thisPart) / 26;
 
                 // The letter A is at 65
@@ -340,11 +351,11 @@ namespace NPOI.SS.Util
                 this.colRef = colRef;
             }
         }
-        /**
-         * Separates the row from the columns and returns an array of three Strings.  The first element
-         * is the sheet name. Only the first element may be null.  The second element in is the column 
-         * name still in ALPHA-26 number format.  The third element is the row.
-         */
+        /// <summary>
+        /// Separates the row from the columns and returns an array of three Strings.  The first element
+        /// is the sheet name. Only the first element may be null.  The second element in is the column
+        /// name still in ALPHA-26 number format.  The third element is the row.
+        /// </summary>
         private static CellRefPartsInner SeparateRefParts(ReadOnlySpan<char> reference)
         {
 
@@ -352,7 +363,7 @@ namespace NPOI.SS.Util
             String sheetName = ParseSheetName(reference, plingPos);
             int start = plingPos + 1;
             String cell = reference.ToString().Substring(plingPos + 1).ToUpper(CultureInfo.InvariantCulture);
-            if (!CellReferenceParser.TryParseCellReference(cell.AsSpan(), out var columnPrefix, out var column, out var rowPrefix, out var row))
+            if(!CellReferenceParser.TryParseCellReference(cell.AsSpan(), out var columnPrefix, out var column, out var rowPrefix, out var row))
                 throw new ArgumentException("Invalid CellReference: " + reference.ToString());
 
             CellRefPartsInner cellRefParts = new CellRefPartsInner(sheetName, rowPrefix, row, columnPrefix, column);
@@ -361,16 +372,16 @@ namespace NPOI.SS.Util
 
         private static String ParseSheetName(ReadOnlySpan<char> reference, int indexOfSheetNameDelimiter)
         {
-            if (indexOfSheetNameDelimiter < 0)
+            if(indexOfSheetNameDelimiter < 0)
             {
                 return null;
             }
 
             bool IsQuoted = reference[0] == SPECIAL_NAME_DELIMITER;
-            if (!IsQuoted)
+            if(!IsQuoted)
             {
                 // sheet names with spaces must be quoted
-                if (reference.IndexOf(' ') == -1)
+                if(reference.IndexOf(' ') == -1)
                 {
                     return reference.Slice(0, indexOfSheetNameDelimiter).ToString();
                 }
@@ -380,7 +391,7 @@ namespace NPOI.SS.Util
                 }
             }
             int lastQuotePos = indexOfSheetNameDelimiter - 1;
-            if (reference[lastQuotePos] != SPECIAL_NAME_DELIMITER)
+            if(reference[lastQuotePos] != SPECIAL_NAME_DELIMITER)
             {
                 throw new ArgumentException("Mismatched quotes: (" + reference.ToString() + ")");
             }
@@ -394,17 +405,17 @@ namespace NPOI.SS.Util
 
             StringBuilder sb = new StringBuilder(indexOfSheetNameDelimiter);
 
-            for (int i = 1; i < lastQuotePos; i++)
+            for(int i = 1; i < lastQuotePos; i++)
             { // Note boundaries - skip outer quotes
                 char ch = reference[i];
-                if (ch != SPECIAL_NAME_DELIMITER)
+                if(ch != SPECIAL_NAME_DELIMITER)
                 {
                     sb.Append(ch);
                     continue;
                 }
-                if (i < lastQuotePos)
+                if(i < lastQuotePos)
                 {
-                    if (reference[i + 1] == SPECIAL_NAME_DELIMITER)
+                    if(reference[i + 1] == SPECIAL_NAME_DELIMITER)
                     {
                         // two consecutive quotes is the escape sequence for a single one
                         i++; // skip this and keep parsing the special name
@@ -418,21 +429,33 @@ namespace NPOI.SS.Util
         }
 
 
-        /**
-         *  Example return values:
-         *    <table border="0" cellpAdding="1" cellspacing="0" summary="Example return values">
-         *      <tr><th align='left'>Result</th><th align='left'>Comment</th></tr>
-         *      <tr><td>A1</td><td>Cell reference without sheet</td></tr>
-         *      <tr><td>Sheet1!A1</td><td>Standard sheet name</td></tr>
-         *      <tr><td>'O''Brien''s Sales'!A1'</td><td>Sheet name with special characters</td></tr>
-         *    </table>
-         * @return the text representation of this cell reference as it would appear in a formula.
-         */
+        /// <summary>
+        ///  Example return values:
+        ///  <list type="table">
+        ///  <listheader>
+        ///     <term>Result</term>
+        ///     <description>Comment</description>
+        ///  </listheader>
+        ///  <item>
+        ///     <term>A1</term>
+        ///     <description>Cell reference without sheet</description>
+        ///  </item>
+        ///  <item>
+        ///      <term>Sheet1!A1</term>
+        ///      <description>Standard sheet name</description>
+        ///  </item>
+        ///  <item>
+        ///      <term>'O''Brien''s Sales'!A1'</term>
+        ///      <description>Sheet name with special characters</description>
+        ///  </item>
+        ///  </list>
+        /// </summary>
+        /// <return>the text representation of this cell reference as it would appear in a formula.</return>
         public String FormatAsString()
         {
 
             StringBuilder sb = new StringBuilder(32);
-            if (_sheetName != null)
+            if(_sheetName != null)
             {
                 SheetNameFormatter.AppendFormat(sb, _sheetName);
                 sb.Append(SHEET_NAME_DELIMITER);
@@ -450,14 +473,14 @@ namespace NPOI.SS.Util
             return sb.ToString();
         }
 
-        /**
-         * Returns the three parts of the cell reference, the
-         *  Sheet name (or null if none supplied), the 1 based
-         *  row number, and the A based column letter.
-         * This will not include any markers for absolute
-         *  references, so use {@link #formatAsString()}
-         *  to properly turn references into strings. 
-         */
+        /// <summary>
+        /// Returns the three parts of the cell reference, the
+        ///  Sheet name (or null if none supplied), the 1 based
+        ///  row number, and the A based column letter.
+        /// This will not include any markers for absolute
+        ///  references, so use <see cref="formatAsString()" />
+        ///  to properly turn references into strings.
+        /// </summary>
         public String[] CellRefParts
         {
             get
@@ -470,25 +493,25 @@ namespace NPOI.SS.Util
             }
         }
 
-        /**
-         * Appends cell reference with '$' markers for absolute values as required.
-         * Sheet name is not included.
-         */
+        /// <summary>
+        /// Appends cell reference with '$' markers for absolute values as required.
+        /// Sheet name is not included.
+        /// </summary>
         /* package */
         public void AppendCellReference(StringBuilder sb)
         {
-            if (_colIndex != -1)
+            if(_colIndex != -1)
             {
-                if (_isColAbs)
+                if(_isColAbs)
                 {
                     sb.Append(ABSOLUTE_REFERENCE_MARKER);
                 }
                 sb.Append(ConvertNumToColString(_colIndex));
             }
 
-            if (_rowIndex != -1)
+            if(_rowIndex != -1)
             {
-                if (_isRowAbs)
+                if(_isRowAbs)
                 {
                     sb.Append(ABSOLUTE_REFERENCE_MARKER);
                 }
@@ -496,57 +519,103 @@ namespace NPOI.SS.Util
             }
         }
 
-        /**
-         * Used to decide whether a name of the form "[A-Z]*[0-9]*" that appears in a formula can be 
-         * interpreted as a cell reference.  Names of that form can be also used for sheets and/or
-         * named ranges, and in those circumstances, the question of whether the potential cell 
-         * reference is valid (in range) becomes important.
-         * <p/>
-         * Note - that the maximum sheet size varies across Excel versions:
-         * <p/>
-         * <blockquote><table border="0" cellpadding="1" cellspacing="0" 
-         *                 summary="Notable cases.">
-         *   <tr><th>Version </th><th>File Format </th>
-         *   	<th>Last Column </th><th>Last Row</th></tr>
-         *   <tr><td>97-2003</td><td>BIFF8</td><td>"IV" (2^8)</td><td>65536 (2^14)</td></tr>
-         *   <tr><td>2007</td><td>BIFF12</td><td>"XFD" (2^14)</td><td>1048576 (2^20)</td></tr>
-         * </table></blockquote>
-         * POI currently targets BIFF8 (Excel 97-2003), so the following behaviour can be observed for
-         * this method:
-         * <blockquote><table border="0" cellpadding="1" cellspacing="0" 
-         *                 summary="Notable cases.">
-         *   <tr><th>Input    </th>
-         *       <th>Result </th></tr>
-         *   <tr><td>"A", "1"</td><td>true</td></tr>
-         *   <tr><td>"a", "111"</td><td>true</td></tr>
-         *   <tr><td>"A", "65536"</td><td>true</td></tr>
-         *   <tr><td>"A", "65537"</td><td>false</td></tr>
-         *   <tr><td>"iv", "1"</td><td>true</td></tr>
-         *   <tr><td>"IW", "1"</td><td>false</td></tr>
-         *   <tr><td>"AAA", "1"</td><td>false</td></tr>
-         *   <tr><td>"a", "111"</td><td>true</td></tr>
-         *   <tr><td>"Sheet", "1"</td><td>false</td></tr>
-         * </table></blockquote>
-         * 
-         * @param colStr a string of only letter characters
-         * @param rowStr a string of only digit characters
-         * @return <c>true</c> if the row and col parameters are within range of a BIFF8 spreadsheet.
-         */
+        /// <summary>
+        /// <para>
+        /// Used to decide whether a name of the form "[A-Z]*[0-9]*" that appears in a formula can be
+        /// interpreted as a cell reference.  Names of that form can be also used for sheets and/or
+        /// named ranges, and in those circumstances, the question of whether the potential cell
+        /// reference is valid (in range) becomes important.
+        /// </para>
+        /// <para>
+        /// Note - that the maximum sheet size varies across Excel versions:
+        /// </para>
+        /// <para>
+        /// <list type="table">
+        ///     <listheader>
+        ///         <term>Version</term>
+        ///         <term>File Format</term>
+        ///         <term>Last Column</term>
+        ///         <description>Last Row</description>
+        ///     </listheader>
+        ///     <item>
+        ///         <term>97-2003</term>
+        ///         <term>BIFF8</term>
+        ///         <term>"IV" (2^8)</term>
+        ///         <description>65536 (2^14)</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>2007</term>
+        ///         <term>BIFF12</term>
+        ///         <term>"XFD" (2^14)</term>
+        ///         <description>1048576 (2^20)</description>
+        ///     </item>
+        /// </list>
+        /// </para>
+        /// <para>
+        /// POI currently targets BIFF8 (Excel 97-2003), so the following behaviour can be observed for
+        /// this method:
+        /// <list type="table">
+        ///     <listheader>
+        ///         <term>Input</term>
+        ///         <description>Result</description>
+        ///     </listheader>
+        ///     <item>
+        ///         <term>"A", "1"</term>
+        ///         <description>true</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>"a", "111"</term>
+        ///         <description>true</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>"A", "65536"</term>
+        ///         <description>true</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>"A", "65537"</term>
+        ///         <description>false</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>"iv", "1"</term>
+        ///         <description>true</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>"IW", "1"</term>
+        ///         <description>false</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>"AAA", "1"</term>
+        ///         <description>false</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>"a", "111"</term>
+        ///         <description>true</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>"Sheet", "1"</term>
+        ///         <description>false</description>
+        ///     </item>
+        /// </list>
+        /// </para>
+        /// </summary>
+        /// <param name="colStr">a string of only letter characters</param>
+        /// <param name="rowStr">a string of only digit characters</param>
+        /// <return><c>true</c> if the row and col parameters are within range of a BIFF8 spreadsheet.</return>
         public static bool CellReferenceIsWithinRange(String colStr, String rowStr, SpreadsheetVersion ssVersion)
             => CellReferenceIsWithinRange(colStr.AsSpan(), rowStr.AsSpan(), ssVersion);
 
         public static bool CellReferenceIsWithinRange(ReadOnlySpan<char> colStr, ReadOnlySpan<char> rowStr, SpreadsheetVersion ssVersion)
         {
-            if (!IsColumnWithinRange(colStr, ssVersion))
+            if(!IsColumnWithinRange(colStr, ssVersion))
             {
                 return false;
             }
             return IsRowWithinRange(rowStr, ssVersion);
         }
 
-        /**
-         * @deprecated 3.15 beta 2. Use {@link #isColumnWithinRange}.
-         */
+        /// <summary>
+        /// </summary>
+        /// @deprecated 3.15 beta 2. Use {@link #isColumnWithinRange}.
         [Obsolete("deprecated 3.15 beta 2. Use {@link #isColumnWithinRange}.")]
         public static bool IsColumnWithnRange(String colStr, SpreadsheetVersion ssVersion)
         {
@@ -578,15 +647,15 @@ namespace NPOI.SS.Util
             int lastColLength = lastCol.Length;
 
             int numberOfLetters = colStr.Length;
-            if (numberOfLetters > lastColLength)
+            if(numberOfLetters > lastColLength)
             {
                 // "Sheet1" case etc
                 return false; // that was easy
             }
-            if (numberOfLetters == lastColLength)
+            if(numberOfLetters == lastColLength)
             {
                 //if (colStr.ToUpper().CompareTo(lastCol) > 0)
-                if (colStr.CompareTo(lastCol.AsSpan(), StringComparison.OrdinalIgnoreCase) > 0)
+                if(colStr.CompareTo(lastCol.AsSpan(), StringComparison.OrdinalIgnoreCase) > 0)
                 {
                     return false;
                 }
@@ -600,9 +669,9 @@ namespace NPOI.SS.Util
         }
         public override bool Equals(Object o)
         {
-            if (object.ReferenceEquals(this, o))
+            if(object.ReferenceEquals(this, o))
                 return true;
-            if (!(o is CellReference))
+            if(!(o is CellReference))
             {
                 return false;
             }
@@ -616,7 +685,7 @@ namespace NPOI.SS.Util
                         : _sheetName.Equals(cr._sheetName));
         }
 
-        public override int GetHashCode ()
+        public override int GetHashCode()
         {
             int result = 17;
             result = 31 * result + _rowIndex;

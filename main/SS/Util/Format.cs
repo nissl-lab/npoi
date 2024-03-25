@@ -39,12 +39,11 @@ namespace NPOI.SS.Util
         }
     }
 
-    /**
-    * Format class for Excel's SSN Format. This class mimics Excel's built-in
-    * SSN Formatting.
-    *
-    * @author James May
-    */
+    /// <summary>
+    /// Format class for Excel's SSN Format. This class mimics Excel's built-in
+    /// SSN Formatting.
+    /// </summary>
+    /// @author James May
     public class SSNFormat : FormatBase
     {
         public static readonly FormatBase Instance = new SSNFormat();
@@ -54,7 +53,9 @@ namespace NPOI.SS.Util
             // enforce singleton
         }
 
-        /** Format a number as an SSN */
+        /// <summary>
+        /// Format a number as an SSN */
+        /// </summary>
         public override string Format(object obj, CultureInfo culture)
         {
             var result = ((double)obj).ToString(df, culture);
@@ -71,7 +72,7 @@ namespace NPOI.SS.Util
         }
         public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
-            return toAppendTo.Append(Format((long)obj, culture));
+            return toAppendTo.Append(Format((long) obj, culture));
         }
 
         public override object ParseObject(string source, int pos)
@@ -81,11 +82,11 @@ namespace NPOI.SS.Util
         }
     }
 
-    /**
-     * Format class for Excel Zip + 4 Format. This class mimics Excel's
-     * built-in Formatting for Zip + 4.
-     * @author James May
-     */
+    /// <summary>
+    /// Format class for Excel Zip + 4 Format. This class mimics Excel's
+    /// built-in Formatting for Zip + 4.
+    /// </summary>
+    /// @author James May
     public class ZipPlusFourFormat : FormatBase
     {
         public static readonly FormatBase Instance = new ZipPlusFourFormat();
@@ -95,7 +96,9 @@ namespace NPOI.SS.Util
             // enforce singleton
         }
 
-        /** Format a number as Zip + 4 */
+        /// <summary>
+        /// Format a number as Zip + 4 */
+        /// </summary>
         public override string Format(object obj, CultureInfo culture)
         {
             var result = ((double)obj).ToString(df, culture);
@@ -119,11 +122,11 @@ namespace NPOI.SS.Util
         }
     }
 
-    /**
-     * Format class for Excel phone number Format. This class mimics Excel's
-     * built-in phone number Formatting.
-     * @author James May
-     */
+    /// <summary>
+    /// Format class for Excel phone number Format. This class mimics Excel's
+    /// built-in phone number Formatting.
+    /// </summary>
+    /// @author James May
     public class PhoneFormat : FormatBase
     {
         public static readonly FormatBase Instance = new PhoneFormat();
@@ -133,14 +136,16 @@ namespace NPOI.SS.Util
             // enforce singleton
         }
 
-        /** Format a number as a phone number */
+        /// <summary>
+        /// Format a number as a phone number */
+        /// </summary>
         public override string Format(object obj, CultureInfo culture)
         {
             var result = ((double)obj).ToString(df, culture);
             var sb = new StringBuilder();
             String seg1, seg2, seg3;
             var len = result.Length;
-            if (len <= 4)
+            if(len <= 4)
             {
                 return result;
             }
@@ -151,11 +156,11 @@ namespace NPOI.SS.Util
             beginPos = Math.Max(0, len - 10);
             seg1 = result.Substring(beginPos, Math.Max(0, len - 7) - beginPos);
 
-            if (seg1 != null && seg1.Trim().Length > 0)
+            if(seg1 != null && seg1.Trim().Length > 0)
             {
                 sb.Append('(').Append(seg1).Append(") ");
             }
-            if (seg2 != null && seg2.Trim().Length > 0)
+            if(seg2 != null && seg2.Trim().Length > 0)
             {
                 sb.Append(seg2).Append('-');
             }
@@ -191,7 +196,7 @@ namespace NPOI.SS.Util
 
         public DecimalFormat(string pattern)
         {
-            if (pattern.IndexOf("'", StringComparison.Ordinal) != -1)
+            if(pattern.IndexOf("'", StringComparison.Ordinal) != -1)
                 throw new ArgumentException("invalid pattern");
             this._pattern = pattern;
         }
@@ -214,13 +219,13 @@ namespace NPOI.SS.Util
         {
             //invalide fraction
             _pattern = RegexFraction.Replace(_pattern, "/");
-            if (_formatInfo != null)
+            if(_formatInfo != null)
             {
-                culture = (CultureInfo)culture.Clone();
+                culture = (CultureInfo) culture.Clone();
                 culture.NumberFormat = _formatInfo;
             }
-                
-            if (_pattern.IndexOf("'", StringComparison.Ordinal) != -1)
+
+            if(_pattern.IndexOf("'", StringComparison.Ordinal) != -1)
             {
                 return Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(culture);
             }
@@ -228,7 +233,7 @@ namespace NPOI.SS.Util
             {
                 var value = Convert.ToDouble(obj, CultureInfo.InvariantCulture);
                 var ret = value.ToString(_pattern, culture);
-                if (string.IsNullOrEmpty(ret))
+                if(string.IsNullOrEmpty(ret))
                     ret = "0";
                 return ret;
             }
@@ -244,9 +249,10 @@ namespace NPOI.SS.Util
             return Decimal.Parse(source.Substring(pos), CultureInfo.CurrentCulture);
         }
 
-        public bool ParseIntegerOnly {
-            get { return false;}
-        } 
+        public bool ParseIntegerOnly
+        {
+            get { return false; }
+        }
     }
 
     public abstract class DateFormat : FormatBase
@@ -263,7 +269,7 @@ namespace NPOI.SS.Util
             string datePattern = GetDatePattern(dateStyle,locale);
             string timePattern = GetTimePattern(timeStyle, locale);
 
-            if (locale.TextInfo.IsRightToLeft)
+            if(locale.TextInfo.IsRightToLeft)
                 return timePattern + " " + datePattern;
             else
                 return datePattern + " " + timePattern;
@@ -271,7 +277,7 @@ namespace NPOI.SS.Util
         public static string GetDatePattern(int dateStyle, CultureInfo locale)
         {
             DateTimeFormatInfo dfi = locale.DateTimeFormat;
-            switch (dateStyle)
+            switch(dateStyle)
             {
                 case DateFormat.SHORT:
                     return dfi.ShortDatePattern.Replace("yyyy", "yy").Replace("YYYY", "YY");
@@ -288,7 +294,7 @@ namespace NPOI.SS.Util
         public static string GetTimePattern(int timeStyle, CultureInfo locale)
         {
             DateTimeFormatInfo dfi = locale.DateTimeFormat;
-            switch (timeStyle)
+            switch(timeStyle)
             {
                 case DateFormat.SHORT:
                     return dfi.ShortTimePattern;
@@ -305,7 +311,7 @@ namespace NPOI.SS.Util
         private string _pattern;
         private DateTimeFormatInfo _formatData;
         private CultureInfo _culture;
-        public SimpleDateFormat():this("", CultureInfo.CurrentCulture)
+        public SimpleDateFormat() : this("", CultureInfo.CurrentCulture)
         {
 
         }
@@ -317,23 +323,23 @@ namespace NPOI.SS.Util
 
         public SimpleDateFormat(string pattern, CultureInfo culture)
         {
-            if (pattern == null || culture == null)
+            if(pattern == null || culture == null)
             {
                 throw new ArgumentNullException();
             }
             this._pattern = pattern;
-            this._formatData = (DateTimeFormatInfo)culture.DateTimeFormat.Clone();
+            this._formatData = (DateTimeFormatInfo) culture.DateTimeFormat.Clone();
             this._culture = culture;
         }
-        
+
         public SimpleDateFormat(string pattern, DateTimeFormatInfo formatSymbols)
         {
-            if (pattern == null || formatSymbols == null)
+            if(pattern == null || formatSymbols == null)
             {
                 throw new ArgumentNullException();
             }
             this._pattern = pattern;
-            this._formatData = (DateTimeFormatInfo)formatSymbols.Clone();
+            this._formatData = (DateTimeFormatInfo) formatSymbols.Clone();
             this._culture = CultureInfo.CurrentCulture;
         }
 
@@ -348,14 +354,14 @@ namespace NPOI.SS.Util
         public override string Format(object obj, CultureInfo culture)
         {
             DateTime dt = (DateTime)obj;
-            if (TimeZone != null)
+            if(TimeZone != null)
                 dt = TimeZoneInfo.ConvertTime(dt, TimeZone);
-            return  dt.ToString(_pattern, culture); 
+            return dt.ToString(_pattern, culture);
         }
 
         public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
         {
-            return toAppendTo.Append(this.Format((DateTime)obj, culture));
+            return toAppendTo.Append(this.Format((DateTime) obj, culture));
         }
 
         public override object ParseObject(string source, int pos)
@@ -365,7 +371,7 @@ namespace NPOI.SS.Util
         }
         public DateTime Parse(string source)
         {
-            if (!DateTime.TryParse(source, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt))
+            if(!DateTime.TryParse(source, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt))
             {
                 // Compatibility stub for SAS-generated ill-formed datetime, such as 2020-07-03T 9:41:11-04:00
                 // There should be a leading zero before the one-digit hour.
@@ -378,18 +384,20 @@ namespace NPOI.SS.Util
 
             return TimeZone != null ? TimeZoneInfo.ConvertTime(dt, TimeZone) : dt;
         }
-        
+
     }
-    
-    
-    /**
-     * Format class that does nothing and always returns a constant string.
-     *
-     * This format is used to simulate Excel's handling of a format string
-     * of all # when the value is 0. Excel will output "", Java will output "0".
-     *
-     * @see DataFormatter#createFormat(double, int, String)
-     */
+
+
+    /// <summary>
+    /// <para>
+    /// Format class that does nothing and always returns a constant string.
+    /// </para>
+    /// <para>
+    /// This format is used to simulate Excel's handling of a format string
+    /// of all # when the value is 0. Excel will output "", Java will output "0".
+    /// </para>
+    /// </summary>
+    /// <see cref="DataFormatter.createFormat(double, int, String)" />
     public class ConstantStringFormat : FormatBase
     {
         private static DecimalFormat df = new DecimalFormat("##########");

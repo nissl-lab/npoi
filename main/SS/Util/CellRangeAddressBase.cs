@@ -2,13 +2,13 @@
 {
     using System;
 
-    /**
-* See OOO documentation: excelfileformat.pdf sec 2.5.14 - 'Cell Range Address'<p/>
-* 
-* Common subclass of 8-bit and 16-bit versions
-* 
-* @author Josh Micich
-*/
+    /// <summary>
+    /// <para>
+    /// See OOO documentation: excelfileformat.pdf sec 2.5.14 - 'Cell Range Address'
+    /// </para>
+    /// <para> Common subclass of 8-bit and 16-bit versions
+    /// </para>
+    /// </summary>
     public abstract class CellRangeAddressBase
     {
 
@@ -56,12 +56,11 @@
         //    return true;
         //}
 
-        /**
-	 * Validate the range limits against the supplied version of Excel
-	 *
-	 * @param ssVersion the version of Excel to validate against
-	 * @throws IllegalArgumentException if the range limits are outside of the allowed range
-	 */
+        /// <summary>
+        /// Validate the range limits against the supplied version of Excel
+        /// </summary>
+        /// <param name="ssVersion">the version of Excel to validate against</param>
+        /// <exception cref="IllegalArgumentException">if the range limits are outside of the allowed range</exception>
         public void Validate(SpreadsheetVersion ssVersion)
         {
             ValidateRow(_firstRow, ssVersion);
@@ -69,10 +68,10 @@
             ValidateColumn(_firstCol, ssVersion);
             ValidateColumn(_lastCol, ssVersion);
         }
-        /**
-	 * Runs a bounds check for row numbers
-	 * @param row
-	 */
+        /// <summary>
+        /// Runs a bounds check for row numbers
+        /// </summary>
+        /// <param name="row">row</param>
         private static void ValidateRow(int row, SpreadsheetVersion ssVersion)
         {
             int maxrow = ssVersion.LastRowIndex;
@@ -80,10 +79,10 @@
             if (row < 0) throw new ArgumentException("Minumum row number is 0");
         }
 
-        /**
-         * Runs a bounds check for column numbers
-         * @param column
-         */
+        /// <summary>
+        /// Runs a bounds check for column numbers
+        /// </summary>
+        /// <param name="column">column</param>
         private static void ValidateColumn(int column, SpreadsheetVersion ssVersion)
         {
             int maxcol = ssVersion.LastColumnIndex;
@@ -116,23 +115,21 @@
             }
         }
 
-        /**
-         * Check if the row is in the specified cell range
-         *
-         * @param rowInd the row to check
-         * @return true if the range contains the row [rowInd]
-         */
+        /// <summary>
+        /// Check if the row is in the specified cell range
+        /// </summary>
+        /// <param name="rowInd">the row to check</param>
+        /// <return>true if the range contains the row [rowInd]</return>
         public bool ContainsRow(int rowInd)
         {
             return _firstRow <= rowInd && rowInd <= _lastRow;
         }
 
-        /**
-         * Check if the column is in the specified cell range
-         *
-         * @param colInd the column to check
-         * @return true if the range contains the column [colInd]
-         */
+        /// <summary>
+        /// Check if the column is in the specified cell range
+        /// </summary>
+        /// <param name="colInd">the column to check</param>
+        /// <return>true if the range contains the column [colInd]</return>
         public bool ContainsColumn(int colInd)
         {
             return _firstCol <= colInd && colInd <= _lastCol;
@@ -151,9 +148,9 @@
                 other._firstCol <= this._lastCol;
         }
 
-        /**
-         * @return column number for the upper left hand corner
-         */
+        /// <summary>
+        /// column number for the upper left hand corner
+        /// </summary>
         public int FirstColumn
         {
             get
@@ -163,9 +160,9 @@
             set { _firstCol = value; }
         }
 
-        /**
-         * @return row number for the upper left hand corner
-         */
+        /// <summary>
+        /// row number for the upper left hand corner
+        /// </summary>
         public int FirstRow
         {
             get
@@ -175,9 +172,9 @@
             set { _firstRow = value; }
         }
 
-        /**
-         * @return column number for the lower right hand corner
-         */
+        /// <summary>
+        /// column number for the lower right hand corner
+        /// </summary>
         public int LastColumn
         {
             get
@@ -187,9 +184,9 @@
             set { _lastCol = value; }
         }
 
-        /**
-         * @return row number for the lower right hand corner
-         */
+        /// <summary>
+        /// row number for the lower right hand corner
+        /// </summary>
         public int LastRow
         {
             get
@@ -199,9 +196,9 @@
             set { _lastRow = value; }
         }
 
-        /**
-         * @return the size of the range (number of cells in the area).
-         */
+        /// <summary>
+        /// the size of the range (number of cells in the area).
+        /// </summary>
         public int NumberOfCells
         {
             get

@@ -23,11 +23,10 @@ namespace NPOI.SS.Util
     using System.Collections.Generic;
     using System.Globalization;
 
-    /**
-     * For POI internal use only
-     *
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// For POI internal use only
+    /// </summary>
+    /// <typeparam name="K"></typeparam>
     public class SSCellRange<K> : ICellRange<K> where K:ICell
     {
 
@@ -199,9 +198,6 @@ namespace NPOI.SS.Util
             }
         }
         #endregion
-
-
-
 
         #region IEnumerable<K> Members
 

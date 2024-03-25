@@ -25,11 +25,17 @@ namespace NPOI.SS.Util
     public class AreaReference
     {
 
-        /** The Char (!) that Separates sheet names from cell references */
+        /// <summary>
+        /// The Char (!) that Separates sheet names from cell references */
+        /// </summary>
         private const char SHEET_NAME_DELIMITER = '!';
-        /** The Char (:) that Separates the two cell references in a multi-cell area reference */
+        /// <summary>
+        /// The Char (:) that Separates the two cell references in a multi-cell area reference */
+        /// </summary>
         private const char CELL_DELIMITER = ':';
-        /** The Char (') used to quote sheet names when they contain special Chars */
+        /// <summary>
+        /// The Char (') used to quote sheet names when they contain special Chars */
+        /// </summary>
         private const char SPECIAL_NAME_DELIMITER = '\'';
         private static SpreadsheetVersion DEFAULT_SPREADSHEET_VERSION = SpreadsheetVersion.EXCEL97;
 
@@ -42,17 +48,17 @@ namespace NPOI.SS.Util
         public AreaReference(String reference)
             : this(reference, DEFAULT_SPREADSHEET_VERSION)
         {
-            
+
         }
-        /**
-         * Create an area ref from a string representation.  Sheet names containing special Chars should be
-         * delimited and escaped as per normal syntax rules for formulas.<br/> 
-         * The area reference must be contiguous (i.e. represent a single rectangle, not a Union of rectangles)
-         */
+        /// <summary>
+        /// Create an area ref from a string representation.  Sheet names containing special Chars should be
+        /// delimited and escaped as per normal syntax rules for formulas.<br/>
+        /// The area reference must be contiguous (i.e. represent a single rectangle, not a Union of rectangles)
+        /// </summary>
         public AreaReference(String reference, SpreadsheetVersion version)
         {
             _version = (null != version) ? version : DEFAULT_SPREADSHEET_VERSION;
-            if (!IsContiguous(reference))
+            if(!IsContiguous(reference))
             {
                 throw new ArgumentException(
                         "References passed to the AreaReference must be contiguous, " +
@@ -62,7 +68,7 @@ namespace NPOI.SS.Util
             String[] parts = SeparateAreaRefs(reference);
 
             String part0 = parts[0];
-            if (parts.Length == 1)
+            if(parts.Length == 1)
             {
                 // TODO - probably shouldn't initialize area ref when text is really a cell ref
                 // Need to fix some named range stuff to get rid of this
@@ -72,14 +78,14 @@ namespace NPOI.SS.Util
                 _isSingleCell = true;
                 return;
             }
-            if (parts.Length != 2)
+            if(parts.Length != 2)
             {
                 throw new ArgumentException("Bad area ref '" + reference + "'");
             }
             String part1 = parts[1];
-            if (IsPlainColumn(part0))
+            if(IsPlainColumn(part0))
             {
-                if (!IsPlainColumn(part1))
+                if(!IsPlainColumn(part1))
                 {
                     throw new Exception("Bad area ref '" + reference + "'");
                 }
@@ -110,7 +116,7 @@ namespace NPOI.SS.Util
             _version = (null != version) ? version : DEFAULT_SPREADSHEET_VERSION;
             bool swapRows = topLeft.Row > botRight.Row;
             bool swapCols = topLeft.Col > botRight.Col;
-            if (swapRows || swapCols)
+            if(swapRows || swapCols)
             {
                 int firstRow;
                 int lastRow;
@@ -120,7 +126,7 @@ namespace NPOI.SS.Util
                 bool lastRowAbs;
                 bool firstColAbs;
                 bool lastColAbs;
-                if (swapRows)
+                if(swapRows)
                 {
                     firstRow = botRight.Row;
                     firstRowAbs = botRight.IsRowAbsolute;
@@ -134,7 +140,7 @@ namespace NPOI.SS.Util
                     lastRow = botRight.Row;
                     lastRowAbs = botRight.IsRowAbsolute;
                 }
-                if (swapCols)
+                if(swapCols)
                 {
                     firstColumn = botRight.Col;
                     firstColAbs = botRight.IsColAbsolute;
@@ -160,14 +166,14 @@ namespace NPOI.SS.Util
         }
         private static bool IsPlainColumn(String refPart)
         {
-            for (int i = refPart.Length - 1; i >= 0; i--)
+            for(int i = refPart.Length - 1; i >= 0; i--)
             {
                 int ch = refPart[i];
-                if (ch == '$' && i == 0)
+                if(ch == '$' && i == 0)
                 {
                     continue;
                 }
-                if (ch < 'A' || ch > 'Z')
+                if(ch < 'A' || ch > 'Z')
                 {
                     return false;
                 }
@@ -176,7 +182,7 @@ namespace NPOI.SS.Util
         }
         public static AreaReference GetWholeRow(SpreadsheetVersion version, String start, String end)
         {
-            if (null == version)
+            if(null == version)
             {
                 version = DEFAULT_SPREADSHEET_VERSION;
             }
@@ -185,7 +191,7 @@ namespace NPOI.SS.Util
 
         public static AreaReference GetWholeColumn(SpreadsheetVersion version, String start, String end)
         {
-            if (null == version)
+            if(null == version)
             {
                 version = DEFAULT_SPREADSHEET_VERSION;
             }
@@ -193,16 +199,16 @@ namespace NPOI.SS.Util
         }
 
 
-        /**
-         * Creates an area ref from a pair of Cell References.
-         */
+        /// <summary>
+        /// Creates an area ref from a pair of Cell References.
+        /// </summary>
         public AreaReference(CellReference topLeft, CellReference botRight)
         {
             _version = DEFAULT_SPREADSHEET_VERSION;
 
             bool swapRows = topLeft.Row > botRight.Row;
             bool swapCols = topLeft.Col > botRight.Col;
-            if (swapRows || swapCols)
+            if(swapRows || swapCols)
             {
                 int firstRow;
                 int lastRow;
@@ -212,7 +218,7 @@ namespace NPOI.SS.Util
                 bool lastRowAbs;
                 bool firstColAbs;
                 bool lastColAbs;
-                if (swapRows)
+                if(swapRows)
                 {
                     firstRow = botRight.Row;
                     firstRowAbs = botRight.IsRowAbsolute;
@@ -226,7 +232,7 @@ namespace NPOI.SS.Util
                     lastRow = botRight.Row;
                     lastRowAbs = botRight.IsRowAbsolute;
                 }
-                if (swapCols)
+                if(swapCols)
                 {
                     firstColumn = botRight.Col;
                     firstColAbs = botRight.IsColAbsolute;
@@ -251,44 +257,44 @@ namespace NPOI.SS.Util
             _isSingleCell = false;
         }
 
-        /**
-         * is the reference for a contiguous (i.e.
-         *  Unbroken) area, or is it made up of
-         *  several different parts?
-         * (If it Is, you will need to call
-         *  ....
-         */
+        /// <summary>
+        /// is the reference for a contiguous (i.e.
+        ///  Unbroken) area, or is it made up of
+        ///  several different parts?
+        /// (If it Is, you will need to call
+        ///  ....
+        /// </summary>
         public static bool IsContiguous(String reference)
         {
             // If there's a sheet name, strip it off
             int sheetRefEnd = reference.IndexOf('!');
-            if (sheetRefEnd != -1)
+            if(sheetRefEnd != -1)
             {
                 reference = reference.Substring(sheetRefEnd);
             }
 
             // Check for the , as a sign of non-coniguous
-            if (reference.IndexOf(',') == -1)
+            if(reference.IndexOf(',') == -1)
             {
                 return true;
             }
             return false;
         }
 
-        /**
-         * is the reference for a whole-column reference,
-         *  such as C:C or D:G ?
-         */
+        /// <summary>
+        /// is the reference for a whole-column reference,
+        ///  such as C:C or D:G ?
+        /// </summary>
         public static bool IsWholeColumnReference(SpreadsheetVersion version, CellReference topLeft, CellReference botRight)
         {
-            if (null == version)
+            if(null == version)
             {
                 version = SpreadsheetVersion.EXCEL97; // how the code used to behave.
             }
             // These are represented as something like
             //   C$1:C$65535 or D$1:F$0
             // i.e. absolute from 1st row to 0th one
-            if (topLeft.Row == 0 && topLeft.IsRowAbsolute &&
+            if(topLeft.Row == 0 && topLeft.IsRowAbsolute &&
                 (botRight.Row == version.LastRowIndex) && botRight.IsRowAbsolute)
             {
                 return true;
@@ -300,59 +306,61 @@ namespace NPOI.SS.Util
             return IsWholeColumnReference(_version, _firstCell, _lastCell);
         }
 
-        /**
-         * Takes a non-contiguous area reference, and
-         *  returns an array of contiguous area references.
-         */
+        /// <summary>
+        /// Takes a non-contiguous area reference, and
+        ///  returns an array of contiguous area references.
+        /// </summary>
         public static AreaReference[] GenerateContiguous(String reference)
         {
             ArrayList refs = new ArrayList();
             String st = reference;
             string[] token = st.Split(',');
-            foreach (string t in token)
+            foreach(string t in token)
             {
                 refs.Add(
                         new AreaReference(t)
                 );
             }
-            return (AreaReference[])refs.ToArray(typeof(AreaReference));
+            return (AreaReference[]) refs.ToArray(typeof(AreaReference));
         }
 
-        /**
-         * @return <c>false</c> if this area reference involves more than one cell
-         */
+        /// <summary>
+        /// <c>false</c> if this area reference involves more than one cell
+        /// </summary>
         public bool IsSingleCell
         {
             get { return _isSingleCell; }
         }
 
-        /**
-         * @return the first cell reference which defines this area. Usually this cell is in the upper
-         * left corner of the area (but this is not a requirement).
-         */
+        /// <summary>
+        /// the first cell reference which defines this area. Usually this cell is in the upper
+        /// left corner of the area (but this is not a requirement).
+        /// </summary>
         public CellReference FirstCell
         {
             get { return _firstCell; }
         }
 
-        /**
-         * Note - if this area reference refers to a single cell, the return value of this method will
-         * be identical to that of <c>GetFirstCell()</c>
-         * @return the second cell reference which defines this area.  For multi-cell areas, this is 
-         * cell diagonally opposite the 'first cell'.  Usually this cell is in the lower right corner 
-         * of the area (but this is not a requirement).
-         */
+        /// <summary>
+        /// Note - if this area reference refers to a single cell, the return value of this method will
+        /// be identical to that of <c>GetFirstCell()</c>.
+        /// <para>
+        /// return the second cell reference which defines this area.  For multi-cell areas, this is
+        /// cell diagonally opposite the 'first cell'.  Usually this cell is in the lower right corner
+        /// of the area (but this is not a requirement).</para>
+        /// </summary>
+
         public CellReference LastCell
         {
-            get{return _lastCell;}
+            get { return _lastCell; }
         }
-        /**
-         * Returns a reference to every cell covered by this area
-         */
+        /// <summary>
+        /// Returns a reference to every cell covered by this area
+        /// </summary>
         public CellReference[] GetAllReferencedCells()
         {
             // Special case for single cell reference
-            if (_isSingleCell)
+            if(_isSingleCell)
             {
                 return new CellReference[] { _firstCell, };
             }
@@ -365,55 +373,55 @@ namespace NPOI.SS.Util
             String sheetName = _firstCell.SheetName;
 
             ArrayList refs = new ArrayList();
-            for (int row = minRow; row <= maxRow; row++)
+            for(int row = minRow; row <= maxRow; row++)
             {
-                for (int col = minCol; col <= maxCol; col++)
+                for(int col = minCol; col <= maxCol; col++)
                 {
                     CellReference ref1 = new CellReference(sheetName, row, col, _firstCell.IsRowAbsolute, _firstCell.IsColAbsolute);
                     refs.Add(ref1);
                 }
             }
-            return (CellReference[])refs.ToArray(typeof(CellReference));
+            return (CellReference[]) refs.ToArray(typeof(CellReference));
         }
 
-        /**
-         *  Example return values:
-         *    <table border="0" cellpAdding="1" cellspacing="0" summary="Example return values">
-         *      <tr><th align='left'>Result</th><th align='left'>Comment</th></tr>
-         *      <tr><td>A1:A1</td><td>Single cell area reference without sheet</td></tr>
-         *      <tr><td>A1:$C$1</td><td>Multi-cell area reference without sheet</td></tr>
-         *      <tr><td>Sheet1!A$1:B4</td><td>Standard sheet name</td></tr>
-         *      <tr><td>'O''Brien''s Sales'!B5:C6' </td><td>Sheet name with special Chars</td></tr>
-         *    </table>
-         * @return the text representation of this area reference as it would appear in a formula.
-         */
+        /// <summary>
+        ///  Example return values:
+        ///    <table border="0" cellpAdding="1" cellspacing="0" summary="Example return values">
+        ///      <tr><th align='left'>Result</th><th align='left'>Comment</th></tr>
+        ///      <tr><td>A1:A1</td><td>Single cell area reference without sheet</td></tr>
+        ///      <tr><td>A1:$C$1</td><td>Multi-cell area reference without sheet</td></tr>
+        ///      <tr><td>Sheet1!A$1:B4</td><td>Standard sheet name</td></tr>
+        ///      <tr><td>'O''Brien''s Sales'!B5:C6' </td><td>Sheet name with special Chars</td></tr>
+        ///    </table>
+        /// </summary>
+        /// <return>the text representation of this area reference as it would appear in a formula.</return>
         public String FormatAsString()
         {
-                // Special handling for whole-column references
-                if (IsWholeColumnReference())
-                {
-                    return
-                        CellReference.ConvertNumToColString(_firstCell.Col)
-                        + ":" +
-                        CellReference.ConvertNumToColString(_lastCell.Col);
-                }
+            // Special handling for whole-column references
+            if(IsWholeColumnReference())
+            {
+                return
+                    CellReference.ConvertNumToColString(_firstCell.Col)
+                    + ":" +
+                    CellReference.ConvertNumToColString(_lastCell.Col);
+            }
 
-                StringBuilder sb = new StringBuilder(32);
-                sb.Append(_firstCell.FormatAsString());
-                if (!_isSingleCell)
+            StringBuilder sb = new StringBuilder(32);
+            sb.Append(_firstCell.FormatAsString());
+            if(!_isSingleCell)
+            {
+                sb.Append(CELL_DELIMITER);
+                if(_lastCell.SheetName == null)
                 {
-                    sb.Append(CELL_DELIMITER);
-                    if (_lastCell.SheetName == null)
-                    {
-                        sb.Append(_lastCell.FormatAsString());
-                    }
-                    else
-                    {
-                        // don't want to include the sheet name twice
-                        _lastCell.AppendCellReference(sb);
-                    }
+                    sb.Append(_lastCell.FormatAsString());
                 }
-                return sb.ToString();
+                else
+                {
+                    // don't want to include the sheet name twice
+                    _lastCell.AppendCellReference(sb);
+                }
+            }
+            return sb.ToString();
         }
         public override String ToString()
         {
@@ -424,12 +432,11 @@ namespace NPOI.SS.Util
             return sb.ToString();
         }
 
-        /**
-         * Separates Area refs in two parts and returns them as Separate elements in a String array,
-         * each qualified with the sheet name (if present)
-         * 
-         * @return array with one or two elements. never <c>null</c>
-         */
+        /// <summary>
+        /// Separates Area refs in two parts and returns them as Separate elements in a String array,
+        /// each qualified with the sheet name (if present)
+        /// </summary>
+        /// <return>array with one or two elements. never <c>null</c></return>
         private static String[] SeparateAreaRefs(String reference)
         {
             // TODO - refactor cell reference parsing logic to one place.
@@ -443,14 +450,14 @@ namespace NPOI.SS.Util
             int len = reference.Length;
             int delimiterPos = -1;
             bool insideDelimitedName = false;
-            for (int i = 0; i < len; i++)
+            for(int i = 0; i < len; i++)
             {
-                switch (reference[i])
+                switch(reference[i])
                 {
                     case CELL_DELIMITER:
-                        if (!insideDelimitedName)
+                        if(!insideDelimitedName)
                         {
-                            if (delimiterPos >= 0)
+                            if(delimiterPos >= 0)
                             {
                                 throw new ArgumentException("More than one cell delimiter '"
                                         + CELL_DELIMITER + "' appears in area reference '" + reference + "'");
@@ -463,20 +470,20 @@ namespace NPOI.SS.Util
                     default:
                         continue;
                 }
-                if (!insideDelimitedName)
+                if(!insideDelimitedName)
                 {
                     insideDelimitedName = true;
                     continue;
                 }
 
-                if (i >= len - 1)
+                if(i >= len - 1)
                 {
                     // reference ends with the delimited name. 
                     // Assume names like: "Sheet1!'A1'" are never legal.
                     throw new ArgumentException("Area reference '" + reference
                             + "' ends with special name delimiter '" + SPECIAL_NAME_DELIMITER + "'");
                 }
-                if (reference[i + 1] == SPECIAL_NAME_DELIMITER)
+                if(reference[i + 1] == SPECIAL_NAME_DELIMITER)
                 {
                     // two consecutive quotes is the escape sequence for a single one
                     i++; // skip this and keep parsing the special name
@@ -487,14 +494,14 @@ namespace NPOI.SS.Util
                     insideDelimitedName = false;
                 }
             }
-            if (delimiterPos < 0)
+            if(delimiterPos < 0)
             {
                 return new String[] { reference, };
             }
 
             String partA = reference.Substring(0, delimiterPos);
             String partB = reference.Substring(delimiterPos + 1);
-            if (partB.IndexOf(SHEET_NAME_DELIMITER) >= 0)
+            if(partB.IndexOf(SHEET_NAME_DELIMITER) >= 0)
             {
                 // TODO - are references like "Sheet1!A1:Sheet1:B2" ever valid?  
                 // FormulaParser has code to handle that.
@@ -504,7 +511,7 @@ namespace NPOI.SS.Util
             }
 
             int plingPos = partA.LastIndexOf(SHEET_NAME_DELIMITER);
-            if (plingPos < 0)
+            if(plingPos < 0)
             {
                 return new String[] { partA, partB, };
             }

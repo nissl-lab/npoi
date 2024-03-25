@@ -23,9 +23,9 @@ namespace NPOI.SS.Util
     using NPOI.Util;
     using SixLabors.ImageSharp;
 
-    /**
-     * @author Yegor Kozlov
-     */
+    /// <summary>
+    /// </summary>
+    /// @author Yegor Kozlov
     public class ImageUtils
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(ImageUtils));
@@ -35,84 +35,86 @@ namespace NPOI.SS.Util
 
         public static Size GetImageDimension(Stream is1)
         {
-            using (Image img = Image.Load(is1))
+            using(Image img = Image.Load(is1))
             {
                 //return img.Size;
                 int[] dpi = GetResolution(img);
 
                 //if DPI is zero then assume standard 96 DPI
                 //since cannot divide by zero
-                if (dpi[0] == 0) dpi[0] = PIXEL_DPI;
-                if (dpi[1] == 0) dpi[1] = PIXEL_DPI;
+                if(dpi[0] == 0)
+                    dpi[0] = PIXEL_DPI;
+                if(dpi[1] == 0)
+                    dpi[1] = PIXEL_DPI;
                 Size size = new Size();
                 size.Width = img.Width * PIXEL_DPI / dpi[0];
                 size.Height = img.Height * PIXEL_DPI / dpi[1];
                 return size;
             }
         }
-        /**
-         * Return the dimension of this image
-         *
-         * @param is the stream Containing the image data
-         * @param type type of the picture: {@link NPOI.SS.UserModel.Workbook#PICTURE_TYPE_JPEG},
-         * {@link NPOI.SS.UserModel.Workbook#PICTURE_TYPE_PNG} or {@link NPOI.SS.UserModel.Workbook#PICTURE_TYPE_DIB}
-         *
-         * @return image dimension in pixels
-         */
+        /// <summary>
+        /// Return the dimension of this image
+        /// </summary>
+        /// <param name="is">the stream Containing the image data</param>
+        /// <param name="type">type of the picture: <see cref="PictureType.JPEG" />,
+        /// <see cref="PictureType.PNG" /> or <see cref="PictureType.DIB" />
+        /// </param>
+        /// <return>image dimension in pixels</return>
         public static Size GetImageDimension(Stream is1, PictureType type)
         {
             Size size = new Size();
 
-            switch (type)
+            switch(type)
             {
                 case PictureType.JPEG:
                 case PictureType.PNG:
                 case PictureType.DIB:
                     //we can calculate the preferred size only for JPEG, PNG and BMP
                     //other formats like WMF, EMF and PICT are not supported in Java
-                    using (Image img = Image.Load(is1))
+                    using(Image img = Image.Load(is1))
                     {
                         int[] dpi = GetResolution(img);
 
                         //if DPI is zero then assume standard 96 DPI
                         //since cannot divide by zero
-                        if (dpi[0] == 0) dpi[0] = PIXEL_DPI;
-                        if (dpi[1] == 0) dpi[1] = PIXEL_DPI;
+                        if(dpi[0] == 0)
+                            dpi[0] = PIXEL_DPI;
+                        if(dpi[1] == 0)
+                            dpi[1] = PIXEL_DPI;
 
                         size.Width = img.Width * PIXEL_DPI / dpi[0];
                         size.Height = img.Height * PIXEL_DPI / dpi[1];
                         return size;
                     }
-                    
+
                 default:
                     logger.Log(POILogger.WARN, "Only JPEG, PNG and DIB pictures can be automatically sized");
                     break;
             }
             return size;
         }
-        
-    
 
-        /**
-         * The metadata of PNG and JPEG can contain the width of a pixel in millimeters.
-         * Return the the "effective" dpi calculated as <code>25.4/HorizontalPixelSize</code>
-         * and <code>25.4/VerticalPixelSize</code>.  Where 25.4 is the number of mm in inch.
-         *
-         * @return array of two elements: <code>{horisontalPdi, verticalDpi}</code>.
-         * {96, 96} is the default.
-         */
+
+
+        /// <summary>
+        /// The metadata of PNG and JPEG can contain the width of a pixel in millimeters.
+        /// Return the the "effective" dpi calculated as <c>25.4/HorizontalPixelSize</c>
+        /// and <c>25.4/VerticalPixelSize</c>.  Where 25.4 is the number of mm in inch.
+        /// </summary>
+        /// <return>array of two elements: <c>{horisontalPdi, verticalDpi}</c>.
+        /// {96, 96} is the default.
+        /// </return>
         public static int[] GetResolution(Image r)
         {
-            return new int[] { (int)r.Metadata.HorizontalResolution, (int)r.Metadata.VerticalResolution };
+            return new int[] { (int) r.Metadata.HorizontalResolution, (int) r.Metadata.VerticalResolution };
         }
 
-        /**
-         * Calculate and Set the preferred size (anchor) for this picture.
-         *
-         * @param scaleX the amount by which image width is multiplied relative to the original width.
-         * @param scaleY the amount by which image height is multiplied relative to the original height.
-         * @return the new Dimensions of the scaled picture in EMUs
-         */
+        /// <summary>
+        /// Calculate and Set the preferred size (anchor) for this picture.
+        /// </summary>
+        /// <param name="scaleX">the amount by which image width is multiplied relative to the original width.</param>
+        /// <param name="scaleY">the amount by which image height is multiplied relative to the original height.</param>
+        /// <return>the new Dimensions of the scaled picture in EMUs</return>
         public static Size SetPreferredSize(IPicture picture, double scaleX, double scaleY)
         {
             IClientAnchor anchor = picture.ClientAnchor;
@@ -135,34 +137,35 @@ namespace NPOI.SS.Util
 
             //space in the leftmost cell
             w = sheet.GetColumnWidthInPixels(col2++);
-            if (isHSSF)
+            if(isHSSF)
             {
                 w *= 1d - anchor.Dx1 / 1024d;
             }
             else
             {
-                w -= anchor.Dx1 / (double)Units.EMU_PER_PIXEL;
+                w -= anchor.Dx1 / (double) Units.EMU_PER_PIXEL;
             }
 
-            while (w < scaledWidth)
+            while(w < scaledWidth)
             {
                 w += sheet.GetColumnWidthInPixels(col2++);
             }
 
-            if (w > scaledWidth)
+            if(w > scaledWidth)
             {
                 //calculate dx2, offset in the rightmost cell
                 double cw = sheet.GetColumnWidthInPixels(--col2);
                 double delta = w - scaledWidth;
-                if (isHSSF)
+                if(isHSSF)
                 {
-                    dx2 = (int)((cw - delta) / cw * 1024);
+                    dx2 = (int) ((cw - delta) / cw * 1024);
                 }
                 else
                 {
-                    dx2 = (int)((cw - delta) * Units.EMU_PER_PIXEL);
+                    dx2 = (int) ((cw - delta) * Units.EMU_PER_PIXEL);
                 }
-                if (dx2 < 0) dx2 = 0;
+                if(dx2 < 0)
+                    dx2 = 0;
             }
             anchor.Col2 = (/*setter*/col2);
             anchor.Dx2 = (/*setter*/dx2);
@@ -172,33 +175,34 @@ namespace NPOI.SS.Util
             int dy2 = 0;
 
             h = GetRowHeightInPixels(sheet, row2++);
-            if (isHSSF)
+            if(isHSSF)
             {
                 h *= 1 - anchor.Dy1 / 256d;
             }
             else
             {
-                h -= anchor.Dy1 / (double)Units.EMU_PER_PIXEL;
+                h -= anchor.Dy1 / (double) Units.EMU_PER_PIXEL;
             }
 
-            while (h < scaledHeight)
+            while(h < scaledHeight)
             {
                 h += GetRowHeightInPixels(sheet, row2++);
             }
 
-            if (h > scaledHeight)
+            if(h > scaledHeight)
             {
                 double ch = GetRowHeightInPixels(sheet, --row2);
                 double delta = h - scaledHeight;
-                if (isHSSF)
+                if(isHSSF)
                 {
-                    dy2 = (int)((ch - delta) / ch * 256);
+                    dy2 = (int) ((ch - delta) / ch * 256);
                 }
                 else
                 {
-                    dy2 = (int)((ch - delta) * Units.EMU_PER_PIXEL);
+                    dy2 = (int) ((ch - delta) * Units.EMU_PER_PIXEL);
                 }
-                if (dy2 < 0) dy2 = 0;
+                if(dy2 < 0)
+                    dy2 = 0;
             }
 
             anchor.Row2 = (/*setter*/row2);
@@ -212,12 +216,11 @@ namespace NPOI.SS.Util
             return dim;
         }
 
-        /**
-         * Calculates the dimensions in EMUs for the anchor of the given picture
-         *
-         * @param picture the picture Containing the anchor
-         * @return the dimensions in EMUs
-         */
+        /// <summary>
+        /// Calculates the dimensions in EMUs for the anchor of the given picture
+        /// </summary>
+        /// <param name="picture">the picture Containing the anchor</param>
+        /// <return>the dimensions in EMUs</return>
         public static Size GetDimensionFromAnchor(IPicture picture)
         {
             IClientAnchor anchor = picture.ClientAnchor;
@@ -229,60 +232,60 @@ namespace NPOI.SS.Util
 
             //space in the leftmost cell
             w = sheet.GetColumnWidthInPixels(col2++);
-            if (isHSSF)
+            if(isHSSF)
             {
                 w *= 1 - anchor.Dx1 / 1024d;
             }
             else
             {
-                w -= anchor.Dx1 / (double)Units.EMU_PER_PIXEL;
+                w -= anchor.Dx1 / (double) Units.EMU_PER_PIXEL;
             }
 
-            while (col2 < anchor.Col2)
+            while(col2 < anchor.Col2)
             {
                 w += sheet.GetColumnWidthInPixels(col2++);
             }
 
-            if (isHSSF)
+            if(isHSSF)
             {
                 w += sheet.GetColumnWidthInPixels(col2) * anchor.Dx2 / 1024d;
             }
             else
             {
-                w += anchor.Dx2 / (double)Units.EMU_PER_PIXEL;
+                w += anchor.Dx2 / (double) Units.EMU_PER_PIXEL;
             }
 
             double h = 0;
             int row2 = anchor.Row1;
 
             h = GetRowHeightInPixels(sheet, row2++);
-            if (isHSSF)
+            if(isHSSF)
             {
                 h *= 1 - anchor.Dy1 / 256d;
             }
             else
             {
-                h -= anchor.Dy1 / (double)Units.EMU_PER_PIXEL;
+                h -= anchor.Dy1 / (double) Units.EMU_PER_PIXEL;
             }
 
-            while (row2 < anchor.Row2)
+            while(row2 < anchor.Row2)
             {
                 h += GetRowHeightInPixels(sheet, row2++);
             }
 
-            if (isHSSF)
+            if(isHSSF)
             {
                 h += GetRowHeightInPixels(sheet, row2) * anchor.Dy2 / 256;
             }
             else
             {
-                h += anchor.Dy2 / (double)Units.EMU_PER_PIXEL;
+                h += anchor.Dy2 / (double) Units.EMU_PER_PIXEL;
             }
 
             w *= Units.EMU_PER_PIXEL;
             h *= Units.EMU_PER_PIXEL;
 
-            return new Size((int)Math.Round(w), (int)Math.Round(h));
+            return new Size((int) Math.Round(w), (int) Math.Round(h));
             //return new Size((int)w * Units.EMU_PER_PIXEL, (int)h * Units.EMU_PER_PIXEL);
 
         }

@@ -18,19 +18,26 @@
 namespace NPOI.SS.Util
 {
 
-    /**
-     * Holds information regarding a split plane or freeze plane for a sheet.
-     *
-     */
+    /// <summary>
+    /// Holds information regarding a split plane or freeze plane for a sheet.
+    /// </summary>
     public class PaneInformation
     {
-        /** Constant for active pane being the lower right*/
+        /// <summary>
+        /// Constant for active pane being the lower right*/
+        /// </summary>
         public const byte PANE_LOWER_RIGHT = (byte)0;
-        /** Constant for active pane being the upper right*/
+        /// <summary>
+        /// Constant for active pane being the upper right*/
+        /// </summary>
         public const byte PANE_UPPER_RIGHT = (byte)1;
-        /** Constant for active pane being the lower left*/
+        /// <summary>
+        /// Constant for active pane being the lower left*/
+        /// </summary>
         public const byte PANE_LOWER_LEFT = (byte)2;
-        /** Constant for active pane being the upper left*/
+        /// <summary>
+        /// Constant for active pane being the upper left*/
+        /// </summary>
         public const byte PANE_UPPER_LEFT = (byte)3;
 
         private short x;
@@ -51,61 +58,64 @@ namespace NPOI.SS.Util
         }
 
 
-        /**
-         * Returns the vertical position of the split.
-         * @return 0 if there is no vertical spilt,
-         *         or for a freeze pane the number of columns in the TOP pane,
-         *         or for a split plane the position of the split in 1/20th of a point.
-         */
+        /// <summary>
+        /// Returns the vertical position of the split.
+        /// </summary>
+        /// <return>0 if there is no vertical spilt,
+        /// or for a freeze pane the number of columns in the TOP pane,
+        /// or for a split plane the position of the split in 1/20th of a point.
+        /// </return>
         public short VerticalSplitPosition
         {
             get { return x; }
         }
 
-        /**
-         * Returns the horizontal position of the split.
-         * @return 0 if there is no horizontal spilt,
-         *         or for a freeze pane the number of rows in the LEFT pane,
-         *         or for a split plane the position of the split in 1/20th of a point.
-         */
+        /// <summary>
+        /// Returns the horizontal position of the split.
+        /// </summary>
+        /// <return>0 if there is no horizontal spilt,
+        /// or for a freeze pane the number of rows in the LEFT pane,
+        /// or for a split plane the position of the split in 1/20th of a point.
+        /// </return>
         public short HorizontalSplitPosition
         {
-           get{return y;}
+            get { return y; }
         }
 
-        /**
-         * For a horizontal split returns the top row in the BOTTOM pane.
-         * @return 0 if there is no horizontal split, or the top row of the bottom pane.
-         */
+        /// <summary>
+        /// For a horizontal split returns the top row in the BOTTOM pane.
+        /// </summary>
+        /// <return>0 if there is no horizontal split, or the top row of the bottom pane.</return>
         public short HorizontalSplitTopRow
         {
             get { return topRow; }
         }
 
-        /**
-         * For a vertical split returns the left column in the RIGHT pane.
-         * @return 0 if there is no vertical split, or the left column in the RIGHT pane.
-         */
+        /// <summary>
+        /// For a vertical split returns the left column in the RIGHT pane.
+        /// </summary>
+        /// <return>0 if there is no vertical split, or the left column in the RIGHT pane.</return>
         public short VerticalSplitLeftColumn
         {
             get { return leftColumn; }
         }
 
-        /**
-         * Returns the active pane
-         * @see #PANE_LOWER_RIGHT
-         * @see #PANE_UPPER_RIGHT
-         * @see #PANE_LOWER_LEFT
-         * @see #PANE_UPPER_LEFT
-         * @return the active pane.
-         */
+        /// <summary>
+        /// Returns the active pane
+        /// </summary>
+        /// <see cref="PANE_LOWER_RIGHT" />
+        /// <see cref="PANE_UPPER_RIGHT" />
+        /// <see cref="PANE_LOWER_LEFT" />
+        /// <see cref="PANE_UPPER_LEFT" />
+        /// <return>the active pane.</return>
         public byte ActivePane
         {
-            get{return activePane;}
+            get { return activePane; }
         }
 
-        /** Returns true if this is a Freeze pane, false if it is a split pane.
-         */
+        /// <summary>
+        /// Returns true if this is a Freeze pane, false if it is a split pane.
+        /// </summary>
         public bool IsFreezePane()
         {
             return frozen;

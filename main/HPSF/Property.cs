@@ -286,7 +286,7 @@ namespace NPOI.HPSF
                     m.Add(id, b.ToString());
                 }
             }
-            catch(SystemException ex)
+            catch(SystemException)
             {
                 //POILogger l = POILogFactory.GetLogger(getClass());
                 //l.log(POILogger.WARN,

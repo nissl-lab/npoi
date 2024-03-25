@@ -59,7 +59,7 @@ namespace NPOI.SS.Formula.Eval
             /** 255 */
             public const int EXTERNAL_FUNC = FunctionMetadataRegistry.FUNCTION_INDEX_EXTERNAL;
         }
-        protected static Function[] functions = ProduceFunctions();
+        internal static Function[] functions = ProduceFunctions();
 
         // fix warning CS0169 "never used": private static Hashtable freeRefFunctionsByIdMap;
         private static FunctionMetadataRegistry _instance;
