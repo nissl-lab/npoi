@@ -8421,6 +8421,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        internal void WriteFallback(StreamWriter sw)
+        {
+            sw.Write("<mc:Fallback>");
+            sw.Write($"<oleObject progId=\"{progId}\" dvAspect=\"{this.dvAspect.ToString()}\" shapeId=\"{shapeId}\" r:id=\"{id}\" />");
+            sw.Write("</mc:Fallback>");
+        }
+
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
@@ -11253,8 +11260,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.oleObject = new List<CT_OleObject>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
+                //handle oleObject with-/out AlternateContent wrappers
                 if(childNode.LocalName == "AlternateContent")
                 {
+                    ctObj.inAlternateContent = true;
                     ctObj.oleObject.Add(CT_OleObject.Parse(childNode.ChildNodes[0].ChildNodes[0], namespaceManager));
                 }
                 else if (childNode.LocalName == "oleObject")
@@ -11271,9 +11280,27 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(">");
             if (this.oleObject != null)
             {
+                if(inAlternateContent)
+                {
+                    sw.Write("<mc:AlternateContent xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\">");
+                }
                 foreach (CT_OleObject x in this.oleObject)
                 {
+                    if(inAlternateContent)
+                    {
+                        sw.Write("<mc:Choice Requires=\"x14\">");
+                    }
                     x.Write(sw, "oleObject");
+                    if(inAlternateContent)
+                    {
+                        sw.Write("</mc:Choice>");
+                        x.WriteFallback(sw);
+                    }
+
+                }
+                if(inAlternateContent)
+                {
+                    sw.Write("</mc:AlternateContent>");
                 }
             }
             sw.Write(string.Format("</{0}>", nodeName));

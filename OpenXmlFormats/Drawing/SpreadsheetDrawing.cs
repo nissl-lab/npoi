@@ -1353,9 +1353,20 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             {
                 sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
                 sw.Write("<xdr:wsDr xmlns:xdr=\"http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing\" xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">");
+                if(inAlternateContent)
+                {
+                    sw.Write("<mc:AlternateContent xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\">");
+                    sw.Write("<mc:Choice xmlns:a14=\"http://schemas.microsoft.com/office/drawing/2010/main\" Requires=\"a14\">");
+                }
                 foreach (IEG_Anchor anchor in this.cellAnchors)
                 {
                     anchor.Write(sw);
+                }
+                if(inAlternateContent)
+                {
+                    sw.Write("</mc:Choice>");
+                    sw.Write("<mc:Fallback />");
+                    sw.Write("</mc:AlternateContent>");
                 }
                 sw.Write("</xdr:wsDr>");
             }
@@ -1406,7 +1417,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         {
             XmlNodeList childNodes = xmldoc.SelectNodes("/xdr:wsDr/*", namespaceManager);
             CT_Drawing ctDrawing = new CT_Drawing();
-            
+            // handle with-/out AlternateContent wrappers
             foreach (XmlNode node in childNodes)
             {
                 if(node.LocalName == "AlternateContent")
