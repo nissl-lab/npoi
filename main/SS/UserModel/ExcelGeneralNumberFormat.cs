@@ -26,14 +26,14 @@ namespace NPOI.SS.UserModel
     using System.Globalization;
     using System.Text;
 
-    /**
-     * A format that formats a double as Excel would, ignoring FieldPosition.
-     * All other operations are unsupported.
-     **/
+    /// <summary>
+    /// A format that formats a double as Excel would, ignoring FieldPosition.
+    /// All other operations are unsupported.
+    /// </summary>
     public class ExcelGeneralNumberFormat : FormatBase
     {
         //private static MathContext TO_10_SF = new MathContext(10, RoundingMode.HALF_UP);
-        
+
         private NumberFormatInfo decimalSymbols;
         private DecimalFormat integerFormat;
         private DecimalFormat decimalFormat;
@@ -42,7 +42,7 @@ namespace NPOI.SS.UserModel
         public ExcelGeneralNumberFormat(CultureInfo culture)
         {
             decimalSymbols = culture.NumberFormat;
-            scientificFormat = new DecimalFormat("0.#####E0" , decimalSymbols);
+            scientificFormat = new DecimalFormat("0.#####E0", decimalSymbols);
             integerFormat = new DecimalFormat("#", decimalSymbols);
             decimalFormat = new DecimalFormat("#.##########", decimalSymbols);
             this.culture = culture;
@@ -56,10 +56,10 @@ namespace NPOI.SS.UserModel
         public override StringBuilder Format(Object number, StringBuilder toAppendTo, CultureInfo culture)
         {
             double value;
-            if (Number.IsNumber(number))
+            if(Number.IsNumber(number))
             {
                 value = double.Parse(number.ToString());
-                if (Double.IsInfinity(value) || Double.IsNaN(value))
+                if(Double.IsInfinity(value) || Double.IsNaN(value))
                 {
                     return integerFormat.Format(number, toAppendTo, culture);
                 }
@@ -71,11 +71,11 @@ namespace NPOI.SS.UserModel
             }
 
             double abs = Math.Abs(value);
-            if (abs >= 1E11 || (abs <= 1E-10 && abs > 0))
+            if(abs >= 1E11 || (abs <= 1E-10 && abs > 0))
             {
                 return scientificFormat.Format(number, toAppendTo, culture);
             }
-            else if (Math.Floor(value) == value || abs >= 1E10)
+            else if(Math.Floor(value) == value || abs >= 1E10)
             {
                 // integer, or integer portion uses all 11 allowed digits
                 return integerFormat.Format(number, toAppendTo, culture);
@@ -87,7 +87,7 @@ namespace NPOI.SS.UserModel
             //double rounded = new BigDecimal(value).round(TO_10_SF);
             // calculate round precision
             int digits = 10;
-            if (Math.Abs(value) > 1)
+            if(Math.Abs(value) > 1)
             {
                 int len = (int)Math.Log10((int)Math.Abs(value)) + 1;
                 digits -= len;

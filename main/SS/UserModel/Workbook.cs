@@ -81,7 +81,7 @@ namespace NPOI.SS.UserModel
         /// <param name="sheet">sheet number (0 based)</param>
         /// <param name="name">sheet name</param>
         void SetSheetName(int sheet, String name);
-   
+
         /// <summary>
         /// Returns the index of the sheet by its name
         /// </summary>
@@ -118,9 +118,9 @@ namespace NPOI.SS.UserModel
         /// <returns></returns>
         ISheet CloneSheet(int sheetNum);
 
-         /// <summary>
-         /// Get the number of spreadsheets in the workbook
-         /// </summary>
+        /// <summary>
+        /// Get the number of spreadsheets in the workbook
+        /// </summary>
         int NumberOfSheets { get; }
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace NPOI.SS.UserModel
         /// <param name="workbook">The open workbook to fetch the link required information from</param>
         /// <returns></returns>
         int LinkExternalWorkbook(String name, IWorkbook workbook);
-    
+
 
         /// <summary>
         /// Sets the printarea for the sheet provided
@@ -376,57 +376,59 @@ namespace NPOI.SS.UserModel
         /// <returns>true if sheet is hidden</returns>
         bool IsSheetHidden(int sheetIx);
 
-        /**
-         * Check whether a sheet is very hidden.
-         * <p>
-         * This is different from the normal hidden status
-         *  ({@link #isSheetHidden(int)})
-         * </p>
-         * @param sheetIx sheet index to check
-         * @return <code>true</code> if sheet is very hidden
-         */
+        /// <summary>
+        /// <para>
+        /// Check whether a sheet is very hidden.
+        /// </para>
+        /// <para>
+        /// This is different from the normal hidden status
+        ///  (<see cref="isSheetHidden(int)" />)
+        /// </para>
+        /// </summary>
+        /// <param name="sheetIx">sheet index to check</param>
+        /// <returns><c>true</c> if sheet is very hidden</returns>
         bool IsSheetVeryHidden(int sheetIx);
 
-        /**
-         * Hide or unhide a sheet
-         *
-         * @param sheetIx the sheet index (0-based)
-         * @param hidden True to mark the sheet as hidden, false otherwise
-         */
+        /// <summary>
+        /// Hide or unhide a sheet
+        /// </summary>
+        /// <param name="sheetIx">the sheet index (0-based)</param>
+        /// <param name="hidden">True to mark the sheet as hidden, false otherwise</param>
         void SetSheetHidden(int sheetIx, SheetVisibility hidden);
 
-        /**
-         * Hide or unhide a sheet.
-         * <pre>
-         *  0 = not hidden
-         *  1 = hidden
-         *  2 = very hidden.
-         * </pre>
-         * @param sheetIx The sheet number
-         * @param hidden 0 for not hidden, 1 for hidden, 2 for very hidden
-         */
+        /// <summary>
+        /// Hide or unhide a sheet.
+        /// <code>
+        ///  0 = not hidden
+        ///  1 = hidden
+        ///  2 = very hidden.
+        /// </code>
+        /// </summary>
+        /// <param name="sheetIx">The sheet number</param>
+        /// <param name="hidden">0 for not hidden, 1 for hidden, 2 for very hidden</param>
         [Obsolete]
         void SetSheetHidden(int sheetIx, int hidden);
 
-        /**
-         * Get the visibility (visible, hidden, very hidden) of a sheet in this workbook
-         *
-         * @param sheetIx  the index of the sheet
-         * @return the sheet visibility
-         * @since POI 3.16 beta 2
-         */
+        /// <summary>
+        /// Get the visibility (visible, hidden, very hidden) of a sheet in this workbook
+        /// </summary>
+        /// <param name="sheetIx"> the index of the sheet</param>
+        /// <returns>the sheet visibility</returns>
+        /// @since POI 3.16 beta 2
         SheetVisibility GetSheetVisibility(int sheetIx);
 
-        /**
-         * Hide or unhide a sheet.
-         *
-         * Please note that the sheet currently set as active sheet (sheet 0 in a newly 
-         * created workbook or the one set via setActiveSheet()) cannot be hidden.
-         *  
-         * @param sheetIx     the sheet index (0-based)
-         * @param visibility  the sheet visibility to set
-         * @since POI 3.16 beta 2
-         */
+        /// <summary>
+        /// <para>
+        /// Hide or unhide a sheet.
+        /// </para>
+        /// <para>
+        /// Please note that the sheet currently set as active sheet (sheet 0 in a newly
+        /// created workbook or the one set via setActiveSheet()) cannot be hidden.
+        /// </para>
+        /// </summary>
+        /// <param name="sheetIx">    the sheet index (0-based)</param>
+        /// <param name="visibility"> the sheet visibility to set</param>
+        /// @since POI 3.16 beta 2
         void SetSheetVisibility(int sheetIx, SheetVisibility visibility);
 
         /// <summary>

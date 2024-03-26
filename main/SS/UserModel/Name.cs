@@ -18,70 +18,62 @@
 namespace NPOI.SS.UserModel
 {
     using System;
-    /**
-     * Represents a defined name for a range of cells.
-     * A name is a meaningful shorthand that makes it easier to understand the purpose of a
-     * cell reference, constant or a formula.
-     */
+    /// <summary>
+    /// Represents a defined name for a range of cells.
+    /// A name is a meaningful shorthand that makes it easier to understand the purpose of a
+    /// cell reference, constant or a formula.
+    /// </summary>
     public interface IName
     {
 
-        /**
-         * Get the sheets name which this named range is referenced to
-         *
-         * @return sheet name, which this named range refered to
-         */
+        /// <summary>
+        /// Get the sheets name which this named range is referenced to
+        /// </summary>
+        /// <returns>sheet name, which this named range refered to</returns>
         String SheetName { get; }
 
-        /**
-         * Gets the name of the named range
-         *
-         * @return named range name
-         */
+        /// <summary>
+        /// Gets the name of the named range
+        /// </summary>
+        /// <returns>named range name</returns>
         String NameName { get; set; }
 
 
-        /**
-         * Returns the formula that the name is defined to refer to.
-         *
-         * @return the reference for this name, <code>null</code> if it has not been set yet. Never empty string
-         * @see #SetRefersToFormula(String)
-         */
+        /// <summary>
+        /// Returns the formula that the name is defined to refer to.
+        /// </summary>
+        /// <returns>the reference for this name, <c>null</c> if it has not been set yet. Never empty string</returns>
+        /// <see cref="SetRefersToFormula(String)" />
         String RefersToFormula { get; set; }
 
-        /**
-         * Checks if this name is a function name
-         *
-         * @return true if this name is a function name
-         */
+        /// <summary>
+        /// Checks if this name is a function name
+        /// </summary>
+        /// <returns>true if this name is a function name</returns>
         bool IsFunctionName { get; }
 
-        /**
-         * Checks if this name points to a cell that no longer exists
-         *
-         * @return <c>true</c> if the name refers to a deleted cell, <c>false</c> otherwise
-         */
+        /// <summary>
+        /// Checks if this name points to a cell that no longer exists
+        /// </summary>
+        /// <returns><c>true</c> if the name refers to a deleted cell, <c>false</c> otherwise</returns>
         bool IsDeleted { get; }
 
-        /**
-         * Returns the sheet index this name applies to.
-         *
-         * @return the sheet index this name applies to, -1 if this name applies to the entire workbook
-         */
+        /// <summary>
+        /// Returns the sheet index this name applies to.
+        /// </summary>
+        /// <returns>the sheet index this name applies to, -1 if this name applies to the entire workbook</returns>
         int SheetIndex { get; set; }
 
-        /**
-         * Returns the comment the user provided when the name was Created.
-         *
-         * @return the user comment for this named range
-         */
+        /// <summary>
+        /// Returns the comment the user provided when the name was Created.
+        /// </summary>
+        /// <returns>the user comment for this named range</returns>
         String Comment { get; set; }
-        /**
-         * Indicates that the defined name refers to a user-defined function.
-         * This attribute is used when there is an add-in or other code project associated with the file.
-         *
-         * @param value <c>true</c> indicates the name refers to a function.
-         */
+        /// <summary>
+        /// Indicates that the defined name refers to a user-defined function.
+        /// This attribute is used when there is an add-in or other code project associated with the file.
+        /// </summary>
+        /// <param name="value"><c>true</c> indicates the name refers to a function.</param>
         void SetFunction(bool value);
     }
 

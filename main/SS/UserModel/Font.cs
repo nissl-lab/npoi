@@ -21,86 +21,86 @@ namespace NPOI.SS.UserModel
 
     public enum FontUnderlineType : byte
     {
-        /**
-         * not underlined
-         */
+        /// <summary>
+        /// not underlined
+        /// </summary>
         None = 0,
-        /**
-         * single (normal) underline
-         */
+        /// <summary>
+        /// single (normal) underline
+        /// </summary>
         Single = 1,
-        /**
-         * double underlined
-         */
+        /// <summary>
+        /// double underlined
+        /// </summary>
         Double = 2,
-        /**
-         * accounting style single underline
-         */
+        /// <summary>
+        /// accounting style single underline
+        /// </summary>
         SingleAccounting = 0x21,
-        /**
-         * accounting style double underline
-         */
+        /// <summary>
+        /// accounting style double underline
+        /// </summary>
         DoubleAccounting = 0x22
     }
 
-    public enum FontSuperScript:short
-    { 
-    
-        /**
-         * no type Offsetting (not super or subscript)
-         */
+    public enum FontSuperScript : short
+    {
+
+        /// <summary>
+        /// no type Offsetting (not super or subscript)
+        /// </summary>
 
         None = 0,
 
-        /**
-         * superscript
-         */
+        /// <summary>
+        /// superscript
+        /// </summary>
 
         Super = 1,
 
-        /**
-         * subscript
-         */
+        /// <summary>
+        /// subscript
+        /// </summary>
 
         Sub = 2,
     }
 
-    public enum FontColor:short
+    public enum FontColor : short
     {
         /// <summary>
         /// Allow accessing the Initial value.
         /// </summary>
         None = 0,
 
-        /**
-         * normal type of black color.
-         */
+        /// <summary>
+        /// normal type of black color.
+        /// </summary>
 
         Normal = 0x7fff,
 
-        /**
-         * Dark Red color
-         */
+        /// <summary>
+        /// Dark Red color
+        /// </summary>
 
         Red = 0xa,
     }
     [Obsolete("deprecated POI 3.15 beta 2. Boldweight constants no longer needed due to IsBold property")]
-    public enum FontBoldWeight:short
+    public enum FontBoldWeight : short
     {
         /// <summary>
         /// Allow accessing the Initial value.
         /// </summary>
         None = 0,
 
-        /**
-         * Normal boldness (not bold)
-         */
+        /// <summary>
+        /// Normal boldness (not bold)
+        /// </summary>
 
         Normal = 0x190,
 
-        /**
-         * Bold boldness (bold)
-         */
+        /// <summary>
+        /// Bold boldness (bold)
+        /// </summary>
 
         Bold = 0x2bc,
     }
@@ -131,7 +131,7 @@ namespace NPOI.SS.UserModel
         /// </remarks>
         /// <see cref="FontHeight"/>
         double FontHeightInPoints { get; set; }
- 
+
         /// <summary>
         /// get whether to use italics or not
         /// </summary>
@@ -142,13 +142,13 @@ namespace NPOI.SS.UserModel
         /// </summary>
         bool IsStrikeout { get; set; }
 
-        /**
-         * get the color for the font
-         * @return color to use
-         * @see #COLOR_NORMAL
-         * @see #COLOR_RED
-         * @see NPOI.HSSF.usermodel.HSSFPalette#GetColor(short)
-         */
+        /// <summary>
+        /// get the color for the font
+        /// </summary>
+        /// <returns>color to use</returns>
+        /// <see cref="COLOR_NORMAL" />
+        /// <see cref="COLOR_RED" />
+        /// <see cref="NPOI.HSSF.UserModel.HSSFPalette.GetColor(short)" />
         short Color { get; set; }
 
         /// <summary>

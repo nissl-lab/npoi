@@ -23,12 +23,12 @@ namespace NPOI.SS.UserModel
     using NPOI.SS.UserModel;
     using System.Globalization;
 
-    /**
-     * Mimics the 'data view' of a cell. This allows formula Evaluator
-     * to return a CellValue instead of precasting the value to String
-     * or Number or bool type.
-     * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
-     */
+    /// <summary>
+    /// Mimics the 'data view' of a cell. This allows formula Evaluator
+    /// to return a CellValue instead of precasting the value to String
+    /// or Number or bool type.
+    /// </summary>
+    /// @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
     public class CellValue
     {
         public static readonly CellValue TRUE = new CellValue(CellType.Boolean, 0.0, true, null, 0);
@@ -71,9 +71,9 @@ namespace NPOI.SS.UserModel
         }
 
 
-        /**
-         * @return Returns the boolValue.
-         */
+        /// <summary>
+        /// Returns the boolValue.
+        /// </summary>
         public bool BooleanValue
         {
             get
@@ -81,9 +81,9 @@ namespace NPOI.SS.UserModel
                 return _boolValue;
             }
         }
-        /**
-         * @return Returns the numberValue.
-         */
+        /// <summary>
+        /// Returns the numberValue.
+        /// </summary>
         public double NumberValue
         {
             get
@@ -91,9 +91,9 @@ namespace NPOI.SS.UserModel
                 return _numberValue;
             }
         }
-        /**
-         * @return Returns the stringValue.
-         */
+        /// <summary>
+        /// Returns the stringValue.
+        /// </summary>
         public String StringValue
         {
             get
@@ -101,9 +101,9 @@ namespace NPOI.SS.UserModel
                 return _textValue;
             }
         }
-        /**
-         * @return Returns the cellType.
-         */
+        /// <summary>
+        /// Returns the cellType.
+        /// </summary>
         public CellType CellType
         {
             get
@@ -111,16 +111,16 @@ namespace NPOI.SS.UserModel
                 return _cellType;
             }
         }
-        /**
-         * @return Returns the errorValue.
-         */
+        /// <summary>
+        /// Returns the errorValue.
+        /// </summary>
         //the return value should be sbyte? the byte in java is signed(-128~127) and is unsiged(0~255) in c#.
         //if use byte, the test NPOI.SS.Formula.TestWorkbookEvaluator.TestResultOutsideRange failed.
         public sbyte ErrorValue
         {
             get
             {
-                return (sbyte)_errorCode;
+                return (sbyte) _errorCode;
             }
         }
         public override String ToString()
@@ -134,7 +134,7 @@ namespace NPOI.SS.UserModel
 
         public String FormatAsString()
         {
-            switch (_cellType)
+            switch(_cellType)
             {
                 case CellType.Numeric:
                     string result = _numberValue.ToString(CultureInfo.InvariantCulture);

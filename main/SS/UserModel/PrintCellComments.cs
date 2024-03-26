@@ -18,30 +18,29 @@
 namespace NPOI.SS.UserModel
 {
 
-    /**
-     * These enumerations specify how cell comments shall be displayed for paper printing purposes.
-     *
-     * @author Gisella Bronzetti
-     */
+    /// <summary>
+    /// These enumerations specify how cell comments shall be displayed for paper printing purposes.
+    /// </summary>
+    /// @author Gisella Bronzetti
     public class PrintCellComments
     {
 
-        /**
-         * Do not print cell comments.
-         */
+        /// <summary>
+        /// Do not print cell comments.
+        /// </summary>
         public static PrintCellComments NONE;
-        /**
-         * Print cell comments as displayed.
-         */
+        /// <summary>
+        /// Print cell comments as displayed.
+        /// </summary>
         public static PrintCellComments AS_DISPLAYED;
-        /**
-         * Print cell comments at end of document.
-         */
+        /// <summary>
+        /// Print cell comments at end of document.
+        /// </summary>
         public static PrintCellComments AT_END;
 
 
         static PrintCellComments()
-        { 
+        {
             _table= new PrintCellComments[4];
             NONE = new PrintCellComments(1);
             AS_DISPLAYED = new PrintCellComments(2);

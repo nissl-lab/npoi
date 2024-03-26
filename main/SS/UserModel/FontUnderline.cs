@@ -17,45 +17,44 @@
 
 namespace NPOI.SS.UserModel
 {
-    /**
-     * the different types of possible underline formatting
-     *
-     * @author Gisella Bronzetti
-     */
+    /// <summary>
+    /// the different types of possible underline formatting
+    /// </summary>
+    /// @author Gisella Bronzetti
     public class FontUnderline
     {
 
-        /**
-         * Single-line underlining under each character in the cell.
-         * The underline is drawn through the descenders of
-         * characters such as g and p..
-         */
+        /// <summary>
+        /// Single-line underlining under each character in the cell.
+        /// The underline is drawn through the descenders of
+        /// characters such as g and p..
+        /// </summary>
         public static readonly FontUnderline SINGLE = new FontUnderline(1);
 
-        /**
-         * Double-line underlining under each character in the
-         * cell. underlines are drawn through the descenders of
-         * characters such as g and p.
-         */
+        /// <summary>
+        /// Double-line underlining under each character in the
+        /// cell. underlines are drawn through the descenders of
+        /// characters such as g and p.
+        /// </summary>
         public static readonly FontUnderline DOUBLE = new FontUnderline(2);
 
-        /**
-         * Single-line accounting underlining under each
-         * character in the cell. The underline is drawn under the
-         * descenders of characters such as g and p.
-         */
+        /// <summary>
+        /// Single-line accounting underlining under each
+        /// character in the cell. The underline is drawn under the
+        /// descenders of characters such as g and p.
+        /// </summary>
         public static readonly FontUnderline SINGLE_ACCOUNTING = new FontUnderline(3);
 
-        /**
-         * Double-line accounting underlining under each
-         * character in the cell. The underlines are drawn under
-         * the descenders of characters such as g and p.
-         */
+        /// <summary>
+        /// Double-line accounting underlining under each
+        /// character in the cell. The underlines are drawn under
+        /// the descenders of characters such as g and p.
+        /// </summary>
         public static readonly FontUnderline DOUBLE_ACCOUNTING = new FontUnderline(4);
 
-        /**
-         * No underline.
-         */
+        /// <summary>
+        /// No underline.
+        /// </summary>
         public static readonly FontUnderline NONE = new FontUnderline(0);
 
 
@@ -79,29 +78,29 @@ namespace NPOI.SS.UserModel
         {
             get
             {
-                if (this == DOUBLE)
+                if(this == DOUBLE)
                 {
-                    return (byte)FontUnderlineType.Double;
+                    return (byte) FontUnderlineType.Double;
                 }
-                else if (this == DOUBLE_ACCOUNTING)
+                else if(this == DOUBLE_ACCOUNTING)
                 {
-                    return (byte)FontUnderlineType.DoubleAccounting;
+                    return (byte) FontUnderlineType.DoubleAccounting;
                 }
-                else if (this == SINGLE_ACCOUNTING)
+                else if(this == SINGLE_ACCOUNTING)
                 {
-                    return (byte)FontUnderlineType.SingleAccounting;
+                    return (byte) FontUnderlineType.SingleAccounting;
                 }
-                else if (this == NONE)
+                else if(this == NONE)
                 {
-                    return (byte)FontUnderlineType.None;
+                    return (byte) FontUnderlineType.None;
                 }
-                else if (this == SINGLE)
+                else if(this == SINGLE)
                 {
-                    return (byte)FontUnderlineType.Single;
+                    return (byte) FontUnderlineType.Single;
                 }
                 else
                 {
-                    return (byte)FontUnderlineType.Single;
+                    return (byte) FontUnderlineType.Single;
                 }
             }
         }
@@ -110,7 +109,7 @@ namespace NPOI.SS.UserModel
 
         static FontUnderline()
         {
-            if (_table == null)
+            if(_table == null)
             {
                 _table = new FontUnderline[5];
                 _table[0] = FontUnderline.NONE;
@@ -128,7 +127,7 @@ namespace NPOI.SS.UserModel
         public static FontUnderline ValueOf(FontUnderlineType value)
         {
             FontUnderline val;
-            switch (value)
+            switch(value)
             {
                 case FontUnderlineType.Double:
                     val = FontUnderline.DOUBLE;

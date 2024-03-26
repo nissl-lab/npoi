@@ -20,10 +20,10 @@ namespace NPOI.SS.UserModel
     using System.Collections.Generic;
     using System.Collections;
 
-    /**
-     * Used to specify the different possible policies
-     *  if for the case of null and blank cells
-     */
+    /// <summary>
+    /// Used to specify the different possible policies
+    ///  if for the case of null and blank cells
+    /// </summary>
     public enum MissingCellPolicy
     {
         RETURN_NULL_AND_BLANK = 1,

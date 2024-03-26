@@ -31,19 +31,21 @@ namespace NPOI.SS.UserModel
         Error = 5
     }
 
-    /**
-     * High level representation of a cell in a row of a spreadsheet.
-     * <p>
-     * Cells can be numeric, formula-based or string-based (text).  The cell type
-     * specifies this.  String cells cannot conatin numbers and numeric cells cannot
-     * contain strings (at least according to our model).  Client apps should do the
-     * conversions themselves.  Formula cells have the formula string, as well as
-     * the formula result, which can be numeric or string.
-     * </p>
-     * <p>
-     * Cells should have their number (0 based) before being Added to a row.
-     * </p>
-     */
+    /// <summary>
+    /// <para>
+    /// High level representation of a cell in a row of a spreadsheet.
+    /// </para>
+    /// <para>
+    /// Cells can be numeric, formula-based or string-based (text).  The cell type
+    /// specifies this.  String cells cannot contain numbers and numeric cells cannot
+    /// contain strings (at least according to our model).  Client apps should do the
+    /// conversions themselves.  Formula cells have the formula string, as well as
+    /// the formula result, which can be numeric or string.
+    /// </para>
+    /// <para>
+    /// Cells should have their number (0 based) before being Added to a row.
+    /// </para>
+    /// </summary>
     public interface ICell
     {
 

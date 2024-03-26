@@ -24,79 +24,108 @@ namespace NPOI.SS.UserModel
     using System;
 
 
-    /**
-     * The Threshold / CFVO / Conditional Formatting Value Object.
-     * <p>This defines how to calculate the ranges for a conditional
-     *  formatting rule, eg which values Get a Green Traffic Light
-     *  icon and which Yellow or Red.</p>
-     */
-    public interface IConditionalFormattingThreshold {
-
-
-
-        /**
-         * Get the Range Type used
-         */
+    /// <summary>
+    /// <para>
+    /// The Threshold / CFVO / Conditional Formatting Value Object.
+    /// </para>
+    /// <para>
+    /// This defines how to calculate the ranges for a conditional
+    ///  formatting rule, eg which values Get a Green Traffic Light
+    ///  icon and which Yellow or Red.
+    /// </para>
+    /// </summary>
+    public interface IConditionalFormattingThreshold
+    {
+        /// <summary>
+        /// Get the Range Type used
+        /// </summary>
         RangeType RangeType { get; set; }
 
-        /**
-         * Changes the Range Type used
-         * 
-         * <p>If you change the range type, you need to
-         *  ensure that the Formula and Value parameters
-         *  are compatible with it before saving</p>
-         */
+        /// <summary>
+        /// <para>
+        /// Changes the Range Type used
+        /// </para>
+        /// <para>
+        /// If you change the range type, you need to
+        ///  ensure that the Formula and Value parameters
+        ///  are compatible with it before saving
+        /// </para>
+        /// </summary>
 
 
-        /**
-         * Formula to use to calculate the threshold,
-         *  or <code>null</code> if no formula 
-         */
+        /// <summary>
+        /// Formula to use to calculate the threshold,
+        ///  or <c>null</c> if no formula
+        /// </summary>
         String Formula { get; set; }
 
-        /**
-         * Sets the formula used to calculate the threshold,
-         *  or unsets it if <code>null</code> is given.
-         */
+        /// <summary>
+        /// Sets the formula used to calculate the threshold,
+        ///  or unsets it if <c>null</c> is given.
+        /// </summary>
 
-        /**
-         * Gets the value used for the threshold, or 
-         *  <code>null</code> if there isn't one.
-         */
+        /// <summary>
+        /// Gets the value used for the threshold, or
+        ///  <c>null</c> if there isn't one.
+        /// </summary>
         double? Value { get; set; }
 
-        /**
-         * Sets the value used for the threshold. 
-         * <p>If the type is {@link RangeType#PERCENT} or 
-         *  {@link RangeType#PERCENTILE} it must be between 0 and 100.
-         * <p>If the type is {@link RangeType#MIN} or {@link RangeType#MAX}
-         *  or {@link RangeType#FORMULA} it shouldn't be Set.
-         * <p>Use <code>null</code> to unset
-         */
+        /// <summary>
+        /// <para>
+        /// Sets the value used for the threshold.
+        /// </para>
+        /// <para>
+        /// If the type is <see cref="RangeType.PERCENT" /> or
+        ///  <see cref="RangeType.PERCENTILE" /> it must be between 0 and 100.
+        /// </para>
+        /// <para>
+        /// If the type is <see cref="RangeType.MIN" /> or <see cref="RangeType.MAX" />
+        ///  or <see cref="RangeType.FORMULA" /> it shouldn't be Set.
+        /// </para>
+        /// <para>
+        /// Use <c>null</c> to unset
+        /// </para>
+        /// </summary>
     }
     public class RangeType
     {
-        /** Number / Parameter */
+        /// <summary>
+        /// Number / Parameter */
+        /// </summary>
         public static RangeType NUMBER = new RangeType(1, "num");
-        /** The minimum value from the range */
+        /// <summary>
+        /// The minimum value from the range */
+        /// </summary>
         public static RangeType MIN = new RangeType(2, "min");
-        /** The maximum value from the range */
+        /// <summary>
+        /// The maximum value from the range */
+        /// </summary>
         public static RangeType MAX = new RangeType(3, "max");
-        /** Percent of the way from the mi to the max value in the range */
+        /// <summary>
+        /// Percent of the way from the mi to the max value in the range */
+        /// </summary>
         public static RangeType PERCENT = new RangeType(4, "percent");
-        /** The minimum value of the cell that is in X percentile of the range */
+        /// <summary>
+        /// The minimum value of the cell that is in X percentile of the range */
+        /// </summary>
         public static RangeType PERCENTILE = new RangeType(5, "percentile");
         public static RangeType UNALLOCATED = new RangeType(6, null);
-        /** Formula result */
+        /// <summary>
+        /// Formula result */
+        /// </summary>
         public static RangeType FORMULA = new RangeType(7, "formula");
 
         public static RangeType AUTOMIN = new RangeType(8, "autoMin");
 
         public static RangeType AUTOMAX = new RangeType(9, "autoMax");
 
-        /** Numeric ID of the type */
+        /// <summary>
+        /// Numeric ID of the type */
+        /// </summary>
         public int id;
-        /** Name (system) of the type */
+        /// <summary>
+        /// Name (system) of the type */
+        /// </summary>
         public string name;
 
         private static List<RangeType> values = new List<RangeType>() {
@@ -120,7 +149,7 @@ namespace NPOI.SS.UserModel
         }
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is RangeType))
+            if(obj == null || !(obj is RangeType))
             {
                 return false;
             }
@@ -139,16 +168,18 @@ namespace NPOI.SS.UserModel
         }
         public static RangeType ByName(string name)
         {
-            foreach (RangeType t in Values())
+            foreach(RangeType t in Values())
             {
-                if (t.name.Equals(name)) return t;
+                if(t.name.Equals(name))
+                    return t;
             }
             return null;
         }
 
         private RangeType(int id, string name)
         {
-            this.id = id; this.name = name;
+            this.id = id;
+            this.name = name;
         }
     }
 }

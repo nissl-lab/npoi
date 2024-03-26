@@ -19,41 +19,41 @@ using System;
 
 namespace NPOI.SS.UserModel
 {
-    /**
-     * This interface isn't implemented ...
-     */
+    /// <summary>
+    /// This interface isn't implemented ...
+    /// </summary>
     [Obsolete("deprecated in POI 3.16 beta1, scheduled for removal in 3.18")]
     public interface ITextbox : IShape
     {
 
         //public const short OBJECT_TYPE_TEXT = 6;
 
-        /**
-         * @return  the rich text string for this textbox.
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>the rich text string for this textbox.</returns>
         IRichTextString String { get; set; }
 
 
-        /**
-         * @return  Returns the left margin within the textbox.
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>Returns the left margin within the textbox.</returns>
         int MarginLeft { get; set; }
 
 
-        /**
-         * @return    returns the right margin within the textbox.
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>returns the right margin within the textbox.</returns>
         int MarginRight { get; set; }
 
 
-        /**
-         * @return  returns the top margin within the textbox.
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>returns the top margin within the textbox.</returns>
         int MarginTop { get; set; }
 
-        /**
-         * s the bottom margin within the textbox.
-         */
+        /// <summary>
+        /// s the bottom margin within the textbox.
+        /// </summary>
         int MarginBottom { get; set; }
 
         short HorizontalAlignment { get; set; }

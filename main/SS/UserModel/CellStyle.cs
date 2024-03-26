@@ -25,51 +25,52 @@ namespace NPOI.SS.UserModel
         /// the Cell should be auto-sized to shrink to fit if the text is too long
         /// </summary>
         bool ShrinkToFit { get; set; }
-        /**
-         * get the index within the Workbook (sequence within the collection of ExtnededFormat objects)
-         * @return unique index number of the underlying record this style represents (probably you don't care
-         *  unless you're comparing which one is which)
-         */
+        /// <summary>
+        /// get the index within the Workbook (sequence within the collection of ExtnededFormat objects)
+        /// </summary>
+        /// <return>unique index number of the underlying record this style represents (probably you don't care
+        /// unless you're comparing which one is which)
+        /// </return>
 
         short Index { get; }
 
-        /**
-         * get the index of the format
-         * @see DataFormat
-         */
+        /// <summary>
+        /// get the index of the format
+        /// </summary>
+        /// <see cref="IDataFormat" />
         short DataFormat { get; set; }
 
-        /**
-         * Get the format string
-         */
+        /// <summary>
+        /// Get the format string
+        /// </summary>
         String GetDataFormatString();
 
-        /**
-         * set the font for this style
-         * @param font  a font object Created or retreived from the Workbook object
-         * @see Workbook#CreateFont()
-         * @see Workbook#GetFontAt(short)
-         */
+        /// <summary>
+        /// set the font for this style
+        /// </summary>
+        /// <param name="font"> a font object Created or retreived from the Workbook object</param>
+        /// <see cref="IWorkbook.CreateFont()" />
+        /// <see cref="IWorkbook.GetFontAt(short)" />
 
         void SetFont(IFont font);
 
-        /**
-         * Gets the index of the font for this style
-         * @see Workbook#GetFontAt(short)
-         */
+        /// <summary>
+        /// Gets the index of the font for this style
+        /// </summary>
+        /// <see cref="IWorkbook.GetFontAt(short)" />
         short FontIndex { get; }
 
-        /**
-         * get whether the cell's using this style are to be hidden
-         * @return hidden - whether the cell using this style should be hidden
-         */
+        /// <summary>
+        /// get whether the cell's using this style are to be hidden
+        /// </summary>
+        /// <return>hidden - whether the cell using this style should be hidden</return>
 
         bool IsHidden { get; set; }
 
-        /**
-         * get whether the cell's using this style are to be locked
-         * @return hidden - whether the cell using this style should be locked
-         */
+        /// <summary>
+        /// get whether the cell's using this style are to be locked
+        /// </summary>
+        /// <return>hidden - whether the cell using this style should be locked</return>
 
         bool IsLocked { get; set; }
 
@@ -82,211 +83,216 @@ namespace NPOI.SS.UserModel
         /// </summary>
         bool IsQuotePrefixed { get; set; }
 
-        /**
-         * get the type of horizontal alignment for the cell
-         * @return align - the type of alignment
-         * @see #ALIGN_GENERAL
-         * @see #ALIGN_LEFT
-         * @see #ALIGN_CENTER
-         * @see #ALIGN_RIGHT
-         * @see #ALIGN_FILL
-         * @see #ALIGN_JUSTIFY
-         * @see #ALIGN_CENTER_SELECTION
-         */
+        /// <summary>
+        /// get the type of horizontal alignment for the cell
+        /// </summary>
+        /// <return>align - the type of alignment</return>
+        /// <see cref="ALIGN_GENERAL" />
+        /// <see cref="ALIGN_LEFT" />
+        /// <see cref="ALIGN_CENTER" />
+        /// <see cref="ALIGN_RIGHT" />
+        /// <see cref="ALIGN_FILL" />
+        /// <see cref="ALIGN_JUSTIFY" />
+        /// <see cref="ALIGN_CENTER_SELECTION" />
 
         HorizontalAlignment Alignment { get; set; }
 
 
-        /**
-         * get whether the text should be wrapped
-         * @return wrap text or not
-         */
+        /// <summary>
+        /// get whether the text should be wrapped
+        /// </summary>
+        /// <return>wrap text or not</return>
 
         bool WrapText { get; set; }
 
 
-        /**
-         * get the type of vertical alignment for the cell
-         * @return align the type of alignment
-         * @see #VERTICAL_TOP
-         * @see #VERTICAL_CENTER
-         * @see #VERTICAL_BOTTOM
-         * @see #VERTICAL_JUSTIFY
-         */
+        /// <summary>
+        /// get the type of vertical alignment for the cell
+        /// </summary>
+        /// <return>align the type of alignment</return>
+        /// <see cref="VERTICAL_TOP" />
+        /// <see cref="VERTICAL_CENTER" />
+        /// <see cref="VERTICAL_BOTTOM" />
+        /// <see cref="VERTICAL_JUSTIFY" />
 
         VerticalAlignment VerticalAlignment { get; set; }
 
-        /**
-         * get the degree of rotation for the text in the cell
-         * 
-         * Note: HSSF uses values from -90 to 90 degrees, whereas XSSF 
-         * uses values from 0 to 180 degrees. The implementations of this method will map between these two value-ranges 
-         * accordingly, however the corresponding getter is returning values in the range mandated by the current type
-         * of Excel file-format that this CellStyle is applied to.
-         *
-         * 
-         * @return rotation degrees (between -90 and 90 degrees)
-         */
+        /// <summary>
+        /// <para>
+        /// get the degree of rotation for the text in the cell
+        /// </para>
+        /// <para>
+        /// Note: HSSF uses values from -90 to 90 degrees, whereas XSSF
+        /// uses values from 0 to 180 degrees. The implementations of this method will map between these two value-ranges
+        /// accordingly, however the corresponding getter is returning values in the range mandated by the current type
+        /// of Excel file-format that this CellStyle is applied to.
+        /// </para>
+        /// </summary>
+        /// <return>rotation degrees (between -90 and 90 degrees)</return>
 
         short Rotation { get; set; }
 
-        /**
-         * get the number of spaces to indent the text in the cell
-         * @return indent - number of spaces
-         */
+        /// <summary>
+        /// get the number of spaces to indent the text in the cell
+        /// </summary>
+        /// <return>indent - number of spaces</return>
 
         short Indention { get; set; }
 
-        /**
-         * get the type of border to use for the left border of the cell
-         * @return border type
-         * @see #BORDER_NONE
-         * @see #BORDER_THIN
-         * @see #BORDER_MEDIUM
-         * @see #BORDER_DASHED
-         * @see #BORDER_DOTTED
-         * @see #BORDER_THICK
-         * @see #BORDER_DOUBLE
-         * @see #BORDER_HAIR
-         * @see #BORDER_MEDIUM_DASHED
-         * @see #BORDER_DASH_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT
-         * @see #BORDER_DASH_DOT_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT_DOT
-         * @see #BORDER_SLANTED_DASH_DOT
-         */
+        /// <summary>
+        /// get the type of border to use for the left border of the cell
+        /// </summary>
+        /// <return>border type</return>
+        /// <see cref="BorderStyle.None" />
+        /// <see cref="BORDER_THIN" />
+        /// <see cref="BORDER_MEDIUM" />
+        /// <see cref="BORDER_DASHED" />
+        /// <see cref="BORDER_DOTTED" />
+        /// <see cref="BORDER_THICK" />
+        /// <see cref="BORDER_DOUBLE" />
+        /// <see cref="BORDER_HAIR" />
+        /// <see cref="BORDER_MEDIUM_DASHED" />
+        /// <see cref="BORDER_DASH_DOT" />
+        /// <see cref="BORDER_MEDIUM_DASH_DOT" />
+        /// <see cref="BORDER_DASH_DOT_DOT" />
+        /// <see cref="BORDER_MEDIUM_DASH_DOT_DOT" />
+        /// <see cref="BORDER_SLANTED_DASH_DOT" />
 
         BorderStyle BorderLeft { get; set; }
 
 
-        /**
-         * get the type of border to use for the right border of the cell
-         * @return border type
-         * @see #BORDER_NONE
-         * @see #BORDER_THIN
-         * @see #BORDER_MEDIUM
-         * @see #BORDER_DASHED
-         * @see #BORDER_DOTTED
-         * @see #BORDER_THICK
-         * @see #BORDER_DOUBLE
-         * @see #BORDER_HAIR
-         * @see #BORDER_MEDIUM_DASHED
-         * @see #BORDER_DASH_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT
-         * @see #BORDER_DASH_DOT_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT_DOT
-         * @see #BORDER_SLANTED_DASH_DOT
-         */
+        /// <summary>
+        /// get the type of border to use for the right border of the cell
+        /// </summary>
+        /// <return>border type</return>
+        /// <see cref="BORDER_NONE" />
+        /// <see cref="BORDER_THIN" />
+        /// <see cref="BORDER_MEDIUM" />
+        /// <see cref="BORDER_DASHED" />
+        /// <see cref="BORDER_DOTTED" />
+        /// <see cref="BORDER_THICK" />
+        /// <see cref="BORDER_DOUBLE" />
+        /// <see cref="BORDER_HAIR" />
+        /// <see cref="BORDER_MEDIUM_DASHED" />
+        /// <see cref="BORDER_DASH_DOT" />
+        /// <see cref="BORDER_MEDIUM_DASH_DOT" />
+        /// <see cref="BORDER_DASH_DOT_DOT" />
+        /// <see cref="BORDER_MEDIUM_DASH_DOT_DOT" />
+        /// <see cref="BORDER_SLANTED_DASH_DOT" />
 
         BorderStyle BorderRight { get; set; }
 
 
-        /**
-         * get the type of border to use for the top border of the cell
-         * @return border type
-         * @see #BORDER_NONE
-         * @see #BORDER_THIN
-         * @see #BORDER_MEDIUM
-         * @see #BORDER_DASHED
-         * @see #BORDER_DOTTED
-         * @see #BORDER_THICK
-         * @see #BORDER_DOUBLE
-         * @see #BORDER_HAIR
-         * @see #BORDER_MEDIUM_DASHED
-         * @see #BORDER_DASH_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT
-         * @see #BORDER_DASH_DOT_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT_DOT
-         * @see #BORDER_SLANTED_DASH_DOT
-         */
+        /// <summary>
+        /// get the type of border to use for the top border of the cell
+        /// </summary>
+        /// <return>border type</return>
+        /// <see cref="BORDER_NONE" />
+        /// <see cref="BORDER_THIN" />
+        /// <see cref="BORDER_MEDIUM" />
+        /// <see cref="BORDER_DASHED" />
+        /// <see cref="BORDER_DOTTED" />
+        /// <see cref="BORDER_THICK" />
+        /// <see cref="BORDER_DOUBLE" />
+        /// <see cref="BORDER_HAIR" />
+        /// <see cref="BORDER_MEDIUM_DASHED" />
+        /// <see cref="BORDER_DASH_DOT" />
+        /// <see cref="BORDER_MEDIUM_DASH_DOT" />
+        /// <see cref="BORDER_DASH_DOT_DOT" />
+        /// <see cref="BORDER_MEDIUM_DASH_DOT_DOT" />
+        /// <see cref="BORDER_SLANTED_DASH_DOT" />
 
         BorderStyle BorderTop { get; set; }
 
 
-        /**
-         * get the type of border to use for the bottom border of the cell
-         * @return border type
-         * @see #BORDER_NONE
-         * @see #BORDER_THIN
-         * @see #BORDER_MEDIUM
-         * @see #BORDER_DASHED
-         * @see #BORDER_DOTTED
-         * @see #BORDER_THICK
-         * @see #BORDER_DOUBLE
-         * @see #BORDER_HAIR
-         * @see #BORDER_MEDIUM_DASHED
-         * @see #BORDER_DASH_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT
-         * @see #BORDER_DASH_DOT_DOT
-         * @see #BORDER_MEDIUM_DASH_DOT_DOT
-         * @see #BORDER_SLANTED_DASH_DOT
-         */
+        /// <summary>
+        /// get the type of border to use for the bottom border of the cell
+        /// </summary>
+        /// <return>border type</return>
+        /// <see cref="BORDER_NONE" />
+        /// <see cref="BORDER_THIN" />
+        /// <see cref="BORDER_MEDIUM" />
+        /// <see cref="BORDER_DASHED" />
+        /// <see cref="BORDER_DOTTED" />
+        /// <see cref="BORDER_THICK" />
+        /// <see cref="BORDER_DOUBLE" />
+        /// <see cref="BORDER_HAIR" />
+        /// <see cref="BORDER_MEDIUM_DASHED" />
+        /// <see cref="BORDER_DASH_DOT" />
+        /// <see cref="BORDER_MEDIUM_DASH_DOT" />
+        /// <see cref="BORDER_DASH_DOT_DOT" />
+        /// <see cref="BORDER_MEDIUM_DASH_DOT_DOT" />
+        /// <see cref="BORDER_SLANTED_DASH_DOT" />
         BorderStyle BorderBottom { get; set; }
 
 
-        /**
-         * get the color to use for the left border
-         */
+        /// <summary>
+        /// get the color to use for the left border
+        /// </summary>
         short LeftBorderColor { get; set; }
 
 
-        /**
-         * get the color to use for the left border
-         * @return the index of the color defInition
-         */
+        /// <summary>
+        /// get the color to use for the left border
+        /// </summary>
+        /// <return>the index of the color defInition</return>
         short RightBorderColor { get; set; }
 
 
-        /**
-         * get the color to use for the top border
-         * @return hhe index of the color defInition
-         */
+        /// <summary>
+        /// get the color to use for the top border
+        /// </summary>
+        /// <return>hhe index of the color defInition</return>
         short TopBorderColor { get; set; }
 
 
-        /**
-         * get the color to use for the left border
-         * @return the index of the color defInition
-         */
+        /// <summary>
+        /// get the color to use for the left border
+        /// </summary>
+        /// <return>the index of the color defInition</return>
         short BottomBorderColor { get; set; }
 
 
-        /**
-         * get the fill pattern (??) - set to 1 to fill with foreground color
-         * @return fill pattern
-         */
+        /// <summary>
+        /// get the fill pattern (??) - set to 1 to fill with foreground color
+        /// </summary>
+        /// <return>fill pattern</return>
 
         FillPattern FillPattern { get; set; }
 
-        /**
-         * get the background fill color
-         * @return fill color
-         */
+        /// <summary>
+        /// get the background fill color
+        /// </summary>
+        /// <return>fill color</return>
         short FillBackgroundColor { get; set; }
 
 
-        /**
-         * get the foreground fill color
-         * @return fill color
-         */
+        /// <summary>
+        /// get the foreground fill color
+        /// </summary>
+        /// <return>fill color</return>
         short FillForegroundColor { get; set; }
 
-        /**
-         * Clones all the style information from another
-         *  CellStyle, onto this one. This 
-         *  CellStyle will then have all the same
-         *  properties as the source, but the two may
-         *  be edited independently.
-         * Any stylings on this CellStyle will be lost! 
-         *  
-         * The source CellStyle could be from another
-         *  Workbook if you like. This allows you to
-         *  copy styles from one Workbook to another.
-         *
-         * However, both of the CellStyles will need
-         *  to be of the same type (HSSFCellStyle or
-         *  XSSFCellStyle)
-         */
+        /// <summary>
+        /// <para>
+        /// Clones all the style information from another
+        ///  CellStyle, onto this one. This
+        ///  CellStyle will then have all the same
+        ///  properties as the source, but the two may
+        ///  be edited independently.
+        /// Any stylings on this CellStyle will be lost!
+        /// </para>
+        /// <para>
+        /// The source CellStyle could be from another
+        ///  Workbook if you like. This allows you to
+        ///  copy styles from one Workbook to another.
+        /// </para>
+        /// <para>
+        /// However, both of the CellStyles will need
+        ///  to be of the same type (HSSFCellStyle or
+        ///  XSSFCellStyle)
+        /// </para>
+        /// </summary>
         void CloneStyleFrom(ICellStyle source);
 
         IFont GetFont(IWorkbook parentWorkbook);
@@ -309,21 +315,21 @@ namespace NPOI.SS.UserModel
         /// <value>The border diagional type.</value>
         BorderDiagonal BorderDiagonal { get; set; }
 
-        /**
-         * Gets the color object representing the current
-         *  background fill, resolving indexes using
-         *  the supplied workbook.
-         * This will work for both indexed and rgb
-         *  defined colors. 
-         */
+        /// <summary>
+        /// Gets the color object representing the current
+        ///  background fill, resolving indexes using
+        ///  the supplied workbook.
+        /// This will work for both indexed and rgb
+        ///  defined colors.
+        /// </summary>
         IColor FillBackgroundColorColor { get; }
-        /**
-         * Gets the color object representing the current
-         *  foreground fill, resolving indexes using
-         *  the supplied workbook.
-         * This will work for both indexed and rgb
-         *  defined colors. 
-         */
+        /// <summary>
+        /// Gets the color object representing the current
+        ///  foreground fill, resolving indexes using
+        ///  the supplied workbook.
+        /// This will work for both indexed and rgb
+        ///  defined colors.
+        /// </summary>
         IColor FillForegroundColorColor { get; }
     }
 }

@@ -33,113 +33,113 @@ namespace NPOI.SS.UserModel
     public interface IPrintSetup
     {
 
-        /**    
-         * Returns the paper size.    
-         * @return paper size    
-         */
+        /// <summary>
+        /// Returns the paper size.
+        /// </summary>
+        /// <returns>paper size</returns>
         short PaperSize { get; set; }
 
-        /**    
-         * Returns the scale.    
-         * @return scale    
-         */
-        short Scale{ get; set; }
+        /// <summary>
+        /// Returns the scale.
+        /// </summary>
+        /// <returns>scale</returns>
+        short Scale { get; set; }
 
-        /**    
-         * Returns the page start.    
-         * @return page start    
-         */
-        short PageStart{ get; set; }
+        /// <summary>
+        /// Returns the page start.
+        /// </summary>
+        /// <returns>page start</returns>
+        short PageStart { get; set; }
 
-        /**    
-         * Returns the number of pages wide to fit sheet in.    
-         * @return number of pages wide to fit sheet in    
-         */
-        short FitWidth{ get; set; }
+        /// <summary>
+        /// Returns the number of pages wide to fit sheet in.
+        /// </summary>
+        /// <returns>number of pages wide to fit sheet in</returns>
+        short FitWidth { get; set; }
 
-        /**    
-         * Returns the number of pages high to fit the sheet in.    
-         * @return number of pages high to fit the sheet in    
-         */
-        short FitHeight{ get; set; }
+        /// <summary>
+        /// Returns the number of pages high to fit the sheet in.
+        /// </summary>
+        /// <returns>number of pages high to fit the sheet in</returns>
+        short FitHeight { get; set; }
 
-        /**    
-         * Returns the left to right print order.    
-         * @return left to right print order    
-         */
-        bool LeftToRight{ get; set; }
+        /// <summary>
+        /// Returns the left to right print order.
+        /// </summary>
+        /// <returns>left to right print order</returns>
+        bool LeftToRight { get; set; }
 
-        /**    
-         * Returns the landscape mode.    
-         * @return landscape mode    
-         */
-        bool Landscape{ get; set; }
+        /// <summary>
+        /// Returns the landscape mode.
+        /// </summary>
+        /// <returns>landscape mode</returns>
+        bool Landscape { get; set; }
 
-        /**    
-         * Returns the valid Settings.    
-         * @return valid Settings    
-         */
-        bool ValidSettings{ get; set; }
+        /// <summary>
+        /// Returns the valid Settings.
+        /// </summary>
+        /// <returns>valid Settings</returns>
+        bool ValidSettings { get; set; }
 
-        /**    
-         * Returns the black and white Setting.    
-         * @return black and white Setting    
-         */
-        bool NoColor{ get; set; }
+        /// <summary>
+        /// Returns the black and white Setting.
+        /// </summary>
+        /// <returns>black and white Setting</returns>
+        bool NoColor { get; set; }
 
-        /**    
-         * Returns the draft mode.    
-         * @return draft mode    
-         */
-        bool Draft{ get; set; }
+        /// <summary>
+        /// Returns the draft mode.
+        /// </summary>
+        /// <returns>draft mode</returns>
+        bool Draft { get; set; }
 
-        /**    
-         * Returns the print notes.    
-         * @return print notes    
-         */
-        bool Notes{ get; set; }
+        /// <summary>
+        /// Returns the print notes.
+        /// </summary>
+        /// <returns>print notes</returns>
+        bool Notes { get; set; }
 
-        /**    
-         * Returns the no orientation.    
-         * @return no orientation    
-         */
-        bool NoOrientation{ get; set; }
+        /// <summary>
+        /// Returns the no orientation.
+        /// </summary>
+        /// <returns>no orientation</returns>
+        bool NoOrientation { get; set; }
 
-        /**    
-         * Returns the use page numbers.    
-         * @return use page numbers    
-         */
-        bool UsePage{ get; set; }
+        /// <summary>
+        /// Returns the use page numbers.
+        /// </summary>
+        /// <returns>use page numbers</returns>
+        bool UsePage { get; set; }
 
-        /**    
-         * Returns the horizontal resolution.    
-         * @return horizontal resolution    
-         */
-        short HResolution{ get; set; }
+        /// <summary>
+        /// Returns the horizontal resolution.
+        /// </summary>
+        /// <returns>horizontal resolution</returns>
+        short HResolution { get; set; }
 
-        /**    
-         * Returns the vertical resolution.    
-         * @return vertical resolution    
-         */
-        short VResolution{ get; set; }
+        /// <summary>
+        /// Returns the vertical resolution.
+        /// </summary>
+        /// <returns>vertical resolution</returns>
+        short VResolution { get; set; }
 
-        /**    
-         * Returns the header margin.    
-         * @return header margin    
-         */
-        double HeaderMargin{ get; set; }
+        /// <summary>
+        /// Returns the header margin.
+        /// </summary>
+        /// <returns>header margin</returns>
+        double HeaderMargin { get; set; }
 
-        /**    
-         * Returns the footer margin.    
-         * @return footer margin    
-         */
-        double FooterMargin{ get; set; }
+        /// <summary>
+        /// Returns the footer margin.
+        /// </summary>
+        /// <returns>footer margin</returns>
+        double FooterMargin { get; set; }
 
-        /**    
-         * Returns the number of copies.    
-         * @return number of copies    
-         */
-        short Copies{ get; set; }
+        /// <summary>
+        /// Returns the number of copies.
+        /// </summary>
+        /// <returns>number of copies</returns>
+        short Copies { get; set; }
 
         bool EndNote { get; set; }
 

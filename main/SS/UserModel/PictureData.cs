@@ -22,34 +22,32 @@ namespace NPOI.SS.UserModel
     public interface IPictureData
     {
 
-        /**
-         * Gets the picture data.
-         *
-         * @return the picture data.
-         */
+        /// <summary>
+        /// Gets the picture data.
+        /// </summary>
+        /// <returns>the picture data.</returns>
         byte[] Data { get; }
 
-        /**
-         * Suggests a file extension for this image.
-         *
-         * @return the file extension.
-         */
+        /// <summary>
+        /// Suggests a file extension for this image.
+        /// </summary>
+        /// <returns>the file extension.</returns>
         String SuggestFileExtension();
-        /**
-         * Returns the mime type for the image
-         */
+        /// <summary>
+        /// Returns the mime type for the image
+        /// </summary>
         String MimeType { get; }
 
-        /**
-         * @return the POI internal image type, 0 if unknown image type
-         *
-         * @see Workbook#PICTURE_TYPE_DIB
-         * @see Workbook#PICTURE_TYPE_EMF
-         * @see Workbook#PICTURE_TYPE_JPEG
-         * @see Workbook#PICTURE_TYPE_PICT
-         * @see Workbook#PICTURE_TYPE_PNG
-         * @see Workbook#PICTURE_TYPE_WMF
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>the POI internal image type, 0 if unknown image type</returns>
+        /// 
+        /// <see cref="Workbook.PICTURE_TYPE_DIB" />
+        /// <see cref="Workbook.PICTURE_TYPE_EMF" />
+        /// <see cref="Workbook.PICTURE_TYPE_JPEG" />
+        /// <see cref="Workbook.PICTURE_TYPE_PICT" />
+        /// <see cref="Workbook.PICTURE_TYPE_PNG" />
+        /// <see cref="Workbook.PICTURE_TYPE_WMF" />
         PictureType PictureType { get; }
     }
 }

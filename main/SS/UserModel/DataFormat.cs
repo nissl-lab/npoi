@@ -21,19 +21,19 @@ namespace NPOI.SS.UserModel
 
     public interface IDataFormat
     {
-        /**
-         * get the format index that matches the given format string.
-         * Creates a new format if one is not found.  Aliases text to the proper format.
-         * @param format string matching a built in format
-         * @return index of format.
-         */
+        /// <summary>
+        /// get the format index that matches the given format string.
+        /// Creates a new format if one is not found.  Aliases text to the proper format.
+        /// </summary>
+        /// <param name="format">string matching a built in format</param>
+        /// <returns>index of format.</returns>
         short GetFormat(String format);
 
-        /**
-         * get the format string that matches the given format index
-         * @param index of a format
-         * @return string represented at index of format or null if there is not a  format at that index
-         */
+        /// <summary>
+        /// get the format string that matches the given format index
+        /// </summary>
+        /// <param name="index">of a format</param>
+        /// <returns>string represented at index of format or null if there is not a  format at that index</returns>
         String GetFormat(short index);
     }
 }

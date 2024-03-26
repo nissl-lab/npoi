@@ -18,11 +18,10 @@
 namespace NPOI.SS.UserModel
 {
 
-    /**
-     *  The enumeration value indicating the possible paper size for a sheet
-     *
-     * @author Daniele Montagni
-     */
+    /// <summary>
+    ///  The enumeration value indicating the possible paper size for a sheet
+    /// </summary>
+    /// @author Daniele Montagni
     public enum PaperSize : short
     {
         /// <summary>

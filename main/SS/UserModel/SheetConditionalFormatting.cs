@@ -23,13 +23,9 @@ namespace NPOI.SS.UserModel
 
     using NPOI.SS.Util;
 
-    /**
-     * The 'Conditional Formatting' facet of <c>Sheet</c>
-     *
-     * @author Dmitriy Kumshayev
-     * @author Yegor Kozlov
-     * @since 3.8
-     */
+    /// <summary>
+    /// The 'Conditional Formatting' facet of <c>Sheet</c>
+    /// </summary>
     public interface ISheetConditionalFormatting
     {
         /// <summary>
@@ -73,32 +69,34 @@ namespace NPOI.SS.UserModel
         /// </remarks>
         int AddConditionalFormatting(IConditionalFormatting cf);
 
-        /**
-         * A factory method allowing to create a conditional formatting rule
-         * with a cell comparison operator
-         * <p>
-         * The Created conditional formatting rule Compares a cell value
-         * to a formula calculated result, using the specified operator.
-         * The type  of the Created condition is {@link ConditionalFormattingRule#CONDITION_TYPE_CELL_VALUE_IS}
-         * </p>
-         *
-         * @param comparisonOperation - MUST be a constant value from
-         *		 <c>{@link ComparisonOperator}</c>: <p>
-         * <ul>
-         *		 <li>BETWEEN</li>
-         *		 <li>NOT_BETWEEN</li>
-         *		 <li>EQUAL</li>
-         *		 <li>NOT_EQUAL</li>
-         *		 <li>GT</li>
-         *		 <li>LT</li>
-         *		 <li>GE</li>
-         *		 <li>LE</li>
-         * </ul>
-         * </p>
-         * @param formula1 - formula for the valued, Compared with the cell
-         * @param formula2 - second formula (only used with
-         * {@link ComparisonOperator#BETWEEN}) and {@link ComparisonOperator#NOT_BETWEEN} operations)
-         */
+        /// <summary>
+        /// <para>
+        /// A factory method allowing to create a conditional formatting rule
+        /// with a cell comparison operator
+        /// </para>
+        /// <para>
+        /// The Created conditional formatting rule Compares a cell value
+        /// to a formula calculated result, using the specified operator.
+        /// The type  of the Created condition is <see cref="ConditionalFormattingRule.CONDITION_TYPE_CELL_VALUE_IS" />
+        /// </para>
+        /// </summary>
+        /// <param name="comparisonOperation">- MUST be a constant value from
+        /// <c><see cref="ComparisonOperator"/></c>:
+        ///   <list type="bullet">
+        ///   <item><description>BETWEEN</description></item>
+        ///    <item><description>NOT_BETWEEN</description></item>
+        ///    <item><description>EQUAL</description></item>
+        ///    <item><description>NOT_EQUAL</description></item>
+        ///    <item><description>GT</description></item>
+        ///    <item><description>LT</description></item>
+        ///    <item><description>GE</description></item>
+        ///    <item><description>LE</description></item>
+        /// </list>
+        /// </param>
+        /// <param name="formula1">- formula for the valued, Compared with the cell</param>
+        /// <param name="formula2">- second formula (only used with
+        /// <see cref="ComparisonOperator.BETWEEN" />) and <see cref="ComparisonOperator.NOT_BETWEEN" /> operations)
+        /// </param>
         IConditionalFormattingRule CreateConditionalFormattingRule(
                 ComparisonOperator comparisonOperation,
                 String formula1,
@@ -123,37 +121,49 @@ namespace NPOI.SS.UserModel
         /// <returns>conditional formatting rule</returns>
         IConditionalFormattingRule CreateConditionalFormattingRule(String formula);
 
-        /**
-         * Create a Databar conditional formatting rule.
-         * <p>The thresholds and colour for it will be created, but will be 
-         *  empty and require configuring with 
-         *  {@link ConditionalFormattingRule#getDataBarFormatting()}
-         *  then
-         *  {@link DataBarFormatting#getMinThreshold()}
-         *  and 
-         *  {@link DataBarFormatting#getMaxThreshold()}
-         */
+        /// <summary>
+        /// <para>
+        /// Create a Databar conditional formatting rule.
+        /// </para>
+        /// <para>
+        /// The thresholds and colour for it will be created, but will be
+        ///  empty and require configuring with
+        ///  <see cref="IConditionalFormattingRule.DataBarFormatting" />
+        ///  then
+        ///  <see cref="IDataBarFormatting.MinThreshold" />
+        ///  and
+        ///  <see cref="IDataBarFormatting.MaxThreshold" />
+        /// </para>
+        /// </summary>
         IConditionalFormattingRule CreateConditionalFormattingRule(ExtendedColor color);
-        /**
-         * Create an Icon Set / Multi-State conditional formatting rule.
-         * <p>The thresholds for it will be created, but will be empty
-         *  and require configuring with 
-         *  {@link ConditionalFormattingRule#getMultiStateFormatting()}
-         *  then
-         *  {@link IconMultiStateFormatting#getThresholds()}
-         */
+        /// <summary>
+        /// <para>
+        /// Create an Icon Set / Multi-State conditional formatting rule.
+        /// </para>
+        /// <para>
+        /// The thresholds for it will be created, but will be empty
+        ///  and require configuring with
+        ///  <see cref="IConditionalFormattingRule.MultiStateFormatting" />
+        ///  then
+        ///  <see cref="IIconMultiStateFormatting.Thresholds" />
+        /// </para>
+        /// </summary>
         IConditionalFormattingRule CreateConditionalFormattingRule(IconSet iconSet);
 
-        /**
-         * Create a Color Scale / Color Gradient conditional formatting rule.
-         * <p>The thresholds and colours for it will be created, but will be 
-         *  empty and require configuring with 
-         *  {@link ConditionalFormattingRule#getColorScaleFormatting()}
-         *  then
-         *  {@link ColorScaleFormatting#getThresholds()}
-         *  and
-         *  {@link ColorScaleFormatting#getColors()}
-         */
+        /// <summary>
+        /// <para>
+        /// Create a Color Scale / Color Gradient conditional formatting rule.
+        /// </para>
+        /// <para>
+        /// The thresholds and colours for it will be created, but will be
+        ///  empty and require configuring with
+        ///  <see cref="IConditionalFormattingRule.ColorScaleFormatting" />
+        ///  then
+        ///  <see cref="IColorScaleFormatting.Thresholds" />
+        ///  and
+        ///  <see cref="IColorScaleFormatting.Colors" />
+        /// </para>
+        /// </summary>
         IConditionalFormattingRule CreateConditionalFormattingColorScaleRule();
 
         /// <summary>

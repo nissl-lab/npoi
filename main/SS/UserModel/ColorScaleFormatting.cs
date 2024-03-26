@@ -23,35 +23,39 @@ namespace NPOI.SS.UserModel
 
     using NPOI.HSSF.Record.CF;
 
-    /**
-     * High level representation for the Color Scale / Colour Scale /
-     *  Color Gradient Formatting component of Conditional Formatting Settings
-     */
-    public interface IColorScaleFormatting {
-        
-        /**
-        * get or sets the number of control points to use to map
-        *  the colours. Should normally be 2 or 3.
-        * <p>After updating, you need to ensure that the
-        *  {@link Threshold} count and Color count match
-        */
+    /// <summary>
+    /// High level representation for the Color Scale / Colour Scale /
+    ///  Color Gradient Formatting component of Conditional Formatting Settings
+    /// </summary>
+    public interface IColorScaleFormatting
+    {
+
+        /// <summary>
+        /// <para>
+        /// get or sets the number of control points to use to map
+        ///  the colours. Should normally be 2 or 3.
+        /// </para>
+        /// <para>
+        /// After updating, you need to ensure that the
+        ///  <see cref="Threshold"/> count and Color count match
+        /// </para>
+        /// </summary>
         int NumControlPoints { get; set; }
 
 
-
-        /**
-         * get or sets the list of colours that are interpolated
-         *  between.The number must match {@link #getNumControlPoints()}
-         */
+        /// <summary>
+        /// get or sets the list of colours that are interpolated
+        ///  between.The number must match <see cref="NumControlPoints" />
+        /// </summary>
         IColor[] Colors { get; set; }
-        /**
-         * Gets the list of thresholds
-         */
+        /// <summary>
+        /// Gets the list of thresholds
+        /// </summary>
         IConditionalFormattingThreshold[] Thresholds { get; set; }
 
-        /**
-         * Creates a new, empty Threshold
-         */
+        /// <summary>
+        /// Creates a new, empty Threshold
+        /// </summary>
         IConditionalFormattingThreshold CreateThreshold();
     }
 

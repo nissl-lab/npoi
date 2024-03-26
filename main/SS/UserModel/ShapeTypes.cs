@@ -17,12 +17,11 @@
 namespace NPOI.SS.UserModel
 {
 
-    /**
-     * All known types of automatic shapes in DrawingML
-     *
-     * @author Yegor Kozlov
-     */
-    public enum ShapeTypes:int
+    /// <summary>
+    /// All known types of automatic shapes in DrawingML
+    /// </summary>
+    /// @author Yegor Kozlov
+    public enum ShapeTypes : int
     {
         /// <summary>
         /// Allow accessing the Initial value.

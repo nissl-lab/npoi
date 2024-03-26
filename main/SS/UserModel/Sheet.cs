@@ -458,23 +458,25 @@ namespace NPOI.SS.UserModel
         /// <param name="denominator">denominator for the zoom magnification.</param>
         [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #setZoom(int)} instead.")]
         void SetZoom(int numerator, int denominator);
-        /**
-         * Window zoom magnification for current view representing percent values.
-         * Valid values range from 10 to 400. Horizontal & Vertical scale together.
-         *
-         * For example:
-         * <pre>
-         * 10 - 10%
-         * 20 - 20%
-         * ...
-         * 100 - 100%
-         * ...
-         * 400 - 400%
-         * </pre>
-         *
-         * @param scale window zoom magnification
-         * @throws IllegalArgumentException if scale is invalid
-         */
+        /// <summary>
+        /// <para>
+        /// Window zoom magnification for current view representing percent values.
+        /// Valid values range from 10 to 400. Horizontal &amp; Vertical scale together.
+        /// </para>
+        /// <para>
+        /// For example:
+        /// <code>
+        /// 10 - 10%
+        /// 20 - 20%
+        /// ...
+        /// 100 - 100%
+        /// ...
+        /// 400 - 400%
+        /// </code>
+        /// </para>
+        /// </summary>
+        /// <param name="scale">window zoom magnification</param>
+        /// <exception cref="ArgumentException">if scale is invalid</exception>
         void SetZoom(int scale);
         /// <summary>
         /// The top row in the visible view when the sheet is

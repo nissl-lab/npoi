@@ -19,16 +19,22 @@ namespace NPOI.SS.UserModel
     using System;
 
     using NPOI.SS.Util;
-    /**
-         * Error style constants for error box
-         */
+    /// <summary>
+    /// Error style constants for error box
+    /// </summary>
     public static class ERRORSTYLE
     {
-        /** STOP style */
+        /// <summary>
+        /// STOP style */
+        /// </summary>
         public const int STOP = 0x00;
-        /** WARNING style */
+        /// <summary>
+        /// WARNING style */
+        /// </summary>
         public const int WARNING = 0x01;
-        /** INFO style */
+        /// <summary>
+        /// INFO style */
+        /// </summary>
         public const int INFO = 0x02;
     }
 
@@ -70,11 +76,14 @@ namespace NPOI.SS.UserModel
          */
         //bool GetSuppressDropDownArrow();
 
-        /**
-         * Sets the behaviour when a cell which belongs to this object is selected
-         * 
-         * <value><c>true</c> if an prompt box should be displayed , <c>false</c> otherwise</value>
-         */
+        /// <summary>
+        /// <para>
+        /// Sets the behaviour when a cell which belongs to this object is selected
+        /// </para>
+        /// <para>
+        /// <value><c>true</c> if an prompt box should be displayed , <c>false</c> otherwise</value>
+        /// </para>
+        /// </summary>
         bool ShowPromptBox { get; set; }
         //void SetShowPromptBox(bool Show);
 
@@ -83,11 +92,14 @@ namespace NPOI.SS.UserModel
          */
         //bool GetShowPromptBox();
 
-        /**
-         * Sets the behaviour when an invalid value is entered
-         * 
-         * <value><c>true</c> if an error box should be displayed , <c>false</c> otherwise</value>
-         */
+        /// <summary>
+        /// <para>
+        /// Sets the behaviour when an invalid value is entered
+        /// </para>
+        /// <para>
+        /// <value><c>true</c> if an error box should be displayed , <c>false</c> otherwise</value>
+        /// </para>
+        /// </summary>
         bool ShowErrorBox { get; set; }
         //void SetShowErrorBox(bool Show);
 
@@ -96,46 +108,44 @@ namespace NPOI.SS.UserModel
          */
         //bool GetShowErrorBox();
 
-        /**
-         * Sets the title and text for the prompt box . Prompt box is displayed when
-         * the user selects a cell which belongs to this validation object . In
-         * order for a prompt box to be displayed you should also use method
-         * SetShowPromptBox( bool show )
-         * 
-         * @param title The prompt box's title
-         * @param text The prompt box's text
-         */
+        /// <summary>
+        /// Sets the title and text for the prompt box . Prompt box is displayed when
+        /// the user selects a cell which belongs to this validation object . In
+        /// order for a prompt box to be displayed you should also use method
+        /// SetShowPromptBox( bool show )
+        /// </summary>
+        /// <param name="title">The prompt box's title</param>
+        /// <param name="text">The prompt box's text</param>
         void CreatePromptBox(String title, String text);
-        /**
-         * @return Prompt box's title or <code>null</code>
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>Prompt box's title or <c>null</c></returns>
         String PromptBoxTitle { get; }
-        
-        /**
-         * @return Prompt box's text or <code>null</code>
-         */
+
+        /// <summary>
+        /// </summary>
+        /// <returns>Prompt box's text or <c>null</c></returns>
         String PromptBoxText { get; }
 
-        /**
-         * Sets the title and text for the error box . Error box is displayed when
-         * the user enters an invalid value int o a cell which belongs to this
-         * validation object . In order for an error box to be displayed you should
-         * also use method SetShowErrorBox( bool show )
-         * 
-         * @param title The error box's title
-         * @param text The error box's text
-         */
+        /// <summary>
+        /// Sets the title and text for the error box . Error box is displayed when
+        /// the user enters an invalid value int o a cell which belongs to this
+        /// validation object . In order for an error box to be displayed you should
+        /// also use method SetShowErrorBox( bool show )
+        /// </summary>
+        /// <param name="title">The error box's title</param>
+        /// <param name="text">The error box's text</param>
         void CreateErrorBox(String title, String text);
 
-        /**
-         * @return Error box's title or <code>null</code>
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>Error box's title or <c>null</c></returns>
 
         String ErrorBoxTitle { get; }
 
-        /**
-         * @return Error box's text or <code>null</code>
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>Error box's text or <c>null</c></returns>
         String ErrorBoxText { get; }
 
         CellRangeAddressList Regions { get; }

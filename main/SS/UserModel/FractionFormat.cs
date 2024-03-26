@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for Additional information regarding copyright ownership.
@@ -24,17 +24,23 @@ using NPOI.SS.Format;
 namespace NPOI.SS.UserModel
 {
 
-    /**
-     * <p>Format class that handles Excel style fractions, such as "# #/#" and "#/###"</p>
-     * 
-     * <p>As of this writing, this is still not 100% accurate, but it does a reasonable job
-     * of trying to mimic Excel's fraction calculations.  It does not currently
-     * maintain Excel's spacing.</p>
-     * 
-     * <p>This class relies on a method lifted nearly verbatim from org.apache.math.fraction.
-     *  If further uses for Commons Math are found, we will consider Adding it as a dependency.
-     *  For now, we have in-lined the one method to keep things simple.</p>
-     */
+    /// <summary>
+    /// <para>
+    /// Format class that handles Excel style fractions, such as "# #/#" and "#/###"
+    /// </para>
+    /// <para>
+    /// 
+    /// As of this writing, this is still not 100% accurate, but it does a reasonable job
+    /// of trying to mimic Excel's fraction calculations.  It does not currently
+    /// maintain Excel's spacing.
+    /// </para>
+    /// <para>
+    /// 
+    /// This class relies on a method lifted nearly verbatim from org.apache.math.fraction.
+    ///  If further uses for Commons Math are found, we will consider Adding it as a dependency.
+    ///  For now, we have in-lined the one method to keep things simple.
+    /// </para>
+    /// </summary>
     /* One question remains...Is the value of epsilon in calcFractionMaxDenom reasonable? */
 
     public class FractionFormat : FormatBase
@@ -56,10 +62,10 @@ namespace NPOI.SS.UserModel
         private int maxDenom;
 
         private String wholePartFormatString;
-        /**
-         * Single parameter ctor
-         * @param denomFormatString The format string for the denominator
-         */
+        /// <summary>
+        /// Single parameter ctor
+        /// </summary>
+        /// <param name="denomFormatString">The format string for the denominator</param>
         public FractionFormat(String wholePartFormatString, String denomFormatString)
         {
             this.wholePartFormatString = wholePartFormatString;
@@ -67,37 +73,37 @@ namespace NPOI.SS.UserModel
             Match m = DENOM_FORMAT_PATTERN.Match(denomFormatString);
             int tmpExact = -1;
             int tmpMax = -1;
-            if (m.Success)
+            if(m.Success)
             {
-                if (m.Groups[2] != null && m.Groups[2].Success)
+                if(m.Groups[2] != null && m.Groups[2].Success)
                 {
                     try
                     {
                         tmpExact = Int32.Parse(m.Groups[2].Value);
                         //if the denom is 0, fall back to the default: tmpExact=100
 
-                        if (tmpExact == 0)
+                        if(tmpExact == 0)
                         {
                             tmpExact = -1;
                         }
                     }
-                    catch (FormatException)
+                    catch(FormatException)
                     {
                         //should never happen
                     }
                 }
-                else if (m.Groups[1] != null && m.Groups[1].Success)
+                else if(m.Groups[1] != null && m.Groups[1].Success)
                 {
                     int len = m.Groups[1].Value.Length;
                     len = len > MAX_DENOM_POW ? MAX_DENOM_POW : len;
-                    tmpMax = (int)Math.Pow(10, len);
+                    tmpMax = (int) Math.Pow(10, len);
                 }
                 else
                 {
                     tmpExact = 100;
                 }
             }
-            if (tmpExact <= 0 && tmpMax <= 0)
+            if(tmpExact <= 0 && tmpMax <= 0)
             {
                 //use 100 as the default denom if something went horribly wrong
                 tmpExact = 100;
@@ -117,29 +123,29 @@ namespace NPOI.SS.UserModel
 
             double wholePart = Math.Floor(absDoubleValue);
             double decPart = absDoubleValue - wholePart;
-            if (wholePart + decPart == 0)
+            if(wholePart + decPart == 0)
             {
                 return "0";
             }
 
             //if the absolute value is smaller than 1 over the exact or maxDenom
             //you can stop here and return "0"
-            if (absDoubleValue < (1 / Math.Max(exactDenom, maxDenom)))
+            if(absDoubleValue < (1 / Math.Max(exactDenom, maxDenom)))
             {
                 return "0";
             }
 
             //this is necessary to prevent overflow in the maxDenom calculation
             //stink1
-            if (wholePart + (int)decPart == wholePart + decPart)
+            if(wholePart + (int) decPart == wholePart + decPart)
             {
 
                 StringBuilder sb = new StringBuilder();
-                if (isNeg)
+                if(isNeg)
                 {
                     sb.Append("-");
                 }
-                sb.Append((int)wholePart);
+                sb.Append((int) wholePart);
                 return sb.ToString();
             }
 
@@ -147,7 +153,7 @@ namespace NPOI.SS.UserModel
             try
             {
                 //this should be the case because of the constructor
-                if (exactDenom > 0)
+                if(exactDenom > 0)
                 {
                     fract = SimpleFraction.BuildFractionExactDenominator(decPart, exactDenom);
                 }
@@ -156,7 +162,7 @@ namespace NPOI.SS.UserModel
                     fract = SimpleFraction.BuildFractionMaxDenominator(decPart, maxDenom);
                 }
             }
-            catch (SimpleFractionException)
+            catch(SimpleFractionException)
             {
                 return doubleValue.ToString();
             }
@@ -164,13 +170,13 @@ namespace NPOI.SS.UserModel
             StringBuilder sb1 = new StringBuilder();
 
             //now format the results
-            if (isNeg)
+            if(isNeg)
             {
                 sb1.Append("-");
             }
 
             //if whole part has to go into the numerator
-            if ("".Equals(wholePartFormatString))
+            if("".Equals(wholePartFormatString))
             {
                 int trueNum = (fract.Denominator * (int)wholePart) + fract.Numerator;
                 sb1.Append(trueNum).Append("/").Append(fract.Denominator);
@@ -179,20 +185,20 @@ namespace NPOI.SS.UserModel
 
 
             //short circuit if fraction is 0 or 1
-            if (fract.Numerator == 0)
+            if(fract.Numerator == 0)
             {
-                sb1.Append((int)wholePart);
+                sb1.Append((int) wholePart);
                 return sb1.ToString();
             }
-            else if (fract.Numerator == fract.Denominator)
+            else if(fract.Numerator == fract.Denominator)
             {
-                sb1.Append((int)wholePart + 1);
+                sb1.Append((int) wholePart + 1);
                 return sb1.ToString();
             }
             //as mentioned above, this ignores the exact space formatting in Excel
-            if (wholePart > 0)
+            if(wholePart > 0)
             {
-                sb1.Append((int)wholePart).Append(" ");
+                sb1.Append((int) wholePart).Append(" ");
             }
             sb1.Append(fract.Numerator).Append("/").Append(fract.Denominator);
             return sb1.ToString();
@@ -212,7 +218,7 @@ namespace NPOI.SS.UserModel
         {
             throw new NotImplementedException("Reverse parsing not supported");
         }
-       
+
         private class SimpleFractionException : Exception
         {
             public SimpleFractionException(String message) :

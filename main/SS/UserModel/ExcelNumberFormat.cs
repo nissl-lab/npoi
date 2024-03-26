@@ -1,4 +1,4 @@
-﻿using NPOI.SS.Formula;
+using NPOI.SS.Formula;
 using System;
 using System.Collections.Generic;
 using System.Text;

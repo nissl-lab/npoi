@@ -55,31 +55,47 @@ namespace NPOI.SS.UserModel
 
         
     }
-    /**
-         * ValidationType enum
-         */
+    /// <summary>
+/// ValidationType enum
+/// </summary>
     public static class ValidationType
     {
-        /** 'Any value' type - value not restricted */
+        /// <summary>
+/// 'Any value' type - value not restricted */
+/// </summary>
         public const int ANY = 0x00;
-        /** int ('Whole number') type */
+        /// <summary>
+/// int ('Whole number') type */
+/// </summary>
         public const int INTEGER = 0x01;
-        /** Decimal type */
+        /// <summary>
+/// Decimal type */
+/// </summary>
         public const int DECIMAL = 0x02;
-        /** List type ( combo box type ) */
+        /// <summary>
+/// List type ( combo box type ) */
+/// </summary>
         public const int LIST = 0x03;
-        /** Date type */
+        /// <summary>
+/// Date type */
+/// </summary>
         public const int DATE = 0x04;
-        /** Time type */
+        /// <summary>
+/// Time type */
+/// </summary>
         public const int TIME = 0x05;
-        /** String length type */
+        /// <summary>
+/// String length type */
+/// </summary>
         public const int TEXT_LENGTH = 0x06;
-        /** Formula ( 'Custom' ) type */
+        /// <summary>
+/// Formula ( 'Custom' ) type */
+/// </summary>
         public const int FORMULA = 0x07;
     }
-    /**
-     * Condition operator enum
-     */
+    /// <summary>
+/// Condition operator enum
+/// </summary>
     public static class OperatorType
     {
        
@@ -91,7 +107,9 @@ namespace NPOI.SS.UserModel
         public const int LESS_THAN = 0x05;
         public const int GREATER_OR_EQUAL = 0x06;
         public const int LESS_OR_EQUAL = 0x07;
-        /** default value to supply when the operator type is not used */
+        /// <summary>
+/// default value to supply when the operator type is not used */
+/// </summary>
         public const int IGNORED = BETWEEN;
 
         /* package */

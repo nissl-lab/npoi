@@ -19,13 +19,12 @@
 
 namespace NPOI.SS.UserModel
 {
-    /**
-     * High level representation for Font Formatting component
-     * of Conditional Formatting Settings
-     *
-     * @author Dmitriy Kumshayev
-     * @author Yegor Kozlov
-     */
+    /// <summary>
+    /// High level representation for Font Formatting component
+    /// of Conditional Formatting Settings
+    /// </summary>
+    /// @author Dmitriy Kumshayev
+    /// @author Yegor Kozlov
     public interface IFontFormatting
     {
         /// <summary>
@@ -68,31 +67,29 @@ namespace NPOI.SS.UserModel
             get;
             set;
         }
-        
 
-        /**
-         * Get whether the font weight is Set to bold or not
-         *
-         * @return bold - whether the font is bold or not
-         */
+
+        /// <summary>
+        /// Get whether the font weight is Set to bold or not
+        /// </summary>
+        /// <returns>bold - whether the font is bold or not</returns>
         bool IsBold { get; }
 
-        /**
-         * @return true if font style was Set to <i>italic</i>
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>true if font style was Set to <i>italic</i></returns>
         bool IsItalic { get; }
 
-        /**
-         * Set font style options.
-         *
-         * @param italic - if true, Set posture style to italic, otherwise to normal
-         * @param bold if true, Set font weight to bold, otherwise to normal
-         */
+        /// <summary>
+        /// Set font style options.
+        /// </summary>
+        /// <param name="italic">- if true, Set posture style to italic, otherwise to normal</param>
+        /// <param name="bold">if true, Set font weight to bold, otherwise to normal</param>
         void SetFontStyle(bool italic, bool bold);
 
-        /**
-         * Set font style options to default values (non-italic, non-bold)
-         */
+        /// <summary>
+        /// Set font style options to default values (non-italic, non-bold)
+        /// </summary>
         void ResetFontStyle();
     }
 

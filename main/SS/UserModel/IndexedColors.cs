@@ -22,18 +22,19 @@ using System.Text;
 namespace NPOI.SS.UserModel
 {
 
-    /**
-     * A deprecated indexing scheme for colours that is still required for some records, and for backwards
-     *  compatibility with OLE2 formats.
-     *
-     * <p>
-     * Each element corresponds to a color index (zero-based). When using the default indexed color palette,
-     * the values are not written out, but instead are implied. When the color palette has been modified from default,
-     * then the entire color palette is used.
-     * </p>
-     *
-     * @author Yegor Kozlov
-     */
+    /// <summary>
+    /// <para>
+    /// A deprecated indexing scheme for colours that is still required for some records, and for backwards
+    ///  compatibility with OLE2 formats.
+    /// </para>
+    /// <para>
+    /// 
+    /// Each element corresponds to a color index (zero-based). When using the default indexed color palette,
+    /// the values are not written out, but instead are implied. When the color palette has been modified from default,
+    /// then the entire color palette is used.
+    /// </para>
+    /// </summary>
+    /// @author Yegor Kozlov
     public class IndexedColors
     {
         public static readonly IndexedColors Black;
@@ -87,7 +88,7 @@ namespace NPOI.SS.UserModel
 
         private int index;
         private HSSFColor hssfColor;
-        
+
 
         IndexedColors(int idx, HSSFColor color)
         {
@@ -120,7 +121,7 @@ namespace NPOI.SS.UserModel
             Orchid = new IndexedColors(28, new HSSFColor.Orchid());
             Coral = new IndexedColors(29, new HSSFColor.Coral());
             RoyalBlue = new IndexedColors(30, new HSSFColor.RoyalBlue());
-            LightCornflowerBlue = new IndexedColors(31,new HSSFColor.LightCornflowerBlue());
+            LightCornflowerBlue = new IndexedColors(31, new HSSFColor.LightCornflowerBlue());
             SkyBlue = new IndexedColors(40, new HSSFColor.SkyBlue());
             LightTurquoise = new IndexedColors(41, new HSSFColor.LightTurquoise());
             LightGreen = new IndexedColors(42, new HSSFColor.LightGreen());
@@ -251,7 +252,7 @@ namespace NPOI.SS.UserModel
         }
         public static IndexedColors ValueOf(string colorName)
         {
-            if (mappingName.ContainsKey(colorName.ToLower()))
+            if(mappingName.ContainsKey(colorName.ToLower()))
                 return mappingName[colorName.ToLower()];
 
             return null;
@@ -263,14 +264,12 @@ namespace NPOI.SS.UserModel
             throw new ArgumentException("Illegal IndexedColor index: " + index);
         }
 
-        /**
-         * 
-         *
-         * @param index the index of the color
-         * @return the corresponding IndexedColors enum
-         * @throws IllegalArgumentException if index is not a valid IndexedColors
-         * @since 3.15-beta2
-         */
+        /// <summary>
+        /// </summary>
+        /// <param name="index">the index of the color</param>
+        /// <returns>the corresponding IndexedColors enum</returns>
+        /// <exception cref="IllegalArgumentException">if index is not a valid IndexedColors</exception>
+        /// @since 3.15-beta2
         public static IndexedColors FromInt(int index)
         {
             return ValueOf(index);
@@ -288,7 +287,7 @@ namespace NPOI.SS.UserModel
                 stringBuilder.Append('#');
 
                 byte[] rgb = this.hssfColor.RGB;
-                foreach (byte s in rgb)
+                foreach(byte s in rgb)
                 {
                     stringBuilder.Append(s.ToString("x2"));
                 }
@@ -296,16 +295,15 @@ namespace NPOI.SS.UserModel
             }
         }
 
-        /**
-         * Returns index of this color
-         *
-         * @return index of this color
-         */
+        /// <summary>
+        /// Returns index of this color
+        /// </summary>
+        /// <returns>index of this color</returns>
         public short Index
         {
             get
             {
-                return (short)index;
+                return (short) index;
             }
         }
     }

@@ -21,9 +21,9 @@ namespace NPOI.SS.UserModel
 {
     using System;
 
-    /**
-     * Enum mapping the values of STDataConsolidateFunction
-     */
+    /// <summary>
+    /// Enum mapping the values of STDataConsolidateFunction
+    /// </summary>
     public class DataConsolidateFunction
     {
         public static DataConsolidateFunction AVERAGE = new DataConsolidateFunction(0, "Average"),

@@ -20,10 +20,10 @@ namespace NPOI.SS.UserModel
 
     using NPOI.SS.Util;
 
-    /**
-     * @author <a href="rjankiraman@emptoris.com">Radhakrishnan J</a>
-     * 
-     */
+    /// <summary>
+/// </summary>
+///
+/// @author <a href="rjankiraman@emptoris.com">Radhakrishnan J</a>
     public interface IDataValidationHelper
     {
 

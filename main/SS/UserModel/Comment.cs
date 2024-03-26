@@ -21,11 +21,10 @@ namespace NPOI.SS.UserModel
     using System;
     public interface IComment
     {
-        /**
-         * Sets whether this comment is visible.
-         *
-         * @return <c>true</c> if the comment is visible, <c>false</c> otherwise
-         */
+        /// <summary>
+        /// Sets whether this comment is visible.
+        /// </summary>
+        /// <returns><c>true</c> if the comment is visible, <c>false</c> otherwise</returns>
         bool Visible { get; set; }
 
         /// <summary>
@@ -33,51 +32,51 @@ namespace NPOI.SS.UserModel
         /// </summary>
         CellAddress Address { get; set; }
 
-        /**
-         * Set the address of the cell that this comment is attached to
-         *
-         * @param row
-         * @param col
-         */
+        /// <summary>
+        /// Set the address of the cell that this comment is attached to
+        /// </summary>
+        /// <param name="row">row</param>
+        /// <param name="col">col</param>
         void SetAddress(int row, int col);
 
-        /**
-         * Return the row of the cell that Contains the comment
-         *
-         * @return the 0-based row of the cell that Contains the comment
-         */
+        /// <summary>
+        /// Return the row of the cell that Contains the comment
+        /// </summary>
+        /// <returns>the 0-based row of the cell that Contains the comment</returns>
         int Row { get; set; }
 
 
-        /**
-         * Return the column of the cell that Contains the comment
-         *
-         * @return the 0-based column of the cell that Contains the comment
-         */
+        /// <summary>
+        /// Return the column of the cell that Contains the comment
+        /// </summary>
+        /// <returns>the 0-based column of the cell that Contains the comment</returns>
         int Column { get; set; }
 
 
-        /**
-         * Name of the original comment author
-         *
-         * @return the name of the original author of the comment
-         */
+        /// <summary>
+        /// Name of the original comment author
+        /// </summary>
+        /// <returns>the name of the original author of the comment</returns>
         String Author { get; set; }
 
-        /**
-         * Fetches the rich text string of the comment
-         */
+        /// <summary>
+        /// Fetches the rich text string of the comment
+        /// </summary>
         IRichTextString String { get; set; }
 
-        /**
-         * Return defines position of this anchor in the sheet.
-         *
-         * The anchor is the yellow box/balloon that is rendered on top of the sheets
-         * when the comment is visible.
-         * 
-         * To associate a comment with a different cell, use {@link #setAddress}.
-         * @return defines position of this anchor in the sheet
-         */
+        /// <summary>
+        /// <para>
+        /// Return defines position of this anchor in the sheet.
+        /// </para>
+        /// <para>
+        /// The anchor is the yellow box/balloon that is rendered on top of the sheets
+        /// when the comment is visible.
+        /// </para>
+        /// <para>
+        /// To associate a comment with a different cell, use <see cref="Address"/>.
+        /// </para>
+        /// </summary>
+        /// <returns>defines position of this anchor in the sheet</returns>
         IClientAnchor ClientAnchor { get; }
     }
 }

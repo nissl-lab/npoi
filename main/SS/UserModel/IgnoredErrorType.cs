@@ -19,68 +19,72 @@ namespace NPOI.SS.UserModel
 {
     using System;
 
-    /**
-     * Types of ignored workbook and worksheet error.
-     * 
-     * TODO Implement these for HSSF too, using FeatFormulaErr2,
-     *  see bugzilla bug #46136 for details
-     */
-    public enum IgnoredErrorType {
-        /**
-         * ????. Probably XSSF-only.
-         */
+    /// <summary>
+    /// <para>
+    /// Types of ignored workbook and worksheet error.
+    /// </para>
+    /// <para>
+    /// TODO Implement these for HSSF too, using FeatFormulaErr2,
+    ///  see bugzilla bug #46136 for details
+    /// </para>
+    /// </summary>
+    public enum IgnoredErrorType
+    {
+        /// <summary>
+        /// ????. Probably XSSF-only.
+        /// </summary>
         CalculatedColumn,
 
-        /**
-         * Whether to check for references to empty cells.
-         * HSSF + XSSF.
-         */
+        /// <summary>
+        /// Whether to check for references to empty cells.
+        /// HSSF + XSSF.
+        /// </summary>
         EmptyCellReference,
 
-        /**
-         * Whether to check for calculation/Evaluation errors.
-         * HSSF + XSSF.
-         */
+        /// <summary>
+        /// Whether to check for calculation/Evaluation errors.
+        /// HSSF + XSSF.
+        /// </summary>
         EvaluationError,
 
-        /**
-         * Whether to check formulas in the range of the shared feature 
-         *  that are inconsistent with formulas in neighbouring cells.
-         * HSSF + XSSF.
-         */
+        /// <summary>
+        /// Whether to check formulas in the range of the shared feature
+        ///  that are inconsistent with formulas in neighbouring cells.
+        /// HSSF + XSSF.
+        /// </summary>
         Formula,
 
-        /**
-         * Whether to check formulas in the range of the shared feature 
-         * with references to less than the entirety of a range Containing 
-         * continuous data.
-         * HSSF + XSSF.
-         */
+        /// <summary>
+        /// Whether to check formulas in the range of the shared feature
+        /// with references to less than the entirety of a range Containing
+        /// continuous data.
+        /// HSSF + XSSF.
+        /// </summary>
         FormulaRange,
 
-        /**
-         * ????. Is this XSSF-specific the same as performDataValidation
-         *  in HSSF?
-         */
+        /// <summary>
+        /// ????. Is this XSSF-specific the same as performDataValidation
+        ///  in HSSF?
+        /// </summary>
         ListDataValidation,
 
-        /**
-         * Whether to check the format of string values and warn
-         *  if they look to actually be numeric values.
-         * HSSF + XSSF.
-         */
+        /// <summary>
+        /// Whether to check the format of string values and warn
+        ///  if they look to actually be numeric values.
+        /// HSSF + XSSF.
+        /// </summary>
         NumberStoredAsText,
 
-        /**
-         * ????. Is this XSSF-specific the same as CheckDateTimeFormats
-         *  in HSSF?
-         */
+        /// <summary>
+        /// ????. Is this XSSF-specific the same as CheckDateTimeFormats
+        ///  in HSSF?
+        /// </summary>
         TwoDigitTextYear,
 
-        /**
-         * Whether to check for unprotected formulas.
-         * HSSF + XSSF.
-         */
+        /// <summary>
+        /// Whether to check for unprotected formulas.
+        /// HSSF + XSSF.
+        /// </summary>
         UnlockedFormula
     }
 

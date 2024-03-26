@@ -23,14 +23,14 @@ using NPOI.SS.Util;
 
 namespace NPOI.SS.UserModel
 {
-    /**
-     * A wrapper around a {@link SimpleDateFormat} instance,
-     * which handles a few Excel-style extensions that
-     * are not supported by {@link SimpleDateFormat}.
-     * Currently, the extensions are around the handling
-     * of elapsed time, eg rendering 1 day 2 hours
-     * as 26 hours.
-     */
+    /// <summary>
+    /// A wrapper around a <see cref="SimpleDateFormat"/> instance,
+    /// which handles a few Excel-style extensions that
+    /// are not supported by <see cref="SimpleDateFormat"/>.
+    /// Currently, the extensions are around the handling
+    /// of elapsed time, eg rendering 1 day 2 hours
+    /// as 26 hours.
+    /// </summary>
     public class ExcelStyleDateFormatter : SimpleDateFormat
     {
         public const char MMMMM_START_SYMBOL = '\ue001';
@@ -77,7 +77,7 @@ namespace NPOI.SS.UserModel
                                    DateTimeFormatInfo formatSymbols)
             : base(ProcessFormatPattern(pattern), formatSymbols)
         {
-            
+
         }
 
         public ExcelStyleDateFormatter(String pattern, CultureInfo locale)
@@ -89,10 +89,10 @@ namespace NPOI.SS.UserModel
         {
             return match.Groups[1].Value;
         }
-        /**
-         * Takes a format String, and Replaces Excel specific bits
-         * with our detection sequences
-         */
+        /// <summary>
+        /// Takes a format String, and Replaces Excel specific bits
+        /// with our detection sequences
+        /// </summary>
         private static String ProcessFormatPattern(String f)
         {
             String t = f.Replace("MMMMM", MMMMM_START_SYMBOL + "MMM" + MMMMM_TRUNCATE_SYMBOL);
@@ -112,47 +112,47 @@ namespace NPOI.SS.UserModel
             return t;
         }
 
-        /**
-         * Used to let us know what the date being
-         * formatted is, in Excel terms, which we
-         * may wish to use when handling elapsed
-         * times.
-         */
+        /// <summary>
+        /// Used to let us know what the date being
+        /// formatted is, in Excel terms, which we
+        /// may wish to use when handling elapsed
+        /// times.
+        /// </summary>
         public void SetDateToBeFormatted(double date)
         {
             this.dateToBeFormatted = date;
         }
         public override string Format(object obj, CultureInfo culture)
         {
-            return this.Format((DateTime)obj, new StringBuilder(), culture).ToString();
+            return this.Format((DateTime) obj, new StringBuilder(), culture).ToString();
         }
 
         public StringBuilder Format(DateTime date, StringBuilder paramStringBuilder, CultureInfo culture)
         {
             // Do the normal format
             string s = string.Empty;
-            if (Regex.IsMatch(Pattern, "[yYmMdDhHsS\\-/,. :\"\\\\]+0?[ampAMP/]*"))
+            if(Regex.IsMatch(Pattern, "[yYmMdDhHsS\\-/,. :\"\\\\]+0?[ampAMP/]*"))
             {
                 s = date.ToString(Pattern, culture);
             }
             else
                 s = Pattern;
-            if (s.IndexOf(QUOTE_SYMBOL) != -1)
+            if(s.IndexOf(QUOTE_SYMBOL) != -1)
             {
                 s = s.Replace(QUOTE_SYMBOL, '"');
             }
             // Now handle our special cases
-            if (s.IndexOf(MMMMM_START_SYMBOL) != -1)
+            if(s.IndexOf(MMMMM_START_SYMBOL) != -1)
             {
                 Regex reg = new Regex(MMMMM_START_SYMBOL + "(\\p{L}|\\p{P}|\\p{N})[\\p{L}|\\p{P}|\\p{N}]+" + MMMMM_TRUNCATE_SYMBOL, RegexOptions.IgnoreCase);
                 Match m = reg.Match(s);
-                if (m.Success)
+                if(m.Success)
                 {
                     s = reg.Replace(s, m.Groups[1].Value);
                 }
             }
 
-            if (s.IndexOf(H_BRACKET_SYMBOL) != -1 ||
+            if(s.IndexOf(H_BRACKET_SYMBOL) != -1 ||
                     s.IndexOf(HH_BRACKET_SYMBOL) != -1)
             {
                 double hours = dateToBeFormatted * 24 + 0.01;
@@ -168,7 +168,7 @@ namespace NPOI.SS.UserModel
                 );
             }
 
-            if (s.IndexOf(M_BRACKET_SYMBOL) != -1 ||
+            if(s.IndexOf(M_BRACKET_SYMBOL) != -1 ||
                     s.IndexOf(MM_BRACKET_SYMBOL) != -1)
             {
                 double minutes = dateToBeFormatted * 24 * 60 + 0.01;
@@ -182,7 +182,7 @@ namespace NPOI.SS.UserModel
                         format2digits.Format(minutes, culture)
                 );
             }
-            if (s.IndexOf(S_BRACKET_SYMBOL) != -1 ||
+            if(s.IndexOf(S_BRACKET_SYMBOL) != -1 ||
                     s.IndexOf(SS_BRACKET_SYMBOL) != -1)
             {
                 double seconds = (dateToBeFormatted * 24.0 * 60.0 * 60.0) + 0.01;
@@ -196,7 +196,7 @@ namespace NPOI.SS.UserModel
                 );
             }
 
-            if (s.IndexOf(L_BRACKET_SYMBOL) != -1 ||
+            if(s.IndexOf(L_BRACKET_SYMBOL) != -1 ||
                     s.IndexOf(LL_BRACKET_SYMBOL) != -1)
             {
                 float millisTemp = (float)((dateToBeFormatted - Math.Floor(dateToBeFormatted)) * 24.0 * 60.0 * 60.0);
@@ -216,7 +216,8 @@ namespace NPOI.SS.UserModel
 
         public override bool Equals(Object o)
         {
-            if (!(o is ExcelStyleDateFormatter)) {
+            if(!(o is ExcelStyleDateFormatter))
+            {
                 return false;
             }
 

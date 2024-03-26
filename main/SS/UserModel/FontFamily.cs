@@ -18,12 +18,11 @@
 namespace NPOI.SS.UserModel
 {
 
-    /**
-     * The font family this font belongs to. A font family is a set of fonts having common stroke width and serif
-     * characteristics. The font name overrides when there are conflicting values.
-     *
-     * @author Gisella Bronzetti
-     */
+    /// <summary>
+    /// The font family this font belongs to. A font family is a set of fonts having common stroke width and serif
+    /// characteristics. The font name overrides when there are conflicting values.
+    /// </summary>
+    /// @author Gisella Bronzetti
     public class FontFamily
     {
         public static readonly FontFamily NOT_APPLICABLE = new FontFamily(0);
@@ -40,11 +39,10 @@ namespace NPOI.SS.UserModel
             family = value;
         }
 
-        /**
-         * Returns index of this font family
-         *
-         * @return index of this font family
-         */
+        /// <summary>
+        /// Returns index of this font family
+        /// </summary>
+        /// <returns>index of this font family</returns>
         public int Value
         {
             get
@@ -57,12 +55,18 @@ namespace NPOI.SS.UserModel
         {
             switch(family)
             {
-                case 0: return NOT_APPLICABLE;
-                case 1: return ROMAN;
-                case 2: return SWISS;
-                case 3: return MODERN;
-                case 4: return SCRIPT;
-                case 5: return DECORATIVE;
+                case 0:
+                    return NOT_APPLICABLE;
+                case 1:
+                    return ROMAN;
+                case 2:
+                    return SWISS;
+                case 3:
+                    return MODERN;
+                case 4:
+                    return SCRIPT;
+                case 5:
+                    return DECORATIVE;
             }
             return NOT_APPLICABLE;
         }

@@ -19,12 +19,11 @@ namespace NPOI.SS.UserModel
 {
 
 
-    /**
-     * Charset represents the basic set of characters associated with a font (that it can display), and 
-     * corresponds to the ANSI codepage (8-bit or DBCS) of that character set used by a given language. 
-     * 
-     * @author Gisella Bronzetti
-     */
+    /// <summary>
+    /// Charset represents the basic set of characters associated with a font (that it can display), and
+    /// corresponds to the ANSI codepage (8-bit or DBCS) of that character set used by a given language.
+    /// </summary>
+    /// @author Gisella Bronzetti
     public class FontCharset
     {
         public static readonly FontCharset ANSI = new FontCharset(0);
@@ -55,11 +54,10 @@ namespace NPOI.SS.UserModel
             charset = value;
         }
 
-        /**
-         * Returns value of this charset
-         *
-         * @return value of this charset
-         */
+        /// <summary>
+        /// Returns value of this charset
+        /// </summary>
+        /// <returns>value of this charset</returns>
         public int Value
         {
             get
@@ -72,7 +70,7 @@ namespace NPOI.SS.UserModel
 
         static FontCharset()
         {
-            if (_table == null)
+            if(_table == null)
             {
                 _table = new FontCharset[256];
                 _table[0] = FontCharset.ANSI;

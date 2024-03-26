@@ -19,58 +19,58 @@
 
 namespace NPOI.SS.UserModel
 {
-    /**
-     * The conditional format operators used for "Highlight Cells That Contain..." rules.
-     * <p>
-     * For example, "highlight cells that begin with "M2" and contain "Mountain Gear".
-     * </p>
-     *
-     * @author Dmitriy Kumshayev
-     * @author Yegor Kozlov
-     */
-    public enum ComparisonOperator:byte
+    /// <summary>
+    /// <para>
+    /// The conditional format operators used for "Highlight Cells That Contain..." rules.
+    /// </para>
+    /// <para>
+    /// For example, "highlight cells that begin with "M2" and contain "Mountain Gear".
+    /// </para>
+    /// </summary>
+    /// @author Dmitriy Kumshayev
+    /// @author Yegor Kozlov
+    public enum ComparisonOperator : byte
     {
         NoComparison = 0,
 
-        /**
-         * 'Between' operator
-         */
+        /// <summary>
+        /// 'Between' operator
+        /// </summary>
         Between = 1,
 
-        /**
-         * 'Not between' operator
-         */
+        /// <summary>
+        /// 'Not between' operator
+        /// </summary>
         NotBetween = 2,
 
-        /**
-         *  'Equal to' operator
-         */
+        /// <summary>
+        ///  'Equal to' operator
+        /// </summary>
         Equal = 3,
 
-        /**
-         * 'Not equal to' operator
-         */
+        /// <summary>
+        /// 'Not equal to' operator
+        /// </summary>
         NotEqual = 4,
 
-        /**
-         * 'Greater than' operator
-         */
+        /// <summary>
+        /// 'Greater than' operator
+        /// </summary>
         GreaterThan = 5,
 
-        /**
-         * 'Less than' operator
-         */
+        /// <summary>
+        /// 'Less than' operator
+        /// </summary>
         LessThan = 6,
 
-        /**
-         * 'Greater than or equal to' operator
-         */
+        /// <summary>
+        /// 'Greater than or equal to' operator
+        /// </summary>
         GreaterThanOrEqual = 7,
 
-        /**
-         * 'Less than or equal to' operator
-         */
+        /// <summary>
+        /// 'Less than or equal to' operator
+        /// </summary>
         LessThanOrEqual = 8,
     }
-
 }

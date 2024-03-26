@@ -19,9 +19,9 @@
 
 namespace NPOI.SS.UserModel
 {
-    /**
-     * @author Yegor Kozlov
-     */
+    /// <summary>
+    /// </summary>
+    /// @author Yegor Kozlov
     public interface IPatternFormatting
     {
         short FillBackgroundColor { get; set; }

@@ -18,30 +18,29 @@
 namespace NPOI.SS.UserModel
 {
 
-    /**
-     * The enumeration value indicating the print orientation for a sheet.
-     *
-     * @author Gisella Bronzetti
-     */
+    /// <summary>
+    /// The enumeration value indicating the print orientation for a sheet.
+    /// </summary>
+    /// @author Gisella Bronzetti
     public class PrintOrientation
     {
 
-        /**
-         * orientation not specified
-         */
+        /// <summary>
+        /// orientation not specified
+        /// </summary>
         public static PrintOrientation DEFAULT;
-        /**
-         * portrait orientation
-         */
+        /// <summary>
+        /// portrait orientation
+        /// </summary>
         public static PrintOrientation PORTRAIT;
 
-        /**
-         * landscape orientations
-         */
+        /// <summary>
+        /// landscape orientations
+        /// </summary>
         public static PrintOrientation LANDSCAPE;
 
         static PrintOrientation()
-        { 
+        {
             _table = new PrintOrientation[4];
             DEFAULT = new PrintOrientation(1);
             PORTRAIT = new PrintOrientation(2);

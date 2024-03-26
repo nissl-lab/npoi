@@ -27,122 +27,133 @@ namespace NPOI.SS.UserModel
         Unknown = -1,
 
         None = 0,
-        
-        /** Extended windows meta file */
+
+        /// <summary>
+        /// Extended windows meta file */
+        /// </summary>
         EMF = 2,
 
-        /** Windows Meta File */
+        /// <summary>
+        /// Windows Meta File */
+        /// </summary>
         WMF = 3,
 
-        /** Mac PICT format */
+        /// <summary>
+        /// Mac PICT format */
+        /// </summary>
         PICT = 4,
 
-        /** JPEG format */
+        /// <summary>
+        /// JPEG format */
+        /// </summary>
         JPEG = 5,
 
-        /** PNG format */
+        /// <summary>
+        /// PNG format */
+        /// </summary>
         PNG = 6,
 
-        /** Device independent bitmap */
+        /// <summary>
+        /// Device independent bitmap */
+        /// </summary>
         DIB = 7,
 
-        /** GIF image format */
+        /// <summary>
+        /// GIF image format */
+        /// </summary>
         GIF = 8,
-        /**
-         * Tag Image File (.tiff)
-         */
+        /// <summary>
+        /// Tag Image File (.tiff)
+        /// </summary>
         TIFF = 9,
 
-        /**
-         * Encapsulated Postscript (.eps)
-         */
+        /// <summary>
+        /// Encapsulated Postscript (.eps)
+        /// </summary>
         EPS = 10,
 
 
-        /**
-         * Windows Bitmap (.bmp)
-         */
+        /// <summary>
+        /// Windows Bitmap (.bmp)
+        /// </summary>
         BMP = 11,
 
-        /**
-         * WordPerfect graphics (.wpg)
-         */
+        /// <summary>
+        /// WordPerfect graphics (.wpg)
+        /// </summary>
         WPG = 12
     }
-    /**
-     * Repersents a picture in a SpreadsheetML document
-     *
-     * @author Yegor Kozlov
-     */
-    public interface IPicture: IShape
+    /// <summary>
+    /// Repersents a picture in a SpreadsheetML document
+    /// </summary>
+    /// @author Yegor Kozlov
+    public interface IPicture : IShape
     {
 
-        /**
-         * Reset the image to the dimension of the embedded image
-         * 
-         * @see #resize(double, double)
-         */
+        /// <summary>
+        /// Reset the image to the dimension of the embedded image
+        /// </summary>
+        /// <see cref="resize(double, double)" />
         void Resize();
-        
-        /**
-         * Resize the image proportionally.
-         *
-         */
+
+        /// <summary>
+        /// Resize the image proportionally.
+        /// </summary>
         void Resize(double scale);
 
-        /**
-         * Resize the image.
-         * <p>
-         * Please note, that this method works correctly only for workbooks
-         * with the default font size (Arial 10pt for .xls and Calibri 11pt for .xlsx).
-         * If the default font is changed the resized image can be streched vertically or horizontally.
-         * </p>
-         * <p>
-         * <code>resize(1.0,1.0)</code> keeps the original size,<br/>
-         * <code>resize(0.5,0.5)</code> resize to 50% of the original,<br/>
-         * <code>resize(2.0,2.0)</code> resizes to 200% of the original.<br/>
-         * <code>resize({@link Double#MAX_VALUE},{@link Double#MAX_VALUE})</code> resizes to the dimension of the embedded image. 
-         * </p>
-         *
-         * @param scaleX the amount by which the image width is multiplied relative to the original width.
-         * @param scaleY the amount by which the image height is multiplied relative to the original height.
-         */
+        /// <summary>
+        /// <para>
+        /// Resize the image.
+        /// </para>
+        /// <para>
+        /// Please note, that this method works correctly only for workbooks
+        /// with the default font size (Arial 10pt for .xls and Calibri 11pt for .xlsx).
+        /// If the default font is changed the resized image can be streched vertically or horizontally.
+        /// </para>
+        /// <para>
+        /// 
+        /// </para>
+        /// <para>
+        /// <c>resize(1.0,1.0)</c> keeps the original size,<br/>
+        /// <c>resize(0.5,0.5)</c> resize to 50% of the original,<br/>
+        /// <c>resize(2.0,2.0)</c> resizes to 200% of the original.<br/>
+        /// <c>resize(<see cref="Double.MAX_VALUE" />,<see cref="Double.MAX_VALUE" />)</c> resizes to the dimension of the embedded image.
+        /// </para>
+        /// </summary>
+        /// <param name="scaleX">the amount by which the image width is multiplied relative to the original width.</param>
+        /// <param name="scaleY">the amount by which the image height is multiplied relative to the original height.</param>
         void Resize(double scaleX, double scaleY);
 
-        /**
-         * Calculate the preferred size for this picture.
-         *
-         * @return XSSFClientAnchor with the preferred size for this image
-         */
+        /// <summary>
+        /// Calculate the preferred size for this picture.
+        /// </summary>
+        /// <returns>XSSFClientAnchor with the preferred size for this image</returns>
         IClientAnchor GetPreferredSize();
 
-        /**
-         * Calculate the preferred size for this picture.
-         *
-         * @param scaleX the amount by which image width is multiplied relative to the original width.
-         * @param scaleY the amount by which image height is multiplied relative to the original height.
-         * @return ClientAnchor with the preferred size for this image
-         */
+        /// <summary>
+        /// Calculate the preferred size for this picture.
+        /// </summary>
+        /// <param name="scaleX">the amount by which image width is multiplied relative to the original width.</param>
+        /// <param name="scaleY">the amount by which image height is multiplied relative to the original height.</param>
+        /// <returns>ClientAnchor with the preferred size for this image</returns>
         IClientAnchor GetPreferredSize(double scaleX, double scaleY);
 
-        /**
-         * Return the dimension of the embedded image in pixel
-         *
-         * @return image dimension in pixels
-         */
+        /// <summary>
+        /// Return the dimension of the embedded image in pixel
+        /// </summary>
+        /// <returns>image dimension in pixels</returns>
         Size GetImageDimension();
 
 
 
-        /**
-         * Return picture data for this picture
-         *
-         * @return picture data for this picture
-         */
+        /// <summary>
+        /// Return picture data for this picture
+        /// </summary>
+        /// <returns>picture data for this picture</returns>
         IPictureData PictureData { get; }
-        /**
-         * @return  the anchor that is used by this picture
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>the anchor that is used by this picture</returns>
         IClientAnchor ClientAnchor { get; }
         /*
          * @return the sheet which contains the picture

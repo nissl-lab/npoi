@@ -21,41 +21,41 @@ namespace NPOI.SS.UserModel
 {
     using System;
 
-    /**
-     * High level representation for the DataBar Formatting 
-     *  component of Conditional Formatting Settings
-     */
+    /// <summary>
+    /// High level representation for the DataBar Formatting
+    ///  component of Conditional Formatting Settings
+    /// </summary>
     public interface IDataBarFormatting
     {
-        /**
-         * Is the bar Drawn from Left-to-Right, or from
-         *  Right-to-Left
-         */
+        /// <summary>
+        /// Is the bar Drawn from Left-to-Right, or from
+        ///  Right-to-Left
+        /// </summary>
         bool IsLeftToRight { get; set; }
-        /**
-         * Should Icon + Value be displayed, or only the Icon?
-         */
+        /// <summary>
+        /// Should Icon + Value be displayed, or only the Icon?
+        /// </summary>
         bool IsIconOnly { get; set; }
-        /**
-         * How much of the cell width, in %, should be given to
-         *  the min value?
-         */
+        /// <summary>
+        /// How much of the cell width, in %, should be given to
+        ///  the min value?
+        /// </summary>
         int WidthMin { get; set; }
-        /**
-         * How much of the cell width, in %, should be given to
-         *  the max value?
-         */
+        /// <summary>
+        /// How much of the cell width, in %, should be given to
+        ///  the max value?
+        /// </summary>
         int WidthMax { get; set; }
 
         IColor Color { get; set; }
 
-        /**
-         * The threshold that defines "everything from here down is minimum"
-         */
+        /// <summary>
+        /// The threshold that defines "everything from here down is minimum"
+        /// </summary>
         IConditionalFormattingThreshold MinThreshold { get; }
-        /**
-         * The threshold that defines "everything from here up is maximum"
-         */
+        /// <summary>
+        /// The threshold that defines "everything from here up is maximum"
+        /// </summary>
         IConditionalFormattingThreshold MaxThreshold { get; }
     }
 
