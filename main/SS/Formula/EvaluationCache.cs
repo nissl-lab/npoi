@@ -21,22 +21,22 @@ namespace NPOI.SS.Formula
     using System;
 
     using NPOI.SS.Formula.Eval;
-    
 
-    /**
-     * Performance optimisation for {@link HSSFFormulaEvaluator}. This class stores previously
-     * calculated values of already visited cells, To avoid unnecessary re-calculation when the 
-     * same cells are referenced multiple times
-     * 
-     * 
-     * @author Josh Micich
-     */
+
+    /// <summary>
+    /// Performance optimisation for <see cref="HSSFFormulaEvaluator"/>. This class stores previously
+    /// calculated values of already visited cells, To avoid unnecessary re-calculation when the
+    /// same cells are referenced multiple times
+    /// </summary>
+    /// @author Josh Micich
     public class EvaluationCache
     {
 
         private PlainCellCache _plainCellCache;
         private FormulaCellCache _formulaCellCache;
-        /** only used for testing. <c>null</c> otherwise */
+        /// <summary>
+        /// only used for testing. <c>null</c> otherwise */
+        /// </summary>
         IEvaluationListener _evaluationListener;
 
         /* package */
@@ -56,15 +56,15 @@ namespace NPOI.SS.Formula
             Loc loc = new Loc(bookIndex, sheetIndex, cell.RowIndex, cell.ColumnIndex);
             PlainValueCellCacheEntry pcce = _plainCellCache.Get(loc);
 
-            if (cell.CellType == NPOI.SS.UserModel.CellType.Formula)
+            if(cell.CellType == NPOI.SS.UserModel.CellType.Formula)
             {
-                if (fcce == null)
+                if(fcce == null)
                 {
                     fcce = new FormulaCellCacheEntry();
 
-                    if (pcce == null)
+                    if(pcce == null)
                     {
-                        if (_evaluationListener != null)
+                        if(_evaluationListener != null)
                         {
                             _evaluationListener.OnChangeFromBlankValue(sheetIndex, rowIndex,
                                     columnIndex, cell, fcce);
@@ -78,7 +78,7 @@ namespace NPOI.SS.Formula
                     fcce.RecurseClearCachedFormulaResults(_evaluationListener);
                     fcce.ClearFormulaEntry();
                 }
-                if (pcce == null)
+                if(pcce == null)
                 {
                     // was formula cell before - no Change of type
                 }
@@ -92,14 +92,14 @@ namespace NPOI.SS.Formula
             else
             {
                 ValueEval value = WorkbookEvaluator.GetValueFromNonFormulaCell(cell);
-                if (pcce == null)
+                if(pcce == null)
                 {
-                    if (value != BlankEval.instance)
+                    if(value != BlankEval.instance)
                     {
                         pcce = new PlainValueCellCacheEntry(value);
-                        if (fcce == null)
+                        if(fcce == null)
                         {
-                            if (_evaluationListener != null)
+                            if(_evaluationListener != null)
                             {
                                 _evaluationListener.OnChangeFromBlankValue(sheetIndex, rowIndex,
                                         columnIndex, cell, pcce);
@@ -111,16 +111,16 @@ namespace NPOI.SS.Formula
                 }
                 else
                 {
-                    if (pcce.UpdateValue(value))
+                    if(pcce.UpdateValue(value))
                     {
                         pcce.RecurseClearCachedFormulaResults(_evaluationListener);
                     }
-                    if (value == BlankEval.instance)
+                    if(value == BlankEval.instance)
                     {
                         _plainCellCache.Remove(loc);
                     }
                 }
-                if (fcce == null)
+                if(fcce == null)
                 {
                     // was plain cell before - no Change of type
                 }
@@ -159,7 +159,7 @@ namespace NPOI.SS.Formula
                 int rowIndex, int columnIndex)
         {
             BookSheetKey bsk = new BookSheetKey(bookIndex, sheetIndex);
-            _formulaCellCache.ApplyOperation(new EntryOperation(bsk,rowIndex,columnIndex,_evaluationListener));
+            _formulaCellCache.ApplyOperation(new EntryOperation(bsk, rowIndex, columnIndex, _evaluationListener));
         }
 
         public PlainValueCellCacheEntry GetPlainValueEntry(int bookIndex, int sheetIndex,
@@ -168,11 +168,11 @@ namespace NPOI.SS.Formula
 
             Loc loc = new Loc(bookIndex, sheetIndex, rowIndex, columnIndex);
             PlainValueCellCacheEntry result = _plainCellCache.Get(loc);
-            if (result == null)
+            if(result == null)
             {
                 result = new PlainValueCellCacheEntry(value);
                 _plainCellCache.Put(loc, result);
-                if (_evaluationListener != null)
+                if(_evaluationListener != null)
                 {
                     _evaluationListener.OnReadPlainValue(sheetIndex, rowIndex, columnIndex, result);
                 }
@@ -180,11 +180,11 @@ namespace NPOI.SS.Formula
             else
             {
                 // TODO - if we are confident that this sanity check is not required, we can Remove 'value' from plain value cache entry  
-                if (!AreValuesEqual(result.GetValue(), value))
+                if(!AreValuesEqual(result.GetValue(), value))
                 {
                     throw new InvalidOperationException("value changed");
                 }
-                if (_evaluationListener != null)
+                if(_evaluationListener != null)
                 {
                     _evaluationListener.OnCacheHit(sheetIndex, rowIndex, columnIndex, value);
                 }
@@ -193,43 +193,43 @@ namespace NPOI.SS.Formula
         }
         private bool AreValuesEqual(ValueEval a, ValueEval b)
         {
-            if (a == null)
+            if(a == null)
             {
                 return false;
             }
             Type cls = a.GetType();
-            if (cls != b.GetType())
+            if(cls != b.GetType())
             {
                 // value type is changing
                 return false;
             }
-            if (a == BlankEval.instance)
+            if(a == BlankEval.instance)
             {
                 return b == a;
             }
-            if (cls == typeof(NumberEval))
+            if(cls == typeof(NumberEval))
             {
-                return ((NumberEval)a).NumberValue == ((NumberEval)b).NumberValue;
+                return ((NumberEval) a).NumberValue == ((NumberEval) b).NumberValue;
             }
-            if (cls == typeof(StringEval))
+            if(cls == typeof(StringEval))
             {
-                return ((StringEval)a).StringValue.Equals(((StringEval)b).StringValue);
+                return ((StringEval) a).StringValue.Equals(((StringEval) b).StringValue);
             }
-            if (cls == typeof(BoolEval))
+            if(cls == typeof(BoolEval))
             {
-                return ((BoolEval)a).BooleanValue == ((BoolEval)b).BooleanValue;
+                return ((BoolEval) a).BooleanValue == ((BoolEval) b).BooleanValue;
             }
-            if (cls == typeof(ErrorEval))
+            if(cls == typeof(ErrorEval))
             {
-                return ((ErrorEval)a).ErrorCode == ((ErrorEval)b).ErrorCode;
+                return ((ErrorEval) a).ErrorCode == ((ErrorEval) b).ErrorCode;
             }
             throw new InvalidOperationException("Unexpected value class (" + cls.Name + ")");
         }
 
         public FormulaCellCacheEntry GetOrCreateFormulaCellEntry(IEvaluationCell cell)
-        {            
+        {
             FormulaCellCacheEntry result = _formulaCellCache.Get(cell);
-            if (result == null)
+            if(result == null)
             {
 
                 result = new FormulaCellCacheEntry();
@@ -238,12 +238,12 @@ namespace NPOI.SS.Formula
             return result;
         }
 
-        /**
-         * Should be called whenever there are Changes To input cells in the evaluated workbook.
-         */
+        /// <summary>
+        /// Should be called whenever there are Changes To input cells in the evaluated workbook.
+        /// </summary>
         public void Clear()
         {
-            if (_evaluationListener != null)
+            if(_evaluationListener != null)
             {
                 _evaluationListener.OnClearWholeCache();
             }
@@ -253,10 +253,10 @@ namespace NPOI.SS.Formula
         public void NotifyDeleteCell(int bookIndex, int sheetIndex, IEvaluationCell cell)
         {
 
-            if (cell.CellType == NPOI.SS.UserModel.CellType.Formula)
+            if(cell.CellType == NPOI.SS.UserModel.CellType.Formula)
             {
                 FormulaCellCacheEntry fcce = _formulaCellCache.Remove(cell);
-                if (fcce == null)
+                if(fcce == null)
                 {
                     // formula cell Has not been evaluated yet 
                 }
@@ -271,7 +271,7 @@ namespace NPOI.SS.Formula
                 Loc loc = new Loc(bookIndex, sheetIndex, cell.RowIndex, cell.ColumnIndex);
                 PlainValueCellCacheEntry pcce = _plainCellCache.Get(loc);
 
-                if (pcce == null)
+                if(pcce == null)
                 {
                     // cache entry doesn't exist. nothing To do
                 }

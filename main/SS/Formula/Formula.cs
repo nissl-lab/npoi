@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for additional information regarding copyright ownership.
@@ -23,23 +23,24 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Util;
     using NPOI.SS.Formula.PTG;
 
-    /**
-     * Encapsulates an encoded formula token array. 
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// Encapsulates an encoded formula token array.
+    /// </summary>
+    /// @author Josh Micich
     public class Formula
     {
 
         private static readonly Formula EMPTY = new Formula(new byte[0], 0);
 
-        /** immutable */
+        /// <summary>
+        /// immutable */
+        /// </summary>
         private byte[] _byteEncoding;
         private int _encodedTokenLen;
 
         private Formula(byte[] byteEncoding, int encodedTokenLen)
         {
-            _byteEncoding = (byte[])byteEncoding.Clone();
+            _byteEncoding = (byte[]) byteEncoding.Clone();
             _encodedTokenLen = encodedTokenLen;
             //if (false) { // set to true to eagerly check Ptg decoding 
             //    LittleEndianByteArrayInputStream in1 = new LittleEndianByteArrayInputStream(byteEncoding);
@@ -55,20 +56,21 @@ namespace NPOI.SS.Formula
             //    }
             //}
         }
-        /**
-         * Convenience method for {@link #read(int, LittleEndianInput, int)}
-         */
+        /// <summary>
+        /// Convenience method for <see cref="read(int, LittleEndianInput, int)" />
+        /// </summary>
         public static Formula Read(int encodedTokenLen, ILittleEndianInput in1)
         {
             return Read(encodedTokenLen, in1, encodedTokenLen);
         }
-        /**
-         * When there are no array constants present, <c>encodedTokenLen</c>==<c>totalEncodedLen</c>
-         * @param encodedTokenLen number of bytes in the stream taken by the plain formula tokens
-         * @param totalEncodedLen the total number of bytes in the formula (includes trailing encoding
-         * for array constants, but does not include 2 bytes for initial <c>ushort encodedTokenLen</c> field.
-         * @return A new formula object as read from the stream.  Possibly empty, never <code>null</code>.
-         */
+        /// <summary>
+        /// When there are no array constants present, <c>encodedTokenLen</c>==<c>totalEncodedLen</c>
+        /// </summary>
+        /// <param name="encodedTokenLen">number of bytes in the stream taken by the plain formula tokens</param>
+        /// <param name="totalEncodedLen">the total number of bytes in the formula (includes trailing encoding
+        /// for array constants, but does not include 2 bytes for initial <c>ushort encodedTokenLen</c> field.
+        /// </param>
+        /// <returns>A new formula object as read from the stream.  Possibly empty, never <c>null</c>.</returns>
         public static Formula Read(int encodedTokenLen, ILittleEndianInput in1, int totalEncodedLen)
         {
             byte[] byteEncoding = new byte[totalEncodedLen];
@@ -84,14 +86,14 @@ namespace NPOI.SS.Formula
                 return Ptg.ReadTokens(_encodedTokenLen, in1);
             }
         }
-        /**
-         * Writes  The formula encoding is includes:
-         * <ul>
-         * <li>ushort tokenDataLen</li>
-         * <li>tokenData</li>
-         * <li>arrayConstantData (if present)</li>
-         * </ul>
-         */
+        /// <summary>
+        /// Writes  The formula encoding is includes:
+        /// <list type="bullet">
+        /// <item><description>ushort tokenDataLen</description></item>
+        /// <item><description>tokenData</description></item>
+        /// <item><description>arrayConstantData (if present)</description></item>
+        /// </list>
+        /// </summary>
         public void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(_encodedTokenLen);
@@ -109,15 +111,16 @@ namespace NPOI.SS.Formula
         }
 
 
-        /**
-         * @return total formula encoding length.  The formula encoding includes:
-         * <ul>
-         * <li>ushort tokenDataLen</li>
-         * <li>tokenData</li>
-         * <li>arrayConstantData (optional)</li>
-         * </ul>
-         * Note - this value is different to <c>tokenDataLength</c>
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>total formula encoding length.  The formula encoding includes:
+        /// <list type="bullet">
+        /// <item><description>ushort tokenDataLen</description></item>
+        /// <item><description>tokenData</description></item>
+        /// <item><description>arrayConstantData (optional)</description></item>
+        /// </list>
+        /// Note - this value is different to <c>tokenDataLength</c>
+        /// </returns>
         public int EncodedSize
         {
             get
@@ -125,13 +128,13 @@ namespace NPOI.SS.Formula
                 return 2 + _byteEncoding.Length;
             }
         }
-        /**
-         * This method is often used when the formula length does not appear immediately before
-         * the encoded token data.
-         * 
-         * @return the encoded length of the plain formula tokens.  This does <em>not</em> include
-         * the leading ushort field, nor any trailing array constant data.
-         */
+        /// <summary>
+        /// This method is often used when the formula length does not appear immediately before
+        /// the encoded token data.
+        /// </summary>
+        /// <returns>the encoded length of the plain formula tokens.  This does <em>not</em> include
+        /// the leading ushort field, nor any trailing array constant data.
+        /// </returns>
         public int EncodedTokenSize
         {
             get
@@ -140,15 +143,15 @@ namespace NPOI.SS.Formula
             }
         }
 
-        /**
-         * Creates a {@link Formula} object from a supplied {@link Ptg} array. 
-         * Handles <code>null</code>s OK.
-         * @param ptgs may be <code>null</code>
-         * @return Never <code>null</code> (Possibly empty if the supplied <c>ptgs</c> is <code>null</code>)
-         */
+        /// <summary>
+        /// Creates a <see cref="Formula"/> object from a supplied <see cref="Ptg"/> array.
+        /// Handles <c>null</c>s OK.
+        /// </summary>
+        /// <param name="ptgs">may be <c>null</c></param>
+        /// <returns>Never <c>null</c> (Possibly empty if the supplied <c>ptgs</c> is <c>null</c>)</returns>
         public static Formula Create(Ptg[] ptgs)
         {
-            if (ptgs == null || ptgs.Length < 1)
+            if(ptgs == null || ptgs.Length < 1)
             {
                 return EMPTY;
             }
@@ -158,16 +161,15 @@ namespace NPOI.SS.Formula
             int encodedTokenLen = Ptg.GetEncodedSizeWithoutArrayData(ptgs);
             return new Formula(encodedData, encodedTokenLen);
         }
-        /**
-         * Gets the {@link Ptg} array from the supplied {@link Formula}. 
-         * Handles <code>null</code>s OK.
-         * 
-         * @param formula may be <code>null</code>
-         * @return possibly <code>null</code> (if the supplied <c>formula</c> is <code>null</code>)
-         */
+        /// <summary>
+        /// Gets the <see cref="Ptg"/> array from the supplied <see cref="Formula"/>.
+        /// Handles <c>null</c>s OK.
+        /// </summary>
+        /// <param name="formula">may be <c>null</c></param>
+        /// <returns>possibly <c>null</c> (if the supplied <c>formula</c> is <c>null</c>)</returns>
         public static Ptg[] GetTokens(Formula formula)
         {
-            if (formula == null)
+            if(formula == null)
             {
                 return null;
             }
@@ -180,26 +182,26 @@ namespace NPOI.SS.Formula
             return this;
         }
 
-        /**
-         * Gets the locator for the corresponding {@link SharedFormulaRecord}, {@link ArrayRecord} or
-         * {@link TableRecord} if this formula belongs to such a grouping.  The {@link CellReference}
-         * returned by this method will  match the top left corner of the range of that grouping. 
-         * The return value is usually not the same as the location of the cell containing this formula.
-         * 
-         * @return the firstRow &amp; firstColumn of an array formula or shared formula that this formula
-         * belongs to.  <code>null</code> if this formula is not part of an array or shared formula.
-         */
+        /// <summary>
+        /// Gets the locator for the corresponding <see cref="SharedFormulaRecord"/>, <see cref="ArrayRecord"/> or
+        /// <see cref="TableRecord"/> if this formula belongs to such a grouping.  The <see cref="CellReference"/>
+        /// returned by this method will  match the top left corner of the range of that grouping.
+        /// The return value is usually not the same as the location of the cell containing this formula.
+        /// </summary>
+        /// <returns>the firstRow &amp; firstColumn of an array formula or shared formula that this formula
+        /// belongs to.  <c>null</c> if this formula is not part of an array or shared formula.
+        /// </returns>
         public CellReference ExpReference
         {
             get
             {
                 byte[] data = _byteEncoding;
-                if (data.Length != 5)
+                if(data.Length != 5)
                 {
                     // tExp and tTbl are always 5 bytes long, and the only ptg in the formula
                     return null;
                 }
-                switch (data[0])
+                switch(data[0])
                 {
                     case ExpPtg.sid:
                         break;

@@ -18,135 +18,136 @@
 namespace NPOI.SS.UserModel.Charts
 {
 
-    /**
-     * High level representation of chart element manual layout.
-     *
-     * @author Roman Kashitsyn
-     */
+    /// <summary>
+    /// High level representation of chart element manual layout.
+    /// </summary>
+    /// @author Roman Kashitsyn
     public interface IManualLayout
     {
 
-        /**
-         * Sets the layout target.
-         * @param target new layout target.
-         */
+        /// <summary>
+        /// Sets the layout target.
+        /// </summary>
+        /// <param name="target">new layout target.</param>
         void SetTarget(LayoutTarget target);
 
-        /**
-         * Returns current layout target.
-         * @return current layout target
-         */
+        /// <summary>
+        /// Returns current layout target.
+        /// </summary>
+        /// <returns>current layout target</returns>
         LayoutTarget GetTarget();
 
-        /**
-         * Sets the x-coordinate layout mode.
-         * @param mode new x-coordinate layout mode.
-         */
+        /// <summary>
+        /// Sets the x-coordinate layout mode.
+        /// </summary>
+        /// <param name="mode">new x-coordinate layout mode.</param>
         void SetXMode(LayoutMode mode);
 
-        /**
-         * Returns current x-coordinnate layout mode.
-         * @return current x-coordinate layout mode.
-         */
+        /// <summary>
+        /// Returns current x-coordinnate layout mode.
+        /// </summary>
+        /// <returns>current x-coordinate layout mode.</returns>
         LayoutMode GetXMode();
 
-        /**
-         * Sets the y-coordinate layout mode.
-         * @param mode new y-coordinate layout mode.
-         */
+        /// <summary>
+        /// Sets the y-coordinate layout mode.
+        /// </summary>
+        /// <param name="mode">new y-coordinate layout mode.</param>
         void SetYMode(LayoutMode mode);
 
-        /**
-         * Returns current y-coordinate layout mode.
-         * @return current y-coordinate layout mode.
-         */
+        /// <summary>
+        /// Returns current y-coordinate layout mode.
+        /// </summary>
+        /// <returns>current y-coordinate layout mode.</returns>
         LayoutMode GetYMode();
 
-        /**
-         * Returns the x location of the chart element.
-         * @return the x location (left) of the chart element or 0.0 if
-         *         not Set.
-         */
+        /// <summary>
+        /// Returns the x location of the chart element.
+        /// </summary>
+        /// <returns>the x location (left) of the chart element or 0.0 if
+        /// not Set.
+        /// </returns>
         double GetX();
 
-        /**
-         * Specifies the x location (left) of the chart element as a
-         * fraction of the width of the chart. If Left Mode is Factor,
-         * then the position is relative to the default position for the
-         * chart element.
-         */
+        /// <summary>
+        /// Specifies the x location (left) of the chart element as a
+        /// fraction of the width of the chart. If Left Mode is Factor,
+        /// then the position is relative to the default position for the
+        /// chart element.
+        /// </summary>
         void SetX(double x);
 
 
-        /**
-         * Returns current y location of the chart element.
-         * @return the y location (top) of the chart element or 0.0 if not
-         *         Set.
-         */
+        /// <summary>
+        /// Returns current y location of the chart element.
+        /// </summary>
+        /// <returns>the y location (top) of the chart element or 0.0 if not
+        /// Set.
+        /// </returns>
         double GetY();
 
-        /**
-         * Specifies the y location (top) of the chart element as a
-         * fraction of the height of the chart. If Top Mode is Factor,
-         * then the position is relative to the default position for the
-         * chart element.
-         */
+        /// <summary>
+        /// Specifies the y location (top) of the chart element as a
+        /// fraction of the height of the chart. If Top Mode is Factor,
+        /// then the position is relative to the default position for the
+        /// chart element.
+        /// </summary>
         void SetY(double y);
 
 
-        /**
-         * Specifies how to interpret the Width element for this manual
-         * layout.
-         * @param mode new width layout mode of this manual layout.
-         */
+        /// <summary>
+        /// Specifies how to interpret the Width element for this manual
+        /// layout.
+        /// </summary>
+        /// <param name="mode">new width layout mode of this manual layout.</param>
         void SetWidthMode(LayoutMode mode);
 
 
-        /**
-         * Returns current width mode of this manual layout.
-         * @return width mode of this manual layout.
-         */
+        /// <summary>
+        /// Returns current width mode of this manual layout.
+        /// </summary>
+        /// <returns>width mode of this manual layout.</returns>
         LayoutMode GetWidthMode();
 
-        /**
-         * Specifies how to interpret the Height element for this manual
-         * layout.
-         * @param mode new height mode of this manual layout.
-         */
+        /// <summary>
+        /// Specifies how to interpret the Height element for this manual
+        /// layout.
+        /// </summary>
+        /// <param name="mode">new height mode of this manual layout.</param>
         void SetHeightMode(LayoutMode mode);
 
-        /**
-         * Returns current height mode of this 
-         * @return height mode of this manual layout.
-         */
+        /// <summary>
+        /// Returns current height mode of this
+        /// </summary>
+        /// <returns>height mode of this manual layout.</returns>
         LayoutMode GetHeightMode();
 
-        /**
-         * Specifies the width (if Width Mode is Factor) or right (if
-         * Width Mode is Edge) of the chart element as a fraction of the
-         * width of the chart.
-         * @param ratio a fraction of the width of the chart.
-         */
+        /// <summary>
+        /// Specifies the width (if Width Mode is Factor) or right (if
+        /// Width Mode is Edge) of the chart element as a fraction of the
+        /// width of the chart.
+        /// </summary>
+        /// <param name="ratio">a fraction of the width of the chart.</param>
         void SetWidthRatio(double ratio);
 
-        /**
-         * Returns current fraction of the width of the chart.
-         * @return fraction of the width of the chart or 0.0 if not Set.
-         */
+        /// <summary>
+        /// Returns current fraction of the width of the chart.
+        /// </summary>
+        /// <returns>fraction of the width of the chart or 0.0 if not Set.</returns>
         double GetWidthRatio();
 
-        /**
-         * Specifies the height (if Height Mode is Factor) or bottom (if
-         * Height Mode is edge) of the chart element as a fraction of the
-         * height of the chart.
-         * @param ratio a fraction of the height of the chart.
-         */
+        /// <summary>
+        /// Specifies the height (if Height Mode is Factor) or bottom (if
+        /// Height Mode is edge) of the chart element as a fraction of the
+        /// height of the chart.
+        /// </summary>
+        /// <param name="ratio">a fraction of the height of the chart.</param>
         void SetHeightRatio(double ratio);
 
-        /**
-         * Returns current fraction of the height of the chart.
-         * @return fraction of the height of the chart or 0.0 if not Set.
-         */
+        /// <summary>
+        /// Returns current fraction of the height of the chart.
+        /// </summary>
+        /// <returns>fraction of the height of the chart or 0.0 if not Set.</returns>
         double GetHeightRatio();
 
     }

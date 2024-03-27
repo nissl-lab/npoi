@@ -24,13 +24,15 @@ namespace NPOI.SS.Formula
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
 
-    /**
-     * Abstracts a workbook for the purpose of formula parsing.<br/>
-     * 
-     * For POI internal use only
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// <para>
+    /// Abstracts a workbook for the purpose of formula parsing.<br/>
+    /// </para>
+    /// <para>
+    /// For POI internal use only
+    /// </para>
+    /// </summary>
+    /// @author Josh Micich
     public interface IFormulaParsingWorkbook
     {
         /// <summary>

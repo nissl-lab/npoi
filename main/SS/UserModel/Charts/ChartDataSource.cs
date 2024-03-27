@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  ====================================================================
  *    Licensed to the Apache Software Foundation (ASF) under one or more
  *    contributor license agreements.  See the NOTICE file distributed with
@@ -21,45 +21,42 @@ namespace NPOI.SS.UserModel.Charts
 {
     public interface IChartDataSource<T>
     {
-        /**
-        * Return number of points contained by data source.
-        *
-        * @return number of points contained by data source
-        */
+        /// <summary>
+        /// Return number of points contained by data source.
+        /// </summary>
+        /// <returns>number of points contained by data source</returns>
         int PointCount { get; }
 
-        /**
-         * Returns point value at specified index.
-         *
-         * @param index index to value from
-         * @return point value at specified index.
-         * @throws {@code IndexOutOfBoundsException} if index
-         *                parameter not in range {@code 0 &lt;= index &lt;= pointCount}
-         */
+        /// <summary>
+        /// Returns point value at specified index.
+        /// </summary>
+        /// <param name="index">index to value from</param>
+        /// <returns>point value at specified index.</returns>
+        /// <exception cref="{@code">IndexOutOfBoundsException} if index
+        /// parameter not in range {@code 0 &lt;= index &lt;= pointCount}
+        /// </exception>
         T GetPointAt(int index);
 
-        /**
-         * Returns {@code true} if charts data source is valid cell range.
-         *
-         * @return {@code true} if charts data source is valid cell range
-         */
+        /// <summary>
+        /// Returns <c>true</c> if charts data source is valid cell range.
+        /// </summary>
+        /// <returns><c>true</c> if charts data source is valid cell range</returns>
         bool IsReference { get; }
 
-        /**
-         * Returns {@code true} if data source points should be treated as numbers.
-         *
-         * @return {@code true} if data source points should be treated as numbers
-         */
+        /// <summary>
+        /// Returns <c>true</c> if data source points should be treated as numbers.
+        /// </summary>
+        /// <returns><c>true</c> if data source points should be treated as numbers</returns>
         bool IsNumeric { get; }
 
-        /**
-         * Returns formula representation of the data source. It is only applicable
-         * for data source that is valid cell range.
-         *
-         * @return formula representation of the data source
-         * @throws {@code UnsupportedOperationException} if the data source is not a
-         *                reference.
-         */
+        /// <summary>
+        /// Returns formula representation of the data source. It is only applicable
+        /// for data source that is valid cell range.
+        /// </summary>
+        /// <returns>formula representation of the data source</returns>
+        /// <exception cref="{@code">UnsupportedOperationException} if the data source is not a
+        /// reference.
+        /// </exception>
         string FormulaString { get; }
     }
 }

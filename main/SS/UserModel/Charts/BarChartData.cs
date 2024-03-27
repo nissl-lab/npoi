@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -19,9 +19,9 @@ namespace NPOI.SS.UserModel.Charts
         /// <returns>Created series.</returns>
         IBarChartSeries<Tx, Ty> AddSeries(IChartDataSource<Tx> categories, IChartDataSource<Ty> values);
 
-        /**
-         * @return list of all series.
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>list of all series.</returns>
         List<IBarChartSeries<Tx, Ty>> GetSeries();
     }
 }

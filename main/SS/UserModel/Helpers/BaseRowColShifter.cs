@@ -1,4 +1,4 @@
-﻿using NPOI.SS.Formula;
+using NPOI.SS.Formula;
 using NPOI.SS.Formula.PTG;
 using NPOI.SS.Util;
 using System;
@@ -12,36 +12,34 @@ namespace NPOI.SS.UserModel.Helpers
         //Update named ranges
         public abstract void UpdateNamedRanges(FormulaShifter formulaShifter);
 
-        /**
-         * Update formulas.
-         */
+        /// <summary>
+        /// Update formulas.
+        /// </summary>
         public abstract void updateFormulas(FormulaShifter formulaShifter);
 
-        /**
-         * Shifts, grows, or shrinks the merged regions due to a row shift
-         * ({@link RowShifter}) or column shift ({@link ColumnShifter}).
-         * Merged regions that are completely overlaid by shifting will be deleted.
-         *
-         * @param start the first row or column to be shifted
-         * @param end   the last row or column to be shifted
-         * @param n     the number of rows or columns to shift
-         * @return a list of affected merged regions, excluding contain deleted ones
-         */
+        /// <summary>
+        /// Shifts, grows, or shrinks the merged regions due to a row shift
+        /// (<see cref="RowShifter"/>) or column shift (<see cref="ColumnShifter"/>).
+        /// Merged regions that are completely overlaid by shifting will be deleted.
+        /// </summary>
+        /// <param name="start">the first row or column to be shifted</param>
+        /// <param name="end">  the last row or column to be shifted</param>
+        /// <param name="n">    the number of rows or columns to shift</param>
+        /// <returns>a list of affected merged regions, excluding contain deleted ones</returns>
         public abstract List<CellRangeAddress> shiftMergedRegions(int start, int end, int n);
 
-        /**
-         * Update conditional formatting
-         * @param formulaShifter The {@link FormulaShifter} to use
-         */
+        /// <summary>
+        /// Update conditional formatting
+        /// </summary>
+        /// <param name="formulaShifter">The <see cref="FormulaShifter"/> to use</param>
         public abstract void updateConditionalFormatting(FormulaShifter formulaShifter);
 
-        /**
-         * Shift the Hyperlink anchors (not the hyperlink text, even if the hyperlink
-         * is of type LINK_DOCUMENT and refers to a cell that was shifted). Hyperlinks
-         * do not track the content they point to.
-         *
-         * @param formulaShifter the formula shifting policy
-         */
+        /// <summary>
+        /// Shift the Hyperlink anchors (not the hyperlink text, even if the hyperlink
+        /// is of type LINK_DOCUMENT and refers to a cell that was shifted). Hyperlinks
+        /// do not track the content they point to.
+        /// </summary>
+        /// <param name="formulaShifter">the formula shifting policy</param>
         public abstract void updateHyperlinks(FormulaShifter formulaShifter);
 
 
@@ -52,17 +50,17 @@ namespace NPOI.SS.UserModel.Helpers
             AreaPtg aptg = new AreaPtg(cra.FirstRow, cra.LastRow, cra.FirstColumn, cra.LastColumn, false, false, false, false);
             Ptg[] ptgs = { aptg, };
 
-            if (!Shifter.AdjustFormula(ptgs, currentExternSheetIx))
+            if(!Shifter.AdjustFormula(ptgs, currentExternSheetIx))
             {
                 return cra;
             }
             Ptg ptg0 = ptgs[0];
-            if (ptg0 is AreaPtg)
+            if(ptg0 is AreaPtg)
             {
                 AreaPtg bptg = (AreaPtg)ptg0;
                 return new CellRangeAddress(bptg.FirstRow, bptg.LastRow, bptg.FirstColumn, bptg.LastColumn);
             }
-            if (ptg0 is AreaErrPtg)
+            if(ptg0 is AreaErrPtg)
             {
                 return null;
             }

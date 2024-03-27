@@ -47,7 +47,7 @@ namespace NPOI.SS.Formula
         }
         public override int GetHashCode()
         {
-            return (int)(_bookSheetColumn ^ (Operator.UnsignedRightShift(_bookSheetColumn , 32))) + 17 * _rowIndex;
+            return (int) (_bookSheetColumn ^ (Operator.UnsignedRightShift(_bookSheetColumn, 32))) + 17 * _rowIndex;
         }
 
         public override bool Equals(Object obj)
@@ -67,14 +67,14 @@ namespace NPOI.SS.Formula
         {
             get
             {
-                return (int)(_bookSheetColumn & 0x000FFFF);
+                return (int) (_bookSheetColumn & 0x000FFFF);
             }
         }
         public int SheetIndex
         {
             get
             {
-                return (int)((_bookSheetColumn >> 32) & 0xFFFF);
+                return (int) ((_bookSheetColumn >> 32) & 0xFFFF);
             }
         }
 
@@ -82,14 +82,13 @@ namespace NPOI.SS.Formula
         {
             get
             {
-                return (int)((_bookSheetColumn >> 48) & 0xFFFF);
+                return (int) ((_bookSheetColumn >> 48) & 0xFFFF);
             }
         }
     }
-    /**
-     *
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// </summary>
+    /// @author Josh Micich
     public class PlainCellCache
     {
 
@@ -109,7 +108,7 @@ namespace NPOI.SS.Formula
         }
         public PlainValueCellCacheEntry Get(Loc key)
         {
-            return (PlainValueCellCacheEntry)_plainValueEntriesByLoc[key];
+            return (PlainValueCellCacheEntry) _plainValueEntriesByLoc[key];
         }
         public void Remove(Loc key)
         {

@@ -23,9 +23,9 @@ namespace NPOI.SS.Formula
     using System.Text;
     using NPOI.SS.Formula.Eval;
 
-    /**
-     * Stores details about the current evaluation of a cell.<br/>
-     */
+    /// <summary>
+    /// Stores details about the current evaluation of a cell.<br/>
+    /// </summary>
     class CellEvaluationFrame
     {
 
@@ -50,31 +50,32 @@ namespace NPOI.SS.Formula
             sb.Append("]");
             return sb.ToString();
         }
-        /**
-         * @param inputCell a cell directly used by the formula of this evaluation frame
-         */
+        /// <summary>
+        /// </summary>
+        /// <param name="inputCell">a cell directly used by the formula of this evaluation frame</param>
         public void AddSensitiveInputCell(CellCacheEntry inputCell)
         {
             _sensitiveInputCells.Add(inputCell);
         }
-        /**
-         * @return never <c>null</c>, (possibly empty) array of all cells directly used while 
-         * evaluating the formula of this frame.
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>never <c>null</c>, (possibly empty) array of all cells directly used while
+        /// evaluating the formula of this frame.
+        /// </returns>
         private CellCacheEntry[] GetSensitiveInputCells()
         {
             int nItems = _sensitiveInputCells.Count;
-            if (nItems < 1)
+            if(nItems < 1)
             {
                 return CellCacheEntry.EMPTY_ARRAY;
             }
             CellCacheEntry[] result = new CellCacheEntry[nItems];
-            result = (CellCacheEntry[])_sensitiveInputCells.ToArray(typeof(CellCacheEntry));
+            result = (CellCacheEntry[]) _sensitiveInputCells.ToArray(typeof(CellCacheEntry));
             return result;
         }
         public void AddUsedBlankCell(int bookIndex, int sheetIndex, int rowIndex, int columnIndex)
         {
-            if (_usedBlankCellGroup == null)
+            if(_usedBlankCellGroup == null)
             {
                 _usedBlankCellGroup = new FormulaUsedBlankCellSet();
             }

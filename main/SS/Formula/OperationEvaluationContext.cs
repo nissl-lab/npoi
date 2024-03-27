@@ -9,14 +9,16 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
     using System.Globalization;
-    /**
-     * Contains all the contextual information required to Evaluate an operation
-     * within a formula
-     *
-     * For POI internal use only
-     *
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// <para>
+    /// Contains all the contextual information required to Evaluate an operation
+    /// within a formula
+    /// </para>
+    /// <para>
+    /// For POI internal use only
+    /// </para>
+    /// </summary>
+    /// @author Josh Micich
     public class OperationEvaluationContext
     {
         public static readonly FreeRefFunction UDF = UserDefinedFunction.instance;
@@ -28,13 +30,13 @@ namespace NPOI.SS.Formula
         private bool _isSingleValue;
         private WorkbookEvaluator _bookEvaluator;
         private bool _isInArrayContext;
-        
+
         public OperationEvaluationContext(WorkbookEvaluator bookEvaluator, IEvaluationWorkbook workbook, int sheetIndex, int srcRowNum,
-                int srcColNum, EvaluationTracker tracker) 
+                int srcColNum, EvaluationTracker tracker)
             : this(bookEvaluator, workbook, sheetIndex, srcRowNum, srcColNum, tracker, isSingleValue: true)
         {
         }
-        
+
         public OperationEvaluationContext(WorkbookEvaluator bookEvaluator, IEvaluationWorkbook workbook, int sheetIndex, int srcRowNum,
             int srcColNum, EvaluationTracker tracker, bool isSingleValue)
         {
@@ -52,7 +54,8 @@ namespace NPOI.SS.Formula
             {
                 return _isInArrayContext;
             }
-            set {
+            set
+            {
                 _isInArrayContext = value;
             }
         }
@@ -105,12 +108,12 @@ namespace NPOI.SS.Formula
             WorkbookEvaluator targetEvaluator;
             int otherFirstSheetIndex;
             int otherLastSheetIndex = -1;
-            if (externalSheet == null || externalSheet.WorkbookName == null)
+            if(externalSheet == null || externalSheet.WorkbookName == null)
             {
                 // sheet is in same workbook
                 targetEvaluator = _bookEvaluator;
 
-                if (externalSheet == null)
+                if(externalSheet == null)
                 {
                     otherFirstSheetIndex = 0;
                 }
@@ -119,7 +122,7 @@ namespace NPOI.SS.Formula
                     otherFirstSheetIndex = _workbook.GetSheetIndex(externalSheet.SheetName);
                 }
 
-                if (externalSheet is ExternalSheetRange)
+                if(externalSheet is ExternalSheetRange)
                 {
                     String lastSheetName = ((ExternalSheetRange)externalSheet).LastSheetName;
                     otherLastSheetIndex = _workbook.GetSheetIndex(lastSheetName);
@@ -133,33 +136,33 @@ namespace NPOI.SS.Formula
                 {
                     targetEvaluator = _bookEvaluator.GetOtherWorkbookEvaluator(workbookName);
                 }
-                catch (WorkbookNotFoundException e)
+                catch(WorkbookNotFoundException e)
                 {
                     throw new RuntimeException(e.Message, e);
                 }
 
                 otherFirstSheetIndex = targetEvaluator.GetSheetIndex(externalSheet.SheetName);
-                if (externalSheet is ExternalSheetRange)
+                if(externalSheet is ExternalSheetRange)
                 {
                     String lastSheetName = ((ExternalSheetRange)externalSheet).LastSheetName;
                     otherLastSheetIndex = targetEvaluator.GetSheetIndex(lastSheetName);
                 }
 
-                if (otherFirstSheetIndex < 0)
+                if(otherFirstSheetIndex < 0)
                 {
                     throw new Exception("Invalid sheet name '" + externalSheet.SheetName
                             + "' in bool '" + workbookName + "'.");
                 }
             }
 
-            if (otherLastSheetIndex == -1)
+            if(otherLastSheetIndex == -1)
             {
                 // Reference to just one sheet
                 otherLastSheetIndex = otherFirstSheetIndex;
             }
 
             SheetRefEvaluator[] Evals = new SheetRefEvaluator[otherLastSheetIndex - otherFirstSheetIndex + 1];
-            for (int i = 0; i < Evals.Length; i++)
+            for(int i = 0; i < Evals.Length; i++)
             {
                 int otherSheetIndex = i + otherFirstSheetIndex;
                 Evals[i] = new SheetRefEvaluator(targetEvaluator, _tracker, otherSheetIndex);
@@ -168,19 +171,19 @@ namespace NPOI.SS.Formula
         }
 
 
-        /**
-         * @return <code>null</code> if either workbook or sheet is not found
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns><c>null</c> if either workbook or sheet is not found</returns>
         private SheetRefEvaluator CreateExternSheetRefEvaluator(String workbookName, String sheetName)
         {
             WorkbookEvaluator targetEvaluator;
-            if (workbookName == null)
+            if(workbookName == null)
             {
                 targetEvaluator = _bookEvaluator;
             }
             else
             {
-                if (sheetName == null)
+                if(sheetName == null)
                 {
                     throw new ArgumentException("sheetName must not be null if workbookName is provided");
                 }
@@ -188,13 +191,13 @@ namespace NPOI.SS.Formula
                 {
                     targetEvaluator = _bookEvaluator.GetOtherWorkbookEvaluator(workbookName);
                 }
-                catch (WorkbookNotFoundException)
+                catch(WorkbookNotFoundException)
                 {
                     return null;
                 }
             }
             int otherSheetIndex = sheetName == null ? _sheetIndex : targetEvaluator.GetSheetIndex(sheetName);
-            if (otherSheetIndex < 0)
+            if(otherSheetIndex < 0)
             {
                 return null;
             }
@@ -209,32 +212,37 @@ namespace NPOI.SS.Formula
 
 
 
-        /**
-         * Resolves a cell or area reference dynamically.
-         * @param workbookName the name of the workbook Containing the reference.  If <code>null</code>
-         * the current workbook is assumed.  Note - to Evaluate formulas which use multiple workbooks,
-         * a {@link CollaboratingWorkbooksEnvironment} must be set up.
-         * @param sheetName the name of the sheet Containing the reference.  May be <code>null</code>
-         * (when <c>workbookName</c> is also null) in which case the current workbook and sheet is
-         * assumed.
-         * @param refStrPart1 the single cell reference or first part of the area reference.  Must not
-         * be <code>null</code>.
-         * @param refStrPart2 the second part of the area reference. For single cell references this
-         * parameter must be <code>null</code>
-         * @param isA1Style specifies the format for <c>refStrPart1</c> and <c>refStrPart2</c>.
-         * Pass <c>true</c> for 'A1' style and <c>false</c> for 'R1C1' style.
-         * TODO - currently POI only supports 'A1' reference style
-         * @return a {@link RefEval} or {@link AreaEval}
-         */
+        /// <summary>
+        /// Resolves a cell or area reference dynamically.
+        /// </summary>
+        /// <param name="workbookName">the name of the workbook Containing the reference.  If <c>null</c>
+        /// the current workbook is assumed.  Note - to Evaluate formulas which use multiple workbooks,
+        /// a <see cref="CollaboratingWorkbooksEnvironment"/> must be set up.
+        /// </param>
+        /// <param name="sheetName">the name of the sheet Containing the reference.  May be <c>null</c>
+        /// (when <c>workbookName</c> is also null) in which case the current workbook and sheet is
+        /// assumed.
+        /// </param>
+        /// <param name="refStrPart1">the single cell reference or first part of the area reference.  Must not
+        /// be <c>null</c>.
+        /// </param>
+        /// <param name="refStrPart2">the second part of the area reference. For single cell references this
+        /// parameter must be <c>null</c>
+        /// </param>
+        /// <param name="isA1Style">specifies the format for <c>refStrPart1</c> and <c>refStrPart2</c>.
+        /// Pass <c>true</c> for 'A1' style and <c>false</c> for 'R1C1' style.
+        /// TODO - currently POI only supports 'A1' reference style
+        /// </param>
+        /// <returns>a <see cref="RefEval"/> or <see cref="AreaEval"/></returns>
         public ValueEval GetDynamicReference(String workbookName, String sheetName, String refStrPart1,
                 String refStrPart2, bool isA1Style)
         {
-            if (!isA1Style)
+            if(!isA1Style)
             {
                 throw new Exception("R1C1 style not supported yet");
             }
             SheetRefEvaluator se = CreateExternSheetRefEvaluator(workbookName, sheetName);
-            if (se == null)
+            if(se == null)
             {
                 return ErrorEval.REF_INVALID;
             }
@@ -244,22 +252,22 @@ namespace NPOI.SS.Formula
             SpreadsheetVersion ssVersion = ((IFormulaParsingWorkbook)_workbook).GetSpreadsheetVersion();
 
             NameType part1refType = ClassifyCellReference(refStrPart1, ssVersion);
-            switch (part1refType)
+            switch(part1refType)
             {
                 case NameType.BadCellOrNamedRange:
                     return ErrorEval.REF_INVALID;
                 case NameType.NamedRange:
                     IEvaluationName nm = ((IFormulaParsingWorkbook)_workbook).GetName(refStrPart1, _sheetIndex);
-                    if (!nm.IsRange)
+                    if(!nm.IsRange)
                     {
                         throw new Exception("Specified name '" + refStrPart1 + "' is not a range as expected.");
                     }
                     return _bookEvaluator.EvaluateNameFormula(nm.NameDefinition, this);
             }
-            if (refStrPart2 == null)
+            if(refStrPart2 == null)
             {
                 // no ':'
-                switch (part1refType)
+                switch(part1refType)
                 {
                     case NameType.Column:
                     case NameType.Row:
@@ -271,7 +279,7 @@ namespace NPOI.SS.Formula
                 throw new InvalidOperationException("Unexpected reference classification of '" + refStrPart1 + "'.");
             }
             NameType part2refType = ClassifyCellReference(refStrPart1, ssVersion);
-            switch (part2refType)
+            switch(part2refType)
             {
                 case NameType.BadCellOrNamedRange:
                     return ErrorEval.REF_INVALID;
@@ -280,17 +288,17 @@ namespace NPOI.SS.Formula
                             + "'. Indirect Evaluation of defined names not supported yet");
             }
 
-            if (part2refType != part1refType)
+            if(part2refType != part1refType)
             {
                 // LHS and RHS of ':' must be compatible
                 return ErrorEval.REF_INVALID;
             }
             int firstRow, firstCol, lastRow, lastCol;
-            switch (part1refType)
+            switch(part1refType)
             {
                 case NameType.Column:
                     firstRow = 0;
-                    if (part2refType.Equals(NameType.Column))
+                    if(part2refType.Equals(NameType.Column))
                     {
                         lastRow = ssVersion.LastRowIndex;
                         firstCol = ParseRowRef(refStrPart1);
@@ -306,7 +314,7 @@ namespace NPOI.SS.Formula
                 case NameType.Row:
                     // support of cell range in the form of integer:integer
                     firstCol = 0;
-                    if (part2refType.Equals(NameType.Row))
+                    if(part2refType.Equals(NameType.Row))
                     {
                         firstRow = ParseColRef(refStrPart1);
                         lastRow = ParseColRef(refStrPart2);
@@ -347,7 +355,7 @@ namespace NPOI.SS.Formula
         private static NameType ClassifyCellReference(String str, SpreadsheetVersion ssVersion)
         {
             int len = str.Length;
-            if (len < 1)
+            if(len < 1)
             {
                 return NameType.BadCellOrNamedRange;
             }
@@ -399,11 +407,11 @@ namespace NPOI.SS.Formula
             ValueEval[] values = new ValueEval[tokens.GetLength(0) * tokens.GetLength(1)];
 
             int index = 0;
-            for (int jdx = 0; jdx < tokens.GetLength(0); jdx++)
+            for(int jdx = 0; jdx < tokens.GetLength(0); jdx++)
             {
-                for (int idx = 0; idx < tokens.GetLength(1); idx++)
+                for(int idx = 0; idx < tokens.GetLength(1); idx++)
                 {
-                    values[index++] = convertObjectEval(tokens[jdx,idx]);
+                    values[index++] = convertObjectEval(tokens[jdx, idx]);
                 }
             }
 
@@ -412,28 +420,32 @@ namespace NPOI.SS.Formula
         }
         private ValueEval convertObjectEval(Object token)
         {
-            if (token == null)
+            if(token == null)
             {
                 throw new ArgumentNullException("Array item cannot be null");
             }
-            if (token is String) {
-                return new StringEval((String)token);
+            if(token is String)
+            {
+                return new StringEval((String) token);
             }
-            if (token is Double) {
-                return new NumberEval(((Double)token));
+            if(token is Double)
+            {
+                return new NumberEval(((Double) token));
             }
-            if (token is Boolean) {
-                return BoolEval.ValueOf((Boolean)token);
+            if(token is Boolean)
+            {
+                return BoolEval.ValueOf((Boolean) token);
             }
-            if (token is Constant.ErrorConstant) {
-                return ErrorEval.ValueOf(((Constant.ErrorConstant)token).ErrorCode);
+            if(token is Constant.ErrorConstant)
+            {
+                return ErrorEval.ValueOf(((Constant.ErrorConstant) token).ErrorCode);
             }
             throw new ArgumentException("Unexpected constant class (" + token.GetType().Name + ")");
         }
         public ValueEval GetNameXEval(NameXPtg nameXPtg)
         {
             ExternalSheet externSheet = _workbook.GetExternalSheet(nameXPtg.SheetRefIndex);
-            if (externSheet == null || externSheet.WorkbookName == null)
+            if(externSheet == null || externSheet.WorkbookName == null)
             {
                 // External reference to our own workbook's name
                 return GetLocalNameXEval(nameXPtg);
@@ -449,7 +461,7 @@ namespace NPOI.SS.Formula
         public ValueEval GetNameXEval(NameXPxg nameXPxg)
         {
             ExternalSheet externSheet = _workbook.GetExternalSheet(nameXPxg.SheetName, null, nameXPxg.ExternalWorkbookNumber);
-            if (externSheet == null || externSheet.WorkbookName == null)
+            if(externSheet == null || externSheet.WorkbookName == null)
             {
                 // External reference to our own workbook's name
                 return GetLocalNameXEval(nameXPxg);
@@ -468,7 +480,7 @@ namespace NPOI.SS.Formula
         {
             // Look up the sheet, if present
             int sIdx = -1;
-            if (nameXPxg.SheetName != null)
+            if(nameXPxg.SheetName != null)
             {
                 sIdx = _workbook.GetSheetIndex(nameXPxg.SheetName);
             }
@@ -476,7 +488,7 @@ namespace NPOI.SS.Formula
             // Is it a name or a function?
             String name = nameXPxg.NameName;
             IEvaluationName evalName = _workbook.GetName(name, sIdx);
-            if (evalName != null)
+            if(evalName != null)
             {
                 // Process it as a name
                 return new ExternalNameEval(evalName);
@@ -494,7 +506,7 @@ namespace NPOI.SS.Formula
             // Try to parse it as a name
             int sheetNameAt = name.IndexOf('!');
             IEvaluationName evalName = null;
-            if (sheetNameAt > -1)
+            if(sheetNameAt > -1)
             {
                 // Sheet based name
                 String sheetName = name.Substring(0, sheetNameAt);
@@ -507,7 +519,7 @@ namespace NPOI.SS.Formula
                 evalName = _workbook.GetName(name, -1);
             }
 
-            if (evalName != null)
+            if(evalName != null)
             {
                 // Process it as a name
                 return new ExternalNameEval(evalName);
@@ -534,9 +546,9 @@ namespace NPOI.SS.Formula
             {
                 WorkbookEvaluator refWorkbookEvaluator = _bookEvaluator.GetOtherWorkbookEvaluator(workbookName);
                 IEvaluationName evaluationName = refWorkbookEvaluator.GetName(externName.Name, externName.Ix - 1);
-                if (evaluationName != null && evaluationName.HasFormula)
+                if(evaluationName != null && evaluationName.HasFormula)
                 {
-                    if (evaluationName.NameDefinition.Length > 1)
+                    if(evaluationName.NameDefinition.Length > 1)
                     {
                         throw new Exception("Complex name formulas not supported yet");
                     }
@@ -545,22 +557,22 @@ namespace NPOI.SS.Formula
                             refWorkbookEvaluator, refWorkbookEvaluator.Workbook, -1, -1, -1, _tracker);
 
                     Ptg ptg = evaluationName.NameDefinition[0];
-                    if (ptg is Ref3DPtg)
+                    if(ptg is Ref3DPtg)
                     {
                         Ref3DPtg ref3D = (Ref3DPtg)ptg;
                         return refWorkbookContext.GetRef3DEval(ref3D);
                     }
-                    else if (ptg is Ref3DPxg)
+                    else if(ptg is Ref3DPxg)
                     {
                         Ref3DPxg ref3D = (Ref3DPxg)ptg;
                         return refWorkbookContext.GetRef3DEval(ref3D);
                     }
-                    else if (ptg is Area3DPtg)
+                    else if(ptg is Area3DPtg)
                     {
                         Area3DPtg area3D = (Area3DPtg)ptg;
                         return refWorkbookContext.GetArea3DEval(area3D);
                     }
-                    else if (ptg is Area3DPxg)
+                    else if(ptg is Area3DPxg)
                     {
                         Area3DPxg area3D = (Area3DPxg)ptg;
                         return refWorkbookContext.GetArea3DEval(area3D);
@@ -569,7 +581,7 @@ namespace NPOI.SS.Formula
                 }
                 return ErrorEval.REF_INVALID;
             }
-            catch (WorkbookNotFoundException)
+            catch(WorkbookNotFoundException)
             {
                 return ErrorEval.REF_INVALID;
             }

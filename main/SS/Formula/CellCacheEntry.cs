@@ -20,9 +20,9 @@ namespace NPOI.SS.Formula
 
     using System;
     using NPOI.SS.Formula.Eval;
-    /**
-     * Stores the parameters that identify the evaluation of one cell.<br/>
-     */
+    /// <summary>
+    /// Stores the parameters that identify the evaluation of one cell.<br/>
+    /// </summary>
     public abstract class CellCacheEntry : ICacheEntry
     {
         public static CellCacheEntry[] EMPTY_ARRAY = { };
@@ -42,7 +42,7 @@ namespace NPOI.SS.Formula
 
         public bool UpdateValue(ValueEval value)
         {
-            if (value == null)
+            if(value == null)
             {
                 throw new ArgumentException("Did not expect To Update To null");
             }
@@ -57,35 +57,35 @@ namespace NPOI.SS.Formula
 
         private static bool AreValuesEqual(ValueEval a, ValueEval b)
         {
-            if (a == null)
+            if(a == null)
             {
                 return false;
             }
             Type cls = a.GetType();
-            if (cls != b.GetType())
+            if(cls != b.GetType())
             {
                 // value type is changing
                 return false;
             }
-            if (a == BlankEval.instance)
+            if(a == BlankEval.instance)
             {
                 return b == a;
             }
-            if (cls == typeof(NumberEval))
+            if(cls == typeof(NumberEval))
             {
-                return ((NumberEval)a).NumberValue == ((NumberEval)b).NumberValue;
+                return ((NumberEval) a).NumberValue == ((NumberEval) b).NumberValue;
             }
-            if (cls == typeof(StringEval))
+            if(cls == typeof(StringEval))
             {
-                return ((StringEval)a).StringValue.Equals(((StringEval)b).StringValue);
+                return ((StringEval) a).StringValue.Equals(((StringEval) b).StringValue);
             }
-            if (cls == typeof(BoolEval))
+            if(cls == typeof(BoolEval))
             {
-                return ((BoolEval)a).BooleanValue == ((BoolEval)b).BooleanValue;
+                return ((BoolEval) a).BooleanValue == ((BoolEval) b).BooleanValue;
             }
-            if (cls == typeof(ErrorEval))
+            if(cls == typeof(ErrorEval))
             {
-                return ((ErrorEval)a).ErrorCode == ((ErrorEval)b).ErrorCode;
+                return ((ErrorEval) a).ErrorCode == ((ErrorEval) b).ErrorCode;
             }
             throw new InvalidOperationException("Unexpected value class (" + cls.Name + ")");
         }
@@ -102,14 +102,14 @@ namespace NPOI.SS.Formula
 
         public void ClearConsumingCell(FormulaCellCacheEntry cce)
         {
-            if (!_consumingCells.Remove(cce))
+            if(!_consumingCells.Remove(cce))
             {
                 throw new InvalidOperationException("Specified formula cell is not consumed by this cell");
             }
         }
         public void RecurseClearCachedFormulaResults(IEvaluationListener listener)
         {
-            if (listener == null)
+            if(listener == null)
             {
                 RecurseClearCachedFormulaResults();
             }
@@ -120,17 +120,17 @@ namespace NPOI.SS.Formula
             }
         }
 
-        /**
-         * Calls formulaCell.SetFormulaResult(null, null) recursively all the way up the tree of 
-         * dependencies. Calls usedCell.ClearConsumingCell(fc) for each child of a cell that Is
-         * Cleared along the way.
-         * @param formulaCells
-         */
+        /// <summary>
+        /// Calls formulaCell.SetFormulaResult(null, null) recursively all the way up the tree of
+        /// dependencies. Calls usedCell.ClearConsumingCell(fc) for each child of a cell that Is
+        /// Cleared along the way.
+        /// </summary>
+        /// <param name="formulaCells">formulaCells</param>
         protected void RecurseClearCachedFormulaResults()
         {
             FormulaCellCacheEntry[] formulaCells = GetConsumingCells();
 
-            for (int i = 0; i < formulaCells.Length; i++)
+            for(int i = 0; i < formulaCells.Length; i++)
             {
                 FormulaCellCacheEntry fc = formulaCells[i];
                 fc.ClearFormulaEntry();
@@ -138,15 +138,15 @@ namespace NPOI.SS.Formula
             }
         }
 
-        /**
-         * Identical To {@link #RecurseClearCachedFormulaResults()} except for the listener call-backs
-         */
+        /// <summary>
+        /// Identical To <see cref="RecurseClearCachedFormulaResults()" /> except for the listener call-backs
+        /// </summary>
         protected void RecurseClearCachedFormulaResults(IEvaluationListener listener, int depth)
         {
             FormulaCellCacheEntry[] formulaCells = GetConsumingCells();
 
             listener.SortDependentCachedValues(formulaCells);
-            for (int i = 0; i < formulaCells.Length; i++)
+            for(int i = 0; i < formulaCells.Length; i++)
             {
                 FormulaCellCacheEntry fc = formulaCells[i];
                 listener.OnClearDependentCachedValue(fc, depth);

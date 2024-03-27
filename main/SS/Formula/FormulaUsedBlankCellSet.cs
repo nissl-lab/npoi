@@ -44,16 +44,15 @@ namespace NPOI.SS.Formula
             return _bookIndex == other._bookIndex && _sheetIndex == other._sheetIndex;
         }
     }
-    /**
-     * Optimisation - compacts many blank cell references used by a single formula. 
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// Optimisation - compacts many blank cell references used by a single formula.
+    /// </summary>
+    /// @author Josh Micich
     public class FormulaUsedBlankCellSet
     {
 
 
-        private  class BlankCellSheetGroup
+        private class BlankCellSheetGroup
         {
             private IList _rectangleGroups;
             private int _currentRowIndex;
@@ -69,7 +68,7 @@ namespace NPOI.SS.Formula
 
             public void AddCell(int rowIndex, int columnIndex)
             {
-                if (_currentRowIndex == -1)
+                if(_currentRowIndex == -1)
                 {
                     _currentRowIndex = rowIndex;
                     _firstColumnIndex = columnIndex;
@@ -77,20 +76,20 @@ namespace NPOI.SS.Formula
                 }
                 else
                 {
-                    if (_currentRowIndex == rowIndex && _lastColumnIndex + 1 == columnIndex)
+                    if(_currentRowIndex == rowIndex && _lastColumnIndex + 1 == columnIndex)
                     {
                         _lastColumnIndex = columnIndex;
                     }
                     else
                     {
                         // cell does not fit on end of current row
-                        if (_currentRectangleGroup == null)
+                        if(_currentRectangleGroup == null)
                         {
                             _currentRectangleGroup = new BlankCellRectangleGroup(_currentRowIndex, _firstColumnIndex, _lastColumnIndex);
                         }
                         else
                         {
-                            if (!_currentRectangleGroup.AcceptRow(_currentRowIndex, _firstColumnIndex, _lastColumnIndex))
+                            if(!_currentRectangleGroup.AcceptRow(_currentRowIndex, _firstColumnIndex, _lastColumnIndex))
                             {
                                 _rectangleGroups.Add(_currentRectangleGroup);
                                 _currentRectangleGroup = new BlankCellRectangleGroup(_currentRowIndex, _firstColumnIndex, _lastColumnIndex);
@@ -105,21 +104,21 @@ namespace NPOI.SS.Formula
 
             public bool ContainsCell(int rowIndex, int columnIndex)
             {
-                for (int i = _rectangleGroups.Count - 1; i >= 0; i--)
+                for(int i = _rectangleGroups.Count - 1; i >= 0; i--)
                 {
                     BlankCellRectangleGroup bcrg = (BlankCellRectangleGroup)_rectangleGroups[i];
-                    if (bcrg.ContainsCell(rowIndex, columnIndex))
+                    if(bcrg.ContainsCell(rowIndex, columnIndex))
                     {
                         return true;
                     }
                 }
-                if (_currentRectangleGroup != null && _currentRectangleGroup.ContainsCell(rowIndex, columnIndex))
+                if(_currentRectangleGroup != null && _currentRectangleGroup.ContainsCell(rowIndex, columnIndex))
                 {
                     return true;
                 }
-                if (_currentRowIndex != -1 && _currentRowIndex == rowIndex)
+                if(_currentRowIndex != -1 && _currentRowIndex == rowIndex)
                 {
-                    if (_firstColumnIndex <= columnIndex && columnIndex <= _lastColumnIndex)
+                    if(_firstColumnIndex <= columnIndex && columnIndex <= _lastColumnIndex)
                     {
                         return true;
                     }
@@ -147,19 +146,19 @@ namespace NPOI.SS.Formula
 
             public bool ContainsCell(int rowIndex, int columnIndex)
             {
-                if (columnIndex < _firstColumnIndex)
+                if(columnIndex < _firstColumnIndex)
                 {
                     return false;
                 }
-                if (columnIndex > _lastColumnIndex)
+                if(columnIndex > _lastColumnIndex)
                 {
                     return false;
                 }
-                if (rowIndex < _firstRowIndex)
+                if(rowIndex < _firstRowIndex)
                 {
                     return false;
                 }
-                if (rowIndex > _lastRowIndex)
+                if(rowIndex > _lastRowIndex)
                 {
                     return false;
                 }
@@ -168,15 +167,15 @@ namespace NPOI.SS.Formula
 
             public bool AcceptRow(int rowIndex, int firstColumnIndex, int lastColumnIndex)
             {
-                if (firstColumnIndex != _firstColumnIndex)
+                if(firstColumnIndex != _firstColumnIndex)
                 {
                     return false;
                 }
-                if (lastColumnIndex != _lastColumnIndex)
+                if(lastColumnIndex != _lastColumnIndex)
                 {
                     return false;
                 }
-                if (rowIndex != _lastRowIndex + 1)
+                if(rowIndex != _lastRowIndex + 1)
                 {
                     return false;
                 }
@@ -212,7 +211,7 @@ namespace NPOI.SS.Formula
             BookSheetKey key = new BookSheetKey(bookIndex, sheetIndex);
 
             BlankCellSheetGroup result = (BlankCellSheetGroup)_sheetGroupsByBookSheet[key];
-            if (result == null)
+            if(result == null)
             {
                 result = new BlankCellSheetGroup();
                 _sheetGroupsByBookSheet[key]= result;
@@ -223,7 +222,7 @@ namespace NPOI.SS.Formula
         public bool ContainsCell(BookSheetKey key, int rowIndex, int columnIndex)
         {
             BlankCellSheetGroup bcsg = (BlankCellSheetGroup)_sheetGroupsByBookSheet[key];
-            if (bcsg == null)
+            if(bcsg == null)
             {
                 return false;
             }

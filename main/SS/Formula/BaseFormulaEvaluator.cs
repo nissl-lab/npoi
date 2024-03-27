@@ -22,9 +22,9 @@ namespace NPOI.SS.Formula
     using NPOI.SS.UserModel;
     using NPOI.Util;
 
-    /**
-    * Common functionality across file formats for Evaluating formula cells.<p/>
-    */
+    /// <summary>
+    /// Common functionality across file formats for Evaluating formula cells.
+    /// </summary>
     public abstract class BaseFormulaEvaluator : IFormulaEvaluator, IWorkbookEvaluatorProvider
     {
         protected WorkbookEvaluator _bookEvaluator;
@@ -34,17 +34,18 @@ namespace NPOI.SS.Formula
             this._bookEvaluator = bookEvaluator;
         }
 
-        /**
-         * Coordinates several formula Evaluators together so that formulas that involve external
-         * references can be Evaluated.
-         * @param workbookNames the simple file names used to identify the workbooks in formulas
-         * with external links (for example "MyData.xls" as used in a formula "[MyData.xls]Sheet1!A1")
-         * @param Evaluators all Evaluators for the full Set of workbooks required by the formulas.
-         */
+        /// <summary>
+        /// Coordinates several formula Evaluators together so that formulas that involve external
+        /// references can be Evaluated.
+        /// </summary>
+        /// <param name="workbookNames">the simple file names used to identify the workbooks in formulas
+        /// with external links (for example "MyData.xls" as used in a formula "[MyData.xls]Sheet1!A1")
+        /// </param>
+        /// <param name="Evaluators">all Evaluators for the full Set of workbooks required by the formulas.</param>
         public static void SetupEnvironment(String[] workbookNames, BaseFormulaEvaluator[] Evaluators)
         {
             WorkbookEvaluator[] wbEvals = new WorkbookEvaluator[Evaluators.Length];
-            for (int i = 0; i < wbEvals.Length; i++)
+            for(int i = 0; i < wbEvals.Length; i++)
             {
                 wbEvals[i] = Evaluators[i]._bookEvaluator;
             }
@@ -63,39 +64,41 @@ namespace NPOI.SS.Formula
             return _bookEvaluator;
         }
 
-        /**
-         * Should be called whenever there are major Changes (e.g. moving sheets) to input cells
-         * in the Evaluated workbook.  If performance is not critical, a single call to this method
-         * may be used instead of many specific calls to the Notify~ methods.
-         *
-         * Failure to call this method After changing cell values will cause incorrect behaviour
-         * of the Evaluate~ methods of this class
-         */
+        /// <summary>
+        /// <para>
+        /// Should be called whenever there are major Changes (e.g. moving sheets) to input cells
+        /// in the Evaluated workbook.  If performance is not critical, a single call to this method
+        /// may be used instead of many specific calls to the Notify~ methods.
+        /// </para>
+        /// <para>
+        /// Failure to call this method After changing cell values will cause incorrect behaviour
+        /// of the Evaluate~ methods of this class
+        /// </para>
+        /// </summary>
 
         public void ClearAllCachedResultValues()
         {
             _bookEvaluator.ClearAllCachedResultValues();
         }
 
-        /**
-         * If cell Contains a formula, the formula is Evaluated and returned,
-         * else the CellValue simply copies the appropriate cell value from
-         * the cell and also its cell type. This method should be preferred over
-         * EvaluateInCell() when the call should not modify the contents of the
-         * original cell.
-         *
-         * @param cell may be <code>null</code> signifying that the cell is not present (or blank)
-         * @return <code>null</code> if the supplied cell is <code>null</code> or blank
-         */
+        /// <summary>
+        /// If cell Contains a formula, the formula is Evaluated and returned,
+        /// else the CellValue simply copies the appropriate cell value from
+        /// the cell and also its cell type. This method should be preferred over
+        /// EvaluateInCell() when the call should not modify the contents of the
+        /// original cell.
+        /// </summary>
+        /// <param name="cell">may be <c>null</c> signifying that the cell is not present (or blank)</param>
+        /// <returns><c>null</c> if the supplied cell is <c>null</c> or blank</returns>
 
         public CellValue Evaluate(ICell cell)
         {
-            if (cell == null)
+            if(cell == null)
             {
                 return null;
             }
 
-            switch (cell.CellType)
+            switch(cell.CellType)
             {
                 case CellType.Boolean:
                     return CellValue.ValueOf(cell.BooleanCellValue);
@@ -114,32 +117,32 @@ namespace NPOI.SS.Formula
             }
         }
 
-        /**
-         * If cell Contains formula, it Evaluates the formula, and
-         *  Puts the formula result back into the cell, in place
-         *  of the old formula.
-         * Else if cell does not contain formula, this method leaves
-         *  the cell unChanged.
-         * Note that the same instance of HSSFCell is returned to
-         * allow chained calls like:
-         * <pre>
-         * int EvaluatedCellType = Evaluator.EvaluateInCell(cell).CellType;
-         * </pre>
-         * Be aware that your cell value will be Changed to hold the
-         *  result of the formula. If you simply want the formula
-         *  value computed for you, use {@link #EvaluateFormulaCellEnum(Cell)}}
-         * @param cell
-         * @return the {@code cell} that was passed in, allowing for chained calls
-         */
+        /// <summary>
+        /// If cell Contains formula, it Evaluates the formula, and
+        ///  Puts the formula result back into the cell, in place
+        ///  of the old formula.
+        /// Else if cell does not contain formula, this method leaves
+        ///  the cell unChanged.
+        /// Note that the same instance of HSSFCell is returned to
+        /// allow chained calls like:
+        /// <code>
+        /// int EvaluatedCellType = Evaluator.EvaluateInCell(cell).CellType;
+        /// </code>
+        /// Be aware that your cell value will be Changed to hold the
+        ///  result of the formula. If you simply want the formula
+        ///  value computed for you, use <see cref="EvaluateFormulaCellEnum(ICell)" />}
+        /// </summary>
+        /// <param name="cell">cell</param>
+        /// <returns>the <c>cell</c> that was passed in, allowing for chained calls</returns>
 
         public virtual ICell EvaluateInCell(ICell cell)
         {
-            if (cell == null)
+            if(cell == null)
             {
                 return null;
             }
             ICell result = cell;
-            if (cell.CellType == CellType.Formula)
+            if(cell.CellType == CellType.Formula)
             {
                 CellValue cv = EvaluateFormulaCellValue(cell);
                 SetCellValue(cell, cv);
@@ -150,49 +153,53 @@ namespace NPOI.SS.Formula
 
         protected abstract CellValue EvaluateFormulaCellValue(ICell cell);
 
-        /**
-         * If cell Contains formula, it Evaluates the formula, and saves the result of the formula. The
-         * cell remains as a formula cell. If the cell does not contain formula, this method returns -1
-         * and leaves the cell unChanged.
-         *
-         * Note that the type of the <em>formula result</em> is returned, so you know what kind of
-         * cached formula result is also stored with  the formula.
-         * <pre>
-         * int EvaluatedCellType = Evaluator.EvaluateFormulaCell(cell);
-         * </pre>
-         * Be aware that your cell will hold both the formula, and the result. If you want the cell
-         * Replaced with the result of the formula, use {@link #EvaluateInCell(NPOI.SS.UserModel.Cell)}
-         * @param cell The cell to Evaluate
-         * @return -1 for non-formula cells, or the type of the <em>formula result</em>
-         */
+        /// <summary>
+        /// <para>
+        /// If cell Contains formula, it Evaluates the formula, and saves the result of the formula. The
+        /// cell remains as a formula cell. If the cell does not contain formula, this method returns -1
+        /// and leaves the cell unChanged.
+        /// </para>
+        /// <para>
+        /// Note that the type of the <em>formula result</em> is returned, so you know what kind of
+        /// cached formula result is also stored with  the formula.
+        /// <code>
+        /// int EvaluatedCellType = Evaluator.EvaluateFormulaCell(cell);
+        /// </code>
+        /// Be aware that your cell will hold both the formula, and the result. If you want the cell
+        /// Replaced with the result of the formula, use <see cref="EvaluateInCell(ICell)" />
+        /// </para>
+        /// </summary>
+        /// <param name="cell">The cell to Evaluate</param>
+        /// <returns>-1 for non-formula cells, or the type of the <em>formula result</em></returns>
         public CellType EvaluateFormulaCell(ICell cell)
         {
             return EvaluateFormulaCellEnum(cell);
         }
 
-        /**
-         * If cell Contains formula, it Evaluates the formula,
-         *  and saves the result of the formula. The cell
-         *  remains as a formula cell.
-         * Else if cell does not contain formula, this method leaves
-         *  the cell unChanged.
-         * Note that the type of the formula result is returned,
-         *  so you know what kind of value is also stored with
-         *  the formula.
-         * <pre>
-         * ICellType EvaluatedCellType = Evaluator.EvaluateFormulaCellEnum(cell);
-         * </pre>
-         * Be aware that your cell will hold both the formula,
-         *  and the result. If you want the cell Replaced with
-         *  the result of the formula, use {@link #Evaluate(NPOI.SS.UserModel.Cell)} }
-         * @param cell The cell to Evaluate
-         * @return The type of the formula result (the cell's type remains as CellType.FORMULA however)
-         *         If cell is not a formula cell, returns {@link CellType#_NONE} rather than throwing an exception.
-         * @since POI 3.15 beta 3
-         */
+        /// <summary>
+        /// If cell Contains formula, it Evaluates the formula,
+        ///  and saves the result of the formula. The cell
+        ///  remains as a formula cell.
+        /// Else if cell does not contain formula, this method leaves
+        ///  the cell unChanged.
+        /// Note that the type of the formula result is returned,
+        ///  so you know what kind of value is also stored with
+        ///  the formula.
+        /// <code>
+        /// ICellType EvaluatedCellType = Evaluator.EvaluateFormulaCellEnum(cell);
+        /// </code>
+        /// Be aware that your cell will hold both the formula,
+        ///  and the result. If you want the cell Replaced with
+        ///  the result of the formula, use <see cref="Evaluate(ICell)" /> }
+        /// </summary>
+        /// <param name="cell">The cell to Evaluate</param>
+        /// <returns>The type of the formula result (the cell's type remains as CellType.FORMULA however)
+        /// If cell is not a formula cell, returns <see cref="CellType._NONE" /> rather than throwing an exception.
+        /// </returns>
+        /// @since POI 3.15 beta 3
         public virtual CellType EvaluateFormulaCellEnum(ICell cell)
         {
-            if (cell == null || cell.CellType != CellType.Formula)
+            if(cell == null || cell.CellType != CellType.Formula)
             {
                 return CellType.Unknown;
             }
@@ -205,7 +212,7 @@ namespace NPOI.SS.Formula
         protected static void SetCellType(ICell cell, CellValue cv)
         {
             CellType cellType = cv.CellType;
-            switch (cellType)
+            switch(cellType)
             {
                 case CellType.Boolean:
                 case CellType.Error:
@@ -229,13 +236,13 @@ namespace NPOI.SS.Formula
         protected void SetCellValue(ICell cell, CellValue cv)
         {
             CellType cellType = cv.CellType;
-            switch (cellType)
+            switch(cellType)
             {
                 case CellType.Boolean:
                     cell.SetCellValue(cv.BooleanValue);
                     break;
                 case CellType.Error:
-                    cell.SetCellErrorValue((byte)cv.ErrorValue);
+                    cell.SetCellErrorValue((byte) cv.ErrorValue);
                     break;
                 case CellType.Numeric:
                     cell.SetCellValue(cv.NumberValue);
@@ -253,17 +260,17 @@ namespace NPOI.SS.Formula
         }
 
 
-        /**
-         * Loops over all cells in all sheets of the supplied
-         *  workbook.
-         * For cells that contain formulas, their formulas are
-         *  Evaluated, and the results are saved. These cells
-         *  remain as formula cells.
-         * For cells that do not contain formulas, no Changes
-         *  are made.
-         * This is a helpful wrapper around looping over all
-         *  cells, and calling EvaluateFormulaCell on each one.
-         */
+        /// <summary>
+        /// Loops over all cells in all sheets of the supplied
+        ///  workbook.
+        /// For cells that contain formulas, their formulas are
+        ///  Evaluated, and the results are saved. These cells
+        ///  remain as formula cells.
+        /// For cells that do not contain formulas, no Changes
+        ///  are made.
+        /// This is a helpful wrapper around looping over all
+        ///  cells, and calling EvaluateFormulaCell on each one.
+        /// </summary>
         public static void EvaluateAllFormulaCells(IWorkbook wb)
         {
             IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
@@ -271,15 +278,15 @@ namespace NPOI.SS.Formula
         }
         protected static void EvaluateAllFormulaCells(IWorkbook wb, IFormulaEvaluator evaluator)
         {
-            for (int i = 0; i < wb.NumberOfSheets; i++)
+            for(int i = 0; i < wb.NumberOfSheets; i++)
             {
                 ISheet sheet = wb.GetSheetAt(i);
 
-                foreach (IRow r in sheet)
+                foreach(IRow r in sheet)
                 {
-                    foreach (ICell c in r)
+                    foreach(ICell c in r)
                     {
-                        if (c.CellType == CellType.Formula)
+                        if(c.CellType == CellType.Formula)
                         {
                             evaluator.EvaluateFormulaCell(c);
                         }
@@ -296,7 +303,9 @@ namespace NPOI.SS.Formula
 
         public abstract void EvaluateAll();
 
-        /** {@inheritDoc} */
+        /// <summary>
+        /// {@inheritDoc} */
+        /// </summary>
 
         public bool IgnoreMissingWorkbooks
         {
@@ -304,7 +313,9 @@ namespace NPOI.SS.Formula
             set { _bookEvaluator.IgnoreMissingWorkbooks = value; }
         }
 
-        /** {@inheritDoc} */
+        /// <summary>
+        /// {@inheritDoc} */
+        /// </summary>
 
         public bool DebugEvaluationOutputForNextEval
         {

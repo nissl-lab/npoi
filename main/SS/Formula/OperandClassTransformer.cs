@@ -22,32 +22,36 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
 
-    /**
-     * This class performs 'operand class' transformation. Non-base Tokens are classified into three 
-     * operand classes:
-     * <ul>
-     * <li>reference</li> 
-     * <li>value</li> 
-     * <li>array</li> 
-     * </ul>
-     * <p/>
-     * 
-     * The operand class chosen for each Token depends on the formula type and the Token's place
-     * in the formula. If POI Gets the operand class wrong, Excel <em>may</em> interpret the formula
-     * incorrectly.  This condition is typically manifested as a formula cell that displays as '#VALUE!',
-     * but resolves correctly when the user presses F2, enter.<p/>
-     * 
-     * The logic implemented here was partially inspired by the description in
-     * "OpenOffice.org's Documentation of the Microsoft Excel File Format".  The model presented there
-     * seems To be inconsistent with observed Excel behaviour (These differences have not been fully
-     * investigated). The implementation in this class Has been heavily modified in order To satisfy
-     * concrete examples of how Excel performs the same logic (see TestRVA).<p/>
-     * 
-     * Hopefully, as Additional important test cases are identified and Added To the test suite, 
-     * patterns might become more obvious in this code and allow for simplification.
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// <para>
+    /// This class performs 'operand class' transformation. Non-base Tokens are classified into three
+    /// operand classes:
+    /// <list type="bullet">
+    /// <item><description>reference</description></item>
+    /// <item><description>value</description></item>
+    /// <item><description>array</description></item>
+    /// </list>
+    /// </para>
+    /// <para>
+    /// 
+    /// The operand class chosen for each Token depends on the formula type and the Token's place
+    /// in the formula. If POI Gets the operand class wrong, Excel <em>may</em> interpret the formula
+    /// incorrectly.  This condition is typically manifested as a formula cell that displays as '#VALUE!',
+    /// but resolves correctly when the user presses F2, enter.
+    /// </para>
+    /// <para>
+    /// The logic implemented here was partially inspired by the description in
+    /// "OpenOffice.org's Documentation of the Microsoft Excel File Format".  The model presented there
+    /// seems To be inconsistent with observed Excel behaviour (These differences have not been fully
+    /// investigated). The implementation in this class Has been heavily modified in order To satisfy
+    /// concrete examples of how Excel performs the same logic (see TestRVA).
+    /// </para>
+    /// <para>
+    /// Hopefully, as Additional important test cases are identified and Added To the test suite,
+    /// patterns might become more obvious in this code and allow for simplification.
+    /// </para>
+    /// </summary>
+    /// @author Josh Micich
     class OperandClassTransformer
     {
 
@@ -58,14 +62,14 @@ namespace NPOI.SS.Formula
             _formulaType = formulaType;
         }
 
-        /**
-         * Traverses the supplied formula parse tree, calling <c>Ptg.SetClass()</c> for each non-base
-         * Token To Set its operand class.
-         */
+        /// <summary>
+        /// Traverses the supplied formula parse tree, calling <c>Ptg.SetClass()</c> for each non-base
+        /// Token To Set its operand class.
+        /// </summary>
         public void TransformFormula(ParseNode rootNode)
         {
             byte rootNodeOperandClass;
-            switch (_formulaType)
+            switch(_formulaType)
             {
                 case FormulaType.Cell:
                     rootNodeOperandClass = Ptg.CLASS_VALUE;
@@ -85,11 +89,12 @@ namespace NPOI.SS.Formula
             TransformNode(rootNode, rootNodeOperandClass, false);
         }
 
-        /**
-         * @param callerForceArrayFlag <c>true</c> if one of the current node's parents is a 
-         * function Ptg which Has been Changed from default 'V' To 'A' type (due To requirements on
-         * the function return value).
-         */
+        /// <summary>
+        /// </summary>
+        /// <param name="callerForceArrayFlag"><c>true</c> if one of the current node's parents is a
+        /// function Ptg which Has been Changed from default 'V' To 'A' type (due To requirements on
+        /// the function return value).
+        /// </param>
         private void TransformNode(ParseNode node, byte desiredOperandClass,
                 bool callerForceArrayFlag)
         {
@@ -97,27 +102,28 @@ namespace NPOI.SS.Formula
             ParseNode[] children = node.GetChildren();
             bool IsSimpleValueFunc = IsSimpleValueFunction(token);
 
-            if (IsSimpleValueFunc)
+            if(IsSimpleValueFunc)
             {
                 bool localForceArray = desiredOperandClass == Ptg.CLASS_ARRAY;
-                for (int i = 0; i < children.Length; i++)
+                for(int i = 0; i < children.Length; i++)
                 {
                     TransformNode(children[i], desiredOperandClass, localForceArray);
                 }
-                SetSimpleValueFuncClass((AbstractFunctionPtg)token, desiredOperandClass, callerForceArrayFlag);
+                SetSimpleValueFuncClass((AbstractFunctionPtg) token, desiredOperandClass, callerForceArrayFlag);
                 return;
             }
-		if (IsSingleArgSum(token)) {
-			// Need to process the argument of SUM with transformFunctionNode below
-			// so make a dummy FuncVarPtg for that call.
-			token = FuncVarPtg.SUM;
-			// Note - the tAttrSum token (node.getToken()) is a base
-			// token so does not need to have its operand class set
-		}
-            if (token is ValueOperatorPtg || token is ControlPtg
+            if(IsSingleArgSum(token))
+            {
+                // Need to process the argument of SUM with transformFunctionNode below
+                // so make a dummy FuncVarPtg for that call.
+                token = FuncVarPtg.SUM;
+                // Note - the tAttrSum token (node.getToken()) is a base
+                // token so does not need to have its operand class set
+            }
+            if(token is ValueOperatorPtg || token is ControlPtg
                 || token is MemFuncPtg
-				|| token is MemAreaPtg
-				|| token is UnionPtg
+                || token is MemAreaPtg
+                || token is UnionPtg
                 || token is IntersectionPtg)
             {
                 // Value Operator Ptgs and Control are base Tokens, so Token will be unchanged
@@ -127,18 +133,18 @@ namespace NPOI.SS.Formula
                 // All direct operands of value operators that are initially 'R' type will 
                 // be converted To 'V' type.
                 byte localDesiredOperandClass = desiredOperandClass == Ptg.CLASS_REF ? Ptg.CLASS_VALUE : desiredOperandClass;
-                for (int i = 0; i < children.Length; i++)
+                for(int i = 0; i < children.Length; i++)
                 {
                     TransformNode(children[i], localDesiredOperandClass, callerForceArrayFlag);
                 }
                 return;
             }
-            if (token is AbstractFunctionPtg)
+            if(token is AbstractFunctionPtg)
             {
-                TransformFunctionNode((AbstractFunctionPtg)token, children, desiredOperandClass, callerForceArrayFlag);
+                TransformFunctionNode((AbstractFunctionPtg) token, children, desiredOperandClass, callerForceArrayFlag);
                 return;
             }
-            if (children.Length > 0)
+            if(children.Length > 0)
             {
                 //if (token == RangePtg.instance)
                 if(token is OperationPtg)
@@ -149,7 +155,7 @@ namespace NPOI.SS.Formula
                 throw new InvalidOperationException("Node should not have any children");
             }
 
-            if (token.IsBaseToken)
+            if(token.IsBaseToken)
             {
                 // nothing To do
                 return;
@@ -158,7 +164,7 @@ namespace NPOI.SS.Formula
         }
         private static bool IsSingleArgSum(Ptg token)
         {
-            if (token is AttrPtg)
+            if(token is AttrPtg)
             {
                 AttrPtg attrPtg = (AttrPtg)token;
                 return attrPtg.IsSum;
@@ -167,17 +173,17 @@ namespace NPOI.SS.Formula
         }
         private static bool IsSimpleValueFunction(Ptg token)
         {
-            if (token is AbstractFunctionPtg)
+            if(token is AbstractFunctionPtg)
             {
                 AbstractFunctionPtg aptg = (AbstractFunctionPtg)token;
-                if (aptg.DefaultOperandClass != Ptg.CLASS_VALUE)
+                if(aptg.DefaultOperandClass != Ptg.CLASS_VALUE)
                 {
                     return false;
                 }
                 int numberOfOperands = aptg.NumberOfOperands;
-                for (int i = numberOfOperands - 1; i >= 0; i--)
+                for(int i = numberOfOperands - 1; i >= 0; i--)
                 {
-                    if (aptg.GetParameterClass(i) != Ptg.CLASS_VALUE)
+                    if(aptg.GetParameterClass(i) != Ptg.CLASS_VALUE)
                     {
                         return false;
                     }
@@ -190,20 +196,20 @@ namespace NPOI.SS.Formula
         private byte TransformClass(byte currentOperandClass, byte desiredOperandClass,
                 bool callerForceArrayFlag)
         {
-            switch (desiredOperandClass)
+            switch(desiredOperandClass)
             {
                 case Ptg.CLASS_VALUE:
-                    if (!callerForceArrayFlag)
+                    if(!callerForceArrayFlag)
                     {
                         return Ptg.CLASS_VALUE;
                     }
                     return Ptg.CLASS_ARRAY;
-                    //break;
+                //break;
                 // else fall through
                 case Ptg.CLASS_ARRAY:
                     return Ptg.CLASS_ARRAY;
                 case Ptg.CLASS_REF:
-                    if (!callerForceArrayFlag)
+                    if(!callerForceArrayFlag)
                     {
                         return currentOperandClass;
                     }
@@ -219,12 +225,12 @@ namespace NPOI.SS.Formula
             bool localForceArrayFlag;
             byte defaultReturnOperandClass = afp.DefaultOperandClass;
 
-            if (callerForceArrayFlag)
+            if(callerForceArrayFlag)
             {
-                switch (defaultReturnOperandClass)
+                switch(defaultReturnOperandClass)
                 {
                     case Ptg.CLASS_REF:
-                        if (desiredOperandClass == Ptg.CLASS_REF)
+                        if(desiredOperandClass == Ptg.CLASS_REF)
                         {
                             afp.PtgClass = (Ptg.CLASS_REF);
                         }
@@ -249,7 +255,7 @@ namespace NPOI.SS.Formula
             }
             else
             {
-                if (defaultReturnOperandClass == desiredOperandClass)
+                if(defaultReturnOperandClass == desiredOperandClass)
                 {
                     localForceArrayFlag = false;
                     // an alternative would have been To for non-base Ptgs To Set their operand class 
@@ -259,7 +265,7 @@ namespace NPOI.SS.Formula
                 }
                 else
                 {
-                    switch (desiredOperandClass)
+                    switch(desiredOperandClass)
                     {
                         case Ptg.CLASS_VALUE:
                             // always OK To Set functions To return 'value'
@@ -267,7 +273,7 @@ namespace NPOI.SS.Formula
                             localForceArrayFlag = false;
                             break;
                         case Ptg.CLASS_ARRAY:
-                            switch (defaultReturnOperandClass)
+                            switch(defaultReturnOperandClass)
                             {
                                 case Ptg.CLASS_REF:
                                     afp.PtgClass = (Ptg.CLASS_REF);
@@ -283,7 +289,7 @@ namespace NPOI.SS.Formula
                             localForceArrayFlag = (defaultReturnOperandClass == Ptg.CLASS_VALUE);
                             break;
                         case Ptg.CLASS_REF:
-                            switch (defaultReturnOperandClass)
+                            switch(defaultReturnOperandClass)
                             {
                                 case Ptg.CLASS_ARRAY:
                                     afp.PtgClass=(Ptg.CLASS_ARRAY);
@@ -305,7 +311,7 @@ namespace NPOI.SS.Formula
                 }
             }
 
-            for (int i = 0; i < children.Length; i++)
+            for(int i = 0; i < children.Length; i++)
             {
                 ParseNode child = children[i];
                 byte paramOperandClass = afp.GetParameterClass(i);
@@ -317,7 +323,7 @@ namespace NPOI.SS.Formula
                 byte desiredOperandClass, bool callerForceArrayFlag)
         {
 
-            if (callerForceArrayFlag || desiredOperandClass == Ptg.CLASS_ARRAY)
+            if(callerForceArrayFlag || desiredOperandClass == Ptg.CLASS_ARRAY)
             {
                 afp.PtgClass = (Ptg.CLASS_ARRAY);
             }

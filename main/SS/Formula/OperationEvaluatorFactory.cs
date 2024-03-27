@@ -26,12 +26,11 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula.Functions;
     using NPOI.SS.Formula.PTG;
 
-    /**
-     * This class Creates <c>OperationEval</c> instances To help evaluate <c>OperationPtg</c>
-     * formula Tokens.
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// This class Creates <c>OperationEval</c> instances To help evaluate <c>OperationPtg</c>
+    /// formula Tokens.
+    /// </summary>
+    /// @author Josh Micich
     class OperationEvaluatorFactory
     {
         private static Type[] OPERATION_CONSTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg) };
@@ -71,7 +70,7 @@ namespace NPOI.SS.Formula
         {
             // make sure ptg has single private constructor because map lookups assume singleton keys
             ConstructorInfo[] cc = ptgKey.GetType().GetConstructors();
-            if (cc.Length > 1 || (cc.Length > 0 && !cc[0].IsPrivate))
+            if(cc.Length > 1 || (cc.Length > 0 && !cc[0].IsPrivate))
             {
                 throw new Exception("Failed to verify instance ("
                         + ptgKey.GetType().Name + ") is a singleton.");
@@ -80,27 +79,27 @@ namespace NPOI.SS.Formula
         }
 
 
-        /**
-         * returns the OperationEval concrete impl instance corresponding
-         * to the supplied operationPtg
-         */
+        /// <summary>
+        /// returns the OperationEval concrete impl instance corresponding
+        /// to the supplied operationPtg
+        /// </summary>
         public static ValueEval Evaluate(OperationPtg ptg, ValueEval[] args,
                 OperationEvaluationContext ec)
         {
-            if (ptg == null)
+            if(ptg == null)
             {
                 throw new ArgumentException("ptg must not be null");
             }
             NPOI.SS.Formula.Functions.Function result = _instancesByPtgClass[ptg] as NPOI.SS.Formula.Functions.Function;
 
             FreeRefFunction udfFunc = null;
-            if (result == null)
+            if(result == null)
             {
-                if (ptg is AbstractFunctionPtg)
+                if(ptg is AbstractFunctionPtg)
                 {
                     AbstractFunctionPtg fptg = (AbstractFunctionPtg)ptg;
                     int functionIndex = fptg.FunctionIndex;
-                    switch (functionIndex)
+                    switch(functionIndex)
                     {
                         case NPOI.SS.Formula.Function.FunctionMetadataRegistry.FUNCTION_INDEX_INDIRECT:
                             udfFunc = Indirect.instance;
@@ -115,20 +114,20 @@ namespace NPOI.SS.Formula
                 }
             }
 
-            if (result != null)
+            if(result != null)
             {
-                if (result is ArrayFunction)
+                if(result is ArrayFunction)
                 {
                     ArrayFunction func = (ArrayFunction)result;
                     ValueEval eval = EvaluateArrayFunction(func, args, ec);
-                    if (eval != null)
+                    if(eval != null)
                     {
                         return eval;
                     }
                 }
-                return result.Evaluate(args, ec.RowIndex, (short)ec.ColumnIndex);
+                return result.Evaluate(args, ec.RowIndex, (short) ec.ColumnIndex);
             }
-            else if (udfFunc != null)
+            else if(udfFunc != null)
             {
                 return udfFunc.Evaluate(args, ec);
             }
@@ -139,15 +138,15 @@ namespace NPOI.SS.Formula
         {
             IEvaluationSheet evalSheet = ec.GetWorkbook().GetSheet(ec.SheetIndex);
             IEvaluationCell evalCell = evalSheet.GetCell(ec.RowIndex, ec.ColumnIndex);
-            if (evalCell != null)
+            if(evalCell != null)
             {
-                if (evalCell.IsPartOfArrayFormulaGroup)
+                if(evalCell.IsPartOfArrayFormulaGroup)
                 {
                     // array arguments must be evaluated relative to the function defining range
                     Util.CellRangeAddress ca = evalCell.ArrayFormulaRange;
                     return func.EvaluateArray(args, ca.FirstRow, ca.FirstColumn);
                 }
-                else if (ec.IsArraymode)
+                else if(ec.IsArraymode)
                 {
                     return func.EvaluateArray(args, ec.RowIndex, ec.ColumnIndex);
                 }

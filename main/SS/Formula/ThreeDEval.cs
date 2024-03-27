@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
@@ -20,19 +20,19 @@ namespace NPOI.SS.Formula
     using System;
     using NPOI.SS.Formula.Eval;
 
-    /**
-     * Optional Extension to the likes of {@link AreaEval} and 
-     *  {@link NPOI.SS.Formula.Eval.AreaEvalBase},
-     *  which allows for looking up 3D (sheet+row+column) Evaluations
-     */
+    /// <summary>
+    /// Optional Extension to the likes of <see cref="AreaEval"/> and
+    ///  <see cref="AreaEvalBase" />,
+    ///  which allows for looking up 3D (sheet+row+column) Evaluations
+    /// </summary>
     public interface ThreeDEval : TwoDEval, ISheetRange
     {
-        /**
-         * @param sheetIndex sheet index (zero based)
-         * @param rowIndex relative row index (zero based)
-         * @param columnIndex relative column index (zero based)
-         * @return element at the specified row and column position
-         */
+        /// <summary>
+        /// </summary>
+        /// <param name="sheetIndex">sheet index (zero based)</param>
+        /// <param name="rowIndex">relative row index (zero based)</param>
+        /// <param name="columnIndex">relative column index (zero based)</param>
+        /// <returns>element at the specified row and column position</returns>
         ValueEval GetValue(int sheetIndex, int rowIndex, int columnIndex);
     }
 

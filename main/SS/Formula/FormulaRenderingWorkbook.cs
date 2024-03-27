@@ -22,28 +22,30 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
 
-    /**
-     * Abstracts a workbook for the purpose of converting formula To text.<br/>
-     * 
-     * For POI internal use only
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// <para>
+    /// Abstracts a workbook for the purpose of converting formula To text.<br/>
+    /// </para>
+    /// <para>
+    /// For POI internal use only
+    /// </para>
+    /// </summary>
+    /// @author Josh Micich
     public interface IFormulaRenderingWorkbook
     {
 
-        /**
-         * @return <c>null</c> if externSheetIndex refers To a sheet inside the current workbook
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns><c>null</c> if externSheetIndex refers To a sheet inside the current workbook</returns>
         ExternalSheet GetExternalSheet(int externSheetIndex);
         //String GetSheetNameByExternSheet(int externSheetIndex);
-        /**
-         * @return the name of the (first) sheet referred to by the given external sheet index
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>the name of the (first) sheet referred to by the given external sheet index</returns>
         String GetSheetFirstNameByExternSheet(int externSheetIndex);
-        /**
-         * @return the name of the (last) sheet referred to by the given external sheet index
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>the name of the (last) sheet referred to by the given external sheet index</returns>
         String GetSheetLastNameByExternSheet(int externSheetIndex);
         String ResolveNameXText(NameXPtg nameXPtg);
         String GetNameText(NamePtg namePtg);

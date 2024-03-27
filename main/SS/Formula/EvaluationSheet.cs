@@ -18,26 +18,27 @@
 namespace NPOI.SS.Formula
 {
 
-    /**
-     * Abstracts a sheet for the purpose of formula evaluation.<br/>
-     * 
-     * For POI internal use only
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// <para>
+    /// Abstracts a sheet for the purpose of formula evaluation.<br/>
+    /// </para>
+    /// <para>
+    /// For POI internal use only
+    /// </para>
+    /// </summary>
+    /// @author Josh Micich
     public interface IEvaluationSheet
     {
 
-        /**
-         * @return <c>null</c> if there is no cell at the specified coordinates
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns><c>null</c> if there is no cell at the specified coordinates</returns>
         IEvaluationCell GetCell(int rowIndex, int columnIndex);
-        /**
-         * Propagated from {@link EvaluationWorkbook#clearAllCachedResultValues()} to clear locally cached data.
-         * 
-         * @see WorkbookEvaluator#clearAllCachedResultValues()
-         * @see EvaluationWorkbook#clearAllCachedResultValues()
-         */
+        /// <summary>
+        /// Propagated from <see cref="EvaluationWorkbook.clearAllCachedResultValues()" /> to clear locally cached data.
+        /// </summary>
+        /// <see cref="WorkbookEvaluator.clearAllCachedResultValues()" />
+        /// <see cref="EvaluationWorkbook.clearAllCachedResultValues()" />
         void ClearAllCachedResultValues();
     }
 }

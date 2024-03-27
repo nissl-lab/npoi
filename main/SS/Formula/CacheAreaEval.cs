@@ -1,4 +1,4 @@
-﻿using NPOI.SS.Formula.Eval;
+using NPOI.SS.Formula.Eval;
 using NPOI.SS.Formula.PTG;
 using NPOI.SS.Util;
 using System;

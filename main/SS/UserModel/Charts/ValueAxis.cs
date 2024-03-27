@@ -18,20 +18,20 @@
 namespace NPOI.SS.UserModel.Charts
 {
 
-    /**
-     * @author Roman Kashitsyn
-     */
+    /// <summary>
+    /// </summary>
+    /// @author Roman Kashitsyn
     public interface IValueAxis : IChartAxis
     {
 
-        /**
-         * @return cross between type
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>cross between type</returns>
         AxisCrossBetween GetCrossBetween();
 
-        /**
-         * @param crossBetween cross between type
-         */
+        /// <summary>
+        /// </summary>
+        /// <param name="crossBetween">cross between type</param>
         void SetCrossBetween(AxisCrossBetween crossBetween);
     }
 

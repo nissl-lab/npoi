@@ -24,9 +24,9 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Util;
 
-    /**
-     * Provides Lazy Evaluation to 3D Ranges
-     */
+    /// <summary>
+    /// Provides Lazy Evaluation to 3D Ranges
+    /// </summary>
     public class LazyAreaEval : AreaEvalBase
     {
 
@@ -35,7 +35,7 @@ namespace NPOI.SS.Formula
         public LazyAreaEval(AreaI ptg, SheetRangeEvaluator evaluator)
             : base(ptg, evaluator)
         {
-            
+
             _evaluator = evaluator;
         }
 
@@ -43,7 +43,7 @@ namespace NPOI.SS.Formula
                 int lastColumnIndex, SheetRangeEvaluator evaluator) :
             base(evaluator, firstRowIndex, firstColumnIndex, lastRowIndex, lastColumnIndex)
         {
-            
+
             _evaluator = evaluator;
         }
 
@@ -61,7 +61,7 @@ namespace NPOI.SS.Formula
 
         public override TwoDEval GetRow(int rowIndex)
         {
-            if (rowIndex >= Height)
+            if(rowIndex >= Height)
             {
                 throw new ArgumentException("Invalid rowIndex " + rowIndex
                         + ".  Allowable range is (0.." + Height + ").");
@@ -71,7 +71,7 @@ namespace NPOI.SS.Formula
         }
         public override TwoDEval GetColumn(int columnIndex)
         {
-            if (columnIndex >= Width)
+            if(columnIndex >= Width)
             {
                 throw new ArgumentException("Invalid columnIndex " + columnIndex
                         + ".  Allowable range is (0.." + Width + ").");
@@ -101,9 +101,9 @@ namespace NPOI.SS.Formula
             sb.Append("]");
             return sb.ToString();
         }
-        /**
-        * @return  whether cell at rowIndex and columnIndex is a subtotal
-        */
+        /// <summary>
+        /// </summary>
+        /// <returns>whether cell at rowIndex and columnIndex is a subtotal</returns>
         public override bool IsSubTotal(int rowIndex, int columnIndex)
         {
             // delegate the query to the sheet evaluator which has access to internal ptgs

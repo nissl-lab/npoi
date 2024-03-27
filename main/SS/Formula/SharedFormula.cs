@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for additional information regarding copyright ownership.
@@ -16,9 +16,9 @@
 ==================================================================== */
 namespace NPOI.SS.Formula.PTG
 {
-    /**
-     *   Encapsulates logic to convert shared formulaa into non shared equivalent
-     */
+    /// <summary>
+    /// Encapsulates logic to convert shared formulaa into non shared equivalent
+    /// </summary>
     public class SharedFormula
     {
 
@@ -31,29 +31,28 @@ namespace NPOI.SS.Formula.PTG
             _rowWrappingMask = ssVersion.LastRowIndex;
         }
 
-        /**
-         * Creates a non shared formula from the shared formula counterpart, i.e.
-         * Converts the shared formula into the equivalent {@link org.apache.poi.ss.formula.ptg.Ptg} array that it would have,
-         * were it not shared.
-         *
-         * @param ptgs parsed tokens of the shared formula
-         * @param formulaRow
-         * @param formulaColumn
-         */
+        /// <summary>
+        /// Creates a non shared formula from the shared formula counterpart, i.e.
+        /// Converts the shared formula into the equivalent <see cref="org.apache.poi.ss.formula.ptg.Ptg" /> array that it would have,
+        /// were it not shared.
+        /// </summary>
+        /// <param name="ptgs">parsed tokens of the shared formula</param>
+        /// <param name="formulaRow">formulaRow</param>
+        /// <param name="formulaColumn">formulaColumn</param>
         public Ptg[] ConvertSharedFormulas(Ptg[] ptgs, int formulaRow, int formulaColumn)
         {
 
             Ptg[] newPtgStack = new Ptg[ptgs.Length];
 
-            for (int k = 0; k < ptgs.Length; k++)
+            for(int k = 0; k < ptgs.Length; k++)
             {
                 Ptg ptg = ptgs[k];
                 byte originalOperandClass = unchecked((byte)-1);
-                if (!ptg.IsBaseToken)
+                if(!ptg.IsBaseToken)
                 {
                     originalOperandClass = ptg.PtgClass;
                 }
-                if (ptg is RefPtgBase)
+                if(ptg is RefPtgBase)
                 {
                     RefPtgBase refNPtg = (RefPtgBase)ptg;
                     ptg = new RefPtg(FixupRelativeRow(formulaRow, refNPtg.Row, refNPtg.IsRowRelative),
@@ -62,7 +61,7 @@ namespace NPOI.SS.Formula.PTG
                                          refNPtg.IsColRelative);
                     ptg.PtgClass = (originalOperandClass);
                 }
-                else if (ptg is AreaPtgBase)
+                else if(ptg is AreaPtgBase)
                 {
                     AreaPtgBase areaNPtg = (AreaPtgBase)ptg;
                     ptg = new AreaPtg(FixupRelativeRow(formulaRow, areaNPtg.FirstRow, areaNPtg.IsFirstRowRelative),
@@ -75,10 +74,10 @@ namespace NPOI.SS.Formula.PTG
                                     areaNPtg.IsLastColRelative);
                     ptg.PtgClass = (originalOperandClass);
                 }
-                else if (ptg is OperandPtg)
+                else if(ptg is OperandPtg)
                 {
                     // Any subclass of OperandPtg is mutable, so it's safest to not share these instances.
-                    ptg = ((OperandPtg)ptg).Copy();
+                    ptg = ((OperandPtg) ptg).Copy();
                 }
                 else
                 {
@@ -91,7 +90,7 @@ namespace NPOI.SS.Formula.PTG
 
         private int FixupRelativeColumn(int currentcolumn, int column, bool relative)
         {
-            if (relative)
+            if(relative)
             {
                 // mask out upper bits to produce 'wrapping' at the maximum column ("IV" for .xls and  "XFD" for .xlsx)
                 return (column + currentcolumn) & _columnWrappingMask;
@@ -101,7 +100,7 @@ namespace NPOI.SS.Formula.PTG
 
         private int FixupRelativeRow(int currentrow, int row, bool relative)
         {
-            if (relative)
+            if(relative)
             {
                 return (row + currentrow) & _rowWrappingMask;
             }

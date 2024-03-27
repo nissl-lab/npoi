@@ -20,25 +20,27 @@ namespace NPOI.SS.Formula
 
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
-    
 
-    /**
- * A (mostly) opaque interface To allow test clients To trace cache values
- * Each spreadsheet cell Gets one unique cache entry instance.  These objects
- * are safe To use as keys in {@link java.util.HashMap}s 
- */
+
+    /// <summary>
+    /// A (mostly) opaque interface To allow test clients To trace cache values
+    /// Each spreadsheet cell Gets one unique cache entry instance.  These objects
+    /// are safe To use as keys in <see cref="java.util.HashMap" />s
+    /// </summary>
     public interface ICacheEntry
     {
         ValueEval GetValue();
     }
 
-    /**
-     * Tests can implement this class To track the internal working of the {@link WorkbookEvaluator}.<br/>
-     * 
-     * For POI internal testing use only
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// <para>
+    /// Tests can implement this class To track the internal working of the <see cref="WorkbookEvaluator"/>.<br/>
+    /// </para>
+    /// <para>
+    /// For POI internal testing use only
+    /// </para>
+    /// </summary>
+    /// @author Josh Micich
     public interface IEvaluationListener
     {
 
@@ -49,13 +51,13 @@ namespace NPOI.SS.Formula
         void OnEndEvaluate(ICacheEntry entry, ValueEval result);
         void OnClearWholeCache();
         void OnClearCachedValue(ICacheEntry entry);
-        /**
-         * Internally, formula {@link ICacheEntry}s are stored in Sets which may Change ordering due 
-         * To seemingly trivial Changes.  This method is provided To make the order of call-backs To 
-         * {@link #onClearDependentCachedValue(ICacheEntry, int)} more deterministic.
-         */
+        /// <summary>
+        /// Internally, formula <see cref="ICacheEntry"/>s are stored in Sets which may Change ordering due
+        /// To seemingly trivial Changes.  This method is provided To make the order of call-backs To
+        /// <see cref="onClearDependentCachedValue(ICacheEntry, int)" /> more deterministic.
+        /// </summary>
         void SortDependentCachedValues(ICacheEntry[] formulaCells);
         void OnClearDependentCachedValue(ICacheEntry formulaCell, int depth);
-        void OnChangeFromBlankValue(int sheetIndex, int rowIndex, int columnIndex,IEvaluationCell cell, ICacheEntry entry);
+        void OnChangeFromBlankValue(int sheetIndex, int rowIndex, int columnIndex, IEvaluationCell cell, ICacheEntry entry);
     }
 }

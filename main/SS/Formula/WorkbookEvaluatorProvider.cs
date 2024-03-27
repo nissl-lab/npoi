@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
@@ -19,18 +19,21 @@ namespace NPOI.SS.Formula
 {
     using System;
 
-    /**
-     * Provides access to a {@link WorkbookEvaluator}, eg for use with
-     *  {@link CollaboratingWorkbooksEnvironment}
-     * 
-     * For POI internal use only
-     */
+    /// <summary>
+    /// <para>
+    /// Provides access to a <see cref="WorkbookEvaluator"/>, eg for use with
+    ///  <see cref="CollaboratingWorkbooksEnvironment"/>
+    /// </para>
+    /// <para>
+    /// For POI internal use only
+    /// </para>
+    /// </summary>
 
     public interface IWorkbookEvaluatorProvider
     {
-        /**
-         * Provide the underlying WorkbookEvaluator
-         */
+        /// <summary>
+        /// Provide the underlying WorkbookEvaluator
+        /// </summary>
         WorkbookEvaluator GetWorkbookEvaluator();
     }
 

@@ -21,17 +21,20 @@ namespace NPOI.SS.Formula
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
 
-    /**
-* Abstracts a cell for the purpose of formula evaluation.  This interface represents both formula
-* and non-formula cells.<br/>
-* 
-* Implementors of this class must implement {@link #HashCode()} and {@link #Equals(Object)}
-* To provide an <em>identity</em> relationship based on the underlying HSSF or XSSF cell <p/>
-* 
-* For POI internal use only
-* 
-* @author Josh Micich
-*/
+    /// <summary>
+    /// <para>
+    /// Abstracts a cell for the purpose of formula evaluation.  This interface represents both formula
+    /// and non-formula cells.<br/>
+    /// </para>
+    /// <para>
+    /// Implementors of this class must implement <see cref="Object.GetHashCode()" /> and <see cref="Object.Equals(Object)" />
+    /// To provide an <em>identity</em> relationship based on the underlying HSSF or XSSF cell
+    /// </para>
+    /// <para>
+    /// For POI internal use only
+    /// </para>
+    /// </summary>
+    /// @author Josh Micich
     public interface IEvaluationCell
     {
         // consider method Object GetUnderlyingCell() To reduce memory consumption in formula cell cache

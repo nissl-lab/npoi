@@ -18,19 +18,18 @@
 namespace NPOI.SS.UserModel.Charts
 {
 
-    /**
-     * Abstraction of chart element that can be positioned with manual
-     * layout.
-     *
-     * @author Roman Kashitsyn
-     */
+    /// <summary>
+    /// Abstraction of chart element that can be positioned with manual
+    /// layout.
+    /// </summary>
+    /// @author Roman Kashitsyn
     public interface ManuallyPositionable
     {
 
-        /**
-         * Returns manual layout for the chart element.
-         * @return manual layout for the chart element.
-         */
+        /// <summary>
+        /// Returns manual layout for the chart element.
+        /// </summary>
+        /// <returns>manual layout for the chart element.</returns>
         IManualLayout GetManualLayout();
     }
 

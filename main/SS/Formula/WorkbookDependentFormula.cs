@@ -18,14 +18,16 @@
 namespace NPOI.SS.Formula
 {
     using System;
-    /**
-     * Should be implemented by any {@link Ptg} subclass that needs a workbook To render its formula.
-     * <br/>
-     * 
-     * For POI internal use only
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// <para>
+    /// Should be implemented by any <see cref="PTG.Ptg"/> subclass that needs a workbook To render its formula.
+    /// <br/>
+    /// </para>
+    /// <para>
+    /// For POI internal use only
+    /// </para>
+    /// </summary>
+    /// @author Josh Micich
     public interface WorkbookDependentFormula
     {
         String ToFormulaString(IFormulaRenderingWorkbook book);

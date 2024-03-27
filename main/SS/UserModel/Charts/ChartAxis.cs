@@ -19,92 +19,91 @@ using System;
 namespace NPOI.SS.UserModel.Charts
 {
 
-    /**
-     * High level representation of chart axis.
-     *
-     * @author Roman Kashitsyn
-     */
+    /// <summary>
+    /// High level representation of chart axis.
+    /// </summary>
+    /// @author Roman Kashitsyn
     public interface IChartAxis
     {
 
-        /**
-         * @return axis id
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>axis id</returns>
         long Id { get; }
 
-        /**
-         * get or set axis position
-         */
+        /// <summary>
+        /// get or set axis position
+        /// </summary>
         AxisPosition Position { get; set; }
 
-        /**
-         * get or set axis number format
-         */
+        /// <summary>
+        /// get or set axis number format
+        /// </summary>
         String NumberFormat { get; set; }
 
-        /**
-         * @return true if log base is defined, false otherwise
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>true if log base is defined, false otherwise</returns>
         bool IsSetLogBase { get; }
 
-        /**
-         * @param logBase a number between 2 and 1000 (inclusive)
-         * @return axis log base or 0.0 if not Set
-         * @throws ArgumentException if log base not within allowed range
-         */
+        /// <summary>
+        /// </summary>
+        /// <param name="logBase">a number between 2 and 1000 (inclusive)</param>
+        /// <returns>axis log base or 0.0 if not Set</returns>
+        /// <exception cref="ArgumentException">if log base not within allowed range</exception>
         double LogBase { get; set; }
 
-        /**
-         * @return true if minimum value is defined, false otherwise
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>true if minimum value is defined, false otherwise</returns>
         bool IsSetMinimum { get; }
 
-        /**
-         * get or set axis minimum 
-         * 0.0 if not Set
-         */
+        /// <summary>
+        /// get or set axis minimum
+        /// 0.0 if not Set
+        /// </summary>
         double Minimum { get; set; }
 
-        /**
-         * @return true if maximum value is defined, false otherwise
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>true if maximum value is defined, false otherwise</returns>
         bool IsSetMaximum { get; }
 
-        /**
-         * get or set axis maximum 
-         * 0.0 if not Set
-         */
+        /// <summary>
+        /// get or set axis maximum
+        /// 0.0 if not Set
+        /// </summary>
         double Maximum { get; set; }
 
-        /**
-         * get or set axis orientation
-         */
+        /// <summary>
+        /// get or set axis orientation
+        /// </summary>
         AxisOrientation Orientation { get; set; }
 
-        /**
-         * get or set axis cross type
-         */
+        /// <summary>
+        /// get or set axis cross type
+        /// </summary>
         AxisCrosses Crosses { get; set; }
 
-        /**
-         * Declare this axis cross another axis.
-         * @param axis that this axis should cross
-         */
+        /// <summary>
+        /// Declare this axis cross another axis.
+        /// </summary>
+        /// <param name="axis">that this axis should cross</param>
         void CrossAxis(IChartAxis axis);
 
-        /**
-         * @return visibility of the axis.
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>visibility of the axis.</returns>
         bool IsVisible { get; set; }
 
-        /**
-         * @return major tick mark.
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>major tick mark.</returns>
         AxisTickMark MajorTickMark { get; set; }
 
-        /**
-         * @return minor tick mark.
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>minor tick mark.</returns>
         AxisTickMark MinorTickMark { get; set; }
     }
 

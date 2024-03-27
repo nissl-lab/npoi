@@ -21,24 +21,24 @@ namespace NPOI.SS.UserModel.Charts
 {
 
 
-    /**
-     * Data for a Scatter Chart
-     */
-    public interface IScatterChartData<Tx,Ty> : IChartData
+    /// <summary>
+    /// Data for a Scatter Chart
+    /// </summary>
+    public interface IScatterChartData<Tx, Ty> : IChartData
     {
-        /**
-         * @param xs data source to be used for X axis values
-         * @param ys data source to be used for Y axis values
-         * @return a new scatter charts series
-         */
+        /// <summary>
+        /// </summary>
+        /// <param name="xs">data source to be used for X axis values</param>
+        /// <param name="ys">data source to be used for Y axis values</param>
+        /// <returns>a new scatter charts series</returns>
         IScatterChartSeries<Tx, Ty> AddSeries(IChartDataSource<Tx> xs, IChartDataSource<Ty> ys);
 
         IScatterChartSeries<Tx, Ty> AddSeries(IChartDataSource<Ty> values);
 
-        /**
-         * @return list of all series
-         */
-        List<IScatterChartSeries<Tx,Ty>> GetSeries();
+        /// <summary>
+        /// </summary>
+        /// <returns>list of all series</returns>
+        List<IScatterChartSeries<Tx, Ty>> GetSeries();
     }
 
 

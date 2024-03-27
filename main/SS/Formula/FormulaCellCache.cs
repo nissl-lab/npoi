@@ -24,10 +24,9 @@ namespace NPOI.SS.Formula
         void ProcessEntry(FormulaCellCacheEntry entry);
     }
 
-    /**
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// </summary>
+    /// @author Josh Micich
     public class FormulaCellCache
     {
 
@@ -43,7 +42,7 @@ namespace NPOI.SS.Formula
         {
 
             FormulaCellCacheEntry[] result = new FormulaCellCacheEntry[_formulaEntriesByCell.Count];
-            _formulaEntriesByCell.Values.CopyTo(result,0);
+            _formulaEntriesByCell.Values.CopyTo(result, 0);
             return result;
         }
 
@@ -52,13 +51,13 @@ namespace NPOI.SS.Formula
             _formulaEntriesByCell.Clear();
         }
 
-        /**
-         * @return <c>null</c> if not found
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns><c>null</c> if not found</returns>
         public FormulaCellCacheEntry Get(IEvaluationCell cell)
         {
-            if (_formulaEntriesByCell.ContainsKey(cell.IdentityKey))
-                return (FormulaCellCacheEntry)_formulaEntriesByCell[cell.IdentityKey];
+            if(_formulaEntriesByCell.ContainsKey(cell.IdentityKey))
+                return (FormulaCellCacheEntry) _formulaEntriesByCell[cell.IdentityKey];
             else
                 return null;
         }
@@ -78,9 +77,9 @@ namespace NPOI.SS.Formula
         public void ApplyOperation(IEntryOperation operation)
         {
             IEnumerator i = _formulaEntriesByCell.Values.GetEnumerator();
-            while (i.MoveNext())
+            while(i.MoveNext())
             {
-                operation.ProcessEntry((FormulaCellCacheEntry)i.Current);
+                operation.ProcessEntry((FormulaCellCacheEntry) i.Current);
             }
         }
     }

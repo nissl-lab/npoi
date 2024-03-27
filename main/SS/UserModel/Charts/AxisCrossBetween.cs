@@ -18,22 +18,21 @@
 namespace NPOI.SS.UserModel.Charts
 {
 
-    /**
-     *  Specifies the possible crossing states of an axis.
-     *
-     * @author Roman Kashitsyn
-     */
+    /// <summary>
+    ///  Specifies the possible crossing states of an axis.
+    /// </summary>
+    /// @author Roman Kashitsyn
     public enum AxisCrossBetween
     {
-        /**
-         * Specifies the value axis shall cross the category axis
-         * between data markers.
-         */
+        /// <summary>
+        /// Specifies the value axis shall cross the category axis
+        /// between data markers.
+        /// </summary>
         Between,
-        /**
-         * Specifies the value axis shall cross the category axis at
-         * the midpoint of a category.
-         */
+        /// <summary>
+        /// Specifies the value axis shall cross the category axis at
+        /// the midpoint of a category.
+        /// </summary>
         MidpointCategory
     }
 

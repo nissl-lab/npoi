@@ -20,11 +20,10 @@ namespace NPOI.SS.Formula
 
     using NPOI.SS.Formula.Eval;
 
-    /**
-     * Used for non-formula cells, primarily To keep track of the referencing (formula) cells.
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// Used for non-formula cells, primarily To keep track of the referencing (formula) cells.
+    /// </summary>
+    /// @author Josh Micich
     public class PlainValueCellCacheEntry : CellCacheEntry
     {
         public PlainValueCellCacheEntry(ValueEval value)

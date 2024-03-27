@@ -24,56 +24,58 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
 
-    /**
-     * Common logic for rendering formulas.<br/>
-     * 
-     * For POI internal use only
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// <para>
+    /// Common logic for rendering formulas.<br/>
+    /// </para>
+    /// <para>
+    /// For POI internal use only
+    /// </para>
+    /// </summary>
+    /// @author Josh Micich
     public class FormulaRenderer
     {
 
-        /**
-         * Static method To convert an array of {@link Ptg}s in RPN order
-         * To a human readable string format in infix mode.
-         * @param book  used for defined names and 3D references
-         * @param ptgs  must not be <c>null</c>
-         * @return a human readable String
-         */
+        /// <summary>
+        /// Static method To convert an array of <see cref="Ptg"/>s in RPN order
+        /// To a human readable string format in infix mode.
+        /// </summary>
+        /// <param name="book"> used for defined names and 3D references</param>
+        /// <param name="ptgs"> must not be <c>null</c></param>
+        /// <returns>a human readable String</returns>
         public static String ToFormulaString(IFormulaRenderingWorkbook book, Ptg[] ptgs)
         {
-            if (ptgs == null || ptgs.Length == 0)
+            if(ptgs == null || ptgs.Length == 0)
             {
                 throw new ArgumentException("ptgs must not be null");
             }
             Stack stack = new Stack();
 
-            for (int i = 0; i < ptgs.Length; i++)
+            for(int i = 0; i < ptgs.Length; i++)
             {
                 Ptg ptg = ptgs[i];
                 // TODO - what about MemNoMemPtg?
-                if (ptg is MemAreaPtg || ptg is MemFuncPtg || ptg is MemErrPtg)
+                if(ptg is MemAreaPtg || ptg is MemFuncPtg || ptg is MemErrPtg)
                 {
                     // marks the start of a list of area expressions which will be naturally combined
                     // by their trailing operators (e.g. UnionPtg)
                     // TODO - Put comment and throw exception in ToFormulaString() of these classes
                     continue;
                 }
-                if (ptg is ParenthesisPtg)
+                if(ptg is ParenthesisPtg)
                 {
                     String contents = (String)stack.Pop();
                     stack.Push("(" + contents + ")");
                     continue;
                 }
-                if (ptg is AttrPtg)
+                if(ptg is AttrPtg)
                 {
                     AttrPtg attrPtg = ((AttrPtg)ptg);
-                    if (attrPtg.IsOptimizedIf || attrPtg.IsOptimizedChoose || attrPtg.IsSkip)
+                    if(attrPtg.IsOptimizedIf || attrPtg.IsOptimizedChoose || attrPtg.IsSkip)
                     {
                         continue;
                     }
-                    if (attrPtg.IsSpace)
+                    if(attrPtg.IsSpace)
                     {
                         // POI currently doesn't render spaces in formulas
                         continue;
@@ -81,12 +83,12 @@ namespace NPOI.SS.Formula
                         // tAttrSpace comes *before* the operand it applies To, which may be consistent
                         // with how the formula text appears but is against the RPN ordering assumed here
                     }
-                    if (attrPtg.IsSemiVolatile)
+                    if(attrPtg.IsSemiVolatile)
                     {
                         // similar To tAttrSpace - RPN is violated
                         continue;
                     }
-                    if (attrPtg.IsSum)
+                    if(attrPtg.IsSum)
                     {
                         String[] operands = GetOperands(stack, attrPtg.NumberOfOperands);
                         stack.Push(attrPtg.ToFormulaString(operands));
@@ -95,13 +97,13 @@ namespace NPOI.SS.Formula
                     throw new Exception("Unexpected tAttr: " + attrPtg.ToString());
                 }
 
-                if (ptg is WorkbookDependentFormula)
+                if(ptg is WorkbookDependentFormula)
                 {
                     WorkbookDependentFormula optg = (WorkbookDependentFormula)ptg;
                     stack.Push(optg.ToFormulaString(book));
                     continue;
                 }
-                if (!(ptg is OperationPtg))
+                if(!(ptg is OperationPtg))
                 {
                     stack.Push(ptg.ToFormulaString());
                     continue;
@@ -111,14 +113,14 @@ namespace NPOI.SS.Formula
                 String[] operands1 = GetOperands(stack, o.NumberOfOperands);
                 stack.Push(o.ToFormulaString(operands1));
             }
-            if (stack.Count == 0)
+            if(stack.Count == 0)
             {
                 // inspection of the code above reveals that every stack.pop() is followed by a
                 // stack.push(). So this is either an internal error or impossible.
                 throw new InvalidOperationException("Stack underflow");
             }
             String result = (String)stack.Pop();
-            if (stack.Count != 0)
+            if(stack.Count != 0)
             {
                 // Might be caused by some Tokens like AttrPtg and Mem*Ptg, which really shouldn't
                 // Put anything on the stack
@@ -131,15 +133,15 @@ namespace NPOI.SS.Formula
         {
             String[] operands = new String[nOperands];
 
-            for (int j = nOperands - 1; j >= 0; j--)
+            for(int j = nOperands - 1; j >= 0; j--)
             { // reverse iteration because args were pushed in-order
-                if (stack.Count == 0)
+                if(stack.Count == 0)
                 {
                     String msg = "Too few arguments supplied to operation. Expected (" + nOperands
                          + ") operands but got (" + (nOperands - j - 1) + ")";
                     throw new InvalidOperationException(msg);
                 }
-                operands[j] = (String)stack.Pop();
+                operands[j] = (String) stack.Pop();
             }
             return operands;
         }

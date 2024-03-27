@@ -23,11 +23,9 @@ namespace NPOI.SS.Formula
     using NPOI.SS.UserModel;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
-    /**
-     * 
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// </summary>
+    /// @author Josh Micich
     public class SheetRefEvaluator
     {
 
@@ -38,7 +36,7 @@ namespace NPOI.SS.Formula
 
         public SheetRefEvaluator(WorkbookEvaluator bookEvaluator, EvaluationTracker tracker, int sheetIndex)
         {
-            if (sheetIndex < 0)
+            if(sheetIndex < 0)
             {
                 throw new ArgumentException("Invalid sheetIndex: " + sheetIndex + ".");
             }
@@ -64,7 +62,7 @@ namespace NPOI.SS.Formula
         {
             get
             {
-                if (_sheet == null)
+                if(_sheet == null)
                 {
                     _sheet = _bookEvaluator.GetSheet(_sheetIndex);
                 }
@@ -72,23 +70,23 @@ namespace NPOI.SS.Formula
             }
         }
 
-        /**
- * @return  whether cell at rowIndex and columnIndex is a subtotal
- * @see org.apache.poi.ss.formula.functions.Subtotal
- */
+        /// <summary>
+        /// </summary>
+        /// <returns>whether cell at rowIndex and columnIndex is a subtotal</returns>
+        /// <see cref="Functions.Subtotal" />
         public bool IsSubTotal(int rowIndex, int columnIndex)
         {
             bool subtotal = false;
             IEvaluationCell cell = Sheet.GetCell(rowIndex, columnIndex);
-            if (cell != null && cell.CellType == CellType.Formula)
+            if(cell != null && cell.CellType == CellType.Formula)
             {
                 IEvaluationWorkbook wb = _bookEvaluator.Workbook;
-                foreach (Ptg ptg in wb.GetFormulaTokens(cell))
+                foreach(Ptg ptg in wb.GetFormulaTokens(cell))
                 {
-                    if (ptg is FuncVarPtg)
+                    if(ptg is FuncVarPtg)
                     {
                         FuncVarPtg f = (FuncVarPtg)ptg;
-                        if ("SUBTOTAL".Equals(f.Name))
+                        if("SUBTOTAL".Equals(f.Name))
                         {
                             subtotal = true;
                             break;

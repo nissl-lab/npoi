@@ -25,21 +25,24 @@ namespace NPOI.SS.Formula
     using NPOI.SS.Util;
     using NPOI.SS.Formula.PTG;
 
-    /**
-     * Provides Lazy Evaluation to a 3D Reference
-     * 
-     * TODO Provide access to multiple sheets where present
-     */
+    /// <summary>
+    /// <para>
+    /// Provides Lazy Evaluation to a 3D Reference
+    /// </para>
+    /// <para>
+    /// TODO Provide access to multiple sheets where present
+    /// </para>
+    /// </summary>
     public class LazyRefEval : RefEvalBase
     {
 
         private SheetRangeEvaluator _evaluator;
 
         public LazyRefEval(int rowIndex, int columnIndex, SheetRangeEvaluator sre)
-            :base(sre, rowIndex, columnIndex)
+            : base(sre, rowIndex, columnIndex)
         {
-           
-            if (sre == null)
+
+            if(sre == null)
             {
                 throw new ArgumentException("sre must not be null");
             }
