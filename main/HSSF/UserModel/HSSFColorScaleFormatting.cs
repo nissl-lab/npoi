@@ -24,10 +24,10 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Record.Common;
     using NPOI.SS.UserModel;
     using ExtendedColorR = NPOI.HSSF.Record.Common.ExtendedColor;
-    /**
-     * High level representation for Color Scale / Color Gradient 
-     *  Formatting component of Conditional Formatting Settings
-     */
+    /// <summary>
+    /// High level representation for Color Scale / Color Gradient
+    ///  Formatting component of Conditional Formatting Settings
+    /// </summary>
     public class HSSFColorScaleFormatting : IColorScaleFormatting
     {
         private HSSFSheet sheet;
@@ -59,7 +59,7 @@ namespace NPOI.HSSF.UserModel
             {
                 ExtendedColorR[] colors = colorFormatting.Colors;
                 HSSFExtendedColor[] hcolors = new HSSFExtendedColor[colors.Length];
-                for (int i = 0; i < colors.Length; i++)
+                for(int i = 0; i < colors.Length; i++)
                 {
                     hcolors[i] = new HSSFExtendedColor(colors[i]);
                 }
@@ -68,9 +68,9 @@ namespace NPOI.HSSF.UserModel
             set
             {
                 ExtendedColorR[] cr = new ExtendedColorR[value.Length];
-                for (int i = 0; i < value.Length; i++)
+                for(int i = 0; i < value.Length; i++)
                 {
-                    cr[i] = ((HSSFExtendedColor)value[i]).ExtendedColor;
+                    cr[i] = ((HSSFExtendedColor) value[i]).ExtendedColor;
                 }
                 colorFormatting.Colors = (/*setter*/cr);
             }
@@ -82,7 +82,7 @@ namespace NPOI.HSSF.UserModel
             {
                 Threshold[] t = colorFormatting.Thresholds;
                 HSSFConditionalFormattingThreshold[] ht = new HSSFConditionalFormattingThreshold[t.Length];
-                for (int i = 0; i < t.Length; i++)
+                for(int i = 0; i < t.Length; i++)
                 {
                     ht[i] = new HSSFConditionalFormattingThreshold(t[i], sheet);
                 }
@@ -91,10 +91,10 @@ namespace NPOI.HSSF.UserModel
             set
             {
                 ColorGradientThreshold[] t = new ColorGradientThreshold[value.Length];
-                for (int i = 0; i < t.Length; i++)
+                for(int i = 0; i < t.Length; i++)
                 {
                     HSSFConditionalFormattingThreshold hssfT = (HSSFConditionalFormattingThreshold)value[i];
-                    t[i] = (ColorGradientThreshold)hssfT.Threshold;
+                    t[i] = (ColorGradientThreshold) hssfT.Threshold;
                 }
                 colorFormatting.Thresholds = (/*setter*/t);
             }

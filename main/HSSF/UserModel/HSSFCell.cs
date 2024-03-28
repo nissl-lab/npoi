@@ -125,17 +125,17 @@ namespace NPOI.HSSF.UserModel
             stringValue = null;
             this.book = book;
             this._sheet = sheet;
-            switch (cellType)
+            switch(cellType)
             {
                 case CellType.String:
-                    stringValue = new HSSFRichTextString(book.Workbook, (LabelSSTRecord)cval);
+                    stringValue = new HSSFRichTextString(book.Workbook, (LabelSSTRecord) cval);
                     break;
 
                 case CellType.Blank:
                     break;
 
                 case CellType.Formula:
-                    stringValue = new HSSFRichTextString(((FormulaRecordAggregate)cval).StringValue);
+                    stringValue = new HSSFRichTextString(((FormulaRecordAggregate) cval).StringValue);
                     break;
 
                 default:
@@ -146,19 +146,19 @@ namespace NPOI.HSSF.UserModel
             //CellStyle = new HSSFCellStyle((short)cval.XFIndex, xf, book);
         }
 
-        /**
-         * private constructor to prevent blank construction
-         */
+        /// <summary>
+        /// private constructor to prevent blank construction
+        /// </summary>
         private HSSFCell()
         {
         }
 
-        /**
-         * used internally -- given a cell value record, figure out its type
-         */
+        /// <summary>
+        /// used internally -- given a cell value record, figure out its type
+        /// </summary>
         private CellType DetermineType(CellValueRecordInterface cval)
         {
-            if (cval is FormulaRecordAggregate)
+            if(cval is FormulaRecordAggregate)
             {
                 return CellType.Formula;
             }
@@ -166,7 +166,7 @@ namespace NPOI.HSSF.UserModel
             Record record = (Record)cval;
             int sid = record.Sid;
 
-            switch (sid)
+            switch(sid)
             {
 
                 case NumberRecord.sid:
@@ -232,7 +232,7 @@ namespace NPOI.HSSF.UserModel
         public void SetCellType(CellType cellType)
         {
             NotifyFormulaChanging();
-            if (IsPartOfArrayFormulaGroup)
+            if(IsPartOfArrayFormulaGroup)
             {
                 NotifyArrayFormulaChanging();
             }
@@ -255,26 +255,26 @@ namespace NPOI.HSSF.UserModel
         /// <param name="styleIndex">Index of the style.</param>
         private void SetCellType(CellType cellType, bool setValue, int row, int col, short styleIndex)
         {
-            if (cellType > CellType.Error)
+            if(cellType > CellType.Error)
             {
                 throw new Exception("I have no idea what type that Is!");
             }
-            switch (cellType)
+            switch(cellType)
             {
 
                 case CellType.Formula:
                     FormulaRecordAggregate frec = null;
 
-                    if (cellType != this.cellType)
+                    if(cellType != this.cellType)
                     {
                         frec = _sheet.Sheet.RowsAggregate.CreateFormula(row, col);
                     }
                     else
                     {
-                        frec = (FormulaRecordAggregate)_record;
+                        frec = (FormulaRecordAggregate) _record;
                     }
                     frec.Column = col;
-                    if (setValue)
+                    if(setValue)
                     {
                         frec.FormulaRecord.Value = NumericCellValue;
                     }
@@ -286,16 +286,16 @@ namespace NPOI.HSSF.UserModel
                 case CellType.Numeric:
                     NumberRecord nrec = null;
 
-                    if (cellType != this.cellType)
+                    if(cellType != this.cellType)
                     {
                         nrec = new NumberRecord();
                     }
                     else
                     {
-                        nrec = (NumberRecord)_record;
+                        nrec = (NumberRecord) _record;
                     }
                     nrec.Column = col;
-                    if (setValue)
+                    if(setValue)
                     {
                         nrec.Value = NumericCellValue;
                     }
@@ -307,21 +307,21 @@ namespace NPOI.HSSF.UserModel
                 case CellType.String:
                     LabelSSTRecord lrec = null;
 
-                    if (cellType != this.cellType)
+                    if(cellType != this.cellType)
                     {
                         lrec = new LabelSSTRecord();
                     }
                     else
                     {
-                        lrec = (LabelSSTRecord)_record;
+                        lrec = (LabelSSTRecord) _record;
                     }
                     lrec.Column = col;
                     lrec.Row = row;
                     lrec.XFIndex = styleIndex;
-                    if (setValue)
+                    if(setValue)
                     {
                         String str = ConvertCellValueToString();
-                        if (str == null)
+                        if(str == null)
                         {
                             // bug 55668: don't try to store null-string when formula
                             // results in empty/null value
@@ -343,13 +343,13 @@ namespace NPOI.HSSF.UserModel
                 case CellType.Blank:
                     BlankRecord brec = null;
 
-                    if (cellType != this.cellType)
+                    if(cellType != this.cellType)
                     {
                         brec = new BlankRecord();
                     }
                     else
                     {
-                        brec = (BlankRecord)_record;
+                        brec = (BlankRecord) _record;
                     }
                     brec.Column = col;
 
@@ -362,16 +362,16 @@ namespace NPOI.HSSF.UserModel
                 case CellType.Boolean:
                     BoolErrRecord boolRec = null;
 
-                    if (cellType != this.cellType)
+                    if(cellType != this.cellType)
                     {
                         boolRec = new BoolErrRecord();
                     }
                     else
                     {
-                        boolRec = (BoolErrRecord)_record;
+                        boolRec = (BoolErrRecord) _record;
                     }
                     boolRec.Column = col;
-                    if (setValue)
+                    if(setValue)
                     {
                         boolRec.SetValue(ConvertCellValueToBoolean());
                     }
@@ -383,16 +383,16 @@ namespace NPOI.HSSF.UserModel
                 case CellType.Error:
                     BoolErrRecord errRec = null;
 
-                    if (cellType != this.cellType)
+                    if(cellType != this.cellType)
                     {
                         errRec = new BoolErrRecord();
                     }
                     else
                     {
-                        errRec = (BoolErrRecord)_record;
+                        errRec = (BoolErrRecord) _record;
                     }
                     errRec.Column = col;
-                    if (setValue)
+                    if(setValue)
                     {
                         errRec.SetValue(FormulaError.VALUE.Code);
                     }
@@ -403,7 +403,7 @@ namespace NPOI.HSSF.UserModel
                 default:
                     throw new InvalidOperationException("Invalid cell type: " + cellType);
             }
-            if (cellType != this.cellType &&
+            if(cellType != this.cellType &&
                 this.cellType != CellType.Unknown)  // Special Value to indicate an Uninitialized Cell
             {
                 _sheet.Sheet.ReplaceValueRecord(_record);
@@ -425,19 +425,19 @@ namespace NPOI.HSSF.UserModel
         private String ConvertCellValueToString()
         {
 
-            switch (cellType)
+            switch(cellType)
             {
                 case CellType.Blank:
                     return "";
                 case CellType.Boolean:
-                    return ((BoolErrRecord)_record).BooleanValue ? "TRUE" : "FALSE";
+                    return ((BoolErrRecord) _record).BooleanValue ? "TRUE" : "FALSE";
                 case CellType.String:
                     int sstIndex = ((LabelSSTRecord)_record).SSTIndex;
                     return book.Workbook.GetSSTString(sstIndex).String;
                 case CellType.Numeric:
-                    return NumberToTextConverter.ToText(((NumberRecord)_record).Value);
+                    return NumberToTextConverter.ToText(((NumberRecord) _record).Value);
                 case CellType.Error:
-                    return FormulaError.ForInt(((BoolErrRecord)_record).ErrorValue).String;
+                    return FormulaError.ForInt(((BoolErrRecord) _record).ErrorValue).String;
                 case CellType.Formula:
                     // should really evaluate, but Cell can't call HSSFFormulaEvaluator
                     // just use cached formula result instead
@@ -447,14 +447,14 @@ namespace NPOI.HSSF.UserModel
             }
             FormulaRecordAggregate fra = ((FormulaRecordAggregate)_record);
             FormulaRecord fr = fra.FormulaRecord;
-            switch (fr.CachedResultType)
+            switch(fr.CachedResultType)
             {
                 case CellType.Boolean:
                     return fr.CachedBooleanValue ? "TRUE" : "FALSE";
                 case CellType.String:
                     return fra.StringValue;
                 case CellType.Numeric:
-                    return NumberToTextConverter.ToText(fr.Value); 
+                    return NumberToTextConverter.ToText(fr.Value);
                 case CellType.Error:
                     return FormulaError.ForInt(fr.CachedErrorValue).String;
             }
@@ -475,7 +475,7 @@ namespace NPOI.HSSF.UserModel
                 // rather, it gives a #DIV/0! error in these cases.
                 SetCellErrorValue(FormulaError.DIV0.Code);
             }
-            else if (double.IsNaN(value))
+            else if(double.IsNaN(value))
             {
                 // Excel does not support Not-a-Number (NaN),
                 // instead it immediately generates a #NUM! error.
@@ -487,21 +487,21 @@ namespace NPOI.HSSF.UserModel
                 int col = _record.Column;
                 short styleIndex = _record.XFIndex;
 
-                switch (cellType)
+                switch(cellType)
                 {
                     case CellType.Numeric:
-                        ((NumberRecord)_record).Value = value;
+                        ((NumberRecord) _record).Value = value;
                         break;
                     case CellType.Formula:
-                        ((FormulaRecordAggregate)_record).SetCachedDoubleResult(value);
+                        ((FormulaRecordAggregate) _record).SetCachedDoubleResult(value);
                         break;
                     default:
                         SetCellType(CellType.Numeric, false, row, col, styleIndex);
-                        ((NumberRecord)_record).Value = value;
+                        ((NumberRecord) _record).Value = value;
                         break;
                 }
             }
-        
+
         }
 
         /// <summary>
@@ -544,45 +544,45 @@ namespace NPOI.HSSF.UserModel
             HSSFRichTextString str = value == null ? null : new HSSFRichTextString(value);
             SetCellValue(str);
         }
-        /**
-         * set a error value for the cell
-         *
-         * @param errorCode the error value to set this cell to.  For formulas we'll set the
-         *        precalculated value , for errors we'll set
-         *        its value. For other types we will change the cell to an error
-         *        cell and set its value.
-         */
+        /// <summary>
+        /// set a error value for the cell
+        /// </summary>
+        /// <param name="errorCode">the error value to set this cell to.  For formulas we'll set the
+        /// precalculated value , for errors we'll set
+        /// its value. For other types we will change the cell to an error
+        /// cell and set its value.
+        /// </param>
         [Obsolete("deprecated 3.15 beta 2. Use {@link #setCellErrorValue(FormulaError)} instead.")]
         public void SetCellErrorValue(byte errorCode)
         {
             FormulaError error = FormulaError.ForInt(errorCode);
             SetCellErrorValue(error);
         }
-        /**
-         * set a error value for the cell
-         *
-         * @param error the error value to set this cell to.  For formulas we'll set the
-         *        precalculated value , for errors we'll set
-         *        its value. For other types we will change the cell to an error
-         *        cell and set its value.
-         */
+        /// <summary>
+        /// set a error value for the cell
+        /// </summary>
+        /// <param name="error">the error value to set this cell to.  For formulas we'll set the
+        /// precalculated value , for errors we'll set
+        /// its value. For other types we will change the cell to an error
+        /// cell and set its value.
+        /// </param>
         public void SetCellErrorValue(FormulaError error)
         {
             int row = _record.Row;
             int col = _record.Column;
             short styleIndex = _record.XFIndex;
-            switch (cellType)
+            switch(cellType)
             {
 
                 case CellType.Error:
-                    ((BoolErrRecord)_record).SetValue(error);
+                    ((BoolErrRecord) _record).SetValue(error);
                     break;
                 case CellType.Formula:
-                    ((FormulaRecordAggregate)_record).SetCachedErrorResult(error);
+                    ((FormulaRecordAggregate) _record).SetCachedErrorResult(error);
                     break;
                 default:
                     SetCellType(CellType.Error, false, row, col, styleIndex);
-                    ((BoolErrRecord)_record).SetValue(error);
+                    ((BoolErrRecord) _record).SetValue(error);
                     break;
             }
         }
@@ -599,18 +599,18 @@ namespace NPOI.HSSF.UserModel
             int row = _record.Row;
             int col = _record.Column;
             short styleIndex = _record.XFIndex;
-            if (value == null)
+            if(value == null)
             {
                 NotifyFormulaChanging();
                 SetCellType(CellType.Blank, false, row, col, styleIndex);
                 return;
             }
 
-            if (value.Length > NPOI.SS.SpreadsheetVersion.EXCEL97.MaxTextLength)
+            if(value.Length > NPOI.SS.SpreadsheetVersion.EXCEL97.MaxTextLength)
             {
                 throw new ArgumentException("The maximum length of cell contents (text) is 32,767 characters");
             }
-            if (cellType == CellType.Formula)
+            if(cellType == CellType.Formula)
             {
                 // Set the 'pre-Evaluated result' for the formula 
                 // note - formulas do not preserve text formatting.
@@ -621,7 +621,7 @@ namespace NPOI.HSSF.UserModel
                 return;
             }
 
-            if (cellType != CellType.String)
+            if(cellType != CellType.String)
             {
                 SetCellType(CellType.String, false, row, col, styleIndex);
             }
@@ -630,21 +630,21 @@ namespace NPOI.HSSF.UserModel
             HSSFRichTextString hvalue = (HSSFRichTextString)value;
             UnicodeString str = hvalue.UnicodeString;
             index = book.Workbook.AddSSTString(str);
-            ((LabelSSTRecord)_record).SSTIndex = index;
+            ((LabelSSTRecord) _record).SSTIndex = index;
             stringValue = hvalue;
-            stringValue.SetWorkbookReferences(book.Workbook, ((LabelSSTRecord)_record));
+            stringValue.SetWorkbookReferences(book.Workbook, ((LabelSSTRecord) _record));
             stringValue.UnicodeString = book.Workbook.GetSSTString(index);
         }
 
-        /**
- * Should be called any time that a formula could potentially be deleted.
- * Does nothing if this cell currently does not hold a formula
- */
+        /// <summary>
+        /// Should be called any time that a formula could potentially be deleted.
+        /// Does nothing if this cell currently does not hold a formula
+        /// </summary>
         private void NotifyFormulaChanging()
         {
-            if (_record is FormulaRecordAggregate)
+            if(_record is FormulaRecordAggregate)
             {
-                ((FormulaRecordAggregate)_record).NotifyFormulaChanging();
+                ((FormulaRecordAggregate) _record).NotifyFormulaChanging();
             }
         }
 
@@ -656,10 +656,10 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                if (!(_record is FormulaRecordAggregate))
+                if(!(_record is FormulaRecordAggregate))
                     throw TypeMismatch(CellType.Formula, cellType, true);
 
-                return HSSFFormulaParser.ToFormulaString(book, ((FormulaRecordAggregate)_record).FormulaTokens);
+                return HSSFFormulaParser.ToFormulaString(book, ((FormulaRecordAggregate) _record).FormulaTokens);
             }
             set
             {
@@ -672,13 +672,13 @@ namespace NPOI.HSSF.UserModel
         /// <param name="message">a customized exception message for the case if deletion of the cell is impossible. If null, a default message will be generated</param>
         internal void TryToDeleteArrayFormula(String message)
         {
-            if (!IsPartOfArrayFormulaGroup)
+            if(!IsPartOfArrayFormulaGroup)
                 return;
 
             CellRangeAddress arrayFormulaRange = ArrayFormulaRange;
-            if (arrayFormulaRange.NumberOfCells > 1)
+            if(arrayFormulaRange.NumberOfCells > 1)
             {
-                if (message == null)
+                if(message == null)
                 {
                     message = "Cell " + new CellReference(this).FormatAsString() + " is part of a multi-cell array formula. " +
                             "You cannot change part of an array.";
@@ -690,35 +690,35 @@ namespace NPOI.HSSF.UserModel
         }
         public void RemoveFormula()
         {
-            if (CellType != CellType.Formula)
+            if(CellType != CellType.Formula)
             {
                 return;
             }
 
-            if (IsPartOfArrayFormulaGroup)
+            if(IsPartOfArrayFormulaGroup)
             {
                 TryToDeleteArrayFormula(null);
                 return;
             }
             NotifyFormulaChanging();
 
-            switch (CachedFormulaResultType)
+            switch(CachedFormulaResultType)
             {
                 case CellType.Numeric:
                     double numericValue = ((FormulaRecordAggregate)_record).FormulaRecord.Value;
                     _record = new NumberRecord();
-                    ((NumberRecord)_record).Value = numericValue;
+                    ((NumberRecord) _record).Value = numericValue;
                     cellType = CellType.Numeric;
                     break;
                 case CellType.String:
                     _record = new NumberRecord();
-                    ((NumberRecord)_record).Value = 0;
+                    ((NumberRecord) _record).Value = 0;
                     cellType = CellType.String;
                     break;
                 case CellType.Boolean:
                     bool booleanValue = ((FormulaRecordAggregate)_record).FormulaRecord.CachedBooleanValue;
                     _record = new BoolErrRecord();
-                    ((BoolErrRecord)_record).SetValue(booleanValue);
+                    ((BoolErrRecord) _record).SetValue(booleanValue);
                     cellType = CellType.Boolean;
                     break;
                 case CellType.Error:
@@ -726,11 +726,11 @@ namespace NPOI.HSSF.UserModel
                     _record = new BoolErrRecord();
                     try
                     {
-                        ((BoolErrRecord)_record).SetValue(errorValue);
+                        ((BoolErrRecord) _record).SetValue(errorValue);
                     }
-                    catch (ArgumentException)
+                    catch(ArgumentException)
                     {
-                        ((BoolErrRecord)_record).SetValue((byte)ErrorEval.REF_INVALID.ErrorCode);
+                        ((BoolErrRecord) _record).SetValue((byte) ErrorEval.REF_INVALID.ErrorCode);
                     }
                     cellType = CellType.Error;
                     break;
@@ -740,7 +740,7 @@ namespace NPOI.HSSF.UserModel
         }
         public void SetCellFormula(String formula)
         {
-            if (IsPartOfArrayFormulaGroup)
+            if(IsPartOfArrayFormulaGroup)
             {
                 NotifyArrayFormulaChanging();
             }
@@ -748,7 +748,7 @@ namespace NPOI.HSSF.UserModel
             int col = _record.Column;
             short styleIndex = _record.XFIndex;
 
-            if (string.IsNullOrEmpty(formula))
+            if(string.IsNullOrEmpty(formula))
             {
                 NotifyFormulaChanging();
                 SetCellType(CellType.Blank, false, row, col, styleIndex);
@@ -760,13 +760,13 @@ namespace NPOI.HSSF.UserModel
             SetCellType(CellType.Formula, false, row, col, styleIndex);
             FormulaRecordAggregate agg = (FormulaRecordAggregate)_record;
             FormulaRecord frec = agg.FormulaRecord;
-            frec.Options = ((short)2);
+            frec.Options = ((short) 2);
             frec.Value = (0);
 
             //only set to default if there is no extended format index already set
-            if (agg.XFIndex == (short)0)
+            if(agg.XFIndex == (short) 0)
             {
-                agg.XFIndex = ((short)0x0f);
+                agg.XFIndex = ((short) 0x0f);
             }
             agg.SetParsedExpression(ptgs);
         }
@@ -780,13 +780,13 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                switch (cellType)
+                switch(cellType)
                 {
                     case CellType.Blank:
                         return 0.0;
 
                     case CellType.Numeric:
-                        return ((NumberRecord)_record).Value;
+                        return ((NumberRecord) _record).Value;
                     case CellType.Formula:
                         break;
                     default:
@@ -805,14 +805,20 @@ namespace NPOI.HSSF.UserModel
         /// <returns></returns>
         private String GetCellTypeName(CellType cellTypeCode)
         {
-            switch (cellTypeCode)
+            switch(cellTypeCode)
             {
-                case CellType.Blank: return "blank";
-                case CellType.String: return "text";
-                case CellType.Boolean: return "boolean";
-                case CellType.Error: return "error";
-                case CellType.Numeric: return "numeric";
-                case CellType.Formula: return "formula";
+                case CellType.Blank:
+                    return "blank";
+                case CellType.String:
+                    return "text";
+                case CellType.Boolean:
+                    return "boolean";
+                case CellType.Error:
+                    return "error";
+                case CellType.Numeric:
+                    return "numeric";
+                case CellType.Formula:
+                    return "formula";
             }
             return "#unknown cell type (" + cellTypeCode + ")#";
         }
@@ -841,7 +847,7 @@ namespace NPOI.HSSF.UserModel
         private void CheckFormulaCachedValueType(CellType expectedTypeCode, FormulaRecord fr)
         {
             CellType cachedValueType = fr.CachedResultType;
-            if (cachedValueType != expectedTypeCode)
+            if(cachedValueType != expectedTypeCode)
             {
                 throw TypeMismatch(expectedTypeCode, cachedValueType, true);
             }
@@ -857,7 +863,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                if (CellType != CellType.Numeric && CellType != CellType.Formula)
+                if(CellType != CellType.Numeric && CellType != CellType.Formula)
                 {
                     return null;
                 }
@@ -922,7 +928,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                switch (cellType)
+                switch(cellType)
                 {
                     case CellType.Blank:
                         return new HSSFRichTextString("");
@@ -951,17 +957,17 @@ namespace NPOI.HSSF.UserModel
             int row = _record.Row;
             int col = _record.Column;
             short styleIndex = _record.XFIndex;
-            switch (cellType)
+            switch(cellType)
             {
                 case CellType.Boolean:
-                    ((BoolErrRecord)_record).SetValue(value);
+                    ((BoolErrRecord) _record).SetValue(value);
                     break;
                 case CellType.Formula:
-                    ((FormulaRecordAggregate)_record).SetCachedBooleanResult(value);
+                    ((FormulaRecordAggregate) _record).SetCachedBooleanResult(value);
                     break;
                 default:
                     SetCellType(CellType.Boolean, false, row, col, styleIndex);
-                    ((BoolErrRecord)_record).SetValue(value);
+                    ((BoolErrRecord) _record).SetValue(value);
                     break;
             }
         }
@@ -976,17 +982,17 @@ namespace NPOI.HSSF.UserModel
         private bool ConvertCellValueToBoolean()
         {
 
-            switch (cellType)
+            switch(cellType)
             {
                 case CellType.Boolean:
-                    return ((BoolErrRecord)_record).BooleanValue;
+                    return ((BoolErrRecord) _record).BooleanValue;
                 case CellType.String:
                     int sstIndex = ((LabelSSTRecord)_record).SSTIndex;
                     String text = book.Workbook.GetSSTString(sstIndex).String;
                     return Convert.ToBoolean(text, CultureInfo.CurrentCulture);
 
                 case CellType.Numeric:
-                    return ((NumberRecord)_record).Value != 0;
+                    return ((NumberRecord) _record).Value != 0;
 
                 // All other cases Convert to false
                 // These choices are not well justified.
@@ -1013,12 +1019,12 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                switch (cellType)
+                switch(cellType)
                 {
                     case CellType.Blank:
                         return false;
                     case CellType.Boolean:
-                        return ((BoolErrRecord)_record).BooleanValue;
+                        return ((BoolErrRecord) _record).BooleanValue;
                     case CellType.Formula:
                         break;
                     default:
@@ -1040,14 +1046,14 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                switch (cellType)
+                switch(cellType)
                 {
                     case CellType.Error:
-                        return ((BoolErrRecord)_record).ErrorValue;
+                        return ((BoolErrRecord) _record).ErrorValue;
                     case CellType.Formula:
                         FormulaRecord fr = ((FormulaRecordAggregate)_record).FormulaRecord;
                         CheckFormulaCachedValueType(CellType.Error, fr);
-                        return (byte)fr.CachedErrorValue;
+                        return (byte) fr.CachedErrorValue;
                     default:
                         throw TypeMismatch(CellType.Error, cellType, false);
                 }
@@ -1070,18 +1076,18 @@ namespace NPOI.HSSF.UserModel
             set
             {
                 // A style of null means resetting back to the default style
-                if (value == null)
+                if(value == null)
                 {
-                    _record.XFIndex = ((short)0xf);
+                    _record.XFIndex = ((short) 0xf);
                     return;
                 }
                 // Verify it really does belong to our workbook
-                ((HSSFCellStyle)value).VerifyBelongsToWorkbook(book);
+                ((HSSFCellStyle) value).VerifyBelongsToWorkbook(book);
 
                 short styleIndex;
-                if (((HSSFCellStyle)value).UserStyleName != null)
+                if(((HSSFCellStyle) value).UserStyleName != null)
                 {
-                    styleIndex = ApplyUserCellStyle((HSSFCellStyle)value);
+                    styleIndex = ApplyUserCellStyle((HSSFCellStyle) value);
                 }
                 else
                 {
@@ -1092,25 +1098,28 @@ namespace NPOI.HSSF.UserModel
                 _record.XFIndex = styleIndex;
             }
         }
-        /**
- * Applying a user-defined style (UDS) is special. Excel does not directly reference user-defined styles, but
- * instead create a 'proxy' ExtendedFormatRecord referencing the UDS as parent.
- *
- * The proceudre to apply a UDS is as follows:
- *
- * 1. search for a ExtendedFormatRecord with parentIndex == style.getIndex()
- *    and xfType ==  ExtendedFormatRecord.XF_CELL.
- * 2. if not found then create a new ExtendedFormatRecord and copy all attributes from the user-defined style
- *    and set the parentIndex to be style.getIndex()
- * 3. return the index of the ExtendedFormatRecord, this will be assigned to the parent cell record
- *
- * @param style  the user style to apply
- *
- * @return  the index of a ExtendedFormatRecord record that will be referenced by the cell
- */
+        /// <summary>
+        /// <para>
+        /// Applying a user-defined style (UDS) is special. Excel does not directly reference user-defined styles, but
+        /// instead create a 'proxy' ExtendedFormatRecord referencing the UDS as parent.
+        /// </para>
+        /// <para>
+        /// The proceudre to apply a UDS is as follows:
+        /// </para>
+        /// <para>
+        /// 1. search for a ExtendedFormatRecord with parentIndex == style.getIndex()
+        ///    and xfType ==  ExtendedFormatRecord.XF_CELL.
+        /// 2. if not found then create a new ExtendedFormatRecord and copy all attributes from the user-defined style
+        ///    and set the parentIndex to be style.getIndex()
+        /// 3. return the index of the ExtendedFormatRecord, this will be assigned to the parent cell record
+        /// </para>
+        /// </summary>
+        /// <param name="style"> the user style to apply</param>
+        /// 
+        /// <returns>the index of a ExtendedFormatRecord record that will be referenced by the cell</returns>
         private short ApplyUserCellStyle(HSSFCellStyle style)
         {
-            if (style.UserStyleName == null)
+            if(style.UserStyleName == null)
             {
                 throw new ArgumentException("Expected user-defined style");
             }
@@ -1118,24 +1127,24 @@ namespace NPOI.HSSF.UserModel
             InternalWorkbook iwb = book.Workbook;
             short userXf = -1;
             int numfmt = iwb.NumExFormats;
-            for (short i = 0; i < numfmt; i++)
+            for(short i = 0; i < numfmt; i++)
             {
                 ExtendedFormatRecord xf = iwb.GetExFormatAt(i);
-                if (xf.XFType == ExtendedFormatRecord.XF_CELL && xf.ParentIndex == style.Index)
+                if(xf.XFType == ExtendedFormatRecord.XF_CELL && xf.ParentIndex == style.Index)
                 {
                     userXf = i;
                     break;
                 }
             }
             short styleIndex;
-            if (userXf == -1)
+            if(userXf == -1)
             {
                 ExtendedFormatRecord xfr = iwb.CreateCellXF();
                 xfr.CloneStyleFrom(iwb.GetExFormatAt(style.Index));
-                xfr.IndentionOptions = (short)0;
+                xfr.IndentionOptions = (short) 0;
                 xfr.XFType = (ExtendedFormatRecord.XF_CELL);
                 xfr.ParentIndex = (style.Index);
-                styleIndex = (short)numfmt;
+                styleIndex = (short) numfmt;
             }
             else
             {
@@ -1161,7 +1170,7 @@ namespace NPOI.HSSF.UserModel
         /// <exception cref="Exception">if the bounds are exceeded.</exception>
         private void CheckBounds(int cellIndex)
         {
-            if (cellIndex < 0 || cellIndex > LAST_COLUMN_NUMBER)
+            if(cellIndex < 0 || cellIndex > LAST_COLUMN_NUMBER)
             {
                 throw new ArgumentException("Invalid column index (" + cellIndex
                         + ").  Allowable column range for " + FILE_FORMAT_NAME + " is (0.."
@@ -1192,14 +1201,14 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         public override String ToString()
         {
-            switch (CellType)
+            switch(CellType)
             {
                 case CellType.Blank:
                     return "";
                 case CellType.Boolean:
                     return BooleanCellValue ? "TRUE" : "FALSE";
                 case CellType.Error:
-                    return NPOI.SS.Formula.Eval.ErrorEval.GetText(((BoolErrRecord)_record).ErrorValue);
+                    return NPOI.SS.Formula.Eval.ErrorEval.GetText(((BoolErrRecord) _record).ErrorValue);
                 case CellType.Formula:
                     return CellFormula;
                 case CellType.Numeric:
@@ -1223,7 +1232,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                if (comment == null)
+                if(comment == null)
                 {
                     comment = _sheet.FindCellComment(_record.Row, _record.Column);
                 }
@@ -1231,7 +1240,7 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                if (value == null)
+                if(value == null)
                 {
                     RemoveCellComment();
                     return;
@@ -1253,7 +1262,7 @@ namespace NPOI.HSSF.UserModel
         {
             HSSFComment comment2 = _sheet.FindCellComment(_record.Row, _record.Column);
             comment = null;
-            if (null == comment2)
+            if(null == comment2)
             {
                 return;
             }
@@ -1280,11 +1289,11 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
-         * Updates the cell record's idea of what
-         *  column it belongs in (0 based)
-         * @param num the new cell number
-         */
+        /// <summary>
+        /// Updates the cell record's idea of what
+        ///  column it belongs in (0 based)
+        /// </summary>
+        /// <param name="num">the new cell number</param>
         internal void UpdateCellNum(int num)
         {
             _record.Column = num;
@@ -1313,7 +1322,7 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                if (value == null)
+                if(value == null)
                 {
                     RemoveHyperlink();
                     return;
@@ -1324,7 +1333,7 @@ namespace NPOI.HSSF.UserModel
                 value.FirstColumn = _record.Column;
                 value.LastColumn = _record.Column;
 
-                switch (link.Type)
+                switch(link.Type)
                 {
                     case HyperlinkType.Email:
                     case HyperlinkType.Url:
@@ -1351,13 +1360,13 @@ namespace NPOI.HSSF.UserModel
         public void RemoveHyperlink()
         {
             RecordBase toRemove = null;
-            for (IEnumerator<RecordBase> it = _sheet.Sheet.Records.GetEnumerator(); it.MoveNext(); )
+            for(IEnumerator<RecordBase> it = _sheet.Sheet.Records.GetEnumerator(); it.MoveNext();)
             {
                 RecordBase rec = it.Current;
-                if (rec is HyperlinkRecord)
+                if(rec is HyperlinkRecord)
                 {
                     HyperlinkRecord link = (HyperlinkRecord)rec;
-                    if (link.FirstColumn == _record.Column && link.FirstRow == _record.Row)
+                    if(link.FirstColumn == _record.Column && link.FirstRow == _record.Row)
                     {
                         toRemove = rec;
                         break;
@@ -1366,7 +1375,7 @@ namespace NPOI.HSSF.UserModel
                     }
                 }
             }
-            if (toRemove != null)
+            if(toRemove != null)
                 _sheet.Sheet.Records.Remove(toRemove);
         }
 
@@ -1379,22 +1388,22 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                if (this.cellType != CellType.Formula)
+                if(this.cellType != CellType.Formula)
                 {
                     throw new InvalidOperationException("Only formula cells have cached results");
                 }
-                return ((FormulaRecordAggregate)_record).FormulaRecord.CachedResultType;
+                return ((FormulaRecordAggregate) _record).FormulaRecord.CachedResultType;
             }
         }
         public bool IsPartOfArrayFormulaGroup
         {
             get
             {
-                if (cellType != CellType.Formula)
+                if(cellType != CellType.Formula)
                 {
                     return false;
                 }
-                return ((FormulaRecordAggregate)_record).IsPartOfArrayFormula;
+                return ((FormulaRecordAggregate) _record).IsPartOfArrayFormula;
             }
         }
 
@@ -1414,18 +1423,18 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                if (cellType != CellType.Formula)
+                if(cellType != CellType.Formula)
                 {
                     String ref1 = new CellReference(this).FormatAsString();
                     throw new InvalidOperationException("Cell " + ref1
                         + " is not part of an array formula.");
                 }
-                return ((FormulaRecordAggregate)_record).GetArrayFormulaRange();
+                return ((FormulaRecordAggregate) _record).GetArrayFormulaRange();
             }
         }
         public ICell CopyCellTo(int targetIndex)
         {
-            return this.Row.CopyCell(this.ColumnIndex,targetIndex);
+            return this.Row.CopyCell(this.ColumnIndex, targetIndex);
         }
         /// <summary>
         /// The purpose of this method is to validate the cell state prior to modification
@@ -1434,7 +1443,7 @@ namespace NPOI.HSSF.UserModel
         internal void NotifyArrayFormulaChanging(String msg)
         {
             CellRangeAddress cra = this.ArrayFormulaRange;
-            if (cra.NumberOfCells > 1)
+            if(cra.NumberOfCells > 1)
             {
                 throw new InvalidOperationException(msg);
             }
@@ -1463,9 +1472,9 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                foreach (CellRangeAddress range in _sheet.Sheet.MergedRecords.MergedRegions)
+                foreach(CellRangeAddress range in _sheet.Sheet.MergedRecords.MergedRegions)
                 {
-                    if (range.FirstColumn <= this.ColumnIndex
+                    if(range.FirstColumn <= this.ColumnIndex
                         && range.LastColumn >= this.ColumnIndex
                         && range.FirstRow <= this.RowIndex
                         && range.LastRow >= this.RowIndex)

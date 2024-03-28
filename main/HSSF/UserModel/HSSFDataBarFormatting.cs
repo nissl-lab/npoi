@@ -23,10 +23,10 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Record.CF;
     using NPOI.SS.UserModel;
 
-    /**
-     * High level representation for DataBar / Data-Bar Formatting 
-     *  component of Conditional Formatting Settings
-     */
+    /// <summary>
+    /// High level representation for DataBar / Data-Bar Formatting
+    ///  component of Conditional Formatting Settings
+    /// </summary>
     public class HSSFDataBarFormatting : IDataBarFormatting
     {
         private HSSFSheet sheet;
@@ -60,7 +60,7 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                databarFormatting.PercentMin = (byte)value;
+                databarFormatting.PercentMin = (byte) value;
             }
         }
 
@@ -72,7 +72,7 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                databarFormatting.PercentMax = (byte)value;
+                databarFormatting.PercentMax = (byte) value;
             }
         }
 

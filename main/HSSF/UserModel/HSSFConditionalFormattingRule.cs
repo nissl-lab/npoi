@@ -25,14 +25,12 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
 
-    /**
-     * 
-     * High level representation of Conditional Formatting Rule.
-     * It allows to specify formula based conditions for the Conditional Formatting
-     * and the formatting Settings such as font, border and pattern.
-     * 
-     * @author Dmitriy Kumshayev
-     */
+    /// <summary>
+    /// High level representation of Conditional Formatting Rule.
+    /// It allows to specify formula based conditions for the Conditional Formatting
+    /// and the formatting Settings such as font, border and pattern.
+    /// </summary>
+    /// @author Dmitriy Kumshayev
 
     public class HSSFConditionalFormattingRule : IConditionalFormattingRule
     {
@@ -44,11 +42,11 @@ namespace NPOI.HSSF.UserModel
 
         public HSSFConditionalFormattingRule(HSSFSheet pSheet, CFRuleBase pRuleRecord)
         {
-            if (pSheet == null)
+            if(pSheet == null)
             {
                 throw new ArgumentException("pSheet must not be null");
             }
-            if (pRuleRecord == null)
+            if(pRuleRecord == null)
             {
                 throw new ArgumentException("pRuleRecord must not be null");
             }
@@ -63,26 +61,27 @@ namespace NPOI.HSSF.UserModel
         }
         private CFRule12Record GetCFRule12Record(bool create)
         {
-            if (cfRuleRecord is CFRule12Record)
+            if(cfRuleRecord is CFRule12Record)
             {
                 // Good
             }
             else
             {
-                if (create) throw new ArgumentException("Can't convert a CF into a CF12 record");
+                if(create)
+                    throw new ArgumentException("Can't convert a CF into a CF12 record");
                 return null;
             }
-            return (CFRule12Record)cfRuleRecord;
+            return (CFRule12Record) cfRuleRecord;
         }
         private HSSFFontFormatting GetFontFormatting(bool Create)
         {
             FontFormatting fontFormatting = cfRuleRecord.FontFormatting;
-            if (fontFormatting != null)
+            if(fontFormatting != null)
             {
                 cfRuleRecord.FontFormatting = (fontFormatting);
                 return new HSSFFontFormatting(cfRuleRecord, workbook);
             }
-            else if (Create)
+            else if(Create)
             {
                 fontFormatting = new FontFormatting();
                 cfRuleRecord.FontFormatting = (fontFormatting);
@@ -94,18 +93,18 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
-         * @return - font formatting object  if defined,  <c>null</c> otherwise
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>- font formatting object  if defined,  <c>null</c> otherwise</returns>
         public IFontFormatting FontFormatting
         {
             get { return GetFontFormatting(false); }
         }
-        /**
-         * Create a new font formatting structure if it does not exist, 
-         * otherwise just return existing object.
-         * @return - font formatting object, never returns <c>null</c>. 
-         */
+        /// <summary>
+        /// Create a new font formatting structure if it does not exist,
+        /// otherwise just return existing object.
+        /// </summary>
+        /// <returns>- font formatting object, never returns <c>null</c>.</returns>
         public IFontFormatting CreateFontFormatting()
         {
             return GetFontFormatting(true);
@@ -114,12 +113,12 @@ namespace NPOI.HSSF.UserModel
         private HSSFBorderFormatting GetBorderFormatting(bool Create)
         {
             BorderFormatting borderFormatting = cfRuleRecord.BorderFormatting;
-            if (borderFormatting != null)
+            if(borderFormatting != null)
             {
                 cfRuleRecord.BorderFormatting = (borderFormatting);
                 return new HSSFBorderFormatting(cfRuleRecord, workbook);
             }
-            else if (Create)
+            else if(Create)
             {
                 borderFormatting = new BorderFormatting();
                 cfRuleRecord.BorderFormatting = (borderFormatting);
@@ -130,18 +129,18 @@ namespace NPOI.HSSF.UserModel
                 return null;
             }
         }
-        /**
-         * @return - border formatting object  if defined,  <c>null</c> otherwise
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>- border formatting object  if defined,  <c>null</c> otherwise</returns>
         public IBorderFormatting BorderFormatting
         {
             get { return GetBorderFormatting(false); }
         }
-        /**
-         * Create a new border formatting structure if it does not exist, 
-         * otherwise just return existing object.
-         * @return - border formatting object, never returns <c>null</c>. 
-         */
+        /// <summary>
+        /// Create a new border formatting structure if it does not exist,
+        /// otherwise just return existing object.
+        /// </summary>
+        /// <returns>- border formatting object, never returns <c>null</c>.</returns>
         public IBorderFormatting CreateBorderFormatting()
         {
             return GetBorderFormatting(true);
@@ -150,12 +149,12 @@ namespace NPOI.HSSF.UserModel
         private HSSFPatternFormatting GetPatternFormatting(bool Create)
         {
             PatternFormatting patternFormatting = cfRuleRecord.PatternFormatting;
-            if (patternFormatting != null)
+            if(patternFormatting != null)
             {
                 cfRuleRecord.PatternFormatting = (patternFormatting);
                 return new HSSFPatternFormatting(cfRuleRecord, workbook);
             }
-            else if (Create)
+            else if(Create)
             {
                 patternFormatting = new PatternFormatting();
                 cfRuleRecord.PatternFormatting = (patternFormatting);
@@ -167,18 +166,18 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
-         * @return - pattern formatting object  if defined, <c>null</c> otherwise
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>- pattern formatting object  if defined, <c>null</c> otherwise</returns>
         public IPatternFormatting PatternFormatting
         {
             get { return GetPatternFormatting(false); }
         }
-        /**
-         * Create a new pattern formatting structure if it does not exist, 
-         * otherwise just return existing object.
-         * @return - pattern formatting object, never returns <c>null</c>. 
-         */
+        /// <summary>
+        /// Create a new pattern formatting structure if it does not exist,
+        /// otherwise just return existing object.
+        /// </summary>
+        /// <returns>- pattern formatting object, never returns <c>null</c>.</returns>
         public IPatternFormatting CreatePatternFormatting()
         {
             return GetPatternFormatting(true);
@@ -188,11 +187,11 @@ namespace NPOI.HSSF.UserModel
         {
             CFRule12Record cfRule12Record = GetCFRule12Record(create);
             DataBarFormatting databarFormatting = cfRule12Record.DataBarFormatting;
-            if (databarFormatting != null)
+            if(databarFormatting != null)
             {
                 return new HSSFDataBarFormatting(cfRule12Record, sheet);
             }
-            else if (create)
+            else if(create)
             {
                 databarFormatting = cfRule12Record.CreateDataBarFormatting();
                 return new HSSFDataBarFormatting(cfRule12Record, sheet);
@@ -202,9 +201,9 @@ namespace NPOI.HSSF.UserModel
                 return null;
             }
         }
-        /**
-         * @return databar / data-bar formatting object if defined, <code>null</code> otherwise
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>databar / data-bar formatting object if defined, <c>null</c> otherwise</returns>
         public IDataBarFormatting DataBarFormatting
         {
             get
@@ -212,10 +211,10 @@ namespace NPOI.HSSF.UserModel
                 return GetDataBarFormatting(false);
             }
         }
-        /**
-         * create a new databar / data-bar formatting object if it does not exist,
-         * otherwise just return the existing object.
-         */
+        /// <summary>
+        /// create a new databar / data-bar formatting object if it does not exist,
+        /// otherwise just return the existing object.
+        /// </summary>
         public HSSFDataBarFormatting CreateDataBarFormatting()
         {
             return GetDataBarFormatting(true);
@@ -225,11 +224,11 @@ namespace NPOI.HSSF.UserModel
         {
             CFRule12Record cfRule12Record = GetCFRule12Record(create);
             IconMultiStateFormatting iconFormatting = cfRule12Record.MultiStateFormatting;
-            if (iconFormatting != null)
+            if(iconFormatting != null)
             {
                 return new HSSFIconMultiStateFormatting(cfRule12Record, sheet);
             }
-            else if (create)
+            else if(create)
             {
                 iconFormatting = cfRule12Record.CreateMultiStateFormatting();
                 return new HSSFIconMultiStateFormatting(cfRule12Record, sheet);
@@ -240,18 +239,18 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
-         * @return icon / multi-state formatting object if defined, <code>null</code> otherwise
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>icon / multi-state formatting object if defined, <c>null</c> otherwise</returns>
         public IIconMultiStateFormatting MultiStateFormatting
         {
             get { return GetMultiStateFormatting(false); }
         }
 
-        /**
-         * create a new icon / multi-state formatting object if it does not exist,
-         * otherwise just return the existing object.
-         */
+        /// <summary>
+        /// create a new icon / multi-state formatting object if it does not exist,
+        /// otherwise just return the existing object.
+        /// </summary>
         public HSSFIconMultiStateFormatting CreateMultiStateFormatting()
         {
             return GetMultiStateFormatting(true);
@@ -261,11 +260,11 @@ namespace NPOI.HSSF.UserModel
         {
             CFRule12Record cfRule12Record = GetCFRule12Record(create);
             ColorGradientFormatting colorFormatting = cfRule12Record.ColorGradientFormatting;
-            if (colorFormatting != null)
+            if(colorFormatting != null)
             {
                 return new HSSFColorScaleFormatting(cfRule12Record, sheet);
             }
-            else if (create)
+            else if(create)
             {
                 colorFormatting = cfRule12Record.CreateColorGradientFormatting();
                 return new HSSFColorScaleFormatting(cfRule12Record, sheet);
@@ -275,9 +274,9 @@ namespace NPOI.HSSF.UserModel
                 return null;
             }
         }
-        /**
-         * @return color scale / gradient formatting object if defined, <code>null</code> otherwise
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>color scale / gradient formatting object if defined, <c>null</c> otherwise</returns>
         public IColorScaleFormatting ColorScaleFormatting
         {
             get
@@ -286,17 +285,17 @@ namespace NPOI.HSSF.UserModel
             }
 
         }
-        /**
-         * create a new color scale / gradient formatting object if it does not exist,
-         * otherwise just return the existing object.
-         */
+        /// <summary>
+        /// create a new color scale / gradient formatting object if it does not exist,
+        /// otherwise just return the existing object.
+        /// </summary>
         public HSSFColorScaleFormatting CreateColorScaleFormatting()
         {
             return GetColorScaleFormatting(true);
         }
-        /**
-	     * @return -  the conditiontype for the cfrule
-	     */
+        /// <summary>
+        /// </summary>
+        /// <returns>-  the conditiontype for the cfrule</returns>
         public ConditionType ConditionType
         {
             get
@@ -304,14 +303,14 @@ namespace NPOI.HSSF.UserModel
                 return NPOI.SS.UserModel.ConditionType.ForId(cfRuleRecord.ConditionType);
             }
         }
-        /**
-	     * @return - the comparisionoperatation for the cfrule
-	     */
+        /// <summary>
+        /// </summary>
+        /// <returns>- the comparisionoperatation for the cfrule</returns>
         public ComparisonOperator ComparisonOperation
         {
             get
             {
-                return (ComparisonOperator)cfRuleRecord.ComparisonOperation;
+                return (ComparisonOperator) cfRuleRecord.ComparisonOperation;
             }
         }
 
@@ -328,13 +327,13 @@ namespace NPOI.HSSF.UserModel
             get
             {
                 byte conditionType = cfRuleRecord.ConditionType;
-                if (conditionType == CELL_COMPARISON)
+                if(conditionType == CELL_COMPARISON)
                 {
                     byte comparisonOperation = cfRuleRecord.ComparisonOperation;
-                    switch (comparisonOperation)
+                    switch(comparisonOperation)
                     {
-                        case (byte)ComparisonOperator.Between:
-                        case (byte)ComparisonOperator.NotBetween:
+                        case (byte) ComparisonOperator.Between:
+                        case (byte) ComparisonOperator.NotBetween:
                             return ToFormulaString(cfRuleRecord.ParsedExpression2);
                     }
                 }
@@ -344,7 +343,7 @@ namespace NPOI.HSSF.UserModel
 
         protected internal String ToFormulaString(Ptg[] ParsedExpression)
         {
-            if (ParsedExpression == null)
+            if(ParsedExpression == null)
             {
                 return null;
             }
@@ -352,7 +351,7 @@ namespace NPOI.HSSF.UserModel
         }
         protected internal static String ToFormulaString(Ptg[] parsedExpression, HSSFWorkbook workbook)
         {
-            if (parsedExpression == null || parsedExpression.Length == 0)
+            if(parsedExpression == null || parsedExpression.Length == 0)
             {
                 return null;
             }
@@ -371,9 +370,11 @@ namespace NPOI.HSSF.UserModel
         }
         public int Priority
         {
-            get {
+            get
+            {
                 CFRule12Record rule12 = GetCFRule12Record(false);
-                if (rule12 == null) return 0;
+                if(rule12 == null)
+                    return 0;
                 return rule12.Priority;
             }
         }
@@ -388,7 +389,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                if (ConditionType == ConditionType.Filter)
+                if(ConditionType == ConditionType.Filter)
                     return null;
                 else
                     return SS.UserModel.ConditionFilterType.FILTER;

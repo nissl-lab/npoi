@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using NPOI.HSSF.Record.AutoFilter;
 using NPOI.HSSF.Model;
 using NPOI.HSSF.Record;

@@ -41,23 +41,23 @@ namespace NPOI.HSSF.UserModel
 
         private int rowNum;
         private SortedDictionary<int, ICell> cells = new SortedDictionary<int, ICell>();
-         
-        /**
-         * reference to low level representation
-         */
+
+        /// <summary>
+        /// reference to low level representation
+        /// </summary>
 
         [NonSerialized]
         private RowRecord row;
 
-        /**
-         * reference to containing low level Workbook
-         */
+        /// <summary>
+        /// reference to containing low level Workbook
+        /// </summary>
 
         private HSSFWorkbook book;
 
-        /**
-         * reference to containing Sheet
-         */
+        /// <summary>
+        /// reference to containing Sheet
+        /// </summary>
 
         private HSSFSheet sheet;
 
@@ -74,7 +74,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="sheet">low-level Sheet object that Contains this Row</param>
         /// <param name="rowNum">the row number of this row (0 based)</param>
         ///<see cref="NPOI.HSSF.UserModel.HSSFSheet.CreateRow(int)"/>
-        public HSSFRow(HSSFWorkbook book, HSSFSheet sheet, int rowNum):this(book, sheet, new RowRecord(rowNum))
+        public HSSFRow(HSSFWorkbook book, HSSFSheet sheet, int rowNum) : this(book, sheet, new RowRecord(rowNum))
         {
 
         }
@@ -94,10 +94,10 @@ namespace NPOI.HSSF.UserModel
             row = record;
 
             RowNum=(record.RowNumber);
-             // Don't trust colIx boundaries as read by other apps
+            // Don't trust colIx boundaries as read by other apps
             // set the RowRecord empty for the moment
             record.SetEmpty();
-            
+
 
         }
         /// <summary>
@@ -123,14 +123,14 @@ namespace NPOI.HSSF.UserModel
         public ICell CreateCell(int columnIndex, CellType type)
         {
             short shortCellNum = (short)columnIndex;
-            if (columnIndex > 0x7FFF)
+            if(columnIndex > 0x7FFF)
             {
-                shortCellNum = (short)(0xffff - columnIndex);
+                shortCellNum = (short) (0xffff - columnIndex);
             }
 
             ICell cell = new HSSFCell(book, sheet, RowNum, (short)columnIndex, type);
             AddCell(cell);
-            sheet.Sheet.AddValueRecord(RowNum, ((HSSFCell)cell).CellValueRecord);
+            sheet.Sheet.AddValueRecord(RowNum, ((HSSFCell) cell).CellValueRecord);
             return cell;
         }
         public IRow CopyRowTo(int targetIndex)
@@ -147,11 +147,11 @@ namespace NPOI.HSSF.UserModel
         /// <param name="cell">The cell to Remove.</param>
         public void RemoveCell(ICell cell)
         {
-            if (cell == null)
+            if(cell == null)
             {
                 throw new ArgumentException("cell must not be null");
             }
-            RemoveCell((HSSFCell)cell, true);
+            RemoveCell((HSSFCell) cell, true);
         }
         /// <summary>
         /// Removes the cell.
@@ -162,7 +162,7 @@ namespace NPOI.HSSF.UserModel
         {
 
             int column = cell.ColumnIndex;
-            if (column < 0)
+            if(column < 0)
             {
                 throw new Exception("Negative cell indexes not allowed");
             }
@@ -171,40 +171,40 @@ namespace NPOI.HSSF.UserModel
             {
                 throw new Exception("Specified cell is not from this row");
             }
-            if (cell.IsPartOfArrayFormulaGroup)
+            if(cell.IsPartOfArrayFormulaGroup)
             {
-                ((HSSFCell)cell).NotifyArrayFormulaChanging();
+                ((HSSFCell) cell).NotifyArrayFormulaChanging();
             }
             cells.Remove(column);
 
 
-            if (alsoRemoveRecords)
+            if(alsoRemoveRecords)
             {
                 CellValueRecordInterface cval = ((HSSFCell)cell).CellValueRecord;
                 sheet.Sheet.RemoveValueRecord(RowNum, cval);
             }
 
-            if (cell.ColumnIndex + 1 == row.LastCol)
+            if(cell.ColumnIndex + 1 == row.LastCol)
             {
                 row.LastCol = CalculateNewLastCellPlusOne(row.LastCol);
             }
-            if (cell.ColumnIndex == row.FirstCol)
+            if(cell.ColumnIndex == row.FirstCol)
             {
                 row.FirstCol = CalculateNewFirstCell(row.FirstCol);
             }
         }
-        /**
-         * used internally to refresh the "last cell plus one" when the last cell is removed.
-         * @return 0 when row contains no cells
-         */
+        /// <summary>
+        /// used internally to refresh the "last cell plus one" when the last cell is removed.
+        /// </summary>
+        /// <returns>0 when row contains no cells</returns>
         private int CalculateNewLastCellPlusOne(int lastcell)
         {
             int cellIx = lastcell - 1;
             ICell r = RetrieveCell(cellIx);
 
-            while (r == null)
+            while(r == null)
             {
-                if (cellIx < 0)
+                if(cellIx < 0)
                 {
                     return 0;
                 }
@@ -213,21 +213,21 @@ namespace NPOI.HSSF.UserModel
             return cellIx + 1;
         }
 
-        /**
-         * used internally to refresh the "first cell" when the first cell is removed.
-         * @return 0 when row contains no cells (also when first cell is occupied)
-         */
+        /// <summary>
+        /// used internally to refresh the "first cell" when the first cell is removed.
+        /// </summary>
+        /// <returns>0 when row contains no cells (also when first cell is occupied)</returns>
         private int CalculateNewFirstCell(int firstcell)
         {
             int cellIx = firstcell + 1;
             ICell r = RetrieveCell(cellIx);
 
-            if (cells.Count == 0)
+            if(cells.Count == 0)
                 return 0;
 
-            while (r == null)
+            while(r == null)
             {
-                if (cellIx <= cells.Count)
+                if(cellIx <= cells.Count)
                 {
                     return 0;
                 }
@@ -247,18 +247,18 @@ namespace NPOI.HSSF.UserModel
 
             AddCell(hcell);
             int colIx = cell.Column;
-            if (row.IsEmpty)
+            if(row.IsEmpty)
             {
                 row.FirstCol=(colIx);
                 row.LastCol=(colIx + 1);
             }
             else
             {
-                if (colIx < row.FirstCol)
+                if(colIx < row.FirstCol)
                 {
                     row.FirstCol = (colIx);
                 }
-                else if (colIx > row.LastCol)
+                else if(colIx > row.LastCol)
                 {
                     row.LastCol = (colIx + 1);
                 }
@@ -288,7 +288,7 @@ namespace NPOI.HSSF.UserModel
         {
             ICell[] cellsToRemove = new ICell[cells.Values.Count];
             cells.Values.CopyTo(cellsToRemove, 0);
-            foreach (ICell cell in cellsToRemove)
+            foreach(ICell cell in cellsToRemove)
             {
                 if(cell != null)
                     RemoveCell(cell, true);
@@ -308,13 +308,13 @@ namespace NPOI.HSSF.UserModel
             set
             {
                 int maxrow = SpreadsheetVersion.EXCEL97.LastRowIndex;
-                if ((value < 0) || (value > maxrow))
+                if((value < 0) || (value > maxrow))
                 {
                     throw new ArgumentException("Invalid row number (" + value
                             + ") outside allowable range (0.." + maxrow + ")");
                 }
                 this.rowNum = value;
-                if (row != null)
+                if(row != null)
                 {
                     row.RowNumber = (value);   // used only for KEY comparison (HSSFRow)
                 }
@@ -349,15 +349,15 @@ namespace NPOI.HSSF.UserModel
 
             // Check it's one of ours
             bool existflag = false;
-            foreach (ICell cellinrow in cells.Values)
+            foreach(ICell cellinrow in cells.Values)
             {
-                if (cellinrow.Equals(cell))
+                if(cellinrow.Equals(cell))
                 {
                     existflag = true;
                     break;
                 }
             }
-            if (!existflag)
+            if(!existflag)
             {
                 throw new ArgumentException("Asked to move a cell, but it didn't belong to our row");
             }
@@ -365,14 +365,13 @@ namespace NPOI.HSSF.UserModel
             // Move the cell to the new position
             // (Don't Remove the records though)
             RemoveCell(cell, false);
-            ((HSSFCell)cell).UpdateCellNum(newColumn);
+            ((HSSFCell) cell).UpdateCellNum(newColumn);
             AddCell(cell);
         }
-        /**
- * Returns the HSSFSheet this row belongs to
- *
- * @return the HSSFSheet that owns this row
- */
+        /// <summary>
+        /// Returns the HSSFSheet this row belongs to
+        /// </summary>
+        /// <returns>the HSSFSheet that owns this row</returns>
         public ISheet Sheet
         {
             get
@@ -400,21 +399,21 @@ namespace NPOI.HSSF.UserModel
             //    cells = new HSSFCell[newSize];
             //    Array.Copy(oldCells, 0, cells, 0, oldCells.Length);
             //}
-            if (cells.ContainsKey(column))
+            if(cells.ContainsKey(column))
             {
                 cells.Remove(column);
             }
             cells.Add(column, cell);
-            
+
             // fix up firstCol and lastCol indexes
-            if (row.IsEmpty|| column < row.FirstCol)
+            if(row.IsEmpty|| column < row.FirstCol)
             {
                 row.FirstCol=(column);
             }
 
-            if (row.IsEmpty || column >= row.LastCol)
+            if(row.IsEmpty || column >= row.LastCol)
             {
-                row.LastCol=((short)(column + 1)); // +1 -> for one past the last index 
+                row.LastCol=((short) (column + 1)); // +1 -> for one past the last index 
             }
         }
 
@@ -428,7 +427,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>Cell representing that column or null if Undefined.</returns>
         private ICell RetrieveCell(int cellnum)
         {
-            if (!cells.ContainsKey(cellnum))
+            if(!cells.ContainsKey(cellnum))
                 return null;
             //if (cellnum < 0 || cellnum >= cells.Count) return null;
             return cells[cellnum];
@@ -458,7 +457,7 @@ namespace NPOI.HSSF.UserModel
         public ICell GetCell(int cellnum, MissingCellPolicy policy)
         {
             ICell cell = RetrieveCell(cellnum);
-            switch (policy)
+            switch(policy)
             {
                 case MissingCellPolicy.RETURN_NULL_AND_BLANK:
                     return cell;
@@ -480,10 +479,10 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                if (row.IsEmpty)
+                if(row.IsEmpty)
                     return -1;
                 else
-                    return (short)row.FirstCol;
+                    return (short) row.FirstCol;
             }
         }
 
@@ -511,11 +510,11 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                if (row.IsEmpty)
+                if(row.IsEmpty)
                 {
                     return -1;
                 }
-                return (short)row.LastCol;
+                return (short) row.LastCol;
             }
         }
 
@@ -544,7 +543,7 @@ namespace NPOI.HSSF.UserModel
             {
                 return row.ZeroHeight;
             }
-            set 
+            set
             {
                 row.ZeroHeight=(value);
             }
@@ -562,16 +561,18 @@ namespace NPOI.HSSF.UserModel
 
                 //The low-order 15 bits contain the row height.
                 //The 0x8000 bit indicates that the row is standard height (optional)
-                if ((height & 0x8000) != 0) height = sheet.Sheet.DefaultRowHeight;
-                else height &= 0x7FFF;
+                if((height & 0x8000) != 0)
+                    height = sheet.Sheet.DefaultRowHeight;
+                else
+                    height &= 0x7FFF;
 
                 return height;
             }
             set
             {
-                if (value == -1)
+                if(value == -1)
                 {
-                    row.Height = unchecked((short)(0xFF | 0x8000));
+                    row.Height = unchecked((short) (0xFF | 0x8000));
                     row.BadFontHeight = false;
                 }
                 else
@@ -605,16 +606,17 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                if (!IsFormatted) { return null; }
+                if(!IsFormatted)
+                { return null; }
                 short styleIndex = row.XFIndex;
                 ExtendedFormatRecord xf = book.Workbook.GetExFormatAt(styleIndex);
                 return new HSSFCellStyle(styleIndex, xf, book);
             }
-            set 
+            set
             {
                 row.Formatted=(true);
                 row.XFIndex=(value.Index);
-            
+
             }
         }
         /// <summary>
@@ -629,16 +631,16 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                if (value == -1)
+                if(value == -1)
                 {
-                    row.Height = unchecked(((short)(0xFF | 0x8000)));
+                    row.Height = unchecked(((short) (0xFF | 0x8000)));
                     row.BadFontHeight = (false);
                 }
                 else
                 {
 
                     row.BadFontHeight = (true);
-                    row.Height = (short)(value * 20);
+                    row.Height = (short) (value * 20);
                 }
             }
         }
@@ -668,13 +670,13 @@ namespace NPOI.HSSF.UserModel
             int cellnum = firstcell + 1;
             ICell r = GetCell(cellnum);
 
-            while (r == null && cellnum <= LastCellNum)
+            while(r == null && cellnum <= LastCellNum)
             {
                 r = GetCell(++cellnum);
             }
-            if (cellnum > LastCellNum)
+            if(cellnum > LastCellNum)
                 return -1;
-            return (short)cellnum;
+            return (short) cellnum;
         }
 
         /// <summary>
@@ -682,7 +684,8 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         public List<ICell> Cells
         {
-            get {
+            get
+            {
                 return new List<ICell>(this.cells.Values);
             }
         }
@@ -725,7 +728,7 @@ namespace NPOI.HSSF.UserModel
         {
             return this.cells.Values.GetEnumerator();
         }
- 
+
         /// <summary>
         /// Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
         /// </summary>
@@ -746,7 +749,7 @@ namespace NPOI.HSSF.UserModel
         /// </exception>
         public int CompareTo(HSSFRow other)
         {
-            if (this.Sheet != other.Sheet)
+            if(this.Sheet != other.Sheet)
             {
                 throw new ArgumentException("The compared rows must belong to the same sheet");
             }
@@ -766,7 +769,7 @@ namespace NPOI.HSSF.UserModel
         /// </exception>
         public override bool Equals(Object obj)
         {
-            if (!(obj is HSSFRow))
+            if(!(obj is HSSFRow))
             {
                 return false;
             }
@@ -779,7 +782,7 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Returns a hash code. In this case it is the number of the row.
         /// </summary>
-        public override int GetHashCode ()
+        public override int GetHashCode()
         {
             return row.GetHashCode();
         }

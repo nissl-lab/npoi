@@ -19,21 +19,20 @@ namespace NPOI.HSSF.UserModel
 {
     using System;
 
-    /**
-     * This class makes an <c>EvaluationCycleDetector</c> instance available to
-     * each thRead via a <c>ThReadLocal</c> in order to avoid Adding a parameter
-     * to a few protected methods within <c>HSSFFormulaEvaluator</c>.
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// This class makes an <c>EvaluationCycleDetector</c> instance available to
+    /// each thRead via a <c>ThReadLocal</c> in order to avoid Adding a parameter
+    /// to a few protected methods within <c>HSSFFormulaEvaluator</c>.
+    /// </summary>
+    /// @author Josh Micich
     class EvaluationCycleDetectorManager
     {
         [ThreadStatic]
         static EvaluationCycleDetector ecd = new EvaluationCycleDetector();
 
-        /**
-         * @return
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
         public static EvaluationCycleDetector GetTracker()
         {
             return ecd;

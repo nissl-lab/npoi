@@ -31,9 +31,11 @@ namespace NPOI.HSSF.UserModel
     /// @author Jason Height (jheight at apache.org)
     /// </summary> 
     [Serializable]
-    public class HSSFRichTextString : IComparable<HSSFRichTextString>,NPOI.SS.UserModel.IRichTextString
+    public class HSSFRichTextString : IComparable<HSSFRichTextString>, NPOI.SS.UserModel.IRichTextString
     {
-        /** Place holder for indicating that NO_FONT has been applied here */
+        /// <summary>
+        /// Place holder for indicating that NO_FONT has been applied here */
+        /// </summary>
         public const short NO_FONT = 0;
 
         [NonSerialized]
@@ -56,7 +58,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="str">The string.</param>
         public HSSFRichTextString(String str)
         {
-            if (str == null)
+            if(str == null)
             {
                 _string = new UnicodeString("");
             }
@@ -98,7 +100,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns></returns>
         private UnicodeString CloneStringIfRequired()
         {
-            if (_book == null)
+            if(_book == null)
                 return _string;
             UnicodeString s = (UnicodeString)_string.Clone();
             return s;
@@ -109,7 +111,7 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         private void AddToSSTIfRequired()
         {
-            if (_book != null)
+            if(_book != null)
             {
                 int index = _book.AddSSTString(_string);
                 _record.SSTIndex = (index);
@@ -128,17 +130,17 @@ namespace NPOI.HSSF.UserModel
         /// <param name="fontIndex">The font to use.</param>
         public void ApplyFont(int startIndex, int endIndex, short fontIndex)
         {
-            if (startIndex > endIndex)
+            if(startIndex > endIndex)
                 throw new ArgumentException("Start index must be less than end index.");
-            if (startIndex < 0 || endIndex > Length)
+            if(startIndex < 0 || endIndex > Length)
                 throw new ArgumentException("Start and end index not in range.");
-            if (startIndex == endIndex)
+            if(startIndex == endIndex)
                 return;
 
             //Need to Check what the font Is currently, so we can reapply it after
             //the range Is completed
             short currentFont = NO_FONT;
-            if (endIndex != Length)
+            if(endIndex != Length)
             {
                 currentFont = this.GetFontAtIndex(endIndex);
             }
@@ -148,26 +150,26 @@ namespace NPOI.HSSF.UserModel
             System.Collections.Generic.List<UnicodeString.FormatRun> formatting = _string.FormatIterator();
 
             ArrayList deletedFR = new ArrayList();
-            if (formatting != null)
+            if(formatting != null)
             {
                 IEnumerator<UnicodeString.FormatRun> formats = formatting.GetEnumerator();
-                while (formats.MoveNext())
+                while(formats.MoveNext())
                 {
                     UnicodeString.FormatRun r = formats.Current;
-                    if ((r.CharacterPos >= startIndex) && (r.CharacterPos < endIndex))
+                    if((r.CharacterPos >= startIndex) && (r.CharacterPos < endIndex))
                     {
                         deletedFR.Add(r);
                     }
                 }
             }
-            foreach (UnicodeString.FormatRun fr in deletedFR)
+            foreach(UnicodeString.FormatRun fr in deletedFR)
             {
                 _string.RemoveFormatRun(fr);
             }
 
-            _string.AddFormatRun(new UnicodeString.FormatRun((short)startIndex, fontIndex));
-            if (endIndex != Length)
-                _string.AddFormatRun(new UnicodeString.FormatRun((short)endIndex, currentFont));
+            _string.AddFormatRun(new UnicodeString.FormatRun((short) startIndex, fontIndex));
+            if(endIndex != Length)
+                _string.AddFormatRun(new UnicodeString.FormatRun((short) endIndex, currentFont));
 
             AddToSSTIfRequired();
         }
@@ -257,16 +259,18 @@ namespace NPOI.HSSF.UserModel
         {
             int size = _string.FormatRunCount;
             UnicodeString.FormatRun currentRun = null;
-            for (int i = 0; i < size; i++)
+            for(int i = 0; i < size; i++)
             {
                 UnicodeString.FormatRun r = _string.GetFormatRun(i);
-                if (r.CharacterPos > index)
+                if(r.CharacterPos > index)
                     break;
-                else currentRun = r;
+                else
+                    currentRun = r;
             }
-            if (currentRun == null)
+            if(currentRun == null)
                 return NO_FONT;
-            else return currentRun.FontIndex;
+            else
+                return currentRun.FontIndex;
         }
 
         /// <summary>
@@ -318,16 +322,16 @@ namespace NPOI.HSSF.UserModel
         /// <returns></returns>
         public override bool Equals(Object o)
         {
-            if (o is HSSFRichTextString)
+            if(o is HSSFRichTextString)
             {
-                return _string.Equals(((HSSFRichTextString)o)._string);
+                return _string.Equals(((HSSFRichTextString) o)._string);
             }
             return false;
         }
 
-        public override int GetHashCode ()
+        public override int GetHashCode()
         {
-            return _string.GetHashCode ();
+            return _string.GetHashCode();
         }
 
         /// <summary>

@@ -32,7 +32,7 @@ namespace NPOI.HSSF.UserModel
     /// High Level Represantion of Named Range
     /// </summary>
     /// <remarks>@author Libin Roman (Vista Portal LDT. Developer)</remarks>
-    public class HSSFName:NPOI.SS.UserModel.IName
+    public class HSSFName : NPOI.SS.UserModel.IName
     {
         //private static Regex isValidName = new Regex(
         //    "[\\p{IsAlphabetic}_\\\\]" +
@@ -42,9 +42,9 @@ namespace NPOI.HSSF.UserModel
         private NameRecord _definedNameRec;
         private NameCommentRecord _commentRec;
         /* package */
-        internal HSSFName(HSSFWorkbook book, NameRecord name):this(book, name, null)
+        internal HSSFName(HSSFWorkbook book, NameRecord name) : this(book, name, null)
         {
-            
+
         }
         /// <summary>
         /// Creates new HSSFName   - called by HSSFWorkbook to Create a sheet from
@@ -104,12 +104,12 @@ namespace NPOI.HSSF.UserModel
                 int sheetNumber = _definedNameRec.SheetNumber;
                 int lastNameIndex = wb.NumNames - 1;
                 //Check to Ensure no other names have the same case-insensitive name
-                for (int i = lastNameIndex; i >= 0; i--)
+                for(int i = lastNameIndex; i >= 0; i--)
                 {
                     NameRecord rec = wb.GetNameRecord(i);
-                    if (rec != _definedNameRec)
+                    if(rec != _definedNameRec)
                     {
-                        if (rec.NameText.Equals(NameName, StringComparison.OrdinalIgnoreCase) && sheetNumber == rec.SheetNumber)
+                        if(rec.NameText.Equals(NameName, StringComparison.OrdinalIgnoreCase) && sheetNumber == rec.SheetNumber)
                         {
                             String msg = "The " + (sheetNumber == 0 ? "workbook" : "sheet") + " already contains this name: " + value;
                             _definedNameRec.NameText = (value + "(2)");
@@ -118,7 +118,7 @@ namespace NPOI.HSSF.UserModel
                     }
                 }
                 // Update our comment, if there is one
-                if (_commentRec != null)
+                if(_commentRec != null)
                 {
                     String oldName = _commentRec.NameText;
                     _commentRec.NameText=value;
@@ -126,27 +126,35 @@ namespace NPOI.HSSF.UserModel
                 }
             }
         }
-        /**
-         * https://support.office.com/en-us/article/Define-and-use-names-in-formulas-4D0F13AC-53B7-422E-AFD2-ABD7FF379C64#bmsyntax_rules_for_names
-         * 
-         * Valid characters:
-         *   First character: { letter | underscore | backslash }
-         *   Remaining characters: { letter | number | period | underscore }
-         *   
-         * Cell shorthand: cannot be { "C" | "c" | "R" | "r" }
-         * 
-         * Cell references disallowed: cannot be a cell reference $A$1 or R1C1
-         * 
-         * Spaces are not valid (follows from valid characters above)
-         * 
-         * Name length: (XSSF-specific?) 255 characters maximum
-         * 
-         * Case sensitivity: all names are case-insensitive
-         * 
-         * Uniqueness: must be unique (for names with the same scope)
-         *
-         * @param name
-         */
+        /// <summary>
+        /// <para>
+        /// https://support.office.com/en-us/article/Define-and-use-names-in-formulas-4D0F13AC-53B7-422E-AFD2-ABD7FF379C64#bmsyntax_rules_for_names
+        /// </para>
+        /// <para>
+        /// Valid characters:
+        ///   First character: { letter | underscore | backslash }
+        ///   Remaining characters: { letter | number | period | underscore }
+        /// </para>
+        /// <para>
+        /// Cell shorthand: cannot be { "C" | "c" | "R" | "r" }
+        /// </para>
+        /// <para>
+        /// Cell references disallowed: cannot be a cell reference $A$1 or R1C1
+        /// </para>
+        /// <para>
+        /// Spaces are not valid (follows from valid characters above)
+        /// </para>
+        /// <para>
+        /// Name length: (XSSF-specific?) 255 characters maximum
+        /// </para>
+        /// <para>
+        /// Case sensitivity: all names are case-insensitive
+        /// </para>
+        /// <para>
+        /// Uniqueness: must be unique (for names with the same scope)
+        /// </para>
+        /// </summary>
+        /// <param name="name">name</param>
         private void ValidateName(String name)
         {
             /* equivalent to:
@@ -158,16 +166,16 @@ namespace NPOI.HSSF.UserModel
             thus we are stuck with Character.isLetter (for now).
             */
 
-            if (name.Length == 0)
+            if(name.Length == 0)
             {
                 throw new ArgumentException("Name cannot be blank");
             }
 
-            if (name.Length > 255)
+            if(name.Length > 255)
             {
                 throw new ArgumentException("Invalid name: '" + name + "': cannot exceed 255 characters in length");
             }
-            if (name.Equals("R", StringComparison.OrdinalIgnoreCase) || name.Equals("C", StringComparison.OrdinalIgnoreCase))
+            if(name.Equals("R", StringComparison.OrdinalIgnoreCase) || name.Equals("C", StringComparison.OrdinalIgnoreCase))
             {
                 throw new ArgumentException("Invalid name: '" + name + "': cannot be special shorthand R or C");
             }
@@ -176,17 +184,17 @@ namespace NPOI.HSSF.UserModel
             char c = name[0];
             String allowedSymbols = "_\\";
             bool characterIsValid = (char.IsLetter(c) || allowedSymbols.IndexOf(c) != -1);
-            if (!characterIsValid)
+            if(!characterIsValid)
             {
                 throw new ArgumentException("Invalid name: '" + name + "': first character must be underscore or a letter");
             }
 
             // are all other characters valid?
             allowedSymbols = "_.\\"; //backslashes needed for unicode escape
-            foreach (char ch in name.ToCharArray())
+            foreach(char ch in name.ToCharArray())
             {
                 characterIsValid = (char.IsLetterOrDigit(ch) || allowedSymbols.IndexOf(ch) != -1);
-                if (!characterIsValid)
+                if(!characterIsValid)
                 {
                     throw new ArgumentException("Invalid name: '" + name + "': name must be letter, digit, period, or underscore");
                 }
@@ -194,18 +202,18 @@ namespace NPOI.HSSF.UserModel
 
             // Is the name a valid $A$1 cell reference
             // Because $, :, and ! are disallowed characters, A1-style references become just a letter-number combination
-            if (Regex.IsMatch(name, "[A-Za-z]+\\d+"))
+            if(Regex.IsMatch(name, "[A-Za-z]+\\d+"))
             {
                 string col = Regex.Replace(name, "\\d", "");
                 string row = Regex.Replace(name, "[A-Za-z]", "");
-                if (CellReference.CellReferenceIsWithinRange(col, row, SpreadsheetVersion.EXCEL97))
+                if(CellReference.CellReferenceIsWithinRange(col, row, SpreadsheetVersion.EXCEL97))
                 {
                     throw new ArgumentException("Invalid name: '" + name + "': cannot be $A$1-style cell reference");
                 }
             }
 
             // Is the name a valid R1C1 cell reference?
-            if (Regex.IsMatch(name,"[Rr]\\d+[Cc]\\d+"))
+            if(Regex.IsMatch(name, "[Rr]\\d+[Cc]\\d+"))
             {
                 throw new ArgumentException("Invalid name: '" + name + "': cannot be R1C1-style cell reference");
             }
@@ -216,12 +224,12 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                if (_definedNameRec.IsFunctionName)
+                if(_definedNameRec.IsFunctionName)
                 {
                     throw new InvalidOperationException("Only applicable to named ranges");
                 }
                 Ptg[] ptgs = _definedNameRec.NameDefinition;
-                if (ptgs.Length < 1)
+                if(ptgs.Length < 1)
                 {
                     // 'refersToFormula' has not been set yet
                     return null;
@@ -234,21 +242,20 @@ namespace NPOI.HSSF.UserModel
                 _definedNameRec.NameDefinition = ptgs;
             }
         }
-        /**
-         * Returns the sheet index this name applies to.
-         *
-         * @return the sheet index this name applies to, -1 if this name applies to the entire workbook
-         */
+        /// <summary>
+        /// Returns the sheet index this name applies to.
+        /// </summary>
+        /// <returns>the sheet index this name applies to, -1 if this name applies to the entire workbook</returns>
         public int SheetIndex
         {
             get
             {
                 return _definedNameRec.SheetNumber - 1;
             }
-            set 
+            set
             {
                 int lastSheetIx = book.NumberOfSheets - 1;
-                if (value < -1 || value > lastSheetIx)
+                if(value < -1 || value > lastSheetIx)
                 {
                     throw new ArgumentException("Sheet index (" + value + ") is out of range" +
                             (lastSheetIx == -1 ? "" : (" (0.." + lastSheetIx + ")")));
@@ -259,18 +266,18 @@ namespace NPOI.HSSF.UserModel
         }
         public string Comment
         {
-            get 
+            get
             {
-                if (_commentRec != null)
+                if(_commentRec != null)
                 {
                     // Prefer the comment record if it has text in it
-                    if (_commentRec.CommentText != null &&
+                    if(_commentRec.CommentText != null &&
                           _commentRec.CommentText.Length > 0)
                     {
                         return _commentRec.CommentText;
                     }
                 }
-                return _definedNameRec.DescriptionText; 
+                return _definedNameRec.DescriptionText;
             }
             set { _definedNameRec.DescriptionText = value; }
         }
@@ -314,12 +321,11 @@ namespace NPOI.HSSF.UserModel
                 return _definedNameRec.IsFunctionName;
             }
         }
-        /**
-     * Indicates that the defined name refers to a user-defined function.
-     * This attribute is used when there is an add-in or other code project associated with the file.
-     *
-     * @param value <c>true</c> indicates the name refers to a function.
-     */
+        /// <summary>
+        /// Indicates that the defined name refers to a user-defined function.
+        /// This attribute is used when there is an add-in or other code project associated with the file.
+        /// </summary>
+        /// <param name="value"><c>true</c> indicates the name refers to a function.</param>
         public void SetFunction(bool value)
         {
             _definedNameRec.SetFunction(value);

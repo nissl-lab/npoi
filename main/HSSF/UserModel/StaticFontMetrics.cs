@@ -23,29 +23,32 @@ namespace NPOI.HSSF.UserModel
     using System.Configuration;
     using NPOI.Util.Collections;
 
-    /**
-     * Allows the user to lookup the font metrics for a particular font without
-     * actually having the font on the system.  The font details are Loaded
-     * as a resource from the POI jar file (or classpath) and should be contained
-     * in path "/font_metrics.properties".  The font widths are for a 10 point
-     * version of the font.  Use a multiplier for other sizes.
-     *
-     * @author Glen Stampoultzis (glens at apache.org)
-     */
+    /// <summary>
+    /// Allows the user to lookup the font metrics for a particular font without
+    /// actually having the font on the system.  The font details are Loaded
+    /// as a resource from the POI jar file (or classpath) and should be contained
+    /// in path "/font_metrics.properties".  The font widths are for a 10 point
+    /// version of the font.  Use a multiplier for other sizes.
+    /// </summary>
+    /// @author Glen Stampoultzis (glens at apache.org)
     class StaticFontMetrics
     {
         private const String FONT_METRICS_PROPERTIES_FILE_NAME = "NPOI.Resources.font_metrics.properties";
-        
-        /** The font metrics property file we're using */
+
+        /// <summary>
+        /// The font metrics property file we're using */
+        /// </summary>
         private static Properties fontMetricsProps;
-        /** Our cache of font details we've alReady looked up */
+        /// <summary>
+        /// Our cache of font details we've alReady looked up */
+        /// </summary>
         private static Hashtable fontDetailsMap = new Hashtable();
 
-        /**
-         * Retrieves the fake font details for a given font.
-         * @param font  the font to lookup.
-         * @return  the fake font.
-         */
+        /// <summary>
+        /// Retrieves the fake font details for a given font.
+        /// </summary>
+        /// <param name="font"> the font to lookup.</param>
+        /// <returns>the fake font.</returns>
         /* TODO - SixLabors.Fonts:
         public static FontDetails GetFontDetails(Font font)
         {

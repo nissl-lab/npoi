@@ -25,40 +25,43 @@ namespace NPOI.HSSF.UserModel
     using SixLabors.ImageSharp.PixelFormats;
     using SixLabors.Fonts;
 
-    /**
-     * Translates Graphics calls into escher calls.  The translation Is lossy so
-     * many features are not supported and some just aren't implemented yet.  If
-     * in doubt test the specific calls you wish to make. Graphics calls are
-     * always performed into an EscherGroup so one will need to be Created.
-     * 
-     * <b>Important:</b>
-     * <blockquote>
-     * One important concept worth considering Is that of font size.  One of the
-     * difficulties in Converting Graphics calls into escher Drawing calls Is that
-     * Excel does not have the concept of absolute pixel positions.  It measures
-     * it's cell widths in 'Chars' and the cell heights in points.
-     * Unfortunately it's not defined exactly what a type of Char it's
-     * measuring.  Presumably this Is due to the fact that the Excel will be
-     * using different fonts on different platforms or even within the same
-     * platform.
-     * 
-     * Because of this constraint we've had to calculate the
-     * verticalPointsPerPixel.  This the amount the font should be scaled by when
-     * you Issue commands such as DrawString().  A good way to calculate this
-     * Is to use the follow formula:
-     * 
-     * <pre>
-     *      multipler = GroupHeightInPoints / heightOfGroup
-     * </pre>
-     * 
-     * The height of the Group Is calculated fairly simply by calculating the
-     * difference between the y coordinates of the bounding box of the shape.  The
-     * height of the Group can be calculated by using a convenience called
-     * <c>HSSFClientAnchor.GetAnchorHeightInPoints()</c>.
-     * </blockquote>
-     *
-     * @author Glen Stampoultzis (glens at apache.org)
-     */
+    /// <summary>
+    /// <para>
+    /// Translates Graphics calls into escher calls.  The translation Is lossy so
+    /// many features are not supported and some just aren't implemented yet.  If
+    /// in doubt test the specific calls you wish to make. Graphics calls are
+    /// always performed into an EscherGroup so one will need to be Created.
+    /// </para>
+    /// <para>
+    /// <b>Important:</b>
+    /// One important concept worth considering Is that of font size.  One of the
+    /// difficulties in Converting Graphics calls into escher Drawing calls Is that
+    /// Excel does not have the concept of absolute pixel positions.  It measures
+    /// it's cell widths in 'Chars' and the cell heights in points.
+    /// Unfortunately it's not defined exactly what a type of Char it's
+    /// measuring.  Presumably this Is due to the fact that the Excel will be
+    /// using different fonts on different platforms or even within the same
+    /// platform.
+    /// </para>
+    /// <para>
+    /// Because of this constraint we've had to calculate the
+    /// verticalPointsPerPixel.  This the amount the font should be scaled by when
+    /// you Issue commands such as DrawString().  A good way to calculate this
+    /// Is to use the follow formula:
+    /// </para>
+    /// <para>
+    /// <code>
+    ///      multipler = GroupHeightInPoints / heightOfGroup
+    /// </code>
+    /// </para>
+    /// <para>
+    /// The height of the Group Is calculated fairly simply by calculating the
+    /// difference between the y coordinates of the bounding box of the shape.  The
+    /// height of the Group can be calculated by using a convenience called
+    /// <c>HSSFClientAnchor.GetAnchorHeightInPoints()</c>.
+    /// </para>
+    /// </summary>
+    /// @author Glen Stampoultzis (glens at apache.org)
     public class EscherGraphics : IDisposable
     {
         private HSSFShapeGroup escherGroup;
@@ -73,14 +76,13 @@ namespace NPOI.HSSF.UserModel
         // Default dpi
         private static int dpi = 96;
 
-        /**
-         * Construct an escher graphics object.
-         *
-         * @param escherGroup           The escher Group to Write the graphics calls into.
-         * @param workbook              The workbook we are using.
-         * @param forecolor             The foreground color to use as default.
-         * @param verticalPointsPerPixel    The font multiplier.  (See class description for information on how this works.).
-         */
+        /// <summary>
+        /// Construct an escher graphics object.
+        /// </summary>
+        /// <param name="escherGroup">          The escher Group to Write the graphics calls into.</param>
+        /// <param name="workbook">             The workbook we are using.</param>
+        /// <param name="forecolor">            The foreground color to use as default.</param>
+        /// <param name="verticalPointsPerPixel">   The font multiplier.  (See class description for information on how this works.).</param>
         public EscherGraphics(HSSFShapeGroup escherGroup, HSSFWorkbook workbook, Color forecolor, float verticalPointsPerPixel)
         {
             this.escherGroup = escherGroup;
@@ -92,15 +94,14 @@ namespace NPOI.HSSF.UserModel
             //        background = backcolor;
         }
 
-        /**
-         * Constructs an escher graphics object.
-         *
-         * @param escherGroup           The escher Group to Write the graphics calls into.
-         * @param workbook              The workbook we are using.
-         * @param foreground            The foreground color to use as default.
-         * @param verticalPointsPerPixel    The font multiplier.  (See class description for information on how this works.).
-         * @param font                  The font to use.
-         */
+        /// <summary>
+        /// Constructs an escher graphics object.
+        /// </summary>
+        /// <param name="escherGroup">          The escher Group to Write the graphics calls into.</param>
+        /// <param name="workbook">             The workbook we are using.</param>
+        /// <param name="foreground">           The foreground color to use as default.</param>
+        /// <param name="verticalPointsPerPixel">   The font multiplier.  (See class description for information on how this works.).</param>
+        /// <param name="font">                 The font to use.</param>
         EscherGraphics(HSSFShapeGroup escherGroup, HSSFWorkbook workbook, Color foreground, Font font, float verticalPointsPerPixel)
         {
             this.escherGroup = escherGroup;
@@ -112,13 +113,12 @@ namespace NPOI.HSSF.UserModel
             this.verticalPixelsPerPoint = 1 / verticalPointsPerPixel;
         }
 
-        //    /**
-        //     * Constructs an escher graphics object.
-        //     *
-        //     * @param escherGroup           The escher Group to Write the graphics calls into.
-        //     * @param workbook              The workbook we are using.
-        //     * @param forecolor             The default foreground color.
-        //     */
+        //    /// <summary>
+        /// Constructs an escher graphics object.
+        /// </summary>
+        /// <param name="escherGroup">          The escher Group to Write the graphics calls into.</param>
+        /// <param name="workbook">             The workbook we are using.</param>
+        /// <param name="forecolor">            The default foreground color.</param>
         //    public EscherGraphics( HSSFShapeGroup escherGroup, HSSFWorkbook workbook, Color forecolor)
         //    {
         //        this(escherGroup, workbook, forecolor, 1.0f);
@@ -132,9 +132,9 @@ namespace NPOI.HSSF.UserModel
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
+            if(disposing)
             {
-                if (null != font)
+                if(null != font)
                 {
                     font = null;
                 }
@@ -151,13 +151,13 @@ namespace NPOI.HSSF.UserModel
 
         public void ClipRect(int x, int y, int width, int height)
         {
-            if (Logger.Check(POILogger.WARN))
+            if(Logger.Check(POILogger.WARN))
                 Logger.Log(POILogger.WARN, "clipRect not supported");
         }
 
         public void CopyArea(int x, int y, int width, int height, int dx, int dy)
         {
-            if (Logger.Check(POILogger.WARN))
+            if(Logger.Check(POILogger.WARN))
                 Logger.Log(POILogger.WARN, "copyArea not supported");
         }
 
@@ -171,7 +171,7 @@ namespace NPOI.HSSF.UserModel
         public void DrawArc(int x, int y, int width, int height,
                      int startAngle, int arcAngle)
         {
-            if (Logger.Check(POILogger.WARN))
+            if(Logger.Check(POILogger.WARN))
                 Logger.Log(POILogger.WARN, "DrawArc not supported");
         }
 
@@ -180,7 +180,7 @@ namespace NPOI.HSSF.UserModel
                           int sx1, int sy1, int sx2, int sy2,
                           Color bgcolor)
         {
-            if (Logger.Check(POILogger.WARN))
+            if(Logger.Check(POILogger.WARN))
                 Logger.Log(POILogger.WARN, "DrawImage not supported");
 
             throw new NotImplementedException();
@@ -192,7 +192,7 @@ namespace NPOI.HSSF.UserModel
                           int dx1, int dy1, int dx2, int dy2,
                           int sx1, int sy1, int sx2, int sy2)
         {
-            if (Logger.Check(POILogger.WARN))
+            if(Logger.Check(POILogger.WARN))
                 Logger.Log(POILogger.WARN, "DrawImage not supported");
 
             throw new NotImplementedException();
@@ -259,7 +259,7 @@ namespace NPOI.HSSF.UserModel
         private int[] AddToAll(int[] values, int amount)
         {
             int[] result = new int[values.Length];
-            for (int i = 0; i < values.Length; i++)
+            for(int i = 0; i < values.Length; i++)
                 result[i] = values[i] + amount;
             return result;
         }
@@ -267,26 +267,26 @@ namespace NPOI.HSSF.UserModel
         public void DrawPolyline(int[] xPoints, int[] yPoints,
                           int nPoints)
         {
-            if (Logger.Check(POILogger.WARN))
+            if(Logger.Check(POILogger.WARN))
                 Logger.Log(POILogger.WARN, "DrawPolyline not supported");
         }
 
         public void DrawRect(int x, int y, int width, int height)
         {
-            if (Logger.Check(POILogger.WARN))
+            if(Logger.Check(POILogger.WARN))
                 Logger.Log(POILogger.WARN, "DrawRect not supported");
         }
 
         public void DrawRoundRect(int x, int y, int width, int height,
                            int arcWidth, int arcHeight)
         {
-            if (Logger.Check(POILogger.WARN))
+            if(Logger.Check(POILogger.WARN))
                 Logger.Log(POILogger.WARN, "DrawRoundRect not supported");
         }
 
         public void DrawString(String str, int x, int y)
         {
-            if (string.IsNullOrEmpty(str))
+            if(string.IsNullOrEmpty(str))
                 return;
             // TODO-Fonts: Fallback for missing font
             Font excelFont = new Font(SystemFonts.Get(font.Name.Equals("SansSerif") ? "Arial" : font.Name),
@@ -310,25 +310,25 @@ namespace NPOI.HSSF.UserModel
         {
             HSSFColor hssfColor = workbook.GetCustomPalette()
                     .FindColor((byte)foreground.R, (byte)foreground.G, (byte)foreground.B);
-            if (hssfColor == null)
-                hssfColor = workbook.GetCustomPalette().FindSimilarColor((byte)foreground.R, (byte)foreground.G, (byte)foreground.B);
+            if(hssfColor == null)
+                hssfColor = workbook.GetCustomPalette().FindSimilarColor((byte) foreground.R, (byte) foreground.G, (byte) foreground.B);
             bool bold = font.IsBold;
             bool italic = font.IsItalic;
-            HSSFFont hssfFont = (HSSFFont)workbook.FindFont(bold ? (short)NPOI.SS.UserModel.FontBoldWeight.Bold : (short)NPOI.SS.UserModel.FontBoldWeight.Normal,
+            HSSFFont hssfFont = (HSSFFont)workbook.FindFont(bold ? (short)FontBoldWeight.Bold : (short)FontBoldWeight.Normal,
                         hssfColor.Indexed,
                         (short)(font.Size * 20),
                         font.Name,
                         italic,
                         false,
-                        (short)NPOI.SS.UserModel.FontSuperScript.None,
-                        (byte)NPOI.SS.UserModel.FontUnderlineType.None
+                        (short)FontSuperScript.None,
+                        (byte)FontUnderlineType.None
                         );
-            if (hssfFont == null)
+            if(hssfFont == null)
             {
-                hssfFont = (HSSFFont)workbook.CreateFont();
-                hssfFont.Boldweight = (short)(bold ? NPOI.SS.UserModel.FontBoldWeight.Bold : 0);
+                hssfFont = (HSSFFont) workbook.CreateFont();
+                hssfFont.Boldweight = (short) (bold ? FontBoldWeight.Bold : 0);
                 hssfFont.Color = (hssfColor.Indexed);
-                hssfFont.FontHeight = ((short)(font.Size * 20));
+                hssfFont.FontHeight = ((short) (font.Size * 20));
                 hssfFont.FontName = font.Name;
                 hssfFont.IsItalic = (italic);
                 hssfFont.IsStrikeout = (false);
@@ -350,7 +350,7 @@ namespace NPOI.HSSF.UserModel
         public void FillArc(int x, int y, int width, int height,
                      int startAngle, int arcAngle)
         {
-            if (Logger.Check(POILogger.WARN))
+            if(Logger.Check(POILogger.WARN))
                 Logger.Log(POILogger.WARN, "FillArc not supported");
         }
 
@@ -364,25 +364,29 @@ namespace NPOI.HSSF.UserModel
             shape.IsNoFill = (false);
         }
 
-        /**
-         * Fills a (closed) polygon, as defined by a pair of arrays, which
-         *  hold the <i>x</i> and <i>y</i> coordinates.
-         * 
-         * This Draws the polygon, with <c>nPoint</c> line segments.
-         * The first <c>nPoint - 1</c> line segments are
-         *  Drawn between sequential points 
-         *  (<c>xPoints[i],yPoints[i],xPoints[i+1],yPoints[i+1]</c>).
-         * The line segment Is a closing one, from the last point to 
-         *  the first (assuming they are different).
-         * 
-         * The area inside of the polygon Is defined by using an
-         *  even-odd Fill rule (also known as the alternating rule), and 
-         *  the area inside of it Is Filled.
-         * @param xPoints array of the <c>x</c> coordinates.
-         * @param yPoints array of the <c>y</c> coordinates.
-         * @param nPoints the total number of points in the polygon.
-         * @see   java.awt.Graphics#DrawPolygon(int[], int[], int)
-         */
+        /// <summary>
+        /// <para>
+        /// Fills a (closed) polygon, as defined by a pair of arrays, which
+        ///  hold the <i>x</i> and <i>y</i> coordinates.
+        /// </para>
+        /// <para>
+        /// This Draws the polygon, with <c>nPoint</c> line segments.
+        /// The first <c>nPoint - 1</c> line segments are
+        ///  Drawn between sequential points
+        ///  (<c>xPoints[i],yPoints[i],xPoints[i+1],yPoints[i+1]</c>).
+        /// The line segment Is a closing one, from the last point to
+        ///  the first (assuming they are different).
+        /// </para>
+        /// <para>
+        /// The area inside of the polygon Is defined by using an
+        ///  even-odd Fill rule (also known as the alternating rule), and
+        ///  the area inside of it Is Filled.
+        /// </para>
+        /// </summary>
+        /// <param name="xPoints">array of the <c>x</c> coordinates.</param>
+        /// <param name="yPoints">array of the <c>y</c> coordinates.</param>
+        /// <param name="nPoints">the total number of points in the polygon.</param>
+        /// <see cref="java.awt.Graphics.DrawPolygon(int[], int[], int)" />
         public void FillPolygon(int[] xPoints, int[] yPoints,
                          int nPoints)
         {
@@ -400,9 +404,9 @@ namespace NPOI.HSSF.UserModel
         private int FindBiggest(int[] values)
         {
             int result = Int32.MinValue;
-            for (int i = 0; i < values.Length; i++)
+            for(int i = 0; i < values.Length; i++)
             {
-                if (values[i] > result)
+                if(values[i] > result)
                     result = values[i];
             }
             return result;
@@ -411,9 +415,9 @@ namespace NPOI.HSSF.UserModel
         private int FindSmallest(int[] values)
         {
             int result = Int32.MaxValue;
-            for (int i = 0; i < values.Length; i++)
+            for(int i = 0; i < values.Length; i++)
             {
-                if (values[i] < result)
+                if(values[i] < result)
                     result = values[i];
             }
             return result;
@@ -431,7 +435,7 @@ namespace NPOI.HSSF.UserModel
         public void FillRoundRect(int x, int y, int width, int height,
                            int arcWidth, int arcHeight)
         {
-            if (Logger.Check(POILogger.WARN))
+            if(Logger.Check(POILogger.WARN))
                 Logger.Log(POILogger.WARN, "FillRoundRect not supported");
         }
 
@@ -495,7 +499,7 @@ namespace NPOI.HSSF.UserModel
 
         public void SetPaintMode()
         {
-            if (Logger.Check(POILogger.WARN))
+            if(Logger.Check(POILogger.WARN))
                 Logger.Log(POILogger.WARN, "SetPaintMode not supported");
 
             throw new NotImplementedException();
@@ -503,7 +507,7 @@ namespace NPOI.HSSF.UserModel
 
         public void SetXORMode(Color color)
         {
-            if (Logger.Check(POILogger.WARN))
+            if(Logger.Check(POILogger.WARN))
                 Logger.Log(POILogger.WARN, "SetXORMode not supported");
 
             throw new NotImplementedException();
@@ -511,7 +515,7 @@ namespace NPOI.HSSF.UserModel
 
         public void Translate(int x, int y)
         {
-            if (Logger.Check(POILogger.WARN))
+            if(Logger.Check(POILogger.WARN))
                 Logger.Log(POILogger.WARN, "translate not supported");
 
             throw new NotImplementedException();
@@ -523,7 +527,7 @@ namespace NPOI.HSSF.UserModel
             {
                 return background;
             }
-            set 
+            set
             {
                 this.background = value;
             }
@@ -531,7 +535,7 @@ namespace NPOI.HSSF.UserModel
 
         HSSFShapeGroup GetEscherGraphics()
         {
-                return escherGroup;
+            return escherGroup;
 
         }
     }

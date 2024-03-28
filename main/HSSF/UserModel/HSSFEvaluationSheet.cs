@@ -20,11 +20,10 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula;
     using NPOI.SS.UserModel;
 
-    /**
-     * HSSF wrapper for a sheet under evaluation
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// HSSF wrapper for a sheet under evaluation
+    /// </summary>
+    /// @author Josh Micich
     public class HSSFEvaluationSheet : IEvaluationSheet
     {
 
@@ -45,12 +44,12 @@ namespace NPOI.HSSF.UserModel
         public IEvaluationCell GetCell(int rowIndex, int columnIndex)
         {
             HSSFRow row = (HSSFRow)_hs.GetRow(rowIndex);
-            if (row == null)
+            if(row == null)
             {
                 return null;
             }
             ICell cell = (HSSFCell)row.GetCell(columnIndex);
-            if (cell == null)
+            if(cell == null)
             {
                 return null;
             }

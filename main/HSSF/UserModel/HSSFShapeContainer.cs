@@ -70,11 +70,11 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         int Y2 { get; }
 
-        /**
-         * remove first level shapes
-         * @param shape to be removed
-         * @return true if shape is removed else return false
-         */
+        /// <summary>
+        /// remove first level shapes
+        /// </summary>
+        /// <param name="shape">to be removed</param>
+        /// <returns>true if shape is removed else return false</returns>
         bool RemoveShape(HSSFShape shape);
     }
 }

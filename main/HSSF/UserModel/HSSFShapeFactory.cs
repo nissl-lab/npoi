@@ -22,64 +22,64 @@ using NPOI.POIFS.FileSystem;
 
 namespace NPOI.HSSF.UserModel
 {
-    /**
-     * @author Evgeniy Berlog
-     * date: 05.06.12
-     */
+    /// <summary>
+    /// </summary>
+    /// @author Evgeniy Berlog
+    /// date: 05.06.12
     public class HSSFShapeFactory
     {
-        /**
-         * build shape tree from escher container
-         * @param container root escher container from which escher records must be taken
-         * @param agg - EscherAggregate
-         * @param out - shape container to which shapes must be added
-         * @param root - node to create HSSFObjectData shapes
-         */
+        /// <summary>
+        /// build shape tree from escher container
+        /// </summary>
+        /// <param name="container">root escher container from which escher records must be taken</param>
+        /// <param name="agg">- EscherAggregate</param>
+        /// <param name="out">- shape container to which shapes must be added</param>
+        /// <param name="root">- node to create HSSFObjectData shapes</param>
         public static void CreateShapeTree(EscherContainerRecord container, EscherAggregate agg,
             HSSFShapeContainer out1, DirectoryNode root)
         {
-            if (container.RecordId == EscherContainerRecord.SPGR_CONTAINER)
+            if(container.RecordId == EscherContainerRecord.SPGR_CONTAINER)
             {
                 ObjRecord obj = null;
                 EscherClientDataRecord clientData = (EscherClientDataRecord)((EscherContainerRecord)container.GetChild(0)).GetChildById(EscherClientDataRecord.RECORD_ID);
-                if (null != clientData)
+                if(null != clientData)
                 {
-                    obj = (ObjRecord)agg.GetShapeToObjMapping()[clientData];
+                    obj = (ObjRecord) agg.GetShapeToObjMapping()[clientData];
                 }
                 HSSFShapeGroup group = new HSSFShapeGroup(container, obj);
                 IList<EscherContainerRecord> children = container.ChildContainers;
                 // skip the first child record, it is group descriptor
-                for (int i = 0; i < children.Count; i++)
+                for(int i = 0; i < children.Count; i++)
                 {
                     EscherContainerRecord spContainer = children[(i)];
-                    if (i != 0)
+                    if(i != 0)
                     {
                         CreateShapeTree(spContainer, agg, group, root);
                     }
                 }
                 out1.AddShape(group);
             }
-            else if (container.RecordId == EscherContainerRecord.SP_CONTAINER)
+            else if(container.RecordId == EscherContainerRecord.SP_CONTAINER)
             {
                 Dictionary<EscherRecord, Record.Record> shapeToObj = agg.GetShapeToObjMapping();
                 ObjRecord objRecord = null;
                 TextObjectRecord txtRecord = null;
 
-                foreach (EscherRecord record in container.ChildRecords)
+                foreach(EscherRecord record in container.ChildRecords)
                 {
-                    switch (record.RecordId)
+                    switch(record.RecordId)
                     {
                         case EscherClientDataRecord.RECORD_ID:
-                            objRecord = (ObjRecord)shapeToObj[(record)];
+                            objRecord = (ObjRecord) shapeToObj[(record)];
                             break;
                         case EscherTextboxRecord.RECORD_ID:
-                            txtRecord = (TextObjectRecord)shapeToObj[(record)];
+                            txtRecord = (TextObjectRecord) shapeToObj[(record)];
                             break;
                         default:
                             break;
                     }
                 }
-                if (IsEmbeddedObject(objRecord))
+                if(IsEmbeddedObject(objRecord))
                 {
                     HSSFObjectData objectData = new HSSFObjectData(container, objRecord, root);
                     out1.AddShape(objectData);
@@ -87,7 +87,7 @@ namespace NPOI.HSSF.UserModel
                 }
                 CommonObjectDataSubRecord cmo = (CommonObjectDataSubRecord)objRecord.SubRecords[0];
                 HSSFShape shape;
-                switch (cmo.ObjectType)
+                switch(cmo.ObjectType)
                 {
                     case CommonObjectType.Picture:
                         shape = new HSSFPicture(container, objRecord);
@@ -103,14 +103,14 @@ namespace NPOI.HSSF.UserModel
                         break;
                     case CommonObjectType.MicrosoftOfficeDrawing:
                         EscherOptRecord optRecord = (EscherOptRecord)container.GetChildById(EscherOptRecord.RECORD_ID);
-                        if (optRecord == null)
+                        if(optRecord == null)
                         {
                             shape = new HSSFSimpleShape(container, objRecord, txtRecord);
                         }
                         else
                         {
                             EscherProperty property = optRecord.Lookup(EscherProperties.GEOMETRY__VERTICES);
-                            if (null != property)
+                            if(null != property)
                             {
                                 shape = new HSSFPolygon(container, objRecord, txtRecord);
                             }
@@ -137,10 +137,10 @@ namespace NPOI.HSSF.UserModel
         private static bool IsEmbeddedObject(ObjRecord obj)
         {
             //Iterator<SubRecord> subRecordIter = obj.SubRecords;
-            foreach (SubRecord sub in obj.SubRecords)
+            foreach(SubRecord sub in obj.SubRecords)
             {
                 //SubRecord sub = subRecordIter.next();
-                if (sub is EmbeddedObjectRefSubRecord)
+                if(sub is EmbeddedObjectRefSubRecord)
                 {
                     return true;
                 }

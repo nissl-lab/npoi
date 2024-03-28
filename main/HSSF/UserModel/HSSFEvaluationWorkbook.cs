@@ -26,14 +26,13 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Formula.UDF;
     using NPOI.SS.UserModel;
-using NPOI.Util;
+    using NPOI.Util;
     using NPOI.SS.Util;
-   
-    /**
-     * Internal POI use only
-     * 
-     * @author Josh Micich
-     */
+
+    /// <summary>
+    /// Internal POI use only
+    /// </summary>
+    /// @author Josh Micich
     public class HSSFEvaluationWorkbook : IFormulaRenderingWorkbook, IEvaluationWorkbook, IFormulaParsingWorkbook
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(HSSFEvaluationWorkbook));
@@ -42,11 +41,11 @@ using NPOI.Util;
 
         public static HSSFEvaluationWorkbook Create(NPOI.SS.UserModel.IWorkbook book)
         {
-            if (book == null)
+            if(book == null)
             {
                 return null;
             }
-            return new HSSFEvaluationWorkbook((HSSFWorkbook)book);
+            return new HSSFEvaluationWorkbook((HSSFWorkbook) book);
         }
 
         private HSSFEvaluationWorkbook(HSSFWorkbook book)
@@ -108,12 +107,12 @@ using NPOI.Util;
         }
 
 
-        public IEvaluationName GetName(String name,int sheetIndex)
+        public IEvaluationName GetName(String name, int sheetIndex)
         {
-            for (int i = 0; i < _iBook.NumNames; i++)
+            for(int i = 0; i < _iBook.NumNames; i++)
             {
                 NameRecord nr = _iBook.GetNameRecord(i);
-                if (nr.SheetNumber == sheetIndex + 1 && name.Equals(nr.NameText, StringComparison.OrdinalIgnoreCase))
+                if(nr.SheetNumber == sheetIndex + 1 && name.Equals(nr.NameText, StringComparison.OrdinalIgnoreCase))
                 {
                     return new Name(nr, i);
                 }
@@ -138,7 +137,7 @@ using NPOI.Util;
 
         public IEvaluationSheet GetSheet(int sheetIndex)
         {
-            return new HSSFEvaluationSheet((HSSFSheet)_uBook.GetSheetAt(sheetIndex));
+            return new HSSFEvaluationSheet((HSSFSheet) _uBook.GetSheetAt(sheetIndex));
         }
         public int ConvertFromExternSheetIndex(int externSheetIndex)
         {
@@ -149,16 +148,16 @@ using NPOI.Util;
         public ExternalSheet GetExternalSheet(int externSheetIndex)
         {
             ExternalSheet sheet = _iBook.GetExternalSheet(externSheetIndex);
-            if (sheet == null)
+            if(sheet == null)
             {
                 // Try to treat it as a local sheet
                 int localSheetIndex = ConvertFromExternSheetIndex(externSheetIndex);
-                if (localSheetIndex == -1)
+                if(localSheetIndex == -1)
                 {
                     // The sheet referenced can't be found, sorry
                     return null;
                 }
-                if (localSheetIndex == -2)
+                if(localSheetIndex == -2)
                 {
                     // Not actually sheet based at all - is workbook scoped
                     return null;
@@ -169,7 +168,7 @@ using NPOI.Util;
 
                 // Is it a single local sheet, or a range?
                 int lastLocalSheetIndex = _iBook.GetLastSheetIndexFromExternSheetIndex(externSheetIndex);
-                if (lastLocalSheetIndex == localSheetIndex)
+                if(lastLocalSheetIndex == localSheetIndex)
                 {
                     sheet = new ExternalSheet(null, sheetName);
                 }
@@ -251,25 +250,29 @@ using NPOI.Util;
             }
             public Ptg[] NameDefinition
             {
-                get{
+                get
+                {
                     return _nameRecord.NameDefinition;
                 }
             }
             public String NameText
             {
-                get{
+                get
+                {
                     return _nameRecord.NameText;
                 }
             }
             public bool HasFormula
             {
-                get{
+                get
+                {
                     return _nameRecord.HasFormula;
                 }
             }
             public bool IsFunctionName
             {
-                get{
+                get
+                {
                     return _nameRecord.IsFunctionName;
                 }
             }
@@ -288,7 +291,7 @@ using NPOI.Util;
         private int GetSheetExtIx(SheetIdentifier sheetIden)
         {
             int extIx;
-            if (sheetIden == null)
+            if(sheetIden == null)
             {
                 extIx = -1;
             }
@@ -298,12 +301,12 @@ using NPOI.Util;
                 String firstSheetName = sheetIden.SheetId.Name;
                 String lastSheetName = firstSheetName;
 
-                if (sheetIden is SheetRangeIdentifier)
+                if(sheetIden is SheetRangeIdentifier)
                 {
-                    lastSheetName = ((SheetRangeIdentifier)sheetIden).LastSheetIdentifier.Name;
+                    lastSheetName = ((SheetRangeIdentifier) sheetIden).LastSheetIdentifier.Name;
                 }
 
-                if (workbookName == null)
+                if(workbookName == null)
                 {
                     int firstSheetIndex = _uBook.GetSheetIndex(firstSheetName);
                     int lastSheetIndex = _uBook.GetSheetIndex(lastSheetName);

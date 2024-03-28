@@ -25,12 +25,11 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula.PTG;
 
 
-    /**
-     * This class Creates <c>OperationEval</c> instances to help evaluate <c>OperationPtg</c>
-     * formula tokens.
-     * 
-     * @author Josh Micich
-     */
+    /// <summary>
+    /// This class Creates <c>OperationEval</c> instances to help evaluate <c>OperationPtg</c>
+    /// formula tokens.
+    /// </summary>
+    /// @author Josh Micich
     class OperationEvaluatorFactory
     {
         private static Type[] OPERATION_CONSTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg) };
@@ -68,39 +67,39 @@ namespace NPOI.HSSF.UserModel
         {
 
             // perform some validation now, to keep later exception handlers simple
-            if (!typeof(Ptg).IsAssignableFrom(ptgClass))
+            if(!typeof(Ptg).IsAssignableFrom(ptgClass))
             {
                 throw new ArgumentException("Expected Ptg subclass");
             }
-            if (!typeof(OperationEval).IsAssignableFrom(evalClass))
+            if(!typeof(OperationEval).IsAssignableFrom(evalClass))
             {
                 throw new ArgumentException("Expected OperationEval subclass");
             }
-            if (!evalClass.IsPublic)
+            if(!evalClass.IsPublic)
             {
                 throw new Exception("Eval class must be public");
             }
-            if (evalClass.IsAbstract)
+            if(evalClass.IsAbstract)
             {
                 throw new Exception("Eval class must not be abstract");
             }
 
             ConstructorInfo constructor;
             constructor = evalClass.GetConstructor(OPERATION_CONSTRUCTOR_CLASS_ARRAY);
-            if (!constructor.IsPublic)
+            if(!constructor.IsPublic)
             {
                 throw new Exception("Eval constructor must be public");
             }
             m[ptgClass] = constructor;
         }
 
-        /**
-         * returns the OperationEval concrete impl instance corresponding
-         * to the supplied operationPtg
-         */
+        /// <summary>
+        /// returns the OperationEval concrete impl instance corresponding
+        /// to the supplied operationPtg
+        /// </summary>
         public static OperationEval Create(OperationPtg ptg)
         {
-            if (ptg == null)
+            if(ptg == null)
             {
                 throw new ArgumentException("ptg must not be null");
             }
@@ -108,9 +107,9 @@ namespace NPOI.HSSF.UserModel
             Type ptgClass = ptg.GetType();
 
             ConstructorInfo constructor = (ConstructorInfo)_constructorsByPtgClass[ptgClass];
-            if (constructor == null)
+            if(constructor == null)
             {
-                if (ptgClass == typeof(ExpPtg))
+                if(ptgClass == typeof(ExpPtg))
                 {
                     // ExpPtg Is used for array formulas and shared formulas.
                     // it Is currently Unsupported, and may not even Get implemented here
@@ -122,7 +121,7 @@ namespace NPOI.HSSF.UserModel
             Object result;
             Object[] initargs = { ptg };
             result = constructor.Invoke(initargs);
-            return (OperationEval)result;
+            return (OperationEval) result;
         }
     }
 }

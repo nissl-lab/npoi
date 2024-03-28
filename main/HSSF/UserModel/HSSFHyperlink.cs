@@ -26,14 +26,14 @@ namespace NPOI.HSSF.UserModel
     /// <remarks>@author Yegor Kozlov (yegor at apache dot org)</remarks>
     public class HSSFHyperlink : IHyperlink
     {
-        /**
-         * Low-level record object that stores the actual hyperlink data
-         */
+        /// <summary>
+        /// Low-level record object that stores the actual hyperlink data
+        /// </summary>
         public HyperlinkRecord record;
 
-        /**
-         * If we Create a new hypelrink remember its type
-         */
+        /// <summary>
+        /// If we Create a new hypelrink remember its type
+        /// </summary>
         protected HyperlinkType link_type;
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace NPOI.HSSF.UserModel
         {
             this.link_type = type;
             record = new HyperlinkRecord();
-            switch (type)
+            switch(type)
             {
                 case HyperlinkType.Url:
                 case HyperlinkType.Email:
@@ -74,17 +74,17 @@ namespace NPOI.HSSF.UserModel
         {
             HyperlinkType link_type;
             // Figure out the type
-            if (record.IsFileLink)
+            if(record.IsFileLink)
             {
                 link_type = HyperlinkType.File;
             }
-            else if (record.IsDocumentLink)
+            else if(record.IsDocumentLink)
             {
                 link_type = HyperlinkType.Document;
             }
             else
             {
-                if (record.Address != null &&
+                if(record.Address != null &&
                         record.Address.StartsWith("mailto:"))
                 {
                     link_type = HyperlinkType.Email;
@@ -99,7 +99,7 @@ namespace NPOI.HSSF.UserModel
 
         public HSSFHyperlink(IHyperlink other)
         {
-            if (other is HSSFHyperlink)
+            if(other is HSSFHyperlink)
             {
                 HSSFHyperlink hlink = (HSSFHyperlink)other;
                 record = hlink.record.Clone() as HyperlinkRecord;
@@ -200,7 +200,7 @@ namespace NPOI.HSSF.UserModel
             {
                 return record.Label;
             }
-            set 
+            set
             {
                 record.Label=value;
             }
@@ -212,16 +212,18 @@ namespace NPOI.HSSF.UserModel
         /// <value>the type of this hyperlink</value>
         public HyperlinkType Type
         {
-            get { return (HyperlinkType)link_type; }
+            get { return (HyperlinkType) link_type; }
         }
 
-        /**
-         * @return whether the objects have the same HyperlinkRecord
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>whether the objects have the same HyperlinkRecord</returns>
         public override bool Equals(Object other)
         {
-            if (this == other) return true;
-            if (!(other is HSSFHyperlink)) return false;
+            if(this == other)
+                return true;
+            if(!(other is HSSFHyperlink))
+                return false;
             HSSFHyperlink otherLink = (HSSFHyperlink)other;
             return record == otherLink.record;
         }

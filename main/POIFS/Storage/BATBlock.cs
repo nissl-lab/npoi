@@ -42,9 +42,18 @@ namespace NPOI.POIFS.Storage
     /// </summary>
     public class BATBlock : BigBlock
     {
+        /// <summary>
+        /// size = 128
+        /// </summary>
         private static int _entries_per_block =
             POIFSConstants.BIG_BLOCK_SIZE / LittleEndianConsts.INT_SIZE;
+        /// <summary>
+        /// 127
+        /// </summary>
         private static int _entries_per_xbat_block = _entries_per_block - 1;
+        /// <summary>
+        /// 508
+        /// </summary>
         private static int _xbat_chain_offset =
             _entries_per_xbat_block * LittleEndianConsts.INT_SIZE;
         private static byte _default_value = (byte)0xFF;

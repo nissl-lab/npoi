@@ -234,9 +234,9 @@ namespace NPOI.HSSF.UserModel
             get { return _note; }
         }
 
-        /**
-         * Do we know which cell this comment belongs to?
-         */
+        /// <summary>
+        /// Do we know which cell this comment belongs to?
+        /// </summary>
         public bool HasPosition
         {
             get

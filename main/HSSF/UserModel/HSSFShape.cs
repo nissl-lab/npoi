@@ -72,16 +72,16 @@ namespace NPOI.HSSF.UserModel
         //LineStyle lineStyle = LineStyle.Solid;
         //bool noFill = false;
 
-        /**
-         * creates shapes from existing file
-         * @param spContainer
-         * @param objRecord
-         */
+        /// <summary>
+        /// creates shapes from existing file
+        /// </summary>
+        /// <param name="spContainer">spContainer</param>
+        /// <param name="objRecord">objRecord</param>
         public HSSFShape(EscherContainerRecord spContainer, ObjRecord objRecord)
         {
             this._escherContainer = spContainer;
             this._objRecord = objRecord;
-            this._optRecord = (EscherOptRecord)spContainer.GetChildById(EscherOptRecord.RECORD_ID);
+            this._optRecord = (EscherOptRecord) spContainer.GetChildById(EscherOptRecord.RECORD_ID);
             this.anchor = HSSFAnchor.CreateAnchorFromEscher(spContainer);
         }
 
@@ -95,7 +95,7 @@ namespace NPOI.HSSF.UserModel
             this.parent = parent;
             this.anchor = anchor;
             this._escherContainer = CreateSpContainer();
-            _optRecord = (EscherOptRecord)_escherContainer.GetChildById(EscherOptRecord.RECORD_ID);
+            _optRecord = (EscherOptRecord) _escherContainer.GetChildById(EscherOptRecord.RECORD_ID);
             _objRecord = CreateObjRecord();
         }
         protected abstract EscherContainerRecord CreateSpContainer();
@@ -108,21 +108,21 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return ((EscherSpRecord)_escherContainer.GetChildById(EscherSpRecord.RECORD_ID)).ShapeId;
+                return ((EscherSpRecord) _escherContainer.GetChildById(EscherSpRecord.RECORD_ID)).ShapeId;
             }
             set
             {
                 EscherSpRecord spRecord = (EscherSpRecord)_escherContainer.GetChildById(EscherSpRecord.RECORD_ID);
                 spRecord.ShapeId = value;
                 CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)_objRecord.SubRecords[0];
-                cod.ObjectId = (short)(value % 1024);
+                cod.ObjectId = (short) (value % 1024);
             }
         }
 
         public uint ID
         {
-            get => (uint)ShapeId;
-            set => ShapeId = (int)value;
+            get => (uint) ShapeId;
+            set => ShapeId = (int) value;
         }
 
         public string Name
@@ -138,7 +138,7 @@ namespace NPOI.HSSF.UserModel
         public IShape Parent
         {
             get { return this.parent; }
-            set { this.parent = (HSSFShape)value; }
+            set { this.parent = (HSSFShape) value; }
         }
 
         /// <summary>
@@ -152,18 +152,18 @@ namespace NPOI.HSSF.UserModel
             {
                 int i = 0;
                 int recordId = -1;
-                if (parent == null)
+                if(parent == null)
                 {
-                    if (value is HSSFChildAnchor)
+                    if(value is HSSFChildAnchor)
                         throw new ArgumentException("Must use client anchors for shapes directly attached to sheet.");
                     EscherClientAnchorRecord anch = (EscherClientAnchorRecord)_escherContainer.GetChildById(EscherClientAnchorRecord.RECORD_ID);
-                    if (null != anch)
+                    if(null != anch)
                     {
-                        for (i = 0; i < _escherContainer.ChildRecords.Count; i++)
+                        for(i = 0; i < _escherContainer.ChildRecords.Count; i++)
                         {
-                            if (_escherContainer.GetChild(i).RecordId == EscherClientAnchorRecord.RECORD_ID)
+                            if(_escherContainer.GetChild(i).RecordId == EscherClientAnchorRecord.RECORD_ID)
                             {
-                                if (i != _escherContainer.ChildRecords.Count - 1)
+                                if(i != _escherContainer.ChildRecords.Count - 1)
                                 {
                                     recordId = _escherContainer.GetChild(i + 1).RecordId;
                                 }
@@ -174,16 +174,16 @@ namespace NPOI.HSSF.UserModel
                 }
                 else
                 {
-                    if (value is HSSFClientAnchor)
+                    if(value is HSSFClientAnchor)
                         throw new ArgumentException("Must use child anchors for shapes attached to Groups.");
                     EscherChildAnchorRecord anch = (EscherChildAnchorRecord)_escherContainer.GetChildById(EscherChildAnchorRecord.RECORD_ID);
-                    if (null != anch)
+                    if(null != anch)
                     {
-                        for (i = 0; i < _escherContainer.ChildRecords.Count; i++)
+                        for(i = 0; i < _escherContainer.ChildRecords.Count; i++)
                         {
-                            if (_escherContainer.GetChild(i).RecordId == EscherChildAnchorRecord.RECORD_ID)
+                            if(_escherContainer.GetChild(i).RecordId == EscherChildAnchorRecord.RECORD_ID)
                             {
-                                if (i != _escherContainer.ChildRecords.Count - 1)
+                                if(i != _escherContainer.ChildRecords.Count - 1)
                                 {
                                     recordId = _escherContainer.GetChild(i + 1).RecordId;
                                 }
@@ -193,7 +193,7 @@ namespace NPOI.HSSF.UserModel
                     }
                 }
                 var anchor = value as HSSFAnchor;
-                if (-1 == recordId)
+                if(-1 == recordId)
                 {
                     _escherContainer.AddChildRecord(anchor.GetEscherAnchor());
                 }
@@ -247,12 +247,12 @@ namespace NPOI.HSSF.UserModel
         /// <value>The color of the fill.</value>
         public int FillColor
         {
-            get 
+            get
             {
                 EscherRGBProperty rgbProperty = (EscherRGBProperty)_optRecord.Lookup(EscherProperties.FILL__FILLCOLOR);
                 return rgbProperty == null ? FILL__FILLCOLOR_DEFAULT : rgbProperty.RgbColor;
             }
-            set 
+            set
             {
                 SetPropertyValue(new EscherRGBProperty(EscherProperties.FILL__FILLCOLOR, value));
             }
@@ -283,7 +283,7 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                SetPropertyValue(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEWIDTH, (int)value));
+                SetPropertyValue(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEWIDTH, (int) value));
             }
         }
 
@@ -296,19 +296,19 @@ namespace NPOI.HSSF.UserModel
             get
             {
                 EscherSimpleProperty property = (EscherSimpleProperty)_optRecord.Lookup(EscherProperties.LINESTYLE__LINEDASHING);
-                if (null == property)
+                if(null == property)
                 {
-                    return (LineStyle)LINESTYLE_DEFAULT;
+                    return (LineStyle) LINESTYLE_DEFAULT;
                 }
-                return (LineStyle)property.PropertyValue;
+                return (LineStyle) property.PropertyValue;
             }
             set
             {
-                SetPropertyValue(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEDASHING, (int)value));
-                if ((int)LineStyle != HSSFShape.LINESTYLE_SOLID)
+                SetPropertyValue(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEDASHING, (int) value));
+                if((int) LineStyle != HSSFShape.LINESTYLE_SOLID)
                 {
                     SetPropertyValue(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEENDCAPSTYLE, 0));
-                    if ((int)LineStyle == HSSFShape.LINESTYLE_NONE)
+                    if((int) LineStyle == HSSFShape.LINESTYLE_NONE)
                     {
                         SetPropertyValue(new EscherBoolProperty(EscherProperties.LINESTYLE__NOLINEDRAWDASH, 0x00080000));
                     }
@@ -352,7 +352,7 @@ namespace NPOI.HSSF.UserModel
             set
             {
                 EscherSpRecord sp = (EscherSpRecord)GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
-                if (value)
+                if(value)
                 {
                     sp.Flags = (sp.Flags | EscherSpRecord.FLAG_FLIPVERT);
                 }
@@ -376,7 +376,7 @@ namespace NPOI.HSSF.UserModel
             set
             {
                 EscherSpRecord sp = (EscherSpRecord)GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
-                if (value)
+                if(value)
                 {
                     sp.Flags=(sp.Flags | EscherSpRecord.FLAG_FLIPHORIZ);
                 }
@@ -397,10 +397,10 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                using (MemoryStream bos = RecyclableMemory.GetStream())
+                using(MemoryStream bos = RecyclableMemory.GetStream())
                 {
                     EscherSimpleProperty property = (EscherSimpleProperty)GetOptRecord().Lookup(EscherProperties.TRANSFORM__ROTATION);
-                    if (null == property)
+                    if(null == property)
                     {
                         return 0;
                     }
@@ -409,7 +409,7 @@ namespace NPOI.HSSF.UserModel
                         LittleEndian.PutInt(property.PropertyValue, bos);
                         return LittleEndian.GetShort(bos.ToArray(), 2);
                     }
-                    catch (IOException)
+                    catch(IOException)
                     {
                         //e.printStackTrace();
                         return 0;
@@ -445,21 +445,22 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
-         * @return the name of this shape
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>the name of this shape</returns>
         public String ShapeName
         {
             get
             {
                 EscherOptRecord eor = GetOptRecord();
-                if (eor == null)
+                if(eor == null)
                 {
                     return null;
                 }
                 EscherProperty ep = eor.Lookup(EscherProperties.GROUPSHAPE__SHAPENAME);
-                if (ep is EscherComplexProperty) {
-                    return StringUtil.Trim(StringUtil.GetFromUnicodeLE(((EscherComplexProperty)ep).ComplexData));
+                if(ep is EscherComplexProperty)
+                {
+                    return StringUtil.Trim(StringUtil.GetFromUnicodeLE(((EscherComplexProperty) ep).ComplexData));
                 }
                 return null;
             }

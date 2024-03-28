@@ -27,11 +27,14 @@ namespace NPOI.HSSF.UserModel.helpers
     using NPOI.SS.UserModel.Helpers;
     using NPOI.Util;
 
-    /**
-     * Helper for Shifting rows up or down
-     * 
-     * When possible, code should be implemented in the RowShifter abstract class to avoid duplication with {@link NPOI.XSSF.UserModel.helpers.XSSFRowShifter}
-     */
+    /// <summary>
+    /// <para>
+    /// Helper for Shifting rows up or down
+    /// </para>
+    /// <para>
+    /// When possible, code should be implemented in the RowShifter abstract class to avoid duplication with <see cref="NPOI.XSSF.UserModel.helpers.XSSFRowShifter" />
+    /// </para>
+    /// </summary>
     public class HSSFRowShifter : RowShifter
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(HSSFRowShifter));

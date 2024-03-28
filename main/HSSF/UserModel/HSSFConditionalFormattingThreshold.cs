@@ -22,10 +22,10 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Record.CF;
     using NPOI.SS.UserModel;
 
-    /**
-     * High level representation for Icon / Multi-State / Databar /
-     *  Colour Scale change thresholds
-     */
+    /// <summary>
+    /// High level representation for Icon / Multi-State / Databar /
+    ///  Colour Scale change thresholds
+    /// </summary>
     public class HSSFConditionalFormattingThreshold : IConditionalFormattingThreshold
     {
         private Threshold threshold;
@@ -51,7 +51,7 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                threshold.Type = (byte)value.id;
+                threshold.Type = (byte) value.id;
             }
         }
 

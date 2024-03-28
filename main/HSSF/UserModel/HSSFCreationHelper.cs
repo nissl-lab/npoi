@@ -48,22 +48,20 @@ namespace NPOI.HSSF.UserModel
             return new HSSFHyperlink(type);
         }
 
-        /**
-         * Creates a HSSFFormulaEvaluator, the object that Evaluates formula cells.
-         *
-         * @return a HSSFFormulaEvaluator instance
-         */
+        /// <summary>
+        /// Creates a HSSFFormulaEvaluator, the object that Evaluates formula cells.
+        /// </summary>
+        /// <returns>a HSSFFormulaEvaluator instance</returns>
         public NPOI.SS.UserModel.IFormulaEvaluator CreateFormulaEvaluator()
         {
             return new HSSFFormulaEvaluator(workbook);
         }
 
-        /**
-         * Creates a HSSFClientAnchor. Use this object to position drawing object in a sheet
-         *
-         * @return a HSSFClientAnchor instance
-         * @see NPOI.SS.usermodel.Drawing
-         */
+        /// <summary>
+        /// Creates a HSSFClientAnchor. Use this object to position drawing object in a sheet
+        /// </summary>
+        /// <returns>a HSSFClientAnchor instance</returns>
+        /// <see cref="NPOI.SS.usermodel.Drawing" />
         public NPOI.SS.UserModel.IClientAnchor CreateClientAnchor()
         {
             return new HSSFClientAnchor();

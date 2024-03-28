@@ -87,15 +87,15 @@ namespace NPOI.HSSF.UserModel
             return new HSSFConditionalFormattingRule(_sheet, rr);
         }
 
-        /**
-         * A factory method allowing the creation of conditional formatting
-         *  rules using an Icon Set / Multi-State formatting.
-         * The thresholds for it will be created, but will be empty
-         *  and require configuring with 
-         *  {@link HSSFConditionalFormattingRule#getMultiStateFormatting()}
-         *  then
-         *  {@link HSSFIconMultiStateFormatting#getThresholds()}
-         */
+        /// <summary>
+        /// A factory method allowing the creation of conditional formatting
+        ///  rules using an Icon Set / Multi-State formatting.
+        /// The thresholds for it will be created, but will be empty
+        ///  and require configuring with
+        ///  <see cref="HSSFConditionalFormattingRule.getMultiStateFormatting()" />
+        ///  then
+        ///  <see cref="HSSFIconMultiStateFormatting.getThresholds()" />
+        /// </summary>
         public IConditionalFormattingRule CreateConditionalFormattingRule(
                 IconSet iconSet)
         {
@@ -103,16 +103,20 @@ namespace NPOI.HSSF.UserModel
             return new HSSFConditionalFormattingRule(_sheet, rr);
         }
 
-        /**
-         * Create a Databar conditional formatting rule.
-         * <p>The thresholds and colour for it will be created, but will be 
-         *  empty and require configuring with 
-         *  {@link HSSFConditionalFormattingRule#getDataBarFormatting()}
-         *  then
-         *  {@link HSSFDataBarFormatting#getMinThreshold()}
-         *  and 
-         *  {@link HSSFDataBarFormatting#getMaxThreshold()}
-         */
+        /// <summary>
+        /// <para>
+        /// Create a Databar conditional formatting rule.
+        /// </para>
+        /// <para>
+        /// The thresholds and colour for it will be created, but will be
+        ///  empty and require configuring with
+        ///  <see cref="HSSFConditionalFormattingRule.getDataBarFormatting()" />
+        ///  then
+        ///  <see cref="HSSFDataBarFormatting.getMinThreshold()" />
+        ///  and
+        ///  <see cref="HSSFDataBarFormatting.getMaxThreshold()" />
+        /// </para>
+        /// </summary>
         public HSSFConditionalFormattingRule CreateConditionalFormattingRule(HSSFExtendedColor color)
         {
             CFRule12Record rr = CFRule12Record.Create(_sheet, color.ExtendedColor);
@@ -120,19 +124,23 @@ namespace NPOI.HSSF.UserModel
         }
         public IConditionalFormattingRule CreateConditionalFormattingRule(ExtendedColor color)
         {
-            return CreateConditionalFormattingRule((HSSFExtendedColor)color);
+            return CreateConditionalFormattingRule((HSSFExtendedColor) color);
         }
 
-        /**
-         * Create a Color Scale / Color Gradient conditional formatting rule.
-         * <p>The thresholds and colours for it will be created, but will be 
-         *  empty and require configuring with 
-         *  {@link HSSFConditionalFormattingRule#getColorScaleFormatting()}
-         *  then
-         *  {@link HSSFColorScaleFormatting#getThresholds()}
-         *  and
-         *  {@link HSSFColorScaleFormatting#getColors()}
-         */
+        /// <summary>
+        /// <para>
+        /// Create a Color Scale / Color Gradient conditional formatting rule.
+        /// </para>
+        /// <para>
+        /// The thresholds and colours for it will be created, but will be
+        ///  empty and require configuring with
+        ///  <see cref="HSSFConditionalFormattingRule.getColorScaleFormatting()" />
+        ///  then
+        ///  <see cref="HSSFColorScaleFormatting.getThresholds()" />
+        ///  and
+        ///  <see cref="HSSFColorScaleFormatting.getColors()" />
+        /// </para>
+        /// </summary>
         public IConditionalFormattingRule CreateConditionalFormattingColorScaleRule()
         {
             CFRule12Record rr = CFRule12Record.CreateColorScale(_sheet);
@@ -159,7 +167,7 @@ namespace NPOI.HSSF.UserModel
         }
         public int AddConditionalFormatting(IConditionalFormatting cf)
         {
-            return AddConditionalFormatting((HSSFConditionalFormatting)cf);
+            return AddConditionalFormatting((HSSFConditionalFormatting) cf);
         }
 
         /// <summary>
@@ -170,27 +178,27 @@ namespace NPOI.HSSF.UserModel
         /// <returns>index of the newly Created Conditional Formatting object</returns>
         public int AddConditionalFormatting(CellRangeAddress[] regions, IConditionalFormattingRule[] cfRules)
         {
-            if (regions == null)
+            if(regions == null)
             {
                 throw new ArgumentException("regions must not be null");
             }
-            if (cfRules == null)
+            if(cfRules == null)
             {
                 throw new ArgumentException("cfRules must not be null");
             }
-            if (cfRules.Length == 0)
+            if(cfRules.Length == 0)
             {
                 throw new ArgumentException("cfRules must not be empty");
             }
-            if (cfRules.Length > 3)
+            if(cfRules.Length > 3)
             {
                 throw new ArgumentException("Number of rules must not exceed 3");
             }
 
             CFRuleBase[] rules = new CFRuleBase[cfRules.Length];
-            for (int i = 0; i != cfRules.Length; i++)
+            for(int i = 0; i != cfRules.Length; i++)
             {
-                rules[i] = ((HSSFConditionalFormattingRule)cfRules[i]).CfRuleRecord;
+                rules[i] = ((HSSFConditionalFormattingRule) cfRules[i]).CfRuleRecord;
             }
             CFRecordsAggregate cfra = new CFRecordsAggregate(regions, rules);
             return _conditionalFormattingTable.Add(cfra);
@@ -200,9 +208,9 @@ namespace NPOI.HSSF.UserModel
         {
             return AddConditionalFormatting(regions,
                     rule1 == null ? null : new HSSFConditionalFormattingRule[]
-				{
-					rule1
-				});
+                {
+                    rule1
+                });
         }
 
         /// <summary>
@@ -214,7 +222,7 @@ namespace NPOI.HSSF.UserModel
         public int AddConditionalFormatting(CellRangeAddress[] regions,
                 IConditionalFormattingRule rule1)
         {
-            return AddConditionalFormatting(regions, (HSSFConditionalFormattingRule)rule1);
+            return AddConditionalFormatting(regions, (HSSFConditionalFormattingRule) rule1);
         }
 
         /// <summary>
@@ -230,9 +238,9 @@ namespace NPOI.HSSF.UserModel
         {
             return AddConditionalFormatting(regions,
                     new HSSFConditionalFormattingRule[]
-				{
-						(HSSFConditionalFormattingRule)rule1, (HSSFConditionalFormattingRule)rule2
-				});
+                {
+                        (HSSFConditionalFormattingRule)rule1, (HSSFConditionalFormattingRule)rule2
+                });
         }
 
         /// <summary>
@@ -245,7 +253,7 @@ namespace NPOI.HSSF.UserModel
         public IConditionalFormatting GetConditionalFormattingAt(int index)
         {
             CFRecordsAggregate cf = _conditionalFormattingTable.Get(index);
-            if (cf == null)
+            if(cf == null)
             {
                 return null;
             }

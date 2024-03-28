@@ -26,10 +26,10 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.UserModel;
     using System.Collections.Generic;
 
-    /**
-     * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
-     * 
-     */
+    /// <summary>
+    /// </summary>
+    ///
+    /// @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
     public class HSSFFormulaEvaluator : BaseFormulaEvaluator
     {
         // params to lookup the right constructor using reflection
@@ -66,11 +66,12 @@ namespace NPOI.HSSF.UserModel
             : this(workbook, null)
         {
         }
-        /**
-         * @param stabilityClassifier used to optimise caching performance. Pass <code>null</code>
-         * for the (conservative) assumption that any cell may have its definition changed after
-         * evaluation begins.
-         */
+        /// <summary>
+        /// </summary>
+        /// <param name="stabilityClassifier">used to optimise caching performance. Pass <c>null</c>
+        /// for the (conservative) assumption that any cell may have its definition changed after
+        /// evaluation begins.
+        /// </param>
         public HSSFFormulaEvaluator(IWorkbook workbook, IStabilityClassifier stabilityClassifier)
             : this(workbook, stabilityClassifier, null)
         {
@@ -78,21 +79,22 @@ namespace NPOI.HSSF.UserModel
 
 
 
-        /**
-         * @param udfFinder pass <code>null</code> for default (AnalysisToolPak only)
-         */
+        /// <summary>
+        /// </summary>
+        /// <param name="udfFinder">pass <c>null</c> for default (AnalysisToolPak only)</param>
         public HSSFFormulaEvaluator(IWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
             : base(new WorkbookEvaluator(HSSFEvaluationWorkbook.Create(workbook), stabilityClassifier, udfFinder))
         {
             _book = workbook;
         }
 
-        /**
-         * @param stabilityClassifier used to optimise caching performance. Pass <code>null</code>
-         * for the (conservative) assumption that any cell may have its definition changed after
-         * evaluation begins.
-         * @param udfFinder pass <code>null</code> for default (AnalysisToolPak only)
-         */
+        /// <summary>
+        /// </summary>
+        /// <param name="stabilityClassifier">used to optimise caching performance. Pass <c>null</c>
+        /// for the (conservative) assumption that any cell may have its definition changed after
+        /// evaluation begins.
+        /// </param>
+        /// <param name="udfFinder">pass <c>null</c> for default (AnalysisToolPak only)</param>
         public static HSSFFormulaEvaluator Create(IWorkbook workbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
         {
             return new HSSFFormulaEvaluator(workbook, stabilityClassifier, udfFinder);
@@ -102,13 +104,14 @@ namespace NPOI.HSSF.UserModel
         {
             return new HSSFRichTextString(str);
         }
-        /**
-         * Coordinates several formula evaluators together so that formulas that involve external
-         * references can be evaluated.
-         * @param workbookNames the simple file names used to identify the workbooks in formulas
-         * with external links (for example "MyData.xls" as used in a formula "[MyData.xls]Sheet1!A1")
-         * @param evaluators all evaluators for the full set of workbooks required by the formulas. 
-         */
+        /// <summary>
+        /// Coordinates several formula evaluators together so that formulas that involve external
+        /// references can be evaluated.
+        /// </summary>
+        /// <param name="workbookNames">the simple file names used to identify the workbooks in formulas
+        /// with external links (for example "MyData.xls" as used in a formula "[MyData.xls]Sheet1!A1")
+        /// </param>
+        /// <param name="evaluators">all evaluators for the full set of workbooks required by the formulas.</param>
         public static void SetupEnvironment(String[] workbookNames, HSSFFormulaEvaluator[] evaluators)
         {
             BaseFormulaEvaluator.SetupEnvironment(workbookNames, evaluators);
@@ -119,89 +122,89 @@ namespace NPOI.HSSF.UserModel
             CollaboratingWorkbooksEnvironment.SetupFormulaEvaluator(evaluators);
         }
 
-        /**
-         * Should be called to tell the cell value cache that the specified (value or formula) cell 
-         * has changed.
-         * Failure to call this method after changing cell values will cause incorrect behaviour
-         * of the evaluate~ methods of this class
-         */
+        /// <summary>
+        /// Should be called to tell the cell value cache that the specified (value or formula) cell
+        /// has changed.
+        /// Failure to call this method after changing cell values will cause incorrect behaviour
+        /// of the evaluate~ methods of this class
+        /// </summary>
         public override void NotifyUpdateCell(ICell cell)
         {
             _bookEvaluator.NotifyUpdateCell(new HSSFEvaluationCell(cell));
         }
-        /**
-         * Should be called to tell the cell value cache that the specified cell has just been
-         * deleted. 
-         * Failure to call this method after changing cell values will cause incorrect behaviour
-         * of the evaluate~ methods of this class
-         */
+        /// <summary>
+        /// Should be called to tell the cell value cache that the specified cell has just been
+        /// deleted.
+        /// Failure to call this method after changing cell values will cause incorrect behaviour
+        /// of the evaluate~ methods of this class
+        /// </summary>
         public override void NotifyDeleteCell(ICell cell)
         {
             _bookEvaluator.NotifyDeleteCell(new HSSFEvaluationCell(cell));
         }
 
-        /**
-         * Should be called to tell the cell value cache that the specified (value or formula) cell
-         * has changed.
-         * Failure to call this method after changing cell values will cause incorrect behaviour
-         * of the evaluate~ methods of this class
-         */
+        /// <summary>
+        /// Should be called to tell the cell value cache that the specified (value or formula) cell
+        /// has changed.
+        /// Failure to call this method after changing cell values will cause incorrect behaviour
+        /// of the evaluate~ methods of this class
+        /// </summary>
         public override void NotifySetFormula(ICell cell)
         {
             _bookEvaluator.NotifyUpdateCell(new HSSFEvaluationCell(cell));
         }
 
-        /**
-         * Returns a CellValue wrapper around the supplied ValueEval instance.
-         * @param cell
-         */
+        /// <summary>
+        /// Returns a CellValue wrapper around the supplied ValueEval instance.
+        /// </summary>
+        /// <param name="cell">cell</param>
         protected override CellValue EvaluateFormulaCellValue(ICell cell)
         {
             ValueEval eval = _bookEvaluator.Evaluate(new HSSFEvaluationCell((HSSFCell)cell));
-            if (eval is BoolEval)
+            if(eval is BoolEval)
             {
                 BoolEval be = (BoolEval)eval;
                 return CellValue.ValueOf(be.BooleanValue);
             }
-            if (eval is NumberEval)
+            if(eval is NumberEval)
             {
                 NumberEval ne = (NumberEval)eval;
                 return new CellValue(ne.NumberValue);
             }
-            if (eval is StringEval)
+            if(eval is StringEval)
             {
                 StringEval ne = (StringEval)eval;
                 return new CellValue(ne.StringValue);
             }
-            if (eval is ErrorEval)
+            if(eval is ErrorEval)
             {
-                return CellValue.GetError(((ErrorEval)eval).ErrorCode);
+                return CellValue.GetError(((ErrorEval) eval).ErrorCode);
             }
             throw new InvalidOperationException("Unexpected eval class (" + eval.GetType().Name + ")");
         }
-        /**
-         * If cell Contains formula, it Evaluates the formula, and
-         *  puts the formula result back into the cell, in place
-         *  of the old formula.
-         * Else if cell does not contain formula, this method leaves
-         *  the cell UnChanged. 
-         * Note that the same instance of Cell is returned to 
-         * allow chained calls like:
-         * <pre>
-         * int EvaluatedCellType = evaluator.EvaluateInCell(cell).CellType;
-         * </pre>
-         * Be aware that your cell value will be Changed to hold the
-         *  result of the formula. If you simply want the formula
-         *  value computed for you, use {@link #EvaluateFormulaCell(HSSFCell)}
-         * @param cell
-         */
+        /// <summary>
+        /// If cell Contains formula, it Evaluates the formula, and
+        ///  puts the formula result back into the cell, in place
+        ///  of the old formula.
+        /// Else if cell does not contain formula, this method leaves
+        ///  the cell UnChanged.
+        /// Note that the same instance of Cell is returned to
+        /// allow chained calls like:
+        /// <code>
+        /// int EvaluatedCellType = evaluator.EvaluateInCell(cell).CellType;
+        /// </code>
+        /// Be aware that your cell value will be Changed to hold the
+        ///  result of the formula. If you simply want the formula
+        ///  value computed for you, use <see cref="EvaluateFormulaCell(HSSFCell)" />
+        /// </summary>
+        /// <param name="cell">cell</param>
         public override ICell EvaluateInCell(ICell cell)
         {
-            if (cell == null)
+            if(cell == null)
             {
                 return null;
             }
-            if (cell.CellType == CellType.Formula)
+            if(cell.CellType == CellType.Formula)
             {
                 CellValue cv = EvaluateFormulaCellValue(cell);
                 SetCellValue(cell, cv);
@@ -210,32 +213,32 @@ namespace NPOI.HSSF.UserModel
             return cell;
         }
 
-        /**
-         * Loops over all cells in all sheets of the supplied
-         *  workbook.
-         * For cells that contain formulas, their formulas are
-         *  Evaluated, and the results are saved. These cells
-         *  remain as formula cells.
-         * For cells that do not contain formulas, no Changes
-         *  are made.
-         * This is a helpful wrapper around looping over all 
-         *  cells, and calling EvaluateFormulaCell on each one.
-         */
+        /// <summary>
+        /// Loops over all cells in all sheets of the supplied
+        ///  workbook.
+        /// For cells that contain formulas, their formulas are
+        ///  Evaluated, and the results are saved. These cells
+        ///  remain as formula cells.
+        /// For cells that do not contain formulas, no Changes
+        ///  are made.
+        /// This is a helpful wrapper around looping over all
+        ///  cells, and calling EvaluateFormulaCell on each one.
+        /// </summary>
         public static void EvaluateAllFormulaCells(HSSFWorkbook wb)
         {
             EvaluateAllFormulaCells(wb, new HSSFFormulaEvaluator(wb));
         }
-        /**
-         * Loops over all cells in all sheets of the supplied
-         *  workbook.
-         * For cells that contain formulas, their formulas are
-         *  evaluated, and the results are saved. These cells
-         *  remain as formula cells.
-         * For cells that do not contain formulas, no changes
-         *  are made.
-         * This is a helpful wrapper around looping over all
-         *  cells, and calling evaluateFormulaCell on each one.
-         */
+        /// <summary>
+        /// Loops over all cells in all sheets of the supplied
+        ///  workbook.
+        /// For cells that contain formulas, their formulas are
+        ///  evaluated, and the results are saved. These cells
+        ///  remain as formula cells.
+        /// For cells that do not contain formulas, no changes
+        ///  are made.
+        /// This is a helpful wrapper around looping over all
+        ///  cells, and calling evaluateFormulaCell on each one.
+        /// </summary>
         public new static void EvaluateAllFormulaCells(IWorkbook wb)
         {
             BaseFormulaEvaluator.EvaluateAllFormulaCells(wb);

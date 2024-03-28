@@ -42,11 +42,11 @@ namespace NPOI.HSSF.UserModel
         private EscherSpgrRecord _spgrRecord;
         private EscherContainerRecord _mainSpgrContainer;
 
-        /**
-         * The EscherAggregate we have been bound to.
-         * (This will handle writing us out into records,
-         *  and building up our shapes from the records)
-         */
+        /// <summary>
+        /// The EscherAggregate we have been bound to.
+        /// (This will handle writing us out into records,
+        ///  and building up our shapes from the records)
+        /// </summary>
         private EscherAggregate _boundAggregate;
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace NPOI.HSSF.UserModel
             _mainSpgrContainer = _boundAggregate.GetEscherContainer().ChildContainers[0];
             EscherContainerRecord spContainer = (EscherContainerRecord)_boundAggregate.GetEscherContainer()
                     .ChildContainers[0].GetChild(0);
-            _spgrRecord = (EscherSpgrRecord)spContainer.GetChildById(EscherSpgrRecord.RECORD_ID);
+            _spgrRecord = (EscherSpgrRecord) spContainer.GetChildById(EscherSpgrRecord.RECORD_ID);
             BuildShapeTree();
         }
 
@@ -70,12 +70,12 @@ namespace NPOI.HSSF.UserModel
         {
             HSSFPatriarch newPatriarch = new HSSFPatriarch(sheet, new EscherAggregate(true));
             newPatriarch.AfterCreate();
-            foreach (HSSFShape shape in patriarch.Children)
+            foreach(HSSFShape shape in patriarch.Children)
             {
                 HSSFShape newShape;
-                if (shape is HSSFShapeGroup)
+                if(shape is HSSFShapeGroup)
                 {
-                    newShape = ((HSSFShapeGroup)shape).CloneShape(newPatriarch);
+                    newShape = ((HSSFShapeGroup) shape).CloneShape(newPatriarch);
                 }
                 else
                 {
@@ -87,10 +87,10 @@ namespace NPOI.HSSF.UserModel
             return newPatriarch;
         }
 
-        /**
-     * check if any shapes contain wrong data
-     * At now(13.08.2010) check if patriarch contains 2 or more comments with same coordinates
-     */
+        /// <summary>
+        /// check if any shapes contain wrong data
+        /// At now(13.08.2010) check if patriarch contains 2 or more comments with same coordinates
+        /// </summary>
         protected internal void PreSerialize()
         {
             Dictionary<int, NoteRecord> tailRecords = _boundAggregate.TailRecords;
@@ -98,10 +98,10 @@ namespace NPOI.HSSF.UserModel
              * contains coordinates of comments we iterate over
              */
             Hashtable coordinates = new Hashtable(tailRecords.Count);
-            foreach (NoteRecord rec in tailRecords.Values)
+            foreach(NoteRecord rec in tailRecords.Values)
             {
                 String noteRef = new CellReference(rec.Row, rec.Column).FormatAsString(); // A1-style notation
-                if (coordinates.Contains(noteRef))
+                if(coordinates.Contains(noteRef))
                 {
                     throw new InvalidOperationException("found multiple cell comments for cell " + noteRef);
                 }
@@ -112,14 +112,14 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
-         * @param shape to be removed
-         * @return true of shape is removed
-         */
+        /// <summary>
+        /// </summary>
+        /// <param name="shape">to be removed</param>
+        /// <returns>true of shape is removed</returns>
         public bool RemoveShape(HSSFShape shape)
         {
             bool isRemoved = _mainSpgrContainer.RemoveChildRecord(shape.GetEscherContainer());
-            if (isRemoved)
+            if(isRemoved)
             {
                 shape.AfterRemove(this);
                 _shapes.Remove(shape);
@@ -197,7 +197,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>return newly created shape</returns>
         public IPicture CreatePicture(IClientAnchor anchor, int pictureIndex)
         {
-            return CreatePicture((HSSFClientAnchor)anchor, pictureIndex);
+            return CreatePicture((HSSFClientAnchor) anchor, pictureIndex);
         }
 
 
@@ -220,7 +220,7 @@ namespace NPOI.HSSF.UserModel
             // FtCf (pictFormat) 
             FtCfSubRecord ftCf = new FtCfSubRecord();
             HSSFPictureData pictData = Sheet.Workbook.GetAllPictures()[(pictureIndex - 1)] as HSSFPictureData;
-            switch ((PictureType)pictData.Format)
+            switch((PictureType) pictData.Format)
             {
                 case PictureType.WMF:
                 case PictureType.EMF:
@@ -255,10 +255,11 @@ namespace NPOI.HSSF.UserModel
             try
             {
                 DirectoryNode dn = (_sheet.Workbook as HSSFWorkbook).RootDirectory;
-                if (dn == null) throw new FileNotFoundException();
-                oleRoot = (DirectoryEntry)dn.GetEntry(entryName);
+                if(dn == null)
+                    throw new FileNotFoundException();
+                oleRoot = (DirectoryEntry) dn.GetEntry(entryName);
             }
-            catch (FileNotFoundException e)
+            catch(FileNotFoundException e)
             {
                 throw new InvalidOperationException("trying to add ole shape without actually Adding data first - use HSSFWorkbook.AddOlePackage first", e);
             }
@@ -305,13 +306,13 @@ namespace NPOI.HSSF.UserModel
             OnCreate(shape);
             return shape;
         }
-        /**
-         * Constructs a cell comment.
-         *
-         * @param anchor    the client anchor describes how this comment is attached
-         *                  to the sheet.
-         * @return      the newly created comment.
-         */
+        /// <summary>
+        /// Constructs a cell comment.
+        /// </summary>
+        /// <param name="anchor">   the client anchor describes how this comment is attached
+        /// to the sheet.
+        /// </param>
+        /// <returns>the newly created comment.</returns>
         public HSSFComment CreateComment(HSSFAnchor anchor)
         {
             HSSFComment shape = new HSSFComment(null, anchor);
@@ -319,11 +320,10 @@ namespace NPOI.HSSF.UserModel
             OnCreate(shape);
             return shape;
         }
-        /**
-         * YK: used to create autofilters
-         *
-         * @see org.apache.poi.hssf.usermodel.HSSFSheet#setAutoFilter(int, int, int, int)
-         */
+        /// <summary>
+        /// YK: used to create autofilters
+        /// </summary>
+        /// <see cref="org.apache.poi.hssf.usermodel.HSSFSheet.setAutoFilter(int, int, int, int)" />
         public HSSFSimpleShape CreateComboBox(HSSFAnchor anchor)
         {
             HSSFCombobox shape = new HSSFCombobox(null, anchor);
@@ -340,7 +340,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>the newly created comment.</returns>
         public IComment CreateCellComment(IClientAnchor anchor)
         {
-            return CreateComment((HSSFAnchor)anchor);
+            return CreateComment((HSSFAnchor) anchor);
         }
 
 
@@ -349,11 +349,11 @@ namespace NPOI.HSSF.UserModel
         private void SetFlipFlags(HSSFShape shape)
         {
             EscherSpRecord sp = (EscherSpRecord)shape.GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
-            if ((shape.Anchor as HSSFAnchor).IsHorizontallyFlipped)
+            if((shape.Anchor as HSSFAnchor).IsHorizontallyFlipped)
             {
                 sp.Flags = (sp.Flags | EscherSpRecord.FLAG_FLIPHORIZ);
             }
-            if ((shape.Anchor as HSSFAnchor).IsVerticallyFlipped)
+            if((shape.Anchor as HSSFAnchor).IsVerticallyFlipped)
             {
                 sp.Flags = (sp.Flags | EscherSpRecord.FLAG_FLIPVERT);
             }
@@ -367,9 +367,9 @@ namespace NPOI.HSSF.UserModel
             get { return _shapes; }
         }
 
-        /**
-         * add a shape to this drawing
-         */
+        /// <summary>
+        /// add a shape to this drawing
+        /// </summary>
         public void AddShape(HSSFShape shape)
         {
             shape.Patriarch = this;
@@ -398,7 +398,7 @@ namespace NPOI.HSSF.UserModel
             get
             {
                 int count = _shapes.Count;
-                for (IEnumerator iterator = _shapes.GetEnumerator(); iterator.MoveNext(); )
+                for(IEnumerator iterator = _shapes.GetEnumerator(); iterator.MoveNext();)
                 {
                     HSSFShape shape = (HSSFShape)iterator.Current;
                     count += shape.CountOfAllChildren;
@@ -425,7 +425,7 @@ namespace NPOI.HSSF.UserModel
         public void Clear()
         {
             List<HSSFShape> copy = new List<HSSFShape>(_shapes);
-            foreach (HSSFShape shape in copy)
+            foreach(HSSFShape shape in copy)
             {
                 RemoveShape(shape);
             }
@@ -456,21 +456,21 @@ namespace NPOI.HSSF.UserModel
             // We're looking for a EscherOptRecord
             EscherOptRecord optRecord = (EscherOptRecord)
                 _boundAggregate.FindFirstWithId(EscherOptRecord.RECORD_ID);
-            if (optRecord == null)
+            if(optRecord == null)
             {
                 // No opt record, can't have chart
                 return false;
             }
 
-            for (IEnumerator it = optRecord.EscherProperties.GetEnumerator(); it.MoveNext(); )
+            for(IEnumerator it = optRecord.EscherProperties.GetEnumerator(); it.MoveNext();)
             {
                 EscherProperty prop = (EscherProperty)it.Current;
-                if (prop.PropertyNumber == 896 && prop.IsComplex)
+                if(prop.PropertyNumber == 896 && prop.IsComplex)
                 {
                     EscherComplexProperty cp = (EscherComplexProperty)prop;
                     String str = StringUtil.GetFromUnicodeLE(cp.ComplexData);
                     //Console.Error.WriteLine(str);
-                    if (str.Equals("Chart 1\0"))
+                    if(str.Equals("Chart 1\0"))
                     {
                         return true;
                     }
@@ -524,48 +524,47 @@ namespace NPOI.HSSF.UserModel
         {
             return _boundAggregate;
         }
-        /**
-         * Creates a new client anchor and sets the top-left and bottom-right
-         * coordinates of the anchor.
-         *
-         * @param dx1  the x coordinate in EMU within the first cell.
-         * @param dy1  the y coordinate in EMU within the first cell.
-         * @param dx2  the x coordinate in EMU within the second cell.
-         * @param dy2  the y coordinate in EMU within the second cell.
-         * @param col1 the column (0 based) of the first cell.
-         * @param row1 the row (0 based) of the first cell.
-         * @param col2 the column (0 based) of the second cell.
-         * @param row2 the row (0 based) of the second cell.
-         * @return the newly created client anchor
-         */
+        /// <summary>
+        /// Creates a new client anchor and sets the top-left and bottom-right
+        /// coordinates of the anchor.
+        /// </summary>
+        /// <param name="dx1"> the x coordinate in EMU within the first cell.</param>
+        /// <param name="dy1"> the y coordinate in EMU within the first cell.</param>
+        /// <param name="dx2"> the x coordinate in EMU within the second cell.</param>
+        /// <param name="dy2"> the y coordinate in EMU within the second cell.</param>
+        /// <param name="col1">the column (0 based) of the first cell.</param>
+        /// <param name="row1">the row (0 based) of the first cell.</param>
+        /// <param name="col2">the column (0 based) of the second cell.</param>
+        /// <param name="row2">the row (0 based) of the second cell.</param>
+        /// <returns>the newly created client anchor</returns>
         public IClientAnchor CreateAnchor(int dx1, int dy1, int dx2, int dy2, int col1, int row1, int col2, int row2)
         {
-            return new HSSFClientAnchor(dx1, dy1, dx2, dy2, (short)col1, row1, (short)col2, row2);
+            return new HSSFClientAnchor(dx1, dy1, dx2, dy2, (short) col1, row1, (short) col2, row2);
         }
 
         public IChart CreateChart(IClientAnchor anchor)
         {
             throw new RuntimeException("NotImplemented");
         }
-        /**
-     * create shape tree from existing escher records tree
-     */
+        /// <summary>
+        /// create shape tree from existing escher records tree
+        /// </summary>
         public void BuildShapeTree()
         {
             EscherContainerRecord dgContainer = _boundAggregate.GetEscherContainer();
-            if (dgContainer == null)
+            if(dgContainer == null)
             {
                 return;
             }
             EscherContainerRecord spgrConrainer = dgContainer.ChildContainers[0];
             IList<EscherContainerRecord> spgrChildren = spgrConrainer.ChildContainers;
 
-            for (int i = 0; i < spgrChildren.Count; i++)
+            for(int i = 0; i < spgrChildren.Count; i++)
             {
                 EscherContainerRecord spContainer = spgrChildren[i];
-                if (i != 0)
+                if(i != 0)
                 {
-                    HSSFShapeFactory.CreateShapeTree(spContainer, _boundAggregate, this, ((HSSFWorkbook)_sheet.Workbook).RootDirectory);
+                    HSSFShapeFactory.CreateShapeTree(spContainer, _boundAggregate, this, ((HSSFWorkbook) _sheet.Workbook).RootDirectory);
                 }
             }
         }

@@ -30,16 +30,15 @@ namespace NPOI.HSSF.UserModel
 
     using NPOI.SS.UserModel;
 
-    /**
-     * Contains methods for dealing with Excel dates.
-     *
-     * @author  Michael Harhen
-     * @author  Glen Stampoultzis (glens at apache.org)
-     * @author  Dan Sherman (dsherman at isisph.com)
-     * @author  Hack Kampbjorn (hak at 2mba.dk)
-     * @author  Alex Jacoby (ajacoby at gmail.com)
-     * @author  Pavel Krupets (pkrupets at palmtreebusiness dot com)
-     */
+    /// <summary>
+    /// Contains methods for dealing with Excel dates.
+    /// </summary>
+    /// @author  Michael Harhen
+    /// @author  Glen Stampoultzis (glens at apache.org)
+    /// @author  Dan Sherman (dsherman at isisph.com)
+    /// @author  Hack Kampbjorn (hak at 2mba.dk)
+    /// @author  Alex Jacoby (ajacoby at gmail.com)
+    /// @author  Pavel Krupets (pkrupets at palmtreebusiness dot com)
 
     public class HSSFDateUtil : DateUtil
     {

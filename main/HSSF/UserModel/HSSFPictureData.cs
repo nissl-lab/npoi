@@ -38,9 +38,9 @@ namespace NPOI.HSSF.UserModel
         // Mask of the bits in the options used to store the image format.
         public const short FORMAT_MASK = unchecked((short)0xFFF0);
 
-        /**
-         * Underlying escher blip record containing the bitmap data.
-         */
+        /// <summary>
+        /// Underlying escher blip record containing the bitmap data.
+        /// </summary>
         private EscherBlipRecord blip;
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace NPOI.HSSF.UserModel
 
                 //PNG created on MAC may have a 16-byte prefix which prevents successful reading.
                 //Just cut it off!.
-                if (PngUtils.MatchesPngHeader(pictureData, 16))
+                if(PngUtils.MatchesPngHeader(pictureData, 16))
                 {
                     byte[] png = new byte[pictureData.Length - 16];
                     System.Array.Copy(pictureData, 16, png, 0, png.Length);
@@ -82,7 +82,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return blip.RecordId - unchecked((short)0xF018);
+                return blip.RecordId - unchecked((short) 0xF018);
             }
         }
         /// <summary>
@@ -91,7 +91,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>the file extension.</returns>
         public String SuggestFileExtension()
         {
-            switch (blip.RecordId)
+            switch(blip.RecordId)
             {
                 case EscherMetafileBlip.RECORD_ID_WMF:
                     return "wmf";
@@ -109,14 +109,14 @@ namespace NPOI.HSSF.UserModel
                     return "";
             }
         }
-        /**
-     * Returns the mime type for the image
-     */
+        /// <summary>
+        /// Returns the mime type for the image
+        /// </summary>
         public String MimeType
         {
             get
             {
-                switch (blip.RecordId)
+                switch(blip.RecordId)
                 {
                     case EscherMetafileBlip.RECORD_ID_WMF:
                         return "image/x-wmf";
@@ -136,21 +136,21 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
-     * @return the POI internal image type, -1 if not unknown image type
-     *
-     * @see Workbook#PICTURE_TYPE_DIB
-     * @see Workbook#PICTURE_TYPE_EMF
-     * @see Workbook#PICTURE_TYPE_JPEG
-     * @see Workbook#PICTURE_TYPE_PICT
-     * @see Workbook#PICTURE_TYPE_PNG
-     * @see Workbook#PICTURE_TYPE_WMF
-     */
+        /// <summary>
+        /// </summary>
+        /// <returns>the POI internal image type, -1 if not unknown image type</returns>
+        /// 
+        /// <see cref="Workbook.PICTURE_TYPE_DIB" />
+        /// <see cref="Workbook.PICTURE_TYPE_EMF" />
+        /// <see cref="Workbook.PICTURE_TYPE_JPEG" />
+        /// <see cref="Workbook.PICTURE_TYPE_PICT" />
+        /// <see cref="Workbook.PICTURE_TYPE_PNG" />
+        /// <see cref="Workbook.PICTURE_TYPE_WMF" />
         public PictureType PictureType
         {
             get
             {
-                switch (blip.RecordId)
+                switch(blip.RecordId)
                 {
                     case EscherMetafileBlip.RECORD_ID_WMF:
                         return PictureType.WMF;

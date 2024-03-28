@@ -28,17 +28,16 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.UserModel;
 
 
-    /**
-     * Represents binary object (i.e. OLE) data stored in the file.  Eg. A GIF, JPEG etc...
-     *
-     * @author Daniel Noll
-     */
+    /// <summary>
+    /// Represents binary object (i.e. OLE) data stored in the file.  Eg. A GIF, JPEG etc...
+    /// </summary>
+    /// @author Daniel Noll
     public class HSSFObjectData : HSSFPicture, IObjectData
     {
 
-        /**
-         * Reference to the filesystem root, required for retrieving the object data.
-         */
+        /// <summary>
+        /// Reference to the filesystem root, required for retrieving the object data.
+        /// </summary>
         private DirectoryEntry _root;
 
 
@@ -47,9 +46,9 @@ namespace NPOI.HSSF.UserModel
         {
             this._root = _root;
         }
-        /**
-         * Returns the OLE2 Class Name of the object
-         */
+        /// <summary>
+        /// Returns the OLE2 Class Name of the object
+        /// </summary>
         public String OLE2ClassName
         {
             get
@@ -58,13 +57,12 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
-         * Gets the object data. Only call for ones that have
-         *  data though. See {@link #hasDirectoryEntry()}
-         *
-         * @return the object data as an OLE2 directory.
-         * @ if there was an error Reading the data.
-         */
+        /// <summary>
+        /// Gets the object data. Only call for ones that have
+        ///  data though. See <see cref="hasDirectoryEntry()" />
+        /// </summary>
+        /// <returns>the object data as an OLE2 directory.</returns>
+        /// @ if there was an error Reading the data.
         public DirectoryEntry Directory
         {
             get
@@ -75,23 +73,23 @@ namespace NPOI.HSSF.UserModel
                 String streamName = "MBD" + HexDump.ToHex((int)streamId);
 
                 Entry entry = _root.GetEntry(streamName);
-                if (entry is DirectoryEntry)
+                if(entry is DirectoryEntry)
                 {
-                    return (DirectoryEntry)entry;
+                    return (DirectoryEntry) entry;
                 }
                 else
                 {
                     throw new IOException("Stream " + streamName + " was not an OLE2 directory");
                 }
             }
-            
+
         }
 
-        /**
-         * Returns the data portion, for an ObjectData
-         *  that doesn't have an associated POIFS Directory
-         *  Entry
-         */
+        /// <summary>
+        /// Returns the data portion, for an ObjectData
+        ///  that doesn't have an associated POIFS Directory
+        ///  Entry
+        /// </summary>
         public byte[] ObjectData
         {
             get
@@ -100,11 +98,11 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
-         * Does this ObjectData have an associated POIFS 
-         *  Directory Entry?
-         * (Not all do, those that don't have a data portion)
-         */
+        /// <summary>
+        /// Does this ObjectData have an associated POIFS
+        ///  Directory Entry?
+        /// (Not all do, those that don't have a data portion)
+        /// </summary>
         public bool HasDirectoryEntry()
         {
             EmbeddedObjectRefSubRecord subRecord = FindObjectRecord();
@@ -114,20 +112,20 @@ namespace NPOI.HSSF.UserModel
             return streamId != null && streamId != 0;
         }
 
-        /**
-         * Finds the EmbeddedObjectRefSubRecord, or throws an 
-         *  Exception if there wasn't one
-         */
+        /// <summary>
+        /// Finds the EmbeddedObjectRefSubRecord, or throws an
+        ///  Exception if there wasn't one
+        /// </summary>
         public EmbeddedObjectRefSubRecord FindObjectRecord()
         {
             IEnumerator subRecordIter = GetObjRecord().SubRecords.GetEnumerator();
 
-            while (subRecordIter.MoveNext())
+            while(subRecordIter.MoveNext())
             {
                 Object subRecord = subRecordIter.Current;
-                if (subRecord is EmbeddedObjectRefSubRecord)
+                if(subRecord is EmbeddedObjectRefSubRecord)
                 {
-                    return (EmbeddedObjectRefSubRecord)subRecord;
+                    return (EmbeddedObjectRefSubRecord) subRecord;
                 }
             }
 

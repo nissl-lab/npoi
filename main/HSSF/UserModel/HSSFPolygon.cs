@@ -53,9 +53,9 @@ namespace NPOI.HSSF.UserModel
             return null;
         }
 
-        /**
-         * Generates the shape records for this shape.
-         */
+        /// <summary>
+        /// Generates the shape records for this shape.
+        /// </summary>
         protected override EscherContainerRecord CreateSpContainer()
         {
             EscherContainerRecord spContainer = new EscherContainerRecord();
@@ -64,10 +64,10 @@ namespace NPOI.HSSF.UserModel
             EscherClientDataRecord clientData = new EscherClientDataRecord();
 
             spContainer.RecordId = (EscherContainerRecord.SP_CONTAINER);
-            spContainer.Options = ((short)0x000F);
+            spContainer.Options = ((short) 0x000F);
             sp.RecordId = (EscherSpRecord.RECORD_ID);
-            sp.Options = ((short)((EscherAggregate.ST_NOT_PRIMATIVE << 4) | 0x2));
-            if (Parent == null)
+            sp.Options = ((short) ((EscherAggregate.ST_NOT_PRIMATIVE << 4) | 0x2));
+            if(Parent == null)
             {
                 sp.Flags = (EscherSpRecord.FLAG_HAVEANCHOR | EscherSpRecord.FLAG_HASSHAPETYPE);
             }
@@ -97,7 +97,7 @@ namespace NPOI.HSSF.UserModel
 
             EscherRecord anchor = (Anchor as HSSFAnchor).GetEscherAnchor();
             clientData.RecordId = (EscherClientDataRecord.RECORD_ID);
-            clientData.Options = ((short)0x0000);
+            clientData.Options = ((short) 0x0000);
 
             spContainer.AddChildRecord(sp);
             spContainer.AddChildRecord(opt);
@@ -107,9 +107,9 @@ namespace NPOI.HSSF.UserModel
             return spContainer;
         }
 
-        /**
-         * Creates the low level OBJ record for this shape.
-         */
+        /// <summary>
+        /// Creates the low level OBJ record for this shape.
+        /// </summary>
         protected override ObjRecord CreateObjRecord()
         {
             ObjRecord obj = new ObjRecord();
@@ -130,20 +130,20 @@ namespace NPOI.HSSF.UserModel
             patriarch.GetBoundAggregate().RemoveShapeToObjRecord(GetEscherContainer().GetChildById(EscherClientDataRecord.RECORD_ID));
         }
 
-        /**
-         * @return array of x coordinates
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>array of x coordinates</returns>
         public int[] XPoints
         {
             get
             {
                 EscherArrayProperty verticesProp = (EscherArrayProperty)GetOptRecord().Lookup(EscherProperties.GEOMETRY__VERTICES);
-                if (null == verticesProp)
+                if(null == verticesProp)
                 {
                     return new int[] { };
                 }
                 int[] array = new int[verticesProp.NumberOfElementsInArray - 1];
-                for (int i = 0; i < verticesProp.NumberOfElementsInArray - 1; i++)
+                for(int i = 0; i < verticesProp.NumberOfElementsInArray - 1; i++)
                 {
                     byte[] property = verticesProp.GetElement(i);
                     short x = LittleEndian.GetShort(property, 0);
@@ -153,20 +153,20 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
-         * @return array of y coordinates
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>array of y coordinates</returns>
         public int[] YPoints
         {
             get
             {
                 EscherArrayProperty verticesProp = (EscherArrayProperty)GetOptRecord().Lookup(EscherProperties.GEOMETRY__VERTICES);
-                if (null == verticesProp)
+                if(null == verticesProp)
                 {
                     return new int[] { };
                 }
                 int[] array = new int[verticesProp.NumberOfElementsInArray - 1];
-                for (int i = 0; i < verticesProp.NumberOfElementsInArray - 1; i++)
+                for(int i = 0; i < verticesProp.NumberOfElementsInArray - 1; i++)
                 {
                     byte[] property = verticesProp.GetElement(i);
                     short x = LittleEndian.GetShort(property, 2);
@@ -176,37 +176,37 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
-         * @param xPoints - array of x coordinates
-         * @param yPoints - array of y coordinates
-         */
+        /// <summary>
+        /// </summary>
+        /// <param name="xPoints">- array of x coordinates</param>
+        /// <param name="yPoints">- array of y coordinates</param>
         public void SetPoints(int[] xPoints, int[] yPoints)
         {
-            if (xPoints.Length != yPoints.Length)
+            if(xPoints.Length != yPoints.Length)
             {
                 logger.Log(POILogger.ERROR, "xPoint.Length must be equal to yPoints.Length");
                 return;
             }
-            if (xPoints.Length == 0)
+            if(xPoints.Length == 0)
             {
                 logger.Log(POILogger.ERROR, "HSSFPolygon must have at least one point");
             }
             EscherArrayProperty verticesProp = new EscherArrayProperty(EscherProperties.GEOMETRY__VERTICES, false, new byte[0]);
             verticesProp.NumberOfElementsInArray = (xPoints.Length + 1);
             verticesProp.NumberOfElementsInMemory = (xPoints.Length + 1);
-            verticesProp.SizeOfElements = unchecked((short)(0xFFF0));
+            verticesProp.SizeOfElements = unchecked((short) (0xFFF0));
             byte[] data;
-            for (int i = 0; i < xPoints.Length; i++)
+            for(int i = 0; i < xPoints.Length; i++)
             {
                 data = new byte[4];
-                LittleEndian.PutShort(data, 0, (short)xPoints[i]);
-                LittleEndian.PutShort(data, 2, (short)yPoints[i]);
+                LittleEndian.PutShort(data, 0, (short) xPoints[i]);
+                LittleEndian.PutShort(data, 2, (short) yPoints[i]);
                 verticesProp.SetElement(i, data);
             }
             int point = xPoints.Length;
             data = new byte[4];
-            LittleEndian.PutShort(data, 0, (short)xPoints[0]);
-            LittleEndian.PutShort(data, 2, (short)yPoints[0]);
+            LittleEndian.PutShort(data, 0, (short) xPoints[0]);
+            LittleEndian.PutShort(data, 2, (short) yPoints[0]);
             verticesProp.SetElement(point, data);
             SetPropertyValue(verticesProp);
 
@@ -214,32 +214,32 @@ namespace NPOI.HSSF.UserModel
             segmentsProp.SizeOfElements = (0x0002);
             segmentsProp.NumberOfElementsInArray = (xPoints.Length * 2 + 4);
             segmentsProp.NumberOfElementsInMemory = (xPoints.Length * 2 + 4);
-            segmentsProp.SetElement(0, new byte[] { (byte)0x00, (byte)0x40 });
-            segmentsProp.SetElement(1, new byte[] { (byte)0x00, (byte)0xAC });
-            for (int i = 0; i < xPoints.Length; i++)
+            segmentsProp.SetElement(0, new byte[] { (byte) 0x00, (byte) 0x40 });
+            segmentsProp.SetElement(1, new byte[] { (byte) 0x00, (byte) 0xAC });
+            for(int i = 0; i < xPoints.Length; i++)
             {
-                segmentsProp.SetElement(2 + i * 2, new byte[] { (byte)0x01, (byte)0x00 });
-                segmentsProp.SetElement(3 + i * 2, new byte[] { (byte)0x00, (byte)0xAC });
+                segmentsProp.SetElement(2 + i * 2, new byte[] { (byte) 0x01, (byte) 0x00 });
+                segmentsProp.SetElement(3 + i * 2, new byte[] { (byte) 0x00, (byte) 0xAC });
             }
-            segmentsProp.SetElement(segmentsProp.NumberOfElementsInArray - 2, new byte[] { (byte)0x01, (byte)0x60 });
-            segmentsProp.SetElement(segmentsProp.NumberOfElementsInArray - 1, new byte[] { (byte)0x00, (byte)0x80 });
+            segmentsProp.SetElement(segmentsProp.NumberOfElementsInArray - 2, new byte[] { (byte) 0x01, (byte) 0x60 });
+            segmentsProp.SetElement(segmentsProp.NumberOfElementsInArray - 1, new byte[] { (byte) 0x00, (byte) 0x80 });
             SetPropertyValue(segmentsProp);
         }
 
-        /**
-         * Defines the width and height of the points in the polygon
-         * @param width
-         * @param height
-         */
+        /// <summary>
+        /// Defines the width and height of the points in the polygon
+        /// </summary>
+        /// <param name="width">width</param>
+        /// <param name="height">height</param>
         public void SetPolygonDrawArea(int width, int height)
         {
             SetPropertyValue(new EscherSimpleProperty(EscherProperties.GEOMETRY__RIGHT, width));
             SetPropertyValue(new EscherSimpleProperty(EscherProperties.GEOMETRY__BOTTOM, height));
         }
 
-        /**
-         * @return shape width
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>shape width</returns>
         public int DrawAreaWidth
         {
             get
@@ -249,9 +249,9 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
-         * @return shape height
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>shape height</returns>
         public int DrawAreaHeight
         {
             get

@@ -53,26 +53,26 @@ namespace NPOI.HSSF.UserModel
     [Serializable]
     public class HSSFSheet : ISheet
     {
-        /**
-         * width of 1px in columns with default width in units of 1/256 of a character width
-         */
+        /// <summary>
+        /// width of 1px in columns with default width in units of 1/256 of a character width
+        /// </summary>
         private static float PX_DEFAULT = 32.00f;
-        /**
-         * width of 1px in columns with overridden width in units of 1/256 of a character width
-         */
+        /// <summary>
+        /// width of 1px in columns with overridden width in units of 1/256 of a character width
+        /// </summary>
         private static float PX_MODIFIED = 36.56f;
 
-        /**
-         * Used for compile-time optimization.  This is the initial size for the collection of
-         * rows.  It is currently Set to 20.  If you generate larger sheets you may benefit
-         * by Setting this to a higher number and recompiling a custom edition of HSSFSheet.
-         */
+        /// <summary>
+        /// Used for compile-time optimization.  This is the initial size for the collection of
+        /// rows.  It is currently Set to 20.  If you generate larger sheets you may benefit
+        /// by Setting this to a higher number and recompiling a custom edition of HSSFSheet.
+        /// </summary>
 
         public const int INITIAL_CAPACITY = 20;
 
-        /**
-         * reference to the low level Sheet object
-         */
+        /// <summary>
+        /// reference to the low level Sheet object
+        /// </summary>
 
         private InternalSheet _sheet;
         private Dictionary<int, IRow> rows;
@@ -122,11 +122,11 @@ namespace NPOI.HSSF.UserModel
             HSSFSheet sheet = new HSSFSheet(workbook, _sheet.CloneSheet());
             int pos = sheet._sheet.FindFirstRecordLocBySid(DrawingRecord.sid);
             DrawingRecord dr = (DrawingRecord)sheet._sheet.FindFirstRecordBySid(DrawingRecord.sid);
-            if (null != dr)
+            if(null != dr)
             {
                 sheet._sheet.Records.Remove(dr);
             }
-            if (DrawingPatriarch != null)
+            if(DrawingPatriarch != null)
             {
                 HSSFPatriarch patr = HSSFPatriarch.CreatePatriarch(this.DrawingPatriarch as HSSFPatriarch, sheet);
                 sheet._sheet.Records.Insert(pos, patr.GetBoundAggregate());
@@ -138,7 +138,7 @@ namespace NPOI.HSSF.UserModel
 
         internal void PreSerialize()
         {
-            if (_patriarch != null)
+            if(_patriarch != null)
             {
                 _patriarch.PreSerialize();
             }
@@ -174,7 +174,7 @@ namespace NPOI.HSSF.UserModel
         {
             RowRecord row = sheet.NextRow;
 
-            while (row != null)
+            while(row != null)
             {
                 CreateRowFromRecord(row);
 
@@ -190,16 +190,16 @@ namespace NPOI.HSSF.UserModel
             HSSFRow lastrow = null;
 
             // Add every cell to its row
-            while (iter.MoveNext())
+            while(iter.MoveNext())
             {
                 CellValueRecordInterface cval = iter.Current;
                 long cellstart = DateTime.Now.Millisecond;
                 HSSFRow hrow = lastrow;
 
-                if ((lastrow == null) || (lastrow.RowNum != cval.Row))
+                if((lastrow == null) || (lastrow.RowNum != cval.Row))
                 {
-                    hrow = (HSSFRow)GetRow(cval.Row);
-                    if (hrow == null)
+                    hrow = (HSSFRow) GetRow(cval.Row);
+                    if(hrow == null)
                     {
                         /* we removed this check, see bug 47245 for the discussion around this
                         // Some tools (like Perl module SpReadsheet::WriteExcel - bug 41187) skip the RowRecords 
@@ -215,41 +215,26 @@ namespace NPOI.HSSF.UserModel
                         hrow = CreateRowFromRecord(rowRec);
                     }
                 }
-                if (hrow != null)
+                if(hrow != null)
                 {
                     lastrow = hrow;
-                    //if (log.Check(POILogger.DEBUG))
-                    //{
-                    //    if (cval is Record)
-                    //    {
-                    //        log.log(DEBUG, "record id = " + Integer.toHexString(((Record)cval).getSid()));
-                    //    }
-                    //    else
-                    //    {
-                    //        log.log(DEBUG, "record = " + cval);
-                    //    }
-                    //}
 
                     hrow.CreateCellFromRecord(cval);
 
-                    //if (log.Check(POILogger.DEBUG))
-                    //    log.Log(DEBUG, "record took ",DateTime.Now.Millisecond - cellstart);
                 }
                 else
                 {
                     cval = null;
                 }
             }
-            //if (log.Check(POILogger.DEBUG))
-            //    log.Log(DEBUG, "total _sheet cell creation took ",
-            //        DateTime.Now.Millisecond - timestart);
         }
-        /**
-         * Gets the flag indicating whether the window should show 0 (zero) in cells containing zero value.
-         * When false, cells with zero value appear blank instead of showing the number zero.
-         * In Excel 2003 this option can be changed in the Options dialog on the View tab.
-         * @return whether all zero values on the worksheet are displayed
-         */
+
+        /// <summary>
+        /// Gets the flag indicating whether the window should show 0 (zero) in cells containing zero value.
+        /// When false, cells with zero value appear blank instead of showing the number zero.
+        /// In Excel 2003 this option can be changed in the Options dialog on the View tab.
+        /// </summary>
+        /// <returns>whether all zero values on the worksheet are displayed</returns>
         public bool DisplayZeros
         {
             get
@@ -300,39 +285,39 @@ namespace NPOI.HSSF.UserModel
         public void RemoveRow(IRow row)
         {
             HSSFRow hrow = (HSSFRow)row;
-            if (row.Sheet != this)
+            if(row.Sheet != this)
             {
                 throw new ArgumentException("Specified row does not belong to this sheet");
             }
-            foreach (ICell cell in row)
+            foreach(ICell cell in row)
             {
                 HSSFCell xcell = (HSSFCell)cell;
-                if (xcell.IsPartOfArrayFormulaGroup)
+                if(xcell.IsPartOfArrayFormulaGroup)
                 {
                     String msg = "Row[rownum=" + row.RowNum + "] contains cell(s) included in a multi-cell array formula. You cannot change part of an array.";
                     xcell.NotifyArrayFormulaChanging(msg);
                 }
             }
-            if (rows.Count > 0)
+            if(rows.Count > 0)
             {
                 int key = row.RowNum;
                 HSSFRow removedRow = (HSSFRow)rows[key];
                 rows.Remove(key);
 
-                if (removedRow != row)
+                if(removedRow != row)
                 {
-                    if (removedRow != null)
+                    if(removedRow != null)
                     {
                         rows[key] = removedRow;
                     }
                     throw new InvalidOperationException("Specified row does not belong to this _sheet");
                 }
 
-                if (hrow.RowNum == LastRowNum)
+                if(hrow.RowNum == LastRowNum)
                 {
                     lastrow = FindLastRow(lastrow);
                 }
-                if (hrow.RowNum == FirstRowNum)
+                if(hrow.RowNum == FirstRowNum)
                 {
                     firstrow = FindFirstRow(firstrow);
                 }
@@ -356,7 +341,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns></returns>
         private int FindLastRow(int lastrow)
         {
-            if (lastrow < 1)
+            if(lastrow < 1)
             {
                 return 0;
             }
@@ -364,11 +349,11 @@ namespace NPOI.HSSF.UserModel
             int rownum = lastrow - 1;
             NPOI.SS.UserModel.IRow r = GetRow(rownum);
 
-            while (r == null && rownum > 0)
+            while(r == null && rownum > 0)
             {
                 r = GetRow(--rownum);
             }
-            if (r == null)
+            if(r == null)
                 return 0;
             return rownum;
         }
@@ -383,37 +368,36 @@ namespace NPOI.HSSF.UserModel
             int rownum = firstrow + 1;
             NPOI.SS.UserModel.IRow r = GetRow(rownum);
 
-            while (r == null && rownum <= LastRowNum)
+            while(r == null && rownum <= LastRowNum)
             {
                 r = GetRow(++rownum);
             }
 
-            if (rownum > LastRowNum)
+            if(rownum > LastRowNum)
                 return 0;
 
             return rownum;
         }
 
-        /**
-         * Add a row to the _sheet
-         *
-         * @param AddLow whether to Add the row to the low level model - false if its already there
-         */
+        /// <summary>
+        /// Add a row to the _sheet
+        /// </summary>
+        /// <param name="AddLow">whether to Add the row to the low level model - false if its already there</param>
 
         private void AddRow(HSSFRow row, bool addLow)
         {
             rows[row.RowNum] = row;
 
-            if (addLow)
+            if(addLow)
             {
                 _sheet.AddRow(row.RowRecord);
             }
             bool firstRow = rows.Count == 1;
-            if (row.RowNum > LastRowNum || firstRow)
+            if(row.RowNum > LastRowNum || firstRow)
             {
                 lastrow = row.RowNum;
             }
-            if (row.RowNum < FirstRowNum || firstRow)
+            if(row.RowNum < FirstRowNum || firstRow)
             {
                 firstrow = row.RowNum;
             }
@@ -430,7 +414,7 @@ namespace NPOI.HSSF.UserModel
         {
             short styleIndex = _sheet.GetXFIndexForColAt((short)column);
 
-            if (styleIndex == 0xf)
+            if(styleIndex == 0xf)
             {
                 // None set
                 return null;
@@ -448,9 +432,9 @@ namespace NPOI.HSSF.UserModel
         /// <returns>the row number or null if its not defined on the _sheet</returns>
         public NPOI.SS.UserModel.IRow GetRow(int rowIndex)
         {
-            if (!rows.ContainsKey(rowIndex))
+            if(!rows.ContainsKey(rowIndex))
                 return null;
-            return (HSSFRow)rows[rowIndex];
+            return (HSSFRow) rows[rowIndex];
         }
 
         /// <summary>
@@ -502,7 +486,7 @@ namespace NPOI.HSSF.UserModel
             private HSSFEvaluationWorkbook book;
             public void VisitRecord(Record r)
             {
-                if (!(r is DVRecord))
+                if(!(r is DVRecord))
                 {
                     return;
                 }
@@ -536,7 +520,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="dataValidation">The data validation object settings</param>
         public void AddValidationData(IDataValidation dataValidation)
         {
-            if (dataValidation == null)
+            if(dataValidation == null)
             {
                 throw new ArgumentException("objValidation must not be null");
             }
@@ -616,7 +600,7 @@ namespace NPOI.HSSF.UserModel
         public short DefaultRowHeight
         {
             get { return _sheet.DefaultRowHeight; }
-            set { _sheet.DefaultRowHeight = (short)value; }
+            set { _sheet.DefaultRowHeight = (short) value; }
         }
 
         /// <summary>
@@ -628,9 +612,9 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return (float)(_sheet.DefaultRowHeight / 20.0);
+                return (float) (_sheet.DefaultRowHeight / 20.0);
             }
-            set { _sheet.DefaultRowHeight = ((short)(value * 20.0)); }
+            set { _sheet.DefaultRowHeight = ((short) (value * 20.0)); }
         }
 
         /// <summary>
@@ -700,11 +684,11 @@ namespace NPOI.HSSF.UserModel
         /// or multi-cell array formula on this sheet</exception>
         private int AddMergedRegion(CellRangeAddress region, bool validate)
         {
-            if (region.NumberOfCells < 2)
+            if(region.NumberOfCells < 2)
             {
                 throw new ArgumentException("Merged region " + region.FormatAsString() + " must contain 2 or more cells");
             }
-            if (validate)
+            if(validate)
             {
                 region.Validate(SpreadsheetVersion.EXCEL97);
                 // throw InvalidOperationException if the argument CellRangeAddress intersects with
@@ -719,7 +703,7 @@ namespace NPOI.HSSF.UserModel
                     region.LastRow,
                     region.LastColumn);
         }
-       
+
         private void ValidateArrayFormulas(CellRangeAddress region)
         {
             // FIXME: this may be faster if it looped over array formulas directly rather than looping over each cell in
@@ -728,20 +712,21 @@ namespace NPOI.HSSF.UserModel
             int firstColumn = region.FirstColumn;
             int lastRow = region.LastRow;
             int lastColumn = region.LastColumn;
-            for (int rowIn = firstRow; rowIn <= lastRow; rowIn++)
+            for(int rowIn = firstRow; rowIn <= lastRow; rowIn++)
             {
                 HSSFRow row = (HSSFRow)GetRow(rowIn);
-                if (row == null)
+                if(row == null)
                     continue;
-                for (int colIn = firstColumn; colIn <= lastColumn; colIn++)
+                for(int colIn = firstColumn; colIn <= lastColumn; colIn++)
                 {
                     HSSFCell cell = (HSSFCell)row.GetCell(colIn);
-                    if (cell == null) continue;
+                    if(cell == null)
+                        continue;
 
-                    if (cell.IsPartOfArrayFormulaGroup)
+                    if(cell.IsPartOfArrayFormulaGroup)
                     {
                         CellRangeAddress arrayRange = cell.ArrayFormulaRange;
-                        if (arrayRange.NumberOfCells > 1 && region.Intersects(arrayRange))
+                        if(arrayRange.NumberOfCells > 1 && region.Intersects(arrayRange))
                         {
                             String msg = "The range " + region.FormatAsString() + " intersects with a multi-cell array formula. " +
                                     "You cannot merge cells of an array.";
@@ -759,7 +744,7 @@ namespace NPOI.HSSF.UserModel
         /// <exception cref="NPOI.Util.InvalidOperationException">if candidate region intersects an existing array formula in this sheet</exception>
         private void CheckForMergedRegionsIntersectingArrayFormulas()
         {
-            foreach (CellRangeAddress region in MergedRegions)
+            foreach(CellRangeAddress region in MergedRegions)
             {
                 ValidateArrayFormulas(region);
             }
@@ -767,9 +752,9 @@ namespace NPOI.HSSF.UserModel
 
         private void ValidateMergedRegions(CellRangeAddress candidateRegion)
         {
-            foreach (CellRangeAddress existingRegion in MergedRegions)
+            foreach(CellRangeAddress existingRegion in MergedRegions)
             {
-                if (existingRegion.Intersects(candidateRegion))
+                if(existingRegion.Intersects(candidateRegion))
                 {
                     throw new InvalidOperationException("Cannot add merged region " + candidateRegion.FormatAsString() +
                             " to sheet because it overlaps with an existing merged region (" + existingRegion.FormatAsString() + ").");
@@ -785,12 +770,12 @@ namespace NPOI.HSSF.UserModel
         {
             List<CellRangeAddress> regions = MergedRegions;
             int size = regions.Count;
-            for (int i = 0; i < size; i++)
+            for(int i = 0; i < size; i++)
             {
                 CellRangeAddress region = regions[i];
-                foreach (CellRangeAddress other in regions.GetRange(i + 1, regions.Count - i - 1))
+                foreach(CellRangeAddress other in regions.GetRange(i + 1, regions.Count - i - 1))
                 {
-                    if (region.Intersects(other))
+                    if(region.Intersects(other))
                     {
                         String msg = "The range " + region.FormatAsString() +
                                     " intersects with another merged region " +
@@ -868,7 +853,7 @@ namespace NPOI.HSSF.UserModel
 
             SortedSet<int> ss = new SortedSet<int>(indices, new Int32Comparer());
             //foreach (int i in (new TreeSet<Integer>(indices)).descendingSet())
-            foreach (int i in ss)
+            foreach(int i in ss)
             {
                 _sheet.RemoveMergedRegion(i);
             }
@@ -878,9 +863,9 @@ namespace NPOI.HSSF.UserModel
         {
             public int Compare(int x, int y)
             {
-                if (x < y)
+                if(x < y)
                     return 1;
-                else if (x > y)
+                else if(x > y)
                     return -1;
                 else
                     return 0;
@@ -992,7 +977,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return ((WSBoolRecord)_sheet.FindFirstRecordBySid(WSBoolRecord.sid))
+                return ((WSBoolRecord) _sheet.FindFirstRecordBySid(WSBoolRecord.sid))
                         .AlternateExpression;
             }
             set
@@ -1012,7 +997,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return ((WSBoolRecord)_sheet.FindFirstRecordBySid(WSBoolRecord.sid))
+                return ((WSBoolRecord) _sheet.FindFirstRecordBySid(WSBoolRecord.sid))
                         .AlternateFormula;
             }
             set
@@ -1031,7 +1016,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return ((WSBoolRecord)_sheet.FindFirstRecordBySid(WSBoolRecord.sid))
+                return ((WSBoolRecord) _sheet.FindFirstRecordBySid(WSBoolRecord.sid))
                         .Autobreaks;
             }
             set
@@ -1051,7 +1036,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return ((WSBoolRecord)_sheet.FindFirstRecordBySid(WSBoolRecord.sid))
+                return ((WSBoolRecord) _sheet.FindFirstRecordBySid(WSBoolRecord.sid))
                         .Dialog;
             }
             set
@@ -1071,7 +1056,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return ((WSBoolRecord)_sheet.FindFirstRecordBySid(WSBoolRecord.sid))
+                return ((WSBoolRecord) _sheet.FindFirstRecordBySid(WSBoolRecord.sid))
                         .DisplayGuts;
             }
             set
@@ -1091,7 +1076,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return ((WSBoolRecord)_sheet.FindFirstRecordBySid(WSBoolRecord.sid))
+                return ((WSBoolRecord) _sheet.FindFirstRecordBySid(WSBoolRecord.sid))
                         .FitToPage;
             }
             set
@@ -1111,7 +1096,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return ((WSBoolRecord)_sheet.FindFirstRecordBySid(WSBoolRecord.sid))
+                return ((WSBoolRecord) _sheet.FindFirstRecordBySid(WSBoolRecord.sid))
                         .RowSumsBelow;
             }
             set
@@ -1131,7 +1116,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return ((WSBoolRecord)_sheet.FindFirstRecordBySid(WSBoolRecord.sid))
+                return ((WSBoolRecord) _sheet.FindFirstRecordBySid(WSBoolRecord.sid))
                         .RowSumsRight;
             }
             set
@@ -1264,7 +1249,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return (short)ProtectionBlock.PasswordHash;
+                return (short) ProtectionBlock.PasswordHash;
             }
         }
 
@@ -1309,34 +1294,36 @@ namespace NPOI.HSSF.UserModel
         [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #setZoom(int)} instead.")]
         public void SetZoom(int numerator, int denominator)
         {
-            if (numerator < 1 || numerator > 65535)
+            if(numerator < 1 || numerator > 65535)
                 throw new ArgumentException("Numerator must be greater than 0 and less than 65536");
-            if (denominator < 1 || denominator > 65535)
+            if(denominator < 1 || denominator > 65535)
                 throw new ArgumentException("Denominator must be greater than 0 and less than 65536");
 
             SCLRecord sclRecord = new SCLRecord();
-            sclRecord.Numerator = ((short)numerator);
-            sclRecord.Denominator = ((short)denominator);
+            sclRecord.Numerator = ((short) numerator);
+            sclRecord.Denominator = ((short) denominator);
             Sheet.SetSCLRecord(sclRecord);
         }
 
-        /**
-         * Window zoom magnification for current view representing percent values.
-         * Valid values range from 10 to 400. Horizontal &amp; Vertical scale together.
-         *
-         * For example:
-         * <pre>
-         * 10 - 10%
-         * 20 - 20%
-         * ...
-         * 100 - 100%
-         * ...
-         * 400 - 400%
-         * </pre>
-         *
-         * @param scale window zoom magnification
-         * @throws IllegalArgumentException if scale is invalid
-         */   
+        /// <summary>
+        /// <para>
+        /// Window zoom magnification for current view representing percent values.
+        /// Valid values range from 10 to 400. Horizontal &amp; Vertical scale together.
+        /// </para>
+        /// <para>
+        /// For example:
+        /// <code>
+        /// 10 - 10%
+        /// 20 - 20%
+        /// ...
+        /// 100 - 100%
+        /// ...
+        /// 400 - 400%
+        /// </code>
+        /// </para>
+        /// </summary>
+        /// <param name="scale">window zoom magnification</param>
+        /// <exception cref="IllegalArgumentException">if scale is invalid</exception>   
         public void SetZoom(int scale)
         {
             SetZoom(scale, 100);
@@ -1440,19 +1427,19 @@ namespace NPOI.HSSF.UserModel
                 _sheet.LeftCol = value;
             }
         }
-        /**
-         * Sets desktop window pane display area, when the
-         * file is first opened in a viewer.
-         *
-         * @param toprow  the top row to show in desktop window pane
-         * @param leftcol the left column to show in desktop window pane
-         */
+        /// <summary>
+        /// Sets desktop window pane display area, when the
+        /// file is first opened in a viewer.
+        /// </summary>
+        /// <param name="toprow"> the top row to show in desktop window pane</param>
+        /// <param name="leftcol">the left column to show in desktop window pane</param>
         public void ShowInPane(int toprow, int leftcol)
         {
             int maxrow = SpreadsheetVersion.EXCEL97.LastRowIndex;
-            if (toprow > maxrow) throw new ArgumentException("Maximum row number is " + maxrow);
+            if(toprow > maxrow)
+                throw new ArgumentException("Maximum row number is " + maxrow);
 
-            ShowInPane((short)toprow, (short)leftcol);
+            ShowInPane((short) toprow, (short) leftcol);
         }
         /// <summary>
         /// Sets desktop window pane display area, when the
@@ -1531,16 +1518,16 @@ namespace NPOI.HSSF.UserModel
             bool copyRowHeight, bool resetOriginalRowHeight, bool moveComments)
         {
             int s, inc;
-            if (endRow < startRow)
+            if(endRow < startRow)
             {
                 throw new ArgumentException("startRow must be less than or equal to endRow. To shift rows up, use n<0.");
             }
-            if (n < 0)
+            if(n < 0)
             {
                 s = startRow;
                 inc = 1;
             }
-            else if (n > 0)
+            else if(n > 0)
             {
                 s = endRow;
                 inc = -1;
@@ -1557,7 +1544,7 @@ namespace NPOI.HSSF.UserModel
             // (above the first row or below the last row), this code will shift the
             // comments to the first or last row, rather than moving them out of
             // bounds or deleting them
-            if (moveComments)
+            if(moveComments)
             {
                 moveCommentsForRowShift(startRow, endRow, n);
             }
@@ -1569,18 +1556,19 @@ namespace NPOI.HSSF.UserModel
             _sheet.PageSettings.ShiftRowBreaks(startRow, endRow, n);
             deleteOverwrittenHyperlinksForRowShift(startRow, endRow, n);
 
-            for (int rowNum = s; rowNum >= startRow && rowNum <= endRow && rowNum >= 0 && rowNum < 65536; rowNum += inc)
+            for(int rowNum = s; rowNum >= startRow && rowNum <= endRow && rowNum >= 0 && rowNum < 65536; rowNum += inc)
             {
                 HSSFRow row = (HSSFRow)GetRow(rowNum);
 
                 // notify all cells in this row that we are going to shift them,
                 // it can throw InvalidOperationException if the operation is not allowed, for example,
                 // if the row contains cells included in a multi-cell array formula
-                if (row != null) NotifyRowShifting(row);
+                if(row != null)
+                    NotifyRowShifting(row);
 
                 HSSFRow row2Replace = (HSSFRow)GetRow(rowNum + n);
-                if (row2Replace == null)
-                    row2Replace = (HSSFRow)CreateRow(rowNum + n);
+                if(row2Replace == null)
+                    row2Replace = (HSSFRow) CreateRow(rowNum + n);
 
 
                 // Remove all the old cells from the row we'll
@@ -1592,23 +1580,24 @@ namespace NPOI.HSSF.UserModel
 
                 // If this row doesn't exist, nothing needs to
                 //  be done for the now empty destination row
-                if (row == null) continue; // Nothing to do for this row
+                if(row == null)
+                    continue; // Nothing to do for this row
 
 
                 // Fix up row heights if required
-                if (copyRowHeight)
+                if(copyRowHeight)
                 {
                     row2Replace.Height = (row.Height);
                 }
-                if (resetOriginalRowHeight)
+                if(resetOriginalRowHeight)
                 {
-                    row.Height = ((short)0xff);
+                    row.Height = ((short) 0xff);
                 }
 
                 // Copy each cell from the source row to
                 //  the destination row
                 List<ICell> cells = row.Cells;
-                foreach (ICell cell in cells)
+                foreach(ICell cell in cells)
                 {
                     row.RemoveCell(cell);
                     IHyperlink link = cell.Hyperlink;
@@ -1617,7 +1606,7 @@ namespace NPOI.HSSF.UserModel
                     row2Replace.CreateCellFromRecord(cellRecord);
                     _sheet.AddValueRecord(rowNum + n, cellRecord);
 
-                    if (link != null)
+                    if(link != null)
                     {
                         link.FirstRow = (link.FirstRow + n);
                         link.LastRow = (link.LastRow + n);
@@ -1647,10 +1636,10 @@ namespace NPOI.HSSF.UserModel
             _sheet.UpdateFormulasAfterCellShift(formulaShifter, externSheetIndex);
 
             int nSheets = _workbook.NumberOfSheets;
-            for (int i = 0; i < nSheets; i++)
+            for(int i = 0; i < nSheets; i++)
             {
                 InternalSheet otherSheet = ((HSSFSheet)_workbook.GetSheetAt(i)).Sheet;
-                if (otherSheet == this._sheet)
+                if(otherSheet == this._sheet)
                 {
                     continue;
                 }
@@ -1661,23 +1650,23 @@ namespace NPOI.HSSF.UserModel
         }
         private void recomputeFirstAndLastRowsForRowShift(int startRow, int endRow, int n)
         {
-            if (n > 0)
+            if(n > 0)
             {
                 // Rows are moving down
-                if (startRow == firstrow)
+                if(startRow == firstrow)
                 {
                     // Need to walk forward to find the first non-blank row
                     firstrow = Math.Max(startRow + n, 0);
-                    for (int i = startRow + 1; i < startRow + n; i++)
+                    for(int i = startRow + 1; i < startRow + n; i++)
                     {
-                        if (GetRow(i) != null)
+                        if(GetRow(i) != null)
                         {
                             firstrow = i;
                             break;
                         }
                     }
                 }
-                if (endRow + n > lastrow)
+                if(endRow + n > lastrow)
                 {
                     lastrow = Math.Min(endRow + n, SpreadsheetVersion.EXCEL97.LastRowIndex);
                 }
@@ -1685,18 +1674,18 @@ namespace NPOI.HSSF.UserModel
             else
             {
                 // Rows are moving up
-                if (startRow + n < firstrow)
+                if(startRow + n < firstrow)
                 {
                     firstrow = Math.Max(startRow + n, 0);
                 }
-                if (endRow == lastrow)
+                if(endRow == lastrow)
                 {
                     // Need to walk backward to find the last non-blank row
                     // NOTE: n is always negative here
                     lastrow = Math.Min(endRow + n, SpreadsheetVersion.EXCEL97.LastRowIndex);
-                    for (int i = endRow - 1; i > endRow + n; i++)
+                    for(int i = endRow - 1; i > endRow + n; i++)
                     {
-                        if (GetRow(i) != null)
+                        if(GetRow(i) != null)
                         {
                             lastrow = i;
                             break;
@@ -1709,10 +1698,10 @@ namespace NPOI.HSSF.UserModel
         {
             int firstOverwrittenRow = startRow + n;
             int lastOverwrittenRow = endRow + n;
-            foreach (HSSFHyperlink link in GetHyperlinkList())
+            foreach(HSSFHyperlink link in GetHyperlinkList())
             {
                 // If hyperlink is fully contained in the rows that will be overwritten, delete the hyperlink
-                if (firstOverwrittenRow <= link.FirstRow &&
+                if(firstOverwrittenRow <= link.FirstRow &&
                         link.FirstRow <= lastOverwrittenRow &&
                         lastOverwrittenRow <= link.LastRow &&
                         link.LastRow <= lastOverwrittenRow)
@@ -1725,16 +1714,16 @@ namespace NPOI.HSSF.UserModel
         {
             HSSFPatriarch patriarch = CreateDrawingPatriarch() as HSSFPatriarch;
             int lastChildIndex = patriarch.Children.Count - 1;
-            for (int i = lastChildIndex; i >= 0; i--)
+            for(int i = lastChildIndex; i >= 0; i--)
             {
                 HSSFShape shape = patriarch.Children[(i)];
-                if (!(shape is HSSFComment))
+                if(!(shape is HSSFComment))
                 {
                     continue;
                 }
                 HSSFComment comment = (HSSFComment)shape;
                 int r = comment.Row;
-                if (startRow <= r && r <= endRow)
+                if(startRow <= r && r <= endRow)
                 {
                     comment.Row = clip(r + n);
                 }
@@ -1759,10 +1748,10 @@ namespace NPOI.HSSF.UserModel
         {
             String msg = "Row[rownum=" + row.RowNum + "] contains cell(s) included in a multi-cell array formula. " +
                     "You cannot change part of an array.";
-            foreach (ICell cell in row.Cells)
+            foreach(ICell cell in row.Cells)
             {
                 HSSFCell hcell = (HSSFCell)cell;
-                if (hcell.IsPartOfArrayFormulaGroup)
+                if(hcell.IsPartOfArrayFormulaGroup)
                 {
                     hcell.NotifyArrayFormulaChanging(msg);
                 }
@@ -1779,8 +1768,10 @@ namespace NPOI.HSSF.UserModel
         {
             ValidateColumn(colSplit);
             ValidateRow(rowSplit);
-            if (leftmostColumn < colSplit) throw new ArgumentException("leftmostColumn parameter must not be less than colSplit parameter");
-            if (topRow < rowSplit) throw new ArgumentException("topRow parameter must not be less than leftmostColumn parameter");
+            if(leftmostColumn < colSplit)
+                throw new ArgumentException("leftmostColumn parameter must not be less than colSplit parameter");
+            if(topRow < rowSplit)
+                throw new ArgumentException("topRow parameter must not be less than leftmostColumn parameter");
             Sheet.CreateFreezePane(colSplit, rowSplit, topRow, leftmostColumn);
         }
 
@@ -1862,7 +1853,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>the size of the margin</returns>
         public double GetMargin(NPOI.SS.UserModel.MarginType margin)
         {
-            switch (margin)
+            switch(margin)
             {
                 case MarginType.FooterMargin:
                     return _sheet.PageSettings.PrintSetup.FooterMargin;
@@ -1880,7 +1871,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="size">the size of the margin</param>
         public void SetMargin(NPOI.SS.UserModel.MarginType margin, double size)
         {
-            switch (margin)
+            switch(margin)
             {
                 case MarginType.FooterMargin:
                     _sheet.PageSettings.PrintSetup.FooterMargin = (size);
@@ -1901,7 +1892,7 @@ namespace NPOI.HSSF.UserModel
         public void SetRowBreak(int row)
         {
             ValidateRow(row);
-            _sheet.PageSettings.SetRowBreak(row, (short)0, (short)255);
+            _sheet.PageSettings.SetRowBreak(row, (short) 0, (short) 255);
         }
 
         /// <summary>
@@ -1959,7 +1950,7 @@ namespace NPOI.HSSF.UserModel
         public void SetColumnBreak(int column)
         {
             ValidateColumn(column);
-            _sheet.PageSettings.SetColumnBreak(column, (short)0, unchecked((short)65535));
+            _sheet.PageSettings.SetColumnBreak(column, (short) 0, unchecked((short) 65535));
         }
 
         /// <summary>
@@ -1990,8 +1981,10 @@ namespace NPOI.HSSF.UserModel
         protected void ValidateRow(int row)
         {
             int maxrow = SpreadsheetVersion.EXCEL97.LastRowIndex;
-            if (row > maxrow) throw new ArgumentException("Maximum row number is " + maxrow.ToString(CultureInfo.CurrentCulture));
-            if (row < 0) throw new ArgumentException("Minumum row number is 0");
+            if(row > maxrow)
+                throw new ArgumentException("Maximum row number is " + maxrow.ToString(CultureInfo.CurrentCulture));
+            if(row < 0)
+                throw new ArgumentException("Minumum row number is 0");
         }
 
         /// <summary>
@@ -2001,8 +1994,10 @@ namespace NPOI.HSSF.UserModel
         protected void ValidateColumn(int column)
         {
             int maxcol = SpreadsheetVersion.EXCEL97.LastColumnIndex;
-            if (column > maxcol) throw new ArgumentException("Maximum column number is " + maxcol.ToString(CultureInfo.CurrentCulture));
-            if (column < 0) throw new ArgumentException("Minimum column number is 0");
+            if(column > maxcol)
+                throw new ArgumentException("Maximum column number is " + maxcol.ToString(CultureInfo.CurrentCulture));
+            if(column < 0)
+                throw new ArgumentException("Minimum column number is 0");
         }
 
         /// <summary>
@@ -2016,9 +2011,9 @@ namespace NPOI.HSSF.UserModel
 
             EscherAggregate r = (EscherAggregate)Sheet.FindFirstRecordBySid(EscherAggregate.sid);
             var escherRecords = r.EscherRecords;
-            foreach (EscherRecord escherRecord in escherRecords)
+            foreach(EscherRecord escherRecord in escherRecords)
             {
-                if (fat)
+                if(fat)
                     Console.WriteLine(escherRecord.ToString());
                 else
                     escherRecord.Display(0);
@@ -2045,7 +2040,7 @@ namespace NPOI.HSSF.UserModel
 
                 // If there's now no drawing manager, then there's
                 //  no drawing escher records on the _workbook
-                if (book.DrawingManager == null)
+                if(book.DrawingManager == null)
                 {
                     return null;
                 }
@@ -2053,22 +2048,21 @@ namespace NPOI.HSSF.UserModel
                 int found = _sheet.AggregateDrawingRecords(
                         book.DrawingManager, false
                 );
-                if (found == -1)
+                if(found == -1)
                 {
                     // Workbook has drawing stuff, but this _sheet doesn't
                     return null;
                 }
 
                 // Grab our aggregate record, and wire it up
-                return (EscherAggregate)_sheet.FindFirstRecordBySid(EscherAggregate.sid);
+                return (EscherAggregate) _sheet.FindFirstRecordBySid(EscherAggregate.sid);
             }
         }
 
-        /**
-     * This will hold any graphics or charts for the sheet.
-     *
-     * @return the top-level drawing patriarch, if there is one, else returns null
-     */
+        /// <summary>
+        /// This will hold any graphics or charts for the sheet.
+        /// </summary>
+        /// <returns>the top-level drawing patriarch, if there is one, else returns null</returns>
         public IDrawing<IShape> DrawingPatriarch
         {
             get
@@ -2078,14 +2072,13 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
-         * Creates the top-level drawing patriarch.  This will have
-         * the effect of removing any existing drawings on this
-         * sheet.
-         * This may then be used to add graphics or charts
-         *
-         * @return The new patriarch.
-         */
+        /// <summary>
+        /// Creates the top-level drawing patriarch.  This will have
+        /// the effect of removing any existing drawings on this
+        /// sheet.
+        /// This may then be used to add graphics or charts
+        /// </summary>
+        /// <returns>The new patriarch.</returns>
         public IDrawing<IShape> CreateDrawingPatriarch()
         {
             _patriarch = GetPatriarch(true);
@@ -2094,15 +2087,15 @@ namespace NPOI.HSSF.UserModel
 
         private HSSFPatriarch GetPatriarch(bool createIfMissing)
         {
-            
-            if (_patriarch != null)
+
+            if(_patriarch != null)
             {
                 return _patriarch;
             }
             DrawingManager2 dm = book.FindDrawingGroup();
-            if (null == dm)
+            if(null == dm)
             {
-                if (!createIfMissing)
+                if(!createIfMissing)
                 {
                     return null;
                 }
@@ -2113,15 +2106,15 @@ namespace NPOI.HSSF.UserModel
                 }
             }
             EscherAggregate agg = (EscherAggregate)_sheet.FindFirstRecordBySid(EscherAggregate.sid);
-            if (null == agg || null == agg.GetEscherContainer())
+            if(null == agg || null == agg.GetEscherContainer())
             {
                 int pos = _sheet.AggregateDrawingRecords(dm, false);
-                if (-1 == pos || (agg = (EscherAggregate)_sheet.Records[(pos)]) == null || agg.GetEscherContainer() == null)
+                if(-1 == pos || (agg = (EscherAggregate) _sheet.Records[(pos)]) == null || agg.GetEscherContainer() == null)
                 {
-                    if (createIfMissing)
+                    if(createIfMissing)
                     {
                         pos = _sheet.AggregateDrawingRecords(dm, true);
-                        agg = (EscherAggregate)_sheet.Records[pos];
+                        agg = (EscherAggregate) _sheet.Records[pos];
                         HSSFPatriarch patriarch = new HSSFPatriarch(this, agg);
                         patriarch.AfterCreate();
                         return patriarch;
@@ -2200,12 +2193,12 @@ namespace NPOI.HSSF.UserModel
         /// <returns>the <see cref="ICellRange{ICell}"/> of cells affected by this change</returns>
         public ICellRange<ICell> RemoveArrayFormula(ICell cell)
         {
-            if (cell.Sheet != this)
+            if(cell.Sheet != this)
             {
                 throw new ArgumentException("Specified cell does not belong to this sheet.");
             }
             CellValueRecordInterface rec = ((HSSFCell)cell).CellValueRecord;
-            if (!(rec is FormulaRecordAggregate))
+            if(!(rec is FormulaRecordAggregate))
             {
                 String ref1 = new CellReference(cell).FormatAsString();
                 throw new ArgumentException("Cell " + ref1 + " is not part of an array formula.");
@@ -2215,7 +2208,7 @@ namespace NPOI.HSSF.UserModel
 
             ICellRange<ICell> result = GetCellRange(range);
             // clear all cells in the range
-            foreach (ICell c in result)
+            foreach(ICell c in result)
             {
                 c.SetCellType(CellType.Blank);
             }
@@ -2234,17 +2227,17 @@ namespace NPOI.HSSF.UserModel
             int height = lastRow - firstRow + 1;
             int width = lastColumn - firstColumn + 1;
             List<ICell> temp = new List<ICell>(height * width);
-            for (int rowIn = firstRow; rowIn <= lastRow; rowIn++)
+            for(int rowIn = firstRow; rowIn <= lastRow; rowIn++)
             {
-                for (int colIn = firstColumn; colIn <= lastColumn; colIn++)
+                for(int colIn = firstColumn; colIn <= lastColumn; colIn++)
                 {
                     IRow row = GetRow(rowIn);
-                    if (row == null)
+                    if(row == null)
                     {
                         row = CreateRow(rowIn);
                     }
                     ICell cell = row.GetCell(colIn);
-                    if (cell == null)
+                    if(cell == null)
                     {
                         cell = row.CreateCell(colIn);
                     }
@@ -2267,7 +2260,7 @@ namespace NPOI.HSSF.UserModel
             Ptg[] ptgs = HSSFFormulaParser.Parse(formula, _workbook, FormulaType.Array, sheetIndex);
             ICellRange<ICell> cells = GetCellRange(range);
 
-            foreach (HSSFCell c in cells)
+            foreach(HSSFCell c in cells)
             {
                 c.SetCellArrayFormula(range);
             }
@@ -2295,7 +2288,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="collapse">if set to <c>true</c> [collapse].</param>
         public void SetRowGroupCollapsed(int row, bool collapse)
         {
-            if (collapse)
+            if(collapse)
             {
                 _sheet.RowsAggregate.CollapseRow(row);
             }
@@ -2340,64 +2333,69 @@ namespace NPOI.HSSF.UserModel
         public void AutoSizeColumn(int column, bool useMergedCells)
         {
             double width = SheetUtil.GetColumnWidth(this, column, useMergedCells);
-            if (width != -1)
+            if(width != -1)
             {
                 width *= 256;
                 int maxColumnWidth = 255 * 256; // The maximum column width for an individual cell is 255 characters
 
-                if (width > maxColumnWidth)
+                if(width > maxColumnWidth)
                 {
                     width = maxColumnWidth;
                 }
-                SetColumnWidth(column, (int)width);
+                SetColumnWidth(column, (int) width);
             }
         }
 
-        /**
-         * Adjusts the row height to fit the contents.
-         *
-         * This process can be relatively slow on large sheets, so this should
-         *  normally only be called once per row, at the end of your
-         *  Processing.
-         *
-         * @param row the row index
-         */
+        /// <summary>
+        /// <para>
+        /// Adjusts the row height to fit the contents.
+        /// </para>
+        /// <para>
+        /// This process can be relatively slow on large sheets, so this should
+        ///  normally only be called once per row, at the end of your
+        ///  Processing.
+        /// </para>
+        /// </summary>
+        /// <param name="row">the row index</param>
         public void AutoSizeRow(int row)
         {
             AutoSizeRow(row, false);
         }
 
-        /**
-         * Adjusts the row height to fit the contents.
-         * <p>
-         * This process can be relatively slow on large sheets, so this should
-         *  normally only be called once per row, at the end of your
-         *  Processing.
-         * </p>
-         * You can specify whether the content of merged cells should be considered or ignored.
-         *  Default is to ignore merged cells.
-         *
-         * @param row the row index
-         * @param useMergedCells whether to use the contents of merged cells when calculating the height of the row
-         */
+        /// <summary>
+        /// <para>
+        /// Adjusts the row height to fit the contents.
+        /// </para>
+        /// <para>
+        /// This process can be relatively slow on large sheets, so this should
+        ///  normally only be called once per row, at the end of your
+        ///  Processing.
+        /// </para>
+        /// <para>
+        /// You can specify whether the content of merged cells should be considered or ignored.
+        ///  Default is to ignore merged cells.
+        /// </para>
+        /// </summary>
+        /// <param name="row">the row index</param>
+        /// <param name="useMergedCells">whether to use the contents of merged cells when calculating the height of the row</param>
         public void AutoSizeRow(int row, bool useMergedCells)
         {
             var targetRow = GetRow(row) ?? CreateRow(row);
 
             double height = SheetUtil.GetRowHeight(this, row, useMergedCells);
 
-            if (height != -1 && height != 0)
+            if(height != -1 && height != 0)
             {
                 height *= 20;
 
                 int maxRowHeight = 409 * 20; // The maximum row height for an individual cell is 409 points
 
-                if (height > maxRowHeight)
+                if(height > maxRowHeight)
                 {
                     height = maxRowHeight;
                 }
 
-                targetRow.Height = (short)height;
+                targetRow.Height = (short) height;
             }
         }
 
@@ -2408,9 +2406,9 @@ namespace NPOI.HSSF.UserModel
         /// <returns><c>true</c>, when the region is contained in at least one of the merged regions</returns>
         public bool IsMergedRegion(CellRangeAddress mergedRegion)
         {
-            foreach (CellRangeAddress range in _sheet.MergedRecords.MergedRegions)
+            foreach(CellRangeAddress range in _sheet.MergedRecords.MergedRegions)
             {
-                if (range.FirstColumn <= mergedRegion.FirstColumn
+                if(range.FirstColumn <= mergedRegion.FirstColumn
                     && range.LastColumn >= mergedRegion.LastColumn
                     && range.FirstRow <= mergedRegion.FirstRow
                     && range.LastRow >= mergedRegion.LastRow)
@@ -2440,7 +2438,7 @@ namespace NPOI.HSSF.UserModel
             {
                 List<CellRangeAddress> addresses = new List<CellRangeAddress>();
                 int count = _sheet.NumMergedRegions;
-                for (int i = 0; i < count; i++)
+                for(int i = 0; i < count; i++)
                 {
                     addresses.Add(_sheet.GetMergedRegionAt(i));
                 }
@@ -2455,7 +2453,7 @@ namespace NPOI.HSSF.UserModel
         public Font HSSFFont2Font(HSSFFont font1)
         {
             // TODO-Fonts: Fallback for missing font
-            return new Font(SystemFonts.Get(font1.FontName), (float)font1.FontHeightInPoints);
+            return new Font(SystemFonts.Get(font1.FontName), (float) font1.FontHeightInPoints);
         }
 
         /// <summary>
@@ -2488,20 +2486,21 @@ namespace NPOI.HSSF.UserModel
         /// <returns>return hyperlink if there is a hyperlink anchored at row, column; otherwise returns null</returns>
         public IHyperlink GetHyperlink(int row, int column)
         {
-            foreach (RecordBase rec in _sheet.Records)
+            foreach(RecordBase rec in _sheet.Records)
             {
-                if (rec is HyperlinkRecord)
+                if(rec is HyperlinkRecord)
                 {
                     HyperlinkRecord link = (HyperlinkRecord)rec;
-                    if (link.FirstColumn == column && link.FirstRow == row)
+                    if(link.FirstColumn == column && link.FirstRow == row)
                     {
                         return new HSSFHyperlink(link);
                     }
-                }                
-                else if (rec is RowRecordsAggregate rra) {
-                    foreach (var link in rra.HyperlinkRecordRecords)
+                }
+                else if(rec is RowRecordsAggregate rra)
+                {
+                    foreach(var link in rra.HyperlinkRecordRecords)
                     {
-                        if (link.FirstColumn == column && link.FirstRow == row)
+                        if(link.FirstColumn == column && link.FirstRow == row)
                         {
                             return new HSSFHyperlink(link);
                         }
@@ -2521,57 +2520,58 @@ namespace NPOI.HSSF.UserModel
             return GetHyperlink(addr.Row, addr.Column);
         }
 
-        /**
-         * Get a list of Hyperlinks in this sheet
-         *
-         * @return Hyperlinks for the sheet
-         */
+        /// <summary>
+        /// Get a list of Hyperlinks in this sheet
+        /// </summary>
+        /// <returns>Hyperlinks for the sheet</returns>
 
         public List<IHyperlink> GetHyperlinkList()
         {
             List<IHyperlink> hyperlinkList = new List<IHyperlink>();
-            foreach (RecordBase rec in _sheet.Records)
+            foreach(RecordBase rec in _sheet.Records)
             {
-                if (rec is HyperlinkRecord){
+                if(rec is HyperlinkRecord)
+                {
                     HyperlinkRecord link = (HyperlinkRecord)rec;
                     hyperlinkList.Add(new HSSFHyperlink(link));
-                }                
-                else if (rec is RowRecordsAggregate rra) {
-                    foreach (var link in rra.HyperlinkRecordRecords)
+                }
+                else if(rec is RowRecordsAggregate rra)
+                {
+                    foreach(var link in rra.HyperlinkRecordRecords)
                     {
-                        if (link is HyperlinkRecord hylink){
+                        if(link is HyperlinkRecord hylink)
+                        {
                             hyperlinkList.Add(new HSSFHyperlink(link));
-                        }  
+                        }
                     }
                 }
             }
             return hyperlinkList;
         }
 
-        /**
-         * Remove the underlying HyperlinkRecord from this sheet.
-         * If multiple HSSFHyperlinks refer to the same HyperlinkRecord, all HSSFHyperlinks will be removed.
-         *
-         * @param link the HSSFHyperlink wrapper around the HyperlinkRecord to remove
-         */
-        protected void RemoveHyperlink(HSSFHyperlink link) {
+        /// <summary>
+        /// Remove the underlying HyperlinkRecord from this sheet.
+        /// If multiple HSSFHyperlinks refer to the same HyperlinkRecord, all HSSFHyperlinks will be removed.
+        /// </summary>
+        /// <param name="link">the HSSFHyperlink wrapper around the HyperlinkRecord to remove</param>
+        protected void RemoveHyperlink(HSSFHyperlink link)
+        {
             RemoveHyperlink(link.record);
         }
 
-        /**
-         * Remove the underlying HyperlinkRecord from this sheet
-         *
-         * @param link the underlying HyperlinkRecord to remove from this sheet
-         */
+        /// <summary>
+        /// Remove the underlying HyperlinkRecord from this sheet
+        /// </summary>
+        /// <param name="link">the underlying HyperlinkRecord to remove from this sheet</param>
         protected void RemoveHyperlink(HyperlinkRecord link)
         {
-            for (int i = 0; i < _sheet.Records.Count; i++)
+            for(int i = 0; i < _sheet.Records.Count; i++)
             {
                 RecordBase rec = _sheet.Records[i];
-                if (rec is HyperlinkRecord)
+                if(rec is HyperlinkRecord)
                 {
                     HyperlinkRecord recLink = (HyperlinkRecord)rec;
-                    if (link == recLink)
+                    if(link == recLink)
                     {
                         _sheet.Records.RemoveAt(i);
                         // if multiple HSSFHyperlinks refer to the same record
@@ -2603,9 +2603,9 @@ namespace NPOI.HSSF.UserModel
                 IList dvRecords = new ArrayList();
                 IList records = _sheet.Records;
 
-                for (int index = 0; index < records.Count; index++)
+                for(int index = 0; index < records.Count; index++)
                 {
-                    if (records[index] is DVRecord)
+                    if(records[index] is DVRecord)
                     {
                         dvRecords.Add(records[index]);
                     }
@@ -2657,13 +2657,13 @@ namespace NPOI.HSSF.UserModel
 
             NameRecord name = workbook.GetSpecificBuiltinRecord(NameRecord.BUILTIN_FILTER_DB, sheetIndex + 1);
 
-            if (name == null)
+            if(name == null)
             {
                 name = workbook.CreateBuiltInName(NameRecord.BUILTIN_FILTER_DB, sheetIndex + 1);
             }
             int firstRow = range.FirstRow;
             // if row was not given when constructing the range...
-            if (firstRow == -1)
+            if(firstRow == -1)
             {
                 firstRow = 0;
             }
@@ -2676,7 +2676,7 @@ namespace NPOI.HSSF.UserModel
             AutoFilterInfoRecord r = new AutoFilterInfoRecord();
             // the number of columns that have AutoFilter enabled.
             int numcols = 1 + range.LastColumn - range.FirstColumn;
-            r.NumEntries = (short)numcols;
+            r.NumEntries = (short) numcols;
             int idx = _sheet.FindFirstRecordLocBySid(DimensionsRecord.sid);
             _sheet.Records.Insert(idx, r);
 
@@ -2684,10 +2684,10 @@ namespace NPOI.HSSF.UserModel
             HSSFPatriarch p = (HSSFPatriarch)CreateDrawingPatriarch();
             int firstColumn = range.FirstColumn;
             int lastColumn = range.LastColumn;
-            for (int col = firstColumn; col <= lastColumn; col++)
+            for(int col = firstColumn; col <= lastColumn; col++)
             {
                 p.CreateComboBox(new HSSFClientAnchor(0, 0, 0, 0,
-                        (short)col, firstRow, (short)(col + 1), firstRow + 1));
+                        (short) col, firstRow, (short) (col + 1), firstRow + 1));
             }
 
             return new HSSFAutoFilter(this);
@@ -2696,7 +2696,7 @@ namespace NPOI.HSSF.UserModel
         protected internal HSSFComment FindCellComment(int row, int column)
         {
             HSSFPatriarch patriarch = DrawingPatriarch as HSSFPatriarch;
-            if (null == patriarch)
+            if(null == patriarch)
             {
                 patriarch = CreateDrawingPatriarch() as HSSFPatriarch;
             }
@@ -2705,22 +2705,22 @@ namespace NPOI.HSSF.UserModel
 
         private HSSFComment LookForComment(HSSFShapeContainer container, int row, int column)
         {
-            foreach (Object obj in container.Children)
+            foreach(Object obj in container.Children)
             {
                 HSSFShape shape = (HSSFShape)obj;
-                if (shape is HSSFShapeGroup)
+                if(shape is HSSFShapeGroup)
                 {
                     HSSFShape res = LookForComment((HSSFShapeContainer)shape, row, column);
-                    if (null != res)
+                    if(null != res)
                     {
-                        return (HSSFComment)res;
+                        return (HSSFComment) res;
                     }
                     continue;
                 }
-                if (shape is HSSFComment)
+                if(shape is HSSFComment)
                 {
                     HSSFComment comment = (HSSFComment)shape;
-                    if (comment.HasPosition && comment.Column == column && comment.Row == row)
+                    if(comment.HasPosition && comment.Column == column && comment.Row == row)
                     {
                         return comment;
                     }
@@ -2736,7 +2736,7 @@ namespace NPOI.HSSF.UserModel
         public Dictionary<CellAddress, IComment> GetCellComments()
         {
             HSSFPatriarch patriarch = DrawingPatriarch as HSSFPatriarch;
-            if (null == patriarch)
+            if(null == patriarch)
             {
                 patriarch = CreateDrawingPatriarch() as HSSFPatriarch;
             }
@@ -2746,26 +2746,25 @@ namespace NPOI.HSSF.UserModel
             return locations;
         }
 
-        /**
-         * Finds all cell comments in this sheet and adds them to the specified locations map
-         *
-         * @param container a container that may contain HSSFComments
-         * @param locations the map to store the HSSFComments in
-         */
+        /// <summary>
+        /// Finds all cell comments in this sheet and adds them to the specified locations map
+        /// </summary>
+        /// <param name="container">a container that may contain HSSFComments</param>
+        /// <param name="locations">the map to store the HSSFComments in</param>
         private void FindCellCommentLocations(HSSFShapeContainer container, Dictionary<CellAddress, IComment> locations)
         {
-            foreach (object obj in container.Children)
+            foreach(object obj in container.Children)
             {
                 HSSFShape shape = (HSSFShape)obj;
-                if (shape is HSSFShapeGroup)
+                if(shape is HSSFShapeGroup)
                 {
-                    FindCellCommentLocations((HSSFShapeGroup)shape, locations);
+                    FindCellCommentLocations((HSSFShapeGroup) shape, locations);
                     continue;
                 }
-                if (shape is HSSFComment)
+                if(shape is HSSFComment)
                 {
                     HSSFComment comment = (HSSFComment)shape;
-                    if (comment.HasPosition)
+                    if(comment.HasPosition)
                     {
                         locations.Add(new CellAddress(comment.Row, comment.Column), comment);
                     }
@@ -2814,22 +2813,22 @@ namespace NPOI.HSSF.UserModel
             int row1 = -1;
             int row2 = -1;
 
-            if (rowDef != null)
+            if(rowDef != null)
             {
                 row1 = rowDef.FirstRow;
                 row2 = rowDef.LastRow;
-                if ((row1 == -1 && row2 != -1) || (row1 > row2)
+                if((row1 == -1 && row2 != -1) || (row1 > row2)
                      || (row1 < 0 || row1 > maxRowIndex)
                      || (row2 < 0 || row2 > maxRowIndex))
                 {
                     throw new ArgumentException("Invalid row range specification");
                 }
             }
-            if (colDef != null)
+            if(colDef != null)
             {
                 col1 = colDef.FirstColumn;
                 col2 = colDef.LastColumn;
-                if ((col1 == -1 && col2 != -1) || (col1 > col2)
+                if((col1 == -1 && col2 != -1) || (col1 > col2)
                     || (col1 < 0 || col1 > maxColIndex)
                     || (col2 < 0 || col2 > maxColIndex))
                 {
@@ -2844,39 +2843,39 @@ namespace NPOI.HSSF.UserModel
             bool removeAll = rowDef == null && colDef == null;
 
             HSSFName name = _workbook.GetBuiltInName(NameRecord.BUILTIN_PRINT_TITLE, sheetIndex);
-            if (removeAll)
+            if(removeAll)
             {
-                if (name != null)
+                if(name != null)
                 {
                     _workbook.RemoveName(name);
                 }
                 return;
             }
-            if (name == null)
+            if(name == null)
             {
                 name = _workbook.CreateBuiltInName(
                     NameRecord.BUILTIN_PRINT_TITLE, sheetIndex);
             }
 
             List<Ptg> ptgList = new List<Ptg>();
-            if (setBoth)
+            if(setBoth)
             {
                 int exprsSize = 2 * 11 + 1; // 2 * Area3DPtg.SIZE + UnionPtg.SIZE
                 ptgList.Add(new MemFuncPtg(exprsSize));
             }
-            if (colDef != null)
+            if(colDef != null)
             {
                 Area3DPtg colArea = new Area3DPtg(0, maxRowIndex, col1, col2,
                         false, false, false, false, externSheetIndex);
                 ptgList.Add(colArea);
             }
-            if (rowDef != null)
+            if(rowDef != null)
             {
                 Area3DPtg rowArea = new Area3DPtg(row1, row2, 0, maxColIndex,
                         false, false, false, false, externSheetIndex);
                 ptgList.Add(rowArea);
             }
-            if (setBoth)
+            if(setBoth)
             {
                 ptgList.Add(UnionPtg.instance);
             }
@@ -2893,12 +2892,12 @@ namespace NPOI.HSSF.UserModel
         private CellRangeAddress GetRepeatingRowsOrColums(bool rows)
         {
             NameRecord rec = GetBuiltinNameRecord(NameRecord.BUILTIN_PRINT_TITLE);
-            if (rec == null)
+            if(rec == null)
             {
                 return null;
             }
             Ptg[] nameDefinition = rec.NameDefinition;
-            if (rec.NameDefinition == null)
+            if(rec.NameDefinition == null)
             {
                 return null;
             }
@@ -2906,26 +2905,26 @@ namespace NPOI.HSSF.UserModel
             int maxRowIndex = SpreadsheetVersion.EXCEL97.LastRowIndex;
             int maxColIndex = SpreadsheetVersion.EXCEL97.LastColumnIndex;
 
-            foreach (Ptg ptg in nameDefinition)
+            foreach(Ptg ptg in nameDefinition)
             {
 
-                if (ptg is Area3DPtg)
+                if(ptg is Area3DPtg)
                 {
                     Area3DPtg areaPtg = (Area3DPtg)ptg;
 
-                    if (areaPtg.FirstColumn == 0
+                    if(areaPtg.FirstColumn == 0
                         && areaPtg.LastColumn == maxColIndex)
                     {
-                        if (rows)
+                        if(rows)
                         {
                             return new CellRangeAddress(
                                 areaPtg.FirstRow, areaPtg.LastRow, -1, -1);
                         }
                     }
-                    else if (areaPtg.FirstRow == 0
+                    else if(areaPtg.FirstRow == 0
                       && areaPtg.LastRow == maxRowIndex)
                     {
-                        if (!rows)
+                        if(!rows)
                         {
                             return new CellRangeAddress(-1, -1,
                                 areaPtg.FirstColumn, areaPtg.LastColumn);
@@ -2945,7 +2944,7 @@ namespace NPOI.HSSF.UserModel
             int sheetIndex = _workbook.GetSheetIndex(this);
             int recIndex =
               _workbook.FindExistingBuiltinNameRecordIdx(sheetIndex, builtinCode);
-            if (recIndex == -1)
+            if(recIndex == -1)
             {
                 return null;
             }
@@ -3000,16 +2999,16 @@ namespace NPOI.HSSF.UserModel
             HSSFSheet newSheet = (HSSFSheet)Workbook.CreateSheet(Name);
             newSheet._sheet = Sheet.CloneSheet();
             IDictionary<Int32, HSSFCellStyle> styleMap = (copyStyle) ? new Dictionary<Int32, HSSFCellStyle>() : null;
-            for (int i = FirstRowNum; i <= LastRowNum; i++)
+            for(int i = FirstRowNum; i <= LastRowNum; i++)
             {
                 HSSFRow srcRow = (HSSFRow)GetRow(i);
                 HSSFRow destRow = (HSSFRow)newSheet.CreateRow(i);
-                if (srcRow != null)
+                if(srcRow != null)
                 {
                     // avoid O(N^2) performance scanning through all regions for each row
                     // merged regions will be copied after all the rows have been copied
                     CopyRow(this, newSheet, srcRow, destRow, styleMap, new Dictionary<short, short>(), true, keepMergedRegions: false);
-                    if (srcRow.LastCellNum > maxColumnNum)
+                    if(srcRow.LastCellNum > maxColumnNum)
                     {
                         maxColumnNum = srcRow.LastCellNum;
                     }
@@ -3017,17 +3016,17 @@ namespace NPOI.HSSF.UserModel
             }
 
             // Copying merged regions
-            foreach (var srcRegion in this.MergedRegions)
+            foreach(var srcRegion in this.MergedRegions)
             {
                 var destRegion = srcRegion.Copy();
                 // Additional check here as Sheet.CloneSheet() should already have copied the merged regions
-                if (!newSheet.IsMergedRegion(destRegion))
+                if(!newSheet.IsMergedRegion(destRegion))
                 {
                     newSheet.AddMergedRegion(destRegion);
                 }
             }
 
-            for (int i = 0; i <= maxColumnNum; i++)
+            for(int i = 0; i <= maxColumnNum; i++)
             {
                 newSheet.SetColumnWidth(i, GetColumnWidth(i));
             }
@@ -3059,27 +3058,27 @@ namespace NPOI.HSSF.UserModel
             newSheet._sheet = Sheet.CloneSheet();
             var internalWorkbook=((HSSFWorkbook)dest).Workbook;
             Dictionary<short, short> paletteMap = new Dictionary<short, short>();
-            if (dest.NumberOfSheets == 1)
+            if(dest.NumberOfSheets == 1)
             {
                 //Replace the color palette with the palette from the source, since this is the first sheet
                 internalWorkbook.CustomPalette.ClearColors();
                 paletteMap = MergePalettes(Workbook as HSSFWorkbook, dest as HSSFWorkbook);
             }
-            else if (dest != Workbook)
+            else if(dest != Workbook)
             {
                 paletteMap = MergePalettes(Workbook as HSSFWorkbook, dest as HSSFWorkbook);
             }
             IDictionary<Int32, HSSFCellStyle> styleMap = (copyStyle) ? new Dictionary<Int32, HSSFCellStyle>() : null;
-            for (int i = FirstRowNum; i <= LastRowNum; i++)
+            for(int i = FirstRowNum; i <= LastRowNum; i++)
             {
                 HSSFRow srcRow = (HSSFRow)GetRow(i);
                 HSSFRow destRow = (HSSFRow)newSheet.CreateRow(i);
-                if (srcRow != null)
+                if(srcRow != null)
                 {
                     // avoid O(N^2) performance scanning through all regions for each row
                     // merged regions will be copied after all the rows have been copied
                     CopyRow(this, newSheet, srcRow, destRow, styleMap, paletteMap, keepFormulas, keepMergedRegions: false);
-                    if (srcRow.LastCellNum > maxColumnNum)
+                    if(srcRow.LastCellNum > maxColumnNum)
                     {
                         maxColumnNum = srcRow.LastCellNum;
                     }
@@ -3087,17 +3086,17 @@ namespace NPOI.HSSF.UserModel
             }
 
             // Copying merged regions
-            foreach (var srcRegion in this.MergedRegions)
+            foreach(var srcRegion in this.MergedRegions)
             {
                 var destRegion = srcRegion.Copy();
                 // Additional check here as Sheet.CloneSheet() should already have copied the merged regions
-                if (!newSheet.IsMergedRegion(destRegion))
+                if(!newSheet.IsMergedRegion(destRegion))
                 {
                     newSheet.AddMergedRegion(destRegion);
                 }
             }
 
-            for (int i = 0; i < maxColumnNum; i++)
+            for(int i = 0; i < maxColumnNum; i++)
             {
                 newSheet.SetColumnWidth(i, GetColumnWidth(i));
             }
@@ -3121,10 +3120,10 @@ namespace NPOI.HSSF.UserModel
             newSheet.PrintSetup.FitHeight = PrintSetup.FitHeight;
             newSheet.PrintSetup.FitWidth = PrintSetup.FitWidth;
             EscherAggregate escher = DrawingEscherAggregate;
-            if (escher != null)
+            if(escher != null)
             {
-                
-                if (internalWorkbook.DrawingManager == null)
+
+                if(internalWorkbook.DrawingManager == null)
                 {
                     internalWorkbook.CreateDrawingGroup();
                 }
@@ -3135,9 +3134,9 @@ namespace NPOI.HSSF.UserModel
                 IEnumerable<int> usedImages = FindUsedPictures(escher.EscherRecords);
                 Dictionary<int,int> remap = new Dictionary<int, int>();
                 IList pics = Workbook.GetAllPictures();
-                foreach (int imgId in usedImages)
+                foreach(int imgId in usedImages)
                 {
-                    if (imgId <= pics.Count)
+                    if(imgId <= pics.Count)
                     {
                         HSSFPictureData pic = (HSSFPictureData)pics[imgId - 1];
                         int dstIdx = dest.AddPicture(pic.Data, (PictureType)pic.Format);
@@ -3145,7 +3144,7 @@ namespace NPOI.HSSF.UserModel
                     }
                 }
                 //Apply the new image Id's the destination
-                foreach (EscherRecord escherRecord in destEscher.EscherRecords)
+                foreach(EscherRecord escherRecord in destEscher.EscherRecords)
                 {
                     ApplyEscherRemap(escherRecord, remap);
                 }
@@ -3155,7 +3154,7 @@ namespace NPOI.HSSF.UserModel
         private IEnumerable<int> FindUsedPictures(IEnumerable<EscherRecord> escherRecords)
         {
             List<int> retval = new List<int>();
-            foreach (EscherRecord escherRecord in escherRecords)
+            foreach(EscherRecord escherRecord in escherRecords)
             {
                 GetSheetImageIds(escherRecord, retval);
             }
@@ -3164,18 +3163,18 @@ namespace NPOI.HSSF.UserModel
 
         private void GetSheetImageIds(EscherRecord parent, List<int> usedIds)
         {
-            foreach (EscherRecord child in parent.ChildRecords)
+            foreach(EscherRecord child in parent.ChildRecords)
             {
-                if (child is EscherOptRecord)
+                if(child is EscherOptRecord)
                 {
                     EscherOptRecord picOpts = (EscherOptRecord)child;
-                    foreach (EscherProperty eprop in picOpts.EscherProperties)
+                    foreach(EscherProperty eprop in picOpts.EscherProperties)
                     {
-                        if (eprop.PropertyNumber == EscherProperties.BLIP__BLIPTODISPLAY)
+                        if(eprop.PropertyNumber == EscherProperties.BLIP__BLIPTODISPLAY)
                         {
                             //This is the picture ID property
                             int pictureId = ((EscherSimpleProperty) eprop).PropertyValue;
-                            if (!usedIds.Contains(pictureId))
+                            if(!usedIds.Contains(pictureId))
                             {
                                 usedIds.Add(pictureId);
                             }
@@ -3183,9 +3182,9 @@ namespace NPOI.HSSF.UserModel
                         }
                     }
                 }
-                if (child.ChildRecords.Count > 0)
+                if(child.ChildRecords.Count > 0)
                 {
-                    foreach (EscherRecord grandKid in child.ChildRecords)
+                    foreach(EscherRecord grandKid in child.ChildRecords)
                     {
                         GetSheetImageIds(grandKid, usedIds);
                     }
@@ -3193,20 +3192,20 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        private void ApplyEscherRemap(EscherRecord parent, Dictionary<int,int> mappings)
+        private void ApplyEscherRemap(EscherRecord parent, Dictionary<int, int> mappings)
         {
-            foreach (EscherRecord child in parent.ChildRecords)
+            foreach(EscherRecord child in parent.ChildRecords)
             {
-                if (child is EscherOptRecord)
+                if(child is EscherOptRecord)
                 {
                     EscherOptRecord picOpts = (EscherOptRecord)child;
-                    foreach (EscherProperty eprop in picOpts.EscherProperties)
+                    foreach(EscherProperty eprop in picOpts.EscherProperties)
                     {
-                        if (eprop.PropertyNumber == EscherProperties.BLIP__BLIPTODISPLAY)
+                        if(eprop.PropertyNumber == EscherProperties.BLIP__BLIPTODISPLAY)
                         {
                             //This is the picture ID property
                             int pictureId = ((EscherSimpleProperty)eprop).PropertyValue;
-                            if (mappings.ContainsKey(pictureId))
+                            if(mappings.ContainsKey(pictureId))
                             {
                                 ((EscherSimpleProperty) eprop).PropertyValue = mappings[pictureId];
                             }
@@ -3214,38 +3213,38 @@ namespace NPOI.HSSF.UserModel
                         }
                     }
                 }
-                if (child.ChildRecords.Count > 0)
+                if(child.ChildRecords.Count > 0)
                 {
-                    foreach (EscherRecord grandKid in child.ChildRecords)
+                    foreach(EscherRecord grandKid in child.ChildRecords)
                     {
                         ApplyEscherRemap(grandKid, mappings);
                     }
                 }
             }
         }
-        private static Dictionary<short,short> MergePalettes(HSSFWorkbook source, HSSFWorkbook dest)
+        private static Dictionary<short, short> MergePalettes(HSSFWorkbook source, HSSFWorkbook dest)
         {
             Dictionary<short, short> retval = new Dictionary<short, short>();
             //This is a slow way to accomplish this, but since the color limit is 56 it won't take long
-            for (short i = 0; i < source.Workbook.CustomPalette.NumColors; i++)
+            for(short i = 0; i < source.Workbook.CustomPalette.NumColors; i++)
             {
                 byte[] sourceColor = source.Workbook.CustomPalette.GetColor((short)(i + PaletteRecord.FIRST_COLOR_INDEX));
                 bool found = false;
-                for (short j = 0; j < dest.Workbook.CustomPalette.NumColors; j++)
+                for(short j = 0; j < dest.Workbook.CustomPalette.NumColors; j++)
                 {
                     byte[] destColor = dest.Workbook.CustomPalette.GetColor((short)(j + PaletteRecord.FIRST_COLOR_INDEX));
-                    if (sourceColor[0] == destColor[0] && sourceColor[1] == destColor[1] && sourceColor[2] == destColor[2])
+                    if(sourceColor[0] == destColor[0] && sourceColor[1] == destColor[1] && sourceColor[2] == destColor[2])
                     {
                         found = true;
-                        retval.Add((short)(i + PaletteRecord.FIRST_COLOR_INDEX), (short)(j + PaletteRecord.FIRST_COLOR_INDEX));
+                        retval.Add((short) (i + PaletteRecord.FIRST_COLOR_INDEX), (short) (j + PaletteRecord.FIRST_COLOR_INDEX));
                         break;
                     }
                 }
-                if (!found) //Color doesn't exist in this palette, add it
+                if(!found) //Color doesn't exist in this palette, add it
                 {
                     short createdIdx = dest.Workbook.CustomPalette.NumColors;
-                    dest.Workbook.CustomPalette.SetColor((short)(createdIdx + PaletteRecord.FIRST_COLOR_INDEX), sourceColor[0], sourceColor[1], sourceColor[2]);
-                    retval.Add((short)(i + PaletteRecord.FIRST_COLOR_INDEX), (short)(createdIdx + PaletteRecord.FIRST_COLOR_INDEX));
+                    dest.Workbook.CustomPalette.SetColor((short) (createdIdx + PaletteRecord.FIRST_COLOR_INDEX), sourceColor[0], sourceColor[1], sourceColor[2]);
+                    retval.Add((short) (i + PaletteRecord.FIRST_COLOR_INDEX), (short) (createdIdx + PaletteRecord.FIRST_COLOR_INDEX));
                 }
             }
             return retval;
@@ -3256,30 +3255,30 @@ namespace NPOI.HSSF.UserModel
             destRow.Height = srcRow.Height;
             destRow.IsHidden = srcRow.IsHidden;
             destRow.RowRecord.OptionFlags = srcRow.RowRecord.OptionFlags;
-            for (int j = srcRow.FirstCellNum; j <= srcRow.LastCellNum; j++)
+            for(int j = srcRow.FirstCellNum; j <= srcRow.LastCellNum; j++)
             {
                 HSSFCell oldCell = (HSSFCell)srcRow.GetCell(j);
                 HSSFCell newCell = (HSSFCell)destRow.GetCell(j);
-                if (srcSheet.Workbook == destSheet.Workbook)
+                if(srcSheet.Workbook == destSheet.Workbook)
                 {
-                    newCell = (HSSFCell)destRow.GetCell(j);
+                    newCell = (HSSFCell) destRow.GetCell(j);
                 }
-                if (oldCell != null)
+                if(oldCell != null)
                 {
-                    if (newCell == null)
+                    if(newCell == null)
                     {
-                        newCell = (HSSFCell)destRow.CreateCell(j);
+                        newCell = (HSSFCell) destRow.CreateCell(j);
                     }
                     HSSFCellUtil.CopyCell(oldCell, newCell, styleMap, paletteMap, keepFormulas);
 
-                    if (keepMergedRegions)
+                    if(keepMergedRegions)
                     {
                         CellRangeAddress mergedRegion = GetMergedRegion(srcSheet, srcRow.RowNum, (short)oldCell.ColumnIndex);
-                        if (mergedRegion != null)
+                        if(mergedRegion != null)
                         {
                             CellRangeAddress newMergedRegion = new CellRangeAddress(mergedRegion.FirstRow,
                                     mergedRegion.LastRow, mergedRegion.FirstColumn, mergedRegion.LastColumn);
-                            if (IsNewMergedRegion(newMergedRegion, mergedRegions))
+                            if(IsNewMergedRegion(newMergedRegion, mergedRegions))
                             {
                                 mergedRegions.Add(newMergedRegion);
                             }
@@ -3292,12 +3291,12 @@ namespace NPOI.HSSF.UserModel
 
         public static CellRangeAddress GetMergedRegion(HSSFSheet sheet, int rowNum, short cellNum)
         {
-            for (int i = 0; i < sheet.NumMergedRegions; i++)
+            for(int i = 0; i < sheet.NumMergedRegions; i++)
             {
                 CellRangeAddress merged = sheet.GetMergedRegion(i);
-                if (rowNum >= merged.FirstRow && rowNum <= merged.LastRow)
+                if(rowNum >= merged.FirstRow && rowNum <= merged.LastRow)
                 {
-                    if (cellNum >= merged.FirstColumn && cellNum <= merged.LastColumn)
+                    if(cellNum >= merged.FirstColumn && cellNum <= merged.LastColumn)
                     {
                         return merged;
                     }
@@ -3309,9 +3308,9 @@ namespace NPOI.HSSF.UserModel
         // modified syntax from Java to C#
         private static bool AreAllTrue(params bool[] values)
         {
-            for (int i = 0; i < values.Length; ++i)
+            for(int i = 0; i < values.Length; ++i)
             {
-                if (values[i] != true)
+                if(values[i] != true)
                 {
                     return false;
                 }
@@ -3324,13 +3323,13 @@ namespace NPOI.HSSF.UserModel
             bool isNew = true;
 
             // we want to check if newMergedRegion is contained inside our collection
-            foreach (CellRangeAddress add in mergedRegions)
+            foreach(CellRangeAddress add in mergedRegions)
             {
                 bool r1 = (add.FirstRow == newMergedRegion.FirstRow);
                 bool r2 = (add.LastRow == newMergedRegion.LastRow);
                 bool c1 = (add.FirstColumn == newMergedRegion.FirstColumn);
                 bool c2 = (add.LastColumn == newMergedRegion.LastColumn);
-                if (AreAllTrue(r1, r2, c1, c2))
+                if(AreAllTrue(r1, r2, c1, c2))
                 {
                     isNew = false;
                 }

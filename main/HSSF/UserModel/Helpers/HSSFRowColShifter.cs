@@ -1,4 +1,4 @@
-﻿using NPOI.SS.Formula;
+using NPOI.SS.Formula;
 using NPOI.SS.Formula.PTG;
 using NPOI.SS.UserModel;
 using NPOI.Util;

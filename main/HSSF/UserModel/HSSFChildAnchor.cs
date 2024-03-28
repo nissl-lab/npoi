@@ -24,10 +24,10 @@ namespace NPOI.HSSF.UserModel
     public class HSSFChildAnchor : HSSFAnchor
     {
         private EscherChildAnchorRecord _escherChildAnchor;
-        /**
-         * create anchor from existing file
-         * @param escherChildAnchorRecord
-         */
+        /// <summary>
+        /// create anchor from existing file
+        /// </summary>
+        /// <param name="escherChildAnchorRecord">escherChildAnchorRecord</param>
         public HSSFChildAnchor(EscherChildAnchorRecord escherChildAnchorRecord)
         {
             this._escherChildAnchor = escherChildAnchorRecord;
@@ -36,31 +36,31 @@ namespace NPOI.HSSF.UserModel
         {
             _escherChildAnchor = new EscherChildAnchorRecord();
         }
-        /**
-        * create anchor from scratch
-        * @param dx1 x coordinate of the left up corner
-        * @param dy1 y coordinate of the left up corner
-        * @param dx2 x coordinate of the right down corner
-        * @param dy2 y coordinate of the right down corner
-        */
+        /// <summary>
+        /// create anchor from scratch
+        /// </summary>
+        /// <param name="dx1">x coordinate of the left up corner</param>
+        /// <param name="dy1">y coordinate of the left up corner</param>
+        /// <param name="dx2">x coordinate of the right down corner</param>
+        /// <param name="dy2">y coordinate of the right down corner</param>
         public HSSFChildAnchor(int dx1, int dy1, int dx2, int dy2)
             : base(Math.Min(dx1, dx2), Math.Min(dy1, dy2), Math.Max(dx1, dx2), Math.Max(dy1, dy2))
         {
-            if (dx1 > dx2)
+            if(dx1 > dx2)
             {
                 _isHorizontallyFlipped = true;
             }
-            if (dy1 > dy2)
+            if(dy1 > dy2)
             {
                 _isVerticallyFlipped = true;
             }
         }
-        /**
-         * @param dx1 x coordinate of the left up corner
-         * @param dy1 y coordinate of the left up corner
-         * @param dx2 x coordinate of the right down corner
-         * @param dy2 y coordinate of the right down corner
-         */
+        /// <summary>
+        /// </summary>
+        /// <param name="dx1">x coordinate of the left up corner</param>
+        /// <param name="dy1">y coordinate of the left up corner</param>
+        /// <param name="dx2">x coordinate of the right down corner</param>
+        /// <param name="dy2">y coordinate of the right down corner</param>
         public void SetAnchor(int dx1, int dy1, int dx2, int dy2)
         {
             this.Dx1 = Math.Min(dx1, dx2);
@@ -71,17 +71,17 @@ namespace NPOI.HSSF.UserModel
 
         public override bool IsHorizontallyFlipped
         {
-            get 
-            { 
-                return _isHorizontallyFlipped; 
+            get
+            {
+                return _isHorizontallyFlipped;
             }
         }
 
         public override bool IsVerticallyFlipped
         {
-            get 
-            { 
-                return _isVerticallyFlipped; 
+            get
+            {
+                return _isVerticallyFlipped;
             }
         }
         public override int Dx1
@@ -92,7 +92,7 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                _escherChildAnchor.Dx1 = (short)value;
+                _escherChildAnchor.Dx1 = (short) value;
             }
         }
         public override int Dx2
@@ -103,7 +103,7 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                _escherChildAnchor.Dx2 = (short)value;
+                _escherChildAnchor.Dx2 = (short) value;
             }
         }
         public override int Dy1
@@ -114,7 +114,7 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                _escherChildAnchor.Dy1 = (short)value;
+                _escherChildAnchor.Dy1 = (short) value;
             }
         }
         public override int Dy2
@@ -125,16 +125,16 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                _escherChildAnchor.Dy2 = (short)value;
+                _escherChildAnchor.Dy2 = (short) value;
             }
         }
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if(obj == null)
                 return false;
-            if (obj == this)
+            if(obj == this)
                 return true;
-            if (obj.GetType() != GetType())
+            if(obj.GetType() != GetType())
                 return false;
             HSSFChildAnchor anchor = (HSSFChildAnchor)obj;
 
