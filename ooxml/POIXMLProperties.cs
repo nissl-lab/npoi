@@ -24,9 +24,9 @@ using NPOI.OpenXmlFormats;
 
 namespace NPOI
 {
-    /**
- * The core document properties
- */
+    /// <summary>
+    /// The core document properties
+    /// </summary>
     public class CoreProperties
     {
         private PackagePropertiesPart part;
@@ -41,7 +41,7 @@ namespace NPOI
             {
                 return part.GetCategoryProperty();
             }
-            set 
+            set
             {
                 part.SetCategoryProperty(value);
             }
@@ -52,7 +52,7 @@ namespace NPOI
             {
                 return part.GetContentStatusProperty();
             }
-            set 
+            set
             {
                 part.SetContentStatusProperty(value);
             }
@@ -63,7 +63,7 @@ namespace NPOI
             {
                 return part.GetContentTypeProperty();
             }
-            set 
+            set
             {
                 part.SetContentTypeProperty(value);
             }
@@ -74,9 +74,9 @@ namespace NPOI
             {
                 return part.GetCreatedProperty();
             }
-            set 
+            set
             {
-                part.SetCreatedProperty(value);    
+                part.SetCreatedProperty(value);
             }
         }
         public void SetCreated(String date)
@@ -89,7 +89,7 @@ namespace NPOI
             {
                 return part.GetCreatorProperty();
             }
-            set 
+            set
             {
                 part.SetCreatorProperty(value);
             }
@@ -100,7 +100,7 @@ namespace NPOI
             {
                 return part.GetDescriptionProperty();
             }
-            set 
+            set
             {
                 part.SetDescriptionProperty(value);
             }
@@ -111,7 +111,7 @@ namespace NPOI
             {
                 return part.GetIdentifierProperty();
             }
-            set 
+            set
             {
                 part.SetIdentifierProperty(value);
             }
@@ -122,7 +122,7 @@ namespace NPOI
             {
                 return part.GetKeywordsProperty();
             }
-            set 
+            set
             {
                 part.SetKeywordsProperty(value);
             }
@@ -133,7 +133,7 @@ namespace NPOI
             {
                 return part.GetLastPrintedProperty();
             }
-            set 
+            set
             {
                 part.SetLastPrintedProperty(value);
             }
@@ -161,7 +161,7 @@ namespace NPOI
             {
                 return part.GetModifiedProperty();
             }
-            set 
+            set
             {
                 part.SetModifiedProperty(value);
             }
@@ -176,7 +176,7 @@ namespace NPOI
             {
                 return part.GetSubjectProperty();
             }
-            set 
+            set
             {
                 part.SetSubjectProperty(value);
             }
@@ -187,7 +187,7 @@ namespace NPOI
             {
                 return part.GetTitleProperty();
             }
-            set 
+            set
             {
                 part.SetTitleProperty(value);
             }
@@ -205,7 +205,7 @@ namespace NPOI
                     long.Parse(value);
                     part.SetRevisionProperty(value);
                 }
-                catch (FormatException) { }            
+                catch(FormatException) { }
             }
         }
 
@@ -215,9 +215,9 @@ namespace NPOI
         }
     }
 
-    /**
-     * Extended document properties
-     */
+    /// <summary>
+    /// Extended document properties
+    /// </summary>
     public class ExtendedProperties
     {
         public ExtendedPropertiesDocument props;
@@ -263,7 +263,7 @@ namespace NPOI
         {
             get
             {
-                if (props.GetProperties().IsSetPages())
+                if(props.GetProperties().IsSetPages())
                 {
                     return props.GetProperties().Pages;
                 }
@@ -274,7 +274,7 @@ namespace NPOI
         {
             get
             {
-                if (props.GetProperties().IsSetWords())
+                if(props.GetProperties().IsSetWords())
                 {
                     return props.GetProperties().Words;
                 }
@@ -285,7 +285,7 @@ namespace NPOI
         {
             get
             {
-                if (props.GetProperties().IsSetCharacters())
+                if(props.GetProperties().IsSetCharacters())
                 {
                     return props.GetProperties().Characters;
                 }
@@ -296,7 +296,7 @@ namespace NPOI
         {
             get
             {
-                if (props.GetProperties().IsSetCharactersWithSpaces())
+                if(props.GetProperties().IsSetCharactersWithSpaces())
                 {
                     return props.GetProperties().CharactersWithSpaces;
                 }
@@ -307,7 +307,7 @@ namespace NPOI
         {
             get
             {
-                if (props.GetProperties().IsSetLines())
+                if(props.GetProperties().IsSetLines())
                 {
                     return props.GetProperties().Lines;
                 }
@@ -318,7 +318,7 @@ namespace NPOI
         {
             get
             {
-                if (props.GetProperties().IsSetParagraphs())
+                if(props.GetProperties().IsSetParagraphs())
                 {
                     return props.GetProperties().Paragraphs;
                 }
@@ -329,7 +329,7 @@ namespace NPOI
         {
             get
             {
-                if (props.GetProperties().IsSetSlides())
+                if(props.GetProperties().IsSetSlides())
                 {
                     return props.GetProperties().Slides;
                 }
@@ -340,7 +340,7 @@ namespace NPOI
         {
             get
             {
-                if (props.GetProperties().IsSetNotes())
+                if(props.GetProperties().IsSetNotes())
                 {
                     return props.GetProperties().Notes;
                 }
@@ -351,7 +351,7 @@ namespace NPOI
         {
             get
             {
-                if (props.GetProperties().IsSetTotalTime())
+                if(props.GetProperties().IsSetTotalTime())
                 {
                     return props.GetProperties().TotalTime;
                 }
@@ -362,7 +362,7 @@ namespace NPOI
         {
             get
             {
-                if (props.GetProperties().IsSetHiddenSlides())
+                if(props.GetProperties().IsSetHiddenSlides())
                 {
                     return props.GetProperties().HiddenSlides;
                 }
@@ -373,7 +373,7 @@ namespace NPOI
         {
             get
             {
-                if (props.GetProperties().IsSetMMClips())
+                if(props.GetProperties().IsSetMMClips())
                 {
                     return props.GetProperties().MMClips;
                 }
@@ -387,15 +387,15 @@ namespace NPOI
         }
     }
 
-    /**
-     *  Custom document properties
-     */
+    /// <summary>
+    ///  Custom document properties
+    /// </summary>
     public class CustomProperties
     {
-        /**
-         *  Each custom property element Contains an fmtid attribute
-         *  with the same GUID value ({D5CDD505-2E9C-101B-9397-08002B2CF9AE}).
-         */
+        /// <summary>
+        ///  Each custom property element Contains an fmtid attribute
+        ///  with the same GUID value ({D5CDD505-2E9C-101B-9397-08002B2CF9AE}).
+        /// </summary>
         public static String FORMAT_ID = "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}";
 
         public CustomPropertiesDocument props;
@@ -409,15 +409,14 @@ namespace NPOI
             return props.GetProperties();
         }
 
-        /**
-         * Add a new property
-         *
-         * @param name the property name
-         * @throws IllegalArgumentException if a property with this name already exists
-         */
+        /// <summary>
+        /// Add a new property
+        /// </summary>
+        /// <param name="name">the property name</param>
+        /// <exception cref="IllegalArgumentException">if a property with this name already exists</exception>
         private CT_Property Add(String name)
         {
-            if (Contains(name))
+            if(Contains(name))
             {
                 throw new ArgumentException("A property with this name " +
                         "already exists in the custom properties");
@@ -431,11 +430,10 @@ namespace NPOI
             return p;
         }
 
-        /**
-         * Add a new string property
-         *
-         * @throws IllegalArgumentException if a property with this name already exists
-         */
+        /// <summary>
+        /// Add a new string property
+        /// </summary>
+        /// <exception cref="IllegalArgumentException">if a property with this name already exists</exception>
         public void AddProperty(String name, String value)
         {
             CT_Property p = Add(name);
@@ -443,11 +441,10 @@ namespace NPOI
             p.Item = value;
         }
 
-        /**
-         * Add a new double property
-         *
-         * @throws IllegalArgumentException if a property with this name already exists
-         */
+        /// <summary>
+        /// Add a new double property
+        /// </summary>
+        /// <exception cref="IllegalArgumentException">if a property with this name already exists</exception>
         public void AddProperty(String name, double value)
         {
             CT_Property p = Add(name);
@@ -455,11 +452,10 @@ namespace NPOI
             p.Item = value;
         }
 
-        /**
-         * Add a new integer property
-         *
-         * @throws IllegalArgumentException if a property with this name already exists
-         */
+        /// <summary>
+        /// Add a new integer property
+        /// </summary>
+        /// <exception cref="IllegalArgumentException">if a property with this name already exists</exception>
         public void AddProperty(String name, int value)
         {
             CT_Property p = Add(name);
@@ -467,11 +463,10 @@ namespace NPOI
             p.Item = value;
         }
 
-        /**
-         * Add a new bool property
-         *
-         * @throws IllegalArgumentException if a property with this name already exists
-         */
+        /// <summary>
+        /// Add a new bool property
+        /// </summary>
+        /// <exception cref="IllegalArgumentException">if a property with this name already exists</exception>
         public void AddProperty(String name, bool value)
         {
             CT_Property p = Add(name);
@@ -479,48 +474,53 @@ namespace NPOI
             p.Item = value;
         }
 
-        /**
-         * Generate next id that uniquely relates a custom property
-         *
-         * @return next property id starting with 2
-         */
+        /// <summary>
+        /// Generate next id that uniquely relates a custom property
+        /// </summary>
+        /// <returns>next property id starting with 2</returns>
         protected int NextPid()
         {
             int propid = 1;
-            foreach (CT_Property p in props.GetProperties().GetPropertyList())
+            foreach(CT_Property p in props.GetProperties().GetPropertyList())
             {
-                if (p.pid > propid) propid = p.pid;
+                if(p.pid > propid)
+                    propid = p.pid;
             }
             return propid + 1;
         }
 
-        /**
-         * Check if a property with this name already exists in the collection of custom properties
-         *
-         * @param name the name to check
-         * @return whether a property with the given name exists in the custom properties
-         */
+        /// <summary>
+        /// Check if a property with this name already exists in the collection of custom properties
+        /// </summary>
+        /// <param name="name">the name to check</param>
+        /// <returns>whether a property with the given name exists in the custom properties</returns>
         public bool Contains(String name)
         {
-            foreach (CT_Property p in props.GetProperties().GetPropertyList())
+            foreach(CT_Property p in props.GetProperties().GetPropertyList())
             {
-                if (p.name.Equals(name)) return true;
+                if(p.name.Equals(name))
+                    return true;
             }
             return false;
         }
 
-        /**
-         * Retrieve the custom property with this name, or null if none exists.
-         *
-         * You will need to test the various isSetX methods to work out
-         *  what the type of the property is, before fetching the 
-         *  appropriate value for it.
-         *
-         * @param name the name of the property to fetch
-         */
-        public CT_Property GetProperty(String name) {
-            foreach(CT_Property p in props.GetProperties().GetPropertyList()){
-                if(p.name.Equals(name)) {
+        /// <summary>
+        /// <para>
+        /// Retrieve the custom property with this name, or null if none exists.
+        /// </para>
+        /// <para>
+        /// You will need to test the various isSetX methods to work out
+        ///  what the type of the property is, before fetching the
+        ///  appropriate value for it.
+        /// </para>
+        /// </summary>
+        /// <param name="name">the name of the property to fetch</param>
+        public CT_Property GetProperty(String name)
+        {
+            foreach(CT_Property p in props.GetProperties().GetPropertyList())
+            {
+                if(p.name.Equals(name))
+                {
                     return p;
                 }
             }
@@ -528,11 +528,11 @@ namespace NPOI
         }
     }
 
-    /**
-     * Wrapper around the three different kinds of OOXML properties
-     *  and metadata a document can have (Core, Extended and Custom), 
-     *  as well Thumbnails.
-     */
+    /// <summary>
+    /// Wrapper around the three different kinds of OOXML properties
+    ///  and metadata a document can have (Core, Extended and Custom),
+    ///  as well Thumbnails.
+    /// </summary>
     public class POIXMLProperties
     {
         private OPCPackage pkg;
@@ -560,12 +560,12 @@ namespace NPOI
             this.pkg = docPackage;
 
             // Core properties
-            core = new CoreProperties((PackagePropertiesPart)pkg.GetPackageProperties());
+            core = new CoreProperties((PackagePropertiesPart) pkg.GetPackageProperties());
 
             // Extended properties
             PackageRelationshipCollection extRel =
                 pkg.GetRelationshipsByType(PackageRelationshipTypes.EXTENDED_PROPERTIES);
-            if (extRel.Size == 1)
+            if(extRel.Size == 1)
             {
                 extPart = pkg.GetPart(extRel.GetRelationship(0));
                 ExtendedPropertiesDocument props = ExtendedPropertiesDocument.Parse(
@@ -576,13 +576,13 @@ namespace NPOI
             else
             {
                 extPart = null;
-                ext = new ExtendedProperties((ExtendedPropertiesDocument)NEW_EXT_INSTANCE.Copy());
+                ext = new ExtendedProperties((ExtendedPropertiesDocument) NEW_EXT_INSTANCE.Copy());
             }
 
             // Custom properties
             PackageRelationshipCollection custRel =
                 pkg.GetRelationshipsByType(PackageRelationshipTypes.CUSTOM_PROPERTIES);
-            if (custRel.Size == 1)
+            if(custRel.Size == 1)
             {
                 custPart = pkg.GetPart(custRel.GetRelationship(0));
                 CustomPropertiesDocument props = CustomPropertiesDocument.Parse(
@@ -593,13 +593,13 @@ namespace NPOI
             else
             {
                 custPart = null;
-                cust = new CustomProperties((CustomPropertiesDocument)NEW_CUST_INSTANCE.Copy());
+                cust = new CustomProperties((CustomPropertiesDocument) NEW_CUST_INSTANCE.Copy());
             }
         }
 
-        /**
-         * Returns the core document properties
-         */
+        /// <summary>
+        /// Returns the core document properties
+        /// </summary>
         public CoreProperties CoreProperties
         {
             get
@@ -608,9 +608,9 @@ namespace NPOI
             }
         }
 
-        /**
-         * Returns the extended document properties
-         */
+        /// <summary>
+        /// Returns the extended document properties
+        /// </summary>
         public ExtendedProperties ExtendedProperties
         {
             get
@@ -619,9 +619,9 @@ namespace NPOI
             }
         }
 
-        /**
-         * Returns the custom document properties
-         */
+        /// <summary>
+        /// Returns the custom document properties
+        /// </summary>
         public CustomProperties CustomProperties
         {
             get
@@ -630,75 +630,76 @@ namespace NPOI
             }
         }
 
-        /**
-	     * Returns the {@link PackagePart} for the Document
-	     *  Thumbnail, or <code>null</code> if there isn't one
-	     *
-	     * @return The Document Thumbnail part or null
-	     */
+        /// <summary>
+        /// Returns the <see cref="PackagePart"/> for the Document
+        ///  Thumbnail, or <c>null</c> if there isn't one
+        /// </summary>
+        /// <returns>The Document Thumbnail part or null</returns>
         protected internal PackagePart ThumbnailPart
         {
             get
             {
                 PackageRelationshipCollection rels =
                     pkg.GetRelationshipsByType(PackageRelationshipTypes.THUMBNAIL);
-                if (rels.Size == 1)
+                if(rels.Size == 1)
                 {
                     return pkg.GetPart(rels.GetRelationship(0));
                 }
                 return null;
             }
         }
-        /**
-         * Returns the name of the Document thumbnail, eg 
-         *  <code>thumbnail.jpeg</code>, or <code>null</code> if there
-         *  isn't one.
-         *
-         * @return The thumbnail filename, or null
-         */
+        /// <summary>
+        /// Returns the name of the Document thumbnail, eg
+        ///  <c>thumbnail.jpeg</c>, or <c>null</c> if there
+        ///  isn't one.
+        /// </summary>
+        /// <returns>The thumbnail filename, or null</returns>
         public String ThumbnailFilename
         {
             get
             {
                 PackagePart tPart = ThumbnailPart;
-                if (tPart == null) return null;
+                if(tPart == null)
+                    return null;
                 String name = tPart.PartName.Name;
                 return name.Substring(name.LastIndexOf('/') + 1);
             }
         }
-        /**
-         * Returns the Document thumbnail image data, or
-         *  <code>null</code> if there isn't one.
-         *
-         * @return The thumbnail data, or null
-         */
+        /// <summary>
+        /// Returns the Document thumbnail image data, or
+        ///  <c>null</c> if there isn't one.
+        /// </summary>
+        /// <returns>The thumbnail data, or null</returns>
         public Stream ThumbnailImage
         {
             get
             {
                 PackagePart tPart = ThumbnailPart;
-                if (tPart == null) return null;
+                if(tPart == null)
+                    return null;
                 return tPart.GetInputStream();
             }
         }
 
-        /**
-	     * Sets the Thumbnail for the document, replacing any existing
-	     *  one.
-	     *
-	     * @param name The filename for the thumbnail image, eg <code>thumbnail.jpg</code>
-	     * @param imageData The inputstream to read the thumbnail image from
-	     */
-        public void SetThumbnail(String filename, Stream imageData) 
+        /// <summary>
+        /// Sets the Thumbnail for the document, replacing any existing
+        ///  one.
+        /// </summary>
+        /// <param name="name">The filename for the thumbnail image, eg <c>thumbnail.jpg</c></param>
+        /// <param name="imageData">The inputstream to read the thumbnail image from</param>
+        public void SetThumbnail(String filename, Stream imageData)
         {
             PackagePart tPart = ThumbnailPart;
-            if (tPart == null) {
+            if(tPart == null)
+            {
                 // New thumbnail
                 pkg.AddThumbnail(filename, imageData);
-            } else {
+            }
+            else
+            {
                 // Change existing
                 String newType = ContentTypes.GetContentTypeFromFileExtension(filename);
-                if (!newType.Equals(tPart.ContentType))
+                if(!newType.Equals(tPart.ContentType))
                 {
                     throw new ArgumentException("Can't set a Thumbnail of type " +
                                    newType + " when existing one is of a different type " +
@@ -708,13 +709,13 @@ namespace NPOI
             }
         }
 
-        /**
-         * Commit Changes to the underlying OPC namespace
-         */
+        /// <summary>
+        /// Commit Changes to the underlying OPC namespace
+        /// </summary>
         public virtual void Commit()
         {
 
-            if (extPart == null && !NEW_EXT_INSTANCE.ToString().Equals(ext.props.ToString()))
+            if(extPart == null && !NEW_EXT_INSTANCE.ToString().Equals(ext.props.ToString()))
             {
                 try
                 {
@@ -722,12 +723,12 @@ namespace NPOI
                     pkg.AddRelationship(prtname, TargetMode.Internal, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties");
                     extPart = pkg.CreatePart(prtname, "application/vnd.openxmlformats-officedocument.extended-properties+xml");
                 }
-                catch (InvalidFormatException e)
+                catch(InvalidFormatException e)
                 {
                     throw new POIXMLException(e);
                 }
             }
-            if (custPart == null && !NEW_CUST_INSTANCE.ToString().Equals(cust.props.ToString()))
+            if(custPart == null && !NEW_CUST_INSTANCE.ToString().Equals(cust.props.ToString()))
             {
                 try
                 {
@@ -735,21 +736,21 @@ namespace NPOI
                     pkg.AddRelationship(prtname, TargetMode.Internal, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties");
                     custPart = pkg.CreatePart(prtname, "application/vnd.openxmlformats-officedocument.custom-properties+xml");
                 }
-                catch (InvalidFormatException e)
+                catch(InvalidFormatException e)
                 {
                     throw new POIXMLException(e);
                 }
             }
-            if (extPart != null)
+            if(extPart != null)
             {
                 Stream out1 = extPart.GetOutputStream();
 
-                if (extPart.Size > 0)
+                if(extPart.Size > 0)
                     extPart.Clear();
                 ext.props.Save(out1);
                 out1.Close();
             }
-            if (custPart != null)
+            if(custPart != null)
             {
                 Stream out1 = custPart.GetOutputStream();
                 cust.props.Save(out1);

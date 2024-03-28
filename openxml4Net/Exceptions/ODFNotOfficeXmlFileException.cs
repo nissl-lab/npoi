@@ -18,10 +18,10 @@ namespace NPOI.Openxml4Net.Exceptions
 {
     using System;
 
-    /**
-     * This exception is thrown when we are given an ODF-based file
-     *  (eg OpenOffice .ods) instead of an actually OOXML (Office Open XML) file
-     */
+    /// <summary>
+    /// This exception is thrown when we are given an ODF-based file
+    ///  (eg OpenOffice .ods) instead of an actually OOXML (Office Open XML) file
+    /// </summary>
     public class ODFNotOfficeXmlFileException : NotOfficeXmlFileException
     {
         public ODFNotOfficeXmlFileException(String message)

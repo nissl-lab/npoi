@@ -18,10 +18,10 @@ namespace NPOI.Openxml4Net.Exceptions
 {
     using System;
 
-    /**
-     * This exception is thrown when we try to open a file that doesn't
-     *  seem to actually be an OOXML (Office Open XML) file After all
-     */
+    /// <summary>
+    /// This exception is thrown when we try to open a file that doesn't
+    ///  seem to actually be an OOXML (Office Open XML) file After all
+    /// </summary>
     public class NotOfficeXmlFileException : UnsupportedFileFormatException
     {
         public NotOfficeXmlFileException(String message)

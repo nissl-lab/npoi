@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -7,24 +7,24 @@ using ICSharpCode.SharpZipLib.Zip;
 
 namespace NPOI.OpenXml4Net.Util
 {
-    /**
-     * Provides a way to get at all the ZipEntries
-     *  from a ZipInputStream, as many times as required.
-     * Allows a ZipInputStream to be treated much like
-     *  a ZipFile, for a price in terms of memory.
-     * Be sure to call {@link #close()} as soon as you're
-     *  done, to free up that memory!
-     */
+    /// <summary>
+    /// Provides a way to get at all the ZipEntries
+    ///  from a ZipInputStream, as many times as required.
+    /// Allows a ZipInputStream to be treated much like
+    ///  a ZipFile, for a price in terms of memory.
+    /// Be sure to call <see cref="Close()" /> as soon as you're
+    ///  done, to free up that memory!
+    /// </summary>
     public class ZipInputStreamZipEntrySource : ZipEntrySource
     {
         private List<FakeZipEntry> zipEntries;
 
-        /**
-         * Reads all the entries from the ZipInputStream 
-         *  into memory, and closes the source stream.
-         * We'll then eat lots of memory, but be able to
-         *  work with the entries at-will.
-         */
+        /// <summary>
+        /// Reads all the entries from the ZipInputStream
+        ///  into memory, and closes the source stream.
+        /// We'll then eat lots of memory, but be able to
+        ///  work with the entries at-will.
+        /// </summary>
         public ZipInputStreamZipEntrySource(ZipInputStream inp)
         {
             zipEntries = new List<FakeZipEntry>();
@@ -72,10 +72,10 @@ namespace NPOI.OpenXml4Net.Util
         {
             get { return zipEntries == null; }
         }
-        /**
-         * Why oh why oh why are Iterator and Enumeration
-         *  still not compatible?
-         */
+        /// <summary>
+        /// Why oh why oh why are Iterator and Enumeration
+        ///  still not compatible?
+        /// </summary>
         internal class EntryEnumerator : IEnumerator
         {
             private List<FakeZipEntry>.Enumerator iterator;
@@ -109,12 +109,12 @@ namespace NPOI.OpenXml4Net.Util
             #endregion
         }
 
-        /**
-         * So we can close the real zip entry and still
-         *  effectively work with it.
-         * Holds the (decompressed!) data in memory, so
-         *  close this as soon as you can! 
-         */
+        /// <summary>
+        /// So we can close the real zip entry and still
+        ///  effectively work with it.
+        /// Holds the (decompressed!) data in memory, so
+        ///  close this as soon as you can!
+        /// </summary>
         public class FakeZipEntry : ZipEntry
         {
             private byte[] data;

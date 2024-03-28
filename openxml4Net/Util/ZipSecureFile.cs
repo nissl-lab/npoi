@@ -1,4 +1,4 @@
-﻿using ICSharpCode.SharpZipLib.Zip;
+using ICSharpCode.SharpZipLib.Zip;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using NPOI.Util;
 using System;
@@ -16,71 +16,78 @@ namespace NPOI.OpenXml4Net.Util
         private static long MAX_ENTRY_SIZE = 0xFFFFFFFFL;
         // The default maximum size of extracted text 
         private static long MAX_TEXT_SIZE = 10*1024*1024L;
-        /**
-         * Sets the ratio between de- and inflated bytes to detect zipbomb.
-         * It defaults to 1% (= 0.01d), i.e. when the compression is better than
-         * 1% for any given read package part, the parsing will fail indicating a 
-         * Zip-Bomb.
-         *
-         * @param ratio the ratio between de- and inflated bytes to detect zipbomb
-         */
+        /// <summary>
+        /// Sets the ratio between de- and inflated bytes to detect zipbomb.
+        /// It defaults to 1% (= 0.01d), i.e. when the compression is better than
+        /// 1% for any given read package part, the parsing will fail indicating a
+        /// Zip-Bomb.
+        /// </summary>
+        /// <param name="ratio">the ratio between de- and inflated bytes to detect zipbomb</param>
         public static void SetMinInflateRatio(double ratio)
         {
             MIN_INFLATE_RATIO = ratio;
         }
 
-        /**
-         * Returns the current minimum compression rate that is used.
-         * 
-         * See setMinInflateRatio() for details.
-         *
-         * @return The min accepted compression-ratio.  
-         */
+        /// <summary>
+        /// <para>
+        /// Returns the current minimum compression rate that is used.
+        /// </para>
+        /// <para>
+        /// See setMinInflateRatio() for details.
+        /// </para>
+        /// </summary>
+        /// <returns>The min accepted compression-ratio.</returns>
         public static double GetMinInflateRatio()
         {
             return MIN_INFLATE_RATIO;
         }
 
-        /**
-         * Sets the maximum file size of a single zip entry. It defaults to 4GB,
-         * i.e. the 32-bit zip format maximum.
-         * 
-         * This can be used to limit memory consumption and protect against 
-         * security vulnerabilities when documents are provided by users.
-         *
-         * @param maxEntrySize the max. file size of a single zip entry
-         */
+        /// <summary>
+        /// <para>
+        /// Sets the maximum file size of a single zip entry. It defaults to 4GB,
+        /// i.e. the 32-bit zip format maximum.
+        /// </para>
+        /// <para>
+        /// This can be used to limit memory consumption and protect against
+        /// security vulnerabilities when documents are provided by users.
+        /// </para>
+        /// </summary>
+        /// <param name="maxEntrySize">the max. file size of a single zip entry</param>
         public static void SetMaxEntrySize(long maxEntrySize)
         {
-            if (maxEntrySize < 0 || maxEntrySize > 0xFFFFFFFFL)
+            if(maxEntrySize < 0 || maxEntrySize > 0xFFFFFFFFL)
             {
                 throw new ArgumentException("Max entry size is bounded [0-4GB].");
             }
             MAX_ENTRY_SIZE = maxEntrySize;
         }
 
-        /**
-         * Returns the current maximum allowed uncompressed file size.
-         * 
-         * See setMaxEntrySize() for details.
-         *
-         * @return The max accepted uncompressed file size. 
-         */
+        /// <summary>
+        /// <para>
+        /// Returns the current maximum allowed uncompressed file size.
+        /// </para>
+        /// <para>
+        /// See setMaxEntrySize() for details.
+        /// </para>
+        /// </summary>
+        /// <returns>The max accepted uncompressed file size.</returns>
         public static long GetMaxEntrySize()
         {
             return MAX_ENTRY_SIZE;
         }
 
-        /**
-     * Sets the maximum number of characters of text that are
-     * extracted before an exception is thrown during extracting
-     * text from documents.
-     * 
-     * This can be used to limit memory consumption and protect against 
-     * security vulnerabilities when documents are provided by users.
-     *
-     * @param maxTextSize the max. file size of a single zip entry
-     */
+        /// <summary>
+        /// <para>
+        /// Sets the maximum number of characters of text that are
+        /// extracted before an exception is thrown during extracting
+        /// text from documents.
+        /// </para>
+        /// <para>
+        /// This can be used to limit memory consumption and protect against
+        /// security vulnerabilities when documents are provided by users.
+        /// </para>
+        /// </summary>
+        /// <param name="maxTextSize">the max. file size of a single zip entry</param>
         public static void SetMaxTextSize(long maxTextSize)
         {
             if(maxTextSize < 0 || maxTextSize > 0xFFFFFFFFL)
@@ -90,13 +97,15 @@ namespace NPOI.OpenXml4Net.Util
             MAX_TEXT_SIZE = maxTextSize;
         }
 
-        /**
-         * Returns the current maximum allowed text size.
-         * 
-         * See setMaxTextSize() for details.
-         *
-         * @return The max accepted text size. 
-         */
+        /// <summary>
+        /// <para>
+        /// Returns the current maximum allowed text size.
+        /// </para>
+        /// <para>
+        /// See setMaxTextSize() for details.
+        /// </para>
+        /// </summary>
+        /// <returns>The max accepted text size.</returns>
         public static long GetMaxTextSize()
         {
             return MAX_TEXT_SIZE;
@@ -120,20 +129,23 @@ namespace NPOI.OpenXml4Net.Util
 
         }
 
-        /**
-         * Returns an input stream for reading the contents of the specified
-         * zip file entry.
-         *
-         * <p> Closing this ZIP file will, in turn, close all input
-         * streams that have been returned by invocations of this method.
-         *
-         * @param entry the zip file entry
-         * @return the input stream for reading the contents of the specified
-         * zip file entry.
-         * @throws ZipException if a ZIP format error has occurred
-         * @throws IOException if an I/O error has occurred
-         * @throws IllegalStateException if the zip file has been closed
-         */
+        /// <summary>
+        /// <para>
+        /// Returns an input stream for reading the contents of the specified
+        /// zip file entry.
+        /// </para>
+        /// <para>
+        /// Closing this ZIP file will, in turn, close all input
+        /// streams that have been returned by invocations of this method.
+        /// </para>
+        /// </summary>
+        /// <param name="entry">the zip file entry</param>
+        /// <returns>the input stream for reading the contents of the specified
+        /// zip file entry.
+        /// </returns>
+        /// <exception cref="ZipException">if a ZIP format error has occurred</exception>
+        /// <exception cref="IOException">if an I/O error has occurred</exception>
+        /// <exception cref="IllegalStateException">if the zip file has been closed</exception>
         public new Stream GetInputStream(ZipEntry entry)
         {
             Stream zipIS = base.GetInputStream(entry);
@@ -144,7 +156,7 @@ namespace NPOI.OpenXml4Net.Util
         {
 
             ThresholdInputStream newInner = null;
-            if (zipIS is InflaterInputStream)
+            if(zipIS is InflaterInputStream)
             {
                 //replace inner stream of zipIS by using a ThresholdInputStream instance??
                 try
@@ -154,11 +166,15 @@ namespace NPOI.OpenXml4Net.Util
                     //InputStream oldInner = (InputStream)f.Get(zipIS);
                     //newInner = new ThresholdInputStream(oldInner, null);
                     //f.Set(zipIS, newInner);
-                } catch (Exception ex) {
+                }
+                catch(Exception)
+                {
                     //logger.Log(POILogger.WARN, "SecurityManager doesn't allow manipulation via reflection for zipbomb detection - continue with original input stream", ex);
                     newInner = null;
                 }
-            } else {
+            }
+            else
+            {
                 // the inner stream is a ZipFileInputStream, i.e. the data wasn't compressed
                 newInner = null;
             }
@@ -183,7 +199,7 @@ namespace NPOI.OpenXml4Net.Util
             public override long Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
             public ThresholdInputStream(Stream is1, ThresholdInputStream cis)
-                        
+
             {
                 this.input = is1;
                 this.cis = cis;
@@ -193,7 +209,8 @@ namespace NPOI.OpenXml4Net.Util
             {
 
                 int b = this.input.ReadByte();
-                if (b > -1) Advance(1);
+                if(b > -1)
+                    Advance(1);
                 return b;
             }
 
@@ -201,7 +218,8 @@ namespace NPOI.OpenXml4Net.Util
             {
 
                 int cnt = input.Read(b, off, len);
-                if (cnt > -1) Advance(cnt);
+                if(cnt > -1)
+                    Advance(cnt);
                 return cnt;
 
             }
@@ -224,62 +242,70 @@ namespace NPOI.OpenXml4Net.Util
 
                 counter += advance;
                 // check the file size first, in case we are working on uncompressed streams
-                if (counter < ZipSecureFile.MAX_ENTRY_SIZE)
+                if(counter < ZipSecureFile.MAX_ENTRY_SIZE)
                 {
-                    if (cis == null) return;
+                    if(cis == null)
+                        return;
                     double ratio = (double)cis.counter / (double)counter;
-                    if (ratio >= ZipSecureFile.MIN_INFLATE_RATIO) return;
+                    if(ratio >= ZipSecureFile.MIN_INFLATE_RATIO)
+                        return;
                 }
                 throw new IOException("Zip bomb detected! The file would exceed certain limits which usually indicate that the file is used to inflate memory usage and thus could pose a security risk. "
                         + "You can adjust these limits via setMinInflateRatio() and setMaxEntrySize() if you need to work with files which exceed these limits. "
-                        + "Counter: " + counter + ", cis.counter: " + (cis == null ? 0 : cis.counter) + ", ratio: " + (cis == null ? 0 : ((double)cis.counter) / counter)
+                        + "Counter: " + counter + ", cis.counter: " + (cis == null ? 0 : cis.counter) + ", ratio: " + (cis == null ? 0 : ((double) cis.counter) / counter)
                         + "Limits: MIN_INFLATE_RATIO: " + ZipSecureFile.MIN_INFLATE_RATIO + ", MAX_ENTRY_SIZE: " + ZipSecureFile.MAX_ENTRY_SIZE);
             }
 
             public ZipEntry GetNextEntry()
             {
 
-                if (!(input is ZipInputStream)) {
+                if(!(input is ZipInputStream))
+                {
                     throw new NotSupportedException("underlying stream is not a ZipInputStream");
                 }
                 counter = 0;
-                return ((ZipInputStream)input).GetNextEntry();
+                return ((ZipInputStream) input).GetNextEntry();
             }
 
             public void CloseEntry()
             {
 
-                if (!(input is ZipInputStream)) {
+                if(!(input is ZipInputStream))
+                {
                     throw new NotSupportedException("underlying stream is not a ZipInputStream");
                 }
                 counter = 0;
-                ((ZipInputStream)input).CloseEntry();
+                ((ZipInputStream) input).CloseEntry();
             }
 
             public void Unread(int b)
             {
 
-                if (!(input is PushbackInputStream)) {
+                if(!(input is PushbackInputStream))
+                {
                     throw new NotSupportedException("underlying stream is not a PushbackInputStream");
                 }
-                if (--counter < 0) counter = 0;
-                ((PushbackInputStream)input).Unread(b);
+                if(--counter < 0)
+                    counter = 0;
+                ((PushbackInputStream) input).Unread(b);
             }
 
             public void Unread(byte[] b, int off, int len)
             {
 
-                if (!(input is PushbackInputStream)) {
+                if(!(input is PushbackInputStream))
+                {
                     throw new NotSupportedException("underlying stream is not a PushbackInputStream");
                 }
                 counter -= len;
-                if (--counter < 0) counter = 0;
-                ((PushbackInputStream)input).Unread(b, off, len);
+                if(--counter < 0)
+                    counter = 0;
+                ((PushbackInputStream) input).Unread(b, off, len);
             }
 
             public int Available()
             {
-                return (int)(input.Length - input.Position);
+                return (int) (input.Length - input.Position);
                 //return input.Available();
             }
 

@@ -20,42 +20,40 @@ using System.Text.RegularExpressions;
 namespace NPOI
 {
 
-    /**
-     * Represents a descriptor of a OOXML relation.
-     *
-     * @author Yegor Kozlov
-     */
+    /// <summary>
+    /// Represents a descriptor of a OOXML relation.
+    /// </summary>
+    /// @author Yegor Kozlov
     public abstract class POIXMLRelation
     {
 
-        /**
-         * Describes the content stored in a part.
-         */
+        /// <summary>
+        /// Describes the content stored in a part.
+        /// </summary>
         private String _type;
 
-        /**
-         * The kind of connection between a source part and a target part in a namespace.
-         */
+        /// <summary>
+        /// The kind of connection between a source part and a target part in a namespace.
+        /// </summary>
         private String _relation;
 
-        /**
-         * The path component of a pack URI.
-         */
+        /// <summary>
+        /// The path component of a pack URI.
+        /// </summary>
         private String _defaultName;
 
-        /**
-         * Defines what object is used to construct instances of this relationship
-         */
+        /// <summary>
+        /// Defines what object is used to construct instances of this relationship
+        /// </summary>
         private Type _cls;
 
-        /**
-         * Instantiates a POIXMLRelation.
-         *
-         * @param type content type
-         * @param rel  relationship
-         * @param defaultName default item name
-         * @param cls defines what object is used to construct instances of this relationship
-         */
+        /// <summary>
+        /// Instantiates a POIXMLRelation.
+        /// </summary>
+        /// <param name="type">content type</param>
+        /// <param name="rel"> relationship</param>
+        /// <param name="defaultName">default item name</param>
+        /// <param name="cls">defines what object is used to construct instances of this relationship</param>
         public POIXMLRelation(String type, String rel, String defaultName, Type cls)
         {
             _type = type;
@@ -64,24 +62,22 @@ namespace NPOI
             _cls = cls;
         }
 
-        /**
-         * Instantiates a POIXMLRelation.
-         *
-         * @param type content type
-         * @param rel  relationship
-         * @param defaultName default item name
-         */
+        /// <summary>
+        /// Instantiates a POIXMLRelation.
+        /// </summary>
+        /// <param name="type">content type</param>
+        /// <param name="rel"> relationship</param>
+        /// <param name="defaultName">default item name</param>
         public POIXMLRelation(String type, String rel, String defaultName)
             : this(type, rel, defaultName, null)
         {
 
         }
-        /**
-         * Return the content type. Content types define a media type, a subtype, and an
-         * optional set of parameters, as defined in RFC 2616.
-         *
-         * @return the content type
-         */
+        /// <summary>
+        /// Return the content type. Content types define a media type, a subtype, and an
+        /// optional set of parameters, as defined in RFC 2616.
+        /// </summary>
+        /// <returns>the content type</returns>
         public String ContentType
         {
             get
@@ -90,13 +86,12 @@ namespace NPOI
             }
         }
 
-        /**
-         * Return the relationship, the kind of connection between a source part and a target part in a namespace.
-         * Relationships make the connections between parts directly discoverable without looking at the content
-         * in the parts, and without altering the parts themselves.
-         *
-         * @return the relationship
-         */
+        /// <summary>
+        /// Return the relationship, the kind of connection between a source part and a target part in a namespace.
+        /// Relationships make the connections between parts directly discoverable without looking at the content
+        /// in the parts, and without altering the parts themselves.
+        /// </summary>
+        /// <returns>the relationship</returns>
         public String Relation
         {
             get
@@ -105,12 +100,11 @@ namespace NPOI
             }
         }
 
-        /**
-         * Return the default part name. Part names are used to refer to a part in the context of a
-         * namespace, typically as part of a URI.
-         *
-         * @return the default part name
-         */
+        /// <summary>
+        /// Return the default part name. Part names are used to refer to a part in the context of a
+        /// namespace, typically as part of a URI.
+        /// </summary>
+        /// <returns>the default part name</returns>
         public String DefaultFileName
         {
             get
@@ -119,13 +113,13 @@ namespace NPOI
             }
         }
 
-        /**
-         * Returns the filename for the nth one of these,
-         *  e.g. /xl/comments4.xml
-         */
+        /// <summary>
+        /// Returns the filename for the nth one of these,
+        ///  e.g. /xl/comments4.xml
+        /// </summary>
         public String GetFileName(int index)
         {
-            if (_defaultName.IndexOf("#") == -1)
+            if(_defaultName.IndexOf("#") == -1)
             {
                 // Generic filename in all cases
                 return DefaultFileName;
@@ -133,21 +127,20 @@ namespace NPOI
             return _defaultName.Replace("#", index.ToString());
         }
 
-        /**
-         * Returns the index of the filename within the package for the given part.
-         *  e.g. 4 for /xl/comments4.xml
-         */
+        /// <summary>
+        /// Returns the index of the filename within the package for the given part.
+        ///  e.g. 4 for /xl/comments4.xml
+        /// </summary>
         public int GetFileNameIndex(POIXMLDocumentPart part)
         {
             Regex regex = new Regex(_defaultName.Replace("#", "(\\d+)"));
             return int.Parse(regex.Match(part.GetPackagePart().PartName.Name).Groups[1].Value);
             //return Integer.valueOf(part.getPackagePart().getPartName().getName().replaceAll(regex, "$1"));
         }
-        /**
-         * Return type of the obejct used to construct instances of this relationship
-         *
-         * @return the class of the object used to construct instances of this relation
-         */
+        /// <summary>
+        /// Return type of the obejct used to construct instances of this relationship
+        /// </summary>
+        /// <returns>the class of the object used to construct instances of this relation</returns>
         public Type RelationClass
         {
             get

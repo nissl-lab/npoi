@@ -24,27 +24,27 @@ namespace NPOI
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats;
 
-    /**
-     * A {@link POITextExtractor} for returning the textual
-     *  content of the OOXML file properties, eg author
-     *  and title.
-     */
+    /// <summary>
+    /// A <see cref="POITextExtractor"/> for returning the textual
+    ///  content of the OOXML file properties, eg author
+    ///  and title.
+    /// </summary>
     public class POIXMLPropertiesTextExtractor : POIXMLTextExtractor
     {
-        /**
-         * Creates a new POIXMLPropertiesTextExtractor for the
-         *  given open document.
-         */
+        /// <summary>
+        /// Creates a new POIXMLPropertiesTextExtractor for the
+        ///  given open document.
+        /// </summary>
         public POIXMLPropertiesTextExtractor(POIXMLDocument doc)
             : base(doc)
         {
 
         }
-        /**
-         * Creates a new POIXMLPropertiesTextExtractor, for the
-         *  same file that another TextExtractor is already
-         *  working on.
-         */
+        /// <summary>
+        /// Creates a new POIXMLPropertiesTextExtractor, for the
+        ///  same file that another TextExtractor is already
+        ///  working on.
+        /// </summary>
         public POIXMLPropertiesTextExtractor(POIXMLTextExtractor otherExtractor)
             : base(otherExtractor.Document)
         {
@@ -61,24 +61,26 @@ namespace NPOI
         }
         private void AppendIfPresent(StringBuilder text, String thing, DateTime? value)
         {
-            if (value == null) { return; }
+            if(value == null)
+            { return; }
             AppendIfPresent(text, thing, value.ToString());
         }
         private void AppendIfPresent(StringBuilder text, String thing, String value)
         {
-            if (value == null) { return; }
+            if(value == null)
+            { return; }
             text.Append(thing);
             text.Append(" = ");
             text.Append(value);
             text.Append("\n");
         }
 
-        /**
-         * Returns the core document properties, eg author
-         */
+        /// <summary>
+        /// Returns the core document properties, eg author
+        /// </summary>
         public String GetCorePropertiesText()
         {
-            if (Document == null)
+            if(Document == null)
             {  // event based extractor does not have a document
                 return "";
             }
@@ -109,13 +111,13 @@ namespace NPOI
 
             return text.ToString();
         }
-        /**
-         * Returns the extended document properties, eg
-         *  application
-         */
+        /// <summary>
+        /// Returns the extended document properties, eg
+        ///  application
+        /// </summary>
         public String GetExtendedPropertiesText()
         {
-            if (Document == null)
+            if(Document == null)
             {  // event based extractor does not have a document
                 return "";
             }
@@ -141,13 +143,13 @@ namespace NPOI
 
             return text.ToString();
         }
-        /**
-        * Returns the custom document properties, if
-        *  there are any
-        */
+        /// <summary>
+        /// Returns the custom document properties, if
+        ///  there are any
+        /// </summary>
         public String GetCustomPropertiesText()
         {
-            if (Document == null)
+            if(Document == null)
             {  // event based extractor does not have a document
                 return "";
             }
@@ -155,88 +157,88 @@ namespace NPOI
             CT_CustomProperties props = Document.GetProperties().CustomProperties.GetUnderlyingProperties();
 
             List<CT_Property> properties = props.GetPropertyList();
-            foreach (CT_Property property in properties)
+            foreach(CT_Property property in properties)
             {
                 String val = "(not implemented!)";
                 //val = property.Item.ToString();
-                if (property.IsSetLpwstr())
+                if(property.IsSetLpwstr())
                 {
                     val = property.GetLpwstr();
                 }
-                else if (property.IsSetLpstr())
+                else if(property.IsSetLpstr())
                 {
                     val = property.GetLpstr();
                 }
-                else if (property.IsSetDate())
+                else if(property.IsSetDate())
                 {
                     val = property.GetDate().ToString();
                 }
-                else if (property.IsSetFiletime())
+                else if(property.IsSetFiletime())
                 {
                     val = property.GetFiletime().ToString();
                 }
-                else if (property.IsSetBool())
+                else if(property.IsSetBool())
                 {
                     val = property.GetBool().ToString();
                 }
 
                 // Integers
-                else if (property.IsSetI1())
+                else if(property.IsSetI1())
                 {
                     val = property.GetI1().ToString();
                 }
-                else if (property.IsSetI2())
+                else if(property.IsSetI2())
                 {
                     val = property.GetI2().ToString();
                 }
-                else if (property.IsSetI4())
+                else if(property.IsSetI4())
                 {
                     val = property.GetI4().ToString();
                 }
-                else if (property.IsSetI8())
+                else if(property.IsSetI8())
                 {
                     val = property.GetI8().ToString();
                 }
-                else if (property.IsSetInt())
+                else if(property.IsSetInt())
                 {
                     val = property.GetInt().ToString();
                 }
 
                 // Unsigned Integers
-                else if (property.IsSetUi1())
+                else if(property.IsSetUi1())
                 {
                     val = property.GetUi1().ToString();
                 }
-                else if (property.IsSetUi2())
+                else if(property.IsSetUi2())
                 {
                     val = property.GetUi2().ToString();
                 }
-                else if (property.IsSetUi4())
+                else if(property.IsSetUi4())
                 {
                     val = property.GetUi4().ToString();
                 }
-                else if (property.IsSetUi8())
+                else if(property.IsSetUi8())
                 {
                     val = property.GetUi8().ToString();
                 }
-                else if (property.IsSetUint())
+                else if(property.IsSetUint())
                 {
                     val = property.GetUint().ToString();
                 }
 
                 // Reals
-                else if (property.IsSetR4())
+                else if(property.IsSetR4())
                 {
                     val = property.GetR4().ToString();
                 }
-                else if (property.IsSetR8())
+                else if(property.IsSetR8())
                 {
                     val = property.GetR8().ToString();
                 }
-                else if (property.IsSetDecimal())
+                else if(property.IsSetDecimal())
                 {
                     Decimal? d = property.GetDecimal();
-                    if (d == null)
+                    if(d == null)
                     {
                         val = null;
                     }

@@ -37,12 +37,14 @@ namespace NPOI
         // Embedded OPC documents relation name
         public static String PACK_OBJECT_REL_TYPE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
 
-        /** The OPC Package */
+        /// <summary>
+        /// The OPC Package */
+        /// </summary>
         private OPCPackage pkg;
 
-        /**
-         * The properties of the OPC namespace, opened as needed
-         */
+        /// <summary>
+        /// The properties of the OPC namespace, opened as needed
+        /// </summary>
         private POIXMLProperties properties;
 
         protected POIXMLDocument(OPCPackage pkg)
@@ -63,18 +65,18 @@ namespace NPOI
 
         }
 
-        /**
-         * Wrapper to open a namespace, returning an IOException
-         *  in the event of a problem.
-         * Works around shortcomings in java's this() constructor calls
-         */
+        /// <summary>
+        /// Wrapper to open a namespace, returning an IOException
+        ///  in the event of a problem.
+        /// Works around shortcomings in java's this() constructor calls
+        /// </summary>
         public static OPCPackage OpenPackage(String path)
         {
             try
             {
                 return OPCPackage.Open(path);
             }
-            catch (InvalidFormatException e)
+            catch(InvalidFormatException e)
             {
                 throw new IOException(e.ToString());
             }
@@ -96,11 +98,11 @@ namespace NPOI
             }
         }
 
-        /**
-         * Retrieves all the PackageParts which are defined as
-         *  relationships of the base document with the
-         *  specified content type.
-         */
+        /// <summary>
+        /// Retrieves all the PackageParts which are defined as
+        ///  relationships of the base document with the
+        ///  specified content type.
+        /// </summary>
         protected PackagePart[] GetRelatedByType(String contentType)
         {
             PackageRelationshipCollection partsC =
@@ -108,7 +110,7 @@ namespace NPOI
 
             PackagePart[] parts = new PackagePart[partsC.Size];
             int count = 0;
-            foreach (PackageRelationship rel in partsC)
+            foreach(PackageRelationship rel in partsC)
             {
                 parts[count] = GetPackagePart().GetRelatedPart(rel);
                 count++;
@@ -116,34 +118,34 @@ namespace NPOI
             return parts;
         }
 
-        /**
-         * Checks that the supplied Stream (which MUST
-         *  support mark and reSet, or be a PushbackStream)
-         *  has a OOXML (zip) header at the start of it.
-         * If your Stream does not support mark / reSet,
-         *  then wrap it in a PushBackStream, then be
-         *  sure to always use that, and not the original!
-         * @param inp An Stream which supports either mark/reSet, or is a PushbackStream
-         */
+        /// <summary>
+        /// Checks that the supplied Stream (which MUST
+        ///  support mark and reSet, or be a PushbackStream)
+        ///  has a OOXML (zip) header at the start of it.
+        /// If your Stream does not support mark / reSet,
+        ///  then wrap it in a PushBackStream, then be
+        ///  sure to always use that, and not the original!
+        /// </summary>
+        /// <param name="inp">An Stream which supports either mark/reSet, or is a PushbackStream</param>
         [Obsolete("Use the method from DocumentFactoryHelper")]
         public static bool HasOOXMLHeader(Stream inp)
         {
             return DocumentFactoryHelper.HasOOXMLHeader(inp);
         }
 
-        /**
-         * Get the document properties. This gives you access to the
-         *  core ooxml properties, and the extended ooxml properties.
-         */
+        /// <summary>
+        /// Get the document properties. This gives you access to the
+        ///  core ooxml properties, and the extended ooxml properties.
+        /// </summary>
         public POIXMLProperties GetProperties()
         {
-            if (properties == null)
+            if(properties == null)
             {
                 try
                 {
                     properties = new POIXMLProperties(pkg);
                 }
-                catch (Exception e)
+                catch(Exception e)
                 {
                     throw new POIXMLException(e);
                 }
@@ -151,9 +153,9 @@ namespace NPOI
             return properties;
         }
 
-        /**
-         * Get the document's embedded files.
-         */
+        /// <summary>
+        /// Get the document's embedded files.
+        /// </summary>
         public abstract List<PackagePart> GetAllEmbedds();
 
         protected void Load(POIXMLFactory factory)
@@ -163,22 +165,22 @@ namespace NPOI
             {
                 Read(factory, context);
             }
-            catch (OpenXml4NetException e)
+            catch(OpenXml4NetException e)
             {
                 throw new POIXMLException(e);
             }
             OnDocumentRead();
             context.Clear();
         }
-        /**
-         * Closes the underlying {@link OPCPackage} from which this
-         *  document was read, if there is one
-         */
+        /// <summary>
+        /// Closes the underlying <see cref="OPCPackage"/> from which this
+        ///  document was read, if there is one
+        /// </summary>
         public void Close()
         {
-            if (pkg != null)
+            if(pkg != null)
             {
-                if (pkg.GetPackageAccess() == PackageAccess.READ)
+                if(pkg.GetPackageAccess() == PackageAccess.READ)
                 {
                     pkg.Revert();
                 }
@@ -189,32 +191,35 @@ namespace NPOI
                 pkg = null;
             }
         }
-        /**
-         * Write out this document to an Outputstream.
-         *
-         * Note - if the Document was opened from a {@link File} rather
-         *  than an {@link InputStream}, you <b>must</b> write out to
-         *  a different file, overwriting via an OutputStream isn't possible.
-         *  
-         * If {@code stream} is a {@link java.io.FileOutputStream} on a networked drive
-         * or has a high cost/latency associated with each written byte,
-         * consider wrapping the OutputStream in a {@link java.io.BufferedOutputStream}
-         * to improve write performance.
-         * 
-         * @param stream - the java Stream you wish to write the file to
-         *
-         * @exception IOException if anything can't be written.
-         */
+        /// <summary>
+        /// <para>
+        /// Write out this document to an Outputstream.
+        /// </para>
+        /// <para>
+        /// Note - if the Document was opened from a <see cref="File"/> rather
+        ///  than an <see cref="InputStream"/>, you <b>must</b> write out to
+        ///  a different file, overwriting via an OutputStream isn't possible.
+        /// </para>
+        /// <para>
+        /// If <c>stream</c> is a <see cref="java.io.FileOutputStream} on a networked drive
+        /// or has a high cost/latency associated with each written byte,
+        /// consider wrapping the OutputStream in a {@link java.io.BufferedOutputStream" />
+        /// to improve write performance.
+        /// </para>
+        /// </summary>
+        /// <param name="stream">- the java Stream you wish to write the file to</param>
+        /// 
+        /// <exception cref="IOException">if anything can't be written.</exception>
         public void Write(Stream stream)
         {
             OPCPackage pkg = Package;
-            if (pkg == null)
+            if(pkg == null)
             {
                 throw new IOException("Cannot write data, document seems to have been closed already");
             }
-            if (!this.GetProperties().CustomProperties.Contains("Generator"))
+            if(!this.GetProperties().CustomProperties.Contains("Generator"))
                 this.GetProperties().CustomProperties.AddProperty("Generator", "NPOI");
-            if (!this.GetProperties().CustomProperties.Contains("Generator Version"))
+            if(!this.GetProperties().CustomProperties.Contains("Generator Version"))
                 this.GetProperties().CustomProperties.AddProperty("Generator Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
             //force all children to commit their Changes into the underlying OOXML Package
             List<PackagePart> context = new List<PackagePart>();

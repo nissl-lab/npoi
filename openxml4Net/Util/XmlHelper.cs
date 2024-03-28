@@ -1,4 +1,4 @@
-﻿using NPOI.Util;
+using NPOI.Util;
 using System;
 using System.Globalization;
 using System.IO;

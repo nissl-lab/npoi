@@ -24,53 +24,56 @@ namespace NPOI
 
     public abstract class POIXMLTextExtractor : POITextExtractor
     {
-        /** The POIXMLDocument that's open */
+        /// <summary>
+        /// The POIXMLDocument that's open */
+        /// </summary>
         private POIXMLDocument _document;
 
-        /**
-         * Creates a new text extractor for the given document
-         */
+        /// <summary>
+        /// Creates a new text extractor for the given document
+        /// </summary>
         public POIXMLTextExtractor(POIXMLDocument document)
         {
 
             _document = document;
         }
 
-        /**
-         * Returns the core document properties
-         */
+        /// <summary>
+        /// Returns the core document properties
+        /// </summary>
         public virtual CoreProperties GetCoreProperties()
         {
             return _document.GetProperties().CoreProperties;
         }
-        /**
-         * Returns the extended document properties
-         */
+        /// <summary>
+        /// Returns the extended document properties
+        /// </summary>
         public virtual ExtendedProperties GetExtendedProperties()
         {
             return _document.GetProperties().ExtendedProperties;
         }
-        /**
-         * Returns the custom document properties
-         */
+        /// <summary>
+        /// Returns the custom document properties
+        /// </summary>
         public virtual CustomProperties GetCustomProperties()
         {
             return _document.GetProperties().CustomProperties;
         }
 
-        /**
-         * Returns opened document
-         */
+        /// <summary>
+        /// Returns opened document
+        /// </summary>
         public POIXMLDocument Document
         {
-            get{
+            get
+            {
                 return _document;
             }
         }
 
-        /**
-         * Returns the opened OPCPackage that Contains the document
-         */
+        /// <summary>
+        /// Returns the opened OPCPackage that Contains the document
+        /// </summary>
         public OPCPackage Package
         {
             get
@@ -79,10 +82,10 @@ namespace NPOI
             }
         }
 
-        /**
-         * Returns an OOXML properties text extractor for the
-         *  document properties metadata, such as title and author.
-         */
+        /// <summary>
+        /// Returns an OOXML properties text extractor for the
+        ///  document properties metadata, such as title and author.
+        /// </summary>
         public override POITextExtractor MetadataTextExtractor
         {
             get
@@ -94,10 +97,10 @@ namespace NPOI
         public override void Close()
         {
             // e.g. XSSFEventBaseExcelExtractor passes a null-document
-            if (_document != null)
+            if(_document != null)
             {
                 OPCPackage pkg = _document.Package;
-                if (pkg != null)
+                if(pkg != null)
                 {
                     pkg.Revert();
                 }
@@ -124,8 +127,3 @@ namespace NPOI
     }
 
 }
-
-
-
-
-
