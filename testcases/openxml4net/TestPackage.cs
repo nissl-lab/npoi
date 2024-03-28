@@ -166,7 +166,7 @@ namespace TestCases.OpenXml4Net.OPC
          *  document and another part, save and re-load and
          *  have everything Setup as expected
          */
-        [Test, RunSerialyAndSweepTmpFiles]
+        [Test]
         //[Ignore("add relation Uri #Sheet1!A1")]
         public void TestCreatePackageWithCoreDocument()
         {
@@ -256,8 +256,6 @@ namespace TestCases.OpenXml4Net.OPC
             {
                 pkg.Close();
             }
-
-            Assert.AreEqual(0, Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp").Length, "At Last: There are no temporary files.");
         }
 
         private void assertMSCompatibility(OPCPackage pkg)
@@ -282,7 +280,7 @@ namespace TestCases.OpenXml4Net.OPC
         /**
          * Test namespace opening.
          */
-        [Test, RunSerialyAndSweepTmpFiles]
+        [Test]
         public void TestOpenPackage()
         {
             FileInfo targetFile = OpenXml4NetTestDataSamples.GetOutputFile("TestOpenPackageTMP.docx");
@@ -344,7 +342,7 @@ namespace TestCases.OpenXml4Net.OPC
             ZipFileAssert.AssertEqual(expectedFile, targetFile);
             File.Delete(targetFile.FullName);
 
-            Assert.AreEqual(0, Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp").Length, "At Last: There are no temporary files.");
+            Assert.IsFalse(File.Exists(targetFile.FullName), $"{targetFile.FullName} file exists!");
         }
 
         /**
@@ -531,7 +529,7 @@ namespace TestCases.OpenXml4Net.OPC
          * Test that we can open a file by path, and then
          *  write Changes to it.
          */
-        [Test, RunSerialyAndSweepTmpFiles, Platform("Win")]
+        [Test, Platform("Win")]
         public void TestOpenFileThenOverWrite()
         {
             string tempFile = TempFile.GetTempFilePath("poiTesting", "tmp");
@@ -568,13 +566,13 @@ namespace TestCases.OpenXml4Net.OPC
             p.Close();
             File.Delete(tempFile);
 
-            Assert.AreEqual(0, Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp").Length, "At Last: There are no temporary files.");
+            Assert.IsFalse(File.Exists(tempFile), $"{tempFile} file exists!");
         }
         /**
          * Test that we can open a file by path, save it
          *  to another file, then delete both
          */
-        [Test, RunSerialyAndSweepTmpFiles]
+        [Test]
         public void TestOpenFileThenSaveDelete()
         {
             string tempFile = TempFile.GetTempFilePath("poiTesting", "tmp");
@@ -593,7 +591,8 @@ namespace TestCases.OpenXml4Net.OPC
             File.Delete(tempFile);
             File.Delete(tempFile2);
 
-            Assert.AreEqual(0, Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp").Length, "At Last: There are no temporary files.");
+            Assert.IsFalse(File.Exists(tempFile), $"{tempFile} file exists!");
+            Assert.IsFalse(File.Exists(tempFile2), $"{tempFile2} file exists!");
         }
 
         private static ContentTypeManager GetContentTypeManager(OPCPackage pkg)

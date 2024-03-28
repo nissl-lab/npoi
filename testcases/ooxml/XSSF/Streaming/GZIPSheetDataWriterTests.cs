@@ -31,11 +31,10 @@ namespace TestCases.XSSF.Streaming
         {
             if (_objectToTest != null)
             {
+                _objectToTest.Dispose();
+
                 if (File.Exists(_objectToTest.TemporaryFilePath()))
-                {
-                    _objectToTest.Dispose();
                     File.Delete(_objectToTest.TemporaryFilePath());
-                }
             }
         }
         [Test]

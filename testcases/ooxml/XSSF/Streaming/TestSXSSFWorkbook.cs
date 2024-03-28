@@ -42,15 +42,12 @@ namespace TestCases.XSSF.Streaming
         public TestSXSSFWorkbook()
                 : base(SXSSFITestDataProvider.instance)
         {
-
         }
-
         [TearDown]
         public void TearDown()
         {
             //((SXSSFITestDataProvider)_testDataProvider).Cleanup();
         }
-
         /**
          * cloning of sheets is not supported in SXSSF
          */
@@ -63,7 +60,7 @@ namespace TestCases.XSSF.Streaming
                 base.CloneSheet();
                 Assert.Fail("expected exception");
             }
-            catch (RuntimeException e)
+            catch(RuntimeException e)
             {
                 Assert.AreEqual("NotImplemented", e.Message);
             }
@@ -76,7 +73,7 @@ namespace TestCases.XSSF.Streaming
                 base.SheetClone();
                 Assert.Fail("expected exception");
             }
-            catch (RuntimeException e)
+            catch(RuntimeException e)
             {
                 Assert.AreEqual("NotImplemented", e.Message);
             }
@@ -271,10 +268,10 @@ namespace TestCases.XSSF.Streaming
             wb.CompressTempFiles = true;
             int rowNum = 1000;
             int sheetNum = 5;
-            for (int i = 0; i < sheetNum; i++)
+            for(int i = 0; i < sheetNum; i++)
             {
                 ISheet sh = wb.CreateSheet("sheet" + i);
-                for (int j = 0; j < rowNum; j++)
+                for(int j = 0; j < rowNum; j++)
                 {
                     IRow row = sh.CreateRow(j);
                     ICell cell1 = row.CreateCell(0);
@@ -289,11 +286,11 @@ namespace TestCases.XSSF.Streaming
             }
 
             XSSFWorkbook xwb = SXSSFITestDataProvider.instance.WriteOutAndReadBack(wb) as XSSFWorkbook;
-            for (int i = 0; i < sheetNum; i++)
+            for(int i = 0; i < sheetNum; i++)
             {
                 ISheet sh = xwb.GetSheetAt(i);
                 Assert.AreEqual("sheet" + i, sh.SheetName);
-                for (int j = 0; j < rowNum; j++)
+                for(int j = 0; j < rowNum; j++)
                 {
                     IRow row = sh.GetRow(j);
                     Assert.IsNotNull(row, "row[" + j + "]");
@@ -301,10 +298,10 @@ namespace TestCases.XSSF.Streaming
                     Assert.AreEqual(new CellReference(cell1).FormatAsString(), cell1.StringCellValue);
 
                     ICell cell2 = row.GetCell(1);
-                    Assert.AreEqual(i, (int)cell2.NumericCellValue);
+                    Assert.AreEqual(i, (int) cell2.NumericCellValue);
 
                     ICell cell3 = row.GetCell(2);
-                    Assert.AreEqual(j, (int)cell3.NumericCellValue);
+                    Assert.AreEqual(j, (int) cell3.NumericCellValue);
                 }
             }
 
@@ -317,10 +314,10 @@ namespace TestCases.XSSF.Streaming
         {
             int rowNum = 1000;
             int sheetNum = 5;
-            for (int i = 0; i < sheetNum; i++)
+            for(int i = 0; i < sheetNum; i++)
             {
                 ISheet sh = wb.CreateSheet("sheet" + i);
-                for (int j = 0; j < rowNum; j++)
+                for(int j = 0; j < rowNum; j++)
                 {
                     IRow row = sh.CreateRow(j);
                     ICell cell1 = row.CreateCell(0);
@@ -334,7 +331,7 @@ namespace TestCases.XSSF.Streaming
                 }
             }
 
-            foreach (ISheet sheet in wb)
+            foreach(ISheet sheet in wb)
             {
                 SXSSFSheet sxSheet = (SXSSFSheet)sheet;
                 Assert.IsTrue(sxSheet.SheetDataWriter.TempFileInfo.Exists);
@@ -342,7 +339,7 @@ namespace TestCases.XSSF.Streaming
 
             Assert.IsTrue(wb.Dispose());
 
-            foreach (ISheet sheet in wb)
+            foreach(ISheet sheet in wb)
             {
                 SXSSFSheet sxSheet = (SXSSFSheet)sheet;
                 Assert.IsFalse(sxSheet.SheetDataWriter.TempFileInfo.Exists);
@@ -384,14 +381,14 @@ namespace TestCases.XSSF.Streaming
         {
             FileInfo out1 = new FileInfo("Test.xlsx");
             out1.Delete();
-            for (int i = 0; i < 2; i++)
+            for(int i = 0; i < 2; i++)
             {
                 Console.WriteLine("Iteration " + i);
                 SXSSFWorkbook wb;
-                if (out1.Exists)
+                if(out1.Exists)
                 {
                     wb = new SXSSFWorkbook(
-                            (XSSFWorkbook)WorkbookFactory.Create(out1.FullName));
+                            (XSSFWorkbook) WorkbookFactory.Create(out1.FullName));
                 }
                 else
                 {
@@ -401,7 +398,7 @@ namespace TestCases.XSSF.Streaming
                 try
                 {
                     FileStream outSteam = new FileStream(out1.FullName, FileMode.Create, FileAccess.ReadWrite);
-                    if (i == 0)
+                    if(i == 0)
                     {
                         populateWorkbook(wb);
                     }
@@ -431,10 +428,10 @@ namespace TestCases.XSSF.Streaming
         private static void populateWorkbook(IWorkbook wb)
         {
             ISheet sh = wb.CreateSheet();
-            for (int rownum = 0; rownum < 100; rownum++)
+            for(int rownum = 0; rownum < 100; rownum++)
             {
                 IRow row = sh.CreateRow(rownum);
-                for (int cellnum = 0; cellnum < 10; cellnum++)
+                for(int cellnum = 0; cellnum < 10; cellnum++)
                 {
                     ICell cell = row.CreateCell(cellnum);
                     String Address = new CellReference(cell).FormatAsString();
@@ -445,7 +442,7 @@ namespace TestCases.XSSF.Streaming
 
         private static void saveTwice(IWorkbook wb)
         {
-            for (int i = 0; i < 2; i++)
+            for(int i = 0; i < 2; i++)
             {
                 try
                 {
@@ -453,7 +450,7 @@ namespace TestCases.XSSF.Streaming
                     wb.Write(out1, false);
                     out1.Close();
                 }
-                catch (Exception e)
+                catch(Exception e)
                 {
                     throw new Exception("ERROR: failed on " + (i + 1)
                             + "th time calling " + wb.GetType().Name
@@ -469,19 +466,19 @@ namespace TestCases.XSSF.Streaming
             XSSFWorkbook workBook = XSSFTestDataSamples.OpenSampleWorkbook("sample.xlsx");
             SXSSFWorkbook streamingWorkBook = new SXSSFWorkbook(workBook, 10);
             ISheet sheet = streamingWorkBook.GetSheet("Sheet1");
-            for (int rowNum = 10; rowNum < 1000000; rowNum++)
+            for(int rowNum = 10; rowNum < 1000000; rowNum++)
             {
                 IRow row = sheet.CreateRow(rowNum);
-                for (int cellNum = 0; cellNum < 700; cellNum++)
+                for(int cellNum = 0; cellNum < 700; cellNum++)
                 {
                     ICell cell = row.CreateCell(cellNum);
                     cell.SetCellValue("somEvalue");
                 }
 
-                if (rowNum % 100 == 0)
+                if(rowNum % 100 == 0)
                 {
                     Console.Write(".");
-                    if (rowNum % 10000 == 0)
+                    if(rowNum % 10000 == 0)
                     {
                         Console.WriteLine(rowNum);
                     }
@@ -525,11 +522,11 @@ namespace TestCases.XSSF.Streaming
             }
             finally
             {
-                if (xwb != null)
+                if(xwb != null)
                 {
                     xwb.Close();
                 }
-                if (wb != null)
+                if(wb != null)
                 {
                     wb.Close();
                 }
@@ -555,10 +552,10 @@ namespace TestCases.XSSF.Streaming
             char[] useless = new char[32767];
             Arrays.Fill(useless, ' ');
 
-            for (int row = 0; row < 1; row++)
+            for(int row = 0; row < 1; row++)
             {
                 IRow r = s.CreateRow(row);
-                for (int col = 0; col < 10; col++)
+                for(int col = 0; col < 10; col++)
                 {
                     char[] prefix = HexDump.ToHex(row * 1000 + col).ToCharArray();
                     Arrays.Fill(useless, 0, 10, ' ');
@@ -593,7 +590,7 @@ namespace TestCases.XSSF.Streaming
 
             String sheetName = "Test SXSSF";
             ISheet s = wb.CreateSheet(sheetName);
-            for (int i = 0; i < 10; i++)
+            for(int i = 0; i < 10; i++)
             {
                 IRow r = s.CreateRow(i);
                 r.CreateCell(0).SetCellValue(true);

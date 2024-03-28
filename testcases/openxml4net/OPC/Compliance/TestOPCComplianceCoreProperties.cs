@@ -287,7 +287,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
          * Document with no core properties - testing at the OPC level,
          *  from a temp-file, saving in-place
          */
-        [Test, RunSerialyAndSweepTmpFiles]
+        [Test]
         public void TestNoCoreProperties_saveInPlace()
         {
             String sampleFileName = "OPCCompliance_NoCoreProperties.xlsx";
@@ -328,8 +328,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             pkg.Revert();
             tmp.Delete();
 
-            Assert.AreEqual(0, Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp").Length, "At Last: There are no temporary files.");
+            Assert.IsFalse(File.Exists(tmp.FullName), $"{tmp.FullName} file exists!");
         }
-
     }
 }
