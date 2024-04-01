@@ -35,19 +35,19 @@ namespace TestCases.SS.Formula.PTG
     {
 
         private static byte[] ENCODED_PTG_DATA = {
-		0x40,
-		0, 0, 0, 0, 0, 0, 0,
-	};
+        0x40,
+        0, 0, 0, 0, 0, 0, 0,
+    };
         private static byte[] ENCODED_CONSTANT_DATA = {
-		2,    // 3 columns
-		1, 0, // 2 rows
-		4, 1, 0, 0, 0, 0, 0, 0, 0, // TRUE
-		2, 4, 0, 0, 65, 66, 67, 68, // "ABCD"
-		2, 1, 0, 0, 69, // "E"
-		1, 0, 0, 0, 0, 0, 0, 0, 0, // 0
-		4, 0, 0, 0, 0, 0, 0, 0, 0, // FALSE
-		2, 2, 0, 0, 70, 71, // "FG"
-	};
+        2,    // 3 columns
+        1, 0, // 2 rows
+        4, 1, 0, 0, 0, 0, 0, 0, 0, // TRUE
+        2, 4, 0, 0, 65, 66, 67, 68, // "ABCD"
+        2, 1, 0, 0, 69, // "E"
+        1, 0, 0, 0, 0, 0, 0, 0, 0, // 0
+        4, 0, 0, 0, 0, 0, 0, 0, 0, // FALSE
+        2, 2, 0, 0, 70, 71, // "FG"
+    };
 
         private static ArrayPtg Create(byte[] initialData, byte[] constantData)
         {
@@ -59,14 +59,13 @@ namespace TestCases.SS.Formula.PTG
          * Lots of problems with ArrayPtg's decoding and encoding of the element value data
          */
         [Test]
-        [Ignore("TODO FIX CI TESTS")]
         public void TestReadWriteTokenValueBytes()
         {
             ArrayPtg ptg = Create(ENCODED_PTG_DATA, ENCODED_CONSTANT_DATA);
             Assert.AreEqual(3, ptg.ColumnCount);
             Assert.AreEqual(2, ptg.RowCount);
             Object[,] values = ptg.GetTokenArrayValues();
-            Assert.AreEqual(2, values.Length);
+            Assert.AreEqual(2, values.GetLength(0));
 
 
             Assert.AreEqual(true, values[0,0]);
