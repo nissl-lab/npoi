@@ -1,4 +1,21 @@
-﻿using System;
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Text;
@@ -7,40 +24,40 @@ using ICSharpCode.SharpZipLib.Zip;
 using NPOI.POIFS.Common;
 using NPOI.Util;
 using NPOI.POIFS.Storage;
-using NPOI.Openxml4Net.Exceptions;
+using NPOI.OpenXml4Net.Exceptions;
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {
     public class ZipHelper
     {
 
-        /**
-         * Forward slash use to convert part name between OPC and zip item naming
-         * conventions.
-         */
+        /// <summary>
+        /// Forward slash use to convert part name between OPC and zip item naming
+        /// conventions.
+        /// </summary>
         private static String FORWARD_SLASH = "/";
 
-        /**
-         * Buffer to read data from file. Use big buffer to improve performaces. the
-         * InputStream class is reading only 8192 bytes per read call (default value
-         * set by sun)
-         */
+        /// <summary>
+        /// Buffer to read data from file. Use big buffer to improve performaces. the
+        /// InputStream class is reading only 8192 bytes per read call (default value
+        /// set by sun)
+        /// </summary>
         public static int READ_WRITE_FILE_BUFFER_SIZE = 8192;
 
-        /**
-         * Prevent this class to be instancied.
-         */
+        /// <summary>
+        /// Prevent this class to be instancied.
+        /// </summary>
         private ZipHelper()
         {
             // Do nothing
         }
 
-        /**
-         * Retrieve the zip entry of the core properties part.
-         *
-         * @throws OpenXml4NetException
-         *             Throws if internal error occurs.
-         */
+        /// <summary>
+        /// Retrieve the zip entry of the core properties part.
+        /// </summary>
+        /// <exception cref="OpenXml4NetException">OpenXml4NetException
+        /// Throws if internal error occurs.
+        /// </exception>
         public static ZipEntry GetCorePropertiesZipEntry(ZipPackage pkg)
         {
             PackageRelationship corePropsRel = pkg.GetRelationshipsByType(
@@ -53,9 +70,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             return ze;
         }
 
-        /**
-         * Retrieve the Zip entry of the content types part.
-         */
+        /// <summary>
+        /// Retrieve the Zip entry of the content types part.
+        /// </summary>
         public static ZipEntry GetContentTypeZipEntry(ZipPackage pkg)
         {
             IEnumerator entries = pkg.ZipArchive.Entries;
@@ -71,14 +88,14 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             return null;
         }
 
-        /**
-         * Convert a zip name into an OPC name by adding a leading forward slash to
-         * the specified item name.
-         *
-         * @param zipItemName
-         *            Zip item name to convert.
-         * @return An OPC compliant name.
-         */
+        /// <summary>
+        /// Convert a zip name into an OPC name by adding a leading forward slash to
+        /// the specified item name.
+        /// </summary>
+        /// <param name="zipItemName">
+        /// Zip item name to convert.
+        /// </param>
+        /// <returns>An OPC compliant name.</returns>
         public static String GetOPCNameFromZipItemName(String zipItemName)
         {
             if (zipItemName == null)
@@ -89,14 +106,14 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 return FORWARD_SLASH + zipItemName;
         }
 
-        /**
-         * Convert an OPC item name into a zip item name by removing any leading
-         * forward slash if it exist.
-         *
-         * @param opcItemName
-         *            The OPC item name to convert.
-         * @return A zip item name without any leading slashes.
-         */
+        /// <summary>
+        /// Convert an OPC item name into a zip item name by removing any leading
+        /// forward slash if it exist.
+        /// </summary>
+        /// <param name="opcItemName">
+        /// The OPC item name to convert.
+        /// </param>
+        /// <returns>A zip item name without any leading slashes.</returns>
         public static String GetZipItemNameFromOPCName(String opcItemName)
         {
             if (opcItemName == null)
@@ -108,14 +125,14 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             return retVal;
         }
 
-        /**
-         * Convert an OPC item name into a zip URI by removing any leading forward
-         * slash if it exist.
-         *
-         * @param opcItemName
-         *            The OPC item name to convert.
-         * @return A zip URI without any leading slashes.
-         */
+        /// <summary>
+        /// Convert an OPC item name into a zip URI by removing any leading forward
+        /// slash if it exist.
+        /// </summary>
+        /// <param name="opcItemName">
+        /// The OPC item name to convert.
+        /// </param>
+        /// <returns>A zip URI without any leading slashes.</returns>
         public static Uri GetZipURIFromOPCName(String opcItemName)
         {
             if (opcItemName == null)
@@ -134,12 +151,15 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             }
         }
 
-        /**
-         * Verifies that the given stream starts with a Zip structure.
-         * 
-         * Warning - this will consume the first few bytes of the stream,
-         *  you should push-back or reset the stream after use!
-         */
+        /// <summary>
+        /// <para>
+        /// Verifies that the given stream starts with a Zip structure.
+        /// </para>
+        /// <para>
+        /// Warning - this will consume the first few bytes of the stream,
+        ///  you should push-back or reset the stream after use!
+        /// </para>
+        /// </summary>
         public static void VerifyZipHeader(InputStream stream)
         {
             // Grab the first 8 bytes
@@ -203,13 +223,13 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             return new PushbackInputStream(stream, 8);
         }
         // TODO: ZipSecureFile
-        /**
-         * Opens the specified stream as a secure zip
-         *
-         * @param stream
-         *            The stream to open.
-         * @return The zip stream freshly open.
-         */
+        /// <summary>
+        /// Opens the specified stream as a secure zip
+        /// </summary>
+        /// <param name="stream">stream
+        /// The stream to open.
+        /// </param>
+        /// <returns>The zip stream freshly open.</returns>
         //public static ThresholdInputStream OpenZipStream(Stream stream)
         //{
         //    // Peek at the first few bytes to sanity check
@@ -229,13 +249,13 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             //return tis;
             return new ZipInputStream(stream);
         }
-        /**
-        * Opens the specified file as a zip, or returns null if no such file exists
-        *
-        * @param file
-        *            The file to open.
-        * @return The zip archive freshly open.
-        */
+        /// <summary>
+        /// Opens the specified file as a zip, or returns null if no such file exists
+        /// </summary>
+        /// <param name="file">
+        /// The file to open.
+        /// </param>
+        /// <returns>The zip archive freshly open.</returns>
         public static ZipFile OpenZipFile(FileInfo file)
         {
             if (!file.Exists)
@@ -262,13 +282,13 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             //return new ZipSecureFile(file);
             return new ZipFile(File.OpenRead(file.FullName));
         }
-        /**
-         * Retrieve and open a zip file with the specified path.
-         *
-         * @param path
-         *            The file path.
-         * @return The zip archive freshly open.
-         */
+        /// <summary>
+        /// Retrieve and open a zip file with the specified path.
+        /// </summary>
+        /// <param name="path">
+        /// The file path.
+        /// </param>
+        /// <returns>The zip archive freshly open.</returns>
         public static ZipFile OpenZipFile(String path)
         {
             return OpenZipFile(new FileInfo(path));

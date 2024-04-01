@@ -1,4 +1,21 @@
-﻿using System;
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -8,58 +25,64 @@ using System.Collections;
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {
-    /**
-     * Represents a immutable MIME ContentType value (RFC 2616 &#167;3.7)
-     * media-type = type "/" subtype *( ";" parameter ) type = token<br>
-     * subtype = token<br>
+    /// <summary>
+    /// <para>
+    /// Represents a immutable MIME ContentType value (RFC 2616 &#167;3.7)<br/>
+    /// media-type = type "/" subtype *( ";" parameter ) type = token<br/>
+    /// subtype = token<br/>
+    /// </para>
+    /// <para>
+    /// Rule M1.13 : Package implementers shall only create and only recognize parts
+    /// with a content type; format designers shall specify a content type for each
+    /// part included in the format. Content types for package parts shall fit the
+    /// definition and syntax for media types as specified in RFC 2616, \&#167;3.7.
+    /// Rule M1.14: Content types shall not use linear white space either between the
+    /// type and subtype or between an attribute and its value. Content types also
+    /// shall not have leading or trailing white spaces. Package implementers shall
+    /// create only such content types and shall require such content types when
+    /// retrieving a part from a package; format designers shall specify only such
+    /// content types for inclusion in the format.
+    /// </para>
+    /// </summary>
+    /// 
+    /// see <a href="http://www.ietf.org/rfc/rfc2045.txt">http://www.ietf.org/rfc/rfc2045.txt</a>
+    /// see <a href="http://www.ietf.org/rfc/rfc2616.txt">http://www.ietf.org/rfc/rfc2616.txt</a>
+    /// <remarks>
+    /// @author Julien Chable
+    /// @version 0.1
+    /// </remarks>
 
-     * Rule M1.13 : Package implementers shall only create and only recognize parts
-     * with a content type; format designers shall specify a content type for each
-     * part included in the format. Content types for package parts shall fit the
-     * definition and syntax for media types as specified in RFC 2616, \&#167;3.7.
-     * Rule M1.14: Content types shall not use linear white space either between the
-     * type and subtype or between an attribute and its value. Content types also
-     * shall not have leading or trailing white spaces. Package implementers shall
-     * create only such content types and shall require such content types when
-     * retrieving a part from a package; format designers shall specify only such
-     * content types for inclusion in the format.
-     * @author Julien Chable
-     * @version 0.1
-     *
-     * @see <a href="http://www.ietf.org/rfc/rfc2045.txt">http://www.ietf.org/rfc/rfc2045.txt</a>
-     * @see <a href="http://www.ietf.org/rfc/rfc2616.txt">http://www.ietf.org/rfc/rfc2616.txt</a>
-     */
     public class ContentType:IComparable
     {
 
-        /**
-         * Type in Type/Subtype.
-         */
+        /// <summary>
+        /// Type in Type/Subtype.
+        /// </summary>
         private String type;
 
-        /**
-         * Subtype
-         */
+        /// <summary>
+        /// Subtype
+        /// </summary>
         private String subType;
 
-        /**
-         * Parameters
-         */
+        /// <summary>
+        /// Parameters
+        /// </summary>
         private Dictionary<String, String> parameters;
 
-        /**
-         * Media type compiled pattern for parameters.
-         */
+        /// <summary>
+        /// Media type compiled pattern for parameters.
+        /// </summary>
         private static Regex patternTypeSubType;
 
-        /**
-         * Media type compiled pattern, with parameters.
-         */
+        /// <summary>
+        /// Media type compiled pattern, with parameters.
+        /// </summary>
         private static Regex patternTypeSubTypeParams;
-        /**
-         * Pattern to match on just the parameters part, to work
-         * around the Java Regexp group capture behaviour
-         */
+        /// <summary>
+        /// Pattern to match on just the parameters part, to work
+        /// around the Java Regexp group capture behaviour
+        /// </summary>
         private static Regex patternParams;
         static ContentType()
         {
@@ -115,14 +138,14 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             patternParams = new Regex(";" + parameter);
         }
 
-        /**
-         * Constructor. Check the input with the RFC 2616 grammar.
-         *
-         * @param contentType
-         *            The content type to store.
-         * @throws InvalidFormatException
-         *             If the specified content type is not valid with RFC 2616.
-         */
+        /// <summary>
+        /// Constructor. Check the input with the RFC 2616 grammar.
+        /// </summary>
+        /// <param name="contentType">The content type to store.
+        /// </param>
+        /// <exception cref="InvalidFormatException">InvalidFormatException
+        /// If the specified content type is not valid with RFC 2616.
+        /// </exception>
         public ContentType(String contentType)
         {
             Match mMediaType = patternTypeSubType.Match(contentType);
@@ -217,11 +240,10 @@ namespace NPOI.OpenXml4Net.OPC.Internal
 
         /* Getters */
 
-        /**
-         * Get the subtype.
-         *
-         * @return The subtype of this content type.
-         */
+        /// <summary>
+        /// Get the subtype.
+        /// </summary>
+        /// <returns>The subtype of this content type.</returns>
         public String SubType
         {
             get
@@ -230,11 +252,10 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             }
         }
 
-        /**
-         * Get the type.
-         *
-         * @return The type of this content type.
-         */
+        /// <summary>
+        /// Get the type.
+        /// </summary>
+        /// <returns>The type of this content type.</returns>
         public String Type
         {
             get
@@ -243,17 +264,17 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             }
         }
 
-        /**
-         * Does this content type have any parameters associated with it?
-         */
+        /// <summary>
+        /// Does this content type have any parameters associated with it?
+        /// </summary>
         public bool HasParameters()
         {
             return (parameters != null) && !(parameters.Count == 0);
         }
 
-        /**
-         * Return the parameter keys
-         */
+        /// <summary>
+        /// Return the parameter keys
+        /// </summary>
         public String[] GetParameterKeys()
         {
             if (parameters == null)
@@ -263,13 +284,12 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             return keys.ToArray();
         }
 
-        /**
-         * Gets the value associated to the specified key.
-         *
-         * @param key
-         *            The key of the key/value pair.
-         * @return The value associated to the specified key.
-         */
+        /// <summary>
+        /// Gets the value associated to the specified key.
+        /// </summary>
+        /// <param name="key">The key of the key/value pair.
+        /// </param>
+        /// <returns>The value associated to the specified key.</returns>
         public String GetParameter(String key)
         {
             return parameters[key];

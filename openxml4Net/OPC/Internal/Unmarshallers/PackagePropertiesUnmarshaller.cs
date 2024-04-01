@@ -1,4 +1,21 @@
-﻿using System;
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
@@ -6,15 +23,17 @@ using System.IO;
 using System.Collections;
 using NPOI.OpenXml4Net.Exceptions;
 using ICSharpCode.SharpZipLib.Zip;
-using NPOI.Util;
+using NPOI.OpenXml4Net.Util;
 namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
 {
-    /**
-     * Package properties unmarshaller.
-     *
-     * @author Julien Chable
-     * @version 1.0
-     */
+    /// <summary>
+    /// Package properties unmarshaller.
+    /// </summary>
+    /// <remarks>
+    /// @author Julien Chable
+    /// @version 1.0
+    /// </remarks>
+
     public class PackagePropertiesUnmarshaller : PartUnmarshaller
     {
 
@@ -350,29 +369,34 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
 
         /* OPC Compliance methods */
 
-        /**
-         * Check the element for the following OPC compliance rules:
-         * <p>
-         * Rule M4.2: A format consumer shall consider the use of the Markup
-         * Compatibility namespace to be an error.
-         * </p><p>
-         * Rule M4.3: Producers shall not create a document element that contains
-         * refinements to the Dublin Core elements, except for the two specified in
-         * the schema: <dcterms:created> and <dcterms:modified> Consumers shall
-         * consider a document element that violates this constraint to be an error.
-         * </p><p>
-         * Rule M4.4: Producers shall not create a document element that contains
-         * the xml:lang attribute. Consumers shall consider a document element that
-         * violates this constraint to be an error.
-         *  </p><p>
-         * Rule M4.5: Producers shall not create a document element that contains
-         * the xsi:type attribute, except for a <dcterms:created> or
-         * <dcterms:modified> element where the xsi:type attribute shall be present
-         * and shall hold the value dcterms:W3CDTF, where dcterms is the namespace
-         * prefix of the Dublin Core namespace. Consumers shall consider a document
-         * element that violates this constraint to be an error.
-         * </p>
-         */
+        /// <summary>
+        /// <para>
+        /// Check the element for the following OPC compliance rules:
+        /// </para>
+        /// <para>
+        /// Rule M4.2: A format consumer shall consider the use of the Markup
+        /// Compatibility namespace to be an error.
+        /// </para>
+        /// <para>
+        /// Rule M4.3: Producers shall not create a document element that contains
+        /// refinements to the Dublin Core elements, except for the two specified in
+        /// the schema: <dcterms:created> and <dcterms:modified> Consumers shall
+        /// consider a document element that violates this constraint to be an error.
+        /// </para>
+        /// <para>
+        /// Rule M4.4: Producers shall not create a document element that contains
+        /// the xml:lang attribute. Consumers shall consider a document element that
+        /// violates this constraint to be an error.
+        /// </para>
+        /// <para>
+        /// Rule M4.5: Producers shall not create a document element that contains
+        /// the xsi:type attribute, except for a <dcterms:created> or
+        /// <dcterms:modified> element where the xsi:type attribute shall be present
+        /// and shall hold the value dcterms:W3CDTF, where dcterms is the namespace
+        /// prefix of the Dublin Core namespace. Consumers shall consider a document
+        /// element that violates this constraint to be an error.
+        /// </para>
+        /// </summary>
         public void CheckElementForOPCCompliance(XmlElement el)
         {
             // Check the current element

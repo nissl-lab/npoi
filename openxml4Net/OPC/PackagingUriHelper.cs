@@ -1,4 +1,21 @@
-﻿using System;
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using NPOI.OpenXml4Net.Exceptions;
@@ -6,78 +23,80 @@ using System.IO;
 
 namespace NPOI.OpenXml4Net.OPC
 {
-    /**
-     * Helper for part and pack Uri.
-     *
-     * @author Julien Chable, CDubet, Kim Ung
-     * @version 0.1
-     */
+    /// <summary>
+    /// Helper for part and pack Uri.
+    /// </summary>
+    /// <remarks>
+    /// @author Julien Chable, CDubet, Kim Ung
+    /// @version 0.1
+    /// </remarks>
+
     public class PackagingUriHelper
     {
 
-        /**
-         * Package root Uri.
-         */
+        /// <summary>
+        /// Package root Uri.
+        /// </summary>
         private static Uri packageRootUri;
 
-        /**
-         * Extension name of a relationship part.
-         */
+        /// <summary>
+        /// Extension name of a relationship part.
+        /// </summary>
         public static String RELATIONSHIP_PART_EXTENSION_NAME;
 
-        /**
-         * Segment name of a relationship part.
-         */
+        /// <summary>
+        /// Segment name of a relationship part.
+        /// </summary>
         public static String RELATIONSHIP_PART_SEGMENT_NAME;
 
-        /**
-         * Segment name of the package properties folder.
-         */
+        /// <summary>
+        /// Segment name of the package properties folder.
+        /// </summary>
         public static String PACKAGE_PROPERTIES_SEGMENT_NAME;
 
-        /**
-         * Core package properties art name.
-         */
+        /// <summary>
+        /// Core package properties art name.
+        /// </summary>
         public static String PACKAGE_CORE_PROPERTIES_NAME;
 
-        /**
-         * Forward slash Uri separator.
-         */
+        /// <summary>
+        /// Forward slash Uri separator.
+        /// </summary>
         public static char FORWARD_SLASH_CHAR;
 
-        /**
-         * Forward slash Uri separator.
-         */
+        /// <summary>
+        /// Forward slash Uri separator.
+        /// </summary>
         public static String FORWARD_SLASH_STRING;
 
-        /**
-         * Package relationships part Uri
-         */
+        /// <summary>
+        /// Package relationships part Uri
+        /// </summary>
         public static Uri PACKAGE_RELATIONSHIPS_ROOT_URI;
 
-        /**
-         * Package relationships part name.
-         */
+        /// <summary>
+        /// Package relationships part name.
+        /// </summary>
         public static PackagePartName PACKAGE_RELATIONSHIPS_ROOT_PART_NAME;
 
-        /**
-         * Core properties part Uri.
-         */
+        /// <summary>
+        /// Core properties part Uri.
+        /// </summary>
         public static Uri CORE_PROPERTIES_URI;
 
-        /**
-         * Core properties partname.
-         */
+        /// <summary>
+        /// Core properties partname.
+        /// </summary>
         public static PackagePartName CORE_PROPERTIES_PART_NAME;
 
-        /**
-         * Root package Uri.
-         */
+        /// <summary>
+        /// Root package Uri.
+        /// </summary>
         public static Uri PACKAGE_ROOT_URI;
 
-        /**
-         * Root package part name.
-         */
+        /// <summary>
+        /// Root package part name.
+        /// </summary>
         public static PackagePartName PACKAGE_ROOT_PART_NAME;
 
         /* Static initialization */
@@ -95,7 +114,7 @@ namespace NPOI.OpenXml4Net.OPC
             Uri uriPACKAGE_RELATIONSHIPS_ROOT_URI = null;
             Uri uriPACKAGE_PROPERTIES_URI = null;
 
-            uriPACKAGE_ROOT_URI = ParseUri("/",UriKind.Relative);
+            uriPACKAGE_ROOT_URI = ParseUri("/", UriKind.Relative);
             uriPACKAGE_RELATIONSHIPS_ROOT_URI = ParseUri(FORWARD_SLASH_CHAR
                     + RELATIONSHIP_PART_SEGMENT_NAME + FORWARD_SLASH_CHAR
                     + RELATIONSHIP_PART_EXTENSION_NAME, UriKind.Relative);
@@ -119,7 +138,7 @@ namespace NPOI.OpenXml4Net.OPC
                 tmpPACKAGE_ROOT_PART_NAME = new PackagePartName(PACKAGE_ROOT_URI,
                         false);
             }
-            catch (InvalidFormatException)
+            catch(InvalidFormatException)
             {
                 // Should never happen in production as all data are fixed
             }
@@ -128,11 +147,10 @@ namespace NPOI.OpenXml4Net.OPC
             PACKAGE_ROOT_PART_NAME = tmpPACKAGE_ROOT_PART_NAME;
         }
         private static Regex missingAuthPattern = new Regex("\\w+://$", RegexOptions.Compiled);
-        /**
-         * Gets the Uri for the package root.
-         *
-         * @return Uri of the package root.
-         */
+        /// <summary>
+        /// Gets the Uri for the package root.
+        /// </summary>
+        /// <returns>Uri of the package root.</returns>
         public static Uri PackageRootUri
         {
             get
@@ -144,27 +162,27 @@ namespace NPOI.OpenXml4Net.OPC
         private static readonly bool IsMono = Type.GetType("Mono.Runtime") != null;
         public static Uri ParseUri(string s, UriKind kind)
         {
-            if (IsMono)
+            if(IsMono)
             {
-                if (kind == UriKind.Absolute)
+                if(kind == UriKind.Absolute)
                     throw new UriFormatException();
-                if (kind == UriKind.RelativeOrAbsolute && s.StartsWith("/"))
+                if(kind == UriKind.RelativeOrAbsolute && s.StartsWith("/"))
                     kind = UriKind.Relative;
             }
             return new Uri(s, kind);
         }
 
 
-        /**
-         * Know if the specified Uri is a relationship part name.
-         *
-         * @param partUri
-         *            Uri to check.
-         * @return <i>true</i> if the Uri <i>false</i>.
-         */
+        /// <summary>
+        /// Know if the specified Uri is a relationship part name.
+        /// </summary>
+        /// <param name="partUri">
+        /// Uri to check.
+        /// </param>
+        /// <returns><i>true</i> if the Uri <i>false</i>.</returns>
         public static bool IsRelationshipPartURI(Uri partUri)
         {
-            if (partUri == null)
+            if(partUri == null)
                 throw new ArgumentException("partUri");
 
             return Regex.IsMatch(partUri.OriginalString,
@@ -172,58 +190,58 @@ namespace NPOI.OpenXml4Net.OPC
                             + RELATIONSHIP_PART_EXTENSION_NAME + "$");
         }
 
-        /**
-         * Get file name from the specified Uri.
-         */
+        /// <summary>
+        /// Get file name from the specified Uri.
+        /// </summary>
         public static String GetFilename(Uri uri)
         {
-            if (uri != null)
+            if(uri != null)
             {
                 String path = uri.OriginalString;
                 int len = path.Length;
                 int num2 = len;
-                while (--num2 >= 0)
+                while(--num2 >= 0)
                 {
                     char ch1 = path[num2];
-                    if (ch1 == PackagingUriHelper.FORWARD_SLASH_CHAR)
+                    if(ch1 == PackagingUriHelper.FORWARD_SLASH_CHAR)
                         return path.Substring(num2 + 1);
                 }
             }
             return "";
         }
 
-        /**
-         * Get the file name without the trailing extension.
-         */
+        /// <summary>
+        /// Get the file name without the trailing extension.
+        /// </summary>
         public static String GetFilenameWithoutExtension(Uri uri)
         {
             String filename = GetFilename(uri);
             int dotIndex = filename.LastIndexOf(".", StringComparison.Ordinal);
-            if (dotIndex == -1)
+            if(dotIndex == -1)
                 return filename;
             return filename.Substring(0, dotIndex);
         }
 
-        /**
-         * Get the directory path from the specified Uri.
-         */
+        /// <summary>
+        /// Get the directory path from the specified Uri.
+        /// </summary>
         public static Uri GetPath(Uri uri)
         {
-            if (uri != null)
+            if(uri != null)
             {
                 String path = uri.OriginalString;
                 int len = path.Length;
                 int num2 = len;
-                while (--num2 >= 0)
+                while(--num2 >= 0)
                 {
                     char ch1 = path[num2];
-                    if (ch1 == PackagingUriHelper.FORWARD_SLASH_CHAR)
+                    if(ch1 == PackagingUriHelper.FORWARD_SLASH_CHAR)
                     {
                         try
                         {
                             return ParseUri(path.Substring(0, num2), UriKind.Absolute);
                         }
-                        catch (UriFormatException)
+                        catch(UriFormatException)
                         {
                             return null;
                         }
@@ -233,14 +251,13 @@ namespace NPOI.OpenXml4Net.OPC
             return null;
         }
 
-        /**
-         * Combine two URIs.
-         *
-         * @param prefix the prefix Uri
-         * @param suffix the suffix Uri
-         *
-         * @return the Combined Uri
-         */
+        /// <summary>
+        /// Combine two URIs.
+        /// </summary>
+        /// <param name="prefix">the prefix Uri</param>
+        /// <param name="suffix">the suffix Uri</param>
+        /// 
+        /// <returns>the Combined Uri</returns>
         public static Uri Combine(Uri prefix, Uri suffix)
         {
             Uri retUri = null;
@@ -248,7 +265,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 retUri = ParseUri(Combine(prefix.OriginalString, suffix.OriginalString), UriKind.Absolute);
             }
-            catch (UriFormatException)
+            catch(UriFormatException)
             {
                 throw new ArgumentException(
                         "Prefix and suffix can't be Combine !");
@@ -256,15 +273,15 @@ namespace NPOI.OpenXml4Net.OPC
             return retUri;
         }
 
-        /**
-         * Combine a string Uri with a prefix and a suffix.
-         */
+        /// <summary>
+        /// Combine a string Uri with a prefix and a suffix.
+        /// </summary>
         public static String Combine(String prefix, String suffix)
         {
-            if (!prefix.EndsWith("" + FORWARD_SLASH_CHAR)
+            if(!prefix.EndsWith("" + FORWARD_SLASH_CHAR)
                     && !suffix.StartsWith("" + FORWARD_SLASH_CHAR))
                 return prefix + FORWARD_SLASH_CHAR + suffix;
-            else if ((!prefix.EndsWith("" + FORWARD_SLASH_CHAR)
+            else if((!prefix.EndsWith("" + FORWARD_SLASH_CHAR)
                     && suffix.StartsWith("" + FORWARD_SLASH_CHAR) || (prefix
                     .EndsWith("" + FORWARD_SLASH_CHAR) && !suffix.StartsWith(""
                     + FORWARD_SLASH_CHAR))))
@@ -273,17 +290,19 @@ namespace NPOI.OpenXml4Net.OPC
                 return "";
         }
 
-        /**
-         * Fully relativize the source part Uri against the target part Uri.
-         *
-         * @param sourceURI
-         *            The source part Uri.
-         * @param targetURI
-         *            The target part Uri.
-         * @return A fully relativize part name Uri ('word/media/image1.gif',
-         *         '/word/document.xml' => 'media/image1.gif') else
-         *         <code>null</code>.
-         */
+        /// <summary>
+        /// Fully relativize the source part Uri against the target part Uri.
+        /// </summary>
+        /// <param name="sourceURI">
+        /// The source part Uri.
+        /// </param>
+        /// <param name="targetURI">
+        /// The target part Uri.
+        /// </param>
+        /// <returns>A fully relativize part name Uri ('word/media/image1.gif',
+        /// '/word/document.xml' => 'media/image1.gif') else
+        /// <c>null</c>.
+        /// </returns>
         public static Uri RelativizeUri(Uri sourceURI, Uri targetURI, bool msCompatible)
         {
             StringBuilder retVal = new StringBuilder();
@@ -291,14 +310,14 @@ namespace NPOI.OpenXml4Net.OPC
             String[] segmentsTarget = targetURI.ToString().Split(new char[] { '/' });
 
             // If the source Uri is empty
-            if (segmentsSource.Length == 0)
+            if(segmentsSource.Length == 0)
             {
                 throw new ArgumentException(
                         "Can't relativize an empty source Uri !");
             }
 
             // If target Uri is empty
-            if (segmentsTarget.Length == 0)
+            if(segmentsTarget.Length == 0)
             {
                 throw new ArgumentException(
                         "Can't relativize an empty target Uri !");
@@ -306,10 +325,10 @@ namespace NPOI.OpenXml4Net.OPC
 
             // If the source is the root, then the relativized
             //  form must actually be an absolute Uri
-            if (sourceURI.ToString().Equals("/"))
+            if(sourceURI.ToString().Equals("/"))
             {
                 String path = targetURI.ToString();
-                if (msCompatible && path.Length > 0 && path[0] == '/')
+                if(msCompatible && path.Length > 0 && path[0] == '/')
                 {
                     try
                     {
@@ -328,9 +347,9 @@ namespace NPOI.OpenXml4Net.OPC
             // First up, figure out how many steps along we can go
             // and still have them be the same
             int segmentsTheSame = 0;
-            for (int i = 0; i < segmentsSource.Length && i < segmentsTarget.Length; i++)
+            for(int i = 0; i < segmentsSource.Length && i < segmentsTarget.Length; i++)
             {
-                if (segmentsSource[i].Equals(segmentsTarget[i]))
+                if(segmentsSource[i].Equals(segmentsTarget[i]))
                 {
                     // Match so far, good
                     segmentsTheSame++;
@@ -342,25 +361,25 @@ namespace NPOI.OpenXml4Net.OPC
             }
 
             // If we didn't have a good match or at least except a first empty element
-            if ((segmentsTheSame == 0 || segmentsTheSame == 1) &&
+            if((segmentsTheSame == 0 || segmentsTheSame == 1) &&
                     segmentsSource[0].Equals("") && segmentsTarget[0].Equals(""))
             {
-                for (int i = 0; i < segmentsSource.Length - 2; i++)
+                for(int i = 0; i < segmentsSource.Length - 2; i++)
                 {
                     retVal.Append("../");
                 }
-                for (int i = 0; i < segmentsTarget.Length; i++)
+                for(int i = 0; i < segmentsTarget.Length; i++)
                 {
-                    if (segmentsTarget[i].Equals(""))
+                    if(segmentsTarget[i].Equals(""))
                         continue;
                     retVal.Append(segmentsTarget[i]);
-                    if (i != segmentsTarget.Length - 1)
+                    if(i != segmentsTarget.Length - 1)
                         retVal.Append("/");
                 }
 
                 try
                 {
-                    return ParseUri(retVal.ToString(),UriKind.RelativeOrAbsolute);
+                    return ParseUri(retVal.ToString(), UriKind.RelativeOrAbsolute);
                 }
                 catch
                 {
@@ -370,10 +389,10 @@ namespace NPOI.OpenXml4Net.OPC
             }
 
             // Special case for where the two are the same
-            if (segmentsTheSame == segmentsSource.Length
+            if(segmentsTheSame == segmentsSource.Length
                     && segmentsTheSame == segmentsTarget.Length)
             {
-                if (sourceURI.Equals(targetURI))
+                if(sourceURI.Equals(targetURI))
                 {
                     // if source and target are the same they should be resolved to the last segment,
                     // Example: if a slide references itself, e.g. the source URI is
@@ -393,22 +412,22 @@ namespace NPOI.OpenXml4Net.OPC
                 // Do we need to go up a directory or two from
                 // the source to get here?
                 // (If it's all the way up, then don't bother!)
-                if (segmentsTheSame == 1)
+                if(segmentsTheSame == 1)
                 {
                     retVal.Append("/");
                 }
                 else
                 {
-                    for (int j = segmentsTheSame; j < segmentsSource.Length - 1; j++)
+                    for(int j = segmentsTheSame; j < segmentsSource.Length - 1; j++)
                     {
                         retVal.Append("../");
                     }
                 }
 
                 // Now go from here on down
-                for (int j = segmentsTheSame; j < segmentsTarget.Length; j++)
+                for(int j = segmentsTheSame; j < segmentsTarget.Length; j++)
                 {
-                    if (retVal.Length > 0
+                    if(retVal.Length > 0
                             && retVal[retVal.Length - 1] != '/')
                     {
                         retVal.Append("/");
@@ -429,71 +448,74 @@ namespace NPOI.OpenXml4Net.OPC
         }
 
 
-        /**
-         * Fully relativize the source part URI against the target part URI.
-         *
-         * @param sourceURI
-         *            The source part URI.
-         * @param targetURI
-         *            The target part URI.
-         * @return A fully relativize part name URI ('word/media/image1.gif',
-         *         '/word/document.xml' => 'media/image1.gif') else
-         *         <code>null</code>.
-         */
+        /// <summary>
+        /// Fully relativize the source part URI against the target part URI.
+        /// </summary>
+        /// <param name="sourceURI">
+        /// The source part URI.
+        /// </param>
+        /// <param name="targetURI">
+        /// The target part URI.
+        /// </param>
+        /// <returns>A fully relativize part name URI ('word/media/image1.gif',
+        /// '/word/document.xml' => 'media/image1.gif') else
+        /// <c>null</c>.
+        /// </returns>
         public static Uri RelativizeUri(Uri sourceURI, Uri targetURI)
         {
             return RelativizeUri(sourceURI, targetURI, false);
         }
 
-        /**
-         * Resolve a source uri against a target.
-         *
-         * @param sourcePartUri
-         *            The source Uri.
-         * @param targetUri
-         *            The target Uri.
-         * @return The resolved Uri.
-         */
+        /// <summary>
+        /// Resolve a source uri against a target.
+        /// </summary>
+        /// <param name="sourcePartUri">
+        /// The source Uri.
+        /// </param>
+        /// <param name="targetUri">
+        /// The target Uri.
+        /// </param>
+        /// <returns>The resolved Uri.</returns>
         public static Uri ResolvePartUri(Uri sourcePartUri, Uri targetUri)
         {
-            if (sourcePartUri == null || sourcePartUri.IsAbsoluteUri)
+            if(sourcePartUri == null || sourcePartUri.IsAbsoluteUri)
             {
                 throw new ArgumentException("sourcePartUri invalid - "
                         + sourcePartUri);
             }
 
-            if (targetUri == null || targetUri.IsAbsoluteUri)
+            if(targetUri == null || targetUri.IsAbsoluteUri)
             {
                 throw new ArgumentException("targetUri invalid - "
                         + targetUri);
             }
             string path;
-            if (sourcePartUri.OriginalString == "/")
+            if(sourcePartUri.OriginalString == "/")
                 path = "/";
             else
                 path = Path.GetDirectoryName(sourcePartUri.OriginalString).Replace("\\", "/");
 
             string targetPath = targetUri.OriginalString;
-            if (targetPath.StartsWith("#"))
+            if(targetPath.StartsWith("#"))
             {
                 path += "/" + Path.GetFileName(sourcePartUri.OriginalString) + targetPath;
             }
-            else if (targetPath.StartsWith("../"))
+            else if(targetPath.StartsWith("../"))
             {
                 string[] segments = path.Split(new char[] { '/' });
 
                 int segmentEnd = segments.Length - 1;
-                while (targetPath.StartsWith("../"))
+                while(targetPath.StartsWith("../"))
                 {
                     targetPath = targetPath.Substring(3);
                     segmentEnd -= 1;
                 }
                 path = "/";
 
-                for (int i = 0; i <= segmentEnd;i++ )
+                for(int i = 0; i <= segmentEnd; i++)
                 {
                     if(segments[i]!=string.Empty)
-                    path += segments[i]+"/";
+                        path += segments[i]+"/";
                 }
                 path += targetPath;
             }
@@ -504,42 +526,42 @@ namespace NPOI.OpenXml4Net.OPC
             return ParseUri(path, UriKind.RelativeOrAbsolute);
         }
 
-        /**
-         * Get Uri from a string path.
-         */
+        /// <summary>
+        /// Get Uri from a string path.
+        /// </summary>
         public static Uri GetURIFromPath(String path)
         {
             Uri retUri = null;
             try
             {
-                retUri = ParseUri(path,UriKind.RelativeOrAbsolute);
+                retUri = ParseUri(path, UriKind.RelativeOrAbsolute);
             }
-            catch (UriFormatException)
+            catch(UriFormatException)
             {
                 throw new ArgumentException("path");
             }
             return retUri;
         }
 
-        /**
-         * Get the source part Uri from a specified relationships part.
-         *
-         * @param relationshipPartUri
-         *            The relationship part use to retrieve the source part.
-         * @return The source part Uri from the specified relationships part.
-         */
+        /// <summary>
+        /// Get the source part Uri from a specified relationships part.
+        /// </summary>
+        /// <param name="relationshipPartUri">
+        /// The relationship part use to retrieve the source part.
+        /// </param>
+        /// <returns>The source part Uri from the specified relationships part.</returns>
         public static Uri GetSourcePartUriFromRelationshipPartUri(
                 Uri relationshipPartUri)
         {
-            if (relationshipPartUri == null)
+            if(relationshipPartUri == null)
                 throw new ArgumentException(
                         "Must not be null");
 
-            if (!IsRelationshipPartURI(relationshipPartUri))
+            if(!IsRelationshipPartURI(relationshipPartUri))
                 throw new ArgumentException(
                         "Must be a relationship part");
 
-            if (Uri.Compare(relationshipPartUri, PACKAGE_RELATIONSHIPS_ROOT_URI, UriComponents.AbsoluteUri, UriFormat.SafeUnescaped, StringComparison.InvariantCultureIgnoreCase) == 0)
+            if(Uri.Compare(relationshipPartUri, PACKAGE_RELATIONSHIPS_ROOT_URI, UriComponents.AbsoluteUri, UriFormat.SafeUnescaped, StringComparison.InvariantCultureIgnoreCase) == 0)
                 return PACKAGE_ROOT_URI;
 
             String filename = relationshipPartUri.OriginalString;
@@ -553,61 +575,65 @@ namespace NPOI.OpenXml4Net.OPC
             return GetURIFromPath(filename);
         }
 
-        /**
-         * Create an OPC compliant part name by throwing an exception if the Uri is
-         * not valid.
-         *
-         * @param partUri
-         *            The part name Uri to validate.
-         * @return A valid part name object, else <code>null</code>.
-         * @throws InvalidFormatException
-         *             Throws if the specified Uri is not OPC compliant.
-         */
+        /// <summary>
+        /// Create an OPC compliant part name by throwing an exception if the Uri is
+        /// not valid.
+        /// </summary>
+        /// <param name="partUri">
+        /// The part name Uri to validate.
+        /// </param>
+        /// <returns>A valid part name object, else <c>null</c>.</returns>
+        /// <exception cref="InvalidFormatException">
+        /// Throws if the specified Uri is not OPC compliant.
+        /// </exception>
         public static PackagePartName CreatePartName(Uri partUri)
         {
-            if (partUri == null)
+            if(partUri == null)
                 throw new ArgumentException("partName");
 
             return new PackagePartName(partUri, true);
         }
 
-        /**
-         * Create an OPC compliant part name.
-         *
-         * @param partName
-         *            The part name to validate.
-         * @return The correspondant part name if valid, else <code>null</code>.
-         * @throws InvalidFormatException
-         *             Throws if the specified part name is not OPC compliant.
-         * @see #CreatePartName(Uri)
-         */
+        /// <summary>
+        /// Create an OPC compliant part name.
+        /// </summary>
+        /// <param name="partName">
+        /// The part name to validate.
+        /// </param>
+        /// <returns>The correspondant part name if valid, else <c>null</c>.</returns>
+        /// <exception cref="InvalidFormatException">
+        /// Throws if the specified part name is not OPC compliant.
+        /// </exception>
+        /// @see #CreatePartName(Uri)
         public static PackagePartName CreatePartName(String partName)
         {
             Uri partNameURI;
             try
             {
-                partName = partName.Replace("\\","/");  //tolerate backslash - poi test49609
-                partNameURI = ParseUri(partName,UriKind.Relative);
+                partName = partName.Replace("\\", "/");  //tolerate backslash - poi test49609
+                partNameURI = ParseUri(partName, UriKind.Relative);
             }
-            catch (UriFormatException e)
+            catch(UriFormatException e)
             {
                 throw new InvalidFormatException(e.Message);
             }
             return CreatePartName(partNameURI);
         }
 
-        /**
-         * Create an OPC compliant part name by resolving it using a base part.
-         *
-         * @param partName
-         *            The part name to validate.
-         * @param relativePart
-         *            The relative base part.
-         * @return The correspondant part name if valid, else <code>null</code>.
-         * @throws InvalidFormatException
-         *             Throws if the specified part name is not OPC compliant.
-         * @see #CreatePartName(Uri)
-         */
+        /// <summary>
+        /// Create an OPC compliant part name by resolving it using a base part.
+        /// </summary>
+        /// <param name="partName">
+        /// The part name to validate.
+        /// </param>
+        /// <param name="relativePart">
+        /// The relative base part.
+        /// </param>
+        /// <returns>The correspondant part name if valid, else <c>null</c>.</returns>
+        /// <exception cref="InvalidFormatException">
+        /// Throws if the specified part name is not OPC compliant.
+        /// </exception>
+        /// @see #CreatePartName(Uri)
         public static PackagePartName CreatePartName(String partName,
                 PackagePart relativePart)
         {
@@ -615,27 +641,29 @@ namespace NPOI.OpenXml4Net.OPC
             try
             {
                 newPartNameURI = ResolvePartUri(
-                        relativePart.PartName.URI, ParseUri(partName,UriKind.RelativeOrAbsolute));
+                        relativePart.PartName.URI, ParseUri(partName, UriKind.RelativeOrAbsolute));
             }
-            catch (UriFormatException e)
+            catch(UriFormatException e)
             {
                 throw new InvalidFormatException(e.Message);
             }
             return CreatePartName(newPartNameURI);
         }
 
-        /**
-         * Create an OPC compliant part name by resolving it using a base part.
-         *
-         * @param partName
-         *            The part name Uri to validate.
-         * @param relativePart
-         *            The relative base part.
-         * @return The correspondant part name if valid, else <code>null</code>.
-         * @throws InvalidFormatException
-         *             Throws if the specified part name is not OPC compliant.
-         * @see #CreatePartName(Uri)
-         */
+        /// <summary>
+        /// Create an OPC compliant part name by resolving it using a base part.
+        /// </summary>
+        /// <param name="partName">
+        /// The part name Uri to validate.
+        /// </param>
+        /// <param name="relativePart">
+        /// The relative base part.
+        /// </param>
+        /// <returns>The correspondant part name if valid, else <c>null</c>.</returns>
+        /// <exception cref="InvalidFormatException">
+        /// Throws if the specified part name is not OPC compliant.
+        /// </exception>
+        /// @see #CreatePartName(Uri)
         public static PackagePartName CreatePartName(Uri partName,
                 PackagePart relativePart)
         {
@@ -644,33 +672,41 @@ namespace NPOI.OpenXml4Net.OPC
             return CreatePartName(newPartNameURI);
         }
 
-        /**
-         * Validate a part Uri by returning a bool.
-         * ([M1.1],[M1.3],[M1.4],[M1.5],[M1.6])
-         *
-         * (OPC Specifications 8.1.1 Part names) :
-         *
-         * Part Name Syntax
-         *
-         * The part name grammar is defined as follows:
-         *
-         * <i>part_name = 1*( "/" segment )
-         *
-         * segment = 1*( pchar )</i>
-         *
-         *
-         * (pchar is defined in RFC 3986)
-         *
-         * @param partUri
-         *            The Uri to validate.
-         * @return <b>true</b> if the Uri is valid to the OPC Specifications, else
-         *         <b>false</b>
-         *
-         * @see #CreatePartName(Uri)
-         */
+        /// <summary>
+        /// <para>
+        /// Validate a part Uri by returning a bool.
+        /// ([M1.1],[M1.3],[M1.4],[M1.5],[M1.6])
+        /// </para>
+        /// <para>
+        /// (OPC Specifications 8.1.1 Part names) :
+        /// </para>
+        /// <para>
+        /// Part Name Syntax
+        /// </para>
+        /// <para>
+        /// The part name grammar is defined as follows:
+        /// </para>
+        /// <para>
+        /// <i>part_name = 1*( "/" segment )
+        /// </para>
+        /// <para>
+        /// segment = 1*( pchar )</i>
+        /// </para>
+        /// <para>
+        /// (pchar is defined in RFC 3986)
+        /// </para>
+        /// </summary>
+        /// <param name="partUri">
+        /// The Uri to validate.
+        /// </param>
+        /// <returns><b>true</b> if the Uri is valid to the OPC Specifications, else
+        /// <b>false</b>
+        /// </returns>
+        /// 
+        /// @see #CreatePartName(Uri)
         public static bool IsValidPartName(Uri partUri)
         {
-            if (partUri == null)
+            if(partUri == null)
                 throw new ArgumentException("partUri");
 
             try
@@ -684,29 +720,30 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * Decode a Uri by converting all percent encoded character into a String
-         * character.
-         *
-         * @param uri
-         *            The Uri to decode.
-         * @return The specified Uri in a String with converted percent encoded
-         *         characters.
-         */
+        /// <summary>
+        /// Decode a Uri by converting all percent encoded character into a String
+        /// character.
+        /// </summary>
+        /// <param name="uri">
+        /// The Uri to decode.
+        /// </param>
+        /// <returns>The specified Uri in a String with converted percent encoded
+        /// characters.
+        /// </returns>
         public static String DecodeURI(Uri uri)
         {
             StringBuilder retVal = new StringBuilder();
             String uriStr = uri.OriginalString;
             char c;
             int length = uriStr.Length;
-            for (int i = 0; i < length; ++i)
+            for(int i = 0; i < length; ++i)
             {
                 c = uriStr[i];
-                if (c == '%')
+                if(c == '%')
                 {
                     // We certainly found an encoded character, check for length
                     // now ( '%' HEXDIGIT HEXDIGIT)
-                    if ((length - i) < 2)
+                    if((length - i) < 2)
                     {
                         throw new ArgumentException("The uri " + uriStr
                                 + " contain invalid encoded character !");
@@ -723,33 +760,35 @@ namespace NPOI.OpenXml4Net.OPC
             }
             return retVal.ToString();
         }
-           /**
-     * Convert a string to {@link java.net.URI}
-     *
-     * If  part name is not a valid URI, it is resolved as follows:
-     * <p>
-     * 1. Percent-encode each open bracket ([) and close bracket (]).</li>
-     * 2. Percent-encode each percent (%) character that is not followed by a hexadecimal notation of an octet value.</li>
-     * 3. Un-percent-encode each percent-encoded unreserved character.
-     * 4. Un-percent-encode each forward slash (/) and back slash (\).
-     * 5. Convert all back slashes to forward slashes.
-     * 6. If present in a segment containing non-dot (?.?) characters, remove trailing dot (?.?) characters from each segment.
-     * 7. Replace each occurrence of multiple consecutive forward slashes (/) with a single forward slash.
-     * 8. If a single trailing forward slash (/) is present, remove that trailing forward slash.
-     * 9. Remove complete segments that consist of three or more dots.
-     * 10. Resolve the relative reference against the base URI of the part holding the Unicode string, as it is defined
-     * in ?5.2 of RFC 3986. The path component of the resulting absolute URI is the part name.
-     *</p>
-     *
-     * @param   value   the string to be parsed into a URI
-     * @return  the resolved part name that should be OK to construct a URI
-     *
-     * TODO YK: for now this method does only (5). Finish the rest.
-     */
+        /// <summary>
+        /// <para>
+        /// Convert a string to <see cref="java.net.URI" />
+        /// </para>
+        /// <para>
+        /// If  part name is not a valid URI, it is resolved as follows:
+        /// </para>
+        /// <para>
+        /// 1. Percent-encode each open bracket ([) and close bracket (]).</li>
+        /// 2. Percent-encode each percent (%) character that is not followed by a hexadecimal notation of an octet value.</li>
+        /// 3. Un-percent-encode each percent-encoded unreserved character.
+        /// 4. Un-percent-encode each forward slash (/) and back slash (\).
+        /// 5. Convert all back slashes to forward slashes.
+        /// 6. If present in a segment containing non-dot (?.?) characters, remove trailing dot (?.?) characters from each segment.
+        /// 7. Replace each occurrence of multiple consecutive forward slashes (/) with a single forward slash.
+        /// 8. If a single trailing forward slash (/) is present, remove that trailing forward slash.
+        /// 9. Remove complete segments that consist of three or more dots.
+        /// 10. Resolve the relative reference against the base URI of the part holding the Unicode string, as it is defined
+        /// in ?5.2 of RFC 3986. The path component of the resulting absolute URI is the part name.
+        /// </para>
+        /// </summary>
+        /// <param name="value">  the string to be parsed into a URI</param>
+        /// <returns>the resolved part name that should be OK to construct a URI</returns>
+        /// 
+        /// TODO YK: for now this method does only (5). Finish the rest.
         public static Uri ToUri(String value)
         {
             //5. Convert all back slashes to forward slashes
-            if (value.IndexOf("\\") != -1)
+            if(value.IndexOf("\\") != -1)
             {
                 value = value.Replace('\\', '/');
             }
@@ -757,7 +796,7 @@ namespace NPOI.OpenXml4Net.OPC
             // URI fragemnts (those starting with '#') are not encoded
             // and may contain white spaces and raw unicode characters
             int fragmentIdx = value.IndexOf('#');
-            if (fragmentIdx != -1)
+            if(fragmentIdx != -1)
             {
                 String path = value.Substring(0, fragmentIdx);
                 String fragment = value.Substring(fragmentIdx + 1);
@@ -765,14 +804,14 @@ namespace NPOI.OpenXml4Net.OPC
                 value = path + "#" + Encode(fragment);
             }
             // trailing white spaces must be url-encoded, see Bugzilla 53282
-            if (value.Length > 0)
+            if(value.Length > 0)
             {
                 StringBuilder b = new StringBuilder();
                 int idx = value.Length - 1;
-                for (; idx >= 0; idx--)
+                for(; idx >= 0; idx--)
                 {
                     char c = value[idx];
-                    if (char.IsWhiteSpace(c) || c == '\u00A0')
+                    if(char.IsWhiteSpace(c) || c == '\u00A0')
                     {
                         b.Append(c);
                     }
@@ -781,7 +820,7 @@ namespace NPOI.OpenXml4Net.OPC
                         break;
                     }
                 }
-                if (b.Length > 0)
+                if(b.Length > 0)
                 {
                     char[] ca = b.ToString().ToCharArray();
                     Array.Reverse(ca);
@@ -791,73 +830,81 @@ namespace NPOI.OpenXml4Net.OPC
 
             // MS Office can insert URIs with missing authority, e.g. "http://" or "javascript://"
             // append a forward slash to avoid parse exception
-            if (missingAuthPattern.IsMatch(value))
+            if(missingAuthPattern.IsMatch(value))
             {
                 value += "/";
             }
             return ParseUri(value, UriKind.RelativeOrAbsolute);  //unicode character is not allowed in Uri class before .NET4.5
         }
 
-           /**
-     * percent-encode white spaces and characters above 0x80.
-     * <p>
-     *   Examples:
-     *   'Apache POI' --> 'Apache%20POI'
-     *   'Apache\u0410POI' --> 'Apache%04%10POI'
-     *
-     * @param s the string to encode
-     * @return  the encoded string
-     */
-    public static String Encode(String s) {
-        int n = s.Length;
-        if (n == 0) return s;
+        /// <summary>
+        /// <para>
+        /// percent-encode white spaces and characters above 0x80.
+        /// </para>
+        /// <para>
+        ///   Examples:
+        ///   'Apache POI' --> 'Apache%20POI'
+        ///   'Apache\u0410POI' --> 'Apache%04%10POI'
+        /// </para>
+        /// </summary>
+        /// <param name="s">the string to encode</param>
+        /// <returns>the encoded string</returns>
+        public static String Encode(String s)
+        {
+            int n = s.Length;
+            if(n == 0)
+                return s;
 
-        byte[] bb = Encoding.UTF8.GetBytes(s);
-        StringBuilder sb = new StringBuilder();
-        foreach (byte b in bb)
-        { 
-            int b1 = (int)b & 0xff;
-            if (IsUnsafe(b1)) {
-                sb.Append('%');
-                sb.Append(hexDigits[(b1 >> 4) & 0x0F]);
-                sb.Append(hexDigits[(b1 >> 0) & 0x0F]);
-            } else {
-                sb.Append((char)b1);
-            }           
+            byte[] bb = Encoding.UTF8.GetBytes(s);
+            StringBuilder sb = new StringBuilder();
+            foreach(byte b in bb)
+            {
+                int b1 = (int)b & 0xff;
+                if(IsUnsafe(b1))
+                {
+                    sb.Append('%');
+                    sb.Append(hexDigits[(b1 >> 4) & 0x0F]);
+                    sb.Append(hexDigits[(b1 >> 0) & 0x0F]);
+                }
+                else
+                {
+                    sb.Append((char) b1);
+                }
+            }
+            return sb.ToString();
         }
-        return sb.ToString();
-    }
 
-    private static char[] hexDigits = {
+        private static char[] hexDigits = {
         '0', '1', '2', '3', '4', '5', '6', '7',
         '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
     };
 
-    private static bool IsUnsafe(int ch)
-    {
-        return ch > 0x80 || char.IsWhiteSpace((char)ch);
-    }
-        /**
-         * Build a part name where the relationship should be stored ((ex
-         * /word/document.xml -> /word/_rels/document.xml.rels)
-         *
-         * @param partName
-         *            Source part Uri
-         * @return the full path (as Uri) of the relation file
-         * @throws InvalidOperationException
-         *             Throws if the specified Uri is a relationshp part.
-         */
+        private static bool IsUnsafe(int ch)
+        {
+            return ch > 0x80 || char.IsWhiteSpace((char) ch);
+        }
+        /// <summary>
+        /// Build a part name where the relationship should be stored ((ex
+        /// /word/document.xml -> /word/_rels/document.xml.rels)
+        /// </summary>
+        /// <param name="partName">
+        /// Source part Uri
+        /// </param>
+        /// <returns>the full path (as Uri) of the relation file</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Throws if the specified Uri is a relationshp part.
+        /// </exception>
         public static PackagePartName GetRelationshipPartName(
                 PackagePartName partName)
         {
-            if (partName == null)
+            if(partName == null)
                 throw new ArgumentException("partName");
 
-            if (PackagingUriHelper.PACKAGE_ROOT_URI.OriginalString == partName.URI
+            if(PackagingUriHelper.PACKAGE_ROOT_URI.OriginalString == partName.URI
                     .OriginalString)
                 return PackagingUriHelper.PACKAGE_RELATIONSHIPS_ROOT_PART_NAME;
 
-            if (partName.IsRelationshipPartURI())
+            if(partName.IsRelationshipPartURI())
                 throw new InvalidOperationException("Can't be a relationship part");
 
             String fullPath = partName.URI.OriginalString;
@@ -874,7 +921,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 retPartName = CreatePartName(fullPath);
             }
-            catch (InvalidFormatException)
+            catch(InvalidFormatException)
             {
                 // Should never happen in production as all data are fixed but in
                 // case of return null:

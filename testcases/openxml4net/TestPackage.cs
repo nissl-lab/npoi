@@ -28,7 +28,8 @@ using System.Xml;
 using System.Text;
 using NPOI.SS.UserModel;
 using NPOI;
-using NPOI.Openxml4Net.Exceptions;
+using NPOI.OpenXml4Net.Util;
+using NPOI.OpenXml4Net.Exceptions;
 
 namespace TestCases.OpenXml4Net.OPC
 {

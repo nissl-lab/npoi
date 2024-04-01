@@ -22,7 +22,7 @@ namespace NPOI.XWPF.UserModel
     using System.IO;
     using System.Xml.Serialization;
     using System.Xml;
-    using NPOI.Util;
+    using NPOI.OpenXml4Net.Util;
     using System.Xml.XPath;
 
     /**

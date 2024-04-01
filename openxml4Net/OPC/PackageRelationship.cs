@@ -1,15 +1,33 @@
-﻿using System;
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace NPOI.OpenXml4Net.OPC
 {
-    /**
-* A part relationship.
-* 
-* @author Julien Chable
-* @version 1.0
-*/
+    /// <summary>
+    /// A part relationship.
+    /// 
+    /// @author Julien Chable
+    /// @version 1.0
+    /// 
+    /// </summary>
     public class PackageRelationship
     {
 
@@ -31,57 +49,56 @@ namespace NPOI.OpenXml4Net.OPC
 
         /* End XML markup */
 
-        /**
-         * Relation id.
-         */
+        /// <summary>
+        /// Relation id.
+        /// </summary>
         private String id;
 
-        /**
-         * Reference to the package.
-         */
+        /// <summary>
+        /// Reference to the package.
+        /// </summary>
         private OPCPackage container;
 
-        /**
-         * Relationship type
-         */
+        /// <summary>
+        /// Relationship type
+        /// </summary>
         private String relationshipType;
 
-        /**
-         * Part of this relationship source
-         */
+        /// <summary>
+        /// Part of this relationship source
+        /// </summary>
         private PackagePart source;
 
-        /**
-         * Targeting mode [Internal|External]
-         */
+        /// <summary>
+        /// Targeting mode [Internal|External]
+        /// </summary>
         private TargetMode? targetMode;
 
-        /**
-         * Target URI
-         */
+        /// <summary>
+        /// Target URI
+        /// </summary>
         private Uri targetUri;
 
-        /**
-         * Constructor.
-         * 
-         * @param pkg
-         * @param sourcePart
-         * @param targetUri
-         * @param targetMode
-         * @param relationshipType
-         * @param id
-         */
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="pkg"></param>
+        /// <param name="sourcePart"></param>
+        /// <param name="targetUri"></param>
+        /// <param name="targetMode"></param>
+        /// <param name="relationshipType"></param>
+        /// <param name="id"></param>
         public PackageRelationship(OPCPackage pkg, PackagePart sourcePart,
                 Uri targetUri, TargetMode targetMode, String relationshipType,
                 String id)
         {
-            if (pkg == null)
+            if(pkg == null)
                 throw new ArgumentException("pkg");
-            if (targetUri == null)
+            if(targetUri == null)
                 throw new ArgumentException("targetUri");
-            if (relationshipType == null)
+            if(relationshipType == null)
                 throw new ArgumentException("relationshipType");
-            if (id == null)
+            if(id == null)
                 throw new ArgumentException("id");
 
             this.container = pkg;
@@ -95,7 +112,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         public override bool Equals(Object obj)
         {
-            if (!(obj is PackageRelationship))
+            if(!(obj is PackageRelationship))
             {
                 return false;
             }
@@ -125,9 +142,9 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * @return the container
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>the container</returns>
         public OPCPackage Package
         {
             get
@@ -136,9 +153,9 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * @return the id
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>the id</returns>
         public String Id
         {
             get
@@ -147,9 +164,9 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * @return the relationshipType
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>the relationshipType</returns>
         public String RelationshipType
         {
             get
@@ -158,9 +175,9 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * @return the source
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>the source</returns>
         public PackagePart Source
         {
             get
@@ -169,15 +186,14 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * 
-         * @return URL of the source part of this relationship
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>URL of the source part of this relationship</returns>
         public Uri SourceUri
         {
             get
             {
-                if (source == null)
+                if(source == null)
                 {
                     return PackagingUriHelper.PACKAGE_ROOT_URI;
                 }
@@ -185,11 +201,10 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * public URI getSourceUri(){ }
-         * 
-         * @return the targetMode
-         */
+        /// <summary>
+        /// public URI getSourceUri(){ }
+        /// </summary>
+        /// <returns>the targetMode</returns>
         public TargetMode? TargetMode
         {
             get
@@ -198,16 +213,16 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * @return the targetUri
-         */
+        /// <summary>
+        /// </summary>
+        /// <returns>the targetUri</returns>
         public Uri TargetUri
         {
             get
             {
                 // If it's an external target, we don't
                 //  need to apply our normal validation rules
-                if (targetMode == OPC.TargetMode.External)
+                if(targetMode == OPC.TargetMode.External)
                 {
                     return targetUri;
                 }
@@ -215,7 +230,7 @@ namespace NPOI.OpenXml4Net.OPC
                 // Internal target
                 // If it isn't absolute, resolve it relative
                 //  to ourselves
-                if (!targetUri.ToString().StartsWith("/"))
+                if(!targetUri.ToString().StartsWith("/"))
                 {
                     // So it's a relative part name, try to resolve it
                     return PackagingUriHelper.ResolvePartUri(SourceUri, targetUri);

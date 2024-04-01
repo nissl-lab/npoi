@@ -1,201 +1,220 @@
-﻿using System;
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace NPOI.OpenXml4Net.OPC
 {
-    /**
-     * Represents the core properties of an OPC package.
-     * 
-     * @author Julien Chable
-     * @version 1.0
-     * @see org.apache.poi.OpenXml4Net.opc.OPCPackage
-     */
+    /// <summary>
+    /// Represents the core properties of an OPC package.
+    /// See <see cref="OPCPackage"/>
+    /// </summary>
+    /// <remarks>
+    /// @author Julien Chable
+    /// @version 1.0
+    /// </remarks>
+
     public interface PackageProperties
     {
         /* Getters and Setters */
 
-        /**
-         * Set the category of the content of this package.
-         */
+        /// <summary>
+        /// Set the category of the content of this package.
+        /// </summary>
         String GetCategoryProperty();
 
-        /**
-         * Set the category of the content of this package.
-         */
+        /// <summary>
+        /// Set the category of the content of this package.
+        /// </summary>
         void SetCategoryProperty(String category);
 
-        /**
-         * Set the status of the content.
-         */
+        /// <summary>
+        /// Set the status of the content.
+        /// </summary>
         String GetContentStatusProperty();
 
-        /**
-         * Get the status of the content.
-         */
+        /// <summary>
+        /// Get the status of the content.
+        /// </summary>
         void SetContentStatusProperty(String contentStatus);
 
-        /**
-         * Get the type of content represented, generally defined by a specific use
-         * and intended audience.
-         */
+        /// <summary>
+        /// Get the type of content represented, generally defined by a specific use
+        /// and intended audience.
+        /// </summary>
         String GetContentTypeProperty();
 
-        /**
-         * Set the type of content represented, generally defined by a specific use
-         * and intended audience.
-         */
+        /// <summary>
+        /// Set the type of content represented, generally defined by a specific use
+        /// and intended audience.
+        /// </summary>
         void SetContentTypeProperty(String contentType);
 
-        /**
-         * Get the date of creation of the resource.
-         */
+        /// <summary>
+        /// Get the date of creation of the resource.
+        /// </summary>
         Nullable<DateTime> GetCreatedProperty();
 
-        /**
-         * Set the date of creation of the resource.
-         */
+        /// <summary>
+        /// Set the date of creation of the resource.
+        /// </summary>
         void SetCreatedProperty(String created);
 
-        /**
-         * Set the date of creation of the resource.
-         */
+        /// <summary>
+        /// Set the date of creation of the resource.
+        /// </summary>
         void SetCreatedProperty(Nullable<DateTime> created);
 
-        /**
-         * Get the entity primarily responsible for making the content of the
-         * resource.
-         */
+        /// <summary>
+        /// Get the entity primarily responsible for making the content of the
+        /// resource.
+        /// </summary>
         String GetCreatorProperty();
 
-        /**
-         * Set the entity primarily responsible for making the content of the
-         * resource.
-         */
+        /// <summary>
+        /// Set the entity primarily responsible for making the content of the
+        /// resource.
+        /// </summary>
         void SetCreatorProperty(String creator);
 
-        /**
-         * Get the explanation of the content of the resource.
-         */
+        /// <summary>
+        /// Get the explanation of the content of the resource.
+        /// </summary>
         String GetDescriptionProperty();
 
-        /**
-         * Set the explanation of the content of the resource.
-         */
+        /// <summary>
+        /// Set the explanation of the content of the resource.
+        /// </summary>
         void SetDescriptionProperty(String description);
 
-        /**
-         * Get an unambiguous reference to the resource within a given context.
-         */
+        /// <summary>
+        /// Get an unambiguous reference to the resource within a given context.
+        /// </summary>
         String GetIdentifierProperty();
 
-        /**
-         * Set an unambiguous reference to the resource within a given context.
-         */
+        /// <summary>
+        /// Set an unambiguous reference to the resource within a given context.
+        /// </summary>
         void SetIdentifierProperty(String identifier);
 
-        /**
-         * Get a delimited Set of keywords to support searching and indexing. This
-         * is typically a list of terms that are not available elsewhere in the
-         * properties
-         */
+        /// <summary>
+        /// Get a delimited Set of keywords to support searching and indexing. This
+        /// is typically a list of terms that are not available elsewhere in the
+        /// properties
+        /// </summary>
         String GetKeywordsProperty();
 
-        /**
-         * Set a delimited Set of keywords to support searching and indexing. This
-         * is typically a list of terms that are not available elsewhere in the
-         * properties
-         */
+        /// <summary>
+        /// Set a delimited Set of keywords to support searching and indexing. This
+        /// is typically a list of terms that are not available elsewhere in the
+        /// properties
+        /// </summary>
         void SetKeywordsProperty(String keywords);
 
-        /**
-         * Get the language of the intellectual content of the resource.
-         */
+        /// <summary>
+        /// Get the language of the intellectual content of the resource.
+        /// </summary>
         String GetLanguageProperty();
 
-        /**
-         * Set the language of the intellectual content of the resource.
-         */
+        /// <summary>
+        /// Set the language of the intellectual content of the resource.
+        /// </summary>
         void SetLanguageProperty(String language);
 
-        /**
-         * Get the user who performed the last modification.
-         */
+        /// <summary>
+        /// Get the user who performed the last modification.
+        /// </summary>
         String GetLastModifiedByProperty();
 
-        /**
-         * Set the user who performed the last modification.
-         */
+        /// <summary>
+        /// Set the user who performed the last modification.
+        /// </summary>
         void SetLastModifiedByProperty(String lastModifiedBy);
 
-        /**
-         * Get the date and time of the last printing.
-         */
+        /// <summary>
+        /// Get the date and time of the last printing.
+        /// </summary>
         Nullable<DateTime> GetLastPrintedProperty();
 
-        /**
-         * Set the date and time of the last printing.
-         */
+        /// <summary>
+        /// Set the date and time of the last printing.
+        /// </summary>
         void SetLastPrintedProperty(String lastPrinted);
 
-        /**
-         * Set the date and time of the last printing.
-         */
+        /// <summary>
+        /// Set the date and time of the last printing.
+        /// </summary>
         void SetLastPrintedProperty(Nullable<DateTime> lastPrinted);
 
-        /**
-         * Get the date on which the resource was changed.
-         */
+        /// <summary>
+        /// Get the date on which the resource was changed.
+        /// </summary>
         Nullable<DateTime> GetModifiedProperty();
 
-        /**
-         * Set the date on which the resource was changed.
-         */
+        /// <summary>
+        /// Set the date on which the resource was changed.
+        /// </summary>
         void SetModifiedProperty(String modified);
 
-        /**
-         * Set the date on which the resource was changed.
-         */
+        /// <summary>
+        /// Set the date on which the resource was changed.
+        /// </summary>
         void SetModifiedProperty(Nullable<DateTime> modified);
 
-        /**
-         * Get the revision number.
-         */
+        /// <summary>
+        /// Get the revision number.
+        /// </summary>
         String GetRevisionProperty();
 
-        /**
-         * Set the revision number.
-         */
+        /// <summary>
+        /// Set the revision number.
+        /// </summary>
         void SetRevisionProperty(String revision);
 
-        /**
-         * Get the topic of the content of the resource.
-         */
+        /// <summary>
+        /// Get the topic of the content of the resource.
+        /// </summary>
         String GetSubjectProperty();
 
-        /**
-         * Set the topic of the content of the resource.
-         */
+        /// <summary>
+        /// Set the topic of the content of the resource.
+        /// </summary>
         void SetSubjectProperty(String subject);
 
-        /**
-         * Get the name given to the resource.
-         */
+        /// <summary>
+        /// Get the name given to the resource.
+        /// </summary>
         String GetTitleProperty();
 
-        /**
-         * Set the name given to the resource.
-         */
+        /// <summary>
+        /// Set the name given to the resource.
+        /// </summary>
         void SetTitleProperty(String title);
 
-        /**
-         * Get the version number.
-         */
+        /// <summary>
+        /// Get the version number.
+        /// </summary>
         String GetVersionProperty();
 
-        /**
-         * Set the version number.
-         */
+        /// <summary>
+        /// Set the version number.
+        /// </summary>
         void SetVersionProperty(String version);
     }
 }

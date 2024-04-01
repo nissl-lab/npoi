@@ -1,36 +1,52 @@
-﻿using System;
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace NPOI.OpenXml4Net.OPC
 {
-    /**
-     * A package part collection.
-     *
-     * @author Julien Chable
-     * @version 0.1
-     */
+    /// <summary>
+    /// A package part collection.
+    /// </summary>
+    /// <remarks>
+    /// @author Julien Chable
+    /// @version 0.1
+    /// </remarks>
+
     public class PackagePartCollection : SortedList<PackagePartName, PackagePart>
     {
-
-        private static long serialVersionUID = 2515031135957635515L;
-
-        /**
-         * Arraylist use to store this collection part names as string for rule
-         * M1.11 optimized checking.
-         */
+        /// <summary>
+        /// Arraylist use to store this collection part names as string for rule
+        /// M1.11 optimized checking.
+        /// </summary>
         private List<String> registerPartNameStr = new List<String>();
 
 
-        /**
-         * Check rule [M1.11]: a package implementer shall neither create nor
-         * recognize a part with a part name derived from another part name by
-         * Appending segments to it.
-         *
-         * @exception InvalidOperationException
-         *                Throws if you try to add a part with a name derived from
-         *                another part name.
-         */
+        /// <summary>
+        /// Check rule [M1.11]: a package implementer shall neither create nor
+        /// recognize a part with a part name derived from another part name by
+        /// Appending segments to it.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// Throws if you try to add a part with a name derived from
+        /// another part name.
+        /// </exception>
         public PackagePart Put(PackagePartName partName, PackagePart part)
         {
             String[] segments = partName.URI.OriginalString.Split(

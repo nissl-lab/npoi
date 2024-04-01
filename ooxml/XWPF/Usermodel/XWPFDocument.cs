@@ -18,20 +18,19 @@
 
 namespace NPOI.XWPF.UserModel
 {
-    using System;
-    using System.IO;
-    using NPOI.Util;
-    using System.Collections.Generic;
+    using NPOI.OOXML.XWPF.Util;
     using NPOI.OpenXml4Net.OPC;
+    using NPOI.OpenXml4Net.Util;
     using NPOI.OpenXmlFormats.Wordprocessing;
-    using System.Xml;
+    using NPOI.POIFS.Crypt;
+    using NPOI.Util;
     using NPOI.WP.UserModel;
     using NPOI.XWPF.Model;
-    using System.Xml.Serialization;
-    using System.Diagnostics;
-    using NPOI.OOXML.XWPF.Util;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
-    using NPOI.POIFS.Crypt;
+    using System.Xml;
 
     /**
      * <p>High(ish) level class for working with .docx files.</p>

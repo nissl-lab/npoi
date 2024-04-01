@@ -1,5 +1,5 @@
 
-namespace NPOI.Util
+namespace NPOI.OpenXml4Net.Util
 {
     public static class XMLConstants
     {

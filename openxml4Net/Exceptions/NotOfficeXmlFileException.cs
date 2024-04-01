@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI.Openxml4Net.Exceptions
+namespace NPOI.OpenXml4Net.Exceptions
 {
     using System;
 

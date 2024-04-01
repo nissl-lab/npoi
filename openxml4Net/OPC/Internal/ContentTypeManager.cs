@@ -1,31 +1,50 @@
-﻿using System;
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NPOI.OpenXml4Net.Exceptions;
 using System.IO;
 using System.Xml;
 using System.Xml.XPath;
-using NPOI.Util;
+using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {
-    /**
-     * Manage package content types ([Content_Types].xml part).
-     * 
-     * @author Julien Chable
-     * @version 1.0
-     */
+    /// <summary>
+    /// Manage package content types ([Content_Types].xml part).
+    /// </summary>
+    /// <remarks>
+    /// @author Julien Chable
+    /// @version 1.0
+    /// </remarks>
+
     public abstract class ContentTypeManager
     {
 
-        /**
-         * Content type part name.
-         */
+        /// <summary>
+        /// Content type part name.
+        /// </summary>
         public const String CONTENT_TYPES_PART_NAME = "[Content_Types].xml";
 
-        /**
-         * Content type namespace
-         */
+        /// <summary>
+        /// Content type namespace
+        /// </summary>
         public const String TYPES_NAMESPACE_URI = "http://schemas.openxmlformats.org/package/2006/content-types";
 
         /* Xml elements in content type part */
@@ -42,30 +61,29 @@ namespace NPOI.OpenXml4Net.OPC.Internal
 
         private const String PART_NAME_ATTRIBUTE_NAME = "PartName";
 
-        /**
-         * Reference to the package using this content type manager.
-         */
+        /// <summary>
+        /// Reference to the package using this content type manager.
+        /// </summary>
         protected OPCPackage container;
 
-        /**
-         * Default content type tree. <Extension, ContentType>
-         */
+        /// <summary>
+        /// Default content type tree. <Extension, ContentType>
+        /// </summary>
         private SortedList<String, String> defaultContentType;
 
-        /**
-         * Override content type tree.
-         */
+        /// <summary>
+        /// Override content type tree.
+        /// </summary>
         private SortedList<PackagePartName, String> overrideContentType;
 
-        /**
-         * Constructor. Parses the content of the specified input stream.
-         * 
-         * @param in
-         *            If different of <i>null</i> then the content types part is
-         *            retrieve and parse.
-         * @throws InvalidFormatException
-         *             If the content types part content is not valid.
-         */
+        /// <summary>
+        /// Constructor. Parses the content of the specified input stream.
+        /// </summary>
+        /// <param name="in">If different of <i>null</i> then the content types part is
+        /// retrieve and parse.
+        /// </param>
+        /// <exception cref="InvalidFormatException">If the content types part content is not valid.
+        /// </exception>
         public ContentTypeManager(Stream in1, OPCPackage pkg)
         {
             this.container = pkg;
@@ -83,43 +101,52 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             }
         }
 
-        /**
-         * Build association extention-> content type (will be stored in
-         * [Content_Types].xml) for example ContentType="image/png" Extension="png"
-         * <p>
-         * [M2.8]: When adding a new part to a package, the package implementer
-         * shall ensure that a content type for that part is specified in the
-         * Content Types stream; the package implementer shall perform the steps
-         * described in &#167;9.1.2.3:
-         * </p><p>
-         * 1. Get the extension from the part name by taking the substring to the
-         * right of the rightmost occurrence of the dot character (.) from the
-         * rightmost segment.
-         * </p><p>
-         * 2. If a part name has no extension, a corresponding Override element
-         * shall be added to the Content Types stream.
-         * </p><p>
-         * 3. Compare the resulting extension with the values specified for the
-         * Extension attributes of the Default elements in the Content Types stream.
-         * The comparison shall be case-insensitive ASCII.
-         * </p><p>
-         * 4. If there is a Default element with a matching Extension attribute,
-         * then the content type of the new part shall be compared with the value of
-         * the ContentType attribute. The comparison might be case-sensitive and
-         * include every character regardless of the role it plays in the
-         * content-type grammar of RFC 2616, or it might follow the grammar of RFC
-         * 2616.
-         * </p><p>
-         * a. If the content types match, no further action is required.
-         * </p><p>
-         * b. If the content types do not match, a new Override element shall be
-         * added to the Content Types stream. .
-         * </p><p>
-         * 5. If there is no Default element with a matching Extension attribute, a
-         * new Default element or Override element shall be added to the Content
-         * Types stream.
-         * </p>
-         */
+        /// <summary>
+        /// <para>
+        /// Build association extention-> content type (will be stored in
+        /// [Content_Types].xml) for example ContentType="image/png" Extension="png"
+        /// </para>
+        /// <para>
+        /// [M2.8]: When adding a new part to a package, the package implementer
+        /// shall ensure that a content type for that part is specified in the
+        /// Content Types stream; the package implementer shall perform the steps
+        /// described in &#167;9.1.2.3:
+        /// </para>
+        /// <para>
+        /// 1. Get the extension from the part name by taking the substring to the
+        /// right of the rightmost occurrence of the dot character (.) from the
+        /// rightmost segment.
+        /// </para>
+        /// <para>
+        /// 2. If a part name has no extension, a corresponding Override element
+        /// shall be added to the Content Types stream.
+        /// </para>
+        /// <para>
+        /// 3. Compare the resulting extension with the values specified for the
+        /// Extension attributes of the Default elements in the Content Types stream.
+        /// The comparison shall be case-insensitive ASCII.
+        /// </para>
+        /// <para>
+        /// 4. If there is a Default element with a matching Extension attribute,
+        /// then the content type of the new part shall be compared with the value of
+        /// the ContentType attribute. The comparison might be case-sensitive and
+        /// include every character regardless of the role it plays in the
+        /// content-type grammar of RFC 2616, or it might follow the grammar of RFC
+        /// 2616.
+        /// </para>
+        /// <para>
+        /// a. If the content types match, no further action is required.
+        /// </para>
+        /// <para>
+        /// b. If the content types do not match, a new Override element shall be
+        /// added to the Content Types stream. .
+        /// </para>
+        /// <para>
+        /// 5. If there is no Default element with a matching Extension attribute, a
+        /// new Default element or Override element shall be added to the Content
+        /// Types stream.
+        /// </para>
+        /// </summary>
         public void AddContentType(PackagePartName partName, String contentType)
         {
             bool defaultCTExists = false;
@@ -132,14 +159,15 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 this.AddDefaultContentType(extension, contentType);
         }
 
-        /**
-         * Add an override content type for a specific part.
-         * 
-         * @param partName
-         *            Name of the part.
-         * @param contentType
-         *            Content type of the part.
-         */
+        /// <summary>
+        /// Add an override content type for a specific part.
+        /// </summary>
+        /// <param name="partName">
+        /// Name of the part.
+        /// </param>
+        /// <param name="contentType">
+        /// Content type of the part.
+        /// </param>
         private void AddOverrideContentType(PackagePartName partName,
                 String contentType)
         {
@@ -152,14 +180,15 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 overrideContentType[partName]= contentType;
         }
 
-        /**
-         * Add a content type associated with the specified extension.
-         * 
-         * @param extension
-         *            The part name extension to bind to a content type.
-         * @param contentType
-         *            The content type associated with the specified extension.
-         */
+        /// <summary>
+        /// Add a content type associated with the specified extension.
+        /// </summary>
+        /// <param name="extension">
+        /// The part name extension to bind to a content type.
+        /// </param>
+        /// <param name="contentType">
+        /// The content type associated with the specified extension.
+        /// </param>
         private void AddDefaultContentType(String extension, String contentType)
         {
             // Remark : Originally the latest parameter was :
@@ -167,25 +196,28 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             defaultContentType.Add(extension.ToLower(), contentType);
         }
 
-        /**
-         * <p>
-         * Delete a content type based on the specified part name. If the specified
-         * part name is register with an override content type, then this content
-         * type is remove, else the content type is remove in the default content
-         * type list if it exists and if no part is associated with it yet.
-         * </p><p>
-         * Check rule M2.4: The package implementer shall require that the Content
-         * Types stream contain one of the following for every part in the package:
-         * One matching Default element One matching Override element Both a
-         * matching Default element and a matching Override element, in which case
-         * the Override element takes precedence.
-         * </p>
-         * @param partName
-         *            The part URI associated with the override content type to
-         *            delete.
-         * @exception InvalidOperationException
-         *                Throws if
-         */
+        /// <summary>
+        /// <para>
+        /// Delete a content type based on the specified part name. If the specified
+        /// part name is register with an override content type, then this content
+        /// type is remove, else the content type is remove in the default content
+        /// type list if it exists and if no part is associated with it yet.
+        /// </para>
+        /// <para>
+        /// Check rule M2.4: The package implementer shall require that the Content
+        /// Types stream contain one of the following for every part in the package:
+        /// One matching Default element One matching Override element Both a
+        /// matching Default element and a matching Override element, in which case
+        /// the Override element takes precedence.
+        /// </para>
+        /// </summary>
+        /// <param name="partName">
+        /// The part URI associated with the override content type to
+        /// delete.
+        /// </param>
+        /// <exception cref="InvalidOperationException">InvalidOperationException
+        /// Throws if
+        /// </exception>
         public void RemoveContentType(PackagePartName partName)
         {
             if (partName == null)
@@ -256,14 +288,15 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             }
         }
 
-        /**
-         * Check if the specified content type is already register.
-         * 
-         * @param contentType
-         *            The content type to check.
-         * @return <code>true</code> if the specified content type is already
-         *         register, then <code>false</code>.
-         */
+        /// <summary>
+        /// Check if the specified content type is already register.
+        /// </summary>
+        /// <param name="contentType">
+        /// The content type to check.
+        /// </param>
+        /// <returns><c>true</c> if the specified content type is already
+        /// register, then <c>false</c>.
+        /// </returns>
         public bool IsContentTypeRegister(String contentType)
         {
             if (contentType == null)
@@ -273,45 +306,55 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                     .Values.Contains(contentType)));
         }
 
-        /**
-         * Get the content type for the specified part, if any.
-         * <p>
-         * Rule [M2.9]: To get the content type of a part, the package implementer
-         * shall perform the steps described in &#167;9.1.2.4:
-         * </p><p>
-         * 1. Compare the part name with the values specified for the PartName
-         * attribute of the Override elements. The comparison shall be
-         * case-insensitive ASCII.
-         * </p><p>
-         * 2. If there is an Override element with a matching PartName attribute,
-         * return the value of its ContentType attribute. No further action is
-         * required.
-         * </p><p>
-         * 3. If there is no Override element with a matching PartName attribute,
-         * then a. Get the extension from the part name by taking the substring to
-         * the right of the rightmost occurrence of the dot character (.) from the
-         * rightmost segment. b. Check the Default elements of the Content Types
-         * stream, comparing the extension with the value of the Extension
-         * attribute. The comparison shall be case-insensitive ASCII.
-         * </p><p>
-         * 4. If there is a Default element with a matching Extension attribute,
-         * return the value of its ContentType attribute. No further action is
-         * required.
-         * </p><p>
-         * 5. If neither Override nor Default elements with matching attributes are
-         * found for the specified part name, the implementation shall not map this
-         * part name to a part.
-         * </p>
-         * @param partName
-         *            The URI part to check.
-         * @return The content type associated with the URI (in case of an override
-         *         content type) or the extension (in case of default content type),
-         *         else <code>null</code>.
-         * 
-         * @exception OpenXml4NetRuntimeException
-         *                Throws if the content type manager is not able to find the
-         *                content from an existing part.
-         */
+        /// <summary>
+        /// <para>
+        /// Get the content type for the specified part, if any.
+        /// </para>
+        /// <para>
+        /// Rule [M2.9]: To get the content type of a part, the package implementer
+        /// shall perform the steps described in &#167;9.1.2.4:
+        /// </para>
+        /// <para>
+        /// 1. Compare the part name with the values specified for the PartName
+        /// attribute of the Override elements. The comparison shall be
+        /// case-insensitive ASCII.
+        /// </para>
+        /// <para>
+        /// 2. If there is an Override element with a matching PartName attribute,
+        /// return the value of its ContentType attribute. No further action is
+        /// required.
+        /// </para>
+        /// <para>
+        /// 3. If there is no Override element with a matching PartName attribute,
+        /// then a. Get the extension from the part name by taking the substring to
+        /// the right of the rightmost occurrence of the dot character (.) from the
+        /// rightmost segment. b. Check the Default elements of the Content Types
+        /// stream, comparing the extension with the value of the Extension
+        /// attribute. The comparison shall be case-insensitive ASCII.
+        /// </para>
+        /// <para>
+        /// 4. If there is a Default element with a matching Extension attribute,
+        /// return the value of its ContentType attribute. No further action is
+        /// required.
+        /// </para>
+        /// <para>
+        /// 5. If neither Override nor Default elements with matching attributes are
+        /// found for the specified part name, the implementation shall not map this
+        /// part name to a part.
+        /// </para>
+        /// </summary>
+        /// <param name="partName">
+        /// The URI part to check.
+        /// </param>
+        /// <returns>The content type associated with the URI (in case of an override
+        /// content type) or the extension (in case of default content type),
+        /// else <c>null</c>.
+        /// </returns>
+        /// 
+        /// <exception cref="OpenXml4NetException">
+        /// Throws if the content type manager is not able to find the
+        /// content from an existing part.
+        /// </exception>
         public String GetContentType(PackagePartName partName)
         {
             if (partName == null)
@@ -343,9 +386,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             }
         }
 
-        /**
-         * Clear all content types.
-         */
+        /// <summary>
+        /// Clear all content types.
+        /// </summary>
         public void ClearAll()
         {
             this.defaultContentType.Clear();
@@ -353,23 +396,22 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 this.overrideContentType.Clear();
         }
 
-        /**
-         * Clear all override content types.
-         * 
-         */
+        /// <summary>
+        /// Clear all override content types.
+        /// </summary>
         public void ClearOverrideContentTypes()
         {
             if (this.overrideContentType != null)
                 this.overrideContentType.Clear();
         }
 
-        /**
-         * Parse the content types part.
-         * 
-         * @throws InvalidFormatException
-         *             Throws if the content type doesn't exist or the XML format is
-         *             invalid.
-         */
+        /// <summary>
+        /// Parse the content types part.
+        /// </summary>
+        /// <exception cref="InvalidFormatException">
+        /// Throws if the content type doesn't exist or the XML format is
+        /// invalid.
+        /// </exception>
         private void ParseContentTypesFile(Stream in1)
         {
             try
@@ -410,14 +452,14 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             }
         }
 
-        /**
-         * Save the contents type part.
-         * 
-         * @param outStream
-         *            The output stream use to save the XML content of the content
-         *            types part.
-         * @return <b>true</b> if the operation success, else <b>false</b>.
-         */
+        /// <summary>
+        /// Save the contents type part.
+        /// </summary>
+        /// <param name="outStream">
+        /// The output stream use to save the XML content of the content
+        /// types part.
+        /// </param>
+        /// <returns><b>true</b> if the operation success, else <b>false</b>.</returns>
         public bool Save(Stream outStream)
         {
             XmlDocument xmlOutDoc = new XmlDocument();
@@ -451,15 +493,16 @@ namespace NPOI.OpenXml4Net.OPC.Internal
 
         }
 
-        /**
-         * Use to Append specific type XML elements, use by the save() method.
-         * 
-         * @param root
-         *            XML parent element use to Append this override type element.
-         * @param entry
-         *            The values to Append.
-         * @see #save(java.io.OutputStream)
-         */
+        /// <summary>
+        /// Use to Append specific type XML elements, use by the save() method.
+        /// </summary>
+        /// <param name="root">
+        /// XML parent element use to Append this override type element.
+        /// </param>
+        /// <param name="entry">
+        /// The values to Append.
+        /// </param>
+        /// @see #save(java.io.OutputStream)
         private void AppendSpecificTypes(XmlDocument xmldoc, XmlElement root,
                 KeyValuePair<PackagePartName, String> entry)
         {
@@ -472,15 +515,16 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                     CONTENT_TYPE_ATTRIBUTE_NAME, entry.Value);
         }
 
-        /**
-         * Use to Append default types XML elements, use by the save() metid.
-         * 
-         * @param root
-         *            XML parent element use to Append this default type element.
-         * @param entry
-         *            The values to Append.
-         * @see #save(java.io.OutputStream)
-         */
+        /// <summary>
+        /// Use to Append default types XML elements, use by the save() metid.
+        /// </summary>
+        /// <param name="root">
+        /// XML parent element use to Append this default type element.
+        /// </param>
+        /// <param name="entry">
+        /// The values to Append.
+        /// </param>
+        /// @see #save(java.io.OutputStream)
         private void AppendDefaultType(XmlDocument xmldoc, XmlElement root, KeyValuePair<String, String> entry)
         {
             XmlElement elem = xmldoc.CreateElement(DEFAULT_TAG_NAME,PackageNamespaces.CONTENT_TYPES);
@@ -489,13 +533,13 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             elem.SetAttribute(CONTENT_TYPE_ATTRIBUTE_NAME, entry.Value);
         }
 
-        /**
-         * Specific implementation of the save method. Call by the save() method,
-         * call before exiting.
-         * 
-         * @param out
-         *            The output stream use to write the content type XML.
-         */
+        /// <summary>
+        /// Specific implementation of the save method. Call by the save() method,
+        /// call before exiting.
+        /// </summary>
+        /// <param name="out">
+        /// The output stream use to write the content type XML.
+        /// </param>
         public abstract bool SaveImpl(XmlDocument content, Stream out1);
     }
 

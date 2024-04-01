@@ -1,4 +1,21 @@
-﻿using System;
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -8,61 +25,65 @@ using NPOI.Util;
 
 namespace NPOI.OpenXml4Net.OPC
 {
-    /**
-     * An immutable Open Packaging Convention compliant part name.
-     *
-     * @author Julien Chable
-     *
-     * @see <a href="http://www.ietf.org/rfc/rfc3986.txt">http://www.ietf.org/rfc/rfc3986.txt</a>
-     */
+    /// <summary>
+    /// An immutable Open Packaging Convention compliant part name.
+    /// </summary>
+    /// 
+    /// @see <a href="http://www.ietf.org/rfc/rfc3986.txt">http://www.ietf.org/rfc/rfc3986.txt</a>
+    /// <remarks>
+    /// @author Julien Chable
+    /// </remarks>
+
     public class PackagePartName : IComparable<PackagePartName>
     {
 
-        /**
-         * Part name stored as an URI.
-         */
+        /// <summary>
+        /// Part name stored as an URI.
+        /// </summary>
         private Uri partNameURI;
 
         /*
          * URI Characters definition (RFC 3986)
          */
 
-        /**
-         * Reserved characters for sub delimitations.
-         */
+        /// <summary>
+        /// Reserved characters for sub delimitations.
+        /// </summary>
         private static String[] RFC3986_PCHAR_SUB_DELIMS = { "!", "$", "&", "'",
             "(", ")", "*", "+", ",", ";", "=" };
 
-        /**
-         * Unreserved character (+ ALPHA & DIGIT).
-         */
+        /// <summary>
+        /// Unreserved character (+ ALPHA & DIGIT).
+        /// </summary>
         private static String[] RFC3986_PCHAR_UNRESERVED_SUP = { "-", ".", "_", "~" };
 
-        /**
-         * Authorized reserved characters for pChar.
-         */
+        /// <summary>
+        /// Authorized reserved characters for pChar.
+        /// </summary>
         private static String[] RFC3986_PCHAR_AUTHORIZED_SUP = { ":", "@" };
 
-        /**
-         * Flag to know if this part name is from a relationship part name.
-         */
+        /// <summary>
+        /// Flag to know if this part name is from a relationship part name.
+        /// </summary>
         private bool isRelationship;
 
-        /**
-         * Constructor. Makes a ValidPartName object from a java.net.URI
-         *
-         * @param uri
-         *            The URI to validate and to transform into ValidPartName.
-         * @param checkConformance
-         *            Flag to specify if the contructor have to validate the OPC
-         *            conformance. Must be always <code>true</code> except for
-         *            special URI like '/' which is needed for internal use by
-         *            OpenXml4Net but is not valid.
-         * @throws InvalidFormatException
-         *             Throw if the specified part name is not conform to Open
-         *             Packaging Convention specifications.
-         * @see java.net.URI
-         */
+        /// <summary>
+        /// Constructor. Makes a ValidPartName object from a java.net.URI
+        /// </summary>
+        /// <param name="uri">
+        /// The URI to validate and to transform into ValidPartName.
+        /// </param>
+        /// <param name="checkConformance">
+        /// Flag to specify if the contructor have to validate the OPC
+        /// conformance. Must be always <c>true</c> except for
+        /// special URI like '/' which is needed for internal use by
+        /// OpenXml4Net but is not valid.
+        /// </param>
+        /// <exception cref="InvalidFormatException">
+        /// Throw if the specified part name is not conform to Open
+        /// Packaging Convention specifications.
+        /// </exception>
+        /// @see java.net.URI
         public PackagePartName(Uri uri, bool checkConformance)
         {
             if (checkConformance)
@@ -81,20 +102,22 @@ namespace NPOI.OpenXml4Net.OPC
             this.isRelationship = IsRelationshipPartURI(this.partNameURI);
         }
 
-        /**
-         * Constructor. Makes a ValidPartName object from a String part name.
-         *
-         * @param partName
-         *            Part name to valid and to create.
-         * @param checkConformance
-         *            Flag to specify if the contructor have to validate the OPC
-         *            conformance. Must be always <code>true</code> except for
-         *            special URI like '/' which is needed for internal use by
-         *            OpenXml4Net but is not valid.
-         * @throws InvalidFormatException
-         *             Throw if the specified part name is not conform to Open
-         *             Packaging Convention specifications.
-         */
+        /// <summary>
+        /// Constructor. Makes a ValidPartName object from a String part name.
+        /// </summary>
+        /// <param name="partName">
+        /// Part name to valid and to create.
+        /// </param>
+        /// <param name="checkConformance">
+        /// Flag to specify if the contructor have to validate the OPC
+        /// conformance. Must be always <c>true</c> except for
+        /// special URI like '/' which is needed for internal use by
+        /// OpenXml4Net but is not valid.
+        /// </param>
+        /// <exception cref="InvalidFormatException">
+        /// Throw if the specified part name is not conform to Open
+        /// Packaging Convention specifications.
+        /// </exception>
         internal PackagePartName(String partName, bool checkConformance)
         {
             Uri partURI;
@@ -124,14 +147,15 @@ namespace NPOI.OpenXml4Net.OPC
             this.isRelationship = IsRelationshipPartURI(this.partNameURI);
         }
 
-        /**
-         * Check if the specified part name is a relationship part name.
-         *
-         * @param partUri
-         *            The URI to check.
-         * @return <code>true</code> if this part name respect the relationship
-         *         part naming convention else <code>false</code>.
-         */
+        /// <summary>
+        /// Check if the specified part name is a relationship part name.
+        /// </summary>
+        /// <param name="partUri">
+        /// The URI to check.
+        /// </param>
+        /// <returns><c>true</c> if this part name respect the relationship
+        /// part naming convention else <c>false</c>.
+        /// </returns>
         private bool IsRelationshipPartURI(Uri partUri)
         {
             if (partUri == null)
@@ -143,26 +167,27 @@ namespace NPOI.OpenXml4Net.OPC
                             + "$");
         }
 
-        /**
-         * Know if this part name is a relationship part name.
-         *
-         * @return <code>true</code> if this part name respect the relationship
-         *         part naming convention else <code>false</code>.
-         */
+        /// <summary>
+        /// Know if this part name is a relationship part name.
+        /// </summary>
+        /// <returns><c>true</c> if this part name respect the relationship
+        /// part naming convention else <c>false</c>.
+        /// </returns>
         public bool IsRelationshipPartURI()
         {
             return this.isRelationship;
         }
 
-        /**
-         * Throws an exception (of any kind) if the specified part name does not
-         * follow the Open Packaging Convention specifications naming rules.
-         *
-         * @param partUri
-         *            The part name to check.
-         * @throws Exception
-         *             Throws if the part name is invalid.
-         */
+        /// <summary>
+        /// Throws an exception (of any kind) if the specified part name does not
+        /// follow the Open Packaging Convention specifications naming rules.
+        /// </summary>
+        /// <param name="partUri">
+        /// The part name to check.
+        /// </param>
+        /// <exception cref="Exception">
+        /// Throws if the part name is invalid.
+        /// </exception>
         private static void ThrowExceptionIfInvalidPartUri(Uri partUri)
         {
             if (partUri == null)
@@ -184,14 +209,15 @@ namespace NPOI.OpenXml4Net.OPC
             ThrowExceptionIfPartNameHaveInvalidSegments(partUri);
         }
 
-        /**
-         * Throws an exception if the specified URI is empty. [M1.1]
-         *
-         * @param partURI
-         *            Part URI to check.
-         * @throws InvalidFormatException
-         *             If the specified URI is empty.
-         */
+        /// <summary>
+        /// Throws an exception if the specified URI is empty. [M1.1]
+        /// </summary>
+        /// <param name="partURI">
+        /// Part URI to check.
+        /// </param>
+        /// <exception cref="InvalidFormatException">
+        /// If the specified URI is empty.
+        /// </exception>
         private static void ThrowExceptionIfEmptyURI(Uri partURI)
         {
             if (partURI == null)
@@ -205,31 +231,39 @@ namespace NPOI.OpenXml4Net.OPC
                                 + partURI.OriginalString);
         }
 
-        /**
-         * Throws an exception if the part name has empty segments. [M1.3]
-         *
-         * Throws an exception if a segment any characters other than pchar
-         * characters. [M1.6]
-         *
-         * Throws an exception if a segment contain percent-encoded forward slash
-         * ('/'), or backward slash ('\') characters. [M1.7]
-         *
-         * Throws an exception if a segment contain percent-encoded unreserved
-         * characters. [M1.8]
-         *
-         * Throws an exception if the specified part name's segments end with a dot
-         * ('.') character. [M1.9]
-         *
-         * Throws an exception if a segment doesn't include at least one non-dot
-         * character. [M1.10]
-         *
-         * @param partUri
-         *            The part name to check.
-         * @throws InvalidFormatException
-         *             if the specified URI contain an empty segments or if one the
-         *             segments contained in the part name, ends with a dot ('.')
-         *             character.
-         */
+        /// <summary>
+        /// <para>
+        /// Throws an exception if the part name has empty segments. [M1.3]
+        /// </para>
+        /// <para>
+        /// Throws an exception if a segment any characters other than pchar
+        /// characters. [M1.6]
+        /// </para>
+        /// <para>
+        /// Throws an exception if a segment contain percent-encoded forward slash
+        /// ('/'), or backward slash ('\') characters. [M1.7]
+        /// </para>
+        /// <para>
+        /// Throws an exception if a segment contain percent-encoded unreserved
+        /// characters. [M1.8]
+        /// </para>
+        /// <para>
+        /// Throws an exception if the specified part name's segments end with a dot
+        /// ('.') character. [M1.9]
+        /// </para>
+        /// <para>
+        /// Throws an exception if a segment doesn't include at least one non-dot
+        /// character. [M1.10]
+        /// </para>
+        /// </summary>
+        /// <param name="partUri">
+        /// The part name to check.
+        /// </param>
+        /// <exception cref="InvalidFormatException">
+        /// if the specified URI contain an empty segments or if one the
+        /// segments contained in the part name, ends with a dot ('.')
+        /// character.
+        /// </exception>
         private static void ThrowExceptionIfPartNameHaveInvalidSegments(Uri partUri)
         {
             if (partUri == null || "".Equals(partUri))
@@ -275,19 +309,23 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * Throws an exception if a segment any characters other than pchar
-         * characters. [M1.6]
-         *
-         * Throws an exception if a segment contain percent-encoded forward slash
-         * ('/'), or backward slash ('\') characters. [M1.7]
-         *
-         * Throws an exception if a segment contain percent-encoded unreserved
-         * characters. [M1.8]
-         *
-         * @param segment
-         *            The segment to check
-         */
+        /// <summary>
+        /// <para>
+        /// Throws an exception if a segment any characters other than pchar
+        /// characters. [M1.6]
+        /// </para>
+        /// <para>
+        /// Throws an exception if a segment contain percent-encoded forward slash
+        /// ('/'), or backward slash ('\') characters. [M1.7]
+        /// </para>
+        /// <para>
+        /// Throws an exception if a segment contain percent-encoded unreserved
+        /// characters. [M1.8]
+        /// </para>
+        /// </summary>
+        /// <param name="segment">
+        /// The segment to check
+        /// </param>
         private static void CheckPCharCompliance(String segment)
         {
             bool errorFlag;
@@ -391,16 +429,17 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * Throws an exception if the specified part name doesn't start with a
-         * forward slash character '/'. [M1.4]
-         *
-         * @param partUri
-         *            The part name to check.
-         * @throws InvalidFormatException
-         *             If the specified part name doesn't start with a forward slash
-         *             character '/'.
-         */
+        /// <summary>
+        /// Throws an exception if the specified part name doesn't start with a
+        /// forward slash character '/'. [M1.4]
+        /// </summary>
+        /// <param name="partUri">
+        /// The part name to check.
+        /// </param>
+        /// <exception cref="InvalidFormatException">
+        /// If the specified part name doesn't start with a forward slash
+        /// character '/'.
+        /// </exception>
         private static void ThrowExceptionIfPartNameNotStartsWithForwardSlashChar(
                 Uri partUri)
         {
@@ -412,16 +451,17 @@ namespace NPOI.OpenXml4Net.OPC
                                 + partUri.OriginalString);
         }
 
-        /**
-         * Throws an exception if the specified part name ends with a forwar slash
-         * character '/'. [M1.5]
-         *
-         * @param partUri
-         *            The part name to check.
-         * @throws InvalidFormatException
-         *             If the specified part name ends with a forwar slash character
-         *             '/'.
-         */
+        /// <summary>
+        /// Throws an exception if the specified part name ends with a forwar slash
+        /// character '/'. [M1.5]
+        /// </summary>
+        /// <param name="partUri">
+        /// The part name to check.
+        /// </param>
+        /// <exception cref="InvalidFormatException">
+        /// If the specified part name ends with a forwar slash character
+        /// '/'.
+        /// </exception>
         private static void ThrowExceptionIfPartNameEndsWithForwardSlashChar(
                 Uri partUri)
         {
@@ -433,14 +473,15 @@ namespace NPOI.OpenXml4Net.OPC
                                 + partUri.OriginalString);
         }
 
-        /**
-         * Throws an exception if the specified URI is absolute.
-         *
-         * @param partUri
-         *            The URI to check.
-         * @throws InvalidFormatException
-         *             Throws if the specified URI is absolute.
-         */
+        /// <summary>
+        /// Throws an exception if the specified URI is absolute.
+        /// </summary>
+        /// <param name="partUri">
+        /// The URI to check.
+        /// </param>
+        /// <exception cref="InvalidFormatException">
+        /// Throws if the specified URI is absolute.
+        /// </exception>
         private static void ThrowExceptionIfAbsoluteUri(Uri partUri)
         {
             if (partUri.IsAbsoluteUri)
@@ -448,26 +489,28 @@ namespace NPOI.OpenXml4Net.OPC
                         + partUri);
         }
 
-        /**
-         * Compare two part name following the rule M1.12 :
-         *
-         * Part name equivalence is determined by comparing part names as
-         * case-insensitive ASCII strings. Packages shall not contain equivalent
-         * part names and package implementers shall neither create nor recognize
-         * packages with equivalent part names. [M1.12]
-         */
+        /// <summary>
+        /// <para>
+        /// Compare two part name following the rule M1.12 :
+        /// </para>
+        /// <para>
+        /// Part name equivalence is determined by comparing part names as
+        /// case-insensitive ASCII strings. Packages shall not contain equivalent
+        /// part names and package implementers shall neither create nor recognize
+        /// packages with equivalent part names. [M1.12]
+        /// </para>
+        /// </summary>
         public int CompareTo(PackagePartName other)
         {
             // compare with natural sort order
             return Compare(this, other);
         }
 
-        /**
-         * Retrieves the extension of the part name if any. If there is no extension
-         * returns an empty String. Example : '/document/content.xml' => 'xml'
-         *
-         * @return The extension of the part name.
-         */
+        /// <summary>
+        /// Retrieves the extension of the part name if any. If there is no extension
+        /// returns an empty String. Example : '/document/content.xml' => 'xml'
+        /// </summary>
+        /// <returns>The extension of the part name.</returns>
         public String Extension
         {
             get
@@ -483,11 +526,10 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * Get this part name.
-         *
-         * @return The name of this part name.
-         */
+        /// <summary>
+        /// Get this part name.
+        /// </summary>
+        /// <returns>The name of this part name.</returns>
         public String Name
         {
             get
@@ -496,12 +538,12 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * Part name equivalence is determined by comparing part names as
-         * case-insensitive ASCII strings. Packages shall not contain equivalent
-         * part names and package implementers shall neither create nor recognize
-         * packages with equivalent part names. [M1.12]
-         */
+        /// <summary>
+        /// Part name equivalence is determined by comparing part names as
+        /// case-insensitive ASCII strings. Packages shall not contain equivalent
+        /// part names and package implementers shall neither create nor recognize
+        /// packages with equivalent part names. [M1.12]
+        /// </summary>
 
         public override bool Equals(Object other)
         {
@@ -533,11 +575,10 @@ namespace NPOI.OpenXml4Net.OPC
 
         /* Getters and setters */
 
-        /**
-         * Part name property getter.
-         *
-         * @return This part name URI.
-         */
+        /// <summary>
+        /// Part name property getter.
+        /// </summary>
+        /// <returns>This part name URI.</returns>
         public Uri URI
         {
             get
@@ -546,23 +587,27 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * A natural sort order for package part names, consistent with the
-         * requirements of {@code java.util.Comparator}, but simply implemented
-         * as a static method.
-         * <p>
-         * For example, this sorts "file10.png" after "file2.png" (comparing the
-         * numerical portion), but sorts "File10.png" before "file2.png"
-         * (lexigraphical sort)
-         *
-         * <p>
-         * When comparing part names, the rule M1.12 is followed:
-         *
-         * Part name equivalence is determined by comparing part names as
-         * case-insensitive ASCII strings. Packages shall not contain equivalent
-         * part names and package implementers shall neither create nor recognize
-         * packages with equivalent part names. [M1.12]
-         */
+        /// <summary>
+        /// <para>
+        /// A natural sort order for package part names, consistent with the
+        /// requirements of <c>java.util.Comparator</c>, but simply implemented
+        /// as a static method.
+        /// </para>
+        /// <para>
+        /// For example, this sorts "file10.png" after "file2.png" (comparing the
+        /// numerical portion), but sorts "File10.png" before "file2.png"
+        /// (lexigraphical sort)
+        /// </para>
+        /// <para>
+        /// When comparing part names, the rule M1.12 is followed:
+        /// </para>
+        /// <para>
+        /// Part name equivalence is determined by comparing part names as
+        /// case-insensitive ASCII strings. Packages shall not contain equivalent
+        /// part names and package implementers shall neither create nor recognize
+        /// packages with equivalent part names. [M1.12]
+        /// </para>
+        /// </summary>
         public static int Compare(PackagePartName obj1, PackagePartName obj2)
         {
             // NOTE could also throw a NullPointerException() if desired
@@ -585,15 +630,18 @@ namespace NPOI.OpenXml4Net.OPC
         }
 
 
-        /**
-         * A natural sort order for strings, consistent with the
-         * requirements of {@code java.util.Comparator}, but simply implemented
-         * as a static method.
-         * <p>
-         * For example, this sorts "file10.png" after "file2.png" (comparing the
-         * numerical portion), but sorts "File10.png" before "file2.png"
-         * (lexigraphical sort)
-         */
+        /// <summary>
+        /// <para>
+        /// A natural sort order for strings, consistent with the
+        /// requirements of <c>java.util.Comparator</c>, but simply implemented
+        /// as a static method.
+        /// </para>
+        /// <para>
+        /// For example, this sorts "file10.png" after "file2.png" (comparing the
+        /// numerical portion), but sorts "File10.png" before "file2.png"
+        /// (lexigraphical sort)
+        /// </para>
+        /// </summary>
         public static int Compare(String str1, String str2)
         {
             if (str1 == null)

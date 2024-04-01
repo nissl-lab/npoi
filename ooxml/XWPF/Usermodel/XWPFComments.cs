@@ -19,6 +19,7 @@ namespace NPOI.XWPF.UserModel
 {
     using NPOI.OpenXml4Net.Exceptions;
     using NPOI.OpenXml4Net.OPC;
+    using NPOI.OpenXml4Net.Util;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using NPOI.Util;
     using System;

@@ -145,7 +145,7 @@ namespace NPOI.OpenXml4Net.Util
         /// </returns>
         /// <exception cref="ZipException">if a ZIP format error has occurred</exception>
         /// <exception cref="IOException">if an I/O error has occurred</exception>
-        /// <exception cref="IllegalStateException">if the zip file has been closed</exception>
+        /// <exception cref="ObjectDisposedException">if the zip file has been closed</exception>
         public new Stream GetInputStream(ZipEntry entry)
         {
             Stream zipIS = base.GetInputStream(entry);

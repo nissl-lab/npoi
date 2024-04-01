@@ -1,4 +1,21 @@
-﻿using System;
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
@@ -6,11 +23,13 @@ using System.IO;
 
 namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
 {
-    /**
-     * Package properties marshaller.
-     *
-     * @author CDubet, Julien Chable
-     */
+    /// <summary>
+    /// Package properties marshaller.
+    /// </summary>
+    /// <remarks>
+    /// @author CDubet, Julien Chable
+    /// </remarks>
+
     public class PackagePropertiesMarshaller : PartMarshaller
     {
 
@@ -59,10 +78,10 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
         // The document
         protected XmlDocument xmlDoc = null;
         protected XmlNamespaceManager nsmgr = null;
-        /**
-         * Marshall package core properties to an XML document. Always return
-         * <code>true</code>.
-         */
+        /// <summary>
+        /// Marshall package core properties to an XML document. Always return
+        /// <c>true</c>.
+        /// </summary>
         public virtual bool Marshall(PackagePart part, Stream out1)
         {
             if (!(part is PackagePropertiesPart))
@@ -106,9 +125,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             return true;
         }
 
-        /**
-         * Add category property element if needed.
-         */
+        /// <summary>
+        /// Add category property element if needed.
+        /// </summary>
         private void AddCategory()
         {
             if (propsPart.GetCategoryProperty() == null)
@@ -130,9 +149,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             elem.InnerText=propsPart.GetCategoryProperty();
         }
 
-        /**
-         * Add content status property element if needed.
-         */
+        /// <summary>
+        /// Add content status property element if needed.
+        /// </summary>
         private void AddContentStatus()
         {
             if (propsPart.GetContentStatusProperty()==null)
@@ -153,9 +172,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             elem.InnerText = propsPart.GetContentStatusProperty();
         }
 
-        /**
-         * Add content type property element if needed.
-         */
+        /// <summary>
+        /// Add content type property element if needed.
+        /// </summary>
         private void AddContentType()
         {
             if (propsPart.GetContentTypeProperty()==null)
@@ -176,9 +195,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             elem.InnerText = propsPart.GetContentTypeProperty();
         }
 
-        /**
-         * Add created property element if needed.
-         */
+        /// <summary>
+        /// Add created property element if needed.
+        /// </summary>
         private void AddCreated()
         {
             if (propsPart.GetCreatedProperty() == null)
@@ -200,9 +219,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             elem.InnerText = propsPart.GetCreatedPropertyString();
         }
 
-        /**
-         * Add creator property element if needed.
-         */
+        /// <summary>
+        /// Add creator property element if needed.
+        /// </summary>
         private void AddCreator()
         {
             if (propsPart.GetCreatorProperty() == null)
@@ -225,9 +244,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             elem.InnerText = propsPart.GetCreatorProperty();
         }
 
-        /**
-         * Add description property element if needed.
-         */
+        /// <summary>
+        /// Add description property element if needed.
+        /// </summary>
         private void AddDescription()
         {
             if (propsPart.GetDescriptionProperty() == null)
@@ -250,9 +269,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             elem.InnerText = propsPart.GetDescriptionProperty();
         }
 
-        /**
-         * Add identifier property element if needed.
-         */
+        /// <summary>
+        /// Add identifier property element if needed.
+        /// </summary>
         private void AddIdentifier()
         {
             if (propsPart.GetIdentifierProperty() == null)
@@ -275,9 +294,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             elem.InnerText = propsPart.GetIdentifierProperty();
         }
 
-        /**
-         * Add keywords property element if needed.
-         */
+        /// <summary>
+        /// Add keywords property element if needed.
+        /// </summary>
         private void AddKeywords()
         {
             if (propsPart.GetKeywordsProperty() == null)
@@ -299,9 +318,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             elem.InnerText = propsPart.GetKeywordsProperty();
         }
 
-        /**
-         * Add language property element if needed.
-         */
+        /// <summary>
+        /// Add language property element if needed.
+        /// </summary>
         private void AddLanguage()
         {
             if (propsPart.GetLanguageProperty() == null)
@@ -323,9 +342,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             elem.InnerText = propsPart.GetLanguageProperty();
         }
 
-        /**
-         * Add 'last modified by' property if needed.
-         */
+        /// <summary>
+        /// Add 'last modified by' property if needed.
+        /// </summary>
         private void AddLastModifiedBy()
         {
             if (propsPart.GetLastModifiedByProperty() == null)
@@ -347,10 +366,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             elem.InnerText = propsPart.GetLastModifiedByProperty();
         }
 
-        /**
-         * Add 'last printed' property if needed.
-         *
-         */
+        /// <summary>
+        /// Add 'last printed' property if needed.
+        /// </summary>
         private void AddLastPrinted()
         {
             if (propsPart.GetLastPrintedProperty() == null)
@@ -372,9 +390,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             elem.InnerText = propsPart.GetLastPrintedPropertyString();
         }
 
-        /**
-         * Add modified property element if needed.
-         */
+        /// <summary>
+        /// Add modified property element if needed.
+        /// </summary>
         private void AddModified()
         {
             if (propsPart.GetModifiedProperty() == null)
@@ -397,9 +415,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             elem.SetAttribute("type", namespaceXSI, "dcterms:W3CDTF");
         }
 
-        /**
-         * Add revision property if needed.
-         */
+        /// <summary>
+        /// Add revision property if needed.
+        /// </summary>
         private void AddRevision()
         {
             if (propsPart.GetRevisionProperty() == null)
@@ -421,9 +439,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             elem.InnerText = propsPart.GetRevisionProperty();
         }
 
-        /**
-         * Add subject property if needed.
-         */
+        /// <summary>
+        /// Add subject property if needed.
+        /// </summary>
         private void AddSubject()
         {
             if (propsPart.GetSubjectProperty() == null)
@@ -445,9 +463,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             elem.InnerText = propsPart.GetSubjectProperty();
         }
 
-        /**
-         * Add title property if needed.
-         */
+        /// <summary>
+        /// Add title property if needed.
+        /// </summary>
         private void AddTitle()
         {
             if (propsPart.GetTitleProperty() == null)

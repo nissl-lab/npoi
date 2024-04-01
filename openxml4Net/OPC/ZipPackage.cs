@@ -1,5 +1,21 @@
-﻿using ICSharpCode.SharpZipLib.Zip;
-using NPOI.Openxml4Net.Exceptions;
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using ICSharpCode.SharpZipLib.Zip;
 using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.OpenXml4Net.OPC.Internal.Marshallers;
@@ -11,28 +27,30 @@ using System.IO;
 
 namespace NPOI.OpenXml4Net.OPC
 {
-    /**
-     * Physical zip package.
-     *
-     * @author Julien Chable
-     */
+    /// <summary>
+    /// Physical zip package.
+    /// </summary>
+    /// <remarks>
+    /// @author Julien Chable
+    /// </remarks>
+
     public class ZipPackage : OPCPackage
     {
         private static String MIMETYPE = "mimetype";
         private static String SETTINGS_XML = "settings.xml";
         private static POILogger logger = POILogFactory.GetLogger(typeof(ZipPackage));
 
-        /**
-         * Zip archive, as either a file on disk,
-         *  or a stream
-         */
+        /// <summary>
+        /// Zip archive, as either a file on disk,
+        ///  or a stream
+        /// </summary>
         private Util.ZipEntrySource zipArchive;
         bool isStream = false;  // whether the file is passed in with stream, no means passed in with string path
         public bool IsExternalStream { get { return isStream; } set { isStream = value; } }
 
-        /**
-         * Constructor. Creates a new ZipPackage.
-         */
+        /// <summary>
+        /// Constructor. Creates a new ZipPackage.
+        /// </summary>
         public ZipPackage()
             : base(defaultPackageAccess)
         {
@@ -47,13 +65,13 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * Constructor. <b>Operation not supported.</b>
-         *
-         * @param in
-         *            Zip input stream to load.
-         * @param access
-         */
+        /// <summary>
+        /// Constructor. <b>Operation not supported.</b>
+        /// </summary>
+        /// <param name="in">
+        /// Zip input stream to load.
+        /// </param>
+        /// <param name="access"></param>
         public ZipPackage(Stream in1, PackageAccess access)
             : base(access)
         {
@@ -64,29 +82,31 @@ namespace NPOI.OpenXml4Net.OPC
             this.zipArchive = new ZipInputStreamZipEntrySource(zis);
         }
 
-        /**
-         * Constructor. Opens a Zip based Open XML document from a file.
-         *
-         * @param path
-         *            The path of the file to open or create.
-         * @param access
-         *            The package access mode.
-         * @throws InvalidOperationException If the zip file cannot be opened.
-         */
+        /// <summary>
+        /// Constructor. Opens a Zip based Open XML document from a file.
+        /// </summary>
+        /// <param name="path">
+        /// The path of the file to open or create.
+        /// </param>
+        /// <param name="access">
+        /// The package access mode.
+        /// </param>
+        /// <exception cref="InvalidOperationException">If the zip file cannot be opened.</exception>
         public ZipPackage(String path, PackageAccess access)
             : this(new FileInfo(path), access)
         {
         }
 
-        /**
-         * Constructor. Opens a Zip based Open XML document from a File.
-         *
-         * @param file
-         *            The file to open or create.
-         * @param access
-         *            The package access mode.
-         * @throws InvalidOperationException If the zip file cannot be opened.
-         */
+        /// <summary>
+        /// Constructor. Opens a Zip based Open XML document from a File.
+        /// </summary>
+        /// <param name="file">
+        /// The file to open or create.
+        /// </param>
+        /// <param name="access">
+        /// The package access mode.
+        /// </param>
+        /// <exception cref="InvalidOperationException">If the zip file cannot be opened.</exception>
         public ZipPackage(FileInfo file, PackageAccess access)
             : base(access)
         {
@@ -150,31 +170,31 @@ namespace NPOI.OpenXml4Net.OPC
             this.zipArchive = ze;
         }
 
-        /**
-         * Constructor. Opens a Zip based Open XML document from
-         *  a custom ZipEntrySource, typically an open archive
-         *  from another system
-         *
-         * @param zipEntry
-         *            Zip data to load.
-         * @param access
-         *            The package access mode.
-         */
+        /// <summary>
+        /// Constructor. Opens a Zip based Open XML document from
+        ///  a custom ZipEntrySource, typically an open archive
+        ///  from another system
+        /// </summary>
+        /// <param name="zipEntry">
+        /// Zip data to load.
+        /// </param>
+        /// <param name="access">
+        /// The package access mode.
+        /// </param>
         public ZipPackage(ZipEntrySource zipEntry, PackageAccess access)
             : base(access)
         {
             this.zipArchive = zipEntry;
         }
 
-        /**
-         * Retrieves the parts from this package. We assume that the package has not
-         * been yet inspect to retrieve all the parts, this method will open the
-         * archive and look for all parts contain inside it. If the package part
-         * list is not empty, it will be emptied.
-         *
-         * @return All parts contain in this package.
-         * @throws InvalidFormatException if the package is not valid.
-         */
+        /// <summary>
+        /// Retrieves the parts from this package. We assume that the package has not
+        /// been yet inspect to retrieve all the parts, this method will open the
+        /// archive and look for all parts contain inside it. If the package part
+        /// list is not empty, it will be emptied.
+        /// </summary>
+        /// <returns>All parts contain in this package.</returns>
+        /// <exception cref="InvalidFormatException">if the package is not valid.</exception>
         protected override PackagePart[] GetPartsImpl()
         {
             if (this.partList == null)
@@ -314,10 +334,10 @@ namespace NPOI.OpenXml4Net.OPC
             return returnArray;
         }
 
-        /**
-         * Builds a PackagePartName for the given ZipEntry,
-         *  or null if it's the content types / invalid part
-         */
+        /// <summary>
+        /// Builds a PackagePartName for the given ZipEntry,
+        ///  or null if it's the content types / invalid part
+        /// </summary>
         private PackagePartName BuildPartName(ZipEntry entry)
         {
             try
@@ -342,16 +362,18 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * Create a new MemoryPackagePart from the specified URI and content type
-         *
-         *
-         * aram partName The part URI.
-         *
-         * @param contentType
-         *            The part content type.
-         * @return The newly created zip package part, else <b>null</b>.
-         */
+        /// <summary>
+        /// <para>
+        /// Create a new MemoryPackagePart from the specified URI and content type
+        /// </para>
+        /// <para>
+        /// aram partName The part URI.
+        /// </para>
+        /// </summary>
+        /// <param name="contentType">
+        /// The part content type.
+        /// </param>
+        /// <returns>The newly created zip package part, else <b>null</b>.</returns>
 
         protected override PackagePart CreatePartImpl(PackagePartName partName,
                 String contentType, bool loadRelationships)
@@ -375,12 +397,12 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * Delete a part from the package
-         *
-         * @throws ArgumentException
-         *             Throws if the part URI is nulll or invalid.
-         */
+        /// <summary>
+        /// Delete a part from the package
+        /// </summary>
+        /// <exception cref="ArgumentException">
+        /// Throws if the part URI is nulll or invalid.
+        /// </exception>
 
         protected override void RemovePartImpl(PackagePartName partName)
         {
@@ -388,20 +410,23 @@ namespace NPOI.OpenXml4Net.OPC
                 throw new ArgumentException("partUri");
         }
 
-        /**
-         * Flush the package. Do nothing.
-         */
+        /// <summary>
+        /// Flush the package. Do nothing.
+        /// </summary>
 
         protected override void FlushImpl()
         {
             // Do nothing
         }
 
-        /**
-         * Close and save the package.
-         *
-         * @see #close()
-         */
+        /// <summary>
+        /// <para>
+        /// Close and save the package.
+        /// </para>
+        /// <para>
+        /// <see cref="close()" />
+        /// </para>
+        /// </summary>
 
         protected override void CloseImpl()
         {
@@ -455,11 +480,10 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * Create a unique identifier to be use as a temp file name.
-         *
-         * @return A unique identifier use to be use as a temp file name.
-         */
+        /// <summary>
+        /// Create a unique identifier to be use as a temp file name.
+        /// </summary>
+        /// <returns>A unique identifier use to be use as a temp file name.</returns>
         private String GenerateTempFileName(string directory)
         {
             FileInfo tmpFilename = null ;
@@ -475,10 +499,10 @@ namespace NPOI.OpenXml4Net.OPC
             return tmpFilename.Name; //FileHelper.getFilename(tmpFilename.Name);
         }
 
-        /**
-         * Close the package without saving the document. Discard all the changes
-         * made to this package.
-         */
+        /// <summary>
+        /// Close the package without saving the document. Discard all the changes
+        /// made to this package.
+        /// </summary>
 
         protected override void RevertImpl()
         {
@@ -493,13 +517,15 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * Implement the getPart() method to retrieve a part from its URI in the
-         * current package
-         *
-         *
-         * @see #getPart(PackageRelationship)
-         */
+        /// <summary>
+        /// <para>
+        /// Implement the getPart() method to retrieve a part from its URI in the
+        /// current package
+        /// </para>
+        /// <para>
+        /// <see cref="getPart(PackageRelationship)" />
+        /// </para>
+        /// </summary>
 
         protected override PackagePart GetPartImpl(PackagePartName partName)
         {
@@ -510,15 +536,14 @@ namespace NPOI.OpenXml4Net.OPC
             return null;
         }
 
-        /**
-         * Save this package into the specified stream
-         *
-         *
-         * @param outputStream
-         *            The stream use to save this package.
-         *
-         * @see #save(OutputStream)
-         */
+        /// <summary>
+        /// Save this package into the specified stream
+        /// </summary>
+        /// <param name="outputStream">
+        /// The stream use to save this package.
+        /// </param>
+        /// 
+        /// @see #save(OutputStream)
 
         protected override void SaveImpl(Stream outputStream)
         {
@@ -624,11 +649,10 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * Get the zip archive
-         *
-         * @return The zip archive.
-         */
+        /// <summary>
+        /// Get the zip archive
+        /// </summary>
+        /// <returns>The zip archive.</returns>
         public Util.ZipEntrySource ZipArchive
         {
             get

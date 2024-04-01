@@ -21,7 +21,7 @@ namespace TestCases.OpenXml4Net.OPC
     using System.IO;
     using System.Xml;
     using NPOI;
-    using NPOI.Openxml4Net.Exceptions;
+    using NPOI.OpenXml4Net.Exceptions;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.SS.UserModel;
     using NPOI.Util;

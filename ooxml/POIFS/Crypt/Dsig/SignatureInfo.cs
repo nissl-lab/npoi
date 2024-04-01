@@ -25,7 +25,7 @@
 namespace NPOI.POIFS.Crypt.Dsig
 {
     using NPOI.OpenXml4Net.OPC;
-    using NPOI.Util;
+    using NPOI.OpenXml4Net.Util;
     using System;
     using System.Collections.Generic;
     using System.IO;

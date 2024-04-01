@@ -33,8 +33,8 @@ namespace NPOI.OpenXml4Net.Util
         void Close();
 
         /// <summary>
-    /// Has close been called already?
-    /// </summary>
+        /// Has close been called already?
+        /// </summary>
         bool IsClosed { get; }
     }
 }

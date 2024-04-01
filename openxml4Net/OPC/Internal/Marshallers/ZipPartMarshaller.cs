@@ -1,4 +1,21 @@
-﻿using System;
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -9,21 +26,23 @@ using NPOI.Util;
 
 namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
 {
-    /**
-     * Zip part marshaller. This marshaller is use to save any part in a zip stream.
-     *
-     * @author Julien Chable
-     */
+    /// <summary>
+    /// Zip part marshaller. This marshaller is use to save any part in a zip stream.
+    /// </summary>
+    /// <remarks>
+    /// @author Julien Chable
+    /// </remarks>
+
     public class ZipPartMarshaller : PartMarshaller
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(ZipPartMarshaller));
 
-        /**
-         * Save the specified part.
-         *
-         * @throws OpenXml4NetException
-         *             Throws if an internal exception is thrown.
-         */
+        /// <summary>
+        /// Save the specified part.
+        /// </summary>
+        /// <exception cref="OpenXml4NetException">OpenXml4NetException
+        /// Throws if an internal exception is thrown.
+        /// </exception>
         public bool Marshall(PackagePart part, Stream os)
         {
             if (!(os is ZipOutputStream))
@@ -87,17 +106,16 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             return true;
         }
 
-        /**
-         * Save relationships into the part.
-         *
-         * @param rels
-         *            The relationships collection to marshall.
-         * @param relPartName
-         *            Part name of the relationship part to marshall.
-         * @param zos
-         *            Zip output stream in which to save the XML content of the
-         *            relationships serialization.
-         */
+        /// <summary>
+        /// Save relationships into the part.
+        /// </summary>
+        /// <param name="rels">The relationships collection to marshall.
+        /// </param>
+        /// <param name="relPartName"> Part name of the relationship part to marshall.
+        /// </param>
+        /// <param name="zos">Zip output stream in which to save the XML content of the
+        /// relationships serialization.
+        /// </param>
         public static bool MarshallRelationshipPart(
                 PackageRelationshipCollection rels, PackagePartName relPartName,
                 ZipOutputStream zos)

@@ -1,15 +1,34 @@
-﻿using System;
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace NPOI.OpenXml4Net.OPC
 {
-    /**
-     * Open Packaging Convention content types (see Annex F : Standard Namespaces
-     * and Content Types).
-     *
-     * @author CDubettier define some constants, Julien Chable
-     */
+    /// <summary>
+    /// Open Packaging Convention content types (see Annex F : Standard Namespaces
+    /// and Content Types).
+    /// </summary>
+    /// <remarks>
+    /// @author CDubettier define some constants, Julien Chable
+    /// </remarks>
+
     public class ContentTypes
     {
 
@@ -18,39 +37,39 @@ namespace NPOI.OpenXml4Net.OPC
          * Types)
          */
 
-        /**
-         * Core Properties part.
-         */
+        /// <summary>
+        /// Core Properties part.
+        /// </summary>
         public static String CORE_PROPERTIES_PART = "application/vnd.openxmlformats-package.core-properties+xml";
 
-        /**
-         * Digital Signature Certificate part.
-         */
+        /// <summary>
+        /// Digital Signature Certificate part.
+        /// </summary>
         public static String DIGITAL_SIGNATURE_CERTIFICATE_PART = "application/vnd.openxmlformats-package.digital-signature-certificate";
 
-        /**
-         * Digital Signature Origin part.
-         */
+        /// <summary>
+        /// Digital Signature Origin part.
+        /// </summary>
         public static String DIGITAL_SIGNATURE_ORIGIN_PART = "application/vnd.openxmlformats-package.digital-signature-origin";
 
-        /**
-         * Digital Signature XML Signature part.
-         */
+        /// <summary>
+        /// Digital Signature XML Signature part.
+        /// </summary>
         public static String DIGITAL_SIGNATURE_XML_SIGNATURE_PART = "application/vnd.openxmlformats-package.digital-signature-xmlsignature+xml";
 
-        /**
-         * Relationships part.
-         */
+        /// <summary>
+        /// Relationships part.
+        /// </summary>
         public static String RELATIONSHIPS_PART = "application/vnd.openxmlformats-package.relationships+xml";
 
-        /**
-         * Custom XML part.
-         */
+        /// <summary>
+        /// Custom XML part.
+        /// </summary>
         public static String CUSTOM_XML_PART = "application/vnd.openxmlformats-officedocument.customXmlProperties+xml";
 
-        /**
-         * Plain old xml. Note - OOXML uses application/xml, and not text/xml!
-         */
+        /// <summary>
+        /// Plain old xml. Note - OOXML uses application/xml, and not text/xml!
+        /// </summary>
         public static String PLAIN_OLD_XML = "application/xml";
 
         public static String IMAGE_JPEG = "image/jpeg";
@@ -69,29 +88,33 @@ namespace NPOI.OpenXml4Net.OPC
 
         public static String EXTENSION_GIF = "gif";
 
-        /**
-         * TIFF image format.
-         *
-         * @see <a href="http://partners.adobe.com/public/developer/tiff/index.html#spec">
-         * http://partners.adobe.com/public/developer/tiff/index.html#spec</a>
-         */
+        /// <summary>
+        /// <para>
+        /// TIFF image format.
+        /// </para>
+        /// <para>
+        /// <see href="http://partners.adobe.com/public/developer/tiff/index.html#spec"> http://partners.adobe.com/public/developer/tiff/index.html#spec</see>
+        /// </para>
+        /// </summary>
         public static String IMAGE_TIFF = "image/tiff";
 
         public static String EXTENSION_TIFF = "tiff";
 
-        /**
-         * Pict image format.
-         *
-         * @see <a href="http://developer.apple.com/documentation/mac/QuickDraw/QuickDraw-2.html">
-         * http://developer.apple.com/documentation/mac/QuickDraw/QuickDraw-2.html</a>
-         */
+        /// <summary>
+        /// <para>
+        /// Pict image format.
+        /// </para>
+        /// <para>
+        /// <see href="http://developer.apple.com/documentation/mac/QuickDraw/QuickDraw-2.html"> http://developer.apple.com/documentation/mac/QuickDraw/QuickDraw-2.html</see>
+        /// </para>
+        /// </summary>
         public static String IMAGE_PICT = "image/pict";
 
         public static String EXTENSION_PICT = "tiff";
 
-        /**
-         * XML file.
-         */
+        /// <summary>
+        /// XML file.
+        /// </summary>
         public static String XML = "text/xml";
 
         public static String EXTENSION_XML = "xml";
