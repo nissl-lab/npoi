@@ -19,6 +19,7 @@ namespace TestCases.XWPF.UserModel
 {
     using NPOI;
     using NPOI.OpenXml4Net.OPC;
+    using NPOI.OpenXmlFormats.Wordprocessing;
     using NPOI.Util;
     using NPOI.XWPF;
     using NPOI.XWPF.Extractor;
@@ -40,13 +41,13 @@ namespace TestCases.XWPF.UserModel
             OPCPackage pack = doc.Package;
 
             bool found = false;
-            foreach (PackagePart part in pack.GetParts())
+            foreach(PackagePart part in pack.GetParts())
             {
-                if (part.ContentType.Equals(XWPFRelation.DOCUMENT.ContentType))
+                if(part.ContentType.Equals(XWPFRelation.DOCUMENT.ContentType))
                 {
                     found = true;
                 }
-                if (false == found)
+                if(false == found)
                 {
                     // successful tests should be silent
                     System.Console.WriteLine(part);
@@ -143,7 +144,7 @@ namespace TestCases.XWPF.UserModel
 
             byte[] newJpeg = ((XWPFPictureData)doc.GetRelationById(relationId)).Data;
             Assert.AreEqual(newJpeg.Length, jpeg.Length);
-            for (int i = 0; i < jpeg.Length; i++)
+            for(int i = 0; i < jpeg.Length; i++)
             {
                 Assert.AreEqual(newJpeg[i], jpeg[i]);
             }
@@ -153,17 +154,17 @@ namespace TestCases.XWPF.UserModel
         {
             XWPFDocument doc = new XWPFDocument();
 
-            doc.AddPictureData(new byte[10], (int)PictureType.EMF);
-            doc.AddPictureData(new byte[11], (int)PictureType.WMF);
-            doc.AddPictureData(new byte[12], (int)PictureType.PICT);
-            doc.AddPictureData(new byte[13], (int)PictureType.JPEG);
-            doc.AddPictureData(new byte[14], (int)PictureType.PNG);
-            doc.AddPictureData(new byte[15], (int)PictureType.DIB);
-            doc.AddPictureData(new byte[16], (int)PictureType.GIF);
-            doc.AddPictureData(new byte[17], (int)PictureType.TIFF);
-            doc.AddPictureData(new byte[18], (int)PictureType.EPS);
-            doc.AddPictureData(new byte[19], (int)PictureType.BMP);
-            doc.AddPictureData(new byte[20], (int)PictureType.WPG);
+            doc.AddPictureData(new byte[10], (int) PictureType.EMF);
+            doc.AddPictureData(new byte[11], (int) PictureType.WMF);
+            doc.AddPictureData(new byte[12], (int) PictureType.PICT);
+            doc.AddPictureData(new byte[13], (int) PictureType.JPEG);
+            doc.AddPictureData(new byte[14], (int) PictureType.PNG);
+            doc.AddPictureData(new byte[15], (int) PictureType.DIB);
+            doc.AddPictureData(new byte[16], (int) PictureType.GIF);
+            doc.AddPictureData(new byte[17], (int) PictureType.TIFF);
+            doc.AddPictureData(new byte[18], (int) PictureType.EPS);
+            doc.AddPictureData(new byte[19], (int) PictureType.BMP);
+            doc.AddPictureData(new byte[20], (int) PictureType.WPG);
 
             Assert.AreEqual(11, doc.AllPictures.Count);
 
@@ -287,7 +288,7 @@ namespace TestCases.XWPF.UserModel
 
             Assert.IsNotNull(allPictures);
             Assert.AreEqual(3, allPictures.Count);
-            foreach (XWPFPictureData xwpfPictureData in allPictures)
+            foreach(XWPFPictureData xwpfPictureData in allPictures)
             {
                 Assert.IsTrue(allPackagePictures.Contains(xwpfPictureData));
             }
@@ -297,7 +298,7 @@ namespace TestCases.XWPF.UserModel
                 allPictures.Add(allPictures[0]);
                 Assert.Fail("This list must be unmodifiable!");
             }
-            catch (NotSupportedException)
+            catch(NotSupportedException)
             {
                 // all ok
             }
@@ -319,7 +320,7 @@ namespace TestCases.XWPF.UserModel
                 allPackagePictures.Add(allPackagePictures[0]);
                 Assert.Fail("This list must be unmodifiable!");
             }
-            catch (NotSupportedException)
+            catch(NotSupportedException)
             {
                 // all ok
             }
@@ -406,22 +407,49 @@ namespace TestCases.XWPF.UserModel
         }
 
         [Test]
-	    [Ignore("XWPF should be able to write to a new Stream when opened Read-Only")]
-	    public void TestWriteFromReadOnlyOPC() {
-	        OPCPackage opc = OPCPackage.Open(
-	                POIDataSamples.GetDocumentInstance().GetFileInfo("SampleDoc.docx"),
-	                PackageAccess.READ
-	        );
-	        XWPFDocument doc = new XWPFDocument(opc);
-	        XWPFWordExtractor ext = new XWPFWordExtractor(doc);
-	        String origText = ext.Text;
-	    
-	        doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
-	        ext = new XWPFWordExtractor(doc);
-	    
-	        Assert.AreEqual(origText, ext.Text);
-	    }
+        [Ignore("XWPF should be able to write to a new Stream when opened Read-Only")]
+        public void TestWriteFromReadOnlyOPC()
+        {
+            OPCPackage opc = OPCPackage.Open(
+                    POIDataSamples.GetDocumentInstance().GetFileInfo("SampleDoc.docx"),
+                    PackageAccess.READ
+            );
+            XWPFDocument doc = new XWPFDocument(opc);
+            XWPFWordExtractor ext = new XWPFWordExtractor(doc);
+            String origText = ext.Text;
 
+            doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            ext = new XWPFWordExtractor(doc);
+
+            Assert.AreEqual(origText, ext.Text);
+        }
+
+        [Test]
+        public void TestDocVars()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("docVars.docx");
+
+            foreach(var part in doc.RelationParts)
+            {
+                var relationType = part.Relationship.RelationshipType;
+                if(relationType == XWPFRelation.SETTINGS.Relation)
+                {
+                    var settingsPart = (XWPFSettings)part.DocumentPart;
+
+                    using(var stream = settingsPart.GetPackagePart().GetInputStream())
+                    {
+                        var xmldoc = POIXMLDocumentPart.ConvertStreamToXml(stream);
+                        var ctSettings = SettingsDocument.Parse(xmldoc, POIXMLDocumentPart.NamespaceManager).Settings;
+                        var variables = ctSettings.docVars;
+
+                        Assert.IsNotNull(variables);
+                        Assert.AreEqual(5, variables.docVar.Count);
+
+                        for(int i = 0; i<variables.docVar.Count; i++)
+                            Assert.AreEqual((i+1).ToString(), variables.docVar[i].val);
+                    }
+                }
+            }
+        }
     }
-
 }
