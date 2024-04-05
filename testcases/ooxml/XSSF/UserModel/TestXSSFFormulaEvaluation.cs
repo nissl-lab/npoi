@@ -755,6 +755,19 @@ namespace TestCases.XSSF.UserModel
             Assert.AreSame(cell, same);
             wb.Close();
         }
+
+        [Test]
+        public void TestRoundDown()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("Rounddown_Issue.xlsx");
+            var sheet = wb.GetSheetAt(0);
+            var formula = new XSSFFormulaEvaluator(wb);
+            formula.EvaluateAll();
+            var cellReference = new CellReference("Q13");
+            var row = sheet.GetRow(cellReference.Row);
+            var cell = row.GetCell(cellReference.Col);
+            Assert.AreEqual(17.56, cell.NumericCellValue, 0.00000001);
+        }
     }
 
 }
