@@ -2255,7 +2255,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            if(valueField!=null&&(valueField.StartsWith(" ")||valueField.EndsWith(" ")))
+            if(valueField!=null&&(valueField.StartsWith(" ")||valueField.EndsWith(" ")||valueField.StartsWith("\t")||valueField.EndsWith("\t")))
             {
                 this.space = "preserve";
                 XmlHelper.WriteAttribute(sw, "xml:space", this.space);
