@@ -50,10 +50,10 @@ namespace TestCases.POIFS.Macros
                     stream.Close();
                 }
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 //throw new Exception(e);
-                throw e;
+                throw;
             }
 
             String testMacroContents = Encoding.UTF8.GetString(bytes);
@@ -88,39 +88,46 @@ namespace TestCases.POIFS.Macros
         {
             FromStream(POIDataSamples.GetSpreadSheetInstance(), "SimpleMacro.xls");
         }
+
         [Test]
         public void XSSFfromStream()
         {
             FromStream(POIDataSamples.GetSpreadSheetInstance(), "SimpleMacro.xlsm");
         }
+
         [Ignore("bug 59302: Found 0 macros")]
         [Test]
         public void HSLFfromStream()
         {
             FromStream(POIDataSamples.GetSlideShowInstance(), "SimpleMacro.ppt");
         }
+
         [Ignore("not support XSLF")]
         [Test]
         public void XSLFfromStream()
         {
             FromStream(POIDataSamples.GetSlideShowInstance(), "SimpleMacro.pptm");
         }
+
         [Test]
         public void HWPFfromStream()
         {
             FromStream(POIDataSamples.GetDocumentInstance(), "SimpleMacro.doc");
         }
+
         [Test]
         public void XWPFfromStream()
         {
             FromStream(POIDataSamples.GetDocumentInstance(), "SimpleMacro.docm");
         }
+
         [Ignore("Found 0 macros")]
         [Test]
         public void HDGFfromStream()
         {
             FromStream(POIDataSamples.GetDiagramInstance(), "SimpleMacro.vsd");
         }
+
         [Ignore("not support XDGF")]
         [Test]
         public void XDGFfromStream()
@@ -134,39 +141,46 @@ namespace TestCases.POIFS.Macros
         {
             FromFile(POIDataSamples.GetSpreadSheetInstance(), "SimpleMacro.xls");
         }
+
         [Test]
         public void XSSFfromFile()
         {
             FromFile(POIDataSamples.GetSpreadSheetInstance(), "SimpleMacro.xlsm");
         }
+
         [Ignore("bug 59302: Found 0 macros")]
         [Test]
         public void HSLFfromFile()
         {
             FromFile(POIDataSamples.GetSlideShowInstance(), "SimpleMacro.ppt");
         }
+
         [Ignore("not support XSLF")]
         [Test]
         public void XSLFfromFile()
         {
             FromFile(POIDataSamples.GetSlideShowInstance(), "SimpleMacro.pptm");
         }
+
         [Test]
         public void HWPFfromFile()
         {
             FromFile(POIDataSamples.GetDocumentInstance(), "SimpleMacro.doc");
         }
+
         [Test]
         public void XWPFfromFile()
         {
             FromFile(POIDataSamples.GetDocumentInstance(), "SimpleMacro.docm");
         }
+
         [Ignore("Found 0 macros")]
         [Test]
         public void HDGFfromFile()
         {
             FromFile(POIDataSamples.GetDiagramInstance(), "SimpleMacro.vsd");
         }
+
         [Ignore("not support XDGF")]
         [Test]
         public void XDGFfromFile()
@@ -180,17 +194,20 @@ namespace TestCases.POIFS.Macros
         {
             FromNPOIFS(POIDataSamples.GetSpreadSheetInstance(), "SimpleMacro.xls");
         }
+
         [Ignore("bug 59302: Found 0 macros")]
         [Test]
         public void HSLFfromNPOIFS()
         {
             FromNPOIFS(POIDataSamples.GetSlideShowInstance(), "SimpleMacro.ppt");
         }
+
         [Test]
         public void HWPFfromNPOIFS()
         {
             FromNPOIFS(POIDataSamples.GetDocumentInstance(), "SimpleMacro.doc");
         }
+
         [Ignore("Found 0 macros")]
         [Test]
         public void HDGFfromNPOIFS()
@@ -291,23 +308,15 @@ namespace TestCases.POIFS.Macros
             POITestCase.AssertContains(content, testMacroNoSub);
         }
 
-        [Ignore("by poi")]
         [Test]
         public void Bug59830()
         {
-            // This file is intentionally omitted from the test-data directory
-            // unless we can extract the vbaProject.bin from this Word 97-2003 file
-            // so that it's less likely to be opened and executed on a Windows computer.
-            // The file is attached to bug 59830.
-            // The Macro Virus only affects Windows computers, as it Makes a
-            // subprocess call to powershell.exe with an encoded payload
-            // The document Contains macros that execute on workbook open if macros
-            // are enabled
-            FileInfo doc = POIDataSamples.GetDocumentInstance().GetFileInfo("macro_virus.doc.do_not_open");
-            VBAMacroReader Reader = new VBAMacroReader(doc);
-            Dictionary<String, String> macros = Reader.ReadMacros();
-            Assert.IsNotNull(macros);
-            Reader.Close();
+            //test file is "609751.xls" in govdocs1
+            FileInfo f = POIDataSamples.GetSpreadSheetInstance().GetFileInfo("59830.xls");
+            VBAMacroReader r = new VBAMacroReader(f);
+            Dictionary<string, string> macros = r.ReadMacros();
+            Assert.IsNotNull(macros["Module20"]);
+            StringAssert.Contains("here start of superscripting", macros["Module20"]);
         }
 
         // This test is written as expected-to-fail and should be rewritten
@@ -315,43 +324,34 @@ namespace TestCases.POIFS.Macros
         [Test]
         public void Bug59858()
         {
-            try
-            {
-                FromFile(POIDataSamples.GetSpreadSheetInstance(), "59858.xls");
-                POITestCase.TestPassesNow(59858);
-            }
-            catch (IOException e)
-            {
-                if (Regex.Match(e.Message, "Module offset for '.+' was never Read.").Success)
-                {
-                    //e.PrintStackTrace();
-                    // NPE when Reading module.offset in VBAMacroReader.ReadMacros (approx line 258)
-                    POITestCase.SkipTest(e);
-                }
-                else
-                {
-                    // something unexpected failed
-                    throw e;
-                }
-            }
+            FileInfo f = POIDataSamples.GetSpreadSheetInstance().GetFileInfo("59858.xls");
+            VBAMacroReader r = new VBAMacroReader(f);
+            Dictionary<string, string> macros = r.ReadMacros();
+            Assert.IsNotNull(macros["Sheet4"]);
+            StringAssert.Contains("intentional constituent", macros["Sheet4"]);
         }
 
         // This test is written as expected-to-fail and should be rewritten
         // as expected-to-pass when the bug is fixed.
         [Test]
-        [Ignore("fix it when it is be fixed in poi")]
         public void Bug60158()
         {
-            try
-            {
-                FromFile(POIDataSamples.GetDocumentInstance(), "60158.docm");
-                POITestCase.TestPassesNow(60158);
-            }
-            catch (IndexOutOfRangeException e)
-            {
-                POITestCase.SkipTest(e);
-            }
+            FileInfo f = POIDataSamples.GetDocumentInstance().GetFileInfo("60158.docm");
+            VBAMacroReader r = new VBAMacroReader(f);
+            Dictionary<string, string> macros = r.ReadMacros();
+            Assert.IsNotNull(macros["NewMacros"]);
+            StringAssert.Contains("' dirty", macros["NewMacros"]);
+        }
+
+        [Test]
+        public void Bug60273()
+        {
+            //test file derives from govdocs1 147240.xls
+            FileInfo f = POIDataSamples.GetSpreadSheetInstance().GetFileInfo("60273.xls");
+            VBAMacroReader r = new VBAMacroReader(f);
+            Dictionary<string, string> macros = r.ReadMacros();
+            Assert.IsNotNull(macros["Module1"]);
+            StringAssert.Contains("9/8/2004", macros["Module1"]);
         }
     }
-
 }
