@@ -21,6 +21,8 @@ namespace TestCases.OOXML
     using NPOI.OpenXml4Net.Exceptions;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.Util;
+    using NPOI.XSSF.UserModel;
+    using NPOI.XWPF.UserModel;
     using NUnit.Framework;
     using System;
     using System.Collections.Generic;
@@ -241,7 +243,42 @@ namespace TestCases.OOXML
             }
 
         }
+        [Test]
+        public void TestGetNextPartNumber()
+        {
 
+            POIDataSamples pds = POIDataSamples.GetDocumentInstance();
+            OPCPackage pkg = PackageHelper.Open(pds.OpenResourceAsStream("WordWithAttachments.docx"));
+            OPCParser doc = new OPCParser(pkg);
+            try
+            {
+                doc.Parse(new TestFactory());
+
+                // Non-indexed parts: Word is taken, Excel is not
+                Assert.AreEqual(-1, doc.GetNextPartNumber(XWPFRelation.DOCUMENT, 0));
+                Assert.AreEqual(-1, doc.GetNextPartNumber(XWPFRelation.DOCUMENT, -1));
+                Assert.AreEqual(-1, doc.GetNextPartNumber(XWPFRelation.DOCUMENT, 99));
+                Assert.AreEqual(0, doc.GetNextPartNumber(XSSFRelation.WORKBOOK, 0));
+                Assert.AreEqual(0, doc.GetNextPartNumber(XSSFRelation.WORKBOOK, -1));
+                Assert.AreEqual(0, doc.GetNextPartNumber(XSSFRelation.WORKBOOK, 99));
+
+                // Indexed parts:
+                // Has 2 headers
+                Assert.AreEqual(0, doc.GetNextPartNumber(XWPFRelation.HEADER, 0));
+                Assert.AreEqual(3, doc.GetNextPartNumber(XWPFRelation.HEADER, -1));
+                Assert.AreEqual(3, doc.GetNextPartNumber(XWPFRelation.HEADER, 1));
+                Assert.AreEqual(8, doc.GetNextPartNumber(XWPFRelation.HEADER, 8));
+
+                // Has no Excel Sheets
+                Assert.AreEqual(0, doc.GetNextPartNumber(XSSFRelation.WORKSHEET, 0));
+                Assert.AreEqual(1, doc.GetNextPartNumber(XSSFRelation.WORKSHEET, -1));
+                Assert.AreEqual(1, doc.GetNextPartNumber(XSSFRelation.WORKSHEET, 1));
+            }
+            finally
+            {
+                doc.Close();
+            }
+        }
         [Test]
         public void TestCommitNullPart()
         {

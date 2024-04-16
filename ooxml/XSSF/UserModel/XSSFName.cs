@@ -21,6 +21,7 @@ using NPOI.SS.Formula;
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System.Text.RegularExpressions;
+using NPOI.SS;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -352,7 +353,28 @@ namespace NPOI.XSSF.UserModel
             return _ctName.name == cf.GetCTName().name && _ctName.localSheetId == cf.GetCTName().localSheetId && _ctName.Value==cf.RefersToFormula ;
         }
 
-        private static void ValidateName(String name)
+        /**
+         * https://support.office.com/en-us/article/Define-and-use-names-in-formulas-4D0F13AC-53B7-422E-AFD2-ABD7FF379C64#bmsyntax_rules_for_names
+         * 
+         * Valid characters:
+         *   First character: { letter | underscore | backslash }
+         *   Remaining characters: { letter | number | period | underscore }
+         *   
+         * Cell shorthand: cannot be { "C" | "c" | "R" | "r" }
+         * 
+         * Cell references disallowed: cannot be a cell reference $A$1 or R1C1
+         * 
+         * Spaces are not valid (follows from valid characters above)
+         * 
+         * Name length: (XSSF-specific?) 255 characters maximum
+         * 
+         * Case sensitivity: all names are case-insensitive
+         * 
+         * Uniqueness: must be unique (for names with the same scope)
+         *
+         * @param name
+         */
+        private static void ValidateName(string name)
         {
             /* equivalent to:
             Pattern.compile(
@@ -367,10 +389,17 @@ namespace NPOI.XSSF.UserModel
             {
                 throw new ArgumentException("Name cannot be blank");
             }
-
+            if (name.Length > 255)
+            {
+                throw new ArgumentException("Invalid name: '" + name + "': cannot exceed 255 characters in length");
+            }
+            if (name.Equals("R", StringComparison.OrdinalIgnoreCase) || name.Equals("C", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new ArgumentException("Invalid name: '" + name + "': cannot be special shorthand R or C");
+            }
             // is first character valid?
             char c = name[0];
-            String allowedSymbols = "_";
+            string allowedSymbols = "_\\";
             bool characterIsValid = (char.IsLetter(c) || allowedSymbols.IndexOf(c) != -1);
             if (!characterIsValid)
             {
@@ -378,14 +407,32 @@ namespace NPOI.XSSF.UserModel
             }
 
             // are all other characters valid?
-            allowedSymbols = "_\\"; //backslashes needed for unicode escape
+            allowedSymbols = "_.\\"; //backslashes needed for unicode escape
             foreach (char ch in name.ToCharArray())
             {
                 characterIsValid = (char.IsLetterOrDigit(ch) || allowedSymbols.IndexOf(ch) != -1);
                 if (!characterIsValid)
                 {
-                    throw new ArgumentException("Invalid name: '" + name + "'");
+                    throw new ArgumentException("Invalid name: '" + name + "': name must be letter, digit, period, or underscore");
                 }
+            }
+
+            // Is the name a valid $A$1 cell reference
+            // Because $, :, and ! are disallowed characters, A1-style references become just a letter-number combination
+            if (Regex.IsMatch(name, "[A-Za-z]+\\d+"))
+            {
+                string col = Regex.Replace(name, "\\d", "");
+                string row = Regex.Replace(name, "[A-Za-z]", "");
+                if (CellReference.CellReferenceIsWithinRange(col, row, SpreadsheetVersion.EXCEL97))
+                {
+                    throw new ArgumentException("Invalid name: '" + name + "': cannot be $A$1-style cell reference");
+                }
+            }
+
+            // Is the name a valid R1C1 cell reference?
+            if (Regex.IsMatch(name, "[Rr]\\d+[Cc]\\d+"))
+            {
+                throw new ArgumentException("Invalid name: '" + name + "': cannot be R1C1-style cell reference");
             }
         }
     }
