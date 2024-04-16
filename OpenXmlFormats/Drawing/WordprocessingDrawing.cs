@@ -444,10 +444,10 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             if (node == null)
                 return null;
             CT_Inline ctObj = new CT_Inline();
-            ctObj.distT = XmlHelper.ReadUInt(node.Attributes["wp:distT"]);
-            ctObj.distB = XmlHelper.ReadUInt(node.Attributes["wp:distB"]);
-            ctObj.distL = XmlHelper.ReadUInt(node.Attributes["wp:distL"]);
-            ctObj.distR = XmlHelper.ReadUInt(node.Attributes["wp:distR"]);
+            ctObj.distT = XmlHelper.ReadUInt(node.Attributes["distT"]);
+            ctObj.distB = XmlHelper.ReadUInt(node.Attributes["distB"]);
+            ctObj.distL = XmlHelper.ReadUInt(node.Attributes["distL"]);
+            ctObj.distR = XmlHelper.ReadUInt(node.Attributes["distR"]);
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "extent")
