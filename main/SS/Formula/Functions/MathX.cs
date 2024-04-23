@@ -170,8 +170,10 @@ namespace NPOI.SS.Formula.Functions
             {
                 if(p != 0)
                 {
-                    var val = new BigDecimal(n);
-                    retval = (double) BigDecimal.Round(val, p);
+                    var absVal = new BigDecimal(Math.Abs(n));
+                    var roundedValue = BigDecimal.Round(absVal, p);
+
+                    retval = ((double)roundedValue) * Sign(n);
                 }
                 else
                 {
