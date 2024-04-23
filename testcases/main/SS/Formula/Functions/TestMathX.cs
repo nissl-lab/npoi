@@ -757,6 +757,9 @@ namespace TestCases.SS.Formula.Functions
             d = -123.99; p = 0;
             AssertEquals("roundDown ", -123, MathX.RoundDown(d, p));
 
+            d = -123.99; p = 2;
+            AssertEquals("roundDown ", -123.99, MathX.RoundDown(d, p));
+
             d = 123.99; p = 2;
             AssertEquals("roundDown ", 123.99, MathX.RoundDown(d, p));
 
