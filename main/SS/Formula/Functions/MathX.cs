@@ -169,8 +169,8 @@ namespace NPOI.SS.Formula.Functions
             {
                 if (p != 0)
                 {
-                    decimal temp = Convert.ToDecimal(Math.Pow(10, p));
-                    retval = Convert.ToDouble(Math.Floor(((decimal)n) * temp) / temp);
+                    double temp = Math.Pow(10, p);
+                    retval = Sign(n) * Math.Round((Math.Abs(n) * temp) - 0.5, MidpointRounding.AwayFromZero) / temp;
                 }
                 else
                 {
