@@ -548,6 +548,20 @@ namespace NPOI.HSSF.UserModel
             dvt.AddDataValidation(dvRecord);
         }
 
+        public void RemoveDataValidation(IDataValidation dataValidation)
+        {
+            if (dataValidation == null)
+            {
+                throw new ArgumentException("objValidation must not be null");
+            }
+
+            HSSFDataValidation hssfDataValidation = (HSSFDataValidation)dataValidation;
+            DataValidityTable dvt = _sheet.GetOrCreateDataValidityTable();
+
+            DVRecord dvRecord = hssfDataValidation.CreateDVRecord(this);
+            dvt.RemoveDataValidation(dvRecord);
+        }
+
         /// <summary>
         /// Get the visibility state for a given column.F:\Gloria\�о�\�ļ���ʽ\NPOI\src\NPOI\HSSF\Util\HSSFDataValidation.cs
         /// </summary>

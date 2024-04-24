@@ -21,7 +21,7 @@
     <PackageReference Include="BouncyCastle.Cryptography" Version="2.3.0" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="SixLabors.Fonts" Version="1.0.1" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.7" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.8" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' != 'net472' ">

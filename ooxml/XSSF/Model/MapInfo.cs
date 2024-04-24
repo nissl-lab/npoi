@@ -50,11 +50,9 @@ namespace NPOI.XSSF.Model
         public MapInfo()
             : base()
         {
-
             mapInfo = new CT_MapInfo();
-
         }
-        XmlDocument xml = null;
+
         internal MapInfo(PackagePart part)
             : base(part)
         {
@@ -166,10 +164,9 @@ namespace NPOI.XSSF.Model
 
         protected void WriteTo(Stream out1)
         {
-            //MapInfoDocument doc = new MapInfoDocument();
-            //doc.SetMapInfo(mapInfo);
-            //doc.Save(out1);
-            xml.Save(out1);
+            MapInfoDocument doc = new MapInfoDocument();
+            doc.SetMapInfo(mapInfo);
+            doc.Save(out1);
         }
 
 
