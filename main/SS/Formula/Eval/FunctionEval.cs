@@ -391,7 +391,7 @@ namespace NPOI.SS.Formula.Eval
             retval[306] = new NotImplementedFunction("CHITEST"); // CHITEST
             retval[307] = new NotImplementedFunction("CORREL"); // CORREL
             retval[308] = new NotImplementedFunction("COVAR"); // COVAR
-            retval[309] = new NotImplementedFunction("FORECAST"); // FORECAST
+            retval[309] = new Forecast(); // FORECAST
             retval[310] = new NotImplementedFunction("FTEST"); // FTEST
             retval[311] = new Intercept(); // INTERCEPT
             retval[312] = new NotImplementedFunction("PEARSON"); // PEARSON
