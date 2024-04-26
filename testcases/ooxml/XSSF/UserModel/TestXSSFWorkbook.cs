@@ -30,6 +30,8 @@ using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -1215,6 +1217,84 @@ namespace TestCases.XSSF.UserModel
                     Assert.AreEqual("Sheet1", wb.GetSheetName(0));
                 }
             }
+        }
+
+
+        /// <summary>
+        /// Issue 1252 https://github.com/nissl-lab/npoi/issues/1252
+        /// </summary>
+        [Test]
+        public void TestSavingXlsxTwiceWithBmpPictures()
+        {
+            using XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("Issue1252.xlsx");
+            byte[] bmpData = GenerateBitmap(100, 100);
+            InsertPicture(wb, bmpData, PictureType.BMP);
+
+            using XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            InsertPicture(wb2, bmpData, PictureType.BMP);
+
+            using XSSFWorkbook wb3 = XSSFTestDataSamples.WriteOutAndReadBack(wb2);
+            InsertPicture(wb3, bmpData, PictureType.BMP);
+            XSSFTestDataSamples.WriteOutAndClose(wb3);
+        }
+
+        private static void InsertPicture(IWorkbook wb, byte[] data, PictureType picType)
+        {
+            ISheet sheet = wb.GetSheetAt(0);
+            IDrawing patriarch = sheet.DrawingPatriarch;
+            XSSFClientAnchor anchor = new(500, 200, 0, 0, 2, 2, 4, 7) {
+                AnchorType = AnchorType.MoveDontResize
+            };
+            int imageId = wb.AddPicture(data, picType);
+            XSSFPicture picture = (XSSFPicture)patriarch.CreatePicture(anchor, imageId);
+            picture.LineStyle = LineStyle.DashDotGel;
+            picture.Resize();
+        }
+
+        private static byte[] GenerateBitmap(int width, int height) {
+            // BMP file header
+            byte[] header = new byte[]
+        {
+            0x42, 0x4D, // BM (Bitmap identifier)
+            0x36, 0x00, 0x0C, 0x00, // File size (54 + width * height)
+            0x00, 0x00, // Reserved
+            0x00, 0x00, // Reserved
+            0x36, 0x00, 0x00, 0x00, // Offset to pixel array
+            0x28, 0x00, 0x00, 0x00, // Header size (40 bytes)
+            0x64, 0x00, 0x00, 0x00, // Width
+            0x64, 0x00, 0x00, 0x00, // Height
+            0x01, 0x00, // Planes
+            0x18, 0x00, // Bits per pixel (24-bit)
+            0x00, 0x00, 0x00, 0x00, // Compression (none)
+            0x00, 0x00, 0x00, 0x00, // Image size (can be 0 for uncompressed images)
+            0x00, 0x00, 0x00, 0x00, // X pixels per meter
+            0x00, 0x00, 0x00, 0x00, // Y pixels per meter
+            0x00, 0x00, 0x00, 0x00, // Colors in color table
+            0x00, 0x00, 0x00, 0x00, // Important color count
+        };
+
+            // Set width and height in header
+            BitConverter.GetBytes(width).CopyTo(header, 0x12);
+            BitConverter.GetBytes(height).CopyTo(header, 0x16);
+
+            // Create a byte array to hold the pixel data
+            int pixelDataSize = width * height * 3; // 3 bytes per pixel for 24-bit color
+            byte[] pixels = new byte[pixelDataSize];
+
+            // Set all pixels to black
+            for(int i = 0; i < pixelDataSize; i += 3)
+            {
+                pixels[i] = 0x00; // Blue
+                pixels[i + 1] = 0x00; // Green
+                pixels[i + 2] = 0x00; // Red
+            }
+
+            // Concatenate header and pixel data
+            byte[] bmpData = new byte[header.Length + pixels.Length];
+            header.CopyTo(bmpData, 0);
+            pixels.CopyTo(bmpData, header.Length);
+
+            return bmpData;
         }
     }
 }
