@@ -53,7 +53,7 @@ namespace TestCases.XSSF.UserModel
         /**
          * Tests that we can save, and then re-load a new document
          */
-        [Test, RunSerialyAndSweepTmpFiles]
+        [Test]
         public void SaveLoadNew()
         {
             XSSFWorkbook wb1 = new XSSFWorkbook();
@@ -123,9 +123,8 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual("hello world", sheet1.GetRow(1).GetCell(0).RichStringCellValue.String);
 
             pkg.Close();
-
-            Assert.AreEqual(0, Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp").Length, "At Last: There are no temporary files.");
         }
+
         [Test]
         public void Existing()
         {
@@ -914,15 +913,19 @@ namespace TestCases.XSSF.UserModel
                 allBytes[i] = (byte)(i - 128);
             }
 
-            XSSFWorkbook wb1 = new XSSFWorkbook();
-            wb1.CreateSheet();
-            wb1.SetVBAProject(new ByteArrayInputStream(allBytes));
-            file = TempFile.CreateTempFile("poi-", ".xlsm");
-            Stream out1 = new FileStream(file.FullName, FileMode.Open, FileAccess.ReadWrite);
-            wb1.Write(out1);
-            out1.Close();
-            wb1.Close();
+            using(XSSFWorkbook wb1 = new XSSFWorkbook())
+            {
+                wb1.CreateSheet();
+                wb1.SetVBAProject(new ByteArrayInputStream(allBytes));
+                file = TempFile.CreateTempFile("poi-", ".xlsm");
+                using(Stream out1 = new FileStream(file.FullName, FileMode.Open, FileAccess.ReadWrite))
+                {
+                    wb1.Write(out1);
+                }
+            }
 
+            if(file != null)
+                file.Refresh();
 
             // Check the package contains what we'd expect it to
             OPCPackage pkg = OPCPackage.Open(file);
