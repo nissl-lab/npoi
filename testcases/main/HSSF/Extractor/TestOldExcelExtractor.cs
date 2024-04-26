@@ -17,16 +17,16 @@
 
 namespace TestCases.HSSF.Extractor
 {
-    using System;
-    using NPOI.HSSF;
-    using TestCases;
-    using NUnit.Framework;
-    using System.IO;
-    using TestCases.HSSF;
+    using NPOI;
     using NPOI.HSSF.Extractor;
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
+    using NUnit.Framework;
+    using System;
+    using System.IO;
     using System.Text;
+    using TestCases;
+    using TestCases.HSSF;
 
     /**
      * Unit tests for the Excel 5/95 and Excel 4 (and older) text 
@@ -386,7 +386,25 @@ namespace TestCases.HSSF.Extractor
                 Console.SetOut(save);
             }
         }
-
+        [Test]
+        public void TestEncryptionException()
+        {
+            //test file derives from Common Crawl
+            FileInfo file = HSSFTestDataSamples.GetSampleFile("60284.xls");
+            OldExcelExtractor ex = new OldExcelExtractor(file);
+            Assert.AreEqual(5, ex.BiffVersion);
+            Assert.AreEqual(5, ex.FileType);
+            try
+            {
+                var x = ex.Text;
+                Assert.Fail();
+            }
+            catch (EncryptedDocumentException)
+            {
+                Assert.IsTrue(true, "correct exception thrown");
+            }
+            ex.Close();
+        }
     }
 
 }

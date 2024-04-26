@@ -317,6 +317,7 @@ namespace TestCases.POIFS.Macros
             Dictionary<string, string> macros = r.ReadMacros();
             Assert.IsNotNull(macros["Module20"]);
             StringAssert.Contains("here start of superscripting", macros["Module20"]);
+            r.Close();
         }
 
         // This test is written as expected-to-fail and should be rewritten
@@ -329,6 +330,7 @@ namespace TestCases.POIFS.Macros
             Dictionary<string, string> macros = r.ReadMacros();
             Assert.IsNotNull(macros["Sheet4"]);
             StringAssert.Contains("intentional constituent", macros["Sheet4"]);
+            r.Close();
         }
 
         // This test is written as expected-to-fail and should be rewritten
@@ -341,6 +343,7 @@ namespace TestCases.POIFS.Macros
             Dictionary<string, string> macros = r.ReadMacros();
             Assert.IsNotNull(macros["NewMacros"]);
             StringAssert.Contains("' dirty", macros["NewMacros"]);
+            r.Close();
         }
 
         [Test]
@@ -352,6 +355,7 @@ namespace TestCases.POIFS.Macros
             Dictionary<string, string> macros = r.ReadMacros();
             Assert.IsNotNull(macros["Module1"]);
             StringAssert.Contains("9/8/2004", macros["Module1"]);
+            r.Close();
         }
     }
 }

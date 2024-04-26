@@ -1495,9 +1495,7 @@ namespace TestCases.XSSF.UserModel
         /**
          * Sum across multiple workbooks
          *  eg =SUM($Sheet1.C1:$Sheet4.C1)
-         * DISABLED As we can't currently Evaluate these
          */
-        [Ignore("by poi")]
         [Test]
         public void Test48703()
         {

@@ -1380,9 +1380,11 @@ namespace TestCases.SS.UserModel
             wb.Close();
         }
 
-        [Ignore("by poi")]
+        // Bug 58648: FormulaParser throws exception in parseSimpleFactor() when getCellFormula()
+        // is called on a cell and the formula contains spaces between closing parentheses ") )"
+        // https://bz.apache.org/bugzilla/show_bug.cgi?id=58648
         [Test]
-        public void test58648()
+        public void Test58648()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ICell cell = wb.CreateSheet().CreateRow(0).CreateCell(0);

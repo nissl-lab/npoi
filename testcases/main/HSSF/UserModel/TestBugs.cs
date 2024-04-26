@@ -2749,12 +2749,13 @@ namespace TestCases.HSSF.UserModel
                 Assert.IsTrue(text.Contains("Bottom Right Cell"));
             }
         }
+
         /**
-     * Sum across multiple workbooks
-     *  eg =SUM($Sheet2.A1:$Sheet3.A1)
-     * DISABLED - We currently get the formula wrong, and mis-evaluate
-     */
-        public void DISABLEDtest48703()
+         * Sum across multiple workbooks
+         *  eg =SUM($Sheet2.A1:$Sheet3.A1)
+         */
+        [Test]
+        public void Test48703()
         {
             HSSFWorkbook wb = OpenSample("48703.xls");
             Assert.AreEqual(3, wb.NumberOfSheets);
@@ -2764,7 +2765,7 @@ namespace TestCases.HSSF.UserModel
             IRow r = sheet.GetRow(0);
             ICell c = r.GetCell(0);
 
-            Assert.AreEqual("SUM(Sheet2!A1:Sheet3!A1)", c.CellFormula);
+            Assert.AreEqual("SUM(Sheet2:Sheet3!A1)", c.CellFormula);
             Assert.AreEqual(4.0, c.NumericCellValue);
 
             // Check the evaluated result
