@@ -2304,11 +2304,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            XmlHelper.WriteAttribute(sw, "w:color", this.color);
             if (this.sz != null)
                 XmlHelper.WriteAttribute(sw, "w:sz", (ulong)this.sz, true);
            if (this.space != null)
                XmlHelper.WriteAttribute(sw, "w:space", (ulong)this.space, true);
+            XmlHelper.WriteAttribute(sw, "w:color", this.color);
             if(this.themeColor!= ST_ThemeColor.none)
                 XmlHelper.WriteAttribute(sw, "w:themeColor", this.themeColor.ToString());
             XmlHelper.WriteAttribute(sw, "w:themeTint", this.themeTint);

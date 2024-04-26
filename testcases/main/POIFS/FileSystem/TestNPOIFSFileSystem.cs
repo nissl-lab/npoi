@@ -109,14 +109,16 @@ namespace TestCases.POIFS.FileSystem
         protected static NPOIFSFileSystem WriteOutFileAndReadBack(NPOIFSFileSystem original)
         {
             FileInfo file = TempFile.CreateTempFile("TestPOIFS", ".ole2");
-            using (FileStream fout = file.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite))
             try
             {
-                original.WriteFileSystem(fout);
+                using(FileStream fout = file.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                { 
+                    original.WriteFileSystem(fout);
+                }
             }
-            finally
+            catch
             {
-                fout.Close();
+                // avoid throw exception
             }
             original.Close();
             return new NPOIFSFileSystem(file, false);

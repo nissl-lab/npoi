@@ -3406,6 +3406,51 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
 
+        /// <summary>
+        /// Other things, including charts, may end up taking Drawing part
+        /// numbers. (Uses a test file hand-crafted with an extra non-drawing
+        /// part with a part number)
+        /// </summary>
+        [Test]
+        public void DrawingNumbersAlreadyTaken_60255()
+        {
+
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("60255_extra_drawingparts.xlsx");
+            Assert.AreEqual(4, wb.NumberOfSheets);
+
+            // Sheet 3 starts with a Drawing
+            ISheet sheet = wb.GetSheetAt(0);
+            Assert.IsNull(sheet.DrawingPatriarch);
+            sheet = wb.GetSheetAt(1);
+            Assert.IsNull(sheet.DrawingPatriarch);
+            sheet = wb.GetSheetAt(2);
+            Assert.IsNotNull(sheet.DrawingPatriarch);
+            sheet = wb.GetSheetAt(3);
+            Assert.IsNull(sheet.DrawingPatriarch);
+
+            // Add another sheet, and give it a Drawing
+            sheet = wb.CreateSheet();
+            Assert.IsNull(sheet.DrawingPatriarch);
+            sheet.CreateDrawingPatriarch();
+            Assert.IsNotNull(sheet.DrawingPatriarch);
+
+            // Save and check
+            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.AreEqual(5, wb.NumberOfSheets);
+
+            // Sheets 3 and 5 now
+            sheet = wb.GetSheetAt(0);
+            Assert.IsNull(sheet.DrawingPatriarch);
+            sheet = wb.GetSheetAt(1);
+            Assert.IsNull(sheet.DrawingPatriarch);
+            sheet = wb.GetSheetAt(2);
+            Assert.IsNotNull(sheet.DrawingPatriarch);
+            sheet = wb.GetSheetAt(3);
+            Assert.IsNull(sheet.DrawingPatriarch);
+            sheet = wb.GetSheetAt(4);
+            Assert.IsNotNull(sheet.DrawingPatriarch);
+        }
+
         [Test]
         [Ignore("TODO FIX CI TESTS")]
         public void Bug61063()

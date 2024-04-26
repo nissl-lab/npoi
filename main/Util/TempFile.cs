@@ -51,9 +51,16 @@ namespace NPOI.Util
                 Directory.CreateDirectory(dir);
 
             Random rnd = new Random(DateTime.Now.Millisecond);
+            rnd.Next();
             Thread.Sleep(10);
             //return prefix + rnd.Next() + suffix;
-            return Path.Combine(dir, prefix + rnd.Next() + suffix);
+            string path = Path.Combine(dir, prefix + rnd.Next() + suffix);
+            while(File.Exists(path))
+            {
+                Thread.Sleep(10);
+                path = Path.Combine(dir, prefix + rnd.Next() + suffix);
+            }
+            return path;
         }
     }
 }

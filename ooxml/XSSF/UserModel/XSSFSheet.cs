@@ -1743,13 +1743,14 @@ namespace NPOI.XSSF.UserModel
                 return GetDrawingPatriarch();
             }
 
-            //drawingNumber = #drawings.Count + 1
-            int DrawingNumber = GetPackagePart()
+            // Default drawingNumber = #drawings.Count + 1
+            int drawingNumber = GetPackagePart()
                 .Package.GetPartsByContentType(XSSFRelation.DRAWINGS.ContentType).Count + 1;
+            drawingNumber = GetNextPartNumber(XSSFRelation.DRAWINGS, drawingNumber);
             RelationPart rp = CreateRelationship(
                 XSSFRelation.DRAWINGS,
                 XSSFFactory.GetInstance(),
-                DrawingNumber,
+                drawingNumber,
                 false);
             XSSFDrawing drawing = rp.DocumentPart as XSSFDrawing;
             string relId = rp.Relationship.Id;
@@ -3326,7 +3327,31 @@ namespace NPOI.XSSF.UserModel
             CT_DataValidation newval = dataValidations.AddNewDataValidation();
             newval.Set(xssfDataValidation.GetCTDataValidation());
             dataValidations.count = (uint)currentCount + 1;
+        }
 
+        public void RemoveDataValidation(IDataValidation dataValidation)
+        {
+            XSSFDataValidation xssfDataValidation = (XSSFDataValidation)dataValidation;
+            CT_DataValidations dataValidations = worksheet.dataValidations;
+
+            if (dataValidations is null)
+            {
+                return;
+            }
+            
+            int currentCount = dataValidations.sizeOfDataValidationArray();
+
+            for (int i = 0; i < currentCount; i++)
+            {
+                CT_DataValidation ctDataValidation = dataValidations.dataValidation[i];
+                
+                if (ctDataValidation.Equals(xssfDataValidation.GetCTDataValidation()))
+                {
+                    dataValidations.dataValidation.RemoveAt(i);
+                    dataValidations.count = (uint)currentCount - 1;
+                    return;
+                }
+            }
         }
 
         public IAutoFilter SetAutoFilter(CellRangeAddress range)
