@@ -1,0 +1,174 @@
+﻿/*
+ *  ====================================================================
+ *    Licensed to the Apache Software Foundation (ASF) under one or more
+ *    contributor license agreements.  See the NOTICE file distributed with
+ *    this work for Additional information regarding copyright ownership.
+ *    The ASF licenses this file to You under the Apache License, Version 2.0
+ *    (the "License"); you may not use this file except in compliance with
+ *    the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ * ====================================================================
+ */
+
+namespace TestCases.SS.Formula.Functions
+{
+    using NUnit.Framework;
+    using System;
+    using HSSF;
+    using NPOI.SS.Formula.Eval;
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.Formula.Functions;
+
+    /**
+     * Test for Excel function INTERCEPT()
+     *
+     * @author Ken Smith
+     */
+    [TestFixture]
+    public class TestForecast
+    {
+        private static readonly Function FORECAST = new Forecast();
+
+        private static ValueEval Invoke(Function function, ValueEval x, ValueEval xArray, ValueEval yArray)
+        {
+            ValueEval[] args = [x, xArray, yArray];
+            return function.Evaluate(args, -1, (short) -1);
+        }
+
+        private void Confirm(Function function, ValueEval x, ValueEval xArray, ValueEval yArray, double expected)
+        {
+            ValueEval result = Invoke(function, x, xArray, yArray);
+            Assert.AreEqual(typeof(NumberEval), result.GetType());
+            Assert.AreEqual(expected, ((NumberEval) result).NumberValue, 0);
+        }
+
+        private void ConfirmError(Function function, ValueEval x, ValueEval xArray, ValueEval yArray,
+            ErrorEval expectedError)
+        {
+            ValueEval result = Invoke(function, x, xArray, yArray);
+            Assert.AreEqual(typeof(ErrorEval), result.GetType());
+            Assert.AreEqual(expectedError.ErrorCode, ((ErrorEval) result).ErrorCode);
+        }
+
+        private void ConfirmError(ValueEval x, ValueEval xArray, ValueEval yArray, ErrorEval expectedError)
+        {
+            ConfirmError(FORECAST, x, xArray, yArray, expectedError);
+        }
+
+        [Test]
+        public void TestBasic()
+        {
+            double exp = Math.Pow(10, 7.5);
+            ValueEval x = new NumberEval(100);
+            ValueEval[] yValues = [
+                new NumberEval(3 + exp), 
+                new NumberEval(4 + exp),
+                new NumberEval(2 + exp),
+                new NumberEval(5 + exp),
+                new NumberEval(4 + exp),
+                new NumberEval(7 + exp)
+            ];
+            ValueEval areaEvalY = CreateAreaEval(yValues);
+
+            ValueEval[] xValues = [
+                new NumberEval(1), 
+                new NumberEval(2), 
+                new NumberEval(3), 
+                new NumberEval(4), 
+                new NumberEval(5),
+                new NumberEval(6)
+            ];
+            ValueEval areaEvalX = CreateAreaEval(xValues);
+            Confirm(FORECAST, x, areaEvalY, areaEvalX, 31622780.0302553);
+            // Excel 365 build 2402 gives 31622780.0302553
+        }
+
+        /**
+         * number of items in array is not limited to 30
+         */
+        [Test]
+        public void TestLargeArrays()
+        {
+            ValueEval x = new NumberEval(100);
+            ValueEval[] yValues = CreateMockNumberArray(100, 3); // [1,2,0,1,2,0,...,0,1]
+            yValues[0] = new NumberEval(2.0); // Changes first element to 2
+            ValueEval[] xValues = CreateMockNumberArray(100, 101); // [1,2,3,4,...,99,100]
+
+            Confirm(FORECAST, x, CreateAreaEval(xValues), CreateAreaEval(yValues), 51.74384236453202);
+            // Excel 2010 gives 51.74384236453200
+        }
+
+        private ValueEval[] CreateMockNumberArray(int size, double value)
+        {
+            ValueEval[] result = new ValueEval[size];
+            for(int i = 0; i < result.Length; i++)
+            {
+                result[i] = new NumberEval((i + 1) % value);
+            }
+
+            return result;
+        }
+
+        private static ValueEval CreateAreaEval(ValueEval[] values)
+        {
+            string refStr = "A1:A" + values.Length;
+            return EvalFactory.CreateAreaEval(refStr, values);
+        }
+
+        [Test]
+        public void TestErrors()
+        {
+            var x = new NumberEval(100);
+            ValueEval[] xValues = [ErrorEval.REF_INVALID, new NumberEval(2)];
+            ValueEval areaEvalX = CreateAreaEval(xValues);
+            ValueEval[] yValues = [new NumberEval(2), ErrorEval.NULL_INTERSECTION];
+            ValueEval areaEvalY = CreateAreaEval(yValues);
+            ValueEval[] zValues = [
+                // wrong size
+                new NumberEval(2)
+            ];
+            ValueEval areaEvalZ = CreateAreaEval(zValues);
+
+            // if either arg is an error, that error propagates
+            ConfirmError(x, ErrorEval.REF_INVALID, ErrorEval.NAME_INVALID, ErrorEval.REF_INVALID);
+            ConfirmError(x, areaEvalX, ErrorEval.NAME_INVALID, ErrorEval.NAME_INVALID);
+            ConfirmError(x, ErrorEval.NAME_INVALID, areaEvalX, ErrorEval.NAME_INVALID);
+
+            // array sizes must match
+            ConfirmError(x, areaEvalX, areaEvalZ, ErrorEval.NA);
+            ConfirmError(x, areaEvalZ, areaEvalY, ErrorEval.NA);
+
+            // any error in an array item propagates up
+            ConfirmError(x, areaEvalX, areaEvalX, ErrorEval.REF_INVALID);
+
+            // search for errors array by array, not pair by pair
+            ConfirmError(x, areaEvalX, areaEvalY, ErrorEval.NULL_INTERSECTION);
+            ConfirmError(x, areaEvalY, areaEvalX, ErrorEval.REF_INVALID);
+        }
+
+        /**
+         *  Example from
+         *  https://support.microsoft.com/en-us/office/forecast-and-forecast-linear-functions-50ca49c9-7b40-4892-94e4-7ad38bbeda99
+         */
+        [Test]
+        public void TestFromFile()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("Forecast.xls");
+            HSSFFormulaEvaluator fe = new(wb);
+
+            ISheet example1 = wb.GetSheet("Example 1");
+            ICell a8 = example1.GetRow(7).GetCell(0);
+            Assert.AreEqual("FORECAST(30,A2:A6,B2:B6)", a8.CellFormula);
+            fe.Evaluate(a8);
+            Assert.AreEqual(10.60725309, a8.NumericCellValue, 0.00000001);
+        }
+    }
+}
