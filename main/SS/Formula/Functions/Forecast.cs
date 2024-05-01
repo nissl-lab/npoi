@@ -15,10 +15,26 @@ namespace NPOI.SS.Formula.Functions
     /// </summary>
     public class Forecast : Fixed3ArgFunction
     {
-        public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1, ValueEval arg2)
+        public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1,
+            ValueEval arg2)
         {
             try
             {
+                if(arg0 is ErrorEval arg0Error)
+                {
+                    return arg0Error;
+                }
+
+                if(arg1 is ErrorEval arg1Error)
+                {
+                    return arg1Error;
+                }
+
+                if(arg2 is ErrorEval arg2Error)
+                {
+                    return arg2Error;
+                }
+
                 double x = NumericFunction.SingleOperandEvaluate(arg0, srcRowIndex, srcColumnIndex);
                 double[] yValues = GetNumericArray(arg1);
                 double[] xValues = GetNumericArray(arg2);

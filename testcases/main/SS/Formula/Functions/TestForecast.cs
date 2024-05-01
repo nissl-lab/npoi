@@ -45,7 +45,7 @@ namespace TestCases.SS.Formula.Functions
         {
             ValueEval x = new NumberEval(100);
             ValueEval[] yValues = [
-                new NumberEval(1), 
+                new NumberEval(1),
                 new NumberEval(2),
                 new NumberEval(3),
                 new NumberEval(4),
@@ -54,17 +54,17 @@ namespace TestCases.SS.Formula.Functions
             ];
 
             ValueEval[] xValues = [
-                new NumberEval(2), 
-                new NumberEval(4), 
-                new NumberEval(6), 
-                new NumberEval(8), 
+                new NumberEval(2),
+                new NumberEval(4),
+                new NumberEval(6),
+                new NumberEval(8),
                 new NumberEval(10),
                 new NumberEval(12)
             ];
             Confirm(x, CreateAreaEval(yValues), CreateAreaEval(xValues), 50.0);
             // Excel 365 build 2402 gives 50.0
         }
-        
+
         /// <summary>
         /// This test is replicated in the "TestLargeNumbers" tab of the "Forecast.xls" file.
         /// </summary>
@@ -74,7 +74,7 @@ namespace TestCases.SS.Formula.Functions
             double exp = Math.Pow(10, 7.5);
             ValueEval x = new NumberEval(100);
             ValueEval[] yValues = [
-                new NumberEval(3 + exp), 
+                new NumberEval(3 + exp),
                 new NumberEval(4 + exp),
                 new NumberEval(2 + exp),
                 new NumberEval(5 + exp),
@@ -83,10 +83,10 @@ namespace TestCases.SS.Formula.Functions
             ];
 
             ValueEval[] xValues = [
-                new NumberEval(1), 
-                new NumberEval(2), 
-                new NumberEval(3), 
-                new NumberEval(4), 
+                new NumberEval(1),
+                new NumberEval(2),
+                new NumberEval(3),
+                new NumberEval(4),
                 new NumberEval(5),
                 new NumberEval(6)
             ];
@@ -112,32 +112,28 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestErrors()
         {
-            var x = new NumberEval(100);
-            ValueEval[] xValues = [ErrorEval.REF_INVALID, new NumberEval(2)];
-            ValueEval areaEvalX = CreateAreaEval(xValues);
-            ValueEval[] yValues = [new NumberEval(2), ErrorEval.NULL_INTERSECTION];
-            ValueEval areaEvalY = CreateAreaEval(yValues);
-            ValueEval[] zValues = [
-                // wrong size
-                new NumberEval(2)
-            ];
-            ValueEval areaEvalZ = CreateAreaEval(zValues);
+            NumberEval x = new(100);
+
+            ValueEval areaEval1 = CreateAreaEval([new NumberEval(2)]);
+            ValueEval areaEval2 = CreateAreaEval([new NumberEval(2), new NumberEval(2)]); // different size
+
+            ValueEval areaEvalWithNullError = CreateAreaEval([new NumberEval(2), ErrorEval.NULL_INTERSECTION]);
+            ValueEval areaEvalWithRefError = CreateAreaEval([ErrorEval.REF_INVALID, new NumberEval(2)]);
 
             // if either arg is an error, that error propagates
             ConfirmError(x, ErrorEval.REF_INVALID, ErrorEval.NAME_INVALID, ErrorEval.REF_INVALID);
-            ConfirmError(x, areaEvalX, ErrorEval.NAME_INVALID, ErrorEval.NAME_INVALID);
-            ConfirmError(x, ErrorEval.NAME_INVALID, areaEvalX, ErrorEval.NAME_INVALID);
+            ConfirmError(x, areaEvalWithRefError, ErrorEval.NAME_INVALID, ErrorEval.NAME_INVALID);
+            ConfirmError(x, ErrorEval.NAME_INVALID, areaEvalWithRefError, ErrorEval.NAME_INVALID);
 
             // array sizes must match
-            ConfirmError(x, areaEvalX, areaEvalZ, ErrorEval.NA);
-            ConfirmError(x, areaEvalZ, areaEvalY, ErrorEval.NA);
+            ConfirmError(x, areaEval1, areaEval2, ErrorEval.NA);
 
             // any error in an array item propagates up
-            ConfirmError(x, areaEvalX, areaEvalX, ErrorEval.REF_INVALID);
+            ConfirmError(x, areaEvalWithRefError, areaEvalWithRefError, ErrorEval.REF_INVALID);
 
             // search for errors array by array, not pair by pair
-            ConfirmError(x, areaEvalX, areaEvalY, ErrorEval.NULL_INTERSECTION);
-            ConfirmError(x, areaEvalY, areaEvalX, ErrorEval.REF_INVALID);
+            ConfirmError(x, areaEvalWithRefError, areaEvalWithNullError, ErrorEval.REF_INVALID);
+            ConfirmError(x, areaEvalWithNullError, areaEvalWithRefError, ErrorEval.NULL_INTERSECTION);
         }
 
         /**
@@ -156,7 +152,7 @@ namespace TestCases.SS.Formula.Functions
             fe.Evaluate(a8);
             Assert.AreEqual(10.60725309, a8.NumericCellValue, 0.00000001);
         }
-        
+
         private static ValueEval Invoke(ValueEval x, ValueEval yArray, ValueEval xArray)
         {
             ValueEval[] args = [x, yArray, xArray];
@@ -174,7 +170,7 @@ namespace TestCases.SS.Formula.Functions
         {
             ValueEval result = Invoke(x, yArray, xArray);
             Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(expectedError.ErrorCode, ((ErrorEval) result).ErrorCode);
+            Assert.AreEqual(expectedError, (ErrorEval) result);
         }
 
         private static ValueEval[] CreateMockNumberArray(int size, double value)
