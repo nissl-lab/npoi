@@ -37,34 +37,39 @@ namespace TestCases.SS.Formula.Functions
     {
         private static readonly Function FORECAST = new Forecast();
 
-        private static ValueEval Invoke(Function function, ValueEval x, ValueEval xArray, ValueEval yArray)
-        {
-            ValueEval[] args = [x, xArray, yArray];
-            return function.Evaluate(args, -1, (short) -1);
-        }
-
-        private void Confirm(Function function, ValueEval x, ValueEval xArray, ValueEval yArray, double expected)
-        {
-            ValueEval result = Invoke(function, x, xArray, yArray);
-            Assert.AreEqual(typeof(NumberEval), result.GetType());
-            Assert.AreEqual(expected, ((NumberEval) result).NumberValue, 0);
-        }
-
-        private void ConfirmError(Function function, ValueEval x, ValueEval xArray, ValueEval yArray,
-            ErrorEval expectedError)
-        {
-            ValueEval result = Invoke(function, x, xArray, yArray);
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(expectedError.ErrorCode, ((ErrorEval) result).ErrorCode);
-        }
-
-        private void ConfirmError(ValueEval x, ValueEval xArray, ValueEval yArray, ErrorEval expectedError)
-        {
-            ConfirmError(FORECAST, x, xArray, yArray, expectedError);
-        }
-
+        /// <summary>
+        /// This test is replicated in the "TestBasic" tab of the "Forecast.xls" file.
+        /// </summary>
         [Test]
         public void TestBasic()
+        {
+            ValueEval x = new NumberEval(100);
+            ValueEval[] yValues = [
+                new NumberEval(1), 
+                new NumberEval(2),
+                new NumberEval(3),
+                new NumberEval(4),
+                new NumberEval(5),
+                new NumberEval(6)
+            ];
+
+            ValueEval[] xValues = [
+                new NumberEval(2), 
+                new NumberEval(4), 
+                new NumberEval(6), 
+                new NumberEval(8), 
+                new NumberEval(10),
+                new NumberEval(12)
+            ];
+            Confirm(x, CreateAreaEval(yValues), CreateAreaEval(xValues), 50.0);
+            // Excel 365 build 2402 gives 50.0
+        }
+        
+        /// <summary>
+        /// This test is replicated in the "TestLargeNumbers" tab of the "Forecast.xls" file.
+        /// </summary>
+        [Test]
+        public void TestLargeNumbers()
         {
             double exp = Math.Pow(10, 7.5);
             ValueEval x = new NumberEval(100);
@@ -76,7 +81,6 @@ namespace TestCases.SS.Formula.Functions
                 new NumberEval(4 + exp),
                 new NumberEval(7 + exp)
             ];
-            ValueEval areaEvalY = CreateAreaEval(yValues);
 
             ValueEval[] xValues = [
                 new NumberEval(1), 
@@ -86,41 +90,23 @@ namespace TestCases.SS.Formula.Functions
                 new NumberEval(5),
                 new NumberEval(6)
             ];
-            ValueEval areaEvalX = CreateAreaEval(xValues);
-            Confirm(FORECAST, x, areaEvalY, areaEvalX, 31622780.0302553);
-            // Excel 365 build 2402 gives 31622780.0302553
+            Confirm(x, CreateAreaEval(yValues), CreateAreaEval(xValues), 31622844.1826363);
+            // Excel 365 build 2402 gives 31622844.1826363
         }
 
-        /**
-         * number of items in array is not limited to 30
-         */
+        /// <summary>
+        /// This test is replicated in the "TestLargeArrays" tab of the "Forecast.xls" file.
+        /// </summary>
         [Test]
         public void TestLargeArrays()
         {
             ValueEval x = new NumberEval(100);
-            ValueEval[] yValues = CreateMockNumberArray(100, 3); // [1,2,0,1,2,0,...,0,1]
+            ValueEval[] yValues = CreateMockNumberArray(100, 3); // [2,2,0,1,2,0,...,0,1]
             yValues[0] = new NumberEval(2.0); // Changes first element to 2
             ValueEval[] xValues = CreateMockNumberArray(100, 101); // [1,2,3,4,...,99,100]
 
-            Confirm(FORECAST, x, CreateAreaEval(xValues), CreateAreaEval(yValues), 51.74384236453202);
-            // Excel 2010 gives 51.74384236453200
-        }
-
-        private ValueEval[] CreateMockNumberArray(int size, double value)
-        {
-            ValueEval[] result = new ValueEval[size];
-            for(int i = 0; i < result.Length; i++)
-            {
-                result[i] = new NumberEval((i + 1) % value);
-            }
-
-            return result;
-        }
-
-        private static ValueEval CreateAreaEval(ValueEval[] values)
-        {
-            string refStr = "A1:A" + values.Length;
-            return EvalFactory.CreateAreaEval(refStr, values);
+            Confirm(x, CreateAreaEval(yValues), CreateAreaEval(xValues), 0.960990099);
+            // Excel 365 build 2402 gives 0.98039604
         }
 
         [Test]
@@ -164,11 +150,48 @@ namespace TestCases.SS.Formula.Functions
             IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("Forecast.xls");
             HSSFFormulaEvaluator fe = new(wb);
 
-            ISheet example1 = wb.GetSheet("Example 1");
+            ISheet example1 = wb.GetSheet("TestFromFile");
             ICell a8 = example1.GetRow(7).GetCell(0);
             Assert.AreEqual("FORECAST(30,A2:A6,B2:B6)", a8.CellFormula);
             fe.Evaluate(a8);
             Assert.AreEqual(10.60725309, a8.NumericCellValue, 0.00000001);
+        }
+        
+        private static ValueEval Invoke(ValueEval x, ValueEval yArray, ValueEval xArray)
+        {
+            ValueEval[] args = [x, yArray, xArray];
+            return FORECAST.Evaluate(args, -1, (short) -1);
+        }
+
+        private static void Confirm(ValueEval x, ValueEval yArray, ValueEval xArray, double expected)
+        {
+            ValueEval result = Invoke(x, yArray, xArray);
+            Assert.AreEqual(typeof(NumberEval), result.GetType());
+            Assert.AreEqual(expected, ((NumberEval) result).NumberValue, expected * .000000001);
+        }
+
+        private static void ConfirmError(ValueEval x, ValueEval yArray, ValueEval xArray, ErrorEval expectedError)
+        {
+            ValueEval result = Invoke(x, yArray, xArray);
+            Assert.AreEqual(typeof(ErrorEval), result.GetType());
+            Assert.AreEqual(expectedError.ErrorCode, ((ErrorEval) result).ErrorCode);
+        }
+
+        private static ValueEval[] CreateMockNumberArray(int size, double value)
+        {
+            ValueEval[] result = new ValueEval[size];
+            for(int i = 0; i < result.Length; i++)
+            {
+                result[i] = new NumberEval((i + 1) % value);
+            }
+
+            return result;
+        }
+
+        private static ValueEval CreateAreaEval(ValueEval[] values)
+        {
+            string refStr = "A1:A" + values.Length;
+            return EvalFactory.CreateAreaEval(refStr, values);
         }
     }
 }
