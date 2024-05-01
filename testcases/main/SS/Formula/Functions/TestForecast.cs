@@ -28,7 +28,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula.Functions;
 
     /**
-     * Test for Excel function INTERCEPT()
+     * Test for Excel function FORECAST()
      *
      * @author Ken Smith
      */
@@ -106,7 +106,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] xValues = CreateMockNumberArray(100, 101); // [1,2,3,4,...,99,100]
 
             Confirm(x, CreateAreaEval(yValues), CreateAreaEval(xValues), 0.960990099);
-            // Excel 365 build 2402 gives 0.98039604
+            // Excel 365 build 2402 gives 0.960990099
         }
 
         [Test]
