@@ -37,8 +37,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         private byte outlineLevelField;
 
-        private bool collapsedField = true;
-        private bool collapsedSpecifiedField = true;
+        private bool collapsedField = false;
+        private bool collapsedSpecifiedField = false;
 
         [XmlAttribute]
         public uint min
@@ -279,7 +279,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             CT_Col ctObj = new CT_Col();
             ctObj.min = XmlHelper.ReadUInt(node.Attributes["min"]);
             ctObj.max = XmlHelper.ReadUInt(node.Attributes["max"]);
-            ctObj.width = XmlHelper.ReadDouble(node.Attributes["width"]);
+            ctObj.widthField = XmlHelper.ReadDouble(node.Attributes["width"]);
             if (node.Attributes["style"] != null)
                 ctObj.style = XmlHelper.ReadUInt(node.Attributes["style"]);
             else
@@ -287,9 +287,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.hidden = XmlHelper.ReadBool(node.Attributes["hidden"]);
             ctObj.bestFit = XmlHelper.ReadBool(node.Attributes["bestFit"]);
             ctObj.outlineLevel = XmlHelper.ReadByte(node.Attributes["outlineLevel"]);
-            ctObj.customWidth = XmlHelper.ReadBool(node.Attributes["customWidth"]);
+            ctObj.customWidthField = XmlHelper.ReadBool(node.Attributes["customWidth"]);
             ctObj.phonetic = XmlHelper.ReadBool(node.Attributes["phonetic"]);
-            ctObj.collapsed = XmlHelper.ReadBool(node.Attributes["collapsed"]);
+            ctObj.collapsedField = XmlHelper.ReadBool(node.Attributes["collapsed"]);
             return ctObj;
         }
 
@@ -347,14 +347,79 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return col;
         }
 
+        /// <summary>
+        /// Checks if <paramref name="col"/> is adjacent or intersecting with
+        /// current column and can be combined with it. If that is the case -
+        /// will modify current <see cref="CT_Col"/> to have <see cref="min"/>
+        /// and <see cref="max"/> of both columns.
+        /// </summary>
+        /// <param name="col"><see cref="CT_Col"/> to combine with</param>
+        /// <exception cref="InvalidOperationException">Thrown if
+        /// <paramref name="col"/> cannot be combined with current
+        /// <see cref="CT_Col"/></exception>
+        public void CombineWith(CT_Col col)
+        {
+            if(!IsAdjacentAndCanBeCombined(col))
+            {
+                throw new InvalidOperationException($"Columns [{this}] and " +
+                    $"[{col}] could not be combined");
+            }
+
+            min = Math.Min(min, col.min);
+            max = Math.Max(max, col.max);
+        }
+
+        /// <summary>
+        /// Checks if <paramref name="col"/> is adjacent or intersecting with
+        /// current column and can be combined with it.
+        /// </summary>
+        /// <param name="col"> <see cref="CT_Col"/> to check</param>
+        /// <returns><c>true</c> if <paramref name="col"/> is adjacent or
+        /// intersecting and have equal properties with current
+        /// <see cref="CT_Col"/>; <c>false</c> otherwise</returns>
+        public bool IsAdjacentAndCanBeCombined(CT_Col col)
+        {
+            return IsAdjacentOrIntersecting(col) && HasEqualProperties(col);
+        }
+
+        private bool HasEqualProperties(CT_Col col)
+        {
+            return bestFitField == col.bestFitField
+                && collapsedField == col.collapsedField
+                && collapsedSpecifiedField == col.collapsedSpecifiedField
+                && customWidthField == col.customWidthField
+                && hiddenField == col.hiddenField
+                && outlineLevelField == col.outlineLevelField
+                && phoneticField == col.phoneticField
+                && styleField == col.styleField
+                && widthField == col.widthField
+                && widthSpecifiedField == col.widthSpecifiedField;
+        }
+
+        private bool IsAdjacentOrIntersecting(CT_Col col)
+        {
+            return IsAdjacent(col) || IsIntersecting(col);
+        }
+
+        private bool IsAdjacent(CT_Col col)
+        {
+            return min == col.max + 1 || max == col.min - 1;
+        }
+
+        private bool IsIntersecting(CT_Col col)
+        {
+            return (min >= col.min && min <= col.max) || (max <= col.max && max >= col.min) ||
+                (col.min >= min && col.min <= max) || (col.max <= max && col.max >= min);
+        }
+
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (obj is not CT_Col col)
+            {
                 return false;
-            if (!(obj is CT_Col))
-                return false;
-            CT_Col col = obj as CT_Col;
-            return col.min == this.min && col.max == this.max;
+            }
+
+            return col.min == min && col.max == max && HasEqualProperties(col);
         }
 
         public override int GetHashCode()

@@ -67,6 +67,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestTextWithDecimalFormatSecondArg()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             ValueEval numArg = new NumberEval(321321.321);
             ValueEval formatArg = new StringEval("#,###.00000");
             ValueEval[] args = { numArg, formatArg };
@@ -96,6 +97,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestTextWithFractionFormatSecondArg()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             ValueEval numArg = new NumberEval(321.321);
             ValueEval formatArg = new StringEval("# #/#");
             ValueEval[] args = { numArg, formatArg };

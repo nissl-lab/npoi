@@ -21,6 +21,8 @@ using TestCases.HSSF;
 using NUnit.Framework;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
+
 namespace TestCases.SS.UserModel
 {
 
@@ -34,6 +36,7 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestSingle()
         {
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             FractionFormat f = new FractionFormat("", "##");
             string val = "321.321";
             String ret = f.Format(val);

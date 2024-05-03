@@ -683,7 +683,12 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return this._cellNum;
+                return _cellNum;
+            }
+
+            internal set
+            {
+                _cellNum = value;
             }
         }
 

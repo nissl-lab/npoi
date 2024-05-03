@@ -236,8 +236,8 @@ namespace NPOI.XSSF.UserModel
                     return _stylesSource.GetStyleAt((int)_row.s);
                 }
 
-                    return null;
-                }
+                return null;
+            }
 
             set
             {
