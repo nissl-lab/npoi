@@ -150,7 +150,92 @@ namespace NPOI.OOXML.XSSF.UserModel.Helpers
             catch (FormulaParseException fpe)
             {
                 // Log, but don't change, rather than breaking
-                Console.WriteLine($"Error shifting formula on row {row.RowNum}, {fpe}");
+                Console.WriteLine("Error shifting formula on row " + 
+                    row.RowNum + ", " + fpe);
+                return formula;
+            }
+        }
+
+        /// <summary>
+        /// Update the formulas in specified column using the formula shifting 
+        /// policy specified by shifter
+        /// </summary>
+        /// <param name="column">the column to update the formulas on</param>
+        /// <param name="Shifter">the formula shifting policy</param>
+        public static void UpdateColumnFormulas(IColumn column, FormulaShifter Shifter)
+        {
+            XSSFSheet sheet = (XSSFSheet)column.Sheet;
+
+            foreach (ICell c in column)
+            {
+                XSSFCell cell = (XSSFCell)c;
+
+                CT_Cell ctCell = cell.GetCTCell();
+                if (ctCell.IsSetF())
+                {
+                    CT_CellFormula f = ctCell.f;
+                    string formula = f.Value;
+                    if (formula.Length > 0)
+                    {
+                        string ShiftedFormula = ShiftFormula(column, formula, Shifter);
+                        if (ShiftedFormula != null)
+                        {
+                            f.Value = ShiftedFormula;
+                            if (f.t == ST_CellFormulaType.shared)
+                            {
+                                int si = (int)f.si;
+                                CT_CellFormula sf = sheet.GetSharedFormula(si);
+                                sf.Value = ShiftedFormula;
+                            }
+                        }
+                    }
+
+                    if (f.isSetRef())
+                    {
+                        //Range of cells which the formula applies to.
+                        string ref1 = f.@ref;
+                        string ShiftedRef = ShiftFormula(column, ref1, Shifter);
+                        if (ShiftedRef != null)
+                        {
+                            f.@ref = ShiftedRef;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Shift a formula using the supplied FormulaShifter
+        /// </summary>
+        /// <param name="column"> the row of the cell this formula belongs to. 
+        /// Used to get a reference to the parent workbook.</param>
+        /// <param name="formula">the formula to shift</param>
+        /// <param name="Shifter">the FormulaShifter object that operates on 
+        /// the Parsed formula tokens</param>
+        /// <returns>the Shifted formula if the formula was changed, null  if 
+        /// the formula wasn't modified</returns>
+        private static string ShiftFormula(IColumn column, string formula, FormulaShifter Shifter)
+        {
+            ISheet sheet = column.Sheet;
+            IWorkbook wb = sheet.Workbook;
+            int sheetIndex = wb.GetSheetIndex(sheet);
+            XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create(wb);
+            try
+            {
+                SS.Formula.PTG.Ptg[] ptgs = 
+                    FormulaParser.Parse(formula, fpb, FormulaType.Cell, sheetIndex, -1);
+                string ShiftedFmla = null;
+                if (Shifter.AdjustFormula(ptgs, sheetIndex))
+                {
+                    ShiftedFmla = FormulaRenderer.ToFormulaString(fpb, ptgs);
+                }
+
+                return ShiftedFmla;
+            }
+            catch (FormulaParseException fpe)
+            {
+                // Log, but don't change, rather than breaking
+                Console.WriteLine($"Error shifting formula on column {column.ColumnNum}, {fpe}");
                 return formula;
             }
         }
@@ -246,7 +331,7 @@ namespace NPOI.OOXML.XSSF.UserModel.Helpers
                         else
                         {
                             refs += " " + a.FormatAsString();
-                    }
+                        }
                     }
 
                     cf.sqref = refs;
