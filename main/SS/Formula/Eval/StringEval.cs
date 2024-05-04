@@ -30,23 +30,27 @@ namespace NPOI.SS.Formula.Eval
     {
         public static readonly StringEval EMPTY_INSTANCE = new StringEval("");
 
-        private readonly string value;
+        private String value;
 
         public StringEval(Ptg ptg):this(((StringPtg)ptg).Value)
         {
             
         }
 
-        public StringEval(string value)
+        public StringEval(String value)
         {
-            this.value = value ?? throw new ArgumentException("value must not be null");
+            if (value == null)
+            {
+                throw new ArgumentException("value must not be null");
+            }
+            this.value = value;
         }
 
-        public string StringValue
+        public String StringValue
         {
             get { return value; }
         }
-        public override string ToString()
+        public override String ToString()
         {
             StringBuilder sb = new StringBuilder(64);
             sb.Append(GetType().Name).Append(" [");

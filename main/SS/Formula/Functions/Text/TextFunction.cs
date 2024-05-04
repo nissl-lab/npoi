@@ -36,10 +36,10 @@ namespace NPOI.SS.Formula.Functions
             {
                 return ErrorEval.VALUE_INVALID;
             }
-            string arg = EvaluateStringArg(args[0], srcCellRow, srcCellCol);
+            String arg = EvaluateStringArg(args[0], srcCellRow, srcCellCol);
             return Evaluate(arg);
         }
-        public abstract ValueEval Evaluate(string arg);
+        public abstract ValueEval Evaluate(String arg);
     }
 
     /**
@@ -47,9 +47,10 @@ namespace NPOI.SS.Formula.Functions
      */
     public abstract class TextFunction : Function
     {
-        protected static string EMPTY_STRING = "";
 
-        public static string EvaluateStringArg(ValueEval eval, int srcRow, int srcCol)
+        protected static String EMPTY_STRING = "";
+
+        public static String EvaluateStringArg(ValueEval eval, int srcRow, int srcCol)
         {
             ValueEval ve = OperandResolver.GetSingleValue(eval, srcRow, srcCol);
             return OperandResolver.CoerceValueToString(ve);
@@ -77,7 +78,8 @@ namespace NPOI.SS.Formula.Functions
         }
         internal static bool IsPrintable(char c)
         {
-            return c >= 32;
+            int charCode = (int)c;
+            return charCode >= 32;
         }
         public abstract ValueEval EvaluateFunc(ValueEval[] args, int srcCellRow, int srcCellCol);
 
