@@ -17,11 +17,12 @@
 
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using System;
+using System.IO;
 using System.Linq;
-using TestCases.SS.UserModel;
 
 namespace TestCases.XSSF.UserModel
 {
@@ -87,6 +88,21 @@ namespace TestCases.XSSF.UserModel
                 .SequenceEqual(
                     destSheet.MergedRegions
                              .Select(r => r.FormatAsString())));
+        }
+
+
+        [Test]
+        public void TestBug346()
+        {
+            using(var wb = XSSFTestDataSamples.OpenSampleWorkbook("MSA_Templete.xlsx"))
+            {
+                var sheet = wb.GetSheetAt(0);
+
+                Assert.DoesNotThrow(() =>
+                {
+                    sheet.CopySheet("Copysheet");
+                });
+            }
         }
     }
 }

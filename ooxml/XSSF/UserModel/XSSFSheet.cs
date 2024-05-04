@@ -3635,9 +3635,7 @@ namespace NPOI.XSSF.UserModel
 
                 PackageRelationship rel = r.GetPackageRelationship();
                 clonedSheet.GetPackagePart().AddRelationship(
-                    rel.TargetUri, (TargetMode)rel.TargetMode, rel.RelationshipType);
-                clonedSheet.AddRelation(rel.Id, r);
-            }
+                    rel.TargetUri, (TargetMode)rel.TargetMode, rel.RelationshipType, rel.Id);            }
 
             // copy hyperlinks
             clonedSheet.hyperlinks = new List<XSSFHyperlink>(hyperlinks);
@@ -3664,7 +3662,6 @@ namespace NPOI.XSSF.UserModel
                 foreach (POIXMLDocumentPart rel in srcRels)
                 {
                     PackageRelationship relation = rel.GetPackageRelationship();
-                    clonedDg.AddRelation(relation.Id, rel);
                     clonedDg
                             .GetPackagePart()
                             .AddRelationship(relation.TargetUri, relation.TargetMode.Value,
