@@ -116,23 +116,13 @@ namespace NPOI.XSSF.Streaming
         {
             try
             {
-                _outputWriter.Flush();
-                OutputStream.Flush();
+                _outputWriter.Dispose();
+                OutputStream.Dispose();
             }
             catch
             {
 
             }
-            try
-            {
-                OutputStream.Close();
-            }
-            catch
-            {
-
-            }
-
-
         }
 
         public FileInfo TempFileInfo
@@ -554,6 +544,7 @@ namespace NPOI.XSSF.Streaming
             bool ret;
             try
             {
+                _outputWriter.Close();
                 OutputStream.Close();
             }
             finally

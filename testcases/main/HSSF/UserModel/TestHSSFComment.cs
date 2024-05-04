@@ -452,5 +452,20 @@ namespace TestCases.HSSF.UserModel
 
             wb.Close();
         }
+
+        [Test]
+        public void TestBug1240()
+        {
+            using(var wb = HSSFTestDataSamples.OpenSampleWorkbook("test_FailAddingComment.xls"))
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    ISheet sheet = wb.GetSheetAt(0);
+                    var drawingPatriarch2 = sheet.CreateDrawingPatriarch();
+                    IClientAnchor anchor2 = drawingPatriarch2.CreateAnchor(0, 0, 0, 0, 55, 71, 58, 75);
+                    IComment comment2 = drawingPatriarch2.CreateCellComment(anchor2);
+                });
+            }
+        }
     }
 }

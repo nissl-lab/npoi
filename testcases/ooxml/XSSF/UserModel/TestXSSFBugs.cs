@@ -1495,9 +1495,7 @@ namespace TestCases.XSSF.UserModel
         /**
          * Sum across multiple workbooks
          *  eg =SUM($Sheet1.C1:$Sheet4.C1)
-         * DISABLED As we can't currently Evaluate these
          */
-        [Ignore("by poi")]
         [Test]
         public void Test48703()
         {
@@ -2707,7 +2705,7 @@ namespace TestCases.XSSF.UserModel
          *  32,767 must not be -32,768, then -32,767, -32,766
          *  long time test, run over 1 minute.
          */
-        [Test, RunSerialyAndSweepTmpFiles]
+        [Test]
         [Ignore("this test doesn't make sense")]
         public void Bug57880()
         {

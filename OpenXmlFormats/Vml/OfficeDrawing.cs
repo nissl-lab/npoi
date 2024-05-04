@@ -2385,10 +2385,10 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         private int? oldField = null;
 
         [XmlAttribute]
-        public int @new
+        public int? @new
         {
-            get { return (int)this.newField; }
-            set { this.newField = value; }
+            get { return newField; }
+            set { newField = value; }
         }
         [XmlIgnore]
         public bool newSpecified
@@ -2397,10 +2397,10 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         }
 
         [XmlAttribute]
-        public int old
+        public int? old
         {
-            get { return (int)this.oldField; }
-            set { this.oldField = value; }
+            get { return oldField; }
+            set { oldField = value; }
         }
         [XmlIgnore]
         public bool oldSpecified
@@ -2424,8 +2424,17 @@ namespace NPOI.OpenXmlFormats.Vml.Office
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<o:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "new", this.@new);
-            XmlHelper.WriteAttribute(sw, "old", this.old);
+            
+            if(@new.HasValue)
+            {
+                XmlHelper.WriteAttribute(sw, "new", @new.Value);
+            }
+
+            if(old.HasValue)
+            {
+                XmlHelper.WriteAttribute(sw, "old", old.Value);
+            }
+
             sw.Write(">");
             sw.Write(string.Format("</o:{0}>", nodeName));
         }

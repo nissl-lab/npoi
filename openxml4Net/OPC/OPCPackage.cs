@@ -1548,7 +1548,7 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public bool IsRelationshipExists(PackageRelationship rel)
         {
-            foreach (PackageRelationship r in this.Relationships)
+            foreach (PackageRelationship r in relationships)
             {
                 if (r == rel)
                     return true;
