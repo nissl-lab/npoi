@@ -947,10 +947,10 @@ namespace NPOI.SS.UserModel
                 {
                     FormatBase dateFormat = GetFormat(value, formatIndex, formatString);
 
-                    if (dateFormat is ExcelStyleDateFormatter excelStyleDateFormat)
+                    if (dateFormat is ExcelStyleDateFormatter)
                     {
                         // Hint about the raw excel value
-                        excelStyleDateFormat.SetDateToBeFormatted(value);
+                        ((ExcelStyleDateFormatter)dateFormat).SetDateToBeFormatted(value);
                     }
 
                     DateTime d = DateUtil.GetJavaDate(value, use1904Windowing);
@@ -982,15 +982,10 @@ namespace NPOI.SS.UserModel
             }
             else
             {
-                var parsed = decimal.Parse(textValue, currentCulture);
-                result = numberFormat.Format(parsed);
+                result = numberFormat.Format(decimal.Parse(textValue));
             }
-
-            // If they requested a non-abbreviated Scientific format,
-            //  and there's an E## (but not E-##), add the missing '+' for E+##
-            string fslc = formatString.ToLower(currentCulture);
-            if((fslc.Contains("general") || fslc.Contains("e+0")) &&
-                result.Contains("E") && !result.Contains("E-"))
+            // Complete scientific notation by adding the missing +.
+            if (result.Contains("E") && !result.Contains("E-"))
             {
                 result = result.Replace("E", "E+");
             }
