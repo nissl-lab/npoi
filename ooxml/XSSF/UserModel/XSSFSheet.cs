@@ -3635,7 +3635,10 @@ namespace NPOI.XSSF.UserModel
 
                 PackageRelationship rel = r.GetPackageRelationship();
                 clonedSheet.GetPackagePart().AddRelationship(
-                    rel.TargetUri, (TargetMode)rel.TargetMode, rel.RelationshipType, rel.Id);            }
+                    rel.TargetUri, (TargetMode)rel.TargetMode, rel.RelationshipType, rel.Id);
+
+                clonedSheet.AddRelation(rel.Id, r);
+            }
 
             // copy hyperlinks
             clonedSheet.hyperlinks = new List<XSSFHyperlink>(hyperlinks);
@@ -3666,6 +3669,8 @@ namespace NPOI.XSSF.UserModel
                             .GetPackagePart()
                             .AddRelationship(relation.TargetUri, relation.TargetMode.Value,
                                     relation.RelationshipType, relation.Id);
+
+                    clonedDg.AddRelation(relation.Id, rel);
                 }
             }
 

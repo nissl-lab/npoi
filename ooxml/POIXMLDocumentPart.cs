@@ -417,7 +417,8 @@ namespace NPOI
         public void AddRelation(String id, POIXMLDocumentPart part)
         {
             PackageRelationship pr = part.GetPackagePart().GetRelationship(id);
-            AddRelation(pr, part);
+            if(pr != null)
+                AddRelation(pr, part);
         }
 
         /// <summary>
