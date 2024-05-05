@@ -68,11 +68,11 @@ namespace NPOI
          *  in the event of a problem.
          * Works around shortcomings in java's this() constructor calls
          */
-        public static OPCPackage OpenPackage(String path)
+        public static OPCPackage OpenPackage(String path, bool bReadOnly=false)
         {
             try
             {
-                return OPCPackage.Open(path);
+                return OPCPackage.Open(path, bReadOnly? PackageAccess.READ: PackageAccess.READ_WRITE);
             }
             catch (InvalidFormatException e)
             {
