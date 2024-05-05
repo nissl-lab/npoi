@@ -64,8 +64,9 @@ namespace TestCases.XSSF.Streaming
         public void IfWritingRowWithCustomHeightShouldIncludeCustomHeightXml()
         {
             _objectToTest = new SheetDataWriter();
-            var row = new SXSSFRow(null);
-            row.Height = 1;
+            var row = new SXSSFRow(null) {
+                Height = 1
+            };
 
             _objectToTest.WriteRow(0, row);
             _objectToTest.Close();
@@ -73,7 +74,7 @@ namespace TestCases.XSSF.Streaming
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
             Assert.True(lines.Length == 2);
-            Assert.AreEqual("<row r=\"" + 1 + "\" customHeight=\"true\" ht=\"" + row.HeightInPoints + "\">", lines[0]);
+            Assert.AreEqual("<row r=\"" + 1 + "\" customHeight=\"1\" ht=\"" + row.HeightInPoints.ToString().Replace(',', '.') + "\">", lines[0]);
             Assert.AreEqual("</row>", lines[1]);
 
 
@@ -93,7 +94,7 @@ namespace TestCases.XSSF.Streaming
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
             Assert.True(lines.Length == 2);
-            Assert.AreEqual("<row r=\"" + 1 + "\" hidden=\"true\">", lines[0]);
+            Assert.AreEqual("<row r=\"" + 1 + "\" hidden=\"1\">", lines[0]);
             Assert.AreEqual("</row>", lines[1]);
 
 
