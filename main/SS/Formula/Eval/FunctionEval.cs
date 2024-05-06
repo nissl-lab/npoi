@@ -221,7 +221,7 @@ namespace NPOI.SS.Formula.Eval
             retval[122] = new NotImplementedFunction("NAMES"); // NAMES
             retval[123] = new NotImplementedFunction("DIRECTORY"); // DIRECTORY
             retval[124] = TextFunction.FIND; // Find
-            retval[125] = new NotImplementedFunction("CELL"); // CELL
+            retval[125] = new Cell(); // CELL
             retval[126] = LogicalFunction.ISERR; // IsERR
             retval[127] = LogicalFunction.ISTEXT; // IsTEXT
             retval[128] = LogicalFunction.ISNUMBER; // IsNUMBER
