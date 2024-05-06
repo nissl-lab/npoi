@@ -317,9 +317,9 @@ namespace NPOI.OpenXml4Net.OPC
             return pack;
         }
 
-        public static OPCPackage Open(Stream stream,bool bReadonly)
+        public static OPCPackage Open(Stream stream,bool readOnly)
         {
-            OPCPackage pack = new ZipPackage(stream, bReadonly ? PackageAccess.READ : PackageAccess.READ_WRITE);
+            OPCPackage pack = new ZipPackage(stream, readOnly ? PackageAccess.READ : PackageAccess.READ_WRITE);
             if (pack.partList == null)
             {
                 pack.GetParts();

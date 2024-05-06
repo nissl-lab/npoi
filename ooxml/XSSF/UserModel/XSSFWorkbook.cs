@@ -230,8 +230,8 @@ namespace NPOI.XSSF.UserModel
          *       pkg.close(); // gracefully closes the underlying zip file
          *   </code></pre>     
          */
-        public XSSFWorkbook(Stream fileStream, bool bReadonly=false)
-            : base(PackageHelper.Open(fileStream, bReadonly))
+        public XSSFWorkbook(Stream fileStream, bool readOnly = false)
+            : base(PackageHelper.Open(fileStream, readOnly))
         {
             BeforeDocumentRead();
 
@@ -259,8 +259,8 @@ namespace NPOI.XSSF.UserModel
          *  
          * @param file   the file to open
          */
-        public XSSFWorkbook(FileInfo file, bool bReadonly = false)
-            : this(OPCPackage.Open(file, bReadonly? PackageAccess.READ: PackageAccess.READ_WRITE))
+        public XSSFWorkbook(FileInfo file, bool readOnly = false)
+            : this(OPCPackage.Open(file, readOnly? PackageAccess.READ: PackageAccess.READ_WRITE))
         {
 
         }
