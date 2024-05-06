@@ -301,8 +301,8 @@ namespace NPOI.XSSF.UserModel
          * 
          * @param      path   the file name.
          */
-        public XSSFWorkbook(String path, bool bReadonly=false)
-            : this(OpenPackage(path))
+        public XSSFWorkbook(String path, bool readOnly = false)
+            : this(OpenPackage(path, readOnly))
         {
 
         }
