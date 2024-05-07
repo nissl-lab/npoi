@@ -18,7 +18,6 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
@@ -29,7 +28,7 @@ namespace NPOI.XSSF.Streaming
 {
     public class SheetDataWriter
     {
-        private static POILogger logger = POILogFactory.GetLogger(typeof(SheetDataWriter));
+        private static readonly POILogger logger = POILogFactory.GetLogger(typeof(SheetDataWriter));
 
         protected FileInfo TemporaryFileInfo { get; set; }
         protected Stream OutputStream { get; private set; }
@@ -43,9 +42,9 @@ namespace NPOI.XSSF.Streaming
          * Table of strings shared across this workbook.
          * If two cells contain the same string, then the cell value is the same index into SharedStringsTable
          */
-        private SharedStringsTable _sharedStringSource;
-        private StreamWriter _outputWriter;
-        private bool _ignoreCellStyle;
+        private readonly SharedStringsTable _sharedStringSource;
+        private readonly StreamWriter _outputWriter;
+        private readonly bool _ignoreCellStyle;
 
         public SheetDataWriter()
         {
@@ -90,7 +89,7 @@ namespace NPOI.XSSF.Streaming
         {
 
             FileStream fos = new FileStream(fd.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            Stream outputStream = null;
+            Stream outputStream;
             try
             {
                 outputStream = DecorateOutputStream(fos);
@@ -229,13 +228,13 @@ namespace NPOI.XSSF.Streaming
 
             if(row.HasCustomHeight())
             {
-                WriteAsBytes(" customHeight=\"true\" ht=\"");
+                WriteAsBytes(" customHeight=\"1\" ht=\"");
                 WriteAsBytes(row.HeightInPoints);
                 WriteAsBytes("\"");
             }
             if(row.ZeroHeight)
             {
-                WriteAsBytes(" hidden=\"true\"");
+                WriteAsBytes(" hidden=\"1\"");
             }
             if(row.IsFormatted)
             {

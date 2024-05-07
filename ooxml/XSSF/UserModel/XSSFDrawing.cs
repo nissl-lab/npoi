@@ -326,8 +326,8 @@ namespace NPOI.XSSF.UserModel
               SS.UserModel.ISheet Sheet
             , BuildFreeForm BFF
         ) {
-            var anchor = new XSSFClientAnchor(Sheet, (int)BFF.Min.x, (int)BFF.Min.y
-                                                   , (int)BFF.Max.x, (int)BFF.Max.y);
+            var anchor = new XSSFClientAnchor(Sheet, (int)BFF.Left, (int)BFF.Top
+                                                   , (int)BFF.Rigth, (int)BFF.Bottom);
             long shapeId = newShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_Shape ctShape = ctAnchor.AddNewSp();
