@@ -87,7 +87,7 @@ namespace NPOI.XSSF.Streaming
             get { return _randomAccessWindowSize; }
             set
             {
-                if (value <= 0)
+                if(value <= 0)
                 {
                     throw new ArgumentException("rowAccessWindowSize must be greater than 0 or -1");
                 }
@@ -111,6 +111,8 @@ namespace NPOI.XSSF.Streaming
         /// shared string table - a cache of strings in this workbook.
         /// </summary>
         private SharedStringsTable _sharedStringSource;
+
+        private bool _ignoreCellStyle;
 
         public int ActiveSheetIndex
         {
@@ -190,7 +192,7 @@ namespace NPOI.XSSF.Streaming
         public SXSSFWorkbook(int rowAccessWindowSize)
             : this(null /*workbook*/, rowAccessWindowSize)
         {
-            
+
         }
         /// <summary>
         /// Construct a new workbook with default row window size
@@ -234,7 +236,7 @@ namespace NPOI.XSSF.Streaming
          *
          * @param workbook  the template workbook
          */
-        public SXSSFWorkbook(XSSFWorkbook workbook) 
+        public SXSSFWorkbook(XSSFWorkbook workbook)
             : this(workbook, DEFAULT_WINDOW_SIZE)
         {
 
@@ -290,6 +292,7 @@ namespace NPOI.XSSF.Streaming
         {
 
         }
+
         /**
          * Constructs an workbook from an existing workbook.
          * <p>
@@ -320,13 +323,41 @@ namespace NPOI.XSSF.Streaming
         /// <param name="rowAccessWindowSize"></param>
         /// <param name="compressTmpFiles"></param>
         /// <param name="useSharedStringsTable"></param>
-        public SXSSFWorkbook(XSSFWorkbook workbook, int rowAccessWindowSize, bool compressTmpFiles, bool useSharedStringsTable)
+        public SXSSFWorkbook(XSSFWorkbook workbook, int rowAccessWindowSize, bool compressTmpFiles, bool useSharedStringsTable) :
+            this(workbook, rowAccessWindowSize, compressTmpFiles, useSharedStringsTable, false)
+        { }
+
+        /**
+         * Constructs an workbook from an existing workbook.
+         * <p>
+         * When a new node is created via {@link SXSSFSheet#createRow} and the total number
+         * of unflushed records would exceed the specified value, then the
+         * row with the lowest index value is flushed and cannot be accessed
+         * via {@link SXSSFSheet#getRow} anymore.
+         * </p>
+         * <p>
+         * A value of <code>-1</code> indicates unlimited access. In this case all
+         * records that have not been flushed by a call to <code>flush()</code> are available
+         * for random access.
+         * </p>
+         * <p>
+         * A value of <code>0</code> is not allowed because it would flush any newly created row
+         * without having a chance to specify any cells.
+         * </p>
+         *
+         * @param workbook              the template workbook
+         * @param rowAccessWindowSize   the number of rows that are kept in memory until flushed out, see above.
+         * @param compressTmpFiles      whether to use gzip compression for temporary files
+         * @param useSharedStringsTable whether to use a shared strings table
+         * @param ignoreCellStyle       whether to use cell style
+         */
+        public SXSSFWorkbook(XSSFWorkbook workbook, int rowAccessWindowSize, bool compressTmpFiles, bool useSharedStringsTable, bool ignoreCellStyle)
         {
             RandomAccessWindowSize = rowAccessWindowSize;
-
             _compressTmpFiles = compressTmpFiles;
+            _ignoreCellStyle = ignoreCellStyle;
 
-            if (workbook == null)
+            if(workbook == null)
             {
                 _wb = new XSSFWorkbook();
                 _sharedStringSource = useSharedStringsTable ? XssfWorkbook.GetSharedStringSource() : null;
@@ -336,7 +367,7 @@ namespace NPOI.XSSF.Streaming
                 _wb = workbook;
                 _sharedStringSource = useSharedStringsTable ? XssfWorkbook.GetSharedStringSource() : null;
                 var numberOfSheets = XssfWorkbook.NumberOfSheets;
-                for (int i = 0; i < numberOfSheets; i++)
+                for(int i = 0; i < numberOfSheets; i++)
                 {
                     XSSFSheet sheet = (XSSFSheet)XssfWorkbook.GetSheetAt(i);
                     CreateAndRegisterSXSSFSheet(sheet);
@@ -351,13 +382,13 @@ namespace NPOI.XSSF.Streaming
             SXSSFSheet sxSheet;
             try
             {
-                sxSheet = new SXSSFSheet(this, (XSSFSheet)xSheet);
+                sxSheet = new SXSSFSheet(this, (XSSFSheet) xSheet);
             }
-            catch (IOException ioe)
+            catch(IOException ioe)
             {
                 throw new RuntimeException(ioe);
             }
-            RegisterSheetMapping(sxSheet, (XSSFSheet)xSheet);
+            RegisterSheetMapping(sxSheet, (XSSFSheet) xSheet);
             return sxSheet;
         }
 
@@ -375,7 +406,7 @@ namespace NPOI.XSSF.Streaming
             {
                 sxSheet.SheetDataWriter.Close();
             }
-            catch (IOException)
+            catch(IOException)
             {
                 // ignore exception here
             }
@@ -388,7 +419,7 @@ namespace NPOI.XSSF.Streaming
 
         public XSSFSheet GetXSSFSheet(SXSSFSheet sheet)
         {
-            if (sheet != null && _sxFromXHash.ContainsKey(sheet))
+            if(sheet != null && _sxFromXHash.ContainsKey(sheet))
                 return _sxFromXHash[sheet];
             else
                 return null;
@@ -396,7 +427,7 @@ namespace NPOI.XSSF.Streaming
 
         public SXSSFSheet GetSXSSFSheet(XSSFSheet sheet)
         {
-            if (sheet != null && _xFromSxHash.ContainsKey(sheet))
+            if(sheet != null && _xFromSxHash.ContainsKey(sheet))
                 return _xFromSxHash[sheet];
             else
                 return null;
@@ -425,24 +456,25 @@ namespace NPOI.XSSF.Streaming
             {
                 _compressTmpFiles = value;
             }
-            
+
         }
 
         public SheetDataWriter CreateSheetDataWriter()
         {
-            if (_compressTmpFiles)
+            if(_compressTmpFiles)
             {
-                return new GZIPSheetDataWriter(_sharedStringSource);
+                return new GZIPSheetDataWriter(_sharedStringSource, _ignoreCellStyle);
             }
 
-            return new SheetDataWriter(_sharedStringSource);
+            return new SheetDataWriter(_sharedStringSource, _ignoreCellStyle);
         }
 
         private XSSFSheet GetSheetFromZipEntryName(string sheetRef)
         {
-            foreach (XSSFSheet sheet in _sxFromXHash.Values)
+            foreach(XSSFSheet sheet in _sxFromXHash.Values)
             {
-                if (sheetRef.Equals(sheet.GetPackagePart().PartName.Name.Substring(1))) return sheet;
+                if(sheetRef.Equals(sheet.GetPackagePart().PartName.Name.Substring(1)))
+                    return sheet;
             }
             return null;
         }
@@ -461,13 +493,13 @@ namespace NPOI.XSSF.Streaming
                     //ZipEntrySource zipEntrySource = new ZipFileZipEntrySource(zip);
                     //var en =  zipEntrySource.Entries;
                     var en = zip.GetEnumerator();
-                    while (en.MoveNext())
+                    while(en.MoveNext())
                     {
                         var ze = (ZipEntry)en.Current;
                         zos.PutNextEntry(new ZipEntry(ze.Name));
                         var inputStream = zip.GetInputStream(ze);
                         XSSFSheet xSheet = GetSheetFromZipEntryName(ze.Name);
-                        if (xSheet != null)
+                        if(xSheet != null)
                         {
                             SXSSFSheet sxSheet = GetSXSSFSheet(xSheet);
                             var xis = sxSheet.GetWorksheetXMLInputStream();
@@ -510,28 +542,28 @@ namespace NPOI.XSSF.Streaming
             StringBuilder sb = new StringBuilder();
             int n = s.Length;
             //Copy from "in" to "out" up to the string "<sheetData/>" or "</sheetData>" (excluding).
-            while (((c = inReader.Read()) != -1))
+            while(((c = inReader.Read()) != -1))
             {
-                if ((char)c == (char)s[pos])
+                if((char) c == (char) s[pos])
                 {
                     pos++;
-                    if (pos == n)
+                    if(pos == n)
                     {
-                        if ("<sheetData".Equals(s))
+                        if("<sheetData".Equals(s))
                         {
                             c = inReader.Read();
-                            if (c == -1)
+                            if(c == -1)
                             {
                                 outWriter.Write(s);
                                 sb.Append(s);
                                 break;
                             }
-                            if ((char)c == '>')
+                            if((char) c == '>')
                             {
                                 // Found <sheetData>
                                 outWriter.Write(s);
                                 sb.Append(s);
-                                outWriter.Write((char)c);
+                                outWriter.Write((char) c);
                                 sb.Append((char) c);
                                 s = "</sheetData>";
                                 n = s.Length;
@@ -539,17 +571,17 @@ namespace NPOI.XSSF.Streaming
                                 needsStartTag = false;
                                 continue;
                             }
-                            if ((char)c == '/')
+                            if((char) c == '/')
                             {
                                 // Found <sheetData/
                                 c = inReader.Read();
-                                if (c == -1)
+                                if(c == -1)
                                 {
                                     outWriter.Write(s);
                                     sb.Append(s);
                                     break;
                                 }
-                                if ((char)c == '>')
+                                if((char) c == '>')
                                 {
                                     // Found <sheetData/>
                                     break;
@@ -559,7 +591,7 @@ namespace NPOI.XSSF.Streaming
                                 sb.Append(s);
                                 outWriter.Write('/');
                                 sb.Append('/');
-                                outWriter.Write((char)c);
+                                outWriter.Write((char) c);
                                 sb.Append((char) c);
                                 pos = 0;
                                 continue;
@@ -569,8 +601,8 @@ namespace NPOI.XSSF.Streaming
                             sb.Append(s);
                             outWriter.Write('/');
                             sb.Append('/');
-                            outWriter.Write((char)c);
-                            sb.Append((char)c);
+                            outWriter.Write((char) c);
+                            sb.Append((char) c);
                             pos = 0;
                             continue;
                         }
@@ -583,25 +615,25 @@ namespace NPOI.XSSF.Streaming
                 }
                 else
                 {
-                    if (pos > 0)
+                    if(pos > 0)
                     {
-                        outWriter.Write(s.Substring(0,pos));
+                        outWriter.Write(s.Substring(0, pos));
                         sb.Append(s, 0, pos);
                     }
-                    if (c == s[0])
+                    if(c == s[0])
                     {
                         pos = 1;
                     }
                     else
                     {
-                        outWriter.Write((char)c);
+                        outWriter.Write((char) c);
                         sb.Append((char) c);
                         pos = 0;
                     }
                 }
             }
             outWriter.Flush();
-            if (needsStartTag)
+            if(needsStartTag)
             {
                 outWriter.Write("<sheetData>\n");
                 sb.Append("<sheetData>\n");
@@ -612,13 +644,13 @@ namespace NPOI.XSSF.Streaming
             outWriter.Write("</sheetData>");
             outWriter.Flush();
             //Copy the rest of "in" to "out".
-            while (((c = inReader.Read()) != -1))
+            while(((c = inReader.Read()) != -1))
             {
                 outWriter.Write((char) c);
-                sb.Append((char)c);
+                sb.Append((char) c);
             }
             outWriter.Flush();
-            
+
         }
 
         public void SetSheetOrder(string sheetname, int pos)
@@ -653,7 +685,7 @@ namespace NPOI.XSSF.Streaming
 
         public int GetSheetIndex(ISheet sheet)
         {
-            return XssfWorkbook.GetSheetIndex(GetXSSFSheet((SXSSFSheet)sheet));
+            return XssfWorkbook.GetSheetIndex(GetXSSFSheet((SXSSFSheet) sheet));
         }
 
         public ISheet CreateSheet()
@@ -674,12 +706,12 @@ namespace NPOI.XSSF.Streaming
 
         public ISheet GetSheetAt(int index)
         {
-            return GetSXSSFSheet((XSSFSheet)XssfWorkbook.GetSheetAt(index));
+            return GetSXSSFSheet((XSSFSheet) XssfWorkbook.GetSheetAt(index));
         }
 
         public ISheet GetSheet(string name)
         {
-            return GetSXSSFSheet((XSSFSheet)XssfWorkbook.GetSheet(name));
+            return GetSXSSFSheet((XSSFSheet) XssfWorkbook.GetSheet(name));
         }
 
         public void RemoveSheetAt(int index)
@@ -697,7 +729,7 @@ namespace NPOI.XSSF.Streaming
             {
                 sxSheet.Dispose();
             }
-            catch (IOException e)
+            catch(IOException e)
             {
                 logger.Log(POILogger.WARN, e);
             }
@@ -725,7 +757,7 @@ namespace NPOI.XSSF.Streaming
          * @return the font with the matched attributes or <code>null</code>
          */
         public IFont FindFont(bool bold, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
-        { 
+        {
             return XssfWorkbook.FindFont(bold, color, fontHeight, name, italic, strikeout, typeOffset, underline);
         }
 
@@ -748,13 +780,13 @@ namespace NPOI.XSSF.Streaming
         public void Close()
         {
             // ensure that any lingering writer is closed
-            foreach (SXSSFSheet sheet in _xFromSxHash.Values)
+            foreach(SXSSFSheet sheet in _xFromSxHash.Values)
             {
                 try
                 {
                     sheet.SheetDataWriter.Close();
                 }
-                catch (IOException e)
+                catch(IOException e)
                 {
                     logger.Log(POILogger.WARN,
                             "An exception occurred while closing sheet data writer for sheet "
@@ -786,13 +818,13 @@ namespace NPOI.XSSF.Streaming
                 }
 
                 //Substitute the template entries with the generated sheet data files
-                
+
                 InjectData(tmplFile, stream, leaveOpen);
             }
             finally
             {
                 tmplFile.Delete();
-                if (File.Exists(tmplFile.FullName))
+                if(File.Exists(tmplFile.FullName))
                 {
                     throw new IOException("Could not delete temporary file after processing: " + tmplFile);
                 }
@@ -801,7 +833,7 @@ namespace NPOI.XSSF.Streaming
 
         private void FlushSheets()
         {
-            foreach (SXSSFSheet sheet in _xFromSxHash.Values)
+            foreach(SXSSFSheet sheet in _xFromSxHash.Values)
             {
                 sheet.FlushRows();
             }
@@ -815,13 +847,13 @@ namespace NPOI.XSSF.Streaming
         public bool Dispose()
         {
             var success = true;
-            foreach (SXSSFSheet sheet in _sxFromXHash.Keys)
+            foreach(SXSSFSheet sheet in _sxFromXHash.Keys)
             {
                 try
                 {
                     success = sheet.Dispose() && success;
                 }
-                catch (IOException e)
+                catch(IOException e)
                 {
                     logger.Log(POILogger.WARN, e);
                     success = false;

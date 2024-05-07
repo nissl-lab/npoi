@@ -37,7 +37,7 @@ namespace TestCases.SS.UserModel
     public abstract class BaseTestBugzillaIssues
     {
 
-        private ITestDataProvider _testDataProvider;
+        protected ITestDataProvider _testDataProvider;
         private static int dpi = 96;
 
         protected BaseTestBugzillaIssues(ITestDataProvider TestDataProvider)

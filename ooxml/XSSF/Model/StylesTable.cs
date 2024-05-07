@@ -462,8 +462,11 @@ namespace NPOI.XSSF.Model
         {
             int styleXfId = 0;
 
-            if (xfs.Count == 0) //in case there is no default style
+            if (idx < 0 || idx >= xfs.Count)
+            {
+                //BUG-60343
                 return null;
+            }
 
             // 0 is the empty default
             if (xfs[idx].xfId > 0)

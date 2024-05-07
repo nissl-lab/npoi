@@ -36,6 +36,14 @@ namespace NPOI.XSSF.Streaming
         }
 
         /**
+         * @param sharedStringsTable the shared strings table, or null if inline text is used
+         * @param ignoreCellStyle whether to use cell style
+         */
+        public GZIPSheetDataWriter(SharedStringsTable sharedStringsTable, bool ignoreCellStyle) :
+            base(sharedStringsTable, ignoreCellStyle)
+        { }
+
+        /**
          * @return temp file to write sheet data
          */
 
@@ -43,7 +51,7 @@ namespace NPOI.XSSF.Streaming
         {
             return TempFile.CreateTempFile("poi-sxssf-sheet-xml", ".gz");
         }
-        
+
         protected override Stream DecorateInputStream(Stream fis)
         {
             return new GZipInputStream(fis);

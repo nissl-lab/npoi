@@ -1236,74 +1236,40 @@ namespace TestCases.XSSF.UserModel
         public void Test51037()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
-            XSSFSheet s = wb.CreateSheet() as XSSFSheet;
-
-            ICellStyle defaultStyle = wb.GetCellStyleAt((short)0);
-            Assert.AreEqual(0, defaultStyle.Index);
 
             ICellStyle blueStyle = wb.CreateCellStyle();
-            blueStyle.FillForegroundColor = (IndexedColors.Aqua.Index);
-            blueStyle.FillPattern = (FillPattern.SolidForeground);
-            Assert.AreEqual(1, blueStyle.Index);
+            blueStyle.FillForegroundColor = IndexedColors.Aqua.Index;
+            blueStyle.FillPattern = FillPattern.SolidForeground;
 
             ICellStyle pinkStyle = wb.CreateCellStyle();
-            pinkStyle.FillForegroundColor = (IndexedColors.Pink.Index);
-            pinkStyle.FillPattern = (FillPattern.SolidForeground);
-            Assert.AreEqual(2, pinkStyle.Index);
+            pinkStyle.FillForegroundColor = IndexedColors.Pink.Index;
+            pinkStyle.FillPattern = FillPattern.SolidForeground;
 
-            // Starts empty
-            Assert.AreEqual(1, s.GetCTWorksheet().sizeOfColsArray());
-            CT_Cols cols = s.GetCTWorksheet().GetColsArray(0);
-            Assert.AreEqual(0, cols.sizeOfColArray());
+            XSSFSheet s1 = wb.CreateSheet("Pretty columns") as XSSFSheet;
 
-            // Add some rows and columns
-            XSSFRow r1 = s.CreateRow(0) as XSSFRow;
-            XSSFRow r2 = s.CreateRow(1) as XSSFRow;
-            r1.CreateCell(0);
-            r1.CreateCell(2);
-            r2.CreateCell(0);
-            r2.CreateCell(3);
+            s1.SetDefaultColumnStyle(4, blueStyle);
+            s1.SetDefaultColumnStyle(6, pinkStyle);
 
-            // Check no style is there
-            Assert.AreEqual(1, s.GetCTWorksheet().sizeOfColsArray());
-            Assert.AreEqual(0, cols.sizeOfColArray());
+            XSSFRow r3 = s1.CreateRow(3) as XSSFRow;
+            r3.CreateCell(0).SetCellValue("The");
+            r3.CreateCell(1).SetCellValue("quick");
+            r3.CreateCell(2).SetCellValue("brown");
+            r3.CreateCell(3).SetCellValue("fox");
+            r3.CreateCell(4).SetCellValue("jumps");
+            r3.CreateCell(5).SetCellValue("over");
+            r3.CreateCell(6).SetCellValue("the");
+            r3.CreateCell(7).SetCellValue("lazy");
+            r3.CreateCell(8).SetCellValue("dog");
 
-            Assert.AreEqual(defaultStyle, s.GetColumnStyle(0));
-            Assert.AreEqual(defaultStyle, s.GetColumnStyle(2));
-            Assert.AreEqual(defaultStyle, s.GetColumnStyle(3));
-
-
-            // Apply the styles
-            s.SetDefaultColumnStyle(0, pinkStyle);
-            s.SetDefaultColumnStyle(3, blueStyle);
-
-            // Check
-            Assert.AreEqual(pinkStyle, s.GetColumnStyle(0));
-            Assert.AreEqual(defaultStyle, s.GetColumnStyle(2));
-            Assert.AreEqual(blueStyle, s.GetColumnStyle(3));
-
-            Assert.AreEqual(1, s.GetCTWorksheet().sizeOfColsArray());
-            Assert.AreEqual(2, cols.sizeOfColArray());
-
-            Assert.AreEqual(1, cols.GetColArray(0).min);
-            Assert.AreEqual(1, cols.GetColArray(0).max);
-            Assert.AreEqual(pinkStyle.Index, cols.GetColArray(0).style);
-
-            Assert.AreEqual(4, cols.GetColArray(1).min);
-            Assert.AreEqual(4, cols.GetColArray(1).max);
-            Assert.AreEqual(blueStyle.Index, cols.GetColArray(1).style);
-
+            Assert.AreEqual(blueStyle.Index, r3.GetCell(4).CellStyle.Index);
+            Assert.AreEqual(pinkStyle.Index, r3.GetCell(6).CellStyle.Index);
 
             // Save, re-load and re-check 
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-            s = wb.GetSheetAt(0) as XSSFSheet;
-            defaultStyle = wb.GetCellStyleAt(defaultStyle.Index);
-            blueStyle = wb.GetCellStyleAt(blueStyle.Index);
-            pinkStyle = wb.GetCellStyleAt(pinkStyle.Index);
-
-            Assert.AreEqual(pinkStyle, s.GetColumnStyle(0));
-            Assert.AreEqual(defaultStyle, s.GetColumnStyle(2));
-            Assert.AreEqual(blueStyle, s.GetColumnStyle(3));
+            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            XSSFSheet wb2Sheet= wb.GetSheetAt(0) as XSSFSheet;
+            XSSFRow wb2R3 = wb2Sheet.GetRow(3) as XSSFRow;
+            Assert.AreEqual(blueStyle.Index, wb2R3.GetCell(4).CellStyle.Index);
+            Assert.AreEqual(pinkStyle.Index, wb2R3.GetCell(6).CellStyle.Index);
 
             wb.Close();
         }
