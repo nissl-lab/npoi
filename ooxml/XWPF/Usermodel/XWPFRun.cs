@@ -1279,7 +1279,7 @@ namespace NPOI.XWPF.UserModel
         static void preserveSpaces(CT_Text xs)
         {
             String text = xs.Value;
-            if (text != null && text.Length>=1 && (text.StartsWith(" ") || text.EndsWith(" ")))
+            if (text != null && text.Length>=1 && (text.StartsWith(" ") || text.EndsWith(" ")||text.StartsWith("\t")||text.EndsWith("\t")))
             {
                 //    XmlCursor c = xs.NewCursor();
                 //    c.ToNextToken();

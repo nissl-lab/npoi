@@ -44,7 +44,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 foreach (CT_Xf x in this.xf)
                 {
-                    x.Write(sw, "xf");
+                    x.Write(sw, "xf", true);
                 }
             }
             sw.Write(string.Format("</{0}>", nodeName));

@@ -1456,6 +1456,12 @@ namespace NPOI.HSSF.UserModel
             NotifyArrayFormulaChanging(msg);
         }
 
+        [Obsolete("Will be removed at NPOI 2.8, Use CachedFormulaResultType instead.")]
+        public CellType GetCachedFormulaResultTypeEnum()
+        {
+            throw new NotImplementedException();
+        }
+
         public void SetBlank()
         {
             SetCellType(CellType.Blank);
