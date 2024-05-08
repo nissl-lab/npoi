@@ -313,11 +313,54 @@ namespace NPOI.XSSF.Streaming
 
                     WriteAsBytes("</f>");
 
-                    switch(cell.GetCachedFormulaResultTypeEnum())
+                    switch(cell.CachedFormulaResultType)
                     {
                         case CellType.Numeric:
                             double nval = cell.NumericCellValue;
                             if(!Double.IsNaN(nval))
+                        WriteAsBytes(">");
+                        WriteAsBytes("<f>");
+
+                        OutputQuotedString(cell.CellFormula);
+
+                        WriteAsBytes("</f>");
+
+                        switch (cell.CachedFormulaResultType)
+                        {
+                            case CellType.Numeric:
+                                double nval = cell.NumericCellValue;
+                                if (!Double.IsNaN(nval))
+                                {
+                                    WriteAsBytes("<v>");
+                                    WriteAsBytes(nval);
+                                    WriteAsBytes("</v>");
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    }
+                case CellType.String:
+                    {
+                        if (_sharedStringSource != null)
+                        {
+                            XSSFRichTextString rt = new XSSFRichTextString(cell.StringCellValue);
+                            int sRef = _sharedStringSource.AddEntry(rt.GetCTRst());
+
+                            WriteAsBytes(" t=\"");
+                            WriteAsBytes("s");
+                            WriteAsBytes("\">");
+                            WriteAsBytes("<v>");
+                            WriteAsBytes(sRef);
+                            WriteAsBytes("</v>");
+                        }
+                        else
+                        {
+                            WriteAsBytes(" t=\"inlineStr\">");
+                            WriteAsBytes("<is><t");
+
+                            if (HasLeadingTrailingSpaces(cell.StringCellValue))
                             {
                                 WriteAsBytes("<v>");
                                 WriteAsBytes(nval);

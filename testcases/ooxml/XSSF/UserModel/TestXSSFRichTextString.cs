@@ -278,6 +278,12 @@ namespace TestCases.XSSF.UserModel
             //_x000D_ is Converted into carriage return
             Assert.AreEqual("abc\r2ef\r", rt.String);
 
+            // Test Lowercase case
+            CT_Rst st2 = new CT_Rst();
+            st2.t = ("abc_x000d_2ef_x000d_");
+            XSSFRichTextString rt2 = new XSSFRichTextString(st2);
+            Assert.AreEqual("abc\r2ef\r", rt2.String);
+
         }
         [Ignore("Not Implemented")]
         public void TestApplyFont_lowlevel()
@@ -424,10 +430,9 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual("Apache", str.GetCTRst().GetRArray(0).t);
             Assert.AreEqual(" Software Foundation", str.GetCTRst().GetRArray(1).t);
         }
-        [Ignore("test")]
+        [Ignore("implement STXString")]
         public void TestLineBreaks_bug48877()
         {
-
             //XSSFFont font = new XSSFFont();
             //font.Boldweight = (short)FontBoldWeight.Bold;
             //font.FontHeightInPoints = ((short)14);
@@ -470,8 +475,7 @@ namespace TestCases.XSSF.UserModel
             //str.ApplyFont(0, 4, font);
             //t1 = str.GetCTRst().r[0].xgetT();
             //t2 = str.GetCTRst().r[1].xgetT();
-            //// YK: don't know why, but XmlBeans Converts leading tab characters to spaces
-            ////Assert.AreEqual("<xml-fragment>Tab\t</xml-fragment>", t1.xmlText());
+            //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">Tab\t</xml-fragment>", t1.xmlText());
             //Assert.AreEqual("<xml-fragment xml:space=\"preserve\">Separated\n</xml-fragment>", t2.xmlText());
 
             //str = new XSSFRichTextString("\n\n\nNew Line\n\n");
@@ -594,6 +598,14 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(font, rts.GetFontAtIndex(s2 - 1));
             //Assert.AreEqual("<xml-fragment/>", rts.GetFontAtIndex(s3 - 1).ToString());
             Assert.AreEqual("<font></font>", rts.GetFontAtIndex(s3 - 1).ToString());
+        }
+
+        [Test]
+        public void Test60289UtfDecode()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("60289.xlsx");
+            Assert.AreEqual("Rich Text\r\nTest", wb.GetSheetAt(0).GetRow(1).GetCell(1).RichStringCellValue.String);
+            wb.Close();
         }
 
         [Test]

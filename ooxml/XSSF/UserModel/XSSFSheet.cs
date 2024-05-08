@@ -1463,6 +1463,37 @@ namespace NPOI.XSSF.UserModel
                 row.OnDocumentWrite();
             }
 
+            int minCell = int.MaxValue, maxCell = int.MinValue;
+            foreach (XSSFRow row in _rows.Values)
+            {
+                // first perform the normal write actions for the row
+                row.OnDocumentWrite();
+
+                // then calculate min/max cell-numbers for the worksheet-dimension
+                if (row.FirstCellNum != -1)
+                {
+                    minCell = Math.Min(minCell, row.FirstCellNum);
+                }
+                if (row.LastCellNum != -1)
+                {
+                    maxCell = Math.Max(maxCell, row.LastCellNum);
+                }
+            }
+
+            // finally, if we had at least one cell we can populate the optional dimension-field
+            if (minCell != int.MaxValue)
+            {
+                string ref1 = new CellRangeAddress(FirstRowNum, LastRowNum, minCell, maxCell).FormatAsString();
+                if (worksheet.IsSetDimension())
+                {
+                    worksheet.dimension.@ref = ref1;
+                }
+                else
+                {
+                    worksheet.AddNewDimension().@ref = (ref1);
+                }
+            }
+
             new WorksheetDocument(worksheet).Save(stream, leaveOpen);
 
             // Bug 52233: Ensure that we have a col-array even if write() removed it

@@ -1044,7 +1044,7 @@ namespace NPOI.SS.UserModel
                     {
                         try
                         {
-                            cellType = cell.GetCachedFormulaResultTypeEnum();
+                            cellType = cell.CachedFormulaResultType;
                         }
                         catch(Exception)
                         {

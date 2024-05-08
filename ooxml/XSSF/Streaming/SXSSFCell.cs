@@ -85,9 +85,18 @@ namespace NPOI.XSSF.Streaming
 
         public CellType CachedFormulaResultType
         {
-            get { return GetCachedFormulaResultTypeEnum(); }
+            get
+            {
+                if(_value.GetType() != CellType.Formula)
+                {
+                    throw new InvalidOperationException("Only formula cells have cached results");
+                }
+
+                return ((FormulaValue) _value).GetFormulaType();
+            }
         }
 
+        [Obsolete("Will be removed at NPOI 2.8, Use CachedFormulaResultType instead.")]
         public CellType GetCachedFormulaResultTypeEnum()
         {
             if(_value.GetType() != CellType.Formula)
@@ -778,6 +787,16 @@ namespace NPOI.XSSF.Streaming
                         // if a cell is not blank then convert the old value to string
                         bool val = convertCellValueToBoolean();
                         bval.Value = val;
+
+                        BooleanValue bval = new BooleanValue();
+                        if (_value != null)
+                        {
+                            // if a cell is not blank then convert the old value to string
+                            bool val = ConvertCellValueToBoolean();
+                            bval.Value = val;
+                        }
+                        _value = bval;
+                        break;
                     }
                     _value = bval;
                     break;
@@ -845,13 +864,13 @@ namespace NPOI.XSSF.Streaming
                     + " " + (isFormulaCell ? "formula " : "") + "cell";
             return new InvalidOperationException(msg);
         }
-        private bool convertCellValueToBoolean()
+        private bool ConvertCellValueToBoolean()
         {
             CellType cellType = _value.GetType();
 
             if(cellType == CellType.Formula)
             {
-                cellType = GetCachedFormulaResultTypeEnum();
+                cellType = CachedFormulaResultType;
             }
 
             switch(cellType)

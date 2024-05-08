@@ -410,6 +410,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.sheetCalcPrField != null;
         }
+
+        public bool IsSetDimension()
+        {
+            return this.dimensionField != null;
+        }
         public CT_SheetProtection AddNewSheetProtection()
         {
             this.sheetProtectionField = new CT_SheetProtection();
