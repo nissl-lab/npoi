@@ -1385,6 +1385,7 @@ namespace NPOI.XSSF.UserModel
             return CellUtil.CopyCell(this.Row, this.ColumnIndex, targetIndex);
         }
 
+        [Obsolete("Will be removed at NPOI 2.8, Use CachedFormulaResultType instead.")]
         public CellType GetCachedFormulaResultTypeEnum()
         {
             if(!IsFormulaCell)
@@ -1395,6 +1396,4 @@ namespace NPOI.XSSF.UserModel
             return GetBaseCellType(false);
         }
     }
-
-
 }

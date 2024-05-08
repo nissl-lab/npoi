@@ -111,23 +111,6 @@ namespace NPOI.SS.Formula
             _mode = ShiftMode.SheetMove;
         }
 
-        [Obsolete("deprecated As of 3.14 beta 1 (November 2015), replaced by CreateForRowShift(int, String, int, int, int, SpreadsheetVersion)")]
-        public static FormulaShifter CreateForRowShift(
-            int externSheetIndex,
-            string sheetName,
-            int firstMovedRowIndex,
-            int lastMovedRowIndex,
-            int numberOfRowsToMove)
-        {
-            return CreateForRowShift(
-                externSheetIndex,
-                sheetName,
-                firstMovedRowIndex,
-                lastMovedRowIndex,
-                numberOfRowsToMove,
-                SpreadsheetVersion.EXCEL97);
-        }
-
         public static FormulaShifter CreateForRowShift(
             int externSheetIndex,
             string sheetName,

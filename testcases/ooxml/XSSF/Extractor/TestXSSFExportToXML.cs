@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using NPOI;
+using NPOI.SS.UserModel;
 using NPOI.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.Extractor;
@@ -23,6 +24,7 @@ using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -243,14 +245,14 @@ namespace TestCases.XSSF.Extractor
                 Assert.AreEqual("15", euro);
                 Assert.AreEqual("19", chf);
 
-                parseXML(xmlData);
+                ParseXML(xmlData);
 
                 found = true;
             }
             Assert.True(found);
         }
         [Test]
-        public void testFormulaCells_Bugzilla_55927()
+        public void TestFormulaCells_Bugzilla_55927()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("55927.xlsx");
 
@@ -280,14 +282,14 @@ namespace TestCases.XSSF.Extractor
                 Assert.AreEqual("2012-02-16", xmlData.Split(new string[] { "<FORMULA_DATE>" }, StringSplitOptions.None)[1]
                     .Split(new string[]{"</FORMULA_DATE>"}, StringSplitOptions.None)[0].Trim());
 
-                parseXML(xmlData);
+                ParseXML(xmlData);
 
                 found = true;
             }
             Assert.IsTrue(found);
         }
         [Test]
-        public void testFormulaCells_Bugzilla_55926()
+        public void TestFormulaCells_Bugzilla_55926()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("55926.xlsx");
 
@@ -322,14 +324,14 @@ namespace TestCases.XSSF.Extractor
                 Assert.AreEqual("Hello World", stringValue);
                 Assert.AreEqual("5.0999999999999996", doubleValue);
 
-                parseXML(xmlData);
+                ParseXML(xmlData);
 
                 found = true;
             }
             Assert.IsTrue(found);
         }
         [Test]
-        public void testXmlExportIgnoresEmptyCells_Bugzilla_55924()
+        public void TestXmlExportIgnoresEmptyCells_Bugzilla_55924()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("55924.xlsx");
 
@@ -360,14 +362,14 @@ namespace TestCases.XSSF.Extractor
                     .Split(new string[] {"</EUR>" }, StringSplitOptions.None)[0].Trim();
                 Assert.AreEqual("1", euro);
 
-                parseXML(xmlData);
+                ParseXML(xmlData);
 
                 found = true;
             }
             Assert.IsTrue(found);
         }
         [Test]
-        public void testXmlExportCompare_Bug_55923()
+        public void TestXmlExportCompare_Bug_55923()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("55923.xlsx");
 
@@ -397,7 +399,7 @@ namespace TestCases.XSSF.Extractor
             Assert.IsTrue(found);
         }
         [Test]
-        public void testXmlExportSchemaWithXSAllTag_Bugzilla_56169()
+        public void TestXmlExportSchemaWithXSAllTag_Bugzilla_56169()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56169.xlsx");
 
@@ -446,7 +448,7 @@ namespace TestCases.XSSF.Extractor
             Assert.IsTrue(found);
         }
         [Test]
-        public void testXmlExportSchemaOrderingBug_Bugzilla_55923()
+        public void TestXmlExportSchemaOrderingBug_Bugzilla_55923()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("55923.xlsx");
 
@@ -504,14 +506,198 @@ namespace TestCases.XSSF.Extractor
             }
             Assert.IsTrue(found);
         }
-        private void parseXML(String xmlData) {
+        private void ParseXML(String xmlData) 
+        {
             string _byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
-            if(xmlData.StartsWith(_byteOrderMarkUtf8))
-            {
-                xmlData = xmlData.Remove(0, _byteOrderMarkUtf8.Length);
-            }
+            xmlData = xmlData.TrimStart(_byteOrderMarkUtf8.ToCharArray());
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xmlData);
+        }
+
+        [Test]
+        public void TestExportDataTypes()
+        {
+
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("55923.xlsx");
+
+            ISheet sheet = wb.GetSheetAt(0);
+            IRow row = sheet.GetRow(0);
+
+            ICell cString = row.CreateCell(0);
+            cString.SetCellValue("somestring");
+            cString.SetCellType(CellType.String);
+
+            ICell cBoolean = row.CreateCell(1);
+            cBoolean.SetCellValue(true);
+            cBoolean.SetCellType(CellType.Boolean);
+
+            ICell cError = row.CreateCell(2);
+            cError.SetCellType(CellType.Error);
+
+            ICell cFormulaString = row.CreateCell(3);
+            cFormulaString.CellFormula = (/*setter*/"A1");
+            cFormulaString.SetCellType(CellType.Formula);
+
+            ICell cFormulaNumeric = row.CreateCell(4);
+            cFormulaNumeric.CellFormula = (/*setter*/"F1");
+            cFormulaNumeric.SetCellType(CellType.Formula);
+
+            ICell cNumeric = row.CreateCell(5);
+            cNumeric.SetCellValue(1.2);
+            cNumeric.SetCellType(CellType.Numeric);
+
+            ICell cDate = row.CreateCell(6);
+            cDate.SetCellValue(new DateTime());
+            cDate.SetCellType(CellType.Numeric);
+
+            bool found = false;
+            foreach(POIXMLDocumentPart p in wb.GetRelations())
+            {
+
+                if(!(p is MapInfo))
+                {
+                    continue;
+                }
+                MapInfo mapInfo = (MapInfo)p;
+
+                XSSFMap map = mapInfo.GetXSSFMapById(4);
+
+                Assert.IsNotNull(map, "XSSFMap is null");
+
+                XSSFExportToXml exporter = new XSSFExportToXml(map);
+                MemoryStream os = new MemoryStream();
+                exporter.ExportToXML(os, true);
+                String xmlData = os.ToString("utf-8");
+
+                Assert.IsNotNull(xmlData);
+                Assert.IsFalse(xmlData.Equals(""));
+
+                ParseXML(xmlData);
+
+                found = true;
+            }
+            Assert.IsTrue(found);
+        }
+
+        [Test]
+        public void TestValidateFalse()
+        {
+
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("55923.xlsx");
+
+            bool found = false;
+            foreach(POIXMLDocumentPart p in wb.GetRelations())
+            {
+
+                if(!(p is MapInfo))
+                {
+                    continue;
+                }
+                MapInfo mapInfo = (MapInfo)p;
+
+                XSSFMap map = mapInfo.GetXSSFMapById(4);
+
+                Assert.IsNotNull(map, "XSSFMap is null");
+
+                XSSFExportToXml exporter = new XSSFExportToXml(map);
+                MemoryStream os = new MemoryStream();
+                exporter.ExportToXML(os, false);
+                String xmlData = os.ToString("utf-8");
+
+                Assert.IsNotNull(xmlData);
+                Assert.IsFalse(xmlData.Equals(""));
+
+                ParseXML(xmlData);
+
+                found = true;
+            }
+            Assert.IsTrue(found);
+        }
+
+        [Test]
+        public void TestRefElementsInXmlSchema_Bugzilla_56730()
+        {
+
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56730.xlsx");
+
+            bool found = false;
+            foreach(POIXMLDocumentPart p in wb.GetRelations())
+            {
+
+                if(!(p is MapInfo))
+                {
+                    continue;
+                }
+                MapInfo mapInfo = (MapInfo)p;
+
+                XSSFMap map = mapInfo.GetXSSFMapById(1);
+
+                Assert.IsNotNull(map, "XSSFMap is null");
+
+                XSSFExportToXml exporter = new XSSFExportToXml(map);
+                MemoryStream os = new MemoryStream();
+                exporter.ExportToXML(os, true);
+                String xmlData = os.ToString("utf-8");
+
+                Assert.IsNotNull(xmlData);
+                Assert.IsFalse(xmlData.Equals(""));
+
+                Assert.AreEqual("2014-12-31", xmlData.Split("<DATE>")[1].Split("</DATE>")[0].Trim());
+                Assert.AreEqual("12.5", xmlData.Split("<REFELEMENT>")[1].Split("</REFELEMENT>")[0].Trim());
+
+                ParseXML(xmlData);
+
+                found = true;
+            }
+            Assert.IsTrue(found);
+        }
+
+        [Test]
+        public void TestBug59026()
+        {
+
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("59026.xlsx");
+
+            List<XSSFMap> mappings = wb.GetCustomXMLMappings();
+            Assert.IsTrue(mappings.Count > 0);
+            foreach(XSSFMap map in mappings)
+            {
+                XSSFExportToXml exporter = new XSSFExportToXml(map);
+
+                MemoryStream os = new MemoryStream();
+                exporter.ExportToXML(os, false);
+                Assert.IsNotNull(os.ToString("utf-8"));
+            }
+        }
+    }
+
+    public static class TestExtensions
+    {
+        public static string ToString(this MemoryStream ms, string encodingName)
+        {
+            if(ms == null || ms.Length == 0)
+                return null;
+            byte[] buffer = ms.ToArray();
+            int index = 0;
+            if(buffer[0] == 239 && buffer[1] == 187 && buffer[2] == 191)
+                index = 3;
+            return Encoding.GetEncoding(encodingName)?.GetString(buffer, index, buffer.Length - index);
+        }
+
+        public static string[] Split(this string text, string splitString)
+        {
+            List<string> ret = new List<string>();
+            int pos = text.IndexOf(splitString);
+            if(pos >= 0)
+            {
+                ret.Add(text.Substring(0, pos));
+                ret.Add(text.Substring(pos + splitString.Length));
+            }
+            else
+            {
+                ret.Add(text);
+            }
+            return ret.ToArray();
         }
     }
 }

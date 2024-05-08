@@ -98,7 +98,9 @@ namespace NPOI.HPSF
             WriteProperties(fs, excepts);
 
             // Copy over everything else unchanged
-            EntryUtils.CopyNodes(directory, fs.Root, excepts);
+            FilteringDirectoryNode src = new FilteringDirectoryNode(directory, excepts);
+            FilteringDirectoryNode dest = new FilteringDirectoryNode(fs.Root, excepts);
+            EntryUtils.CopyNodes(src, dest);
 
             // Caller will save the resultant POIFSFileSystem to the stream/file
         }
