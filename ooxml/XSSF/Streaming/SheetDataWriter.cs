@@ -37,7 +37,7 @@ namespace NPOI.XSSF.Streaming
         public int LowestIndexOfFlushedRows { get; set; } = -1; // meaningful only of _numberOfFlushedRows>0
         public int NumberOfCellsOfLastFlushedRow { get; set; } // meaningful only of _numberOfFlushedRows>0
         public int NumberLastFlushedRow = -1; // meaningful only of _numberOfFlushedRows>0
-        
+
         /**
          * Table of strings shared across this workbook.
          * If two cells contain the same string, then the cell value is the same index into SharedStringsTable
@@ -318,49 +318,6 @@ namespace NPOI.XSSF.Streaming
                         case CellType.Numeric:
                             double nval = cell.NumericCellValue;
                             if(!Double.IsNaN(nval))
-                        WriteAsBytes(">");
-                        WriteAsBytes("<f>");
-
-                        OutputQuotedString(cell.CellFormula);
-
-                        WriteAsBytes("</f>");
-
-                        switch (cell.CachedFormulaResultType)
-                        {
-                            case CellType.Numeric:
-                                double nval = cell.NumericCellValue;
-                                if (!Double.IsNaN(nval))
-                                {
-                                    WriteAsBytes("<v>");
-                                    WriteAsBytes(nval);
-                                    WriteAsBytes("</v>");
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    }
-                case CellType.String:
-                    {
-                        if (_sharedStringSource != null)
-                        {
-                            XSSFRichTextString rt = new XSSFRichTextString(cell.StringCellValue);
-                            int sRef = _sharedStringSource.AddEntry(rt.GetCTRst());
-
-                            WriteAsBytes(" t=\"");
-                            WriteAsBytes("s");
-                            WriteAsBytes("\">");
-                            WriteAsBytes("<v>");
-                            WriteAsBytes(sRef);
-                            WriteAsBytes("</v>");
-                        }
-                        else
-                        {
-                            WriteAsBytes(" t=\"inlineStr\">");
-                            WriteAsBytes("<is><t");
-
-                            if (HasLeadingTrailingSpaces(cell.StringCellValue))
                             {
                                 WriteAsBytes("<v>");
                                 WriteAsBytes(nval);

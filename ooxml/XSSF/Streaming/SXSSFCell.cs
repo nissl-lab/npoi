@@ -99,12 +99,7 @@ namespace NPOI.XSSF.Streaming
         [Obsolete("Will be removed at NPOI 2.8, Use CachedFormulaResultType instead.")]
         public CellType GetCachedFormulaResultTypeEnum()
         {
-            if(_value.GetType() != CellType.Formula)
-            {
-                throw new InvalidOperationException("Only formula cells have cached results");
-            }
-
-            return ((FormulaValue) _value).GetFormulaType();
+            return CachedFormulaResultType;
         }
 
         public IComment CellComment
@@ -785,18 +780,8 @@ namespace NPOI.XSSF.Streaming
                     if(_value != null)
                     {
                         // if a cell is not blank then convert the old value to string
-                        bool val = convertCellValueToBoolean();
+                        bool val = ConvertCellValueToBoolean();
                         bval.Value = val;
-
-                        BooleanValue bval = new BooleanValue();
-                        if (_value != null)
-                        {
-                            // if a cell is not blank then convert the old value to string
-                            bool val = ConvertCellValueToBoolean();
-                            bval.Value = val;
-                        }
-                        _value = bval;
-                        break;
                     }
                     _value = bval;
                     break;
