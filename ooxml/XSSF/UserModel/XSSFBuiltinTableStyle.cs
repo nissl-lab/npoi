@@ -1,5 +1,5 @@
-﻿using EnumsNET;
-using NPOI.SS.UserModel;
+﻿using NPOI.SS.UserModel;
+using NPOI.Util;
 using NPOI.XSSF.Model;
 using System;
 using System.Collections.Generic;
@@ -309,11 +309,13 @@ namespace NPOI.XSSF.UserModel
             Init();
             return styleMap[style];
         }
+        private static readonly HashSet<string> BuiltInStyleNames = new HashSet<string>(EnumExtensions.GetEnumNames<XSSFBuiltinTableStyleEnum>());
         public static bool IsBuiltinStyle(ITableStyle style)
         {
             if (style == null) 
                 return false;
-            return Enums.GetNames<XSSFBuiltinTableStyleEnum>().Any(x=>x==style.Name);
+
+            return BuiltInStyleNames.Contains(style.Name);
         }
         private static void Init()
         {
