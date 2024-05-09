@@ -87,6 +87,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "BIN2OCT", null);
             r(m, "COMPLEX", Complex.Instance);
             r(m, "CONVERT", null);
+            r(m, "CONCAT", TextFunction.CONCAT);
             r(m, "COUNTIFS", Countifs.instance);
             r(m, "COUPDAYBS", null);
             r(m, "COUPDAYS", null);
