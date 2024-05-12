@@ -294,9 +294,9 @@ namespace NPOI.OpenXml4Net.OPC
          *            The InputStream to read the package from
          * @return A PackageBase object
          */
-        public static OPCPackage Open(Stream in1)
+        public static OPCPackage Open(Stream stream)
         {
-            OPCPackage pack = new ZipPackage(in1, PackageAccess.READ_WRITE);
+            OPCPackage pack = new ZipPackage(stream, PackageAccess.READ_WRITE);
             try
             {
                 if (pack.partList == null)
@@ -317,9 +317,9 @@ namespace NPOI.OpenXml4Net.OPC
             return pack;
         }
 
-        public static OPCPackage Open(Stream in1,bool bReadonly)
+        public static OPCPackage Open(Stream stream,bool readOnly)
         {
-            OPCPackage pack = new ZipPackage(in1, bReadonly ? PackageAccess.READ : PackageAccess.READ_WRITE);
+            OPCPackage pack = new ZipPackage(stream, readOnly ? PackageAccess.READ : PackageAccess.READ_WRITE);
             if (pack.partList == null)
             {
                 pack.GetParts();
