@@ -183,6 +183,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "TBILLPRICE", null);
             r(m, "TBILLYIELD", null);
             r(m, "TEXTJOIN", TextJoinFunction.instance);
+            r(m, "T.INV", TInv.instance);
             r(m, "WEEKNUM", WeekNum.instance);
             r(m, "WORKDAY", WorkdayFunction.instance);
             r(m, "WORKDAY.INTL", WorkdayIntlFunction.instance);
