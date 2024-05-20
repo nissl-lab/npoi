@@ -729,7 +729,7 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ICellStyle style = wb.CreateCellStyle();
             ISheet sheet = wb.CreateSheet();
-            sheet.SetDefaultColumnStyle(/*setter*/0, style);
+            sheet.SetDefaultColumnStyle(0, style);
             Assert.IsNotNull(sheet.GetColumnStyle(0));
             Assert.AreEqual(style.Index, sheet.GetColumnStyle(0).Index);
 
@@ -739,8 +739,46 @@ namespace TestCases.SS.UserModel
             Assert.IsNotNull(style2);
             Assert.AreEqual(style.Index, style2.Index, "style should match");
 
+            var wb2 = _testDataProvider.WriteOutAndReadBack(wb);
+            var wb2Sheet= wb2.GetSheetAt(0);
+            Assert.IsNotNull(wb2Sheet.GetColumnStyle(0));
+            Assert.AreEqual(style.Index, wb2Sheet.GetColumnStyle(0).Index);
+
+            var wb2R0 = wb2Sheet.GetRow(0);
+            var wb2Cell = wb2R0.GetCell(0);
+            var style3 = wb2Cell.CellStyle;
+            Assert.IsNotNull(style3);
+            Assert.AreEqual(style.Index, style3.Index, "style3 should match");
+
             wb.Close();
         }
+
+        [Test]
+        public virtual void DefaultRowStyle()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ICellStyle style = wb.CreateCellStyle();
+            ISheet sheet = wb.CreateSheet();
+            var r0 = sheet.CreateRow(0);
+            r0.RowStyle = style;
+            Assert.IsNotNull(r0.RowStyle);
+            Assert.AreEqual(style.Index, r0.RowStyle.Index);
+
+            var cell = r0.CreateCell(0);
+            var style2 = cell.CellStyle;
+            Assert.IsNotNull(style2);
+            //current implementations mean that cells inherit column style but not row style
+            Assert.AreNotEqual(style.Index, style2.Index, "style should not match"); // failing
+
+            var wb2 = _testDataProvider.WriteOutAndReadBack(wb);
+            var wb2Sheet= wb2.GetSheetAt(0);
+            var wb2R0 = wb2Sheet.GetRow(0);
+            Assert.IsNotNull(wb2R0.RowStyle);
+            Assert.AreEqual(style.Index, wb2R0.RowStyle.Index);
+
+            wb.Close();
+        }
+
         [Test]
         public void TestOutlineProperties()
         {

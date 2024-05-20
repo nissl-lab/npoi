@@ -49,12 +49,18 @@ namespace TestCases.XSSF.UserModel
 
         }
 
-        //[Test]
-        //TODO column styles are not yet supported by XSSF
+        [Test]
         public override void DefaultColumnStyle()
         {
             base.DefaultColumnStyle();
         }
+
+        [Test]
+        public override void DefaultRowStyle()
+        {
+            base.DefaultRowStyle();
+        }
+
         [Test]
         public void TestTestGetSetMargin()
         {

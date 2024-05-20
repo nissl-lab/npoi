@@ -130,7 +130,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetS()
         {
-            return sField != 0;
+            return sField != null && sField != 0;
         }
         public bool IsSetF()
         {

@@ -3,6 +3,7 @@ using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.Streaming;
+using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using System.IO;
 using TestCases.SS.UserModel;
@@ -83,6 +84,51 @@ namespace TestCases.XSSF.Streaming
                     throw e;
                 }
             }
+        }
+
+        /**
+         * Default Column style
+         */
+        [Test]
+        public void Test51037()
+        {
+            SXSSFWorkbook wb = new SXSSFWorkbook();
+
+            ICellStyle blueStyle = wb.CreateCellStyle();
+            blueStyle.FillForegroundColor = IndexedColors.Aqua.Index;
+            blueStyle.FillPattern = FillPattern.SolidForeground;
+
+            ICellStyle pinkStyle = wb.CreateCellStyle();
+            pinkStyle.FillForegroundColor = IndexedColors.Pink.Index;
+            pinkStyle.FillPattern = FillPattern.SolidForeground;
+
+            SXSSFSheet s1 = wb.CreateSheet("Pretty columns") as SXSSFSheet;
+
+            s1.SetDefaultColumnStyle(4, blueStyle);
+            s1.SetDefaultColumnStyle(6, pinkStyle);
+
+            SXSSFRow r3 = s1.CreateRow(3) as SXSSFRow;
+            r3.CreateCell(0).SetCellValue("The");
+            r3.CreateCell(1).SetCellValue("quick");
+            r3.CreateCell(2).SetCellValue("brown");
+            r3.CreateCell(3).SetCellValue("fox");
+            r3.CreateCell(4).SetCellValue("jumps");
+            r3.CreateCell(5).SetCellValue("over");
+            r3.CreateCell(6).SetCellValue("the");
+            r3.CreateCell(7).SetCellValue("lazy");
+            r3.CreateCell(8).SetCellValue("dog");
+
+            Assert.AreEqual(blueStyle.Index, r3.GetCell(4).CellStyle.Index);
+            Assert.AreEqual(pinkStyle.Index, r3.GetCell(6).CellStyle.Index);
+
+            // Save, re-load and re-check 
+            var wb2 = (XSSFWorkbook)_testDataProvider.WriteOutAndReadBack(wb);
+            XSSFSheet wb2Sheet= wb2.GetSheetAt(0) as XSSFSheet;
+            XSSFRow wb2R3 = wb2Sheet.GetRow(3) as XSSFRow;
+            Assert.AreEqual(blueStyle.Index, wb2R3.GetCell(4).CellStyle.Index);
+            Assert.AreEqual(pinkStyle.Index, wb2R3.GetCell(6).CellStyle.Index);
+
+            wb.Close();
         }
     }
 }

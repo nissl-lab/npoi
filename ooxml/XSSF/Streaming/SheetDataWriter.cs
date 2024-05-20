@@ -44,6 +44,7 @@ namespace NPOI.XSSF.Streaming
          */
         private readonly SharedStringsTable _sharedStringSource;
         private readonly StreamWriter _outputWriter;
+        private readonly bool _ignoreCellStyle;
 
         public SheetDataWriter()
         {
@@ -55,6 +56,16 @@ namespace NPOI.XSSF.Streaming
         {
             _sharedStringSource = sharedStringsTable;
         }
+
+        /**
+         * @param sharedStringsTable the shared strings table, or null if inline text is used
+         * @param ignoreCellStyle whether to use cell style
+         */
+        public SheetDataWriter(SharedStringsTable sharedStringsTable, bool ignoreCellStyle) : this(sharedStringsTable)
+        {
+            _ignoreCellStyle = ignoreCellStyle;
+        }
+
         /**
          * Create a temp file to write sheet data. 
          * By default, temp files are created in the default temporary-file directory
@@ -141,7 +152,7 @@ namespace NPOI.XSSF.Streaming
             {
                 return DecorateInputStream(fis);
             }
-            catch (IOException)
+            catch(IOException)
             {
                 fis.Close();
                 throw;
@@ -166,7 +177,7 @@ namespace NPOI.XSSF.Streaming
         protected void FinalizeWriter()
         {
             TemporaryFileInfo.Delete();
-            if (File.Exists(TemporaryFileInfo.FullName))
+            if(File.Exists(TemporaryFileInfo.FullName))
             {
                 logger.Log(POILogger.ERROR, "Can't delete temporary encryption file: " + TemporaryFileInfo);
             }
@@ -181,18 +192,18 @@ namespace NPOI.XSSF.Streaming
         public void WriteRow(int rownum, SXSSFRow row)
         {
             BeginRow(rownum, row);
-            
-            using (var cells = row.AllCellsIterator())
+
+            using(var cells = row.AllCellsIterator())
             {
                 int columnIndex = 0;
-                while (cells.MoveNext())
+                while(cells.MoveNext())
                 {
                     WriteCell(columnIndex++, cells.Current);
                 }
                 EndRow();
             }
-            
-            if (LowestIndexOfFlushedRows == -1 || LowestIndexOfFlushedRows > rownum)
+
+            if(LowestIndexOfFlushedRows == -1 || LowestIndexOfFlushedRows > rownum)
             {
                 LowestIndexOfFlushedRows = rownum;
                 NumberOfFlushedRows++;
@@ -215,17 +226,17 @@ namespace NPOI.XSSF.Streaming
             WriteAsBytes(rownum + 1);
             WriteAsBytes("\"");
 
-            if (row.HasCustomHeight())
+            if(row.HasCustomHeight())
             {
                 WriteAsBytes(" customHeight=\"1\" ht=\"");
                 WriteAsBytes(row.HeightInPoints);
                 WriteAsBytes("\"");
             }
-            if (row.ZeroHeight)
+            if(row.ZeroHeight)
             {
                 WriteAsBytes(" hidden=\"1\"");
             }
-            if (row.IsFormatted)
+            if(row.IsFormatted)
             {
                 WriteAsBytes(" s=\"");
                 WriteAsBytes(row.RowStyle.Index);
@@ -233,19 +244,19 @@ namespace NPOI.XSSF.Streaming
                 WriteAsBytes(" customFormat=\"1\"");
             }
 
-            if (row.OutlineLevel != 0)
+            if(row.OutlineLevel != 0)
             {
                 WriteAsBytes(" outlineLevel=\"");
                 WriteAsBytes(row.OutlineLevel);
                 WriteAsBytes("\"");
             }
-            if (row.Hidden != null)
+            if(row.Hidden != null)
             {
                 WriteAsBytes(" hidden=\"");
                 WriteAsBytes(row.Hidden.Value ? "1" : "0");
                 WriteAsBytes("\"");
             }
-            if (row.Collapsed != null)
+            if(row.Collapsed != null)
             {
                 WriteAsBytes(" collapsed=\"");
                 WriteAsBytes(row.Collapsed.Value ? "1" : "0");
@@ -264,7 +275,7 @@ namespace NPOI.XSSF.Streaming
 
         public void WriteCell(int columnIndex, ICell cell)
         {
-            if (cell == null)
+            if(cell == null)
             {
                 return;
             }
@@ -273,109 +284,113 @@ namespace NPOI.XSSF.Streaming
             WriteAsBytes(cellRef);
             WriteAsBytes("\"");
 
-            if (cell.CellStyle.Index != 0)
+            if(!_ignoreCellStyle)
             {
-                // need to convert the short to unsigned short as the indexes can be up to 64k
-                // ideally we would use int for this index, but that would need changes to some more 
-                // APIs
-                WriteAsBytes(" s=\"");
-                WriteAsBytes(cell.CellStyle.Index & 0xffff);
-                WriteAsBytes("\"");
+                if(cell.CellStyle.Index != 0)
+                {
+                    // need to convert the short to unsigned short as the indexes can be up to 64k
+                    // ideally we would use int for this index, but that would need changes to some more 
+                    // APIs
+                    WriteAsBytes(" s=\"");
+                    WriteAsBytes(cell.CellStyle.Index & 0xffff);
+                    WriteAsBytes("\"");
+                }
             }
-            switch (cell.CellType)
+
+            switch(cell.CellType)
             {
                 case CellType.Blank:
-                    {
-                        WriteAsBytes(">");
-                        break;
-                    }
+                {
+                    WriteAsBytes(">");
+                    break;
+                }
                 case CellType.Formula:
+                {
+                    WriteAsBytes(">");
+                    WriteAsBytes("<f>");
+
+                    OutputQuotedString(cell.CellFormula);
+
+                    WriteAsBytes("</f>");
+
+                    switch(cell.CachedFormulaResultType)
                     {
-                        WriteAsBytes(">");
-                        WriteAsBytes("<f>");
-
-                        OutputQuotedString(cell.CellFormula);
-
-                        WriteAsBytes("</f>");
-
-                        switch (cell.CachedFormulaResultType)
-                        {
-                            case CellType.Numeric:
-                                double nval = cell.NumericCellValue;
-                                if (!Double.IsNaN(nval))
-                                {
-                                    WriteAsBytes("<v>");
-                                    WriteAsBytes(nval);
-                                    WriteAsBytes("</v>");
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    }
-                case CellType.String:
-                    {
-                        if (_sharedStringSource != null)
-                        {
-                            XSSFRichTextString rt = new XSSFRichTextString(cell.StringCellValue);
-                            int sRef = _sharedStringSource.AddEntry(rt.GetCTRst());
-
-                            WriteAsBytes(" t=\"");
-                            WriteAsBytes("s");
-                            WriteAsBytes("\">");
-                            WriteAsBytes("<v>");
-                            WriteAsBytes(sRef);
-                            WriteAsBytes("</v>");
-                        }
-                        else
-                        {
-                            WriteAsBytes(" t=\"inlineStr\">");
-                            WriteAsBytes("<is><t");
-
-                            if (HasLeadingTrailingSpaces(cell.StringCellValue))
+                        case CellType.Numeric:
+                            double nval = cell.NumericCellValue;
+                            if(!Double.IsNaN(nval))
                             {
-                                WriteAsBytes(" xml:space=\"preserve\"");
+                                WriteAsBytes("<v>");
+                                WriteAsBytes(nval);
+                                WriteAsBytes("</v>");
                             }
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case CellType.String:
+                {
+                    if(_sharedStringSource != null)
+                    {
+                        XSSFRichTextString rt = new XSSFRichTextString(cell.StringCellValue);
+                        int sRef = _sharedStringSource.AddEntry(rt.GetCTRst());
 
-                            WriteAsBytes(">");
+                        WriteAsBytes(" t=\"");
+                        WriteAsBytes("s");
+                        WriteAsBytes("\">");
+                        WriteAsBytes("<v>");
+                        WriteAsBytes(sRef);
+                        WriteAsBytes("</v>");
+                    }
+                    else
+                    {
+                        WriteAsBytes(" t=\"inlineStr\">");
+                        WriteAsBytes("<is><t");
 
-                            OutputQuotedString(cell.StringCellValue);
-
-                            WriteAsBytes("</t></is>");
+                        if(HasLeadingTrailingSpaces(cell.StringCellValue))
+                        {
+                            WriteAsBytes(" xml:space=\"preserve\"");
                         }
-                        break;
-                    }
-                case CellType.Numeric:
-                    {
-                        WriteAsBytes(" t=\"n\">");
-                        WriteAsBytes("<v>");
-                        WriteAsBytes(cell.NumericCellValue);
-                        WriteAsBytes("</v>");
-                        break;
-                    }
-                case CellType.Boolean:
-                    {
-                        WriteAsBytes(" t=\"b\">");
-                        WriteAsBytes("<v>");
-                        WriteAsBytes(cell.BooleanCellValue ? "1" : "0");
-                        WriteAsBytes("</v>");
-                        break;
-                    }
-                case CellType.Error:
-                    {
-                        FormulaError error = FormulaError.ForInt(cell.ErrorCellValue);
 
-                        WriteAsBytes(" t=\"e\">");
-                        WriteAsBytes("<v>");
-                        WriteAsBytes(error.String);
-                        WriteAsBytes("</v>");
-                        break;
+                        WriteAsBytes(">");
+
+                        OutputQuotedString(cell.StringCellValue);
+
+                        WriteAsBytes("</t></is>");
                     }
+                    break;
+                }
+                case CellType.Numeric:
+                {
+                    WriteAsBytes(" t=\"n\">");
+                    WriteAsBytes("<v>");
+                    WriteAsBytes(cell.NumericCellValue);
+                    WriteAsBytes("</v>");
+                    break;
+                }
+                case CellType.Boolean:
+                {
+                    WriteAsBytes(" t=\"b\">");
+                    WriteAsBytes("<v>");
+                    WriteAsBytes(cell.BooleanCellValue ? "1" : "0");
+                    WriteAsBytes("</v>");
+                    break;
+                }
+                case CellType.Error:
+                {
+                    FormulaError error = FormulaError.ForInt(cell.ErrorCellValue);
+
+                    WriteAsBytes(" t=\"e\">");
+                    WriteAsBytes("<v>");
+                    WriteAsBytes(error.String);
+                    WriteAsBytes("</v>");
+                    break;
+                }
                 default:
-                    {
-                        throw new InvalidOperationException("Invalid cell type: " + cell.CellType);
-                    }
+                {
+                    throw new InvalidOperationException("Invalid cell type: " + cell.CellType);
+                }
             }
             WriteAsBytes("</c>");
         }
@@ -411,7 +426,7 @@ namespace NPOI.XSSF.Streaming
          */
         private bool HasLeadingTrailingSpaces(string str)
         {
-            if (!string.IsNullOrEmpty(str))
+            if(!string.IsNullOrEmpty(str))
             {
                 char firstChar = str[0];
                 char lastChar = str[str.Length - 1];
@@ -423,7 +438,7 @@ namespace NPOI.XSSF.Streaming
         //Taken from jdk1.3/src/javax/swing/text/html/HTMLWriter.java
         protected void OutputQuotedString(string s)
         {
-            if (string.IsNullOrEmpty(s))
+            if(string.IsNullOrEmpty(s))
             {
                 return;
             }
@@ -431,13 +446,13 @@ namespace NPOI.XSSF.Streaming
             char[] chars = s.ToCharArray();
             int last = 0;
             int length = s.Length;
-            for (int counter = 0; counter < length; counter++)
+            for(int counter = 0; counter < length; counter++)
             {
                 char c = chars[counter];
-                switch (c)
+                switch(c)
                 {
                     case '<':
-                        if (counter > last)
+                        if(counter > last)
                         {
                             WriteAsBytes(GetSubArray(chars, last, counter - last));
                         }
@@ -446,7 +461,7 @@ namespace NPOI.XSSF.Streaming
                         WriteAsBytes("&lt;");
                         break;
                     case '>':
-                        if (counter > last)
+                        if(counter > last)
                         {
                             WriteAsBytes(GetSubArray(chars, last, counter - last));
                         }
@@ -454,7 +469,7 @@ namespace NPOI.XSSF.Streaming
                         WriteAsBytes("&gt;");
                         break;
                     case '&':
-                        if (counter > last)
+                        if(counter > last)
                         {
                             WriteAsBytes(GetSubArray(chars, last, counter - last));
                         }
@@ -462,7 +477,7 @@ namespace NPOI.XSSF.Streaming
                         WriteAsBytes("&amp;");
                         break;
                     case '"':
-                        if (counter > last)
+                        if(counter > last)
                         {
                             WriteAsBytes(GetSubArray(chars, last, counter - last));
                         }
@@ -472,7 +487,7 @@ namespace NPOI.XSSF.Streaming
                     // Special characters
                     case '\n':
                     case '\r':
-                        if (counter > last)
+                        if(counter > last)
                         {
                             WriteAsBytes(GetSubArray(chars, last, counter - last));
                         }
@@ -480,15 +495,15 @@ namespace NPOI.XSSF.Streaming
                         last = counter + 1;
                         break;
                     case '\t':
-                        if (counter > last)
+                        if(counter > last)
                         {
                             WriteAsBytes(GetSubArray(chars, last, counter - last));
                         }
                         WriteAsBytes("&#x9;");
                         last = counter + 1;
                         break;
-                    case (char)0xa0:
-                        if (counter > last)
+                    case (char) 0xa0:
+                        if(counter > last)
                         {
                             WriteAsBytes(GetSubArray(chars, last, counter - last));
                         }
@@ -498,18 +513,18 @@ namespace NPOI.XSSF.Streaming
                     default:
                         // YK: XmlBeans silently replaces all ISO control characters ( < 32) with question marks.
                         // the same rule applies to unicode surrogates and "not a character" symbols.
-                        if (c < ' ' || Char.IsLowSurrogate(c) || Char.IsHighSurrogate(c) || '\uFFFE' <= c)
+                        if(c < ' ' || Char.IsLowSurrogate(c) || Char.IsHighSurrogate(c) || '\uFFFE' <= c)
                         {
-                            if (counter > last)
+                            if(counter > last)
                             {
                                 WriteAsBytes(GetSubArray(chars, last, counter - last));
                             }
                             WriteAsBytes("?");
                             last = counter + 1;
                         }
-                        else if (c > 127)
+                        else if(c > 127)
                         {
-                            if (counter > last)
+                            if(counter > last)
                             {
                                 WriteAsBytes(GetSubArray(chars, last, counter - last));
                             }
@@ -523,7 +538,7 @@ namespace NPOI.XSSF.Streaming
                         break;
                 }
             }
-            if (last < length)
+            if(last < length)
             {
                 WriteAsBytes(GetSubArray(chars, last, length - last));
             }
@@ -557,7 +572,7 @@ namespace NPOI.XSSF.Streaming
 
         public string TemporaryFilePath()
         {
-            if (TemporaryFileInfo != null)
+            if(TemporaryFileInfo != null)
             {
                 return TemporaryFileInfo.FullName;
             }
