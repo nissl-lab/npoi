@@ -47,7 +47,9 @@ namespace NPOI.HSSF.UserModel
         /**
          * Constructor which Initializes the cell range on which this object will be
          * applied
-         * @param constraint 
+         *
+         * @param regions A list of regions where the constraint is validated.
+         * @param constraint The constraints to apply for this validation.
          */
         public HSSFDataValidation(CellRangeAddressList regions, IDataValidationConstraint constraint)
         {
@@ -153,6 +155,14 @@ namespace NPOI.HSSF.UserModel
          */
         public void CreatePromptBox(String title, String text)
         {
+            if (title != null && title.Length > 32)
+            {
+                throw new ArgumentOutOfRangeException("Prompt-title cannot be longer than 32 characters, but had: " + title);
+            }
+            if (text != null && text.Length > 255)
+            {
+                throw new ArgumentOutOfRangeException("Prompt-text cannot be longer than 255 characters, but had: " + text);
+            }
             _prompt_title = title;
             _prompt_text = text;
             this.ShowPromptBox = (/*setter*/true);
@@ -185,6 +195,14 @@ namespace NPOI.HSSF.UserModel
          */
         public void CreateErrorBox(String title, String text)
         {
+            if (title != null && title.Length > 32)
+            {
+                throw new ArgumentOutOfRangeException("Error-title cannot be longer than 32 characters, but had: " + title);
+            }
+            if (text != null && text.Length > 255)
+            {
+                throw new ArgumentOutOfRangeException("Error-text cannot be longer than 255 characters, but had: " + text);
+            }
             _error_title = title;
             _error_text = text;
             this.ShowErrorBox = (/*setter*/true);

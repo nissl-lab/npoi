@@ -58,8 +58,7 @@ namespace TestCases.XSSF.UserModel
         public void TestReadOffice2007()
         {
             // TODO Bring the XSSF support up to the same level
-            testReadOffice2007("NewStyleConditionalFormattings.xlsx");
+            TestReadOffice2007("NewStyleConditionalFormattings.xlsx");
         }
     }
-
 }

@@ -102,6 +102,15 @@ namespace NPOI.XSSF.UserModel
          */
         public void CreateErrorBox(String title, String text)
         {
+            // the spec does not specify a length-limit, however Excel reports files as "corrupt" if they exceed 255 bytes for these texts...
+            if (title != null && title.Length > 255)
+            {
+                throw new ArgumentOutOfRangeException("Error-title cannot be longer than 32 characters, but had: " + title);
+            }
+            if (text != null && text.Length > 255)
+            {
+                throw new ArgumentOutOfRangeException("Error-text cannot be longer than 255 characters, but had: " + text);
+            }
             ctDdataValidation.errorTitle = (title);
             ctDdataValidation.error = (text);
         }
@@ -111,6 +120,15 @@ namespace NPOI.XSSF.UserModel
          */
         public void CreatePromptBox(String title, String text)
         {
+            // the spec does not specify a length-limit, however Excel reports files as "corrupt" if they exceed 255 bytes for these texts...
+            if (title != null && title.Length > 255)
+            {
+                throw new ArgumentOutOfRangeException("Prompt-title cannot be longer than 32 characters, but had: " + title);
+            }
+            if (text != null && text.Length > 255)
+            {
+                throw new ArgumentOutOfRangeException("Prompt-text cannot be longer than 255 characters, but had: " + text);
+            }
             ctDdataValidation.promptTitle = (title);
             ctDdataValidation.prompt = (text);
         }
@@ -253,15 +271,13 @@ namespace NPOI.XSSF.UserModel
 
         private static XSSFDataValidationConstraint GetConstraint(CT_DataValidation ctDataValidation)
         {
-            XSSFDataValidationConstraint constraint = null;
             String formula1 = ctDataValidation.formula1;
             String formula2 = ctDataValidation.formula2;
             ST_DataValidationOperator operator1 = ctDataValidation.@operator;
             ST_DataValidationType type = ctDataValidation.type;
             int validationType = XSSFDataValidation.validationTypeReverseMappings[type];
             int operatorType = XSSFDataValidation.operatorTypeReverseMappings[operator1];
-            constraint = new XSSFDataValidationConstraint(validationType, operatorType, formula1, formula2);
-            return constraint;
+            return new XSSFDataValidationConstraint(validationType, operatorType, formula1, formula2);
         }
     }
 

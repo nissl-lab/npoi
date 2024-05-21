@@ -200,7 +200,6 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-
         /// <summary>
         /// Get whether the cell's using this style are to be locked
         /// </summary>
@@ -215,6 +214,23 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// Turn on or off "Quote Prefix" or "123 Prefix" for the style,
+        /// which is used to tell Excel that the thing which looks like
+        /// a number or a formula shouldn't be treated as on.
+        /// </summary>
+        /// <value>Is "Quote Prefix" or "123 Prefix" enabled for the cell?</value>
+        public bool IsQuotePrefixed
+        {
+            get
+            {
+                return _format._123Prefix;
+            }
+            set
+            {
+                _format._123Prefix = value;
+            }
+        }
         /// <summary>
         /// Get the type of horizontal alignment for the cell
         /// </summary>
