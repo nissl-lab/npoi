@@ -269,6 +269,12 @@ namespace NPOI.XSSF.Model
         //  Start of style related Getters and Setters
         // ===========================================================
 
+        [Obsolete("To be removed NPOI 2.8. GetNumberFormatAt(short) instead.")]
+        public String GetNumberFormatAt(int idx)
+        {
+            return GetNumberFormatAt((short) idx);
+        }
+        
         /**
          * Get number format string given its id
          * 
