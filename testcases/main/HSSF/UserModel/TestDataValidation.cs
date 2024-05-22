@@ -464,6 +464,28 @@ namespace TestCases.HSSF.UserModel
             Assert.AreEqual(double.NaN, c.Value2);
         }
 
-    }
+        [Test]
+        public void TestRemoveDataValidation()
+        {
+            
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
+            List<IDataValidation> list = sheet.GetDataValidations();
+            Assert.AreEqual(0, list.Count);
 
+            IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
+            IDataValidationConstraint constraint = dataValidationHelper.CreateCustomConstraint("A2:A3");
+            CellRangeAddressList AddressList = new CellRangeAddressList(0, 0, 0, 0);
+            IDataValidation validation = dataValidationHelper.CreateValidation(constraint, AddressList);
+            sheet.AddValidationData(validation);
+
+            list = sheet.GetDataValidations();
+            Assert.AreEqual(1, list.Count);
+
+            sheet.RemoveDataValidation(validation);
+
+            list = sheet.GetDataValidations();
+            Assert.AreEqual(0, list.Count);
+        }
+    }
 }

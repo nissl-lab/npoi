@@ -283,6 +283,20 @@ namespace NPOI.SS.UserModel
         bool IsPartOfArrayFormulaGroup { get; }
 
         bool IsMergedCell { get; }
+
+        /// <summary>
+        /// Only valid for formula cells
+        /// </summary>
+        /// <returns>one of (<see cref="CellType.Numeric" />, <see cref="CellType.String" />,
+        /// <see cref="CellType.Boolean" />, <see cref="CellType.Error" />) depending
+        /// on the cached value of the formula
+        /// </returns>
+        /// <remarks>
+        /// @since POI 3.15 beta 3
+        /// Will be renamed to <c>getCachedFormulaResultType()</c> when we make the CellType enum transition in POI 4.0. See bug 59791.
+        /// </remarks>
+        [Obsolete("Will be removed at NPOI 2.8, Use CachedFormulaResultType instead.")]
+        CellType GetCachedFormulaResultTypeEnum();
     }
 }
 
