@@ -152,7 +152,26 @@ namespace NPOI.XWPF.Usermodel
             }
         }
 
-        public double FontSize { get; set; }
+        public double FontSize 
+        {
+            get
+            {
+                OpenXmlFormats.Wordprocessing.CT_RPr pr = run.rPr1;
+                return (pr != null && pr.IsSetSz()) ? pr.sz.val / 2.0 : -1;
+            }
+            set
+            {
+                OpenXmlFormats.Wordprocessing.CT_RPr pr = run.IsSetRPr1() ? run.rPr1 : run.AddNewRPr1();
+                if(value < 1)
+                {
+                    // fix for TestBug58922() in NPOI
+                    pr.sz = null; // unset
+                    return;
+                }
+                OpenXmlFormats.Wordprocessing.CT_HpsMeasure ctSize = pr.IsSetSz() ? pr.sz : pr.AddNewSz();
+                ctSize.val = (ulong) (value * 2);
+            }
+        }
 
         public string Text
         {
