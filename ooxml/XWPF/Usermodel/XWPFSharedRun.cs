@@ -164,8 +164,7 @@ namespace NPOI.XWPF.Usermodel
                 OpenXmlFormats.Wordprocessing.CT_RPr pr = run.IsSetRPr1() ? run.rPr1 : run.AddNewRPr1();
                 if(value < 1)
                 {
-                    // fix for TestBug58922() in NPOI
-                    pr.sz = null; // unset
+                    pr.sz = null;
                     return;
                 }
                 OpenXmlFormats.Wordprocessing.CT_HpsMeasure ctSize = pr.IsSetSz() ? pr.sz : pr.AddNewSz();
