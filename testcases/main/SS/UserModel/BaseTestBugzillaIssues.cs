@@ -39,6 +39,9 @@ namespace TestCases.SS.UserModel
 
         private ITestDataProvider _testDataProvider;
         private static int dpi = 96;
+        private static String TEST_32 = "Some text with 32 characters to ";
+        private static String TEST_255 = "Some very long text that is exactly 255 characters, which are allowed here, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla.....";
+        private static String TEST_256 = "Some very long text that is longer than the 255 characters allowed in HSSF here, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla1";
 
         protected BaseTestBugzillaIssues(ITestDataProvider TestDataProvider)
         {
@@ -1781,6 +1784,71 @@ namespace TestCases.SS.UserModel
                         Assert.AreEqual("Sheet2!A1", name.RefersToFormula);
                     }
                 }
+            }
+        }
+
+        [Test]
+        public void test59200()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            IDataValidation dataValidation;
+            CellRangeAddressList headerCell = new CellRangeAddressList(0, 1, 0, 1);
+            IDataValidationConstraint constraint = sheet.GetDataValidationHelper().CreateCustomConstraint("A1<>\"\"");
+
+            dataValidation = sheet.GetDataValidationHelper().CreateValidation(constraint, headerCell);
+
+            // HSSF has 32/255 limits as part of the Spec, XSSF has no limit in the spec, but Excel applies a 255 length limit!
+            // more than 255 fail for all
+            checkFailures(dataValidation, TEST_256, TEST_32, true);
+            checkFailures(dataValidation, TEST_32, TEST_256, true);
+            // more than 32 title fail for HSSFWorkbook
+            checkFailures(dataValidation, TEST_255, TEST_32, wb is HSSFWorkbook);
+            // 32 length title and 255 length text wrok for both
+            checkFailures(dataValidation, TEST_32, TEST_255, false);
+
+            dataValidation.ShowErrorBox = false;
+            sheet.AddValidationData(dataValidation);
+
+            // write out and read back in to trigger some more validation
+            IWorkbook wbBack = _testDataProvider.WriteOutAndReadBack(wb);
+
+            ISheet sheetBack = wbBack.GetSheetAt(0);
+            List<IDataValidation> dataValidations = sheetBack.GetDataValidations();
+            Assert.AreEqual(1, dataValidations.Count);
+
+            /*String ext = (wb instanceof HSSFWorkbook) ? ".xls" : ".xlsx";
+            OutputStream str = new FileOutputStream("C:\\temp\\59200" + ext);
+            try {
+                wb.write(str);
+            } finally {
+                str.close();
+            }*/
+
+            wb.Close();
+        }
+
+        private void checkFailures(IDataValidation dataValidation, String title, String text, bool shouldFail)
+        {
+            try
+            {
+                dataValidation.CreatePromptBox(title, text);
+                Assert.IsFalse(shouldFail, "Should fail in a length-check, had " + title.Length + " and " + text.Length);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Assert.IsTrue(shouldFail, "Should not fail in a length-check, had " + title.Length + " and " + text.Length);
+                // expected here
+            }
+            try
+            {
+                dataValidation.CreateErrorBox(title, text);
+                Assert.IsFalse(shouldFail, "Should fail in a length-check, had " + title.Length + " and " + text.Length);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Assert.IsTrue(shouldFail, "Should not fail in a length-check, had " + title.Length + " and " + text.Length);
             }
         }
     }

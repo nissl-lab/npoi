@@ -455,12 +455,7 @@ namespace TestCases.XSSF.UserModel
             // Should have one style
             Assert.AreEqual(1, wb1.NumCellStyles);
             wb1.GetCellStyleAt((short)0);
-            try
-            {
-                wb1.GetCellStyleAt((short)1);
-                Assert.Fail("Shouldn't be able to get style at 1 that doesn't exist");
-            }
-            catch (ArgumentOutOfRangeException) { }
+            Assert.IsNull(wb1.GetCellStyleAt((short)1),"Shouldn't be able to get style at 0 that doesn't exist");
 
             // Add another one
             ICellStyle cs = wb1.CreateCellStyle();
@@ -470,24 +465,14 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(2, wb1.NumCellStyles);
             wb1.GetCellStyleAt((short)0);
             wb1.GetCellStyleAt((short)1);
-            try
-            {
-                wb1.GetCellStyleAt((short)2);
-                Assert.Fail("Shouldn't be able to get style at 2 that doesn't exist");
-            }
-            catch (ArgumentOutOfRangeException) { }
+            Assert.IsNull(wb1.GetCellStyleAt((short)2), "Shouldn't be able to get style at 2 that doesn't exist");
 
             // Save and reload
             XSSFWorkbook nwb = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb1);
             Assert.AreEqual(2, nwb.NumCellStyles);
             nwb.GetCellStyleAt((short)0);
             nwb.GetCellStyleAt((short)1);
-            try
-            {
-                nwb.GetCellStyleAt((short)2);
-                Assert.Fail("Shouldn't be able to Get style at 2 that doesn't exist");
-            }
-            catch (ArgumentOutOfRangeException) { }
+            Assert.IsNull(nwb.GetCellStyleAt((short)2), "Shouldn't be able to Get style at 2 that doesn't exist");
 
             // Now with an existing file
             XSSFWorkbook wb2 = XSSFTestDataSamples.OpenSampleWorkbook("sample.xlsx");
@@ -495,16 +480,10 @@ namespace TestCases.XSSF.UserModel
             wb2.GetCellStyleAt((short)0);
             wb2.GetCellStyleAt((short)1);
             wb2.GetCellStyleAt((short)2);
-            try
-            {
-                wb2.GetCellStyleAt((short)3);
-                Assert.Fail("Shouldn't be able to Get style at 3 that doesn't exist");
-            }
-            catch (ArgumentOutOfRangeException) { }
+            Assert.IsNull(nwb.GetCellStyleAt((short)3), "Shouldn't be able to Get style at 3 that doesn't exist");
 
             wb2.Close();
-            wb1.Close();
-            nwb.Close();
+            wb1.Close();            nwb.Close();
         }
         [Test]
         public void RecalcId()

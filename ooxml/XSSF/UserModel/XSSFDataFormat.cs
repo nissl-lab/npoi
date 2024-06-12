@@ -61,15 +61,6 @@ namespace NPOI.XSSF.UserModel
          */
         public String GetFormat(short index)
         {
-            return GetFormat(index & 0xffff);
-        }
-        /**
-         * get the format string that matches the given format index
-         * @param index of a format
-         * @return string represented at index of format or null if there is not a  format at that index
-         */
-        public String GetFormat(int index)
-        {
             // Indices used for built-in formats may be overridden with
             // custom formats, such as locale-specific currency.
             // See org.apache.poi.xssf.usermodel.TestXSSFDataFormat#test49928() 
@@ -81,6 +72,18 @@ namespace NPOI.XSSF.UserModel
             return fmt;
         }
 
+        /**
+         * get the format string that matches the given format index
+         * @param index of a format
+         * @return string represented at index of format or <code>null</code> if there is not a  format at that index
+         * 
+         * @deprecated POI 3.16 beta 1 - use {@link #getFormat(short)} instead
+         */
+        [Obsolete("use GetFormat(short) instead, schedule to remove NPOI 2.8")]
+        public String GetFormat(int index)
+        {
+            return GetFormat((short)index);
+        }
         /**
          * Add a number format with a specific ID into the number format style table.
          * If a format with the same ID already exists, overwrite the format code

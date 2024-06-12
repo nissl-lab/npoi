@@ -290,8 +290,8 @@ namespace NPOI.XSSF.Streaming
 
                 XSSFHyperlink xssfobj = (XSSFHyperlink)value;
                 // Assign to us
-                CellReference reference = new CellReference(RowIndex, ColumnIndex);
-                xssfobj.GetCTHyperlink().@ref = reference.FormatAsString();
+                CellReference ref1 = new CellReference(RowIndex, ColumnIndex);
+                xssfobj.SetCellReference(ref1);
 
                 // Add to the lists
                 ((SXSSFSheet)Sheet)._sh.AddHyperlink(xssfobj);
@@ -697,7 +697,7 @@ namespace NPOI.XSSF.Streaming
         {
             if (_value.GetType() != CellType.Formula
                || ((FormulaValue)_value).GetFormulaType() != type)
-                setFormulaType(type);
+                SetFormulaType(type);
         }
         /*
          * Sets the cell type to type if it is different
@@ -715,7 +715,7 @@ namespace NPOI.XSSF.Streaming
             {
                 if (((FormulaValue)_value).GetFormulaType() == type)
                     return;
-                setFormulaType(type); // once a formula, always a formula
+                SetFormulaType(type); // once a formula, always a formula
                 return;
             }
             SetType(type);
@@ -777,7 +777,7 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        private void setFormulaType(CellType type)
+        private void SetFormulaType(CellType type)
         {
             Value prevValue = _value;
             switch (type)
