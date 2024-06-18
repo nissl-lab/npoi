@@ -99,8 +99,6 @@ namespace NPOI.XSSF.UserModel
             return ctDdataValidation;
         }
 
-
-
         /* (non-Javadoc)
          * @see NPOI.ss.usermodel.DataValidation#CreateErrorBox(java.lang.String, java.lang.String)
          */

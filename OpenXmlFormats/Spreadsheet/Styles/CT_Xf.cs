@@ -109,14 +109,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
 
 
-        internal void Write(StreamWriter sw, string nodeName)
+        internal void Write(StreamWriter sw, string nodeName, bool writingCellStyle=false)
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId, true);
             XmlHelper.WriteAttribute(sw, "fontId", this.fontId, true);
             XmlHelper.WriteAttribute(sw, "fillId", this.fillId, true);
             XmlHelper.WriteAttribute(sw, "borderId", this.borderId, true);
-            XmlHelper.WriteAttribute(sw, "xfId", this.xfId, true);
+            if (!writingCellStyle)
+                XmlHelper.WriteAttribute(sw, "xfId", this.xfId, true);
             XmlHelper.WriteAttribute(sw, "quotePrefix", this.quotePrefix,false);
             XmlHelper.WriteAttribute(sw, "pivotButton", this.pivotButton, false);
             if(this.applyNumberFormat)
