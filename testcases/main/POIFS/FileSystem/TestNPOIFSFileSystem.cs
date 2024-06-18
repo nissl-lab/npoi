@@ -1521,6 +1521,63 @@ namespace TestCases.POIFS.FileSystem
             Assert.That(wbDataExp, new EqualConstraint(wbDataAct));
         }
 
-        // TODO Directory/Document create/write/read/delete/change tests
+        /**
+        * Ensure that you can recursively delete directories and their
+        *  contents
+        */
+        [Test]
+        public void RecursiveDelete() 
+        {
+            FileStream testFile = POIDataSamples.GetSpreadSheetInstance().GetFile("SimpleMacro.xls");
+            NPOIFSFileSystem src = new NPOIFSFileSystem(testFile);
+
+            // Starts out with 5 entries:
+            //  _VBA_PROJECT_CUR
+            //  SummaryInformation <(0x05)SummaryInformation>
+            //  DocumentSummaryInformation <(0x05)DocumentSummaryInformation>
+            //  Workbook
+            //  CompObj <(0x01)CompObj>
+            Assert.AreEqual(5, _countChildren(src.PropertyTable.Root));
+            Assert.AreEqual(5, src.Root.EntryCount);
+
+            // Grab the VBA project root
+            DirectoryEntry vbaProj = (DirectoryEntry)src.Root.GetEntry("_VBA_PROJECT_CUR");
+            Assert.AreEqual(3, vbaProj.EntryCount);
+            // Can't delete yet, has stuff
+            Assert.AreEqual(false, vbaProj.Delete());
+            // Recursively delete
+            _recursiveDeletee(vbaProj);
+
+            // Entries gone
+            Assert.AreEqual(4, _countChildren(src.PropertyTable.Root));
+            Assert.AreEqual(4, src.Root.EntryCount);
+
+            // Done
+            src.Close();
+        }
+        private void _recursiveDeletee(Entry entry)
+        {
+            if (entry.IsDocumentEntry)
+            {
+                Assert.AreEqual(true, entry.Delete());
+                return;
+            }
+
+            DirectoryEntry dir = (DirectoryEntry)entry;
+            String[] names = dir.EntryNames.ToArray();
+            foreach (String name in names)
+            {
+                Entry ce = dir.GetEntry(name);
+                _recursiveDeletee(ce);
+            }
+            Assert.AreEqual(true, dir.Delete());
+        }
+
+        private int _countChildren(DirectoryProperty p)
+        {
+            int count = 0;
+            foreach (Property cp in p) { count++; }
+            return count;
+        }
     }
 }

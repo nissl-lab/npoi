@@ -43,6 +43,9 @@ namespace TestCases.SS.UserModel
         private static String TEST_255 = "Some very long text that is exactly 255 characters, which are allowed here, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla.....";
         private static String TEST_256 = "Some very long text that is longer than the 255 characters allowed in HSSF here, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla1";
 
+        private static String TEST_SPECIAL_TITLE = "special \n\t\r\u0002characters";
+        private static String TEST_SPECIAL = "Some text with special \n\t\r\u0002characters to s";
+
         protected BaseTestBugzillaIssues(ITestDataProvider TestDataProvider)
         {
             _testDataProvider = TestDataProvider;
@@ -1803,8 +1806,16 @@ namespace TestCases.SS.UserModel
             // more than 255 fail for all
             checkFailures(dataValidation, TEST_256, TEST_32, true);
             checkFailures(dataValidation, TEST_32, TEST_256, true);
+
+            // null does work
+            checkFailures(dataValidation, null, null, false);
+
             // more than 32 title fail for HSSFWorkbook
             checkFailures(dataValidation, TEST_255, TEST_32, wb is HSSFWorkbook);
+
+            // special characters work
+            checkFailures(dataValidation, TEST_SPECIAL_TITLE, TEST_SPECIAL, false);
+
             // 32 length title and 255 length text wrok for both
             checkFailures(dataValidation, TEST_32, TEST_255, false);
 
@@ -1834,21 +1845,21 @@ namespace TestCases.SS.UserModel
             try
             {
                 dataValidation.CreatePromptBox(title, text);
-                Assert.IsFalse(shouldFail, "Should fail in a length-check, had " + title.Length + " and " + text.Length);
+                Assert.IsFalse(shouldFail, "Should fail in a length-check, had " + (title == null ? null : title.Length) + " and " + (text == null ? null : text.Length));
             }
             catch (ArgumentOutOfRangeException)
             {
-                Assert.IsTrue(shouldFail, "Should not fail in a length-check, had " + title.Length + " and " + text.Length);
+                Assert.IsTrue(shouldFail, "Should not fail in a length-check, had " + (title == null ? null : title.Length) + " and " + (text == null ? null : text.Length));
                 // expected here
             }
             try
             {
                 dataValidation.CreateErrorBox(title, text);
-                Assert.IsFalse(shouldFail, "Should fail in a length-check, had " + title.Length + " and " + text.Length);
+                Assert.IsFalse(shouldFail, "Should fail in a length-check, had " + (title == null ? null : title.Length) + " and " + (text == null ? null : text.Length));
             }
             catch (ArgumentOutOfRangeException)
             {
-                Assert.IsTrue(shouldFail, "Should not fail in a length-check, had " + title.Length + " and " + text.Length);
+                Assert.IsTrue(shouldFail, "Should not fail in a length-check, had " + (title == null ? null : title.Length) + " and " + (text == null ? null : text.Length));
             }
         }
     }

@@ -20,6 +20,8 @@ using NPOI.SS.UserModel;
 using System;
 using System.Text;
 using NPOI.SS.Util;
+using NPOI.Util;
+
 namespace NPOI.XSSF.UserModel
 {
 
@@ -29,6 +31,8 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFDataValidation : IDataValidation
     {
+        private static int MAX_TEXT_LENGTH = 255;
+
         private CT_DataValidation ctDdataValidation;
         private XSSFDataValidationConstraint validationConstraint;
         private CellRangeAddressList regions;
@@ -95,24 +99,22 @@ namespace NPOI.XSSF.UserModel
             return ctDdataValidation;
         }
 
-
-
         /* (non-Javadoc)
          * @see NPOI.ss.usermodel.DataValidation#CreateErrorBox(java.lang.String, java.lang.String)
          */
         public void CreateErrorBox(String title, String text)
         {
             // the spec does not specify a length-limit, however Excel reports files as "corrupt" if they exceed 255 bytes for these texts...
-            if (title != null && title.Length > 255)
+            if (title != null && title.Length > MAX_TEXT_LENGTH)
             {
                 throw new ArgumentOutOfRangeException("Error-title cannot be longer than 32 characters, but had: " + title);
             }
-            if (text != null && text.Length > 255)
+            if (text != null && text.Length > MAX_TEXT_LENGTH)
             {
                 throw new ArgumentOutOfRangeException("Error-text cannot be longer than 255 characters, but had: " + text);
             }
-            ctDdataValidation.errorTitle = (title);
-            ctDdataValidation.error = (text);
+            ctDdataValidation.errorTitle = EncodeUtf(title);
+            ctDdataValidation.error = EncodeUtf(text);
         }
 
         /* (non-Javadoc)
@@ -121,16 +123,52 @@ namespace NPOI.XSSF.UserModel
         public void CreatePromptBox(String title, String text)
         {
             // the spec does not specify a length-limit, however Excel reports files as "corrupt" if they exceed 255 bytes for these texts...
-            if (title != null && title.Length > 255)
+            if (title != null && title.Length > MAX_TEXT_LENGTH)
             {
                 throw new ArgumentOutOfRangeException("Prompt-title cannot be longer than 32 characters, but had: " + title);
             }
-            if (text != null && text.Length > 255)
+            if (text != null && text.Length > MAX_TEXT_LENGTH)
             {
                 throw new ArgumentOutOfRangeException("Prompt-text cannot be longer than 255 characters, but had: " + text);
             }
-            ctDdataValidation.promptTitle = (title);
-            ctDdataValidation.prompt = (text);
+            ctDdataValidation.promptTitle = EncodeUtf(title);
+            ctDdataValidation.prompt = EncodeUtf(text);
+        }
+
+        /**
+         * For all characters which cannot be represented in XML as defined by the XML 1.0 specification,
+         * the characters are escaped using the Unicode numerical character representation escape character
+         * format _xHHHH_, where H represents a hexadecimal character in the character's value.
+         * <p>
+         * Example: The Unicode character 0D is invalid in an XML 1.0 document,
+         * so it shall be escaped as <code>_x000D_</code>.
+         * </p>
+         * See section 3.18.9 in the OOXML spec.
+         *
+         * @param   text the string to encode
+         * @return  the encoded string
+         */
+        private String EncodeUtf(String text)
+        {
+            if(text == null)
+            {
+                return null;
+            }
+            StringBuilder builder = new StringBuilder();
+            foreach (char c in text.ToCharArray())
+            {
+                // for now only encode characters below 32, we can add more here if needed
+                if (c < 32)
+                {
+                    builder.Append("_x").Append(c < 16 ? "000" : "00").Append(HexDump.ToHex(c)).Append("_");
+                }
+                else
+                {
+                    builder.Append(c);
+                }
+            }
+
+            return builder.ToString();
         }
 
         public bool EmptyCellAllowed

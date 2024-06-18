@@ -79,6 +79,7 @@ namespace NPOI.XSSF.UserModel
          * 
          * @deprecated POI 3.16 beta 1 - use {@link #getFormat(short)} instead
          */
+
         [Obsolete("use GetFormat(short) instead, schedule to remove NPOI 2.8")]
         public String GetFormat(int index)
         {

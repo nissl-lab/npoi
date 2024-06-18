@@ -55,8 +55,7 @@ namespace NPOI.DDF
             Array.Copy(data, pos, field_1_UID, 0, 16); pos += 16;
             field_2_marker = data[pos]; pos++;
 
-            field_pictureData = new byte[bytesAfterHeader - 17];
-            Array.Copy(data, pos, field_pictureData, 0, field_pictureData.Length);
+            SetPictureData(data, pos, bytesAfterHeader - 17);
 
             return bytesAfterHeader + HEADER_SIZE;
         }
@@ -79,10 +78,11 @@ namespace NPOI.DDF
 
             Array.Copy(field_1_UID, 0, data, pos, 16);
             data[pos + 16] = field_2_marker;
-            Array.Copy(field_pictureData, 0, data, pos + 17, field_pictureData.Length);
+            byte[] pd = PictureData;
+            Array.Copy(pd, 0, data, pos + 17, pd.Length);
 
             listener.AfterRecordSerialize(offset + RecordSize, RecordId, RecordSize, this);
-            return HEADER_SIZE + 16 + 1 + field_pictureData.Length;
+            return HEADER_SIZE + 16 + 1 + pd.Length;
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace NPOI.DDF
         /// <value> Number of bytes</value>
         public override int RecordSize
         {
-            get { return 8 + 16 + 1 + field_pictureData.Length; }
+            get { return 8 + 16 + 1 + PictureData.Length; }
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace NPOI.DDF
         {
             String nl = Environment.NewLine;
 
-            String extraData = HexDump.Dump(this.field_pictureData, 0, 0);
+            String extraData = HexDump.Dump(this.PictureData, 0, 0);
             return this.GetType().Name + ":" + nl +
                         "  RecordId: 0x" + HexDump.ToHex(RecordId) + nl +
                         "  Version: 0x" + HexDump.ToHex(Version) + nl +
@@ -141,7 +141,7 @@ namespace NPOI.DDF
 
         public override String ToXml(String tab)
         {
-            String extraData = HexDump.ToHex(this.field_pictureData);
+            String extraData = HexDump.ToHex(this.PictureData);
             
             StringBuilder builder = new StringBuilder();
             builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))

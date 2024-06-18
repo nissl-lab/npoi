@@ -32,7 +32,7 @@ namespace NPOI.DDF
     /// </summary>
     public class EscherComplexProperty : EscherProperty
     {
-        protected byte[] _complexData = new byte[0];
+        private byte[] _complexData = new byte[0];
 
         /// <summary>
         /// Create a complex property using the property id and a byte array containing the complex
@@ -100,6 +100,17 @@ namespace NPOI.DDF
         public byte[] ComplexData
         {
             get { return _complexData; }
+        }
+
+        protected void ResizeComplexData(int newSize, int bytesToKeep)
+        {
+            if (newSize == _complexData.Length)
+            {
+                return;
+            }
+            byte[] newArray = new byte[newSize];
+            Array.Copy(_complexData, 0, newArray, 0, Math.Min(bytesToKeep, newSize));
+            _complexData = newArray;
         }
 
         /// <summary>

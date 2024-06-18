@@ -274,6 +274,7 @@ namespace NPOI.XSSF.Model
         {
             return GetNumberFormatAt((short) idx);
         }
+        
         /**
          * Get number format string given its id
          * 

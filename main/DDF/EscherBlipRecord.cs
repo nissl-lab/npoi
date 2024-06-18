@@ -35,7 +35,7 @@ namespace NPOI.DDF
 
         private const int HEADER_SIZE = 8;
 
-        protected byte[] field_pictureData;
+        private byte[] field_pictureData;
 
         public EscherBlipRecord()
         {
@@ -106,20 +106,31 @@ namespace NPOI.DDF
             get { return field_pictureData; }
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("picture data can't be null");
-                }
-                else
-                {
-                    field_pictureData = new byte[value.Length];
-                    if (value.Length > 0)
-                        Array.Copy(value, field_pictureData, value.Length);
-                }
+                SetPictureData(value, 0, (value == null ? 0 : value.Length));
             }
         }
 
-
+        /// <summary>
+        /// Sets the picture data bytes
+        /// </summary>
+        /// <param name="pictureData">the picture data</param>
+        /// <param name="offset">the offset into the picture data</param>
+        /// <param name="length">the amount of bytes to be used</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public void SetPictureData(byte[] pictureData, int offset, int length)
+        {
+            if (pictureData == null)
+            {
+                throw new ArgumentNullException("picture data can't be null");
+            }
+            if (offset < 0 || length < 0 || pictureData.Length < offset + length)
+            {
+                throw new ArgumentOutOfRangeException("picture data, offset, length were out of range");
+            }
+            field_pictureData = new byte[length];
+            Array.Copy(pictureData, offset, field_pictureData, 0, length);
+        }
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </summary>

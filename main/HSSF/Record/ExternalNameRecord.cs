@@ -308,7 +308,7 @@ namespace NPOI.HSSF.Record
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("[EXTERNALNAME]\n");
-            sb.Append("    .options      = ").Append(field_1_option_flag).Append("\n");
+            sb.Append("    .options = ").Append(field_1_option_flag).Append("\n");
             sb.Append("    .ix      = ").Append(field_2_ixals).Append("\n");
             sb.Append("    .name    = ").Append(field_4_name).Append("\n");
             if (field_5_name_definition != null)
@@ -317,7 +317,7 @@ namespace NPOI.HSSF.Record
                 for (int i = 0; i < ptgs.Length; i++)
                 {
                     Ptg ptg = ptgs[i];
-                    sb.Append(ptg.ToString()).Append(ptg.RVAType).Append("\n");
+                    sb.Append("    .namedef = ").Append(ptg.ToString()).Append(ptg.RVAType).Append("\n");
                 }
             }
             sb.Append("[/EXTERNALNAME]\n");
