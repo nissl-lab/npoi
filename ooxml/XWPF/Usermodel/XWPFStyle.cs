@@ -56,14 +56,14 @@ namespace NPOI.XWPF.UserModel
          */
         public String StyleId
         {
-			get
-			{
-				return ctStyle.styleId;
-			}
-			set 
-			{
-				ctStyle.styleId =value;
-			}
+            get
+            {
+                return ctStyle.styleId;
+            }
+            set 
+            {
+                ctStyle.styleId =value;
+            }
         }
 
         /**
@@ -72,14 +72,14 @@ namespace NPOI.XWPF.UserModel
          */
         public ST_StyleType StyleType
         {
-			get
-			{
-				return ctStyle.type;
-			}
-			set 
-			{
-				ctStyle.type = value;
-			}
+            get
+            {
+                return ctStyle.type;
+            }
+            set 
+            {
+                ctStyle.type = value;
+            }
         }
 
         /**
@@ -110,13 +110,13 @@ namespace NPOI.XWPF.UserModel
 
         public String BasisStyleID
         {
-			get
-			{
-				if (ctStyle.basedOn != null)
-					return ctStyle.basedOn.val;
-				else
-					return null;
-			}
+            get
+            {
+                if (ctStyle.basedOn != null)
+                    return ctStyle.basedOn.val;
+                else
+                    return null;
+            }
         }
 
 
@@ -125,13 +125,13 @@ namespace NPOI.XWPF.UserModel
          */
         public String LinkStyleID
         {
-			get
-			{
-				if (ctStyle.link != null)
-					return ctStyle.link.val;
-				else
-					return null;
-			}
+            get
+            {
+                if (ctStyle.link != null)
+                    return ctStyle.link.val;
+                else
+                    return null;
+            }
         }
 
         /**
@@ -139,23 +139,23 @@ namespace NPOI.XWPF.UserModel
          */
         public String NextStyleID
         {
-			get
-			{
-				if (ctStyle.next != null)
-					return ctStyle.next.val;
-				else
-					return null;
-			}
+            get
+            {
+                if (ctStyle.next != null)
+                    return ctStyle.next.val;
+                else
+                    return null;
+            }
         }
 
         public String Name
         {
-			get
-			{
-				if (ctStyle.IsSetName())
-					return ctStyle.name.val;
-				return null;
-			}
+            get
+            {
+                if (ctStyle.IsSetName())
+                    return ctStyle.name.val;
+                return null;
+            }
         }
 
         /**

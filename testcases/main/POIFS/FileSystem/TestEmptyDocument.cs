@@ -96,8 +96,9 @@ namespace TestCases.POIFS.FileSystem
 
             MemoryStream output = new MemoryStream();
             fs.WriteFileSystem(output);
-            byte[] temp = output.ToArray();
-            Assert.IsNotNull(new POIFSFileSystem(new MemoryStream(temp)));
+            
+            new POIFSFileSystem(new ByteArrayInputStream(output.ToArray())).Close();
+            fs.Close();
         }
 
         [Test]
@@ -109,7 +110,8 @@ namespace TestCases.POIFS.FileSystem
 
             MemoryStream output = new MemoryStream();
             fs.WriteFileSystem(output);
-            Assert.IsNotNull(new POIFSFileSystem(new MemoryStream(output.ToArray())));
+            new POIFSFileSystem(new ByteArrayInputStream(output.ToArray())).Close();
+            fs.Close();
         }
         [Test]
         public void TestEmptyDocumentWithFriend()
@@ -121,7 +123,8 @@ namespace TestCases.POIFS.FileSystem
 
             MemoryStream output = new MemoryStream();
             fs.WriteFileSystem(output);
-            Assert.IsNotNull(new POIFSFileSystem(new MemoryStream(output.ToArray())));
+            new POIFSFileSystem(new ByteArrayInputStream(output.ToArray())).Close();
+            fs.Close();
         }
 
         [Test]
@@ -134,7 +137,8 @@ namespace TestCases.POIFS.FileSystem
 
             MemoryStream output = new MemoryStream();
             fs.WriteFileSystem(output);
-            Assert.IsNotNull(new POIFSFileSystem(new MemoryStream(output.ToArray())));
+            new POIFSFileSystem(new ByteArrayInputStream(output.ToArray())).Close();
+            fs.Close();
 
         }
         [Test]
@@ -147,6 +151,7 @@ namespace TestCases.POIFS.FileSystem
             fs.CreateDocument(new MemoryStream(TestData), "NotEmpty");
             MemoryStream output = new MemoryStream();
             fs.WriteFileSystem(output);
+            fs.Close();
 
             // This line caused the error.
             fs = new POIFSFileSystem(new MemoryStream(output.ToArray()));
@@ -162,6 +167,8 @@ namespace TestCases.POIFS.FileSystem
             Assert.AreEqual(TestData.Length, entry.Size, "Expected size was wrong");
             Assert.IsTrue(
                     Arrays.Equals(TestData,actualReadbackData), "Expected different data Read from stream");
+
+            fs.Close();
         }
     }
 }

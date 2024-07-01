@@ -87,6 +87,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "BIN2OCT", null);
             r(m, "COMPLEX", Complex.Instance);
             r(m, "CONVERT", null);
+            r(m, "CONCAT", TextFunction.CONCAT);
             r(m, "COUNTIFS", Countifs.instance);
             r(m, "COUPDAYBS", null);
             r(m, "COUPDAYS", null);
@@ -182,6 +183,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "TBILLPRICE", null);
             r(m, "TBILLYIELD", null);
             r(m, "TEXTJOIN", TextJoinFunction.instance);
+            r(m, "T.INV", TInv.instance);
             r(m, "WEEKNUM", WeekNum.instance);
             r(m, "WORKDAY", WorkdayFunction.instance);
             r(m, "WORKDAY.INTL", WorkdayIntlFunction.instance);
