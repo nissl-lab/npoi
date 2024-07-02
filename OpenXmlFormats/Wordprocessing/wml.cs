@@ -18,6 +18,7 @@ using System.IO;
 using NPOI.OpenXml4Net.Util;
 using System.Xml;
 using NPOI.OpenXmlFormats.Dml.WordProcessing;
+using System.Text;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -2246,9 +2247,26 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             if (node == null)
                 return null;
+
             CT_Text ctObj = new CT_Text();
             ctObj.space = XmlHelper.ReadString(node.Attributes["xml:space"]);
-            ctObj.Value = node.InnerText;
+
+            //Check if the current Xml Node contains "<w:cr/>" elements.
+            //Each cr element should be replaced with \n
+            StringBuilder sb = new StringBuilder();
+            foreach (XmlNode elem in node.ChildNodes)
+            {
+                if (elem.NodeType==XmlNodeType.Text)
+                {
+                    sb.Append(elem.InnerText);
+                }
+                else if (elem.NodeType==XmlNodeType.Element && elem.LocalName=="cr")
+                {
+                    sb.Append("\n");
+                }
+            }
+
+            ctObj.Value = sb.ToString();          
             return ctObj;
         }
 
@@ -2263,7 +2281,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(">");
             if (this.valueField != null)
             {
-                sw.Write(XmlHelper.EncodeXml(this.valueField));
+                string[] parts = this.valueField.Split('\n');
+                for(int i = 0; i<parts.Length; i++)
+                {
+                    sw.Write(XmlHelper.EncodeXml(parts[i]));
+                    if(i < parts.Length - 1)
+                        sw.Write("<w:cr/>");
+                }
             }
             sw.WriteEndW(nodeName);
         }
