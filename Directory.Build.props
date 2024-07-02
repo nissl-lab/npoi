@@ -14,7 +14,7 @@
     <Owners>Nissl Lab</Owners>
     <Description>.NET port of Apache POI | Contact us on telegram: https://t.me/npoidevs</Description>
     <Summary>NPOI can read and write xls (Excel 97-2003), xlsx(Excel 2007+) and docx(Word 2007+)</Summary>
-    <RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
+    <RepositoryUrl>https://github.com/nissl-lab/npoi</RepositoryUrl>
 
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageIcon>logo\60_60.jpg</PackageIcon>
