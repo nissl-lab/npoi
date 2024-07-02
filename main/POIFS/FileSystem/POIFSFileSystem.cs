@@ -164,11 +164,22 @@ namespace NPOI.POIFS.FileSystem
             // TODO Make this nicer!
             // Create a new empty POIFS in the file
             POIFSFileSystem tmp = new POIFSFileSystem();
-            FileStream fout = file.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            tmp.WriteFileSystem(fout);
-            fout.Close();
-            tmp.Close();
-
+            try
+            {
+                FileStream fout = file.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                try
+                {
+                    tmp.WriteFileSystem(fout);
+                }
+                finally
+                {
+                    fout.Close();
+                }
+            }
+            finally
+            {
+                tmp.Close(); 
+            }
             // Open it up again backed by the file
             return new POIFSFileSystem(file, false);
         }
