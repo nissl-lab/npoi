@@ -129,26 +129,27 @@ namespace NPOI.Util
         /// <returns></returns>
         public static byte[] ToByteArray(Stream stream, int length)
         {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream(length == Int32.MaxValue ? 4096 : length);
-
-            byte[] buffer = new byte[4096];
-            int totalBytes = 0, readBytes;
-            do
+            using (ByteArrayOutputStream baos = new ByteArrayOutputStream(length == Int32.MaxValue ? 4096 : length))
             {
-                readBytes = stream.Read(buffer, 0, Math.Min(buffer.Length, length - totalBytes));
-                totalBytes += Math.Max(readBytes, 0);
-                if (readBytes > 0)
+                byte[] buffer = new byte[4096];
+                int totalBytes = 0, readBytes;
+                do
                 {
-                    baos.Write(buffer, 0, readBytes);
+                    readBytes = stream.Read(buffer, 0, Math.Min(buffer.Length, length - totalBytes));
+                    totalBytes += Math.Max(readBytes, 0);
+                    if(readBytes > 0)
+                    {
+                        baos.Write(buffer, 0, readBytes);
+                    }
+                } while(totalBytes < length && readBytes > 0);
+            
+                if(length != Int32.MaxValue && totalBytes < length)
+                {
+                    throw new IOException("unexpected EOF");
                 }
-            } while (totalBytes < length && readBytes > 0);
-
-            if (length != Int32.MaxValue && totalBytes < length)
-            {
-                throw new IOException("unexpected EOF");
+            
+                return baos.ToByteArray();
             }
-
-            return baos.ToByteArray();
         }
 
         public static byte[] ToByteArray(ByteBuffer buffer, int length)
