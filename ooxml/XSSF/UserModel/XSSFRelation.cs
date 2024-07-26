@@ -315,6 +315,13 @@ namespace NPOI.XSSF.UserModel
             null
         );
 
+        public static XSSFRelation CUSTOM_PROPERTIES = new XSSFRelation(
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.customProperty",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customProperty",
+            "/xl/customProperty#.bin",
+            null
+    );
+
         public static String NS_SPREADSHEETML = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
         public static String NS_DRAWINGML = "http://schemas.openxmlformats.org/drawingml/2006/main";
         public static String NS_CHART = "http://schemas.openxmlformats.org/drawingml/2006/chart";
