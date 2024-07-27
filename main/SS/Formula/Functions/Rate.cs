@@ -16,7 +16,7 @@
 ==================================================================== */
 using System;
 using NPOI.SS.Formula.Eval;
-using System.Diagnostics;
+using NPOI.Util;
 
 namespace NPOI.SS.Formula.Functions
 {
@@ -25,9 +25,11 @@ namespace NPOI.SS.Formula.Functions
      */
     public class Rate : Function
     {
+        private static readonly POILogger Logger = POILogFactory.GetLogger(typeof(Rate));
+
         public ValueEval Evaluate(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
         {
-            if (args.Length < 3)
+            if(args.Length < 3)
             { //First 3 parameters are mandatory
                 return ErrorEval.VALUE_INVALID;
             }
@@ -40,82 +42,80 @@ namespace NPOI.SS.Formula.Functions
                 ValueEval v2 = OperandResolver.GetSingleValue(args[1], srcRowIndex, srcColumnIndex);
                 ValueEval v3 = OperandResolver.GetSingleValue(args[2], srcRowIndex, srcColumnIndex);
                 ValueEval v4 = null;
-                if (args.Length >= 4)
+                if(args.Length >= 4)
                     v4 = OperandResolver.GetSingleValue(args[3], srcRowIndex, srcColumnIndex);
                 ValueEval v5 = null;
-                if (args.Length >= 5)
+                if(args.Length >= 5)
                     v5 = OperandResolver.GetSingleValue(args[4], srcRowIndex, srcColumnIndex);
                 ValueEval v6 = null;
-                if (args.Length >= 6)
+                if(args.Length >= 6)
                     v6 = OperandResolver.GetSingleValue(args[5], srcRowIndex, srcColumnIndex);
 
                 periods = OperandResolver.CoerceValueToDouble(v1);
                 payment = OperandResolver.CoerceValueToDouble(v2);
                 present_val = OperandResolver.CoerceValueToDouble(v3);
-                if (args.Length >= 4)
+                if(args.Length >= 4)
                     future_val = OperandResolver.CoerceValueToDouble(v4);
-                if (args.Length >= 5)
+                if(args.Length >= 5)
                     type = OperandResolver.CoerceValueToDouble(v5);
-                if (args.Length >= 6)
+                if(args.Length >= 6)
                     estimate = OperandResolver.CoerceValueToDouble(v6);
                 rate = CalculateRate(periods, payment, present_val, future_val, type, estimate);
 
                 CheckValue(rate);
             }
-            catch (EvaluationException e)
+            catch(EvaluationException e)
             {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.StackTrace);
+                Logger.Log(POILogger.ERROR, "Can't evaluate rate function");
                 return e.GetErrorEval();
             }
 
             return new NumberEval(rate);
         }
 
-        private double CalculateRate(double nper, double pmt, double pv, double fv, double type, double guess)
+        private static double G_Div_GP(double r, double n, double p, double x, double y, double w)
         {
-            //FROM MS http://office.microsoft.com/en-us/excel-help/rate-HP005209232.aspx
-            int FINANCIAL_MAX_ITERATIONS = 20;//Bet accuracy with 128
-            double FINANCIAL_PRECISION = 0.0000001;//1.0e-8
+            double t1 = Math.Pow(r+1, n);
+            double t2 = Math.Pow(r+1, n-1);
+            return (y + t1*x + p*(t1 - 1)*(r*w + 1)/r) /
+                    (n*t2*x - p*(t1 - 1)*(r*w + 1)/(Math.Pow(r, 2) + n*p*t2*(r*w + 1)/r +
+                            p*(t1 - 1)*w/r));
+        }
 
-            double y, y0, y1, x0, x1 = 0, f = 0, i = 0;
-            double rate = guess;
-            if (Math.Abs(rate) < FINANCIAL_PRECISION)
+        /// <summary>
+        /// Compute the rate of interest per period.
+        /// </summary>
+        /// <param name="nper">Number of compounding periods</param>
+        /// <param name="pmt">Payment</param>
+        /// <param name="pv">Present Value</param>
+        /// <param name="fv">Future value</param>
+        /// <param name="type">When payments are due ('begin' (1) or 'end' (0))</param>
+        /// <param name="guess">Starting guess for solving the rate of interest</param>
+        /// <returns>rate of interest per period or NaN if the solution didn't converge</returns>
+        static double CalculateRate(double nper, double pmt, double pv, double fv, double type, double guess)
+        {
+            double tol = 1e-8;
+            double maxiter = 100;
+
+            double rn = guess;
+            int iter = 0;
+            bool close = false;
+
+            while(iter < maxiter && !close)
             {
-                y = pv * (1 + nper * rate) + pmt * (1 + rate * type) * nper + fv;
+                double rnp1 = rn - G_Div_GP(rn, nper, pmt, pv, fv, type);
+                double diff = Math.Abs(rnp1 - rn);
+                close = diff < tol;
+                iter += 1;
+                rn = rnp1;
+
             }
+            if(!close)
+                return double.NaN;
             else
             {
-                f = Math.Exp(nper * Math.Log(1 + rate));
-                y = pv * f + pmt * (1 / rate + type) * (f - 1) + fv;
+                return rn;
             }
-            y0 = pv + pmt * nper + fv;
-            y1 = pv * f + pmt * (1 / rate + type) * (f - 1) + fv;
-
-            // find root by Newton secant method
-            i = x0 = 0.0;
-            x1 = rate;
-            while ((Math.Abs(y0 - y1) > FINANCIAL_PRECISION) && (i < FINANCIAL_MAX_ITERATIONS))
-            {
-                rate = (y1 * x0 - y0 * x1) / (y1 - y0);
-                x0 = x1;
-                x1 = rate;
-
-                if (Math.Abs(rate) < FINANCIAL_PRECISION)
-                {
-                    y = pv * (1 + nper * rate) + pmt * (1 + rate * type) * nper + fv;
-                }
-                else
-                {
-                    f = Math.Exp(nper * Math.Log(1 + rate));
-                    y = pv * f + pmt * (1 / rate + type) * (f - 1) + fv;
-                }
-
-                y0 = y1;
-                y1 = y;
-                ++i;
-            }
-            return rate;
         }
 
         /**
@@ -125,7 +125,7 @@ namespace NPOI.SS.Formula.Functions
          */
         static void CheckValue(double result)
         {
-            if (Double.IsNaN(result) || Double.IsInfinity(result))
+            if (double.IsNaN(result) || double.IsInfinity(result))
             {
                 throw new EvaluationException(ErrorEval.NUM_ERROR);
             }
