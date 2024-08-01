@@ -121,7 +121,7 @@ namespace NPOI.SS.UserModel
         /// <returns>IWorkbook depending on the input HSSFWorkbook or XSSFWorkbook is returned.</returns>
         /// <remarks>Your input stream MUST either support mark/reset, or
         ///  be wrapped as a {@link PushbackInputStream}!</remarks>
-        public static IWorkbook Create(Stream inputStream, bool bReadonly)
+        public static IWorkbook Create(Stream inputStream, bool readOnly)
         {
             if (inputStream.Length == 0)
                 throw new EmptyFileException();
@@ -133,7 +133,7 @@ namespace NPOI.SS.UserModel
             inputStream.Position = 0;
             if (DocumentFactoryHelper.HasOOXMLHeader(inputStream))
             {
-                return new XSSFWorkbook(OPCPackage.Open(inputStream, bReadonly));
+                return new XSSFWorkbook(OPCPackage.Open(inputStream, readOnly));
             }
             throw new InvalidFormatException("Your stream was neither an OLE2 stream, nor an OOXML stream.");
         }
