@@ -28,8 +28,6 @@ Get Started with NPOI
 ============
 [How NPOI succeeds](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb)
 
-[NPOI examples](https://github.com/nissl-lab/npoi-examples)
-
 [Getting Started with NPOI](https://github.com/nissl-lab/npoi/wiki/Getting-Started-with-NPOI)
 
 [How to use NPOI on Linux](https://github.com/nissl-lab/npoi/wiki/How-to-use-NPOI-on-Linux)
@@ -52,9 +50,7 @@ e. Support not only export but also import
 
 f. Real successful cases all over the world
 
-g. [huge amount of code examples for you to learn how to use NPOI](https://github.com/nissl-lab/npoi-examples)
-
-h. Works on both Windows and Linux 
+g. Works on both Windows and Linux 
 
 
 System Requirement
