@@ -16,7 +16,8 @@
   <ItemGroup>
     <PackageReference Include="Enums.NET" Version="4.0.1" />
     <PackageReference Include="ExtendedNumerics.BigDecimal" Version="2025.1001.2.129" />
-    <PackageReference Include="MathNet.Numerics.Signed" Version="5.0.0" />
+    <PackageReference Condition=" '$(TargetFramework)'=='net472' Or '$(TargetFramework)'=='netstandard2.0' " Include="MathNet.Numerics.Signed" Version="5.0.0" />
+    <PackageReference Condition=" '$(TargetFramework)'!='net472' And '$(TargetFramework)'!='netstandard2.0' "  Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.0" />
     <PackageReference Include="BouncyCastle.Cryptography" Version="2.3.1" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
