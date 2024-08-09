@@ -77,9 +77,18 @@ namespace NPOI.Util
             int currentLevel;
             try
             {
-                string temp = ConfigurationManager.AppSettings["poi.log.level"];
-                if (string.IsNullOrEmpty(temp))
+                string temp = Environment.GetEnvironmentVariable("NPOI_LOG_LEVEL");
+#if NETFRAMEWORK
+                if (temp == null)
+                {
+                    temp = ConfigurationManager.AppSettings["poi.log.level"];
+                }
+#endif
+                if(string.IsNullOrEmpty(temp))
+                {
                     temp = WARN.ToString(CultureInfo.InvariantCulture);
+                }
+
                 currentLevel = int.Parse(temp, CultureInfo.InvariantCulture);
             }
             catch

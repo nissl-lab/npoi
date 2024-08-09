@@ -83,11 +83,18 @@ namespace NPOI.Util
             //  that our users can set the system property
             //  between class loading and first use
             if(_loggerClassName == null) {
+#if NETFRAMEWORK
         	    try {
         		    _loggerClassName = ConfigurationManager.AppSettings["loggername"];
         	    } catch(Exception) {}
-            	
-        	    // Use the default logger if none specified,
+#endif
+                if(_loggerClassName == null)
+                {
+                    // try environment
+                    _loggerClassName = Environment.GetEnvironmentVariable("NPOI_LOGGER_NAME");
+                }
+
+                // Use the default logger if none specified,
         	    //  or none could be fetched
         	    if(_loggerClassName == null) {
         		    _loggerClassName = _nullLogger.GetType().Name;
