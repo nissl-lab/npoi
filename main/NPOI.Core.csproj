@@ -24,10 +24,6 @@
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.8" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' != 'net472' ">
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
-  </ItemGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
     <Reference Include="System.Configuration" />
   </ItemGroup>
