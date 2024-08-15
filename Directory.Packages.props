@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="BenchmarkDotNet" Version="0.13.12" />
@@ -21,8 +21,9 @@
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageVersion Include="SharpZipLib" Version="1.4.2" />
     <PackageVersion Include="SixLabors.Fonts" Version="1.0.1" />
-    <PackageVersion Include="SixLabors.ImageSharp" Version="2.1.8" />
+    <PackageVersion Include="SixLabors.ImageSharp" Version="2.1.9" />
     <PackageVersion Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
+    <PackageVersion Include="System.Formats.Asn1" Version="8.0.1" />
     <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="6.0.3" />
     <PackageVersion Include="System.Security.Cryptography.Xml" Version="6.0.1" />
   </ItemGroup>
