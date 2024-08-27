@@ -280,9 +280,9 @@ namespace NPOI.XSSF.UserModel
             // Bug #62740, the logic was just re-using the existing max ID, not incrementing beyond it.
             nextColumnId++;
 
-            // Add the new Column
+            // Add the new count
             CT_TableColumn column = columns.InsertNewTableColumn(columnIndex);
-            columns.count = columns.count;
+            columns.count = (uint)columns.tableColumn.Count;
 
             column.id = (uint)nextColumnId;
             if (columnName != null)
@@ -665,20 +665,17 @@ namespace NPOI.XSSF.UserModel
         /// <returns></returns>
         public List<XSSFTableColumn> GetColumns()
         {
-            if (tableColumns == null)
+            var columns = new List<XSSFTableColumn>();
+            CT_TableColumns ctTableColumns = ctTable.tableColumns;
+            if(ctTableColumns != null)
             {
-                var columns = new List<XSSFTableColumn>();
-                CT_TableColumns ctTableColumns = ctTable.tableColumns;
-                if (ctTableColumns != null)
+                foreach(CT_TableColumn column in ctTableColumns.GetTableColumnList())
                 {
-                    foreach (CT_TableColumn column in ctTableColumns.GetTableColumnList())
-                    {
-                        XSSFTableColumn tableColumn = new XSSFTableColumn(this, column);
-                        columns.Add(tableColumn);
-                    }
+                    XSSFTableColumn tableColumn = new XSSFTableColumn(this, column);
+                    columns.Add(tableColumn);
                 }
-                tableColumns = columns;
             }
+            tableColumns = columns;
             return tableColumns;
         }
         public void RemoveColumn(XSSFTableColumn column)
