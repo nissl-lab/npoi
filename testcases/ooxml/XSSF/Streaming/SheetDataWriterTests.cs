@@ -333,7 +333,7 @@ namespace TestCases.XSSF.Streaming
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
             Assert.True(lines.Length == 1);
-            Assert.AreEqual("<c r=\"A1\" t=\"inlineStr\"><is><t xml:space=\"preserve\">\'\'&lt;&gt;&#x9;&#xa;&#xa;&amp;&quot;?         test:SLDFKj    </t></is></c>", lines[0]);
+            Assert.AreEqual("<c r=\"A1\" t=\"inlineStr\"><is><t xml:space=\"preserve\">\'\'&lt;&gt;&#x9;&#xa;&#xd;&amp;&quot;?         test:SLDFKj    </t></is></c>", lines[0]);
 
         }
 
