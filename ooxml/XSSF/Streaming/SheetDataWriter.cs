@@ -471,12 +471,19 @@ namespace NPOI.XSSF.Streaming
                         break;
                     // Special characters
                     case '\n':
+                        if(counter > last)
+                        {
+                            WriteAsBytes(GetSubArray(chars, last, counter - last));
+                        }
+                        WriteAsBytes("&#xa;");
+                        last = counter + 1;
+                        break;
                     case '\r':
                         if (counter > last)
                         {
                             WriteAsBytes(GetSubArray(chars, last, counter - last));
                         }
-                        WriteAsBytes("&#xa;");
+                        WriteAsBytes("&#xd;");
                         last = counter + 1;
                         break;
                     case '\t':
