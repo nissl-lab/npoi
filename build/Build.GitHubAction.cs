@@ -3,20 +3,21 @@ using Nuke.Common.CI.GitHubActions;
 [GitHubActions("CI",
     GitHubActionsImage.WindowsLatest,
     GitHubActionsImage.UbuntuLatest,
-    OnPushBranches = new[] { "main", "master", "release*", "poi/*" },
-    InvokedTargets = new[] { nameof(Clean), nameof(Test), nameof(Pack) },
+    OnPushBranches = ["main", "master", "release*", "poi/*"],
+    InvokedTargets = [nameof(Clean), nameof(Test), nameof(Pack)],
     TimeoutMinutes = 20,
-    CacheKeyFiles = new string[0]
+    CacheKeyFiles = [],
+    PublishCondition = "runner.os == 'Windows'"
 )]
 [GitHubActions("PR",
     GitHubActionsImage.WindowsLatest,
     GitHubActionsImage.UbuntuLatest,
-    On = new [] { GitHubActionsTrigger.PullRequest },
-    InvokedTargets = new[] { nameof(Clean), nameof(Test), nameof(Pack) },
+    On = [GitHubActionsTrigger.PullRequest],
+    InvokedTargets = [nameof(Clean), nameof(Test), nameof(Pack)],
     TimeoutMinutes = 20,
-    CacheKeyFiles = new string[0]
+    CacheKeyFiles = [],
+    ConcurrencyCancelInProgress = true,
+    PublishCondition = "runner.os == 'Windows'"
 )]
-partial class Build
-{
-}
+partial class Build;
 
