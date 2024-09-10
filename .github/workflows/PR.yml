@@ -33,6 +33,7 @@ jobs:
         run: ./build.cmd Clean Test Pack
       - name: 'Publish: publish'
         uses: actions/upload-artifact@v4
+        if: runner.os == 'Windows'
         with:
           name: publish
           path: publish
@@ -46,6 +47,7 @@ jobs:
         run: ./build.cmd Clean Test Pack
       - name: 'Publish: publish'
         uses: actions/upload-artifact@v4
+        if: runner.os == 'Windows'
         with:
           name: publish
           path: publish

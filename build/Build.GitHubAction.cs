@@ -6,7 +6,8 @@ using Nuke.Common.CI.GitHubActions;
     OnPushBranches = ["main", "master", "release*", "poi/*"],
     InvokedTargets = [nameof(Clean), nameof(Test), nameof(Pack)],
     TimeoutMinutes = 20,
-    CacheKeyFiles = []
+    CacheKeyFiles = [],
+    PublishCondition = "runner.os == 'Windows'"
 )]
 [GitHubActions("PR",
     GitHubActionsImage.WindowsLatest,
@@ -15,7 +16,8 @@ using Nuke.Common.CI.GitHubActions;
     InvokedTargets = [nameof(Clean), nameof(Test), nameof(Pack)],
     TimeoutMinutes = 20,
     CacheKeyFiles = [],
-    ConcurrencyCancelInProgress = true
+    ConcurrencyCancelInProgress = true,
+    PublishCondition = "runner.os == 'Windows'"
 )]
 partial class Build;
 
