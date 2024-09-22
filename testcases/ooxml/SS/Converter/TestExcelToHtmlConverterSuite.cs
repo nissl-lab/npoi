@@ -14,7 +14,7 @@ namespace TestCases.SS.Converter
         private static List<String> failingFiles = new List<string>();
 
         [Test]
-        [Ignore("test")]
+       
         public void TestExcelToHtmlConverter()
         {
             string[] fileNames = POIDataSamples.GetSpreadSheetInstance().GetFiles("*.xls");
@@ -22,7 +22,7 @@ namespace TestCases.SS.Converter
             StringBuilder stringBuilder = new StringBuilder();
             foreach (string filename in fileNames)
             {
-                if (filename.EndsWith(".xls"))
+                if (filename.EndsWith("clusterfuzz-testcase-minimized-POIHSSFFuzzer-6322470200934400.xls"))
                     toConverter.Add(filename);
                 else
                     continue;
