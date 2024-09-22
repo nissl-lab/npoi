@@ -233,7 +233,6 @@ namespace TestCases.SS.Formula
         }
 
         // bug 60219: FormulaParser can't parse external references when sheet name is quoted
-        [Ignore("bug 60219: FormulaParser can't parse external references when sheet name is quoted")]
         [Test]
         public void TestParseExternalReferencesWithQuotedSheetName()
         {
