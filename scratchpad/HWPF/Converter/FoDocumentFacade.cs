@@ -222,7 +222,7 @@ namespace NPOI.HWPF.Converter
 
             // See http://xmlgraphics.apache.org/fop/0.95/metadata.html
 
-            XmlElement xmpmeta = document.CreateElement("adobe:ns:meta",
+            XmlElement xmpmeta = document.CreateElement("adobe:ns:meta/",
                     "x:xmpmeta", NS_XSLFO);
             declarations.AppendChild(xmpmeta);
 
