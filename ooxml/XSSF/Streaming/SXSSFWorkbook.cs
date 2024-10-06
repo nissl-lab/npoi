@@ -985,7 +985,7 @@ namespace NPOI.XSSF.Streaming
 
         void IDisposable.Dispose()
         {
-            this.Close();
+            this.Dispose();
         }
 
 
