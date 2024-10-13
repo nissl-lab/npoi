@@ -1,6 +1,6 @@
 What's NPOI
 ===================
- [![NuGet](https://img.shields.io/nuget/dt/npoi)](https://www.nuget.org/packages/NPOI)
+[![NuGet](https://img.shields.io/nuget/dt/npoi)](https://www.nuget.org/packages/NPOI)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square&logo=Apache)](LICENSE)
 [![traffic](https://api.segment.io/v1/pixel/track?data=ewogICJ3cml0ZUtleSI6ICJBV2NjaWd1UkhKODBuNkJ4WlI4cHRaRzBINzY0RmJObCIsCiAgInVzZXJJZCI6ICJ0b255cXVzIiwKICAiZXZlbnQiOiAiTlBPSSBIb21lcGFnZSIKfQ==
 )](#)
@@ -12,6 +12,8 @@ What's NPOI
   </a>
 <br />
 This project is the .NET version of Apache POI project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
+
+Do you interested in how NPOI get success? [please read this post](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb) 
 
 About Donation 关于捐款
 ============
@@ -26,7 +28,6 @@ Join us on telegram: https://t.me/npoidevs
 
 Get Started with NPOI
 ============
-[How NPOI succeeds](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb)
 
 [Getting Started with NPOI](https://github.com/nissl-lab/npoi/wiki/Getting-Started-with-NPOI)
 
