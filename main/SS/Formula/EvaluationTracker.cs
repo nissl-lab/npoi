@@ -20,6 +20,7 @@ namespace NPOI.SS.Formula
 
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using NPOI.SS.Formula.Eval;
     
 
@@ -36,15 +37,15 @@ namespace NPOI.SS.Formula
     public class EvaluationTracker
     {
         // TODO - consider deleting this class and letting CellEvaluationFrame take care of itself
-        private IList _evaluationFrames;
-        private IList _currentlyEvaluatingCells;
+        private IList<CellEvaluationFrame> _evaluationFrames;
+        private ISet<FormulaCellCacheEntry> _currentlyEvaluatingCells;
         private EvaluationCache _cache;
 
         public EvaluationTracker(EvaluationCache cache)
         {
             _cache = cache;
-            _evaluationFrames = new ArrayList();
-            _currentlyEvaluatingCells = new ArrayList();
+            _evaluationFrames = new List<CellEvaluationFrame>();
+            _currentlyEvaluatingCells = new HashSet<FormulaCellCacheEntry>();
         }
 
         /**
@@ -116,7 +117,7 @@ namespace NPOI.SS.Formula
             }
             // else - no problems so pop current frame
             _evaluationFrames.RemoveAt(nFrames);
-            _currentlyEvaluatingCells.Remove(cce);
+            _currentlyEvaluatingCells.Remove((FormulaCellCacheEntry) cce);
         }
 
         public void AcceptFormulaDependency(CellCacheEntry cce)
