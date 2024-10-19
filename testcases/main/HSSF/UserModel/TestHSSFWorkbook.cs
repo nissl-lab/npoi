@@ -17,29 +17,23 @@
 
 namespace TestCases.HSSF.UserModel
 {
-    using System;
-    using System.IO;
-    using System.Collections;
-
-    using TestCases.HSSF;
+    using NPOI.DDF;
+    using NPOI.HSSF;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
-    using NPOI.SS.Formula;
-    using NPOI.Util;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
-    using NPOI.DDF;
-    using TestCases.SS.UserModel;
+    using NPOI.POIFS.FileSystem;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
-    using NPOI.POIFS.FileSystem;
     using NPOI.SS.Util;
+    using NPOI.Util;
+    using NUnit.Framework;
+    using System;
+    using System.Collections;
     using System.Collections.Generic;
-    using System.Text;
-    using NPOI.HSSF;
-    using System.Threading;
-    using System.Globalization;
-    using NPOI.SS;
+    using System.IO;
+    using TestCases.HSSF;
+    using TestCases.SS.UserModel;
 
     /**
 *
@@ -68,7 +62,7 @@ namespace TestCases.HSSF.UserModel
          * @throws IOException 
          */
         [Test]
-        public void Hidden()
+        public void TestHidden()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
 
@@ -94,90 +88,6 @@ namespace TestCases.HSSF.UserModel
 
             wbBack.Close();
             wb.Close();
-        }
-
-        [Test]
-        [Ignore("not found in poi")]
-        public void CaseInsensitiveNames()
-        {
-            HSSFWorkbook b = new HSSFWorkbook();
-            ISheet originalSheet = b.CreateSheet("Sheet1");
-            ISheet fetchedSheet = b.GetSheet("sheet1");
-            if (fetchedSheet == null)
-            {
-                throw new AssertionException("Identified bug 44892");
-            }
-            Assert.AreEqual(originalSheet, fetchedSheet);
-            try
-            {
-                b.CreateSheet("sHeeT1");
-                Assert.Fail("should have thrown exceptiuon due to duplicate sheet name");
-            }
-            catch (ArgumentException e)
-            {
-                // expected during successful Test
-                Assert.AreEqual("The workbook already contains a sheet of this name", e.Message);
-            }
-        }
-        [Test]
-        [Ignore("not found in poi")]
-        public void DuplicateNames()
-        {
-            HSSFWorkbook b = new HSSFWorkbook();
-            b.CreateSheet("Sheet1");
-            b.CreateSheet();
-            b.CreateSheet("name1");
-            try
-            {
-                b.CreateSheet("name1");
-                Assert.Fail();
-            }
-            catch (ArgumentException)// pass
-            {
-            }
-            b.CreateSheet();
-            try
-            {
-                b.SetSheetName(3, "name1");
-                Assert.Fail();
-            }
-            catch (ArgumentException)// pass
-            {
-            }
-
-            try
-            {
-                b.SetSheetName(3, "name1");
-                Assert.Fail();
-            }
-            catch (ArgumentException)// pass
-            {
-            }
-
-            b.SetSheetName(3, "name2");
-            b.SetSheetName(3, "name2");
-            b.SetSheetName(3, "name2");
-
-            HSSFWorkbook c = new HSSFWorkbook();
-            c.CreateSheet("Sheet1");
-            c.CreateSheet("Sheet2");
-            c.CreateSheet("Sheet3");
-            c.CreateSheet("Sheet4");
-
-        }
-
-        [Test]
-        [Ignore("not found in poi")]
-        public new void TestSheetSelection()
-        {
-            HSSFWorkbook b = new HSSFWorkbook();
-            b.CreateSheet("Sheet One");
-            b.CreateSheet("Sheet Two");
-            b.SetActiveSheet(1);
-            b.SetSelectedTab(1);
-            b.FirstVisibleTab = (1);
-            Assert.AreEqual(1, b.ActiveSheetIndex);
-            Assert.AreEqual(1, b.FirstVisibleTab);
         }
 
         [Test]
@@ -1219,11 +1129,10 @@ namespace TestCases.HSSF.UserModel
                 IList<HSSFShape> shapes = (sheet.DrawingPatriarch as HSSFPatriarch).Children;
                 foreach (HSSFShape shape in shapes)
                 {
-                    HSSFAnchor anchor = shape.Anchor;
+                    HSSFAnchor anchor = shape.Anchor as HSSFAnchor;
 
                     if (anchor is HSSFClientAnchor)
-                    {
-                        // absolute coordinates
+                    {                        // absolute coordinates
                         HSSFClientAnchor clientAnchor = (HSSFClientAnchor)anchor;
                         Assert.IsNotNull(clientAnchor);
                         //System.out.Println(clientAnchor.Row1 + "," + clientAnchor.Row2);

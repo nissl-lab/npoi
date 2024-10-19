@@ -26,7 +26,7 @@ namespace NPOI.XSSF.UserModel
      *
      * @author Yegor Kozlov
      */
-    public abstract class XSSFShape:IShape
+    public abstract class XSSFShape: IShape
     {
         public static int EMU_PER_PIXEL = 9525;
         public static int EMU_PER_POINT = 12700;
@@ -50,6 +50,9 @@ namespace NPOI.XSSF.UserModel
          */
         internal XSSFAnchor anchor;
 
+        public virtual string ShapeName => throw new System.NotImplementedException();
+
+        public virtual IChildAnchor Anchor => throw new System.NotImplementedException();
         /**
          * Return the Drawing that owns this shape
          *
@@ -241,11 +244,6 @@ namespace NPOI.XSSF.UserModel
                 CT_LineProperties ln = props.IsSetLn() ? props.ln : props.AddNewLn();
                 ln.w = (int)(value * EMU_PER_POINT);
             }
-        }
-
-        public void SetLineStyleColor(int lineStyleColor)
-        {
-            throw new System.NotImplementedException();
         }
 
         public virtual LineEndingCapType LineEndingCapType

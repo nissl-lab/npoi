@@ -66,4 +66,8 @@ namespace NPOI.SS.UserModel
         IClientAnchor CreateAnchor(int dx1, int dy1, int dx2, int dy2, int col1, int row1, int col2, int row2);
     }
 
+    public interface IDrawing<T> : IShapeContainer<T> where T : class, IShape
+    {
+
+    }
 }

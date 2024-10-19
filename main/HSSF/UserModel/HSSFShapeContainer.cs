@@ -19,12 +19,13 @@
 namespace NPOI.HSSF.UserModel
 {
     using System.Collections.Generic;
+    using NPOI.SS.UserModel;
 
     /// <summary>
     /// An interface that indicates whether a class can contain children.
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
-    public interface HSSFShapeContainer : IEnumerable<HSSFShape>
+    public interface HSSFShapeContainer : IShapeContainer<HSSFShape>
     {
         /// <summary>
         /// Gets Any children contained by this shape.

@@ -51,7 +51,7 @@ namespace TestCases.HSSF.UserModel
             HSSFPicture cmpPic = (HSSFPicture)pics[(1)];
 
             BaseTestResize(inpPic, cmpPic, 2.0, 2.0);
-            //wb.Close();
+            wb.Close();
         }
 
 
@@ -69,6 +69,8 @@ namespace TestCases.HSSF.UserModel
             int idx1 = wb.AddPicture(pictureData, PictureType.PNG);
             IPicture pic = p1.CreatePicture(new HSSFClientAnchor(), idx1);
             pic.Resize();
+
+            wb.Close();
         }
         [Test]
         public void AddPictures()
@@ -163,6 +165,8 @@ namespace TestCases.HSSF.UserModel
             Assert.IsTrue(Arrays.Equals(data2, ((HSSFPicture)((HSSFPatriarch)dr).Children[(1)]).PictureData.Data));
             Assert.IsTrue(Arrays.Equals(data3, ((HSSFPicture)((HSSFPatriarch)dr).Children[(2)]).PictureData.Data));
             Assert.IsTrue(Arrays.Equals(data4, ((HSSFPicture)((HSSFPatriarch)dr).Children[(3)]).PictureData.Data));
+
+            wb.Close();
         }
         [Test]
         public void BSEPictureRef()
@@ -201,6 +205,8 @@ namespace TestCases.HSSF.UserModel
 
             HSSFPicture picture = (HSSFPicture)Drawing.Children[0];
             Assert.AreEqual(picture.FileName, "test");
+
+            wb.Close();
         }
         [Test]
         public void SetGetProperties()
@@ -226,6 +232,8 @@ namespace TestCases.HSSF.UserModel
 
             p1 = (HSSFPicture)dr.Children[0];
             Assert.AreEqual(p1.FileName, "aaa");
+
+            wb.Close();
         }
 
         [Test]
@@ -275,6 +283,8 @@ namespace TestCases.HSSF.UserModel
             Array.Copy(pictureDataWmf, 22, wmfNoHeader, 0, pictureDataWmf.Length - 22);
             pictureDataOut = (wb.GetAllPictures()[2] as HSSFPictureData).Data;
             Assert.IsTrue(Arrays.Equals(wmfNoHeader, pictureDataOut));
+
+            wb.Close();
         }
 
     }
