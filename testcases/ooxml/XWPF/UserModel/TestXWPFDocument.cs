@@ -28,6 +28,8 @@ namespace TestCases.XWPF.UserModel
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
+    using System.Text;
     using TestCases;
 
     [TestFixture]
@@ -135,6 +137,53 @@ namespace TestCases.XWPF.UserModel
             //Assert.AreSame(cP, doc.Paragraphs[(0)]);
             //Assert.AreEqual(5, doc.Paragraphs.Count);
         }
+
+        [Test]
+        public void ReplaceParagraphText()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("WordReplaceCRLF.docx");
+
+            //Find and replace text in document body
+            doc.FindAndReplaceText("$replace_text$", "Regel1\nRegel2\nRegel3");
+
+            //Find and replace text io tabel cell
+            doc.FindAndReplaceText("$replace_cell_text$", "Regel1\nRegel2\nRegel3");
+
+            //Save Word Document
+            XWPFDocument outputDocument = outputDocument = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+
+            //Combine all runs of all paragraphs
+            StringBuilder builder = new StringBuilder();
+            foreach (var paragraph in outputDocument.Paragraphs)
+            {
+                foreach (var run in  paragraph.Runs)
+                {
+                    builder.Append(run.GetText(0));
+                }
+            }
+
+            //Check 
+            Assert.AreEqual("Regel1\nRegel2\nRegel3", builder.ToString());
+
+            //Check text was replaced correctly in table cell
+            var table = outputDocument.Tables.FirstOrDefault();
+            Assert.IsNotNull(table);
+
+            var dataRow = table.Rows[1];
+            builder.Clear();
+            foreach (var tableCellParagraph in dataRow.GetCell(0).Paragraphs)
+            {
+                foreach(var run in tableCellParagraph.Runs)
+                {
+                    builder.Append(run.GetText(0));
+                }
+            }
+
+            //Check 
+            Assert.AreEqual("Table replace multiple enters Regel1\nRegel2\nRegel3 text after last enter", builder.ToString());
+
+        }
+
         [Test]
         public void TestAddPicture()
         {

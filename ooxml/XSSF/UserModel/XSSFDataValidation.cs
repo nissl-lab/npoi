@@ -155,12 +155,12 @@ namespace NPOI.XSSF.UserModel
                 return null;
             }
             StringBuilder builder = new StringBuilder();
-            foreach (char c in text.ToCharArray())
+            foreach (char c in text)
             {
                 // for now only encode characters below 32, we can add more here if needed
                 if (c < 32)
                 {
-                    builder.Append("_x").Append(c < 16 ? "000" : "00").Append(HexDump.ToHex(c)).Append("_");
+                    builder.Append("_x").Append(HexDump.ToHex((short) c)).Append('_');
                 }
                 else
                 {

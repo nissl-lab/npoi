@@ -159,7 +159,10 @@ namespace NPOI.HSSF.Record
         }
         public override String ToString()
         {
-            return GetType().Name + '[' + FormatValue + ']';
+            StringBuilder sb = new StringBuilder(64);
+            sb.Append(GetType().Name);
+            sb.Append('[').Append(FormatValue).Append(']');
+            return sb.ToString();
         }
         public NPOI.SS.UserModel.CellType GetValueType()
         {

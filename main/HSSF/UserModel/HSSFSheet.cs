@@ -2353,7 +2353,23 @@ namespace NPOI.HSSF.UserModel
         /// <param name="useMergedCells">whether to use the contents of merged cells when calculating the width of the column</param>
         public void AutoSizeColumn(int column, bool useMergedCells)
         {
-            double width = SheetUtil.GetColumnWidth(this, column, useMergedCells);
+            AutoSizeColumn(column, useMergedCells, maxRows: 0);
+        }
+
+        /// <summary>
+        /// Adjusts the column width to fit the contents.
+        /// This Process can be relatively slow on large sheets, so this should
+        /// normally only be called once per column, at the end of your
+        /// Processing.
+        /// You can specify whether the content of merged cells should be considered or ignored.
+        /// Default is to ignore merged cells.
+        /// </summary>
+        /// <param name="column">the column index</param>
+        /// <param name="useMergedCells">whether to use the contents of merged cells when calculating the width of the column</param>
+        /// <param name="maxRows">limit the scope to maxRows rows to speed up the function, or leave 0 (optional)</param>
+        public void AutoSizeColumn(int column, bool useMergedCells, int maxRows = 0)
+        {
+            double width = SheetUtil.GetColumnWidth(this, column, useMergedCells, maxRows);
             if (width != -1)
             {
                 width *= 256;
