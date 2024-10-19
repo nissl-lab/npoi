@@ -2256,13 +2256,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             StringBuilder sb = new StringBuilder();
             foreach (XmlNode elem in node.ChildNodes)
             {
-                if (elem.NodeType==XmlNodeType.Text)
-                {
-                    sb.Append(elem.InnerText);
-                }
-                else if (elem.NodeType==XmlNodeType.Element && elem.LocalName=="cr")
+                if(elem.NodeType==XmlNodeType.Element && elem.LocalName=="cr")
                 {
                     sb.Append("\n");
+                }
+                else
+                {
+                    sb.Append(elem.InnerText);
                 }
             }
 
