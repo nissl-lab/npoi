@@ -13,7 +13,7 @@ What's NPOI
 <br />
 This project is the .NET version of Apache POI project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
-Do you interested in how NPOI get success? [please read this post](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb) 
+Are you interested in how NPOI get success? [please read this post](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb) 
 
 About Donation 关于捐款
 ============
