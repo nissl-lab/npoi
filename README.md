@@ -15,6 +15,10 @@ This project is the .NET version of Apache POI project. With NPOI, you can read/
 
 Are you interested in how NPOI get success? [please read this post](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb) 
 
+NPOI Tutorial Waitlist
+======================
+I have plan to write a beginner tutorial about NPOI and I need to know how many beginners need it. [Click here to vote for this tutorial](https://github.com/nissl-lab/npoi/issues/1436)
+
 About Donation 关于捐款
 ============
 If you profits/benefits from NPOI and you believe it's useful, please [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
