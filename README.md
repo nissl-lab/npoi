@@ -17,7 +17,7 @@ Are you interested in how NPOI get success? [please read this post](https://tony
 
 NPOI Tutorial Waitlist
 ======================
-I have plan to write a beginner tutorial about NPOI and I need to know how many beginners need it. [Click here to vote for this tutorial](https://github.com/nissl-lab/npoi/issues/1436)
+I have plan to write a beginner tutorial about NPOI and I need to know how many beginners/developers need it. [Click here to vote for this tutorial](https://github.com/nissl-lab/npoi/issues/1436)
 
 About Donation 关于捐款
 ============
