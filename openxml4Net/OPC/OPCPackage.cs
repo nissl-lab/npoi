@@ -1023,7 +1023,7 @@ namespace NPOI.OpenXml4Net.OPC
                         return null;
                     }
 
-                    partOutput.Write(content.ToArray(), 0, (int)content.Length);
+                    partOutput.Write(content.TryGetBuffer(out var buf) ? buf.Array : content.ToArray(), 0, (int)content.Length);
                     partOutput.Close();
 
                 }

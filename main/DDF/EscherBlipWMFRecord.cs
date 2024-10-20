@@ -287,7 +287,7 @@ namespace NPOI.DDF
                 {
                     HexDump.Dump(this.field_12_data, 0, b, 0);
                     //extraData = b.ToString();
-                    extraData = Encoding.UTF8.GetString(b.ToArray());
+                    extraData = Encoding.UTF8.GetString(b.GetBuffer(), 0, (int)b.Length);
                 }
                 catch (Exception e)
                 {
