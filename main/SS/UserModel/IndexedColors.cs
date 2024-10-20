@@ -249,6 +249,15 @@ namespace NPOI.SS.UserModel
             mappingIndex.Add(63, IndexedColors.Grey80Percent);
             mappingIndex.Add(64, IndexedColors.Automatic);
         }
+
+        public static IndexedColors TryValueOf(int index)
+        {
+            if (mappingIndex.ContainsKey(index))
+                return mappingIndex[index];
+
+            return null;
+        }
+
         public static IndexedColors ValueOf(string colorName)
         {
             if (mappingName.ContainsKey(colorName.ToLower()))
@@ -256,11 +265,15 @@ namespace NPOI.SS.UserModel
 
             return null;
         }
+
         public static IndexedColors ValueOf(int index)
         {
-            if(mappingIndex.ContainsKey(index))
-                return mappingIndex[index];
-            throw new ArgumentException("Illegal IndexedColor index: " + index);
+            var indexedColors = TryValueOf(index);
+            
+            if(indexedColors == null)
+                throw new ArgumentException("Illegal IndexedColor index: " + index);
+
+            return indexedColors;
         }
 
         /**

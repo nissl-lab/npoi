@@ -1958,12 +1958,21 @@ namespace NPOI.XWPF.UserModel
                 {
                     FindAndReplaceTextInParagraph(paragraph, oldValue, newValue);
                 }
+                foreach(var table in footer.Tables)
+                {
+                    FindAndReplaceTextInTable(table, oldValue, newValue);
+                }
             }
+
             foreach (var header in this.HeaderList)
             {
                 foreach (var paragraph in header.Paragraphs)
                 {
                     FindAndReplaceTextInParagraph(paragraph, oldValue, newValue);
+                }
+                foreach(var table in header.Tables)
+                {
+                    FindAndReplaceTextInTable(table, oldValue, newValue);
                 }
             }
         }

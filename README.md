@@ -1,6 +1,6 @@
 What's NPOI
 ===================
-[![NuGet Badge](https://buildstats.info/nuget/NPOI)](https://www.nuget.org/packages/NPOI)
+[![NuGet](https://img.shields.io/nuget/dt/npoi)](https://www.nuget.org/packages/NPOI)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square&logo=Apache)](LICENSE)
 [![traffic](https://api.segment.io/v1/pixel/track?data=ewogICJ3cml0ZUtleSI6ICJBV2NjaWd1UkhKODBuNkJ4WlI4cHRaRzBINzY0RmJObCIsCiAgInVzZXJJZCI6ICJ0b255cXVzIiwKICAiZXZlbnQiOiAiTlBPSSBIb21lcGFnZSIKfQ==
 )](#)
@@ -13,11 +13,13 @@ What's NPOI
 <br />
 This project is the .NET version of Apache POI project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
+Are you interested in how NPOI get success? [please read this post](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb) 
+
 About Donation 关于捐款
 ============
-If you profits/benefits from NPOI and you believe it's useful, please [sponsor me via Github Sponsor](https://github.com/sponsors/tonyqus) or [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
+If you profits/benefits from NPOI and you believe it's useful, please [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
 
-如果您从NPOI受益或实现盈利，请通过[Github Sponsor赞助我](https://github.com/sponsors/tonyqus)或[给该项目捐款](https://github.com/nissl-lab/npoi/discussions/923)，谢谢！
+如果您从NPOI受益或实现盈利，请[给该项目捐款](https://github.com/nissl-lab/npoi/discussions/923)，谢谢！
 
 
 Telegram User Group
@@ -26,9 +28,6 @@ Join us on telegram: https://t.me/npoidevs
 
 Get Started with NPOI
 ============
-[How NPOI succeeds](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb)
-
-[NPOI examples](https://github.com/nissl-lab/npoi-examples)
 
 [Getting Started with NPOI](https://github.com/nissl-lab/npoi/wiki/Getting-Started-with-NPOI)
 
@@ -52,9 +51,7 @@ e. Support not only export but also import
 
 f. Real successful cases all over the world
 
-g. [huge amount of code examples for you to learn how to use NPOI](https://github.com/nissl-lab/npoi-examples)
-
-h. Works on both Windows and Linux 
+g. Works on both Windows and Linux 
 
 
 System Requirement

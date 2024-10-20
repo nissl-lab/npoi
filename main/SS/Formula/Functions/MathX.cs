@@ -20,6 +20,7 @@
  */
 namespace NPOI.SS.Formula.Functions
 {
+    using ExtendedNumerics;
     using System;
 
     /**
@@ -54,24 +55,24 @@ namespace NPOI.SS.Formula.Functions
         {
             double retval;
 
-            if (double.IsNaN(n) || double.IsInfinity(n))
+            if(double.IsNaN(n) || double.IsInfinity(n))
             {
                 retval = double.NaN;
             }
-            else if (double.MaxValue == n)
+            else if(double.MaxValue == n)
                 return double.MaxValue;
-            else if (double.MinValue == n)
+            else if(double.MinValue == n)
                 return 0;
             else
             {
-                if (p >= 0)
+                if(p >= 0)
                 {
-                    retval = (double)Math.Round((decimal)n, p, MidpointRounding.AwayFromZero);
+                    retval = (double) Math.Round((decimal) n, p, MidpointRounding.AwayFromZero);
                 }
                 else
                 {
                     int temp = (int)Math.Pow(10, Math.Abs(p));
-                    retval = (double)(Math.Round((decimal)(n) / temp, MidpointRounding.AwayFromZero) * temp);
+                    retval = (double) (Math.Round((decimal) (n) / temp, MidpointRounding.AwayFromZero) * temp);
                 }
             }
 
@@ -97,16 +98,16 @@ namespace NPOI.SS.Formula.Functions
         {
             double retval;
 
-            if (double.IsNaN(n) || double.IsInfinity(n))
+            if(double.IsNaN(n) || double.IsInfinity(n))
             {
                 retval = double.NaN;
             }
-            else if (double.MaxValue == n)
+            else if(double.MaxValue == n)
                 return double.MaxValue;
-            else if (double.MinValue == n)
+            else if(double.MinValue == n)
             {
                 double digit = 1;
-                while (p > 0)
+                while(p > 0)
                 {
                     digit = digit / 10;
                     p--;
@@ -115,13 +116,13 @@ namespace NPOI.SS.Formula.Functions
             }
             else
             {
-                if (p != 0)
+                if(p != 0)
                 {
                     double temp = Math.Pow(10, p);
                     double nat = (double)((decimal)Math.Abs(n * temp));
 
                     retval = Sign(n) *
-                        ((nat == (long)nat)
+                        ((nat == (long) nat)
                                 ? nat / temp
                                 : Math.Round(nat + 0.5) / temp);
                 }
@@ -129,9 +130,9 @@ namespace NPOI.SS.Formula.Functions
                 {
                     double na = Math.Abs(n);
                     retval = Sign(n) *
-                        ((na == (long)na)
+                        ((na == (long) na)
                             ? na
-                            : (long)na + 1);
+                            : (long) na + 1);
                 }
             }
 
@@ -157,24 +158,24 @@ namespace NPOI.SS.Formula.Functions
         {
             double retval;
 
-            if (double.IsNaN(n) || double.IsInfinity(n))
+            if(double.IsNaN(n) || double.IsInfinity(n))
             {
                 retval = double.NaN;
             }
-            else if (double.MaxValue == n)
+            else if(double.MaxValue == n)
                 return double.MaxValue;
-            else if (double.MinValue == n)
+            else if(double.MinValue == n)
                 return 0;
             else
             {
-                if (p != 0)
+                if(p != 0)
                 {
-                    double temp = Math.Pow(10, p);
-                    retval = Sign(n) * Math.Round((Math.Abs(n) * temp) - 0.5, MidpointRounding.AwayFromZero) / temp;
+                    var value = new BigDecimal(n);
+                    retval = (double)BigDecimal.Round(value, p);
                 }
                 else
                 {
-                    retval = (long)n;
+                    retval = (long) n;
                 }
             }
 
@@ -194,7 +195,7 @@ namespace NPOI.SS.Formula.Functions
          */
         public static short Sign(double d)
         {
-            return (short)((d == 0)
+            return (short) ((d == 0)
                     ? 0
                     : (d < 0)
                             ? -1
@@ -209,7 +210,7 @@ namespace NPOI.SS.Formula.Functions
         {
             double ave = 0;
             double sum = 0;
-            for (int i = 0, iSize = values.Length; i < iSize; i++)
+            for(int i = 0, iSize = values.Length; i < iSize; i++)
             {
                 sum += values[i];
             }
@@ -225,7 +226,7 @@ namespace NPOI.SS.Formula.Functions
         public static double Sum(double[] values)
         {
             double sum = 0;
-            for (int i = 0, iSize = values.Length; i < iSize; i++)
+            for(int i = 0, iSize = values.Length; i < iSize; i++)
             {
                 sum += values[i];
             }
@@ -239,7 +240,7 @@ namespace NPOI.SS.Formula.Functions
         public static double Sumsq(double[] values)
         {
             double sumsq = 0;
-            for (int i = 0, iSize = values.Length; i < iSize; i++)
+            for(int i = 0, iSize = values.Length; i < iSize; i++)
             {
                 sumsq += values[i] * values[i];
             }
@@ -254,10 +255,10 @@ namespace NPOI.SS.Formula.Functions
         public static double Product(double[] values)
         {
             double product = 0;
-            if (values != null && values.Length > 0)
+            if(values != null && values.Length > 0)
             {
                 product = 1;
-                for (int i = 0, iSize = values.Length; i < iSize; i++)
+                for(int i = 0, iSize = values.Length; i < iSize; i++)
                 {
                     product *= values[i];
                 }
@@ -273,7 +274,7 @@ namespace NPOI.SS.Formula.Functions
         public static double Min(double[] values)
         {
             double min = double.PositiveInfinity;
-            for (int i = 0, iSize = values.Length; i < iSize; i++)
+            for(int i = 0, iSize = values.Length; i < iSize; i++)
             {
                 min = Math.Min(min, values[i]);
             }
@@ -288,7 +289,7 @@ namespace NPOI.SS.Formula.Functions
         public static double Max(double[] values)
         {
             double max = double.NegativeInfinity;
-            for (int i = 0, iSize = values.Length; i < iSize; i++)
+            for(int i = 0, iSize = values.Length; i < iSize; i++)
             {
                 max = Math.Max(max, values[i]);
             }
@@ -314,7 +315,7 @@ namespace NPOI.SS.Formula.Functions
         {
             double f;
 
-            if ((n < 0 && s > 0) || (n > 0 && s < 0) || (s == 0 && n != 0))
+            if((n < 0 && s > 0) || (n > 0 && s < 0) || (s == 0 && n != 0))
             {
                 f = double.NaN;
             }
@@ -345,7 +346,7 @@ namespace NPOI.SS.Formula.Functions
         {
             double c;
 
-            if (n > 0 && s < 0)
+            if(n > 0 && s < 0)
             {
                 c = double.NaN;
             }
@@ -371,11 +372,11 @@ namespace NPOI.SS.Formula.Functions
         {
             double d = 1;
 
-            if (n >= 0)
+            if(n >= 0)
             {
-                if (n <= 170)
+                if(n <= 170)
                 {
-                    for (int i = 1; i <= n; i++)
+                    for(int i = 1; i <= n; i++)
                     {
                         d *= i;
                     }
@@ -412,11 +413,11 @@ namespace NPOI.SS.Formula.Functions
         {
             double result = 0;
 
-            if (d == 0)
+            if(d == 0)
             {
                 result = double.NaN;
             }
-            else if (Sign(n) == Sign(d))
+            else if(Sign(n) == Sign(d))
             {
                 //double t = Math.Abs(n / d);
                 //t = t - (long)t;
@@ -516,17 +517,17 @@ namespace NPOI.SS.Formula.Functions
                 int narr = arrays.Length;
                 int arrlen = arrays[0].Length;
 
-                for (int j = 0; j < arrlen; j++)
+                for(int j = 0; j < arrlen; j++)
                 {
                     double t = 1;
-                    for (int i = 0; i < narr; i++)
+                    for(int i = 0; i < narr; i++)
                     {
                         t *= arrays[i][j];
                     }
                     d += t;
                 }
             }
-            catch (IndexOutOfRangeException)
+            catch(IndexOutOfRangeException)
             {
                 d = double.NaN;
             }
@@ -551,12 +552,12 @@ namespace NPOI.SS.Formula.Functions
 
             try
             {
-                for (int i = 0, iSize = xarr.Length; i < iSize; i++)
+                for(int i = 0, iSize = xarr.Length; i < iSize; i++)
                 {
                     d += (xarr[i] + yarr[i]) * (xarr[i] - yarr[i]);
                 }
             }
-            catch (IndexOutOfRangeException)
+            catch(IndexOutOfRangeException)
             {
                 d = double.NaN;
             }
@@ -581,12 +582,12 @@ namespace NPOI.SS.Formula.Functions
 
             try
             {
-                for (int i = 0, iSize = xarr.Length; i < iSize; i++)
+                for(int i = 0, iSize = xarr.Length; i < iSize; i++)
                 {
                     d += (xarr[i] * xarr[i]) + (yarr[i] * yarr[i]);
                 }
             }
-            catch (IndexOutOfRangeException )
+            catch(IndexOutOfRangeException)
             {
                 d = double.NaN;
             }
@@ -612,13 +613,13 @@ namespace NPOI.SS.Formula.Functions
 
             try
             {
-                for (int i = 0, iSize = xarr.Length; i < iSize; i++)
+                for(int i = 0, iSize = xarr.Length; i < iSize; i++)
                 {
                     double t = (xarr[i] - yarr[i]);
                     d += t * t;
                 }
             }
-            catch (IndexOutOfRangeException )
+            catch(IndexOutOfRangeException)
             {
                 d = double.NaN;
             }
@@ -639,7 +640,7 @@ namespace NPOI.SS.Formula.Functions
         public static double NChooseK(int n, int k)
         {
             double d = 1;
-            if (n < 0 || k < 0 || n < k)
+            if(n < 0 || k < 0 || n < k)
             {
                 d = double.NaN;
             }
@@ -647,7 +648,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 int minnk = Math.Min(n - k, k);
                 int maxnk = Math.Max(n - k, k);
-                for (int i = maxnk; i < n; i++)
+                for(int i = maxnk; i < n; i++)
                 {
                     d *= i + 1;
                 }

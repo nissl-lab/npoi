@@ -221,7 +221,7 @@ namespace NPOI.SS.Formula.Eval
             retval[122] = new NotImplementedFunction("NAMES"); // NAMES
             retval[123] = new NotImplementedFunction("DIRECTORY"); // DIRECTORY
             retval[124] = TextFunction.FIND; // Find
-            retval[125] = new NotImplementedFunction("CELL"); // CELL
+            retval[125] = new Cell(); // CELL
             retval[126] = LogicalFunction.ISERR; // IsERR
             retval[127] = LogicalFunction.ISTEXT; // IsTEXT
             retval[128] = LogicalFunction.ISNUMBER; // IsNUMBER
@@ -391,7 +391,7 @@ namespace NPOI.SS.Formula.Eval
             retval[306] = new NotImplementedFunction("CHITEST"); // CHITEST
             retval[307] = new NotImplementedFunction("CORREL"); // CORREL
             retval[308] = new NotImplementedFunction("COVAR"); // COVAR
-            retval[309] = new NotImplementedFunction("FORECAST"); // FORECAST
+            retval[309] = new Forecast(); // FORECAST
             retval[310] = new NotImplementedFunction("FTEST"); // FTEST
             retval[311] = new Intercept(); // INTERCEPT
             retval[312] = new NotImplementedFunction("PEARSON"); // PEARSON
