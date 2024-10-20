@@ -42,7 +42,7 @@ namespace NPOI.Util
     /// @since      May 10, 2002
     /// @version    1.0
     /// </summary>
-    public class StringUtil
+    public static class StringUtil
     {
         private static Encoding ISO_8859_1 = Encoding.GetEncoding("ISO-8859-1");
         private static Encoding UTF16LE = Encoding.Unicode;
@@ -50,9 +50,9 @@ namespace NPOI.Util
         /**     
          *  Constructor for the StringUtil object     
          */
-        private StringUtil()
-        {
-        }
+        //private StringUtil()
+        //{
+        //}
 
         /// <summary>
         /// Given a byte array of 16-bit unicode characters in Little Endian
@@ -876,6 +876,22 @@ namespace NPOI.Util
                 }
             }
             return count;
+        }
+        
+        public static int CodePointAt(this string text, int index)
+        {
+            if (!char.IsSurrogate(text[index]))
+            {
+                return (int)text[index];
+            }
+            if (index + 1 < text.Length && char.IsSurrogatePair(text[index], text[index + 1]))
+            {
+                return char.ConvertToUtf32(text[index], text[index+1]);
+            }
+            else
+            {
+                throw new Exception("String was not well-formed UTF-16.");
+            }
         }
     }
 }

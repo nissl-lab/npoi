@@ -57,13 +57,15 @@ namespace NPOI.XSSF
 
         public IWorkbook WriteOutAndReadBack(IWorkbook wb)
         {
-            if (!(wb is SXSSFWorkbook))
+            // wb is usually an SXSSFWorkbook, but must also work on an XSSFWorkbook
+            // since workbooks must be able to be written out and read back
+            // several times in succession
+            if (!(wb is SXSSFWorkbook || wb is XSSFWorkbook))
             {
-                throw new ArgumentException("Expected an instance of SXSSFWorkbook");
+                throw new ArgumentException("Expected an instance of XSSFWorkbook or SXSSFWorkbook");
             }
 
-            XSSFWorkbook result;
-            try
+            XSSFWorkbook result;            try
             {
                 MemoryStream baos = new MemoryStream(8192);
                 wb.Write(baos, false);
