@@ -169,7 +169,8 @@ namespace NPOI.POIFS.NIO
         {
             //byte[] tempBuffer = new byte[stream.Length];
             //fileStream.Read(tempBuffer, 0, tempBuffer.Length);
-            stream.Write(fileStream.GetBuffer(), 0, (int)fileStream.Length);        }
+            byte[] tempBuffer = fileStream.ToArray();
+            stream.Write(tempBuffer, 0, tempBuffer.Length);        }
 
         public override long Size
         {
