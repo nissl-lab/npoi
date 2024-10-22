@@ -320,7 +320,7 @@ namespace NPOI.POIFS.Crypt.Agile
                 byte[] buf = Encoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n");
                 bos.Write(buf, 0, buf.Length);
                 ed.Save(bos);
-                os.Write(bos.ToArray());
+                os.Write(bos.GetBuffer(), 0, (int)bos.Length);
             } catch (IOException e) {
                 throw new EncryptedDocumentException("error marshalling encryption info document", e);
             }

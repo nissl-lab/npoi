@@ -206,8 +206,7 @@ namespace NPOI.Util
                             stream.WriteByte((byte)c);
                     }
                 }
-                byte[] data = stream.ToArray();
-                Dump(data, 0L, null, start, data.Length);
+                Dump(stream.GetBuffer(), 0L, null, start, (int)stream.Length);
             }
         }
 
@@ -318,8 +317,7 @@ namespace NPOI.Util
                 }
             }
 
-            byte[] data = buf.ToArray();
-            Dump(data, 0, out1, start, data.Length);
+            Dump(buf.GetBuffer(), 0, out1, start, (int)buf.Length);
         }
 
         /// <summary>

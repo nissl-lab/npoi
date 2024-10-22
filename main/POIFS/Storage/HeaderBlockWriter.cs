@@ -169,7 +169,7 @@ namespace NPOI.POIFS.Storage
             {
                 _header_block.WriteData(ms);
 
-                block.Write(ms.ToArray());
+                block.Write(ms.GetBuffer(), 0, (int)ms.Length);
             }
         }
 
@@ -180,8 +180,7 @@ namespace NPOI.POIFS.Storage
             {
                 _header_block.WriteData(ms);
 
-                byte[] temp = ms.ToArray();
-                Array.Copy(temp, 0, block, 0, temp.Length);
+                Array.Copy(ms.GetBuffer(), 0, block, 0, (int)ms.Length);
             }
         }
     }
