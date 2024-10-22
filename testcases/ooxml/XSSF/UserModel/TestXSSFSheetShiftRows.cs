@@ -18,6 +18,7 @@
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
@@ -462,6 +463,15 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
 
+        // bug 60260: shift rows or rename a sheet containing a named range
+        // that refers to formula with a unicode (non-ASCII) sheet name formula
+        [Test]
+        public void ShiftRowsWithUnicodeNamedRange()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("unicodeSheetName.xlsx");
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+            sheet.ShiftRows(1, 2, 3);
+            IOUtils.CloseQuietly(wb);
+        }
     }
 }
-

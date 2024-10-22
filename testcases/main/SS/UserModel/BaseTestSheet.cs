@@ -1327,6 +1327,30 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
+        public void RemoveAllHyperlinks() 
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            IHyperlink hyperlink = workbook.GetCreationHelper().CreateHyperlink(HyperlinkType.Url);
+            hyperlink.Address = "https://poi.apache.org/";
+            ISheet sheet = workbook.CreateSheet();
+            ICell cell = sheet.CreateRow(5).CreateCell(1);
+            cell.Hyperlink = hyperlink;
+
+            Assert.AreEqual(1, workbook.GetSheetAt(0).GetHyperlinkList().Count);
+            // Save a workbook with a hyperlink
+            IWorkbook workbook2 = _testDataProvider.WriteOutAndReadBack(workbook);
+            Assert.AreEqual(1, workbook2.GetSheetAt(0).GetHyperlinkList().Count);
+        
+            // Remove all hyperlinks from a saved workbook
+            workbook2.GetSheetAt(0).GetRow(5).GetCell(1).RemoveHyperlink();
+            Assert.AreEqual(0, workbook2.GetSheetAt(0).GetHyperlinkList().Count);
+        
+            // Verify that hyperlink was removed from workbook after writing out
+            IWorkbook workbook3 = _testDataProvider.WriteOutAndReadBack(workbook2);
+            Assert.AreEqual(0, workbook3.GetSheetAt(0).GetHyperlinkList().Count);
+        }
+
+        [Test]
         public void NewMergedRegionAt()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();

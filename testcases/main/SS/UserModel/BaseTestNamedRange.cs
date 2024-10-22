@@ -741,6 +741,20 @@ namespace TestCases.SS.UserModel
             wb.Close();
         }
 
+        // bug 60260: renaming a sheet with a named range referring to a unicode (non-ASCII) sheet name
+        [Test]
+        public void RenameSheetWithNamedRangeReferringToUnicodeSheetName()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            wb.CreateSheet("Sheet\u30FB1");
+
+            IName name = wb.CreateName();
+            name.NameName = ("test_named_range");
+            name.RefersToFormula = ("'Sheet\u30FB201'!A1:A6");
+
+            wb.SetSheetName(0, "Sheet 1");
+            IOUtils.CloseQuietly(wb);
+        }
     }
 
 }
