@@ -43,20 +43,21 @@ Get Started with NPOI
 
 Advantage of NPOI
 =================
-a. It's totally free to use
+a. [Huge examples (This example repo is private. You can sponsor me with NPOI example access option)](https://github.com/sponsors/tonyqus)
 
-b. Cover most features of Excel (cell style, data format, formula and so on)
+b. It's totally free to use
 
-c. Supported formats: xls, xlsx, docx.
+c. Cover most features of Excel (cell style, data format, formula and so on)
 
-d. Designed to be interface-oriented (take a look at NPOI.SS namespace)
+d. Supported formats: xls, xlsx, docx.
 
-e. Support not only export but also import
+e. Designed to be interface-oriented (take a look at NPOI.SS namespace)
 
-f. Real successful cases all over the world
+f. Support not only export but also import
 
-g. Works on both Windows and Linux 
+g. Real successful cases all over the world
 
+h. Works on both Windows and Linux 
 
 System Requirement
 ===================
