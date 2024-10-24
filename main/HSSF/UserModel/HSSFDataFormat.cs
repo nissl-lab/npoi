@@ -15,38 +15,36 @@
    limitations Under the License.
 ==================================================================== */
 
-
 namespace NPOI.HSSF.UserModel
 {
     using System;
     using System.Collections;
-
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using System.Collections.Generic;
     using NPOI.SS.UserModel;
 
-    /*
-     * Identifies both built-in and user defined formats within a workbook.<p/>
-     * See {@link BuiltinFormats} for a list of supported built-in formats.<p/>
-     *
-     * <b>International Formats</b><br/>
-     * Since version 2003 Excel has supported international formats.  These are denoted
-     * with a prefix "[$-xxx]" (where xxx is a 1-7 digit hexadecimal number).
-     * See the Microsoft article
-     * <a href="http://office.microsoft.com/assistance/hfws.aspx?AssetID=HA010346351033&CTT=6&Origin=EC010272491033">
-     *   Creating international number formats
-     * </a> for more details on these codes.
-     *
-     * @author  Andrew C. Oliver (acoliver at apache dot org)
-     * @author  Shawn M. Laubach (slaubach at apache dot org)
-     */
+    /// <summary>
+    /// <para>
+    /// Identifies both built-in and user defined formats within a workbook.
+    /// </para>
+    /// <para>
+    /// See <see cref="BuiltinFormats"/> for a list of supported built-in formats.
+    /// </para>
+    /// <para>
+    /// <b>International Formats</b><br/>
+    /// Since version 2003 Excel has supported international formats.  These are denoted
+    /// with a prefix "[$-xxx]" (where xxx is a 1-7 digit hexadecimal number).
+    /// See the Microsoft article
+    /// <a href="http://office.microsoft.com/assistance/hfws.aspx?AssetID=HA010346351033&amp;CTT=6&amp;Origin=EC010272491033">
+    ///   Creating international number formats
+    /// </a> for more details on these codes.
+    /// </para>
+    /// </summary>
     [Serializable]
     public class HSSFDataFormat : IDataFormat
     {
-        /**
- * The first user-defined format starts at 164.
- */
+        //The first user-defined format starts at 164.
         public const int FIRST_USER_DEFINED_FORMAT_INDEX = 164;
 
         private static List<string> builtinFormats = new List<string>(BuiltinFormats.GetAll());
@@ -67,17 +65,16 @@ namespace NPOI.HSSF.UserModel
         {
             this.workbook = workbook;
             IEnumerator i = workbook.Formats.GetEnumerator();
-            while (i.MoveNext())
+            while(i.MoveNext())
             {
                 FormatRecord r = (FormatRecord)i.Current;
-                for (int j = formats.Count; formats.Count <= r.IndexCode; j++)
+                for(int j = formats.Count; formats.Count <= r.IndexCode; j++)
                 {
                     formats.Add(null);
                 }
                 formats[r.IndexCode] = r.FormatString;
             }
         }
-
 
         public static List<string> GetBuiltinFormats()
         {
@@ -90,24 +87,9 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="format">The format string matching a built in format.</param>
         /// <returns>index of format or -1 if Undefined.</returns>
-        public static short GetBuiltinFormat(String format)
+        public static short GetBuiltinFormat(string format)
         {
-            if (format.ToUpper().Equals("TEXT"))
-                format = "@";
-
-            short retval = -1;
-
-            for (short k = 0; k <= 0x31; k++)
-            {
-                String nformat = (String)builtinFormats[k];
-
-                if ((nformat != null) && nformat.Equals(format))
-                {
-                    retval = k;
-                    break;
-                }
-            }
-            return retval;
+            return (short) BuiltinFormats.GetBuiltinFormat(format);
         }
 
         /// <summary>
@@ -117,12 +99,12 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="pFormat">The format string matching a built in format.</param>
         /// <returns>index of format.</returns>
-        public short GetFormat(String pFormat)
+        public short GetFormat(string pFormat)
         {
             IEnumerator i;
             int ind;
-            String format;
-            if (pFormat.ToUpper().Equals("TEXT"))
+            string format;
+            if(pFormat.Equals("TEXT", StringComparison.OrdinalIgnoreCase))
             {
                 format = "@";
             }
@@ -131,13 +113,13 @@ namespace NPOI.HSSF.UserModel
                 format = pFormat;
             }
 
-            if (!movedBuiltins)
+            if(!movedBuiltins)
             {
                 i = builtinFormats.GetEnumerator();
                 ind = 0;
-                while (i.MoveNext())
+                while(i.MoveNext())
                 {
-                    for (int j = formats.Count; formats.Count < ind + 1; j++)
+                    for(int j = formats.Count; formats.Count < ind + 1; j++)
                     {
                         formats.Add(null);
                     }
@@ -148,22 +130,22 @@ namespace NPOI.HSSF.UserModel
             }
             i = formats.GetEnumerator();
             ind = 0;
-            while (i.MoveNext())
+            while(i.MoveNext())
             {
-                if (format.Equals(i.Current))
-                    return (short)ind;
+                if(format.Equals(i.Current))
+                    return (short) ind;
 
                 ind++;
             }
 
             ind = workbook.GetFormat(format, true);
-            for (int j = formats.Count; formats.Count < ind + 1; j++)
+            for(int j = formats.Count; formats.Count < ind + 1; j++)
             {
                 formats.Add(null);
             }
             formats[ind] = format;
 
-            return (short)ind;
+            return (short) ind;
         }
 
         /// <summary>
@@ -171,21 +153,21 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="index">The index of a format.</param>
         /// <returns>string represented at index of format or null if there Is not a  format at that index</returns>
-        public String GetFormat(short index)
+        public string GetFormat(short index)
         {
-            if (movedBuiltins)
-                return (String)formats[index];
+            if(movedBuiltins)
+                return formats[index];
 
-            if (index == -1)
+            if(index == -1)
                 return null;
 
-            String fmt = formats.Count > index ? formats[index] : null;
+            string fmt = formats.Count > index ? formats[index] : null;
 
-            if (builtinFormats.Count > index
+            if(builtinFormats.Count > index
                         && builtinFormats[index] != null)
             {
                 // It's in the built in range
-                if (fmt != null)
+                if(fmt != null)
                 {
                     // It's been overriden, use that value
                     return fmt;
@@ -204,9 +186,9 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="index">The index of a built in format.</param>
         /// <returns>string represented at index of format or null if there Is not a builtin format at that index</returns>
-        public static String GetBuiltinFormat(short index)
+        public static string GetBuiltinFormat(short index)
         {
-            return (String)builtinFormats[index];
+            return builtinFormats[index];
         }
 
         /// <summary>
@@ -220,13 +202,15 @@ namespace NPOI.HSSF.UserModel
                 return builtinFormats.Count;
             }
         }
-        /**
-	     * Ensures that the formats list can hold entries
-	     *  up to and including the entry with this index
-	     */
+
+        /// <summary>
+        /// Ensures that the formats list can hold entries
+        /// up to and including the entry with this index
+        /// </summary>
+        /// <param name="index"></param>
         private void EnsureFormatsSize(int index)
         {
-            if (formats.Count <= index)
+            if(formats.Count <= index)
             {
                 formats.Capacity = (index + 1);
             }

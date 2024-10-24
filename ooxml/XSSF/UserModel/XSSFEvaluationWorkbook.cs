@@ -62,7 +62,7 @@ namespace NPOI.XSSF.UserModel
 
         public override int GetSheetIndex(IEvaluationSheet evalSheet)
         {
-            XSSFSheet sheet = ((XSSFEvaluationSheet)evalSheet).GetXSSFSheet();
+            XSSFSheet sheet = ((XSSFEvaluationSheet)evalSheet).XSSFSheet;
             return _uBook.GetSheetIndex(sheet);
         }
 

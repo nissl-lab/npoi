@@ -465,7 +465,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        public void TestRemoveValidationData()
+        public void TestRemoveDataValidation()
         {
             
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -482,7 +482,7 @@ namespace TestCases.HSSF.UserModel
             list = sheet.GetDataValidations();
             Assert.AreEqual(1, list.Count);
 
-            sheet.RemoveValidationData(validation);
+            sheet.RemoveDataValidation(validation);
 
             list = sheet.GetDataValidations();
             Assert.AreEqual(0, list.Count);

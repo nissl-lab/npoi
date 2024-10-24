@@ -31,17 +31,17 @@ namespace NPOI
         /**
          * Describes the content stored in a part.
          */
-        protected String _type;
+        private String _type;
 
         /**
          * The kind of connection between a source part and a target part in a namespace.
          */
-        protected String _relation;
+        private String _relation;
 
         /**
          * The path component of a pack URI.
          */
-        protected String _defaultName;
+        private String _defaultName;
 
         /**
          * Defines what object is used to construct instances of this relationship
@@ -140,7 +140,7 @@ namespace NPOI
         public int GetFileNameIndex(POIXMLDocumentPart part)
         {
             Regex regex = new Regex(_defaultName.Replace("#", "(\\d+)"));
-            return int.Parse(regex.Match(part.GetPackagePart().PartName.Name).Value);
+            return int.Parse(regex.Match(part.GetPackagePart().PartName.Name).Groups[1].Value);
             //return Integer.valueOf(part.getPackagePart().getPartName().getName().replaceAll(regex, "$1"));
         }
         /**

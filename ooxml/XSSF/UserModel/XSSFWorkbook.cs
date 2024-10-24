@@ -230,8 +230,8 @@ namespace NPOI.XSSF.UserModel
          *       pkg.close(); // gracefully closes the underlying zip file
          *   </code></pre>     
          */
-        public XSSFWorkbook(Stream is1)
-            : base(PackageHelper.Open(is1))
+        public XSSFWorkbook(Stream fileStream, bool readOnly = false)
+            : base(PackageHelper.Open(fileStream, readOnly))
         {
             BeforeDocumentRead();
 
@@ -259,8 +259,8 @@ namespace NPOI.XSSF.UserModel
          *  
          * @param file   the file to open
          */
-        public XSSFWorkbook(FileInfo file)
-            : this(OPCPackage.Open(file))
+        public XSSFWorkbook(FileInfo file, bool readOnly = false)
+            : this(OPCPackage.Open(file, readOnly? PackageAccess.READ: PackageAccess.READ_WRITE))
         {
 
         }
@@ -301,8 +301,8 @@ namespace NPOI.XSSF.UserModel
          * 
          * @param      path   the file name.
          */
-        public XSSFWorkbook(String path)
-            : this(OpenPackage(path))
+        public XSSFWorkbook(String path, bool readOnly = false)
+            : this(OpenPackage(path, readOnly))
         {
 
         }
@@ -2421,7 +2421,33 @@ namespace NPOI.XSSF.UserModel
 
         public int AddPicture(byte[] pictureData, PictureType format)
         {
-            int imageNumber = GetAllPictures().Count + 1;
+            int imageNumber = 1;
+            List<XSSFPictureData> allPics = (List<XSSFPictureData>)GetAllPictures();
+
+            if (allPics.Any())
+            {
+                List<int> sortedIndexs = new List<int> { 0 };
+
+                sortedIndexs.AddRange
+                    (
+                        allPics
+                            .Select(pic => XSSFPictureData.RELATIONS[(int)pic.PictureType].GetFileNameIndex(pic))
+                            .OrderBy(i => i)
+                            .ToList()
+                    );
+
+                int previous = sortedIndexs[0];
+                for (int index = 1; index < sortedIndexs.Count; index++)
+                {
+                    if (sortedIndexs[index] > previous + 1)
+                        break;
+
+                    previous = sortedIndexs[index];
+                }
+
+                imageNumber = previous + 1;
+            }
+            
             XSSFPictureData img = (XSSFPictureData)CreateRelationship(XSSFPictureData.RELATIONS[(int)format], XSSFFactory.GetInstance(), imageNumber, true).DocumentPart;
             try
             {
@@ -2434,8 +2460,9 @@ namespace NPOI.XSSF.UserModel
                 throw new POIXMLException(e);
             }
             pictures.Add(img);
-            return imageNumber - 1;
 
+            // returns image Index
+            return allPics.Count - 1;
         }
 
         public XSSFWorkbookType WorkbookType

@@ -87,6 +87,9 @@ namespace TestCases.OpenXml4Net.OPC
             props.SetCreatedProperty("2007-05-12T06:00:00-0200");
             Assert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
 
+            props.SetCreatedProperty("2015-07-27");
+            Assert.AreEqual(msdf.Parse("2015-07-27T00:00:00.000Z"), props.GetCreatedProperty().Value);
+
             props.SetCreatedProperty("2007-05-12T10:00:00.123+0200");
             Assert.AreEqual(msdf.Parse("2007-05-12T08:00:00.123Z"), props.GetCreatedProperty().Value);
 

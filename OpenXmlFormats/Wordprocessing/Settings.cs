@@ -22,7 +22,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return null;
             CT_Settings ctObj = new CT_Settings();
             ctObj.activeWritingStyle = new List<CT_WritingStyle>();
-            ctObj.docVars = new List<CT_DocVar>();
             ctObj.attachedSchema = new List<CT_String>();
             ctObj.smartTagType = new List<CT_SmartTagType>();
             ctObj.schemaLibrary = new List<CT_Schema>();
@@ -219,7 +218,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (childNode.LocalName == "activeWritingStyle")
                     ctObj.activeWritingStyle.Add(CT_WritingStyle.Parse(childNode, namespaceManager));
                 else if (childNode.LocalName == "docVars")
-                    ctObj.docVars.Add(CT_DocVar.Parse(childNode, namespaceManager));
+                    ctObj.docVars = CT_DocVars.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "attachedSchema")
                     ctObj.attachedSchema.Add(CT_String.Parse(childNode, namespaceManager));
                 else if (childNode.LocalName == "smartTagType")
@@ -433,12 +432,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 }
             }
             if (this.docVars != null)
-            {
-                foreach (CT_DocVar x in this.docVars)
-                {
-                    x.Write(sw, "docVars");
-                }
-            }
+                this.docVars.Write(sw, "docVars");
             if (this.attachedSchema != null)
             {
                 foreach (CT_String x in this.attachedSchema)
@@ -625,7 +619,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private CT_Compat compatField;
 
-        private List<CT_DocVar> docVarsField;
+        private CT_DocVars docVarsField;
 
         private CT_DocRsids rsidsField;
 
@@ -1840,9 +1834,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
-        [XmlArray(Order = 81)]
-        [XmlArrayItem("docVar", IsNullable = false)]
-        public List<CT_DocVar> docVars
+        [XmlElement(Order = 81)]
+        public CT_DocVars docVars
         {
             get
             {
@@ -6105,8 +6098,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (node == null)
                 return null;
             CT_DocVar ctObj = new CT_DocVar();
+
             ctObj.name = XmlHelper.ReadString(node.Attributes["w:name"]);
             ctObj.val = XmlHelper.ReadString(node.Attributes["w:val"]);
+
             return ctObj;
         }
 

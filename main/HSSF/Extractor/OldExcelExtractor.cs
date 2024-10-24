@@ -39,6 +39,7 @@ namespace NPOI.HSSF.Extractor
      */
     public class OldExcelExtractor
     {
+        private const int FILE_PASS_RECORD_SID = 0x2f;
         private RecordInputStream ris;
 
         // sometimes we hold the stream here and thus need to ensure it is closed at some point
@@ -247,6 +248,9 @@ namespace NPOI.HSSF.Extractor
 
                     switch (sid)
                     {
+                        case FILE_PASS_RECORD_SID:
+                            throw new EncryptedDocumentException("Encryption not supported for Old Excel files");
+
                         // Biff 5+ only, no sheet names in older formats
                         case OldSheetRecord.sid:
                             OldSheetRecord shr = new OldSheetRecord(ris);

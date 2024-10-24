@@ -251,7 +251,7 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                HSSFAnchor ha = base.Anchor;
+                HSSFAnchor ha = base.Anchor as HSSFAnchor;
                 if (ha is IClientAnchor)
                 {
                     return (IClientAnchor)ha;

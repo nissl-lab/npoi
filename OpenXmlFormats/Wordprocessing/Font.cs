@@ -488,16 +488,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            if (this.hint != ST_Hint.@default || this.hintFieldSpecified)
-                XmlHelper.WriteAttribute(sw, "w:hint", this.hint.ToString());
             XmlHelper.WriteAttribute(sw, "w:ascii", this.ascii);
-            XmlHelper.WriteAttribute(sw, "w:hAnsi", this.hAnsi);
-            XmlHelper.WriteAttribute(sw, "w:eastAsia", this.eastAsia);
-            XmlHelper.WriteAttribute(sw, "w:cs", this.cs);
-            if (this.asciiTheme != null)
-                XmlHelper.WriteAttribute(sw, "w:asciiTheme", this.asciiTheme.ToString());
-            if (this.eastAsiaTheme !=null)
+            if(this.eastAsiaTheme !=null)
                 XmlHelper.WriteAttribute(sw, "w:eastAsiaTheme", this.eastAsiaTheme.ToString());
+            XmlHelper.WriteAttribute(sw, "w:eastAsia", this.eastAsia);
+            XmlHelper.WriteAttribute(sw, "w:hAnsi", this.hAnsi);
+            XmlHelper.WriteAttribute(sw, "w:cs", this.cs);
+            if(this.hint != ST_Hint.@default || this.hintFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "w:hint", this.hint.ToString());
+
+            if(this.asciiTheme != null)
+                XmlHelper.WriteAttribute(sw, "w:asciiTheme", this.asciiTheme.ToString());
             if (this.hAnsiTheme != ST_Theme.majorEastAsia)
                 XmlHelper.WriteAttribute(sw, "w:hAnsiTheme", this.hAnsiTheme.ToString());
             if (this.cstheme != null)

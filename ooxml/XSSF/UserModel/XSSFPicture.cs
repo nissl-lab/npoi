@@ -389,6 +389,8 @@ namespace NPOI.XSSF.UserModel
                 return (XSSFSheet)this.GetDrawing().GetParent();
             }
         }
+
+        public override string ShapeName => ctPicture.nvPicPr.cNvPr.name;
     }
 }
 

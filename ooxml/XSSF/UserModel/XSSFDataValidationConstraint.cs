@@ -87,7 +87,7 @@ namespace NPOI.XSSF.UserModel
         public XSSFDataValidationConstraint(int validationType, int operator1, String formula1, String formula2)
             : base()
         {
-
+            //removes leading equals sign if present
             Formula1 = (formula1);
             Formula2 = (formula2);
             this.validationType = validationType;
@@ -99,12 +99,10 @@ namespace NPOI.XSSF.UserModel
             // empirical testing shows Excel saves explicit lists surrounded by double quotes, 
             // range formula expressions can't start with quotes (I think - anyone have a creative counter example?)
             if (ValidationType.LIST == validationType
-                    && formula1 != null
-                    && formula1.StartsWith(QUOTE)
-                    && formula1.EndsWith(QUOTE))
+                    && this.formula1 != null
+                    && IsQuoted(this.formula1))
             {
-                String formulaWithoutQuotes = formula1.Substring(1, formula1.Length - 2);
-                explicitListOfValues = LIST_SPLIT_REGEX.Split(formulaWithoutQuotes);
+                explicitListOfValues = LIST_SPLIT_REGEX.Split(Unquote(this.formula1));
             }
         }
 
@@ -190,9 +188,27 @@ namespace NPOI.XSSF.UserModel
             return validationType;
         }
 
-        protected static String RemoveLeadingEquals(String formula1)
+        protected static string RemoveLeadingEquals(string formula1)
         {
             return IsFormulaEmpty(formula1) ? formula1 : formula1[0] == '=' ? formula1.Substring(1) : formula1;
+        }
+
+        private static bool IsQuoted(string s)
+        {
+            return s.StartsWith(QUOTE) && s.EndsWith(QUOTE);
+        }
+        private static String Unquote(string s)
+        {
+            // removes leading and trailing quotes from a quoted string
+            if (IsQuoted(s))
+            {
+                return s.Substring(1, s.Length - 2);
+            }
+            return s;
+        }
+        protected static bool IsFormulaEmpty(string formula1)
+        {
+            return formula1 == null || formula1.Trim().Length == 0;
         }
 
         public void Validate()
@@ -230,12 +246,8 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        protected static bool IsFormulaEmpty(String formula1)
-        {
-            return formula1 == null || formula1.Trim().Length == 0;
-        }
 
-        public String PrettyPrint()
+        public string PrettyPrint()
         {
             StringBuilder builder = new StringBuilder();
             ST_DataValidationType vt = XSSFDataValidation.validationTypeMappings[validationType];
@@ -245,7 +257,6 @@ namespace NPOI.XSSF.UserModel
             if (validationType != ValidationType.ANY)
             {
                 if (validationType != ValidationType.LIST
-                    && validationType != ValidationType.ANY
                     && validationType != ValidationType.FORMULA)
                 {
                     builder.Append(LIST_SEPARATOR).Append(ot).Append(", ");

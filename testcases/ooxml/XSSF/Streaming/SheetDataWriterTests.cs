@@ -48,11 +48,10 @@ namespace TestCases.XSSF.Streaming
         {
             if (_objectToTest != null)
             {
+                _objectToTest.Dispose();
+
                 if (File.Exists(_objectToTest.TemporaryFilePath()))
-                {
-                    _objectToTest.Dispose();
                     File.Delete(_objectToTest.TemporaryFilePath());
-                }
             }
 
         }
@@ -68,8 +67,9 @@ namespace TestCases.XSSF.Streaming
         public void IfWritingRowWithCustomHeightShouldIncludeCustomHeightXml()
         {
             _objectToTest = new SheetDataWriter();
-            var row = new SXSSFRow(null);
-            row.Height = 1;
+            var row = new SXSSFRow(null) {
+                Height = 1
+            };
 
             _objectToTest.WriteRow(0, row);
             _objectToTest.Close();
@@ -77,7 +77,7 @@ namespace TestCases.XSSF.Streaming
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
             Assert.True(lines.Length == 2);
-            Assert.AreEqual($"<row r=\"{1}\" customHeight=\"true\" ht=\"{row.HeightInPoints}\">", lines[0]);
+            Assert.AreEqual("<row r=\"" + 1 + "\" customHeight=\"1\" ht=\"" + row.HeightInPoints.ToString().Replace(',', '.') + "\">", lines[0]);
             Assert.AreEqual("</row>", lines[1]);
 
 
@@ -97,7 +97,7 @@ namespace TestCases.XSSF.Streaming
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
             Assert.True(lines.Length == 2);
-            Assert.AreEqual("<row r=\"" + 1 + "\" hidden=\"true\">", lines[0]);
+            Assert.AreEqual("<row r=\"" + 1 + "\" hidden=\"1\">", lines[0]);
             Assert.AreEqual("</row>", lines[1]);
 
 
@@ -237,7 +237,7 @@ namespace TestCases.XSSF.Streaming
             _cell.CellStyle.Index.Returns((short)0);
             _cell.CellType.Returns(CellType.Formula);
             _cell.CellFormula.Returns("SUM(A1:A3)");
-            _cell.GetCachedFormulaResultTypeEnum().Returns(CellType.Numeric);
+            _cell.CachedFormulaResultType.Returns(CellType.Numeric);
             _cell.NumericCellValue.Returns(1);
 
             _objectToTest.WriteCell(0, _cell);
@@ -336,7 +336,7 @@ namespace TestCases.XSSF.Streaming
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
             Assert.True(lines.Length == 1);
-            Assert.AreEqual("<c r=\"A1\" t=\"inlineStr\"><is><t xml:space=\"preserve\">\'\'&lt;&gt;&#x9;&#xa;&#xa;&amp;&quot;?         test:SLDFKj    </t></is></c>", lines[0]);
+            Assert.AreEqual("<c r=\"A1\" t=\"inlineStr\"><is><t xml:space=\"preserve\">\'\'&lt;&gt;&#x9;&#xa;&#xd;&amp;&quot;?         test:SLDFKj    </t></is></c>", lines[0]);
 
         }
 

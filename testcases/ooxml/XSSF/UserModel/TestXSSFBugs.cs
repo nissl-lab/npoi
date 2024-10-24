@@ -1495,9 +1495,7 @@ namespace TestCases.XSSF.UserModel
         /**
          * Sum across multiple workbooks
          *  eg =SUM($Sheet1.C1:$Sheet4.C1)
-         * DISABLED As we can't currently Evaluate these
          */
-        [Ignore("by poi")]
         [Test]
         public void Test48703()
         {
@@ -2707,7 +2705,7 @@ namespace TestCases.XSSF.UserModel
          *  32,767 must not be -32,768, then -32,767, -32,766
          *  long time test, run over 1 minute.
          */
-        [Test, RunSerialyAndSweepTmpFiles]
+        [Test]
         [Ignore("this test doesn't make sense")]
         public void Bug57880()
         {
@@ -3363,6 +3361,120 @@ namespace TestCases.XSSF.UserModel
             IFormulaEvaluator evaluator = cell.Sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
             String result = form.FormatCellValue(cell, evaluator);
             Assert.AreEqual("09 Mar 2016", result);
+        }
+
+        // This bug is currently open. When this bug is fixed, it should not throw an AssertionError
+        //@Test(expected= AssertionError.class)
+        [Test]
+        [Explicit("This bug is currently open. When this bug is fixed, it should not throw an AssertionError")]
+        public void Test55076_collapseColumnGroups()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+
+            // this column collapsing bug only occurs when the grouped columns are different widths
+            sheet.SetColumnWidth(1, 400);
+            sheet.SetColumnWidth(2, 600);
+            sheet.SetColumnWidth(3, 800);
+
+            Assert.AreEqual(400, sheet.GetColumnWidth(1));
+            Assert.AreEqual(600, sheet.GetColumnWidth(2));
+            Assert.AreEqual(800, sheet.GetColumnWidth(3));
+
+            sheet.GroupColumn(1, 3);
+            sheet.SetColumnGroupCollapsed(1, true);
+
+            Assert.AreEqual(0, sheet.GetColumnOutlineLevel(0));
+            Assert.AreEqual(1, sheet.GetColumnOutlineLevel(1));
+            Assert.AreEqual(1, sheet.GetColumnOutlineLevel(2));
+            Assert.AreEqual(1, sheet.GetColumnOutlineLevel(3));
+            Assert.AreEqual(0, sheet.GetColumnOutlineLevel(4));
+
+            // none of the columns should be hidden
+            // column group collapsing is a different concept
+            for (int c = 0; c < 5; c++)
+            {
+                Assert.IsFalse(sheet.IsColumnHidden(c), "Column " + c);
+            }
+
+            Assert.AreEqual(400, sheet.GetColumnWidth(1));
+            Assert.AreEqual(600, sheet.GetColumnWidth(2));
+            Assert.AreEqual(800, sheet.GetColumnWidth(3));
+
+            wb.Close();
+        }
+
+        /// <summary>
+        /// Other things, including charts, may end up taking Drawing part
+        /// numbers. (Uses a test file hand-crafted with an extra non-drawing
+        /// part with a part number)
+        /// </summary>
+        [Test]
+        public void DrawingNumbersAlreadyTaken_60255()
+        {
+
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("60255_extra_drawingparts.xlsx");
+            Assert.AreEqual(4, wb.NumberOfSheets);
+
+            // Sheet 3 starts with a Drawing
+            ISheet sheet = wb.GetSheetAt(0);
+            Assert.IsNull(sheet.DrawingPatriarch);
+            sheet = wb.GetSheetAt(1);
+            Assert.IsNull(sheet.DrawingPatriarch);
+            sheet = wb.GetSheetAt(2);
+            Assert.IsNotNull(sheet.DrawingPatriarch);
+            sheet = wb.GetSheetAt(3);
+            Assert.IsNull(sheet.DrawingPatriarch);
+
+            // Add another sheet, and give it a Drawing
+            sheet = wb.CreateSheet();
+            Assert.IsNull(sheet.DrawingPatriarch);
+            sheet.CreateDrawingPatriarch();
+            Assert.IsNotNull(sheet.DrawingPatriarch);
+
+            // Save and check
+            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            Assert.AreEqual(5, wb.NumberOfSheets);
+
+            // Sheets 3 and 5 now
+            sheet = wb.GetSheetAt(0);
+            Assert.IsNull(sheet.DrawingPatriarch);
+            sheet = wb.GetSheetAt(1);
+            Assert.IsNull(sheet.DrawingPatriarch);
+            sheet = wb.GetSheetAt(2);
+            Assert.IsNotNull(sheet.DrawingPatriarch);
+            sheet = wb.GetSheetAt(3);
+            Assert.IsNull(sheet.DrawingPatriarch);
+            sheet = wb.GetSheetAt(4);
+            Assert.IsNotNull(sheet.DrawingPatriarch);
+        }
+
+        [Test]
+        public void Test53611() 
+        {
+            IWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("test");
+            IRow row = sheet.CreateRow(1);
+            ICell cell = row.CreateCell(1);
+            cell.SetCellValue("blabla");
+
+            row = sheet.CreateRow(4);
+            cell = row.CreateCell(7);
+            cell.SetCellValue("blabla");
+
+            // we currently only populate the dimension during writing out
+            // to avoid having to iterate all rows/cells in each add/remove of a row or cell
+            //OutputStream str = new FileOutputStream("/tmp/53611.xlsx");
+            var str = new ByteArrayOutputStream();
+            try {
+                wb.Write(str);
+            } finally {
+                str.Close();
+            }
+
+            Assert.AreEqual("B2:I5", ((XSSFSheet)sheet).GetCTWorksheet().dimension.@ref);
+
+            wb.Close();
         }
 
         [Test]

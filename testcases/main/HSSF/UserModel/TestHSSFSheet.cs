@@ -200,49 +200,6 @@ namespace TestCases.HSSF.UserModel
 
             wb.Close();
         }
-        [Test]
-        [Ignore("not fount in poi")]
-        public void TestReadBooleans()
-        {
-            HSSFWorkbook wb1 = new HSSFWorkbook();
-            NPOI.SS.UserModel.ISheet sheet = wb1.CreateSheet("Test boolean");
-            IRow row = sheet.CreateRow(2);
-            ICell cell = row.CreateCell(9);
-            cell.SetCellValue(true);
-            cell = row.CreateCell(11);
-            cell.SetCellValue(true);
-
-            IWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
-            wb1.Close();
-
-            sheet = wb2.GetSheetAt(0);
-            row = sheet.GetRow(2);
-            Assert.IsNotNull(row);
-            Assert.AreEqual(2, row.PhysicalNumberOfCells);
-
-            wb2.Close();
-        }
-        [Test]
-        [Ignore("not fount in poi")]
-        public void TestRemoveZeroRow()
-        {
-            HSSFWorkbook workbook = new HSSFWorkbook();
-            NPOI.SS.UserModel.ISheet sheet = workbook.CreateSheet("Sheet1");
-            IRow row = sheet.CreateRow(0);
-            try
-            {
-                sheet.RemoveRow(row);
-            }
-            catch (ArgumentException e)
-            {
-                if (e.Message.Equals("Invalid row number (-1) outside allowable range (0..65535)"))
-                {
-                    throw new AssertionException("Identified bug 45367");
-                }
-                throw e;
-            }
-        }
-
 
         /**
          * Setting landscape and portrait stuff on existing sheets
@@ -552,7 +509,7 @@ namespace TestCases.HSSF.UserModel
                     Assert.Fail("Identified bug 47363b");
                 }
                 workbook.Close();
-                throw e;
+                throw;
             }
             TestCases.HSSF.UserModel.RecordInspector.RecordCollector rc;
             rc = new RecordInspector.RecordCollector();

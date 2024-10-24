@@ -18,34 +18,49 @@ namespace NPOI.Util
          */
         public static FileInfo CreateTempFile(String prefix, String suffix)
         {
-
-            if (dir == null)
+            if (string.IsNullOrWhiteSpace(dir))
             {
-                dir = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "poifiles")).FullName;
+                string tempDir = Path.Combine(Path.GetTempPath(), "poifiles");
+                dir = Directory.CreateDirectory(tempDir).FullName;
             }
+
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
             // Generate a unique new filename 
             string file = Path.Combine(dir, prefix + Guid.NewGuid().ToString() + suffix);
             while (File.Exists(file))
             {
                 file = Path.Combine(dir, prefix + Guid.NewGuid().ToString() + suffix);
-                Thread.Sleep(1);
             }
-            FileStream newFile = new FileStream(file, FileMode.CreateNew, FileAccess.ReadWrite);
-            newFile.Close();
+
+            using (FileStream newFile = new FileStream(file, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.ReadWrite)) { };
 
             return new FileInfo(file);
         }
 
         public static string GetTempFilePath(String prefix, String suffix)
         {
-            if (dir == null)
+            if (string.IsNullOrWhiteSpace(dir))
             {
-                dir = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "poifiles")).FullName;
+                string tempDir = Path.Combine(Path.GetTempPath(), "poifiles");
+                dir = Directory.CreateDirectory(tempDir).FullName;
             }
+
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
             Random rnd = new Random(DateTime.Now.Millisecond);
+            rnd.Next();
             Thread.Sleep(10);
             //return prefix + rnd.Next() + suffix;
-            return Path.Combine(dir, prefix + rnd.Next() + suffix);
+            string path = Path.Combine(dir, prefix + rnd.Next() + suffix);
+            while(File.Exists(path))
+            {
+                Thread.Sleep(10);
+                path = Path.Combine(dir, prefix + rnd.Next() + suffix);
+            }
+            return path;
         }
     }
 }

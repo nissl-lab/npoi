@@ -147,15 +147,28 @@ namespace TestCases.HSSF.UserModel
             HSSFRow row = sheet.CreateRow(0) as HSSFRow;
 
             Assert.AreEqual(row.Height, sheet.DefaultRowHeight);
-            Assert.AreEqual(row.RowRecord.BadFontHeight, false);
+            Assert.IsFalse(row.RowRecord.BadFontHeight);
 
             row.Height=((short)123);
-            Assert.AreEqual(row.Height, 123);
-            Assert.AreEqual(row.RowRecord.BadFontHeight, true);
+            Assert.AreEqual(123, row.Height);
+            Assert.IsTrue(row.RowRecord.BadFontHeight);
 
             row.Height = ((short)-1);
             Assert.AreEqual(row.Height, sheet.DefaultRowHeight);
-            Assert.AreEqual(row.RowRecord.BadFontHeight, false);
+            Assert.IsFalse(row.RowRecord.BadFontHeight);
+
+            row.Height=((short) 123);
+            Assert.AreEqual(123, row.Height);
+            Assert.IsTrue(row.RowRecord.BadFontHeight);
+
+            row.HeightInPoints = (-1);
+            Assert.AreEqual(row.Height, sheet.DefaultRowHeight);
+            Assert.IsFalse(row.RowRecord.BadFontHeight);
+
+            row.HeightInPoints = (432);
+            Assert.AreEqual(432*20, row.Height);
+            Assert.IsTrue(row.RowRecord.BadFontHeight);
+
             workbook.Close();
         }
     }

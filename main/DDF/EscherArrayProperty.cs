@@ -76,36 +76,26 @@ namespace NPOI.DDF
                 {
                     return 0;
                 }
-                return LittleEndian.GetUShort(_complexData, 0);
+                return LittleEndian.GetUShort(ComplexData, 0);
             }
             set
             {
-                int expectedArraySize = value * GetActualSizeOfElements(SizeOfElements) + FIXED_SIZE;
-                if (expectedArraySize != _complexData.Length)
-                {
-                    byte[] newArray = new byte[expectedArraySize];
-                    Array.Copy(_complexData, 0, newArray, 0, _complexData.Length);
-                    _complexData = newArray;
-                }
-                LittleEndian.PutShort(_complexData, 0, (short)value);
+                int expectedArraySize = GetArraySizeInBytes(value, SizeOfElements);
+                ResizeComplexData(expectedArraySize, ComplexData.Length);
+                LittleEndian.PutShort(ComplexData, 0, (short)value);
             }
         }
         public int NumberOfElementsInMemory
         {
             get
             {
-                return LittleEndian.GetUShort(_complexData, 2);
+                return LittleEndian.GetUShort(ComplexData, 2);
             }
             set
             {
-                int expectedArraySize = value * GetActualSizeOfElements(this.SizeOfElements) + FIXED_SIZE;
-                if (expectedArraySize != _complexData.Length)
-                {
-                    byte[] newArray = new byte[expectedArraySize];
-                    Array.Copy(_complexData, 0, newArray, 0, expectedArraySize);
-                    _complexData = newArray;
-                }
-                LittleEndian.PutShort(_complexData, 2, (short)value);
+                int expectedArraySize = GetArraySizeInBytes(value, SizeOfElements);
+                ResizeComplexData(expectedArraySize, expectedArraySize);
+                LittleEndian.PutShort(ComplexData, 2, (short)value);
             }
         }
 
@@ -113,20 +103,14 @@ namespace NPOI.DDF
         {
             get
             {
-                return LittleEndian.GetShort(_complexData, 4);
+                return (emptyComplexPart) ? (short)0 : LittleEndian.GetShort(ComplexData, 4);
             }
             set
             {
-                LittleEndian.PutShort(_complexData, 4, (short)value);
-
-                int expectedArraySize = NumberOfElementsInArray * GetActualSizeOfElements(SizeOfElements) + FIXED_SIZE;
-                if (expectedArraySize != _complexData.Length)
-                {
-                    // Keep just the first 6 bytes.  The rest is no good to us anyway.
-                    byte[] newArray = new byte[expectedArraySize];
-                    Array.Copy(_complexData, 0, newArray, 0, 6);
-                    _complexData = newArray;
-                }
+                LittleEndian.PutShort(ComplexData, 4, (short)value);
+                int expectedArraySize = GetArraySizeInBytes(NumberOfElementsInArray, value);
+                // Keep just the first 6 bytes.  The rest is no good to us anyway.
+                ResizeComplexData(expectedArraySize, 6);
             }
         }
 
@@ -139,7 +123,7 @@ namespace NPOI.DDF
         {
             int actualSize = GetActualSizeOfElements(SizeOfElements);
             byte[] result = new byte[actualSize];
-            Array.Copy(_complexData, FIXED_SIZE + index * actualSize, result, 0, result.Length);
+            Array.Copy(ComplexData, FIXED_SIZE + index * actualSize, result, 0, result.Length);
             return result;
         }
 
@@ -151,7 +135,7 @@ namespace NPOI.DDF
         public void SetElement(int index, byte[] element)
         {
             int actualSize = GetActualSizeOfElements(SizeOfElements);
-            Array.Copy(element, 0, _complexData, FIXED_SIZE + index * actualSize, actualSize);
+            Array.Copy(element, 0, ComplexData, FIXED_SIZE + index * actualSize, actualSize);
         }
 
         /// <summary>
@@ -205,24 +189,26 @@ namespace NPOI.DDF
         {
             if (emptyComplexPart)
             {
-                _complexData = new byte[0];
+                ResizeComplexData(0, 0);
+                return 0;
             }
-            else
-            {
-                short numElements = LittleEndian.GetShort(data, offset);
-                //short numReserved = LittleEndian.GetShort(data, offset + 2); // numReserved
-                short sizeOfElements = LittleEndian.GetShort(data, offset + 4);
 
-                int arraySize = GetActualSizeOfElements(sizeOfElements) * numElements;
-                if (arraySize == _complexData.Length)
-                {
-                    // The stored data size in the simple block excludes the header size
-                    _complexData = new byte[arraySize + 6];
-                    sizeIncludesHeaderSize = false;
-                }
-                Array.Copy(data, offset, _complexData, 0, _complexData.Length);
+            short numElements = LittleEndian.GetShort(data, offset);
+            // LittleEndian.getShort(data, offset + 2); // numReserved
+            short sizeOfElements = LittleEndian.GetShort(data, offset + 4);
+
+            // TODO: this part is strange - it doesn't make sense to compare
+            // the size of the existing data when setting a new data array ...
+            int arraySize = GetArraySizeInBytes(numElements, sizeOfElements);
+            if (arraySize - FIXED_SIZE == ComplexData.Length)
+            {
+                // The stored data size in the simple block excludes the header size
+                sizeIncludesHeaderSize = false;
             }
-            return _complexData.Length;
+            int cpySize = Math.Min(arraySize, data.Length - offset);
+            ResizeComplexData(cpySize, 0);
+            Array.Copy(data, offset, ComplexData, 0, cpySize);
+            return cpySize;
         }
 
         /// <summary>
@@ -236,7 +222,7 @@ namespace NPOI.DDF
         public override int SerializeSimplePart(byte[] data, int pos)
         {
             LittleEndian.PutShort(data, pos, Id);
-            int recordSize = _complexData.Length;
+            int recordSize = ComplexData.Length;
             if (!sizeIncludesHeaderSize)
             {
                 recordSize -= 6;
@@ -258,7 +244,10 @@ namespace NPOI.DDF
             else
                 return sizeOfElements;
         }
-
+        private static int GetArraySizeInBytes(int numberOfElements, int sizeOfElements)
+        {
+            return numberOfElements * GetActualSizeOfElements((short)(sizeOfElements & 0xFFFF)) + FIXED_SIZE;
+        }
 
         public IEnumerator<byte[]> GetEnumerator()
         {

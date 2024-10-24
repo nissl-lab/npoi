@@ -52,25 +52,34 @@ namespace NPOI.DDF
                 bool isComplex = (propId & unchecked((short)0x8000)) != 0;
 
                 byte propertyType = EscherProperties.GetPropertyType((short)propNumber);
-                if (propertyType == EscherPropertyMetaData.TYPE_BOOL)
-                    results.Add(new EscherBoolProperty(propId, propData));
-                else if (propertyType == EscherPropertyMetaData.TYPE_RGB)
-                    results.Add(new EscherRGBProperty(propId, propData));
-                else if (propertyType == EscherPropertyMetaData.TYPE_SHAPEPATH)
-                    results.Add(new EscherShapePathProperty(propId, propData));
-                else
+                EscherProperty ep;
+                switch (propertyType)
                 {
-                    if (!isComplex)
-                        results.Add(new EscherSimpleProperty(propId, propData));
-                    else
-                    {
-                        if (propertyType == EscherPropertyMetaData.TYPE_ARRAY)
-                            results.Add(new EscherArrayProperty(propId, new byte[propData]));
+                    case EscherPropertyMetaData.TYPE_BOOL:
+                        ep = new EscherBoolProperty(propId, propData);
+                        break;
+                    case EscherPropertyMetaData.TYPE_RGB:
+                        ep = new EscherRGBProperty(propId, propData);
+                        break;
+                    case EscherPropertyMetaData.TYPE_SHAPEPATH:
+                        ep = new EscherShapePathProperty(propId, propData);
+                        break;
+                    default:
+                        if (!isComplex)
+                        {
+                            ep = new EscherSimpleProperty(propId, propData);
+                        }
+                        else if (propertyType == EscherPropertyMetaData.TYPE_ARRAY)
+                        {
+                            ep = new EscherArrayProperty(propId, new byte[propData]);
+                        }
                         else
-                            results.Add(new EscherComplexProperty(propId, new byte[propData]));
-
-                    }
+                        {
+                            ep = new EscherComplexProperty(propId, new byte[propData]);
+                        }
+                        break;
                 }
+                results.Add(ep);
                 pos += 6;
             }
 

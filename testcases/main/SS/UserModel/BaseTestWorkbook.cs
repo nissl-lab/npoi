@@ -24,6 +24,7 @@ namespace TestCases.SS.UserModel
     using NUnit.Framework;
     using System;
     using System.Collections;
+    using System.IO;
     using System.Text;
     using TestCases.HSSF;
     using TestCases.SS;
@@ -939,6 +940,63 @@ namespace TestCases.SS.UserModel
             catch (ArgumentException e)
             {
                 Assert.IsTrue(e.Message.Contains("already contains a sheet named 'Sheet1'"), e.Message);
+            }
+            wb.Close();
+        }
+
+        // bug 51233 and 55075: correctly size image if Added to a row with a custom height
+        [Test]
+        public virtual void CreateDrawing()
+        {
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("Main Sheet");
+            IRow row0 = sheet.CreateRow(0);
+            IRow row1 = sheet.CreateRow(1);
+            ICell cell = row1.CreateCell(0);
+            row0.CreateCell(1);
+            row1.CreateCell(0);
+            row1.CreateCell(1);
+
+            byte[] pictureData = _testDataProvider.GetTestDataFileContent("logoKarmokar4.png");
+
+            int handle = wb.AddPicture(pictureData, PictureType.PNG);
+            IDrawing Drawing = sheet.CreateDrawingPatriarch();
+            ICreationHelper helper = wb.GetCreationHelper();
+            IClientAnchor anchor = helper.CreateClientAnchor();
+            anchor.AnchorType = (/*setter*/AnchorType.DontMoveAndResize);
+            anchor.Col1 = (/*setter*/0);
+            anchor.Row1 = (/*setter*/0);
+            IPicture picture = Drawing.CreatePicture(anchor, handle);
+
+            row0.HeightInPoints = (/*setter*/144);
+            // Set a column width so that XSSF and SXSSF have the same width (default widths may be different otherwise)
+            sheet.SetColumnWidth(0, 100 * 256);
+            picture.Resize();
+
+            // The actual dimensions don't matter as much as having XSSF and SXSSF produce the same size Drawings
+
+            // Check Drawing height
+            Assert.AreEqual(0, anchor.Row1);
+            Assert.AreEqual(0, anchor.Row2);
+            Assert.AreEqual(0, anchor.Dy1);
+            Assert.AreEqual(1609725, anchor.Dy2); //HSSF: 225
+
+            // Check Drawing width
+            Assert.AreEqual(0, anchor.Col1);
+            Assert.AreEqual(0, anchor.Col2);
+            Assert.AreEqual(0, anchor.Dx1);
+            Assert.AreEqual(1114425, anchor.Dx2); //HSSF: 171
+
+            bool WriteOut = false;
+            if (WriteOut)
+            {
+                string ext = "." + _testDataProvider.StandardFileNameExtension;
+                string prefix = wb.GetType().Name + "-CreateDrawing";
+                FileInfo f = TempFile.CreateTempFile(prefix, ext);
+                FileStream out1 = new FileStream(f.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                wb.Write(out1);
+                out1.Close();
             }
             wb.Close();
         }

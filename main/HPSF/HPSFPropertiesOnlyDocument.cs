@@ -50,7 +50,7 @@ namespace NPOI.HPSF
          */
         public override void Write()
         {
-            NPOIFSFileSystem fs = directory.FileSystem;
+            NPOIFSFileSystem fs = Directory.FileSystem;
 
             ValidateInPlaceWritePossible();
             WriteProperties(fs, null);
@@ -98,7 +98,9 @@ namespace NPOI.HPSF
             WriteProperties(fs, excepts);
 
             // Copy over everything else unchanged
-            EntryUtils.CopyNodes(directory, fs.Root, excepts);
+            FilteringDirectoryNode src = new FilteringDirectoryNode(Directory, excepts);
+            FilteringDirectoryNode dest = new FilteringDirectoryNode(fs.Root, excepts);
+            EntryUtils.CopyNodes(src, dest);
 
             // Caller will save the resultant POIFSFileSystem to the stream/file
         }
