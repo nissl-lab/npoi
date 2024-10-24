@@ -162,7 +162,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Sets the parent graphic frame.
          */
-        internal void SetGraphicFrame(XSSFGraphicFrame frame)
+        public void SetGraphicFrame(XSSFGraphicFrame frame)
         {
             this.frame = frame;
         }

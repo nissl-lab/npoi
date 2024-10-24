@@ -29,11 +29,13 @@ namespace TestCases.SS.Util
                 else if(values[i] is double doubleValue)
                     cell.SetCellValue(doubleValue);
 
-#if NET6_0_OR_GREATER
-                else if(values[i] is DateOnly doValue)
-                    cell.SetCellValue(doValue);
-#endif
+                /*#if NET6_0_OR_GREATER
+                                else if(values[i] is DateOnly doValue)
+                                    cell.SetCellValue(doValue);
+                #endif
 
+                                else
+                                    cell.SetCellValue(values[i].ToString());*/
                 else
                     cell.SetCellValue(values[i].ToString());
             }

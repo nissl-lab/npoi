@@ -165,7 +165,9 @@ namespace NPOI.XSSF.Model
         }
         public ITableStyle GetExplicitTableStyle(String name)
         {
-            return tableStyles[name];
+            if(tableStyles.TryGetValue(name, out ITableStyle style))
+                return style;
+            return null;
         }
         /**
          * If there isn't currently a {@link ThemesTable} for the

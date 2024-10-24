@@ -44,7 +44,7 @@ namespace TestCases.HSSF.Extractor
 
         public TestOldExcelExtractor()
         {
-            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
         }
 
         [Test]
