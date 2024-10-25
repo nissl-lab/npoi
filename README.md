@@ -15,10 +15,6 @@ This project is the .NET version of Apache POI project. With NPOI, you can read/
 
 Are you interested in how NPOI get success? [please read this post](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb) 
 
-NPOI Tutorial Waitlist
-======================
-I have plan to write a beginner tutorial about NPOI and I need to know how many beginners/developers need it. [Click here to vote for this tutorial](https://github.com/nissl-lab/npoi/issues/1436)
-
 About Donation 关于捐款
 ============
 If you profits/benefits from NPOI and you believe it's useful, please [sponsor me via Github Sponsor](https://github.com/sponsors/tonyqus) or [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
@@ -26,12 +22,10 @@ If you profits/benefits from NPOI and you believe it's useful, please [sponsor m
 如果您从NPOI受益或实现盈利，请通过[Github Sponsor赞助我](https://github.com/sponsors/tonyqus)或[给该项目捐款](https://github.com/nissl-lab/npoi/discussions/923)，谢谢！
 
 
-Telegram User Group
-================
-Join us on telegram: https://t.me/npoidevs
-
 Get Started with NPOI
 ============
+
+[NPOI Tutorial on Youtube](https://www.youtube.com/playlist?list=PL7J6yRMWV1ot32hsgCZJ5sI4Fp2QKovCM)
 
 [Getting Started with NPOI](https://github.com/nissl-lab/npoi/wiki/Getting-Started-with-NPOI)
 
@@ -40,6 +34,10 @@ Get Started with NPOI
 [ORM on NPOI](https://github.com/nissl-lab/npoi/wiki/ORM-on-NPOI)
 
 [NPOI Changelog](https://github.com/nissl-lab/npoi/wiki/Changelog)
+
+Telegram User Group
+================
+Join us on telegram: https://t.me/npoidevs
 
 Advantage of NPOI
 =================
