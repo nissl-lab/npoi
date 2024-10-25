@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="IronSoftware.System.Drawing" Version="2024.9.11" />
+		<PackageReference Include="IronSoftware.System.Drawing" Version="2024.9.15" />
 		<PackageReference Include="Enums.NET" Version="5.0.0" />
 		<PackageReference Include="ExtendedNumerics.BigDecimal" Version="2025.1004.0.247" />
 		<PackageReference Include="MathNet.Numerics.Signed" Version="5.0.0" />
