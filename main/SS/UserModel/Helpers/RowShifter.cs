@@ -57,12 +57,7 @@ namespace NPOI.SS.UserModel.Helpers
                 var merged = sheet.GetMergedRegion(i);
 
                 // remove merged region that overlaps Shifting
-                var lastCol = sheet.GetRow(startRow) != null 
-                    ? sheet.GetRow(startRow).LastCellNum 
-                    : sheet.GetRow(endRow) != null 
-                        ? sheet.GetRow(endRow).LastCellNum 
-                        : 0;
-                if (RemovalNeeded(merged, startRow, endRow, n, lastCol))
+                if (RemovalNeeded(merged, startRow, endRow, n))
                 {
                     removedIndices.Add(i);
                     continue;
@@ -103,7 +98,7 @@ namespace NPOI.SS.UserModel.Helpers
         }
 
         // Keep in sync with {@link ColumnShifter#removalNeeded}
-        private bool RemovalNeeded(CellRangeAddress merged, int startRow, int endRow, int n, int lastCol)
+        private bool RemovalNeeded(CellRangeAddress merged, int startRow, int endRow, int n)
         {
             var movedRows = endRow - startRow + 1;
 
@@ -115,14 +110,14 @@ namespace NPOI.SS.UserModel.Helpers
                 // area is moved down => overwritten area is [endRow + n - movedRows, endRow + n]
                 var firstRow = Math.Max(endRow + 1, endRow + n - movedRows);
                 var lastRow = endRow + n;
-                overwrite = new CellRangeAddress(firstRow, lastRow, 0, lastCol);
+                overwrite = new CellRangeAddress(firstRow, lastRow, merged.FirstColumn, merged.LastColumn);
             }
             else
             {
                 // area is moved up => overwritten area is [startRow + n, startRow + n + movedRows]
                 var firstRow = startRow + n;
                 var lastRow = Math.Min(startRow - 1, startRow + n + movedRows);
-                overwrite = new CellRangeAddress(firstRow, lastRow, 0, lastCol);
+                overwrite = new CellRangeAddress(firstRow, lastRow, merged.FirstColumn, merged.LastColumn);
             }
 
             // if the merged-region and the overwritten area intersect, we need to remove it
