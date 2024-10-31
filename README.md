@@ -25,7 +25,7 @@ If you profits/benefits from NPOI and you believe it's useful, please [sponsor m
 Get Started with NPOI
 ============
 
-[NPOI Tutorial on Youtube](https://www.youtube.com/playlist?list=PL7J6yRMWV1ot32hsgCZJ5sI4Fp2QKovCM)
+[NPOI Tutorial on Youtube](https://github.com/nissl-lab/npoi-tutorial)
 
 [Getting Started with NPOI](https://github.com/nissl-lab/npoi/wiki/Getting-Started-with-NPOI)
 
