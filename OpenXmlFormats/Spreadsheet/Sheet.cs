@@ -10711,16 +10711,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            sw.Write(">");
-            if (this.hyperlink != null)
+            if (this.hyperlink != null && this.hyperlink.Count > 0)
             {
+                sw.Write(string.Format("<{0}", nodeName));
+                sw.Write(">");
                 foreach (CT_Hyperlink x in this.hyperlink)
                 {
                     x.Write(sw, "hyperlink");
                 }
+                sw.Write(string.Format("</{0}>", nodeName));
             }
-            sw.Write(string.Format("</{0}>", nodeName));
         }
         public void SetHyperlinkArray(CT_Hyperlink[] array)
         {
