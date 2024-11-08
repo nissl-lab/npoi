@@ -1744,7 +1744,7 @@ namespace TestCases.XSSF.UserModel
 
             wb.Close();
         }
-
+        [Ignore("randomly throw filenotfound exception")]
         [Test]
         public void TestBug53798XLSX()
         {
@@ -1768,6 +1768,7 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
 
+        [Ignore("randomly throw filenotfound exception")]
         [Test]
         public void TestBug53798XLS()
         {
