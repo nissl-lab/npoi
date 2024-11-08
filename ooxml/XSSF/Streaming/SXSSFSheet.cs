@@ -1474,5 +1474,10 @@ namespace NPOI.XSSF.Streaming
         {
             throw new NotImplementedException();
         }
+
+        IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
+        {
+            return ((IEnumerable<IRow>) _sh).GetEnumerator();
+        }
     }
 }

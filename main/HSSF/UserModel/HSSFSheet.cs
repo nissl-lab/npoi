@@ -3389,5 +3389,10 @@ namespace NPOI.HSSF.UserModel
                 _sheet.ActiveCellCol = col;
             }
         }
+
+        IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
+        {
+            return rows.Values.GetEnumerator();
+        }
     }
 }
