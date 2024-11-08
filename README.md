@@ -1,6 +1,7 @@
 What's NPOI
 ===================
 [![NuGet](https://img.shields.io/nuget/dt/npoi)](https://www.nuget.org/packages/NPOI)
+[![Telegram](https://img.shields.io/badge/Chat-Telegram-2CA5E0.svg?logo=telegram&logoColor=white)](https://t.me/npoidevs)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square&logo=Apache)](LICENSE)
 [![traffic](https://api.segment.io/v1/pixel/track?data=ewogICJ3cml0ZUtleSI6ICJBV2NjaWd1UkhKODBuNkJ4WlI4cHRaRzBINzY0RmJObCIsCiAgInVzZXJJZCI6ICJ0b255cXVzIiwKICAiZXZlbnQiOiAiTlBPSSBIb21lcGFnZSIKfQ==
 )](#)
@@ -13,19 +14,18 @@ What's NPOI
 <br />
 This project is the .NET version of Apache POI project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
-Are you interested in how NPOI get success? [please read this post](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb) 
-
-About Donation 关于捐款
+Donation 捐款
 ============
-If you profits/benefits from NPOI and you believe it's useful, please [sponsor me via Github Sponsor](https://github.com/sponsors/tonyqus) or [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
+If you profits/benefits from NPOI, please [sponsor me via Github Sponsor](https://github.com/sponsors/tonyqus) or [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
 
-如果您从NPOI受益或实现盈利，请通过[Github Sponsor赞助我](https://github.com/sponsors/tonyqus)或[给该项目捐款](https://github.com/nissl-lab/npoi/discussions/923)，谢谢！
-
+如果您从NPOI受益或实现盈利，请通过[Github Sponsor赞助我](https://github.com/sponsors/tonyqus)或[为该项目捐款](https://github.com/nissl-lab/npoi/discussions/923)，谢谢！
 
 Get Started with NPOI
 ============
 
 [NPOI Tutorial on Youtube](https://github.com/nissl-lab/npoi-tutorial)
+
+[How NPOI succeed](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb)
 
 [Getting Started with NPOI](https://github.com/nissl-lab/npoi/wiki/Getting-Started-with-NPOI)
 
