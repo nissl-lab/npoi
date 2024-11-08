@@ -555,9 +555,16 @@ namespace NPOI.XSSF.Streaming
             }
             finally
             {
-                TemporaryFileInfo.Delete();
-                ret = !File.Exists(TemporaryFileInfo.FullName);
-                TemporaryFileInfo.Refresh();
+                try
+                {
+                    TemporaryFileInfo.Delete();
+                    ret = !File.Exists(TemporaryFileInfo.FullName);
+                    TemporaryFileInfo.Refresh();
+                }
+                catch(Exception)
+                {
+                    ret = false;
+                }
             }
             return ret;
         }
