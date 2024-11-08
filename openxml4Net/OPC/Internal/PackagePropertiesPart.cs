@@ -33,6 +33,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         private static String[] DATE_FORMATS = new String[]{
             DEFAULT_DATEFORMAT,
             "yyyy-MM-dd'T'HH:mm:ss.ff'Z'",
+            "yyyy-MM-dd",
         };
 
         //Had to add this and TIME_ZONE_PAT to handle tz with colons.

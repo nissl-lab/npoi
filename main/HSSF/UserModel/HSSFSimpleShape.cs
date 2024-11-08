@@ -26,7 +26,7 @@ namespace NPOI.HSSF.UserModel
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
     [Serializable]
-    public class HSSFSimpleShape: HSSFShape
+    public class HSSFSimpleShape: HSSFShape, ISimpleShape
     {
         // The commented out ones haven't been tested yet or aren't supported
         // by HSSFSimpleShape.
@@ -223,7 +223,7 @@ namespace NPOI.HSSF.UserModel
 
             spContainer.AddChildRecord(sp);
             spContainer.AddChildRecord(optRecord);
-            spContainer.AddChildRecord(this.Anchor.GetEscherAnchor());
+            spContainer.AddChildRecord(this.anchor.GetEscherAnchor());
             spContainer.AddChildRecord(clientData);
             spContainer.AddChildRecord(escherTextbox);
             return spContainer;

@@ -85,17 +85,21 @@ namespace NPOI.XSSF.Streaming
 
         public CellType CachedFormulaResultType
         {
-            get { return GetCachedFormulaResultTypeEnum(); }
+            get
+            {
+                if(_value.GetType() != CellType.Formula)
+                {
+                    throw new InvalidOperationException("Only formula cells have cached results");
+                }
+
+                return ((FormulaValue) _value).GetFormulaType();
+            }
         }
 
+        [Obsolete("Will be removed at NPOI 2.8, Use CachedFormulaResultType instead.")]
         public CellType GetCachedFormulaResultTypeEnum()
         {
-            if (_value.GetType() != CellType.Formula)
-            {
-                throw new InvalidOperationException("Only formula cells have cached results");
-            }
-
-            return ((FormulaValue)_value).GetFormulaType();
+            return CachedFormulaResultType;
         }
 
         public IComment CellComment
@@ -286,8 +290,8 @@ namespace NPOI.XSSF.Streaming
 
                 XSSFHyperlink xssfobj = (XSSFHyperlink)value;
                 // Assign to us
-                CellReference reference = new CellReference(RowIndex, ColumnIndex);
-                xssfobj.GetCTHyperlink().@ref = reference.FormatAsString();
+                CellReference ref1 = new CellReference(RowIndex, ColumnIndex);
+                xssfobj.SetCellReference(ref1);
 
                 // Add to the lists
                 ((SXSSFSheet)Sheet)._sh.AddHyperlink(xssfobj);
@@ -693,7 +697,7 @@ namespace NPOI.XSSF.Streaming
         {
             if (_value.GetType() != CellType.Formula
                || ((FormulaValue)_value).GetFormulaType() != type)
-                setFormulaType(type);
+                SetFormulaType(type);
         }
         /*
          * Sets the cell type to type if it is different
@@ -711,7 +715,7 @@ namespace NPOI.XSSF.Streaming
             {
                 if (((FormulaValue)_value).GetFormulaType() == type)
                     return;
-                setFormulaType(type); // once a formula, always a formula
+                SetFormulaType(type); // once a formula, always a formula
                 return;
             }
             SetType(type);
@@ -755,7 +759,7 @@ namespace NPOI.XSSF.Streaming
                         if (_value != null)
                         {
                             // if a cell is not blank then convert the old value to string
-                            bool val = convertCellValueToBoolean();
+                            bool val = ConvertCellValueToBoolean();
                             bval.Value = val;
                         }
                         _value = bval;
@@ -773,7 +777,7 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        private void setFormulaType(CellType type)
+        private void SetFormulaType(CellType type)
         {
             Value prevValue = _value;
             switch (type)
@@ -824,13 +828,13 @@ namespace NPOI.XSSF.Streaming
                     + " " + (isFormulaCell ? "formula " : "") + "cell";
             return new InvalidOperationException(msg);
         }
-        private bool convertCellValueToBoolean()
+        private bool ConvertCellValueToBoolean()
         {
             CellType cellType = _value.GetType();
 
             if (cellType == CellType.Formula)
             {
-                cellType = GetCachedFormulaResultTypeEnum();
+                cellType = CachedFormulaResultType;
             }
 
             switch (cellType)

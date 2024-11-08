@@ -211,9 +211,8 @@ namespace TestCases.HSSF.Record
 
             //Serialize and verify that the Serialized data is1 the same as the original
             MemoryStream out1 = new MemoryStream();
-            for (IEnumerator it = records.GetEnumerator(); it.MoveNext();)
+            foreach (Record rec in records)
             {
-                Record rec = (Record)it.Current;
                 byte[] serialdata = rec.Serialize();
                 out1.Write(serialdata, 0, serialdata.Length);
             }
@@ -228,7 +227,7 @@ namespace TestCases.HSSF.Record
             Record[] recs = {
                 new BOFRecord(),
                 new WriteAccessRecord(), // need *something* between BOF and EOF
-			    EOFRecord.instance,
+                EOFRecord.instance,
                 BOFRecord.CreateSheetBOF(),
                 EOFRecord.instance,
             };
@@ -250,71 +249,17 @@ namespace TestCases.HSSF.Record
 
 
             POIFSFileSystem fs = new POIFSFileSystem();
-            Stream is1;
-            fs.CreateDocument(new MemoryStream(baos.ToArray()), "dummy");
-            is1 = fs.Root.CreatePOIFSDocumentReader("dummy");
+            fs.CreateDocument(new ByteArrayInputStream(baos.ToArray()), "dummy");
+            InputStream is1 = fs.Root.CreateDocumentInputStream("dummy");
 
-
-            List<Record> outRecs;
-            try
-            {
-                outRecs = RecordFactory.CreateRecords(is1);
-            }
-            catch (Exception e)
-            {
-                if (e.Message.Equals("Buffer underrun - requested 512 bytes but 192 was available"))
-                {
-                    throw new AssertionException("Identified bug 46987");
-                }
-                throw;
-            }
+            List<Record> outRecs = RecordFactory.CreateRecords(is1);
+            // Buffer underrun - requested 512 bytes but 192 was available
             Assert.AreEqual(5, outRecs.Count);
+            fs.Close();
         }
         [Test]
-        //public void TestNonZeroPadding_bug46987()
         public void TestNPOIBug6177()
         {
-            //Record[] recs = {
-            //    new BOFRecord(),
-            //    EOFRecord.instance,
-            //    BOFRecord.CreateSheetBOF(),
-            //    EOFRecord.instance,
-            //};
-            //MemoryStream baos = new MemoryStream();
-            //for (int i = 0; i < recs.Length; i++)
-            //{
-            //    baos.Write(recs[i].Serialize(),0, recs[i].RecordSize);
-            //}
-            ////simulate the bad padding at the end of the workbook stream in attachment 23483 of bug 46987
-            //baos.WriteByte(0x00);
-            //baos.WriteByte(0x11);
-            //baos.WriteByte(0x00);
-            //baos.WriteByte(0x02);
-            //for (int i = 0; i < 192; i++)
-            //{
-            //    baos.WriteByte(0x00);
-            //}
-
-
-            //POIFSFileSystem fs = new POIFSFileSystem();
-            //Stream is1;
-            //fs.CreateDocument(new MemoryStream(baos.ToArray()), "dummy");
-            //is1 = fs.Root.CreatePOIFSDocumentReader("dummy");
-
-            //List<Record> outRecs;
-            //try
-            //{
-            //    outRecs = RecordFactory.CreateRecords(is1);
-            //}
-            //catch (Exception e)
-            //{
-            //    if (e.Message.Equals("Buffer underrun - requested 512 bytes but 192 was available"))
-            //    {
-            //        throw new AssertionException("Identified bug 46987");
-            //    }
-            //    throw e;
-            //}
-            //Assert.AreEqual(4, outRecs.Count);
             string sampleFileName = "FW 8.6 Table Relationship2.xls";
             HSSFTestDataSamples.OpenSampleWorkbook(sampleFileName);
         }

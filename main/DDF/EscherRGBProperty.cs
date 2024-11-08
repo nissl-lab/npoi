@@ -45,7 +45,7 @@ namespace NPOI.DDF
         /// <value>The color of the RGB.</value>
         public int RgbColor
         {
-            get { return propertyValue; }
+            get { return PropertyValue; }
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace NPOI.DDF
         /// <value>The red.</value>
         public byte Red
         {
-            get { return (byte)(propertyValue & 0xFF); }
+            get { return (byte)(RgbColor & 0xFF); }
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace NPOI.DDF
         /// <value>The green.</value>
         public byte Green
         {
-            get{return (byte)((propertyValue >> 8) & 0xFF);}
+            get{return (byte)((RgbColor >> 8) & 0xFF);}
         }
 
         /// <summary>
@@ -72,14 +72,14 @@ namespace NPOI.DDF
         /// <value>The blue.</value>
         public byte Blue
         {
-            get{return (byte)((propertyValue >> 16) & 0xFF);}
+            get{return (byte)((RgbColor >> 16) & 0xFF);}
         }
         public override String ToXml(String tab)
         {
             StringBuilder builder = new StringBuilder();
             builder.Append(tab).Append("<").Append(GetType().Name).Append(" id=\"0x").Append(HexDump.ToHex(Id))
                     .Append("\" name=\"").Append(Name).Append("\" blipId=\"")
-                    .Append(IsBlipId).Append("\" value=\"0x").Append(HexDump.ToHex(propertyValue)).Append("\"/>\n");
+                    .Append(IsBlipId).Append("\" value=\"0x").Append(HexDump.ToHex(RgbColor)).Append("\"/>\n");
             return builder.ToString();
         }
     }

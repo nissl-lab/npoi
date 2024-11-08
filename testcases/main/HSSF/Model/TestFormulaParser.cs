@@ -1483,8 +1483,7 @@ namespace TestCases.HSSF.Model
         }
 
         /**
-         * TODO - delete equiv Test:
-         * {@link BaseTestBugzillaIssues#test42448()}
+         * See the related/similar test: {@link BaseTestBugzillaIssues#test42448()}
          */
         [Test]
         public void TestParseAbnormalSheetNamesAndRanges_bug42448()
@@ -1537,11 +1536,11 @@ namespace TestCases.HSSF.Model
         [Test]
         public void TestUnionOfFullCollFullRowRef()
         {
+            ParseFormula("3:4");
             Ptg[] ptgs;
-            ptgs = ParseFormula("3:4");
             ptgs = ParseFormula("$Z:$AC");
             ConfirmTokenClasses(ptgs, typeof(AreaPtg));
-            ptgs = ParseFormula("B:B");
+            ParseFormula("B:B");
 
             ptgs = ParseFormula("$11:$13");
             ConfirmTokenClasses(ptgs, typeof(AreaPtg));

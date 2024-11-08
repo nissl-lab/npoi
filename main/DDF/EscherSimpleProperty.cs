@@ -31,7 +31,7 @@ namespace NPOI.DDF
     /// </summary>
     public class EscherSimpleProperty : EscherProperty
     {
-        protected int propertyValue;
+        private int propertyValue;
 
         /// <summary>
         /// The id is distinct from the actual property number.  The id includes the property number the blip id

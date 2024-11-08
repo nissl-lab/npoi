@@ -31,7 +31,7 @@ namespace NPOI.HSSF.UserModel
     /// reverse them and draw shapes vertically or horizontally flipped! 
     /// </summary>
     [Serializable]
-    public abstract class HSSFShape //: IShape
+    public abstract class HSSFShape : IShape
     {
         public const int LINEWIDTH_ONE_PT = 12700; // 12700 = 1pt
         public const int LINEWIDTH_DEFAULT = 9525;
@@ -118,21 +118,34 @@ namespace NPOI.HSSF.UserModel
                 cod.ObjectId = (short)(value % 1024);
             }
         }
+
+        public uint ID
+        {
+            get => (uint)ShapeId;
+            set => ShapeId = (int)value;
+        }
+
+        public string Name
+        {
+            get => ShapeName;
+            set => throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Gets the parent shape.
         /// </summary>
         /// <value>The parent.</value>
-        public HSSFShape Parent
+        public IShape Parent
         {
             get { return this.parent; }
-            set { this.parent = value; }
+            set { this.parent = (HSSFShape)value; }
         }
 
         /// <summary>
         /// Gets or sets the anchor that is used by this shape.
         /// </summary>
         /// <value>The anchor.</value>
-        public HSSFAnchor Anchor
+        public IChildAnchor Anchor
         {
             get { return anchor; }
             set
@@ -179,22 +192,19 @@ namespace NPOI.HSSF.UserModel
                         _escherContainer.RemoveChildRecord(anch);
                     }
                 }
+                var anchor = value as HSSFAnchor;
                 if (-1 == recordId)
                 {
-                    _escherContainer.AddChildRecord(value.GetEscherAnchor());
+                    _escherContainer.AddChildRecord(anchor.GetEscherAnchor());
                 }
                 else
                 {
-                    _escherContainer.AddChildBefore(value.GetEscherAnchor(), recordId);
+                    _escherContainer.AddChildBefore(anchor.GetEscherAnchor(), recordId);
                 }
-                this.anchor = value;
+                this.anchor = anchor;
             }
         }
 
-        //public void SetLineStyleColor(int lineStyleColor)
-        //{
-        //    this.lineStyleColor = lineStyleColor;
-        //}
         /// <summary>
         /// The color applied to the lines of this shape.
         /// </summary>
@@ -264,7 +274,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets with width of the line in EMUs.  12700 = 1 pt.
         /// </summary>
         /// <value>The width of the line.</value>
-        public int LineWidth
+        public double LineWidth
         {
             get
             {
@@ -273,7 +283,7 @@ namespace NPOI.HSSF.UserModel
             }
             set
             {
-                SetPropertyValue(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEWIDTH, value));
+                SetPropertyValue(new EscherSimpleProperty(EscherProperties.LINESTYLE__LINEWIDTH, (int)value));
             }
         }
 
@@ -435,6 +445,37 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
+        /**
+         * @return the name of this shape
+         */
+        public String ShapeName
+        {
+            get
+            {
+                EscherOptRecord eor = GetOptRecord();
+                if (eor == null)
+                {
+                    return null;
+                }
+                EscherProperty ep = eor.Lookup(EscherProperties.GROUPSHAPE__SHAPENAME);
+                if (ep is EscherComplexProperty) {
+                    return StringUtil.GetFromUnicodeLE(((EscherComplexProperty)ep).ComplexData);
+                }
+                return null;
+            }
+        }
+
+        public LineEndingCapType LineEndingCapType
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        public CompoundLineType CompoundLineType
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
         protected internal ObjRecord GetObjRecord()
         {
             return _objRecord;

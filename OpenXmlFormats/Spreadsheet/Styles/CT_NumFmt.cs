@@ -23,7 +23,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 return null;
             CT_NumFmt ctObj = new CT_NumFmt();
             ctObj.numFmtId = XmlHelper.ReadUInt(node.Attributes["numFmtId"]);
-            ctObj.formatCode = XmlHelper.ReadString(node.Attributes["formatCode"]);
+            if(node.Attributes["formatCode"]!=null)
+                ctObj.formatCode = XmlHelper.ReadString(node.Attributes["formatCode"]);
             return ctObj;
         }
 
@@ -33,7 +34,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId,true);
-            XmlHelper.WriteAttribute(sw, "formatCode", this.formatCode);
+            if(formatCode!=null)
+                XmlHelper.WriteAttribute(sw, "formatCode", this.formatCode, true);
             sw.Write("/>");
         }
 

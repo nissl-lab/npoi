@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPOI.SS.UserModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,7 +11,7 @@ namespace NPOI.XSSF.UserModel
      *
      * @author Yegor Kozlov
      */
-    public abstract class XSSFAnchor
+    public abstract class XSSFAnchor: IChildAnchor
     {
         public abstract int Dx1 { get; set; }
         public abstract int Dy1 { get; set; }

@@ -682,7 +682,7 @@ namespace NPOI.SS.Converter
                 else if (cellStyle.FillPattern == FillPattern.SolidForeground)
                 {
                     //cellStyle
-                    IndexedColors clr=IndexedColors.ValueOf(cellStyle.FillForegroundColor);
+                    IndexedColors clr=IndexedColors.TryValueOf(cellStyle.FillForegroundColor);
                     string hexstring=null;
                     if(clr!=null)
                     {
@@ -698,7 +698,7 @@ namespace NPOI.SS.Converter
                 }
                 else
                 {
-                    IndexedColors clr = IndexedColors.ValueOf(cellStyle.FillBackgroundColor);
+                    IndexedColors clr = IndexedColors.TryValueOf(cellStyle.FillBackgroundColor);
                     string hexstring = null;
                     if (clr != null)
                     {
@@ -752,7 +752,7 @@ namespace NPOI.SS.Converter
             }
             else 
             {
-                IndexedColors clr = IndexedColors.ValueOf(borderColor);
+                IndexedColors clr = IndexedColors.TryValueOf(borderColor);
                 if (clr != null)
                 {
                    borderStyle.Append(' ');
@@ -803,7 +803,7 @@ namespace NPOI.SS.Converter
             }
             else
             {
-                IndexedColors clr = IndexedColors.ValueOf(font.Color);
+                IndexedColors clr = IndexedColors.TryValueOf(font.Color);
                 string hexstring = null;
                 if (clr != null)
                 {

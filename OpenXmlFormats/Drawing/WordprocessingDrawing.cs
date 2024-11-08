@@ -1246,6 +1246,8 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
                     ctObj.wrapNone = new CT_WrapNone();
                 else if (childNode.LocalName == "effectExtent")
                     ctObj.effectExtent = CT_EffectExtent.Parse(childNode, namespaceManager);
+                else if(childNode.LocalName == "wrapTight")
+                    ctObj.wrapTight = CT_WrapTight.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "wrapTopAndBottom")
                     ctObj.wrapTopAndBottom = CT_WrapTopBottom.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "docPr")
@@ -1272,7 +1274,7 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             XmlHelper.WriteAttribute(sw, "behindDoc", this.behindDoc);
             XmlHelper.WriteAttribute(sw, "locked", this.locked);
             XmlHelper.WriteAttribute(sw, "layoutInCell", this.layoutInCell);
-            if(!this.hidden)
+            if(this.hidden)
                 XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
             XmlHelper.WriteAttribute(sw, "allowOverlap", this.allowOverlap);
             XmlHelper.WriteAttribute(sw, "wp14:anchorId", this.anchorIdField);
@@ -1288,6 +1290,8 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
                 this.extent.Write(sw, "extent");
             if (this.effectExtent != null)
                 this.effectExtent.Write(sw, "effectExtent");
+            if(this.wrapTight != null)
+                this.wrapTight.Write(sw, "wrapTight");
             if (this.wrapTopAndBottom != null)
                 this.wrapTopAndBottom.Write(sw, "wrapTopAndBottom");
             if (this.wrapSquare != null)
@@ -1961,6 +1965,37 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
                 this.editedFieldSpecified = value;
             }
         }
+        internal static CT_WrapPath Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if(node == null)
+                return null;
+            CT_WrapPath ctObj = new CT_WrapPath();
+            ctObj.lineToField = new List<CT_Point2D>();
+            foreach(XmlNode childNode in node.ChildNodes)
+            {
+                if(childNode.LocalName == "start")
+                    ctObj.start = CT_Point2D.Parse(childNode, namespaceManager);
+                else if(childNode.LocalName == "lineTo")
+                    ctObj.lineToField.Add(CT_Point2D.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<wp:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "edited", this.edited, true);
+            sw.Write(">");
+            if(this.start!=null)
+                this.start.Write(sw, "wp:start");
+            if(this.lineToField!=null)
+            {
+                foreach(var lineTo in this.lineToField)
+                {
+                    lineTo.Write(sw, "wp:lineTo");
+                }
+            }
+            sw.Write("</wp:{0}>", nodeName);
+        }
     }
 
     
@@ -2067,6 +2102,32 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             {
                 this.distRFieldSpecified = value;
             }
+        }
+        internal static CT_WrapTight Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if(node == null)
+                return null;
+            CT_WrapTight ctObj = new CT_WrapTight();
+            ctObj.wrapText = XmlHelper.ReadEnum<ST_WrapText>(node.Attributes["wrapText"]);
+            ctObj.distR = XmlHelper.ReadUInt(node.Attributes["distR"]);
+            ctObj.distL = XmlHelper.ReadUInt(node.Attributes["distL"]);
+            foreach(XmlNode childNode in node.ChildNodes)
+            {
+                if(childNode.LocalName == "wrapPolygon")
+                    ctObj.wrapPolygon = CT_WrapPath.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<wp:{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "distR", this.distR);
+            XmlHelper.WriteAttribute(sw, "distL", this.distL);
+            XmlHelper.WriteAttribute(sw, "wrapText", this.wrapTextField.ToString());            
+            sw.Write(">");
+            if(this.wrapPolygon!=null)
+                this.wrapPolygon.Write(sw, "wrapPolygon");
+            sw.Write("</wp:{0}>", nodeName);
         }
     }
 
