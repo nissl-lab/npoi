@@ -489,7 +489,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.pageMarginsField != null;
         }
-
+        public bool IsSetHyperLinks()
+        {
+            return this.hyperlinksField != null;
+        }
         public bool IsSetSheetPr()
         {
             return this.sheetPrField != null;
