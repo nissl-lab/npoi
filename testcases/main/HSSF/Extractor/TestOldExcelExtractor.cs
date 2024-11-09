@@ -27,6 +27,7 @@ namespace TestCases.HSSF.Extractor
     using System.Text;
     using TestCases;
     using TestCases.HSSF;
+    using System.Threading;
 
     /**
      * Unit tests for the Excel 5/95 and Excel 4 (and older) text 
@@ -40,6 +41,11 @@ namespace TestCases.HSSF.Extractor
             FileInfo file = HSSFTestDataSamples.GetSampleFile(sampleFileName);
 
             return new OldExcelExtractor(file);
+        }
+
+        public TestOldExcelExtractor()
+        {
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
         }
 
         [Test]

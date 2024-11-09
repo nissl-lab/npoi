@@ -8,18 +8,18 @@
     <DebugType>portable</DebugType>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 
-    <VersionPrefix>2.7.1</VersionPrefix>
+    <VersionPrefix>2.7.2</VersionPrefix>
     <Title>NPOI</Title>
     <Authors>Tony Qu,NPOI Contributors</Authors>
     <Owners>Nissl Lab</Owners>
-    <Description>.NET port of Apache POI | Contact us on telegram: https://t.me/npoidevs</Description>
-    <Summary>NPOI can read and write xls (Excel 97-2003), xlsx(Excel 2007+) and docx(Word 2007+)</Summary>
+    <Description>.NET port of Apache POI</Description>
+    <Summary>NPOI can read and write xls (Excel 97-2003), xlsx(Excel 2007+) and docx(Word 2007+). </Summary>
     <RepositoryUrl>https://github.com/nissl-lab/npoi</RepositoryUrl>
 
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageIcon>logo\60_60.jpg</PackageIcon>
     <PackageProjectUrl>https://github.com/nissl-lab/npoi</PackageProjectUrl>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/nissl-lab/npoi/discussions/1422</PackageReleaseNotes>
     <Copyright>Nissl LLC</Copyright>
     <PackageTags>xlsx xls Excel Word docx office ole</PackageTags>
   </PropertyGroup>

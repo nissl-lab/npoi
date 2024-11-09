@@ -67,12 +67,17 @@ namespace TestCases.XSSF.UserModel
             ISheet sheet1 = wb1.CreateSheet("sheet1");
             ISheet sheet2 = wb1.CreateSheet("sheet2");
             wb1.CreateSheet("sheet3");
+            ISheet sheet4 = wb1.CreateSheet("sheet4");
 
             IRichTextString rts = wb1.GetCreationHelper().CreateRichTextString("hello world");
 
             sheet1.CreateRow(0).CreateCell((short)0).SetCellValue(1.2);
             sheet1.CreateRow(1).CreateCell((short)0).SetCellValue(rts);
             sheet2.CreateRow(0);
+            ((XSSFSheet)sheet2).CreateColumn(0);
+
+            ((XSSFSheet)sheet4).CreateColumn(0).CreateCell(0).SetCellValue(1.2);
+            ((XSSFSheet)sheet4).CreateColumn(1).CreateCell(0).SetCellValue(rts);
 
             Assert.AreEqual(0, wb1.GetSheetAt(0).FirstRowNum);
             Assert.AreEqual(1, wb1.GetSheetAt(0).LastRowNum);
@@ -80,6 +85,17 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(0, wb1.GetSheetAt(1).LastRowNum);
             Assert.AreEqual(0, wb1.GetSheetAt(2).FirstRowNum);
             Assert.AreEqual(0, wb1.GetSheetAt(2).LastRowNum);
+            Assert.AreEqual(0, wb1.GetSheetAt(3).FirstRowNum);
+            Assert.AreEqual(0, wb1.GetSheetAt(3).LastRowNum);
+
+            Assert.AreEqual(0, ((XSSFSheet)wb1.GetSheetAt(0)).FirstColumnNum);
+            Assert.AreEqual(0, ((XSSFSheet)wb1.GetSheetAt(0)).LastColumnNum);
+            Assert.AreEqual(0, ((XSSFSheet)wb1.GetSheetAt(1)).FirstColumnNum);
+            Assert.AreEqual(0, ((XSSFSheet)wb1.GetSheetAt(1)).LastColumnNum);
+            Assert.AreEqual(0, ((XSSFSheet)wb1.GetSheetAt(2)).FirstColumnNum);
+            Assert.AreEqual(0, ((XSSFSheet)wb1.GetSheetAt(2)).LastColumnNum);
+            Assert.AreEqual(0, ((XSSFSheet)wb1.GetSheetAt(3)).FirstColumnNum);
+            Assert.AreEqual(1, ((XSSFSheet)wb1.GetSheetAt(3)).LastColumnNum);
 
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
             Stream out1 = File.OpenWrite(file.FullName);
@@ -98,15 +114,16 @@ namespace TestCases.XSSF.UserModel
                 pkg.GetPart(PackagingUriHelper.CreatePartName("/xl/workbook.xml"));
             // Links to the three sheets, shared strings and styles
             Assert.IsTrue(wbPart.HasRelationships);
-            Assert.AreEqual(5, wbPart.Relationships.Size);
+            Assert.AreEqual(6, wbPart.Relationships.Size);
             wb1.Close();
 
             // Load back the XSSFWorkbook
             XSSFWorkbook wb2 = new XSSFWorkbook(pkg);
-            Assert.AreEqual(3, wb2.NumberOfSheets);
+            Assert.AreEqual(4, wb2.NumberOfSheets);
             Assert.IsNotNull(wb2.GetSheetAt(0));
             Assert.IsNotNull(wb2.GetSheetAt(1));
             Assert.IsNotNull(wb2.GetSheetAt(2));
+            Assert.IsNotNull(wb2.GetSheetAt(3));
 
             Assert.IsNotNull(wb2.GetSharedStringSource());
             Assert.IsNotNull(wb2.GetStylesSource());
@@ -117,10 +134,23 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(0, wb2.GetSheetAt(1).LastRowNum);
             Assert.AreEqual(0, wb2.GetSheetAt(2).FirstRowNum);
             Assert.AreEqual(0, wb2.GetSheetAt(2).LastRowNum);
+            Assert.AreEqual(0, wb2.GetSheetAt(3).FirstRowNum);
+            Assert.AreEqual(0, wb2.GetSheetAt(3).LastRowNum);
+
+            Assert.AreEqual(0, ((XSSFSheet)wb1.GetSheetAt(0)).FirstColumnNum);
+            Assert.AreEqual(0, ((XSSFSheet)wb1.GetSheetAt(0)).LastColumnNum);
+            Assert.AreEqual(0, ((XSSFSheet)wb1.GetSheetAt(1)).FirstColumnNum);
+            Assert.AreEqual(0, ((XSSFSheet)wb1.GetSheetAt(1)).LastColumnNum);
+            Assert.AreEqual(0, ((XSSFSheet)wb1.GetSheetAt(2)).FirstColumnNum);
+            Assert.AreEqual(0, ((XSSFSheet)wb1.GetSheetAt(2)).LastColumnNum);
+            Assert.AreEqual(0, ((XSSFSheet)wb1.GetSheetAt(3)).FirstColumnNum);
+            Assert.AreEqual(1, ((XSSFSheet)wb1.GetSheetAt(3)).LastColumnNum);
 
             sheet1 = wb2.GetSheetAt(0);
             Assert.AreEqual(1.2, sheet1.GetRow(0).GetCell(0).NumericCellValue, 0.0001);
+            Assert.AreEqual(1.2, ((XSSFSheet)sheet4).GetColumn(0).GetCell(0).NumericCellValue, 0.0001);
             Assert.AreEqual("hello world", sheet1.GetRow(1).GetCell(0).RichStringCellValue.String);
+            Assert.AreEqual("hello world", ((XSSFSheet)sheet4).GetColumn(1).GetCell(0).RichStringCellValue.String);
 
             pkg.Close();
         }
@@ -822,6 +852,7 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void AddPivotTableToWorkbookWithLoadedPivotTable()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             String fileName = "ooxml-pivottable.xlsx";
 
             XSSFWorkbook wb = new XSSFWorkbook();

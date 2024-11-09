@@ -19,7 +19,9 @@ using NPOI.XSSF.Streaming;
 using NPOI.XSSF.UserModel;
 using NSubstitute;
 using NUnit.Framework;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 
 namespace TestCases.XSSF.Streaming
 {
@@ -33,6 +35,7 @@ namespace TestCases.XSSF.Streaming
         [SetUp]
         public void Init()
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             var _xssfsheet = Substitute.For<XSSFSheet>();
             var _workbook = Substitute.For<SXSSFWorkbook>();
             var _sheet = Substitute.For<SXSSFSheet>(_workbook, _xssfsheet);
@@ -74,10 +77,8 @@ namespace TestCases.XSSF.Streaming
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
             Assert.True(lines.Length == 2);
-            Assert.AreEqual("<row r=\"" + 1 + "\" customHeight=\"1\" ht=\"" + row.HeightInPoints.ToString().Replace(',', '.') + "\">", lines[0]);
+            Assert.AreEqual($"<row r=\"{1}\" customHeight=\"1\" ht=\"{row.HeightInPoints}\">", lines[0]);
             Assert.AreEqual("</row>", lines[1]);
-
-
         }
 
         [Test]

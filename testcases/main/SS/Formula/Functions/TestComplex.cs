@@ -52,6 +52,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestBasic()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             ConfirmValue("Complex number with 3 and 4 as the real and imaginary coefficients (3 + 4i)", "3", "4", "", "3+4i");
             ConfirmValue("Complex number with 3 and 4 as the real and imaginary coefficients, and j as the suffix (3 + 4j)", "3", "4", "j", "3+4j");
 
