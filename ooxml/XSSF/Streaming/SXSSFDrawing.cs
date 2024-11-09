@@ -19,13 +19,15 @@ namespace NPOI.XSSF.Streaming
 {
     using NPOI.SS.UserModel;
     using NPOI.XSSF.UserModel;
+    using System.Collections;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Streaming version of Drawing.
     /// Delegates most tasks to the non-streaming XSSF code.
     /// TODO: Potentially, Comment and Chart need a similar streaming wrapper like Picture.
     /// </summary>
-    public class SXSSFDrawing : IDrawing
+    public class SXSSFDrawing : IDrawing, IDrawing<XSSFShape>
     {
         private SXSSFWorkbook _wb;
         private XSSFDrawing _drawing;
@@ -51,6 +53,16 @@ namespace NPOI.XSSF.Streaming
         public IClientAnchor CreateAnchor(int dx1, int dy1, int dx2, int dy2, int col1, int row1, int col2, int row2)
         {
             return _drawing.CreateAnchor(dx1, dy1, dx2, dy2, col1, row1, col2, row2);
+        }
+
+        public IEnumerator<XSSFShape> GetEnumerator()
+        {
+            return _drawing.GetShapes().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
         }
         //public ObjectData CreateObjectData(IClientAnchor anchor, int storageId, int pictureIndex)
         //{

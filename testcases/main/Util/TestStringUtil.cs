@@ -20,7 +20,7 @@ namespace TestCases.Util
 {
     using System;
     using System.Text;
-
+    using System.Threading;
     using NPOI.Util;
     using NUnit.Framework;
     /**
@@ -248,6 +248,7 @@ namespace TestCases.Util
         [Test]
         public void Join()
         {
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             Assert.AreEqual("", StringUtil.Join(",")); // degenerate case: nothing to join
             Assert.AreEqual("abc", StringUtil.Join(",", "abc")); // degenerate case: one thing to join, no trailing comma
             Assert.AreEqual("abc|def|ghi", StringUtil.Join("|", "abc", "def", "ghi"));

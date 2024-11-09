@@ -87,7 +87,7 @@ namespace NPOI.SS.Util
 
         public CellReference(ReadOnlySpan<char> cellRef)
         {
-            if (cellRef.EndsWith("#REF!".AsSpan(), StringComparison.InvariantCulture))
+            if (cellRef.EndsWith("#REF!".AsSpan(), StringComparison.OrdinalIgnoreCase))
             {
                 throw new ArgumentException("Cell reference invalid: " + cellRef.ToString());
             }

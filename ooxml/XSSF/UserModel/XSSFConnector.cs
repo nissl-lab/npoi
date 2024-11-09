@@ -134,6 +134,7 @@ namespace NPOI.XSSF.UserModel
             return ctShape.spPr;
         }
 
+        public override string ShapeName => ctShape.nvCxnSpPr.cNvPr.name;
     }
 }
 

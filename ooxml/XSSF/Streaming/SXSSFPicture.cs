@@ -313,6 +313,26 @@ namespace NPOI.XSSF.Streaming
             set { _picture.IsNoFill = value;}
         }
 
+        public string ShapeName => this.GetShapeName();
+
+        public IChildAnchor Anchor => GetAnchor();
+
+        public IShape Parent => GetParent();
+
+        public uint ID => _picture.ID;
+
+        public string Name { get => this.GetShapeName(); set => throw new System.NotImplementedException(); }
+
+        public int LineStyleColor => _picture.LineStyleColor;
+
+        public int FillColor { get => _picture.FillColor; set => throw new System.NotImplementedException(); }
+        public double LineWidth { get => _picture.LineWidth; set => throw new System.NotImplementedException(); }
+        public LineStyle LineStyle { get => _picture.LineStyle; set => throw new System.NotImplementedException(); }
+        public LineEndingCapType LineEndingCapType { get => _picture.LineEndingCapType; set => throw new System.NotImplementedException(); }
+        public CompoundLineType CompoundLineType { get => _picture.CompoundLineType; set => throw new System.NotImplementedException(); }
+
+        public int CountOfAllChildren => _picture.CountOfAllChildren;
+
         public void SetFillColor(int red, int green, int blue)
         {
             _picture.SetFillColor(red, green, blue);

@@ -15,28 +15,34 @@
    limitations under the License.
 ==================================================================== */
 
+
 namespace NPOI.SS.UserModel
 {
-    public interface IShape
+    /// <summary>
+    /// Common interface for anchors.
+    /// 
+    /// An anchor is what specifics the position of a shape within a client object
+    /// or within another containing shape.
+    /// </summary>
+    public interface IChildAnchor
     {
-        string ShapeName { get; }
-        IChildAnchor Anchor { get; }
+        /// <summary>
+        /// get or set x coordinate of the left up corner
+        /// </summary>
+        int Dx1 { get; set; }
 
-        IShape Parent { get; }
+        /// <summary>
+        /// get or set y coordinate of the left up corner
+        /// </summary>
+        int Dy1 {  get; set; }
 
-        uint ID { get; }
-        string Name { get; set; }
-        void SetLineStyleColor(int red, int green, int blue);
-        void SetFillColor(int red, int green, int blue);
-
-        int LineStyleColor { get; }
-
-        int FillColor { get; set; }
-        double LineWidth { get; set; }
-        LineStyle LineStyle { get; set; }
-        LineEndingCapType LineEndingCapType{ get; set; }
-        CompoundLineType CompoundLineType { get; set; }
-        bool IsNoFill { get; set; }
-        int CountOfAllChildren { get; }
+        /// <summary>
+        /// get or set x coordinate of the right down corner
+        /// </summary>
+        int Dx2 { get; set; }
+        /// <summary>
+        /// get or set y coordinate of the right down corner
+        /// </summary>
+        int Dy2 { get; set; }
     }
 }

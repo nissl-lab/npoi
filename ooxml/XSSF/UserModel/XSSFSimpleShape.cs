@@ -32,7 +32,7 @@ namespace NPOI.XSSF.UserModel
      * Represents a shape with a predefined geometry in a SpreadsheetML Drawing.
      * Possible shape types are defined in {@link NPOI.SS.UserModel.ShapeTypes}
      */
-    public class XSSFSimpleShape : XSSFShape, IEnumerable<XSSFTextParagraph>
+    public class XSSFSimpleShape : XSSFShape, IEnumerable<XSSFTextParagraph>, ISimpleShape
     { // TODO - instantiable superclass
         /**
          * List of the paragraphs that make up the text in this shape
@@ -1014,5 +1014,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
+
+        public override string ShapeName => ctShape.nvSpPr.cNvPr.name;
     }
 }

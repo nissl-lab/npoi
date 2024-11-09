@@ -426,23 +426,25 @@ namespace NPOI.HPSF
                     propertyListStream.Flush();
 
                     /* Write the section: */
-                    byte[] pb1 = propertyListStream.ToArray();
-                    byte[] pb2 = propertyStream.ToArray();
+                    byte[] pb1 = propertyListStream.GetBuffer();
+                    byte[] pb2 = propertyStream.GetBuffer();
+                    int pb1Length = (int)propertyListStream.Length;
+                    int pb2Length = (int)propertyStream.Length;
 
                     /* Write the section's Length: */
                     TypeWriter.WriteToStream(out1, LittleEndianConsts.INT_SIZE * 2 +
-                                                  pb1.Length + pb2.Length);
+                                                  pb1Length + pb2Length);
 
                     /* Write the section's number of properties: */
                     TypeWriter.WriteToStream(out1, PropertyCount);
 
                     /* Write the property list: */
-                    out1.Write(pb1, 0, pb1.Length);
+                    out1.Write(pb1, 0, pb1Length);
 
                     /* Write the properties: */
-                    out1.Write(pb2, 0, pb2.Length);
+                    out1.Write(pb2, 0, pb2Length);
 
-                    int streamLength = LittleEndianConsts.INT_SIZE * 2 + pb1.Length + pb2.Length;
+                    int streamLength = LittleEndianConsts.INT_SIZE * 2 + pb1Length + pb2Length;
                     return streamLength;
                 }
             }

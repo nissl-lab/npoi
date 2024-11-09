@@ -34,7 +34,7 @@ namespace NPOI.HSSF.UserModel
     /// little other than act as a container for other shapes and Groups.
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
-    public class HSSFPatriarch : HSSFShapeContainer, IDrawing
+    public class HSSFPatriarch : HSSFShapeContainer, IDrawing, IDrawing<HSSFShape>
     {
         //private static POILogger log = POILogFactory.GetLogger(typeof(HSSFPatriarch));
         List<HSSFShape> _shapes = new List<HSSFShape>();
@@ -359,11 +359,11 @@ namespace NPOI.HSSF.UserModel
         private void SetFlipFlags(HSSFShape shape)
         {
             EscherSpRecord sp = (EscherSpRecord)shape.GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
-            if (shape.Anchor.IsHorizontallyFlipped)
+            if ((shape.Anchor as HSSFAnchor).IsHorizontallyFlipped)
             {
                 sp.Flags = (sp.Flags | EscherSpRecord.FLAG_FLIPHORIZ);
             }
-            if (shape.Anchor.IsVerticallyFlipped)
+            if ((shape.Anchor as HSSFAnchor).IsVerticallyFlipped)
             {
                 sp.Flags = (sp.Flags | EscherSpRecord.FLAG_FLIPVERT);
             }
