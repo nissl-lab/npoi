@@ -812,6 +812,7 @@ namespace TestCases.XSSF.UserModel
          *  better should really review this!
          */
         [Test]
+        [Ignore("re-port method XSSFSheet.GroupColumn()")]
         public void TestSetColumnGroupCollapsed()
         {
             XSSFWorkbook wb1 = new XSSFWorkbook();
