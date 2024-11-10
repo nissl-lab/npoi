@@ -35,10 +35,6 @@ Get Started with NPOI
 
 [NPOI Changelog](https://github.com/nissl-lab/npoi/wiki/Changelog)
 
-Telegram User Group
-================
-Join us on telegram: https://t.me/npoidevs
-
 Advantage of NPOI
 =================
 a. [Huge examples (This example repo is private. You can get access by sponsoring me)](https://github.com/sponsors/tonyqus)
