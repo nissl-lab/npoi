@@ -41,7 +41,7 @@ Join us on telegram: https://t.me/npoidevs
 
 Advantage of NPOI
 =================
-a. [Huge examples (This example repo is private. You can sponsor me with NPOI example access option)](https://github.com/sponsors/tonyqus)
+a. [Huge examples (This example repo is private. You can get access by sponsoring me)](https://github.com/sponsors/tonyqus)
 
 b. It's totally free to use
 
