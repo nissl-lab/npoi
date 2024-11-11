@@ -1456,6 +1456,80 @@ namespace TestCases.XSSF.UserModel
         }
 
         /**
+     * Verify that column groups were created correctly after Sheet.groupColumn
+     *
+     * @param col the column group xml bean
+     * @param fromColumnIndex 0-indexed
+     * @param toColumnIndex 0-indexed
+     */
+        private static void checkColumnGroup(
+                CT_Col col,
+                int fromColumnIndex, int toColumnIndex,
+                bool isSetHidden, bool isSetCollapsed
+                )
+        {
+            Assert.AreEqual(fromColumnIndex, col.min - 1, "from column index"); // 1 based
+            Assert.AreEqual(toColumnIndex, col.max - 1, "to column index"); // 1 based
+            Assert.AreEqual(isSetHidden, col.IsSetHidden(), "isSetHidden");
+            Assert.AreEqual(isSetCollapsed, col.IsSetCollapsed(), "isSetCollapsed"); //not necessarily set
+        }
+
+        /**
+         * Verify that column groups were created correctly after Sheet.groupColumn
+         *
+         * @param col the column group xml bean
+         * @param fromColumnIndex 0-indexed
+         * @param toColumnIndex 0-indexed
+         */
+        private static void checkColumnGroup(
+                CT_Col col,
+                int fromColumnIndex, int toColumnIndex
+                )
+        {
+            Assert.AreEqual(fromColumnIndex, col.min - 1, "from column index"); // 1 based
+            Assert.AreEqual(toColumnIndex, col.max - 1, "to column index"); // 1 based
+            Assert.IsFalse(col.IsSetHidden(), "isSetHidden");
+            Assert.IsTrue(col.IsSetCollapsed(), "isSetCollapsed"); //not necessarily set
+        }
+        /**
+         * Verify that column groups were created correctly after Sheet.groupColumn
+         *
+         * @param col the column group xml bean
+         * @param fromColumnIndex 0-indexed
+         * @param toColumnIndex 0-indexed
+         */
+        private static void checkColumnGroupIsCollapsed(
+                CT_Col col,
+                int fromColumnIndex, int toColumnIndex
+                )
+        {
+            Assert.AreEqual(fromColumnIndex, col.min - 1, "from column index"); // 1 based
+            Assert.AreEqual(toColumnIndex, col.max - 1, "to column index"); // 1 based
+            Assert.IsTrue(col.IsSetHidden(), "isSetHidden");
+            Assert.IsTrue(col.IsSetCollapsed(), "isSetCollapsed");
+            //assertTrue("getCollapsed", col.getCollapsed());
+        }
+        /**
+         * Verify that column groups were created correctly after Sheet.groupColumn
+         *
+         * @param col the column group xml bean
+         * @param fromColumnIndex 0-indexed
+         * @param toColumnIndex 0-indexed
+         */
+        private static void checkColumnGroupIsExpanded(
+                CT_Col col,
+                int fromColumnIndex, int toColumnIndex
+                )
+        {
+            Assert.AreEqual(fromColumnIndex, col.min - 1, "from column index"); // 1 based
+            Assert.AreEqual(toColumnIndex, col.max - 1, "to column index"); // 1 based
+            Assert.IsFalse(col.IsSetHidden(), "isSetHidden");
+            Assert.IsTrue(col.IsSetCollapsed(), "isSetCollapsed");
+            //assertTrue("isSetCollapsed", !col.isSetCollapsed() || !col.getCollapsed());
+            //assertFalse("getCollapsed", col.getCollapsed());
+        }
+
+        /**
          * TODO - while this is internally consistent, I'm not
          *  completely clear in all cases what it's supposed to
          *  be doing... Someone who understands the goals a little
@@ -2211,8 +2285,7 @@ namespace TestCases.XSSF.UserModel
             ICell cell6 = row3.CreateCell(1);
             cell6.SetCellValue(3);
 
-            return wb;
-        }
+            return wb;        }
 
         [Test]
         public void TestCreateTwoPivotTablesInOneSheet()

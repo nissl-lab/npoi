@@ -10726,6 +10726,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             hyperlinkField = new List<CT_Hyperlink>(array);
         }
+
+        public int SizeOfHyperlinkArray()
+        {
+            return this.hyperlinkField == null ? 0 : this.hyperlinkField.Count;
+        }
+
+        public void RemoveHyperlink(int index)
+        {
+            if (this.hyperlink == null)
+                return;
+            this.hyperlinkField.RemoveAt(index);
+        }
+
         [XmlElement("hyperlink", IsNullable = false)]
         public List<CT_Hyperlink> hyperlink
         {
