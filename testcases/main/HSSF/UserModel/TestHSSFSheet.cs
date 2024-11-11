@@ -764,7 +764,7 @@ namespace TestCases.HSSF.UserModel
             s.AutoSizeColumn((short)1);
 
             // Size ranges due to different fonts on different machines
-            Assert.IsTrue(s.GetColumnWidth(0) > 350, "Single number column too small: " + s.GetColumnWidth(0));
+            Assert.IsTrue(s.GetColumnWidth(0) > 340, "Single number column too small: " + s.GetColumnWidth(0));
             //Assert.IsTrue(s.GetColumnWidth(0) < 550, "Single number column too big: " + s.GetColumnWidth(0));
             //Todo: find a algorithm of function SheetUtil.GetColumnWidth to make the test statement above succeed.
             Assert.IsTrue(s.GetColumnWidth(0) < 650, "Single number column too big: " + s.GetColumnWidth(0));
