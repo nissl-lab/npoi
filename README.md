@@ -35,23 +35,23 @@ Get Started with NPOI
 
 [NPOI Changelog](https://github.com/nissl-lab/npoi/wiki/Changelog)
 
+[NPOI code examples (This example repo is private. You can get access by sponsoring me)](https://github.com/sponsors/tonyqus)
+
 Advantage of NPOI
 =================
-a. [Huge examples (This example repo is private. You can get access by sponsoring me)](https://github.com/sponsors/tonyqus)
+a. It's totally free to use
 
-b. It's totally free to use
+b. Cover most features of Excel (cell style, data format, formula and so on)
 
-c. Cover most features of Excel (cell style, data format, formula and so on)
+c. Supported formats: xls, xlsx, docx.
 
-d. Supported formats: xls, xlsx, docx.
+d. Designed to be interface-oriented (take a look at NPOI.SS namespace)
 
-e. Designed to be interface-oriented (take a look at NPOI.SS namespace)
+e. Support not only export but also import
 
-f. Support not only export but also import
+f. Real successful cases all over the world
 
-g. Real successful cases all over the world
-
-h. Works on both Windows and Linux 
+g. Works on both Windows and Linux 
 
 System Requirement
 ===================
