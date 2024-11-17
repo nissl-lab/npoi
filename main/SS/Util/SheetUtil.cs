@@ -565,11 +565,12 @@ namespace NPOI.SS.Util
          * @param sheet the sheet to calculate
          * @param column    0-based index of the column
          * @param useMergedCells    whether to use merged cells
+         * @param maxRows   limit the scope to maxRows rows to speed up the function, or leave 0 (optional)
          * @return  the width in pixels or -1 if all cells are empty
          */
-        public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells)
+        public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells, int maxRows = 0)
         {
-            return GetColumnWidth(sheet, column, useMergedCells, sheet.FirstRowNum, sheet.LastRowNum);
+            return GetColumnWidth(sheet, column, useMergedCells, sheet.FirstRowNum, sheet.LastRowNum, maxRows);
         }
         /**
          * Compute width of a column based on a subset of the rows and return the result

@@ -1035,8 +1035,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             sw.Write(">");
-            if (this.sectPr != null)
-                this.sectPr.Write(sw, "sectPr");
             if (this.pPrChange != null)
                 this.pPrChange.Write(sw, "pPrChange");
             if (this.pStyle != null)
@@ -1105,6 +1103,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.outlineLvl.Write(sw, "outlineLvl");
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
+            if(this.sectPr != null)
+                this.sectPr.Write(sw, "sectPr");
             if (this.textDirection != null)
                 this.textDirection.Write(sw, "textDirection");
             if (this.textAlignment != null)
@@ -2637,27 +2637,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_SectPr()
         {
-            //this.sectPrChangeField = new CT_SectPrChange();
-            //this.printerSettingsField = new CT_Rel();
-            this.docGridField = new CT_DocGrid();
-            this.docGrid.type = ST_DocGrid.lines;
-            this.docGrid.typeSpecified = true;
-            this.docGrid.linePitch = "312";
-            
-            //this.rtlGutterField = new CT_OnOff();
-            //this.bidiField = new CT_OnOff();
-            //this.textDirectionField = new CT_TextDirection();
-            //this.titlePgField = new CT_OnOff();
-            //this.noEndnoteField = new CT_OnOff();
-            //this.vAlignField = new CT_VerticalJc();
-            //this.formProtField = new CT_OnOff();
             this.colsField = new CT_Columns();
             this.cols.space = 425;
             this.cols.spaceSpecified = true;
-            //this.pgNumTypeField = new CT_PageNumber();
-            //this.lnNumTypeField = new CT_LineNumber();
-            //this.pgBordersField = new CT_PageBorders();
-            //this.paperSrcField = new CT_PaperSource();
             this.pgMarField = new CT_PageMar();
             this.pgMar.top = 1440;
             this.pgMar.right = 1800;
@@ -7647,7 +7629,8 @@ cnfStyleField == null;
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
-            XmlHelper.WriteAttribute(sw, "w:clear", this.clear.ToString());
+            if(this.clear!= ST_BrClear.none)
+                XmlHelper.WriteAttribute(sw, "w:clear", this.clear.ToString());
             sw.Write(">");
             sw.WriteEndW(nodeName);
         }

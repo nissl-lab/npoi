@@ -65,7 +65,8 @@ namespace NPOI.XSSF
                 throw new ArgumentException("Expected an instance of XSSFWorkbook or SXSSFWorkbook");
             }
 
-            XSSFWorkbook result;            try
+            XSSFWorkbook result;
+            try
             {
                 MemoryStream baos = new MemoryStream(8192);
                 wb.Write(baos, false);

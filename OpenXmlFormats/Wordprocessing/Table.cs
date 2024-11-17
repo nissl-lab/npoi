@@ -1912,9 +1912,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<w:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "w:val", this.val);
             if(this.hRule!= ST_HeightRule.auto)
                 XmlHelper.WriteAttribute(sw, "w:hRule", this.hRule.ToString());
+            XmlHelper.WriteAttribute(sw, "w:val", this.val);
             sw.Write("/>");
         }
 
@@ -5703,8 +5703,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:rsidR", this.rsidR);
             XmlHelper.WriteAttribute(sw, "w:rsidRPr", this.rsidRPr);
-            //XmlHelper.WriteAttribute(sw, "w14:paraId", this.paraIdField);
-            //XmlHelper.WriteAttribute(sw, "w14:textId", this.textIdField);
+            XmlHelper.WriteAttribute(sw, "w14:paraId", this.paraIdField);
+            XmlHelper.WriteAttribute(sw, "w14:textId", this.textIdField);
             XmlHelper.WriteAttribute(sw, "w:rsidDel", this.rsidDel);
             XmlHelper.WriteAttribute(sw, "w:rsidTr", this.rsidTr);
             sw.Write(">");
