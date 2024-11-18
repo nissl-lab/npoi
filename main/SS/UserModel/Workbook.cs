@@ -24,29 +24,6 @@ namespace NPOI.SS.UserModel
     using System.Collections.Generic;
     using NPOI.Util;
 
-    public enum SheetState : int
-    {
-        /// <summary>
-        /// Indicates the sheet is visible.
-        /// </summary>
-        Visible = 0,
-
-        /// <summary>
-        /// Indicates the book window is hidden, but can be shown by the user via the user interface.
-        /// </summary>
-        Hidden = 1,
-
-        /// <summary>
-        /// Indicates the sheet is hidden and cannot be shown in the user interface (UI).
-        /// </summary>
-        /// <remarks>
-        /// In Excel this state is only available programmatically in VBA:
-        /// ThisWorkbook.Sheets("MySheetName").Visible = xlSheetVeryHidden
-        /// 
-        /// </remarks>
-        VeryHidden = 2
-    }
-
     /// <summary>
     /// High level interface of a Excel workbook.  This is the first object most users 
     /// will construct whether they are reading or writing a workbook.  It is also the
@@ -416,7 +393,7 @@ namespace NPOI.SS.UserModel
          * @param sheetIx the sheet index (0-based)
          * @param hidden True to mark the sheet as hidden, false otherwise
          */
-        void SetSheetHidden(int sheetIx, SheetState hidden);
+        void SetSheetHidden(int sheetIx, SheetVisibility hidden);
 
         /**
          * Hide or unhide a sheet.
@@ -428,7 +405,29 @@ namespace NPOI.SS.UserModel
          * @param sheetIx The sheet number
          * @param hidden 0 for not hidden, 1 for hidden, 2 for very hidden
          */
+        [Obsolete]
         void SetSheetHidden(int sheetIx, int hidden);
+
+        /**
+         * Get the visibility (visible, hidden, very hidden) of a sheet in this workbook
+         *
+         * @param sheetIx  the index of the sheet
+         * @return the sheet visibility
+         * @since POI 3.16 beta 2
+         */
+        SheetVisibility GetSheetVisibility(int sheetIx);
+
+        /**
+         * Hide or unhide a sheet.
+         *
+         * Please note that the sheet currently set as active sheet (sheet 0 in a newly 
+         * created workbook or the one set via setActiveSheet()) cannot be hidden.
+         *  
+         * @param sheetIx     the sheet index (0-based)
+         * @param visibility  the sheet visibility to set
+         * @since POI 3.16 beta 2
+         */
+        void SetSheetVisibility(int sheetIx, SheetVisibility visibility);
 
         /// <summary>
         /// Register a new toolpack in this workbook.
@@ -444,7 +443,7 @@ namespace NPOI.SS.UserModel
         /// <returns>True if the date systems used in the workbook starts in 1904</returns>
         bool IsDate1904();
 
-        void Close();
+        //void Close();
 
         /// <summary>
         /// Returns the spreadsheet version (EXCLE97) of this workbook

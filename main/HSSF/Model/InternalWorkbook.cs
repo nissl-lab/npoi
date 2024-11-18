@@ -775,6 +775,31 @@ namespace NPOI.HSSF.Model
         {
             return GetBoundSheetRec(sheetnum).IsVeryHidden;
         }
+
+        /**
+         * Gets the hidden flag for a given sheet.
+         * Note that a sheet could instead be
+         *  set to be very hidden, which is different
+         *  ({@link #isSheetVeryHidden(int)})
+         *
+         * @param sheetnum the sheet number (0 based)
+         * @return True if sheet is hidden
+         * @since 3.16 beta 2
+         */
+        public SheetVisibility GetSheetVisibility(int sheetnum)
+        {
+            BoundSheetRecord bsr = GetBoundSheetRec(sheetnum);
+            if(bsr.IsVeryHidden)
+            {
+                return SheetVisibility.VeryHidden;
+            }
+            if(bsr.IsHidden)
+            {
+                return SheetVisibility.Hidden;
+            }
+            return SheetVisibility.Visible;
+        }
+
         /**
          * Hide or Unhide a sheet
          * 
@@ -784,40 +809,19 @@ namespace NPOI.HSSF.Model
 
         public void SetSheetHidden(int sheetnum, bool hidden)
         {
-            BoundSheetRecord bsr = boundsheets[sheetnum];
-            bsr.IsHidden=hidden;
+            SetSheetHidden(sheetnum, hidden ? SheetVisibility.Hidden : SheetVisibility.Visible);
         }
         /**
- * Hide or unhide a sheet.
- *  0 = not hidden
- *  1 = hidden
- *  2 = very hidden.
- * 
- * @param sheetnum The sheet number
- * @param hidden 0 for not hidden, 1 for hidden, 2 for very hidden
- */
-        public void SetSheetHidden(int sheetnum, int hidden)
+         * Hide or unhide a sheet.
+         * 
+         * @param sheetnum The sheet number
+         * @param visibility the sheet visibility to set (visible, hidden, very hidden)
+         */
+        public void SetSheetHidden(int sheetnum, SheetVisibility visibility)
         {
             BoundSheetRecord bsr = GetBoundSheetRec(sheetnum);
-            bool h = false;
-            bool vh = false;
-            if (hidden == 0)
-            {
-            }
-            else if (hidden == 1)
-            {
-                h = true;
-            }
-            else if (hidden == 2)
-            {
-                vh = true;
-            }
-            else
-            {
-                throw new ArgumentException("Invalid hidden flag " + hidden + " given, must be 0, 1 or 2");
-            }
-            bsr.IsHidden = (h);
-            bsr.IsVeryHidden = (vh);
+            bsr.IsHidden = visibility == SheetVisibility.Hidden;
+            bsr.IsVeryHidden = visibility == SheetVisibility.VeryHidden;
         }
         /**
          * Get the sheet's index
