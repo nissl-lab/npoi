@@ -42,6 +42,7 @@ namespace TestCases.SS.UserModel
         private static String TEST_32 = "Some text with 32 characters to ";
         private static String TEST_255 = "Some very long text that is exactly 255 characters, which are allowed here, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla.....";
         private static String TEST_256 = "Some very long text that is longer than the 255 characters allowed in HSSF here, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla1";
+
         private static String TEST_SPECIAL_TITLE = "special \n\t\r\u0002characters";
         private static String TEST_SPECIAL = "Some text with special \n\t\r\u0002characters to s";
 
@@ -1817,6 +1818,7 @@ namespace TestCases.SS.UserModel
 
             // 32 length title and 255 length text wrok for both
             checkFailures(dataValidation, TEST_32, TEST_255, false);
+
             dataValidation.ShowErrorBox = false;
             sheet.AddValidationData(dataValidation);
 

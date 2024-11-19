@@ -495,11 +495,16 @@ namespace NPOI.XSSF.Streaming
             _sh.ValidateMergedRegions();
         }
 
-
         public void AddValidationData(IDataValidation dataValidation)
         {
             _sh.AddValidationData(dataValidation);
         }
+
+        public void RemoveDataValidation(IDataValidation dataValidation)
+        {
+            _sh.RemoveDataValidation(dataValidation);
+        }
+        
         /**
          * Adjusts the column width to fit the contents.
          *
@@ -1468,6 +1473,11 @@ namespace NPOI.XSSF.Streaming
         public void AutoSizeRow(int row, bool useMergedCells)
         {
             throw new NotImplementedException();
+        }
+
+        IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
+        {
+            return ((IEnumerable<IRow>) _sh).GetEnumerator();
         }
     }
 }

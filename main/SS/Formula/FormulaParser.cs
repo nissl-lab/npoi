@@ -1405,7 +1405,11 @@ namespace NPOI.SS.Formula
 
             public override String ToString()
             {
-                return this.GetType().Name + " [" + _rep + "]";
+                StringBuilder sb = new StringBuilder(64);
+                sb.Append(this.GetType().Name).Append(" [");
+                sb.Append(_rep);
+                sb.Append("]");
+                return sb.ToString();
             }
         }
 

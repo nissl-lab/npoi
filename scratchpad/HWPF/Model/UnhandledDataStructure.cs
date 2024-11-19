@@ -25,13 +25,17 @@ namespace NPOI.HWPF.Model
         public UnhandledDataStructure(byte[] buf, int offset, int length)
         {
             //    Console.WriteLine("Yes, using my code");
-            _buf = new byte[length];
             if (offset + length > buf.Length)
             {
                 throw new IndexOutOfRangeException("buffer length is " + buf.Length +
                                                     "but code is trying to read " + length + " from offset " + offset);
             }
-            Array.Copy(buf, offset, _buf, 0, length);
+            if(offset < 0 || length < 0)
+            {
+                throw new IndexOutOfBoundsException("Offset and Length must both be >= 0, negative " +
+                        "indicies are not permitted - code is tried to read " + length + " from offset " + offset);
+            }
+            _buf = Array.Copy(buf, offset, _buf, 0, length);
         }
 
         internal byte[] GetBuf()

@@ -57,7 +57,7 @@ namespace NPOI.HSSF.Record.CF
 
             if (percentMax < 0 || percentMax > 100)
                 //log.Log(POILogger.WARN, "Inconsistent Minimum Percentage found " + percentMin);
-                Console.WriteLine("Inconsistent Minimum Percentage found " + percentMin);
+                Console.WriteLine("Inconsistent Maximum Percentage found " + percentMax);
 
             color = new ExtendedColor(in1);
             thresholdMin = new DataBarThreshold(in1);

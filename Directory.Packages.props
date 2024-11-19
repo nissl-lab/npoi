@@ -1,0 +1,29 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="BenchmarkDotNet" Version="0.13.12" />
+    <PackageVersion Include="BouncyCastle.Cryptography" Version="2.3.1" />
+    <PackageVersion Include="Enums.NET" Version="4.0.1" />
+    <PackageVersion Include="ExtendedNumerics.BigDecimal" Version="2025.1001.2.129" />
+    <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.3" />
+    <PackageVersion Include="ICSharpCode.TextEditor" Version="3.2.1.6466" />
+    <PackageVersion Include="MathNet.Numerics.Signed" Version="5.0.0" />
+    <PackageVersion Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+    <PackageVersion Include="NSubstitute" Version="5.1.0" />
+    <PackageVersion Include="NuGetizer" Version="1.1.0" />
+    <PackageVersion Include="NUnit" Version="3.14.0" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageVersion Include="SharpZipLib" Version="1.4.2" />
+    <PackageVersion Include="SixLabors.Fonts" Version="1.0.1" />
+    <PackageVersion Include="SixLabors.ImageSharp" Version="2.1.9" />
+    <PackageVersion Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
+    <PackageVersion Include="System.Formats.Asn1" Version="8.0.1" />
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="8.0.1" />
+    <PackageVersion Include="System.Security.Cryptography.Xml" Version="8.0.2" />
+  </ItemGroup>
+</Project>

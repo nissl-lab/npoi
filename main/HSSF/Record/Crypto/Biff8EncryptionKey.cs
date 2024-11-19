@@ -138,10 +138,9 @@ namespace NPOI.HSSF.Record.Crypto
                 using (MemoryStream baos = RecyclableMemory.GetStream(4))
                 {
                     new LittleEndianOutputStream(baos).WriteInt(keyBlockNo);
-                    byte[] baosToArray = baos.ToArray();
-                    byte[] data = new byte[baosToArray.Length + _keyDigest.Length];
+                    byte[] data = new byte[(int)baos.Length + _keyDigest.Length];
                     Array.Copy(_keyDigest, 0, data, 0, _keyDigest.Length);
-                    Array.Copy(baosToArray, 0, data, _keyDigest.Length, baosToArray.Length);
+                    Array.Copy(baos.GetBuffer(), 0, data, _keyDigest.Length, (int)baos.Length);
 
                     byte[] digest = md5.ComputeHash(data);
                     return new RC4(digest);
