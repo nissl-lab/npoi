@@ -945,11 +945,18 @@ namespace NPOI.XSSF.Streaming
             return XssfWorkbook.IsSheetVeryHidden(sheetIx);
         }
 
-        public void SetSheetHidden(int sheetIx, SheetState hidden)
+        public SheetVisibility GetSheetVisibility(int sheetIx)
+        {
+            return _wb.GetSheetVisibility(sheetIx);
+        }
+
+        [Obsolete]
+        public void SetSheetHidden(int sheetIx, SheetVisibility hidden)
         {
             XssfWorkbook.SetSheetHidden(sheetIx, hidden);
         }
 
+        [Obsolete]
         public void SetSheetHidden(int sheetIx, int hidden)
         {
             XssfWorkbook.SetSheetHidden(sheetIx, hidden);
@@ -959,7 +966,10 @@ namespace NPOI.XSSF.Streaming
         {
             XssfWorkbook.AddToolPack(toopack);
         }
-
+        public void SetSheetVisibility(int sheetIx, SheetVisibility visibility)
+        {
+            _wb.SetSheetVisibility(sheetIx, visibility);
+        }
 
         /// <summary>
         /// Returns the spreadsheet version (EXCLE2007) of this workbook

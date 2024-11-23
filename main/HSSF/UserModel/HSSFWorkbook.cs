@@ -759,32 +759,57 @@ namespace NPOI.HSSF.UserModel
             ValidateSheetIndex(sheetIx);
             return workbook.IsSheetVeryHidden(sheetIx);
         }
+
+        public SheetVisibility GetSheetVisibility(int sheetIx)
+        {
+            return workbook.GetSheetVisibility(sheetIx);
+        }
+
         /// <summary>
         /// Hide or Unhide a sheet
         /// </summary>
         /// <param name="sheetIx">The sheet index</param>
-        /// <param name="hidden">True to mark the sheet as hidden, false otherwise</param>
-        public void SetSheetHidden(int sheetIx, SheetState hidden)
+        /// <param name="hidden"></param>
+        [Obsolete]
+        public void SetSheetHidden(int sheetIx, SheetVisibility hidden)
         {
-            ValidateSheetIndex(sheetIx);
-            WorkbookUtil.ValidateSheetState(hidden);
-            workbook.SetSheetHidden(sheetIx, (int)hidden);
+            SetSheetVisibility(sheetIx, hidden);
         }
         /// <summary>
         /// Hide or unhide a sheet.
         /// </summary>
         /// <param name="sheetIx">The sheet number</param>
         /// <param name="hidden">0 for not hidden, 1 for hidden, 2 for very hidden</param>
+        [Obsolete]
         public void SetSheetHidden(int sheetIx, int hidden)
         {
-            ValidateSheetIndex(sheetIx);
-            workbook.SetSheetHidden(sheetIx, hidden);
+            switch(hidden)
+            {
+                case 0:
+                    SetSheetVisibility(sheetIx, SheetVisibility.Visible);
+                    break;
+                case 1:
+                    SetSheetVisibility(sheetIx, SheetVisibility.Hidden);
+                    break;
+                case 2:
+                    SetSheetVisibility(sheetIx, SheetVisibility.VeryHidden);
+                    break;
+                default:
+                    throw new ArgumentException("Invalid sheet state : " + hidden + "\n" +
+                            "Sheet state must beone of the Workbook.SHEET_STATE_* constants");
+            }
         }
         public void SetSheetHidden(int sheetIx, bool hidden)
         {
-            ValidateSheetIndex(sheetIx);
-            workbook.SetSheetHidden(sheetIx, hidden);
+            SetSheetVisibility(sheetIx, hidden ? SheetVisibility.Hidden : SheetVisibility.Visible);
         }
+
+        public void SetSheetVisibility(int sheetIx, SheetVisibility visibility)
+        {
+            ValidateSheetIndex(sheetIx);
+            workbook.SetSheetHidden(sheetIx, visibility);
+        }
+
         /// <summary>
         /// Returns the index of the sheet by his name
         /// </summary>

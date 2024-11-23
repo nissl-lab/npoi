@@ -1502,7 +1502,26 @@ namespace NPOI.XSSF.UserModel
 
                 worksheet.hyperlinks.SetHyperlinkArray(ctHls);
             }
-
+            else
+            {
+                if (worksheet.hyperlinks != null)
+                {
+                    int count = worksheet.hyperlinks.SizeOfHyperlinkArray();
+                    for (int i = count - 1; i >= 0; i--)
+                    {
+                        worksheet.hyperlinks.RemoveHyperlink(i);
+                    }
+                    // For some reason, we have to remove the hyperlinks one by one from the CTHyperlinks array
+                    // before unsetting the hyperlink array.
+                    // Resetting the hyperlink array seems to break some XML nodes.
+                    //worksheet.getHyperlinks().setHyperlinkArray(new CTHyperlink[0]);
+                    worksheet.UnsetHyperlinks();
+                }
+                else
+                {
+                    // nothing to do
+                }
+            }
             foreach (XSSFRow row in _rows.Values)
             {
                 row.OnDocumentWrite();

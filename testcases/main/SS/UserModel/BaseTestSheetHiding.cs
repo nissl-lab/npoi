@@ -58,7 +58,8 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
-        public void TestSheetHidden()
+        [Obsolete]
+        public void TestSheetHiddenOld()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             wb.CreateSheet("MySheet");
@@ -66,15 +67,15 @@ namespace TestCases.SS.UserModel
             Assert.IsFalse(wb.IsSheetHidden(0));
             Assert.IsFalse(wb.IsSheetVeryHidden(0));
 
-            wb.SetSheetHidden(0, SheetState.Hidden);
+            wb.SetSheetHidden(0, SheetVisibility.Hidden);
             Assert.IsTrue(wb.IsSheetHidden(0));
             Assert.IsFalse(wb.IsSheetVeryHidden(0));
 
-            wb.SetSheetHidden(0, SheetState.VeryHidden);
+            wb.SetSheetHidden(0, SheetVisibility.VeryHidden);
             Assert.IsFalse(wb.IsSheetHidden(0));
             Assert.IsTrue(wb.IsSheetVeryHidden(0));
 
-            wb.SetSheetHidden(0, SheetState.Visible);
+            wb.SetSheetHidden(0, SheetVisibility.Visible);
             Assert.IsFalse(wb.IsSheetHidden(0));
             Assert.IsFalse(wb.IsSheetVeryHidden(0));
 
@@ -96,6 +97,34 @@ namespace TestCases.SS.UserModel
             {
                 // ok
             }
+
+            wb.Close();
+        }
+
+        [Test]
+        public void TestSheetVisibility()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            wb.CreateSheet("MySheet");
+
+            Assert.IsFalse(wb.IsSheetHidden(0));
+            Assert.IsFalse(wb.IsSheetVeryHidden(0));
+            Assert.AreEqual(SheetVisibility.Visible, wb.GetSheetVisibility(0));
+
+            wb.SetSheetVisibility(0, SheetVisibility.Hidden);
+            Assert.IsTrue(wb.IsSheetHidden(0));
+            Assert.IsFalse(wb.IsSheetVeryHidden(0));
+            Assert.AreEqual(SheetVisibility.Hidden, wb.GetSheetVisibility(0));
+
+            wb.SetSheetVisibility(0, SheetVisibility.VeryHidden);
+            Assert.IsFalse(wb.IsSheetHidden(0));
+            Assert.IsTrue(wb.IsSheetVeryHidden(0));
+            Assert.AreEqual(SheetVisibility.VeryHidden, wb.GetSheetVisibility(0));
+
+            wb.SetSheetVisibility(0, SheetVisibility.Visible);
+            Assert.IsFalse(wb.IsSheetHidden(0));
+            Assert.IsFalse(wb.IsSheetVeryHidden(0));
+            Assert.AreEqual(SheetVisibility.Visible, wb.GetSheetVisibility(0));
 
             wb.Close();
         }
@@ -151,7 +180,7 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestHide()
         {
-            wbU.SetSheetHidden(0,SheetState.Hidden);
+            wbU.SetSheetHidden(0,SheetVisibility.Hidden);
             Assert.IsTrue(wbU.IsSheetHidden(0));
             Assert.IsFalse(wbU.IsSheetHidden(1));
             IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wbU);
@@ -168,7 +197,7 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestUnHide()
         {
-            wbH.SetSheetHidden(0,SheetState.Visible);
+            wbH.SetSheetHidden(0,SheetVisibility.Visible);
             Assert.IsFalse(wbH.IsSheetHidden(0));
             Assert.IsFalse(wbH.IsSheetHidden(1));
             IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wbH);

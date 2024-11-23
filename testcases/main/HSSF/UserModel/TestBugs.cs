@@ -1601,8 +1601,8 @@ namespace TestCases.HSSF.UserModel
             Assert.IsFalse(wb.IsSheetHidden(2));
             Assert.IsTrue(wb.IsSheetVeryHidden(2));
 
-            // Change 0 to be very hidden, and re-load
-            wb.SetSheetHidden(0, 2);
+            // Change sheet 0 to be very hidden, and re-load
+            wb.SetSheetVisibility(0, SheetVisibility.VeryHidden);
 
             HSSFWorkbook nwb = WriteOutAndReadBack(wb);
 
@@ -1614,76 +1614,59 @@ namespace TestCases.HSSF.UserModel
             Assert.IsTrue(nwb.IsSheetVeryHidden(2));
         }
 
-        ///**
-        // * header / footer text too long
-        // */
-        //[Test]
-        //public void Test45777()
-        //{
-        //    HSSFWorkbook wb = new HSSFWorkbook();
-        //    Sheet s = wb.CreateSheet();
+        /// <summary>
+        /// The resolution for bug 45777 assumed that the maximum text length in a header / footer
+        /// record was 256 bytes.  This assumption appears to be wrong.  Since the fix for bug 47244,
+        /// POI now supports header / footer text lengths beyond 256 bytes.
+        /// </summary>
+        [Test]
+        public void Bug45777()
+        {
 
-        //    String s248 = "";
-        //    for (int i = 0; i < 248; i++)
-        //    {
-        //        s248 += "x";
-        //    }
-        //    String s249 = s248 + "1";
-        //    String s250 = s248 + "12";
-        //    String s251 = s248 + "123";
-        //    Assert.AreEqual(248, s248.Length);
-        //    Assert.AreEqual(249, s249.Length);
-        //    Assert.AreEqual(250, s250.Length);
-        //    Assert.AreEqual(251, s251.Length);
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet s = wb.CreateSheet() as HSSFSheet;
 
+            char[] cc248 = new char[248];
+            Arrays.Fill(cc248, 'x');
+            String s248 = new String(cc248);
 
-        //    // Try on headers
-        //    s.Header.Center = (s248);
-        //    Assert.AreEqual(254, s.Header.RawHeader.Length);
-        //    WriteOutAndReadBack(wb);
-
-        //    s.Header.Center = (s249);
-        //    Assert.AreEqual(255, s.Header.RawHeader.Length);
-        //    WriteOutAndReadBack(wb);
-
-        //    try
-        //    {
-        //        s.Header.Center = (s250); // 256
-        //        Assert.Fail();
-        //    }
-        //    catch (ArgumentException e) { }
-
-        //    try
-        //    {
-        //        s.Header.Center = (s251); // 257
-        //        Assert.Fail();
-        //    }
-        //    catch (ArgumentException e) { }
+            String s249 = s248 + "1";
+            String s250 = s248 + "12";
+            String s251 = s248 + "123";
+            Assert.AreEqual(248, s248.Length);
+            Assert.AreEqual(249, s249.Length);
+            Assert.AreEqual(250, s250.Length);
+            Assert.AreEqual(251, s251.Length);
 
 
-        //    // Now try on footers
-        //    s.Footer.Center = (s248);
-        //    Assert.AreEqual(254, s.Footer.RawFooter.Length);
-        //    WriteOutAndReadBack(wb);
+            // Try on headers
+            s.Header.Center = (s248);
+            Assert.AreEqual(254, (s.Header as HSSFHeader).RawText.Length);
+            WriteOutAndReadBack(wb).Close();
 
-        //    s.Footer.Center = (s249);
-        //    Assert.AreEqual(255, s.Footer.RawFooter.Length);
-        //    WriteOutAndReadBack(wb);
+            s.Header.Center = (s251);
+            Assert.AreEqual(257, (s.Header as HSSFHeader).RawText.Length);
+            WriteOutAndReadBack(wb).Close();
 
-        //    try
-        //    {
-        //        s.Footer.Center = (s250); // 256
-        //        Assert.Fail();
-        //    }
-        //    catch (ArgumentException e) { }
+            // header can be more than 256 bytes
+            s.Header.Center = (s250); // 256 bytes required
+            s.Header.Center = (s251); // 257 bytes required
 
-        //    try
-        //    {
-        //        s.Footer.Center = (s251); // 257
-        //        Assert.Fail();
-        //    }
-        //    catch (ArgumentException e) { }
-        //}
+            // Now try on footers
+            s.Footer.Center = (s248);
+            Assert.AreEqual(254, (s.Footer as HSSFFooter).RawText.Length);
+            WriteOutAndReadBack(wb).Close();
+
+            s.Footer.Center = (s251);
+            Assert.AreEqual(257, (s.Footer as HSSFFooter).RawText.Length);
+            WriteOutAndReadBack(wb).Close();
+
+            // footer can be more than 256 bytes
+            s.Footer.Center = (s250); // 256 bytes required
+            s.Footer.Center = (s251); // 257 bytes required
+
+            wb.Close();
+        }
 
         /**
          * Charts with long titles

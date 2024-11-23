@@ -2,6 +2,7 @@ What's NPOI
 ===================
 [![NuGet](https://img.shields.io/nuget/dt/npoi)](https://www.nuget.org/packages/NPOI)
 [![Telegram](https://img.shields.io/badge/Chat-Telegram-2CA5E0.svg?logo=telegram&logoColor=white)](https://t.me/npoidevs)
+[![WhatsApp](https://img.shields.io/badge/Chat-WhatsApp-25D366?logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/CKD9wv3eW37K20CPUjCXwy)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square&logo=Apache)](LICENSE)
 [![traffic](https://api.segment.io/v1/pixel/track?data=ewogICJ3cml0ZUtleSI6ICJBV2NjaWd1UkhKODBuNkJ4WlI4cHRaRzBINzY0RmJObCIsCiAgInVzZXJJZCI6ICJ0b255cXVzIiwKICAiZXZlbnQiOiAiTlBPSSBIb21lcGFnZSIKfQ==
 )](#)
@@ -31,31 +32,27 @@ Get Started with NPOI
 
 [How to use NPOI on Linux](https://github.com/nissl-lab/npoi/wiki/How-to-use-NPOI-on-Linux)
 
-[ORM on NPOI](https://github.com/nissl-lab/npoi/wiki/ORM-on-NPOI)
+[Useful Packages based on NPOI](https://github.com/nissl-lab/npoi/wiki/ORM-on-NPOI)
 
 [NPOI Changelog](https://github.com/nissl-lab/npoi/wiki/Changelog)
 
-Telegram User Group
-================
-Join us on telegram: https://t.me/npoidevs
+[NPOI code examples (This example repo is private. You can get access by sponsoring me)](https://github.com/sponsors/tonyqus)
 
 Advantage of NPOI
 =================
-a. [Huge examples (This example repo is private. You can sponsor me with NPOI example access option)](https://github.com/sponsors/tonyqus)
+a. It's totally free to use
 
-b. It's totally free to use
+b. Cover most features of Excel (cell style, data format, formula and so on)
 
-c. Cover most features of Excel (cell style, data format, formula and so on)
+c. Supported formats: xls, xlsx, docx.
 
-d. Supported formats: xls, xlsx, docx.
+d. Designed to be interface-oriented (take a look at NPOI.SS namespace)
 
-e. Designed to be interface-oriented (take a look at NPOI.SS namespace)
+e. Support not only export but also import
 
-f. Support not only export but also import
+f. Real successful cases all over the world
 
-g. Real successful cases all over the world
-
-h. Works on both Windows and Linux 
+g. Works on both Windows and Linux 
 
 System Requirement
 ===================
@@ -68,3 +65,5 @@ System Requirement
 Contributors
 ===================
 ![Contributors](https://contrib.rocks/image?repo=nissl-lab/npoi)
+
+<a href="https://info.flagcounter.com/bndt"><img src="https://s01.flagcounter.com/count/bndt/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_20/viewers_0/labels_1/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
