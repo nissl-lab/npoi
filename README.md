@@ -32,7 +32,7 @@ Get Started with NPOI
 
 [How to use NPOI on Linux](https://github.com/nissl-lab/npoi/wiki/How-to-use-NPOI-on-Linux)
 
-[ORM on NPOI](https://github.com/nissl-lab/npoi/wiki/ORM-on-NPOI)
+[Useful Packages based on NPOI](https://github.com/nissl-lab/npoi/wiki/ORM-on-NPOI)
 
 [NPOI Changelog](https://github.com/nissl-lab/npoi/wiki/Changelog)
 
