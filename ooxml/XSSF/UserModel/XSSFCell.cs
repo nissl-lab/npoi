@@ -283,10 +283,11 @@ namespace NPOI.XSSF.UserModel
          *        precalculated value, for bools we'll Set its value. For other types we
          *        will change the cell to a bool cell and Set its value.
          */
-        public void SetCellValue(bool value)
+        public ICell SetCellValue(bool value)
         {
             _cell.t = (ST_CellType.b);
             _cell.v = (value ? TRUE_AS_STRING : FALSE_AS_STRING);
+            return this;
         }
 
         /**
@@ -342,7 +343,7 @@ namespace NPOI.XSSF.UserModel
          *        precalculated value, for numerics we'll Set its value. For other types we
          *        will change the cell to a numeric cell and Set its value.
          */
-        public void SetCellValue(double value)
+        public ICell SetCellValue(double value)
         {
             if (Double.IsInfinity(value))
             {
@@ -363,6 +364,8 @@ namespace NPOI.XSSF.UserModel
                 _cell.t = (ST_CellType.n);
                 _cell.v = (value.ToString(CultureInfo.InvariantCulture));
             }
+
+            return this;
         }
 
         /**
@@ -464,9 +467,9 @@ namespace NPOI.XSSF.UserModel
          * change the cell to a string cell and Set its value.
          * If value is null then we will change the cell to a Blank cell.
          */
-        public void SetCellValue(String str)
+        public ICell SetCellValue(String str)
         {
-            SetCellValue(str == null ? null : new XSSFRichTextString(str));
+            return SetCellValue(str == null ? null : new XSSFRichTextString(str));
         }
 
         /**
@@ -477,12 +480,12 @@ namespace NPOI.XSSF.UserModel
          * change the cell to a string cell and Set its value.
          * If value is null then we will change the cell to a Blank cell.
          */
-        public void SetCellValue(IRichTextString str)
+        public ICell SetCellValue(IRichTextString str)
         {
             if (str == null || str.String == null)
             {
                 SetCellType(CellType.Blank);
-                return;
+                return this;
             }
 
             if (str.Length > SpreadsheetVersion.EXCEL2007.MaxTextLength)
@@ -512,6 +515,8 @@ namespace NPOI.XSSF.UserModel
                     }
                     break;
             }
+
+            return this;
         }
 
         /// <summary>
@@ -617,13 +622,13 @@ namespace NPOI.XSSF.UserModel
          * @throws InvalidOperationException if the operation is not allowed, for example,
          *  when the cell is a part of a multi-cell array formula
          */
-        public void SetCellFormula(String formula)
+        public ICell SetCellFormula(String formula)
         {
             if (IsPartOfArrayFormulaGroup)
             {
                 NotifyArrayFormulaChanging();
             }
-            SetFormula(formula, FormulaType.Cell);
+            return SetFormula(formula, FormulaType.Cell);
         }
 
         internal void SetCellArrayFormula(String formula, CellRangeAddress range)
@@ -655,13 +660,13 @@ namespace NPOI.XSSF.UserModel
             //un-register the single-cell array formula from the parent sheet through public interface
             Row.Sheet.RemoveArrayFormula(this);
         }
-        private void SetFormula(String formula, FormulaType formulaType)
+        private ICell SetFormula(String formula, FormulaType formulaType)
         {
             XSSFWorkbook wb = (XSSFWorkbook)_row.Sheet.Workbook;
             if (formula == null)
             {
                 RemoveFormula();
-                return;
+                return this;
             }
 
             if (wb.CellFormulaValidation)
@@ -670,10 +675,10 @@ namespace NPOI.XSSF.UserModel
                 //validate through the FormulaParser
                 FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(this.Sheet), RowIndex);
             }
-            CT_CellFormula f = new CT_CellFormula();
-            f.Value = formula;
-            _cell.f= (f);
+            CT_CellFormula f = new CT_CellFormula { Value = formula };
+            _cell.f= f;
             if (_cell.IsSetV()) _cell.unsetV();
+            return this;
         }
 
         /// <summary>
@@ -889,28 +894,28 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         /// <param name="value">the date value to Set this cell to.  For formulas we'll set the precalculated value, 
         /// for numerics we'll Set its value. For other types we will change the cell to a numeric cell and Set its value. </param>
-        public void SetCellValue(DateTime value)
+        public ICell SetCellValue(DateTime value)
         {
             bool date1904 = Sheet.Workbook.IsDate1904();
-            SetCellValue(DateUtil.GetExcelDate(value, date1904));
+            return SetCellValue(DateUtil.GetExcelDate(value, date1904));
         }
 
 #if NET6_0_OR_GREATER
-        public void SetCellValue(DateOnly value)
+        public ICell SetCellValue(DateOnly value)
         {
             bool date1904 = Sheet.Workbook.IsDate1904();
-            SetCellValue(DateUtil.GetExcelDate(value, date1904));
+            return SetCellValue(DateUtil.GetExcelDate(value, date1904));
         }
         
-        public void SetCellValue(DateOnly? value)
+        public ICell SetCellValue(DateOnly? value)
         {
             if (value == null)
             {
                 SetCellType(CellType.Blank);
-                return;
+                return this;
             }
             
-            SetCellValue(value.Value);
+            return SetCellValue(value.Value);
         }
 #endif
         
@@ -946,10 +951,10 @@ namespace NPOI.XSSF.UserModel
                 return FormulaError.ForString(code).Code;
             }
         }
-        public void SetCellErrorValue(byte errorCode)
+        public ICell SetCellErrorValue(byte errorCode)
         {
             FormulaError error = FormulaError.ForInt(errorCode);
-            SetCellErrorValue(error);
+            return SetCellErrorValue(error);
         }
         /// <summary>
         /// Set a error value for the cell
@@ -958,10 +963,11 @@ namespace NPOI.XSSF.UserModel
         /// For formulas we'll Set the precalculated value , for errors we'll set
         /// its value. For other types we will change the cell to an error cell and Set its value.
         /// </param>
-        public void SetCellErrorValue(FormulaError error)
+        public ICell SetCellErrorValue(FormulaError error)
         {
-            _cell.t = (ST_CellType.e);
-            _cell.v = (error.String);
+            _cell.t = ST_CellType.e;
+            _cell.v = error.String;
+            return this;
         }
 
         /// <summary>
@@ -983,9 +989,9 @@ namespace NPOI.XSSF.UserModel
             if (_cell.IsSetS()) blank.s=(_cell.s);
             _cell.Set(blank);
         }
-        public void SetBlank()
+        public ICell SetBlank()
         {
-            SetCellType(CellType.Blank);
+            return SetCellType(CellType.Blank);
         }
 
         /// <summary>
@@ -1003,7 +1009,7 @@ namespace NPOI.XSSF.UserModel
         /// Set the cells type (numeric, formula or string)
         /// </summary>
         /// <param name="cellType"></param>
-        public void SetCellType(CellType cellType)
+        public ICell SetCellType(CellType cellType)
         {
             CellType prevType = CellType;
 
@@ -1059,6 +1065,8 @@ namespace NPOI.XSSF.UserModel
             {
                 _cell.unsetF();
             }
+
+            return this;
         }
         /// <summary>
         /// Returns a string representation of the cell
