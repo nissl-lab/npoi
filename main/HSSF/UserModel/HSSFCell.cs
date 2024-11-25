@@ -515,8 +515,7 @@ namespace NPOI.HSSF.UserModel
         /// will Change the cell to a numeric cell and Set its value.</param>
         public ICell SetCellValue(DateTime value)
         {
-            SetCellValue(DateUtil.GetExcelDate(value, this.book.IsDate1904()));
-            return this;
+            return SetCellValue(DateUtil.GetExcelDate(value, this.book.IsDate1904()));
         }
 
 #if NET6_0_OR_GREATER
@@ -545,8 +544,7 @@ namespace NPOI.HSSF.UserModel
         public ICell SetCellValue(String value)
         {
             HSSFRichTextString str = value == null ? null : new HSSFRichTextString(value);
-            SetCellValue(str);
-            return this;
+            return SetCellValue(str);
         }
         /**
          * set a error value for the cell
