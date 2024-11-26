@@ -14,18 +14,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Enums.NET" />
-    <PackageReference Include="ExtendedNumerics.BigDecimal" />
-    <PackageReference Include="MathNet.Numerics.Signed" />
-    <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" />
-    <PackageReference Include="BouncyCastle.Cryptography" />
-    <PackageReference Include="SharpZipLib" />
-    <PackageReference Include="SixLabors.Fonts" />
-    <PackageReference Include="SixLabors.ImageSharp" />
+    <PackageReference Include="Enums.NET" Version="4.0.1" />
+    <PackageReference Include="ExtendedNumerics.BigDecimal" Version="2025.1001.2.129" />
+    <PackageReference Include="MathNet.Numerics.Signed" Version="5.0.0" />
+    <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.0" />
+    <PackageReference Include="BouncyCastle.Cryptography" Version="2.3.1" />
+    <PackageReference Include="SharpZipLib" Version="1.4.2" />
+    <PackageReference Include="SixLabors.Fonts" Version="1.0.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.9" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
     <Reference Include="System.Configuration" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="NuGetizer" Version="1.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>
