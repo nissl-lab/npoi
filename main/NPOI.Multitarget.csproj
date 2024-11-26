@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="IronSoftware.System.Drawing" Version="2024.9.11" />
+		<PackageReference Include="IronSoftware.System.Drawing" Version="2024.12.3" />
 		<PackageReference Include="Enums.NET" Version="5.0.0" />
 		<PackageReference Include="ExtendedNumerics.BigDecimal" Version="2025.1004.0.247" />
 		<PackageReference Include="MathNet.Numerics.Signed" Version="5.0.0" />
@@ -30,6 +30,13 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="[6.0.1]" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="NuGetizer" Version="1.1.0">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
 	</ItemGroup>
 
 </Project>

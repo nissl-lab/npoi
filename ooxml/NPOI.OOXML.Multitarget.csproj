@@ -43,4 +43,11 @@
 		</PackageReference>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Update="NuGetizer" Version="1.1.0">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
+
 </Project>
