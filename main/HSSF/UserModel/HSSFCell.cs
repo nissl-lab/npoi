@@ -229,7 +229,7 @@ namespace NPOI.HSSF.UserModel
         /// Set the cells type (numeric, formula or string)
         /// </summary>
         /// <param name="cellType">Type of the cell.</param>
-        public void SetCellType(CellType cellType)
+        public ICell SetCellType(CellType cellType)
         {
             NotifyFormulaChanging();
             if (IsPartOfArrayFormulaGroup)
@@ -240,6 +240,7 @@ namespace NPOI.HSSF.UserModel
             int col = _record.Column;
             short styleIndex = _record.XFIndex;
             SetCellType(cellType, true, row, col, styleIndex);
+            return this;
         }
 
         /// <summary>
@@ -467,7 +468,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="value">the numeric value to Set this cell to.  For formulas we'll Set the
         /// precalculated value, for numerics we'll Set its value. For other types we
         /// will Change the cell to a numeric cell and Set its value.</param>
-        public void SetCellValue(double value)
+        public ICell SetCellValue(double value)
         {
             if(double.IsInfinity(value))
             {
@@ -501,7 +502,8 @@ namespace NPOI.HSSF.UserModel
                         break;
                 }
             }
-        
+
+            return this;
         }
 
         /// <summary>
@@ -511,9 +513,9 @@ namespace NPOI.HSSF.UserModel
         /// <param name="value">the date value to Set this cell to.  For formulas we'll Set the
         /// precalculated value, for numerics we'll Set its value. For other types we
         /// will Change the cell to a numeric cell and Set its value.</param>
-        public void SetCellValue(DateTime value)
+        public ICell SetCellValue(DateTime value)
         {
-            SetCellValue(DateUtil.GetExcelDate(value, this.book.IsDate1904()));
+            return SetCellValue(DateUtil.GetExcelDate(value, this.book.IsDate1904()));
         }
 
 #if NET6_0_OR_GREATER
@@ -524,9 +526,9 @@ namespace NPOI.HSSF.UserModel
         /// <param name="value">the date value to Set this cell to.  For formulas we'll Set the
         /// precalculated value, for numerics we'll Set its value. For other types we
         /// will Change the cell to a numeric cell and Set its value.</param>
-        public void SetCellValue(DateOnly value)
+        public ICell SetCellValue(DateOnly value)
         {
-            SetCellValue(DateUtil.GetExcelDate(value, this.book.IsDate1904()));
+            return SetCellValue(DateUtil.GetExcelDate(value, this.book.IsDate1904()));
         }
 #endif
 
@@ -539,10 +541,10 @@ namespace NPOI.HSSF.UserModel
         /// string, for String cells we'll Set its value.  For other types we will
         /// Change the cell to a string cell and Set its value.
         /// If value is null then we will Change the cell to a Blank cell.</param>
-        public void SetCellValue(String value)
+        public ICell SetCellValue(String value)
         {
             HSSFRichTextString str = value == null ? null : new HSSFRichTextString(value);
-            SetCellValue(str);
+            return SetCellValue(str);
         }
         /**
          * set a error value for the cell
@@ -553,10 +555,10 @@ namespace NPOI.HSSF.UserModel
          *        cell and set its value.
          */
         [Obsolete("deprecated 3.15 beta 2. Use {@link #setCellErrorValue(FormulaError)} instead.")]
-        public void SetCellErrorValue(byte errorCode)
+        public ICell SetCellErrorValue(byte errorCode)
         {
             FormulaError error = FormulaError.ForInt(errorCode);
-            SetCellErrorValue(error);
+            return SetCellErrorValue(error);
         }
         /**
          * set a error value for the cell
@@ -566,7 +568,7 @@ namespace NPOI.HSSF.UserModel
          *        its value. For other types we will change the cell to an error
          *        cell and set its value.
          */
-        public void SetCellErrorValue(FormulaError error)
+        public ICell SetCellErrorValue(FormulaError error)
         {
             int row = _record.Row;
             int col = _record.Column;
@@ -585,6 +587,8 @@ namespace NPOI.HSSF.UserModel
                     ((BoolErrRecord)_record).SetValue(error);
                     break;
             }
+
+            return this;
         }
         /// <summary>
         /// Set a string value for the cell. Please note that if you are using
@@ -594,7 +598,7 @@ namespace NPOI.HSSF.UserModel
         /// string, for String cells we'll Set its value.  For other types we will
         /// Change the cell to a string cell and Set its value.
         /// If value is null then we will Change the cell to a Blank cell.</param>
-        public void SetCellValue(IRichTextString value)
+        public ICell SetCellValue(IRichTextString value)
         {
             int row = _record.Row;
             int col = _record.Column;
@@ -603,7 +607,7 @@ namespace NPOI.HSSF.UserModel
             {
                 NotifyFormulaChanging();
                 SetCellType(CellType.Blank, false, row, col, styleIndex);
-                return;
+                return this;
             }
 
             if (value.Length > NPOI.SS.SpreadsheetVersion.EXCEL97.MaxTextLength)
@@ -618,7 +622,7 @@ namespace NPOI.HSSF.UserModel
                 fr.SetCachedStringResult(value.String);
                 // Update our local cache to the un-formatted version
                 stringValue = new HSSFRichTextString(value.String);
-                return;
+                return this;
             }
 
             if (cellType != CellType.String)
@@ -634,6 +638,7 @@ namespace NPOI.HSSF.UserModel
             stringValue = hvalue;
             stringValue.SetWorkbookReferences(book.Workbook, ((LabelSSTRecord)_record));
             stringValue.UnicodeString = book.Workbook.GetSSTString(index);
+            return this;
         }
 
         /**
@@ -738,7 +743,7 @@ namespace NPOI.HSSF.UserModel
                     throw new InvalidOperationException();
             }
         }
-        public void SetCellFormula(String formula)
+        public ICell SetCellFormula(String formula)
         {
             if (IsPartOfArrayFormulaGroup)
             {
@@ -752,7 +757,7 @@ namespace NPOI.HSSF.UserModel
             {
                 NotifyFormulaChanging();
                 SetCellType(CellType.Blank, false, row, col, styleIndex);
-                return;
+                return this;
             }
             int sheetIndex = book.GetSheetIndex(_sheet);
             Ptg[] ptgs = HSSFFormulaParser.Parse(formula, book, FormulaType.Cell, sheetIndex);
@@ -769,6 +774,7 @@ namespace NPOI.HSSF.UserModel
                 agg.XFIndex = ((short)0x0f);
             }
             agg.SetParsedExpression(ptgs);
+            return this;
         }
 
         /// <summary>
@@ -946,7 +952,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="value">the bool value to Set this cell to.  For formulas we'll Set the
         /// precalculated value, for bools we'll Set its value. For other types we
         /// will Change the cell to a bool cell and Set its value.</param>
-        public void SetCellValue(bool value)
+        public ICell SetCellValue(bool value)
         {
             int row = _record.Row;
             int col = _record.Column;
@@ -964,6 +970,7 @@ namespace NPOI.HSSF.UserModel
                     ((BoolErrRecord)_record).SetValue(value);
                     break;
             }
+            return this;
         }
         /// <summary>
         /// Chooses a new bool value for the cell when its type is changing.
@@ -1462,9 +1469,9 @@ namespace NPOI.HSSF.UserModel
             throw new NotImplementedException();
         }
 
-        public void SetBlank()
+        public ICell SetBlank()
         {
-            SetCellType(CellType.Blank);
+            return SetCellType(CellType.Blank);
         }
 
         public bool IsMergedCell
