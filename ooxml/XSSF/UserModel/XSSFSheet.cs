@@ -1508,9 +1508,35 @@ namespace NPOI.XSSF.UserModel
                 row.OnDocumentWrite();
             }
 
-            foreach (XSSFColumn column in _columns.Values)
+            int minCell = int.MaxValue, maxCell = int.MinValue;
+            foreach (XSSFRow row in _rows.Values)
             {
-                column.OnDocumentWrite();
+                // first perform the normal write actions for the row
+                row.OnDocumentWrite();
+
+                // then calculate min/max cell-numbers for the worksheet-dimension
+                if (row.FirstCellNum != -1)
+                {
+                    minCell = Math.Min(minCell, row.FirstCellNum);
+                }
+                if (row.LastCellNum != -1)
+                {
+                    maxCell = Math.Max(maxCell, row.LastCellNum);
+                }
+            }
+
+            // finally, if we had at least one cell we can populate the optional dimension-field
+            if (minCell != int.MaxValue)
+            {
+                string ref1 = new CellRangeAddress(FirstRowNum, LastRowNum, minCell, maxCell).FormatAsString();
+                if (worksheet.IsSetDimension())
+                {
+                    worksheet.dimension.@ref = ref1;
+                }
+                else
+                {
+                    worksheet.AddNewDimension().@ref = (ref1);
+                }
             }
 
             new WorksheetDocument(worksheet).Save(stream, leaveOpen);
@@ -1795,13 +1821,14 @@ namespace NPOI.XSSF.UserModel
                 return GetDrawingPatriarch();
             }
 
-            //drawingNumber = #drawings.Count + 1
-            int DrawingNumber = GetPackagePart()
+            // Default drawingNumber = #drawings.Count + 1
+            int drawingNumber = GetPackagePart()
                 .Package.GetPartsByContentType(XSSFRelation.DRAWINGS.ContentType).Count + 1;
+            drawingNumber = GetNextPartNumber(XSSFRelation.DRAWINGS, drawingNumber);
             RelationPart rp = CreateRelationship(
                 XSSFRelation.DRAWINGS,
                 XSSFFactory.GetInstance(),
-                DrawingNumber,
+                drawingNumber,
                 false);
             XSSFDrawing drawing = rp.DocumentPart as XSSFDrawing;
             string relId = rp.Relationship.Id;
@@ -2609,7 +2636,7 @@ namespace NPOI.XSSF.UserModel
             {
                 foreach (CellAddress ref1 in GetCellComments().Keys)
                 {
-                    if (ref1.Row == idx)
+                    if (ref1.Row == row.RowNum)
                     {
                         sheetComments.RemoveComment(ref1);
                     }
@@ -3590,7 +3617,7 @@ namespace NPOI.XSSF.UserModel
             dataValidations.count = (uint)currentCount + 1;
         }
 
-        public void RemoveValidationData(IDataValidation dataValidation)
+        public void RemoveDataValidation(IDataValidation dataValidation)
         {
             XSSFDataValidation xssfDataValidation = (XSSFDataValidation)dataValidation;
             CT_DataValidations dataValidations = worksheet.dataValidations;
@@ -5231,6 +5258,8 @@ namespace NPOI.XSSF.UserModel
             SortedDictionary<XSSFComment, int> commentsToShift =
                 new SortedDictionary<XSSFComment, int>(new ShiftCommentComparator(n));
 
+            IEnumerable<CT_Shape> ctShapes = GetVMLDrawing(false)?.GetItems().OfType<CT_Shape>();
+
             foreach (KeyValuePair<int, XSSFRow> rowDict in _rows)
             {
                 XSSFRow row = rowDict.Value;
@@ -5253,11 +5282,22 @@ namespace NPOI.XSSF.UserModel
                                     .FindCellComment(cellAddress);
                                 if (oldComment != null)
                                 {
+                                    var ctShape = oldComment.GetCTShape();
+
+                                    if (ctShape == null && ctShapes != null)
+                                    {
+                                        ctShape = ctShapes.FirstOrDefault
+                                            (x => 
+                                                x.ClientData[0].row[0] == cellAddress.Row && 
+                                                x.ClientData[0].column[0] == cellAddress.Column
+                                            );
+                                    }
+
                                     XSSFComment xssfComment =
                                         new XSSFComment(
                                             sheetComments,
                                             oldComment.GetCTComment(),
-                                       oldComment.GetCTShape());
+                                            ctShape);
                                     if (commentsToShift.ContainsKey(xssfComment))
                                     {
                                         commentsToShift[xssfComment] = newrownum;

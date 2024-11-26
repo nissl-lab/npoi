@@ -1164,9 +1164,9 @@ namespace NPOI.XWPF.UserModel
          * Create an empty table with one row and one column as default.
          * @return a new table
          */
-        public XWPFTable CreateTable()
+        public XWPFTable CreateTable(int? pos = null)
         {
-            XWPFTable table = new XWPFTable(ctDocument.body.AddNewTbl(), this);
+            XWPFTable table = new XWPFTable(ctDocument.body.AddNewTbl(pos), this);
             bodyElements.Add(table);
             tables.Add(table);
             return table;
@@ -1178,9 +1178,9 @@ namespace NPOI.XWPF.UserModel
          * @param cols
          * @return table
          */
-        public XWPFTable CreateTable(int rows, int cols)
+        public XWPFTable CreateTable(int rows, int cols, int? pos = null)
         {
-            XWPFTable table = new XWPFTable(ctDocument.body.AddNewTbl(), this, rows, cols);
+            XWPFTable table = new XWPFTable(ctDocument.body.AddNewTbl(pos), this, rows, cols);
             bodyElements.Add(table);
             tables.Add(table);
             return table;
@@ -1958,12 +1958,21 @@ namespace NPOI.XWPF.UserModel
                 {
                     FindAndReplaceTextInParagraph(paragraph, oldValue, newValue);
                 }
+                foreach(var table in footer.Tables)
+                {
+                    FindAndReplaceTextInTable(table, oldValue, newValue);
+                }
             }
+
             foreach (var header in this.HeaderList)
             {
                 foreach (var paragraph in header.Paragraphs)
                 {
                     FindAndReplaceTextInParagraph(paragraph, oldValue, newValue);
+                }
+                foreach(var table in header.Tables)
+                {
+                    FindAndReplaceTextInTable(table, oldValue, newValue);
                 }
             }
         }

@@ -67,7 +67,7 @@ namespace NPOI.XSSF.UserModel
         public string GetSchema()
         {
             CT_Schema ctSchema = GetCTSchema();
-            return ctSchema.InnerXml;
+            return ctSchema.Any.OuterXml;
         }
 
         /**

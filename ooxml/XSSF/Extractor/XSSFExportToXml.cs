@@ -285,7 +285,7 @@ namespace NPOI.XSSF.Extractor
                 case CellType.Boolean: value += cell.BooleanCellValue; break;
                 case CellType.Error: value = cell.ErrorCellString; break;
                 case CellType.Formula:
-                    if(cell.GetCachedFormulaResultTypeEnum()== CellType.String)
+                    if(cell.CachedFormulaResultType== CellType.String)
                     {
                         value = cell.StringCellValue;
                     }
@@ -295,7 +295,7 @@ namespace NPOI.XSSF.Extractor
                         {
                             value = GetFormattedDate(cell);
                         }
-                        else if(cell.GetCachedFormulaResultTypeEnum()== CellType.Numeric)
+                        else if(cell.CachedFormulaResultType== CellType.Numeric)
                         {
                             value=cell.GetRawValue();
                         }
@@ -455,12 +455,12 @@ namespace NPOI.XSSF.Extractor
             String[] leftTokens = leftXpath.Split(new char[]{'/'});
             String[] rightTokens = rightXpath.Split(new char[] { '/' });
 
-            int minLenght = leftTokens.Length < rightTokens.Length ? leftTokens.Length : rightTokens.Length;
+            int minLength = leftTokens.Length < rightTokens.Length ? leftTokens.Length : rightTokens.Length;
 
             XmlNode localComplexTypeRootNode = doc.DocumentElement;
 
 
-            for (int i = 1; i < minLenght; i++)
+            for (int i = 1; i < minLength; i++)
             {
 
                 String leftElementName = leftTokens[i];
@@ -496,7 +496,10 @@ namespace NPOI.XSSF.Extractor
 
         private int IndexOfElementInComplexType(String elementName, XmlNode complexType)
         {
-
+            if(complexType == null)
+            {
+                return -1;
+            }
             XmlNodeList list = complexType.ChildNodes;
             int indexOf = -1;
 
@@ -507,8 +510,8 @@ namespace NPOI.XSSF.Extractor
                 {
                     if (node.LocalName.Equals("element"))
                     {
-                        XmlNode nameAttribute = node.Attributes.GetNamedItem("name");
-                        if (nameAttribute.Value.Equals(RemoveNamespace(elementName)))
+                        XmlNode element = GetNameOrRefElement(node);
+                        if (element.Value.Equals(RemoveNamespace(elementName)))
                         {
                             indexOf = i;
                             break;
@@ -519,22 +522,32 @@ namespace NPOI.XSSF.Extractor
             }
             return indexOf;
         }
+        private XmlNode GetNameOrRefElement(XmlNode node)
+        {
+            XmlNode returnNode = node.Attributes.GetNamedItem("name");
+            if(returnNode != null)
+            {
+                return returnNode;
+            }
+
+            return node.Attributes.GetNamedItem("ref");
+        }
 
         private XmlNode GetComplexTypeForElement(String elementName, XmlNode xmlSchema, XmlNode localComplexTypeRootNode)
         {
             String elementNameWithoutNamespace = RemoveNamespace(elementName);
 
-            String complexTypeName = getComplexTypeNameFromChildren(localComplexTypeRootNode, elementNameWithoutNamespace);
+            String complexTypeName = GetComplexTypeNameFromChildren(localComplexTypeRootNode, elementNameWithoutNamespace);
 
             XmlNode complexTypeNode = null;
             // Note: we expect that all the complex types are defined at root level
             if(!"".Equals(complexTypeName))
             {
-                complexTypeNode = getComplexTypeNodeFromSchemaChildren(xmlSchema, null, complexTypeName);
+                complexTypeNode = GetComplexTypeNodeFromSchemaChildren(xmlSchema, null, complexTypeName);
             }
             return complexTypeNode;
         }
-        private String getComplexTypeNameFromChildren(XmlNode localComplexTypeRootNode,
+        private String GetComplexTypeNameFromChildren(XmlNode localComplexTypeRootNode,
             String elementNameWithoutNamespace)
         {
             if(localComplexTypeRootNode == null)
@@ -566,45 +579,45 @@ namespace NPOI.XSSF.Extractor
             }
             return complexTypeName;
         }
-        private XmlNode getComplexTypeNodeFromSchemaChildren(XmlNode xmlSchema, XmlNode complexTypeNode,
+        private XmlNode GetComplexTypeNodeFromSchemaChildren(XmlNode xmlSchema, XmlNode complexTypeNode,
            String complexTypeName)
         {
 
-                XmlNodeList complexTypeList = xmlSchema.ChildNodes;
-                for(int i = 0; i < complexTypeList.Count; i++)
+            XmlNodeList complexTypeList = xmlSchema.ChildNodes;
+            for(int i = 0; i < complexTypeList.Count; i++)
+            {
+                XmlNode node = complexTypeList[i];
+                if(node is XmlElement)
                 {
-                    XmlNode node = complexTypeList[i];
-                    if(node is XmlElement)
+                    if(node.LocalName.Equals("complexType"))
                     {
-                        if(node.LocalName.Equals("complexType"))
+                        XmlNode nameAttribute = node.Attributes.GetNamedItem("name");
+                        if(nameAttribute.Value.Equals(complexTypeName))
                         {
-                            XmlNode nameAttribute = node.Attributes.GetNamedItem("name");
-                            if(nameAttribute.Value.Equals(complexTypeName))
+
+                            XmlNodeList complexTypeChildList = node.ChildNodes;
+                            for(int j = 0; j < complexTypeChildList.Count; j++)
                             {
+                                XmlNode sequence = complexTypeChildList[j];
 
-                                XmlNodeList complexTypeChildList = node.ChildNodes;
-                                for(int j = 0; j < complexTypeChildList.Count; j++)
+                                if(sequence is XmlElement)
                                 {
-                                    XmlNode sequence = complexTypeChildList[j];
-
-                                    if(sequence is XmlElement)
+                                    if(sequence.LocalName.Equals("sequence"))
                                     {
-                                        if(sequence.LocalName.Equals("sequence"))
-                                        {
-                                            complexTypeNode = sequence;
-                                            break;
-                                        }
+                                        complexTypeNode = sequence;
+                                        break;
                                     }
                                 }
-                                if(complexTypeNode != null)
-                                {
-                                    break;
-                                }
-
                             }
+                            if(complexTypeNode != null)
+                            {
+                                break;
+                            }
+
                         }
                     }
                 }
+            }
             return complexTypeNode;
         }
     }

@@ -500,9 +500,9 @@ namespace NPOI.XSSF.Streaming
             _sh.AddValidationData(dataValidation);
         }
 
-        public void RemoveValidationData(IDataValidation dataValidation)
+        public void RemoveDataValidation(IDataValidation dataValidation)
         {
-            _sh.RemoveValidationData(dataValidation);
+            _sh.RemoveDataValidation(dataValidation);
         }
         
         /**
@@ -657,7 +657,7 @@ namespace NPOI.XSSF.Streaming
 
         public IDrawing CreateDrawingPatriarch()
         {
-            return _sh.CreateDrawingPatriarch();
+            return new SXSSFDrawing((SXSSFWorkbook)Workbook, (XSSFDrawing)_sh.CreateDrawingPatriarch());
         }
 
         public void CreateFreezePane(int colSplit, int rowSplit)

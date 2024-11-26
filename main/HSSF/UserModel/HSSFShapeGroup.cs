@@ -99,7 +99,7 @@ namespace NPOI.HSSF.UserModel
             opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.PROTECTION__LOCKAGAINSTGROUPING, 0x00040004));
             opt.AddEscherProperty(new EscherBoolProperty(EscherProperties.GROUPSHAPE__PRINT, 0x00080000));
 
-            anchor = Anchor.GetEscherAnchor();
+            anchor = this.anchor.GetEscherAnchor();
             clientData.RecordId = (EscherClientDataRecord.RECORD_ID);
             clientData.Options = ((short)0x0000);
 
@@ -197,11 +197,11 @@ namespace NPOI.HSSF.UserModel
             shapes.Add(shape);
             OnCreate(shape);
             EscherSpRecord sp = (EscherSpRecord)shape.GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
-            if (shape.Anchor.IsHorizontallyFlipped)
+            if ((shape.Anchor as HSSFAnchor).IsHorizontallyFlipped)
             {
                 sp.Flags = (sp.Flags | EscherSpRecord.FLAG_FLIPHORIZ);
             }
-            if (shape.Anchor.IsVerticallyFlipped)
+            if ((shape.Anchor as HSSFAnchor).IsVerticallyFlipped)
             {
                 sp.Flags = (sp.Flags | EscherSpRecord.FLAG_FLIPVERT);
             }
@@ -255,11 +255,11 @@ namespace NPOI.HSSF.UserModel
             shapes.Add(shape);
             OnCreate(shape);
             EscherSpRecord sp = (EscherSpRecord)shape.GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
-            if (shape.Anchor.IsHorizontallyFlipped)
+            if ((shape.Anchor as HSSFAnchor).IsHorizontallyFlipped)
             {
                 sp.Flags = (sp.Flags | EscherSpRecord.FLAG_FLIPHORIZ);
             }
-            if (shape.Anchor.IsVerticallyFlipped)
+            if ((shape.Anchor as HSSFAnchor).IsVerticallyFlipped)
             {
                 sp.Flags = (sp.Flags | EscherSpRecord.FLAG_FLIPVERT);
             }

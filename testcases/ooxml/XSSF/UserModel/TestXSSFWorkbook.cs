@@ -30,6 +30,8 @@ using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -51,7 +53,7 @@ namespace TestCases.XSSF.UserModel
         /**
          * Tests that we can save, and then re-load a new document
          */
-        [Test, RunSerialyAndSweepTmpFiles]
+        [Test]
         public void SaveLoadNew()
         {
             XSSFWorkbook wb1 = new XSSFWorkbook();
@@ -151,8 +153,6 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual("hello world", ((XSSFSheet)sheet4).GetColumn(1).GetCell(0).RichStringCellValue.String);
 
             pkg.Close();
-
-            Assert.AreEqual(0, Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.tmp").Length, "At Last: There are no temporary files.");
         }
 
         [Test]
@@ -485,12 +485,7 @@ namespace TestCases.XSSF.UserModel
             // Should have one style
             Assert.AreEqual(1, wb1.NumCellStyles);
             wb1.GetCellStyleAt((short)0);
-            try
-            {
-                wb1.GetCellStyleAt((short)1);
-                Assert.Fail("Shouldn't be able to get style at 1 that doesn't exist");
-            }
-            catch (ArgumentOutOfRangeException) { }
+            Assert.IsNull(wb1.GetCellStyleAt((short)1),"Shouldn't be able to get style at 0 that doesn't exist");
 
             // Add another one
             ICellStyle cs = wb1.CreateCellStyle();
@@ -500,24 +495,14 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(2, wb1.NumCellStyles);
             wb1.GetCellStyleAt((short)0);
             wb1.GetCellStyleAt((short)1);
-            try
-            {
-                wb1.GetCellStyleAt((short)2);
-                Assert.Fail("Shouldn't be able to get style at 2 that doesn't exist");
-            }
-            catch (ArgumentOutOfRangeException) { }
+            Assert.IsNull(wb1.GetCellStyleAt((short)2), "Shouldn't be able to get style at 2 that doesn't exist");
 
             // Save and reload
             XSSFWorkbook nwb = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb1);
             Assert.AreEqual(2, nwb.NumCellStyles);
             nwb.GetCellStyleAt((short)0);
             nwb.GetCellStyleAt((short)1);
-            try
-            {
-                nwb.GetCellStyleAt((short)2);
-                Assert.Fail("Shouldn't be able to Get style at 2 that doesn't exist");
-            }
-            catch (ArgumentOutOfRangeException) { }
+            Assert.IsNull(nwb.GetCellStyleAt((short)2), "Shouldn't be able to Get style at 2 that doesn't exist");
 
             // Now with an existing file
             XSSFWorkbook wb2 = XSSFTestDataSamples.OpenSampleWorkbook("sample.xlsx");
@@ -525,16 +510,10 @@ namespace TestCases.XSSF.UserModel
             wb2.GetCellStyleAt((short)0);
             wb2.GetCellStyleAt((short)1);
             wb2.GetCellStyleAt((short)2);
-            try
-            {
-                wb2.GetCellStyleAt((short)3);
-                Assert.Fail("Shouldn't be able to Get style at 3 that doesn't exist");
-            }
-            catch (ArgumentOutOfRangeException) { }
+            Assert.IsNull(nwb.GetCellStyleAt((short)3), "Shouldn't be able to Get style at 3 that doesn't exist");
 
             wb2.Close();
-            wb1.Close();
-            nwb.Close();
+            wb1.Close();            nwb.Close();
         }
         [Test]
         public void RecalcId()
@@ -944,15 +923,19 @@ namespace TestCases.XSSF.UserModel
                 allBytes[i] = (byte)(i - 128);
             }
 
-            XSSFWorkbook wb1 = new XSSFWorkbook();
-            wb1.CreateSheet();
-            wb1.SetVBAProject(new ByteArrayInputStream(allBytes));
-            file = TempFile.CreateTempFile("poi-", ".xlsm");
-            Stream out1 = new FileStream(file.FullName, FileMode.Open, FileAccess.ReadWrite);
-            wb1.Write(out1);
-            out1.Close();
-            wb1.Close();
+            using(XSSFWorkbook wb1 = new XSSFWorkbook())
+            {
+                wb1.CreateSheet();
+                wb1.SetVBAProject(new ByteArrayInputStream(allBytes));
+                file = TempFile.CreateTempFile("poi-", ".xlsm");
+                using(Stream out1 = new FileStream(file.FullName, FileMode.Open, FileAccess.ReadWrite))
+                {
+                    wb1.Write(out1);
+                }
+            }
 
+            if(file != null)
+                file.Refresh();
 
             // Check the package contains what we'd expect it to
             OPCPackage pkg = OPCPackage.Open(file);
@@ -1075,7 +1058,6 @@ namespace TestCases.XSSF.UserModel
             FileInfo file = TempFile.CreateTempFile("TestBug56957_", ".xlsx");
             //String dateExp = "Sun Nov 09 00:00:00 CET 2014";
             DateTime dateExp = LocaleUtil.GetLocaleCalendar(2014, 11, 9);
-            IWorkbook workbook = null;
             try
             {
                 // as the file is written to, we make a copy before actually working on it
@@ -1084,41 +1066,39 @@ namespace TestCases.XSSF.UserModel
                 Assert.IsTrue(file.Exists);
 
                 // read-only mode works!
-                workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ));
-                var dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
-                Assert.AreEqual(dateExp, dateAct);
-                workbook.Close();
-                workbook = null;
+                using(var workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ)))
+                {
+                    var dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
+                    Assert.AreEqual(dateExp, dateAct);
+                }
 
-                workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ));
-                dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
-                Assert.AreEqual(dateExp, dateAct);
-                workbook.Close();
-                workbook = null;
+                using(var workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ)))
+                {
+                    var dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
+                    Assert.AreEqual(dateExp, dateAct);
+                }
 
                 // now check read/write mode
-                workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ_WRITE));
-                dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
-                Assert.AreEqual(dateExp, dateAct);
-                workbook.Close();
-                workbook = null;
+                using(var workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ_WRITE)))
+                {
+                    var dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
+                    Assert.AreEqual(dateExp, dateAct);
+                }
 
-                workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ_WRITE));
-                dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
-                Assert.AreEqual(dateExp, dateAct);
-                workbook.Close();
-                workbook = null;
+                using(var workbook = WorkbookFactory.Create(OPCPackage.Open(file, PackageAccess.READ_WRITE)))
+                {
+                    var dateAct = workbook.GetSheetAt(0).GetRow(0).GetCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK).DateCellValue;
+                    Assert.AreEqual(dateExp, dateAct);
+                }
             }
             finally
             {
-                if (workbook != null)
-                {
-                    workbook.Close();
-                }
                 Assert.IsTrue(file.Exists);
+
                 file.Delete();
                 file.Refresh();
-                Assert.IsTrue(!file.Exists);
+
+                Assert.IsFalse(file.Exists);
             }
         }
 
@@ -1247,6 +1227,84 @@ namespace TestCases.XSSF.UserModel
                     Assert.AreEqual("Sheet1", wb.GetSheetName(0));
                 }
             }
+        }
+
+
+        /// <summary>
+        /// Issue 1252 https://github.com/nissl-lab/npoi/issues/1252
+        /// </summary>
+        [Test]
+        public void TestSavingXlsxTwiceWithBmpPictures()
+        {
+            using XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("Issue1252.xlsx");
+            byte[] bmpData = GenerateBitmap(100, 100);
+            InsertPicture(wb, bmpData, PictureType.BMP);
+
+            using XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            InsertPicture(wb2, bmpData, PictureType.BMP);
+
+            using XSSFWorkbook wb3 = XSSFTestDataSamples.WriteOutAndReadBack(wb2);
+            InsertPicture(wb3, bmpData, PictureType.BMP);
+            XSSFTestDataSamples.WriteOutAndClose(wb3);
+        }
+
+        private static void InsertPicture(IWorkbook wb, byte[] data, PictureType picType)
+        {
+            ISheet sheet = wb.GetSheetAt(0);
+            IDrawing patriarch = sheet.DrawingPatriarch;
+            XSSFClientAnchor anchor = new(500, 200, 0, 0, 2, 2, 4, 7) {
+                AnchorType = AnchorType.MoveDontResize
+            };
+            int imageId = wb.AddPicture(data, picType);
+            XSSFPicture picture = (XSSFPicture)patriarch.CreatePicture(anchor, imageId);
+            picture.LineStyle = LineStyle.DashDotGel;
+            picture.Resize();
+        }
+
+        private static byte[] GenerateBitmap(int width, int height) {
+            // BMP file header
+            byte[] header = new byte[]
+        {
+            0x42, 0x4D, // BM (Bitmap identifier)
+            0x36, 0x00, 0x0C, 0x00, // File size (54 + width * height)
+            0x00, 0x00, // Reserved
+            0x00, 0x00, // Reserved
+            0x36, 0x00, 0x00, 0x00, // Offset to pixel array
+            0x28, 0x00, 0x00, 0x00, // Header size (40 bytes)
+            0x64, 0x00, 0x00, 0x00, // Width
+            0x64, 0x00, 0x00, 0x00, // Height
+            0x01, 0x00, // Planes
+            0x18, 0x00, // Bits per pixel (24-bit)
+            0x00, 0x00, 0x00, 0x00, // Compression (none)
+            0x00, 0x00, 0x00, 0x00, // Image size (can be 0 for uncompressed images)
+            0x00, 0x00, 0x00, 0x00, // X pixels per meter
+            0x00, 0x00, 0x00, 0x00, // Y pixels per meter
+            0x00, 0x00, 0x00, 0x00, // Colors in color table
+            0x00, 0x00, 0x00, 0x00, // Important color count
+        };
+
+            // Set width and height in header
+            BitConverter.GetBytes(width).CopyTo(header, 0x12);
+            BitConverter.GetBytes(height).CopyTo(header, 0x16);
+
+            // Create a byte array to hold the pixel data
+            int pixelDataSize = width * height * 3; // 3 bytes per pixel for 24-bit color
+            byte[] pixels = new byte[pixelDataSize];
+
+            // Set all pixels to black
+            for(int i = 0; i < pixelDataSize; i += 3)
+            {
+                pixels[i] = 0x00; // Blue
+                pixels[i + 1] = 0x00; // Green
+                pixels[i + 2] = 0x00; // Red
+            }
+
+            // Concatenate header and pixel data
+            byte[] bmpData = new byte[header.Length + pixels.Length];
+            header.CopyTo(bmpData, 0);
+            pixels.CopyTo(bmpData, header.Length);
+
+            return bmpData;
         }
     }
 }

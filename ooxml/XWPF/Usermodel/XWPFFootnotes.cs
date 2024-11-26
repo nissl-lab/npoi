@@ -235,7 +235,12 @@ namespace NPOI.XWPF.UserModel
             }
             else
             {
-                return (XWPFDocument)GetParent();
+                var parent = GetParent();
+                while(parent!=null && parent is not XWPFDocument)
+                {
+                    parent=parent.GetParent();
+                }
+                return parent as XWPFDocument;
             }
         }
 

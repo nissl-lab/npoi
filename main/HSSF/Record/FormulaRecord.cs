@@ -248,25 +248,25 @@ namespace NPOI.HSSF.Record
          * @param in the RecordInputstream to Read the record from
          */
 
-        public FormulaRecord(RecordInputStream in1):base(in1)
+        public FormulaRecord(RecordInputStream ris):base(ris)
         {
-                long valueLongBits  = in1.ReadLong();
-                field_5_options = in1.ReadShort();
+                long valueLongBits  = ris.ReadLong();
+                field_5_options = ris.ReadShort();
                 specialCachedValue = SpecialCachedValue.Create(valueLongBits);
                 if (specialCachedValue == null) {
                     field_4_value = BitConverter.Int64BitsToDouble(valueLongBits);
                 }
 
-                field_6_zero = in1.ReadInt();
-                int field_7_expression_len = in1.ReadShort();
+                field_6_zero = ris.ReadInt();
+                int field_7_expression_len = ris.ReadShort();
 
-                field_8_parsed_expr = NPOI.SS.Formula.Formula.Read(field_7_expression_len, in1,in1.Available());
+                field_8_parsed_expr = NPOI.SS.Formula.Formula.Read(field_7_expression_len, ris, ris.Available());
         }
         /**
- * @return <c>true</c> if this {@link FormulaRecord} is followed by a
- *  {@link StringRecord} representing the cached text result of the formula
- *  evaluation.
- */
+         * @return <c>true</c> if this {@link FormulaRecord} is followed by a
+         *  {@link StringRecord} representing the cached text result of the formula
+         *  evaluation.
+         */
         public bool HasCachedResultString
         {
             get

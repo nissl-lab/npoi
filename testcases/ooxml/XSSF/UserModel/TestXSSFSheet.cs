@@ -1472,67 +1472,68 @@ namespace TestCases.XSSF.UserModel
             sheet1.GroupRow(16, 19);
 
             Assert.AreEqual(14, sheet1.PhysicalNumberOfRows);
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(6)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(6)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(7)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(7)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(9)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(9)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(14)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(14)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(6)).GetCTRow().IsSetCollapsed());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(6)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(7)).GetCTRow().IsSetCollapsed());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(7)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(9)).GetCTRow().IsSetCollapsed());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(9)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(14)).GetCTRow().IsSetCollapsed());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(14)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetCollapsed());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetCollapsed());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetHidden());
 
             //collapsed
             sheet1.SetRowGroupCollapsed(7, true);
 
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(6)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(6)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(7)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(true, ((XSSFRow)sheet1.GetRow(7)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(9)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(true, ((XSSFRow)sheet1.GetRow(9)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(14)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(true, ((XSSFRow)sheet1.GetRow(14)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(6)).GetCTRow().IsSetCollapsed());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(6)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(7)).GetCTRow().IsSetCollapsed());
+            Assert.IsTrue(((XSSFRow)sheet1.GetRow(7)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(9)).GetCTRow().IsSetCollapsed());
+            Assert.IsTrue(((XSSFRow)sheet1.GetRow(9)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(14)).GetCTRow().IsSetCollapsed());
+            Assert.IsTrue(((XSSFRow)sheet1.GetRow(14)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetCollapsed());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetCollapsed());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetHidden());
 
             //expanded
             sheet1.SetRowGroupCollapsed(7, false);
 
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(6)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(6)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(7)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(true, ((XSSFRow)sheet1.GetRow(7)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(9)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(true, ((XSSFRow)sheet1.GetRow(9)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(14)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(true, ((XSSFRow)sheet1.GetRow(14)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(6)).GetCTRow().IsSetCollapsed());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(6)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(7)).GetCTRow().IsSetCollapsed());
+            Assert.IsTrue(((XSSFRow)sheet1.GetRow(7)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(9)).GetCTRow().IsSetCollapsed());
+            Assert.IsTrue(((XSSFRow)sheet1.GetRow(9)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(14)).GetCTRow().IsSetCollapsed());
+            Assert.IsTrue(((XSSFRow)sheet1.GetRow(14)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetCollapsed());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetCollapsed());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetHidden());
+
 
             // Save and re-load
             XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1);
             sheet1 = (XSSFSheet)wb2.GetSheetAt(0);
 
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(6)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(6)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(7)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(true, ((XSSFRow)sheet1.GetRow(7)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(9)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(true, ((XSSFRow)sheet1.GetRow(9)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(14)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(true, ((XSSFRow)sheet1.GetRow(14)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetHidden());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetCollapsed());
-            Assert.AreEqual(false, ((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(6)).GetCTRow().IsSetCollapsed());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(6)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(7)).GetCTRow().IsSetCollapsed());
+            Assert.IsTrue(((XSSFRow)sheet1.GetRow(7)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(9)).GetCTRow().IsSetCollapsed());
+            Assert.IsTrue(((XSSFRow)sheet1.GetRow(9)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(14)).GetCTRow().IsSetCollapsed());
+            Assert.IsTrue(((XSSFRow)sheet1.GetRow(14)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetCollapsed());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(16)).GetCTRow().IsSetHidden());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetCollapsed());
+            Assert.IsFalse(((XSSFRow)sheet1.GetRow(18)).GetCTRow().IsSetHidden());
 
             wb2.Close();
         }
@@ -1883,7 +1884,7 @@ namespace TestCases.XSSF.UserModel
             Assert.IsNotNull(nm);
 
             Assert.AreEqual(0u, nm.GetCTName().localSheetId);
-            Assert.AreEqual(true, nm.GetCTName().hidden);
+            Assert.IsTrue(nm.GetCTName().hidden);
             Assert.AreEqual("_xlnm._FilterDatabase", nm.GetCTName().name);
             Assert.AreEqual("'new sheet'!$A$1:$D$100", nm.GetCTName().Value);
 
@@ -2020,8 +2021,8 @@ namespace TestCases.XSSF.UserModel
             Assert.IsFalse(sheet.ForceFormulaRecalculation);
 
             // Set
-            sheet.ForceFormulaRecalculation = true;
-            Assert.AreEqual(true, sheet.ForceFormulaRecalculation);
+            sheet.ForceFormulaRecalculation = (true);
+            Assert.IsTrue(sheet.ForceFormulaRecalculation);
 
             // calcMode="manual" is unset when forceFormulaRecalculation=true
             CT_CalcPr calcPr = wb1.GetCTWorkbook().AddNewCalcPr();
@@ -2030,15 +2031,16 @@ namespace TestCases.XSSF.UserModel
             Assert.AreEqual(ST_CalcMode.auto, calcPr.calcMode);
 
             // Check
-            sheet.ForceFormulaRecalculation = false;
-            Assert.AreEqual(false, sheet.ForceFormulaRecalculation);
+            sheet.ForceFormulaRecalculation = (false);
+            Assert.IsFalse(sheet.ForceFormulaRecalculation);
+
 
             // Save, re-load, and re-check
             XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1);
             wb1.Close();
 
             sheet = (XSSFSheet)wb2.GetSheet("Sheet 1");
-            Assert.AreEqual(false, sheet.ForceFormulaRecalculation);
+            Assert.IsFalse(sheet.ForceFormulaRecalculation);
 
             wb2.Close();
         }
@@ -2375,7 +2377,7 @@ namespace TestCases.XSSF.UserModel
             // Boolean
             cell = CellUtil.GetCell(destRow, col++);
             Assert.AreEqual(CellType.Boolean, cell.CellType, "[Boolean] F7 cell type");
-            Assert.AreEqual(true, cell.BooleanCellValue, "[Boolean] F7 cell value");
+            Assert.IsTrue(cell.BooleanCellValue, "[Boolean] F7 cell value");
             // String
             cell = CellUtil.GetCell(destRow, col++);
             Assert.AreEqual(CellType.String, cell.CellType, "[String] G7 cell type");
@@ -2543,15 +2545,14 @@ namespace TestCases.XSSF.UserModel
             col++;
             cell = CellUtil.GetCell(destRow1, col);
             Assert.AreEqual(CellType.Boolean, cell.CellType, "[Boolean] F10 cell type");
-            Assert.AreEqual(true, cell.BooleanCellValue, "[Boolean] F10 cell value");
+            Assert.IsTrue(cell.BooleanCellValue, "[Boolean] F10 cell value");
 
             cell = CellUtil.GetCell(destRow2, col);
             Assert.AreEqual(CellType.Boolean, cell.CellType, "[Boolean] F11 cell type");
-            Assert.AreEqual(false, cell.BooleanCellValue, "[Boolean] F11 cell value");
+            Assert.IsFalse(cell.BooleanCellValue, "[Boolean] F11 cell value");
 
             // String
-            col++;
-            cell = CellUtil.GetCell(destRow1, col);
+            col++;            cell = CellUtil.GetCell(destRow1, col);
             Assert.AreEqual(CellType.String, cell.CellType, "[String] G10 cell type");
             Assert.AreEqual("Hello", cell.StringCellValue, "[String] G10 cell value");
 
@@ -2892,6 +2893,25 @@ namespace TestCases.XSSF.UserModel
                 }
                 cell.CellComment = comment;
             }
+        }
+
+
+        // bug 59687:  XSSFSheet.RemoveRow doesn't handle row gaps properly when removing row comments
+        [Test]
+        public void TestRemoveRowWithCommentAndGapAbove()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("59687.xlsx");
+            ISheet sheet = wb.GetSheetAt(0);
+
+            // comment exists
+            CellAddress commentCellAddress = new CellAddress("A4");
+            Assert.IsNotNull(sheet.GetCellComment(commentCellAddress));
+
+            Assert.AreEqual(1, sheet.GetCellComments().Count, "Wrong starting # of comments");
+
+            sheet.RemoveRow(sheet.GetRow(commentCellAddress.Row));
+
+            Assert.AreEqual(0, sheet.GetCellComments().Count, "There should not be any comments left!");
         }
 
         //[Test]

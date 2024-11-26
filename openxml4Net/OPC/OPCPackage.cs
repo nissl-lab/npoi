@@ -185,12 +185,12 @@ namespace NPOI.OpenXml4Net.OPC
                 // pack.originalPackagePath = file.AbsolutePath;
                 return pack;
             }
-            catch (InvalidFormatException e)
+            catch (InvalidFormatException)
             {
                 IOUtils.CloseQuietly(pack);
                 throw;
             }
-            catch (RuntimeException e)
+            catch (RuntimeException)
             {
                 IOUtils.CloseQuietly(pack);
                 throw;
@@ -208,8 +208,8 @@ namespace NPOI.OpenXml4Net.OPC
          * @throws InvalidFormatException
          *             If the specified file doesn't exist, and a parsing error
          *             occur.
-	     * @throws InvalidOperationException If the zip file cannot be opened.
-	     * @throws InvalidFormatException if the package is not valid.
+         * @throws InvalidOperationException If the zip file cannot be opened.
+         * @throws InvalidFormatException if the package is not valid.
          */
         public static OPCPackage Open(String path, PackageAccess access)
         {
@@ -271,12 +271,12 @@ namespace NPOI.OpenXml4Net.OPC
                 pack.originalPackagePath = file.FullName;
                 return pack;
             }
-            catch (InvalidFormatException e)
+            catch (InvalidFormatException)
             {
                 IOUtils.CloseQuietly(pack);
                 throw;
             }
-            catch (RuntimeException e)
+            catch (RuntimeException)
             {
                 IOUtils.CloseQuietly(pack);
                 throw;
@@ -294,9 +294,9 @@ namespace NPOI.OpenXml4Net.OPC
          *            The InputStream to read the package from
          * @return A PackageBase object
          */
-        public static OPCPackage Open(Stream in1)
+        public static OPCPackage Open(Stream stream)
         {
-            OPCPackage pack = new ZipPackage(in1, PackageAccess.READ_WRITE);
+            OPCPackage pack = new ZipPackage(stream, PackageAccess.READ_WRITE);
             try
             {
                 if (pack.partList == null)
@@ -304,12 +304,12 @@ namespace NPOI.OpenXml4Net.OPC
                     pack.GetParts();
                 }
             }
-            catch (InvalidFormatException e)
+            catch (InvalidFormatException)
             {
                 IOUtils.CloseQuietly(pack);
                 throw;
             }
-            catch (RuntimeException e)
+            catch (RuntimeException)
             {
                 IOUtils.CloseQuietly(pack);
                 throw;
@@ -317,9 +317,9 @@ namespace NPOI.OpenXml4Net.OPC
             return pack;
         }
 
-        public static OPCPackage Open(Stream in1,bool bReadonly)
+        public static OPCPackage Open(Stream stream,bool readOnly)
         {
-            OPCPackage pack = new ZipPackage(in1, bReadonly ? PackageAccess.READ : PackageAccess.READ_WRITE);
+            OPCPackage pack = new ZipPackage(stream, readOnly ? PackageAccess.READ : PackageAccess.READ_WRITE);
             if (pack.partList == null)
             {
                 pack.GetParts();
@@ -456,7 +456,7 @@ namespace NPOI.OpenXml4Net.OPC
                 {
                     FileInfo targetFile = new FileInfo(this.originalPackagePath);
                     if (!File.Exists(this.originalPackagePath)|| !(this.originalPackagePath
-                        		.Equals(targetFile.FullName, StringComparison.InvariantCultureIgnoreCase))) {
+                                .Equals(targetFile.FullName, StringComparison.InvariantCultureIgnoreCase))) {
 
                         // Case of a package Created from scratch
                         Save(originalPackagePath);
@@ -589,7 +589,7 @@ namespace NPOI.OpenXml4Net.OPC
          * (PackageAccess.Write). This method is call when other methods need write
          * right.
          * 
-    	 * @throws InvalidOperationException if a read operation is done on a write only package.
+         * @throws InvalidOperationException if a read operation is done on a write only package.
          * @see org.apache.poi.OpenXml4Net.opc.PackageAccess
          */
         internal void ThrowExceptionIfWriteOnly()
@@ -1548,7 +1548,7 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public bool IsRelationshipExists(PackageRelationship rel)
         {
-            foreach (PackageRelationship r in this.Relationships)
+            foreach (PackageRelationship r in relationships)
             {
                 if (r == rel)
                     return true;

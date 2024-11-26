@@ -94,6 +94,9 @@ namespace NPOI.HSSF.Record
                     throw new RecordFormatException("Read " + ptgs.Length
                             + " tokens but expected exactly 1");
                 }
+                if(!(ptgs[0] is OperandPtg)) {
+                    throw new ArgumentException("Had unexpected type of ptg at index 0: " + ptgs[0].GetType());
+                }
                 _linkRefPtg = (OperandPtg)ptgs[0];
                 if (in1.Remaining > 0)
                 {

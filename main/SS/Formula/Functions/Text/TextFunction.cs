@@ -120,6 +120,7 @@ namespace NPOI.SS.Formula.Functions
         public static readonly Function RIGHT = new LeftRight(false);
 
         public static readonly Function CONCATENATE = new Concatenate();
+        public static readonly FreeRefFunction CONCAT = new Concat();
 
         public static readonly Function EXACT = new Exact();
 

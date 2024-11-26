@@ -47,7 +47,7 @@ namespace NPOI.DDF
         /// <value><c>true</c> if this instance is true; otherwise, <c>false</c>.</value>
         public bool IsTrue
         {
-            get { return propertyValue != 0; }
+            get { return PropertyValue != 0; }
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace NPOI.DDF
         /// <value><c>true</c> if this instance is false; otherwise, <c>false</c>.</value>
         public bool IsFalse
         {
-            get { return propertyValue == 0; }
+            get { return !IsTrue; }
         }
 
         //public override String ToString()

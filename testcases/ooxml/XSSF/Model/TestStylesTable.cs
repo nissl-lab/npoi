@@ -200,7 +200,7 @@ namespace TestCases.XSSF.Model
                     }
                     else
                     {
-                        throw e;
+                        throw;
                     }
                 }
             }
@@ -210,35 +210,35 @@ namespace TestCases.XSSF.Model
             }
         }
 
-        private static void assertNotContainsKey<K, V>(SortedDictionary<K, V> map, K key)
+        private static void AssertNotContainsKey<K, V>(SortedDictionary<K, V> map, K key)
         {
             Assert.IsFalse(map.ContainsKey(key));
         }
-        private static void assertNotContainsValue<K, V>(SortedDictionary<K, V> map, V value)
+        private static void AssertNotContainsValue<K, V>(SortedDictionary<K, V> map, V value)
         {
             Assert.IsFalse(map.ContainsValue(value));
         }
 
         [Test]
-        public void removeNumberFormat()
+        public void RemoveNumberFormat()
         {
-            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFWorkbook wb1 = new XSSFWorkbook();
             try
             {
                 String fmt = customDataFormat;
-                short fmtIdx = (short)wb.GetStylesSource().PutNumberFormat(fmt);
+                short fmtIdx = (short)wb1.GetStylesSource().PutNumberFormat(fmt);
 
-                ICell cell = wb.CreateSheet("test").CreateRow(0).CreateCell(0);
+                ICell cell = wb1.CreateSheet("test").CreateRow(0).CreateCell(0);
                 cell.SetCellValue(5.25);
-                ICellStyle style = wb.CreateCellStyle();
+                ICellStyle style = wb1.CreateCellStyle();
                 style.DataFormat = fmtIdx;
                 cell.CellStyle = style;
 
                 Assert.AreEqual(fmt, cell.CellStyle.GetDataFormatString());
-                Assert.AreEqual(fmt, wb.GetStylesSource().GetNumberFormatAt(fmtIdx));
+                Assert.AreEqual(fmt, wb1.GetStylesSource().GetNumberFormatAt(fmtIdx));
 
                 // remove the number format from the workbook
-                wb.GetStylesSource().RemoveNumberFormat(fmt);
+                wb1.GetStylesSource().RemoveNumberFormat(fmt);
 
                 // number format in CellStyles should be restored to default number format
                 short defaultFmtIdx = 0;
@@ -247,19 +247,19 @@ namespace TestCases.XSSF.Model
                 Assert.AreEqual(defaultFmt, style.GetDataFormatString());
 
                 // The custom number format should be entirely removed from the workbook
-                SortedDictionary<short, String> numberFormats = wb.GetStylesSource().GetNumberFormats() as SortedDictionary<short, String>;
-                assertNotContainsKey(numberFormats, fmtIdx);
-                assertNotContainsValue(numberFormats, fmt);
+                SortedDictionary<short, String> numberFormats = wb1.GetStylesSource().GetNumberFormats() as SortedDictionary<short, String>;
+                AssertNotContainsKey(numberFormats, fmtIdx);
+                AssertNotContainsValue(numberFormats, fmt);
 
                 // The default style shouldn't be added back to the styles source because it's built-in
-                Assert.AreEqual(0, wb.GetStylesSource().NumDataFormats);
+                Assert.AreEqual(0, wb1.GetStylesSource().NumDataFormats);
 
                 cell = null;
                 style = null;
                 numberFormats = null;
-                wb = XSSFTestDataSamples.WriteOutCloseAndReadBack(wb);
+                XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutCloseAndReadBack(wb1);
 
-                cell = wb.GetSheet("test").GetRow(0).GetCell(0);
+                cell = wb2.GetSheet("test").GetRow(0).GetCell(0);
                 style = cell.CellStyle;
 
                 // number format in CellStyles should be restored to default number format
@@ -267,25 +267,25 @@ namespace TestCases.XSSF.Model
                 Assert.AreEqual(defaultFmt, style.GetDataFormatString());
 
                 // The custom number format should be entirely removed from the workbook
-                numberFormats = wb.GetStylesSource().GetNumberFormats() as SortedDictionary<short, String>;
-                assertNotContainsKey(numberFormats, fmtIdx);
-                assertNotContainsValue(numberFormats, fmt);
+                numberFormats = wb2.GetStylesSource().GetNumberFormats() as SortedDictionary<short, String>;
+                AssertNotContainsKey(numberFormats, fmtIdx);
+                AssertNotContainsValue(numberFormats, fmt);
 
                 // The default style shouldn't be added back to the styles source because it's built-in
-                Assert.AreEqual(0, wb.GetStylesSource().NumDataFormats);
+                Assert.AreEqual(0, wb2.GetStylesSource().NumDataFormats);
 
+                wb2.Close();
             }
             finally
             {
-                wb.Close();
+                wb1.Close();
             }
         }
 
         [Test]
-        public void maxNumberOfDataFormats()
+        public void MaxNumberOfDataFormats()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
-
             try
             {
                 StylesTable styles = wb.GetStylesSource();
@@ -315,7 +315,7 @@ namespace TestCases.XSSF.Model
                     }
                     else
                     {
-                        throw e;
+                        throw;
                     }
                 }
             }
@@ -349,7 +349,7 @@ namespace TestCases.XSSF.Model
                     }
                     else
                     {
-                        throw e;
+                        throw;
                     }
                 }
             }
@@ -383,7 +383,7 @@ namespace TestCases.XSSF.Model
                     }
                     else
                     {
-                        throw e;
+                        throw;
                     }
                 }
             }

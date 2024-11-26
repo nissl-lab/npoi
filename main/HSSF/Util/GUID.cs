@@ -83,17 +83,15 @@ namespace NPOI.HSSF.Util
         {
             get{
                 //return _d4;
-                byte[] buf;
-
-                using (MemoryStream ms = new MemoryStream(8))
+                byte[] result = new byte[sizeof(long) / sizeof(byte)];
+                long l = _d4;
+                for (int i = result.Length - 1; i >= 0; i--)
                 {
-                    BinaryWriter bw = new BinaryWriter(ms);
-                    bw.Write(_d4);
-                    buf = ms.ToArray();
-                    bw.Close();
+                    result[i] = (byte)(l & 0xFF);
+                    l >>= 8;
                 }
-                Array.Reverse(buf);
-                return new LittleEndianByteArrayInputStream(buf).ReadLong();
+
+                return LittleEndian.GetLong(result, 0);
             }
         }
 

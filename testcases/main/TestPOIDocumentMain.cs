@@ -2,6 +2,7 @@
 using NPOI.HSSF.UserModel;
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
+using NPOI.HPSF;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -31,13 +32,18 @@ namespace TestCases
         [Test]
         public void TestReadProperties()
         {
+            readPropertiesHelper(doc);
+        }
+
+        private void readPropertiesHelper(POIDocument docWB)
+        {
             // We should have both sets
-            Assert.IsNotNull(doc.DocumentSummaryInformation);
-            Assert.IsNotNull(doc.SummaryInformation);
+            Assert.IsNotNull(docWB.DocumentSummaryInformation);
+            Assert.IsNotNull(docWB.SummaryInformation);
 
             // Check they are as expected for the test doc
-            Assert.AreEqual("Administrator", doc.SummaryInformation.Author);
-            Assert.AreEqual(0, doc.DocumentSummaryInformation.ByteCount);
+            Assert.AreEqual("Administrator", docWB.SummaryInformation.Author);
+            Assert.AreEqual(0, docWB.DocumentSummaryInformation.ByteCount);
         }
         [Test]
         public void TestReadProperties2()
@@ -82,15 +88,15 @@ namespace TestCases
             OPOIFSFileSystem inFS = new OPOIFSFileSystem(bais);
 
             // Check they're still there
-            doc.SetDirectoryNode(inFS.Root);
-            doc.ReadProperties();
+            POIDocument doc3 = new HPSFPropertiesOnlyDocument(inFS);
+            doc3.ReadProperties();
 
             // Delegate test
-            TestReadProperties();
+            readPropertiesHelper(doc3);
+            doc3.Close();
         }
         [Test]
-        public void TestCreateNewProperties()
-        {
+        public void TestCreateNewProperties()        {
             POIDocument doc = new HSSFWorkbook();
 
             // New document won't have them

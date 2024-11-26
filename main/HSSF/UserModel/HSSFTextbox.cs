@@ -102,7 +102,7 @@ namespace NPOI.HSSF.UserModel
             opt.SetEscherProperty(new EscherBoolProperty(EscherProperties.FILL__NOFILLHITTEST, NO_FILLHITTEST_FALSE));
             opt.SetEscherProperty(new EscherBoolProperty(EscherProperties.GROUPSHAPE__PRINT, 0x080000));
 
-            EscherRecord anchor = Anchor.GetEscherAnchor();
+            EscherRecord anchor = (Anchor as HSSFAnchor).GetEscherAnchor();
             clientData.RecordId = (EscherClientDataRecord.RECORD_ID);
             clientData.Options = ((short)0x0000);
             escherTextbox.RecordId = (EscherTextboxRecord.RECORD_ID);

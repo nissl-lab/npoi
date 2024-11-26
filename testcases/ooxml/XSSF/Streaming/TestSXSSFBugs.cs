@@ -80,7 +80,7 @@ namespace TestCases.XSSF.Streaming
                 }
                 else
                 {
-                    throw e;
+                    throw;
                 }
             }
         }

@@ -2694,8 +2694,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
             XmlHelper.WriteAttribute(sw, "aca", this.aca, false);
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
-            XmlHelper.WriteAttribute(sw, "dt2D", this.dt2D, true);
-            XmlHelper.WriteAttribute(sw, "dtr", this.dtr, true);
+            XmlHelper.WriteAttribute(sw, "dt2D", this.dt2D, false);
+            XmlHelper.WriteAttribute(sw, "dtr", this.dtr, false);
             XmlHelper.WriteAttribute(sw, "del1", this.del1, false);
             XmlHelper.WriteAttribute(sw, "del2", this.del2, false);
             XmlHelper.WriteAttribute(sw, "r1", this.r1);
@@ -10711,16 +10711,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            sw.Write(">");
-            if (this.hyperlink != null)
+            if (this.hyperlink != null && this.hyperlink.Count > 0)
             {
+                sw.Write(string.Format("<{0}", nodeName));
+                sw.Write(">");
                 foreach (CT_Hyperlink x in this.hyperlink)
                 {
                     x.Write(sw, "hyperlink");
                 }
+                sw.Write(string.Format("</{0}>", nodeName));
             }
-            sw.Write(string.Format("</{0}>", nodeName));
         }
         public void SetHyperlinkArray(CT_Hyperlink[] array)
         {

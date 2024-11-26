@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using NPOI.DDF;
+using NPOI.SS.UserModel;
 namespace NPOI.HSSF.UserModel
 {
 
@@ -25,7 +26,7 @@ namespace NPOI.HSSF.UserModel
     /// or within another containing shape.
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
-    public abstract class HSSFAnchor
+    public abstract class HSSFAnchor: IChildAnchor
     {
         protected bool _isHorizontallyFlipped = false;
         protected bool _isVerticallyFlipped = false;
@@ -69,7 +70,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the DX1.
         /// </summary>
         /// <value>The DX1.</value>
-        public abstract int Dx1
+        public virtual int Dx1
         {
             get;
             set;
@@ -78,7 +79,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the dy1.
         /// </summary>
         /// <value>The dy1.</value>
-        public abstract int Dy1
+        public virtual int Dy1
         {
             get;
             set;
@@ -87,7 +88,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the dy2.
         /// </summary>
         /// <value>The dy2.</value>
-        public abstract int Dy2
+        public virtual int Dy2
         {
             get;
             set;
@@ -96,7 +97,7 @@ namespace NPOI.HSSF.UserModel
         /// Gets or sets the DX2.
         /// </summary>
         /// <value>The DX2.</value>
-        public abstract int Dx2
+        public virtual int Dx2
         {
             get;
             set;

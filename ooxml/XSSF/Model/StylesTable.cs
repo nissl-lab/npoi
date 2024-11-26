@@ -165,7 +165,9 @@ namespace NPOI.XSSF.Model
         }
         public ITableStyle GetExplicitTableStyle(String name)
         {
-            return tableStyles[name];
+            if(tableStyles.TryGetValue(name, out ITableStyle style))
+                return style;
+            return null;
         }
         /**
          * If there isn't currently a {@link ThemesTable} for the
@@ -268,17 +270,13 @@ namespace NPOI.XSSF.Model
         // ===========================================================
         //  Start of style related Getters and Setters
         // ===========================================================
-        /**
-         * Get number format string given its id
-         * 
-         * @param idx number format id
-         * @return number format code
-         */
-         [Obsolete("deprecated POI 3.14-beta2. Use {@link #getNumberFormatAt(short)} instead.")]
+
+        [Obsolete("To be removed NPOI 2.8. GetNumberFormatAt(short) instead.")]
         public String GetNumberFormatAt(int idx)
         {
-            return GetNumberFormatAt((short)idx);
+            return GetNumberFormatAt((short) idx);
         }
+        
         /**
          * Get number format string given its id
          * 
@@ -458,12 +456,20 @@ namespace NPOI.XSSF.Model
             return PutFont(font, false);
         }
 
+        /**
+         *
+         * @param idx style index
+         * @return XSSFCellStyle or null if idx is out of bounds for xfs array
+         */
         public XSSFCellStyle GetStyleAt(int idx)
         {
             int styleXfId = 0;
 
-            if (xfs.Count == 0) //in case there is no default style
+            if (idx < 0 || idx >= xfs.Count)
+            {
+                //BUG-60343
                 return null;
+            }
 
             // 0 is the empty default
             if (xfs[idx].xfId > 0)

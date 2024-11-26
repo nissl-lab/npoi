@@ -97,6 +97,12 @@ namespace NPOI.HSSF.UserModel
         {
             return cfAggregate.Header.CellRanges;
         }
+
+        public void SetFormattingRanges(CellRangeAddress[] ranges)
+        {
+            cfAggregate.Header.CellRanges = ranges;
+        }
+
         /// <summary>
         /// Replaces an existing Conditional Formatting rule at position idx.
         /// Excel allows to Create up to 3 Conditional Formatting rules.

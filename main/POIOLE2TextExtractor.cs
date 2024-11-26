@@ -95,10 +95,10 @@ namespace NPOI
         }
 
         /**
-	     * Return the underlying DirectoryEntry of this document.
-	     *
-	     * @return the DirectoryEntry that is associated with the POIDocument of this extractor.
-	     */
+         * Return the underlying DirectoryEntry of this document.
+         *
+         * @return the DirectoryEntry that is associated with the POIDocument of this extractor.
+         */
         public DirectoryEntry Root
         {
             get { return document.Directory; }

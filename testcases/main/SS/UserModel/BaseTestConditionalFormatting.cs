@@ -432,7 +432,7 @@ namespace TestCases.SS.UserModel
             {
                 if (e.Message.IndexOf("needs to define a clone method") > 0)
                 {
-                    Assert.Fail("Indentified bug 45682");
+                    Assert.Fail("Identified bug 45682");
                 }
                 throw;
             }
@@ -588,12 +588,10 @@ namespace TestCases.SS.UserModel
             wb.Close();
         }
 
-        public void testReadOffice2007(String filename)
+        public void TestReadOffice2007(String filename)
         {
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook(filename);
             ISheet s = wb.GetSheet("CF");
-            IConditionalFormatting cf = null;
-            IConditionalFormattingRule cr = null;
 
             // Sanity check data
             Assert.AreEqual("Values", s.GetRow(0).GetCell(0).ToString());
@@ -610,10 +608,10 @@ namespace TestCases.SS.UserModel
             int fCF = 0, fCF12 = 0, fCFEX = 0;
             for (int i = 0; i < sheetCF.NumConditionalFormattings; i++)
             {
-                cf = sheetCF.GetConditionalFormattingAt(i);
-                if (cf is HSSFConditionalFormatting)
+                IConditionalFormatting cf0 = sheetCF.GetConditionalFormattingAt(i);
+                if (cf0 is HSSFConditionalFormatting)
                 {
-                    String str = cf.ToString();
+                    String str = cf0.ToString();
                     if (str.Contains("[CF]"))
                         fCF++;
                     if (str.Contains("[CF12]"))
@@ -623,7 +621,7 @@ namespace TestCases.SS.UserModel
                 }
                 else
                 {
-                    ConditionType type = cf.GetRule(cf.NumberOfRules - 1).ConditionType;
+                    ConditionType type = cf0.GetRule(cf0.NumberOfRules - 1).ConditionType;
                     if (type == ConditionType.CellValueIs ||
                         type == ConditionType.Formula)
                     {
@@ -644,12 +642,12 @@ namespace TestCases.SS.UserModel
             // Check the rules / values in detail
 
             // Highlight Positive values - Column C
-            cf = sheetCF.GetConditionalFormattingAt(0);
+            IConditionalFormatting cf = sheetCF.GetConditionalFormattingAt(0);
             Assert.AreEqual(1, cf.GetFormattingRanges().Length);
             Assert.AreEqual("C2:C17", cf.GetFormattingRanges()[0].FormatAsString());
 
             Assert.AreEqual(1, cf.NumberOfRules);
-            cr = cf.GetRule(0);
+            IConditionalFormattingRule cr = cf.GetRule(0);
             Assert.AreEqual(ConditionType.CellValueIs, cr.ConditionType);
             Assert.AreEqual(ComparisonOperator.GreaterThan, cr.ComparisonOperation);
             Assert.AreEqual("0", cr.Formula1);
@@ -1321,6 +1319,161 @@ namespace TestCases.SS.UserModel
             sheet.SheetConditionalFormatting.AddConditionalFormatting(ranges, rule);
 
             wb.Close();
+        }
+
+        [Test]
+        public void TestSetCellRangeAddresswithSingleRange()
+        {
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("S1");
+            ISheetConditionalFormatting cf = sheet.SheetConditionalFormatting;
+            Assert.AreEqual(0, cf.NumConditionalFormattings);
+            IConditionalFormattingRule rule1 = cf.CreateConditionalFormattingRule("$A$1>0");
+            cf.AddConditionalFormatting(new CellRangeAddress[] {
+                CellRangeAddress.ValueOf("A1:A5")
+            }, rule1);
+
+            Assert.AreEqual(1, cf.NumConditionalFormattings);
+            IConditionalFormatting ReadCf = cf.GetConditionalFormattingAt(0);
+            CellRangeAddress[] formattingRanges = ReadCf.GetFormattingRanges();
+            Assert.AreEqual(1, formattingRanges.Length);
+            CellRangeAddress formattingRange = formattingRanges[0];
+            Assert.AreEqual("A1:A5", formattingRange.FormatAsString());
+
+            ReadCf.SetFormattingRanges(new CellRangeAddress[] {
+                CellRangeAddress.ValueOf("A1:A6")
+            });
+
+            ReadCf = cf.GetConditionalFormattingAt(0);
+            formattingRanges = ReadCf.GetFormattingRanges();
+            Assert.AreEqual(1, formattingRanges.Length);
+            formattingRange = formattingRanges[0];
+            Assert.AreEqual("A1:A6", formattingRange.FormatAsString());
+        }
+
+        [Test]
+        public void TestSetCellRangeAddressWithMultipleRanges()
+        {
+
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("S1");
+            ISheetConditionalFormatting cf = sheet.SheetConditionalFormatting;
+            Assert.AreEqual(0, cf.NumConditionalFormattings);
+            IConditionalFormattingRule rule1 = cf.CreateConditionalFormattingRule("$A$1>0");
+            cf.AddConditionalFormatting(new CellRangeAddress[] {
+                CellRangeAddress.ValueOf("A1:A5")
+            }, rule1);
+
+            Assert.AreEqual(1, cf.NumConditionalFormattings);
+            IConditionalFormatting ReadCf = cf.GetConditionalFormattingAt(0);
+            CellRangeAddress[] formattingRanges = ReadCf.GetFormattingRanges();
+            Assert.AreEqual(1, formattingRanges.Length);
+            CellRangeAddress formattingRange = formattingRanges[0];
+            Assert.AreEqual("A1:A5", formattingRange.FormatAsString());
+
+            ReadCf.SetFormattingRanges(new CellRangeAddress[] {
+                CellRangeAddress.ValueOf("A1:A6"),
+                CellRangeAddress.ValueOf("B1:B6")
+            });
+
+            ReadCf = cf.GetConditionalFormattingAt(0);
+            formattingRanges = ReadCf.GetFormattingRanges();
+            Assert.AreEqual(2, formattingRanges.Length);
+            formattingRange = formattingRanges[0];
+            Assert.AreEqual("A1:A6", formattingRange.FormatAsString());
+            formattingRange = formattingRanges[1];
+            Assert.AreEqual("B1:B6", formattingRange.FormatAsString());
+        }
+
+        [Test]
+        public void TestSetCellRangeAddressWithNullRanges()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("S1");
+            ISheetConditionalFormatting cf = sheet.SheetConditionalFormatting;
+            Assert.AreEqual(0, cf.NumConditionalFormattings);
+            IConditionalFormattingRule rule1 = cf.CreateConditionalFormattingRule("$A$1>0");
+            cf.AddConditionalFormatting(new CellRangeAddress[] {
+                CellRangeAddress.ValueOf("A1:A5")
+            }, rule1);
+
+            Assert.AreEqual(1, cf.NumConditionalFormattings);
+            IConditionalFormatting ReadCf = cf.GetConditionalFormattingAt(0);
+            Assert.Throws<ArgumentNullException>(() => ReadCf.SetFormattingRanges(null));
+        }
+
+        [Test]
+        public void Test52122()
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet = workbook.CreateSheet("Conditional Formatting Test");
+            sheet.SetColumnWidth(0, 256 * 10);
+            sheet.SetColumnWidth(1, 256 * 10);
+            sheet.SetColumnWidth(2, 256 * 10);
+            // Create some content.
+            // row 0
+            IRow row = sheet.CreateRow(0);
+            ICell cell0 = row.CreateCell(0);
+            cell0.SetCellType(CellType.Numeric);
+            cell0.SetCellValue(100);
+            ICell cell1 = row.CreateCell(1);
+            cell1.SetCellType(CellType.Numeric);
+            cell1.SetCellValue(120);
+            ICell cell2 = row.CreateCell(2);
+            cell2.SetCellType(CellType.Numeric);
+            cell2.SetCellValue(130);
+            // row 1
+            row = sheet.CreateRow(1);
+            cell0 = row.CreateCell(0);
+            cell0.SetCellType(CellType.Numeric);
+            cell0.SetCellValue(200);
+            cell1 = row.CreateCell(1);
+            cell1.SetCellType(CellType.Numeric);
+            cell1.SetCellValue(220);
+            cell2 = row.CreateCell(2);
+            cell2.SetCellType(CellType.Numeric);
+            cell2.SetCellValue(230);
+            // row 2
+            row = sheet.CreateRow(2);
+            cell0 = row.CreateCell(0);
+            cell0.SetCellType(CellType.Numeric);
+            cell0.SetCellValue(300);
+            cell1 = row.CreateCell(1);
+            cell1.SetCellType(CellType.Numeric);
+            cell1.SetCellValue(320);
+            cell2 = row.CreateCell(2);
+            cell2.SetCellType(CellType.Numeric);
+            cell2.SetCellValue(330);
+            // Create conditional formatting, CELL1 should be yellow if CELL0 is not blank.
+            ISheetConditionalFormatting formatting = sheet.SheetConditionalFormatting;
+            IConditionalFormattingRule rule = formatting.CreateConditionalFormattingRule("$A$1>75");
+            IPatternFormatting pattern = rule.CreatePatternFormatting();
+            pattern.FillBackgroundColor = IndexedColors.Blue.Index;
+            pattern.FillPattern = FillPattern.SolidForeground;
+            CellRangeAddress[] range = { CellRangeAddress.ValueOf("B2:C2") };
+            CellRangeAddress[] range2 = { CellRangeAddress.ValueOf("B1:C1") };
+            formatting.AddConditionalFormatting(range, rule);
+            formatting.AddConditionalFormatting(range2, rule);
+            // Write file.
+            /*FileOutputStream fos = new FileOutputStream("c:\\temp\\52122_conditional-sheet.xls");
+            try {
+                workbook.write(fos);
+            } finally {
+                fos.Close();
+            }*/
+            IWorkbook wbBack = _testDataProvider.WriteOutAndReadBack(workbook);
+            ISheet sheetBack = wbBack.GetSheetAt(0);
+            ISheetConditionalFormatting sheetConditionalFormattingBack = sheetBack.SheetConditionalFormatting;
+            Assert.IsNotNull(sheetConditionalFormattingBack);
+            IConditionalFormatting formattingBack = sheetConditionalFormattingBack.GetConditionalFormattingAt(0);
+            Assert.IsNotNull(formattingBack);
+            IConditionalFormattingRule ruleBack = formattingBack.GetRule(0);
+            Assert.IsNotNull(ruleBack);
+            IPatternFormatting patternFormattingBack1 = ruleBack.PatternFormatting;
+            Assert.IsNotNull(patternFormattingBack1);
+            Assert.AreEqual(IndexedColors.Blue.Index, patternFormattingBack1.FillBackgroundColor);
+            Assert.AreEqual(FillPattern.SolidForeground, patternFormattingBack1.FillPattern);
         }
     }
 

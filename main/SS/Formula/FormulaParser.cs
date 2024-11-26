@@ -81,7 +81,7 @@ namespace NPOI.SS.Formula
          * Tracks whether the run of whitespace preceeding "look" could be an
          * intersection operator.  See GetChar.
          */
-        private bool _inIntersection = false;
+        private bool _inIntersection;
 
         private IFormulaParsingWorkbook _book;
         private static SpreadsheetVersion _ssVersion;
@@ -123,7 +123,7 @@ namespace NPOI.SS.Formula
          * @param formulaType the type of the formula, see {@link FormulaType}
          * @param sheetIndex  the 0-based index of the sheet this formula belongs to.
          * @param rowIndex  - the related cell's row index in 0-based form (-1 if the formula is not cell related)
-	     *                     used to handle structured references that have the "#This Row" quantifier.
+         *                     used to handle structured references that have the "#This Row" quantifier.
          * The sheet index is required to resolve sheet-level names. <code>-1</code> means that
          * the scope of the name will be ignored and  the parser will match names only by name
          *
@@ -759,7 +759,7 @@ namespace NPOI.SS.Formula
                 GetChar();
             }
             // parse column quantifier
-            String startColumnName = null;
+            String startColumnName;
             String endColumnName = null;
             int nColQuantifiers = 0;
             savePtr1 = _pointer;
@@ -1393,6 +1393,19 @@ namespace NPOI.SS.Formula
                 return sb.ToString();
             }
         }
+
+        private String GetBookName()
+        {
+            StringBuilder sb = new StringBuilder();
+            GetChar();
+            while (look != ']')
+            {
+                sb.Append(look);
+                GetChar();
+            }
+            GetChar();
+            return sb.ToString();
+        }
         /**
          * Note - caller should reset {@link #_pointer} upon <code>null</code> result
          * @return The sheet name as an identifier <code>null</code> if '!' is not found in the right place
@@ -1403,15 +1416,7 @@ namespace NPOI.SS.Formula
             String bookName;
             if (look == '[')
             {
-                StringBuilder sb = new StringBuilder();
-                GetChar();
-                while (look != ']')
-                {
-                    sb.Append(look);
-                    GetChar();
-                }
-                GetChar();
-                bookName = sb.ToString();
+                bookName = GetBookName();
             }
             else
             {
@@ -1420,9 +1425,13 @@ namespace NPOI.SS.Formula
 
             if (look == '\'')
             {
-                StringBuilder sb = new StringBuilder();
-
                 Match('\'');
+                if (look == '[')
+                {
+                    bookName = GetBookName();
+                }
+
+                StringBuilder sb = new StringBuilder();
                 bool done = look == '\'';
                 while (!done)
                 {
@@ -1641,9 +1650,9 @@ namespace NPOI.SS.Formula
             return GetFunction(name, nameToken, args);
         }
         /**
-	     * Adds a name (named range or user defined function) to underlying workbook's names table
-	     * @param functionName
-	     */
+         * Adds a name (named range or user defined function) to underlying workbook's names table
+         * @param functionName
+         */
         private void AddName(String functionName)
         {
             IName name = _book.CreateName();
@@ -1655,7 +1664,7 @@ namespace NPOI.SS.Formula
          * Generates the variable Function ptg for the formula.
          * 
          * For IF Formulas, Additional PTGs are Added To the Tokens
-     * @param name a {@link NamePtg} or {@link NameXPtg} or <code>null</code>
+         * @param name a {@link NamePtg} or {@link NameXPtg} or <code>null</code>
          * @return Ptg a null is returned if we're in an IF formula, it needs extreme manipulation and is handled in this Function
          */
         private ParseNode GetFunction(String name, Ptg namePtg, ParseNode[] args)

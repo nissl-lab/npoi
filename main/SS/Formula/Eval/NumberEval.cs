@@ -89,11 +89,8 @@ namespace NPOI.SS.Formula.Eval
         }
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(GetType().Name).Append(" [");
-            sb.Append(this.StringValue);
-            sb.Append("]");
-            return sb.ToString();
+            return GetType().Name + " [" +
+                StringValue + "]";
         }
     }
 }

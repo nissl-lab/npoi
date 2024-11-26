@@ -315,6 +315,13 @@ namespace NPOI.XSSF.UserModel
             null
         );
 
+        public static XSSFRelation CUSTOM_PROPERTIES = new XSSFRelation(
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.customProperty",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customProperty",
+            "/xl/customProperty#.bin",
+            null
+    );
+
         public static String NS_SPREADSHEETML = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
         public static String NS_DRAWINGML = "http://schemas.openxmlformats.org/drawingml/2006/main";
         public static String NS_CHART = "http://schemas.openxmlformats.org/drawingml/2006/chart";
@@ -333,7 +340,7 @@ namespace NPOI.XSSF.UserModel
         public Stream GetContents(PackagePart corePart)
         {
             PackageRelationshipCollection prc =
-                corePart.GetRelationshipsByType(_relation);
+                corePart.GetRelationshipsByType(Relation);
             IEnumerator<PackageRelationship> it = prc.GetEnumerator();
             if (it.MoveNext())
             {
@@ -342,7 +349,7 @@ namespace NPOI.XSSF.UserModel
                 PackagePart part = corePart.Package.GetPart(relName);
                 return part.GetInputStream();
             }
-            log.Log(POILogger.WARN, "No part " + _defaultName + " found");
+            log.Log(POILogger.WARN, "No part " + DefaultFileName + " found");
             return null;
         }
 
@@ -369,9 +376,9 @@ namespace NPOI.XSSF.UserModel
         /// <param name="relation">Relation to remove</param>
         public static void RemoveRelation(XSSFRelation relation)
         {
-            if (_table.ContainsKey(relation._relation))
+            if (_table.ContainsKey(relation.Relation))
             {
-                _table.Remove(relation._relation);
+                _table.Remove(relation.Relation);
             }
         }
 
@@ -382,9 +389,9 @@ namespace NPOI.XSSF.UserModel
         /// <param name="relation">Relation to add</param>
         internal static void AddRelation(XSSFRelation relation)
         {
-            if ((null != relation._type) && !_table.ContainsKey(relation._relation))
+            if ((null != relation.ContentType) && !_table.ContainsKey(relation.Relation))
             {
-                _table.Add(relation._relation, relation);
+                _table.Add(relation.Relation, relation);
             }
         }
     }
