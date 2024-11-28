@@ -821,6 +821,32 @@ namespace TestCases.SS.UserModel
             Assert.AreEqual("5.6789", formatter.FormatCellValue(cell, evaluator));
             wb.Close();
         }
-    }
 
+        /**
+         * bug 60031: DataFormatter parses months incorrectly when put at the end of date segment
+         */
+        [Test]
+        public void TestBug60031()
+        {
+            // 23-08-2016 08:51:01 which is 42605.368761574071 as double will be parsed
+            // with format "yyyy-dd-MM HH:mm:ss" into "2016-23-51 08:51:01".
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
+            Assert.AreEqual("2016-23-08 08:51:01", dfUS.FormatRawCellContents(42605.368761574071, -1, "yyyy-dd-MM HH:mm:ss"));
+            Assert.AreEqual("2016-23 08:51:01 08", dfUS.FormatRawCellContents(42605.368761574071, -1, "yyyy-dd HH:mm:ss MM"));
+            Assert.AreEqual("2017-12-01 January 09:54:33", dfUS.FormatRawCellContents(42747.412892397523, -1, "yyyy-dd-MM MMMM HH:mm:ss"));
+
+            Assert.AreEqual("08", dfUS.FormatRawCellContents(42605.368761574071, -1, "MM"));
+            Assert.AreEqual("01", dfUS.FormatRawCellContents(42605.368761574071, -1, "ss"));
+
+            // From Excel help:
+            /*
+                The "m" or "mm" code must appear immediately after the "h" or"hh"
+                code or immediately before the "ss" code; otherwise, Microsoft
+                Excel displays the month instead of minutes."
+              */
+            Assert.AreEqual("08", dfUS.FormatRawCellContents(42605.368761574071, -1, "mm"));
+            Assert.AreEqual("08:51", dfUS.FormatRawCellContents(42605.368761574071, -1, "hh:mm"));
+            Assert.AreEqual("51:01", dfUS.FormatRawCellContents(42605.368761574071, -1, "mm:ss"));
+        }
+    }
 }
