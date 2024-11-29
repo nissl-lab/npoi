@@ -47,6 +47,21 @@ namespace TestCases.SS.Formula.Functions
             }
         }
         [Test]
+        public void TestCell()
+        {
+            Function target = new Cell();
+            {
+                ValueEval[] args = { new StringEval("col"), EvalFactory.CreateRefEval("B5"), };
+                double actual = NumericFunctionInvoker.Invoke(target, args);
+                Assert.AreEqual(2, actual);
+            }
+            {
+                ValueEval[] args = { new StringEval("row"), EvalFactory.CreateRefEval("B5"), };
+                double actual = NumericFunctionInvoker.Invoke(target, args);
+                Assert.AreEqual(5, actual);
+            }
+        }
+        [Test]
         public void TestRow()
         {
             //throw new NotImplementedException();

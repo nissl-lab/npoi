@@ -52,6 +52,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestBasic()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             ConfirmValue("5", "4", 0); // Checks whether 5 Equals 4 (0)
             ConfirmValue("5", "5", 1); // Checks whether 5 Equals 5 (1)
 

@@ -89,9 +89,9 @@ namespace NPOI.SS.UserModel
         /// Set the cells type (numeric, formula or string)
         /// </summary>
         /// <param name="cellType"></param>
-        void SetCellType(CellType cellType);
+        ICell SetCellType(CellType cellType);
 
-        void SetBlank();
+        ICell SetBlank();
         /// <summary>
         /// Only valid for formula cells
         /// </summary>
@@ -105,7 +105,7 @@ namespace NPOI.SS.UserModel
         ///  precalculated value, for numerics we'll set its value. For other types we will change 
         ///  the cell to a numeric cell and set its value.
         /// </param>
-        void SetCellValue(double value);
+        ICell SetCellValue(double value);
 
         /// <summary>
         /// Set a error value for the cell
@@ -114,7 +114,7 @@ namespace NPOI.SS.UserModel
         /// precalculated value , for errors we'll set its value. For other types we will change 
         /// the cell to an error cell and set its value.
         /// </param>
-        void SetCellErrorValue(byte value);
+        ICell SetCellErrorValue(byte value);
 
         /// <summary>
         /// Converts the supplied date to its equivalent Excel numeric value and Sets that into the cell.
@@ -123,7 +123,7 @@ namespace NPOI.SS.UserModel
         ///  precalculated value, for numerics we'll set its value. For other types we will change 
         ///  the cell to a numerics cell and set its value.
         /// </param>
-        void SetCellValue(DateTime value);
+        ICell SetCellValue(DateTime value);
 
 #if NET6_0_OR_GREATER
         /// <summary>
@@ -133,7 +133,7 @@ namespace NPOI.SS.UserModel
         ///  precalculated value, for numerics we'll set its value. For other types we will change 
         ///  the cell to a numerics cell and set its value.
         /// </param>
-        void SetCellValue(DateOnly value);
+        ICell SetCellValue(DateOnly value);
 #endif
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace NPOI.SS.UserModel
         ///  change the cell to a string cell and set its value.
         ///  If value is null then we will change the cell to a Blank cell.
         ///  </param>
-        void SetCellValue(IRichTextString value);
+        ICell SetCellValue(IRichTextString value);
 
         /// <summary>
         /// Set a string value for the cell.
@@ -154,7 +154,7 @@ namespace NPOI.SS.UserModel
         /// change the cell to a string cell and set its value. 
         /// If value is null then we will change the cell to a blank cell.
         /// </param>
-        void SetCellValue(String value);
+        ICell SetCellValue(String value);
 
         /// <summary>
         /// Copy the cell to the target index. If the target cell exists, a new cell will be inserted before the existing cell.
@@ -180,7 +180,7 @@ namespace NPOI.SS.UserModel
         /// Sets formula for this cell.
         /// </summary>
         /// <param name="formula">the formula to Set, e.g. <code>"SUM(C4:E4)"</code>.</param>
-        void SetCellFormula(String formula);        
+        ICell SetCellFormula(String formula);        
 
         /// <summary>
         /// Get the value of the cell as a number.
@@ -224,7 +224,7 @@ namespace NPOI.SS.UserModel
         /// Set a bool value for the cell
         /// </summary>
         /// <param name="value"></param>
-        void SetCellValue(bool value);
+        ICell SetCellValue(bool value);
 
         /// <summary>
         /// Get the value of the cell as a bool.
@@ -283,6 +283,20 @@ namespace NPOI.SS.UserModel
         bool IsPartOfArrayFormulaGroup { get; }
 
         bool IsMergedCell { get; }
+
+        /// <summary>
+        /// Only valid for formula cells
+        /// </summary>
+        /// <returns>one of (<see cref="CellType.Numeric" />, <see cref="CellType.String" />,
+        /// <see cref="CellType.Boolean" />, <see cref="CellType.Error" />) depending
+        /// on the cached value of the formula
+        /// </returns>
+        /// <remarks>
+        /// @since POI 3.15 beta 3
+        /// Will be renamed to <c>getCachedFormulaResultType()</c> when we make the CellType enum transition in POI 4.0. See bug 59791.
+        /// </remarks>
+        [Obsolete("Will be removed at NPOI 2.8, Use CachedFormulaResultType instead.")]
+        CellType GetCachedFormulaResultTypeEnum();
     }
 }
 

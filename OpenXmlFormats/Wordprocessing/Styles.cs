@@ -50,7 +50,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal void Write(StreamWriter sw)
         {
             sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
-            sw.Write("<w:styles xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\">");
+            sw.Write("<w:styles xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"");
+            sw.Write(" xmlns:w14=\"http://schemas.microsoft.com/office/word/2010/wordml\" xmlns:w15=\"http://schemas.microsoft.com/office/word/2012/wordml\" xmlns:w16cex=\"http://schemas.microsoft.com/office/word/2018/wordml/cex\" xmlns:w16cid=\"http://schemas.microsoft.com/office/word/2016/wordml/cid\" xmlns:w16=\"http://schemas.microsoft.com/office/word/2018/wordml\" xmlns:w16sdtdh=\"http://schemas.microsoft.com/office/word/2020/wordml/sdtdatahash\" xmlns:w16se=\"http://schemas.microsoft.com/office/word/2015/wordml/symex\" mc:Ignorable=\"w14 w15 w16se w16cid w16 w16cex w16sdtdh\"");
+            sw.Write(">");
             if (this.docDefaults != null)
                 this.docDefaults.Write(sw, "docDefaults");
             if (this.latentStyles != null)
@@ -2304,11 +2306,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             sw.Write(string.Format("<w:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            XmlHelper.WriteAttribute(sw, "w:color", this.color);
             if (this.sz != null)
                 XmlHelper.WriteAttribute(sw, "w:sz", (ulong)this.sz, true);
            if (this.space != null)
                XmlHelper.WriteAttribute(sw, "w:space", (ulong)this.space, true);
+            XmlHelper.WriteAttribute(sw, "w:color", this.color);
             if(this.themeColor!= ST_ThemeColor.none)
                 XmlHelper.WriteAttribute(sw, "w:themeColor", this.themeColor.ToString());
             XmlHelper.WriteAttribute(sw, "w:themeTint", this.themeTint);

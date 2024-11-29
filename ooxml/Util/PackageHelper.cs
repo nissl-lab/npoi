@@ -30,12 +30,11 @@ namespace NPOI.Util
      */
     public class PackageHelper
     {
-
-        public static OPCPackage Open(Stream is1)
+        public static OPCPackage Open(Stream stream, bool readOnly = false)
         {
             try
             {
-                return OPCPackage.Open(is1);
+                return OPCPackage.Open(stream, readOnly);
             }
             catch (InvalidFormatException e)
             {

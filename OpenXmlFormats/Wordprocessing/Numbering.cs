@@ -971,7 +971,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.multiLevelTypeField = new CT_MultiLevelType();
             this.nsidField = new CT_LongHexNumber();
             this.nsidField.val = new byte[4];
-            Array.Copy(BitConverter.GetBytes(DateTime.Now.Ticks), 4, this.nsidField.val, 0, 4);
+            Array.Copy(BitConverter.GetBytes(DateTime.Now.Ticks), 0, this.nsidField.val, 0, 4);
         }
 
         [XmlElement(Order = 0)]

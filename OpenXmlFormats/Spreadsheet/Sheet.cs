@@ -2694,14 +2694,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
             XmlHelper.WriteAttribute(sw, "aca", this.aca, false);
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
-            XmlHelper.WriteAttribute(sw, "dt2D", this.dt2D, true);
-            XmlHelper.WriteAttribute(sw, "dtr", this.dtr, true);
+            XmlHelper.WriteAttribute(sw, "dt2D", this.dt2D, false);
+            XmlHelper.WriteAttribute(sw, "dtr", this.dtr, false);
             XmlHelper.WriteAttribute(sw, "del1", this.del1, false);
             XmlHelper.WriteAttribute(sw, "del2", this.del2, false);
             XmlHelper.WriteAttribute(sw, "r1", this.r1);
             XmlHelper.WriteAttribute(sw, "r2", this.r2);
             XmlHelper.WriteAttribute(sw, "ca", this.ca, false);
-            if(this.si!=0)
+            if(this.t == ST_CellFormulaType.shared || this.si!=0)
                 XmlHelper.WriteAttribute(sw, "si", this.si, true);
             XmlHelper.WriteAttribute(sw, "bx", this.bx, false);
             if (!string.IsNullOrEmpty(this.valueField))
@@ -7133,6 +7133,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
+            if (this.countField == 0)
+                return;
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "disablePrompts", this.disablePrompts);
             XmlHelper.WriteAttribute(sw, "xWindow", this.xWindow);
@@ -7387,6 +7389,33 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             promptField = obj.promptField;
             sqrefField = obj.sqrefField;
         }
+
+        public override bool Equals(object obj)
+        {
+            CT_DataValidation o = (CT_DataValidation)obj;
+
+            if (o is null)
+            {
+                return false;
+            }
+
+            return formula1Field == o.formula1Field
+                && formula2Field == o.formula2Field
+                && typeField == o.typeField
+                && errorStyleField == o.errorStyleField
+                && imeModeField == o.imeModeField
+                && operatorField == o.operatorField
+                && allowBlankField == o.allowBlankField
+                && showDropDownField == o.showDropDownField
+                && showInputMessageField == o.showInputMessageField
+                && showErrorMessageField == o.showErrorMessageField
+                && errorTitleField == o.errorTitleField
+                && errorField == o.errorField
+                && promptTitleField == o.promptTitleField
+                && promptField == o.promptField
+                && sqrefField == o.sqrefField;
+        }
+
         [XmlElement(Order = 0)]
         public string formula1
         {

@@ -204,8 +204,8 @@ namespace NPOI.XSSF.UserModel
         public XSSFFreeform CreateFreeform(
               BuildFreeForm BFF
         ) {
-            var anchor = new XSSFChildAnchor((int)BFF.Min.x, (int)BFF.Min.y
-                                            , (int)BFF.Max.x, (int)BFF.Max.y);
+            var anchor = new XSSFChildAnchor((int)BFF.Left, (int)BFF.Top
+                                            , (int)BFF.Rigth, (int)BFF.Bottom);
             //long shapeId = newShapeId();
             CT_Shape ctShape = ctGroup.AddNewSp();
             ctShape.Set(XSSFFreeform.Prototype());
