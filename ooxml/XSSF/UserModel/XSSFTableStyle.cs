@@ -18,7 +18,7 @@ namespace NPOI.OOXML.XSSF.UserModel
             this.name = tableStyle.name;
             this.index = index;
 
-            List<CT_Dxf> dxfList = dxfs.dxf;
+            List<CT_Dxf> dxfList = dxfs == null ? [] : dxfs.dxf;
 
             foreach (CT_TableStyleElement element in tableStyle.tableStyleElement)
             {
