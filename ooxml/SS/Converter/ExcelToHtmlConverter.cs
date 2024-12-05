@@ -172,7 +172,13 @@ namespace NPOI.SS.Converter
             {
                 IRow row = sheet.GetRow(r);
                 if (row == null)
-                    row = sheet.CreateRow(r); //if row is null, create an empty row
+                {
+                    IRow newRow = sheet.CreateRow(r); //if row is null, create an empty row
+                    if (newRow != null)
+                        row = newRow; 
+                    else
+                        continue;
+                }
 
                 if (!OutputHiddenRows && row.ZeroHeight)
                     continue;
