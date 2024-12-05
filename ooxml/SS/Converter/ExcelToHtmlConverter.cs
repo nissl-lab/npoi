@@ -168,12 +168,11 @@ namespace NPOI.SS.Converter
 
             List<XmlElement> emptyRowElements = new List<XmlElement>(physicalNumberOfRows);
             int maxSheetColumns = 1;
-            for (int r = 0; r < physicalNumberOfRows; r++)
+            for (int r = 0; r < sheet.LastPhysicalRowNumber; r++) //just number of rows will skip bottom rows if there's empty rows in the middle
             {
                 IRow row = sheet.GetRow(r);
-
                 if (row == null)
-                    continue;
+                    row = sheet.CreateRow(r); //if row is null, create an empty row
 
                 if (!OutputHiddenRows && row.ZeroHeight)
                     continue;
@@ -817,10 +816,13 @@ namespace NPOI.SS.Converter
                     {
                         fontColor = st.GetTheme().GetThemeColor(font.Color);
                     }
-                    else
+                    var cellSpecificFontColour = ((XSSFFont)font).GetXSSFColor();
+                    if (cellSpecificFontColour != null)
                     {
-                        fontColor = ((XSSFFont)font).GetXSSFColor();
+                        //themed colour is file-wide colour, cell-level colour should overwrite file-level theme colour
+                        fontColor = cellSpecificFontColour;
                     }
+                    
                     if (fontColor != null)
                         hexstring = ExcelToHtmlUtils.GetColor(fontColor);
                 }
