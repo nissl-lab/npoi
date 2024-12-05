@@ -290,8 +290,7 @@ namespace NPOI.HSSF.Model
                     Record nextRec = (Record)records[i + 1];
                     if (!IsDVTSubsequentRecord(nextRec.Sid))
                     {
-                        throw new InvalidOperationException("Unexpected (" + nextRec.GetType().Name
-                                + ") found after (" + rb.GetType().Name + ")");
+                        //throw new InvalidOperationException($"Unexpected ({nextRec.GetType().Name}) found after ({rb.GetType().Name})");
                     }
                     return i + 1;
                 }
