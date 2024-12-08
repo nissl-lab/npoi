@@ -50,11 +50,15 @@ namespace NPOI.SS.UserModel
         private static Regex date_ptrn1 = new Regex("^\\[\\$\\-.*?\\]", RegexOptions.Compiled);
         private static Regex date_ptrn2 = new Regex("^\\[[a-zA-Z]+\\]", RegexOptions.Compiled);
         private static Regex date_ptrn3a = new Regex("[yYmMdDhHsS]", RegexOptions.Compiled);
-        private static Regex date_ptrn3b = new Regex("^[\\[\\]yYmMdDhHsS\\-T/,. :\"\\\\]+0*[ampAMP/]*$", RegexOptions.Compiled);
+        // add "\u5e74 \u6708 \u65e5"（年月日） for Chinese/Japanese date format:2017年2月7日
+        private static Regex date_ptrn3b = new Regex("^[\\[\\]yYmMdDhHsS\\-T/\u5e74\u6708\u65e5,. :\"\\\\]+0*[ampAMP/]*$", RegexOptions.Compiled);
+
         //  elapsed time patterns: [h],[m] and [s]
         //private static Regex date_ptrn4 = new Regex("^\\[([hH]+|[mM]+|[sS]+)\\]", RegexOptions.Compiled);
         private static Regex date_ptrn4 = new Regex("^\\[([hH]+|[mM]+|[sS]+)\\]$", RegexOptions.Compiled);
 
+        // for format which start with "[DBNum1]" or "[DBNum2]" or "[DBNum3]" could be a Chinese date
+        private static Regex date_ptrn5 = new Regex("^\\[DBNum(1|2|3)\\]", RegexOptions.Compiled);
 
         /// <summary>
         /// Given a Calendar, return the number of days since 1899/12/31.
@@ -671,6 +675,10 @@ namespace NPOI.SS.UserModel
                     cached = true;
                     return true;
                 }
+
+                // If it starts with [DBNum1] or [DBNum2] or [DBNum3]
+                // then it could be a Chinese date 
+                fs = date_ptrn5.Replace(fs, "");
 
                 // If it starts with [$-...], then could be a date, but
                 //  who knows what that starting bit Is all about
