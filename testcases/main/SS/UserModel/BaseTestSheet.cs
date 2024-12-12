@@ -1517,7 +1517,7 @@ namespace TestCases.SS.UserModel
         {
             var wb1 = _testDataProvider.CreateWorkbook();
             var sheet = wb1.CreateSheet();
-            var cellRange = sheet.GetCells("Sheet1:A1:C3");
+            var cellRange = sheet.GetCells("Sheet1!A1:C3");
             Assert.AreEqual(3, cellRange.Width);
             Assert.AreEqual(3, cellRange.Height);
             Assert.AreEqual(new CellAddress(0, 0), cellRange.Cells[0][0].Address);

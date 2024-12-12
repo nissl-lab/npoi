@@ -180,8 +180,7 @@ namespace NPOI.HSSF.Util
                     {
                         return 0;
                     }
-                    else
-                        return toX - fromX + 1;
+                    return toX - fromX + 1;
                 }
                 return 0;
             }
@@ -199,8 +198,7 @@ namespace NPOI.HSSF.Util
                     {
                         return 0;
                     }
-                    else
-                        return toY - fromY + 1;
+                    return toY - fromY + 1;
                 }
                 return 0;
             }
