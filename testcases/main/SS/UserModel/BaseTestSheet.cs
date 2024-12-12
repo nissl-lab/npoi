@@ -1497,31 +1497,32 @@ namespace TestCases.SS.UserModel
         {
             var wb1 = _testDataProvider.CreateWorkbook();
             var sheet = wb1.CreateSheet();
-            var cellRange= sheet.GetCells("A1");
-            Assert.AreEqual(1, cellRange.Width);
-            Assert.AreEqual(1, cellRange.Height);
+            var cellRanges= sheet.GetCells("A1");
+            Assert.AreEqual(1, cellRanges.CountRanges());
         }
 
         [Test]
-        public void TestGetCells_CellRange_WithoutSheetName()
+        public void TestGetCells_MultipleCellRange()
         {
             var wb1 = _testDataProvider.CreateWorkbook();
             var sheet = wb1.CreateSheet();
-            var cellRange = sheet.GetCells("A1:B2");
-            Assert.AreEqual(2, cellRange.Width);
-            Assert.AreEqual(2, cellRange.Height);
-            Assert.AreEqual(new CellAddress(0, 0), cellRange.Cells[0][0].Address);
+            var cellRanges = sheet.GetCells("A1:B2, D5:F7");
+            Assert.AreEqual(2, cellRanges.CountRanges());
+            Assert.AreEqual(4+9, cellRanges.NumberOfCells());
         }
         [Test]
-        public void TestGetCells_CellRange_WithSheetName()
+        public void TestGetCells_SingleCellRange()
         {
             var wb1 = _testDataProvider.CreateWorkbook();
             var sheet = wb1.CreateSheet();
-            var cellRange = sheet.GetCells("Sheet1!A1:C3");
-            Assert.AreEqual(3, cellRange.Width);
-            Assert.AreEqual(3, cellRange.Height);
-            Assert.AreEqual(new CellAddress(0, 0), cellRange.Cells[0][0].Address);
-        }
+            var cellRanges = sheet.GetCells("Sheet1!B1:D3");
+            Assert.AreEqual(1, cellRanges.CountRanges());
+            Assert.AreEqual(1, cellRanges.GetCellRangeAddress(0).FirstColumn);
+            Assert.AreEqual(3, cellRanges.GetCellRangeAddress(0).LastColumn);
+            Assert.AreEqual(0, cellRanges.GetCellRangeAddress(0).FirstRow);
+            Assert.AreEqual(2, cellRanges.GetCellRangeAddress(0).LastRow);
+            Assert.AreEqual(9, cellRanges.GetCellRangeAddress(0).NumberOfCells);
+        }        
     }
 
 }

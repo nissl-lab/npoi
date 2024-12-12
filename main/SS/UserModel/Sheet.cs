@@ -15,6 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Collections.ObjectModel;
+
 namespace NPOI.SS.UserModel
 {
 
@@ -952,6 +954,6 @@ namespace NPOI.SS.UserModel
 
         void CopyTo(IWorkbook dest, string name, bool copyStyle, bool keepFormulas);
         
-        ICellRange<ICell> GetCells(string range);
+        CellRangeAddressList GetCells(string cellranges);
     }
 }

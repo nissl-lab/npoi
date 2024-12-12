@@ -15,6 +15,8 @@
    limitations Under the License.
 ==================================================================== */
 
+using System.Collections.ObjectModel;
+
 namespace NPOI.HSSF.UserModel
 {
     using System;
@@ -3394,30 +3396,9 @@ namespace NPOI.HSSF.UserModel
         {
             return rows.Values.GetEnumerator();
         }
-        public ICellRange<ICell> GetCells(string range)
+        public CellRangeAddressList GetCells(string cellranges)
         {
-            if(string.IsNullOrWhiteSpace(range))
-            {
-                throw new ArgumentException("cell range cannot be null or empty");
-            }
-
-            var cells = new List<ICell>();
-
-            var rangeAddress = new RangeAddress(range);
-            var startCellAddress = new CellAddress(rangeAddress.FromCell);
-
-            for(int i = startCellAddress.Row; i < rangeAddress.Height; i++)
-            {
-                for(int j = startCellAddress.Column; j < rangeAddress.Width; j++)
-                {
-                    var row = this.GetRow(i) ?? CreateRow(i);
-                    var cell = row.GetCell(j) ?? row.CreateCell(j);
-                    cells.Add(cell);
-                }
-            }
-            return SSCellRange<ICell>.Create(
-                startCellAddress.Row, startCellAddress.Column, 
-                rangeAddress.Height, rangeAddress.Width, cells, typeof(ICell));
+            return CellRangeAddressList.Parse(cellranges);
         }
     }
 }
