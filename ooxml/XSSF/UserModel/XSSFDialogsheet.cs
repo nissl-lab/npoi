@@ -32,7 +32,7 @@ namespace NPOI.XSSF.UserModel
         {
 
             this.dialogsheet = new CT_Dialogsheet();
-            this.worksheet = new CT_Worksheet();
+            this.Worksheet = new CT_Worksheet();
         }
 
         public override IRow CreateRow(int rowNum)
@@ -609,7 +609,7 @@ namespace NPOI.XSSF.UserModel
             throw new System.NotImplementedException();
         }
 
-        void ISheet.AutoSizeColumn(int column, bool useMergedCells)
+        void ISheet.AutoSizeColumn(int column, bool useMergedCells, int maxRows = 0)
         {
             throw new System.NotImplementedException();
         }

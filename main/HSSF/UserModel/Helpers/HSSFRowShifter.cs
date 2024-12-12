@@ -15,17 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.HSSF.UserModel.helpers
+namespace NPOI.HSSF.UserModel.Helpers
 {
     using System;
 
-    using NPOI.HSSF.UserModel;
-    using NPOI.HSSF.UserModel.Helpers;
-    using NPOI.SS.Formula;
-    using NPOI.SS.Formula.Eval;
+    using UserModel;
+    using SS.Formula;
     using NPOI.SS.UserModel;
     using NPOI.SS.UserModel.Helpers;
-    using NPOI.Util;
 
     /**
      * Helper for Shifting rows up or down
@@ -34,20 +31,20 @@ namespace NPOI.HSSF.UserModel.helpers
      */
     public class HSSFRowShifter : RowShifter
     {
-        private static POILogger logger = POILogFactory.GetLogger(typeof(HSSFRowShifter));
+        //private static POILogger logger = POILogFactory.GetLogger(typeof(HSSFRowShifter));
 
         public HSSFRowShifter(HSSFSheet sh)
                 : base(sh)
         {
-            ;
+            
         }
 
-        public override void UpdateNamedRanges(FormulaShifter Shifter)
+        public override void UpdateNamedRanges(FormulaShifter shifter)
         {
             throw new NotImplementedException("HSSFRowShifter.updateNamedRanges");
         }
 
-        public override void UpdateFormulas(FormulaShifter Shifter)
+        public override void UpdateFormulas(FormulaShifter shifter)
         {
             throw new NotImplementedException("updateFormulas");
         }
@@ -58,12 +55,12 @@ namespace NPOI.HSSF.UserModel.helpers
             HSSFRowColShifter.UpdateRowFormulas(row, formulaShifter);
         }
 
-        public override void UpdateConditionalFormatting(FormulaShifter Shifter)
+        public override void UpdateConditionalFormatting(FormulaShifter shifter)
         {
             throw new NotImplementedException("updateConditionalFormatting");
         }
 
-        public override void UpdateHyperlinks(FormulaShifter Shifter)
+        public override void UpdateHyperlinks(FormulaShifter shifter)
         {
             throw new NotImplementedException("updateHyperlinks");
         }

@@ -554,7 +554,7 @@ namespace NPOI.XSSF.Streaming
          * @param column the column index to auto-size
          * @param useMergedCells whether to use the contents of merged cells when calculating the width of the column
          */
-        public void AutoSizeColumn(int column, bool useMergedCells)
+        public void AutoSizeColumn(int column, bool useMergedCells, int maxRows = 0)
         {
             // Multiple calls to autoSizeColumn need to look up the best-fit width
             // of rows already flushed to disk plus re-calculate the best-fit width
@@ -610,17 +610,17 @@ namespace NPOI.XSSF.Streaming
             throw new NotImplementedException();
         }
 
-        public ISheet CopySheet(string Name)
+        public ISheet CopySheet(string name)
         {
             throw new NotImplementedException();
         }
 
-        public ISheet CopySheet(string Name,string newName, bool copyStyle)
+        public ISheet CopySheet(string name,string newName, bool copyStyle)
         {
             throw new NotImplementedException();
         }
 
-        public ISheet CopySheet(string Name, bool copyStyle)
+        public ISheet CopySheet(string name, bool copyStyle)
         {
             throw new NotImplementedException();
         }
@@ -1478,6 +1478,10 @@ namespace NPOI.XSSF.Streaming
         IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
         {
             return ((IEnumerable<IRow>) _sh).GetEnumerator();
+        }
+        public ICellRange<ICell> GetCells(string range)
+        {
+            throw new NotImplementedException();
         }
     }
 }

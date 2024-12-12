@@ -429,7 +429,7 @@ namespace NPOI.XSSF.UserModel
                 logger.Log(POILogger.WARN, "Sheet with name " + ctSheet.name + " and r:id " + ctSheet.id + " was defined, but didn't exist in package, skipping");
                 return;
             }
-            sh.sheet = ctSheet;
+            sh.Sheet = ctSheet;
             sh.OnDocumentRead();
             sheets.Add(sh);
         }
@@ -895,14 +895,14 @@ namespace NPOI.XSSF.UserModel
 
             int sheetNumber = 1;
             //TODO: this is extra somehow
-            foreach (XSSFSheet sh in sheets) sheetNumber = (int)Math.Max(sh.sheet.sheetId + 1, sheetNumber);
+            foreach (XSSFSheet sh in sheets) sheetNumber = (int)Math.Max(sh.Sheet.sheetId + 1, sheetNumber);
 
             outerloop:
             while (true)
             {
                 foreach (XSSFSheet sh in sheets)
                 {
-                    sheetNumber = (int)Math.Max(sh.sheet.sheetId + 1, sheetNumber);
+                    sheetNumber = (int)Math.Max(sh.Sheet.sheetId + 1, sheetNumber);
                 }
 
                 // Bug 57165: We also need to check that the resulting file name is not already taken
@@ -925,7 +925,7 @@ namespace NPOI.XSSF.UserModel
 
             RelationPart rp = CreateRelationship(XSSFRelation.WORKSHEET, XSSFFactory.GetInstance(), sheetNumber, false);
             XSSFSheet wrapper = rp.DocumentPart as XSSFSheet;
-            wrapper.sheet = sheet;
+            wrapper.Sheet = sheet;
             sheet.id = (rp.Relationship.Id);
             sheet.sheetId = (uint)sheetNumber;
             if (sheets.Count == 0) wrapper.IsSelected = (true);
@@ -1684,7 +1684,7 @@ namespace NPOI.XSSF.UserModel
             List<CT_Sheet> sheetArray = ct.sheet;
             for (int i = 0; i < sheetArray.Count; i++)
             {
-                sheets[i].sheet = sheetArray[i];
+                sheets[i].Sheet = sheetArray[i];
             }
 
             UpdateNamedRangesAfterSheetReorder(idx, pos);
@@ -1973,7 +1973,7 @@ namespace NPOI.XSSF.UserModel
         public bool IsSheetHidden(int sheetIx)
         {
             ValidateSheetIndex(sheetIx);
-            CT_Sheet ctSheet = sheets[sheetIx].sheet;
+            CT_Sheet ctSheet = sheets[sheetIx].Sheet;
             return ctSheet.state == ST_SheetState.hidden;
         }
 
@@ -1989,14 +1989,14 @@ namespace NPOI.XSSF.UserModel
         public bool IsSheetVeryHidden(int sheetIx)
         {
             ValidateSheetIndex(sheetIx);
-            CT_Sheet ctSheet = sheets[sheetIx].sheet;
+            CT_Sheet ctSheet = sheets[sheetIx].Sheet;
             return ctSheet.state == ST_SheetState.veryHidden;
         }
 
         public SheetVisibility GetSheetVisibility(int sheetIx)
         {
             ValidateSheetIndex(sheetIx);
-            CT_Sheet ctSheet = sheets[sheetIx].sheet;
+            CT_Sheet ctSheet = sheets[sheetIx].Sheet;
             ST_SheetState state = ctSheet.state;
             if(state == ST_SheetState.visible)
             {
@@ -2069,7 +2069,7 @@ namespace NPOI.XSSF.UserModel
         {
             ValidateSheetIndex(sheetIx);
 
-            CT_Sheet ctSheet = sheets[sheetIx].sheet;
+            CT_Sheet ctSheet = sheets[sheetIx].Sheet;
             switch(visibility)
             {
                 case SheetVisibility.Visible:
@@ -2096,7 +2096,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (calcChain != null)
             {
-                int sheetId = (int)((XSSFSheet)cell.Sheet).sheet.sheetId;
+                int sheetId = (int)((XSSFSheet)cell.Sheet).Sheet.sheetId;
                 calcChain.RemoveItem(sheetId, cell.GetReference());
             }
         }

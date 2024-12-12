@@ -129,11 +129,11 @@ namespace NPOI.XSSF.UserModel
             double  MDW = rt.Width + 1;                                                     //MaximumDigitWidth
 
             double colwidth;                                                                //default or base column width (in pixel)
-            var width = ((XSSFSheet)Sheet).worksheet.sheetFormatPr.defaultColWidth;         //string length with padding
+            var width = ((XSSFSheet)Sheet).Worksheet.sheetFormatPr.defaultColWidth;         //string length with padding
             if(width != 0.0) {
                 colwidth = width * MDW;
             } else {
-                var length = ((XSSFSheet)Sheet).worksheet.sheetFormatPr.baseColWidth;       //string length with out padding
+                var length = ((XSSFSheet)Sheet).Worksheet.sheetFormatPr.baseColWidth;       //string length with out padding
                 var fontwidth = Math.Truncate((length * MDW + 5) / MDW * 256) / 256;
                 var tmp = 256 * fontwidth + Math.Truncate(128 / MDW);
                 colwidth = Math.Truncate((tmp / 256) * MDW) + 3;                            // +3 ???
@@ -160,7 +160,7 @@ namespace NPOI.XSSF.UserModel
             Mkr.col = 0;
             for(int iCol = 0; iCol < SpreadsheetVersion.EXCEL2007.MaxColumns; iCol++) {
                 width_px = Colwith;
-                foreach(var cols in ((XSSFSheet)Sheet).worksheet.cols) {
+                foreach(var cols in ((XSSFSheet)Sheet).Worksheet.cols) {
                     foreach(var col in cols.col) {
                         if(col.min <= iCol + 1 && iCol + 1 <= col.max) {
                             width_px = col.width * MDW;

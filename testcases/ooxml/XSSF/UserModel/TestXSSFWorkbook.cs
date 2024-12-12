@@ -315,17 +315,17 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             try
             {
-                int sheetId = (int)(wb.CreateSheet() as XSSFSheet).sheet.sheetId;
+                int sheetId = (int)(wb.CreateSheet() as XSSFSheet).Sheet.sheetId;
                 Assert.AreEqual(1, sheetId);
-                sheetId = (int)(wb.CreateSheet() as XSSFSheet).sheet.sheetId;
+                sheetId = (int)(wb.CreateSheet() as XSSFSheet).Sheet.sheetId;
                 Assert.AreEqual(2, sheetId);
 
                 //test file with gaps in the sheetId sequence
                 XSSFWorkbook wbBack = XSSFTestDataSamples.OpenSampleWorkbook("47089.xlsm");
                 try
                 {
-                    int lastSheetId = (int)(wbBack.GetSheetAt(wbBack.NumberOfSheets - 1) as XSSFSheet).sheet.sheetId;
-                    sheetId = (int)(wbBack.CreateSheet() as XSSFSheet).sheet.sheetId;
+                    int lastSheetId = (int)(wbBack.GetSheetAt(wbBack.NumberOfSheets - 1) as XSSFSheet).Sheet.sheetId;
+                    sheetId = (int)(wbBack.CreateSheet() as XSSFSheet).Sheet.sheetId;
                     Assert.AreEqual(lastSheetId + 1, sheetId);
                 }
                 finally

@@ -151,14 +151,14 @@ namespace NPOI.SS.UserModel.Helpers
         /// <summary>
         /// Updated named ranges
         /// </summary>
-        /// <param name="Shifter"></param>
-        public abstract void UpdateNamedRanges(FormulaShifter Shifter);
+        /// <param name="shifter"></param>
+        public abstract void UpdateNamedRanges(FormulaShifter shifter);
         
         /// <summary>
         /// Update formulas.
         /// </summary>
-        /// <param name="Shifter"></param>
-        public abstract void UpdateFormulas(FormulaShifter Shifter);
+        /// <param name="shifter"></param>
+        public abstract void UpdateFormulas(FormulaShifter shifter);
 
         /// <summary>
         /// Update the formulas in specified row using the formula Shifting policy specified by Shifter
@@ -167,14 +167,14 @@ namespace NPOI.SS.UserModel.Helpers
         /// <param name="Shifter">the formula Shifting policy</param>
         public abstract void UpdateRowFormulas(IRow row, FormulaShifter Shifter);
 
-        public abstract void UpdateConditionalFormatting(FormulaShifter Shifter);
+        public abstract void UpdateConditionalFormatting(FormulaShifter shifter);
         
         /// <summary>
         /// Shift the Hyperlink anchors (not the hyperlink text, even if the hyperlink
         /// is of type LINK_DOCUMENT and refers to a cell that was Shifted). Hyperlinks
         /// do not track the content they point to.
         /// </summary>
-        /// <param name="Shifter">the formula Shifting policy</param>
-        public abstract void UpdateHyperlinks(FormulaShifter Shifter);
+        /// <param name="shifter">the formula Shifting policy</param>
+        public abstract void UpdateHyperlinks(FormulaShifter shifter);
     }
 }

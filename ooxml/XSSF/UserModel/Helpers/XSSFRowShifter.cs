@@ -40,24 +40,24 @@ namespace NPOI.XSSF.UserModel.Helpers
             sheet = sh;
         }
 
-        public override void UpdateConditionalFormatting(FormulaShifter formulaShifter)
+        public override void UpdateConditionalFormatting(FormulaShifter shifter)
         {
-            XSSFRowColShifter.UpdateConditionalFormatting(sheet, formulaShifter);
+            XSSFRowColShifter.UpdateConditionalFormatting(sheet, shifter);
         }
 
-        public override void UpdateFormulas(FormulaShifter formulaShifter)
+        public override void UpdateFormulas(FormulaShifter shifter)
         {
-            XSSFRowColShifter.UpdateFormulas(sheet, formulaShifter);
+            XSSFRowColShifter.UpdateFormulas(sheet, shifter);
         }
 
-        public override void UpdateHyperlinks(FormulaShifter formulaShifter)
+        public override void UpdateHyperlinks(FormulaShifter shifter)
         {
-            XSSFRowColShifter.UpdateHyperlinks(sheet, formulaShifter);
+            XSSFRowColShifter.UpdateHyperlinks(sheet, shifter);
         }
 
-        public override void UpdateNamedRanges(FormulaShifter formulaShifter)
+        public override void UpdateNamedRanges(FormulaShifter shifter)
         {
-            XSSFRowColShifter.UpdateNamedRanges(sheet, formulaShifter);
+            XSSFRowColShifter.UpdateNamedRanges(sheet, shifter);
         }
 
         public override void UpdateRowFormulas(IRow row, FormulaShifter formulaShifter)

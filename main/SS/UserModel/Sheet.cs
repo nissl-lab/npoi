@@ -723,12 +723,13 @@ namespace NPOI.SS.UserModel
         /// <param name="column">the column index.</param>
         /// <param name="useMergedCells">whether to use the contents of merged cells when 
         /// calculating the width of the column. Default is to ignore merged cells.</param>
+        /// <param name="maxRow">max number of rows involved to resize</param>
         /// <remarks>
         /// This process can be relatively slow on large sheets, so this should
         /// normally only be called once per column, at the end of your
         /// processing.
         /// </remarks>
-        void AutoSizeColumn(int column, bool useMergedCells);
+        void AutoSizeColumn(int column, bool useMergedCells, int maxRow = 0);
 
         /// <summary>
         /// Adjusts the row height to fit the contents.
@@ -901,17 +902,17 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// Copy sheet with a new name
         /// </summary>
-        /// <param name="Name">new sheet name</param>
+        /// <param name="name">new sheet name</param>
         /// <returns>cloned sheet</returns>
-        ISheet CopySheet(String Name);
+        ISheet CopySheet(String name);
 
         /// <summary>
         /// Copy sheet with a new name
         /// </summary>
-        /// <param name="Name">new sheet name</param>
+        /// <param name="name">new sheet name</param>
         /// <param name="copyStyle">whether to copy styles</param>
         /// <returns>cloned sheet</returns>
-        ISheet CopySheet(String Name, Boolean copyStyle);
+        ISheet CopySheet(String name, Boolean copyStyle);
 
         /// <summary>
         /// Returns the column outline level. Increased as you
@@ -952,5 +953,7 @@ namespace NPOI.SS.UserModel
 
 
         void CopyTo(IWorkbook dest, string name, bool copyStyle, bool keepFormulas);
+        
+        ICellRange<ICell> GetCells(string range);
     }
 }

@@ -603,7 +603,7 @@ namespace NPOI.XSSF.UserModel
             int columnNum = ColumnNum + n;
             CalculationChain calcChain =
                 ((XSSFWorkbook)_sheet.Workbook).GetCalculationChain();
-            int sheetId = (int)_sheet.sheet.sheetId;
+            int sheetId = (int)_sheet.Sheet.sheetId;
             string msg = "Column[columnNum=" + ColumnNum + "] contains cell(s) " +
                 "included in a multi-cell array formula. You cannot change " +
                 "part of an array.";
