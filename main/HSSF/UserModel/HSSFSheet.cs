@@ -1317,8 +1317,8 @@ namespace NPOI.HSSF.UserModel
                 throw new ArgumentException("Denominator must be greater than 0 and less than 65536");
 
             SCLRecord sclRecord = new SCLRecord();
-            sclRecord.Numerator = ((short)numerator);
-            sclRecord.Denominator = ((short)denominator);
+            sclRecord.Numerator = (short)numerator;
+            sclRecord.Denominator = (short)denominator;
             Sheet.SetSCLRecord(sclRecord);
         }
 
@@ -2618,11 +2618,11 @@ namespace NPOI.HSSF.UserModel
                 IList dvRecords = new ArrayList();
                 IList records = _sheet.Records;
 
-                for (int index = 0; index < records.Count; index++)
+                foreach (var t in records)
                 {
-                    if (records[index] is DVRecord)
+                    if (t is DVRecord)
                     {
-                        dvRecords.Add(records[index]);
+                        dvRecords.Add(t);
                     }
                 }
                 return dvRecords;

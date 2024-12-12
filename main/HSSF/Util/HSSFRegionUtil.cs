@@ -19,26 +19,20 @@ namespace NPOI.HSSF.Util
 {
     using System;
 
-    using NPOI.HSSF.UserModel;
+    using UserModel;
     using NPOI.SS.Util;
 
     /// <summary>
     /// Various utility functions that make working with a region of cells easier.
     /// @author Eric Pugh epugh@upstate.com
     /// </summary>
-    public class HSSFRegionUtil
+    public static class HSSFRegionUtil
     {
-
-        private HSSFRegionUtil()
-        {
-            // no instances of this class
-        }
         /// <summary>
         /// For setting the same property on many cells to the same value
         /// </summary>
         private class CellPropertySetter
         {
-
             private HSSFWorkbook _workbook;
             private String _propertyName;
             private short _propertyValue;
@@ -51,8 +45,8 @@ namespace NPOI.HSSF.Util
             }
             public void SetProperty(NPOI.SS.UserModel.IRow row, int column)
             {
-                NPOI.SS.UserModel.ICell cell = HSSFCellUtil.GetCell(row, column);
-                HSSFCellUtil.SetCellStyleProperty(cell, _workbook, _propertyName, _propertyValue);
+                NPOI.SS.UserModel.ICell cell = CellUtil.GetCell(row, column);
+                CellUtil.SetCellStyleProperty(cell, _propertyName, _propertyValue);
             }
         }
 
@@ -74,7 +68,7 @@ namespace NPOI.HSSF.Util
             CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.BORDER_LEFT, (int)border);
             for (int i = rowStart; i <= rowEnd; i++)
             {
-                cps.SetProperty(HSSFCellUtil.GetRow(i, sheet), column);
+                cps.SetProperty(CellUtil.GetRow(i, sheet), column);
             }
         }
 
@@ -95,7 +89,7 @@ namespace NPOI.HSSF.Util
             CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.LEFT_BORDER_COLOR, color);
             for (int i = rowStart; i <= rowEnd; i++)
             {
-                cps.SetProperty(HSSFCellUtil.GetRow(i, sheet), column);
+                cps.SetProperty(CellUtil.GetRow(i, sheet), column);
             }
         }
 
@@ -116,7 +110,7 @@ namespace NPOI.HSSF.Util
             CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.BORDER_RIGHT, (int)border);
             for (int i = rowStart; i <= rowEnd; i++)
             {
-                cps.SetProperty(HSSFCellUtil.GetRow(i, sheet), column);
+                cps.SetProperty(CellUtil.GetRow(i, sheet), column);
             }
         }
 
@@ -138,7 +132,7 @@ namespace NPOI.HSSF.Util
             CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.RIGHT_BORDER_COLOR, color);
             for (int i = rowStart; i <= rowEnd; i++)
             {
-                cps.SetProperty(HSSFCellUtil.GetRow(i, sheet), column);
+                cps.SetProperty(CellUtil.GetRow(i, sheet), column);
             }
         }
 
@@ -156,7 +150,7 @@ namespace NPOI.HSSF.Util
             int colEnd = region.LastColumn;
             int rowIndex = region.LastRow;
             CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.BORDER_BOTTOM, (int)border);
-            NPOI.SS.UserModel.IRow row = HSSFCellUtil.GetRow(rowIndex, sheet);
+            NPOI.SS.UserModel.IRow row = CellUtil.GetRow(rowIndex, sheet);
             for (int i = colStart; i <= colEnd; i++)
             {
                 cps.SetProperty(row, i);
@@ -178,7 +172,7 @@ namespace NPOI.HSSF.Util
             int colEnd = region.LastColumn;
             int rowIndex = region.LastRow;
             CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.BOTTOM_BORDER_COLOR, color);
-            NPOI.SS.UserModel.IRow row = HSSFCellUtil.GetRow(rowIndex, sheet);
+            NPOI.SS.UserModel.IRow row = CellUtil.GetRow(rowIndex, sheet);
             for (int i = colStart; i <= colEnd; i++)
             {
                 cps.SetProperty(row, i);
@@ -200,7 +194,7 @@ namespace NPOI.HSSF.Util
             int colEnd = region.LastColumn;
             int rowIndex = region.FirstRow;
             CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.BORDER_TOP, (int)border);
-            NPOI.SS.UserModel.IRow row = HSSFCellUtil.GetRow(rowIndex, sheet);
+            NPOI.SS.UserModel.IRow row = CellUtil.GetRow(rowIndex, sheet);
             for (int i = colStart; i <= colEnd; i++)
             {
                 cps.SetProperty(row, i);
@@ -221,7 +215,7 @@ namespace NPOI.HSSF.Util
             int colEnd = region.LastColumn;
             int rowIndex = region.FirstRow;
             CellPropertySetter cps = new CellPropertySetter(workbook, CellUtil.TOP_BORDER_COLOR, color);
-            NPOI.SS.UserModel.IRow row = HSSFCellUtil.GetRow(rowIndex, sheet);
+            NPOI.SS.UserModel.IRow row = CellUtil.GetRow(rowIndex, sheet);
             for (int i = colStart; i <= colEnd; i++)
             {
                 cps.SetProperty(row, i);
