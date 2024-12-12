@@ -1479,5 +1479,9 @@ namespace NPOI.XSSF.Streaming
         {
             return ((IEnumerable<IRow>) _sh).GetEnumerator();
         }
+        public ICellRange<ICell> GetCells(string range)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

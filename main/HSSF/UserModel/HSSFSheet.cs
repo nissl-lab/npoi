@@ -3394,5 +3394,32 @@ namespace NPOI.HSSF.UserModel
         {
             return rows.Values.GetEnumerator();
         }
+        public ICellRange<ICell> GetCells(string range)
+        {
+            if(string.IsNullOrWhiteSpace(range))
+            {
+                throw new ArgumentException("range cannot be null or empty");
+            }
+
+            var cells = new List<ICell>();
+
+            var rangeAddress = new RangeAddress(range);
+            var startCellAddress = new CellAddress(rangeAddress.FromCell);
+            var firstColumn = startCellAddress.Column;
+            var firstRow = startCellAddress.Row;
+            var height = rangeAddress.Height;
+            var width = rangeAddress.Width;
+            for(int i = firstRow; i < height; i++)
+            {
+                for(int j = firstColumn; j < width; j++)
+                {
+                    var row = this.GetRow(i) ?? CreateRow(i);
+                    var cell = row.GetCell(j) ?? row.CreateCell(j);
+                    cells.Add(cell);
+                }
+            }
+
+            return SSCellRange<ICell>.Create(firstRow, firstColumn, height, width, cells, typeof(ICell));
+        }
     }
 }
