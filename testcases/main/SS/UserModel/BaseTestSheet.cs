@@ -1492,6 +1492,36 @@ namespace TestCases.SS.UserModel
 
             wb.Close();
         }
+        [Test]
+        public void TestGetCells_SingleCell()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            var cellRange= sheet.GetCells("A1");
+            Assert.AreEqual(1, cellRange.Width);
+            Assert.AreEqual(1, cellRange.Height);
+        }
+
+        [Test]
+        public void TestGetCells_CellRange_WithoutSheetName()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            var cellRange = sheet.GetCells("A1:B2");
+            Assert.AreEqual(2, cellRange.Width);
+            Assert.AreEqual(2, cellRange.Height);
+            Assert.AreEqual(new CellAddress(0, 0), cellRange.Cells[0][0].Address);
+        }
+        [Test]
+        public void TestGetCells_CellRange_WithSheetName()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            var cellRange = sheet.GetCells("Sheet1:A1:C3");
+            Assert.AreEqual(3, cellRange.Width);
+            Assert.AreEqual(3, cellRange.Height);
+            Assert.AreEqual(new CellAddress(0, 0), cellRange.Cells[0][0].Address);
+        }
     }
 
 }
