@@ -3386,44 +3386,27 @@ namespace NPOI.HSSF.UserModel
             {
                 throw new ArgumentException("range cannot be null or empty");
             }
-
-            int firstRow = 0;
-            int firstColumn = 0;
-            int height = 0;
-            int width = 0;
             
             var cells = new List<ICell>();
-            if(range.Contains(":"))
+
+            var rangeAddress = new RangeAddress(range);
+            var startCellAddress= new CellAddress(rangeAddress.FromCell);
+            var firstColumn = startCellAddress.Column;
+            var firstRow = startCellAddress.Row;  
+            var height = rangeAddress.Height;
+            var width = rangeAddress.Width;
+            for(int i = firstRow; i < height; i++)
             {
-                var rangeAddress = new RangeAddress(range);
-                var startCellAddress= new CellAddress(rangeAddress.FromCell);
-                firstColumn = startCellAddress.Column;
-                firstRow = startCellAddress.Row;
-                height = rangeAddress.Height;
-                width = rangeAddress.Width;
-                for(int i = firstRow; i < height; i++)
+                for(int j = firstColumn; j < width; j++)
                 {
-                    for(int j = firstColumn; j < width; j++)
+                    var row = this.GetRow(i) ?? CreateRow(i);
+                    var cell = row.GetCell(j) ?? row.CreateCell(j);
+                    if(cell != null)
                     {
-                        var row = this.GetRow(i) ?? CreateRow(i);
-                        var cell = row.GetCell(j) ?? row.CreateCell(j);
                         cells.Add(cell);
                     }
                 }
             }
-            else
-            {
-                var cellAddress = new CellAddress(range);
-                IRow row = GetRow(cellAddress.Row) ?? CreateRow(cellAddress.Row);
-
-                ICell cell = row.GetCell(cellAddress.Column) ?? row.CreateCell(cellAddress.Column);
-                cells.Add(cell);
-                firstColumn = cellAddress.Column;
-                firstRow = cellAddress.Row;
-                height = 1;
-                width = 1;
-            }
-
             return SSCellRange<ICell>.Create(firstRow, firstColumn, height, width, cells, typeof(ICell));
         }
     }
