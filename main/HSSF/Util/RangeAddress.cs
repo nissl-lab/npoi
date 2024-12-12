@@ -180,8 +180,8 @@ namespace NPOI.HSSF.Util
                     {
                         return 0;
                     }
-                    else
-                        return toX - fromX + 1;
+                    
+                    return toX - fromX + 1;
                 }
                 return 0;
             }
@@ -434,7 +434,7 @@ namespace NPOI.HSSF.Util
                 for (int i = _s.Length - 1; i >= 0; i--)
                 {
                     char ch = _s[i];
-                    int val = (int)(Char.GetNumericValue(ch) - Char.GetNumericValue('A') + 1);
+                    int val = (ch - 'A') + 1;
                     sum = sum + val * multiplier;
                     multiplier = multiplier * 26;
                 }
