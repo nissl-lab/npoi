@@ -143,5 +143,17 @@ namespace TestCases
         {
             Assert.Fail("This test passes now. Please update the unit test and bug " + bug + ".");
         }
+
+        public static void AssertBetween(String message, int value, int min, int max)
+        {
+            Assert.IsTrue(min <= value, message + ": " + value + " is less than the minimum value of " + min);
+            Assert.IsTrue(value <= max, message + ": " + value + " is greater than the maximum value of " + max);
+        }
+
+        public static void AssertStrictlyBetween(String message, int value, int min, int max)
+        {
+            Assert.IsTrue(min < value, message + ": " + value + " is less than or equal to the minimum value of " + min);
+            Assert.IsTrue(value < max, message + ": " + value + " is greater than or equal to the maximum value of " + max);
+        }
     }
 }
