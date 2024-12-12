@@ -3398,28 +3398,26 @@ namespace NPOI.HSSF.UserModel
         {
             if(string.IsNullOrWhiteSpace(range))
             {
-                throw new ArgumentException("range cannot be null or empty");
+                throw new ArgumentException("cell range cannot be null or empty");
             }
 
             var cells = new List<ICell>();
 
             var rangeAddress = new RangeAddress(range);
             var startCellAddress = new CellAddress(rangeAddress.FromCell);
-            var firstColumn = startCellAddress.Column;
-            var firstRow = startCellAddress.Row;
-            var height = rangeAddress.Height;
-            var width = rangeAddress.Width;
-            for(int i = firstRow; i < height; i++)
+
+            for(int i = startCellAddress.Row; i < rangeAddress.Height; i++)
             {
-                for(int j = firstColumn; j < width; j++)
+                for(int j = startCellAddress.Column; j < rangeAddress.Width; j++)
                 {
                     var row = this.GetRow(i) ?? CreateRow(i);
                     var cell = row.GetCell(j) ?? row.CreateCell(j);
                     cells.Add(cell);
                 }
             }
-
-            return SSCellRange<ICell>.Create(firstRow, firstColumn, height, width, cells, typeof(ICell));
+            return SSCellRange<ICell>.Create(
+                startCellAddress.Row, startCellAddress.Column, 
+                rangeAddress.Height, rangeAddress.Width, cells, typeof(ICell));
         }
     }
 }
