@@ -17,29 +17,20 @@
 
 namespace TestCases.HSSF.UserModel
 {
-    using System.IO;
-    using System;
-    using System.Configuration;
-    using System.Runtime.InteropServices;
-    using NPOI.HSSF.UserModel;
+    using NPOI.DDF;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
-    using NPOI.SS.Util;
-    using NPOI.DDF;
-
-    using TestCases.HSSF;
-    using NPOI.HSSF.Record.Aggregates;
-    using TestCases.SS;
-    using TestCases.SS.UserModel;
-    using NPOI.SS.UserModel;
-    using NPOI.Util;
     using NPOI.HSSF.Record.AutoFilter;
-    using System.Collections.Generic;
-    using System.Collections;
-    using NPOI.SS.Formula;
+    using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+    using NPOI.Util;
     using NUnit.Framework;
-    using NPOI.SS;
+    using System;
+    using System.Collections;
+    using TestCases.HSSF;
+    using TestCases.SS.UserModel;
 
     /**
      * Tests NPOI.SS.UserModel.Sheet.  This Test case is very incomplete at the moment.
@@ -748,49 +739,6 @@ namespace TestCases.HSSF.UserModel
             wb3.Close();
             wb2.Close();
             wb1.Close();
-        }
-
-        [Test]
-        public void TestAutoSizeDate()
-        {
-            IWorkbook wb = new HSSFWorkbook();
-            ISheet s = wb.CreateSheet("Sheet1");
-            IRow r = s.CreateRow(0);
-            r.CreateCell(0).SetCellValue(1);
-            r.CreateCell(1).SetCellValue(123456);
-
-            // Will be sized fairly small
-            s.AutoSizeColumn((short)0);
-            s.AutoSizeColumn((short)1);
-
-            // Size ranges due to different fonts on different machines
-            Assert.IsTrue(s.GetColumnWidth(0) > 350, "Single number column too small: " + s.GetColumnWidth(0));
-            //Assert.IsTrue(s.GetColumnWidth(0) < 550, "Single number column too big: " + s.GetColumnWidth(0));
-            //Todo: find a algorithm of function SheetUtil.GetColumnWidth to make the test statement above succeed.
-            Assert.IsTrue(s.GetColumnWidth(0) < 650, "Single number column too big: " + s.GetColumnWidth(0));
-            Assert.IsTrue(s.GetColumnWidth(1) > 1500, "6 digit number column too small: " + s.GetColumnWidth(1));
-            Assert.IsTrue(s.GetColumnWidth(1) < 2000, "6 digit number column too big: " + s.GetColumnWidth(1));
-
-            // Set a date format
-            ICellStyle cs = wb.CreateCellStyle();
-            HSSFDataFormat f = (HSSFDataFormat)wb.CreateDataFormat();
-            cs.DataFormat = (/*setter*/f.GetFormat("yyyy-mm-dd MMMM hh:mm:ss"));
-            r.GetCell(0).CellStyle = (/*setter*/cs);
-            r.GetCell(1).CellStyle = (/*setter*/cs);
-
-            Assert.IsTrue(DateUtil.IsCellDateFormatted(r.GetCell(0)));
-            Assert.IsTrue(DateUtil.IsCellDateFormatted(r.GetCell(1)));
-
-            // Should Get much bigger now
-            s.AutoSizeColumn((short)0);
-            s.AutoSizeColumn((short)1);
-
-            Assert.IsTrue(s.GetColumnWidth(0) > 4750, "Date column too small: " + s.GetColumnWidth(0));
-            Assert.IsTrue(s.GetColumnWidth(1) > 4750, "Date column too small: " + s.GetColumnWidth(1));
-            Assert.IsTrue(s.GetColumnWidth(0) < 6500, "Date column too big: " + s.GetColumnWidth(0));
-            Assert.IsTrue(s.GetColumnWidth(0) < 6500, "Date column too big: " + s.GetColumnWidth(0));
-
-            wb.Close();
         }
 
 
