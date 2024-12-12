@@ -3401,6 +3401,15 @@ namespace NPOI.HSSF.UserModel
                 firstRow = startCellAddress.Row;
                 height = rangeAddress.Height;
                 width = rangeAddress.Width;
+                for(int i = firstRow; i < height; i++)
+                {
+                    for(int j = firstColumn; j < width; j++)
+                    {
+                        var row = this.GetRow(i) ?? CreateRow(i);
+                        var cell = row.GetCell(j) ?? row.CreateCell(j);
+                        cells.Add(cell);
+                    }
+                }
             }
             else
             {

@@ -2022,15 +2022,15 @@ namespace NPOI.HSSF.Model
         /// If requested, will Create a new DrawRecord if none currently exist
         /// </summary>
         /// <param name="drawingManager">The DrawingManager2 for our workbook</param>
-        /// <param name="CreateIfMissing">Should one be Created if missing?</param>
+        /// <param name="createIfMissing">Should one be Created if missing?</param>
         /// <returns>location of EscherAggregate record. if no EscherAggregate record is found return -1</returns>
-        public int AggregateDrawingRecords(DrawingManager2 drawingManager, bool CreateIfMissing)
+        public int AggregateDrawingRecords(DrawingManager2 drawingManager, bool createIfMissing)
         {
             int loc = FindFirstRecordLocBySid(DrawingRecord.sid);
             bool noDrawingRecordsFound = (loc == -1);
             if (noDrawingRecordsFound)
             {
-                if (!CreateIfMissing)
+                if (!createIfMissing)
                 {
                     // None found, and not allowed to Add in
                     return -1;
