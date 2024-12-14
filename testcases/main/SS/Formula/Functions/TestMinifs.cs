@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  ====================================================================
  *    Licensed to the Apache Software Foundation (ASF) under one or more
  *    contributor license agreements.  See the NOTICE file distributed with
@@ -17,14 +17,13 @@
  * ====================================================================
  */
 
-namespace TestCases.SS.Formula.Atp
+namespace TestCases.SS.Formula.Functions
 {
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
-    using NPOI.SS.Formula.Atp;
+    using NPOI.SS.Formula.Functions;
     using NUnit.Framework;
-    using TestCases.SS.Formula.Functions;
 
     /**
      * Test cases for MINIFS()
@@ -41,10 +40,7 @@ namespace TestCases.SS.Formula.Atp
 
         private static void ConfirmDouble(double expected, ValueEval actualEval)
         {
-            if (!(actualEval is NumericValueEval))
-            {
-                throw new AssertionException("Expected numeric result");
-            }
+            Assert.IsTrue(actualEval is NumericValueEval, "Expected numeric result");
             NumericValueEval nve = (NumericValueEval)actualEval;
             Assert.AreEqual(expected, nve.NumberValue, 0);
         }
@@ -90,80 +86,38 @@ namespace TestCases.SS.Formula.Atp
                 new NumberEval(1)
             };
             Confirm(88.0, args);
-
-            args = new ValueEval[]
-            {
-                EvalFactory.CreateAreaEval("A2:A7", a2a7),
-                EvalFactory.CreateAreaEval("B2:B7", b2b7),
-                new StringEval(">1")
-            };
-            Confirm(85.0, args);
-
-            args = new ValueEval[]
-            {
-                EvalFactory.CreateAreaEval("A2:A7", a2a7),
-                EvalFactory.CreateAreaEval("B2:B7", b2b7),
-                new StringEval(">1"),
-                EvalFactory.CreateAreaEval("B2:B7", b2b7),
-                new StringEval("<3")
-            };
-            Confirm(93.0, args);
         }
 
-         /**
-         *  Ensure that this works with non-numeric data within the processed values.
+        /**
+         *  Example 2 from
+         *  https://support.microsoft.com/en-us/office/minifs-function-6ca1ddaa-079b-4e74-80cc-72eef32e6599
          */
         [Test]
-        public void TestMinWithNonNumeric()
+        public void TestExample2()
         {
-            ValueEval[] a2a7 = new ValueEval[]
-            {
-                new NumberEval(89),
-                new NumberEval(93),
-                new NumberEval(96),
-                new NumberEval(85),
-                new StringEval("Test"),
-                new NumberEval(88)
+            ValueEval[] a2a5 = new ValueEval[] {
+                new NumberEval(10),
+                new NumberEval(11),
+                new NumberEval(100),
+                new NumberEval(111)
             };
 
-            ValueEval[] b2b7 = new ValueEval[]
-            {
-                new NumberEval(1),
-                new NumberEval(2),
-                new NumberEval(2),
-                new NumberEval(3),
-                new NumberEval(1),
-                new NumberEval(1)
+            ValueEval[] b3b6 = new ValueEval[] {
+                new StringEval("a"),
+                new StringEval("a"),
+                new StringEval("b"),
+                new StringEval("a")
             };
 
-            // "=MinIFS(A2:A7, B2:B7, "1")"
-            ValueEval[] args = new ValueEval[]
-            {
-                EvalFactory.CreateAreaEval("A2:A7", a2a7),
-                EvalFactory.CreateAreaEval("B2:B7", b2b7),
-                new NumberEval(1)
-            };
-            Confirm(88.0, args);
+            ValueEval[] args;
 
-            // "=MinIFS(A2:A7, B2:B7, ">1")"
-            args = new ValueEval[]
-            {
-                EvalFactory.CreateAreaEval("A2:A7", a2a7),
-                EvalFactory.CreateAreaEval("B2:B7", b2b7),
-                new StringEval(">1")
+            // "=MINIFS(A2:A5,B3:B6,"a")"
+            args = new ValueEval[]{
+                EvalFactory.CreateAreaEval("A2:A5", a2a5),
+                EvalFactory.CreateAreaEval("B3:B6", b3b6),
+                new StringEval("a")
             };
-            Confirm(85.0, args);
-
-            // "=MinIFS(A2:A7, B2:B7, ">1", B2:B7, "<3")"
-            args = new ValueEval[]
-            {
-                EvalFactory.CreateAreaEval("A2:A7", a2a7),
-                EvalFactory.CreateAreaEval("B2:B7", b2b7),
-                new StringEval(">1"),
-                EvalFactory.CreateAreaEval("B2:B7", b2b7),
-                new StringEval("<3")
-            };
-            Confirm(93.0, args);
+            Confirm(10.0, args);
         }
     }
 }

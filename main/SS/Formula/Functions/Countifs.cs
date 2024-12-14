@@ -33,13 +33,15 @@ namespace NPOI.SS.Formula.Functions
     {
         public static FreeRefFunction instance = new Countifs();
 
-        
-        public override bool HasInitialRange()
-        {
-            return false;
-        }
+        /**
+         * https://support.office.com/en-us/article/COUNTIFS-function-dda3dc6e-f74e-4aee-88bc-aa8c2a866842?ui=en-US&rs=en-US&ad=US
+         * COUNTIFS(criteria_range1, criteria1, [criteria_range2, criteria2]...)
+         * need at least 2 arguments and need to have an even number of arguments (criteria_range1, criteria1 plus x*(criteria_range, criteria))
+         * @see org.apache.poi.ss.formula.functions.Baseifs#hasInitialRange()
+         */
+        protected override bool HasInitialRange => false;
 
-        public class MyAggregator : IAggregator
+        private class MyAggregator : IAggregator
         {
             double accumulator = 0.0;
 
@@ -54,7 +56,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        public override IAggregator CreateAggregator()
+        protected override IAggregator CreateAggregator()
         {
             return new MyAggregator();
         }

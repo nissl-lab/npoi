@@ -18,21 +18,36 @@
 
 namespace TestCases.SS.Formula.Functions
 {
-    using System;
-
-    using NUnit.Framework;
     using NPOI.HSSF.UserModel;
-    using NPOI.SS.Formula.Atp;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+    using NPOI.Util;
+    using NPOI.XSSF;
+    using NUnit.Framework;
+    using TestCases.HSSF;
 
     [TestFixture]
-    public class CountifsTests
+    public class TestCountifs
     {
+        private IWorkbook workbook;
+
+        [SetUp]
+        public void Setup()
+        {
+            // not sure why we allow this, COUNTIFS() is only available
+            // in OOXML, it was introduced with Office 2007
+            workbook = new HSSFWorkbook();
+        }
+
+        [TearDown]
+        public void Teardown()
+        {
+            IOUtils.CloseQuietly(workbook);
+        }
 
         [Test]
         public void TestCallFunction()
         {
-            HSSFWorkbook workbook = new HSSFWorkbook();
             ISheet sheet = workbook.CreateSheet("test");
             IRow row1 = sheet.CreateRow(0);
             ICell cellA1 = row1.CreateCell(0, CellType.Formula);
@@ -48,14 +63,13 @@ namespace TestCases.SS.Formula.Functions
             cellA1.SetCellFormula("COUNTIFS(B1:C1,1, D1:E1,2)");
             IFormulaEvaluator Evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
             CellValue Evaluate = Evaluator.Evaluate(cellA1);
-            Assert.AreEqual(1.0d, Evaluate.NumberValue);
+            Assert.AreEqual(1.0d, Evaluate.NumberValue, 0.000000000000001);
         }
 
         // issue#825
         [Test]
         public void TestMultiRows()
         {
-            HSSFWorkbook workbook = new HSSFWorkbook();
             ISheet sheet = workbook.CreateSheet("test");
             IRow row1 = sheet.CreateRow(0);
             IRow row2 = sheet.CreateRow(1);
@@ -105,6 +119,17 @@ namespace TestCases.SS.Formula.Functions
             Evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
             Evaluate = Evaluator.Evaluate(cellA1);
             Assert.AreEqual(15, Evaluate.ErrorValue);
+        }
+
+        [Test]
+        public void TestBug56822()
+        {
+            workbook = XSSFTestDataSamples.OpenSampleWorkbook("56822-Countifs.xlsx");
+            IFormulaEvaluator evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
+            ICell cell = SheetUtil.GetCell(workbook.GetSheetAt(0), 0, 3);
+            Assert.IsNotNull(cell, "Test workbook missing cell D1");
+            CellValue evaluate = evaluator.Evaluate(cell);
+            Assert.AreEqual(2.0d, evaluate.NumberValue, 0.00000000000001);
         }
     }
 
