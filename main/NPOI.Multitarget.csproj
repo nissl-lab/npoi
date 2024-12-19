@@ -29,7 +29,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="System.Configuration.ConfigurationManager" Version="[6.0.1]" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
