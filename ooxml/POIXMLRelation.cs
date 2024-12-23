@@ -81,9 +81,9 @@ namespace NPOI
             _relation = rel;
             _defaultName = defaultName;
             _cls = cls;
-            CreatePartWithParent=createPartWithParent;
-            CreatePart=createPart;
-            CreateInstance=createInstance;
+            _createPartWithParent=createPartWithParent;
+            _createPart=createPart;
+            _createInstance=createInstance;
         }
 
         /**
@@ -183,21 +183,39 @@ namespace NPOI
          *
          * @return An instance of the document part of this relation
          */
-        public Func<POIXMLDocumentPart, PackagePart, POIXMLDocumentPart> CreatePartWithParent { get; }
+        public Func<POIXMLDocumentPart, PackagePart, POIXMLDocumentPart> CreatePartWithParent
+        {
+            get
+            {
+                return _createPartWithParent;
+            }
+        }
 
         /**
          * Function to construct an instance of this relation type with package part provided
          *
          * @return An instance of the document part of this relation
          */
-        public Func<PackagePart, POIXMLDocumentPart> CreatePart { get; }
+        public Func<PackagePart, POIXMLDocumentPart> CreatePart
+        {
+            get
+            {
+                return _createPart;
+            }
+        }
 
         /**
          * Function to construct an instance of this relation type
          *
          * @return An instance of the document part of this relation
          */
-        public Func<POIXMLDocumentPart> CreateInstance { get; }
+        public Func<POIXMLDocumentPart> CreateInstance
+        {
+            get
+            {
+                return _createInstance;
+            }
+        }
     }
 }
 
