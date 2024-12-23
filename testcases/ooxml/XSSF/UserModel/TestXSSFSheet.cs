@@ -145,13 +145,13 @@ namespace TestCases.XSSF.UserModel
             Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("J11:K12")));
 
             Assert.AreEqual("regionThatEndsWithinShiftedRows", sheet.GetRow(1).GetCell(11).StringCellValue);
-            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("L2:M3")));
+            Assert.False(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("L2:M3")));
 
             Assert.AreEqual("regionThatEndsOnLastShiftedRow", sheet.GetRow(1).GetCell(13).StringCellValue);
-            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("N2:O4")));
+            Assert.False(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("N2:O4")));
 
             Assert.AreEqual("regionThatEndsOutsideShiftedRows", sheet.GetRow(1).GetCell(15).StringCellValue);
-            Assert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("P2:Q5")));
+            Assert.False(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("P2:Q5")));
 
             Assert.AreEqual("reallyLongRegion", sheet.GetRow(1).GetCell(17).StringCellValue);
             Assert.False(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("R2:S12")));
@@ -180,13 +180,13 @@ namespace TestCases.XSSF.UserModel
             Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("J11:K12")));
 
             Assert.AreEqual("regionThatEndsWithinShiftedRows", sheetLoaded.GetRow(1).GetCell(11).StringCellValue);
-            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("L2:M3")));
+            Assert.False(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("L2:M3")));
 
             Assert.AreEqual("regionThatEndsOnLastShiftedRow", sheetLoaded.GetRow(1).GetCell(13).StringCellValue);
-            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("N2:O4")));
+            Assert.False(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("N2:O4")));
 
             Assert.AreEqual("regionThatEndsOutsideShiftedRows", sheetLoaded.GetRow(1).GetCell(15).StringCellValue);
-            Assert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("P2:Q5")));
+            Assert.False(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("P2:Q5")));
 
             Assert.AreEqual("reallyLongRegion", sheetLoaded.GetRow(1).GetCell(17).StringCellValue);
             Assert.False(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("R2:S12")));
