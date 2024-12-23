@@ -50,6 +50,21 @@ namespace NPOI
         private Type _cls;
 
         /**
+         * Defines a function to construct and instance of this relationship with parent and part provided
+         */
+        private Func<POIXMLDocumentPart, PackagePart, POIXMLDocumentPart> _createPartWithParent;
+
+        /**
+         * Defines a function to construct and instance of this relationship with part provided
+         */
+        private Func<PackagePart, POIXMLDocumentPart> _createPart;
+
+        /**
+         * Defines a function to construct and instance of this relationship
+         */
+        private Func<POIXMLDocumentPart> _createInstance;
+
+        /**
          * Instantiates a POIXMLRelation.
          *
          * @param type content type
@@ -151,7 +166,7 @@ namespace NPOI
             //return Integer.valueOf(part.getPackagePart().getPartName().getName().replaceAll(regex, "$1"));
         }
         /**
-         * Return type of the obejct used to construct instances of this relationship
+         * Return type of the object used to construct instances of this relationship
          *
          * @return the class of the object used to construct instances of this relation
          */
@@ -163,8 +178,25 @@ namespace NPOI
             }
         }
 
+        /**
+         * Function to construct an instance of this relation type with parent and package part provided
+         *
+         * @return An instance of the document part of this relation
+         */
         public Func<POIXMLDocumentPart, PackagePart, POIXMLDocumentPart> CreatePartWithParent { get; }
+
+        /**
+         * Function to construct an instance of this relation type with package part provided
+         *
+         * @return An instance of the document part of this relation
+         */
         public Func<PackagePart, POIXMLDocumentPart> CreatePart { get; }
+
+        /**
+         * Function to construct an instance of this relation type
+         *
+         * @return An instance of the document part of this relation
+         */
         public Func<POIXMLDocumentPart> CreateInstance { get; }
     }
 }
