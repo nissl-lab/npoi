@@ -14,6 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+using NPOI.OpenXml4Net.OPC;
 using System;
 using System.Text.RegularExpressions;
 
@@ -56,12 +57,18 @@ namespace NPOI
          * @param defaultName default item name
          * @param cls defines what object is used to construct instances of this relationship
          */
-        public POIXMLRelation(String type, String rel, String defaultName, Type cls)
+        public POIXMLRelation(String type, String rel, String defaultName, Type cls
+            , Func<POIXMLDocumentPart, PackagePart, POIXMLDocumentPart> createPartWithParent
+            , Func<PackagePart, POIXMLDocumentPart> createPart
+            , Func<POIXMLDocumentPart> createInstance)
         {
             _type = type;
             _relation = rel;
             _defaultName = defaultName;
             _cls = cls;
+            CreatePartWithParent=createPartWithParent;
+            CreatePart=createPart;
+            CreateInstance=createInstance;
         }
 
         /**
@@ -72,7 +79,7 @@ namespace NPOI
          * @param defaultName default item name
          */
         public POIXMLRelation(String type, String rel, String defaultName)
-            : this(type, rel, defaultName, null)
+            : this(type, rel, defaultName, null, null, null, null)
         {
 
         }
@@ -155,6 +162,10 @@ namespace NPOI
                 return _cls;
             }
         }
+
+        public Func<POIXMLDocumentPart, PackagePart, POIXMLDocumentPart> CreatePartWithParent { get; }
+        public Func<PackagePart, POIXMLDocumentPart> CreatePart { get; }
+        public Func<POIXMLDocumentPart> CreateInstance { get; }
     }
 }
 

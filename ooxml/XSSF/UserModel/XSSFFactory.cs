@@ -15,11 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.Util;
-using NPOI.XSSF.UserModel;
 using System;
-using NPOI.OpenXml4Net.OPC;
-using System.Reflection;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -28,14 +24,14 @@ namespace NPOI.XSSF.UserModel
      *
      * @author Yegor Kozlov
      */
-    public class XSSFFactory : POIXMLFactory
+    public sealed class XSSFFactory : POIXMLFactory
     {
         private XSSFFactory()
         {
 
         }
 
-        private static XSSFFactory inst = new XSSFFactory();
+        private static readonly XSSFFactory inst = new XSSFFactory();
 
         public static XSSFFactory GetInstance()
         {
@@ -43,33 +39,11 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-     * @since POI 3.14-Beta1
-     */
+         * @since POI 3.14-Beta1
+         */
         protected override POIXMLRelation GetDescriptor(String relationshipType)
         {
             return XSSFRelation.GetInstance(relationshipType);
-        }
-
-        /**
-         * @since POI 3.14-Beta1
-         */
-
-        protected override POIXMLDocumentPart CreateDocumentPart(Type cls, Type[] classes, Object[] values)
-        {
-            if (classes == null)
-            {
-                classes = new Type[0];
-            }
-            
-            ConstructorInfo constructor = cls.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public,
-                        null, classes, null);
-            if (constructor == null)
-                throw new MissingMethodException();
-            if (values == null)
-            {
-                values = new object[0];
-            }
-            return constructor.Invoke(values) as POIXMLDocumentPart;
         }
     }
 }

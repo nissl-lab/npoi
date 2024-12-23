@@ -32,9 +32,6 @@ namespace NPOI
     {
         private static POILogger LOGGER = POILogFactory.GetLogger(typeof(POIXMLFactory));
 
-        private static Type[] PARENT_PART = { typeof(POIXMLDocumentPart), typeof(PackagePart) };
-        private static Type[] ORPHAN_PART = { typeof(PackagePart) };
-
         /**
          * Create a POIXMLDocumentPart from existing package part and relation. This method is called
          * from {@link POIXMLDocument#load(POIXMLFactory)} when parsing a document
@@ -46,7 +43,7 @@ namespace NPOI
          * 
          * @since by POI 3.14-Beta1
          */
-        public virtual POIXMLDocumentPart CreateDocumentPart(POIXMLDocumentPart parent, PackagePart part)
+        public POIXMLDocumentPart CreateDocumentPart(POIXMLDocumentPart parent, PackagePart part)
         {
             PackageRelationship rel = GetPackageRelationship(parent, part);
             POIXMLRelation descriptor = GetDescriptor(rel.RelationshipType);
@@ -56,29 +53,11 @@ namespace NPOI
                 LOGGER.Log(POILogger.DEBUG, "using default POIXMLDocumentPart for " + rel.RelationshipType);
                 return new POIXMLDocumentPart(parent, part);
             }
-            Type cls = descriptor.RelationClass;
-            try
-            {
-                try
-                {
-                    return CreateDocumentPart(cls, PARENT_PART, new Object[] { parent, part });
-                }
-                catch (MissingMethodException)
-                {
-                    return CreateDocumentPart(cls, ORPHAN_PART, new Object[] { part });
-                }
-            }
-            catch (Exception e)
-            {
-                throw new POIXMLException(e);
-            }
-        }
 
-        /**
-         * Need to delegate instantiation to sub class because of constructor visibility
-         * @since POI 3.14-Beta1
-         */
-        protected abstract POIXMLDocumentPart CreateDocumentPart(Type cls, Type[] classes, Object[] values);
+            return descriptor.CreatePartWithParent?.Invoke(parent, part)
+                    ?? descriptor.CreatePart?.Invoke(part)
+                    ?? throw new POIXMLException(new MissingMethodException(descriptor.RelationClass?.Name ?? "Unknown type"));
+        }
 
         /**
          * returns the descriptor for the given relationship type 
@@ -115,15 +94,8 @@ namespace NPOI
          */
         public POIXMLDocumentPart NewDocumentPart(POIXMLRelation descriptor)
         {
-            Type cls = descriptor.RelationClass;
-            try
-            {
-                return CreateDocumentPart(cls, null, null);
-            }
-            catch (Exception e)
-            {
-                throw new POIXMLException(e);
-            }
+            return descriptor.CreateInstance?.Invoke()
+                    ?? throw new POIXMLException(new MissingMethodException(descriptor.RelationClass?.Name ?? "Unknown type"));
         }
 
         /**
@@ -153,8 +125,6 @@ namespace NPOI
             throw new POIXMLException("package part isn't a child of the parent document.");
         }
     }
-
-
 }
 
 
