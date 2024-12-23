@@ -50,17 +50,17 @@ namespace NPOI
         private Type _cls;
 
         /**
-         * Defines a function to construct and instance of this relationship with parent and part provided
+         * Defines a function to construct an instance of this relationship with parent and part provided
          */
         private Func<POIXMLDocumentPart, PackagePart, POIXMLDocumentPart> _createPartWithParent;
 
         /**
-         * Defines a function to construct and instance of this relationship with part provided
+         * Defines a function to construct an instance of this relationship with part provided
          */
         private Func<PackagePart, POIXMLDocumentPart> _createPart;
 
         /**
-         * Defines a function to construct and instance of this relationship
+         * Defines a function to construct an instance of this relationship
          */
         private Func<POIXMLDocumentPart> _createInstance;
 
