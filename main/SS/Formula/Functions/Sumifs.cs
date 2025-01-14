@@ -42,147 +42,30 @@ namespace NPOI.SS.Formula.Functions
      *
      * @author Yegor Kozlov
      */
-    public class Sumifs : FreeRefFunction
+    public class Sumifs : Baseifs
     {
         public static FreeRefFunction instance = new Sumifs();
 
-        public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
+        protected override bool HasInitialRange => true;
+
+        protected override IAggregator CreateAggregator()
         {
-            if (args.Length < 3 || args.Length % 2 == 0)
-            {
-                return ErrorEval.VALUE_INVALID;
-            }
-
-            try
-            {
-                AreaEval sumRange = ConvertRangeArg(args[0]);
-
-                // collect pairs of ranges and criteria
-                AreaEval[] ae = new AreaEval[(args.Length - 1) / 2];
-                IMatchPredicate[] mp = new IMatchPredicate[ae.Length];
-                for (int i = 1, k = 0; i < args.Length; i += 2, k++)
-                {
-                    ae[k] = ConvertRangeArg(args[i]);
-                    mp[k] = Countif.CreateCriteriaPredicate(args[i + 1], ec.RowIndex, ec.ColumnIndex);
-                }
-
-                ValidateCriteriaRanges(ae, sumRange);
-                ValidateCriteria(mp);
-
-                double result = CalcMatchingCells(ae, mp, sumRange, 0.0, (init, current) => init + (current.HasValue ? current.Value : 0.0));
-                return new NumberEval(result);
-            }
-            catch (EvaluationException e)
-            {
-                return e.GetErrorEval();
-            }
+            return new MyAggregator();
         }
 
-        /**
-         * Verify that each <code>criteria</code> predicate is valid, i.e. not an error
-         *
-         * @throws EvaluationException if there are criteria which resulted in Errors.
-         */
-        internal static void ValidateCriteria(IMatchPredicate[] criteria)
+        private class MyAggregator : IAggregator
         {
-            foreach (IMatchPredicate predicate in criteria)
+            double accumulator = 0.0;
+
+            public void AddValue(ValueEval value)
             {
-
-                // check for errors in predicate and return immediately using this error code
-                if (predicate is NPOI.SS.Formula.Functions.Countif.ErrorMatcher)
-                {
-                    throw new EvaluationException(
-                        ErrorEval.ValueOf(((NPOI.SS.Formula.Functions.Countif.ErrorMatcher) predicate).Value));
-                }
+                accumulator += (value is NumberEval) ? ((NumberEval) value).NumberValue : 0.0;
             }
-        }
 
-        /**
-         * Verify that each <code>criteriaRanges</code> argument contains the same number of rows and columns
-         * as the <code>sumRange</code> argument
-         *
-         * @throws EvaluationException if
-         */
-        internal static void ValidateCriteriaRanges(AreaEval[] criteriaRanges, AreaEval sumRange)
-        {
-            foreach (AreaEval r in criteriaRanges)
+            public ValueEval GetResult()
             {
-                if (r.Height != sumRange.Height ||
-                   r.Width != sumRange.Width)
-                {
-                    throw EvaluationException.InvalidValue();
-                }
+                return new NumberEval(accumulator);
             }
-        }
-
-        /**
-         *
-         * @param ranges  criteria ranges, each range must be of the same dimensions as <code>aeSum</code>
-         * @param predicates  array of predicates, a predicate for each value in <code>ranges</code>
-         * @param aeSum  the range to sum
-         *
-         * @return the computed value
-         */
-        internal static double CalcMatchingCells(AreaEval[] ranges, IMatchPredicate[] predicates, AreaEval aeSum, double initialValue, System.Func<double, double?, double> calc)
-        {
-            int height = aeSum.Height;
-            int width = aeSum.Width;
-
-            double result = initialValue;
-            for (int r = 0; r < height; r++)
-            {
-                for (int c = 0; c < width; c++)
-                {
-
-                    bool matches = true;
-                    for (int i = 0; i < ranges.Length; i++)
-                    {
-                        AreaEval aeRange = ranges[i];
-                        IMatchPredicate mp = predicates[i];
-
-                        if (mp == null || !mp.Matches(aeRange.GetRelativeValue(r, c)))
-                        {
-                            matches = false;
-                            break;
-                        }
-
-                    }
-
-                    if (matches)
-                    { // sum only if all of the corresponding criteria specified are true for that cell.
-                        result = calc(result, ReadValue(aeSum, r, c));
-                    }
-                }
-            }
-            return result;
-        }
-
-        /**
-         * Reads the numeric values from the row/col of the specified area - other values return the indicated missing value.
-         */
-        private static double? ReadValue(AreaEval aeSum, int relRowIndex, int relColIndex)
-        {
-
-            ValueEval addend = aeSum.GetRelativeValue(relRowIndex, relColIndex);
-            if (addend is NumberEval)
-            {
-                return ((NumberEval)addend).NumberValue;
-            }
-            // everything else (including string and boolean values) counts as zero
-            return null;
-        }
-
-        internal static AreaEval ConvertRangeArg(ValueEval eval)
-        {
-            if (eval is AreaEval)
-            {
-                return (AreaEval)eval;
-            }
-            if (eval is RefEval)
-            {
-                return ((RefEval)eval).Offset(0, 0, 0, 0);
-            }
-            throw new EvaluationException(ErrorEval.VALUE_INVALID);
         }
 
     }

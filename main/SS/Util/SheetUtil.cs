@@ -684,6 +684,31 @@ namespace NPOI.SS.Util
         //    TODO-Fonts: not supported: if (font.Underline == (byte)FontUnderlineType.SINGLE) str.AddAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);
         //}
 
+        /**
+         * Return the cell, without taking account of merged regions.
+         * <p>
+         * Use {@link #getCellWithMerges(Sheet, int, int)} if you want the top left
+         * cell from merged regions instead when the reference is a merged cell.
+         * <p>
+         * Use this where you want to know if the given cell is explicitly defined
+         * or not.
+         *
+         * @param sheet The workbook sheet to look at.
+         * @param rowIx The 0-based index of the row.
+         * @param colIx The 0-based index of the cell.
+         * @return cell at the given location, or null if not defined
+         * @throws NullPointerException if sheet is null
+         */
+        public static ICell GetCell(ISheet sheet, int rowIx, int colIx)
+        {
+            IRow r = sheet.GetRow(rowIx);
+            if(r != null)
+            {
+                return r.GetCell(colIx);
+            }
+            return null;
+        }
+
         private readonly struct FontCacheKey : IEquatable<FontCacheKey>
         {
             public FontCacheKey(string fontName, float fontHeightInPoints, FontStyle style)
