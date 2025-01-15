@@ -647,6 +647,7 @@ namespace TestCases.XSSF.UserModel
             String paraString10 = "Fifth Bullet";
 
             XSSFTextParagraph para = shape.AddNewTextParagraph(paraString1);
+            Assert.IsNotNull(para);
             para = shape.AddNewTextParagraph(paraString2);
             para.SetBullet(true);
 
@@ -658,6 +659,7 @@ namespace TestCases.XSSF.UserModel
             para.SetBullet(true);
 
             para = shape.AddNewTextParagraph(paraString5);
+            Assert.IsNotNull(para);
             para = shape.AddNewTextParagraph(paraString6);
             para.SetBullet(ListAutoNumber.ARABIC_PERIOD);
 

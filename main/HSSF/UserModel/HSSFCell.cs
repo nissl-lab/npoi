@@ -1052,14 +1052,12 @@ namespace NPOI.HSSF.UserModel
                     case CellType.Error:
                         return ((BoolErrRecord)_record).ErrorValue;
                     case CellType.Formula:
-                        break;
+                        FormulaRecord fr = ((FormulaRecordAggregate)_record).FormulaRecord;
+                        CheckFormulaCachedValueType(CellType.Error, fr);
+                        return (byte) fr.CachedErrorValue;
                     default:
                         throw TypeMismatch(CellType.Error, cellType, false);
-
                 }
-                FormulaRecord fr = ((FormulaRecordAggregate)_record).FormulaRecord;
-                CheckFormulaCachedValueType(CellType.Error, fr);
-                return (byte)fr.CachedErrorValue;
             }
         }
 

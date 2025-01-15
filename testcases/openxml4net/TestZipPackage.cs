@@ -43,21 +43,23 @@ namespace TestCases.OpenXml4Net.OPC
 
             // Check we found the contents of it
             bool foundCoreProps = false, foundDocument = false, foundTheme1 = false;
-            foreach (PackagePart part in p.GetParts())
+            foreach(PackagePart part in p.GetParts())
             {
-                if (part.PartName.ToString().Equals("/docProps/core.xml"))
+                String partName = part.PartName.ToString();
+                String contentType = part.ContentType;
+                if("/docProps/core.xml".Equals(partName))
                 {
-                    Assert.AreEqual(ContentTypes.CORE_PROPERTIES_PART, part.ContentType);
+                    Assert.AreEqual(ContentTypes.CORE_PROPERTIES_PART, contentType);
                     foundCoreProps = true;
                 }
-                if (part.PartName.ToString().Equals("/word/document.xml"))
+                if("/word/document.xml".Equals(partName))
                 {
-                    Assert.AreEqual(XWPFRelation.DOCUMENT.ContentType, part.ContentType);
+                    Assert.AreEqual(XWPFRelation.DOCUMENT.ContentType, contentType);
                     foundDocument = true;
                 }
-                if (part.PartName.ToString().Equals("/word/theme/theme1.xml"))
+                if("/word/theme/theme1.xml".Equals(partName))
                 {
-                    Assert.AreEqual(XWPFRelation.THEME.ContentType, part.ContentType);
+                    Assert.AreEqual(XWPFRelation.THEME.ContentType, contentType);
                     foundTheme1 = true;
                 }
             }
