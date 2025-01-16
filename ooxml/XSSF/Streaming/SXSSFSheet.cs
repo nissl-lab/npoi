@@ -14,6 +14,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+
+using NPOI.HSSF.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -1478,6 +1480,10 @@ namespace NPOI.XSSF.Streaming
         IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
         {
             return ((IEnumerable<IRow>) _sh).GetEnumerator();
+        }
+        public CellRangeAddressList GetCells(string cellranges)
+        {
+            return CellRangeAddressList.Parse(cellranges);
         }
     }
 }

@@ -160,9 +160,9 @@ namespace NPOI.SS.Util
                 itemCls = itemCls.GetElementType();
                 for (int r = _height - 1; r >= 0; r--)
                 {
-                    K[] row = (K[])Array.CreateInstance(itemCls, _width);
+                    result[r] = (K[])Array.CreateInstance(itemCls, _width);
                     int flatIndex = _width * r;
-                    Array.Copy(_flattenedArray, flatIndex, row, 0, _width);
+                    Array.Copy(_flattenedArray, flatIndex, result[r], 0, _width);
                 }
                 return result;
             }

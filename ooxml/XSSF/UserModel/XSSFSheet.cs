@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI.HSSF.Util;
 using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
@@ -69,21 +70,24 @@ namespace NPOI.XSSF.UserModel
         private List<XSSFHyperlink> hyperlinks;
         private ColumnHelper columnHelper;
         private CommentsTable sheetComments;
+
         /// <summary>
         /// cache of master shared formulas in this sheet. Master shared 
         /// formula is the first formula in a group of shared formulas is saved
         /// in the f element.
         /// </summary>
         private Dictionary<int, CT_CellFormula> sharedFormulas;
+
         private Dictionary<string, XSSFTable> tables;
         private List<CellRangeAddress> arrayFormulas;
         private readonly XSSFDataValidationHelper dataValidationHelper;
         private XSSFDrawing drawing = null;
+
         private CT_Pane Pane
         {
             get
             {
-                if (GetDefaultSheetView().pane == null)
+                if(GetDefaultSheetView().pane == null)
                 {
                     GetDefaultSheetView().AddNewPane();
                 }
@@ -93,6 +97,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         #region Public properties
+
         /// <summary>
         /// Returns the parent XSSFWorkbook
         /// </summary>
@@ -100,7 +105,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (XSSFWorkbook)GetParent();
+                return (XSSFWorkbook) GetParent();
 
             }
         }
@@ -127,7 +132,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (!worksheet.IsSetColBreaks() || worksheet.colBreaks.sizeOfBrkArray() == 0)
+                if(!worksheet.IsSetColBreaks() || worksheet.colBreaks.sizeOfBrkArray() == 0)
                 {
                     return new int[0];
                 }
@@ -135,10 +140,10 @@ namespace NPOI.XSSF.UserModel
                 List<CT_Break> brkArray = worksheet.colBreaks.brk;
 
                 int[] breaks = new int[brkArray.Count];
-                for (int i = 0; i < brkArray.Count; i++)
+                for(int i = 0; i < brkArray.Count; i++)
                 {
                     CT_Break brk = brkArray[i];
-                    breaks[i] = (int)brk.id - 1;
+                    breaks[i] = (int) brk.id - 1;
                 }
 
                 return breaks;
@@ -172,11 +177,11 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (short)((decimal)DefaultRowHeightInPoints * TWIPS_PER_POINT);
+                return (short) ((decimal) DefaultRowHeightInPoints * TWIPS_PER_POINT);
             }
             set
             {
-                DefaultRowHeightInPoints = (float)value / TWIPS_PER_POINT;
+                DefaultRowHeightInPoints = (float) value / TWIPS_PER_POINT;
             }
         }
 
@@ -189,7 +194,7 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 CT_SheetFormatPr pr = worksheet.sheetFormatPr;
-                return (float)(pr == null ? 0 : pr.defaultRowHeight);
+                return (float) (pr == null ? 0 : pr.defaultRowHeight);
             }
             set
             {
@@ -261,13 +266,13 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (_rows.Count == 0)
+                if(_rows.Count == 0)
                 {
                     return 0;
                 }
                 else
                 {
-                    foreach (int key in _rows.Keys)
+                    foreach(int key in _rows.Keys)
                     {
                         return key;
                     }
@@ -284,13 +289,13 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (_columns.Count == 0)
+                if(_columns.Count == 0)
                 {
                     return 0;
                 }
                 else
                 {
-                    foreach (int key in _columns.Keys)
+                    foreach(int key in _columns.Keys)
                     {
                         return key;
                     }
@@ -432,8 +437,9 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                CT_PrintOptions opts = worksheet.IsSetPrintOptions() ?
-                    worksheet.printOptions : worksheet.AddNewPrintOptions();
+                CT_PrintOptions opts = worksheet.IsSetPrintOptions()
+                    ? worksheet.printOptions
+                    : worksheet.AddNewPrintOptions();
                 opts.horizontalCentered = value;
 
             }
@@ -465,12 +471,12 @@ namespace NPOI.XSSF.UserModel
             {
                 List<CellRangeAddress> addresses = new List<CellRangeAddress>();
                 CT_MergeCells ctMergeCells = worksheet.mergeCells;
-                if (ctMergeCells == null)
+                if(ctMergeCells == null)
                 {
                     return addresses;
                 }
 
-                foreach (CT_MergeCell ctMergeCell in ctMergeCells.mergeCell)
+                foreach(CT_MergeCell ctMergeCell in ctMergeCells.mergeCell)
                 {
                     string ref1 = ctMergeCell.@ref;
                     addresses.Add(CellRangeAddress.ValueOf(ref1));
@@ -512,22 +518,21 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_Pane pane = GetDefaultSheetView().pane;
                 // no pane configured
-                if (pane == null)
+                if(pane == null)
                 {
                     return null;
                 }
 
-                CellReference cellRef = pane.IsSetTopLeftCell() ?
-                    new CellReference(pane.topLeftCell) : null;
-                return new PaneInformation((short)pane.xSplit,
-                    (short)pane.ySplit,
+                CellReference cellRef = pane.IsSetTopLeftCell() ? new CellReference(pane.topLeftCell) : null;
+                return new PaneInformation((short) pane.xSplit,
+                    (short) pane.ySplit,
                     cellRef == null
-                        ? (short)0
-                        : (short)cellRef.Row,
+                        ? (short) 0
+                        : (short) cellRef.Row,
                     cellRef == null
-                        ? (short)0
+                        ? (short) 0
                         : cellRef.Col,
-                    (byte)pane.activePane,
+                    (byte) pane.activePane,
                     pane.state == ST_PaneState.frozen);
             }
         }
@@ -588,17 +593,17 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (!worksheet.IsSetRowBreaks() || worksheet.rowBreaks.sizeOfBrkArray() == 0)
+                if(!worksheet.IsSetRowBreaks() || worksheet.rowBreaks.sizeOfBrkArray() == 0)
                 {
                     return new int[0];
                 }
 
                 List<CT_Break> brkArray = worksheet.rowBreaks.brk;
                 int[] breaks = new int[brkArray.Count];
-                for (int i = 0; i < brkArray.Count; i++)
+                for(int i = 0; i < brkArray.Count; i++)
                 {
                     CT_Break brk = brkArray[i];
-                    breaks[i] = (int)brk.id - 1;
+                    breaks[i] = (int) brk.id - 1;
                 }
 
                 return breaks;
@@ -619,7 +624,8 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_SheetPr sheetPr = worksheet.sheetPr;
                 CT_OutlinePr outlinePr = (sheetPr != null && sheetPr.IsSetOutlinePr())
-                        ? sheetPr.outlinePr : null;
+                    ? sheetPr.outlinePr
+                    : null;
                 return outlinePr == null || outlinePr.summaryBelow;
             }
             set
@@ -641,7 +647,8 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_SheetPr sheetPr = worksheet.sheetPr;
                 CT_OutlinePr outlinePr = (sheetPr != null && sheetPr.IsSetOutlinePr())
-                        ? sheetPr.outlinePr : new CT_OutlinePr();
+                    ? sheetPr.outlinePr
+                    : new CT_OutlinePr();
                 return outlinePr.summaryRight;
             }
             set
@@ -659,15 +666,16 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 return worksheet.IsSetSheetProtection()
-                    && worksheet.sheetProtection.scenarios;
+                       && worksheet.sheetProtection.scenarios;
             }
         }
+
         public short LeftCol
         {
             get
             {
                 string cellRef = GetPane().topLeftCell;
-                if (cellRef == null)
+                if(cellRef == null)
                 {
                     return 0;
                 }
@@ -680,6 +688,7 @@ namespace NPOI.XSSF.UserModel
                 throw new NotImplementedException();
             }
         }
+
         /// <summary>
         /// The top row in the visible view when the sheet is first viewed 
         /// after opening it in a viewer
@@ -689,13 +698,13 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 string cellRef = GetSheetTypeSheetView().topLeftCell;
-                if (cellRef == null)
+                if(cellRef == null)
                 {
                     return 0;
                 }
 
                 CellReference cellReference = new CellReference(cellRef);
-                return (short)cellReference.Row;
+                return (short) cellReference.Row;
             }
             set
             {
@@ -716,8 +725,9 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                CT_PrintOptions opts = worksheet.IsSetPrintOptions() ?
-            worksheet.printOptions : worksheet.AddNewPrintOptions();
+                CT_PrintOptions opts = worksheet.IsSetPrintOptions()
+                    ? worksheet.printOptions
+                    : worksheet.AddNewPrintOptions();
                 opts.verticalCentered = value;
 
             }
@@ -818,7 +828,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (worksheet.IsSetSheetCalcPr())
+                if(worksheet.IsSetSheetCalcPr())
                 {
                     CT_SheetCalcPr calc = worksheet.sheetCalcPr;
                     return calc.fullCalcOnLoad;
@@ -829,21 +839,21 @@ namespace NPOI.XSSF.UserModel
             set
             {
                 CT_CalcPr calcPr = (Workbook as XSSFWorkbook).GetCTWorkbook().calcPr;
-                if (worksheet.IsSetSheetCalcPr())
+                if(worksheet.IsSetSheetCalcPr())
                 {
                     // Change the current Setting
                     CT_SheetCalcPr calc = worksheet.sheetCalcPr;
                     calc.fullCalcOnLoad = value;
                 }
-                else if (value)
+                else if(value)
                 {
                     // Add the Calc block and set it
                     CT_SheetCalcPr calc = worksheet.AddNewSheetCalcPr();
                     calc.fullCalcOnLoad = value;
                 }
 
-                if (value && calcPr != null
-                    && calcPr.calcMode == ST_CalcMode.manual)
+                if(value && calcPr != null
+                         && calcPr.calcMode == ST_CalcMode.manual)
                 {
                     calcPr.calcMode = ST_CalcMode.auto;
                 }
@@ -893,7 +903,7 @@ namespace NPOI.XSSF.UserModel
             set
             {
                 CT_SheetViews views = GetSheetTypeSheetViews();
-                foreach (CT_SheetView view in views.sheetView)
+                foreach(CT_SheetView view in views.sheetView)
                 {
                     view.tabSelected = value;
                 }
@@ -908,7 +918,7 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 string address = GetSheetTypeSelection().activeCell;
-                if (address == null)
+                if(address == null)
                 {
                     return null;
                 }
@@ -932,7 +942,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (sheetComments == null)
+                if(sheetComments == null)
                 {
                     return false;
                 }
@@ -945,7 +955,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (sheetComments == null)
+                if(sheetComments == null)
                 {
                     return 0;
                 }
@@ -1149,12 +1159,12 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 CT_SheetPr pr = worksheet.sheetPr;
-                if (pr == null)
+                if(pr == null)
                 {
                     pr = worksheet.AddNewSheetPr();
                 }
 
-                if (!pr.IsSetTabColor())
+                if(!pr.IsSetTabColor())
                 {
                     return null;
                 }
@@ -1164,7 +1174,7 @@ namespace NPOI.XSSF.UserModel
             set
             {
                 CT_SheetPr pr = worksheet.sheetPr;
-                if (pr == null)
+                if(pr == null)
                 {
                     pr = worksheet.AddNewSheetPr();
                 }
@@ -1198,9 +1208,11 @@ namespace NPOI.XSSF.UserModel
                 SetRepeatingRowsAndColumns(rowRangeRef, value);
             }
         }
+
         #endregion
 
         #region Constructors
+
         /// <summary>
         /// Creates new XSSFSheet   - called by XSSFWorkbook to create a sheet 
         /// from scratch. See <see cref="XSSFWorkbook.CreateSheet"/>
@@ -1231,9 +1243,11 @@ namespace NPOI.XSSF.UserModel
             : this(part)
         {
         }
+
         #endregion
 
         #region Internal methods
+
         /// <summary>
         /// Initialize worksheet data when Reading in an exisiting file.
         /// </summary>
@@ -1244,7 +1258,7 @@ namespace NPOI.XSSF.UserModel
             {
                 Read(GetPackagePart().GetInputStream());
             }
-            catch (IOException e)
+            catch(IOException e)
             {
                 throw new POIXMLException(e);
             }
@@ -1257,7 +1271,7 @@ namespace NPOI.XSSF.UserModel
                 XmlDocument doc = ConvertStreamToXml(is1);
                 worksheet = WorksheetDocument.Parse(doc, NamespaceManager).GetWorksheet();
             }
-            catch (XmlException e)
+            catch(XmlException e)
             {
                 throw new POIXMLException(e);
             }
@@ -1266,21 +1280,21 @@ namespace NPOI.XSSF.UserModel
             InitColumns(worksheet);
 
             // Look for bits we're interested in
-            foreach (RelationPart rp in RelationParts)
+            foreach(RelationPart rp in RelationParts)
             {
                 POIXMLDocumentPart p = rp.DocumentPart;
-                if (p is CommentsTable commentsTable)
+                if(p is CommentsTable commentsTable)
                 {
                     sheetComments = commentsTable;
                     //break;
                 }
 
-                if (p is XSSFTable xssfTable)
+                if(p is XSSFTable xssfTable)
                 {
                     tables[rp.Relationship.Id] = xssfTable;
                 }
 
-                if (p is XSSFPivotTable pivotTable)
+                if(p is XSSFPivotTable pivotTable)
                 {
                     GetWorkbook().PivotTables.Add(pivotTable);
                 }
@@ -1313,9 +1327,9 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFVMLDrawing drawing = null;
             OpenXmlFormats.Spreadsheet.CT_LegacyDrawing ctDrawing = GetCTLegacyDrawing();
-            if (ctDrawing == null)
+            if(ctDrawing == null)
             {
-                if (autoCreate)
+                if(autoCreate)
                 {
                     //drawingNumber = #drawings.Count + 1
                     int drawingNumber = GetPackagePart()
@@ -1340,13 +1354,13 @@ namespace NPOI.XSSF.UserModel
             {
                 //search the referenced drawing in the list of the sheet's relations
                 string id = ctDrawing.id;
-                foreach (RelationPart rp in RelationParts)
+                foreach(RelationPart rp in RelationParts)
                 {
                     POIXMLDocumentPart p = rp.DocumentPart;
-                    if (p is XSSFVMLDrawing dr)
+                    if(p is XSSFVMLDrawing dr)
                     {
                         string drId = rp.Relationship.Id;
-                        if (drId.Equals(id))
+                        if(drId.Equals(id))
                         {
                             drawing = dr;
                             break;
@@ -1355,10 +1369,10 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
 
-                if (drawing == null)
+                if(drawing == null)
                 {
                     logger.Log(POILogger.ERROR, "Can't find VML drawing with " +
-                        "id=" + id + " in the list of the sheet's relationships");
+                                                "id=" + id + " in the list of the sheet's relationships");
                 }
             }
 
@@ -1373,22 +1387,22 @@ namespace NPOI.XSSF.UserModel
         /// <returns></returns>
         protected internal CommentsTable GetCommentsTable(bool create)
         {
-            if (sheetComments == null && create)
+            if(sheetComments == null && create)
             {
                 // Try to create a comments table with the same number as the
                 // sheet has (i.e. sheet 1 -> comments 1)
                 try
                 {
-                    sheetComments = (CommentsTable)CreateRelationship(
-                          XSSFRelation.SHEET_COMMENTS, XSSFFactory.GetInstance(), (int)sheet.sheetId);
+                    sheetComments = (CommentsTable) CreateRelationship(
+                        XSSFRelation.SHEET_COMMENTS, XSSFFactory.GetInstance(), (int) sheet.sheetId);
                 }
-                catch (PartAlreadyExistsException)
+                catch(PartAlreadyExistsException)
                 {
                     // Technically a sheet doesn't need the same number as it's
                     // comments, and clearly someone has already pinched our
                     // number! Go for the next available one instead
-                    sheetComments = (CommentsTable)CreateRelationship(
-                          XSSFRelation.SHEET_COMMENTS, XSSFFactory.GetInstance(), -1);
+                    sheetComments = (CommentsTable) CreateRelationship(
+                        XSSFRelation.SHEET_COMMENTS, XSSFFactory.GetInstance(), -1);
                 }
             }
 
@@ -1411,8 +1425,8 @@ namespace NPOI.XSSF.UserModel
             //collect cells holding shared formulas
             CT_Cell ct = cell.GetCTCell();
             CT_CellFormula f = ct.f;
-            if (f != null && f.t == ST_CellFormulaType.shared
-                && f.isSetRef() && f.Value != null)
+            if(f != null && f.t == ST_CellFormulaType.shared
+                         && f.isSetRef() && f.Value != null)
             {
                 // save a detached  copy to avoid XmlValueDisconnectedException,
                 // this may happen when the master cell of a shared formula
@@ -1425,19 +1439,19 @@ namespace NPOI.XSSF.UserModel
                 // and the shared formula range is C60:M85 then the effective
                 // range is E60:M85 see more details in
                 // https://issues.apache.org/bugzilla/show_bug.cgi?id=51710
-                if (cellRef.Col > sfRef.FirstColumn || cellRef.Row > sfRef.FirstRow)
+                if(cellRef.Col > sfRef.FirstColumn || cellRef.Row > sfRef.FirstRow)
                 {
                     string effectiveRef = new CellRangeAddress(
                             Math.Max(cellRef.Row, sfRef.FirstRow), sfRef.LastRow,
-                        Math.Max(cellRef.Col, sfRef.FirstColumn), sfRef.LastColumn)
+                            Math.Max(cellRef.Col, sfRef.FirstColumn), sfRef.LastColumn)
                         .FormatAsString();
                     sf.@ref = effectiveRef;
                 }
 
-                sharedFormulas[(int)f.si] = sf;
+                sharedFormulas[(int) f.si] = sf;
             }
 
-            if (f != null && f.t == ST_CellFormulaType.array && f.@ref != null)
+            if(f != null && f.t == ST_CellFormulaType.array && f.@ref != null)
             {
                 arrayFormulas.Add(CellRangeAddress.ValueOf(f.@ref));
             }
@@ -1455,6 +1469,7 @@ namespace NPOI.XSSF.UserModel
         {
             return worksheet.drawing;
         }
+
         protected virtual OpenXmlFormats.Spreadsheet.CT_LegacyDrawing GetCTLegacyDrawing()
         {
             return worksheet.legacyDrawing;
@@ -1463,10 +1478,10 @@ namespace NPOI.XSSF.UserModel
         internal virtual void Write(Stream stream, bool leaveOpen = false)
         {
             bool setToNull = false;
-            if (worksheet.sizeOfColsArray() == 1)
+            if(worksheet.sizeOfColsArray() == 1)
             {
                 CT_Cols col = worksheet.GetColsArray(0);
-                if (col.sizeOfColArray() == 0)
+                if(col.sizeOfColArray() == 0)
                 {
                     setToNull = true;
                     // this is necessary so that we do not write an empty
@@ -1481,16 +1496,16 @@ namespace NPOI.XSSF.UserModel
             }
 
             // Now re-generate our CT_Hyperlinks, if needed
-            if (hyperlinks.Count > 0)
+            if(hyperlinks.Count > 0)
             {
-                if (worksheet.hyperlinks == null)
+                if(worksheet.hyperlinks == null)
                 {
                     worksheet.AddNewHyperlinks();
                 }
 
                 CT_Hyperlink[] ctHls
                     = new CT_Hyperlink[hyperlinks.Count];
-                for (int i = 0; i < ctHls.Length; i++)
+                for(int i = 0; i < ctHls.Length; i++)
                 {
                     // If our sheet has hyperlinks, have them add
                     //  any relationships that they might need
@@ -1504,13 +1519,14 @@ namespace NPOI.XSSF.UserModel
             }
             else
             {
-                if (worksheet.hyperlinks != null)
+                if(worksheet.hyperlinks != null)
                 {
                     int count = worksheet.hyperlinks.SizeOfHyperlinkArray();
-                    for (int i = count - 1; i >= 0; i--)
+                    for(int i = count - 1; i >= 0; i--)
                     {
                         worksheet.hyperlinks.RemoveHyperlink(i);
                     }
+
                     // For some reason, we have to remove the hyperlinks one by one from the CTHyperlinks array
                     // before unsetting the hyperlink array.
                     // Resetting the hyperlink array seems to break some XML nodes.
@@ -1522,38 +1538,40 @@ namespace NPOI.XSSF.UserModel
                     // nothing to do
                 }
             }
-            foreach (XSSFRow row in _rows.Values)
+
+            foreach(XSSFRow row in _rows.Values)
             {
                 row.OnDocumentWrite();
             }
 
             int minCell = int.MaxValue, maxCell = int.MinValue;
-            foreach (XSSFRow row in _rows.Values)
+            foreach(XSSFRow row in _rows.Values)
             {
                 // first perform the normal write actions for the row
                 row.OnDocumentWrite();
 
                 // then calculate min/max cell-numbers for the worksheet-dimension
-                if (row.FirstCellNum != -1)
+                if(row.FirstCellNum != -1)
                 {
                     minCell = Math.Min(minCell, row.FirstCellNum);
                 }
-                if (row.LastCellNum != -1)
+
+                if(row.LastCellNum != -1)
                 {
                     maxCell = Math.Max(maxCell, row.LastCellNum);
                 }
             }
-            
-            foreach (XSSFColumn column in _columns.Values)
+
+            foreach(XSSFColumn column in _columns.Values)
             {
                 column.OnDocumentWrite();
             }
 
             // finally, if we had at least one cell we can populate the optional dimension-field
-            if (minCell != int.MaxValue)
+            if(minCell != int.MaxValue)
             {
                 string ref1 = new CellRangeAddress(FirstRowNum, LastRowNum, minCell, maxCell).FormatAsString();
-                if (worksheet.IsSetDimension())
+                if(worksheet.IsSetDimension())
                 {
                     worksheet.dimension.@ref = ref1;
                 }
@@ -1566,7 +1584,7 @@ namespace NPOI.XSSF.UserModel
             new WorksheetDocument(worksheet).Save(stream, leaveOpen);
 
             // Bug 52233: Ensure that we have a col-array even if write() removed it
-            if (setToNull)
+            if(setToNull)
             {
                 worksheet.AddNewCols();
             }
@@ -1574,9 +1592,9 @@ namespace NPOI.XSSF.UserModel
 
         internal bool IsCellInArrayFormulaContext(ICell cell)
         {
-            foreach (CellRangeAddress range in arrayFormulas)
+            foreach(CellRangeAddress range in arrayFormulas)
             {
-                if (range.IsInRange(cell.RowIndex, cell.ColumnIndex))
+                if(range.IsInRange(cell.RowIndex, cell.ColumnIndex))
                 {
                     return true;
                 }
@@ -1587,11 +1605,11 @@ namespace NPOI.XSSF.UserModel
 
         internal XSSFCell GetFirstCellInArrayFormula(ICell cell)
         {
-            foreach (CellRangeAddress range in arrayFormulas)
+            foreach(CellRangeAddress range in arrayFormulas)
             {
-                if (range.IsInRange(cell.RowIndex, cell.ColumnIndex))
+                if(range.IsInRange(cell.RowIndex, cell.ColumnIndex))
                 {
-                    return (XSSFCell)GetRow(range.FirstRow)
+                    return (XSSFCell) GetRow(range.FirstRow)
                         .GetCell(range.FirstColumn);
                 }
             }
@@ -1609,45 +1627,45 @@ namespace NPOI.XSSF.UserModel
         {
 
             CT_CellFormula f = cell.GetCTCell().f;
-            if (f != null
-                && f.t == ST_CellFormulaType.shared
-                && f.isSetRef()
-                && f.Value != null)
+            if(f != null
+               && f.t == ST_CellFormulaType.shared
+               && f.isSetRef()
+               && f.Value != null)
             {
                 bool breakit = false;
                 CellRangeAddress ref1 = CellRangeAddress.ValueOf(f.@ref);
-                if (ref1.NumberOfCells > 1)
+                if(ref1.NumberOfCells > 1)
                 {
-                    for (int i = cell.RowIndex; i <= ref1.LastRow; i++)
+                    for(int i = cell.RowIndex; i <= ref1.LastRow; i++)
                     {
-                        XSSFRow row = (XSSFRow)GetRow(i);
-                        if (row != null)
+                        XSSFRow row = (XSSFRow) GetRow(i);
+                        if(row != null)
                         {
-                            for (int j = cell.ColumnIndex; j <= ref1.LastColumn; j++)
+                            for(int j = cell.ColumnIndex; j <= ref1.LastColumn; j++)
                             {
-                                XSSFCell nextCell = (XSSFCell)row.GetCell(j);
-                                if (nextCell != null
-                                    && nextCell != cell
-                                    && nextCell.CellType == CellType.Formula)
+                                XSSFCell nextCell = (XSSFCell) row.GetCell(j);
+                                if(nextCell != null
+                                   && nextCell != cell
+                                   && nextCell.CellType == CellType.Formula)
                                 {
                                     CT_CellFormula nextF = nextCell.GetCTCell().f;
-                                    if (nextF.t == ST_CellFormulaType.shared
-                                        && nextF.si == f.si)
+                                    if(nextF.t == ST_CellFormulaType.shared
+                                       && nextF.si == f.si)
                                     {
                                         nextF.Value = nextCell.GetCellFormula(evalWb);
                                         CellRangeAddress nextRef = new CellRangeAddress(
-                                                nextCell.RowIndex, ref1.LastRow,
-                                                nextCell.ColumnIndex, ref1.LastColumn);
+                                            nextCell.RowIndex, ref1.LastRow,
+                                            nextCell.ColumnIndex, ref1.LastColumn);
                                         nextF.@ref = nextRef.FormatAsString();
 
-                                        sharedFormulas[(int)nextF.si] = nextF;
+                                        sharedFormulas[(int) nextF.si] = nextF;
                                         breakit = true;
                                         break;
                                     }
                                 }
                             }
 
-                            if (breakit)
+                            if(breakit)
                             {
                                 break;
                             }
@@ -1661,9 +1679,11 @@ namespace NPOI.XSSF.UserModel
         {
             return _rows.Values.GetEnumerator();
         }
+
         #endregion
 
         #region Public methods
+
         /// <summary>
         /// Provide access to the CT_Worksheet bean holding this sheet's data
         /// </summary>
@@ -1672,7 +1692,7 @@ namespace NPOI.XSSF.UserModel
         {
             return worksheet;
         }
-        
+
         public ColumnHelper GetColumnHelper()
         {
             columnHelper = columnHelper ?? new ColumnHelper(worksheet);
@@ -1745,12 +1765,12 @@ namespace NPOI.XSSF.UserModel
         {
             double width = SheetUtil.GetColumnWidth(this, column, useMergedCells);
 
-            if (width != -1)
+            if(width != -1)
             {
                 width *= 256;
                 // The maximum column width for an individual cell is 255 characters
                 int maxColumnWidth = 255 * 256;
-                if (width > maxColumnWidth)
+                if(width > maxColumnWidth)
                 {
                     width = maxColumnWidth;
                 }
@@ -1789,18 +1809,18 @@ namespace NPOI.XSSF.UserModel
 
             double height = SheetUtil.GetRowHeight(this, row, useMergedCells);
 
-            if (height != -1 && height != 0)
+            if(height != -1 && height != 0)
             {
                 height *= 20;
                 // The maximum row height for an individual cell is 409 points
                 int maxRowHeight = 409 * 20;
 
-                if (height > maxRowHeight)
+                if(height > maxRowHeight)
                 {
                     height = maxRowHeight;
                 }
 
-                targetRow.Height = (short)height;
+                targetRow.Height = (short) height;
             }
         }
 
@@ -1812,16 +1832,16 @@ namespace NPOI.XSSF.UserModel
         public XSSFDrawing GetDrawingPatriarch()
         {
             OpenXmlFormats.Spreadsheet.CT_Drawing ctDrawing = GetCTDrawing();
-            if (ctDrawing != null)
+            if(ctDrawing != null)
             {
                 // Search the referenced Drawing in the list of the sheet's relations
-                foreach (RelationPart rp in RelationParts)
+                foreach(RelationPart rp in RelationParts)
                 {
                     POIXMLDocumentPart p = rp.DocumentPart;
-                    if (p is XSSFDrawing dr)
+                    if(p is XSSFDrawing dr)
                     {
                         string drId = rp.Relationship.Id;
-                        if (drId.Equals(ctDrawing.id))
+                        if(drId.Equals(ctDrawing.id))
                         {
                             return dr;
                         }
@@ -1831,7 +1851,7 @@ namespace NPOI.XSSF.UserModel
                 }
 
                 logger.Log(POILogger.ERROR, "Can't find Drawing with id=" +
-                    ctDrawing.id + " in the list of the sheet's relationships");
+                                            ctDrawing.id + " in the list of the sheet's relationships");
             }
 
             return null;
@@ -1845,7 +1865,7 @@ namespace NPOI.XSSF.UserModel
         public IDrawing CreateDrawingPatriarch()
         {
             OpenXmlFormats.Spreadsheet.CT_Drawing ctDrawing = GetCTDrawing();
-            if (ctDrawing != null)
+            if(ctDrawing != null)
             {
                 return GetDrawingPatriarch();
             }
@@ -1898,10 +1918,10 @@ namespace NPOI.XSSF.UserModel
             CT_SheetView ctView = GetDefaultSheetView();
 
             // If both colSplit and rowSplit are zero then the existing freeze pane is Removed
-            if (colSplit == 0 && rowSplit == 0)
+            if(colSplit == 0 && rowSplit == 0)
             {
 
-                if (ctView.IsSetPane())
+                if(ctView.IsSetPane())
                 {
                     ctView.UnsetPane();
                 }
@@ -1910,45 +1930,45 @@ namespace NPOI.XSSF.UserModel
                 return;
             }
 
-            if (!ctView.IsSetPane())
+            if(!ctView.IsSetPane())
             {
                 ctView.AddNewPane();
             }
 
             CT_Pane pane = ctView.pane;
 
-            if (colSplit > 0)
+            if(colSplit > 0)
             {
                 pane.xSplit = colSplit;
             }
             else
             {
 
-                if (pane.IsSetXSplit())
+                if(pane.IsSetXSplit())
                 {
                     pane.UnsetXSplit();
                 }
             }
 
-            if (rowSplit > 0)
+            if(rowSplit > 0)
             {
                 pane.ySplit = rowSplit;
             }
             else
             {
-                if (pane.IsSetYSplit())
+                if(pane.IsSetYSplit())
                 {
                     pane.UnsetYSplit();
                 }
             }
 
             pane.state = ST_PaneState.frozen;
-            if (rowSplit == 0)
+            if(rowSplit == 0)
             {
                 pane.topLeftCell = new CellReference(0, leftmostColumn).FormatAsString();
                 pane.activePane = ST_Pane.topRight;
             }
-            else if (colSplit == 0)
+            else if(colSplit == 0)
             {
                 pane.topLeftCell = new CellReference(topRow, 0).FormatAsString();
                 pane.activePane = ST_Pane.bottomLeft;
@@ -1975,7 +1995,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Row ctRow;
             XSSFRow prev = _rows.ContainsKey(rownum) ? _rows[rownum] : null;
-            if (prev != null)
+            if(prev != null)
             {
                 // the Cells in an existing row are invalidated on-purpose, in
                 // order to clean up correctly, we need to call the remove, so
@@ -1983,7 +2003,7 @@ namespace NPOI.XSSF.UserModel
                 // done correctly. We remove the cell this way as the internal
                 // cell-list is changed by the remove call and thus would cause
                 // ConcurrentModificationException otherwise
-                while (prev.FirstCellNum != -1)
+                while(prev.FirstCellNum != -1)
                 {
                     prev.RemoveCell(prev.GetCell(prev.FirstCellNum));
                 }
@@ -1993,7 +2013,7 @@ namespace NPOI.XSSF.UserModel
             }
             else
             {
-                if (_rows.Count == 0 || rownum > GetLastKey(_rows.Keys))
+                if(_rows.Count == 0 || rownum > GetLastKey(_rows.Keys))
                 {
                     // we can append the new row at the end
                     ctRow = worksheet.sheetData.AddNewRow();
@@ -2007,10 +2027,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
-            XSSFRow r = new XSSFRow(ctRow, this)
-            {
-                RowNum = rownum
-            };
+            XSSFRow r = new XSSFRow(ctRow, this) { RowNum = rownum };
             _rows[rownum] = r;
             return r;
         }
@@ -2026,7 +2043,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Col ctCol;
             XSSFColumn prev = _columns.ContainsKey(columnnum) ? _columns[columnnum] : null;
-            if (prev != null)
+            if(prev != null)
             {
                 // the Cells in an existing column are invalidated on-purpose, in
                 // order to clean up correctly, we need to call the remove, so
@@ -2034,7 +2051,7 @@ namespace NPOI.XSSF.UserModel
                 // done correctly. We remove the cell this way as the internal
                 // cell-list is changed by the remove call and thus would cause
                 // ConcurrentModificationException otherwise
-                while (prev.FirstCellNum != -1)
+                while(prev.FirstCellNum != -1)
                 {
                     prev.RemoveCell(prev.GetCell(prev.FirstCellNum));
                 }
@@ -2044,12 +2061,12 @@ namespace NPOI.XSSF.UserModel
             }
             else
             {
-                if (worksheet.cols.FirstOrDefault() is null)
+                if(worksheet.cols.FirstOrDefault() is null)
                 {
                     worksheet.AddNewCols();
                 }
 
-                if (_columns.Count == 0 || columnnum > GetLastKey(_columns.Keys))
+                if(_columns.Count == 0 || columnnum > GetLastKey(_columns.Keys))
                 {
                     // we can append the new column at the end
                     ctCol = worksheet.cols.FirstOrDefault().AddNewCol();
@@ -2064,12 +2081,9 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
-            ctCol.SetNumber((uint)columnnum + 1);
+            ctCol.SetNumber((uint) columnnum + 1);
 
-            XSSFColumn c = new XSSFColumn(ctCol, this)
-            {
-                ColumnNum = columnnum
-            };
+            XSSFColumn c = new XSSFColumn(ctCol, this) { ColumnNum = columnnum };
 
             _columns[columnnum] = c;
             return c;
@@ -2087,11 +2101,12 @@ namespace NPOI.XSSF.UserModel
         /// <param name="topRow">Top row visible in bottom pane</param>
         /// <param name="activePane">Active pane.  One of: PANE_LOWER_RIGHT, 
         /// PANE_UPPER_RIGHT, PANE_LOWER_LEFT, PANE_UPPER_LEFT</param>
-        public void CreateSplitPane(int xSplitPos, int ySplitPos, int leftmostColumn, int topRow, PanePosition activePane)
+        public void CreateSplitPane(int xSplitPos, int ySplitPos, int leftmostColumn, int topRow,
+            PanePosition activePane)
         {
             CreateFreezePane(xSplitPos, ySplitPos, leftmostColumn, topRow);
             GetPane().state = ST_PaneState.split;
-            GetPane().activePane = (ST_Pane)activePane;
+            GetPane().activePane = (ST_Pane) activePane;
         }
 
         /// <summary>
@@ -2100,7 +2115,8 @@ namespace NPOI.XSSF.UserModel
         /// <param name="row">The row.</param>
         /// <param name="column">The column.</param>
         /// <returns>cell comment or <code>null</code> if not found</returns>
-        [Obsolete("deprecated as of 2015-11-23 (circa POI 3.14beta1). Use {@link #getCellComment(CellAddress)} instead.")]
+        [Obsolete(
+            "deprecated as of 2015-11-23 (circa POI 3.14beta1). Use {@link #getCellComment(CellAddress)} instead.")]
         public IComment GetCellComment(int row, int column)
         {
             return GetCellComment(new CellAddress(row, column));
@@ -2113,7 +2129,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns>return cell comment or null if not found</returns>
         public IComment GetCellComment(CellAddress address)
         {
-            if (sheetComments == null)
+            if(sheetComments == null)
             {
                 return null;
             }
@@ -2123,14 +2139,14 @@ namespace NPOI.XSSF.UserModel
 
             CellAddress ref1 = new CellAddress(row, column);
             CT_Comment ctComment = sheetComments.GetCTComment(ref1);
-            if (ctComment == null)
+            if(ctComment == null)
             {
                 return null;
             }
 
             XSSFVMLDrawing vml = GetVMLDrawing(false);
             return new XSSFComment(sheetComments, ctComment,
-                    vml?.FindCommentShape(row, column));
+                vml?.FindCommentShape(row, column));
         }
 
         /// <summary>
@@ -2140,7 +2156,7 @@ namespace NPOI.XSSF.UserModel
         /// the cell address where the comment is located.</returns>
         public Dictionary<CellAddress, IComment> GetCellComments()
         {
-            if (sheetComments == null)
+            if(sheetComments == null)
             {
                 return new Dictionary<CellAddress, IComment>();
             }
@@ -2171,9 +2187,9 @@ namespace NPOI.XSSF.UserModel
         public IHyperlink GetHyperlink(CellAddress addr)
         {
             string ref1 = addr.FormatAsString();
-            foreach (XSSFHyperlink hyperlink in hyperlinks)
+            foreach(XSSFHyperlink hyperlink in hyperlinks)
             {
-                if (hyperlink.CellRef.Equals(ref1))
+                if(hyperlink.CellRef.Equals(ref1))
                 {
                     return hyperlink;
                 }
@@ -2227,13 +2243,13 @@ namespace NPOI.XSSF.UserModel
         /// <exception cref="ArgumentException"></exception>
         public double GetMargin(MarginType margin)
         {
-            if (!worksheet.IsSetPageMargins())
+            if(!worksheet.IsSetPageMargins())
             {
                 return 0;
             }
 
             CT_PageMargins pageMargins = worksheet.pageMargins;
-            switch (margin)
+            switch(margin)
             {
                 case MarginType.LeftMargin:
                     return pageMargins.left;
@@ -2261,9 +2277,9 @@ namespace NPOI.XSSF.UserModel
         /// <exception cref="InvalidOperationException"></exception>
         public void SetMargin(MarginType margin, double size)
         {
-            CT_PageMargins pageMargins = worksheet.IsSetPageMargins() ?
-                    worksheet.pageMargins : worksheet.AddNewPageMargins();
-            switch (margin)
+            CT_PageMargins pageMargins =
+                worksheet.IsSetPageMargins() ? worksheet.pageMargins : worksheet.AddNewPageMargins();
+            switch(margin)
             {
                 case MarginType.LeftMargin:
                     pageMargins.left = size;
@@ -2299,14 +2315,14 @@ namespace NPOI.XSSF.UserModel
         public CellRangeAddress GetMergedRegion(int index)
         {
             CT_MergeCells ctMergeCells = worksheet.mergeCells;
-            if (ctMergeCells == null)
+            if(ctMergeCells == null)
             {
                 throw new InvalidOperationException("This worksheet does not contain merged regions");
             }
 
             CT_MergeCell ctMergeCell = ctMergeCells.GetMergeCellArray(index);
 
-            if (ctMergeCell == null)
+            if(ctMergeCell == null)
             {
                 return null;
             }
@@ -2317,20 +2333,20 @@ namespace NPOI.XSSF.UserModel
 
         public CellRangeAddress GetMergedRegion(CellRangeAddress mergedRegion)
         {
-            if (worksheet.mergeCells == null || worksheet.mergeCells.mergeCell == null)
+            if(worksheet.mergeCells == null || worksheet.mergeCells.mergeCell == null)
             {
                 return null;
             }
 
-            foreach (CT_MergeCell mc in worksheet.mergeCells.mergeCell)
+            foreach(CT_MergeCell mc in worksheet.mergeCells.mergeCell)
             {
-                if (mc != null && !string.IsNullOrEmpty(mc.@ref))
+                if(mc != null && !string.IsNullOrEmpty(mc.@ref))
                 {
                     CellRangeAddress range = CellRangeAddress.ValueOf(mc.@ref);
-                    if (range.FirstColumn <= mergedRegion.FirstColumn
-                     && range.LastColumn >= mergedRegion.LastColumn
-                     && range.FirstRow <= mergedRegion.FirstRow
-                     && range.LastRow >= mergedRegion.LastRow)
+                    if(range.FirstColumn <= mergedRegion.FirstColumn
+                       && range.LastColumn >= mergedRegion.LastColumn
+                       && range.FirstRow <= mergedRegion.FirstRow
+                       && range.LastRow >= mergedRegion.LastRow)
                     {
                         return range;
                     }
@@ -2350,7 +2366,7 @@ namespace NPOI.XSSF.UserModel
         public void ProtectSheet(string password)
         {
 
-            if (password != null)
+            if(password != null)
             {
                 CT_SheetProtection sheetProtection = worksheet.AddNewSheetProtection();
                 SetSheetPassword(password, null); // defaults to xor password
@@ -2373,7 +2389,7 @@ namespace NPOI.XSSF.UserModel
         /// used for calculating the hash password (Excel 2013)</param>
         public void SetSheetPassword(string password, HashAlgorithm hashAlgo)
         {
-            if (password == null && !IsSheetProtectionEnabled())
+            if(password == null && !IsSheetProtectionEnabled())
             {
                 return;
             }
@@ -2391,7 +2407,7 @@ namespace NPOI.XSSF.UserModel
         /// may differ ...)</returns>
         public bool ValidateSheetPassword(string password)
         {
-            if (!IsSheetProtectionEnabled())
+            if(!IsSheetProtectionEnabled())
             {
                 return password == null;
             }
@@ -2410,7 +2426,7 @@ namespace NPOI.XSSF.UserModel
         /// if its not defined on the sheet</returns>
         public IRow GetRow(int rownum)
         {
-            if (_rows.ContainsKey(rownum))
+            if(_rows.ContainsKey(rownum))
             {
                 return _rows[rownum];
             }
@@ -2428,12 +2444,12 @@ namespace NPOI.XSSF.UserModel
         /// if its not defined on the sheet</returns>
         public IColumn GetColumn(int columnnum, bool createIfNull = false)
         {
-            if (_columns.ContainsKey(columnnum))
+            if(_columns.ContainsKey(columnnum))
             {
                 return _columns[columnnum];
             }
 
-            if (createIfNull)
+            if(createIfNull)
             {
                 return CreateColumn(columnnum);
             }
@@ -2448,7 +2464,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="toColumn"></param>
         public void GroupColumn(int fromColumn, int toColumn)
         {
-            for (int i = fromColumn; i <= toColumn; i++)
+            for(int i = fromColumn; i <= toColumn; i++)
             {
                 IColumn column = GetColumn(i, true);
                 column.OutlineLevel++;
@@ -2465,9 +2481,9 @@ namespace NPOI.XSSF.UserModel
         public bool IsColumnBroken(int column)
         {
             int[] colBreaks = ColumnBreaks;
-            for (int i = 0; i < colBreaks.Length; i++)
+            for(int i = 0; i < colBreaks.Length; i++)
             {
-                if (colBreaks[i] == column)
+                if(colBreaks[i] == column)
                 {
                     return true;
                 }
@@ -2495,9 +2511,9 @@ namespace NPOI.XSSF.UserModel
         public bool IsRowBroken(int row)
         {
             int[] rowBreaks = RowBreaks;
-            for (int i = 0; i < rowBreaks.Length; i++)
+            for(int i = 0; i < rowBreaks.Length; i++)
             {
-                if (rowBreaks[i] == row)
+                if(rowBreaks[i] == row)
                 {
                     return true;
                 }
@@ -2523,15 +2539,15 @@ namespace NPOI.XSSF.UserModel
                 ? worksheet.rowBreaks
                 : worksheet.AddNewRowBreaks();
 
-            if (!IsRowBroken(row))
+            if(!IsRowBroken(row))
             {
                 CT_Break brk = pgBreak.AddNewBrk();
-                brk.id = (uint)row + 1; // this is id of the row element which is 1-based: <row r="1" ... >
+                brk.id = (uint) row + 1; // this is id of the row element which is 1-based: <row r="1" ... >
                 brk.man = true;
-                brk.max = (uint)SpreadsheetVersion.EXCEL2007.LastColumnIndex; //end column of the break
+                brk.max = (uint) SpreadsheetVersion.EXCEL2007.LastColumnIndex; //end column of the break
 
-                pgBreak.count = (uint)pgBreak.sizeOfBrkArray();
-                pgBreak.manualBreakCount = (uint)pgBreak.sizeOfBrkArray();
+                pgBreak.count = (uint) pgBreak.sizeOfBrkArray();
+                pgBreak.manualBreakCount = (uint) pgBreak.sizeOfBrkArray();
             }
         }
 
@@ -2542,7 +2558,7 @@ namespace NPOI.XSSF.UserModel
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public void RemoveColumnBreak(int column)
         {
-            if (!worksheet.IsSetColBreaks())
+            if(!worksheet.IsSetColBreaks())
             {
                 // no breaks
                 return;
@@ -2550,9 +2566,9 @@ namespace NPOI.XSSF.UserModel
 
             CT_PageBreak pgBreak = worksheet.colBreaks;
             List<CT_Break> brkArray = pgBreak.brk;
-            for (int i = 0; i < brkArray.Count; i++)
+            for(int i = 0; i < brkArray.Count; i++)
             {
-                if (brkArray[i].id == (column + 1))
+                if(brkArray[i].id == (column + 1))
                 {
                     pgBreak.RemoveBrk(i);
                 }
@@ -2569,19 +2585,19 @@ namespace NPOI.XSSF.UserModel
 
             int size = ctMergeCells.sizeOfMergeCellArray();
             CT_MergeCell[] mergeCellsArray = new CT_MergeCell[size - 1];
-            for (int i = 0; i < size; i++)
+            for(int i = 0; i < size; i++)
             {
-                if (i < index)
+                if(i < index)
                 {
                     mergeCellsArray[i] = ctMergeCells.GetMergeCellArray(i);
                 }
-                else if (i > index)
+                else if(i > index)
                 {
                     mergeCellsArray[i - 1] = ctMergeCells.GetMergeCellArray(i);
                 }
             }
 
-            if (mergeCellsArray.Length > 0)
+            if(mergeCellsArray.Length > 0)
             {
                 ctMergeCells.SetMergeCellArray(mergeCellsArray);
             }
@@ -2600,7 +2616,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="indices">A Set of the regions to unmerge</param>
         public void RemoveMergedRegions(IList<int> indices)
         {
-            if (!worksheet.IsSetMergeCells())
+            if(!worksheet.IsSetMergeCells())
             {
                 return;
             }
@@ -2611,9 +2627,9 @@ namespace NPOI.XSSF.UserModel
             List<CT_MergeCell> newMergeCells =
                 new List<CT_MergeCell>(ctMergeCells.sizeOfMergeCellArray());
 
-            for (int i = 0, d = 0; i < size; i++)
+            for(int i = 0, d = 0; i < size; i++)
             {
-                if (!indices.Contains(i))
+                if(!indices.Contains(i))
                 {
                     //newMergeCells[d] = ctMergeCells.GetMergeCellArray(i);
                     newMergeCells.Add(ctMergeCells.GetMergeCellArray(i));
@@ -2621,7 +2637,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
-            if (ListIsEmpty(newMergeCells))
+            if(ListIsEmpty(newMergeCells))
             {
                 worksheet.UnsetMergeCells();
             }
@@ -2639,33 +2655,34 @@ namespace NPOI.XSSF.UserModel
         /// <exception cref="ArgumentException"></exception>
         public void RemoveRow(IRow row)
         {
-            if (row.Sheet != this)
+            if(row.Sheet != this)
             {
                 throw new ArgumentException("Specified row does not belong to" +
-                    " this sheet");
-            }
-            // collect cells into a temporary array to avoid ConcurrentModificationException
-            List<XSSFCell> cellsToDelete = new List<XSSFCell>();
-            foreach (ICell cell in row)
-            {
-                cellsToDelete.Add((XSSFCell)cell);
+                                            " this sheet");
             }
 
-            foreach (XSSFCell cell in cellsToDelete)
+            // collect cells into a temporary array to avoid ConcurrentModificationException
+            List<XSSFCell> cellsToDelete = new List<XSSFCell>();
+            foreach(ICell cell in row)
+            {
+                cellsToDelete.Add((XSSFCell) cell);
+            }
+
+            foreach(XSSFCell cell in cellsToDelete)
             {
                 row.RemoveCell(cell);
             }
 
-            int idx = _rows.Count(p => p.Key < row.RowNum);// _rows.headMap(row.getRowNum()).size();
+            int idx = _rows.Count(p => p.Key < row.RowNum); // _rows.headMap(row.getRowNum()).size();
             _rows.Remove(row.RowNum);
             worksheet.sheetData.RemoveRow(row.RowNum + 1); // Note that rows in worksheet.sheetData is 1-based.
 
             // also remove any comment located in that row
-            if (sheetComments != null)
+            if(sheetComments != null)
             {
-                foreach (CellAddress ref1 in GetCellComments().Keys)
+                foreach(CellAddress ref1 in GetCellComments().Keys)
                 {
-                    if (ref1.Row == row.RowNum)
+                    if(ref1.Row == row.RowNum)
                     {
                         sheetComments.RemoveComment(ref1);
                     }
@@ -2681,47 +2698,47 @@ namespace NPOI.XSSF.UserModel
         /// <exception cref="ArgumentException"></exception>
         public void RemoveColumn(IColumn column)
         {
-            if (column == null)
+            if(column == null)
             {
                 throw new ArgumentException("Column can't be null");
             }
 
-            if (column.Sheet != this)
+            if(column.Sheet != this)
             {
                 throw new ArgumentException("Specified column does not belong to" +
-                    " this sheet");
+                                            " this sheet");
             }
 
             // collect cells into a temporary array to avoid ConcurrentModificationException
             List<XSSFCell> cellsToDelete = new List<XSSFCell>();
-            foreach (ICell cell in column)
+            foreach(ICell cell in column)
             {
-                cellsToDelete.Add((XSSFCell)cell);
+                cellsToDelete.Add((XSSFCell) cell);
             }
 
-            foreach (XSSFCell cell in cellsToDelete)
+            foreach(XSSFCell cell in cellsToDelete)
             {
                 column.RemoveCell(cell);
             }
 
             // also remove any comment located in that column
-            if (sheetComments != null)
+            if(sheetComments != null)
             {
-                foreach (CellAddress ref1 in GetCellComments().Keys)
+                foreach(CellAddress ref1 in GetCellComments().Keys)
                 {
-                    if (ref1.Column == column.ColumnNum)
+                    if(ref1.Column == column.ColumnNum)
                     {
                         sheetComments.RemoveComment(ref1);
                     }
                 }
             }
 
-            if (hyperlinks != null)
+            if(hyperlinks != null)
             {
-                foreach (XSSFHyperlink link in new List<XSSFHyperlink>(hyperlinks))
+                foreach(XSSFHyperlink link in new List<XSSFHyperlink>(hyperlinks))
                 {
                     CellReference ref1 = new CellReference(link.CellRef);
-                    if (ref1.Col == column.ColumnNum)
+                    if(ref1.Col == column.ColumnNum)
                     {
                         hyperlinks.Remove(link);
                     }
@@ -2738,16 +2755,16 @@ namespace NPOI.XSSF.UserModel
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public void RemoveRowBreak(int row)
         {
-            if (!worksheet.IsSetRowBreaks())
+            if(!worksheet.IsSetRowBreaks())
             {
                 return;
             }
 
             CT_PageBreak pgBreak = worksheet.rowBreaks;
             List<CT_Break> brkArray = pgBreak.brk;
-            for (int i = 0; i < brkArray.Count; i++)
+            for(int i = 0; i < brkArray.Count; i++)
             {
-                if (brkArray[i].id == (row + 1))
+                if(brkArray[i].id == (row + 1))
                 {
                     pgBreak.RemoveBrk(i);
                 }
@@ -2766,17 +2783,16 @@ namespace NPOI.XSSF.UserModel
         /// <param name="column">the column to break, inclusive</param>
         public void SetColumnBreak(int column)
         {
-            if (!IsColumnBroken(column))
+            if(!IsColumnBroken(column))
             {
-                CT_PageBreak pgBreak = worksheet.IsSetColBreaks() ?
-                    worksheet.colBreaks : worksheet.AddNewColBreaks();
+                CT_PageBreak pgBreak = worksheet.IsSetColBreaks() ? worksheet.colBreaks : worksheet.AddNewColBreaks();
                 CT_Break brk = pgBreak.AddNewBrk();
-                brk.id = (uint)column + 1;  // this is id of the row element which is 1-based: <row r="1" ... >
+                brk.id = (uint) column + 1; // this is id of the row element which is 1-based: <row r="1" ... >
                 brk.man = true;
-                brk.max = (uint)SpreadsheetVersion.EXCEL2007.LastRowIndex; //end row of the break
+                brk.max = (uint) SpreadsheetVersion.EXCEL2007.LastRowIndex; //end row of the break
 
-                pgBreak.count = (uint)pgBreak.sizeOfBrkArray();
-                pgBreak.manualBreakCount = (uint)pgBreak.sizeOfBrkArray();
+                pgBreak.count = (uint) pgBreak.sizeOfBrkArray();
+                pgBreak.manualBreakCount = (uint) pgBreak.sizeOfBrkArray();
             }
         }
 
@@ -2784,7 +2800,7 @@ namespace NPOI.XSSF.UserModel
         {
             IColumn col = GetColumn(columnNumber);
 
-            if (col == null)
+            if(col == null)
             {
                 return;
             }
@@ -2793,9 +2809,9 @@ namespace NPOI.XSSF.UserModel
 
             int lastColumnIndex = group.Keys.Max();
 
-            foreach (KeyValuePair<int, IColumn> columnEntry in group)
+            foreach(KeyValuePair<int, IColumn> columnEntry in group)
             {
-                if (columnEntry.Key == lastColumnIndex)
+                if(columnEntry.Key == lastColumnIndex)
                 {
                     columnEntry.Value.Collapsed = collapsed;
                 }
@@ -2878,14 +2894,14 @@ namespace NPOI.XSSF.UserModel
         /// maximum column width in Excel is 255 characters)</exception>
         public void SetColumnWidth(int columnIndex, double width)
         {
-            if (width > 255 * 256)
+            if(width > 255 * 256)
             {
                 throw new ArgumentException("The maximum column width for an " +
-                    "individual cell is 255 characters.");
+                                            "individual cell is 255 characters.");
             }
 
             IColumn column = GetColumn(columnIndex, true);
-            column.Width = (double)width / 256;
+            column.Width = (double) width / 256;
         }
 
         public void SetDefaultColumnStyle(int column, ICellStyle style)
@@ -2905,7 +2921,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="collapse">bool value for collapse</param>
         public void SetRowGroupCollapsed(int rowIndex, bool collapse)
         {
-            if (collapse)
+            if(collapse)
             {
                 CollapseRow(rowIndex);
             }
@@ -2949,12 +2965,12 @@ namespace NPOI.XSSF.UserModel
         /// <exception cref="ArgumentException">if scale is invalid</exception>
         public void SetZoom(int scale)
         {
-            if (scale < 10 || scale > 400)
+            if(scale < 10 || scale > 400)
             {
                 throw new ArgumentException("Valid scale values range from 10 to 400");
             }
 
-            GetSheetTypeSheetView().zoomScale = (uint)scale;
+            GetSheetTypeSheetView().zoomScale = (uint) scale;
         }
 
         /// <summary>
@@ -2974,7 +2990,7 @@ namespace NPOI.XSSF.UserModel
         /// <exception cref="ArgumentException"></exception>
         public void CopyRows(List<XSSFRow> srcRows, int destStartRow, CellCopyPolicy policy)
         {
-            if (srcRows == null || srcRows.Count == 0)
+            if(srcRows == null || srcRows.Count == 0)
             {
                 throw new ArgumentException("No rows to copy");
             }
@@ -2982,7 +2998,7 @@ namespace NPOI.XSSF.UserModel
             IRow srcStartRow = srcRows[0];
             IRow srcEndRow = srcRows[srcRows.Count - 1];
 
-            if (srcStartRow == null)
+            if(srcStartRow == null)
             {
                 throw new ArgumentException("copyRows: First row cannot be null");
             }
@@ -2993,16 +3009,16 @@ namespace NPOI.XSSF.UserModel
             // check row numbers to make sure they are continuous and
             // increasing (monotonic) and srcRows does not contain null rows
             int size = srcRows.Count;
-            for (int index = 1; index < size; index++)
+            for(int index = 1; index < size; index++)
             {
                 IRow curRow = srcRows[index];
-                if (curRow == null)
+                if(curRow == null)
                 {
                     throw new ArgumentException(
                         "srcRows may not contain null rows. Found null row at" +
                         " index " + index + ".");
                 }
-                else if (srcStartRow.Sheet.Workbook != curRow.Sheet.Workbook)
+                else if(srcStartRow.Sheet.Workbook != curRow.Sheet.Workbook)
                 {
                     throw new ArgumentException(
                         "All rows in srcRows must belong to the same sheet in" +
@@ -3011,7 +3027,7 @@ namespace NPOI.XSSF.UserModel
                         "Got srcRows[" + index + "] from different workbook (" +
                         curRow.Sheet.Workbook + ").");
                 }
-                else if (srcStartRow.Sheet != curRow.Sheet)
+                else if(srcStartRow.Sheet != curRow.Sheet)
                 {
                     throw new ArgumentException(
                         "All rows in srcRows must belong to the same sheet. " +
@@ -3022,8 +3038,7 @@ namespace NPOI.XSSF.UserModel
 
             // FIXME: is special behavior needed if srcRows and destRows belong to the same sheets and the regions overlap?
 
-            CellCopyPolicy options = new CellCopyPolicy(policy)
-            {
+            CellCopyPolicy options = new CellCopyPolicy(policy) {
                 // avoid O(N^2) performance scanning through all regions for
                 // each row merged regions will be copied after all the rows
                 // have been copied
@@ -3034,10 +3049,10 @@ namespace NPOI.XSSF.UserModel
             // how will this work with merging (copy just values, leave cell styles in place?)
 
             int r = destStartRow;
-            foreach (IRow srcRow in srcRows)
+            foreach(IRow srcRow in srcRows)
             {
                 int destRowNum;
-                if (policy.IsCondenseRows)
+                if(policy.IsCondenseRows)
                 {
                     destRowNum = r++;
                 }
@@ -3046,6 +3061,7 @@ namespace NPOI.XSSF.UserModel
                     int shift = srcRow.RowNum - srcStartRowNum;
                     destRowNum = destStartRow + shift;
                 }
+
                 //removeRow(destRowNum); //this probably clears all external formula references to destRow, causing unwanted #REF! errors
                 XSSFRow destRow = CreateRow(destRowNum) as XSSFRow;
                 destRow.CopyRowFrom(srcRow, options);
@@ -3055,13 +3071,13 @@ namespace NPOI.XSSF.UserModel
             // Row.copyFromRow(Row, options) reasons: operation needs to
             // interact with multiple rows or sheets.
             // Copy merged regions that are contained within the copy region
-            if (policy.IsCopyMergedRegions)
+            if(policy.IsCopyMergedRegions)
             {
                 // FIXME: is this something that rowShifter could be doing?
                 int shift = destStartRow - srcStartRowNum;
-                foreach (CellRangeAddress srcRegion in srcStartRow.Sheet.MergedRegions)
+                foreach(CellRangeAddress srcRegion in srcStartRow.Sheet.MergedRegions)
                 {
-                    if (srcStartRowNum <= srcRegion.FirstRow && srcRegion.LastRow <= srcEndRowNum)
+                    if(srcStartRowNum <= srcRegion.FirstRow && srcRegion.LastRow <= srcEndRowNum)
                     {
                         // srcRegion is fully inside the copied rows
                         CellRangeAddress destRegion = srcRegion.Copy();
@@ -3151,7 +3167,7 @@ namespace NPOI.XSSF.UserModel
             int sheetIndex = Workbook.GetSheetIndex(this);
             string sheetName = Workbook.GetSheetName(sheetIndex);
             FormulaShifter shifter = FormulaShifter.CreateForRowShift(
-                           sheetIndex, sheetName, startRow, endRow, n, SpreadsheetVersion.EXCEL2007);
+                sheetIndex, sheetName, startRow, endRow, n, SpreadsheetVersion.EXCEL2007);
             RemoveOverwrittenRows(startRow, endRow, n);
             ShiftCommentsAndRows(startRow, endRow, n, copyRowHeight);
 
@@ -3191,7 +3207,7 @@ namespace NPOI.XSSF.UserModel
             int sheetIndex = Workbook.GetSheetIndex(this);
             string sheetName = Workbook.GetSheetName(sheetIndex);
             FormulaShifter shifter = FormulaShifter.CreateForColumnShift(
-                           sheetIndex, sheetName, startColumn, endColumn, n, SpreadsheetVersion.EXCEL2007);
+                sheetIndex, sheetName, startColumn, endColumn, n, SpreadsheetVersion.EXCEL2007);
             RemoveOverwrittenColumns(startColumn, endColumn, n);
             ShiftCommentsAndColumns(startColumn, endColumn, n, copyColumnWidth);
 
@@ -3214,7 +3230,7 @@ namespace NPOI.XSSF.UserModel
         {
             IColumn col = GetColumn(column);
 
-            if (col != null)
+            if(col != null)
             {
                 return col.ColumnStyle;
             }
@@ -3230,17 +3246,17 @@ namespace NPOI.XSSF.UserModel
         /// <param name="toRow">end row (0-based)</param>
         public void GroupRow(int fromRow, int toRow)
         {
-            for (int i = fromRow; i <= toRow; i++)
+            for(int i = fromRow; i <= toRow; i++)
             {
-                XSSFRow xrow = (XSSFRow)GetRow(i);
-                if (xrow == null)
+                XSSFRow xrow = (XSSFRow) GetRow(i);
+                if(xrow == null)
                 {
-                    xrow = (XSSFRow)CreateRow(i);
+                    xrow = (XSSFRow) CreateRow(i);
                 }
 
                 CT_Row ctrow = xrow.GetCTRow();
                 short outlineLevel = ctrow.outlineLevel;
-                ctrow.outlineLevel = (byte)(outlineLevel + 1);
+                ctrow.outlineLevel = (byte) (outlineLevel + 1);
             }
 
             SetSheetFormatPrOutlineLevelRow();
@@ -3253,13 +3269,13 @@ namespace NPOI.XSSF.UserModel
         /// <returns></returns>
         public int FindEndOfRowOutlineGroup(int row)
         {
-            int level = ((XSSFRow)GetRow(row)).GetCTRow().outlineLevel;
+            int level = ((XSSFRow) GetRow(row)).GetCTRow().outlineLevel;
             int currentRow;
             int lastRowNum = LastRowNum;
-            for (currentRow = row; currentRow < lastRowNum; currentRow++)
+            for(currentRow = row; currentRow < lastRowNum; currentRow++)
             {
-                if (GetRow(currentRow) == null
-                        || ((XSSFRow)GetRow(currentRow)).GetCTRow().outlineLevel < level)
+                if(GetRow(currentRow) == null
+                   || ((XSSFRow) GetRow(currentRow)).GetCTRow().outlineLevel < level)
                 {
                     break;
                 }
@@ -3270,18 +3286,18 @@ namespace NPOI.XSSF.UserModel
 
         public void UngroupColumn(int fromColumn, int toColumn)
         {
-            for (int index = fromColumn; index <= toColumn; index++)
+            for(int index = fromColumn; index <= toColumn; index++)
             {
                 IColumn col = GetColumn(index);
-                if (col != null)
+                if(col != null)
                 {
                     int outlineLevel = col.OutlineLevel;
                     col.OutlineLevel = outlineLevel - 1 < 0 ? 0 : outlineLevel - 1;
 
-                    if (col.OutlineLevel == 0
-                        && col.FirstCellNum == -1
-                        && (col.ColumnStyle == null 
-                        || col.ColumnStyle.Index == Workbook.GetCellStyleAt(0).Index))
+                    if(col.OutlineLevel == 0
+                       && col.FirstCellNum == -1
+                       && (col.ColumnStyle == null
+                           || col.ColumnStyle.Index == Workbook.GetCellStyleAt(0).Index))
                     {
                         DestroyColumn(col);
                     }
@@ -3298,17 +3314,17 @@ namespace NPOI.XSSF.UserModel
         /// <param name="toRow">end row (0-based)</param>
         public void UngroupRow(int fromRow, int toRow)
         {
-            for (int i = fromRow; i <= toRow; i++)
+            for(int i = fromRow; i <= toRow; i++)
             {
-                XSSFRow xrow = (XSSFRow)GetRow(i);
-                if (xrow != null)
+                XSSFRow xrow = (XSSFRow) GetRow(i);
+                if(xrow != null)
                 {
                     CT_Row ctrow = xrow.GetCTRow();
                     short outlinelevel = ctrow.outlineLevel;
-                    ctrow.outlineLevel = (byte)(outlinelevel - 1);
+                    ctrow.outlineLevel = (byte) (outlinelevel - 1);
                     // remove a row only if the row has no cell and if the
                     // outline level is 0
-                    if (ctrow.outlineLevel == 0 && xrow.FirstCellNum == -1)
+                    if(ctrow.outlineLevel == 0 && xrow.FirstCellNum == -1)
                     {
                         RemoveRow(xrow);
                     }
@@ -3338,15 +3354,15 @@ namespace NPOI.XSSF.UserModel
             // spreadsheet so don't worry about maintaining hyperlinks and
             // CTHyperlinks in parallel. only maintain hyperlinks
             string ref1 = new CellReference(row, column).FormatAsString();
-            for (int index = 0; index < hyperlinks.Count; index++)
+            for(int index = 0; index < hyperlinks.Count; index++)
             {
                 XSSFHyperlink hyperlink = hyperlinks[index];
-                if (hyperlink.CellRef.Equals(ref1))
+                if(hyperlink.CellRef.Equals(ref1))
                 {
-                    if (worksheet != null
-                        && worksheet.hyperlinks != null
-                        && worksheet.hyperlinks.hyperlink != null
-                        && worksheet.hyperlinks.hyperlink.Contains(hyperlink.GetCTHyperlink()))
+                    if(worksheet != null
+                       && worksheet.hyperlinks != null
+                       && worksheet.hyperlinks.hyperlink != null
+                       && worksheet.hyperlinks.hyperlink.Contains(hyperlink.GetCTHyperlink()))
                     {
                         worksheet.hyperlinks.hyperlink.Remove(hyperlink.GetCTHyperlink());
                     }
@@ -3552,26 +3568,26 @@ namespace NPOI.XSSF.UserModel
             ICellRange<ICell> cr = GetCellRange(range);
 
             ICell mainArrayFormulaCell = cr.TopLeftCell;
-            ((XSSFCell)mainArrayFormulaCell).SetCellArrayFormula(formula, range);
+            ((XSSFCell) mainArrayFormulaCell).SetCellArrayFormula(formula, range);
             arrayFormulas.Add(range);
             return cr;
         }
 
         public ICellRange<ICell> RemoveArrayFormula(ICell cell)
         {
-            if (cell.Sheet != this)
+            if(cell.Sheet != this)
             {
                 throw new ArgumentException("Specified cell does not belong " +
-                    "to this sheet.");
+                                            "to this sheet.");
             }
 
-            foreach (CellRangeAddress range in arrayFormulas)
+            foreach(CellRangeAddress range in arrayFormulas)
             {
-                if (range.IsInRange(cell.RowIndex, cell.ColumnIndex))
+                if(range.IsInRange(cell.RowIndex, cell.ColumnIndex))
                 {
                     arrayFormulas.Remove(range);
                     ICellRange<ICell> cr = GetCellRange(range);
-                    foreach (ICell c in cr)
+                    foreach(ICell c in cr)
                     {
                         c.SetCellType(CellType.Blank);
                     }
@@ -3580,7 +3596,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
-            string ref1 = ((XSSFCell)cell).GetCTCell().r;
+            string ref1 = ((XSSFCell) cell).GetCTCell().r;
             throw new ArgumentException(
                 "Cell " + ref1 + " is not part of an array formula.");
         }
@@ -3595,16 +3611,16 @@ namespace NPOI.XSSF.UserModel
         {
             List<IDataValidation> xssfValidations = new List<IDataValidation>();
             CT_DataValidations dataValidations = worksheet.dataValidations;
-            if (dataValidations != null && dataValidations.count > 0)
+            if(dataValidations != null && dataValidations.count > 0)
             {
-                foreach (CT_DataValidation ctDataValidation in dataValidations.dataValidation)
+                foreach(CT_DataValidation ctDataValidation in dataValidations.dataValidation)
                 {
                     CellRangeAddressList addressList = new CellRangeAddressList();
 
                     string[] regions = ctDataValidation.sqref.Split(new char[] { ' ' });
-                    for (int i = 0; i < regions.Length; i++)
+                    for(int i = 0; i < regions.Length; i++)
                     {
-                        if (regions[i].Length == 0)
+                        if(regions[i].Length == 0)
                         {
                             continue;
                         }
@@ -3633,9 +3649,9 @@ namespace NPOI.XSSF.UserModel
 
         public void AddValidationData(IDataValidation dataValidation)
         {
-            XSSFDataValidation xssfDataValidation = (XSSFDataValidation)dataValidation;
+            XSSFDataValidation xssfDataValidation = (XSSFDataValidation) dataValidation;
             CT_DataValidations dataValidations = worksheet.dataValidations;
-            if (dataValidations == null)
+            if(dataValidations == null)
             {
                 dataValidations = worksheet.AddNewDataValidations();
             }
@@ -3643,29 +3659,29 @@ namespace NPOI.XSSF.UserModel
             int currentCount = dataValidations.sizeOfDataValidationArray();
             CT_DataValidation newval = dataValidations.AddNewDataValidation();
             newval.Set(xssfDataValidation.GetCTDataValidation());
-            dataValidations.count = (uint)currentCount + 1;
+            dataValidations.count = (uint) currentCount + 1;
         }
 
         public void RemoveDataValidation(IDataValidation dataValidation)
         {
-            XSSFDataValidation xssfDataValidation = (XSSFDataValidation)dataValidation;
+            XSSFDataValidation xssfDataValidation = (XSSFDataValidation) dataValidation;
             CT_DataValidations dataValidations = worksheet.dataValidations;
 
-            if (dataValidations is null)
+            if(dataValidations is null)
             {
                 return;
             }
-            
+
             int currentCount = dataValidations.sizeOfDataValidationArray();
 
-            for (int i = 0; i < currentCount; i++)
+            for(int i = 0; i < currentCount; i++)
             {
                 CT_DataValidation ctDataValidation = dataValidations.dataValidation[i];
-                
-                if (ctDataValidation.Equals(xssfDataValidation.GetCTDataValidation()))
+
+                if(ctDataValidation.Equals(xssfDataValidation.GetCTDataValidation()))
                 {
                     dataValidations.dataValidation.RemoveAt(i);
-                    dataValidations.count = (uint)currentCount - 1;
+                    dataValidations.count = (uint) currentCount - 1;
                     return;
                 }
             }
@@ -3674,20 +3690,20 @@ namespace NPOI.XSSF.UserModel
         public IAutoFilter SetAutoFilter(CellRangeAddress range)
         {
             CT_AutoFilter af = worksheet.autoFilter;
-            if (af == null)
+            if(af == null)
             {
                 af = worksheet.AddNewAutoFilter();
             }
 
             CellRangeAddress norm = new CellRangeAddress(range.FirstRow, range.LastRow,
-                    range.FirstColumn, range.LastColumn);
+                range.FirstColumn, range.LastColumn);
             string ref1 = norm.FormatAsString();
             af.@ref = ref1;
 
-            XSSFWorkbook wb = (XSSFWorkbook)Workbook;
+            XSSFWorkbook wb = (XSSFWorkbook) Workbook;
             int sheetIndex = Workbook.GetSheetIndex(this);
             XSSFName name = wb.GetBuiltInName(XSSFName.BUILTIN_FILTER_DB, sheetIndex);
-            if (name == null)
+            if(name == null)
             {
                 name = wb.CreateBuiltInName(XSSFName.BUILTIN_FILTER_DB, sheetIndex);
             }
@@ -3707,7 +3723,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns></returns>
         public XSSFTable CreateTable()
         {
-            if (!worksheet.IsSetTableParts())
+            if(!worksheet.IsSetTableParts())
             {
                 worksheet.AddNewTableParts();
             }
@@ -3739,7 +3755,7 @@ namespace NPOI.XSSF.UserModel
         public List<XSSFTable> GetTables()
         {
             List<XSSFTable> tableList = new List<XSSFTable>(
-                  tables.Values
+                tables.Values
             );
             return tableList;
         }
@@ -3753,38 +3769,36 @@ namespace NPOI.XSSF.UserModel
         public void SetTabColor(int colorIndex)
         {
             CT_SheetPr pr = worksheet.sheetPr;
-            if (pr == null)
+            if(pr == null)
             {
                 pr = worksheet.AddNewSheetPr();
             }
 
-            CT_Color color = new CT_Color
-            {
-                indexed = (uint)colorIndex
-            };
+            CT_Color color = new CT_Color { indexed = (uint) colorIndex };
             pr.tabColor = color;
         }
 
         #region ISheet Members
+
         public IDrawing DrawingPatriarch
         {
             get
             {
-                if (drawing == null)
+                if(drawing == null)
                 {
                     OpenXmlFormats.Spreadsheet.CT_Drawing ctDrawing = GetCTDrawing();
-                    if (ctDrawing == null)
+                    if(ctDrawing == null)
                     {
                         return null;
                     }
 
-                    foreach (RelationPart rp in RelationParts)
+                    foreach(RelationPart rp in RelationParts)
                     {
                         POIXMLDocumentPart p = rp.DocumentPart;
-                        if (p is XSSFDrawing dr)
+                        if(p is XSSFDrawing dr)
                         {
                             string drId = rp.Relationship.Id;
-                            if (drId.Equals(ctDrawing.id))
+                            if(drId.Equals(ctDrawing.id))
                             {
                                 drawing = dr;
                                 break;
@@ -3823,20 +3837,20 @@ namespace NPOI.XSSF.UserModel
 
         public bool IsMergedRegion(CellRangeAddress mergedRegion)
         {
-            if (worksheet.mergeCells == null || worksheet.mergeCells.mergeCell == null)
+            if(worksheet.mergeCells == null || worksheet.mergeCells.mergeCell == null)
             {
                 return false;
             }
 
-            foreach (CT_MergeCell mc in worksheet.mergeCells.mergeCell)
+            foreach(CT_MergeCell mc in worksheet.mergeCells.mergeCell)
             {
-                if (!string.IsNullOrEmpty(mc.@ref))
+                if(!string.IsNullOrEmpty(mc.@ref))
                 {
                     CellRangeAddress range = CellRangeAddress.ValueOf(mc.@ref);
-                    if (range.FirstColumn <= mergedRegion.FirstColumn
-                     && range.LastColumn >= mergedRegion.LastColumn
-                     && range.FirstRow <= mergedRegion.FirstRow
-                     && range.LastRow >= mergedRegion.LastRow)
+                    if(range.FirstColumn <= mergedRegion.FirstColumn
+                       && range.LastColumn >= mergedRegion.LastColumn
+                       && range.FirstRow <= mergedRegion.FirstRow
+                       && range.LastRow >= mergedRegion.LastRow)
                     {
                         return true;
                     }
@@ -3845,12 +3859,14 @@ namespace NPOI.XSSF.UserModel
 
             return false;
         }
+
         public void SetActive(bool value)
         {
             IsSelected = value;
         }
 
-        public void SetActiveCellRange(List<CellRangeAddress8Bit> cellranges, int activeRange, int activeRow, int activeColumn)
+        public void SetActiveCellRange(List<CellRangeAddress8Bit> cellranges, int activeRange, int activeRow,
+            int activeColumn)
         {
             throw new NotImplementedException();
         }
@@ -3885,6 +3901,7 @@ namespace NPOI.XSSF.UserModel
                 view.rightToLeft = value;
             }
         }
+
         #endregion
 
         public IRow CopyRow(int sourceIndex, int targetIndex)
@@ -3902,7 +3919,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns>the new copied column object</returns>
         public IColumn CopyColumn(int sourceIndex, int targetIndex)
         {
-            if (sourceIndex == targetIndex)
+            if(sourceIndex == targetIndex)
             {
                 throw new ArgumentException(
                     "sourceIndex and targetIndex cannot be same");
@@ -3914,41 +3931,41 @@ namespace NPOI.XSSF.UserModel
 
             // If the column exist in destination, push right all columns
             // by 1 else create a new column
-            if (newColumn != null)
+            if(newColumn != null)
             {
                 ShiftColumns(targetIndex, LastColumnNum, 1);
             }
 
             newColumn = CreateColumn(targetIndex);
-            newColumn.Width = sourceColumn.Width;   //copy column width
+            newColumn.Width = sourceColumn.Width; //copy column width
 
             // Loop through source cells to add to new column
-            for (int i = sourceColumn.FirstCellNum; i < sourceColumn.LastCellNum; i++)
+            for(int i = sourceColumn.FirstCellNum; i < sourceColumn.LastCellNum; i++)
             {
                 // Grab a copy of the old/new cell
                 ICell oldCell = sourceColumn.GetCell(i);
 
                 // If the old cell is null jump to next cell
-                if (oldCell == null)
+                if(oldCell == null)
                 {
                     continue;
                 }
 
                 ICell newCell = newColumn.CreateCell(i);
 
-                if (oldCell.CellStyle != null)
+                if(oldCell.CellStyle != null)
                 {
                     // apply style from old cell to new cell 
                     newCell.CellStyle = oldCell.CellStyle;
                 }
 
-                if (oldCell.CellComment != null)
+                if(oldCell.CellComment != null)
                 {
                     CopyComment(oldCell, newCell);
                 }
 
                 // If there is a cell hyperlink, copy
-                if (oldCell.Hyperlink != null)
+                if(oldCell.Hyperlink != null)
                 {
                     newCell.Hyperlink = oldCell.Hyperlink;
                 }
@@ -3957,7 +3974,7 @@ namespace NPOI.XSSF.UserModel
                 newCell.SetCellType(oldCell.CellType);
 
                 // Set the cell data value
-                switch (oldCell.CellType)
+                switch(oldCell.CellType)
                 {
                     case CellType.Blank:
                         newCell.SetCellValue(oldCell.StringCellValue);
@@ -3982,17 +3999,17 @@ namespace NPOI.XSSF.UserModel
 
             // If there are are any merged regions in the source column,
             // copy to new column
-            for (int i = 0; i < NumMergedRegions; i++)
+            for(int i = 0; i < NumMergedRegions; i++)
             {
                 CellRangeAddress cellRangeAddress = GetMergedRegion(i);
-                if (cellRangeAddress != null
-                    && cellRangeAddress.FirstColumn == sourceColumn.ColumnNum)
+                if(cellRangeAddress != null
+                   && cellRangeAddress.FirstColumn == sourceColumn.ColumnNum)
                 {
                     CellRangeAddress newCellRangeAddress = new CellRangeAddress(
-                            cellRangeAddress.FirstRow,
-                            cellRangeAddress.LastRow,
-                            newColumn.ColumnNum,
-                            newColumn.ColumnNum + cellRangeAddress.LastColumn - cellRangeAddress.FirstColumn);
+                        cellRangeAddress.FirstRow,
+                        cellRangeAddress.LastRow,
+                        newColumn.ColumnNum,
+                        newColumn.ColumnNum + cellRangeAddress.LastColumn - cellRangeAddress.FirstColumn);
                     AddMergedRegion(newCellRangeAddress);
                 }
             }
@@ -4011,7 +4028,7 @@ namespace NPOI.XSSF.UserModel
         /// null or if it doesn't belong to this <see cref="XSSFSheet"/></exception>
         public void DestroyColumns(List<IColumn> columnsToDestroy)
         {
-            foreach (IColumn column in columnsToDestroy)
+            foreach(IColumn column in columnsToDestroy)
             {
                 DestroyColumn(column);
             }
@@ -4029,21 +4046,21 @@ namespace NPOI.XSSF.UserModel
         /// null or if it doesn't belong to this <see cref="XSSFSheet"/></exception>
         public void DestroyColumn(IColumn column)
         {
-            if (column == null)
+            if(column == null)
             {
                 throw new ArgumentException("Column can't be null");
             }
 
-            if (column.Sheet != this)
+            if(column.Sheet != this)
             {
                 throw new ArgumentException("Specified column does not belong to" +
-                    " this sheet");
+                                            " this sheet");
             }
 
             _columns.Remove(column.ColumnNum);
 
             CT_Cols ctCols = worksheet.cols.FirstOrDefault();
-            CT_Col ctCol = ((XSSFColumn)column).GetCTCol();
+            CT_Col ctCol = ((XSSFColumn) column).GetCTCol();
             int colIndex = GetIndexOfColumn(ctCols, ctCol);
 
             ctCols.RemoveCol(colIndex); // Note that columns in worksheet.sheetData is 1-based.
@@ -4064,24 +4081,24 @@ namespace NPOI.XSSF.UserModel
         public ISheet CopySheet(string name, bool copyStyle)
         {
             string clonedName = SheetUtil.GetUniqueSheetName(Workbook, name);
-            XSSFSheet clonedSheet = (XSSFSheet)Workbook.CreateSheet(clonedName);
+            XSSFSheet clonedSheet = (XSSFSheet) Workbook.CreateSheet(clonedName);
 
             try
             {
-                using (MemoryStream ms = RecyclableMemory.GetStream())
+                using(MemoryStream ms = RecyclableMemory.GetStream())
                 {
                     Write(ms, true);
                     ms.Position = 0;
                     clonedSheet.Read(ms);
                 }
             }
-            catch (IOException e)
+            catch(IOException e)
             {
                 throw new POIXMLException("Failed to clone sheet", e);
             }
 
             CT_Worksheet ct = clonedSheet.GetCTWorksheet();
-            if (ct.IsSetLegacyDrawing())
+            if(ct.IsSetLegacyDrawing())
             {
                 logger.Log(POILogger.WARN, "Cloning sheets with comments is not yet supported.");
                 ct.UnsetLegacyDrawing();
@@ -4093,23 +4110,24 @@ namespace NPOI.XSSF.UserModel
             IList<POIXMLDocumentPart> rels = GetRelations();
             // if the sheet being cloned has a drawing then remember it and re-create too
             XSSFDrawing dg = null;
-            foreach (POIXMLDocumentPart r in rels)
+            foreach(POIXMLDocumentPart r in rels)
             {
                 // do not copy the drawing relationship, it will be re-created
-                if (r is XSSFDrawing dr)
+                if(r is XSSFDrawing dr)
                 {
                     dg = dr;
                     continue;
                 }
+
                 //skip printerSettings.bin part
-                if (r.GetPackagePart().PartName.Name.StartsWith("/xl/printerSettings/printerSettings"))
+                if(r.GetPackagePart().PartName.Name.StartsWith("/xl/printerSettings/printerSettings"))
                 {
                     continue;
                 }
 
                 PackageRelationship rel = r.GetPackageRelationship();
                 clonedSheet.GetPackagePart().AddRelationship(
-                    rel.TargetUri, (TargetMode)rel.TargetMode, rel.RelationshipType);
+                    rel.TargetUri, (TargetMode) rel.TargetMode, rel.RelationshipType);
                 clonedSheet.AddRelation(rel.Id, r);
             }
 
@@ -4117,9 +4135,9 @@ namespace NPOI.XSSF.UserModel
             clonedSheet.hyperlinks = new List<XSSFHyperlink>(hyperlinks);
 
             // clone the sheet drawing along with its relationships
-            if (dg != null)
+            if(dg != null)
             {
-                if (ct.IsSetDrawing())
+                if(ct.IsSetDrawing())
                 {
                     // unset the existing reference to the drawing, so that
                     // subsequent call of clonedSheet.createDrawingPatriarch()
@@ -4135,14 +4153,14 @@ namespace NPOI.XSSF.UserModel
 
                 // Clone drawing relations
                 IList<POIXMLDocumentPart> srcRels = dg.GetRelations();
-                foreach (POIXMLDocumentPart rel in srcRels)
+                foreach(POIXMLDocumentPart rel in srcRels)
                 {
                     PackageRelationship relation = rel.GetPackageRelationship();
                     clonedDg.AddRelation(relation.Id, rel);
                     clonedDg
-                            .GetPackagePart()
-                            .AddRelationship(relation.TargetUri, relation.TargetMode.Value,
-                                    relation.RelationshipType, relation.Id);
+                        .GetPackagePart()
+                        .AddRelationship(relation.TargetUri, relation.TargetMode.Value,
+                            relation.RelationshipType, relation.Id);
                 }
             }
 
@@ -4151,23 +4169,23 @@ namespace NPOI.XSSF.UserModel
 
         public void CopyTo(IWorkbook dest, string name, bool copyStyle, bool keepFormulas)
         {
-            StylesTable styles = ((XSSFWorkbook)dest).GetStylesSource();
-            if (copyStyle && Workbook.NumberOfFonts > 0)
+            StylesTable styles = ((XSSFWorkbook) dest).GetStylesSource();
+            if(copyStyle && Workbook.NumberOfFonts > 0)
             {
-                foreach (XSSFFont font in ((XSSFWorkbook)Workbook).GetStylesSource().GetFonts())
+                foreach(XSSFFont font in ((XSSFWorkbook) Workbook).GetStylesSource().GetFonts())
                 {
                     styles.PutFont(font);
                 }
             }
 
-            XSSFSheet newSheet = (XSSFSheet)dest.CreateSheet(name);
+            XSSFSheet newSheet = (XSSFSheet) dest.CreateSheet(name);
             newSheet.sheet.state = sheet.state;
             IDictionary<int, ICellStyle> styleMap = copyStyle ? new Dictionary<int, ICellStyle>() : null;
-            for (int i = FirstRowNum; i <= LastRowNum; i++)
+            for(int i = FirstRowNum; i <= LastRowNum; i++)
             {
-                XSSFRow srcRow = (XSSFRow)GetRow(i);
-                XSSFRow destRow = (XSSFRow)newSheet.CreateRow(i);
-                if (srcRow != null)
+                XSSFRow srcRow = (XSSFRow) GetRow(i);
+                XSSFRow destRow = (XSSFRow) newSheet.CreateRow(i);
+                if(srcRow != null)
                 {
                     // avoid O(N^2) performance scanning through all regions for each row
                     // merged regions will be copied after all the rows have been copied
@@ -4176,7 +4194,7 @@ namespace NPOI.XSSF.UserModel
             }
 
             // Copying merged regions
-            foreach (var srcRegion in this.MergedRegions)
+            foreach(var srcRegion in this.MergedRegions)
             {
                 var destRegion = srcRegion.Copy();
                 newSheet.AddMergedRegion(destRegion);
@@ -4185,10 +4203,10 @@ namespace NPOI.XSSF.UserModel
             List<CT_Cols> srcCols = worksheet.GetColsList();
             List<CT_Cols> dstCols = newSheet.worksheet.GetColsList();
             dstCols.Clear(); //Should already be empty since this is a new sheet.
-            foreach (CT_Cols srcCol in srcCols)
+            foreach(CT_Cols srcCol in srcCols)
             {
                 CT_Cols dstCol = new CT_Cols();
-                foreach (CT_Col column in srcCol.col)
+                foreach(CT_Col column in srcCol.col)
                 {
                     dstCol.col.Add(column.Copy());
                 }
@@ -4224,12 +4242,12 @@ namespace NPOI.XSSF.UserModel
             newSheet.PrintSetup.FitHeight = PrintSetup.FitHeight;
             newSheet.PrintSetup.FitWidth = PrintSetup.FitWidth;
             newSheet.DisplayGridlines = DisplayGridlines;
-            if (worksheet.IsSetSheetPr())
+            if(worksheet.IsSetSheetPr())
             {
                 newSheet.worksheet.sheetPr = worksheet.sheetPr.Clone();
             }
 
-            if (GetDefaultSheetView().pane != null)
+            if(GetDefaultSheetView().pane != null)
             {
                 CT_Pane oldPane = GetDefaultSheetView().pane;
                 CT_Pane newPane = newSheet.GetPane();
@@ -4245,7 +4263,7 @@ namespace NPOI.XSSF.UserModel
 
         public XSSFWorkbook GetWorkbook()
         {
-            return (XSSFWorkbook)GetParent();
+            return (XSSFWorkbook) GetParent();
         }
 
         /// <summary>
@@ -4264,8 +4282,8 @@ namespace NPOI.XSSF.UserModel
         public XSSFPivotTable CreatePivotTable(AreaReference source, CellReference position, ISheet sourceSheet)
         {
             string sourceSheetName = source.FirstCell.SheetName;
-            if (sourceSheetName != null
-                && !sourceSheetName.Equals(sourceSheet.SheetName, StringComparison.InvariantCultureIgnoreCase))
+            if(sourceSheetName != null
+               && !sourceSheetName.Equals(sourceSheet.SheetName, StringComparison.InvariantCultureIgnoreCase))
             {
                 throw new ArgumentException(
                     "The area is referenced in another sheet than the defined" +
@@ -4288,7 +4306,8 @@ namespace NPOI.XSSF.UserModel
         public XSSFPivotTable CreatePivotTable(AreaReference source, CellReference position)
         {
             string sourceSheetName = source.FirstCell.SheetName;
-            if (sourceSheetName != null && !sourceSheetName.Equals(SheetName, StringComparison.InvariantCultureIgnoreCase))
+            if(sourceSheetName != null &&
+               !sourceSheetName.Equals(SheetName, StringComparison.InvariantCultureIgnoreCase))
             {
                 XSSFSheet sourceSheet = Workbook.GetSheet(sourceSheetName) as XSSFSheet;
                 return CreatePivotTable(source, position, sourceSheet);
@@ -4311,8 +4330,8 @@ namespace NPOI.XSSF.UserModel
         /// <exception cref="ArgumentException"></exception>
         public XSSFPivotTable CreatePivotTable(IName source, CellReference position, ISheet sourceSheet)
         {
-            if (source.SheetName != null
-                && !source.SheetName.Equals(sourceSheet.SheetName))
+            if(source.SheetName != null
+               && !source.SheetName.Equals(sourceSheet.SheetName))
             {
                 throw new ArgumentException(
                     "The named range references another sheet than the defined" +
@@ -4363,9 +4382,9 @@ namespace NPOI.XSSF.UserModel
         public List<XSSFPivotTable> GetPivotTables()
         {
             List<XSSFPivotTable> tables = new List<XSSFPivotTable>();
-            foreach (XSSFPivotTable table in GetWorkbook().PivotTables)
+            foreach(XSSFPivotTable table in GetWorkbook().PivotTables)
             {
-                if (table.GetParent() == this)
+                if(table.GetParent() == this)
                 {
                     tables.Add(table);
                 }
@@ -4377,7 +4396,7 @@ namespace NPOI.XSSF.UserModel
         public int GetColumnOutlineLevel(int columnIndex)
         {
             IColumn col = GetColumn(columnIndex);
-            if (col == null)
+            if(col == null)
             {
                 return 0;
             }
@@ -4419,19 +4438,20 @@ namespace NPOI.XSSF.UserModel
         /// <returns>Map of error type to the range(s) where they are ignored.</returns>
         public Dictionary<IgnoredErrorType, ISet<CellRangeAddress>> GetIgnoredErrors()
         {
-            Dictionary<IgnoredErrorType, ISet<CellRangeAddress>> result = new Dictionary<IgnoredErrorType, ISet<CellRangeAddress>>();
-            if (worksheet.IsSetIgnoredErrors())
+            Dictionary<IgnoredErrorType, ISet<CellRangeAddress>> result =
+                new Dictionary<IgnoredErrorType, ISet<CellRangeAddress>>();
+            if(worksheet.IsSetIgnoredErrors())
             {
-                foreach (CT_IgnoredError err in worksheet.ignoredErrors.ignoredError)
+                foreach(CT_IgnoredError err in worksheet.ignoredErrors.ignoredError)
                 {
-                    foreach (IgnoredErrorType errType in GetErrorTypes(err))
+                    foreach(IgnoredErrorType errType in GetErrorTypes(err))
                     {
-                        if (!result.ContainsKey(errType))
+                        if(!result.ContainsKey(errType))
                         {
                             result.Add(errType, new HashSet<CellRangeAddress>());
                         }
 
-                        foreach (object ref1 in err.sqref)
+                        foreach(object ref1 in err.sqref)
                         {
                             result[errType].Add(CellRangeAddress.ValueOf(ref1.ToString()));
                         }
@@ -4474,9 +4494,11 @@ namespace NPOI.XSSF.UserModel
 
             return targetComment;
         }
+
         #endregion
 
         #region Private methods
+
         /// <summary>
         /// Read hyperlink relations, link them with CT_Hyperlink beans in this
         /// worksheet and Initialize the internal array of XSSFHyperlink objects
@@ -4487,7 +4509,7 @@ namespace NPOI.XSSF.UserModel
         {
             hyperlinks = new List<XSSFHyperlink>();
 
-            if (!worksheet.IsSetHyperlinks())
+            if(!worksheet.IsSetHyperlinks())
             {
                 return;
             }
@@ -4498,10 +4520,10 @@ namespace NPOI.XSSF.UserModel
                     GetPackagePart().GetRelationshipsByType(XSSFRelation.SHEET_HYPERLINKS.Relation);
 
                 // Turn each one into a XSSFHyperlink
-                foreach (CT_Hyperlink hyperlink in worksheet.hyperlinks.hyperlink)
+                foreach(CT_Hyperlink hyperlink in worksheet.hyperlinks.hyperlink)
                 {
                     PackageRelationship hyperRel = null;
-                    if (hyperlink.id != null)
+                    if(hyperlink.id != null)
                     {
                         hyperRel = hyperRels.GetRelationshipByID(hyperlink.id);
                     }
@@ -4509,7 +4531,7 @@ namespace NPOI.XSSF.UserModel
                     hyperlinks.Add(new XSSFHyperlink(hyperlink, hyperRel));
                 }
             }
-            catch (InvalidFormatException e)
+            catch(InvalidFormatException e)
             {
                 throw new POIXMLException(e);
             }
@@ -4521,12 +4543,12 @@ namespace NPOI.XSSF.UserModel
             tables = new Dictionary<string, XSSFTable>();
             sharedFormulas = new Dictionary<int, CT_CellFormula>();
             arrayFormulas = new List<CellRangeAddress>();
-            if (0 < worksheetParam.sheetData.SizeOfRowArray())
+            if(0 < worksheetParam.sheetData.SizeOfRowArray())
             {
-                foreach (CT_Row row in worksheetParam.sheetData.row)
+                foreach(CT_Row row in worksheetParam.sheetData.row)
                 {
                     XSSFRow r = new XSSFRow(row, this);
-                    if (!_rows.ContainsKey(r.RowNum))
+                    if(!_rows.ContainsKey(r.RowNum))
                     {
                         _rows.Add(r.RowNum, r);
                     }
@@ -4540,12 +4562,12 @@ namespace NPOI.XSSF.UserModel
 
             CT_Cols ctCols = worksheetParam.cols.FirstOrDefault() ?? worksheetParam.AddNewCols();
 
-            if (ctCols.sizeOfColArray() > 0)
+            if(ctCols.sizeOfColArray() > 0)
             {
-                foreach (CT_Col column in ctCols.col)
+                foreach(CT_Col column in ctCols.col)
                 {
                     XSSFColumn c = new XSSFColumn(column, this);
-                    if (!_columns.ContainsKey(c.ColumnNum))
+                    if(!_columns.ContainsKey(c.ColumnNum))
                     {
                         _columns.Add(c.ColumnNum, c);
                     }
@@ -4594,14 +4616,14 @@ namespace NPOI.XSSF.UserModel
         /// than 2 cells</exception>
         private int AddMergedRegion(CellRangeAddress region, bool validate)
         {
-            if (region.NumberOfCells < 2)
+            if(region.NumberOfCells < 2)
             {
                 throw new ArgumentException("Merged region " +
-                    region.FormatAsString() + " must contain 2 or more cells");
+                                            region.FormatAsString() + " must contain 2 or more cells");
             }
 
             region.Validate(SpreadsheetVersion.EXCEL2007);
-            if (validate)
+            if(validate)
             {
                 // throw InvalidOperationException if the argument
                 // CellRangeAddress intersects with a multi-cell array formula
@@ -4639,30 +4661,30 @@ namespace NPOI.XSSF.UserModel
             int lastColumn = region.LastColumn;
             // for each cell in sheet, if cell belongs to an array formula,
             // check if merged region intersects array formula cells
-            for (int rowIn = firstRow; rowIn <= lastRow; rowIn++)
+            for(int rowIn = firstRow; rowIn <= lastRow; rowIn++)
             {
                 IRow row = GetRow(rowIn);
-                if (row == null)
+                if(row == null)
                 {
                     continue;
                 }
 
-                for (int colIn = firstColumn; colIn <= lastColumn; colIn++)
+                for(int colIn = firstColumn; colIn <= lastColumn; colIn++)
                 {
                     ICell cell = row.GetCell(colIn);
-                    if (cell == null)
+                    if(cell == null)
                     {
                         continue;
                     }
 
-                    if (cell.IsPartOfArrayFormulaGroup)
+                    if(cell.IsPartOfArrayFormulaGroup)
                     {
                         CellRangeAddress arrayRange = cell.ArrayFormulaRange;
-                        if (arrayRange.NumberOfCells > 1 && region.Intersects(arrayRange))
+                        if(arrayRange.NumberOfCells > 1 && region.Intersects(arrayRange))
                         {
                             string msg = "The range " + region.FormatAsString() +
-                                " intersects with a multi-cell array formula. " +
-                                    "You cannot merge cells of an array.";
+                                         " intersects with a multi-cell array formula. " +
+                                         "You cannot merge cells of an array.";
                             throw new InvalidOperationException(msg);
                         }
                     }
@@ -4676,7 +4698,7 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         private void CheckForMergedRegionsIntersectingArrayFormulas()
         {
-            foreach (CellRangeAddress region in MergedRegions)
+            foreach(CellRangeAddress region in MergedRegions)
             {
                 ValidateArrayFormulas(region);
             }
@@ -4691,9 +4713,9 @@ namespace NPOI.XSSF.UserModel
         /// intersects an existing merged region in this sheet</exception>
         private void ValidateMergedRegions(CellRangeAddress candidateRegion)
         {
-            foreach (CellRangeAddress existingRegion in MergedRegions)
+            foreach(CellRangeAddress existingRegion in MergedRegions)
             {
-                if (existingRegion.Intersects(candidateRegion))
+                if(existingRegion.Intersects(candidateRegion))
                 {
                     throw new InvalidOperationException(
                         "Cannot add merged region " + candidateRegion.FormatAsString() +
@@ -4713,16 +4735,16 @@ namespace NPOI.XSSF.UserModel
         {
             List<CellRangeAddress> regions = MergedRegions;
             int size = regions.Count;
-            for (int i = 0; i < size; i++)
+            for(int i = 0; i < size; i++)
             {
                 CellRangeAddress region = regions[i];
-                foreach (CellRangeAddress other in regions.Skip(i + 1)) //regions.subList(i+1, regions.size()
+                foreach(CellRangeAddress other in regions.Skip(i + 1)) //regions.subList(i+1, regions.size()
                 {
-                    if (region.Intersects(other))
+                    if(region.Intersects(other))
                     {
                         string msg = "The range " + region.FormatAsString() +
-                                    " intersects with another merged region " +
-                                    other.FormatAsString() + " in this sheet";
+                                     " intersects with another merged region " +
+                                     other.FormatAsString() + " in this sheet";
                         throw new InvalidOperationException(msg);
                     }
                 }
@@ -4738,9 +4760,9 @@ namespace NPOI.XSSF.UserModel
         private int HeadMapCount(IList<int> keys, int rownum)
         {
             int count = 0;
-            foreach (int key in keys)
+            foreach(int key in keys)
             {
-                if (key < rownum)
+                if(key < rownum)
                 {
                     count++;
                 }
@@ -4755,14 +4777,12 @@ namespace NPOI.XSSF.UserModel
 
         private CT_SheetFormatPr GetSheetTypeSheetFormatPr()
         {
-            return worksheet.IsSetSheetFormatPr() ?
-                   worksheet.sheetFormatPr :
-                   worksheet.AddNewSheetFormatPr();
+            return worksheet.IsSetSheetFormatPr() ? worksheet.sheetFormatPr : worksheet.AddNewSheetFormatPr();
         }
 
         private CT_SheetPr GetSheetTypeSheetPr()
         {
-            if (worksheet.sheetPr == null)
+            if(worksheet.sheetPr == null)
             {
                 worksheet.sheetPr = new CT_SheetPr();
             }
@@ -4772,7 +4792,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_HeaderFooter GetSheetTypeHeaderFooter()
         {
-            if (worksheet.headerFooter == null)
+            if(worksheet.headerFooter == null)
             {
                 worksheet.headerFooter = new CT_HeaderFooter();
             }
@@ -4795,18 +4815,18 @@ namespace NPOI.XSSF.UserModel
         /// are not in ascending order</exception>
         private List<XSSFRow> GetRows(int startRowNum, int endRowNum, bool createRowIfMissing)
         {
-            if (startRowNum > endRowNum)
+            if(startRowNum > endRowNum)
             {
                 throw new ArgumentException("getRows: startRowNum must be " +
-                    "less than or equal to endRowNum");
+                                            "less than or equal to endRowNum");
             }
 
             List<XSSFRow> rows = new List<XSSFRow>();
-            if (createRowIfMissing)
+            if(createRowIfMissing)
             {
-                for (int i = startRowNum; i <= endRowNum; i++)
+                for(int i = startRowNum; i <= endRowNum; i++)
                 {
-                    if (!(GetRow(i) is XSSFRow row))
+                    if(!(GetRow(i) is XSSFRow row))
                     {
                         row = CreateRow(i) as XSSFRow;
                     }
@@ -4846,9 +4866,9 @@ namespace NPOI.XSSF.UserModel
         /// <param name="ctCols"></param>
         private void SetColWidthAttribute(CT_Cols ctCols)
         {
-            foreach (CT_Col col in ctCols.GetColList())
+            foreach(CT_Col col in ctCols.GetColList())
             {
-                if (!col.IsSetWidth())
+                if(!col.IsSetWidth())
                 {
                     col.width = DefaultColumnWidth;
                     col.customWidth = false;
@@ -4859,7 +4879,7 @@ namespace NPOI.XSSF.UserModel
         private short GetMaxOutlineLevelRows()
         {
             short outlineLevel = 0;
-            foreach (XSSFRow xrow in _rows.Values)
+            foreach(XSSFRow xrow in _rows.Values)
             {
                 outlineLevel = xrow.GetCTRow().outlineLevel > outlineLevel
                     ? xrow.GetCTRow().outlineLevel
@@ -4875,7 +4895,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Cols ctCols = worksheet.GetColsArray(0);
             short outlineLevel = 0;
-            foreach (CT_Col col in ctCols.GetColList())
+            foreach(CT_Col col in ctCols.GetColList())
             {
                 outlineLevel = col.outlineLevel > outlineLevel
                     ? col.outlineLevel
@@ -4887,9 +4907,9 @@ namespace NPOI.XSSF.UserModel
 
         private bool ListIsEmpty(List<CT_MergeCell> list)
         {
-            foreach (CT_MergeCell mc in list)
+            foreach(CT_MergeCell mc in list)
             {
-                if (mc != null)
+                if(mc != null)
                 {
                     return false;
                 }
@@ -4902,11 +4922,11 @@ namespace NPOI.XSSF.UserModel
         {
             SortedDictionary<int, IColumn> group = new SortedDictionary<int, IColumn>() { { col.ColumnNum, col } };
 
-            for (int i = col.ColumnNum - 1; i >= 0; i--)
+            for(int i = col.ColumnNum - 1; i >= 0; i--)
             {
                 IColumn columnToTheLeft = GetColumn(i);
 
-                if (columnToTheLeft == null || columnToTheLeft.OutlineLevel < col.OutlineLevel)
+                if(columnToTheLeft == null || columnToTheLeft.OutlineLevel < col.OutlineLevel)
                 {
                     break;
                 }
@@ -4916,11 +4936,11 @@ namespace NPOI.XSSF.UserModel
 
             int idx;
 
-            for (idx = col.ColumnNum + 1; idx <= SpreadsheetVersion.EXCEL2007.LastColumnIndex; idx++)
+            for(idx = col.ColumnNum + 1; idx <= SpreadsheetVersion.EXCEL2007.LastColumnIndex; idx++)
             {
                 IColumn columnToTheRight = GetColumn(idx);
 
-                if (columnToTheRight == null || columnToTheRight.OutlineLevel < col.OutlineLevel)
+                if(columnToTheRight == null || columnToTheRight.OutlineLevel < col.OutlineLevel)
                 {
                     break;
                 }
@@ -4936,7 +4956,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_SheetView GetSheetTypeSheetView()
         {
-            if (GetDefaultSheetView() == null)
+            if(GetDefaultSheetView() == null)
             {
                 GetSheetTypeSheetViews().SetSheetViewArray(0, new CT_SheetView());
             }
@@ -4950,20 +4970,20 @@ namespace NPOI.XSSF.UserModel
         /// <param name="rowIndex">the zero based row index to collapse</param>
         private void CollapseRow(int rowIndex)
         {
-            XSSFRow row = (XSSFRow)GetRow(rowIndex);
-            if (row != null)
+            XSSFRow row = (XSSFRow) GetRow(rowIndex);
+            if(row != null)
             {
                 int startRow = FindStartOfRowOutlineGroup(rowIndex);
 
                 // Hide all the columns until the end of the group
                 int lastRow = WriteHidden(row, startRow, true);
-                if (GetRow(lastRow) != null)
+                if(GetRow(lastRow) != null)
                 {
-                    ((XSSFRow)GetRow(lastRow)).GetCTRow().collapsed = true;
+                    ((XSSFRow) GetRow(lastRow)).GetCTRow().collapsed = true;
                 }
                 else
                 {
-                    XSSFRow newRow = (XSSFRow)CreateRow(lastRow);
+                    XSSFRow newRow = (XSSFRow) CreateRow(lastRow);
                     newRow.GetCTRow().collapsed = true;
                 }
             }
@@ -4977,11 +4997,11 @@ namespace NPOI.XSSF.UserModel
         private int FindStartOfRowOutlineGroup(int rowIndex)
         {
             // Find the start of the group.
-            int level = ((XSSFRow)GetRow(rowIndex)).GetCTRow().outlineLevel;
+            int level = ((XSSFRow) GetRow(rowIndex)).GetCTRow().outlineLevel;
             int currentRow = rowIndex;
-            while (GetRow(currentRow) != null)
+            while(GetRow(currentRow) != null)
             {
-                if (((XSSFRow)GetRow(currentRow)).GetCTRow().outlineLevel < level)
+                if(((XSSFRow) GetRow(currentRow)).GetCTRow().outlineLevel < level)
                 {
                     return currentRow + 1;
                 }
@@ -4995,10 +5015,10 @@ namespace NPOI.XSSF.UserModel
         private int WriteHidden(XSSFRow xRow, int rowIndex, bool hidden)
         {
             int level = xRow.GetCTRow().outlineLevel;
-            for (IEnumerator it = GetRowEnumerator(); it.MoveNext();)
+            for(IEnumerator it = GetRowEnumerator(); it.MoveNext();)
             {
-                xRow = (XSSFRow)it.Current;
-                if (xRow.GetCTRow().outlineLevel >= level)
+                xRow = (XSSFRow) it.Current;
+                if(xRow.GetCTRow().outlineLevel >= level)
                 {
                     xRow.GetCTRow().hidden = hidden;
                     rowIndex++;
@@ -5014,17 +5034,18 @@ namespace NPOI.XSSF.UserModel
         /// <param name="rowNumber">the zero based row index to expand</param>
         private void ExpandRow(int rowNumber)
         {
-            if (rowNumber == -1)
+            if(rowNumber == -1)
             {
                 return;
             }
 
-            XSSFRow row = (XSSFRow)GetRow(rowNumber);
+            XSSFRow row = (XSSFRow) GetRow(rowNumber);
             // If it is already expanded do nothing.
-            if (!row.GetCTRow().IsSetHidden())
+            if(!row.GetCTRow().IsSetHidden())
             {
                 return;
             }
+
             // Find the start of the group.
             int startIdx = FindStartOfRowOutlineGroup(rowNumber);
 
@@ -5038,30 +5059,31 @@ namespace NPOI.XSSF.UserModel
             // determine which is the enclosing group hidden bit only is
             // altered for this outline level. ie. don't un-collapse Contained
             // groups
-            if (!IsRowGroupHiddenByParent(rowNumber))
+            if(!IsRowGroupHiddenByParent(rowNumber))
             {
-                for (int i = startIdx; i < endIdx; i++)
+                for(int i = startIdx; i < endIdx; i++)
                 {
-                    if (row.GetCTRow().outlineLevel == ((XSSFRow)GetRow(i))
-                        .GetCTRow()
-                            .outlineLevel)
+                    if(row.GetCTRow().outlineLevel == ((XSSFRow) GetRow(i))
+                       .GetCTRow()
+                       .outlineLevel)
                     {
-                        ((XSSFRow)GetRow(i)).GetCTRow().UnsetHidden();
+                        ((XSSFRow) GetRow(i)).GetCTRow().UnsetHidden();
                     }
-                    else if (!IsRowGroupCollapsed(i))
+                    else if(!IsRowGroupCollapsed(i))
                     {
-                        ((XSSFRow)GetRow(i)).GetCTRow().UnsetHidden();
+                        ((XSSFRow) GetRow(i)).GetCTRow().UnsetHidden();
                     }
                 }
             }
+
             // Write collapse field
             row = GetRow(endIdx) as XSSFRow;
-            if (row != null)
+            if(row != null)
             {
                 CT_Row ctRow = row.GetCTRow();
                 // This avoids an IndexOutOfBounds if multiple nested groups
                 // are collapsed/expanded
-                if (ctRow.collapsed)
+                if(ctRow.collapsed)
                 {
                     ctRow.UnsetCollapsed();
                 }
@@ -5079,16 +5101,16 @@ namespace NPOI.XSSF.UserModel
             int endLevel;
             bool endHidden;
             int endOfOutlineGroupIdx = FindEndOfRowOutlineGroup(row);
-            if (GetRow(endOfOutlineGroupIdx) == null)
+            if(GetRow(endOfOutlineGroupIdx) == null)
             {
                 endLevel = 0;
                 endHidden = false;
             }
             else
             {
-                endLevel = ((XSSFRow)GetRow(endOfOutlineGroupIdx))
+                endLevel = ((XSSFRow) GetRow(endOfOutlineGroupIdx))
                     .GetCTRow().outlineLevel;
-                endHidden = ((XSSFRow)GetRow(endOfOutlineGroupIdx))
+                endHidden = ((XSSFRow) GetRow(endOfOutlineGroupIdx))
                     .GetCTRow().hidden;
             }
 
@@ -5096,21 +5118,21 @@ namespace NPOI.XSSF.UserModel
             int startLevel;
             bool startHidden;
             int startOfOutlineGroupIdx = FindStartOfRowOutlineGroup(row);
-            if (startOfOutlineGroupIdx < 0
-                    || GetRow(startOfOutlineGroupIdx) == null)
+            if(startOfOutlineGroupIdx < 0
+               || GetRow(startOfOutlineGroupIdx) == null)
             {
                 startLevel = 0;
                 startHidden = false;
             }
             else
             {
-                startLevel = ((XSSFRow)GetRow(startOfOutlineGroupIdx))
+                startLevel = ((XSSFRow) GetRow(startOfOutlineGroupIdx))
                     .GetCTRow().outlineLevel;
-                startHidden = ((XSSFRow)GetRow(startOfOutlineGroupIdx))
+                startHidden = ((XSSFRow) GetRow(startOfOutlineGroupIdx))
                     .GetCTRow().hidden;
             }
 
-            if (endLevel > startLevel)
+            if(endLevel > startLevel)
             {
                 return endHidden;
             }
@@ -5126,12 +5148,12 @@ namespace NPOI.XSSF.UserModel
         private bool IsRowGroupCollapsed(int row)
         {
             int collapseRow = FindEndOfRowOutlineGroup(row) + 1;
-            if (GetRow(collapseRow) == null)
+            if(GetRow(collapseRow) == null)
             {
                 return false;
             }
 
-            return ((XSSFRow)GetRow(collapseRow)).GetCTRow().collapsed;
+            return ((XSSFRow) GetRow(collapseRow)).GetCTRow().collapsed;
         }
 
         private void RemoveOverwrittenRows(int startRow, int endRow, int n)
@@ -5141,14 +5163,14 @@ namespace NPOI.XSSF.UserModel
             List<CellAddress> commentsToRemove = new List<CellAddress>();
             List<CT_Row> ctRowsToRemove = new List<CT_Row>();
             // first remove all rows which will be overwritten
-            foreach (KeyValuePair<int, XSSFRow> rowDict in _rows)
+            foreach(KeyValuePair<int, XSSFRow> rowDict in _rows)
             {
                 XSSFRow row = rowDict.Value;
                 int rownum = row.RowNum;
 
                 // check if we should remove this row as it will be overwritten
                 // by the data later
-                if (ShouldRemoveAtIndex(startRow, endRow, n, rownum))
+                if(ShouldRemoveAtIndex(startRow, endRow, n, rownum))
                 {
                     // remove row from worksheet.GetSheetData row array
                     //int idx = _rows.headMap(row.getRowNum()).size();
@@ -5162,16 +5184,16 @@ namespace NPOI.XSSF.UserModel
                     commentsToRemove.Clear();
                     // FIXME: (performance optimization) this should be moved outside the for-loop so that comments only needs to be iterated over once.
                     // also remove any comments associated with this row
-                    if (sheetComments != null)
+                    if(sheetComments != null)
                     {
                         CT_CommentList lst = sheetComments.GetCTComments().commentList;
-                        foreach (CT_Comment comment in lst.comment)
+                        foreach(CT_Comment comment in lst.comment)
                         {
                             string strRef = comment.@ref;
                             CellAddress ref1 = new CellAddress(strRef);
 
                             // is this comment part of the current row?
-                            if (ref1.Row == rownum)
+                            if(ref1.Row == rownum)
                             {
                                 //sheetComments.RemoveComment(strRef);
                                 //vml.RemoveCommentShape(ref1.Row, ref1.Col);
@@ -5180,7 +5202,7 @@ namespace NPOI.XSSF.UserModel
                         }
                     }
 
-                    foreach (CellAddress ref1 in commentsToRemove)
+                    foreach(CellAddress ref1 in commentsToRemove)
                     {
                         sheetComments.RemoveComment(ref1);
                         vml.RemoveCommentShape(ref1.Row, ref1.Column);
@@ -5188,12 +5210,12 @@ namespace NPOI.XSSF.UserModel
 
                     // FIXME: (performance optimization) this should be moved outside the for-loop so that hyperlinks only needs to be iterated over once.
                     // also remove any hyperlinks associated with this row
-                    if (hyperlinks != null)
+                    if(hyperlinks != null)
                     {
-                        foreach (XSSFHyperlink link in new List<XSSFHyperlink>(hyperlinks))
+                        foreach(XSSFHyperlink link in new List<XSSFHyperlink>(hyperlinks))
                         {
                             CellReference ref1 = new CellReference(link.CellRef);
-                            if (ref1.Row == rownum)
+                            if(ref1.Row == rownum)
                             {
                                 hyperlinks.Remove(link);
                             }
@@ -5202,7 +5224,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
-            foreach (int rowKey in rowsToRemove)
+            foreach(int rowKey in rowsToRemove)
             {
                 _rows.Remove(rowKey);
             }
@@ -5212,7 +5234,7 @@ namespace NPOI.XSSF.UserModel
 
         private void RemoveOverwrittenColumns(int startColumn, int endColumn, int n)
         {
-            if (worksheet.cols.FirstOrDefault() is null)
+            if(worksheet.cols.FirstOrDefault() is null)
             {
                 throw new RuntimeException("There is no columns in XML part");
             }
@@ -5220,11 +5242,11 @@ namespace NPOI.XSSF.UserModel
             List<IColumn> columnsToRemove = new List<IColumn>();
 
             // first remove all columns which will be overwritten
-            for (int i = startColumn + n; i <= endColumn + n; i++)
+            for(int i = startColumn + n; i <= endColumn + n; i++)
             {
                 // check if we should remove this column as it will be overwritten
                 // by the data later
-                if (ShouldRemoveAtIndex(startColumn, endColumn, n, i))
+                if(ShouldRemoveAtIndex(startColumn, endColumn, n, i))
                 {
                     IColumn column = GetColumn(i, true);
 
@@ -5232,7 +5254,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
-            foreach (IColumn column in columnsToRemove)
+            foreach(IColumn column in columnsToRemove)
             {
                 RemoveColumn(column);
             }
@@ -5242,21 +5264,21 @@ namespace NPOI.XSSF.UserModel
         {
             //rebuild the _rows map
             Dictionary<int, XSSFRow> map = new Dictionary<int, XSSFRow>();
-            foreach (XSSFRow r in _rows.Values)
+            foreach(XSSFRow r in _rows.Values)
             {
                 map.Add(r.RowNum, r);
             }
 
             _rows.Clear();
             //_rows.putAll(map);
-            foreach (KeyValuePair<int, XSSFRow> kv in map)
+            foreach(KeyValuePair<int, XSSFRow> kv in map)
             {
                 _rows.Add(kv.Key, kv.Value);
             }
 
             // Sort CTRows by index asc.
             // not found at poi 3.15
-            if (worksheet.sheetData.row != null)
+            if(worksheet.sheetData.row != null)
             {
                 worksheet.sheetData.row.Sort((row1, row2) => row1.r.CompareTo(row2.r));
             }
@@ -5266,14 +5288,14 @@ namespace NPOI.XSSF.UserModel
         {
             //rebuild the _columns map
             Dictionary<int, XSSFColumn> map = new Dictionary<int, XSSFColumn>();
-            foreach (XSSFColumn c in _columns.Values)
+            foreach(XSSFColumn c in _columns.Values)
             {
                 map.Add(c.ColumnNum, c);
             }
 
             _columns.Clear();
 
-            foreach (KeyValuePair<int, XSSFColumn> kv in map)
+            foreach(KeyValuePair<int, XSSFColumn> kv in map)
             {
                 _columns.Add(kv.Key, kv.Value);
             }
@@ -5289,37 +5311,37 @@ namespace NPOI.XSSF.UserModel
 
             IEnumerable<CT_Shape> ctShapes = GetVMLDrawing(false)?.GetItems().OfType<CT_Shape>();
 
-            foreach (KeyValuePair<int, XSSFRow> rowDict in _rows)
+            foreach(KeyValuePair<int, XSSFRow> rowDict in _rows)
             {
                 XSSFRow row = rowDict.Value;
                 int rownum = row.RowNum;
 
-                if (sheetComments != null)
+                if(sheetComments != null)
                 {
                     // calculate the new rownum
                     int newrownum = ShiftedRowOrColumnNumber(startRow, endRow, n, rownum);
 
                     // is there a change necessary for the current row?
-                    if (newrownum != rownum)
+                    if(newrownum != rownum)
                     {
                         List<CellAddress> commentAddresses = sheetComments.GetCellAddresses();
-                        foreach (CellAddress cellAddress in commentAddresses)
+                        foreach(CellAddress cellAddress in commentAddresses)
                         {
-                            if (cellAddress.Row == rownum)
+                            if(cellAddress.Row == rownum)
                             {
                                 XSSFComment oldComment = sheetComments
                                     .FindCellComment(cellAddress);
-                                if (oldComment != null)
+                                if(oldComment != null)
                                 {
                                     var ctShape = oldComment.GetCTShape();
 
-                                    if (ctShape == null && ctShapes != null)
+                                    if(ctShape == null && ctShapes != null)
                                     {
                                         ctShape = ctShapes.FirstOrDefault
-                                            (x => 
-                                                x.ClientData[0].row[0] == cellAddress.Row && 
-                                                x.ClientData[0].column[0] == cellAddress.Column
-                                            );
+                                        (x =>
+                                            x.ClientData[0].row[0] == cellAddress.Row &&
+                                            x.ClientData[0].column[0] == cellAddress.Column
+                                        );
                                     }
 
                                     XSSFComment xssfComment =
@@ -5327,7 +5349,7 @@ namespace NPOI.XSSF.UserModel
                                             sheetComments,
                                             oldComment.GetCTComment(),
                                             ctShape);
-                                    if (commentsToShift.ContainsKey(xssfComment))
+                                    if(commentsToShift.ContainsKey(xssfComment))
                                     {
                                         commentsToShift[xssfComment] = newrownum;
                                     }
@@ -5341,12 +5363,12 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
 
-                if (rownum < startRow || rownum > endRow)
+                if(rownum < startRow || rownum > endRow)
                 {
                     continue;
                 }
 
-                if (!copyRowHeight)
+                if(!copyRowHeight)
                 {
                     row.Height = /*setter*/-1;
                 }
@@ -5357,7 +5379,7 @@ namespace NPOI.XSSF.UserModel
             // adjust all the affected comment-structures now
             // the Map is sorted and thus provides them in the order that we need here, 
             // i.e. from down to up if Shifting down, vice-versa otherwise
-            foreach (KeyValuePair<XSSFComment, int> entry in commentsToShift)
+            foreach(KeyValuePair<XSSFComment, int> entry in commentsToShift)
             {
                 entry.Key.Row = entry.Value;
             }
@@ -5367,22 +5389,22 @@ namespace NPOI.XSSF.UserModel
 
         private void ValidateCellsForCopyComment(ICell sourceCell, ICell targetCell)
         {
-            if (sourceCell == null || targetCell == null)
+            if(sourceCell == null || targetCell == null)
             {
                 throw new ArgumentException("Cells can not be null");
             }
 
-            if (sourceCell.Sheet != targetCell.Sheet || sourceCell.Sheet != this)
+            if(sourceCell.Sheet != targetCell.Sheet || sourceCell.Sheet != this)
             {
                 throw new ArgumentException("Cells should belong to the same worksheet");
             }
 
-            if (sheetComments == null)
+            if(sheetComments == null)
             {
                 throw new ArgumentException("Source cell doesn't have a comment");
             }
 
-            if (sheetComments.FindCellComment(sourceCell.Address) == null)
+            if(sheetComments.FindCellComment(sourceCell.Address) == null)
             {
                 throw new ArgumentException("Source cell doesn't have a comment");
             }
@@ -5395,9 +5417,9 @@ namespace NPOI.XSSF.UserModel
 
             List<IColumn> columnsToDestroy = new List<IColumn>();
 
-            for (int i = startColumn; i <= endColumn; i++)
+            for(int i = startColumn; i <= endColumn; i++)
             {
-                if (!_columns.ContainsKey(i))
+                if(!_columns.ContainsKey(i))
                 {
                     columnsToDestroy.Add(CreateColumn(i));
                 }
@@ -5407,33 +5429,33 @@ namespace NPOI.XSSF.UserModel
                 ? new SortedDictionary<int, XSSFColumn>(_columns)
                 : new SortedDictionary<int, XSSFColumn>(_columns).Reverse();
 
-            foreach (KeyValuePair<int, XSSFColumn> columnDict in sortedColumns)
+            foreach(KeyValuePair<int, XSSFColumn> columnDict in sortedColumns)
             {
                 XSSFColumn column = columnDict.Value;
                 int columnNum = column.ColumnNum;
 
-                if (sheetComments != null)
+                if(sheetComments != null)
                 {
                     // calculate the new columnNum
                     int newColumnNum = ShiftedRowOrColumnNumber(startColumn, endColumn, n, columnNum);
 
                     // is there a change necessary for the current column?
-                    if (newColumnNum != columnNum)
+                    if(newColumnNum != columnNum)
                     {
                         List<CellAddress> commentAddresses = sheetComments.GetCellAddresses();
-                        foreach (CellAddress cellAddress in commentAddresses)
+                        foreach(CellAddress cellAddress in commentAddresses)
                         {
-                            if (cellAddress.Column == columnNum)
+                            if(cellAddress.Column == columnNum)
                             {
                                 XSSFComment oldComment = sheetComments
                                     .FindCellComment(cellAddress);
-                                if (oldComment != null)
+                                if(oldComment != null)
                                 {
                                     CT_Shape commentShape =
                                         GetVMLDrawing(false)
-                                        .FindCommentShape(
-                                            oldComment.Row,
-                                            oldComment.Column);
+                                            .FindCommentShape(
+                                                oldComment.Row,
+                                                oldComment.Column);
 
                                     XSSFComment xssfComment =
                                         new XSSFComment(
@@ -5441,7 +5463,7 @@ namespace NPOI.XSSF.UserModel
                                             oldComment.GetCTComment(),
                                             commentShape);
 
-                                    if (commentsToShift.ContainsKey(xssfComment))
+                                    if(commentsToShift.ContainsKey(xssfComment))
                                     {
                                         commentsToShift[xssfComment] = newColumnNum;
                                     }
@@ -5455,12 +5477,12 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
 
-                if (columnNum < startColumn || columnNum > endColumn)
+                if(columnNum < startColumn || columnNum > endColumn)
                 {
                     continue;
                 }
 
-                if (!copyColumnWidth)
+                if(!copyColumnWidth)
                 {
                     column.Width = -1;
                 }
@@ -5471,7 +5493,7 @@ namespace NPOI.XSSF.UserModel
             // adjust all the affected comment-structures now
             // the Map is sorted and thus provides them in the order that we need here, 
             // i.e. from right to left if Shifting right, vice-versa otherwise
-            foreach (KeyValuePair<XSSFComment, int> entry in commentsToShift)
+            foreach(KeyValuePair<XSSFComment, int> entry in commentsToShift)
             {
                 entry.Key.Column = entry.Value;
             }
@@ -5483,10 +5505,10 @@ namespace NPOI.XSSF.UserModel
 
         private int GetIndexOfColumn(CT_Cols ctCols, CT_Col ctCol)
         {
-            for (int i = 0; i < ctCols.sizeOfColArray(); i++)
+            for(int i = 0; i < ctCols.sizeOfColArray(); i++)
             {
-                if (ctCols.GetColArray(i).min == ctCol.min
-                    && ctCols.GetColArray(i).max == ctCol.max)
+                if(ctCols.GetColArray(i).min == ctCol.min
+                   && ctCols.GetColArray(i).max == ctCol.max)
                 {
                     return i;
                 }
@@ -5497,7 +5519,7 @@ namespace NPOI.XSSF.UserModel
 
         private void RebuildRowCells()
         {
-            foreach (XSSFRow row in _rows.Values)
+            foreach(XSSFRow row in _rows.Values)
             {
                 row.RebuildCells();
             }
@@ -5506,26 +5528,26 @@ namespace NPOI.XSSF.UserModel
         private int ShiftedRowOrColumnNumber(int startIndex, int endIndex, int n, int index)
         {
             // no change if before any affected index
-            if (index < startIndex && (n > 0 || (startIndex - index) > n))
+            if(index < startIndex && (n > 0 || (startIndex - index) > n))
             {
                 return index;
             }
 
             // no change if After any affected index
-            if (index > endIndex && (n < 0 || (index - endIndex) > n))
+            if(index > endIndex && (n < 0 || (index - endIndex) > n))
             {
                 return index;
             }
 
             // index before and things are Moved up/left
-            if (index < startIndex)
+            if(index < startIndex)
             {
                 // index is Moved down/right by the Shifting
                 return index + (endIndex - startIndex);
             }
 
             // index is After and things are Moved down/right
-            if (index > endIndex)
+            if(index > endIndex)
             {
                 // index is Moved up/left by the Shifting
                 return index - (endIndex - startIndex);
@@ -5537,7 +5559,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_Selection GetSheetTypeSelection()
         {
-            if (GetSheetTypeSheetView().SizeOfSelectionArray() == 0)
+            if(GetSheetTypeSheetView().SizeOfSelectionArray() == 0)
             {
                 GetSheetTypeSheetView().InsertNewSelection(0);
             }
@@ -5562,7 +5584,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_SheetViews views = GetSheetTypeSheetViews();
             int sz = views == null ? 0 : views.sizeOfSheetViewArray();
-            if (sz == 0)
+            if(sz == 0)
             {
                 return null;
             }
@@ -5578,13 +5600,13 @@ namespace NPOI.XSSF.UserModel
 
         private static bool ShouldRemoveAtIndex(int startIndex, int endIndex, int n, int currentIndex)
         {
-            if (currentIndex >= (startIndex + n) && currentIndex <= (endIndex + n))
+            if(currentIndex >= (startIndex + n) && currentIndex <= (endIndex + n))
             {
-                if (n > 0 && currentIndex > endIndex)
+                if(n > 0 && currentIndex > endIndex)
                 {
                     return true;
                 }
-                else if (n < 0 && currentIndex < startIndex)
+                else if(n < 0 && currentIndex < startIndex)
                 {
                     return true;
                 }
@@ -5595,7 +5617,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_Pane GetPane()
         {
-            if (GetDefaultSheetView().pane == null)
+            if(GetDefaultSheetView().pane == null)
             {
                 GetDefaultSheetView().AddNewPane();
             }
@@ -5606,18 +5628,18 @@ namespace NPOI.XSSF.UserModel
         private void SetSheetFormatPrOutlineLevelRow()
         {
             short maxLevelRow = GetMaxOutlineLevelRows();
-            GetSheetTypeSheetFormatPr().outlineLevelRow = (byte)maxLevelRow;
+            GetSheetTypeSheetFormatPr().outlineLevelRow = (byte) maxLevelRow;
         }
 
         private void SetSheetFormatPrOutlineLevelCol()
         {
             short maxLevelCol = GetMaxOutlineLevelCols();
-            GetSheetTypeSheetFormatPr().outlineLevelCol = (byte)maxLevelCol;
+            GetSheetTypeSheetFormatPr().outlineLevelCol = (byte) maxLevelCol;
         }
 
         private CT_SheetViews GetSheetTypeSheetViews()
         {
-            if (worksheet.sheetViews == null)
+            if(worksheet.sheetViews == null)
             {
                 worksheet.sheetViews = new CT_SheetViews();
                 worksheet.sheetViews.AddNewSheetView();
@@ -5628,7 +5650,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_SheetProtection SafeGetProtectionField()
         {
-            if (!IsSheetProtectionEnabled())
+            if(!IsSheetProtectionEnabled())
             {
                 return worksheet.AddNewSheetProtection();
             }
@@ -5655,18 +5677,18 @@ namespace NPOI.XSSF.UserModel
             int height = lastRow - firstRow + 1;
             int width = lastColumn - firstColumn + 1;
             List<ICell> temp = new List<ICell>(height * width);
-            for (int rowIn = firstRow; rowIn <= lastRow; rowIn++)
+            for(int rowIn = firstRow; rowIn <= lastRow; rowIn++)
             {
-                for (int colIn = firstColumn; colIn <= lastColumn; colIn++)
+                for(int colIn = firstColumn; colIn <= lastColumn; colIn++)
                 {
                     IRow row = GetRow(rowIn);
-                    if (row == null)
+                    if(row == null)
                     {
                         row = CreateRow(rowIn);
                     }
 
                     ICell cell = row.GetCell(colIn);
-                    if (cell == null)
+                    if(cell == null)
                     {
                         cell = row.CreateCell(colIn);
                     }
@@ -5685,31 +5707,31 @@ namespace NPOI.XSSF.UserModel
             //   'second sheet'!$E:$F,'second sheet'!$2:$3
 
             CellReference colRef =
-              new CellReference(sheetName, 0, startC, true, true);
+                new CellReference(sheetName, 0, startC, true, true);
             CellReference colRef2 =
-              new CellReference(sheetName, 0, endC, true, true);
+                new CellReference(sheetName, 0, endC, true, true);
             CellReference rowRef =
-              new CellReference(sheetName, startR, 0, true, true);
+                new CellReference(sheetName, startR, 0, true, true);
             CellReference rowRef2 =
-              new CellReference(sheetName, endR, 0, true, true);
+                new CellReference(sheetName, endR, 0, true, true);
 
             string escapedName = SheetNameFormatter.Format(sheetName);
 
             string c = "";
             string r = "";
 
-            if (startC != -1 || endC != -1)
+            if(startC != -1 || endC != -1)
             {
                 string col1 = colRef.CellRefParts[2];
                 string col2 = colRef2.CellRefParts[2];
                 c = escapedName + "!$" + col1 + ":$" + col2;
             }
 
-            if (startR != -1 || endR != -1)
+            if(startR != -1 || endR != -1)
             {
                 string row1 = rowRef.CellRefParts[1];
                 string row2 = rowRef2.CellRefParts[1];
-                if (!row1.Equals("0") && !row2.Equals("0"))
+                if(!row1.Equals("0") && !row2.Equals("0"))
                 {
                     r = escapedName + "!$" + row1 + ":$" + row2;
                 }
@@ -5717,7 +5739,7 @@ namespace NPOI.XSSF.UserModel
 
             StringBuilder rng = new StringBuilder();
             rng.Append(c);
-            if (rng.Length > 0 && r.Length > 0)
+            if(rng.Length > 0 && r.Length > 0)
             {
                 rng.Append(',');
             }
@@ -5729,19 +5751,19 @@ namespace NPOI.XSSF.UserModel
         private CellRangeAddress GetRepeatingRowsOrColums(bool rows)
         {
             int sheetIndex = Workbook.GetSheetIndex(this);
-            if (!(Workbook is XSSFWorkbook xwb))
+            if(!(Workbook is XSSFWorkbook xwb))
             {
                 throw new RuntimeException("Workbook should not be null");
             }
 
             XSSFName name = xwb.GetBuiltInName(XSSFName.BUILTIN_PRINT_TITLE, sheetIndex);
-            if (name == null)
+            if(name == null)
             {
                 return null;
             }
 
             string refStr = name.RefersToFormula;
-            if (refStr == null)
+            if(refStr == null)
             {
                 return null;
             }
@@ -5749,25 +5771,25 @@ namespace NPOI.XSSF.UserModel
             string[] parts = refStr.Split(",".ToCharArray());
             int maxRowIndex = SpreadsheetVersion.EXCEL2007.LastRowIndex;
             int maxColIndex = SpreadsheetVersion.EXCEL2007.LastColumnIndex;
-            foreach (string part in parts)
+            foreach(string part in parts)
             {
                 CellRangeAddress range = CellRangeAddress.ValueOf(part);
-                if ((range.FirstColumn == 0
+                if((range.FirstColumn == 0
                     && range.LastColumn == maxColIndex)
-                    || (range.FirstColumn == -1
-                        && range.LastColumn == -1))
+                   || (range.FirstColumn == -1
+                       && range.LastColumn == -1))
                 {
-                    if (rows)
+                    if(rows)
                     {
                         return range;
                     }
                 }
-                else if ((range.FirstRow == 0
-                  && range.LastRow == maxRowIndex)
-                  || (range.FirstRow == -1
-                      && range.LastRow == -1))
+                else if((range.FirstRow == 0
+                         && range.LastRow == maxRowIndex)
+                        || (range.FirstRow == -1
+                            && range.LastRow == -1))
                 {
-                    if (!rows)
+                    if(!rows)
                     {
                         return range;
                     }
@@ -5785,23 +5807,23 @@ namespace NPOI.XSSF.UserModel
             int row1 = -1;
             int row2 = -1;
 
-            if (rowDef != null)
+            if(rowDef != null)
             {
                 row1 = rowDef.FirstRow;
                 row2 = rowDef.LastRow;
-                if ((row1 == -1 && row2 != -1)
-                    || row1 < -1 || row2 < -1 || row1 > row2)
+                if((row1 == -1 && row2 != -1)
+                   || row1 < -1 || row2 < -1 || row1 > row2)
                 {
                     throw new ArgumentException("Invalid row range specification");
                 }
             }
 
-            if (colDef != null)
+            if(colDef != null)
             {
                 col1 = colDef.FirstColumn;
                 col2 = colDef.LastColumn;
-                if ((col1 == -1 && col2 != -1)
-                    || col1 < -1 || col2 < -1 || col1 > col2)
+                if((col1 == -1 && col2 != -1)
+                   || col1 < -1 || col2 < -1 || col1 > col2)
                 {
                     throw new ArgumentException(
                         "Invalid column range specification");
@@ -5811,15 +5833,15 @@ namespace NPOI.XSSF.UserModel
             int sheetIndex = Workbook.GetSheetIndex(this);
 
             bool removeAll = rowDef == null && colDef == null;
-            if (!(Workbook is XSSFWorkbook xwb))
+            if(!(Workbook is XSSFWorkbook xwb))
             {
                 throw new RuntimeException("Workbook should not be null");
             }
 
             XSSFName name = xwb.GetBuiltInName(XSSFName.BUILTIN_PRINT_TITLE, sheetIndex);
-            if (removeAll)
+            if(removeAll)
             {
-                if (name != null)
+                if(name != null)
                 {
                     xwb.RemoveName(name);
                 }
@@ -5827,7 +5849,7 @@ namespace NPOI.XSSF.UserModel
                 return;
             }
 
-            if (name == null)
+            if(name == null)
             {
                 name = xwb.CreateBuiltInName(
                     XSSFName.BUILTIN_PRINT_TITLE, sheetIndex);
@@ -5840,7 +5862,7 @@ namespace NPOI.XSSF.UserModel
             // If the print setup isn't currently defined, then add it
             //  in but without printer defaults
             // If it's already there, leave it as-is!
-            if (worksheet.IsSetPageSetup() && worksheet.IsSetPageMargins())
+            if(worksheet.IsSetPageSetup() && worksheet.IsSetPageMargins())
             {
                 // Everything we need is already there
             }
@@ -5854,28 +5876,28 @@ namespace NPOI.XSSF.UserModel
         private void CopySheetImages(XSSFWorkbook destWorkbook, XSSFSheet destSheet)
         {
             XSSFDrawing sheetDrawing = GetDrawingPatriarch();
-            if (sheetDrawing != null)
+            if(sheetDrawing != null)
             {
                 IDrawing destDraw = destSheet.CreateDrawingPatriarch();
                 IList<POIXMLDocumentPart> sheetPictures = sheetDrawing.GetRelations();
                 Dictionary<string, uint> pictureIdMapping = new Dictionary<string, uint>();
-                foreach (IEG_Anchor anchor in sheetDrawing.GetCTDrawing().CellAnchors)
+                foreach(IEG_Anchor anchor in sheetDrawing.GetCTDrawing().CellAnchors)
                 {
-                    if (anchor is CT_TwoCellAnchor cellAnchor)
+                    if(anchor is CT_TwoCellAnchor cellAnchor)
                     {
                         XSSFClientAnchor newAnchor = new XSSFClientAnchor(
-                            (int)cellAnchor.from.colOff,
-                            (int)cellAnchor.from.rowOff,
-                            (int)cellAnchor.to.colOff,
-                            (int)cellAnchor.to.rowOff,
+                            (int) cellAnchor.from.colOff,
+                            (int) cellAnchor.from.rowOff,
+                            (int) cellAnchor.to.colOff,
+                            (int) cellAnchor.to.rowOff,
                             cellAnchor.from.col,
                             cellAnchor.from.row,
                             cellAnchor.to.col,
                             cellAnchor.to.row);
 
-                        if (cellAnchor.editAsSpecified)
+                        if(cellAnchor.editAsSpecified)
                         {
-                            switch (cellAnchor.editAs)
+                            switch(cellAnchor.editAs)
                             {
                                 case ST_EditAs.twoCell:
                                     newAnchor.AnchorType = AnchorType.MoveAndResize;
@@ -5892,19 +5914,19 @@ namespace NPOI.XSSF.UserModel
                         }
 
                         string oldPictureId = anchor.picture?.blipFill?.blip.embed;
-                        if (oldPictureId == null)
+                        if(oldPictureId == null)
                         {
                             continue;
                         }
 
-                        if (!pictureIdMapping.ContainsKey(oldPictureId))
+                        if(!pictureIdMapping.ContainsKey(oldPictureId))
                         {
                             XSSFPictureData srcPic = FindPicture(sheetPictures, oldPictureId);
-                            if (srcPic != null && srcPic.PictureType != PictureType.None)
+                            if(srcPic != null && srcPic.PictureType != PictureType.None)
                             {
                                 pictureIdMapping.Add(
                                     oldPictureId,
-                                    (uint)destWorkbook.AddPicture(srcPic.Data, srcPic.PictureType));
+                                    (uint) destWorkbook.AddPicture(srcPic.Data, srcPic.PictureType));
                             }
                             else
                             {
@@ -5912,7 +5934,7 @@ namespace NPOI.XSSF.UserModel
                             }
                         }
 
-                        destDraw.CreatePicture(newAnchor, (int)pictureIdMapping[oldPictureId]);
+                        destDraw.CreatePicture(newAnchor, (int) pictureIdMapping[oldPictureId]);
                     }
                 }
             }
@@ -5920,9 +5942,9 @@ namespace NPOI.XSSF.UserModel
 
         private XSSFPictureData FindPicture(IList<POIXMLDocumentPart> sheetPictures, string id)
         {
-            foreach (POIXMLDocumentPart item in sheetPictures)
+            foreach(POIXMLDocumentPart item in sheetPictures)
             {
-                if (item.GetPackageRelationship().Id == id)
+                if(item.GetPackageRelationship().Id == id)
                 {
                     return item as XSSFPictureData;
                 }
@@ -5931,10 +5953,11 @@ namespace NPOI.XSSF.UserModel
             return null;
         }
 
-        private static void CopyRow(XSSFSheet srcSheet, XSSFSheet destSheet, XSSFRow srcRow, XSSFRow destRow, IDictionary<int, ICellStyle> styleMap, bool keepFormulas, bool keepMergedRegion)
+        private static void CopyRow(XSSFSheet srcSheet, XSSFSheet destSheet, XSSFRow srcRow, XSSFRow destRow,
+            IDictionary<int, ICellStyle> styleMap, bool keepFormulas, bool keepMergedRegion)
         {
             destRow.Height = srcRow.Height;
-            if (!srcRow.GetCTRow().IsSetCustomHeight())
+            if(!srcRow.GetCTRow().IsSetCustomHeight())
             {
                 //Copying height sets the custom height flag, but Excel will
                 //set a value for height even if it's auto-sized.
@@ -5945,37 +5968,37 @@ namespace NPOI.XSSF.UserModel
             destRow.Collapsed = srcRow.Collapsed;
             destRow.OutlineLevel = srcRow.OutlineLevel;
 
-            if (srcRow.FirstCellNum < 0)
+            if(srcRow.FirstCellNum < 0)
             {
                 return; //Row has no cells, this sometimes happens with hidden or blank rows
             }
 
-            for (int j = srcRow.FirstCellNum; j <= srcRow.LastCellNum; j++)
+            for(int j = srcRow.FirstCellNum; j <= srcRow.LastCellNum; j++)
             {
-                XSSFCell oldCell = (XSSFCell)srcRow.GetCell(j);
-                XSSFCell newCell = (XSSFCell)destRow.GetCell(j);
-                if (srcSheet.Workbook == destSheet.Workbook)
+                XSSFCell oldCell = (XSSFCell) srcRow.GetCell(j);
+                XSSFCell newCell = (XSSFCell) destRow.GetCell(j);
+                if(srcSheet.Workbook == destSheet.Workbook)
                 {
-                    newCell = (XSSFCell)destRow.GetCell(j);
+                    newCell = (XSSFCell) destRow.GetCell(j);
                 }
 
-                if (oldCell != null)
+                if(oldCell != null)
                 {
-                    if (newCell == null)
+                    if(newCell == null)
                     {
-                        newCell = (XSSFCell)destRow.CreateCell(j);
+                        newCell = (XSSFCell) destRow.CreateCell(j);
                     }
 
                     CopyCell(oldCell, newCell, styleMap, keepFormulas);
-                    
-                    if (keepMergedRegion)
+
+                    if(keepMergedRegion)
                     {
                         CellRangeAddress mergedRegion = srcSheet.GetMergedRegion(
                             new CellRangeAddress(srcRow.RowNum, srcRow.RowNum,
-                            (short)oldCell.ColumnIndex,
-                            (short)oldCell.ColumnIndex));
+                                (short) oldCell.ColumnIndex,
+                                (short) oldCell.ColumnIndex));
 
-                        if (mergedRegion != null)
+                        if(mergedRegion != null)
                         {
                             CellRangeAddress newMergedRegion = new CellRangeAddress(
                                 mergedRegion.FirstRow,
@@ -5983,7 +6006,7 @@ namespace NPOI.XSSF.UserModel
                                 mergedRegion.FirstColumn,
                                 mergedRegion.LastColumn);
 
-                            if (!destSheet.IsMergedRegion(newMergedRegion))
+                            if(!destSheet.IsMergedRegion(newMergedRegion))
                             {
                                 destSheet.AddMergedRegion(newMergedRegion);
                             }
@@ -5993,20 +6016,21 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        private static void CopyCell(ICell oldCell, ICell newCell, IDictionary<int, ICellStyle> styleMap, bool keepFormulas)
+        private static void CopyCell(ICell oldCell, ICell newCell, IDictionary<int, ICellStyle> styleMap,
+            bool keepFormulas)
         {
-            if (styleMap != null)
+            if(styleMap != null)
             {
-                if (oldCell.CellStyle != null)
+                if(oldCell.CellStyle != null)
                 {
-                    if (oldCell.Sheet.Workbook == newCell.Sheet.Workbook)
+                    if(oldCell.Sheet.Workbook == newCell.Sheet.Workbook)
                     {
                         newCell.CellStyle = oldCell.CellStyle;
                     }
                     else
                     {
                         int styleHashCode = oldCell.CellStyle.GetHashCode();
-                        if (styleMap.ContainsKey(styleHashCode))
+                        if(styleMap.ContainsKey(styleHashCode))
                         {
                             newCell.CellStyle = styleMap[styleHashCode];
                         }
@@ -6025,18 +6049,18 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
-            switch (oldCell.CellType)
+            switch(oldCell.CellType)
             {
                 case CellType.String:
                     XSSFRichTextString rts = oldCell.RichStringCellValue as XSSFRichTextString;
                     newCell.SetCellValue(rts);
-                    if (rts != null)
+                    if(rts != null)
                     {
-                        for (int j = 0; j < rts.NumFormattingRuns; j++)
+                        for(int j = 0; j < rts.NumFormattingRuns; j++)
                         {
                             int startIndex = rts.GetIndexOfFormattingRun(j);
                             int endIndex;
-                            if (j + 1 == rts.NumFormattingRuns)
+                            if(j + 1 == rts.NumFormattingRuns)
                             {
                                 endIndex = rts.Length;
                             }
@@ -6065,7 +6089,7 @@ namespace NPOI.XSSF.UserModel
                     newCell.SetCellValue(oldCell.ErrorCellValue);
                     break;
                 case CellType.Formula:
-                    if (keepFormulas)
+                    if(keepFormulas)
                     {
                         newCell.SetCellType(CellType.Formula);
                         newCell.CellFormula = oldCell.CellFormula;
@@ -6101,7 +6125,7 @@ namespace NPOI.XSSF.UserModel
             List<XSSFPivotTable> pivotTables = wb.PivotTables;
             int tableId = GetWorkbook().PivotTables.Count + 1;
             //Create relationship between pivotTable and the worksheet
-            XSSFPivotTable pivotTable = (XSSFPivotTable)CreateRelationship(
+            XSSFPivotTable pivotTable = (XSSFPivotTable) CreateRelationship(
                 XSSFRelation.PIVOT_TABLE,
                 XSSFFactory.GetInstance(),
                 tableId);
@@ -6110,11 +6134,10 @@ namespace NPOI.XSSF.UserModel
             XSSFWorkbook workbook = GetWorkbook();
 
             //Create relationship between the pivot cache defintion and the workbook
-            XSSFPivotCacheDefinition pivotCacheDefinition = (XSSFPivotCacheDefinition)workbook.
-                CreateRelationship(
-                    XSSFRelation.PIVOT_CACHE_DEFINITION,
-                    XSSFFactory.GetInstance(),
-                    tableId);
+            XSSFPivotCacheDefinition pivotCacheDefinition = (XSSFPivotCacheDefinition) workbook.CreateRelationship(
+                XSSFRelation.PIVOT_CACHE_DEFINITION,
+                XSSFFactory.GetInstance(),
+                tableId);
             string rId = workbook.GetRelationId(pivotCacheDefinition);
             //Create relationship between pivotTable and pivotCacheDefInition
             //without creating a new instance
@@ -6130,11 +6153,10 @@ namespace NPOI.XSSF.UserModel
             pivotTable.SetPivotCache(new XSSFPivotCache(workbook.AddPivotCache(rId)));
 
             //Create relationship between pivotcacherecord and pivotcachedefInition
-            XSSFPivotCacheRecords pivotCacheRecords = (XSSFPivotCacheRecords)pivotCacheDefinition.
-                CreateRelationship(
-                    XSSFRelation.PIVOT_CACHE_RECORDS,
-                    XSSFFactory.GetInstance(),
-                    tableId);
+            XSSFPivotCacheRecords pivotCacheRecords = (XSSFPivotCacheRecords) pivotCacheDefinition.CreateRelationship(
+                XSSFRelation.PIVOT_CACHE_RECORDS,
+                XSSFFactory.GetInstance(),
+                tableId);
 
             //Set relationships id for pivotCacheDefInition to pivotCacheRecords
             pivotTable.GetPivotCacheDefinition().GetCTPivotCacheDefinition().id =
@@ -6156,7 +6178,8 @@ namespace NPOI.XSSF.UserModel
         /// if the source reference doesn't contain a sheet name</param>
         /// <param name="refConfig"></param>
         /// <returns>The pivot table</returns>
-        private XSSFPivotTable CreatePivotTable(CellReference position, ISheet sourceSheet, XSSFPivotTable.IPivotTableReferenceConfigurator refConfig)
+        private XSSFPivotTable CreatePivotTable(CellReference position, ISheet sourceSheet,
+            XSSFPivotTable.IPivotTableReferenceConfigurator refConfig)
         {
 
             XSSFPivotTable pivotTable = CreatePivotTable();
@@ -6175,7 +6198,9 @@ namespace NPOI.XSSF.UserModel
 
         private void AddIgnoredErrors(string ref1, params IgnoredErrorType[] ignoredErrorTypes)
         {
-            CT_IgnoredErrors ctIgnoredErrors = worksheet.IsSetIgnoredErrors() ? worksheet.ignoredErrors : worksheet.AddNewIgnoredErrors();
+            CT_IgnoredErrors ctIgnoredErrors = worksheet.IsSetIgnoredErrors()
+                ? worksheet.ignoredErrors
+                : worksheet.AddNewIgnoredErrors();
             CT_IgnoredError ctIgnoredError = ctIgnoredErrors.AddNewIgnoredError();
             XSSFIgnoredErrorHelper.AddIgnoredErrors(ctIgnoredError, ref1, ignoredErrorTypes);
         }
@@ -6184,9 +6209,9 @@ namespace NPOI.XSSF.UserModel
         {
             ISet<IgnoredErrorType> result = new HashSet<IgnoredErrorType>();
 
-            foreach (IgnoredErrorType errType in IgnoredErrorTypeValues.Values)
+            foreach(IgnoredErrorType errType in IgnoredErrorTypeValues.Values)
             {
-                if (XSSFIgnoredErrorHelper.IsSet(errType, err))
+                if(XSSFIgnoredErrorHelper.IsSet(errType, err))
                 {
                     result.Add(errType);
                 }
@@ -6194,16 +6219,20 @@ namespace NPOI.XSSF.UserModel
 
             return result;
         }
+
         #endregion
 
         #region Helper classes
+
         public class PivotTableReferenceConfigurator2 : XSSFPivotTable.IPivotTableReferenceConfigurator
         {
             private readonly IName source;
+
             public PivotTableReferenceConfigurator2(IName source)
             {
                 this.source = source;
             }
+
             public void ConfigureReference(CT_WorksheetSource wsSource)
             {
                 wsSource.name = source.NameName;
@@ -6213,10 +6242,12 @@ namespace NPOI.XSSF.UserModel
         public class PivotTableReferenceConfigurator1 : XSSFPivotTable.IPivotTableReferenceConfigurator
         {
             private readonly AreaReference source;
+
             public PivotTableReferenceConfigurator1(AreaReference source)
             {
                 this.source = source;
             }
+
             public void ConfigureReference(CT_WorksheetSource wsSource)
             {
                 string[] firstCell = source.FirstCell.CellRefParts;
@@ -6233,10 +6264,12 @@ namespace NPOI.XSSF.UserModel
         public class PivotTableReferenceConfigurator3 : XSSFPivotTable.IPivotTableReferenceConfigurator
         {
             private readonly ITable source;
+
             public PivotTableReferenceConfigurator3(ITable source)
             {
                 this.source = source;
             }
+
             public void ConfigureReference(CT_WorksheetSource wsSource)
             {
                 wsSource.name = source.Name;
@@ -6246,16 +6279,18 @@ namespace NPOI.XSSF.UserModel
         private class ShiftCommentComparator : IComparer<XSSFComment>
         {
             private readonly int shiftDir;
+
             public ShiftCommentComparator(int shiftDir)
             {
                 this.shiftDir = shiftDir;
             }
+
             public int Compare(XSSFComment o1, XSSFComment o2)
             {
                 int row1 = o1.Row;
                 int row2 = o2.Row;
 
-                if (row1 == row2)
+                if(row1 == row2)
                 {
                     // ordering is not important when row is equal, but don't
                     // return zero to still get multiple comments per row into
@@ -6264,7 +6299,7 @@ namespace NPOI.XSSF.UserModel
                 }
 
                 // when Shifting down, sort higher row-values first
-                if (shiftDir > 0)
+                if(shiftDir > 0)
                 {
                     return row1 < row2 ? 1 : -1;
                 }
@@ -6280,11 +6315,12 @@ namespace NPOI.XSSF.UserModel
         /// 
         /// </summary>
         /// <param name="Width">In EMU</param>
-        public void SetDefaultColWidth(int Width) {
-            IFont   ift = GetWorkbook().GetStylesSource().GetFontAt(0);
-            Font    ft  = SheetUtil.IFont2Font(ift);
-            var     rt  = TextMeasurer.MeasureSize("0", new TextOptions(ft));
-            double  MDW = rt.Width + 1;                                                     //MaximumDigitWidth
+        public void SetDefaultColWidth(int Width)
+        {
+            IFont ift = GetWorkbook().GetStylesSource().GetFontAt(0);
+            Font ft = SheetUtil.IFont2Font(ift);
+            var rt = TextMeasurer.MeasureSize("0", new TextOptions(ft));
+            double MDW = rt.Width + 1; //MaximumDigitWidth
 
             worksheet.sheetFormatPr.defaultColWidth = Width / Units.EMU_PER_PIXEL / MDW;
             worksheet.cols.Clear();
@@ -6304,18 +6340,18 @@ namespace NPOI.XSSF.UserModel
             double width_px;
 
             var width = worksheet.sheetFormatPr.defaultColWidth; //string length with padding
-            if (width != 0.0)
+            if(width != 0.0)
             {
                 double widthInPx = width * MaximumDigitWidth;
                 width_px = widthInPx + (8 - widthInPx % 8); // round up to the nearest multiple of 8 pixels
             }
-            else if (worksheet.sheetFormatPr.baseColWidth != 0)
+            else if(worksheet.sheetFormatPr.baseColWidth != 0)
             {
                 double MDW = MaximumDigitWidth;
-                var length = worksheet.sheetFormatPr.baseColWidth;                      //string length with out padding
+                var length = worksheet.sheetFormatPr.baseColWidth; //string length with out padding
                 fontwidth = Math.Truncate((length * MDW + 5) / MDW * 256) / 256;
                 double tmp = 256 * fontwidth + Math.Truncate(128 / MDW);
-                width_px = Math.Truncate((tmp / 256) * MDW) + 3;                        // +3 ???
+                width_px = Math.Truncate((tmp / 256) * MDW) + 3; // +3 ???
             }
             else
             {
@@ -6328,7 +6364,7 @@ namespace NPOI.XSSF.UserModel
 
         [Obsolete("")]
         public XSSFClientAnchor CreateClientAnchor(
-              int dx1
+            int dx1
             , int dy1
             , int dx2
             , int dy2
@@ -6342,10 +6378,11 @@ namespace NPOI.XSSF.UserModel
             CT_Marker mk1 = EMUtoMarker(left, top);
             CT_Marker mk2 = EMUtoMarker(right, bottom);
 
-            if (mk1.colOff >= 0 && mk1.rowOff >= 0 && mk2.colOff >= 0 && mk2.rowOff >= 0)
+            if(mk1.colOff >= 0 && mk1.rowOff >= 0 && mk2.colOff >= 0 && mk2.rowOff >= 0)
             {
                 return new XSSFClientAnchor(mk1, mk2, left, top, right, bottom);
             }
+
             return null;
         }
 
@@ -6362,17 +6399,18 @@ namespace NPOI.XSSF.UserModel
 
         [Obsolete("")]
         public int EMUtoRowOff(
-              int y
+            int y
             , out int cell
         )
         {
             double height;
             cell = 0;
-            for (int iRow = 0; iRow < SpreadsheetVersion.EXCEL2007.MaxRows; iRow++)
+            for(int iRow = 0; iRow < SpreadsheetVersion.EXCEL2007.MaxRows; iRow++)
             {
-                height = _rows.ContainsKey(iRow) ? _rows[iRow].HeightInPoints
-                                                 : DefaultRowHeightInPoints;
-                if (y >= Units.ToEMU(height))
+                height = _rows.ContainsKey(iRow)
+                    ? _rows[iRow].HeightInPoints
+                    : DefaultRowHeightInPoints;
+                if(y >= Units.ToEMU(height))
                 {
                     y -= Units.ToEMU(height);
                     cell++;
@@ -6388,30 +6426,31 @@ namespace NPOI.XSSF.UserModel
 
         [Obsolete("")]
         public int EMUtoColOff(
-              int x
+            int x
             , out int cell
         )
         {
 
             double width_px;
             cell = 0;
-            for (int iCol = 0; iCol < SpreadsheetVersion.EXCEL2007.MaxColumns; iCol++)
+            for(int iCol = 0; iCol < SpreadsheetVersion.EXCEL2007.MaxColumns; iCol++)
             {
                 width_px = GetDefaultColWidthInPixel();
-                foreach (var cols in worksheet.cols)
+                foreach(var cols in worksheet.cols)
                 {
-                    foreach (var col in cols.col)
+                    foreach(var col in cols.col)
                     {
-                        if (col.min <= iCol + 1 && iCol + 1 <= col.max)
+                        if(col.min <= iCol + 1 && iCol + 1 <= col.max)
                         {
                             width_px = col.width * MaximumDigitWidth;
                             goto lblforbreak;
                         }
                     }
                 }
+
                 lblforbreak:
-                int EMUwidth = Units.PixelToEMU((int)Math.Round(width_px, 1));
-                if (x >= EMUwidth)
+                int EMUwidth = Units.PixelToEMU((int) Math.Round(width_px, 1));
+                if(x >= EMUwidth)
                 {
                     x -= EMUwidth;
                     cell++;
@@ -6424,6 +6463,12 @@ namespace NPOI.XSSF.UserModel
 
             return -1;
         }
+
         #endregion
+
+        public CellRangeAddressList GetCells(string cellranges)
+        {
+            return CellRangeAddressList.Parse(cellranges);
+        }
     }
 }
