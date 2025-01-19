@@ -19,6 +19,7 @@ namespace TestCases.HPSF.Basic
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
 
@@ -549,7 +550,7 @@ namespace TestCases.HPSF.Basic
                 /* The document does not have custom properties. */
                 return;
 
-            foreach (DictionaryEntry de in cps)
+            foreach (var de in cps)
             {
                 CustomProperty cp = (CustomProperty)de.Value;
                 Assert.IsNotNull(cp.Name);
@@ -593,7 +594,7 @@ namespace TestCases.HPSF.Basic
         [Test]
         public void TestCustomerProperties()
         {
-            String KEY = "Schlüssel ";
+            String KEY = "Schl\u00fcssel \u00e4";
             String VALUE_1 = "Wert 1";
             String VALUE_2 = "Wert 2";
 
@@ -632,9 +633,9 @@ namespace TestCases.HPSF.Basic
         {
             long ID_1 = 2;
             long ID_2 = 3;
-            String NAME_1 = "Schlüssel";
+            String NAME_1 = "Schl\u00fcssel \u00e4";
             String VALUE_1 = "Wert 1";
-            Hashtable dictionary = new Hashtable();
+            Dictionary<long, string> dictionary = new();
 
             DocumentSummaryInformation dsi = PropertySetFactory.CreateDocumentSummaryInformation();
             CustomProperties cps;
@@ -646,7 +647,7 @@ namespace TestCases.HPSF.Basic
 
             /* Test an empty custom properties Set. */
             s = new MutableSection();
-            s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID2);
+            s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[1]);
             // s.SetCodepage(CodePageUtil.CP_UNICODE);
             dsi.AddSection(s);
             cps = dsi.CustomProperties;
@@ -659,7 +660,7 @@ namespace TestCases.HPSF.Basic
             p.Value = VALUE_1;
             s.SetProperty(p);
             dictionary[ID_1] = NAME_1;
-            s.Dictionary = dictionary;
+            s.SetDictionary(dictionary);
             cps = dsi.CustomProperties;
             Assert.AreEqual(1, cps.Count);
             Assert.IsTrue(cps.IsPure);
@@ -667,7 +668,7 @@ namespace TestCases.HPSF.Basic
             /* Add another custom property. */
             s.SetProperty((int)ID_2, Variant.VT_LPWSTR, VALUE_1);
             dictionary[ID_2] = NAME_1;
-            s.Dictionary = dictionary;
+            s.SetDictionary(dictionary);
             cps = dsi.CustomProperties;
             Assert.AreEqual(1, cps.Count);
             Assert.IsFalse(cps.IsPure);
