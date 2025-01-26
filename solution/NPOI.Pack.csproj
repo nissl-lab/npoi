@@ -3,7 +3,7 @@
   <!-- This is an umbrella project that gathers dependencies for dotnet pack -->
   
   <PropertyGroup>
-    <TargetFrameworks>net472;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
+    <TargetFrameworks>net472;netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <PackageId>NPOI</PackageId>
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
