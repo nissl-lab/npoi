@@ -3,6 +3,8 @@
     using NPOI.XWPF.UserModel;
     using NUnit.Framework;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Reflection.Metadata;
 
     [TestFixture]
     public class TestXWPFComments
@@ -54,6 +56,32 @@
 
                 IList<XWPFPictureData> allPictures = docComments.GetAllPictures();
                 Assert.AreEqual(1, allPictures.Count);
+            }
+        }
+
+        [Test]
+        public void TestNPOIBug1481()
+        {
+            using(XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("NPOI-bug-1481.docx"))
+            {
+                XWPFComment[] comments = doc.GetComments();
+                Assert.AreEqual(1, comments.Length);
+
+                XWPFComment comment = comments[0];
+                Assert.AreEqual("Claudio Pais", comment.GetAuthor());
+                Assert.AreEqual("2025-01-23T17:18:00Z", comment.Date);
+                Assert.AreEqual("Bla bla", comment.GetText());
+
+                XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+
+                comments = docIn.GetComments();
+                Assert.AreEqual(1, comments.Length);
+
+                comment = comments[0];
+                Assert.AreEqual("Claudio Pais", comment.GetAuthor());
+                Assert.AreEqual("2025-01-23T17:18:00Z", comment.Date);
+                Assert.AreEqual("Bla bla", comment.GetText());
+
             }
         }
     }
