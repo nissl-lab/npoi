@@ -49,39 +49,50 @@ namespace NPOI.SS.UserModel.Helpers
         {
             var ShiftedRegions = new List<CellRangeAddress>();
             ISet<int> removedIndices = new HashSet<int>();
-            //move merged regions completely if they fall within the new region boundaries when they are Shifted
             var size = sheet.NumMergedRegions;
-            var lastCol = sheet.Any() ? sheet.Max(r => r.LastCellNum) : 0;
 
             for (var i = 0; i < size; i++)
             {
                 var merged = sheet.GetMergedRegion(i);
 
-                // remove merged region that overlaps Shifting
-                if (RemovalNeeded(merged, startRow, endRow, n, lastCol))
-                {
-                    removedIndices.Add(i);
-                    continue;
-                }
-
-                var inStart = merged.FirstRow >= startRow || merged.LastRow >= startRow;
-                var inEnd = merged.FirstRow <= endRow || merged.LastRow <= endRow;
-
-                //don't check if it's not within the Shifted area
-                if (!inStart || !inEnd)
-                {
-                    continue;
-                }
-
-                //only shift if the region outside the Shifted rows is not merged too
-                if (!merged.ContainsRow(startRow - 1) && !merged.ContainsRow(endRow + 1))
+                //Shift if the merged region inside the Shifting rows
+                if (merged.FirstRow >= startRow && merged.LastRow <= endRow)
                 {
                     merged.FirstRow += n;
                     merged.LastRow += n;
                     //have to Remove/add it back
                     ShiftedRegions.Add(merged);
                     removedIndices.Add(i);
+
+                    continue;
                 }
+
+                //don't check if it's not within the Shifted area
+                if (n > 0)
+                {
+                    // area is moved down
+                    if (merged.LastRow < startRow
+                     || merged.FirstRow > endRow + n
+                     || merged.FirstRow > endRow && merged.LastRow < startRow + n
+                    )
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    // area is moved up
+                    if (merged.LastRow < startRow + n
+                     || merged.FirstRow > endRow
+                     || merged.FirstRow > endRow + n && merged.LastRow < startRow
+                    )
+                    {
+                        continue;
+                    }
+                }
+
+                //remove merged region that overlaps Shifting
+                removedIndices.Add(i);
             }
 
             if (removedIndices.Count != 0)
@@ -89,26 +100,13 @@ namespace NPOI.SS.UserModel.Helpers
                 sheet.RemoveMergedRegions(removedIndices.ToList());
             }
 
-            //read so it doesn't Get Shifted again
+            //add it which is within the shifted area back
             foreach (var region in ShiftedRegions)
             {
                 sheet.AddMergedRegion(region);
             }
 
             return ShiftedRegions;
-        }
-
-        // Keep in sync with {@link ColumnShifter#removalNeeded}
-        private bool RemovalNeeded(CellRangeAddress merged, int startRow, int endRow, int n, int lastCol)
-        {
-            // build a range of the rows that are overwritten, i.e. the target-area, but without
-            // rows that are moved along
-            var firstRow = startRow + n;
-            var lastRow = endRow + n;
-            CellRangeAddress overwrite = new CellRangeAddress(firstRow, lastRow, 0, lastCol);
-
-            // if the merged-region and the overwritten area intersect, we need to remove it
-            return merged.Intersects(overwrite);
         }
         
         /// <summary>
