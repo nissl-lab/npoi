@@ -20,6 +20,7 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.UserModel;
     using NUnit.Framework;
     using System;
+    using System.Collections.Generic;
 
     /**
      * Common superclass for Testing implementatiosn of{@link FormulaEvaluator}
@@ -351,6 +352,35 @@ namespace TestCases.SS.UserModel
             //assertSame(cell, same);
             Assert.AreSame(cell, same);
             wb.Close();
+        }
+
+        public void BaseTestNPOIIssue_1057(string paramsFile, string installFile)
+        {
+            DataFormatter formatter = new DataFormatter();
+            var paramswb = _testDataProvider.OpenSampleWorkbook(paramsFile);
+            var installwb = _testDataProvider.OpenSampleWorkbook(installFile);
+            
+            var paramsevaluator = paramswb.GetCreationHelper().CreateFormulaEvaluator();
+            var installevaluator = installwb.GetCreationHelper().CreateFormulaEvaluator();
+
+            var refs = new Dictionary<string, IFormulaEvaluator>();
+            refs.Add(paramsFile, paramsevaluator);
+            refs.Add(installFile, installevaluator);
+            installevaluator.SetupReferencedWorkbooks(refs);
+
+            var suffix = installFile[0].ToString().ToUpper();
+            var sheet = installwb.GetSheetAt(0);
+            var row = sheet.GetRow(0);
+            var cell = row.GetCell(1);
+
+            
+            String cellValue = formatter.FormatCellValue(cell, installevaluator);
+            Assert.AreEqual("Referenced value in sheet 1" + suffix, cellValue);
+
+            row = sheet.GetRow(1);
+            cell = row.GetCell(1);
+            cellValue = formatter.FormatCellValue(cell, installevaluator);
+            Assert.AreEqual("Referenced value in sheet 2" + suffix, cellValue);
         }
     }
 }
