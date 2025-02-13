@@ -19,6 +19,7 @@
 namespace NPOI.SS.Formula.Functions
 {
     using NPOI.SS.Formula.Eval;
+    using System;
 
     /**
      * Counts the number of cells that contain data within the list of arguments. 
@@ -104,9 +105,25 @@ namespace NPOI.SS.Formula.Functions
             }
 
         }
-        public static Counta SubtotalInstance()
+        private static IMatchPredicate subtotalVisibleOnlyPredicate = new SubtotalVisibleOnlyPredicate();
+        public class SubtotalVisibleOnlyPredicate : I_MatchAreaPredicate
         {
-            return new Counta(subtotalPredicate);
+            public bool Matches(ValueEval valueEval)
+            {
+                return defaultPredicate.Matches(valueEval);
+            }
+
+            /**
+             * don't count cells in rows that are hidden or subtotal cells
+             */
+            public bool Matches(TwoDEval areEval, int rowIndex, int columnIndex)
+            {
+                return !areEval.IsSubTotal(rowIndex, columnIndex) && !areEval.IsRowHidden(rowIndex);
+            }
+        }
+        public static Counta SubtotalInstance(bool includeHiddenRows)
+        {
+            return new Counta(includeHiddenRows ? subtotalPredicate : subtotalVisibleOnlyPredicate);
         }
     }
 }
