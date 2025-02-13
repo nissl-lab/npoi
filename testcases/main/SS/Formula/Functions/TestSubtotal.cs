@@ -309,6 +309,113 @@ namespace TestCases.SS.Formula.Functions
             Assert.AreEqual(2.82842, a7.NumericCellValue, 0.00001);
             Assert.AreEqual(2.82842, a8.NumericCellValue, 0.00001);
         }
+
+        [Test]
+        public void TestStdevp()
+        {
+            using(IWorkbook wb = new HSSFWorkbook())
+            {
+                IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+
+                ISheet sh = wb.CreateSheet();
+                ICell a1 = sh.CreateRow(1).CreateCell(1);
+                a1.SetCellValue(1);
+                ICell a2 = sh.CreateRow(2).CreateCell(1);
+                a2.SetCellValue(3);
+                ICell a3 = sh.CreateRow(3).CreateCell(1);
+                a3.SetCellFormula("SUBTOTAL(8,B2:B3)");
+                ICell a4 = sh.CreateRow(4).CreateCell(1);
+                a4.SetCellValue(1);
+                ICell a5 = sh.CreateRow(5).CreateCell(1);
+                a5.SetCellValue(7);
+                ICell a6 = sh.CreateRow(6).CreateCell(1);
+                a6.SetCellFormula("SUBTOTAL(8,B2:B6)*2 + 2");
+                ICell a7 = sh.CreateRow(7).CreateCell(1);
+                a7.SetCellFormula("SUBTOTAL(8,B2:B7)");
+                ICell a8 = sh.CreateRow(8).CreateCell(1);
+                a8.SetCellFormula("SUBTOTAL(8,B2,B3,B4,B5,B6,B7,B8)");
+
+                fe.EvaluateAll();
+
+                Assert.AreEqual(1.0, a3.NumericCellValue, 0.00001);
+                Assert.AreEqual(6.898979, a6.NumericCellValue, 0.00001);
+                Assert.AreEqual(2.44949, a7.NumericCellValue, 0.00001);
+                Assert.AreEqual(2.44949, a8.NumericCellValue, 0.00001);
+            }
+        }
+
+        [Test]
+        public void TestVar()
+        {
+
+
+            using(IWorkbook wb = new HSSFWorkbook())
+            {
+                IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+
+                ISheet sh = wb.CreateSheet();
+                ICell a1 = sh.CreateRow(1).CreateCell(1);
+                a1.SetCellValue(1);
+                ICell a2 = sh.CreateRow(2).CreateCell(1);
+                a2.SetCellValue(3);
+                ICell a3 = sh.CreateRow(3).CreateCell(1);
+                a3.SetCellFormula("SUBTOTAL(10,B2:B3)");
+                ICell a4 = sh.CreateRow(4).CreateCell(1);
+                a4.SetCellValue(1);
+                ICell a5 = sh.CreateRow(5).CreateCell(1);
+                a5.SetCellValue(7);
+                ICell a6 = sh.CreateRow(6).CreateCell(1);
+                a6.SetCellFormula("SUBTOTAL(10,B2:B6)*2 + 2");
+                ICell a7 = sh.CreateRow(7).CreateCell(1);
+                a7.SetCellFormula("SUBTOTAL(10,B2:B7)");
+                ICell a8 = sh.CreateRow(8).CreateCell(1);
+                a8.SetCellFormula("SUBTOTAL(10,B2,B3,B4,B5,B6,B7,B8)");
+
+                fe.EvaluateAll();
+
+                Assert.AreEqual(2.0, a3.NumericCellValue);
+                Assert.AreEqual(18.0, a6.NumericCellValue);
+                Assert.AreEqual(8.0, a7.NumericCellValue);
+                Assert.AreEqual(8.0, a8.NumericCellValue);
+            }
+        }
+
+        [Test]
+        public void TestVarp()
+        {
+
+
+            using(IWorkbook wb = new HSSFWorkbook())
+            {
+                IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
+
+                ISheet sh = wb.CreateSheet();
+                ICell a1 = sh.CreateRow(1).CreateCell(1);
+                a1.SetCellValue(1);
+                ICell a2 = sh.CreateRow(2).CreateCell(1);
+                a2.SetCellValue(3);
+                ICell a3 = sh.CreateRow(3).CreateCell(1);
+                a3.SetCellFormula("SUBTOTAL(11,B2:B3)");
+                ICell a4 = sh.CreateRow(4).CreateCell(1);
+                a4.SetCellValue(1);
+                ICell a5 = sh.CreateRow(5).CreateCell(1);
+                a5.SetCellValue(7);
+                ICell a6 = sh.CreateRow(6).CreateCell(1);
+                a6.SetCellFormula("SUBTOTAL(11,B2:B6)*2 + 2");
+                ICell a7 = sh.CreateRow(7).CreateCell(1);
+                a7.SetCellFormula("SUBTOTAL(11,B2:B7)");
+                ICell a8 = sh.CreateRow(8).CreateCell(1);
+                a8.SetCellFormula("SUBTOTAL(11,B2,B3,B4,B5,B6,B7,B8)");
+
+                fe.EvaluateAll();
+
+                Assert.AreEqual(1.0, a3.NumericCellValue);
+                Assert.AreEqual(14.0, a6.NumericCellValue);
+                Assert.AreEqual(6.0, a7.NumericCellValue);
+                Assert.AreEqual(6.0, a8.NumericCellValue);
+            }
+        }
+
         [Test]
         public void Test50209()
         {
