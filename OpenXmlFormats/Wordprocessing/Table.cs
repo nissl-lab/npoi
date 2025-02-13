@@ -5521,6 +5521,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private byte[] paraIdField;
         private byte[] textIdField;
 
+        public XmlNode XmlNode { get; private set; }
+
+        public XmlNamespaceManager NamespaceManager { get; private set; }
+
         public CT_Row()
         {
             this.itemsElementNameField = new List<ItemsChoiceTableRowType>();
@@ -5537,6 +5541,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if (node == null)
                 return null;
             CT_Row ctObj = new CT_Row();
+            ctObj.XmlNode = node;
+            ctObj.NamespaceManager = namespaceManager;
             if (parent != null)
                 ctObj.parent = parent;
             if (node.Attributes["w14:paraId"] != null)
@@ -5775,18 +5781,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         public CT_Row Copy()
         {
-            CT_Row ctRow = new CT_Row();
-            ctRow.paraIdField = this.paraIdField?.ToArray();
-            ctRow.rsidRField = this.rsidRField?.ToArray();
-            ctRow.rsidDelField = this.rsidDelField?.ToArray();
-            ctRow.rsidRPrField = this.rsidRPrField?.ToArray();
-            ctRow.rsidTrField = this.rsidTrField?.ToArray();
-            ctRow.textIdField = this.textIdField?.ToArray();
-            ctRow.trPrField = this.trPrField?.Copy();
-            ctRow.tblPrExField = this.tblPrExField?.Copy();
-            ctRow.itemsElementNameField = this.itemsElementNameField?.Copy();
-            ctRow.itemsField = this.itemsField?.Copy();
-            return ctRow;
+            return Parse(XmlNode, NamespaceManager, Parent);
         }
         public void RemoveTc(int pos)
         {
