@@ -66,8 +66,8 @@ namespace TestCases.HSSF.UserModel
         }
 
         /**
-	     * Test for bug due to attempt to convert a cached formula error result to a boolean
-	     */
+         * Test for bug due to attempt to convert a cached formula error result to a boolean
+         */
         [Test]
         public override void TestUpdateCachedFormulaResultFromErrorToNumber_bug46479()
         {
@@ -354,6 +354,12 @@ namespace TestCases.HSSF.UserModel
         public void TestSharedFormulas()
         {
             BaseTestSharedFormulas("shared_formulas.xls");
+        }
+
+        [Test]
+        public void TestNPOIIssue_1057()
+        {
+            BaseTestNPOIIssue_1057("hparams.xls", "hinstall.xls");
         }
     }
 }
