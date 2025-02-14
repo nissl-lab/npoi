@@ -41,7 +41,10 @@ namespace NPOI.SS.Formula.Functions
             DCOUNT,
             DCOUNTA,
             DAVERAGE,
-
+            DSTDEV,
+            DSTDEVP,
+            DVAR,
+            DVARP,
             DPRODUCT,
         }
 
@@ -99,6 +102,18 @@ namespace NPOI.SS.Formula.Functions
                     break;
                 case DStarAlgorithmEnum.DAVERAGE:
                     algorithm = new DAverage();
+                    break;
+                case DStarAlgorithmEnum.DSTDEV:
+                    algorithm = new DStdev();
+                    break;
+                case DStarAlgorithmEnum.DSTDEVP:
+                    algorithm = new DStdevp();
+                    break;
+                case DStarAlgorithmEnum.DVAR:
+                    algorithm = new DVar();
+                    break;
+                case DStarAlgorithmEnum.DVARP:
+                    algorithm = new DVarp();
                     break;
                 case DStarAlgorithmEnum.DPRODUCT:
                     algorithm = new DProduct();
