@@ -137,11 +137,11 @@ namespace NPOI.SS.Formula.Eval
             retval[37] = new Or(); // OR
             retval[38] = new Not(); // NOT
             retval[39] = NumericFunction.MOD; // MOD
-            retval[40] = new NotImplementedFunction("DCOUNT"); // DCOUNT
-            retval[41] = new NotImplementedFunction("DSUM"); // DSUM
+            retval[40] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DCOUNT); // DCOUNT
+            retval[41] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DSUM); // DSUM
             retval[42] = new NotImplementedFunction("DAVERAGE"); // DAVERAGE
             retval[43] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DMIN); // DMIN
-            retval[44] = new NotImplementedFunction("DMAX"); // DMAX
+            retval[44] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DMAX);// DMAX
             retval[45] = new NotImplementedFunction("DSTDEV"); // DSTDEV
             retval[46] = AggregateFunction.VAR; // VAR
             retval[47] = new NotImplementedFunction("DVAR"); // DVAR

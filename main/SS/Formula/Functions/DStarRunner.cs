@@ -36,7 +36,10 @@ namespace NPOI.SS.Formula.Functions
         {
             DGET,
             DMIN,
-            // DMAX, // DMAX is not yet implemented
+            DMAX,
+            DSUM,
+            DCOUNT,
+            DCOUNTA,
         }
 
         private DStarAlgorithmEnum algoType;
@@ -78,6 +81,18 @@ namespace NPOI.SS.Formula.Functions
                     break;
                 case DStarAlgorithmEnum.DMIN:
                     algorithm = new DMin();
+                    break;
+                case DStarAlgorithmEnum.DMAX:
+                    algorithm = new DMax();
+                    break;
+                case DStarAlgorithmEnum.DSUM:
+                    algorithm = new DSum();
+                    break;
+                case DStarAlgorithmEnum.DCOUNT:
+                    algorithm = new DCount();
+                    break;
+                case DStarAlgorithmEnum.DCOUNTA:
+                    algorithm = new DCountA();
                     break;
                 default:
                     throw new InvalidOperationException("Unexpected algorithm type " + algoType + " encountered.");
