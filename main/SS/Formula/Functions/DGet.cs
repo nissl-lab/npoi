@@ -75,6 +75,8 @@ namespace NPOI.SS.Formula.Functions
                     }
             }
         }
+
+        public bool AllowEmptyMatchField { get; } = false;
     }
 }
 
