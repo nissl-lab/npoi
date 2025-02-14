@@ -40,6 +40,9 @@ namespace NPOI.SS.Formula.Functions
             DSUM,
             DCOUNT,
             DCOUNTA,
+            DAVERAGE,
+
+            DPRODUCT,
         }
 
         private DStarAlgorithmEnum algoType;
@@ -93,6 +96,12 @@ namespace NPOI.SS.Formula.Functions
                     break;
                 case DStarAlgorithmEnum.DCOUNTA:
                     algorithm = new DCountA();
+                    break;
+                case DStarAlgorithmEnum.DAVERAGE:
+                    algorithm = new DAverage();
+                    break;
+                case DStarAlgorithmEnum.DPRODUCT:
+                    algorithm = new DProduct();
                     break;
                 default:
                     throw new InvalidOperationException("Unexpected algorithm type " + algoType + " encountered.");

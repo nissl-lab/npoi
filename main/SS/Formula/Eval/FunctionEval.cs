@@ -139,7 +139,7 @@ namespace NPOI.SS.Formula.Eval
             retval[39] = NumericFunction.MOD; // MOD
             retval[40] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DCOUNT); // DCOUNT
             retval[41] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DSUM); // DSUM
-            retval[42] = new NotImplementedFunction("DAVERAGE"); // DAVERAGE
+            retval[42] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DAVERAGE); // DAVERAGE
             retval[43] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DMIN); // DMIN
             retval[44] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DMAX);// DMAX
             retval[45] = new NotImplementedFunction("DSTDEV"); // DSTDEV
@@ -281,7 +281,7 @@ namespace NPOI.SS.Formula.Eval
             retval[186] = new NotImplementedFunction("GetWORKSPACE"); // GetWORKSPACE
             retval[187] = new NotImplementedFunction("GetWINDOW"); // GetWINDOW
             retval[188] = new NotImplementedFunction("GetDOCUMENT"); // GetDOCUMENT
-            retval[189] = new NotImplementedFunction("DPRODUCT"); // DPRODUCT
+            retval[189] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DPRODUCT);
             retval[190] = LogicalFunction.ISNONTEXT; // IsNONTEXT
             retval[191] = new NotImplementedFunction("GetNOTE"); // GetNOTE
             retval[192] = new NotImplementedFunction("NOTE"); // NOTE
