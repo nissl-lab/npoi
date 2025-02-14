@@ -63,22 +63,30 @@ namespace NPOI.SS.Formula.Functions
             //Function func;
             switch (functionCode)
             {
-                case 1: return AggregateFunction.SubtotalInstance(AggregateFunction.AVERAGE);
-                case 2: return Count.SubtotalInstance();
-                case 3: return Counta.SubtotalInstance();
-                case 4: return AggregateFunction.SubtotalInstance(AggregateFunction.MAX);
-                case 5: return AggregateFunction.SubtotalInstance(AggregateFunction.MIN);
-                case 6: return AggregateFunction.SubtotalInstance(AggregateFunction.PRODUCT);
-                case 7: return AggregateFunction.SubtotalInstance(AggregateFunction.STDEV);
-                case 8: throw new NotImplementedFunctionException("STDEVP");
-                case 9: return AggregateFunction.SubtotalInstance(AggregateFunction.SUM);
-                case 10: throw new NotImplementedFunctionException("VAR");
-                case 11: throw new NotImplementedFunctionException("VARP");
+                case 1: return AggregateFunction.SubtotalInstance(AggregateFunction.AVERAGE, true);
+                case 2: return Count.SubtotalInstance(true);
+                case 3: return Counta.SubtotalInstance(true);
+                case 4: return AggregateFunction.SubtotalInstance(AggregateFunction.MAX, true);
+                case 5: return AggregateFunction.SubtotalInstance(AggregateFunction.MIN, true);
+                case 6: return AggregateFunction.SubtotalInstance(AggregateFunction.PRODUCT, true);
+                case 7: return AggregateFunction.SubtotalInstance(AggregateFunction.STDEV, true);
+                case 8: return AggregateFunction.SubtotalInstance(AggregateFunction.STDEVP, true);
+                case 9: return AggregateFunction.SubtotalInstance(AggregateFunction.SUM, true);
+                case 10: return AggregateFunction.SubtotalInstance(AggregateFunction.VAR, true);
+                case 11: return AggregateFunction.SubtotalInstance(AggregateFunction.VARP, true);
+                case 101: return AggregateFunction.SubtotalInstance(AggregateFunction.AVERAGE, false);
+                case 102: return Count.SubtotalInstance(false);
+                case 103: return Counta.SubtotalInstance(false);
+                case 104: return AggregateFunction.SubtotalInstance(AggregateFunction.MAX, false);
+                case 105: return AggregateFunction.SubtotalInstance(AggregateFunction.MIN, false);
+                case 106: return AggregateFunction.SubtotalInstance(AggregateFunction.PRODUCT, false);
+                case 107: return AggregateFunction.SubtotalInstance(AggregateFunction.STDEV, false);
+                case 108: return AggregateFunction.SubtotalInstance(AggregateFunction.STDEVP, false);
+                case 109: return AggregateFunction.SubtotalInstance(AggregateFunction.SUM, false);
+                case 110: return AggregateFunction.SubtotalInstance(AggregateFunction.VAR, false);
+                case 111: return AggregateFunction.SubtotalInstance(AggregateFunction.VARP, false);
             }
-            if (functionCode > 100 && functionCode < 112)
-            {
-                throw new NotImplementedException("SUBTOTAL - with 'exclude hidden values' option");
-            }
+            
             throw EvaluationException.InvalidValue();
         }
 

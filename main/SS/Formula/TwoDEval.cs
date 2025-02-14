@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using NPOI.SS.Formula.Eval;
+using System;
 namespace NPOI.SS.Formula
 {
 
@@ -64,7 +65,11 @@ namespace NPOI.SS.Formula
          * @return true if the  cell at row and col is a subtotal
          */
         bool IsSubTotal(int rowIndex, int columnIndex);
-
+        /**
+         * @return true if the row is hidden
+         * @see Subtotal
+         */
+        bool IsRowHidden(int rowIndex);
     }
 
 }

@@ -268,6 +268,10 @@ namespace NPOI.SS.Formula.Atp
                 return false;
             }
 
+            public bool IsRowHidden(int rowIndex)
+            {
+                return false;
+            }
             public AreaEval Offset(int relFirstRowIx, int relLastRowIx, int relFirstColIx, int relLastColIx)
             {
                 throw null;

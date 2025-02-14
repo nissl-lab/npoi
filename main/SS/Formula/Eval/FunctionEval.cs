@@ -334,7 +334,7 @@ namespace NPOI.SS.Formula.Eval
             retval[247] = new NotImplementedFunction("DB"); // DB
             retval[248] = new NotImplementedFunction("PAUSE"); // PAUSE
             retval[250] = new NotImplementedFunction("RESUME"); // RESUME
-            retval[252] = new NotImplementedFunction("FREQUENCY"); // FREQUENCY
+            retval[252] = Frequency.Instance; // FREQUENCY
             retval[253] = new NotImplementedFunction("AddTOOLBAR"); // AddTOOLBAR
             retval[254] = new NotImplementedFunction("DELETETOOLBAR"); // DELETETOOLBAR
             retval[FunctionID.EXTERNAL_FUNC] = null; // ExternalFunction is a FreeREfFunction
