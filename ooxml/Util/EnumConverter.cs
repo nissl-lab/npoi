@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using NPOI.OpenXmlFormats.Wordprocessing;
 using NPOI.XWPF.UserModel;
-using NPOI.OpenXmlFormats.Wordprocessing;
-using System.Reflection;
+using System;
 
 namespace NPOI.Util
 {
@@ -38,7 +35,7 @@ namespace NPOI.Util
         }
         public static T ValueOf<T, F>(F val)
         {
-            string value = Enum.GetName(val.GetType(), val);
+            string value = Enum.GetName(typeof(F), val);
             return (T)Enum.Parse(typeof(T), value, true);
         }
     }

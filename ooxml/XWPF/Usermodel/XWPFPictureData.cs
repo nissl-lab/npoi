@@ -58,7 +58,7 @@ namespace NPOI.XWPF.UserModel
          * Create a new XWPFGraphicData node
          *
          */
-        protected XWPFPictureData()
+        internal XWPFPictureData()
             : base()
         {
         }

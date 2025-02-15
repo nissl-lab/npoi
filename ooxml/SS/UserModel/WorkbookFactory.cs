@@ -15,8 +15,6 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
-using System.IO;
 using NPOI.HSSF.Record.Crypto;
 using NPOI.HSSF.UserModel;
 using NPOI.OpenXml4Net.Exceptions;
@@ -25,7 +23,7 @@ using NPOI.POIFS.Crypt;
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
 using NPOI.XSSF.UserModel;
-using Org.BouncyCastle.Security;
+using System.IO;
 
 namespace NPOI.SS.UserModel
 {

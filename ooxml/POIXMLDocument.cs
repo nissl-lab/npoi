@@ -16,16 +16,15 @@
 ==================================================================== */
 namespace NPOI
 {
-    using System;
-    using NPOI.POIFS.Common;
-    using NPOI.Util;
-    using NPOI.OpenXml4Net.Exceptions;
-    using System.IO;
-    using NPOI.OpenXml4Net.OPC;
-    using System.Collections.Generic;
     using NPOI.OpenXml4Net;
-    using System.Reflection;
+    using NPOI.OpenXml4Net.Exceptions;
+    using NPOI.OpenXml4Net.OPC;
     using NPOI.POIFS.FileSystem;
+    using NPOI.Util;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Reflection;
 
     public abstract class POIXMLDocument : POIXMLDocumentPart, ICloseable
     {

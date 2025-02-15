@@ -45,13 +45,13 @@ namespace NPOI.XSSF.UserModel
         /**
          * @since POI 3.14-Beta1
          */
-        protected XSSFChartSheet(PackagePart part)
+        internal XSSFChartSheet(PackagePart part)
             : base(part)
         {
             
         }
         [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
-        protected XSSFChartSheet(PackagePart part, PackageRelationship rel)
+        internal XSSFChartSheet(PackagePart part, PackageRelationship rel)
             : base(part)
         {
 

@@ -75,7 +75,7 @@ namespace NPOI.XSSF.UserModel
          * 
          * @since POI 3.14-Beta1
          */
-        protected XSSFChart(PackagePart part)
+        internal XSSFChart(PackagePart part)
             : base(part)
         {
 
