@@ -52,7 +52,7 @@ namespace NPOI.HPSF.Wellknown
         /**
          * The SummaryInformation's section's format ID.
          */
-        public static readonly byte[] SUMMARY_INFORMATION_ID = new byte[]
+        public static readonly byte[] SUMMARY_INFORMATION_ID = new[]
         {
             (byte) 0xF2, (byte) 0x9F, (byte) 0x85, (byte) 0xE0,
             (byte) 0x4F, (byte) 0xF9, (byte) 0x10, (byte) 0x68,
@@ -64,20 +64,21 @@ namespace NPOI.HPSF.Wellknown
          * The DocumentSummaryInformation's first and second sections' format
          * ID.
          */
-        public static readonly byte[] DOCUMENT_SUMMARY_INFORMATION_ID1 =
+        public static readonly byte[][] DOCUMENT_SUMMARY_INFORMATION_ID = new[]
         {
+            new[] {
                 (byte) 0xD5, (byte) 0xCD, (byte) 0xD5, (byte) 0x02,
                 (byte) 0x2E, (byte) 0x9C, (byte) 0x10, (byte) 0x1B,
                 (byte) 0x93, (byte) 0x97, (byte) 0x08, (byte) 0x00,
                 (byte) 0x2B, (byte) 0x2C, (byte) 0xF9, (byte) 0xAE
-            };
-        public static readonly byte[] DOCUMENT_SUMMARY_INFORMATION_ID2 =
-            {
+            },
+            new[] {
                 (byte) 0xD5, (byte) 0xCD, (byte) 0xD5, (byte) 0x05,
                 (byte) 0x2E, (byte) 0x9C, (byte) 0x10, (byte) 0x1B,
                 (byte) 0x93, (byte) 0x97, (byte) 0x08, (byte) 0x00,
                 (byte) 0x2B, (byte) 0x2C, (byte) 0xF9, (byte) 0xAE
-            };
+            }
+        };
 
         /**
          * A property without a known name is described by this string. 
@@ -99,12 +100,12 @@ namespace NPOI.HPSF.Wellknown
         /// <returns>The instance value</returns>
         public static SectionIDMap GetInstance()
         {
-            if (defaultMap == null)
+            if(defaultMap == null)
             {
                 SectionIDMap m = new SectionIDMap();
                 m.Put(SUMMARY_INFORMATION_ID,
                       PropertyIDMap.SummaryInformationProperties);
-                m.Put(DOCUMENT_SUMMARY_INFORMATION_ID1,
+                m.Put(DOCUMENT_SUMMARY_INFORMATION_ID[0],
                       PropertyIDMap.DocumentSummaryInformationProperties);
                 defaultMap = m;
             }
@@ -129,12 +130,12 @@ namespace NPOI.HPSF.Wellknown
                                           long pid)
         {
             PropertyIDMap m = GetInstance().Get(sectionFormatID);
-            if (m == null)
+            if(m == null)
                 return UNDEFINED;
             else
             {
                 String s = (String)m.Get(pid);
-                if (s == null)
+                if(s == null)
                     return UNDEFINED;
                 return s;
             }
@@ -150,7 +151,7 @@ namespace NPOI.HPSF.Wellknown
         /// <returns>the property ID map</returns>
         public PropertyIDMap Get(byte[] sectionFormatID)
         {
-            return (PropertyIDMap)this[Encoding.UTF8.GetString(sectionFormatID)];
+            return (PropertyIDMap) this[Encoding.UTF8.GetString(sectionFormatID)];
         }
 
         /// <summary>

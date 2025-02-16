@@ -95,7 +95,7 @@ namespace TestCases.HPSF.Basic
             };
             for (int i = 0; i < expected.Length; i++)
             {
-                Stream in1 = new ByteArrayInputStream(poiFiles[i].GetBytes());
+                InputStream in1 = new ByteArrayInputStream(poiFiles[i].GetBytes());
                 Object o;
                 try
                 {

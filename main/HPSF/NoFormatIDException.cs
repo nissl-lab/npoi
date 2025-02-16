@@ -30,10 +30,10 @@ namespace NPOI.HPSF
     using System;
 
     /// <summary>
-    /// This exception is thrown if a {@link MutablePropertySet} is To be written
+    /// This exception is thrown if a {@link PropertySet} is To be written
     /// but does not have a formatID Set (see {@link
-    /// MutableSection#SetFormatID(ClassID)} or
-    /// {@link org.apache.poi.hpsf.MutableSection#SetFormatID(byte[])}.
+    /// Section#SetFormatID(ClassID)} or
+    /// {@link org.apache.poi.hpsf.Section#SetFormatID(byte[])}.
     /// @author Rainer Klute 
     /// <a href="mailto:klute@rainer-klute.de">&lt;klute@rainer-klute.de&gt;</a>
     /// @since 2002-09-03 

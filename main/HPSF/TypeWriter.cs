@@ -48,8 +48,8 @@ namespace NPOI.HPSF
         /// <returns></returns>
         public static int WriteToStream(Stream out1, short n)
         {
-            LittleEndian.PutShort( out1, n ); // FIXME: unsigned
-            return LittleEndian.SHORT_SIZE;
+            LittleEndian.PutShort(out1, n); // FIXME: unsigned
+            return LittleEndianConsts.SHORT_SIZE;
         }
 
 
@@ -64,8 +64,8 @@ namespace NPOI.HPSF
          */
         public static int WriteToStream(Stream out1, int n)
         {
-            LittleEndian.PutInt( n, out1 );
-            return LittleEndian.INT_SIZE;
+            LittleEndian.PutInt(n, out1);
+            return LittleEndianConsts.INT_SIZE;
         }
         /**
          * Writes a four-byte value To an output stream.
@@ -97,8 +97,8 @@ namespace NPOI.HPSF
          */
         public static int WriteToStream(Stream out1, long n)
         {
-            LittleEndian.PutLong( n, out1 );
-            return LittleEndian.LONG_SIZE;
+            LittleEndian.PutLong(n, out1);
+            return LittleEndianConsts.LONG_SIZE;
         }
 
 
@@ -113,11 +113,11 @@ namespace NPOI.HPSF
         public static void WriteUShortToStream(Stream out1, int n)
         {
             int high = n & unchecked((int)0xFFFF0000);
-            if (high != 0)
+            if(high != 0)
                 throw new IllegalPropertySetDataException
                     ("Value " + n + " cannot be represented by 2 bytes.");
             //WriteToStream(out1, (short)n);
-            LittleEndian.PutUShort( n, out1 );
+            LittleEndian.PutUShort(n, out1);
         }
 
 
@@ -133,11 +133,11 @@ namespace NPOI.HPSF
         public static int WriteUIntToStream(Stream out1, uint n)
         {
             ulong high = (ulong)(n & unchecked((long)0xFFFFFFFF00000000L));
-            if (high != 0 && high != 0xFFFFFFFF00000000L)
+            if(high != 0 && high != 0xFFFFFFFF00000000L)
                 throw new IllegalPropertySetDataException
                     ("Value " + n + " cannot be represented by 4 bytes.");
-            LittleEndian.PutUInt( n, out1 );
-            return LittleEndian.INT_SIZE;
+            LittleEndian.PutUInt(n, out1);
+            return LittleEndianConsts.INT_SIZE;
         }
 
 
@@ -176,25 +176,25 @@ namespace NPOI.HPSF
                                          int codepage)
         {
             /* If there are no properties don't Write anything. */
-            if (properties == null)
+            if(properties == null)
                 return;
 
             /* Write the property list. This is a list containing pairs of property
              * ID and offset into the stream. */
-            for (int i = 0; i < properties.Length; i++)
+            for(int i = 0; i < properties.Length; i++)
             {
                 Property p = properties[i];
-                WriteUIntToStream(out1, (uint)p.ID);
-                WriteUIntToStream(out1, (uint)p.Count);
+                WriteUIntToStream(out1, (uint) p.ID);
+                WriteUIntToStream(out1, (uint) p.GetSize());
             }
 
             /* Write the properties themselves. */
-            for (int i = 0; i < properties.Length; i++)
+            for(int i = 0; i < properties.Length; i++)
             {
                 Property p = properties[i];
                 long type = p.Type;
-                WriteUIntToStream(out1, (uint)type);
-                VariantSupport.Write(out1, (int)type, p.Value, codepage);
+                WriteUIntToStream(out1, (uint) type);
+                VariantSupport.Write(out1, (int) type, p.Value, codepage);
             }
         }
 
@@ -210,8 +210,8 @@ namespace NPOI.HPSF
          */
         public static int WriteToStream(Stream out1, double n)
         {
-            LittleEndian.PutDouble( n, out1 );
-            return LittleEndian.DOUBLE_SIZE;
+            LittleEndian.PutDouble(n, out1);
+            return LittleEndianConsts.DOUBLE_SIZE;
         }
 
     }

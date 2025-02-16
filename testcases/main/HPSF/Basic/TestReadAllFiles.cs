@@ -69,7 +69,7 @@ namespace TestCases.HPSF.Basic
 
                     for (int j = 0; j < psf1.Length; j++)
                     {
-                        Stream in1 =
+                        InputStream in1 =
                             new ByteArrayInputStream(psf1[j].GetBytes());
                         try
                         {
