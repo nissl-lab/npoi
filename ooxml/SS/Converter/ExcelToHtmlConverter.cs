@@ -631,8 +631,8 @@ namespace NPOI.SS.Converter
         {
             short cellStyleKey = cellStyle.Index;
 
-            if(excelStyleToClass.ContainsKey(cellStyleKey))
-                return excelStyleToClass[cellStyleKey];
+            if(excelStyleToClass.TryGetValue(cellStyleKey, out string name))
+                return name;
 
             String cssStyle = BuildStyle(workbook, cellStyle);
             String cssClass = htmlDocumentFacade.GetOrCreateCssClass("td", "c",

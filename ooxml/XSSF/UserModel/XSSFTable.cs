@@ -655,8 +655,8 @@ namespace NPOI.XSSF.UserModel
             // but the escape is not present in the column definition
             int idx = -1;
             string testKey = columnHeader.Replace("'", "").ToUpper(CultureInfo.CurrentCulture);
-            if (columnMap.ContainsKey(testKey))
-                idx = columnMap[testKey];
+            if (columnMap.TryGetValue(testKey, out int value))
+                idx = value;
             return idx;
         }
         /// <summary>

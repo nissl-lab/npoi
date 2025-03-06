@@ -198,9 +198,9 @@ namespace NPOI.HSSF.Record.Aggregates
             }
             int key=GetKeyForCache(cellRef);
             SharedFormulaGroup sfg = null;
-            if (_groupsCache.ContainsKey(key))
+            if (_groupsCache.TryGetValue(key, out SharedFormulaGroup value))
             {
-                sfg = _groupsCache[key];
+                sfg = value;
             }
             
             return sfg;

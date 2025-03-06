@@ -281,8 +281,8 @@ namespace NPOI.XSSF.Streaming
             CheckBounds(cellnum);
 
             SXSSFCell cell = null;
-            if (_cells.ContainsKey(cellnum))
-                cell = _cells[cellnum];
+            if (_cells.TryGetValue(cellnum, out SXSSFCell cell1))
+                cell = cell1;
             
             switch (policy)
             {
@@ -442,7 +442,7 @@ namespace NPOI.XSSF.Streaming
             {
                 get
                 {
-                    return _cells.ContainsKey(pos) ? _cells[pos]: null;
+                    return _cells.TryGetValue(pos, out SXSSFCell cell) ? cell: null;
                 }
             }
 

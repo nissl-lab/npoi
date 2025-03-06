@@ -388,16 +388,16 @@ namespace NPOI.XSSF.Streaming
 
         public XSSFSheet GetXSSFSheet(SXSSFSheet sheet)
         {
-            if (sheet != null && _sxFromXHash.ContainsKey(sheet))
-                return _sxFromXHash[sheet];
+            if (sheet != null && _sxFromXHash.TryGetValue(sheet, out XSSFSheet xssfSheet))
+                return xssfSheet;
             else
                 return null;
         }
 
         public SXSSFSheet GetSXSSFSheet(XSSFSheet sheet)
         {
-            if (sheet != null && _xFromSxHash.ContainsKey(sheet))
-                return _xFromSxHash[sheet];
+            if (sheet != null && _xFromSxHash.TryGetValue(sheet, out SXSSFSheet sxssfSheet))
+                return sxssfSheet;
             else
                 return null;
         }

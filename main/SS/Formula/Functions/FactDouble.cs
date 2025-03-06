@@ -78,9 +78,9 @@ namespace NPOI.SS.Formula.Functions
                 return BigInteger.One;
             }
 
-            if (cache.ContainsKey(n))
+            if (cache.TryGetValue(n, out BigInteger factorial1))
             {
-                return cache[(n)];
+                return factorial1;
             }
 
             BigInteger result = BigInteger.ValueOf(n).Multiply(factorial(n - 2));

@@ -32,8 +32,8 @@ namespace NPOI.XSSF.Util
 
         public static TReturn ForName(string name, TReturn defaultValue)
         {
-            if (values.ContainsKey(name))
-                return values[name];
+            if (values.TryGetValue(name, out TReturn forName))
+                return forName;
             return defaultValue;
         }
     }

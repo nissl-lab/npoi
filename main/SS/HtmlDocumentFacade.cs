@@ -216,9 +216,9 @@ namespace NPOI.SS
             Dictionary<string, string> styleToClassName = stylesheet[tagName];
 
             string knownClass;
-            if (styleToClassName.ContainsKey(style))
+            if (styleToClassName.TryGetValue(style, out string value))
             {
-                knownClass = styleToClassName[style];
+                knownClass = value;
                 return knownClass;
             }
 

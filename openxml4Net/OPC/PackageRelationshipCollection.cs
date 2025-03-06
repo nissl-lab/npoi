@@ -314,9 +314,9 @@ namespace NPOI.OpenXml4Net.OPC
                 throw new ArgumentException("Cannot read relationship, provided ID is empty: " + id +
                     ", having relationships: " + relationshipsByID.Keys.Select(key=>string.Join(",", key)));
             }
-            if (!relationshipsByID.ContainsKey(id))
+            if (!relationshipsByID.TryGetValue(id, out PackageRelationship byId))
                 return null;
-            return relationshipsByID[id];
+            return byId;
         }
 
         /**
@@ -462,9 +462,9 @@ namespace NPOI.OpenXml4Net.OPC
         public PackageRelationship FindExistingInternalRelation(PackagePart packagePart)
         {
             var pn=packagePart.PartName.Name;
-            if (!internalRelationshipsByTargetName.ContainsKey(pn))
+            if (!internalRelationshipsByTargetName.TryGetValue(pn, out PackageRelationship relation))
                 return null;
-            return internalRelationshipsByTargetName[pn];
+            return relation;
         }
         public override String ToString()
         {

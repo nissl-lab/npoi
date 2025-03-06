@@ -186,9 +186,9 @@ namespace NPOI.XSSF.Model
         {
             String s = GetKey(st);
             count++;
-            if (stmap.ContainsKey(s))
+            if (stmap.TryGetValue(s, out int entry))
             {
-                return stmap[s];
+                return entry;
             }
 
             uniqueCount++;

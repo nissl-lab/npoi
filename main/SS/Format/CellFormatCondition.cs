@@ -137,9 +137,8 @@ namespace NPOI.SS.Format
         public static CellFormatCondition GetInstance(String opString,
                 String constStr) {
 
-            if (!TESTS.ContainsKey(opString))
+            if (!TESTS.TryGetValue(opString, out int test))
                 throw new ArgumentException("Unknown test: " + opString);
-            int test = TESTS[(opString)];
 
             double c = Double.Parse(constStr, CultureInfo.InvariantCulture);
 

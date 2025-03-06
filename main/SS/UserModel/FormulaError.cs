@@ -220,14 +220,14 @@ namespace NPOI.SS.UserModel
         }
         public static FormulaError ForInt(byte type)
         {
-            if (bmap.ContainsKey(type))
-                return bmap[type];
+            if (bmap.TryGetValue(type, out FormulaError i))
+                return i;
             throw new ArgumentException("Unknown error type: " + type);
         }
         public static FormulaError ForInt(int type)
         {
-            if (imap.ContainsKey(type))
-                return imap[type];
+            if (imap.TryGetValue(type, out FormulaError i))
+                return i;
 
             if (bmap.ContainsKey((byte)type))
                 return bmap[(byte)type];
@@ -237,8 +237,8 @@ namespace NPOI.SS.UserModel
 
         public static FormulaError ForString(String code)
         {
-            if (smap.ContainsKey(code))
-                return smap[code];
+            if (smap.TryGetValue(code, out FormulaError s))
+                return s;
             
             throw new ArgumentException("Unknown error code: " + code);
         }

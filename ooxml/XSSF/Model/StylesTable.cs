@@ -283,8 +283,8 @@ namespace NPOI.XSSF.Model
          */
         public String GetNumberFormatAt(short fmtId)
         {
-            if (numberFormats.ContainsKey(fmtId))
-                return numberFormats[fmtId];
+            if (numberFormats.TryGetValue(fmtId, out string at))
+                return at;
             else
                 return null;
         }

@@ -396,8 +396,8 @@ namespace NPOI.XSSF.UserModel
                     foreach (CT_ExternalReference er in this.workbook.externalReferences.externalReference)
                     {
                         ExternalLinksTable el = null;
-                        if (elIdMap.ContainsKey(er.id))
-                            el = elIdMap[(er.id)];
+                        if (elIdMap.TryGetValue(er.id, out ExternalLinksTable value))
+                            el = value;
                         if (el == null)
                         {
                             logger.Log(POILogger.WARN, "ExternalLinksTable with r:id " + er.id + " was defined, but didn't exist in package, skipping");
@@ -422,8 +422,8 @@ namespace NPOI.XSSF.UserModel
         private void ParseSheet(Dictionary<String, XSSFSheet> shIdMap, CT_Sheet ctSheet)
         {
             XSSFSheet sh = null;
-            if (shIdMap.ContainsKey(ctSheet.id))
-                sh = shIdMap[ctSheet.id];
+            if (shIdMap.TryGetValue(ctSheet.id, out XSSFSheet value))
+                sh = value;
             if (sh == null)
             {
                 logger.Log(POILogger.WARN, "Sheet with name " + ctSheet.name + " and r:id " + ctSheet.id + " was defined, but didn't exist in package, skipping");
@@ -1287,9 +1287,8 @@ namespace NPOI.XSSF.UserModel
 
         private bool RemoveMapping(string key, XSSFName item)
         {
-            if (namedRangesByName.ContainsKey(key))
+            if (namedRangesByName.TryGetValue(key, out List<XSSFName> values))
             {
-                var values = namedRangesByName[key];
                 return values.Remove(item);
             }
             return false;

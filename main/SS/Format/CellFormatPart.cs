@@ -285,8 +285,8 @@ namespace NPOI.SS.Format
             if (cdesc == null || cdesc.Length == 0)
                 return POIUtils.Color_Empty;
             Color c = POIUtils.Color_Empty;
-            if (NAMED_COLORS.ContainsKey(cdesc))
-                c = NAMED_COLORS[(cdesc)];
+            if (NAMED_COLORS.TryGetValue(cdesc, out Color value))
+                c = value;
             //if (c == null)
             //    logger.Warning("Unknown color: " + quote(cdesc));
             return c;

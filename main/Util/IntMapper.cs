@@ -98,9 +98,9 @@ namespace NPOI.Util
         /// <returns></returns>
         public int GetIndex(T o)
         {
-            if (!valueKeyMap.ContainsKey(o))
+            if (!valueKeyMap.TryGetValue(o, out int index))
                 return -1;
-            return valueKeyMap[o];
+            return index;
             /*
             int i = valueKeyMap[(o)];
             if (i == null)

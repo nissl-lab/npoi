@@ -516,9 +516,8 @@ namespace NPOI.HSSF.Record
 
         public static Record CreateSingleRecord(RecordInputStream in1)
         {
-            if (_recordCreatorsById.ContainsKey(in1.Sid))
+            if (_recordCreatorsById.TryGetValue(in1.Sid, out I_RecordCreator constructor))
             {
-                I_RecordCreator constructor = _recordCreatorsById[in1.Sid];
                 return constructor.Create(in1);
             }
             else

@@ -504,9 +504,9 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (!filterTypeLookup.ContainsKey(_cfRule.type))
+                if (!filterTypeLookup.TryGetValue(_cfRule.type, out ConditionFilterType type))
                     return null;
-                return filterTypeLookup[_cfRule.type];
+                return type;
             }
         }
         public IConditionFilterData FilterConfiguration
