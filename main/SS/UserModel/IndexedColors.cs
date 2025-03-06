@@ -85,8 +85,8 @@ namespace NPOI.SS.UserModel
         public static readonly IndexedColors Grey80Percent;
         public static readonly IndexedColors Automatic;
 
-        private int index;
-        private HSSFColor hssfColor;
+        private readonly int index;
+        private readonly HSSFColor hssfColor;
         
 
         IndexedColors(int idx, HSSFColor color)
@@ -94,8 +94,8 @@ namespace NPOI.SS.UserModel
             index = idx;
             this.hssfColor = color;
         }
-        static Dictionary<string, IndexedColors> mappingName = null;
-        static Dictionary<int, IndexedColors> mappingIndex = null;
+        static readonly Dictionary<string, IndexedColors> mappingName = null;
+        static readonly Dictionary<int, IndexedColors> mappingIndex = null;
         static IndexedColors()
         {
             Black = new IndexedColors(8, new HSSFColor.Black());

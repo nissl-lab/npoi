@@ -124,7 +124,7 @@ namespace NPOI.HSSF.UserModel
         private class SheetRecordCollector : NPOI.HSSF.Record.Aggregates.RecordVisitor,IDisposable
         {
 
-            private ArrayList _list;
+            private readonly ArrayList _list;
             private int _totalSize;
 
             public SheetRecordCollector()

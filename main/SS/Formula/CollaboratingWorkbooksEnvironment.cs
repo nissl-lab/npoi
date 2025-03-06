@@ -43,8 +43,8 @@ namespace NPOI.SS.Formula
     {
         public static readonly CollaboratingWorkbooksEnvironment EMPTY = new CollaboratingWorkbooksEnvironment();
 
-        private Dictionary<String, WorkbookEvaluator> _evaluatorsByName;
-        private WorkbookEvaluator[] _evaluators;
+        private readonly Dictionary<String, WorkbookEvaluator> _evaluatorsByName;
+        private readonly WorkbookEvaluator[] _evaluators;
 
         private bool _unhooked;
         private CollaboratingWorkbooksEnvironment()

@@ -36,7 +36,7 @@ namespace NPOI.Util
     public class LongField
     {
         private long      _value;
-        private int _offset;
+        private readonly int _offset;
 
         /// <summary>
         /// construct the <see cref="LongField"/> with its offset into its containing byte array

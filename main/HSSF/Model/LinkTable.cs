@@ -91,8 +91,8 @@ namespace NPOI.HSSF.Model
         private class CRNBlock
         {
 
-            private CRNCountRecord _countRecord;
-            private CRNRecord[] _crns;
+            private readonly CRNCountRecord _countRecord;
+            private readonly CRNRecord[] _crns;
 
             public CRNBlock(RecordStream rs)
             {
@@ -113,7 +113,7 @@ namespace NPOI.HSSF.Model
 
         private class ExternalBookBlock
         {
-            private SupBookRecord _externalBookRecord;
+            private readonly SupBookRecord _externalBookRecord;
             internal ExternalNameRecord[] _externalNameRecords;
             private CRNBlock[] _crnBlocks;
             /**
@@ -217,10 +217,10 @@ namespace NPOI.HSSF.Model
         }
 
         private ExternalBookBlock[] _externalBookBlocks;
-        private ExternSheetRecord _externSheetRecord;
-        private List<NameRecord> _definedNames;
-        private int _recordCount;
-        private WorkbookRecordList _workbookRecordList; // TODO - would be nice to Remove this
+        private readonly ExternSheetRecord _externSheetRecord;
+        private readonly List<NameRecord> _definedNames;
+        private readonly int _recordCount;
+        private readonly WorkbookRecordList _workbookRecordList; // TODO - would be nice to Remove this
 
         public LinkTable(List<Record> inputList, int startIndex, WorkbookRecordList workbookRecordList, Dictionary<String, NameCommentRecord> commentRecords)
         {

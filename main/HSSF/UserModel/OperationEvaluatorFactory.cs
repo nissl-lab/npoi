@@ -33,9 +33,9 @@ namespace NPOI.HSSF.UserModel
      */
     class OperationEvaluatorFactory
     {
-        private static Type[] OPERATION_CONSTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg) };
+        private static readonly Type[] OPERATION_CONSTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg) };
 
-        private static Hashtable _constructorsByPtgClass = InitialiseConstructorsMap();
+        private static readonly Hashtable _constructorsByPtgClass = InitialiseConstructorsMap();
 
         private OperationEvaluatorFactory()
         {

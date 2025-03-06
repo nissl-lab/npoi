@@ -30,7 +30,7 @@ namespace NPOI.HSSF.Record
     public abstract class SharedValueRecordBase : StandardRecord
     {
 
-        private CellRangeAddress8Bit _range;
+        private readonly CellRangeAddress8Bit _range;
 
         protected SharedValueRecordBase(CellRangeAddress8Bit range)
         {

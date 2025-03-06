@@ -25,8 +25,8 @@ namespace NPOI.XSSF.Streaming
 {
     public class SXSSFRow : IRow, IComparable<SXSSFRow>
     {
-        private SXSSFSheet _sheet; // parent sheet
-        private IDictionary<int, SXSSFCell> _cells = new Dictionary<int, SXSSFCell>();
+        private readonly SXSSFSheet _sheet; // parent sheet
+        private readonly IDictionary<int, SXSSFCell> _cells = new Dictionary<int, SXSSFCell>();
         private short _style = -1; // index of cell style in style table
         private bool _zHeight; // row zero-height (this is somehow different than being hidden)
         private float _height = -1;
@@ -385,7 +385,7 @@ namespace NPOI.XSSF.Streaming
         public class FilledCellIterator : IEnumerator<ICell>
         {
             //private SortedDictionary<int, SXSSFCell> _cells;
-            private IEnumerator<SXSSFCell> enumerator;
+            private readonly IEnumerator<SXSSFCell> enumerator;
             public FilledCellIterator(SortedDictionary<int, SXSSFCell> cells)
             {
                 //_cells = cells;
@@ -427,8 +427,8 @@ namespace NPOI.XSSF.Streaming
 
         public class CellIterator : IEnumerator<ICell>
         {
-            private IDictionary<int, SXSSFCell> _cells;
-            private int maxColumn;
+            private readonly IDictionary<int, SXSSFCell> _cells;
+            private readonly int maxColumn;
             private int pos;
             public CellIterator(int lastCellNum, IDictionary<int, SXSSFCell> cells)
             {

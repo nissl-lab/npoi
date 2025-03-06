@@ -59,7 +59,7 @@ namespace NPOI.SS.UserModel
         public static readonly FontUnderline NONE = new FontUnderline(0);
 
 
-        private int value;
+        private readonly int value;
 
 
         private FontUnderline(int val)
@@ -106,7 +106,7 @@ namespace NPOI.SS.UserModel
             }
         }
 
-        private static FontUnderline[] _table = null;
+        private static readonly FontUnderline[] _table = null;
 
         static FontUnderline()
         {

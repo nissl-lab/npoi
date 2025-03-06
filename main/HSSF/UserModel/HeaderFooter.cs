@@ -469,23 +469,23 @@ namespace NPOI.HSSF.UserModel
 
         public class Fields
         {
-            private List<Field> allFields = new List<Field>();
+            private readonly List<Field> allFields = new List<Field>();
             public static ReadOnlyCollection<Field> AllFields { get { return Instance.allFields.AsReadOnly(); } }
-            private Field _sheetnamefield;
-            private Field _filefield;
-            private Field _fullfilefield;
-            private Field _pagefield;
-            private Field _datefield;
-            private Field _timefield;
-            private Field _numpagesfield;
-            private Field _picturefield;
-            private PairField _boldfield;
-            private PairField _italicfield;
-            private PairField _strikethroughfield;
-            private PairField _subscriptfield;
-            private PairField _superscriptfield;
-            private PairField _underlinefield;
-            private PairField _doubleunderlinefield;
+            private readonly Field _sheetnamefield;
+            private readonly Field _filefield;
+            private readonly Field _fullfilefield;
+            private readonly Field _pagefield;
+            private readonly Field _datefield;
+            private readonly Field _timefield;
+            private readonly Field _numpagesfield;
+            private readonly Field _picturefield;
+            private readonly PairField _boldfield;
+            private readonly PairField _italicfield;
+            private readonly PairField _strikethroughfield;
+            private readonly PairField _subscriptfield;
+            private readonly PairField _superscriptfield;
+            private readonly PairField _underlinefield;
+            private readonly PairField _doubleunderlinefield;
             public Field SHEET_NAME_FIELD
             {
                 get{return _sheetnamefield;}

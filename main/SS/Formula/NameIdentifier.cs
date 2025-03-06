@@ -22,8 +22,8 @@ namespace NPOI.SS.Formula
 
     public class NameIdentifier
     {
-        private String _name;
-        private bool _isQuoted;
+        private readonly String _name;
+        private readonly bool _isQuoted;
 
         public NameIdentifier(String name, bool isQuoted)
         {

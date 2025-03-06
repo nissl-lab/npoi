@@ -1463,7 +1463,7 @@ namespace NPOI.HSSF.Util
          */
         public class Automatic : HSSFColor
         {
-            private static HSSFColor instance = new Automatic();
+            private static readonly HSSFColor instance = new Automatic();
 
             public const short Index = 0x40;
 

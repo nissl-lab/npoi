@@ -31,15 +31,15 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
     /// </summary>
     public class ChartSheetAggregate : ChartRecordAggregate
     {
-        private BOFRecord _bofRec;
+        private readonly BOFRecord _bofRec;
         /**
          * All the records between BOF and EOF
          */
-        private List<RecordBase> _recs;
-        private PageSettingsBlock _psBlock;
+        private readonly List<RecordBase> _recs;
+        private readonly PageSettingsBlock _psBlock;
 
-        private ChartFormatsAggregate chartFormats;
-        private SeriesDataAggregate seriesData;
+        private readonly ChartFormatsAggregate chartFormats;
+        private readonly SeriesDataAggregate seriesData;
 
         public ChartSheetAggregate(RecordStream rs, ChartRecordAggregate container)
             : base(RuleName_CHARTSHEET, container)

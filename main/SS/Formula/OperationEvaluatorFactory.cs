@@ -36,7 +36,7 @@ namespace NPOI.SS.Formula
     {
         private static Type[] OPERATION_CONSTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg) };
 
-        private static Hashtable _instancesByPtgClass = InitialiseInstancesMap();
+        private static readonly Hashtable _instancesByPtgClass = InitialiseInstancesMap();
 
         private OperationEvaluatorFactory()
         {

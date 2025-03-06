@@ -46,21 +46,21 @@ namespace NPOI.HSSF.Record
         /** Option flags */
         private int _option_flags;
         /** Title of the prompt box, cannot be longer than 32 chars */
-        private UnicodeString _promptTitle;
+        private readonly UnicodeString _promptTitle;
         /** Title of the error box, cannot be longer than 32 chars */
-        private UnicodeString _errorTitle;
+        private readonly UnicodeString _errorTitle;
         /** Text of the prompt box, cannot be longer than 255 chars */
-        private UnicodeString _promptText;
+        private readonly UnicodeString _promptText;
         /** Text of the error box, cannot be longer than 255 chars */
-        private UnicodeString _errorText;
+        private readonly UnicodeString _errorText;
         /** Not used - Excel seems to always write 0x3FE0 */
-        private short _not_used_1 = 0x3FE0;
+        private readonly short _not_used_1 = 0x3FE0;
         /** Formula data for first condition (RPN token array without size field) */
-        private NPOI.SS.Formula.Formula _formula1;
+        private readonly NPOI.SS.Formula.Formula _formula1;
         /** Not used - Excel seems to always write 0x0000 */
-        private short _not_used_2 = 0x0000;
+        private readonly short _not_used_2 = 0x0000;
         /** Formula data for second condition (RPN token array without size field) */
-        private NPOI.SS.Formula.Formula _formula2;
+        private readonly NPOI.SS.Formula.Formula _formula2;
         /** Cell range address list with all affected ranges */
         private CellRangeAddressList _regions;
 
@@ -74,14 +74,14 @@ namespace NPOI.HSSF.Record
          * Option flags field
          * @see org.apache.poi.hssf.util.HSSFDataValidation utility class
          */
-        private BitField opt_data_type = new BitField(0x0000000F);
-        private BitField opt_error_style = new BitField(0x00000070);
-        private BitField opt_string_list_formula = new BitField(0x00000080);
-        private BitField opt_empty_cell_allowed = new BitField(0x00000100);
-        private BitField opt_suppress_dropdown_arrow = new BitField(0x00000200);
-        private BitField opt_show_prompt_on_cell_selected = new BitField(0x00040000);
-        private BitField opt_show_error_on_invalid_value = new BitField(0x00080000);
-        private BitField opt_condition_operator = new BitField(0x00F00000);
+        private readonly BitField opt_data_type = new BitField(0x0000000F);
+        private readonly BitField opt_error_style = new BitField(0x00000070);
+        private readonly BitField opt_string_list_formula = new BitField(0x00000080);
+        private readonly BitField opt_empty_cell_allowed = new BitField(0x00000100);
+        private readonly BitField opt_suppress_dropdown_arrow = new BitField(0x00000200);
+        private readonly BitField opt_show_prompt_on_cell_selected = new BitField(0x00040000);
+        private readonly BitField opt_show_error_on_invalid_value = new BitField(0x00080000);
+        private readonly BitField opt_condition_operator = new BitField(0x00F00000);
 
         public DVRecord()
         {

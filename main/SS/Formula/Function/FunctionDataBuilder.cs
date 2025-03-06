@@ -31,10 +31,10 @@ namespace NPOI.SS.Formula.Function
     {
         private int _maxFunctionIndex;
 
-        private Dictionary<string, FunctionMetadata> _functionDataByName;
-        private Dictionary<int, FunctionMetadata> _functionDataByIndex;
+        private readonly Dictionary<string, FunctionMetadata> _functionDataByName;
+        private readonly Dictionary<int, FunctionMetadata> _functionDataByIndex;
         /** stores indexes of all functions with footnotes (i.e. whose definitions might Change) */
-        private HashSet<int> _mutatingFunctionIndexes;
+        private readonly HashSet<int> _mutatingFunctionIndexes;
 
         public FunctionDataBuilder(int sizeEstimate)
         {

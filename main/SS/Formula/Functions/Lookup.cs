@@ -23,7 +23,7 @@ namespace NPOI.SS.Formula.Functions
 
     public class SimpleValueVector : ValueVector
     {
-        private ValueEval[] _values;
+        private readonly ValueEval[] _values;
 
         public SimpleValueVector(ValueEval[] values)
         {

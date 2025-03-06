@@ -23,7 +23,7 @@ namespace NPOI
     public abstract class POIXMLTextExtractor : POITextExtractor
     {
         /** The POIXMLDocument that's open */
-        private POIXMLDocument _document;
+        private readonly POIXMLDocument _document;
 
         /**
          * Creates a new text extractor for the given document

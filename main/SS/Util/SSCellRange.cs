@@ -31,11 +31,11 @@ namespace NPOI.SS.Util
     public class SSCellRange<K> : ICellRange<K> where K:ICell
     {
 
-        private int _height;
-        private int _width;
-        private K[] _flattenedArray;
-        private int _firstRow;
-        private int _firstColumn;
+        private readonly int _height;
+        private readonly int _width;
+        private readonly K[] _flattenedArray;
+        private readonly int _firstRow;
+        private readonly int _firstColumn;
 
         private SSCellRange(int firstRow, int firstColumn, int height, int width, K[] flattenedArray)
         {
@@ -79,7 +79,7 @@ namespace NPOI.SS.Util
         internal class ArrayIterator<D> :IEnumerator<D>
         {
 
-            private D[] _array;
+            private readonly D[] _array;
             private int _index;
 
             public ArrayIterator(D[] array)

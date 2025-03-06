@@ -11,7 +11,7 @@ namespace NPOI.XSSF.Util
     [Obsolete]
     public class XmlEnumParser<TReturn>
     {
-        private static Dictionary<string, TReturn> values;
+        private static readonly Dictionary<string, TReturn> values;
         static XmlEnumParser()
         {
             Type type = typeof(TReturn);

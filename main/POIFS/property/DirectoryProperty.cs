@@ -39,10 +39,10 @@ namespace NPOI.POIFS.Properties
     public class DirectoryProperty: Property, Parent, IEnumerable<Property>
     {
         // List of Property instances
-        private List<Property> _children;
+        private readonly List<Property> _children;
 
         // Set of children's names
-        private List<string>  _children_names;
+        private readonly List<string>  _children_names;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DirectoryProperty"/> class.

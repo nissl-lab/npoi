@@ -7,9 +7,9 @@ namespace NPOI.HSSF.Record.Drawing
 {
     public class OfficeArtFOPT
     {
-        private OfficeArtRecordHeader _rh;
-        private List<OfficeArtFOPTE> _fopt;
-        private Dictionary<int, OfficeArtFOPTE> dictOptions = new Dictionary<int, OfficeArtFOPTE>();
+        private readonly OfficeArtRecordHeader _rh;
+        private readonly List<OfficeArtFOPTE> _fopt;
+        private readonly Dictionary<int, OfficeArtFOPTE> dictOptions = new Dictionary<int, OfficeArtFOPTE>();
         //private byte[] complexData = new byte[0];
 
         public OfficeArtFOPT(RecordInputStream ris)

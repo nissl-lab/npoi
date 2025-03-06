@@ -26,7 +26,7 @@ namespace NPOI.XSSF.UserModel.Extensions
     public class XSSFCellFill
     {
 
-        private CT_Fill _fill;
+        private readonly CT_Fill _fill;
 
         /**
          * Creates a CellFill from the supplied parts

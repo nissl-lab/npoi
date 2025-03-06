@@ -25,7 +25,7 @@ namespace NPOI.HPSF
         //private final static POILogger logger = POILogFactory
         //   .getLogger( UnicodeString.class );
 
-        private byte[] _value;
+        private readonly byte[] _value;
 
         public UnicodeString(byte[] data, int offset)
         {

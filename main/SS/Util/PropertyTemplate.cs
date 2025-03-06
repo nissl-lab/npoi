@@ -56,7 +56,7 @@ namespace NPOI.SS.Util
         /// This is a list of cell properties for one shot application to a range of
         /// cells at a later time.
         /// </summary>
-        private Dictionary<CellAddress, Dictionary<String, object>> _propertyTemplate;
+        private readonly Dictionary<CellAddress, Dictionary<String, object>> _propertyTemplate;
 
         /// <summary>
         /// Create a PropertyTemplate object

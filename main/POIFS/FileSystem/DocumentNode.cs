@@ -31,7 +31,7 @@ namespace NPOI.POIFS.FileSystem
     public class DocumentNode : EntryNode, POIFSViewable, DocumentEntry
     {
         // underlying POIFSDocument instance
-        private OPOIFSDocument _document;
+        private readonly OPOIFSDocument _document;
 
         /**
          * create a DocumentNode. This method Is not public by design; it

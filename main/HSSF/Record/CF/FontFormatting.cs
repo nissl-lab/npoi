@@ -31,7 +31,7 @@ namespace NPOI.HSSF.Record.CF
      */
     public class FontFormatting : ICloneable
     {
-        private byte[] _rawData = new byte[RAW_DATA_SIZE];
+        private readonly byte[] _rawData = new byte[RAW_DATA_SIZE];
 
         private const int OFFSET_FONT_NAME = 0;
         private const int OFFSET_FONT_HEIGHT = 64;
@@ -54,17 +54,17 @@ namespace NPOI.HSSF.Record.CF
         public const int FONT_CELL_HEIGHT_PRESERVED = unchecked((int)0xFFFFFFFF);
 
         // FONT OPTIONS MASKS
-        private static BitField posture = BitFieldFactory.GetInstance(0x00000002);
-        private static BitField outline = BitFieldFactory.GetInstance(0x00000008);
-        private static BitField shadow = BitFieldFactory.GetInstance(0x00000010);
-        private static BitField cancellation = BitFieldFactory.GetInstance(0x00000080);
+        private static readonly BitField posture = BitFieldFactory.GetInstance(0x00000002);
+        private static readonly BitField outline = BitFieldFactory.GetInstance(0x00000008);
+        private static readonly BitField shadow = BitFieldFactory.GetInstance(0x00000010);
+        private static readonly BitField cancellation = BitFieldFactory.GetInstance(0x00000080);
 
         // OPTION FLAGS MASKS
 
-        private static BitField styleModified = BitFieldFactory.GetInstance(0x00000002);
-        private static BitField outlineModified = BitFieldFactory.GetInstance(0x00000008);
-        private static BitField shadowModified = BitFieldFactory.GetInstance(0x00000010);
-        private static BitField cancellationModified = BitFieldFactory.GetInstance(0x00000080);
+        private static readonly BitField styleModified = BitFieldFactory.GetInstance(0x00000002);
+        private static readonly BitField outlineModified = BitFieldFactory.GetInstance(0x00000008);
+        private static readonly BitField shadowModified = BitFieldFactory.GetInstance(0x00000010);
+        private static readonly BitField cancellationModified = BitFieldFactory.GetInstance(0x00000080);
 
         /** Normal boldness (not bold) */
         private const short FONT_WEIGHT_NORMAL = 0x190;

@@ -36,7 +36,7 @@ namespace NPOI.POIFS.Properties
     public class PropertyTable : PropertyTableBase, BlockWritable
     {
 
-        private POIFSBigBlockSize _bigBigBlockSize;
+        private readonly POIFSBigBlockSize _bigBigBlockSize;
         private BlockWritable[] _blocks;
         /**
          * Default constructor

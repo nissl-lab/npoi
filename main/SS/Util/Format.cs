@@ -48,7 +48,7 @@ namespace NPOI.SS.Util
     public class SSNFormat : FormatBase
     {
         public static readonly FormatBase Instance = new SSNFormat();
-        private static string df = "000000000";
+        private static readonly string df = "000000000";
         private SSNFormat()
         {
             // enforce singleton
@@ -89,7 +89,7 @@ namespace NPOI.SS.Util
     public class ZipPlusFourFormat : FormatBase
     {
         public static readonly FormatBase Instance = new ZipPlusFourFormat();
-        private static string df = "000000000";
+        private static readonly string df = "000000000";
         private ZipPlusFourFormat()
         {
             // enforce singleton
@@ -127,7 +127,7 @@ namespace NPOI.SS.Util
     public class PhoneFormat : FormatBase
     {
         public static readonly FormatBase Instance = new PhoneFormat();
-        private static string df = "##########";
+        private static readonly string df = "##########";
         private PhoneFormat()
         {
             // enforce singleton
@@ -187,7 +187,7 @@ namespace NPOI.SS.Util
         }
 
         private string _pattern;
-        private NumberFormatInfo _formatInfo;
+        private readonly NumberFormatInfo _formatInfo;
 
         public DecimalFormat(string pattern)
         {
@@ -302,7 +302,7 @@ namespace NPOI.SS.Util
     }
     public class SimpleDateFormat : DateFormat
     {
-        private string _pattern;
+        private readonly string _pattern;
         private DateTimeFormatInfo _formatData;
         private CultureInfo _culture;
         public SimpleDateFormat():this("", CultureInfo.CurrentCulture)
@@ -392,8 +392,8 @@ namespace NPOI.SS.Util
      */
     public class ConstantStringFormat : FormatBase
     {
-        private static DecimalFormat df = new DecimalFormat("##########");
-        private string str;
+        private static readonly DecimalFormat df = new DecimalFormat("##########");
+        private readonly string str;
         public ConstantStringFormat(string s)
         {
             str = s;

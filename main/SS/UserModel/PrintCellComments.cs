@@ -48,7 +48,7 @@ namespace NPOI.SS.UserModel
             AT_END = new PrintCellComments(3);
         }
 
-        private int comments;
+        private readonly int comments;
 
         private PrintCellComments(int comments)
         {
@@ -64,7 +64,7 @@ namespace NPOI.SS.UserModel
             }
         }
 
-        private static PrintCellComments[] _table;
+        private static readonly PrintCellComments[] _table;
 
         public static PrintCellComments ValueOf(int value)
         {
