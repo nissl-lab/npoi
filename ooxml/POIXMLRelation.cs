@@ -14,6 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+using NPOI.OpenXml4Net.OPC;
 using System;
 using System.Text.RegularExpressions;
 
@@ -49,6 +50,21 @@ namespace NPOI
         private Type _cls;
 
         /**
+         * Defines a function to construct an instance of this relationship with parent and part provided
+         */
+        private Func<POIXMLDocumentPart, PackagePart, POIXMLDocumentPart> _createPartWithParent;
+
+        /**
+         * Defines a function to construct an instance of this relationship with part provided
+         */
+        private Func<PackagePart, POIXMLDocumentPart> _createPart;
+
+        /**
+         * Defines a function to construct an instance of this relationship
+         */
+        private Func<POIXMLDocumentPart> _createInstance;
+
+        /**
          * Instantiates a POIXMLRelation.
          *
          * @param type content type
@@ -56,12 +72,18 @@ namespace NPOI
          * @param defaultName default item name
          * @param cls defines what object is used to construct instances of this relationship
          */
-        public POIXMLRelation(String type, String rel, String defaultName, Type cls)
+        public POIXMLRelation(String type, String rel, String defaultName, Type cls
+            , Func<POIXMLDocumentPart, PackagePart, POIXMLDocumentPart> createPartWithParent
+            , Func<PackagePart, POIXMLDocumentPart> createPart
+            , Func<POIXMLDocumentPart> createInstance)
         {
             _type = type;
             _relation = rel;
             _defaultName = defaultName;
             _cls = cls;
+            _createPartWithParent=createPartWithParent;
+            _createPart=createPart;
+            _createInstance=createInstance;
         }
 
         /**
@@ -72,7 +94,7 @@ namespace NPOI
          * @param defaultName default item name
          */
         public POIXMLRelation(String type, String rel, String defaultName)
-            : this(type, rel, defaultName, null)
+            : this(type, rel, defaultName, null, null, null, null)
         {
 
         }
@@ -144,7 +166,7 @@ namespace NPOI
             //return Integer.valueOf(part.getPackagePart().getPartName().getName().replaceAll(regex, "$1"));
         }
         /**
-         * Return type of the obejct used to construct instances of this relationship
+         * Return type of the object used to construct instances of this relationship
          *
          * @return the class of the object used to construct instances of this relation
          */
@@ -153,6 +175,45 @@ namespace NPOI
             get
             {
                 return _cls;
+            }
+        }
+
+        /**
+         * Function to construct an instance of this relation type with parent and package part provided
+         *
+         * @return An instance of the document part of this relation
+         */
+        public Func<POIXMLDocumentPart, PackagePart, POIXMLDocumentPart> CreatePartWithParent
+        {
+            get
+            {
+                return _createPartWithParent;
+            }
+        }
+
+        /**
+         * Function to construct an instance of this relation type with package part provided
+         *
+         * @return An instance of the document part of this relation
+         */
+        public Func<PackagePart, POIXMLDocumentPart> CreatePart
+        {
+            get
+            {
+                return _createPart;
+            }
+        }
+
+        /**
+         * Function to construct an instance of this relation type
+         *
+         * @return An instance of the document part of this relation
+         */
+        public Func<POIXMLDocumentPart> CreateInstance
+        {
+            get
+            {
+                return _createInstance;
             }
         }
     }

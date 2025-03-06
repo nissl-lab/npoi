@@ -19,10 +19,6 @@ namespace NPOI.XWPF.UserModel
 {
     using System;
 
-    using NPOI.OpenXml4Net.OPC;
-    using NPOI.Util;
-    using System.Reflection;
-
     /**
      * @author Yegor Kozlov
      */
@@ -33,7 +29,7 @@ namespace NPOI.XWPF.UserModel
 
         }
 
-        private static XWPFFactory inst = new XWPFFactory();
+        private static readonly XWPFFactory inst = new XWPFFactory();
 
         public static XWPFFactory GetInstance()
         {
@@ -48,27 +44,5 @@ namespace NPOI.XWPF.UserModel
         {
             return XWPFRelation.GetInstance(relationshipType);
         }
-
-        /**
-         * @since POI 3.14-Beta1
-         */
-
-        protected override POIXMLDocumentPart CreateDocumentPart(Type cls, Type[] classes, Object[] values)
-        {
-            if (classes == null)
-            {
-                classes = new Type[0];
-            }
-            ConstructorInfo constructor = cls.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public,
-                    null, classes, null);
-            if (constructor == null)
-                throw new MissingMethodException();
-            if (values == null)
-            {
-                values = new object[0];
-            }
-            return constructor.Invoke(values) as POIXMLDocumentPart;
-        }
-
     }
 }
