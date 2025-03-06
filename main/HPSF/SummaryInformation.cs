@@ -1,114 +1,99 @@
 /* ====================================================================
-   Licensed To the Apache Software Foundation (ASF) under one or more
+   Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
-   this work for Additional information regarding copyright ownership.
-   The ASF licenses this file To You under the Apache License, Version 2.0
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
 
        http://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed To in writing, software
-   distributed under the License is distributed on an "AS Is" BASIS,
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
 
-/* ================================================================
- * About NPOI
- * Author: Tony Qu 
- * Author's email: tonyqus (at) gmail.com 
- * Author's Blog: tonyqus.wordpress.com.cn (wp.tonyqus.cn)
- * HomePage: http://www.codeplex.com/npoi
- * Contributors:
- * 
- * ==============================================================*/
-
 namespace NPOI.HPSF
-{
-    using System;
-    using NPOI.HPSF.Wellknown;
 
+{
+    using NPOI.HPSF.Wellknown;
+    using System;
+    using System.Xml.Linq;
 
     /// <summary>
     /// Convenience class representing a Summary Information stream in a
     /// Microsoft Office document.
-    /// @author Rainer Klute 
-    /// <a href="mailto:klute@rainer-klute.de">&lt;klute@rainer-klute.de&gt;</a>
-    /// @see DocumentSummaryInformation
-    /// @since 2002-02-09
     /// </summary>
-    [Serializable]
+    /// @see DocumentSummaryInformation
     public class SummaryInformation : SpecialPropertySet
     {
 
-        /**
-         * The document name a summary information stream usually has in a POIFS
-         * filesystem.
-         */
-        public const String DEFAULT_STREAM_NAME = "\x0005SummaryInformation";
+        /// <summary>
+        /// The document name a summary information stream usually has in a POIFS filesystem.
+        /// </summary>
+        public static String DEFAULT_STREAM_NAME = "\x0005SummaryInformation";
 
+        public override PropertyIDMap PropertySetIDMap => PropertyIDMap.SummaryInformationProperties;
 
-        public override PropertyIDMap PropertySetIDMap
+        /// <summary>
+        /// Creates an empty {@link SummaryInformation}.
+        /// </summary>
+        public SummaryInformation()
         {
-            get
+            FirstSection.SetFormatID(SectionIDMap.SUMMARY_INFORMATION_ID);
+        }
+
+        /// <summary>
+        /// Creates a {@link SummaryInformation} from a given {@link
+        /// PropertySet}.
+        /// </summary>
+        /// <param name="ps">A property Set which should be created from a summary
+        /// information stream.
+        /// </param>
+        /// <exception name="UnexpectedPropertySetTypeException">if <c>ps</c> does not
+        /// contain a summary information stream.
+        /// </exception>
+        public SummaryInformation(PropertySet ps) : base(ps)
+        {
+            if(!IsSummaryInformation)
             {
-                return PropertyIDMap.SummaryInformationProperties;
+                throw new UnexpectedPropertySetTypeException("Not a " + GetType().Name);
             }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SummaryInformation"/> class.
-        /// </summary>
-        /// <param name="ps">A property Set which should be Created from a summary
-        /// information stream.</param>
-        public SummaryInformation(PropertySet ps): base(ps)
-        {
-
-            if (!IsSummaryInformation)
-                throw new UnexpectedPropertySetTypeException("Not a "
-                        + GetType().Name);
-        }
-
 
 
         /// <summary>
-        /// Gets or sets the title.
+        /// get or set the title.
         /// </summary>
-        /// <value>The title.</value>
+        /// <return>title or <c>null</c></return>
         public String Title
         {
-            get { return GetPropertyStringValue(PropertyIDMap.PID_TITLE); }
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_TITLE, value);
-            }
+            get => GetPropertyStringValue(PropertyIDMap.PID_TITLE);
+            set => Set1stProperty(PropertyIDMap.PID_TITLE, value);
         }
+
 
         /// <summary>
         /// Removes the title.
         /// </summary>
         public void RemoveTitle()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_TITLE);
+            Remove1stProperty(PropertyIDMap.PID_TITLE);
         }
 
 
+
         /// <summary>
-        /// Gets or sets the subject.
+        /// get or set the subject (or <c>null</c>).
         /// </summary>
-        /// <value>The subject.</value>
+        /// <return>subject or <c>null</c></return>
         public String Subject
         {
-            get { return GetPropertyStringValue(PropertyIDMap.PID_SUBJECT); }
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_SUBJECT, value);
-            }
+            get => GetPropertyStringValue(PropertyIDMap.PID_SUBJECT);
+            set => Set1stProperty(PropertyIDMap.PID_SUBJECT, value);
         }
 
         /// <summary>
@@ -116,72 +101,61 @@ namespace NPOI.HPSF
         /// </summary>
         public void RemoveSubject()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_SUBJECT);
+            Remove1stProperty(PropertyIDMap.PID_SUBJECT);
         }
+
 
 
         /// <summary>
-        /// Gets or sets the author.
+        /// get or set the author (or <c>null</c>).
         /// </summary>
-        /// <value>The author.</value>
+        /// <return>author or <c>null</c></return>
         public String Author
         {
-            get { return GetPropertyStringValue(PropertyIDMap.PID_AUTHOR); }
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_AUTHOR, value);
-            }
+            get => GetPropertyStringValue(PropertyIDMap.PID_AUTHOR);
+            set => Set1stProperty(PropertyIDMap.PID_AUTHOR, value);
         }
+
 
         /// <summary>
         /// Removes the author.
         /// </summary>
         public void RemoveAuthor()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_AUTHOR);
+            Remove1stProperty(PropertyIDMap.PID_AUTHOR);
         }
+
 
 
         /// <summary>
-        /// Gets or sets the keywords.
+        /// get or set the keywords (or <c>null</c>).
         /// </summary>
-        /// <value>The keywords.</value>
+        /// <return>keywords or <c>null</c></return>
         public String Keywords
         {
-            get { return GetPropertyStringValue(PropertyIDMap.PID_KEYWORDS); }
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_KEYWORDS, value);
-            }
+            get => GetPropertyStringValue(PropertyIDMap.PID_KEYWORDS);
+            set => Set1stProperty(PropertyIDMap.PID_KEYWORDS, value);
         }
+
 
         /// <summary>
         /// Removes the keywords.
         /// </summary>
         public void RemoveKeywords()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_KEYWORDS);
+            Remove1stProperty(PropertyIDMap.PID_KEYWORDS);
         }
 
 
 
         /// <summary>
-        /// Gets or sets the comments.
+        /// get or set the comments (or <c>null</c>).
         /// </summary>
-        /// <value>The comments.</value>
+        /// <return>comments or <c>null</c></return>
         public String Comments
         {
-            get { return GetPropertyStringValue(PropertyIDMap.PID_COMMENTS); }
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_COMMENTS, value);
-            }
+            get => GetPropertyStringValue(PropertyIDMap.PID_COMMENTS);
+            set => Set1stProperty(PropertyIDMap.PID_COMMENTS, value);
         }
 
         /// <summary>
@@ -189,22 +163,18 @@ namespace NPOI.HPSF
         /// </summary>
         public void RemoveComments()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_COMMENTS);
+            Remove1stProperty(PropertyIDMap.PID_COMMENTS);
         }
 
+
         /// <summary>
-        /// Gets or sets the template.
+        /// get or set the template (or <c>null</c>).
         /// </summary>
-        /// <value>The template.</value>
+        /// <return>template or <c>null</c></return>
         public String Template
         {
-            get { return GetPropertyStringValue(PropertyIDMap.PID_TEMPLATE); }
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_TEMPLATE, value);
-            }
+            get => GetPropertyStringValue(PropertyIDMap.PID_TEMPLATE);
+            set => Set1stProperty(PropertyIDMap.PID_TEMPLATE, value);
         }
 
         /// <summary>
@@ -212,22 +182,19 @@ namespace NPOI.HPSF
         /// </summary>
         public void RemoveTemplate()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_TEMPLATE);
+            Remove1stProperty(PropertyIDMap.PID_TEMPLATE);
         }
 
+
+
         /// <summary>
-        /// Gets or sets the last author.
+        /// get or set the last author (or <c>null</c>).
         /// </summary>
-        /// <value>The last author.</value>
+        /// <return>last author or <c>null</c></return>
         public String LastAuthor
         {
-            get{return GetPropertyStringValue(PropertyIDMap.PID_LASTAUTHOR);}
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_LASTAUTHOR, value);
-            }
+            get => GetPropertyStringValue(PropertyIDMap.PID_LASTAUTHOR);
+            set => Set1stProperty(PropertyIDMap.PID_LASTAUTHOR, value);
         }
 
         /// <summary>
@@ -235,332 +202,304 @@ namespace NPOI.HPSF
         /// </summary>
         public void RemoveLastAuthor()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_LASTAUTHOR);
+            Remove1stProperty(PropertyIDMap.PID_LASTAUTHOR);
         }
 
 
+
         /// <summary>
-        /// Gets or sets the rev number.
+        /// get or set the revision number (or <c>null</c>).
         /// </summary>
-        /// <value>The rev number.</value>
+        /// <return>revision number or <c>null</c></return>
         public String RevNumber
         {
-            get { return GetPropertyStringValue(PropertyIDMap.PID_REVNUMBER); }
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_REVNUMBER, value);
-            }
+            get => GetPropertyStringValue(PropertyIDMap.PID_REVNUMBER);
+            set => Set1stProperty(PropertyIDMap.PID_REVNUMBER, value);
         }
 
         /// <summary>
-        /// Removes the rev number.
+        /// Removes the revision number.
         /// </summary>
         public void RemoveRevNumber()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_REVNUMBER);
+            Remove1stProperty(PropertyIDMap.PID_REVNUMBER);
         }
 
 
 
         /// <summary>
-        /// Returns the Total time spent in editing the document (or 0).
+        /// get or set the total time spent in editing the document (or
+        /// <c>0</c>).
         /// </summary>
-        /// <value>The Total time spent in editing the document or 0 if the {@link
-        /// SummaryInformation} does not contain this information.</value>
+        /// <return>total time spent in editing the document or 0 if the {@link
+        /// SummaryInformation} does not contain this information.
+        /// </return>
         public long EditTime
         {
             get
             {
-                if (GetProperty(PropertyIDMap.PID_EDITTIME) == null)
-                    return 0;
-                else
-                {
-                    DateTime d = (DateTime)GetProperty(PropertyIDMap.PID_EDITTIME);
-                    return Util.DateToFileTime(d);
-                }
+                DateTime? d = (DateTime?)GetProperty(PropertyIDMap.PID_EDITTIME);
+
+                return d.HasValue ? Util.DateToFileTime(d.Value) : 0;
             }
             set
             {
                 DateTime d = Util.FiletimeToDate(value);
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_EDITTIME, Variant.VT_FILETIME, d);
+                FirstSection.SetProperty(PropertyIDMap.PID_EDITTIME, Variant.VT_FILETIME, d);
             }
         }
 
-
         /// <summary>
-        /// Removes the edit time.
+        /// Remove the total time spent in editing the document.
         /// </summary>
         public void RemoveEditTime()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_EDITTIME);
+            Remove1stProperty(PropertyIDMap.PID_EDITTIME);
         }
 
 
 
         /// <summary>
-        /// Gets or sets the last printed time
+        /// get or set the last printed time (or <c>null</c>).
         /// </summary>
-        /// <value>The last printed time</value>
-        /// Returns the last printed time (or <c>null</c>).
+        /// <return>last printed time or <c>null</c></return>
         public DateTime? LastPrinted
         {
-            get { 
-                return (DateTime?)GetProperty(PropertyIDMap.PID_LASTPRINTED); 
-            }
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_LASTPRINTED, Variant.VT_FILETIME,
-                        value);
-            }
+            get => (DateTime?) GetProperty(PropertyIDMap.PID_LASTPRINTED);
+            set => FirstSection.SetProperty(PropertyIDMap.PID_LASTPRINTED, Variant.VT_FILETIME, value);
         }
 
         /// <summary>
-        /// Removes the last printed.
+        /// Removes the lastPrinted.
         /// </summary>
         public void RemoveLastPrinted()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_LASTPRINTED);
+            Remove1stProperty(PropertyIDMap.PID_LASTPRINTED);
         }
 
+
+
         /// <summary>
-        /// Gets or sets the create date time.
+        /// get or set the creation time (or <c>null</c>).
         /// </summary>
-        /// <value>The create date time.</value>
+        /// <return>creation time or <c>null</c></return>
         public DateTime? CreateDateTime
         {
-            get { return (DateTime?)GetProperty(PropertyIDMap.PID_Create_DTM); }
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_Create_DTM, Variant.VT_FILETIME,
-                        value);
-            }
+            get => (DateTime?) GetProperty(PropertyIDMap.PID_CREATE_DTM);
+            set => FirstSection.SetProperty(PropertyIDMap.PID_CREATE_DTM, Variant.VT_FILETIME, value);
         }
 
+
         /// <summary>
-        /// Removes the create date time.
+        /// Removes the creation time.
         /// </summary>
         public void RemoveCreateDateTime()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_Create_DTM);
+            Remove1stProperty(PropertyIDMap.PID_CREATE_DTM);
         }
 
 
+
         /// <summary>
-        /// Gets or sets the last save date time.
+        /// get or set the last save time (or <c>null</c>).
         /// </summary>
-        /// <value>The last save date time.</value>
+        /// <return>last save time or <c>null</c></return>
         public DateTime? LastSaveDateTime
         {
-            get { return (DateTime?)GetProperty(PropertyIDMap.PID_LASTSAVE_DTM); }
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_LASTSAVE_DTM,
-                                Variant.VT_FILETIME, value);
-            }
+            get => (DateTime?) GetProperty(PropertyIDMap.PID_LASTSAVE_DTM);
+            set => FirstSection.SetProperty(PropertyIDMap.PID_LASTSAVE_DTM, Variant.VT_FILETIME, value);
         }
 
+
         /// <summary>
-        /// Removes the last save date time.
+        /// Remove the total time spent in editing the document.
         /// </summary>
         public void RemoveLastSaveDateTime()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_LASTSAVE_DTM);
+            Remove1stProperty(PropertyIDMap.PID_LASTSAVE_DTM);
         }
 
 
 
         /// <summary>
-        /// Gets or sets the page count or 0 if the {@link SummaryInformation} does
+        /// get or set the page count or 0 if the {@link SummaryInformation} does
         /// not contain a page count.
         /// </summary>
-        /// <value>The page count or 0 if the {@link SummaryInformation} does not
-        /// contain a page count.</value>
+        /// <return>page count or 0 if the {@link SummaryInformation} does not
+        /// contain a page count.
+        /// </return>
         public int PageCount
         {
-            get { return GetPropertyIntValue(PropertyIDMap.PID_PAGECOUNT); }
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_PAGECOUNT, value);
-            }
+            get => GetPropertyIntValue(PropertyIDMap.PID_PAGECOUNT);
+            set => Set1stProperty(PropertyIDMap.PID_PAGECOUNT, value);
         }
-
 
         /// <summary>
         /// Removes the page count.
         /// </summary>
         public void RemovePageCount()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_PAGECOUNT);
+            Remove1stProperty(PropertyIDMap.PID_PAGECOUNT);
         }
 
 
 
         /// <summary>
-        /// Gets or sets the word count or 0 if the {@link SummaryInformation} does
+        /// get or set the word count or 0 if the {@link SummaryInformation} does
         /// not contain a word count.
         /// </summary>
-        /// <value>The word count.</value>
+        /// <return>word count or <c>null</c></return>
         public int WordCount
         {
-            get { return GetPropertyIntValue(PropertyIDMap.PID_WORDCOUNT); }
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_WORDCOUNT, value);
-            }
+            get => GetPropertyIntValue(PropertyIDMap.PID_WORDCOUNT);
+            set => Set1stProperty(PropertyIDMap.PID_WORDCOUNT, value);
         }
+
 
         /// <summary>
         /// Removes the word count.
         /// </summary>
         public void RemoveWordCount()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_WORDCOUNT);
+            Remove1stProperty(PropertyIDMap.PID_WORDCOUNT);
         }
 
 
 
         /// <summary>
-        /// Gets or sets the character count or 0 if the {@link SummaryInformation}
+        /// get or set the character count or 0 if the {@link SummaryInformation}
         /// does not contain a char count.
         /// </summary>
-        /// <value>The character count.</value>
+        /// <return>character count or <c>null</c></return>
         public int CharCount
         {
-            get{return GetPropertyIntValue(PropertyIDMap.PID_CHARCOUNT);}
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_CHARCOUNT, value);
-            }
+            get => GetPropertyIntValue(PropertyIDMap.PID_CHARCOUNT);
+            set => Set1stProperty(PropertyIDMap.PID_CHARCOUNT, value);
         }
 
         /// <summary>
-        /// Removes the char count.
+        /// Removes the character count.
         /// </summary>
         public void RemoveCharCount()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_CHARCOUNT);
+            Remove1stProperty(PropertyIDMap.PID_CHARCOUNT);
         }
 
 
+
         /// <summary>
-        /// Gets or sets the thumbnail (or <c>null</c>) <strong>when this
-        /// method is implemented. Please note that the return type is likely To
-        /// Change!</strong>
-        /// <p>To process this data, you may wish to make use of the
-        ///  {@link Thumbnail} class. The raw data is generally 
-        /// an image in WMF or Clipboard (BMP?) format</p>
+        /// <para>
+        /// get or set the thumbnail (or <c>null</c>) <strong>when this
+        /// method is implemented. Please note that the return type is likely to
+        /// change!</strong>
+        /// </para>
+        /// <para>
+        /// To process this data, you may wish to make use of the
+        /// {@link Thumbnail} class. The raw data is generally
+        /// an image in WMF or Clipboard (BMP?) format
+        /// </para>
         /// </summary>
-        /// <value>The thumbnail.</value>
+        /// <return>thumbnail or <c>null</c></return>
         public byte[] Thumbnail
         {
-            get{return (byte[])GetProperty(PropertyIDMap.PID_THUMBNAIL);}
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_THUMBNAIL, /* FIXME: */
-                        Variant.VT_LPSTR, value);
-            }
+            get => (byte[]) GetProperty(PropertyIDMap.PID_THUMBNAIL);
+            set => FirstSection.SetProperty(PropertyIDMap.PID_THUMBNAIL, /* FIXME: */ Variant.VT_LPSTR, value);
         }
 
         /// <summary>
-        /// Returns the thumbnail or null, processed as an object 
-        /// which is (largely) able to unpack the thumbnail image data.
+        /// get or set the thumbnail (or <c>null</c>), processed
+        /// as an object which is (largely) able to unpack the thumbnail
+        /// image data.
         /// </summary>
+        /// <return>thumbnail or <c>null</c></return>
         public Thumbnail ThumbnailThumbnail
         {
             get
             {
                 byte[] data = Thumbnail;
-                if (data == null) return null;
+                if(data == null)
+                    return null;
                 return new Thumbnail(data);
             }
+
         }
+
+
         /// <summary>
         /// Removes the thumbnail.
         /// </summary>
         public void RemoveThumbnail()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_THUMBNAIL);
+            Remove1stProperty(PropertyIDMap.PID_THUMBNAIL);
         }
 
 
+
         /// <summary>
-        /// Gets or sets the name of the application.
+        /// get or set the application name (or <c>null</c>).
         /// </summary>
-        /// <value>The name of the application.</value>
+        /// <return>application name or <c>null</c></return>
         public String ApplicationName
         {
-            get { return GetPropertyStringValue(PropertyIDMap.PID_APPNAME); }
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_APPNAME, value);
-            }
+            get => GetPropertyStringValue(PropertyIDMap.PID_APPNAME);
+            set => Set1stProperty(PropertyIDMap.PID_APPNAME, value);
         }
 
 
         /// <summary>
-        /// Removes the name of the application.
+        /// Removes the application name.
         /// </summary>
         public void RemoveApplicationName()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_APPNAME);
+            Remove1stProperty(PropertyIDMap.PID_APPNAME);
         }
 
 
 
         /// <summary>
-        /// Gets or sets a security code which is one of the following values:
+        /// <para>
+        /// get or set a security code which is one of the following values:
+        /// </para>
+        /// <para>
         /// <ul>
-        /// 	<li>0 if the {@link SummaryInformation} does not contain a
+        /// </para>
+        /// <para>
+        /// <li>0 if the {@link SummaryInformation} does not contain a
         /// security field or if there is no security on the document. Use
-        /// {@link PropertySet#wasNull()} To distinguish between the two
-        /// cases!</li>
-        /// 	<li>1 if the document is password protected</li>
-        /// 	<li>2 if the document is Read-only recommended</li>
-        /// 	<li>4 if the document is Read-only enforced</li>
-        /// 	<li>8 if the document is locked for annotations</li>
+        /// {@link PropertySet#wasNull()} to distinguish between the two
+        /// cases!
+        /// </para>
+        /// <para>
+        /// <li>1 if the document is password protected
+        /// </para>
+        /// <para>
+        /// <li>2 if the document is read-only recommended
+        /// </para>
+        /// <para>
+        /// <li>4 if the document is read-only enforced
+        /// </para>
+        /// <para>
+        /// <li>8 if the document is locked for annotations
+        /// </para>
+        /// <para>
         /// </ul>
+        /// </para>
         /// </summary>
-        /// <value>The security code</value>
+        /// <return>security code or <c>null</c></return>
         public int Security
         {
-            get { return GetPropertyIntValue(PropertyIDMap.PID_SECURITY); }
-            set
-            {
-                MutableSection s = (MutableSection)FirstSection;
-                s.SetProperty(PropertyIDMap.PID_SECURITY, value);
-            }
+            get => GetPropertyIntValue(PropertyIDMap.PID_SECURITY);
+            set => Set1stProperty(PropertyIDMap.PID_SECURITY, value);
         }
-
 
         /// <summary>
         /// Removes the security code.
         /// </summary>
         public void RemoveSecurity()
         {
-            MutableSection s = (MutableSection)FirstSection;
-            s.RemoveProperty(PropertyIDMap.PID_SECURITY);
+            Remove1stProperty(PropertyIDMap.PID_SECURITY);
         }
 
     }
 }
+

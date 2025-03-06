@@ -230,7 +230,7 @@ namespace TestCases.HPSF.Basic
                     POIFile f = new POIFile();
                     f.SetName(e.Name);
                     f.SetPath(e.Path);
-                    Stream in1 = e.Stream;
+                    InputStream in1 = e.Stream;
                     if (PropertySet.IsPropertySetStream(in1))
                     {
                         using (MemoryStream out1 = new MemoryStream())

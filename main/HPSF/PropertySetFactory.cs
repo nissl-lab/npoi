@@ -25,16 +25,18 @@
  * 
  * ==============================================================*/
 
+using NPOI.Util;
+
 namespace NPOI.HPSF
 {
     using System.IO;
     using NPOI.HPSF.Wellknown;
     using System;
-using NPOI.POIFS.FileSystem;
+    using NPOI.POIFS.FileSystem;
 
     /// <summary>
     /// Factory class To Create instances of {@link SummaryInformation},
-    /// {@link DocumentSummaryInformation} and {@link PropertySet}.
+    /// {@link DocumentSummaryInformation} and <see cref="PropertySet"/>.
     /// @author Rainer Klute 
     /// <a href="mailto:klute@rainer-klute.de">&lt;klute@rainer-klute.de&gt;</a>
     /// @since 2002-02-09
@@ -42,7 +44,7 @@ using NPOI.POIFS.FileSystem;
     public class PropertySetFactory
     {
         /**
-         * <p>Creates the most specific {@link PropertySet} from an entry
+         * <p>Creates the most specific <see cref="PropertySet"/> from an entry
          *  in the specified POIFS Directory. This is preferrably a {@link
          * DocumentSummaryInformation} or a {@link SummaryInformation}. If
          * the specified entry does not contain a property Set stream, an 
@@ -51,7 +53,7 @@ using NPOI.POIFS.FileSystem;
          *
          * @param dir The directory to find the PropertySet in
          * @param name The name of the entry Containing the PropertySet
-         * @return The Created {@link PropertySet}.
+         * @return The Created <see cref="PropertySet"/>.
          * @if there is no entry with that name
          * @if the stream does not
          * contain a property Set.
@@ -61,7 +63,7 @@ using NPOI.POIFS.FileSystem;
          */
         public static PropertySet Create(DirectoryEntry dir, String name)
         {
-            Stream inp = null;
+            InputStream inp = null;
             try
             {
                 DocumentEntry entry = (DocumentEntry)dir.GetEntry(name);
@@ -70,37 +72,38 @@ using NPOI.POIFS.FileSystem;
                 {
                     return Create(inp);
                 }
-                catch (MarkUnsupportedException) { return null; }
+                catch(MarkUnsupportedException) { return null; }
             }
             finally
             {
-                if (inp != null) inp.Close();
+                if(inp != null)
+                    inp.Close();
             }
         }
 
         /// <summary>
-        /// Creates the most specific {@link PropertySet} from an {@link
-        /// InputStream}. This is preferrably a {@link
-        /// DocumentSummaryInformation} or a {@link SummaryInformation}. If
-        /// the specified {@link InputStream} does not contain a property
-        /// Set stream, an exception is thrown and the {@link InputStream}
+        /// Creates the most specific <see cref="PropertySet"/> from an 
+        /// <see cref="InputStream"/>. This is preferrably a <see cref="DocumentSummaryInformation"/>
+        /// or a <see cref="SummaryInformation"/>. If
+        /// the specified <see cref="InputStream"/> does not contain a property
+        /// Set stream, an exception is thrown and the <see cref="InputStream"/>
         /// is repositioned at its beginning.
         /// </summary>
         /// <param name="stream">Contains the property set stream's data.</param>
-        /// <returns>The Created {@link PropertySet}.</returns>
-        public static PropertySet Create(Stream stream)
+        /// <returns>The Created <see cref="PropertySet"/>.</returns>
+        public static PropertySet Create(InputStream stream)
         {
             PropertySet ps = new PropertySet(stream);
             try
             {
-                if (ps.IsSummaryInformation)
+                if(ps.IsSummaryInformation)
                     return new SummaryInformation(ps);
-                else if (ps.IsDocumentSummaryInformation)
+                else if(ps.IsDocumentSummaryInformation)
                     return new DocumentSummaryInformation(ps);
                 else
                     return ps;
             }
-            catch (UnexpectedPropertySetTypeException ex)
+            catch(UnexpectedPropertySetTypeException ex)
             {
                 /* This exception will never be throws because we alReady checked
                  * explicitly for this case above. */
@@ -123,7 +126,7 @@ using NPOI.POIFS.FileSystem;
             {
                 return new SummaryInformation(ps);
             }
-            catch (UnexpectedPropertySetTypeException ex)
+            catch(UnexpectedPropertySetTypeException ex)
             {
                 /* This should never happen. */
                 throw new HPSFRuntimeException(ex);
@@ -140,12 +143,12 @@ using NPOI.POIFS.FileSystem;
         {
             MutablePropertySet ps = new MutablePropertySet();
             MutableSection s = (MutableSection)ps.FirstSection;
-            s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
+            s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0]);
             try
             {
                 return new DocumentSummaryInformation(ps);
             }
-            catch (UnexpectedPropertySetTypeException ex)
+            catch(UnexpectedPropertySetTypeException ex)
             {
                 /* This should never happen. */
                 throw new HPSFRuntimeException(ex);
@@ -156,12 +159,12 @@ using NPOI.POIFS.FileSystem;
         {
             MutablePropertySet ps = new MutablePropertySet();
             MutableSection s = (MutableSection)ps.FirstSection;
-            s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
+            s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0]);
             try
             {
                 return new DocumentSummaryInformation(ps);
             }
-            catch (UnexpectedPropertySetTypeException ex)
+            catch(UnexpectedPropertySetTypeException ex)
             {
                 /* This should never happen. */
                 throw new HPSFRuntimeException(ex);

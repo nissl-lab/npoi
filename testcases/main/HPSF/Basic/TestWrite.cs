@@ -20,6 +20,7 @@ namespace TestCases.HPSF.Basic
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.IO;
     using System.Text;
 
@@ -91,7 +92,7 @@ namespace TestCases.HPSF.Basic
                 /* Write it to a POIFS and the latter to disk: */
                 try
                 {
-                    MemoryStream psStream = new MemoryStream();
+                    ByteArrayOutputStream psStream = new ByteArrayOutputStream();
                     ps.Write(psStream);
                     psStream.Close();
                     byte[] streamData = psStream.ToArray();
@@ -145,7 +146,7 @@ namespace TestCases.HPSF.Basic
                 MutableSection s = (MutableSection)ps.Sections[0];
                 s.SetFormatID(SectionIDMap.SUMMARY_INFORMATION_ID);
 
-                MemoryStream psStream = new MemoryStream();
+                ByteArrayOutputStream psStream = new ByteArrayOutputStream();
                 ps.Write(psStream);
                 psStream.Close();
                 byte[] streamData = psStream.ToArray();
@@ -291,12 +292,12 @@ namespace TestCases.HPSF.Basic
             formatID.Bytes = new byte[]{0, 1,  2,  3,  4,  5,  6,  7,
                                      8, 9, 10, 11, 12, 13, 14, 15};
             MutableSection s1 = new MutableSection();
-            s1.SetFormatID(formatID);
+            s1.FormatID = formatID;
             s1.SetProperty(2, SECTION1);
             ps.AddSection(s1);
 
             MutableSection s2 = new MutableSection();
-            s2.SetFormatID(formatID);
+            s2.FormatID = formatID;
             s2.SetProperty(2, SECTION2);
             ps.AddSection(s2);
 
@@ -528,7 +529,7 @@ namespace TestCases.HPSF.Basic
             Exception t = null;
             try
             {
-                MemoryStream out1 = new MemoryStream();
+                ByteArrayOutputStream out1 = new ByteArrayOutputStream();
                 mps.Write(out1);
                 out1.Close();
                 byte[] bytes = out1.ToArray();
@@ -690,12 +691,12 @@ namespace TestCases.HPSF.Basic
             POIFSFileSystem poiFs = new POIFSFileSystem();
             for (int i = 0; i < psf1.Length; i++)
             {
-                Stream in1 =
+                InputStream in1 =
                     new ByteArrayInputStream(psf1[i].GetBytes());
                 PropertySet psIn = PropertySetFactory.Create(in1);
                 MutablePropertySet psOut = new MutablePropertySet(psIn);
-                MemoryStream psStream =
-                    new MemoryStream();
+                ByteArrayOutputStream psStream =
+                    new ByteArrayOutputStream();
                 psOut.Write(psStream);
                 psStream.Close();
                 byte[] streamData = psStream.ToArray();
@@ -713,8 +714,8 @@ namespace TestCases.HPSF.Basic
             {
                 byte[] bytes1 = psf1[i].GetBytes();
                 byte[] bytes2 = psf2[i].GetBytes();
-                Stream in1 = new ByteArrayInputStream(bytes1);
-                Stream in2 = new ByteArrayInputStream(bytes2);
+                InputStream in1 = new ByteArrayInputStream(bytes1);
+                InputStream in2 = new ByteArrayInputStream(bytes2);
                 PropertySet ps1 = PropertySetFactory.Create(in1);
                 PropertySet ps2 = PropertySetFactory.Create(in2);
 
@@ -739,12 +740,12 @@ namespace TestCases.HPSF.Basic
                 /* Write: */
                 POIFSFileSystem poiFs = new POIFSFileSystem();
                 MutableSection s = (MutableSection)ps1.Sections[0];
-                Hashtable m = new Hashtable(3, 1.0f);
+                Dictionary<long, string> m = new();
                 m[1] = "String 1";
                 m[2] = "String 2";
                 m[3] = "String 3";
-                s.Dictionary = (m);
-                s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
+                s.SetDictionary(m);
+                s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0]);
                 int codepage = CodePageUtil.CP_UNICODE;
                 s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, codepage);
                 poiFs.CreateDocument(ps1.ToInputStream(), "Test");
@@ -755,7 +756,7 @@ namespace TestCases.HPSF.Basic
             POIFile[] psf = Util.ReadPropertySets(copy);
             Assert.AreEqual(1, psf.Length);
             byte[] bytes = psf[0].GetBytes();
-            Stream in1 = new ByteArrayInputStream(bytes);
+            InputStream in1 = new ByteArrayInputStream(bytes);
             PropertySet ps2 = PropertySetFactory.Create(in1);
 
             /* Check if the result is a DocumentSummaryInformation stream, as
@@ -877,9 +878,9 @@ namespace TestCases.HPSF.Basic
             doufStream.Close();
 
             // And also write to some bytes for Checking
-            MemoryStream sinfBytes = new MemoryStream();
+            ByteArrayOutputStream sinfBytes = new ByteArrayOutputStream();
             sinf.Write(sinfBytes);
-            MemoryStream dinfBytes = new MemoryStream();
+            ByteArrayOutputStream dinfBytes = new ByteArrayOutputStream();
             dinf.Write(dinfBytes);
 
 
@@ -1000,7 +1001,7 @@ namespace TestCases.HPSF.Basic
                 POIFSFileSystem poiFs = new POIFSFileSystem();
                 MutablePropertySet ps1 = new MutablePropertySet();
                 MutableSection s = (MutableSection)ps1.Sections[0];
-                Hashtable m = new Hashtable(3, 1.0f);
+                Dictionary<long, string> m = new();
                 m[1] = "String 1";
                 m[2] = "String 2";
                 m[3] = "String 3";
@@ -1008,8 +1009,8 @@ namespace TestCases.HPSF.Basic
                 try
                 {
                     Assert.Throws<IllegalPropertySetDataException>(() => {
-                        s.Dictionary = m;
-                        s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
+                        s.SetDictionary(m);
+                        s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0]);
                         s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, 12345);
                         poiFs.CreateDocument(ps1.ToInputStream(), "Test");
                         poiFs.WriteFileSystem(copy);

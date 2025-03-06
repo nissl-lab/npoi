@@ -24,9 +24,9 @@ namespace TestCases.HSSF.UserModel
 
     using TestCases.HSSF;
     using System.Collections.Generic;
-using NPOI.SS.UserModel;
-using NPOI.POIFS.FileSystem;
-using System.IO;
+    using NPOI.SS.UserModel;
+    using NPOI.POIFS.FileSystem;
+    using System.IO;
     using System.Text;
     using NPOI.Util;
 
@@ -36,6 +36,12 @@ using System.IO;
     [TestFixture]
     public class TestOLE2Embeding
     {
+        [SetUp]
+        public void Setup()
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
+
         [Test]
         public void TestEmbeding()
         {
