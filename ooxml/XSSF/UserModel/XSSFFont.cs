@@ -23,6 +23,7 @@ using NPOI.OpenXmlFormats.Dml;
 using Dml = NPOI.OpenXmlFormats.Dml;
 using NPOI.XSSF.Model;
 using NPOI.Util;
+using NPOI.Common.UserModel.Fonts;
 
 namespace NPOI.XSSF.UserModel
 {

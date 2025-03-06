@@ -28,6 +28,7 @@ using NPOI.XSSF.UserModel.Extensions;
 using System.Collections.ObjectModel;
 using NPOI.SS;
 using NPOI.OOXML.XSSF.UserModel;
+using NPOI.Common.UserModel.Fonts;
 
 namespace NPOI.XSSF.Model
 {

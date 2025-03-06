@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using NPOI;
+using NPOI.Common.UserModel.Fonts;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;

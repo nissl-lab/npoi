@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.SS.UserModel
+namespace NPOI.Common.UserModel.Fonts
 {
 
     /**
@@ -33,11 +33,11 @@ namespace NPOI.SS.UserModel
         public static readonly FontFamily SCRIPT = new FontFamily(4);
         public static readonly FontFamily DECORATIVE = new FontFamily(5);
 
-        private int family;
+        private int nativeId;
 
         private FontFamily(int value)
         {
-            family = value;
+            nativeId = value;
         }
 
         /**
@@ -45,14 +45,13 @@ namespace NPOI.SS.UserModel
          *
          * @return index of this font family
          */
-        public int Value
+        public int NativeId
         {
             get
             {
-                return family;
+                return nativeId;
             }
         }
-
         public static FontFamily ValueOf(int family)
         {
             switch(family)
