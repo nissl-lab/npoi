@@ -176,10 +176,18 @@ namespace NPOI.SS.Formula.Eval
         }
 
         /**
- * @return  whether cell at rowIndex and columnIndex is a subtotal.
- * By default return false which means 'don't care about subtotals'
-*/
+         * @return  whether cell at rowIndex and columnIndex is a subtotal.
+         * By default return false which means 'don't care about subtotals'
+        */
         public virtual bool IsSubTotal(int rowIndex, int columnIndex)
+        {
+            return false;
+        }
+        /**
+         * @return false by default, meaning all rows are calculated
+         * @see org.apache.poi.ss.formula.TwoDEval#isRowHidden(int)
+         */
+        public bool IsRowHidden(int rowIndex)
         {
             return false;
         }
