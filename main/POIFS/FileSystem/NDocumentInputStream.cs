@@ -98,6 +98,15 @@ namespace NPOI.POIFS.FileSystem
 
         public override int Available()
         {
+            return RemainingBytes();
+        }
+        /**
+         * Helper methods for forbidden api calls
+         *
+         * @return the bytes remaining until the end of the stream
+         */
+        private int RemainingBytes()
+        {
             if (_closed)
             {
                 throw new InvalidOperationException("cannot perform requested operation on a closed stream");
@@ -159,7 +168,7 @@ namespace NPOI.POIFS.FileSystem
             {
                 return EOF;
             }
-            int limit = Math.Min(Available(), len);
+            int limit = Math.Min(RemainingBytes(), len);
             ReadFully(b, off, limit);
             return limit;
         }

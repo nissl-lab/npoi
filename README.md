@@ -15,11 +15,9 @@ What's NPOI
 <br />
 This project is the .NET version of Apache POI project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
-Donation 捐款
-============
+Donation 
+=========
 If you profits/benefits from NPOI, please [sponsor me via Github Sponsor](https://github.com/sponsors/tonyqus) or [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
-
-如果您从NPOI受益或实现盈利，请通过[Github Sponsor赞助我](https://github.com/sponsors/tonyqus)或[为该项目捐款](https://github.com/nissl-lab/npoi/discussions/923)，谢谢！
 
 Get Started with NPOI
 ============

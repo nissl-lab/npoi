@@ -29,6 +29,7 @@ using NPOI.OpenXmlFormats.Vml.Office;
 using NPOI.OpenXmlFormats.Vml.Spreadsheet;
 using System.Text;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
+using NPOI.Util;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -116,7 +117,7 @@ namespace NPOI.XSSF.UserModel
             //Stream vmlsm = new EvilUnclosedBRFixingInputStream(is1); --TODO:: add later
             
              doc.LoadXml(
-                  data.Replace("<br>","").Replace("</br>", "")
+                  data.Replace("<br>", "<br/>").Replace("</br>", "<br/>")
             );
 
              XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);

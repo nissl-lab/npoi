@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net472;net6.0</TargetFrameworks>
+    <TargetFrameworks>net472;net8.0</TargetFrameworks>
     <AssemblyName>NPOI.OOXML.TestCases</AssemblyName>
     <RootNamespace>TestCases</RootNamespace>
     <SignAssembly>true</SignAssembly>
