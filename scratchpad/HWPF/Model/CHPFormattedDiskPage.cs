@@ -113,7 +113,7 @@ namespace NPOI.HWPF.Model
             //optimization if offset == 0 use "Normal" style
             if (chpxOffset == 0)
             {
-                return new byte[0];
+                return Array.Empty<byte>();
             }
 
             int size = LittleEndian.GetUByte(_fkp, _offset + chpxOffset);
