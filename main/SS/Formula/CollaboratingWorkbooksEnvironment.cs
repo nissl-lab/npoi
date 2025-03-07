@@ -122,10 +122,10 @@ namespace NPOI.SS.Formula
             Dictionary<WorkbookEvaluator, String> uniqueEvals = new Dictionary<WorkbookEvaluator, String>(evaluators.Length);
             foreach (KeyValuePair<string, WorkbookEvaluator> me in evaluatorsByName)
             {
-                if (uniqueEvals.ContainsKey(me.Value))
+                if (uniqueEvals.TryGetValue(me.Value, out string eval))
                 {
                     String msg = "Attempted to register same workbook under names '" +
-                        uniqueEvals[me.Value] + "' and '" + me.Key + "'";
+                        eval + "' and '" + me.Key + "'";
                     throw new ArgumentException(msg);
                 }
                 uniqueEvals.Add(me.Value, me.Key);
@@ -199,9 +199,9 @@ namespace NPOI.SS.Formula
                 throw new InvalidOperationException("This environment Has been unhooked");
             }
             WorkbookEvaluator result;
-            if (_evaluatorsByName.ContainsKey(workbookName))
+            if (_evaluatorsByName.TryGetValue(workbookName, out WorkbookEvaluator value))
             {
-                result = (WorkbookEvaluator)_evaluatorsByName[workbookName];
+                result = (WorkbookEvaluator)value;
             }
             else
             {

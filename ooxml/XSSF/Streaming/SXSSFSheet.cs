@@ -811,8 +811,8 @@ namespace NPOI.XSSF.Streaming
 
         public IRow GetRow(int rownum)
         {
-            if (_rows.ContainsKey(rownum))
-                return _rows[rownum];
+            if (_rows.TryGetValue(rownum, out SXSSFRow row))
+                return row;
             else
                 return null;
         }

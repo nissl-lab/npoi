@@ -52,8 +52,8 @@ namespace NPOI.SS.Formula.Eval.Forked
             RowColKey key = new RowColKey(rowIndex, columnIndex);
 
             ForkedEvaluationCell result = null;
-            if (_sharedCellsByRowCol.ContainsKey(key))
-                result = _sharedCellsByRowCol[(key)];
+            if (_sharedCellsByRowCol.TryGetValue(key, out ForkedEvaluationCell value))
+                result = value;
 
             if (result == null)
             {
@@ -67,8 +67,8 @@ namespace NPOI.SS.Formula.Eval.Forked
             RowColKey key = new RowColKey(rowIndex, columnIndex);
 
             ForkedEvaluationCell result = null;
-            if (_sharedCellsByRowCol.ContainsKey(key))
-                result = _sharedCellsByRowCol[(key)];
+            if (_sharedCellsByRowCol.TryGetValue(key, out ForkedEvaluationCell value))
+                result = value;
             if (result == null)
             {
                 IEvaluationCell mcell = _masterSheet.GetCell(rowIndex, columnIndex);

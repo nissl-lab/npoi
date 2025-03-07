@@ -96,8 +96,8 @@ namespace NPOI.SS.UserModel.Drawing
         }
         public static string GetFillStyleName(int optionId)
         {
-            if (fillStyle.ContainsKey(optionId))
-                return fillStyle[optionId];
+            if (fillStyle.TryGetValue(optionId, out string name))
+                return name;
             return "Unknown";
         }
         #endregion

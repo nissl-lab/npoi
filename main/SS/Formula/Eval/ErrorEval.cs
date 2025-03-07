@@ -62,8 +62,8 @@ namespace NPOI.SS.Formula.Eval
         public static ErrorEval ValueOf(int errorCode)
         {
             FormulaError error = FormulaError.ForInt(errorCode);
-            if (evals.ContainsKey(error))
-                return evals[error];
+            if (evals.TryGetValue(error, out ErrorEval of))
+                return of;
 
             throw new RuntimeException("Unhandled error type  for code " + errorCode);
         }

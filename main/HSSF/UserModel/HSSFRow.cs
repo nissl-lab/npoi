@@ -428,10 +428,10 @@ namespace NPOI.HSSF.UserModel
         /// <returns>Cell representing that column or null if Undefined.</returns>
         private ICell RetrieveCell(int cellnum)
         {
-            if (!cells.ContainsKey(cellnum))
+            if (!cells.TryGetValue(cellnum, out ICell cell))
                 return null;
             //if (cellnum < 0 || cellnum >= cells.Count) return null;
-            return cells[cellnum];
+            return cell;
         }
 
         /// <summary>

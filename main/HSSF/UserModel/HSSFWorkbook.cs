@@ -1291,9 +1291,9 @@ namespace NPOI.HSSF.UserModel
             //  the same object every time, but create
             //  them lazily
 
-            if (fonts.ContainsKey(idx))
+            if (fonts.TryGetValue(idx, out HSSFFont font1))
             {
-                return (HSSFFont)fonts[idx];
+                return (HSSFFont)font1;
             }
 
             FontRecord font = workbook.GetFontRecordAt(idx);

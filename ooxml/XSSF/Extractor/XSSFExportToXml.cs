@@ -140,13 +140,13 @@ namespace NPOI.XSSF.Extractor
             {
 
                 XSSFSingleXmlCell simpleXmlCell;
-                if (SingleXmlCellsMappings.ContainsKey(xpath))
-                    simpleXmlCell = SingleXmlCellsMappings[xpath];
+                if (SingleXmlCellsMappings.TryGetValue(xpath, out XSSFSingleXmlCell mapping))
+                    simpleXmlCell = mapping;
                 else
                     simpleXmlCell=null;
                 XSSFTable table;
-                if (tableMappings.ContainsKey(xpath))
-                    table = tableMappings[xpath];
+                if (tableMappings.TryGetValue(xpath, out XSSFTable tableMapping))
+                    table = tableMapping;
                 else
                     table = null;
 

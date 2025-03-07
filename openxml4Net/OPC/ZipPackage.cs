@@ -503,9 +503,9 @@ namespace NPOI.OpenXml4Net.OPC
 
         protected override PackagePart GetPartImpl(PackagePartName partName)
         {
-            if (partList.ContainsKey(partName))
+            if (partList.TryGetValue(partName, out PackagePart impl))
             {
-                return partList[partName];
+                return impl;
             }
             return null;
         }
@@ -582,10 +582,8 @@ namespace NPOI.OpenXml4Net.OPC
                     logger.Log(POILogger.DEBUG, "Save part '"
                             + ZipHelper.GetZipItemNameFromOPCName(part
                                     .PartName.Name) + "'");
-                    if (partMarshallers.ContainsKey(part._contentType))
+                    if (partMarshallers.TryGetValue(part._contentType, out PartMarshaller marshaller))
                     {
-                        PartMarshaller marshaller = partMarshallers[part._contentType];
-
                         if (!marshaller.Marshall(part, zos))
                         {
                             throw new OpenXml4NetException(

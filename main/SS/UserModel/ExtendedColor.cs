@@ -93,8 +93,8 @@ namespace NPOI.SS.UserModel
                 int indexNum = Index;
                 var hashIndex = HSSFColor.GetIndexHash();
                 HSSFColor indexed = null;
-                if (hashIndex.ContainsKey(indexNum))
-                    indexed = hashIndex[indexNum];
+                if (hashIndex.TryGetValue(indexNum, out HSSFColor value))
+                    indexed = value;
                 if (indexed != null)
                 {
                     byte[] rgb = new byte[3];

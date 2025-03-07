@@ -49,19 +49,19 @@ namespace NPOI.SS.Formula.Functions
         }
         public static MatchMode GetMatchMode(int m)
         {
-            if (!matchModeMap.ContainsKey(m))
+            if (!matchModeMap.TryGetValue(m, out MatchMode mode))
             {
                 throw new ArgumentException("unknown match mode " + m);
             }
-            return matchModeMap[m];
+            return mode;
         }
         public static SearchMode GetSearchMode(int s)
         {
-            if (!searchModeMap.ContainsKey(s))
+            if (!searchModeMap.TryGetValue(s, out SearchMode mode))
             {
                 throw new ArgumentException("unknown search mode " + s);
             }
-            return searchModeMap[s];
+            return mode;
         }
         public enum MatchMode : int
         {

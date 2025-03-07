@@ -742,9 +742,9 @@ namespace NPOI.SS.Formula
         }
         private List<ValueAndFormat> GetMeaningfulValues(CellRangeAddress region, bool withText, Func<List<ValueAndFormat>, List<ValueAndFormat>> func)
         {
-            if (meaningfulRegionValues.ContainsKey(region))
+            if (meaningfulRegionValues.TryGetValue(region, out List<ValueAndFormat> meaningfulValues))
             {
-                return meaningfulRegionValues[region];
+                return meaningfulValues;
             }
             List<ValueAndFormat> values = new List<ValueAndFormat>();
             List<ValueAndFormat> allValues = new List<ValueAndFormat>((region.LastColumn - region.FirstColumn + 1) * (region.LastRow - region.FirstRow + 1));

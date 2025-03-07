@@ -376,10 +376,9 @@ namespace NPOI
 
         public POIXMLDocumentPart GetRelationById(String id)
         {
-            if (string.IsNullOrEmpty(id) || !relations.ContainsKey(id))
+            if (string.IsNullOrEmpty(id) || !relations.TryGetValue(id, out RelationPart rp))
                 return null;
 
-            RelationPart rp = relations[id];
             return (rp == null) ? null : rp.DocumentPart;
         }
 
@@ -730,9 +729,9 @@ namespace NPOI
 
         public TValue GetDictionary<TKey, TValue>(Dictionary<TKey, TValue> dict, TKey key)
         {
-            if (dict.ContainsKey(key))
+            if (dict.TryGetValue(key, out TValue dictionary))
             {
-                return dict[key];
+                return dictionary;
             }
             return default(TValue);
         }

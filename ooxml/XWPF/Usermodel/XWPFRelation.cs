@@ -234,8 +234,8 @@ namespace NPOI.XWPF.UserModel
          */
         public static XWPFRelation GetInstance(String rel)
         {
-            if (_table.ContainsKey(rel))
-                return _table[(rel)];
+            if (_table.TryGetValue(rel, out XWPFRelation instance))
+                return instance;
             return null;
         }
 

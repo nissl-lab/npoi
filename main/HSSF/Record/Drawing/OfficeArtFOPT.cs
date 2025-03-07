@@ -28,8 +28,8 @@ namespace NPOI.HSSF.Record.Drawing
         }
         public OfficeArtFOPTE GetFillOptionElement(int opid)
         {
-            if (dictOptions.ContainsKey(opid))
-                return dictOptions[opid];
+            if (dictOptions.TryGetValue(opid, out OfficeArtFOPTE element))
+                return element;
             return null;
         }
         public int DataSize

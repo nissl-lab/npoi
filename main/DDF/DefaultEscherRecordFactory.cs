@@ -98,8 +98,8 @@ namespace NPOI.DDF
 
             //ConstructorInfo recordConstructor = (ConstructorInfo) recordsMap[header.RecordId];
             ConstructorInfo recordConstructor = null;
-            if (recordsMap.ContainsKey(recordId))
-                recordConstructor = recordsMap[recordId];
+            if (recordsMap.TryGetValue(recordId, out ConstructorInfo value))
+                recordConstructor = value;
 
             EscherRecord escherRecord = null;
             if (recordConstructor == null)

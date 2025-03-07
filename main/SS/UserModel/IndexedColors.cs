@@ -252,8 +252,8 @@ namespace NPOI.SS.UserModel
 
         public static IndexedColors TryValueOf(int index)
         {
-            if (mappingIndex.ContainsKey(index))
-                return mappingIndex[index];
+            if (mappingIndex.TryGetValue(index, out IndexedColors of))
+                return of;
 
             return null;
         }

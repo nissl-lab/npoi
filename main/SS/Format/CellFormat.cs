@@ -131,8 +131,8 @@ namespace NPOI.SS.Format
         public static CellFormat GetInstance(String format)
         {
             CellFormat fmt = null;
-            if (formatCache.ContainsKey(format))
-                fmt = formatCache[format];
+            if (formatCache.TryGetValue(format, out CellFormat value))
+                fmt = value;
             if (fmt == null)
             {
                 if (format.Equals("General") || format.Equals("@"))

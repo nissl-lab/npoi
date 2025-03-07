@@ -349,9 +349,8 @@ namespace NPOI.XSSF.Streaming
                     // FIXME: Most cells are not merged, so calling getCellWidth twice re-computes the same value twice.
                     // Need to rewrite this to avoid unnecessary computation if this proves to be a performance bottleneck.
 
-                    if (maxColumnWidths.ContainsKey(column))
+                    if (maxColumnWidths.TryGetValue(column, out ColumnWidthPair pair))
                     {
-                        ColumnWidthPair pair = maxColumnWidths[column];
                         UpdateColumnWidth(cell, pair);
                     }
                 }
