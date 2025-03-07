@@ -32,7 +32,7 @@ namespace NPOI.Util
     internal class CloseIgnoringInputStream : Stream
     {
 
-        private Stream _is;
+        private readonly Stream _is;
 
         public CloseIgnoringInputStream(Stream stream)
         {

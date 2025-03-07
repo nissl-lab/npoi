@@ -28,7 +28,7 @@ namespace NPOI.XSSF.UserModel
      *  component of Conditional Formatting Settings
      */
     public class XSSFColorScaleFormatting : IColorScaleFormatting {
-        CT_ColorScale _scale;
+        readonly CT_ColorScale _scale;
 
         /*package*/
         public XSSFColorScaleFormatting(CT_ColorScale scale) {

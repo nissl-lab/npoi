@@ -30,8 +30,8 @@ namespace NPOI.HSSF.Record.Crypto
     public class Biff8DecryptingStream : BiffHeaderInput, ILittleEndianInput
     {
 
-        private ILittleEndianInput _le;
-        private Biff8RC4 _rc4;
+        private readonly ILittleEndianInput _le;
+        private readonly Biff8RC4 _rc4;
 
         public Biff8DecryptingStream(Stream in1, int InitialOffSet, Biff8EncryptionKey key)
         {

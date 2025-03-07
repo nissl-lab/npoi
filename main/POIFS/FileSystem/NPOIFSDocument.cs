@@ -35,9 +35,9 @@ namespace NPOI.POIFS.FileSystem
  */
     public class NPOIFSDocument : POIFSViewable
     {
-        private DocumentProperty _property;
+        private readonly DocumentProperty _property;
 
-        private NPOIFSFileSystem _filesystem;
+        private readonly NPOIFSFileSystem _filesystem;
         private NPOIFSStream _stream;
         private int _block_size;
 

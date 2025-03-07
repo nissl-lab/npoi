@@ -21,7 +21,7 @@ namespace NPOI.SS.Formula
 {
     internal class SingleValueAttribute : Attribute
     {
-        private bool _isSingleValue=false;
+        private readonly bool _isSingleValue=false;
         public SingleValueAttribute(bool isSingleValue)
         {
             this._isSingleValue = isSingleValue;

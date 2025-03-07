@@ -29,8 +29,8 @@ namespace NPOI.SS.Formula.Functions
      */
     public class LeftRight : Var1or2ArgFunction
     {
-        private static ValueEval DEFAULT_ARG1 = new NumberEval(1.0);
-        private bool _isLeft;
+        private static readonly ValueEval DEFAULT_ARG1 = new NumberEval(1.0);
+        private readonly bool _isLeft;
         public LeftRight(bool isLeft)
         {
             _isLeft = isLeft;

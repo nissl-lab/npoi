@@ -27,9 +27,9 @@ namespace NPOI.SS.Formula
      */
     public class SheetRangeEvaluator : ISheetRange
     {
-        private int _firstSheetIndex;
-        private int _lastSheetIndex;
-        private SheetRefEvaluator[] _sheetEvaluators;
+        private readonly int _firstSheetIndex;
+        private readonly int _lastSheetIndex;
+        private readonly SheetRefEvaluator[] _sheetEvaluators;
 
         public SheetRangeEvaluator(int firstSheetIndex, int lastSheetIndex, SheetRefEvaluator[] sheetEvaluators)
         {

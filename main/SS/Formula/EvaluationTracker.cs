@@ -37,9 +37,9 @@ namespace NPOI.SS.Formula
     public class EvaluationTracker
     {
         // TODO - consider deleting this class and letting CellEvaluationFrame take care of itself
-        private IList<CellEvaluationFrame> _evaluationFrames;
-        private ISet<FormulaCellCacheEntry> _currentlyEvaluatingCells;
-        private EvaluationCache _cache;
+        private readonly IList<CellEvaluationFrame> _evaluationFrames;
+        private readonly ISet<FormulaCellCacheEntry> _currentlyEvaluatingCells;
+        private readonly EvaluationCache _cache;
 
         public EvaluationTracker(EvaluationCache cache)
         {

@@ -9,7 +9,7 @@ namespace NPOI.SS.Formula
 {
     public class CacheAreaEval:AreaEvalBase
     {
-        ValueEval[] _values;
+        readonly ValueEval[] _values;
         public CacheAreaEval(AreaI ptg, ValueEval[] values):base(ptg)
         {
             _values = values;

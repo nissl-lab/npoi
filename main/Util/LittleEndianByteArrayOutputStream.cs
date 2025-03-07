@@ -26,8 +26,8 @@ namespace NPOI.Util
     /// <remarks>@author Josh Micich</remarks>
     public class LittleEndianByteArrayOutputStream : ILittleEndianOutput, IDelayableLittleEndianOutput
     {
-        private byte[] _buf;
-        private int _endIndex;
+        private readonly byte[] _buf;
+        private readonly int _endIndex;
         private int _writeIndex;
 
         public LittleEndianByteArrayOutputStream(byte[] buf, int startOffset, int maxWriteLen)

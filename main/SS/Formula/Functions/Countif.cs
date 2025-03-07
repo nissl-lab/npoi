@@ -56,8 +56,8 @@ namespace NPOI.SS.Formula.Functions
             public static readonly CmpOp OP_LT = op("<", LT);
             public static readonly CmpOp OP_GT = op(">", GT);
             public static readonly CmpOp OP_GE = op(">=", GE);
-            private String _representation;
-            private int _code;
+            private readonly String _representation;
+            private readonly int _code;
 
             private static CmpOp op(String rep, int code)
             {
@@ -175,7 +175,7 @@ namespace NPOI.SS.Formula.Functions
         }
         public abstract class MatcherBase : IMatchPredicate
         {
-            private CmpOp _operator;
+            private readonly CmpOp _operator;
 
             public MatcherBase(CmpOp operator1)
             {
@@ -213,7 +213,7 @@ namespace NPOI.SS.Formula.Functions
         public class ErrorMatcher : MatcherBase
         {
 
-            private int _value;
+            private readonly int _value;
 
             public ErrorMatcher(int errorCode, CmpOp operator1)
                 : base(operator1)
@@ -249,7 +249,7 @@ namespace NPOI.SS.Formula.Functions
         private class NumberMatcher : MatcherBase
         {
 
-            private double _value;
+            private readonly double _value;
 
             public NumberMatcher(double value, CmpOp optr)
                 : base(optr)
@@ -318,7 +318,7 @@ namespace NPOI.SS.Formula.Functions
         private class BooleanMatcher : MatcherBase
         {
 
-            private int _value;
+            private readonly int _value;
 
             public BooleanMatcher(bool value, CmpOp optr)
                 : base(optr)
@@ -390,9 +390,9 @@ namespace NPOI.SS.Formula.Functions
         internal class StringMatcher : MatcherBase
         {
 
-            private String _value;
-            private CmpOp _operator;
-            private Regex _pattern;
+            private readonly String _value;
+            private readonly CmpOp _operator;
+            private readonly Regex _pattern;
 
             public StringMatcher(String value, CmpOp optr) : base(optr)
             {

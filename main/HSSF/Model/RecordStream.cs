@@ -29,9 +29,9 @@ namespace NPOI.HSSF.Model
     public class RecordStream
     {
 
-        private IList _list;
+        private readonly IList _list;
         private int _nextIndex;
-        private int _endIx;
+        private readonly int _endIx;
         private int _countRead;
 
         public RecordStream(IList inputList, int startIndex, int endIx)

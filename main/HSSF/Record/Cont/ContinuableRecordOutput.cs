@@ -32,7 +32,7 @@ namespace NPOI.HSSF.Record.Cont
     public class ContinuableRecordOutput : ILittleEndianOutput
     {
 
-        private ILittleEndianOutput _out;
+        private readonly ILittleEndianOutput _out;
         private UnknownLengthRecordOutput _ulrOutput;
         private int _totalPreviousRecordsSize;
 
@@ -281,7 +281,7 @@ namespace NPOI.HSSF.Record.Cont
         ///**
         // * Allows optimised usage of {@link ContinuableRecordOutput} for sizing purposes only.
         // */
-        private static ILittleEndianOutput NOPOutput = new DelayableLittleEndianOutput1();
+        private static readonly ILittleEndianOutput NOPOutput = new DelayableLittleEndianOutput1();
 
         class DelayableLittleEndianOutput1 : IDelayableLittleEndianOutput
         {

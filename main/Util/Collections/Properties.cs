@@ -36,7 +36,7 @@ namespace NPOI.Util.Collections
     /// </summary>
     public class Properties
     {
-        private Hashtable _col;
+        private readonly Hashtable _col;
         private const string whiteSpaceChars = " \t\r\n\f";
         private const string keyValueSeparators = "=: \t\r\n\f";
         private const string strictKeyValueSeparators = "=:";

@@ -46,7 +46,7 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFWorkbook : POIXMLDocument, IWorkbook
     {
-        private static Regex COMMA_PATTERN = new Regex(",", RegexOptions.Compiled);
+        private static readonly Regex COMMA_PATTERN = new Regex(",", RegexOptions.Compiled);
 
         /**
          * Width of one character of the default font in pixels. Same for Calibry and Arial.
@@ -57,7 +57,7 @@ namespace NPOI.XSSF.UserModel
          * Excel silently tRuncates long sheet names to 31 chars.
          * This constant is used to ensure uniqueness in the first 31 chars
          */
-        private static int Max_SENSITIVE_SHEET_NAME_LEN = 31;
+        private static readonly int Max_SENSITIVE_SHEET_NAME_LEN = 31;
         /** Extended windows meta file */
         public static int PICTURE_TYPE_EMF = 2;
 
@@ -118,7 +118,7 @@ namespace NPOI.XSSF.UserModel
          * The locator of user-defined functions.
          * By default includes functions from the Excel Analysis Toolpack
          */
-        private IndexedUDFFinder _udfFinder = new IndexedUDFFinder(UDFFinder.GetDefault());
+        private readonly IndexedUDFFinder _udfFinder = new IndexedUDFFinder(UDFFinder.GetDefault());
 
         /**
          * TODO
@@ -155,7 +155,7 @@ namespace NPOI.XSSF.UserModel
          */
         private List<XSSFPictureData> pictures;
 
-        private static POILogger logger = POILogFactory.GetLogger(typeof(XSSFWorkbook));
+        private static readonly POILogger logger = POILogFactory.GetLogger(typeof(XSSFWorkbook));
 
         /**
          * cached instance of XSSFCreationHelper for this workbook

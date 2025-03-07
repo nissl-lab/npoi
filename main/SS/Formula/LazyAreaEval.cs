@@ -30,7 +30,7 @@ namespace NPOI.SS.Formula
     public class LazyAreaEval : AreaEvalBase
     {
 
-        private SheetRangeEvaluator _evaluator;
+        private readonly SheetRangeEvaluator _evaluator;
 
         public LazyAreaEval(AreaI ptg, SheetRangeEvaluator evaluator)
             : base(ptg, evaluator)

@@ -11,8 +11,8 @@ namespace NPOI.XSSF.UserModel
         public static XSSFWorkbookType XLSX = new XSSFWorkbookType(XSSFRelation.WORKBOOK.ContentType, "xlsx");
         public static XSSFWorkbookType XLSM = new XSSFWorkbookType(XSSFRelation.MACROS_WORKBOOK.ContentType, "xlsm");
 
-        private string _contentType;
-        private string _extension;
+        private readonly string _contentType;
+        private readonly string _extension;
 
         private XSSFWorkbookType(string contentType, string extension)
         {

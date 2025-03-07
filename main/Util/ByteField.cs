@@ -39,7 +39,7 @@ namespace NPOI.Util
     public class ByteField : FixedField
     {
         private const byte _default_value = 0;
-        private int _offset;
+        private readonly int _offset;
         private byte _value;
 
         /// <summary>

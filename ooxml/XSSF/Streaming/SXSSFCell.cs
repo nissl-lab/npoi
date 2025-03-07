@@ -30,9 +30,9 @@ namespace NPOI.XSSF.Streaming
 {
     public class SXSSFCell : ICell
     {
-        private static POILogger logger = POILogFactory.GetLogger(typeof(SXSSFCell));
+        private static readonly POILogger logger = POILogFactory.GetLogger(typeof(SXSSFCell));
 
-        private SXSSFRow _row;
+        private readonly SXSSFRow _row;
         private Value _value;
         private ICellStyle _style;
         private Property _firstProperty;

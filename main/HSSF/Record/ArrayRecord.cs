@@ -40,7 +40,7 @@ namespace NPOI.HSSF.Record
 
         private int _options;
         private int _field3notUsed;
-        private NPOI.SS.Formula.Formula _formula;
+        private readonly NPOI.SS.Formula.Formula _formula;
 
         public ArrayRecord(RecordInputStream in1)
             : base(in1)

@@ -28,7 +28,7 @@ namespace NPOI.HSSF.UserModel
     public class HSSFEvaluationSheet : IEvaluationSheet
     {
 
-        private HSSFSheet _hs;
+        private readonly HSSFSheet _hs;
 
         public HSSFEvaluationSheet(HSSFSheet hs)
         {

@@ -30,7 +30,7 @@ namespace NPOI.XSSF.UserModel
     public class XSSFRelation : POIXMLRelation
     {
 
-        private static POILogger log = POILogFactory.GetLogger(typeof(XSSFRelation));
+        private static readonly POILogger log = POILogFactory.GetLogger(typeof(XSSFRelation));
 
         /**
          * A map to lookup POIXMLRelation by its relation type

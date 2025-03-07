@@ -36,7 +36,7 @@ namespace NPOI.SS.Formula.Atp
      */
     class RandBetween : FreeRefFunction
     {
-        private Random _rnd;
+        private readonly Random _rnd;
         
         public static FreeRefFunction Instance = new RandBetween();
 

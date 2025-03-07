@@ -36,7 +36,7 @@ namespace NPOI.SS.Formula.Functions
      */
     public class Count : Function
     {
-        private IMatchPredicate _predicate;
+        private readonly IMatchPredicate _predicate;
 
         public Count()
         {
@@ -92,7 +92,7 @@ namespace NPOI.SS.Formula.Functions
                 return false;
             }
         }
-        private static IMatchPredicate defaultPredicate = new DefaultPredicate();
+        private static readonly IMatchPredicate defaultPredicate = new DefaultPredicate();
 
         /// <summary>
         /// matches hidden rows but not subtotals
@@ -135,8 +135,8 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private static IMatchPredicate subtotalPredicate = new SubtotalPredicate();
-        private static I_MatchAreaPredicate subtotalVisibleOnlyPredicate = new SubtotalVisibleOnlyPredicate();
+        private static readonly IMatchPredicate subtotalPredicate = new SubtotalPredicate();
+        private static readonly I_MatchAreaPredicate subtotalVisibleOnlyPredicate = new SubtotalVisibleOnlyPredicate();
         /**
      *  Create an instance of Count to use in {@link Subtotal}
      * <p>

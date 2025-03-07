@@ -27,7 +27,7 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFPatternFormatting : IPatternFormatting
     {
-        CT_Fill _fill;
+        readonly CT_Fill _fill;
 
         public XSSFPatternFormatting(CT_Fill fill)
         {

@@ -30,7 +30,7 @@ namespace NPOI.SS.Formula.Atp
 
     public class NotImplemented : FreeRefFunction
     {
-        private String _functionName;
+        private readonly String _functionName;
 
         public NotImplemented(String functionName)
         {
@@ -47,7 +47,7 @@ namespace NPOI.SS.Formula.Atp
     {
         public static UDFFinder instance = new AnalysisToolPak();
 
-        private static Dictionary<String, FreeRefFunction> _functionsByName = CreateFunctionsMap();
+        private static readonly Dictionary<String, FreeRefFunction> _functionsByName = CreateFunctionsMap();
 
         private AnalysisToolPak()
         {

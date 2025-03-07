@@ -36,15 +36,15 @@ namespace NPOI.HSSF.Record.Aggregates
 
         private class SharedFormulaGroup
         {
-            private SharedFormulaRecord _sfr;
-            private FormulaRecordAggregate[] _frAggs;
+            private readonly SharedFormulaRecord _sfr;
+            private readonly FormulaRecordAggregate[] _frAggs;
             private int _numberOfFormulas;
             /**
              * Coordinates of the first cell having a formula that uses this shared formula.
              * This is often <i>but not always</i> the top left cell in the range covered by
              * {@link #_sfr}
              */
-            private CellReference _firstCell;
+            private readonly CellReference _firstCell;
             internal CellReference FirstCell
             {
                 get { return _firstCell; }

@@ -37,13 +37,13 @@ namespace NPOI.POIFS.FileSystem
         private long _marked_offset;
 
         /** the Document's size */
-        private int _document_size;
+        private readonly int _document_size;
 
         /** have we been closed? */
         private bool _closed;
 
         /** the actual Document */
-        private OPOIFSDocument _document;
+        private readonly OPOIFSDocument _document;
 
         /** the data block Containing the current stream pointer */
         private DataInputBlock _currentBlock;

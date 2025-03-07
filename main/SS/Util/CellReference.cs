@@ -63,7 +63,7 @@ namespace NPOI.SS.Util
         private const char SPECIAL_NAME_DELIMITER = '\'';
 
         //private static final Pattern NAMED_RANGE_NAME_PATTERN = Pattern.compile("[_A-Z][_.A-Z0-9]*", Pattern.CASE_INSENSITIVE);
-        private static Regex NAMED_RANGE_NAME_PATTERN = new Regex("^[_A-Za-z][_.A-Za-z0-9]*$", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        private static readonly Regex NAMED_RANGE_NAME_PATTERN = new Regex("^[_A-Za-z][_.A-Za-z0-9]*$", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
         //private static string BIFF8_LAST_COLUMN = "IV";
         //private static int BIFF8_LAST_COLUMN_TEXT_LEN = BIFF8_LAST_COLUMN.Length;
         //private static string BIFF8_LAST_ROW = (0x10000).ToString();
@@ -71,11 +71,11 @@ namespace NPOI.SS.Util
 
         // FIXME: _sheetName may be null, depending on the entry point.
         // Perhaps it would be better to declare _sheetName is never null, using an empty string to represent a 2D reference.
-        private String _sheetName;
-        private int _rowIndex;
-        private int _colIndex;
-        private bool _isRowAbs;
-        private bool _isColAbs;
+        private readonly String _sheetName;
+        private readonly int _rowIndex;
+        private readonly int _colIndex;
+        private readonly bool _isRowAbs;
+        private readonly bool _isColAbs;
 
         /**
          * Create an cell ref from a string representation.  Sheet names containing special characters should be

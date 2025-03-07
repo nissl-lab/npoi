@@ -31,9 +31,9 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFTextParagraph : IEnumerator<XSSFTextRun>, IEnumerable<XSSFTextRun>
     {
-        private CT_TextParagraph _p;
-        private CT_Shape _shape;
-        private List<XSSFTextRun> _Runs;
+        private readonly CT_TextParagraph _p;
+        private readonly CT_Shape _shape;
+        private readonly List<XSSFTextRun> _Runs;
 
         public XSSFTextParagraph(CT_TextParagraph p, CT_Shape ctShape)
         {
@@ -674,7 +674,7 @@ namespace NPOI.XSSF.UserModel
 
         class ParagraphPropertyFetcherTabStop : ParagraphPropertyFetcher<double>
         {
-            private int idx;
+            private readonly int idx;
             public ParagraphPropertyFetcherTabStop(int level, int idx) : base(level) { this.idx = idx; }
             public override bool Fetch(CT_TextParagraphProperties props)
             {

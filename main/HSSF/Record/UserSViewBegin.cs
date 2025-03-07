@@ -34,7 +34,7 @@ using NPOI.Util;
     {
 
         public const short sid = 0x01AA;
-        private byte[] _rawData;
+        private readonly byte[] _rawData;
 
         public UserSViewBegin(byte[] data)
         {

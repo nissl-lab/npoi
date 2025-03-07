@@ -37,7 +37,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * List of the paragraphs that make up the text in this shape
          */
-        private List<XSSFTextParagraph> _paragraphs;
+        private readonly List<XSSFTextParagraph> _paragraphs;
         /**
          * A default instance of CTShape used for creating new shapes.
          */
@@ -46,7 +46,7 @@ namespace NPOI.XSSF.UserModel
         /**
          *  Xml bean that stores properties of this shape
          */
-        private CT_Shape ctShape;
+        private readonly CT_Shape ctShape;
 
         protected internal XSSFSimpleShape(XSSFDrawing Drawing, CT_Shape ctShape)
         {
@@ -399,8 +399,8 @@ namespace NPOI.XSSF.UserModel
             return alpha;
         }
 
-        private static String[] _romanChars = new String[] { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
-        private static int[] _romanAlphaValues = new int[] { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
+        private static readonly String[] _romanChars = new String[] { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+        private static readonly int[] _romanAlphaValues = new int[] { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
 
         /**
          * Convert an integer to its roman equivalent e.g. 1 = I, 9 = IX etc

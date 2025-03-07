@@ -35,7 +35,7 @@ namespace NPOI.HSSF.Record
        : StandardRecord
     {
         public const short sid = 0xe1;
-        private int _codepage;   // = 0;
+        private readonly int _codepage;   // = 0;
 
         /**
          * suggested (and probably correct) default

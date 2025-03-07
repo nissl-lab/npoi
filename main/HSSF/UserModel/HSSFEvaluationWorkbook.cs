@@ -37,8 +37,8 @@ using NPOI.Util;
     public class HSSFEvaluationWorkbook : IFormulaRenderingWorkbook, IEvaluationWorkbook, IFormulaParsingWorkbook
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(HSSFEvaluationWorkbook));
-        private HSSFWorkbook _uBook;
-        private NPOI.HSSF.Model.InternalWorkbook _iBook;
+        private readonly HSSFWorkbook _uBook;
+        private readonly NPOI.HSSF.Model.InternalWorkbook _iBook;
 
         public static HSSFEvaluationWorkbook Create(NPOI.SS.UserModel.IWorkbook book)
         {
@@ -241,8 +241,8 @@ using NPOI.Util;
         private class Name : IEvaluationName
         {
 
-            private NameRecord _nameRecord;
-            private int _index;
+            private readonly NameRecord _nameRecord;
+            private readonly int _index;
 
             public Name(NameRecord nameRecord, int index)
             {

@@ -39,8 +39,8 @@ namespace NPOI.SS.Formula.Eval.Forked
     public class ForkedEvaluator
     {
 
-        private WorkbookEvaluator _evaluator;
-        private ForkedEvaluationWorkbook _sewb;
+        private readonly WorkbookEvaluator _evaluator;
+        private readonly ForkedEvaluationWorkbook _sewb;
 
         private ForkedEvaluator(IEvaluationWorkbook masterWorkbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
         {

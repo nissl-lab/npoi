@@ -20,37 +20,37 @@ namespace NPOI.OpenXml4Net.OPC
     public class PackageRelationshipCollection : IEnumerator<PackageRelationship>
     {
 
-        private static POILogger logger = POILogFactory.GetLogger(typeof(PackageRelationshipCollection));
+        private static readonly POILogger logger = POILogFactory.GetLogger(typeof(PackageRelationshipCollection));
 
         /**
          * Package relationships ordered by ID.
          */
-        private SortedList<String, PackageRelationship> relationshipsByID;
+        private readonly SortedList<String, PackageRelationship> relationshipsByID;
 
         /**
          * A lookup of internal relationships to avoid
          */
-        private SortedList<String, PackageRelationship> internalRelationshipsByTargetName;
+        private readonly SortedList<String, PackageRelationship> internalRelationshipsByTargetName;
 
         /**
          * This relationshipPart.
          */
-        private PackagePart relationshipPart;
+        private readonly PackagePart relationshipPart;
 
         /**
          * Source part.
          */
-        private PackagePart sourcePart;
+        private readonly PackagePart sourcePart;
 
         /**
          * This part name.
          */
-        private PackagePartName partName;
+        private readonly PackagePartName partName;
 
         /**
          * Reference to the package.
          */
-        private OPCPackage container;
+        private readonly OPCPackage container;
         /**
          * The ID number of the next rID# to generate, or -1
          *  if that is still to be determined.

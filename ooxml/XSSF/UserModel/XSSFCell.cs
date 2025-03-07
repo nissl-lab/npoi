@@ -48,19 +48,19 @@ namespace NPOI.XSSF.UserModel
     public class XSSFCell : ICell
     {
 
-        private static String FALSE_AS_STRING = "0";
-        private static String TRUE_AS_STRING = "1";
+        private static readonly String FALSE_AS_STRING = "0";
+        private static readonly String TRUE_AS_STRING = "1";
 
         /**
          * the xml bean Containing information about the cell's location, value,
          * data type, formatting, and formula
          */
-        private CT_Cell _cell;
+        private readonly CT_Cell _cell;
 
         /**
          * the XSSFRow this cell belongs to
          */
-        private XSSFRow _row;
+        private readonly XSSFRow _row;
 
         /**
          * 0-based column index
@@ -71,12 +71,12 @@ namespace NPOI.XSSF.UserModel
          * Table of strings shared across this workbook.
          * If two cells contain the same string, then the cell value is the same index into SharedStringsTable
          */
-        private SharedStringsTable _sharedStringSource;
+        private readonly SharedStringsTable _sharedStringSource;
 
         /**
          * Table of cell styles shared across all cells in a workbook.
          */
-        private StylesTable _stylesSource;
+        private readonly StylesTable _stylesSource;
 
         /**
          * Construct a XSSFCell.

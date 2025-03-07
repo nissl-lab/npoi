@@ -35,7 +35,7 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Flag to know if this part is a relationship.
          */
-        private bool _isRelationshipPart;
+        private readonly bool _isRelationshipPart;
 
         /**
          * Flag to know if this part has been logically deleted.

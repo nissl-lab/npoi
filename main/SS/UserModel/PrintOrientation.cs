@@ -48,7 +48,7 @@ namespace NPOI.SS.UserModel
             LANDSCAPE = new PrintOrientation(3);
         }
 
-        private int orientation;
+        private readonly int orientation;
 
         private PrintOrientation(int orientation)
         {
@@ -67,7 +67,7 @@ namespace NPOI.SS.UserModel
         }
 
 
-        private static PrintOrientation[] _table;
+        private static readonly PrintOrientation[] _table;
 
         public static PrintOrientation ValueOf(int value)
         {

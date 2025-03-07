@@ -39,8 +39,8 @@ namespace NPOI.SS.Util
         /** A constant for references to the first cell in a sheet. */
         public static CellAddress A1 = new CellAddress(0, 0);
 
-        private int _row;
-        private int _col;
+        private readonly int _row;
+        private readonly int _col;
 
         /**
          * Create a new CellAddress object.

@@ -52,7 +52,7 @@ namespace NPOI.HSSF.Record.Cont
      */
     public class ContinuableRecordInput : ILittleEndianInput
     {
-        private RecordInputStream _in;
+        private readonly RecordInputStream _in;
 
         public ContinuableRecordInput(RecordInputStream in1)
         {

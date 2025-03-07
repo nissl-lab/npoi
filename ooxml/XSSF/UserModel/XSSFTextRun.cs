@@ -28,8 +28,8 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFTextRun
     {
-        private CT_RegularTextRun _r;
-        private XSSFTextParagraph _p;
+        private readonly CT_RegularTextRun _r;
+        private readonly XSSFTextParagraph _p;
 
         public XSSFTextRun(CT_RegularTextRun r, XSSFTextParagraph p)
         {

@@ -32,9 +32,9 @@ namespace NPOI.HSSF.UserModel
     /// </summary>
     public class HSSFCellStyle : ICellStyle
     {
-        private ExtendedFormatRecord _format = null;
-        private short index = 0;
-        private NPOI.HSSF.Model.InternalWorkbook _workbook = null;
+        private readonly ExtendedFormatRecord _format = null;
+        private readonly short index = 0;
+        private readonly NPOI.HSSF.Model.InternalWorkbook _workbook = null;
 
 
         /// <summary>

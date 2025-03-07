@@ -39,7 +39,7 @@ namespace NPOI.HPSF
 
     internal class ArrayHeader
     {
-        private ArrayDimension[] _dimensions;
+        private readonly ArrayDimension[] _dimensions;
         internal int _type;
 
         public ArrayHeader( byte[] data, int startOffset )

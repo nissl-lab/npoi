@@ -40,8 +40,8 @@ namespace NPOI.POIFS.FileSystem
     {
         private bool _closed;
         private int _current_offset;
-        private OPOIFSDocument _document;
-        private int _document_size;
+        private readonly OPOIFSDocument _document;
+        private readonly int _document_size;
         private byte[] _tiny_buffer;
         private const int _EOD = 0;
 

@@ -72,8 +72,8 @@ namespace NPOI.SS.Formula.Functions
         public class LinearOffsetRange
         {
 
-            private int _offset;
-            private int _Length;
+            private readonly int _offset;
+            private readonly int _Length;
 
             public LinearOffsetRange(int offset, int length)
             {
@@ -154,12 +154,12 @@ namespace NPOI.SS.Formula.Functions
         private class BaseRef
         {
             private const int INVALID_SHEET_INDEX = -1;
-            private int _firstRowIndex;
-            private int _firstColumnIndex;
-            private int _width;
-            private int _height;
-            private RefEval _refEval;
-		    private AreaEval _areaEval;
+            private readonly int _firstRowIndex;
+            private readonly int _firstColumnIndex;
+            private readonly int _width;
+            private readonly int _height;
+            private readonly RefEval _refEval;
+		    private readonly AreaEval _areaEval;
 
             public BaseRef(RefEval re)
             {

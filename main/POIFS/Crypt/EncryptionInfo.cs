@@ -311,39 +311,39 @@ namespace NPOI.POIFS.Crypt
             return eib;
         }
 
-        private int _versionMajor;
+        private readonly int _versionMajor;
         public int VersionMajor
         {
             get { return _versionMajor; }
         }
         
-        private int _versionMinor;
+        private readonly int _versionMinor;
         public int VersionMinor
         {
             get { return _versionMinor; }
         }
 
-        private int _encryptionFlags;
+        private readonly int _encryptionFlags;
         public int EncryptionFlags
         {
             get { return _encryptionFlags; }
         }
-        private EncryptionHeader _header;
+        private readonly EncryptionHeader _header;
         public EncryptionHeader Header
         {
             get { return _header; }
         }
-        private EncryptionVerifier _verifier;
+        private readonly EncryptionVerifier _verifier;
         public EncryptionVerifier Verifier
         {
             get { return _verifier; }
         }
-        private Decryptor _decryptor;
+        private readonly Decryptor _decryptor;
         public Decryptor Decryptor
         {
             get { return _decryptor; }
         }
-        private Encryptor _encryptor;
+        private readonly Encryptor _encryptor;
         public Encryptor Encryptor
         {
             get { return _encryptor; }

@@ -30,8 +30,8 @@ namespace NPOI.HSSF.UserModel
     public class HSSFEvaluationCell : IEvaluationCell
     {
 
-        private IEvaluationSheet _evalSheet;
-        private NPOI.SS.UserModel.ICell _cell;
+        private readonly IEvaluationSheet _evalSheet;
+        private readonly NPOI.SS.UserModel.ICell _cell;
 
         public HSSFEvaluationCell(NPOI.SS.UserModel.ICell cell, IEvaluationSheet evalSheet)
         {

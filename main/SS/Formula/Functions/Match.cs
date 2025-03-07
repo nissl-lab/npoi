@@ -27,7 +27,7 @@ namespace NPOI.SS.Formula.Functions
     public class SingleValueVector : ValueVector
     {
 
-        private ValueEval _value;
+        private readonly ValueEval _value;
 
         public SingleValueVector(ValueEval value)
         {

@@ -6,7 +6,7 @@ namespace NPOI.SS.Formula.Functions
     public class SearchFind : Var2or3ArgFunction
     {
 
-        private bool _isCaseSensitive;
+        private readonly bool _isCaseSensitive;
 
         public SearchFind(bool isCaseSensitive)
         {

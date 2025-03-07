@@ -28,7 +28,7 @@ namespace NPOI.SS.Formula.Atp
     {
 
         public static WorkdayCalculator instance = new WorkdayCalculator();
-        private static Dictionary<int, List<int>> weekendTypeMap = new Dictionary<int, List<int>>();
+        private static readonly Dictionary<int, List<int>> weekendTypeMap = new Dictionary<int, List<int>>();
         /**
          * Constructor.
          */

@@ -59,13 +59,13 @@ namespace NPOI.SS.Formula.Eval
 
         private class ArrayEval : MatrixFunction.TwoArrayArg
         {
-            Func<double, double, double> _evaluateFunc = null;
+            readonly Func<double, double, double> _evaluateFunc = null;
             public ArrayEval(Func<double, double, double> evalFunc)
             {
                 _evaluateFunc = evalFunc;
             }
 
-            private MatrixFunction.MutableValueCollector instance = new MatrixFunction.MutableValueCollector(false, true);
+            private readonly MatrixFunction.MutableValueCollector instance = new MatrixFunction.MutableValueCollector(false, true);
 
             protected override double[] CollectValues(ValueEval arg)
             {

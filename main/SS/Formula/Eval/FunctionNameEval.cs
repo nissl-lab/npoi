@@ -25,7 +25,7 @@ namespace NPOI.SS.Formula.Eval
     public class FunctionNameEval : ValueEval
     {
 
-        private String _functionName;
+        private readonly String _functionName;
 
         /**
          * Creates a NameEval representing a function name

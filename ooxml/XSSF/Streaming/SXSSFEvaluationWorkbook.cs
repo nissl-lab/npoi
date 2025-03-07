@@ -23,7 +23,7 @@ namespace NPOI.XSSF.Streaming
 {
     public class SXSSFEvaluationWorkbook : BaseXSSFEvaluationWorkbook
     {
-        private SXSSFWorkbook _xBook;
+        private readonly SXSSFWorkbook _xBook;
 
         public static SXSSFEvaluationWorkbook Create(SXSSFWorkbook book)
         {

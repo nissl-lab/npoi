@@ -38,9 +38,9 @@ namespace NPOI.HSSF.UserModel
         //    "[\\p{IsAlphabetic}_\\\\]" +
         //    "[\\p{IsAlphabetic}0-9_.\\\\]*",
         //    RegexOptions.IgnoreCase);
-        private HSSFWorkbook book;
-        private NameRecord _definedNameRec;
-        private NameCommentRecord _commentRec;
+        private readonly HSSFWorkbook book;
+        private readonly NameRecord _definedNameRec;
+        private readonly NameCommentRecord _commentRec;
         /* package */
         internal HSSFName(HSSFWorkbook book, NameRecord name):this(book, name, null)
         {

@@ -29,8 +29,8 @@ namespace NPOI.XSSF.Streaming
     /// </summary>
     public class SXSSFDrawing : IDrawing, IDrawing<XSSFShape>
     {
-        private SXSSFWorkbook _wb;
-        private XSSFDrawing _drawing;
+        private readonly SXSSFWorkbook _wb;
+        private readonly XSSFDrawing _drawing;
 
         public SXSSFDrawing(SXSSFWorkbook workbook, XSSFDrawing Drawing)
         {

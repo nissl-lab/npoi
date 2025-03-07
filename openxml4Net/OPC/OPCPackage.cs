@@ -24,7 +24,7 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Logger.
          */
-        private static POILogger logger = POILogFactory.GetLogger(typeof(OPCPackage));
+        private static readonly POILogger logger = POILogFactory.GetLogger(typeof(OPCPackage));
 
         /**
          * Default package access.
@@ -34,7 +34,7 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Package access.
          */
-        private PackageAccess packageAccess;
+        private readonly PackageAccess packageAccess;
 
         /**
          * Package parts collection.

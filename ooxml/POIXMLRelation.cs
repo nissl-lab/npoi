@@ -31,22 +31,22 @@ namespace NPOI
         /**
          * Describes the content stored in a part.
          */
-        private String _type;
+        private readonly String _type;
 
         /**
          * The kind of connection between a source part and a target part in a namespace.
          */
-        private String _relation;
+        private readonly String _relation;
 
         /**
          * The path component of a pack URI.
          */
-        private String _defaultName;
+        private readonly String _defaultName;
 
         /**
          * Defines what object is used to construct instances of this relationship
          */
-        private Type _cls;
+        private readonly Type _cls;
 
         /**
          * Instantiates a POIXMLRelation.

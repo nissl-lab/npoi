@@ -49,7 +49,7 @@ namespace NPOI.HSSF.Record
         public const int ERROR_CODE = 2;
         public const int EMPTY = 3;
 
-        private byte[] _variableData;
+        private readonly byte[] _variableData;
 
         private SpecialCachedValue(byte[] data)
         {

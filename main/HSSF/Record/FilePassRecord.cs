@@ -33,8 +33,8 @@ namespace NPOI.HSSF.Record
         private const int ENCRYPTION_XOR = 0;
         private const int ENCRYPTION_OTHER = 1;
 
-        private int _encryptionType;
-        private KeyData _keyData;
+        private readonly int _encryptionType;
+        private readonly KeyData _keyData;
 
         private interface KeyData : ICloneable
         {

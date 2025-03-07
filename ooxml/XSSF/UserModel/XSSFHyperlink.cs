@@ -30,9 +30,9 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFHyperlink : IHyperlink
     {
-        private HyperlinkType _type;
-        private PackageRelationship _externalRel;
-        private CT_Hyperlink _ctHyperlink; //contains a reference to the cell where the hyperlink is anchored, getRef()
+        private readonly HyperlinkType _type;
+        private readonly PackageRelationship _externalRel;
+        private readonly CT_Hyperlink _ctHyperlink; //contains a reference to the cell where the hyperlink is anchored, getRef()
         private String _location; //what the hyperlink refers to
 
         /**

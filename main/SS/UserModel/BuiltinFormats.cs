@@ -82,7 +82,7 @@ namespace NPOI.SS.UserModel
          */
         public const int FIRST_USER_DEFINED_FORMAT_INDEX = 164;
 
-        private static String[] _formats = new string[]{
+        private static readonly String[] _formats = new string[]{
             "General",
             "0",
             "0.00",

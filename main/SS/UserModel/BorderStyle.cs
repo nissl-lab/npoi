@@ -98,7 +98,7 @@ namespace NPOI.SS.UserModel
 
     public class BorderStyleEnum
     {
-        private static BorderStyle[] _table = new BorderStyle[0xD + 1];
+        private static readonly BorderStyle[] _table = new BorderStyle[0xD + 1];
         public static BorderStyle[] Values()
         {
             return _table;

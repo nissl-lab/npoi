@@ -38,7 +38,7 @@ namespace NPOI.SS.Formula.Constant
         private static readonly ErrorConstant NUM = new ErrorConstant(FormulaError.NUM.Code);
         private static readonly ErrorConstant NA = new ErrorConstant(FormulaError.NA.Code);
 
-        private int _errorCode;
+        private readonly int _errorCode;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ErrorConstant"/> class.

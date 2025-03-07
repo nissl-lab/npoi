@@ -50,7 +50,7 @@ namespace NPOI.XSSF.UserModel
         public static short DEFAULT_FONT_COLOR = IndexedColors.Black.Index;
 
         private ThemesTable _themes;
-        private CT_Font _ctFont;
+        private readonly CT_Font _ctFont;
         private short _index;
 
         /**

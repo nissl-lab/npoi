@@ -31,8 +31,8 @@ namespace NPOI.SS.Formula
     class CellEvaluationFrame
     {
 
-        private FormulaCellCacheEntry _cce;
-        private ISet<CellCacheEntry> _sensitiveInputCells;
+        private readonly FormulaCellCacheEntry _cce;
+        private readonly ISet<CellCacheEntry> _sensitiveInputCells;
         private FormulaUsedBlankCellSet _usedBlankCellGroup;
 
         public CellEvaluationFrame(FormulaCellCacheEntry cce)

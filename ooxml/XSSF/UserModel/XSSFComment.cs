@@ -30,9 +30,9 @@ namespace NPOI.XSSF.UserModel
     public class XSSFComment : IComment
     {
 
-        private CT_Comment _comment;
-        private CommentsTable _comments;
-        private CT_Shape _vmlShape;
+        private readonly CT_Comment _comment;
+        private readonly CommentsTable _comments;
+        private readonly CT_Shape _vmlShape;
 
         /**
          * cached reference to the string with the comment text

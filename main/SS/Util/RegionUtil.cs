@@ -39,8 +39,8 @@ namespace NPOI.SS.Util
          */
         private class CellPropertySetter
         {
-            private String _propertyName;
-            private object _propertyValue;
+            private readonly String _propertyName;
+            private readonly object _propertyValue;
 
 
             public CellPropertySetter(String propertyName, int value)

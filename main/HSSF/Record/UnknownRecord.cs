@@ -58,8 +58,8 @@ namespace NPOI.HSSF.Record
         public const int HEADER_FOOTER_089C   = 0x089C;
         public const int CODENAME_1BA = 0x01BA;
         public const int PLV_MAC = 0x08C8;
-        private int _sid = 0;
-        private byte[] _rawData = null;
+        private readonly int _sid = 0;
+        private readonly byte[] _rawData = null;
 
         //public UnknownRecord()
         //{

@@ -34,11 +34,11 @@ namespace NPOI.SS.UserModel
         public static readonly CellValue TRUE = new CellValue(CellType.Boolean, 0.0, true, null, 0);
         public static readonly CellValue FALSE = new CellValue(CellType.Boolean, 0.0, false, null, 0);
 
-        private CellType _cellType;
-        private double _numberValue;
-        private bool _boolValue;
-        private String _textValue;
-        private int _errorCode;
+        private readonly CellType _cellType;
+        private readonly double _numberValue;
+        private readonly bool _boolValue;
+        private readonly String _textValue;
+        private readonly int _errorCode;
 
         private CellValue(CellType cellType, double numberValue, bool boolValue,
                 String textValue, int errorCode)

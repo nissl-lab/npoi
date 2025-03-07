@@ -38,7 +38,7 @@ namespace NPOI.HSSF.UserModel
         /**
          * Reference to the filesystem root, required for retrieving the object data.
          */
-        private DirectoryEntry _root;
+        private readonly DirectoryEntry _root;
 
 
         public HSSFObjectData(EscherContainerRecord spContainer, ObjRecord objRecord, DirectoryEntry _root)

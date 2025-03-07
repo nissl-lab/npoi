@@ -25,9 +25,9 @@ namespace NPOI.SS.Formula
     public class Loc
     {
 
-        private long _bookSheetColumn;
+        private readonly long _bookSheetColumn;
 
-        private int _rowIndex;
+        private readonly int _rowIndex;
 
         public Loc(int bookIndex, int sheetIndex, int rowIndex, int columnIndex)
         {
@@ -93,7 +93,7 @@ namespace NPOI.SS.Formula
     public class PlainCellCache
     {
 
-        private Hashtable _plainValueEntriesByLoc;
+        private readonly Hashtable _plainValueEntriesByLoc;
 
         public PlainCellCache()
         {

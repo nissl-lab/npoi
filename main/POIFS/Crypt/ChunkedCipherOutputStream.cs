@@ -28,9 +28,9 @@ namespace NPOI.POIFS.Crypt
         protected int chunkMask;
         protected int chunkBits;
 
-        private byte[] _chunk;
-        private FileInfo fileOut;
-        private DirectoryNode dir;
+        private readonly byte[] _chunk;
+        private readonly FileInfo fileOut;
+        private readonly DirectoryNode dir;
 
         private long _pos = 0;
         private Cipher _cipher;
@@ -133,7 +133,7 @@ namespace NPOI.POIFS.Crypt
         }
 
         private class EncryptedPackageWriter : POIFSWriterListener {
-            ChunkedCipherOutputStream stream;
+            readonly ChunkedCipherOutputStream stream;
             public EncryptedPackageWriter(ChunkedCipherOutputStream stream)
             {
                 this.stream = stream;

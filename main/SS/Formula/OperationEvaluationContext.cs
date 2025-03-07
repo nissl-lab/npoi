@@ -20,13 +20,13 @@ namespace NPOI.SS.Formula
     public class OperationEvaluationContext
     {
         public static readonly FreeRefFunction UDF = UserDefinedFunction.instance;
-        private IEvaluationWorkbook _workbook;
-        private int _sheetIndex;
-        private int _rowIndex;
-        private int _columnIndex;
-        private EvaluationTracker _tracker;
-        private bool _isSingleValue;
-        private WorkbookEvaluator _bookEvaluator;
+        private readonly IEvaluationWorkbook _workbook;
+        private readonly int _sheetIndex;
+        private readonly int _rowIndex;
+        private readonly int _columnIndex;
+        private readonly EvaluationTracker _tracker;
+        private readonly bool _isSingleValue;
+        private readonly WorkbookEvaluator _bookEvaluator;
         private bool _isInArrayContext;
         
         public OperationEvaluationContext(WorkbookEvaluator bookEvaluator, IEvaluationWorkbook workbook, int sheetIndex, int srcRowNum,

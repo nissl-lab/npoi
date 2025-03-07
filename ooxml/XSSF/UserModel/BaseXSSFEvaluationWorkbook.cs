@@ -134,7 +134,7 @@ namespace NPOI.XSSF.UserModel
         }
         private class FakeExternalLinksTable : ExternalLinksTable
         {
-            private String fileName;
+            private readonly String fileName;
             internal FakeExternalLinksTable(string fileName)
             {
                 this.fileName = fileName;
@@ -429,9 +429,9 @@ namespace NPOI.XSSF.UserModel
         private class Name : IEvaluationName
         {
 
-            private XSSFName _nameRecord;
-            private int _index;
-            private IFormulaParsingWorkbook _fpBook;
+            private readonly XSSFName _nameRecord;
+            private readonly int _index;
+            private readonly IFormulaParsingWorkbook _fpBook;
 
             public Name(XSSFName name, int index, IFormulaParsingWorkbook fpBook)
             {

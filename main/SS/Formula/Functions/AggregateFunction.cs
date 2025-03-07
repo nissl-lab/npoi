@@ -165,8 +165,8 @@ namespace NPOI.SS.Formula.Functions
 
     public class SubtotalInstance : AggregateFunction
     {
-        private AggregateFunction _func;
-        private bool _countHiddenRows;
+        private readonly AggregateFunction _func;
+        private readonly bool _countHiddenRows;
         public SubtotalInstance(AggregateFunction func, bool countHiddenRows)
         {
             _func = func;
@@ -200,7 +200,7 @@ namespace NPOI.SS.Formula.Functions
 
     public class LargeSmall : Fixed2ArgFunction
     {
-        private bool _isLarge;
+        private readonly bool _isLarge;
         protected LargeSmall(bool isLarge)
         {
             _isLarge = isLarge;
@@ -339,7 +339,7 @@ namespace NPOI.SS.Formula.Functions
         }
         internal class ValueCollector : MultiOperandNumericFunction
         {
-            private static ValueCollector instance = new ValueCollector();
+            private static readonly ValueCollector instance = new ValueCollector();
             public ValueCollector() :
                 base(false, false)
             {

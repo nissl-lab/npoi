@@ -50,13 +50,13 @@ namespace NPOI.POIFS.Storage
     public class BlockAllocationTableReader
     {
 
-        private static POILogger _logger = POILogFactory.GetLogger(typeof(BlockAllocationTableReader));
+        private static readonly POILogger _logger = POILogFactory.GetLogger(typeof(BlockAllocationTableReader));
 
         private const int MAX_BLOCK_COUNT = 65535;
        
-        private List<int> _entries;
+        private readonly List<int> _entries;
 
-        private POIFSBigBlockSize bigBlockSize;
+        private readonly POIFSBigBlockSize bigBlockSize;
         /// <summary>
         /// create a BlockAllocationTableReader for an existing filesystem. Side
         /// effect: when this method finishes, the BAT blocks will have

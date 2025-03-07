@@ -179,7 +179,7 @@ namespace NPOI.HSSF.Model
 
         private class RecordCloner : RecordVisitor
         {
-            private IList<Record> _destList;
+            private readonly IList<Record> _destList;
 
             public RecordCloner(IList<Record> destList)
             {
@@ -452,7 +452,7 @@ namespace NPOI.HSSF.Model
         }
         private class RecordVisitor1:RecordVisitor
         {
-            List<RecordBase> _records;
+            readonly List<RecordBase> _records;
             public RecordVisitor1(List<RecordBase> recs)
             {
                 _records=recs;
@@ -2339,7 +2339,7 @@ namespace NPOI.HSSF.Model
 
     public class UnsupportedBOFType : RecordFormatException
     {
-        private BOFRecordType type;
+        private readonly BOFRecordType type;
         public UnsupportedBOFType(BOFRecordType type)
             : base("BOF not of a supported type, found " + type)
         {

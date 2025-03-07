@@ -14,7 +14,7 @@ namespace NPOI.HSSF.Record.Crypto
         private const int KEY_DIGEST_LENGTH = 5;
         private const int PASSWORD_HASH_NUMBER_OF_BYTES_USED = 5;
 
-        private byte[] _keyDigest;
+        private readonly byte[] _keyDigest;
 
         /**
          * Create using the default password and a specified docId

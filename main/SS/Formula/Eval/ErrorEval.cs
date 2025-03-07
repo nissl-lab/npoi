@@ -30,7 +30,7 @@ namespace NPOI.SS.Formula.Eval
      */
     public class ErrorEval : ValueEval
     {
-        private static Dictionary<FormulaError, ErrorEval> evals = new Dictionary<FormulaError, ErrorEval>();
+        private static readonly Dictionary<FormulaError, ErrorEval> evals = new Dictionary<FormulaError, ErrorEval>();
 
         /** <b>#NULL!</b>  - Intersection of two cell ranges is empty */
         public static readonly ErrorEval NULL_INTERSECTION = new ErrorEval(FormulaError.NULL);
@@ -83,7 +83,7 @@ namespace NPOI.SS.Formula.Eval
             return "~non~std~err(" + errorCode + ")~";
         }
 
-        private FormulaError _error;
+        private readonly FormulaError _error;
  
         private ErrorEval(FormulaError error)
         {

@@ -34,7 +34,7 @@ namespace NPOI.Util
     public class ShortField
     {
         private short     _value;
-        private int _offset;
+        private readonly int _offset;
 
         /// <summary>
         /// construct the ShortField with its offset into its containing

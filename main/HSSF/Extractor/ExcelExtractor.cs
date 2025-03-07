@@ -35,8 +35,8 @@ namespace NPOI.HSSF.Extractor
     /// </summary>
     public class ExcelExtractor : POIOLE2TextExtractor, IExcelExtractor
     {
-        private HSSFWorkbook wb;
-        private HSSFDataFormatter _formatter;
+        private readonly HSSFWorkbook wb;
+        private readonly HSSFDataFormatter _formatter;
         private bool includeSheetNames = true;
         private bool formulasNotResults = false;
         private bool includeCellComments = false;

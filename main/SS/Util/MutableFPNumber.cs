@@ -154,7 +154,7 @@ namespace NPOI.SS.Util
 
         private class Rounder
         {
-            private static BigInteger[] HALF_BITS;
+            private static readonly BigInteger[] HALF_BITS;
 
             static Rounder()
             {
@@ -186,12 +186,12 @@ namespace NPOI.SS.Util
         private class TenPower
         {
             private static readonly BigInteger FIVE = new BigInteger(5L);// new BigInteger("5",10);
-            private static TenPower[] _cache = new TenPower[350];
+            private static readonly TenPower[] _cache = new TenPower[350];
 
-            public BigInteger _multiplicand;
-            public BigInteger _divisor;
-            public int _divisorShift;
-            public int _multiplierShift;
+            public readonly BigInteger _multiplicand;
+            public readonly BigInteger _divisor;
+            public readonly int _divisorShift;
+            public readonly int _multiplierShift;
 
             private TenPower(int index)
             {

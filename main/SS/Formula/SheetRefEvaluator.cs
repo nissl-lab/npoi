@@ -31,10 +31,10 @@ namespace NPOI.SS.Formula
     public class SheetRefEvaluator
     {
 
-        private WorkbookEvaluator _bookEvaluator;
-        private EvaluationTracker _tracker;
+        private readonly WorkbookEvaluator _bookEvaluator;
+        private readonly EvaluationTracker _tracker;
         private IEvaluationSheet _sheet;
-        private int _sheetIndex;
+        private readonly int _sheetIndex;
 
         public SheetRefEvaluator(WorkbookEvaluator bookEvaluator, EvaluationTracker tracker, int sheetIndex)
         {

@@ -19,7 +19,7 @@ namespace NPOI.HPSF
     public class VersionedStream
     {
         private GUID _versionGuid;
-        private IndirectPropertyName _streamName;
+        private readonly IndirectPropertyName _streamName;
 
         public VersionedStream(byte[] data, int offset)
         {

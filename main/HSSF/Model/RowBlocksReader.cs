@@ -34,9 +34,9 @@ namespace NPOI.HSSF.Model
     public class RowBlocksReader
     {
 
-        private ArrayList _plainRecords;
-        private SharedValueManager _sfm;
-        private MergeCellsRecord[] _mergedCellsRecords;
+        private readonly ArrayList _plainRecords;
+        private readonly SharedValueManager _sfm;
+        private readonly MergeCellsRecord[] _mergedCellsRecords;
 
         /**
          * Also collects any loose MergeCellRecords and puts them in the supplied

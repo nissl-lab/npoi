@@ -27,14 +27,14 @@ namespace NPOI.SS.Formula.Eval
      */
     public abstract class AreaEvalBase : AreaEval
     {
-        private int _firstSheet;
-        private int _firstColumn;
-        private int _firstRow;
-        private int _lastSheet;
-        private int _lastColumn;
-        private int _lastRow;
-        private int _nColumns;
-        private int _nRows;
+        private readonly int _firstSheet;
+        private readonly int _firstColumn;
+        private readonly int _firstRow;
+        private readonly int _lastSheet;
+        private readonly int _lastColumn;
+        private readonly int _lastRow;
+        private readonly int _nColumns;
+        private readonly int _nRows;
 
         protected AreaEvalBase(ISheetRange sheets, int firstRow, int firstColumn, int lastRow, int lastColumn)
         {
