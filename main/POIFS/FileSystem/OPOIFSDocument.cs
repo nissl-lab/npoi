@@ -153,7 +153,7 @@ namespace NPOI.POIFS.FileSystem
             if (_property.ShouldUseSmallBlocks)
             {
                 _small_store = new SmallBlockStore(bigBlockSize, SmallDocumentBlock.Convert(bigBlockSize, bigBlocks, _size));
-                _big_store = new BigBlockStore(bigBlockSize, new DocumentBlock[0]);
+                _big_store = new BigBlockStore(bigBlockSize, Array.Empty<DocumentBlock>());
             }
             else
             {
@@ -475,7 +475,7 @@ namespace NPOI.POIFS.FileSystem
             internal SmallBlockStore(POIFSBigBlockSize bigBlockSize, POIFSDocumentPath path, string name, int size, POIFSWriterListener writer)
             {
                 this.bigBlockSize = bigBlockSize;
-                this.smallBlocks = new SmallDocumentBlock[0];
+                this.smallBlocks = Array.Empty<SmallDocumentBlock>();
                 this.path = path;
                 this.name = name;
                 this.size = size;
@@ -532,7 +532,7 @@ namespace NPOI.POIFS.FileSystem
             internal BigBlockStore(POIFSBigBlockSize bigBlockSize, POIFSDocumentPath path, string name, int size, POIFSWriterListener writer)
             {
                 this.bigBlockSize = bigBlockSize;
-                this.bigBlocks = new DocumentBlock[0];
+                this.bigBlocks = Array.Empty<DocumentBlock>();
                 this.path = path;
                 this.name = name;
                 this.size = size;

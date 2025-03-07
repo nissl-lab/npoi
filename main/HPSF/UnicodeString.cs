@@ -58,7 +58,7 @@ namespace NPOI.HPSF
 
             if (length == 0)
             {
-                _value = new byte[0];
+                _value = System.Array.Empty<byte>();
                 return;
             }
 

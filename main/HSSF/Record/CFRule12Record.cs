@@ -193,7 +193,7 @@ namespace NPOI.HSSF.Record
             int field_4_formula2_len = in1.ReadUShort();
 
             ext_formatting_length = in1.ReadInt();
-            ext_formatting_data = new byte[0];
+            ext_formatting_data = Array.Empty<byte>();
             if (ext_formatting_length == 0) {
                 // 2 bytes reserved
                 in1.ReadUShort();

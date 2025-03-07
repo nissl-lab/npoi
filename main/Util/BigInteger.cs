@@ -400,7 +400,7 @@ namespace NPOI.Util
          *
          * @since   1.2
          */
-        public static readonly BigInteger ZERO = new BigInteger(new int[0], 0);
+        public static readonly BigInteger ZERO = new BigInteger(Array.Empty<int>(), 0);
 
         /**
          * The BigInteger constant one.

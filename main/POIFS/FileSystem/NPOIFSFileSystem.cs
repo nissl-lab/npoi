@@ -954,7 +954,7 @@ namespace NPOI.POIFS.FileSystem
                 return rval;
 
             }
-            return new Object[0];
+            return Array.Empty<Object>();
         }
 
         /**

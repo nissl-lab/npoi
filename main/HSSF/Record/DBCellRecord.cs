@@ -38,7 +38,7 @@ namespace NPOI.HSSF.Record
 
         public DBCellRecord()
         {
-            field_2_cell_offsets = new short[0];
+            field_2_cell_offsets = Array.Empty<short>();
         }
 
         /**

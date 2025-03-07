@@ -10,7 +10,7 @@ namespace NPOI.HSSF.Record.Drawing
     {
         //private OfficeArtFOPTEOPID field_1_opid;
         //private int field_2_op;
-        private byte[] complexData = new byte[0];
+        private byte[] complexData = Array.Empty<byte>();
 
         public OfficeArtFOPTE(RecordInputStream ris)
         {

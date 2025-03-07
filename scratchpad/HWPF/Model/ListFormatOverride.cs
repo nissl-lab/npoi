@@ -32,7 +32,7 @@ namespace NPOI.HWPF.Model
         public ListFormatOverride(int lsid)
         {
             _lsid = lsid;
-            _levelOverrides = new ListFormatOverrideLevel[0];
+            _levelOverrides = Array.Empty<ListFormatOverrideLevel>();
         }
 
         public ListFormatOverride(byte[] buf, int offset)

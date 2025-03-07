@@ -854,8 +854,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_DocPartPr()
         {
-            this.itemsElementNameField = new ItemsChoiceType11[0];
-            this.itemsField = new object[0];
+            this.itemsElementNameField = Array.Empty<ItemsChoiceType11>();
+            this.itemsField = Array.Empty<object>();
         }
 
         [XmlElement("behaviors", typeof(CT_DocPartBehaviors), Order = 0)]

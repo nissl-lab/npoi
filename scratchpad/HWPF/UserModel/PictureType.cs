@@ -34,7 +34,7 @@ namespace NPOI.HWPF.UserModel
 
         public static PictureType JPEG = new PictureType("image/jpeg", "jpg", new byte[][] { new byte[] { (byte)0xFF, (byte)0xD8 } });
 
-        public static PictureType PICT = new PictureType("image/pict", ".pict", new byte[0][]);
+        public static PictureType PICT = new PictureType("image/pict", ".pict", Array.Empty<byte>()[]);
 
         public static PictureType PNG = new PictureType("image/png", "png", new byte[][] { new byte[]{ (byte) 0x89, 0x50, 0x4E, 0x47,
             0x0D, 0x0A, 0x1A, 0x0A } });

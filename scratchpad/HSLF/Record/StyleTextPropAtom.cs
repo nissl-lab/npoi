@@ -195,7 +195,7 @@ using NPOI.HSLF.Model.TextProperties;
                 //  decode them (via a call to SetParentTextSize(int)
                 rawContents = new byte[len - 8];
                 Array.Copy(source, start + 8, rawContents, 0, rawContents.Length);
-                reserved = new byte[0];
+                reserved = Array.Empty<byte>();
 
                 // Set empty linked lists, Ready for when they call SetParentTextSize
                 paragraphStyles = new List<TextPropCollection>();
@@ -209,8 +209,8 @@ using NPOI.HSLF.Model.TextProperties;
             public StyleTextPropAtom(int parentTextSize)
             {
                 _header = new byte[8];
-                rawContents = new byte[0];
-                reserved = new byte[0];
+                rawContents = Array.Empty<byte>();
+                reserved = Array.Empty<byte>();
 
                 // Set our type
                 LittleEndian.PutInt(_header, 2, (short)_type);
@@ -398,7 +398,7 @@ using NPOI.HSLF.Model.TextProperties;
             public void SetRawContents(byte[] bytes)
             {
                 rawContents = bytes;
-                reserved = new byte[0];
+                reserved = Array.Empty<byte>();
                 Initialised = false;
             }
 

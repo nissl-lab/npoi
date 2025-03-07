@@ -76,7 +76,7 @@ namespace NPOI.SS.Formula.Atp
         {
             if (arg == null)
             {
-                return new double[0];
+                return Array.Empty<double>();
             }
 
             if (arg is StringEval)

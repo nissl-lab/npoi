@@ -136,7 +136,7 @@ namespace NPOI.HWPF.Model
         internal GenericPropertyNode[] ToPropertiesArray()
         {
             if (_props == null || _props.Count==0)
-                return new GenericPropertyNode[0];
+                return Array.Empty<GenericPropertyNode>();
 
             return (GenericPropertyNode[])_props.ToArray(typeof(GenericPropertyNode));
         }

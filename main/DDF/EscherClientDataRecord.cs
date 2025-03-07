@@ -65,7 +65,7 @@ namespace NPOI.DDF
         {
             listener.BeforeRecordSerialize(offset, RecordId, this);
 
-            if (remainingData == null) remainingData = new byte[0];
+            if (remainingData == null) remainingData = Array.Empty<byte>();
             LittleEndian.PutShort(data, offset, Options);
             LittleEndian.PutShort(data, offset + 2, RecordId);
             LittleEndian.PutInt(data, offset + 4, remainingData.Length);
@@ -137,7 +137,7 @@ namespace NPOI.DDF
             get { return remainingData; }
             set
             {
-                this.remainingData = (value == null) ? new byte[0] : (byte[])value.Clone();
+                this.remainingData = (value == null) ? Array.Empty<byte>() : (byte[])value.Clone();
             }
         }
     }

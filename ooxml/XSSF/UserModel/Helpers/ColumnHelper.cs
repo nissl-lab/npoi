@@ -85,7 +85,7 @@ namespace NPOI.XSSF.UserModel.Helpers
                 new TreeSet<CT_Col>(CTColComparator.BY_MIN_MAX);
             trackedCols.AddAll(cols.GetColList());
             AddCleanColIntoCols(cols, newCol, trackedCols);
-            cols.SetColArray(trackedCols.ToArray(new CT_Col[0]));
+            cols.SetColArray(trackedCols.ToArray(Array.Empty<CT_Col>()));
             return cols;
         }
 

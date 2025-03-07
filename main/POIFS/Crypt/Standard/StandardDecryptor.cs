@@ -317,17 +317,17 @@ namespace NPOI.POIFS.Crypt.Standard
 
         public byte[] DoFinal()
         {
-            return new byte[0];
+            return Array.Empty<byte>();
         }
 
         public byte[] DoFinal(byte[] input)
         {
-            return new byte[0];
+            return Array.Empty<byte>();
         }
 
         public byte[] DoFinal(byte[] input, int inOff, int length)
         {
-            return new byte[0];
+            return Array.Empty<byte>();
         }
 
         public int DoFinal(byte[] output, int outOff)
@@ -367,7 +367,7 @@ namespace NPOI.POIFS.Crypt.Standard
 
         public byte[] ProcessByte(byte input)
         {
-            return new byte[0];
+            return Array.Empty<byte>();
         }
 
         public int ProcessByte(byte input, byte[] output, int outOff)
@@ -377,12 +377,12 @@ namespace NPOI.POIFS.Crypt.Standard
 
         public byte[] ProcessBytes(byte[] input)
         {
-            return new byte[0];
+            return Array.Empty<byte>();
         }
 
         public byte[] ProcessBytes(byte[] input, int inOff, int length)
         {
-            return new byte[0];
+            return Array.Empty<byte>();
         }
 
         public int ProcessBytes(byte[] input, byte[] output, int outOff)

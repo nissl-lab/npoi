@@ -118,7 +118,7 @@ namespace NPOI.HSSF.Record.Aggregates
         }
 
         public static readonly SharedValueManager EMPTY = new SharedValueManager(
-                new SharedFormulaRecord[0], new CellReference[0], new List<ArrayRecord>(), new List<TableRecord>());
+                Array.Empty<SharedFormulaRecord>(), Array.Empty<CellReference>(), new List<ArrayRecord>(), new List<TableRecord>());
         private List<ArrayRecord> _arrayRecords;
         private List<TableRecord> _tableRecords;
         private Dictionary<SharedFormulaRecord, SharedFormulaGroup> _groupsBySharedFormulaRecord;
@@ -149,7 +149,7 @@ namespace NPOI.HSSF.Record.Aggregates
         {
             // Note - must create distinct instances because they are assumed to be mutable.
             return new SharedValueManager(
-                new SharedFormulaRecord[0], new CellReference[0], new List<ArrayRecord>(), new List<TableRecord>());
+                Array.Empty<SharedFormulaRecord>(), Array.Empty<CellReference>(), new List<ArrayRecord>(), new List<TableRecord>());
         }
         /**
          * @param firstCells
