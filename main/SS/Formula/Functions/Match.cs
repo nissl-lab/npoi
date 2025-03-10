@@ -135,9 +135,8 @@ namespace NPOI.SS.Formula.Functions
 
         private static ValueVector EvaluateLookupRange(ValueEval eval)
         {
-            if (eval is RefEval)
+            if (eval is RefEval re)
             {
-                RefEval re = (RefEval)eval;
                 if (re.NumberOfSheets == 1)
                 {
                     return new SingleValueVector(re.GetInnerValueEval(re.FirstSheetIndex));
@@ -147,9 +146,9 @@ namespace NPOI.SS.Formula.Functions
                     return LookupUtils.CreateVector(re);
                 }
             }
-            if (eval is TwoDEval)
+            if (eval is TwoDEval dEval)
             {
-                ValueVector result = LookupUtils.CreateVector((TwoDEval)eval);
+                ValueVector result = LookupUtils.CreateVector(dEval);
                 if (result == null)
                 {
                     throw new EvaluationException(ErrorEval.NA);
@@ -162,9 +161,8 @@ namespace NPOI.SS.Formula.Functions
             {
                 throw new EvaluationException(ErrorEval.NA);
             }
-            if (eval is StringEval)
+            if (eval is StringEval se)
             {
-                StringEval se = (StringEval)eval;
                 double d = OperandResolver.ParseDouble(se.StringValue);
                 if (double.IsNaN(d))
                 {
@@ -183,18 +181,16 @@ namespace NPOI.SS.Formula.Functions
         {
             ValueEval match_type = OperandResolver.GetSingleValue(arg, srcCellRow, srcCellCol);
 
-            if (match_type is ErrorEval)
+            if (match_type is ErrorEval eval)
             {
-                throw new EvaluationException((ErrorEval)match_type);
+                throw new EvaluationException(eval);
             }
-            if (match_type is NumericValueEval)
+            if (match_type is NumericValueEval ne)
             {
-                NumericValueEval ne = (NumericValueEval)match_type;
                 return ne.NumberValue;
             }
-            if (match_type is StringEval)
+            if (match_type is StringEval se)
             {
-                StringEval se = (StringEval)match_type;
                 double d = OperandResolver.ParseDouble(se.StringValue);
                 if (double.IsNaN(d))
                 {

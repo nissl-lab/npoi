@@ -146,9 +146,9 @@ namespace NPOI.POIFS.Crypt.Dsig
             {
                 uriDereferencer = new OOXMLURIDereferencer();
             }
-            if (uriDereferencer is ISignatureConfigurable)
+            if (uriDereferencer is ISignatureConfigurable configurable)
             {
-                ((ISignatureConfigurable)uriDereferencer).SetSignatureConfig(this);
+                configurable.SetSignatureConfig(this);
             }
             if (namespacePrefixes.Count == 0)
             {
@@ -167,9 +167,9 @@ namespace NPOI.POIFS.Crypt.Dsig
                 signatureMarshalListener = new SignatureMarshalListener();
             }
 
-            if (signatureMarshalListener is ISignatureConfigurable)
+            if (signatureMarshalListener is ISignatureConfigurable signatureConfigurable)
             {
-                ((ISignatureConfigurable)signatureMarshalListener).SetSignatureConfig(this);
+                signatureConfigurable.SetSignatureConfig(this);
             }
 
             if (tspService != null)

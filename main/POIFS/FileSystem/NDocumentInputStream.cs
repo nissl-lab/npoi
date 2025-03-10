@@ -59,7 +59,7 @@ namespace NPOI.POIFS.FileSystem
         /// <exception cref="System.IO.IOException">IOException if the DocumentEntry cannot be opened (like, maybe it has been deleted?)</exception>
         public NDocumentInputStream(DocumentEntry document)
         {
-            if (!(document is DocumentNode))
+            if (document is not DocumentNode doc)
             {
                 throw new IOException("Cannot open internal document storage, " + document + " not a Document Node");
             }
@@ -70,7 +70,6 @@ namespace NPOI.POIFS.FileSystem
             _document_size = document.Size;
             _closed = false;
 
-            DocumentNode doc = (DocumentNode)document;
             DocumentProperty property = (DocumentProperty)doc.Property;
             _document = new NPOIFSDocument(
                   property,

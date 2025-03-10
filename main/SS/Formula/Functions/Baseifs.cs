@@ -125,10 +125,10 @@ namespace NPOI.SS.Formula.Functions
             foreach(IMatchPredicate predicate in criteria)
             {
                 // check for errors in predicate and return immediately using this error code
-                if(predicate is Countif.ErrorMatcher)
+                if(predicate is Countif.ErrorMatcher matcher)
                 {
                     throw new EvaluationException(
-                        ErrorEval.ValueOf(((NPOI.SS.Formula.Functions.Countif.ErrorMatcher) predicate).Value));
+                        ErrorEval.ValueOf(matcher.Value));
                 }
             }
         }
@@ -168,9 +168,9 @@ namespace NPOI.SS.Formula.Functions
                         if(sumRange != null)
                         {
                             ValueEval value = sumRange.GetRelativeValue(r, c);
-                            if(value is ErrorEval)
+                            if(value is ErrorEval eval)
                             {
-                                throw new EvaluationException((ErrorEval) value);
+                                throw new EvaluationException(eval);
                             }
                             aggregator.AddValue(value);
                         }
@@ -188,13 +188,13 @@ namespace NPOI.SS.Formula.Functions
 
         protected internal static AreaEval ConvertRangeArg(ValueEval eval)
         {
-            if(eval is AreaEval)
+            if(eval is AreaEval areaEval)
             {
-                return (AreaEval) eval;
+                return areaEval;
             }
-            if(eval is RefEval)
+            if(eval is RefEval refEval)
             {
-                return ((RefEval) eval).Offset(0, 0, 0, 0);
+                return refEval.Offset(0, 0, 0, 0);
             }
             throw new EvaluationException(ErrorEval.VALUE_INVALID);
         }

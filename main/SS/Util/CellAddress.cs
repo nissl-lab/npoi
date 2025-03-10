@@ -175,14 +175,13 @@ namespace NPOI.SS.Util
             {
                 return true;
             }
-            if (!(o is CellAddress))
+            if (o is not CellAddress other)
             {
                 return false;
             }
 
-            CellAddress other = (CellAddress)o;
             return _row == other._row
-                    && _col == other._col
+                   && _col == other._col
             ;
         }
 

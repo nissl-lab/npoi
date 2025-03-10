@@ -244,17 +244,17 @@ namespace NPOI.SS.Formula.Functions
                 switch (args.Length)
                 {
                     case 5:
-                        if (!(args[4] is MissingArgEval)) {
+                        if (args[4] is not MissingArgEval) {
                             width = EvaluateIntArg(args[4], srcCellRow, srcCellCol);
                         }
                         // fall-through to pick up height 
-                        if (!(args[3] is MissingArgEval))
+                        if (args[3] is not MissingArgEval)
                         {
                             height = EvaluateIntArg(args[3], srcCellRow, srcCellCol);
                         }
                         break;
                     case 4:
-                        if (!(args[3] is MissingArgEval)) {
+                        if (args[3] is not MissingArgEval) {
                             height = EvaluateIntArg(args[3], srcCellRow, srcCellCol);
                         }
                         break;
@@ -300,17 +300,17 @@ namespace NPOI.SS.Formula.Functions
         private static BaseRef EvaluateBaseRef(ValueEval eval)
         {
 
-            if (eval is RefEval)
+            if (eval is RefEval refEval)
             {
-                return new BaseRef((RefEval)eval);
+                return new BaseRef(refEval);
             }
-            if (eval is AreaEval)
+            if (eval is AreaEval areaEval)
             {
-                return new BaseRef((AreaEval)eval);
+                return new BaseRef(areaEval);
             }
-            if (eval is ErrorEval)
+            if (eval is ErrorEval errorEval)
             {
-                throw new EvalEx((ErrorEval)eval);
+                throw new EvalEx(errorEval);
             }
             throw new EvalEx(ErrorEval.VALUE_INVALID);
         }
@@ -343,13 +343,12 @@ namespace NPOI.SS.Formula.Functions
         {
             ValueEval ve = OperandResolver.GetSingleValue(eval, srcCellRow, srcCellCol);
 
-            if (ve is NumericValueEval)
+            if (ve is NumericValueEval valueEval)
             {
-                return ((NumericValueEval)ve).NumberValue;
+                return valueEval.NumberValue;
             }
-            if (ve is StringEval)
+            if (ve is StringEval se)
             {
-                StringEval se = (StringEval)ve;
                 double d = OperandResolver.ParseDouble(se.StringValue);
                 if (double.IsNaN(d))
                 {
@@ -357,10 +356,10 @@ namespace NPOI.SS.Formula.Functions
                 }
                 return d;
             }
-            if (ve is BoolEval)
+            if (ve is BoolEval boolEval)
             {
                 // in the context of OFFSet, bools resolve to 0 and 1.
-                if (((BoolEval)ve).BooleanValue)
+                if (boolEval.BooleanValue)
                 {
                     return 1;
                 }

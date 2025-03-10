@@ -94,7 +94,7 @@ namespace NPOI.HPSF
                 isPure = false;
                 return null;
             }
-            if (!(name is String))
+            if (name is not String)
                 throw new ArgumentException("The name of a custom property must " +
                         "be a String, but it is a " +
                         name.GetType().Name);
@@ -355,9 +355,9 @@ namespace NPOI.HPSF
      */
         public override bool ContainsKey(Object key)
         {
-            if (key is long)
+            if (key is long l)
             {
-                return base.ContainsKey((long)key);
+                return base.ContainsKey(l);
             }
             if (key is String)
             {

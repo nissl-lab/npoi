@@ -203,9 +203,8 @@ namespace NPOI.Util
         /// false</returns>
         public override bool Equals(Object o)
         {
-            if (o == null || !(o is ClassID))
+            if (o == null || o is not ClassID cid)
                 return false;
-            ClassID cid = (ClassID) o;
             if (bytes.Length != cid.bytes.Length)
                 return false;
             for (int i = 0; i < bytes.Length; i++)

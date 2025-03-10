@@ -151,35 +151,34 @@ namespace NPOI.HSSF.UserModel
             foreach (RecordBase r in records)
             {
 
-                if (r is ChartRecord)
+                if (r is ChartRecord record1)
                 {
                     lastSeries = null;
 
-                    lastChart = new HSSFChart(sheet, (ChartRecord)r);
+                    lastChart = new HSSFChart(sheet, record1);
                     charts.Add(lastChart);
                 }
-                else if (r is LegendRecord)
+                else if (r is LegendRecord legendRecord1)
                 {
-                    lastChart.legendRecord = (LegendRecord)r;
+                    lastChart.legendRecord = legendRecord1;
                 }
-                else if (r is SeriesRecord)
+                else if (r is SeriesRecord seriesRecord)
                 {
-                    HSSFSeries series = new HSSFSeries((SeriesRecord)r);
+                    HSSFSeries series = new HSSFSeries(seriesRecord);
                     lastChart.series.Add(series);
                     lastSeries = series;
                 }
-                else if (r is AlRunsRecord)
+                else if (r is AlRunsRecord runsRecord)
                 {
                     lastChart.chartTitleFormat =
-                        (AlRunsRecord)r;
+                        runsRecord;
                 }
-                else if (r is SeriesTextRecord)
+                else if (r is SeriesTextRecord str)
                 {
                     // Applies to a series, unless we've seen
                     //  a legend already
-                    SeriesTextRecord str = (SeriesTextRecord)r;
                     if (lastChart.legendRecord == null &&
-                            lastChart.series.Count > 0)
+                        lastChart.series.Count > 0)
                     {
                         HSSFSeries series = (HSSFSeries)
                             lastChart.series[lastChart.series.Count - 1];
@@ -190,23 +189,21 @@ namespace NPOI.HSSF.UserModel
                         lastChart.chartTitleText = str;
                     }
                 }
-                else if (r is LinkedDataRecord)
+                else if (r is LinkedDataRecord linkedDataRecord)
                 {
-                    LinkedDataRecord linkedDataRecord = (LinkedDataRecord)r;
                     if (lastSeries != null)
                     {
                         lastSeries.InsertData(linkedDataRecord);
                     }
                 }
-                else if (r is ValueRangeRecord)
+                else if (r is ValueRangeRecord rangeRecord)
                 {
-                    lastChart.valueRanges.Add((ValueRangeRecord)r);
+                    lastChart.valueRanges.Add(rangeRecord);
                 }
-                else if (r is Record)
+                else if (r is Record record)
                 {
                     if (lastChart != null)
                     {
-                        Record record = (Record)r;
                         foreach (int type in Enum.GetValues(typeof(HSSFChartType)))
                         {
                             if (type == 0)
@@ -1126,10 +1123,8 @@ namespace NPOI.HSSF.UserModel
 
                 foreach (Ptg ptg in linkedDataRecord.FormulaOfLink)
                 {
-                    if (ptg is AreaPtgBase)
+                    if (ptg is AreaPtgBase areaPtg)
                     {
-                        AreaPtgBase areaPtg = (AreaPtgBase)ptg;
-
                         firstRow = areaPtg.FirstRow;
                         lastRow = areaPtg.LastRow;
 
@@ -1166,10 +1161,8 @@ namespace NPOI.HSSF.UserModel
 
                 foreach (Ptg ptg in linkedDataRecord.FormulaOfLink)
                 {
-                    if (ptg is AreaPtgBase)
+                    if (ptg is AreaPtgBase areaPtg)
                     {
-                        AreaPtgBase areaPtg = (AreaPtgBase)ptg;
-
                         areaPtg.FirstRow = range.FirstRow;
                         areaPtg.LastRow = range.LastRow;
 
@@ -1293,42 +1286,42 @@ namespace NPOI.HSSF.UserModel
                 {
                     newRecord = new EndRecord();
                 }
-                else if (record is SeriesRecord)
+                else if (record is SeriesRecord record1)
                 {
-                    SeriesRecord seriesRecord = (SeriesRecord)((SeriesRecord)record).Clone();
+                    SeriesRecord seriesRecord = (SeriesRecord)record1.Clone();
                     newSeries = new HSSFSeries(seriesRecord);
                     newRecord = seriesRecord;
                 }
-                else if (record is LinkedDataRecord)
+                else if (record is LinkedDataRecord dataRecord)
                 {
-                    LinkedDataRecord linkedDataRecord = (LinkedDataRecord)((LinkedDataRecord)record).Clone();
+                    LinkedDataRecord linkedDataRecord = (LinkedDataRecord)dataRecord.Clone();
                     if (newSeries != null)
                     {
                         newSeries.InsertData(linkedDataRecord);
                     }
                     newRecord = linkedDataRecord;
                 }
-                else if (record is DataFormatRecord)
+                else if (record is DataFormatRecord formatRecord)
                 {
-                    DataFormatRecord dataFormatRecord = (DataFormatRecord)((DataFormatRecord)record).Clone();
+                    DataFormatRecord dataFormatRecord = (DataFormatRecord)formatRecord.Clone();
 
                     dataFormatRecord.SeriesIndex = ((short)seriesIdx);
                     dataFormatRecord.SeriesNumber = ((short)seriesIdx);
 
                     newRecord = dataFormatRecord;
                 }
-                else if (record is SeriesTextRecord)
+                else if (record is SeriesTextRecord textRecord)
                 {
-                    SeriesTextRecord seriesTextRecord = (SeriesTextRecord)((SeriesTextRecord)record).Clone();
+                    SeriesTextRecord seriesTextRecord = (SeriesTextRecord)textRecord.Clone();
                     if (newSeries != null)
                     {
                         newSeries.SetSeriesTitleText(seriesTextRecord);
                     }
                     newRecord = seriesTextRecord;
                 }
-                else if (record is Record)
+                else if (record is Record record2)
                 {
-                    newRecord = (Record)((Record)record).Clone();
+                    newRecord = (Record)record2.Clone();
                 }
 
                 if (newRecord != null)
@@ -1421,11 +1414,10 @@ namespace NPOI.HSSF.UserModel
                         }
                     }
                 }
-                else if (record is DataFormatRecord)
+                else if (record is DataFormatRecord dataFormatRecord)
                 {
                     if (chartEntered && !RemoveSeries)
                     {
-                        DataFormatRecord dataFormatRecord = (DataFormatRecord)record;
                         dataFormatRecord.SeriesIndex = ((short)seriesIdx);
                         dataFormatRecord.SeriesNumber = ((short)seriesIdx);
                     }

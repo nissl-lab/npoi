@@ -51,9 +51,8 @@ namespace NPOI.SS.Formula.Functions
             foreach (ValueEval arg in args)
             {
                 bool? tempVe;
-                if (arg is TwoDEval)
+                if (arg is TwoDEval ae)
                 {
-                    TwoDEval ae = (TwoDEval)arg;
                     int height = ae.Height;
                     int width = ae.Width;
                     for (int rrIx = 0; rrIx < height; rrIx++)
@@ -72,9 +71,8 @@ namespace NPOI.SS.Formula.Functions
                     continue;
                 }
 
-                if (arg is RefEval)
+                if (arg is RefEval re)
                 {
-                    RefEval re = (RefEval)arg;
                     int firstSheetIndex = re.FirstSheetIndex;
                     int lastSheetIndex = re.LastSheetIndex;
                     for (int sIx = firstSheetIndex; sIx <= lastSheetIndex; sIx++)

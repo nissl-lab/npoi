@@ -180,9 +180,8 @@ namespace NPOI.XSSF.UserModel.Helpers
 
         private void UpdatePtg(Ptg ptg, String oldName, String newName)
         {
-            if (ptg is Pxg)
+            if (ptg is Pxg pxg)
             {
-                Pxg pxg = (Pxg)ptg;
                 if (pxg.ExternalWorkbookNumber < 1)
                 {
                     if (pxg.SheetName != null &&
@@ -190,11 +189,10 @@ namespace NPOI.XSSF.UserModel.Helpers
                     {
                         pxg.SheetName = (newName);
                     }
-                    if (pxg is Pxg3D)
+                    if (pxg is Pxg3D pxg3D)
                     {
-                        Pxg3D pxg3D = (Pxg3D)pxg;
                         if (pxg3D.LastSheetName != null &&
-                                pxg3D.LastSheetName.Equals(oldName))
+                            pxg3D.LastSheetName.Equals(oldName))
                         {
                             pxg3D.LastSheetName = (/*setter*/newName);
                         }

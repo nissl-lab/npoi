@@ -305,9 +305,9 @@ namespace NPOI.HPSF
              */
             public int CompareTo(Object o)
             {
-                if (!(o is PropertyListEntry))
+                if (o is not PropertyListEntry entry)
                     throw new InvalidCastException(o.ToString());
-                int otherOffSet = ((PropertyListEntry)o).offset;
+                int otherOffSet = entry.offset;
                 if (offset < otherOffSet)
                     return -1;
                 else if (offset == otherOffSet)
@@ -509,18 +509,17 @@ namespace NPOI.HPSF
          */
         public override bool Equals(Object o)
         {
-            if (o == null || !(o is Section))
+            if (o == null || o is not Section section)
                 return false;
-            Section s = (Section)o;
-            if (!s.FormatID.Equals(FormatID))
+            if (!section.FormatID.Equals(FormatID))
                 return false;
 
             /* Compare all properties except 0 and 1 as they must be handled 
              * specially. */
             Property[] pa1 = new Property[Properties.Length];
-            Property[] pa2 = new Property[s.Properties.Length];
+            Property[] pa2 = new Property[section.Properties.Length];
             System.Array.Copy(Properties, 0, pa1, 0, pa1.Length);
-            System.Array.Copy(s.Properties, 0, pa2, 0, pa2.Length);
+            System.Array.Copy(section.Properties, 0, pa2, 0, pa2.Length);
 
             /* Extract properties 0 and 1 and Remove them from the copy of the
              * arrays. */

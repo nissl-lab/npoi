@@ -79,7 +79,7 @@ namespace NPOI.SS.Formula.Functions
 
             public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0)
             {
-                if (arg0 is AreaEval)
+                if (arg0 is AreaEval eval)
                 {
                     double[] result = null;
                     double[,] resultArray;
@@ -87,8 +87,8 @@ namespace NPOI.SS.Formula.Functions
 
                     try
                     {
-                        double[] values = CollectValues(arg0);
-                        double[,] array = fillDoubleArray(values, ((AreaEval)arg0).Height, ((AreaEval)arg0).Width);
+                        double[] values = CollectValues(eval);
+                        double[,] array = fillDoubleArray(values, eval.Height, eval.Width);
                         resultArray = Evaluate(array);
                         width = resultArray.GetLength(1);
                         height = resultArray.GetLength(0);
@@ -115,9 +115,9 @@ namespace NPOI.SS.Formula.Functions
                     else
                     {
                         /* find a better solution */
-                        return new CacheAreaEval(((AreaEval)arg0).FirstRow, ((AreaEval)arg0).FirstColumn,
-                                                ((AreaEval)arg0).FirstRow + height - 1,
-                                                ((AreaEval)arg0).FirstColumn + width - 1, vals);
+                        return new CacheAreaEval(eval.FirstRow, eval.FirstColumn,
+                                                eval.FirstRow + height - 1,
+                                                eval.FirstColumn + width - 1, vals);
                     }
                 }
                 else
@@ -159,12 +159,12 @@ namespace NPOI.SS.Formula.Functions
                 {
                     double[,] array0, array1, resultArray;
 
-                    if (arg0 is AreaEval)
+                    if (arg0 is AreaEval eval)
                     {
                         try
                         {
-                            double[] values = CollectValues(arg0);
-                            array0 = fillDoubleArray(values, ((AreaEval)arg0).Height, ((AreaEval)arg0).Width);
+                            double[] values = CollectValues(eval);
+                            array0 = fillDoubleArray(values, eval.Height, eval.Width);
                         }
                         catch (EvaluationException e)
                         {
@@ -184,12 +184,12 @@ namespace NPOI.SS.Formula.Functions
                         }
                     }
 
-                    if (arg1 is AreaEval)
+                    if (arg1 is AreaEval areaEval)
                     {
                         try
                         {
-                            double[] values = CollectValues(arg1);
-                            array1 = fillDoubleArray(values, ((AreaEval)arg1).Height, ((AreaEval)arg1).Width);
+                            double[] values = CollectValues(areaEval);
+                            array1 = fillDoubleArray(values, areaEval.Height, areaEval.Width);
                         }
                         catch (EvaluationException e)
                         {

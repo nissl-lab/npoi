@@ -230,17 +230,16 @@ lblforbreak:
 
         public override bool Equals(Object o)
         {
-            if (o == null || !(o is XSSFClientAnchor)) return false;
+            if (o == null || o is not XSSFClientAnchor anchor) return false;
 
-            XSSFClientAnchor anchor = (XSSFClientAnchor)o;
             return Dx1 == anchor.Dx1 &&
-                Dx2 == anchor.Dx2 &&
-                Dy1 == anchor.Dy1 &&
-                Dy2 == anchor.Dy2 &&
-                Col1 == anchor.Col1 &&
-                Col2 == anchor.Col2 &&
-                Row1 == anchor.Row1 &&
-                Row2 == anchor.Row2;
+                   Dx2 == anchor.Dx2 &&
+                   Dy1 == anchor.Dy1 &&
+                   Dy2 == anchor.Dy2 &&
+                   Col1 == anchor.Col1 &&
+                   Col2 == anchor.Col2 &&
+                   Row1 == anchor.Row1 &&
+                   Row2 == anchor.Row2;
 
         }
 

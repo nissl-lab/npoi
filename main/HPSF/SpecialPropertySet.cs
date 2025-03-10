@@ -350,30 +350,29 @@ namespace NPOI.HPSF
         {
             // Normal cases
             if (propertyValue == null) return null;
-            if (propertyValue is String) return (String)propertyValue;
+            if (propertyValue is String value) return value;
 
             // Do our best with some edge cases
-            if (propertyValue is byte[])
+            if (propertyValue is byte[] data)
             {
-                byte[] b = (byte[])propertyValue;
-                if (b.Length == 0)
+                if (data.Length == 0)
                 {
                     return "";
                 }
-                if (b.Length == 1)
+                if (data.Length == 1)
                 {
-                    return b[0].ToString();
+                    return data[0].ToString();
                 }
-                if (b.Length == 2)
+                if (data.Length == 2)
                 {
-                    return LittleEndian.GetUShort(b).ToString();
+                    return LittleEndian.GetUShort(data).ToString();
                 }
-                if (b.Length == 4)
+                if (data.Length == 4)
                 {
-                    return LittleEndian.GetUInt(b).ToString();
+                    return LittleEndian.GetUInt(data).ToString();
                 }
                 // Maybe it's a string? who knows!
-                return Encoding.UTF8.GetString(b);
+                return Encoding.UTF8.GetString(data);
             }
             return propertyValue.ToString();
         }

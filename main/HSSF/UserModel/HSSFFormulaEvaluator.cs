@@ -158,24 +158,21 @@ namespace NPOI.HSSF.UserModel
         protected override CellValue EvaluateFormulaCellValue(ICell cell)
         {
             ValueEval eval = _bookEvaluator.Evaluate(new HSSFEvaluationCell((HSSFCell)cell));
-            if (eval is BoolEval)
+            if (eval is BoolEval be)
             {
-                BoolEval be = (BoolEval)eval;
                 return CellValue.ValueOf(be.BooleanValue);
             }
-            if (eval is NumberEval)
+            if (eval is NumberEval numberEval)
             {
-                NumberEval ne = (NumberEval)eval;
-                return new CellValue(ne.NumberValue);
+                return new CellValue(numberEval.NumberValue);
             }
-            if (eval is StringEval)
+            if (eval is StringEval ne)
             {
-                StringEval ne = (StringEval)eval;
                 return new CellValue(ne.StringValue);
             }
-            if (eval is ErrorEval)
+            if (eval is ErrorEval errorEval)
             {
-                return CellValue.GetError(((ErrorEval)eval).ErrorCode);
+                return CellValue.GetError(errorEval.ErrorCode);
             }
             throw new InvalidOperationException("Unexpected eval class (" + eval.GetType().Name + ")");
         }

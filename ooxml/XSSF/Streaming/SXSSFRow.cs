@@ -200,11 +200,10 @@ namespace NPOI.XSSF.Streaming
 
         public override bool Equals(Object obj)
         {
-            if (!(obj is SXSSFRow))
+            if (obj is not SXSSFRow other)
         {
                 return false;
             }
-            SXSSFRow other = (SXSSFRow)obj;
 
             return (this.RowNum == other.RowNum) &&
                    (this.Sheet == other.Sheet);

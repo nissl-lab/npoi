@@ -352,14 +352,14 @@ namespace NPOI.HPSF
                     }
                 case Variant.VT_I4:
                     {
-                        if (!(value is int))
+                        if (value is not int i)
                         {
                             throw new Exception("Could not cast an object To "
                                     + "int" + ": "
                                     + value.GetType().Name + ", "
                                     + value.ToString());
                         }
-                        length += TypeWriter.WriteToStream(out1, (int)value);
+                        length += TypeWriter.WriteToStream(out1, i);
                         break;
                     }
                 case Variant.VT_I8:
@@ -399,13 +399,12 @@ namespace NPOI.HPSF
                     {
                         /* The variant type is not supported yet. However, if the value
                          * is a byte array we can Write it nevertheless. */
-                        if (value is byte[])
+                        if (value is byte[] o)
                         {
-                            byte[] b = (byte[])value;
-                            out1.Write(b, 0, b.Length);
-                            length = b.Length;
+                            out1.Write(o, 0, o.Length);
+                            length = o.Length;
                             WriteUnsupportedTypeMessage
-                                (new WritingNotSupportedException(type, value));
+                                (new WritingNotSupportedException(type, o));
                         }
                         else
                             throw new WritingNotSupportedException(type, value);

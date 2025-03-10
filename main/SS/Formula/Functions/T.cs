@@ -27,16 +27,15 @@ namespace NPOI.SS.Formula.Functions
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0)
         {
             ValueEval arg = arg0;
-            if (arg is RefEval)
+            if (arg is RefEval re)
             {
                 // always use the first sheet
-                RefEval re = (RefEval)arg;
                 arg = re.GetInnerValueEval(re.FirstSheetIndex);
             }
-            else if (arg is AreaEval)
+            else if (arg is AreaEval eval)
             {
                 // when the arg is an area, choose the top left cell
-                arg = ((AreaEval)arg).GetRelativeValue(0, 0);
+                arg = eval.GetRelativeValue(0, 0);
             }
 
             if (arg is StringEval)

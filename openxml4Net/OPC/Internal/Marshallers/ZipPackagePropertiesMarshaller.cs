@@ -15,12 +15,11 @@ public class ZipPackagePropertiesMarshaller:PackagePropertiesMarshaller
 {
 	public override bool Marshall(PackagePart part, Stream out1)
 	{
-		if (!(out1 is ZipOutputStream)) {
+		if (out1 is not ZipOutputStream zos) {
 			throw new ArgumentException("ZipOutputStream expected!");
 		}
-		ZipOutputStream zos = (ZipOutputStream) out1;
 
-		// Saving the part in the zip file
+        // Saving the part in the zip file
 		string name = ZipHelper
 				.GetZipItemNameFromOPCName(part.PartName.URI.ToString());
         ZipEntry ctEntry = new ZipEntry(name);
@@ -30,9 +29,9 @@ public class ZipPackagePropertiesMarshaller:PackagePropertiesMarshaller
             // Save in ZIP
             zos.PutNextEntry(ctEntry); // Add entry in ZIP
 
-            base.Marshall(part, out1); // Marshall the properties inside a XML
+            base.Marshall(part, zos); // Marshall the properties inside a XML
             // Document
-            StreamHelper.SaveXmlInStream(xmlDoc, out1);
+            StreamHelper.SaveXmlInStream(xmlDoc, zos);
 
             zos.CloseEntry();
         }

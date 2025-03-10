@@ -137,9 +137,9 @@ namespace NPOI.SS.Util
                 double.TryParse(value.ToString(), out val);
                 cell.SetCellValue(val);
             }
-            else if (value is DateTime)
+            else if (value is DateTime time)
             {
-                cell.SetCellValue((DateTime)value);
+                cell.SetCellValue(time);
                 //} else if (value is Calendar) {
                 //    cell.SetCellValue((Calendar) value);
             }
@@ -155,16 +155,15 @@ namespace NPOI.SS.Util
 
         private bool IsFormulaDefinition(Object obj)
         {
-            if (obj is String)
+            if (obj is String str)
             {
-                String str = (String)obj;
                 if (str.Length < 2)
                 {
                     return false;
                 }
                 else
                 {
-                    return ((String)obj)[0] == '=';
+                    return str[0] == '=';
                 }
             }
             else

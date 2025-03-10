@@ -216,11 +216,10 @@ namespace NPOI.SS.UserModel
 
         public override bool Equals(Object o)
         {
-            if (!(o is ExcelStyleDateFormatter)) {
+            if (o is not ExcelStyleDateFormatter other) {
                 return false;
             }
 
-            ExcelStyleDateFormatter other = (ExcelStyleDateFormatter)o;
             return dateToBeFormatted == other.dateToBeFormatted;
         }
 

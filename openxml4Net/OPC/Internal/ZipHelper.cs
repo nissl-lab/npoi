@@ -175,9 +175,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             //  start before beginning processing.
 
             // Put things back
-            if (stream is PushbackInputStream)
+            if (stream is PushbackInputStream inputStream)
             {
-                ((PushbackInputStream)stream).Unread(data);
+                inputStream.Unread(data);
             }
             else if (stream.MarkSupported())
             {

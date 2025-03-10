@@ -97,9 +97,8 @@ namespace NPOI.SS.Formula.Functions
 
         private static void CollectValues(ValueEval arg, IList temp)
         {
-            if (arg is TwoDEval)
+            if (arg is TwoDEval ae)
             {
-                TwoDEval ae = (TwoDEval)arg;
                 int width = ae.Width;
                 int height = ae.Height;
                 for (int rrIx = 0; rrIx < height; rrIx++)
@@ -112,9 +111,8 @@ namespace NPOI.SS.Formula.Functions
                 }
                 return;
             }
-            if (arg is RefEval)
+            if (arg is RefEval re)
             {
-                RefEval re = (RefEval)arg;
                 int firstSheetIndex = re.FirstSheetIndex;
                 int lastSheetIndex = re.LastSheetIndex;
                 for (int sIx = firstSheetIndex; sIx <= lastSheetIndex; sIx++)
@@ -129,9 +127,9 @@ namespace NPOI.SS.Formula.Functions
 
         private static void CollectValue(ValueEval arg, IList temp, bool mustBeNumber)
         {
-            if (arg is ErrorEval)
+            if (arg is ErrorEval eval)
             {
-                throw new EvaluationException((ErrorEval)arg);
+                throw new EvaluationException(eval);
             }
             if (arg == BlankEval.instance || arg is BoolEval || arg is StringEval)
             {
@@ -141,9 +139,9 @@ namespace NPOI.SS.Formula.Functions
                 }
                 return;
             }
-            if (arg is NumberEval)
+            if (arg is NumberEval numberEval)
             {
-                temp.Add(((NumberEval)arg).NumberValue);
+                temp.Add(numberEval.NumberValue);
                 return;
             }
             throw new InvalidOperationException("Unexpected value type (" + arg.GetType().Name + ")");

@@ -49,12 +49,10 @@ namespace NPOI.SS.Formula.Eval
                 return -CompareBlank(va);
             }
 
-            if (va is BoolEval)
+            if (va is BoolEval bA)
             {
-                if (vb is BoolEval)
+                if (vb is BoolEval bB)
                 {
-                    BoolEval bA = (BoolEval)va;
-                    BoolEval bB = (BoolEval)vb;
                     if (bA.BooleanValue == bB.BooleanValue)
                     {
                         return 0;
@@ -67,12 +65,10 @@ namespace NPOI.SS.Formula.Eval
             {
                 return -1;
             }
-            if (va is StringEval)
+            if (va is StringEval sA)
             {
-                if (vb is StringEval)
+                if (vb is StringEval sB)
                 {
-                    StringEval sA = (StringEval)va;
-                    StringEval sB = (StringEval)vb;
                     return string.Compare(sA.StringValue, sB.StringValue, StringComparison.OrdinalIgnoreCase);
                 }
                 return 1;
@@ -81,12 +77,10 @@ namespace NPOI.SS.Formula.Eval
             {
                 return -1;
             }
-            if (va is NumberEval)
+            if (va is NumberEval nA)
             {
-                if (vb is NumberEval)
+                if (vb is NumberEval nB)
                 {
-                    NumberEval nA = (NumberEval)va;
-                    NumberEval nB = (NumberEval)vb;
                     if (nA.NumberValue == nB.NumberValue)
                     {
                         // Excel considers -0.0 == 0.0 which is different to Double.compare()
@@ -104,20 +98,17 @@ namespace NPOI.SS.Formula.Eval
             {
                 return 0;
             }
-            if (v is BoolEval)
+            if (v is BoolEval boolEval)
             {
-                BoolEval boolEval = (BoolEval)v;
                 return boolEval.BooleanValue ? -1 : 0;
             }
-            if (v is NumberEval)
+            if (v is NumberEval ne)
             {
-                NumberEval ne = (NumberEval)v;
                 //return ne.NumberValue.CompareTo(0.0);
                 return NumberComparer.Compare(0.0, ne.NumberValue);
             }
-            if (v is StringEval)
+            if (v is StringEval se)
             {
-                StringEval se = (StringEval)v;
                 return se.StringValue.Length < 1 ? 0 : -1;
             }
             throw new ArgumentException("bad value class (" + v.GetType().Name + ")");
@@ -148,17 +139,15 @@ namespace NPOI.SS.Formula.Eval
 
             int w1, w2, h1, h2;
             int a1FirstCol = 0, a1FirstRow = 0;
-            if (arg0 is AreaEval)
+            if (arg0 is AreaEval eval)
             {
-                AreaEval ae = (AreaEval)arg0;
-                w1 = ae.Width;
-                h1 = ae.Height;
-                a1FirstCol = ae.FirstColumn;
-                a1FirstRow = ae.FirstRow;
+                w1 = eval.Width;
+                h1 = eval.Height;
+                a1FirstCol = eval.FirstColumn;
+                a1FirstRow = eval.FirstRow;
             }
-            else if (arg0 is RefEval)
+            else if (arg0 is RefEval ref1)
             {
-                RefEval ref1 = (RefEval)arg0;
                 w1 = 1;
                 h1 = 1;
                 a1FirstCol = ref1.Column;
@@ -170,17 +159,15 @@ namespace NPOI.SS.Formula.Eval
                 h1 = 1;
             }
             int a2FirstCol = 0, a2FirstRow = 0;
-            if (arg1 is AreaEval)
+            if (arg1 is AreaEval ae)
             {
-                AreaEval ae = (AreaEval)arg1;
                 w2 = ae.Width;
                 h2 = ae.Height;
                 a2FirstCol = ae.FirstColumn;
                 a2FirstRow = ae.FirstRow;
             }
-            else if (arg1 is RefEval)
+            else if (arg1 is RefEval ref1)
             {
-                RefEval ref1 = (RefEval)arg1;
                 w2 = 1;
                 h2 = 1;
                 a2FirstCol = ref1.Column;

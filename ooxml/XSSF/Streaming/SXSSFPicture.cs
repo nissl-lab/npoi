@@ -284,7 +284,7 @@ namespace NPOI.XSSF.Streaming
             get
             {
                 XSSFAnchor a = GetAnchor();
-                return (a is XSSFClientAnchor) ? (XSSFClientAnchor)a : null;
+                return (a is XSSFClientAnchor anchor) ? anchor : null;
             }
         }
 

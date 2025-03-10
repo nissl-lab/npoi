@@ -58,11 +58,11 @@ namespace NPOI.POIFS.FileSystem
          */
         public ODocumentInputStream(DocumentEntry document)
         {
-            if (!(document is DocumentNode))
+            if (document is not DocumentNode documentNode)
             {
                 throw new IOException("Cannot open internal document storage");
             }
-            DocumentNode documentNode = (DocumentNode)document;
+
             if (documentNode.Document == null)
             {
                 throw new IOException("Cannot open internal document storage");

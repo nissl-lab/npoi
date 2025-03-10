@@ -135,9 +135,8 @@ namespace NPOI.SS.Formula.Eval.Forked
         }
         public int GetSheetIndex(IEvaluationSheet sheet)
         {
-            if (sheet is ForkedEvaluationSheet)
+            if (sheet is ForkedEvaluationSheet mes)
             {
-                ForkedEvaluationSheet mes = (ForkedEvaluationSheet)sheet;
                 return mes.GetSheetIndex(_masterBook);
             }
             return _masterBook.GetSheetIndex(sheet);

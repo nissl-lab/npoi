@@ -281,15 +281,15 @@ namespace NPOI.HSSF.Record
 
         public Rc4KeyData GetRc4KeyData()
         {
-            return (_keyData is Rc4KeyData)
-                ? (Rc4KeyData)_keyData
+            return (_keyData is Rc4KeyData data)
+                ? data
                 : null;
         }
 
         public XorKeyData GetXorKeyData()
         {
-            return (_keyData is XorKeyData)
-                ? (XorKeyData)_keyData
+            return (_keyData is XorKeyData data)
+                ? data
                 : null;
         }
 

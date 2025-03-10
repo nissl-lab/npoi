@@ -85,9 +85,8 @@ namespace NPOI.POIFS.FileSystem
             int bytesRead = IOUtils.ReadFully(inp, header);
 
             // Wind back those 4 bytes
-            if (inp is PushbackStream)
+            if (inp is PushbackStream pin)
             {
-                PushbackStream pin = (PushbackStream)inp;
                 pin.Position = pin.Position - 4;
                 //pin.unread(header, 0, bytesRead);
             }

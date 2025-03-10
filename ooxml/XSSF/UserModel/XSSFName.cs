@@ -347,9 +347,8 @@ namespace NPOI.XSSF.UserModel
         {
             if (o == this) return true;
 
-            if (!(o is XSSFName)) return false;
+            if (o is not XSSFName cf) return false;
 
-            XSSFName cf = (XSSFName)o;
             return _ctName.name == cf.GetCTName().name && _ctName.localSheetId == cf.GetCTName().localSheetId && _ctName.Value==cf.RefersToFormula ;
         }
 
