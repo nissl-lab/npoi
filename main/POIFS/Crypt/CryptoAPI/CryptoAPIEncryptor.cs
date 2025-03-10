@@ -197,7 +197,8 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
             EncryptionRecord er = new EncryptionRecordInternal(info, header, verifier);
             DataSpaceMapUtils.CreateEncryptionEntry(dir, "EncryptionInfo", er);
         }
-        private class EncryptionRecordInternal : EncryptionRecord
+
+        private sealed class EncryptionRecordInternal : EncryptionRecord
         {
             public EncryptionRecordInternal(EncryptionInfo info,
                 StandardEncryptionHeader header, StandardEncryptionVerifier verifier)
@@ -217,7 +218,7 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
                 verifier.Write(bos);
             }
         }
-        private class CipherByteArrayOutputStream : ByteArrayOutputStream
+        private sealed class CipherByteArrayOutputStream : ByteArrayOutputStream
         {
             CryptoAPIEncryptor encryptor;
             public CipherByteArrayOutputStream(CryptoAPIEncryptor encryptor)

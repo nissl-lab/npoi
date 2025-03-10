@@ -113,7 +113,7 @@ namespace NPOI.SS.Util.CellWalk
          * Inner class to hold walk context.
          * @author Roman Kashitsyn
          */
-        private class SimpleCellWalkContext : ICellWalkContext
+        private sealed class SimpleCellWalkContext : ICellWalkContext
         {
             public long ordinalNumber = 0;
             public int rowNumber = 0;

@@ -288,7 +288,7 @@ namespace NPOI.Util
             }
         }
 
-        internal class Segment
+        internal sealed class Segment
         {
 
             public Segment(long start, long end)

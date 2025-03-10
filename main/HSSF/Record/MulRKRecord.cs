@@ -169,7 +169,8 @@ namespace NPOI.HSSF.Record
                 throw new RecordFormatException("Sorry, you can't serialize MulRK in this release");
             }
         }
-        private class RkRec
+
+        private sealed class RkRec
         {
             public const int ENCODED_SIZE = 6;
             public short xf;

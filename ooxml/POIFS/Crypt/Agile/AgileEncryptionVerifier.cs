@@ -170,7 +170,7 @@ namespace NPOI.POIFS.Crypt.Agile
         }
     }
 
-    internal class CertificateFactory
+    internal sealed class CertificateFactory
     {
         internal static CertificateFactory GetInstance(string v)
         {

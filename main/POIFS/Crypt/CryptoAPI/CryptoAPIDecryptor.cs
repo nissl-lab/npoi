@@ -28,7 +28,7 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
 
         private long _length;
 
-        private class SeekableMemoryStream : MemoryStream {
+        private sealed class SeekableMemoryStream : MemoryStream {
             Cipher cipher;
             byte[] oneByte = { 0 };
 
@@ -78,7 +78,7 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
             }
         }
 
-        internal class StreamDescriptorEntry {
+        internal sealed class StreamDescriptorEntry {
             internal static BitField flagStream = BitFieldFactory.GetInstance(1);
 
             internal int streamOffset;

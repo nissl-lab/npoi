@@ -19,7 +19,7 @@ using NPOI.Util;
 
 namespace NPOI.HPSF
 {
-    internal class Date
+    internal sealed class Date
     {
         public const int SIZE = 8;
 

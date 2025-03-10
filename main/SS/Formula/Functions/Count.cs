@@ -72,7 +72,7 @@ namespace NPOI.SS.Formula.Functions
             return new NumberEval(temp);
         }
 
-        private class DefaultPredicate : IMatchPredicate
+        private sealed class DefaultPredicate : IMatchPredicate
         {
             public bool Matches(ValueEval valueEval)
             {
@@ -97,7 +97,7 @@ namespace NPOI.SS.Formula.Functions
         /// <summary>
         /// matches hidden rows but not subtotals
         /// </summary>
-        private class SubtotalPredicate : I_MatchAreaPredicate
+        private sealed class SubtotalPredicate : I_MatchAreaPredicate
         {
             public bool Matches(ValueEval valueEval)
             {
@@ -115,7 +115,7 @@ namespace NPOI.SS.Formula.Functions
         /// <summary>
         /// matches nither hidden rows or subtotals
         /// </summary>
-        private class SubtotalVisibleOnlyPredicate: I_MatchAreaPredicate
+        private sealed class SubtotalVisibleOnlyPredicate: I_MatchAreaPredicate
         {
             public bool Matches(ValueEval valueEval)
             {

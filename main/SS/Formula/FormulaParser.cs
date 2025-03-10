@@ -1311,7 +1311,7 @@ namespace NPOI.SS.Formula
         /**
          * A1, $A1, A$1, $A$1, A, 1
          */
-        private class SimpleRangePart
+        private sealed class SimpleRangePart
         {
             public enum PartType
             {

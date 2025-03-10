@@ -27,7 +27,7 @@ namespace NPOI.HSSF.Record
     using System.Collections.Generic;
     using System.IO;
 
-    internal class SerializationListener : EscherSerializationListener
+    internal sealed class SerializationListener : EscherSerializationListener
     {
         readonly IList<int> spEndingOffsets;
         readonly IList<EscherRecord> records;
@@ -58,7 +58,8 @@ namespace NPOI.HSSF.Record
 
         #endregion
     }
-    internal class RecordSizeListener : EscherSerializationListener
+
+    internal sealed class RecordSizeListener : EscherSerializationListener
     {
         readonly IList<int> spEndingOffsets;
         EscherRecord record;
@@ -803,7 +804,7 @@ namespace NPOI.HSSF.Record
 
         
 
-        internal class CustomEscherRecordFactory : DefaultEscherRecordFactory
+        internal sealed class CustomEscherRecordFactory : DefaultEscherRecordFactory
         {
             readonly List<EscherRecord> shapeRecords;
             public CustomEscherRecordFactory(List<EscherRecord> shapeRecords)

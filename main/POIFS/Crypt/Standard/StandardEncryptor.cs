@@ -213,7 +213,7 @@ namespace NPOI.POIFS.Crypt.Standard
             // TODO: any properties???
         }
 
-        private class EncryptionRecordInternal : EncryptionRecord
+        private sealed class EncryptionRecordInternal : EncryptionRecord
         {
             public EncryptionRecordInternal(EncryptionInfo info,
                 StandardEncryptionHeader header, StandardEncryptionVerifier verifier)
@@ -237,7 +237,7 @@ namespace NPOI.POIFS.Crypt.Standard
 
     }
 
-    internal class CipherOutputStream : ByteArrayOutputStream
+    internal sealed class CipherOutputStream : ByteArrayOutputStream
     {
         private byte[] ibuffer = new byte[1];
         private byte[] obuffer;

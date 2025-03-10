@@ -192,7 +192,7 @@ namespace NPOI.SS.Formula
             return _children;
         }
 
-        private class TokenCollector
+        private sealed class TokenCollector
         {
 
             private readonly Ptg[] _ptgs;

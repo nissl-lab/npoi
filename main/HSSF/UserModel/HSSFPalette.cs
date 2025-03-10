@@ -148,7 +148,7 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// user custom color
         /// </summary>
-        private class CustomColor : HSSFColor
+        private sealed class CustomColor : HSSFColor
         {
             private short byteOffset;
             private byte red;

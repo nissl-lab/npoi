@@ -132,7 +132,7 @@ namespace NPOI.POIFS.Crypt
             }
         }
 
-        private class EncryptedPackageWriter : POIFSWriterListener {
+        private sealed class EncryptedPackageWriter : POIFSWriterListener {
             readonly ChunkedCipherOutputStream stream;
             public EncryptedPackageWriter(ChunkedCipherOutputStream stream)
             {

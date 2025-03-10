@@ -31,7 +31,7 @@ namespace NPOI.HSSF.Record.Aggregates
     /// </summary>
     public class ColumnInfoRecordsAggregate : RecordAggregate, ICloneable
     {
-        private class CIRComparator : IComparer<ColumnInfoRecord>
+        private sealed class CIRComparator : IComparer<ColumnInfoRecord>
         {
             public static IComparer<ColumnInfoRecord> instance = new CIRComparator();
             private CIRComparator()

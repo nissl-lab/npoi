@@ -42,7 +42,7 @@ namespace NPOI.HSSF.Record.Chart
 
         private int m_recs;
 
-        private class CTFormat
+        private sealed class CTFormat
         {
             private short m_offset;
             private short m_fontIndex;

@@ -133,7 +133,7 @@ namespace NPOI.HSSF.Model
             }
             
         }
-        private class PLSAggregateVisitor : RecordVisitor
+        private sealed class PLSAggregateVisitor : RecordVisitor
         {
             private List<RecordBase> container;
             public PLSAggregateVisitor(List<RecordBase> container)

@@ -185,7 +185,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
-        private class ParagraphPropertyTextAlignFetcher : ParagraphPropertyFetcher<TextAlign?>
+        private sealed class ParagraphPropertyTextAlignFetcher : ParagraphPropertyFetcher<TextAlign?>
         {
             public ParagraphPropertyTextAlignFetcher(int level) : base(level) 
             {

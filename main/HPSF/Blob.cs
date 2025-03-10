@@ -2,7 +2,7 @@
 
 namespace NPOI.HPSF
 {
-    internal class Blob
+    internal sealed class Blob
     {
         private readonly byte[] _value;
 

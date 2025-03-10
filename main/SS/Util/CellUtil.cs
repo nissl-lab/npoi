@@ -87,7 +87,7 @@ namespace NPOI.SS.Util
 
         private static UnicodeMapping[] unicodeMappings;
 
-        private class UnicodeMapping
+        private sealed class UnicodeMapping
         {
 
             public String entityName;

@@ -28,7 +28,7 @@ namespace NPOI.XSSF.UserModel.Charts
      *
      * @author Roman Kashitsyn
      */
-    internal class XSSFChartUtil
+    internal sealed class XSSFChartUtil
     {
 
         private XSSFChartUtil() { }

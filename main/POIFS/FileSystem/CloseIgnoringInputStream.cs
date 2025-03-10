@@ -30,7 +30,7 @@ using System.IO;
 
 namespace NPOI.POIFS.FileSystem
 {
-    internal class CloseIgnoringInputStream : Stream
+    internal sealed class CloseIgnoringInputStream : Stream
     {
 
         private readonly Stream _is;

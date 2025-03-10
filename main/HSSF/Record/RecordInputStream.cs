@@ -49,7 +49,8 @@ namespace NPOI.HSSF.Record
             return recordClass.Name;
         }
     }
-    internal class SimpleHeaderInput : BiffHeaderInput
+
+    internal sealed class SimpleHeaderInput : BiffHeaderInput
     {
 
         private readonly ILittleEndianInput _lei;

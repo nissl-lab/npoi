@@ -37,7 +37,7 @@ namespace NPOI.SS.Format
         private const double MIN__FACTOR = HOUR__FACTOR / 60.0;
         private const double SEC__FACTOR = MIN__FACTOR / 60.0;
 
-        private class TimeSpec
+        private sealed class TimeSpec
         {
             internal readonly char type;
             internal readonly int pos;
@@ -68,7 +68,7 @@ namespace NPOI.SS.Format
             }
         }
 
-        private class ElapsedPartHandler : CellFormatPart.IPartHandler
+        private sealed class ElapsedPartHandler : CellFormatPart.IPartHandler
         {
             public ElapsedPartHandler(CellElapsedFormatter formatter)
             {

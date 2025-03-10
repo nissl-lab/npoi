@@ -15,10 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+
 namespace NPOI.SS.Format
 {
-    using System;
-    internal class GeneralCellFormatType : CellFormatType
+    internal sealed class GeneralCellFormatType : CellFormatType
     {
         public override CellFormatter Formatter(String pattern)
         {
@@ -29,7 +30,8 @@ namespace NPOI.SS.Format
             return false;
         }
     }
-    internal class NumberCellFormatType : CellFormatType
+
+    internal sealed class NumberCellFormatType : CellFormatType
     {
         public override CellFormatter Formatter(String pattern)
         {
@@ -40,7 +42,8 @@ namespace NPOI.SS.Format
             return false;
         }
     }
-    internal class DateCellFormatType : CellFormatType
+
+    internal sealed class DateCellFormatType : CellFormatType
     {
         public override bool IsSpecial(char ch)
         {
@@ -51,7 +54,8 @@ namespace NPOI.SS.Format
             return new CellDateFormatter(pattern);
         }
     }
-    internal class ElapsedCellFormatType : CellFormatType
+
+    internal sealed class ElapsedCellFormatType : CellFormatType
     {
         public override bool IsSpecial(char ch)
         {
@@ -62,7 +66,8 @@ namespace NPOI.SS.Format
             return new CellElapsedFormatter(pattern);
         }
     }
-    internal class TextCellFormatType : CellFormatType
+
+    internal sealed class TextCellFormatType : CellFormatType
     {
         public override bool IsSpecial(char ch)
         {
@@ -73,6 +78,7 @@ namespace NPOI.SS.Format
             return new CellTextFormatter(pattern);
         }
     }
+
     /**
      * The different kinds of formats that the formatter understands.
      *
@@ -109,7 +115,5 @@ namespace NPOI.SS.Format
          * @return A new formatter of the appropriate type, for the given pattern.
          */
         public abstract CellFormatter Formatter(String pattern);
-
     }
-
 }

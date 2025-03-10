@@ -177,7 +177,7 @@ namespace NPOI.HSSF.Model
             return new InternalSheet(rs);
         }
 
-        private class RecordCloner : RecordVisitor
+        private sealed class RecordCloner : RecordVisitor
         {
             private readonly IList<Record> _destList;
 
@@ -450,7 +450,7 @@ namespace NPOI.HSSF.Model
             //    log.Log(POILogger.DEBUG, "sheet createSheet (existing file) exited");
 
         }
-        private class RecordVisitor1:RecordVisitor
+        private sealed class RecordVisitor1:RecordVisitor
         {
             readonly List<RecordBase> _records;
             public RecordVisitor1(List<RecordBase> recs)

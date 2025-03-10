@@ -170,7 +170,7 @@ namespace NPOI.XSSF.Model
         // TODO Last seen data
 
 
-        protected internal class ExternalName : IName
+        protected internal sealed class ExternalName : IName
         {
             private ExternalLinksTable externalLinkTable;
             private CT_ExternalDefinedName name;

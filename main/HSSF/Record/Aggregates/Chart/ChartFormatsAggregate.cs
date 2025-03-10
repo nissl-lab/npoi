@@ -185,7 +185,8 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
             WriteEndBlock(rv);
             rv.VisitRecord(EndRecord.instance);
         }
-        private class ChartFormatsAttachedLabelAggregate : ChartRecordAggregate
+
+        private sealed class ChartFormatsAttachedLabelAggregate : ChartRecordAggregate
         {
             private DataLabExtRecord dataLabExt;
             private ChartStartObjectRecord startObject;

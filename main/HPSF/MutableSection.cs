@@ -307,7 +307,7 @@ namespace NPOI.HPSF
         }
 
 
-        private class PropertyComparer : IComparer
+        private sealed class PropertyComparer : IComparer
         {
             #region IComparer Members
 

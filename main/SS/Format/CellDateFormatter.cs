@@ -50,7 +50,7 @@ namespace NPOI.SS.Format
             EXCEL_EPOCH_TIME = c.TimeOfDay;
         }
 
-        private class DatePartHandler : CellFormatPart.IPartHandler
+        private sealed class DatePartHandler : CellFormatPart.IPartHandler
         {
             private readonly CellDateFormatter _formatter;
             private int mStart = -1;

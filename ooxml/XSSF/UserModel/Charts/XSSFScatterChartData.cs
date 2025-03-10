@@ -45,7 +45,7 @@ namespace NPOI.XSSF.UserModel.Charts
         /**
          * Package private ScatterChartSerie implementation.
          */
-        internal class Series : AbstractXSSFChartSeries, IScatterChartSeries<Tx, Ty>
+        internal sealed class Series : AbstractXSSFChartSeries, IScatterChartSeries<Tx, Ty>
         {
             private int id;
             private int order;

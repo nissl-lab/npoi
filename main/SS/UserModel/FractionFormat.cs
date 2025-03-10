@@ -213,7 +213,7 @@ namespace NPOI.SS.UserModel
             throw new NotImplementedException("Reverse parsing not supported");
         }
        
-        private class SimpleFractionException : Exception
+        private sealed class SimpleFractionException : Exception
         {
             public SimpleFractionException(String message) :
                 base(message)

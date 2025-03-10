@@ -1183,7 +1183,7 @@ namespace NPOI.SS.UserModel
          * Workaround until we merge {@link DataFormatter} with {@link CellFormat}.
          * Constant, non-cachable wrapper around a {@link CellFormatResult} 
          */
-        private class CellFormatResultWrapper : FormatBase
+        private sealed class CellFormatResultWrapper : FormatBase
         {
             private readonly CellFormatResult result;
             private readonly bool emulateCSV;

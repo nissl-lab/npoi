@@ -125,7 +125,7 @@ namespace NPOI.SS.Formula.Eval.Forked
             _masterSheet.ClearAllCachedResultValues();
         }
 
-        private class RowColKey : IComparable<RowColKey>
+        private sealed class RowColKey : IComparable<RowColKey>
         {
             private readonly int _rowIndex;
             private readonly int _columnIndex;

@@ -76,7 +76,7 @@ namespace NPOI.SS.Util
             int flatIndex = _width * relativeRowIndex + relativeColumnIndex;
             return _flattenedArray[flatIndex];
         }
-        internal class ArrayIterator<D> :IEnumerator<D>
+        internal sealed class ArrayIterator<D> :IEnumerator<D>
         {
 
             private readonly D[] _array;

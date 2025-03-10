@@ -51,7 +51,8 @@ namespace NPOI.SS.Format
             TESTS.Add("!=", NE);
             TESTS.Add("<>", NE);
         }
-        private class LT_CellFormatCondition : CellFormatCondition
+
+        private sealed class LT_CellFormatCondition : CellFormatCondition
         {
             readonly double _c;
             public LT_CellFormatCondition(double c)
@@ -63,7 +64,8 @@ namespace NPOI.SS.Format
                 return value < _c;
             }
         }
-        private class LE_CellFormatCondition : CellFormatCondition
+
+        private sealed class LE_CellFormatCondition : CellFormatCondition
         {
             readonly double _c;
             public LE_CellFormatCondition(double c)
@@ -75,7 +77,8 @@ namespace NPOI.SS.Format
                 return value <= _c;
             }
         }
-        private class GT_CellFormatCondition : CellFormatCondition
+
+        private sealed class GT_CellFormatCondition : CellFormatCondition
         {
             readonly double _c;
             public GT_CellFormatCondition(double c)
@@ -87,7 +90,8 @@ namespace NPOI.SS.Format
                 return value > _c;
             }
         }
-        private class GE_CellFormatCondition : CellFormatCondition
+
+        private sealed class GE_CellFormatCondition : CellFormatCondition
         {
             readonly double _c;
             public GE_CellFormatCondition(double c)
@@ -99,7 +103,8 @@ namespace NPOI.SS.Format
                 return value >= _c;
             }
         }
-        private class EQ_CellFormatCondition : CellFormatCondition
+
+        private sealed class EQ_CellFormatCondition : CellFormatCondition
         {
             readonly double _c;
             public EQ_CellFormatCondition(double c)
@@ -111,7 +116,8 @@ namespace NPOI.SS.Format
                 return value == _c;
             }
         }
-        private class NE_CellFormatCondition : CellFormatCondition
+
+        private sealed class NE_CellFormatCondition : CellFormatCondition
         {
             readonly double _c;
             public NE_CellFormatCondition(double c)

@@ -424,7 +424,7 @@ namespace NPOI.DDF
             }
         }
 
-        private class PropName
+        private sealed class PropName
         {
             public PropName(int id, String name)
             {

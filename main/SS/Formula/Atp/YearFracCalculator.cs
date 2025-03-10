@@ -427,7 +427,7 @@ namespace NPOI.SS.Formula.Atp
         /// <summary>
         /// Simple Date Wrapper
         /// </summary>
-        private class SimpleDate
+        private sealed class SimpleDate
         {
 
             public const int JANUARY = 1;

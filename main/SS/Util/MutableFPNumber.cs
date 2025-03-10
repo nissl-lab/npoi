@@ -152,7 +152,7 @@ namespace NPOI.SS.Util
             }
         }
 
-        private class Rounder
+        private sealed class Rounder
         {
             private static readonly BigInteger[] HALF_BITS;
 
@@ -183,7 +183,7 @@ namespace NPOI.SS.Util
         /**
          * Holds values for quick multiplication and division by 10
          */
-        private class TenPower
+        private sealed class TenPower
         {
             private static readonly BigInteger FIVE = new BigInteger(5L);// new BigInteger("5",10);
             private static readonly TenPower[] _cache = new TenPower[350];

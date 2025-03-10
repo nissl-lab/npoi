@@ -50,7 +50,7 @@ namespace NPOI.SS.Formula.Functions
          * are enCountered 
          */
         [Serializable]
-        private class EvalEx : Exception
+        private sealed class EvalEx : Exception
         {
             private ErrorEval _error;
 
@@ -151,7 +151,7 @@ namespace NPOI.SS.Formula.Functions
         /**
          * Encapsulates either an area or cell reference which may be 2d or 3d.
          */
-        private class BaseRef
+        private sealed class BaseRef
         {
             private const int INVALID_SHEET_INDEX = -1;
             private readonly int _firstRowIndex;

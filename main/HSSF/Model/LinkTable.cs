@@ -88,7 +88,7 @@ namespace NPOI.HSSF.Model
             return ExternSheetRecord.Combine(esrs);
         }
 
-        private class CRNBlock
+        private sealed class CRNBlock
         {
 
             private readonly CRNCountRecord _countRecord;
@@ -111,7 +111,7 @@ namespace NPOI.HSSF.Model
             }
         }
 
-        private class ExternalBookBlock
+        private sealed class ExternalBookBlock
         {
             private readonly SupBookRecord _externalBookRecord;
             internal ExternalNameRecord[] _externalNameRecords;

@@ -28,7 +28,7 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
     {
         private long _length = -1L;
 
-        private class BinaryRC4CipherInputStream : ChunkedCipherInputStream
+        private sealed class BinaryRC4CipherInputStream : ChunkedCipherInputStream
         {
             protected override Cipher InitCipherForBlock(Cipher existing, int block)
             {

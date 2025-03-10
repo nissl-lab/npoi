@@ -36,7 +36,7 @@ namespace NPOI.HSSF.Util
         /// <summary>
         /// For setting the same property on many cells to the same value
         /// </summary>
-        private class CellPropertySetter
+        private sealed class CellPropertySetter
         {
 
             private readonly HSSFWorkbook _workbook;

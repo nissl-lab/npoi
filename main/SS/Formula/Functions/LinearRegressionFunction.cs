@@ -68,7 +68,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private class SingleCellValueArray : ValueArray
+        private sealed class SingleCellValueArray : ValueArray
         {
             private readonly ValueEval _value;
             public SingleCellValueArray(ValueEval value)
@@ -83,7 +83,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private class RefValueArray : ValueArray
+        private sealed class RefValueArray : ValueArray
         {
             private readonly RefEval _ref;
             private readonly int _width;
@@ -101,7 +101,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private class AreaValueArray : ValueArray
+        private sealed class AreaValueArray : ValueArray
         {
             private readonly TwoDEval _ae;
             private readonly int _width;

@@ -45,7 +45,7 @@ namespace NPOI.SS.Formula.Eval
          * Some function IDs that require special treatment
          */
 
-        private class FunctionID
+        private sealed class FunctionID
         {
             /** 1 */
             public const int IF = FunctionMetadataRegistry.FUNCTION_INDEX_IF;

@@ -236,7 +236,7 @@ namespace NPOI.DDF
         /// <summary>
         /// This class Reads the standard escher header.
         /// </summary>
-        internal class DeleteEscherRecordHeader
+        internal sealed class DeleteEscherRecordHeader
         {
             private short options;
             private short recordId;
@@ -275,7 +275,7 @@ namespace NPOI.DDF
             /// Gets the record id.
             /// </summary>
             /// <value>The record id.</value>
-            public virtual short RecordId
+            public short RecordId
             {
                 get { return recordId; }
             }

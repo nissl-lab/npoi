@@ -39,7 +39,7 @@ namespace NPOI.POIFS.Storage
     /// </summary>
     public class PropertyBlock : BigBlock
     {
-        private class AnonymousProperty : Property
+        private sealed class AnonymousProperty : Property
         {
             public override void PreWrite()
             {

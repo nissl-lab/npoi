@@ -53,7 +53,7 @@ namespace NPOI.SS.Formula.Functions
         }
 
         private static IMatchPredicate predicate = new BlankPredicate();
-        private class BlankPredicate : IMatchPredicate
+        private sealed class BlankPredicate : IMatchPredicate
         {
             #region I_MatchPredicate 成员
 
