@@ -31,7 +31,7 @@ namespace NPOI.SS.Formula
     public class Formula
     {
 
-        private static readonly Formula EMPTY = new Formula(new byte[0], 0);
+        private static readonly Formula EMPTY = new Formula(System.Array.Empty<byte>(), 0);
 
         /** immutable */
         private readonly byte[] _byteEncoding;

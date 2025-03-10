@@ -133,7 +133,7 @@ namespace NPOI.DDF
         {
             Dictionary<short, ConstructorInfo> result = new Dictionary<short, ConstructorInfo>();
             //ConstructorInfo constructor;
-            Type[] EMPTY_CLASS_ARRAY = new Type[0];
+            Type[] EMPTY_CLASS_ARRAY = Array.Empty<Type>();
             for (int i = 0; i < records.Length; i++)
             {
                 Type recordType = records[i];

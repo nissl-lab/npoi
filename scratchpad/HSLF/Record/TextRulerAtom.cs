@@ -52,7 +52,7 @@ namespace NPOI.HSLF.Record
         public TextRulerAtom()
         {
             _header = new byte[8];
-            _data = new byte[0];
+            _data = Array.Empty<byte>();
 
             LittleEndian.PutShort(_header, 2, (short)RecordType);
             LittleEndian.PutInt(_header, 4, _data.Length);

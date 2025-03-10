@@ -12,7 +12,7 @@ namespace NPOI.HPSF
 
             if (size == 0)
             {
-                _value = new byte[0];
+                _value = System.Array.Empty<byte>();
                 return;
             }
 
