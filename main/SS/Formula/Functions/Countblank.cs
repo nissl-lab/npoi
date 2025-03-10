@@ -37,13 +37,13 @@ namespace NPOI.SS.Formula.Functions
         {
 
             double result;
-            if (arg0 is RefEval)
+            if (arg0 is RefEval eval)
             {
-                result = CountUtils.CountMatchingCellsInRef((RefEval)arg0, predicate);
+                result = CountUtils.CountMatchingCellsInRef(eval, predicate);
             }
-            else if (arg0 is ThreeDEval)
+            else if (arg0 is ThreeDEval dEval)
             {
-                result = CountUtils.CountMatchingCellsInArea((ThreeDEval)arg0, predicate);
+                result = CountUtils.CountMatchingCellsInArea(dEval, predicate);
             }
             else
             {
@@ -62,7 +62,7 @@ namespace NPOI.SS.Formula.Functions
                 return valueEval == BlankEval.instance ||
                     // see https://support.office.com/en-us/article/COUNTBLANK-function-6a92d772-675c-4bee-b346-24af6bd3ac22
                     // "Cells with formulas that return "" (empty text) are also counted."
-                    (valueEval is StringEval && "".Equals(((StringEval)valueEval).StringValue));
+                    (valueEval is StringEval eval && "".Equals(eval.StringValue));
             }
 
             #endregion

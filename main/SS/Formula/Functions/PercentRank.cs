@@ -115,15 +115,14 @@ namespace NPOI.SS.Formula.Functions
             else
             {
                 ValueEval belowRank = calculateRank(numbers, closestMatchBelow, significance, false);
-                if (!(belowRank is NumberEval)) {
+                if (belowRank is not NumberEval below) {
                     return belowRank;
                 }
                 ValueEval aboveRank = calculateRank(numbers, closestMatchAbove, significance, false);
-                if (!(aboveRank is NumberEval)) {
+                if (aboveRank is not NumberEval above) {
                     return aboveRank;
                 }
-                NumberEval below = (NumberEval)belowRank;
-                NumberEval above = (NumberEval)aboveRank;
+
                 double diff = closestMatchAbove - closestMatchBelow;
                 double pos = x - closestMatchBelow;
                 double rankDiff = above.NumberValue - below.NumberValue;
@@ -133,9 +132,8 @@ namespace NPOI.SS.Formula.Functions
         }
         private List<ValueEval> getValues(ValueEval eval, int srcRowIndex, int srcColumnIndex)
         {
-            if (eval is AreaEval)
+            if (eval is AreaEval ae)
             {
-                AreaEval ae = (AreaEval)eval;
                 List<ValueEval> list = new List<ValueEval>();
                 for (int r = ae.FirstRow; r <= ae.LastRow; r++)
                 {

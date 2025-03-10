@@ -30,7 +30,7 @@ namespace NPOI.SS.Formula.Functions
     {
         protected override bool Evaluate(ValueEval arg)
         {
-            return !(arg is StringEval);
+            return arg is not StringEval;
         }
     }
 }

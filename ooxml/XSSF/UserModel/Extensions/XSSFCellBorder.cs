@@ -201,10 +201,9 @@ namespace NPOI.XSSF.UserModel.Extensions
 
         public override bool Equals(Object o)
         {
-            if (!(o is XSSFCellBorder)) return false;
+            if (o is not XSSFCellBorder cf) return false;
 
             //TODO: change the compare logic
-            XSSFCellBorder cf = (XSSFCellBorder)o;
             return border.ToString().Equals(cf.GetCTBorder().ToString());
         }
     }

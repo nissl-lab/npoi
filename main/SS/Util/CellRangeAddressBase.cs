@@ -250,12 +250,11 @@
 
         public override bool Equals(Object other)
         {
-            if (other is CellRangeAddressBase) {
-                CellRangeAddressBase o = (CellRangeAddressBase)other;
-                return ((MinRow == o.MinRow) &&
-                        (MaxRow == o.MaxRow) &&
-                        (MinColumn == o.MinColumn) &&
-                        (MaxColumn == o.MaxColumn));
+            if (other is CellRangeAddressBase @base) {
+                return ((MinRow == @base.MinRow) &&
+                        (MaxRow == @base.MaxRow) &&
+                        (MinColumn == @base.MinColumn) &&
+                        (MaxColumn == @base.MaxColumn));
             }
             return false;
         }

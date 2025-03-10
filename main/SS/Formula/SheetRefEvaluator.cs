@@ -85,10 +85,9 @@ namespace NPOI.SS.Formula
                 IEvaluationWorkbook wb = _bookEvaluator.Workbook;
                 foreach (Ptg ptg in wb.GetFormulaTokens(cell))
                 {
-                    if (ptg is FuncVarPtg)
+                    if (ptg is FuncVarPtg varPtg)
                     {
-                        FuncVarPtg f = (FuncVarPtg)ptg;
-                        if ("SUBTOTAL".Equals(f.Name))
+                        if ("SUBTOTAL".Equals(varPtg.Name))
                         {
                             subtotal = true;
                             break;

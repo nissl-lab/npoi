@@ -239,9 +239,8 @@ namespace NPOI.HSSF.UserModel
         {
             if (this == obj) return true;
             if (obj == null) return false;
-            if (obj is HSSFFont)
+            if (obj is HSSFFont other)
             {
-                HSSFFont other = (HSSFFont)obj;
                 if (font == null)
                 {
                     if (other.font != null)

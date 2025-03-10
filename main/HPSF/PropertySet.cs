@@ -605,9 +605,8 @@ namespace NPOI.HPSF
         /// if not</returns>
         public override bool Equals(Object o)
         {
-            if (o == null || !(o is PropertySet))
+            if (o == null || o is not PropertySet ps)
                 return false;
-            PropertySet ps = (PropertySet)o;
             int byteOrder1 = ps.ByteOrder;
             int byteOrder2 = ByteOrder;
             ClassID classID1 = ps.ClassID;

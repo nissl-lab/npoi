@@ -209,7 +209,7 @@ namespace NPOI.HSSF.Util
 
         public static HSSFColor ToHSSFColor(IColor color)
         {
-            if (color != null && !(color is HSSFColor)) {
+            if (color != null && color is not HSSFColor) {
                 throw new ArgumentException("Only HSSFColor objects are supported");
             }
             return (HSSFColor)color;

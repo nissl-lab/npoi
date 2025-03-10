@@ -24,9 +24,9 @@ namespace NPOI.SS.Formula
 
             ValueEval nameArg = args[0];
             String functionName = string.Empty ;
-            if (nameArg is FunctionNameEval)
+            if (nameArg is FunctionNameEval nameEval)
             {
-                functionName = ((FunctionNameEval)nameArg).FunctionName;
+                functionName = nameEval.FunctionName;
             }
             else
             {
@@ -41,8 +41,7 @@ namespace NPOI.SS.Formula
             int nOutGoingArgs = nIncomingArgs - 1;
             ValueEval[] outGoingArgs = new ValueEval[nOutGoingArgs];
             Array.Copy(args, 1, outGoingArgs, 0, nOutGoingArgs);
-            if (targetFunc is ArrayFunction) {
-                ArrayFunction func = (ArrayFunction)targetFunc;
+            if (targetFunc is ArrayFunction func) {
                 ValueEval eval = OperationEvaluatorFactory.EvaluateArrayFunction(func, outGoingArgs, ec);
                 if (eval != null)
                 {

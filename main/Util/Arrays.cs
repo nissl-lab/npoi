@@ -608,24 +608,24 @@ namespace NPOI.Util
 
             foreach (Object element in a) {
                 int elementHash = 0;
-                if (element is Object[])
-                    elementHash = DeepHashCode((Object[]) element);
-                else if (element is byte[])
-                    elementHash = HashCode((byte[]) element);
-                else if (element is short[])
-                    elementHash = HashCode((short[]) element);
-                else if (element is int[])
-                    elementHash = HashCode((int[]) element);
-                else if (element is long[])
-                    elementHash = HashCode((long[]) element);
-                else if (element is char[])
-                    elementHash = HashCode((char[]) element);
-                else if (element is float[])
-                    elementHash = HashCode((float[]) element);
-                else if (element is double[])
-                    elementHash = HashCode((double[]) element);
-                else if (element is bool[])
-                    elementHash = HashCode((bool[]) element);
+                if (element is Object[] objects)
+                    elementHash = DeepHashCode(objects);
+                else if (element is byte[] bytes)
+                    elementHash = HashCode(bytes);
+                else if (element is short[] shorts)
+                    elementHash = HashCode(shorts);
+                else if (element is int[] ints)
+                    elementHash = HashCode(ints);
+                else if (element is long[] longs)
+                    elementHash = HashCode(longs);
+                else if (element is char[] chars)
+                    elementHash = HashCode(chars);
+                else if (element is float[] floats)
+                    elementHash = HashCode(floats);
+                else if (element is double[] doubles)
+                    elementHash = HashCode(doubles);
+                else if (element is bool[] bools)
+                    elementHash = HashCode(bools);
                 else if (element != null)
                     elementHash = element.GetHashCode();
 
@@ -699,24 +699,24 @@ namespace NPOI.Util
 
         static bool DeepEquals0(Object e1, Object e2) {
             bool eq;
-            if (e1 is Object[] && e2 is Object[])
-                eq = DeepEquals ((Object[]) e1, (Object[]) e2);
-            else if (e1 is byte[] && e2 is byte[])
-                eq = Equals((byte[]) e1, (byte[]) e2);
-            else if (e1 is short[] && e2 is short[])
-                eq = Equals((short[]) e1, (short[]) e2);
-            else if (e1 is int[] && e2 is int[])
-                eq = Equals((int[]) e1, (int[]) e2);
-            else if (e1 is long[] && e2 is long[])
-                eq = Equals((long[]) e1, (long[]) e2);
-            else if (e1 is char[] && e2 is char[])
-                eq = Equals((char[]) e1, (char[]) e2);
-            else if (e1 is float[] && e2 is float[])
-                eq = Equals((float[]) e1, (float[]) e2);
-            else if (e1 is double[] && e2 is double[])
-                eq = Equals((double[]) e1, (double[]) e2);
-            else if (e1 is bool[] && e2 is bool[])
-                eq = Equals((bool[]) e1, (bool[]) e2);
+            if (e1 is Object[] objects && e2 is Object[] e3)
+                eq = DeepEquals (objects, e3);
+            else if (e1 is byte[] bytes && e2 is byte[] bytes1)
+                eq = Equals(bytes, bytes1);
+            else if (e1 is short[] shorts && e2 is short[] shorts1)
+                eq = Equals(shorts, shorts1);
+            else if (e1 is int[] ints && e2 is int[] ints1)
+                eq = Equals(ints, ints1);
+            else if (e1 is long[] longs && e2 is long[] longs1)
+                eq = Equals(longs, longs1);
+            else if (e1 is char[] chars && e2 is char[] chars1)
+                eq = Equals(chars, chars1);
+            else if (e1 is float[] floats && e2 is float[] floats1)
+                eq = Equals(floats, floats1);
+            else if (e1 is double[] doubles && e2 is double[] doubles1)
+                eq = Equals(doubles, doubles1);
+            else if (e1 is bool[] bools && e2 is bool[] bools1)
+                eq = Equals(bools, bools1);
             else
                 eq = e1.Equals(e2);
             return eq;

@@ -107,12 +107,12 @@ namespace NPOI.XSSF.UserModel
 	     */
         protected override IEvaluationCell ToEvaluationCell(ICell cell)
         {
-            if (!(cell is XSSFCell)){
+            if (cell is not XSSFCell xssfCell){
                 throw new ArgumentException("Unexpected type of cell: " + cell.GetType().Name + "." +
                         " Only XSSFCells can be evaluated.");
             }
 
-            return new XSSFEvaluationCell((XSSFCell)cell);
+            return new XSSFEvaluationCell(xssfCell);
         }
     }
 }

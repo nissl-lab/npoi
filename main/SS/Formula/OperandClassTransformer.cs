@@ -133,9 +133,9 @@ namespace NPOI.SS.Formula
                 }
                 return;
             }
-            if (token is AbstractFunctionPtg)
+            if (token is AbstractFunctionPtg ptg)
             {
-                TransformFunctionNode((AbstractFunctionPtg)token, children, desiredOperandClass, callerForceArrayFlag);
+                TransformFunctionNode(ptg, children, desiredOperandClass, callerForceArrayFlag);
                 return;
             }
             if (children.Length > 0)
@@ -158,18 +158,16 @@ namespace NPOI.SS.Formula
         }
         private static bool IsSingleArgSum(Ptg token)
         {
-            if (token is AttrPtg)
+            if (token is AttrPtg attrPtg)
             {
-                AttrPtg attrPtg = (AttrPtg)token;
                 return attrPtg.IsSum;
             }
             return false;
         }
         private static bool IsSimpleValueFunction(Ptg token)
         {
-            if (token is AbstractFunctionPtg)
+            if (token is AbstractFunctionPtg aptg)
             {
-                AbstractFunctionPtg aptg = (AbstractFunctionPtg)token;
                 if (aptg.DefaultOperandClass != Ptg.CLASS_VALUE)
                 {
                     return false;

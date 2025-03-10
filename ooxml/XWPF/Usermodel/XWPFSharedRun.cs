@@ -180,9 +180,9 @@ namespace NPOI.XWPF.Usermodel
                 for (int i = 0; i < run.Items.Count; i++)
                 {
                     object o = run.Items[i];
-                    if (o is CT_Text1)
+                    if (o is CT_Text1 text1)
                     {
-                        text.Append(((CT_Text1)o).Value);
+                        text.Append(text1.Value);
                     }
                 }
 

@@ -18,8 +18,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 ValueEval valueEval = args[0];
                 int result = 1;
-                if (valueEval is RefListEval) {
-                    RefListEval refListEval = (RefListEval)valueEval;
+                if (valueEval is RefListEval refListEval) {
                     result = refListEval.GetList().Count;
                 }
                 NumberEval numberEval = new NumberEval(new NumberPtg(result));

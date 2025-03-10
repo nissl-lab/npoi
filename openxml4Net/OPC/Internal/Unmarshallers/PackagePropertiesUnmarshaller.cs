@@ -432,8 +432,8 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             IEnumerator itChildren = el.GetEnumerator();
             while (itChildren.MoveNext())
             {
-                if (itChildren.Current is XmlElement)
-                    CheckElementForOPCCompliance((XmlElement)itChildren.Current);
+                if (itChildren.Current is XmlElement element)
+                    CheckElementForOPCCompliance(element);
             }
         }
     }

@@ -332,12 +332,11 @@ namespace NPOI.HPSF
         /// <returns></returns>
         public override bool Equals(Object o)
         {
-            if (!(o is Property))
+            if (o is not Property property)
                 return false;
-            Property p = (Property)o;
-            Object pValue = p.Value;
-            long pId = p.ID;
-            if (id != pId || (id != 0 && !TypesAreEqual(type, p.Type)))
+            Object pValue = property.Value;
+            long pId = property.ID;
+            if (id != pId || (id != 0 && !TypesAreEqual(type, property.Type)))
                 return false;
             if (value == null && pValue == null)
                 return true;
@@ -351,8 +350,8 @@ namespace NPOI.HPSF
                 !(pValueClass.IsAssignableFrom(valueClass)))
                 return false;
 
-            if (value is byte[])
-                return Arrays.Equals((byte[])value, (byte[])pValue);
+            if (value is byte[] bytes)
+                return Arrays.Equals(bytes, (byte[])pValue);
 
             return value.Equals(pValue);
         }
@@ -434,9 +433,8 @@ namespace NPOI.HPSF
                 }
                 b.Append("]");
             }
-            else if (value is byte[])
+            else if (value is byte[] bytes)
             {
-                byte[] bytes = (byte[]) value;
                 if (bytes.Length > 0)
                 {
                     String hex = HexDump.Dump(bytes, 0L, 0);

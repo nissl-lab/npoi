@@ -286,9 +286,9 @@ namespace NPOI.XSSF.Extractor
                         {
                             foreach (XSSFShape shape in drawing.GetShapes())
                             {
-                                if (shape is XSSFSimpleShape)
+                                if (shape is XSSFSimpleShape simpleShape)
                                 {
-                                    String boxText = ((XSSFSimpleShape)shape).Text;
+                                    String boxText = simpleShape.Text;
                                     if (boxText.Length > 0)
                                     {
                                         text.Append(boxText);

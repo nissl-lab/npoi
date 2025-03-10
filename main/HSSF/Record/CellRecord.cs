@@ -173,14 +173,13 @@ namespace NPOI.HSSF.Record
 
         public override bool Equals(object obj)
         {
-            if (!(obj is CellValueRecordInterface))
+            if (obj is not CellValueRecordInterface loc)
             {
                 return false;
             }
-            CellValueRecordInterface loc = (CellValueRecordInterface)obj;
 
             if ((this.Row == loc.Row)
-                    && (this.Column == loc.Column))
+                && (this.Column == loc.Column))
             {
                 return true;
             }

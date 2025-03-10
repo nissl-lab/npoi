@@ -373,7 +373,7 @@ namespace NPOI.HPSF
                         Object p1 = GetProperty(PropertyIDMap.PID_CODEPAGE);
                         if (p1 != null)
                         {
-                            if (!(p1 is int))
+                            if (p1 is not int)
                                 throw new IllegalPropertySetDataException
                                     ("The codepage property (ID = 1) must be an " +
                                      "Integer object.");
@@ -642,16 +642,16 @@ namespace NPOI.HPSF
         /// supported by HPSF.</param>
         public void SetProperty(int id, Object value)
         {
-            if (value is String)
-                SetProperty(id, (String)value);
-            else if (value is long)
-                SetProperty(id, ((long)value));
+            if (value is String s)
+                SetProperty(id, s);
+            else if (value is long l)
+                SetProperty(id, l);
             else if (value is int)
                 SetProperty(id, value);
-            else if (value is short)
-                SetProperty(id, (short)value);
-            else if (value is bool)
-                SetProperty(id, (bool)value);
+            else if (value is short value1)
+                SetProperty(id, value1);
+            else if (value is bool b)
+                SetProperty(id, b);
             else if (value is DateTime)
                 SetProperty(id, Variant.VT_FILETIME, value);
             else

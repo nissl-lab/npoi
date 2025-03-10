@@ -637,8 +637,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.checkedField.Write(sw, "checked");
             if (this.itemField != null)
             {
-                if (this.itemField is CT_OnOff)
-                    (this.itemField as CT_OnOff).Write(sw, "sizeAuto");
+                if (this.itemField is CT_OnOff off)
+                    off.Write(sw, "sizeAuto");
                 else
                     (this.itemField as CT_HpsMeasure).Write(sw, "size");
             }

@@ -65,10 +65,10 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
          */
         public virtual bool Marshall(PackagePart part, Stream out1)
         {
-            if (!(part is PackagePropertiesPart))
+            if (part is not PackagePropertiesPart propertiesPart)
                 throw new ArgumentException(
                         "'part' must be a PackagePropertiesPart instance.");
-            propsPart = (PackagePropertiesPart)part;
+            propsPart = propertiesPart;
 
             // Configure the document
             xmlDoc = new XmlDocument();

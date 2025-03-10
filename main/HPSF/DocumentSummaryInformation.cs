@@ -582,8 +582,8 @@ namespace NPOI.HPSF
             get
             {
                 Object value = GetProperty(PropertyIDMap.PID_DIGSIG);
-                if (value != null && value is byte[]) {
-                    return (byte[])value;
+                if (value != null && value is byte[] bytes) {
+                    return bytes;
                 }
                 return null;
             }

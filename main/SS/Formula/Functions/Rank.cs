@@ -53,9 +53,9 @@ namespace NPOI.SS.Formula.Functions
                 {
                     throw new EvaluationException(ErrorEval.NUM_ERROR);
                 }
-                if (arg1 is RefListEval)
+                if (arg1 is RefListEval listEval)
                 {
-                    return eval(result, ((RefListEval)arg1), true);
+                    return eval(result, listEval, true);
                 }
                 aeRange = ConvertRangeArg(arg1);
                 return eval(result, aeRange, true);
@@ -91,9 +91,9 @@ namespace NPOI.SS.Formula.Functions
                 }
                 else throw new EvaluationException(ErrorEval.NUM_ERROR);
 
-                if (arg1 is RefListEval)
+                if (arg1 is RefListEval listEval)
                 {
-                    return eval(result, ((RefListEval)arg1), order);
+                    return eval(result, listEval, order);
                 }
                 AreaEval aeRange = ConvertRangeArg(arg1);
                 return eval(result, aeRange, order);
@@ -143,9 +143,9 @@ namespace NPOI.SS.Formula.Functions
                     aeRange.GetList()[index] = ((RefEval)targetVe).GetInnerValueEval(((RefEval)ve).FirstSheetIndex);
                 }
                 Double value;
-                if (ve is NumberEval)
+                if (ve is NumberEval numberEval)
                 {
-                    value = ((NumberEval)ve).NumberValue;
+                    value = numberEval.NumberValue;
                 }
                 else
                 {
@@ -164,9 +164,9 @@ namespace NPOI.SS.Formula.Functions
         {
 
             ValueEval addend = aeRange.GetRelativeValue(relRowIndex, relColIndex);
-            if (addend is NumberEval)
+            if (addend is NumberEval numberEval)
             {
-                return ((NumberEval)addend).NumberValue;
+                return numberEval.NumberValue;
             }
             // everything else (including string and boolean values) counts as zero
             return Double.NaN;
@@ -174,13 +174,13 @@ namespace NPOI.SS.Formula.Functions
 
         private static AreaEval ConvertRangeArg(ValueEval eval)
         {
-            if (eval is AreaEval)
+            if (eval is AreaEval areaEval)
             {
-                return (AreaEval)eval;
+                return areaEval;
             }
-            if (eval is RefEval)
+            if (eval is RefEval refEval)
             {
-                return ((RefEval)eval).Offset(0, 0, 0, 0);
+                return refEval.Offset(0, 0, 0, 0);
             }
             throw new EvaluationException(ErrorEval.VALUE_INVALID);
         }

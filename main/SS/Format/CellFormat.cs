@@ -238,18 +238,18 @@ namespace NPOI.SS.Format
                     return GetApplicableFormatPart(val).Apply(val);
                 }
             }
-            else if (value is DateTime)
+            else if (value is DateTime time)
             {
                 // Don't know (and can't get) the workbook date windowing (1900 or 1904)
                 // so assume 1900 date windowing
-                Double numericValue = DateUtil.GetExcelDate((DateTime)value);
+                Double numericValue = DateUtil.GetExcelDate(time);
                 if (DateUtil.IsValidExcelDate(numericValue))
                 {
-                    return GetApplicableFormatPart(numericValue).Apply(value);
+                    return GetApplicableFormatPart(numericValue).Apply(time);
                 }
                 else
                 {
-                    throw new ArgumentException("value " + numericValue + " of date " + value + " is not a valid Excel date");
+                    throw new ArgumentException("value " + numericValue + " of date " + time + " is not a valid Excel date");
                 }
             }
             else
@@ -413,9 +413,8 @@ namespace NPOI.SS.Format
         {
             if (this == obj)
                 return true;
-            if (obj is CellFormat)
+            if (obj is CellFormat that)
             {
-                CellFormat that = (CellFormat)obj;
                 return format.Equals(that.format);
             }
             return false;

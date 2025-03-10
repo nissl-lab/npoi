@@ -577,9 +577,9 @@ namespace NPOI.HSSF.UserModel
          */
         public void CloneStyleFrom(ICellStyle source)
         {
-            if (source is HSSFCellStyle)
+            if (source is HSSFCellStyle style)
             {
-                this.CloneStyleFrom((HSSFCellStyle)source);
+                this.CloneStyleFrom(style);
             }
             else
             {
@@ -766,9 +766,8 @@ namespace NPOI.HSSF.UserModel
         {
             if (this == obj) return true;
             if (obj == null) return false;
-            if (obj is HSSFCellStyle)
+            if (obj is HSSFCellStyle other)
             {
-                HSSFCellStyle other = (HSSFCellStyle)obj;
                 if (_format == null)
                 {
                     if (other._format != null)

@@ -34,8 +34,8 @@ public class ZipContentTypeManager:ContentTypeManager {
 	
 	public override bool SaveImpl(XmlDocument content, Stream out1) {
 		ZipOutputStream zos = null;
-		if (out1 is ZipOutputStream)
-			zos = (ZipOutputStream) out1;
+		if (out1 is ZipOutputStream stream)
+			zos = stream;
 		else
 			zos = new ZipOutputStream(out1);
 

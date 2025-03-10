@@ -86,9 +86,9 @@ namespace NPOI.HSSF.Record.Aggregates
             for (int i = 0; i < _recs.Count; i++)
             {
                 RecordBase rb = _recs[i];
-                if (rb is RecordAggregate)
+                if (rb is RecordAggregate aggregate)
                 {
-                    ((RecordAggregate)rb).VisitContainedRecords(rv);
+                    aggregate.VisitContainedRecords(rv);
                 }
                 else
                 {

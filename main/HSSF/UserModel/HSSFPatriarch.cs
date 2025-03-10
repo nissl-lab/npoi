@@ -73,9 +73,9 @@ namespace NPOI.HSSF.UserModel
             foreach (HSSFShape shape in patriarch.Children)
             {
                 HSSFShape newShape;
-                if (shape is HSSFShapeGroup)
+                if (shape is HSSFShapeGroup group)
                 {
-                    newShape = ((HSSFShapeGroup)shape).CloneShape(newPatriarch);
+                    newShape = group.CloneShape(newPatriarch);
                 }
                 else
                 {

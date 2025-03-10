@@ -200,9 +200,9 @@ namespace NPOI.POIFS.Macros
                 // Check children
                 foreach (Entry child in dir)
                 {
-                    if (child is DirectoryNode)
+                    if (child is DirectoryNode node)
                     {
-                        FindMacros((DirectoryNode)child, modules);
+                        FindMacros(node, modules);
                     }
                 }
             }
@@ -347,10 +347,9 @@ namespace NPOI.POIFS.Macros
         {
             foreach (Entry entry in macroDir)
             {
-                if (!(entry is DocumentNode)) { continue; }
+                if (entry is not DocumentNode document) { continue; }
 
                 String name = entry.Name;
-                DocumentNode document = (DocumentNode)entry;
                 DocumentInputStream dis = new DocumentInputStream(document);
                 try
                 {

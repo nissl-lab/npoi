@@ -83,10 +83,9 @@ namespace NPOI.XSSF.UserModel
                 XSSFSheet sheet = (XSSFSheet)mapInfo.Workbook.GetSheetAt(i);
                 foreach (POIXMLDocumentPart p in sheet.GetRelations())
                 {
-                    if (p is SingleXmlCells)
+                    if (p is SingleXmlCells singleXmlCells)
                     {
-                        SingleXmlCells SingleXMLCells = (SingleXmlCells)p;
-                        foreach (XSSFSingleXmlCell cell in SingleXMLCells.GetAllSimpleXmlCell())
+                        foreach (XSSFSingleXmlCell cell in singleXmlCells.GetAllSimpleXmlCell())
                         {
                             if (cell.GetMapId() == ctMap.ID)
                             {
