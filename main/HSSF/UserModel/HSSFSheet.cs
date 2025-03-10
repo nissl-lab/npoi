@@ -491,7 +491,7 @@ namespace NPOI.HSSF.UserModel
 
         private class RecordVisitor1 : RecordVisitor
         {
-            private List<IDataValidation> hssfValidations;
+            private readonly List<IDataValidation> hssfValidations;
             private IWorkbook workbook;
             public RecordVisitor1(List<IDataValidation> hssfValidations, IWorkbook workbook)
             {
@@ -499,7 +499,7 @@ namespace NPOI.HSSF.UserModel
                 this.workbook = workbook;
                 this.book = HSSFEvaluationWorkbook.Create(workbook);
             }
-            private HSSFEvaluationWorkbook book;
+            private readonly HSSFEvaluationWorkbook book;
             public void VisitRecord(Record r)
             {
                 if (!(r is DVRecord))

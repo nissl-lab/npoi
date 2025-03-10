@@ -34,8 +34,8 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFConditionalFormatting : IConditionalFormatting
     {
-        private CT_ConditionalFormatting _cf;
-        private XSSFSheet _sh;
+        private readonly CT_ConditionalFormatting _cf;
+        private readonly XSSFSheet _sh;
 
         /*package*/
         internal XSSFConditionalFormatting(XSSFSheet sh)

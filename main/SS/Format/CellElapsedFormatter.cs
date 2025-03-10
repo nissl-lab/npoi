@@ -27,9 +27,9 @@ namespace NPOI.SS.Format
      */
     public class CellElapsedFormatter : CellFormatter
     {
-        private List<TimeSpec> specs;
+        private readonly List<TimeSpec> specs;
         private TimeSpec topmost;
-        private String printfFmt;
+        private readonly String printfFmt;
 
         private static readonly Regex PERCENTS = new Regex("%", RegexOptions.Compiled);
 
@@ -39,10 +39,10 @@ namespace NPOI.SS.Format
 
         private class TimeSpec
         {
-            internal char type;
-            internal int pos;
-            internal int len;
-            internal double factor;
+            internal readonly char type;
+            internal readonly int pos;
+            internal readonly int len;
+            internal readonly double factor;
             internal double modBy;
 
             public TimeSpec(char type, int pos, int len, double factor)
@@ -78,7 +78,7 @@ namespace NPOI.SS.Format
             // the default handling for quoted strings and special characters.  The
             // only special character for this is '%', so we have to handle all the
             // quoting in this method ourselves.
-            private CellElapsedFormatter _formatter;
+            private readonly CellElapsedFormatter _formatter;
             public String HandlePart(Match m, String part, CellFormatType type,
                     StringBuilder desc)
             {

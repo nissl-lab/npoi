@@ -30,7 +30,7 @@ namespace NPOI.DDF
     /// </summary>
     public class DefaultEscherRecordFactory : IEscherRecordFactory
     {
-        private static Type[] escherRecordClasses = {
+        private static readonly Type[] escherRecordClasses = {
             
             typeof(EscherBSERecord), typeof(EscherOptRecord), typeof(EscherTertiaryOptRecord),
             typeof(EscherClientAnchorRecord), 
@@ -38,7 +38,7 @@ namespace NPOI.DDF
             typeof(EscherClientDataRecord), typeof(EscherDggRecord),
             typeof(EscherSplitMenuColorsRecord), typeof(EscherChildAnchorRecord), typeof(EscherTextboxRecord)
         };
-        private static Dictionary<short,ConstructorInfo> recordsMap = RecordsToMap(escherRecordClasses);
+        private static readonly Dictionary<short,ConstructorInfo> recordsMap = RecordsToMap(escherRecordClasses);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultEscherRecordFactory"/> class.

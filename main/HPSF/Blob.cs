@@ -4,7 +4,7 @@ namespace NPOI.HPSF
 {
     internal class Blob
     {
-        private byte[] _value;
+        private readonly byte[] _value;
 
         public Blob(byte[] data, int offset)
         {

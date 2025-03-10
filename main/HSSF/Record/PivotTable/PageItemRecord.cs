@@ -32,11 +32,11 @@ namespace NPOI.HSSF.Record.PivotTable
         {
             public const int ENCODED_SIZE = 6;
             /** Index to the View Item SXVI(0x00B2) record */
-            private int _isxvi;
+            private readonly int _isxvi;
             /** Index to the {@link ViewFieldsRecord} SXVD(0x00B1) record */
-            private int _isxvd;
+            private readonly int _isxvd;
             /** Object ID for the drop-down arrow */
-            private int _idObj;
+            private readonly int _idObj;
 
             public FieldInfo(RecordInputStream in1)
             {
@@ -62,7 +62,7 @@ namespace NPOI.HSSF.Record.PivotTable
             }
         }
 
-	    private FieldInfo[] _fieldInfos;
+	    private readonly FieldInfo[] _fieldInfos;
 
         public PageItemRecord(RecordInputStream in1)
         {

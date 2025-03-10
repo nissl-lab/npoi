@@ -51,7 +51,7 @@ namespace NPOI.XSSF.Extractor
     public class XSSFExportToXml : IComparer<String>
     {
 
-        private XSSFMap map;
+        private readonly XSSFMap map;
 
         /**
          * Creates a new exporter and Sets the mapping to be used when generating the XML output document

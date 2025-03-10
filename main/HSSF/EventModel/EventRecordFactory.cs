@@ -36,8 +36,8 @@ namespace NPOI.HSSF.EventModel
     public class EventRecordFactory
     {
 
-        private IERFListener _listener;
-        private ArrayList _sids;
+        private readonly IERFListener _listener;
+        private readonly ArrayList _sids;
 
         /**
          * Create an EventRecordFactory

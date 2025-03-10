@@ -24,7 +24,7 @@ namespace NPOI.XSSF.UserModel
  */
     public class XSSFBorderFormatting : IBorderFormatting
     {
-        CT_Border _border;
+        readonly CT_Border _border;
 
         /*package*/
         internal XSSFBorderFormatting(CT_Border border)

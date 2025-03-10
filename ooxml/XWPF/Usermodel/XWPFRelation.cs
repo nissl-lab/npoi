@@ -28,7 +28,7 @@ namespace NPOI.XWPF.UserModel
         /**
          * A map to lookup POIXMLRelation by its relation type
          */
-        private static Dictionary<String, XWPFRelation> _table = new Dictionary<String, XWPFRelation>();
+        private static readonly Dictionary<String, XWPFRelation> _table = new Dictionary<String, XWPFRelation>();
 
 
         public static XWPFRelation DOCUMENT = new XWPFRelation(

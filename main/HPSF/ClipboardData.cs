@@ -8,8 +8,8 @@ namespace NPOI.HPSF
         //private static final POILogger logger = POILogFactory
         //    .getLogger( ClipboardData.class );
 
-        private int _format;
-        private byte[] _value;
+        private readonly int _format;
+        private readonly byte[] _value;
 
         public ClipboardData(byte[] data, int offset)
         {

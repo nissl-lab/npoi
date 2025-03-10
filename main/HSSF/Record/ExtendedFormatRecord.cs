@@ -105,82 +105,82 @@ namespace NPOI.HSSF.Record
         private short field_2_format_index;           // not bit-mapped
 
         // field_3_cell_options bit map
-        static private BitField _locked = BitFieldFactory.GetInstance(0x0001);
-        static private BitField _hidden = BitFieldFactory.GetInstance(0x0002);
-        static private BitField _xf_type = BitFieldFactory.GetInstance(0x0004);
-        static private BitField _123_prefix = BitFieldFactory.GetInstance(0x0008);
-        static private BitField _parent_index = BitFieldFactory.GetInstance(0xFFF0);
+        static private readonly BitField _locked = BitFieldFactory.GetInstance(0x0001);
+        static private readonly BitField _hidden = BitFieldFactory.GetInstance(0x0002);
+        static private readonly BitField _xf_type = BitFieldFactory.GetInstance(0x0004);
+        static private readonly BitField _123_prefix = BitFieldFactory.GetInstance(0x0008);
+        static private readonly BitField _parent_index = BitFieldFactory.GetInstance(0xFFF0);
         private short field_3_cell_options;
 
         // field_4_alignment_options bit map
-        static private BitField _alignment = BitFieldFactory.GetInstance(0x0007);
-        static private BitField _wrap_text = BitFieldFactory.GetInstance(0x0008);
-        static private BitField _vertical_alignment = BitFieldFactory.GetInstance(0x0070);
-        static private BitField _justify_last = BitFieldFactory.GetInstance(0x0080);
-        static private BitField _rotation = BitFieldFactory.GetInstance(0xFF00);
+        static private readonly BitField _alignment = BitFieldFactory.GetInstance(0x0007);
+        static private readonly BitField _wrap_text = BitFieldFactory.GetInstance(0x0008);
+        static private readonly BitField _vertical_alignment = BitFieldFactory.GetInstance(0x0070);
+        static private readonly BitField _justify_last = BitFieldFactory.GetInstance(0x0080);
+        static private readonly BitField _rotation = BitFieldFactory.GetInstance(0xFF00);
         private short field_4_alignment_options;
 
         // field_5_indention_options
-        static private BitField _indent =
+        static private readonly BitField _indent =
             BitFieldFactory.GetInstance(0x000F);
-        static private BitField _shrink_to_fit =
+        static private readonly BitField _shrink_to_fit =
             BitFieldFactory.GetInstance(0x0010);
-        static private BitField _merge_cells =
+        static private readonly BitField _merge_cells =
             BitFieldFactory.GetInstance(0x0020);
-        static private BitField _Reading_order =
+        static private readonly BitField _Reading_order =
             BitFieldFactory.GetInstance(0x00C0);
 
         // apparently bits 8 and 9 are Unused
-        static private BitField _indent_not_parent_format =
+        static private readonly BitField _indent_not_parent_format =
             BitFieldFactory.GetInstance(0x0400);
-        static private BitField _indent_not_parent_font =
+        static private readonly BitField _indent_not_parent_font =
             BitFieldFactory.GetInstance(0x0800);
-        static private BitField _indent_not_parent_alignment =
+        static private readonly BitField _indent_not_parent_alignment =
             BitFieldFactory.GetInstance(0x1000);
-        static private BitField _indent_not_parent_border =
+        static private readonly BitField _indent_not_parent_border =
             BitFieldFactory.GetInstance(0x2000);
-        static private BitField _indent_not_parent_pattern =
+        static private readonly BitField _indent_not_parent_pattern =
             BitFieldFactory.GetInstance(0x4000);
-        static private BitField _indent_not_parent_cell_options =
+        static private readonly BitField _indent_not_parent_cell_options =
             BitFieldFactory.GetInstance(0x8000);
         private short field_5_indention_options;
 
         // field_6_border_options bit map
-        static private BitField _border_left = BitFieldFactory.GetInstance(0x000F);
-        static private BitField _border_right = BitFieldFactory.GetInstance(0x00F0);
-        static private BitField _border_top = BitFieldFactory.GetInstance(0x0F00);
-        static private BitField _border_bottom = BitFieldFactory.GetInstance(0xF000);
+        static private readonly BitField _border_left = BitFieldFactory.GetInstance(0x000F);
+        static private readonly BitField _border_right = BitFieldFactory.GetInstance(0x00F0);
+        static private readonly BitField _border_top = BitFieldFactory.GetInstance(0x0F00);
+        static private readonly BitField _border_bottom = BitFieldFactory.GetInstance(0xF000);
         private short field_6_border_options;
 
         // all three of the following attributes are palette options
         // field_7_palette_options bit map
-        static private BitField _left_border_palette_idx =
+        static private readonly BitField _left_border_palette_idx =
             BitFieldFactory.GetInstance(0x007F);
-        static private BitField _right_border_palette_idx =
+        static private readonly BitField _right_border_palette_idx =
             BitFieldFactory.GetInstance(0x3F80);
-        static private BitField _diag =
+        static private readonly BitField _diag =
             BitFieldFactory.GetInstance(0xC000);
         private short field_7_palette_options;
 
         // field_8_adtl_palette_options bit map
-        static private BitField _top_border_palette_idx =
+        static private readonly BitField _top_border_palette_idx =
             BitFieldFactory.GetInstance(0x0000007F);
-        static private BitField _bottom_border_palette_idx =
+        static private readonly BitField _bottom_border_palette_idx =
             BitFieldFactory.GetInstance(0x00003F80);
         //is this used for diagional border color?
-        static private BitField _adtl_diag_border_palette_idx =
+        static private readonly BitField _adtl_diag_border_palette_idx =
             BitFieldFactory.GetInstance(0x001fc000);
-        static private BitField _adtl_diag_line_style =
+        static private readonly BitField _adtl_diag_line_style =
             BitFieldFactory.GetInstance(0x01e00000);
 
         // apparently bit 25 Is Unused
-        static private BitField _adtl_fill_pattern =
+        static private readonly BitField _adtl_fill_pattern =
             BitFieldFactory.GetInstance(unchecked((int)0xfc000000));
         private int field_8_adtl_palette_options;   // Additional to avoid 2
 
         // field_9_fill_palette_options bit map
-        static private BitField _fill_foreground = BitFieldFactory.GetInstance(0x007F);
-        static private BitField _fill_background = BitFieldFactory.GetInstance(0x3f80);
+        static private readonly BitField _fill_foreground = BitFieldFactory.GetInstance(0x007F);
+        static private readonly BitField _fill_background = BitFieldFactory.GetInstance(0x3f80);
 
         // apparently bits 15 and 14 are Unused
         private short field_9_fill_palette_options;

@@ -35,10 +35,10 @@ namespace NPOI.POIFS.FileSystem
         private bool _closed;
 
         /** the actual Document */
-        private NPOIFSDocument _document;
+        private readonly NPOIFSDocument _document;
 
         /** and its Property */
-        private DocumentProperty _property;
+        private readonly DocumentProperty _property;
 
         /** our buffer, when null we're into normal blocks */
         private MemoryStream _buffer =

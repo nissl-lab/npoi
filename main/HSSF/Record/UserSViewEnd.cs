@@ -31,7 +31,7 @@ namespace NPOI.HSSF.Record
     {
 
         public const short sid = 0x01AB;
-        private byte[] _rawData;
+        private readonly byte[] _rawData;
 
         public UserSViewEnd(byte[] data)
         {

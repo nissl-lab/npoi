@@ -28,7 +28,7 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFDataBarFormatting : IDataBarFormatting
     {
-        CT_DataBar _databar;
+        readonly CT_DataBar _databar;
 
         /*package*/
         public XSSFDataBarFormatting(CT_DataBar databar)

@@ -18,15 +18,15 @@ namespace NPOI.OpenXml4Net.OPC
      */
     public class ZipPackage : OPCPackage
     {
-        private static String MIMETYPE = "mimetype";
-        private static String SETTINGS_XML = "settings.xml";
-        private static POILogger logger = POILogFactory.GetLogger(typeof(ZipPackage));
+        private static readonly String MIMETYPE = "mimetype";
+        private static readonly String SETTINGS_XML = "settings.xml";
+        private static readonly POILogger logger = POILogFactory.GetLogger(typeof(ZipPackage));
 
         /**
          * Zip archive, as either a file on disk,
          *  or a stream
          */
-        private Util.ZipEntrySource zipArchive;
+        private readonly Util.ZipEntrySource zipArchive;
         bool isStream = false;  // whether the file is passed in with stream, no means passed in with string path
         public bool IsExternalStream { get { return isStream; } set { isStream = value; } }
 

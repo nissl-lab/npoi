@@ -7,7 +7,7 @@ namespace NPOI.HSSF.Record
     /// </summary>
     public abstract class RowDataRecord : StandardRecord
     {
-        private byte[] _rawData = null;
+        private readonly byte[] _rawData = null;
         public RowDataRecord(RecordInputStream in1)
         {
             _rawData = in1.ReadRemainder();

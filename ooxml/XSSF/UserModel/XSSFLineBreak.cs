@@ -24,7 +24,7 @@ namespace NPOI.XSSF.UserModel
 
     public class XSSFLineBreak : XSSFTextRun
     {
-        private CT_TextCharacterProperties _brProps;
+        private readonly CT_TextCharacterProperties _brProps;
 
         public XSSFLineBreak(CT_RegularTextRun r, XSSFTextParagraph p, CT_TextCharacterProperties brProps)
             : base(r, p)

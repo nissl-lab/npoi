@@ -42,11 +42,11 @@ namespace NPOI.SS.Util
     ///</example>
     public class DateFormatConverter
     {
-        private static POILogger logger = POILogFactory.GetLogger(typeof(DateFormatConverter));
+        private static readonly POILogger logger = POILogFactory.GetLogger(typeof(DateFormatConverter));
 
         public class DateFormatTokenizer
         {
-            string format;
+            readonly string format;
             int pos;
 
             public DateFormatTokenizer(string format)
@@ -118,8 +118,8 @@ namespace NPOI.SS.Util
             }
         }
 
-        private static Dictionary<string, string> tokenConversions = PrepareTokenConversions();
-        private static Dictionary<string, string> localePrefixes = PrepareLocalePrefixes();
+        private static readonly Dictionary<string, string> tokenConversions = PrepareTokenConversions();
+        private static readonly Dictionary<string, string> localePrefixes = PrepareLocalePrefixes();
 
         private static Dictionary<string, string> PrepareTokenConversions()
         {

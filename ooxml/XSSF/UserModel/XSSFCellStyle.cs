@@ -37,13 +37,13 @@ namespace NPOI.XSSF.UserModel
     public class XSSFCellStyle : ICellStyle
     {
 
-        private int _cellXfId;
-        private StylesTable _stylesSource;
+        private readonly int _cellXfId;
+        private readonly StylesTable _stylesSource;
         private CT_Xf _cellXf;
         private CT_Xf _cellStyleXf;
         private XSSFFont _font;
         private XSSFCellAlignment _cellAlignment;
-        private ThemesTable _theme;
+        private readonly ThemesTable _theme;
 
         /**
          * Creates a Cell Style from the supplied parts

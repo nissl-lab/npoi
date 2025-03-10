@@ -79,8 +79,8 @@ namespace NPOI.XSSF.UserModel.Helpers
      */
     public class XSSFFormulaUtils
     {
-        private XSSFWorkbook _wb;
-        private XSSFEvaluationWorkbook _fpwb;
+        private readonly XSSFWorkbook _wb;
+        private readonly XSSFEvaluationWorkbook _fpwb;
 
         public XSSFFormulaUtils(XSSFWorkbook wb)
         {

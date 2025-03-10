@@ -29,15 +29,15 @@ namespace NPOI.HSSF.Record
     public class SSTSerializer
     {
 
-        private int _numStrings;
-        private int _numUniqueStrings;
+        private readonly int _numStrings;
+        private readonly int _numUniqueStrings;
 
-        private IntMapper<UnicodeString> strings;
+        private readonly IntMapper<UnicodeString> strings;
 
         /** OffSets from the beginning of the SST record (even across continuations) */
-        private int[] bucketAbsoluteOffsets;
+        private readonly int[] bucketAbsoluteOffsets;
         /** OffSets relative the start of the current SST or continue record */
-        private int[] bucketRelativeOffsets;
+        private readonly int[] bucketRelativeOffsets;
         // fix warning CS0169 "never used": int startOfSST, startOfRecord;
 
         public SSTSerializer(IntMapper<UnicodeString> strings, int numStrings, int numUniqueStrings)

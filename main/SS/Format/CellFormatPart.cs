@@ -44,11 +44,11 @@ namespace NPOI.SS.Format
      */
     public class CellFormatPart
     {
-        private Color color;
-        private CellFormatCondition condition;
-        private CellFormatter format;
-        private CellFormatType type;
-        private static Dictionary<String, Color> NAMED_COLORS;
+        private readonly Color color;
+        private readonly CellFormatCondition condition;
+        private readonly CellFormatter format;
+        private readonly CellFormatType type;
+        private static readonly Dictionary<String, Color> NAMED_COLORS;
         public static IEqualityComparer<String> CASE_INSENSITIVE_ORDER
                                              = new CaseInsensitiveComparator();
         private class CaseInsensitiveComparator : IEqualityComparer<String>

@@ -34,8 +34,8 @@ namespace NPOI.SS.Formula
         private static readonly Formula EMPTY = new Formula(System.Array.Empty<byte>(), 0);
 
         /** immutable */
-        private byte[] _byteEncoding;
-        private int _encodedTokenLen;
+        private readonly byte[] _byteEncoding;
+        private readonly int _encodedTokenLen;
 
         private Formula(byte[] byteEncoding, int encodedTokenLen)
         {

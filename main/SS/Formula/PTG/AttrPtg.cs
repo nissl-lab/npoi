@@ -38,19 +38,19 @@ namespace NPOI.SS.Formula.PTG
         private short field_2_data;
 
         /** only used for tAttrChoose: table of offsets to starts of args */
-        private int[] _jumpTable;
+        private readonly int[] _jumpTable;
         /** only used for tAttrChoose: offset to the tFuncVar for CHOOSE() */
-        private int _chooseFuncOffset;
+        private readonly int _chooseFuncOffset;
 
         // flags 'volatile' and 'space', can be combined.  
         // OOO spec says other combinations are theoretically possible but not likely to occur.
-        private static BitField semiVolatile = BitFieldFactory.GetInstance(0x01);
-        private static BitField optiIf = BitFieldFactory.GetInstance(0x02);
-        private static BitField optiChoose = BitFieldFactory.GetInstance(0x04);
-        private static BitField optiSkip = BitFieldFactory.GetInstance(0x08); // skip
-        private static BitField optiSum = BitFieldFactory.GetInstance(0x10);
-        private static BitField baxcel = BitFieldFactory.GetInstance(0x20); // 'assignment-style formula in a macro sheet'
-        private static BitField space = BitFieldFactory.GetInstance(0x40);
+        private static readonly BitField semiVolatile = BitFieldFactory.GetInstance(0x01);
+        private static readonly BitField optiIf = BitFieldFactory.GetInstance(0x02);
+        private static readonly BitField optiChoose = BitFieldFactory.GetInstance(0x04);
+        private static readonly BitField optiSkip = BitFieldFactory.GetInstance(0x08); // skip
+        private static readonly BitField optiSum = BitFieldFactory.GetInstance(0x10);
+        private static readonly BitField baxcel = BitFieldFactory.GetInstance(0x20); // 'assignment-style formula in a macro sheet'
+        private static readonly BitField space = BitFieldFactory.GetInstance(0x40);
 
         public static readonly AttrPtg SUM = new AttrPtg(0x0010, 0, null, -1);
 

@@ -29,8 +29,8 @@ namespace NPOI.POIFS.FileSystem
 
     public class DocumentOutputStream : MemoryStream
     {
-        private Stream _stream;
-        private int _limit;
+        private readonly Stream _stream;
+        private readonly int _limit;
         private int _written;
 
         /**

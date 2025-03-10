@@ -31,7 +31,7 @@ namespace NPOI.SS.Formula
     public class FormulaCellCache
     {
 
-        private Hashtable _formulaEntriesByCell;
+        private readonly Hashtable _formulaEntriesByCell;
 
         public FormulaCellCache()
         {

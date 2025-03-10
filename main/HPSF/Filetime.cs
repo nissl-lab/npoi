@@ -7,8 +7,8 @@ namespace NPOI.HPSF
     {
         public const int SIZE = LittleEndian.INT_SIZE * 2;
 
-        private int _dwHighDateTime;
-        private int _dwLowDateTime;
+        private readonly int _dwHighDateTime;
+        private readonly int _dwLowDateTime;
 
         public Filetime(byte[] data, int offset)
         {

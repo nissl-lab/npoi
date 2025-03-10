@@ -12,7 +12,7 @@ namespace NPOI.SS.Util
         /**
  * List of <c>CellRangeAddress</c>es. Each structure represents a cell range
  */
-        private ArrayList _list;
+        private readonly ArrayList _list;
 
         public CellRangeAddressList()
         {

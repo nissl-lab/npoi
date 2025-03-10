@@ -51,7 +51,7 @@ namespace NPOI.SS.Formula
     class OperandClassTransformer
     {
 
-        private FormulaType _formulaType;
+        private readonly FormulaType _formulaType;
 
         public OperandClassTransformer(FormulaType formulaType)
         {

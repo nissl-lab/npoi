@@ -48,16 +48,16 @@ namespace NPOI.SS.Formula
     public class WorkbookEvaluator
     {
 
-        private IEvaluationWorkbook _workbook;
+        private readonly IEvaluationWorkbook _workbook;
         private EvaluationCache _cache;
         private int _workbookIx;
 
-        private IEvaluationListener _evaluationListener;
-        private Dictionary<IEvaluationSheet, int> _sheetIndexesBySheet;
-        private Dictionary<String, int> _sheetIndexesByName;
+        private readonly IEvaluationListener _evaluationListener;
+        private readonly Dictionary<IEvaluationSheet, int> _sheetIndexesBySheet;
+        private readonly Dictionary<String, int> _sheetIndexesByName;
         private CollaboratingWorkbooksEnvironment _collaboratingWorkbookEnvironment;
-        private IStabilityClassifier _stabilityClassifier;
-        private UDFFinder _udfFinder;
+        private readonly IStabilityClassifier _stabilityClassifier;
+        private readonly UDFFinder _udfFinder;
 
         private bool _ignoreMissingWorkbooks = false;
 
@@ -520,7 +520,7 @@ namespace NPOI.SS.Formula
         private bool dbgEvaluationOutputForNextEval = false;
 
         // special logger for formula evaluation output (because of possibly very large output)
-        private POILogger EVAL_LOG = POILogFactory.GetLogger("POI.FormulaEval");
+        private readonly POILogger EVAL_LOG = POILogFactory.GetLogger("POI.FormulaEval");
         // current indent level for evalution; negative value for no output
         private int dbgEvaluationOutputIndent = -1;
 

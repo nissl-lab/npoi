@@ -30,10 +30,10 @@ namespace NPOI.SS.Formula
     {
 
         public static ParseNode[] EMPTY_ARRAY = { };
-        private Ptg _token;
-        private ParseNode[] _children;
-        private bool _isIf;
-        private int _tokenCount;
+        private readonly Ptg _token;
+        private readonly ParseNode[] _children;
+        private readonly bool _isIf;
+        private readonly int _tokenCount;
 
         public ParseNode(Ptg token, ParseNode[] children)
         {
@@ -195,7 +195,7 @@ namespace NPOI.SS.Formula
         private class TokenCollector
         {
 
-            private Ptg[] _ptgs;
+            private readonly Ptg[] _ptgs;
             private int _offset;
 
             public TokenCollector(int tokenCount)

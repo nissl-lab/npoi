@@ -47,16 +47,16 @@ namespace NPOI.POIFS.FileSystem
     /// </summary>
     public class OPOIFSDocument : BATManaged, BlockWritable, POIFSViewable
     {
-        private static DocumentBlock[] EMPTY_BIG_BLOCK_ARRAY = { };
-        private static SmallDocumentBlock[] EMPTY_SMALL_BLOCK_ARRAY = { };
+        private static readonly DocumentBlock[] EMPTY_BIG_BLOCK_ARRAY = { };
+        private static readonly SmallDocumentBlock[] EMPTY_SMALL_BLOCK_ARRAY = { };
 
-        private DocumentProperty _property;
-        private int _size;
+        private readonly DocumentProperty _property;
+        private readonly int _size;
 
-        private POIFSBigBlockSize _bigBigBlockSize;
-        private SmallBlockStore _small_store;
+        private readonly POIFSBigBlockSize _bigBigBlockSize;
+        private readonly SmallBlockStore _small_store;
 
-        private BigBlockStore _big_store;
+        private readonly BigBlockStore _big_store;
 
         public OPOIFSDocument(string name, RawDataBlock[] blocks, int length)
         {
@@ -456,11 +456,11 @@ namespace NPOI.POIFS.FileSystem
         internal class SmallBlockStore
         {
             private SmallDocumentBlock[] smallBlocks;
-            private POIFSDocumentPath path;
-            private string name;
-            private int size;
-            private POIFSWriterListener writer;
-            private POIFSBigBlockSize bigBlockSize;
+            private readonly POIFSDocumentPath path;
+            private readonly string name;
+            private readonly int size;
+            private readonly POIFSWriterListener writer;
+            private readonly POIFSBigBlockSize bigBlockSize;
 
             internal SmallBlockStore(POIFSBigBlockSize bigBlockSize, SmallDocumentBlock[] blocks)
             {
@@ -513,11 +513,11 @@ namespace NPOI.POIFS.FileSystem
         internal class BigBlockStore
         {
             private DocumentBlock[] bigBlocks;
-            private POIFSDocumentPath path;
-            private string name;
-            private int size;
-            private POIFSWriterListener writer;
-            private POIFSBigBlockSize bigBlockSize;
+            private readonly POIFSDocumentPath path;
+            private readonly string name;
+            private readonly int size;
+            private readonly POIFSWriterListener writer;
+            private readonly POIFSBigBlockSize bigBlockSize;
 
             internal BigBlockStore(POIFSBigBlockSize bigBlockSize, DocumentBlock[] blocks)
             {

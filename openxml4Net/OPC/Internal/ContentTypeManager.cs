@@ -50,7 +50,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         /**
          * Default content type tree. <Extension, ContentType>
          */
-        private SortedList<String, String> defaultContentType;
+        private readonly SortedList<String, String> defaultContentType;
 
         /**
          * Override content type tree.
