@@ -53,7 +53,7 @@ namespace NPOI.SS.Formula.Functions
             return new MyAggregator();
         }
 
-        private class MyAggregator : IAggregator
+        private sealed class MyAggregator : IAggregator
         {
             double accumulator = 0.0;
 

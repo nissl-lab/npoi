@@ -117,7 +117,7 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
             DataSpaceMapUtils.CreateEncryptionEntry(dir, "EncryptionInfo", er);
         }
 
-        private class EncryptionRecordInternal : EncryptionRecord
+        private sealed class EncryptionRecordInternal : EncryptionRecord
         {
             public EncryptionRecordInternal(EncryptionInfo info,
                 BinaryRC4EncryptionHeader header, BinaryRC4EncryptionVerifier verifier)

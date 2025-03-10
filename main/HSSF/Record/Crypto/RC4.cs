@@ -28,7 +28,7 @@ namespace NPOI.HSSF.Record.Crypto
      *
      * @author Josh Micich
      */
-    internal class RC4
+    internal sealed class RC4
     {
 
         private int _i, _j;

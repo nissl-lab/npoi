@@ -26,7 +26,7 @@ namespace NPOI.SS.Formula.Atp
      * 
      * @author jfaenomoto@gmail.com
      */
-    internal class ArgumentsEvaluator
+    internal sealed class ArgumentsEvaluator
     {
 
         public static ArgumentsEvaluator instance = new ArgumentsEvaluator();

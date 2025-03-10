@@ -155,7 +155,7 @@ namespace NPOI.HSSF.Extractor
             return tl;
         }
 
-        private class TextListener : IHSSFListener
+        private sealed class TextListener : IHSSFListener
         {
             public FormatTrackingHSSFListener ft;
             private SSTRecord sstRecord;

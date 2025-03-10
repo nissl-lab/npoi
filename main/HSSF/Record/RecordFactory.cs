@@ -58,7 +58,8 @@ namespace NPOI.HSSF.Record
 
             Type GetRecordClass();
         }
-        private class ReflectionConstructorRecordCreator : I_RecordCreator
+
+        private sealed class ReflectionConstructorRecordCreator : I_RecordCreator
         {
 
             private readonly ConstructorInfo _c;
@@ -87,7 +88,7 @@ namespace NPOI.HSSF.Record
          * A "create" method is used instead of the usual constructor if the created record might
          * be of a different class to the declaring class.
          */
-        private class ReflectionMethodRecordCreator : I_RecordCreator
+        private sealed class ReflectionMethodRecordCreator : I_RecordCreator
         {
 
             private readonly MethodInfo _m;

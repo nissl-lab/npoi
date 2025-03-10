@@ -35,7 +35,8 @@ namespace NPOI.SS.UserModel.Charts
     public static IChartDataSource<double> FromNumericCellRange(ISheet sheet, CellRangeAddress cellRangeAddress) {
         return new DoubleCellRangeDataSource(sheet, cellRangeAddress);
     }
-    private class DoubleCellRangeDataSource: AbstractCellRangeDataSource<double>
+
+    private sealed class DoubleCellRangeDataSource: AbstractCellRangeDataSource<double>
     {
         public DoubleCellRangeDataSource(ISheet sheet, CellRangeAddress cellRangeAddress) 
             : base(sheet, cellRangeAddress)
@@ -60,11 +61,13 @@ namespace NPOI.SS.UserModel.Charts
             get { return true; }
         }
     }
+
     public static IChartDataSource<String> FromStringCellRange(ISheet sheet, CellRangeAddress cellRangeAddress)
     {
         return new StringCellRangeDataSource(sheet, cellRangeAddress);
     }
-    private class StringCellRangeDataSource : AbstractCellRangeDataSource<string> 
+
+    private sealed class StringCellRangeDataSource : AbstractCellRangeDataSource<string>
     {
         public StringCellRangeDataSource(ISheet sheet, CellRangeAddress cellRangeAddress) 
             : base(sheet, cellRangeAddress)
@@ -91,7 +94,7 @@ namespace NPOI.SS.UserModel.Charts
         }
     }
 
-    private class ArrayDataSource<T> : IChartDataSource<T> {
+    private sealed class ArrayDataSource<T> : IChartDataSource<T> {
 
         private T[] elements;
 

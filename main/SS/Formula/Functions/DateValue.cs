@@ -11,7 +11,7 @@ namespace NPOI.SS.Formula.Functions
 {
     public class DateValue : Fixed1ArgFunction
     {
-        private class Format
+        private sealed class Format
         {
             public Regex pattern;
             public bool hasYear;

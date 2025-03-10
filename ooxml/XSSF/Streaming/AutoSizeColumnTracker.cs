@@ -43,7 +43,7 @@ namespace NPOI.XSSF.Streaming
         private readonly HashSet<int> untrackedColumns = new HashSet<int>();
         private bool trackAllColumns = false;
 
-        private class ColumnWidthPair
+        private sealed class ColumnWidthPair
         {
             private double withSkipMergedCells;
             private double withUseMergedCells;

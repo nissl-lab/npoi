@@ -259,7 +259,7 @@ namespace NPOI.DDF
             return this.GetEnumerator();
         }
 
-        private class EscherArrayEnumerator : IEnumerator<byte[]>
+        private sealed class EscherArrayEnumerator : IEnumerator<byte[]>
         {
             EscherArrayProperty dataHolder;
             public EscherArrayEnumerator(EscherArrayProperty eap)

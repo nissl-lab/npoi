@@ -1738,7 +1738,7 @@ namespace NPOI.Util
         }
         #endregion
     }
-    internal class MutableBigInteger
+    internal sealed class MutableBigInteger
     {
         /**
          * Holds the magnitude of this MutableBigInteger in big endian order.

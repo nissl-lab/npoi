@@ -489,7 +489,7 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        private class RecordVisitor1 : RecordVisitor
+        private sealed class RecordVisitor1 : RecordVisitor
         {
             private readonly List<IDataValidation> hssfValidations;
             private IWorkbook workbook;
@@ -888,7 +888,7 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        private class Int32Comparer : IComparer<int>
+        private sealed class Int32Comparer : IComparer<int>
         {
             public int Compare(int x, int y)
             {

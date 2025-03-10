@@ -221,7 +221,7 @@ namespace NPOI.POIFS.FileSystem
         }
 
         #endregion
-        private class FilteringIterator : IEnumerator<Entry>
+        private sealed class FilteringIterator : IEnumerator<Entry>
         {
             private IEnumerator<Entry> parent;
             private Entry next;

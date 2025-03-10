@@ -121,7 +121,7 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Totals the sizes of all sheet records and eventually serializes them
         /// </summary>
-        private class SheetRecordCollector : NPOI.HSSF.Record.Aggregates.RecordVisitor,IDisposable
+        private sealed class SheetRecordCollector : NPOI.HSSF.Record.Aggregates.RecordVisitor,IDisposable
         {
 
             private readonly ArrayList _list;

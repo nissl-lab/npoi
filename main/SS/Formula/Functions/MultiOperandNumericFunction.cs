@@ -60,7 +60,7 @@ namespace NPOI.SS.Formula.Functions
             return new NumberEval(d);
         }
 
-        private class DoubleList
+        private sealed class DoubleList
         {
             private double[] _array;
             private int _Count;

@@ -59,6 +59,7 @@ namespace NPOI.SS.Format
         private static readonly CellFormatter SIMPLE_NUMBER = new SimpleNumberCellFormatter("General");
         private static readonly CellFormatter SIMPLE_INT = new CellNumberFormatter("#");
         private static readonly CellFormatter SIMPLE_FLOAT = new CellNumberFormatter("#.#");
+
         /// <summary>
         /// The CellNumberFormatter.simpleValue() method uses the SIMPLE_NUMBER
         /// CellFormatter defined here. The CellFormat.GENERAL_FORMAT CellFormat
@@ -68,7 +69,7 @@ namespace NPOI.SS.Format
         /// different from the 'General' format for numbers ("#" for integer
         /// values and "#.#########" for floating-point values).
         /// </summary>
-        private class GeneralNumberFormatter : CellFormatter
+        private sealed class GeneralNumberFormatter : CellFormatter
         {
             private GeneralNumberFormatter()
                     : base("General")
@@ -103,7 +104,8 @@ namespace NPOI.SS.Format
                 FormatValue(toAppendTo, value);
             }
         }
-        private class SimpleNumberCellFormatter : CellFormatter
+
+        private sealed class SimpleNumberCellFormatter : CellFormatter
         {
             public SimpleNumberCellFormatter(string format)
                 : base(format)

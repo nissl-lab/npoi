@@ -29,7 +29,7 @@ using System.IO;
 
 namespace NPOI.Util
 {
-    internal class CloseIgnoringInputStream : Stream
+    internal sealed class CloseIgnoringInputStream : Stream
     {
 
         private readonly Stream _is;

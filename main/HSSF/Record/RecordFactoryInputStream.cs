@@ -43,7 +43,7 @@ namespace NPOI.HSSF.Record
          * Needed for protected files because each byte is encrypted with respect to its absolute
          * position from the start of the stream.
          */
-        private class StreamEncryptionInfo
+        private sealed class StreamEncryptionInfo
         {
             private int _InitialRecordsSize;
             private readonly FilePassRecord _filePassRec;

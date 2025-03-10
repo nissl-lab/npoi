@@ -18,7 +18,7 @@ using NPOI.Util;
 
 namespace NPOI.HPSF
 {
-    internal class Currency
+    internal sealed class Currency
     {
         public const int SIZE = 8;
 

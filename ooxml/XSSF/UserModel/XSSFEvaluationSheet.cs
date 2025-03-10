@@ -102,7 +102,7 @@ namespace NPOI.XSSF.UserModel
             return evalcell;
         }
 
-        private class CellKey
+        private sealed class CellKey
         {
             private readonly int _row;
             private readonly int _col;
