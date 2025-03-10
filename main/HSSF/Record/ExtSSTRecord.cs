@@ -53,7 +53,7 @@ namespace NPOI.HSSF.Record
 
         public ExtSSTRecord()
         {
-            _sstInfos = new InfoSubRecord[0];
+            _sstInfos = Array.Empty<InfoSubRecord>();
         }
 
         /**

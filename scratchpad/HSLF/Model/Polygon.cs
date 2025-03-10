@@ -82,7 +82,7 @@ public class Polygon : AutoShape {
 
         int numpoints = xPoints.Length;
 
-        EscherArrayProperty verticesProp = new EscherArrayProperty(EscherProperties.GEOMETRY__VERTICES, false, new byte[0] );
+        EscherArrayProperty verticesProp = new EscherArrayProperty(EscherProperties.GEOMETRY__VERTICES, false, Array.Empty<byte>() );
         verticesProp.SetNumberOfElementsInArray(numpoints+1);
         verticesProp.SetNumberOfElementsInMemory(numpoints+1);
         verticesProp.SetSizeOfElements(0xFFF0);

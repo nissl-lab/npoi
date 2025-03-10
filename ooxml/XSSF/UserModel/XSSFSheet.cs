@@ -129,7 +129,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (!worksheet.IsSetColBreaks() || worksheet.colBreaks.sizeOfBrkArray() == 0)
                 {
-                    return new int[0];
+                    return Array.Empty<int>();
                 }
 
                 List<CT_Break> brkArray = worksheet.colBreaks.brk;
@@ -590,7 +590,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (!worksheet.IsSetRowBreaks() || worksheet.rowBreaks.sizeOfBrkArray() == 0)
                 {
-                    return new int[0];
+                    return Array.Empty<int>();
                 }
 
                 List<CT_Break> brkArray = worksheet.rowBreaks.brk;
@@ -1514,7 +1514,7 @@ namespace NPOI.XSSF.UserModel
                     // For some reason, we have to remove the hyperlinks one by one from the CTHyperlinks array
                     // before unsetting the hyperlink array.
                     // Resetting the hyperlink array seems to break some XML nodes.
-                    //worksheet.getHyperlinks().setHyperlinkArray(new CTHyperlink[0]);
+                    //worksheet.getHyperlinks().setHyperlinkArray(Array.Empty<CTHyperlink>());
                     worksheet.UnsetHyperlinks();
                 }
                 else

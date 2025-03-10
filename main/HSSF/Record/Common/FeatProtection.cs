@@ -50,7 +50,7 @@ namespace NPOI.HSSF.Record.Common
 
         public FeatProtection()
         {
-            securityDescriptor = new byte[0];
+            securityDescriptor = Array.Empty<byte>();
         }
 
         public FeatProtection(RecordInputStream in1)
