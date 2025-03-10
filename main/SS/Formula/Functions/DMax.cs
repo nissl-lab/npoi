@@ -1,7 +1,7 @@
-/* ====================================================================
+﻿/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
-   this work for Additional information regarding copyright ownership.
+   this work for additional information regarding copyright ownership.
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
@@ -15,60 +15,71 @@
    limitations under the License.
 ==================================================================== */
 
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+
 namespace NPOI.SS.Formula.Functions
 {
     using NPOI.SS.Formula.Eval;
 
-    /**
-     * Implementation of the DMin function:
-     * Finds the minimum value of a column in an area with given conditions.
-     * 
-     * TODO:
-     * - wildcards ? and * in string conditions
-     * - functions as conditions
-     */
-    public class DMin : IDStarAlgorithm
-    {
-        private ValueEval minimumValue;
 
+
+
+    /// <summary>
+    /// <para>
+    /// Implementation of the DMax function:
+    /// Finds the maximum value of a column in an area with given conditions.
+    /// </para>
+    /// <para>
+    /// TODO:
+    /// - functions as conditions
+    /// </para>
+    /// </summary>
+    public sealed class DMax : IDStarAlgorithm
+    {
+        private ValueEval maximumValue;
         public bool ProcessMatch(ValueEval eval)
         {
-            if (eval is NumericValueEval)
+            if(eval is NumericValueEval)
             {
-                if (minimumValue == null)
+                if(maximumValue == null)
                 { // First match, just Set the value.
-                    minimumValue = eval;
+                    maximumValue = eval;
                 }
                 else
                 { // There was a previous match, find the new minimum.
                     double currentValue = ((NumericValueEval)eval).NumberValue;
-                    double oldValue = ((NumericValueEval)minimumValue).NumberValue;
-                    if (currentValue < oldValue)
+                    double oldValue = ((NumericValueEval)maximumValue).NumberValue;
+                    if(currentValue > oldValue)
                     {
-                        minimumValue = eval;
+                        maximumValue = eval;
                     }
                 }
             }
 
             return true;
         }
-
         public ValueEval Result
         {
             get
             {
-                if (minimumValue == null)
+                if(maximumValue == null)
                 {
                     return NumberEval.ZERO;
                 }
                 else
                 {
-                    return minimumValue;
+                    return maximumValue;
                 }
             }
+            
         }
-
         public bool AllowEmptyMatchField { get; } = false;
     }
-
 }
+
+
