@@ -81,9 +81,9 @@ namespace NPOI.XWPF.UserModel
             if (part != null)
             {
                 POIXMLDocumentPart relatedPart = part.GetRelationById(blipId);
-                if (relatedPart is XWPFPictureData)
+                if (relatedPart is XWPFPictureData data)
                 {
-                    return (XWPFPictureData)relatedPart;
+                    return data;
                 }
             }
             return null;

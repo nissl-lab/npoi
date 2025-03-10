@@ -454,25 +454,25 @@ namespace NPOI.HPSF
         /// </param>
         public void SetProperty(int id, Object value)
         {
-            if(value is String)
+            if(value is String s)
             {
-                SetProperty(id, (String) value);
+                SetProperty(id, s);
             }
-            else if(value is long)
+            else if(value is long l)
             {
-                SetProperty(id, ((long) value));
+                SetProperty(id, l);
             }
-            else if(value is int)
+            else if(value is int i)
             {
-                SetProperty(id, ((int) value));
+                SetProperty(id, i);
             }
-            else if(value is short)
+            else if(value is short s1)
             {
-                SetProperty(id, ((short) value));
+                SetProperty(id, s1);
             }
-            else if(value is Boolean)
+            else if(value is Boolean b)
             {
-                SetProperty(id, ((Boolean) value));
+                SetProperty(id, b);
             }
             else if(value is Date)
             {
@@ -702,12 +702,12 @@ namespace NPOI.HPSF
         /// </return>
         public override bool Equals(Object o)
         {
-            if(o == null || !(o is Section))
+            if(o == null || o is not Section section)
             {
                 return false;
             }
-            Section s = (Section)o;
-            if(!s.FormatID.Equals(FormatID))
+
+            if(!section.FormatID.Equals(FormatID))
             {
                 return false;
             }
@@ -715,9 +715,9 @@ namespace NPOI.HPSF
             /* Compare all properties except 0 and 1 as they must be handled
              * specially. */
             Property[] pa1 = new Property[Properties.Length];
-            Property[] pa2 = new Property[s.Properties.Length];
+            Property[] pa2 = new Property[section.Properties.Length];
             System.Array.Copy(Properties, 0, pa1, 0, pa1.Length);
-            System.Array.Copy(s.Properties, 0, pa2, 0, pa2.Length);
+            System.Array.Copy(section.Properties, 0, pa2, 0, pa2.Length);
 
             /* Extract properties 0 and 1 and remove them from the copy of the
              * arrays. */
@@ -876,7 +876,7 @@ namespace NPOI.HPSF
                 Object p1 = GetProperty(PropertyIDMap.PID_CODEPAGE);
                 if(p1 != null)
                 {
-                    if(!(p1 is int))
+                    if(p1 is not int)
                     {
                         throw new IllegalPropertySetDataException
                             ("The codepage property (ID = 1) must be an " +

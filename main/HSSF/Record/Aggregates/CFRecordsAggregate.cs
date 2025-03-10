@@ -156,9 +156,9 @@ namespace NPOI.HSSF.Record.Aggregates
                     break;
                 }
                 rec = (Record)recs[offset];
-                if (rec is CFRuleRecord)
+                if (rec is CFRuleRecord record)
                 {
-                    rules[countFound] = (CFRuleRecord)rec;
+                    rules[countFound] = record;
                     countFound++;
                 }
                 else
@@ -318,9 +318,8 @@ namespace NPOI.HSSF.Record.Aggregates
                 {
                     rule.ParsedExpression2 = (ptgs);
                 }
-                if (rule is CFRule12Record)
+                if (rule is CFRule12Record rule12)
                 {
-                    CFRule12Record rule12 = (CFRule12Record)rule;
                     ptgs = rule12.ParsedExpressionScale;
                     if (ptgs != null && shifter.AdjustFormula(ptgs, currentExternSheetIx))
                     {
@@ -341,9 +340,8 @@ namespace NPOI.HSSF.Record.Aggregates
                 return cra;
             }
             Ptg ptg0 = ptgs[0];
-            if (ptg0 is AreaPtg)
+            if (ptg0 is AreaPtg bptg)
             {
-                AreaPtg bptg = (AreaPtg)ptg0;
                 return new CellRangeAddress(bptg.FirstRow, bptg.LastRow, bptg.FirstColumn, bptg.LastColumn);
             }
             if (ptg0 is AreaErrPtg)

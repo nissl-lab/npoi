@@ -374,7 +374,7 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 XSSFAnchor a = GetAnchor() as XSSFAnchor;
-                return (a is XSSFClientAnchor) ? (XSSFClientAnchor)a : null;
+                return (a is XSSFClientAnchor clientAnchor) ? clientAnchor : null;
             }
         }
 

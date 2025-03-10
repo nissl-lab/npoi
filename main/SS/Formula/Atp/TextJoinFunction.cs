@@ -112,9 +112,8 @@ namespace NPOI.SS.Formula.Atp
         //this is why lastRowOnly is supported
         private List<ValueEval> GetValues(ValueEval eval, int srcRowIndex, int srcColumnIndex, bool lastRowOnly)
         {
-            if (eval is AreaEval)
+            if (eval is AreaEval ae)
             {
-                AreaEval ae = (AreaEval)eval;
                 List<ValueEval> list = new List<ValueEval>();
                 int startRow = lastRowOnly ? ae.LastRow : ae.FirstRow;
                 for (int r = startRow; r <= ae.LastRow; r++)

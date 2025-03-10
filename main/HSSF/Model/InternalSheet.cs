@@ -136,9 +136,9 @@ namespace NPOI.HSSF.Model
             for (int i = 0; i < this.records.Count; i++)
             {
                 RecordBase rb = (RecordBase)this.records[i];
-                if (rb is RecordAggregate)
+                if (rb is RecordAggregate aggregate)
                 {
-                    ((RecordAggregate)rb).VisitContainedRecords(new RecordCloner(clonedRecords));
+                    aggregate.VisitContainedRecords(new RecordCloner(clonedRecords));
                     continue;
                 }
 
@@ -1648,11 +1648,11 @@ namespace NPOI.HSSF.Model
             for (int i = 0; i < max; i++)
             {
                 Object rb = records[i];
-                if (!(rb is Record))
+                if (rb is not Record record)
                 {
                     continue;
                 }
-                Record record = (Record)rb;
+
                 if (record.Sid == sid)
                 {
                     return i;
@@ -2182,17 +2182,16 @@ namespace NPOI.HSSF.Model
             for (int k = 0; k < records.Count; k++)
             {
                 RecordBase record = records[k];
-                if (record is RecordAggregate)
+                if (record is RecordAggregate agg)
                 {
-                    RecordAggregate agg = (RecordAggregate)record;
                     agg.VisitContainedRecords(ptv);
                     sheetOffset += agg.RecordSize;
                 }
                 else
                 {
-                    if (record is DefaultColWidthRecord)
+                    if (record is DefaultColWidthRecord widthRecord)
                     {
-                        ((DefaultColWidthRecord)record).offsetForFilePointer = sheetOffset;
+                        widthRecord.offsetForFilePointer = sheetOffset;
                     }
                     ptv.VisitRecord((Record)record);
                     sheetOffset += record.RecordSize;
@@ -2316,9 +2315,9 @@ namespace NPOI.HSSF.Model
             for (int i = records.Count - 1; i >= 0; i--)
             {
                 RecordBase rec = records[i];
-                if (rec is NoteRecord)
+                if (rec is NoteRecord record)
                 {
-                    temp.Add((NoteRecord)rec);
+                    temp.Add(record);
                 }
             }
             if (temp.Count < 1)

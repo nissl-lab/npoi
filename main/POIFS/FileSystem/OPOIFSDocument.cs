@@ -85,8 +85,8 @@ namespace NPOI.POIFS.FileSystem
 
         private static SmallDocumentBlock[] ConvertRawBlocksToSmallBlocks(ListManagedBlock[] blocks)
         {
-            if (blocks is SmallDocumentBlock[])
-                return (SmallDocumentBlock[])blocks;
+            if (blocks is SmallDocumentBlock[] documentBlocks)
+                return documentBlocks;
             SmallDocumentBlock[] result = new SmallDocumentBlock[blocks.Length];
             System.Array.Copy(blocks, 0, result, 0, blocks.Length);
             return result;

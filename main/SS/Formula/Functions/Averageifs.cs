@@ -147,9 +147,9 @@ namespace NPOI.SS.Formula.Functions {
         {
 
             ValueEval addend = aeSum.GetRelativeValue(relRowIndex, relColIndex);
-            if (addend is NumberEval)
+            if (addend is NumberEval eval)
             {
-                return ((NumberEval)addend).NumberValue;
+                return eval.NumberValue;
             }
             // everything else (including string and boolean values) dont count
             return null;
@@ -157,13 +157,13 @@ namespace NPOI.SS.Formula.Functions {
 
         private static AreaEval ConvertRangeArg(ValueEval eval)
         {
-            if (eval is AreaEval)
+            if (eval is AreaEval areaEval)
             {
-                return (AreaEval)eval;
+                return areaEval;
             }
-            if (eval is RefEval)
+            if (eval is RefEval refEval)
             {
-                return ((RefEval)eval).Offset(0, 0, 0, 0);
+                return refEval.Offset(0, 0, 0, 0);
             }
             throw new EvaluationException(ErrorEval.VALUE_INVALID);
         }

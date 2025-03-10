@@ -73,9 +73,8 @@ namespace NPOI.XWPF.UserModel
                     for (int i = 0; i < r.Items.Count; i++)
                     {
                         object o = r.Items[i];
-                        if (o is CT_FtnEdnRef)
+                        if (o is CT_FtnEdnRef ftn)
                         {
-                            CT_FtnEdnRef ftn = (CT_FtnEdnRef)o;
                             footnoteText.Append("[").Append(ftn.id).Append(": ");
 
                             XWPFFootnote footnote = null;
@@ -122,15 +121,14 @@ namespace NPOI.XWPF.UserModel
         {
             foreach (object o in items)
             {
-                if (o is CT_R)
+                if (o is CT_R ctR)
                 {
-                    XWPFRun r = new XWPFRun((CT_R)o, (IRunBody)this);
+                    XWPFRun r = new XWPFRun(ctR, (IRunBody)this);
                     runs.Add(r);
                     iRuns.Add(r);
                 }
-                if (o is CT_Hyperlink1)
+                if (o is CT_Hyperlink1 link)
                 {
-                    CT_Hyperlink1 link = (CT_Hyperlink1)o;
                     foreach (CT_R r in link.GetRList())
                     {
                         //runs.Add(new XWPFHyperlinkRun(link, r, this));
@@ -140,8 +138,7 @@ namespace NPOI.XWPF.UserModel
 
                     }
                 }
-                if (o is CT_SimpleField) {
-                    CT_SimpleField field = (CT_SimpleField)o;
+                if (o is CT_SimpleField field) {
                     foreach (CT_R r in field.GetRList())
                     {
                         XWPFFieldRun fr = new XWPFFieldRun(field, r, this);
@@ -149,34 +146,34 @@ namespace NPOI.XWPF.UserModel
                         iRuns.Add(fr);
                     }
                 }
-                if (o is CT_SdtBlock)
+                if (o is CT_SdtBlock block)
                 {
-                    XWPFSDT cc = new XWPFSDT((CT_SdtBlock)o, part);
+                    XWPFSDT cc = new XWPFSDT(block, part);
                     iRuns.Add(cc);
                 }
-                if (o is CT_SdtRun)
+                if (o is CT_SdtRun run)
                 {
-                    XWPFSDT cc = new XWPFSDT((CT_SdtRun)o, part);
+                    XWPFSDT cc = new XWPFSDT(run, part);
                     iRuns.Add(cc);
                 }
-                if (o is CT_RunTrackChange)
+                if (o is CT_RunTrackChange change)
                 {
-                    foreach (CT_R r in ((CT_RunTrackChange)o).GetRList())
+                    foreach (CT_R r in change.GetRList())
                     {
                         XWPFRun cr = new XWPFRun(r, (IRunBody)this);
                         runs.Add(cr);
                         iRuns.Add(cr);
                     }
                 }
-                if (o is CT_SmartTagRun)
+                if (o is CT_SmartTagRun tagRun)
                 {
                     // Smart Tags can be nested many times. 
                     // This implementation does not preserve the tagging information
-                    BuildRunsInOrderFromXml((o as CT_SmartTagRun).Items);
+                    BuildRunsInOrderFromXml(tagRun.Items);
                 }
-                if (o is CT_RunTrackChange) {
+                if (o is CT_RunTrackChange trackChange) {
                     // add all the insertions as text
-                    foreach (CT_RunTrackChange ins in ((CT_RunTrackChange)o).GetInsList())
+                    foreach (CT_RunTrackChange ins in trackChange.GetInsList())
                     {
                         foreach (CT_R r in ins.GetRList())
                         {
@@ -193,9 +190,9 @@ namespace NPOI.XWPF.UserModel
         {
             foreach (object o in items)
             {
-                if(o is S.CT_OMath)
+                if(o is S.CT_OMath math)
                 {
-                    oMaths.Add(new XWPFOMath(o as S.CT_OMath, this));
+                    oMaths.Add(new XWPFOMath(math, this));
                 }
             }
         }
@@ -264,18 +261,17 @@ namespace NPOI.XWPF.UserModel
                 StringBuilder out1 = new StringBuilder();
                 foreach (IRunElement run in iRuns)
                 {
-                    if (run is XWPFRun)
+                    if (run is XWPFRun xRun)
                     {
-                        XWPFRun xRun = (XWPFRun)run;
                         // don't include the text if reviewing is enabled and this is a deleted run
                         if (xRun.GetCTR().GetDelTextList().Count==0)
                         {
                             out1.Append(xRun.ToString());
                         }
                     }
-                    else if (run is XWPFSDT)
+                    else if (run is XWPFSDT xwpfsdt)
                     {
-                        out1.Append(((XWPFSDT)run).Content.Text);
+                        out1.Append(xwpfsdt.Content.Text);
                     }
                     else
                     {
@@ -1400,11 +1396,11 @@ namespace NPOI.XWPF.UserModel
                 CT_R ctRun = paragraph.GetRList()[runPos];
                 foreach (object o in ctRun.Items)
                 {
-                    if (o is CT_Text)
+                    if (o is CT_Text text)
                     {
                         if (textPos >= startText)
                         {
-                            String candidate = ((CT_Text)o).Value;
+                            String candidate = text.Value;
                             if (runPos == startRun)
                                 charPos = startChar;
                             else

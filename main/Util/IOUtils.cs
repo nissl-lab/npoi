@@ -91,8 +91,8 @@ namespace NPOI.Util
             long mark =  stream.Position;
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream(limit);
-            if(stream is ByteArrayInputStream)
-                Copy(new BoundedInputStream((ByteArrayInputStream) stream, limit), bos);
+            if(stream is ByteArrayInputStream inputStream)
+                Copy(new BoundedInputStream(inputStream, limit), bos);
             else
             {
                 MemoryStream ms = new MemoryStream();

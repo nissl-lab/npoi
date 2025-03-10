@@ -31,18 +31,18 @@ namespace NPOI.SS.Formula
                 case OperatorEnum.NO_COMPARISON:
                     return false;
                 case OperatorEnum.BETWEEN:
-                    if (cellValue is Double)
+                    if (cellValue is Double value)
                     {
                         // use zero for null
                         double n1 = v1==null? 0:(double)v1;
                         double n2 = v2 == null ? 0 : (double)v2;
-                        return (double)cellValue - n1 >= 0 && (double)cellValue - n2 <= 0;
+                        return value - n1 >= 0 && value - n2 <= 0;
                     }
-                    else if (cellValue is String)
+                    else if (cellValue is String betweeenString)
                     {
                         String n1 = v1 == null ? "" : (String)v1;
                         String n2 = v2 == null ? "" : (String)v2;
-                        return string.Compare((String)cellValue, n1, true) >= 0 && string.Compare((String)cellValue, n2, true) <= 0;
+                        return string.Compare(betweeenString, n1, true) >= 0 && string.Compare(betweeenString, n2, true) <= 0;
                     }
                     else if (cellValue is Boolean)
                         return false;
@@ -50,115 +50,115 @@ namespace NPOI.SS.Formula
                 case OperatorEnum.EQUAL:
                     if (v1 == null)
                         return false;
-                    if (cellValue is Double)
+                    if (cellValue is Double d)
                     {
-                        return (double)cellValue >= 0;
+                        return d >= 0;
                     }
-                    else if (cellValue is String)
+                    else if (cellValue is String equalString)
                     {
-                        return string.Compare((String)cellValue, (String)v1, true) == 0;
+                        return string.Compare(equalString, (String)v1, true) == 0;
                     }
-                    else if (cellValue is Boolean)
+                    else if (cellValue is Boolean b)
                     {
                         bool n1 = (bool)v1;
-                        return (bool)cellValue==n1;
+                        return b==n1;
                     }
                     return false; 
                 case OperatorEnum.NOT_EQUAL:
                     if (v1 == null)
                         return true;
-                    if (cellValue is String)
+                    if (cellValue is String s)
                     {
                         String n1 = (String)v1;
-                        return string.Compare((String)cellValue, n1, true) != 0;
+                        return string.Compare(s, n1, true) != 0;
                     }
-                    else if (cellValue is Boolean)
+                    else if (cellValue is Boolean b)
                     {
                         bool n1 = (bool)v1;
-                        return (bool)cellValue != n1;
+                        return b != n1;
                     }
                     return false;
                 case OperatorEnum.GREATER_THAN:
-                    if (cellValue is Double)
+                    if (cellValue is Double value1)
                     {
                         // use zero for null
                         double n1 = v1 == null ? 0 : (double)v1;
-                        return (double)cellValue> n1;
+                        return value1> n1;
                     }
-                    else if (cellValue is String)
+                    else if (cellValue is String greaterThanString)
                     {
                         String n1 = v1 == null ? "" : (String)v1;
-                        return string.Compare((String)cellValue, n1, true) > 0;
+                        return string.Compare(greaterThanString, n1, true) > 0;
                     }
-                    else if (cellValue is Boolean)
+                    else if (cellValue is Boolean b)
                     {
                         if (v1 == null)
                             return true;
                         bool n1 = (bool)v1;
-                        return ((bool)cellValue).CompareTo(n1)>0;
+                        return b.CompareTo(n1)>0;
                     }
                     return false;
                 case OperatorEnum.LESS_THAN:
-                    if (cellValue is Double)
+                    if (cellValue is Double cellValue1)
                     {
                         // use zero for null
                         double n1 = v1 == null ? 0 : (double)v1;
-                        return (double)cellValue<n1;
+                        return cellValue1<n1;
                     }
-                    else if (cellValue is String)
+                    else if (cellValue is String s1)
                     {
                         if (v1 == null)
                             return false;
-                        return string.Compare((String)cellValue, (String)v1, true)< 0;
+                        return string.Compare(s1, (String)v1, true)< 0;
                     }
-                    else if (cellValue is Boolean)
+                    else if (cellValue is Boolean b)
                     {
                         if (v1 == null)
                             return false;
                         bool n1 = (bool)v1;
-                        return ((bool)cellValue).CompareTo(n1) < 0;
+                        return b.CompareTo(n1) < 0;
                     }
                     return false;
                 case OperatorEnum.GREATER_OR_EQUAL:
-                    if (cellValue is Double)
+                    if (cellValue is Double d1)
                     {
                         // use zero for null
                         double n1 = v1 == null ? 0 : (double)v1;
-                        return (double)cellValue >= n1;
+                        return d1 >= n1;
                     }
-                    else if (cellValue is String)
+                    else if (cellValue is String s1)
                     {
                         if (v1 == null)
                             return true;
-                        return string.Compare((String)cellValue, (String)v1, true) >= 0;
+                        return string.Compare(s1, (String)v1, true) >= 0;
                     }
-                    else if (cellValue is Boolean)
+                    else if (cellValue is Boolean b)
                     {
                         if (v1 == null)
                             return false;
                         bool n1 = (bool)v1;
-                        return ((bool)cellValue).CompareTo(n1) >= 0;
+                        return b.CompareTo(n1) >= 0;
                     }
                     return false;
                 case OperatorEnum.LESS_OR_EQUAL:
-                    if (cellValue is Double)
+                    if (cellValue is Double value2)
                     {
                         // use zero for null
                         double n1 = v1 == null ? 0 : (double)v1;
-                        return (double)cellValue <= n1;
+                        return value2 <= n1;
                     }
-                    else if (cellValue is String)
+                    else if (cellValue is String s1)
                     {
                         if (v1 == null)
                             return false;
-                        return string.Compare((String)cellValue, (String)v1, true) <= 0;
+                        return string.Compare(s1, (String)v1, true) <= 0;
                     }
-                    else if (cellValue is Boolean)
+                    else if (cellValue is Boolean b)
                     {
                         if (v1 == null)
                             return false;
                         bool n1 = (bool)v1;
-                        return ((bool)cellValue).CompareTo(n1) <= 0;
+                        return b.CompareTo(n1) <= 0;
                     }
                     return false;
             }
@@ -240,14 +240,14 @@ namespace NPOI.SS.Formula
 
             public override bool Equals(Object obj)
             {
-                if (!(obj is ValueAndFormat))
+                if (obj is not ValueAndFormat andFormat)
                 {
                     return false;
                 }
-                ValueAndFormat o = (ValueAndFormat)obj;
-                return (value == o.value || value.Equals(o.value))
-                        && (format == o.format || format.Equals(o.format))
-                        && (str == o.str || str.Equals(o.str));
+
+                return (value == andFormat.value || value.Equals(andFormat.value))
+                       && (format == andFormat.format || format.Equals(andFormat.format))
+                       && (str == andFormat.str || str.Equals(andFormat.str));
             }
 
             /**
@@ -423,8 +423,7 @@ namespace NPOI.SS.Formula
         {
             ValueEval comp = eval;
 
-            while (comp is RefEval) {
-                RefEval reference = (RefEval)comp;
+            while (comp is RefEval reference) {
                 comp = reference.GetInnerValueEval(reference.FirstSheetIndex);
             }
             return comp;
@@ -482,13 +481,13 @@ namespace NPOI.SS.Formula
             if (comp is ErrorEval) {
                 return false;
             }
-            if (comp is BoolEval) {
-                return ((BoolEval)comp).BooleanValue;
+            if (comp is BoolEval eval) {
+                return eval.BooleanValue;
             }
             // empirically tested in Excel - 0=false, any other number = true/valid
             // see test file DataValidationEvaluations.xlsx
-            if (comp is NumberEval) {
-                return ((NumberEval)comp).NumberValue != 0;
+            if (comp is NumberEval numberEval) {
+                return numberEval.NumberValue != 0;
             }
             return false; // anything else is false, such as text
         }

@@ -47,10 +47,9 @@ namespace NPOI.HSSF.Util
 
         
         public override bool Equals(Object obj) {
-            if (!(obj is GUID)) return false;
-            GUID other = (GUID) obj;
+            if (obj is not GUID other) return false;
             return _d1 == other._d1 && _d2 == other._d2 
-                && _d3 == other._d3 && _d4 == other._d4;
+                                    && _d3 == other._d3 && _d4 == other._d4;
         }
 
         public override int GetHashCode ()

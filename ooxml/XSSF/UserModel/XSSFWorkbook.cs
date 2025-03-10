@@ -335,18 +335,18 @@ namespace NPOI.XSSF.UserModel
                 foreach (RelationPart rp in RelationParts)
                 {
                     POIXMLDocumentPart p = rp.DocumentPart;
-                    if (p is SharedStringsTable) sharedStringSource = (SharedStringsTable)p;
-                    else if (p is StylesTable) stylesSource = (StylesTable)p;
-                    else if (p is ThemesTable) theme = (ThemesTable)p;
-                    else if (p is CalculationChain) calcChain = (CalculationChain)p;
-                    else if (p is MapInfo) mapInfo = (MapInfo)p;
-                    else if (p is XSSFSheet)
+                    if (p is SharedStringsTable table) sharedStringSource = table;
+                    else if (p is StylesTable stylesTable) stylesSource = stylesTable;
+                    else if (p is ThemesTable themesTable) theme = themesTable;
+                    else if (p is CalculationChain chain) calcChain = chain;
+                    else if (p is MapInfo info) mapInfo = info;
+                    else if (p is XSSFSheet sheet)
                     {
-                        shIdMap[rp.Relationship.Id] = (XSSFSheet)p;
+                        shIdMap[rp.Relationship.Id] = sheet;
                     }
-                    else if (p is ExternalLinksTable)
+                    else if (p is ExternalLinksTable linksTable)
                     {
-                        elIdMap[rp.Relationship.Id] = (ExternalLinksTable)p;
+                        elIdMap[rp.Relationship.Id] = linksTable;
                     }
                 }
 
@@ -610,9 +610,9 @@ namespace NPOI.XSSF.UserModel
             {
                 POIXMLDocumentPart r = rp.DocumentPart;
                 // do not copy the drawing relationship, it will be re-created
-                if (r is XSSFDrawing)
+                if (r is XSSFDrawing drawing)
                 {
-                    dg = (XSSFDrawing)r;
+                    dg = drawing;
                     continue;
                 }
 
@@ -1826,7 +1826,7 @@ namespace NPOI.XSSF.UserModel
         public void Write(Stream stream, bool leaveOpen = false)
         {
             bool? originalValue = null;
-            if (Package is ZipPackage)
+            if (Package is ZipPackage package)
             {
                 //By default ZipPackage closes the stream if it wasn't constructed from a stream.
                 originalValue = ((ZipPackage)Package).IsExternalStream;
@@ -2273,9 +2273,8 @@ namespace NPOI.XSSF.UserModel
 
             foreach (var poixmlDocumentPart in GetRelations())
             {
-                if (poixmlDocumentPart is XSSFPivotCacheDefinition)
+                if (poixmlDocumentPart is XSSFPivotCacheDefinition pivotCacheDefinition)
                 {
-                    var pivotCacheDefinition = (XSSFPivotCacheDefinition)poixmlDocumentPart;
                     RemoveRelation(pivotCacheDefinition);
                 }
             }

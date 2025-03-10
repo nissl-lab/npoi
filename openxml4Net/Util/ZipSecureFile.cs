@@ -207,42 +207,42 @@ namespace NPOI.OpenXml4Net.Util
             public ZipEntry GetNextEntry()
             {
 
-                if (!(input is ZipInputStream)) {
+                if (input is not ZipInputStream stream) {
                     throw new NotSupportedException("underlying stream is not a ZipInputStream");
                 }
                 counter = 0;
-                return ((ZipInputStream)input).GetNextEntry();
+                return stream.GetNextEntry();
             }
 
             public void CloseEntry()
             {
 
-                if (!(input is ZipInputStream)) {
+                if (input is not ZipInputStream stream) {
                     throw new NotSupportedException("underlying stream is not a ZipInputStream");
                 }
                 counter = 0;
-                ((ZipInputStream)input).CloseEntry();
+                stream.CloseEntry();
             }
 
             public void Unread(int b)
             {
 
-                if (!(input is PushbackInputStream)) {
+                if (input is not PushbackInputStream stream) {
                     throw new NotSupportedException("underlying stream is not a PushbackInputStream");
                 }
                 if (--counter < 0) counter = 0;
-                ((PushbackInputStream)input).Unread(b);
+                stream.Unread(b);
             }
 
             public void Unread(byte[] b, int off, int len)
             {
 
-                if (!(input is PushbackInputStream)) {
+                if (input is not PushbackInputStream stream) {
                     throw new NotSupportedException("underlying stream is not a PushbackInputStream");
                 }
                 counter -= len;
                 if (--counter < 0) counter = 0;
-                ((PushbackInputStream)input).Unread(b, off, len);
+                stream.Unread(b, off, len);
             }
 
             public int Available()

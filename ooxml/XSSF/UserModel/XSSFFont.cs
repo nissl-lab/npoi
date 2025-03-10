@@ -654,9 +654,8 @@ namespace NPOI.XSSF.UserModel
 
         public override bool Equals(Object o)
         {
-            if (!(o is XSSFFont)) return false;
+            if (o is not XSSFFont cf) return false;
 
-            XSSFFont cf = (XSSFFont)o;
             return _ctFont.ToString().Equals(cf.GetCTFont().ToString());
         }
 

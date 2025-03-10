@@ -951,10 +951,10 @@ namespace NPOI.SS.UserModel
                 {
                     FormatBase dateFormat = GetFormat(value, formatIndex, formatString);
 
-                    if (dateFormat is ExcelStyleDateFormatter)
+                    if (dateFormat is ExcelStyleDateFormatter formatter)
                     {
                         // Hint about the raw excel value
-                        ((ExcelStyleDateFormatter)dateFormat).SetDateToBeFormatted(value);
+                        formatter.SetDateToBeFormatted(value);
                     }
 
                     DateTime d = DateUtil.GetJavaDate(value, use1904Windowing);
@@ -1150,8 +1150,7 @@ namespace NPOI.SS.UserModel
      */
         public void Update(IObservable<object> observable, object localeObj)
         {
-            if (localeObj is not CultureInfo) return;
-            CultureInfo newLocale = (CultureInfo)localeObj;
+            if (localeObj is not CultureInfo newLocale) return;
             if (newLocale.Equals(currentCulture)) return;
 
             currentCulture = newLocale;

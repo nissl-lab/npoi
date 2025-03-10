@@ -505,12 +505,12 @@ namespace NPOI.OpenXml4Net.OPC
 
         public override bool Equals(Object other)
         {
-            if (other is PackagePartName)
+            if (other is PackagePartName name)
             {
                 // String.equals() is compatible with our compareTo(), but cheaper
                 return this.partNameURI.OriginalString.ToLower().Equals
                 (
-                    ((PackagePartName)other).partNameURI.OriginalString.ToLower()
+                    name.partNameURI.OriginalString.ToLower()
                 );
             }
             else

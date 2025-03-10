@@ -79,9 +79,8 @@ namespace NPOI.XWPF.UserModel
         {
             foreach (POIXMLDocumentPart poixmlDocumentPart in GetRelations())
             {
-                if (poixmlDocumentPart is XWPFPictureData)
+                if (poixmlDocumentPart is XWPFPictureData xwpfPicData)
                 {
-                    XWPFPictureData xwpfPicData = (XWPFPictureData)poixmlDocumentPart;
                     pictures.Add(xwpfPicData);
                     document.RegisterPackagePictureData(xwpfPicData);
                 }
@@ -171,9 +170,9 @@ namespace NPOI.XWPF.UserModel
                 }
                 foreach (IBodyElement bodyElement in BodyElements)
                 {
-                    if (bodyElement is XWPFSDT)
+                    if (bodyElement is XWPFSDT xwpfsdt)
                     {
-                        t.Append(((XWPFSDT)bodyElement).Content.Text + '\n');
+                        t.Append(xwpfsdt.Content.Text + '\n');
                     }
                 }
                 return t.ToString();
@@ -360,9 +359,9 @@ namespace NPOI.XWPF.UserModel
         public XWPFPictureData GetPictureDataByID(String blipID)
         {
             POIXMLDocumentPart relatedPart = GetRelationById(blipID);
-            if (relatedPart != null && relatedPart is XWPFPictureData)
+            if (relatedPart != null && relatedPart is XWPFPictureData data)
             {
-                return (XWPFPictureData)relatedPart;
+                return data;
             }
             return null;
         }
@@ -605,15 +604,15 @@ namespace NPOI.XWPF.UserModel
             // the XmlObject to its lists
             foreach (object o in headerFooter.Items)
             {
-                if (o is CT_P)
+                if (o is CT_P ctP)
                 {
-                    XWPFParagraph p = new XWPFParagraph((CT_P)o, this);
+                    XWPFParagraph p = new XWPFParagraph(ctP, this);
                     paragraphs.Add(p);
                     bodyElements.Add(p);
                 }
-                if (o is CT_Tbl)
+                if (o is CT_Tbl tbl)
                 {
-                    XWPFTable t = new XWPFTable((CT_Tbl)o, this);
+                    XWPFTable t = new XWPFTable(tbl, this);
                     tables.Add(t);
                     bodyElements.Add(t);
                 }
@@ -699,7 +698,7 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        #region IBody ³ÉÔ±
+        #region IBody ï¿½ï¿½Ô±
 
 
         public virtual BodyType PartType

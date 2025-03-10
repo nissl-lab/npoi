@@ -137,28 +137,26 @@ namespace NPOI.SS.Formula.Functions
      */
         private void CollectValues(ValueEval operand, DoubleList temp)
         {
-            if (operand is ThreeDEval)
+            if (operand is ThreeDEval eval)
             {
-                ThreeDEval ae = (ThreeDEval)operand;
-                for (int sIx = ae.FirstSheetIndex; sIx <= ae.LastSheetIndex; sIx++)
+                for (int sIx = eval.FirstSheetIndex; sIx <= eval.LastSheetIndex; sIx++)
                 {
-                    int width = ae.Width;
-                    int height = ae.Height;
+                    int width = eval.Width;
+                    int height = eval.Height;
                     for (int rrIx = 0; rrIx < height; rrIx++)
                     {
                         for (int rcIx = 0; rcIx < width; rcIx++)
                         {
-                            ValueEval ve = ae.GetValue(sIx, rrIx, rcIx);
-                            if (!IsSubtotalCounted && ae.IsSubTotal(rrIx, rcIx)) continue;
+                            ValueEval ve = eval.GetValue(sIx, rrIx, rcIx);
+                            if (!IsSubtotalCounted && eval.IsSubTotal(rrIx, rcIx)) continue;
                             CollectValue(ve, true, temp);
                         }
                     }
                 }
                 return;
             }
-            if (operand is TwoDEval)
+            if (operand is TwoDEval ae)
             {
-                TwoDEval ae = (TwoDEval)operand;
                 int width = ae.Width;
                 int height = ae.Height;
                 for (int rrIx = 0; rrIx < height; rrIx++)
@@ -172,9 +170,8 @@ namespace NPOI.SS.Formula.Functions
                 }
                 return;
             }
-            if (operand is RefEval)
+            if (operand is RefEval re)
             {
-                RefEval re = (RefEval)operand;
                 for (int sIx = re.FirstSheetIndex; sIx <= re.LastSheetIndex; sIx++)
                 {
                     CollectValue(re.GetInnerValueEval(sIx), true, temp);
@@ -189,29 +186,27 @@ namespace NPOI.SS.Formula.Functions
             {
                 throw new ArgumentException("ve must not be null");
             }
-            if (ve is BoolEval)
+            if (ve is BoolEval boolEval)
             {
                 if (!isViaReference || _isReferenceBoolCounted)
                 {
-                    BoolEval boolEval = (BoolEval)ve;
                     temp.Add(boolEval.NumberValue);
                 }
                 return;
             }
-            if (ve is NumberEval)
+            if (ve is NumberEval ne)
             {
-                NumberEval ne = (NumberEval)ve;
                 temp.Add(ne.NumberValue);
                 return;
             }
-            if (ve is StringEval)
+            if (ve is StringEval eval)
             {
                 if (isViaReference)
                 {
                     // ignore all ref strings
                     return;
                 }
-                String s = ((StringEval)ve).StringValue;
+                String s = eval.StringValue;
                 Double d = OperandResolver.ParseDouble(s);
                 if (double.IsNaN(d))
                 {
@@ -220,9 +215,9 @@ namespace NPOI.SS.Formula.Functions
                 temp.Add(d);
                 return;
             }
-            if (ve is ErrorEval)
+            if (ve is ErrorEval errorEval)
             {
-                throw new EvaluationException((ErrorEval)ve);
+                throw new EvaluationException(errorEval);
             }
             if (ve == BlankEval.instance)
             {

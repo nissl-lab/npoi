@@ -52,13 +52,13 @@ namespace NPOI.XSSF.Streaming
 
         protected override IEvaluationCell ToEvaluationCell(ICell cell)
         {
-            if (!(cell is SXSSFCell))
+            if (cell is not SXSSFCell sxssfCell)
             {
                 throw new ArgumentException("Unexpected type of cell: " + cell.GetType() + "." +
                         " Only SXSSFCells can be evaluated.");
             }
 
-            return new SXSSFEvaluationCell((SXSSFCell)cell);
+            return new SXSSFEvaluationCell(sxssfCell);
         }
 
         public static void EvaluateAllFormulaCells(SXSSFWorkbook wb, bool skipOutOfWindow)

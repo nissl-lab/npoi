@@ -85,9 +85,9 @@ namespace NPOI.SS.Formula
             {
                 string wbName = swb.Key;
                 IFormulaEvaluator eval = swb.Value;
-                if (eval is IWorkbookEvaluatorProvider)
+                if (eval is IWorkbookEvaluatorProvider provider)
                 {
-                    evaluatorsByName.Add(wbName, ((IWorkbookEvaluatorProvider)eval).GetWorkbookEvaluator());
+                    evaluatorsByName.Add(wbName, provider.GetWorkbookEvaluator());
                 }
                 else
                 {

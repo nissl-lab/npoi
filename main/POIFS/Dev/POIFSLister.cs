@@ -53,9 +53,9 @@ namespace NPOI.POIFS.Dev
             while (it.MoveNext())
             {
                 Object entry = it.Current;
-                if (entry is DirectoryNode)
+                if (entry is DirectoryNode node)
                 {
-                    DisplayDirectory((DirectoryNode)entry, newIndent);
+                    DisplayDirectory(node, newIndent);
                 }
                 else
                 {

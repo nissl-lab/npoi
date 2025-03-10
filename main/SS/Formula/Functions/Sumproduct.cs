@@ -70,9 +70,8 @@ namespace NPOI.SS.Formula.Functions
                 {
                     return EvaluateSingleProduct(args);
                 }
-                if (firstArg is TwoDEval)
+                if (firstArg is TwoDEval ae)
                 {
-                    TwoDEval ae = (TwoDEval)firstArg;
                     if (ae.IsRow && ae.IsColumn)
                     {
                         return EvaluateSingleProduct(args);
@@ -104,9 +103,8 @@ namespace NPOI.SS.Formula.Functions
         {
 
             ValueEval eval;
-            if (arg is RefEval)
+            if (arg is RefEval re)
             {
-                RefEval re = (RefEval)arg;
                 if (re.NumberOfSheets > 1)
                 {
                     throw new EvaluationException(ErrorEval.VALUE_INVALID);
@@ -122,9 +120,8 @@ namespace NPOI.SS.Formula.Functions
             {
                 throw new ArgumentException("parameter may not be null");
             }
-            if (eval is AreaEval)
+            if (eval is AreaEval ae)
             {
-                AreaEval ae = (AreaEval)eval;
                 // an area ref can work as a scalar value if it is 1x1
                 if (!ae.IsColumn || !ae.IsRow)
                 {
@@ -133,13 +130,13 @@ namespace NPOI.SS.Formula.Functions
                 eval = ae.GetRelativeValue(0, 0);
             }
 
-            if (!(eval is ValueEval))
+            if (!(eval is ValueEval valueEval))
             {
                 throw new ArgumentException("Unexpected value eval class ("
                         + eval.GetType().Name + ")");
             }
 
-            return GetProductTerm((ValueEval)eval, true);
+            return GetProductTerm(valueEval, true);
         }
         private ValueEval EvaluateAreaSumProduct(ValueEval[] evalArgs)
         {
@@ -200,9 +197,9 @@ namespace NPOI.SS.Formula.Functions
                 for (int rcIx = 0; rcIx < width; rcIx++)
                 {
                     ValueEval ve = areaEval.GetValue(rrIx, rcIx);
-                    if (ve is ErrorEval)
+                    if (ve is ErrorEval eval)
                     {
-                        throw new EvaluationException((ErrorEval)ve);
+                        throw new EvaluationException(eval);
                     }
                 }
             }
@@ -248,9 +245,9 @@ namespace NPOI.SS.Formula.Functions
                 return 0;
             }
 
-            if (ve is ErrorEval)
+            if (ve is ErrorEval eval)
             {
-                throw new EvaluationException((ErrorEval)ve);
+                throw new EvaluationException(eval);
             }
             if (ve is StringEval)
             {
@@ -262,9 +259,8 @@ namespace NPOI.SS.Formula.Functions
                 // even if they would Parse as valid numeric values
                 return 0;
             }
-            if (ve is NumericValueEval)
+            if (ve is NumericValueEval nve)
             {
-                NumericValueEval nve = (NumericValueEval)ve;
                 return nve.NumberValue;
             }
             throw new RuntimeException("Unexpected value eval class ("

@@ -53,18 +53,16 @@ namespace NPOI.SS.Formula.PTG
                 {
                     originalOperandClass = ptg.PtgClass;
                 }
-                if (ptg is RefPtgBase)
+                if (ptg is RefPtgBase refNPtg)
                 {
-                    RefPtgBase refNPtg = (RefPtgBase)ptg;
                     ptg = new RefPtg(FixupRelativeRow(formulaRow, refNPtg.Row, refNPtg.IsRowRelative),
                                          FixupRelativeColumn(formulaColumn, refNPtg.Column, refNPtg.IsColRelative),
                                          refNPtg.IsRowRelative,
                                          refNPtg.IsColRelative);
                     ptg.PtgClass = (originalOperandClass);
                 }
-                else if (ptg is AreaPtgBase)
+                else if (ptg is AreaPtgBase areaNPtg)
                 {
-                    AreaPtgBase areaNPtg = (AreaPtgBase)ptg;
                     ptg = new AreaPtg(FixupRelativeRow(formulaRow, areaNPtg.FirstRow, areaNPtg.IsFirstRowRelative),
                                     FixupRelativeRow(formulaRow, areaNPtg.LastRow, areaNPtg.IsLastRowRelative),
                                     FixupRelativeColumn(formulaColumn, areaNPtg.FirstColumn, areaNPtg.IsFirstColRelative),
@@ -75,10 +73,10 @@ namespace NPOI.SS.Formula.PTG
                                     areaNPtg.IsLastColRelative);
                     ptg.PtgClass = (originalOperandClass);
                 }
-                else if (ptg is OperandPtg)
+                else if (ptg is OperandPtg operandPtg)
                 {
                     // Any subclass of OperandPtg is mutable, so it's safest to not share these instances.
-                    ptg = ((OperandPtg)ptg).Copy();
+                    ptg = operandPtg.Copy();
                 }
                 else
                 {

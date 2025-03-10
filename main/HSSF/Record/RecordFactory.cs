@@ -487,13 +487,13 @@ namespace NPOI.HSSF.Record
                 // Not needed by POI.  Regenerated from scratch by POI when spreadsheet is written
                 return new Record[] { null, };
             }
-            if (record is RKRecord)
+            if (record is RKRecord rkRecord)
             {
-                return new Record[] { ConvertToNumberRecord((RKRecord)record), };
+                return new Record[] { ConvertToNumberRecord(rkRecord), };
             }
-            if (record is MulRKRecord)
+            if (record is MulRKRecord mulRkRecord)
             {
-                return ConvertRKRecords((MulRKRecord)record);
+                return ConvertRKRecords(mulRkRecord);
             }
             return new Record[] { record, };
         }

@@ -653,28 +653,27 @@ namespace NPOI.HPSF
             {
                 return null;
             }
-            if(propertyValue is String)
+            if(propertyValue is String value)
             {
-                return (String) propertyValue;
+                return value;
             }
 
             // Do our best with some edge cases
-            if(propertyValue is byte[])
+            if(propertyValue is byte[] data)
             {
-                byte[] b = (byte[])propertyValue;
-                switch(b.Length)
+                switch(data.Length)
                 {
                     case 0:
                         return "";
                     case 1:
-                        return b[0].ToString();
+                        return data[0].ToString();
                     case 2:
-                        return LittleEndian.GetUShort(b).ToString();
+                        return LittleEndian.GetUShort(data).ToString();
                     case 4:
-                        return LittleEndian.GetUInt(b).ToString();
+                        return LittleEndian.GetUInt(data).ToString();
                     default:
                         // Maybe it's a string? who knows!
-                        return Encoding.ASCII.GetString(b);
+                        return Encoding.ASCII.GetString(data);
                 }
             }
             return propertyValue.ToString();
@@ -842,11 +841,11 @@ namespace NPOI.HPSF
         /// </return>
         public override bool Equals(object o)
         {
-            if(o == null || !(o is PropertySet))
+            if(o == null || o is not PropertySet ps)
             {
                 return false;
             }
-            PropertySet ps = (PropertySet)o;
+
             int byteOrder1 = ps.ByteOrder;
             int byteOrder2 = ByteOrder;
             ClassID classID1 = ps.ClassID;

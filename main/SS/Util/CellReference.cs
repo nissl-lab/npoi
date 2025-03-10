@@ -602,18 +602,18 @@ namespace NPOI.SS.Util
         {
             if (object.ReferenceEquals(this, o))
                 return true;
-            if (!(o is CellReference))
+            if (o is not CellReference cr)
             {
                 return false;
             }
-            CellReference cr = (CellReference)o;
+
             return _rowIndex == cr._rowIndex
-                && _colIndex == cr._colIndex
-                && _isRowAbs == cr._isRowAbs
-                && _isColAbs == cr._isColAbs
-                && ((_sheetName == null)
-                        ? (cr._sheetName == null)
-                        : _sheetName.Equals(cr._sheetName));
+                   && _colIndex == cr._colIndex
+                   && _isRowAbs == cr._isRowAbs
+                   && _isColAbs == cr._isColAbs
+                   && ((_sheetName == null)
+                       ? (cr._sheetName == null)
+                       : _sheetName.Equals(cr._sheetName));
         }
 
         public override int GetHashCode ()

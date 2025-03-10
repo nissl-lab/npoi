@@ -108,10 +108,9 @@ namespace NPOI.HSSF.EventUserModel
                 for (int k = 0; k < listeners.Count; k++)
                 {
                     Object listenObj = listeners[k];
-                    if (listenObj is AbortableHSSFListener)
+                    if (listenObj is AbortableHSSFListener hssfListener)
                     {
-                        AbortableHSSFListener listener = (AbortableHSSFListener)listenObj;
-                        userCode = listener.AbortableProcessRecord(rec);
+                        userCode = hssfListener.AbortableProcessRecord(rec);
                         if (userCode != 0) break;
                     }
                     else

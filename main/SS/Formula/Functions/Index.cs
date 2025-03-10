@@ -126,14 +126,14 @@ namespace NPOI.SS.Formula.Functions
         private static TwoDEval ConvertFirstArg(ValueEval arg0)
         {
             ValueEval firstArg = arg0;
-            if (firstArg is RefEval)
+            if (firstArg is RefEval eval)
             {
                 // Convert to area ref for simpler code in getValueFromArea()
-                return ((RefEval)firstArg).Offset(0, 0, 0, 0);
+                return eval.Offset(0, 0, 0, 0);
             }
-            if ((firstArg is TwoDEval))
+            if ((firstArg is TwoDEval arg))
             {
-                return (TwoDEval)firstArg;
+                return arg;
             }
             // else the other variation of thIs function takes an array as the first argument
             // it seems like interface 'ArrayEval' does not even exIst yet

@@ -331,7 +331,7 @@ namespace NPOI.HPSF
         {
             //key is long
 
-            return (key is long && dictionary.ContainsKey((long) key))
+            return (key is long l && dictionary.ContainsKey(l))
                    || dictionary.ContainsValue(key.ToString());
         }
 

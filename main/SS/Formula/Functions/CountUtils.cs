@@ -67,17 +67,17 @@ namespace NPOI.SS.Formula.Functions
             {
                 throw new ArgumentException("eval must not be null");
             }
-            if (eval is ThreeDEval)
+            if (eval is ThreeDEval dEval)
             {
-                return CountUtils.CountMatchingCellsInArea((ThreeDEval)eval, criteriaPredicate);
+                return CountUtils.CountMatchingCellsInArea(dEval, criteriaPredicate);
             }
             if (eval is TwoDEval)
             {
                 throw new ArgumentException("Count requires 3D Evals, 2D ones aren't supported");
             }
-            if (eval is RefEval)
+            if (eval is RefEval refEval)
             {
-                return CountUtils.CountMatchingCellsInRef((RefEval)eval, criteriaPredicate);
+                return CountUtils.CountMatchingCellsInRef(refEval, criteriaPredicate);
             }
             return criteriaPredicate.Matches(eval) ? 1 : 0;
         }
@@ -99,9 +99,8 @@ namespace NPOI.SS.Formula.Functions
                     {
                         ValueEval ve = areaEval.GetValue(sIx, rrIx, rcIx);
 
-                        if (criteriaPredicate is I_MatchAreaPredicate)
+                        if (criteriaPredicate is I_MatchAreaPredicate areaPredicate)
                         {
-                            I_MatchAreaPredicate areaPredicate = (I_MatchAreaPredicate)criteriaPredicate;
                             if (!areaPredicate.Matches(areaEval, rrIx, rcIx)) continue;
                         }
 

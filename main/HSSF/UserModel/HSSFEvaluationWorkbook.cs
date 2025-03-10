@@ -298,9 +298,9 @@ using NPOI.Util;
                 String firstSheetName = sheetIden.SheetId.Name;
                 String lastSheetName = firstSheetName;
 
-                if (sheetIden is SheetRangeIdentifier)
+                if (sheetIden is SheetRangeIdentifier identifier)
                 {
-                    lastSheetName = ((SheetRangeIdentifier)sheetIden).LastSheetIdentifier.Name;
+                    lastSheetName = identifier.LastSheetIdentifier.Name;
                 }
 
                 if (workbookName == null)

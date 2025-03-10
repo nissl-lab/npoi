@@ -48,9 +48,8 @@ namespace NPOI.SS.Formula.Functions
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval numberVE)
         {
             String hex;
-            if (numberVE is RefEval)
+            if (numberVE is RefEval re)
             {
-                RefEval re = (RefEval)numberVE;
                 hex = OperandResolver.CoerceValueToString(re.GetInnerValueEval(re.FirstSheetIndex));
             }
             else

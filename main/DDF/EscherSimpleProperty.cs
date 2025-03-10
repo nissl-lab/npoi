@@ -101,9 +101,7 @@ namespace NPOI.DDF
         public override bool Equals(Object o)
         {
             if (this == o) return true;
-            if (!(o is EscherSimpleProperty)) return false;
-
-            EscherSimpleProperty escherSimpleProperty = (EscherSimpleProperty)o;
+            if (o is not EscherSimpleProperty escherSimpleProperty) return false;
 
             if (propertyValue != escherSimpleProperty.propertyValue) return false;
             if (Id != escherSimpleProperty.Id) return false;

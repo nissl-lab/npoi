@@ -320,7 +320,7 @@ namespace NPOI.HSSF.UserModel
             get
             {
                 HSSFAnchor a = Anchor as HSSFAnchor;
-                return (a is HSSFClientAnchor) ? (HSSFClientAnchor) a : null;
+                return (a is HSSFClientAnchor clientAnchor) ? clientAnchor : null;
             }
         }
 
