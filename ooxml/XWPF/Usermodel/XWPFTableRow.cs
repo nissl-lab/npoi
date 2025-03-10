@@ -116,6 +116,16 @@ namespace NPOI.XWPF.UserModel
         }
 
         /**
+         * Clones a table row and inserts it at the specified position in the table
+         */
+        public XWPFTableRow CloneRow(int pos)
+        {
+            XWPFTableRow clonedRow= new XWPFTableRow(ctRow.Copy(), this.table);
+            table.AddRow(clonedRow, pos);
+            return clonedRow;
+        }
+
+        /**
          * This element specifies the height of the current table row within the
          * current table. This height shall be used to determine the resulting
          * height of the table row, which may be absolute or relative (depending on
