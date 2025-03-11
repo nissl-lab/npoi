@@ -336,9 +336,7 @@ namespace NPOI.HPSF
         /// 	<c>true</c> if the byte array is a property Set
         /// stream; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsPropertySetStream(byte[] src,
-                                                  int offset,
-                                                  int Length)
+        public static bool IsPropertySetStream(byte[] src, int offset, int Length)
         {
             /* FIXME (3): Ensure that at most "Length" bytes are Read. */
 
@@ -364,10 +362,9 @@ namespace NPOI.HPSF
             ClassID classID = new ClassID(src, offset);
             o += ClassID.LENGTH;
             long sectionCount = LittleEndian.GetUInt(src, o);
-            o += LittleEndianConsts.INT_SIZE;
-            if (sectionCount < 0)
-                return false;
-            return true;
+            //o += LittleEndianConsts.INT_SIZE;
+
+            return sectionCount >= 0;
         }
 
 

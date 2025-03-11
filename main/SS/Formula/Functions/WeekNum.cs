@@ -53,7 +53,7 @@ namespace NPOI.SS.Formula.Functions
 
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval serialNumVE, ValueEval returnTypeVE)
         {
-            double serialNum = 0.0;
+            double serialNum;
             try
             {
                 serialNum = NumericFunction.SingleOperandEvaluate(serialNumVE, srcRowIndex, srcColumnIndex);
@@ -71,7 +71,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 return ErrorEval.NUM_ERROR;
             }
-            int returnType = 0;
+            int returnType;
             try
             {
                 ValueEval ve = OperandResolver.GetSingleValue(returnTypeVE, srcRowIndex, srcColumnIndex);

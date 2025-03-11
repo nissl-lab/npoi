@@ -182,15 +182,49 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private List<CT_Comment> commentField;
 
+        private Dictionary<string, string> extraXmlNamespace = new Dictionary<string, string>();
+        private Dictionary<string, string> defaultXmlNamespace = new Dictionary<string, string>(){
+            { "o", "urn:schemas-microsoft-com:office:office" },
+            { "ve", "http://schemas.openxmlformats.org/markup-compatibility/2006" },
+            { "r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships" },
+            { "v", "urn:schemas-microsoft-com:vml" },
+            { "m", "http://schemas.openxmlformats.org/officeDocument/2006/math" },
+            { "w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main" },
+            { "wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" },
+            { "w10", "urn:schemas-microsoft-com:office:word" },
+            { "w14", "http://schemas.microsoft.com/office/word/2010/wordml" },
+            { "wne", "http://schemas.microsoft.com/office/word/2006/wordml" },
+            
+        };
         public CT_Comments()
         {
             this.commentField = new List<CT_Comment>();
+        }
+        private void FindExtraNamespace(XmlNode node)
+        {
+            if (node.Attributes != null)
+            {
+                foreach (XmlAttribute attr in node.Attributes)
+                {
+                    if (attr.Name.StartsWith("xmlns:"))
+                    {
+                        string[] strs = attr.Name.Split(':');
+                        if (strs.Length == 2)
+                        {
+                            if (!extraXmlNamespace.ContainsKey(strs[1]) &&
+                                !defaultXmlNamespace.ContainsKey(strs[1]))
+                                extraXmlNamespace.Add(strs[1], attr.Value);
+                        }
+                    }
+                }
+            }
         }
         public static CT_Comments Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
             CT_Comments ctObj = new CT_Comments();
+            ctObj.FindExtraNamespace(node);
             ctObj.comment = new List<CT_Comment>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
@@ -201,16 +235,21 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
 
 
-
+        private void WriteXmlNamespace(StreamWriter sw, Dictionary<string, string> ns)
+        {
+            if(ns == null || ns.Count == 0)
+                return;
+            foreach (var kv in ns)
+            {
+                sw.Write(string.Format($"xmlns:{kv.Key}=\"{kv.Value}\" ", kv.Key, kv.Value));
+            }
+        }
         internal void Write(StreamWriter sw)
         {
             sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
             sw.Write(string.Format("<w:comments "));
-            sw.Write("xmlns:ve=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" ");
-            sw.Write("xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:m=\"http://schemas.openxmlformats.org/officeDocument/2006/math\" ");
-            sw.Write("xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\" ");
-            sw.Write("xmlns:w10=\"urn:schemas-microsoft-com:office:word\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\" ");
-            sw.Write("xmlns:wne=\"http://schemas.microsoft.com/office/word/2006/wordml\">");
+            WriteXmlNamespace(sw, defaultXmlNamespace);
+            WriteXmlNamespace(sw, extraXmlNamespace);
             sw.Write(">");
             if (this.comment != null)
             {

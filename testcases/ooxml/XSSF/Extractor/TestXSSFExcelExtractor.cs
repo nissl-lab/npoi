@@ -248,9 +248,9 @@ namespace TestCases.XSSF.Extractor
         }
 
         /**
-	     * Simple test for text box text
-	     * @throws IOException
-	     */
+         * Simple test for text box text
+         * @throws IOException
+         */
         [Test]
         public void TestTextBoxes()
         {
@@ -294,6 +294,23 @@ namespace TestCases.XSSF.Extractor
             extractor.Close();
         }
 
+        [Test]
+        public void TestPhoneticRuns()
+        {
+            XSSFExcelExtractor extractor = GetExtractor("51519.xlsx");
+            try
+            {
+                String text = extractor.Text;
+                Assert.IsTrue(text.Contains("\u8C4A\u7530"));
+                //this shows up only as a phonetic run and should not appear
+                //in the extracted text
+                Assert.IsFalse(text.Contains("\u30CB\u30DB\u30F3"));
+            }
+            finally
+            {
+                extractor.Close();
+            }
+        }
     }
 }
 

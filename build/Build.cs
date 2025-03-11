@@ -125,8 +125,8 @@ partial class Build : NukeBuild
                 .EnableNoRestore()
                 .SetConfiguration(Configuration)
                 .SetProjectFile(Solution)
-                .When(Host is GitHubActions, settings => settings.SetLoggers("GitHubActions"))
-                .When(!RuntimeInformation.IsOSPlatform(OSPlatform.Windows), settings => settings.SetFramework("net6.0"))
+                .When(_ => Host is GitHubActions, settings => settings.SetLoggers("GitHubActions"))
+                .When(_ => !RuntimeInformation.IsOSPlatform(OSPlatform.Windows), settings => settings.SetFramework("net8.0"))
             );
         });
 

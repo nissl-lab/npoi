@@ -445,9 +445,11 @@ namespace NPOI.HSSF.Record
 
             base.CopyTo(rec);
 
-            rec.ext_formatting_length = ext_formatting_length;
+            // use min() to gracefully handle cases where the length-property and the array-lenght do not match
+            // we saw some such files in circulation
+            rec.ext_formatting_length = Math.Min(ext_formatting_length, ext_formatting_data.Length);
             rec.ext_formatting_data = new byte[ext_formatting_length];
-            Array.Copy(ext_formatting_data, 0, rec.ext_formatting_data, 0, ext_formatting_length);
+            Array.Copy(ext_formatting_data, 0, rec.ext_formatting_data, 0, rec.ext_formatting_length);
 
             rec.formula_scale = formula_scale.Copy();
 

@@ -20,15 +20,12 @@ using NPOI.OpenXml4Net.OPC.Internal;
 using System.IO;
 using System.Collections.Generic;
 using System;
-using TestCases.OpenXml4Net;
 using NPOI.Util;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using System.Xml;
 using System.Text;
-using ICSharpCode.SharpZipLib.Zip;
-using System.Collections;
 using NPOI.SS.UserModel;
 using NPOI;
 using NPOI.Openxml4Net.Exceptions;
@@ -842,7 +839,7 @@ namespace TestCases.OpenXml4Net.OPC
         //    {
         //        ZipEntry e2 = (ZipEntry)entries.Current;
         //        ZipEntry e = new ZipEntry(e2.Name);
-                
+
         //        e.DateTime = (e2.DateTime);
         //        e.Comment = (e2.Comment);
         //        e.Size = (e2.Size);
@@ -888,6 +885,47 @@ namespace TestCases.OpenXml4Net.OPC
         //    wb.Close();
         //    zipFile.Close();
         //}
+
+        [Test, Ignore("need ExtractorFactory class")]
+        public void ZipBombSampleFiles() {
+
+            openZipBombFile("poc-shared-strings.xlsx");
+            openZipBombFile("poc-xmlbomb.xlsx");
+            openZipBombFile("poc-xmlbomb-empty.xlsx");
+        }
+
+        private void openZipBombFile(String file)
+        {
+            try
+            {
+                IWorkbook wb = NPOI.XSSF.XSSFTestDataSamples.OpenSampleWorkbook(file);
+                wb.Close();
+
+                //POITextExtractor extractor = ExtractorFactory.CreateExtractor(TestCases.HSSF.HSSFTestDataSamples.GetSampleFile("poc-shared-strings.xlsx"));
+                //try
+                //{
+                //    Assert.IsNotNull(extractor);
+                //    var _ = extractor.Text;
+                //}
+                //finally
+                //{
+                //    extractor.Close();
+                //}
+
+                Assert.Fail("Should catch an exception because of a ZipBomb");
+            }
+            catch (InvalidOperationException e)
+            {
+                if (!e.Message.Contains("The text would exceed the max allowed overall size of extracted text."))
+                {
+                    throw e;
+                }
+            }
+            catch (POIXMLException e)
+            {
+                checkForZipBombException(e);
+            }
+        }
 
         [Test, Ignore("need ZipSecureFile class")]
         public void ZipBombCheckSizes()
@@ -964,16 +1002,15 @@ namespace TestCases.OpenXml4Net.OPC
 
         private void checkForZipBombException(Exception e)
         {
+            // unwrap InvocationTargetException as they usually contain the nested exception in the "target" member
             //if (e is InvocationTargetException) {
-            //    InvocationTargetException t = (InvocationTargetException)e;
-            //    IOException t2 = (IOException)t.getTargetException();
-            //    if (t2.Message.StartsWith("Zip bomb detected!"))
-            //    {
-            //        return;
-            //    }
+            //    e = ((InvocationTargetException)e).getTargetException();
             //}
 
-            if (e.Message.StartsWith("Zip bomb detected! Exiting."))
+            String msg = e.Message;
+            if (msg != null && (msg.StartsWith("Zip bomb detected!") ||
+                    msg.Contains("The parser has encountered more than \"4,096\" entity expansions in this document;") ||
+                    msg.Contains("The parser has encountered more than \"4096\" entity expansions in this document;")))
             {
                 return;
             }
