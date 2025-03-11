@@ -36,7 +36,7 @@ namespace NPOI.HSSF.UserModel
         /**
          * Stores the parameters that identify the evaluation of one cell.<br/>
          */
-        private class CellEvaluationFrame
+        private sealed class CellEvaluationFrame
         {
 
             private readonly HSSFWorkbook _workbook;

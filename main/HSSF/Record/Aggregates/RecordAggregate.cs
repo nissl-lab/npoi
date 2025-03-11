@@ -74,7 +74,7 @@ namespace NPOI.HSSF.Record.Aggregates
         }
 
 
-        private class SerializingRecordVisitor : RecordVisitor
+        private sealed class SerializingRecordVisitor : RecordVisitor
         {
 
             private readonly byte[] _data;
@@ -97,7 +97,8 @@ namespace NPOI.HSSF.Record.Aggregates
                 _countBytesWritten += r.Serialize(currentOffset, _data);
             }
         }
-        private class RecordSizingVisitor : RecordVisitor
+
+        private sealed class RecordSizingVisitor : RecordVisitor
         {
 
             private int _totalSize;

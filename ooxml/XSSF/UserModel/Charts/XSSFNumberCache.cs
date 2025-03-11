@@ -31,7 +31,7 @@ namespace NPOI.XSSF.UserModel.Charts
      *
      * @author Roman Kashitsyn
      */
-    internal class XSSFNumberCache
+    internal sealed class XSSFNumberCache
     {
 
         private CT_NumData ctNumData;
@@ -115,7 +115,7 @@ namespace NPOI.XSSF.UserModel.Charts
             ctNumData.AddNewPtCount().val = (uint)numOfPoints;
         }
 
-        private class NumCacheCellHandler : ICellHandler
+        private sealed class NumCacheCellHandler : ICellHandler
         {
 
             private IFormulaEvaluator Evaluator;

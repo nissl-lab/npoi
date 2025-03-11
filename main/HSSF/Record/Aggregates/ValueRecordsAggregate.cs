@@ -399,7 +399,7 @@ namespace NPOI.HSSF.Record.Aggregates
             return GetEnumerator();
         }
 
-        private class ValueEnumerator : IEnumerator<CellValueRecordInterface>
+        private sealed class ValueEnumerator : IEnumerator<CellValueRecordInterface>
         {
             short nextColumn = -1;
             int nextRow, lastRow;

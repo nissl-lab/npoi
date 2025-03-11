@@ -282,7 +282,7 @@ using System.Collections.Generic;
         }
 
 
-        private class EscherDggRecordComparer : IComparer<FileIdCluster>
+        private sealed class EscherDggRecordComparer : IComparer<FileIdCluster>
         {
 
             #region IComparer Members

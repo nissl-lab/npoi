@@ -175,7 +175,7 @@ namespace NPOI.HSSF.Model
             get { return _children; }
         }
 
-        private class TokenCollector
+        private sealed class TokenCollector
         {
 
             private readonly Ptg[] _ptgs;

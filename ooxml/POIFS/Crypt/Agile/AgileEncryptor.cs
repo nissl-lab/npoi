@@ -365,7 +365,7 @@ namespace NPOI.POIFS.Crypt.Agile
          * that the StreamSize field of the EncryptedPackage field specifies the number of bytes of
          * unencrypted data as specified in section 2.3.4.4.
          */
-        private class AgileCipherOutputStream : ChunkedCipherOutputStream {
+        private sealed class AgileCipherOutputStream : ChunkedCipherOutputStream {
             ISecretKey skey;
             public AgileCipherOutputStream(DirectoryNode dir, IEncryptionInfoBuilder builder, ISecretKey skey, AgileEncryptor encryptor)
                     : base(dir, 4096, builder, encryptor)

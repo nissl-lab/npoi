@@ -6276,7 +6276,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        private class ShiftCommentComparator : IComparer<XSSFComment>
+        private sealed class ShiftCommentComparator : IComparer<XSSFComment>
         {
             private readonly int shiftDir;
 

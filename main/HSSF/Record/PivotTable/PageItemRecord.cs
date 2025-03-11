@@ -28,7 +28,8 @@ namespace NPOI.HSSF.Record.PivotTable
     public class PageItemRecord : StandardRecord
     {
         public const short sid = 0x00B6;
-        private class FieldInfo
+
+        private sealed class FieldInfo
         {
             public const int ENCODED_SIZE = 6;
             /** Index to the View Item SXVI(0x00B2) record */

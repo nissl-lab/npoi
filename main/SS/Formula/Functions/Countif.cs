@@ -246,7 +246,8 @@ namespace NPOI.SS.Formula.Functions
                 }
             }
         }
-        private class NumberMatcher : MatcherBase
+
+        private sealed class NumberMatcher : MatcherBase
         {
 
             private readonly double _value;
@@ -315,7 +316,8 @@ namespace NPOI.SS.Formula.Functions
                 get { return _value.ToString(CultureInfo.InvariantCulture); }
             }
         }
-        private class BooleanMatcher : MatcherBase
+
+        private sealed class BooleanMatcher : MatcherBase
         {
 
             private readonly int _value;
@@ -387,7 +389,8 @@ namespace NPOI.SS.Formula.Functions
                 get { return _value == 1 ? "TRUE" : "FALSE"; }
             }
         }
-        internal class StringMatcher : MatcherBase
+
+        internal sealed class StringMatcher : MatcherBase
         {
 
             private readonly String _value;

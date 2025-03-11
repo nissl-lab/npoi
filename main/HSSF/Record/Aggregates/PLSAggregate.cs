@@ -3,7 +3,7 @@ using NPOI.HSSF.Model;
 
 namespace NPOI.HSSF.Record.Aggregates
 {
-    internal class PLSAggregate : RecordAggregate
+    internal sealed class PLSAggregate : RecordAggregate
     {
         private static readonly ContinueRecord[] EMPTY_CONTINUE_RECORD_ARRAY = { };
         private readonly Record _pls;

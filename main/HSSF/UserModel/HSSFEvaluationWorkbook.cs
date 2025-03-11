@@ -238,7 +238,7 @@ using NPOI.Util;
         }
 
 
-        private class Name : IEvaluationName
+        private sealed class Name : IEvaluationName
         {
 
             private readonly NameRecord _nameRecord;

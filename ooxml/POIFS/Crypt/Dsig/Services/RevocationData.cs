@@ -152,7 +152,7 @@ namespace NPOI.POIFS.Crypt.Dsig.Services
     }
 
     [Serializable]
-    internal class CRLException : Exception
+    internal sealed class CRLException : Exception
     {
         public CRLException()
         {
