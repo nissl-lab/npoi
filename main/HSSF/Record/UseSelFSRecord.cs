@@ -38,8 +38,8 @@ namespace NPOI.HSSF.Record
     {
         public const short sid = 0x160;
 
-        private static BitField useNaturalLanguageFormulasFlag = BitFieldFactory.GetInstance(0x0001);
-        private int _options;
+        private static readonly BitField useNaturalLanguageFormulasFlag = BitFieldFactory.GetInstance(0x0001);
+        private readonly int _options;
 
         public UseSelFSRecord(int options)
         {

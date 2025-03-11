@@ -34,10 +34,10 @@ namespace NPOI.Util
     /// <remarks>@author Jason Height</remarks>
     public class IntMapper<T>
     {
-        private List<T> elements;
-        private Dictionary<T, int> valueKeyMap;
+        private readonly List<T> elements;
+        private readonly Dictionary<T, int> valueKeyMap;
 
-        private static int _default_size = 10;
+        private static readonly int _default_size = 10;
 
         /// <summary>
         /// create an IntMapper of default size
@@ -98,9 +98,9 @@ namespace NPOI.Util
         /// <returns></returns>
         public int GetIndex(T o)
         {
-            if (!valueKeyMap.ContainsKey(o))
+            if (!valueKeyMap.TryGetValue(o, out int index))
                 return -1;
-            return valueKeyMap[o];
+            return index;
             /*
             int i = valueKeyMap[(o)];
             if (i == null)

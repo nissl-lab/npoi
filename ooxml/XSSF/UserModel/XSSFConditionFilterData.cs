@@ -6,7 +6,7 @@ namespace NPOI.OOXML.XSSF.UserModel
 {
     public class XSSFConditionFilterData:IConditionFilterData
     {
-        private CT_CfRule _cfRule;
+        private readonly CT_CfRule _cfRule;
         public XSSFConditionFilterData(CT_CfRule cfRule)
         {
             _cfRule = cfRule;

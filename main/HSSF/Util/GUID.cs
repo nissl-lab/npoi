@@ -15,15 +15,15 @@ namespace NPOI.HSSF.Util
         public const int ENCODED_SIZE = 16;
 
         /** 4 bytes - little endian */
-        private int _d1;
+        private readonly int _d1;
         /** 2 bytes - little endian */
-        private int _d2;
+        private readonly int _d2;
         /** 2 bytes - little endian */
-        private int _d3;
+        private readonly int _d3;
         /**
          * 8 bytes - serialized as big endian,  stored with inverted endianness here
          */
-        private long _d4;
+        private readonly long _d4;
 
         public GUID(ILittleEndianInput in1) 
             :this(in1.ReadInt(), in1.ReadUShort(), in1.ReadUShort(), in1.ReadLong())

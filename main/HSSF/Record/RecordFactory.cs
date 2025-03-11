@@ -50,7 +50,7 @@ namespace NPOI.HSSF.Record
     public class RecordFactory
     {
         private static int NUM_RECORDS = 512;
-        private static Type[] recordClasses;
+        private static readonly Type[] recordClasses;
         #region inner Record Creater
         private interface I_RecordCreator
         {
@@ -61,7 +61,7 @@ namespace NPOI.HSSF.Record
         private class ReflectionConstructorRecordCreator : I_RecordCreator
         {
 
-            private ConstructorInfo _c;
+            private readonly ConstructorInfo _c;
             public ReflectionConstructorRecordCreator(ConstructorInfo c)
             {
                 _c = c;
@@ -90,7 +90,7 @@ namespace NPOI.HSSF.Record
         private class ReflectionMethodRecordCreator : I_RecordCreator
         {
 
-            private MethodInfo _m;
+            private readonly MethodInfo _m;
             public ReflectionMethodRecordCreator(MethodInfo m)
             {
                 _m = m;
@@ -114,7 +114,7 @@ namespace NPOI.HSSF.Record
         }
         #endregion
 
-        private static Type[] CONSTRUCTOR_ARGS = new Type[] { typeof(RecordInputStream), };
+        private static readonly Type[] CONSTRUCTOR_ARGS = new Type[] { typeof(RecordInputStream), };
 
 
         static RecordFactory()
@@ -409,7 +409,7 @@ namespace NPOI.HSSF.Record
         /**
 	     * cache of the recordsToMap();
 	     */
-        private static Dictionary<short, I_RecordCreator> _recordCreatorsById = null;//RecordsToMap(recordClasses);
+        private static readonly Dictionary<short, I_RecordCreator> _recordCreatorsById = null;//RecordsToMap(recordClasses);
 
         private static short[] _allKnownRecordSIDs;
         /**
@@ -516,9 +516,8 @@ namespace NPOI.HSSF.Record
 
         public static Record CreateSingleRecord(RecordInputStream in1)
         {
-            if (_recordCreatorsById.ContainsKey(in1.Sid))
+            if (_recordCreatorsById.TryGetValue(in1.Sid, out I_RecordCreator constructor))
             {
-                I_RecordCreator constructor = _recordCreatorsById[in1.Sid];
                 return constructor.Create(in1);
             }
             else

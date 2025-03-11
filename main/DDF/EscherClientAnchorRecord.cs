@@ -52,7 +52,7 @@ namespace NPOI.DDF
         private short field_7_dx2;
         private short field_8_row2;
         private short field_9_dy2;
-        private byte[] remainingData = new byte[0];
+        private byte[] remainingData = Array.Empty<byte>();
         private bool shortRecord = false;
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace NPOI.DDF
         {
             listener.BeforeRecordSerialize(offset, RecordId, this);
 
-            if (remainingData == null) remainingData = new byte[0];
+            if (remainingData == null) remainingData = Array.Empty<byte>();
             LittleEndian.PutShort(data, offset, Options);
             LittleEndian.PutShort(data, offset + 2, RecordId);
             int remainingBytes = remainingData.Length + (shortRecord ? 8 : 18);
@@ -329,7 +329,7 @@ namespace NPOI.DDF
             {
                 if (value == null)
                 {
-                    this.remainingData = new byte[0];
+                    this.remainingData = Array.Empty<byte>();
                 }
                 else
                 {

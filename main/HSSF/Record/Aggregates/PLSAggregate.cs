@@ -5,15 +5,15 @@ namespace NPOI.HSSF.Record.Aggregates
 {
     internal class PLSAggregate : RecordAggregate
     {
-        private static ContinueRecord[] EMPTY_CONTINUE_RECORD_ARRAY = { };
-        private Record _pls;
+        private static readonly ContinueRecord[] EMPTY_CONTINUE_RECORD_ARRAY = { };
+        private readonly Record _pls;
         /**
          * holds any continue records found after the PLS record.<br/>
          * This would not be required if PLS was properly interpreted.
          * Currently, PLS is an {@link UnknownRecord} and does not automatically
          * include any trailing {@link ContinueRecord}s.
          */
-        private ContinueRecord[] _plsContinues;
+        private readonly ContinueRecord[] _plsContinues;
 
         public PLSAggregate(RecordStream rs)
         {

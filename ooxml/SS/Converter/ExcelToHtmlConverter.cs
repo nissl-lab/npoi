@@ -34,7 +34,7 @@ namespace NPOI.SS.Converter
 
     public class ExcelToHtmlConverter
     {
-        POILogger logger = POILogFactory.GetLogger(typeof(ExcelToHtmlConverter));
+        readonly POILogger logger = POILogFactory.GetLogger(typeof(ExcelToHtmlConverter));
         public ExcelToHtmlConverter()
         {
             XmlDocument doc = new XmlDocument();
@@ -47,16 +47,16 @@ namespace NPOI.SS.Converter
             return ExcelToHtmlUtils.GetColumnWidthInPx(sheet.GetColumnWidth(columnIndex));
         }
         //private HSSFDataFormatter _formatter = new HSSFDataFormatter();
-        private DataFormatter _formatter = new DataFormatter();
+        private readonly DataFormatter _formatter = new DataFormatter();
         private string cssClassContainerCell = null;
 
         private string cssClassContainerDiv = null;
 
-        private string cssClassTable;
+        private readonly string cssClassTable;
 
-        private Dictionary<short, string> excelStyleToClass = new Dictionary<short, string>();
+        private readonly Dictionary<short, string> excelStyleToClass = new Dictionary<short, string>();
 
-        private HtmlDocumentFacade htmlDocumentFacade;
+        private readonly HtmlDocumentFacade htmlDocumentFacade;
 
         private bool outputColumnHeaders = true;
         /// <summary>
@@ -631,8 +631,8 @@ namespace NPOI.SS.Converter
         {
             short cellStyleKey = cellStyle.Index;
 
-            if(excelStyleToClass.ContainsKey(cellStyleKey))
-                return excelStyleToClass[cellStyleKey];
+            if(excelStyleToClass.TryGetValue(cellStyleKey, out string name))
+                return name;
 
             String cssStyle = BuildStyle(workbook, cellStyle);
             String cssClass = htmlDocumentFacade.GetOrCreateCssClass("td", "c",

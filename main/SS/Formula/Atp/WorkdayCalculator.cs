@@ -28,7 +28,7 @@ namespace NPOI.SS.Formula.Atp
     {
 
         public static WorkdayCalculator instance = new WorkdayCalculator();
-        private static Dictionary<int, List<int>> weekendTypeMap = new Dictionary<int, List<int>>();
+        private static readonly Dictionary<int, List<int>> weekendTypeMap = new Dictionary<int, List<int>>();
         /**
          * Constructor.
          */
@@ -124,8 +124,8 @@ namespace NPOI.SS.Formula.Atp
         public DateTime CalculateWorkdays(double start, int workdays, int weekendType, double[] holidays)
         {
             List<int> weekendDays = new List<int>() { 7, 1 };
-            if (weekendTypeMap.ContainsKey(weekendType))
-                weekendDays= weekendTypeMap[weekendType];
+            if (weekendTypeMap.TryGetValue(weekendType, out List<int> value))
+                weekendDays= value;
             DateTime startDate = DateUtil.GetJavaDate(start);
             int direction = workdays < 0 ? -1 : 1;
             var endDate=startDate;

@@ -37,7 +37,7 @@ namespace NPOI.SS.Format
         private const int EQ = 4;
         private const int NE = 5;
 
-        private static Dictionary<String, int> TESTS;
+        private static readonly Dictionary<String, int> TESTS;
 
         static CellFormatCondition()
         {
@@ -53,7 +53,7 @@ namespace NPOI.SS.Format
         }
         private class LT_CellFormatCondition : CellFormatCondition
         {
-            double _c;
+            readonly double _c;
             public LT_CellFormatCondition(double c)
             {
                 _c = c;
@@ -65,7 +65,7 @@ namespace NPOI.SS.Format
         }
         private class LE_CellFormatCondition : CellFormatCondition
         {
-            double _c;
+            readonly double _c;
             public LE_CellFormatCondition(double c)
             {
                 _c = c;
@@ -77,7 +77,7 @@ namespace NPOI.SS.Format
         }
         private class GT_CellFormatCondition : CellFormatCondition
         {
-            double _c;
+            readonly double _c;
             public GT_CellFormatCondition(double c)
             {
                 _c = c;
@@ -89,7 +89,7 @@ namespace NPOI.SS.Format
         }
         private class GE_CellFormatCondition : CellFormatCondition
         {
-            double _c;
+            readonly double _c;
             public GE_CellFormatCondition(double c)
             {
                 _c = c;
@@ -101,7 +101,7 @@ namespace NPOI.SS.Format
         }
         private class EQ_CellFormatCondition : CellFormatCondition
         {
-            double _c;
+            readonly double _c;
             public EQ_CellFormatCondition(double c)
             {
                 _c = c;
@@ -113,7 +113,7 @@ namespace NPOI.SS.Format
         }
         private class NE_CellFormatCondition : CellFormatCondition
         {
-            double _c;
+            readonly double _c;
             public NE_CellFormatCondition(double c)
             {
                 _c = c;
@@ -137,9 +137,8 @@ namespace NPOI.SS.Format
         public static CellFormatCondition GetInstance(String opString,
                 String constStr) {
 
-            if (!TESTS.ContainsKey(opString))
+            if (!TESTS.TryGetValue(opString, out int test))
                 throw new ArgumentException("Unknown test: " + opString);
-            int test = TESTS[(opString)];
 
             double c = Double.Parse(constStr, CultureInfo.InvariantCulture);
 

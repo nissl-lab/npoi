@@ -58,7 +58,7 @@ namespace NPOI.DDF
         private byte field_11_unused3;
         private EscherBlipRecord field_12_blipRecord;
 
-        private byte[] _remainingData = new byte[0];
+        private byte[] _remainingData = Array.Empty<byte>();
 
         /// <summary>
         /// This method deSerializes the record from a byte array.
@@ -114,7 +114,7 @@ namespace NPOI.DDF
             listener.BeforeRecordSerialize(offset, RecordId, this);
 
             if (_remainingData == null)
-                _remainingData = new byte[0];
+                _remainingData = Array.Empty<byte>();
 
             LittleEndian.PutShort(data, offset, Options);
             LittleEndian.PutShort(data, offset + 2, RecordId);
@@ -322,7 +322,7 @@ namespace NPOI.DDF
             {
                 if (value == null)
                 {
-                    _remainingData = new byte[0];
+                    _remainingData = Array.Empty<byte>();
                 }
                 else
                 {

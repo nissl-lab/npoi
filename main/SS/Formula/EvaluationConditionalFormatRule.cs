@@ -181,9 +181,9 @@ namespace NPOI.SS.Formula
         protected class ValueAndFormat : IComparable<ValueAndFormat>
         {
             private double? value;
-            private String str;
-            private String format;
-            private DecimalFormat decimalTextFormat;
+            private readonly String str;
+            private readonly String format;
+            private readonly DecimalFormat decimalTextFormat;
 
             public ValueAndFormat(Double value, String format, DecimalFormat df)
             {
@@ -310,32 +310,32 @@ namespace NPOI.SS.Formula
             }
         }
 
-        private WorkbookEvaluator workbookEvaluator;
-        private ISheet sheet;
-        private IConditionalFormatting formatting;
-        private IConditionalFormattingRule rule;
+        private readonly WorkbookEvaluator workbookEvaluator;
+        private readonly ISheet sheet;
+        private readonly IConditionalFormatting formatting;
+        private readonly IConditionalFormattingRule rule;
 
         /* cached values */
-        private CellRangeAddress[] regions;
+        private readonly CellRangeAddress[] regions;
         /**
          * Depending on the rule type, it may want to know about certain values in the region when evaluating {@link #matches(CellReference)},
          * such as top 10, unique, duplicate, average, etc.  This collection stores those if needed so they are not repeatedly calculated
          */
-        private Dictionary<CellRangeAddress, List<ValueAndFormat>> meaningfulRegionValues = new Dictionary<CellRangeAddress, List<ValueAndFormat>>();
+        private readonly Dictionary<CellRangeAddress, List<ValueAndFormat>> meaningfulRegionValues = new Dictionary<CellRangeAddress, List<ValueAndFormat>>();
 
-        private int priority;
-        private int formattingIndex;
-        private int ruleIndex;
-        private String formula1;
-        private String formula2;
-        private String text;
+        private readonly int priority;
+        private readonly int formattingIndex;
+        private readonly int ruleIndex;
+        private readonly String formula1;
+        private readonly String formula2;
+        private readonly String text;
         // cached for performance, used with cell text comparisons, which are case insensitive and need to be Locale aware (contains, starts with, etc.) 
-        private String lowerText;
+        private readonly String lowerText;
 
-        private OperatorEnum @operator;
-        private ConditionType type;
+        private readonly OperatorEnum @operator;
+        private readonly ConditionType type;
         // cached for performance, to avoid reading the XMLBean every time a conditionally formatted cell is rendered
-        private ExcelNumberFormat numberFormat;
+        private readonly ExcelNumberFormat numberFormat;
         // cached for performance, used to format numeric cells for string comparisons.  See Bug #61764 for explanation
         private DecimalFormat decimalTextFormat;
         public EvaluationConditionalFormatRule(WorkbookEvaluator workbookEvaluator, ISheet sheet, IConditionalFormatting formatting, int formattingIndex, IConditionalFormattingRule rule, int ruleIndex, CellRangeAddress[] regions)
@@ -742,9 +742,9 @@ namespace NPOI.SS.Formula
         }
         private List<ValueAndFormat> GetMeaningfulValues(CellRangeAddress region, bool withText, Func<List<ValueAndFormat>, List<ValueAndFormat>> func)
         {
-            if (meaningfulRegionValues.ContainsKey(region))
+            if (meaningfulRegionValues.TryGetValue(region, out List<ValueAndFormat> meaningfulValues))
             {
-                return meaningfulRegionValues[region];
+                return meaningfulValues;
             }
             List<ValueAndFormat> values = new List<ValueAndFormat>();
             List<ValueAndFormat> allValues = new List<ValueAndFormat>((region.LastColumn - region.FirstColumn + 1) * (region.LastRow - region.FirstRow + 1));

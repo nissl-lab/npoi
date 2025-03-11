@@ -42,7 +42,7 @@ namespace NPOI.SS.Formula.Functions
 
         private abstract class ValueArray : ValueVector
         {
-            private int _size;
+            private readonly int _size;
             protected ValueArray(int size)
             {
                 _size = size;
@@ -70,7 +70,7 @@ namespace NPOI.SS.Formula.Functions
 
         private class SingleCellValueArray : ValueArray
         {
-            private ValueEval _value;
+            private readonly ValueEval _value;
             public SingleCellValueArray(ValueEval value)
                 : base(1)
             {
@@ -85,8 +85,8 @@ namespace NPOI.SS.Formula.Functions
 
         private class RefValueArray : ValueArray
         {
-            private RefEval _ref;
-            private int _width;
+            private readonly RefEval _ref;
+            private readonly int _width;
             public RefValueArray(RefEval ref1)
                 : base(ref1.NumberOfSheets)
             {
@@ -103,8 +103,8 @@ namespace NPOI.SS.Formula.Functions
 
         private class AreaValueArray : ValueArray
         {
-            private TwoDEval _ae;
-            private int _width;
+            private readonly TwoDEval _ae;
+            private readonly int _width;
 
             public AreaValueArray(TwoDEval ae)
                 : base(ae.Width * ae.Height)

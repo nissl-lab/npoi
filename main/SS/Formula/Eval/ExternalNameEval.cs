@@ -27,7 +27,7 @@ namespace NPOI.SS.Formula.Eval
      */
     public class ExternalNameEval : ValueEval
     {
-        private IEvaluationName _name;
+        private readonly IEvaluationName _name;
 
         public ExternalNameEval(IEvaluationName name)
         {

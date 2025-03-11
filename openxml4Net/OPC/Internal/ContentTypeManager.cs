@@ -50,7 +50,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         /**
          * Default content type tree. <Extension, ContentType>
          */
-        private SortedList<String, String> defaultContentType;
+        private readonly SortedList<String, String> defaultContentType;
 
         /**
          * Override content type tree.
@@ -318,12 +318,12 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 throw new ArgumentException("partName");
 
             if ((this.overrideContentType != null)
-                    && this.overrideContentType.ContainsKey(partName))
-                return this.overrideContentType[partName];
+                    && this.overrideContentType.TryGetValue(partName, out string type))
+                return type;
 
             String extension = partName.Extension.ToLower();
-            if (this.defaultContentType.ContainsKey(extension))
-                return this.defaultContentType[extension];
+            if (this.defaultContentType.TryGetValue(extension, out string contentType))
+                return contentType;
 
             /*
              * [M2.4] : The package implementer shall require that the Content Types

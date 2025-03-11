@@ -56,7 +56,7 @@ namespace NPOI.SS.Util
         /// This is a list of cell properties for one shot application to a range of
         /// cells at a later time.
         /// </summary>
-        private Dictionary<CellAddress, Dictionary<String, object>> _propertyTemplate;
+        private readonly Dictionary<CellAddress, Dictionary<String, object>> _propertyTemplate;
 
         /// <summary>
         /// Create a PropertyTemplate object
@@ -863,7 +863,7 @@ namespace NPOI.SS.Util
         private void AddProperty(int row, int col, String property, object value)
         {
             CellAddress cell = new CellAddress(row, col);
-            Dictionary<String, object> cellProperties = _propertyTemplate.ContainsKey(cell) ? _propertyTemplate[cell] : null;
+            Dictionary<String, object> cellProperties = _propertyTemplate.TryGetValue(cell, out Dictionary<string, object> value1) ? value1 : null;
             if(cellProperties == null)
             {
                 cellProperties = new Dictionary<String, object>();
@@ -882,7 +882,7 @@ namespace NPOI.SS.Util
         private void removeProperties(int row, int col, HashSet<String> properties)
         {
             CellAddress cell = new CellAddress(row, col);
-            Dictionary<String, object> cellProperties = _propertyTemplate.ContainsKey(cell) ? _propertyTemplate[cell] : null;
+            Dictionary<String, object> cellProperties = _propertyTemplate.TryGetValue(cell, out Dictionary<string, object> value) ? value : null;
             if(cellProperties != null)
             {
                 //cellProperties.keySet().removeAll(properties);
@@ -909,7 +909,7 @@ namespace NPOI.SS.Util
         /// <param name="cell">cell</param>
         public int GetNumBorders(CellAddress cell)
         {
-            Dictionary<String, object> cellProperties = _propertyTemplate.ContainsKey(cell) ? _propertyTemplate[cell] : null;
+            Dictionary<String, object> cellProperties = _propertyTemplate.TryGetValue(cell, out Dictionary<string, object> value) ? value : null;
             if(cellProperties == null)
             {
                 return 0;
@@ -946,7 +946,7 @@ namespace NPOI.SS.Util
         /// <param name="cell">cell</param>
         public int GetNumBorderColors(CellAddress cell)
         {
-            Dictionary<String, object> cellProperties = _propertyTemplate.ContainsKey(cell) ? _propertyTemplate[cell] : null;
+            Dictionary<String, object> cellProperties = _propertyTemplate.TryGetValue(cell, out Dictionary<string, object> value) ? value : null;
             if(cellProperties == null)
             {
                 return 0;
@@ -985,10 +985,10 @@ namespace NPOI.SS.Util
         public BorderStyle GetBorderStyle(CellAddress cell, String property)
         {
             BorderStyle value = BorderStyle.None;
-            Dictionary<String, object> cellProperties = _propertyTemplate.ContainsKey(cell) ? _propertyTemplate[cell] : null;
+            Dictionary<String, object> cellProperties = _propertyTemplate.TryGetValue(cell, out Dictionary<string, object> value1) ? value1 : null;
             if(cellProperties != null)
             {
-                object obj = cellProperties.ContainsKey(property) ? cellProperties[property] : null;
+                object obj = cellProperties.TryGetValue(property, out object cellProperty) ? cellProperty : null;
                 if(obj is BorderStyle)
                 {
                     value = (BorderStyle) obj;
@@ -1016,10 +1016,10 @@ namespace NPOI.SS.Util
         public short GetTemplateProperty(CellAddress cell, String property)
         {
             short value = 0;
-            Dictionary<String, object> cellProperties = _propertyTemplate.ContainsKey(cell) ? _propertyTemplate[cell] : null;
+            Dictionary<String, object> cellProperties = _propertyTemplate.TryGetValue(cell, out Dictionary<string, object> value1) ? value1 : null;
             if(cellProperties != null)
             {
-                object obj = cellProperties.ContainsKey(property) ? cellProperties[property] : null;
+                object obj = cellProperties.TryGetValue(property, out object cellProperty) ? cellProperty : null;
                 if(obj != null)
                 {
                     value = Getshort(obj);

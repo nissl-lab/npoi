@@ -158,33 +158,33 @@ namespace NPOI.HSSF.Util
         /// </summary>
         private static void RemapCellStyle(HSSFCellStyle stylish, Dictionary<short, short> paletteMap)
         {
-            if (paletteMap.ContainsKey(stylish.BorderDiagonalColor))
+            if (paletteMap.TryGetValue(stylish.BorderDiagonalColor, out short value))
             {
-                stylish.BorderDiagonalColor = paletteMap[stylish.BorderDiagonalColor];
+                stylish.BorderDiagonalColor = value;
             }
-            if (paletteMap.ContainsKey(stylish.BottomBorderColor))
+            if (paletteMap.TryGetValue(stylish.BottomBorderColor, out short value1))
             {
-                stylish.BottomBorderColor = paletteMap[stylish.BottomBorderColor];
+                stylish.BottomBorderColor = value1;
             }
-            if (paletteMap.ContainsKey(stylish.FillBackgroundColor))
+            if (paletteMap.TryGetValue(stylish.FillBackgroundColor, out short value2))
             {
-                stylish.FillBackgroundColor = paletteMap[stylish.FillBackgroundColor];
+                stylish.FillBackgroundColor = value2;
             }
-            if (paletteMap.ContainsKey(stylish.FillForegroundColor))
+            if (paletteMap.TryGetValue(stylish.FillForegroundColor, out short value3))
             {
-                stylish.FillForegroundColor = paletteMap[stylish.FillForegroundColor];
+                stylish.FillForegroundColor = value3;
             }
-            if (paletteMap.ContainsKey(stylish.LeftBorderColor))
+            if (paletteMap.TryGetValue(stylish.LeftBorderColor, out short value4))
             {
-                stylish.LeftBorderColor = paletteMap[stylish.LeftBorderColor];
+                stylish.LeftBorderColor = value4;
             }
-            if (paletteMap.ContainsKey(stylish.RightBorderColor))
+            if (paletteMap.TryGetValue(stylish.RightBorderColor, out short value5))
             {
-                stylish.RightBorderColor = paletteMap[stylish.RightBorderColor];
+                stylish.RightBorderColor = value5;
             }
-            if (paletteMap.ContainsKey(stylish.TopBorderColor))
+            if (paletteMap.TryGetValue(stylish.TopBorderColor, out short value6))
             {
-                stylish.TopBorderColor = paletteMap[stylish.TopBorderColor];
+                stylish.TopBorderColor = value6;
             }
         }
         public static void CopyCell(HSSFCell oldCell, HSSFCell newCell, IDictionary<Int32, HSSFCellStyle> styleMap, Dictionary<short, short> paletteMap, Boolean keepFormulas)
@@ -200,9 +200,9 @@ namespace NPOI.HSSF.Util
                     else
                     {
                         int styleHashCode = oldCell.CellStyle.GetHashCode();
-                        if (styleMap.ContainsKey(styleHashCode))
+                        if (styleMap.TryGetValue(styleHashCode, out HSSFCellStyle value))
                         {
-                            newCell.CellStyle = styleMap[styleHashCode];
+                            newCell.CellStyle = value;
                         }
                         else
                         {
@@ -212,9 +212,9 @@ namespace NPOI.HSSF.Util
                             newCell.CellStyle = newCellStyle;
                             //Clone of cell style always clones the font. This makes my life easier
                             IFont theFont = newCellStyle.GetFont(newCell.Sheet.Workbook);
-                            if (theFont.Color > 0 && paletteMap.ContainsKey(theFont.Color))
+                            if (theFont.Color > 0 && paletteMap.TryGetValue(theFont.Color, out short value1))
                             {
-                                theFont.Color = paletteMap[theFont.Color]; //Remap font color
+                                theFont.Color = value1; //Remap font color
                             }
                             styleMap.Add(styleHashCode, newCellStyle);
                         }

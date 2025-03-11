@@ -450,9 +450,9 @@ namespace NPOI.HSSF.UserModel
         /// <returns>the row number or null if its not defined on the _sheet</returns>
         public NPOI.SS.UserModel.IRow GetRow(int rowIndex)
         {
-            if (!rows.ContainsKey(rowIndex))
+            if (!rows.TryGetValue(rowIndex, out IRow row))
                 return null;
-            return (HSSFRow)rows[rowIndex];
+            return (HSSFRow)row;
         }
 
         /// <summary>
@@ -493,7 +493,7 @@ namespace NPOI.HSSF.UserModel
 
         private class RecordVisitor1 : RecordVisitor
         {
-            private List<IDataValidation> hssfValidations;
+            private readonly List<IDataValidation> hssfValidations;
             private IWorkbook workbook;
             public RecordVisitor1(List<IDataValidation> hssfValidations, IWorkbook workbook)
             {
@@ -501,7 +501,7 @@ namespace NPOI.HSSF.UserModel
                 this.workbook = workbook;
                 this.book = HSSFEvaluationWorkbook.Create(workbook);
             }
-            private HSSFEvaluationWorkbook book;
+            private readonly HSSFEvaluationWorkbook book;
             public void VisitRecord(Record r)
             {
                 if (!(r is DVRecord))
@@ -3238,9 +3238,9 @@ namespace NPOI.HSSF.UserModel
                         {
                             //This is the picture ID property
                             int pictureId = ((EscherSimpleProperty)eprop).PropertyValue;
-                            if (mappings.ContainsKey(pictureId))
+                            if (mappings.TryGetValue(pictureId, out int mapping))
                             {
-                                ((EscherSimpleProperty) eprop).PropertyValue = mappings[pictureId];
+                                ((EscherSimpleProperty) eprop).PropertyValue = mapping;
                             }
                             break;
                         }

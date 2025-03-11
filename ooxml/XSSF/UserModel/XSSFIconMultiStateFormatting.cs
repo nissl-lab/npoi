@@ -30,7 +30,7 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFIconMultiStateFormatting : IIconMultiStateFormatting
     {
-        CT_IconSet _iconset;
+        readonly CT_IconSet _iconset;
 
         /*package*/
         internal XSSFIconMultiStateFormatting(CT_IconSet iconset)

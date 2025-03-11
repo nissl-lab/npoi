@@ -50,7 +50,7 @@ namespace NPOI.HSSF.Record.Chart
             iObjectKind = in1.ReadShort();
             		// Often, but not always has 6 unused bytes at the end
 		    if(in1.Available() == 0) {
-			    unused = new byte[0];
+			    unused = Array.Empty<byte>();
 		    } else {
 			    unused = new byte[6];
 			    in1.ReadFully(unused);

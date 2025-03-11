@@ -54,9 +54,9 @@ namespace NPOI.POIFS.FileSystem
 
         private NPOIFSMiniStore _mini_store;
         private NPropertyTable _property_table;
-        private List<BATBlock> _xbat_blocks;
-        private List<BATBlock> _bat_blocks;
-        private HeaderBlock _header;
+        private readonly List<BATBlock> _xbat_blocks;
+        private readonly List<BATBlock> _bat_blocks;
+        private readonly HeaderBlock _header;
         private DirectoryNode _root;
 
         private DataSource _data;
@@ -954,7 +954,7 @@ namespace NPOI.POIFS.FileSystem
                 return rval;
 
             }
-            return new Object[0];
+            return Array.Empty<Object>();
         }
 
         /**

@@ -21,6 +21,7 @@
 namespace NPOI.SS.Formula.Functions
 {
     using NPOI.SS.Formula.Eval;
+    using System;
 
     /**
      * Counts the number of cells that contain numeric data within
@@ -35,7 +36,7 @@ namespace NPOI.SS.Formula.Functions
      */
     public class Count : Function
     {
-        private IMatchPredicate _predicate;
+        private readonly IMatchPredicate _predicate;
 
         public Count()
         {
@@ -91,7 +92,11 @@ namespace NPOI.SS.Formula.Functions
                 return false;
             }
         }
-        private static IMatchPredicate defaultPredicate = new DefaultPredicate();
+        private static readonly IMatchPredicate defaultPredicate = new DefaultPredicate();
+
+        /// <summary>
+        /// matches hidden rows but not subtotals
+        /// </summary>
         private class SubtotalPredicate : I_MatchAreaPredicate
         {
             public bool Matches(ValueEval valueEval)
@@ -107,7 +112,31 @@ namespace NPOI.SS.Formula.Functions
 
         }
 
-        private static IMatchPredicate subtotalPredicate = new SubtotalPredicate();
+        /// <summary>
+        /// matches nither hidden rows or subtotals
+        /// </summary>
+        private class SubtotalVisibleOnlyPredicate: I_MatchAreaPredicate
+        {
+            public bool Matches(ValueEval valueEval)
+            {
+                return defaultPredicate.Matches(valueEval);
+            }
+
+            /// <summary>
+            /// don't count cells that are subtotals
+            /// </summary>
+            /// <param name="areEval"></param>
+            /// <param name="rowIndex"></param>
+            /// <param name="columnIndex"></param>
+            /// <returns></returns>
+            public bool Matches(TwoDEval areEval, int rowIndex, int columnIndex)
+            {
+                return !areEval.IsSubTotal(rowIndex, columnIndex) && !areEval.IsRowHidden(rowIndex);
+            }
+        }
+
+        private static readonly IMatchPredicate subtotalPredicate = new SubtotalPredicate();
+        private static readonly I_MatchAreaPredicate subtotalVisibleOnlyPredicate = new SubtotalVisibleOnlyPredicate();
         /**
      *  Create an instance of Count to use in {@link Subtotal}
      * <p>
@@ -117,9 +146,9 @@ namespace NPOI.SS.Formula.Functions
      *
      *  @see Subtotal
      */
-        public static Count SubtotalInstance()
+        public static Count SubtotalInstance(bool includeHiddenRows)
         {
-            return new Count(subtotalPredicate);
+            return new Count(includeHiddenRows ? subtotalPredicate : subtotalVisibleOnlyPredicate);
         }
     }
 }

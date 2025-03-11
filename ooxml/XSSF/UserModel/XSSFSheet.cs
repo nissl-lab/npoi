@@ -134,7 +134,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if(!worksheet.IsSetColBreaks() || worksheet.colBreaks.sizeOfBrkArray() == 0)
                 {
-                    return new int[0];
+                    return Array.Empty<int>();
                 }
 
                 List<CT_Break> brkArray = worksheet.colBreaks.brk;
@@ -595,7 +595,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if(!worksheet.IsSetRowBreaks() || worksheet.rowBreaks.sizeOfBrkArray() == 0)
                 {
-                    return new int[0];
+                    return Array.Empty<int>();
                 }
 
                 List<CT_Break> brkArray = worksheet.rowBreaks.brk;
@@ -1530,7 +1530,7 @@ namespace NPOI.XSSF.UserModel
                     // For some reason, we have to remove the hyperlinks one by one from the CTHyperlinks array
                     // before unsetting the hyperlink array.
                     // Resetting the hyperlink array seems to break some XML nodes.
-                    //worksheet.getHyperlinks().setHyperlinkArray(new CTHyperlink[0]);
+                    //worksheet.getHyperlinks().setHyperlinkArray(Array.Empty<CTHyperlink>());
                     worksheet.UnsetHyperlinks();
                 }
                 else
@@ -1994,8 +1994,8 @@ namespace NPOI.XSSF.UserModel
         public virtual IRow CreateRow(int rownum)
         {
             CT_Row ctRow;
-            XSSFRow prev = _rows.ContainsKey(rownum) ? _rows[rownum] : null;
-            if(prev != null)
+            XSSFRow prev = _rows.TryGetValue(rownum, out XSSFRow row) ? row : null;
+            if (prev != null)
             {
                 // the Cells in an existing row are invalidated on-purpose, in
                 // order to clean up correctly, we need to call the remove, so
@@ -2042,8 +2042,8 @@ namespace NPOI.XSSF.UserModel
         public virtual IColumn CreateColumn(int columnnum)
         {
             CT_Col ctCol;
-            XSSFColumn prev = _columns.ContainsKey(columnnum) ? _columns[columnnum] : null;
-            if(prev != null)
+            XSSFColumn prev = _columns.TryGetValue(columnnum, out XSSFColumn column) ? column : null;
+            if (prev != null)
             {
                 // the Cells in an existing column are invalidated on-purpose, in
                 // order to clean up correctly, we need to call the remove, so
@@ -2426,9 +2426,9 @@ namespace NPOI.XSSF.UserModel
         /// if its not defined on the sheet</returns>
         public IRow GetRow(int rownum)
         {
-            if(_rows.ContainsKey(rownum))
+            if (_rows.TryGetValue(rownum, out XSSFRow row))
             {
-                return _rows[rownum];
+                return row;
             }
 
             return null;
@@ -2444,9 +2444,9 @@ namespace NPOI.XSSF.UserModel
         /// if its not defined on the sheet</returns>
         public IColumn GetColumn(int columnnum, bool createIfNull = false)
         {
-            if(_columns.ContainsKey(columnnum))
+            if (_columns.TryGetValue(columnnum, out XSSFColumn column))
             {
-                return _columns[columnnum];
+                return column;
             }
 
             if(createIfNull)
@@ -6030,9 +6030,9 @@ namespace NPOI.XSSF.UserModel
                     else
                     {
                         int styleHashCode = oldCell.CellStyle.GetHashCode();
-                        if(styleMap.ContainsKey(styleHashCode))
+                        if (styleMap.TryGetValue(styleHashCode, out ICellStyle value))
                         {
-                            newCell.CellStyle = styleMap[styleHashCode];
+                            newCell.CellStyle = value;
                         }
                         else
                         {
@@ -6407,10 +6407,9 @@ namespace NPOI.XSSF.UserModel
             cell = 0;
             for(int iRow = 0; iRow < SpreadsheetVersion.EXCEL2007.MaxRows; iRow++)
             {
-                height = _rows.ContainsKey(iRow)
-                    ? _rows[iRow].HeightInPoints
-                    : DefaultRowHeightInPoints;
-                if(y >= Units.ToEMU(height))
+                height = _rows.TryGetValue(iRow, out XSSFRow row) ? row.HeightInPoints
+                                                 : DefaultRowHeightInPoints;
+                if (y >= Units.ToEMU(height))
                 {
                     y -= Units.ToEMU(height);
                     cell++;

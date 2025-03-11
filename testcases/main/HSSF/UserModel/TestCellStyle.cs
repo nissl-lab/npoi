@@ -34,6 +34,8 @@ namespace TestCases.HSSF.UserModel
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
     using NPOI.HSSF.Util;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     /**
      * Class to Test cell styling functionality
@@ -522,5 +524,93 @@ namespace TestCases.HSSF.UserModel
             wb.Close();
         }
 
+        [Test, Parallelizable(ParallelScope.None)]
+        public async Task TestNPOI1469()
+        {
+            const string dateFormat = "yyyy/MM/dd";
+            const string timeFormat = "HH:mm:ss";
+            const int rows = 1_000;
+            const int dop = 2;
+
+            var time = DateTime.UtcNow.AddYears(-1);
+
+            Console.WriteLine($"Start time: {time:yyyy/MM/dd} {time:HH:mm:ss}");
+
+            using var wb = new HSSFWorkbook();
+            var expected = Write(wb);
+            var actual = await Read(wb); // single threaded
+            Compare(expected, actual);
+
+            Console.WriteLine("Single-threaded passed");
+
+            var tasks = new List<Task<List<string[]>>>(dop);
+            for(var i = 0; i<dop; i++)
+                tasks.Add(Read(wb));
+            await Task.WhenAll(tasks);
+
+            for(var i = 0; i<dop; i++)
+                Compare(expected, tasks[i].Result);
+
+            List<string[]> Write(HSSFWorkbook wb)
+            {
+                List<string[]> results = new(rows);
+
+                IDataFormat df = wb.CreateDataFormat();
+                var dateStyle = wb.CreateCellStyle();
+                dateStyle.DataFormat = df.GetFormat(dateFormat);
+                var timeStyle = wb.CreateCellStyle();
+                timeStyle.DataFormat = df.GetFormat(timeFormat);
+
+                ISheet sheet = wb.CreateSheet();
+
+                for(var i = 0; i<rows; i++)
+                {
+                    IRow row = sheet.CreateRow(i);
+
+                    ICell cellA = row.CreateCell(0);
+                    cellA.SetCellValue(time);
+                    cellA.CellStyle = dateStyle;
+
+                    ICell cellB = row.CreateCell(1);
+                    cellB.SetCellValue(time);
+                    cellB.CellStyle = timeStyle;
+
+                    results.Add([time.ToString(dateFormat), time.ToString(timeFormat)]);
+                    time = time.AddHours(1);
+                }
+
+                return results;
+            }
+
+            async Task<List<string[]>> Read(HSSFWorkbook wb)
+            {
+                await Task.Yield();
+                List<string[]> results = new(rows);
+                DataFormatter df = new DataFormatter();
+                ISheet sheet = wb.GetSheetAt(0);
+                var numRows = sheet.LastRowNum;
+                for(var r = 0; r<=numRows; r++)
+                {
+                    IRow row = sheet.GetRow(r);
+                    var numCells = row.LastCellNum;
+                    var readRow = new string[numCells];
+                    for(var c = 0; c<numCells; c++)
+                    {
+                        ICell cell = row.GetCell(c);
+                        if(cell is null) continue;
+                        readRow[c] = df.FormatCellValue(cell);
+                    }
+                    results.Add(readRow);
+                }
+                return results;
+            }
+
+            void Compare(List<string[]> expected, List<string[]> actual)
+            {
+                Assert.That(actual.Count, Is.EqualTo(expected.Count), "Row count mismatch");
+                for(var r = 0; r<expected.Count; r++)
+                    Assert.That(actual[r], Is.EqualTo(expected[r]), $"Row mismatch ({r})");
+            }
+        }
     }
 }

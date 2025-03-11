@@ -206,8 +206,8 @@ namespace NPOI.XSSF.Model
             PrepareCTCommentCache();
 
             // Return the comment, or null if not known
-            if (commentRefs.ContainsKey(cellRef))
-                return commentRefs[cellRef];
+            if (commentRefs.TryGetValue(cellRef, out CT_Comment comment))
+                return comment;
             return null;
         }
 

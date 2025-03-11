@@ -39,7 +39,7 @@ namespace NPOI.XSSF.UserModel
     public class XSSFFormulaEvaluator : BaseXSSFFormulaEvaluator
     {
 
-        private XSSFWorkbook _book;
+        private readonly XSSFWorkbook _book;
 
         public XSSFFormulaEvaluator(IWorkbook workbook)
             : this(workbook as XSSFWorkbook, null, null)

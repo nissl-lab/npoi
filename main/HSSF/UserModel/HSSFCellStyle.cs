@@ -23,6 +23,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
     using System.Collections.Generic;
+    using System.Threading;
 
     /// <summary>
     /// High level representation of the style of a cell in a sheet of a workbook.
@@ -31,9 +32,9 @@ namespace NPOI.HSSF.UserModel
     /// </summary>
     public class HSSFCellStyle : ICellStyle
     {
-        private ExtendedFormatRecord _format = null;
-        private short index = 0;
-        private NPOI.HSSF.Model.InternalWorkbook _workbook = null;
+        private readonly ExtendedFormatRecord _format = null;
+        private readonly short index = 0;
+        private readonly NPOI.HSSF.Model.InternalWorkbook _workbook = null;
 
 
         /// <summary>
@@ -101,9 +102,23 @@ namespace NPOI.HSSF.UserModel
             get { return _format.FormatIndex; }
             set { _format.FormatIndex = (value); }
         }
-        private static short lastDateFormat = short.MinValue;
-        private static List<FormatRecord> lastFormats = null;
-        private static String getDataFormatStringCache = null;
+
+        private static readonly AsyncLocal<short> lastDateFormat;
+        private static readonly AsyncLocal<List<FormatRecord>> lastFormats;
+        private static readonly AsyncLocal<string> getDataFormatStringCache;
+
+        static HSSFCellStyle ()
+        {
+            lastDateFormat = new AsyncLocal<short>();
+            lastDateFormat.Value = short.MinValue;
+
+            lastFormats = new AsyncLocal<List<FormatRecord>>();
+            lastFormats.Value = null;
+
+            getDataFormatStringCache = new AsyncLocal<string>();
+            getDataFormatStringCache.Value = null;
+        }
+
         /// <summary>
         /// Get the contents of the format string, by looking up
         /// the DataFormat against the bound workbook
@@ -114,20 +129,20 @@ namespace NPOI.HSSF.UserModel
             //HSSFDataFormat format = new HSSFDataFormat(workbook);
             //return format.GetFormat(DataFormat);
 
-            if (getDataFormatStringCache != null)
+            if (getDataFormatStringCache.Value != null)
             {
-                if (lastDateFormat == DataFormat && _workbook.Formats.Equals(lastFormats))
+                if (lastDateFormat.Value == DataFormat && _workbook.Formats.Equals(lastFormats.Value))
                 {
-                    return getDataFormatStringCache;
+                    return getDataFormatStringCache.Value;
                 }
             }
 
-            lastFormats = _workbook.Formats;
-            lastDateFormat = DataFormat;
+            lastFormats.Value = _workbook.Formats;
+            lastDateFormat.Value = DataFormat;
 
-            getDataFormatStringCache = GetDataFormatString(_workbook);
+            getDataFormatStringCache.Value = GetDataFormatString(_workbook);
 
-            return getDataFormatStringCache;
+            return getDataFormatStringCache.Value;
         }
 
         /// <summary>
@@ -593,9 +608,9 @@ namespace NPOI.HSSF.UserModel
             // Handle matching things if we cross workbooks
             if (_workbook != source._workbook)
             {
-                lastDateFormat = short.MinValue;
-                lastFormats = null;
-                getDataFormatStringCache = null;
+                lastDateFormat.Value = short.MinValue;
+                lastFormats.Value = null;
+                getDataFormatStringCache.Value = null;
                 // Then we need to clone the format string,
                 //  and update the format record for this
                 short fmt = (short)_workbook.CreateFormat(

@@ -48,7 +48,7 @@ namespace NPOI.SS.UserModel
         public static readonly FontCharset OEM = new FontCharset(255);
 
 
-        private int charset;
+        private readonly int charset;
 
         private FontCharset(int value)
         {
@@ -68,7 +68,7 @@ namespace NPOI.SS.UserModel
             }
         }
 
-        private static FontCharset[] _table = null;
+        private static readonly FontCharset[] _table = null;
 
         static FontCharset()
         {

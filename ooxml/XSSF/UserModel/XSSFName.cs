@@ -109,8 +109,8 @@ namespace NPOI.XSSF.UserModel
          */
         public static String BUILTIN_SHEET_TITLE = "_xlnm.Sheet_Title";
 
-        private XSSFWorkbook _workbook;
-        private CT_DefinedName _ctName;
+        private readonly XSSFWorkbook _workbook;
+        private readonly CT_DefinedName _ctName;
 
         /**
          * Creates an XSSFName object - called internally by XSSFWorkbook.

@@ -97,8 +97,8 @@ namespace NPOI.HSSF.Record
      public class UnknownSubRecord : SubRecord
      {
 
-         private int _sid;
-         private byte[] _data;
+         private readonly int _sid;
+         private readonly byte[] _data;
 
          public UnknownSubRecord(ILittleEndianInput in1, int sid, int size)
          {

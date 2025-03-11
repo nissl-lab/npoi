@@ -8,8 +8,8 @@ namespace NPOI.HPSF
         //private static final POILogger logger = POILogFactory
         //    .getLogger( ClipboardData.class );
 
-        private int _format;
-        private byte[] _value;
+        private readonly int _format;
+        private readonly byte[] _value;
 
         public ClipboardData(byte[] data, int offset)
         {
@@ -22,7 +22,7 @@ namespace NPOI.HPSF
                 //                + "(doesn't even have format field!). "
                 //                + "Setting to format == 0 and hope for the best" );
                 _format = 0;
-                _value = new byte[0];
+                _value = System.Array.Empty<byte>();
                 return;
             }
 

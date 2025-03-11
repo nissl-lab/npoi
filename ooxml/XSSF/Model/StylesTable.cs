@@ -40,24 +40,24 @@ namespace NPOI.XSSF.Model
      */
     public class StylesTable : POIXMLDocumentPart
     {
-        private SortedDictionary<short, String> numberFormats = new SortedDictionary<short, String>();
-        private List<XSSFFont> fonts = new List<XSSFFont>();
-        private List<XSSFCellFill> fills = new List<XSSFCellFill>();
-        private List<XSSFCellBorder> borders = new List<XSSFCellBorder>();
-        private List<CT_Xf> styleXfs = new List<CT_Xf>();
-        private List<CT_Xf> xfs = new List<CT_Xf>();
+        private readonly SortedDictionary<short, String> numberFormats = new SortedDictionary<short, String>();
+        private readonly List<XSSFFont> fonts = new List<XSSFFont>();
+        private readonly List<XSSFCellFill> fills = new List<XSSFCellFill>();
+        private readonly List<XSSFCellBorder> borders = new List<XSSFCellBorder>();
+        private readonly List<CT_Xf> styleXfs = new List<CT_Xf>();
+        private readonly List<CT_Xf> xfs = new List<CT_Xf>();
 
-        private List<CT_Dxf> dxfs = new List<CT_Dxf>();
-        private Dictionary<string, ITableStyle> tableStyles = new Dictionary<string, ITableStyle>();
-        private IIndexedColorMap indexedColors = new DefaultIndexedColorMap();
+        private readonly List<CT_Dxf> dxfs = new List<CT_Dxf>();
+        private readonly Dictionary<string, ITableStyle> tableStyles = new Dictionary<string, ITableStyle>();
+        private readonly IIndexedColorMap indexedColors = new DefaultIndexedColorMap();
         /**
          * The first style id available for use as a custom style
          */
         public static int FIRST_CUSTOM_STYLE_ID = BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX + 1;
         // Is this right? Number formats (XSSFDataFormat) and cell styles (XSSFCellStyle) are different. What's up with the plus 1?
-        private static int MAXIMUM_STYLE_ID = SpreadsheetVersion.EXCEL2007.MaxCellStyles;
+        private static readonly int MAXIMUM_STYLE_ID = SpreadsheetVersion.EXCEL2007.MaxCellStyles;
 
-        private static short FIRST_USER_DEFINED_NUMBER_FORMAT_ID = BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX;
+        private static readonly short FIRST_USER_DEFINED_NUMBER_FORMAT_ID = BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX;
         /**
          * Depending on the version of Excel, the maximum number of number formats in a workbook is between 200 and 250
          * See https://support.office.com/en-us/article/excel-specifications-and-limits-1672b34d-7043-467e-8e27-269d656771c3
@@ -283,8 +283,8 @@ namespace NPOI.XSSF.Model
          */
         public String GetNumberFormatAt(short fmtId)
         {
-            if (numberFormats.ContainsKey(fmtId))
-                return numberFormats[fmtId];
+            if (numberFormats.TryGetValue(fmtId, out string at))
+                return at;
             else
                 return null;
         }

@@ -33,8 +33,8 @@ namespace NPOI.HSSF.UserModel
     {
 
         //private HSSFWorkbook _workbook;
-        private HSSFSheet _sheet;
-        private ConditionalFormattingTable _conditionalFormattingTable;
+        private readonly HSSFSheet _sheet;
+        private readonly ConditionalFormattingTable _conditionalFormattingTable;
 
         /* package */
         //public HSSFSheetConditionalFormatting(HSSFWorkbook workbook, InternalSheet sheet)

@@ -46,9 +46,9 @@ namespace NPOI.HSSF.Record
         private class StreamEncryptionInfo
         {
             private int _InitialRecordsSize;
-            private FilePassRecord _filePassRec;
-            private Record _lastRecord;
-            private bool _hasBOFRecord;
+            private readonly FilePassRecord _filePassRec;
+            private readonly Record _lastRecord;
+            private readonly bool _hasBOFRecord;
 
             public StreamEncryptionInfo(RecordInputStream rs, List<Record> outputRecs)
             {
@@ -158,8 +158,8 @@ namespace NPOI.HSSF.Record
         }
 
 
-        private RecordInputStream _recStream;
-        private bool _shouldIncludeContinueRecords;
+        private readonly RecordInputStream _recStream;
+        private readonly bool _shouldIncludeContinueRecords;
 
         /**
          * Temporarily stores a group of {@link Record}s, for future return by {@link #nextRecord()}.

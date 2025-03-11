@@ -2,7 +2,7 @@
 {
     public class IndirectPropertyName
     {
-        private CodePageString _value;
+        private readonly CodePageString _value;
 
         public IndirectPropertyName(byte[] data, int offset)
         {

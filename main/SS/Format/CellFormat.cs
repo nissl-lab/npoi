@@ -72,12 +72,12 @@ namespace NPOI.SS.Format
      */
     public class CellFormat
     {
-        private String format;
-        private CellFormatPart posNumFmt;
-        private CellFormatPart zeroNumFmt;
-        private CellFormatPart negNumFmt;
-        private CellFormatPart textFmt;
-        private int formatPartCount;
+        private readonly String format;
+        private readonly CellFormatPart posNumFmt;
+        private readonly CellFormatPart zeroNumFmt;
+        private readonly CellFormatPart negNumFmt;
+        private readonly CellFormatPart textFmt;
+        private readonly int formatPartCount;
 
         private static readonly Regex ONE_PART = new Regex(CellFormatPart.FORMAT_PAT.ToString() + "(;|$)", RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
@@ -117,7 +117,7 @@ namespace NPOI.SS.Format
         }
 
         /** Maps a format string to its Parsed version for efficiencies sake. */
-        private static Dictionary<String, CellFormat> formatCache =
+        private static readonly Dictionary<String, CellFormat> formatCache =
                 new Dictionary<String, CellFormat>();
 
         /**
@@ -131,8 +131,8 @@ namespace NPOI.SS.Format
         public static CellFormat GetInstance(String format)
         {
             CellFormat fmt = null;
-            if (formatCache.ContainsKey(format))
-                fmt = formatCache[format];
+            if (formatCache.TryGetValue(format, out CellFormat value))
+                fmt = value;
             if (fmt == null)
             {
                 if (format.Equals("General") || format.Equals("@"))
