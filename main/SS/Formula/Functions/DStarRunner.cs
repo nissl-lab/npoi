@@ -18,7 +18,7 @@
 namespace NPOI.SS.Formula.Functions
 {
     using System;
-
+    using System.Text.RegularExpressions;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Util;
@@ -36,7 +36,16 @@ namespace NPOI.SS.Formula.Functions
         {
             DGET,
             DMIN,
-            // DMAX, // DMAX is not yet implemented
+            DMAX,
+            DSUM,
+            DCOUNT,
+            DCOUNTA,
+            DAVERAGE,
+            DSTDEV,
+            DSTDEVP,
+            DVAR,
+            DVARP,
+            DPRODUCT,
         }
 
         private DStarAlgorithmEnum algoType;
@@ -69,6 +78,50 @@ namespace NPOI.SS.Formula.Functions
             AreaEval db = (AreaEval)database;
             AreaEval cdb = (AreaEval)conditionDatabase;
 
+            // Create an algorithm runner.
+            IDStarAlgorithm algorithm = null;
+            switch(algoType)
+            {
+                case DStarAlgorithmEnum.DGET:
+                    algorithm = new DGet();
+                    break;
+                case DStarAlgorithmEnum.DMIN:
+                    algorithm = new DMin();
+                    break;
+                case DStarAlgorithmEnum.DMAX:
+                    algorithm = new DMax();
+                    break;
+                case DStarAlgorithmEnum.DSUM:
+                    algorithm = new DSum();
+                    break;
+                case DStarAlgorithmEnum.DCOUNT:
+                    algorithm = new DCount();
+                    break;
+                case DStarAlgorithmEnum.DCOUNTA:
+                    algorithm = new DCountA();
+                    break;
+                case DStarAlgorithmEnum.DAVERAGE:
+                    algorithm = new DAverage();
+                    break;
+                case DStarAlgorithmEnum.DSTDEV:
+                    algorithm = new DStdev();
+                    break;
+                case DStarAlgorithmEnum.DSTDEVP:
+                    algorithm = new DStdevp();
+                    break;
+                case DStarAlgorithmEnum.DVAR:
+                    algorithm = new DVar();
+                    break;
+                case DStarAlgorithmEnum.DVARP:
+                    algorithm = new DVarp();
+                    break;
+                case DStarAlgorithmEnum.DPRODUCT:
+                    algorithm = new DProduct();
+                    break;
+                default:
+                    throw new InvalidOperationException("Unexpected algorithm type " + algoType + " encountered.");
+            }
+
             try
             {
                 filterColumn = OperandResolver.GetSingleValue(filterColumn, srcRowIndex, srcColumnIndex);
@@ -81,26 +134,24 @@ namespace NPOI.SS.Formula.Functions
             int fc;
             try
             {
-                fc = GetColumnForName(filterColumn, db);
+                if(filterColumn is NumericValueEval)
+                {
+                    //fc is zero based while Excel uses 1 based column numbering
+                    fc = (int) Math.Round(((NumericValueEval) filterColumn).NumberValue) - 1;
+                }
+                else
+                    fc = GetColumnForName(filterColumn, db);
             }
             catch (EvaluationException)
             {
                 return ErrorEval.VALUE_INVALID;
             }
-            if (fc == -1)
+            if (fc == -1 && !algorithm.AllowEmptyMatchField)
             { // column not found
                 return ErrorEval.VALUE_INVALID;
             }
 
-            // Create an algorithm runner.
-            IDStarAlgorithm algorithm = null;
-            switch (algoType)
-            {
-                case DStarAlgorithmEnum.DGET: algorithm = new DGet(); break;
-                case DStarAlgorithmEnum.DMIN: algorithm = new DMin(); break;
-                default:
-                    throw new InvalidOperationException("Unexpected algorithm type " + algoType + " encountered.");
-            }
+            
 
             // Iterate over all db entries.
             int height = db.Height;
@@ -119,6 +170,10 @@ namespace NPOI.SS.Formula.Functions
                 if (matches)
                 {
                     ValueEval currentValueEval = ResolveReference(db, row, fc);
+                    if(fc < 0 && algorithm.AllowEmptyMatchField && !(currentValueEval is NumericValueEval)) 
+                    {
+                        currentValueEval = NumberEval.ZERO;
+                    }
                     // Pass the match to the algorithm and conditionally abort the search.
                     bool shouldContinue = algorithm.ProcessMatch(currentValueEval);
                     if (!shouldContinue)
@@ -138,7 +193,8 @@ namespace NPOI.SS.Formula.Functions
             largerEqualThan,
             smallerThan,
             smallerEqualThan,
-            equal
+            equal,
+            notEqual,
         }
 
         /**
@@ -179,7 +235,7 @@ namespace NPOI.SS.Formula.Functions
                     continue;
                 }
                 String columnName = OperandResolver.CoerceValueToString(columnNameValueEval);
-                if (name.Equals(columnName))
+                if (name.Equals(columnName, StringComparison.OrdinalIgnoreCase))
                 {
                     resultColumn = column;
                     break;
@@ -278,10 +334,23 @@ namespace NPOI.SS.Formula.Functions
                 if (conditionString.StartsWith("<"))
                 { // It's a </<= condition.
                     String number = conditionString.Substring(1);
-                    if (number.StartsWith("="))
+                    if(number.StartsWith("="))
                     {
                         number = number.Substring(1);
                         return testNumericCondition(value, Operator.smallerEqualThan, number);
+                    }
+                    else if(number.StartsWith(">"))
+                    {
+                        number = number.Substring(1);
+                        bool itsANumber = IsNumber(number);
+                        if(itsANumber)
+                        {
+                            return testNumericCondition(value, Operator.notEqual, number);
+                        }
+                        else
+                        {
+                            return testStringCondition(value, Operator.notEqual, number);
+                        }
                     }
                     else
                     {
@@ -310,32 +379,14 @@ namespace NPOI.SS.Formula.Functions
                         return value is BlankEval;
                     }
                     // Distinguish between string and number.
-                    bool itsANumber = false;
-                    try
-                    {
-                        int.Parse(stringOrNumber);
-                        itsANumber = true;
-                    }
-                    catch (FormatException)
-                    { // It's not an int.
-                        try
-                        {
-                            Double.Parse(stringOrNumber);
-                            itsANumber = true;
-                        }
-                        catch (FormatException)
-                        { // It's a string.
-                            itsANumber = false;
-                        }
-                    }
+                    bool itsANumber = IsNumber(stringOrNumber);
                     if (itsANumber)
                     {
                         return testNumericCondition(value, Operator.equal, stringOrNumber);
                     }
                     else
                     { // It's a string.
-                        String valueString = value is BlankEval ? "" : OperandResolver.CoerceValueToString(value);
-                        return stringOrNumber.Equals(valueString);
+                        return testStringCondition(value, Operator.equal, stringOrNumber);
                     }
                 }
                 else
@@ -347,7 +398,17 @@ namespace NPOI.SS.Formula.Functions
                     else
                     {
                         String valueString = value is BlankEval ? "" : OperandResolver.CoerceValueToString(value);
-                        return valueString.StartsWith(conditionString);
+                        String lowerValue = valueString.ToLower(LocaleUtil.GetUserLocale());
+                        String lowerCondition = conditionString.ToLower(LocaleUtil.GetUserLocale());
+                        Regex pattern = Countif.StringMatcher.GetWildCardPattern(lowerCondition);
+                        if(pattern == null)
+                        {
+                            return lowerValue.StartsWith(lowerCondition);
+                        }
+                        else
+                        {
+                            return pattern.IsMatch(lowerValue);
+                        }
                     }
                 }
             }
@@ -423,6 +484,30 @@ namespace NPOI.SS.Formula.Functions
                     return result <= 0;
                 case Operator.equal:
                     return result == 0;
+                case Operator.notEqual:
+                    return result != 0;
+            }
+            return false; // Can not be reached.
+        }
+
+        /**
+         * Test whether a value matches a text condition.
+         * @param valueEval Value to check.
+         * @param op Comparator to use.
+         * @param condition Value to check against.
+         * @return whether the condition holds.
+         */
+        private static bool testStringCondition(
+            ValueEval valueEval, Operator op, String condition)
+        {
+
+            String valueString = valueEval is BlankEval ? "" : OperandResolver.CoerceValueToString(valueEval);
+            switch(op)
+            {
+                case Operator.equal:
+                    return valueString.Equals(condition, StringComparison.OrdinalIgnoreCase);
+                case Operator.notEqual:
+                    return !valueString.Equals(condition, StringComparison.OrdinalIgnoreCase);
             }
             return false; // Can not be reached.
         }
@@ -468,6 +553,36 @@ namespace NPOI.SS.Formula.Functions
             {
                 return e.GetErrorEval();
             }
+        }
+
+        /**
+         * Determines whether a given string represents a valid number.
+         *
+         * @param value The string to be checked if it represents a number.
+         * @return {@code true} if the string can be parsed as either an integer or
+         *         a double; {@code false} otherwise.
+         */
+        private static bool IsNumber(String value)
+        {
+            bool itsANumber;
+            try
+            {
+                int.Parse(value);
+                itsANumber = true;
+            }
+            catch(FormatException)
+            { // It's not an int.
+                try
+                {
+                    double.Parse(value);
+                    itsANumber = true;
+                }
+                catch(FormatException)
+                { // It's a string.
+                    itsANumber = false;
+                }
+            }
+            return itsANumber;
         }
     }
 

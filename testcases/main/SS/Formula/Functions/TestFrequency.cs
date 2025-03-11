@@ -21,13 +21,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace NPOI.SS.Formula.Functions
+namespace TestCases.SS.Formula.Functions
 {
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.Util;
-    using NPOI.Util.ArrayExtensions;
     using NUnit.Framework;
     using static NPOI.SS.Formula.Functions.Frequency;
 
