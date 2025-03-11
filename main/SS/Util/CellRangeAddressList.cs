@@ -1,5 +1,8 @@
-﻿using System;
+﻿using NPOI.SS.UserModel;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NPOI.SS.Util
 {
@@ -12,11 +15,11 @@ namespace NPOI.SS.Util
         /**
  * List of <c>CellRangeAddress</c>es. Each structure represents a cell range
  */
-        private readonly ArrayList _list;
+        private readonly List<CellRangeAddress> _list;
 
         public CellRangeAddressList()
         {
-            _list = new ArrayList();
+            _list = new List<CellRangeAddress>();
         }
         /**
          * Convenience constructor for creating a <c>CellRangeAddressList</c> with a single 
@@ -30,12 +33,12 @@ namespace NPOI.SS.Util
         }
 
         /**
-         * @param in the RecordInputstream to read the record from
+         * @param in the RecordInputStream to read the record from
          */
-        public CellRangeAddressList(RecordInputStream in1)
+        internal CellRangeAddressList(RecordInputStream in1)
         {
             int nItems = in1.ReadUShort();
-            _list = new ArrayList(nItems);
+            _list = new List<CellRangeAddress>(nItems);
 
             for (int k = 0; k < nItems; k++)
             {
@@ -43,12 +46,28 @@ namespace NPOI.SS.Util
             }
         }
 
+        public static CellRangeAddressList Parse(string cellRanges)
+        {
+            if(string.IsNullOrWhiteSpace(cellRanges))
+            {
+                throw new ArgumentException("cell range cannot be null or empty");
+            }
+            var ranges = cellRanges.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var list = new CellRangeAddressList();
+            foreach(var range in ranges)
+            {
+                var ca = CellRangeAddress.ValueOf(range.Trim());
+                list.AddCellRangeAddress(ca);
+            }
+            return list;
+        }
+
         /**
-         * Get the number of following ADDR structures. The number of this
+         * Get the number of following ADDR structures. The number of these
          * structures is automatically set when reading an Excel file and/or
          * increased when you manually Add a new ADDR structure . This is the reason
          * there isn't a set method for this field .
-         * 
+         *
          * @return number of ADDR structures
          */
         public int CountRanges()
@@ -56,9 +75,14 @@ namespace NPOI.SS.Util
             return _list.Count;
         }
 
+        public int NumberOfCells()
+        {
+            return _list.Sum(cr => cr.NumberOfCells);
+        }
+
         /**
          * Add a cell range structure.
-         * 
+         *
          * @param firstRow - the upper left hand corner's row
          * @param firstCol - the upper left hand corner's col
          * @param lastRow - the lower right hand corner's row
@@ -86,7 +110,7 @@ namespace NPOI.SS.Util
                         + ") is outside allowable range (0.." + (_list.Count - 1) + ")");
             }
             CellRangeAddress cra = (CellRangeAddress)_list[rangeIndex];
-            _list.Remove(rangeIndex);
+            _list.Remove(_list[rangeIndex]);
             return cra;
         }
 
@@ -97,24 +121,24 @@ namespace NPOI.SS.Util
         {
             return (CellRangeAddress)_list[index];
         }
-        public int Serialize(int offset, byte[] data)
+        internal int Serialize(int offset, byte[] data)
         {
             int totalSize = this.Size;
             Serialize(new LittleEndianByteArrayOutputStream(data, offset, totalSize));
             return totalSize;
         }
-        public void Serialize(ILittleEndianOutput out1)
+        internal void Serialize(ILittleEndianOutput out1)
         {
             int nItems = _list.Count;
             out1.WriteShort(nItems);
             for (int k = 0; k < nItems; k++)
             {
                 CellRangeAddress region = (CellRangeAddress)_list[k];
-                region.Serialize(out1);
+                region?.Serialize(out1);
             }
         }
 
-        public int Size
+        internal int Size
         {
             get
             {
@@ -125,7 +149,7 @@ namespace NPOI.SS.Util
          * @return the total size of for the specified number of ranges,
          *  including the initial 2 byte range count
          */
-        public static int GetEncodedSize(int numberOfRanges)
+        internal static int GetEncodedSize(int numberOfRanges)
         {
             return 2 + CellRangeAddress.GetEncodedSize(numberOfRanges);
         }
@@ -137,18 +161,11 @@ namespace NPOI.SS.Util
             for (int k = 0; k < nItems; k++)
             {
                 CellRangeAddress region = (CellRangeAddress)_list[k];
-                result.AddCellRangeAddress(region.Copy());
+                if (region != null)
+                    result.AddCellRangeAddress(region.Copy());
             }
             return result;
         }
-        public CellRangeAddress[] CellRangeAddresses
-        {
-            get
-            {
-                CellRangeAddress[] result =
-                    (CellRangeAddress[])_list.ToArray(typeof(CellRangeAddress));
-                return result;
-            }
-        }
+        public CellRangeAddress[] CellRangeAddresses => _list.ToArray();
     }
 }

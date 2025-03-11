@@ -15,6 +15,8 @@
    limitations Under the License.
 ==================================================================== */
 
+using System.Collections.ObjectModel;
+
 namespace NPOI.HSSF.UserModel
 {
     using System;
@@ -3393,6 +3395,10 @@ namespace NPOI.HSSF.UserModel
         IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
         {
             return rows.Values.GetEnumerator();
+        }
+        public CellRangeAddressList GetCells(string cellranges)
+        {
+            return CellRangeAddressList.Parse(cellranges);
         }
     }
 }
