@@ -24,8 +24,8 @@ namespace NPOI.XSSF.Streaming
 {
     public class AutoSizeColumnTracker
     {
-        private int defaultCharWidth;
-        private DataFormatter dataFormatter = new DataFormatter();
+        private readonly int defaultCharWidth;
+        private readonly DataFormatter dataFormatter = new DataFormatter();
 
 
         /// <summary>
@@ -35,12 +35,12 @@ namespace NPOI.XSSF.Streaming
         /// outweigh the infrequent O(n*log n) cost of sorting getTrackedColumns().
         /// Memory consumption for a HashMap and TreeMap is about the same
         /// </summary>
-        private Dictionary<int, ColumnWidthPair> maxColumnWidths = new Dictionary<int, ColumnWidthPair>();
+        private readonly Dictionary<int, ColumnWidthPair> maxColumnWidths = new Dictionary<int, ColumnWidthPair>();
 
 
         // untrackedColumns stores columns have been explicitly untracked so they aren't implicitly re-tracked by trackAllColumns
         // Using a HashSet instead of a TreeSet because we don't care about order.
-        private HashSet<int> untrackedColumns = new HashSet<int>();
+        private readonly HashSet<int> untrackedColumns = new HashSet<int>();
         private bool trackAllColumns = false;
 
         private class ColumnWidthPair
@@ -349,9 +349,8 @@ namespace NPOI.XSSF.Streaming
                     // FIXME: Most cells are not merged, so calling getCellWidth twice re-computes the same value twice.
                     // Need to rewrite this to avoid unnecessary computation if this proves to be a performance bottleneck.
 
-                    if (maxColumnWidths.ContainsKey(column))
+                    if (maxColumnWidths.TryGetValue(column, out ColumnWidthPair pair))
                     {
-                        ColumnWidthPair pair = maxColumnWidths[column];
                         UpdateColumnWidth(cell, pair);
                     }
                 }

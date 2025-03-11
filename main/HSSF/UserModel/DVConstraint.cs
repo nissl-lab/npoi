@@ -37,8 +37,8 @@ using NPOI.HSSF.Record;
         public class FormulaPair
         {
 
-            private Ptg[] _formula1;
-            private Ptg[] _formula2;
+            private readonly Ptg[] _formula1;
+            private readonly Ptg[] _formula2;
 
             public FormulaPair(Ptg[] formula1, Ptg[] formula2)
             {
@@ -66,7 +66,7 @@ using NPOI.HSSF.Record;
         //private static ValidationType VT = null;
 
 
-        private int _validationType;
+        private readonly int _validationType;
         private int _operator;
         private String[] _explicitListValues;
 

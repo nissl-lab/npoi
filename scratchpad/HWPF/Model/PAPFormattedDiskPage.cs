@@ -162,7 +162,7 @@ namespace NPOI.HWPF.Model
             int grpprlOffset = 0;
             int bxOffset = 0;
             int fcOffset = 0;
-            byte[] lastGrpprl = new byte[0];
+            byte[] lastGrpprl = Array.Empty<byte>();
 
             // total size is currently the size of one FC
             int totalSize = FC_SIZE;
@@ -227,7 +227,7 @@ namespace NPOI.HWPF.Model
             grpprlOffset = 511;
 
             PAPX papx = null;
-            lastGrpprl = new byte[0];
+            lastGrpprl = Array.Empty<byte>();
             for (int x = 0; x < index; x++)
             {
                 papx = _papxList[x];

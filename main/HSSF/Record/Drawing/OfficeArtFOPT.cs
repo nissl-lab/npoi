@@ -7,10 +7,10 @@ namespace NPOI.HSSF.Record.Drawing
 {
     public class OfficeArtFOPT
     {
-        private OfficeArtRecordHeader _rh;
-        private List<OfficeArtFOPTE> _fopt;
-        private Dictionary<int, OfficeArtFOPTE> dictOptions = new Dictionary<int, OfficeArtFOPTE>();
-        //private byte[] complexData = new byte[0];
+        private readonly OfficeArtRecordHeader _rh;
+        private readonly List<OfficeArtFOPTE> _fopt;
+        private readonly Dictionary<int, OfficeArtFOPTE> dictOptions = new Dictionary<int, OfficeArtFOPTE>();
+        //private byte[] complexData = Array.Empty<byte>();
 
         public OfficeArtFOPT(RecordInputStream ris)
         {
@@ -28,8 +28,8 @@ namespace NPOI.HSSF.Record.Drawing
         }
         public OfficeArtFOPTE GetFillOptionElement(int opid)
         {
-            if (dictOptions.ContainsKey(opid))
-                return dictOptions[opid];
+            if (dictOptions.TryGetValue(opid, out OfficeArtFOPTE element))
+                return element;
             return null;
         }
         public int DataSize

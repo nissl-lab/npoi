@@ -33,8 +33,8 @@ namespace NPOI.SS.Formula.Functions
      */
     internal class LookupUtils
     {
-        private static Dictionary<int, MatchMode> matchModeMap = new Dictionary<int, MatchMode>();
-        private static Dictionary<int, SearchMode> searchModeMap = new Dictionary<int, SearchMode>();
+        private static readonly Dictionary<int, MatchMode> matchModeMap = new Dictionary<int, MatchMode>();
+        private static readonly Dictionary<int, SearchMode> searchModeMap = new Dictionary<int, SearchMode>();
 
         static LookupUtils()
         {
@@ -49,19 +49,19 @@ namespace NPOI.SS.Formula.Functions
         }
         public static MatchMode GetMatchMode(int m)
         {
-            if (!matchModeMap.ContainsKey(m))
+            if (!matchModeMap.TryGetValue(m, out MatchMode mode))
             {
                 throw new ArgumentException("unknown match mode " + m);
             }
-            return matchModeMap[m];
+            return mode;
         }
         public static SearchMode GetSearchMode(int s)
         {
-            if (!searchModeMap.ContainsKey(s))
+            if (!searchModeMap.TryGetValue(s, out SearchMode mode))
             {
                 throw new ArgumentException("unknown search mode " + s);
             }
-            return searchModeMap[s];
+            return mode;
         }
         public enum MatchMode : int
         {
@@ -80,9 +80,9 @@ namespace NPOI.SS.Formula.Functions
         internal class RowVector : ValueVector
         {
 
-            private AreaEval _tableArray;
-            private int _size;
-            private int _rowIndex;
+            private readonly AreaEval _tableArray;
+            private readonly int _size;
+            private readonly int _rowIndex;
 
             public RowVector(AreaEval tableArray, int rowIndex)
             {
@@ -118,9 +118,9 @@ namespace NPOI.SS.Formula.Functions
         internal class ColumnVector : ValueVector
         {
 
-            private AreaEval _tableArray;
-            private int _size;
-            private int _columnIndex;
+            private readonly AreaEval _tableArray;
+            private readonly int _size;
+            private readonly int _columnIndex;
 
             public ColumnVector(AreaEval tableArray, int columnIndex)
             {
@@ -156,8 +156,8 @@ namespace NPOI.SS.Formula.Functions
 
         private class SheetVector : ValueVector
         {
-            private RefEval _re;
-            private int _size;
+            private readonly RefEval _re;
+            private readonly int _size;
 
             public SheetVector(RefEval re)
             {
@@ -216,10 +216,10 @@ namespace NPOI.SS.Formula.Functions
         private class StringLookupComparer : LookupValueComparerBase
         {
 
-            protected String _value;
-            protected Regex _wildCardPattern;
-            protected bool _matchExact;
-            protected bool _isMatchFunction;
+            protected readonly String _value;
+            protected readonly Regex _wildCardPattern;
+            protected readonly bool _matchExact;
+            protected readonly bool _isMatchFunction;
 
             public StringLookupComparer(StringEval se, bool matchExact, bool isMatchFunction)
                 : base(se)
@@ -278,7 +278,7 @@ namespace NPOI.SS.Formula.Functions
 
         private class NumberLookupComparer : LookupValueComparerBase
         {
-            private double _value;
+            private readonly double _value;
 
             public NumberLookupComparer(NumberEval ne)
                 : base(ne)
@@ -766,10 +766,10 @@ namespace NPOI.SS.Formula.Functions
     */
     public class CompareResult
     {
-        private bool _isTypeMismatch;
-        private bool _isLessThan;
-        private bool _isEqual;
-        private bool _isGreaterThan;
+        private readonly bool _isTypeMismatch;
+        private readonly bool _isLessThan;
+        private readonly bool _isEqual;
+        private readonly bool _isGreaterThan;
 
         private CompareResult(bool IsTypeMismatch, int simpleCompareResult)
         {
@@ -915,7 +915,7 @@ namespace NPOI.SS.Formula.Functions
     }
     internal class BooleanLookupComparer : LookupValueComparerBase
     {
-        private bool _value;
+        private readonly bool _value;
 
         public BooleanLookupComparer(BoolEval be)
             : base(be)
@@ -967,7 +967,7 @@ namespace NPOI.SS.Formula.Functions
     internal abstract class LookupValueComparerBase : LookupValueComparer
     {
 
-        private Type _targetType;
+        private readonly Type _targetType;
         protected LookupValueComparerBase(ValueEval targetValue)
         {
             if (targetValue == null)

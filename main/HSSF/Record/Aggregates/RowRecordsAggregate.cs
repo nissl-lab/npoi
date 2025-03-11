@@ -38,12 +38,12 @@ namespace NPOI.HSSF.Record.Aggregates
     {
         private int firstrow = -1;
         private int lastrow = -1;
-        private SortedList _rowRecords;
+        private readonly SortedList _rowRecords;
         //private int size = 0;
-        private ValueRecordsAggregate _valuesAgg;
-        private List<HyperlinkRecord> _hyperlinkRecordRecords;
-        private List<Record> _unknownRecords;
-        private SharedValueManager _sharedValueManager;
+        private readonly ValueRecordsAggregate _valuesAgg;
+        private readonly List<HyperlinkRecord> _hyperlinkRecordRecords;
+        private readonly List<Record> _unknownRecords;
+        private readonly SharedValueManager _sharedValueManager;
 
         // Cache values to speed up performance of
         // getStartRowNumberForBlock / getEndRowNumberForBlock, see Bugzilla 47405

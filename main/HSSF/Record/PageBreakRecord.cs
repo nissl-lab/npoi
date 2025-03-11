@@ -43,8 +43,8 @@ namespace NPOI.HSSF.Record
 
         public short sid;
         // fix warning CS0169 "never used": private short numBreaks;
-        private IList<Break> _breaks;
-        private Hashtable _breakMap;
+        private readonly IList<Break> _breaks;
+        private readonly Hashtable _breakMap;
 
         /**
          * Since both records store 2byte integers (short), no point in 

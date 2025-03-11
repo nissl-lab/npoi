@@ -46,7 +46,7 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFWorkbook : POIXMLDocument, IWorkbook
     {
-        private static Regex COMMA_PATTERN = new Regex(",", RegexOptions.Compiled);
+        private static readonly Regex COMMA_PATTERN = new Regex(",", RegexOptions.Compiled);
 
         /**
          * Width of one character of the default font in pixels. Same for Calibry and Arial.
@@ -57,7 +57,7 @@ namespace NPOI.XSSF.UserModel
          * Excel silently tRuncates long sheet names to 31 chars.
          * This constant is used to ensure uniqueness in the first 31 chars
          */
-        private static int Max_SENSITIVE_SHEET_NAME_LEN = 31;
+        private static readonly int Max_SENSITIVE_SHEET_NAME_LEN = 31;
         /** Extended windows meta file */
         public static int PICTURE_TYPE_EMF = 2;
 
@@ -118,7 +118,7 @@ namespace NPOI.XSSF.UserModel
          * The locator of user-defined functions.
          * By default includes functions from the Excel Analysis Toolpack
          */
-        private IndexedUDFFinder _udfFinder = new IndexedUDFFinder(UDFFinder.GetDefault());
+        private readonly IndexedUDFFinder _udfFinder = new IndexedUDFFinder(UDFFinder.GetDefault());
 
         /**
          * TODO
@@ -155,7 +155,7 @@ namespace NPOI.XSSF.UserModel
          */
         private List<XSSFPictureData> pictures;
 
-        private static POILogger logger = POILogFactory.GetLogger(typeof(XSSFWorkbook));
+        private static readonly POILogger logger = POILogFactory.GetLogger(typeof(XSSFWorkbook));
 
         /**
          * cached instance of XSSFCreationHelper for this workbook
@@ -396,8 +396,8 @@ namespace NPOI.XSSF.UserModel
                     foreach (CT_ExternalReference er in this.workbook.externalReferences.externalReference)
                     {
                         ExternalLinksTable el = null;
-                        if (elIdMap.ContainsKey(er.id))
-                            el = elIdMap[(er.id)];
+                        if (elIdMap.TryGetValue(er.id, out ExternalLinksTable value))
+                            el = value;
                         if (el == null)
                         {
                             logger.Log(POILogger.WARN, "ExternalLinksTable with r:id " + er.id + " was defined, but didn't exist in package, skipping");
@@ -422,8 +422,8 @@ namespace NPOI.XSSF.UserModel
         private void ParseSheet(Dictionary<String, XSSFSheet> shIdMap, CT_Sheet ctSheet)
         {
             XSSFSheet sh = null;
-            if (shIdMap.ContainsKey(ctSheet.id))
-                sh = shIdMap[ctSheet.id];
+            if (shIdMap.TryGetValue(ctSheet.id, out XSSFSheet value))
+                sh = value;
             if (sh == null)
             {
                 logger.Log(POILogger.WARN, "Sheet with name " + ctSheet.name + " and r:id " + ctSheet.id + " was defined, but didn't exist in package, skipping");
@@ -1287,9 +1287,8 @@ namespace NPOI.XSSF.UserModel
 
         private bool RemoveMapping(string key, XSSFName item)
         {
-            if (namedRangesByName.ContainsKey(key))
+            if (namedRangesByName.TryGetValue(key, out List<XSSFName> values))
             {
-                var values = namedRangesByName[key];
                 return values.Remove(item);
             }
             return false;

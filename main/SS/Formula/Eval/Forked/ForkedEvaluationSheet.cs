@@ -35,11 +35,11 @@ namespace NPOI.SS.Formula.Eval.Forked
     class ForkedEvaluationSheet : IEvaluationSheet
     {
 
-        private IEvaluationSheet _masterSheet;
+        private readonly IEvaluationSheet _masterSheet;
         /**
          * Only cells which have been split are Put in this map.  (This has been done to conserve memory).
          */
-        private Dictionary<RowColKey, ForkedEvaluationCell> _sharedCellsByRowCol;
+        private readonly Dictionary<RowColKey, ForkedEvaluationCell> _sharedCellsByRowCol;
 
         public ForkedEvaluationSheet(IEvaluationSheet masterSheet)
         {
@@ -52,8 +52,8 @@ namespace NPOI.SS.Formula.Eval.Forked
             RowColKey key = new RowColKey(rowIndex, columnIndex);
 
             ForkedEvaluationCell result = null;
-            if (_sharedCellsByRowCol.ContainsKey(key))
-                result = _sharedCellsByRowCol[(key)];
+            if (_sharedCellsByRowCol.TryGetValue(key, out ForkedEvaluationCell value))
+                result = value;
 
             if (result == null)
             {
@@ -67,8 +67,8 @@ namespace NPOI.SS.Formula.Eval.Forked
             RowColKey key = new RowColKey(rowIndex, columnIndex);
 
             ForkedEvaluationCell result = null;
-            if (_sharedCellsByRowCol.ContainsKey(key))
-                result = _sharedCellsByRowCol[(key)];
+            if (_sharedCellsByRowCol.TryGetValue(key, out ForkedEvaluationCell value))
+                result = value;
             if (result == null)
             {
                 IEvaluationCell mcell = _masterSheet.GetCell(rowIndex, columnIndex);
@@ -127,8 +127,8 @@ namespace NPOI.SS.Formula.Eval.Forked
 
         private class RowColKey : IComparable<RowColKey>
         {
-            private int _rowIndex;
-            private int _columnIndex;
+            private readonly int _rowIndex;
+            private readonly int _columnIndex;
 
             public RowColKey(int rowIndex, int columnIndex)
             {

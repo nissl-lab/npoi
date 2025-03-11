@@ -33,7 +33,7 @@ namespace NPOI.HSSF.Record
     public class UncalcedRecord : StandardRecord
     {
         public const short sid = 0x5E;
-        private short _reserved;
+        private readonly short _reserved;
         /**
          * Default constructor
          */

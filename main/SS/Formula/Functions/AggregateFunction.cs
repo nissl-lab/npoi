@@ -120,6 +120,19 @@ namespace NPOI.SS.Formula.Functions
             return StatsLib.stdev(values);
         }
     }
+
+    public class STDEVP : AggregateFunction
+    {
+        protected internal override double Evaluate(double[] values)
+        {
+            if(values.Length < 1)
+            {
+                throw new EvaluationException(ErrorEval.DIV_ZERO);
+            }
+            return StatsLib.stdevp(values);
+        }
+    }
+
     public class SUMSQ : AggregateFunction
     {
         protected internal override double Evaluate(double[] values)
@@ -152,10 +165,12 @@ namespace NPOI.SS.Formula.Functions
 
     public class SubtotalInstance : AggregateFunction
     {
-        private AggregateFunction _func;
-        public SubtotalInstance(AggregateFunction func)
+        private readonly AggregateFunction _func;
+        private readonly bool _countHiddenRows;
+        public SubtotalInstance(AggregateFunction func, bool countHiddenRows)
         {
             _func = func;
+            _countHiddenRows = countHiddenRows;
         }
 
         protected internal override double Evaluate(double[] values)
@@ -172,12 +187,20 @@ namespace NPOI.SS.Formula.Functions
                 return false;
             }
         }
+        public bool IsHiddenRowCounted
+        {
+            get
+            {
+                return _countHiddenRows;
+            }
+            
+        }
     }
 
 
     public class LargeSmall : Fixed2ArgFunction
     {
-        private bool _isLarge;
+        private readonly bool _isLarge;
         protected LargeSmall(bool isLarge)
         {
             _isLarge = isLarge;
@@ -309,14 +332,14 @@ namespace NPOI.SS.Formula.Functions
      */
     public abstract class AggregateFunction : MultiOperandNumericFunction
     {
-        public static Function SubtotalInstance(Function func)
+        internal static Function SubtotalInstance(Function func, bool countHiddenRows)
         {
             AggregateFunction arg = (AggregateFunction)func;
-            return new SubtotalInstance(arg);
+            return new SubtotalInstance(arg, countHiddenRows);
         }
         internal class ValueCollector : MultiOperandNumericFunction
         {
-            private static ValueCollector instance = new ValueCollector();
+            private static readonly ValueCollector instance = new ValueCollector();
             public ValueCollector() :
                 base(false, false)
             {
@@ -346,6 +369,7 @@ namespace NPOI.SS.Formula.Functions
         public static readonly Function PRODUCT = new PRODUCT();
         public static readonly Function SMALL = new SMALL();
         public static readonly Function STDEV = new STDEV();
+        public static readonly Function STDEVP = new STDEVP();
         public static readonly Function SUM = new SUM();
         public static readonly Function SUMSQ = new SUMSQ();
         public static readonly Function VAR = new VAR();

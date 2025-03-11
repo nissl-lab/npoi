@@ -32,7 +32,7 @@ namespace NPOI.HSSF.Record.Aggregates
     {
         private const int MAX_MERGED_REGIONS = 1027; // enforced by the 8224 byte limit
 
-        private List<CellRangeAddress> _mergedRegions;
+        private readonly List<CellRangeAddress> _mergedRegions;
 
         /// <summary>
         /// Creates an empty aggregate

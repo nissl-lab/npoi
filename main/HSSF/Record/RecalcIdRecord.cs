@@ -48,7 +48,7 @@ namespace NPOI.HSSF.Record
         //public short[] field_1_recalcids;
 
         //private bool isNeeded = true;
-        private int _reserved0;
+        private readonly int _reserved0;
         //private bool isNeeded = true;
         /**
      * An unsigned integer that specifies the recalculation engine identifier

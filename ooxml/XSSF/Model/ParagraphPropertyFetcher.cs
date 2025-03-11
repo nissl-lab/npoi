@@ -33,7 +33,7 @@ namespace NPOI.XSSF.Model
     {
 
         private T _value;
-        private int _level;
+        private readonly int _level;
 
         public T GetValue()
         {

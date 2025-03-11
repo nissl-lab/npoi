@@ -327,8 +327,8 @@ namespace NPOI.HSSF.Model
      */
         public NameCommentRecord GetNameCommentRecord(NameRecord nameRecord)
         {
-            if (commentRecords.ContainsKey(nameRecord.NameText))
-                return commentRecords[nameRecord.NameText];
+            if (commentRecords.TryGetValue(nameRecord.NameText, out NameCommentRecord record))
+                return record;
             else
                 return null;
         }

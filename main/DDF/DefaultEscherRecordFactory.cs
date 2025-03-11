@@ -30,7 +30,7 @@ namespace NPOI.DDF
     /// </summary>
     public class DefaultEscherRecordFactory : IEscherRecordFactory
     {
-        private static Type[] escherRecordClasses = {
+        private static readonly Type[] escherRecordClasses = {
             
             typeof(EscherBSERecord), typeof(EscherOptRecord), typeof(EscherTertiaryOptRecord),
             typeof(EscherClientAnchorRecord), 
@@ -38,7 +38,7 @@ namespace NPOI.DDF
             typeof(EscherClientDataRecord), typeof(EscherDggRecord),
             typeof(EscherSplitMenuColorsRecord), typeof(EscherChildAnchorRecord), typeof(EscherTextboxRecord)
         };
-        private static Dictionary<short,ConstructorInfo> recordsMap = RecordsToMap(escherRecordClasses);
+        private static readonly Dictionary<short,ConstructorInfo> recordsMap = RecordsToMap(escherRecordClasses);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultEscherRecordFactory"/> class.
@@ -98,8 +98,8 @@ namespace NPOI.DDF
 
             //ConstructorInfo recordConstructor = (ConstructorInfo) recordsMap[header.RecordId];
             ConstructorInfo recordConstructor = null;
-            if (recordsMap.ContainsKey(recordId))
-                recordConstructor = recordsMap[recordId];
+            if (recordsMap.TryGetValue(recordId, out ConstructorInfo value))
+                recordConstructor = value;
 
             EscherRecord escherRecord = null;
             if (recordConstructor == null)
@@ -133,7 +133,7 @@ namespace NPOI.DDF
         {
             Dictionary<short, ConstructorInfo> result = new Dictionary<short, ConstructorInfo>();
             //ConstructorInfo constructor;
-            Type[] EMPTY_CLASS_ARRAY = new Type[0];
+            Type[] EMPTY_CLASS_ARRAY = Array.Empty<Type>();
             for (int i = 0; i < records.Length; i++)
             {
                 Type recordType = records[i];

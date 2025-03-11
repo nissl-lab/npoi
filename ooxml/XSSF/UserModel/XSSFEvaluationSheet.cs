@@ -31,7 +31,7 @@ namespace NPOI.XSSF.UserModel
     public class XSSFEvaluationSheet : IEvaluationSheet
     {
 
-        private XSSFSheet _xs;
+        private readonly XSSFSheet _xs;
         private Dictionary<CellKey, IEvaluationCell> _cellCache;
 
         public XSSFEvaluationSheet(ISheet sheet)
@@ -73,9 +73,9 @@ namespace NPOI.XSSF.UserModel
             CellKey key = new CellKey(rowIndex, columnIndex);
 
             IEvaluationCell evalcell = null;
-            if (_cellCache.ContainsKey(key))
+            if (_cellCache.TryGetValue(key, out IEvaluationCell value))
             {
-                evalcell = _cellCache[key];           
+                evalcell = value;           
             }           
 
             // If cache is stale, update cache with this one cell
@@ -104,8 +104,8 @@ namespace NPOI.XSSF.UserModel
 
         private class CellKey
         {
-            private int _row;
-            private int _col;
+            private readonly int _row;
+            private readonly int _col;
             private int _hash = -1; //lazily computed
 
             protected internal CellKey(int row, int col)

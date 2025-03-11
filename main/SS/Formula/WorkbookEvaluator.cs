@@ -48,16 +48,16 @@ namespace NPOI.SS.Formula
     public class WorkbookEvaluator
     {
 
-        private IEvaluationWorkbook _workbook;
+        private readonly IEvaluationWorkbook _workbook;
         private EvaluationCache _cache;
         private int _workbookIx;
 
-        private IEvaluationListener _evaluationListener;
-        private Dictionary<IEvaluationSheet, int> _sheetIndexesBySheet;
-        private Dictionary<String, int> _sheetIndexesByName;
+        private readonly IEvaluationListener _evaluationListener;
+        private readonly Dictionary<IEvaluationSheet, int> _sheetIndexesBySheet;
+        private readonly Dictionary<String, int> _sheetIndexesByName;
         private CollaboratingWorkbooksEnvironment _collaboratingWorkbookEnvironment;
-        private IStabilityClassifier _stabilityClassifier;
-        private UDFFinder _udfFinder;
+        private readonly IStabilityClassifier _stabilityClassifier;
+        private readonly UDFFinder _udfFinder;
 
         private bool _ignoreMissingWorkbooks = false;
 
@@ -210,8 +210,8 @@ namespace NPOI.SS.Formula
         public int GetSheetIndex(IEvaluationSheet sheet)
         {
             int result = int.MinValue;
-            if(_sheetIndexesBySheet.ContainsKey(sheet))
-                result = _sheetIndexesBySheet[sheet];
+            if(_sheetIndexesBySheet.TryGetValue(sheet, out int value))
+                result = value;
             if (result == int.MinValue)
             {
                 int sheetIndex = _workbook.GetSheetIndex(sheet);
@@ -237,9 +237,9 @@ namespace NPOI.SS.Formula
         public int GetSheetIndex(String sheetName)
         {
             int result;
-            if (_sheetIndexesByName.ContainsKey(sheetName))
+            if (_sheetIndexesByName.TryGetValue(sheetName, out int value))
             {
-                result = _sheetIndexesByName[sheetName];
+                result = value;
             }
             else
             {
@@ -520,7 +520,7 @@ namespace NPOI.SS.Formula
         private bool dbgEvaluationOutputForNextEval = false;
 
         // special logger for formula evaluation output (because of possibly very large output)
-        private POILogger EVAL_LOG = POILogFactory.GetLogger("POI.FormulaEval");
+        private readonly POILogger EVAL_LOG = POILogFactory.GetLogger("POI.FormulaEval");
         // current indent level for evalution; negative value for no output
         private int dbgEvaluationOutputIndent = -1;
 

@@ -53,7 +53,7 @@ namespace NPOI.XWPF.UserModel
         /**
          * Keeps track on all id-values used in this document and included parts, like headers, footers, etc.
          */
-        private IdentifierManager drawingIdManager = new IdentifierManager(0L, 4294967295L);
+        private readonly IdentifierManager drawingIdManager = new IdentifierManager(0L, 4294967295L);
         protected List<XWPFFooter> footers = new List<XWPFFooter>();
         protected List<XWPFHeader> headers = new List<XWPFHeader>();
         protected List<XWPFHyperlink> hyperlinks = new List<XWPFHyperlink>();
@@ -474,9 +474,9 @@ namespace NPOI.XWPF.UserModel
         }
         public XWPFFootnote GetEndnoteByID(int id)
         {
-            if (endnotes == null || !endnotes.ContainsKey(id)) 
+            if (endnotes == null || !endnotes.TryGetValue(id, out XWPFFootnote byId)) 
                 return null;
-            return endnotes[id];
+            return byId;
         }
 
         public List<XWPFFootnote> GetFootnotes()
@@ -1568,8 +1568,8 @@ namespace NPOI.XWPF.UserModel
         public void RegisterPackagePictureData(XWPFPictureData picData)
         {
             List<XWPFPictureData> list = null;
-            if(packagePictures.ContainsKey(picData.Checksum))
-              list = packagePictures[(picData.Checksum)];
+            if(packagePictures.TryGetValue(picData.Checksum, out List<XWPFPictureData> picture))
+              list = picture;
             if (list == null)
             {
                 list = new List<XWPFPictureData>(1);
@@ -1590,8 +1590,8 @@ namespace NPOI.XWPF.UserModel
              * exists.
              */
             List<XWPFPictureData> xwpfPicDataList = null;
-            if(packagePictures.ContainsKey(Checksum))
-               xwpfPicDataList = packagePictures[(Checksum)];
+            if(packagePictures.TryGetValue(Checksum, out List<XWPFPictureData> picture))
+               xwpfPicDataList = picture;
             if (xwpfPicDataList != null)
             {
                 IEnumerator<XWPFPictureData> iter = xwpfPicDataList.GetEnumerator();

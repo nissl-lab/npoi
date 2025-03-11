@@ -41,10 +41,10 @@ namespace NPOI
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(POIXMLDocumentPart));
 
-        private String coreDocumentRel = PackageRelationshipTypes.CORE_DOCUMENT;
+        private readonly String coreDocumentRel = PackageRelationshipTypes.CORE_DOCUMENT;
         private PackagePart packagePart;
         private POIXMLDocumentPart parent;
-        private Dictionary<String, RelationPart> relations = new Dictionary<String, RelationPart>();
+        private readonly Dictionary<String, RelationPart> relations = new Dictionary<String, RelationPart>();
 
         /**
          * The RelationPart is a cached relationship between the document, which contains the RelationPart,
@@ -55,8 +55,8 @@ namespace NPOI
 
         public class RelationPart
         {
-            private PackageRelationship relationship;
-            private POIXMLDocumentPart documentPart;
+            private readonly PackageRelationship relationship;
+            private readonly POIXMLDocumentPart documentPart;
 
             internal RelationPart(PackageRelationship relationship, POIXMLDocumentPart documentPart)
             {
@@ -376,10 +376,9 @@ namespace NPOI
 
         public POIXMLDocumentPart GetRelationById(String id)
         {
-            if (string.IsNullOrEmpty(id) || !relations.ContainsKey(id))
+            if (string.IsNullOrEmpty(id) || !relations.TryGetValue(id, out RelationPart rp))
                 return null;
 
-            RelationPart rp = relations[id];
             return (rp == null) ? null : rp.DocumentPart;
         }
 
@@ -730,9 +729,9 @@ namespace NPOI
 
         public TValue GetDictionary<TKey, TValue>(Dictionary<TKey, TValue> dict, TKey key)
         {
-            if (dict.ContainsKey(key))
+            if (dict.TryGetValue(key, out TValue dictionary))
             {
-                return dict[key];
+                return dictionary;
             }
             return default(TValue);
         }

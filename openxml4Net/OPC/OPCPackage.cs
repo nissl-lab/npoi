@@ -24,7 +24,7 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Logger.
          */
-        private static POILogger logger = POILogFactory.GetLogger(typeof(OPCPackage));
+        private static readonly POILogger logger = POILogFactory.GetLogger(typeof(OPCPackage));
 
         /**
          * Default package access.
@@ -34,7 +34,7 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Package access.
          */
-        private PackageAccess packageAccess;
+        private readonly PackageAccess packageAccess;
 
         /**
          * Package parts collection.
@@ -835,9 +835,8 @@ namespace NPOI.OpenXml4Net.OPC
                                     "POI will use only the first, but other software may reject this file.");
                     }
 
-                    if (partUnmarshallers.ContainsKey(part._contentType))
+                    if (partUnmarshallers.TryGetValue(part._contentType, out PartUnmarshaller partUnmarshaller))
                     {
-                        PartUnmarshaller partUnmarshaller = partUnmarshallers[part._contentType];
                         UnmarshallContext context = new UnmarshallContext(this,
                                 part.PartName);
                         try
@@ -1060,9 +1059,9 @@ namespace NPOI.OpenXml4Net.OPC
                 throw new ArgumentException("part");
             }
 
-            if (partList.ContainsKey(part.PartName))
+            if (partList.TryGetValue(part.PartName, out PackagePart value))
             {
-                if (!partList[part.PartName].IsDeleted)
+                if (!value.IsDeleted)
                 {
                     throw new InvalidOperationException(
                             "A part with the name '"
@@ -1110,9 +1109,9 @@ namespace NPOI.OpenXml4Net.OPC
                 throw new ArgumentException("PartName");
 
             // Delete the specified part from the package.
-            if (this.partList.ContainsKey(PartName))
+            if (this.partList.TryGetValue(PartName, out PackagePart value))
             {
-                this.partList[PartName].IsDeleted = (true);
+                value.IsDeleted = (true);
                 this.RemovePartImpl(PartName);
                 this.partList.Remove(PartName);
             }

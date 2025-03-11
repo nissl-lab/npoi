@@ -21,7 +21,7 @@ namespace NPOI.XSSF.Streaming
 {
     public class SXSSFEvaluationSheet : IEvaluationSheet //XSSFEvaluationSheet
     {
-        private SXSSFSheet _xs;
+        private readonly SXSSFSheet _xs;
 
         public SXSSFEvaluationSheet(SXSSFSheet sheet)
         {

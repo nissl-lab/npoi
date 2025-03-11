@@ -58,12 +58,12 @@ namespace NPOI.XSSF.Model
         /**
          *  Array of individual string items in the Shared String table.
          */
-        private List<CT_Rst> strings = new List<CT_Rst>();
+        private readonly List<CT_Rst> strings = new List<CT_Rst>();
 
         /**
          *  Maps strings and their indexes in the <code>strings</code> arrays
          */
-        private Dictionary<String, int> stmap = new Dictionary<String, int>();
+        private readonly Dictionary<String, int> stmap = new Dictionary<String, int>();
 
         /**
          * An integer representing the total count of strings in the workbook. This count does not
@@ -186,9 +186,9 @@ namespace NPOI.XSSF.Model
         {
             String s = GetKey(st);
             count++;
-            if (stmap.ContainsKey(s))
+            if (stmap.TryGetValue(s, out int entry))
             {
-                return stmap[s];
+                return entry;
             }
 
             uniqueCount++;

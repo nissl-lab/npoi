@@ -35,7 +35,7 @@ namespace NPOI.Util
     public class IntegerField:FixedField
     {
         private int _value;
-        private int _offset;
+        private readonly int _offset;
 
         /// <summary>
         /// construct the <see cref="IntegerField"/> with its offset into its containing byte array  class.

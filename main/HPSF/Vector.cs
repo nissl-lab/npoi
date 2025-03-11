@@ -22,7 +22,7 @@ namespace NPOI.HPSF
 {
     public class Vector
     {
-        private short _type;
+        private readonly short _type;
 
         private TypedPropertyValue[] _values;
 

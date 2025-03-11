@@ -4,10 +4,10 @@ namespace NPOI.SS.Formula.Eval
 {
     public abstract class RefEvalBase : RefEval
     {
-        private int _firstSheetIndex;
-        private int _lastSheetIndex;
-        private int _rowIndex;
-        private int _columnIndex;
+        private readonly int _firstSheetIndex;
+        private readonly int _lastSheetIndex;
+        private readonly int _rowIndex;
+        private readonly int _columnIndex;
 
         protected RefEvalBase(ISheetRange sheetRange, int rowIndex, int columnIndex)
         {

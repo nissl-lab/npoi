@@ -29,9 +29,9 @@ namespace NPOI.SS.Formula.Functions
      */
     public abstract class MultiOperandNumericFunction : Function
     {
-        static double[] EMPTY_DOUBLE_ARRAY = { };
-        private bool _isReferenceBoolCounted;
-        private bool _isBlankCounted;
+        static readonly double[] EMPTY_DOUBLE_ARRAY = { };
+        private readonly bool _isReferenceBoolCounted;
+        private readonly bool _isBlankCounted;
 
         protected MultiOperandNumericFunction(bool isReferenceBoolCounted, bool isBlankCounted)
         {

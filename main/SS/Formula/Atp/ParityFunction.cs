@@ -31,7 +31,7 @@ namespace NPOI.SS.Formula.Atp
 
         public static readonly FreeRefFunction IS_EVEN = new ParityFunction(0);
         public static readonly FreeRefFunction IS_ODD = new ParityFunction(1);
-        private int _desiredParity;
+        private readonly int _desiredParity;
 
         private ParityFunction(int desiredParity)
         {

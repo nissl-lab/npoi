@@ -29,8 +29,8 @@ namespace NPOI.HSSF.Record
 
     internal class SerializationListener : EscherSerializationListener
     {
-        IList<int> spEndingOffsets;
-        IList<EscherRecord> records;
+        readonly IList<int> spEndingOffsets;
+        readonly IList<EscherRecord> records;
         EscherRecord record;
 
         public SerializationListener(IList<int> spEndingOffsets, IList<EscherRecord> records, EscherRecord e)
@@ -60,7 +60,7 @@ namespace NPOI.HSSF.Record
     }
     internal class RecordSizeListener : EscherSerializationListener
     {
-        IList<int> spEndingOffsets;
+        readonly IList<int> spEndingOffsets;
         EscherRecord record;
 
         public RecordSizeListener(IList<int> spEndingOffsets, EscherRecord e)
@@ -343,7 +343,7 @@ namespace NPOI.HSSF.Record
         protected HSSFPatriarch patriarch;
 
         /** Maps shape container objects to their OBJ records */
-        private Dictionary<EscherRecord, Record> shapeToObj = new Dictionary<EscherRecord, Record>();
+        private readonly Dictionary<EscherRecord, Record> shapeToObj = new Dictionary<EscherRecord, Record>();
         private DrawingManager2 drawingManager;
         //private short drawingGroupId;
 
@@ -805,7 +805,7 @@ namespace NPOI.HSSF.Record
 
         internal class CustomEscherRecordFactory : DefaultEscherRecordFactory
         {
-            List<EscherRecord> shapeRecords;
+            readonly List<EscherRecord> shapeRecords;
             public CustomEscherRecordFactory(List<EscherRecord> shapeRecords)
             {
                 this.shapeRecords = shapeRecords;
@@ -1317,9 +1317,9 @@ namespace NPOI.HSSF.Record
         internal NoteRecord GetNoteRecordByObj(ObjRecord obj)
         {
             CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)obj.SubRecords[0];
-            if (!tailRec.ContainsKey(cod.ObjectId))
+            if (!tailRec.TryGetValue(cod.ObjectId, out NoteRecord byObj))
                 return null;
-            return tailRec[(cod.ObjectId)];
+            return byObj;
         }
     }
 }
