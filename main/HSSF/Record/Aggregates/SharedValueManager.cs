@@ -34,7 +34,7 @@ namespace NPOI.HSSF.Record.Aggregates
     public class SharedValueManager
     {
 
-        private class SharedFormulaGroup
+        private sealed class SharedFormulaGroup
         {
             private readonly SharedFormulaRecord _sfr;
             private readonly FormulaRecordAggregate[] _frAggs;
@@ -245,7 +245,8 @@ namespace NPOI.HSSF.Record.Aggregates
 
         [NonSerialized]
         private SharedFormulaGroupComparator SVGComparator = new SharedFormulaGroupComparator();
-        private class SharedFormulaGroupComparator : Comparer<SharedFormulaGroup>
+
+        private sealed class SharedFormulaGroupComparator : Comparer<SharedFormulaGroup>
         {
             public override int Compare(SharedFormulaGroup a, SharedFormulaGroup b)
             {

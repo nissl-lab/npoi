@@ -669,7 +669,8 @@ namespace NPOI.HSSF.Record.Aggregates
                 }
             }
         }
-        private class CustomRecordVisitor1 : RecordVisitor
+
+        private sealed class CustomRecordVisitor1 : RecordVisitor
         {
             readonly CustomViewSettingsRecordAggregate _cv;
             readonly HeaderFooterRecord _hf;

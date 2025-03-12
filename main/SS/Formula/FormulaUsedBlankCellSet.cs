@@ -129,7 +129,7 @@ namespace NPOI.SS.Formula
 
         }
 
-        private class BlankCellRectangleGroup
+        private sealed class BlankCellRectangleGroup
         {
 
             private readonly int _firstRowIndex;

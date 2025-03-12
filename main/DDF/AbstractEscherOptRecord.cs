@@ -127,7 +127,8 @@ namespace NPOI.DDF
             listener.AfterRecordSerialize(pos, RecordId, pos - offset, this);
             return pos - offset;
         }
-        internal class EscherPropertyComparer : IComparer<EscherProperty>
+
+        internal sealed class EscherPropertyComparer : IComparer<EscherProperty>
         {
             public int Compare(EscherProperty p1, EscherProperty p2)
             {
@@ -136,6 +137,7 @@ namespace NPOI.DDF
                 return s1 < s2 ? -1 : s1 == s2 ? 0 : 1;
             }
         }
+
         /**
          * Records should be sorted by property number before being stored.
          */

@@ -519,7 +519,7 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
             }
         }
 
-        private class StartBlockStack
+        private sealed class StartBlockStack
         {
             private List<StartBlockRecord> blockList = new List<StartBlockRecord>(16);
             public void Push(StartBlockRecord item)

@@ -31,7 +31,7 @@ namespace NPOI.SS.Formula.Functions
      * 
      * @author Josh Micich
      */
-    internal class LookupUtils
+    internal sealed class LookupUtils
     {
         private static readonly Dictionary<int, MatchMode> matchModeMap = new Dictionary<int, MatchMode>();
         private static readonly Dictionary<int, SearchMode> searchModeMap = new Dictionary<int, SearchMode>();
@@ -77,7 +77,7 @@ namespace NPOI.SS.Formula.Functions
             BinarySearchForward = 2,
             BinarySearchBackward = -2
         }
-        internal class RowVector : ValueVector
+        internal sealed class RowVector : ValueVector
         {
 
             private readonly AreaEval _tableArray;
@@ -115,7 +115,7 @@ namespace NPOI.SS.Formula.Functions
                 }
             }
         }
-        internal class ColumnVector : ValueVector
+        internal sealed class ColumnVector : ValueVector
         {
 
             private readonly AreaEval _tableArray;
@@ -154,7 +154,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private class SheetVector : ValueVector
+        private sealed class SheetVector : ValueVector
         {
             private readonly RefEval _re;
             private readonly int _size;
@@ -230,11 +230,13 @@ namespace NPOI.SS.Formula.Functions
                 _matchExact = matchExact;
                 _isMatchFunction = isMatchFunction;
             }
+
             protected virtual String ConvertToString(ValueEval other)
             {
                 StringEval se = (StringEval)other;
                 return se.StringValue;
             }
+
             protected override CompareResult CompareSameType(ValueEval other)
             {
                 String stringValue = ConvertToString(other);
@@ -247,12 +249,13 @@ namespace NPOI.SS.Formula.Functions
 
                 return CompareResult.ValueOf(String.Compare(_value, stringValue, true));
             }
+
             protected override String GetValueAsString()
             {
                 return _value;
             }
         }
-        private class TolerantStringLookupComparer : StringLookupComparer
+        private sealed class TolerantStringLookupComparer : StringLookupComparer
         {
             static StringEval ConvertToStringEval(ValueEval eval)
             {
@@ -276,7 +279,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private class NumberLookupComparer : LookupValueComparerBase
+        private sealed class NumberLookupComparer : LookupValueComparerBase
         {
             private readonly double _value;
 
@@ -868,7 +871,7 @@ namespace NPOI.SS.Formula.Functions
     * Encapsulates some standard binary search functionality so the Unusual Excel behaviour can
     * be clearly distinguished. 
     */
-    internal class BinarySearchIndexes
+    internal sealed class BinarySearchIndexes
     {
 
         private int _lowIx;
@@ -913,7 +916,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
     }
-    internal class BooleanLookupComparer : LookupValueComparerBase
+    internal sealed class BooleanLookupComparer : LookupValueComparerBase
     {
         private readonly bool _value;
 

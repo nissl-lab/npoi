@@ -106,7 +106,7 @@ namespace NPOI.POIFS.Crypt.Dsig
         }
     }
 
-    internal class X509Data
+    internal sealed class X509Data
     {
         public List<object> Content { get; internal set; }
     }

@@ -76,7 +76,7 @@ namespace NPOI.OpenXml4Net.Util
          * Why oh why oh why are Iterator and Enumeration
          *  still not compatible?
          */
-        internal class EntryEnumerator : IEnumerator
+        internal sealed class EntryEnumerator : IEnumerator
         {
             private List<FakeZipEntry>.Enumerator iterator;
 

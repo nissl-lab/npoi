@@ -32,7 +32,7 @@ namespace NPOI.SS.Format
         private String desc;
 
         internal static CellFormatter SIMPLE_TEXT = new CellTextFormatter("@");
-        private class PartHandler : CellFormatPart.IPartHandler
+        private sealed class PartHandler : CellFormatPart.IPartHandler
         {
             private int numplace;
             public int NumPlace

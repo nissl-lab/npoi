@@ -57,7 +57,7 @@ namespace NPOI.SS.Formula.Eval
         public static NPOI.SS.Formula.Functions.Function PowerEval = new PowerEval();
         public static NPOI.SS.Formula.Functions.Function SubtractEval = new SubtractEval();
 
-        private class ArrayEval : MatrixFunction.TwoArrayArg
+        private sealed class ArrayEval : MatrixFunction.TwoArrayArg
         {
             readonly Func<double, double, double> _evaluateFunc = null;
             public ArrayEval(Func<double, double, double> evalFunc)

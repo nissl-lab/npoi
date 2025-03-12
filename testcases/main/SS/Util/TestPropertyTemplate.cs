@@ -22,12 +22,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace NPOI.SS.Util
+namespace TestCases.SS.Util
 {
-
-
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
     using NUnit.Framework;
 
     /// <summary>

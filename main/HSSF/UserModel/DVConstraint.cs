@@ -550,7 +550,7 @@ using NPOI.HSSF.Record;
             }
         }
 
-        private class FormulaValuePair
+        private sealed class FormulaValuePair
         {
             internal String _formula;
             internal String _value;

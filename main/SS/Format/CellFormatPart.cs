@@ -51,7 +51,7 @@ namespace NPOI.SS.Format
         private static readonly Dictionary<String, Color> NAMED_COLORS;
         public static IEqualityComparer<String> CASE_INSENSITIVE_ORDER
                                              = new CaseInsensitiveComparator();
-        private class CaseInsensitiveComparator : IEqualityComparer<String>
+        private sealed class CaseInsensitiveComparator : IEqualityComparer<String>
         {
             // use serialVersionUID from JDK 1.2.2 for interoperability
             //private const long serialVersionUID = 8575799808933029326L;
