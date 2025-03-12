@@ -23,10 +23,10 @@ namespace NPOI.HSSF.UserModel
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
-    using System.Reflection;
     using System.Security.Cryptography;
     using System.Text;
     using NPOI.DDF;
+    using NPOI.HPSF;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using NPOI.POIFS.Crypt;
@@ -414,7 +414,7 @@ namespace NPOI.HSSF.UserModel
                     records.RemoveAt(k);
                     LabelSSTRecord newrec = new LabelSSTRecord();
                     int stringid =
-                        workbook.AddSSTString(new UnicodeString(oldrec.Value));
+                        workbook.AddSSTString(new HSSF.Record.UnicodeString(oldrec.Value));
 
                     newrec.Row = (oldrec.Row);
                     newrec.Column = (oldrec.Column);
@@ -1943,7 +1943,7 @@ namespace NPOI.HSSF.UserModel
                     // see also http://de.wikipedia.org/wiki/Windows_Metafile#Hinweise_zur_WMF-Spezifikation
                     if (LittleEndian.GetInt(pictureData) == unchecked((int)0x9AC6CDD7)) {
                         byte[] picDataNoHeader = new byte[pictureData.Length-22];
-                        Array.Copy(pictureData, 22, picDataNoHeader, 0, pictureData.Length-22);
+                        System.Array.Copy(pictureData, 22, picDataNoHeader, 0, pictureData.Length-22);
                         pictureData = picDataNoHeader;
                     }
                     EscherMetafileBlip blipRecordMeta = new EscherMetafileBlip();

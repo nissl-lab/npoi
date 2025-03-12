@@ -284,8 +284,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-	     * Sets the title text.
-	     */
+         * Sets the title text.
+         */
         public void SetTitle(string newTitle)
         {
             CT_Title ctTitle;

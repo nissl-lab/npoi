@@ -156,7 +156,7 @@ namespace NPOI.POIFS.FileSystem
             return directory.CreateDirectory(name);
         }
 
-        public Util.ClassID StorageClsid
+        public HPSF.ClassID StorageClsid
         {
             get
             {

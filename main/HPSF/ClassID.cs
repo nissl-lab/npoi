@@ -15,52 +15,70 @@
    limitations under the License.
 ==================================================================== */
 
-/* ================================================================
- * About NPOI
- * Author: Tony Qu 
- * Author's email: tonyqus (at) gmail.com 
- * Author's Blog: tonyqus.wordpress.com.cn (wp.tonyqus.cn)
- * HomePage: http://www.codeplex.com/npoi
- * Contributors:
- * 
- * ==============================================================*/
-
 using System;
 using System.Text;
 using System.Text.RegularExpressions;
+using NPOI.Util;
 
-namespace NPOI.Util
+namespace NPOI.HPSF
 {
     /// <summary>
-    /// Represents a class ID (16 bytes). Unlike other little-endian
-    /// type the {@link ClassID} is not just 16 bytes stored in the wrong
-    /// order. Instead, it is a double word (4 bytes) followed by two
-    /// words (2 bytes each) followed by 8 bytes.
-    /// @author Rainer Klute 
-    /// <a href="mailto:klute@rainer-klute.de">klute@rainer-klute.de</a>
-    /// @version $Id: ClassID.java 489730 2006-12-22 19:18:16Z bayard $
-    /// @since 2002-02-09
+    ///  Represents a class ID (16 bytes). Unlike other little-endian
+    ///  type the <see cref="ClassID"/> is not just 16 bytes stored in the wrong
+    ///  order. Instead, it is a double word (4 bytes) followed by two
+    ///  words (2 bytes each) followed by 8 bytes.
     /// </summary>
     public class ClassID
     {
         public static ClassID OLE10_PACKAGE = new ClassID("{0003000C-0000-0000-C000-000000000046}");
         public static ClassID PPT_SHOW = new ClassID("{64818D10-4F9B-11CF-86EA-00AA00B929E8}");
         public static ClassID XLS_WORKBOOK = new ClassID("{00020841-0000-0000-C000-000000000046}");
-        public static ClassID TXT_ONLY = new ClassID("{5e941d80-bf96-11cd-b579-08002b30bfeb}"); // ???
-        public static ClassID EXCEL97      = new ClassID("{00020820-0000-0000-C000-000000000046}");
-        public static ClassID EXCEL95      = new ClassID("{00020810-0000-0000-C000-000000000046}");
-        public static ClassID WORD97       = new ClassID("{00020906-0000-0000-C000-000000000046}");
-        public static ClassID WORD95       = new ClassID("{00020900-0000-0000-C000-000000000046}");
+        public static ClassID TXT_ONLY = new ClassID("{5e941d80-bf96-11cd-b579-08002b30bfeb}");
+
+        // Excel V3
+        public static ClassID EXCEL_V3 = new ClassID("{00030000-0000-0000-C000-000000000046}");
+        public static ClassID EXCEL_V3_CHART = new ClassID("{00030001-0000-0000-C000-000000000046}");
+        public static ClassID EXCEL_V3_MACRO = new ClassID("{00030002-0000-0000-C000-000000000046}");
+        // Excel V5
+        public static ClassID EXCEL95 = new ClassID("{00020810-0000-0000-C000-000000000046}");
+        public static ClassID EXCEL95_CHART = new ClassID("{00020811-0000-0000-C000-000000000046}");
+        // Excel V8
+        public static ClassID EXCEL97 = new ClassID("{00020820-0000-0000-C000-000000000046}");
+        public static ClassID EXCEL97_CHART = new ClassID("{00020821-0000-0000-C000-000000000046}");
+        // Excel V11
+        public static ClassID EXCEL2003 = new ClassID("{00020812-0000-0000-C000-000000000046}");
+        // Excel V12
+        public static ClassID EXCEL2007 = new ClassID("{00020830-0000-0000-C000-000000000046}");
+        public static ClassID EXCEL2007_MACRO = new ClassID("{00020832-0000-0000-C000-000000000046}");
+        public static ClassID EXCEL2007_XLSB = new ClassID("{00020833-0000-0000-C000-000000000046}");
+        // Excel V14
+        public static ClassID EXCEL2010 = new ClassID("{00024500-0000-0000-C000-000000000046}");
+        public static ClassID EXCEL2010_CHART = new ClassID("{00024505-0014-0000-C000-000000000046}");
+        public static ClassID EXCEL2010_ODS = new ClassID("{EABCECDB-CC1C-4A6F-B4E3-7F888A5ADFC8}");
+
+        public static ClassID WORD97 = new ClassID("{00020906-0000-0000-C000-000000000046}");
+        public static ClassID WORD95 = new ClassID("{00020900-0000-0000-C000-000000000046}");
+        public static ClassID WORD2007 = new ClassID("{F4754C9B-64F5-4B40-8AF4-679732AC0607}");
+        public static ClassID WORD2007_MACRO = new ClassID("{18A06B6B-2F3F-4E2B-A611-52BE631B2D22}");
+
         public static ClassID POWERPOINT97 = new ClassID("{64818D10-4F9B-11CF-86EA-00AA00B929E8}");
         public static ClassID POWERPOINT95 = new ClassID("{EA7BAE70-FB3B-11CD-A903-00AA00510EA3}");
-        public static ClassID EQUATION30   = new ClassID("{0002CE02-0000-0000-C000-000000000046}");
-        /**
-         * The bytes making out the class ID in correct order,
-         * i.e. big-endian.
-         */
+        public static ClassID POWERPOINT2007 = new ClassID("{CF4F55F4-8F87-4D47-80BB-5808164BB3F8}");
+        public static ClassID POWERPOINT2007_MACRO = new ClassID("{DC020317-E6E2-4A62-B9FA-B3EFE16626F4}");
+
+        public static ClassID EQUATION30 = new ClassID("{0002CE02-0000-0000-C000-000000000046}");
+
+        /// <summary>
+        /// The number of bytes occupied by this object in the byte
+        /// stream. */
+        /// </summary>
+        public const int LENGTH = 16;
+
+        /// <summary>
+        /// The bytes making out the class ID in correct order,
+        /// i.e. big-endian.
+        /// </summary>
         protected byte[] bytes;
-
-
 
         /// <summary>
         /// Creates a <see cref="ClassID"/> and Reads its value from a byte array.
@@ -79,7 +97,7 @@ namespace NPOI.Util
         public ClassID()
         {
             bytes = new byte[LENGTH];
-            for (int i = 0; i < LENGTH; i++)
+            for(int i = 0; i < LENGTH; i++)
                 bytes[i] = 0x00;
         }
 
@@ -93,15 +111,11 @@ namespace NPOI.Util
         {
             bytes = new byte[LENGTH];
             String clsStr = Regex.Replace(externalForm, "[{}-]", "");
-            for (int i = 0; i < clsStr.Length; i += 2)
+            for(int i = 0; i < clsStr.Length; i += 2)
             {
-                bytes[i / 2] = (byte)Convert.ToInt64(clsStr.Substring(i, 2), 16);
+                bytes[i / 2] = (byte) Convert.ToInt64(clsStr.Substring(i, 2), 16);
             }
         }
-
-        /** The number of bytes occupied by this object in the byte
-         * stream. */
-        public const int LENGTH = 16;
 
         /// <summary>
         /// Gets the length.
@@ -123,7 +137,7 @@ namespace NPOI.Util
             get { return bytes; }
             set
             {
-                for (int i = 0; i < this.bytes.Length; i++)
+                for(int i = 0; i < this.bytes.Length; i++)
                     this.bytes[i] = value[i];
             }
         }
@@ -153,7 +167,7 @@ namespace NPOI.Util
             bytes[7] = src[6 + offset];
 
             /* Read 8 bytes. */
-            for (int i = 8; i < 16; i++)
+            for(int i = 8; i < 16; i++)
                 bytes[i] = src[i + offset];
 
             return bytes;
@@ -166,10 +180,13 @@ namespace NPOI.Util
         /// </summary>
         /// <param name="dst">The byte array to Write to.</param>
         /// <param name="offset">The offset within the </param>
+        /// <exception cref="ArrayTypeMismatchException">if there is not enough room for the class
+        /// ID 16 bytes in the byte array After the <var>offset</var> position.
+        /// </exception>
         public void Write(byte[] dst, int offset)
         {
             /* Check array size: */
-            if (dst.Length < 16)
+            if(dst.Length < 16)
                 throw new ArrayTypeMismatchException
                     ("Destination byte[] must have room for at least 16 bytes, " +
                      "but has a length of only " + dst.Length + ".");
@@ -188,33 +205,54 @@ namespace NPOI.Util
             dst[7 + offset] = bytes[6];
 
             /* Write 8 bytes. */
-            for (int i = 8; i < 16; i++)
+            for(int i = 8; i < 16; i++)
                 dst[i + offset] = bytes[i];
         }
 
 
 
         /// <summary>
-        /// Checks whether this ClassID is equal to another
+        /// Checks whether this <c>ClassID</c> is equal to another
         /// object.
         /// </summary>
-        /// <param name="o">the object to compare this PropertySet with</param>
-        /// <returns>true if the objects are equal, else
-        /// false</returns>
+        /// <param name="o">the object to compare this <c>PropertySet</c> with</param>
+        /// <return><c>true</c> if the objects are equal, else
+        /// <c>false</c>.
+        /// </return>
         public override bool Equals(Object o)
         {
-            if (o == null || !(o is ClassID))
-                return false;
-            ClassID cid = (ClassID) o;
-            if (bytes.Length != cid.bytes.Length)
-                return false;
-            for (int i = 0; i < bytes.Length; i++)
-                if (bytes[i] != cid.bytes[i])
-                    return false;
-            return true;
+            return o is ClassID cid && Arrays.Equals(bytes, cid.bytes);
         }
 
-
+        /**
+         * Checks whether this {@code ClassID} is equal to another ClassID with inverted endianess,
+         * because there are apparently not only version 1 GUIDs (aka "network" with big-endian encoding),
+         * but also version 2 GUIDs (aka "native" with little-endian encoding) out there.
+         *
+         * @param o the object to compare this {@code ClassID} with
+         * @return {@code true} if the objects are equal, else {@code false}.
+         */
+        public bool EqualsInverted(ClassID o)
+        {
+            return
+                o.bytes[0] == bytes[3] &&
+                o.bytes[1] == bytes[2] &&
+                o.bytes[2] == bytes[1] &&
+                o.bytes[3] == bytes[0] &&
+                o.bytes[4] == bytes[5] &&
+                o.bytes[5] == bytes[4] &&
+                o.bytes[6] == bytes[7] &&
+                o.bytes[7] == bytes[6] &&
+                o.bytes[8] == bytes[8] &&
+                o.bytes[9] == bytes[9] &&
+                o.bytes[10] == bytes[10] &&
+                o.bytes[11] == bytes[11] &&
+                o.bytes[12] == bytes[12] &&
+                o.bytes[13] == bytes[13] &&
+                o.bytes[14] == bytes[14] &&
+                o.bytes[15] == bytes[15]
+                ;
+        }
 
         /// <summary>
         /// Serves as a hash function for a particular type.
@@ -224,10 +262,8 @@ namespace NPOI.Util
         /// </returns>
         public override int GetHashCode()
         {
-            return Encoding.UTF8.GetString(bytes).GetHashCode();
+            return ToString().GetHashCode();
         }
-
-
 
         /// <summary>
         /// Returns a human-Readable representation of the Class ID in standard
@@ -240,10 +276,10 @@ namespace NPOI.Util
         {
             StringBuilder sbClassId = new StringBuilder(38);
             sbClassId.Append('{');
-            for (int i = 0; i < 16; i++)
+            for(int i = 0; i < 16; i++)
             {
                 sbClassId.Append(HexDump.ToHex(bytes[i]));
-                if (i == 3 || i == 5 || i == 7 || i == 9)
+                if(i == 3 || i == 5 || i == 7 || i == 9)
                     sbClassId.Append('-');
             }
             sbClassId.Append('}');
