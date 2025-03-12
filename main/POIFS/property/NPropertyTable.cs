@@ -29,7 +29,7 @@ namespace NPOI.POIFS.Properties
 {
     public class NPropertyTable : PropertyTableBase
     {
-        private POIFSBigBlockSize _bigBigBlockSize;
+        private readonly POIFSBigBlockSize _bigBigBlockSize;
 
         public NPropertyTable(HeaderBlock headerBlock) : base(headerBlock)
         {

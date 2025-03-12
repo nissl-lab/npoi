@@ -124,7 +124,7 @@ namespace NPOI.HSSF.UserModel
         private class SheetRecordCollector : NPOI.HSSF.Record.Aggregates.RecordVisitor,IDisposable
         {
 
-            private ArrayList _list;
+            private readonly ArrayList _list;
             private int _totalSize;
 
             public SheetRecordCollector()
@@ -1291,9 +1291,9 @@ namespace NPOI.HSSF.UserModel
             //  the same object every time, but create
             //  them lazily
 
-            if (fonts.ContainsKey(idx))
+            if (fonts.TryGetValue(idx, out HSSFFont font1))
             {
-                return (HSSFFont)fonts[idx];
+                return (HSSFFont)font1;
             }
 
             FontRecord font = workbook.GetFontRecordAt(idx);

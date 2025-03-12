@@ -40,10 +40,10 @@ namespace NPOI.POIFS.Storage
     /// </summary>
     public class RawDataBlock : ListManagedBlock
     {
-        private byte[] _data;
-        private bool _eof;
-        private bool _hasData;
-        private static POILogger log = POILogFactory.GetLogger(typeof(RawDataBlock));
+        private readonly byte[] _data;
+        private readonly bool _eof;
+        private readonly bool _hasData;
+        private static readonly POILogger log = POILogFactory.GetLogger(typeof(RawDataBlock));
 
         /// <summary>
         /// Constructor RawDataBlock

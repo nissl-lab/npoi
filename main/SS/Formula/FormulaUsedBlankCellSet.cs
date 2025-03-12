@@ -26,8 +26,8 @@ namespace NPOI.SS.Formula
     public class BookSheetKey
     {
 
-        private int _bookIndex;
-        private int _sheetIndex;
+        private readonly int _bookIndex;
+        private readonly int _sheetIndex;
 
         public BookSheetKey(int bookIndex, int sheetIndex)
         {
@@ -55,7 +55,7 @@ namespace NPOI.SS.Formula
 
         private  class BlankCellSheetGroup
         {
-            private IList _rectangleGroups;
+            private readonly IList _rectangleGroups;
             private int _currentRowIndex;
             private int _firstColumnIndex;
             private int _lastColumnIndex;
@@ -132,9 +132,9 @@ namespace NPOI.SS.Formula
         private class BlankCellRectangleGroup
         {
 
-            private int _firstRowIndex;
-            private int _firstColumnIndex;
-            private int _lastColumnIndex;
+            private readonly int _firstRowIndex;
+            private readonly int _firstColumnIndex;
+            private readonly int _lastColumnIndex;
             private int _lastRowIndex;
 
             public BlankCellRectangleGroup(int firstRowIndex, int firstColumnIndex, int lastColumnIndex)
@@ -194,7 +194,7 @@ namespace NPOI.SS.Formula
             }
         }
 
-        private Hashtable _sheetGroupsByBookSheet;
+        private readonly Hashtable _sheetGroupsByBookSheet;
 
         public FormulaUsedBlankCellSet()
         {

@@ -51,14 +51,14 @@ namespace NPOI.SS.Formula.PTG
         //private static byte[] DEFAULT_RESERVED_DATA = new byte[RESERVED_FIELD_LEN];
 
         // 7 bytes of data (stored as an int, short and byte here)
-        private int _reserved0Int;
-        private int _reserved1Short;
-        private int _reserved2Byte;
+        private readonly int _reserved0Int;
+        private readonly int _reserved1Short;
+        private readonly int _reserved2Byte;
 
         // data from these fields comes after the Ptg data of all tokens in current formula
-        private int _nColumns;
-        private int _nRows;
-        private object[] _arrayValues;
+        private readonly int _nColumns;
+        private readonly int _nRows;
+        private readonly object[] _arrayValues;
 
         ArrayPtg(int reserved0, int reserved1, int reserved2, int nColumns, int nRows, object[] arrayValues)
         {
@@ -263,9 +263,9 @@ namespace NPOI.SS.Formula.PTG
  */
         public class Initial : Ptg
         {
-            private int _reserved0;
-            private int _reserved1;
-            private int _reserved2;
+            private readonly int _reserved0;
+            private readonly int _reserved1;
+            private readonly int _reserved2;
 
             public Initial(ILittleEndianInput in1)
             {

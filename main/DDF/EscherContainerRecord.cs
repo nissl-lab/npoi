@@ -40,7 +40,7 @@ namespace NPOI.DDF
         public const short SPGR_CONTAINER = unchecked((short)0xF003);
         public const short SP_CONTAINER = unchecked((short)0xF004);
         public const short SOLVER_CONTAINER = unchecked((short)0xF005);
-        private static POILogger log = POILogFactory.GetLogger(typeof(EscherContainerRecord));
+        private static readonly POILogger log = POILogFactory.GetLogger(typeof(EscherContainerRecord));
 
         /**
          * in case if document contains any charts we have such document structure:
@@ -65,7 +65,7 @@ namespace NPOI.DDF
          * and add it to container size when we serialize it
          */
         private int _remainingLength;
-        private List<EscherRecord> _childRecords = new List<EscherRecord>();
+        private readonly List<EscherRecord> _childRecords = new List<EscherRecord>();
 
         /// <summary>
         /// The contract of this method is to deSerialize an escher record including

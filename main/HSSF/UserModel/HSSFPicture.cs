@@ -91,23 +91,22 @@ namespace NPOI.HSSF.UserModel
             Resize(scale, scale);
         }
 
-        /**
-     * Resize the image
-     * <p>
-     * Please note, that this method works correctly only for workbooks
-     * with default font size (Arial 10pt for .xls).
-     * If the default font is changed the resized image can be streched vertically or horizontally.
-     * </p>
-     * <p>
-     * <code>resize(1.0,1.0)</code> keeps the original size,<br/>
-     * <code>resize(0.5,0.5)</code> resize to 50% of the original,<br/>
-     * <code>resize(2.0,2.0)</code> resizes to 200% of the original.<br/>
-     * <code>resize({@link Double#MAX_VALUE},{@link Double#MAX_VALUE})</code> resizes to the dimension of the embedded image. 
-     * </p>
-     *
-     * @param scaleX the amount by which the image width is multiplied relative to the original width.
-     * @param scaleY the amount by which the image height is multiplied relative to the original height.
-     */
+        /// <summary>
+        /// <para>Resize the image</para>
+        /// <para>
+        /// Please note, that this method works correctly only for workbooks
+        /// with default font size (Arial 10pt for .xls).
+        /// If the default font is changed the resized image can be streched vertically or horizontally.
+        /// <list type="bullet">
+        /// <item><c>resize(1.0,1.0)</c> keeps the original size,</item>
+        /// <item><c>resize(0.5,0.5)</c> resize to 50% of the original,</item>
+        /// <item><c>resize(2.0,2.0)</c> resizes to 200% of the original.</item>
+        /// <item><c>resize(<see cref="double.MaxValue"/>,<see cref="double.MaxValue"/>)</c> resizes to the dimension of the embedded image. </item>
+        /// </list>
+        /// </para>
+        /// </summary>
+        /// <param name="scaleX">the amount by which the image width is multiplied relative to the original width.</param>
+        /// <param name="scaleY">the amount by which the image height is multiplied relative to the original height.</param>
         public void Resize(double scaleX, double scaleY)
         {
             HSSFClientAnchor anchor = (HSSFClientAnchor)ClientAnchor;
@@ -118,7 +117,7 @@ namespace NPOI.HSSF.UserModel
             int row2 = anchor.Row1 + (pref.Row2 - pref.Row1);
             int col2 = anchor.Col1 + (pref.Col2 - pref.Col1);
 
-            anchor.Col2=((short)col2);
+            anchor.Col2=((short) col2);
             // anchor.setDx1(0);
             anchor.Dx2=(pref.Dx2);
 
@@ -135,7 +134,7 @@ namespace NPOI.HSSF.UserModel
             get
             {
                 EscherSimpleProperty property = (EscherSimpleProperty)GetOptRecord().Lookup(EscherProperties.BLIP__BLIPTODISPLAY);
-                if (null == property)
+                if(null == property)
                 {
                     return -1;
                 }
@@ -146,17 +145,17 @@ namespace NPOI.HSSF.UserModel
                 SetPropertyValue(new EscherSimpleProperty(EscherProperties.BLIP__BLIPTODISPLAY, false, true, value));
             }
         }
-        /**
-         * Calculate the preferred size for this picture.
-         *
-         * @param scale the amount by which image dimensions are multiplied relative to the original size.
-         * @return HSSFClientAnchor with the preferred size for this image
-         * @since POI 3.0.2
-         */
+
+        /// <summary>
+        /// Calculate the preferred size for this picture.
+        /// </summary>
+        /// <param name="scale">the amount by which image dimensions are multiplied relative to the original size.</param>
+        /// <returns>HSSFClientAnchor with the preferred size for this image</returns>
         public IClientAnchor GetPreferredSize(double scale)
         {
             return GetPreferredSize(scale, scale);
         }
+
         /// <summary>
         /// Calculate the preferred size for this picture.
         /// </summary>
@@ -167,7 +166,7 @@ namespace NPOI.HSSF.UserModel
         {
             ImageUtils.SetPreferredSize(this, scaleX, scaleY);
             return ClientAnchor;
-            
+
         }
 
         /// <summary>
@@ -194,7 +193,7 @@ namespace NPOI.HSSF.UserModel
         {
             //int hdpi = 96, vdpi = 96;
             //double mm2inch = 25.4;
-            return new Size((int)r.Metadata.HorizontalResolution, (int)r.Metadata.VerticalResolution);
+            return new Size((int) r.Metadata.HorizontalResolution, (int) r.Metadata.VerticalResolution);
         }
 
         /// <summary>
@@ -208,24 +207,35 @@ namespace NPOI.HSSF.UserModel
             byte[] data = bse.BlipRecord.PictureData;
             //int type = bse.BlipTypeWin32;
 
-            using (MemoryStream ms = RecyclableMemory.GetStream(data))
+            using(MemoryStream ms = RecyclableMemory.GetStream(data))
             {
-                using (Image img = Image.Load(ms))
+                using(Image img = Image.Load(ms))
                 {
                     return img.Size();
                 }
             }
         }
-        /**
-         * Return picture data for this shape
-         *
-         * @return picture data for this shape
-         */
+
+        /// <summary>
+        /// Return picture data for this shape
+        /// </summary>
         public IPictureData PictureData
         {
             get
             {
-                InternalWorkbook iwb = ((_patriarch.Sheet.Workbook) as HSSFWorkbook).Workbook;
+                HSSFPatriarch patriarch = Patriarch;
+                HSSFShape parent = Parent as HSSFShape;
+                while(patriarch == null && parent != null)
+                {
+                    patriarch = parent.Patriarch;
+                    parent = parent.Parent as HSSFShape;
+                }
+                if(patriarch == null)
+                {
+                    throw new InvalidOperationException("Could not find a patriarch for a HSSPicture");
+                }
+
+                InternalWorkbook iwb = (patriarch.Sheet.Workbook as HSSFWorkbook).Workbook;
                 EscherBSERecord bse = iwb.GetBSERecord(PictureIndex);
                 EscherBlipRecord blipRecord = bse.BlipRecord;
                 return new HSSFPictureData(blipRecord);
@@ -237,7 +247,7 @@ namespace NPOI.HSSF.UserModel
         {
             EscherAggregate agg = patriarch.GetBoundAggregate();
             agg.AssociateShapeToObjRecord(GetEscherContainer().GetChildById(EscherClientDataRecord.RECORD_ID), GetObjRecord());
-            if (PictureIndex != -1)
+            if(PictureIndex != -1)
             {
                 EscherBSERecord bse =
                     (patriarch.Sheet.Workbook as HSSFWorkbook).Workbook.GetBSERecord(PictureIndex);
@@ -245,9 +255,9 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
-         * The color applied to the lines of this shape.
-         */
+        /// <summary>
+        /// The color applied to the lines of this shape.
+        /// </summary>
         public String FileName
         {
             get
@@ -271,11 +281,11 @@ namespace NPOI.HSSF.UserModel
             //int off = offset;      /* avoid getfield opcode */
             char[] val = value.ToCharArray();    /* avoid getfield opcode */
 
-            while ((st < end) && (val[st] <= ' '))
+            while((st < end) && (val[st] <= ' '))
             {
                 st++;
             }
-            while ((st < end) && (val[end - 1] <= ' '))
+            while((st < end) && (val[end - 1] <= ' '))
             {
                 end--;
             }
@@ -302,22 +312,22 @@ namespace NPOI.HSSF.UserModel
         }
 
 
-        /**
-         * @return the anchor that is used by this picture.
-         */
+        /// <summary>
+        /// the anchor that is used by this picture.
+        /// </summary>
         public IClientAnchor ClientAnchor
         {
             get
             {
                 HSSFAnchor a = Anchor as HSSFAnchor;
-                return (a is HSSFClientAnchor) ? (HSSFClientAnchor)a : null;
+                return (a is HSSFClientAnchor) ? (HSSFClientAnchor) a : null;
             }
         }
 
 
-        /**
-         * @return the sheet which contains the picture shape
-         */
+        /// <summary>
+        /// the sheet which contains the picture shape
+        /// </summary>
         public ISheet Sheet
         {
             get

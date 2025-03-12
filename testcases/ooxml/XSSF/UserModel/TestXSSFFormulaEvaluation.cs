@@ -755,6 +755,12 @@ namespace TestCases.XSSF.UserModel
             Assert.AreSame(cell, same);
             wb.Close();
         }
+
+        [Test]
+        public void TestNPOIIssue_1057()
+        {
+            BaseTestNPOIIssue_1057("xparams.xlsx", "xinstall.xlsx");
+        }
     }
 
 }

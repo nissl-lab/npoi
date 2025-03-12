@@ -30,12 +30,12 @@ namespace NPOI.HSSF.Record.Aggregates
     public class DataValidityTable : RecordAggregate
     {
 
-        private DVALRecord _headerRec;
+        private readonly DVALRecord _headerRec;
         /**
          * The list of data validations for the current sheet.
          * Note - this may be empty (contrary to OOO documentation)
          */
-        private IList _validationList;
+        private readonly IList _validationList;
 
         public DataValidityTable(RecordStream rs)
         {

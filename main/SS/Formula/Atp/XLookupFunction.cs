@@ -157,8 +157,8 @@ namespace NPOI.SS.Formula.Atp
 
         class NotFoundAreaEval : AreaEval
         {
-            private int _width;
-            private string _notFound;
+            private readonly int _width;
+            private readonly string _notFound;
             public NotFoundAreaEval(string notFound, int width)
             {
                 _width = width;
@@ -268,6 +268,10 @@ namespace NPOI.SS.Formula.Atp
                 return false;
             }
 
+            public bool IsRowHidden(int rowIndex)
+            {
+                return false;
+            }
             public AreaEval Offset(int relFirstRowIx, int relLastRowIx, int relFirstColIx, int relLastColIx)
             {
                 throw null;

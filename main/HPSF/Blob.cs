@@ -4,7 +4,7 @@ namespace NPOI.HPSF
 {
     internal class Blob
     {
-        private byte[] _value;
+        private readonly byte[] _value;
 
         public Blob(byte[] data, int offset)
         {
@@ -12,7 +12,7 @@ namespace NPOI.HPSF
 
             if (size == 0)
             {
-                _value = new byte[0];
+                _value = System.Array.Empty<byte>();
                 return;
             }
 

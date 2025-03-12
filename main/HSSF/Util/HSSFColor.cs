@@ -87,9 +87,9 @@ namespace NPOI.HSSF.Util
                 HSSFColor color = colors[i];
 
                 int index1 = color.Indexed;
-                if (result.ContainsKey(index1))
+                if (result.TryGetValue(index1, out HSSFColor value))
                 {
-                    HSSFColor prevColor = (HSSFColor)result[index1];
+                    HSSFColor prevColor = (HSSFColor)value;
                     throw new InvalidDataException("Dup color index (" + index1
                             + ") for colors (" + prevColor.GetType().Name
                             + "),(" + color.GetType().Name + ")");
@@ -1463,7 +1463,7 @@ namespace NPOI.HSSF.Util
          */
         public class Automatic : HSSFColor
         {
-            private static HSSFColor instance = new Automatic();
+            private static readonly HSSFColor instance = new Automatic();
 
             public const short Index = 0x40;
 

@@ -62,8 +62,8 @@ namespace NPOI.SS.Formula
      */
     public class FormulaParser
     {
-        private String _formulaString;
-        private int _formulaLength;
+        private readonly String _formulaString;
+        private readonly int _formulaLength;
         /** points at the next character to be read (after the {@link #look} codepoint) */
         private int _pointer;
 
@@ -85,11 +85,11 @@ namespace NPOI.SS.Formula
          */
         private bool _inIntersection;
 
-        private IFormulaParsingWorkbook _book;
+        private readonly IFormulaParsingWorkbook _book;
         private static SpreadsheetVersion _ssVersion;
 
-        private int _sheetIndex;
-        private int _rowIndex; // 0-based
+        private readonly int _sheetIndex;
+        private readonly int _rowIndex; // 0-based
 
         /**
          * Create the formula Parser, with the string that is To be
@@ -664,11 +664,11 @@ namespace NPOI.SS.Formula
             return ParseNonRange(savePointer);
         }
 
-        private static String specHeaders = "Headers";
-        private static String specAll = "All";
-        private static String specData = "Data";
-        private static String specTotals = "Totals";
-        private static String specThisRow = "This Row";
+        private static readonly String specHeaders = "Headers";
+        private static readonly String specAll = "All";
+        private static readonly String specData = "Data";
+        private static readonly String specTotals = "Totals";
+        private static readonly String specThisRow = "This Row";
 
         /**
          * Parses a structured reference, returns it as area reference.
@@ -1331,8 +1331,8 @@ namespace NPOI.SS.Formula
                 return PartType.Row;
             }
 
-            private PartType _type;
-            private String _rep;
+            private readonly PartType _type;
+            private readonly String _rep;
 
             public SimpleRangePart(String rep, bool hasLetters, bool hasNumbers)
             {

@@ -24,8 +24,8 @@ namespace NPOI.XSSF.Streaming
 {
     public class SXSSFEvaluationCell : IEvaluationCell 
     {
-        private SXSSFEvaluationSheet _evalSheet;
-        private SXSSFCell _cell;
+        private readonly SXSSFEvaluationSheet _evalSheet;
+        private readonly SXSSFCell _cell;
 
         public SXSSFEvaluationCell(SXSSFCell cell, SXSSFEvaluationSheet evaluationSheet)
         {

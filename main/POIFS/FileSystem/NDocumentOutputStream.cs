@@ -35,10 +35,10 @@ namespace NPOI.POIFS.FileSystem
         private bool _closed;
 
         /** the actual Document */
-        private NPOIFSDocument _document;
+        private readonly NPOIFSDocument _document;
 
         /** and its Property */
-        private DocumentProperty _property;
+        private readonly DocumentProperty _property;
 
         /** our buffer, when null we're into normal blocks */
         private MemoryStream _buffer =
@@ -84,7 +84,7 @@ namespace NPOI.POIFS.FileSystem
             _closed = false;
 
             // Have an empty one Created for now
-            DocumentEntry doc = parent.CreateDocument(name, new MemoryStream(new byte[0]));
+            DocumentEntry doc = parent.CreateDocument(name, new MemoryStream(Array.Empty<byte>()));
             _property = (DocumentProperty)((DocumentNode)doc).Property;
             _document = new NPOIFSDocument((DocumentNode)doc);
         }

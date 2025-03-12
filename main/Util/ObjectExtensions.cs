@@ -24,7 +24,7 @@ namespace NPOI.Util
             if (originalObject == null) return null;
             var typeToReflect = originalObject.GetType();
             if (IsPrimitive(typeToReflect)) return originalObject;
-            if (visited.ContainsKey(originalObject)) return visited[originalObject];
+            if (visited.TryGetValue(originalObject, out object copy)) return copy;
             if (typeof(Delegate).IsAssignableFrom(typeToReflect)) return null;
             var cloneObject = CloneMethod.Invoke(originalObject, null);
             if (typeToReflect.IsArray)
@@ -98,7 +98,7 @@ namespace NPOI.Util
         internal class ArrayTraverse
         {
             public int[] Position;
-            private int[] maxLengths;
+            private readonly int[] maxLengths;
 
             public ArrayTraverse(Array array)
             {

@@ -34,10 +34,10 @@ namespace NPOI.SS.Formula
     public class EvaluationCache
     {
 
-        private PlainCellCache _plainCellCache;
-        private FormulaCellCache _formulaCellCache;
+        private readonly PlainCellCache _plainCellCache;
+        private readonly FormulaCellCache _formulaCellCache;
         /** only used for testing. <c>null</c> otherwise */
-        IEvaluationListener _evaluationListener;
+        readonly IEvaluationListener _evaluationListener;
 
         /* package */
         public EvaluationCache(IEvaluationListener evaluationListener)
@@ -136,9 +136,10 @@ namespace NPOI.SS.Formula
 
         public class EntryOperation : IEntryOperation
         {
-            BookSheetKey bsk;
-            int rowIndex, columnIndex;
-            IEvaluationListener evaluationListener;
+            readonly BookSheetKey bsk;
+            readonly int rowIndex;
+            readonly int columnIndex;
+            readonly IEvaluationListener evaluationListener;
 
             public EntryOperation(BookSheetKey bsk,
                 int rowIndex, int columnIndex, IEvaluationListener evaluationListener)

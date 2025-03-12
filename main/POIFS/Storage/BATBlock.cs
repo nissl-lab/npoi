@@ -42,21 +42,21 @@ namespace NPOI.POIFS.Storage
     /// </summary>
     public class BATBlock : BigBlock
     {
-        private static int _entries_per_block =
+        private static readonly int _entries_per_block =
             POIFSConstants.BIG_BLOCK_SIZE / LittleEndianConsts.INT_SIZE;
-        private static int _entries_per_xbat_block = _entries_per_block - 1;
-        private static int _xbat_chain_offset =
+        private static readonly int _entries_per_xbat_block = _entries_per_block - 1;
+        private static readonly int _xbat_chain_offset =
             _entries_per_xbat_block * LittleEndianConsts.INT_SIZE;
-        private static byte _default_value = (byte)0xFF;
-        private IntegerField[] _fields;
-        private byte[] _data;
+        private static readonly byte _default_value = (byte)0xFF;
+        private readonly IntegerField[] _fields;
+        private readonly byte[] _data;
         /**
          * For a regular fat block, these are 128 / 1024 
          *  next sector values.
          * For a XFat (DIFat) block, these are 127 / 1023
          *  next sector values, then a chaining value.
          */
-        private int[] _values;
+        private readonly int[] _values;
 
         /**
          * Does this BATBlock have any free sectors in it?
@@ -515,8 +515,8 @@ namespace NPOI.POIFS.Storage
     }
     public class BATBlockAndIndex
     {
-       private int index;
-       private BATBlock block;
+       private readonly int index;
+       private readonly BATBlock block;
 
         public BATBlockAndIndex(int index, BATBlock block)
         {

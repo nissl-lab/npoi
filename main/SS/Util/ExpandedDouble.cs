@@ -53,8 +53,8 @@ namespace NPOI.SS.Util
         /**
          * Always 64 bits long (MSB, bit-63 is '1')
          */
-        private BigInteger _significand;
-        private int _binaryExponent;
+        private readonly BigInteger _significand;
+        private readonly int _binaryExponent;
 
         public ExpandedDouble(long rawBits)
         {

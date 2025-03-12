@@ -480,7 +480,7 @@ namespace NPOI.POIFS.FileSystem
                 }
                 else
                 {
-                    return new Object[0];
+                    return Array.Empty<Object>();
                 }
             }
         }

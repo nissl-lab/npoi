@@ -22,8 +22,8 @@ namespace NPOI.SS.Formula.PTG
     public class SharedFormula
     {
 
-        private int _columnWrappingMask;
-        private int _rowWrappingMask;
+        private readonly int _columnWrappingMask;
+        private readonly int _rowWrappingMask;
 
         public SharedFormula(SpreadsheetVersion ssVersion)
         {

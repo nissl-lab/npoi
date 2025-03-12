@@ -52,7 +52,7 @@ namespace NPOI.HSSF.Record
     internal class SimpleHeaderInput : BiffHeaderInput
     {
 
-        private ILittleEndianInput _lei;
+        private readonly ILittleEndianInput _lei;
 
         internal static ILittleEndianInput GetLEI(Stream in1)
         {
@@ -107,9 +107,9 @@ namespace NPOI.HSSF.Record
         private long pos = 0;
 
         /** Header {@link LittleEndianInput} facet of the wrapped {@link InputStream} */
-        private BiffHeaderInput _bhi;
+        private readonly BiffHeaderInput _bhi;
         /** Data {@link LittleEndianInput} facet of the wrapped {@link InputStream} */
-        private ILittleEndianInput _dataInput;
+        private readonly ILittleEndianInput _dataInput;
         /** the record identifier of the BIFF record currently being read */
 
         //protected byte[] data = new byte[MAX_RECORD_DATA_SIZE];
@@ -526,7 +526,7 @@ namespace NPOI.HSSF.Record
             int size = Remaining;
             if (size == 0)
             {
-                return new byte[0];
+                return Array.Empty<byte>();
             }
             byte[] result = new byte[size];
             ReadFully(result);

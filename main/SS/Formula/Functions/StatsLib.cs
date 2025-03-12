@@ -66,6 +66,17 @@ namespace NPOI.SS.Formula.Functions
             }
             return r;
         }
+
+        public static double stdevp(double[] v)
+        {
+            double r = Double.NaN;
+            if(v!=null && v.Length > 1)
+            {
+                r = Math.Sqrt(devsq(v) / v.Length);
+            }
+            return r;
+        }
+
         public static double var(double[] v)
         {
             double r = Double.NaN;

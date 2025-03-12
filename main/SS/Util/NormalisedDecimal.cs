@@ -157,19 +157,19 @@ namespace NPOI.SS.Util
         /**
          * The decimal exponent increased by one less than the digit count of {@link #_wholePart}
          */
-        private int _relativeDecimalExponent;
+        private readonly int _relativeDecimalExponent;
         /**
          * The whole part of the significand (typically 15 digits).
          *
          * 47-50 bits long (MSB may be anywhere from bit 46 to 49)
          * LSB is units bit.
          */
-        private long _wholePart;
+        private readonly long _wholePart;
         /**
          * The fractional part of the significand.
          * 24 bits (only top 14-17 bits significant): a value between 0x000000 and 0xFFFF80
          */
-        private int _fractionalPart;
+        private readonly int _fractionalPart;
 
 
         public NormalisedDecimal(long wholePart, int fracPart, int decimalExponent)

@@ -27,12 +27,12 @@ namespace NPOI.SS.Formula.Function
     public class FunctionMetadata
     {
 
-        private int _index;
-        private String _name;
-        private int _minParams;
-        private int _maxParams;
-        private byte _returnClassCode;
-        private byte[] _parameterClassCodes;
+        private readonly int _index;
+        private readonly String _name;
+        private readonly int _minParams;
+        private readonly int _maxParams;
+        private readonly byte _returnClassCode;
+        private readonly byte[] _parameterClassCodes;
         private const short FUNCTION_MAX_PARAMS = 30;
         /* package */
         internal FunctionMetadata(int index, String name, int minParams, int maxParams,

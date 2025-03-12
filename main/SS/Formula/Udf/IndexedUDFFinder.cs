@@ -27,7 +27,7 @@ namespace NPOI.SS.Formula.UDF
      */
     public class IndexedUDFFinder : AggregatingUDFFinder
     {
-        private Dictionary<int, String> _funcMap;
+        private readonly Dictionary<int, String> _funcMap;
 
         public IndexedUDFFinder(params UDFFinder[] usedToolPacks)
             : base(usedToolPacks)

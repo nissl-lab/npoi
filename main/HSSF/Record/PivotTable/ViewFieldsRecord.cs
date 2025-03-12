@@ -48,12 +48,12 @@ namespace NPOI.HSSF.Record.PivotTable
         private const int STRING_NOT_PRESENT_LEN = 0xFFFF;
         /** 5 shorts */
 	    private const int BASE_SIZE = 10;
-        private int sxaxis;
-        private int cSub;
-        private int grbitSub;
-        private int cItm;
+        private readonly int sxaxis;
+        private readonly int cSub;
+        private readonly int grbitSub;
+        private readonly int cItm;
 
-        private String _name = null;
+        private readonly String _name = null;
 
         public ViewFieldsRecord(RecordInputStream in1)
         {

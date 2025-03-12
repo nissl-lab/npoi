@@ -56,7 +56,7 @@ namespace NPOI.POIFS.Storage
 
 
 
-        private Property[]       _properties;
+        private readonly Property[]       _properties;
 
         /// <summary>
         /// Create a single instance initialized with default values

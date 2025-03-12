@@ -36,7 +36,7 @@ namespace NPOI.HSSF.Record.Aggregates
     public class ConditionalFormattingTable : RecordAggregate
     {
 
-        private IList<CFRecordsAggregate> _cfHeaders;
+        private readonly IList<CFRecordsAggregate> _cfHeaders;
 
         /**
          * Creates an empty ConditionalFormattingTable

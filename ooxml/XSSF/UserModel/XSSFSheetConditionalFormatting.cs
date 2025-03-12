@@ -38,7 +38,7 @@ namespace NPOI.XSSF.UserModel
     {
         /** Office 2010 Conditional Formatting extensions namespace */
         protected static string CF_EXT_2009_NS_X14 = "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main";
-        private XSSFSheet _sheet;
+        private readonly XSSFSheet _sheet;
 
         /* namespace */
         internal XSSFSheetConditionalFormatting(XSSFSheet sheet)

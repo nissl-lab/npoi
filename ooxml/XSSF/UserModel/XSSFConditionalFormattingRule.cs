@@ -36,11 +36,11 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFConditionalFormattingRule : IConditionalFormattingRule
     {
-        private CT_CfRule _cfRule;
-        private XSSFSheet _sh;
+        private readonly CT_CfRule _cfRule;
+        private readonly XSSFSheet _sh;
         
-        private static Dictionary<ST_CfType, ConditionType> typeLookup = new Dictionary<ST_CfType, ConditionType>();
-        private static Dictionary<ST_CfType, ConditionFilterType> filterTypeLookup = new Dictionary<ST_CfType, ConditionFilterType>();
+        private static readonly Dictionary<ST_CfType, ConditionType> typeLookup = new Dictionary<ST_CfType, ConditionType>();
+        private static readonly Dictionary<ST_CfType, ConditionFilterType> filterTypeLookup = new Dictionary<ST_CfType, ConditionFilterType>();
         static XSSFConditionalFormattingRule()
         {
             typeLookup.Add(ST_CfType.cellIs, ConditionTypeClass.CellValueIs);
@@ -504,9 +504,9 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (!filterTypeLookup.ContainsKey(_cfRule.type))
+                if (!filterTypeLookup.TryGetValue(_cfRule.type, out ConditionFilterType type))
                     return null;
-                return filterTypeLookup[_cfRule.type];
+                return type;
             }
         }
         public IConditionFilterData FilterConfiguration

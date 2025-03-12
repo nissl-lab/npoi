@@ -29,7 +29,7 @@ namespace NPOI.SS.Formula.UDF
     public class AggregatingUDFFinder : UDFFinder
     {
 
-        private List<UDFFinder> _usedToolPacks = new List<UDFFinder>();
+        private readonly List<UDFFinder> _usedToolPacks = new List<UDFFinder>();
 
         public AggregatingUDFFinder(params UDFFinder[] usedToolPacks)
         {

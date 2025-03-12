@@ -32,8 +32,8 @@ namespace NPOI.XSSF.UserModel
     public class XSSFEvaluationCell : IEvaluationCell
     {
 
-        private IEvaluationSheet _evalSheet;
-        private XSSFCell _cell;
+        private readonly IEvaluationSheet _evalSheet;
+        private readonly XSSFCell _cell;
 
         public XSSFEvaluationCell(ICell cell, XSSFEvaluationSheet EvaluationSheet)
         {

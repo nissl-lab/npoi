@@ -37,9 +37,9 @@ namespace NPOI.POIFS.Storage
 {
     public class DocumentBlock : BigBlock
     {
-        private static byte _default_value = (byte)0xFF;
-        private byte[] _data;
-        private int _bytes_Read;
+        private static readonly byte _default_value = (byte)0xFF;
+        private readonly byte[] _data;
+        private readonly int _bytes_Read;
 
         /// <summary>
         /// create a document block from a raw data block

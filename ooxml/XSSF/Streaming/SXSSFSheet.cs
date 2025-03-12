@@ -32,12 +32,12 @@ namespace NPOI.XSSF.Streaming
     {
         // TODO: fields should be private and use public property
         internal XSSFSheet _sh;
-        private SXSSFWorkbook _workbook;
+        private readonly SXSSFWorkbook _workbook;
         //private TreeMap<Integer, SXSSFRow> _rows = new TreeMap<Integer, SXSSFRow>();
-        private IDictionary<int, SXSSFRow> _rows = new Dictionary<int, SXSSFRow>();
-        private SheetDataWriter _writer;
+        private readonly IDictionary<int, SXSSFRow> _rows = new Dictionary<int, SXSSFRow>();
+        private readonly SheetDataWriter _writer;
         private int _randomAccessWindowSize = SXSSFWorkbook.DEFAULT_WINDOW_SIZE;
-        private Lazy<AutoSizeColumnTracker> _autoSizeColumnTracker;
+        private readonly Lazy<AutoSizeColumnTracker> _autoSizeColumnTracker;
         private int outlineLevelRow = 0;
         private int lastFlushedRowNumber = -1;
         private bool allFlushed = false;
@@ -811,8 +811,8 @@ namespace NPOI.XSSF.Streaming
 
         public IRow GetRow(int rownum)
         {
-            if (_rows.ContainsKey(rownum))
-                return _rows[rownum];
+            if (_rows.TryGetValue(rownum, out SXSSFRow row))
+                return row;
             else
                 return null;
         }

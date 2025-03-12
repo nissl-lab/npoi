@@ -40,7 +40,7 @@ namespace NPOI.XSSF.Streaming
     /// </summary>
     public class SXSSFPicture : IPicture
     {
-        private static POILogger logger = POILogFactory.GetLogger(typeof(SXSSFPicture));
+        private static readonly POILogger logger = POILogFactory.GetLogger(typeof(SXSSFPicture));
         /// <summary>
         /// <para>
         /// Column width measured as the number of characters of the maximum digit width of the
@@ -51,10 +51,10 @@ namespace NPOI.XSSF.Streaming
         /// This value is the same for default font in Office 2007 (Calibry) and Office 2003 and earlier (Arial)
         /// </para>
         /// </summary>
-        private static float DEFAULT_COLUMN_WIDTH = 9.140625f;
+        private static readonly float DEFAULT_COLUMN_WIDTH = 9.140625f;
 
-        private SXSSFWorkbook _wb;
-        private XSSFPicture _picture;
+        private readonly SXSSFWorkbook _wb;
+        private readonly XSSFPicture _picture;
 
         public SXSSFPicture(SXSSFWorkbook _wb, XSSFPicture _picture)
         {

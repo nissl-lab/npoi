@@ -44,10 +44,10 @@ namespace NPOI.HSSF.Record
     {
         public const short sid = 0xbe;
         //private short             field_1_row;
-        private int _row;
-        private int _first_col;
-        private short[] _xfs;
-        private int _last_col;
+        private readonly int _row;
+        private readonly int _first_col;
+        private readonly short[] _xfs;
+        private readonly int _last_col;
 
         /** Creates new MulBlankRecord */
 

@@ -92,7 +92,7 @@ namespace NPOI.SS.UserModel
             int digits = 10;
             if (Math.Abs(value) > 1)
             {
-                int len = (int)Math.Log10((int)Math.Abs(value)) + 1;
+                int len = (int)Math.Log10((long)Math.Abs(value)) + 1;
                 digits -= len;
             }
             double rounded = Math.Round(value, digits, MidpointRounding.AwayFromZero);

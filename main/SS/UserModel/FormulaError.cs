@@ -60,7 +60,7 @@ namespace NPOI.SS.UserModel
                 smap.Add(error.String, error);
             }
         }
-        private static FormulaError[] _values;
+        private static readonly FormulaError[] _values;
 
         internal static readonly FormulaError _NO_ERROR = new FormulaError(-1, "(no error)", "_NO_ERROR");
         /**
@@ -149,9 +149,9 @@ namespace NPOI.SS.UserModel
          */
         public static readonly FormulaError FUNCTION_NOT_IMPLEMENTED = new FormulaError(unchecked((int)0xFFFFFFE2), "~FUNCTION~NOT~IMPLEMENTED~", "FUNCTION_NOT_IMPLEMENTED");
 
-        private byte type;
-        private int longType;
-        private String repr;
+        private readonly byte type;
+        private readonly int longType;
+        private readonly String repr;
 
         private FormulaError(int type, String repr, string name)
         {
@@ -206,9 +206,9 @@ namespace NPOI.SS.UserModel
             }
         }
 
-        private static Dictionary<String, FormulaError> smap = new Dictionary<string, FormulaError>();
-        private static Dictionary<Byte, FormulaError> bmap = new Dictionary<byte, FormulaError>();
-        private static Dictionary<int, FormulaError> imap = new Dictionary<int, FormulaError>();
+        private static readonly Dictionary<String, FormulaError> smap = new Dictionary<string, FormulaError>();
+        private static readonly Dictionary<Byte, FormulaError> bmap = new Dictionary<byte, FormulaError>();
+        private static readonly Dictionary<int, FormulaError> imap = new Dictionary<int, FormulaError>();
         public static bool IsValidCode(int errorCode)
         {
             foreach (FormulaError error in _values)
@@ -220,14 +220,14 @@ namespace NPOI.SS.UserModel
         }
         public static FormulaError ForInt(byte type)
         {
-            if (bmap.ContainsKey(type))
-                return bmap[type];
+            if (bmap.TryGetValue(type, out FormulaError i))
+                return i;
             throw new ArgumentException("Unknown error type: " + type);
         }
         public static FormulaError ForInt(int type)
         {
-            if (imap.ContainsKey(type))
-                return imap[type];
+            if (imap.TryGetValue(type, out FormulaError i))
+                return i;
 
             if (bmap.ContainsKey((byte)type))
                 return bmap[(byte)type];
@@ -237,8 +237,8 @@ namespace NPOI.SS.UserModel
 
         public static FormulaError ForString(String code)
         {
-            if (smap.ContainsKey(code))
-                return smap[code];
+            if (smap.TryGetValue(code, out FormulaError s))
+                return s;
             
             throw new ArgumentException("Unknown error code: " + code);
         }

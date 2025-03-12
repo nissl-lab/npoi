@@ -42,11 +42,11 @@ namespace NPOI.SS.Util
     ///</example>
     public class DateFormatConverter
     {
-        private static POILogger logger = POILogFactory.GetLogger(typeof(DateFormatConverter));
+        private static readonly POILogger logger = POILogFactory.GetLogger(typeof(DateFormatConverter));
 
         public class DateFormatTokenizer
         {
-            string format;
+            readonly string format;
             int pos;
 
             public DateFormatTokenizer(string format)
@@ -118,8 +118,8 @@ namespace NPOI.SS.Util
             }
         }
 
-        private static Dictionary<string, string> tokenConversions = PrepareTokenConversions();
-        private static Dictionary<string, string> localePrefixes = PrepareLocalePrefixes();
+        private static readonly Dictionary<string, string> tokenConversions = PrepareTokenConversions();
+        private static readonly Dictionary<string, string> localePrefixes = PrepareLocalePrefixes();
 
         private static Dictionary<string, string> PrepareTokenConversions()
         {
@@ -340,11 +340,11 @@ namespace NPOI.SS.Util
         {
             string localeString = locale.ToString().ToLower();
             string result = null;
-            if (!localePrefixes.ContainsKey(localeString))
+            if (!localePrefixes.TryGetValue(localeString, out string prefix))
             {
                 string name = localeString.IndexOf("-") > 0 ? localeString.Substring(0, localeString.IndexOf("-")) :
                     localeString;
-                if (!localePrefixes.ContainsKey(name))
+                if (!localePrefixes.TryGetValue(name, out string localePrefix))
                 {
                     CultureInfo parentLocale = CultureInfo.GetCultureInfo(name);
                     logger.Log(POILogger.ERROR, "Unable to find prefix for " + locale + "(" + locale.DisplayName + ") or "
@@ -353,12 +353,12 @@ namespace NPOI.SS.Util
                 }
                 else
                 {
-                    result = localePrefixes[name];
+                    result = localePrefix;
                 }
             }
             else
             {
-                result = localePrefixes[localeString];
+                result = prefix;
             }
             return result;
         }
@@ -390,12 +390,11 @@ namespace NPOI.SS.Util
                 else
                 {
                     // It's a code, translate it if necessary
-                    if (!tokenConversions.ContainsKey(token))
+                    if (!tokenConversions.TryGetValue(token, out string mappedToken))
                     {
                         result.Append(token);
                     } else
                     {
-                        string mappedToken = tokenConversions[(token)];
                         result.Append(mappedToken);
                     }
                 }

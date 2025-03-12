@@ -32,7 +32,7 @@ namespace NPOI.HSSF.Record
         public const int ENCODED_SIZE = 6;
 
         /** index to External Book Block (which starts with a EXTERNALBOOK record) */
-        private int _extBookIndex;
+        private readonly int _extBookIndex;
         private int _firstSheetIndex; // may be -1 (0xFFFF)
         private int _lastSheetIndex;  // may be -1 (0xFFFF)
 
@@ -114,7 +114,7 @@ namespace NPOI.HSSF.Record
     public class ExternSheetRecord : StandardRecord
     {
         public const short sid = 0x17;
-        private IList<RefSubRecord> _list;
+        private readonly IList<RefSubRecord> _list;
 
 
 

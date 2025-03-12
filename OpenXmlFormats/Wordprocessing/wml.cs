@@ -129,8 +129,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_TxbxContent()
         {
-            this.itemsElementNameField = new ItemsChoiceType[0];
-            this.itemsField = new object[0];
+            this.itemsElementNameField = Array.Empty<ItemsChoiceType>();
+            this.itemsField = Array.Empty<object>();
         }
 
         [XmlElement("oMath", typeof(CT_OMath), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]

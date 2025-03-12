@@ -31,8 +31,8 @@ namespace NPOI.HSSF.UserModel
     /// </summary>
     public class HSSFShapeGroup : HSSFShape, HSSFShapeContainer
     {
-        private List<HSSFShape> shapes = new List<HSSFShape>();
-        private EscherSpgrRecord _spgrRecord;
+        private readonly List<HSSFShape> shapes = new List<HSSFShape>();
+        private readonly EscherSpgrRecord _spgrRecord;
 
         public HSSFShapeGroup(EscherContainerRecord spgrContainer, ObjRecord objRecord)
             : base(spgrContainer, objRecord)

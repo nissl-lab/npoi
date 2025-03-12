@@ -30,7 +30,7 @@ namespace NPOI.XSSF.UserModel
     public class XSSFRelation : POIXMLRelation
     {
 
-        private static POILogger log = POILogFactory.GetLogger(typeof(XSSFRelation));
+        private static readonly POILogger log = POILogFactory.GetLogger(typeof(XSSFRelation));
 
         /**
          * A map to lookup POIXMLRelation by its relation type
@@ -363,8 +363,8 @@ namespace NPOI.XSSF.UserModel
          */
         public static XSSFRelation GetInstance(String rel)
         {
-            if (_table.ContainsKey(rel))
-                return _table[rel];
+            if (_table.TryGetValue(rel, out XSSFRelation instance))
+                return instance;
             else
                 return null;
         }

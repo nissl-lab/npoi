@@ -37,8 +37,8 @@ namespace NPOI.HSSF.Record
     public class DSFRecord: StandardRecord
     {
         public const short sid = 0x161;
-        private int _options;
-        private static BitField biff5BookStreamFlag = BitFieldFactory.GetInstance(0x0001);
+        private readonly int _options;
+        private static readonly BitField biff5BookStreamFlag = BitFieldFactory.GetInstance(0x0001);
 
         private DSFRecord(int options)
         {
