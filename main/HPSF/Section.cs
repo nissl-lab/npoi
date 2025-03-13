@@ -565,7 +565,7 @@ namespace NPOI.HPSF
                     }
                     catch(HPSFRuntimeException ex)
                     {
-                        throw ex;
+                        throw;
                     }
                     catch(Exception ex)
                     {
