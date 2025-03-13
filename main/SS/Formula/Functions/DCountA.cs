@@ -35,7 +35,7 @@ namespace NPOI.SS.Formula.Functions
         private long count;
         public bool ProcessMatch(ValueEval eval)
         {
-            if(!(eval is BlankEval))
+            if(eval is not BlankEval)
             {
                 count++;
             }

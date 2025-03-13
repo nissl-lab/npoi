@@ -673,12 +673,10 @@ namespace NPOI.XSSF.UserModel
 
         public override bool Equals(object obj)
         {
-            if (!(obj is XSSFRow))
+            if (obj is not XSSFRow other)
             {
                 return false;
             }
-
-            XSSFRow other = (XSSFRow)obj;
 
             return (RowNum == other.RowNum) &&
                    (Sheet == other.Sheet);

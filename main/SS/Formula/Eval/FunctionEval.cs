@@ -504,7 +504,7 @@ namespace NPOI.SS.Formula.Eval
             {
                 Function func = functions[i];
                 FunctionMetadata metaData = FunctionMetadataRegistry.GetFunctionByIndex(i);
-                if (func != null && !(func is NotImplementedFunction))
+                if (func != null && func is not NotImplementedFunction)
                 {
                     lst.Add(metaData.Name);
                 }

@@ -443,9 +443,9 @@ namespace NPOI.XSSF.UserModel
             List<XSSFChart> charts = new List<XSSFChart>();
             foreach (POIXMLDocumentPart part in GetRelations())
             {
-                if (part is XSSFChart)
+                if (part is XSSFChart chart)
                 {
-                    charts.Add((XSSFChart)part);
+                    charts.Add(chart);
                 }
             }
             return charts;
@@ -523,25 +523,25 @@ namespace NPOI.XSSF.UserModel
                     foreach(var s in lstCtShapes)
                     {
                         XSSFShape gShape = null;
-                        if(s is CT_Connector)
+                        if(s is CT_Connector connector)
                         {
-                            gShape = new XSSFConnector(this, (CT_Connector)s);
+                            gShape = new XSSFConnector(this, connector);
                         }
-                        else if(s is CT_Picture)
+                        else if(s is CT_Picture picture)
                         {
-                            gShape = new XSSFPicture(this, (CT_Picture)s);
+                            gShape = new XSSFPicture(this, picture);
                         }
-                        else if(s is CT_Shape)
+                        else if(s is CT_Shape ctShape)
                         {
-                            gShape = new XSSFSimpleShape(this, (CT_Shape)s);
+                            gShape = new XSSFSimpleShape(this, ctShape);
                         }
-                        else if(s is CT_GroupShape)
+                        else if(s is CT_GroupShape groupShape)
                         {
-                            gShape = new XSSFShapeGroup(this, (CT_GroupShape)s);
+                            gShape = new XSSFShapeGroup(this, groupShape);
                         }
-                        else if(s is CT_GraphicalObjectFrame)
+                        else if(s is CT_GraphicalObjectFrame frame)
                         {
-                            gShape = new XSSFGraphicFrame(this, (CT_GraphicalObjectFrame)s);
+                            gShape = new XSSFGraphicFrame(this, frame);
                         }
                         if(gShape != null)
                         {
@@ -595,14 +595,14 @@ namespace NPOI.XSSF.UserModel
         private XSSFAnchor GetAnchorFromIEGAnchor(IEG_Anchor ctAnchor)
         {
             CT_Marker ctFrom=null, ctTo=null;
-            if (ctAnchor is CT_TwoCellAnchor)
+            if (ctAnchor is CT_TwoCellAnchor cellAnchor)
             {
-                ctFrom = ((CT_TwoCellAnchor)ctAnchor).from;
-                ctTo = ((CT_TwoCellAnchor)ctAnchor).to;
+                ctFrom = cellAnchor.from;
+                ctTo = cellAnchor.to;
             }
-            else if (ctAnchor is CT_OneCellAnchor)
+            else if (ctAnchor is CT_OneCellAnchor oneCellAnchor)
             {
-                ctFrom = ((CT_OneCellAnchor)ctAnchor).from;
+                ctFrom = oneCellAnchor.from;
             }
             XSSFAnchor anchor = new XSSFClientAnchor(ctFrom, ctTo);
             return anchor;

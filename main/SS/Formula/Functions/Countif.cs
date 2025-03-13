@@ -231,9 +231,9 @@ namespace NPOI.SS.Formula.Functions
 
             public override bool Matches(ValueEval x)
             {
-                if(x is ErrorEval)
+                if(x is ErrorEval eval)
                 {
-                    int testValue = ((ErrorEval)x).ErrorCode;
+                    int testValue = eval.ErrorCode;
                     return Evaluate(testValue - _value);
                 }
                 return false;
@@ -261,7 +261,7 @@ namespace NPOI.SS.Formula.Functions
             public override bool Matches(ValueEval x)
             {
                 double testValue;
-                if(x is StringEval)
+                if(x is StringEval se)
                 {
                     // if the target(x) is a string, but parses as a number
                     // it may still count as a match, only for the equality operator
@@ -279,7 +279,7 @@ namespace NPOI.SS.Formula.Functions
                             // for example '>5' does not match '6',
                             return false;
                     }
-                    StringEval se = (StringEval)x;
+
                     Double val = OperandResolver.ParseDouble(se.StringValue);
                     if(double.IsNaN(val))
                     {
@@ -288,9 +288,8 @@ namespace NPOI.SS.Formula.Functions
                     }
                     return _value == val;
                 }
-                else if((x is NumberEval))
+                else if((x is NumberEval ne))
                 {
-                    NumberEval ne = (NumberEval)x;
                     testValue = ne.NumberValue;
                 }
                 else if((x is BlankEval))
@@ -350,9 +349,8 @@ namespace NPOI.SS.Formula.Functions
                     // }
                     // testValue = boolToInt(val.booleanValue());
                 }
-                else if(x is BoolEval)
+                else if(x is BoolEval be)
                 {
-                    BoolEval be = (BoolEval)x;
                     testValue = BoolToInt(be.BooleanValue);
                 }
                 else if((x is BlankEval))
@@ -430,7 +428,7 @@ namespace NPOI.SS.Formula.Functions
                     // no other criteria matches a blank cell
                     return false;
                 }
-                if(!(x is StringEval))
+                if(x is not StringEval eval)
                 {
                     if(_operator.Code==CmpOp.NE)
                         return true;
@@ -439,7 +437,7 @@ namespace NPOI.SS.Formula.Functions
                     // e.g. '4*7', NumberEval(4567) does not match
                     return false;
                 }
-                String testedValue = ((StringEval)x).StringValue;
+                String testedValue = eval.StringValue;
                 if((testedValue.Length < 1 && _value.Length < 1))
                 {
                     // odd case: criteria '=' behaves differently to criteria ''
@@ -547,13 +545,13 @@ namespace NPOI.SS.Formula.Functions
      */
         private double CountMatchingCellsInArea(ValueEval rangeArg, IMatchPredicate criteriaPredicate)
         {
-            if(rangeArg is RefEval)
+            if(rangeArg is RefEval arg)
             {
-                return CountUtils.CountMatchingCellsInRef((RefEval) rangeArg, criteriaPredicate);
+                return CountUtils.CountMatchingCellsInRef(arg, criteriaPredicate);
             }
-            else if(rangeArg is ThreeDEval)
+            else if(rangeArg is ThreeDEval eval)
             {
-                return CountUtils.CountMatchingCellsInArea((ThreeDEval) rangeArg, criteriaPredicate);
+                return CountUtils.CountMatchingCellsInArea(eval, criteriaPredicate);
             }
             else
             {
@@ -615,22 +613,22 @@ namespace NPOI.SS.Formula.Functions
 
             ValueEval evaluatedCriteriaArg = EvaluateCriteriaArg(arg, srcRowIndex, srcColumnIndex);
 
-            if(evaluatedCriteriaArg is NumberEval)
+            if(evaluatedCriteriaArg is NumberEval eval)
             {
-                return new NumberMatcher(((NumberEval) evaluatedCriteriaArg).NumberValue, CmpOp.OP_NONE);
+                return new NumberMatcher(eval.NumberValue, CmpOp.OP_NONE);
             }
-            if(evaluatedCriteriaArg is BoolEval)
+            if(evaluatedCriteriaArg is BoolEval boolEval)
             {
-                return new BooleanMatcher(((BoolEval) evaluatedCriteriaArg).BooleanValue, CmpOp.OP_NONE);
+                return new BooleanMatcher(boolEval.BooleanValue, CmpOp.OP_NONE);
             }
 
-            if(evaluatedCriteriaArg is StringEval)
+            if(evaluatedCriteriaArg is StringEval stringEval)
             {
-                return CreateGeneralMatchPredicate((StringEval) evaluatedCriteriaArg);
+                return CreateGeneralMatchPredicate(stringEval);
             }
-            if(evaluatedCriteriaArg is ErrorEval)
+            if(evaluatedCriteriaArg is ErrorEval errorEval)
             {
-                return new ErrorMatcher(((ErrorEval) evaluatedCriteriaArg).ErrorCode, CmpOp.OP_NONE);
+                return new ErrorMatcher(errorEval.ErrorCode, CmpOp.OP_NONE);
             }
             if(evaluatedCriteriaArg == BlankEval.instance)
             {

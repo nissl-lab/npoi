@@ -120,11 +120,11 @@ namespace NPOI.SS.UserModel
         }
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is RangeType))
+            if (obj == null || obj is not RangeType other)
             {
                 return false;
             }
-            RangeType other = obj as RangeType;
+
             return this.id == other.id && this.name == other.name;
         }
 

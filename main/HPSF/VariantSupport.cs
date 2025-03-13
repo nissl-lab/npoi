@@ -339,7 +339,7 @@ namespace NPOI.HPSF
                     break;
 
                 case Variant.VT_I4:
-                    if(!(value is int))
+                    if(value is not int)
                     {
                         throw new InvalidCastException("Could not cast an object to "
                                 + typeof(Int32).ToString() + ": "
@@ -368,12 +368,11 @@ namespace NPOI.HPSF
                 default:
                     /* The variant type is not supported yet. However, if the value
                      * is a byte array we can write it nevertheless. */
-                    if(value is byte[])
+                    if(value is byte[] bytes)
                     {
-                        byte[] b = (byte[])value;
-                        out1.Write(b, 0, b.Length);
-                        length = b.Length;
-                        WriteUnsupportedTypeMessage(new WritingNotSupportedException(type, value));
+                        out1.Write(bytes, 0, bytes.Length);
+                        length = bytes.Length;
+                        WriteUnsupportedTypeMessage(new WritingNotSupportedException(type, bytes));
                     }
                     else
                     {

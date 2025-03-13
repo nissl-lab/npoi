@@ -666,9 +666,9 @@ namespace NPOI.HSSF.Record
         private static short GetSid(List<RecordBase> records, int loc)
         {
             RecordBase record = records[(loc)];
-            if (record is Record)
+            if (record is Record record1)
             {
-                return ((Record)record).Sid;
+                return record1.Sid;
             }
             else
             {

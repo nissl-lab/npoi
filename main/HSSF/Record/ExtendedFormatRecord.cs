@@ -1018,9 +1018,8 @@ namespace NPOI.HSSF.Record
                 return true;
             if (obj == null)
                 return false;
-            if (obj is ExtendedFormatRecord)
+            if (obj is ExtendedFormatRecord other)
             {
-                ExtendedFormatRecord other = (ExtendedFormatRecord)obj;
                 if (field_1_font_index != other.field_1_font_index)
                     return false;
                 if (field_2_format_index != other.field_2_format_index)

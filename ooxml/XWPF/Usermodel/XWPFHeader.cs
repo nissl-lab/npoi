@@ -69,14 +69,14 @@ namespace NPOI.XWPF.UserModel
             cursor.Dispose();*/
             foreach (object o in hdrFtr.Items)
             {
-                if (o is CT_P)
+                if (o is CT_P ctP)
                 {
-                    XWPFParagraph p = new XWPFParagraph((CT_P)o, this);
+                    XWPFParagraph p = new XWPFParagraph(ctP, this);
                     paragraphs.Add(p);
                 }
-                if (o is CT_Tbl)
+                if (o is CT_Tbl tbl)
                 {
-                    XWPFTable t = new XWPFTable((CT_Tbl)o, this);
+                    XWPFTable t = new XWPFTable(tbl, this);
                     tables.Add(t);
                 }
             }
@@ -125,21 +125,21 @@ namespace NPOI.XWPF.UserModel
                 headerFooter = hdrDocument.Hdr;
                 foreach (object o in headerFooter.Items)
                 {
-                    if (o is CT_P)
+                    if (o is CT_P ctP)
                     {
-                        XWPFParagraph p = new XWPFParagraph((CT_P)o, this);
+                        XWPFParagraph p = new XWPFParagraph(ctP, this);
                         paragraphs.Add(p);
                         bodyElements.Add(p);
                     }
-                    if (o is CT_Tbl)
+                    if (o is CT_Tbl tbl)
                     {
-                        XWPFTable t = new XWPFTable((CT_Tbl)o, this);
+                        XWPFTable t = new XWPFTable(tbl, this);
                         tables.Add(t);
                         bodyElements.Add(t);
                     }
-                    if (o is CT_SdtBlock)
+                    if (o is CT_SdtBlock block)
                     {
-                        XWPFSDT c = new XWPFSDT((CT_SdtBlock)o, this);
+                        XWPFSDT c = new XWPFSDT(block, this);
                         bodyElements.Add(c);
                     }
                 }

@@ -111,8 +111,8 @@ namespace NPOI.HSSF.Extractor
 
         private void Open(Stream biffStream)
         {
-            BufferedStream bis = (biffStream is BufferedStream) 
-            ? (BufferedStream)biffStream
+            BufferedStream bis = (biffStream is BufferedStream stream) 
+            ? stream
             : new BufferedStream(biffStream, 8);
 
             if (NPOIFSFileSystem.HasPOIFSHeader(bis))

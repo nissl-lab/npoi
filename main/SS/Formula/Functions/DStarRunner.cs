@@ -71,12 +71,10 @@ namespace NPOI.SS.Formula.Functions
                 ValueEval database, ValueEval filterColumn, ValueEval conditionDatabase)
         {
             // Input Processing and error Checks.
-            if (!(database is AreaEval) || !(conditionDatabase is AreaEval))
+            if (database is not AreaEval db || conditionDatabase is not AreaEval cdb)
             {
                 return ErrorEval.VALUE_INVALID;
             }
-            AreaEval db = (AreaEval)database;
-            AreaEval cdb = (AreaEval)conditionDatabase;
 
             // Create an algorithm runner.
             IDStarAlgorithm algorithm = null;
@@ -134,10 +132,10 @@ namespace NPOI.SS.Formula.Functions
             int fc;
             try
             {
-                if(filterColumn is NumericValueEval)
+                if(filterColumn is NumericValueEval eval)
                 {
                     //fc is zero based while Excel uses 1 based column numbering
-                    fc = (int) Math.Round(((NumericValueEval) filterColumn).NumberValue) - 1;
+                    fc = (int) Math.Round(eval.NumberValue) - 1;
                 }
                 else
                     fc = GetColumnForName(filterColumn, db);
@@ -170,7 +168,7 @@ namespace NPOI.SS.Formula.Functions
                 if (matches)
                 {
                     ValueEval currentValueEval = ResolveReference(db, row, fc);
-                    if(fc < 0 && algorithm.AllowEmptyMatchField && !(currentValueEval is NumericValueEval)) 
+                    if(fc < 0 && algorithm.AllowEmptyMatchField && currentValueEval is not NumericValueEval) 
                     {
                         currentValueEval = NumberEval.ZERO;
                     }
@@ -280,7 +278,7 @@ namespace NPOI.SS.Formula.Functions
                     // The column in the DB to apply the condition to.
                     ValueEval targetHeader = ResolveReference(cdb, 0, column);
 
-                    if (!(targetHeader is StringValueEval))
+                    if (targetHeader is not StringValueEval)
                     {
                         throw new EvaluationException(ErrorEval.VALUE_INVALID);
                     }
@@ -328,8 +326,8 @@ namespace NPOI.SS.Formula.Functions
          */
         private static bool testNormalCondition(ValueEval value, ValueEval condition)
         {
-            if (condition is StringEval) {
-                String conditionString = ((StringEval)condition).StringValue;
+            if (condition is StringEval eval) {
+                String conditionString = eval.StringValue;
 
                 if (conditionString.StartsWith("<"))
                 { // It's a </<= condition.
@@ -412,8 +410,8 @@ namespace NPOI.SS.Formula.Functions
                     }
                 }
             }
-            else if (condition is NumericValueEval) {
-                double conditionNumber = ((NumericValueEval)condition).NumberValue;
+            else if (condition is NumericValueEval valueEval) {
+                double conditionNumber = valueEval.NumberValue;
                 Double? valueNumber = GetNumberFromValueEval(value);
                 if (valueNumber == null)
                 {
@@ -422,9 +420,9 @@ namespace NPOI.SS.Formula.Functions
 
                 return conditionNumber == valueNumber;
             }
-            else if (condition is ErrorEval) {
-                if (value is ErrorEval) {
-                    return ((ErrorEval)condition).ErrorCode == ((ErrorEval)value).ErrorCode;
+            else if (condition is ErrorEval errorEval) {
+                if (value is ErrorEval eval1) {
+                    return errorEval.ErrorCode == eval1.ErrorCode;
                 }
                 else {
                     return false;
@@ -448,9 +446,9 @@ namespace NPOI.SS.Formula.Functions
                 ValueEval valueEval, Operator op, String condition)
         {
             // Construct double from ValueEval.
-            if (!(valueEval is NumericValueEval))
+            if (valueEval is not NumericValueEval eval)
                 return false;
-            double value = ((NumericValueEval)valueEval).NumberValue;
+            double value = eval.NumberValue;
 
             // Construct double from condition.
             double conditionValue = 0.0;
@@ -514,13 +512,13 @@ namespace NPOI.SS.Formula.Functions
 
         private static Double? GetNumberFromValueEval(ValueEval value)
         {
-            if (value is NumericValueEval)
+            if (value is NumericValueEval eval)
             {
-                return ((NumericValueEval)value).NumberValue;
+                return eval.NumberValue;
             }
-            else if (value is StringValueEval)
+            else if (value is StringValueEval valueEval)
             {
-                String stringValue = ((StringValueEval)value).StringValue;
+                String stringValue = valueEval.StringValue;
                 try
                 {
                     return Double.Parse(stringValue);

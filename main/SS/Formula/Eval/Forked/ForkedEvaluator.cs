@@ -49,9 +49,9 @@ namespace NPOI.SS.Formula.Eval.Forked
         }
         private static IEvaluationWorkbook CreateEvaluationWorkbook(IWorkbook wb)
         {
-            if (wb is HSSFWorkbook)
+            if (wb is HSSFWorkbook workbook)
             {
-                return HSSFEvaluationWorkbook.Create((HSSFWorkbook)wb);
+                return HSSFEvaluationWorkbook.Create(workbook);
             }
             else
             {

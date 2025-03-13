@@ -44,19 +44,19 @@ namespace NPOI.SS.Formula.Functions
         private ValueEval maximumValue;
         public bool ProcessMatch(ValueEval eval)
         {
-            if(eval is NumericValueEval)
+            if(eval is NumericValueEval valueEval)
             {
                 if(maximumValue == null)
                 { // First match, just Set the value.
-                    maximumValue = eval;
+                    maximumValue = valueEval;
                 }
                 else
                 { // There was a previous match, find the new minimum.
-                    double currentValue = ((NumericValueEval)eval).NumberValue;
+                    double currentValue = valueEval.NumberValue;
                     double oldValue = ((NumericValueEval)maximumValue).NumberValue;
                     if(currentValue > oldValue)
                     {
-                        maximumValue = eval;
+                        maximumValue = valueEval;
                     }
                 }
             }

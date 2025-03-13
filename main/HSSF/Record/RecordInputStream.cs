@@ -57,10 +57,10 @@ namespace NPOI.HSSF.Record
 
         internal static ILittleEndianInput GetLEI(Stream in1)
         {
-            if (in1 is ILittleEndianInput)
+            if (in1 is ILittleEndianInput input)
             {
                 // accessing directly is an optimisation
-                return (ILittleEndianInput)in1;
+                return input;
             }
             // less optimal, but should work OK just the same. Often occurs in junit tests.
             return new LittleEndianInputStream(in1);

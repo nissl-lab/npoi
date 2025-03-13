@@ -42,25 +42,22 @@ namespace NPOI.XSSF.UserModel
             _Runs = new List<XSSFTextRun>();
             foreach (object ch in _p.r)
             {
-                if (ch is CT_RegularTextRun)
+                if (ch is CT_RegularTextRun run)
                 {
-                    CT_RegularTextRun r = (CT_RegularTextRun)ch;
-                    _Runs.Add(new XSSFTextRun(r, this));
+                    _Runs.Add(new XSSFTextRun(run, this));
                 }
-                else if (ch is CT_TextLineBreak)
+                else if (ch is CT_TextLineBreak br)
                 {
-                    CT_TextLineBreak br = (CT_TextLineBreak)ch;
                     CT_RegularTextRun r = new CT_RegularTextRun();
                     r.rPr = (br.rPr);
                     r.t=("\n");
                     _Runs.Add(new XSSFTextRun(r, this));
                 }
-                else if (ch is CT_TextField)
+                else if (ch is CT_TextField field)
                 {
-                    CT_TextField f = (CT_TextField)ch;
                     CT_RegularTextRun r = new CT_RegularTextRun();
-                    r.rPr = (f.rPr);
-                    r.t = (f.t);
+                    r.rPr = (field.rPr);
+                    r.t = (field.t);
                     _Runs.Add(new XSSFTextRun(r, this));
                 }
             }

@@ -39,14 +39,14 @@ namespace NPOI.POIFS.Crypt
         public void Init(int cipherMode, IKey key, AlgorithmParameterSpec aps)
         {
             ICipherParameters cp;
-            if (aps is RC2ParameterSpec)
+            if (aps is RC2ParameterSpec spec)
             {
-                cp = new RC2Parameters(key.GetEncoded(), (aps as RC2ParameterSpec).GetEffectiveKeyBits());
+                cp = new RC2Parameters(key.GetEncoded(), spec.GetEffectiveKeyBits());
             }
-            else if (aps is IvParameterSpec)
+            else if (aps is IvParameterSpec parameterSpec)
             {
                 cp = new KeyParameter(key.GetEncoded());
-                cp = new ParametersWithIV(cp, (aps as IvParameterSpec).GetIV());
+                cp = new ParametersWithIV(cp, parameterSpec.GetIV());
             }
             else
             {

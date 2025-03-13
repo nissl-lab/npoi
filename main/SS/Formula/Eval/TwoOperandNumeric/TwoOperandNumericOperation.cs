@@ -32,7 +32,7 @@ namespace NPOI.SS.Formula.Eval
                 if (result == 0.0)
                 { // this '==' matches +0.0 and -0.0
                     // Excel Converts -0.0 to +0.0 for '*', '/', '%', '+' and '^'
-                    if (!(this is SubtractEval))
+                    if (this is not SS.Formula.Eval.SubtractEval)
                     {
                         return NumberEval.ZERO;
                     }

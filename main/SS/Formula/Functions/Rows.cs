@@ -32,9 +32,9 @@ namespace NPOI.SS.Formula.Functions
         {
 
             int result;
-            if (arg0 is TwoDEval)
+            if (arg0 is TwoDEval eval)
             {
-                result = ((TwoDEval)arg0).Height;
+                result = eval.Height;
             }
             else if (arg0 is RefEval)
             {

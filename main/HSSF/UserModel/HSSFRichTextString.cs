@@ -318,9 +318,9 @@ namespace NPOI.HSSF.UserModel
         /// <returns></returns>
         public override bool Equals(Object o)
         {
-            if (o is HSSFRichTextString)
+            if (o is HSSFRichTextString textString)
             {
-                return _string.Equals(((HSSFRichTextString)o)._string);
+                return _string.Equals(textString._string);
             }
             return false;
         }

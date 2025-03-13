@@ -124,12 +124,11 @@ namespace NPOI.XSSF.UserModel.Charts
 
         public void FillChart(SS.UserModel.IChart chart, params IChartAxis[] axis)
         {
-            if (!(chart is XSSFChart))
+            if (chart is not XSSFChart xssfChart)
             {
                 throw new ArgumentException("Chart must be instance of XSSFChart");
             }
 
-            XSSFChart xssfChart = (XSSFChart)chart;
             CT_PlotArea plotArea = xssfChart.GetCTChart().plotArea;
             int allSeriesCount = plotArea.GetAllSeriesCount();
             CT_BarChart barChart = plotArea.AddNewBarChart();

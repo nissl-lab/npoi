@@ -647,9 +647,9 @@ namespace NPOI.HSSF.UserModel
  */
         private void NotifyFormulaChanging()
         {
-            if (_record is FormulaRecordAggregate)
+            if (_record is FormulaRecordAggregate aggregate)
             {
-                ((FormulaRecordAggregate)_record).NotifyFormulaChanging();
+                aggregate.NotifyFormulaChanging();
             }
         }
 
@@ -661,10 +661,10 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                if (!(_record is FormulaRecordAggregate))
+                if (_record is not FormulaRecordAggregate aggregate)
                     throw TypeMismatch(CellType.Formula, cellType, true);
 
-                return HSSFFormulaParser.ToFormulaString(book, ((FormulaRecordAggregate)_record).FormulaTokens);
+                return HSSFFormulaParser.ToFormulaString(book, aggregate.FormulaTokens);
             }
             set
             {
@@ -1361,12 +1361,11 @@ namespace NPOI.HSSF.UserModel
             for (IEnumerator<RecordBase> it = _sheet.Sheet.Records.GetEnumerator(); it.MoveNext(); )
             {
                 RecordBase rec = it.Current;
-                if (rec is HyperlinkRecord)
+                if (rec is HyperlinkRecord link)
                 {
-                    HyperlinkRecord link = (HyperlinkRecord)rec;
                     if (link.FirstColumn == _record.Column && link.FirstRow == _record.Row)
                     {
-                        toRemove = rec;
+                        toRemove = link;
                         break;
                         //it.Remove();
                         //return;

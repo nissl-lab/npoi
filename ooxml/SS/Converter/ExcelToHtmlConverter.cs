@@ -226,9 +226,9 @@ namespace NPOI.SS.Converter
 
         protected void ProcessDocumentInformation(IWorkbook workbook)
         {
-            if (workbook is NPOI.HSSF.UserModel.HSSFWorkbook)
+            if (workbook is NPOI.HSSF.UserModel.HSSFWorkbook hssfWorkbook)
             {
-                SummaryInformation summaryInformation = ((HSSFWorkbook)workbook).SummaryInformation;
+                SummaryInformation summaryInformation = hssfWorkbook.SummaryInformation;
                 if (summaryInformation != null)
                 {
                     if (!string.IsNullOrEmpty(summaryInformation.Title))
@@ -244,9 +244,9 @@ namespace NPOI.SS.Converter
                         htmlDocumentFacade.AddDescription(summaryInformation.Comments);
                 }
             }
-            else if(workbook is NPOI.XSSF.UserModel.XSSFWorkbook)
+            else if(workbook is NPOI.XSSF.UserModel.XSSFWorkbook xssfWorkbook)
             {
-                POIXMLProperties props=((NPOI.XSSF.UserModel.XSSFWorkbook)workbook).GetProperties();
+                POIXMLProperties props=xssfWorkbook.GetProperties();
                 if (!string.IsNullOrEmpty(props.CoreProperties.Title))
                 {
                     htmlDocumentFacade.Title = props.CoreProperties.Title;
@@ -645,9 +645,9 @@ namespace NPOI.SS.Converter
         {
             StringBuilder style = new StringBuilder();
 
-            if (workbook is HSSFWorkbook)
+            if (workbook is HSSFWorkbook hssfWorkbook)
             {
-                HSSFPalette palette = ((HSSFWorkbook)workbook).GetCustomPalette();
+                HSSFPalette palette = hssfWorkbook.GetCustomPalette();
                 style.Append("white-space: pre-wrap; ");
                 ExcelToHtmlUtils.AppendAlign(style, cellStyle.Alignment);
 
@@ -738,9 +738,9 @@ namespace NPOI.SS.Converter
             borderStyle.Append(' ');
             borderStyle.Append(ExcelToHtmlUtils.GetBorderStyle(xlsBorder));
 
-            if (workbook is HSSFWorkbook)
+            if (workbook is HSSFWorkbook hssfWorkbook)
             {
-                var customPalette = ((HSSFWorkbook) workbook).GetCustomPalette();
+                var customPalette = hssfWorkbook.GetCustomPalette();
                 HSSFColor color = null;
                 if (customPalette != null)
                     color = customPalette.GetColor(borderColor);
@@ -792,9 +792,9 @@ namespace NPOI.SS.Converter
                     break;
             }
 
-            if (workbook is HSSFWorkbook)
+            if (workbook is HSSFWorkbook hssfWorkbook)
             {
-                var customPalette = ((HSSFWorkbook) workbook).GetCustomPalette();
+                var customPalette = hssfWorkbook.GetCustomPalette();
                 HSSFColor fontColor=null;
                 if(customPalette!=null)
                     fontColor = customPalette.GetColor(font.Color);

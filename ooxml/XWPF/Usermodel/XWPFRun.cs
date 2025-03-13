@@ -155,9 +155,8 @@ namespace NPOI.XWPF.UserModel
             //    pictures.Add((NPOI.OpenXmlFormats.Dml.CT_Picture)pict);
             //}
             //}
-            if (o is CT_Drawing)
+            if (o is CT_Drawing drawing)
             {
-                CT_Drawing drawing = o as CT_Drawing;
                 if (drawing.inline != null)
                 {
                     foreach (CT_Inline inline in drawing.inline)
@@ -166,9 +165,9 @@ namespace NPOI.XWPF.UserModel
                     }
                 }
             }
-            else if (o is CT_GraphicalObjectData)
+            else if (o is CT_GraphicalObjectData data)
             {
-                GetPictures(o as CT_GraphicalObjectData, pictures);
+                GetPictures(data, pictures);
             }
             return pictures;
         }
@@ -217,8 +216,8 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                if (parent is XWPFParagraph)
-                    return (XWPFParagraph)parent;
+                if (parent is XWPFParagraph paragraph)
+                    return paragraph;
                 return null;
             }
         }
@@ -475,17 +474,16 @@ namespace NPOI.XWPF.UserModel
                 for (int i = 0; i < run.Items.Count; i++)
                 {
                     object o = run.Items[i];
-                    if (o is CT_Text)
+                    if (o is CT_Text ctText)
                     {
                         if (!(run.ItemsElementName[i] == RunItemsChoiceType.instrText))
                         {
-                            text.Append(((CT_Text)o).Value);
+                            text.Append(ctText.Value);
                         }
                     }
                     // Complex type evaluation (currently only for extraction of check boxes)
-                    if (o is CT_FldChar)
+                    if (o is CT_FldChar ctfldChar)
                     {
-                        CT_FldChar ctfldChar = ((CT_FldChar)o);
                         if (ctfldChar.fldCharType == ST_FldCharType.begin)
                         {
                             if (ctfldChar.ffData != null)
@@ -533,9 +531,8 @@ namespace NPOI.XWPF.UserModel
                         }
                     }
 
-                    if (o is CT_FtnEdnRef)
+                    if (o is CT_FtnEdnRef ftn)
                     {
-                        CT_FtnEdnRef ftn = (CT_FtnEdnRef)o;
                         String footnoteRef = ftn.DomNode.LocalName.Equals("footnoteReference") ?
                             "[footnoteRef:" + ftn.id + "]" : "[endnoteRef:" + ftn.id + "]";
                         text.Append(footnoteRef);
@@ -1072,15 +1069,13 @@ namespace NPOI.XWPF.UserModel
             // Work out what to add the picture to, then add both the
             //  picture and the relationship for it
             // TODO Should we have an interface for this sort of thing?
-            if (parent.Part is XWPFHeaderFooter)
+            if (parent.Part is XWPFHeaderFooter headerFooter)
             {
-                XWPFHeaderFooter headerFooter = (XWPFHeaderFooter)parent.Part;
                 relationId = headerFooter.AddPictureData(pictureData, pictureType);
                 picData = (XWPFPictureData)headerFooter.GetRelationById(relationId);
             }
-            else if (parent.Part is XWPFComments)
+            else if (parent.Part is XWPFComments comments)
             {
-                XWPFComments comments = (XWPFComments)parent.Part;
                 relationId = comments.AddPictureData(pictureData, pictureType);
                 picData = (XWPFPictureData)comments.GetRelationById(relationId);
             }

@@ -120,12 +120,11 @@ namespace NPOI.SS.Formula.Functions
             while (it.MoveNext())
             {
                 ValueEval eval = it.Current;
-                if (eval is LazyRefEval)
+                if (eval is LazyRefEval lazyRefEval)
                 {
-                    LazyRefEval lazyRefEval = (LazyRefEval)eval;
                     if (lazyRefEval.IsSubTotal)
                     {
-                        toRemove.Add(eval);
+                        toRemove.Add(lazyRefEval);
                     }
                 }
             }

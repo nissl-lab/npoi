@@ -214,9 +214,9 @@ namespace NPOI.DDF
                 for (IEnumerator iterator = ChildRecords.GetEnumerator(); iterator.MoveNext(); )
                 {
                     EscherRecord r = (EscherRecord)iterator.Current;
-                    if (r is EscherContainerRecord)
+                    if (r is EscherContainerRecord record)
                     {
-                        containers.Add((EscherContainerRecord)r);
+                        containers.Add(record);
                     }
                 }
                 return containers;
@@ -379,10 +379,9 @@ namespace NPOI.DDF
             {
                 Object er = it.Current;
                 EscherRecord r = (EscherRecord)er;
-                if (r is EscherContainerRecord)
+                if (r is EscherContainerRecord record)
                 {
-                    EscherContainerRecord c = (EscherContainerRecord)r;
-                    c.GetRecordsById(recordId, ref out1);
+                    record.GetRecordsById(recordId, ref out1);
                 }
                 else if (r.RecordId == recordId)
                 {

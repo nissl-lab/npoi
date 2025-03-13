@@ -107,21 +107,21 @@ namespace NPOI.XWPF.UserModel
 
                 foreach (object o in ctDocument.body.Items)
                 {
-                    if (o is CT_P)
+                    if (o is CT_P ctP)
                     {
-                        XWPFParagraph p = new XWPFParagraph((CT_P)o, this);
+                        XWPFParagraph p = new XWPFParagraph(ctP, this);
                         bodyElements.Add(p);
                         paragraphs.Add(p);
                     }
-                    else if (o is CT_Tbl)
+                    else if (o is CT_Tbl tbl)
                     {
-                        XWPFTable t = new XWPFTable((CT_Tbl)o, this);
+                        XWPFTable t = new XWPFTable(tbl, this);
                         bodyElements.Add(t);
                         tables.Add(t);
                     }
-                    else if (o is CT_SdtBlock)
+                    else if (o is CT_SdtBlock block)
                     {
-                        XWPFSDT c = new XWPFSDT((CT_SdtBlock)o, this);
+                        XWPFSDT c = new XWPFSDT(block, this);
                         bodyElements.Add(c);
                         contentControls.Add(c);
                     }
@@ -1706,9 +1706,8 @@ namespace NPOI.XWPF.UserModel
         public XWPFPictureData GetPictureDataByID(String blipID)
         {
             POIXMLDocumentPart relatedPart = GetRelationById(blipID);
-            if (relatedPart is XWPFPictureData)
+            if (relatedPart is XWPFPictureData xwpfPicData)
             {
-                XWPFPictureData xwpfPicData = (XWPFPictureData)relatedPart;
                 return xwpfPicData;
             }
             return null;
@@ -1859,18 +1858,18 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTableCell GetTableCell(CT_Tc cell)
         {
-            if (cell == null|| !(cell.Parent is CT_Row))
+            if (cell == null|| cell.Parent is not CT_Row row)
                 return null;
 
-            object parent2 = ((CT_Row)cell.Parent).Parent;
-            if ( parent2== null || !(parent2 is CT_Tbl))
+            object parent2 = row.Parent;
+            if ( parent2== null || parent2 is not CT_Tbl tbl)
                 return null;
-            XWPFTable table = GetTable((CT_Tbl)parent2);
+            XWPFTable table = GetTable(tbl);
             if (table == null)
             {
                 return null;
             }
-            XWPFTableRow tableRow = table.GetRow((CT_Row)cell.Parent);
+            XWPFTableRow tableRow = table.GetRow(row);
             if (tableRow == null)
             {
                 return null;

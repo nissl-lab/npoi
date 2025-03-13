@@ -173,9 +173,8 @@ namespace NPOI.XSSF.UserModel.Extensions
 
         public override bool Equals(object o)
         {
-            if (!(o is XSSFCellFill)) return false;
+            if (o is not XSSFCellFill cf) return false;
 
-            XSSFCellFill cf = (XSSFCellFill)o;
             return _fill.ToString().Equals(cf.GetCTFill().ToString());
         }
     }

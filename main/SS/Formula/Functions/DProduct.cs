@@ -36,15 +36,15 @@ namespace NPOI.SS.Formula.Functions
         private bool initDone = false;
         public bool ProcessMatch(ValueEval eval)
         {
-            if(eval is NumericValueEval)
+            if(eval is NumericValueEval valueEval)
             {
                 if(initDone)
                 {
-                    product *= ((NumericValueEval) eval).NumberValue;
+                    product *= valueEval.NumberValue;
                 }
                 else
                 {
-                    product = ((NumericValueEval) eval).NumberValue;
+                    product = valueEval.NumberValue;
                     initDone = true;
                 }
             }

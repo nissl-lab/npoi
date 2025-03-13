@@ -79,11 +79,10 @@ namespace NPOI.HSSF.Record
 
             public override bool Equals(Object o)
             {
-                if (!(o is FormatRun))
+                if (o is not FormatRun other)
                 {
                     return false;
                 }
-                FormatRun other = (FormatRun)o;
 
                 return _character == other._character && _fontIndex == other._fontIndex;
             }
@@ -275,11 +274,11 @@ namespace NPOI.HSSF.Record
 
             public override bool Equals(Object obj)
             {
-                if (!(obj is ExtRst))
+                if (obj is not ExtRst other)
                 {
                     return false;
                 }
-                ExtRst other = (ExtRst)obj;
+
                 return (CompareTo(other) == 0);
             }
             public override string ToString()
@@ -435,11 +434,10 @@ namespace NPOI.HSSF.Record
          */
         public override bool Equals(Object o)
         {
-            if (!(o is UnicodeString))
+            if (o is not UnicodeString other)
             {
                 return false;
             }
-            UnicodeString other = (UnicodeString)o;
 
             //OK lets do this in stages to return a quickly, first check the actual string
             if (field_1_charCount != other.field_1_charCount

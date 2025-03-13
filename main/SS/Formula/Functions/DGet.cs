@@ -46,7 +46,7 @@ namespace NPOI.SS.Formula.Functions
                 else
                 {
                     // We have a previous filled result.
-                    if(!(eval is BlankEval))
+                    if(eval is not BlankEval)
                     {
                         result = ErrorEval.NUM_ERROR;
                         return false;

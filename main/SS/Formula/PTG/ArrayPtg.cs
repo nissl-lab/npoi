@@ -230,9 +230,9 @@ namespace NPOI.SS.Formula.PTG
             {
                 return ""; // TODO - how is 'empty value' represented in formulas?
             }
-            if (o is String)
+            if (o is String s)
             {
-                return "\"" + (String)o + "\"";
+                return "\"" + s + "\"";
             }
             if (o is Double || o is double)
             {
@@ -242,9 +242,9 @@ namespace NPOI.SS.Formula.PTG
             {
                 return ((bool)o).ToString().ToUpper();
             }
-            if (o is ErrorConstant)
+            if (o is ErrorConstant constant)
             {
-                return ((ErrorConstant)o).Text;
+                return constant.Text;
             }
             throw new ArgumentException("Unexpected constant class (" + o.GetType().Name + ")");
         }

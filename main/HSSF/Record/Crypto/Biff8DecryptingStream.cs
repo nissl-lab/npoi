@@ -37,10 +37,10 @@ namespace NPOI.HSSF.Record.Crypto
         {
             _rc4 = new Biff8RC4(InitialOffSet, key);
 
-            if (in1 is ILittleEndianInput)
+            if (in1 is ILittleEndianInput input)
             {
                 // accessing directly is an optimisation
-                _le = (ILittleEndianInput)in1;
+                _le = input;
             }
             else
             {

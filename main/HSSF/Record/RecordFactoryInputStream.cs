@@ -80,9 +80,9 @@ namespace NPOI.HSSF.Record
                         }
                         // If it's a FILEPASS, track it specifically but
                         //  don't include it in the main stream
-                        if (rec is FilePassRecord)
+                        if (rec is FilePassRecord record)
                         {
-                            fpr = (FilePassRecord)rec;
+                            fpr = record;
                             outputRecs.RemoveAt(outputRecs.Count - 1);
                             // TODO - add fpr not Added to outPutRecs
                             rec = outputRecs[0];
@@ -340,14 +340,14 @@ namespace NPOI.HSSF.Record
                 return null;
             }
 
-            if (record is RKRecord)
+            if (record is RKRecord rkRecord)
             {
-                return RecordFactory.ConvertToNumberRecord((RKRecord)record);
+                return RecordFactory.ConvertToNumberRecord(rkRecord);
             }
 
-            if (record is MulRKRecord)
+            if (record is MulRKRecord mulRkRecord)
             {
-                Record[] records = RecordFactory.ConvertRKRecords((MulRKRecord)record);
+                Record[] records = RecordFactory.ConvertRKRecords(mulRkRecord);
 
                 _unreadRecordBuffer = records;
                 _unreadRecordIndex = 1;
@@ -355,10 +355,9 @@ namespace NPOI.HSSF.Record
             }
 
             if (record.Sid == DrawingGroupRecord.sid
-                    && _lastRecord is DrawingGroupRecord)
+                    && _lastRecord is DrawingGroupRecord lastDgRecord)
             {
-                DrawingGroupRecord lastDGRecord = (DrawingGroupRecord)_lastRecord;
-                lastDGRecord.Join((AbstractEscherHolderRecord)record);
+                lastDgRecord.Join((AbstractEscherHolderRecord)record);
                 return null;
             }
             if (record.Sid == ContinueRecord.sid)
@@ -378,9 +377,9 @@ namespace NPOI.HSSF.Record
                     }
                     return null;
                 }
-                if (_lastRecord is DrawingGroupRecord)
+                if (_lastRecord is DrawingGroupRecord groupRecord)
                 {
-                    ((DrawingGroupRecord)_lastRecord).ProcessContinueRecord(contRec.Data);
+                    groupRecord.ProcessContinueRecord(contRec.Data);
                     return null;
                 }
                 if (_lastRecord is DrawingRecord)
@@ -412,9 +411,9 @@ namespace NPOI.HSSF.Record
                 throw new RecordFormatException("Unhandled Continue Record");
             }
             _lastRecord = record;
-            if (record is DrawingRecord)
+            if (record is DrawingRecord drawingRecord)
             {
-                _lastDrawingRecord = (DrawingRecord)record;
+                _lastDrawingRecord = drawingRecord;
             }
             return record;
         }

@@ -82,17 +82,16 @@ namespace NPOI.SS.Formula.Functions
         }
         private double GetValue(ValueEval arg)
         {
-            if (arg is NumberEval)
+            if (arg is NumberEval eval)
             {
-                return ((NumberEval)arg).NumberValue;
+                return eval.NumberValue;
             }
             if (arg is BlankEval)
             {
                 return 0;
             }
-            if (arg is RefEval)
+            if (arg is RefEval refEval)
             {
-                RefEval refEval = (RefEval)arg;
                 if (refEval.NumberOfSheets > 1)
                 {
                     // Multi-Sheet references are not supported
@@ -100,9 +99,9 @@ namespace NPOI.SS.Formula.Functions
                 }
 
                 ValueEval innerValueEval = refEval.GetInnerValueEval(refEval.FirstSheetIndex);
-                if (innerValueEval is NumberEval)
+                if (innerValueEval is NumberEval numberEval)
                 {
-                    return ((NumberEval)innerValueEval).NumberValue;
+                    return numberEval.NumberValue;
                 }
                 if (innerValueEval is BlankEval)
                 {

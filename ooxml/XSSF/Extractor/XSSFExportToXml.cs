@@ -318,9 +318,8 @@ namespace NPOI.XSSF.Extractor
                 default:
                     break;
             }
-            if (node is XmlElement)
+            if (node is XmlElement currentElement)
             {
-                XmlElement currentElement = (XmlElement)node;
                 currentElement.InnerText = value;
             }
             else

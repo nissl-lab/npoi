@@ -225,12 +225,11 @@ namespace NPOI.XWPF.UserModel
                 return false;
             }
 
-            if (!(obj is XWPFPictureData))
+            if (obj is not XWPFPictureData picData)
             {
                 return false;
             }
 
-            XWPFPictureData picData = (XWPFPictureData)obj;
             PackagePart foreignPackagePart = picData.GetPackagePart();
             PackagePart ownPackagePart = this.GetPackagePart();
 

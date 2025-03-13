@@ -4826,7 +4826,7 @@ namespace NPOI.XSSF.UserModel
             {
                 for(int i = startRowNum; i <= endRowNum; i++)
                 {
-                    if(!(GetRow(i) is XSSFRow row))
+                    if(GetRow(i) is not XSSFRow row)
                     {
                         row = CreateRow(i) as XSSFRow;
                     }
@@ -5751,7 +5751,7 @@ namespace NPOI.XSSF.UserModel
         private CellRangeAddress GetRepeatingRowsOrColums(bool rows)
         {
             int sheetIndex = Workbook.GetSheetIndex(this);
-            if(!(Workbook is XSSFWorkbook xwb))
+            if(Workbook is not XSSFWorkbook xwb)
             {
                 throw new RuntimeException("Workbook should not be null");
             }
@@ -5833,7 +5833,7 @@ namespace NPOI.XSSF.UserModel
             int sheetIndex = Workbook.GetSheetIndex(this);
 
             bool removeAll = rowDef == null && colDef == null;
-            if(!(Workbook is XSSFWorkbook xwb))
+            if(Workbook is not XSSFWorkbook xwb)
             {
                 throw new RuntimeException("Workbook should not be null");
             }

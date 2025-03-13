@@ -504,11 +504,11 @@ namespace NPOI.HSSF.UserModel
             private readonly HSSFEvaluationWorkbook book;
             public void VisitRecord(Record r)
             {
-                if (!(r is DVRecord))
+                if (r is not DVRecord dvRecord)
                 {
                     return;
                 }
-                DVRecord dvRecord = (DVRecord)r;
+
                 CellRangeAddressList regions = dvRecord.CellRangeAddress.Copy();
                 DVConstraint constraint = DVConstraint.CreateDVConstraint(dvRecord, book);
                 HSSFDataValidation hssfDataValidation = new HSSFDataValidation(regions, constraint);
@@ -1744,11 +1744,11 @@ namespace NPOI.HSSF.UserModel
             for (int i = lastChildIndex; i >= 0; i--)
             {
                 HSSFShape shape = patriarch.Children[(i)];
-                if (!(shape is HSSFComment))
+                if (shape is not HSSFComment comment)
                 {
                     continue;
                 }
-                HSSFComment comment = (HSSFComment)shape;
+
                 int r = comment.Row;
                 if (startRow <= r && r <= endRow)
                 {
@@ -2221,12 +2221,12 @@ namespace NPOI.HSSF.UserModel
                 throw new ArgumentException("Specified cell does not belong to this sheet.");
             }
             CellValueRecordInterface rec = ((HSSFCell)cell).CellValueRecord;
-            if (!(rec is FormulaRecordAggregate))
+            if (rec is not FormulaRecordAggregate fra)
             {
                 String ref1 = new CellReference(cell).FormatAsString();
                 throw new ArgumentException("Cell " + ref1 + " is not part of an array formula.");
             }
-            FormulaRecordAggregate fra = (FormulaRecordAggregate)rec;
+
             CellRangeAddress range = fra.RemoveArrayFormula(cell.RowIndex, cell.ColumnIndex);
 
             ICellRange<ICell> result = GetCellRange(range);
@@ -2522,12 +2522,11 @@ namespace NPOI.HSSF.UserModel
         {
             foreach (RecordBase rec in _sheet.Records)
             {
-                if (rec is HyperlinkRecord)
+                if (rec is HyperlinkRecord record)
                 {
-                    HyperlinkRecord link = (HyperlinkRecord)rec;
-                    if (link.FirstColumn == column && link.FirstRow == row)
+                    if (record.FirstColumn == column && record.FirstRow == row)
                     {
-                        return new HSSFHyperlink(link);
+                        return new HSSFHyperlink(record);
                     }
                 }                
                 else if (rec is RowRecordsAggregate rra) {
@@ -2564,9 +2563,8 @@ namespace NPOI.HSSF.UserModel
             List<IHyperlink> hyperlinkList = new List<IHyperlink>();
             foreach (RecordBase rec in _sheet.Records)
             {
-                if (rec is HyperlinkRecord){
-                    HyperlinkRecord link = (HyperlinkRecord)rec;
-                    hyperlinkList.Add(new HSSFHyperlink(link));
+                if (rec is HyperlinkRecord record){
+                    hyperlinkList.Add(new HSSFHyperlink(record));
                 }                
                 else if (rec is RowRecordsAggregate rra) {
                     foreach (var link in rra.HyperlinkRecordRecords)
@@ -2600,9 +2598,8 @@ namespace NPOI.HSSF.UserModel
             for (int i = 0; i < _sheet.Records.Count; i++)
             {
                 RecordBase rec = _sheet.Records[i];
-                if (rec is HyperlinkRecord)
+                if (rec is HyperlinkRecord recLink)
                 {
-                    HyperlinkRecord recLink = (HyperlinkRecord)rec;
                     if (link == recLink)
                     {
                         _sheet.Records.RemoveAt(i);
@@ -2740,18 +2737,17 @@ namespace NPOI.HSSF.UserModel
             foreach (Object obj in container.Children)
             {
                 HSSFShape shape = (HSSFShape)obj;
-                if (shape is HSSFShapeGroup)
+                if (shape is HSSFShapeGroup group)
                 {
-                    HSSFShape res = LookForComment((HSSFShapeContainer)shape, row, column);
+                    HSSFShape res = LookForComment(group, row, column);
                     if (null != res)
                     {
                         return (HSSFComment)res;
                     }
                     continue;
                 }
-                if (shape is HSSFComment)
+                if (shape is HSSFComment comment)
                 {
-                    HSSFComment comment = (HSSFComment)shape;
                     if (comment.HasPosition && comment.Column == column && comment.Row == row)
                     {
                         return comment;
@@ -2789,14 +2785,13 @@ namespace NPOI.HSSF.UserModel
             foreach (object obj in container.Children)
             {
                 HSSFShape shape = (HSSFShape)obj;
-                if (shape is HSSFShapeGroup)
+                if (shape is HSSFShapeGroup group)
                 {
-                    FindCellCommentLocations((HSSFShapeGroup)shape, locations);
+                    FindCellCommentLocations(group, locations);
                     continue;
                 }
-                if (shape is HSSFComment)
+                if (shape is HSSFComment comment)
                 {
-                    HSSFComment comment = (HSSFComment)shape;
                     if (comment.HasPosition)
                     {
                         locations.Add(new CellAddress(comment.Row, comment.Column), comment);
@@ -2941,10 +2936,8 @@ namespace NPOI.HSSF.UserModel
             foreach (Ptg ptg in nameDefinition)
             {
 
-                if (ptg is Area3DPtg)
+                if (ptg is Area3DPtg areaPtg)
                 {
-                    Area3DPtg areaPtg = (Area3DPtg)ptg;
-
                     if (areaPtg.FirstColumn == 0
                         && areaPtg.LastColumn == maxColIndex)
                     {
@@ -3198,9 +3191,8 @@ namespace NPOI.HSSF.UserModel
         {
             foreach (EscherRecord child in parent.ChildRecords)
             {
-                if (child is EscherOptRecord)
+                if (child is EscherOptRecord picOpts)
                 {
-                    EscherOptRecord picOpts = (EscherOptRecord)child;
                     foreach (EscherProperty eprop in picOpts.EscherProperties)
                     {
                         if (eprop.PropertyNumber == EscherProperties.BLIP__BLIPTODISPLAY)
@@ -3229,9 +3221,8 @@ namespace NPOI.HSSF.UserModel
         {
             foreach (EscherRecord child in parent.ChildRecords)
             {
-                if (child is EscherOptRecord)
+                if (child is EscherOptRecord picOpts)
                 {
-                    EscherOptRecord picOpts = (EscherOptRecord)child;
                     foreach (EscherProperty eprop in picOpts.EscherProperties)
                     {
                         if (eprop.PropertyNumber == EscherProperties.BLIP__BLIPTODISPLAY)

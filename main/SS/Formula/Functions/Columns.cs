@@ -31,9 +31,9 @@ namespace NPOI.SS.Formula.Functions
         {
 
             int result;
-            if (arg0 is AreaEval)
+            if (arg0 is AreaEval eval)
             {
-                result = ((AreaEval)arg0).Width;
+                result = eval.Width;
             }
             else if (arg0 is RefEval)
             {

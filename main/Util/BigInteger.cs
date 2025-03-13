@@ -1172,10 +1172,9 @@ namespace NPOI.Util
             if (Object.ReferenceEquals(x, this))
                 return true;
 
-            if (!(x is BigInteger) || (null == x))
+            if (x is not BigInteger xInt || (null == x))
                 return false;
 
-            BigInteger xInt = (BigInteger)x;
             if (xInt._signum != _signum)
                 return false;
 
