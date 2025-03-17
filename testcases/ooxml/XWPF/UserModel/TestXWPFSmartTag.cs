@@ -34,10 +34,9 @@ namespace TestCases.XWPF.UserModel
             XWPFParagraph p = doc.GetParagraphArray(0);
             //About NPOI: because the serializer bug(the CT_Run contains whitespace will discard the whitespace),
             //Text is "CarnegieMellonUniversitySchool of Computer Science"
-            Assert.IsTrue(p.Text.Contains("Carnegie Mellon University School of Computer Science"));
+            POITestCase.AssertContains(p.Text, "Carnegie Mellon University School of Computer Science");
             p = doc.GetParagraphArray(2);
-            Assert.IsTrue(p.Text.Contains("Alice's Adventures"));
+            POITestCase.AssertContains(p.Text, "Alice's Adventures");
         }
     }
-
 }
