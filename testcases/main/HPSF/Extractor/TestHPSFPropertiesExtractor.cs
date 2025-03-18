@@ -17,23 +17,18 @@
 
 namespace TestCases.HPSF.Extractor
 {
-    using System;
-
-
-
-    using NUnit.Framework;
-
-    using NPOI.HSSF;
+    using NPOI.HPSF;
+    using NPOI.HPSF.Extractor;
+    using NPOI.HSSF.Extractor;
     using NPOI.HSSF.UserModel;
     using NPOI.POIFS.FileSystem;
+    using NUnit.Framework;
+    using System;
     using System.IO;
-    using NPOI.HSSF.Extractor;
-    using NPOI.HPSF.Extractor;
     using TestCases.HSSF;
-    using NPOI.HPSF;
 
     [TestFixture]
-    public class TestHPSFPropertiesExtractor
+    public class TestHPSFPropertiesExtractor : POITestCase
     {
         private static POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
 
@@ -45,20 +40,20 @@ namespace TestCases.HPSF.Extractor
             String text = ext.Text;
 
             // Check each bit in turn
-            String sinfText = ext.SummaryInformationText;
-            String dinfText = ext.DocumentSummaryInformationText;
+            String summary = ext.SummaryInformationText;
+            String docsummary = ext.DocumentSummaryInformationText;
 
-            Assert.IsTrue(sinfText.IndexOf("TEMPLATE = Normal") > -1);
-            Assert.IsTrue(sinfText.IndexOf("SUBJECT = sample subject") > -1);
-            Assert.IsTrue(dinfText.IndexOf("MANAGER = sample manager") > -1);
-            Assert.IsTrue(dinfText.IndexOf("COMPANY = sample company") > -1);
+            AssertContains(summary, "TEMPLATE = Normal");
+            AssertContains(summary, "SUBJECT = sample subject");
+            AssertContains(docsummary, "MANAGER = sample manager");
+            AssertContains(docsummary, "COMPANY = sample company");
 
             // Now overall
             text = ext.Text;
-            Assert.IsTrue(text.IndexOf("TEMPLATE = Normal") > -1);
-            Assert.IsTrue(text.IndexOf("SUBJECT = sample subject") > -1);
-            Assert.IsTrue(text.IndexOf("MANAGER = sample manager") > -1);
-            Assert.IsTrue(text.IndexOf("COMPANY = sample company") > -1);
+            AssertContains(text, "TEMPLATE = Normal");
+            AssertContains(text, "SUBJECT = sample subject");
+            AssertContains(text, "MANAGER = sample manager");
+            AssertContains(text, "COMPANY = sample company");
         }
 
         [Test]
@@ -66,23 +61,22 @@ namespace TestCases.HPSF.Extractor
         {
             POIFSFileSystem fs = new POIFSFileSystem(_samples.OpenResourceAsStream("TestUnicode.xls"));
             HPSFPropertiesExtractor ext = new HPSFPropertiesExtractor(fs);
-            string text = ext.Text;
 
             // Check each bit in turn
-            String sinfText = ext.SummaryInformationText;
-            String dinfText = ext.DocumentSummaryInformationText;
+            String summary = ext.SummaryInformationText;
+            String docsummary = ext.DocumentSummaryInformationText;
 
-            Assert.IsTrue(sinfText.IndexOf("AUTHOR = marshall") > -1);
-            Assert.IsTrue(sinfText.IndexOf("TITLE = Titel: \u00c4h") > -1);
-            Assert.IsTrue(dinfText.IndexOf("COMPANY = Schreiner") > -1);
-            Assert.IsTrue(dinfText.IndexOf("SCALE = False") > -1);
+            AssertContains(summary, "AUTHOR = marshall");
+            AssertContains(summary, "TITLE = Titel: \u00c4h");
+            AssertContains(docsummary, "COMPANY = Schreiner");
+            AssertContains(docsummary, "SCALE = False");
 
             // Now overall
-            text = ext.Text;
-            Assert.IsTrue(text.IndexOf("AUTHOR = marshall") > -1);
-            Assert.IsTrue(text.IndexOf("TITLE = Titel: \u00c4h") > -1);
-            Assert.IsTrue(text.IndexOf("COMPANY = Schreiner") > -1);
-            Assert.IsTrue(text.IndexOf("SCALE = False") > -1);
+            string text = ext.Text;
+            AssertContains(text, "AUTHOR = marshall");
+            AssertContains(text, "TITLE = Titel: \u00c4h");
+            AssertContains(text, "COMPANY = Schreiner");
+            AssertContains(text, "SCALE = False");
         }
 
         [Test]
@@ -95,12 +89,12 @@ namespace TestCases.HPSF.Extractor
 
             // Custom properties are part of the document info stream
             String dinfText = ext.DocumentSummaryInformationText;
-            Assert.IsTrue(dinfText.IndexOf("Client = sample client") > -1);
-            Assert.IsTrue(dinfText.IndexOf("Division = sample division") > -1);
+            AssertContains(dinfText, "Client = sample client");
+            AssertContains(dinfText, "Division = sample division");
 
             String text = ext.Text;
-            Assert.IsTrue(text.IndexOf("Client = sample client") > -1);
-            Assert.IsTrue(text.IndexOf("Division = sample division") > -1);
+            AssertContains(text, "Client = sample client");
+            AssertContains(text, "Division = sample division");
         }
 
         [Test]
@@ -153,16 +147,14 @@ namespace TestCases.HPSF.Extractor
             finally
             {
                 eeExt.Close();
+                wb.Close();
             }
 
             Assert.AreEqual(fsText, hwText);
             Assert.AreEqual(fsText, eeText);
 
-            Assert.IsTrue(fsText.IndexOf("AUTHOR = marshall") > -1);
-            Assert.IsTrue(fsText.IndexOf("TITLE = Titel: \u00c4h") > -1);
-
-            // Finally tidy
-            wb.Close();
+            AssertContains(fsText, "AUTHOR = marshall");
+            AssertContains(fsText, "TITLE = Titel: \u00c4h");
         }
 
         [Test]
@@ -170,10 +162,10 @@ namespace TestCases.HPSF.Extractor
         {
             HPSFPropertiesExtractor ex = new HPSFPropertiesExtractor(HSSFTestDataSamples.OpenSampleWorkbook("42726.xls"));
             String txt = ex.Text;
-            Assert.IsTrue(txt.IndexOf("PID_AUTHOR") != -1);
-            Assert.IsTrue(txt.IndexOf("PID_EDITTIME") != -1);
-            Assert.IsTrue(txt.IndexOf("PID_REVNUMBER") != -1);
-            Assert.IsTrue(txt.IndexOf("PID_THUMBNAIL") != -1);
+            AssertContains(txt, "PID_AUTHOR");
+            AssertContains(txt, "PID_EDITTIME");
+            AssertContains(txt, "PID_REVNUMBER");
+            AssertContains(txt, "PID_THUMBNAIL");
         }
 
         [Test]

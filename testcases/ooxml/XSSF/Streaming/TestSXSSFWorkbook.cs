@@ -233,8 +233,8 @@ namespace TestCases.XSSF.Streaming
             SheetDataWriter wr = sh.SheetDataWriter;
             Assert.IsTrue(wr.GetType() == typeof(SheetDataWriter));
             FileInfo tmp = wr.TempFileInfo;
-            Assert.IsTrue(tmp.Name.StartsWith("poi-sxssf-sheet"));
-            Assert.IsTrue(tmp.Name.EndsWith(".xml"));
+            AssertStartsWith(tmp.Name, "poi-sxssf-sheet");
+            AssertEndsWith(tmp.Name, ".xml");
             Assert.IsTrue(wb.Dispose());
             wb.Close();
 
@@ -244,8 +244,8 @@ namespace TestCases.XSSF.Streaming
             wr = sh.SheetDataWriter;
             Assert.IsTrue(wr.GetType() == typeof(GZIPSheetDataWriter));
             tmp = wr.TempFileInfo;
-            Assert.IsTrue(tmp.Name.StartsWith("poi-sxssf-sheet-xml"));
-            Assert.IsTrue(tmp.Name.EndsWith(".gz"));
+            AssertStartsWith(tmp.Name, "poi-sxssf-sheet-xml");
+            AssertEndsWith(tmp.Name, ".gz");
             Assert.IsTrue(wb.Dispose());
             wb.Close();
 

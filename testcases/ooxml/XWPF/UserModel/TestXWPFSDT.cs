@@ -23,7 +23,7 @@ using NUnit.Framework;
 namespace TestCases.XWPF.UserModel
 {
     [TestFixture]
-    public class TestXWPFSDT
+    public class TestXWPFSDT : POITestCase
     {
 
         /**
@@ -95,20 +95,20 @@ namespace TestCases.XWPF.UserModel
             List<AbstractXWPFSDT> sdts = ExtractAllSDTs(doc);
             String text = sdts[(0)].Content.Text;
             Assert.AreEqual(2, sdts.Count);
-            Assert.IsTrue(text.IndexOf("Test") > -1);
+            AssertContains(text, "Test");
 
             text = sdts[(1)].Content.Text;
-            Assert.IsTrue(text.IndexOf("Test Subtitle") > -1);
-            Assert.IsTrue(text.IndexOf("Test User") > -1);
+            AssertContains(text, "Test Subtitle");
+            AssertContains(text, "Test User");
             Assert.IsTrue(text.IndexOf("Test") < text.IndexOf("Test Subtitle"));
 
             doc = XWPFTestDataSamples.OpenSampleDocument("Bug54771b.docx");
             sdts = ExtractAllSDTs(doc);
             Assert.AreEqual(3, sdts.Count);
-            Assert.IsTrue(sdts[0].Content.Text.IndexOf("Test") > -1);
+            AssertContains(sdts[0].Content.Text, "Test");
 
-            Assert.IsTrue(sdts[(1)].Content.Text.IndexOf("Test Subtitle") > -1);
-            Assert.IsTrue(sdts[(2)].Content.Text.IndexOf("Test User") > -1);
+            AssertContains(sdts[1].Content.Text, "Test Subtitle");
+            AssertContains(sdts[2].Content.Text, "Test User");
 
         }
         /**
