@@ -22,10 +22,38 @@
     <PackageReleaseNotes>https://github.com/nissl-lab/npoi/discussions/1422</PackageReleaseNotes>
     <Copyright>Nissl LLC</Copyright>
     <PackageTags>xlsx xls Excel Word docx office ole</PackageTags>
+
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+  <PropertyGroup Label="XML Documentation" Condition=" '$(Configuration)' == 'Release' ">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS0419</NoWarn> <!-- Ambiguous reference in cref attribute -->
+    <NoWarn>$(NoWarn);CS1570</NoWarn> <!-- XML comment has badly formed XML -->
+    <NoWarn>$(NoWarn);CS1572</NoWarn> <!-- XML comment has a param tag for XXX, but there is no parameter by that name -->
+    <NoWarn>$(NoWarn);CS1573</NoWarn> <!-- Parameter XXX has no matching param tag in the XML comment -->
+    <NoWarn>$(NoWarn);CS1574</NoWarn> <!-- XML comment has cref attribute xxx that could not be resolved -->
+    <NoWarn>$(NoWarn);CS1584</NoWarn> <!-- XML comment has syntactically incorrect cref attribute -->
+    <NoWarn>$(NoWarn);CS1587</NoWarn> <!-- XML comment is not placed on a valid language element -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn> <!-- Missing XML comment for publicly visible type or member -->
+    <NoWarn>$(NoWarn);CS1734</NoWarn> <!-- XML comment on XXX has a paramref tag for YYY, but there is no parameter by that name -->
+  </PropertyGroup>
+
+  <PropertyGroup Label="Code Analysis">
+    <NoWarn>$(NoWarn);CS0108</NoWarn> <!-- XXX hides inherited member -->
+    <NoWarn>$(NoWarn);CS0114</NoWarn> <!-- XXX hides inherited member -->
+    <NoWarn>$(NoWarn);CS0162</NoWarn> <!-- Unreachable code detected -->
+    <NoWarn>$(NoWarn);CS0168</NoWarn> <!-- The variable XXX is declared but never used -->
+    <NoWarn>$(NoWarn);CS0169</NoWarn> <!-- Unreachable code detected -->
+    <NoWarn>$(NoWarn);CS0414</NoWarn> <!-- The field XXX is assigned but its value is never used -->
+    <NoWarn>$(NoWarn);CS0628</NoWarn> <!-- new protected member declared in sealed type -->
+    <NoWarn>$(NoWarn);CS0649</NoWarn> <!-- Field XXX is never assigned to -->
+    <NoWarn>$(NoWarn);CS0659</NoWarn> <!-- XXX overrides Object.Equals(object o) but does not override Object.GetHashCode() -->
+
+    <NoWarn>$(NoWarn);CS0612</NoWarn> <!-- XXX is obsolete -->
+    <NoWarn>$(NoWarn);CS0618</NoWarn> <!-- XXX is obsolete: deprecated POI XYZ -->
+
+    <NoWarn>$(NoWarn);SYSLIB0021;SYSLIB0051</NoWarn> <!-- Deprecated API usage -->
   </PropertyGroup>
 
   <ItemGroup>
