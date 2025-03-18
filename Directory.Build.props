@@ -8,7 +8,7 @@
     <DebugType>portable</DebugType>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 
-    <VersionPrefix>2.7.2</VersionPrefix>
+    <VersionPrefix>2.7.3</VersionPrefix>
     <Title>NPOI</Title>
     <Authors>Tony Qu,NPOI Contributors</Authors>
     <Owners>Nissl Lab</Owners>
