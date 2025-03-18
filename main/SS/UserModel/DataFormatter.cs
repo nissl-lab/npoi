@@ -107,10 +107,13 @@ namespace NPOI.SS.UserModel
         /** Pattern to find "AM/PM" marker */
         private static readonly string amPmPattern = "((A|P)[M/P]*)";
 
+        /** Pattern to find formats with condition ranges e.g. [>=100] */
+        private static Regex rangeConditionalPattern = new Regex(".*\\[\\s*(>|>=|<|<=|=)\\s*[0-9]*\\.*[0-9].*", RegexOptions.Compiled);
+
         /** A regex to find patterns like [$$-1009] and [$�-452]. 
          *  Note that we don't currently process these into locales 
          */
-        private static readonly string localePatternGroup = "(\\[\\$[^-\\]]*-[0-9A-Z]+\\])";
+        private static Regex localePatternGroup = new Regex("(\\[\\$[^-\\]]*-[0-9A-Z]+\\])", RegexOptions.Compiled);
 
         /*
          * A regex to match the colour formattings rules.
@@ -320,14 +323,16 @@ namespace NPOI.SS.UserModel
 
             string formatStr = formatStrIn;
 
-            // Excel supports 3+ part conditional data formats, eg positive/negative/zero,
+            // Excel supports 2+ part conditional data formats, eg positive/negative/zero,
             //  or (>1000),(>0),(0),(negative). As Java doesn't handle these kinds
             //  of different formats for different ranges, just +ve/-ve, we need to 
             //  handle these ourselves in a special way.
-            // For now, if we detect 3+ parts, we call out to CellFormat to handle it
+            // For now, if we detect 2+ parts, we call out to CellFormat to handle it
             // TODO Going forward, we should really merge the logic between the two classes
             if (formatStr.IndexOf(';') != -1 &&
-                    formatStr.IndexOf(';') != formatStr.LastIndexOf(';'))
+                (formatStr.IndexOf(';') != formatStr.LastIndexOf(';')
+                 || rangeConditionalPattern.IsMatch(formatStr)
+                ))
             {
                 try
                 {
@@ -425,7 +430,7 @@ namespace NPOI.SS.UserModel
             string formatStr = colorPattern.Replace(sFormat, "");
 
             // Strip off the locale information, we use an instance-wide locale for everything
-            MatchCollection matches = Regex.Matches(formatStr, localePatternGroup);
+            MatchCollection matches = localePatternGroup.Matches(formatStr); 
             foreach (Match match in matches)
             {
                 string matchedstring = match.Value;
@@ -441,7 +446,7 @@ namespace NPOI.SS.UserModel
                     sb.Append(symbol.Substring(symbol.IndexOf('$'), symbol.Length- symbol.IndexOf('$')));
                     symbol = sb.ToString();
                 }
-                matchedstring = Regex.Replace(matchedstring, localePatternGroup, symbol);
+                matchedstring = localePatternGroup.Replace(matchedstring, symbol); 
 
                 formatStr = formatStr.Remove(match.Index, match.Length);
                 formatStr = formatStr.Insert(match.Index, matchedstring);

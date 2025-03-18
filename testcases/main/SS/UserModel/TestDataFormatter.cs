@@ -192,6 +192,16 @@ namespace TestCases.SS.UserModel
             }
         }
 
+        [Test]
+        public void TestConditionalRanges()
+        {
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
+        
+            String format = "[>=10]#,##0;[<10]0.0";
+            Assert.AreEqual("17,876", dfUS.FormatRawCellContents(17876.000, -1, format), "Wrong format for " + format);
+            Assert.AreEqual("9.7", dfUS.FormatRawCellContents(9.71, -1, format), "Wrong format for " + format);
+        }
+
         /**
          * Test how we handle negative and zeros.
          * Note - some Tests are disabled as DecimalFormat
@@ -305,6 +315,7 @@ namespace TestCases.SS.UserModel
 
             //Bug54868 patch has a hit on the first string before the ";"
             Assert.AreEqual("-123 1/3", dfUS.FormatRawCellContents(-123.321, -1, "0 ?/?;0"));
+            Assert.AreEqual("123 1/3", dfUS.FormatRawCellContents(123.321, -1, "0 ?/?;0"));
 
             //Bug53150 formatting a whole number with fractions should just give the number
             Assert.AreEqual("1", dfUS.FormatRawCellContents(1.0, -1, "# #/#"));
